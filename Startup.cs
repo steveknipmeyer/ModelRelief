@@ -42,6 +42,16 @@ namespace ModelRelief
                 {
                 app.UseDeveloperExceptionPage();
                 }
+                {
+                app.UseExceptionHandler(new ExceptionHandlerOptions
+                    {
+                    ExceptionHandler = context => context.Response.WriteAsync("Application error")
+                    }
+                    );
+                }
+
+            app.UseFileServer();
+            app.UseWelcomePage("/welcome");
 
             app.Run(async (context) =>
                 {
