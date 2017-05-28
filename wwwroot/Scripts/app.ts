@@ -9,7 +9,7 @@ module MR {
 
     export function run() {
         console.log("ModelRelief");
-        /*
+
                 'use strict';
         
                 var WWOBJLoader2Example = (function () {
@@ -322,7 +322,6 @@ module MR {
                 app.loadFiles(prepData);
                 // kick render loop
                 render();
-        */
     }
 }
 

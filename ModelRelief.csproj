@@ -12,6 +12,26 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot/Scripts\typings\threejs\three-canvasrenderer.d.ts" />
+    <Content Remove="wwwroot/Scripts\typings\threejs\three-colladaLoader.d.ts" />
+    <Content Remove="wwwroot/Scripts\typings\threejs\three-copyshader.d.ts" />
+    <Content Remove="wwwroot/Scripts\typings\threejs\three-css3drenderer.d.ts" />
+    <Content Remove="wwwroot/Scripts\typings\threejs\three-ctmloader.d.ts.Exclude" />
+    <Content Remove="wwwroot/Scripts\typings\threejs\three-editorcontrols.d.ts" />
+    <Content Remove="wwwroot/Scripts\typings\threejs\three-effectcomposer.d.ts" />
+    <Content Remove="wwwroot/Scripts\typings\threejs\three-FirstPersonControls.d.ts" />
+    <Content Remove="wwwroot/Scripts\typings\threejs\three-maskpass.d.ts" />
+    <Content Remove="wwwroot/Scripts\typings\threejs\three-octree.d.ts.Exclude" />
+    <Content Remove="wwwroot/Scripts\typings\threejs\three-orthographictrackballcontrols.d.ts" />
+    <Content Remove="wwwroot/Scripts\typings\threejs\three-renderpass.d.ts" />
+    <Content Remove="wwwroot/Scripts\typings\threejs\three-shaderpass.d.ts" />
+    <Content Remove="wwwroot/Scripts\typings\threejs\three-trackballcontrols.d.ts" />
+    <Content Remove="wwwroot/Scripts\typings\threejs\three-transformcontrols.d.ts" />
+    <Content Remove="wwwroot/Scripts\typings\threejs\three-vrcontrols.d.ts.Exclude" />
+    <Content Remove="wwwroot/Scripts\typings\threejs\three-vreffect.d.ts.Exclude" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="wwwroot\css\site.css" />
     <Content Include="wwwroot\index.html" />
     <Content Include="wwwroot\Scripts\app.ts" />
