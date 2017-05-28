@@ -53,11 +53,13 @@ namespace ModelRelief
             app.UseFileServer();
             app.UseWelcomePage("/welcome");
 
+ #if false
             app.Run(async (context) =>
                 {
                 var message = greeter.GetGreeting();
                 await context.Response.WriteAsync(message);
                 });
+#endif
             }
         }
     }

@@ -1,0 +1,18 @@
+{
+  //"compileOnSave": true,
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "noEmitOnError": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "target": "es5",
+    "types": [],
+    "module": "amd",
+    "outFile": "wwwroot\\js\\modelrelief.js"
+  },
+
+  "exclude": [
+    "node_modules",
+    "build"
+  ]
+}
