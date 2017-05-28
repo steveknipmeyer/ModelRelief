@@ -13,9 +13,8 @@ module MR {
                 'use strict';
         
                 var WWOBJLoader2Example = (function () {
-        
+                    
                     var Validator = THREE.OBJLoader2.prototype._getValidator();
-        
                     function WWOBJLoader2Example(elementToBindTo) {
                         this.renderer = null;
                         this.canvas = elementToBindTo;
@@ -135,7 +134,6 @@ module MR {
                                 });
                             } else {
                                 fileReader.onload = function (fileDataMtl) {
-                                    var xz : EventTarget;
                                     app.loadFilesUser({
                                         name: 'userObj',
                                         objAsArrayBuffer: uint8Array,
