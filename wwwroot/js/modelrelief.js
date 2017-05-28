@@ -132,7 +132,6 @@ var MR;
                     }
                     else {
                         fileReader.onload = function (fileDataMtl) {
-                            var xz;
                             app.loadFilesUser({
                                 name: 'userObj',
                                 objAsArrayBuffer: uint8Array,

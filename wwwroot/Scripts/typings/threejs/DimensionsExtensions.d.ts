@@ -13,10 +13,13 @@ declare namespace THREE {
         _getValidator();
     }
 }
-//declare namespace THREE.OBJLoader2 {
 
-//        export class WWOBJLoader2{
-//            PrepDataArrayBuffer() : any;
-//            PrepDataFile() : any;
-//        }
-//}
+/*
+declare namespace THREE.OBJLoader2 {
+
+    export class WWOBJLoader2{
+        PrepDataArrayBuffer() : any;
+        PrepDataFile() : any;
+    }
+}
+*/
