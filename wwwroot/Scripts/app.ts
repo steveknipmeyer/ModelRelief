@@ -37,11 +37,12 @@ module MR {
                         this.streamMeshes = true;
                         this.cube = null;
                         this.pivot = null;
-                        this.wwObjLoader2 = new THREE.OBJLoader2.WWOBJLoader2();
+                        this.wwObjLoader2 = new (<any>THREE.OBJLoader2).WWOBJLoader2();
                         this.wwObjLoader2.setCrossOrigin('anonymous');
                         // Check for the various File API support.
                         this.fileApiAvailable = true;
-                        if (window.File && window.FileReader && window.FileList && window.Blob) {
+//                      if (window.File && window.FileReader && window.FileList && window.Blob) {
+                        if (File && FileReader && FileList && Blob) {
                             console.log('File API is supported! Enabling all features.');
                         } else {
                             this.fileApiAvailable = false;
@@ -124,7 +125,7 @@ module MR {
                         }
                         var fileReader = new FileReader();
                         fileReader.onload = function (fileDataObj) {
-                            var uint8Array = new Uint8Array(fileDataObj.target.result);
+                            var uint8Array = new Uint8Array((<any>fileDataObj.target).result);
                             if (fileMtl === null) {
                                 app.loadFilesUser({
                                     name: 'userObj',
@@ -134,11 +135,12 @@ module MR {
                                 });
                             } else {
                                 fileReader.onload = function (fileDataMtl) {
+                                    var xz : EventTarget;
                                     app.loadFilesUser({
                                         name: 'userObj',
                                         objAsArrayBuffer: uint8Array,
                                         pathTexture: pathTexture,
-                                        mtlAsString: fileDataMtl.target.result
+                                        mtlAsString: (<any>fileDataMtl.target).result
                                     });
                                 };
                                 fileReader.readAsText(fileMtl);
@@ -147,7 +149,7 @@ module MR {
                         fileReader.readAsArrayBuffer(fileObj);
                     };
                     WWOBJLoader2Example.prototype.loadFilesUser = function (objDef) {
-                        var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataArrayBuffer(
+                        var prepData = new (<any>THREE.OBJLoader2).WWOBJLoader2.PrepDataArrayBuffer(
                             objDef.name, objDef.objAsArrayBuffer, objDef.pathTexture, objDef.mtlAsString
                         );
                         prepData.setSceneGraphBaseNode(this.pivot);
@@ -312,7 +314,7 @@ module MR {
                 app.initGL();
                 app.resizeDisplayGL();
                 app.initPostGL();
-                var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataFile(
+                var prepData = new (<any>THREE.OBJLoader2).WWOBJLoader2.PrepDataFile(
                     'male02',
                     'obj/male02/',
                     'male02.obj',

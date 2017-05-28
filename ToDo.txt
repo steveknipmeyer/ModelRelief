@@ -1,0 +1,21 @@
+﻿
+Google Chrome (and other browsers?) cannot resolve references in the TypeScript map file to source files outside the wwwwroot folder.
+    So, the TypeScript files must also be located below wwwroot.
+
+
+// ------------------------------------------------------------------------// 
+//      TypeScript Typings                                                 //
+// ------------------------------------------------------------------------//
+
+var uint8Array = new Uint8Array((<any>fileDataObj.target).result);
+    fileDataObj is of type Event in the standard library.
+
+var prepData = new (<any>THREE.OBJLoader2).WWOBJLoader2.PrepDataArrayBuffer(
+
+// ------------------------------------------------------------------------// 
+//      Questions                                                          //
+// ------------------------------------------------------------------------//
+What is the correct way to add typings?
+
+When NPB is used to install typings (e.g. dat-gui) where are the files installed?
+    The included types were still unresolved...
