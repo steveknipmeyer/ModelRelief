@@ -53,7 +53,7 @@ namespace ModelRelief
             app.UseFileServer();
             app.UseWelcomePage("/welcome");
 
- #if false
+ #if true
             app.Run(async (context) =>
                 {
                 var message = greeter.GetGreeting();

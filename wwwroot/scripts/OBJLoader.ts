@@ -1,97 +1,45 @@
-// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------// 
 // ModelRelief                                                             //
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-var MR;
-(function (MR) {
+
+module MR {
     "use strict";
-    function run() {
-        'use strict';
-        var app = new MR.WWOBJLoader2Example(document.getElementById('example'));
-        // Init dat.gui and controls
-        var elemFileInput = document.getElementById('fileUploadInput');
-        var WWOBJLoader2Control = function () {
-            this.smoothShading = app.smoothShading;
-            this.doubleSide = app.doubleSide;
-            this.streamMeshes = app.streamMeshes;
-        };
-        var wwObjLoader2Control = new WWOBJLoader2Control();
-        var gui = new dat.GUI({
-            autoPlace: false,
-            width: 320
-        });
-        var menuDiv = document.getElementById('dat');
-        menuDiv.appendChild(gui.domElement);
-        var folderOptions = gui.addFolder('WWOBJLoader2 Options');
-        var controlSmooth = folderOptions.add(wwObjLoader2Control, 'smoothShading').name('Smooth Shading');
-        controlSmooth.onChange(function (value) {
-            console.log('Setting smoothShading to: ' + value);
-            app.alterSmoothShading();
-        });
-        var controlDouble = folderOptions.add(wwObjLoader2Control, 'doubleSide').name('Double Side Materials');
-        controlDouble.onChange(function (value) {
-            console.log('Setting doubleSide to: ' + value);
-            app.alterDouble();
-        });
-        var controlStreamMeshes = folderOptions.add(wwObjLoader2Control, 'streamMeshes').name('Stream Meshes');
-        controlStreamMeshes.onChange(function (value) {
-            console.log('Setting streamMeshes to: ' + value);
-            app.streamMeshes = value;
-        });
-        if (app.fileApiAvailable) {
-            wwObjLoader2Control.pathTexture = 'obj/female02/';
-            var controlPathTexture = folderOptions.add(wwObjLoader2Control, 'pathTexture').name('Relative path to textures');
-            controlPathTexture.onChange(function (value) {
-                console.log('Setting pathTexture to: ' + value);
-                app.pathTexture = value + '/';
-            });
-            wwObjLoader2Control.loadObjFile = function () {
-                elemFileInput.click();
-            };
-            folderOptions.add(wwObjLoader2Control, 'loadObjFile').name('Load OBJ/MTL Files');
-            var handleFileSelect = function (object3d) {
-                app._handleFileSelect(object3d, wwObjLoader2Control.pathTexture);
-            };
-            elemFileInput.addEventListener('change', handleFileSelect, false);
-            wwObjLoader2Control.clearAllAssests = function () {
-                app.clearAllAssests();
-            };
-            folderOptions.add(wwObjLoader2Control, 'clearAllAssests').name('Clear Scene');
-        }
-        folderOptions.open();
-        // init three.js example application
-        var resizeWindow = function () {
-            app.resizeDisplayGL();
-        };
-        var render = function () {
-            requestAnimationFrame(render);
-            app.render();
-        };
-        window.addEventListener('resize', resizeWindow, false);
-        console.log('Starting initialisation phase...');
-        app.initGL();
-        app.resizeDisplayGL();
-        app.initPostGL();
-        var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataFile('male02', 'obj/male02/', 'male02.obj', 'obj/male02/', 'male02.mtl');
-        app.loadFiles(prepData);
-        // kick render loop
-        render();
+
+    interface CameraDefaults {
+        posCamera       : THREE.Vector3;
+        posCameraTarget : THREE.Vector3;
+        near            : number;
+        far             : number;
+        fov             : number;
     }
-    MR.run = run;
-})(MR || (MR = {}));
-window.onload = MR.run;
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017> Steve Knipmeyer                                    //
-// ------------------------------------------------------------------------//
-var MR;
-(function (MR) {
-    "use strict";
-    var WWOBJLoader2Example = (function () {
-        function WWOBJLoader2Example(elementToBindTo) {
+
+    export class WWOBJLoader2Example  {
+         
+         Validator          : any;
+
+         renderer           : THREE.WebGLRenderer;
+         canvas             : HTMLCanvasElement;
+         aspectRatio        : number;
+         scene              : THREE.Scene;
+         camera             : THREE.PerspectiveCamera;
+         cameraDefaults     : CameraDefaults;
+         cameraTarget       : THREE.Vector3;
+         controls           : THREE.TrackballControls;
+         smoothShading      : boolean;
+         doubleSide         : boolean;
+         streamMeshes       : boolean;
+         cube               : THREE.Mesh;
+         pivot              : THREE.Object3D;
+         wwObjLoader2       : any;
+         fileApiAvailable   : boolean;
+         traversalFunction  : (any) => any;
+         pathTexture        : string;
+
+        constructor (elementToBindTo) {
             this.Validator = THREE.OBJLoader2.prototype._getValidator();
+
             this.renderer = null;
             this.canvas = elementToBindTo;
             this.aspectRatio = 1;
@@ -112,19 +60,20 @@ var MR;
             this.streamMeshes = true;
             this.cube = null;
             this.pivot = null;
-            this.wwObjLoader2 = new THREE.OBJLoader2.WWOBJLoader2();
+            this.wwObjLoader2 = new (<any>THREE.OBJLoader2).WWOBJLoader2();
             this.wwObjLoader2.setCrossOrigin('anonymous');
+
             // Check for the various File API support.
             this.fileApiAvailable = true;
             if (File && FileReader && FileList && Blob) {
                 console.log('File API is supported! Enabling all features.');
-            }
-            else {
+            } else {
                 this.fileApiAvailable = false;
                 console.warn('File API is not supported! Disabling file loading.');
             }
         }
-        WWOBJLoader2Example.prototype.initGL = function () {
+
+        initGL () {
             this.renderer = new THREE.WebGLRenderer({
                 canvas: this.canvas,
                 antialias: true,
@@ -152,15 +101,16 @@ var MR;
             this.scene.add(this.cube);
             this.createPivot();
         };
-        ;
-        WWOBJLoader2Example.prototype.createPivot = function () {
+
+        createPivot () {
             this.pivot = new THREE.Object3D();
             this.pivot.name = 'Pivot';
             this.scene.add(this.pivot);
         };
-        ;
-        WWOBJLoader2Example.prototype.initPostGL = function () {
+
+        initPostGL () {
             var scope = this;
+
             var reportProgress = function (content) {
                 console.log('Progress: ' + content);
             };
@@ -180,16 +130,17 @@ var MR;
             this.wwObjLoader2.registerCallbackMeshLoaded(meshLoaded);
             return true;
         };
-        ;
-        WWOBJLoader2Example.prototype.loadFiles = function (prepData) {
+
+        loadFiles (prepData) {
             prepData.setSceneGraphBaseNode(this.pivot);
             prepData.setStreamMeshes(this.streamMeshes);
             this.wwObjLoader2.prepareRun(prepData);
             this.wwObjLoader2.run();
         };
-        ;
-        WWOBJLoader2Example.prototype._handleFileSelect = function (event, pathTexture) {
+
+        _handleFileSelect (event, pathTexture) {
             var scope = this;
+
             var fileObj = null;
             var fileMtl = null;
             var files = event.target.files;
@@ -206,7 +157,7 @@ var MR;
             }
             var fileReader = new FileReader();
             fileReader.onload = function (fileDataObj) {
-                var uint8Array = new Uint8Array(fileDataObj.target.result);
+                var uint8Array = new Uint8Array((<any>fileDataObj.target).result);
                 if (fileMtl === null) {
                     scope.loadFilesUser({
                         name: 'userObj',
@@ -214,14 +165,13 @@ var MR;
                         pathTexture: pathTexture,
                         mtlAsString: null
                     });
-                }
-                else {
+                } else {
                     fileReader.onload = function (fileDataMtl) {
                         scope.loadFilesUser({
                             name: 'userObj',
                             objAsArrayBuffer: uint8Array,
                             pathTexture: pathTexture,
-                            mtlAsString: fileDataMtl.target.result
+                            mtlAsString: (<any>fileDataMtl.target).result
                         });
                     };
                     fileReader.readAsText(fileMtl);
@@ -229,48 +179,49 @@ var MR;
             };
             fileReader.readAsArrayBuffer(fileObj);
         };
-        ;
-        WWOBJLoader2Example.prototype.loadFilesUser = function (objDef) {
-            var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataArrayBuffer(objDef.name, objDef.objAsArrayBuffer, objDef.pathTexture, objDef.mtlAsString);
+
+        loadFilesUser (objDef) {
+            var prepData = new (<any>THREE.OBJLoader2).WWOBJLoader2.PrepDataArrayBuffer(
+                objDef.name, objDef.objAsArrayBuffer, objDef.pathTexture, objDef.mtlAsString
+            );
             prepData.setSceneGraphBaseNode(this.pivot);
             prepData.setStreamMeshes(this.streamMeshes);
             this.wwObjLoader2.prepareRun(prepData);
             this.wwObjLoader2.run();
         };
-        ;
-        WWOBJLoader2Example.prototype.resizeDisplayGL = function () {
+
+        resizeDisplayGL () {
             this.controls.handleResize();
             this.recalcAspectRatio();
             this.renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight, false);
             this.updateCamera();
         };
-        ;
-        WWOBJLoader2Example.prototype.recalcAspectRatio = function () {
+
+        recalcAspectRatio () {
             this.aspectRatio = (this.canvas.offsetHeight === 0) ? 1 : this.canvas.offsetWidth / this.canvas.offsetHeight;
         };
-        ;
-        WWOBJLoader2Example.prototype.resetCamera = function () {
+
+        resetCamera () {
             this.camera.position.copy(this.cameraDefaults.posCamera);
             this.cameraTarget.copy(this.cameraDefaults.posCameraTarget);
             this.updateCamera();
         };
-        ;
-        WWOBJLoader2Example.prototype.updateCamera = function () {
+
+        updateCamera () {
             this.camera.aspect = this.aspectRatio;
             this.camera.lookAt(this.cameraTarget);
             this.camera.updateProjectionMatrix();
         };
-        ;
-        WWOBJLoader2Example.prototype.render = function () {
-            if (!this.renderer.autoClear)
-                this.renderer.clear();
+
+        render () {
+            if (!this.renderer.autoClear) this.renderer.clear();
             this.controls.update();
             this.cube.rotation.x += 0.05;
             this.cube.rotation.y += 0.05;
             this.renderer.render(this.scene, this.camera);
         };
-        ;
-        WWOBJLoader2Example.prototype.alterSmoothShading = function () {
+
+        alterSmoothShading () {
             var scope = this;
             scope.smoothShading = !scope.smoothShading;
             console.log(scope.smoothShading ? 'Enabling SmoothShading' : 'Enabling FlatShading');
@@ -283,8 +234,8 @@ var MR;
             };
             scope.pivot.traverse(scopeTraverse);
         };
-        ;
-        WWOBJLoader2Example.prototype.alterDouble = function () {
+
+        alterDouble () {
             var scope = this;
             scope.doubleSide = !scope.doubleSide;
             console.log(scope.doubleSide ? 'Enabling DoubleSide materials' : 'Enabling FrontSide materials');
@@ -296,21 +247,19 @@ var MR;
             };
             scope.pivot.traverse(scopeTraverse);
         };
-        ;
-        WWOBJLoader2Example.prototype.traverseScene = function (object3d) {
+
+        traverseScene (object3d) {
             if (object3d.material instanceof THREE.MultiMaterial) {
                 var materials = object3d.material.materials;
                 for (var name in materials) {
-                    if (materials.hasOwnProperty(name))
-                        this.traversalFunction(materials[name]);
+                    if (materials.hasOwnProperty(name)) this.traversalFunction(materials[name]);
                 }
-            }
-            else if (object3d.material) {
+            } else if (object3d.material) {
                 this.traversalFunction(object3d.material);
             }
         };
-        ;
-        WWOBJLoader2Example.prototype.clearAllAssests = function () {
+
+        clearAllAssests () {
             var scope = this;
             var remover = function (object3d) {
                 if (object3d === scope.pivot) {
@@ -326,8 +275,7 @@ var MR;
                     if (mat.hasOwnProperty('materials')) {
                         var materials = mat.materials;
                         for (var name in materials) {
-                            if (materials.hasOwnProperty(name))
-                                materials[name].dispose();
+                            if (materials.hasOwnProperty(name)) materials[name].dispose();
                         }
                     }
                 }
@@ -339,9 +287,5 @@ var MR;
             scope.pivot.traverse(remover);
             scope.createPivot();
         };
-        ;
-        return WWOBJLoader2Example;
-    }());
-    MR.WWOBJLoader2Example = WWOBJLoader2Example;
-})(MR || (MR = {}));
-//# sourceMappingURL=modelrelief.js.map
+    }
+ }
