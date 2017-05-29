@@ -42,6 +42,7 @@ namespace ModelRelief
                 {
                 app.UseDeveloperExceptionPage();
                 }
+            else
                 {
                 app.UseExceptionHandler(new ExceptionHandlerOptions
                     {
@@ -53,13 +54,11 @@ namespace ModelRelief
             app.UseFileServer();
             app.UseWelcomePage("/welcome");
 
- #if true
             app.Run(async (context) =>
                 {
                 var message = greeter.GetGreeting();
                 await context.Response.WriteAsync(message);
                 });
-#endif
             }
         }
     }

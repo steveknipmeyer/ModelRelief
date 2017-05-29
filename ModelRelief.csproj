@@ -34,6 +34,8 @@
   <ItemGroup>
     <Content Include="wwwroot\css\site.css" />
     <Content Include="wwwroot\index.html" />
+    <Content Include="wwwroot\models\lucy.mtl" />
+    <Content Include="wwwroot\models\lucy.obj" />
     <Content Include="wwwroot\Scripts\app.ts" />
     <Content Include="wwwroot\scripts\OBJLoader.ts" />
     <Content Include="wwwroot\scripts\OBJViewer.ts" />
@@ -50,6 +52,14 @@
     <Folder Include="Source\Models\" />
     <Folder Include="Source\Views\" />
     <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="wwwroot/models\lucy.obj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\models\lucy.obj">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

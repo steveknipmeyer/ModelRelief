@@ -126,6 +126,7 @@ var MR;
             }
         }
         OBJViewer.prototype.initGL = function () {
+            var scope = this;
             this.renderer = new THREE.WebGLRenderer({
                 logarithmicDepthBuffer: false,
                 canvas: this.canvas,
@@ -153,6 +154,10 @@ var MR;
             this.cube = new THREE.Mesh(geometry, material);
             this.cube.position.set(0, 0, 0);
             this.scene.add(this.cube);
+            var loader = new THREE.OBJLoader();
+            loader.load('/models/lucy.html', function (object) {
+                scope.scene.add(object);
+            });
             this.createPivot();
         };
         ;

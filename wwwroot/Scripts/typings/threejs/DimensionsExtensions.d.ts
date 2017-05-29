@@ -29,6 +29,11 @@ declare namespace THREE {
 		verifyInput: (input : any, defaultValue: any ) => any;
 	}
 
+    export class OBJLoader {
+        constructor ();
+        load (fileName : string, callback : (object : THREE.Object3D) => any) : any;
+    }
+
     export class OBJLoader2 {
         _getValidator() : Validator;
     }

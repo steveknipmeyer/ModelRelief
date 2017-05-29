@@ -14,6 +14,9 @@ var uint8Array = new Uint8Array((<any>fileDataObj.target).result);
 // ------------------------------------------------------------------------// 
 //      Questions                                                          //
 // ------------------------------------------------------------------------//
+Why does OBJLoader not find '/models/Lucy.obj' but '/models/Lucy.obj' is resolved?
+Does the app.Run context handling interfere with loading the index page?
+
 What is the correct way to add typings?
 
 When NPB is used to install typings (e.g. dat-gui) where are the files installed?
