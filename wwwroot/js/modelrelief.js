@@ -8,7 +8,7 @@ var MR;
     "use strict";
     function run() {
         'use strict';
-        var app = new MR.WWOBJLoader2Example(document.getElementById('example'));
+        var app = new MR.OBJViewer(document.getElementById('example'));
         // Init dat.gui and controls
         var elemFileInput = document.getElementById('fileUploadInput');
         var WWOBJLoader2Control = function () {
@@ -75,7 +75,7 @@ var MR;
         app.initPostGL();
         var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataFile('male02', 'obj/male02/', 'male02.obj', 'obj/male02/', 'male02.mtl');
         app.loadFiles(prepData);
-        // kick render loop
+        // start render loop
         render();
     }
     MR.run = run;
@@ -89,8 +89,8 @@ window.onload = MR.run;
 var MR;
 (function (MR) {
     "use strict";
-    var WWOBJLoader2Example = (function () {
-        function WWOBJLoader2Example(elementToBindTo) {
+    var OBJViewer = (function () {
+        function OBJViewer(elementToBindTo) {
             this.Validator = THREE.OBJLoader2.prototype._getValidator();
             this.renderer = null;
             this.canvas = elementToBindTo;
@@ -98,14 +98,14 @@ var MR;
             this.recalcAspectRatio();
             this.scene = null;
             this.cameraDefaults = {
-                posCamera: new THREE.Vector3(0.0, 175.0, 500.0),
-                posCameraTarget: new THREE.Vector3(0, 0, 0),
+                position: new THREE.Vector3(0.0, 175.0, 500.0),
+                target: new THREE.Vector3(0, 0, 0),
                 near: 0.1,
                 far: 10000,
                 fov: 45
             };
             this.camera = null;
-            this.cameraTarget = this.cameraDefaults.posCameraTarget;
+            this.cameraTarget = this.cameraDefaults.target;
             this.controls = null;
             this.smoothShading = true;
             this.doubleSide = false;
@@ -124,13 +124,14 @@ var MR;
                 console.warn('File API is not supported! Disabling file loading.');
             }
         }
-        WWOBJLoader2Example.prototype.initGL = function () {
+        OBJViewer.prototype.initGL = function () {
             this.renderer = new THREE.WebGLRenderer({
                 canvas: this.canvas,
                 antialias: true,
                 autoClear: true
             });
             this.renderer.setClearColor(0x050505);
+            this.renderer.setClearColor(0xf0f0f0);
             this.scene = new THREE.Scene();
             this.camera = new THREE.PerspectiveCamera(this.cameraDefaults.fov, this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far);
             this.resetCamera();
@@ -143,7 +144,7 @@ var MR;
             this.scene.add(directionalLight1);
             this.scene.add(directionalLight2);
             this.scene.add(ambientLight);
-            var helper = new THREE.GridHelper(1200, 60, 0xFF4444, 0x404040);
+            var helper = new THREE.GridHelper(1200, 60, 0x86e6ff, 0x999999);
             this.scene.add(helper);
             var geometry = new THREE.BoxGeometry(10, 10, 10);
             var material = new THREE.MeshNormalMaterial();
@@ -153,13 +154,13 @@ var MR;
             this.createPivot();
         };
         ;
-        WWOBJLoader2Example.prototype.createPivot = function () {
+        OBJViewer.prototype.createPivot = function () {
             this.pivot = new THREE.Object3D();
             this.pivot.name = 'Pivot';
             this.scene.add(this.pivot);
         };
         ;
-        WWOBJLoader2Example.prototype.initPostGL = function () {
+        OBJViewer.prototype.initPostGL = function () {
             var scope = this;
             var reportProgress = function (content) {
                 console.log('Progress: ' + content);
@@ -181,14 +182,14 @@ var MR;
             return true;
         };
         ;
-        WWOBJLoader2Example.prototype.loadFiles = function (prepData) {
+        OBJViewer.prototype.loadFiles = function (prepData) {
             prepData.setSceneGraphBaseNode(this.pivot);
             prepData.setStreamMeshes(this.streamMeshes);
             this.wwObjLoader2.prepareRun(prepData);
             this.wwObjLoader2.run();
         };
         ;
-        WWOBJLoader2Example.prototype._handleFileSelect = function (event, pathTexture) {
+        OBJViewer.prototype._handleFileSelect = function (event, pathTexture) {
             var scope = this;
             var fileObj = null;
             var fileMtl = null;
@@ -206,7 +207,8 @@ var MR;
             }
             var fileReader = new FileReader();
             fileReader.onload = function (fileDataObj) {
-                var uint8Array = new Uint8Array(fileDataObj.target.result);
+                var eventTarget = fileDataObj.target;
+                var uint8Array = new Uint8Array(eventTarget.result);
                 if (fileMtl === null) {
                     scope.loadFilesUser({
                         name: 'userObj',
@@ -217,11 +219,12 @@ var MR;
                 }
                 else {
                     fileReader.onload = function (fileDataMtl) {
+                        var eventTarget = fileDataMtl.target;
                         scope.loadFilesUser({
                             name: 'userObj',
                             objAsArrayBuffer: uint8Array,
                             pathTexture: pathTexture,
-                            mtlAsString: fileDataMtl.target.result
+                            mtlAsString: eventTarget.result
                         });
                     };
                     fileReader.readAsText(fileMtl);
@@ -230,7 +233,7 @@ var MR;
             fileReader.readAsArrayBuffer(fileObj);
         };
         ;
-        WWOBJLoader2Example.prototype.loadFilesUser = function (objDef) {
+        OBJViewer.prototype.loadFilesUser = function (objDef) {
             var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataArrayBuffer(objDef.name, objDef.objAsArrayBuffer, objDef.pathTexture, objDef.mtlAsString);
             prepData.setSceneGraphBaseNode(this.pivot);
             prepData.setStreamMeshes(this.streamMeshes);
@@ -238,30 +241,30 @@ var MR;
             this.wwObjLoader2.run();
         };
         ;
-        WWOBJLoader2Example.prototype.resizeDisplayGL = function () {
+        OBJViewer.prototype.resizeDisplayGL = function () {
             this.controls.handleResize();
             this.recalcAspectRatio();
             this.renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight, false);
             this.updateCamera();
         };
         ;
-        WWOBJLoader2Example.prototype.recalcAspectRatio = function () {
+        OBJViewer.prototype.recalcAspectRatio = function () {
             this.aspectRatio = (this.canvas.offsetHeight === 0) ? 1 : this.canvas.offsetWidth / this.canvas.offsetHeight;
         };
         ;
-        WWOBJLoader2Example.prototype.resetCamera = function () {
-            this.camera.position.copy(this.cameraDefaults.posCamera);
-            this.cameraTarget.copy(this.cameraDefaults.posCameraTarget);
+        OBJViewer.prototype.resetCamera = function () {
+            this.camera.position.copy(this.cameraDefaults.position);
+            this.cameraTarget.copy(this.cameraDefaults.target);
             this.updateCamera();
         };
         ;
-        WWOBJLoader2Example.prototype.updateCamera = function () {
+        OBJViewer.prototype.updateCamera = function () {
             this.camera.aspect = this.aspectRatio;
             this.camera.lookAt(this.cameraTarget);
             this.camera.updateProjectionMatrix();
         };
         ;
-        WWOBJLoader2Example.prototype.render = function () {
+        OBJViewer.prototype.render = function () {
             if (!this.renderer.autoClear)
                 this.renderer.clear();
             this.controls.update();
@@ -270,7 +273,7 @@ var MR;
             this.renderer.render(this.scene, this.camera);
         };
         ;
-        WWOBJLoader2Example.prototype.alterSmoothShading = function () {
+        OBJViewer.prototype.alterSmoothShading = function () {
             var scope = this;
             scope.smoothShading = !scope.smoothShading;
             console.log(scope.smoothShading ? 'Enabling SmoothShading' : 'Enabling FlatShading');
@@ -284,7 +287,7 @@ var MR;
             scope.pivot.traverse(scopeTraverse);
         };
         ;
-        WWOBJLoader2Example.prototype.alterDouble = function () {
+        OBJViewer.prototype.alterDouble = function () {
             var scope = this;
             scope.doubleSide = !scope.doubleSide;
             console.log(scope.doubleSide ? 'Enabling DoubleSide materials' : 'Enabling FrontSide materials');
@@ -297,7 +300,7 @@ var MR;
             scope.pivot.traverse(scopeTraverse);
         };
         ;
-        WWOBJLoader2Example.prototype.traverseScene = function (object3d) {
+        OBJViewer.prototype.traverseScene = function (object3d) {
             if (object3d.material instanceof THREE.MultiMaterial) {
                 var materials = object3d.material.materials;
                 for (var name in materials) {
@@ -310,7 +313,7 @@ var MR;
             }
         };
         ;
-        WWOBJLoader2Example.prototype.clearAllAssests = function () {
+        OBJViewer.prototype.clearAllAssests = function () {
             var scope = this;
             var remover = function (object3d) {
                 if (object3d === scope.pivot) {
@@ -340,8 +343,8 @@ var MR;
             scope.createPivot();
         };
         ;
-        return WWOBJLoader2Example;
+        return OBJViewer;
     }());
-    MR.WWOBJLoader2Example = WWOBJLoader2Example;
+    MR.OBJViewer = OBJViewer;
 })(MR || (MR = {}));
 //# sourceMappingURL=modelrelief.js.map

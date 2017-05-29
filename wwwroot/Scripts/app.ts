@@ -11,14 +11,14 @@ module MR {
 
         'use strict';
         
-        var app = new MR.WWOBJLoader2Example(document.getElementById('example'));
+        var app = new MR.OBJViewer(<HTMLCanvasElement> document.getElementById('example'));
 
         // Init dat.gui and controls
         var elemFileInput = document.getElementById('fileUploadInput');
         var WWOBJLoader2Control = function () {
-            this.smoothShading = app.smoothShading;
-            this.doubleSide = app.doubleSide;
-            this.streamMeshes = app.streamMeshes;
+            this.smoothShading  = app.smoothShading;
+            this.doubleSide     = app.doubleSide;
+            this.streamMeshes   = app.streamMeshes;
         };
         var wwObjLoader2Control = new WWOBJLoader2Control();
         var gui = new dat.GUI({
@@ -28,21 +28,25 @@ module MR {
         var menuDiv = document.getElementById('dat');
         menuDiv.appendChild(gui.domElement);
         var folderOptions = gui.addFolder('WWOBJLoader2 Options');
+
         var controlSmooth = folderOptions.add(wwObjLoader2Control, 'smoothShading').name('Smooth Shading');
         controlSmooth.onChange(function (value) {
             console.log('Setting smoothShading to: ' + value);
             app.alterSmoothShading();
         });
+
         var controlDouble = folderOptions.add(wwObjLoader2Control, 'doubleSide').name('Double Side Materials');
         controlDouble.onChange(function (value) {
             console.log('Setting doubleSide to: ' + value);
             app.alterDouble();
         });
+
         var controlStreamMeshes = folderOptions.add(wwObjLoader2Control, 'streamMeshes').name('Stream Meshes');
         controlStreamMeshes.onChange(function (value) {
             console.log('Setting streamMeshes to: ' + value);
             app.streamMeshes = value;
         });
+
         if (app.fileApiAvailable) {
             wwObjLoader2Control.pathTexture = 'obj/female02/';
             var controlPathTexture = folderOptions.add(wwObjLoader2Control, 'pathTexture').name('Relative path to textures');
@@ -74,10 +78,11 @@ module MR {
         };
         window.addEventListener('resize', resizeWindow, false);
         console.log('Starting initialisation phase...');
+
         app.initGL();
         app.resizeDisplayGL();
         app.initPostGL();
-        var prepData = new (<any>THREE.OBJLoader2).WWOBJLoader2.PrepDataFile(
+        var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataFile(
             'male02',
             'obj/male02/',
             'male02.obj',
@@ -85,7 +90,8 @@ module MR {
             'male02.mtl'
         );
         app.loadFiles(prepData);
-        // kick render loop
+
+        // start render loop
         render();
     }
 }

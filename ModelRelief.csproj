@@ -36,6 +36,7 @@
     <Content Include="wwwroot\index.html" />
     <Content Include="wwwroot\Scripts\app.ts" />
     <Content Include="wwwroot\scripts\OBJLoader.ts" />
+    <Content Include="wwwroot\scripts\OBJViewer.ts" />
     <Content Include="wwwroot\Scripts\typings\dat-gui\index.d.ts" />
   </ItemGroup>
   <ItemGroup>

@@ -8,9 +8,8 @@ Google Chrome (and other browsers?) cannot resolve references in the TypeScript 
 // ------------------------------------------------------------------------//
 
 var uint8Array = new Uint8Array((<any>fileDataObj.target).result);
-    fileDataObj is of type Event in the standard library.
-
-var prepData = new (<any>THREE.OBJLoader2).WWOBJLoader2.PrepDataArrayBuffer(
+    EventTarget does not contain a member result.
+    https://github.com/Microsoft/TSJS-lib-generator/pull/207
 
 // ------------------------------------------------------------------------// 
 //      Questions                                                          //
