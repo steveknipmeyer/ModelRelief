@@ -64,5 +64,14 @@ declare namespace THREE.OBJLoader2.WWOBJLoader2 {
 
         constructor (modelName : string, path : string, file : string, texturePath : string, materialFile : string);
     }
+    export class LoadedMeshUserOverride {
+
+     /*
+     * @param {boolean} disregardMesh=false Tell WWOBJLoader2 to completely disregard this mesh
+     * @param {THREE.BufferGeometry} bufferGeometry The {@link THREE.BufferGeometry} to be used
+     * @param {THREE.Material} material The {@link THREE.Material} to be used
+     */
+     constructor (disregardMesh : boolean, bufferGeometry : THREE.BufferGeometry, material : THREE.Material);
+    }
 }
 

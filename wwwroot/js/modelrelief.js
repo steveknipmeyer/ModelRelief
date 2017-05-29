@@ -98,10 +98,11 @@ var MR;
             this.recalcAspectRatio();
             this.scene = null;
             this.cameraDefaults = {
+                // Baseline : near = 0.1, far =10000
                 position: new THREE.Vector3(0.0, 175.0, 500.0),
                 target: new THREE.Vector3(0, 0, 0),
-                near: 0.1,
-                far: 10000,
+                near: 100,
+                far: 300,
                 fov: 45
             };
             this.camera = null;
@@ -126,6 +127,7 @@ var MR;
         }
         OBJViewer.prototype.initGL = function () {
             this.renderer = new THREE.WebGLRenderer({
+                logarithmicDepthBuffer: false,
                 canvas: this.canvas,
                 antialias: true,
                 autoClear: true
@@ -171,6 +173,9 @@ var MR;
             };
             var meshLoaded = function (name, bufferGeometry, material) {
                 console.log('Loaded mesh: ' + name + ' Material name: ' + material.name);
+                var meshParameters;
+                var depthMaterial = new THREE.MeshDepthMaterial();
+                return new THREE.OBJLoader2.WWOBJLoader2.LoadedMeshUserOverride(false, null, depthMaterial);
             };
             var completedLoading = function () {
                 console.log('Loading complete!');
