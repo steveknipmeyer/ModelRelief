@@ -121,7 +121,7 @@ module MR {
             this.scene.add(this.cube);
 
             var loader = new THREE.OBJLoader( );
-            loader.load( '/models/lucy.html', function (object) {
+            loader.load( '/models/Lucy.obj', function (object) {
                scope.scene.add(object);
             });
 

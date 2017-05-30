@@ -155,7 +155,6 @@ var MR;
             this.cube.position.set(0, 0, 0);
             this.scene.add(this.cube);
             var loader = new THREE.OBJLoader();
-            loader.load('/models/lucy.html', function (object) {
                 scope.scene.add(object);
             });
             this.createPivot();

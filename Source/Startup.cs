@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace ModelRelief
     {
@@ -51,7 +52,19 @@ namespace ModelRelief
                     );
                 }
 
-            app.UseFileServer();
+            // Set up custom content types -associating file extension to MIME type
+            var provider = new FileExtensionContentTypeProvider();
+            // Add new mappings
+            provider.Mappings[".obj"] = "text/plain";
+            provider.Mappings[".mtl"] = "text/plain";
+            app.UseStaticFiles(new StaticFileOptions() {   
+                ContentTypeProvider = provider
+            });
+
+            // N.B. Remove in production!
+            app.UseDirectoryBrowser();
+
+#if false
             app.UseWelcomePage("/welcome");
 
             app.Run(async (context) =>
@@ -59,6 +72,7 @@ namespace ModelRelief
                 var message = greeter.GetGreeting();
                 await context.Response.WriteAsync(message);
                 });
+#endif
             }
         }
     }
