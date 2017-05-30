@@ -1,7 +1,4 @@
 ﻿
-Google Chrome (and other browsers?) cannot resolve references in the TypeScript map file to source files outside the wwwwroot folder.
-    So, the TypeScript files must also be located below wwwroot.
-
 
 // ------------------------------------------------------------------------// 
 //      TypeScript Typings                                                 //
@@ -14,10 +11,14 @@ var uint8Array = new Uint8Array((<any>fileDataObj.target).result);
 // ------------------------------------------------------------------------// 
 //      Questions                                                          //
 // ------------------------------------------------------------------------//
-Why does OBJLoader not find '/models/Lucy.obj' but '/models/Lucy.obj' is resolved?
-Does the app.Run context handling interfere with loading the index page?
+
+Which content (e.g. scripts, etc.) should be in wwwroot?
+    Google Chrome (and other browsers?) cannot resolve references in the TypeScript map file to source files outside the wwwwroot folder.
+        So, the TypeScript files must also be located below wwwroot.
+
+    How is the server configure to allow access to outside wwwroot?
 
 What is the correct way to add typings?
 
-When NPB is used to install typings (e.g. dat-gui) where are the files installed?
+When NPM is used to install typings (e.g. dat-gui) where are the files installed?
     The included types were still unresolved...
