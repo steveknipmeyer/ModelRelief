@@ -83,9 +83,12 @@ module MR {
         app.resizeDisplayGL();
         app.initPostGL();
 
-        let modelName    = 'tyrannosaurus';
-        let modelPath    = '/models/5/';
-        let fileName     = modelName + '.obj';
+        let modelNameElement : HTMLElement = window.document.getElementById('modelName');
+        let modelPathElement : HTMLElement = window.document.getElementById('modelPath');
+
+        let modelName    = modelNameElement.textContent;
+        let modelPath    = modelPathElement.textContent;
+        let fileName     = modelName;
         let texturePath  = modelPath;
         let materialFile = '';
         var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataFile(

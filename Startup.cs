@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.StaticFiles;
+
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.StaticFiles;
+
 using ModelRelief.Services;
 
 namespace ModelRelief
@@ -32,7 +31,9 @@ namespace ModelRelief
         public void ConfigureServices(IServiceCollection services)
             {
             services.AddSingleton(Configuration);
+            services.AddMvc();
             services.AddSingleton<IGreeter, Greeter>();
+            services.AddScoped<IModelLocator, InMemoryModelLocator>();
             }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,10 +63,24 @@ namespace ModelRelief
                 ContentTypeProvider = provider
             });
 
+            app.UseMvc(ConfigureRoutes);
+
+            app.Run((context) => context.Response.WriteAsync("Invalid route"));
+            }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        private void ConfigureRoutes(IRouteBuilder routeBuilder)
+            {
+            routeBuilder.MapRoute("Default", "{controller=Home}/{action=Index}/{id?}");
+            }
+
+#if false
             // N.B. Remove in production!
             app.UseDirectoryBrowser();
 
-#if false
             app.UseWelcomePage("/welcome");
 
             app.Run(async (context) =>
@@ -74,6 +89,5 @@ namespace ModelRelief
                 await context.Response.WriteAsync(message);
                 });
 #endif
-            }
         }
     }
