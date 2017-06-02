@@ -152,7 +152,7 @@ var MR;
             this.scene.add(directionalLight1);
             this.scene.add(directionalLight2);
             this.scene.add(ambientLight);
-            var helper = new THREE.GridHelper(1200, 60, 0x86e6ff, 0x999999);
+            var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
             this.scene.add(helper);
             this.createPivot();
         };
