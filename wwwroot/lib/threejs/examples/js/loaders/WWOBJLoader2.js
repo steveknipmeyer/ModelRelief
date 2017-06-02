@@ -356,7 +356,7 @@ THREE.OBJLoader2.WWOBJLoader2 = (function () {
 			if ( Validator.isValid( this.fileMtl ) ) {
 
 				var onError = function ( event ) {
-					output = 'Error occurred while downloading "' + scope.fileMtl + '"';
+					var output = 'Error occurred while downloading "' + scope.fileMtl + '"';
 					console.error( output + ': ' + event );
 					scope._announceProgress( output );
 					scope._finalize( 'error' );

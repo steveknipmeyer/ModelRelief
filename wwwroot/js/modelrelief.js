@@ -40,7 +40,7 @@ var MR;
             app.streamMeshes = value;
         });
         if (app.fileApiAvailable) {
-            wwObjLoader2Control.pathTexture = 'obj/female02/';
+            wwObjLoader2Control.pathTexture = '';
             var controlPathTexture = folderOptions.add(wwObjLoader2Control, 'pathTexture').name('Relative path to textures');
             controlPathTexture.onChange(function (value) {
                 console.log('Setting pathTexture to: ' + value);
@@ -73,7 +73,12 @@ var MR;
         app.initGL();
         app.resizeDisplayGL();
         app.initPostGL();
-        var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataFile('male02', 'obj/male02/', 'male02.obj', 'obj/male02/', 'male02.mtl');
+        var modelName = 'tyrannosaurus';
+        var modelPath = '/models/5/';
+        var fileName = modelName + '.obj';
+        var texturePath = modelPath;
+        var materialFile = '';
+        var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataFile(modelName, modelPath, fileName, texturePath, materialFile);
         app.loadFiles(prepData);
         // start render loop
         render();
@@ -98,11 +103,12 @@ var MR;
             this.recalcAspectRatio();
             this.scene = null;
             this.cameraDefaults = {
-                // Baseline : near = 0.1, far =10000
+                // Baseline : near = 0.1, far = 10000
+                // ZBuffer  : near = 100, far = 300
                 position: new THREE.Vector3(0.0, 175.0, 500.0),
                 target: new THREE.Vector3(0, 0, 0),
-                near: 100,
-                far: 300,
+                near: 0.1,
+                far: 10000,
                 fov: 45
             };
             this.camera = null;
@@ -111,7 +117,6 @@ var MR;
             this.smoothShading = true;
             this.doubleSide = false;
             this.streamMeshes = true;
-            this.cube = null;
             this.pivot = null;
             this.wwObjLoader2 = new THREE.OBJLoader2.WWOBJLoader2();
             this.wwObjLoader2.setCrossOrigin('anonymous');
@@ -149,15 +154,6 @@ var MR;
             this.scene.add(ambientLight);
             var helper = new THREE.GridHelper(1200, 60, 0x86e6ff, 0x999999);
             this.scene.add(helper);
-            var geometry = new THREE.BoxGeometry(10, 10, 10);
-            var material = new THREE.MeshNormalMaterial();
-            this.cube = new THREE.Mesh(geometry, material);
-            this.cube.position.set(0, 0, 0);
-            this.scene.add(this.cube);
-            var loader = new THREE.OBJLoader();
-            loader.load('/models/Lucy.obj', function (object) {
-                scope.scene.add(object);
-            });
             this.createPivot();
         };
         ;
@@ -178,9 +174,12 @@ var MR;
             };
             var meshLoaded = function (name, bufferGeometry, material) {
                 console.log('Loaded mesh: ' + name + ' Material name: ' + material.name);
-                var meshParameters;
-                var depthMaterial = new THREE.MeshDepthMaterial();
-                return new THREE.OBJLoader2.WWOBJLoader2.LoadedMeshUserOverride(false, null, depthMaterial);
+                /*
+                                let meshParameters : THREE.MeshDepthMaterialParameters;
+                                let depthMaterial = new THREE.MeshDepthMaterial();
+                                return new THREE.OBJLoader2.WWOBJLoader2.LoadedMeshUserOverride (false, null, depthMaterial);
+                */
+                return new THREE.OBJLoader2.WWOBJLoader2.LoadedMeshUserOverride(false, null, new THREE.MeshPhongMaterial());
             };
             var completedLoading = function () {
                 console.log('Loading complete!');
@@ -278,8 +277,6 @@ var MR;
             if (!this.renderer.autoClear)
                 this.renderer.clear();
             this.controls.update();
-            this.cube.rotation.x += 0.05;
-            this.cube.rotation.y += 0.05;
             this.renderer.render(this.scene, this.camera);
         };
         ;

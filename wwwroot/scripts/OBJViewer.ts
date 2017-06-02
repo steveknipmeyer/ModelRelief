@@ -34,7 +34,6 @@ module MR {
          streamMeshes       : boolean;          // ?
          pathTexture        : string;           // relative path to textures
 
-         cube               : THREE.Mesh;
          pivot              : THREE.Object3D;
          wwObjLoader2       : THREE.OBJLoader2.WWOBJLoader2;
          fileApiAvailable   : boolean;
@@ -52,12 +51,12 @@ module MR {
 
             this.cameraDefaults = {
 
-                // Baseline : near = 0.1, far =10000
-
+                // Baseline : near = 0.1, far = 10000
+                // ZBuffer  : near = 100, far = 300
                 position: new THREE.Vector3(0.0, 175.0, 500.0),
                 target: new THREE.Vector3(0, 0, 0),
-                near: 100,                       
-                far: 300,                               
+                near: 0.1,                       
+                far: 10000,                               
                 fov: 45
             };
             this.camera = null;
@@ -68,7 +67,6 @@ module MR {
             this.smoothShading = true;
             this.doubleSide = false;
             this.streamMeshes = true;
-            this.cube = null;
             this.pivot = null;
 
             this.wwObjLoader2 = new THREE.OBJLoader2.WWOBJLoader2();
@@ -114,17 +112,6 @@ module MR {
             var helper = new THREE.GridHelper(1200, 60, 0x86e6ff, 0x999999);
             this.scene.add(helper);
 
-            var geometry = new THREE.BoxGeometry(10, 10, 10);
-            var material = new THREE.MeshNormalMaterial();
-            this.cube = new THREE.Mesh(geometry, material);
-            this.cube.position.set(0, 0, 0);
-            this.scene.add(this.cube);
-
-            var loader = new THREE.OBJLoader( );
-            loader.load( '/models/Lucy.obj', function (object) {
-               scope.scene.add(object);
-            });
-
             this.createPivot();
         };
 
@@ -146,10 +133,12 @@ module MR {
             };
             var meshLoaded = function (name, bufferGeometry, material) {
                 console.log('Loaded mesh: ' + name + ' Material name: ' + material.name);
-
+/*
                 let meshParameters : THREE.MeshDepthMaterialParameters;
                 let depthMaterial = new THREE.MeshDepthMaterial();
                 return new THREE.OBJLoader2.WWOBJLoader2.LoadedMeshUserOverride (false, null, depthMaterial);
+*/
+                return new THREE.OBJLoader2.WWOBJLoader2.LoadedMeshUserOverride (false, null, new THREE.MeshPhongMaterial());
             };
             var completedLoading = function () {
                 console.log('Loading complete!');
@@ -250,8 +239,6 @@ module MR {
             if (!this.renderer.autoClear) this.renderer.clear();
 
             this.controls.update();
-            this.cube.rotation.x += 0.05;
-            this.cube.rotation.y += 0.05;
             this.renderer.render(this.scene, this.camera);
         };
 

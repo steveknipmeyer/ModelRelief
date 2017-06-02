@@ -48,7 +48,7 @@ module MR {
         });
 
         if (app.fileApiAvailable) {
-            wwObjLoader2Control.pathTexture = 'obj/female02/';
+            wwObjLoader2Control.pathTexture = '';
             var controlPathTexture = folderOptions.add(wwObjLoader2Control, 'pathTexture').name('Relative path to textures');
             controlPathTexture.onChange(function (value) {
                 console.log('Setting pathTexture to: ' + value);
@@ -82,12 +82,18 @@ module MR {
         app.initGL();
         app.resizeDisplayGL();
         app.initPostGL();
+
+        let modelName    = 'tyrannosaurus';
+        let modelPath    = '/models/5/';
+        let fileName     = modelName + '.obj';
+        let texturePath  = modelPath;
+        let materialFile = '';
         var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataFile(
-            'male02',
-            'obj/male02/',
-            'male02.obj',
-            'obj/male02/',
-            'male02.mtl'
+            modelName,
+            modelPath,
+            fileName,
+            texturePath,
+            materialFile
         );
         app.loadFiles(prepData);
 
