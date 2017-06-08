@@ -3,7 +3,7 @@ D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\bin\Debug\netc
 D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\bin\Debug\netcoreapp1.1\ModelRelief.runtimeconfig.dev.json
 D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\bin\Debug\netcoreapp1.1\ModelRelief.dll
 D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\bin\Debug\netcoreapp1.1\ModelRelief.pdb
+D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\obj\Debug\netcoreapp1.1\ModelRelief.csprojResolveAssemblyReference.cache
 D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\obj\Debug\netcoreapp1.1\ModelRelief.AssemblyInfo.cs
 D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\obj\Debug\netcoreapp1.1\ModelRelief.dll
 D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\obj\Debug\netcoreapp1.1\ModelRelief.pdb
-D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\obj\Debug\netcoreapp1.1\ModelRelief.csprojResolveAssemblyReference.cache
