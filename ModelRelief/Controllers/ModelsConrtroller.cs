@@ -40,17 +40,24 @@ namespace ModelRelief.Controllers
             }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Model3dEditViewModel editModel)
             {           
-            var newModel = new Model3d()
+            if (ModelState.IsValid)
                 {
-                Name   = editModel.Name,
-                Format = editModel.Format
-                };
+                var newModel = new Model3d()
+                    {
+                    Name   = editModel.Name,
+                    Format = editModel.Format
+                    };
 
-            newModel = _modelLocator.Add (newModel);
+                newModel = _modelLocator.Add (newModel);
 
-            return View ("Viewer", newModel);
+                return RedirectToAction ("Viewer", new { Id = newModel.Id});
+                }
+            
+            // re-display with validation messages
+            return View();
             }
         }
     }
