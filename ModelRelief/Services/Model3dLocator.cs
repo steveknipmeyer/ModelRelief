@@ -1,4 +1,4 @@
-﻿using ModelRelief.Models;
+﻿using ModelRelief.Entitities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace ModelRelief.Services
     {
-    public interface IModelLocator
+    public interface IModel3dLocator
         {
         IEnumerable<Model3d> GetAll();
         Model3d Find (int id);
         }
 
-    public class InMemoryModelLocator : IModelLocator
+    public class InMemoryModel3dLocator : IModel3dLocator
         {
         List<Model3d> _models;
 
-        public InMemoryModelLocator()
+        public InMemoryModel3dLocator()
             {
             _models = new List<Model3d>
                 {
@@ -28,22 +28,14 @@ namespace ModelRelief.Services
                 };
             }
 
-        IEnumerable<Model3d> IModelLocator.GetAll()
+        IEnumerable<Model3d> IModel3dLocator.GetAll()
             {
             return _models;            
             }
 
         public Model3d Find (int id)
             {
-            Model3d model = new Model3d();
-            try
-                {
-                model = _models.First(m => m.Id == id);
-                }
-            catch(Exception)
-                {
-                }
-            return model;
+            return _models.FirstOrDefault(m => m.Id == id);
             }
         }
     }

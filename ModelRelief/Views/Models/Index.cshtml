@@ -1,0 +1,25 @@
+﻿@using ModelRelief.Entitities 
+@model IEnumerable<ModelRelief.Entitities.Model3d>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Model Catalog</title>
+
+    <!------------------------------------------------------------------------------------------------>
+    <!--                                    CSS                                                     -->
+    <!------------------------------------------------------------------------------------------------>
+    <link rel="stylesheet" href="/css/site.css">
+
+</head>
+<body>
+    <table id="modelCatalog">
+        @foreach (ModelRelief.Entitities.Model3d model3d in Model)
+            {
+            <tr>
+                <td>@Html.ActionLink("Viewer", "Viewer", new { id = model3d.Id })</td>
+                <td>@model3d.Name</td>
+            </tr>
+            }
+    </table>
+</body>
+</html>

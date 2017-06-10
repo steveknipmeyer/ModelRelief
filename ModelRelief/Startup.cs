@@ -33,7 +33,7 @@ namespace ModelRelief
             services.AddSingleton(Configuration);
             services.AddMvc();
             services.AddSingleton<IGreeter, Greeter>();
-            services.AddScoped<IModelLocator, InMemoryModelLocator>();
+            services.AddScoped<IModel3dLocator, InMemoryModel3dLocator>();
             }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,11 +1,26 @@
 ﻿body {
-    font-family: Monospace;
+    font-family: 'Segoe UI';
     background-color: #000;
     color: #fff;
     margin: 0 0 0 0;
     padding: 0 0 0 0;
     border: none;
     cursor: default;
+}
+
+h2#welcome {
+    padding: 32px;
+    color: slategrey;
+    font-size: larger;
+}
+a#catalogLink {
+    padding-left: 32px;
+}
+
+table#modelCatalog {
+    position: absolute;
+    top: 20%;
+    left: 20%;;
 }
 
 #info {

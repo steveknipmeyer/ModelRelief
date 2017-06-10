@@ -33,7 +33,6 @@
 
   <ItemGroup>
     <Content Include="wwwroot\css\site.css" />
-    <Content Include="wwwroot\index.html" />
     <Content Include="wwwroot\models\lucy.mtl" />
     <Content Include="wwwroot\models\lucy.obj" />
     <Content Include="wwwroot\Scripts\app.ts" />
@@ -49,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\js\" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="wwwroot/models\lucy.obj">

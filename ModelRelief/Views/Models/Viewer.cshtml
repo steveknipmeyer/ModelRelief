@@ -1,0 +1,52 @@
+﻿@model ModelRelief.Entitities.Model3d
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>ModelRelief</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+    <!------------------------------------------------------------------------------------------------>
+    <!--                                    CSS                                                     -->
+    <!------------------------------------------------------------------------------------------------>
+    <link rel="stylesheet" href="/css/site.css">
+
+</head>
+<body>
+    <div id="glFullscreen">
+        <canvas id="example"></canvas>
+    </div>
+    <div id="dat">
+
+    </div>
+
+    <div id="info">
+        <a href="http://threejs.org" target="_blank">three.js</a> - OBJLoader2 direct loader test
+        <div id="feedback"></div>
+    </div>
+    <input id="fileUploadInput" type="file" name="files[]" multiple accept=".obj,.mtl" />
+
+
+    <text id="modelName">@Model.Name</text>
+    <text id="modelPath">@Model.Path</text>
+
+    <!------------------------------------------------------------------------------------------------>
+    <!--                                    Libraries                                               -->
+    <!------------------------------------------------------------------------------------------------>
+    <script src="/lib/threejs/examples/js/Detector.js"></script>
+    <script src="/lib/threejs/build//three.js"></script>
+    <script src="/lib/threejs/examples/js/controls/TrackballControls.js"></script>
+    <script src="/lib/threejs/examples/js/loaders/MTLLoader.js"></script>
+    <script src="/lib/threejs/examples/js/libs/dat.gui.min.js"></script>
+
+    <script src="/lib/threejs/examples/js/loaders/OBJLoader2.js"></script>
+    <script src="/lib/threejs/examples/js/loaders/WWOBJLoader2.js"></script>
+
+    <!------------------------------------------------------------------------------------------------>
+    <!--                                    ModelRelief                                             -->
+    <!------------------------------------------------------------------------------------------------>
+    <script src="/js/modelrelief.js"></script>
+</body>
+
+</html>
