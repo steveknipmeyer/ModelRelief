@@ -1,0 +1,21 @@
+﻿@using ModelRelief.Entitities
+@using ModelRelief.ViewModels
+
+@model Model3dEditViewModel
+
+<div>
+    @using (Html.BeginForm())
+        {
+        <div>
+            @Html.LabelFor(m => m.Name)
+            @Html.TextBoxFor(m => m.Name)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.Format)
+            @Html.DropDownListFor(m => m.Format, Html.GetEnumSelectList(typeof(Format3d)));
+        </div>
+        <div>
+            <input type="submit" value="Add" />
+        </div>
+        }
+</div>

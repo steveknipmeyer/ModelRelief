@@ -5,13 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 
 using ModelRelief.Entitities;
 using ModelRelief.Services;
+using ModelRelief.ViewModels;
 
 namespace ModelRelief.Controllers
     {
     public class ModelsController : Controller
         {
         IModel3dLocator _modelLocator;
-
+        
         public ModelsController(IModel3dLocator modelLocator)
             {
             _modelLocator = modelLocator;
@@ -30,6 +31,26 @@ namespace ModelRelief.Controllers
                 return Content(String.Format("Model not found: {0}", id));
 
             return View (model);
+            }
+
+        [HttpGet]
+        public IActionResult Create()
+            {           
+            return View ();
+            }
+
+        [HttpPost]
+        public IActionResult Create(Model3dEditViewModel editModel)
+            {           
+            var newModel = new Model3d()
+                {
+                Name   = editModel.Name,
+                Format = editModel.Format
+                };
+
+            newModel = _modelLocator.Add (newModel);
+
+            return View ("Viewer", newModel);
             }
         }
     }

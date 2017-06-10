@@ -10,21 +10,22 @@ namespace ModelRelief.Services
         {
         IEnumerable<Model3d> GetAll();
         Model3d Find (int id);
+        Model3d Add (Model3d model);
         }
 
     public class InMemoryModel3dLocator : IModel3dLocator
         {
-        List<Model3d> _models;
+        static List<Model3d> _models;
 
-        public InMemoryModel3dLocator()
+        static InMemoryModel3dLocator()
             {
             _models = new List<Model3d>
                 {
-                new Model3d {Id = 1, Path = "/models/1/", Name = "armadillo.obj"},
-                new Model3d {Id = 2, Path = "/models/2/", Name = "bunny.obj"},
-                new Model3d {Id = 3, Path = "/models/3/", Name = "dragon.obj"},
-                new Model3d {Id = 4, Path = "/models/4/", Name = "lucy.obj"},
-                new Model3d {Id = 5, Path = "/models/5/", Name = "tyrannosaurus.obj"},
+                new Model3d {Id = 1, Name = "armadillo.obj", Format = Format3d.OBJ, Path = "/models/1/"},
+                new Model3d {Id = 2, Name = "bunny.obj", Format = Format3d.OBJ, Path = "/models/2/"},
+                new Model3d {Id = 3, Name = "dragon.obj", Format = Format3d.OBJ, Path = "/models/3/"},
+                new Model3d {Id = 4, Name = "lucy.obj", Format = Format3d.OBJ, Path = "/models/4/"},
+                new Model3d {Id = 5, Name = "tyrannosaurus.obj", Format = Format3d.OBJ, Path = "/models/5/"},
                 };
             }
 
@@ -36,6 +37,14 @@ namespace ModelRelief.Services
         public Model3d Find (int id)
             {
             return _models.FirstOrDefault(m => m.Id == id);
+            }
+
+        public Model3d Add(Model3d model)
+            {
+            model.Id = _models.Max(m => m.Id) + 1;
+
+            _models.Add(model);
+            return model;
             }
         }
     }
