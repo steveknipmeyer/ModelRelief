@@ -33,8 +33,6 @@
 
   <ItemGroup>
     <Content Include="wwwroot\css\site.css" />
-    <Content Include="wwwroot\models\lucy.mtl" />
-    <Content Include="wwwroot\models\lucy.obj" />
     <Content Include="wwwroot\Scripts\app.ts" />
     <Content Include="wwwroot\scripts\OBJViewer.ts" />
     <Content Include="wwwroot\Scripts\typings\dat-gui\index.d.ts" />
@@ -44,19 +42,13 @@
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="1.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="1.1.2" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\js\" />
     <Folder Include="wwwroot\images\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Update="wwwroot/models\lucy.obj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\models\lucy.obj">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
 </Project>

@@ -13,6 +13,33 @@ namespace ModelRelief.Services
         Model3d Add (Model3d model);
         }
 
+    public class SqlModel3dLocator : IModel3dLocator
+        {
+        private ModelReliefDbContext _context;
+
+        public SqlModel3dLocator(ModelReliefDbContext context)
+            {
+            _context = context;
+            }
+
+        public Model3d Add(Model3d newModel)
+            {
+            _context.Add (newModel);
+            _context.SaveChanges();
+            return newModel;
+            }
+
+        public Model3d Find(int id)
+            {
+            return _context.Models.FirstOrDefault (m => m.Id == id);
+            }
+
+        public IEnumerable<Model3d> GetAll()
+            {
+            return _context.Models;
+            }
+        }
+
     public class InMemoryModel3dLocator : IModel3dLocator
         {
         static List<Model3d> _models;
@@ -22,10 +49,10 @@ namespace ModelRelief.Services
             _models = new List<Model3d>
                 {
                 new Model3d {Id = 1, Name = "armadillo.obj", Format = Format3d.OBJ, Path = "/models/1/"},
-                new Model3d {Id = 2, Name = "bunny.obj", Format = Format3d.OBJ, Path = "/models/2/"},
-                new Model3d {Id = 3, Name = "dragon.obj", Format = Format3d.OBJ, Path = "/models/3/"},
-                new Model3d {Id = 4, Name = "lucy.obj", Format = Format3d.OBJ, Path = "/models/4/"},
-                new Model3d {Id = 5, Name = "tyrannosaurus.obj", Format = Format3d.OBJ, Path = "/models/5/"},
+                new Model3d {Id = 2, Name = "bunny.obj", Format = Format3d.OBJ, Path = "/models/3/"},
+                new Model3d {Id = 3, Name = "dragon.obj", Format = Format3d.OBJ, Path = "/models/4/"},
+                new Model3d {Id = 4, Name = "lucy.obj", Format = Format3d.OBJ, Path = "/models/5/"},
+                new Model3d {Id = 5, Name = "tyrannosaurus.obj", Format = Format3d.OBJ, Path = "/models/6/"},
                 };
             }
 

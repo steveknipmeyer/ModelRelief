@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
+using ModelRelief.Entitities;
 using ModelRelief.Services;
 
 namespace ModelRelief
@@ -33,7 +35,8 @@ namespace ModelRelief
             services.AddSingleton(Configuration);
             services.AddMvc();
             services.AddSingleton<IGreeter, Greeter>();
-            services.AddScoped<IModel3dLocator, InMemoryModel3dLocator>();
+            services.AddScoped<IModel3dLocator, SqlModel3dLocator>();
+            services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ModelRelief")));
             }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

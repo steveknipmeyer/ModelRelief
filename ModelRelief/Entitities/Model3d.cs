@@ -9,7 +9,7 @@ namespace ModelRelief.Entitities
     public enum Format3d
         {
         None,           // unknown
-        OBJ,            // Wavefront OBJT
+        OBJ,            // Wavefront OBJ
         STL             // Stereolithography
         }
 
