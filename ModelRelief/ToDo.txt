@@ -1,4 +1,9 @@
 ﻿// ------------------------------------------------------------------------// 
+//      Pluralsight Course                                                 //
+// ------------------------------------------------------------------------//
+Experiment with the @section footer in _Layout.cshtml.
+
+// ------------------------------------------------------------------------// 
 //      GitHub                                                 //
 // ------------------------------------------------------------------------//
 Extend gitignore to include binary files (e.g. obj) that are locked during development (and prevent commits).

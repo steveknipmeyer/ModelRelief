@@ -93,6 +93,7 @@ module MR {
             });
             this.renderer.setClearColor(0x050505);
             this.renderer.setClearColor(0xf0f0f0);
+            this.renderer.setClearColor(0x000000);
             this.scene = new THREE.Scene();
 
             this.camera = new THREE.PerspectiveCamera(this.cameraDefaults.fov, this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far);

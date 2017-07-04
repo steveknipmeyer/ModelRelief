@@ -1,25 +1,21 @@
-﻿@using ModelRelief.Entitities 
+﻿@using ModelRelief.Entitities
 @model IEnumerable<ModelRelief.Entitities.Model3d>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title>Model Catalog</title>
+@{
+    ViewBag.Title = "Model Catalog";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-    <!------------------------------------------------------------------------------------------------>
-    <!--                                    CSS                                                     -->
-    <!------------------------------------------------------------------------------------------------>
-    <link rel="stylesheet" href="/css/site.css">
+<table id="modelCatalog">
+    @foreach (ModelRelief.Entitities.Model3d model3d in Model)
+        {
+        <tr>
+            <td>@Html.ActionLink("Viewer", "Viewer", new { id = model3d.Id })</td>
+            <td>@model3d.Name</td>
+        </tr>
+        }
+</table>
 
-</head>
-<body>
-    <table id="modelCatalog">
-        @foreach (ModelRelief.Entitities.Model3d model3d in Model)
-            {
-            <tr>
-                <td>@Html.ActionLink("Viewer", "Viewer", new { id = model3d.Id })</td>
-                <td>@model3d.Name</td>
-            </tr>
-            }
-    </table>
-</body>
-</html>
+@section footer{
+ hello, world   
+}
