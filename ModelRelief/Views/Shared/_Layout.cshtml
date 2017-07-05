@@ -1,22 +1,20 @@
 ﻿<!DOCTYPE html>
 
 <html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
+    <head>
+        <title>@ViewBag.Title</title>
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
-    <!------------------------------------------------------------------------------------------------>
-    <!--                                    CSS                                                     -->
-    <!------------------------------------------------------------------------------------------------>
-    <link rel="stylesheet" href="/css/site.css">
-</head>
+        <!------------------------------------------------------------------------------------------------>
+        <!--                                    CSS                                                     -->
+        <!------------------------------------------------------------------------------------------------>
+        <link rel="stylesheet" href="/css/site.css">
+    </head>
 
-<body>
-    <div>
-        @RenderBody()
-    </div>
-    <footer>
-        @RenderSection("footer", required : false)
-    </footer>
-</body>
+    <body>
+        <div>
+            @RenderBody()
+        </div>
+        <footer>@RenderSection("footer", required : false)</footer>
+    </body>
 </html>

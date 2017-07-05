@@ -1,12 +1,10 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Pluralsight Course                                                 //
 // ------------------------------------------------------------------------//
-Experiment with the @section footer in _Layout.cshtml.
 
 // ------------------------------------------------------------------------// 
-//      GitHub                                                 //
+//      GitHub                                                             //
 // ------------------------------------------------------------------------//
-Extend gitignore to include binary files (e.g. obj) that are locked during development (and prevent commits).
 
 // ------------------------------------------------------------------------// 
 //      TypeScript Typings                                                 //
@@ -15,6 +13,11 @@ Extend gitignore to include binary files (e.g. obj) that are locked during devel
 var uint8Array = new Uint8Array((<any>fileDataObj.target).result);
     EventTarget does not contain a member result.
     https://github.com/Microsoft/TSJS-lib-generator/pull/207
+
+What is the correct way to add typings?
+
+When NPM is used to install typings (e.g. dat-gui) where are the files installed?
+    The included types were still unresolved...
 
 // ------------------------------------------------------------------------// 
 //      Questions                                                          //
@@ -26,7 +29,5 @@ Which content (e.g. scripts, etc.) should be in wwwroot?
 
     How is the server configure to allow access to outside wwwroot?
 
-What is the correct way to add typings?
-
-When NPM is used to install typings (e.g. dat-gui) where are the files installed?
-    The included types were still unresolved...
+What is the correct use of user-scalable-no? Should it appear only on the Model Viewer page and not be included in the _Layout.cshtml?
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
