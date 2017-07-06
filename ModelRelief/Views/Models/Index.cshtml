@@ -1,12 +1,11 @@
-﻿@using ModelRelief.Entitities
-@model IEnumerable<ModelRelief.Entitities.Model3d>
+﻿@model IEnumerable<Model3d>
 
 @{
     ViewBag.Title = "Model Catalog";
 }
 
 <table id="modelCatalog">
-    @foreach (ModelRelief.Entitities.Model3d model3d in Model)
+    @foreach (Model3d model3d in Model)
         {
         <tr>
             <td>@Html.ActionLink("Viewer", "Viewer", new { id = model3d.Id })</td>
