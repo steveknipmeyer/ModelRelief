@@ -8,11 +8,14 @@
     @foreach (Model3d model3d in Model)
         {
         <tr>
-            <td>@Html.ActionLink("Viewer", "Viewer", new { id = model3d.Id })</td>
+            <td>
+            </td>
             <td>@model3d.Name</td>
         </tr>
         }
 </table>
+
+<a asp-action="Create">Create</a>
 
 @section footer{
 hello, world   
