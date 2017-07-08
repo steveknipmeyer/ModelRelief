@@ -1,0 +1,27 @@
+﻿@model Model3dEditViewModel
+
+@{
+    ViewBag.Title = (null == @Model) ? "null" : $"Editing {@Model.Name}";
+}
+
+<h2>@ViewBag.Title</h2>
+<div>
+    <form method="post" asp-antiforgery="true">
+        <div asp-validation-summary="All"></div>
+
+        <div>
+            <label asp-for="Name"/>
+            <input asp-for="Name"/>
+            <span asp-validation-for="Name"/>
+        </div>
+        <div>
+            <label asp-for="Format" />
+            <select asp-for="Format" asp-items="@Html.GetEnumSelectList(typeof(Format3d))"></select>
+            <span asp-validation-for="Format" />
+        </div>
+
+        <div>
+            <input type="submit" value="Edit" />
+        </div>
+    </form>
+</div>

@@ -24,11 +24,12 @@ namespace ModelRelief.Controllers
             return View(models);
             }
 
-        public IActionResult Viewer(int id)
+        [Route ("[controller]/[action]/{modelId}")]
+        public IActionResult Viewer(int modelid)
             {           
-            Model3d model = _modelLocator.Find(id);
+            Model3d model = _modelLocator.Find(modelid);
             if (model == null)
-                return Content(String.Format("Model not found: {0}", id));
+                return Content(String.Format("Model not found: {0}", modelid));
 
             return View (model);
             }
@@ -49,15 +50,58 @@ namespace ModelRelief.Controllers
                 return View();
                 }
 
-            var newModel = new Model3d()
+            var model = new Model3d()
                 {
                 Name   = editModel.Name,
                 Format = editModel.Format
                 };
 
-            newModel = _modelLocator.Add (newModel);
+            model = _modelLocator.Add (model);
+            _modelLocator.Commit();
 
-            return RedirectToAction ("Viewer", new { Id = newModel.Id});           
+            return RedirectToAction ("Viewer", new { Id = model.Id});           
             }
+
+        [HttpGet]
+        [Route ("[controller]/[action]/{modelId}")]
+        public IActionResult Edit(int modelId)
+            {           
+            Model3d model = _modelLocator.Find(modelId);
+            if (model == null)
+                return Content(String.Format("Model not found: {0}", modelId));
+
+            var editModel = new Model3dEditViewModel
+                {
+                Name   = model.Name,
+                Format = model.Format
+                };
+
+            return View (editModel);
+            }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route ("[controller]/[action]/{modelId}")]
+        public IActionResult Edit(int modelId, Model3dEditViewModel editModel)
+            {           
+            if (!ModelState.IsValid)
+                {
+                // re-display with validation messages
+                return View();
+                }
+
+            Model3d model = _modelLocator.Find(modelId);
+            if (model == null)
+                return Content(String.Format("Model not found: {0}", modelId));
+
+            // copy properties
+            model.Name   = editModel.Name;
+            model.Format = editModel.Format;
+
+            _modelLocator.Commit();
+
+            return RedirectToAction ("Viewer", new { Id = model.Id});           
+            }
+
         }
     }

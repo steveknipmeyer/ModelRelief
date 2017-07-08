@@ -10,7 +10,9 @@ namespace ModelRelief.Services
         {
         IEnumerable<Model3d> GetAll();
         Model3d Find (int id);
+
         Model3d Add (Model3d model);
+        void Commit ();
         }
 
     public class SqlModel3dLocator : IModel3dLocator
@@ -22,11 +24,9 @@ namespace ModelRelief.Services
             _context = context;
             }
 
-        public Model3d Add(Model3d newModel)
+        public IEnumerable<Model3d> GetAll()
             {
-            _context.Add (newModel);
-            _context.SaveChanges();
-            return newModel;
+            return _context.Models;
             }
 
         public Model3d Find(int id)
@@ -34,9 +34,16 @@ namespace ModelRelief.Services
             return _context.Models.FirstOrDefault (m => m.Id == id);
             }
 
-        public IEnumerable<Model3d> GetAll()
+        public Model3d Add(Model3d newModel)
             {
-            return _context.Models;
+            _context.Add (newModel);
+            _context.SaveChanges();
+            return newModel;
+            }
+
+        public void Commit()
+            {
+            _context.SaveChanges();
             }
         }
 
@@ -72,6 +79,11 @@ namespace ModelRelief.Services
 
             _models.Add(model);
             return model;
+            }
+
+        public void Commit()
+            {
+            // NOOP
             }
         }
     }
