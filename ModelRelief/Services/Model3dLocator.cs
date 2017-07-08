@@ -48,11 +48,11 @@ namespace ModelRelief.Services
             {
             _models = new List<Model3d>
                 {
-                new Model3d {Id = 1, Name = "armadillo.obj", Format = Format3d.OBJ, Path = "/models/1/"},
-                new Model3d {Id = 2, Name = "bunny.obj", Format = Format3d.OBJ, Path = "/models/3/"},
-                new Model3d {Id = 3, Name = "dragon.obj", Format = Format3d.OBJ, Path = "/models/4/"},
-                new Model3d {Id = 4, Name = "lucy.obj", Format = Format3d.OBJ, Path = "/models/5/"},
-                new Model3d {Id = 5, Name = "tyrannosaurus.obj", Format = Format3d.OBJ, Path = "/models/6/"},
+                new Model3d {Id = 1, Name = "armadillo.obj",    Format = Format3d.OBJ, Path = "/models/1/"},
+                new Model3d {Id = 2, Name = "bunny.obj",        Format = Format3d.OBJ, Path = "/models/3/"},
+                new Model3d {Id = 3, Name = "dragon.obj",       Format = Format3d.OBJ, Path = "/models/4/"},
+                new Model3d {Id = 4, Name = "lucy.obj",         Format = Format3d.OBJ, Path = "/models/5/"},
+                new Model3d {Id = 5, Name = "tyrannosaurus.obj",Format = Format3d.OBJ, Path = "/models/6/"},
                 };
             }
 

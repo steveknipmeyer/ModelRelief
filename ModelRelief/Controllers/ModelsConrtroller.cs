@@ -43,21 +43,21 @@ namespace ModelRelief.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Model3dEditViewModel editModel)
             {           
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
                 {
-                var newModel = new Model3d()
-                    {
-                    Name   = editModel.Name,
-                    Format = editModel.Format
-                    };
-
-                newModel = _modelLocator.Add (newModel);
-
-                return RedirectToAction ("Viewer", new { Id = newModel.Id});
+                // re-display with validation messages
+                return View();
                 }
-            
-            // re-display with validation messages
-            return View();
+
+            var newModel = new Model3d()
+                {
+                Name   = editModel.Name,
+                Format = editModel.Format
+                };
+
+            newModel = _modelLocator.Add (newModel);
+
+            return RedirectToAction ("Viewer", new { Id = newModel.Id});           
             }
         }
     }

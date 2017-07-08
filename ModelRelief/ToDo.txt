@@ -16,8 +16,12 @@ var uint8Array = new Uint8Array((<any>fileDataObj.target).result);
 
 What is the correct way to add typings?
 
-When NPM is used to install typings (e.g. dat-gui) where are the files installed?
-    The included types were still unresolved...
+    When NPM is used to install typings (e.g. dat-gui) where are the files installed?
+        The included types were still unresolved...
+
+Investigate these tsconfig.json settings from Scott Allen's NDC Biased Approach to ASP.NET Core talk.
+    path
+    lib
 
 // ------------------------------------------------------------------------// 
 //      Questions                                                          //

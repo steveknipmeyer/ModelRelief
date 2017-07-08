@@ -8,7 +8,7 @@ var MR;
     "use strict";
     function run() {
         'use strict';
-        var app = new MR.OBJViewer(document.getElementById('example'));
+        var app = new MR.OBJViewer(document.getElementById('model3D'));
         // Init dat.gui and controls
         var elemFileInput = document.getElementById('fileUploadInput');
         var WWOBJLoader2Control = function () {

@@ -1,4 +1,8 @@
-﻿body {
+﻿/* ----------------------    
+    Site         
+------------------------*/
+
+body {
     font-family: 'Segoe UI';
     background-color: #000;
     color: #fff;
@@ -8,11 +12,33 @@
     cursor: default;
 }
 
+footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 1rem;
+    text-align: center;
+}
+
+a:visited {
+    color : aquamarine;
+}
+
+/* ----------------------    
+    Home
+------------------------*/
+
 h2#welcome {
     padding: 32px;
     color: slategrey;
     font-size: larger;
 }
+
+/* ----------------------    
+    Model Catalog
+------------------------*/
+
 a#catalogLink {
     padding-left: 32px;
 }
@@ -22,6 +48,10 @@ table#modelCatalog {
     top: 20%;
     left: 20%;
 }
+
+/* ----------------------    
+    Model3D Viewer
+------------------------*/
 
 #info {
     color: #fff;
@@ -40,24 +70,6 @@ table#modelCatalog {
     cursor: pointer
 }
 
-#glFullscreen {
-    width: 100%;
-    height: 100vh;
-    min-width: 640px;
-    min-height: 360px;
-    position: relative;
-    overflow: hidden;
-    z-index: 0;
-}
-
-#example {
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background-color: #000000;
-}
-
 #feedback {
     color: darkorange;
 }
@@ -74,11 +86,21 @@ table#modelCatalog {
     display: none;
 }
 
-footer {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    padding: 1rem;
-    text-align: center;
+#glFullscreen {
+    width: 100%;
+    height: 100vh;
+    min-width: 640px;
+    min-height: 360px;
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
 }
+
+#model3D {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #000000;
+}
+

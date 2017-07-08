@@ -11,7 +11,7 @@ module MR {
 
         'use strict';
         
-        var app = new MR.OBJViewer(<HTMLCanvasElement> document.getElementById('example'));
+        var app = new MR.OBJViewer(<HTMLCanvasElement> document.getElementById('model3D'));
 
         // Init dat.gui and controls
         var elemFileInput = document.getElementById('fileUploadInput');

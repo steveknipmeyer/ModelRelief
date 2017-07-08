@@ -8,10 +8,10 @@
     @foreach (Model3d model3d in Model)
         {
         <tr>
+            <td>@model3d.Name</td>
             <td>
                 <a asp-action="Viewer" asp-route-id="@model3d.Id">View Model</a>
             </td>
-            <td>@model3d.Name</td>
         </tr>
         }
 </table>
