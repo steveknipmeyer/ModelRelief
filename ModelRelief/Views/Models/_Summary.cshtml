@@ -1,0 +1,17 @@
+﻿@model Model3d
+
+<h3>@Model.Name</h3>
+
+<div>
+    Format: @Model.Format
+</div>
+
+<div>
+    Path: @Model.Path
+</div>
+<div>
+    <a asp-action="Viewer" asp-route-id="@Model.Id">View Model</a>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit Properties</a>
+</div>

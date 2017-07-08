@@ -4,22 +4,15 @@
     ViewBag.Title = "Model Catalog";
 }
 
-<table id="modelCatalog">
-    @foreach (Model3d model3d in Model)
-        {
-        <tr>
-            <td>@model3d.Name</td>
-            <td>
-                <a asp-action="Viewer" asp-route-id="@model3d.Id">View Model</a>
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@model3d.Id">Edit Properties</a>
-            </td>
-        </tr>
-        }
-</table>
+@foreach (Model3d model3d in Model)
+    {
+    @Html.Partial("_Summary", model3d);
+    }
 
-<a asp-action="Create">Create</a>
+<div>
+    <br />
+    <a asp-action="Create">Create</a>
+</div>
 
 @section footer{
 hello, world   

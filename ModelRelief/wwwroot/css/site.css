@@ -39,16 +39,6 @@ h2#welcome {
     Model Catalog
 ------------------------*/
 
-a#catalogLink {
-    padding-left: 32px;
-}
-
-table#modelCatalog {
-    position: absolute;
-    top: 20%;
-    left: 20%;
-}
-
 /* ----------------------    
     Model3D Viewer
 ------------------------*/
