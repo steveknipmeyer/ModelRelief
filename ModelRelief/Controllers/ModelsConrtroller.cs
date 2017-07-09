@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 
 using ModelRelief.Entitities;
 using ModelRelief.Services;
@@ -9,6 +12,7 @@ using ModelRelief.ViewModels;
 
 namespace ModelRelief.Controllers
     {
+    [Authorize]
     public class ModelsController : Controller
         {
         IModel3dLocator _modelLocator;
@@ -18,6 +22,7 @@ namespace ModelRelief.Controllers
             _modelLocator = modelLocator;
             }
 
+        [AllowAnonymous]
         public IActionResult Index()
             {    
             IEnumerable<Model3d> models = _modelLocator.GetAll();

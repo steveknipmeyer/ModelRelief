@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,8 @@ namespace ModelRelief
             services.AddSingleton<IGreeter, Greeter>();
             services.AddScoped<IModel3dLocator, SqlModel3dLocator>();
             services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ModelRelief")));
+            services.AddIdentity<User, IdentityRole>()
+                    .AddEntityFrameworkStores<ModelReliefDbContext>();
             }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,6 +69,7 @@ namespace ModelRelief
                 ContentTypeProvider = provider
             });
 
+            app.UseIdentity();
             app.UseMvc(ConfigureRoutes);
 
             app.Run((context) => context.Response.WriteAsync("Invalid route"));
