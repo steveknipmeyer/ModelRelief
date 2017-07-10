@@ -8,9 +8,10 @@ using ModelRelief.Entitities;
 namespace ModelRelief.Migrations
 {
     [DbContext(typeof(ModelReliefDbContext))]
-    partial class ModelReliefDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170710095033_Identity")]
+    partial class Identity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
