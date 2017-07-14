@@ -53,5 +53,38 @@ namespace ModelRelief.Controllers
             await _signInManger.SignInAsync(user, false);
             return RedirectToAction("Index", "Home");
             }
+
+        [HttpGet]
+        public IActionResult Login()
+            {
+            return View();
+            }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model)
+            {
+            if (!ModelState.IsValid)
+                {
+                // re-display with validation messages
+                return View();
+                }
+            
+            var loginResult = await _signInManger.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
+            if (!loginResult.Succeeded)
+                {
+                ModelState.AddModelError("", "Login was not successful. Please try again.");
+
+                // re-display with validation messages
+                return View();
+                }
+            if (Url.IsLocalUrl(model.ReturnUrl))
+                {
+                return Redirect(model.ReturnUrl);
+                }
+            else
+                {
+                return RedirectToAction("Index", "Home");
+                }
+            }
         }
     }

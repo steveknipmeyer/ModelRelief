@@ -1,4 +1,9 @@
-﻿// ------------------------------------------------------------------------// 
+﻿Is Password clear text?
+How does it get added to the LoginViewModel?
+Can a user row be deleted from the database?
+What is an "open redirect"?
+
+// ------------------------------------------------------------------------// 
 //      Pluralsight Course                                                 //
 // ------------------------------------------------------------------------//
 
