@@ -2,13 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+
 using ModelRelief.ViewModels;
+using ModelRelief.Entitities;
 
 namespace ModelRelief.Controllers
         {
     public class AccountController : Controller
         {
+        private UserManager<User>   _userManager;
+        private SignInManager<User> _signInManger;
+
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+            {
+            _userManager  = userManager;
+            _signInManger = signInManager;
+            }
+
         [HttpGet]
         public IActionResult Register()
             {
@@ -16,14 +29,29 @@ namespace ModelRelief.Controllers
             }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model)
             {
             if (!ModelState.IsValid)
                 {
                 // re-display with validation messages
                 return View();
                 }
-            return View();
+
+            var user = new User() { UserName = model.Username};
+            var createResult = await _userManager.CreateAsync (user, model.Password);
+            if (!createResult.Succeeded)
+                {
+                foreach (var error in createResult.Errors)
+                    {
+                    ModelState.AddModelError("", error.Description);
+                    }
+                // re-display with validation messages
+                return View();               
+                }
+
+            // success
+            await _signInManger.SignInAsync(user, false);
+            return RedirectToAction("Index", "Home");
             }
         }
     }
