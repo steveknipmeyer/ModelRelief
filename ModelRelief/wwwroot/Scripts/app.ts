@@ -13,7 +13,7 @@ module MR {
         
         var app = new MR.OBJViewer(<HTMLCanvasElement> document.getElementById('model3D'));
 
-        // Init dat.gui and controls
+        // Init dat.gui and controls for the UI
         var elemFileInput = document.getElementById('fileUploadInput');
         var WWOBJLoader2Control = function () {
             this.smoothShading  = app.smoothShading;

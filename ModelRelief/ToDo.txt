@@ -1,11 +1,22 @@
-﻿Is Password clear text?
-How does it get added to the LoginViewModel?
-Can a user row be deleted from the database?
-What is an "open redirect"?
-
-// ------------------------------------------------------------------------// 
-//      Pluralsight Course                                                 //
+﻿// ------------------------------------------------------------------------// 
+//      Tasks                                                              //
 // ------------------------------------------------------------------------//
+A ASPNET Core middleware to allow access beyond wwwroot.
+    Preserve existing node.js/npm installation for lavender development.
+        D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\build>node -v
+            v4.6.0
+
+        D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\build>npm -v
+            2.15.9
+
+    Install current versions of nodes.js/mpm.
+    Install Bootstrap using npm.
+    Implement gulp task to deploy Bootstrap files into wwwwroot.
+
+B TypeScript Typings management
+    Where is the Visual Studio instance of node.s installed?
+        Where are the typings?
+
 
 // ------------------------------------------------------------------------// 
 //      GitHub                                                             //
@@ -32,11 +43,13 @@ Investigate these tsconfig.json settings from Scott Allen's NDC Biased Approach 
 //      Questions                                                          //
 // ------------------------------------------------------------------------//
 
-Which content (e.g. scripts, etc.) should be in wwwroot?
-    Google Chrome (and other browsers?) cannot resolve references in the TypeScript map file to source files outside the wwwwroot folder.
-        So, the TypeScript files must also be located below wwwroot.
+Configuration
+    Which content (e.g. scripts, etc.) should be in wwwroot?
+        Google Chrome (and other browsers?) cannot resolve references in the TypeScript map file to source files outside the wwwwroot folder.
+            So, the TypeScript files must also be located below wwwroot.
 
-    How is the server configure to allow access to outside wwwroot?
+        How is the server configure to allow access to outside wwwroot?
 
-What is the correct use of user-scalable-no? Should it appear only on the Model Viewer page and not be included in the _Layout.cshtml?
-    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+HTML
+    What is the correct use of user-scalable-no? Should it appear only on the Model Viewer page and not be included in the _Layout.cshtml?
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">

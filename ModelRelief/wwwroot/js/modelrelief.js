@@ -9,7 +9,7 @@ var MR;
     function run() {
         'use strict';
         var app = new MR.OBJViewer(document.getElementById('model3D'));
-        // Init dat.gui and controls
+        // Init dat.gui and controls for the UI
         var elemFileInput = document.getElementById('fileUploadInput');
         var WWOBJLoader2Control = function () {
             this.smoothShading = app.smoothShading;
