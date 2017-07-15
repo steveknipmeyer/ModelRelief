@@ -1,22 +1,17 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
-A ASPNET Core middleware to allow access beyond wwwroot.
-    Preserve existing node.js/npm installation for lavender development.
-        D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\build>node -v
-            v4.6.0
+A gulp
+    Implement gulp task to deploy files into wwwwroot
+        three.js
+        Bootstrap
 
-        D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\build>npm -v
-            2.15.9
+B ASPNET Core middleware to allow access beyond wwwroot.
+    Add models folder to path.
 
-    Install current versions of nodes.js/mpm.
-    Install Bootstrap using npm.
-    Implement gulp task to deploy Bootstrap files into wwwwroot.
-
-B TypeScript Typings management
+C TypeScript Typings management
     Where is the Visual Studio instance of node.s installed?
-        Where are the typings?
-
+        Where are the Visual Studio npm typings?
 
 // ------------------------------------------------------------------------// 
 //      GitHub                                                             //

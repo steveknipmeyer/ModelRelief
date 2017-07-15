@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "@types/three": "^0.84.17",
+    "bootstrap": "^3.3.7",
+    "three": "^0.86.0"
+  },
   "devDependencies": {
     "gulp": "^3.9.1"
   },

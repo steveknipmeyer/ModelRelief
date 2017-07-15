@@ -5,13 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="build\**" />
     <Compile Remove="Scripts\**" />
+    <Content Remove="build\**" />
     <Content Remove="Scripts\**" />
+    <EmbeddedResource Remove="build\**" />
     <EmbeddedResource Remove="Scripts\**" />
+    <None Remove="build\**" />
     <None Remove="Scripts\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="bower.json" />
+    <Content Remove="package-lock.json" />
     <Content Remove="wwwroot/Scripts\typings\threejs\three-canvasrenderer.d.ts" />
     <Content Remove="wwwroot/Scripts\typings\threejs\three-colladaLoader.d.ts" />
     <Content Remove="wwwroot/Scripts\typings\threejs\three-copyshader.d.ts" />
@@ -29,6 +35,10 @@
     <Content Remove="wwwroot/Scripts\typings\threejs\three-transformcontrols.d.ts" />
     <Content Remove="wwwroot/Scripts\typings\threejs\three-vrcontrols.d.ts.Exclude" />
     <Content Remove="wwwroot/Scripts\typings\threejs\three-vreffect.d.ts.Exclude" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove=".bowerrc" />
   </ItemGroup>
 
   <ItemGroup>
