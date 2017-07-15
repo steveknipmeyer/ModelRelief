@@ -68,6 +68,7 @@ namespace ModelRelief
             app.UseStaticFiles(new StaticFileOptions {  
                 ContentTypeProvider = provider
             });
+            app.AddNodeModules(env.ContentRootPath);
 
             app.UseIdentity();
             app.UseMvc(ConfigureRoutes);

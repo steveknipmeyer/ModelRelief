@@ -39,6 +39,7 @@
 
   <ItemGroup>
     <None Remove=".bowerrc" />
+    <None Remove="npm-debug.log" />
   </ItemGroup>
 
   <ItemGroup>
