@@ -165,4 +165,4 @@ HTML5Assist_Browser_Cache/*
 #################
 ## npm
 #################
-build/node_modules/*
+node_modules/
