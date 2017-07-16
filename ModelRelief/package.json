@@ -6,6 +6,9 @@
   "dependencies": {
     "@types/three": "^0.84.17",
     "bootstrap": "^3.3.7",
+    "jquery": "^3.2.1",
+    "jquery-validation": "^1.16.0",
+    "jquery-validation-unobtrusive": "^3.2.6",
     "three": "^0.86.0"
   },
   "devDependencies": {

@@ -73,7 +73,9 @@ namespace ModelRelief
             app.UseIdentity();
             app.UseMvc(ConfigureRoutes);
 
+            #if false
             app.Run((context) => context.Response.WriteAsync("Invalid route"));
+            #endif
             }
 
         /// <summary>
