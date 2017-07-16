@@ -54,6 +54,13 @@ namespace ModelRelief.Controllers
             return RedirectToAction("Index", "Home");
             }
 
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+            {
+            await _signInManger.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+            }
+
         [HttpGet]
         public IActionResult Login()
             {

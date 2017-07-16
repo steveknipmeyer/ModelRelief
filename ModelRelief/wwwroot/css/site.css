@@ -1,44 +1,4 @@
-﻿/* ----------------------    
-    Site         
-------------------------*/
-
-body {
-    font-family: 'Segoe UI';
-    background-color: #000;
-    color: #fff;
-    margin: 0 0 0 0;
-    padding: 0 0 0 0;
-    border: none;
-    cursor: default;
-}
-
-footer {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    padding: 1rem;
-    text-align: center;
-}
-
-a:visited {
-    color : aquamarine;
-}
-
-/* ----------------------    
-    Home
-------------------------*/
-
-h2#welcome {
-    padding: 32px;
-    color: slategrey;
-    font-size: larger;
-}
-
-/* ----------------------    
-    Model Catalog
-------------------------*/
-
+﻿
 /* ----------------------    
     Model3D Viewer
 ------------------------*/
@@ -67,7 +27,7 @@ h2#welcome {
 #dat {
     user-select: none;
     position: absolute;
-    left: 0;
+    right: 0;
     top: 0;
     z-Index: 200;
 }

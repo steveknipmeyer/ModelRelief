@@ -1,17 +1,20 @@
 ﻿@model Model3d
 
-<h3>@Model.Name</h3>
+<div class="panel panel-default">
+    <h3 class="panel-heading">@Model.Name</h3>
 
-<div>
-    Format: @Model.Format
-</div>
+    <div class="panel-body">
+        <div>
+            Format: @Model.Format
+        </div>
 
-<div>
-    Path: @Model.Path
-</div>
-<div>
-    <a asp-action="Viewer" asp-route-id="@Model.Id">View Model</a>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit Properties</a>
+        <div>
+            Path: @Model.Path
+        </div>
+    </div>
+
+    <div class="panel-footer">
+        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit Properties</a>
+        <a class="btn btn-primary" asp-action="Viewer" asp-route-id="@Model.Id">View Model</a>
+    </div>
 </div>

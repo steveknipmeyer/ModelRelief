@@ -14,14 +14,26 @@
     </head>
 
     <body>
-        <header>
-            @await Component.InvokeAsync("LoginLogout")
-        </header>
-        <div>
-            @RenderBody()
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">ModelRelief</a>
+                </div>
+
+                <div class="navbar-right">
+                    @await Component.InvokeAsync("LoginLogout")
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div>
+                @RenderBody()
+            </div>
+
+            <footer>
+                @await Component.InvokeAsync("Footer")
+            </footer>
         </div>
-        <footer>
-            @await  Component.InvokeAsync("Footer")
-        </footer>
     </body>
 </html>

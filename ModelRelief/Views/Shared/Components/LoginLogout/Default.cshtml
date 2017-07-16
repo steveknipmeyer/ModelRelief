@@ -5,12 +5,12 @@
     <form method="post", asp-controller="Account", asp-action="Logout", asp-antiforgery="true">
 
         <div>
-            <input type="submit" value="Logout"/>
+            <input class="btn btn-danger" type="submit" value="Logout"/>
         </div>
     </form>
     }
 else
     {
-    <a asp-controller="Account" asp-action="Login">Login</a>
-    <a asp-controller="Account" asp-action="Register">Register</a>
+    <a class="btn btn-default" asp-controller="Account" asp-action="Login">Login</a>
+    <a class="btn btn-default" asp-controller="Account" asp-action="Register">Register</a>
     }

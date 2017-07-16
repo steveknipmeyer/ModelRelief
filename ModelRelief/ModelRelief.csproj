@@ -43,6 +43,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="wwwroot\css\bootstrap.css" />
+    <Content Include="wwwroot\css\bootstrap.css.map" />
     <Content Include="wwwroot\css\site.css" />
     <Content Include="wwwroot\Scripts\app.ts" />
     <Content Include="wwwroot\scripts\OBJViewer.ts" />
