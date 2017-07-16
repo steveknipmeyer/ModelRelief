@@ -1,17 +1,22 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
-A gulp
+gulp
     Implement gulp task to deploy files into wwwwroot
-        three.js
-        Bootstrap
+        <script src="/lib/threejs/examples/js/Detector.js"></script>
+        <script src="/lib/threejs/build//three.js"></script>
+        <script src="/lib/threejs/examples/js/controls/TrackballControls.js"></script>
+        <script src="/lib/threejs/examples/js/loaders/MTLLoader.js"></script>
+        <script src="/lib/threejs/examples/js/libs/dat.gui.min.js"></script>
 
-B ASPNET Core middleware to allow access beyond wwwroot.
-    Add models folder to path.
+        <script src="/lib/threejs/examples/js/loaders/OBJLoader2.js"></script>
+        <script src="/lib/threejs/examples/js/loaders/WWOBJLoader2.js"></script>
 
-C TypeScript Typings management
+TypeScript Typings management
     Where is the Visual Studio instance of node.s installed?
         Where are the Visual Studio npm typings?
+
+Relational Database Design
 
 // ------------------------------------------------------------------------// 
 //      GitHub                                                             //
@@ -39,11 +44,6 @@ Investigate these tsconfig.json settings from Scott Allen's NDC Biased Approach 
 // ------------------------------------------------------------------------//
 
 Configuration
-    Which content (e.g. scripts, etc.) should be in wwwroot?
-        Google Chrome (and other browsers?) cannot resolve references in the TypeScript map file to source files outside the wwwwroot folder.
-            So, the TypeScript files must also be located below wwwroot.
-
-        How is the server configure to allow access to outside wwwroot?
 
 HTML
     What is the correct use of user-scalable-no? Should it appear only on the Model Viewer page and not be included in the _Layout.cshtml?

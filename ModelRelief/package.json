@@ -1,14 +1,17 @@
 {
-  "name": "build",
+  "name": "odetofood",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "dependencies": {
     "@types/three": "^0.84.17",
+    "beepbeep": "^1.2.1",
     "bootstrap": "^3.3.7",
     "jquery": "^3.2.1",
     "jquery-validation": "^1.16.0",
     "jquery-validation-unobtrusive": "^3.2.6",
+    "robocopy": "^0.1.15",
+    "run-sequence": "^2.0.0",
     "three": "^0.86.0"
   },
   "devDependencies": {
