@@ -90,7 +90,7 @@ module MR {
         let modelPath    = modelPathElement.textContent;
         let fileName     = modelName;
         let texturePath  = modelPath;
-        let materialFile = '';
+        let materialFile = modelName.replace(/\.[^/.]+$/, "") + '.mtl';
         var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataFile(
             modelName,
             modelPath,

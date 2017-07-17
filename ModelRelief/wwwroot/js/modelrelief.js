@@ -79,7 +79,7 @@ var MR;
         var modelPath = modelPathElement.textContent;
         var fileName = modelName;
         var texturePath = modelPath;
-        var materialFile = '';
+        var materialFile = modelName.replace(/\.[^/.]+$/, "") + '.mtl';
         var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataFile(modelName, modelPath, fileName, texturePath, materialFile);
         app.loadFiles(prepData);
         // start render loop

@@ -1,22 +1,13 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
-gulp
-    Implement gulp task to deploy files into wwwwroot
-        <script src="/lib/threejs/examples/js/Detector.js"></script>
-        <script src="/lib/threejs/build//three.js"></script>
-        <script src="/lib/threejs/examples/js/controls/TrackballControls.js"></script>
-        <script src="/lib/threejs/examples/js/loaders/MTLLoader.js"></script>
-        <script src="/lib/threejs/examples/js/libs/dat.gui.min.js"></script>
-
-        <script src="/lib/threejs/examples/js/loaders/OBJLoader2.js"></script>
-        <script src="/lib/threejs/examples/js/loaders/WWOBJLoader2.js"></script>
-
-TypeScript Typings management
-    Where is the Visual Studio instance of node.s installed?
-        Where are the Visual Studio npm typings?
 
 Relational Database Design
+
+// ------------------------------------------------------------------------// 
+//      Viewer                                                             //
+// ------------------------------------------------------------------------//
+Create a set of sample materials such as wood, glass, plaster, etc.
 
 // ------------------------------------------------------------------------// 
 //      GitHub                                                             //
@@ -25,6 +16,9 @@ Relational Database Design
 // ------------------------------------------------------------------------// 
 //      TypeScript Typings                                                 //
 // ------------------------------------------------------------------------//
+TypeScript Typings management
+    Where is the Visual Studio instance of node.s installed?
+        Where are the Visual Studio npm typings?
 
 var uint8Array = new Uint8Array((<any>fileDataObj.target).result);
     EventTarget does not contain a member result.
