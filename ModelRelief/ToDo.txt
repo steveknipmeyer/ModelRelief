@@ -18,6 +18,7 @@ Create a set of sample materials such as wood, glass, plaster, etc.
 // ------------------------------------------------------------------------//
 TypeScript Typings management
     Where is the Visual Studio instance of node.s installed?
+        "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\Microsoft\Web Tools\External"
         Where are the Visual Studio npm typings?
 
 var uint8Array = new Uint8Array((<any>fileDataObj.target).result);
