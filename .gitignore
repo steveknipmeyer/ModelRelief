@@ -161,6 +161,7 @@ HTML5Assist_Browser_Cache/*
 #################
 *.rhl
 *.bak
+hidden/
 
 #################
 ## npm
