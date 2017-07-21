@@ -21,6 +21,7 @@
     <!------------------------------------------------------------------------------------------------>
     <!--                                    Libraries                                               -->
     <!------------------------------------------------------------------------------------------------>
+
     <script src="/lib/threejs/Detector.js"></script>
     <script src="/lib/threejs/three.js"></script>
     <script src="/lib/threejs/TrackballControls.js"></script>
@@ -33,7 +34,20 @@
     <!------------------------------------------------------------------------------------------------>
     <!--                                    ModelRelief                                             -->
     <!------------------------------------------------------------------------------------------------>
-    <script src="/js/modelrelief.js"></script>
+    <script src="/lib/require.js"></script>
+
+    <script>
+        require.config({
+            baseUrl : '/js',
+            paths: {
+                THREE    : '../lib/threejs/',
+                dat      : '../lib/threejs/dat-gui.min.js'
+            }
+        });
+        var modelRelief = require(['/js/modelrelief.js']);
+        var app = modelRelief(['app']);
+        //app.run();
+    </script>
 </body>
 
 

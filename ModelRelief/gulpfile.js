@@ -164,6 +164,10 @@ gulp.task('copyNPM', function () {
     copyFile('MTLLoader.js',            threeExamplesFolder + 'loaders/',   siteConfig.libRoot + 'threejs/');
     copyFile('OBJLoader2.js',           threeExamplesFolder + 'loaders/',   siteConfig.libRoot + 'threejs/');
     copyFile('WWOBJLoader2.js',         threeExamplesFolder + 'loaders/',   siteConfig.libRoot + 'threejs/');
+
+    // require.js
+    let requirejsFolder = siteConfig.nodeModulesRoot + 'requirejs/';
+    copyFile('require.js',  requirejsFolder, siteConfig.libRoot);
 });
 /// <summary>
 /// Debug task

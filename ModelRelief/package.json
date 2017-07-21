@@ -4,18 +4,21 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+  },
+  "devDependencies": {
+    "@types/dat-gui": "^0.6.3",
+    "@types/requirejs": "^2.1.29",
     "@types/three": "^0.84.17",
     "beepbeep": "^1.2.1",
     "bootstrap": "^3.3.7",
+    "gulp": "^3.9.1",
     "jquery": "^3.2.1",
     "jquery-validation": "^1.16.0",
     "jquery-validation-unobtrusive": "^3.2.6",
+    "requirejs": "^2.3.3",
     "robocopy": "^0.1.15",
     "run-sequence": "^2.0.0",
     "three": "^0.86.0"
-  },
-  "devDependencies": {
-    "gulp": "^3.9.1"
   },
   "scripts": {
     "test": "echo hello, world"

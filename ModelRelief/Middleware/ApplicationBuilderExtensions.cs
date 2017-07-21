@@ -12,22 +12,37 @@ namespace Microsoft.AspNetCore.Builder
     public static class ApplicationBuilderExtensions
         {
         /// <summary>
-        /// Include the node_modules folder in the list of valid static file folders.
+        /// Include the target folders in the list of valid static file folders.
         /// </summary>
         /// <param name="app">IApplicationBuilder</param>
         /// <param name="root">Root (parent of wwwwroot) of the file server</param>
         /// <returns>IApplicationBuilder</returns>
-        public static IApplicationBuilder AddNodeModules (this IApplicationBuilder app, string root)
+        public static IApplicationBuilder AddStaticFilePath (this IApplicationBuilder app, string root, string staticFilePath)
             {
-            var path = Path.Combine(root, "node_modules");
+            var path = Path.Combine(root, staticFilePath);
             var provider = new PhysicalFileProvider(path);
 
             var options = new StaticFileOptions();
-            options.RequestPath  = "/node_modules";     // process only this path
+            options.RequestPath  = "/" + staticFilePath;     // process only this path
             options.FileProvider = provider;
 
             app.UseStaticFiles(options);
 
+            return app;
+            }
+
+        /// <summary>
+        /// Include the given folders in the list of valid static file folders.
+        /// </summary>
+        /// <param name="app">IApplicationBuilder</param>
+        /// <param name="root">Root (parent of wwwwroot) of the file server</param>
+        /// <returns>IApplicationBuilder</returns>
+        public static IApplicationBuilder AddStaticFilePaths (this IApplicationBuilder app, string root, string[] paths)
+            {
+            foreach (string path in paths)
+                {
+                app = AddStaticFilePath(app, root, path);
+                }
             return app;
             }
         }

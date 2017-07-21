@@ -1,20 +1,29 @@
 {
-  //"compileOnSave": true,
   "compilerOptions": {
+    // Compiler
+    "target": "es5",
+    "lib": [ "es5", "es2015", "dom" ],  // assume availability of these libraries
+    "compileOnSave": false,
     "noImplicitAny": false,
     "noEmitOnError": true,
     "removeComments": false,
     "sourceMap": true,
-    "target": "es5",
-    "types": [],
-    "module": "amd",
-    "outFile": "wwwroot\\js\\modelrelief.js"
-  },
+    "outFile": "wwwroot\\js\\modelrelief.js",
 
-  "exclude": [
+    // Modules
+    "module": "amd",                    // generate AMD (Asynchronous Module Definition code for modules
+    "moduleResolution": "node",         // include node_modules in search paths
+    "traceResolution": true,             // show search paths when resolving modules
+    
+    "baseUrl" : ".",
+    "paths": {                          // search path for module resolution; include project client libraries
+      "*": [ "*", "Scripts/typings/*" ]
+      }
+    },
+
+  "exclude": [                          // folders <not> included in compilation
     "node_modules",
-    "build"
+    "wwwroot"                           // Scott Allen : NDC Opinionated View of ASPNET Core
   ]
+}
 
-
-} 

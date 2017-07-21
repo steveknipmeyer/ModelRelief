@@ -1,6 +1,12 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
+Modules
+    How does a module get a name?
+        Is it only through the file name or is there a directive?
+
+    How can require.js be loaded after all other javascript <without> putting it in the head element?
+        Can a common ViewComponent be created?
 
 Relational Database Design
 
@@ -30,9 +36,6 @@ What is the correct way to add typings?
     When NPM is used to install typings (e.g. dat-gui) where are the files installed?
         The included types were still unresolved...
 
-Investigate these tsconfig.json settings from Scott Allen's NDC Biased Approach to ASP.NET Core talk.
-    path
-    lib
 
 // ------------------------------------------------------------------------// 
 //      Questions                                                          //
