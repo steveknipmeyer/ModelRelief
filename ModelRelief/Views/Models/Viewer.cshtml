@@ -34,20 +34,13 @@
     <!------------------------------------------------------------------------------------------------>
     <!--                                    ModelRelief                                             -->
     <!------------------------------------------------------------------------------------------------>
-    <script src="/lib/require.js"></script>
-
+    <script src="/js/modelrelief.js"></script>
     <script>
-        require.config({
-            baseUrl : '/js',
-            paths: {
-                THREE    : '../lib/threejs/',
-                dat      : '../lib/threejs/dat-gui.min.js'
-            }
-        });
-        var modelRelief = require(['/js/modelrelief.js']);
-        var app = modelRelief(['app']);
-        //app.run();
+        window.onload = () => {
+            MR.run();
+        }
     </script>
+   
 </body>
 
 

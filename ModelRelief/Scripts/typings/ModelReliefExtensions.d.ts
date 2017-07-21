@@ -1,7 +1,4 @@
 // Type definitions 
-import * as THREE from 'THREE';
-
-export as namespace THREE;
 
 declare class Stats {       
 
@@ -11,7 +8,7 @@ declare class Stats {
     update () : any;
 }
 
-export interface Validator {
+declare interface Validator {
 
 	/**
 		* If given input is null or undefined, false is returned otherwise true.
@@ -31,16 +28,16 @@ export interface Validator {
 	verifyInput: (input : any, defaultValue: any ) => any;
 }
 
-export class OBJLoader {
+declare class OBJLoader {
     constructor ();
     load (fileName : string, callback : (object : THREE.Object3D) => any) : any;
 }
 
-export class OBJLoader2 {
+declare class OBJLoader2 {
     _getValidator() : Validator;
 }
 
-export class WWOBJLoader2 {
+declare class WWOBJLoader2 {
 
         prepareRun (any) : void;
         run () : void;
