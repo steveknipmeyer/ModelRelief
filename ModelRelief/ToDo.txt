@@ -1,13 +1,6 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
-Modules
-    How does a module get a name?
-        Is it only through the file name or is there a directive?
-
-    How can require.js be loaded after all other javascript <without> putting it in the head element?
-        Can a common ViewComponent be created?
-
 Relational Database Design
 
 // ------------------------------------------------------------------------// 
@@ -25,17 +18,11 @@ Create a set of sample materials such as wood, glass, plaster, etc.
 TypeScript Typings management
     Where is the Visual Studio instance of node.s installed?
         "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\Microsoft\Web Tools\External"
-        Where are the Visual Studio npm typings?
+        Where are the Visual Studio (automatic) npm typings? Do they really exist?
 
 var uint8Array = new Uint8Array((<any>fileDataObj.target).result);
     EventTarget does not contain a member result.
     https://github.com/Microsoft/TSJS-lib-generator/pull/207
-
-What is the correct way to add typings?
-
-    When NPM is used to install typings (e.g. dat-gui) where are the files installed?
-        The included types were still unresolved...
-
 
 // ------------------------------------------------------------------------// 
 //      Questions                                                          //
