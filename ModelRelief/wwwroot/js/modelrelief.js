@@ -112,19 +112,11 @@ var MR;
             this.controls = null;
             this.pivot = null;
             this.initializeViewerControls();
-            var resizeWindow = function () {
-                scope.resizeDisplayGL();
-            };
-            var render = function () {
-                requestAnimationFrame(render);
-                scope.renderGL();
-            };
-            window.addEventListener('resize', resizeWindow, false);
-            console.log('Starting initialization phase...');
             this.initGL();
             this.resizeDisplayGL();
+            window.addEventListener('resize', this.resizeWindow.bind(this), false);
             // start render loop
-            render();
+            this.render();
         }
         Viewer.prototype.initGL = function () {
             var scope = this;
@@ -150,6 +142,10 @@ var MR;
             var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
             this.scene.add(helper);
             this.createPivot();
+        };
+        ;
+        Viewer.prototype.resizeWindow = function () {
+            this.resizeDisplayGL();
         };
         ;
         Viewer.prototype.createPivot = function () {
@@ -186,6 +182,11 @@ var MR;
                 this.renderer.clear();
             this.controls.update();
             this.renderer.render(this.scene, this.camera);
+        };
+        ;
+        Viewer.prototype.render = function () {
+            requestAnimationFrame((this.render).bind(this));
+            this.renderGL();
         };
         ;
         Viewer.prototype.clearAllAssests = function () {

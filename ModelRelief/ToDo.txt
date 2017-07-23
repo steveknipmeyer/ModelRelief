@@ -1,11 +1,13 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
+requestAnimationFrame((this.render).bind(this));
+
 Add documentation comments.
-Create an OBJ Loader class and separate the loading from main.ts.
 Add types to all methods.
 Properly augment THREE types!
 Add Grid Display support.
+Why does closing Chrome not terminate the debugger process?
 
 // ------------------------------------------------------------------------// 
 //      Database Design                                                    //

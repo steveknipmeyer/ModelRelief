@@ -56,21 +56,13 @@ namespace MR {
 
             this.initializeViewerControls();
 
-            let resizeWindow = function () {
-                scope.resizeDisplayGL();
-            };
-            let render = function () {
-                requestAnimationFrame(render);
-                scope.renderGL();
-            };
-            window.addEventListener('resize', resizeWindow, false);
-            console.log('Starting initialization phase...');
-
             this.initGL();
             this.resizeDisplayGL();
 
+            window.addEventListener('resize', this.resizeWindow.bind(this), false);
+
             // start render loop
-            render();
+            this.render();
         }
 
         initGL() {
@@ -103,6 +95,10 @@ namespace MR {
             this.scene.add(helper);
 
             this.createPivot();
+        };
+
+        resizeWindow () {
+            this.resizeDisplayGL();
         };
 
         createPivot() {
@@ -139,6 +135,11 @@ namespace MR {
 
             this.controls.update();
             this.renderer.render(this.scene, this.camera);
+        };
+
+        render() {
+            requestAnimationFrame((this.render).bind(this));
+            this.renderGL();
         };
 
         clearAllAssests() {
