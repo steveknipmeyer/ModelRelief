@@ -27,13 +27,15 @@ console.log ('ModelRelief started');
         let fileName     = modelName;
         let texturePath  = modelPath;
         let materialFile = modelName.replace(/\.[^/.]+$/, "") + '.mtl';
-        var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataFile(
+        let prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataFile(
             modelName,
             modelPath,
             fileName,
             texturePath,
             materialFile
         );
-        viewer.loadFiles(prepData);
+
+        let loader = new MR.OBJLoader(viewer.pivot);
+        loader.loadFiles (prepData);
     }
 }

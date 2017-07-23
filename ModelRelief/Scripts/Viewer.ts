@@ -15,7 +15,8 @@ namespace MR {
         fov: number;               // field of view
     }
     export class Viewer {
-        Validator: Validator;
+
+        public pivot: THREE.Object3D;
 
         renderer: THREE.WebGLRenderer;
         canvas: HTMLCanvasElement;
@@ -27,13 +28,8 @@ namespace MR {
         cameraTarget: THREE.Vector3;
         controls: THREE.TrackballControls;
 
-        pivot: THREE.Object3D;
-        wwObjLoader2: WWOBJLoader2;
-
         constructor(elementToBindTo: HTMLCanvasElement) {
             let scope = this;
-
-            this.Validator = THREE.OBJLoader2.prototype._getValidator();
 
             this.renderer = null;
             this.canvas = elementToBindTo;
@@ -56,12 +52,7 @@ namespace MR {
             this.cameraTarget = this.cameraDefaults.target;
 
             this.controls = null;
-
             this.pivot = null;
-
-            this.wwObjLoader2 = new THREE.OBJLoader2.WWOBJLoader2();
-            this.wwObjLoader2.setCrossOrigin('anonymous');
-
 
             this.initializeViewerControls();
 
@@ -77,7 +68,6 @@ namespace MR {
 
             this.initGL();
             this.resizeDisplayGL();
-            this.initPostGL();
 
             // start render loop
             render();
@@ -92,8 +82,6 @@ namespace MR {
                 antialias: true,
             });
             this.renderer.autoClear = true;
-            this.renderer.setClearColor(0x050505);
-            this.renderer.setClearColor(0xf0f0f0);
             this.renderer.setClearColor(0x000000);
             this.scene = new THREE.Scene();
 
@@ -121,43 +109,6 @@ namespace MR {
             this.pivot = new THREE.Object3D();
             this.pivot.name = 'Pivot';
             this.scene.add(this.pivot);
-        };
-
-        initPostGL() {
-            var scope = this;
-
-            var reportProgress = function (content) {
-                console.log('Progress: ' + content);
-            };
-            var materialsLoaded = function (materials) {
-                var count = scope.Validator.isValid(materials) ? materials.length : 0;
-                console.log('Loaded #' + count + ' materials.');
-            };
-            var meshLoaded = function (name, bufferGeometry, material) {
-                console.log('Loaded mesh: ' + name + ' Material name: ' + material.name);
-                /*
-                            let meshParameters : THREE.MeshDepthMaterialParameters;
-                            let depthMaterial = new THREE.MeshDepthMaterial();
-                            return new THREE.OBJLoader2.WWOBJLoader2.LoadedMeshUserOverride (false, null, depthMaterial);
-                */
-                return new THREE.OBJLoader2.WWOBJLoader2.LoadedMeshUserOverride(false, null, new THREE.MeshPhongMaterial());
-            };
-            var completedLoading = function () {
-                console.log('Loading complete!');
-            };
-
-            this.wwObjLoader2.registerCallbackProgress(reportProgress);
-            this.wwObjLoader2.registerCallbackCompletedLoading(completedLoading);
-            this.wwObjLoader2.registerCallbackMaterialsLoaded(materialsLoaded);
-            this.wwObjLoader2.registerCallbackMeshLoaded(meshLoaded);
-            return true;
-        };
-
-        loadFiles(prepData) {
-            prepData.setSceneGraphBaseNode(this.pivot);
-            prepData.setStreamMeshes(true);
-            this.wwObjLoader2.prepareRun(prepData);
-            this.wwObjLoader2.run();
         };
 
         resizeDisplayGL() {
@@ -218,7 +169,7 @@ namespace MR {
             scope.pivot.traverse(remover);
             scope.createPivot();
         };
-        ///
+
         initializeViewerControls() {
             class ViewerControls {
                 displayGrid: boolean;

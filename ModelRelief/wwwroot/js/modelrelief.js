@@ -23,9 +23,64 @@ var MR;
         var texturePath = modelPath;
         var materialFile = modelName.replace(/\.[^/.]+$/, "") + '.mtl';
         var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataFile(modelName, modelPath, fileName, texturePath, materialFile);
-        viewer.loadFiles(prepData);
+        var loader = new MR.OBJLoader(viewer.pivot);
+        loader.loadFiles(prepData);
     }
     MR.main = main;
+})(MR || (MR = {}));
+// ------------------------------------------------------------------------// 
+// ModelRelief                                                             //
+//                                                                         //                                                                          
+// Copyright (c) <2017> Steve Knipmeyer                                    //
+// ------------------------------------------------------------------------//
+"use strict";
+var MR;
+(function (MR) {
+    var OBJLoader = (function () {
+        function OBJLoader(pivot) {
+            var scope = this;
+            this.pivot = pivot;
+            this.loader = new THREE.OBJLoader2.WWOBJLoader2();
+            this.loader.setCrossOrigin('anonymous');
+            this.loader.registerCallbackProgress(this.reportProgress.bind(scope));
+            this.loader.registerCallbackCompletedLoading(this.completedLoading.bind(scope));
+            this.loader.registerCallbackMaterialsLoaded(this.materialsLoaded.bind(scope));
+            this.loader.registerCallbackMeshLoaded(this.meshLoaded.bind(scope));
+            this.validator = THREE.OBJLoader2.prototype._getValidator();
+        }
+        OBJLoader.prototype.reportProgress = function (content) {
+            console.log('Progress: ' + content);
+        };
+        ;
+        OBJLoader.prototype.materialsLoaded = function (materials) {
+            var count = this.validator.isValid(materials) ? materials.length : 0;
+            console.log('Loaded #' + count + ' materials.');
+        };
+        ;
+        OBJLoader.prototype.meshLoaded = function (name, bufferGeometry, material) {
+            console.log('Loaded mesh: ' + name + ' Material name: ' + material.name);
+            /*
+                        let meshParameters : THREE.MeshDepthMaterialParameters;
+                        let depthMaterial = new THREE.MeshDepthMaterial();
+                        return new THREE.OBJLoader2.WWOBJLoader2.LoadedMeshUserOverride (false, null, depthMaterial);
+            */
+            return new THREE.OBJLoader2.WWOBJLoader2.LoadedMeshUserOverride(false, null, new THREE.MeshPhongMaterial());
+        };
+        ;
+        OBJLoader.prototype.completedLoading = function () {
+            console.log('Loading complete!');
+        };
+        ;
+        OBJLoader.prototype.loadFiles = function (prepData) {
+            prepData.setSceneGraphBaseNode(this.pivot);
+            prepData.setStreamMeshes(true);
+            this.loader.prepareRun(prepData);
+            this.loader.run();
+        };
+        ;
+        return OBJLoader;
+    }());
+    MR.OBJLoader = OBJLoader;
 })(MR || (MR = {}));
 // ------------------------------------------------------------------------// 
 // ModelRelief                                                             //
@@ -38,7 +93,6 @@ var MR;
     var Viewer = (function () {
         function Viewer(elementToBindTo) {
             var scope = this;
-            this.Validator = THREE.OBJLoader2.prototype._getValidator();
             this.renderer = null;
             this.canvas = elementToBindTo;
             this.aspectRatio = 1;
@@ -57,8 +111,6 @@ var MR;
             this.cameraTarget = this.cameraDefaults.target;
             this.controls = null;
             this.pivot = null;
-            this.wwObjLoader2 = new THREE.OBJLoader2.WWOBJLoader2();
-            this.wwObjLoader2.setCrossOrigin('anonymous');
             this.initializeViewerControls();
             var resizeWindow = function () {
                 scope.resizeDisplayGL();
@@ -71,7 +123,6 @@ var MR;
             console.log('Starting initialization phase...');
             this.initGL();
             this.resizeDisplayGL();
-            this.initPostGL();
             // start render loop
             render();
         }
@@ -83,8 +134,6 @@ var MR;
                 antialias: true,
             });
             this.renderer.autoClear = true;
-            this.renderer.setClearColor(0x050505);
-            this.renderer.setClearColor(0xf0f0f0);
             this.renderer.setClearColor(0x000000);
             this.scene = new THREE.Scene();
             this.camera = new THREE.PerspectiveCamera(this.cameraDefaults.fov, this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far);
@@ -107,41 +156,6 @@ var MR;
             this.pivot = new THREE.Object3D();
             this.pivot.name = 'Pivot';
             this.scene.add(this.pivot);
-        };
-        ;
-        Viewer.prototype.initPostGL = function () {
-            var scope = this;
-            var reportProgress = function (content) {
-                console.log('Progress: ' + content);
-            };
-            var materialsLoaded = function (materials) {
-                var count = scope.Validator.isValid(materials) ? materials.length : 0;
-                console.log('Loaded #' + count + ' materials.');
-            };
-            var meshLoaded = function (name, bufferGeometry, material) {
-                console.log('Loaded mesh: ' + name + ' Material name: ' + material.name);
-                /*
-                            let meshParameters : THREE.MeshDepthMaterialParameters;
-                            let depthMaterial = new THREE.MeshDepthMaterial();
-                            return new THREE.OBJLoader2.WWOBJLoader2.LoadedMeshUserOverride (false, null, depthMaterial);
-                */
-                return new THREE.OBJLoader2.WWOBJLoader2.LoadedMeshUserOverride(false, null, new THREE.MeshPhongMaterial());
-            };
-            var completedLoading = function () {
-                console.log('Loading complete!');
-            };
-            this.wwObjLoader2.registerCallbackProgress(reportProgress);
-            this.wwObjLoader2.registerCallbackCompletedLoading(completedLoading);
-            this.wwObjLoader2.registerCallbackMaterialsLoaded(materialsLoaded);
-            this.wwObjLoader2.registerCallbackMeshLoaded(meshLoaded);
-            return true;
-        };
-        ;
-        Viewer.prototype.loadFiles = function (prepData) {
-            prepData.setSceneGraphBaseNode(this.pivot);
-            prepData.setStreamMeshes(true);
-            this.wwObjLoader2.prepareRun(prepData);
-            this.wwObjLoader2.run();
         };
         ;
         Viewer.prototype.resizeDisplayGL = function () {
@@ -204,7 +218,6 @@ var MR;
             scope.createPivot();
         };
         ;
-        ///
         Viewer.prototype.initializeViewerControls = function () {
             var ViewerControls = (function () {
                 function ViewerControls() {
