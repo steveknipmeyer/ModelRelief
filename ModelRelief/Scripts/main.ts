@@ -6,82 +6,18 @@
 
 "use strict";
 namespace MR {
-    export function main() {
 
-        console.log ('ModelRelief started');
+    class Dummy {
+        constructor() {
+            var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataFile();
+        }
+    }
+
+    export function main() {
+        
+console.log ('ModelRelief started');
 
         var viewer = new MR.Viewer(<HTMLCanvasElement> document.getElementById('model3D'));
-
-        // Init dat.gui and controls for the UI
-        var elemFileInput = document.getElementById('fileUploadInput');
-        var WWOBJLoader2Control = function () {
-            this.smoothShading  = viewer.smoothShading;
-            this.doubleSide     = viewer.doubleSide;
-            this.streamMeshes   = viewer.streamMeshes;
-        };
-        var wwObjLoader2Control = new WWOBJLoader2Control();
-        var gui = new dat.GUI({
-            autoPlace: false,
-            width: 320
-        });
-        var menuDiv = document.getElementById('dat');
-        menuDiv.appendChild(gui.domElement);
-        var folderOptions = gui.addFolder('WWOBJLoader2 Options');
-
-        var controlSmooth = folderOptions.add(wwObjLoader2Control, 'smoothShading').name('Smooth Shading');
-        controlSmooth.onChange(function (value) {
-            console.log('Setting smoothShading to: ' + value);
-            viewer.alterSmoothShading();
-        });
-
-        var controlDouble = folderOptions.add(wwObjLoader2Control, 'doubleSide').name('Double Side Materials');
-        controlDouble.onChange(function (value) {
-            console.log('Setting doubleSide to: ' + value);
-            viewer.alterDouble();
-        });
-
-        var controlStreamMeshes = folderOptions.add(wwObjLoader2Control, 'streamMeshes').name('Stream Meshes');
-        controlStreamMeshes.onChange(function (value) {
-            console.log('Setting streamMeshes to: ' + value);
-            viewer.streamMeshes = value;
-        });
-
-        if (viewer.fileApiAvailable) {
-            wwObjLoader2Control.pathTexture = '';
-            var controlPathTexture = folderOptions.add(wwObjLoader2Control, 'pathTexture').name('Relative path to textures');
-            controlPathTexture.onChange(function (value) {
-                console.log('Setting pathTexture to: ' + value);
-                viewer.pathTexture = value + '/';
-            });
-            wwObjLoader2Control.loadObjFile = function () {
-                elemFileInput.click();
-            };
-            folderOptions.add(wwObjLoader2Control, 'loadObjFile').name('Load OBJ/MTL Files');
-            var handleFileSelect = function (object3d) {
-                viewer._handleFileSelect(object3d, wwObjLoader2Control.pathTexture);
-            };
-            elemFileInput.addEventListener('change', handleFileSelect, false);
-            wwObjLoader2Control.clearAllAssests = function () {
-                viewer.clearAllAssests();
-            };
-            folderOptions.add(wwObjLoader2Control, 'clearAllAssests').name('Clear Scene');
-        }
-        folderOptions.open();
-
-        // init three.js example application
-        var resizeWindow = function () {
-            viewer.resizeDisplayGL();
-        };
-        var render = function () {
-            requestAnimationFrame(render);
-            viewer.render();
-        };
-        window.addEventListener('resize', resizeWindow, false);
-        console.log('Starting initialisation phase...');
-
-        viewer.initGL();
-        viewer.resizeDisplayGL();
-        viewer.initPostGL();
 
         let modelNameElement : HTMLElement = window.document.getElementById('modelName');
         let modelPathElement : HTMLElement = window.document.getElementById('modelPath');
@@ -99,8 +35,5 @@ namespace MR {
             materialFile
         );
         viewer.loadFiles(prepData);
-
-        // start render loop
-        render();
     }
 }
