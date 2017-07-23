@@ -14,7 +14,7 @@ namespace MR {
         fov             : number;               // field of view
     }
 
-    export class OBJViewer  {
+    export class Viewer  {
             Validator          : Validator;
 
             renderer           : THREE.WebGLRenderer;

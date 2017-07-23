@@ -13,17 +13,6 @@
     display: block;
 }
 
-#info a {
-    color: #f00;
-    font-weight: bold;
-    text-decoration: underline;
-    cursor: pointer
-}
-
-#feedback {
-    color: darkorange;
-}
-
 #dat {
     user-select: none;
     position: absolute;

@@ -6,15 +6,15 @@
 "use strict";
 var MR;
 (function (MR) {
-    function run() {
-        console.log('ModelRelief started.');
-        var app = new MR.OBJViewer(document.getElementById('model3D'));
+    function main() {
+        console.log('ModelRelief started');
+        var viewer = new MR.Viewer(document.getElementById('model3D'));
         // Init dat.gui and controls for the UI
         var elemFileInput = document.getElementById('fileUploadInput');
         var WWOBJLoader2Control = function () {
-            this.smoothShading = app.smoothShading;
-            this.doubleSide = app.doubleSide;
-            this.streamMeshes = app.streamMeshes;
+            this.smoothShading = viewer.smoothShading;
+            this.doubleSide = viewer.doubleSide;
+            this.streamMeshes = viewer.streamMeshes;
         };
         var wwObjLoader2Control = new WWOBJLoader2Control();
         var gui = new dat.GUI({
@@ -27,52 +27,52 @@ var MR;
         var controlSmooth = folderOptions.add(wwObjLoader2Control, 'smoothShading').name('Smooth Shading');
         controlSmooth.onChange(function (value) {
             console.log('Setting smoothShading to: ' + value);
-            app.alterSmoothShading();
+            viewer.alterSmoothShading();
         });
         var controlDouble = folderOptions.add(wwObjLoader2Control, 'doubleSide').name('Double Side Materials');
         controlDouble.onChange(function (value) {
             console.log('Setting doubleSide to: ' + value);
-            app.alterDouble();
+            viewer.alterDouble();
         });
         var controlStreamMeshes = folderOptions.add(wwObjLoader2Control, 'streamMeshes').name('Stream Meshes');
         controlStreamMeshes.onChange(function (value) {
             console.log('Setting streamMeshes to: ' + value);
-            app.streamMeshes = value;
+            viewer.streamMeshes = value;
         });
-        if (app.fileApiAvailable) {
+        if (viewer.fileApiAvailable) {
             wwObjLoader2Control.pathTexture = '';
             var controlPathTexture = folderOptions.add(wwObjLoader2Control, 'pathTexture').name('Relative path to textures');
             controlPathTexture.onChange(function (value) {
                 console.log('Setting pathTexture to: ' + value);
-                app.pathTexture = value + '/';
+                viewer.pathTexture = value + '/';
             });
             wwObjLoader2Control.loadObjFile = function () {
                 elemFileInput.click();
             };
             folderOptions.add(wwObjLoader2Control, 'loadObjFile').name('Load OBJ/MTL Files');
             var handleFileSelect = function (object3d) {
-                app._handleFileSelect(object3d, wwObjLoader2Control.pathTexture);
+                viewer._handleFileSelect(object3d, wwObjLoader2Control.pathTexture);
             };
             elemFileInput.addEventListener('change', handleFileSelect, false);
             wwObjLoader2Control.clearAllAssests = function () {
-                app.clearAllAssests();
+                viewer.clearAllAssests();
             };
             folderOptions.add(wwObjLoader2Control, 'clearAllAssests').name('Clear Scene');
         }
         folderOptions.open();
         // init three.js example application
         var resizeWindow = function () {
-            app.resizeDisplayGL();
+            viewer.resizeDisplayGL();
         };
         var render = function () {
             requestAnimationFrame(render);
-            app.render();
+            viewer.render();
         };
         window.addEventListener('resize', resizeWindow, false);
         console.log('Starting initialisation phase...');
-        app.initGL();
-        app.resizeDisplayGL();
-        app.initPostGL();
+        viewer.initGL();
+        viewer.resizeDisplayGL();
+        viewer.initPostGL();
         var modelNameElement = window.document.getElementById('modelName');
         var modelPathElement = window.document.getElementById('modelPath');
         var modelName = modelNameElement.textContent;
@@ -81,11 +81,11 @@ var MR;
         var texturePath = modelPath;
         var materialFile = modelName.replace(/\.[^/.]+$/, "") + '.mtl';
         var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataFile(modelName, modelPath, fileName, texturePath, materialFile);
-        app.loadFiles(prepData);
+        viewer.loadFiles(prepData);
         // start render loop
         render();
     }
-    MR.run = run;
+    MR.main = main;
 })(MR || (MR = {}));
 // ------------------------------------------------------------------------// 
 // ModelRelief                                                             //
@@ -95,8 +95,8 @@ var MR;
 "use strict";
 var MR;
 (function (MR) {
-    var OBJViewer = (function () {
-        function OBJViewer(elementToBindTo) {
+    var Viewer = (function () {
+        function Viewer(elementToBindTo) {
             this.Validator = THREE.OBJLoader2.prototype._getValidator();
             this.renderer = null;
             this.canvas = elementToBindTo;
@@ -131,7 +131,7 @@ var MR;
                 console.warn('File API is not supported! Disabling file loading.');
             }
         }
-        OBJViewer.prototype.initGL = function () {
+        Viewer.prototype.initGL = function () {
             var scope = this;
             this.renderer = new THREE.WebGLRenderer({
                 logarithmicDepthBuffer: false,
@@ -159,13 +159,13 @@ var MR;
             this.createPivot();
         };
         ;
-        OBJViewer.prototype.createPivot = function () {
+        Viewer.prototype.createPivot = function () {
             this.pivot = new THREE.Object3D();
             this.pivot.name = 'Pivot';
             this.scene.add(this.pivot);
         };
         ;
-        OBJViewer.prototype.initPostGL = function () {
+        Viewer.prototype.initPostGL = function () {
             var scope = this;
             var reportProgress = function (content) {
                 console.log('Progress: ' + content);
@@ -193,14 +193,14 @@ var MR;
             return true;
         };
         ;
-        OBJViewer.prototype.loadFiles = function (prepData) {
+        Viewer.prototype.loadFiles = function (prepData) {
             prepData.setSceneGraphBaseNode(this.pivot);
             prepData.setStreamMeshes(this.streamMeshes);
             this.wwObjLoader2.prepareRun(prepData);
             this.wwObjLoader2.run();
         };
         ;
-        OBJViewer.prototype._handleFileSelect = function (event, pathTexture) {
+        Viewer.prototype._handleFileSelect = function (event, pathTexture) {
             var scope = this;
             var fileObj = null;
             var fileMtl = null;
@@ -244,7 +244,7 @@ var MR;
             fileReader.readAsArrayBuffer(fileObj);
         };
         ;
-        OBJViewer.prototype.loadFilesUser = function (objDef) {
+        Viewer.prototype.loadFilesUser = function (objDef) {
             var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataArrayBuffer(objDef.name, objDef.objAsArrayBuffer, objDef.pathTexture, objDef.mtlAsString);
             prepData.setSceneGraphBaseNode(this.pivot);
             prepData.setStreamMeshes(this.streamMeshes);
@@ -252,37 +252,37 @@ var MR;
             this.wwObjLoader2.run();
         };
         ;
-        OBJViewer.prototype.resizeDisplayGL = function () {
+        Viewer.prototype.resizeDisplayGL = function () {
             this.controls.handleResize();
             this.recalcAspectRatio();
             this.renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight, false);
             this.updateCamera();
         };
         ;
-        OBJViewer.prototype.recalcAspectRatio = function () {
+        Viewer.prototype.recalcAspectRatio = function () {
             this.aspectRatio = (this.canvas.offsetHeight === 0) ? 1 : this.canvas.offsetWidth / this.canvas.offsetHeight;
         };
         ;
-        OBJViewer.prototype.resetCamera = function () {
+        Viewer.prototype.resetCamera = function () {
             this.camera.position.copy(this.cameraDefaults.position);
             this.cameraTarget.copy(this.cameraDefaults.target);
             this.updateCamera();
         };
         ;
-        OBJViewer.prototype.updateCamera = function () {
+        Viewer.prototype.updateCamera = function () {
             this.camera.aspect = this.aspectRatio;
             this.camera.lookAt(this.cameraTarget);
             this.camera.updateProjectionMatrix();
         };
         ;
-        OBJViewer.prototype.render = function () {
+        Viewer.prototype.render = function () {
             if (!this.renderer.autoClear)
                 this.renderer.clear();
             this.controls.update();
             this.renderer.render(this.scene, this.camera);
         };
         ;
-        OBJViewer.prototype.alterSmoothShading = function () {
+        Viewer.prototype.alterSmoothShading = function () {
             var scope = this;
             scope.smoothShading = !scope.smoothShading;
             console.log(scope.smoothShading ? 'Enabling SmoothShading' : 'Enabling FlatShading');
@@ -296,7 +296,7 @@ var MR;
             scope.pivot.traverse(scopeTraverse);
         };
         ;
-        OBJViewer.prototype.alterDouble = function () {
+        Viewer.prototype.alterDouble = function () {
             var scope = this;
             scope.doubleSide = !scope.doubleSide;
             console.log(scope.doubleSide ? 'Enabling DoubleSide materials' : 'Enabling FrontSide materials');
@@ -309,7 +309,7 @@ var MR;
             scope.pivot.traverse(scopeTraverse);
         };
         ;
-        OBJViewer.prototype.traverseScene = function (object3d) {
+        Viewer.prototype.traverseScene = function (object3d) {
             if (object3d.material instanceof THREE.MultiMaterial) {
                 var materials = object3d.material.materials;
                 for (var name in materials) {
@@ -322,7 +322,7 @@ var MR;
             }
         };
         ;
-        OBJViewer.prototype.clearAllAssests = function () {
+        Viewer.prototype.clearAllAssests = function () {
             var scope = this;
             var remover = function (object3d) {
                 if (object3d === scope.pivot) {
@@ -352,8 +352,8 @@ var MR;
             scope.createPivot();
         };
         ;
-        return OBJViewer;
+        return Viewer;
     }());
-    MR.OBJViewer = OBJViewer;
+    MR.Viewer = Viewer;
 })(MR || (MR = {}));
 //# sourceMappingURL=modelrelief.js.map

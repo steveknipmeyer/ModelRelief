@@ -10,9 +10,6 @@
         <canvas id="model3D"></canvas>
     </div>
 
-    <div id="info">
-        <div id="feedback"></div>
-    </div>
     <input id="fileUploadInput" type="file" name="files[]" multiple accept=".obj,.mtl" />
 
     <text id="modelName">@Model.Name</text>
@@ -37,7 +34,7 @@
     <script src="/js/modelrelief.js"></script>
     <script>
         window.onload = () => {
-            MR.run();
+            MR.main();
         }
     </script>
    
