@@ -67,6 +67,7 @@ namespace MR {
             folderOptions.add(wwObjLoader2Control, 'clearAllAssests').name('Clear Scene');
         }
         folderOptions.open();
+
         // init three.js example application
         var resizeWindow = function () {
             app.resizeDisplayGL();

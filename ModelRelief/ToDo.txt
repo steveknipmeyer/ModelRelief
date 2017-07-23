@@ -1,8 +1,55 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
-Relational Database Design
 
+// ------------------------------------------------------------------------// 
+//      Database Design                                                    //
+// ------------------------------------------------------------------------//
+    How can JSON files be used to configure the projects?
+    JSON will be used to drive the API!
+
+    Users
+        Id
+    
+    Project
+        Scene
+        Transform
+    
+    Transform
+        Mesh Depth
+        Bas Relief Parameters
+            Tau Threshold
+            Sigma1 Gaussian Blur 
+            Sigma2 Gaussian Smooth
+            Lambsa Linear Scaling
+
+    Models
+        Id
+        Name
+        File System Path?
+       ?Format (OBJ, STL)
+       
+    Images
+        Id
+        Name
+        File System Path?
+        Type (Depth, Mask)
+       ?Format (PNG, JPG, EXR)
+
+     Scenes
+        Id
+        Name
+        Model
+        Material
+        Lighting
+        Camera Position
+
+     Materials
+        Id
+        Name
+
+     Lighting Configurations
+       
 // ------------------------------------------------------------------------// 
 //      Viewer                                                             //
 // ------------------------------------------------------------------------//

@@ -2,7 +2,7 @@
   "compilerOptions": {
     // Compiler
     "target": "es5",
-    "lib": [ "es5", "es2015", "dom" ],  // assume availability of these libraries
+    "lib": [ "es5", "es2015", "dom" ], // assume availability of these libraries
     "compileOnSave": false,
     "noImplicitAny": false,
     "noEmitOnError": true,
@@ -11,19 +11,25 @@
     "outFile": "wwwroot\\js\\modelrelief.js",
 
     // Modules
-    "module": "amd",                    // generate AMD (Asynchronous Module Definition code for modules
-    "moduleResolution": "node",         // include node_modules in search paths
-    "traceResolution": true,             // show search paths when resolving modules
-    
-    "baseUrl" : ".",
-    "paths": {                          // search path for module resolution; include project client libraries
-      "*": [ "*", "Scripts/typings/*" ]
-      }
-    },
+    "module": "amd", // generate AMD (Asynchronous Module Definition code for modules
+    "moduleResolution": "node", // include node_modules in search paths
+    "traceResolution": true, // show search paths when resolving modules
 
-  "exclude": [                          // folders <not> included in compilation
+    "baseUrl": ".",
+    "paths": { // search path for module resolution; include project client libraries
+      "*": [ "*", "Scripts/typings/*" ]
+    }
+  },
+
+  "exclude": [ // folders <not> included in compilation
     "node_modules",
-    "wwwroot"                           // Scott Allen : NDC Opinionated View of ASPNET Core
+    "wwwroot" // Scott Allen : NDC Opinionated View of ASPNET Core
   ]
 }
 
+/*
+    "strictNullChecks": true,
+    // never allow null of undefined to be assigned to types by default
+    let modelNameElement : HTMLElement = window.document.getElementById('modelName');         // error
+    let modelNameElement : HTMLElement | null = window.document.getElementById('modelName');  // OK
+*/

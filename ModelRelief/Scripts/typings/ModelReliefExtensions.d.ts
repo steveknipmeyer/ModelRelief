@@ -28,11 +28,6 @@ declare interface Validator {
 	verifyInput: (input : any, defaultValue: any ) => any;
 }
 
-declare class OBJLoader {
-    constructor ();
-    load (fileName : string, callback : (object : THREE.Object3D) => any) : any;
-}
-
 declare class OBJLoader2 {
     _getValidator() : Validator;
 }
