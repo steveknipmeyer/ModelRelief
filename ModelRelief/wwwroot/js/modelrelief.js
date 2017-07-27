@@ -3,93 +3,9 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-"use strict";
-var MR;
-(function (MR) {
-    var Dummy = (function () {
-        function Dummy() {
-            var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataFile();
-        }
-        return Dummy;
-    }());
-    function main() {
-        console.log('ModelRelief started');
-        var viewer = new MR.Viewer(document.getElementById('model3D'));
-        var modelNameElement = window.document.getElementById('modelName');
-        var modelPathElement = window.document.getElementById('modelPath');
-        var modelName = modelNameElement.textContent;
-        var modelPath = modelPathElement.textContent;
-        var fileName = modelName;
-        var texturePath = modelPath;
-        var materialFile = modelName.replace(/\.[^/.]+$/, "") + '.mtl';
-        var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataFile(modelName, modelPath, fileName, texturePath, materialFile);
-        var loader = new MR.OBJLoader(viewer.pivot);
-        loader.loadFiles(prepData);
-    }
-    MR.main = main;
-})(MR || (MR = {}));
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017> Steve Knipmeyer                                    //
-// ------------------------------------------------------------------------//
-"use strict";
-var MR;
-(function (MR) {
-    var OBJLoader = (function () {
-        function OBJLoader(pivot) {
-            var scope = this;
-            this.pivot = pivot;
-            this.loader = new THREE.OBJLoader2.WWOBJLoader2();
-            this.loader.setCrossOrigin('anonymous');
-            this.loader.registerCallbackProgress(this.reportProgress.bind(scope));
-            this.loader.registerCallbackCompletedLoading(this.completedLoading.bind(scope));
-            this.loader.registerCallbackMaterialsLoaded(this.materialsLoaded.bind(scope));
-            this.loader.registerCallbackMeshLoaded(this.meshLoaded.bind(scope));
-            this.validator = THREE.OBJLoader2.prototype._getValidator();
-        }
-        OBJLoader.prototype.reportProgress = function (content) {
-            console.log('Progress: ' + content);
-        };
-        ;
-        OBJLoader.prototype.materialsLoaded = function (materials) {
-            var count = this.validator.isValid(materials) ? materials.length : 0;
-            console.log('Loaded #' + count + ' materials.');
-        };
-        ;
-        OBJLoader.prototype.meshLoaded = function (name, bufferGeometry, material) {
-            console.log('Loaded mesh: ' + name + ' Material name: ' + material.name);
-            /*
-                        let meshParameters : THREE.MeshDepthMaterialParameters;
-                        let depthMaterial = new THREE.MeshDepthMaterial();
-                        return new THREE.OBJLoader2.WWOBJLoader2.LoadedMeshUserOverride (false, null, depthMaterial);
-            */
-            return new THREE.OBJLoader2.WWOBJLoader2.LoadedMeshUserOverride(false, null, new THREE.MeshPhongMaterial());
-        };
-        ;
-        OBJLoader.prototype.completedLoading = function () {
-            console.log('Loading complete!');
-        };
-        ;
-        OBJLoader.prototype.loadFiles = function (prepData) {
-            prepData.setSceneGraphBaseNode(this.pivot);
-            prepData.setStreamMeshes(true);
-            this.loader.prepareRun(prepData);
-            this.loader.run();
-        };
-        ;
-        return OBJLoader;
-    }());
-    MR.OBJLoader = OBJLoader;
-})(MR || (MR = {}));
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017> Steve Knipmeyer                                    //
-// ------------------------------------------------------------------------//
-"use strict";
-var MR;
-(function (MR) {
+define("Viewer", ["require", "exports", "three", "dat-gui"], function (require, exports, THREE, dat) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var Viewer = (function () {
         function Viewer(elementToBindTo) {
             var scope = this;
@@ -123,7 +39,7 @@ var MR;
             this.renderer = new THREE.WebGLRenderer({
                 logarithmicDepthBuffer: false,
                 canvas: this.canvas,
-                antialias: true,
+                antialias: true
             });
             this.renderer.autoClear = true;
             this.renderer.setClearColor(0x000000);
@@ -143,52 +59,43 @@ var MR;
             this.scene.add(helper);
             this.createPivot();
         };
-        ;
         Viewer.prototype.resizeWindow = function () {
             this.resizeDisplayGL();
         };
-        ;
         Viewer.prototype.createPivot = function () {
             this.pivot = new THREE.Object3D();
             this.pivot.name = 'Pivot';
             this.scene.add(this.pivot);
         };
-        ;
         Viewer.prototype.resizeDisplayGL = function () {
             this.controls.handleResize();
             this.recalcAspectRatio();
             this.renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight, false);
             this.updateCamera();
         };
-        ;
         Viewer.prototype.recalcAspectRatio = function () {
             this.aspectRatio = (this.canvas.offsetHeight === 0) ? 1 : this.canvas.offsetWidth / this.canvas.offsetHeight;
         };
-        ;
         Viewer.prototype.resetCamera = function () {
             this.camera.position.copy(this.cameraDefaults.position);
             this.cameraTarget.copy(this.cameraDefaults.target);
             this.updateCamera();
         };
-        ;
         Viewer.prototype.updateCamera = function () {
             this.camera.aspect = this.aspectRatio;
             this.camera.lookAt(this.cameraTarget);
             this.camera.updateProjectionMatrix();
         };
-        ;
         Viewer.prototype.renderGL = function () {
             if (!this.renderer.autoClear)
                 this.renderer.clear();
             this.controls.update();
             this.renderer.render(this.scene, this.camera);
         };
-        ;
         Viewer.prototype.render = function () {
-            requestAnimationFrame((this.render).bind(this));
+            requestAnimationFrame(this.render.bind(this));
             this.renderGL();
         };
-        ;
         Viewer.prototype.clearAllAssests = function () {
             var scope = this;
             var remover = function (object3d) {
@@ -218,13 +125,11 @@ var MR;
             scope.pivot.traverse(remover);
             scope.createPivot();
         };
-        ;
         Viewer.prototype.initializeViewerControls = function () {
             var ViewerControls = (function () {
                 function ViewerControls() {
                     this.displayGrid = true;
                 }
-                ;
                 return ViewerControls;
             }());
             var viewerControls = new ViewerControls();
@@ -237,13 +142,93 @@ var MR;
             menuDiv.appendChild(gui.domElement);
             var folderOptions = gui.addFolder('ModelViewer Options');
             var controlDisplayGrid = folderOptions.add(viewerControls, 'displayGrid').name('Display Grid');
-            controlDisplayGrid.onChange = (function (value) {
+            controlDisplayGrid.onChange = function (value) {
                 console.log('Setting displayGrid to: ' + value);
-            });
+            };
             folderOptions.open();
         };
         return Viewer;
     }());
-    MR.Viewer = Viewer;
-})(MR || (MR = {}));
+    exports.Viewer = Viewer;
+});
+// ------------------------------------------------------------------------// 
+// ModelRelief                                                             //
+//                                                                         //                                                                          
+// Copyright (c) <2017> Steve Knipmeyer                                    //
+// ------------------------------------------------------------------------//
+define("OBJLoader", ["require", "exports", "three"], function (require, exports, THREE) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var OBJLoader = (function () {
+        function OBJLoader(pivot) {
+            var scope = this;
+            this.pivot = pivot;
+            this.loader = new THREE.OBJLoader2.WWOBJLoader2();
+            this.loader.setCrossOrigin('anonymous');
+            this.loader.registerCallbackProgress(this.reportProgress.bind(scope));
+            this.loader.registerCallbackCompletedLoading(this.completedLoading.bind(scope));
+            this.loader.registerCallbackMaterialsLoaded(this.materialsLoaded.bind(scope));
+            this.loader.registerCallbackMeshLoaded(this.meshLoaded.bind(scope));
+            this.validator = THREE.OBJLoader2.prototype._getValidator();
+        }
+        OBJLoader.prototype.reportProgress = function (content) {
+            console.log('Progress: ' + content);
+        };
+        OBJLoader.prototype.materialsLoaded = function (materials) {
+            var count = this.validator.isValid(materials) ? materials.length : 0;
+            console.log("Loaded #" + count + " materials.");
+        };
+        OBJLoader.prototype.meshLoaded = function (name, bufferGeometry, material) {
+            console.log("Loaded mesh: " + name + ", Material name: " + material.name);
+            /*
+                        let meshParameters : THREE.MeshDepthMaterialParameters;
+                        let depthMaterial = new THREE.MeshDepthMaterial();
+                        return new THREE.OBJLoader2.WWOBJLoader2.LoadedMeshUserOverride (false, null, depthMaterial);
+            */
+            return new THREE.OBJLoader2.WWOBJLoader2.LoadedMeshUserOverride(false, null, new THREE.MeshPhongMaterial());
+        };
+        OBJLoader.prototype.completedLoading = function () {
+            console.log('Loading complete!');
+        };
+        OBJLoader.prototype.loadFiles = function (prepData) {
+            prepData.setSceneGraphBaseNode(this.pivot);
+            prepData.setStreamMeshes(true);
+            this.loader.prepareRun(prepData);
+            this.loader.run();
+        };
+        return OBJLoader;
+    }());
+    exports.OBJLoader = OBJLoader;
+});
+// ------------------------------------------------------------------------// 
+// ModelRelief                                                             //
+//                                                                         //                                                                          
+// Copyright (c) <2017> Steve Knipmeyer                                    //
+// ------------------------------------------------------------------------//
+define("main", ["require", "exports", "three", "Viewer", "OBJLoader"], function (require, exports, THREE, MRViewer, MROBJLoader) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var ModelRelief = (function () {
+        function ModelRelief() {
+        }
+        ModelRelief.prototype.run = function () {
+            console.log('ModelRelief started');
+            var viewer = new MRViewer.Viewer(document.getElementById('model3D'));
+            var modelNameElement = window.document.getElementById('modelName');
+            var modelPathElement = window.document.getElementById('modelPath');
+            var modelName = modelNameElement.textContent;
+            var modelPath = modelPathElement.textContent;
+            var fileName = modelName;
+            var texturePath = modelPath;
+            var materialFile = modelName.replace(/\.[^/.]+$/, "") + '.mtl';
+            var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataFile(modelName, modelPath, fileName, texturePath, materialFile);
+            var loader = new MROBJLoader.OBJLoader(viewer.pivot);
+            loader.loadFiles(prepData);
+        };
+        return ModelRelief;
+    }());
+    exports.ModelRelief = ModelRelief;
+    var modelRelief = new ModelRelief();
+    modelRelief.run();
+});
 //# sourceMappingURL=modelrelief.js.map

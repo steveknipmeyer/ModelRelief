@@ -18,23 +18,33 @@
     <!------------------------------------------------------------------------------------------------>
     <!--                                    Libraries                                               -->
     <!------------------------------------------------------------------------------------------------>
-
     <script src="/lib/threejs/Detector.js"></script>
+
     <script src="/lib/threejs/three.js"></script>
     <script src="/lib/threejs/TrackballControls.js"></script>
-    <script src="/lib/threejs/MTLLoader.js"></script>
-    <script src="/lib/threejs/dat.gui.min.js"></script>
 
+    <script src="/lib/threejs/MTLLoader.js"></script>
     <script src="/lib/threejs/OBJLoader2.js"></script>
     <script src="/lib/threejs/WWOBJLoader2.js"></script>
 
     <!------------------------------------------------------------------------------------------------>
     <!--                                    ModelRelief                                             -->
     <!------------------------------------------------------------------------------------------------>
-    <script src="/js/modelrelief.js"></script>
+    <script src="/lib/require.js"></script>
     <script>
-        window.onload = () => {
-            MR.main();
+        requirejs.config({
+            baseUrl: 'lib',
+            paths: {
+                main                                    : '/js/modelrelief',
+
+                three                                   : '/lib/threejs/three',
+               'three/three-trackballcontrols'          : '/lib/threejs/TrackballControls',
+               'dat-gui'                                : '/lib/threejs/dat.gui.min'
+            }
+        });
+        window.onload = function () {
+            // main ap
+            requirejs(['main']);
         }
     </script>
    

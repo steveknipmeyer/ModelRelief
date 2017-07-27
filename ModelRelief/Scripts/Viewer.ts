@@ -5,196 +5,197 @@
 // ------------------------------------------------------------------------//
 
 "use strict";
-namespace MR {
+import * as THREE        from 'three'
 
-    interface CameraDefaults {
-        position: THREE.Vector3;        // location of camera
-        target: THREE.Vector3;        // target point
-        near: number;               // near clipping plane
-        far: number;               // far clipping plane
-        fov: number;               // field of view
+import * as dat from 'dat-gui'
+
+interface CameraDefaults {
+    position: THREE.Vector3;        // location of camera
+    target: THREE.Vector3;          // target point
+    near: number;                   // near clipping plane
+    far: number;                    // far clipping plane
+    fov: number;                    // field of view
+}
+
+export class Viewer {
+
+    public pivot: THREE.Object3D;
+    
+    renderer: THREE.WebGLRenderer;
+    canvas: HTMLCanvasElement;
+    aspectRatio: number;
+
+    scene: THREE.Scene;
+    camera: THREE.PerspectiveCamera;
+    cameraDefaults: CameraDefaults;
+    cameraTarget: THREE.Vector3;
+    controls: THREE.TrackballControls;
+
+    constructor(elementToBindTo: HTMLCanvasElement) {
+        let scope = this;
+            
+        this.renderer = null;
+        this.canvas = elementToBindTo;
+        this.aspectRatio = 1;
+        this.recalcAspectRatio();
+
+        this.scene = null;
+
+        this.cameraDefaults = {
+
+            // Baseline : near = 0.1, far = 10000
+            // ZBuffer  : near = 100, far = 300
+            position: new THREE.Vector3(0.0, 175.0, 500.0),
+            target: new THREE.Vector3(0, 0, 0),
+            near: 0.1,
+            far: 10000,
+            fov: 45
+        };
+        this.camera = null;
+        this.cameraTarget = this.cameraDefaults.target;
+
+        this.controls = null;
+        this.pivot = null;
+
+        this.initializeViewerControls();
+
+        this.initGL();
+        this.resizeDisplayGL();
+   
+        window.addEventListener('resize', this.resizeWindow.bind(this), false);
+
+        // start render loop
+        this.render();
     }
-    export class Viewer {
 
-        public pivot: THREE.Object3D;
+    initGL() {
+        let scope = this;
 
-        renderer: THREE.WebGLRenderer;
-        canvas: HTMLCanvasElement;
-        aspectRatio: number;
+        this.renderer = new THREE.WebGLRenderer({
+            logarithmicDepthBuffer: false,
+            canvas: this.canvas,
+            antialias: true
+        });
+        this.renderer.autoClear = true;
+        this.renderer.setClearColor(0x000000);
+        this.scene = new THREE.Scene();
 
-        scene: THREE.Scene;
-        camera: THREE.PerspectiveCamera;
-        cameraDefaults: CameraDefaults;
-        cameraTarget: THREE.Vector3;
-        controls: THREE.TrackballControls;
+        this.camera = new THREE.PerspectiveCamera(this.cameraDefaults.fov, this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far);
+        this.resetCamera();
 
-        constructor(elementToBindTo: HTMLCanvasElement) {
-            let scope = this;
+        this.controls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
+        var ambientLight = new THREE.AmbientLight(0x404040);
+        var directionalLight1 = new THREE.DirectionalLight(0xC0C090);
+        var directionalLight2 = new THREE.DirectionalLight(0xC0C090);
+        directionalLight1.position.set(-100, -50, 100);
+        directionalLight2.position.set(100, 50, -100);
+        this.scene.add(directionalLight1);
+        this.scene.add(directionalLight2);
+        this.scene.add(ambientLight);
 
-            this.renderer = null;
-            this.canvas = elementToBindTo;
-            this.aspectRatio = 1;
-            this.recalcAspectRatio();
+        var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
+        this.scene.add(helper);
 
-            this.scene = null;
+        this.createPivot();
+    }
 
-            this.cameraDefaults = {
+    resizeWindow () {
+        this.resizeDisplayGL();
+    }
 
-                // Baseline : near = 0.1, far = 10000
-                // ZBuffer  : near = 100, far = 300
-                position: new THREE.Vector3(0.0, 175.0, 500.0),
-                target: new THREE.Vector3(0, 0, 0),
-                near: 0.1,
-                far: 10000,
-                fov: 45
-            };
-            this.camera = null;
-            this.cameraTarget = this.cameraDefaults.target;
+    createPivot() {
+        this.pivot = new THREE.Object3D();
+        this.pivot.name = 'Pivot';
+        this.scene.add(this.pivot);
+    }
 
-            this.controls = null;
-            this.pivot = null;
+    resizeDisplayGL() {
+        this.controls.handleResize();
+        this.recalcAspectRatio();
+        this.renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight, false);
+        this.updateCamera();
+    }
 
-            this.initializeViewerControls();
+    recalcAspectRatio() {
+        this.aspectRatio = (this.canvas.offsetHeight === 0) ? 1 : this.canvas.offsetWidth / this.canvas.offsetHeight;
+    } 
 
-            this.initGL();
-            this.resizeDisplayGL();
+    resetCamera() {
+        this.camera.position.copy(this.cameraDefaults.position);
+        this.cameraTarget.copy(this.cameraDefaults.target);
+        this.updateCamera();
+    }
 
-            window.addEventListener('resize', this.resizeWindow.bind(this), false);
+    updateCamera() {
+        this.camera.aspect = this.aspectRatio;
+        this.camera.lookAt(this.cameraTarget);
+        this.camera.updateProjectionMatrix();
+    }
 
-            // start render loop
-            this.render();
-        }
+    renderGL() {
+        if (!this.renderer.autoClear) this.renderer.clear();
 
-        initGL() {
-            let scope = this;
+        this.controls.update();
+        this.renderer.render(this.scene, this.camera);
+    }
 
-            this.renderer = new THREE.WebGLRenderer({
-                logarithmicDepthBuffer: false,
-                canvas: this.canvas,
-                antialias: true,
-            });
-            this.renderer.autoClear = true;
-            this.renderer.setClearColor(0x000000);
-            this.scene = new THREE.Scene();
+    render() {
+        requestAnimationFrame(this.render.bind(this));
+        this.renderGL();
+    }
 
-            this.camera = new THREE.PerspectiveCamera(this.cameraDefaults.fov, this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far);
-            this.resetCamera();
-
-            this.controls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
-
-            var ambientLight = new THREE.AmbientLight(0x404040);
-            var directionalLight1 = new THREE.DirectionalLight(0xC0C090);
-            var directionalLight2 = new THREE.DirectionalLight(0xC0C090);
-            directionalLight1.position.set(-100, -50, 100);
-            directionalLight2.position.set(100, 50, -100);
-            this.scene.add(directionalLight1);
-            this.scene.add(directionalLight2);
-            this.scene.add(ambientLight);
-
-            var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
-            this.scene.add(helper);
-
-            this.createPivot();
-        };
-
-        resizeWindow () {
-            this.resizeDisplayGL();
-        };
-
-        createPivot() {
-            this.pivot = new THREE.Object3D();
-            this.pivot.name = 'Pivot';
-            this.scene.add(this.pivot);
-        };
-
-        resizeDisplayGL() {
-            this.controls.handleResize();
-            this.recalcAspectRatio();
-            this.renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight, false);
-            this.updateCamera();
-        };
-
-        recalcAspectRatio() {
-            this.aspectRatio = (this.canvas.offsetHeight === 0) ? 1 : this.canvas.offsetWidth / this.canvas.offsetHeight;
-        };
-
-        resetCamera() {
-            this.camera.position.copy(this.cameraDefaults.position);
-            this.cameraTarget.copy(this.cameraDefaults.target);
-            this.updateCamera();
-        };
-
-        updateCamera() {
-            this.camera.aspect = this.aspectRatio;
-            this.camera.lookAt(this.cameraTarget);
-            this.camera.updateProjectionMatrix();
-        };
-
-        renderGL() {
-            if (!this.renderer.autoClear) this.renderer.clear();
-
-            this.controls.update();
-            this.renderer.render(this.scene, this.camera);
-        };
-
-        render() {
-            requestAnimationFrame((this.render).bind(this));
-            this.renderGL();
-        };
-
-        clearAllAssests() {
-            var scope = this;
-            var remover = function (object3d) {
-                if (object3d === scope.pivot) {
-                    return;
-                }
-                console.log('Removing: ' + object3d.name);
-                scope.scene.remove(object3d);
-                if (object3d.hasOwnProperty('geometry')) {
-                    object3d.geometry.dispose();
-                }
-                if (object3d.hasOwnProperty('material')) {
-                    var mat = object3d.material;
-                    if (mat.hasOwnProperty('materials')) {
-                        var materials = mat.materials;
-                        for (var name in materials) {
-                            if (materials.hasOwnProperty(name)) materials[name].dispose();
-                        }
+    clearAllAssests() {
+        var scope = this;
+        var remover = function (object3d) {
+            if (object3d === scope.pivot) {
+                return;
+            }
+            console.log('Removing: ' + object3d.name);
+            scope.scene.remove(object3d);
+            if (object3d.hasOwnProperty('geometry')) {
+                object3d.geometry.dispose();
+            }
+            if (object3d.hasOwnProperty('material')) {
+                var mat = object3d.material;
+                if (mat.hasOwnProperty('materials')) {
+                    var materials = mat.materials;
+                    for (var name in materials) {
+                        if (materials.hasOwnProperty(name)) materials[name].dispose();
                     }
                 }
-                if (object3d.hasOwnProperty('texture')) {
-                    object3d.texture.dispose();
-                }
-            };
-            scope.scene.remove(scope.pivot);
-            scope.pivot.traverse(remover);
-            scope.createPivot();
-        };
-
-        initializeViewerControls() {
-            class ViewerControls {
-                displayGrid: boolean;
-
-                constructor() {
-                    this.displayGrid = true;
-                };
             }
-            let viewerControls = new ViewerControls();
+            if (object3d.hasOwnProperty('texture')) {
+                object3d.texture.dispose();
+            }
+        };
+        scope.scene.remove(scope.pivot);
+        scope.pivot.traverse(remover);
+        scope.createPivot();
+    } 
 
-            // Init dat.gui and controls for the UI
-            var gui = new dat.GUI({
-                autoPlace: false,
-                width: 320
-            });
-            var menuDiv = document.getElementById('dat');
-            menuDiv.appendChild(gui.domElement);
-            var folderOptions = gui.addFolder('ModelViewer Options');
+    initializeViewerControls() {
+        class ViewerControls {
+            displayGrid: boolean;
 
-            var controlDisplayGrid = folderOptions.add(viewerControls, 'displayGrid').name('Display Grid');
-            controlDisplayGrid.onChange = (function (value) {
-                console.log('Setting displayGrid to: ' + value);
-            });
-            folderOptions.open();
+            constructor() {
+                this.displayGrid = true;
+            }
         }
+        let viewerControls = new ViewerControls();
+
+        // Init dat.gui and controls for the UI
+        var gui = new dat.GUI({
+            autoPlace: false,
+            width: 320
+        });
+        var menuDiv = document.getElementById('dat');
+        menuDiv.appendChild(gui.domElement);
+        var folderOptions = gui.addFolder('ModelViewer Options');
+
+        var controlDisplayGrid = folderOptions.add(viewerControls, 'displayGrid').name('Display Grid');
+        controlDisplayGrid.onChange = function (value) {
+            console.log('Setting displayGrid to: ' + value);
+        };
+        folderOptions.open();
     }
 }

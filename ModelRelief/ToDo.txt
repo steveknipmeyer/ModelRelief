@@ -1,11 +1,14 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
-requestAnimationFrame((this.render).bind(this));
+Decouple THREE examples source from THREE?
+    Strip THREE using gulp.
+    Remove partial paths from import statements. Add the path to the reguirejs.config.
 
-Add documentation comments.
 Add types to all methods.
 Properly augment THREE types!
+Add documentation comments.
+
 Add Grid Display support.
 Why does closing Chrome not terminate the debugger process?
 
@@ -72,9 +75,13 @@ Create a set of sample materials such as wood, glass, plaster, etc.
 TypeScript Typings management
     Where is the Visual Studio instance of node.s installed?
         "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\Microsoft\Web Tools\External"
-        Where are the Visual Studio (automatic) npm typings? Do they really exist?
+        Where are the Visual Studio (automatic) npm typings?
+            C:\Users\Steve Knipmeyer\AppData\Local\Microsoft\TypeScript\node_modules\@types
+            https://stackoverflow.com/questions/42663010/typescript-in-visual-studio-2017-automatic-definition-inclusion-causes-duplicat
+            https://blogs.msdn.microsoft.com/visualstudio/2016/11/28/more-productive-javascript-in-visual-studio-2017-rc/
+                (Note: This feature is disabled by default if using a tsconfig.json configuration file
 
-var uint8Array = new Uint8Array((<any>fileDataObj.target).result);
+    var uint8Array = new Uint8Array((<any>fileDataObj.target).result);
     EventTarget does not contain a member result.
     https://github.com/Microsoft/TSJS-lib-generator/pull/207
 

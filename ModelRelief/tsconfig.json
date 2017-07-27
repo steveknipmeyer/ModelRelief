@@ -2,28 +2,29 @@
   "compilerOptions": {
     // Compiler
     "target": "es5",
-    "lib": [ "es5", "es2015", "dom" ], // assume availability of these libraries
+    "lib": [ "es5", "es2015", "dom" ],                // assume availability of these libraries
     "compileOnSave": false,
     "noImplicitAny": false,
     "noEmitOnError": true,
     "removeComments": false,
     "sourceMap": true,
-    "outFile": "wwwroot\\js\\modelrelief.js",
+    "outFile": "wwwroot/js/modelrelief.js",
 
     // Modules
-    "module": "amd", // generate AMD (Asynchronous Module Definition code for modules
-    "moduleResolution": "node", // include node_modules in search paths
-    "traceResolution": true, // show search paths when resolving modules
+    "module": "amd",                                  // generate AMD (Asynchronous Module Definition code for modules
+    "moduleResolution": "node",                       // include node_modules in search paths
+    "traceResolution": true,                          // show search paths when resolving modules
 
     "baseUrl": ".",
-    "paths": { // search path for module resolution; include project client libraries
-      "*": [ "*", "Scripts/typings/*" ]
+    "paths": {                                        // search path for module resolution; include project client libraries
+      "*": [ "*", "Scripts/*"]
     }
   },
 
-  "exclude": [ // folders <not> included in compilation
+  "exclude": [                                        // folders <not> included in compilation
     "node_modules",
-    "wwwroot" // Scott Allen : NDC Opinionated View of ASPNET Core
+    "wwwroot",                                        // Scott Allen : NDC Opinionated View of ASPNET Core
+    "Scripts/Workbench.*"                             // test
   ]
 }
 
