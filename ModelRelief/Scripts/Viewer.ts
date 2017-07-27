@@ -5,9 +5,9 @@
 // ------------------------------------------------------------------------//
 
 "use strict";
-import * as THREE        from 'three'
-
-import * as dat from 'dat-gui'
+import * as THREE               from 'three'
+import * as dat                 from 'dat-gui'
+import { TrackballControls }    from 'TrackballControls'
 
 interface CameraDefaults {
     position: THREE.Vector3;        // location of camera
@@ -19,7 +19,7 @@ interface CameraDefaults {
 
 export class Viewer {
 
-    public pivot: THREE.Object3D;
+    public pivot: THREE.Object3D; 
     
     renderer: THREE.WebGLRenderer;
     canvas: HTMLCanvasElement;
@@ -29,7 +29,7 @@ export class Viewer {
     camera: THREE.PerspectiveCamera;
     cameraDefaults: CameraDefaults;
     cameraTarget: THREE.Vector3;
-    controls: THREE.TrackballControls;
+    controls : TrackballControls;
 
     constructor(elementToBindTo: HTMLCanvasElement) {
         let scope = this;
@@ -83,7 +83,7 @@ export class Viewer {
         this.camera = new THREE.PerspectiveCamera(this.cameraDefaults.fov, this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far);
         this.resetCamera();
 
-        this.controls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
+        this.controls = new TrackballControls(this.camera, this.renderer.domElement);
         var ambientLight = new THREE.AmbientLight(0x404040);
         var directionalLight1 = new THREE.DirectionalLight(0xC0C090);
         var directionalLight2 = new THREE.DirectionalLight(0xC0C090);

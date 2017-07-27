@@ -4,8 +4,9 @@
  * @author Simone Manini / http://daron1337.github.io
  * @author Luca Antiga 	/ http://lantiga.github.io
  */
+import * as THREE from 'three';
 
-THREE.TrackballControls = function ( object, domElement ) {
+export function TrackballControls ( object, domElement ) {
 
 	var _this = this;
 	var STATE = { NONE: - 1, ROTATE: 0, ZOOM: 1, PAN: 2, TOUCH_ROTATE: 3, TOUCH_ZOOM_PAN: 4 };
@@ -103,7 +104,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	this.handleEvent = function ( event ) {
 
-		if ( typeof this[ event.type ] == 'function' ) {
+		if ( typeof this[ event.type ] === 'function' ) {
 
 			this[ event.type ]( event );
 
@@ -267,7 +268,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 			}
 
-		};
+		}
 
 	}() );
 
@@ -603,7 +604,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	};
 
-	this.domElement.addEventListener( 'contextmenu', contextmenu, false );
+	this.domElement.addEventListener( 'contextmenu', contextmenu, false ); 
 	this.domElement.addEventListener( 'mousedown', mousedown, false );
 	this.domElement.addEventListener( 'wheel', mousewheel, false );
 
@@ -619,7 +620,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 	// force an update at start
 	this.update();
 
-};
+}
 
-THREE.TrackballControls.prototype = Object.create( THREE.EventDispatcher.prototype );
-THREE.TrackballControls.prototype.constructor = THREE.TrackballControls;
+TrackballControls.prototype = Object.create( THREE.EventDispatcher.prototype );
+TrackballControls.prototype.constructor = TrackballControls;

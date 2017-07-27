@@ -164,7 +164,6 @@ gulp.task('copyNPM', function () {
     // three/examples/js
     let threeExamplesFolder = siteConfig.nodeModulesRoot + 'three/examples/js/';
     copyFile('Detector.js',             threeExamplesFolder,                siteConfig.libRoot + 'threejs/');
-    copyFile('TrackballControls.js',    threeExamplesFolder + 'controls/',  siteConfig.libRoot + 'threejs/');
     copyFile('dat.gui.min.js',          threeExamplesFolder + 'libs/',      siteConfig.libRoot + 'threejs/');
     copyFile('MTLLoader.js',            threeExamplesFolder + 'loaders/',   siteConfig.libRoot + 'threejs/');
     copyFile('OBJLoader2.js',           threeExamplesFolder + 'loaders/',   siteConfig.libRoot + 'threejs/');
