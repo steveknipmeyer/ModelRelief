@@ -376,19 +376,21 @@ define("Viewer/TrackballControls", ["require", "exports", "three"], function (re
     TrackballControls.prototype = Object.create(THREE.EventDispatcher.prototype);
     TrackballControls.prototype.constructor = TrackballControls;
 });
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017> Steve Knipmeyer                                    //
-// ------------------------------------------------------------------------//
 define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/TrackballControls"], function (require, exports, THREE, dat, TrackballControls_1) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
-     * @class
+     * @exports Viewer/Viewer
      */
     var Viewer = (function () {
         /**
+         * Default constructor
+         * @class Viewer
          * @constructor
          * @param elementToBindTo HTML element to host the viewer
          */
@@ -400,9 +402,9 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
             this.scene = null;
             this.root = null;
             this.controls = null;
+            this.initializeScene();
             this.initializeViewerControls();
             this.initializeGL();
-            this.initializeScene();
             // start render loop
             this.render();
         }
@@ -419,6 +421,9 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
             directionalLight2.position.set(100, 50, -100);
             this.scene.add(directionalLight2);
         };
+        /**
+         * Initialize the viewer camera
+         */
         Viewer.prototype.initializeCamera = function () {
             this.cameraDefaults = {
                 // Baseline : near = 0.1, far = 10000
@@ -1094,19 +1099,17 @@ define("ModelLoaders/OBJLoader", ["require", "exports", "three"], function (requ
         }
     };
 });
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017> Steve Knipmeyer                                    //
-// ------------------------------------------------------------------------//
 define("main", ["require", "exports", "three", "Viewer/Viewer", "ModelLoaders/OBJLoader"], function (require, exports, THREE, Viewer_1, OBJLoader_1) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * @class
-     */
     var ModelRelief = (function () {
         /** Default constructor
+         * @class ModelRelief
          * @constructor
          */
         function ModelRelief() {
