@@ -8,13 +8,23 @@
 import * as THREE   from 'three' 
 
 import {Viewer}     from "Viewer"
-import {OBJLoader}  from "OBJLoader"
+import {OBJLoader} from "OBJLoader"
 
+/**
+ * @class
+ */
 export class ModelRelief {
 
+    /** Default constructor
+     * @constructor
+     */
     constructor() {  
     }
-    
+
+    /**
+     * Loads a model based on the model name and path embedded in the HTML page.
+     * @param viewer Instance of the Viewer to display the model
+     */    
     loadModel (viewer : Viewer) {
 
         let modelNameElement : HTMLElement = window.document.getElementById('modelName');
@@ -26,21 +36,25 @@ export class ModelRelief {
 
         let manager = new THREE.LoadingManager();
         let loader  = new OBJLoader(manager);
-        var onProgress = function (xhr) {
+
+        let onProgress = function (xhr) {
             if (xhr.lengthComputable) {
                 var percentComplete = xhr.loaded / xhr.total * 100;
                 console.log(percentComplete.toFixed(2) + '% downloaded');
             }
         };
 
-        var onError = function (xhr) {
+        let onError = function (xhr) {
         };        
 
         loader.load(fileName, function (object) {
-            viewer.scene.add(object);
+            viewer.root.add(object);
         }, onProgress, onError);
     }
 
+    /**
+     * Launch the model Viewer.
+     */
     run () {
         console.log ('ModelRelief started');   
 
