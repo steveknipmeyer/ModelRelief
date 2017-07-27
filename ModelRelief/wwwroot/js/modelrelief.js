@@ -384,14 +384,42 @@ define("Viewer/TrackballControls", ["require", "exports", "three"], function (re
 define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/TrackballControls"], function (require, exports, THREE, dat, TrackballControls_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * @class
+     */
     var Viewer = (function () {
+        /**
+         * @constructor
+         * @param elementToBindTo HTML element to host the viewer
+         */
         function Viewer(elementToBindTo) {
-            var scope = this;
             this.renderer = null;
             this.canvas = elementToBindTo;
             this.aspectRatio = 1;
             this.recalcAspectRatio();
             this.scene = null;
+            this.root = null;
+            this.controls = null;
+            this.initializeViewerControls();
+            this.initializeGL();
+            this.initializeScene();
+            // start render loop
+            this.render();
+        }
+        /**
+         * Adds lighting to the scene
+         */
+        Viewer.prototype.initializeLighting = function () {
+            var ambientLight = new THREE.AmbientLight(0x404040);
+            this.scene.add(ambientLight);
+            var directionalLight1 = new THREE.DirectionalLight(0xC0C090);
+            directionalLight1.position.set(-100, -50, 100);
+            this.scene.add(directionalLight1);
+            var directionalLight2 = new THREE.DirectionalLight(0xC0C090);
+            directionalLight2.position.set(100, 50, -100);
+            this.scene.add(directionalLight2);
+        };
+        Viewer.prototype.initializeCamera = function () {
             this.cameraDefaults = {
                 // Baseline : near = 0.1, far = 10000
                 // ZBuffer  : near = 100, far = 300
@@ -403,17 +431,22 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
             };
             this.camera = null;
             this.cameraTarget = this.cameraDefaults.target;
-            this.controls = null;
-            this.pivot = null;
-            this.initializeViewerControls();
-            this.initGL();
-            this.resizeDisplayGL();
-            window.addEventListener('resize', this.resizeWindow.bind(this), false);
-            // start render loop
-            this.render();
-        }
-        Viewer.prototype.initGL = function () {
-            var scope = this;
+            this.camera = new THREE.PerspectiveCamera(this.cameraDefaults.fov, this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far);
+            this.resetCamera();
+        };
+        /**
+         * Initialize the scene with the base objects
+         */
+        Viewer.prototype.initializeScene = function () {
+            this.scene = new THREE.Scene();
+            this.createRoot();
+            var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
+            this.scene.add(helper);
+        };
+        /**
+         * Initialize the WebGL settings
+         */
+        Viewer.prototype.initializeGL = function () {
             this.renderer = new THREE.WebGLRenderer({
                 logarithmicDepthBuffer: false,
                 canvas: this.canvas,
@@ -421,63 +454,80 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
             });
             this.renderer.autoClear = true;
             this.renderer.setClearColor(0x000000);
-            this.scene = new THREE.Scene();
-            this.camera = new THREE.PerspectiveCamera(this.cameraDefaults.fov, this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far);
-            this.resetCamera();
-            this.controls = new TrackballControls_1.TrackballControls(this.camera, this.renderer.domElement);
-            var ambientLight = new THREE.AmbientLight(0x404040);
-            var directionalLight1 = new THREE.DirectionalLight(0xC0C090);
-            var directionalLight2 = new THREE.DirectionalLight(0xC0C090);
-            directionalLight1.position.set(-100, -50, 100);
-            directionalLight2.position.set(100, 50, -100);
-            this.scene.add(directionalLight1);
-            this.scene.add(directionalLight2);
-            this.scene.add(ambientLight);
-            var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
-            this.scene.add(helper);
-            this.createPivot();
+            this.initializeCamera();
+            this.initializeLighting();
+            this.initializeInputControls();
+            this.resizeDisplayGL();
+            window.addEventListener('resize', this.resizeWindow.bind(this), false);
         };
+        /**
+         * Handles a window resize event
+         */
         Viewer.prototype.resizeWindow = function () {
             this.resizeDisplayGL();
         };
-        Viewer.prototype.createPivot = function () {
-            this.pivot = new THREE.Object3D();
-            this.pivot.name = 'Pivot';
-            this.scene.add(this.pivot);
+        /**
+         * Creates the root object in the scene
+         */
+        Viewer.prototype.createRoot = function () {
+            this.root = new THREE.Object3D();
+            this.root.name = 'Pivot';
+            this.scene.add(this.root);
         };
+        /**
+         * Handles the WebGL processing for a DOM window 'resize' event
+         */
         Viewer.prototype.resizeDisplayGL = function () {
             this.controls.handleResize();
             this.recalcAspectRatio();
             this.renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight, false);
             this.updateCamera();
         };
+        /**
+         * Calculates the aspect ration of the canvas afer a window resize
+         */
         Viewer.prototype.recalcAspectRatio = function () {
             this.aspectRatio = (this.canvas.offsetHeight === 0) ? 1 : this.canvas.offsetWidth / this.canvas.offsetHeight;
         };
+        /**
+         * Resets all camera properties to the defaults
+         */
         Viewer.prototype.resetCamera = function () {
             this.camera.position.copy(this.cameraDefaults.position);
             this.cameraTarget.copy(this.cameraDefaults.target);
             this.updateCamera();
         };
+        /**
+         * Updates the scene camera to match the new window size
+         */
         Viewer.prototype.updateCamera = function () {
             this.camera.aspect = this.aspectRatio;
             this.camera.lookAt(this.cameraTarget);
             this.camera.updateProjectionMatrix();
         };
+        /**
+         * Performs the WebGL render of the scene
+         */
         Viewer.prototype.renderGL = function () {
             if (!this.renderer.autoClear)
                 this.renderer.clear();
             this.controls.update();
             this.renderer.render(this.scene, this.camera);
         };
+        /**
+         * Main DOM render loop
+         */
         Viewer.prototype.render = function () {
             requestAnimationFrame(this.render.bind(this));
             this.renderGL();
         };
+        /**
+         * Removes all scene objects
+         */
         Viewer.prototype.clearAllAssests = function () {
             var scope = this;
             var remover = function (object3d) {
-                if (object3d === scope.pivot) {
+                if (object3d === scope.root) {
                     return;
                 }
                 console.log('Removing: ' + object3d.name);
@@ -499,10 +549,19 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
                     object3d.texture.dispose();
                 }
             };
-            scope.scene.remove(scope.pivot);
-            scope.pivot.traverse(remover);
-            scope.createPivot();
+            this.scene.remove(this.root);
+            this.root.traverse(remover);
+            this.createRoot();
         };
+        /**
+         * Sets up the user input controls (Trackball)
+         */
+        Viewer.prototype.initializeInputControls = function () {
+            this.controls = new TrackballControls_1.TrackballControls(this.camera, this.renderer.domElement);
+        };
+        /**
+         * Initialize the view settings that are controllable by the user
+         */
         Viewer.prototype.initializeViewerControls = function () {
             var ViewerControls = (function () {
                 function ViewerControls() {
@@ -1043,9 +1102,19 @@ define("ModelLoaders/OBJLoader", ["require", "exports", "three"], function (requ
 define("main", ["require", "exports", "three", "Viewer/Viewer", "ModelLoaders/OBJLoader"], function (require, exports, THREE, Viewer_1, OBJLoader_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * @class
+     */
     var ModelRelief = (function () {
+        /** Default constructor
+         * @constructor
+         */
         function ModelRelief() {
         }
+        /**
+         * Loads a model based on the model name and path embedded in the HTML page.
+         * @param viewer Instance of the Viewer to display the model
+         */
         ModelRelief.prototype.loadModel = function (viewer) {
             var modelNameElement = window.document.getElementById('modelName');
             var modelPathElement = window.document.getElementById('modelPath');
@@ -1063,9 +1132,12 @@ define("main", ["require", "exports", "three", "Viewer/Viewer", "ModelLoaders/OB
             var onError = function (xhr) {
             };
             loader.load(fileName, function (object) {
-                viewer.scene.add(object);
+                viewer.root.add(object);
             }, onProgress, onError);
         };
+        /**
+         * Launch the model Viewer.
+         */
         ModelRelief.prototype.run = function () {
             console.log('ModelRelief started');
             var viewer = new Viewer_1.Viewer(document.getElementById('model3D'));
