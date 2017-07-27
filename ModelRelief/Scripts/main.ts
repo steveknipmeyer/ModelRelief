@@ -5,38 +5,48 @@
 // ------------------------------------------------------------------------//
 
 "use strict";
-import * as THREE       from 'three' 
-import * as MRViewer    from "Viewer"
-import * as MROBJLoader from "OBJLoader"
+import * as THREE   from 'three' 
+
+import {Viewer}     from "Viewer"
+import {OBJLoader}  from "OBJLoader"
 
 export class ModelRelief {
 
     constructor() {  
     }
-     
-    run () {
-        console.log ('ModelRelief started');   
-
-        var viewer = new MRViewer.Viewer(<HTMLCanvasElement> document.getElementById('model3D'));
+    
+    loadModel (viewer : Viewer) {
 
         let modelNameElement : HTMLElement = window.document.getElementById('modelName');
         let modelPathElement : HTMLElement = window.document.getElementById('modelPath');
 
         let modelName    : string = modelNameElement.textContent;
         let modelPath    : string = modelPathElement.textContent;
-        let fileName     : string = modelName;
-        let texturePath  : string = modelPath;
-        let materialFile : string = modelName.replace(/\.[^/.]+$/, "") + '.mtl';
-        let prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataFile(
-            modelName,
-            modelPath,
-            fileName,
-            texturePath,
-            materialFile
-        );
+        let fileName     : string = modelPath + modelName;
 
-        let loader = new MROBJLoader.OBJLoader(viewer.pivot);
-        loader.loadFiles (prepData);
+        let manager = new THREE.LoadingManager();
+        let loader  = new OBJLoader(manager);
+        var onProgress = function (xhr) {
+            if (xhr.lengthComputable) {
+                var percentComplete = xhr.loaded / xhr.total * 100;
+                console.log(percentComplete.toFixed(2) + '% downloaded');
+            }
+        };
+
+        var onError = function (xhr) {
+        };        
+
+        loader.load(fileName, function (object) {
+            viewer.scene.add(object);
+        }, onProgress, onError);
+    }
+
+    run () {
+        console.log ('ModelRelief started');   
+
+        let viewer = new Viewer(<HTMLCanvasElement> document.getElementById('model3D'));
+
+        this.loadModel (viewer);
     }
 }
 

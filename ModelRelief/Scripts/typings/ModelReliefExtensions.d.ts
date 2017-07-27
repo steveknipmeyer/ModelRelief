@@ -8,43 +8,6 @@ declare class Stats {
     update(): any;
 }
 
-declare interface Validator {
-
-    /**
-        * If given input is null or undefined, false is returned otherwise true.
-        *
-        * @param input Anything
-        * @returns {boolean}
-        */
-    isValid: (input: any) => boolean;
-
-    /**
-        * If given input is null or undefined, the defaultValue is returned otherwise the given input.
-        *
-        * @param input Anything
-        * @param defaultValue Anything
-        * @returns {*}
-        */
-    verifyInput: (input: any, defaultValue: any) => any;
-}
-
-declare class OBJLoader2 {
-    _getValidator(): Validator;
-}
-
-declare class WWOBJLoader2 {
-
-    prepareRun(any): void;
-    run(): void;
-
-    registerCallbackProgress(callback: (content: any) => void): void;
-    registerCallbackCompletedLoading(callback: (content: any) => void): void;
-    registerCallbackMaterialsLoaded(callback: (materials: any) => void): void;
-    registerCallbackMeshLoaded(callback: (name: string, bufferGeometry: any, material: THREE.Material) => void): void;
-
-    setCrossOrigin(policy: string): void;
-}
-
 declare class TrackballControls extends THREE.EventDispatcher {
     constructor(object: THREE.Camera, domElement?: HTMLElement);
 
@@ -87,4 +50,20 @@ declare class TrackballControls extends THREE.EventDispatcher {
     handleResize(): void;
 
     handleEvent(event: any): void;
+}
+
+declare class OBJLoader {
+
+    constructor(manager?: THREE.LoadingManager);
+
+    manager: THREE.LoadingManager;
+    regexp: any;
+    materials: THREE.Material[];
+    path: string;
+
+    load(url: string, onLoad: (group: THREE.Group) => void, onProgress?: (event: ProgressEvent) => void, onError?: (event: ErrorEvent) => void): void;
+    parse(data: string) : THREE.Group;
+    setPath(value: string) : void;
+    setMaterials(materials: any) : void;
+    _createParserState() : any;
 }

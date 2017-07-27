@@ -7,7 +7,8 @@
 "use strict";
 import * as THREE               from 'three'
 import * as dat                 from 'dat-gui'
-import { TrackballControls }    from 'TrackballControls'
+
+import {TrackballControls}      from 'TrackballControls'
 
 interface CameraDefaults {
     position: THREE.Vector3;        // location of camera
