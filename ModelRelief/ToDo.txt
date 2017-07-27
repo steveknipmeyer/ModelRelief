@@ -1,12 +1,10 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
-Decouple THREE examples source from THREE?
-    Strip THREE using gulp.
-    Remove partial paths from import statements. Add the path to the reguirejs.config.
-
 Add types to all methods.
-Properly augment THREE types!
+    TrackballControls
+    OBJLoader
+
 Add documentation comments.
 
 Add Grid Display support.

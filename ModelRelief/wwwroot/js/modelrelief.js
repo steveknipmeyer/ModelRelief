@@ -4,7 +4,7 @@
  * @author Simone Manini / http://daron1337.github.io
  * @author Luca Antiga 	/ http://lantiga.github.io
  */
-define("TrackballControls", ["require", "exports", "three"], function (require, exports, THREE) {
+define("Viewer/TrackballControls", ["require", "exports", "three"], function (require, exports, THREE) {
     'use strict';
     Object.defineProperty(exports, "__esModule", { value: true });
     function TrackballControls(object, domElement) {
@@ -381,7 +381,7 @@ define("TrackballControls", ["require", "exports", "three"], function (require, 
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-define("Viewer", ["require", "exports", "three", "dat-gui", "TrackballControls"], function (require, exports, THREE, dat, TrackballControls_1) {
+define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/TrackballControls"], function (require, exports, THREE, dat, TrackballControls_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var Viewer = (function () {
@@ -534,7 +534,7 @@ define("Viewer", ["require", "exports", "three", "dat-gui", "TrackballControls"]
 //                                                                         // 
 // @author mrdoob / http://mrdoob.com/                                     // 
 // ------------------------------------------------------------------------//
-define("OBJLoader", ["require", "exports", "three"], function (require, exports, THREE) {
+define("ModelLoaders/OBJLoader", ["require", "exports", "three"], function (require, exports, THREE) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     function OBJLoader(manager) {
@@ -1040,7 +1040,7 @@ define("OBJLoader", ["require", "exports", "three"], function (require, exports,
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-define("main", ["require", "exports", "three", "Viewer", "OBJLoader"], function (require, exports, THREE, Viewer_1, OBJLoader_1) {
+define("main", ["require", "exports", "three", "Viewer/Viewer", "ModelLoaders/OBJLoader"], function (require, exports, THREE, Viewer_1, OBJLoader_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var ModelRelief = (function () {

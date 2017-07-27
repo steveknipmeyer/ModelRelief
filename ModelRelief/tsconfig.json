@@ -17,7 +17,12 @@
 
     "baseUrl": ".",
     "paths": {                                        // search path for module resolution; include project client libraries
-      "*": [ "*", "Scripts/*"]
+      "*": [
+        "*",
+        "Scripts/*",
+        "Scripts/ModelLoaders/*",
+        "Scripts/Viewer/*"
+      ]
     }
   },
 
