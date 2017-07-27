@@ -5,58 +5,58 @@
 // ------------------------------------------------------------------------//
 
 "use strict";
-namespace MR {
+import * as THREE from 'three'
 
-    export class OBJLoader {
+export class OBJLoader {
         
-        pivot     : THREE.Object3D;
-        loader    : any;                // THREE.OBJLoader2.WWOBJLoader2();
-        validator : any;                // Validator
+    pivot     : THREE.Object3D;
+    loader    : any;                        // THREE.OBJLoader2.WWOBJLoader2();
+    validator : Validator;          
 
-        constructor(pivot : THREE.Object3D) {
-            let scope = this;
+    constructor(pivot : THREE.Object3D) {
+        let scope = this;
             
-            this.pivot = pivot;
+        this.pivot = pivot;
 
-            this.loader = new THREE.OBJLoader2.WWOBJLoader2();
-            this.loader.setCrossOrigin('anonymous');
+        this.loader = new THREE.OBJLoader2.WWOBJLoader2();
+        this.loader.setCrossOrigin('anonymous');
 
-            this.loader.registerCallbackProgress(this.reportProgress.bind(scope));
-            this.loader.registerCallbackCompletedLoading(this.completedLoading.bind(scope));
-            this.loader.registerCallbackMaterialsLoaded(this.materialsLoaded.bind(scope));
-            this.loader.registerCallbackMeshLoaded(this.meshLoaded.bind(scope));
+        this.loader.registerCallbackProgress(this.reportProgress.bind(scope));
+        this.loader.registerCallbackCompletedLoading(this.completedLoading.bind(scope));
+        this.loader.registerCallbackMaterialsLoaded(this.materialsLoaded.bind(scope));
+        this.loader.registerCallbackMeshLoaded(this.meshLoaded.bind(scope));
 
-            this.validator = THREE.OBJLoader2.prototype._getValidator();
-        }
+        this.validator = THREE.OBJLoader2.prototype._getValidator();
+    }
 
-        reportProgress (content) {
-            console.log('Progress: ' + content);
-        };
+    reportProgress (content) {
+        console.log('Progress: ' + content);
+    }
 
-        materialsLoaded (materials) {
-            var count = this.validator.isValid(materials) ? materials.length : 0;
-            console.log('Loaded #' + count + ' materials.');
-        };
+    materialsLoaded (materials) {
+        var count : number = this.validator.isValid(materials) ? materials.length : 0;
+        console.log(`Loaded #${count} materials.`);
+    }
 
-        meshLoaded (name, bufferGeometry, material) {
-            console.log('Loaded mesh: ' + name + ' Material name: ' + material.name);
-            /*
-                        let meshParameters : THREE.MeshDepthMaterialParameters;
-                        let depthMaterial = new THREE.MeshDepthMaterial();
-                        return new THREE.OBJLoader2.WWOBJLoader2.LoadedMeshUserOverride (false, null, depthMaterial);
-            */
-            return new THREE.OBJLoader2.WWOBJLoader2.LoadedMeshUserOverride(false, null, new THREE.MeshPhongMaterial());
-        };
+    meshLoaded (name : string, bufferGeometry : THREE.BufferGeometry, material : THREE.Material) {
+        console.log(`Loaded mesh: ${name}, Material name: ${material.name}`);
+        /*
+                    let meshParameters : THREE.MeshDepthMaterialParameters;
+                    let depthMaterial = new THREE.MeshDepthMaterial();
+                    return new THREE.OBJLoader2.WWOBJLoader2.LoadedMeshUserOverride (false, null, depthMaterial);
+        */
+        return new THREE.OBJLoader2.WWOBJLoader2.LoadedMeshUserOverride(false, null, new THREE.MeshPhongMaterial());
+    }
 
-        completedLoading () {
-            console.log('Loading complete!');
-        };
+    completedLoading () {
+        console.log('Loading complete!');
+    }
 
-        loadFiles(prepData) {
-            prepData.setSceneGraphBaseNode(this.pivot);
-            prepData.setStreamMeshes(true);
-            this.loader.prepareRun(prepData);
-            this.loader.run();
-        };
+    loadFiles(prepData) {
+        prepData.setSceneGraphBaseNode(this.pivot);
+        prepData.setStreamMeshes(true);
+
+        this.loader.prepareRun(prepData);
+        this.loader.run();
     }
 }
