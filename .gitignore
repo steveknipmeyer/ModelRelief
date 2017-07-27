@@ -164,6 +164,11 @@ HTML5Assist_Browser_Cache/*
 hidden/
 
 #################
+## JSDoc
+#################
+out/
+
+#################
 ## npm
 #################
 node_modules/
