@@ -19,6 +19,7 @@ interface CameraDefaults {
 }
 
 const ObjectNames = {
+    Root :  'Root',
     Grid :  'Grid'
 }
 
@@ -159,7 +160,7 @@ export class Viewer {
     createRoot() {
 
         this.root = new THREE.Object3D();
-        this.root.name = 'Pivot';
+        this.root.name = ObjectNames.Root;
         this.scene.add(this.root);
     }
 
@@ -224,6 +225,73 @@ export class Viewer {
     }
 
     /**
+     * Sets up the user input controls (Trackball)
+     */
+    initializeInputControls() {
+
+        this.controls = new TrackballControls(this.camera, this.renderer.domElement);
+    }
+
+    /**
+     * Initialize the view settings that are controllable by the user
+     */
+    initializeViewerControls() {
+        
+        class ViewerControls {
+            displayGrid: boolean;
+            depthBuffer: boolean;
+
+            constructor() {
+                this.displayGrid = true;
+                this.depthBuffer = true;
+            }
+        }
+        let scope = this;
+        let viewerControls = new ViewerControls();
+
+        // Init dat.gui and controls for the UI
+        var gui = new dat.GUI({
+            autoPlace: false,
+            width: 320
+        });
+        var menuDiv = document.getElementById('dat');
+        menuDiv.appendChild(gui.domElement);
+        var folderOptions = gui.addFolder('ModelViewer Options');
+
+        // Grid
+        var controlDisplayGrid = folderOptions.add(viewerControls, 'displayGrid').name('Display Grid');
+        controlDisplayGrid.onChange (function (value) {
+
+            scope.displayGrid = !scope.displayGrid;
+
+            let gridGeometry : THREE.Object3D = this.scene.getObjectByName(ObjectNames.Grid);
+            gridGeometry.visible = scope.displayGrid;
+
+            console.log('Setting displayGrid to: ' + value);
+        }.bind(this));
+
+        // Depth Buffer
+        var controlDepthBuffer = folderOptions.add(viewerControls, 'depthBuffer').name('Depth Buffer');
+        controlDepthBuffer.onChange (function (value) {
+
+            scope.depthBuffer = !scope.depthBuffer;
+
+            let redMaterial = new THREE.MeshPhongMaterial();
+            redMaterial.color = new THREE.Color (0xff0000);
+
+            let whiteMaterial = new THREE.MeshPhongMaterial();
+            whiteMaterial.color = new THREE.Color (0xffffff);
+
+            let newMaterial = scope.depthBuffer ? redMaterial : whiteMaterial;
+            scope.changeObjectMaterials(newMaterial);
+
+            console.log('Setting depthBuffer to: ' + value);
+        }.bind(this));
+
+        folderOptions.open();
+    }
+
+    /**
      * Removes all scene objects
      */
     clearAllAssests() {
@@ -257,56 +325,23 @@ export class Viewer {
         this.root.traverse(remover);
         this.createRoot();
     } 
-    /**
-     * Sets up the user input controls (Trackball)
-     */
-    initializeInputControls() {
-
-        this.controls = new TrackballControls(this.camera, this.renderer.domElement);
-    }
 
     /**
-     * Initialize the view settings that are controllable by the user
+     * Change materials of all scene objects
      */
-    initializeViewerControls() {
-        
-        class ViewerControls {
-            displayGrid: boolean;
-            depthBuffer: boolean;
+    changeObjectMaterials(material : THREE.Material) {
 
-            constructor() {
-                this.displayGrid = true;
-                this.depthBuffer = true;
+        let scope = this;
+        let applyMaterial = function (object : THREE.Object3D) {
+            
+            if (!(object instanceof THREE.Mesh) )
+                return;
+
+            console.log('Applying material: ' + object.name);
+            object.material = material;
+            object.material.needsUpdate = true;
             }
-        }
-        let viewerControls = new ViewerControls();
+        this.root.traverse(applyMaterial);
+        }    
+    } 
 
-        // Init dat.gui and controls for the UI
-        var gui = new dat.GUI({
-            autoPlace: false,
-            width: 320
-        });
-        var menuDiv = document.getElementById('dat');
-        menuDiv.appendChild(gui.domElement);
-        var folderOptions = gui.addFolder('ModelViewer Options');
-
-        // Grid
-        var controlDisplayGrid = folderOptions.add(viewerControls, 'displayGrid').name('Display Grid');
-        controlDisplayGrid.onChange (function (value) {
-
-            let gridGeometry : THREE.Object3D = this.scene.getObjectByName(ObjectNames.Grid);
-            gridGeometry.visible = !gridGeometry.visible;
-
-            console.log('Setting displayGrid to: ' + value);
-        }.bind(this));
-
-        // Depth Buffer
-        var controlDepthBuffer = folderOptions.add(viewerControls, 'depthBuffer').name('Depth Buffer');
-        controlDepthBuffer.onChange (function (value) {
-
-            console.log('Setting depthBuffer to: ' + value);
-        }.bind(this));
-
-        folderOptions.open();
-    }
-}

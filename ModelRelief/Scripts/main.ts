@@ -45,9 +45,9 @@ export class ModelRelief {
         let onError = function (xhr) {
         };        
 
-        loader.load(fileName, function (object) {
-
-            viewer.root.add(object);
+        loader.load(fileName, function (group : THREE.Group) {
+            
+            viewer.root.add(group);
 
         }, onProgress, onError);
     }

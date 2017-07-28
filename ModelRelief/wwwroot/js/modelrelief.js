@@ -385,6 +385,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var ObjectNames = {
+        Root: 'Root',
         Grid: 'Grid'
     };
     /**
@@ -480,7 +481,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
          */
         Viewer.prototype.createRoot = function () {
             this.root = new THREE.Object3D();
-            this.root.name = 'Pivot';
+            this.root.name = ObjectNames.Root;
             this.scene.add(this.root);
         };
         /**
@@ -531,6 +532,55 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
             this.renderGL();
         };
         /**
+         * Sets up the user input controls (Trackball)
+         */
+        Viewer.prototype.initializeInputControls = function () {
+            this.controls = new TrackballControls_1.TrackballControls(this.camera, this.renderer.domElement);
+        };
+        /**
+         * Initialize the view settings that are controllable by the user
+         */
+        Viewer.prototype.initializeViewerControls = function () {
+            var ViewerControls = (function () {
+                function ViewerControls() {
+                    this.displayGrid = true;
+                    this.depthBuffer = true;
+                }
+                return ViewerControls;
+            }());
+            var scope = this;
+            var viewerControls = new ViewerControls();
+            // Init dat.gui and controls for the UI
+            var gui = new dat.GUI({
+                autoPlace: false,
+                width: 320
+            });
+            var menuDiv = document.getElementById('dat');
+            menuDiv.appendChild(gui.domElement);
+            var folderOptions = gui.addFolder('ModelViewer Options');
+            // Grid
+            var controlDisplayGrid = folderOptions.add(viewerControls, 'displayGrid').name('Display Grid');
+            controlDisplayGrid.onChange(function (value) {
+                scope.displayGrid = !scope.displayGrid;
+                var gridGeometry = this.scene.getObjectByName(ObjectNames.Grid);
+                gridGeometry.visible = scope.displayGrid;
+                console.log('Setting displayGrid to: ' + value);
+            }.bind(this));
+            // Depth Buffer
+            var controlDepthBuffer = folderOptions.add(viewerControls, 'depthBuffer').name('Depth Buffer');
+            controlDepthBuffer.onChange(function (value) {
+                scope.depthBuffer = !scope.depthBuffer;
+                var redMaterial = new THREE.MeshPhongMaterial();
+                redMaterial.color = new THREE.Color(0xff0000);
+                var whiteMaterial = new THREE.MeshPhongMaterial();
+                whiteMaterial.color = new THREE.Color(0xffffff);
+                var newMaterial = scope.depthBuffer ? redMaterial : whiteMaterial;
+                scope.changeObjectMaterials(newMaterial);
+                console.log('Setting depthBuffer to: ' + value);
+            }.bind(this));
+            folderOptions.open();
+        };
+        /**
          * Removes all scene objects
          */
         Viewer.prototype.clearAllAssests = function () {
@@ -563,44 +613,18 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
             this.createRoot();
         };
         /**
-         * Sets up the user input controls (Trackball)
+         * Change materials of all scene objects
          */
-        Viewer.prototype.initializeInputControls = function () {
-            this.controls = new TrackballControls_1.TrackballControls(this.camera, this.renderer.domElement);
-        };
-        /**
-         * Initialize the view settings that are controllable by the user
-         */
-        Viewer.prototype.initializeViewerControls = function () {
-            var ViewerControls = (function () {
-                function ViewerControls() {
-                    this.displayGrid = true;
-                    this.depthBuffer = true;
-                }
-                return ViewerControls;
-            }());
-            var viewerControls = new ViewerControls();
-            // Init dat.gui and controls for the UI
-            var gui = new dat.GUI({
-                autoPlace: false,
-                width: 320
-            });
-            var menuDiv = document.getElementById('dat');
-            menuDiv.appendChild(gui.domElement);
-            var folderOptions = gui.addFolder('ModelViewer Options');
-            // Grid
-            var controlDisplayGrid = folderOptions.add(viewerControls, 'displayGrid').name('Display Grid');
-            controlDisplayGrid.onChange(function (value) {
-                var gridGeometry = this.scene.getObjectByName(ObjectNames.Grid);
-                gridGeometry.visible = !gridGeometry.visible;
-                console.log('Setting displayGrid to: ' + value);
-            }.bind(this));
-            // Depth Buffer
-            var controlDepthBuffer = folderOptions.add(viewerControls, 'depthBuffer').name('Depth Buffer');
-            controlDepthBuffer.onChange(function (value) {
-                console.log('Setting depthBuffer to: ' + value);
-            }.bind(this));
-            folderOptions.open();
+        Viewer.prototype.changeObjectMaterials = function (material) {
+            var scope = this;
+            var applyMaterial = function (object) {
+                if (!(object instanceof THREE.Mesh))
+                    return;
+                console.log('Applying material: ' + object.name);
+                object.material = material;
+                object.material.needsUpdate = true;
+            };
+            this.root.traverse(applyMaterial);
         };
         return Viewer;
     }());
@@ -1147,8 +1171,8 @@ define("main", ["require", "exports", "three", "Viewer/Viewer", "ModelLoaders/OB
             };
             var onError = function (xhr) {
             };
-            loader.load(fileName, function (object) {
-                viewer.root.add(object);
+            loader.load(fileName, function (group) {
+                viewer.root.add(group);
             }, onProgress, onError);
         };
         /**
