@@ -3,19 +3,17 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-
 "use strict";
+
 import * as THREE   from 'three' 
 
 import {Viewer}     from "Viewer"
 import {OBJLoader} from "OBJLoader"
 
-/**
- * @class
- */
 export class ModelRelief {
 
     /** Default constructor
+     * @class ModelRelief
      * @constructor
      */
     constructor() {  

@@ -34,4 +34,10 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="1.1.2" />
   </ItemGroup>
 
+  
+  <ItemGroup>
+    <Folder Include="wwwroot\js\" />
+    <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+
 </Project>

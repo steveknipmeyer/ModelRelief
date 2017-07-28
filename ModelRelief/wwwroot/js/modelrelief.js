@@ -384,6 +384,9 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    var ObjectNames = {
+        Grid: 'Grid'
+    };
     /**
      * @exports Viewer/Viewer
      */
@@ -446,6 +449,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
             this.scene = new THREE.Scene();
             this.createRoot();
             var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
+            helper.name = ObjectNames.Grid;
             this.scene.add(helper);
         };
         /**
@@ -584,9 +588,11 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
             menuDiv.appendChild(gui.domElement);
             var folderOptions = gui.addFolder('ModelViewer Options');
             var controlDisplayGrid = folderOptions.add(viewerControls, 'displayGrid').name('Display Grid');
-            controlDisplayGrid.onChange = function (value) {
+            controlDisplayGrid.onChange(function (value) {
+                var gridGeometry = this.scene.getObjectByName(ObjectNames.Grid);
+                gridGeometry.visible = !gridGeometry.visible;
                 console.log('Setting displayGrid to: ' + value);
-            };
+            }.bind(this));
             folderOptions.open();
         };
         return Viewer;

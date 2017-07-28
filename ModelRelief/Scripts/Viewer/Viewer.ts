@@ -3,10 +3,10 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-
 "use strict";
-import * as THREE               from 'three'
-import * as dat                 from 'dat-gui'
+
+import * as THREE      from 'three'
+import * as dat        from 'dat-gui'
 
 import {TrackballControls}      from 'TrackballControls'
 
@@ -18,8 +18,12 @@ interface CameraDefaults {
     fov: number;                    // field of view
 }
 
+const ObjectNames = {
+    Grid :  'Grid'
+}
+
 /**
- * @class
+ * @exports Viewer/Viewer
  */
 export class Viewer {
    
@@ -37,6 +41,8 @@ export class Viewer {
     controls : TrackballControls;
 
     /**
+     * Default constructor
+     * @class Viewer
      * @constructor
      * @param elementToBindTo HTML element to host the viewer
      */
@@ -52,11 +58,11 @@ export class Viewer {
 
         this.controls = null;
 
+        this.initializeScene();
+
         this.initializeViewerControls();
 
         this.initializeGL();
-        
-        this.initializeScene();
 
         // start render loop
         this.render();
@@ -79,6 +85,9 @@ export class Viewer {
         this.scene.add(directionalLight2);
     }
 
+    /**
+     * Initialize the viewer camera
+     */
     initializeCamera() {
 
         this.cameraDefaults = {
@@ -107,6 +116,7 @@ export class Viewer {
         this.createRoot();
 
         var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
+        helper.name = ObjectNames.Grid;
         this.scene.add(helper);
     }
 
@@ -276,9 +286,13 @@ export class Viewer {
         var folderOptions = gui.addFolder('ModelViewer Options');
 
         var controlDisplayGrid = folderOptions.add(viewerControls, 'displayGrid').name('Display Grid');
-        controlDisplayGrid.onChange = function (value) {
+        controlDisplayGrid.onChange (function (value) {
+
+            let gridGeometry : THREE.Object3D = this.scene.getObjectByName(ObjectNames.Grid);
+            gridGeometry.visible = !gridGeometry.visible;
+
             console.log('Setting displayGrid to: ' + value);
-        };
+        }.bind(this));
         folderOptions.open();
     }
 }
