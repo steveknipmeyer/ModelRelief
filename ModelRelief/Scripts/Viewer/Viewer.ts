@@ -40,6 +40,9 @@ export class Viewer {
 
     controls : TrackballControls;
 
+    displayGrid : boolean;
+    depthBuffer : boolean;
+
     /**
      * Default constructor
      * @class Viewer
@@ -266,12 +269,14 @@ export class Viewer {
      * Initialize the view settings that are controllable by the user
      */
     initializeViewerControls() {
-
+        
         class ViewerControls {
             displayGrid: boolean;
+            depthBuffer: boolean;
 
             constructor() {
                 this.displayGrid = true;
+                this.depthBuffer = true;
             }
         }
         let viewerControls = new ViewerControls();
@@ -285,6 +290,7 @@ export class Viewer {
         menuDiv.appendChild(gui.domElement);
         var folderOptions = gui.addFolder('ModelViewer Options');
 
+        // Grid
         var controlDisplayGrid = folderOptions.add(viewerControls, 'displayGrid').name('Display Grid');
         controlDisplayGrid.onChange (function (value) {
 
@@ -293,6 +299,14 @@ export class Viewer {
 
             console.log('Setting displayGrid to: ' + value);
         }.bind(this));
+
+        // Depth Buffer
+        var controlDepthBuffer = folderOptions.add(viewerControls, 'depthBuffer').name('Depth Buffer');
+        controlDepthBuffer.onChange (function (value) {
+
+            console.log('Setting depthBuffer to: ' + value);
+        }.bind(this));
+
         folderOptions.open();
     }
 }

@@ -575,6 +575,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
             var ViewerControls = (function () {
                 function ViewerControls() {
                     this.displayGrid = true;
+                    this.depthBuffer = true;
                 }
                 return ViewerControls;
             }());
@@ -587,11 +588,17 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
             var menuDiv = document.getElementById('dat');
             menuDiv.appendChild(gui.domElement);
             var folderOptions = gui.addFolder('ModelViewer Options');
+            // Grid
             var controlDisplayGrid = folderOptions.add(viewerControls, 'displayGrid').name('Display Grid');
             controlDisplayGrid.onChange(function (value) {
                 var gridGeometry = this.scene.getObjectByName(ObjectNames.Grid);
                 gridGeometry.visible = !gridGeometry.visible;
                 console.log('Setting displayGrid to: ' + value);
+            }.bind(this));
+            // Depth Buffer
+            var controlDepthBuffer = folderOptions.add(viewerControls, 'depthBuffer').name('Depth Buffer');
+            controlDepthBuffer.onChange(function (value) {
+                console.log('Setting depthBuffer to: ' + value);
             }.bind(this));
             folderOptions.open();
         };

@@ -34,7 +34,7 @@ export class ModelRelief {
 
         let manager = new THREE.LoadingManager();
         let loader  = new OBJLoader(manager);
-
+        
         let onProgress = function (xhr) {
             if (xhr.lengthComputable) {
                 var percentComplete = xhr.loaded / xhr.total * 100;
@@ -46,7 +46,9 @@ export class ModelRelief {
         };        
 
         loader.load(fileName, function (object) {
+
             viewer.root.add(object);
+
         }, onProgress, onError);
     }
 
