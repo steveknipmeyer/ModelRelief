@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "dependencies": {
-  },
-
+  "dependencies": {},
   "devDependencies": {
     "@types/dat-gui": "^0.6.3",
     "@types/requirejs": "^2.1.29",
@@ -17,6 +15,7 @@
     "jquery-validation": "^1.16.0",
     "jquery-validation-unobtrusive": "^3.2.6",
     "jsdoc": "^3.5.3",
+    "path": "^0.12.7",
     "requirejs": "^2.3.3",
     "robocopy": "^0.1.15",
     "run-sequence": "^2.0.0",

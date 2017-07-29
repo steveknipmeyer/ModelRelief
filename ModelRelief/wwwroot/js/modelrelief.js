@@ -538,49 +538,6 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
             this.controls = new TrackballControls_1.TrackballControls(this.camera, this.renderer.domElement);
         };
         /**
-         * Initialize the view settings that are controllable by the user
-         */
-        Viewer.prototype.initializeViewerControls = function () {
-            var ViewerControls = (function () {
-                function ViewerControls() {
-                    this.displayGrid = true;
-                    this.depthBuffer = true;
-                }
-                return ViewerControls;
-            }());
-            var scope = this;
-            var viewerControls = new ViewerControls();
-            // Init dat.gui and controls for the UI
-            var gui = new dat.GUI({
-                autoPlace: false,
-                width: 320
-            });
-            var menuDiv = document.getElementById('dat');
-            menuDiv.appendChild(gui.domElement);
-            var folderOptions = gui.addFolder('ModelViewer Options');
-            // Grid
-            var controlDisplayGrid = folderOptions.add(viewerControls, 'displayGrid').name('Display Grid');
-            controlDisplayGrid.onChange(function (value) {
-                scope.displayGrid = !scope.displayGrid;
-                var gridGeometry = this.scene.getObjectByName(ObjectNames.Grid);
-                gridGeometry.visible = scope.displayGrid;
-                console.log('Setting displayGrid to: ' + value);
-            }.bind(this));
-            // Depth Buffer
-            var controlDepthBuffer = folderOptions.add(viewerControls, 'depthBuffer').name('Depth Buffer');
-            controlDepthBuffer.onChange(function (value) {
-                scope.depthBuffer = !scope.depthBuffer;
-                var redMaterial = new THREE.MeshPhongMaterial();
-                redMaterial.color = new THREE.Color(0xff0000);
-                var whiteMaterial = new THREE.MeshPhongMaterial();
-                whiteMaterial.color = new THREE.Color(0xffffff);
-                var newMaterial = scope.depthBuffer ? redMaterial : whiteMaterial;
-                scope.changeObjectMaterials(newMaterial);
-                console.log('Setting depthBuffer to: ' + value);
-            }.bind(this));
-            folderOptions.open();
-        };
-        /**
          * Removes all scene objects
          */
         Viewer.prototype.clearAllAssests = function () {
@@ -611,6 +568,49 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
             this.scene.remove(this.root);
             this.root.traverse(remover);
             this.createRoot();
+        };
+        /**
+         * Initialize the view settings that are controllable by the user
+         */
+        Viewer.prototype.initializeViewerControls = function () {
+            var ViewerControls = (function () {
+                function ViewerControls() {
+                    this.displayGrid = true;
+                    this.depthBuffer = false;
+                }
+                return ViewerControls;
+            }());
+            var scope = this;
+            var viewerControls = new ViewerControls();
+            // Init dat.gui and controls for the UI
+            var gui = new dat.GUI({
+                autoPlace: false,
+                width: 320
+            });
+            var menuDiv = document.getElementById('dat');
+            menuDiv.appendChild(gui.domElement);
+            var folderOptions = gui.addFolder('ModelViewer Options');
+            // Grid
+            var controlDisplayGrid = folderOptions.add(viewerControls, 'displayGrid').name('Display Grid');
+            controlDisplayGrid.onChange(function (value) {
+                scope.displayGrid = value;
+                var gridGeometry = this.scene.getObjectByName(ObjectNames.Grid);
+                gridGeometry.visible = scope.displayGrid;
+                console.log('Setting displayGrid to: ' + value);
+            }.bind(this));
+            // Depth Buffer
+            var controlDepthBuffer = folderOptions.add(viewerControls, 'depthBuffer').name('Depth Buffer');
+            controlDepthBuffer.onChange(function (value) {
+                scope.depthBuffer = value;
+                var depthMaterialParameters = {};
+                var depthMaterial = new THREE.MeshDepthMaterial(depthMaterialParameters);
+                var whiteMaterial = new THREE.MeshPhongMaterial();
+                whiteMaterial.color = new THREE.Color(0xffffff);
+                var newMaterial = scope.depthBuffer ? depthMaterial : whiteMaterial;
+                scope.changeObjectMaterials(newMaterial);
+                console.log('Setting depthBuffer to: ' + value);
+            }.bind(this));
+            folderOptions.open();
         };
         /**
          * Change materials of all scene objects
