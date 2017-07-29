@@ -295,7 +295,7 @@ define("Viewer/TrackballControls", ["require", "exports", "three"], function (re
                     _moveCurr.copy(getMouseOnCircle(event.touches[0].pageX, event.touches[0].pageY));
                     _movePrev.copy(_moveCurr);
                     break;
-                default:
+                default:// 2 or more
                     _state = STATE.TOUCH_ZOOM_PAN;
                     var dx = event.touches[0].pageX - event.touches[1].pageX;
                     var dy = event.touches[0].pageY - event.touches[1].pageY;
@@ -318,7 +318,7 @@ define("Viewer/TrackballControls", ["require", "exports", "three"], function (re
                     _movePrev.copy(_moveCurr);
                     _moveCurr.copy(getMouseOnCircle(event.touches[0].pageX, event.touches[0].pageY));
                     break;
-                default:
+                default:// 2 or more
                     var dx = event.touches[0].pageX - event.touches[1].pageX;
                     var dy = event.touches[0].pageY - event.touches[1].pageY;
                     _touchZoomDistanceEnd = Math.sqrt(dx * dx + dy * dy);
@@ -376,7 +376,83 @@ define("Viewer/TrackballControls", ["require", "exports", "three"], function (re
     TrackballControls.prototype = Object.create(THREE.EventDispatcher.prototype);
     TrackballControls.prototype.constructor = TrackballControls;
 });
-define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/TrackballControls"], function (require, exports, THREE, dat, TrackballControls_1) {
+define("Viewer/Materials", ["require", "exports", "three"], function (require, exports, THREE) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /// <summary>
+    /// Materials
+    /// General THREE.js Material classes and helpers
+    /// </summary>
+    var Materials = (function () {
+        /// <summary>
+        ///  Constructor
+        /// </summary>
+        function Materials() {
+        }
+        //#region Materials
+        /// <summary>
+        ///  Create a texture material from an image URL.
+        /// </summary>
+        Materials.createTextureMaterial = function (image) {
+            var texture, textureMaterial;
+            texture = new THREE.Texture(image);
+            texture.needsUpdate = true;
+            texture.generateMipmaps = false;
+            texture.magFilter = THREE.NearestFilter; // The magnification and minification filters sample the texture map elements when mapping to a pixel.
+            texture.minFilter = THREE.NearestFilter; // The default modes oversample which leads to blending with the black background. 
+            // This produces colored (black) artifacts around the edges of the texture map elements.
+            texture.repeat = new THREE.Vector2(1.0, 1.0);
+            textureMaterial = new THREE.MeshBasicMaterial({ map: texture });
+            textureMaterial.transparent = true;
+            return textureMaterial;
+        };
+        /// <summary>
+        ///  Create a bump map Phong shader from a texture map.
+        /// </summary>
+        Materials.createMeshPhongMaterial = function (designTexture) {
+            var material;
+            material = new THREE.MeshPhongMaterial({
+                color: 0xffffff,
+                bumpMap: designTexture,
+                bumpScale: -1.0,
+                shading: THREE.SmoothShading,
+            });
+            return material;
+        };
+        /// <summary>
+        ///  Create a transparent material.
+        /// </summary>
+        Materials.createTransparentMaterial = function (designTexture) {
+            return new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 0.0, transparent: true });
+        };
+        /// <summary>
+        ///  Create the shader material used for generating the DepthBuffer.
+        /// </summary>
+        Materials.createDepthBufferMaterial = function (designColor) {
+            var textureLoader = new THREE.TextureLoader();
+            var shaderMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    designColor: {
+                        type: 'c',
+                        value: new THREE.Color(designColor)
+                    },
+                },
+                vertexShader: MR.shaderSource['DepthMapVertexShader'],
+                fragmentShader: MR.shaderSource['DepthMapFragmentShader'],
+                shading: THREE.SmoothShading
+            });
+            return shaderMaterial;
+        };
+        return Materials;
+    }());
+    exports.Materials = Materials;
+});
+define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/TrackballControls", "Viewer/Materials"], function (require, exports, THREE, dat, TrackballControls_1, Materials_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -599,14 +675,13 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
                 console.log('Setting displayGrid to: ' + value);
             }.bind(this));
             // Depth Buffer
+            var depthBufferMaterial = Materials_1.Materials.createDepthBufferMaterial(0x5555ff);
+            var whiteMaterial = new THREE.MeshPhongMaterial();
+            whiteMaterial.color = new THREE.Color(0xffffff);
             var controlDepthBuffer = folderOptions.add(viewerControls, 'depthBuffer').name('Depth Buffer');
             controlDepthBuffer.onChange(function (value) {
                 scope.depthBuffer = value;
-                var depthMaterialParameters = {};
-                var depthMaterial = new THREE.MeshDepthMaterial(depthMaterialParameters);
-                var whiteMaterial = new THREE.MeshPhongMaterial();
-                whiteMaterial.color = new THREE.Color(0xffffff);
-                var newMaterial = scope.depthBuffer ? depthMaterial : whiteMaterial;
+                var newMaterial = scope.depthBuffer ? depthBufferMaterial : whiteMaterial;
                 scope.changeObjectMaterials(newMaterial);
                 console.log('Setting depthBuffer to: ' + value);
             }.bind(this));
@@ -1188,5 +1263,315 @@ define("main", ["require", "exports", "three", "Viewer/Viewer", "ModelLoaders/OB
     exports.ModelRelief = ModelRelief;
     var modelRelief = new ModelRelief();
     modelRelief.run();
+});
+define("Viewer/Graphics", ["require", "exports", "three"], function (require, exports, THREE) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /// <summary>
+    /// Graphics Library
+    /// General THREE.js/WebGL support routines
+    /// </summary>
+    var Graphics = (function () {
+        /// <summary>
+        ///  Constructor
+        /// </summary>
+        function Graphics() {
+        }
+        //#region Geometry
+        /*
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        //			Geometry
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        */
+        /// <summary>
+        ///  Create a transparent bounding box used for element location.
+        /// </summary>
+        Graphics.createTransparentBoundingBox = function (position, mesh) {
+            var targetGeometry, boundingBox, width, height, depth, material, box;
+            targetGeometry = mesh.geometry;
+            targetGeometry.computeBoundingBox();
+            boundingBox = targetGeometry.boundingBox;
+            width = boundingBox.max.x - boundingBox.min.x;
+            height = boundingBox.max.y - boundingBox.min.y;
+            depth = boundingBox.max.z - boundingBox.min.z;
+            material = new THREE.MeshBasicMaterial({ color: 0x0000ff, opacity: 1.0, transparent: true, wireframe: true });
+            box = this.createBox(position, width, height, depth, material);
+            box.name = Graphics.BoundingBoxName;
+            box.visible = false;
+            return box;
+        };
+        /// <summary>
+        ///  Creates a box mesh.
+        /// </summary>
+        Graphics.createBox = function (position, width, height, depth, material) {
+            var boxGeometry, boxMaterial, box;
+            boxGeometry = new THREE.BoxGeometry(width, height, depth);
+            boxGeometry.computeBoundingBox();
+            boxMaterial = material || new THREE.MeshPhongMaterial({ color: 0x0000ff, opacity: 1.0 });
+            box = new THREE.Mesh(boxGeometry, boxMaterial);
+            box.position.copy(position);
+            return box;
+        };
+        /// <summary>
+        ///  Creates a sphere mesh.
+        /// </summary>
+        Graphics.createSphere = function (position, radius, color, segments) {
+            var sphereGeometry, material, segmentCount = segments || 32, sphere;
+            sphereGeometry = new THREE.SphereGeometry(radius, segmentCount, segmentCount);
+            sphereGeometry.computeBoundingBox();
+            material = new THREE.MeshPhongMaterial({ color: color, opacity: 1.0, transparent: false, wireframe: false });
+            sphere = new THREE.Mesh(sphereGeometry, material);
+            sphere.position.copy(position);
+            return sphere;
+        };
+        /// <summary>
+        ///  Creates a line object.
+        /// </summary>
+        Graphics.createLine = function (startPosition, endPosition, color) {
+            var line, lineGeometry, material;
+            lineGeometry = new THREE.Geometry();
+            lineGeometry.vertices.push(startPosition, endPosition);
+            material = new THREE.LineBasicMaterial({ color: color });
+            line = new THREE.Line(lineGeometry, material);
+            return line;
+        };
+        /// <summary>
+        ///  Creates an axes triad.
+        /// </summary>
+        Graphics.createWorldAxesTriad = function (position, length, headLength, headWidth) {
+            var triadGroup = new THREE.Object3D(), arrowPosition = position || new THREE.Vector3(), arrowLength = length || 15, arrowHeadLength = headLength || 1, arrowHeadWidth = headWidth || 1;
+            triadGroup.add(new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), arrowPosition, arrowLength, 0xff0000, arrowHeadLength, arrowHeadWidth));
+            triadGroup.add(new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), arrowPosition, arrowLength, 0x00ff00, arrowHeadLength, arrowHeadWidth));
+            triadGroup.add(new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), arrowPosition, arrowLength, 0x0000ff, arrowHeadLength, arrowHeadWidth));
+            return triadGroup;
+        };
+        /// <summary>
+        ///  Creates an axes grid.
+        /// </summary>
+        Graphics.createWorldAxesGrid = function (position, size, step) {
+            var gridGroup = new THREE.Object3D(), gridPosition = position || new THREE.Vector3(), gridSize = size || 10, gridStep = step || 1, colorCenterline = 0xff000000, xyGrid, yzGrid, zxGrid;
+            xyGrid = new THREE.GridHelper(gridSize, gridStep);
+            xyGrid.setColors(colorCenterline, 0xff0000);
+            xyGrid.position.copy(gridPosition.clone());
+            xyGrid.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
+            xyGrid.position.x += gridSize;
+            xyGrid.position.y += gridSize;
+            gridGroup.add(xyGrid);
+            yzGrid = new THREE.GridHelper(gridSize, gridStep);
+            yzGrid.setColors(colorCenterline, 0x00ff00);
+            yzGrid.position.copy(gridPosition.clone());
+            yzGrid.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 2);
+            yzGrid.position.y += gridSize;
+            yzGrid.position.z += gridSize;
+            gridGroup.add(yzGrid);
+            zxGrid = new THREE.GridHelper(gridSize, gridStep);
+            zxGrid.setColors(colorCenterline, 0x0000ff);
+            zxGrid.position.copy(gridPosition.clone());
+            zxGrid.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
+            zxGrid.position.z += gridSize;
+            zxGrid.position.x += gridSize;
+            gridGroup.add(zxGrid);
+            return gridGroup;
+        };
+        //#endregion
+        //#region Coordinate Conversion
+        /*
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        //			Coordinate Systems
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        FRAME	            EXAMPLE										SPACE                      UNITS                       NOTES
+    
+        Model               Catalog WebGL: Model, BandElement Block     object                      mm                          Rhino definitions
+        World               Design Model								world                       mm
+        View                Camera                                      view                        mm
+        Device              Normalized view							    device                      [(-1, -1), (1, 1)]
+        Screen.Page         HTML page									screen                      px                          0,0 at Top Left, +Y down    HTML page
+        Screen.Client       Browser view port 						    screen                      px                          0,0 at Top Left, +Y down    browser window
+        Screen.Container    DOM container								screen                      px                          0,0 at Top Left, +Y down    HTML canvas
+    
+        Mouse Event Properties
+        http://www.jacklmoore.com/notes/mouse-position/
+        */
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        //			Model Coordinates
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        //			World Coordinates
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        ///  Converts a JQuery event to normalized device coordinates.
+        /// </summary>
+        Graphics.worldCoordinatesFromJQEvent = function (event, container, camera) {
+            var worldCoordinates, deviceCoordinates2D, deviceCoordinates3D, deviceZ;
+            deviceCoordinates2D = this.deviceCoordinatesFromJQEvent(event, container);
+            deviceZ = (camera instanceof THREE.PerspectiveCamera) ? 0.5 : 1.0;
+            deviceCoordinates3D = new THREE.Vector3(deviceCoordinates2D.x, deviceCoordinates2D.y, deviceZ);
+            worldCoordinates = deviceCoordinates3D.unproject(camera);
+            return worldCoordinates;
+        };
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        //			View Coordinates
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        ///  Converts world coordinates to view coordinates.
+        /// </summary>
+        Graphics.viewCoordinatesFromWorldCoordinates = function (vector, camera) {
+            var position = vector.clone(), viewCoordinates;
+            viewCoordinates = position.applyMatrix4(camera.matrixWorldInverse);
+            return viewCoordinates;
+        };
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        //			Device Coordinates
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        ///  Converts a JQuery event to normalized device coordinates.
+        /// </summary>
+        Graphics.deviceCoordinatesFromJQEvent = function (event, container) {
+            var deviceCoordinates, screenContainerCoordinates, ratioX, ratioY, deviceX, deviceY;
+            screenContainerCoordinates = this.screenContainerCoordinatesFromJQEvent(event, container);
+            ratioX = screenContainerCoordinates.x / container.width();
+            ratioY = screenContainerCoordinates.y / container.height();
+            deviceX = +((ratioX * 2) - 1); // [-1, 1]
+            deviceY = -((ratioY * 2) - 1); // [-1, 1]
+            deviceCoordinates = new THREE.Vector2(deviceX, deviceY);
+            return deviceCoordinates;
+        };
+        /// <summary>
+        ///  Converts world coordinates to device coordinates [-1, 1].
+        /// </summary>
+        Graphics.deviceCoordinatesFromWorldCoordinates = function (vector, camera) {
+            // https://github.com/mrdoob/three.js/issues/78
+            var position = vector.clone(), deviceCoordinates2D, deviceCoordinates3D;
+            deviceCoordinates3D = position.project(camera);
+            deviceCoordinates2D = new THREE.Vector2(deviceCoordinates3D.x, deviceCoordinates3D.y);
+            return deviceCoordinates2D;
+        };
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        //			Screen Coordinates
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        ///  Page coordinates from a JQuery event.
+        /// </summary>
+        Graphics.screenPageCoordinatesFromJQEvent = function (event) {
+            var screenPageCoordinates = new THREE.Vector2();
+            screenPageCoordinates.x = event.pageX;
+            screenPageCoordinates.y = event.pageY;
+            return screenPageCoordinates;
+        };
+        /// <summary>
+        ///  Client coordinates from a JQuery event.
+        ///  Client coordinates are relative to the <browser> view port. If the document has been scrolled it will
+        //   be different than the page coordinates which are always relative to the top left of the <entire> HTML page document.
+        //   http://www.bennadel.com/blog/1869-jquery-mouse-events-pagex-y-vs-clientx-y.htm
+        /// </summary>
+        Graphics.screenClientCoordinatesFromJQEvent = function (event) {
+            var screenClientCoordinates = new THREE.Vector2();
+            screenClientCoordinates.x = event.clientX;
+            screenClientCoordinates.y = event.clientY;
+            return screenClientCoordinates;
+        };
+        /// <summary> 
+        ///  Converts JQuery event coordinates to screen container coordinates.
+        /// </summary>
+        Graphics.screenContainerCoordinatesFromJQEvent = function (event, container) {
+            var screenContainerCoordinates = new THREE.Vector2(), containerOffset, pageX, pageY;
+            containerOffset = container.offset();
+            // JQuery does not set pageX/pageY for Drop events. They are defined in the originalEvent member.
+            pageX = event.pageX || (event.originalEvent).pageX;
+            pageY = event.pageY || (event.originalEvent).pageY;
+            screenContainerCoordinates.x = pageX - containerOffset.left;
+            screenContainerCoordinates.y = pageY - containerOffset.top;
+            return screenContainerCoordinates;
+        };
+        /// <summary>
+        ///  Converts world coordinates to screen container coordinates.
+        /// </summary>
+        Graphics.screenContainerCoordinatesFromWorldCoordinates = function (vector, container, camera) {
+            //https://github.com/mrdoob/three.js/issues/78
+            var position = vector.clone(), deviceCoordinates, screenContainerCoordinates, left, top;
+            // [(-1, -1), (1, 1)]
+            deviceCoordinates = this.deviceCoordinatesFromWorldCoordinates(position, camera);
+            left = ((+deviceCoordinates.x + 1) / 2) * container.width();
+            top = ((-deviceCoordinates.y + 1) / 2) * container.height();
+            screenContainerCoordinates = new THREE.Vector2(left, top);
+            return screenContainerCoordinates;
+        };
+        //#endregion
+        //#region Helpers
+        /*
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        //			Helpers
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        */
+        /// <summary>
+        ///  Creates a Raycaster through the mouse world position.
+        /// </summary>
+        Graphics.raycasterFromMouse = function (mouseWorld, camera) {
+            var rayOrigin = new THREE.Vector3(mouseWorld.x, mouseWorld.y, camera.position.z), worldPoint = new THREE.Vector3(mouseWorld.x, mouseWorld.y, mouseWorld.z);
+            //          Tools.consoleLog('World mouse coordinates: ' + worldPoint.x + ', ' + worldPoint.y);
+            // construct ray from camera to mouse world
+            var raycaster = new THREE.Raycaster(rayOrigin, worldPoint.sub(rayOrigin).normalize());
+            return raycaster;
+        };
+        /// <summary>
+        ///  Returns the first Intersection located by the cursor.
+        /// </summary>
+        Graphics.getFirstIntersection = function (event, container, camera, sceneObjects, recurse) {
+            var raycaster, mouseWorld, iIntersection, intersection;
+            // construct ray from camera to mouse world
+            mouseWorld = Graphics.worldCoordinatesFromJQEvent(event, container, camera);
+            raycaster = Graphics.raycasterFromMouse(mouseWorld, camera);
+            // find all object intersections
+            var intersects = raycaster.intersectObjects(sceneObjects, recurse);
+            // no intersection?
+            if (intersects.length === 0) {
+                return null;
+            }
+            // use first; reject lines (Transform Frame)
+            for (iIntersection = 0; iIntersection < intersects.length; iIntersection++) {
+                intersection = intersects[iIntersection];
+                if (!(intersection.object instanceof THREE.Line))
+                    return intersection;
+            }
+            ;
+            return null;
+        };
+        Graphics.BoundingBoxName = 'Bounding Box';
+        return Graphics;
+    }());
+    exports.Graphics = Graphics;
+});
+define("System/Math", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /// <summary>
+    /// Math Library
+    /// General mathematics routines
+    /// </summary>
+    var Math = (function () {
+        /// <summary>
+        ///  Constructor
+        /// </summary>
+        function Math() {
+        }
+        /// <summary>
+        ///  Returns whether two numbers are equal within the given tolerance.
+        /// </summary>
+        Math.numbersEqualWithinTolerance = function (value, other, tolerance) {
+            return ((value >= (other - tolerance)) && (value <= (other + tolerance)));
+        };
+        return Math;
+    }());
+    exports.Math = Math;
 });
 //# sourceMappingURL=modelrelief.js.map

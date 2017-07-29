@@ -1,5 +1,10 @@
 // Type definitions (currently omitted from THREE definitions)
 
+declare class MR {
+    
+    static shaderSource : any;
+}
+
 declare class Stats {
 
     domElement: HTMLElement;

@@ -2,13 +2,13 @@
   "compilerOptions": {
     // Compiler
     "target": "es5",
-    "lib": [ "es5", "es2015", "dom" ],                // assume availability of these libraries
-    "compileOnSave": false,
+    "lib": [ "es5", "es2015", "dom"],                // assume availability of these libraries
     "noImplicitAny": false,
     "noEmitOnError": true,
     "removeComments": false,
     "sourceMap": true,
     "outFile": "wwwroot/js/modelrelief.js",
+    "allowJs": true,
 
     // Modules
     "module": "amd",                                  // generate AMD (Asynchronous Module Definition code for modules
@@ -29,7 +29,8 @@
   "exclude": [                                        // folders <not> included in compilation
     "node_modules",
     "wwwroot",                                        // Scott Allen : NDC Opinionated View of ASPNET Core
-    "Scripts/Workbench.*"                             // test
+    "Scripts/Workbench.*",                            // test
+    "**/*.js"                                         // JavaScript
   ]
 }
 

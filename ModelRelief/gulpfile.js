@@ -6,7 +6,7 @@
 
 /*
 https://stackoverflow.com/questions/40033298/how-to-debug-a-gulp-task
-Insert the debugger statement at the target line. Reun DebugGulp.bat.
+Insert the debugger statement at the target line. Run DebugGulp.bat.
     debugger;
 Documents\bin\DebugGulp.bat
 */
@@ -19,13 +19,22 @@ var gutil        = require('gulp-util');
 // Node.js
 var beep         = require('beepbeep');
 var fs           = require('fs');
+var path         = require('path');
 var robocopy     = require('robocopy');
 var runSequence  = require('run-sequence');
 
+var sourceConfig = new function() {
+ 
+    this.sourceRoot     = './';                
+    this.scriptsRoot    = this.sourceRoot + 'Scripts/';
+      
+    this.shaders        = this.scriptsRoot + 'Shaders/';
+ }();
+
 var siteConfig = new function() {
  
-    this.nodeModulesRoot = './node_modules/';                      
     this.wwwRoot         = './wwwroot/';                      
+    this.nodeModulesRoot = './node_modules/';                      
 
     this.cssRoot         = this.wwwRoot + 'css/';
     this.jsRoot          = this.wwwRoot + 'js/';
@@ -132,6 +141,59 @@ function appendFile (fileName, lines, encoding) {
 }
 
 //-----------------------------------------------------------------------------
+//  Shader Tasks
+//-----------------------------------------------------------------------------
+
+/// <summary>
+/// Generates the composite Shaders.js JavaScript file from the individual .glsl source files.
+/// </summary>
+function generateShaders() {
+    var glslSourceFolder    = sourceConfig.shaders,
+        shaderTemplateFile  = 'ShadersTemplate.js',
+        shaderFile          = 'shaders.js',
+        shaderOutputFolder  = siteConfig.jsRoot,
+        shaderFilePath      = shaderOutputFolder + shaderFile,
+        glslFiles           = [],
+        allShaderLines      = [];
+    
+    allShaderLines = readFile(glslSourceFolder + shaderTemplateFile, true);
+
+    glslFiles = fs.readdirSync(glslSourceFolder);
+    glslFiles.forEach(appendShader);
+
+    deleteFile (shaderFilePath);
+    appendFile(shaderFilePath, allShaderLines, encodingAscii);
+
+
+    /// <summary>
+    /// Appends a .glsl source file to the output file.
+    /// </summary>
+    function appendShader(fileName) {
+        var shaderLine      = '',
+            shaderName      = '',
+            thisShaderLines = [],
+            iLine           = 0;
+
+        if (path.extname(fileName) !== '.glsl')
+            return;
+
+        shaderName = path.basename(fileName, '.glsl');
+        thisShaderLines = readFile(glslSourceFolder + fileName, true);
+        thisShaderLines = stripEOLCharacters(thisShaderLines);
+
+        shaderLine = 'MR.shaderSource["' + shaderName + '"] = "';
+        for (iLine = 0; iLine < thisShaderLines.length; iLine++)
+            shaderLine += thisShaderLines[iLine] + '\\n';
+
+        shaderLine += '";';
+        allShaderLines.push(shaderLine);
+        allShaderLines.push('\n');
+
+//      console.log(allShaderLines);
+    }
+}
+
+//-----------------------------------------------------------------------------
 //  Build Tasks
 //-----------------------------------------------------------------------------
 
@@ -170,6 +232,14 @@ gulp.task('copyNPM', function () {
     let requirejsFolder = siteConfig.nodeModulesRoot + 'requirejs/';
     copyFile('require.js', requirejsFolder, siteConfig.libRoot);
 });
+
+/// <summary>
+/// Assemble shader file from .glsl components.
+/// </summary>
+gulp.task('buildShaders', function() {
+    generateShaders();
+});
+
 /// <summary>
 /// Debug task
 /// </summary>
@@ -181,7 +251,7 @@ gulp.task('debug', function () {
 /// Default build task
 /// </summary>
 gulp.task('default', function () {
-  runSequence('copyNPM');
+  runSequence('copyNPM', 'buildShaders');
 });
 
 //-----------------------------------------------------------------------------

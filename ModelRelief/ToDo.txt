@@ -1,6 +1,12 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
+Why does the shader code not reload?
+Add documentation.
+    Graphics
+    Materials
+    Math
+
 Add types to all methods.
     TrackballControls
     OBJLoader

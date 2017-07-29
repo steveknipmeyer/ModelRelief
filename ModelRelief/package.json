@@ -6,6 +6,7 @@
   "dependencies": {},
   "devDependencies": {
     "@types/dat-gui": "^0.6.3",
+    "@types/jquery": "^3.2.1",
     "@types/requirejs": "^2.1.29",
     "@types/three": "^0.84.17",
     "beepbeep": "^1.2.1",
