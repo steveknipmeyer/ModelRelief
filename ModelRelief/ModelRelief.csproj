@@ -32,4 +32,9 @@
     <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
+  
+  <ItemGroup>
+    <None Include="Views\Workbench\DepthBuffer.cshtml" />
+  </ItemGroup>
+
 </Project>

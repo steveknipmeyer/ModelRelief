@@ -1,9 +1,5 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>three.js webgl - Depth Texture</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+﻿
+<!--<head>
     <style>
         body {
             color: #fff;
@@ -46,7 +42,19 @@
             background: #CE0808;
         }
     </style>
+</head>-->
 
+<body>
+    <canvas></canvas>
+
+    <!------------------------------------------------------------------------------------------------>
+    <!--                                    Libraries                                               -->
+    <!------------------------------------------------------------------------------------------------>
+    <script src="/lib/require.js"></script>
+
+    <!------------------------------------------------------------------------------------------------>
+    <!--                                    ModelRelief                                             -->
+    <!------------------------------------------------------------------------------------------------>
     <script id="post-vert" type="x-shader/x-vertex">
         varying vec2 vUv;
 
@@ -80,34 +88,17 @@
             }
     </script>
 
-</head>
-<body>
-    <canvas></canvas>
-    <div id="info">
-        <a href="http://threejs.org" target="_blank">threejs</a> - WebGL - Depth Texture<br />
-        Stores render target depth in a texture attachment.<br />
-        Created by <a href="http://twitter.com/mattdesl" target="_blank">@mattdesl</a>.
-
-        <div id="error" style="display: none;">
-            Your browser does not support <strong>WEBGL_depth_texture</strong>.<br /><br />
-            This demo will not work.
-        </div>
-    </div>
-
-    <script src="../../wwwroot/lib/require.js"></script>
     <script>
         requirejs.config({
             baseUrl: '.',
             paths: {
-                'three'                                       : '../../wwwroot/lib/threejs/three',
-                'Workbench/DepthTexture'                      : '../../wwwroot/js/modelrelief'
+                'Workbench/DepthTexture'                      : '/js/modelrelief',
+
+                'three'                                       : '/lib/threejs/three',
             }
         });
         window.onload = function () {
             requirejs(['Workbench/DepthTexture']);
         }
     </script>
-
-
 </body>
-</html>
