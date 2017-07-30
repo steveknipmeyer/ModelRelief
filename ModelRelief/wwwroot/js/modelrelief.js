@@ -1279,6 +1279,8 @@ define("Workbench/DepthTexture", ["require", "exports", "three", "Viewer/Trackba
     var target;
     var postScene, postCamera;
     var supportsExtension = true;
+    var depthCanvas;
+    var depthCanvasContext;
     init();
     animate();
     function init() {
@@ -1314,6 +1316,8 @@ define("Workbench/DepthTexture", ["require", "exports", "three", "Viewer/Trackba
         setupPost();
         onWindowResize();
         window.addEventListener('resize', onWindowResize, false);
+        depthCanvas = document.querySelector('#depthBuffer');
+        depthCanvasContext = depthCanvas.getContext('2d');
     }
     function setupPost() {
         // Setup post processing stage
@@ -1333,12 +1337,23 @@ define("Workbench/DepthTexture", ["require", "exports", "three", "Viewer/Trackba
         postScene = new THREE.Scene();
         postScene.add(postQuad);
     }
+    /**
+        * Adds lighting to the scene
+        */
+    function initializeLighting() {
+        var ambientLight = new THREE.AmbientLight(0x404040);
+        scene.add(ambientLight);
+        var directionalLight1 = new THREE.DirectionalLight(0xC0C090);
+        directionalLight1.position.set(-100, -50, 100);
+        scene.add(directionalLight1);
+        var directionalLight2 = new THREE.DirectionalLight(0xC0C090);
+        directionalLight2.position.set(100, 50, -100);
+        scene.add(directionalLight2);
+    }
     function setupScene() {
-        var diffuse = new THREE.TextureLoader().load('textures/brick_diffuse.jpg');
-        diffuse.wrapS = diffuse.wrapT = THREE.RepeatWrapping;
         // Setup some geometries
         var geometry = new THREE.TorusKnotGeometry(1, 0.3, 128, 64);
-        var material = new THREE.MeshBasicMaterial({ color: 'blue' });
+        var material = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
         var count = 50;
         var scale = 5;
         for (var i = 0; i < count; i++) {
@@ -1350,6 +1365,7 @@ define("Workbench/DepthTexture", ["require", "exports", "three", "Viewer/Trackba
             mesh.rotation.set(Math.random(), Math.random(), Math.random());
             scene.add(mesh);
         }
+        initializeLighting();
     }
     function onWindowResize() {
         var aspect = window.innerWidth / window.innerHeight;
@@ -1366,8 +1382,10 @@ define("Workbench/DepthTexture", ["require", "exports", "three", "Viewer/Trackba
         controls.update();
         // render scene into target
         renderer.render(scene, camera, target);
+        renderer.render(scene, camera);
+        //  depthCanvasContext.drawImage(target.texture.image, 0, 0, depthCanvas.width, depthCanvas.height);
         // render post FX
-        renderer.render(postScene, postCamera);
+        // renderer.render(postScene, postCamera);
     }
 });
 define("Viewer/Graphics", ["require", "exports", "three"], function (require, exports, THREE) {
@@ -1712,19 +1730,24 @@ define("System/Math", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    /// <summary>
-    /// Math Library
-    /// General mathematics routines
-    /// </summary>
+    /**
+     * Math Library
+     * General mathematics routines
+     * @class
+     */
     var Math = (function () {
-        /// <summary>
-        ///  Constructor
-        /// </summary>
+        /**
+         * @constructor
+         */
         function Math() {
         }
-        /// <summary>
-        ///  Returns whether two numbers are equal within the given tolerance.
-        /// </summary>
+        /**
+         * Returns whether two numbers are equal within the given tolerance.
+         * @param value - First value
+         * @param other - Second value
+         * @param tolerance - Tolerance for comparison
+         * @returns True if within tolerance
+         */
         Math.numbersEqualWithinTolerance = function (value, other, tolerance) {
             return ((value >= (other - tolerance)) && (value <= (other + tolerance)));
         };

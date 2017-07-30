@@ -8,6 +8,9 @@ var target : THREE.WebGLRenderTarget;
 var postScene, postCamera;
 var supportsExtension = true;
 
+var depthCanvas        : HTMLCanvasElement;
+var depthCanvasContext : CanvasRenderingContext2D;
+
 init();
 animate();
 
@@ -31,19 +34,19 @@ function init() {
     controls = new TrackballControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.25;
-    controls.rotateSpeed = 0.35;
+    controls.rotateSpeed   = 0.35;
 
     // Create a multi render target with Float buffers
     target = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight);
-    target.texture.format = THREE.RGBFormat;
-    target.texture.minFilter = THREE.NearestFilter;
-    target.texture.magFilter = THREE.NearestFilter;
-    target.texture.generateMipmaps = false;
-    target.stencilBuffer = false;
-    target.depthBuffer = true;
-    target.depthTexture = new THREE.DepthTexture(window.innerWidth, window.innerHeight);
-    target.depthTexture.type = THREE.UnsignedShortType;
+    target.texture.format           = THREE.RGBFormat;
+    target.texture.minFilter        = THREE.NearestFilter;
+    target.texture.magFilter        = THREE.NearestFilter;
+    target.texture.generateMipmaps  = false;
+    target.stencilBuffer            = false;
 
+    target.depthBuffer              = true;
+    target.depthTexture             = new THREE.DepthTexture(window.innerWidth, window.innerHeight);
+    target.depthTexture.type        = THREE.UnsignedShortType;
 
     // Our scene
     scene = new THREE.Scene();
@@ -55,6 +58,8 @@ function init() {
     onWindowResize();
     window.addEventListener('resize', onWindowResize, false);
 
+    depthCanvas        = <HTMLCanvasElement> document.querySelector('#depthBuffer');
+    depthCanvasContext = depthCanvas.getContext('2d');
 }
 
 function setupPost() {
@@ -66,25 +71,38 @@ function setupPost() {
         fragmentShader: document.querySelector('#post-frag').textContent.trim(),
         uniforms: {
             cameraNear: { value: camera.near },
-            cameraFar: { value: camera.far },
-            tDiffuse: { value: target.texture },
-            tDepth: { value: target.depthTexture }
+            cameraFar:  { value: camera.far },
+            tDiffuse:   { value: target.texture },
+            tDepth:     { value: target.depthTexture }
         }
     });
     var postPlane = new THREE.PlaneGeometry(2, 2);
-    var postQuad = new THREE.Mesh(postPlane, postMaterial);
+    var postQuad  = new THREE.Mesh(postPlane, postMaterial);
     postScene = new THREE.Scene();
     postScene.add(postQuad);
+}
+/**
+    * Adds lighting to the scene
+    */
+function initializeLighting() {
 
+    let ambientLight = new THREE.AmbientLight(0x404040);
+    scene.add(ambientLight);
+
+    let directionalLight1 = new THREE.DirectionalLight(0xC0C090);
+    directionalLight1.position.set(-100, -50, 100);
+    scene.add(directionalLight1);
+
+    let directionalLight2 = new THREE.DirectionalLight(0xC0C090);
+    directionalLight2.position.set(100, 50, -100);
+    scene.add(directionalLight2);
 }
 
 function setupScene() {
-    var diffuse = new THREE.TextureLoader().load('textures/brick_diffuse.jpg');
-    diffuse.wrapS = diffuse.wrapT = THREE.RepeatWrapping;
 
     // Setup some geometries
     var geometry = new THREE.TorusKnotGeometry(1, 0.3, 128, 64);
-    var material = new THREE.MeshBasicMaterial({ color: 'blue' });
+    var material = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
 
     var count = 50;
     var scale = 5;
@@ -103,9 +121,8 @@ function setupScene() {
         );
         mesh.rotation.set(Math.random(), Math.random(), Math.random());
         scene.add(mesh);
-
     }
-
+    initializeLighting();
 }
 
 function onWindowResize() {
@@ -117,7 +134,6 @@ function onWindowResize() {
     var dpr = renderer.getPixelRatio();
     target.setSize(window.innerWidth * dpr, window.innerHeight * dpr);
     renderer.setSize(window.innerWidth, window.innerHeight);
-
 }
 
 function animate() {
@@ -129,9 +145,13 @@ function animate() {
 
     // render scene into target
     renderer.render(scene, camera, target);
+    renderer.render(scene, camera);
+
+//  depthCanvasContext.drawImage(target.texture.image, 0, 0, depthCanvas.width, depthCanvas.height);
 
     // render post FX
-    renderer.render(postScene, postCamera);
+ // renderer.render(postScene, postCamera);
 
+    
 }
 

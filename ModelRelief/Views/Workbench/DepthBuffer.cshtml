@@ -3,6 +3,7 @@
     <div id="glFullscreen">
         <canvas id="model3D"></canvas>
     </div>
+    <canvas id="depthBuffer" width="512" height="512"></canvas>
 
     <!------------------------------------------------------------------------------------------------>
     <!--                                    Libraries                                               -->
@@ -23,25 +24,25 @@
     <script id="post-frag" type="x-shader/x-fragment">
         #include <packing>
 
-            varying vec2 vUv;
-            uniform sampler2D tDiffuse;
-            uniform sampler2D tDepth;
-            uniform float cameraNear;
-            uniform float cameraFar;
-
+            varying vec2        vUv;
+            uniform sampler2D   tDiffuse;
+            uniform sampler2D   tDepth;
+            uniform float       cameraNear;
+            uniform float       cameraFar;
 
             float readDepth (sampler2D depthSampler, vec2 coord) {
-            float fragCoordZ = texture2D(depthSampler, coord).x;
-            float viewZ = perspectiveDepthToViewZ( fragCoordZ, cameraNear, cameraFar );
-            return viewZToOrthographicDepth( viewZ, cameraNear, cameraFar );
+                float fragCoordZ = texture2D(depthSampler, coord).x;
+                float viewZ = perspectiveDepthToViewZ( fragCoordZ, cameraNear, cameraFar );
+
+                return viewZToOrthographicDepth( viewZ, cameraNear, cameraFar );
             }
 
             void main() {
-            vec3 diffuse = texture2D(tDiffuse, vUv).rgb;
-            float depth = readDepth(tDepth, vUv);
+                vec3 diffuse = texture2D(tDiffuse, vUv).rgb;
+                float depth = readDepth(tDepth, vUv);
 
-            gl_FragColor.rgb = vec3(depth);
-            gl_FragColor.a = 1.0;
+                gl_FragColor.rgb = vec3(depth);
+                gl_FragColor.a = 1.0;
             }
     </script>
 
