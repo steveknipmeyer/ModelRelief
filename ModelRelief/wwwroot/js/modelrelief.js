@@ -1275,15 +1275,20 @@ define("main", ["require", "exports", "three", "Viewer/Viewer", "ModelLoaders/OB
 define("Workbench/DepthTexture", ["require", "exports", "three", "Viewer/TrackballControls"], function (require, exports, THREE, TrackballControls_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var camera, scene, renderer, controls;
+    var renderer;
+    var postRenderer;
+    var controls;
+    var scene;
+    var postScene;
+    var camera;
+    var postCamera;
     var target;
-    var postScene, postCamera;
-    var supportsExtension = true;
     var depthCanvas;
-    var depthCanvasContext;
+    var supportsExtension = true;
     init();
     animate();
     function init() {
+        // Scene Renderer
         renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('canvas') });
         if (!renderer.extensions.get('WEBGL_depth_texture')) {
             supportsExtension = false;
@@ -1293,12 +1298,14 @@ define("Workbench/DepthTexture", ["require", "exports", "three", "Viewer/Trackba
         }
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth, window.innerHeight);
+        // DepthMap Renderer
+        depthCanvas = document.querySelector('#depthBuffer');
+        postRenderer = new THREE.WebGLRenderer({ canvas: depthCanvas });
+        postRenderer.setPixelRatio(window.devicePixelRatio);
+        postRenderer.setSize(depthCanvas.width, depthCanvas.height);
         camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 50);
         camera.position.z = -4;
         controls = new TrackballControls_2.TrackballControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.25;
-        controls.rotateSpeed = 0.35;
         // Create a multi render target with Float buffers
         target = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight);
         target.texture.format = THREE.RGBFormat;
@@ -1316,8 +1323,6 @@ define("Workbench/DepthTexture", ["require", "exports", "three", "Viewer/Trackba
         setupPost();
         onWindowResize();
         window.addEventListener('resize', onWindowResize, false);
-        depthCanvas = document.querySelector('#depthBuffer');
-        depthCanvasContext = depthCanvas.getContext('2d');
     }
     function setupPost() {
         // Setup post processing stage
@@ -1371,8 +1376,10 @@ define("Workbench/DepthTexture", ["require", "exports", "three", "Viewer/Trackba
         var aspect = window.innerWidth / window.innerHeight;
         camera.aspect = aspect;
         camera.updateProjectionMatrix();
-        var dpr = renderer.getPixelRatio();
-        target.setSize(window.innerWidth * dpr, window.innerHeight * dpr);
+        // size target DepthTexture
+        var dpr = postRenderer.getPixelRatio();
+        target.setSize(depthCanvas.width * dpr, depthCanvas.height * dpr);
+        postRenderer.setSize(depthCanvas.width, depthCanvas.height);
         renderer.setSize(window.innerWidth, window.innerHeight);
     }
     function animate() {
@@ -1381,11 +1388,10 @@ define("Workbench/DepthTexture", ["require", "exports", "three", "Viewer/Trackba
         requestAnimationFrame(animate);
         controls.update();
         // render scene into target
-        renderer.render(scene, camera, target);
         renderer.render(scene, camera);
-        //  depthCanvasContext.drawImage(target.texture.image, 0, 0, depthCanvas.width, depthCanvas.height);
         // render post FX
-        // renderer.render(postScene, postCamera);
+        renderer.render(scene, camera, target);
+        postRenderer.render(postScene, postCamera);
     }
 });
 define("Viewer/Graphics", ["require", "exports", "three"], function (require, exports, THREE) {

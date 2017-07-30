@@ -3,19 +3,24 @@
 import * as THREE               from 'three'
 import {TrackballControls}      from 'TrackballControls'
 
-var camera, scene, renderer, controls;
-var target : THREE.WebGLRenderTarget;
-var postScene, postCamera;
-var supportsExtension = true;
+var renderer    : THREE.WebGLRenderer;
+var postRenderer: THREE.WebGLRenderer;
+var controls    : TrackballControls;
+var scene       : THREE. Scene;
+var postScene   : THREE.Scene;
+var camera      : THREE.PerspectiveCamera;
+var postCamera  : THREE.OrthographicCamera;
 
-var depthCanvas        : HTMLCanvasElement;
-var depthCanvasContext : CanvasRenderingContext2D;
+var target      : THREE.WebGLRenderTarget;
+var depthCanvas: HTMLCanvasElement;
+var supportsExtension : boolean = true;
 
 init();
 animate();
 
 function init() {
 
+    // Scene Renderer
     renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('canvas') });
 
     if (!renderer.extensions.get('WEBGL_depth_texture')) {
@@ -28,13 +33,16 @@ function init() {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
 
+    // DepthMap Renderer
+    depthCanvas = <HTMLCanvasElement> document.querySelector('#depthBuffer');
+    postRenderer = new THREE.WebGLRenderer({ canvas: depthCanvas });
+    postRenderer.setPixelRatio(window.devicePixelRatio);
+    postRenderer.setSize(depthCanvas.width, depthCanvas.height);
+
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 50);
     camera.position.z = -4;
 
     controls = new TrackballControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.25;
-    controls.rotateSpeed   = 0.35;
 
     // Create a multi render target with Float buffers
     target = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight);
@@ -57,18 +65,18 @@ function init() {
 
     onWindowResize();
     window.addEventListener('resize', onWindowResize, false);
-
-    depthCanvas        = <HTMLCanvasElement> document.querySelector('#depthBuffer');
-    depthCanvasContext = depthCanvas.getContext('2d');
 }
 
 function setupPost() {
 
     // Setup post processing stage
     postCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
     var postMaterial = new THREE.ShaderMaterial({
-        vertexShader: document.querySelector('#post-vert').textContent.trim(),
+        
+        vertexShader:   document.querySelector('#post-vert').textContent.trim(),
         fragmentShader: document.querySelector('#post-frag').textContent.trim(),
+
         uniforms: {
             cameraNear: { value: camera.near },
             cameraFar:  { value: camera.far },
@@ -78,6 +86,7 @@ function setupPost() {
     });
     var postPlane = new THREE.PlaneGeometry(2, 2);
     var postQuad  = new THREE.Mesh(postPlane, postMaterial);
+
     postScene = new THREE.Scene();
     postScene.add(postQuad);
 }
@@ -120,6 +129,7 @@ function setupScene() {
             z * scale
         );
         mesh.rotation.set(Math.random(), Math.random(), Math.random());
+
         scene.add(mesh);
     }
     initializeLighting();
@@ -131,27 +141,27 @@ function onWindowResize() {
     camera.aspect = aspect;
     camera.updateProjectionMatrix();
 
-    var dpr = renderer.getPixelRatio();
-    target.setSize(window.innerWidth * dpr, window.innerHeight * dpr);
+    // size target DepthTexture
+    var dpr = postRenderer.getPixelRatio();
+    target.setSize(depthCanvas.width * dpr, depthCanvas.height * dpr);
+    postRenderer.setSize(depthCanvas.width, depthCanvas.height);
+
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 function animate() {
 
-    if (!supportsExtension) return;
+    if (!supportsExtension) 
+        return;
 
     requestAnimationFrame(animate);
     controls.update();
 
     // render scene into target
-    renderer.render(scene, camera, target);
     renderer.render(scene, camera);
 
-//  depthCanvasContext.drawImage(target.texture.image, 0, 0, depthCanvas.width, depthCanvas.height);
-
     // render post FX
- // renderer.render(postScene, postCamera);
-
-    
+    postRenderer.render(scene, camera, target);
+    postRenderer.render(postScene, postCamera);
 }
 
