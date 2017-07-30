@@ -29,8 +29,9 @@
   "exclude": [                                        // folders <not> included in compilation
     "node_modules",
     "wwwroot",                                        // Scott Allen : NDC Opinionated View of ASPNET Core
-    "Scripts/Workbench.*",                            // test
-    "**/*.js"                                         // JavaScript
+    "**/*.js" // JavaScript
+
+    //  "Scripts/Workbench/*",                       // test
   ]
 }
 

@@ -98,6 +98,8 @@ HTML
 // ------------------------------------------------------------------------// 
 //      Modules                                                            //
 // ------------------------------------------------------------------------//
+http://davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd/
+
 What is the recommended way to split a module over multiple files?
     Using a d.ts file and 'export as namespace' works but it led to issues loading MR in require.js. 
         modelrelief.d.ts
