@@ -7,23 +7,25 @@
 
 import * as THREE from 'three'
           
-/// <summary>
-/// Materials
-/// General THREE.js Material classes and helpers
-/// </summary>
+/**
+ * Materials
+ * General THREE.js Material classes and helpers
+ * @class
+ */
 export class Materials {
 
-    /// <summary>
-    ///  Constructor
-    /// </summary>
+    /**
+     * @constructor
+     */
     constructor() {
     }
 
 //#region Materials
-
-    /// <summary>
-    ///  Create a texture material from an image URL.
-    /// </summary>
+    /**
+     * Create a texture material from an image URL.
+     * @param image - Image to use in texture
+     * @returns Texture material
+     */
     static createTextureMaterial (image : HTMLImageElement) : THREE.MeshBasicMaterial {
             
         var texture         : THREE.Texture,
@@ -44,9 +46,11 @@ export class Materials {
         return textureMaterial;
     }
 
-    /// <summary>
-    ///  Create a bump map Phong shader from a texture map.
-    /// </summary>
+    /**
+     *  Create a bump map Phong material from a texture map.
+     * @param designTexture - Bump map texture
+     * @returns Phong bump mapped material
+     */
     static createMeshPhongMaterial(designTexture : THREE.Texture)  : THREE.MeshPhongMaterial {
 
         var material : THREE.MeshPhongMaterial;
@@ -63,17 +67,19 @@ export class Materials {
         return material;
     }
 
-    /// <summary>
-    ///  Create a transparent material.
-    /// </summary>
-    static createTransparentMaterial(designTexture : THREE.Texture)  : THREE.Material {
+    /**
+     * Create a transparent material.
+     * @returns Transparent material
+     */
+    static createTransparentMaterial()  : THREE.Material {
 
         return new THREE.MeshBasicMaterial({color : 0x000000, opacity : 0.0, transparent : true});
     }
-
-    /// <summary>
-    ///  Create the shader material used for generating the DepthBuffer.
-    /// </summary>
+    /**
+     * Create the shader material used for generating the DepthBuffer.
+     * @param designColor - Material color
+     * @returns Shader material
+     */
     static createDepthBufferMaterial(designColor : number) : THREE.ShaderMaterial {
             
         var textureLoader  = new THREE.TextureLoader();               
@@ -94,6 +100,5 @@ export class Materials {
             
         return shaderMaterial;
     }       
-
 //#endregion
 }

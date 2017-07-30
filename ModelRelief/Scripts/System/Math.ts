@@ -5,20 +5,25 @@
 // ------------------------------------------------------------------------//
 "use strict";
          
-/// <summary>
-/// Math Library
-/// General mathematics routines
-/// </summary>
+/**
+ * Math Library
+ * General mathematics routines
+ * @class
+ */
 export class Math {
-    /// <summary>
-    ///  Constructor
-    /// </summary>
+    /**
+     * @constructor
+     */
     constructor() {
     }
 
-    /// <summary>
-    ///  Returns whether two numbers are equal within the given tolerance.
-    /// </summary>
+    /**
+     * Returns whether two numbers are equal within the given tolerance.
+     * @param value - First value
+     * @param other - Second value
+     * @param tolerance - Tolerance for comparison
+     * @returns True if within tolerance
+     */
     static numbersEqualWithinTolerance(value : number, other : number, tolerance : number) : boolean {
             
         return ((value >= (other - tolerance)) && (value <= (other + tolerance)));

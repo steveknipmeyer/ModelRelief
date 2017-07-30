@@ -7,30 +7,31 @@
 
 import * as THREE from 'three'
           
-/// <summary>
-/// Graphics Library
-/// General THREE.js/WebGL support routines
-/// </summary>
+/**
+ *  General THREE.js/WebGL support routines
+ *  Graphics Library
+ *  @class
+ */
 export class Graphics {
 
     static BoundingBoxName     : string = 'Bounding Box';
 
-    /// <summary>
-    ///  Constructor
-    /// </summary>
+    /**
+     * @constructor
+     */
     constructor() {
     }
 
 //#region Geometry
-    /*
     // --------------------------------------------------------------------------------------------------------------------------------------//
     //			Geometry
     // --------------------------------------------------------------------------------------------------------------------------------------//
-    */
-    /// <summary>
-    ///  Create a transparent bounding box used for element location.
-    /// </summary>
-    static createTransparentBoundingBox(position : THREE.Vector3, mesh : THREE.Mesh) {
+    /**
+     * @param position - Location of bounding box
+     * @param mesh - Mesh from which to create bounding box
+     * @ returns Mesh of the bounding box
+     */
+    static createTransparentBoundingBox(position : THREE.Vector3, mesh : THREE.Mesh) : THREE.Mesh{
 
         var targetGeometry  : THREE.Geometry,
             boundingBox     : THREE.Box3,
@@ -57,9 +58,15 @@ export class Graphics {
         return box;
     }
 
-    /// <summary>
-    ///  Creates a box mesh.
-    /// </summary>
+    /**
+     * Creates a box mesh.
+     * @param position - Location of the box
+     * @param width - Width
+     * @param height - Height
+     * @param depth - Depth
+     * @param material - Optional material
+     * @returns Box mesh
+     */
     static createBox(position : THREE.Vector3, width : number, height : number, depth : number, material? : THREE.Material) : THREE.Mesh {
 
         var 
@@ -78,16 +85,19 @@ export class Graphics {
         return box;
     }
 
-    /// <summary>
-    ///  Creates a sphere mesh.
-    /// </summary>
+    /**
+     * Creates a sphere mesh.
+     * @param position - Origin of the sphere
+     * @param radius - Radius
+     * @param color - Color
+     * @param segments - Mesh segments
+     */
     static createSphere(position : THREE.Vector3, radius : number, color : number, segments? : number) : THREE.Mesh {
-
         var sphereGeometry  : THREE.SphereGeometry,
             material        : THREE.MeshBasicMaterial,
             segmentCount    : number = segments || 32,
             sphere          : THREE.Mesh;
-            
+         Graphics.createBox       
         sphereGeometry = new THREE.SphereGeometry(radius, segmentCount, segmentCount);
         sphereGeometry.computeBoundingBox();
 
@@ -99,9 +109,13 @@ export class Graphics {
         return sphere;
     }
 
-    /// <summary>
-    ///  Creates a line object.
-    /// </summary>
+        /**
+     * Creates a line object.
+     * @param startPosition - Start point
+     * @param endPosition - End point
+     * @param color - color
+     * @return Line
+     */
     static createLine(startPosition : THREE.Vector3, endPosition : THREE.Vector3, color : number) : THREE.Line {
 
         var line            : THREE.Line,
@@ -116,10 +130,14 @@ export class Graphics {
 
         return line;
     }
-
-    /// <summary>
-    ///  Creates an axes triad.
-    /// </summary>
+        
+    /**
+     * Creates an axes triad.
+     * @param position - Origin of the triad
+     * @param length - Length of the coordinate arrow
+     * @param headLength - Length of the arrow head
+     * @param headWidth - Width of the arrow head
+     */
     static createWorldAxesTriad(position? : THREE.Vector3, length? : number, headLength? : number, headWidth? : number) : THREE.Object3D {
             
         var triadGroup      : THREE.Object3D = new THREE.Object3D(),
@@ -135,9 +153,13 @@ export class Graphics {
         return triadGroup;
     }
 
-    /// <summary>
-    ///  Creates an axes grid.
-    /// </summary>
+    /**
+     * Creates an axes grid.
+     * @param position : Origin of the axes grid
+     * @param size : Size of the grid
+     * @param step : Grid line intervals
+     * @returns Grid object
+     */
     static createWorldAxesGrid(position? : THREE.Vector3, size? : number, step? : number) : THREE.Object3D {
             
         var gridGroup       : THREE.Object3D = new THREE.Object3D(),
@@ -195,18 +217,17 @@ export class Graphics {
     Mouse Event Properties
     http://www.jacklmoore.com/notes/mouse-position/
     */
-
-    // --------------------------------------------------------------------------------------------------------------------------------------//
-    //			Model Coordinates
-    // --------------------------------------------------------------------------------------------------------------------------------------//
-
+        
     // --------------------------------------------------------------------------------------------------------------------------------------//
     //			World Coordinates
     // --------------------------------------------------------------------------------------------------------------------------------------//
-
-    /// <summary>
-    ///  Converts a JQuery event to normalized device coordinates.
-    /// </summary>
+    /**
+     * Converts a JQuery event to world coordinates.
+     * @param event - Event
+     * @param container - DOM container
+     * @param camera - Camera
+     * @returns World coordinates
+     */
     static worldCoordinatesFromJQEvent (event : JQueryEventObject, container : JQuery, camera : THREE.Camera) : THREE.Vector3 {
 
         var worldCoordinates    : THREE.Vector3,
@@ -226,11 +247,13 @@ export class Graphics {
 
     // --------------------------------------------------------------------------------------------------------------------------------------//
     //			View Coordinates
-    // --------------------------------------------------------------------------------------------------------------------------------------//
-
-    /// <summary>
-    ///  Converts world coordinates to view coordinates.
-    /// </summary>
+    // --------------------------------------------------------------------------------------------------------------------------------------// 
+    /**
+     * Converts world coordinates to view coordinates.
+     * @param vector - World coordinate vector to convert
+     * @param camera - Camera
+     * @returns View coordinates
+     */
     static viewCoordinatesFromWorldCoordinates (vector : THREE.Vector3, camera : THREE.Camera) : THREE.Vector3 {
 
         var position          : THREE.Vector3 = vector.clone(),  
@@ -244,10 +267,12 @@ export class Graphics {
     // --------------------------------------------------------------------------------------------------------------------------------------//
     //			Device Coordinates
     // --------------------------------------------------------------------------------------------------------------------------------------//
-
-    /// <summary>
-    ///  Converts a JQuery event to normalized device coordinates.
-    /// </summary>
+    /**
+     * Converts a JQuery event to normalized device coordinates.
+     * @param event - JQuery event
+     * @param container - DOM container
+     * @returns Normalized device coordinates
+     */
     static deviceCoordinatesFromJQEvent (event : JQueryEventObject, container : JQuery) : THREE.Vector2 {
 
         var deviceCoordinates           : THREE.Vector2,
@@ -266,9 +291,12 @@ export class Graphics {
         return deviceCoordinates;
     }
 
-    /// <summary>
-    ///  Converts world coordinates to device coordinates [-1, 1].
-    /// </summary>
+    /**
+     * Converts world coordinates to device coordinates [-1, 1].
+     * @param vector - World coordinates vector
+     * @param camera - Camera
+     * @preturns Device coorindates
+     */
     static deviceCoordinatesFromWorldCoordinates (vector : THREE.Vector3, camera : THREE.Camera) : THREE.Vector2 {
             
         // https://github.com/mrdoob/three.js/issues/78
@@ -285,10 +313,11 @@ export class Graphics {
     // --------------------------------------------------------------------------------------------------------------------------------------//
     //			Screen Coordinates
     // --------------------------------------------------------------------------------------------------------------------------------------//
-
-    /// <summary>
-    ///  Page coordinates from a JQuery event.
-    /// </summary>
+    /**
+     * Page coordinates from a JQuery event.
+     * @param event - JQuery event
+     * @returns Screen (page) coordinates
+     */
     static screenPageCoordinatesFromJQEvent(event : JQueryEventObject) : THREE.Vector2 {
         
         var screenPageCoordinates : THREE.Vector2 = new THREE.Vector2();
@@ -298,12 +327,15 @@ export class Graphics {
 
         return screenPageCoordinates;
     }
-    /// <summary>
-    ///  Client coordinates from a JQuery event.
-    ///  Client coordinates are relative to the <browser> view port. If the document has been scrolled it will
-    //   be different than the page coordinates which are always relative to the top left of the <entire> HTML page document.
-    //   http://www.bennadel.com/blog/1869-jquery-mouse-events-pagex-y-vs-clientx-y.htm
-    /// </summary>
+    
+    /**
+     * Client coordinates from a JQuery event.
+     * Client coordinates are relative to the <browser> view port. If the document has been scrolled it will
+     * be different than the page coordinates which are always relative to the top left of the <entire> HTML page document.
+     * http://www.bennadel.com/blog/1869-jquery-mouse-events-pagex-y-vs-clientx-y.htm
+     * @param event - JQuery event
+     * @returns Screen client coordinates
+     */
     static screenClientCoordinatesFromJQEvent(event : JQueryEventObject) : THREE.Vector2 {
         
         var screenClientCoordinates : THREE.Vector2 = new THREE.Vector2();
@@ -314,9 +346,12 @@ export class Graphics {
         return screenClientCoordinates;
     }
 
-    /// <summary> 
-    ///  Converts JQuery event coordinates to screen container coordinates.
-    /// </summary>
+    /**
+     * Converts JQuery event coordinates to screen container coordinates.
+     * @param event - JQuery event
+     * @param container - DOM container
+     * @returns Screen container coordinates
+     */
     static screenContainerCoordinatesFromJQEvent(event : JQueryEventObject, container : JQuery) : THREE.Vector2 {
         
         var screenContainerCoordinates : THREE.Vector2 = new THREE.Vector2(),
@@ -334,10 +369,14 @@ export class Graphics {
 
         return screenContainerCoordinates;
     }
-
-    /// <summary>
-    ///  Converts world coordinates to screen container coordinates.
-    /// </summary>
+  
+    /**
+     * Converts world coordinates to screen container coordinates.
+     * @param vector - World vector
+     * @param container - DOM container
+     * @param camera - Camera
+     * @returns Screen container coordinates
+     */
     static screenContainerCoordinatesFromWorldCoordinates (vector : THREE.Vector3, container : JQuery, camera : THREE.Camera) : THREE.Vector2 {
             
         //https://github.com/mrdoob/three.js/issues/78
@@ -358,15 +397,16 @@ export class Graphics {
 //#endregion
 
 //#region Helpers
-    /*
     // --------------------------------------------------------------------------------------------------------------------------------------//
     //			Helpers
     // --------------------------------------------------------------------------------------------------------------------------------------//
-    */
-    /// <summary>
-    ///  Creates a Raycaster through the mouse world position.
-    /// </summary>
-    static raycasterFromMouse (mouseWorld : THREE.Vector3, camera : THREE.Camera) {
+    /**
+     * Creates a Raycaster through the mouse world position.
+     * @param mouseWorld - World coordinates
+     * @param camera - Camera
+     * @returns THREE.Raycaster
+     */
+    static raycasterFromMouse (mouseWorld : THREE.Vector3, camera : THREE.Camera) : THREE.Raycaster{
 
         var rayOrigin  : THREE.Vector3 = new THREE.Vector3 (mouseWorld.x, mouseWorld.y, camera.position.z),
             worldPoint : THREE.Vector3 = new THREE.Vector3(mouseWorld.x, mouseWorld.y, mouseWorld.z);
@@ -378,10 +418,15 @@ export class Graphics {
 
         return raycaster;
     }
-
-    /// <summary>
-    ///  Returns the first Intersection located by the cursor.
-    /// </summary>
+    /**
+     * Returns the first Intersection located by the cursor.
+     * @param event : JQuery event
+     * @param container : DOM container
+     * @param camera - Camera
+     * @param sceneObjects - Array of scene objects
+     * @param recurse - Recurse through objects
+     * @returns First intersection with screen objects
+     */
     static getFirstIntersection(event : JQueryEventObject, container : JQuery, camera : THREE.Camera, sceneObjects : THREE.Object3D[], recurse : boolean) : THREE.Intersection {
 
         var raycaster          : THREE.Raycaster,
