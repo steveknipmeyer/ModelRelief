@@ -13,6 +13,7 @@ var postCamera  : THREE.OrthographicCamera;
 
 var target              : THREE.WebGLRenderTarget;
 var depthBufferCanvas   : HTMLCanvasElement;
+var depthBufferImage    : HTMLImageElement;
 var supportsExtension   : boolean = true;
 
 init();
@@ -38,6 +39,10 @@ function init() {
     postRenderer = new THREE.WebGLRenderer({ canvas: depthBufferCanvas });
     postRenderer.setPixelRatio(window.devicePixelRatio);
     postRenderer.setSize(depthBufferCanvas.width, depthBufferCanvas.height);
+
+    // click handler
+    depthBufferImage = <HTMLImageElement>document.querySelector('#depthBufferImage');
+    depthBufferImage.onclick = populateImageUrl;
 
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 50);
     camera.position.z = -4;
@@ -149,6 +154,15 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
+function populateImageUrl() {
+    var imageUrlInput = <HTMLInputElement>document.querySelector('#imageUrlInput');
+    imageUrlInput.value = depthBufferImage.src;
+
+    // https://github.com/mrdoob/three.js/issues/9513   
+    var imageBuffer =  new Uint16Array(window.innerWidth * window.innerHeight * 2);
+    postRenderer.readRenderTargetPixels(target, 0, 0, window.innerWidth, window.innerHeight, imageBuffer);
+}
+
 function animate() {
 
     if (!supportsExtension) 
@@ -165,7 +179,6 @@ function animate() {
     postRenderer.render(postScene, postCamera);
 
     // update image
-    let depthBufferImage = <HTMLImageElement>document.querySelector('#depthBufferImage');
     depthBufferImage.src = depthBufferCanvas.toDataURL();
 }
 

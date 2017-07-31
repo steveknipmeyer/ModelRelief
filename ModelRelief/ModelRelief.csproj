@@ -14,7 +14,7 @@
   <ItemGroup>
     <None Remove="npm-debug.log" />
   </ItemGroup>
- 
+
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
@@ -32,9 +32,5 @@
     <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
-  
-  <ItemGroup>
-    <None Include="Views\Workbench\DepthBuffer.cshtml" />
-  </ItemGroup>
 
 </Project>

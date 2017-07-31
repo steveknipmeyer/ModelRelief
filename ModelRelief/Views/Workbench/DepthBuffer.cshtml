@@ -1,4 +1,5 @@
-﻿
+﻿@model DepthBufferViewModel
+
 <body>
     <div id="glFullscreen">
         <canvas id="model3D"></canvas>
@@ -6,6 +7,20 @@
     <div >
         <canvas id="depthBufferCanvas" class="depth" height="512" width="512"></canvas>
         <img id="depthBufferImage" class="depth" />
+    </div>
+    <div>
+        <form method="post" asp-antiforgery="true">
+            <div asp-validation-summary="All"></div>
+
+            <div>
+                <label asp-for="ImageUrl" />
+                <input asp-for="ImageUrl" id="imageUrlInput"/>
+                <span asp-validation-for="ImageUrl" />
+            </div>
+            <div>
+                <input type="submit" value="Save" />
+            </div>
+        </form>
     </div>
 
     <!------------------------------------------------------------------------------------------------>

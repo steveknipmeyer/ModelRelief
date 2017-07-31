@@ -1284,6 +1284,7 @@ define("Workbench/DepthTexture", ["require", "exports", "three", "Viewer/Trackba
     var postCamera;
     var target;
     var depthBufferCanvas;
+    var depthBufferImage;
     var supportsExtension = true;
     init();
     animate();
@@ -1303,6 +1304,9 @@ define("Workbench/DepthTexture", ["require", "exports", "three", "Viewer/Trackba
         postRenderer = new THREE.WebGLRenderer({ canvas: depthBufferCanvas });
         postRenderer.setPixelRatio(window.devicePixelRatio);
         postRenderer.setSize(depthBufferCanvas.width, depthBufferCanvas.height);
+        // click handler
+        depthBufferImage = document.querySelector('#depthBufferImage');
+        depthBufferImage.onclick = populateImageUrl;
         camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 50);
         camera.position.z = -4;
         controls = new TrackballControls_2.TrackballControls(camera, renderer.domElement);
@@ -1382,6 +1386,13 @@ define("Workbench/DepthTexture", ["require", "exports", "three", "Viewer/Trackba
         postRenderer.setSize(depthBufferCanvas.width, depthBufferCanvas.height);
         renderer.setSize(window.innerWidth, window.innerHeight);
     }
+    function populateImageUrl() {
+        var imageUrlInput = document.querySelector('#imageUrlInput');
+        imageUrlInput.value = depthBufferImage.src;
+        // https://github.com/mrdoob/three.js/issues/9513   
+        var imageBuffer = new Uint16Array(window.innerWidth * window.innerHeight * 2);
+        postRenderer.readRenderTargetPixels(target, 0, 0, window.innerWidth, window.innerHeight, imageBuffer);
+    }
     function animate() {
         if (!supportsExtension)
             return;
@@ -1393,7 +1404,6 @@ define("Workbench/DepthTexture", ["require", "exports", "three", "Viewer/Trackba
         postRenderer.render(scene, camera, target);
         postRenderer.render(postScene, postCamera);
         // update image
-        var depthBufferImage = document.querySelector('#depthBufferImage');
         depthBufferImage.src = depthBufferCanvas.toDataURL();
     }
 });
