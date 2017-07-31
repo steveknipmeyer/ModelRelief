@@ -1283,7 +1283,7 @@ define("Workbench/DepthTexture", ["require", "exports", "three", "Viewer/Trackba
     var camera;
     var postCamera;
     var target;
-    var depthCanvas;
+    var depthBufferCanvas;
     var supportsExtension = true;
     init();
     animate();
@@ -1299,10 +1299,10 @@ define("Workbench/DepthTexture", ["require", "exports", "three", "Viewer/Trackba
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth, window.innerHeight);
         // DepthMap Renderer
-        depthCanvas = document.querySelector('#depthBuffer');
-        postRenderer = new THREE.WebGLRenderer({ canvas: depthCanvas });
+        depthBufferCanvas = document.querySelector('#depthBufferCanvas');
+        postRenderer = new THREE.WebGLRenderer({ canvas: depthBufferCanvas });
         postRenderer.setPixelRatio(window.devicePixelRatio);
-        postRenderer.setSize(depthCanvas.width, depthCanvas.height);
+        postRenderer.setSize(depthBufferCanvas.width, depthBufferCanvas.height);
         camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 50);
         camera.position.z = -4;
         controls = new TrackballControls_2.TrackballControls(camera, renderer.domElement);
@@ -1378,8 +1378,8 @@ define("Workbench/DepthTexture", ["require", "exports", "three", "Viewer/Trackba
         camera.updateProjectionMatrix();
         // size target DepthTexture
         var dpr = postRenderer.getPixelRatio();
-        target.setSize(depthCanvas.width * dpr, depthCanvas.height * dpr);
-        postRenderer.setSize(depthCanvas.width, depthCanvas.height);
+        target.setSize(depthBufferCanvas.width * dpr, depthBufferCanvas.height * dpr);
+        postRenderer.setSize(depthBufferCanvas.width, depthBufferCanvas.height);
         renderer.setSize(window.innerWidth, window.innerHeight);
     }
     function animate() {
@@ -1390,8 +1390,11 @@ define("Workbench/DepthTexture", ["require", "exports", "three", "Viewer/Trackba
         // render scene into target
         renderer.render(scene, camera);
         // render post FX
-        renderer.render(scene, camera, target);
+        postRenderer.render(scene, camera, target);
         postRenderer.render(postScene, postCamera);
+        // update image
+        var depthBufferImage = document.querySelector('#depthBufferImage');
+        depthBufferImage.src = depthBufferCanvas.toDataURL();
     }
 });
 define("Viewer/Graphics", ["require", "exports", "three"], function (require, exports, THREE) {

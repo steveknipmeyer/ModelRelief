@@ -1,0 +1,13 @@
+﻿
+/* ----------------------    
+------------------------*/
+
+.depth {
+    width: 512px;
+    height: 512px;
+
+    margin: 10px;
+    display: inline-block;
+    vertical-align: baseline;
+}
+

@@ -11,9 +11,9 @@ var postScene   : THREE.Scene;
 var camera      : THREE.PerspectiveCamera;
 var postCamera  : THREE.OrthographicCamera;
 
-var target      : THREE.WebGLRenderTarget;
-var depthCanvas: HTMLCanvasElement;
-var supportsExtension : boolean = true;
+var target              : THREE.WebGLRenderTarget;
+var depthBufferCanvas   : HTMLCanvasElement;
+var supportsExtension   : boolean = true;
 
 init();
 animate();
@@ -34,10 +34,10 @@ function init() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     // DepthMap Renderer
-    depthCanvas = <HTMLCanvasElement> document.querySelector('#depthBuffer');
-    postRenderer = new THREE.WebGLRenderer({ canvas: depthCanvas });
+    depthBufferCanvas = <HTMLCanvasElement> document.querySelector('#depthBufferCanvas');
+    postRenderer = new THREE.WebGLRenderer({ canvas: depthBufferCanvas });
     postRenderer.setPixelRatio(window.devicePixelRatio);
-    postRenderer.setSize(depthCanvas.width, depthCanvas.height);
+    postRenderer.setSize(depthBufferCanvas.width, depthBufferCanvas.height);
 
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 50);
     camera.position.z = -4;
@@ -143,8 +143,8 @@ function onWindowResize() {
 
     // size target DepthTexture
     var dpr = postRenderer.getPixelRatio();
-    target.setSize(depthCanvas.width * dpr, depthCanvas.height * dpr);
-    postRenderer.setSize(depthCanvas.width, depthCanvas.height);
+    target.setSize(depthBufferCanvas.width * dpr, depthBufferCanvas.height * dpr);
+    postRenderer.setSize(depthBufferCanvas.width, depthBufferCanvas.height);
 
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
@@ -163,5 +163,9 @@ function animate() {
     // render post FX
     postRenderer.render(scene, camera, target);
     postRenderer.render(postScene, postCamera);
+
+    // update image
+    let depthBufferImage = <HTMLImageElement>document.querySelector('#depthBufferImage');
+    depthBufferImage.src = depthBufferCanvas.toDataURL();
 }
 
