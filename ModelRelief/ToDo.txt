@@ -1,7 +1,6 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
-Move shaders to files.
 Develop a standard test model.
 Investigate jQuery ajax support for posting the file to the server.
 Investigte the DepthMeshMaterial.

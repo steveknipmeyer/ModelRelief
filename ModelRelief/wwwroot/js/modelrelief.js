@@ -1282,43 +1282,49 @@ define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/Trackbal
     var postScene;
     var camera;
     var postCamera;
+    var modelCanvas;
     var target;
     var depthBufferCanvas;
-    var depthBufferImage;
-    var supportsExtension = true;
+    var supportsExtensions = true;
+    var Resolution;
+    (function (Resolution) {
+        Resolution[Resolution["viewModel"] = 512] = "viewModel";
+        Resolution[Resolution["viewDepthBuffer"] = 512] = "viewDepthBuffer";
+        Resolution[Resolution["textureDepthBuffer"] = 512] = "textureDepthBuffer";
+    })(Resolution || (Resolution = {}));
     init();
     animate();
+    function verifyExtensions(renderer) {
+        if (!renderer.extensions.get('WEBGL_depth_texture'))
+            return false;
+        return true;
+    }
     function init() {
-        // Scene Renderer
-        renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('canvas') });
-        if (!renderer.extensions.get('WEBGL_depth_texture')) {
-            supportsExtension = false;
-            var element = document.querySelector('#error');
-            element.style.display = 'block';
-            return;
-        }
+        // Model Renderer
+        modelCanvas = initializeCanvas('model3D', Resolution.viewModel);
+        renderer = new THREE.WebGLRenderer({ canvas: modelCanvas });
         renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        // DepthMap Renderer
-        depthBufferCanvas = document.querySelector('#depthBufferCanvas');
+        renderer.setSize(Resolution.viewModel, Resolution.viewModel);
+        supportsExtensions = verifyExtensions(renderer);
+        // DepthBuffer Renderer
+        depthBufferCanvas = initializeCanvas('depthBufferCanvas', Resolution.viewDepthBuffer);
         postRenderer = new THREE.WebGLRenderer({ canvas: depthBufferCanvas });
         postRenderer.setPixelRatio(window.devicePixelRatio);
-        postRenderer.setSize(depthBufferCanvas.width, depthBufferCanvas.height);
+        postRenderer.setSize(Resolution.viewDepthBuffer, Resolution.viewDepthBuffer);
         // click handler
-        depthBufferImage = document.querySelector('#depthBufferImage');
-        depthBufferImage.onclick = populateImageUrl;
-        camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 50);
+        depthBufferCanvas.onclick = probe;
+        camera = new THREE.PerspectiveCamera(70, Resolution.viewModel / Resolution.viewModel, 0.01, 50);
         camera.position.z = -4;
         controls = new TrackballControls_2.TrackballControls(camera, renderer.domElement);
-        // Create a multi render target with Float buffers
-        target = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight);
+        // Create a multi render target
+        target = new THREE.WebGLRenderTarget(Resolution.viewDepthBuffer, Resolution.viewDepthBuffer);
         target.texture.format = THREE.RGBFormat;
         target.texture.minFilter = THREE.NearestFilter;
         target.texture.magFilter = THREE.NearestFilter;
         target.texture.generateMipmaps = false;
         target.stencilBuffer = false;
         target.depthBuffer = true;
-        target.depthTexture = new THREE.DepthTexture(window.innerWidth, window.innerHeight);
+        target.depthTexture = new THREE.DepthTexture(Resolution.textureDepthBuffer, Resolution.textureDepthBuffer);
         target.depthTexture.type = THREE.UnsignedShortType;
         // Our scene
         scene = new THREE.Scene();
@@ -1359,7 +1365,7 @@ define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/Trackbal
     function initializeLighting() {
         var ambientLight = new THREE.AmbientLight(0x404040);
         scene.add(ambientLight);
-        var directionalLight1 = new THREE.DirectionalLight(0xC0C090);
+        var directionalLight1 = new THREE.DirectionalLight(0xC0C0C0);
         directionalLight1.position.set(-100, -50, 100);
         scene.add(directionalLight1);
     }
@@ -1381,24 +1387,36 @@ define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/Trackbal
         initializeLighting();
     }
     function onWindowResize() {
-        var aspect = window.innerWidth / window.innerHeight;
+        var aspect = Resolution.viewModel / Resolution.viewModel;
         camera.aspect = aspect;
         camera.updateProjectionMatrix();
+        renderer.setSize(Resolution.viewModel, Resolution.viewModel);
         // size target DepthTexture
-        var dpr = postRenderer.getPixelRatio();
-        target.setSize(depthBufferCanvas.width * dpr, depthBufferCanvas.height * dpr);
+        var depthBufferPixelRatio = postRenderer.getPixelRatio();
+        target.setSize(depthBufferCanvas.width * depthBufferPixelRatio, depthBufferCanvas.height * depthBufferPixelRatio);
         postRenderer.setSize(depthBufferCanvas.width, depthBufferCanvas.height);
-        renderer.setSize(window.innerWidth, window.innerHeight);
     }
-    function populateImageUrl() {
-        var imageUrlInput = document.querySelector('#imageUrlInput');
-        imageUrlInput.value = depthBufferImage.src;
+    function probe() {
         // https://github.com/mrdoob/three.js/issues/9513   
-        var imageBuffer = new Uint16Array(window.innerWidth * window.innerHeight * 2);
-        postRenderer.readRenderTargetPixels(target, 0, 0, window.innerWidth, window.innerHeight, imageBuffer);
+        var imageBuffer = new Uint16Array(Resolution.viewDepthBuffer * Resolution.viewDepthBuffer * 2);
+        postRenderer.readRenderTargetPixels(target, 0, 0, Resolution.viewDepthBuffer, Resolution.viewDepthBuffer, imageBuffer);
+    }
+    function initializeCanvas(id, resolution) {
+        var canvas = document.querySelector("#" + id);
+        if (!canvas) {
+            console.error("Canvas element id = " + id + " not found");
+            return null;
+        }
+        // render dimensions    
+        canvas.width = resolution;
+        canvas.height = resolution;
+        // DOM element dimensions (may be different than render dimensions)
+        canvas.style.width = resolution + "px";
+        canvas.style.height = resolution + "px";
+        return canvas;
     }
     function animate() {
-        if (!supportsExtension)
+        if (!supportsExtensions)
             return;
         requestAnimationFrame(animate);
         controls.update();
@@ -1407,8 +1425,6 @@ define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/Trackbal
         // render post FX
         postRenderer.render(scene, camera, target);
         postRenderer.render(postScene, postCamera);
-        // update image
-        depthBufferImage.src = depthBufferCanvas.toDataURL();
     }
 });
 define("Viewer/Graphics", ["require", "exports", "three"], function (require, exports, THREE) {

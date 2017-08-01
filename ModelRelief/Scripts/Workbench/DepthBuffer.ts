@@ -3,55 +3,64 @@
 import * as THREE               from 'three'
 import {TrackballControls}      from 'TrackballControls'
 
-var renderer    : THREE.WebGLRenderer;
-var postRenderer: THREE.WebGLRenderer;
-var controls    : TrackballControls;
-var scene       : THREE. Scene;
-var postScene   : THREE.Scene;
-var camera      : THREE.PerspectiveCamera;
-var postCamera  : THREE.OrthographicCamera;
+var renderer            : THREE.WebGLRenderer;
+var postRenderer        : THREE.WebGLRenderer;
+var controls            : TrackballControls;
+var scene               : THREE. Scene;
+var postScene           : THREE.Scene;
+var camera              : THREE.PerspectiveCamera;
+var postCamera          : THREE.OrthographicCamera;
+
+var modelCanvas         : HTMLCanvasElement;
 
 var target              : THREE.WebGLRenderTarget;
 var depthBufferCanvas   : HTMLCanvasElement;
-var depthBufferImage    : HTMLImageElement;
-var supportsExtension   : boolean = true;
+
+var supportsExtensions   : boolean = true;
+
+enum Resolution {
+    viewModel          = 512,
+    viewDepthBuffer    = 512,
+    textureDepthBuffer = 512
+}
 
 init();
 animate();
 
+function verifyExtensions(renderer : THREE.WebGLRenderer) : boolean {
+    
+    if (!renderer.extensions.get('WEBGL_depth_texture')) 
+        return false;
+
+    return true;
+}
+
 function init() {
 
-    // Scene Renderer
-    renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('canvas') });
-
-    if (!renderer.extensions.get('WEBGL_depth_texture')) {
-
-        supportsExtension = false;
-        var element : any = document.querySelector('#error');
-        element.style.display = 'block';
-        return;
-    }
-
+    // Model Renderer
+    modelCanvas = initializeCanvas('model3D', Resolution.viewModel);
+    renderer = new THREE.WebGLRenderer( {canvas : modelCanvas});
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(Resolution.viewModel, Resolution.viewModel);
 
-    // DepthMap Renderer
-    depthBufferCanvas = <HTMLCanvasElement> document.querySelector('#depthBufferCanvas');
+    supportsExtensions = verifyExtensions(renderer);
+
+    // DepthBuffer Renderer
+    depthBufferCanvas = initializeCanvas('depthBufferCanvas', Resolution.viewDepthBuffer);
     postRenderer = new THREE.WebGLRenderer({ canvas: depthBufferCanvas });
     postRenderer.setPixelRatio(window.devicePixelRatio);
-    postRenderer.setSize(depthBufferCanvas.width, depthBufferCanvas.height);
+    postRenderer.setSize(Resolution.viewDepthBuffer, Resolution.viewDepthBuffer);
 
     // click handler
-    depthBufferImage = <HTMLImageElement>document.querySelector('#depthBufferImage');
-    depthBufferImage.onclick = populateImageUrl;
+    depthBufferCanvas.onclick = probe;
 
-    camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 50);
+    camera = new THREE.PerspectiveCamera(70, Resolution.viewModel / Resolution.viewModel, 0.01, 50);
     camera.position.z = -4;
 
     controls = new TrackballControls(camera, renderer.domElement);
 
-    // Create a multi render target with Float buffers
-    target = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight);
+    // Create a multi render target
+    target = new THREE.WebGLRenderTarget(Resolution.viewDepthBuffer, Resolution.viewDepthBuffer);
     target.texture.format           = THREE.RGBFormat;
     target.texture.minFilter        = THREE.NearestFilter;
     target.texture.magFilter        = THREE.NearestFilter;
@@ -60,7 +69,7 @@ function init() {
     target.stencilBuffer            = false;
 
     target.depthBuffer              = true;
-    target.depthTexture             = new THREE.DepthTexture(window.innerWidth, window.innerHeight);
+    target.depthTexture             = new THREE.DepthTexture(Resolution.textureDepthBuffer, Resolution.textureDepthBuffer);
     target.depthTexture.type        = THREE.UnsignedShortType;
 
     // Our scene
@@ -113,7 +122,7 @@ function initializeLighting() {
     let ambientLight = new THREE.AmbientLight(0x404040);
     scene.add(ambientLight);
 
-    let directionalLight1 = new THREE.DirectionalLight(0xC0C090);
+    let directionalLight1 = new THREE.DirectionalLight(0xC0C0C0);
     directionalLight1.position.set(-100, -50, 100);
     scene.add(directionalLight1);
 }
@@ -148,30 +157,48 @@ function setupScene() {
 
 function onWindowResize() {
 
-    let aspect : number = window.innerWidth / window.innerHeight;
+    let aspect : number = Resolution.viewModel / Resolution.viewModel;
     camera.aspect = aspect;
     camera.updateProjectionMatrix();
 
-    // size target DepthTexture
-    var dpr = postRenderer.getPixelRatio();
-    target.setSize(depthBufferCanvas.width * dpr, depthBufferCanvas.height * dpr);
-    postRenderer.setSize(depthBufferCanvas.width, depthBufferCanvas.height);
+    renderer.setSize(Resolution.viewModel, Resolution.viewModel);
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    // size target DepthTexture
+    var depthBufferPixelRatio = postRenderer.getPixelRatio();
+    target.setSize(depthBufferCanvas.width * depthBufferPixelRatio, depthBufferCanvas.height * depthBufferPixelRatio);
+    postRenderer.setSize(depthBufferCanvas.width, depthBufferCanvas.height);
 }
 
-function populateImageUrl() {
-    var imageUrlInput = <HTMLInputElement>document.querySelector('#imageUrlInput');
-    imageUrlInput.value = depthBufferImage.src;
+function probe() {
 
     // https://github.com/mrdoob/three.js/issues/9513   
-    var imageBuffer =  new Uint16Array(window.innerWidth * window.innerHeight * 2);
-    postRenderer.readRenderTargetPixels(target, 0, 0, window.innerWidth, window.innerHeight, imageBuffer);
+    var imageBuffer =  new Uint16Array(Resolution.viewDepthBuffer * Resolution.viewDepthBuffer * 2);
+    postRenderer.readRenderTargetPixels(target, 0, 0, Resolution.viewDepthBuffer, Resolution.viewDepthBuffer, imageBuffer);
+}
+
+function initializeCanvas(id : string, resolution : number) : HTMLCanvasElement {
+    
+    let canvas : HTMLCanvasElement = <HTMLCanvasElement> document.querySelector(`#${id}`);
+    if (!canvas)
+        {
+        console.error(`Canvas element id = ${id} not found`);
+        return null;
+        }
+
+    // render dimensions    
+    canvas.width  = resolution;
+    canvas.height = resolution;
+
+    // DOM element dimensions (may be different than render dimensions)
+    canvas.style.width  = `${resolution}px`;
+    canvas.style.height = `${resolution}px`;
+
+    return canvas;
 }
 
 function animate() {
 
-    if (!supportsExtension) 
+    if (!supportsExtensions) 
         return;
 
     requestAnimationFrame(animate);
@@ -183,7 +210,4 @@ function animate() {
     // render post FX
     postRenderer.render(scene, camera, target);
     postRenderer.render(postScene, postCamera);
-
-    // update image
-    depthBufferImage.src = depthBufferCanvas.toDataURL();
 }

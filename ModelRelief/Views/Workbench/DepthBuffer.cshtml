@@ -1,12 +1,9 @@
 ﻿@model DepthBufferViewModel
 
 <body>
-    <div id="glFullscreen">
-        <canvas id="model3D"></canvas>
-    </div>
     <div >
-        <canvas id="depthBufferCanvas" class="depth" height="512" width="512"></canvas>
-        <img id="depthBufferImage" class="depth" />
+        <canvas id="model3D" class="depth"></canvas>
+        <canvas id="depthBufferCanvas" class="depth""></canvas>
     </div>
     <div>
         <form method="post" asp-antiforgery="true">
