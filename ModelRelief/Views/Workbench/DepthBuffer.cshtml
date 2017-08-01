@@ -31,50 +31,18 @@
     <!------------------------------------------------------------------------------------------------>
     <!--                                    ModelRelief                                             -->
     <!------------------------------------------------------------------------------------------------>
-    <script id="post-vert" type="x-shader/x-vertex">
-        varying vec2 vUv;
-
-        void main() {
-            vUv = uv;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-    </script>
-    <script id="post-frag" type="x-shader/x-fragment">
-        #include <packing>
-
-            varying vec2        vUv;
-            uniform sampler2D   tDiffuse;
-            uniform sampler2D   tDepth;
-            uniform float       cameraNear;
-            uniform float       cameraFar;
-
-            float readDepth (sampler2D depthSampler, vec2 coord) {
-                float fragCoordZ = texture2D(depthSampler, coord).x;
-                float viewZ = perspectiveDepthToViewZ( fragCoordZ, cameraNear, cameraFar );
-
-                return viewZToOrthographicDepth( viewZ, cameraNear, cameraFar );
-            }
-
-            void main() {
-                vec3 diffuse = texture2D(tDiffuse, vUv).rgb;
-                float depth = readDepth(tDepth, vUv);
-
-                gl_FragColor.rgb = vec3(depth);
-                gl_FragColor.a = 1.0;
-            }
-    </script>
-
+    <script src="/js/shaders.js"></script>
     <script>
         requirejs.config({
             baseUrl: '.',
             paths: {
-                'Workbench/DepthTexture'                      : '/js/modelrelief',
+                'Workbench/DepthBuffer'                      : '/js/modelrelief',
 
-                'three'                                       : '/lib/threejs/three',
+                'three'                                      : '/lib/threejs/three',
             }
         });
         window.onload = function () {
-            requirejs(['Workbench/DepthTexture']);
+            requirejs(['Workbench/DepthBuffer']);
         }
     </script>
 </body>

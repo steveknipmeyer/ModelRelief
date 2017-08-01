@@ -92,8 +92,8 @@ export class Materials {
                 },
             },
 
-            vertexShader:   MR.shaderSource['DepthMapVertexShader'],
-            fragmentShader: MR.shaderSource['DepthMapFragmentShader'],
+            vertexShader:   MR.shaderSource['DepthBufferVertexShader'],
+            fragmentShader: MR.shaderSource['DepthBufferFragmentShader'],
 
             shading: THREE.SmoothShading
             });

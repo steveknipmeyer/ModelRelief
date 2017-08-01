@@ -25,6 +25,7 @@ function init() {
     renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('canvas') });
 
     if (!renderer.extensions.get('WEBGL_depth_texture')) {
+
         supportsExtension = false;
         var element : any = document.querySelector('#error');
         element.style.display = 'block';
@@ -55,6 +56,7 @@ function init() {
     target.texture.minFilter        = THREE.NearestFilter;
     target.texture.magFilter        = THREE.NearestFilter;
     target.texture.generateMipmaps  = false;
+
     target.stencilBuffer            = false;
 
     target.depthBuffer              = true;
@@ -75,18 +77,26 @@ function init() {
 function setupPost() {
 
     // Setup post processing stage
-    postCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+    let left: number      =  -1;
+    let right: number     =   1;
+    let top: number       =   1;
+    let bottom: number    =  -1;
+    let near: number      =   0;
+    let far: number       =   1;
+    postCamera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
 
     var postMaterial = new THREE.ShaderMaterial({
         
-        vertexShader:   document.querySelector('#post-vert').textContent.trim(),
-        fragmentShader: document.querySelector('#post-frag').textContent.trim(),
+        vertexShader:   MR.shaderSource['DepthBufferVertexShader'],
+        fragmentShader: MR.shaderSource['DepthBufferFragmentShader'],
 
         uniforms: {
-            cameraNear: { value: camera.near },
-            cameraFar:  { value: camera.far },
-            tDiffuse:   { value: target.texture },
-            tDepth:     { value: target.depthTexture }
+            designColor :   { value: 0xC0C090},
+            cameraNear  :   { value: camera.near },
+            cameraFar   :   { value: camera.far },
+            tDiffuse    :   { value: target.texture },
+            tDepth      :   { value: target.depthTexture }
         }
     });
     var postPlane = new THREE.PlaneGeometry(2, 2);
@@ -106,10 +116,6 @@ function initializeLighting() {
     let directionalLight1 = new THREE.DirectionalLight(0xC0C090);
     directionalLight1.position.set(-100, -50, 100);
     scene.add(directionalLight1);
-
-    let directionalLight2 = new THREE.DirectionalLight(0xC0C090);
-    directionalLight2.position.set(100, 50, -100);
-    scene.add(directionalLight2);
 }
 
 function setupScene() {
@@ -142,7 +148,7 @@ function setupScene() {
 
 function onWindowResize() {
 
-    var aspect = window.innerWidth / window.innerHeight;
+    let aspect : number = window.innerWidth / window.innerHeight;
     camera.aspect = aspect;
     camera.updateProjectionMatrix();
 
@@ -181,4 +187,3 @@ function animate() {
     // update image
     depthBufferImage.src = depthBufferCanvas.toDataURL();
 }
-

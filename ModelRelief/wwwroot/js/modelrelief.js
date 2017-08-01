@@ -450,8 +450,8 @@ define("Viewer/Materials", ["require", "exports", "three"], function (require, e
                         value: new THREE.Color(designColor)
                     },
                 },
-                vertexShader: MR.shaderSource['DepthMapVertexShader'],
-                fragmentShader: MR.shaderSource['DepthMapFragmentShader'],
+                vertexShader: MR.shaderSource['DepthBufferVertexShader'],
+                fragmentShader: MR.shaderSource['DepthBufferFragmentShader'],
                 shading: THREE.SmoothShading
             });
             return shaderMaterial;
@@ -1272,7 +1272,7 @@ define("main", ["require", "exports", "three", "Viewer/Viewer", "ModelLoaders/OB
     var modelRelief = new ModelRelief();
     modelRelief.run();
 });
-define("Workbench/DepthTexture", ["require", "exports", "three", "Viewer/TrackballControls"], function (require, exports, THREE, TrackballControls_2) {
+define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/TrackballControls"], function (require, exports, THREE, TrackballControls_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var renderer;
@@ -1330,11 +1330,18 @@ define("Workbench/DepthTexture", ["require", "exports", "three", "Viewer/Trackba
     }
     function setupPost() {
         // Setup post processing stage
-        postCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        var left = -1;
+        var right = 1;
+        var top = 1;
+        var bottom = -1;
+        var near = 0;
+        var far = 1;
+        postCamera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
         var postMaterial = new THREE.ShaderMaterial({
-            vertexShader: document.querySelector('#post-vert').textContent.trim(),
-            fragmentShader: document.querySelector('#post-frag').textContent.trim(),
+            vertexShader: MR.shaderSource['DepthBufferVertexShader'],
+            fragmentShader: MR.shaderSource['DepthBufferFragmentShader'],
             uniforms: {
+                designColor: { value: 0xC0C090 },
                 cameraNear: { value: camera.near },
                 cameraFar: { value: camera.far },
                 tDiffuse: { value: target.texture },
@@ -1355,9 +1362,6 @@ define("Workbench/DepthTexture", ["require", "exports", "three", "Viewer/Trackba
         var directionalLight1 = new THREE.DirectionalLight(0xC0C090);
         directionalLight1.position.set(-100, -50, 100);
         scene.add(directionalLight1);
-        var directionalLight2 = new THREE.DirectionalLight(0xC0C090);
-        directionalLight2.position.set(100, 50, -100);
-        scene.add(directionalLight2);
     }
     function setupScene() {
         // Setup some geometries

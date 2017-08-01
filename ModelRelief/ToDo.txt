@@ -1,6 +1,13 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
+Move shaders to files.
+Develop a standard test model.
+Investigate jQuery ajax support for posting the file to the server.
+Investigte the DepthMeshMaterial.
+    Two pass shader?
+OrbitControls versus Trackball
+
 Why does the shader code not reload?
 
 Add types to all methods.
