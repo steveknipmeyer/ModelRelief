@@ -17,7 +17,7 @@ uniform vec3 cameraPosition;
 uniform vec3        designColor;				// color
 uniform float       cameraNear;                 // near clipping plane
 uniform float       cameraFar;                  // far clipping plane
-uniform sampler2D   tDiffuse;                   // diffuse texture (not used)
+uniform sampler2D   tDiffuse;                   // diffuse texture 
 uniform sampler2D   tDepth;                     // depth texture
 
 varying vec2 vUV;								// UV coordinates of vertex
@@ -47,9 +47,11 @@ void main() {
 	vec3 normal = normalize(vNormal);
 	vec3 viewPosition = normalize(vViewPosition);
 
-    vec3 diffuse = texture2D(tDiffuse, vUV).rgb;
     float depth = readDepth(tDepth, vUV);
+    vec3 diffuse = texture2D(tDiffuse, vUV).rgb;
 
-    gl_FragColor.rgb = vec3(depth);
+//  gl_FragColor.rgb = vec3(depth);
+    gl_FragColor.rgb = diffuse;
+
     gl_FragColor.a = 1.0;
 }

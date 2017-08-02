@@ -4,6 +4,9 @@
 ------------------------*/
 
 .depth {
+    border-width : 1px;
+    border-style : solid;
+
     margin: 10px;
     display: inline-block;
     vertical-align: baseline;
