@@ -30,9 +30,11 @@ namespace ModelRelief.Controllers
                 return View();
                 }
 
-            var imageUrl = viewModel.ImageUrl;
+            var debugValue = viewModel.DebugValue;
+#if false
+            var imageUrl = "";
             SaveImage(imageUrl);
-            
+#endif      
             return View();
             }
 

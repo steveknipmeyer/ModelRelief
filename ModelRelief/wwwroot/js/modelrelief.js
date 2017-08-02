@@ -1329,8 +1329,8 @@ define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/Trackbal
         target.depthTexture.type = THREE.UnsignedShortType;
         // scene
         scene = new THREE.Scene();
-        setupTorusScene();
-        //  setupSphereScene();
+        //  setupTorusScene();
+        setupSphereScene();
         initializeLighting();
         initializeHelpers();
         // Setup post-processing step
@@ -1402,12 +1402,12 @@ define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/Trackbal
     }
     function setupSphereScene() {
         // Setup some geometries
-        var radius = 1;
+        var radius = 2;
         var segments = 64;
         var geometry = new THREE.SphereGeometry(radius, segments, segments);
-        //  let material = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
-        var material = new THREE.MeshDepthMaterial();
-        var center = new THREE.Vector3(0.0, 0.0, 1.0);
+        var material = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
+        //  let material = new THREE.MeshDepthMaterial();
+        var center = new THREE.Vector3(0.0, 0.0, 0.0);
         var mesh = new THREE.Mesh(geometry, material);
         mesh.position.set(center.x, center.y, center.z);
         scene.add(mesh);
@@ -1423,21 +1423,25 @@ define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/Trackbal
         postRenderer.setSize(depthBufferCanvas.width, depthBufferCanvas.height);
     }
     function createDepthBuffer() {
+        // create depth texture
         postRenderer.render(scene, camera, target);
-        var primaryImageBuffer = new Uint8Array(Resolution.viewModel * Resolution.viewModel * 4).fill(0);
-        renderer.readRenderTargetPixels(target, 0, 0, Resolution.viewModel, Resolution.viewModel, primaryImageBuffer);
-        // render post FX
+        //  let primaryImageBuffer =  new Uint8Array(Resolution.viewModel * Resolution.viewModel * 4).fill(0);
+        //  renderer.readRenderTargetPixels(target, 0, 0, Resolution.viewModel, Resolution.viewModel, primaryImageBuffer);
+        // (optional) display float encoding in depth buffer preview
         postRenderer.render(postScene, postCamera);
-        // create depth buffer
+        // write depth values as RGBA texture
         var postTarget = new THREE.WebGLRenderTarget(Resolution.viewDepthBuffer, Resolution.viewDepthBuffer);
-        postRenderer.render(postScene, postCamera, postTarget); // offscreen (render visible to target)
-        var imageBuffer = new Uint8Array(Resolution.viewDepthBuffer * Resolution.viewDepthBuffer * 4).fill(0);
-        postRenderer.readRenderTargetPixels(postTarget, 0, 0, Resolution.viewDepthBuffer, Resolution.viewDepthBuffer, imageBuffer);
-        var pixelFloats = new Float32Array(imageBuffer.buffer);
-        var inputElement = document.querySelector("#imageUrlInput");
-        var depth = pixelFloats[0];
+        postRenderer.render(postScene, postCamera, postTarget);
+        // decode RGBA texture into depth floats
+        var depthBuffer = new Uint8Array(Resolution.viewDepthBuffer * Resolution.viewDepthBuffer * 4).fill(0);
+        postRenderer.readRenderTargetPixels(postTarget, 0, 0, Resolution.viewDepthBuffer, Resolution.viewDepthBuffer, depthBuffer);
+        var depthValues = new Float32Array(depthBuffer.buffer);
+        var inputElement = document.querySelector("#debugValueInput");
+        var depth = depthValues[0];
+        // adjust for camera clipping planes
+        depth *= (camera.far - camera.near);
         inputElement.value = depth.toString();
-        console.log("imageBuffer[0] depth = " + pixelFloats[0]);
+        console.log("imageBuffer[0] depth = " + depthValues[0]);
     }
     function initializeCanvas(id, resolution) {
         var canvas = document.querySelector("#" + id);
