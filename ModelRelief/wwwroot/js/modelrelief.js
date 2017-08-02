@@ -1272,7 +1272,40 @@ define("main", ["require", "exports", "three", "Viewer/Viewer", "ModelLoaders/OB
     var modelRelief = new ModelRelief();
     modelRelief.run();
 });
-define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/TrackballControls"], function (require, exports, THREE, TrackballControls_2) {
+define("System/Math", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * Math Library
+     * General mathematics routines
+     * @class
+     */
+    var MathLibrary = (function () {
+        /**
+         * @constructor
+         */
+        function MathLibrary() {
+        }
+        /**
+         * Returns whether two numbers are equal within the given tolerance.
+         * @param value - First value
+         * @param other - Second value
+         * @param tolerance - Tolerance for comparison
+         * @returns True if within tolerance
+         */
+        MathLibrary.numbersEqualWithinTolerance = function (value, other, tolerance) {
+            return ((value >= (other - tolerance)) && (value <= (other + tolerance)));
+        };
+        return MathLibrary;
+    }());
+    exports.MathLibrary = MathLibrary;
+});
+define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/TrackballControls", "System/Math"], function (require, exports, THREE, TrackballControls_2, Math_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var renderer;
@@ -1436,12 +1469,34 @@ define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/Trackbal
         var depthBuffer = new Uint8Array(Resolution.viewDepthBuffer * Resolution.viewDepthBuffer * 4).fill(0);
         postRenderer.readRenderTargetPixels(postTarget, 0, 0, Resolution.viewDepthBuffer, Resolution.viewDepthBuffer, depthBuffer);
         var depthValues = new Float32Array(depthBuffer.buffer);
-        var inputElement = document.querySelector("#debugValueInput");
-        var depth = depthValues[0];
+        // LL depth
+        var depthNormalized = depthValues[0];
+        // extrema (normalized)
+        var maximumNormalized = Number.MIN_VALUE;
+        for (var index = 0; index < depthValues.length; index++) {
+            var depthValue = depthValues[index];
+            // skip values at far plane
+            if (Math_1.MathLibrary.numbersEqualWithinTolerance(depthValue, 1.0, .001))
+                continue;
+            if (depthValue > maximumNormalized)
+                maximumNormalized = depthValue;
+        }
+        var minimumNormalized = Number.MAX_VALUE;
+        for (var index = 0; index < depthValues.length; index++) {
+            var depthValue = depthValues[index];
+            if (depthValue < minimumNormalized)
+                minimumNormalized = depthValue;
+        }
         // adjust for camera clipping planes
-        depth *= (camera.far - camera.near);
-        inputElement.value = depth.toString();
-        console.log("imageBuffer[0] depth = " + depthValues[0]);
+        var cameraRange = (camera.far - camera.near);
+        var depth = depthNormalized * cameraRange;
+        var minimum = minimumNormalized * cameraRange;
+        var maximum = maximumNormalized * cameraRange;
+        var sceneDepth = maximum - minimum;
+        var decimalPlaces = 2;
+        var messageString = "Scene Depth = " + sceneDepth.toFixed(2) + " [Normalized] depth = " + depthNormalized.toFixed(decimalPlaces) + ", min = " + minimumNormalized.toFixed(decimalPlaces) + ", max = " + maximumNormalized.toFixed(decimalPlaces) + ", [Absolute] depth = " + depth.toFixed(decimalPlaces) + ", min = " + minimum.toFixed(decimalPlaces) + ", max = " + maximum.toFixed(decimalPlaces);
+        var inputElement = document.querySelector("#debugValueInput");
+        inputElement.value = messageString;
     }
     function initializeCanvas(id, resolution) {
         var canvas = document.querySelector("#" + id);
@@ -1799,38 +1854,5 @@ define("Viewer/Graphics", ["require", "exports", "three"], function (require, ex
         return Graphics;
     }());
     exports.Graphics = Graphics;
-});
-define("System/Math", ["require", "exports"], function (require, exports) {
-    // ------------------------------------------------------------------------// 
-    // ModelRelief                                                             //
-    //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
-    // ------------------------------------------------------------------------//
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * Math Library
-     * General mathematics routines
-     * @class
-     */
-    var Math = (function () {
-        /**
-         * @constructor
-         */
-        function Math() {
-        }
-        /**
-         * Returns whether two numbers are equal within the given tolerance.
-         * @param value - First value
-         * @param other - Second value
-         * @param tolerance - Tolerance for comparison
-         * @returns True if within tolerance
-         */
-        Math.numbersEqualWithinTolerance = function (value, other, tolerance) {
-            return ((value >= (other - tolerance)) && (value <= (other + tolerance)));
-        };
-        return Math;
-    }());
-    exports.Math = Math;
 });
 //# sourceMappingURL=modelrelief.js.map

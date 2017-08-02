@@ -10,7 +10,7 @@
  * General mathematics routines
  * @class
  */
-export class Math {
+export class MathLibrary {
     /**
      * @constructor
      */
