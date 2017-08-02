@@ -1312,9 +1312,8 @@ define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/Trackbal
         postRenderer.setPixelRatio(window.devicePixelRatio);
         postRenderer.setSize(Resolution.viewDepthBuffer, Resolution.viewDepthBuffer);
         // click handler
-        depthBufferCanvas.onclick = probe;
+        depthBufferCanvas.onclick = createDepthBuffer;
         camera = new THREE.PerspectiveCamera(70, Resolution.viewModel / Resolution.viewModel, .01, 50);
-        //  camera = new THREE.PerspectiveCamera(70, Resolution.viewModel / Resolution.viewModel, .1, 50);
         camera.position.z = 5;
         controls = new TrackballControls_2.TrackballControls(camera, renderer.domElement);
         // Create a multi render target
@@ -1423,16 +1422,22 @@ define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/Trackbal
         target.setSize(depthBufferCanvas.width * depthBufferPixelRatio, depthBufferCanvas.height * depthBufferPixelRatio);
         postRenderer.setSize(depthBufferCanvas.width, depthBufferCanvas.height);
     }
-    function probe() {
-        var imageBuffer = new Uint8Array(Resolution.viewDepthBuffer * Resolution.viewDepthBuffer * 4);
-        postRenderer.readRenderTargetPixels(target, 0, 0, Resolution.viewDepthBuffer, Resolution.viewDepthBuffer, imageBuffer);
-        var sum = 0;
-        var index = 0;
-        for (index = 0; index < imageBuffer.length; index++)
-            sum += imageBuffer[index];
-        console.log("imageBuffer sum = " + sum);
+    function createDepthBuffer() {
+        postRenderer.render(scene, camera, target);
+        var primaryImageBuffer = new Uint8Array(Resolution.viewModel * Resolution.viewModel * 4).fill(0);
+        renderer.readRenderTargetPixels(target, 0, 0, Resolution.viewModel, Resolution.viewModel, primaryImageBuffer);
+        // render post FX
+        postRenderer.render(postScene, postCamera);
+        // create depth buffer
+        var postTarget = new THREE.WebGLRenderTarget(Resolution.viewDepthBuffer, Resolution.viewDepthBuffer);
+        postRenderer.render(postScene, postCamera, postTarget); // offscreen (render visible to target)
+        var imageBuffer = new Uint8Array(Resolution.viewDepthBuffer * Resolution.viewDepthBuffer * 4).fill(0);
+        postRenderer.readRenderTargetPixels(postTarget, 0, 0, Resolution.viewDepthBuffer, Resolution.viewDepthBuffer, imageBuffer);
+        var pixelFloats = new Float32Array(imageBuffer.buffer);
         var inputElement = document.querySelector("#imageUrlInput");
-        inputElement.value = sum.toString();
+        var depth = pixelFloats[0];
+        inputElement.value = depth.toString();
+        console.log("imageBuffer[0] depth = " + pixelFloats[0]);
     }
     function initializeCanvas(id, resolution) {
         var canvas = document.querySelector("#" + id);
@@ -1455,9 +1460,6 @@ define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/Trackbal
         controls.update();
         // render scene into target
         renderer.render(scene, camera);
-        // render post FX
-        postRenderer.render(scene, camera, target);
-        postRenderer.render(postScene, postCamera);
     }
 });
 define("Viewer/Graphics", ["require", "exports", "three"], function (require, exports, THREE) {

@@ -3,8 +3,14 @@
 //                                                                         //
 // Copyright (c) <2012-2017> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
-precision highp float;
-precision highp int;
+
+//#define MAXIMUMPRECISION
+#if defined(MAXIMUMPRECISION)
+    precision highp float;
+    precision highp int;
+#else
+    precision mediump float;
+#endif
 
 // THREE.js pre-defined vertex shader uniforms and attributes
 // http://threejs.org/docs/#Reference/Renderers.WebGL/WebGLProgram
