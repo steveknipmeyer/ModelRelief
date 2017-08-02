@@ -1359,7 +1359,7 @@ define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/Trackbal
         target.stencilBuffer = false;
         target.depthBuffer = true;
         target.depthTexture = new THREE.DepthTexture(Resolution.textureDepthBuffer, Resolution.textureDepthBuffer);
-        target.depthTexture.type = THREE.UnsignedShortType;
+        target.depthTexture.type = THREE.UnsignedIntType;
         // scene
         scene = new THREE.Scene();
         //  setupTorusScene();

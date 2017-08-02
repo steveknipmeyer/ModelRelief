@@ -2,6 +2,7 @@
 
 import * as THREE               from 'three'
 import {TrackballControls}      from 'TrackballControls'
+import {MathLibrary}            from 'Math'
 
 var renderer            : THREE.WebGLRenderer;
 var postRenderer        : THREE.WebGLRenderer;
@@ -52,16 +53,16 @@ function init() {
     postRenderer.setSize(Resolution.viewDepthBuffer, Resolution.viewDepthBuffer);
 
     // click handler
-    depthBufferCanvas.onclick = probe;
+    depthBufferCanvas.onclick = createDepthBuffer;
 
     camera = new THREE.PerspectiveCamera(70, Resolution.viewModel / Resolution.viewModel, .01, 50);
-//  camera = new THREE.PerspectiveCamera(70, Resolution.viewModel / Resolution.viewModel, .1, 50);
     camera.position.z = 5;
 
     controls = new TrackballControls(camera, renderer.domElement);
 
     // Create a multi render target
     target = new THREE.WebGLRenderTarget(Resolution.viewDepthBuffer, Resolution.viewDepthBuffer);
+
     target.texture.format           = THREE.RGBAFormat;
     target.texture.type             = THREE.UnsignedByteType;
     target.texture.minFilter        = THREE.NearestFilter;
@@ -72,13 +73,13 @@ function init() {
 
     target.depthBuffer              = true;
     target.depthTexture             = new THREE.DepthTexture(Resolution.textureDepthBuffer, Resolution.textureDepthBuffer);
-    target.depthTexture.type        = THREE.UnsignedShortType;
+    target.depthTexture.type        = THREE.UnsignedIntType;
 
     // scene
     scene = new THREE.Scene();
 
-    setupTorusScene();
-//  setupSphereScene();
+//  setupTorusScene();
+    setupSphereScene();
 
     initializeLighting();
     initializeHelpers();
@@ -93,7 +94,6 @@ function init() {
 function setupPost() {
 
     // Setup post processing stage
-
     let left: number      =  -1;
     let right: number     =   1;
     let top: number       =   1;
@@ -178,13 +178,13 @@ function setupTorusScene() {
 function setupSphereScene() {
 
     // Setup some geometries
-    let radius  : number = 1;
+    let radius  : number = 2;
     let segments : number = 64;
     let geometry = new THREE.SphereGeometry(radius, segments, segments);
-//  let material = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
-    let material = new THREE.MeshDepthMaterial();
+    let material = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
+//  let material = new THREE.MeshDepthMaterial();
 
-    let center : THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 1.0);
+    let center : THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0);
     let mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(center.x, center.y, center.z);
 
@@ -205,19 +205,61 @@ function onWindowResize() {
     postRenderer.setSize(depthBufferCanvas.width, depthBufferCanvas.height);
 }
 
-function probe() {
+function createDepthBuffer() {
 
-    var imageBuffer =  new Uint8Array(Resolution.viewDepthBuffer * Resolution.viewDepthBuffer * 4);
-    postRenderer.readRenderTargetPixels(target, 0, 0, Resolution.viewDepthBuffer, Resolution.viewDepthBuffer, imageBuffer);
+    // create depth texture
+    postRenderer.render(scene, camera, target);    
+//  let primaryImageBuffer =  new Uint8Array(Resolution.viewModel * Resolution.viewModel * 4).fill(0);
+//  renderer.readRenderTargetPixels(target, 0, 0, Resolution.viewModel, Resolution.viewModel, primaryImageBuffer);
 
-    let sum = 0;
-    let index = 0;
-    for (index = 0; index < imageBuffer.length; index++)
-        sum += imageBuffer[index];
+    // (optional) display float encoding in depth buffer preview
+    postRenderer.render(postScene, postCamera);    
 
-    console.log (`imageBuffer sum = ${sum}`);
-    var inputElement : HTMLInputElement = <HTMLInputElement> document.querySelector(`#imageUrlInput`);
-    inputElement.value = sum.toString();
+    // write depth values as RGBA texture
+    let postTarget : THREE.WebGLRenderTarget = new THREE.WebGLRenderTarget(Resolution.viewDepthBuffer, Resolution.viewDepthBuffer);
+    postRenderer.render(postScene, postCamera, postTarget); 
+
+    // decode RGBA texture into depth floats
+    let depthBuffer =  new Uint8Array(Resolution.viewDepthBuffer * Resolution.viewDepthBuffer * 4).fill(0);
+    postRenderer.readRenderTargetPixels(postTarget, 0, 0, Resolution.viewDepthBuffer, Resolution.viewDepthBuffer, depthBuffer);
+    let depthValues = new Float32Array(depthBuffer.buffer);
+
+    // LL depth
+    let depthNormalized = depthValues[0];
+
+    // extrema (normalized)
+    let maximumNormalized : number = Number.MIN_VALUE;
+    for (let index: number = 0; index < depthValues.length; index++)
+        {
+        let depthValue = depthValues[index];
+
+        // skip values at far plane
+        if (MathLibrary.numbersEqualWithinTolerance(depthValue, 1.0, .001))
+            continue;
+
+        if (depthValue > maximumNormalized)
+            maximumNormalized = depthValue;
+        }
+
+    let minimumNormalized : number = Number.MAX_VALUE;
+    for (let index: number = 0; index < depthValues.length; index++)
+        {
+        let depthValue = depthValues[index];
+        if (depthValue < minimumNormalized)
+            minimumNormalized = depthValue;
+        }
+    
+    // adjust for camera clipping planes
+    let cameraRange : number = (camera.far - camera.near);
+    let depth   = depthNormalized   * cameraRange;
+    let minimum = minimumNormalized * cameraRange;
+    let maximum = maximumNormalized * cameraRange;
+    let sceneDepth = maximum - minimum;
+
+    let decimalPlaces = 2;
+    let messageString : string = `Scene Depth = ${sceneDepth.toFixed(2)} [Normalized] depth = ${depthNormalized.toFixed(decimalPlaces)}, min = ${minimumNormalized.toFixed(decimalPlaces)}, max = ${maximumNormalized.toFixed(decimalPlaces)}, [Absolute] depth = ${depth.toFixed(decimalPlaces)}, min = ${minimum.toFixed(decimalPlaces)}, max = ${maximum.toFixed(decimalPlaces)}`;
+    let inputElement : HTMLInputElement = <HTMLInputElement> document.querySelector(`#debugValueInput`);
+    inputElement.value = messageString;
 }
 
 function initializeCanvas(id : string, resolution : number) : HTMLCanvasElement {
@@ -249,9 +291,5 @@ function animate() {
     controls.update();
 
     // render scene into target
-    renderer.render(scene, camera);
-
-    // render post FX
-    postRenderer.render(scene, camera, target);
-    postRenderer.render(postScene, postCamera);
+    renderer.render(scene, camera); 
 }
