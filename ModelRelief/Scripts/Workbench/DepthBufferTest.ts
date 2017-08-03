@@ -2,6 +2,7 @@
 
 import * as THREE               from 'three'
 import {TrackballControls}      from 'TrackballControls'
+import {DepthBuffer}            from 'DepthBuffer'
 import {MathLibrary}            from 'Math'
 import {Logger, HTMLLogger}     from 'Logger'
 
@@ -208,6 +209,8 @@ function onWindowResize() {
 
 function createDepthBuffer() {
 
+    let logger = new HTMLLogger();
+
     // create depth texture
     postRenderer.render(scene, camera, target);    
 //  let primaryImageBuffer =  new Uint8Array(Resolution.viewModel * Resolution.viewModel * 4).fill(0);
@@ -221,53 +224,17 @@ function createDepthBuffer() {
     postRenderer.render(postScene, postCamera, postTarget); 
 
     // decode RGBA texture into depth floats
-    let depthBuffer =  new Uint8Array(Resolution.viewDepthBuffer * Resolution.viewDepthBuffer * 4).fill(0);
-    postRenderer.readRenderTargetPixels(postTarget, 0, 0, Resolution.viewDepthBuffer, Resolution.viewDepthBuffer, depthBuffer);
-    let depthValues = new Float32Array(depthBuffer.buffer);
+    let depthBufferRaw =  new Uint8Array(Resolution.viewDepthBuffer * Resolution.viewDepthBuffer * 4).fill(0);
+    postRenderer.readRenderTargetPixels(postTarget, 0, 0, Resolution.viewDepthBuffer, Resolution.viewDepthBuffer, depthBufferRaw);
 
-    // LL depth
-    let depthNormalized = depthValues[0];
-
-    // extrema (normalized)
-    let maximumNormalized : number = Number.MIN_VALUE;
-    for (let index: number = 0; index < depthValues.length; index++)
-        {
-        let depthValue = depthValues[index];
-
-        // skip values at far plane
-        if (MathLibrary.numbersEqualWithinTolerance(depthValue, 1.0, .001))
-            continue;
-
-        if (depthValue > maximumNormalized)
-            maximumNormalized = depthValue;
-        }
-
-    let minimumNormalized : number = Number.MAX_VALUE;
-    for (let index: number = 0; index < depthValues.length; index++)
-        {
-        let depthValue = depthValues[index];
-        if (depthValue < minimumNormalized)
-            minimumNormalized = depthValue;
-        }
+    let depthBuffer = new DepthBuffer(depthBufferRaw, Resolution.viewDepthBuffer, Resolution.viewDepthBuffer, camera.near, camera.far);
     
-    // adjust for camera clipping planes
-    let cameraRange : number = (camera.far - camera.near);
-    let depth   = depthNormalized   * cameraRange;
-    let minimum = minimumNormalized * cameraRange;
-    let maximum = maximumNormalized * cameraRange;
-    let sceneDepth = maximum - minimum;
-
+    let middle = Resolution.viewDepthBuffer / 2;
+    let depthNormalized = depthBuffer.valueNormalized(middle, middle);
     let decimalPlaces = 2;
-    let messageString : string = `Scene Depth = ${sceneDepth.toFixed(2)} [Normalized] depth = ${depthNormalized.toFixed(decimalPlaces)}, min = ${minimumNormalized.toFixed(decimalPlaces)}, max = ${maximumNormalized.toFixed(decimalPlaces)}, [Absolute] depth = ${depth.toFixed(decimalPlaces)}, min = ${minimum.toFixed(decimalPlaces)}, max = ${maximum.toFixed(decimalPlaces)}`;
+    let messageString : string = `Scene Depth = ${depthBuffer.depth.toFixed(2)} [Normalized] depth = ${depthNormalized.toFixed(decimalPlaces)}, min = ${depthBuffer.minimumNormalized.toFixed(decimalPlaces)}, max = ${depthBuffer.maximumNormalized.toFixed(decimalPlaces)}, [Absolute] depth = ${depthBuffer.depth.toFixed(decimalPlaces)}, min = ${depthBuffer.minimum.toFixed(decimalPlaces)}, max = ${depthBuffer.maximum.toFixed(decimalPlaces)}`;
 
-    let logger : Logger = new HTMLLogger('ul', 'li');
-    logger.addErrorMessage ('Error message');
-    logger.addWarningMessage ('Warning message');
-    logger.addInfoMessage (messageString);
-
-    logger.addMessage ('Black', 'black');
-    logger.addMessage ('Pink', 'pink');
-    logger.addMessage ('Lavender', 'lavender');
+    logger.addMessage(messageString, 'blue');
 }
 
 function initializeCanvas(id : string, resolution : number) : HTMLCanvasElement {

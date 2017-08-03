@@ -1272,39 +1272,6 @@ define("main", ["require", "exports", "three", "Viewer/Viewer", "ModelLoaders/OB
     var modelRelief = new ModelRelief();
     modelRelief.run();
 });
-define("System/Math", ["require", "exports"], function (require, exports) {
-    // ------------------------------------------------------------------------// 
-    // ModelRelief                                                             //
-    //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
-    // ------------------------------------------------------------------------//
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * Math Library
-     * General mathematics routines
-     * @class
-     */
-    var MathLibrary = (function () {
-        /**
-         * @constructor
-         */
-        function MathLibrary() {
-        }
-        /**
-         * Returns whether two numbers are equal within the given tolerance.
-         * @param value First value to compare.
-         * @param other Second value to compare.
-         * @param tolerance Tolerance for comparison.
-         * @returns True if within tolerance.
-         */
-        MathLibrary.numbersEqualWithinTolerance = function (value, other, tolerance) {
-            return ((value >= (other - tolerance)) && (value <= (other + tolerance)));
-        };
-        return MathLibrary;
-    }());
-    exports.MathLibrary = MathLibrary;
-});
 define("System/Logger", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
@@ -1327,13 +1294,14 @@ define("System/Logger", ["require", "exports"], function (require, exports) {
         /**
          * @constructor
          */
-        function HTMLLogger(rootElementTag, messageTag) {
+        function HTMLLogger() {
             this.rootId = 'loggerRoot';
-            this.messageTag = messageTag;
+            this.rootElementTag = 'ul';
+            this.messageTag = 'li';
             this.baseMessageClass = 'logMessage';
             this.rootElement = document.querySelector("#" + this.rootId);
             if (!this.rootElement) {
-                this.rootElement = document.createElement(rootElementTag);
+                this.rootElement = document.createElement(this.rootElementTag);
                 this.rootElement.id = this.rootId;
                 document.body.appendChild(this.rootElement);
             }
@@ -1385,7 +1353,179 @@ define("System/Logger", ["require", "exports"], function (require, exports) {
     }());
     exports.HTMLLogger = HTMLLogger;
 });
-define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/TrackballControls", "System/Math", "System/Logger"], function (require, exports, THREE, TrackballControls_2, Math_1, Logger_1) {
+define("System/Math", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * Math Library
+     * General mathematics routines
+     * @class
+     */
+    var MathLibrary = (function () {
+        /**
+         * @constructor
+         */
+        function MathLibrary() {
+        }
+        /**
+         * Returns whether two numbers are equal within the given tolerance.
+         * @param value First value to compare.
+         * @param other Second value to compare.
+         * @param tolerance Tolerance for comparison.
+         * @returns True if within tolerance.
+         */
+        MathLibrary.numbersEqualWithinTolerance = function (value, other, tolerance) {
+            return ((value >= (other - tolerance)) && (value <= (other + tolerance)));
+        };
+        return MathLibrary;
+    }());
+    exports.MathLibrary = MathLibrary;
+});
+define("Viewer/DepthBuffer", ["require", "exports", "System/Logger", "System/Math"], function (require, exports, Logger_1, Math_1) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     *  DepthBuffer
+     *  @class
+     */
+    var DepthBuffer = (function () {
+        /**
+         * @constructor
+         * @param rgbaArray Raw aray of RGBA bytes packed with floats.
+         * @param width Width of map.
+         * @param height Height of map.
+         * @param nearClipPlane Camera near clipping plane.
+         * @param farClipPlane Camera far clipping plane.
+         */
+        function DepthBuffer(rgbaArray, width, height, nearClipPlane, farClipPlane) {
+            this.rgbaArray = rgbaArray;
+            this.width = width;
+            this.height = height;
+            this.nearClipPlane = nearClipPlane;
+            this.farClipPlane = farClipPlane;
+            this.initialize();
+        }
+        /**
+         * Initialize
+         */
+        DepthBuffer.prototype.initialize = function () {
+            this.logger = new Logger_1.HTMLLogger();
+            this.values = new Float32Array(this.rgbaArray.buffer);
+            this.cameraRange = this.farClipPlane - this.nearClipPlane;
+        };
+        /**
+         * Returns the normalized depth value at a pixel index
+         * @param pixelRow Map row.
+         * @param pixelColumn Map column.
+         */
+        DepthBuffer.prototype.valueNormalized = function (pixelRow, pixelColumn) {
+            var index = (pixelRow * this.width) + pixelColumn;
+            return this.values[index];
+        };
+        /**
+         * Returns the depth value at a pixel index
+         * @param pixelRow Map row.
+         * @param pixelColumn Map column.
+         */
+        DepthBuffer.prototype.value = function (pixelRow, pixelColumn) {
+            var value = this.valueNormalized(pixelRow, pixelColumn) * this.cameraRange;
+            return value;
+        };
+        Object.defineProperty(DepthBuffer.prototype, "minimumNormalized", {
+            /**
+            * Returns the minimum normalized depth value.
+            */
+            get: function () {
+                var minimumNormalized = Number.MAX_VALUE;
+                for (var index = 0; index < this.values.length; index++) {
+                    var depthValue = this.values[index];
+                    if (depthValue < minimumNormalized)
+                        minimumNormalized = depthValue;
+                }
+                return minimumNormalized;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DepthBuffer.prototype, "minimum", {
+            /**
+            * Returns the minimum depth value.
+            */
+            get: function () {
+                var minimum = this.minimumNormalized * this.cameraRange;
+                return minimum;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DepthBuffer.prototype, "maximumNormalized", {
+            /**
+            * Returns the maximum normalized depth value.
+            */
+            get: function () {
+                var maximumNormalized = Number.MIN_VALUE;
+                for (var index = 0; index < this.values.length; index++) {
+                    var depthValue = this.values[index];
+                    // skip values at far plane
+                    if (Math_1.MathLibrary.numbersEqualWithinTolerance(depthValue, 1.0, DepthBuffer.normalizedTolerance))
+                        continue;
+                    if (depthValue > maximumNormalized)
+                        maximumNormalized = depthValue;
+                }
+                return maximumNormalized;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DepthBuffer.prototype, "maximum", {
+            /**
+            * Returns the maximum depth value.
+            */
+            get: function () {
+                var maximum = this.maximumNormalized * this.cameraRange;
+                return maximum;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DepthBuffer.prototype, "depthNormalized", {
+            /**
+            * Returns the normalized depth of the buffer.
+            */
+            get: function () {
+                var depthNormalized = this.maximumNormalized - this.minimumNormalized;
+                return depthNormalized;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DepthBuffer.prototype, "depth", {
+            /**
+            * Returns the normalized depth of the buffer.
+            */
+            get: function () {
+                var depth = this.depthNormalized * this.cameraRange;
+                return depth;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        DepthBuffer.normalizedTolerance = .001;
+        return DepthBuffer;
+    }());
+    exports.DepthBuffer = DepthBuffer;
+});
+define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/TrackballControls", "Viewer/DepthBuffer", "System/Logger"], function (require, exports, THREE, TrackballControls_2, DepthBuffer_1, Logger_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var renderer;
@@ -1536,6 +1676,7 @@ define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/Trackbal
         postRenderer.setSize(depthBufferCanvas.width, depthBufferCanvas.height);
     }
     function createDepthBuffer() {
+        var logger = new Logger_2.HTMLLogger();
         // create depth texture
         postRenderer.render(scene, camera, target);
         //  let primaryImageBuffer =  new Uint8Array(Resolution.viewModel * Resolution.viewModel * 4).fill(0);
@@ -1546,42 +1687,14 @@ define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/Trackbal
         var postTarget = new THREE.WebGLRenderTarget(Resolution.viewDepthBuffer, Resolution.viewDepthBuffer);
         postRenderer.render(postScene, postCamera, postTarget);
         // decode RGBA texture into depth floats
-        var depthBuffer = new Uint8Array(Resolution.viewDepthBuffer * Resolution.viewDepthBuffer * 4).fill(0);
-        postRenderer.readRenderTargetPixels(postTarget, 0, 0, Resolution.viewDepthBuffer, Resolution.viewDepthBuffer, depthBuffer);
-        var depthValues = new Float32Array(depthBuffer.buffer);
-        // LL depth
-        var depthNormalized = depthValues[0];
-        // extrema (normalized)
-        var maximumNormalized = Number.MIN_VALUE;
-        for (var index = 0; index < depthValues.length; index++) {
-            var depthValue = depthValues[index];
-            // skip values at far plane
-            if (Math_1.MathLibrary.numbersEqualWithinTolerance(depthValue, 1.0, .001))
-                continue;
-            if (depthValue > maximumNormalized)
-                maximumNormalized = depthValue;
-        }
-        var minimumNormalized = Number.MAX_VALUE;
-        for (var index = 0; index < depthValues.length; index++) {
-            var depthValue = depthValues[index];
-            if (depthValue < minimumNormalized)
-                minimumNormalized = depthValue;
-        }
-        // adjust for camera clipping planes
-        var cameraRange = (camera.far - camera.near);
-        var depth = depthNormalized * cameraRange;
-        var minimum = minimumNormalized * cameraRange;
-        var maximum = maximumNormalized * cameraRange;
-        var sceneDepth = maximum - minimum;
+        var depthBufferRaw = new Uint8Array(Resolution.viewDepthBuffer * Resolution.viewDepthBuffer * 4).fill(0);
+        postRenderer.readRenderTargetPixels(postTarget, 0, 0, Resolution.viewDepthBuffer, Resolution.viewDepthBuffer, depthBufferRaw);
+        var depthBuffer = new DepthBuffer_1.DepthBuffer(depthBufferRaw, Resolution.viewDepthBuffer, Resolution.viewDepthBuffer, camera.near, camera.far);
+        var middle = Resolution.viewDepthBuffer / 2;
+        var depthNormalized = depthBuffer.valueNormalized(middle, middle);
         var decimalPlaces = 2;
-        var messageString = "Scene Depth = " + sceneDepth.toFixed(2) + " [Normalized] depth = " + depthNormalized.toFixed(decimalPlaces) + ", min = " + minimumNormalized.toFixed(decimalPlaces) + ", max = " + maximumNormalized.toFixed(decimalPlaces) + ", [Absolute] depth = " + depth.toFixed(decimalPlaces) + ", min = " + minimum.toFixed(decimalPlaces) + ", max = " + maximum.toFixed(decimalPlaces);
-        var logger = new Logger_1.HTMLLogger('ul', 'li');
-        logger.addErrorMessage('Error message');
-        logger.addWarningMessage('Warning message');
-        logger.addInfoMessage(messageString);
-        logger.addMessage('Black', 'black');
-        logger.addMessage('Pink', 'pink');
-        logger.addMessage('Lavender', 'lavender');
+        var messageString = "Scene Depth = " + depthBuffer.depth.toFixed(2) + " [Normalized] depth = " + depthNormalized.toFixed(decimalPlaces) + ", min = " + depthBuffer.minimumNormalized.toFixed(decimalPlaces) + ", max = " + depthBuffer.maximumNormalized.toFixed(decimalPlaces) + ", [Absolute] depth = " + depthBuffer.depth.toFixed(decimalPlaces) + ", min = " + depthBuffer.minimum.toFixed(decimalPlaces) + ", max = " + depthBuffer.maximum.toFixed(decimalPlaces);
+        logger.addMessage(messageString, 'blue');
     }
     function initializeCanvas(id, resolution) {
         var canvas = document.querySelector("#" + id);

@@ -1,4 +1,4 @@
-﻿@model DepthBufferViewModel
+﻿@model DepthBufferTestViewModel
 
 <body>
     <div >
@@ -33,13 +33,13 @@
         requirejs.config({
             baseUrl: '.',
             paths: {
-                'Workbench/DepthBuffer'                      : '/js/modelrelief',
+                'Workbench/DepthBufferTest'                  : '/js/modelrelief',
 
                 'three'                                      : '/lib/threejs/three',
             }
         });
         window.onload = function () {
-            requirejs(['Workbench/DepthBuffer']);
+            requirejs(['Workbench/DepthBufferTest']);
         }
     </script>
 </body>

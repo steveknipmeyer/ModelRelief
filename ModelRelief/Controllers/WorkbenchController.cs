@@ -14,7 +14,7 @@ namespace ModelRelief.Controllers
     public class WorkbenchController : Controller
         {
         // GET: /<controller>/
-        public IActionResult DepthBuffer()
+        public IActionResult DepthBufferTest()
             {
             return View();
             }
@@ -22,7 +22,7 @@ namespace ModelRelief.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("[controller]/[action]")]
-        public IActionResult DepthBuffer(DepthBufferViewModel viewModel)
+        public IActionResult DepthBufferTest(DepthBufferTestViewModel viewModel)
             {
             if (!ModelState.IsValid)
                 {

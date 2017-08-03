@@ -30,24 +30,27 @@ export class HTMLLogger implements Logger{
     
 
     rootId           : string;
+    rootElementTag   : string;
     rootElement      : HTMLElement;
+
     messageTag       : string;
     baseMessageClass : string
 
     /**
      * @constructor
      */
-    constructor(rootElementTag : string, messageTag : string) {
+    constructor() {
         
-        this.rootId = 'loggerRoot'
+        this.rootId         = 'loggerRoot'
+        this.rootElementTag = 'ul';
 
-        this.messageTag = messageTag;
+        this.messageTag = 'li';
         this.baseMessageClass = 'logMessage';
 
         this.rootElement = <HTMLElement> document.querySelector(`#${this.rootId}`);
         if (!this.rootElement) {
 
-            this.rootElement = document.createElement(rootElementTag);
+            this.rootElement = document.createElement(this.rootElementTag);
             this.rootElement.id = this.rootId;
             document.body.appendChild(this.rootElement);
         }

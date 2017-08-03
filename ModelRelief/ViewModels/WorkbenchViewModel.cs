@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ModelRelief.ViewModels
     {
-    public class DepthBufferViewModel
+    public class DepthBufferTestViewModel
         {
         [Required]
         public string ImageUrl { get; set; }
