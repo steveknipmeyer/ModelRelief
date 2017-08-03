@@ -23,8 +23,8 @@ export class Materials {
 //#region Materials
     /**
      * Create a texture material from an image URL.
-     * @param image - Image to use in texture
-     * @returns Texture material
+     * @param image Image to use in texture.
+     * @returns Texture material.
      */
     static createTextureMaterial (image : HTMLImageElement) : THREE.MeshBasicMaterial {
             
@@ -48,8 +48,8 @@ export class Materials {
 
     /**
      *  Create a bump map Phong material from a texture map.
-     * @param designTexture - Bump map texture
-     * @returns Phong bump mapped material
+     * @param designTexture Bump map texture.
+     * @returns Phong bump mapped material.
      */
     static createMeshPhongMaterial(designTexture : THREE.Texture)  : THREE.MeshPhongMaterial {
 
@@ -69,16 +69,17 @@ export class Materials {
 
     /**
      * Create a transparent material.
-     * @returns Transparent material
+     * @returns Transparent material.
      */
     static createTransparentMaterial()  : THREE.Material {
 
         return new THREE.MeshBasicMaterial({color : 0x000000, opacity : 0.0, transparent : true});
     }
+
     /**
      * Create the shader material used for generating the DepthBuffer.
-     * @param designColor - Material color
-     * @returns Shader material
+     * @param designColor Material color.
+     * @returns Shader material.
      */
     static createDepthBufferMaterial(designColor : number) : THREE.ShaderMaterial {
             

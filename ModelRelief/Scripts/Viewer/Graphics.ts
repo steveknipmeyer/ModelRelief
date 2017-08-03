@@ -27,9 +27,9 @@ export class Graphics {
     //			Geometry
     // --------------------------------------------------------------------------------------------------------------------------------------//
     /**
-     * @param position - Location of bounding box
-     * @param mesh - Mesh from which to create bounding box
-     * @ returns Mesh of the bounding box
+     * @param position Location of bounding box.
+     * @param mesh Mesh from which to create bounding box.
+     * @ returns Mesh of the bounding box.
      */
     static createTransparentBoundingBox(position : THREE.Vector3, mesh : THREE.Mesh) : THREE.Mesh{
 
@@ -60,12 +60,12 @@ export class Graphics {
 
     /**
      * Creates a box mesh.
-     * @param position - Location of the box
-     * @param width - Width
-     * @param height - Height
-     * @param depth - Depth
-     * @param material - Optional material
-     * @returns Box mesh
+     * @param position Location of the box.
+     * @param width Width.
+     * @param height Height.
+     * @param depth Depth.
+     * @param material Optional material.
+     * @returns Box mesh.
      */
     static createBox(position : THREE.Vector3, width : number, height : number, depth : number, material? : THREE.Material) : THREE.Mesh {
 
@@ -87,10 +87,10 @@ export class Graphics {
 
     /**
      * Creates a sphere mesh.
-     * @param position - Origin of the sphere
-     * @param radius - Radius
-     * @param color - Color
-     * @param segments - Mesh segments
+     * @param position Origin of the sphere.
+     * @param radius Radius.
+     * @param color Color.
+     * @param segments Mesh segments.
      */
     static createSphere(position : THREE.Vector3, radius : number, color : number, segments? : number) : THREE.Mesh {
         var sphereGeometry  : THREE.SphereGeometry,
@@ -111,10 +111,10 @@ export class Graphics {
 
         /**
      * Creates a line object.
-     * @param startPosition - Start point
-     * @param endPosition - End point
-     * @param color - color
-     * @return Line
+     * @param startPosition Start point.
+     * @param endPosition End point.
+     * @param color Color.
+     * @returns Line element.
      */
     static createLine(startPosition : THREE.Vector3, endPosition : THREE.Vector3, color : number) : THREE.Line {
 
@@ -133,10 +133,10 @@ export class Graphics {
         
     /**
      * Creates an axes triad.
-     * @param position - Origin of the triad
-     * @param length - Length of the coordinate arrow
-     * @param headLength - Length of the arrow head
-     * @param headWidth - Width of the arrow head
+     * @param position Origin of the triad.
+     * @param length Length of the coordinate arrow.
+     * @param headLength Length of the arrow head.
+     * @param headWidth Width of the arrow head.
      */
     static createWorldAxesTriad(position? : THREE.Vector3, length? : number, headLength? : number, headWidth? : number) : THREE.Object3D {
             
@@ -155,10 +155,10 @@ export class Graphics {
 
     /**
      * Creates an axes grid.
-     * @param position : Origin of the axes grid
-     * @param size : Size of the grid
-     * @param step : Grid line intervals
-     * @returns Grid object
+     * @param position  Origin of the axes grid.
+     * @param size Size of the grid.
+     * @param step Grid line intervals.
+     * @returns Grid object.
      */
     static createWorldAxesGrid(position? : THREE.Vector3, size? : number, step? : number) : THREE.Object3D {
             
@@ -223,10 +223,10 @@ export class Graphics {
     // --------------------------------------------------------------------------------------------------------------------------------------//
     /**
      * Converts a JQuery event to world coordinates.
-     * @param event - Event
-     * @param container - DOM container
-     * @param camera - Camera
-     * @returns World coordinates
+     * @param event Event.
+     * @param container DOM container.
+     * @param camera Camera.
+     * @returns World coordinates.
      */
     static worldCoordinatesFromJQEvent (event : JQueryEventObject, container : JQuery, camera : THREE.Camera) : THREE.Vector3 {
 
@@ -250,9 +250,9 @@ export class Graphics {
     // --------------------------------------------------------------------------------------------------------------------------------------// 
     /**
      * Converts world coordinates to view coordinates.
-     * @param vector - World coordinate vector to convert
-     * @param camera - Camera
-     * @returns View coordinates
+     * @param vector World coordinate vector to convert.
+     * @param camera Camera.
+     * @returns View coordinates.
      */
     static viewCoordinatesFromWorldCoordinates (vector : THREE.Vector3, camera : THREE.Camera) : THREE.Vector3 {
 
@@ -269,9 +269,9 @@ export class Graphics {
     // --------------------------------------------------------------------------------------------------------------------------------------//
     /**
      * Converts a JQuery event to normalized device coordinates.
-     * @param event - JQuery event
-     * @param container - DOM container
-     * @returns Normalized device coordinates
+     * @param event JQuery event.
+     * @param container DOM container.
+     * @returns Normalized device coordinates.
      */
     static deviceCoordinatesFromJQEvent (event : JQueryEventObject, container : JQuery) : THREE.Vector2 {
 
@@ -293,9 +293,9 @@ export class Graphics {
 
     /**
      * Converts world coordinates to device coordinates [-1, 1].
-     * @param vector - World coordinates vector
-     * @param camera - Camera
-     * @preturns Device coorindates
+     * @param vector  World coordinates vector.
+     * @param camera Camera.
+     * @preturns Device coorindates.
      */
     static deviceCoordinatesFromWorldCoordinates (vector : THREE.Vector3, camera : THREE.Camera) : THREE.Vector2 {
             
@@ -315,8 +315,8 @@ export class Graphics {
     // --------------------------------------------------------------------------------------------------------------------------------------//
     /**
      * Page coordinates from a JQuery event.
-     * @param event - JQuery event
-     * @returns Screen (page) coordinates
+     * @param event JQuery event.
+     * @returns Screen (page) coordinates.
      */
     static screenPageCoordinatesFromJQEvent(event : JQueryEventObject) : THREE.Vector2 {
         
@@ -333,8 +333,8 @@ export class Graphics {
      * Client coordinates are relative to the <browser> view port. If the document has been scrolled it will
      * be different than the page coordinates which are always relative to the top left of the <entire> HTML page document.
      * http://www.bennadel.com/blog/1869-jquery-mouse-events-pagex-y-vs-clientx-y.htm
-     * @param event - JQuery event
-     * @returns Screen client coordinates
+     * @param event JQuery event.
+     * @returns Screen client coordinates.
      */
     static screenClientCoordinatesFromJQEvent(event : JQueryEventObject) : THREE.Vector2 {
         
@@ -348,9 +348,9 @@ export class Graphics {
 
     /**
      * Converts JQuery event coordinates to screen container coordinates.
-     * @param event - JQuery event
-     * @param container - DOM container
-     * @returns Screen container coordinates
+     * @param event JQuery event.
+     * @param container DOM container.
+     * @returns Screen container coordinates.
      */
     static screenContainerCoordinatesFromJQEvent(event : JQueryEventObject, container : JQuery) : THREE.Vector2 {
         
@@ -372,10 +372,10 @@ export class Graphics {
   
     /**
      * Converts world coordinates to screen container coordinates.
-     * @param vector - World vector
-     * @param container - DOM container
-     * @param camera - Camera
-     * @returns Screen container coordinates
+     * @param vector World vector.
+     * @param container DOM container.
+     * @param camera Camera.
+     * @returns Screen container coordinates.
      */
     static screenContainerCoordinatesFromWorldCoordinates (vector : THREE.Vector3, container : JQuery, camera : THREE.Camera) : THREE.Vector2 {
             
@@ -402,9 +402,9 @@ export class Graphics {
     // --------------------------------------------------------------------------------------------------------------------------------------//
     /**
      * Creates a Raycaster through the mouse world position.
-     * @param mouseWorld - World coordinates
-     * @param camera - Camera
-     * @returns THREE.Raycaster
+     * @param mouseWorld World coordinates.
+     * @param camera Camera.
+     * @returns THREE.Raycaster.
      */
     static raycasterFromMouse (mouseWorld : THREE.Vector3, camera : THREE.Camera) : THREE.Raycaster{
 
@@ -420,12 +420,12 @@ export class Graphics {
     }
     /**
      * Returns the first Intersection located by the cursor.
-     * @param event : JQuery event
-     * @param container : DOM container
-     * @param camera - Camera
-     * @param sceneObjects - Array of scene objects
-     * @param recurse - Recurse through objects
-     * @returns First intersection with screen objects
+     * @param event JQuery event.
+     * @param container DOM container.
+     * @param camera Camera.
+     * @param sceneObjects Array of scene objects.
+     * @param recurse Recurse through objects.
+     * @returns First intersection with screen objects.
      */
     static getFirstIntersection(event : JQueryEventObject, container : JQuery, camera : THREE.Camera, sceneObjects : THREE.Object3D[], recurse : boolean) : THREE.Intersection {
 

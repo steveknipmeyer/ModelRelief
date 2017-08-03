@@ -398,8 +398,8 @@ define("Viewer/Materials", ["require", "exports", "three"], function (require, e
         //#region Materials
         /**
          * Create a texture material from an image URL.
-         * @param image - Image to use in texture
-         * @returns Texture material
+         * @param image Image to use in texture.
+         * @returns Texture material.
          */
         Materials.createTextureMaterial = function (image) {
             var texture, textureMaterial;
@@ -416,8 +416,8 @@ define("Viewer/Materials", ["require", "exports", "three"], function (require, e
         };
         /**
          *  Create a bump map Phong material from a texture map.
-         * @param designTexture - Bump map texture
-         * @returns Phong bump mapped material
+         * @param designTexture Bump map texture.
+         * @returns Phong bump mapped material.
          */
         Materials.createMeshPhongMaterial = function (designTexture) {
             var material;
@@ -431,15 +431,15 @@ define("Viewer/Materials", ["require", "exports", "three"], function (require, e
         };
         /**
          * Create a transparent material.
-         * @returns Transparent material
+         * @returns Transparent material.
          */
         Materials.createTransparentMaterial = function () {
             return new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 0.0, transparent: true });
         };
         /**
          * Create the shader material used for generating the DepthBuffer.
-         * @param designColor - Material color
-         * @returns Shader material
+         * @param designColor Material color.
+         * @returns Shader material.
          */
         Materials.createDepthBufferMaterial = function (designColor) {
             var textureLoader = new THREE.TextureLoader();
@@ -480,7 +480,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
          * Default constructor
          * @class Viewer
          * @constructor
-         * @param elementToBindTo HTML element to host the viewer
+         * @param elementToBindTo HTML element to host the viewer.
          */
         function Viewer(elementToBindTo) {
             this.renderer = null;
@@ -1293,10 +1293,10 @@ define("System/Math", ["require", "exports"], function (require, exports) {
         }
         /**
          * Returns whether two numbers are equal within the given tolerance.
-         * @param value - First value
-         * @param other - Second value
-         * @param tolerance - Tolerance for comparison
-         * @returns True if within tolerance
+         * @param value First value to compare.
+         * @param other Second value to compare.
+         * @param tolerance Tolerance for comparison.
+         * @returns True if within tolerance.
          */
         MathLibrary.numbersEqualWithinTolerance = function (value, other, tolerance) {
             return ((value >= (other - tolerance)) && (value <= (other + tolerance)));
@@ -1305,7 +1305,78 @@ define("System/Math", ["require", "exports"], function (require, exports) {
     }());
     exports.MathLibrary = MathLibrary;
 });
-define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/TrackballControls", "System/Math"], function (require, exports, THREE, TrackballControls_2, Math_1) {
+define("System/Logger", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var MessageClass;
+    (function (MessageClass) {
+        MessageClass["Error"] = "logError";
+        MessageClass["Warning"] = "logWarning";
+        MessageClass["Info"] = "logInfo";
+    })(MessageClass || (MessageClass = {}));
+    /**
+     * HTML logging
+     * @class
+     */
+    var HTMLLogger = (function () {
+        /**
+         * @constructor
+         */
+        function HTMLLogger(rootElementTag, messageTag) {
+            this.rootId = 'loggerRoot';
+            this.messageTag = messageTag;
+            this.baseMessageClass = 'logMessage';
+            this.rootElement = document.querySelector("#" + this.rootId);
+            if (!this.rootElement) {
+                this.rootElement = document.createElement(rootElementTag);
+                this.rootElement.id = this.rootId;
+                document.body.appendChild(this.rootElement);
+            }
+        }
+        /**
+         * Construct a general message and append to the log root.
+         * @param message Message text.
+         * @param messageClass CSS class to be added to message.
+         */
+        HTMLLogger.prototype.addMessage = function (message, messageClass) {
+            var messageElement = document.createElement(this.messageTag);
+            messageElement.textContent = message;
+            messageElement.className = this.baseMessageClass + " " + messageClass;
+            ;
+            this.rootElement.appendChild(messageElement);
+            return messageElement;
+        };
+        /**
+         * Add an error message to the log.
+         * @param errorMessage Error message text.
+         */
+        HTMLLogger.prototype.addErrorMessage = function (errorMessage) {
+            this.addMessage(errorMessage, MessageClass.Error);
+        };
+        /**
+         * Add a warning message to the log.
+         * @param warningMessage Warning message text.
+         */
+        HTMLLogger.prototype.addWarningMessage = function (warningMessage) {
+            this.addMessage(warningMessage, MessageClass.Warning);
+        };
+        /**
+         * Add an informational message to the log.
+         * @param infoMessage Information message text.
+         */
+        HTMLLogger.prototype.addInfoMessage = function (infoMessage) {
+            this.addMessage(infoMessage, MessageClass.Info);
+        };
+        return HTMLLogger;
+    }());
+    exports.HTMLLogger = HTMLLogger;
+});
+define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/TrackballControls", "System/Math", "System/Logger"], function (require, exports, THREE, TrackballControls_2, Math_1, Logger_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var renderer;
@@ -1397,8 +1468,8 @@ define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/Trackbal
         postScene.add(postQuad);
     }
     /**
-        * Adds lighting to the scene
-        */
+      * Adds lighting to the scene
+    */
     function initializeLighting() {
         var ambientLight = new THREE.AmbientLight(0x404040);
         scene.add(ambientLight);
@@ -1495,8 +1566,17 @@ define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/Trackbal
         var sceneDepth = maximum - minimum;
         var decimalPlaces = 2;
         var messageString = "Scene Depth = " + sceneDepth.toFixed(2) + " [Normalized] depth = " + depthNormalized.toFixed(decimalPlaces) + ", min = " + minimumNormalized.toFixed(decimalPlaces) + ", max = " + maximumNormalized.toFixed(decimalPlaces) + ", [Absolute] depth = " + depth.toFixed(decimalPlaces) + ", min = " + minimum.toFixed(decimalPlaces) + ", max = " + maximum.toFixed(decimalPlaces);
-        var inputElement = document.querySelector("#debugValueInput");
-        inputElement.value = messageString;
+        /*
+            let debugLog : HTMLDivElement = <HTMLDivElement> document.querySelector(`#debugLog`);
+        
+            let spanElement = document.createElement('span');
+            spanElement.textContent = messageString;
+            debugLog.appendChild(spanElement);
+        */
+        var logger = new Logger_1.HTMLLogger('ul', 'li');
+        logger.addErrorMessage('Error message');
+        logger.addWarningMessage('Warning message');
+        logger.addInfoMessage(messageString);
     }
     function initializeCanvas(id, resolution) {
         var canvas = document.querySelector("#" + id);
@@ -1545,9 +1625,9 @@ define("Viewer/Graphics", ["require", "exports", "three"], function (require, ex
         //			Geometry
         // --------------------------------------------------------------------------------------------------------------------------------------//
         /**
-         * @param position - Location of bounding box
-         * @param mesh - Mesh from which to create bounding box
-         * @ returns Mesh of the bounding box
+         * @param position Location of bounding box.
+         * @param mesh Mesh from which to create bounding box.
+         * @ returns Mesh of the bounding box.
          */
         Graphics.createTransparentBoundingBox = function (position, mesh) {
             var targetGeometry, boundingBox, width, height, depth, material, box;
@@ -1565,12 +1645,12 @@ define("Viewer/Graphics", ["require", "exports", "three"], function (require, ex
         };
         /**
          * Creates a box mesh.
-         * @param position - Location of the box
-         * @param width - Width
-         * @param height - Height
-         * @param depth - Depth
-         * @param material - Optional material
-         * @returns Box mesh
+         * @param position Location of the box.
+         * @param width Width.
+         * @param height Height.
+         * @param depth Depth.
+         * @param material Optional material.
+         * @returns Box mesh.
          */
         Graphics.createBox = function (position, width, height, depth, material) {
             var boxGeometry, boxMaterial, box;
@@ -1583,10 +1663,10 @@ define("Viewer/Graphics", ["require", "exports", "three"], function (require, ex
         };
         /**
          * Creates a sphere mesh.
-         * @param position - Origin of the sphere
-         * @param radius - Radius
-         * @param color - Color
-         * @param segments - Mesh segments
+         * @param position Origin of the sphere.
+         * @param radius Radius.
+         * @param color Color.
+         * @param segments Mesh segments.
          */
         Graphics.createSphere = function (position, radius, color, segments) {
             var sphereGeometry, material, segmentCount = segments || 32, sphere;
@@ -1600,10 +1680,10 @@ define("Viewer/Graphics", ["require", "exports", "three"], function (require, ex
         };
         /**
      * Creates a line object.
-     * @param startPosition - Start point
-     * @param endPosition - End point
-     * @param color - color
-     * @return Line
+     * @param startPosition Start point.
+     * @param endPosition End point.
+     * @param color Color.
+     * @returns Line element.
      */
         Graphics.createLine = function (startPosition, endPosition, color) {
             var line, lineGeometry, material;
@@ -1615,10 +1695,10 @@ define("Viewer/Graphics", ["require", "exports", "three"], function (require, ex
         };
         /**
          * Creates an axes triad.
-         * @param position - Origin of the triad
-         * @param length - Length of the coordinate arrow
-         * @param headLength - Length of the arrow head
-         * @param headWidth - Width of the arrow head
+         * @param position Origin of the triad.
+         * @param length Length of the coordinate arrow.
+         * @param headLength Length of the arrow head.
+         * @param headWidth Width of the arrow head.
          */
         Graphics.createWorldAxesTriad = function (position, length, headLength, headWidth) {
             var triadGroup = new THREE.Object3D(), arrowPosition = position || new THREE.Vector3(), arrowLength = length || 15, arrowHeadLength = headLength || 1, arrowHeadWidth = headWidth || 1;
@@ -1629,10 +1709,10 @@ define("Viewer/Graphics", ["require", "exports", "three"], function (require, ex
         };
         /**
          * Creates an axes grid.
-         * @param position : Origin of the axes grid
-         * @param size : Size of the grid
-         * @param step : Grid line intervals
-         * @returns Grid object
+         * @param position  Origin of the axes grid.
+         * @param size Size of the grid.
+         * @param step Grid line intervals.
+         * @returns Grid object.
          */
         Graphics.createWorldAxesGrid = function (position, size, step) {
             var gridGroup = new THREE.Object3D(), gridPosition = position || new THREE.Vector3(), gridSize = size || 10, gridStep = step || 1, colorCenterline = 0xff000000, xyGrid, yzGrid, zxGrid;
@@ -1683,10 +1763,10 @@ define("Viewer/Graphics", ["require", "exports", "three"], function (require, ex
         // --------------------------------------------------------------------------------------------------------------------------------------//
         /**
          * Converts a JQuery event to world coordinates.
-         * @param event - Event
-         * @param container - DOM container
-         * @param camera - Camera
-         * @returns World coordinates
+         * @param event Event.
+         * @param container DOM container.
+         * @param camera Camera.
+         * @returns World coordinates.
          */
         Graphics.worldCoordinatesFromJQEvent = function (event, container, camera) {
             var worldCoordinates, deviceCoordinates2D, deviceCoordinates3D, deviceZ;
@@ -1701,9 +1781,9 @@ define("Viewer/Graphics", ["require", "exports", "three"], function (require, ex
         // --------------------------------------------------------------------------------------------------------------------------------------// 
         /**
          * Converts world coordinates to view coordinates.
-         * @param vector - World coordinate vector to convert
-         * @param camera - Camera
-         * @returns View coordinates
+         * @param vector World coordinate vector to convert.
+         * @param camera Camera.
+         * @returns View coordinates.
          */
         Graphics.viewCoordinatesFromWorldCoordinates = function (vector, camera) {
             var position = vector.clone(), viewCoordinates;
@@ -1715,9 +1795,9 @@ define("Viewer/Graphics", ["require", "exports", "three"], function (require, ex
         // --------------------------------------------------------------------------------------------------------------------------------------//
         /**
          * Converts a JQuery event to normalized device coordinates.
-         * @param event - JQuery event
-         * @param container - DOM container
-         * @returns Normalized device coordinates
+         * @param event JQuery event.
+         * @param container DOM container.
+         * @returns Normalized device coordinates.
          */
         Graphics.deviceCoordinatesFromJQEvent = function (event, container) {
             var deviceCoordinates, screenContainerCoordinates, ratioX, ratioY, deviceX, deviceY;
@@ -1731,9 +1811,9 @@ define("Viewer/Graphics", ["require", "exports", "three"], function (require, ex
         };
         /**
          * Converts world coordinates to device coordinates [-1, 1].
-         * @param vector - World coordinates vector
-         * @param camera - Camera
-         * @preturns Device coorindates
+         * @param vector  World coordinates vector.
+         * @param camera Camera.
+         * @preturns Device coorindates.
          */
         Graphics.deviceCoordinatesFromWorldCoordinates = function (vector, camera) {
             // https://github.com/mrdoob/three.js/issues/78
@@ -1747,8 +1827,8 @@ define("Viewer/Graphics", ["require", "exports", "three"], function (require, ex
         // --------------------------------------------------------------------------------------------------------------------------------------//
         /**
          * Page coordinates from a JQuery event.
-         * @param event - JQuery event
-         * @returns Screen (page) coordinates
+         * @param event JQuery event.
+         * @returns Screen (page) coordinates.
          */
         Graphics.screenPageCoordinatesFromJQEvent = function (event) {
             var screenPageCoordinates = new THREE.Vector2();
@@ -1761,8 +1841,8 @@ define("Viewer/Graphics", ["require", "exports", "three"], function (require, ex
          * Client coordinates are relative to the <browser> view port. If the document has been scrolled it will
          * be different than the page coordinates which are always relative to the top left of the <entire> HTML page document.
          * http://www.bennadel.com/blog/1869-jquery-mouse-events-pagex-y-vs-clientx-y.htm
-         * @param event - JQuery event
-         * @returns Screen client coordinates
+         * @param event JQuery event.
+         * @returns Screen client coordinates.
          */
         Graphics.screenClientCoordinatesFromJQEvent = function (event) {
             var screenClientCoordinates = new THREE.Vector2();
@@ -1772,9 +1852,9 @@ define("Viewer/Graphics", ["require", "exports", "three"], function (require, ex
         };
         /**
          * Converts JQuery event coordinates to screen container coordinates.
-         * @param event - JQuery event
-         * @param container - DOM container
-         * @returns Screen container coordinates
+         * @param event JQuery event.
+         * @param container DOM container.
+         * @returns Screen container coordinates.
          */
         Graphics.screenContainerCoordinatesFromJQEvent = function (event, container) {
             var screenContainerCoordinates = new THREE.Vector2(), containerOffset, pageX, pageY;
@@ -1788,10 +1868,10 @@ define("Viewer/Graphics", ["require", "exports", "three"], function (require, ex
         };
         /**
          * Converts world coordinates to screen container coordinates.
-         * @param vector - World vector
-         * @param container - DOM container
-         * @param camera - Camera
-         * @returns Screen container coordinates
+         * @param vector World vector.
+         * @param container DOM container.
+         * @param camera Camera.
+         * @returns Screen container coordinates.
          */
         Graphics.screenContainerCoordinatesFromWorldCoordinates = function (vector, container, camera) {
             //https://github.com/mrdoob/three.js/issues/78
@@ -1810,9 +1890,9 @@ define("Viewer/Graphics", ["require", "exports", "three"], function (require, ex
         // --------------------------------------------------------------------------------------------------------------------------------------//
         /**
          * Creates a Raycaster through the mouse world position.
-         * @param mouseWorld - World coordinates
-         * @param camera - Camera
-         * @returns THREE.Raycaster
+         * @param mouseWorld World coordinates.
+         * @param camera Camera.
+         * @returns THREE.Raycaster.
          */
         Graphics.raycasterFromMouse = function (mouseWorld, camera) {
             var rayOrigin = new THREE.Vector3(mouseWorld.x, mouseWorld.y, camera.position.z), worldPoint = new THREE.Vector3(mouseWorld.x, mouseWorld.y, mouseWorld.z);
@@ -1823,12 +1903,12 @@ define("Viewer/Graphics", ["require", "exports", "three"], function (require, ex
         };
         /**
          * Returns the first Intersection located by the cursor.
-         * @param event : JQuery event
-         * @param container : DOM container
-         * @param camera - Camera
-         * @param sceneObjects - Array of scene objects
-         * @param recurse - Recurse through objects
-         * @returns First intersection with screen objects
+         * @param event JQuery event.
+         * @param container DOM container.
+         * @param camera Camera.
+         * @param sceneObjects Array of scene objects.
+         * @param recurse Recurse through objects.
+         * @returns First intersection with screen objects.
          */
         Graphics.getFirstIntersection = function (event, container, camera, sceneObjects, recurse) {
             var raycaster, mouseWorld, iIntersection, intersection;

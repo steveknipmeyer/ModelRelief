@@ -49,7 +49,7 @@ export class Viewer {
      * Default constructor
      * @class Viewer
      * @constructor
-     * @param elementToBindTo HTML element to host the viewer
+     * @param elementToBindTo HTML element to host the viewer.
      */
     constructor(elementToBindTo: HTMLCanvasElement) {
             

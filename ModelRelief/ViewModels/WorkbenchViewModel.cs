@@ -9,6 +9,6 @@ namespace ModelRelief.ViewModels
     public class DepthBufferViewModel
         {
         [Required]
-        public string DebugValue { get; set; }
+        public string ImageUrl { get; set; }
         }
     }

@@ -3,6 +3,7 @@
 import * as THREE               from 'three'
 import {TrackballControls}      from 'TrackballControls'
 import {MathLibrary}            from 'Math'
+import {Logger, HTMLLogger}     from 'Logger'
 
 var renderer            : THREE.WebGLRenderer;
 var postRenderer        : THREE.WebGLRenderer;
@@ -122,8 +123,8 @@ function setupPost() {
     postScene.add(postQuad);
 }
 /**
-    * Adds lighting to the scene
-    */
+  * Adds lighting to the scene
+*/
 function initializeLighting() {
 
     let ambientLight = new THREE.AmbientLight(0x404040);
@@ -258,8 +259,11 @@ function createDepthBuffer() {
 
     let decimalPlaces = 2;
     let messageString : string = `Scene Depth = ${sceneDepth.toFixed(2)} [Normalized] depth = ${depthNormalized.toFixed(decimalPlaces)}, min = ${minimumNormalized.toFixed(decimalPlaces)}, max = ${maximumNormalized.toFixed(decimalPlaces)}, [Absolute] depth = ${depth.toFixed(decimalPlaces)}, min = ${minimum.toFixed(decimalPlaces)}, max = ${maximum.toFixed(decimalPlaces)}`;
-    let inputElement : HTMLInputElement = <HTMLInputElement> document.querySelector(`#debugValueInput`);
-    inputElement.value = messageString;
+
+    let logger : Logger = new HTMLLogger('ul', 'li');
+    logger.addErrorMessage ('Error message');
+    logger.addWarningMessage ('Warning message');
+    logger.addInfoMessage (messageString);
 }
 
 function initializeCanvas(id : string, resolution : number) : HTMLCanvasElement {

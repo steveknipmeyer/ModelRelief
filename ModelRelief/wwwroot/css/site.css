@@ -43,3 +43,27 @@
     background-color: #000000;
 }
 
+/*
+    Logger
+*/
+
+#loggerRoot {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.logMessage {
+    margin-left: 100PX;
+}
+
+.logError {
+    color : red;
+}
+
+.logWarning {
+    color: purple;
+}
+
+.logInfo {
+    color: black;
+}
