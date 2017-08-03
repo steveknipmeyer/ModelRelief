@@ -1583,7 +1583,8 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         // scene
         scene = new THREE.Scene();
         //  setupTorusScene();
-        setupSphereScene();
+        //  setupSphereScene();
+        setupBoxScene();
         initializeLighting();
         initializeHelpers();
         // Setup post-processing step
@@ -1662,6 +1663,27 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         //  let material = new THREE.MeshDepthMaterial();
         var center = new THREE.Vector3(0.0, 0.0, 0.0);
         var mesh = new THREE.Mesh(geometry, material);
+        mesh.position.set(center.x, center.y, center.z);
+        scene.add(mesh);
+    }
+    function setupBoxScene() {
+        // box
+        var width = 2;
+        var height = 2;
+        var depth = 2;
+        var geometry = new THREE.BoxGeometry(width, height, depth);
+        var material = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
+        var center = new THREE.Vector3(0.0, 0.0, 0.0);
+        var mesh = new THREE.Mesh(geometry, material);
+        mesh.position.set(center.x, center.y, center.z);
+        scene.add(mesh);
+        // background plane
+        width = 4;
+        height = 4;
+        geometry = new THREE.PlaneGeometry(width, height);
+        material = new THREE.MeshPhongMaterial({ color: 0x5555cc });
+        center = new THREE.Vector3(0.0, 0.0, 0.0);
+        mesh = new THREE.Mesh(geometry, material);
         mesh.position.set(center.x, center.y, center.z);
         scene.add(mesh);
     }

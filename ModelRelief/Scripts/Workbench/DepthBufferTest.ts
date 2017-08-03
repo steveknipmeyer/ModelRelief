@@ -81,7 +81,8 @@ function init() {
     scene = new THREE.Scene();
 
 //  setupTorusScene();
-    setupSphereScene();
+//  setupSphereScene();
+    setupBoxScene();
 
     initializeLighting();
     initializeHelpers();
@@ -188,6 +189,36 @@ function setupSphereScene() {
 
     let center : THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0);
     let mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(center.x, center.y, center.z);
+
+    scene.add(mesh);
+}
+
+function setupBoxScene() {
+
+    // box
+    let width  : number = 2;
+    let height : number = 2;
+    let depth  : number = 2;
+
+    let geometry : THREE.Geometry = new THREE.BoxGeometry(width, height, depth);
+    let material : THREE.Material = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
+
+    let center : THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0);
+    let mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(center.x, center.y, center.z);
+
+    scene.add(mesh);
+
+    // background plane
+    width  = 4;
+    height = 4;
+
+    geometry = new THREE.PlaneGeometry(width, height);
+    material = new THREE.MeshPhongMaterial({ color: 0x5555cc });
+
+    center = new THREE.Vector3(0.0, 0.0, 0.0);
+    mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(center.x, center.y, center.z);
 
     scene.add(mesh);
