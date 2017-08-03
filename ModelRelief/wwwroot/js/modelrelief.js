@@ -1343,7 +1343,7 @@ define("System/Logger", ["require", "exports"], function (require, exports) {
          * @param message Message text.
          * @param messageClass CSS class to be added to message.
          */
-        HTMLLogger.prototype.addMessage = function (message, messageClass) {
+        HTMLLogger.prototype.addMessageElement = function (message, messageClass) {
             var messageElement = document.createElement(this.messageTag);
             messageElement.textContent = message;
             messageElement.className = this.baseMessageClass + " " + messageClass;
@@ -1356,21 +1356,30 @@ define("System/Logger", ["require", "exports"], function (require, exports) {
          * @param errorMessage Error message text.
          */
         HTMLLogger.prototype.addErrorMessage = function (errorMessage) {
-            this.addMessage(errorMessage, MessageClass.Error);
+            this.addMessageElement(errorMessage, MessageClass.Error);
         };
         /**
          * Add a warning message to the log.
          * @param warningMessage Warning message text.
          */
         HTMLLogger.prototype.addWarningMessage = function (warningMessage) {
-            this.addMessage(warningMessage, MessageClass.Warning);
+            this.addMessageElement(warningMessage, MessageClass.Warning);
         };
         /**
          * Add an informational message to the log.
          * @param infoMessage Information message text.
          */
         HTMLLogger.prototype.addInfoMessage = function (infoMessage) {
-            this.addMessage(infoMessage, MessageClass.Info);
+            this.addMessageElement(infoMessage, MessageClass.Info);
+        };
+        /**
+         * Add a message to the log.
+         * @param message Information message text.
+         * @param color Optional color (black default).
+         */
+        HTMLLogger.prototype.addMessage = function (infoMessage, color) {
+            var messageElement = this.addMessageElement(infoMessage, MessageClass.Info);
+            messageElement.style.color = color ? color : 'black';
         };
         return HTMLLogger;
     }());
@@ -1566,17 +1575,13 @@ define("Workbench/DepthBuffer", ["require", "exports", "three", "Viewer/Trackbal
         var sceneDepth = maximum - minimum;
         var decimalPlaces = 2;
         var messageString = "Scene Depth = " + sceneDepth.toFixed(2) + " [Normalized] depth = " + depthNormalized.toFixed(decimalPlaces) + ", min = " + minimumNormalized.toFixed(decimalPlaces) + ", max = " + maximumNormalized.toFixed(decimalPlaces) + ", [Absolute] depth = " + depth.toFixed(decimalPlaces) + ", min = " + minimum.toFixed(decimalPlaces) + ", max = " + maximum.toFixed(decimalPlaces);
-        /*
-            let debugLog : HTMLDivElement = <HTMLDivElement> document.querySelector(`#debugLog`);
-        
-            let spanElement = document.createElement('span');
-            spanElement.textContent = messageString;
-            debugLog.appendChild(spanElement);
-        */
         var logger = new Logger_1.HTMLLogger('ul', 'li');
         logger.addErrorMessage('Error message');
         logger.addWarningMessage('Warning message');
         logger.addInfoMessage(messageString);
+        logger.addMessage('Black', 'black');
+        logger.addMessage('Pink', 'pink');
+        logger.addMessage('Lavender', 'lavender');
     }
     function initializeCanvas(id, resolution) {
         var canvas = document.querySelector("#" + id);

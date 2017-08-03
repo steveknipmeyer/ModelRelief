@@ -13,6 +13,8 @@ export interface Logger {
     addErrorMessage (errorMessage : string);
     addWarningMessage (warningMessage : string);
     addInfoMessage (infoMessage : string);
+
+    addMessage (infoMessage : string, color? : string);
 }
          
 enum MessageClass {
@@ -55,7 +57,7 @@ export class HTMLLogger implements Logger{
      * @param message Message text.
      * @param messageClass CSS class to be added to message.
      */
-    addMessage (message : string, messageClass : string) : HTMLElement {
+    addMessageElement (message : string, messageClass : string) : HTMLElement {
         
         let messageElement = document.createElement(this.messageTag);
         messageElement.textContent = message;
@@ -72,7 +74,7 @@ export class HTMLLogger implements Logger{
      */
     addErrorMessage (errorMessage : string) {
 
-        this.addMessage(errorMessage, MessageClass.Error);
+        this.addMessageElement(errorMessage, MessageClass.Error);
     }
 
     /**
@@ -81,7 +83,7 @@ export class HTMLLogger implements Logger{
      */
     addWarningMessage (warningMessage : string) {
 
-        this.addMessage(warningMessage, MessageClass.Warning);
+        this.addMessageElement(warningMessage, MessageClass.Warning);
     }
 
     /**
@@ -90,6 +92,17 @@ export class HTMLLogger implements Logger{
      */
     addInfoMessage (infoMessage : string) {
 
-        this.addMessage(infoMessage, MessageClass.Info);
+        this.addMessageElement(infoMessage, MessageClass.Info);
+    }
+
+    /**
+     * Add a message to the log.
+     * @param message Information message text.
+     * @param color Optional color (black default).
+     */
+    addMessage (infoMessage : string, color? : string) {
+
+        let messageElement = this.addMessageElement(infoMessage, MessageClass.Info);
+        messageElement.style.color = color ? color : 'black';
     }
 }

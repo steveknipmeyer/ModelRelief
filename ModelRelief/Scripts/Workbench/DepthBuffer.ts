@@ -264,6 +264,10 @@ function createDepthBuffer() {
     logger.addErrorMessage ('Error message');
     logger.addWarningMessage ('Warning message');
     logger.addInfoMessage (messageString);
+
+    logger.addMessage ('Black', 'black');
+    logger.addMessage ('Pink', 'pink');
+    logger.addMessage ('Lavender', 'lavender');
 }
 
 function initializeCanvas(id : string, resolution : number) : HTMLCanvasElement {
