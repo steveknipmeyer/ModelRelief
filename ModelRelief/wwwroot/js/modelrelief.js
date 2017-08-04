@@ -1537,6 +1537,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
     var postRenderer;
     var postCamera;
     var postScene;
+    var postMeshScene;
     var target;
     var encodedTarget;
     var meshCanvas;
@@ -1621,6 +1622,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         // Encoded RGBA Texture from Depth Texture
         meshEncodedTarget = new THREE.WebGLRenderTarget(Resolution.viewMesh, Resolution.viewMesh);
         setupMeshScene();
+        setupPostMeshScene();
         initializeLighting(meshScene);
     }
     function init() {
@@ -1715,8 +1717,8 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         meshMaterial.uniforms = {
             cameraNear: { value: modelCamera.near },
             cameraFar: { value: modelCamera.far },
-            tDiffuse: { value: meshTarget.texture },
-            tDepth: { value: meshTarget.depthTexture }
+            tDiffuse: { value: meshEncodedTarget.texture },
+            tDepth: { value: meshEncodedTarget.depthTexture }
         };
     }
     function setupMeshScene() {
@@ -1755,6 +1757,23 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         postScene = new THREE.Scene();
         postScene.add(postQuad);
     }
+    function setupPostMeshScene() {
+        var postMeshMaterial = new THREE.ShaderMaterial({
+            vertexShader: MR.shaderSource['DepthBufferVertexShader'],
+            fragmentShader: MR.shaderSource['DepthBufferFragmentShader'],
+            uniforms: {
+                designColor: { value: 0xC0C090 },
+                cameraNear: { value: modelCamera.near },
+                cameraFar: { value: modelCamera.far },
+                tDiffuse: { value: meshTarget.texture },
+                tDepth: { value: meshTarget.depthTexture }
+            }
+        });
+        var postMeshPlane = new THREE.PlaneGeometry(2, 2);
+        var postMeshQuad = new THREE.Mesh(postMeshPlane, postMeshMaterial);
+        postMeshScene = new THREE.Scene();
+        postMeshScene.add(postMeshQuad);
+    }
     function createDepthBuffer() {
         var logger = new Logger_2.HTMLLogger();
         // create depth texture
@@ -1780,6 +1799,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
     }
     function updateMeshMaterial() {
         meshRenderer.render(modelScene, modelCamera, meshTarget);
+        meshRenderer.render(postMeshScene, postCamera, meshEncodedTarget);
     }
     function initializeCanvas(id, resolution) {
         var canvas = document.querySelector("#" + id);

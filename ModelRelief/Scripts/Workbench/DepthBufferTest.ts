@@ -16,6 +16,7 @@ var postCanvas          : HTMLCanvasElement;
 var postRenderer        : THREE.WebGLRenderer;
 var postCamera          : THREE.OrthographicCamera;
 var postScene           : THREE.Scene;
+var postMeshScene       : THREE.Scene;
 var target              : THREE.WebGLRenderTarget;
 var encodedTarget       : THREE.WebGLRenderTarget;
 
@@ -134,6 +135,7 @@ function initializeMeshRenderer() {
     meshEncodedTarget = new THREE.WebGLRenderTarget(Resolution.viewMesh, Resolution.viewMesh);
 
     setupMeshScene();
+    setupPostMeshScene();
 
     initializeLighting(meshScene);
 }
@@ -269,8 +271,8 @@ function setMeshMaterialUnforms () {
     meshMaterial.uniforms = {
         cameraNear  :   { value: modelCamera.near },
         cameraFar   :   { value: modelCamera.far },
-        tDiffuse    :   { value: meshTarget.texture },
-        tDepth      :   { value: meshTarget.depthTexture }
+        tDiffuse    :   { value: meshEncodedTarget.texture },
+        tDepth      :   { value: meshEncodedTarget.depthTexture }
     }
 }
 
@@ -321,6 +323,28 @@ function setupPostScene() {
     postScene.add(postQuad);
 }
 
+function setupPostMeshScene() {
+
+    var postMeshMaterial = new THREE.ShaderMaterial({
+        
+        vertexShader:   MR.shaderSource['DepthBufferVertexShader'],
+        fragmentShader: MR.shaderSource['DepthBufferFragmentShader'],
+
+        uniforms: {
+            designColor :   { value: 0xC0C090},
+            cameraNear  :   { value: modelCamera.near },
+            cameraFar   :   { value: modelCamera.far },
+            tDiffuse    :   { value: meshTarget.texture },
+            tDepth      :   { value: meshTarget.depthTexture }
+        }
+    });
+    var postMeshPlane = new THREE.PlaneGeometry(2, 2);
+    var postMeshQuad  = new THREE.Mesh(postMeshPlane, postMeshMaterial);
+
+    postMeshScene = new THREE.Scene();
+    postMeshScene.add(postMeshQuad);
+}
+
 function createDepthBuffer() {
     
     let logger = new HTMLLogger();
@@ -358,6 +382,7 @@ function createDepthBuffer() {
 function updateMeshMaterial() {
 
     meshRenderer.render(modelScene, modelCamera, meshTarget);    
+    meshRenderer.render(postMeshScene, postCamera, meshEncodedTarget);    
 }  
 
 function initializeCanvas(id : string, resolution : number) : HTMLCanvasElement {
