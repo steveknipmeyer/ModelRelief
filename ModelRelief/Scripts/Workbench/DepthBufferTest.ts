@@ -24,6 +24,9 @@ var meshRenderer        : THREE.WebGLRenderer;
 var meshCamera          : THREE.PerspectiveCamera;
 var meshControls        : TrackballControls;
 var meshScene           : THREE.Scene;
+var meshMaterial        : THREE.ShaderMaterial;
+var meshTarget          : THREE.WebGLRenderTarget;
+var meshEncodedTarget   : THREE.WebGLRenderTarget;
 
 var supportsExtensions  : boolean = true;
 
@@ -71,6 +74,26 @@ function initializeModelRenderer() {
     initializeModelHelpers();
 }
 
+function constructDepthTextureRenderTarget(width : number, height : number) : THREE.WebGLRenderTarget {
+
+    // Model Scene -> (Render Texture, Depth Texture)
+    var renderTarget = new THREE.WebGLRenderTarget(width, height);
+
+    renderTarget.texture.format           = THREE.RGBAFormat;
+    renderTarget.texture.type             = THREE.UnsignedByteType;
+    renderTarget.texture.minFilter        = THREE.NearestFilter;
+    renderTarget.texture.magFilter        = THREE.NearestFilter;
+    renderTarget.texture.generateMipmaps  = false;
+
+    renderTarget.stencilBuffer            = false;
+
+    renderTarget.depthBuffer              = true;
+    renderTarget.depthTexture             = new THREE.DepthTexture(Resolution.textureDepthBuffer, Resolution.textureDepthBuffer);
+    renderTarget.depthTexture.type        = THREE.UnsignedIntType;
+    
+    return renderTarget;
+}
+
 function initializePostRenderer() {
 
     // DepthBuffer Renderer
@@ -83,19 +106,7 @@ function initializePostRenderer() {
     postCanvas.onclick = createDepthBuffer;
 
     // Model Scene -> (Render Texture, Depth Texture)
-    target = new THREE.WebGLRenderTarget(Resolution.viewPost, Resolution.viewPost);
-
-    target.texture.format           = THREE.RGBAFormat;
-    target.texture.type             = THREE.UnsignedByteType;
-    target.texture.minFilter        = THREE.NearestFilter;
-    target.texture.magFilter        = THREE.NearestFilter;
-    target.texture.generateMipmaps  = false;
-
-    target.stencilBuffer            = false;
-
-    target.depthBuffer              = true;
-    target.depthTexture             = new THREE.DepthTexture(Resolution.textureDepthBuffer, Resolution.textureDepthBuffer);
-    target.depthTexture.type        = THREE.UnsignedIntType;
+    target = constructDepthTextureRenderTarget(Resolution.viewPost, Resolution.viewPost);
 
     // Encoded RGBA Texture from Depth Texture
     encodedTarget = new THREE.WebGLRenderTarget(Resolution.viewPost, Resolution.viewPost);
@@ -116,8 +127,11 @@ function initializeMeshRenderer() {
 
     meshControls = new TrackballControls(meshCamera, meshRenderer.domElement);
 
-    // scene
-    meshScene = new THREE.Scene();
+    // Model Scene -> (Render Texture, Depth Texture)
+    meshTarget = constructDepthTextureRenderTarget(Resolution.viewMesh, Resolution.viewMesh);
+
+    // Encoded RGBA Texture from Depth Texture
+    meshEncodedTarget = new THREE.WebGLRenderTarget(Resolution.viewMesh, Resolution.viewMesh);
 
     setupMeshScene();
 
@@ -250,9 +264,30 @@ function setupBoxScene(theScene : THREE.Scene) {
     theScene.add(mesh);
 }
 
+function setMeshMaterialUnforms () {
+
+    meshMaterial.uniforms = {
+        cameraNear  :   { value: modelCamera.near },
+        cameraFar   :   { value: modelCamera.far },
+        tDiffuse    :   { value: meshTarget.texture },
+        tDepth      :   { value: meshTarget.depthTexture }
+    }
+}
+
 function setupMeshScene() {
 
-    setupTorusScene(meshScene);
+    meshMaterial = new THREE.ShaderMaterial({
+        
+        vertexShader:   MR.shaderSource['MeshVertexShader'],
+        fragmentShader: MR.shaderSource['MeshFragmentShader'],
+    });
+    setMeshMaterialUnforms();
+
+    var meshPlane = new THREE.PlaneGeometry(2, 2);
+    var meshQuad  = new THREE.Mesh(meshPlane, meshMaterial);
+
+    meshScene = new THREE.Scene();
+    meshScene.add(meshQuad);
 }
 
 function setupPostScene() {
@@ -287,7 +322,7 @@ function setupPostScene() {
 }
 
 function createDepthBuffer() {
-
+    
     let logger = new HTMLLogger();
 
     // create depth texture
@@ -315,7 +350,15 @@ function createDepthBuffer() {
     let decimalPlaces = 2;
     let messageString : string = `Scene Depth = ${depthBuffer.depth.toFixed(2)} [Normalized] depth = ${depthNormalized.toFixed(decimalPlaces)}, min = ${depthBuffer.minimumNormalized.toFixed(decimalPlaces)}, max = ${depthBuffer.maximumNormalized.toFixed(decimalPlaces)}, [Absolute] depth = ${depthBuffer.depth.toFixed(decimalPlaces)}, min = ${depthBuffer.minimum.toFixed(decimalPlaces)}, max = ${depthBuffer.maximum.toFixed(decimalPlaces)}`;
     logger.addMessage(messageString, 'blue');
+    
+    updateMeshMaterial();
+
 }
+
+function updateMeshMaterial() {
+
+    meshRenderer.render(modelScene, modelCamera, meshTarget);    
+}  
 
 function initializeCanvas(id : string, resolution : number) : HTMLCanvasElement {
     
