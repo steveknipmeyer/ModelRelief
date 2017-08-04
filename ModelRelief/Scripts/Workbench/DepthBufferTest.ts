@@ -6,25 +6,25 @@ import {DepthBuffer}            from 'DepthBuffer'
 import {MathLibrary}            from 'Math'
 import {Logger, HTMLLogger}     from 'Logger'
 
-var renderer            : THREE.WebGLRenderer;
-var postRenderer        : THREE.WebGLRenderer;
-var controls            : TrackballControls;
-var scene               : THREE. Scene;
-var postScene           : THREE.Scene;
-var camera              : THREE.PerspectiveCamera;
-var postCamera          : THREE.OrthographicCamera;
-
 var modelCanvas         : HTMLCanvasElement;
+var modelRenderer       : THREE.WebGLRenderer;
+var modelCamera         : THREE.PerspectiveCamera;
+var modelControls       : TrackballControls;
+var modelScene          : THREE. Scene;
 
+var postCanvas          : HTMLCanvasElement;
+var postRenderer        : THREE.WebGLRenderer;
+var postCamera          : THREE.OrthographicCamera;
+var postScene           : THREE.Scene;
 var target              : THREE.WebGLRenderTarget;
-var depthBufferCanvas   : HTMLCanvasElement;
+var encodedTarget       : THREE.WebGLRenderTarget;
 
-var supportsExtensions   : boolean = true;
+var supportsExtensions  : boolean = true;
 
 enum Resolution {
-    viewModel          = 512,
-    viewDepthBuffer    = 512,
-    textureDepthBuffer = 512
+    viewModel          = 256,
+    viewDepthBuffer    = 256,
+    textureDepthBuffer = 256
 }
 
 init();
@@ -38,31 +38,43 @@ function verifyExtensions(renderer : THREE.WebGLRenderer) : boolean {
     return true;
 }
 
-function init() {
+function initializeModelRenderer() {
 
-    // Model Renderer
     modelCanvas = initializeCanvas('modelCanvas', Resolution.viewModel);
-    renderer = new THREE.WebGLRenderer( {canvas : modelCanvas, logarithmicDepthBuffer : true});
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(Resolution.viewModel, Resolution.viewModel);
+    modelRenderer = new THREE.WebGLRenderer( {canvas : modelCanvas, logarithmicDepthBuffer : true});
+    modelRenderer.setPixelRatio(window.devicePixelRatio);
+    modelRenderer.setSize(Resolution.viewModel, Resolution.viewModel);
 
-    supportsExtensions = verifyExtensions(renderer);
+    supportsExtensions = verifyExtensions(modelRenderer);
+
+    modelCamera = new THREE.PerspectiveCamera(70, Resolution.viewModel / Resolution.viewModel, .01, 50);
+    modelCamera.position.z = 5;
+
+    modelControls = new TrackballControls(modelCamera, modelRenderer.domElement);
+
+    // scene
+    modelScene = new THREE.Scene();
+
+//  setupModelTorusScene();
+//  setupModelSphereScene();
+    setupModelBoxScene();
+
+    initializeModelLighting();
+    initializeModelHelpers();
+}
+
+function initializePostRenderer() {
 
     // DepthBuffer Renderer
-    depthBufferCanvas = initializeCanvas('depthBufferCanvas', Resolution.viewDepthBuffer);
-    postRenderer = new THREE.WebGLRenderer({ canvas: depthBufferCanvas });
+    postCanvas = initializeCanvas('depthBufferCanvas', Resolution.viewDepthBuffer);
+    postRenderer = new THREE.WebGLRenderer({ canvas: postCanvas });
     postRenderer.setPixelRatio(window.devicePixelRatio);
     postRenderer.setSize(Resolution.viewDepthBuffer, Resolution.viewDepthBuffer);
 
     // click handler
-    depthBufferCanvas.onclick = createDepthBuffer;
+    postCanvas.onclick = createDepthBuffer;
 
-    camera = new THREE.PerspectiveCamera(70, Resolution.viewModel / Resolution.viewModel, .01, 50);
-    camera.position.z = 5;
-
-    controls = new TrackballControls(camera, renderer.domElement);
-
-    // Create a multi render target
+    // Model Scene -> (Render Texture, Depth Texture)
     target = new THREE.WebGLRenderTarget(Resolution.viewDepthBuffer, Resolution.viewDepthBuffer);
 
     target.texture.format           = THREE.RGBAFormat;
@@ -77,81 +89,68 @@ function init() {
     target.depthTexture             = new THREE.DepthTexture(Resolution.textureDepthBuffer, Resolution.textureDepthBuffer);
     target.depthTexture.type        = THREE.UnsignedIntType;
 
-    // scene
-    scene = new THREE.Scene();
-
-//  setupTorusScene();
-//  setupSphereScene();
-    setupBoxScene();
-
-    initializeLighting();
-    initializeHelpers();
+    // Encoded RGBA Texture from Depth Texture
+    encodedTarget = new THREE.WebGLRenderTarget(Resolution.viewDepthBuffer, Resolution.viewDepthBuffer);
 
     // Setup post-processing step
-    setupPost();
+    setupPostScene();
+}
+
+function initializeMeshRenderer() {
+}
+
+function init() {
+    
+    initializeModelRenderer();
+    initializePostRenderer();
+    initializeMeshRenderer();
 
     onWindowResize();
     window.addEventListener('resize', onWindowResize, false);
 }
 
-function setupPost() {
+function onWindowResize() {
 
-    // Setup post processing stage
-    let left: number      =  -1;
-    let right: number     =   1;
-    let top: number       =   1;
-    let bottom: number    =  -1;
-    let near: number      =   0;
-    let far: number       =   1;
-    postCamera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
+    let aspect : number = Resolution.viewModel / Resolution.viewModel;
+    modelCamera.aspect = aspect;
+    modelCamera.updateProjectionMatrix();
 
-    var postMaterial = new THREE.ShaderMaterial({
-        
-        vertexShader:   MR.shaderSource['DepthBufferVertexShader'],
-        fragmentShader: MR.shaderSource['DepthBufferFragmentShader'],
+    modelRenderer.setSize(Resolution.viewModel, Resolution.viewModel);
 
-        uniforms: {
-            designColor :   { value: 0xC0C090},
-            cameraNear  :   { value: camera.near },
-            cameraFar   :   { value: camera.far },
-            tDiffuse    :   { value: target.texture },
-            tDepth      :   { value: target.depthTexture }
-        }
-    });
-    var postPlane = new THREE.PlaneGeometry(2, 2);
-    var postQuad  = new THREE.Mesh(postPlane, postMaterial);
-
-    postScene = new THREE.Scene();
-    postScene.add(postQuad);
+    // size target DepthTexture
+    var depthBufferPixelRatio = postRenderer.getPixelRatio();
+    target.setSize(postCanvas.width * depthBufferPixelRatio, postCanvas.height * depthBufferPixelRatio);
+    postRenderer.setSize(postCanvas.width, postCanvas.height);
 }
+
 /**
   * Adds lighting to the scene
 */
-function initializeLighting() {
+function initializeModelLighting() {
 
     let ambientLight = new THREE.AmbientLight(0x404040);
-    scene.add(ambientLight);
+    modelScene.add(ambientLight);
 
     let directionalLight1 = new THREE.DirectionalLight(0xC0C0C0);
     directionalLight1.position.set(50, 50, 50);
-    scene.add(directionalLight1);
+    modelScene.add(directionalLight1);
 }
 
 /**
  * Adds helpers to the scene to visualize camera, coordinates, etc.
 */
-function initializeHelpers() {
+function initializeModelHelpers() {
 
-    var cameraHelper = new THREE.CameraHelper(camera );
+    var cameraHelper = new THREE.CameraHelper(modelCamera );
     cameraHelper.visible = true;
 //  scene.add(cameraHelper);
 
     var axisHelper = new THREE.AxisHelper(2);
     axisHelper.visible = true;
-    scene.add(axisHelper);
+    modelScene.add(axisHelper);
 }
 
-function setupTorusScene() {
+function setupModelTorusScene() {
 
     // Setup some geometries
     var geometry = new THREE.TorusKnotGeometry(1, 0.3, 128, 64);
@@ -174,11 +173,11 @@ function setupTorusScene() {
         );
         mesh.rotation.set(Math.random(), Math.random(), Math.random());
 
-        scene.add(mesh);
+        modelScene.add(mesh);
     }
 }
 
-function setupSphereScene() {
+function setupModelSphereScene() {
 
     // Setup some geometries
     let radius  : number = 2;
@@ -191,10 +190,10 @@ function setupSphereScene() {
     let mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(center.x, center.y, center.z);
 
-    scene.add(mesh);
+    modelScene.add(mesh);
 }
 
-function setupBoxScene() {
+function setupModelBoxScene() {
 
     // box
     let width  : number = 2;
@@ -208,7 +207,7 @@ function setupBoxScene() {
     let mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(center.x, center.y, center.z);
 
-    scene.add(mesh);
+    modelScene.add(mesh);
 
     // background plane
     width  = 4;
@@ -221,21 +220,38 @@ function setupBoxScene() {
     mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(center.x, center.y, center.z);
 
-    scene.add(mesh);
+    modelScene.add(mesh);
 }
 
-function onWindowResize() {
+function setupPostScene() {
 
-    let aspect : number = Resolution.viewModel / Resolution.viewModel;
-    camera.aspect = aspect;
-    camera.updateProjectionMatrix();
+    // Setup post processing stage
+    let left: number      =  -1;
+    let right: number     =   1;
+    let top: number       =   1;
+    let bottom: number    =  -1;
+    let near: number      =   0;
+    let far: number       =   1;
+    postCamera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
 
-    renderer.setSize(Resolution.viewModel, Resolution.viewModel);
+    var postMaterial = new THREE.ShaderMaterial({
+        
+        vertexShader:   MR.shaderSource['DepthBufferVertexShader'],
+        fragmentShader: MR.shaderSource['DepthBufferFragmentShader'],
 
-    // size target DepthTexture
-    var depthBufferPixelRatio = postRenderer.getPixelRatio();
-    target.setSize(depthBufferCanvas.width * depthBufferPixelRatio, depthBufferCanvas.height * depthBufferPixelRatio);
-    postRenderer.setSize(depthBufferCanvas.width, depthBufferCanvas.height);
+        uniforms: {
+            designColor :   { value: 0xC0C090},
+            cameraNear  :   { value: modelCamera.near },
+            cameraFar   :   { value: modelCamera.far },
+            tDiffuse    :   { value: target.texture },
+            tDepth      :   { value: target.depthTexture }
+        }
+    });
+    var postPlane = new THREE.PlaneGeometry(2, 2);
+    var postQuad  = new THREE.Mesh(postPlane, postMaterial);
+
+    postScene = new THREE.Scene();
+    postScene.add(postQuad);
 }
 
 function createDepthBuffer() {
@@ -243,7 +259,7 @@ function createDepthBuffer() {
     let logger = new HTMLLogger();
 
     // create depth texture
-    postRenderer.render(scene, camera, target);    
+    postRenderer.render(modelScene, modelCamera, target);    
 //  let primaryImageBuffer =  new Uint8Array(Resolution.viewModel * Resolution.viewModel * 4).fill(0);
 //  renderer.readRenderTargetPixels(target, 0, 0, Resolution.viewModel, Resolution.viewModel, primaryImageBuffer);
 
@@ -251,20 +267,21 @@ function createDepthBuffer() {
     postRenderer.render(postScene, postCamera);    
 
     // write depth values as RGBA texture
-    let postTarget : THREE.WebGLRenderTarget = new THREE.WebGLRenderTarget(Resolution.viewDepthBuffer, Resolution.viewDepthBuffer);
-    postRenderer.render(postScene, postCamera, postTarget); 
+    // target.depthTexture -> postTarget (encoded RGBA texture)
+    postRenderer.render(postScene, postCamera, encodedTarget); 
 
     // decode RGBA texture into depth floats
     let depthBufferRaw =  new Uint8Array(Resolution.viewDepthBuffer * Resolution.viewDepthBuffer * 4).fill(0);
-    postRenderer.readRenderTargetPixels(postTarget, 0, 0, Resolution.viewDepthBuffer, Resolution.viewDepthBuffer, depthBufferRaw);
+    postRenderer.readRenderTargetPixels(encodedTarget, 0, 0, Resolution.viewDepthBuffer, Resolution.viewDepthBuffer, depthBufferRaw);
 
-    let depthBuffer = new DepthBuffer(depthBufferRaw, Resolution.viewDepthBuffer, Resolution.viewDepthBuffer, camera.near, camera.far);
+    let depthBuffer = new DepthBuffer(depthBufferRaw, Resolution.viewDepthBuffer, Resolution.viewDepthBuffer, modelCamera.near, modelCamera.far);
     
     let middle = Resolution.viewDepthBuffer / 2;
     let depthNormalized = depthBuffer.valueNormalized(middle, middle);
+    logger.addMessage(`${depthNormalized}`, 'red');
+
     let decimalPlaces = 2;
     let messageString : string = `Scene Depth = ${depthBuffer.depth.toFixed(2)} [Normalized] depth = ${depthNormalized.toFixed(decimalPlaces)}, min = ${depthBuffer.minimumNormalized.toFixed(decimalPlaces)}, max = ${depthBuffer.maximumNormalized.toFixed(decimalPlaces)}, [Absolute] depth = ${depthBuffer.depth.toFixed(decimalPlaces)}, min = ${depthBuffer.minimum.toFixed(decimalPlaces)}, max = ${depthBuffer.maximum.toFixed(decimalPlaces)}`;
-
     logger.addMessage(messageString, 'blue');
 }
 
@@ -294,8 +311,8 @@ function animate() {
         return;
 
     requestAnimationFrame(animate);
-    controls.update();
+    modelControls.update();
 
     // render scene into target
-    renderer.render(scene, camera); 
+    modelRenderer.render(modelScene, modelCamera); 
 }
