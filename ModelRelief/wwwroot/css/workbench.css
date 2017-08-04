@@ -3,6 +3,11 @@
     Workbench (Experimental)
 ------------------------*/
 
+/*Bootstrap override*/
+.container {
+    width : 1800px;
+}
+
 .depth {
     border-width : 1px;
     border-style : solid;

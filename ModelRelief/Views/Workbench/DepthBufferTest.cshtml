@@ -1,9 +1,10 @@
 ﻿@model DepthBufferTestViewModel
 
 <body>
-    <div >
+    <div id="depthBufferContainer" >
         <canvas id="modelCanvas" class="depth"></canvas>
-        <canvas id="depthBufferCanvas" class="depth""></canvas>
+        <canvas id="postCanvas" class="depth""></canvas>
+        <canvas id="meshCanvas" class="depth" "></canvas>
     </div>
     <div>
         <form method="post" asp-antiforgery="true">
