@@ -101,7 +101,7 @@ void main() {
 
 //  gl_FragColor = texture2D(tDiffuse, vUV);
 
-    gl_FragColor = texture2D(tDepth, vUV);
+    gl_FragColor = texture2D(tDepth, vUV); 
     gl_FragColor.a = 1.0;
 }
 

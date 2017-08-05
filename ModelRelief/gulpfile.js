@@ -241,13 +241,6 @@ gulp.task('buildShaders', function() {
 });
 
 /// <summary>
-/// Debug task
-/// </summary>
-gulp.task('debug', function () {
-  console.log (siteConfig.libRoot);
-});
-
-/// <summary>
 /// Default build task
 /// </summary>
 gulp.task('default', function () {
@@ -257,3 +250,10 @@ gulp.task('default', function () {
 //-----------------------------------------------------------------------------
 //  Watch and Build Tasks
 //-----------------------------------------------------------------------------
+/// <summary>
+/// Watch development files for changes and build.
+/// </summary>
+gulp.task('serve', function () {
+    
+  gulp.watch([sourceConfig.shaders + '*.glsl'],                   ['buildShaders']);
+});
