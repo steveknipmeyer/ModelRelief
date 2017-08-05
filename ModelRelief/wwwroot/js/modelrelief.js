@@ -1569,10 +1569,10 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
     var supportsWebGLExtensions = true;
     var logger;
     var uselogDepthBuffer = false;
-    var cameraNearPlane = 0.01;
-    var cameraFarPlane = 50.00;
-    var fieldOfView = 70;
     var cameraZPosition = 4;
+    var cameraNearPlane = 2;
+    var cameraFarPlane = 10.0;
+    var fieldOfView = 70;
     var Resolution;
     (function (Resolution) {
         Resolution[Resolution["viewModel"] = 512] = "viewModel";
@@ -1917,19 +1917,23 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         var depthBuffer = new DepthBuffer_1.DepthBuffer(depthBufferRGBA, width, height, camera.near, camera.far);
         var middle = width / 2;
         var decimalPlaces = 5;
-        var headerStyle = "font-family : monospace; font-weight : bold; color : red; font-size : 18px";
+        var headerStyle = "font-family : monospace; font-weight : bold; color : blue; font-size : 18px";
         var messageStyle = "font-family : monospace; color : black; font-size : 14px";
         logger.addEmptyLine();
-        logger.addMessage("Center Depth (Normalized) = " + depthBuffer.valueNormalized(middle, middle).toFixed(decimalPlaces), messageStyle);
-        logger.addMessage("Center Depth (Absolute)   = " + depthBuffer.value(middle, middle), messageStyle);
+        logger.addMessage('Camera Properties', headerStyle);
+        logger.addMessage("Near Plane = " + camera.near, messageStyle);
+        logger.addMessage("Far Plane  = " + camera.far, messageStyle);
+        logger.addMessage("Clip Range = " + (camera.far - camera.near), messageStyle);
         logger.addEmptyLine();
         logger.addMessage('Normalized', headerStyle);
-        logger.addMessage("Depth   = " + depthBuffer.depthNormalized.toFixed(decimalPlaces), messageStyle);
+        logger.addMessage("Center Depth = " + depthBuffer.valueNormalized(middle, middle).toFixed(decimalPlaces), messageStyle);
+        logger.addMessage("Z Depth = " + depthBuffer.depthNormalized.toFixed(decimalPlaces), messageStyle);
         logger.addMessage("Minimum = " + depthBuffer.minimumNormalized.toFixed(decimalPlaces), messageStyle);
         logger.addMessage("Maximum = " + depthBuffer.maximumNormalized.toFixed(decimalPlaces), messageStyle);
         logger.addEmptyLine();
-        logger.addMessage('Absolute', headerStyle);
-        logger.addMessage("Depth   = " + depthBuffer.depth.toFixed(decimalPlaces), messageStyle);
+        logger.addMessage('Model Units', headerStyle);
+        logger.addMessage("Center Depth = " + depthBuffer.value(middle, middle).toFixed(decimalPlaces), messageStyle);
+        logger.addMessage("Z Depth = " + depthBuffer.depth.toFixed(decimalPlaces), messageStyle);
         logger.addMessage("Minimum = " + depthBuffer.minimum.toFixed(decimalPlaces), messageStyle);
         logger.addMessage("Maximum = " + depthBuffer.maximum.toFixed(decimalPlaces), messageStyle);
     }

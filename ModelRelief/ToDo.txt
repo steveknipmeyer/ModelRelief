@@ -17,6 +17,14 @@ Why does the shader code not reload?
 Add types to all methods.
     TrackballControls
     OBJLoader
+// ------------------------------------------------------------------------// 
+//      Depth Buffer Notes                                                 //
+// ------------------------------------------------------------------------//
+Precision is substantially improved by moving the Near plane as close to the model as possible.
+    Pulling in the Far plane does not seem to improve the precision.
+
+The range of the depth buffer is based on the distance between the Near and Far planes. 
+    If the Near and Far planes bound the model, the range will be [0.1].
 
 // ------------------------------------------------------------------------// 
 //      Database Design                                                    //
