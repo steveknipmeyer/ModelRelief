@@ -30,6 +30,7 @@ var meshTarget          : THREE.WebGLRenderTarget;
 var meshEncodedTarget   : THREE.WebGLRenderTarget;
 
 var supportsWebGLExtensions : boolean = true;
+var logger                  : Logger;
 
 var uselogDepthBuffer   : boolean = true;
 var cameraNearPlane     : number =  0.01;
@@ -109,7 +110,7 @@ function initializePostRenderer() {
     postRenderer.setSize(Resolution.viewPost, Resolution.viewPost);
 
     // click handler
-    postCanvas.onclick = createDepthBuffer;
+    postCanvas.onclick = onClick;
 
     // Model Scene -> (Render Texture, Depth Texture)
     target = constructDepthTextureRenderTarget(Resolution.viewPost, Resolution.viewPost);
@@ -147,6 +148,8 @@ function initializeMeshRenderer() {
 
 function init() {
     
+    logger = new HTMLLogger();
+
     initializeModelRenderer();
     initializePostRenderer();
     initializeMeshRenderer();
@@ -376,8 +379,6 @@ function unsignedBytesToRGBA (buffer : Uint8Array, width: number, height : numbe
 
 function analyzeRenderBuffer (renderer: THREE.WebGLRenderer, renderTarget : THREE.RenderTarget, width : number, height : number, color : string) {
 
-    let logger = new HTMLLogger();
-
     let renderBuffer =  new Uint8Array(width * height * 4).fill(0);
     renderer.readRenderTargetPixels(renderTarget, 0, 0, width, height, renderBuffer);
 
@@ -386,8 +387,6 @@ function analyzeRenderBuffer (renderer: THREE.WebGLRenderer, renderTarget : THRE
 }
 
 function analyzeDepthBuffer (renderer: THREE.WebGLRenderer, encodedRenderTarget : THREE.RenderTarget, width : number, height : number, color : string, camera : THREE.PerspectiveCamera) {
-
-    let logger = new HTMLLogger();
 
     // decode RGBA texture into depth floats
     let depthBufferRGBA =  new Uint8Array(width * height * 4).fill(0);
@@ -410,35 +409,42 @@ function analyzeTargets (renderer: THREE.WebGLRenderer, renderTarget : THREE.Ren
     analyzeDepthBuffer(renderer,  encodedRenderTarget, width, height, color, camera);
 }
 
-function createDepthBuffer() {
+function createDepthBuffer(
+        renderer        : THREE.WebGLRenderer, 
+        width           : number,
+        height          : number,
+        modelScene      : THREE.Scene, 
+        postScene       : THREE.Scene, 
+        modelCamera     : THREE.PerspectiveCamera, 
+        postCamera      : THREE.OrthographicCamera, 
+        renderTarget    : THREE.RenderTarget, 
+        encodedTarget   : THREE.RenderTarget,
+        color           : string) {
 
-    let logger = new HTMLLogger();
-    logger.clearLog();
+    // N.B. Danger! Parameters hide global variables...
 
-    // target.texture      : render buffer
-    // target.depthTexture : depth buffer
-    postRenderer.render(modelScene, modelCamera, target);    
+    // renderTarget.texture      : render buffer
+    // renderTarget.depthTexture : depth buffer
+    renderer.render(modelScene, modelCamera, renderTarget);    
     
     // (optional) preview encoded RGBA texture; drawn by shader but not persisted
-    postRenderer.render(postScene, postCamera);    
+    renderer.render(postScene, postCamera);    
 
     // Persist encoded RGBA texture; calculated from depth buffer
     // encodedTarget.texture      : encoded RGBA texture
     // encodedTarget.depthTexture : null
-    postRenderer.render(postScene, postCamera, encodedTarget); 
+    renderer.render(postScene, postCamera, encodedTarget); 
 
-    analyzeTargets (postRenderer, target, encodedTarget, modelCamera, Resolution.viewPost, Resolution.viewPost, 'red');
-    
-    updateMeshMaterial();
+    analyzeTargets (renderer, renderTarget, encodedTarget, modelCamera, width, height, color);
 }
 
-function updateMeshMaterial() {
+function onClick() {
 
-    meshRenderer.render(modelScene, modelCamera, meshTarget);    
-    meshRenderer.render(meshPostScene, postCamera, meshEncodedTarget);    
+    logger.clearLog();
 
-    analyzeTargets(meshRenderer, meshTarget, meshEncodedTarget, modelCamera, Resolution.viewMesh, Resolution.viewMesh, 'blue');
-}  
+    createDepthBuffer (postRenderer, Resolution.viewPost, Resolution.viewPost, modelScene, postScene,     modelCamera, postCamera, target,     encodedTarget,     'red');
+    createDepthBuffer (meshRenderer, Resolution.viewMesh, Resolution.viewMesh, modelScene, meshPostScene, modelCamera, postCamera, meshTarget, meshEncodedTarget, 'blue');
+}
 
 function initializeCanvas(id : string, resolution : number) : HTMLCanvasElement {
     

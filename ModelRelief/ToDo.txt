@@ -4,9 +4,11 @@
 
 Add watch task to gulp.
     Shader creation....
+Add comments to DepthBufferTest.
+
+Add support for sampling arbitrary pixels in the postCanvas.
 
 Implement unpackRGBAToDepth in DepthBuffer.ts.
-Add support for sampling arbitrary pixels in the postCanvas.
 
 Create a 16 bit PNG from the depth data.
 

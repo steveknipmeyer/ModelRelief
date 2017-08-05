@@ -1558,6 +1558,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
     var meshTarget;
     var meshEncodedTarget;
     var supportsWebGLExtensions = true;
+    var logger;
     var uselogDepthBuffer = true;
     var cameraNearPlane = 0.01;
     var cameraFarPlane = 50.00;
@@ -1614,7 +1615,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         postRenderer.setPixelRatio(window.devicePixelRatio);
         postRenderer.setSize(Resolution.viewPost, Resolution.viewPost);
         // click handler
-        postCanvas.onclick = createDepthBuffer;
+        postCanvas.onclick = onClick;
         // Model Scene -> (Render Texture, Depth Texture)
         target = constructDepthTextureRenderTarget(Resolution.viewPost, Resolution.viewPost);
         // Encoded RGBA Texture from Depth Texture
@@ -1639,6 +1640,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         initializeLighting(meshScene);
     }
     function init() {
+        logger = new Logger_2.HTMLLogger();
         initializeModelRenderer();
         initializePostRenderer();
         initializeMeshRenderer();
@@ -1802,17 +1804,15 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         var gValue = buffer[offset + 1].toString(16);
         var bValue = buffer[offset + 2].toString(16);
         var aValue = buffer[offset + 3].toString(16);
-        return "0x" + rValue + gValue + bValue + " " + aValue;
+        return "#" + rValue + gValue + bValue + " " + aValue;
     }
     function analyzeRenderBuffer(renderer, renderTarget, width, height, color) {
-        var logger = new Logger_2.HTMLLogger();
         var renderBuffer = new Uint8Array(width * height * 4).fill(0);
         renderer.readRenderTargetPixels(renderTarget, 0, 0, width, height, renderBuffer);
         var messageString = "RGBA[0, 0] = " + unsignedBytesToRGBA(renderBuffer, width, height, 0, 0);
         logger.addMessage(messageString, color);
     }
     function analyzeDepthBuffer(renderer, encodedRenderTarget, width, height, color, camera) {
-        var logger = new Logger_2.HTMLLogger();
         // decode RGBA texture into depth floats
         var depthBufferRGBA = new Uint8Array(width * height * 4).fill(0);
         renderer.readRenderTargetPixels(encodedRenderTarget, 0, 0, width, height, depthBufferRGBA);
@@ -1828,25 +1828,23 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         analyzeRenderBuffer(renderer, renderTarget, width, height, color);
         analyzeDepthBuffer(renderer, encodedRenderTarget, width, height, color, camera);
     }
-    function createDepthBuffer() {
-        var logger = new Logger_2.HTMLLogger();
-        logger.clearLog();
-        // target.texture      : render buffer
-        // target.depthTexture : depth buffer
-        postRenderer.render(modelScene, modelCamera, target);
+    function createDepthBuffer(renderer, width, height, modelScene, postScene, modelCamera, postCamera, renderTarget, encodedTarget, color) {
+        // N.B. Danger! Parameters hide global variables...
+        // renderTarget.texture      : render buffer
+        // renderTarget.depthTexture : depth buffer
+        renderer.render(modelScene, modelCamera, renderTarget);
         // (optional) preview encoded RGBA texture; drawn by shader but not persisted
-        postRenderer.render(postScene, postCamera);
+        renderer.render(postScene, postCamera);
         // Persist encoded RGBA texture; calculated from depth buffer
         // encodedTarget.texture      : encoded RGBA texture
         // encodedTarget.depthTexture : null
-        postRenderer.render(postScene, postCamera, encodedTarget);
-        analyzeTargets(postRenderer, target, encodedTarget, modelCamera, Resolution.viewPost, Resolution.viewPost, 'red');
-        updateMeshMaterial();
+        renderer.render(postScene, postCamera, encodedTarget);
+        analyzeTargets(renderer, renderTarget, encodedTarget, modelCamera, width, height, color);
     }
-    function updateMeshMaterial() {
-        meshRenderer.render(modelScene, modelCamera, meshTarget);
-        meshRenderer.render(meshPostScene, postCamera, meshEncodedTarget);
-        analyzeTargets(meshRenderer, meshTarget, meshEncodedTarget, modelCamera, Resolution.viewMesh, Resolution.viewMesh, 'blue');
+    function onClick() {
+        logger.clearLog();
+        createDepthBuffer(postRenderer, Resolution.viewPost, Resolution.viewPost, modelScene, postScene, modelCamera, postCamera, target, encodedTarget, 'red');
+        createDepthBuffer(meshRenderer, Resolution.viewMesh, Resolution.viewMesh, modelScene, meshPostScene, modelCamera, postCamera, meshTarget, meshEncodedTarget, 'blue');
     }
     function initializeCanvas(id, resolution) {
         var canvas = document.querySelector("#" + id);
