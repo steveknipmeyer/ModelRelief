@@ -36,7 +36,7 @@ var uselogDepthBuffer   : boolean = false;
 var cameraZPosition     : number = 4
 var cameraNearPlane     : number = 2;
 var cameraFarPlane      : number = 10.0;
-var fieldOfView         : number = 70;
+var fieldOfView         : number = 37;              // https://www.nikonians.org/reviews/fov-tables
 
 enum Resolution {
     viewModel          = 512,
@@ -81,12 +81,12 @@ function initializeModelRenderer() {
     // scene
     modelScene = new THREE.Scene();
 
-//  setupTorusScene(modelScene);
+    setupTorusScene(modelScene);
 //  setupSphereScene(modelScene);
     setupBoxScene(modelScene);
 
     initializeLighting(modelScene);
-    initializeModelHelpers(modelScene, null, true);
+    initializeModelHelpers(modelScene, null, false);
 }
 
 /**
@@ -177,6 +177,8 @@ function init() {
 
     onWindowResize();
     window.addEventListener('resize', onWindowResize, false);
+
+    onClick();
 }
 
 /**
@@ -305,7 +307,6 @@ function setupSphereScene(scene : THREE.Scene) {
     let geometry = new THREE.SphereGeometry(radius, segments, segments);
 
     let material = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
-//  let material = new THREE.MeshDepthMaterial();
 
     let mesh = new THREE.Mesh(geometry, material);
     let center : THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0);
@@ -315,7 +316,7 @@ function setupSphereScene(scene : THREE.Scene) {
 }
 
 /**
- * Add a s test box to a scene.
+ * Add a test box to a scene.
  * @param scene Target scene.
  */
 function setupBoxScene(scene : THREE.Scene) {
@@ -334,16 +335,23 @@ function setupBoxScene(scene : THREE.Scene) {
     mesh.position.set(center.x, center.y, center.z);
 
     scene.add(mesh);
+}
+
+/**
+ * Adds a backgroun plane at the origin.
+ * @param scene Target scene.
+ */
+function addBackgroundPlane (scene : THREE.Scene) {
 
     // background plane
-    width  = 4;
-    height = 4;
+    let width  = 4;
+    let height = 4;
 
-    geometry = new THREE.PlaneGeometry(width, height);
-    material = new THREE.MeshPhongMaterial({ color: 0x5555cc });
+    let geometry = new THREE.PlaneGeometry(width, height);
+    let material = new THREE.MeshPhongMaterial({ color: 0x5555cc });
 
-    mesh = new THREE.Mesh(geometry, material);
-    center = new THREE.Vector3(0.0, 0.0, 0.0);
+    let mesh = new THREE.Mesh(geometry, material);
+    let center = new THREE.Vector3(0.0, 0.0, 0.0);
     mesh.position.set(center.x, center.y, center.z);
 
     scene.add(mesh);

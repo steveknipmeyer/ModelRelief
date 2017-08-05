@@ -1572,7 +1572,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
     var cameraZPosition = 4;
     var cameraNearPlane = 2;
     var cameraFarPlane = 10.0;
-    var fieldOfView = 70;
+    var fieldOfView = 37; // https://www.nikonians.org/reviews/fov-tables
     var Resolution;
     (function (Resolution) {
         Resolution[Resolution["viewModel"] = 512] = "viewModel";
@@ -1605,11 +1605,11 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         modelControls = new TrackballControls_2.TrackballControls(modelCamera, modelRenderer.domElement);
         // scene
         modelScene = new THREE.Scene();
-        //  setupTorusScene(modelScene);
+        setupTorusScene(modelScene);
         //  setupSphereScene(modelScene);
         setupBoxScene(modelScene);
         initializeLighting(modelScene);
-        initializeModelHelpers(modelScene, null, true);
+        initializeModelHelpers(modelScene, null, false);
     }
     /**
      * Constructs a render target <with a depth texture buffer>.
@@ -1676,6 +1676,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         initializeMeshRenderer();
         onWindowResize();
         window.addEventListener('resize', onWindowResize, false);
+        onClick();
     }
     /**
      * Updates a renderer target properties.
@@ -1776,14 +1777,13 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         var segments = 64;
         var geometry = new THREE.SphereGeometry(radius, segments, segments);
         var material = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
-        //  let material = new THREE.MeshDepthMaterial();
         var mesh = new THREE.Mesh(geometry, material);
         var center = new THREE.Vector3(0.0, 0.0, 0.0);
         mesh.position.set(center.x, center.y, center.z);
         scene.add(mesh);
     }
     /**
-     * Add a s test box to a scene.
+     * Add a test box to a scene.
      * @param scene Target scene.
      */
     function setupBoxScene(scene) {
@@ -1798,13 +1798,19 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         var center = new THREE.Vector3(0.0, 0.0, 0.0);
         mesh.position.set(center.x, center.y, center.z);
         scene.add(mesh);
+    }
+    /**
+     * Adds a backgroun plane at the origin.
+     * @param scene Target scene.
+     */
+    function addBackgroundPlane(scene) {
         // background plane
-        width = 4;
-        height = 4;
-        geometry = new THREE.PlaneGeometry(width, height);
-        material = new THREE.MeshPhongMaterial({ color: 0x5555cc });
-        mesh = new THREE.Mesh(geometry, material);
-        center = new THREE.Vector3(0.0, 0.0, 0.0);
+        var width = 4;
+        var height = 4;
+        var geometry = new THREE.PlaneGeometry(width, height);
+        var material = new THREE.MeshPhongMaterial({ color: 0x5555cc });
+        var mesh = new THREE.Mesh(geometry, material);
+        var center = new THREE.Vector3(0.0, 0.0, 0.0);
         mesh.position.set(center.x, center.y, center.z);
         scene.add(mesh);
     }

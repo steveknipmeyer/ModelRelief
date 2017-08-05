@@ -28,10 +28,7 @@ uniform float       cameraFar;                  // far clipping plane
 uniform sampler2D   tDiffuse;                   // diffuse texture 
 uniform sampler2D   tDepth;                     // depth texture
 
-varying vec2 vUV;								// UV coordinates of vertex
-varying vec3 vNormal;							// vertex normal
-varying vec3 vWorldPosition;					// vertex world position
-varying vec3 vViewPosition;						// vertex view position (flipped)
+varying vec2 vUV;                               // UV coordinates of vertex
 
 const vec3 noColor = vec3(0.0, 0.0, 0.0);
 
@@ -92,9 +89,6 @@ float readDepth (sampler2D depthSampler, vec2 uvCoordinate) {
 ///  Main entry point
 /// </summary>
 void main() {
-
-    vec3 normal = normalize(vNormal);
-    vec3 viewPosition = normalize(vViewPosition);
 
     gl_FragColor = texture2D(tDepth, vUV);
 

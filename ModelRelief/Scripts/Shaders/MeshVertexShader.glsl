@@ -34,10 +34,7 @@ uniform float       cameraFar;              // far clipping plane
 uniform sampler2D   tDiffuse;               // RGBA float depth
 uniform sampler2D   tDepth;                 // depth texture
 
-varying vec2 vUV;							// UV coordinates of vertex
-varying vec3 vNormal;						// vertex normal
-varying vec3 vWorldPosition;				// vertex world position
-varying vec3 vViewPosition;					// vertex view position (flipped)
+varying vec2 vUV;                           // UV coordinates of vertex
 
 /// <summary>
 ///  Main entry point
@@ -46,15 +43,15 @@ void main() {
 
     vUV = uv;
 
-    vec3 transformedNormal = normalMatrix * normal;
-    vNormal = normalize(transformedNormal);
+    // adjust Z position by depth
+    vec3 positionPrime = position;
 
-    vec4 worldPosition = modelMatrix * vec4(position, 1.0);
-    vWorldPosition = worldPosition.xyz;
+    float depth = texture2D(tDepth, vUV).x;
+    depth = depth * (cameraFar - cameraNear);
+    positionPrime.z = -depth;
 
     vec4 mvPosition;
-    mvPosition = modelViewMatrix * vec4(position, 1.0);
-    vViewPosition = -mvPosition.xyz;
+    mvPosition = modelViewMatrix * vec4(positionPrime, 1.0);
 
     gl_Position = projectionMatrix * mvPosition;
 }
