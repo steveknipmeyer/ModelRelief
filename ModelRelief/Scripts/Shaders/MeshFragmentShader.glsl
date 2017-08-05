@@ -96,9 +96,12 @@ void main() {
     vec3 normal = normalize(vNormal);
     vec3 viewPosition = normalize(vViewPosition);
 
-    vec3 diffuse = texture2D(tDiffuse, vUV).rgb;
+    vec4 diffuse = texture2D(tDiffuse, vUV);
+    gl_FragColor = diffuse;
 
-    gl_FragColor.rgb = diffuse;
+//  gl_FragColor = texture2D(tDiffuse, vUV);
+
+    gl_FragColor = texture2D(tDepth, vUV);
     gl_FragColor.a = 1.0;
 }
 

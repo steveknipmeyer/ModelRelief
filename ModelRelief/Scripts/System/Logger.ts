@@ -13,8 +13,9 @@ export interface Logger {
     addErrorMessage (errorMessage : string);
     addWarningMessage (warningMessage : string);
     addInfoMessage (infoMessage : string);
-
     addMessage (infoMessage : string, color? : string);
+
+    clearLog();
 }
          
 enum MessageClass {
@@ -107,5 +108,16 @@ export class HTMLLogger implements Logger{
 
         let messageElement = this.addMessageElement(infoMessage, MessageClass.Info);
         messageElement.style.color = color ? color : 'black';
+    }
+
+    /**
+     * Clears the log output
+     */
+    clearLog () {
+
+        // https://stackoverflow.com/questions/3955229/remove-all-child-elements-of-a-dom-node-in-javascript
+        while (this.rootElement.firstChild) {
+            this.rootElement.removeChild(this.rootElement.firstChild);
+}
     }
 }

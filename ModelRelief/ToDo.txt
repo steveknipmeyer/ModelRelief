@@ -2,12 +2,11 @@
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
 
+Add watch task to gulp.
+    Shader creation....
+
 Implement unpackRGBAToDepth in DepthBuffer.ts.
 Add support for sampling arbitrary pixels in the postCanvas.
-
-Shader
-    Parition Z range into 32 bit space.
-    Encode into RGBA texture.
 
 Create a 16 bit PNG from the depth data.
 

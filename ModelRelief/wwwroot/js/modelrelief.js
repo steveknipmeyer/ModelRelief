@@ -21,7 +21,7 @@ define("Viewer/TrackballControls", ["require", "exports", "three"], function (re
         this.noRotate = false;
         this.noZoom = false;
         this.noPan = false;
-        this.staticMoving = false;
+        this.staticMoving = true;
         this.dynamicDampingFactor = 0.2;
         this.minDistance = 0;
         this.maxDistance = Infinity;
@@ -1349,6 +1349,15 @@ define("System/Logger", ["require", "exports"], function (require, exports) {
             var messageElement = this.addMessageElement(infoMessage, MessageClass.Info);
             messageElement.style.color = color ? color : 'black';
         };
+        /**
+         * Clears the log output
+         */
+        HTMLLogger.prototype.clearLog = function () {
+            // https://stackoverflow.com/questions/3955229/remove-all-child-elements-of-a-dom-node-in-javascript
+            while (this.rootElement.firstChild) {
+                this.rootElement.removeChild(this.rootElement.firstChild);
+            }
+        };
         return HTMLLogger;
     }());
     exports.HTMLLogger = HTMLLogger;
@@ -1537,7 +1546,6 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
     var postRenderer;
     var postCamera;
     var postScene;
-    var postMeshScene;
     var target;
     var encodedTarget;
     var meshCanvas;
@@ -1545,10 +1553,15 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
     var meshCamera;
     var meshControls;
     var meshScene;
+    var meshPostScene;
     var meshMaterial;
     var meshTarget;
     var meshEncodedTarget;
-    var supportsExtensions = true;
+    var supportsWebGLExtensions = true;
+    var uselogDepthBuffer = true;
+    var cameraNearPlane = 0.01;
+    var cameraFarPlane = 50.00;
+    var fieldOfView = 70;
     var Resolution;
     (function (Resolution) {
         Resolution[Resolution["viewModel"] = 512] = "viewModel";
@@ -1565,11 +1578,11 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
     }
     function initializeModelRenderer() {
         modelCanvas = initializeCanvas('modelCanvas', Resolution.viewModel);
-        modelRenderer = new THREE.WebGLRenderer({ canvas: modelCanvas, logarithmicDepthBuffer: true });
+        modelRenderer = new THREE.WebGLRenderer({ canvas: modelCanvas, logarithmicDepthBuffer: uselogDepthBuffer });
         modelRenderer.setPixelRatio(window.devicePixelRatio);
         modelRenderer.setSize(Resolution.viewModel, Resolution.viewModel);
-        supportsExtensions = verifyExtensions(modelRenderer);
-        modelCamera = new THREE.PerspectiveCamera(70, Resolution.viewModel / Resolution.viewModel, .01, 50);
+        supportsWebGLExtensions = verifyExtensions(modelRenderer);
+        modelCamera = new THREE.PerspectiveCamera(fieldOfView, Resolution.viewModel / Resolution.viewModel, cameraNearPlane, cameraFarPlane);
         modelCamera.position.z = 5;
         modelControls = new TrackballControls_2.TrackballControls(modelCamera, modelRenderer.domElement);
         // scene
@@ -1578,7 +1591,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         //  setupModelSphereScene(modelScene);
         setupBoxScene(modelScene);
         initializeLighting(modelScene);
-        initializeModelHelpers();
+        initializeModelHelpers(modelScene, null, true);
     }
     function constructDepthTextureRenderTarget(width, height) {
         // Model Scene -> (Render Texture, Depth Texture)
@@ -1597,7 +1610,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
     function initializePostRenderer() {
         // DepthBuffer Renderer
         postCanvas = initializeCanvas('postCanvas', Resolution.viewPost);
-        postRenderer = new THREE.WebGLRenderer({ canvas: postCanvas });
+        postRenderer = new THREE.WebGLRenderer({ canvas: postCanvas, logarithmicDepthBuffer: uselogDepthBuffer });
         postRenderer.setPixelRatio(window.devicePixelRatio);
         postRenderer.setSize(Resolution.viewPost, Resolution.viewPost);
         // click handler
@@ -1611,10 +1624,10 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
     }
     function initializeMeshRenderer() {
         meshCanvas = initializeCanvas('meshCanvas', Resolution.viewMesh);
-        meshRenderer = new THREE.WebGLRenderer({ canvas: meshCanvas, logarithmicDepthBuffer: true });
+        meshRenderer = new THREE.WebGLRenderer({ canvas: meshCanvas, logarithmicDepthBuffer: uselogDepthBuffer });
         meshRenderer.setPixelRatio(window.devicePixelRatio);
         meshRenderer.setSize(Resolution.viewMesh, Resolution.viewMesh);
-        meshCamera = new THREE.PerspectiveCamera(70, Resolution.viewMesh / Resolution.viewMesh, .01, 50);
+        meshCamera = new THREE.PerspectiveCamera(fieldOfView, Resolution.viewMesh / Resolution.viewMesh, cameraNearPlane, cameraFarPlane);
         meshCamera.position.z = 5;
         meshControls = new TrackballControls_2.TrackballControls(meshCamera, meshRenderer.domElement);
         // Model Scene -> (Render Texture, Depth Texture)
@@ -1632,39 +1645,53 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         onWindowResize();
         window.addEventListener('resize', onWindowResize, false);
     }
+    function updateRenderTargetOnResize(renderer, renderTarget, width, height) {
+        var pixelRatio = renderer.getPixelRatio();
+        renderTarget.setSize(width * pixelRatio, height * pixelRatio);
+    }
+    function updateViewOnWindowResize(renderer, width, height, camera) {
+        var aspect = width / height;
+        if (camera) {
+            camera.aspect = aspect;
+            camera.updateProjectionMatrix();
+        }
+        renderer.setSize(width, height);
+    }
     function onWindowResize() {
-        var aspect = Resolution.viewModel / Resolution.viewModel;
-        modelCamera.aspect = aspect;
-        modelCamera.updateProjectionMatrix();
-        modelRenderer.setSize(Resolution.viewModel, Resolution.viewModel);
-        // size target DepthTexture
-        var postPixelRatio = postRenderer.getPixelRatio();
-        target.setSize(postCanvas.width * postPixelRatio, postCanvas.height * postPixelRatio);
-        encodedTarget.setSize(postCanvas.width * postPixelRatio, postCanvas.height * postPixelRatio);
-        postRenderer.setSize(postCanvas.width, postCanvas.height);
+        updateViewOnWindowResize(modelRenderer, Resolution.viewModel, Resolution.viewModel, modelCamera);
+        updateViewOnWindowResize(postRenderer, Resolution.viewPost, Resolution.viewPost, null);
+        updateViewOnWindowResize(meshRenderer, Resolution.viewMesh, Resolution.viewMesh, meshCamera);
+        updateRenderTargetOnResize(postRenderer, target, Resolution.viewModel, Resolution.viewModel);
+        updateRenderTargetOnResize(postRenderer, encodedTarget, Resolution.viewModel, Resolution.viewModel);
+        updateRenderTargetOnResize(meshRenderer, meshTarget, Resolution.viewMesh, Resolution.viewMesh);
+        updateRenderTargetOnResize(meshRenderer, meshEncodedTarget, Resolution.viewMesh, Resolution.viewMesh);
     }
     /**
-      * Adds lighting to the scene
-    */
+     * Adds lighting to the scene
+     */
     function initializeLighting(theScene) {
-        var ambientLight = new THREE.AmbientLight(0x404040);
+        var ambientLight = new THREE.AmbientLight(0xffffff);
         theScene.add(ambientLight);
-        var directionalLight1 = new THREE.DirectionalLight(0xC0C0C0);
+        var directionalLight1 = new THREE.DirectionalLight(0xffffff);
         directionalLight1.position.set(50, 50, 50);
         theScene.add(directionalLight1);
     }
     /**
      * Adds helpers to the scene to visualize camera, coordinates, etc.
-    */
-    function initializeModelHelpers() {
-        var cameraHelper = new THREE.CameraHelper(modelCamera);
-        cameraHelper.visible = true;
-        //  scene.add(cameraHelper);
-        var axisHelper = new THREE.AxisHelper(2);
-        axisHelper.visible = true;
-        modelScene.add(axisHelper);
+     */
+    function initializeModelHelpers(scene, camera, addAxisHelper) {
+        if (camera) {
+            var cameraHelper = new THREE.CameraHelper(camera);
+            cameraHelper.visible = true;
+            scene.add(cameraHelper);
+        }
+        if (addAxisHelper) {
+            var axisHelper = new THREE.AxisHelper(2);
+            axisHelper.visible = true;
+            scene.add(axisHelper);
+        }
     }
-    function setupTorusScene(theScene) {
+    function setupTorusScene(scene) {
         // Setup some geometries
         var geometry = new THREE.TorusKnotGeometry(1, 0.3, 128, 64);
         var material = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
@@ -1677,60 +1704,41 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
             var mesh = new THREE.Mesh(geometry, material);
             mesh.position.set(Math.cos(r) * zScale, Math.sin(r) * zScale, z * scale);
             mesh.rotation.set(Math.random(), Math.random(), Math.random());
-            theScene.add(mesh);
+            scene.add(mesh);
         }
     }
-    function setupSphereScene(theScene) {
-        // Setup some geometries
+    function setupSphereScene(scene) {
+        // geometry
         var radius = 2;
         var segments = 64;
         var geometry = new THREE.SphereGeometry(radius, segments, segments);
         var material = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
         //  let material = new THREE.MeshDepthMaterial();
-        var center = new THREE.Vector3(0.0, 0.0, 0.0);
         var mesh = new THREE.Mesh(geometry, material);
+        var center = new THREE.Vector3(0.0, 0.0, 0.0);
         mesh.position.set(center.x, center.y, center.z);
-        theScene.add(mesh);
+        scene.add(mesh);
     }
-    function setupBoxScene(theScene) {
+    function setupBoxScene(scene) {
         // box
         var width = 2;
         var height = 2;
         var depth = 2;
         var geometry = new THREE.BoxGeometry(width, height, depth);
         var material = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
-        var center = new THREE.Vector3(0.0, 0.0, 0.0);
         var mesh = new THREE.Mesh(geometry, material);
+        var center = new THREE.Vector3(0.0, 0.0, 0.0);
         mesh.position.set(center.x, center.y, center.z);
-        theScene.add(mesh);
+        scene.add(mesh);
         // background plane
         width = 4;
         height = 4;
         geometry = new THREE.PlaneGeometry(width, height);
         material = new THREE.MeshPhongMaterial({ color: 0x5555cc });
-        center = new THREE.Vector3(0.0, 0.0, 0.0);
         mesh = new THREE.Mesh(geometry, material);
+        center = new THREE.Vector3(0.0, 0.0, 0.0);
         mesh.position.set(center.x, center.y, center.z);
-        theScene.add(mesh);
-    }
-    function setMeshMaterialUnforms() {
-        meshMaterial.uniforms = {
-            cameraNear: { value: modelCamera.near },
-            cameraFar: { value: modelCamera.far },
-            tDiffuse: { value: meshEncodedTarget.texture },
-            tDepth: { value: meshEncodedTarget.depthTexture }
-        };
-    }
-    function setupMeshScene() {
-        meshMaterial = new THREE.ShaderMaterial({
-            vertexShader: MR.shaderSource['MeshVertexShader'],
-            fragmentShader: MR.shaderSource['MeshFragmentShader'],
-        });
-        setMeshMaterialUnforms();
-        var meshPlane = new THREE.PlaneGeometry(2, 2);
-        var meshQuad = new THREE.Mesh(meshPlane, meshMaterial);
-        meshScene = new THREE.Scene();
-        meshScene.add(meshQuad);
+        scene.add(mesh);
     }
     function setupPostScene() {
         // Setup post processing stage
@@ -1745,7 +1753,6 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
             vertexShader: MR.shaderSource['DepthBufferVertexShader'],
             fragmentShader: MR.shaderSource['DepthBufferFragmentShader'],
             uniforms: {
-                designColor: { value: 0xC0C090 },
                 cameraNear: { value: modelCamera.near },
                 cameraFar: { value: modelCamera.far },
                 tDiffuse: { value: target.texture },
@@ -1757,12 +1764,27 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         postScene = new THREE.Scene();
         postScene.add(postQuad);
     }
+    function setupMeshScene() {
+        meshMaterial = new THREE.ShaderMaterial({
+            vertexShader: MR.shaderSource['MeshVertexShader'],
+            fragmentShader: MR.shaderSource['MeshFragmentShader'],
+            uniforms: {
+                cameraNear: { value: modelCamera.near },
+                cameraFar: { value: modelCamera.far },
+                tDiffuse: { value: meshEncodedTarget.texture },
+                tDepth: { value: meshTarget.depthTexture }
+            }
+        });
+        var meshPlane = new THREE.PlaneGeometry(2, 2);
+        var meshQuad = new THREE.Mesh(meshPlane, meshMaterial);
+        meshScene = new THREE.Scene();
+        meshScene.add(meshQuad);
+    }
     function setupPostMeshScene() {
         var postMeshMaterial = new THREE.ShaderMaterial({
             vertexShader: MR.shaderSource['DepthBufferVertexShader'],
             fragmentShader: MR.shaderSource['DepthBufferFragmentShader'],
             uniforms: {
-                designColor: { value: 0xC0C090 },
                 cameraNear: { value: modelCamera.near },
                 cameraFar: { value: modelCamera.far },
                 tDiffuse: { value: meshTarget.texture },
@@ -1771,35 +1793,60 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         });
         var postMeshPlane = new THREE.PlaneGeometry(2, 2);
         var postMeshQuad = new THREE.Mesh(postMeshPlane, postMeshMaterial);
-        postMeshScene = new THREE.Scene();
-        postMeshScene.add(postMeshQuad);
+        meshPostScene = new THREE.Scene();
+        meshPostScene.add(postMeshQuad);
+    }
+    function unsignedBytesToRGBA(buffer, width, height, row, column) {
+        var offset = (row * width) + column;
+        var rValue = buffer[offset + 0].toString(16);
+        var gValue = buffer[offset + 1].toString(16);
+        var bValue = buffer[offset + 2].toString(16);
+        var aValue = buffer[offset + 3].toString(16);
+        return "0x" + rValue + gValue + bValue + " " + aValue;
+    }
+    function analyzeRenderBuffer(renderer, renderTarget, width, height, color) {
+        var logger = new Logger_2.HTMLLogger();
+        var renderBuffer = new Uint8Array(width * height * 4).fill(0);
+        renderer.readRenderTargetPixels(renderTarget, 0, 0, width, height, renderBuffer);
+        var messageString = "RGBA[0, 0] = " + unsignedBytesToRGBA(renderBuffer, width, height, 0, 0);
+        logger.addMessage(messageString, color);
+    }
+    function analyzeDepthBuffer(renderer, encodedRenderTarget, width, height, color, camera) {
+        var logger = new Logger_2.HTMLLogger();
+        // decode RGBA texture into depth floats
+        var depthBufferRGBA = new Uint8Array(width * height * 4).fill(0);
+        renderer.readRenderTargetPixels(encodedRenderTarget, 0, 0, width, height, depthBufferRGBA);
+        var depthBuffer = new DepthBuffer_1.DepthBuffer(depthBufferRGBA, width, height, camera.near, camera.far);
+        var middle = width / 2;
+        var depthNormalized = depthBuffer.valueNormalized(middle, middle);
+        logger.addMessage("" + depthNormalized, color);
+        var decimalPlaces = 2;
+        var messageString = "Scene Depth = " + depthBuffer.depth.toFixed(2) + " [Normalized] depth = " + depthNormalized.toFixed(decimalPlaces) + ", min = " + depthBuffer.minimumNormalized.toFixed(decimalPlaces) + ", max = " + depthBuffer.maximumNormalized.toFixed(decimalPlaces) + ", [Absolute] depth = " + depthBuffer.depth.toFixed(decimalPlaces) + ", min = " + depthBuffer.minimum.toFixed(decimalPlaces) + ", max = " + depthBuffer.maximum.toFixed(decimalPlaces);
+        logger.addMessage(messageString, color);
+    }
+    function analyzeTargets(renderer, renderTarget, encodedRenderTarget, camera, width, height, color) {
+        analyzeRenderBuffer(renderer, renderTarget, width, height, color);
+        analyzeDepthBuffer(renderer, encodedRenderTarget, width, height, color, camera);
     }
     function createDepthBuffer() {
         var logger = new Logger_2.HTMLLogger();
-        // create depth texture
+        logger.clearLog();
+        // target.texture      : render buffer
+        // target.depthTexture : depth buffer
         postRenderer.render(modelScene, modelCamera, target);
-        //  let primaryImageBuffer =  new Uint8Array(Resolution.viewModel * Resolution.viewModel * 4).fill(0);
-        //  renderer.readRenderTargetPixels(target, 0, 0, Resolution.viewModel, Resolution.viewModel, primaryImageBuffer);
-        // (optional) display float encoding in depth buffer preview
+        // (optional) preview encoded RGBA texture; drawn by shader but not persisted
         postRenderer.render(postScene, postCamera);
-        // write depth values as RGBA texture
-        // target.depthTexture -> postTarget (encoded RGBA texture)
+        // Persist encoded RGBA texture; calculated from depth buffer
+        // encodedTarget.texture      : encoded RGBA texture
+        // encodedTarget.depthTexture : null
         postRenderer.render(postScene, postCamera, encodedTarget);
-        // decode RGBA texture into depth floats
-        var depthBufferRaw = new Uint8Array(Resolution.viewPost * Resolution.viewPost * 4).fill(0);
-        postRenderer.readRenderTargetPixels(encodedTarget, 0, 0, Resolution.viewPost, Resolution.viewPost, depthBufferRaw);
-        var depthBuffer = new DepthBuffer_1.DepthBuffer(depthBufferRaw, Resolution.viewPost, Resolution.viewPost, modelCamera.near, modelCamera.far);
-        var middle = Resolution.viewPost / 2;
-        var depthNormalized = depthBuffer.valueNormalized(middle, middle);
-        logger.addMessage("" + depthNormalized, 'red');
-        var decimalPlaces = 2;
-        var messageString = "Scene Depth = " + depthBuffer.depth.toFixed(2) + " [Normalized] depth = " + depthNormalized.toFixed(decimalPlaces) + ", min = " + depthBuffer.minimumNormalized.toFixed(decimalPlaces) + ", max = " + depthBuffer.maximumNormalized.toFixed(decimalPlaces) + ", [Absolute] depth = " + depthBuffer.depth.toFixed(decimalPlaces) + ", min = " + depthBuffer.minimum.toFixed(decimalPlaces) + ", max = " + depthBuffer.maximum.toFixed(decimalPlaces);
-        logger.addMessage(messageString, 'blue');
+        analyzeTargets(postRenderer, target, encodedTarget, modelCamera, Resolution.viewPost, Resolution.viewPost, 'red');
         updateMeshMaterial();
     }
     function updateMeshMaterial() {
         meshRenderer.render(modelScene, modelCamera, meshTarget);
-        meshRenderer.render(postMeshScene, postCamera, meshEncodedTarget);
+        meshRenderer.render(meshPostScene, postCamera, meshEncodedTarget);
+        analyzeTargets(meshRenderer, meshTarget, meshEncodedTarget, modelCamera, Resolution.viewMesh, Resolution.viewMesh, 'blue');
     }
     function initializeCanvas(id, resolution) {
         var canvas = document.querySelector("#" + id);
@@ -1816,13 +1863,14 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         return canvas;
     }
     function animate() {
-        if (!supportsExtensions)
+        if (!supportsWebGLExtensions)
             return;
         requestAnimationFrame(animate);
         modelControls.update();
         meshControls.update();
         modelRenderer.render(modelScene, modelCamera);
         meshRenderer.render(meshScene, meshCamera);
+        //  meshRenderer.render(meshScene, postCamera); 
     }
 });
 define("Viewer/Graphics", ["require", "exports", "three"], function (require, exports, THREE) {

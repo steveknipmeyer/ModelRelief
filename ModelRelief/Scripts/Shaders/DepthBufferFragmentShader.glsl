@@ -23,7 +23,6 @@ uniform mat4 viewMatrix;
 uniform vec3 cameraPosition;
 #endif
 
-uniform vec3        designColor;				// color
 uniform float       cameraNear;                 // near clipping plane
 uniform float       cameraFar;                  // far clipping plane
 uniform sampler2D   tDiffuse;                   // diffuse texture 
@@ -97,16 +96,26 @@ void main() {
     vec3 normal = normalize(vNormal);
     vec3 viewPosition = normalize(vViewPosition);
 
-    float depth = readDepth(tDepth, vUV);
     vec3 diffuse = texture2D(tDiffuse, vUV).rgb;
 
-    gl_FragColor = encode_float(depth);
+    float depth = readDepth(tDepth, vUV);
+//  gl_FragColor = encode_float(depth);
+
+    gl_FragColor = texture2D(tDepth, vUV);
+    gl_FragColor.a = 1.0;
 
 #if defined (DEBUG)
+    // float constant
     gl_FragColor = encode_float(3.141592653);
 
+    // solid color
     gl_FragColor.rgb = diffuse;
     gl_FragColor.a = 1.0;
+
+    // raw depth buffer
+    gl_FragColor = texture2D(tDepth, vUV);
+    gl_FragColor.a = 1.0;
+
 #endif
 }
 
