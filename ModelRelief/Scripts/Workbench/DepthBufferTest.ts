@@ -33,7 +33,7 @@ var supportsWebGLExtensions : boolean = true;
 var logger                  : Logger;
 
 var uselogDepthBuffer     : boolean = false;
-var physicalMeshTransform : boolean = true;
+var physicalMeshTransform : boolean = false;
 var MeshModelName         : string = 'ModelMesh';
 
 var cameraZPosition     : number = 4
@@ -500,7 +500,7 @@ function analyzeDepthBuffer (renderer: THREE.WebGLRenderer, encodedRenderTarget 
     let depthBufferRGBA =  new Uint8Array(width * height * 4).fill(0);
     renderer.readRenderTargetPixels(encodedRenderTarget, 0, 0, width, height, depthBufferRGBA);
 
-    let depthBuffer = new DepthBuffer(depthBufferRGBA, width, height, camera.near, camera.far);
+    let depthBuffer = new DepthBuffer(depthBufferRGBA, width, height, camera);
     
     let middle = width / 2;
     let decimalPlaces = 5;
@@ -600,19 +600,19 @@ function transformMeshSceneFromDepthBuffer (renderer : THREE.WebGLRenderer, mesh
     // decode RGBA texture into depth floats
     let depthBufferRGBA =  new Uint8Array(width * height * 4).fill(0);
     renderer.readRenderTargetPixels(meshEncodedTarget, 0, 0, width, height, depthBufferRGBA);
-    let depthBuffer = new DepthBuffer(depthBufferRGBA, width, height, camera.near, camera.far);    
+    let depthBuffer = new DepthBuffer(depthBufferRGBA, width, height, camera);    
 
     let meshGeometry : THREE.Geometry = <THREE.Geometry> mesh.geometry;
     let vertexCount : number = meshGeometry.vertices.length;
     let clipRange : number = camera.far - camera.near;
     for (let iVertex : number = 0; iVertex < vertexCount; iVertex++) {
 
-    /*
         // calculate index of vertex in depth buffer based on view extents and camera transform
         let vertex = meshGeometry.vertices[iVertex];
-        let depthBufferVertex = depthBuffer.getVertexIndex (vertex);
+        let depthBufferVertex = depthBuffer.getModelVertexIndex (vertex);
+
+        var depth = 
         meshGeometry.vertices[iVertex].z = -depthBuffer.values[depthBufferVertex];
-    */
     }
 
     meshGeometry.verticesNeedUpdate = true;

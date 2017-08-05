@@ -6,6 +6,7 @@
 "use strict";
 
 import * as THREE           from 'three'
+import {Graphics}           from 'Graphics'
 import {Logger, HTMLLogger} from 'Logger'
 import {MathLibrary}        from 'Math'
           
@@ -24,6 +25,7 @@ export class DepthBuffer {
     width     : number;
     height    : number;
 
+    camera        : THREE.PerspectiveCamera;
     nearClipPlane : number;
     farClipPlane  : number;
     cameraRange   : number;
@@ -36,14 +38,16 @@ export class DepthBuffer {
      * @param nearClipPlane Camera near clipping plane.
      * @param farClipPlane Camera far clipping plane.
      */
-    constructor(rgbaArray : Uint8Array, width : number, height :number, nearClipPlane : number, farClipPlane : number) {
+    constructor(rgbaArray : Uint8Array, width : number, height :number, camera : THREE.PerspectiveCamera) {
         
         this.rgbaArray = rgbaArray;
 
         this.width  = width;
         this.height = height;
-        this.nearClipPlane = nearClipPlane;
-        this.farClipPlane  = farClipPlane;
+        this.camera = camera;
+
+        this.nearClipPlane = camera.near;
+        this.farClipPlane  = camera.far;
 
         this.initialize();
     }
@@ -158,4 +162,28 @@ export class DepthBuffer {
         return depth;
     }
 
+    /**
+     * Returns the linear index of a model point in world coordinates.
+     * @param worldVertex Vertex of model.
+     */
+    getModelVertexIndex (worldVertex : THREE.Vertex) : number {
+        
+        let deviceCoordinates : THREE.Vector2 = Graphics.deviceCoordinatesFromWorldCoordinates (worldVertex, this.camera);
+
+        // device coordinates are returned in range [-1, 1]; remp to [0, 1]
+        let deviceX : number = (deviceCoordinates.x + 1) / 2;
+        let deviceY : number = (deviceCoordinates.y + 1) / 2;
+
+        let pixelRow    : number = deviceY * this.height;
+        let pixelColumn : number = deviceX * this.width;
+        
+        let index = (pixelRow * this.width) + pixelColumn;
+
+        index = Math.floor(index);
+        if ((index < 0) || (index > this.values.length)) {
+            console.log (`Vertex (${worldVertex.x}, ${worldVertex.y}, ${worldVertex.z}) yielded device = (${deviceCoordinates.x}. ${deviceCoordinates.y}), index = ${index}`);
+        }
+
+        return index;
+    }
 }

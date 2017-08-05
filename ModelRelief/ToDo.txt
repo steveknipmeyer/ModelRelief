@@ -4,6 +4,8 @@
 
 Remove PostCanvas?
 
+Add assert library.
+
 How should the vertex (translated) Z position be calculated from the depth buffer?
 
 Transform the mesh model based on the depth buffer.
