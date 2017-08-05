@@ -166,22 +166,25 @@ export class DepthBuffer {
      * Returns the linear index of a model point in world coordinates.
      * @param worldVertex Vertex of model.
      */
-    getModelVertexIndex (worldVertex : THREE.Vertex) : number {
-        
-        let deviceCoordinates : THREE.Vector2 = Graphics.deviceCoordinatesFromWorldCoordinates (worldVertex, this.camera);
+    getModelVertexIndex (worldVertex : THREE.Vertex, planeBoundingBox : THREE.Box3) : number {
+    
+        let boxSize          : THREE.Vector3 = planeBoundingBox.getSize();
+        let meshExtents      : THREE.Vector2 = new THREE.Vector2 (boxSize.x, boxSize.y);
 
-        // device coordinates are returned in range [-1, 1]; remp to [0, 1]
-        let deviceX : number = (deviceCoordinates.x + 1) / 2;
-        let deviceY : number = (deviceCoordinates.y + 1) / 2;
+        //  map coordinates to offsets in range [0, 1]
+        let offsetX : number = (worldVertex.x + (boxSize.x / 2)) / boxSize.x;
+        let offsetY : number = (worldVertex.y + (boxSize.y / 2)) / boxSize.y;
 
-        let pixelRow    : number = deviceY * this.height;
-        let pixelColumn : number = deviceX * this.width;
+        let pixelRow    : number = offsetY * (this.height - 1);
+        let pixelColumn : number = offsetX * (this.width - 1);
         
         let index = (pixelRow * this.width) + pixelColumn;
 
+
+
         index = Math.floor(index);
-        if ((index < 0) || (index > this.values.length)) {
-            console.log (`Vertex (${worldVertex.x}, ${worldVertex.y}, ${worldVertex.z}) yielded device = (${deviceCoordinates.x}. ${deviceCoordinates.y}), index = ${index}`);
+        if ((index < 0) || (index >= this.values.length)) {
+            console.log (`Vertex (${worldVertex.x}, ${worldVertex.y}, ${worldVertex.z}) yielded offset = (${offsetX}, ${offsetY}), index = ${index}`);
         }
 
         return index;

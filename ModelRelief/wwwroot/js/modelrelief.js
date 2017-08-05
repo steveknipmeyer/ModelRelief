@@ -1738,7 +1738,7 @@ define("System/Math", ["require", "exports"], function (require, exports) {
     }());
     exports.MathLibrary = MathLibrary;
 });
-define("Viewer/DepthBuffer", ["require", "exports", "Viewer/Graphics", "System/Logger", "System/Math"], function (require, exports, Graphics_1, Logger_1, Math_1) {
+define("Viewer/DepthBuffer", ["require", "exports", "three", "System/Logger", "System/Math"], function (require, exports, THREE, Logger_1, Math_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -1877,17 +1877,18 @@ define("Viewer/DepthBuffer", ["require", "exports", "Viewer/Graphics", "System/L
          * Returns the linear index of a model point in world coordinates.
          * @param worldVertex Vertex of model.
          */
-        DepthBuffer.prototype.getModelVertexIndex = function (worldVertex) {
-            var deviceCoordinates = Graphics_1.Graphics.deviceCoordinatesFromWorldCoordinates(worldVertex, this.camera);
-            // device coordinates are returned in range [-1, 1]; remp to [0, 1]
-            var deviceX = (deviceCoordinates.x + 1) / 2;
-            var deviceY = (deviceCoordinates.y + 1) / 2;
-            var pixelRow = deviceY * this.height;
-            var pixelColumn = deviceX * this.width;
+        DepthBuffer.prototype.getModelVertexIndex = function (worldVertex, planeBoundingBox) {
+            var boxSize = planeBoundingBox.getSize();
+            var meshExtents = new THREE.Vector2(boxSize.x, boxSize.y);
+            //  map coordinates to offsets in range [0, 1]
+            var offsetX = (worldVertex.x + (boxSize.x / 2)) / boxSize.x;
+            var offsetY = (worldVertex.y + (boxSize.y / 2)) / boxSize.y;
+            var pixelRow = offsetY * (this.height - 1);
+            var pixelColumn = offsetX * (this.width - 1);
             var index = (pixelRow * this.width) + pixelColumn;
             index = Math.floor(index);
-            if ((index < 0) || (index > this.values.length)) {
-                console.log("Vertex (" + worldVertex.x + ", " + worldVertex.y + ", " + worldVertex.z + ") yielded device = (" + deviceCoordinates.x + ". " + deviceCoordinates.y + "), index = " + index);
+            if ((index < 0) || (index >= this.values.length)) {
+                console.log("Vertex (" + worldVertex.x + ", " + worldVertex.y + ", " + worldVertex.z + ") yielded offset = (" + offsetX + ", " + offsetY + "), index = " + index);
             }
             return index;
         };
@@ -2361,13 +2362,15 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         renderer.readRenderTargetPixels(meshEncodedTarget, 0, 0, width, height, depthBufferRGBA);
         var depthBuffer = new DepthBuffer_1.DepthBuffer(depthBufferRGBA, width, height, camera);
         var meshGeometry = mesh.geometry;
+        meshGeometry.computeBoundingBox();
         var vertexCount = meshGeometry.vertices.length;
         var clipRange = camera.far - camera.near;
         for (var iVertex = 0; iVertex < vertexCount; iVertex++) {
             // calculate index of vertex in depth buffer based on view extents and camera transform
             var vertex = meshGeometry.vertices[iVertex];
-            var depthBufferVertex = depthBuffer.getModelVertexIndex(vertex);
-            var depth = meshGeometry.vertices[iVertex].z = -depthBuffer.values[depthBufferVertex];
+            var depthBufferVertex = depthBuffer.getModelVertexIndex(vertex, meshGeometry.boundingBox);
+            var depth = -depthBuffer.values[depthBufferVertex];
+            meshGeometry.vertices[iVertex].z = depth;
         }
         meshGeometry.verticesNeedUpdate = true;
     }

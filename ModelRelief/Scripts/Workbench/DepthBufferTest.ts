@@ -603,16 +603,18 @@ function transformMeshSceneFromDepthBuffer (renderer : THREE.WebGLRenderer, mesh
     let depthBuffer = new DepthBuffer(depthBufferRGBA, width, height, camera);    
 
     let meshGeometry : THREE.Geometry = <THREE.Geometry> mesh.geometry;
+    meshGeometry.computeBoundingBox();
+
     let vertexCount : number = meshGeometry.vertices.length;
     let clipRange : number = camera.far - camera.near;
     for (let iVertex : number = 0; iVertex < vertexCount; iVertex++) {
 
         // calculate index of vertex in depth buffer based on view extents and camera transform
         let vertex = meshGeometry.vertices[iVertex];
-        let depthBufferVertex = depthBuffer.getModelVertexIndex (vertex);
+        let depthBufferVertex = depthBuffer.getModelVertexIndex (vertex, meshGeometry.boundingBox);
 
-        var depth = 
-        meshGeometry.vertices[iVertex].z = -depthBuffer.values[depthBufferVertex];
+        var depth = -depthBuffer.values[depthBufferVertex];
+        meshGeometry.vertices[iVertex].z = depth;
     }
 
     meshGeometry.verticesNeedUpdate = true;
