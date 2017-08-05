@@ -32,7 +32,10 @@ var meshEncodedTarget   : THREE.WebGLRenderTarget;
 var supportsWebGLExtensions : boolean = true;
 var logger                  : Logger;
 
-var uselogDepthBuffer   : boolean = false;
+var uselogDepthBuffer     : boolean = false;
+var physicalMeshTransform : boolean = true;
+var MeshModelName         : string = 'ModelMesh';
+
 var cameraZPosition     : number = 4
 var cameraNearPlane     : number = 2;
 var cameraFarPlane      : number = 10.0;
@@ -81,7 +84,7 @@ function initializeModelRenderer() {
     // scene
     modelScene = new THREE.Scene();
 
-    setupTorusScene(modelScene);
+//  setupTorusScene(modelScene);
 //  setupSphereScene(modelScene);
     setupBoxScene(modelScene);
 
@@ -394,22 +397,32 @@ function setupPostScene() {
  * Constructs the scene used to visualize the 3D mesh.
  */
 function setupMeshScene() {
+    
+    var meshMaterial : THREE.Material;
 
-    meshMaterial = new THREE.ShaderMaterial({
+    if (physicalMeshTransform) {
+
+        meshMaterial = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
+
+    } else {
+
+        meshMaterial = new THREE.ShaderMaterial({
                 
-        vertexShader:   MR.shaderSource['MeshVertexShader'],
-        fragmentShader: MR.shaderSource['MeshFragmentShader'],
+            vertexShader:   MR.shaderSource['MeshVertexShader'],
+            fragmentShader: MR.shaderSource['MeshFragmentShader'],
 
-        uniforms : {
-            cameraNear  :   { value: modelCamera.near },
-            cameraFar   :   { value: modelCamera.far },
-            tDiffuse    :   { value: meshEncodedTarget.texture },
-            tDepth      :   { value: meshTarget.depthTexture }
-        }
-    });
+            uniforms : {
+                cameraNear  :   { value: modelCamera.near },
+                cameraFar   :   { value: modelCamera.far },
+                tDiffuse    :   { value: meshEncodedTarget.texture },
+                tDepth      :   { value: meshTarget.depthTexture }
+            }
+        });
+    }
 
     let meshPlane = new THREE.PlaneGeometry(2, 2, Resolution.viewMesh, Resolution.viewMesh);
     let meshQuad  = new THREE.Mesh(meshPlane, meshMaterial);
+    meshQuad.name = MeshModelName;
 
     meshScene = new THREE.Scene();
     meshScene.add(meshQuad);
@@ -566,6 +579,45 @@ function createDepthBuffer(
     // encodedTarget.depthTexture : null
     renderer.render(postScene, postCamera, encodedTarget); 
 }
+
+ /**
+  * Transform the vertices of the model mesh to match the depth buffer. 
+  * @param renderer WebGL renderer that owns the render target.
+  * @param meshScene Scene containing the target mesh.
+  * @param meshEncodedTarget Encoded RGBA depth buffer;
+  * @param width Width of render target.
+  * @param height Height of render target.
+  * @param camera Render camera.
+  */
+function transformMeshSceneFromDepthBuffer (renderer : THREE.WebGLRenderer, meshScene : THREE.Scene, meshEncodedTarget : THREE.WebGLRenderTarget, width : number, height : number, camera : THREE.PerspectiveCamera) {
+
+    let mesh : THREE.Mesh = <THREE.Mesh> meshScene.getObjectByName(MeshModelName);
+    if (!mesh) {
+        console.error ('Model mesh not found in scene.');
+        return;
+     }      
+
+    // decode RGBA texture into depth floats
+    let depthBufferRGBA =  new Uint8Array(width * height * 4).fill(0);
+    renderer.readRenderTargetPixels(meshEncodedTarget, 0, 0, width, height, depthBufferRGBA);
+    let depthBuffer = new DepthBuffer(depthBufferRGBA, width, height, camera.near, camera.far);    
+
+    let meshGeometry : THREE.Geometry = <THREE.Geometry> mesh.geometry;
+    let vertexCount : number = meshGeometry.vertices.length;
+    let clipRange : number = camera.far - camera.near;
+    for (let iVertex : number = 0; iVertex < vertexCount; iVertex++) {
+
+    /*
+        // calculate index of vertex in depth buffer based on view extents and camera transform
+        let vertex = meshGeometry.vertices[iVertex];
+        let depthBufferVertex = depthBuffer.getVertexIndex (vertex);
+        meshGeometry.vertices[iVertex].z = -depthBuffer.values[depthBufferVertex];
+    */
+    }
+
+    meshGeometry.verticesNeedUpdate = true;
+}
+
 /**
  *  Event handler to create depth buffers.
  */
@@ -578,6 +630,8 @@ function onClick() {
 
     createDepthBuffer (meshRenderer, Resolution.viewMesh, Resolution.viewMesh, modelScene, meshPostScene, modelCamera, postCamera, meshTarget, meshEncodedTarget);
     analyzeTargets (meshRenderer, meshTarget, meshEncodedTarget, modelCamera, Resolution.viewMesh, Resolution.viewMesh);
+
+    transformMeshSceneFromDepthBuffer (meshRenderer, meshScene, meshEncodedTarget, Resolution.viewMesh, Resolution.viewMesh, modelCamera);
 }
 
 /**

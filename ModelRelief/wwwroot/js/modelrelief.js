@@ -1569,6 +1569,8 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
     var supportsWebGLExtensions = true;
     var logger;
     var uselogDepthBuffer = false;
+    var physicalMeshTransform = true;
+    var MeshModelName = 'ModelMesh';
     var cameraZPosition = 4;
     var cameraNearPlane = 2;
     var cameraFarPlane = 10.0;
@@ -1605,7 +1607,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         modelControls = new TrackballControls_2.TrackballControls(modelCamera, modelRenderer.domElement);
         // scene
         modelScene = new THREE.Scene();
-        setupTorusScene(modelScene);
+        //  setupTorusScene(modelScene);
         //  setupSphereScene(modelScene);
         setupBoxScene(modelScene);
         initializeLighting(modelScene);
@@ -1845,18 +1847,25 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
      * Constructs the scene used to visualize the 3D mesh.
      */
     function setupMeshScene() {
-        meshMaterial = new THREE.ShaderMaterial({
-            vertexShader: MR.shaderSource['MeshVertexShader'],
-            fragmentShader: MR.shaderSource['MeshFragmentShader'],
-            uniforms: {
-                cameraNear: { value: modelCamera.near },
-                cameraFar: { value: modelCamera.far },
-                tDiffuse: { value: meshEncodedTarget.texture },
-                tDepth: { value: meshTarget.depthTexture }
-            }
-        });
+        var meshMaterial;
+        if (physicalMeshTransform) {
+            meshMaterial = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
+        }
+        else {
+            meshMaterial = new THREE.ShaderMaterial({
+                vertexShader: MR.shaderSource['MeshVertexShader'],
+                fragmentShader: MR.shaderSource['MeshFragmentShader'],
+                uniforms: {
+                    cameraNear: { value: modelCamera.near },
+                    cameraFar: { value: modelCamera.far },
+                    tDiffuse: { value: meshEncodedTarget.texture },
+                    tDepth: { value: meshTarget.depthTexture }
+                }
+            });
+        }
         var meshPlane = new THREE.PlaneGeometry(2, 2, Resolution.viewMesh, Resolution.viewMesh);
         var meshQuad = new THREE.Mesh(meshPlane, meshMaterial);
+        meshQuad.name = MeshModelName;
         meshScene = new THREE.Scene();
         meshScene.add(meshQuad);
     }
@@ -1980,6 +1989,34 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         renderer.render(postScene, postCamera, encodedTarget);
     }
     /**
+     * Transform the vertices of the model mesh to match the depth buffer.
+     * @param renderer WebGL renderer that owns the render target.
+     * @param meshScene Scene containing the target mesh.
+     * @param meshEncodedTarget Encoded RGBA depth buffer;
+     * @param width Width of render target.
+     * @param height Height of render target.
+     * @param camera Render camera.
+     */
+    function transformMeshSceneFromDepthBuffer(renderer, meshScene, meshEncodedTarget, width, height, camera) {
+        var mesh = meshScene.getObjectByName(MeshModelName);
+        if (!mesh) {
+            console.error('Model mesh not found in scene.');
+            return;
+        }
+        // decode RGBA texture into depth floats
+        var depthBufferRGBA = new Uint8Array(width * height * 4).fill(0);
+        renderer.readRenderTargetPixels(meshEncodedTarget, 0, 0, width, height, depthBufferRGBA);
+        var depthBuffer = new DepthBuffer_1.DepthBuffer(depthBufferRGBA, width, height, camera.near, camera.far);
+        var meshGeometry = mesh.geometry;
+        var vertexCount = meshGeometry.vertices.length;
+        var clipRange = camera.far - camera.near;
+        for (var iVertex = 0; iVertex < vertexCount; iVertex++) {
+            //      let vertexUV : THREE.Vector2 = meshGeometry.faceVertexUvs[iVertex];
+            //      meshGeometry.vertices[iVertex].z = -depthBuffer.values[iVertex];
+        }
+        meshGeometry.verticesNeedUpdate = true;
+    }
+    /**
      *  Event handler to create depth buffers.
      */
     function onClick() {
@@ -1988,6 +2025,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         //  analyzeTargets (postRenderer, target, encodedTarget, modelCamera, Resolution.viewPost, Resolution.viewPost);
         createDepthBuffer(meshRenderer, Resolution.viewMesh, Resolution.viewMesh, modelScene, meshPostScene, modelCamera, postCamera, meshTarget, meshEncodedTarget);
         analyzeTargets(meshRenderer, meshTarget, meshEncodedTarget, modelCamera, Resolution.viewMesh, Resolution.viewMesh);
+        transformMeshSceneFromDepthBuffer(meshRenderer, meshScene, meshEncodedTarget, Resolution.viewMesh, Resolution.viewMesh, modelCamera);
     }
     /**
      * Constructs a WebGL target canvas.
