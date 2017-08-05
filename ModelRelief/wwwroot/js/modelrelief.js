@@ -1849,7 +1849,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
                 tDepth: { value: meshTarget.depthTexture }
             }
         });
-        var meshPlane = new THREE.PlaneGeometry(2, 2);
+        var meshPlane = new THREE.PlaneGeometry(2, 2, Resolution.viewMesh, Resolution.viewMesh);
         var meshQuad = new THREE.Mesh(meshPlane, meshMaterial);
         meshScene = new THREE.Scene();
         meshScene.add(meshQuad);
@@ -1919,7 +1919,6 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         var decimalPlaces = 5;
         var headerStyle = "font-family : monospace; font-weight : bold; color : blue; font-size : 18px";
         var messageStyle = "font-family : monospace; color : black; font-size : 14px";
-        logger.addEmptyLine();
         logger.addMessage('Camera Properties', headerStyle);
         logger.addMessage("Near Plane = " + camera.near, messageStyle);
         logger.addMessage("Far Plane  = " + camera.far, messageStyle);

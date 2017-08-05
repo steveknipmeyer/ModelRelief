@@ -29,6 +29,11 @@ attribute vec2 uv;
 attribute vec2 uv2;
 #endif
 
+uniform float       cameraNear;             // near clipping plane
+uniform float       cameraFar;              // far clipping plane
+uniform sampler2D   tDiffuse;               // RGBA float depth
+uniform sampler2D   tDepth;                 // depth texture
+
 varying vec2 vUV;							// UV coordinates of vertex
 varying vec3 vNormal;						// vertex normal
 varying vec3 vWorldPosition;				// vertex world position
@@ -39,17 +44,17 @@ varying vec3 vViewPosition;					// vertex view position (flipped)
 /// </summary>
 void main() {
 
-	vUV = uv;
+    vUV = uv;
 
-	vec3 transformedNormal = normalMatrix * normal;
-	vNormal = normalize(transformedNormal);
+    vec3 transformedNormal = normalMatrix * normal;
+    vNormal = normalize(transformedNormal);
 
-	vec4 worldPosition = modelMatrix * vec4(position, 1.0);
-	vWorldPosition = worldPosition.xyz;
+    vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+    vWorldPosition = worldPosition.xyz;
 
-	vec4 mvPosition;
-	mvPosition = modelViewMatrix * vec4(position, 1.0);
-	vViewPosition = -mvPosition.xyz;
+    vec4 mvPosition;
+    mvPosition = modelViewMatrix * vec4(position, 1.0);
+    vViewPosition = -mvPosition.xyz;
 
-	gl_Position = projectionMatrix * mvPosition;
+    gl_Position = projectionMatrix * mvPosition;
 }

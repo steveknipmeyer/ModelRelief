@@ -400,7 +400,7 @@ function setupMeshScene() {
         }
     });
 
-    let meshPlane = new THREE.PlaneGeometry(2, 2);
+    let meshPlane = new THREE.PlaneGeometry(2, 2, Resolution.viewMesh, Resolution.viewMesh);
     let meshQuad  = new THREE.Mesh(meshPlane, meshMaterial);
 
     meshScene = new THREE.Scene();
