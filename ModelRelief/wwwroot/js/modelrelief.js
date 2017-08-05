@@ -1314,7 +1314,7 @@ define("System/Logger", ["require", "exports"], function (require, exports) {
         HTMLLogger.prototype.addMessageElement = function (message, messageClass) {
             var messageElement = document.createElement(this.messageTag);
             messageElement.textContent = message;
-            messageElement.className = this.baseMessageClass + " " + messageClass;
+            messageElement.className = this.baseMessageClass + " " + (messageClass ? messageClass : '');
             ;
             this.rootElement.appendChild(messageElement);
             return messageElement;
@@ -1343,11 +1343,20 @@ define("System/Logger", ["require", "exports"], function (require, exports) {
         /**
          * Add a message to the log.
          * @param message Information message text.
-         * @param color Optional color (black default).
+         * @param style Optional CSS style.
          */
-        HTMLLogger.prototype.addMessage = function (infoMessage, color) {
-            var messageElement = this.addMessageElement(infoMessage, MessageClass.Info);
-            messageElement.style.color = color ? color : 'black';
+        HTMLLogger.prototype.addMessage = function (message, style) {
+            var messageElement = this.addMessageElement(message);
+            if (style)
+                messageElement.style.cssText = style;
+        };
+        /**
+         * Adds an empty line
+         */
+        HTMLLogger.prototype.addEmptyLine = function () {
+            // https://stackoverflow.com/questions/5140547/line-break-inside-a-list-item-generates-space-between-the-lines
+            //      this.addMessage('<br/><br/>');        
+            this.addMessage('.');
         };
         /**
          * Clears the log output
@@ -1559,10 +1568,11 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
     var meshEncodedTarget;
     var supportsWebGLExtensions = true;
     var logger;
-    var uselogDepthBuffer = true;
+    var uselogDepthBuffer = false;
     var cameraNearPlane = 0.01;
     var cameraFarPlane = 50.00;
     var fieldOfView = 70;
+    var cameraZPosition = 4;
     var Resolution;
     (function (Resolution) {
         Resolution[Resolution["viewModel"] = 512] = "viewModel";
@@ -1591,13 +1601,13 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         modelRenderer.setSize(Resolution.viewModel, Resolution.viewModel);
         supportsWebGLExtensions = verifyExtensions(modelRenderer);
         modelCamera = new THREE.PerspectiveCamera(fieldOfView, Resolution.viewModel / Resolution.viewModel, cameraNearPlane, cameraFarPlane);
-        modelCamera.position.z = 5;
+        modelCamera.position.z = cameraZPosition;
         modelControls = new TrackballControls_2.TrackballControls(modelCamera, modelRenderer.domElement);
         // scene
         modelScene = new THREE.Scene();
-        setupTorusScene(modelScene);
+        //  setupTorusScene(modelScene);
         //  setupSphereScene(modelScene);
-        //  setupBoxScene(modelScene);
+        setupBoxScene(modelScene);
         initializeLighting(modelScene);
         initializeModelHelpers(modelScene, null, true);
     }
@@ -1646,7 +1656,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         meshRenderer.setPixelRatio(window.devicePixelRatio);
         meshRenderer.setSize(Resolution.viewMesh, Resolution.viewMesh);
         meshCamera = new THREE.PerspectiveCamera(fieldOfView, Resolution.viewMesh / Resolution.viewMesh, cameraNearPlane, cameraFarPlane);
-        meshCamera.position.z = 5;
+        meshCamera.position.z = 2;
         meshControls = new TrackballControls_2.TrackballControls(meshCamera, meshRenderer.domElement);
         // Model Scene -> (Render Texture, Depth Texture)
         meshTarget = constructDepthTextureRenderTarget(Resolution.viewMesh, Resolution.viewMesh);
@@ -1778,9 +1788,10 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
      */
     function setupBoxScene(scene) {
         // box
-        var width = 2;
-        var height = 2;
-        var depth = 2;
+        var dimensions = 2.0;
+        var width = dimensions;
+        var height = dimensions;
+        var depth = dimensions;
         var geometry = new THREE.BoxGeometry(width, height, depth);
         var material = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
         var mesh = new THREE.Mesh(geometry, material);
@@ -1884,13 +1895,12 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
      * @param renderTarget Render target (texture buffer).
      * @param width Width of target.
      * @param height Height of target.
-     * @param color Color for logger messages.
      */
-    function analyzeRenderBuffer(renderer, renderTarget, width, height, color) {
+    function analyzeRenderBuffer(renderer, renderTarget, width, height) {
         var renderBuffer = new Uint8Array(width * height * 4).fill(0);
         renderer.readRenderTargetPixels(renderTarget, 0, 0, width, height, renderBuffer);
         var messageString = "RGBA[0, 0] = " + unsignedBytesToRGBA(renderBuffer, width, height, 0, 0);
-        logger.addMessage(messageString, color);
+        logger.addMessage(messageString, null);
     }
     /**
      * Analyzes properties of a depth buffer.
@@ -1898,20 +1908,30 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
      * @param encodedRenderTarget RGBA encoded values of depth buffer
      * @param width Width of target.
      * @param height Height of target.
-     * @param color Color for logger messages.
      * @param camera Perspective camera used to create render target.
      */
-    function analyzeDepthBuffer(renderer, encodedRenderTarget, width, height, color, camera) {
+    function analyzeDepthBuffer(renderer, encodedRenderTarget, width, height, camera) {
         // decode RGBA texture into depth floats
         var depthBufferRGBA = new Uint8Array(width * height * 4).fill(0);
         renderer.readRenderTargetPixels(encodedRenderTarget, 0, 0, width, height, depthBufferRGBA);
         var depthBuffer = new DepthBuffer_1.DepthBuffer(depthBufferRGBA, width, height, camera.near, camera.far);
         var middle = width / 2;
-        var depthNormalized = depthBuffer.valueNormalized(middle, middle);
-        logger.addMessage("" + depthNormalized, color);
-        var decimalPlaces = 2;
-        var messageString = "Scene Depth = " + depthBuffer.depth.toFixed(2) + " [Normalized] depth = " + depthNormalized.toFixed(decimalPlaces) + ", min = " + depthBuffer.minimumNormalized.toFixed(decimalPlaces) + ", max = " + depthBuffer.maximumNormalized.toFixed(decimalPlaces) + ", [Absolute] depth = " + depthBuffer.depth.toFixed(decimalPlaces) + ", min = " + depthBuffer.minimum.toFixed(decimalPlaces) + ", max = " + depthBuffer.maximum.toFixed(decimalPlaces);
-        logger.addMessage(messageString, color);
+        var decimalPlaces = 5;
+        var headerStyle = "font-family : monospace; font-weight : bold; color : red; font-size : 18px";
+        var messageStyle = "font-family : monospace; color : black; font-size : 14px";
+        logger.addEmptyLine();
+        logger.addMessage("Center Depth (Normalized) = " + depthBuffer.valueNormalized(middle, middle).toFixed(decimalPlaces), messageStyle);
+        logger.addMessage("Center Depth (Absolute)   = " + depthBuffer.value(middle, middle), messageStyle);
+        logger.addEmptyLine();
+        logger.addMessage('Normalized', headerStyle);
+        logger.addMessage("Depth   = " + depthBuffer.depthNormalized.toFixed(decimalPlaces), messageStyle);
+        logger.addMessage("Minimum = " + depthBuffer.minimumNormalized.toFixed(decimalPlaces), messageStyle);
+        logger.addMessage("Maximum = " + depthBuffer.maximumNormalized.toFixed(decimalPlaces), messageStyle);
+        logger.addEmptyLine();
+        logger.addMessage('Absolute', headerStyle);
+        logger.addMessage("Depth   = " + depthBuffer.depth.toFixed(decimalPlaces), messageStyle);
+        logger.addMessage("Minimum = " + depthBuffer.minimum.toFixed(decimalPlaces), messageStyle);
+        logger.addMessage("Maximum = " + depthBuffer.maximum.toFixed(decimalPlaces), messageStyle);
     }
     /**
      * Analyze the render and depth targets.
@@ -1921,11 +1941,10 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
      * @param camera Perspective camera used to create targets.
      * @param width Width of targets.
      * @param height Height of targets.
-     * @param color Color for logger messages.
      */
-    function analyzeTargets(renderer, renderTarget, encodedRenderTarget, camera, width, height, color) {
-        analyzeRenderBuffer(renderer, renderTarget, width, height, color);
-        analyzeDepthBuffer(renderer, encodedRenderTarget, width, height, color, camera);
+    function analyzeTargets(renderer, renderTarget, encodedRenderTarget, camera, width, height) {
+        //  analyzeRenderBuffer(renderer, renderTarget,        width, height);
+        analyzeDepthBuffer(renderer, encodedRenderTarget, width, height, camera);
     }
     /**
      * Create a depth buffer.
@@ -1938,9 +1957,8 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
      * @param postCamera Orthographic camera for post scene.
      * @param renderTarget Render target.
      * @param encodedTarget Encoded RGBA target of depth buffer.
-     * @param color Color for logger messages.
      */
-    function createDepthBuffer(renderer, width, height, modelScene, postScene, modelCamera, postCamera, renderTarget, encodedTarget, color) {
+    function createDepthBuffer(renderer, width, height, modelScene, postScene, modelCamera, postCamera, renderTarget, encodedTarget) {
         // N.B. Danger! Parameters hide global variables...
         // renderTarget.texture      : render buffer
         // renderTarget.depthTexture : depth buffer
@@ -1951,15 +1969,16 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         // encodedTarget.texture      : encoded RGBA texture
         // encodedTarget.depthTexture : null
         renderer.render(postScene, postCamera, encodedTarget);
-        analyzeTargets(renderer, renderTarget, encodedTarget, modelCamera, width, height, color);
     }
     /**
      *  Event handler to create depth buffers.
      */
     function onClick() {
         logger.clearLog();
-        createDepthBuffer(postRenderer, Resolution.viewPost, Resolution.viewPost, modelScene, postScene, modelCamera, postCamera, target, encodedTarget, 'red');
-        createDepthBuffer(meshRenderer, Resolution.viewMesh, Resolution.viewMesh, modelScene, meshPostScene, modelCamera, postCamera, meshTarget, meshEncodedTarget, 'blue');
+        createDepthBuffer(postRenderer, Resolution.viewPost, Resolution.viewPost, modelScene, postScene, modelCamera, postCamera, target, encodedTarget);
+        //  analyzeTargets (postRenderer, target, encodedTarget, modelCamera, Resolution.viewPost, Resolution.viewPost);
+        createDepthBuffer(meshRenderer, Resolution.viewMesh, Resolution.viewMesh, modelScene, meshPostScene, modelCamera, postCamera, meshTarget, meshEncodedTarget);
+        analyzeTargets(meshRenderer, meshTarget, meshEncodedTarget, modelCamera, Resolution.viewMesh, Resolution.viewMesh);
     }
     /**
      * Constructs a WebGL target canvas.

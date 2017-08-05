@@ -13,7 +13,9 @@ export interface Logger {
     addErrorMessage (errorMessage : string);
     addWarningMessage (warningMessage : string);
     addInfoMessage (infoMessage : string);
-    addMessage (infoMessage : string, color? : string);
+    addMessage (infoMessage : string, style? : string);
+
+    addEmptyLine ();
 
     clearLog();
 }
@@ -61,11 +63,12 @@ export class HTMLLogger implements Logger{
      * @param message Message text.
      * @param messageClass CSS class to be added to message.
      */
-    addMessageElement (message : string, messageClass : string) : HTMLElement {
+    addMessageElement (message : string, messageClass? : string) : HTMLElement {
         
         let messageElement = document.createElement(this.messageTag);
         messageElement.textContent = message;
-        messageElement.className   = `${this.baseMessageClass} ${messageClass}`;;
+
+        messageElement.className   = `${this.baseMessageClass} ${messageClass ? messageClass : ''}`;;
 
         this.rootElement.appendChild(messageElement);
 
@@ -102,12 +105,23 @@ export class HTMLLogger implements Logger{
     /**
      * Add a message to the log.
      * @param message Information message text.
-     * @param color Optional color (black default).
+     * @param style Optional CSS style.
      */
-    addMessage (infoMessage : string, color? : string) {
+    addMessage (message : string, style? : string) {
 
-        let messageElement = this.addMessageElement(infoMessage, MessageClass.Info);
-        messageElement.style.color = color ? color : 'black';
+        let messageElement = this.addMessageElement(message);
+        if (style)
+            messageElement.style.cssText = style;
+    }
+
+    /**
+     * Adds an empty line
+     */
+    addEmptyLine () {
+
+        // https://stackoverflow.com/questions/5140547/line-break-inside-a-list-item-generates-space-between-the-lines
+//      this.addMessage('<br/><br/>');        
+        this.addMessage('.');        
     }
 
     /**
@@ -118,6 +132,6 @@ export class HTMLLogger implements Logger{
         // https://stackoverflow.com/questions/3955229/remove-all-child-elements-of-a-dom-node-in-javascript
         while (this.rootElement.firstChild) {
             this.rootElement.removeChild(this.rootElement.firstChild);
-}
+        }
     }
 }

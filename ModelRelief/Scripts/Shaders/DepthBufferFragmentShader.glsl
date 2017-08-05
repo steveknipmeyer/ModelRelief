@@ -101,9 +101,6 @@ void main() {
     float depth = readDepth(tDepth, vUV);
     gl_FragColor = encode_float(depth);
 
-    // raw depth buffer
-    gl_FragColor = texture2D(tDepth, vUV);
-
 #if defined (DEBUG)
     // float constant
     gl_FragColor = encode_float(3.141592653);

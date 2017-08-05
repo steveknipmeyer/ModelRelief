@@ -98,9 +98,6 @@ void main() {
 
     gl_FragColor = texture2D(tDiffuse, vUV);
 
-    // raw depth buffer
-    gl_FragColor = texture2D(tDepth, vUV);
-
 #if defined (DEBUG)
 
     // raw depth buffer
