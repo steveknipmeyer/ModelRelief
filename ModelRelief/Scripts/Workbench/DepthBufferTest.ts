@@ -80,9 +80,9 @@ function initializeModelRenderer() {
     // scene
     modelScene = new THREE.Scene();
 
-//  setupModelTorusScene(modelScene);
-//  setupModelSphereScene(modelScene);
-    setupBoxScene(modelScene);
+    setupTorusScene(modelScene);
+//  setupSphereScene(modelScene);
+//  setupBoxScene(modelScene);
 
     initializeLighting(modelScene);
     initializeModelHelpers(modelScene, null, true);

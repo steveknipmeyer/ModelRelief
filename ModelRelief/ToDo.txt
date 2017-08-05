@@ -2,8 +2,6 @@
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
 
-Add comments to DepthBufferTest.
-
 Add support for sampling arbitrary pixels in the postCanvas.
 
 Implement unpackRGBAToDepth in DepthBuffer.ts.

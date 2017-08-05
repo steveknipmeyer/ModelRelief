@@ -1595,9 +1595,9 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         modelControls = new TrackballControls_2.TrackballControls(modelCamera, modelRenderer.domElement);
         // scene
         modelScene = new THREE.Scene();
-        //  setupModelTorusScene(modelScene);
-        //  setupModelSphereScene(modelScene);
-        setupBoxScene(modelScene);
+        setupTorusScene(modelScene);
+        //  setupSphereScene(modelScene);
+        //  setupBoxScene(modelScene);
         initializeLighting(modelScene);
         initializeModelHelpers(modelScene, null, true);
     }

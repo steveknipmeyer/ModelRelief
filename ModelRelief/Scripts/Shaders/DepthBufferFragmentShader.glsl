@@ -99,10 +99,10 @@ void main() {
     vec3 diffuse = texture2D(tDiffuse, vUV).rgb;
 
     float depth = readDepth(tDepth, vUV);
-//  gl_FragColor = encode_float(depth);
+    gl_FragColor = encode_float(depth);
 
-    gl_FragColor = texture2D(tDepth, vUV); 
-    gl_FragColor.a = 1.0;
+    // raw depth buffer
+    gl_FragColor = texture2D(tDepth, vUV);
 
 #if defined (DEBUG)
     // float constant
@@ -114,8 +114,6 @@ void main() {
 
     // raw depth buffer
     gl_FragColor = texture2D(tDepth, vUV);
-    gl_FragColor.a = 1.0;
-
 #endif
 }
 

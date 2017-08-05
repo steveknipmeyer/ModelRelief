@@ -96,13 +96,16 @@ void main() {
     vec3 normal = normalize(vNormal);
     vec3 viewPosition = normalize(vViewPosition);
 
-    vec4 diffuse = texture2D(tDiffuse, vUV);
-    gl_FragColor = diffuse;
+    gl_FragColor = texture2D(tDiffuse, vUV);
 
-//  gl_FragColor = texture2D(tDiffuse, vUV);
+    // raw depth buffer
+    gl_FragColor = texture2D(tDepth, vUV);
 
-    gl_FragColor = texture2D(tDepth, vUV); 
-    gl_FragColor.a = 1.0;
+#if defined (DEBUG)
+
+    // raw depth buffer
+    gl_FragColor = texture2D(tDepth, vUV);
+#endif
 }
 
 #if defined(NOOP)
