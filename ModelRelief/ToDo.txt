@@ -7,6 +7,7 @@ Add comments to DepthBufferTest.
 Add support for sampling arbitrary pixels in the postCanvas.
 
 Implement unpackRGBAToDepth in DepthBuffer.ts.
+Experiment with precision setting in THREE.WebGLRenderer.
 
 Create a 16 bit PNG from the depth data.
 

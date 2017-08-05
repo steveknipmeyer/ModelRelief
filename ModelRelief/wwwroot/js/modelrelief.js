@@ -1572,11 +1572,18 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
     })(Resolution || (Resolution = {}));
     init();
     animate();
+    /**
+     * Verifies the minimum WebGL extensions are present.
+     * @param renderer WebGL renderer.
+     */
     function verifyExtensions(renderer) {
         if (!renderer.extensions.get('WEBGL_depth_texture'))
             return false;
         return true;
     }
+    /**
+     * Initialize the primary model view.
+     */
     function initializeModelRenderer() {
         modelCanvas = initializeCanvas('modelCanvas', Resolution.viewModel);
         modelRenderer = new THREE.WebGLRenderer({ canvas: modelCanvas, logarithmicDepthBuffer: uselogDepthBuffer });
@@ -1594,6 +1601,11 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         initializeLighting(modelScene);
         initializeModelHelpers(modelScene, null, true);
     }
+    /**
+     * Constructs a render target <with a depth texture buffer>.
+     * @param width Width of render target.
+     * @param height Height of render target.
+     */
     function constructDepthTextureRenderTarget(width, height) {
         // Model Scene -> (Render Texture, Depth Texture)
         var renderTarget = new THREE.WebGLRenderTarget(width, height);
@@ -1608,8 +1620,10 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         renderTarget.depthTexture.type = THREE.UnsignedIntType;
         return renderTarget;
     }
+    /**
+     * Initializes the post renderer used to visualize the encoded depth texture.
+     */
     function initializePostRenderer() {
-        // DepthBuffer Renderer
         postCanvas = initializeCanvas('postCanvas', Resolution.viewPost);
         postRenderer = new THREE.WebGLRenderer({ canvas: postCanvas, logarithmicDepthBuffer: uselogDepthBuffer });
         postRenderer.setPixelRatio(window.devicePixelRatio);
@@ -1623,6 +1637,9 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         // Setup post-processing step
         setupPostScene();
     }
+    /**
+     * Initializes the mesh renderer used to view the 3D mesh.
+     */
     function initializeMeshRenderer() {
         meshCanvas = initializeCanvas('meshCanvas', Resolution.viewMesh);
         meshRenderer = new THREE.WebGLRenderer({ canvas: meshCanvas, logarithmicDepthBuffer: uselogDepthBuffer });
@@ -1639,6 +1656,9 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         setupPostMeshScene();
         initializeLighting(meshScene);
     }
+    /**
+     * Initialize the application.
+     */
     function init() {
         logger = new Logger_2.HTMLLogger();
         initializeModelRenderer();
@@ -1647,10 +1667,26 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         onWindowResize();
         window.addEventListener('resize', onWindowResize, false);
     }
+    /**
+     * Updates a renderer target properties.
+     * Event handler called on window resize.
+     * @param renderer Renderer that owns the target.
+     * @param renderTarget Render target to update.
+     * @param width Width of the renderer.
+     * @param height Height of the renderer.
+     */
     function updateRenderTargetOnResize(renderer, renderTarget, width, height) {
         var pixelRatio = renderer.getPixelRatio();
         renderTarget.setSize(width * pixelRatio, height * pixelRatio);
     }
+    /**
+     * Updates a renderer properties.
+     * Event handler called on window resize.
+     * @param renderer Renderer to update.
+     * @param width Width of the renderer.
+     * @param height Height of the renderer.
+     * @param camera Renderer's camera.
+     */
     function updateViewOnWindowResize(renderer, width, height, camera) {
         var aspect = width / height;
         if (camera) {
@@ -1659,6 +1695,9 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         }
         renderer.setSize(width, height);
     }
+    /**
+     * Event handler called on window resize.
+     */
     function onWindowResize() {
         updateViewOnWindowResize(modelRenderer, Resolution.viewModel, Resolution.viewModel, modelCamera);
         updateViewOnWindowResize(postRenderer, Resolution.viewPost, Resolution.viewPost, null);
@@ -1669,7 +1708,8 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         updateRenderTargetOnResize(meshRenderer, meshEncodedTarget, Resolution.viewMesh, Resolution.viewMesh);
     }
     /**
-     * Adds lighting to the scene
+     * Adds lighting to the scene.
+     * param theScene Scene to add lighting.
      */
     function initializeLighting(theScene) {
         var ambientLight = new THREE.AmbientLight(0xffffff);
@@ -1680,6 +1720,9 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
     }
     /**
      * Adds helpers to the scene to visualize camera, coordinates, etc.
+     * @param scene Scene to annotate.
+     * @param camera Camera to construct helper (may be null).
+     * @param addAxisHelper Add a helper for the cartesian axes.
      */
     function initializeModelHelpers(scene, camera, addAxisHelper) {
         if (camera) {
@@ -1693,6 +1736,10 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
             scene.add(axisHelper);
         }
     }
+    /**
+     * Adds a torus to a scene.
+     * @param scene Target scene.
+     */
     function setupTorusScene(scene) {
         // Setup some geometries
         var geometry = new THREE.TorusKnotGeometry(1, 0.3, 128, 64);
@@ -1709,6 +1756,10 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
             scene.add(mesh);
         }
     }
+    /**
+     * Adds a test sphere to a scene.
+     * @param scene Target scene.
+     */
     function setupSphereScene(scene) {
         // geometry
         var radius = 2;
@@ -1721,6 +1772,10 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         mesh.position.set(center.x, center.y, center.z);
         scene.add(mesh);
     }
+    /**
+     * Add a s test box to a scene.
+     * @param scene Target scene.
+     */
     function setupBoxScene(scene) {
         // box
         var width = 2;
@@ -1742,6 +1797,9 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         mesh.position.set(center.x, center.y, center.z);
         scene.add(mesh);
     }
+    /**
+     * Constructs the scene used to visualize textures.
+     */
     function setupPostScene() {
         // Setup post processing stage
         var left = -1;
@@ -1766,6 +1824,9 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         postScene = new THREE.Scene();
         postScene.add(postQuad);
     }
+    /**
+     * Constructs the scene used to visualize the 3D mesh.
+     */
     function setupMeshScene() {
         meshMaterial = new THREE.ShaderMaterial({
             vertexShader: MR.shaderSource['MeshVertexShader'],
@@ -1782,6 +1843,9 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         meshScene = new THREE.Scene();
         meshScene.add(meshQuad);
     }
+    /**
+     * Constructs the scene used to construct a depth buffer.
+     */
     function setupPostMeshScene() {
         var postMeshMaterial = new THREE.ShaderMaterial({
             vertexShader: MR.shaderSource['DepthBufferVertexShader'],
@@ -1798,6 +1862,14 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         meshPostScene = new THREE.Scene();
         meshPostScene.add(postMeshQuad);
     }
+    /**
+     * Constructs an RGBA string with the byte values of a pixel.
+     * @param buffer Unsigned byte raw buffer.
+     * @param width Width of texture.
+     * @param height Height of texture.
+     * @param row Pixel row.
+     * @param column Column row.
+     */
     function unsignedBytesToRGBA(buffer, width, height, row, column) {
         var offset = (row * width) + column;
         var rValue = buffer[offset + 0].toString(16);
@@ -1806,12 +1878,29 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         var aValue = buffer[offset + 3].toString(16);
         return "#" + rValue + gValue + bValue + " " + aValue;
     }
+    /**
+     * Analyzes a pixel from a render buffer.
+     * @param renderer Renderer that created render target.
+     * @param renderTarget Render target (texture buffer).
+     * @param width Width of target.
+     * @param height Height of target.
+     * @param color Color for logger messages.
+     */
     function analyzeRenderBuffer(renderer, renderTarget, width, height, color) {
         var renderBuffer = new Uint8Array(width * height * 4).fill(0);
         renderer.readRenderTargetPixels(renderTarget, 0, 0, width, height, renderBuffer);
         var messageString = "RGBA[0, 0] = " + unsignedBytesToRGBA(renderBuffer, width, height, 0, 0);
         logger.addMessage(messageString, color);
     }
+    /**
+     * Analyzes properties of a depth buffer.
+     * @param renderer Renderer that created encoded render target.
+     * @param encodedRenderTarget RGBA encoded values of depth buffer
+     * @param width Width of target.
+     * @param height Height of target.
+     * @param color Color for logger messages.
+     * @param camera Perspective camera used to create render target.
+     */
     function analyzeDepthBuffer(renderer, encodedRenderTarget, width, height, color, camera) {
         // decode RGBA texture into depth floats
         var depthBufferRGBA = new Uint8Array(width * height * 4).fill(0);
@@ -1824,10 +1913,33 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         var messageString = "Scene Depth = " + depthBuffer.depth.toFixed(2) + " [Normalized] depth = " + depthNormalized.toFixed(decimalPlaces) + ", min = " + depthBuffer.minimumNormalized.toFixed(decimalPlaces) + ", max = " + depthBuffer.maximumNormalized.toFixed(decimalPlaces) + ", [Absolute] depth = " + depthBuffer.depth.toFixed(decimalPlaces) + ", min = " + depthBuffer.minimum.toFixed(decimalPlaces) + ", max = " + depthBuffer.maximum.toFixed(decimalPlaces);
         logger.addMessage(messageString, color);
     }
+    /**
+     * Analyze the render and depth targets.
+     * @param renderer Renderer that owns the targets.
+     * @param renderTarget Render buffer target.
+     * @param encodedRenderTarget Encoded RGBA depth target.
+     * @param camera Perspective camera used to create targets.
+     * @param width Width of targets.
+     * @param height Height of targets.
+     * @param color Color for logger messages.
+     */
     function analyzeTargets(renderer, renderTarget, encodedRenderTarget, camera, width, height, color) {
         analyzeRenderBuffer(renderer, renderTarget, width, height, color);
         analyzeDepthBuffer(renderer, encodedRenderTarget, width, height, color, camera);
     }
+    /**
+     * Create a depth buffer.
+     * @param renderer Renderer to create the depth buffer.
+     * @param width Width of renderer.
+     * @param height Height of renderer.
+     * @param modelScene 3D model scene to create depth buffer.
+     * @param postScene Polygon scene used to create encoded target of depth buffer.
+     * @param modelCamera Perspective camera for scene.
+     * @param postCamera Orthographic camera for post scene.
+     * @param renderTarget Render target.
+     * @param encodedTarget Encoded RGBA target of depth buffer.
+     * @param color Color for logger messages.
+     */
     function createDepthBuffer(renderer, width, height, modelScene, postScene, modelCamera, postCamera, renderTarget, encodedTarget, color) {
         // N.B. Danger! Parameters hide global variables...
         // renderTarget.texture      : render buffer
@@ -1841,11 +1953,19 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         renderer.render(postScene, postCamera, encodedTarget);
         analyzeTargets(renderer, renderTarget, encodedTarget, modelCamera, width, height, color);
     }
+    /**
+     *  Event handler to create depth buffers.
+     */
     function onClick() {
         logger.clearLog();
         createDepthBuffer(postRenderer, Resolution.viewPost, Resolution.viewPost, modelScene, postScene, modelCamera, postCamera, target, encodedTarget, 'red');
         createDepthBuffer(meshRenderer, Resolution.viewMesh, Resolution.viewMesh, modelScene, meshPostScene, modelCamera, postCamera, meshTarget, meshEncodedTarget, 'blue');
     }
+    /**
+     * Constructs a WebGL target canvas.
+     * @param id DOM id for canvas.
+     * @param resolution Resolution (square) for canvas.
+     */
     function initializeCanvas(id, resolution) {
         var canvas = document.querySelector("#" + id);
         if (!canvas) {
@@ -1860,6 +1980,9 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         canvas.style.height = resolution + "px";
         return canvas;
     }
+    /**
+     * Animation loop.
+     */
     function animate() {
         if (!supportsWebGLExtensions)
             return;

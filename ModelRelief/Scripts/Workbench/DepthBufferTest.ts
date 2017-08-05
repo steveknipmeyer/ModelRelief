@@ -48,6 +48,10 @@ enum Resolution {
 init();
 animate();
 
+/**
+ * Verifies the minimum WebGL extensions are present.
+ * @param renderer WebGL renderer.
+ */
 function verifyExtensions(renderer : THREE.WebGLRenderer) : boolean {
     
     if (!renderer.extensions.get('WEBGL_depth_texture')) 
@@ -56,6 +60,9 @@ function verifyExtensions(renderer : THREE.WebGLRenderer) : boolean {
     return true;
 }
 
+/**
+ * Initialize the primary model view.
+ */
 function initializeModelRenderer() {
 
     modelCanvas = initializeCanvas('modelCanvas', Resolution.viewModel);
@@ -81,6 +88,11 @@ function initializeModelRenderer() {
     initializeModelHelpers(modelScene, null, true);
 }
 
+/**
+ * Constructs a render target <with a depth texture buffer>.
+ * @param width Width of render target.
+ * @param height Height of render target.
+ */
 function constructDepthTextureRenderTarget(width : number, height : number) : THREE.WebGLRenderTarget {
 
     // Model Scene -> (Render Texture, Depth Texture)
@@ -101,9 +113,11 @@ function constructDepthTextureRenderTarget(width : number, height : number) : TH
     return renderTarget;
 }
 
+/**
+ * Initializes the post renderer used to visualize the encoded depth texture.
+ */
 function initializePostRenderer() {
 
-    // DepthBuffer Renderer
     postCanvas = initializeCanvas('postCanvas', Resolution.viewPost);
     postRenderer = new THREE.WebGLRenderer({ canvas: postCanvas, logarithmicDepthBuffer : uselogDepthBuffer });
     postRenderer.setPixelRatio(window.devicePixelRatio);
@@ -122,6 +136,9 @@ function initializePostRenderer() {
     setupPostScene();
 }
 
+/**
+ * Initializes the mesh renderer used to view the 3D mesh.
+ */
 function initializeMeshRenderer() {
 
     meshCanvas = initializeCanvas('meshCanvas', Resolution.viewMesh);
@@ -146,6 +163,9 @@ function initializeMeshRenderer() {
    initializeLighting(meshScene);
 }
 
+/**
+ * Initialize the application.
+ */
 function init() {
     
     logger = new HTMLLogger();
@@ -158,12 +178,28 @@ function init() {
     window.addEventListener('resize', onWindowResize, false);
 }
 
+/**
+ * Updates a renderer target properties.
+ * Event handler called on window resize.
+ * @param renderer Renderer that owns the target.
+ * @param renderTarget Render target to update.
+ * @param width Width of the renderer.
+ * @param height Height of the renderer.
+ */
 function updateRenderTargetOnResize  (renderer : THREE.WebGLRenderer, renderTarget : THREE.WebGLRenderTarget, width : number, height : number) {
 
     let pixelRatio = renderer.getPixelRatio();
     renderTarget.setSize(width * pixelRatio, height * pixelRatio);
 }
 
+/**
+ * Updates a renderer properties.
+ * Event handler called on window resize.
+ * @param renderer Renderer to update.
+ * @param width Width of the renderer.
+ * @param height Height of the renderer.
+ * @param camera Renderer's camera.
+ */
 function updateViewOnWindowResize(renderer : THREE.Renderer, width : number, height : number, camera? : THREE.PerspectiveCamera) {
 
     let aspect : number = width / height;
@@ -175,6 +211,9 @@ function updateViewOnWindowResize(renderer : THREE.Renderer, width : number, hei
     renderer.setSize(width, height);
 }
 
+/**
+ * Event handler called on window resize.
+ */
 function onWindowResize() {
 
     updateViewOnWindowResize(modelRenderer, Resolution.viewModel, Resolution.viewModel, modelCamera);
@@ -189,7 +228,8 @@ function onWindowResize() {
 }
 
 /**
- * Adds lighting to the scene
+ * Adds lighting to the scene.
+ * param theScene Scene to add lighting.
  */
 function initializeLighting(theScene : THREE.Scene) {
 
@@ -201,9 +241,12 @@ function initializeLighting(theScene : THREE.Scene) {
     theScene.add(directionalLight1);
 }
 
-/**
- * Adds helpers to the scene to visualize camera, coordinates, etc.
- */
+ /**
+  * Adds helpers to the scene to visualize camera, coordinates, etc. 
+  * @param scene Scene to annotate.
+  * @param camera Camera to construct helper (may be null).
+  * @param addAxisHelper Add a helper for the cartesian axes.
+  */
 function initializeModelHelpers(scene : THREE.Scene, camera : THREE.Camera, addAxisHelper : boolean) {
 
     if (camera) {
@@ -218,7 +261,10 @@ function initializeModelHelpers(scene : THREE.Scene, camera : THREE.Camera, addA
         scene.add(axisHelper);
     }
 }
-
+/**
+ * Adds a torus to a scene.
+ * @param scene Target scene.
+ */
 function setupTorusScene(scene : THREE.Scene) {
 
     // Setup some geometries
@@ -246,6 +292,10 @@ function setupTorusScene(scene : THREE.Scene) {
     }
 }
 
+/**
+ * Adds a test sphere to a scene.
+ * @param scene Target scene.
+ */
 function setupSphereScene(scene : THREE.Scene) {
 
     // geometry
@@ -263,6 +313,10 @@ function setupSphereScene(scene : THREE.Scene) {
     scene.add(mesh);
 }
 
+/**
+ * Add a s test box to a scene.
+ * @param scene Target scene.
+ */
 function setupBoxScene(scene : THREE.Scene) {
 
     // box
@@ -293,6 +347,9 @@ function setupBoxScene(scene : THREE.Scene) {
     scene.add(mesh);
 }
 
+/**
+ * Constructs the scene used to visualize textures.
+ */
 function setupPostScene() {
 
     // Setup post processing stage
@@ -323,6 +380,9 @@ function setupPostScene() {
     postScene.add(postQuad);
 }
 
+/**
+ * Constructs the scene used to visualize the 3D mesh.
+ */
 function setupMeshScene() {
 
     meshMaterial = new THREE.ShaderMaterial({
@@ -345,6 +405,9 @@ function setupMeshScene() {
     meshScene.add(meshQuad);
 }
 
+/**
+ * Constructs the scene used to construct a depth buffer.
+ */
 function setupPostMeshScene() {
 
     let postMeshMaterial = new THREE.ShaderMaterial({
@@ -365,7 +428,14 @@ function setupPostMeshScene() {
     meshPostScene = new THREE.Scene();
     meshPostScene.add(postMeshQuad);
 }
-
+/**
+ * Constructs an RGBA string with the byte values of a pixel.
+ * @param buffer Unsigned byte raw buffer.
+ * @param width Width of texture.
+ * @param height Height of texture.
+ * @param row Pixel row.
+ * @param column Column row.
+ */
 function unsignedBytesToRGBA (buffer : Uint8Array, width: number, height : number, row : number, column : number) : string {
         
     let offset = (row * width) + column;
@@ -377,6 +447,14 @@ function unsignedBytesToRGBA (buffer : Uint8Array, width: number, height : numbe
     return `#${rValue}${gValue}${bValue} ${aValue}`;
 }
 
+/**
+ * Analyzes a pixel from a render buffer.
+ * @param renderer Renderer that created render target.
+ * @param renderTarget Render target (texture buffer).
+ * @param width Width of target.
+ * @param height Height of target.
+ * @param color Color for logger messages.
+ */
 function analyzeRenderBuffer (renderer: THREE.WebGLRenderer, renderTarget : THREE.RenderTarget, width : number, height : number, color : string) {
 
     let renderBuffer =  new Uint8Array(width * height * 4).fill(0);
@@ -386,6 +464,15 @@ function analyzeRenderBuffer (renderer: THREE.WebGLRenderer, renderTarget : THRE
     logger.addMessage(messageString, color);
 }
 
+/**
+ * Analyzes properties of a depth buffer.
+ * @param renderer Renderer that created encoded render target.
+ * @param encodedRenderTarget RGBA encoded values of depth buffer
+ * @param width Width of target.
+ * @param height Height of target.
+ * @param color Color for logger messages.
+ * @param camera Perspective camera used to create render target.
+ */
 function analyzeDepthBuffer (renderer: THREE.WebGLRenderer, encodedRenderTarget : THREE.RenderTarget, width : number, height : number, color : string, camera : THREE.PerspectiveCamera) {
 
     // decode RGBA texture into depth floats
@@ -403,12 +490,35 @@ function analyzeDepthBuffer (renderer: THREE.WebGLRenderer, encodedRenderTarget 
     logger.addMessage(messageString, color);
 }
 
+/**
+ * Analyze the render and depth targets.
+ * @param renderer Renderer that owns the targets.
+ * @param renderTarget Render buffer target.
+ * @param encodedRenderTarget Encoded RGBA depth target.
+ * @param camera Perspective camera used to create targets.
+ * @param width Width of targets.
+ * @param height Height of targets.
+ * @param color Color for logger messages.
+ */
 function analyzeTargets (renderer: THREE.WebGLRenderer, renderTarget : THREE.RenderTarget, encodedRenderTarget : THREE.RenderTarget, camera : THREE.PerspectiveCamera, width : number, height : number, color : string)  {
 
     analyzeRenderBuffer(renderer, renderTarget,        width, height, color);
     analyzeDepthBuffer(renderer,  encodedRenderTarget, width, height, color, camera);
 }
 
+/**
+ * Create a depth buffer.
+ * @param renderer Renderer to create the depth buffer.
+ * @param width Width of renderer.
+ * @param height Height of renderer.
+ * @param modelScene 3D model scene to create depth buffer.
+ * @param postScene Polygon scene used to create encoded target of depth buffer.
+ * @param modelCamera Perspective camera for scene.
+ * @param postCamera Orthographic camera for post scene.
+ * @param renderTarget Render target.
+ * @param encodedTarget Encoded RGBA target of depth buffer. 
+ * @param color Color for logger messages.
+ */
 function createDepthBuffer(
         renderer        : THREE.WebGLRenderer, 
         width           : number,
@@ -437,7 +547,9 @@ function createDepthBuffer(
 
     analyzeTargets (renderer, renderTarget, encodedTarget, modelCamera, width, height, color);
 }
-
+/**
+ *  Event handler to create depth buffers.
+ */
 function onClick() {
 
     logger.clearLog();
@@ -446,6 +558,11 @@ function onClick() {
     createDepthBuffer (meshRenderer, Resolution.viewMesh, Resolution.viewMesh, modelScene, meshPostScene, modelCamera, postCamera, meshTarget, meshEncodedTarget, 'blue');
 }
 
+/**
+ * Constructs a WebGL target canvas.
+ * @param id DOM id for canvas.
+ * @param resolution Resolution (square) for canvas.
+ */
 function initializeCanvas(id : string, resolution : number) : HTMLCanvasElement {
     
     let canvas : HTMLCanvasElement = <HTMLCanvasElement> document.querySelector(`#${id}`);
@@ -466,6 +583,9 @@ function initializeCanvas(id : string, resolution : number) : HTMLCanvasElement 
     return canvas;
 }
 
+/**
+ * Animation loop.
+ */
 function animate() {
 
     if (!supportsWebGLExtensions) 
