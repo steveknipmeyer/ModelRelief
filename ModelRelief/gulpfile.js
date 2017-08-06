@@ -231,6 +231,10 @@ gulp.task('copyNPM', function () {
     // requirejs
     let requirejsFolder = siteConfig.nodeModulesRoot + 'requirejs/';
     copyFile('require.js', requirejsFolder, siteConfig.libRoot);
+
+    // chai assertion library
+    let chaiFolder = siteConfig.nodeModulesRoot + 'chai/';
+    copyFile('chai.js', chaiFolder, siteConfig.libRoot);
 });
 
 /// <summary>

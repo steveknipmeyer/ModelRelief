@@ -1,16 +1,22 @@
 {
   "name": "modelrelief",
   "version": "1.0.0",
-  "description": "",
+  "description": "Design tools to convert 3D models to low reliefs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/steveknipmeyer/ModelRelief.git"
+  },
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
+    "@types/chai": "^4.0.2",
     "@types/dat-gui": "^0.6.3",
     "@types/jquery": "^3.2.1",
     "@types/requirejs": "^2.1.29",
     "@types/three": "^0.84.17",
     "beepbeep": "^1.2.1",
     "bootstrap": "^3.3.7",
+    "chai": "^4.1.1",
     "gulp": "^3.9.1",
     "jquery": "^3.2.1",
     "jquery-validation": "^1.16.0",

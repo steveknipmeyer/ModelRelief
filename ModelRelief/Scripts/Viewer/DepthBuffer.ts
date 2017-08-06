@@ -5,7 +5,9 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
+import {assert}             from 'chai'
 import * as THREE           from 'three'
+
 import {Graphics}           from 'Graphics'
 import {Logger, HTMLLogger} from 'Logger'
 import {MathLibrary}        from 'Math'
@@ -179,8 +181,8 @@ export class DepthBuffer {
      */
     getModelVertexIndex (worldVertex : THREE.Vertex, planeBoundingBox : THREE.Box3) : number {
     
-        let boxSize          : THREE.Vector3 = planeBoundingBox.getSize();
-        let meshExtents      : THREE.Vector2 = new THREE.Vector2 (boxSize.x, boxSize.y);
+        let boxSize      : THREE.Vector3 = planeBoundingBox.getSize();
+        let meshExtents  : THREE.Vector2 = new THREE.Vector2 (boxSize.x, boxSize.y);
 
         //  map coordinates to offsets in range [0, 1]
         let offsetX : number = (worldVertex.x + (boxSize.x / 2)) / boxSize.x;
@@ -192,9 +194,7 @@ export class DepthBuffer {
         let index = (row * this.width) + column;
         index = Math.floor(index);
 
-        if ((index < 0) || (index >= this.depths.length)) {
-            console.log (`Vertex (${worldVertex.x}, ${worldVertex.y}, ${worldVertex.z}) yielded offset = (${offsetX}, ${offsetY}), index = ${index}`);
-        }
+        assert.isTrue((index >= 0) && (index < this.depths.length), (`Vertex (${worldVertex.x}, ${worldVertex.y}, ${worldVertex.z}) yielded offset = (${offsetX}, ${offsetY}), index = ${index}`));
 
         return index;
     }

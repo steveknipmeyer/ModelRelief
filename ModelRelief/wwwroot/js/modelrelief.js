@@ -1738,7 +1738,7 @@ define("System/Math", ["require", "exports"], function (require, exports) {
     }());
     exports.MathLibrary = MathLibrary;
 });
-define("Viewer/DepthBuffer", ["require", "exports", "three", "System/Logger", "System/Math"], function (require, exports, THREE, Logger_1, Math_1) {
+define("Viewer/DepthBuffer", ["require", "exports", "chai", "three", "System/Logger", "System/Math"], function (require, exports, chai_1, THREE, Logger_1, Math_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -1896,9 +1896,7 @@ define("Viewer/DepthBuffer", ["require", "exports", "three", "System/Logger", "S
             var column = offsetX * (this.width - 1);
             var index = (row * this.width) + column;
             index = Math.floor(index);
-            if ((index < 0) || (index >= this.depths.length)) {
-                console.log("Vertex (" + worldVertex.x + ", " + worldVertex.y + ", " + worldVertex.z + ") yielded offset = (" + offsetX + ", " + offsetY + "), index = " + index);
-            }
+            chai_1.assert.isTrue((index >= 0) && (index < this.depths.length), ("Vertex (" + worldVertex.x + ", " + worldVertex.y + ", " + worldVertex.z + ") yielded offset = (" + offsetX + ", " + offsetY + "), index = " + index));
             return index;
         };
         DepthBuffer.normalizedTolerance = .001;
