@@ -514,15 +514,15 @@ function analyzeDepthBuffer (renderer: THREE.WebGLRenderer, encodedRenderTarget 
     logger.addEmptyLine();
 
     logger.addMessage('Normalized', headerStyle);
-    logger.addMessage(`Center Depth = ${depthBuffer.valueNormalized(middle, middle).toFixed(decimalPlaces)}`, messageStyle);
-    logger.addMessage(`Z Depth = ${depthBuffer.depthNormalized.toFixed(decimalPlaces)}`, messageStyle);
+    logger.addMessage(`Center Depth = ${depthBuffer.depthNormalized(middle, middle).toFixed(decimalPlaces)}`, messageStyle);
+    logger.addMessage(`Z Depth = ${depthBuffer.rangeNormalized.toFixed(decimalPlaces)}`, messageStyle);
     logger.addMessage(`Minimum = ${depthBuffer.minimumNormalized.toFixed(decimalPlaces)}`, messageStyle);
     logger.addMessage(`Maximum = ${depthBuffer.maximumNormalized.toFixed(decimalPlaces)}`, messageStyle);
     logger.addEmptyLine();
 
     logger.addMessage('Model Units', headerStyle);
-    logger.addMessage(`Center Depth = ${depthBuffer.value(middle, middle).toFixed(decimalPlaces)}`, messageStyle);
-    logger.addMessage(`Z Depth = ${depthBuffer.depth.toFixed(decimalPlaces)}`, messageStyle);
+    logger.addMessage(`Center Depth = ${depthBuffer.depth(middle, middle).toFixed(decimalPlaces)}`, messageStyle);
+    logger.addMessage(`Z Depth = ${depthBuffer.range.toFixed(decimalPlaces)}`, messageStyle);
     logger.addMessage(`Minimum = ${depthBuffer.minimum.toFixed(decimalPlaces)}`, messageStyle);
     logger.addMessage(`Maximum = ${depthBuffer.maximum.toFixed(decimalPlaces)}`, messageStyle);
 }
@@ -613,7 +613,7 @@ function transformMeshSceneFromDepthBuffer (renderer : THREE.WebGLRenderer, mesh
         let vertex = meshGeometry.vertices[iVertex];
         let depthBufferVertex = depthBuffer.getModelVertexIndex (vertex, meshGeometry.boundingBox);
 
-        var depth = -depthBuffer.values[depthBufferVertex];
+        var depth = -depthBuffer.depths[depthBufferVertex];
         meshGeometry.vertices[iVertex].z = depth;
     }
 

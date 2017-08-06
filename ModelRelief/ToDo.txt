@@ -1,15 +1,32 @@
 ﻿// ------------------------------------------------------------------------// 
+//      Commit Notes                                                       //
+// ------------------------------------------------------------------------//
+
+// ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
 
+Units/pixel not bounding box.
+
+Add gulp TypeScript compilation.
+Memory management!
+
 Remove PostCanvas?
+    Add Camera button.
+
+Create DepthBufferFactory class.
+Create MeshPreview class.
+
+Calculate model extents.
+    Transform model by camera transform.
+    Calculate bounding box.
+
+Add Orthographic view controls.
+Add axes helper to mesh viewer.
 
 Add assert library.
 
 How should the vertex (translated) Z position be calculated from the depth buffer?
-
-Transform the mesh model based on the depth buffer.
-Substitute a MeshPhongMaterial for the Mesh shaders...
 
 Add support for sampling arbitrary pixels in the postCanvas.
 
@@ -19,6 +36,7 @@ Experiment with precision setting in THREE.WebGLRenderer.
 Create a 16 bit PNG from the depth data.
 
 Investigate jQuery ajax support for posting the file to the server.
+
 OrbitControls versus Trackball
 
 Why does the shader code not reload?

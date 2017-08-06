@@ -1764,8 +1764,6 @@ define("Viewer/DepthBuffer", ["require", "exports", "three", "System/Logger", "S
             this.width = width;
             this.height = height;
             this.camera = camera;
-            this.nearClipPlane = camera.near;
-            this.farClipPlane = camera.far;
             this.initialize();
         }
         /**
@@ -1773,35 +1771,46 @@ define("Viewer/DepthBuffer", ["require", "exports", "three", "System/Logger", "S
          */
         DepthBuffer.prototype.initialize = function () {
             this.logger = new Logger_1.HTMLLogger();
-            this.values = new Float32Array(this.rgbaArray.buffer);
-            this.cameraRange = this.farClipPlane - this.nearClipPlane;
+            this.nearClipPlane = this.camera.near;
+            this.farClipPlane = this.camera.far;
+            this.cameraClipRange = this.farClipPlane - this.nearClipPlane;
+            // RGBA -> Float32
+            this.depths = new Float32Array(this.rgbaArray.buffer);
+        };
+        /**
+         * Convert a normalized depth [0,1] to depth in model units.
+         * @param normalizedDepth Normalized depth [0,1].
+         */
+        DepthBuffer.prototype.normalizedToModelDepth = function (normalizedDepth) {
+            return normalizedDepth * this.cameraClipRange;
         };
         /**
          * Returns the normalized depth value at a pixel index
-         * @param pixelRow Map row.
-         * @param pixelColumn Map column.
+         * @param row Buffer row.
+         * @param column Buffer column.
          */
-        DepthBuffer.prototype.valueNormalized = function (pixelRow, pixelColumn) {
-            var index = (pixelRow * this.width) + pixelColumn;
-            return this.values[index];
+        DepthBuffer.prototype.depthNormalized = function (row, column) {
+            var index = (row * this.width) + column;
+            return this.depths[index];
         };
         /**
          * Returns the depth value at a pixel index
-         * @param pixelRow Map row.
+         * @param row Map row.
          * @param pixelColumn Map column.
          */
-        DepthBuffer.prototype.value = function (pixelRow, pixelColumn) {
-            var value = this.valueNormalized(pixelRow, pixelColumn) * this.cameraRange;
-            return value;
+        DepthBuffer.prototype.depth = function (row, column) {
+            var depthNormalized = this.depthNormalized(row, column);
+            var depth = this.normalizedToModelDepth(depthNormalized);
+            return depth;
         };
         Object.defineProperty(DepthBuffer.prototype, "minimumNormalized", {
             /**
-            * Returns the minimum normalized depth value.
-            */
+             * Returns the minimum normalized depth value.
+             */
             get: function () {
                 var minimumNormalized = Number.MAX_VALUE;
-                for (var index = 0; index < this.values.length; index++) {
-                    var depthValue = this.values[index];
+                for (var index = 0; index < this.depths.length; index++) {
+                    var depthValue = this.depths[index];
                     if (depthValue < minimumNormalized)
                         minimumNormalized = depthValue;
                 }
@@ -1812,10 +1821,10 @@ define("Viewer/DepthBuffer", ["require", "exports", "three", "System/Logger", "S
         });
         Object.defineProperty(DepthBuffer.prototype, "minimum", {
             /**
-            * Returns the minimum depth value.
-            */
+             * Returns the minimum depth value.
+             */
             get: function () {
-                var minimum = this.minimumNormalized * this.cameraRange;
+                var minimum = this.normalizedToModelDepth(this.minimumNormalized);
                 return minimum;
             },
             enumerable: true,
@@ -1823,12 +1832,12 @@ define("Viewer/DepthBuffer", ["require", "exports", "three", "System/Logger", "S
         });
         Object.defineProperty(DepthBuffer.prototype, "maximumNormalized", {
             /**
-            * Returns the maximum normalized depth value.
-            */
+             * Returns the maximum normalized depth value.
+             */
             get: function () {
                 var maximumNormalized = Number.MIN_VALUE;
-                for (var index = 0; index < this.values.length; index++) {
-                    var depthValue = this.values[index];
+                for (var index = 0; index < this.depths.length; index++) {
+                    var depthValue = this.depths[index];
                     // skip values at far plane
                     if (Math_1.MathLibrary.numbersEqualWithinTolerance(depthValue, 1.0, DepthBuffer.normalizedTolerance))
                         continue;
@@ -1842,19 +1851,19 @@ define("Viewer/DepthBuffer", ["require", "exports", "three", "System/Logger", "S
         });
         Object.defineProperty(DepthBuffer.prototype, "maximum", {
             /**
-            * Returns the maximum depth value.
-            */
+             * Returns the maximum depth value.
+             */
             get: function () {
-                var maximum = this.maximumNormalized * this.cameraRange;
+                var maximum = this.normalizedToModelDepth(this.maximumNormalized);
                 return maximum;
             },
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(DepthBuffer.prototype, "depthNormalized", {
+        Object.defineProperty(DepthBuffer.prototype, "rangeNormalized", {
             /**
-            * Returns the normalized depth of the buffer.
-            */
+             * Returns the normalized depth range of the buffer.
+             */
             get: function () {
                 var depthNormalized = this.maximumNormalized - this.minimumNormalized;
                 return depthNormalized;
@@ -1862,12 +1871,12 @@ define("Viewer/DepthBuffer", ["require", "exports", "three", "System/Logger", "S
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(DepthBuffer.prototype, "depth", {
+        Object.defineProperty(DepthBuffer.prototype, "range", {
             /**
-            * Returns the normalized depth of the buffer.
-            */
+             * Returns the normalized depth of the buffer.
+             */
             get: function () {
-                var depth = this.depthNormalized * this.cameraRange;
+                var depth = this.normalizedToModelDepth(this.rangeNormalized);
                 return depth;
             },
             enumerable: true,
@@ -1883,11 +1892,11 @@ define("Viewer/DepthBuffer", ["require", "exports", "three", "System/Logger", "S
             //  map coordinates to offsets in range [0, 1]
             var offsetX = (worldVertex.x + (boxSize.x / 2)) / boxSize.x;
             var offsetY = (worldVertex.y + (boxSize.y / 2)) / boxSize.y;
-            var pixelRow = offsetY * (this.height - 1);
-            var pixelColumn = offsetX * (this.width - 1);
-            var index = (pixelRow * this.width) + pixelColumn;
+            var row = offsetY * (this.height - 1);
+            var column = offsetX * (this.width - 1);
+            var index = (row * this.width) + column;
             index = Math.floor(index);
-            if ((index < 0) || (index >= this.values.length)) {
+            if ((index < 0) || (index >= this.depths.length)) {
                 console.log("Vertex (" + worldVertex.x + ", " + worldVertex.y + ", " + worldVertex.z + ") yielded offset = (" + offsetX + ", " + offsetY + "), index = " + index);
             }
             return index;
@@ -2294,14 +2303,14 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         logger.addMessage("Clip Range = " + (camera.far - camera.near), messageStyle);
         logger.addEmptyLine();
         logger.addMessage('Normalized', headerStyle);
-        logger.addMessage("Center Depth = " + depthBuffer.valueNormalized(middle, middle).toFixed(decimalPlaces), messageStyle);
-        logger.addMessage("Z Depth = " + depthBuffer.depthNormalized.toFixed(decimalPlaces), messageStyle);
+        logger.addMessage("Center Depth = " + depthBuffer.depthNormalized(middle, middle).toFixed(decimalPlaces), messageStyle);
+        logger.addMessage("Z Depth = " + depthBuffer.rangeNormalized.toFixed(decimalPlaces), messageStyle);
         logger.addMessage("Minimum = " + depthBuffer.minimumNormalized.toFixed(decimalPlaces), messageStyle);
         logger.addMessage("Maximum = " + depthBuffer.maximumNormalized.toFixed(decimalPlaces), messageStyle);
         logger.addEmptyLine();
         logger.addMessage('Model Units', headerStyle);
-        logger.addMessage("Center Depth = " + depthBuffer.value(middle, middle).toFixed(decimalPlaces), messageStyle);
-        logger.addMessage("Z Depth = " + depthBuffer.depth.toFixed(decimalPlaces), messageStyle);
+        logger.addMessage("Center Depth = " + depthBuffer.depth(middle, middle).toFixed(decimalPlaces), messageStyle);
+        logger.addMessage("Z Depth = " + depthBuffer.range.toFixed(decimalPlaces), messageStyle);
         logger.addMessage("Minimum = " + depthBuffer.minimum.toFixed(decimalPlaces), messageStyle);
         logger.addMessage("Maximum = " + depthBuffer.maximum.toFixed(decimalPlaces), messageStyle);
     }
@@ -2369,7 +2378,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
             // calculate index of vertex in depth buffer based on view extents and camera transform
             var vertex = meshGeometry.vertices[iVertex];
             var depthBufferVertex = depthBuffer.getModelVertexIndex(vertex, meshGeometry.boundingBox);
-            var depth = -depthBuffer.values[depthBufferVertex];
+            var depth = -depthBuffer.depths[depthBufferVertex];
             meshGeometry.vertices[iVertex].z = depth;
         }
         meshGeometry.verticesNeedUpdate = true;

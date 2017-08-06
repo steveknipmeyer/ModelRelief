@@ -21,14 +21,14 @@ export class DepthBuffer {
     logger : Logger;
 
     rgbaArray : Uint8Array;
-    values    : Float32Array;
+    depths    : Float32Array;
     width     : number;
     height    : number;
 
-    camera        : THREE.PerspectiveCamera;
-    nearClipPlane : number;
-    farClipPlane  : number;
-    cameraRange   : number;
+    camera          : THREE.PerspectiveCamera;
+    nearClipPlane   : number;
+    farClipPlane    : number;
+    cameraClipRange : number;
 
     /**
      * @constructor
@@ -46,9 +46,6 @@ export class DepthBuffer {
         this.height = height;
         this.camera = camera;
 
-        this.nearClipPlane = camera.near;
-        this.farClipPlane  = camera.far;
-
         this.initialize();
     }
 
@@ -59,42 +56,56 @@ export class DepthBuffer {
         
         this.logger = new HTMLLogger();       
 
-        this.values = new Float32Array(this.rgbaArray.buffer);
-        this.cameraRange = this.farClipPlane - this.nearClipPlane;
+        this.nearClipPlane = this.camera.near;
+        this.farClipPlane  = this.camera.far;
+        this.cameraClipRange = this.farClipPlane - this.nearClipPlane;
+
+        // RGBA -> Float32
+        this.depths = new Float32Array(this.rgbaArray.buffer);
+    }
+
+    /**
+     * Convert a normalized depth [0,1] to depth in model units.
+     * @param normalizedDepth Normalized depth [0,1].
+     */
+    normalizedToModelDepth(normalizedDepth : number) : number {
+
+        return normalizedDepth * this.cameraClipRange;
     }
 
     /**
      * Returns the normalized depth value at a pixel index
-     * @param pixelRow Map row.
-     * @param pixelColumn Map column.
+     * @param row Buffer row.
+     * @param column Buffer column.
      */
-    valueNormalized (pixelRow : number, pixelColumn) : number {
+    depthNormalized (row : number, column) : number {
 
-        let index = (pixelRow * this.width) + pixelColumn;
-        return this.values[index]
+        let index = (row * this.width) + column;
+        return this.depths[index]
     }
 
     /**
      * Returns the depth value at a pixel index
-     * @param pixelRow Map row.
+     * @param row Map row.
      * @param pixelColumn Map column.
      */
-    value(pixelRow : number, pixelColumn) : number {
+    depth(row : number, column) : number {
 
-        let value = this.valueNormalized(pixelRow, pixelColumn) * this.cameraRange;
+        let depthNormalized = this.depthNormalized(row, column);
+        let depth = this.normalizedToModelDepth(depthNormalized);
 
-        return value;
+        return depth;
     }
 
     /**
-    * Returns the minimum normalized depth value.
-    */
+     * Returns the minimum normalized depth value.
+     */
     get minimumNormalized() : number{
 
         let minimumNormalized : number = Number.MAX_VALUE;
-        for (let index: number = 0; index < this.values.length; index++)
+        for (let index: number = 0; index < this.depths.length; index++)
             {
-            let depthValue : number = this.values[index];
+            let depthValue : number = this.depths[index];
 
             if (depthValue < minimumNormalized)
                 minimumNormalized = depthValue;
@@ -103,24 +114,24 @@ export class DepthBuffer {
     }
 
     /**
-    * Returns the minimum depth value.
-    */
+     * Returns the minimum depth value.
+     */
     get minimum() : number{
 
-        let minimum = this.minimumNormalized * this.cameraRange;
+        let minimum = this.normalizedToModelDepth(this.minimumNormalized);
 
         return minimum;
     }
 
     /**
-    * Returns the maximum normalized depth value.
-    */
+     * Returns the maximum normalized depth value.
+     */
     get maximumNormalized() : number{
 
         let maximumNormalized : number = Number.MIN_VALUE;
-        for (let index: number = 0; index < this.values.length; index++)
+        for (let index: number = 0; index < this.depths.length; index++)
             {
-            let depthValue : number = this.values[index];
+            let depthValue : number = this.depths[index];
 
             // skip values at far plane
             if (MathLibrary.numbersEqualWithinTolerance(depthValue, 1.0, DepthBuffer.normalizedTolerance))
@@ -133,19 +144,19 @@ export class DepthBuffer {
     }
 
     /**
-    * Returns the maximum depth value.
-    */
+     * Returns the maximum depth value.
+     */
     get maximum() : number{
 
-        let maximum = this.maximumNormalized * this.cameraRange;
+        let maximum = this.normalizedToModelDepth(this.maximumNormalized);
 
         return maximum;
     }
 
     /**
-    * Returns the normalized depth of the buffer.
-    */
-    get depthNormalized() : number{
+     * Returns the normalized depth range of the buffer.
+     */
+    get rangeNormalized() : number{
 
         let depthNormalized : number = this.maximumNormalized - this.minimumNormalized;
 
@@ -153,11 +164,11 @@ export class DepthBuffer {
     }
 
     /**
-    * Returns the normalized depth of the buffer.
-    */
-    get depth() : number{
+     * Returns the normalized depth of the buffer.
+     */
+    get range() : number{
 
-        let depth : number = this.depthNormalized * this.cameraRange;
+        let depth : number = this.normalizedToModelDepth( this.rangeNormalized);
 
         return depth;
     }
@@ -175,15 +186,13 @@ export class DepthBuffer {
         let offsetX : number = (worldVertex.x + (boxSize.x / 2)) / boxSize.x;
         let offsetY : number = (worldVertex.y + (boxSize.y / 2)) / boxSize.y;
 
-        let pixelRow    : number = offsetY * (this.height - 1);
-        let pixelColumn : number = offsetX * (this.width - 1);
+        let row    : number = offsetY * (this.height - 1);
+        let column : number = offsetX * (this.width - 1);
         
-        let index = (pixelRow * this.width) + pixelColumn;
-
-
-
+        let index = (row * this.width) + column;
         index = Math.floor(index);
-        if ((index < 0) || (index >= this.values.length)) {
+
+        if ((index < 0) || (index >= this.depths.length)) {
             console.log (`Vertex (${worldVertex.x}, ${worldVertex.y}, ${worldVertex.z}) yielded offset = (${offsetX}, ${offsetY}), index = ${index}`);
         }
 
