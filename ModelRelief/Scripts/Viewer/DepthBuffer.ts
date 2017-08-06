@@ -270,7 +270,10 @@ export class DepthBuffer {
      * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ration.
      * @param material Material to assign to mesh.
      */
-    mesh (modelWidth : number, material : THREE.Material) : THREE.Mesh {
+    mesh (modelWidth : number, material? : THREE.Material) : THREE.Mesh {
+
+        if (!material)
+            material = new THREE.MeshPhongMaterial({wireframe : false, color : 0xff00ff, reflectivity : 0.75, shininess : 0.75});
 
         // construct plane of given dimensions; resolution = depth buffer
         let mesh : THREE.Mesh = this.constructMeshPlane(modelWidth, material);

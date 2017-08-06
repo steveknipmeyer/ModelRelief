@@ -1960,6 +1960,8 @@ define("Viewer/DepthBuffer", ["require", "exports", "chai", "three", "System/Log
          * @param material Material to assign to mesh.
          */
         DepthBuffer.prototype.mesh = function (modelWidth, material) {
+            if (!material)
+                material = new THREE.MeshPhongMaterial({ wireframe: false, color: 0xff00ff, reflectivity: 0.75, shininess: 0.75 });
             // construct plane of given dimensions; resolution = depth buffer
             var mesh = this.constructMeshPlane(modelWidth, material);
             // tranlate mesh points to respective depths
@@ -2054,7 +2056,7 @@ define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function 
     }());
     exports.UnitTests = UnitTests;
 });
-define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/TrackballControls", "Viewer/DepthBuffer", "System/Logger", "UnitTests/UnitTests"], function (require, exports, THREE, TrackballControls_2, DepthBuffer_1, Logger_2, UnitTests_1) {
+define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/TrackballControls", "Viewer/DepthBuffer", "System/Logger"], function (require, exports, THREE, TrackballControls_2, DepthBuffer_1, Logger_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var modelCanvas;
@@ -2239,7 +2241,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         var ambientLight = new THREE.AmbientLight(0xffffff);
         theScene.add(ambientLight);
         var directionalLight1 = new THREE.DirectionalLight(0xffffff);
-        directionalLight1.position.set(50, 50, 50);
+        directionalLight1.position.set(500, 500, 500);
         theScene.add(directionalLight1);
     }
     /**
@@ -2519,9 +2521,9 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         var depthBufferRGBA = new Uint8Array(width * height * 4).fill(0);
         renderer.readRenderTargetPixels(meshEncodedTarget, 0, 0, width, height, depthBufferRGBA);
         var depthBuffer = new DepthBuffer_1.DepthBuffer(depthBufferRGBA, width, height, camera);
-        var mesh = depthBuffer.mesh(2, new THREE.MeshPhongMaterial({ color: 0x0000ff }));
+        var mesh = depthBuffer.mesh(2);
         meshScene.add(mesh);
-        UnitTests_1.UnitTests.VertexMapping(depthBuffer, mesh);
+        //  UnitTests.VertexMapping(depthBuffer, mesh);
     }
     /**
      *  Event handler to create depth buffers.

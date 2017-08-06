@@ -244,7 +244,7 @@ function initializeLighting(theScene : THREE.Scene) {
     theScene.add(ambientLight);
 
     let directionalLight1 = new THREE.DirectionalLight(0xffffff);
-    directionalLight1.position.set(50, 50, 50);
+    directionalLight1.position.set(500, 500, 500);
     theScene.add(directionalLight1);
 }
 
@@ -604,10 +604,10 @@ function transformMeshSceneFromDepthBuffer (renderer : THREE.WebGLRenderer, mesh
     renderer.readRenderTargetPixels(meshEncodedTarget, 0, 0, width, height, depthBufferRGBA);
     let depthBuffer = new DepthBuffer(depthBufferRGBA, width, height, camera);    
 
-    let mesh = depthBuffer.mesh(2, new THREE.MeshPhongMaterial({color : 0x0000ff}));
+    let mesh = depthBuffer.mesh(2);
     meshScene.add(mesh);
 
-    UnitTests.VertexMapping(depthBuffer, mesh);
+//  UnitTests.VertexMapping(depthBuffer, mesh);
 }
 
 

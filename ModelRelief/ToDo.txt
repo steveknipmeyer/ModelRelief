@@ -1,96 +1,49 @@
-﻿function transformMeshSceneFromDepthBuffer (renderer : THREE.WebGLRenderer, meshScene : THREE.Scene, meshEncodedTarget : THREE.WebGLRenderTarget, width : number, height : number, camera : THREE.PerspectiveCamera) {
-
-    let previousMesh : THREE.Mesh = <THREE.Mesh> meshScene.getObjectByName(MeshModelName);
-    if (!previousMesh) {
-        console.error ('Model mesh not found in scene.');
-        return;
-     }      
-     meshScene.remove(previousMesh);
-
-    // decode RGBA texture into depth floats
-    let depthBufferRGBA =  new Uint8Array(width * height * 4).fill(0);
-    renderer.readRenderTargetPixels(meshEncodedTarget, 0, 0, width, height, depthBufferRGBA);
-    let depthBuffer = new DepthBuffer(depthBufferRGBA, width, height, camera);    
-
-    let mesh = depthBuffer.mesh(2, new THREE.MeshPhongMaterial({color : 0x0000ff}));
-    meshScene.add(mesh);
-}
-
-function transformMeshSceneFromDepthBuffer (renderer : THREE.WebGLRenderer, meshScene : THREE.Scene, meshEncodedTarget : THREE.WebGLRenderTarget, width : number, height : number, camera : THREE.PerspectiveCamera) {
-
-    let mesh : THREE.Mesh = <THREE.Mesh> meshScene.getObjectByName(MeshModelName);
-    if (!mesh) {
-        console.error ('Model mesh not found in scene.');
-        return;
-     }      
-
-    // decode RGBA texture into depth floats
-    let depthBufferRGBA =  new Uint8Array(width * height * 4).fill(0);
-    renderer.readRenderTargetPixels(meshEncodedTarget, 0, 0, width, height, depthBufferRGBA);
-    let depthBuffer = new DepthBuffer(depthBufferRGBA, width, height, camera);    
-
-    let meshGeometry : THREE.Geometry = <THREE.Geometry> mesh.geometry;
-    meshGeometry.computeBoundingBox();
-
-    let vertexCount : number = meshGeometry.vertices.length;
-    let clipRange : number = camera.far - camera.near;
-    for (let iVertex : number = 0; iVertex < vertexCount; iVertex++) {
-
-        // calculate index of vertex in depth buffer based on view extents and camera transform
-        let vertex = meshGeometry.vertices[iVertex];
-        let depthBufferVertex = depthBuffer.getModelVertexIndex (vertex, meshGeometry.boundingBox);
-
-        var depth = -depthBuffer.depths[depthBufferVertex];
-        meshGeometry.vertices[iVertex].z = depth;
-    }
-
-    meshGeometry.verticesNeedUpdate = true;
-}
-
-// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------// 
 //      Commit Notes                                                       //
 // ------------------------------------------------------------------------//
 
 // ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
+Viewing
 
-Return mesh with given units.
+    Why does the Mesh not render correctly?
+        OBJ Export?
 
-Add gulp TypeScript compilation.
-Memory management!
+    OrbitControls versus Trackball
+    Add Orthographic view controls.
+    Add axes helper to mesh viewer.
 
-Remove PostCanvas?
+Performance
+    Optimize!
+    Memory management!
+
+Development Workflow
+    Add gulp TypeScript compilation.
+    Why does the shader code not reload?
+
+Core
+    Create DepthBufferFactory class.
+    Create MeshPreview class.
+    Calculate model extents so the clip planes can be optimized in DepthBuferFactory.
+        Transform model by camera transform.
+        Calculate bounding box.
+
+    How should the vertex (translated) Z position be calculated from the depth buffer?
+        Experiment with precision setting in THREE.WebGLRenderer.
+
+DepthBufferTest
+    Remove PostCanvas?
     Add Camera button.
 
-Create DepthBufferFactory class.
-Create MeshPreview class.
+Image File Creation
+    Create a 16 bit PNG from the depth data.
+        Investigate jQuery ajax support for posting the file to the server.
 
-Calculate model extents.
-    Transform model by camera transform.
-    Calculate bounding box.
-
-Add Orthographic view controls.
-Add axes helper to mesh viewer.
-
-How should the vertex (translated) Z position be calculated from the depth buffer?
-
-Add support for sampling arbitrary pixels in the postCanvas.
-
-Implement unpackRGBAToDepth in DepthBuffer.ts.
-Experiment with precision setting in THREE.WebGLRenderer.
-
-Create a 16 bit PNG from the depth data.
-
-Investigate jQuery ajax support for posting the file to the server.
-
-OrbitControls versus Trackball
-
-Why does the shader code not reload?
-
-Add types to all methods.
-    TrackballControls
-    OBJLoader
+Code Quality
+    Add types to all methods.
+        TrackballControls
+        OBJLoader
 // ------------------------------------------------------------------------// 
 //      Depth Buffer Notes                                                 //
 // ------------------------------------------------------------------------//
