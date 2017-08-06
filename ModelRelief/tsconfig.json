@@ -22,6 +22,7 @@
         "Scripts/*",
         "Scripts/ModelLoaders/*",
         "Scripts/System/*",
+        "Scripts/UnitTests/*",
         "Scripts/Viewer/*"
       ]
     }

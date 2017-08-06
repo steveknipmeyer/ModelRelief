@@ -18,7 +18,8 @@ import {MathLibrary}        from 'Math'
  */
 export class DepthBuffer {
 
-    static normalizedTolerance : number = .001;    
+    static readonly MeshModelName       : string = 'ModelMesh';
+    static readonly normalizedTolerance : number = .001;    
 
     logger : Logger;
 
@@ -72,7 +73,8 @@ export class DepthBuffer {
      */
     normalizedToModelDepth(normalizedDepth : number) : number {
 
-        return normalizedDepth * this.cameraClipRange;
+        return normalizedDepth;
+//      return normalizedDepth * this.cameraClipRange;
     }
 
     /**
@@ -176,10 +178,18 @@ export class DepthBuffer {
     }
 
     /**
+     * Returns the aspect ration of the depth buffer.
+     */
+        get aspectRatio () : number {
+
+        return this.width / this.height;
+    }
+
+/**
      * Returns the linear index of a model point in world coordinates.
      * @param worldVertex Vertex of model.
      */
-    getModelVertexIndex (worldVertex : THREE.Vertex, planeBoundingBox : THREE.Box3) : number {
+    getModelVertexIndices (worldVertex : THREE.Vertex, planeBoundingBox : THREE.Box3) : THREE.Vector2 {
     
         let boxSize      : THREE.Vector3 = planeBoundingBox.getSize();
         let meshExtents  : THREE.Vector2 = new THREE.Vector2 (boxSize.x, boxSize.y);
@@ -190,12 +200,84 @@ export class DepthBuffer {
 
         let row    : number = offsetY * (this.height - 1);
         let column : number = offsetX * (this.width - 1);
+        row    = Math.round(row);
+        column = Math.round(column);
+
+        assert.isTrue((row >= 0) && (row < this.height), (`Vertex (${worldVertex.x}, ${worldVertex.y}, ${worldVertex.z}) yielded row = ${row}`));
+        assert.isTrue((column>= 0) && (column < this.width), (`Vertex (${worldVertex.x}, ${worldVertex.y}, ${worldVertex.z}) yielded column = ${column}`));
+
+        return new THREE.Vector2(row, column);
+    }
+    /**
+     * Returns the linear index of a model point in world coordinates.
+     * @param worldVertex Vertex of model.
+     */
+    getModelVertexIndex (worldVertex : THREE.Vertex, planeBoundingBox : THREE.Box3) : number {
+
+        let indices : THREE.Vector2 = this.getModelVertexIndices(worldVertex, planeBoundingBox);    
+        let row    : number = indices.x;
+        let column : number = indices.y;
         
         let index = (row * this.width) + column;
-        index = Math.floor(index);
+        index = Math.round(index);
 
-        assert.isTrue((index >= 0) && (index < this.depths.length), (`Vertex (${worldVertex.x}, ${worldVertex.y}, ${worldVertex.z}) yielded offset = (${offsetX}, ${offsetY}), index = ${index}`));
+        assert.isTrue((index >= 0) && (index < this.depths.length), (`Vertex (${worldVertex.x}, ${worldVertex.y}, ${worldVertex.z}) yielded index = ${index}`));
 
         return index;
+    }
+    /**
+     * Transforms the vertices of a mesh plane to match the depth offsets of the DB.
+     * @param meshPlane Mesh plane to transform.
+     */
+    transformMeshPlaneToMesh (meshPlane : THREE.Mesh) {
+
+        let meshGeometry : THREE.Geometry = <THREE.Geometry> meshPlane.geometry;
+        meshGeometry.computeBoundingBox();
+
+        let vertexCount : number = meshGeometry.vertices.length;
+        let clipRange   : number = this.farClipPlane - this.nearClipPlane;
+        for (let iVertex : number = 0; iVertex < vertexCount; iVertex++) {
+
+            // calculate index of vertex in depth buffer based on view extents and camera transform
+            let vertex = meshGeometry.vertices[iVertex];
+            let depthBufferVertex = this.getModelVertexIndex (vertex, meshGeometry.boundingBox);
+
+            var depth = -this.depths[depthBufferVertex];
+            meshGeometry.vertices[iVertex].z = depth;
+        }
+
+        meshGeometry.verticesNeedUpdate = true;
+    }
+
+    /**
+     * Constructs a mesh plane of the given base dimension.
+     * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ration.
+     * @param material Material to assign to mesh.
+     */
+    constructMeshPlane (modelWidth : number, material : THREE.Material) : THREE.Mesh {
+
+        let modelHeight = modelWidth * this.aspectRatio;
+
+        let meshGeometry = new THREE.PlaneGeometry(modelWidth, modelHeight, this.width, this.height);
+        let mesh         = new THREE.Mesh(meshGeometry, material);
+        mesh.name = DepthBuffer.MeshModelName;
+
+        return mesh;
+    }
+
+    /**
+     * Constructs a mesh of the given base dimension.
+     * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ration.
+     * @param material Material to assign to mesh.
+     */
+    mesh (modelWidth : number, material : THREE.Material) : THREE.Mesh {
+
+        // construct plane of given dimensions; resolution = depth buffer
+        let mesh : THREE.Mesh = this.constructMeshPlane(modelWidth, material);
+
+        // tranlate mesh points to respective depths
+        this.transformMeshPlaneToMesh(mesh);
+
+        return mesh;
     }
 }

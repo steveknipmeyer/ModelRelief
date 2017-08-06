@@ -5,6 +5,7 @@ import {TrackballControls}      from 'TrackballControls'
 import {DepthBuffer}            from 'DepthBuffer'
 import {MathLibrary}            from 'Math'
 import {Logger, HTMLLogger}     from 'Logger'
+import {UnitTests}              from 'UnitTests'
 
 var modelCanvas         : HTMLCanvasElement;
 var modelRenderer       : THREE.WebGLRenderer;
@@ -33,7 +34,7 @@ var supportsWebGLExtensions : boolean = true;
 var logger                  : Logger;
 
 var uselogDepthBuffer     : boolean = false;
-var physicalMeshTransform : boolean = false;
+var physicalMeshTransform : boolean = true;
 var MeshModelName         : string = 'ModelMesh';
 
 var cameraZPosition     : number = 4
@@ -591,34 +592,24 @@ function createDepthBuffer(
   */
 function transformMeshSceneFromDepthBuffer (renderer : THREE.WebGLRenderer, meshScene : THREE.Scene, meshEncodedTarget : THREE.WebGLRenderTarget, width : number, height : number, camera : THREE.PerspectiveCamera) {
 
-    let mesh : THREE.Mesh = <THREE.Mesh> meshScene.getObjectByName(MeshModelName);
-    if (!mesh) {
+    let previousMesh : THREE.Mesh = <THREE.Mesh> meshScene.getObjectByName(MeshModelName);
+    if (!previousMesh) {
         console.error ('Model mesh not found in scene.');
         return;
      }      
+     meshScene.remove(previousMesh);
 
     // decode RGBA texture into depth floats
     let depthBufferRGBA =  new Uint8Array(width * height * 4).fill(0);
     renderer.readRenderTargetPixels(meshEncodedTarget, 0, 0, width, height, depthBufferRGBA);
     let depthBuffer = new DepthBuffer(depthBufferRGBA, width, height, camera);    
 
-    let meshGeometry : THREE.Geometry = <THREE.Geometry> mesh.geometry;
-    meshGeometry.computeBoundingBox();
+    let mesh = depthBuffer.mesh(2, new THREE.MeshPhongMaterial({color : 0x0000ff}));
+    meshScene.add(mesh);
 
-    let vertexCount : number = meshGeometry.vertices.length;
-    let clipRange : number = camera.far - camera.near;
-    for (let iVertex : number = 0; iVertex < vertexCount; iVertex++) {
-
-        // calculate index of vertex in depth buffer based on view extents and camera transform
-        let vertex = meshGeometry.vertices[iVertex];
-        let depthBufferVertex = depthBuffer.getModelVertexIndex (vertex, meshGeometry.boundingBox);
-
-        var depth = -depthBuffer.depths[depthBufferVertex];
-        meshGeometry.vertices[iVertex].z = depth;
-    }
-
-    meshGeometry.verticesNeedUpdate = true;
+    UnitTests.VertexMapping(depthBuffer, mesh);
 }
+
 
 /**
  *  Event handler to create depth buffers.

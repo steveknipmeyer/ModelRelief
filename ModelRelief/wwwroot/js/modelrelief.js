@@ -1782,7 +1782,8 @@ define("Viewer/DepthBuffer", ["require", "exports", "chai", "three", "System/Log
          * @param normalizedDepth Normalized depth [0,1].
          */
         DepthBuffer.prototype.normalizedToModelDepth = function (normalizedDepth) {
-            return normalizedDepth * this.cameraClipRange;
+            return normalizedDepth;
+            //      return normalizedDepth * this.cameraClipRange;
         };
         /**
          * Returns the normalized depth value at a pixel index
@@ -1882,11 +1883,21 @@ define("Viewer/DepthBuffer", ["require", "exports", "chai", "three", "System/Log
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(DepthBuffer.prototype, "aspectRatio", {
+            /**
+             * Returns the aspect ration of the depth buffer.
+             */
+            get: function () {
+                return this.width / this.height;
+            },
+            enumerable: true,
+            configurable: true
+        });
         /**
-         * Returns the linear index of a model point in world coordinates.
-         * @param worldVertex Vertex of model.
-         */
-        DepthBuffer.prototype.getModelVertexIndex = function (worldVertex, planeBoundingBox) {
+             * Returns the linear index of a model point in world coordinates.
+             * @param worldVertex Vertex of model.
+             */
+        DepthBuffer.prototype.getModelVertexIndices = function (worldVertex, planeBoundingBox) {
             var boxSize = planeBoundingBox.getSize();
             var meshExtents = new THREE.Vector2(boxSize.x, boxSize.y);
             //  map coordinates to offsets in range [0, 1]
@@ -1894,17 +1905,156 @@ define("Viewer/DepthBuffer", ["require", "exports", "chai", "three", "System/Log
             var offsetY = (worldVertex.y + (boxSize.y / 2)) / boxSize.y;
             var row = offsetY * (this.height - 1);
             var column = offsetX * (this.width - 1);
+            row = Math.round(row);
+            column = Math.round(column);
+            chai_1.assert.isTrue((row >= 0) && (row < this.height), ("Vertex (" + worldVertex.x + ", " + worldVertex.y + ", " + worldVertex.z + ") yielded row = " + row));
+            chai_1.assert.isTrue((column >= 0) && (column < this.width), ("Vertex (" + worldVertex.x + ", " + worldVertex.y + ", " + worldVertex.z + ") yielded column = " + column));
+            return new THREE.Vector2(row, column);
+        };
+        /**
+         * Returns the linear index of a model point in world coordinates.
+         * @param worldVertex Vertex of model.
+         */
+        DepthBuffer.prototype.getModelVertexIndex = function (worldVertex, planeBoundingBox) {
+            var indices = this.getModelVertexIndices(worldVertex, planeBoundingBox);
+            var row = indices.x;
+            var column = indices.y;
             var index = (row * this.width) + column;
-            index = Math.floor(index);
-            chai_1.assert.isTrue((index >= 0) && (index < this.depths.length), ("Vertex (" + worldVertex.x + ", " + worldVertex.y + ", " + worldVertex.z + ") yielded offset = (" + offsetX + ", " + offsetY + "), index = " + index));
+            index = Math.round(index);
+            chai_1.assert.isTrue((index >= 0) && (index < this.depths.length), ("Vertex (" + worldVertex.x + ", " + worldVertex.y + ", " + worldVertex.z + ") yielded index = " + index));
             return index;
         };
+        /**
+         * Transforms the vertices of a mesh plane to match the depth offsets of the DB.
+         * @param meshPlane Mesh plane to transform.
+         */
+        DepthBuffer.prototype.transformMeshPlaneToMesh = function (meshPlane) {
+            var meshGeometry = meshPlane.geometry;
+            meshGeometry.computeBoundingBox();
+            var vertexCount = meshGeometry.vertices.length;
+            var clipRange = this.farClipPlane - this.nearClipPlane;
+            for (var iVertex = 0; iVertex < vertexCount; iVertex++) {
+                // calculate index of vertex in depth buffer based on view extents and camera transform
+                var vertex = meshGeometry.vertices[iVertex];
+                var depthBufferVertex = this.getModelVertexIndex(vertex, meshGeometry.boundingBox);
+                var depth = -this.depths[depthBufferVertex];
+                meshGeometry.vertices[iVertex].z = depth;
+            }
+            meshGeometry.verticesNeedUpdate = true;
+        };
+        /**
+         * Constructs a mesh plane of the given base dimension.
+         * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ration.
+         * @param material Material to assign to mesh.
+         */
+        DepthBuffer.prototype.constructMeshPlane = function (modelWidth, material) {
+            var modelHeight = modelWidth * this.aspectRatio;
+            var meshGeometry = new THREE.PlaneGeometry(modelWidth, modelHeight, this.width, this.height);
+            var mesh = new THREE.Mesh(meshGeometry, material);
+            mesh.name = DepthBuffer.MeshModelName;
+            return mesh;
+        };
+        /**
+         * Constructs a mesh of the given base dimension.
+         * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ration.
+         * @param material Material to assign to mesh.
+         */
+        DepthBuffer.prototype.mesh = function (modelWidth, material) {
+            // construct plane of given dimensions; resolution = depth buffer
+            var mesh = this.constructMeshPlane(modelWidth, material);
+            // tranlate mesh points to respective depths
+            this.transformMeshPlaneToMesh(mesh);
+            return mesh;
+        };
+        DepthBuffer.MeshModelName = 'ModelMesh';
         DepthBuffer.normalizedTolerance = .001;
         return DepthBuffer;
     }());
     exports.DepthBuffer = DepthBuffer;
 });
-define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/TrackballControls", "Viewer/DepthBuffer", "System/Logger"], function (require, exports, THREE, TrackballControls_2, DepthBuffer_1, Logger_2) {
+define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function (require, exports, chai_2, THREE) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * @exports Viewer/Viewer
+     */
+    var UnitTests = (function () {
+        /**
+         * Default constructor
+         * @class UnitTests
+         * @constructor
+         */
+        function UnitTests() {
+        }
+        UnitTests.VertexMapping = function (depthBuffer, mesh) {
+            var meshGeometry = mesh.geometry;
+            meshGeometry.computeBoundingBox();
+            var boundingBox = meshGeometry.boundingBox;
+            // width  = 3              3   4   5
+            // column = 2              0   1   2
+            // buffer length = 6
+            // Test Points            
+            var lowerLeft = boundingBox.min;
+            var lowerRight = new THREE.Vector3(boundingBox.max.x, boundingBox.min.y, 0);
+            var upperRight = boundingBox.max;
+            var upperLeft = new THREE.Vector3(boundingBox.min.x, boundingBox.max.y, 0);
+            var center = boundingBox.getCenter();
+            // Expected Values
+            var bufferLength = (depthBuffer.width * depthBuffer.height);
+            var firstColumn = 0;
+            var lastColumn = depthBuffer.width - 1;
+            var centerColumn = Math.round(depthBuffer.width / 2);
+            var firstRow = 0;
+            var lastRow = depthBuffer.height - 1;
+            var centerRow = Math.round(depthBuffer.height / 2);
+            var lowerLeftIndex = 0;
+            var lowerRightIndex = depthBuffer.width - 1;
+            var upperRightIndex = bufferLength - 1;
+            var upperLeftIndex = bufferLength - depthBuffer.width;
+            var centerIndex = (centerRow * depthBuffer.width) + Math.round(depthBuffer.width / 2);
+            var lowerLeftIndices = new THREE.Vector2(firstRow, firstColumn);
+            var lowerRightIndices = new THREE.Vector2(firstRow, lastColumn);
+            var upperRightIndices = new THREE.Vector2(lastRow, lastColumn);
+            var upperLeftIndices = new THREE.Vector2(lastRow, firstColumn);
+            var centerIndices = new THREE.Vector2(centerRow, centerColumn);
+            var index;
+            var indices;
+            // Lower Left
+            indices = depthBuffer.getModelVertexIndices(lowerLeft, boundingBox);
+            chai_2.assert.deepEqual(indices, lowerLeftIndices);
+            index = depthBuffer.getModelVertexIndex(lowerLeft, boundingBox);
+            chai_2.assert.equal(index, lowerLeftIndex);
+            // Lower Right
+            indices = depthBuffer.getModelVertexIndices(lowerRight, boundingBox);
+            chai_2.assert.deepEqual(indices, lowerRightIndices);
+            index = depthBuffer.getModelVertexIndex(lowerRight, boundingBox);
+            chai_2.assert.equal(index, lowerRightIndex);
+            // Upper Right
+            indices = depthBuffer.getModelVertexIndices(upperRight, boundingBox);
+            chai_2.assert.deepEqual(indices, upperRightIndices);
+            index = depthBuffer.getModelVertexIndex(upperRight, boundingBox);
+            chai_2.assert.equal(index, upperRightIndex);
+            // Upper Left
+            indices = depthBuffer.getModelVertexIndices(upperLeft, boundingBox);
+            chai_2.assert.deepEqual(indices, upperLeftIndices);
+            index = depthBuffer.getModelVertexIndex(upperLeft, boundingBox);
+            chai_2.assert.equal(index, upperLeftIndex);
+            // Center
+            indices = depthBuffer.getModelVertexIndices(center, boundingBox);
+            chai_2.assert.deepEqual(indices, centerIndices);
+            index = depthBuffer.getModelVertexIndex(center, boundingBox);
+            chai_2.assert.equal(index, centerIndex);
+        };
+        return UnitTests;
+    }());
+    exports.UnitTests = UnitTests;
+});
+define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/TrackballControls", "Viewer/DepthBuffer", "System/Logger", "UnitTests/UnitTests"], function (require, exports, THREE, TrackballControls_2, DepthBuffer_1, Logger_2, UnitTests_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var modelCanvas;
@@ -1930,7 +2080,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
     var supportsWebGLExtensions = true;
     var logger;
     var uselogDepthBuffer = false;
-    var physicalMeshTransform = false;
+    var physicalMeshTransform = true;
     var MeshModelName = 'ModelMesh';
     var cameraZPosition = 4;
     var cameraNearPlane = 2;
@@ -2359,27 +2509,19 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
      * @param camera Render camera.
      */
     function transformMeshSceneFromDepthBuffer(renderer, meshScene, meshEncodedTarget, width, height, camera) {
-        var mesh = meshScene.getObjectByName(MeshModelName);
-        if (!mesh) {
+        var previousMesh = meshScene.getObjectByName(MeshModelName);
+        if (!previousMesh) {
             console.error('Model mesh not found in scene.');
             return;
         }
+        meshScene.remove(previousMesh);
         // decode RGBA texture into depth floats
         var depthBufferRGBA = new Uint8Array(width * height * 4).fill(0);
         renderer.readRenderTargetPixels(meshEncodedTarget, 0, 0, width, height, depthBufferRGBA);
         var depthBuffer = new DepthBuffer_1.DepthBuffer(depthBufferRGBA, width, height, camera);
-        var meshGeometry = mesh.geometry;
-        meshGeometry.computeBoundingBox();
-        var vertexCount = meshGeometry.vertices.length;
-        var clipRange = camera.far - camera.near;
-        for (var iVertex = 0; iVertex < vertexCount; iVertex++) {
-            // calculate index of vertex in depth buffer based on view extents and camera transform
-            var vertex = meshGeometry.vertices[iVertex];
-            var depthBufferVertex = depthBuffer.getModelVertexIndex(vertex, meshGeometry.boundingBox);
-            var depth = -depthBuffer.depths[depthBufferVertex];
-            meshGeometry.vertices[iVertex].z = depth;
-        }
-        meshGeometry.verticesNeedUpdate = true;
+        var mesh = depthBuffer.mesh(2, new THREE.MeshPhongMaterial({ color: 0x0000ff }));
+        meshScene.add(mesh);
+        UnitTests_1.UnitTests.VertexMapping(depthBuffer, mesh);
     }
     /**
      *  Event handler to create depth buffers.
