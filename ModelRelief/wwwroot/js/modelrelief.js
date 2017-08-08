@@ -1940,7 +1940,10 @@ define("Viewer/DepthBuffer", ["require", "exports", "chai", "three", "System/Log
                 var depth = -this.depths[depthBufferVertex];
                 meshGeometry.vertices[iVertex].z = depth;
             }
+            meshGeometry.computeFaceNormals();
+            meshGeometry.computeVertexNormals(true);
             meshGeometry.verticesNeedUpdate = true;
+            meshGeometry.normalsNeedUpdate = true;
         };
         /**
          * Constructs a mesh plane of the given base dimension.
@@ -1956,10 +1959,10 @@ define("Viewer/DepthBuffer", ["require", "exports", "chai", "three", "System/Log
         };
         /**
          * Constructs a mesh of the given base dimension.
-         * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ration.
+         * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ratio.
          * @param material Material to assign to mesh.
          */
-        DepthBuffer.prototype.mesh = function (modelWidth, material) {
+        DepthBuffer.prototype.meshByMeshPlane = function (modelWidth, material) {
             if (!material)
                 material = new THREE.MeshPhongMaterial({ wireframe: false, color: 0xff00ff, reflectivity: 0.75, shininess: 0.75 });
             // construct plane of given dimensions; resolution = depth buffer
@@ -1967,6 +1970,64 @@ define("Viewer/DepthBuffer", ["require", "exports", "chai", "three", "System/Log
             // tranlate mesh points to respective depths
             this.transformMeshPlaneToMesh(mesh);
             return mesh;
+        };
+        /**
+         * Constructs a mesh of the given base dimension.
+         * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ratio.
+         * @param material Material to assign to mesh.
+         */
+        DepthBuffer.prototype.mesh = function (modelWidth, material) {
+            if (!material)
+                material = new THREE.MeshPhongMaterial({ wireframe: false, color: 0xff00ff, reflectivity: 0.75, shininess: 0.75 });
+            var meshGeometry = new THREE.Geometry();
+            var faceSize = modelWidth / (this.width - 1);
+            var baseVertexIndex = 0;
+            for (var iRow = 0; iRow < this.height - 1; iRow++) {
+                for (var iColumn = 0; iColumn < this.width; iColumn++) {
+                    var facePair = this.constructTriFacesAtOffset(iRow, iColumn, faceSize, baseVertexIndex);
+                    (_a = meshGeometry.vertices).push.apply(_a, facePair.vertices);
+                    (_b = meshGeometry.faces).push.apply(_b, facePair.faces);
+                    baseVertexIndex += 4;
+                }
+            }
+            meshGeometry.computeFaceNormals();
+            var mesh = new THREE.Mesh(meshGeometry, material);
+            mesh.name = DepthBuffer.MeshModelName;
+            return mesh;
+            var _a, _b;
+        };
+        /**
+         * Constructs a pair of triangular faces at the given offset in the DepthBuffer.
+         * @param row Row offset (Lower Left).
+         * @param column Column offset (Lower Left).
+         * @param faceSize Size of a face edge (not hypotenuse).
+         * @param baseVertexIndex Beginning offset in mesh geometry vertex array.
+         */
+        DepthBuffer.prototype.constructTriFacesAtOffset = function (row, column, faceSize, baseVertexIndex) {
+            var facePair = {
+                vertices: [],
+                faces: []
+            };
+            //  Vertices
+            //   2    3       
+            //   0    1
+            var meshWidth = (this.width - 1) * faceSize;
+            var meshHeight = (this.height - 1) * faceSize;
+            // mesh center will be at the world origin
+            var originX = (column * faceSize) - (meshWidth / 2);
+            var originY = (row * faceSize) - (meshHeight / 2);
+            var lowerLeft = new THREE.Vector3(originX + 0, originY + 0, -this.depth(row + 0, column + 0)); // baseVertexIndex + 0
+            var lowerRight = new THREE.Vector3(originX + faceSize, originY + 0, -this.depth(row + 0, column + 1)); // baseVertexIndex + 1
+            var upperLeft = new THREE.Vector3(originX + 0, originY + faceSize, -this.depth(row + 1, column + 0)); // baseVertexIndex + 2
+            var upperRight = new THREE.Vector3(originX + faceSize, originY + faceSize, -this.depth(row + 1, column + 1)); // baseVertexIndex + 3
+            facePair.vertices.push(lowerLeft, // baseVertexIndex + 0
+            lowerRight, // baseVertexIndex + 1
+            upperLeft, // baseVertexIndex + 2
+            upperRight // baseVertexIndex + 3
+            );
+            // right hand rule for polygon winding
+            facePair.faces.push(new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 1, baseVertexIndex + 3), new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 3, baseVertexIndex + 2));
+            return facePair;
         };
         DepthBuffer.MeshModelName = 'ModelMesh';
         DepthBuffer.normalizedTolerance = .001;
@@ -2171,7 +2232,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         meshRenderer.setPixelRatio(window.devicePixelRatio);
         meshRenderer.setSize(Resolution.viewMesh, Resolution.viewMesh);
         meshCamera = new THREE.PerspectiveCamera(fieldOfView, Resolution.viewMesh / Resolution.viewMesh, cameraNearPlane, cameraFarPlane);
-        meshCamera.position.z = 2;
+        meshCamera.position.z = cameraZPosition;
         meshControls = new TrackballControls_2.TrackballControls(meshCamera, meshRenderer.domElement);
         // Model Scene -> (Render Texture, Depth Texture)
         meshTarget = constructDepthTextureRenderTarget(Resolution.viewMesh, Resolution.viewMesh);
@@ -2238,10 +2299,10 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
      * param theScene Scene to add lighting.
      */
     function initializeLighting(theScene) {
-        var ambientLight = new THREE.AmbientLight(0xffffff);
+        var ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
         theScene.add(ambientLight);
         var directionalLight1 = new THREE.DirectionalLight(0xffffff);
-        directionalLight1.position.set(500, 500, 500);
+        directionalLight1.position.set(4, 4, 4);
         theScene.add(directionalLight1);
     }
     /**
@@ -2308,7 +2369,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         var height = dimensions;
         var depth = dimensions;
         var geometry = new THREE.BoxGeometry(width, height, depth);
-        var material = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
+        var material = new THREE.MeshPhongMaterial({ color: 0xffffff });
         var mesh = new THREE.Mesh(geometry, material);
         var center = new THREE.Vector3(0.0, 0.0, 0.0);
         mesh.position.set(center.x, center.y, center.z);
@@ -2566,7 +2627,6 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         meshControls.update();
         modelRenderer.render(modelScene, modelCamera);
         meshRenderer.render(meshScene, meshCamera);
-        //  meshRenderer.render(meshScene, postCamera); 
     }
 });
 //# sourceMappingURL=modelrelief.js.map

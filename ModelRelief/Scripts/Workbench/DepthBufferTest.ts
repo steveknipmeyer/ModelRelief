@@ -152,7 +152,7 @@ function initializeMeshRenderer() {
     meshRenderer.setSize(Resolution.viewMesh, Resolution.viewMesh);
 
     meshCamera = new THREE.PerspectiveCamera(fieldOfView, Resolution.viewMesh / Resolution.viewMesh, cameraNearPlane, cameraFarPlane);
-    meshCamera.position.z = 2;
+    meshCamera.position.z = cameraZPosition;
 
     meshControls = new TrackballControls(meshCamera, meshRenderer.domElement);
 
@@ -165,7 +165,7 @@ function initializeMeshRenderer() {
     setupMeshScene();
     setupPostMeshScene();
 
-   initializeLighting(meshScene);
+    initializeLighting(meshScene);
 }
 
 /**
@@ -240,11 +240,11 @@ function onWindowResize() {
  */
 function initializeLighting(theScene : THREE.Scene) {
 
-    let ambientLight = new THREE.AmbientLight(0xffffff);
+    let ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
     theScene.add(ambientLight);
 
     let directionalLight1 = new THREE.DirectionalLight(0xffffff);
-    directionalLight1.position.set(500, 500, 500);
+    directionalLight1.position.set(4, 4, 4);
     theScene.add(directionalLight1);
 }
 
@@ -332,7 +332,7 @@ function setupBoxScene(scene : THREE.Scene) {
     let depth  : number = dimensions;
 
     let geometry : THREE.Geometry = new THREE.BoxGeometry(width, height, depth);
-    let material : THREE.Material = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
+    let material : THREE.Material = new THREE.MeshPhongMaterial({ color: 0xffffff });
 
     let mesh = new THREE.Mesh(geometry, material);
     let center : THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0);
@@ -667,6 +667,4 @@ function animate() {
 
     modelRenderer.render(modelScene, modelCamera); 
     meshRenderer.render(meshScene,   meshCamera); 
-
-//  meshRenderer.render(meshScene, postCamera); 
 }
