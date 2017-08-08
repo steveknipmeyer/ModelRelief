@@ -2125,12 +2125,6 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
     var modelCamera;
     var modelControls;
     var modelScene;
-    var postCanvas;
-    var postRenderer;
-    var postCamera;
-    var postScene;
-    var target;
-    var encodedTarget;
     var meshCanvas;
     var meshRenderer;
     var meshCamera;
@@ -2140,6 +2134,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
     var meshMaterial;
     var meshTarget;
     var meshEncodedTarget;
+    var postCamera;
     var supportsWebGLExtensions = true;
     var logger;
     var uselogDepthBuffer = false;
@@ -2152,10 +2147,9 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
     var fieldOfView = 37; // https://www.nikonians.org/reviews/fov-tables
     var Resolution;
     (function (Resolution) {
-        Resolution[Resolution["viewModel"] = 512] = "viewModel";
-        Resolution[Resolution["viewPost"] = 512] = "viewPost";
-        Resolution[Resolution["viewMesh"] = 512] = "viewMesh";
-        Resolution[Resolution["textureDepthBuffer"] = 512] = "textureDepthBuffer";
+        Resolution[Resolution["viewModel"] = 768] = "viewModel";
+        Resolution[Resolution["viewMesh"] = 768] = "viewMesh";
+        Resolution[Resolution["textureDepthBuffer"] = 768] = "textureDepthBuffer";
     })(Resolution || (Resolution = {}));
     init();
     animate();
@@ -2208,21 +2202,6 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         return renderTarget;
     }
     /**
-     * Initializes the post renderer used to visualize the encoded depth texture.
-     */
-    function initializePostRenderer() {
-        postCanvas = initializeCanvas('postCanvas', Resolution.viewPost);
-        postRenderer = new THREE.WebGLRenderer({ canvas: postCanvas, logarithmicDepthBuffer: uselogDepthBuffer });
-        postRenderer.setPixelRatio(window.devicePixelRatio);
-        postRenderer.setSize(Resolution.viewPost, Resolution.viewPost);
-        // Model Scene -> (Render Texture, Depth Texture)
-        target = constructDepthTextureRenderTarget(Resolution.viewPost, Resolution.viewPost);
-        // Encoded RGBA Texture from Depth Texture
-        encodedTarget = new THREE.WebGLRenderTarget(Resolution.viewPost, Resolution.viewPost);
-        // Setup post-processing step
-        setupPostScene();
-    }
-    /**
      * Initializes the mesh renderer used to view the 3D mesh.
      */
     function initializeMeshRenderer() {
@@ -2238,8 +2217,22 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         // Encoded RGBA Texture from Depth Texture
         meshEncodedTarget = new THREE.WebGLRenderTarget(Resolution.viewMesh, Resolution.viewMesh);
         setupMeshScene();
+        initializePostCamera();
         setupPostMeshScene();
         initializeLighting(meshScene);
+    }
+    /**
+     * Constructs the scene used to visualize textures.
+     */
+    function initializePostCamera() {
+        // Setup post processing stage
+        var left = -1;
+        var right = 1;
+        var top = 1;
+        var bottom = -1;
+        var near = 0;
+        var far = 1;
+        postCamera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
     }
     /**
      * Initialize the application.
@@ -2247,7 +2240,6 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
     function init() {
         logger = new Logger_2.HTMLLogger();
         initializeModelRenderer();
-        initializePostRenderer();
         initializeMeshRenderer();
         onWindowResize();
         window.addEventListener('resize', onWindowResize, false);
@@ -2287,10 +2279,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
      */
     function onWindowResize() {
         updateViewOnWindowResize(modelRenderer, Resolution.viewModel, Resolution.viewModel, modelCamera);
-        updateViewOnWindowResize(postRenderer, Resolution.viewPost, Resolution.viewPost, null);
         updateViewOnWindowResize(meshRenderer, Resolution.viewMesh, Resolution.viewMesh, meshCamera);
-        updateRenderTargetOnResize(postRenderer, target, Resolution.viewModel, Resolution.viewModel);
-        updateRenderTargetOnResize(postRenderer, encodedTarget, Resolution.viewModel, Resolution.viewModel);
         updateRenderTargetOnResize(meshRenderer, meshTarget, Resolution.viewMesh, Resolution.viewMesh);
         updateRenderTargetOnResize(meshRenderer, meshEncodedTarget, Resolution.viewMesh, Resolution.viewMesh);
     }
@@ -2389,33 +2378,6 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         var center = new THREE.Vector3(0.0, 0.0, 0.0);
         mesh.position.set(center.x, center.y, center.z);
         scene.add(mesh);
-    }
-    /**
-     * Constructs the scene used to visualize textures.
-     */
-    function setupPostScene() {
-        // Setup post processing stage
-        var left = -1;
-        var right = 1;
-        var top = 1;
-        var bottom = -1;
-        var near = 0;
-        var far = 1;
-        postCamera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
-        var postMaterial = new THREE.ShaderMaterial({
-            vertexShader: MR.shaderSource['DepthBufferVertexShader'],
-            fragmentShader: MR.shaderSource['DepthBufferFragmentShader'],
-            uniforms: {
-                cameraNear: { value: modelCamera.near },
-                cameraFar: { value: modelCamera.far },
-                tDiffuse: { value: target.texture },
-                tDepth: { value: target.depthTexture }
-            }
-        });
-        var postPlane = new THREE.PlaneGeometry(2, 2);
-        var postQuad = new THREE.Mesh(postPlane, postMaterial);
-        postScene = new THREE.Scene();
-        postScene.add(postQuad);
     }
     /**
      * Constructs the scene used to visualize the 3D mesh.
@@ -2593,8 +2555,6 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
      */
     function takePhotograph() {
         logger.clearLog();
-        createDepthBuffer(postRenderer, Resolution.viewPost, Resolution.viewPost, modelScene, postScene, modelCamera, postCamera, target, encodedTarget);
-        //  analyzeTargets (postRenderer, target, encodedTarget, modelCamera, Resolution.viewPost, Resolution.viewPost);
         createDepthBuffer(meshRenderer, Resolution.viewMesh, Resolution.viewMesh, modelScene, meshPostScene, modelCamera, postCamera, meshTarget, meshEncodedTarget);
         analyzeTargets(meshRenderer, meshTarget, meshEncodedTarget, modelCamera, Resolution.viewMesh, Resolution.viewMesh);
         transformMeshSceneFromDepthBuffer(meshRenderer, meshScene, meshEncodedTarget, Resolution.viewMesh, Resolution.viewMesh, modelCamera);

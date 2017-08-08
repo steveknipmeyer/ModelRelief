@@ -6,9 +6,6 @@
 // ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
-DepthBufferTest
-    Remove PostCanvas?
-    Add Camera button.
 
 Core
     Create DepthBufferFactory class.
@@ -21,6 +18,7 @@ Core
         Experiment with precision setting in THREE.WebGLRenderer.
 
 Viewing
+    Progress Indicator
     OrbitControls versus Trackball
     Add Orthographic view controls.
     Add axes helper to mesh viewer.
