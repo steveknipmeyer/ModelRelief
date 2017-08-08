@@ -36,6 +36,7 @@ var logger                  : Logger;
 var uselogDepthBuffer     : boolean = false;
 var physicalMeshTransform : boolean = true;
 var MeshModelName         : string = 'ModelMesh';
+var CameraButtonId        : string = 'camera';
 
 var cameraZPosition     : number = 4
 var cameraNearPlane     : number = 2;
@@ -128,9 +129,6 @@ function initializePostRenderer() {
     postRenderer.setPixelRatio(window.devicePixelRatio);
     postRenderer.setSize(Resolution.viewPost, Resolution.viewPost);
 
-    // click handler
-    postCanvas.onclick = onClick;
-
     // Model Scene -> (Render Texture, Depth Texture)
     target = constructDepthTextureRenderTarget(Resolution.viewPost, Resolution.viewPost);
 
@@ -182,7 +180,8 @@ function init() {
     onWindowResize();
     window.addEventListener('resize', onWindowResize, false);
 
-    onClick();
+    let cameraButton = (<HTMLInputElement> document.querySelector(`#${CameraButtonId}`)).onclick = takePhotograph;
+    takePhotograph();
 }
 
 /**
@@ -598,6 +597,8 @@ function transformMeshSceneFromDepthBuffer (renderer : THREE.WebGLRenderer, mesh
         return;
      }      
      meshScene.remove(previousMesh);
+     previousMesh.geometry.dispose();
+     previousMesh.material.dispose();
 
     // decode RGBA texture into depth floats
     let depthBufferRGBA =  new Uint8Array(width * height * 4).fill(0);
@@ -614,7 +615,7 @@ function transformMeshSceneFromDepthBuffer (renderer : THREE.WebGLRenderer, mesh
 /**
  *  Event handler to create depth buffers.
  */
-function onClick() {
+function takePhotograph() {
 
     logger.clearLog();
 

@@ -2145,6 +2145,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
     var uselogDepthBuffer = false;
     var physicalMeshTransform = true;
     var MeshModelName = 'ModelMesh';
+    var CameraButtonId = 'camera';
     var cameraZPosition = 4;
     var cameraNearPlane = 2;
     var cameraFarPlane = 10.0;
@@ -2214,8 +2215,6 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         postRenderer = new THREE.WebGLRenderer({ canvas: postCanvas, logarithmicDepthBuffer: uselogDepthBuffer });
         postRenderer.setPixelRatio(window.devicePixelRatio);
         postRenderer.setSize(Resolution.viewPost, Resolution.viewPost);
-        // click handler
-        postCanvas.onclick = onClick;
         // Model Scene -> (Render Texture, Depth Texture)
         target = constructDepthTextureRenderTarget(Resolution.viewPost, Resolution.viewPost);
         // Encoded RGBA Texture from Depth Texture
@@ -2252,7 +2251,8 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         initializeMeshRenderer();
         onWindowResize();
         window.addEventListener('resize', onWindowResize, false);
-        onClick();
+        var cameraButton = document.querySelector("#" + CameraButtonId).onclick = takePhotograph;
+        takePhotograph();
     }
     /**
      * Updates a renderer target properties.
@@ -2578,6 +2578,8 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
             return;
         }
         meshScene.remove(previousMesh);
+        previousMesh.geometry.dispose();
+        previousMesh.material.dispose();
         // decode RGBA texture into depth floats
         var depthBufferRGBA = new Uint8Array(width * height * 4).fill(0);
         renderer.readRenderTargetPixels(meshEncodedTarget, 0, 0, width, height, depthBufferRGBA);
@@ -2589,7 +2591,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
     /**
      *  Event handler to create depth buffers.
      */
-    function onClick() {
+    function takePhotograph() {
         logger.clearLog();
         createDepthBuffer(postRenderer, Resolution.viewPost, Resolution.viewPost, modelScene, postScene, modelCamera, postCamera, target, encodedTarget);
         //  analyzeTargets (postRenderer, target, encodedTarget, modelCamera, Resolution.viewPost, Resolution.viewPost);
