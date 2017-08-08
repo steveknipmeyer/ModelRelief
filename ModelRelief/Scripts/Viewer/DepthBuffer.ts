@@ -11,6 +11,12 @@ import * as THREE           from 'three'
 import {Graphics}           from 'Graphics'
 import {Logger, HTMLLogger} from 'Logger'
 import {MathLibrary}        from 'Math'
+
+interface FacePair {
+        
+    vertices : THREE.Vector3[];
+    faces    : THREE.Face3[];
+}
           
 /**
  *  DepthBuffer 
@@ -189,7 +195,7 @@ export class DepthBuffer {
      * Returns the linear index of a model point in world coordinates.
      * @param worldVertex Vertex of model.
      */
-    getModelVertexIndices (worldVertex : THREE.Vertex, planeBoundingBox : THREE.Box3) : THREE.Vector2 {
+    getModelVertexIndices (worldVertex : THREE.Vector3, planeBoundingBox : THREE.Box3) : THREE.Vector2 {
     
         let boxSize      : THREE.Vector3 = planeBoundingBox.getSize();
         let meshExtents  : THREE.Vector2 = new THREE.Vector2 (boxSize.x, boxSize.y);
@@ -212,7 +218,7 @@ export class DepthBuffer {
      * Returns the linear index of a model point in world coordinates.
      * @param worldVertex Vertex of model.
      */
-    getModelVertexIndex (worldVertex : THREE.Vertex, planeBoundingBox : THREE.Box3) : number {
+    getModelVertexIndex (worldVertex : THREE.Vector3, planeBoundingBox : THREE.Box3) : number {
 
         let indices : THREE.Vector2 = this.getModelVertexIndices(worldVertex, planeBoundingBox);    
         let row    : number = indices.x;
@@ -246,7 +252,11 @@ export class DepthBuffer {
             meshGeometry.vertices[iVertex].z = depth;
         }
 
+        meshGeometry.computeFaceNormals();
+        meshGeometry.computeVertexNormals(true);
+
         meshGeometry.verticesNeedUpdate = true;
+        meshGeometry.normalsNeedUpdate = true;
     }
 
     /**
@@ -267,10 +277,10 @@ export class DepthBuffer {
 
     /**
      * Constructs a mesh of the given base dimension.
-     * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ration.
+     * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ratio.
      * @param material Material to assign to mesh.
      */
-    mesh (modelWidth : number, material? : THREE.Material) : THREE.Mesh {
+    meshByMeshPlane (modelWidth : number, material? : THREE.Material) : THREE.Mesh {
 
         if (!material)
             material = new THREE.MeshPhongMaterial({wireframe : false, color : 0xff00ff, reflectivity : 0.75, shininess : 0.75});
@@ -282,5 +292,85 @@ export class DepthBuffer {
         this.transformMeshPlaneToMesh(mesh);
 
         return mesh;
+    }
+
+    /**
+     * Constructs a mesh of the given base dimension.
+     * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ratio.
+     * @param material Material to assign to mesh.
+     */
+    mesh(modelWidth : number, material? : THREE.Material) : THREE.Mesh {
+
+        if (!material)
+            material = new THREE.MeshPhongMaterial({wireframe : false, color : 0xff00ff, reflectivity : 0.75, shininess : 0.75});
+
+        let meshGeometry = new THREE.Geometry();
+        let faceSize        : number = modelWidth / (this.width - 1);
+        let baseVertexIndex : number = 0;
+
+        for (let iRow = 0; iRow < this.height - 1; iRow++) {
+            for (let iColumn = 0; iColumn < this.width; iColumn++) {
+                
+                let facePair = this.constructTriFacesAtOffset(iRow, iColumn, faceSize, baseVertexIndex);
+
+                meshGeometry.vertices.push(...facePair.vertices);
+                meshGeometry.faces.push(...facePair.faces);
+
+                baseVertexIndex += 4;
+            }    
+        }
+        
+        meshGeometry.computeFaceNormals();            
+
+        let mesh  = new THREE.Mesh(meshGeometry, material);
+        mesh.name = DepthBuffer.MeshModelName;
+
+        return mesh;
+    }
+
+    /**
+     * Constructs a pair of triangular faces at the given offset in the DepthBuffer.
+     * @param row Row offset (Lower Left).
+     * @param column Column offset (Lower Left).
+     * @param faceSize Size of a face edge (not hypotenuse).
+     * @param baseVertexIndex Beginning offset in mesh geometry vertex array.
+     */
+    constructTriFacesAtOffset (row : number, column : number, faceSize : number, baseVertexIndex : number) : FacePair {
+        
+        let facePair : FacePair = {
+            vertices : [],
+            faces    : []
+        }
+
+        //  Vertices
+        //   2    3       
+        //   0    1
+
+        let meshWidth  : number = (this.width - 1) * faceSize;
+        let meshHeight : number = (this.height- 1) * faceSize;
+
+        // mesh center will be at the world origin
+        let originX : number = (column * faceSize) - (meshWidth / 2);
+        let originY : number = (row    * faceSize) - (meshHeight / 2);
+
+        let lowerLeft   = new THREE.Vector3(originX + 0,         originY + 0,        -this.depth(row + 0, column+ 0));             // baseVertexIndex + 0
+        let lowerRight  = new THREE.Vector3(originX + faceSize,  originY + 0,        -this.depth(row + 0, column + 1));            // baseVertexIndex + 1
+        let upperLeft   = new THREE.Vector3(originX + 0,         originY + faceSize, -this.depth(row + 1, column + 0));            // baseVertexIndex + 2
+        let upperRight  = new THREE.Vector3(originX + faceSize,  originY + faceSize, -this.depth(row + 1, column + 1));            // baseVertexIndex + 3
+
+        facePair.vertices.push(
+             lowerLeft,             // baseVertexIndex + 0
+             lowerRight,            // baseVertexIndex + 1
+             upperLeft,             // baseVertexIndex + 2
+             upperRight             // baseVertexIndex + 3
+         );
+
+         // right hand rule for polygon winding
+         facePair.faces.push(
+             new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 1, baseVertexIndex + 3),
+             new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 3, baseVertexIndex + 2)
+         );
+            
+        return facePair;
     }
 }
