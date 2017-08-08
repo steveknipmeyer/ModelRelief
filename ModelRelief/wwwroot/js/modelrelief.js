@@ -1982,8 +1982,8 @@ define("Viewer/DepthBuffer", ["require", "exports", "chai", "three", "System/Log
             var meshGeometry = new THREE.Geometry();
             var faceSize = modelWidth / (this.width - 1);
             var baseVertexIndex = 0;
-            for (var iRow = 0; iRow < this.height - 1; iRow++) {
-                for (var iColumn = 0; iColumn < this.width; iColumn++) {
+            for (var iRow = 0; iRow < (this.height - 1); iRow++) {
+                for (var iColumn = 0; iColumn < (this.width - 1); iColumn++) {
                     var facePair = this.constructTriFacesAtOffset(iRow, iColumn, faceSize, baseVertexIndex);
                     (_a = meshGeometry.vertices).push.apply(_a, facePair.vertices);
                     (_b = meshGeometry.faces).push.apply(_b, facePair.faces);
@@ -2181,9 +2181,9 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         modelControls = new TrackballControls_2.TrackballControls(modelCamera, modelRenderer.domElement);
         // scene
         modelScene = new THREE.Scene();
-        //  setupTorusScene(modelScene);
+        setupTorusScene(modelScene);
         //  setupSphereScene(modelScene);
-        setupBoxScene(modelScene);
+        //  setupBoxScene(modelScene);
         initializeLighting(modelScene);
         initializeModelHelpers(modelScene, null, false);
     }

@@ -308,8 +308,8 @@ export class DepthBuffer {
         let faceSize        : number = modelWidth / (this.width - 1);
         let baseVertexIndex : number = 0;
 
-        for (let iRow = 0; iRow < this.height - 1; iRow++) {
-            for (let iColumn = 0; iColumn < this.width; iColumn++) {
+        for (let iRow = 0; iRow < (this.height - 1); iRow++) {
+            for (let iColumn = 0; iColumn < (this.width - 1); iColumn++) {
                 
                 let facePair = this.constructTriFacesAtOffset(iRow, iColumn, faceSize, baseVertexIndex);
 

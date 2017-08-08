@@ -1,54 +1,4 @@
-﻿    /**
-     * Constructs a mesh of the given base dimension.
-     * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ration.
-     * @param material Material to assign to mesh.
-     */
-    meshA(modelWidth : number, material? : THREE.Material) : THREE.Mesh {
-
-        if (!material)
-            material = new THREE.MeshPhongMaterial({wireframe : false, color : 0xff00ff, reflectivity : 0.75, shininess : 0.75});
-
-        let meshGeometry = new THREE.PlaneGeometry(modelWidth, modelWidth, 1, 1);
-        let mesh         = new THREE.Mesh(meshGeometry, material);
-        mesh.name = DepthBuffer.MeshModelName;
-
-        let vertexCount : number = meshGeometry.vertices.length;
-        for (let iVertex = 0; iVertex < vertexCount; iVertex++) {
-            
-            let vertex : THREE.Vertex = meshGeometry.vertices[iVertex];
-        }
-
-        meshGeometry.vertices[0].z = 1;
-
-        meshGeometry.elementsNeedUpdate = true;
-
-        meshGeometry.computeFaceNormals();
-        meshGeometry.computeVertexNormals(true);
-
-        meshGeometry.verticesNeedUpdate = true;
-        meshGeometry.normalsNeedUpdate = true;
-
-        return mesh;
-    }
-
-    /**
-     * Constructs a mesh of the given base dimension.
-     * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ration.
-     * @param material Material to assign to mesh.
-     */
-    meshC(modelWidth : number, material? : THREE.Material) : THREE.Mesh {
-
-        let theMaterial = new THREE.MeshPhongMaterial({color : 0xffffff});
-
-        let meshGeometry : THREE.Geometry = new THREE.BoxGeometry(modelWidth, modelWidth, modelWidth);
-
-
-        let mesh  = new THREE.Mesh(meshGeometry, theMaterial);
-        mesh.name = DepthBuffer.MeshModelName;
-
-        return mesh;
-    }
-
+﻿
 // ------------------------------------------------------------------------// 
 //      Commit Notes                                                       //
 // ------------------------------------------------------------------------//
@@ -58,10 +8,6 @@
 // ------------------------------------------------------------------------//
 Viewing
 
-    Why does the Mesh not render correctly?
-        Material or Lighting!!!
-        It behaves as though the direction lighting was missing!
-
     OrbitControls versus Trackball
     Add Orthographic view controls.
     Add axes helper to mesh viewer.
@@ -70,6 +16,8 @@ Performance
     Optimize!
     Memory management!
         Make sure if you use scene.remove(mesh), you also call mesh.geometry.dispose(), mesh.material.dispose() and mesh.texture.dispose() else you'll get memory leaks I think (r71).
+            meshByMeshPlane: 66080.48974609375ms
+            mesh: 7068.237060546875ms
 
 Development Workflow
     Add gulp TypeScript compilation.
