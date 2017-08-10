@@ -1619,7 +1619,85 @@ define("System/Logger", ["require", "exports"], function (require, exports) {
         MessageClass["Error"] = "logError";
         MessageClass["Warning"] = "logWarning";
         MessageClass["Info"] = "logInfo";
+        MessageClass["None"] = "logNone";
     })(MessageClass || (MessageClass = {}));
+    /**
+     * Console logging
+     * @class
+     */
+    var ConsoleLogger = (function () {
+        /**
+         * @constructor
+         */
+        function ConsoleLogger() {
+        }
+        /**
+         * Construct a general message and add to the log.
+         * @param message Message text.
+         * @param messageClass Message class.
+         */
+        ConsoleLogger.prototype.addMessageEntry = function (message, messageClass) {
+            var prefix = 'ModelRelief: ';
+            var logMessage = "" + prefix + message;
+            switch (messageClass) {
+                case MessageClass.Error:
+                    console.error(logMessage);
+                    break;
+                case MessageClass.Warning:
+                    console.warn(logMessage);
+                    break;
+                case MessageClass.Info:
+                    console.info(logMessage);
+                    break;
+                case MessageClass.None:
+                    console.log(logMessage);
+                    break;
+            }
+        };
+        /**
+         * Add an error message to the log.
+         * @param errorMessage Error message text.
+         */
+        ConsoleLogger.prototype.addErrorMessage = function (errorMessage) {
+            this.addMessageEntry(errorMessage, MessageClass.Error);
+        };
+        /**
+         * Add a warning message to the log.
+         * @param warningMessage Warning message text.
+         */
+        ConsoleLogger.prototype.addWarningMessage = function (warningMessage) {
+            this.addMessageEntry(warningMessage, MessageClass.Warning);
+        };
+        /**
+         * Add an informational message to the log.
+         * @param infoMessage Information message text.
+         */
+        ConsoleLogger.prototype.addInfoMessage = function (infoMessage) {
+            this.addMessageEntry(infoMessage, MessageClass.Info);
+        };
+        /**
+         * Add a message to the log.
+         * @param message Information message text.
+         * @param style Optional style.
+         */
+        ConsoleLogger.prototype.addMessage = function (message, style) {
+            this.addMessageEntry(message, MessageClass.None);
+        };
+        /**
+         * Adds an empty line
+         */
+        ConsoleLogger.prototype.addEmptyLine = function () {
+            console.log('');
+        };
+        /**
+         * Clears the log output
+         */
+        ConsoleLogger.prototype.clearLog = function () {
+            console.clear();
+        };
+        return ConsoleLogger;
+    }());
+    exports.ConsoleLogger = ConsoleLogger;
     /**
      * HTML logging
      * @class
@@ -1738,7 +1816,7 @@ define("System/Math", ["require", "exports"], function (require, exports) {
     }());
     exports.MathLibrary = MathLibrary;
 });
-define("Viewer/DepthBuffer", ["require", "exports", "chai", "three", "System/Logger", "System/Math"], function (require, exports, chai_1, THREE, Logger_1, Math_1) {
+define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "System/Logger", "System/Math"], function (require, exports, chai_1, THREE, Logger_1, Math_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -1760,7 +1838,7 @@ define("Viewer/DepthBuffer", ["require", "exports", "chai", "three", "System/Log
          * @param farClipPlane Camera far clipping plane.
          */
         function DepthBuffer(rgbaArray, width, height, camera) {
-            this.rgbaArray = rgbaArray;
+            this._rgbaArray = rgbaArray;
             this.width = width;
             this.height = height;
             this.camera = camera;
@@ -1770,12 +1848,12 @@ define("Viewer/DepthBuffer", ["require", "exports", "chai", "three", "System/Log
          * Initialize
          */
         DepthBuffer.prototype.initialize = function () {
-            this.logger = new Logger_1.HTMLLogger();
-            this.nearClipPlane = this.camera.near;
-            this.farClipPlane = this.camera.far;
-            this.cameraClipRange = this.farClipPlane - this.nearClipPlane;
+            this._logger = new Logger_1.HTMLLogger();
+            this._nearClipPlane = this.camera.near;
+            this._farClipPlane = this.camera.far;
+            this._cameraClipRange = this._farClipPlane - this._nearClipPlane;
             // RGBA -> Float32
-            this.depths = new Float32Array(this.rgbaArray.buffer);
+            this.depths = new Float32Array(this._rgbaArray.buffer);
         };
         /**
          * Convert a normalized depth [0,1] to depth in model units.
@@ -1932,7 +2010,7 @@ define("Viewer/DepthBuffer", ["require", "exports", "chai", "three", "System/Log
             var meshGeometry = meshPlane.geometry;
             meshGeometry.computeBoundingBox();
             var vertexCount = meshGeometry.vertices.length;
-            var clipRange = this.farClipPlane - this.nearClipPlane;
+            var clipRange = this._farClipPlane - this._nearClipPlane;
             for (var iVertex = 0; iVertex < vertexCount; iVertex++) {
                 // calculate index of vertex in depth buffer based on view extents and camera transform
                 var vertex = meshGeometry.vertices[iVertex];
@@ -2029,6 +2107,31 @@ define("Viewer/DepthBuffer", ["require", "exports", "chai", "three", "System/Log
             facePair.faces.push(new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 1, baseVertexIndex + 3), new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 3, baseVertexIndex + 2));
             return facePair;
         };
+        /**
+         * Analyzes properties of a depth buffer.
+         */
+        DepthBuffer.prototype.analyze = function () {
+            var middle = this.width / 2;
+            var decimalPlaces = 5;
+            var headerStyle = "font-family : monospace; font-weight : bold; color : blue; font-size : 18px";
+            var messageStyle = "font-family : monospace; color : black; font-size : 14px";
+            this._logger.addMessage('Camera Properties', headerStyle);
+            this._logger.addMessage("Near Plane = " + this.camera.near, messageStyle);
+            this._logger.addMessage("Far Plane  = " + this.camera.far, messageStyle);
+            this._logger.addMessage("Clip Range = " + (this.camera.far - this.camera.near), messageStyle);
+            this._logger.addEmptyLine();
+            this._logger.addMessage('Normalized', headerStyle);
+            this._logger.addMessage("Center Depth = " + this.depthNormalized(middle, middle).toFixed(decimalPlaces), messageStyle);
+            this._logger.addMessage("Z Depth = " + this.rangeNormalized.toFixed(decimalPlaces), messageStyle);
+            this._logger.addMessage("Minimum = " + this.minimumNormalized.toFixed(decimalPlaces), messageStyle);
+            this._logger.addMessage("Maximum = " + this.maximumNormalized.toFixed(decimalPlaces), messageStyle);
+            this._logger.addEmptyLine();
+            this._logger.addMessage('Model Units', headerStyle);
+            this._logger.addMessage("Center Depth = " + this.depth(middle, middle).toFixed(decimalPlaces), messageStyle);
+            this._logger.addMessage("Z Depth = " + this.range.toFixed(decimalPlaces), messageStyle);
+            this._logger.addMessage("Minimum = " + this.minimum.toFixed(decimalPlaces), messageStyle);
+            this._logger.addMessage("Maximum = " + this.maximum.toFixed(decimalPlaces), messageStyle);
+        };
         DepthBuffer.MeshModelName = 'ModelMesh';
         DepthBuffer.normalizedTolerance = .001;
         return DepthBuffer;
@@ -2117,7 +2220,7 @@ define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function 
     }());
     exports.UnitTests = UnitTests;
 });
-define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/TrackballControls", "Viewer/DepthBuffer", "System/Logger"], function (require, exports, THREE, TrackballControls_2, DepthBuffer_1, Logger_2) {
+define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/TrackballControls", "DepthBuffer/DepthBuffer", "System/Logger"], function (require, exports, THREE, TrackballControls_2, DepthBuffer_1, Logger_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var modelCanvas;
@@ -2590,5 +2693,312 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "Viewer/Trac
         modelRenderer.render(modelScene, modelCamera);
         meshRenderer.render(meshScene, meshCamera);
     }
+});
+define("System/Tools", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * Tool Library
+     * General utility routines
+     * @class
+     */
+    var Tools = (function () {
+        /**
+         * @constructor
+         */
+        function Tools() {
+        }
+        //#region Utility
+        /// <summary>        
+        // Generate a pseudo GUID.
+        // http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
+        /// </summary>
+        Tools.generatePseudoGUID = function () {
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+            }
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                s4() + '-' + s4() + s4() + s4();
+        };
+        return Tools;
+    }());
+    exports.Tools = Tools;
+});
+// ------------------------------------------------------------------------// 
+// ModelRelief                                                             //
+//                                                                         //                                                                          
+// Copyright (c) <2017> Steve Knipmeyer                                    //
+// ------------------------------------------------------------------------//
+/*
+  Requirements
+    No persistent DOM element. The canvas is created dynamically.
+        Option for persisting the Factory in the constructor
+    JSON compatible constructor parameters
+    Fixed resolution; resizing support is not required.
+
+    class Relief {
+        factory : DepthBufferFactory;
+        mesh    : THREE.Mesh;
+    }
+*/
+define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthBuffer/DepthBuffer", "System/Logger", "System/Tools"], function (require, exports, THREE, DepthBuffer_2, Logger_3, Tools_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * @class
+     * DepthBufferFactory
+     */
+    var DepthBufferFactory = (function () {
+        /**
+         * @constructor
+         * @param parameters Initialization parameters (DepthBufferFactoryParameters)
+         */
+        function DepthBufferFactory(parameters) {
+            this._width = DepthBufferFactory.DefaultResolution; // width resolution of the DB
+            this._height = DepthBufferFactory.DefaultResolution; // height resolution of the DB
+            this._logDepthBuffer = false; // use a logarithmic buffer for more accuracy in large scenes
+            this._boundedClipping = true; // override camera clipping planes; set near and far to bound model for improved accuracy
+            this._depthBuffer = null; // depth buffer 
+            this._target = null; // WebGL render target for creating the WebGL depth buffer when rendering the scene
+            this._encodedTarget = null; // WebGL render target for encodin the WebGL depth buffer into a floating point (RGBA format)
+            this._canvas = null; // DOM canvas supporting renderer
+            this._renderer = null; // scene renderer
+            this._scene = null; // target scene
+            this._model = null; // target model
+            this._camera = null; // perspective camera to generate the depth buffer
+            this._postScene = null; // single polygon scene use to generate the encoded RGBA buffer
+            this._postCamera = null; // orthographic camera
+            this._postMaterial = null; // shader material that encodes the WebGL depth buffer into a floating point RGBA format
+            this._minimumWebGL = true; // true if minimum WeGL requirementat are present
+            this._logger = null; // logger
+            // required
+            this._width = parameters.width;
+            this._height = parameters.height;
+            // optional
+            this._model = parameters.model = parameters.model || null;
+            this._camera = parameters.camera = parameters.camera || null;
+            this._logDepthBuffer = parameters.logDepthBuffer = parameters.logDepthBuffer || false;
+            this._boundedClipping = parameters.boundedClipping = parameters.boundedClipping || true;
+            this.initialize();
+        }
+        /**
+         * Initialize default lighting in the scene.
+         * Lighting does not affect the depth buffer. It is only used if the canvas is made visible.
+         */
+        DepthBufferFactory.prototype.initializeLighting = function () {
+            var ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+            this._scene.add(ambientLight);
+            var directionalLight1 = new THREE.DirectionalLight(0xffffff);
+            directionalLight1.position.set(1, 1, 1);
+            this._scene.add(directionalLight1);
+        };
+        /**
+         * Adds a background plane at the origin.
+         */
+        DepthBufferFactory.prototype.addBackgroundPlane = function (size) {
+            // background plane
+            var geometry = new THREE.PlaneGeometry(size, size);
+            var material = new THREE.MeshPhongMaterial({ color: 0xffffff });
+            var mesh = new THREE.Mesh(geometry, material);
+            var center = new THREE.Vector3(0.0, 0.0, 0.0);
+            mesh.position.set(center.x, center.y, center.z);
+            this._scene.add(mesh);
+        };
+        /**
+         * Perform setup and initialization of the render scene.
+         */
+        DepthBufferFactory.prototype.initializeScene = function () {
+            this._scene = new THREE.Scene();
+            this.initializeLighting();
+        };
+        /**
+         * Constructs the orthographic camera used to convert the WebGL depth buffer to the encoded RGBA buffer
+         */
+        DepthBufferFactory.prototype.initializePostCamera = function () {
+            // Setup post processing stage
+            var left = -1;
+            var right = 1;
+            var top = 1;
+            var bottom = -1;
+            var near = 0;
+            var far = 1;
+            this._postCamera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
+        };
+        /**
+         * Perform setup and initialization of the post scene used to create the final RGBA encoded depth buffer.
+         */
+        DepthBufferFactory.prototype.initializePostScene = function () {
+            var postMeshMaterial = new THREE.ShaderMaterial({
+                vertexShader: MR.shaderSource['DepthBufferVertexShader'],
+                fragmentShader: MR.shaderSource['DepthBufferFragmentShader'],
+                uniforms: {
+                    cameraNear: { value: this._camera.near },
+                    cameraFar: { value: this._camera.far },
+                    tDiffuse: { value: this._target.texture },
+                    tDepth: { value: this._target.depthTexture }
+                }
+            });
+            var postMeshPlane = new THREE.PlaneGeometry(2, 2);
+            var postMeshQuad = new THREE.Mesh(postMeshPlane, postMeshMaterial);
+            this._postScene = new THREE.Scene();
+            this._postScene.add(postMeshQuad);
+            this.initializePostCamera();
+        };
+        /**
+         * Perform setup and initialization.
+         */
+        DepthBufferFactory.prototype.initialize = function () {
+            this._logger = new Logger_3.ConsoleLogger();
+            this.verifyWebGLExtensions();
+            this.initializeRenderer();
+            this.initializeScene();
+            this.initializePostScene();
+        };
+        /**
+         * Verifies the minimum WebGL extensions are present.
+         * @param renderer WebGL renderer.
+         */
+        DepthBufferFactory.prototype.verifyWebGLExtensions = function () {
+            if (!this._renderer.extensions.get('WEBGL_depth_texture')) {
+                this._logger.addErrorMessage('The minimum WebGL extensions are not supported in the browser.');
+                return false;
+            }
+            return true;
+        };
+        /**
+         * Constructs a render target <with a depth texture buffer>.
+         */
+        DepthBufferFactory.prototype.constructDepthTextureRenderTarget = function () {
+            // Model Scene -> (Render Texture, Depth Texture)
+            var renderTarget = new THREE.WebGLRenderTarget(this._width, this._height);
+            renderTarget.texture.format = THREE.RGBAFormat;
+            renderTarget.texture.type = THREE.UnsignedByteType;
+            renderTarget.texture.minFilter = THREE.NearestFilter;
+            renderTarget.texture.magFilter = THREE.NearestFilter;
+            renderTarget.texture.generateMipmaps = false;
+            renderTarget.stencilBuffer = false;
+            renderTarget.depthBuffer = true;
+            renderTarget.depthTexture = new THREE.DepthTexture(this._width, this._height);
+            renderTarget.depthTexture.type = THREE.UnsignedIntType;
+            return renderTarget;
+        };
+        /**
+         * Initialize the  model view.
+         */
+        DepthBufferFactory.prototype.initializeRenderer = function () {
+            this._canvas = this.initializeCanvas();
+            this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas, logarithmicDepthBuffer: this._logDepthBuffer });
+            this._renderer.setPixelRatio(window.devicePixelRatio);
+            this._renderer.setSize(this._width, this._height);
+            // Model Scene -> (Render Texture, Depth Texture)
+            this._target = this.constructDepthTextureRenderTarget();
+            // Encoded RGBA Texture from Depth Texture
+            this._encodedTarget = new THREE.WebGLRenderTarget(this._width, this._height);
+        };
+        /**
+         * Constructs a WebGL target canvas.
+         */
+        DepthBufferFactory.prototype.initializeCanvas = function () {
+            this._canvas = document.createElement('canvas');
+            this._canvas.setAttribute('name', Tools_1.Tools.generatePseudoGUID());
+            // render dimensions    
+            this._canvas.width = this._width;
+            this._canvas.height = this._height;
+            // DOM element dimensions (may be different than render dimensions)
+            this._canvas.style.width = this._width + "px";
+            this._canvas.style.height = this._height + "px";
+            return this._canvas;
+        };
+        /**
+         * Generates a mesh from the active model and camera
+         * @param parameters Generation parameters (MeshGenerateParameters)
+         */
+        DepthBufferFactory.prototype.meshGenerate = function (parameters) {
+            this.createDepthBuffer();
+            var mesh = this._depthBuffer.mesh(parameters.modelWidth, parameters.material);
+            return mesh;
+        };
+        /**
+         * Generates an image from the active model and camera
+         * @param parameters Generation parameters (ImageGenerateParameters)
+         */
+        DepthBufferFactory.prototype.imageGenerate = function (parameters) {
+            return null;
+        };
+        Object.defineProperty(DepthBufferFactory.prototype, "model", {
+            /**
+             * Model setter
+             * @param mesh Active mesh in the DBF
+             */
+            set: function (mesh) {
+                // replace existing model in scene...
+                this._model = mesh;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+         * Constructs an RGBA string with the byte values of a pixel.
+         * @param buffer Unsigned byte raw buffer.
+         * @param row Pixel row.
+         * @param column Column row.
+         */
+        DepthBufferFactory.prototype.unsignedBytesToRGBA = function (buffer, row, column) {
+            var offset = (row * this._width) + column;
+            var rValue = buffer[offset + 0].toString(16);
+            var gValue = buffer[offset + 1].toString(16);
+            var bValue = buffer[offset + 2].toString(16);
+            var aValue = buffer[offset + 3].toString(16);
+            return "#" + rValue + gValue + bValue + " " + aValue;
+        };
+        /**
+         * Analyzes a pixel from a render buffer.
+         * @param renderer Renderer that created render target.
+         * @param renderTarget Render target (texture buffer).
+         */
+        DepthBufferFactory.prototype.analyzeRenderBuffer = function (renderer, renderTarget) {
+            var renderBuffer = new Uint8Array(this._width * this._height * 4).fill(0);
+            renderer.readRenderTargetPixels(renderTarget, 0, 0, this._width, this._height, renderBuffer);
+            var messageString = "RGBA[0, 0] = " + this.unsignedBytesToRGBA(renderBuffer, 0, 0);
+            this._logger.addMessage(messageString, null);
+        };
+        /**
+         * Analyze the render and depth targets.
+         * @param renderer Renderer that owns the targets.
+         * @param renderTarget Render buffer target.
+         * @param encodedRenderTarget Encoded RGBA depth target.
+         */
+        DepthBufferFactory.prototype.analyzeTargets = function (renderer, renderTarget, encodedRenderTarget) {
+            //      this.analyzeRenderBuffer(renderer, renderTarget);
+            this._depthBuffer.analyze();
+        };
+        /**
+         * Create a depth buffer.
+         */
+        DepthBufferFactory.prototype.createDepthBuffer = function () {
+            this._renderer.render(this._scene, this._camera, this._target);
+            // (optional) preview encoded RGBA texture; drawn by shader but not persisted
+            this._renderer.render(this._postScene, this._postCamera);
+            // Persist encoded RGBA texture; calculated from depth buffer
+            // encodedTarget.texture      : encoded RGBA texture
+            // encodedTarget.depthTexture : null
+            this._renderer.render(this._postScene, this._postCamera, this._encodedTarget);
+            // decode RGBA texture into depth floats
+            var depthBufferRGBA = new Uint8Array(this._width * this._height * 4).fill(0);
+            this._renderer.readRenderTargetPixels(this._encodedTarget, 0, 0, this._width, this._height, depthBufferRGBA);
+            this._depthBuffer = new DepthBuffer_2.DepthBuffer(depthBufferRGBA, this._width, this._height, this._camera);
+        };
+        DepthBufferFactory.MeshModelName = 'Model'; // default name for scene mesh
+        DepthBufferFactory.DefaultResolution = 1024; // default DB resolution
+        return DepthBufferFactory;
+    }());
+    exports.DepthBufferFactory = DepthBufferFactory;
 });
 //# sourceMappingURL=modelrelief.js.map

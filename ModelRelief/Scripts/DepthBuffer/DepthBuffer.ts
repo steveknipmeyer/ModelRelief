@@ -27,17 +27,17 @@ export class DepthBuffer {
     static readonly MeshModelName       : string = 'ModelMesh';
     static readonly normalizedTolerance : number = .001;    
 
-    logger : Logger;
+    _logger : Logger;
 
-    rgbaArray : Uint8Array;
+    _rgbaArray : Uint8Array;
     depths    : Float32Array;
     width     : number;
     height    : number;
 
     camera          : THREE.PerspectiveCamera;
-    nearClipPlane   : number;
-    farClipPlane    : number;
-    cameraClipRange : number;
+    _nearClipPlane   : number;
+    _farClipPlane    : number;
+    _cameraClipRange : number;
 
     /**
      * @constructor
@@ -49,7 +49,7 @@ export class DepthBuffer {
      */
     constructor(rgbaArray : Uint8Array, width : number, height :number, camera : THREE.PerspectiveCamera) {
         
-        this.rgbaArray = rgbaArray;
+        this._rgbaArray = rgbaArray;
 
         this.width  = width;
         this.height = height;
@@ -63,14 +63,14 @@ export class DepthBuffer {
      */       
     initialize () {
         
-        this.logger = new HTMLLogger();       
+        this._logger = new HTMLLogger();       
 
-        this.nearClipPlane = this.camera.near;
-        this.farClipPlane  = this.camera.far;
-        this.cameraClipRange = this.farClipPlane - this.nearClipPlane;
+        this._nearClipPlane = this.camera.near;
+        this._farClipPlane  = this.camera.far;
+        this._cameraClipRange = this._farClipPlane - this._nearClipPlane;
 
         // RGBA -> Float32
-        this.depths = new Float32Array(this.rgbaArray.buffer);
+        this.depths = new Float32Array(this._rgbaArray.buffer);
     }
 
     /**
@@ -241,7 +241,7 @@ export class DepthBuffer {
         meshGeometry.computeBoundingBox();
 
         let vertexCount : number = meshGeometry.vertices.length;
-        let clipRange   : number = this.farClipPlane - this.nearClipPlane;
+        let clipRange   : number = this._farClipPlane - this._nearClipPlane;
         for (let iVertex : number = 0; iVertex < vertexCount; iVertex++) {
 
             // calculate index of vertex in depth buffer based on view extents and camera transform
@@ -372,5 +372,35 @@ export class DepthBuffer {
          );
             
         return facePair;
+    }
+
+    /**
+     * Analyzes properties of a depth buffer.
+     */
+    analyze () {
+    
+        let middle = this.width / 2;
+        let decimalPlaces = 5;
+        let headerStyle   = "font-family : monospace; font-weight : bold; color : blue; font-size : 18px";
+        let messageStyle  = "font-family : monospace; color : black; font-size : 14px";
+
+        this._logger.addMessage('Camera Properties', headerStyle);
+        this._logger.addMessage(`Near Plane = ${this.camera.near}`, messageStyle);
+        this._logger.addMessage(`Far Plane  = ${this.camera.far}`, messageStyle);
+        this._logger.addMessage(`Clip Range = ${this.camera.far - this.camera.near}`, messageStyle);
+        this._logger.addEmptyLine();
+
+        this._logger.addMessage('Normalized', headerStyle);
+        this._logger.addMessage(`Center Depth = ${this.depthNormalized(middle, middle).toFixed(decimalPlaces)}`, messageStyle);
+        this._logger.addMessage(`Z Depth = ${this.rangeNormalized.toFixed(decimalPlaces)}`, messageStyle);
+        this._logger.addMessage(`Minimum = ${this.minimumNormalized.toFixed(decimalPlaces)}`, messageStyle);
+        this._logger.addMessage(`Maximum = ${this.maximumNormalized.toFixed(decimalPlaces)}`, messageStyle);
+        this._logger.addEmptyLine();
+
+        this._logger.addMessage('Model Units', headerStyle);
+        this._logger.addMessage(`Center Depth = ${this.depth(middle, middle).toFixed(decimalPlaces)}`, messageStyle);
+        this._logger.addMessage(`Z Depth = ${this.range.toFixed(decimalPlaces)}`, messageStyle);
+        this._logger.addMessage(`Minimum = ${this.minimum.toFixed(decimalPlaces)}`, messageStyle);
+        this._logger.addMessage(`Maximum = ${this.maximum.toFixed(decimalPlaces)}`, messageStyle);
     }
 }

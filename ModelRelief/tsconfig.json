@@ -20,6 +20,7 @@
       "*": [
         "*",
         "Scripts/*",
+        "Scripts/DepthBuffer/*",
         "Scripts/ModelLoaders/*",
         "Scripts/System/*",
         "Scripts/UnitTests/*",

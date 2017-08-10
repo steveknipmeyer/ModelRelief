@@ -24,13 +24,111 @@ enum MessageClass {
     Error   = 'logError',
     Warning = 'logWarning',
     Info    = 'logInfo',
+    None    = 'logNone'
 }
+
+/**
+ * Console logging
+ * @class
+ */
+export class ConsoleLogger implements Logger{
+
+    /**
+     * @constructor
+     */
+    constructor() {
+    }
+
+    /**
+     * Construct a general message and add to the log.
+     * @param message Message text.
+     * @param messageClass Message class.
+     */
+    addMessageEntry (message : string, messageClass : MessageClass) : void {
+
+        const prefix = 'ModelRelief: ';
+        let logMessage = `${prefix}${message}`;
+
+        switch (messageClass) {
+
+            case MessageClass.Error:
+                console.error(logMessage);
+                break;
+
+            case MessageClass.Warning:
+                console.warn(logMessage);
+                break;
+
+            case MessageClass.Info:
+                console.info(logMessage);
+                break;
+
+            case MessageClass.None:
+                console.log(logMessage);
+                break;
+        }
+    }
+
+    /**
+     * Add an error message to the log.
+     * @param errorMessage Error message text.
+     */
+    addErrorMessage (errorMessage : string) {
+
+        this.addMessageEntry(errorMessage, MessageClass.Error);
+    }
+
+    /**
+     * Add a warning message to the log.
+     * @param warningMessage Warning message text.
+     */
+    addWarningMessage (warningMessage : string) {
+
+        this.addMessageEntry(warningMessage, MessageClass.Warning);
+    }
+
+    /**
+     * Add an informational message to the log.
+     * @param infoMessage Information message text.
+     */
+    addInfoMessage (infoMessage : string) {
+
+        this.addMessageEntry(infoMessage, MessageClass.Info);
+    }
+
+    /**
+     * Add a message to the log.
+     * @param message Information message text.
+     * @param style Optional style.
+     */
+    addMessage (message : string, style? : string) {
+
+        this.addMessageEntry(message, MessageClass.None);
+    }
+
+    /**
+     * Adds an empty line
+     */
+    addEmptyLine () {
+        
+        console.log('');
+    }
+
+    /**
+     * Clears the log output
+     */
+    clearLog () {
+
+        console.clear();
+    }
+}
+
+
 /**
  * HTML logging
  * @class
  */
 export class HTMLLogger implements Logger{
-    
 
     rootId           : string;
     rootElementTag   : string;
@@ -47,7 +145,7 @@ export class HTMLLogger implements Logger{
         this.rootId         = 'loggerRoot'
         this.rootElementTag = 'ul';
 
-        this.messageTag = 'li';
+        this.messageTag       = 'li';
         this.baseMessageClass = 'logMessage';
 
         this.rootElement = <HTMLElement> document.querySelector(`#${this.rootId}`);
