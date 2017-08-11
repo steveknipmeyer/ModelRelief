@@ -9,6 +9,7 @@ import * as THREE      from 'three'
 import * as dat        from 'dat-gui'
 
 import {TrackballControls}      from 'TrackballControls'
+import {Graphics}               from 'Graphics'
 import {Materials}              from 'Materials'
 
 interface CameraDefaults {
@@ -237,34 +238,8 @@ export class Viewer {
      * Removes all scene objects
      */
     clearAllAssests() {
-
-        let scope = this;
-
-        let remover = function (object3d) {
-            if (object3d === scope.root) {
-                return;
-            }
-            console.log('Removing: ' + object3d.name);
-            scope.scene.remove(object3d);
-            if (object3d.hasOwnProperty('geometry')) {
-                object3d.geometry.dispose();
-            }
-            if (object3d.hasOwnProperty('material')) {
-                var mat = object3d.material;
-                if (mat.hasOwnProperty('materials')) {
-                    var materials = mat.materials;
-                    for (var name in materials) {
-                        if (materials.hasOwnProperty(name)) materials[name].dispose();
-                    }
-                }
-            }
-            if (object3d.hasOwnProperty('texture')) {
-                object3d.texture.dispose();
-            }
-        };
-
-        this.scene.remove(this.root);
-        this.root.traverse(remover);
+        
+        Graphics.removeSceneObjectChildren(this.scene, this.root, false);
         this.createRoot();
     } 
 

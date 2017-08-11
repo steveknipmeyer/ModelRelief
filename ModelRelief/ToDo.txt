@@ -8,7 +8,7 @@
 // ------------------------------------------------------------------------//
 
 Core
-    Create DepthBufferFactory class.
+    Make the logger global.
 
     Create MeshPreview class.
     Calculate model extents so the clip planes can be optimized in DepthBuferFactory.
@@ -18,7 +18,7 @@ Core
     How should the vertex (translated) Z position be calculated from the depth buffer?
         Experiment with precision setting in THREE.WebGLRenderer.
 
-Model Support
+OBJ Model Support
     
 
 Viewing

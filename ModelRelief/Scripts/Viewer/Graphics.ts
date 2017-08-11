@@ -6,6 +6,7 @@
 "use strict";
 
 import * as THREE from 'three'
+import {Logger, ConsoleLogger}  from 'Logger'
         
 /**
  *  General THREE.js/WebGL support routines
@@ -26,6 +27,62 @@ export class Graphics {
     // --------------------------------------------------------------------------------------------------------------------------------------//
     //			Geometry
     // --------------------------------------------------------------------------------------------------------------------------------------//
+
+    /**
+     * Removes an object and all children from a scene.
+     * @param scene Scene holding object to be removed.
+     * @param rootObject Parent object (possibly with children).
+     */
+    static removeSceneObjectChildren(scene : THREE.Scene, rootObject : THREE.Object3D, removeRoot : boolean) {
+
+        if (!scene || !rootObject)
+            return;
+
+        let logger  = new ConsoleLogger();
+        let remover = function (object3d) {
+            
+            if (object3d === rootObject) {
+                return;
+            }
+
+            logger.addInfoMessage ('Removing: ' + object3d.name);
+            scene.remove(object3d);
+
+            if (object3d.hasOwnProperty('geometry')) {
+                object3d.geometry.dispose();
+            }
+
+            if (object3d.hasOwnProperty('material')) {
+
+                var material = object3d.material;
+                if (material.hasOwnProperty('materials')) {
+
+                    var materials = material.materials;
+                    for (var iMaterial in materials) {
+                        if (materials.hasOwnProperty(iMaterial)) {
+                            materials[iMaterial].dispose();
+                        }
+                    }
+                }
+            }
+            if (object3d.hasOwnProperty('texture')) {
+                object3d.texture.dispose();
+            }
+        };
+        // remove root children from scene
+        rootObject.traverse(remover);
+
+        // remove root children from root
+        for (let iChild : number = 0; iChild < rootObject.children.length; iChild++) {
+
+            let child : THREE.Object3D = rootObject.children[iChild];
+            rootObject.remove (child);
+        }
+
+        if (removeRoot)
+            scene.remove(rootObject);
+    } 
+
     /**
      * @param position Location of bounding box.
      * @param mesh Mesh from which to create bounding box.

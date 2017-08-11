@@ -20,15 +20,17 @@
 
 import * as THREE               from 'three'
 import {DepthBuffer}            from 'DepthBuffer'
-import {MathLibrary}            from 'Math'
+import {Graphics}               from 'Graphics'
 import {Logger, ConsoleLogger}  from 'Logger'
+import {MathLibrary}            from 'Math'
 import {Tools}                  from 'Tools'
 
 export interface DepthBufferFactoryParameters {
+
     width  : number,
     height : number
+    model            : THREE.Group,
 
-    model?           : THREE.Mesh,
     camera?          : THREE.PerspectiveCamera,
     logDepthBuffer?  : boolean
     boundedClipping? : boolean
@@ -50,7 +52,6 @@ export interface ImageGenerateParameters {
  */
 export class DepthBufferFactory {
 
-    static MeshModelName     : string           = 'Model';  // default name for scene mesh
     static DefaultResolution : number           = 1024;     // default DB resolution
 
     _width           : number                   = DepthBufferFactory.DefaultResolution;     // width resolution of the DB
@@ -67,7 +68,7 @@ export class DepthBufferFactory {
     _renderer        : THREE.WebGLRenderer      = null;     // scene renderer
 
     _scene           : THREE.Scene              = null;     // target scene
-    _model           : THREE.Mesh               = null;     // target model
+    _model           : THREE.Group              = null;     // target model
     _camera          : THREE.PerspectiveCamera  = null;     // perspective camera to generate the depth buffer
         
     _postScene       : THREE.Scene              = null;     // single polygon scene use to generate the encoded RGBA buffer
@@ -88,12 +89,12 @@ export class DepthBufferFactory {
         // required
         this._width           = parameters.width;
         this._height          = parameters.height;
+        this._model           = parameters.model.clone();
 
         // optional
-        this._model           = parameters.model  =          parameters.model           || null;
-        this._camera          = parameters.camera =          parameters.camera          || null;
-        this._logDepthBuffer  = parameters.logDepthBuffer  = parameters.logDepthBuffer  || false;
-        this._boundedClipping = parameters.boundedClipping = parameters.boundedClipping || true;
+        this._camera          = parameters.camera          || null;
+        this._logDepthBuffer  = parameters.logDepthBuffer  || false;
+        this._boundedClipping = parameters.boundedClipping || true;
 
         this.initialize();
     }
@@ -102,14 +103,14 @@ export class DepthBufferFactory {
      * Initialize default lighting in the scene.
      * Lighting does not affect the depth buffer. It is only used if the canvas is made visible.
      */
-    initializeLighting () : void {
+    initializeLighting (scene : THREE.Scene) : void {
 
         let ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-        this._scene.add(ambientLight);
+        scene.add(ambientLight);
 
         let directionalLight1 = new THREE.DirectionalLight(0xffffff);
         directionalLight1.position.set(1, 1, 1);
-        this._scene.add(directionalLight1);
+        scene.add(directionalLight1);
     }
 
     /**
@@ -137,7 +138,7 @@ export class DepthBufferFactory {
         if (this._model)
             this._scene.add(this._model);
 
-        this.initializeLighting();
+        this.initializeLighting(this._scene);
     }
 
     /**
@@ -152,6 +153,7 @@ export class DepthBufferFactory {
         let bottom: number    =  -1;
         let near: number      =   0;
         let far: number       =   1;
+
         this._postCamera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
     }
 
@@ -179,6 +181,7 @@ export class DepthBufferFactory {
         this._postScene.add(postMeshQuad);
 
         this.initializePostCamera();
+        this.initializeLighting(this._postScene);
     }
 
     /**
@@ -187,7 +190,6 @@ export class DepthBufferFactory {
     initialize () : void {
 
         this._logger = new ConsoleLogger();   
-        this.verifyWebGLExtensions();
 
         this.initializeRenderer();
         this.initializeScene();
@@ -201,6 +203,7 @@ export class DepthBufferFactory {
     verifyWebGLExtensions() : boolean {
     
         if (!this._renderer.extensions.get('WEBGL_depth_texture')) {
+            this._minimumWebGL = false;
             this._logger.addErrorMessage('The minimum WebGL extensions are not supported in the browser.');
             return false;
         }
@@ -236,7 +239,7 @@ export class DepthBufferFactory {
      */
      initializeRenderer() {
 
-        this._canvas = this.initializeCanvas();
+        this._canvas   = this.initializeCanvas();
         this._renderer = new THREE.WebGLRenderer( {canvas : this._canvas, logarithmicDepthBuffer : this._logDepthBuffer});
         this._renderer.setPixelRatio(window.devicePixelRatio);
         this._renderer.setSize(this._width, this._height);
@@ -246,6 +249,8 @@ export class DepthBufferFactory {
 
         // Encoded RGBA Texture from Depth Texture
         this._encodedTarget = new THREE.WebGLRenderTarget(this._width, this._height);
+
+        this.verifyWebGLExtensions();
     }
 
     /**
@@ -268,13 +273,36 @@ export class DepthBufferFactory {
     }
 
     /**
+     * Verifies the pre-requisite settings are defined to create a mesh.
+     */
+    verifyMeshSettings(): boolean {
+
+        let minimumSettings : boolean = true
+        let errorPrefix     : string = 'DepthBufferFactory: ';
+
+        if (!this._model) {
+            this._logger.addErrorMessage(`${errorPrefix}The model is not defined.`);
+            minimumSettings = false;
+        }
+
+        if (!this._camera) {
+            this._logger.addErrorMessage(`${errorPrefix}The camera is not defined.`);
+            minimumSettings = false;
+        }
+
+        return minimumSettings;
+    }
+
+    /**
      * Generates a mesh from the active model and camera
      * @param parameters Generation parameters (MeshGenerateParameters)
      */
     meshGenerate (parameters : MeshGenerateParameters) : THREE.Mesh {
+        
+        if (!this.verifyMeshSettings()) 
+            return null;
 
         this.createDepthBuffer();
-
         let mesh = this._depthBuffer.mesh(parameters.modelWidth, parameters.material);
 
         return mesh;
@@ -287,27 +315,6 @@ export class DepthBufferFactory {
     imageGenerate (parameters : ImageGenerateParameters) : Uint8Array {
 
         return null;
-    }
-
-    /**
-     * Model setter
-     * @param model Active mesh in the DBF
-     */
-    set model(model :THREE.Mesh) {
-
-        this._model = model;
-
-        let previousMesh : THREE.Mesh = <THREE.Mesh> this._scene.getObjectByName(DepthBufferFactory.MeshModelName);
-        if (!previousMesh) {
-            this._logger.addErrorMessage ('Model mesh not found in scene.');
-            return;
-         }      
-
-         this._scene.remove(previousMesh);
-         previousMesh.geometry.dispose();
-         previousMesh.material.dispose();
-        
-         this._scene.add(this._model);
     }
 
     /**
@@ -368,6 +375,8 @@ export class DepthBufferFactory {
         this._renderer.readRenderTargetPixels(this._encodedTarget, 0, 0, this._width, this._height, depthBufferRGBA);
 
         this._depthBuffer = new DepthBuffer(depthBufferRGBA, this._width, this._height, this._camera);    
+
+        this.analyzeTargets();
     }
 }
 
