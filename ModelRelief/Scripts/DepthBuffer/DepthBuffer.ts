@@ -11,6 +11,7 @@ import * as THREE           from 'three'
 import {Graphics}           from 'Graphics'
 import {Logger, HTMLLogger} from 'Logger'
 import {MathLibrary}        from 'Math'
+import {Services}           from 'Services'
 
 interface FacePair {
         
@@ -63,7 +64,7 @@ export class DepthBuffer {
      */       
     initialize () {
         
-        this._logger = new HTMLLogger();       
+        this._logger = Services.htmlLogger;       
 
         this._nearClipPlane = this.camera.near;
         this._farClipPlane  = this.camera.far;

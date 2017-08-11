@@ -1,10 +1,12 @@
 ﻿"use strict";
 
 import * as THREE               from 'three'
+
 import {DepthBufferFactory}     from 'DepthBufferFactory'
 import {Graphics}               from 'Graphics'
 import {Logger, HTMLLogger}     from 'Logger'
 import {MathLibrary}            from 'Math'
+import {Services}               from 'Services'
 import {TrackballControls}      from 'TrackballControls'
 import {UnitTests}              from 'UnitTests'
 
@@ -100,7 +102,7 @@ function initializePreviewRenderer() {
  */
 function init() {
     
-    logger = new HTMLLogger();
+    logger = Services.htmlLogger;       
 
     initializeModelRenderer();
     initializePreviewRenderer();

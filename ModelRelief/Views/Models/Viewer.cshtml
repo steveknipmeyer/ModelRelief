@@ -29,7 +29,7 @@
         requirejs.config({
             baseUrl: '.',
             paths: {
-                main                                    : '/js/modelrelief',
+                ModelRelief                             : '/js/modelrelief',
 
                 chai                                    : '/lib/chai',
                 three                                   : '/lib/threejs/three',
@@ -37,8 +37,8 @@
             }
         });
         window.onload = function () {
-            // main ap
-            requirejs(['main']);
+        
+            requirejs(['ModelRelief']);
         }
     </script>
    

@@ -1,3 +1,711 @@
+define("System/Logger", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var MessageClass;
+    (function (MessageClass) {
+        MessageClass["Error"] = "logError";
+        MessageClass["Warning"] = "logWarning";
+        MessageClass["Info"] = "logInfo";
+        MessageClass["None"] = "logNone";
+    })(MessageClass || (MessageClass = {}));
+    /**
+     * Console logging
+     * @class
+     */
+    var ConsoleLogger = (function () {
+        /**
+         * @constructor
+         */
+        function ConsoleLogger() {
+        }
+        /**
+         * Construct a general message and add to the log.
+         * @param message Message text.
+         * @param messageClass Message class.
+         */
+        ConsoleLogger.prototype.addMessageEntry = function (message, messageClass) {
+            var prefix = 'ModelRelief: ';
+            var logMessage = "" + prefix + message;
+            switch (messageClass) {
+                case MessageClass.Error:
+                    console.error(logMessage);
+                    break;
+                case MessageClass.Warning:
+                    console.warn(logMessage);
+                    break;
+                case MessageClass.Info:
+                    console.info(logMessage);
+                    break;
+                case MessageClass.None:
+                    console.log(logMessage);
+                    break;
+            }
+        };
+        /**
+         * Add an error message to the log.
+         * @param errorMessage Error message text.
+         */
+        ConsoleLogger.prototype.addErrorMessage = function (errorMessage) {
+            this.addMessageEntry(errorMessage, MessageClass.Error);
+        };
+        /**
+         * Add a warning message to the log.
+         * @param warningMessage Warning message text.
+         */
+        ConsoleLogger.prototype.addWarningMessage = function (warningMessage) {
+            this.addMessageEntry(warningMessage, MessageClass.Warning);
+        };
+        /**
+         * Add an informational message to the log.
+         * @param infoMessage Information message text.
+         */
+        ConsoleLogger.prototype.addInfoMessage = function (infoMessage) {
+            this.addMessageEntry(infoMessage, MessageClass.Info);
+        };
+        /**
+         * Add a message to the log.
+         * @param message Information message text.
+         * @param style Optional style.
+         */
+        ConsoleLogger.prototype.addMessage = function (message, style) {
+            this.addMessageEntry(message, MessageClass.None);
+        };
+        /**
+         * Adds an empty line
+         */
+        ConsoleLogger.prototype.addEmptyLine = function () {
+            console.log('');
+        };
+        /**
+         * Clears the log output
+         */
+        ConsoleLogger.prototype.clearLog = function () {
+            console.clear();
+        };
+        return ConsoleLogger;
+    }());
+    exports.ConsoleLogger = ConsoleLogger;
+    /**
+     * HTML logging
+     * @class
+     */
+    var HTMLLogger = (function () {
+        /**
+         * @constructor
+         */
+        function HTMLLogger() {
+            this.rootId = 'loggerRoot';
+            this.rootElementTag = 'ul';
+            this.messageTag = 'li';
+            this.baseMessageClass = 'logMessage';
+            this.rootElement = document.querySelector("#" + this.rootId);
+            if (!this.rootElement) {
+                this.rootElement = document.createElement(this.rootElementTag);
+                this.rootElement.id = this.rootId;
+                document.body.appendChild(this.rootElement);
+            }
+        }
+        /**
+         * Construct a general message and append to the log root.
+         * @param message Message text.
+         * @param messageClass CSS class to be added to message.
+         */
+        HTMLLogger.prototype.addMessageElement = function (message, messageClass) {
+            var messageElement = document.createElement(this.messageTag);
+            messageElement.textContent = message;
+            messageElement.className = this.baseMessageClass + " " + (messageClass ? messageClass : '');
+            ;
+            this.rootElement.appendChild(messageElement);
+            return messageElement;
+        };
+        /**
+         * Add an error message to the log.
+         * @param errorMessage Error message text.
+         */
+        HTMLLogger.prototype.addErrorMessage = function (errorMessage) {
+            this.addMessageElement(errorMessage, MessageClass.Error);
+        };
+        /**
+         * Add a warning message to the log.
+         * @param warningMessage Warning message text.
+         */
+        HTMLLogger.prototype.addWarningMessage = function (warningMessage) {
+            this.addMessageElement(warningMessage, MessageClass.Warning);
+        };
+        /**
+         * Add an informational message to the log.
+         * @param infoMessage Information message text.
+         */
+        HTMLLogger.prototype.addInfoMessage = function (infoMessage) {
+            this.addMessageElement(infoMessage, MessageClass.Info);
+        };
+        /**
+         * Add a message to the log.
+         * @param message Information message text.
+         * @param style Optional CSS style.
+         */
+        HTMLLogger.prototype.addMessage = function (message, style) {
+            var messageElement = this.addMessageElement(message);
+            if (style)
+                messageElement.style.cssText = style;
+        };
+        /**
+         * Adds an empty line
+         */
+        HTMLLogger.prototype.addEmptyLine = function () {
+            // https://stackoverflow.com/questions/5140547/line-break-inside-a-list-item-generates-space-between-the-lines
+            //      this.addMessage('<br/><br/>');        
+            this.addMessage('.');
+        };
+        /**
+         * Clears the log output
+         */
+        HTMLLogger.prototype.clearLog = function () {
+            // https://stackoverflow.com/questions/3955229/remove-all-child-elements-of-a-dom-node-in-javascript
+            while (this.rootElement.firstChild) {
+                this.rootElement.removeChild(this.rootElement.firstChild);
+            }
+        };
+        return HTMLLogger;
+    }());
+    exports.HTMLLogger = HTMLLogger;
+});
+// ------------------------------------------------------------------------// 
+// ModelRelief                                                             //
+//                                                                         // 
+// @author mrdoob / http://mrdoob.com/                                     // 
+// ------------------------------------------------------------------------//
+define("ModelLoaders/OBJLoader", ["require", "exports", "three"], function (require, exports, THREE) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    function OBJLoader(manager) {
+        this.manager = (manager !== undefined) ? manager : THREE.DefaultLoadingManager;
+        this.materials = null;
+        this.regexp = {
+            // v float float float
+            vertex_pattern: /^v\s+([\d\.\+\-eE]+)\s+([\d\.\+\-eE]+)\s+([\d\.\+\-eE]+)/,
+            // vn float float float
+            normal_pattern: /^vn\s+([\d\.\+\-eE]+)\s+([\d\.\+\-eE]+)\s+([\d\.\+\-eE]+)/,
+            // vt float float
+            uv_pattern: /^vt\s+([\d\.\+\-eE]+)\s+([\d\.\+\-eE]+)/,
+            // f vertex vertex vertex
+            face_vertex: /^f\s+(-?\d+)\s+(-?\d+)\s+(-?\d+)(?:\s+(-?\d+))?/,
+            // f vertex/uv vertex/uv vertex/uv
+            face_vertex_uv: /^f\s+(-?\d+)\/(-?\d+)\s+(-?\d+)\/(-?\d+)\s+(-?\d+)\/(-?\d+)(?:\s+(-?\d+)\/(-?\d+))?/,
+            // f vertex/uv/normal vertex/uv/normal vertex/uv/normal
+            face_vertex_uv_normal: /^f\s+(-?\d+)\/(-?\d+)\/(-?\d+)\s+(-?\d+)\/(-?\d+)\/(-?\d+)\s+(-?\d+)\/(-?\d+)\/(-?\d+)(?:\s+(-?\d+)\/(-?\d+)\/(-?\d+))?/,
+            // f vertex//normal vertex//normal vertex//normal
+            face_vertex_normal: /^f\s+(-?\d+)\/\/(-?\d+)\s+(-?\d+)\/\/(-?\d+)\s+(-?\d+)\/\/(-?\d+)(?:\s+(-?\d+)\/\/(-?\d+))?/,
+            // o object_name | g group_name
+            object_pattern: /^[og]\s*(.+)?/,
+            // s boolean
+            smoothing_pattern: /^s\s+(\d+|on|off)/,
+            // mtllib file_reference
+            material_library_pattern: /^mtllib /,
+            // usemtl material_name
+            material_use_pattern: /^usemtl /
+        };
+    }
+    exports.OBJLoader = OBJLoader;
+    ;
+    OBJLoader.prototype = {
+        constructor: OBJLoader,
+        load: function (url, onLoad, onProgress, onError) {
+            var scope = this;
+            var loader = new THREE.FileLoader(scope.manager);
+            loader.setPath(this.path);
+            loader.load(url, function (text) {
+                onLoad(scope.parse(text));
+            }, onProgress, onError);
+        },
+        setPath: function (value) {
+            this.path = value;
+        },
+        setMaterials: function (materials) {
+            this.materials = materials;
+        },
+        _createParserState: function () {
+            var state = {
+                objects: [],
+                object: {},
+                vertices: [],
+                normals: [],
+                uvs: [],
+                materialLibraries: [],
+                startObject: function (name, fromDeclaration) {
+                    // If the current object (initial from reset) is not from a g/o declaration in the parsed
+                    // file. We need to use it for the first parsed g/o to keep things in sync.
+                    if (this.object && this.object.fromDeclaration === false) {
+                        this.object.name = name;
+                        this.object.fromDeclaration = (fromDeclaration !== false);
+                        return;
+                    }
+                    var previousMaterial = (this.object && typeof this.object.currentMaterial === 'function' ? this.object.currentMaterial() : undefined);
+                    if (this.object && typeof this.object._finalize === 'function') {
+                        this.object._finalize(true);
+                    }
+                    this.object = {
+                        name: name || '',
+                        fromDeclaration: (fromDeclaration !== false),
+                        geometry: {
+                            vertices: [],
+                            normals: [],
+                            uvs: []
+                        },
+                        materials: [],
+                        smooth: true,
+                        startMaterial: function (name, libraries) {
+                            var previous = this._finalize(false);
+                            // New usemtl declaration overwrites an inherited material, except if faces were declared
+                            // after the material, then it must be preserved for proper MultiMaterial continuation.
+                            if (previous && (previous.inherited || previous.groupCount <= 0)) {
+                                this.materials.splice(previous.index, 1);
+                            }
+                            var material = {
+                                index: this.materials.length,
+                                name: name || '',
+                                mtllib: (Array.isArray(libraries) && libraries.length > 0 ? libraries[libraries.length - 1] : ''),
+                                smooth: (previous !== undefined ? previous.smooth : this.smooth),
+                                groupStart: (previous !== undefined ? previous.groupEnd : 0),
+                                groupEnd: -1,
+                                groupCount: -1,
+                                inherited: false,
+                                clone: function (index) {
+                                    var cloned = {
+                                        index: (typeof index === 'number' ? index : this.index),
+                                        name: this.name,
+                                        mtllib: this.mtllib,
+                                        smooth: this.smooth,
+                                        groupStart: 0,
+                                        groupEnd: -1,
+                                        groupCount: -1,
+                                        inherited: false,
+                                        // ModelRelief
+                                        clone: null
+                                    };
+                                    cloned.clone = this.clone.bind(cloned);
+                                    return cloned;
+                                }
+                            };
+                            this.materials.push(material);
+                            return material;
+                        },
+                        currentMaterial: function () {
+                            if (this.materials.length > 0) {
+                                return this.materials[this.materials.length - 1];
+                            }
+                            return undefined;
+                        },
+                        _finalize: function (end) {
+                            var lastMultiMaterial = this.currentMaterial();
+                            if (lastMultiMaterial && lastMultiMaterial.groupEnd === -1) {
+                                lastMultiMaterial.groupEnd = this.geometry.vertices.length / 3;
+                                lastMultiMaterial.groupCount = lastMultiMaterial.groupEnd - lastMultiMaterial.groupStart;
+                                lastMultiMaterial.inherited = false;
+                            }
+                            // Ignore objects tail materials if no face declarations followed them before a new o/g started.
+                            if (end && this.materials.length > 1) {
+                                for (var mi = this.materials.length - 1; mi >= 0; mi--) {
+                                    if (this.materials[mi].groupCount <= 0) {
+                                        this.materials.splice(mi, 1);
+                                    }
+                                }
+                            }
+                            // Guarantee at least one empty material, this makes the creation later more straight forward.
+                            if (end && this.materials.length === 0) {
+                                this.materials.push({
+                                    name: '',
+                                    smooth: this.smooth
+                                });
+                            }
+                            return lastMultiMaterial;
+                        }
+                    };
+                    // Inherit previous objects material.
+                    // Spec tells us that a declared material must be set to all objects until a new material is declared.
+                    // If a usemtl declaration is encountered while this new object is being parsed, it will
+                    // overwrite the inherited material. Exception being that there was already face declarations
+                    // to the inherited material, then it will be preserved for proper MultiMaterial continuation.
+                    if (previousMaterial && previousMaterial.name && typeof previousMaterial.clone === "function") {
+                        var declared = previousMaterial.clone(0);
+                        declared.inherited = true;
+                        this.object.materials.push(declared);
+                    }
+                    this.objects.push(this.object);
+                },
+                finalize: function () {
+                    if (this.object && typeof this.object._finalize === 'function') {
+                        this.object._finalize(true);
+                    }
+                },
+                parseVertexIndex: function (value, len) {
+                    var index = parseInt(value, 10);
+                    return (index >= 0 ? index - 1 : index + len / 3) * 3;
+                },
+                parseNormalIndex: function (value, len) {
+                    var index = parseInt(value, 10);
+                    return (index >= 0 ? index - 1 : index + len / 3) * 3;
+                },
+                parseUVIndex: function (value, len) {
+                    var index = parseInt(value, 10);
+                    return (index >= 0 ? index - 1 : index + len / 2) * 2;
+                },
+                addVertex: function (a, b, c) {
+                    var src = this.vertices;
+                    var dst = this.object.geometry.vertices;
+                    dst.push(src[a + 0]);
+                    dst.push(src[a + 1]);
+                    dst.push(src[a + 2]);
+                    dst.push(src[b + 0]);
+                    dst.push(src[b + 1]);
+                    dst.push(src[b + 2]);
+                    dst.push(src[c + 0]);
+                    dst.push(src[c + 1]);
+                    dst.push(src[c + 2]);
+                },
+                addVertexLine: function (a) {
+                    var src = this.vertices;
+                    var dst = this.object.geometry.vertices;
+                    dst.push(src[a + 0]);
+                    dst.push(src[a + 1]);
+                    dst.push(src[a + 2]);
+                },
+                addNormal: function (a, b, c) {
+                    var src = this.normals;
+                    var dst = this.object.geometry.normals;
+                    dst.push(src[a + 0]);
+                    dst.push(src[a + 1]);
+                    dst.push(src[a + 2]);
+                    dst.push(src[b + 0]);
+                    dst.push(src[b + 1]);
+                    dst.push(src[b + 2]);
+                    dst.push(src[c + 0]);
+                    dst.push(src[c + 1]);
+                    dst.push(src[c + 2]);
+                },
+                addUV: function (a, b, c) {
+                    var src = this.uvs;
+                    var dst = this.object.geometry.uvs;
+                    dst.push(src[a + 0]);
+                    dst.push(src[a + 1]);
+                    dst.push(src[b + 0]);
+                    dst.push(src[b + 1]);
+                    dst.push(src[c + 0]);
+                    dst.push(src[c + 1]);
+                },
+                addUVLine: function (a) {
+                    var src = this.uvs;
+                    var dst = this.object.geometry.uvs;
+                    dst.push(src[a + 0]);
+                    dst.push(src[a + 1]);
+                },
+                addFace: function (a, b, c, d, ua, ub, uc, ud, na, nb, nc, nd) {
+                    var vLen = this.vertices.length;
+                    var ia = this.parseVertexIndex(a, vLen);
+                    var ib = this.parseVertexIndex(b, vLen);
+                    var ic = this.parseVertexIndex(c, vLen);
+                    var id;
+                    if (d === undefined) {
+                        this.addVertex(ia, ib, ic);
+                    }
+                    else {
+                        id = this.parseVertexIndex(d, vLen);
+                        this.addVertex(ia, ib, id);
+                        this.addVertex(ib, ic, id);
+                    }
+                    if (ua !== undefined) {
+                        var uvLen = this.uvs.length;
+                        ia = this.parseUVIndex(ua, uvLen);
+                        ib = this.parseUVIndex(ub, uvLen);
+                        ic = this.parseUVIndex(uc, uvLen);
+                        if (d === undefined) {
+                            this.addUV(ia, ib, ic);
+                        }
+                        else {
+                            id = this.parseUVIndex(ud, uvLen);
+                            this.addUV(ia, ib, id);
+                            this.addUV(ib, ic, id);
+                        }
+                    }
+                    if (na !== undefined) {
+                        // Normals are many times the same. If so, skip function call and parseInt.
+                        var nLen = this.normals.length;
+                        ia = this.parseNormalIndex(na, nLen);
+                        ib = na === nb ? ia : this.parseNormalIndex(nb, nLen);
+                        ic = na === nc ? ia : this.parseNormalIndex(nc, nLen);
+                        if (d === undefined) {
+                            this.addNormal(ia, ib, ic);
+                        }
+                        else {
+                            id = this.parseNormalIndex(nd, nLen);
+                            this.addNormal(ia, ib, id);
+                            this.addNormal(ib, ic, id);
+                        }
+                    }
+                },
+                addLineGeometry: function (vertices, uvs) {
+                    this.object.geometry.type = 'Line';
+                    var vLen = this.vertices.length;
+                    var uvLen = this.uvs.length;
+                    for (var vi = 0, l = vertices.length; vi < l; vi++) {
+                        this.addVertexLine(this.parseVertexIndex(vertices[vi], vLen));
+                    }
+                    for (var uvi = 0, l = uvs.length; uvi < l; uvi++) {
+                        this.addUVLine(this.parseUVIndex(uvs[uvi], uvLen));
+                    }
+                }
+            };
+            state.startObject('', false);
+            return state;
+        },
+        parse: function (text) {
+            console.time('OBJLoader');
+            var state = this._createParserState();
+            if (text.indexOf('\r\n') !== -1) {
+                // This is faster than String.split with regex that splits on both
+                text = text.replace(/\r\n/g, '\n');
+            }
+            if (text.indexOf('\\\n') !== -1) {
+                // join lines separated by a line continuation character (\)
+                text = text.replace(/\\\n/g, '');
+            }
+            var lines = text.split('\n');
+            var line = '', lineFirstChar = '', lineSecondChar = '';
+            var lineLength = 0;
+            var result = [];
+            // Faster to just trim left side of the line. Use if available.
+            // ModelRelief
+            // var trimLeft = ( typeof ''.trimLeft === 'function' );
+            for (var i = 0, l = lines.length; i < l; i++) {
+                line = lines[i];
+                // ModelRelief
+                // line = trimLeft ? line.trimLeft() : line.trim();
+                line = line.trim();
+                lineLength = line.length;
+                if (lineLength === 0)
+                    continue;
+                lineFirstChar = line.charAt(0);
+                // @todo invoke passed in handler if any
+                if (lineFirstChar === '#')
+                    continue;
+                if (lineFirstChar === 'v') {
+                    lineSecondChar = line.charAt(1);
+                    if (lineSecondChar === ' ' && (result = this.regexp.vertex_pattern.exec(line)) !== null) {
+                        // 0                  1      2      3
+                        // ["v 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
+                        state.vertices.push(parseFloat(result[1]), parseFloat(result[2]), parseFloat(result[3]));
+                    }
+                    else if (lineSecondChar === 'n' && (result = this.regexp.normal_pattern.exec(line)) !== null) {
+                        // 0                   1      2      3
+                        // ["vn 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
+                        state.normals.push(parseFloat(result[1]), parseFloat(result[2]), parseFloat(result[3]));
+                    }
+                    else if (lineSecondChar === 't' && (result = this.regexp.uv_pattern.exec(line)) !== null) {
+                        // 0               1      2
+                        // ["vt 0.1 0.2", "0.1", "0.2"]
+                        state.uvs.push(parseFloat(result[1]), parseFloat(result[2]));
+                    }
+                    else {
+                        throw new Error("Unexpected vertex/normal/uv line: '" + line + "'");
+                    }
+                }
+                else if (lineFirstChar === "f") {
+                    if ((result = this.regexp.face_vertex_uv_normal.exec(line)) !== null) {
+                        // f vertex/uv/normal vertex/uv/normal vertex/uv/normal
+                        // 0                        1    2    3    4    5    6    7    8    9   10         11         12
+                        // ["f 1/1/1 2/2/2 3/3/3", "1", "1", "1", "2", "2", "2", "3", "3", "3", undefined, undefined, undefined]
+                        state.addFace(result[1], result[4], result[7], result[10], result[2], result[5], result[8], result[11], result[3], result[6], result[9], result[12]);
+                    }
+                    else if ((result = this.regexp.face_vertex_uv.exec(line)) !== null) {
+                        // f vertex/uv vertex/uv vertex/uv
+                        // 0                  1    2    3    4    5    6   7          8
+                        // ["f 1/1 2/2 3/3", "1", "1", "2", "2", "3", "3", undefined, undefined]
+                        state.addFace(result[1], result[3], result[5], result[7], result[2], result[4], result[6], result[8]);
+                    }
+                    else if ((result = this.regexp.face_vertex_normal.exec(line)) !== null) {
+                        // f vertex//normal vertex//normal vertex//normal
+                        // 0                     1    2    3    4    5    6   7          8
+                        // ["f 1//1 2//2 3//3", "1", "1", "2", "2", "3", "3", undefined, undefined]
+                        state.addFace(result[1], result[3], result[5], result[7], undefined, undefined, undefined, undefined, result[2], result[4], result[6], result[8]);
+                    }
+                    else if ((result = this.regexp.face_vertex.exec(line)) !== null) {
+                        // f vertex vertex vertex
+                        // 0            1    2    3   4
+                        // ["f 1 2 3", "1", "2", "3", undefined]
+                        state.addFace(result[1], result[2], result[3], result[4]);
+                    }
+                    else {
+                        throw new Error("Unexpected face line: '" + line + "'");
+                    }
+                }
+                else if (lineFirstChar === "l") {
+                    var lineParts = line.substring(1).trim().split(" ");
+                    var lineVertices = [], lineUVs = [];
+                    if (line.indexOf("/") === -1) {
+                        lineVertices = lineParts;
+                    }
+                    else {
+                        for (var li = 0, llen = lineParts.length; li < llen; li++) {
+                            var parts = lineParts[li].split("/");
+                            if (parts[0] !== "")
+                                lineVertices.push(parts[0]);
+                            if (parts[1] !== "")
+                                lineUVs.push(parts[1]);
+                        }
+                    }
+                    state.addLineGeometry(lineVertices, lineUVs);
+                }
+                else if ((result = this.regexp.object_pattern.exec(line)) !== null) {
+                    // o object_name
+                    // or
+                    // g group_name
+                    // WORKAROUND: https://bugs.chromium.org/p/v8/issues/detail?id=2869
+                    // var name = result[ 0 ].substr( 1 ).trim();
+                    var name = (" " + result[0].substr(1).trim()).substr(1);
+                    state.startObject(name);
+                }
+                else if (this.regexp.material_use_pattern.test(line)) {
+                    // material
+                    state.object.startMaterial(line.substring(7).trim(), state.materialLibraries);
+                }
+                else if (this.regexp.material_library_pattern.test(line)) {
+                    // mtl file
+                    state.materialLibraries.push(line.substring(7).trim());
+                }
+                else if ((result = this.regexp.smoothing_pattern.exec(line)) !== null) {
+                    // smooth shading
+                    // @todo Handle files that have varying smooth values for a set of faces inside one geometry,
+                    // but does not define a usemtl for each face set.
+                    // This should be detected and a dummy material created (later MultiMaterial and geometry groups).
+                    // This requires some care to not create extra material on each smooth value for "normal" obj files.
+                    // where explicit usemtl defines geometry groups.
+                    // Example asset: examples/models/obj/cerberus/Cerberus.obj
+                    var value = result[1].trim().toLowerCase();
+                    /*
+                     * http://paulbourke.net/dataformats/obj/
+                     * or
+                     * http://www.cs.utah.edu/~boulos/cs3505/obj_spec.pdf
+                     *
+                     * From chapter "Grouping" Syntax explanation "s group_number":
+                     * "group_number is the smoothing group number. To turn off smoothing groups, use a value of 0 or off.
+                     * Polygonal elements use group numbers to put elements in different smoothing groups. For free-form
+                     * surfaces, smoothing groups are either turned on or off; there is no difference between values greater
+                     * than 0."
+                     */
+                    state.object.smooth = (value !== '0' && value !== 'off');
+                    var material = state.object.currentMaterial();
+                    if (material) {
+                        material.smooth = state.object.smooth;
+                    }
+                }
+                else {
+                    // Handle null terminated files without exception
+                    if (line === '\0')
+                        continue;
+                    throw new Error("Unexpected line: '" + line + "'");
+                }
+            }
+            state.finalize();
+            var container = new THREE.Group();
+            // ModelRelief
+            //container.materialLibraries = [].concat( state.materialLibraries );
+            container.materialLibraries = [].concat(state.materialLibraries);
+            for (var i = 0, l = state.objects.length; i < l; i++) {
+                var object = state.objects[i];
+                var geometry = object.geometry;
+                var materials = object.materials;
+                var isLine = (geometry.type === 'Line');
+                // Skip o/g line declarations that did not follow with any faces
+                if (geometry.vertices.length === 0)
+                    continue;
+                var buffergeometry = new THREE.BufferGeometry();
+                buffergeometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(geometry.vertices), 3));
+                if (geometry.normals.length > 0) {
+                    buffergeometry.addAttribute('normal', new THREE.BufferAttribute(new Float32Array(geometry.normals), 3));
+                }
+                else {
+                    buffergeometry.computeVertexNormals();
+                }
+                if (geometry.uvs.length > 0) {
+                    buffergeometry.addAttribute('uv', new THREE.BufferAttribute(new Float32Array(geometry.uvs), 2));
+                }
+                // Create materials
+                // ModelRelief
+                //var createdMaterials = [];           
+                var createdMaterials = [];
+                for (var mi = 0, miLen = materials.length; mi < miLen; mi++) {
+                    var sourceMaterial = materials[mi];
+                    var material = undefined;
+                    if (this.materials !== null) {
+                        material = this.materials.create(sourceMaterial.name);
+                        // mtl etc. loaders probably can't create line materials correctly, copy properties to a line material.
+                        if (isLine && material && !(material instanceof THREE.LineBasicMaterial)) {
+                            var materialLine = new THREE.LineBasicMaterial();
+                            materialLine.copy(material);
+                            material = materialLine;
+                        }
+                    }
+                    if (!material) {
+                        material = (!isLine ? new THREE.MeshPhongMaterial() : new THREE.LineBasicMaterial());
+                        material.name = sourceMaterial.name;
+                    }
+                    material.shading = sourceMaterial.smooth ? THREE.SmoothShading : THREE.FlatShading;
+                    createdMaterials.push(material);
+                }
+                // Create mesh
+                var mesh;
+                if (createdMaterials.length > 1) {
+                    for (var mi = 0, miLen = materials.length; mi < miLen; mi++) {
+                        var sourceMaterial = materials[mi];
+                        buffergeometry.addGroup(sourceMaterial.groupStart, sourceMaterial.groupCount, mi);
+                    }
+                    // ModelRelief
+                    //mesh = ( ! isLine ? new THREE.Mesh( buffergeometry, createdMaterials ) : new THREE.LineSegments( buffergeometry, createdMaterials ) );
+                    mesh = (!isLine ? new THREE.Mesh(buffergeometry, createdMaterials[0]) : new THREE.LineSegments(buffergeometry, null));
+                }
+                else {
+                    // ModelRelief
+                    //mesh = ( ! isLine ? new THREE.Mesh( buffergeometry, createdMaterials[ 0 ] ) : new THREE.LineSegments( buffergeometry, createMaterials) );
+                    mesh = (!isLine ? new THREE.Mesh(buffergeometry, createdMaterials[0]) : new THREE.LineSegments(buffergeometry, null));
+                }
+                mesh.name = object.name;
+                container.add(mesh);
+            }
+            console.timeEnd('OBJLoader');
+            return container;
+        }
+    };
+});
+define("System/Services", ["require", "exports", "System/Logger"], function (require, exports, Logger_1) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * Services
+     * General runtime support
+     * @class
+     */
+    var Services = (function () {
+        /**
+         * @constructor
+         */
+        function Services() {
+        }
+        Services.consoleLogger = new Logger_1.ConsoleLogger();
+        Services.htmlLogger = new Logger_1.HTMLLogger();
+        return Services;
+    }());
+    exports.Services = Services;
+});
 /**
  * @author Eberhard Graether / http://egraether.com/
  * @author Mark Lundin 	/ http://mark-lundin.com
@@ -376,184 +1084,7 @@ define("Viewer/TrackballControls", ["require", "exports", "three"], function (re
     TrackballControls.prototype = Object.create(THREE.EventDispatcher.prototype);
     TrackballControls.prototype.constructor = TrackballControls;
 });
-define("System/Logger", ["require", "exports"], function (require, exports) {
-    // ------------------------------------------------------------------------// 
-    // ModelRelief                                                             //
-    //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
-    // ------------------------------------------------------------------------//
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var MessageClass;
-    (function (MessageClass) {
-        MessageClass["Error"] = "logError";
-        MessageClass["Warning"] = "logWarning";
-        MessageClass["Info"] = "logInfo";
-        MessageClass["None"] = "logNone";
-    })(MessageClass || (MessageClass = {}));
-    /**
-     * Console logging
-     * @class
-     */
-    var ConsoleLogger = (function () {
-        /**
-         * @constructor
-         */
-        function ConsoleLogger() {
-        }
-        /**
-         * Construct a general message and add to the log.
-         * @param message Message text.
-         * @param messageClass Message class.
-         */
-        ConsoleLogger.prototype.addMessageEntry = function (message, messageClass) {
-            var prefix = 'ModelRelief: ';
-            var logMessage = "" + prefix + message;
-            switch (messageClass) {
-                case MessageClass.Error:
-                    console.error(logMessage);
-                    break;
-                case MessageClass.Warning:
-                    console.warn(logMessage);
-                    break;
-                case MessageClass.Info:
-                    console.info(logMessage);
-                    break;
-                case MessageClass.None:
-                    console.log(logMessage);
-                    break;
-            }
-        };
-        /**
-         * Add an error message to the log.
-         * @param errorMessage Error message text.
-         */
-        ConsoleLogger.prototype.addErrorMessage = function (errorMessage) {
-            this.addMessageEntry(errorMessage, MessageClass.Error);
-        };
-        /**
-         * Add a warning message to the log.
-         * @param warningMessage Warning message text.
-         */
-        ConsoleLogger.prototype.addWarningMessage = function (warningMessage) {
-            this.addMessageEntry(warningMessage, MessageClass.Warning);
-        };
-        /**
-         * Add an informational message to the log.
-         * @param infoMessage Information message text.
-         */
-        ConsoleLogger.prototype.addInfoMessage = function (infoMessage) {
-            this.addMessageEntry(infoMessage, MessageClass.Info);
-        };
-        /**
-         * Add a message to the log.
-         * @param message Information message text.
-         * @param style Optional style.
-         */
-        ConsoleLogger.prototype.addMessage = function (message, style) {
-            this.addMessageEntry(message, MessageClass.None);
-        };
-        /**
-         * Adds an empty line
-         */
-        ConsoleLogger.prototype.addEmptyLine = function () {
-            console.log('');
-        };
-        /**
-         * Clears the log output
-         */
-        ConsoleLogger.prototype.clearLog = function () {
-            console.clear();
-        };
-        return ConsoleLogger;
-    }());
-    exports.ConsoleLogger = ConsoleLogger;
-    /**
-     * HTML logging
-     * @class
-     */
-    var HTMLLogger = (function () {
-        /**
-         * @constructor
-         */
-        function HTMLLogger() {
-            this.rootId = 'loggerRoot';
-            this.rootElementTag = 'ul';
-            this.messageTag = 'li';
-            this.baseMessageClass = 'logMessage';
-            this.rootElement = document.querySelector("#" + this.rootId);
-            if (!this.rootElement) {
-                this.rootElement = document.createElement(this.rootElementTag);
-                this.rootElement.id = this.rootId;
-                document.body.appendChild(this.rootElement);
-            }
-        }
-        /**
-         * Construct a general message and append to the log root.
-         * @param message Message text.
-         * @param messageClass CSS class to be added to message.
-         */
-        HTMLLogger.prototype.addMessageElement = function (message, messageClass) {
-            var messageElement = document.createElement(this.messageTag);
-            messageElement.textContent = message;
-            messageElement.className = this.baseMessageClass + " " + (messageClass ? messageClass : '');
-            ;
-            this.rootElement.appendChild(messageElement);
-            return messageElement;
-        };
-        /**
-         * Add an error message to the log.
-         * @param errorMessage Error message text.
-         */
-        HTMLLogger.prototype.addErrorMessage = function (errorMessage) {
-            this.addMessageElement(errorMessage, MessageClass.Error);
-        };
-        /**
-         * Add a warning message to the log.
-         * @param warningMessage Warning message text.
-         */
-        HTMLLogger.prototype.addWarningMessage = function (warningMessage) {
-            this.addMessageElement(warningMessage, MessageClass.Warning);
-        };
-        /**
-         * Add an informational message to the log.
-         * @param infoMessage Information message text.
-         */
-        HTMLLogger.prototype.addInfoMessage = function (infoMessage) {
-            this.addMessageElement(infoMessage, MessageClass.Info);
-        };
-        /**
-         * Add a message to the log.
-         * @param message Information message text.
-         * @param style Optional CSS style.
-         */
-        HTMLLogger.prototype.addMessage = function (message, style) {
-            var messageElement = this.addMessageElement(message);
-            if (style)
-                messageElement.style.cssText = style;
-        };
-        /**
-         * Adds an empty line
-         */
-        HTMLLogger.prototype.addEmptyLine = function () {
-            // https://stackoverflow.com/questions/5140547/line-break-inside-a-list-item-generates-space-between-the-lines
-            //      this.addMessage('<br/><br/>');        
-            this.addMessage('.');
-        };
-        /**
-         * Clears the log output
-         */
-        HTMLLogger.prototype.clearLog = function () {
-            // https://stackoverflow.com/questions/3955229/remove-all-child-elements-of-a-dom-node-in-javascript
-            while (this.rootElement.firstChild) {
-                this.rootElement.removeChild(this.rootElement.firstChild);
-            }
-        };
-        return HTMLLogger;
-    }());
-    exports.HTMLLogger = HTMLLogger;
-});
-define("Viewer/Graphics", ["require", "exports", "three", "System/Logger"], function (require, exports, THREE, Logger_1) {
+define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], function (require, exports, THREE, Services_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -584,7 +1115,7 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Logger"], func
         Graphics.removeSceneObjectChildren = function (scene, rootObject, removeRoot) {
             if (!scene || !rootObject)
                 return;
-            var logger = new Logger_1.ConsoleLogger();
+            var logger = Services_1.Services.consoleLogger;
             var remover = function (object3d) {
                 if (object3d === rootObject) {
                     return;
@@ -1132,7 +1663,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
             this.updateCamera();
         };
         /**
-         * Calculates the aspect ration of the canvas afer a window resize
+         * Calculates the aspect ratio of the canvas afer a window resize
          */
         Viewer.prototype.recalcAspectRatio = function () {
             this.aspectRatio = (this.canvas.offsetHeight === 0) ? 1 : this.canvas.offsetWidth / this.canvas.offsetHeight;
@@ -1242,513 +1773,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
     }());
     exports.Viewer = Viewer;
 });
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         // 
-// @author mrdoob / http://mrdoob.com/                                     // 
-// ------------------------------------------------------------------------//
-define("ModelLoaders/OBJLoader", ["require", "exports", "three"], function (require, exports, THREE) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    function OBJLoader(manager) {
-        this.manager = (manager !== undefined) ? manager : THREE.DefaultLoadingManager;
-        this.materials = null;
-        this.regexp = {
-            // v float float float
-            vertex_pattern: /^v\s+([\d\.\+\-eE]+)\s+([\d\.\+\-eE]+)\s+([\d\.\+\-eE]+)/,
-            // vn float float float
-            normal_pattern: /^vn\s+([\d\.\+\-eE]+)\s+([\d\.\+\-eE]+)\s+([\d\.\+\-eE]+)/,
-            // vt float float
-            uv_pattern: /^vt\s+([\d\.\+\-eE]+)\s+([\d\.\+\-eE]+)/,
-            // f vertex vertex vertex
-            face_vertex: /^f\s+(-?\d+)\s+(-?\d+)\s+(-?\d+)(?:\s+(-?\d+))?/,
-            // f vertex/uv vertex/uv vertex/uv
-            face_vertex_uv: /^f\s+(-?\d+)\/(-?\d+)\s+(-?\d+)\/(-?\d+)\s+(-?\d+)\/(-?\d+)(?:\s+(-?\d+)\/(-?\d+))?/,
-            // f vertex/uv/normal vertex/uv/normal vertex/uv/normal
-            face_vertex_uv_normal: /^f\s+(-?\d+)\/(-?\d+)\/(-?\d+)\s+(-?\d+)\/(-?\d+)\/(-?\d+)\s+(-?\d+)\/(-?\d+)\/(-?\d+)(?:\s+(-?\d+)\/(-?\d+)\/(-?\d+))?/,
-            // f vertex//normal vertex//normal vertex//normal
-            face_vertex_normal: /^f\s+(-?\d+)\/\/(-?\d+)\s+(-?\d+)\/\/(-?\d+)\s+(-?\d+)\/\/(-?\d+)(?:\s+(-?\d+)\/\/(-?\d+))?/,
-            // o object_name | g group_name
-            object_pattern: /^[og]\s*(.+)?/,
-            // s boolean
-            smoothing_pattern: /^s\s+(\d+|on|off)/,
-            // mtllib file_reference
-            material_library_pattern: /^mtllib /,
-            // usemtl material_name
-            material_use_pattern: /^usemtl /
-        };
-    }
-    exports.OBJLoader = OBJLoader;
-    ;
-    OBJLoader.prototype = {
-        constructor: OBJLoader,
-        load: function (url, onLoad, onProgress, onError) {
-            var scope = this;
-            var loader = new THREE.FileLoader(scope.manager);
-            loader.setPath(this.path);
-            loader.load(url, function (text) {
-                onLoad(scope.parse(text));
-            }, onProgress, onError);
-        },
-        setPath: function (value) {
-            this.path = value;
-        },
-        setMaterials: function (materials) {
-            this.materials = materials;
-        },
-        _createParserState: function () {
-            var state = {
-                objects: [],
-                object: {},
-                vertices: [],
-                normals: [],
-                uvs: [],
-                materialLibraries: [],
-                startObject: function (name, fromDeclaration) {
-                    // If the current object (initial from reset) is not from a g/o declaration in the parsed
-                    // file. We need to use it for the first parsed g/o to keep things in sync.
-                    if (this.object && this.object.fromDeclaration === false) {
-                        this.object.name = name;
-                        this.object.fromDeclaration = (fromDeclaration !== false);
-                        return;
-                    }
-                    var previousMaterial = (this.object && typeof this.object.currentMaterial === 'function' ? this.object.currentMaterial() : undefined);
-                    if (this.object && typeof this.object._finalize === 'function') {
-                        this.object._finalize(true);
-                    }
-                    this.object = {
-                        name: name || '',
-                        fromDeclaration: (fromDeclaration !== false),
-                        geometry: {
-                            vertices: [],
-                            normals: [],
-                            uvs: []
-                        },
-                        materials: [],
-                        smooth: true,
-                        startMaterial: function (name, libraries) {
-                            var previous = this._finalize(false);
-                            // New usemtl declaration overwrites an inherited material, except if faces were declared
-                            // after the material, then it must be preserved for proper MultiMaterial continuation.
-                            if (previous && (previous.inherited || previous.groupCount <= 0)) {
-                                this.materials.splice(previous.index, 1);
-                            }
-                            var material = {
-                                index: this.materials.length,
-                                name: name || '',
-                                mtllib: (Array.isArray(libraries) && libraries.length > 0 ? libraries[libraries.length - 1] : ''),
-                                smooth: (previous !== undefined ? previous.smooth : this.smooth),
-                                groupStart: (previous !== undefined ? previous.groupEnd : 0),
-                                groupEnd: -1,
-                                groupCount: -1,
-                                inherited: false,
-                                clone: function (index) {
-                                    var cloned = {
-                                        index: (typeof index === 'number' ? index : this.index),
-                                        name: this.name,
-                                        mtllib: this.mtllib,
-                                        smooth: this.smooth,
-                                        groupStart: 0,
-                                        groupEnd: -1,
-                                        groupCount: -1,
-                                        inherited: false,
-                                        // ModelRelief
-                                        clone: null
-                                    };
-                                    cloned.clone = this.clone.bind(cloned);
-                                    return cloned;
-                                }
-                            };
-                            this.materials.push(material);
-                            return material;
-                        },
-                        currentMaterial: function () {
-                            if (this.materials.length > 0) {
-                                return this.materials[this.materials.length - 1];
-                            }
-                            return undefined;
-                        },
-                        _finalize: function (end) {
-                            var lastMultiMaterial = this.currentMaterial();
-                            if (lastMultiMaterial && lastMultiMaterial.groupEnd === -1) {
-                                lastMultiMaterial.groupEnd = this.geometry.vertices.length / 3;
-                                lastMultiMaterial.groupCount = lastMultiMaterial.groupEnd - lastMultiMaterial.groupStart;
-                                lastMultiMaterial.inherited = false;
-                            }
-                            // Ignore objects tail materials if no face declarations followed them before a new o/g started.
-                            if (end && this.materials.length > 1) {
-                                for (var mi = this.materials.length - 1; mi >= 0; mi--) {
-                                    if (this.materials[mi].groupCount <= 0) {
-                                        this.materials.splice(mi, 1);
-                                    }
-                                }
-                            }
-                            // Guarantee at least one empty material, this makes the creation later more straight forward.
-                            if (end && this.materials.length === 0) {
-                                this.materials.push({
-                                    name: '',
-                                    smooth: this.smooth
-                                });
-                            }
-                            return lastMultiMaterial;
-                        }
-                    };
-                    // Inherit previous objects material.
-                    // Spec tells us that a declared material must be set to all objects until a new material is declared.
-                    // If a usemtl declaration is encountered while this new object is being parsed, it will
-                    // overwrite the inherited material. Exception being that there was already face declarations
-                    // to the inherited material, then it will be preserved for proper MultiMaterial continuation.
-                    if (previousMaterial && previousMaterial.name && typeof previousMaterial.clone === "function") {
-                        var declared = previousMaterial.clone(0);
-                        declared.inherited = true;
-                        this.object.materials.push(declared);
-                    }
-                    this.objects.push(this.object);
-                },
-                finalize: function () {
-                    if (this.object && typeof this.object._finalize === 'function') {
-                        this.object._finalize(true);
-                    }
-                },
-                parseVertexIndex: function (value, len) {
-                    var index = parseInt(value, 10);
-                    return (index >= 0 ? index - 1 : index + len / 3) * 3;
-                },
-                parseNormalIndex: function (value, len) {
-                    var index = parseInt(value, 10);
-                    return (index >= 0 ? index - 1 : index + len / 3) * 3;
-                },
-                parseUVIndex: function (value, len) {
-                    var index = parseInt(value, 10);
-                    return (index >= 0 ? index - 1 : index + len / 2) * 2;
-                },
-                addVertex: function (a, b, c) {
-                    var src = this.vertices;
-                    var dst = this.object.geometry.vertices;
-                    dst.push(src[a + 0]);
-                    dst.push(src[a + 1]);
-                    dst.push(src[a + 2]);
-                    dst.push(src[b + 0]);
-                    dst.push(src[b + 1]);
-                    dst.push(src[b + 2]);
-                    dst.push(src[c + 0]);
-                    dst.push(src[c + 1]);
-                    dst.push(src[c + 2]);
-                },
-                addVertexLine: function (a) {
-                    var src = this.vertices;
-                    var dst = this.object.geometry.vertices;
-                    dst.push(src[a + 0]);
-                    dst.push(src[a + 1]);
-                    dst.push(src[a + 2]);
-                },
-                addNormal: function (a, b, c) {
-                    var src = this.normals;
-                    var dst = this.object.geometry.normals;
-                    dst.push(src[a + 0]);
-                    dst.push(src[a + 1]);
-                    dst.push(src[a + 2]);
-                    dst.push(src[b + 0]);
-                    dst.push(src[b + 1]);
-                    dst.push(src[b + 2]);
-                    dst.push(src[c + 0]);
-                    dst.push(src[c + 1]);
-                    dst.push(src[c + 2]);
-                },
-                addUV: function (a, b, c) {
-                    var src = this.uvs;
-                    var dst = this.object.geometry.uvs;
-                    dst.push(src[a + 0]);
-                    dst.push(src[a + 1]);
-                    dst.push(src[b + 0]);
-                    dst.push(src[b + 1]);
-                    dst.push(src[c + 0]);
-                    dst.push(src[c + 1]);
-                },
-                addUVLine: function (a) {
-                    var src = this.uvs;
-                    var dst = this.object.geometry.uvs;
-                    dst.push(src[a + 0]);
-                    dst.push(src[a + 1]);
-                },
-                addFace: function (a, b, c, d, ua, ub, uc, ud, na, nb, nc, nd) {
-                    var vLen = this.vertices.length;
-                    var ia = this.parseVertexIndex(a, vLen);
-                    var ib = this.parseVertexIndex(b, vLen);
-                    var ic = this.parseVertexIndex(c, vLen);
-                    var id;
-                    if (d === undefined) {
-                        this.addVertex(ia, ib, ic);
-                    }
-                    else {
-                        id = this.parseVertexIndex(d, vLen);
-                        this.addVertex(ia, ib, id);
-                        this.addVertex(ib, ic, id);
-                    }
-                    if (ua !== undefined) {
-                        var uvLen = this.uvs.length;
-                        ia = this.parseUVIndex(ua, uvLen);
-                        ib = this.parseUVIndex(ub, uvLen);
-                        ic = this.parseUVIndex(uc, uvLen);
-                        if (d === undefined) {
-                            this.addUV(ia, ib, ic);
-                        }
-                        else {
-                            id = this.parseUVIndex(ud, uvLen);
-                            this.addUV(ia, ib, id);
-                            this.addUV(ib, ic, id);
-                        }
-                    }
-                    if (na !== undefined) {
-                        // Normals are many times the same. If so, skip function call and parseInt.
-                        var nLen = this.normals.length;
-                        ia = this.parseNormalIndex(na, nLen);
-                        ib = na === nb ? ia : this.parseNormalIndex(nb, nLen);
-                        ic = na === nc ? ia : this.parseNormalIndex(nc, nLen);
-                        if (d === undefined) {
-                            this.addNormal(ia, ib, ic);
-                        }
-                        else {
-                            id = this.parseNormalIndex(nd, nLen);
-                            this.addNormal(ia, ib, id);
-                            this.addNormal(ib, ic, id);
-                        }
-                    }
-                },
-                addLineGeometry: function (vertices, uvs) {
-                    this.object.geometry.type = 'Line';
-                    var vLen = this.vertices.length;
-                    var uvLen = this.uvs.length;
-                    for (var vi = 0, l = vertices.length; vi < l; vi++) {
-                        this.addVertexLine(this.parseVertexIndex(vertices[vi], vLen));
-                    }
-                    for (var uvi = 0, l = uvs.length; uvi < l; uvi++) {
-                        this.addUVLine(this.parseUVIndex(uvs[uvi], uvLen));
-                    }
-                }
-            };
-            state.startObject('', false);
-            return state;
-        },
-        parse: function (text) {
-            console.time('OBJLoader');
-            var state = this._createParserState();
-            if (text.indexOf('\r\n') !== -1) {
-                // This is faster than String.split with regex that splits on both
-                text = text.replace(/\r\n/g, '\n');
-            }
-            if (text.indexOf('\\\n') !== -1) {
-                // join lines separated by a line continuation character (\)
-                text = text.replace(/\\\n/g, '');
-            }
-            var lines = text.split('\n');
-            var line = '', lineFirstChar = '', lineSecondChar = '';
-            var lineLength = 0;
-            var result = [];
-            // Faster to just trim left side of the line. Use if available.
-            // ModelRelief
-            // var trimLeft = ( typeof ''.trimLeft === 'function' );
-            for (var i = 0, l = lines.length; i < l; i++) {
-                line = lines[i];
-                // ModelRelief
-                // line = trimLeft ? line.trimLeft() : line.trim();
-                line = line.trim();
-                lineLength = line.length;
-                if (lineLength === 0)
-                    continue;
-                lineFirstChar = line.charAt(0);
-                // @todo invoke passed in handler if any
-                if (lineFirstChar === '#')
-                    continue;
-                if (lineFirstChar === 'v') {
-                    lineSecondChar = line.charAt(1);
-                    if (lineSecondChar === ' ' && (result = this.regexp.vertex_pattern.exec(line)) !== null) {
-                        // 0                  1      2      3
-                        // ["v 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
-                        state.vertices.push(parseFloat(result[1]), parseFloat(result[2]), parseFloat(result[3]));
-                    }
-                    else if (lineSecondChar === 'n' && (result = this.regexp.normal_pattern.exec(line)) !== null) {
-                        // 0                   1      2      3
-                        // ["vn 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
-                        state.normals.push(parseFloat(result[1]), parseFloat(result[2]), parseFloat(result[3]));
-                    }
-                    else if (lineSecondChar === 't' && (result = this.regexp.uv_pattern.exec(line)) !== null) {
-                        // 0               1      2
-                        // ["vt 0.1 0.2", "0.1", "0.2"]
-                        state.uvs.push(parseFloat(result[1]), parseFloat(result[2]));
-                    }
-                    else {
-                        throw new Error("Unexpected vertex/normal/uv line: '" + line + "'");
-                    }
-                }
-                else if (lineFirstChar === "f") {
-                    if ((result = this.regexp.face_vertex_uv_normal.exec(line)) !== null) {
-                        // f vertex/uv/normal vertex/uv/normal vertex/uv/normal
-                        // 0                        1    2    3    4    5    6    7    8    9   10         11         12
-                        // ["f 1/1/1 2/2/2 3/3/3", "1", "1", "1", "2", "2", "2", "3", "3", "3", undefined, undefined, undefined]
-                        state.addFace(result[1], result[4], result[7], result[10], result[2], result[5], result[8], result[11], result[3], result[6], result[9], result[12]);
-                    }
-                    else if ((result = this.regexp.face_vertex_uv.exec(line)) !== null) {
-                        // f vertex/uv vertex/uv vertex/uv
-                        // 0                  1    2    3    4    5    6   7          8
-                        // ["f 1/1 2/2 3/3", "1", "1", "2", "2", "3", "3", undefined, undefined]
-                        state.addFace(result[1], result[3], result[5], result[7], result[2], result[4], result[6], result[8]);
-                    }
-                    else if ((result = this.regexp.face_vertex_normal.exec(line)) !== null) {
-                        // f vertex//normal vertex//normal vertex//normal
-                        // 0                     1    2    3    4    5    6   7          8
-                        // ["f 1//1 2//2 3//3", "1", "1", "2", "2", "3", "3", undefined, undefined]
-                        state.addFace(result[1], result[3], result[5], result[7], undefined, undefined, undefined, undefined, result[2], result[4], result[6], result[8]);
-                    }
-                    else if ((result = this.regexp.face_vertex.exec(line)) !== null) {
-                        // f vertex vertex vertex
-                        // 0            1    2    3   4
-                        // ["f 1 2 3", "1", "2", "3", undefined]
-                        state.addFace(result[1], result[2], result[3], result[4]);
-                    }
-                    else {
-                        throw new Error("Unexpected face line: '" + line + "'");
-                    }
-                }
-                else if (lineFirstChar === "l") {
-                    var lineParts = line.substring(1).trim().split(" ");
-                    var lineVertices = [], lineUVs = [];
-                    if (line.indexOf("/") === -1) {
-                        lineVertices = lineParts;
-                    }
-                    else {
-                        for (var li = 0, llen = lineParts.length; li < llen; li++) {
-                            var parts = lineParts[li].split("/");
-                            if (parts[0] !== "")
-                                lineVertices.push(parts[0]);
-                            if (parts[1] !== "")
-                                lineUVs.push(parts[1]);
-                        }
-                    }
-                    state.addLineGeometry(lineVertices, lineUVs);
-                }
-                else if ((result = this.regexp.object_pattern.exec(line)) !== null) {
-                    // o object_name
-                    // or
-                    // g group_name
-                    // WORKAROUND: https://bugs.chromium.org/p/v8/issues/detail?id=2869
-                    // var name = result[ 0 ].substr( 1 ).trim();
-                    var name = (" " + result[0].substr(1).trim()).substr(1);
-                    state.startObject(name);
-                }
-                else if (this.regexp.material_use_pattern.test(line)) {
-                    // material
-                    state.object.startMaterial(line.substring(7).trim(), state.materialLibraries);
-                }
-                else if (this.regexp.material_library_pattern.test(line)) {
-                    // mtl file
-                    state.materialLibraries.push(line.substring(7).trim());
-                }
-                else if ((result = this.regexp.smoothing_pattern.exec(line)) !== null) {
-                    // smooth shading
-                    // @todo Handle files that have varying smooth values for a set of faces inside one geometry,
-                    // but does not define a usemtl for each face set.
-                    // This should be detected and a dummy material created (later MultiMaterial and geometry groups).
-                    // This requires some care to not create extra material on each smooth value for "normal" obj files.
-                    // where explicit usemtl defines geometry groups.
-                    // Example asset: examples/models/obj/cerberus/Cerberus.obj
-                    var value = result[1].trim().toLowerCase();
-                    /*
-                     * http://paulbourke.net/dataformats/obj/
-                     * or
-                     * http://www.cs.utah.edu/~boulos/cs3505/obj_spec.pdf
-                     *
-                     * From chapter "Grouping" Syntax explanation "s group_number":
-                     * "group_number is the smoothing group number. To turn off smoothing groups, use a value of 0 or off.
-                     * Polygonal elements use group numbers to put elements in different smoothing groups. For free-form
-                     * surfaces, smoothing groups are either turned on or off; there is no difference between values greater
-                     * than 0."
-                     */
-                    state.object.smooth = (value !== '0' && value !== 'off');
-                    var material = state.object.currentMaterial();
-                    if (material) {
-                        material.smooth = state.object.smooth;
-                    }
-                }
-                else {
-                    // Handle null terminated files without exception
-                    if (line === '\0')
-                        continue;
-                    throw new Error("Unexpected line: '" + line + "'");
-                }
-            }
-            state.finalize();
-            var container = new THREE.Group();
-            // ModelRelief
-            //container.materialLibraries = [].concat( state.materialLibraries );
-            container.materialLibraries = [].concat(state.materialLibraries);
-            for (var i = 0, l = state.objects.length; i < l; i++) {
-                var object = state.objects[i];
-                var geometry = object.geometry;
-                var materials = object.materials;
-                var isLine = (geometry.type === 'Line');
-                // Skip o/g line declarations that did not follow with any faces
-                if (geometry.vertices.length === 0)
-                    continue;
-                var buffergeometry = new THREE.BufferGeometry();
-                buffergeometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(geometry.vertices), 3));
-                if (geometry.normals.length > 0) {
-                    buffergeometry.addAttribute('normal', new THREE.BufferAttribute(new Float32Array(geometry.normals), 3));
-                }
-                else {
-                    buffergeometry.computeVertexNormals();
-                }
-                if (geometry.uvs.length > 0) {
-                    buffergeometry.addAttribute('uv', new THREE.BufferAttribute(new Float32Array(geometry.uvs), 2));
-                }
-                // Create materials
-                // ModelRelief
-                //var createdMaterials = [];           
-                var createdMaterials = [];
-                for (var mi = 0, miLen = materials.length; mi < miLen; mi++) {
-                    var sourceMaterial = materials[mi];
-                    var material = undefined;
-                    if (this.materials !== null) {
-                        material = this.materials.create(sourceMaterial.name);
-                        // mtl etc. loaders probably can't create line materials correctly, copy properties to a line material.
-                        if (isLine && material && !(material instanceof THREE.LineBasicMaterial)) {
-                            var materialLine = new THREE.LineBasicMaterial();
-                            materialLine.copy(material);
-                            material = materialLine;
-                        }
-                    }
-                    if (!material) {
-                        material = (!isLine ? new THREE.MeshPhongMaterial() : new THREE.LineBasicMaterial());
-                        material.name = sourceMaterial.name;
-                    }
-                    material.shading = sourceMaterial.smooth ? THREE.SmoothShading : THREE.FlatShading;
-                    createdMaterials.push(material);
-                }
-                // Create mesh
-                var mesh;
-                if (createdMaterials.length > 1) {
-                    for (var mi = 0, miLen = materials.length; mi < miLen; mi++) {
-                        var sourceMaterial = materials[mi];
-                        buffergeometry.addGroup(sourceMaterial.groupStart, sourceMaterial.groupCount, mi);
-                    }
-                    // ModelRelief
-                    //mesh = ( ! isLine ? new THREE.Mesh( buffergeometry, createdMaterials ) : new THREE.LineSegments( buffergeometry, createdMaterials ) );
-                    mesh = (!isLine ? new THREE.Mesh(buffergeometry, createdMaterials[0]) : new THREE.LineSegments(buffergeometry, null));
-                }
-                else {
-                    // ModelRelief
-                    //mesh = ( ! isLine ? new THREE.Mesh( buffergeometry, createdMaterials[ 0 ] ) : new THREE.LineSegments( buffergeometry, createMaterials) );
-                    mesh = (!isLine ? new THREE.Mesh(buffergeometry, createdMaterials[0]) : new THREE.LineSegments(buffergeometry, null));
-                }
-                mesh.name = object.name;
-                container.add(mesh);
-            }
-            console.timeEnd('OBJLoader');
-            return container;
-        }
-    };
-});
-define("main", ["require", "exports", "three", "Viewer/Viewer", "ModelLoaders/OBJLoader"], function (require, exports, THREE, Viewer_1, OBJLoader_1) {
+define("ModelRelief", ["require", "exports", "three", "ModelLoaders/OBJLoader", "System/Services", "Viewer/Viewer"], function (require, exports, THREE, OBJLoader_1, Services_2, Viewer_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -1791,12 +1816,7 @@ define("main", ["require", "exports", "three", "Viewer/Viewer", "ModelLoaders/OB
          * Launch the model Viewer.
          */
         ModelRelief.prototype.run = function () {
-            var sceneA = new THREE.Scene();
-            var theGroup = new THREE.Group();
-            sceneA.add(theGroup);
-            var sceneB = new THREE.Scene();
-            sceneB.add(theGroup);
-            console.log('ModelRelief started');
+            Services_2.Services.consoleLogger.addInfoMessage('ModelRelief started');
             var viewer = new Viewer_1.Viewer(document.getElementById('model3D'));
             this.loadModel(viewer);
         };
@@ -1839,7 +1859,7 @@ define("System/Math", ["require", "exports"], function (require, exports) {
     }());
     exports.MathLibrary = MathLibrary;
 });
-define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "System/Logger", "System/Math"], function (require, exports, chai_1, THREE, Logger_2, Math_1) {
+define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "System/Math", "System/Services"], function (require, exports, chai_1, THREE, Math_1, Services_3) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -1871,7 +1891,7 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Syste
          * Initialize
          */
         DepthBuffer.prototype.initialize = function () {
-            this._logger = new Logger_2.HTMLLogger();
+            this._logger = Services_3.Services.htmlLogger;
             this._nearClipPlane = this.camera.near;
             this._farClipPlane = this.camera.far;
             this._cameraClipRange = this._farClipPlane - this._nearClipPlane;
@@ -2209,13 +2229,8 @@ define("System/Tools", ["require", "exports"], function (require, exports) {
         Option for persisting the Factory in the constructor
     JSON compatible constructor parameters
     Fixed resolution; resizing support is not required.
-
-    class Relief {
-        factory : DepthBufferFactory;
-        mesh    : THREE.Mesh;
-    }
 */
-define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthBuffer/DepthBuffer", "System/Logger", "System/Tools"], function (require, exports, THREE, DepthBuffer_1, Logger_3, Tools_1) {
+define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthBuffer/DepthBuffer", "System/Services", "System/Tools"], function (require, exports, THREE, DepthBuffer_1, Services_4, Tools_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
@@ -2325,7 +2340,7 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthB
          * Perform setup and initialization.
          */
         DepthBufferFactory.prototype.initialize = function () {
-            this._logger = new Logger_3.ConsoleLogger();
+            this._logger = Services_4.Services.consoleLogger;
             this.initializeRenderer();
             this.initializeScene();
             this.initializePostScene();
@@ -2555,7 +2570,7 @@ define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function 
     }());
     exports.UnitTests = UnitTests;
 });
-define("Workbench/DepthBufferTest", ["require", "exports", "three", "DepthBuffer/DepthBufferFactory", "Viewer/Graphics", "System/Logger", "Viewer/TrackballControls"], function (require, exports, THREE, DepthBufferFactory_1, Graphics_2, Logger_4, TrackballControls_2) {
+define("Workbench/DepthBufferTest", ["require", "exports", "three", "DepthBuffer/DepthBufferFactory", "Viewer/Graphics", "System/Services", "Viewer/TrackballControls"], function (require, exports, THREE, DepthBufferFactory_1, Graphics_2, Services_5, TrackballControls_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var modelCanvas;
@@ -2628,7 +2643,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "DepthBuffer
      * Initialize the application.
      */
     function init() {
-        logger = new Logger_4.HTMLLogger();
+        logger = Services_5.Services.htmlLogger;
         initializeModelRenderer();
         initializePreviewRenderer();
         onWindowResize();
@@ -2803,478 +2818,145 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "DepthBuffer
         previewRenderer.render(previewScene, previewCamera);
     }
 });
-define("Workbench/DepthBufferTestBaseline", ["require", "exports", "three", "Viewer/TrackballControls", "DepthBuffer/DepthBuffer", "System/Logger"], function (require, exports, THREE, TrackballControls_3, DepthBuffer_2, Logger_5) {
+define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "System/Services", "Viewer/TrackballControls"], function (require, exports, THREE, Services_6, TrackballControls_3) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var modelCanvas;
-    var modelRenderer;
-    var modelCamera;
-    var modelControls;
-    var modelScene;
-    var meshCanvas;
-    var meshRenderer;
-    var meshCamera;
-    var meshControls;
-    var meshScene;
-    var meshPostScene;
-    var meshMaterial;
-    var meshTarget;
-    var meshEncodedTarget;
-    var postCamera;
-    var supportsWebGLExtensions = true;
-    var logger;
-    var uselogDepthBuffer = false;
-    var physicalMeshTransform = true;
-    var MeshModelName = 'ModelMesh';
-    var CameraButtonId = 'camera';
-    var cameraZPosition = 4;
-    var cameraNearPlane = 2;
-    var cameraFarPlane = 10.0;
-    var fieldOfView = 37; // https://www.nikonians.org/reviews/fov-tables
-    var Resolution;
-    (function (Resolution) {
-        Resolution[Resolution["viewModel"] = 768] = "viewModel";
-        Resolution[Resolution["viewMesh"] = 768] = "viewMesh";
-        Resolution[Resolution["textureDepthBuffer"] = 768] = "textureDepthBuffer";
-    })(Resolution || (Resolution = {}));
-    init();
-    animate();
     /**
-     * Verifies the minimum WebGL extensions are present.
-     * @param renderer WebGL renderer.
+     * @class
+     * MeshViewer
      */
-    function verifyExtensions(renderer) {
-        if (!renderer.extensions.get('WEBGL_depth_texture'))
-            return false;
-        return true;
-    }
-    /**
-     * Initialize the primary model view.
-     */
-    function initializeModelRenderer() {
-        modelCanvas = initializeCanvas('modelCanvas', Resolution.viewModel);
-        modelRenderer = new THREE.WebGLRenderer({ canvas: modelCanvas, logarithmicDepthBuffer: uselogDepthBuffer });
-        modelRenderer.setPixelRatio(window.devicePixelRatio);
-        modelRenderer.setSize(Resolution.viewModel, Resolution.viewModel);
-        supportsWebGLExtensions = verifyExtensions(modelRenderer);
-        modelCamera = new THREE.PerspectiveCamera(fieldOfView, Resolution.viewModel / Resolution.viewModel, cameraNearPlane, cameraFarPlane);
-        modelCamera.position.z = cameraZPosition;
-        modelControls = new TrackballControls_3.TrackballControls(modelCamera, modelRenderer.domElement);
-        // scene
-        modelScene = new THREE.Scene();
-        setupTorusScene(modelScene);
-        //  setupSphereScene(modelScene);
-        //  setupBoxScene(modelScene);
-        initializeLighting(modelScene);
-        initializeModelHelpers(modelScene, null, false);
-    }
-    /**
-     * Constructs a render target <with a depth texture buffer>.
-     * @param width Width of render target.
-     * @param height Height of render target.
-     */
-    function constructDepthTextureRenderTarget(width, height) {
-        // Model Scene -> (Render Texture, Depth Texture)
-        var renderTarget = new THREE.WebGLRenderTarget(width, height);
-        renderTarget.texture.format = THREE.RGBAFormat;
-        renderTarget.texture.type = THREE.UnsignedByteType;
-        renderTarget.texture.minFilter = THREE.NearestFilter;
-        renderTarget.texture.magFilter = THREE.NearestFilter;
-        renderTarget.texture.generateMipmaps = false;
-        renderTarget.stencilBuffer = false;
-        renderTarget.depthBuffer = true;
-        renderTarget.depthTexture = new THREE.DepthTexture(Resolution.textureDepthBuffer, Resolution.textureDepthBuffer);
-        renderTarget.depthTexture.type = THREE.UnsignedIntType;
-        return renderTarget;
-    }
-    /**
-     * Initializes the mesh renderer used to view the 3D mesh.
-     */
-    function initializeMeshRenderer() {
-        meshCanvas = initializeCanvas('meshCanvas', Resolution.viewMesh);
-        meshRenderer = new THREE.WebGLRenderer({ canvas: meshCanvas, logarithmicDepthBuffer: uselogDepthBuffer });
-        meshRenderer.setPixelRatio(window.devicePixelRatio);
-        meshRenderer.setSize(Resolution.viewMesh, Resolution.viewMesh);
-        meshCamera = new THREE.PerspectiveCamera(fieldOfView, Resolution.viewMesh / Resolution.viewMesh, cameraNearPlane, cameraFarPlane);
-        meshCamera.position.z = cameraZPosition;
-        meshControls = new TrackballControls_3.TrackballControls(meshCamera, meshRenderer.domElement);
-        // Model Scene -> (Render Texture, Depth Texture)
-        meshTarget = constructDepthTextureRenderTarget(Resolution.viewMesh, Resolution.viewMesh);
-        // Encoded RGBA Texture from Depth Texture
-        meshEncodedTarget = new THREE.WebGLRenderTarget(Resolution.viewMesh, Resolution.viewMesh);
-        setupMeshScene();
-        initializePostCamera();
-        setupPostMeshScene();
-        initializeLighting(meshScene);
-    }
-    /**
-     * Constructs the scene used to visualize textures.
-     */
-    function initializePostCamera() {
-        // Setup post processing stage
-        var left = -1;
-        var right = 1;
-        var top = 1;
-        var bottom = -1;
-        var near = 0;
-        var far = 1;
-        postCamera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
-    }
-    /**
-     * Initialize the application.
-     */
-    function init() {
-        logger = new Logger_5.HTMLLogger();
-        initializeModelRenderer();
-        initializeMeshRenderer();
-        onWindowResize();
-        window.addEventListener('resize', onWindowResize, false);
-        var cameraButton = document.querySelector("#" + CameraButtonId).onclick = takePhotograph;
-        takePhotograph();
-    }
-    /**
-     * Updates a renderer target properties.
-     * Event handler called on window resize.
-     * @param renderer Renderer that owns the target.
-     * @param renderTarget Render target to update.
-     * @param width Width of the renderer.
-     * @param height Height of the renderer.
-     */
-    function updateRenderTargetOnResize(renderer, renderTarget, width, height) {
-        var pixelRatio = renderer.getPixelRatio();
-        renderTarget.setSize(width * pixelRatio, height * pixelRatio);
-    }
-    /**
-     * Updates a renderer properties.
-     * Event handler called on window resize.
-     * @param renderer Renderer to update.
-     * @param width Width of the renderer.
-     * @param height Height of the renderer.
-     * @param camera Renderer's camera.
-     */
-    function updateViewOnWindowResize(renderer, width, height, camera) {
-        var aspect = width / height;
-        if (camera) {
-            camera.aspect = aspect;
-            camera.updateProjectionMatrix();
+    var MeshPreviewViewer = (function () {
+        /**
+         * @constructor
+         */
+        function MeshPreviewViewer() {
+            this._width = MeshPreviewViewer.DefaultResolution;
+            this._height = MeshPreviewViewer.DefaultResolution;
+            this.CameraButtonId = 'camera';
+            this.cameraZPosition = 4;
+            this.cameraNearPlane = 2;
+            this.cameraFarPlane = 10.0;
+            this.fieldOfView = 37; // https://www.nikonians.org/reviews/fov-tables
+            this.initialize();
+            this.animate();
         }
-        renderer.setSize(width, height);
-    }
-    /**
-     * Event handler called on window resize.
-     */
-    function onWindowResize() {
-        updateViewOnWindowResize(modelRenderer, Resolution.viewModel, Resolution.viewModel, modelCamera);
-        updateViewOnWindowResize(meshRenderer, Resolution.viewMesh, Resolution.viewMesh, meshCamera);
-        updateRenderTargetOnResize(meshRenderer, meshTarget, Resolution.viewMesh, Resolution.viewMesh);
-        updateRenderTargetOnResize(meshRenderer, meshEncodedTarget, Resolution.viewMesh, Resolution.viewMesh);
-    }
-    /**
-     * Adds lighting to the scene.
-     * param theScene Scene to add lighting.
-     */
-    function initializeLighting(theScene) {
-        var ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-        theScene.add(ambientLight);
-        var directionalLight1 = new THREE.DirectionalLight(0xffffff);
-        directionalLight1.position.set(4, 4, 4);
-        theScene.add(directionalLight1);
-    }
-    /**
-     * Adds helpers to the scene to visualize camera, coordinates, etc.
-     * @param scene Scene to annotate.
-     * @param camera Camera to construct helper (may be null).
-     * @param addAxisHelper Add a helper for the cartesian axes.
-     */
-    function initializeModelHelpers(scene, camera, addAxisHelper) {
-        if (camera) {
-            var cameraHelper = new THREE.CameraHelper(camera);
-            cameraHelper.visible = true;
-            scene.add(cameraHelper);
-        }
-        if (addAxisHelper) {
-            var axisHelper = new THREE.AxisHelper(2);
-            axisHelper.visible = true;
-            scene.add(axisHelper);
-        }
-    }
-    /**
-     * Adds a torus to a scene.
-     * @param scene Target scene.
-     */
-    function setupTorusScene(scene) {
-        // Setup some geometries
-        var geometry = new THREE.TorusKnotGeometry(1, 0.3, 128, 64);
-        var material = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
-        var count = 50;
-        var scale = 5;
-        for (var i = 0; i < count; i++) {
-            var r = Math.random() * 2.0 * Math.PI;
-            var z = (Math.random() * 2.0) - 1.0;
-            var zScale = Math.sqrt(1.0 - z * z) * scale;
-            var mesh = new THREE.Mesh(geometry, material);
-            mesh.position.set(Math.cos(r) * zScale, Math.sin(r) * zScale, z * scale);
-            mesh.rotation.set(Math.random(), Math.random(), Math.random());
-            scene.add(mesh);
-        }
-    }
-    /**
-     * Adds a test sphere to a scene.
-     * @param scene Target scene.
-     */
-    function setupSphereScene(scene) {
-        // geometry
-        var radius = 2;
-        var segments = 64;
-        var geometry = new THREE.SphereGeometry(radius, segments, segments);
-        var material = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
-        var mesh = new THREE.Mesh(geometry, material);
-        var center = new THREE.Vector3(0.0, 0.0, 0.0);
-        mesh.position.set(center.x, center.y, center.z);
-        scene.add(mesh);
-    }
-    /**
-     * Add a test box to a scene.
-     * @param scene Target scene.
-     */
-    function setupBoxScene(scene) {
-        // box
-        var dimensions = 2.0;
-        var width = dimensions;
-        var height = dimensions;
-        var depth = dimensions;
-        var geometry = new THREE.BoxGeometry(width, height, depth);
-        var material = new THREE.MeshPhongMaterial({ color: 0xffffff });
-        var mesh = new THREE.Mesh(geometry, material);
-        var center = new THREE.Vector3(0.0, 0.0, 0.0);
-        mesh.position.set(center.x, center.y, center.z);
-        scene.add(mesh);
-    }
-    /**
-     * Adds a backgroun plane at the origin.
-     * @param scene Target scene.
-     */
-    function addBackgroundPlane(scene) {
-        // background plane
-        var width = 4;
-        var height = 4;
-        var geometry = new THREE.PlaneGeometry(width, height);
-        var material = new THREE.MeshPhongMaterial({ color: 0x5555cc });
-        var mesh = new THREE.Mesh(geometry, material);
-        var center = new THREE.Vector3(0.0, 0.0, 0.0);
-        mesh.position.set(center.x, center.y, center.z);
-        scene.add(mesh);
-    }
-    /**
-     * Constructs the scene used to visualize the 3D mesh.
-     */
-    function setupMeshScene() {
-        var meshMaterial;
-        if (physicalMeshTransform) {
-            meshMaterial = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
-        }
-        else {
-            meshMaterial = new THREE.ShaderMaterial({
-                vertexShader: MR.shaderSource['MeshVertexShader'],
-                fragmentShader: MR.shaderSource['MeshFragmentShader'],
-                uniforms: {
-                    cameraNear: { value: modelCamera.near },
-                    cameraFar: { value: modelCamera.far },
-                    tDiffuse: { value: meshEncodedTarget.texture },
-                    tDepth: { value: meshTarget.depthTexture }
-                }
-            });
-        }
-        var meshPlane = new THREE.PlaneGeometry(2, 2, Resolution.viewMesh, Resolution.viewMesh);
-        var meshQuad = new THREE.Mesh(meshPlane, meshMaterial);
-        meshQuad.name = MeshModelName;
-        meshScene = new THREE.Scene();
-        meshScene.add(meshQuad);
-    }
-    /**
-     * Constructs the scene used to construct a depth buffer.
-     */
-    function setupPostMeshScene() {
-        var postMeshMaterial = new THREE.ShaderMaterial({
-            vertexShader: MR.shaderSource['DepthBufferVertexShader'],
-            fragmentShader: MR.shaderSource['DepthBufferFragmentShader'],
-            uniforms: {
-                cameraNear: { value: modelCamera.near },
-                cameraFar: { value: modelCamera.far },
-                tDiffuse: { value: meshTarget.texture },
-                tDepth: { value: meshTarget.depthTexture }
+        /**
+         * Initializes the preview renderer used to view the 3D mesh.
+         */
+        MeshPreviewViewer.prototype.initializePreviewRenderer = function () {
+            this.previewCanvas = this.initializeCanvas('previewCanvas', this._width, this._height);
+            this.previewRenderer = new THREE.WebGLRenderer({ canvas: this.previewCanvas });
+            this.previewRenderer.setPixelRatio(window.devicePixelRatio);
+            this.previewRenderer.setSize(this._width, this._height);
+            this.previewCamera = new THREE.PerspectiveCamera(this.fieldOfView, this._width / this._height, this.cameraNearPlane, this.cameraFarPlane);
+            this.previewCamera.position.z = this.cameraZPosition;
+            this.previewControls = new TrackballControls_3.TrackballControls(this.previewCamera, this.previewRenderer.domElement);
+            this.setupPreviewScene();
+            this.initializeLighting(this.previewScene);
+        };
+        /**
+         * Initialize the application.
+         */
+        MeshPreviewViewer.prototype.initialize = function () {
+            this.logger = Services_6.Services.htmlLogger;
+            this.initializePreviewRenderer();
+            this.onWindowResize();
+            window.addEventListener('resize', this.onWindowResize, false);
+        };
+        /**
+         * Updates a renderer properties.
+         * Event handler called on window resize.
+         * @param renderer Renderer to update.
+         * @param width Width of the renderer.
+         * @param height Height of the renderer.
+         * @param camera Renderer's camera.
+         */
+        MeshPreviewViewer.prototype.updateViewOnWindowResize = function (renderer, width, height, camera) {
+            var aspect = width / height;
+            if (camera) {
+                camera.aspect = aspect;
+                camera.updateProjectionMatrix();
             }
-        });
-        var postMeshPlane = new THREE.PlaneGeometry(2, 2);
-        var postMeshQuad = new THREE.Mesh(postMeshPlane, postMeshMaterial);
-        meshPostScene = new THREE.Scene();
-        meshPostScene.add(postMeshQuad);
-    }
-    /**
-     * Constructs an RGBA string with the byte values of a pixel.
-     * @param buffer Unsigned byte raw buffer.
-     * @param width Width of texture.
-     * @param height Height of texture.
-     * @param row Pixel row.
-     * @param column Column row.
-     */
-    function unsignedBytesToRGBA(buffer, width, height, row, column) {
-        var offset = (row * width) + column;
-        var rValue = buffer[offset + 0].toString(16);
-        var gValue = buffer[offset + 1].toString(16);
-        var bValue = buffer[offset + 2].toString(16);
-        var aValue = buffer[offset + 3].toString(16);
-        return "#" + rValue + gValue + bValue + " " + aValue;
-    }
-    /**
-     * Analyzes a pixel from a render buffer.
-     * @param renderer Renderer that created render target.
-     * @param renderTarget Render target (texture buffer).
-     * @param width Width of target.
-     * @param height Height of target.
-     */
-    function analyzeRenderBuffer(renderer, renderTarget, width, height) {
-        var renderBuffer = new Uint8Array(width * height * 4).fill(0);
-        renderer.readRenderTargetPixels(renderTarget, 0, 0, width, height, renderBuffer);
-        var messageString = "RGBA[0, 0] = " + unsignedBytesToRGBA(renderBuffer, width, height, 0, 0);
-        logger.addMessage(messageString, null);
-    }
-    /**
-     * Analyzes properties of a depth buffer.
-     * @param renderer Renderer that created encoded render target.
-     * @param encodedRenderTarget RGBA encoded values of depth buffer
-     * @param width Width of target.
-     * @param height Height of target.
-     * @param camera Perspective camera used to create render target.
-     */
-    function analyzeDepthBuffer(renderer, encodedRenderTarget, width, height, camera) {
-        // decode RGBA texture into depth floats
-        var depthBufferRGBA = new Uint8Array(width * height * 4).fill(0);
-        renderer.readRenderTargetPixels(encodedRenderTarget, 0, 0, width, height, depthBufferRGBA);
-        var depthBuffer = new DepthBuffer_2.DepthBuffer(depthBufferRGBA, width, height, camera);
-        var middle = width / 2;
-        var decimalPlaces = 5;
-        var headerStyle = "font-family : monospace; font-weight : bold; color : blue; font-size : 18px";
-        var messageStyle = "font-family : monospace; color : black; font-size : 14px";
-        logger.addMessage('Camera Properties', headerStyle);
-        logger.addMessage("Near Plane = " + camera.near, messageStyle);
-        logger.addMessage("Far Plane  = " + camera.far, messageStyle);
-        logger.addMessage("Clip Range = " + (camera.far - camera.near), messageStyle);
-        logger.addEmptyLine();
-        logger.addMessage('Normalized', headerStyle);
-        logger.addMessage("Center Depth = " + depthBuffer.depthNormalized(middle, middle).toFixed(decimalPlaces), messageStyle);
-        logger.addMessage("Z Depth = " + depthBuffer.rangeNormalized.toFixed(decimalPlaces), messageStyle);
-        logger.addMessage("Minimum = " + depthBuffer.minimumNormalized.toFixed(decimalPlaces), messageStyle);
-        logger.addMessage("Maximum = " + depthBuffer.maximumNormalized.toFixed(decimalPlaces), messageStyle);
-        logger.addEmptyLine();
-        logger.addMessage('Model Units', headerStyle);
-        logger.addMessage("Center Depth = " + depthBuffer.depth(middle, middle).toFixed(decimalPlaces), messageStyle);
-        logger.addMessage("Z Depth = " + depthBuffer.range.toFixed(decimalPlaces), messageStyle);
-        logger.addMessage("Minimum = " + depthBuffer.minimum.toFixed(decimalPlaces), messageStyle);
-        logger.addMessage("Maximum = " + depthBuffer.maximum.toFixed(decimalPlaces), messageStyle);
-    }
-    /**
-     * Analyze the render and depth targets.
-     * @param renderer Renderer that owns the targets.
-     * @param renderTarget Render buffer target.
-     * @param encodedRenderTarget Encoded RGBA depth target.
-     * @param camera Perspective camera used to create targets.
-     * @param width Width of targets.
-     * @param height Height of targets.
-     */
-    function analyzeTargets(renderer, renderTarget, encodedRenderTarget, camera, width, height) {
-        //  analyzeRenderBuffer(renderer, renderTarget,        width, height);
-        analyzeDepthBuffer(renderer, encodedRenderTarget, width, height, camera);
-    }
-    /**
-     * Create a depth buffer.
-     * @param renderer Renderer to create the depth buffer.
-     * @param width Width of renderer.
-     * @param height Height of renderer.
-     * @param modelScene 3D model scene to create depth buffer.
-     * @param postScene Polygon scene used to create encoded target of depth buffer.
-     * @param modelCamera Perspective camera for scene.
-     * @param postCamera Orthographic camera for post scene.
-     * @param renderTarget Render target.
-     * @param encodedTarget Encoded RGBA target of depth buffer.
-     */
-    function createDepthBuffer(renderer, width, height, modelScene, postScene, modelCamera, postCamera, renderTarget, encodedTarget) {
-        // N.B. Danger! Parameters hide global variables...
-        // renderTarget.texture      : render buffer
-        // renderTarget.depthTexture : depth buffer
-        renderer.render(modelScene, modelCamera, renderTarget);
-        // (optional) preview encoded RGBA texture; drawn by shader but not persisted
-        renderer.render(postScene, postCamera);
-        // Persist encoded RGBA texture; calculated from depth buffer
-        // encodedTarget.texture      : encoded RGBA texture
-        // encodedTarget.depthTexture : null
-        renderer.render(postScene, postCamera, encodedTarget);
-    }
-    /**
-     * Transform the vertices of the model mesh to match the depth buffer.
-     * @param renderer WebGL renderer that owns the render target.
-     * @param meshScene Scene containing the target mesh.
-     * @param meshEncodedTarget Encoded RGBA depth buffer;
-     * @param width Width of render target.
-     * @param height Height of render target.
-     * @param camera Render camera.
-     */
-    function transformMeshSceneFromDepthBuffer(renderer, meshScene, meshEncodedTarget, width, height, camera) {
-        var previousMesh = meshScene.getObjectByName(MeshModelName);
-        if (!previousMesh) {
-            console.error('Model mesh not found in scene.');
-            return;
-        }
-        meshScene.remove(previousMesh);
-        previousMesh.geometry.dispose();
-        previousMesh.material.dispose();
-        // decode RGBA texture into depth floats
-        var depthBufferRGBA = new Uint8Array(width * height * 4).fill(0);
-        renderer.readRenderTargetPixels(meshEncodedTarget, 0, 0, width, height, depthBufferRGBA);
-        var depthBuffer = new DepthBuffer_2.DepthBuffer(depthBufferRGBA, width, height, camera);
-        var mesh = depthBuffer.mesh(2);
-        meshScene.add(mesh);
-        //  UnitTests.VertexMapping(depthBuffer, mesh);
-    }
-    /**
-     *  Event handler to create depth buffers.
-     */
-    function takePhotograph() {
-        logger.clearLog();
-        createDepthBuffer(meshRenderer, Resolution.viewMesh, Resolution.viewMesh, modelScene, meshPostScene, modelCamera, postCamera, meshTarget, meshEncodedTarget);
-        analyzeTargets(meshRenderer, meshTarget, meshEncodedTarget, modelCamera, Resolution.viewMesh, Resolution.viewMesh);
-        transformMeshSceneFromDepthBuffer(meshRenderer, meshScene, meshEncodedTarget, Resolution.viewMesh, Resolution.viewMesh, modelCamera);
-    }
-    /**
-     * Constructs a WebGL target canvas.
-     * @param id DOM id for canvas.
-     * @param resolution Resolution (square) for canvas.
-     */
-    function initializeCanvas(id, resolution) {
-        var canvas = document.querySelector("#" + id);
-        if (!canvas) {
-            console.error("Canvas element id = " + id + " not found");
-            return null;
-        }
-        // render dimensions    
-        canvas.width = resolution;
-        canvas.height = resolution;
-        // DOM element dimensions (may be different than render dimensions)
-        canvas.style.width = resolution + "px";
-        canvas.style.height = resolution + "px";
-        return canvas;
-    }
-    /**
-     * Animation loop.
-     */
-    function animate() {
-        if (!supportsWebGLExtensions)
-            return;
-        requestAnimationFrame(animate);
-        modelControls.update();
-        meshControls.update();
-        modelRenderer.render(modelScene, modelCamera);
-        meshRenderer.render(meshScene, meshCamera);
-    }
+            renderer.setSize(width, height);
+        };
+        /**
+         * Event handler called on window resize.
+         */
+        MeshPreviewViewer.prototype.onWindowResize = function () {
+            this.updateViewOnWindowResize(this.previewRenderer, this._width, this._height, this.previewCamera);
+        };
+        /**
+         * Adds lighting to the scene.
+         * param theScene Scene to add lighting.
+         */
+        MeshPreviewViewer.prototype.initializeLighting = function (theScene) {
+            var ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+            theScene.add(ambientLight);
+            var directionalLight1 = new THREE.DirectionalLight(0xffffff);
+            directionalLight1.position.set(4, 4, 4);
+            theScene.add(directionalLight1);
+        };
+        /**
+         * Adds helpers to the scene to visualize camera, coordinates, etc.
+         * @param scene Scene to annotate.
+         * @param camera Camera to construct helper (may be null).
+         * @param addAxisHelper Add a helper for the cartesian axes.
+         */
+        MeshPreviewViewer.prototype.initializeModelHelpers = function (scene, camera, addAxisHelper) {
+            if (camera) {
+                var cameraHelper = new THREE.CameraHelper(camera);
+                cameraHelper.visible = true;
+                scene.add(cameraHelper);
+            }
+            if (addAxisHelper) {
+                var axisHelper = new THREE.AxisHelper(2);
+                axisHelper.visible = true;
+                scene.add(axisHelper);
+            }
+        };
+        /**
+         * Constructs the scene used to visualize the 3D mesh.
+         */
+        MeshPreviewViewer.prototype.setupPreviewScene = function () {
+            this.previewScene = new THREE.Scene();
+            this.previewModel = new THREE.Group();
+            this.previewScene.add(this.previewModel);
+        };
+        /**
+         * Constructs a WebGL target canvas.
+         * @param id DOM id for canvas.
+         * @param resolution Resolution (square) for canvas.
+         */
+        MeshPreviewViewer.prototype.initializeCanvas = function (id, width, height) {
+            var canvas = document.querySelector("#" + id);
+            if (!canvas) {
+                console.error("Canvas element id = " + id + " not found");
+                return null;
+            }
+            // render dimensions    
+            canvas.width = width;
+            canvas.height = height;
+            // DOM element dimensions (may be different than render dimensions)
+            canvas.style.width = width + "px";
+            canvas.style.height = height + "px";
+            return canvas;
+        };
+        /**
+         * Animation loop.
+         */
+        MeshPreviewViewer.prototype.animate = function () {
+            requestAnimationFrame(this.animate);
+            this.previewControls.update();
+            this.previewRenderer.render(this.previewScene, this.previewCamera);
+        };
+        MeshPreviewViewer.DefaultResolution = 1024; // default MPV resolution
+        return MeshPreviewViewer;
+    }());
+    exports.MeshPreviewViewer = MeshPreviewViewer;
 });
 //# sourceMappingURL=modelrelief.js.map

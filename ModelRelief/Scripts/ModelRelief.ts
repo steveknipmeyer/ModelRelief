@@ -7,8 +7,10 @@
 
 import * as THREE   from 'three' 
 
-import {Viewer}     from "Viewer"
-import {OBJLoader} from "OBJLoader"
+import {Logger, ConsoleLogger}  from 'Logger'
+import {OBJLoader}              from "OBJLoader"
+import {Services}               from 'Services'
+import {Viewer              }   from "Viewer"
 
 export class ModelRelief {
 
@@ -57,7 +59,7 @@ export class ModelRelief {
      */
     run () {
 
-        console.log ('ModelRelief started');   
+        Services.consoleLogger.addInfoMessage ('ModelRelief started');   
 
         let viewer = new Viewer(<HTMLCanvasElement> document.getElementById('model3D'));
 
@@ -67,3 +69,4 @@ export class ModelRelief {
 
 let modelRelief = new ModelRelief();
 modelRelief.run();
+

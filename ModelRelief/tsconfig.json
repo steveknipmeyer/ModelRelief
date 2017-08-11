@@ -34,7 +34,7 @@
     "wwwroot",                                        // Scott Allen : NDC Opinionated View of ASPNET Core
     "**/*.js" // JavaScript
 
-    //  "Scripts/Workbench/*",                       // test
+    //  "Scripts/Workbench/*",                        // test
   ]
 }
 

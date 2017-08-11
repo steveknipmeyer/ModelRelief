@@ -5,19 +5,19 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE      from 'three'
-import * as dat        from 'dat-gui'
+import * as THREE               from 'three'
+import * as dat                 from 'dat-gui'
 
 import {TrackballControls}      from 'TrackballControls'
 import {Graphics}               from 'Graphics'
 import {Materials}              from 'Materials'
 
 interface CameraDefaults {
-    position: THREE.Vector3;        // location of camera
-    target: THREE.Vector3;          // target point
-    near: number;                   // near clipping plane
-    far: number;                    // far clipping plane
-    fov: number;                    // field of view
+    position:   THREE.Vector3;        // location of camera
+    target:     THREE.Vector3;        // target point
+    near:       number;               // near clipping plane
+    far:        number;               // far clipping plane
+    fov:        number;               // field of view
 }
 
 const ObjectNames = {
@@ -60,7 +60,7 @@ export class Viewer {
         this.recalcAspectRatio();
 
         this.scene = null;
-        this.root = null;
+        this.root  = null;
 
         this.controls = null;
 
@@ -99,11 +99,11 @@ export class Viewer {
         this.cameraDefaults = {
             // Baseline : near = 0.1, far = 10000
             // ZBuffer  : near = 100, far = 300
-            position: new THREE.Vector3(0.0, 175.0, 500.0),
-            target: new THREE.Vector3(0, 0, 0),
-            near: 0.1,
-            far: 10000,
-            fov: 45
+            position:       new THREE.Vector3(0.0, 175.0, 500.0),
+            target:         new THREE.Vector3(0, 0, 0),
+            near:           0.1,
+            far:            10000,
+            fov:            45
         };
 
         this.camera = null;
@@ -178,7 +178,7 @@ export class Viewer {
     }
 
     /**
-     * Calculates the aspect ration of the canvas afer a window resize
+     * Calculates the aspect ratio of the canvas afer a window resize
      */
     recalcAspectRatio() {
 

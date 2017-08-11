@@ -10,6 +10,7 @@ import * as THREE               from 'three'
 import {Graphics}               from 'Graphics'
 import {Logger, HTMLLogger}     from 'Logger'
 import {MathLibrary}            from 'Math'
+import {Services}               from 'Services'
 import {TrackballControls}      from 'TrackballControls'
 
 /**
@@ -74,7 +75,7 @@ export class MeshPreviewViewer {
      */
     initialize() {
     
-        this.logger = new HTMLLogger();
+        this.logger = Services.htmlLogger;       
 
         this.initializePreviewRenderer();
 

@@ -5,9 +5,12 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE from 'three'
+import * as THREE               from 'three'
+
 import {Logger, ConsoleLogger}  from 'Logger'
-        
+import {ModelRelief}            from 'ModelRelief'
+import {Services}               from 'Services'
+
 /**
  *  General THREE.js/WebGL support routines
  *  Graphics Library
@@ -38,7 +41,7 @@ export class Graphics {
         if (!scene || !rootObject)
             return;
 
-        let logger  = new ConsoleLogger();
+        let logger  = Services.consoleLogger;
         let remover = function (object3d) {
             
             if (object3d === rootObject) {

@@ -19,6 +19,8 @@ import {DepthBuffer}            from 'DepthBuffer'
 import {Graphics}               from 'Graphics'
 import {Logger, ConsoleLogger}  from 'Logger'
 import {MathLibrary}            from 'Math'
+import {ModelRelief}            from 'ModelRelief'
+import {Services}               from 'Services'
 import {Tools}                  from 'Tools'
 
 export interface DepthBufferFactoryParameters {
@@ -185,7 +187,7 @@ export class DepthBufferFactory {
      */
     initialize () : void {
 
-        this._logger = new ConsoleLogger();   
+        this._logger = Services.consoleLogger;
 
         this.initializeRenderer();
         this.initializeScene();
