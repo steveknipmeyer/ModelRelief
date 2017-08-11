@@ -5,15 +5,13 @@
 // ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
+Share CameraDefaults -> CameraSettings. Class?
+
 Graphics
     ModelHelpers
     initializeCanvas
 
 Core
-    Make the logger global.
-
-    Create MeshPreview class.
-
     Calculate model extents so the clip planes can be optimized in DepthBuferFactory.
         Transform model by camera transform.
         Calculate bounding box.

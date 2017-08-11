@@ -19,27 +19,25 @@ import {TrackballControls}      from 'TrackballControls'
  */
 export class MeshPreviewViewer {
 
-    static DefaultResolution : number           = 1024;     // default MPV resolution
+    static DefaultResolution : number       = 512;     // default MPV resolution
 
-    _width           : number                   = MeshPreviewViewer.DefaultResolution;  
-    _height          : number                   = MeshPreviewViewer.DefaultResolution;  
+    _width       : number                   = MeshPreviewViewer.DefaultResolution;  
+    _height      : number                   = MeshPreviewViewer.DefaultResolution;  
 
-    previewCanvas       : HTMLCanvasElement;
-    previewRenderer     : THREE.WebGLRenderer;
-    previewCamera       : THREE.PerspectiveCamera;
-    previewControls     : TrackballControls;
-    previewScene        : THREE.Scene;
-    previewModel        : THREE.Group;
-    previewMaterial     : THREE.ShaderMaterial;
+    _canvas       : HTMLCanvasElement;
+    _renderer     : THREE.WebGLRenderer;
+    _camera       : THREE.PerspectiveCamera;
+    _controls     : TrackballControls;
 
-    logger              : Logger;
+    scene         : THREE.Scene;
+    root          : THREE.Group;
 
-    CameraButtonId      : string = 'camera';
-
-    cameraZPosition     : number = 4
-    cameraNearPlane     : number = 2;
-    cameraFarPlane      : number = 10.0;
-    fieldOfView         : number = 37;              // https://www.nikonians.org/reviews/fov-tables
+    _logger        : Logger;
+    
+    _cameraZPosition     : number = 4
+    _cameraNearPlane     : number = 2;
+    _cameraFarPlane      : number = 10.0;
+    _fieldOfView         : number = 37;              // https://www.nikonians.org/reviews/fov-tables
     
     /**
      * @constructor
@@ -55,19 +53,19 @@ export class MeshPreviewViewer {
      */
     initializePreviewRenderer() {
 
-        this.previewCanvas = this.initializeCanvas('previewCanvas', this._width, this._height);
-        this.previewRenderer = new THREE.WebGLRenderer( {canvas : this.previewCanvas});
-        this.previewRenderer.setPixelRatio(window.devicePixelRatio);
-        this.previewRenderer.setSize(this._width, this._height);
+        this._canvas = this.initializeCanvas('previewCanvas', this._width, this._height);
+        this._renderer = new THREE.WebGLRenderer( {canvas : this._canvas});
+        this._renderer.setPixelRatio(window.devicePixelRatio);
+        this._renderer.setSize(this._width, this._height);
 
-        this.previewCamera = new THREE.PerspectiveCamera(this.fieldOfView, this._width / this._height, this.cameraNearPlane, this.cameraFarPlane);
-        this.previewCamera.position.z = this.cameraZPosition;
+        this._camera = new THREE.PerspectiveCamera(this._fieldOfView, this._width / this._height, this._cameraNearPlane, this._cameraFarPlane);
+        this._camera.position.z = this._cameraZPosition;
 
-        this.previewControls = new TrackballControls(this.previewCamera, this.previewRenderer.domElement);
+        this._controls = new TrackballControls(this._camera, this._renderer.domElement);
 
         this.setupPreviewScene();
 
-        this.initializeLighting(this.previewScene);
+        this.initializeLighting(this.scene);
     }
 
     /**
@@ -75,7 +73,7 @@ export class MeshPreviewViewer {
      */
     initialize() {
     
-        this.logger = Services.htmlLogger;       
+        this._logger = Services.htmlLogger;       
 
         this.initializePreviewRenderer();
 
@@ -106,7 +104,7 @@ export class MeshPreviewViewer {
      */
     onWindowResize() {
 
-        this.updateViewOnWindowResize(this.previewRenderer,  this._width, this._height,  this.previewCamera);
+        this.updateViewOnWindowResize(this._renderer,  this._width, this._height,  this._camera);
     }
 
     /**
@@ -149,9 +147,9 @@ export class MeshPreviewViewer {
      */
     setupPreviewScene() {
     
-        this.previewScene = new THREE.Scene();
-        this.previewModel = new THREE.Group();
-        this.previewScene.add(this.previewModel);
+        this.scene = new THREE.Scene();
+        this.root = new THREE.Group();
+        this.scene.add(this.root);
     }
 
     /**
@@ -184,10 +182,10 @@ export class MeshPreviewViewer {
      */
     animate() {
 
-        requestAnimationFrame(this.animate);
+        requestAnimationFrame(this.animate.bind(this));
 
-        this.previewControls.update();
+        this._controls.update();
 
-        this.previewRenderer.render(this.previewScene, this.previewCamera); 
+        this._renderer.render(this.scene, this._camera); 
     }
 }

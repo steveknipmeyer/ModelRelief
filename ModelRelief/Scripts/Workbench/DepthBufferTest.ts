@@ -6,28 +6,18 @@ import {DepthBufferFactory}     from 'DepthBufferFactory'
 import {Graphics}               from 'Graphics'
 import {Logger, HTMLLogger}     from 'Logger'
 import {MathLibrary}            from 'Math'
+import {MeshPreviewViewer}      from "MeshPreviewViewer"
 import {Services}               from 'Services'
 import {TrackballControls}      from 'TrackballControls'
 import {UnitTests}              from 'UnitTests'
+import {Viewer}                 from "Viewer"
 
 var modelCanvas         : HTMLCanvasElement;
 var modelRenderer       : THREE.WebGLRenderer;
 var modelCamera         : THREE.PerspectiveCamera;
 var modelControls       : TrackballControls;
 var modelScene          : THREE.Scene;
-var modelGroup          : THREE.Group;
-
-var previewCanvas       : HTMLCanvasElement;
-var previewRenderer     : THREE.WebGLRenderer;
-var previewCamera       : THREE.PerspectiveCamera;
-var previewControls     : TrackballControls;
-var previewScene        : THREE.Scene;
-var previewModel        : THREE.Group;
-var previewMaterial     : THREE.ShaderMaterial;
-
-var logger              : Logger;
-
-var CameraButtonId      : string = 'camera';
+var modelRoot           : THREE.Group;
 
 var cameraZPosition     : number = 4
 var cameraNearPlane     : number = 2;
@@ -35,12 +25,8 @@ var cameraFarPlane      : number = 10.0;
 var fieldOfView         : number = 37;              // https://www.nikonians.org/reviews/fov-tables
 
 enum Resolution {
-    viewModel          = 768,
-    previewMesh        = 768,
+    viewModel = 768,
 }
-
-init();
-animate();
 
 /**
  * Setup the primary model scene.
@@ -48,8 +34,8 @@ animate();
 function setupModelScene() {
 
     modelScene = new THREE.Scene();
-    modelGroup = new THREE.Group();
-    modelScene.add(modelGroup);
+    modelRoot = new THREE.Group();
+    modelScene.add(modelRoot);
 
     setupTorusScene();
 //  setupSphereScene();
@@ -78,40 +64,14 @@ function initializeModelRenderer() {
 }
 
 /**
- * Initializes the preview renderer used to view the 3D mesh.
- */
-function initializePreviewRenderer() {
-
-    previewCanvas = initializeCanvas('previewCanvas', Resolution.previewMesh);
-    previewRenderer = new THREE.WebGLRenderer( {canvas : previewCanvas});
-    previewRenderer.setPixelRatio(window.devicePixelRatio);
-    previewRenderer.setSize(Resolution.previewMesh, Resolution.previewMesh);
-
-    previewCamera = new THREE.PerspectiveCamera(fieldOfView, Resolution.previewMesh / Resolution.previewMesh, cameraNearPlane, cameraFarPlane);
-    previewCamera.position.z = cameraZPosition;
-
-    previewControls = new TrackballControls(previewCamera, previewRenderer.domElement);
-
-    setupPreviewScene();
-
-    initializeLighting(previewScene);
-}
-
-/**
  * Initialize the application.
  */
-function init() {
+function initialize() {
     
-    logger = Services.htmlLogger;       
-
     initializeModelRenderer();
-    initializePreviewRenderer();
 
     onWindowResize();
     window.addEventListener('resize', onWindowResize, false);
-
-    let cameraButton = (<HTMLInputElement> document.querySelector(`#${CameraButtonId}`)).onclick = takePhotograph;
-    takePhotograph();
 }
 
 /**
@@ -138,7 +98,6 @@ function updateViewOnWindowResize(renderer : THREE.Renderer, width : number, hei
 function onWindowResize() {
 
     updateViewOnWindowResize(modelRenderer, Resolution.viewModel, Resolution.viewModel, modelCamera);
-    updateViewOnWindowResize(previewRenderer,  Resolution.previewMesh,  Resolution.previewMesh,  previewCamera);
 }
 
 /**
@@ -202,7 +161,7 @@ function setupTorusScene() {
         );
         mesh.rotation.set(Math.random(), Math.random(), Math.random());
 
-       modelGroup.add(mesh);
+       modelRoot.add(mesh);
     }
 }
 
@@ -223,7 +182,7 @@ function setupSphereScene() {
     let center : THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0);
     mesh.position.set(center.x, center.y, center.z);
 
-    modelGroup.add(mesh);
+    modelRoot.add(mesh);
 }
 
 /**
@@ -245,7 +204,7 @@ function setupBoxScene() {
     let center : THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0);
     mesh.position.set(center.x, center.y, center.z);
 
-    modelGroup.add(mesh);
+    modelRoot.add(mesh);
 }
 
 /**
@@ -265,31 +224,7 @@ function addBackgroundPlane () {
     let center = new THREE.Vector3(0.0, 0.0, 0.0);
     mesh.position.set(center.x, center.y, center.z);
 
-    modelGroup.add(mesh);
-}
-
-/**
- * Constructs the scene used to visualize the 3D mesh.
- */
-function setupPreviewScene() {
-    
-    previewScene = new THREE.Scene();
-    previewModel = new THREE.Group();
-    previewScene.add(previewModel);
-}
-
-/**
- *  Event handler to create depth buffers.
- */
-function takePhotograph() {
-
-    let size = 768;
-    let factory = new DepthBufferFactory({width : size, height : size, model : modelGroup, camera : modelCamera});
-
-    Graphics.removeSceneObjectChildren(previewScene, previewModel, false);
-    
-    let previewMesh = factory.meshGenerate({modelWidth : 2, camera : modelCamera});
-    previewModel.add(previewMesh);
+    modelRoot.add(mesh);
 }
 
 /**
@@ -325,8 +260,57 @@ function animate() {
     requestAnimationFrame(animate);
 
     modelControls.update();
-    previewControls.update();
-
     modelRenderer.render(modelScene, modelCamera); 
-    previewRenderer.render(previewScene,   previewCamera); 
 }
+
+// ------------------------------------------------------------------------// 
+// ModelRelief                                                             //
+//                                                                         //                                                                          
+// Copyright (c) <2017> Steve Knipmeyer                                    //
+// ------------------------------------------------------------------------//
+
+var logger              : Logger;
+var CameraButtonId      : string = 'camera';
+var modelViewer         : Viewer;
+var meshPreviewViewer   : MeshPreviewViewer;
+
+function initializeModelViewer() {
+
+//  modelViewer = new Viewer();
+
+    initialize();
+    animate();
+}
+
+function initializeMeshPreviewViewer() {
+    
+    meshPreviewViewer = new MeshPreviewViewer();
+}
+
+/**
+ *  Event handler to create depth buffers.
+ */
+function takePhotograph() {
+
+    let size = 768;
+    let factory = new DepthBufferFactory({width : size, height : size, model : modelRoot, camera : modelCamera});
+    
+    let previewMesh : THREE.Mesh = factory.meshGenerate({modelWidth : 2, camera : modelCamera});
+
+    Graphics.removeSceneObjectChildren(meshPreviewViewer.scene, meshPreviewViewer.root, false);
+    meshPreviewViewer.root.add(previewMesh);
+}
+
+function main() {
+
+    logger = Services.htmlLogger;       
+
+    initializeModelViewer();
+    initializeMeshPreviewViewer();
+
+    let cameraButton = (<HTMLInputElement> document.querySelector(`#${CameraButtonId}`)).onclick = takePhotograph;
+}
+
+main();
+
+takePhotograph();

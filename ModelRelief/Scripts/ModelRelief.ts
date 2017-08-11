@@ -38,6 +38,7 @@ export class ModelRelief {
         let loader  = new OBJLoader(manager);
         
         let onProgress = function (xhr) {
+
             if (xhr.lengthComputable) {
                 var percentComplete = xhr.loaded / xhr.total * 100;
                 console.log(percentComplete.toFixed(2) + '% downloaded');
