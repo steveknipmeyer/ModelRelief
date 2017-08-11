@@ -1,16 +1,19 @@
-﻿
-// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------// 
 //      Commit Notes                                                       //
 // ------------------------------------------------------------------------//
 
 // ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
+Graphics
+    ModelHelpers
+    initializeCanvas
 
 Core
     Make the logger global.
 
     Create MeshPreview class.
+
     Calculate model extents so the clip planes can be optimized in DepthBuferFactory.
         Transform model by camera transform.
         Calculate bounding box.
@@ -20,7 +23,6 @@ Core
 
 OBJ Model Support
     
-
 Viewing
     Progress Indicator
     OrbitControls versus Trackball
@@ -163,3 +165,14 @@ What is the recommended way to split a module over multiple files?
         Can multiple modules be imported into the same alias? This construct is not valid.
              import * as MR from"Graphics"
              import * as MR from"Views"
+
+// ------------------------------------------------------------------------// 
+//      THREE.js                                                           //
+// ------------------------------------------------------------------------//
+    A Group can belong to only one Scene.
+        let sceneA   = new THREE.Scene();
+        let theGroup = new THREE.Group();
+        sceneA.add(theGroup);
+
+        let sceneB = new THREE.Scene();
+        sceneB.add(theGroup);
