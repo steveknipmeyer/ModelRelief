@@ -76,30 +76,5 @@ export class Materials {
         return new THREE.MeshBasicMaterial({color : 0x000000, opacity : 0.0, transparent : true});
     }
 
-    /**
-     * Create the shader material used for generating the DepthBuffer.
-     * @param designColor Material color.
-     * @returns Shader material.
-     */
-    static createDepthBufferMaterial(designColor : number) : THREE.ShaderMaterial {
-            
-        var textureLoader  = new THREE.TextureLoader();               
-        var shaderMaterial = new THREE.ShaderMaterial({
-
-            uniforms: { 
-                designColor : { 
-                    type: 'c', 
-                    value: new THREE.Color(designColor)
-                },
-            },
-
-            vertexShader:   MR.shaderSource['DepthBufferVertexShader'],
-            fragmentShader: MR.shaderSource['DepthBufferFragmentShader'],
-
-            shading: THREE.SmoothShading
-            });
-            
-        return shaderMaterial;
-    }       
 //#endregion
 }

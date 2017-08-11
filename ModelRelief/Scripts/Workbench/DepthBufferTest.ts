@@ -309,8 +309,8 @@ function main() {
     initializeMeshPreviewViewer();
 
     let cameraButton = (<HTMLInputElement> document.querySelector(`#${CameraButtonId}`)).onclick = takePhotograph;
+
+    takePhotograph();
 }
 
 main();
-
-takePhotograph();

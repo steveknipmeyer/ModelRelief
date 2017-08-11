@@ -5,14 +5,19 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE   from 'three' 
+import * as THREE  from 'three' 
+import * as dat    from 'dat-gui'
 
 import {Logger, ConsoleLogger}  from 'Logger'
 import {OBJLoader}              from "OBJLoader"
+import {MeshPreviewViewer}      from "MeshPreviewViewer"
 import {Services}               from 'Services'
-import {Viewer              }   from "Viewer"
+import {Viewer}                 from "Viewer"
 
 export class ModelRelief {
+
+    _modelViewer        : Viewer;
+    _meshPreviewViewer  : MeshPreviewViewer;
 
     /** Default constructor
      * @class ModelRelief
@@ -56,15 +61,67 @@ export class ModelRelief {
     }
 
     /**
+     * Initialize the view settings that are controllable by the user
+     */
+    initializeViewerControls() {
+
+        let scope = this;
+
+        function captureRelief() : void {
+
+            Services.consoleLogger.addInfoMessage('Relief captured');
+        }
+
+        class ViewerControls {
+            displayGrid: boolean;
+            captureRelief : () => void;
+
+            constructor() {
+                this.displayGrid   = true;
+                this.captureRelief = function() {};
+            }
+        }
+        let viewerControls = new ViewerControls();
+
+        // Init dat.gui and controls for the UI
+        var gui = new dat.GUI({
+            autoPlace: false,
+            width: 320
+        });
+        var menuDiv = document.getElementById('dat');
+        menuDiv.appendChild(gui.domElement);
+        var folderOptions = gui.addFolder('ModelViewer Options');
+
+        // Grid
+        var controlDisplayGrid = folderOptions.add(viewerControls, 'displayGrid').name('Display Grid');
+        controlDisplayGrid.onChange (function (value) {
+
+            scope._modelViewer.displayGrid (value);
+        }.bind(this));
+
+        // Depth Buffer
+        var controlCaptureRelief = folderOptions.add(viewerControls, 'captureRelief').name('Capture Relief');
+        controlCaptureRelief.onChange (function () {
+
+            captureRelief();
+        }.bind(this));
+
+        folderOptions.open();
+    }
+
+    /**
      * Launch the model Viewer.
      */
     run () {
 
         Services.consoleLogger.addInfoMessage ('ModelRelief started');   
 
-        let viewer = new Viewer(<HTMLCanvasElement> document.getElementById('model3D'));
+        this._modelViewer = new Viewer(<HTMLCanvasElement> document.getElementById('model3D'));
+        this.loadModel (this._modelViewer);
 
-        this.loadModel (viewer);
+        this._meshPreviewViewer =  new MeshPreviewViewer();
+
+        this.initializeViewerControls();
     }
 }
 

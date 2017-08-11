@@ -21,25 +21,9 @@
     z-Index: 200;
 }
 
-#fileUploadInput {
-    display: none;
-}
-
-#glFullscreen {
-    width:      100%;
-    height:     100vh;
-    min-width:  640px;
-    min-height: 360px;
-    position:   relative;
-    overflow:   hidden;
-    z-index: 0;
-}
-
 #model3D {
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
+    width:  512px;
+    height: 512px;
     background-color: #000000;
 }
 

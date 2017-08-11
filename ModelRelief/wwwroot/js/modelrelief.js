@@ -706,6 +706,416 @@ define("System/Services", ["require", "exports", "System/Logger"], function (req
     }());
     exports.Services = Services;
 });
+define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], function (require, exports, THREE, Services_1) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     *  General THREE.js/WebGL support routines
+     *  Graphics Library
+     *  @class
+     */
+    var Graphics = (function () {
+        /**
+         * @constructor
+         */
+        function Graphics() {
+        }
+        //#region Geometry
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        //			Geometry
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        /**
+         * Removes an object and all children from a scene.
+         * @param scene Scene holding object to be removed.
+         * @param rootObject Parent object (possibly with children).
+         */
+        Graphics.removeSceneObjectChildren = function (scene, rootObject, removeRoot) {
+            if (!scene || !rootObject)
+                return;
+            var logger = Services_1.Services.consoleLogger;
+            var remover = function (object3d) {
+                if (object3d === rootObject) {
+                    return;
+                }
+                logger.addInfoMessage('Removing: ' + object3d.name);
+                scene.remove(object3d);
+                if (object3d.hasOwnProperty('geometry')) {
+                    object3d.geometry.dispose();
+                }
+                if (object3d.hasOwnProperty('material')) {
+                    var material = object3d.material;
+                    if (material.hasOwnProperty('materials')) {
+                        var materials = material.materials;
+                        for (var iMaterial in materials) {
+                            if (materials.hasOwnProperty(iMaterial)) {
+                                materials[iMaterial].dispose();
+                            }
+                        }
+                    }
+                }
+                if (object3d.hasOwnProperty('texture')) {
+                    object3d.texture.dispose();
+                }
+            };
+            // remove root children from scene
+            rootObject.traverse(remover);
+            // remove root children from root
+            for (var iChild = 0; iChild < rootObject.children.length; iChild++) {
+                var child = rootObject.children[iChild];
+                rootObject.remove(child);
+            }
+            if (removeRoot)
+                scene.remove(rootObject);
+        };
+        /**
+         * @param position Location of bounding box.
+         * @param mesh Mesh from which to create bounding box.
+         * @ returns Mesh of the bounding box.
+         */
+        Graphics.createTransparentBoundingBox = function (position, mesh) {
+            var targetGeometry, boundingBox, width, height, depth, material, box;
+            targetGeometry = mesh.geometry;
+            targetGeometry.computeBoundingBox();
+            boundingBox = targetGeometry.boundingBox;
+            width = boundingBox.max.x - boundingBox.min.x;
+            height = boundingBox.max.y - boundingBox.min.y;
+            depth = boundingBox.max.z - boundingBox.min.z;
+            material = new THREE.MeshBasicMaterial({ color: 0x0000ff, opacity: 1.0, transparent: true, wireframe: true });
+            box = this.createBox(position, width, height, depth, material);
+            box.name = Graphics.BoundingBoxName;
+            box.visible = false;
+            return box;
+        };
+        /**
+         * Creates a box mesh.
+         * @param position Location of the box.
+         * @param width Width.
+         * @param height Height.
+         * @param depth Depth.
+         * @param material Optional material.
+         * @returns Box mesh.
+         */
+        Graphics.createBox = function (position, width, height, depth, material) {
+            var boxGeometry, boxMaterial, box;
+            boxGeometry = new THREE.BoxGeometry(width, height, depth);
+            boxGeometry.computeBoundingBox();
+            boxMaterial = material || new THREE.MeshPhongMaterial({ color: 0x0000ff, opacity: 1.0 });
+            box = new THREE.Mesh(boxGeometry, boxMaterial);
+            box.position.copy(position);
+            return box;
+        };
+        /**
+         * Creates a sphere mesh.
+         * @param position Origin of the sphere.
+         * @param radius Radius.
+         * @param color Color.
+         * @param segments Mesh segments.
+         */
+        Graphics.createSphere = function (position, radius, color, segments) {
+            var sphereGeometry, material, segmentCount = segments || 32, sphere;
+            Graphics.createBox;
+            sphereGeometry = new THREE.SphereGeometry(radius, segmentCount, segmentCount);
+            sphereGeometry.computeBoundingBox();
+            material = new THREE.MeshPhongMaterial({ color: color, opacity: 1.0, transparent: false, wireframe: false });
+            sphere = new THREE.Mesh(sphereGeometry, material);
+            sphere.position.copy(position);
+            return sphere;
+        };
+        /**
+     * Creates a line object.
+     * @param startPosition Start point.
+     * @param endPosition End point.
+     * @param color Color.
+     * @returns Line element.
+     */
+        Graphics.createLine = function (startPosition, endPosition, color) {
+            var line, lineGeometry, material;
+            lineGeometry = new THREE.Geometry();
+            lineGeometry.vertices.push(startPosition, endPosition);
+            material = new THREE.LineBasicMaterial({ color: color });
+            line = new THREE.Line(lineGeometry, material);
+            return line;
+        };
+        /**
+         * Creates an axes triad.
+         * @param position Origin of the triad.
+         * @param length Length of the coordinate arrow.
+         * @param headLength Length of the arrow head.
+         * @param headWidth Width of the arrow head.
+         */
+        Graphics.createWorldAxesTriad = function (position, length, headLength, headWidth) {
+            var triadGroup = new THREE.Object3D(), arrowPosition = position || new THREE.Vector3(), arrowLength = length || 15, arrowHeadLength = headLength || 1, arrowHeadWidth = headWidth || 1;
+            triadGroup.add(new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), arrowPosition, arrowLength, 0xff0000, arrowHeadLength, arrowHeadWidth));
+            triadGroup.add(new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), arrowPosition, arrowLength, 0x00ff00, arrowHeadLength, arrowHeadWidth));
+            triadGroup.add(new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), arrowPosition, arrowLength, 0x0000ff, arrowHeadLength, arrowHeadWidth));
+            return triadGroup;
+        };
+        /**
+         * Creates an axes grid.
+         * @param position  Origin of the axes grid.
+         * @param size Size of the grid.
+         * @param step Grid line intervals.
+         * @returns Grid object.
+         */
+        Graphics.createWorldAxesGrid = function (position, size, step) {
+            var gridGroup = new THREE.Object3D(), gridPosition = position || new THREE.Vector3(), gridSize = size || 10, gridStep = step || 1, colorCenterline = 0xff000000, xyGrid, yzGrid, zxGrid;
+            xyGrid = new THREE.GridHelper(gridSize, gridStep);
+            xyGrid.setColors(colorCenterline, 0xff0000);
+            xyGrid.position.copy(gridPosition.clone());
+            xyGrid.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
+            xyGrid.position.x += gridSize;
+            xyGrid.position.y += gridSize;
+            gridGroup.add(xyGrid);
+            yzGrid = new THREE.GridHelper(gridSize, gridStep);
+            yzGrid.setColors(colorCenterline, 0x00ff00);
+            yzGrid.position.copy(gridPosition.clone());
+            yzGrid.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 2);
+            yzGrid.position.y += gridSize;
+            yzGrid.position.z += gridSize;
+            gridGroup.add(yzGrid);
+            zxGrid = new THREE.GridHelper(gridSize, gridStep);
+            zxGrid.setColors(colorCenterline, 0x0000ff);
+            zxGrid.position.copy(gridPosition.clone());
+            zxGrid.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
+            zxGrid.position.z += gridSize;
+            zxGrid.position.x += gridSize;
+            gridGroup.add(zxGrid);
+            return gridGroup;
+        };
+        //#endregion
+        //#region Coordinate Conversion
+        /*
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        //			Coordinate Systems
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        FRAME	            EXAMPLE										SPACE                      UNITS                       NOTES
+    
+        Model               Catalog WebGL: Model, BandElement Block     object                      mm                          Rhino definitions
+        World               Design Model								world                       mm
+        View                Camera                                      view                        mm
+        Device              Normalized view							    device                      [(-1, -1), (1, 1)]
+        Screen.Page         HTML page									screen                      px                          0,0 at Top Left, +Y down    HTML page
+        Screen.Client       Browser view port 						    screen                      px                          0,0 at Top Left, +Y down    browser window
+        Screen.Container    DOM container								screen                      px                          0,0 at Top Left, +Y down    HTML canvas
+    
+        Mouse Event Properties
+        http://www.jacklmoore.com/notes/mouse-position/
+        */
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        //			World Coordinates
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        /**
+         * Converts a JQuery event to world coordinates.
+         * @param event Event.
+         * @param container DOM container.
+         * @param camera Camera.
+         * @returns World coordinates.
+         */
+        Graphics.worldCoordinatesFromJQEvent = function (event, container, camera) {
+            var worldCoordinates, deviceCoordinates2D, deviceCoordinates3D, deviceZ;
+            deviceCoordinates2D = this.deviceCoordinatesFromJQEvent(event, container);
+            deviceZ = (camera instanceof THREE.PerspectiveCamera) ? 0.5 : 1.0;
+            deviceCoordinates3D = new THREE.Vector3(deviceCoordinates2D.x, deviceCoordinates2D.y, deviceZ);
+            worldCoordinates = deviceCoordinates3D.unproject(camera);
+            return worldCoordinates;
+        };
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        //			View Coordinates
+        // --------------------------------------------------------------------------------------------------------------------------------------// 
+        /**
+         * Converts world coordinates to view coordinates.
+         * @param vector World coordinate vector to convert.
+         * @param camera Camera.
+         * @returns View coordinates.
+         */
+        Graphics.viewCoordinatesFromWorldCoordinates = function (vector, camera) {
+            var position = vector.clone(), viewCoordinates;
+            viewCoordinates = position.applyMatrix4(camera.matrixWorldInverse);
+            return viewCoordinates;
+        };
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        //			Device Coordinates
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        /**
+         * Converts a JQuery event to normalized device coordinates.
+         * @param event JQuery event.
+         * @param container DOM container.
+         * @returns Normalized device coordinates.
+         */
+        Graphics.deviceCoordinatesFromJQEvent = function (event, container) {
+            var deviceCoordinates, screenContainerCoordinates, ratioX, ratioY, deviceX, deviceY;
+            screenContainerCoordinates = this.screenContainerCoordinatesFromJQEvent(event, container);
+            ratioX = screenContainerCoordinates.x / container.width();
+            ratioY = screenContainerCoordinates.y / container.height();
+            deviceX = +((ratioX * 2) - 1); // [-1, 1]
+            deviceY = -((ratioY * 2) - 1); // [-1, 1]
+            deviceCoordinates = new THREE.Vector2(deviceX, deviceY);
+            return deviceCoordinates;
+        };
+        /**
+         * Converts world coordinates to device coordinates [-1, 1].
+         * @param vector  World coordinates vector.
+         * @param camera Camera.
+         * @preturns Device coorindates.
+         */
+        Graphics.deviceCoordinatesFromWorldCoordinates = function (vector, camera) {
+            // https://github.com/mrdoob/three.js/issues/78
+            var position = vector.clone(), deviceCoordinates2D, deviceCoordinates3D;
+            deviceCoordinates3D = position.project(camera);
+            deviceCoordinates2D = new THREE.Vector2(deviceCoordinates3D.x, deviceCoordinates3D.y);
+            return deviceCoordinates2D;
+        };
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        //			Screen Coordinates
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        /**
+         * Page coordinates from a JQuery event.
+         * @param event JQuery event.
+         * @returns Screen (page) coordinates.
+         */
+        Graphics.screenPageCoordinatesFromJQEvent = function (event) {
+            var screenPageCoordinates = new THREE.Vector2();
+            screenPageCoordinates.x = event.pageX;
+            screenPageCoordinates.y = event.pageY;
+            return screenPageCoordinates;
+        };
+        /**
+         * Client coordinates from a JQuery event.
+         * Client coordinates are relative to the <browser> view port. If the document has been scrolled it will
+         * be different than the page coordinates which are always relative to the top left of the <entire> HTML page document.
+         * http://www.bennadel.com/blog/1869-jquery-mouse-events-pagex-y-vs-clientx-y.htm
+         * @param event JQuery event.
+         * @returns Screen client coordinates.
+         */
+        Graphics.screenClientCoordinatesFromJQEvent = function (event) {
+            var screenClientCoordinates = new THREE.Vector2();
+            screenClientCoordinates.x = event.clientX;
+            screenClientCoordinates.y = event.clientY;
+            return screenClientCoordinates;
+        };
+        /**
+         * Converts JQuery event coordinates to screen container coordinates.
+         * @param event JQuery event.
+         * @param container DOM container.
+         * @returns Screen container coordinates.
+         */
+        Graphics.screenContainerCoordinatesFromJQEvent = function (event, container) {
+            var screenContainerCoordinates = new THREE.Vector2(), containerOffset, pageX, pageY;
+            containerOffset = container.offset();
+            // JQuery does not set pageX/pageY for Drop events. They are defined in the originalEvent member.
+            pageX = event.pageX || (event.originalEvent).pageX;
+            pageY = event.pageY || (event.originalEvent).pageY;
+            screenContainerCoordinates.x = pageX - containerOffset.left;
+            screenContainerCoordinates.y = pageY - containerOffset.top;
+            return screenContainerCoordinates;
+        };
+        /**
+         * Converts world coordinates to screen container coordinates.
+         * @param vector World vector.
+         * @param container DOM container.
+         * @param camera Camera.
+         * @returns Screen container coordinates.
+         */
+        Graphics.screenContainerCoordinatesFromWorldCoordinates = function (vector, container, camera) {
+            //https://github.com/mrdoob/three.js/issues/78
+            var position = vector.clone(), deviceCoordinates, screenContainerCoordinates, left, top;
+            // [(-1, -1), (1, 1)]
+            deviceCoordinates = this.deviceCoordinatesFromWorldCoordinates(position, camera);
+            left = ((+deviceCoordinates.x + 1) / 2) * container.width();
+            top = ((-deviceCoordinates.y + 1) / 2) * container.height();
+            screenContainerCoordinates = new THREE.Vector2(left, top);
+            return screenContainerCoordinates;
+        };
+        //#endregion
+        //#region Helpers
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        //			Helpers
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        /**
+         * Creates a Raycaster through the mouse world position.
+         * @param mouseWorld World coordinates.
+         * @param camera Camera.
+         * @returns THREE.Raycaster.
+         */
+        Graphics.raycasterFromMouse = function (mouseWorld, camera) {
+            var rayOrigin = new THREE.Vector3(mouseWorld.x, mouseWorld.y, camera.position.z), worldPoint = new THREE.Vector3(mouseWorld.x, mouseWorld.y, mouseWorld.z);
+            //          Tools.consoleLog('World mouse coordinates: ' + worldPoint.x + ', ' + worldPoint.y);
+            // construct ray from camera to mouse world
+            var raycaster = new THREE.Raycaster(rayOrigin, worldPoint.sub(rayOrigin).normalize());
+            return raycaster;
+        };
+        /**
+         * Returns the first Intersection located by the cursor.
+         * @param event JQuery event.
+         * @param container DOM container.
+         * @param camera Camera.
+         * @param sceneObjects Array of scene objects.
+         * @param recurse Recurse through objects.
+         * @returns First intersection with screen objects.
+         */
+        Graphics.getFirstIntersection = function (event, container, camera, sceneObjects, recurse) {
+            var raycaster, mouseWorld, iIntersection, intersection;
+            // construct ray from camera to mouse world
+            mouseWorld = Graphics.worldCoordinatesFromJQEvent(event, container, camera);
+            raycaster = Graphics.raycasterFromMouse(mouseWorld, camera);
+            // find all object intersections
+            var intersects = raycaster.intersectObjects(sceneObjects, recurse);
+            // no intersection?
+            if (intersects.length === 0) {
+                return null;
+            }
+            // use first; reject lines (Transform Frame)
+            for (iIntersection = 0; iIntersection < intersects.length; iIntersection++) {
+                intersection = intersects[iIntersection];
+                if (!(intersection.object instanceof THREE.Line))
+                    return intersection;
+            }
+            ;
+            return null;
+        };
+        Graphics.BoundingBoxName = 'Bounding Box';
+        return Graphics;
+    }());
+    exports.Graphics = Graphics;
+});
+define("System/Math", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * Math Library
+     * General mathematics routines
+     * @class
+     */
+    var MathLibrary = (function () {
+        /**
+         * @constructor
+         */
+        function MathLibrary() {
+        }
+        /**
+         * Returns whether two numbers are equal within the given tolerance.
+         * @param value First value to compare.
+         * @param other Second value to compare.
+         * @param tolerance Tolerance for comparison.
+         * @returns True if within tolerance.
+         */
+        MathLibrary.numbersEqualWithinTolerance = function (value, other, tolerance) {
+            return ((value >= (other - tolerance)) && (value <= (other + tolerance)));
+        };
+        return MathLibrary;
+    }());
+    exports.MathLibrary = MathLibrary;
+});
 /**
  * @author Eberhard Graether / http://egraether.com/
  * @author Mark Lundin 	/ http://mark-lundin.com
@@ -1084,7 +1494,7 @@ define("Viewer/TrackballControls", ["require", "exports", "three"], function (re
     TrackballControls.prototype = Object.create(THREE.EventDispatcher.prototype);
     TrackballControls.prototype.constructor = TrackballControls;
 });
-define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], function (require, exports, THREE, Services_1) {
+define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "System/Services", "Viewer/TrackballControls"], function (require, exports, THREE, Services_2, TrackballControls_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -1093,373 +1503,136 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
-     *  General THREE.js/WebGL support routines
-     *  Graphics Library
-     *  @class
+     * @class
+     * MeshViewer
      */
-    var Graphics = (function () {
+    var MeshPreviewViewer = (function () {
         /**
          * @constructor
          */
-        function Graphics() {
+        function MeshPreviewViewer() {
+            this._width = MeshPreviewViewer.DefaultResolution;
+            this._height = MeshPreviewViewer.DefaultResolution;
+            this._cameraZPosition = 4;
+            this._cameraNearPlane = 2;
+            this._cameraFarPlane = 10.0;
+            this._fieldOfView = 37; // https://www.nikonians.org/reviews/fov-tables
+            this.initialize();
+            this.animate();
         }
-        //#region Geometry
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        //			Geometry
-        // --------------------------------------------------------------------------------------------------------------------------------------//
         /**
-         * Removes an object and all children from a scene.
-         * @param scene Scene holding object to be removed.
-         * @param rootObject Parent object (possibly with children).
+         * Initializes the preview renderer used to view the 3D mesh.
          */
-        Graphics.removeSceneObjectChildren = function (scene, rootObject, removeRoot) {
-            if (!scene || !rootObject)
-                return;
-            var logger = Services_1.Services.consoleLogger;
-            var remover = function (object3d) {
-                if (object3d === rootObject) {
-                    return;
-                }
-                logger.addInfoMessage('Removing: ' + object3d.name);
-                scene.remove(object3d);
-                if (object3d.hasOwnProperty('geometry')) {
-                    object3d.geometry.dispose();
-                }
-                if (object3d.hasOwnProperty('material')) {
-                    var material = object3d.material;
-                    if (material.hasOwnProperty('materials')) {
-                        var materials = material.materials;
-                        for (var iMaterial in materials) {
-                            if (materials.hasOwnProperty(iMaterial)) {
-                                materials[iMaterial].dispose();
-                            }
-                        }
-                    }
-                }
-                if (object3d.hasOwnProperty('texture')) {
-                    object3d.texture.dispose();
-                }
-            };
-            // remove root children from scene
-            rootObject.traverse(remover);
-            // remove root children from root
-            for (var iChild = 0; iChild < rootObject.children.length; iChild++) {
-                var child = rootObject.children[iChild];
-                rootObject.remove(child);
+        MeshPreviewViewer.prototype.initializePreviewRenderer = function () {
+            this._canvas = this.initializeCanvas('previewCanvas', this._width, this._height);
+            this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas });
+            this._renderer.setPixelRatio(window.devicePixelRatio);
+            this._renderer.setSize(this._width, this._height);
+            this._camera = new THREE.PerspectiveCamera(this._fieldOfView, this._width / this._height, this._cameraNearPlane, this._cameraFarPlane);
+            this._camera.position.z = this._cameraZPosition;
+            this._controls = new TrackballControls_1.TrackballControls(this._camera, this._renderer.domElement);
+            this.setupPreviewScene();
+            this.initializeLighting(this.scene);
+        };
+        /**
+         * Initialize the application.
+         */
+        MeshPreviewViewer.prototype.initialize = function () {
+            this._logger = Services_2.Services.htmlLogger;
+            this.initializePreviewRenderer();
+            this.onWindowResize();
+            window.addEventListener('resize', this.onWindowResize, false);
+        };
+        /**
+         * Updates a renderer properties.
+         * Event handler called on window resize.
+         * @param renderer Renderer to update.
+         * @param width Width of the renderer.
+         * @param height Height of the renderer.
+         * @param camera Renderer's camera.
+         */
+        MeshPreviewViewer.prototype.updateViewOnWindowResize = function (renderer, width, height, camera) {
+            var aspect = width / height;
+            if (camera) {
+                camera.aspect = aspect;
+                camera.updateProjectionMatrix();
             }
-            if (removeRoot)
-                scene.remove(rootObject);
+            renderer.setSize(width, height);
         };
         /**
-         * @param position Location of bounding box.
-         * @param mesh Mesh from which to create bounding box.
-         * @ returns Mesh of the bounding box.
+         * Event handler called on window resize.
          */
-        Graphics.createTransparentBoundingBox = function (position, mesh) {
-            var targetGeometry, boundingBox, width, height, depth, material, box;
-            targetGeometry = mesh.geometry;
-            targetGeometry.computeBoundingBox();
-            boundingBox = targetGeometry.boundingBox;
-            width = boundingBox.max.x - boundingBox.min.x;
-            height = boundingBox.max.y - boundingBox.min.y;
-            depth = boundingBox.max.z - boundingBox.min.z;
-            material = new THREE.MeshBasicMaterial({ color: 0x0000ff, opacity: 1.0, transparent: true, wireframe: true });
-            box = this.createBox(position, width, height, depth, material);
-            box.name = Graphics.BoundingBoxName;
-            box.visible = false;
-            return box;
+        MeshPreviewViewer.prototype.onWindowResize = function () {
+            this.updateViewOnWindowResize(this._renderer, this._width, this._height, this._camera);
         };
         /**
-         * Creates a box mesh.
-         * @param position Location of the box.
-         * @param width Width.
-         * @param height Height.
-         * @param depth Depth.
-         * @param material Optional material.
-         * @returns Box mesh.
+         * Adds lighting to the scene.
+         * param theScene Scene to add lighting.
          */
-        Graphics.createBox = function (position, width, height, depth, material) {
-            var boxGeometry, boxMaterial, box;
-            boxGeometry = new THREE.BoxGeometry(width, height, depth);
-            boxGeometry.computeBoundingBox();
-            boxMaterial = material || new THREE.MeshPhongMaterial({ color: 0x0000ff, opacity: 1.0 });
-            box = new THREE.Mesh(boxGeometry, boxMaterial);
-            box.position.copy(position);
-            return box;
+        MeshPreviewViewer.prototype.initializeLighting = function (theScene) {
+            var ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+            theScene.add(ambientLight);
+            var directionalLight1 = new THREE.DirectionalLight(0xffffff);
+            directionalLight1.position.set(4, 4, 4);
+            theScene.add(directionalLight1);
         };
         /**
-         * Creates a sphere mesh.
-         * @param position Origin of the sphere.
-         * @param radius Radius.
-         * @param color Color.
-         * @param segments Mesh segments.
+         * Adds helpers to the scene to visualize camera, coordinates, etc.
+         * @param scene Scene to annotate.
+         * @param camera Camera to construct helper (may be null).
+         * @param addAxisHelper Add a helper for the cartesian axes.
          */
-        Graphics.createSphere = function (position, radius, color, segments) {
-            var sphereGeometry, material, segmentCount = segments || 32, sphere;
-            Graphics.createBox;
-            sphereGeometry = new THREE.SphereGeometry(radius, segmentCount, segmentCount);
-            sphereGeometry.computeBoundingBox();
-            material = new THREE.MeshPhongMaterial({ color: color, opacity: 1.0, transparent: false, wireframe: false });
-            sphere = new THREE.Mesh(sphereGeometry, material);
-            sphere.position.copy(position);
-            return sphere;
+        MeshPreviewViewer.prototype.initializeModelHelpers = function (scene, camera, addAxisHelper) {
+            if (camera) {
+                var cameraHelper = new THREE.CameraHelper(camera);
+                cameraHelper.visible = true;
+                scene.add(cameraHelper);
+            }
+            if (addAxisHelper) {
+                var axisHelper = new THREE.AxisHelper(2);
+                axisHelper.visible = true;
+                scene.add(axisHelper);
+            }
         };
         /**
-     * Creates a line object.
-     * @param startPosition Start point.
-     * @param endPosition End point.
-     * @param color Color.
-     * @returns Line element.
-     */
-        Graphics.createLine = function (startPosition, endPosition, color) {
-            var line, lineGeometry, material;
-            lineGeometry = new THREE.Geometry();
-            lineGeometry.vertices.push(startPosition, endPosition);
-            material = new THREE.LineBasicMaterial({ color: color });
-            line = new THREE.Line(lineGeometry, material);
-            return line;
-        };
-        /**
-         * Creates an axes triad.
-         * @param position Origin of the triad.
-         * @param length Length of the coordinate arrow.
-         * @param headLength Length of the arrow head.
-         * @param headWidth Width of the arrow head.
+         * Constructs the scene used to visualize the 3D mesh.
          */
-        Graphics.createWorldAxesTriad = function (position, length, headLength, headWidth) {
-            var triadGroup = new THREE.Object3D(), arrowPosition = position || new THREE.Vector3(), arrowLength = length || 15, arrowHeadLength = headLength || 1, arrowHeadWidth = headWidth || 1;
-            triadGroup.add(new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), arrowPosition, arrowLength, 0xff0000, arrowHeadLength, arrowHeadWidth));
-            triadGroup.add(new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), arrowPosition, arrowLength, 0x00ff00, arrowHeadLength, arrowHeadWidth));
-            triadGroup.add(new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), arrowPosition, arrowLength, 0x0000ff, arrowHeadLength, arrowHeadWidth));
-            return triadGroup;
+        MeshPreviewViewer.prototype.setupPreviewScene = function () {
+            this.scene = new THREE.Scene();
+            this.root = new THREE.Group();
+            this.scene.add(this.root);
         };
         /**
-         * Creates an axes grid.
-         * @param position  Origin of the axes grid.
-         * @param size Size of the grid.
-         * @param step Grid line intervals.
-         * @returns Grid object.
+         * Constructs a WebGL target canvas.
+         * @param id DOM id for canvas.
+         * @param resolution Resolution (square) for canvas.
          */
-        Graphics.createWorldAxesGrid = function (position, size, step) {
-            var gridGroup = new THREE.Object3D(), gridPosition = position || new THREE.Vector3(), gridSize = size || 10, gridStep = step || 1, colorCenterline = 0xff000000, xyGrid, yzGrid, zxGrid;
-            xyGrid = new THREE.GridHelper(gridSize, gridStep);
-            xyGrid.setColors(colorCenterline, 0xff0000);
-            xyGrid.position.copy(gridPosition.clone());
-            xyGrid.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
-            xyGrid.position.x += gridSize;
-            xyGrid.position.y += gridSize;
-            gridGroup.add(xyGrid);
-            yzGrid = new THREE.GridHelper(gridSize, gridStep);
-            yzGrid.setColors(colorCenterline, 0x00ff00);
-            yzGrid.position.copy(gridPosition.clone());
-            yzGrid.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 2);
-            yzGrid.position.y += gridSize;
-            yzGrid.position.z += gridSize;
-            gridGroup.add(yzGrid);
-            zxGrid = new THREE.GridHelper(gridSize, gridStep);
-            zxGrid.setColors(colorCenterline, 0x0000ff);
-            zxGrid.position.copy(gridPosition.clone());
-            zxGrid.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
-            zxGrid.position.z += gridSize;
-            zxGrid.position.x += gridSize;
-            gridGroup.add(zxGrid);
-            return gridGroup;
-        };
-        //#endregion
-        //#region Coordinate Conversion
-        /*
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        //			Coordinate Systems
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        FRAME	            EXAMPLE										SPACE                      UNITS                       NOTES
-    
-        Model               Catalog WebGL: Model, BandElement Block     object                      mm                          Rhino definitions
-        World               Design Model								world                       mm
-        View                Camera                                      view                        mm
-        Device              Normalized view							    device                      [(-1, -1), (1, 1)]
-        Screen.Page         HTML page									screen                      px                          0,0 at Top Left, +Y down    HTML page
-        Screen.Client       Browser view port 						    screen                      px                          0,0 at Top Left, +Y down    browser window
-        Screen.Container    DOM container								screen                      px                          0,0 at Top Left, +Y down    HTML canvas
-    
-        Mouse Event Properties
-        http://www.jacklmoore.com/notes/mouse-position/
-        */
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        //			World Coordinates
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        /**
-         * Converts a JQuery event to world coordinates.
-         * @param event Event.
-         * @param container DOM container.
-         * @param camera Camera.
-         * @returns World coordinates.
-         */
-        Graphics.worldCoordinatesFromJQEvent = function (event, container, camera) {
-            var worldCoordinates, deviceCoordinates2D, deviceCoordinates3D, deviceZ;
-            deviceCoordinates2D = this.deviceCoordinatesFromJQEvent(event, container);
-            deviceZ = (camera instanceof THREE.PerspectiveCamera) ? 0.5 : 1.0;
-            deviceCoordinates3D = new THREE.Vector3(deviceCoordinates2D.x, deviceCoordinates2D.y, deviceZ);
-            worldCoordinates = deviceCoordinates3D.unproject(camera);
-            return worldCoordinates;
-        };
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        //			View Coordinates
-        // --------------------------------------------------------------------------------------------------------------------------------------// 
-        /**
-         * Converts world coordinates to view coordinates.
-         * @param vector World coordinate vector to convert.
-         * @param camera Camera.
-         * @returns View coordinates.
-         */
-        Graphics.viewCoordinatesFromWorldCoordinates = function (vector, camera) {
-            var position = vector.clone(), viewCoordinates;
-            viewCoordinates = position.applyMatrix4(camera.matrixWorldInverse);
-            return viewCoordinates;
-        };
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        //			Device Coordinates
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        /**
-         * Converts a JQuery event to normalized device coordinates.
-         * @param event JQuery event.
-         * @param container DOM container.
-         * @returns Normalized device coordinates.
-         */
-        Graphics.deviceCoordinatesFromJQEvent = function (event, container) {
-            var deviceCoordinates, screenContainerCoordinates, ratioX, ratioY, deviceX, deviceY;
-            screenContainerCoordinates = this.screenContainerCoordinatesFromJQEvent(event, container);
-            ratioX = screenContainerCoordinates.x / container.width();
-            ratioY = screenContainerCoordinates.y / container.height();
-            deviceX = +((ratioX * 2) - 1); // [-1, 1]
-            deviceY = -((ratioY * 2) - 1); // [-1, 1]
-            deviceCoordinates = new THREE.Vector2(deviceX, deviceY);
-            return deviceCoordinates;
-        };
-        /**
-         * Converts world coordinates to device coordinates [-1, 1].
-         * @param vector  World coordinates vector.
-         * @param camera Camera.
-         * @preturns Device coorindates.
-         */
-        Graphics.deviceCoordinatesFromWorldCoordinates = function (vector, camera) {
-            // https://github.com/mrdoob/three.js/issues/78
-            var position = vector.clone(), deviceCoordinates2D, deviceCoordinates3D;
-            deviceCoordinates3D = position.project(camera);
-            deviceCoordinates2D = new THREE.Vector2(deviceCoordinates3D.x, deviceCoordinates3D.y);
-            return deviceCoordinates2D;
-        };
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        //			Screen Coordinates
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        /**
-         * Page coordinates from a JQuery event.
-         * @param event JQuery event.
-         * @returns Screen (page) coordinates.
-         */
-        Graphics.screenPageCoordinatesFromJQEvent = function (event) {
-            var screenPageCoordinates = new THREE.Vector2();
-            screenPageCoordinates.x = event.pageX;
-            screenPageCoordinates.y = event.pageY;
-            return screenPageCoordinates;
-        };
-        /**
-         * Client coordinates from a JQuery event.
-         * Client coordinates are relative to the <browser> view port. If the document has been scrolled it will
-         * be different than the page coordinates which are always relative to the top left of the <entire> HTML page document.
-         * http://www.bennadel.com/blog/1869-jquery-mouse-events-pagex-y-vs-clientx-y.htm
-         * @param event JQuery event.
-         * @returns Screen client coordinates.
-         */
-        Graphics.screenClientCoordinatesFromJQEvent = function (event) {
-            var screenClientCoordinates = new THREE.Vector2();
-            screenClientCoordinates.x = event.clientX;
-            screenClientCoordinates.y = event.clientY;
-            return screenClientCoordinates;
-        };
-        /**
-         * Converts JQuery event coordinates to screen container coordinates.
-         * @param event JQuery event.
-         * @param container DOM container.
-         * @returns Screen container coordinates.
-         */
-        Graphics.screenContainerCoordinatesFromJQEvent = function (event, container) {
-            var screenContainerCoordinates = new THREE.Vector2(), containerOffset, pageX, pageY;
-            containerOffset = container.offset();
-            // JQuery does not set pageX/pageY for Drop events. They are defined in the originalEvent member.
-            pageX = event.pageX || (event.originalEvent).pageX;
-            pageY = event.pageY || (event.originalEvent).pageY;
-            screenContainerCoordinates.x = pageX - containerOffset.left;
-            screenContainerCoordinates.y = pageY - containerOffset.top;
-            return screenContainerCoordinates;
-        };
-        /**
-         * Converts world coordinates to screen container coordinates.
-         * @param vector World vector.
-         * @param container DOM container.
-         * @param camera Camera.
-         * @returns Screen container coordinates.
-         */
-        Graphics.screenContainerCoordinatesFromWorldCoordinates = function (vector, container, camera) {
-            //https://github.com/mrdoob/three.js/issues/78
-            var position = vector.clone(), deviceCoordinates, screenContainerCoordinates, left, top;
-            // [(-1, -1), (1, 1)]
-            deviceCoordinates = this.deviceCoordinatesFromWorldCoordinates(position, camera);
-            left = ((+deviceCoordinates.x + 1) / 2) * container.width();
-            top = ((-deviceCoordinates.y + 1) / 2) * container.height();
-            screenContainerCoordinates = new THREE.Vector2(left, top);
-            return screenContainerCoordinates;
-        };
-        //#endregion
-        //#region Helpers
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        //			Helpers
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        /**
-         * Creates a Raycaster through the mouse world position.
-         * @param mouseWorld World coordinates.
-         * @param camera Camera.
-         * @returns THREE.Raycaster.
-         */
-        Graphics.raycasterFromMouse = function (mouseWorld, camera) {
-            var rayOrigin = new THREE.Vector3(mouseWorld.x, mouseWorld.y, camera.position.z), worldPoint = new THREE.Vector3(mouseWorld.x, mouseWorld.y, mouseWorld.z);
-            //          Tools.consoleLog('World mouse coordinates: ' + worldPoint.x + ', ' + worldPoint.y);
-            // construct ray from camera to mouse world
-            var raycaster = new THREE.Raycaster(rayOrigin, worldPoint.sub(rayOrigin).normalize());
-            return raycaster;
-        };
-        /**
-         * Returns the first Intersection located by the cursor.
-         * @param event JQuery event.
-         * @param container DOM container.
-         * @param camera Camera.
-         * @param sceneObjects Array of scene objects.
-         * @param recurse Recurse through objects.
-         * @returns First intersection with screen objects.
-         */
-        Graphics.getFirstIntersection = function (event, container, camera, sceneObjects, recurse) {
-            var raycaster, mouseWorld, iIntersection, intersection;
-            // construct ray from camera to mouse world
-            mouseWorld = Graphics.worldCoordinatesFromJQEvent(event, container, camera);
-            raycaster = Graphics.raycasterFromMouse(mouseWorld, camera);
-            // find all object intersections
-            var intersects = raycaster.intersectObjects(sceneObjects, recurse);
-            // no intersection?
-            if (intersects.length === 0) {
+        MeshPreviewViewer.prototype.initializeCanvas = function (id, width, height) {
+            var canvas = document.querySelector("#" + id);
+            if (!canvas) {
+                console.error("Canvas element id = " + id + " not found");
                 return null;
             }
-            // use first; reject lines (Transform Frame)
-            for (iIntersection = 0; iIntersection < intersects.length; iIntersection++) {
-                intersection = intersects[iIntersection];
-                if (!(intersection.object instanceof THREE.Line))
-                    return intersection;
-            }
-            ;
-            return null;
+            // render dimensions    
+            canvas.width = width;
+            canvas.height = height;
+            // DOM element dimensions (may be different than render dimensions)
+            canvas.style.width = width + "px";
+            canvas.style.height = height + "px";
+            return canvas;
         };
-        Graphics.BoundingBoxName = 'Bounding Box';
-        return Graphics;
+        /**
+         * Animation loop.
+         */
+        MeshPreviewViewer.prototype.animate = function () {
+            requestAnimationFrame(this.animate.bind(this));
+            this._controls.update();
+            this._renderer.render(this.scene, this._camera);
+        };
+        MeshPreviewViewer.DefaultResolution = 512; // default MPV resolution
+        return MeshPreviewViewer;
     }());
-    exports.Graphics = Graphics;
+    exports.MeshPreviewViewer = MeshPreviewViewer;
 });
 define("Viewer/Materials", ["require", "exports", "three"], function (require, exports, THREE) {
     // ------------------------------------------------------------------------// 
@@ -1521,31 +1694,11 @@ define("Viewer/Materials", ["require", "exports", "three"], function (require, e
         Materials.createTransparentMaterial = function () {
             return new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 0.0, transparent: true });
         };
-        /**
-         * Create the shader material used for generating the DepthBuffer.
-         * @param designColor Material color.
-         * @returns Shader material.
-         */
-        Materials.createDepthBufferMaterial = function (designColor) {
-            var textureLoader = new THREE.TextureLoader();
-            var shaderMaterial = new THREE.ShaderMaterial({
-                uniforms: {
-                    designColor: {
-                        type: 'c',
-                        value: new THREE.Color(designColor)
-                    },
-                },
-                vertexShader: MR.shaderSource['DepthBufferVertexShader'],
-                fragmentShader: MR.shaderSource['DepthBufferFragmentShader'],
-                shading: THREE.SmoothShading
-            });
-            return shaderMaterial;
-        };
         return Materials;
     }());
     exports.Materials = Materials;
 });
-define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/TrackballControls", "Viewer/Graphics", "Viewer/Materials"], function (require, exports, THREE, dat, TrackballControls_1, Graphics_1, Materials_1) {
+define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControls", "Viewer/Graphics", "System/Services"], function (require, exports, THREE, TrackballControls_2, Graphics_1, Services_3) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -1568,6 +1721,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
          * @param elementToBindTo HTML element to host the viewer.
          */
         function Viewer(elementToBindTo) {
+            this.logger = Services_3.Services.consoleLogger;
             this.renderer = null;
             this.canvas = elementToBindTo;
             this.aspectRatio = 1;
@@ -1576,7 +1730,6 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
             this.root = null;
             this.controls = null;
             this.initializeScene();
-            this.initializeViewerControls();
             this.initializeGL();
             // start render loop
             this.render();
@@ -1704,7 +1857,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
          * Sets up the user input controls (Trackball)
          */
         Viewer.prototype.initializeInputControls = function () {
-            this.controls = new TrackballControls_1.TrackballControls(this.camera, this.renderer.domElement);
+            this.controls = new TrackballControls_2.TrackballControls(this.camera, this.renderer.domElement);
         };
         /**
          * Removes all scene objects
@@ -1714,66 +1867,18 @@ define("Viewer/Viewer", ["require", "exports", "three", "dat-gui", "Viewer/Track
             this.createRoot();
         };
         /**
-         * Initialize the view settings that are controllable by the user
+         * Display the reference grid.
          */
-        Viewer.prototype.initializeViewerControls = function () {
-            var ViewerControls = (function () {
-                function ViewerControls() {
-                    this.displayGrid = true;
-                    this.depthBuffer = false;
-                }
-                return ViewerControls;
-            }());
-            var scope = this;
-            var viewerControls = new ViewerControls();
-            // Init dat.gui and controls for the UI
-            var gui = new dat.GUI({
-                autoPlace: false,
-                width: 320
-            });
-            var menuDiv = document.getElementById('dat');
-            menuDiv.appendChild(gui.domElement);
-            var folderOptions = gui.addFolder('ModelViewer Options');
-            // Grid
-            var controlDisplayGrid = folderOptions.add(viewerControls, 'displayGrid').name('Display Grid');
-            controlDisplayGrid.onChange(function (value) {
-                scope.displayGrid = value;
-                var gridGeometry = this.scene.getObjectByName(ObjectNames.Grid);
-                gridGeometry.visible = scope.displayGrid;
-                console.log('Setting displayGrid to: ' + value);
-            }.bind(this));
-            // Depth Buffer
-            var depthBufferMaterial = Materials_1.Materials.createDepthBufferMaterial(0x5555ff);
-            var whiteMaterial = new THREE.MeshPhongMaterial();
-            whiteMaterial.color = new THREE.Color(0xffffff);
-            var controlDepthBuffer = folderOptions.add(viewerControls, 'depthBuffer').name('Depth Buffer');
-            controlDepthBuffer.onChange(function (value) {
-                scope.depthBuffer = value;
-                var newMaterial = scope.depthBuffer ? depthBufferMaterial : whiteMaterial;
-                scope.changeObjectMaterials(newMaterial);
-                console.log('Setting depthBuffer to: ' + value);
-            }.bind(this));
-            folderOptions.open();
-        };
-        /**
-         * Change materials of all scene objects
-         */
-        Viewer.prototype.changeObjectMaterials = function (material) {
-            var scope = this;
-            var applyMaterial = function (object) {
-                if (!(object instanceof THREE.Mesh))
-                    return;
-                console.log('Applying material: ' + object.name);
-                object.material = material;
-                object.material.needsUpdate = true;
-            };
-            this.root.traverse(applyMaterial);
+        Viewer.prototype.displayGrid = function (visible) {
+            var gridGeometry = this.scene.getObjectByName(ObjectNames.Grid);
+            gridGeometry.visible = visible;
+            this.logger.addInfoMessage("Display grid = " + visible);
         };
         return Viewer;
     }());
     exports.Viewer = Viewer;
 });
-define("ModelRelief", ["require", "exports", "three", "ModelLoaders/OBJLoader", "System/Services", "Viewer/Viewer"], function (require, exports, THREE, OBJLoader_1, Services_2, Viewer_1) {
+define("ModelRelief", ["require", "exports", "three", "dat-gui", "ModelLoaders/OBJLoader", "Viewer/MeshPreviewViewer", "System/Services", "Viewer/Viewer"], function (require, exports, THREE, dat, OBJLoader_1, MeshPreviewViewer_1, Services_4, Viewer_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -1813,12 +1918,50 @@ define("ModelRelief", ["require", "exports", "three", "ModelLoaders/OBJLoader", 
             }, onProgress, onError);
         };
         /**
+         * Initialize the view settings that are controllable by the user
+         */
+        ModelRelief.prototype.initializeViewerControls = function () {
+            var scope = this;
+            function captureRelief() {
+                Services_4.Services.consoleLogger.addInfoMessage('Relief captured');
+            }
+            var ViewerControls = (function () {
+                function ViewerControls() {
+                    this.displayGrid = true;
+                    this.captureRelief = function () { };
+                }
+                return ViewerControls;
+            }());
+            var viewerControls = new ViewerControls();
+            // Init dat.gui and controls for the UI
+            var gui = new dat.GUI({
+                autoPlace: false,
+                width: 320
+            });
+            var menuDiv = document.getElementById('dat');
+            menuDiv.appendChild(gui.domElement);
+            var folderOptions = gui.addFolder('ModelViewer Options');
+            // Grid
+            var controlDisplayGrid = folderOptions.add(viewerControls, 'displayGrid').name('Display Grid');
+            controlDisplayGrid.onChange(function (value) {
+                scope._modelViewer.displayGrid(value);
+            }.bind(this));
+            // Depth Buffer
+            var controlCaptureRelief = folderOptions.add(viewerControls, 'captureRelief').name('Capture Relief');
+            controlCaptureRelief.onChange(function () {
+                captureRelief();
+            }.bind(this));
+            folderOptions.open();
+        };
+        /**
          * Launch the model Viewer.
          */
         ModelRelief.prototype.run = function () {
-            Services_2.Services.consoleLogger.addInfoMessage('ModelRelief started');
-            var viewer = new Viewer_1.Viewer(document.getElementById('model3D'));
-            this.loadModel(viewer);
+            Services_4.Services.consoleLogger.addInfoMessage('ModelRelief started');
+            this._modelViewer = new Viewer_1.Viewer(document.getElementById('model3D'));
+            this.loadModel(this._modelViewer);
+            this._meshPreviewViewer = new MeshPreviewViewer_1.MeshPreviewViewer();
+            this.initializeViewerControls();
         };
         return ModelRelief;
     }());
@@ -1826,40 +1969,7 @@ define("ModelRelief", ["require", "exports", "three", "ModelLoaders/OBJLoader", 
     var modelRelief = new ModelRelief();
     modelRelief.run();
 });
-define("System/Math", ["require", "exports"], function (require, exports) {
-    // ------------------------------------------------------------------------// 
-    // ModelRelief                                                             //
-    //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
-    // ------------------------------------------------------------------------//
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * Math Library
-     * General mathematics routines
-     * @class
-     */
-    var MathLibrary = (function () {
-        /**
-         * @constructor
-         */
-        function MathLibrary() {
-        }
-        /**
-         * Returns whether two numbers are equal within the given tolerance.
-         * @param value First value to compare.
-         * @param other Second value to compare.
-         * @param tolerance Tolerance for comparison.
-         * @returns True if within tolerance.
-         */
-        MathLibrary.numbersEqualWithinTolerance = function (value, other, tolerance) {
-            return ((value >= (other - tolerance)) && (value <= (other + tolerance)));
-        };
-        return MathLibrary;
-    }());
-    exports.MathLibrary = MathLibrary;
-});
-define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "System/Math", "System/Services"], function (require, exports, chai_1, THREE, Math_1, Services_3) {
+define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "System/Math", "System/Services"], function (require, exports, chai_1, THREE, Math_1, Services_5) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -1891,7 +2001,7 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Syste
          * Initialize
          */
         DepthBuffer.prototype.initialize = function () {
-            this._logger = Services_3.Services.htmlLogger;
+            this._logger = Services_5.Services.htmlLogger;
             this._nearClipPlane = this.camera.near;
             this._farClipPlane = this.camera.far;
             this._cameraClipRange = this._farClipPlane - this._nearClipPlane;
@@ -2230,7 +2340,7 @@ define("System/Tools", ["require", "exports"], function (require, exports) {
     JSON compatible constructor parameters
     Fixed resolution; resizing support is not required.
 */
-define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthBuffer/DepthBuffer", "System/Services", "System/Tools"], function (require, exports, THREE, DepthBuffer_1, Services_4, Tools_1) {
+define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthBuffer/DepthBuffer", "System/Services", "System/Tools"], function (require, exports, THREE, DepthBuffer_1, Services_6, Tools_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
@@ -2340,7 +2450,7 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthB
          * Perform setup and initialization.
          */
         DepthBufferFactory.prototype.initialize = function () {
-            this._logger = Services_4.Services.consoleLogger;
+            this._logger = Services_6.Services.consoleLogger;
             this.initializeRenderer();
             this.initializeScene();
             this.initializePostScene();
@@ -2488,146 +2598,6 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthB
     }());
     exports.DepthBufferFactory = DepthBufferFactory;
 });
-define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "System/Services", "Viewer/TrackballControls"], function (require, exports, THREE, Services_5, TrackballControls_2) {
-    // ------------------------------------------------------------------------// 
-    // ModelRelief                                                             //
-    //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
-    // ------------------------------------------------------------------------//
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * @class
-     * MeshViewer
-     */
-    var MeshPreviewViewer = (function () {
-        /**
-         * @constructor
-         */
-        function MeshPreviewViewer() {
-            this._width = MeshPreviewViewer.DefaultResolution;
-            this._height = MeshPreviewViewer.DefaultResolution;
-            this._cameraZPosition = 4;
-            this._cameraNearPlane = 2;
-            this._cameraFarPlane = 10.0;
-            this._fieldOfView = 37; // https://www.nikonians.org/reviews/fov-tables
-            this.initialize();
-            this.animate();
-        }
-        /**
-         * Initializes the preview renderer used to view the 3D mesh.
-         */
-        MeshPreviewViewer.prototype.initializePreviewRenderer = function () {
-            this._canvas = this.initializeCanvas('previewCanvas', this._width, this._height);
-            this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas });
-            this._renderer.setPixelRatio(window.devicePixelRatio);
-            this._renderer.setSize(this._width, this._height);
-            this._camera = new THREE.PerspectiveCamera(this._fieldOfView, this._width / this._height, this._cameraNearPlane, this._cameraFarPlane);
-            this._camera.position.z = this._cameraZPosition;
-            this._controls = new TrackballControls_2.TrackballControls(this._camera, this._renderer.domElement);
-            this.setupPreviewScene();
-            this.initializeLighting(this.scene);
-        };
-        /**
-         * Initialize the application.
-         */
-        MeshPreviewViewer.prototype.initialize = function () {
-            this._logger = Services_5.Services.htmlLogger;
-            this.initializePreviewRenderer();
-            this.onWindowResize();
-            window.addEventListener('resize', this.onWindowResize, false);
-        };
-        /**
-         * Updates a renderer properties.
-         * Event handler called on window resize.
-         * @param renderer Renderer to update.
-         * @param width Width of the renderer.
-         * @param height Height of the renderer.
-         * @param camera Renderer's camera.
-         */
-        MeshPreviewViewer.prototype.updateViewOnWindowResize = function (renderer, width, height, camera) {
-            var aspect = width / height;
-            if (camera) {
-                camera.aspect = aspect;
-                camera.updateProjectionMatrix();
-            }
-            renderer.setSize(width, height);
-        };
-        /**
-         * Event handler called on window resize.
-         */
-        MeshPreviewViewer.prototype.onWindowResize = function () {
-            this.updateViewOnWindowResize(this._renderer, this._width, this._height, this._camera);
-        };
-        /**
-         * Adds lighting to the scene.
-         * param theScene Scene to add lighting.
-         */
-        MeshPreviewViewer.prototype.initializeLighting = function (theScene) {
-            var ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-            theScene.add(ambientLight);
-            var directionalLight1 = new THREE.DirectionalLight(0xffffff);
-            directionalLight1.position.set(4, 4, 4);
-            theScene.add(directionalLight1);
-        };
-        /**
-         * Adds helpers to the scene to visualize camera, coordinates, etc.
-         * @param scene Scene to annotate.
-         * @param camera Camera to construct helper (may be null).
-         * @param addAxisHelper Add a helper for the cartesian axes.
-         */
-        MeshPreviewViewer.prototype.initializeModelHelpers = function (scene, camera, addAxisHelper) {
-            if (camera) {
-                var cameraHelper = new THREE.CameraHelper(camera);
-                cameraHelper.visible = true;
-                scene.add(cameraHelper);
-            }
-            if (addAxisHelper) {
-                var axisHelper = new THREE.AxisHelper(2);
-                axisHelper.visible = true;
-                scene.add(axisHelper);
-            }
-        };
-        /**
-         * Constructs the scene used to visualize the 3D mesh.
-         */
-        MeshPreviewViewer.prototype.setupPreviewScene = function () {
-            this.scene = new THREE.Scene();
-            this.root = new THREE.Group();
-            this.scene.add(this.root);
-        };
-        /**
-         * Constructs a WebGL target canvas.
-         * @param id DOM id for canvas.
-         * @param resolution Resolution (square) for canvas.
-         */
-        MeshPreviewViewer.prototype.initializeCanvas = function (id, width, height) {
-            var canvas = document.querySelector("#" + id);
-            if (!canvas) {
-                console.error("Canvas element id = " + id + " not found");
-                return null;
-            }
-            // render dimensions    
-            canvas.width = width;
-            canvas.height = height;
-            // DOM element dimensions (may be different than render dimensions)
-            canvas.style.width = width + "px";
-            canvas.style.height = height + "px";
-            return canvas;
-        };
-        /**
-         * Animation loop.
-         */
-        MeshPreviewViewer.prototype.animate = function () {
-            requestAnimationFrame(this.animate.bind(this));
-            this._controls.update();
-            this._renderer.render(this.scene, this._camera);
-        };
-        MeshPreviewViewer.DefaultResolution = 512; // default MPV resolution
-        return MeshPreviewViewer;
-    }());
-    exports.MeshPreviewViewer = MeshPreviewViewer;
-});
 define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function (require, exports, chai_2, THREE) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
@@ -2710,7 +2680,7 @@ define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function 
     }());
     exports.UnitTests = UnitTests;
 });
-define("Workbench/DepthBufferTest", ["require", "exports", "three", "DepthBuffer/DepthBufferFactory", "Viewer/Graphics", "Viewer/MeshPreviewViewer", "System/Services", "Viewer/TrackballControls"], function (require, exports, THREE, DepthBufferFactory_1, Graphics_2, MeshPreviewViewer_1, Services_6, TrackballControls_3) {
+define("Workbench/DepthBufferTest", ["require", "exports", "three", "DepthBuffer/DepthBufferFactory", "Viewer/Graphics", "Viewer/MeshPreviewViewer", "System/Services", "Viewer/TrackballControls"], function (require, exports, THREE, DepthBufferFactory_1, Graphics_2, MeshPreviewViewer_2, Services_7, TrackballControls_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var modelCanvas;
@@ -2921,7 +2891,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "DepthBuffer
         animate();
     }
     function initializeMeshPreviewViewer() {
-        meshPreviewViewer = new MeshPreviewViewer_1.MeshPreviewViewer();
+        meshPreviewViewer = new MeshPreviewViewer_2.MeshPreviewViewer();
     }
     /**
      *  Event handler to create depth buffers.
@@ -2934,12 +2904,12 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "DepthBuffer
         meshPreviewViewer.root.add(previewMesh);
     }
     function main() {
-        logger = Services_6.Services.htmlLogger;
+        logger = Services_7.Services.htmlLogger;
         initializeModelViewer();
         initializeMeshPreviewViewer();
         var cameraButton = document.querySelector("#" + CameraButtonId).onclick = takePhotograph;
+        takePhotograph();
     }
     main();
-    takePhotograph();
 });
 //# sourceMappingURL=modelrelief.js.map

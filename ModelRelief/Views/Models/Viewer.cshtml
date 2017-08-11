@@ -8,15 +8,14 @@
     <div id="glFullscreen">
         <div id="dat"></div>
         <canvas id="model3D"></canvas>
+        <canvas id="previewCanvas"></canvas>
     </div>
-
-    <input id="fileUploadInput" type="file" name="files[]" multiple accept=".obj,.mtl" />
 
     <text id="modelName">@Model.Name</text>
     <text id="modelPath">@Model.Path</text>
 
     <!------------------------------------------------------------------------------------------------>
-    <!--                                    Libraries                                               -->
+    <!--                        fileuploa            Libraries                                               -->
     <!------------------------------------------------------------------------------------------------>
     <script src="/lib/threejs/Detector.js"></script>
     <script src="/lib/require.js"></script>

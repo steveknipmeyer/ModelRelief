@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:60655//Workbench/DepthBufferTest",
+      "applicationUrl": "http://localhost:60655//Models/Viewer/5",
       "sslPort": 44368
     }
   },

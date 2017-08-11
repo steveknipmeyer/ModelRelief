@@ -6,11 +6,12 @@
 "use strict";
 
 import * as THREE               from 'three'
-import * as dat                 from 'dat-gui'
 
 import {TrackballControls}      from 'TrackballControls'
 import {Graphics}               from 'Graphics'
+import {Logger}                 from 'Logger'
 import {Materials}              from 'Materials'
+import {Services}               from 'Services'
 
 interface CameraDefaults {
     position:   THREE.Vector3;        // location of camera
@@ -42,9 +43,7 @@ export class Viewer {
     cameraTarget:   THREE.Vector3;
 
     controls :      TrackballControls;
-
-    displayGrid :   boolean;
-    depthBuffer :   boolean;
+    logger   :      Logger;
 
     /**
      * Default constructor
@@ -53,7 +52,9 @@ export class Viewer {
      * @param elementToBindTo HTML element to host the viewer.
      */
     constructor(elementToBindTo: HTMLCanvasElement) {
-            
+                    
+        this.logger = Services.consoleLogger;
+
         this.renderer = null;
         this.canvas = elementToBindTo;
         this.aspectRatio = 1;
@@ -65,8 +66,6 @@ export class Viewer {
         this.controls = null;
 
         this.initializeScene();
-
-        this.initializeViewerControls();
 
         this.initializeGL();
 
@@ -244,79 +243,13 @@ export class Viewer {
     } 
 
     /**
-     * Initialize the view settings that are controllable by the user
+     * Display the reference grid.
      */
-    initializeViewerControls() {
-        
-        class ViewerControls {
-            displayGrid: boolean;
-            depthBuffer: boolean;
+    displayGrid(visible : boolean) {
 
-            constructor() {
-                this.displayGrid = true;
-                this.depthBuffer = false;
-            }
-        }
-        let scope = this;
-        let viewerControls = new ViewerControls();
-
-        // Init dat.gui and controls for the UI
-        var gui = new dat.GUI({
-            autoPlace: false,
-            width: 320
-        });
-        var menuDiv = document.getElementById('dat');
-        menuDiv.appendChild(gui.domElement);
-        var folderOptions = gui.addFolder('ModelViewer Options');
-
-        // Grid
-        var controlDisplayGrid = folderOptions.add(viewerControls, 'displayGrid').name('Display Grid');
-        controlDisplayGrid.onChange (function (value) {
-
-            scope.displayGrid = value;
-
-            let gridGeometry : THREE.Object3D = this.scene.getObjectByName(ObjectNames.Grid);
-            gridGeometry.visible = scope.displayGrid;
-
-            console.log('Setting displayGrid to: ' + value);
-        }.bind(this));
-
-        // Depth Buffer
-        let depthBufferMaterial = Materials.createDepthBufferMaterial(0x5555ff);
-        let whiteMaterial = new THREE.MeshPhongMaterial();
-        whiteMaterial.color = new THREE.Color (0xffffff);
-
-        var controlDepthBuffer = folderOptions.add(viewerControls, 'depthBuffer').name('Depth Buffer');
-        controlDepthBuffer.onChange (function (value) {
-
-            scope.depthBuffer = value;
-
-            let newMaterial = scope.depthBuffer ? depthBufferMaterial : whiteMaterial;
-            scope.changeObjectMaterials(newMaterial);
-
-            console.log('Setting depthBuffer to: ' + value);
-        }.bind(this));
-
-        folderOptions.open();
-    }
-
-    /**
-     * Change materials of all scene objects
-     */
-    changeObjectMaterials(material : THREE.Material) {
-
-        let scope = this;
-        let applyMaterial = function (object : THREE.Object3D) {
-            
-            if (!(object instanceof THREE.Mesh) )
-                return;
-
-            console.log('Applying material: ' + object.name);
-            object.material = material;
-            object.material.needsUpdate = true;
-            }
-        this.root.traverse(applyMaterial);
-        }
-        
+        let gridGeometry : THREE.Object3D = this.scene.getObjectByName(ObjectNames.Grid);
+        gridGeometry.visible = visible;
+        this.logger.addInfoMessage(`Display grid = ${visible}`);
     } 
+} 
 
