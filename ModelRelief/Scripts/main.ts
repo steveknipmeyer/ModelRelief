@@ -56,6 +56,7 @@ export class ModelRelief {
      * Launch the model Viewer.
      */
     run () {
+
         console.log ('ModelRelief started');   
 
         let viewer = new Viewer(<HTMLCanvasElement> document.getElementById('model3D'));

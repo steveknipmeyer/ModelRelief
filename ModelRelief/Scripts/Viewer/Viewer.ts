@@ -30,21 +30,21 @@ const ObjectNames = {
  */
 export class Viewer {
    
-    renderer: THREE.WebGLRenderer;
-    canvas: HTMLCanvasElement;
-    aspectRatio: number;
+    renderer:       THREE.WebGLRenderer;
+    canvas:         HTMLCanvasElement;
+    aspectRatio:    number;
 
-    scene: THREE.Scene;
-    root: THREE.Object3D; 
+    scene:          THREE.Scene;
+    root:           THREE.Object3D; 
 
-    camera: THREE.PerspectiveCamera;
+    camera:         THREE.PerspectiveCamera;
     cameraDefaults: CameraDefaults;
-    cameraTarget: THREE.Vector3;
+    cameraTarget:   THREE.Vector3;
 
-    controls : TrackballControls;
+    controls :      TrackballControls;
 
-    displayGrid : boolean;
-    depthBuffer : boolean;
+    displayGrid :   boolean;
+    depthBuffer :   boolean;
 
     /**
      * Default constructor

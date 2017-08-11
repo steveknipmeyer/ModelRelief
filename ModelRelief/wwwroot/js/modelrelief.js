@@ -1791,6 +1791,11 @@ define("main", ["require", "exports", "three", "Viewer/Viewer", "ModelLoaders/OB
          * Launch the model Viewer.
          */
         ModelRelief.prototype.run = function () {
+            var sceneA = new THREE.Scene();
+            var theGroup = new THREE.Group();
+            sceneA.add(theGroup);
+            var sceneB = new THREE.Scene();
+            sceneB.add(theGroup);
             console.log('ModelRelief started');
             var viewer = new Viewer_1.Viewer(document.getElementById('model3D'));
             this.loadModel(viewer);

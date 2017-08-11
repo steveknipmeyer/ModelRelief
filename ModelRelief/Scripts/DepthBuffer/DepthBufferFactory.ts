@@ -9,16 +9,12 @@
         Option for persisting the Factory in the constructor
     JSON compatible constructor parameters
     Fixed resolution; resizing support is not required.
-
-    class Relief {
-        factory : DepthBufferFactory;
-        mesh    : THREE.Mesh;
-    }
 */
 
 "use strict";
 
 import * as THREE               from 'three'
+
 import {DepthBuffer}            from 'DepthBuffer'
 import {Graphics}               from 'Graphics'
 import {Logger, ConsoleLogger}  from 'Logger'
