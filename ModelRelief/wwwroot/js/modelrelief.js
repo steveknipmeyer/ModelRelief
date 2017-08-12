@@ -2239,14 +2239,14 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
          * @param elementToBindTo HTML element to host the viewer.
          */
         function Viewer(modelCanvasId) {
-            this.camera = null;
-            this._defaultCameraSettings = null;
+            this._scene = null;
+            this._root = null;
             this._renderer = null;
             this._canvas = null;
             this._width = 0;
             this._height = 0;
-            this._scene = null;
-            this._root = null;
+            this.camera = null;
+            this._defaultCameraSettings = null;
             this._controls = null;
             this._logger = null;
             this._logger = Services_4.Services.consoleLogger;
@@ -2363,15 +2363,6 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
             window.addEventListener('resize', this.resizeWindow.bind(this), false);
         };
         //#endregion
-        //#region Camera
-        /**
-         * Resets all camera properties to the defaults
-         */
-        Viewer.prototype.resetCamera = function () {
-            this.camera.position.copy(this._defaultCameraSettings.position);
-            this.updateCamera();
-        };
-        //#endregion
         //#region Scene
         /**
          * Removes all scene objects
@@ -2395,6 +2386,15 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
             var gridGeometry = this._scene.getObjectByName(ObjectNames.Grid);
             gridGeometry.visible = visible;
             this._logger.addInfoMessage("Display grid = " + visible);
+        };
+        //#endregion
+        //#region Camera
+        /**
+         * Resets all camera properties to the defaults
+         */
+        Viewer.prototype.resetCamera = function () {
+            this.camera.position.copy(this._defaultCameraSettings.position);
+            this.updateCamera();
         };
         //#endregion
         //#region Window Resize
@@ -2423,12 +2423,11 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
             this.resizeDisplayWebGL();
         };
         //#endregion
+        //#region Render Loop
         /**
          * Performs the WebGL render of the scene
          */
         Viewer.prototype.renderWebGL = function () {
-            if (!this._renderer.autoClear)
-                this._renderer.clear();
             this._controls.update();
             this._renderer.render(this._scene, this.camera);
         };
@@ -2560,17 +2559,15 @@ define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "Viewer/Graph
         function MeshPreviewViewer(previewCanvasId) {
             this._scene = null;
             this._root = null;
+            this._renderer = null;
             this._canvas = null;
             this._width = 0;
             this._height = 0;
-            this._renderer = null;
             this._camera = null;
+            this._defaultCameraSettings = null;
             this._controls = null;
-            this._cameraZPosition = 4;
-            this._cameraNearPlane = 2;
-            this._cameraFarPlane = 10.0;
-            this._fieldOfView = 37; // https://www.nikonians.org/reviews/fov-tables
             this._logger = null;
+            this._logger = Services_5.Services.htmlLogger;
             this._canvas = Graphics_2.Graphics.initializeCanvas(previewCanvasId);
             this._width = this._canvas.offsetWidth;
             this._height = this._canvas.offsetHeight;
@@ -2588,7 +2585,27 @@ define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "Viewer/Graph
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(MeshPreviewViewer.prototype, "aspectRatio", {
+            /**
+             * Calculates the aspect ratio of the canvas afer a window resize
+             */
+            get: function () {
+                var aspectRatio = this._width / this._height;
+                return aspectRatio;
+            },
+            enumerable: true,
+            configurable: true
+        });
         //#endregion
+        //#region Initialization
+        /**
+             * Constructs the scene used to visualize the 3D mesh.
+             */
+        MeshPreviewViewer.prototype.initializeScene = function () {
+            this._scene = new THREE.Scene();
+            this._root = new THREE.Group();
+            this._scene.add(this._root);
+        };
         /**
          * Initializes the preview renderer used to view the 3D mesh.
          */
@@ -2596,54 +2613,52 @@ define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "Viewer/Graph
             this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas });
             this._renderer.setPixelRatio(window.devicePixelRatio);
             this._renderer.setSize(this._width, this._height);
-            this._camera = new THREE.PerspectiveCamera(this._fieldOfView, this._width / this._height, this._cameraNearPlane, this._cameraFarPlane);
-            this._camera.position.z = this._cameraZPosition;
+        };
+        /**
+         * Initializes perspective camera.
+         */
+        MeshPreviewViewer.prototype.initializeCamera = function () {
+            this._defaultCameraSettings = {
+                position: new THREE.Vector3(0.0, 0.0, 4.0),
+                target: new THREE.Vector3(0, 0, 0),
+                near: 2.0,
+                far: 10.0,
+                fieldOfView: 37 // https://www.nikonians.org/reviews/fov-tables
+            };
+            this._camera = new THREE.PerspectiveCamera(this._defaultCameraSettings.fieldOfView, this.aspectRatio, this._defaultCameraSettings.near, this._defaultCameraSettings.far);
+            this._camera.position.copy(this._defaultCameraSettings.position);
+            this.resetCamera();
+        };
+        /**
+         * Adds lighting to the scene.
+         */
+        MeshPreviewViewer.prototype.initializeLighting = function () {
+            var ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+            this._scene.add(ambientLight);
+            var directionalLight1 = new THREE.DirectionalLight(0xffffff);
+            directionalLight1.position.set(4, 4, 4);
+            this._scene.add(directionalLight1);
+        };
+        /**
+         * Sets up the user input controls (Trackball)
+         */
+        MeshPreviewViewer.prototype.initializeInputControls = function () {
             this._controls = new TrackballControls_2.TrackballControls(this._camera, this._renderer.domElement);
-            this.setupScene();
-            this.initializeLighting(this._scene);
         };
         /**
          * Initialize the application.
          */
         MeshPreviewViewer.prototype.initialize = function () {
-            this._logger = Services_5.Services.htmlLogger;
+            this.initializeScene();
             this.initializeRenderer();
+            this.initializeCamera();
+            this.initializeLighting();
+            this.initializeInputControls();
             this.onWindowResize();
             window.addEventListener('resize', this.onWindowResize.bind(this), false);
         };
-        /**
-         * Updates a renderer properties.
-         * Event handler called on window resize.
-         * @param renderer Renderer to update.
-         * @param width Width of the renderer.
-         * @param height Height of the renderer.
-         * @param camera Renderer's camera.
-         */
-        MeshPreviewViewer.prototype.updateViewOnWindowResize = function (renderer, width, height, camera) {
-            var aspect = width / height;
-            if (camera) {
-                camera.aspect = aspect;
-                camera.updateProjectionMatrix();
-            }
-            renderer.setSize(width, height);
-        };
-        /**
-         * Event handler called on window resize.
-         */
-        MeshPreviewViewer.prototype.onWindowResize = function () {
-            this.updateViewOnWindowResize(this._renderer, this._width, this._height, this._camera);
-        };
-        /**
-         * Adds lighting to the scene.
-         * param theScene Scene to add lighting.
-         */
-        MeshPreviewViewer.prototype.initializeLighting = function (theScene) {
-            var ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-            theScene.add(ambientLight);
-            var directionalLight1 = new THREE.DirectionalLight(0xffffff);
-            directionalLight1.position.set(4, 4, 4);
-            theScene.add(directionalLight1);
-        };
+        //#endregion
+        //#region Scene
         /**
          * Adds helpers to the scene to visualize camera, coordinates, etc.
          * @param scene Scene to annotate.
@@ -2662,21 +2677,56 @@ define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "Viewer/Graph
                 scene.add(axisHelper);
             }
         };
+        //#endregion
+        //#region Camera
         /**
-         * Constructs the scene used to visualize the 3D mesh.
+         * Resets all camera properties to the defaults
          */
-        MeshPreviewViewer.prototype.setupScene = function () {
-            this._scene = new THREE.Scene();
-            this._root = new THREE.Group();
-            this._scene.add(this._root);
+        MeshPreviewViewer.prototype.resetCamera = function () {
+            this._camera.position.copy(this._defaultCameraSettings.position);
+            this.updateCamera();
+        };
+        //#endregion
+        //#region Window Resize
+        /**
+         * Updates the scene camera to match the new window size
+         */
+        MeshPreviewViewer.prototype.updateCamera = function () {
+            this._camera.aspect = this.aspectRatio;
+            this._camera.lookAt(this._defaultCameraSettings.target);
+            this._camera.updateProjectionMatrix();
         };
         /**
-         * Animation loop.
+         * Handles the WebGL processing for a DOM window 'resize' event
+         */
+        MeshPreviewViewer.prototype.resizeDisplayWebGL = function () {
+            this._width = this._canvas.offsetWidth;
+            this._height = this._canvas.offsetHeight;
+            this._renderer.setSize(this._width, this._height, false);
+            this._controls.handleResize();
+            this.updateCamera();
+        };
+        /**
+         * Handles a window resize event
+         */
+        MeshPreviewViewer.prototype.onWindowResize = function () {
+            this.resizeDisplayWebGL();
+        };
+        //#endregion
+        //#region Render Loop
+        /**
+         * Performs the WebGL render of the scene
+         */
+        MeshPreviewViewer.prototype.renderWebGL = function () {
+            this._controls.update();
+            this._renderer.render(this._scene, this._camera);
+        };
+        /**
+         * Main DOM render loop
          */
         MeshPreviewViewer.prototype.animate = function () {
             requestAnimationFrame(this.animate.bind(this));
-            this._controls.update();
-            this._renderer.render(this._scene, this._camera);
+            this.renderWebGL();
         };
         return MeshPreviewViewer;
     }());

@@ -6,15 +6,10 @@
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
 
-aspectRatio property of viewing classes
-
-Share CameraSettings. Class?
-
 Graphics
     ModelHelpers
         Grid helper
         World Axes helper
-    initializeCanvas
 
 Core
     Calculate model extents so the clip planes can be optimized in DepthBuferFactory.

@@ -5,13 +5,13 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE               from 'three'
+import * as THREE                   from 'three'
 
-import {Graphics}               from 'Graphics'
-import {Logger, HTMLLogger}     from 'Logger'
-import {MathLibrary}            from 'Math'
-import {Services}               from 'Services'
-import {TrackballControls}      from 'TrackballControls'
+import {CameraSettings, Graphics}   from 'Graphics'
+import {Logger, HTMLLogger}         from 'Logger'
+import {MathLibrary}                from 'Math'
+import {Services}                   from 'Services'
+import {TrackballControls}          from 'TrackballControls'
 
 /**
  * @class
@@ -22,18 +22,15 @@ export class MeshPreviewViewer {
     _scene              : THREE.Scene               = null;;
     _root               : THREE.Group               = null;
 
+    _renderer           : THREE.WebGLRenderer       = null;;
     _canvas             : HTMLCanvasElement         = null;
     _width              : number                    = 0;
     _height             : number                    = 0;
 
-    _renderer           : THREE.WebGLRenderer       = null;;
     _camera             : THREE.PerspectiveCamera   = null;
+    _defaultCameraSettings  : CameraSettings            = null;
+
     _controls           : TrackballControls         = null;
-    
-    _cameraZPosition    : number                    = 4
-    _cameraNearPlane    : number                    = 2;
-    _cameraFarPlane     : number                    = 10.0;
-    _fieldOfView        : number                    = 37;                                   // https://www.nikonians.org/reviews/fov-tables
 
     _logger             : Logger                    = null;
     
@@ -42,11 +39,14 @@ export class MeshPreviewViewer {
      */
     constructor(previewCanvasId : string) {
 
+        this._logger = Services.htmlLogger;       
+
         this._canvas = Graphics.initializeCanvas(previewCanvasId);
         this._width  = this._canvas.offsetWidth;
         this._height = this._canvas.offsetHeight;
 
         this.initialize()
+
         this.animate();
     }
 
@@ -57,7 +57,27 @@ export class MeshPreviewViewer {
         this._root.add(value);
     }
 
+    /**
+     * Calculates the aspect ratio of the canvas afer a window resize
+     */
+    get aspectRatio() : number {
+
+        let aspectRatio : number = this._width / this._height;
+        return aspectRatio;
+    } 
+
 //#endregion
+
+//#region Initialization
+/**
+     * Constructs the scene used to visualize the 3D mesh.
+     */
+    initializeScene() {
+    
+        this._scene = new THREE.Scene();
+        this._root = new THREE.Group();
+        this._scene.add(this._root);
+    }
 
     /**
      * Initializes the preview renderer used to view the 3D mesh.
@@ -67,70 +87,67 @@ export class MeshPreviewViewer {
         this._renderer = new THREE.WebGLRenderer( {canvas : this._canvas});
         this._renderer.setPixelRatio(window.devicePixelRatio);
         this._renderer.setSize(this._width, this._height);
+    }
 
-        this._camera = new THREE.PerspectiveCamera(this._fieldOfView, this._width / this._height, this._cameraNearPlane, this._cameraFarPlane);
-        this._camera.position.z = this._cameraZPosition;
+    /**
+     * Initializes perspective camera.
+     */
+    initializeCamera() {
+
+        this._defaultCameraSettings = {
+
+            position:       new THREE.Vector3(0.0, 0.0, 4.0),
+            target:         new THREE.Vector3(0, 0, 0),
+            near:           2.0,
+            far:            10.0,
+            fieldOfView:    37                                  // https://www.nikonians.org/reviews/fov-tables
+        };
+
+        this._camera = new THREE.PerspectiveCamera(this._defaultCameraSettings.fieldOfView, this.aspectRatio, this._defaultCameraSettings.near, this._defaultCameraSettings.far);
+        this._camera.position.copy(this._defaultCameraSettings.position);
+
+        this.resetCamera();
+    }
+
+    /**
+     * Adds lighting to the scene.
+     */
+    initializeLighting() {
+
+        let ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+        this._scene.add(ambientLight);
+
+        let directionalLight1 = new THREE.DirectionalLight(0xffffff);
+        directionalLight1.position.set(4, 4, 4);
+        this._scene.add(directionalLight1);
+    }
+
+    /**
+     * Sets up the user input controls (Trackball)
+     */
+    initializeInputControls() {
 
         this._controls = new TrackballControls(this._camera, this._renderer.domElement);
-
-        this.setupScene();
-
-        this.initializeLighting(this._scene);
     }
 
     /**
      * Initialize the application.
      */
     initialize() {
-    
-        this._logger = Services.htmlLogger;       
 
+        this.initializeScene();
         this.initializeRenderer();
+        this.initializeCamera();
+        this.initializeLighting();
+        this.initializeInputControls();
 
         this.onWindowResize();
         window.addEventListener('resize', this.onWindowResize.bind(this), false);
     }
 
-    /**
-     * Updates a renderer properties.
-     * Event handler called on window resize.
-     * @param renderer Renderer to update.
-     * @param width Width of the renderer.
-     * @param height Height of the renderer.
-     * @param camera Renderer's camera.
-     */
-    updateViewOnWindowResize(renderer : THREE.Renderer, width : number, height : number, camera? : THREE.PerspectiveCamera) {
+//#endregion
 
-        let aspect : number = width / height;
-        if (camera) {
-            camera.aspect = aspect;
-            camera.updateProjectionMatrix();
-        }
-        renderer.setSize(width, height);
-    }
-
-    /**
-     * Event handler called on window resize.
-     */
-    onWindowResize() {
-
-        this.updateViewOnWindowResize(this._renderer,  this._width, this._height,  this._camera);
-    }
-
-    /**
-     * Adds lighting to the scene.
-     * param theScene Scene to add lighting.
-     */
-    initializeLighting(theScene : THREE.Scene) {
-
-        let ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-        theScene.add(ambientLight);
-
-        let directionalLight1 = new THREE.DirectionalLight(0xffffff);
-        directionalLight1.position.set(4, 4, 4);
-        theScene.add(directionalLight1);
-    }
-
+//#region Scene
      /**
       * Adds helpers to the scene to visualize camera, coordinates, etc. 
       * @param scene Scene to annotate.
@@ -151,26 +168,69 @@ export class MeshPreviewViewer {
             scene.add(axisHelper);
         }
     }
+//#endregion
 
+//#region Camera
     /**
-     * Constructs the scene used to visualize the 3D mesh.
+     * Resets all camera properties to the defaults
      */
-    setupScene() {
-    
-        this._scene = new THREE.Scene();
-        this._root = new THREE.Group();
-        this._scene.add(this._root);
+    resetCamera() {
+
+        this._camera.position.copy(this._defaultCameraSettings.position);
+        this.updateCamera();
+    }
+//#endregion
+
+//#region Window Resize
+    /**
+     * Updates the scene camera to match the new window size
+     */
+    updateCamera() {
+
+        this._camera.aspect = this.aspectRatio;
+        this._camera.lookAt(this._defaultCameraSettings.target);
+        this._camera.updateProjectionMatrix();
     }
 
     /**
-     * Animation loop.
+     * Handles the WebGL processing for a DOM window 'resize' event
+     */
+    resizeDisplayWebGL() {
+
+        this._width =  this._canvas.offsetWidth;
+        this._height = this._canvas.offsetHeight;
+        this._renderer.setSize(this._width, this._height, false);
+
+        this._controls.handleResize();
+        this.updateCamera();
+    }
+
+    /**
+     * Handles a window resize event
+     */
+    onWindowResize () {
+
+        this.resizeDisplayWebGL();
+    }
+//#endregion
+
+//#region Render Loop
+    /**
+     * Performs the WebGL render of the scene
+     */
+    renderWebGL() {
+
+        this._controls.update();
+        this._renderer.render(this._scene, this._camera);
+    }
+
+    /**
+     * Main DOM render loop
      */
     animate() {
 
         requestAnimationFrame(this.animate.bind(this));
-
-        this._controls.update();
-
-        this._renderer.render(this._scene, this._camera); 
+        this.renderWebGL();
     }
+//#endregion
 }

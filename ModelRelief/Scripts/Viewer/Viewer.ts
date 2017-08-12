@@ -22,17 +22,17 @@ const ObjectNames = {
  * @exports Viewer/Viewer
  */
 export class Viewer {
-   
-    camera                  : THREE.PerspectiveCamera   = null;
-    _defaultCameraSettings  : CameraSettings            = null;
+
+    _scene                  : THREE.Scene               = null;
+    _root                   : THREE.Object3D            = null;      
                                                         
     _renderer               : THREE.WebGLRenderer       = null;;
     _canvas                 : HTMLCanvasElement         = null;
     _width                  : number                    = 0;
     _height                 : number                    = 0;
 
-    _scene                  : THREE.Scene               = null;
-    _root                   : THREE.Object3D            = null;      
+    camera                  : THREE.PerspectiveCamera   = null;
+    _defaultCameraSettings  : CameraSettings            = null;
 
     _controls               : TrackballControls         = null;
 
@@ -183,17 +183,6 @@ export class Viewer {
     }
 //#endregion
 
-//#region Camera
-    /**
-     * Resets all camera properties to the defaults
-     */
-    resetCamera() {
-
-        this.camera.position.copy(this._defaultCameraSettings.position);
-        this.updateCamera();
-    }
-//#endregion
-
 //#region Scene
     /**
      * Removes all scene objects
@@ -223,6 +212,17 @@ export class Viewer {
         gridGeometry.visible = visible;
         this._logger.addInfoMessage(`Display grid = ${visible}`);
     } 
+//#endregion
+
+//#region Camera
+    /**
+     * Resets all camera properties to the defaults
+     */
+    resetCamera() {
+
+        this.camera.position.copy(this._defaultCameraSettings.position);
+        this.updateCamera();
+    }
 //#endregion
 
 //#region Window Resize
@@ -258,13 +258,11 @@ export class Viewer {
     }
 //#endregion
 
+//#region Render Loop
     /**
      * Performs the WebGL render of the scene
      */
     renderWebGL() {
-
-        if (!this._renderer.autoClear) 
-            this._renderer.clear();
 
         this._controls.update();
         this._renderer.render(this._scene, this.camera);
@@ -278,5 +276,6 @@ export class Viewer {
         requestAnimationFrame(this.animate.bind(this));
         this.renderWebGL();
     }
+//#endregion
 } 
 
