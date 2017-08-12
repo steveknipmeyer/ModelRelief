@@ -31,7 +31,7 @@ export class Viewer {
     _width                  : number                    = 0;
     _height                 : number                    = 0;
 
-    camera                  : THREE.PerspectiveCamera   = null;
+    _camera                 : THREE.PerspectiveCamera   = null;
     _defaultCameraSettings  : CameraSettings            = null;
 
     _controls               : TrackballControls         = null;
@@ -48,7 +48,7 @@ export class Viewer {
                     
         this._logger = Services.consoleLogger;
 
-        this._canvas         = <HTMLCanvasElement> document.getElementById(modelCanvasId);
+        this._canvas = Graphics.initializeCanvas(modelCanvasId);
         this._width  = this._canvas.offsetWidth;
         this._height = this._canvas.offsetHeight;
 
@@ -67,6 +67,14 @@ export class Viewer {
 
         Graphics.removeSceneObjectChildren(this._scene, this._root, false);
         this._root.add(value);
+    }
+
+    /**
+     * Gets the camera.
+     */
+    get camera() {
+
+        return this._camera;
     }
 
     /**
@@ -136,8 +144,8 @@ export class Viewer {
 
         this._defaultCameraSettings = useTestCamera ? settingsTestModels : settingsOBJ;    
 
-        this.camera = new THREE.PerspectiveCamera(this._defaultCameraSettings.fieldOfView, this.aspectRatio, this._defaultCameraSettings.near, this._defaultCameraSettings.far);
-        this.camera.position.copy(this._defaultCameraSettings.position);
+        this._camera = new THREE.PerspectiveCamera(this._defaultCameraSettings.fieldOfView, this.aspectRatio, this._defaultCameraSettings.near, this._defaultCameraSettings.far);
+        this._camera.position.copy(this._defaultCameraSettings.position);
 
         this.resetCamera();
     }

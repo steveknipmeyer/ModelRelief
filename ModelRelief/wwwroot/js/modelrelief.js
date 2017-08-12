@@ -2245,12 +2245,12 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
             this._canvas = null;
             this._width = 0;
             this._height = 0;
-            this.camera = null;
+            this._camera = null;
             this._defaultCameraSettings = null;
             this._controls = null;
             this._logger = null;
             this._logger = Services_4.Services.consoleLogger;
-            this._canvas = document.getElementById(modelCanvasId);
+            this._canvas = Graphics_1.Graphics.initializeCanvas(modelCanvasId);
             this._width = this._canvas.offsetWidth;
             this._height = this._canvas.offsetHeight;
             var useTestCamera = true;
@@ -2267,6 +2267,16 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
             set: function (value) {
                 Graphics_1.Graphics.removeSceneObjectChildren(this._scene, this._root, false);
                 this._root.add(value);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Viewer.prototype, "camera", {
+            /**
+             * Gets the camera.
+             */
+            get: function () {
+                return this._camera;
             },
             enumerable: true,
             configurable: true
@@ -2327,8 +2337,8 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
                 fieldOfView: 37 // https://www.nikonians.org/reviews/fov-tables
             };
             this._defaultCameraSettings = useTestCamera ? settingsTestModels : settingsOBJ;
-            this.camera = new THREE.PerspectiveCamera(this._defaultCameraSettings.fieldOfView, this.aspectRatio, this._defaultCameraSettings.near, this._defaultCameraSettings.far);
-            this.camera.position.copy(this._defaultCameraSettings.position);
+            this._camera = new THREE.PerspectiveCamera(this._defaultCameraSettings.fieldOfView, this.aspectRatio, this._defaultCameraSettings.near, this._defaultCameraSettings.far);
+            this._camera.position.copy(this._defaultCameraSettings.position);
             this.resetCamera();
         };
         /**
