@@ -175,6 +175,1099 @@ define("System/Logger", ["require", "exports"], function (require, exports) {
     }());
     exports.HTMLLogger = HTMLLogger;
 });
+define("System/Services", ["require", "exports", "System/Logger"], function (require, exports, Logger_1) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * Services
+     * General runtime support
+     * @class
+     */
+    var Services = (function () {
+        /**
+         * @constructor
+         */
+        function Services() {
+        }
+        Services.consoleLogger = new Logger_1.ConsoleLogger();
+        Services.htmlLogger = new Logger_1.HTMLLogger();
+        return Services;
+    }());
+    exports.Services = Services;
+});
+define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], function (require, exports, THREE, Services_1) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     *  General THREE.js/WebGL support routines
+     *  Graphics Library
+     *  @class
+     */
+    var Graphics = (function () {
+        /**
+         * @constructor
+         */
+        function Graphics() {
+        }
+        //#region Geometry
+        /* --------------------------------------------------------------------------------------------------------------------------------------//
+        //			Geometry
+        // --------------------------------------------------------------------------------------------------------------------------------------*/
+        /**
+         * Removes an object and all children from a scene.
+         * @param scene Scene holding object to be removed.
+         * @param rootObject Parent object (possibly with children).
+         */
+        Graphics.removeSceneObjectChildren = function (scene, rootObject, removeRoot) {
+            if (!scene || !rootObject)
+                return;
+            var logger = Services_1.Services.consoleLogger;
+            var remover = function (object3d) {
+                if (object3d === rootObject) {
+                    return;
+                }
+                logger.addInfoMessage('Removing: ' + object3d.name);
+                scene.remove(object3d);
+                if (object3d.hasOwnProperty('geometry')) {
+                    object3d.geometry.dispose();
+                }
+                if (object3d.hasOwnProperty('material')) {
+                    var material = object3d.material;
+                    if (material.hasOwnProperty('materials')) {
+                        var materials = material.materials;
+                        for (var iMaterial in materials) {
+                            if (materials.hasOwnProperty(iMaterial)) {
+                                materials[iMaterial].dispose();
+                            }
+                        }
+                    }
+                }
+                if (object3d.hasOwnProperty('texture')) {
+                    object3d.texture.dispose();
+                }
+            };
+            // remove root children from scene
+            rootObject.traverse(remover);
+            // remove root children from root
+            for (var iChild = 0; iChild < rootObject.children.length; iChild++) {
+                var child = rootObject.children[iChild];
+                rootObject.remove(child);
+            }
+            if (removeRoot)
+                scene.remove(rootObject);
+        };
+        /**
+         * @param position Location of bounding box.
+         * @param mesh Mesh from which to create bounding box.
+         * @ returns Mesh of the bounding box.
+         */
+        Graphics.createTransparentBoundingBox = function (position, mesh) {
+            var targetGeometry, boundingBox, width, height, depth, material, box;
+            targetGeometry = mesh.geometry;
+            targetGeometry.computeBoundingBox();
+            boundingBox = targetGeometry.boundingBox;
+            width = boundingBox.max.x - boundingBox.min.x;
+            height = boundingBox.max.y - boundingBox.min.y;
+            depth = boundingBox.max.z - boundingBox.min.z;
+            material = new THREE.MeshBasicMaterial({ color: 0x0000ff, opacity: 1.0, transparent: true, wireframe: true });
+            box = this.createBox(position, width, height, depth, material);
+            box.name = Graphics.BoundingBoxName;
+            box.visible = false;
+            return box;
+        };
+        /**
+         * Creates a box mesh.
+         * @param position Location of the box.
+         * @param width Width.
+         * @param height Height.
+         * @param depth Depth.
+         * @param material Optional material.
+         * @returns Box mesh.
+         */
+        Graphics.createBox = function (position, width, height, depth, material) {
+            var boxGeometry, boxMaterial, box;
+            boxGeometry = new THREE.BoxGeometry(width, height, depth);
+            boxGeometry.computeBoundingBox();
+            boxMaterial = material || new THREE.MeshPhongMaterial({ color: 0x0000ff, opacity: 1.0 });
+            box = new THREE.Mesh(boxGeometry, boxMaterial);
+            box.position.copy(position);
+            return box;
+        };
+        /**
+         * Creates a sphere mesh.
+         * @param position Origin of the sphere.
+         * @param radius Radius.
+         * @param color Color.
+         * @param segments Mesh segments.
+         */
+        Graphics.createSphere = function (position, radius, color, segments) {
+            var sphereGeometry, material, segmentCount = segments || 32, sphere;
+            Graphics.createBox;
+            sphereGeometry = new THREE.SphereGeometry(radius, segmentCount, segmentCount);
+            sphereGeometry.computeBoundingBox();
+            material = new THREE.MeshPhongMaterial({ color: color, opacity: 1.0, transparent: false, wireframe: false });
+            sphere = new THREE.Mesh(sphereGeometry, material);
+            sphere.position.copy(position);
+            return sphere;
+        };
+        /**
+     * Creates a line object.
+     * @param startPosition Start point.
+     * @param endPosition End point.
+     * @param color Color.
+     * @returns Line element.
+     */
+        Graphics.createLine = function (startPosition, endPosition, color) {
+            var line, lineGeometry, material;
+            lineGeometry = new THREE.Geometry();
+            lineGeometry.vertices.push(startPosition, endPosition);
+            material = new THREE.LineBasicMaterial({ color: color });
+            line = new THREE.Line(lineGeometry, material);
+            return line;
+        };
+        /**
+         * Creates an axes triad.
+         * @param position Origin of the triad.
+         * @param length Length of the coordinate arrow.
+         * @param headLength Length of the arrow head.
+         * @param headWidth Width of the arrow head.
+         */
+        Graphics.createWorldAxesTriad = function (position, length, headLength, headWidth) {
+            var triadGroup = new THREE.Object3D(), arrowPosition = position || new THREE.Vector3(), arrowLength = length || 15, arrowHeadLength = headLength || 1, arrowHeadWidth = headWidth || 1;
+            triadGroup.add(new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), arrowPosition, arrowLength, 0xff0000, arrowHeadLength, arrowHeadWidth));
+            triadGroup.add(new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), arrowPosition, arrowLength, 0x00ff00, arrowHeadLength, arrowHeadWidth));
+            triadGroup.add(new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), arrowPosition, arrowLength, 0x0000ff, arrowHeadLength, arrowHeadWidth));
+            return triadGroup;
+        };
+        /**
+         * Creates an axes grid.
+         * @param position  Origin of the axes grid.
+         * @param size Size of the grid.
+         * @param step Grid line intervals.
+         * @returns Grid object.
+         */
+        Graphics.createWorldAxesGrid = function (position, size, step) {
+            var gridGroup = new THREE.Object3D(), gridPosition = position || new THREE.Vector3(), gridSize = size || 10, gridStep = step || 1, colorCenterline = 0xff000000, xyGrid, yzGrid, zxGrid;
+            xyGrid = new THREE.GridHelper(gridSize, gridStep);
+            xyGrid.setColors(colorCenterline, 0xff0000);
+            xyGrid.position.copy(gridPosition.clone());
+            xyGrid.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
+            xyGrid.position.x += gridSize;
+            xyGrid.position.y += gridSize;
+            gridGroup.add(xyGrid);
+            yzGrid = new THREE.GridHelper(gridSize, gridStep);
+            yzGrid.setColors(colorCenterline, 0x00ff00);
+            yzGrid.position.copy(gridPosition.clone());
+            yzGrid.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 2);
+            yzGrid.position.y += gridSize;
+            yzGrid.position.z += gridSize;
+            gridGroup.add(yzGrid);
+            zxGrid = new THREE.GridHelper(gridSize, gridStep);
+            zxGrid.setColors(colorCenterline, 0x0000ff);
+            zxGrid.position.copy(gridPosition.clone());
+            zxGrid.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
+            zxGrid.position.z += gridSize;
+            zxGrid.position.x += gridSize;
+            gridGroup.add(zxGrid);
+            return gridGroup;
+        };
+        //#endregion
+        //#region Coordinate Conversion
+        /*
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        //  Coordinate Systems
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        FRAME	            EXAMPLE										SPACE                      UNITS                       NOTES
+    
+        Model               Catalog WebGL: Model, BandElement Block     object                      mm                          Rhino definitions
+        World               Design Model								world                       mm
+        View                Camera                                      view                        mm
+        Device              Normalized view							    device                      [(-1, -1), (1, 1)]
+        Screen.Page         HTML page									screen                      px                          0,0 at Top Left, +Y down    HTML page
+        Screen.Client       Browser view port 						    screen                      px                          0,0 at Top Left, +Y down    browser window
+        Screen.Container    DOM container								screen                      px                          0,0 at Top Left, +Y down    HTML canvas
+    
+        Mouse Event Properties
+        http://www.jacklmoore.com/notes/mouse-position/
+        */
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        //			World Coordinates
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        /**
+         * Converts a JQuery event to world coordinates.
+         * @param event Event.
+         * @param container DOM container.
+         * @param camera Camera.
+         * @returns World coordinates.
+         */
+        Graphics.worldCoordinatesFromJQEvent = function (event, container, camera) {
+            var worldCoordinates, deviceCoordinates2D, deviceCoordinates3D, deviceZ;
+            deviceCoordinates2D = this.deviceCoordinatesFromJQEvent(event, container);
+            deviceZ = (camera instanceof THREE.PerspectiveCamera) ? 0.5 : 1.0;
+            deviceCoordinates3D = new THREE.Vector3(deviceCoordinates2D.x, deviceCoordinates2D.y, deviceZ);
+            worldCoordinates = deviceCoordinates3D.unproject(camera);
+            return worldCoordinates;
+        };
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        //			View Coordinates
+        // --------------------------------------------------------------------------------------------------------------------------------------// 
+        /**
+         * Converts world coordinates to view coordinates.
+         * @param vector World coordinate vector to convert.
+         * @param camera Camera.
+         * @returns View coordinates.
+         */
+        Graphics.viewCoordinatesFromWorldCoordinates = function (vector, camera) {
+            var position = vector.clone(), viewCoordinates;
+            viewCoordinates = position.applyMatrix4(camera.matrixWorldInverse);
+            return viewCoordinates;
+        };
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        //			Device Coordinates
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        /**
+         * Converts a JQuery event to normalized device coordinates.
+         * @param event JQuery event.
+         * @param container DOM container.
+         * @returns Normalized device coordinates.
+         */
+        Graphics.deviceCoordinatesFromJQEvent = function (event, container) {
+            var deviceCoordinates, screenContainerCoordinates, ratioX, ratioY, deviceX, deviceY;
+            screenContainerCoordinates = this.screenContainerCoordinatesFromJQEvent(event, container);
+            ratioX = screenContainerCoordinates.x / container.width();
+            ratioY = screenContainerCoordinates.y / container.height();
+            deviceX = +((ratioX * 2) - 1); // [-1, 1]
+            deviceY = -((ratioY * 2) - 1); // [-1, 1]
+            deviceCoordinates = new THREE.Vector2(deviceX, deviceY);
+            return deviceCoordinates;
+        };
+        /**
+         * Converts world coordinates to device coordinates [-1, 1].
+         * @param vector  World coordinates vector.
+         * @param camera Camera.
+         * @preturns Device coorindates.
+         */
+        Graphics.deviceCoordinatesFromWorldCoordinates = function (vector, camera) {
+            // https://github.com/mrdoob/three.js/issues/78
+            var position = vector.clone(), deviceCoordinates2D, deviceCoordinates3D;
+            deviceCoordinates3D = position.project(camera);
+            deviceCoordinates2D = new THREE.Vector2(deviceCoordinates3D.x, deviceCoordinates3D.y);
+            return deviceCoordinates2D;
+        };
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        //			Screen Coordinates
+        // --------------------------------------------------------------------------------------------------------------------------------------//
+        /**
+         * Page coordinates from a JQuery event.
+         * @param event JQuery event.
+         * @returns Screen (page) coordinates.
+         */
+        Graphics.screenPageCoordinatesFromJQEvent = function (event) {
+            var screenPageCoordinates = new THREE.Vector2();
+            screenPageCoordinates.x = event.pageX;
+            screenPageCoordinates.y = event.pageY;
+            return screenPageCoordinates;
+        };
+        /**
+         * Client coordinates from a JQuery event.
+         * Client coordinates are relative to the <browser> view port. If the document has been scrolled it will
+         * be different than the page coordinates which are always relative to the top left of the <entire> HTML page document.
+         * http://www.bennadel.com/blog/1869-jquery-mouse-events-pagex-y-vs-clientx-y.htm
+         * @param event JQuery event.
+         * @returns Screen client coordinates.
+         */
+        Graphics.screenClientCoordinatesFromJQEvent = function (event) {
+            var screenClientCoordinates = new THREE.Vector2();
+            screenClientCoordinates.x = event.clientX;
+            screenClientCoordinates.y = event.clientY;
+            return screenClientCoordinates;
+        };
+        /**
+         * Converts JQuery event coordinates to screen container coordinates.
+         * @param event JQuery event.
+         * @param container DOM container.
+         * @returns Screen container coordinates.
+         */
+        Graphics.screenContainerCoordinatesFromJQEvent = function (event, container) {
+            var screenContainerCoordinates = new THREE.Vector2(), containerOffset, pageX, pageY;
+            containerOffset = container.offset();
+            // JQuery does not set pageX/pageY for Drop events. They are defined in the originalEvent member.
+            pageX = event.pageX || (event.originalEvent).pageX;
+            pageY = event.pageY || (event.originalEvent).pageY;
+            screenContainerCoordinates.x = pageX - containerOffset.left;
+            screenContainerCoordinates.y = pageY - containerOffset.top;
+            return screenContainerCoordinates;
+        };
+        /**
+         * Converts world coordinates to screen container coordinates.
+         * @param vector World vector.
+         * @param container DOM container.
+         * @param camera Camera.
+         * @returns Screen container coordinates.
+         */
+        Graphics.screenContainerCoordinatesFromWorldCoordinates = function (vector, container, camera) {
+            //https://github.com/mrdoob/three.js/issues/78
+            var position = vector.clone(), deviceCoordinates, screenContainerCoordinates, left, top;
+            // [(-1, -1), (1, 1)]
+            deviceCoordinates = this.deviceCoordinatesFromWorldCoordinates(position, camera);
+            left = ((+deviceCoordinates.x + 1) / 2) * container.width();
+            top = ((-deviceCoordinates.y + 1) / 2) * container.height();
+            screenContainerCoordinates = new THREE.Vector2(left, top);
+            return screenContainerCoordinates;
+        };
+        //#endregion
+        //#region Intersections
+        /* --------------------------------------------------------------------------------------------------------------------------------------//
+        //  Intersections
+        // --------------------------------------------------------------------------------------------------------------------------------------*/
+        /**
+         * Creates a Raycaster through the mouse world position.
+         * @param mouseWorld World coordinates.
+         * @param camera Camera.
+         * @returns THREE.Raycaster.
+         */
+        Graphics.raycasterFromMouse = function (mouseWorld, camera) {
+            var rayOrigin = new THREE.Vector3(mouseWorld.x, mouseWorld.y, camera.position.z), worldPoint = new THREE.Vector3(mouseWorld.x, mouseWorld.y, mouseWorld.z);
+            //          Tools.consoleLog('World mouse coordinates: ' + worldPoint.x + ', ' + worldPoint.y);
+            // construct ray from camera to mouse world
+            var raycaster = new THREE.Raycaster(rayOrigin, worldPoint.sub(rayOrigin).normalize());
+            return raycaster;
+        };
+        /**
+         * Returns the first Intersection located by the cursor.
+         * @param event JQuery event.
+         * @param container DOM container.
+         * @param camera Camera.
+         * @param sceneObjects Array of scene objects.
+         * @param recurse Recurse through objects.
+         * @returns First intersection with screen objects.
+         */
+        Graphics.getFirstIntersection = function (event, container, camera, sceneObjects, recurse) {
+            var raycaster, mouseWorld, iIntersection, intersection;
+            // construct ray from camera to mouse world
+            mouseWorld = Graphics.worldCoordinatesFromJQEvent(event, container, camera);
+            raycaster = Graphics.raycasterFromMouse(mouseWorld, camera);
+            // find all object intersections
+            var intersects = raycaster.intersectObjects(sceneObjects, recurse);
+            // no intersection?
+            if (intersects.length === 0) {
+                return null;
+            }
+            // use first; reject lines (Transform Frame)
+            for (iIntersection = 0; iIntersection < intersects.length; iIntersection++) {
+                intersection = intersects[iIntersection];
+                if (!(intersection.object instanceof THREE.Line))
+                    return intersection;
+            }
+            ;
+            return null;
+        };
+        //#endregion
+        //#region Helpers
+        /* --------------------------------------------------------------------------------------------------------------------------------------//
+        //  Helpers
+        // --------------------------------------------------------------------------------------------------------------------------------------*/
+        /**
+         * Constructs a WebGL target canvas.
+         * @param id DOM id for canvas.
+         * @param width Width of canvas.
+         * @param height Height of canvas.
+         */
+        Graphics.initializeCanvas = function (id, width, height) {
+            var canvas = document.querySelector("#" + id);
+            if (!canvas) {
+                Services_1.Services.consoleLogger.addErrorMessage("Canvas element id = " + id + " not found");
+                return null;
+            }
+            // CSS controls the size
+            if (!width || !height)
+                return canvas;
+            // render dimensions    
+            canvas.width = width;
+            canvas.height = height;
+            // DOM element dimensions (may be different than render dimensions)
+            canvas.style.width = width + "px";
+            canvas.style.height = height + "px";
+            return canvas;
+        };
+        Graphics.BoundingBoxName = 'Bounding Box';
+        return Graphics;
+    }());
+    exports.Graphics = Graphics;
+});
+define("System/Math", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * Math Library
+     * General mathematics routines
+     * @class
+     */
+    var MathLibrary = (function () {
+        /**
+         * @constructor
+         */
+        function MathLibrary() {
+        }
+        /**
+         * Returns whether two numbers are equal within the given tolerance.
+         * @param value First value to compare.
+         * @param other Second value to compare.
+         * @param tolerance Tolerance for comparison.
+         * @returns True if within tolerance.
+         */
+        MathLibrary.numbersEqualWithinTolerance = function (value, other, tolerance) {
+            return ((value >= (other - tolerance)) && (value <= (other + tolerance)));
+        };
+        return MathLibrary;
+    }());
+    exports.MathLibrary = MathLibrary;
+});
+define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "System/Math", "System/Services"], function (require, exports, chai_1, THREE, Math_1, Services_2) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     *  DepthBuffer
+     *  @class
+     */
+    var DepthBuffer = (function () {
+        /**
+         * @constructor
+         * @param rgbaArray Raw aray of RGBA bytes packed with floats.
+         * @param width Width of map.
+         * @param height Height of map.
+         * @param nearClipPlane Camera near clipping plane.
+         * @param farClipPlane Camera far clipping plane.
+         */
+        function DepthBuffer(rgbaArray, width, height, camera) {
+            this._rgbaArray = rgbaArray;
+            this.width = width;
+            this.height = height;
+            this.camera = camera;
+            this.initialize();
+        }
+        /**
+         * Initialize
+         */
+        DepthBuffer.prototype.initialize = function () {
+            this._logger = Services_2.Services.htmlLogger;
+            this._nearClipPlane = this.camera.near;
+            this._farClipPlane = this.camera.far;
+            this._cameraClipRange = this._farClipPlane - this._nearClipPlane;
+            // RGBA -> Float32
+            this.depths = new Float32Array(this._rgbaArray.buffer);
+        };
+        /**
+         * Convert a normalized depth [0,1] to depth in model units.
+         * @param normalizedDepth Normalized depth [0,1].
+         */
+        DepthBuffer.prototype.normalizedToModelDepth = function (normalizedDepth) {
+            return normalizedDepth;
+            //      return normalizedDepth * this.cameraClipRange;
+        };
+        /**
+         * Returns the normalized depth value at a pixel index
+         * @param row Buffer row.
+         * @param column Buffer column.
+         */
+        DepthBuffer.prototype.depthNormalized = function (row, column) {
+            var index = (row * this.width) + column;
+            return this.depths[index];
+        };
+        /**
+         * Returns the depth value at a pixel index
+         * @param row Map row.
+         * @param pixelColumn Map column.
+         */
+        DepthBuffer.prototype.depth = function (row, column) {
+            var depthNormalized = this.depthNormalized(row, column);
+            var depth = this.normalizedToModelDepth(depthNormalized);
+            return depth;
+        };
+        Object.defineProperty(DepthBuffer.prototype, "minimumNormalized", {
+            /**
+             * Returns the minimum normalized depth value.
+             */
+            get: function () {
+                var minimumNormalized = Number.MAX_VALUE;
+                for (var index = 0; index < this.depths.length; index++) {
+                    var depthValue = this.depths[index];
+                    if (depthValue < minimumNormalized)
+                        minimumNormalized = depthValue;
+                }
+                return minimumNormalized;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DepthBuffer.prototype, "minimum", {
+            /**
+             * Returns the minimum depth value.
+             */
+            get: function () {
+                var minimum = this.normalizedToModelDepth(this.minimumNormalized);
+                return minimum;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DepthBuffer.prototype, "maximumNormalized", {
+            /**
+             * Returns the maximum normalized depth value.
+             */
+            get: function () {
+                var maximumNormalized = Number.MIN_VALUE;
+                for (var index = 0; index < this.depths.length; index++) {
+                    var depthValue = this.depths[index];
+                    // skip values at far plane
+                    if (Math_1.MathLibrary.numbersEqualWithinTolerance(depthValue, 1.0, DepthBuffer.normalizedTolerance))
+                        continue;
+                    if (depthValue > maximumNormalized)
+                        maximumNormalized = depthValue;
+                }
+                return maximumNormalized;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DepthBuffer.prototype, "maximum", {
+            /**
+             * Returns the maximum depth value.
+             */
+            get: function () {
+                var maximum = this.normalizedToModelDepth(this.maximumNormalized);
+                return maximum;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DepthBuffer.prototype, "rangeNormalized", {
+            /**
+             * Returns the normalized depth range of the buffer.
+             */
+            get: function () {
+                var depthNormalized = this.maximumNormalized - this.minimumNormalized;
+                return depthNormalized;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DepthBuffer.prototype, "range", {
+            /**
+             * Returns the normalized depth of the buffer.
+             */
+            get: function () {
+                var depth = this.normalizedToModelDepth(this.rangeNormalized);
+                return depth;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DepthBuffer.prototype, "aspectRatio", {
+            /**
+             * Returns the aspect ration of the depth buffer.
+             */
+            get: function () {
+                return this.width / this.height;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+             * Returns the linear index of a model point in world coordinates.
+             * @param worldVertex Vertex of model.
+             */
+        DepthBuffer.prototype.getModelVertexIndices = function (worldVertex, planeBoundingBox) {
+            var boxSize = planeBoundingBox.getSize();
+            var meshExtents = new THREE.Vector2(boxSize.x, boxSize.y);
+            //  map coordinates to offsets in range [0, 1]
+            var offsetX = (worldVertex.x + (boxSize.x / 2)) / boxSize.x;
+            var offsetY = (worldVertex.y + (boxSize.y / 2)) / boxSize.y;
+            var row = offsetY * (this.height - 1);
+            var column = offsetX * (this.width - 1);
+            row = Math.round(row);
+            column = Math.round(column);
+            chai_1.assert.isTrue((row >= 0) && (row < this.height), ("Vertex (" + worldVertex.x + ", " + worldVertex.y + ", " + worldVertex.z + ") yielded row = " + row));
+            chai_1.assert.isTrue((column >= 0) && (column < this.width), ("Vertex (" + worldVertex.x + ", " + worldVertex.y + ", " + worldVertex.z + ") yielded column = " + column));
+            return new THREE.Vector2(row, column);
+        };
+        /**
+         * Returns the linear index of a model point in world coordinates.
+         * @param worldVertex Vertex of model.
+         */
+        DepthBuffer.prototype.getModelVertexIndex = function (worldVertex, planeBoundingBox) {
+            var indices = this.getModelVertexIndices(worldVertex, planeBoundingBox);
+            var row = indices.x;
+            var column = indices.y;
+            var index = (row * this.width) + column;
+            index = Math.round(index);
+            chai_1.assert.isTrue((index >= 0) && (index < this.depths.length), ("Vertex (" + worldVertex.x + ", " + worldVertex.y + ", " + worldVertex.z + ") yielded index = " + index));
+            return index;
+        };
+        /**
+         * Transforms the vertices of a mesh plane to match the depth offsets of the DB.
+         * @param meshPlane Mesh plane to transform.
+         */
+        DepthBuffer.prototype.transformMeshPlaneToMesh = function (meshPlane) {
+            var meshGeometry = meshPlane.geometry;
+            meshGeometry.computeBoundingBox();
+            var vertexCount = meshGeometry.vertices.length;
+            var clipRange = this._farClipPlane - this._nearClipPlane;
+            for (var iVertex = 0; iVertex < vertexCount; iVertex++) {
+                // calculate index of vertex in depth buffer based on view extents and camera transform
+                var vertex = meshGeometry.vertices[iVertex];
+                var depthBufferVertex = this.getModelVertexIndex(vertex, meshGeometry.boundingBox);
+                var depth = -this.depths[depthBufferVertex];
+                meshGeometry.vertices[iVertex].z = depth;
+            }
+            meshGeometry.computeFaceNormals();
+            meshGeometry.computeVertexNormals(true);
+            meshGeometry.verticesNeedUpdate = true;
+            meshGeometry.normalsNeedUpdate = true;
+        };
+        /**
+         * Constructs a mesh plane of the given base dimension.
+         * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ration.
+         * @param material Material to assign to mesh.
+         */
+        DepthBuffer.prototype.constructMeshPlane = function (modelWidth, material) {
+            var modelHeight = modelWidth * this.aspectRatio;
+            var meshGeometry = new THREE.PlaneGeometry(modelWidth, modelHeight, this.width, this.height);
+            var mesh = new THREE.Mesh(meshGeometry, material);
+            mesh.name = DepthBuffer.MeshModelName;
+            return mesh;
+        };
+        /**
+         * Constructs a mesh of the given base dimension.
+         * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ratio.
+         * @param material Material to assign to mesh.
+         */
+        DepthBuffer.prototype.meshByMeshPlane = function (modelWidth, material) {
+            if (!material)
+                material = new THREE.MeshPhongMaterial({ wireframe: false, color: 0xff00ff, reflectivity: 0.75, shininess: 0.75 });
+            // construct plane of given dimensions; resolution = depth buffer
+            var mesh = this.constructMeshPlane(modelWidth, material);
+            // tranlate mesh points to respective depths
+            this.transformMeshPlaneToMesh(mesh);
+            return mesh;
+        };
+        /**
+         * Constructs a mesh of the given base dimension.
+         * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ratio.
+         * @param material Material to assign to mesh.
+         */
+        DepthBuffer.prototype.mesh = function (modelWidth, material) {
+            if (!material)
+                material = new THREE.MeshPhongMaterial({ wireframe: false, color: 0xff00ff, reflectivity: 0.75, shininess: 0.75 });
+            var meshGeometry = new THREE.Geometry();
+            var faceSize = modelWidth / (this.width - 1);
+            var baseVertexIndex = 0;
+            for (var iRow = 0; iRow < (this.height - 1); iRow++) {
+                for (var iColumn = 0; iColumn < (this.width - 1); iColumn++) {
+                    var facePair = this.constructTriFacesAtOffset(iRow, iColumn, faceSize, baseVertexIndex);
+                    (_a = meshGeometry.vertices).push.apply(_a, facePair.vertices);
+                    (_b = meshGeometry.faces).push.apply(_b, facePair.faces);
+                    baseVertexIndex += 4;
+                }
+            }
+            meshGeometry.computeFaceNormals();
+            var mesh = new THREE.Mesh(meshGeometry, material);
+            mesh.name = DepthBuffer.MeshModelName;
+            return mesh;
+            var _a, _b;
+        };
+        /**
+         * Constructs a pair of triangular faces at the given offset in the DepthBuffer.
+         * @param row Row offset (Lower Left).
+         * @param column Column offset (Lower Left).
+         * @param faceSize Size of a face edge (not hypotenuse).
+         * @param baseVertexIndex Beginning offset in mesh geometry vertex array.
+         */
+        DepthBuffer.prototype.constructTriFacesAtOffset = function (row, column, faceSize, baseVertexIndex) {
+            var facePair = {
+                vertices: [],
+                faces: []
+            };
+            //  Vertices
+            //   2    3       
+            //   0    1
+            var meshWidth = (this.width - 1) * faceSize;
+            var meshHeight = (this.height - 1) * faceSize;
+            // mesh center will be at the world origin
+            var originX = (column * faceSize) - (meshWidth / 2);
+            var originY = (row * faceSize) - (meshHeight / 2);
+            var lowerLeft = new THREE.Vector3(originX + 0, originY + 0, -this.depth(row + 0, column + 0)); // baseVertexIndex + 0
+            var lowerRight = new THREE.Vector3(originX + faceSize, originY + 0, -this.depth(row + 0, column + 1)); // baseVertexIndex + 1
+            var upperLeft = new THREE.Vector3(originX + 0, originY + faceSize, -this.depth(row + 1, column + 0)); // baseVertexIndex + 2
+            var upperRight = new THREE.Vector3(originX + faceSize, originY + faceSize, -this.depth(row + 1, column + 1)); // baseVertexIndex + 3
+            facePair.vertices.push(lowerLeft, // baseVertexIndex + 0
+            lowerRight, // baseVertexIndex + 1
+            upperLeft, // baseVertexIndex + 2
+            upperRight // baseVertexIndex + 3
+            );
+            // right hand rule for polygon winding
+            facePair.faces.push(new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 1, baseVertexIndex + 3), new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 3, baseVertexIndex + 2));
+            return facePair;
+        };
+        /**
+         * Analyzes properties of a depth buffer.
+         */
+        DepthBuffer.prototype.analyze = function () {
+            this._logger.clearLog();
+            var middle = this.width / 2;
+            var decimalPlaces = 5;
+            var headerStyle = "font-family : monospace; font-weight : bold; color : blue; font-size : 18px";
+            var messageStyle = "font-family : monospace; color : black; font-size : 14px";
+            this._logger.addMessage('Camera Properties', headerStyle);
+            this._logger.addMessage("Near Plane = " + this.camera.near, messageStyle);
+            this._logger.addMessage("Far Plane  = " + this.camera.far, messageStyle);
+            this._logger.addMessage("Clip Range = " + (this.camera.far - this.camera.near), messageStyle);
+            this._logger.addEmptyLine();
+            this._logger.addMessage('Normalized', headerStyle);
+            this._logger.addMessage("Center Depth = " + this.depthNormalized(middle, middle).toFixed(decimalPlaces), messageStyle);
+            this._logger.addMessage("Z Depth = " + this.rangeNormalized.toFixed(decimalPlaces), messageStyle);
+            this._logger.addMessage("Minimum = " + this.minimumNormalized.toFixed(decimalPlaces), messageStyle);
+            this._logger.addMessage("Maximum = " + this.maximumNormalized.toFixed(decimalPlaces), messageStyle);
+            this._logger.addEmptyLine();
+            this._logger.addMessage('Model Units', headerStyle);
+            this._logger.addMessage("Center Depth = " + this.depth(middle, middle).toFixed(decimalPlaces), messageStyle);
+            this._logger.addMessage("Z Depth = " + this.range.toFixed(decimalPlaces), messageStyle);
+            this._logger.addMessage("Minimum = " + this.minimum.toFixed(decimalPlaces), messageStyle);
+            this._logger.addMessage("Maximum = " + this.maximum.toFixed(decimalPlaces), messageStyle);
+        };
+        DepthBuffer.MeshModelName = 'ModelMesh';
+        DepthBuffer.normalizedTolerance = .001;
+        return DepthBuffer;
+    }());
+    exports.DepthBuffer = DepthBuffer;
+});
+define("System/Tools", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * Tool Library
+     * General utility routines
+     * @class
+     */
+    var Tools = (function () {
+        /**
+         * @constructor
+         */
+        function Tools() {
+        }
+        //#region Utility
+        /// <summary>        
+        // Generate a pseudo GUID.
+        // http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
+        /// </summary>
+        Tools.generatePseudoGUID = function () {
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+            }
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                s4() + '-' + s4() + s4() + s4();
+        };
+        return Tools;
+    }());
+    exports.Tools = Tools;
+});
+// ------------------------------------------------------------------------// 
+// ModelRelief                                                             //
+//                                                                         //                                                                          
+// Copyright (c) <2017> Steve Knipmeyer                                    //
+// ------------------------------------------------------------------------//
+/*
+  Requirements
+    No persistent DOM element. The canvas is created dynamically.
+        Option for persisting the Factory in the constructor
+    JSON compatible constructor parameters
+    Fixed resolution; resizing support is not required.
+*/
+define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthBuffer/DepthBuffer", "System/Services", "System/Tools"], function (require, exports, THREE, DepthBuffer_1, Services_3, Tools_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * @class
+     * DepthBufferFactory
+     */
+    var DepthBufferFactory = (function () {
+        /**
+         * @constructor
+         * @param parameters Initialization parameters (DepthBufferFactoryParameters)
+         */
+        function DepthBufferFactory(parameters) {
+            this._width = DepthBufferFactory.DefaultResolution; // width resolution of the DB
+            this._height = DepthBufferFactory.DefaultResolution; // height resolution of the DB
+            this._logDepthBuffer = false; // use a logarithmic buffer for more accuracy in large scenes
+            this._boundedClipping = true; // override camera clipping planes; set near and far to bound model for improved accuracy
+            this._depthBuffer = null; // depth buffer 
+            this._target = null; // WebGL render target for creating the WebGL depth buffer when rendering the scene
+            this._encodedTarget = null; // WebGL render target for encodin the WebGL depth buffer into a floating point (RGBA format)
+            this._canvas = null; // DOM canvas supporting renderer
+            this._renderer = null; // scene renderer
+            this._scene = null; // target scene
+            this._model = null; // target model
+            this._camera = null; // perspective camera to generate the depth buffer
+            this._postScene = null; // single polygon scene use to generate the encoded RGBA buffer
+            this._postCamera = null; // orthographic camera
+            this._postMaterial = null; // shader material that encodes the WebGL depth buffer into a floating point RGBA format
+            this._minimumWebGL = true; // true if minimum WeGL requirementat are present
+            this._logger = null; // logger
+            // required
+            this._width = parameters.width;
+            this._height = parameters.height;
+            this._model = parameters.model.clone();
+            // optional
+            this._camera = parameters.camera || null;
+            this._logDepthBuffer = parameters.logDepthBuffer || false;
+            this._boundedClipping = parameters.boundedClipping || true;
+            this.initialize();
+        }
+        /**
+         * Initialize default lighting in the scene.
+         * Lighting does not affect the depth buffer. It is only used if the canvas is made visible.
+         */
+        DepthBufferFactory.prototype.initializeLighting = function (scene) {
+            var ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+            scene.add(ambientLight);
+            var directionalLight1 = new THREE.DirectionalLight(0xffffff);
+            directionalLight1.position.set(1, 1, 1);
+            scene.add(directionalLight1);
+        };
+        /**
+         * Adds a background plane at the origin.
+         */
+        DepthBufferFactory.prototype.addBackgroundPlane = function (size) {
+            // background plane
+            var geometry = new THREE.PlaneGeometry(size, size);
+            var material = new THREE.MeshPhongMaterial({ color: 0xffffff });
+            var mesh = new THREE.Mesh(geometry, material);
+            var center = new THREE.Vector3(0.0, 0.0, 0.0);
+            mesh.position.set(center.x, center.y, center.z);
+            this._scene.add(mesh);
+        };
+        /**
+         * Perform setup and initialization of the render scene.
+         */
+        DepthBufferFactory.prototype.initializeScene = function () {
+            this._scene = new THREE.Scene();
+            if (this._model)
+                this._scene.add(this._model);
+            this.initializeLighting(this._scene);
+        };
+        /**
+         * Constructs the orthographic camera used to convert the WebGL depth buffer to the encoded RGBA buffer
+         */
+        DepthBufferFactory.prototype.initializePostCamera = function () {
+            // Setup post processing stage
+            var left = -1;
+            var right = 1;
+            var top = 1;
+            var bottom = -1;
+            var near = 0;
+            var far = 1;
+            this._postCamera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
+        };
+        /**
+         * Perform setup and initialization of the post scene used to create the final RGBA encoded depth buffer.
+         */
+        DepthBufferFactory.prototype.initializePostScene = function () {
+            var postMeshMaterial = new THREE.ShaderMaterial({
+                vertexShader: MR.shaderSource['DepthBufferVertexShader'],
+                fragmentShader: MR.shaderSource['DepthBufferFragmentShader'],
+                uniforms: {
+                    cameraNear: { value: this._camera.near },
+                    cameraFar: { value: this._camera.far },
+                    tDiffuse: { value: this._target.texture },
+                    tDepth: { value: this._target.depthTexture }
+                }
+            });
+            var postMeshPlane = new THREE.PlaneGeometry(2, 2);
+            var postMeshQuad = new THREE.Mesh(postMeshPlane, postMeshMaterial);
+            this._postScene = new THREE.Scene();
+            this._postScene.add(postMeshQuad);
+            this.initializePostCamera();
+            this.initializeLighting(this._postScene);
+        };
+        /**
+         * Perform setup and initialization.
+         */
+        DepthBufferFactory.prototype.initialize = function () {
+            this._logger = Services_3.Services.consoleLogger;
+            this.initializeRenderer();
+            this.initializeScene();
+            this.initializePostScene();
+        };
+        /**
+         * Verifies the minimum WebGL extensions are present.
+         * @param renderer WebGL renderer.
+         */
+        DepthBufferFactory.prototype.verifyWebGLExtensions = function () {
+            if (!this._renderer.extensions.get('WEBGL_depth_texture')) {
+                this._minimumWebGL = false;
+                this._logger.addErrorMessage('The minimum WebGL extensions are not supported in the browser.');
+                return false;
+            }
+            return true;
+        };
+        /**
+         * Constructs a render target <with a depth texture buffer>.
+         */
+        DepthBufferFactory.prototype.constructDepthTextureRenderTarget = function () {
+            // Model Scene -> (Render Texture, Depth Texture)
+            var renderTarget = new THREE.WebGLRenderTarget(this._width, this._height);
+            renderTarget.texture.format = THREE.RGBAFormat;
+            renderTarget.texture.type = THREE.UnsignedByteType;
+            renderTarget.texture.minFilter = THREE.NearestFilter;
+            renderTarget.texture.magFilter = THREE.NearestFilter;
+            renderTarget.texture.generateMipmaps = false;
+            renderTarget.stencilBuffer = false;
+            renderTarget.depthBuffer = true;
+            renderTarget.depthTexture = new THREE.DepthTexture(this._width, this._height);
+            renderTarget.depthTexture.type = THREE.UnsignedIntType;
+            return renderTarget;
+        };
+        /**
+         * Initialize the  model view.
+         */
+        DepthBufferFactory.prototype.initializeRenderer = function () {
+            this._canvas = this.initializeCanvas();
+            this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas, logarithmicDepthBuffer: this._logDepthBuffer });
+            this._renderer.setPixelRatio(window.devicePixelRatio);
+            this._renderer.setSize(this._width, this._height);
+            // Model Scene -> (Render Texture, Depth Texture)
+            this._target = this.constructDepthTextureRenderTarget();
+            // Encoded RGBA Texture from Depth Texture
+            this._encodedTarget = new THREE.WebGLRenderTarget(this._width, this._height);
+            this.verifyWebGLExtensions();
+        };
+        /**
+         * Constructs a WebGL target canvas.
+         */
+        DepthBufferFactory.prototype.initializeCanvas = function () {
+            this._canvas = document.createElement('canvas');
+            this._canvas.setAttribute('name', Tools_1.Tools.generatePseudoGUID());
+            // render dimensions    
+            this._canvas.width = this._width;
+            this._canvas.height = this._height;
+            // DOM element dimensions (may be different than render dimensions)
+            this._canvas.style.width = this._width + "px";
+            this._canvas.style.height = this._height + "px";
+            return this._canvas;
+        };
+        /**
+         * Verifies the pre-requisite settings are defined to create a mesh.
+         */
+        DepthBufferFactory.prototype.verifyMeshSettings = function () {
+            var minimumSettings = true;
+            var errorPrefix = 'DepthBufferFactory: ';
+            if (!this._model) {
+                this._logger.addErrorMessage(errorPrefix + "The model is not defined.");
+                minimumSettings = false;
+            }
+            if (!this._camera) {
+                this._logger.addErrorMessage(errorPrefix + "The camera is not defined.");
+                minimumSettings = false;
+            }
+            return minimumSettings;
+        };
+        /**
+         * Generates a mesh from the active model and camera
+         * @param parameters Generation parameters (MeshGenerateParameters)
+         */
+        DepthBufferFactory.prototype.meshGenerate = function (parameters) {
+            if (!this.verifyMeshSettings())
+                return null;
+            this.createDepthBuffer();
+            var mesh = this._depthBuffer.mesh(parameters.modelWidth, parameters.material);
+            return mesh;
+        };
+        /**
+         * Generates an image from the active model and camera
+         * @param parameters Generation parameters (ImageGenerateParameters)
+         */
+        DepthBufferFactory.prototype.imageGenerate = function (parameters) {
+            return null;
+        };
+        /**
+         * Constructs an RGBA string with the byte values of a pixel.
+         * @param buffer Unsigned byte raw buffer.
+         * @param row Pixel row.
+         * @param column Column row.
+         */
+        DepthBufferFactory.prototype.unsignedBytesToRGBA = function (buffer, row, column) {
+            var offset = (row * this._width) + column;
+            var rValue = buffer[offset + 0].toString(16);
+            var gValue = buffer[offset + 1].toString(16);
+            var bValue = buffer[offset + 2].toString(16);
+            var aValue = buffer[offset + 3].toString(16);
+            return "#" + rValue + gValue + bValue + " " + aValue;
+        };
+        /**
+         * Analyzes a pixel from a render buffer.
+         */
+        DepthBufferFactory.prototype.analyzeRenderBuffer = function () {
+            var renderBuffer = new Uint8Array(this._width * this._height * 4).fill(0);
+            this._renderer.readRenderTargetPixels(this._target, 0, 0, this._width, this._height, renderBuffer);
+            var messageString = "RGBA[0, 0] = " + this.unsignedBytesToRGBA(renderBuffer, 0, 0);
+            this._logger.addMessage(messageString, null);
+        };
+        /**
+         * Analyze the render and depth targets.
+         */
+        DepthBufferFactory.prototype.analyzeTargets = function () {
+            //      this.analyzeRenderBuffer();
+            this._depthBuffer.analyze();
+        };
+        /**
+         * Create a depth buffer.
+         */
+        DepthBufferFactory.prototype.createDepthBuffer = function () {
+            this._renderer.render(this._scene, this._camera, this._target);
+            // (optional) preview encoded RGBA texture; drawn by shader but not persisted
+            this._renderer.render(this._postScene, this._postCamera);
+            // Persist encoded RGBA texture; calculated from depth buffer
+            // encodedTarget.texture      : encoded RGBA texture
+            // encodedTarget.depthTexture : null
+            this._renderer.render(this._postScene, this._postCamera, this._encodedTarget);
+            // decode RGBA texture into depth floats
+            var depthBufferRGBA = new Uint8Array(this._width * this._height * 4).fill(0);
+            this._renderer.readRenderTargetPixels(this._encodedTarget, 0, 0, this._width, this._height, depthBufferRGBA);
+            this._depthBuffer = new DepthBuffer_1.DepthBuffer(depthBufferRGBA, this._width, this._height, this._camera);
+            this.analyzeTargets();
+        };
+        DepthBufferFactory.DefaultResolution = 1024; // default DB resolution
+        return DepthBufferFactory;
+    }());
+    exports.DepthBufferFactory = DepthBufferFactory;
+});
 // ------------------------------------------------------------------------// 
 // ModelRelief                                                             //
 //                                                                         // 
@@ -681,469 +1774,6 @@ define("ModelLoaders/OBJLoader", ["require", "exports", "three"], function (requ
         }
     };
 });
-define("System/Services", ["require", "exports", "System/Logger"], function (require, exports, Logger_1) {
-    // ------------------------------------------------------------------------// 
-    // ModelRelief                                                             //
-    //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
-    // ------------------------------------------------------------------------//
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * Services
-     * General runtime support
-     * @class
-     */
-    var Services = (function () {
-        /**
-         * @constructor
-         */
-        function Services() {
-        }
-        Services.consoleLogger = new Logger_1.ConsoleLogger();
-        Services.htmlLogger = new Logger_1.HTMLLogger();
-        return Services;
-    }());
-    exports.Services = Services;
-});
-define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], function (require, exports, THREE, Services_1) {
-    // ------------------------------------------------------------------------// 
-    // ModelRelief                                                             //
-    //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
-    // ------------------------------------------------------------------------//
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     *  General THREE.js/WebGL support routines
-     *  Graphics Library
-     *  @class
-     */
-    var Graphics = (function () {
-        /**
-         * @constructor
-         */
-        function Graphics() {
-        }
-        //#region Geometry
-        /* --------------------------------------------------------------------------------------------------------------------------------------//
-        //			Geometry
-        // --------------------------------------------------------------------------------------------------------------------------------------*/
-        /**
-         * Removes an object and all children from a scene.
-         * @param scene Scene holding object to be removed.
-         * @param rootObject Parent object (possibly with children).
-         */
-        Graphics.removeSceneObjectChildren = function (scene, rootObject, removeRoot) {
-            if (!scene || !rootObject)
-                return;
-            var logger = Services_1.Services.consoleLogger;
-            var remover = function (object3d) {
-                if (object3d === rootObject) {
-                    return;
-                }
-                logger.addInfoMessage('Removing: ' + object3d.name);
-                scene.remove(object3d);
-                if (object3d.hasOwnProperty('geometry')) {
-                    object3d.geometry.dispose();
-                }
-                if (object3d.hasOwnProperty('material')) {
-                    var material = object3d.material;
-                    if (material.hasOwnProperty('materials')) {
-                        var materials = material.materials;
-                        for (var iMaterial in materials) {
-                            if (materials.hasOwnProperty(iMaterial)) {
-                                materials[iMaterial].dispose();
-                            }
-                        }
-                    }
-                }
-                if (object3d.hasOwnProperty('texture')) {
-                    object3d.texture.dispose();
-                }
-            };
-            // remove root children from scene
-            rootObject.traverse(remover);
-            // remove root children from root
-            for (var iChild = 0; iChild < rootObject.children.length; iChild++) {
-                var child = rootObject.children[iChild];
-                rootObject.remove(child);
-            }
-            if (removeRoot)
-                scene.remove(rootObject);
-        };
-        /**
-         * @param position Location of bounding box.
-         * @param mesh Mesh from which to create bounding box.
-         * @ returns Mesh of the bounding box.
-         */
-        Graphics.createTransparentBoundingBox = function (position, mesh) {
-            var targetGeometry, boundingBox, width, height, depth, material, box;
-            targetGeometry = mesh.geometry;
-            targetGeometry.computeBoundingBox();
-            boundingBox = targetGeometry.boundingBox;
-            width = boundingBox.max.x - boundingBox.min.x;
-            height = boundingBox.max.y - boundingBox.min.y;
-            depth = boundingBox.max.z - boundingBox.min.z;
-            material = new THREE.MeshBasicMaterial({ color: 0x0000ff, opacity: 1.0, transparent: true, wireframe: true });
-            box = this.createBox(position, width, height, depth, material);
-            box.name = Graphics.BoundingBoxName;
-            box.visible = false;
-            return box;
-        };
-        /**
-         * Creates a box mesh.
-         * @param position Location of the box.
-         * @param width Width.
-         * @param height Height.
-         * @param depth Depth.
-         * @param material Optional material.
-         * @returns Box mesh.
-         */
-        Graphics.createBox = function (position, width, height, depth, material) {
-            var boxGeometry, boxMaterial, box;
-            boxGeometry = new THREE.BoxGeometry(width, height, depth);
-            boxGeometry.computeBoundingBox();
-            boxMaterial = material || new THREE.MeshPhongMaterial({ color: 0x0000ff, opacity: 1.0 });
-            box = new THREE.Mesh(boxGeometry, boxMaterial);
-            box.position.copy(position);
-            return box;
-        };
-        /**
-         * Creates a sphere mesh.
-         * @param position Origin of the sphere.
-         * @param radius Radius.
-         * @param color Color.
-         * @param segments Mesh segments.
-         */
-        Graphics.createSphere = function (position, radius, color, segments) {
-            var sphereGeometry, material, segmentCount = segments || 32, sphere;
-            Graphics.createBox;
-            sphereGeometry = new THREE.SphereGeometry(radius, segmentCount, segmentCount);
-            sphereGeometry.computeBoundingBox();
-            material = new THREE.MeshPhongMaterial({ color: color, opacity: 1.0, transparent: false, wireframe: false });
-            sphere = new THREE.Mesh(sphereGeometry, material);
-            sphere.position.copy(position);
-            return sphere;
-        };
-        /**
-     * Creates a line object.
-     * @param startPosition Start point.
-     * @param endPosition End point.
-     * @param color Color.
-     * @returns Line element.
-     */
-        Graphics.createLine = function (startPosition, endPosition, color) {
-            var line, lineGeometry, material;
-            lineGeometry = new THREE.Geometry();
-            lineGeometry.vertices.push(startPosition, endPosition);
-            material = new THREE.LineBasicMaterial({ color: color });
-            line = new THREE.Line(lineGeometry, material);
-            return line;
-        };
-        /**
-         * Creates an axes triad.
-         * @param position Origin of the triad.
-         * @param length Length of the coordinate arrow.
-         * @param headLength Length of the arrow head.
-         * @param headWidth Width of the arrow head.
-         */
-        Graphics.createWorldAxesTriad = function (position, length, headLength, headWidth) {
-            var triadGroup = new THREE.Object3D(), arrowPosition = position || new THREE.Vector3(), arrowLength = length || 15, arrowHeadLength = headLength || 1, arrowHeadWidth = headWidth || 1;
-            triadGroup.add(new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), arrowPosition, arrowLength, 0xff0000, arrowHeadLength, arrowHeadWidth));
-            triadGroup.add(new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), arrowPosition, arrowLength, 0x00ff00, arrowHeadLength, arrowHeadWidth));
-            triadGroup.add(new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), arrowPosition, arrowLength, 0x0000ff, arrowHeadLength, arrowHeadWidth));
-            return triadGroup;
-        };
-        /**
-         * Creates an axes grid.
-         * @param position  Origin of the axes grid.
-         * @param size Size of the grid.
-         * @param step Grid line intervals.
-         * @returns Grid object.
-         */
-        Graphics.createWorldAxesGrid = function (position, size, step) {
-            var gridGroup = new THREE.Object3D(), gridPosition = position || new THREE.Vector3(), gridSize = size || 10, gridStep = step || 1, colorCenterline = 0xff000000, xyGrid, yzGrid, zxGrid;
-            xyGrid = new THREE.GridHelper(gridSize, gridStep);
-            xyGrid.setColors(colorCenterline, 0xff0000);
-            xyGrid.position.copy(gridPosition.clone());
-            xyGrid.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
-            xyGrid.position.x += gridSize;
-            xyGrid.position.y += gridSize;
-            gridGroup.add(xyGrid);
-            yzGrid = new THREE.GridHelper(gridSize, gridStep);
-            yzGrid.setColors(colorCenterline, 0x00ff00);
-            yzGrid.position.copy(gridPosition.clone());
-            yzGrid.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 2);
-            yzGrid.position.y += gridSize;
-            yzGrid.position.z += gridSize;
-            gridGroup.add(yzGrid);
-            zxGrid = new THREE.GridHelper(gridSize, gridStep);
-            zxGrid.setColors(colorCenterline, 0x0000ff);
-            zxGrid.position.copy(gridPosition.clone());
-            zxGrid.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
-            zxGrid.position.z += gridSize;
-            zxGrid.position.x += gridSize;
-            gridGroup.add(zxGrid);
-            return gridGroup;
-        };
-        //#endregion
-        //#region Coordinate Conversion
-        /*
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        //  Coordinate Systems
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        FRAME	            EXAMPLE										SPACE                      UNITS                       NOTES
-    
-        Model               Catalog WebGL: Model, BandElement Block     object                      mm                          Rhino definitions
-        World               Design Model								world                       mm
-        View                Camera                                      view                        mm
-        Device              Normalized view							    device                      [(-1, -1), (1, 1)]
-        Screen.Page         HTML page									screen                      px                          0,0 at Top Left, +Y down    HTML page
-        Screen.Client       Browser view port 						    screen                      px                          0,0 at Top Left, +Y down    browser window
-        Screen.Container    DOM container								screen                      px                          0,0 at Top Left, +Y down    HTML canvas
-    
-        Mouse Event Properties
-        http://www.jacklmoore.com/notes/mouse-position/
-        */
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        //			World Coordinates
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        /**
-         * Converts a JQuery event to world coordinates.
-         * @param event Event.
-         * @param container DOM container.
-         * @param camera Camera.
-         * @returns World coordinates.
-         */
-        Graphics.worldCoordinatesFromJQEvent = function (event, container, camera) {
-            var worldCoordinates, deviceCoordinates2D, deviceCoordinates3D, deviceZ;
-            deviceCoordinates2D = this.deviceCoordinatesFromJQEvent(event, container);
-            deviceZ = (camera instanceof THREE.PerspectiveCamera) ? 0.5 : 1.0;
-            deviceCoordinates3D = new THREE.Vector3(deviceCoordinates2D.x, deviceCoordinates2D.y, deviceZ);
-            worldCoordinates = deviceCoordinates3D.unproject(camera);
-            return worldCoordinates;
-        };
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        //			View Coordinates
-        // --------------------------------------------------------------------------------------------------------------------------------------// 
-        /**
-         * Converts world coordinates to view coordinates.
-         * @param vector World coordinate vector to convert.
-         * @param camera Camera.
-         * @returns View coordinates.
-         */
-        Graphics.viewCoordinatesFromWorldCoordinates = function (vector, camera) {
-            var position = vector.clone(), viewCoordinates;
-            viewCoordinates = position.applyMatrix4(camera.matrixWorldInverse);
-            return viewCoordinates;
-        };
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        //			Device Coordinates
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        /**
-         * Converts a JQuery event to normalized device coordinates.
-         * @param event JQuery event.
-         * @param container DOM container.
-         * @returns Normalized device coordinates.
-         */
-        Graphics.deviceCoordinatesFromJQEvent = function (event, container) {
-            var deviceCoordinates, screenContainerCoordinates, ratioX, ratioY, deviceX, deviceY;
-            screenContainerCoordinates = this.screenContainerCoordinatesFromJQEvent(event, container);
-            ratioX = screenContainerCoordinates.x / container.width();
-            ratioY = screenContainerCoordinates.y / container.height();
-            deviceX = +((ratioX * 2) - 1); // [-1, 1]
-            deviceY = -((ratioY * 2) - 1); // [-1, 1]
-            deviceCoordinates = new THREE.Vector2(deviceX, deviceY);
-            return deviceCoordinates;
-        };
-        /**
-         * Converts world coordinates to device coordinates [-1, 1].
-         * @param vector  World coordinates vector.
-         * @param camera Camera.
-         * @preturns Device coorindates.
-         */
-        Graphics.deviceCoordinatesFromWorldCoordinates = function (vector, camera) {
-            // https://github.com/mrdoob/three.js/issues/78
-            var position = vector.clone(), deviceCoordinates2D, deviceCoordinates3D;
-            deviceCoordinates3D = position.project(camera);
-            deviceCoordinates2D = new THREE.Vector2(deviceCoordinates3D.x, deviceCoordinates3D.y);
-            return deviceCoordinates2D;
-        };
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        //			Screen Coordinates
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        /**
-         * Page coordinates from a JQuery event.
-         * @param event JQuery event.
-         * @returns Screen (page) coordinates.
-         */
-        Graphics.screenPageCoordinatesFromJQEvent = function (event) {
-            var screenPageCoordinates = new THREE.Vector2();
-            screenPageCoordinates.x = event.pageX;
-            screenPageCoordinates.y = event.pageY;
-            return screenPageCoordinates;
-        };
-        /**
-         * Client coordinates from a JQuery event.
-         * Client coordinates are relative to the <browser> view port. If the document has been scrolled it will
-         * be different than the page coordinates which are always relative to the top left of the <entire> HTML page document.
-         * http://www.bennadel.com/blog/1869-jquery-mouse-events-pagex-y-vs-clientx-y.htm
-         * @param event JQuery event.
-         * @returns Screen client coordinates.
-         */
-        Graphics.screenClientCoordinatesFromJQEvent = function (event) {
-            var screenClientCoordinates = new THREE.Vector2();
-            screenClientCoordinates.x = event.clientX;
-            screenClientCoordinates.y = event.clientY;
-            return screenClientCoordinates;
-        };
-        /**
-         * Converts JQuery event coordinates to screen container coordinates.
-         * @param event JQuery event.
-         * @param container DOM container.
-         * @returns Screen container coordinates.
-         */
-        Graphics.screenContainerCoordinatesFromJQEvent = function (event, container) {
-            var screenContainerCoordinates = new THREE.Vector2(), containerOffset, pageX, pageY;
-            containerOffset = container.offset();
-            // JQuery does not set pageX/pageY for Drop events. They are defined in the originalEvent member.
-            pageX = event.pageX || (event.originalEvent).pageX;
-            pageY = event.pageY || (event.originalEvent).pageY;
-            screenContainerCoordinates.x = pageX - containerOffset.left;
-            screenContainerCoordinates.y = pageY - containerOffset.top;
-            return screenContainerCoordinates;
-        };
-        /**
-         * Converts world coordinates to screen container coordinates.
-         * @param vector World vector.
-         * @param container DOM container.
-         * @param camera Camera.
-         * @returns Screen container coordinates.
-         */
-        Graphics.screenContainerCoordinatesFromWorldCoordinates = function (vector, container, camera) {
-            //https://github.com/mrdoob/three.js/issues/78
-            var position = vector.clone(), deviceCoordinates, screenContainerCoordinates, left, top;
-            // [(-1, -1), (1, 1)]
-            deviceCoordinates = this.deviceCoordinatesFromWorldCoordinates(position, camera);
-            left = ((+deviceCoordinates.x + 1) / 2) * container.width();
-            top = ((-deviceCoordinates.y + 1) / 2) * container.height();
-            screenContainerCoordinates = new THREE.Vector2(left, top);
-            return screenContainerCoordinates;
-        };
-        //#endregion
-        //#region Intersections
-        /* --------------------------------------------------------------------------------------------------------------------------------------//
-        //  Intersections
-        // --------------------------------------------------------------------------------------------------------------------------------------*/
-        /**
-         * Creates a Raycaster through the mouse world position.
-         * @param mouseWorld World coordinates.
-         * @param camera Camera.
-         * @returns THREE.Raycaster.
-         */
-        Graphics.raycasterFromMouse = function (mouseWorld, camera) {
-            var rayOrigin = new THREE.Vector3(mouseWorld.x, mouseWorld.y, camera.position.z), worldPoint = new THREE.Vector3(mouseWorld.x, mouseWorld.y, mouseWorld.z);
-            //          Tools.consoleLog('World mouse coordinates: ' + worldPoint.x + ', ' + worldPoint.y);
-            // construct ray from camera to mouse world
-            var raycaster = new THREE.Raycaster(rayOrigin, worldPoint.sub(rayOrigin).normalize());
-            return raycaster;
-        };
-        /**
-         * Returns the first Intersection located by the cursor.
-         * @param event JQuery event.
-         * @param container DOM container.
-         * @param camera Camera.
-         * @param sceneObjects Array of scene objects.
-         * @param recurse Recurse through objects.
-         * @returns First intersection with screen objects.
-         */
-        Graphics.getFirstIntersection = function (event, container, camera, sceneObjects, recurse) {
-            var raycaster, mouseWorld, iIntersection, intersection;
-            // construct ray from camera to mouse world
-            mouseWorld = Graphics.worldCoordinatesFromJQEvent(event, container, camera);
-            raycaster = Graphics.raycasterFromMouse(mouseWorld, camera);
-            // find all object intersections
-            var intersects = raycaster.intersectObjects(sceneObjects, recurse);
-            // no intersection?
-            if (intersects.length === 0) {
-                return null;
-            }
-            // use first; reject lines (Transform Frame)
-            for (iIntersection = 0; iIntersection < intersects.length; iIntersection++) {
-                intersection = intersects[iIntersection];
-                if (!(intersection.object instanceof THREE.Line))
-                    return intersection;
-            }
-            ;
-            return null;
-        };
-        //#endregion
-        //#region Helpers
-        /* --------------------------------------------------------------------------------------------------------------------------------------//
-        //  Helpers
-        // --------------------------------------------------------------------------------------------------------------------------------------*/
-        /**
-         * Constructs a WebGL target canvas.
-         * @param id DOM id for canvas.
-         * @param width Width of canvas.
-         * @param height Height of canvas.
-         */
-        Graphics.initializeCanvas = function (id, width, height) {
-            var canvas = document.querySelector("#" + id);
-            if (!canvas) {
-                Services_1.Services.consoleLogger.addErrorMessage("Canvas element id = " + id + " not found");
-                return null;
-            }
-            // CSS controls the size
-            if (!width || !height)
-                return canvas;
-            // render dimensions    
-            canvas.width = width;
-            canvas.height = height;
-            // DOM element dimensions (may be different than render dimensions)
-            canvas.style.width = width + "px";
-            canvas.style.height = height + "px";
-            return canvas;
-        };
-        Graphics.BoundingBoxName = 'Bounding Box';
-        return Graphics;
-    }());
-    exports.Graphics = Graphics;
-});
-define("System/Math", ["require", "exports"], function (require, exports) {
-    // ------------------------------------------------------------------------// 
-    // ModelRelief                                                             //
-    //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
-    // ------------------------------------------------------------------------//
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * Math Library
-     * General mathematics routines
-     * @class
-     */
-    var MathLibrary = (function () {
-        /**
-         * @constructor
-         */
-        function MathLibrary() {
-        }
-        /**
-         * Returns whether two numbers are equal within the given tolerance.
-         * @param value First value to compare.
-         * @param other Second value to compare.
-         * @param tolerance Tolerance for comparison.
-         * @returns True if within tolerance.
-         */
-        MathLibrary.numbersEqualWithinTolerance = function (value, other, tolerance) {
-            return ((value >= (other - tolerance)) && (value <= (other + tolerance)));
-        };
-        return MathLibrary;
-    }());
-    exports.MathLibrary = MathLibrary;
-});
 /**
  * @author Eberhard Graether / http://egraether.com/
  * @author Mark Lundin 	/ http://mark-lundin.com
@@ -1522,7 +2152,7 @@ define("Viewer/TrackballControls", ["require", "exports", "three"], function (re
     TrackballControls.prototype = Object.create(THREE.EventDispatcher.prototype);
     TrackballControls.prototype.constructor = TrackballControls;
 });
-define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "Viewer/Graphics", "System/Services", "Viewer/TrackballControls"], function (require, exports, THREE, Graphics_1, Services_2, TrackballControls_1) {
+define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "Viewer/Graphics", "System/Services", "Viewer/TrackballControls"], function (require, exports, THREE, Graphics_1, Services_4, TrackballControls_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -1539,8 +2169,8 @@ define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "Viewer/Graph
          * @constructor
          */
         function MeshPreviewViewer(previewCanvasId) {
-            this.scene = null;
-            this.root = null;
+            this._scene = null;
+            this._root = null;
             this._canvas = null;
             this._width = 0;
             this._height = 0;
@@ -1560,6 +2190,16 @@ define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "Viewer/Graph
         }
         ;
         ;
+        Object.defineProperty(MeshPreviewViewer.prototype, "model", {
+            //#region Properties
+            set: function (value) {
+                Graphics_1.Graphics.removeSceneObjectChildren(this._scene, this._root, false);
+                this._root.add(value);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        //#endregion
         /**
          * Initializes the preview renderer used to view the 3D mesh.
          */
@@ -1571,16 +2211,16 @@ define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "Viewer/Graph
             this._camera.position.z = this._cameraZPosition;
             this._controls = new TrackballControls_1.TrackballControls(this._camera, this._renderer.domElement);
             this.setupScene();
-            this.initializeLighting(this.scene);
+            this.initializeLighting(this._scene);
         };
         /**
          * Initialize the application.
          */
         MeshPreviewViewer.prototype.initialize = function () {
-            this._logger = Services_2.Services.htmlLogger;
+            this._logger = Services_4.Services.htmlLogger;
             this.initializeRenderer();
             this.onWindowResize();
-            window.addEventListener('resize', this.onWindowResize, false);
+            window.addEventListener('resize', this.onWindowResize.bind(this), false);
         };
         /**
          * Updates a renderer properties.
@@ -1637,9 +2277,9 @@ define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "Viewer/Graph
          * Constructs the scene used to visualize the 3D mesh.
          */
         MeshPreviewViewer.prototype.setupScene = function () {
-            this.scene = new THREE.Scene();
-            this.root = new THREE.Group();
-            this.scene.add(this.root);
+            this._scene = new THREE.Scene();
+            this._root = new THREE.Group();
+            this._scene.add(this._root);
         };
         /**
          * Animation loop.
@@ -1647,7 +2287,7 @@ define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "Viewer/Graph
         MeshPreviewViewer.prototype.animate = function () {
             requestAnimationFrame(this.animate.bind(this));
             this._controls.update();
-            this._renderer.render(this.scene, this._camera);
+            this._renderer.render(this._scene, this._camera);
         };
         return MeshPreviewViewer;
     }());
@@ -1717,7 +2357,7 @@ define("Viewer/Materials", ["require", "exports", "three"], function (require, e
     }());
     exports.Materials = Materials;
 });
-define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControls", "Viewer/Graphics", "System/Services"], function (require, exports, THREE, TrackballControls_2, Graphics_2, Services_3) {
+define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControls", "Viewer/Graphics", "System/Services"], function (require, exports, THREE, TrackballControls_2, Graphics_2, Services_5) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -1740,26 +2380,38 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
          * @param elementToBindTo HTML element to host the viewer.
          */
         function Viewer(modelCanvasId) {
-            this.root = null;
+            this.camera = null;
             this._renderer = null;
             this._canvas = null;
-            this._aspectRatio = 1.0;
+            this._width = 0;
+            this._height = 0;
             this._scene = null;
-            this._camera = null;
-            this._cameraDefaults = null;
+            this._root = null;
+            this._cameraSettings = null;
             this._cameraTarget = null;
             this._controls = null;
             this._logger = null;
-            this._logger = Services_3.Services.consoleLogger;
+            this._logger = Services_5.Services.consoleLogger;
             this._canvas = document.getElementById(modelCanvasId);
-            this.recalcAspectRatio();
+            this._width = this._canvas.offsetWidth;
+            this._height = this._canvas.offsetHeight;
             this.initializeScene();
             this.initializeGL();
-            this.render();
+            this.animate();
         }
         ;
         ;
         ;
+        Object.defineProperty(Viewer.prototype, "model", {
+            //#region Properties
+            set: function (value) {
+                Graphics_2.Graphics.removeSceneObjectChildren(this._scene, this._root, false);
+                this._root.add(value);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        //#endregion
         /**
          * Adds lighting to the scene
          */
@@ -1777,7 +2429,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
          * Initialize the viewer camera
          */
         Viewer.prototype.initializeCamera = function () {
-            this._cameraDefaults = {
+            this._cameraSettings = {
                 // Baseline : near = 0.1, far = 10000
                 // ZBuffer  : near = 100, far = 300
                 position: new THREE.Vector3(0.0, 175.0, 500.0),
@@ -1786,9 +2438,9 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
                 far: 10000,
                 fov: 45
             };
-            this._camera = null;
-            this._cameraTarget = this._cameraDefaults.target;
-            this._camera = new THREE.PerspectiveCamera(this._cameraDefaults.fov, this._aspectRatio, this._cameraDefaults.near, this._cameraDefaults.far);
+            this.camera = null;
+            this._cameraTarget = this._cameraSettings.target;
+            this.camera = new THREE.PerspectiveCamera(this._cameraSettings.fov, this.aspectRatio, this._cameraSettings.near, this._cameraSettings.far);
             this.resetCamera();
         };
         /**
@@ -1815,81 +2467,87 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
             this.initializeCamera();
             this.initializeLighting();
             this.initializeInputControls();
-            this.resizeDisplayGL();
+            this.resizeDisplayWebGL();
             window.addEventListener('resize', this.resizeWindow.bind(this), false);
         };
         /**
          * Handles a window resize event
          */
         Viewer.prototype.resizeWindow = function () {
-            this.resizeDisplayGL();
+            this.resizeDisplayWebGL();
         };
         /**
          * Creates the root object in the scene
          */
         Viewer.prototype.createRoot = function () {
-            this.root = new THREE.Object3D();
-            this.root.name = ObjectNames.Root;
-            this._scene.add(this.root);
+            this._root = new THREE.Object3D();
+            this._root.name = ObjectNames.Root;
+            this._scene.add(this._root);
         };
         /**
          * Handles the WebGL processing for a DOM window 'resize' event
          */
-        Viewer.prototype.resizeDisplayGL = function () {
+        Viewer.prototype.resizeDisplayWebGL = function () {
+            this._width = this._canvas.offsetWidth;
+            this._height = this._canvas.offsetHeight;
+            this._renderer.setSize(this._width, this._height, false);
             this._controls.handleResize();
-            this.recalcAspectRatio();
-            this._renderer.setSize(this._canvas.offsetWidth, this._canvas.offsetHeight, false);
             this.updateCamera();
         };
-        /**
-         * Calculates the aspect ratio of the canvas afer a window resize
-         */
-        Viewer.prototype.recalcAspectRatio = function () {
-            this._aspectRatio = (this._canvas.offsetHeight === 0) ? 1 : this._canvas.offsetWidth / this._canvas.offsetHeight;
-        };
+        Object.defineProperty(Viewer.prototype, "aspectRatio", {
+            /**
+             * Calculates the aspect ratio of the canvas afer a window resize
+             */
+            get: function () {
+                var aspectRatio = this._width / this._height;
+                return aspectRatio;
+            },
+            enumerable: true,
+            configurable: true
+        });
         /**
          * Resets all camera properties to the defaults
          */
         Viewer.prototype.resetCamera = function () {
-            this._camera.position.copy(this._cameraDefaults.position);
-            this._cameraTarget.copy(this._cameraDefaults.target);
+            this.camera.position.copy(this._cameraSettings.position);
+            this._cameraTarget.copy(this._cameraSettings.target);
             this.updateCamera();
         };
         /**
          * Updates the scene camera to match the new window size
          */
         Viewer.prototype.updateCamera = function () {
-            this._camera.aspect = this._aspectRatio;
-            this._camera.lookAt(this._cameraTarget);
-            this._camera.updateProjectionMatrix();
+            this.camera.aspect = this.aspectRatio;
+            this.camera.lookAt(this._cameraTarget);
+            this.camera.updateProjectionMatrix();
         };
         /**
          * Performs the WebGL render of the scene
          */
-        Viewer.prototype.renderGL = function () {
+        Viewer.prototype.renderWebGL = function () {
             if (!this._renderer.autoClear)
                 this._renderer.clear();
             this._controls.update();
-            this._renderer.render(this._scene, this._camera);
+            this._renderer.render(this._scene, this.camera);
         };
         /**
          * Main DOM render loop
          */
-        Viewer.prototype.render = function () {
-            requestAnimationFrame(this.render.bind(this));
-            this.renderGL();
+        Viewer.prototype.animate = function () {
+            requestAnimationFrame(this.animate.bind(this));
+            this.renderWebGL();
         };
         /**
          * Sets up the user input controls (Trackball)
          */
         Viewer.prototype.initializeInputControls = function () {
-            this._controls = new TrackballControls_2.TrackballControls(this._camera, this._renderer.domElement);
+            this._controls = new TrackballControls_2.TrackballControls(this.camera, this._renderer.domElement);
         };
         /**
          * Removes all scene objects
          */
         Viewer.prototype.clearAllAssests = function () {
-            Graphics_2.Graphics.removeSceneObjectChildren(this._scene, this.root, false);
+            Graphics_2.Graphics.removeSceneObjectChildren(this._scene, this._root, false);
             this.createRoot();
         };
         /**
@@ -1904,7 +2562,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
     }());
     exports.Viewer = Viewer;
 });
-define("ModelRelief", ["require", "exports", "three", "dat-gui", "ModelLoaders/OBJLoader", "Viewer/MeshPreviewViewer", "System/Services", "Viewer/Viewer"], function (require, exports, THREE, dat, OBJLoader_1, MeshPreviewViewer_1, Services_4, Viewer_1) {
+define("ModelRelief", ["require", "exports", "three", "dat-gui", "DepthBuffer/DepthBufferFactory", "ModelLoaders/OBJLoader", "Viewer/MeshPreviewViewer", "System/Services", "Viewer/Viewer"], function (require, exports, THREE, dat, DepthBufferFactory_1, OBJLoader_1, MeshPreviewViewer_1, Services_6, Viewer_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -1940,21 +2598,28 @@ define("ModelRelief", ["require", "exports", "three", "dat-gui", "ModelLoaders/O
             var onError = function (xhr) {
             };
             loader.load(fileName, function (group) {
-                viewer.root.add(group);
+                viewer.model = group;
             }, onProgress, onError);
+        };
+        /**
+         * Generates a relief from the current model camera.
+         */
+        ModelRelief.prototype.generateRelief = function () {
+            var size = 768;
+            var factory = new DepthBufferFactory_1.DepthBufferFactory({ width: size, height: size, model: this._modelViewer._root, camera: this._modelViewer.camera });
+            var previewMesh = factory.meshGenerate({ modelWidth: 2 });
+            this._meshPreviewViewer.model = previewMesh;
+            Services_6.Services.consoleLogger.addInfoMessage('Relief generated');
         };
         /**
          * Initialize the view settings that are controllable by the user
          */
         ModelRelief.prototype.initializeViewerControls = function () {
             var scope = this;
-            function captureRelief() {
-                Services_4.Services.consoleLogger.addInfoMessage('Relief captured');
-            }
             var ViewerControls = (function () {
                 function ViewerControls() {
                     this.displayGrid = true;
-                    this.captureRelief = function () { };
+                    this.generateRelief = function () { };
                 }
                 return ViewerControls;
             }());
@@ -1973,9 +2638,9 @@ define("ModelRelief", ["require", "exports", "three", "dat-gui", "ModelLoaders/O
                 scope._modelViewer.displayGrid(value);
             }.bind(this));
             // Depth Buffer
-            var controlCaptureRelief = folderOptions.add(viewerControls, 'captureRelief').name('Capture Relief');
-            controlCaptureRelief.onChange(function () {
-                captureRelief();
+            var controlGenerateRelief = folderOptions.add(viewerControls, 'generateRelief').name('Generate Relief');
+            controlGenerateRelief.onChange(function () {
+                scope.generateRelief();
             }.bind(this));
             folderOptions.open();
         };
@@ -1983,7 +2648,7 @@ define("ModelRelief", ["require", "exports", "three", "dat-gui", "ModelLoaders/O
          * Launch the model Viewer.
          */
         ModelRelief.prototype.run = function () {
-            Services_4.Services.consoleLogger.addInfoMessage('ModelRelief started');
+            Services_6.Services.consoleLogger.addInfoMessage('ModelRelief started');
             // Model Viewer    
             this._modelViewer = new Viewer_1.Viewer('modelCanvas');
             this.loadModel(this._modelViewer);
@@ -1997,635 +2662,6 @@ define("ModelRelief", ["require", "exports", "three", "dat-gui", "ModelLoaders/O
     exports.ModelRelief = ModelRelief;
     var modelRelief = new ModelRelief();
     modelRelief.run();
-});
-define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "System/Math", "System/Services"], function (require, exports, chai_1, THREE, Math_1, Services_5) {
-    // ------------------------------------------------------------------------// 
-    // ModelRelief                                                             //
-    //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
-    // ------------------------------------------------------------------------//
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     *  DepthBuffer
-     *  @class
-     */
-    var DepthBuffer = (function () {
-        /**
-         * @constructor
-         * @param rgbaArray Raw aray of RGBA bytes packed with floats.
-         * @param width Width of map.
-         * @param height Height of map.
-         * @param nearClipPlane Camera near clipping plane.
-         * @param farClipPlane Camera far clipping plane.
-         */
-        function DepthBuffer(rgbaArray, width, height, camera) {
-            this._rgbaArray = rgbaArray;
-            this.width = width;
-            this.height = height;
-            this.camera = camera;
-            this.initialize();
-        }
-        /**
-         * Initialize
-         */
-        DepthBuffer.prototype.initialize = function () {
-            this._logger = Services_5.Services.htmlLogger;
-            this._nearClipPlane = this.camera.near;
-            this._farClipPlane = this.camera.far;
-            this._cameraClipRange = this._farClipPlane - this._nearClipPlane;
-            // RGBA -> Float32
-            this.depths = new Float32Array(this._rgbaArray.buffer);
-        };
-        /**
-         * Convert a normalized depth [0,1] to depth in model units.
-         * @param normalizedDepth Normalized depth [0,1].
-         */
-        DepthBuffer.prototype.normalizedToModelDepth = function (normalizedDepth) {
-            return normalizedDepth;
-            //      return normalizedDepth * this.cameraClipRange;
-        };
-        /**
-         * Returns the normalized depth value at a pixel index
-         * @param row Buffer row.
-         * @param column Buffer column.
-         */
-        DepthBuffer.prototype.depthNormalized = function (row, column) {
-            var index = (row * this.width) + column;
-            return this.depths[index];
-        };
-        /**
-         * Returns the depth value at a pixel index
-         * @param row Map row.
-         * @param pixelColumn Map column.
-         */
-        DepthBuffer.prototype.depth = function (row, column) {
-            var depthNormalized = this.depthNormalized(row, column);
-            var depth = this.normalizedToModelDepth(depthNormalized);
-            return depth;
-        };
-        Object.defineProperty(DepthBuffer.prototype, "minimumNormalized", {
-            /**
-             * Returns the minimum normalized depth value.
-             */
-            get: function () {
-                var minimumNormalized = Number.MAX_VALUE;
-                for (var index = 0; index < this.depths.length; index++) {
-                    var depthValue = this.depths[index];
-                    if (depthValue < minimumNormalized)
-                        minimumNormalized = depthValue;
-                }
-                return minimumNormalized;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(DepthBuffer.prototype, "minimum", {
-            /**
-             * Returns the minimum depth value.
-             */
-            get: function () {
-                var minimum = this.normalizedToModelDepth(this.minimumNormalized);
-                return minimum;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(DepthBuffer.prototype, "maximumNormalized", {
-            /**
-             * Returns the maximum normalized depth value.
-             */
-            get: function () {
-                var maximumNormalized = Number.MIN_VALUE;
-                for (var index = 0; index < this.depths.length; index++) {
-                    var depthValue = this.depths[index];
-                    // skip values at far plane
-                    if (Math_1.MathLibrary.numbersEqualWithinTolerance(depthValue, 1.0, DepthBuffer.normalizedTolerance))
-                        continue;
-                    if (depthValue > maximumNormalized)
-                        maximumNormalized = depthValue;
-                }
-                return maximumNormalized;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(DepthBuffer.prototype, "maximum", {
-            /**
-             * Returns the maximum depth value.
-             */
-            get: function () {
-                var maximum = this.normalizedToModelDepth(this.maximumNormalized);
-                return maximum;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(DepthBuffer.prototype, "rangeNormalized", {
-            /**
-             * Returns the normalized depth range of the buffer.
-             */
-            get: function () {
-                var depthNormalized = this.maximumNormalized - this.minimumNormalized;
-                return depthNormalized;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(DepthBuffer.prototype, "range", {
-            /**
-             * Returns the normalized depth of the buffer.
-             */
-            get: function () {
-                var depth = this.normalizedToModelDepth(this.rangeNormalized);
-                return depth;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(DepthBuffer.prototype, "aspectRatio", {
-            /**
-             * Returns the aspect ration of the depth buffer.
-             */
-            get: function () {
-                return this.width / this.height;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        /**
-             * Returns the linear index of a model point in world coordinates.
-             * @param worldVertex Vertex of model.
-             */
-        DepthBuffer.prototype.getModelVertexIndices = function (worldVertex, planeBoundingBox) {
-            var boxSize = planeBoundingBox.getSize();
-            var meshExtents = new THREE.Vector2(boxSize.x, boxSize.y);
-            //  map coordinates to offsets in range [0, 1]
-            var offsetX = (worldVertex.x + (boxSize.x / 2)) / boxSize.x;
-            var offsetY = (worldVertex.y + (boxSize.y / 2)) / boxSize.y;
-            var row = offsetY * (this.height - 1);
-            var column = offsetX * (this.width - 1);
-            row = Math.round(row);
-            column = Math.round(column);
-            chai_1.assert.isTrue((row >= 0) && (row < this.height), ("Vertex (" + worldVertex.x + ", " + worldVertex.y + ", " + worldVertex.z + ") yielded row = " + row));
-            chai_1.assert.isTrue((column >= 0) && (column < this.width), ("Vertex (" + worldVertex.x + ", " + worldVertex.y + ", " + worldVertex.z + ") yielded column = " + column));
-            return new THREE.Vector2(row, column);
-        };
-        /**
-         * Returns the linear index of a model point in world coordinates.
-         * @param worldVertex Vertex of model.
-         */
-        DepthBuffer.prototype.getModelVertexIndex = function (worldVertex, planeBoundingBox) {
-            var indices = this.getModelVertexIndices(worldVertex, planeBoundingBox);
-            var row = indices.x;
-            var column = indices.y;
-            var index = (row * this.width) + column;
-            index = Math.round(index);
-            chai_1.assert.isTrue((index >= 0) && (index < this.depths.length), ("Vertex (" + worldVertex.x + ", " + worldVertex.y + ", " + worldVertex.z + ") yielded index = " + index));
-            return index;
-        };
-        /**
-         * Transforms the vertices of a mesh plane to match the depth offsets of the DB.
-         * @param meshPlane Mesh plane to transform.
-         */
-        DepthBuffer.prototype.transformMeshPlaneToMesh = function (meshPlane) {
-            var meshGeometry = meshPlane.geometry;
-            meshGeometry.computeBoundingBox();
-            var vertexCount = meshGeometry.vertices.length;
-            var clipRange = this._farClipPlane - this._nearClipPlane;
-            for (var iVertex = 0; iVertex < vertexCount; iVertex++) {
-                // calculate index of vertex in depth buffer based on view extents and camera transform
-                var vertex = meshGeometry.vertices[iVertex];
-                var depthBufferVertex = this.getModelVertexIndex(vertex, meshGeometry.boundingBox);
-                var depth = -this.depths[depthBufferVertex];
-                meshGeometry.vertices[iVertex].z = depth;
-            }
-            meshGeometry.computeFaceNormals();
-            meshGeometry.computeVertexNormals(true);
-            meshGeometry.verticesNeedUpdate = true;
-            meshGeometry.normalsNeedUpdate = true;
-        };
-        /**
-         * Constructs a mesh plane of the given base dimension.
-         * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ration.
-         * @param material Material to assign to mesh.
-         */
-        DepthBuffer.prototype.constructMeshPlane = function (modelWidth, material) {
-            var modelHeight = modelWidth * this.aspectRatio;
-            var meshGeometry = new THREE.PlaneGeometry(modelWidth, modelHeight, this.width, this.height);
-            var mesh = new THREE.Mesh(meshGeometry, material);
-            mesh.name = DepthBuffer.MeshModelName;
-            return mesh;
-        };
-        /**
-         * Constructs a mesh of the given base dimension.
-         * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ratio.
-         * @param material Material to assign to mesh.
-         */
-        DepthBuffer.prototype.meshByMeshPlane = function (modelWidth, material) {
-            if (!material)
-                material = new THREE.MeshPhongMaterial({ wireframe: false, color: 0xff00ff, reflectivity: 0.75, shininess: 0.75 });
-            // construct plane of given dimensions; resolution = depth buffer
-            var mesh = this.constructMeshPlane(modelWidth, material);
-            // tranlate mesh points to respective depths
-            this.transformMeshPlaneToMesh(mesh);
-            return mesh;
-        };
-        /**
-         * Constructs a mesh of the given base dimension.
-         * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ratio.
-         * @param material Material to assign to mesh.
-         */
-        DepthBuffer.prototype.mesh = function (modelWidth, material) {
-            if (!material)
-                material = new THREE.MeshPhongMaterial({ wireframe: false, color: 0xff00ff, reflectivity: 0.75, shininess: 0.75 });
-            var meshGeometry = new THREE.Geometry();
-            var faceSize = modelWidth / (this.width - 1);
-            var baseVertexIndex = 0;
-            for (var iRow = 0; iRow < (this.height - 1); iRow++) {
-                for (var iColumn = 0; iColumn < (this.width - 1); iColumn++) {
-                    var facePair = this.constructTriFacesAtOffset(iRow, iColumn, faceSize, baseVertexIndex);
-                    (_a = meshGeometry.vertices).push.apply(_a, facePair.vertices);
-                    (_b = meshGeometry.faces).push.apply(_b, facePair.faces);
-                    baseVertexIndex += 4;
-                }
-            }
-            meshGeometry.computeFaceNormals();
-            var mesh = new THREE.Mesh(meshGeometry, material);
-            mesh.name = DepthBuffer.MeshModelName;
-            return mesh;
-            var _a, _b;
-        };
-        /**
-         * Constructs a pair of triangular faces at the given offset in the DepthBuffer.
-         * @param row Row offset (Lower Left).
-         * @param column Column offset (Lower Left).
-         * @param faceSize Size of a face edge (not hypotenuse).
-         * @param baseVertexIndex Beginning offset in mesh geometry vertex array.
-         */
-        DepthBuffer.prototype.constructTriFacesAtOffset = function (row, column, faceSize, baseVertexIndex) {
-            var facePair = {
-                vertices: [],
-                faces: []
-            };
-            //  Vertices
-            //   2    3       
-            //   0    1
-            var meshWidth = (this.width - 1) * faceSize;
-            var meshHeight = (this.height - 1) * faceSize;
-            // mesh center will be at the world origin
-            var originX = (column * faceSize) - (meshWidth / 2);
-            var originY = (row * faceSize) - (meshHeight / 2);
-            var lowerLeft = new THREE.Vector3(originX + 0, originY + 0, -this.depth(row + 0, column + 0)); // baseVertexIndex + 0
-            var lowerRight = new THREE.Vector3(originX + faceSize, originY + 0, -this.depth(row + 0, column + 1)); // baseVertexIndex + 1
-            var upperLeft = new THREE.Vector3(originX + 0, originY + faceSize, -this.depth(row + 1, column + 0)); // baseVertexIndex + 2
-            var upperRight = new THREE.Vector3(originX + faceSize, originY + faceSize, -this.depth(row + 1, column + 1)); // baseVertexIndex + 3
-            facePair.vertices.push(lowerLeft, // baseVertexIndex + 0
-            lowerRight, // baseVertexIndex + 1
-            upperLeft, // baseVertexIndex + 2
-            upperRight // baseVertexIndex + 3
-            );
-            // right hand rule for polygon winding
-            facePair.faces.push(new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 1, baseVertexIndex + 3), new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 3, baseVertexIndex + 2));
-            return facePair;
-        };
-        /**
-         * Analyzes properties of a depth buffer.
-         */
-        DepthBuffer.prototype.analyze = function () {
-            var middle = this.width / 2;
-            var decimalPlaces = 5;
-            var headerStyle = "font-family : monospace; font-weight : bold; color : blue; font-size : 18px";
-            var messageStyle = "font-family : monospace; color : black; font-size : 14px";
-            this._logger.addMessage('Camera Properties', headerStyle);
-            this._logger.addMessage("Near Plane = " + this.camera.near, messageStyle);
-            this._logger.addMessage("Far Plane  = " + this.camera.far, messageStyle);
-            this._logger.addMessage("Clip Range = " + (this.camera.far - this.camera.near), messageStyle);
-            this._logger.addEmptyLine();
-            this._logger.addMessage('Normalized', headerStyle);
-            this._logger.addMessage("Center Depth = " + this.depthNormalized(middle, middle).toFixed(decimalPlaces), messageStyle);
-            this._logger.addMessage("Z Depth = " + this.rangeNormalized.toFixed(decimalPlaces), messageStyle);
-            this._logger.addMessage("Minimum = " + this.minimumNormalized.toFixed(decimalPlaces), messageStyle);
-            this._logger.addMessage("Maximum = " + this.maximumNormalized.toFixed(decimalPlaces), messageStyle);
-            this._logger.addEmptyLine();
-            this._logger.addMessage('Model Units', headerStyle);
-            this._logger.addMessage("Center Depth = " + this.depth(middle, middle).toFixed(decimalPlaces), messageStyle);
-            this._logger.addMessage("Z Depth = " + this.range.toFixed(decimalPlaces), messageStyle);
-            this._logger.addMessage("Minimum = " + this.minimum.toFixed(decimalPlaces), messageStyle);
-            this._logger.addMessage("Maximum = " + this.maximum.toFixed(decimalPlaces), messageStyle);
-        };
-        DepthBuffer.MeshModelName = 'ModelMesh';
-        DepthBuffer.normalizedTolerance = .001;
-        return DepthBuffer;
-    }());
-    exports.DepthBuffer = DepthBuffer;
-});
-define("System/Tools", ["require", "exports"], function (require, exports) {
-    // ------------------------------------------------------------------------// 
-    // ModelRelief                                                             //
-    //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
-    // ------------------------------------------------------------------------//
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * Tool Library
-     * General utility routines
-     * @class
-     */
-    var Tools = (function () {
-        /**
-         * @constructor
-         */
-        function Tools() {
-        }
-        //#region Utility
-        /// <summary>        
-        // Generate a pseudo GUID.
-        // http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
-        /// </summary>
-        Tools.generatePseudoGUID = function () {
-            function s4() {
-                return Math.floor((1 + Math.random()) * 0x10000)
-                    .toString(16)
-                    .substring(1);
-            }
-            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-                s4() + '-' + s4() + s4() + s4();
-        };
-        return Tools;
-    }());
-    exports.Tools = Tools;
-});
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017> Steve Knipmeyer                                    //
-// ------------------------------------------------------------------------//
-/*
-  Requirements
-    No persistent DOM element. The canvas is created dynamically.
-        Option for persisting the Factory in the constructor
-    JSON compatible constructor parameters
-    Fixed resolution; resizing support is not required.
-*/
-define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthBuffer/DepthBuffer", "System/Services", "System/Tools"], function (require, exports, THREE, DepthBuffer_1, Services_6, Tools_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * @class
-     * DepthBufferFactory
-     */
-    var DepthBufferFactory = (function () {
-        /**
-         * @constructor
-         * @param parameters Initialization parameters (DepthBufferFactoryParameters)
-         */
-        function DepthBufferFactory(parameters) {
-            this._width = DepthBufferFactory.DefaultResolution; // width resolution of the DB
-            this._height = DepthBufferFactory.DefaultResolution; // height resolution of the DB
-            this._logDepthBuffer = false; // use a logarithmic buffer for more accuracy in large scenes
-            this._boundedClipping = true; // override camera clipping planes; set near and far to bound model for improved accuracy
-            this._depthBuffer = null; // depth buffer 
-            this._target = null; // WebGL render target for creating the WebGL depth buffer when rendering the scene
-            this._encodedTarget = null; // WebGL render target for encodin the WebGL depth buffer into a floating point (RGBA format)
-            this._canvas = null; // DOM canvas supporting renderer
-            this._renderer = null; // scene renderer
-            this._scene = null; // target scene
-            this._model = null; // target model
-            this._camera = null; // perspective camera to generate the depth buffer
-            this._postScene = null; // single polygon scene use to generate the encoded RGBA buffer
-            this._postCamera = null; // orthographic camera
-            this._postMaterial = null; // shader material that encodes the WebGL depth buffer into a floating point RGBA format
-            this._minimumWebGL = true; // true if minimum WeGL requirementat are present
-            this._logger = null; // logger
-            // required
-            this._width = parameters.width;
-            this._height = parameters.height;
-            this._model = parameters.model.clone();
-            // optional
-            this._camera = parameters.camera || null;
-            this._logDepthBuffer = parameters.logDepthBuffer || false;
-            this._boundedClipping = parameters.boundedClipping || true;
-            this.initialize();
-        }
-        /**
-         * Initialize default lighting in the scene.
-         * Lighting does not affect the depth buffer. It is only used if the canvas is made visible.
-         */
-        DepthBufferFactory.prototype.initializeLighting = function (scene) {
-            var ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-            scene.add(ambientLight);
-            var directionalLight1 = new THREE.DirectionalLight(0xffffff);
-            directionalLight1.position.set(1, 1, 1);
-            scene.add(directionalLight1);
-        };
-        /**
-         * Adds a background plane at the origin.
-         */
-        DepthBufferFactory.prototype.addBackgroundPlane = function (size) {
-            // background plane
-            var geometry = new THREE.PlaneGeometry(size, size);
-            var material = new THREE.MeshPhongMaterial({ color: 0xffffff });
-            var mesh = new THREE.Mesh(geometry, material);
-            var center = new THREE.Vector3(0.0, 0.0, 0.0);
-            mesh.position.set(center.x, center.y, center.z);
-            this._scene.add(mesh);
-        };
-        /**
-         * Perform setup and initialization of the render scene.
-         */
-        DepthBufferFactory.prototype.initializeScene = function () {
-            this._scene = new THREE.Scene();
-            if (this._model)
-                this._scene.add(this._model);
-            this.initializeLighting(this._scene);
-        };
-        /**
-         * Constructs the orthographic camera used to convert the WebGL depth buffer to the encoded RGBA buffer
-         */
-        DepthBufferFactory.prototype.initializePostCamera = function () {
-            // Setup post processing stage
-            var left = -1;
-            var right = 1;
-            var top = 1;
-            var bottom = -1;
-            var near = 0;
-            var far = 1;
-            this._postCamera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
-        };
-        /**
-         * Perform setup and initialization of the post scene used to create the final RGBA encoded depth buffer.
-         */
-        DepthBufferFactory.prototype.initializePostScene = function () {
-            var postMeshMaterial = new THREE.ShaderMaterial({
-                vertexShader: MR.shaderSource['DepthBufferVertexShader'],
-                fragmentShader: MR.shaderSource['DepthBufferFragmentShader'],
-                uniforms: {
-                    cameraNear: { value: this._camera.near },
-                    cameraFar: { value: this._camera.far },
-                    tDiffuse: { value: this._target.texture },
-                    tDepth: { value: this._target.depthTexture }
-                }
-            });
-            var postMeshPlane = new THREE.PlaneGeometry(2, 2);
-            var postMeshQuad = new THREE.Mesh(postMeshPlane, postMeshMaterial);
-            this._postScene = new THREE.Scene();
-            this._postScene.add(postMeshQuad);
-            this.initializePostCamera();
-            this.initializeLighting(this._postScene);
-        };
-        /**
-         * Perform setup and initialization.
-         */
-        DepthBufferFactory.prototype.initialize = function () {
-            this._logger = Services_6.Services.consoleLogger;
-            this.initializeRenderer();
-            this.initializeScene();
-            this.initializePostScene();
-        };
-        /**
-         * Verifies the minimum WebGL extensions are present.
-         * @param renderer WebGL renderer.
-         */
-        DepthBufferFactory.prototype.verifyWebGLExtensions = function () {
-            if (!this._renderer.extensions.get('WEBGL_depth_texture')) {
-                this._minimumWebGL = false;
-                this._logger.addErrorMessage('The minimum WebGL extensions are not supported in the browser.');
-                return false;
-            }
-            return true;
-        };
-        /**
-         * Constructs a render target <with a depth texture buffer>.
-         */
-        DepthBufferFactory.prototype.constructDepthTextureRenderTarget = function () {
-            // Model Scene -> (Render Texture, Depth Texture)
-            var renderTarget = new THREE.WebGLRenderTarget(this._width, this._height);
-            renderTarget.texture.format = THREE.RGBAFormat;
-            renderTarget.texture.type = THREE.UnsignedByteType;
-            renderTarget.texture.minFilter = THREE.NearestFilter;
-            renderTarget.texture.magFilter = THREE.NearestFilter;
-            renderTarget.texture.generateMipmaps = false;
-            renderTarget.stencilBuffer = false;
-            renderTarget.depthBuffer = true;
-            renderTarget.depthTexture = new THREE.DepthTexture(this._width, this._height);
-            renderTarget.depthTexture.type = THREE.UnsignedIntType;
-            return renderTarget;
-        };
-        /**
-         * Initialize the  model view.
-         */
-        DepthBufferFactory.prototype.initializeRenderer = function () {
-            this._canvas = this.initializeCanvas();
-            this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas, logarithmicDepthBuffer: this._logDepthBuffer });
-            this._renderer.setPixelRatio(window.devicePixelRatio);
-            this._renderer.setSize(this._width, this._height);
-            // Model Scene -> (Render Texture, Depth Texture)
-            this._target = this.constructDepthTextureRenderTarget();
-            // Encoded RGBA Texture from Depth Texture
-            this._encodedTarget = new THREE.WebGLRenderTarget(this._width, this._height);
-            this.verifyWebGLExtensions();
-        };
-        /**
-         * Constructs a WebGL target canvas.
-         */
-        DepthBufferFactory.prototype.initializeCanvas = function () {
-            this._canvas = document.createElement('canvas');
-            this._canvas.setAttribute('name', Tools_1.Tools.generatePseudoGUID());
-            // render dimensions    
-            this._canvas.width = this._width;
-            this._canvas.height = this._height;
-            // DOM element dimensions (may be different than render dimensions)
-            this._canvas.style.width = this._width + "px";
-            this._canvas.style.height = this._height + "px";
-            return this._canvas;
-        };
-        /**
-         * Verifies the pre-requisite settings are defined to create a mesh.
-         */
-        DepthBufferFactory.prototype.verifyMeshSettings = function () {
-            var minimumSettings = true;
-            var errorPrefix = 'DepthBufferFactory: ';
-            if (!this._model) {
-                this._logger.addErrorMessage(errorPrefix + "The model is not defined.");
-                minimumSettings = false;
-            }
-            if (!this._camera) {
-                this._logger.addErrorMessage(errorPrefix + "The camera is not defined.");
-                minimumSettings = false;
-            }
-            return minimumSettings;
-        };
-        /**
-         * Generates a mesh from the active model and camera
-         * @param parameters Generation parameters (MeshGenerateParameters)
-         */
-        DepthBufferFactory.prototype.meshGenerate = function (parameters) {
-            if (!this.verifyMeshSettings())
-                return null;
-            this.createDepthBuffer();
-            var mesh = this._depthBuffer.mesh(parameters.modelWidth, parameters.material);
-            return mesh;
-        };
-        /**
-         * Generates an image from the active model and camera
-         * @param parameters Generation parameters (ImageGenerateParameters)
-         */
-        DepthBufferFactory.prototype.imageGenerate = function (parameters) {
-            return null;
-        };
-        /**
-         * Constructs an RGBA string with the byte values of a pixel.
-         * @param buffer Unsigned byte raw buffer.
-         * @param row Pixel row.
-         * @param column Column row.
-         */
-        DepthBufferFactory.prototype.unsignedBytesToRGBA = function (buffer, row, column) {
-            var offset = (row * this._width) + column;
-            var rValue = buffer[offset + 0].toString(16);
-            var gValue = buffer[offset + 1].toString(16);
-            var bValue = buffer[offset + 2].toString(16);
-            var aValue = buffer[offset + 3].toString(16);
-            return "#" + rValue + gValue + bValue + " " + aValue;
-        };
-        /**
-         * Analyzes a pixel from a render buffer.
-         */
-        DepthBufferFactory.prototype.analyzeRenderBuffer = function () {
-            var renderBuffer = new Uint8Array(this._width * this._height * 4).fill(0);
-            this._renderer.readRenderTargetPixels(this._target, 0, 0, this._width, this._height, renderBuffer);
-            var messageString = "RGBA[0, 0] = " + this.unsignedBytesToRGBA(renderBuffer, 0, 0);
-            this._logger.addMessage(messageString, null);
-        };
-        /**
-         * Analyze the render and depth targets.
-         */
-        DepthBufferFactory.prototype.analyzeTargets = function () {
-            //      this.analyzeRenderBuffer();
-            this._depthBuffer.analyze();
-        };
-        /**
-         * Create a depth buffer.
-         */
-        DepthBufferFactory.prototype.createDepthBuffer = function () {
-            this._renderer.render(this._scene, this._camera, this._target);
-            // (optional) preview encoded RGBA texture; drawn by shader but not persisted
-            this._renderer.render(this._postScene, this._postCamera);
-            // Persist encoded RGBA texture; calculated from depth buffer
-            // encodedTarget.texture      : encoded RGBA texture
-            // encodedTarget.depthTexture : null
-            this._renderer.render(this._postScene, this._postCamera, this._encodedTarget);
-            // decode RGBA texture into depth floats
-            var depthBufferRGBA = new Uint8Array(this._width * this._height * 4).fill(0);
-            this._renderer.readRenderTargetPixels(this._encodedTarget, 0, 0, this._width, this._height, depthBufferRGBA);
-            this._depthBuffer = new DepthBuffer_1.DepthBuffer(depthBufferRGBA, this._width, this._height, this._camera);
-            this.analyzeTargets();
-        };
-        DepthBufferFactory.DefaultResolution = 1024; // default DB resolution
-        return DepthBufferFactory;
-    }());
-    exports.DepthBufferFactory = DepthBufferFactory;
 });
 define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function (require, exports, chai_2, THREE) {
     // ------------------------------------------------------------------------// 
@@ -2709,7 +2745,7 @@ define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function 
     }());
     exports.UnitTests = UnitTests;
 });
-define("Workbench/DepthBufferTest", ["require", "exports", "three", "DepthBuffer/DepthBufferFactory", "Viewer/Graphics", "Viewer/MeshPreviewViewer", "System/Services", "Viewer/TrackballControls"], function (require, exports, THREE, DepthBufferFactory_1, Graphics_3, MeshPreviewViewer_2, Services_7, TrackballControls_3) {
+define("Workbench/DepthBufferTest", ["require", "exports", "three", "DepthBuffer/DepthBufferFactory", "Viewer/Graphics", "Viewer/MeshPreviewViewer", "System/Services", "Viewer/TrackballControls"], function (require, exports, THREE, DepthBufferFactory_2, Graphics_3, MeshPreviewViewer_2, Services_7, TrackballControls_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var modelCanvas;
@@ -2906,19 +2942,19 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "DepthBuffer
     /**
      *  Event handler to create depth buffers.
      */
-    function takePhotograph() {
+    function generateRelief() {
         var size = 768;
-        var factory = new DepthBufferFactory_1.DepthBufferFactory({ width: size, height: size, model: modelRoot, camera: modelCamera });
+        var factory = new DepthBufferFactory_2.DepthBufferFactory({ width: size, height: size, model: modelRoot, camera: modelCamera });
         var previewMesh = factory.meshGenerate({ modelWidth: 2, camera: modelCamera });
-        Graphics_3.Graphics.removeSceneObjectChildren(meshPreviewViewer.scene, meshPreviewViewer.root, false);
-        meshPreviewViewer.root.add(previewMesh);
+        Graphics_3.Graphics.removeSceneObjectChildren(meshPreviewViewer._scene, meshPreviewViewer._root, false);
+        meshPreviewViewer._root.add(previewMesh);
     }
     function main() {
         logger = Services_7.Services.htmlLogger;
         initializeModelViewer();
         initializeMeshPreviewViewer();
-        var cameraButton = document.querySelector("#" + CameraButtonId).onclick = takePhotograph;
-        takePhotograph();
+        var cameraButton = document.querySelector("#" + CameraButtonId).onclick = generateRelief;
+        generateRelief();
     }
     main();
 });

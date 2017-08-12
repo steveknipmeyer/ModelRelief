@@ -9,6 +9,8 @@ import * as THREE  from 'three'
 import * as dat    from 'dat-gui'
 
 import {Logger, ConsoleLogger}  from 'Logger'
+import {DepthBufferFactory}     from "DepthBufferFactory"
+import {Graphics}               from "Graphics"
 import {OBJLoader}              from "OBJLoader"
 import {MeshPreviewViewer}      from "MeshPreviewViewer"
 import {Services}               from 'Services'
@@ -55,9 +57,23 @@ export class ModelRelief {
 
         loader.load(fileName, function (group : THREE.Group) {
             
-            viewer.root.add(group);
+            viewer.model = group;
 
         }, onProgress, onError);
+    }
+
+    /**
+     * Generates a relief from the current model camera.
+     */
+    generateRelief() : void {
+
+        let size = 768;
+        let factory = new DepthBufferFactory({width : size, height : size, model : this._modelViewer._root, camera : this._modelViewer.camera});   
+        let previewMesh : THREE.Mesh = factory.meshGenerate({modelWidth : 2});
+
+        this._meshPreviewViewer.model = previewMesh;
+            
+        Services.consoleLogger.addInfoMessage('Relief generated');
     }
 
     /**
@@ -67,18 +83,13 @@ export class ModelRelief {
 
         let scope = this;
 
-        function captureRelief() : void {
-
-            Services.consoleLogger.addInfoMessage('Relief captured');
-        }
-
         class ViewerControls {
             displayGrid: boolean;
-            captureRelief : () => void;
+            generateRelief : () => void;
 
             constructor() {
                 this.displayGrid   = true;
-                this.captureRelief = function() {};
+                this.generateRelief = function() {};
             }
         }
         let viewerControls = new ViewerControls();
@@ -100,10 +111,10 @@ export class ModelRelief {
         }.bind(this));
 
         // Depth Buffer
-        var controlCaptureRelief = folderOptions.add(viewerControls, 'captureRelief').name('Capture Relief');
-        controlCaptureRelief.onChange (function () {
+        var controlGenerateRelief = folderOptions.add(viewerControls, 'generateRelief').name('Generate Relief');
+        controlGenerateRelief.onChange (function () {
 
-            captureRelief();
+            scope.generateRelief();
         }.bind(this));
 
         folderOptions.open();

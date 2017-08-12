@@ -3,17 +3,7 @@
     Model3D Viewer
 ------------------------*/
 
-#info {
-    color: #fff;
-    position: absolute;
-    top: 10px;
-    width: 100%;
-    text-align: center;
-    z-index: 100;
-    display: block;
-}
-
-#dat {
+#settingsControls {
     user-select: none;
     position: absolute;
     right: 0;
@@ -22,7 +12,7 @@
 }
 
 #modelCanvas, #meshCanvas {
-    width:  512px;
+    width: 512px;
     height: 512px;
     background-color: #000000;
 }

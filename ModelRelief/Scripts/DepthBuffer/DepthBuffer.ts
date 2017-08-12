@@ -379,7 +379,8 @@ export class DepthBuffer {
      * Analyzes properties of a depth buffer.
      */
     analyze () {
-    
+        this._logger.clearLog();
+
         let middle = this.width / 2;
         let decimalPlaces = 5;
         let headerStyle   = "font-family : monospace; font-weight : bold; color : blue; font-size : 18px";

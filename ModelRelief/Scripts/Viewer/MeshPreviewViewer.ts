@@ -19,8 +19,8 @@ import {TrackballControls}      from 'TrackballControls'
  */
 export class MeshPreviewViewer {
 
-    scene               : THREE.Scene               = null;;
-    root                : THREE.Group               = null;
+    _scene               : THREE.Scene               = null;;
+    _root               : THREE.Group               = null;
 
     _canvas             : HTMLCanvasElement         = null;
     _width              : number                    = 0;
@@ -50,6 +50,15 @@ export class MeshPreviewViewer {
         this.animate();
     }
 
+//#region Properties
+    set model(value : THREE.Mesh) {
+
+        Graphics.removeSceneObjectChildren(this._scene, this._root, false);
+        this._root.add(value);
+    }
+
+//#endregion
+
     /**
      * Initializes the preview renderer used to view the 3D mesh.
      */
@@ -66,7 +75,7 @@ export class MeshPreviewViewer {
 
         this.setupScene();
 
-        this.initializeLighting(this.scene);
+        this.initializeLighting(this._scene);
     }
 
     /**
@@ -79,7 +88,7 @@ export class MeshPreviewViewer {
         this.initializeRenderer();
 
         this.onWindowResize();
-        window.addEventListener('resize', this.onWindowResize, false);
+        window.addEventListener('resize', this.onWindowResize.bind(this), false);
     }
 
     /**
@@ -148,9 +157,9 @@ export class MeshPreviewViewer {
      */
     setupScene() {
     
-        this.scene = new THREE.Scene();
-        this.root = new THREE.Group();
-        this.scene.add(this.root);
+        this._scene = new THREE.Scene();
+        this._root = new THREE.Group();
+        this._scene.add(this._root);
     }
 
     /**
@@ -162,6 +171,6 @@ export class MeshPreviewViewer {
 
         this._controls.update();
 
-        this._renderer.render(this.scene, this._camera); 
+        this._renderer.render(this._scene, this._camera); 
     }
 }

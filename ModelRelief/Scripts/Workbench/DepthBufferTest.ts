@@ -265,15 +265,15 @@ function initializeMeshPreviewViewer() {
 /**
  *  Event handler to create depth buffers.
  */
-function takePhotograph() {
+function generateRelief() {
 
     let size = 768;
     let factory = new DepthBufferFactory({width : size, height : size, model : modelRoot, camera : modelCamera});
     
     let previewMesh : THREE.Mesh = factory.meshGenerate({modelWidth : 2, camera : modelCamera});
 
-    Graphics.removeSceneObjectChildren(meshPreviewViewer.scene, meshPreviewViewer.root, false);
-    meshPreviewViewer.root.add(previewMesh);
+    Graphics.removeSceneObjectChildren(meshPreviewViewer._scene, meshPreviewViewer._root, false);
+    meshPreviewViewer._root.add(previewMesh);
 }
 
 function main() {
@@ -283,9 +283,9 @@ function main() {
     initializeModelViewer();
     initializeMeshPreviewViewer();
 
-    let cameraButton = (<HTMLInputElement> document.querySelector(`#${CameraButtonId}`)).onclick = takePhotograph;
+    let cameraButton = (<HTMLInputElement> document.querySelector(`#${CameraButtonId}`)).onclick = generateRelief;
 
-    takePhotograph();
+    generateRelief();
 }
 
 main();

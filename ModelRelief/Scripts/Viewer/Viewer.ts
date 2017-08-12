@@ -13,7 +13,7 @@ import {Logger}                 from 'Logger'
 import {Materials}              from 'Materials'
 import {Services}               from 'Services'
 
-interface CameraDefaults {
+interface CameraSettings {
     position:   THREE.Vector3;        // location of camera
     target:     THREE.Vector3;        // target point
     near:       number;               // near clipping plane
@@ -31,16 +31,17 @@ const ObjectNames = {
  */
 export class Viewer {
    
-    root            : THREE.Object3D               = null;      
+    camera           : THREE.PerspectiveCamera     = null;
 
     _renderer        : THREE.WebGLRenderer         = null;;
     _canvas          : HTMLCanvasElement           = null;
-    _aspectRatio     : number                      = 1.0;
+    _width           : number                      = 0;
+    _height          : number                      = 0;
 
     _scene           : THREE.Scene                 = null;
+    _root            : THREE.Object3D               = null;      
 
-    _camera          : THREE.PerspectiveCamera     = null;
-    _cameraDefaults  : CameraDefaults              = null;;
+    _cameraSettings  : CameraSettings              = null;;
     _cameraTarget    : THREE.Vector3               = null;;
 
     _controls        : TrackballControls           = null;
@@ -57,14 +58,24 @@ export class Viewer {
         this._logger = Services.consoleLogger;
 
         this._canvas         = <HTMLCanvasElement> document.getElementById(modelCanvasId);
-        this.recalcAspectRatio();
+        this._width  = this._canvas.offsetWidth;
+        this._height = this._canvas.offsetHeight;
 
         this.initializeScene();
 
         this.initializeGL();
 
-        this.render();
+        this.animate();
     }
+
+//#region Properties
+    set model(value : THREE.Group) {
+
+        Graphics.removeSceneObjectChildren(this._scene, this._root, false);
+        this._root.add(value);
+    }
+
+//#endregion
     
     /**
      * Adds lighting to the scene
@@ -88,9 +99,10 @@ export class Viewer {
      */
     initializeCamera() {
 
-        this._cameraDefaults = {
+        this._cameraSettings = {
             // Baseline : near = 0.1, far = 10000
             // ZBuffer  : near = 100, far = 300
+
             position:       new THREE.Vector3(0.0, 175.0, 500.0),
             target:         new THREE.Vector3(0, 0, 0),
             near:           0.1,
@@ -98,10 +110,10 @@ export class Viewer {
             fov:            45
         };
 
-        this._camera = null;
-        this._cameraTarget = this._cameraDefaults.target;
+        this.camera = null;
+        this._cameraTarget = this._cameraSettings.target;
 
-        this._camera = new THREE.PerspectiveCamera(this._cameraDefaults.fov, this._aspectRatio, this._cameraDefaults.near, this._cameraDefaults.far);
+        this.camera = new THREE.PerspectiveCamera(this._cameraSettings.fov, this.aspectRatio, this._cameraSettings.near, this._cameraSettings.far);
         this.resetCamera();
     }
 
@@ -124,9 +136,10 @@ export class Viewer {
     initializeGL() {
 
         this._renderer = new THREE.WebGLRenderer({
-            logarithmicDepthBuffer: false,
-            canvas: this._canvas,
-            antialias: true
+
+            logarithmicDepthBuffer  : false,
+            canvas                  : this._canvas,
+            antialias               : true
         });
         this._renderer.autoClear = true;
         this._renderer.setClearColor(0x000000);
@@ -136,7 +149,7 @@ export class Viewer {
         this.initializeLighting();
         this.initializeInputControls();
 
-        this.resizeDisplayGL();  
+        this.resizeDisplayWebGL();  
         window.addEventListener('resize', this.resizeWindow.bind(this), false);
     }
 
@@ -145,7 +158,7 @@ export class Viewer {
      */
     resizeWindow () {
 
-        this.resizeDisplayGL();
+        this.resizeDisplayWebGL();
     }
 
     /**
@@ -153,28 +166,32 @@ export class Viewer {
      */
     createRoot() {
 
-        this.root = new THREE.Object3D();
-        this.root.name = ObjectNames.Root;
-        this._scene.add(this.root);
+        this._root = new THREE.Object3D();
+        this._root.name = ObjectNames.Root;
+        this._scene.add(this._root);
     }
 
     /**
      * Handles the WebGL processing for a DOM window 'resize' event
      */
-    resizeDisplayGL() {
+    resizeDisplayWebGL() {
+
+        this._width =  this._canvas.offsetWidth;
+        this._height = this._canvas.offsetHeight;
+        this._renderer.setSize(this._width, this._height, false);
 
         this._controls.handleResize();
-        this.recalcAspectRatio();
-        this._renderer.setSize(this._canvas.offsetWidth, this._canvas.offsetHeight, false);
         this.updateCamera();
     }
 
     /**
      * Calculates the aspect ratio of the canvas afer a window resize
      */
-    recalcAspectRatio() {
+    get aspectRatio() : number {
 
-        this._aspectRatio = (this._canvas.offsetHeight === 0) ? 1 : this._canvas.offsetWidth / this._canvas.offsetHeight;
+        let aspectRatio : number = this._width / this._height;
+
+        return aspectRatio;
     } 
 
     /**
@@ -182,8 +199,8 @@ export class Viewer {
      */
     resetCamera() {
 
-        this._camera.position.copy(this._cameraDefaults.position);
-        this._cameraTarget.copy(this._cameraDefaults.target);
+        this.camera.position.copy(this._cameraSettings.position);
+        this._cameraTarget.copy(this._cameraSettings.target);
         this.updateCamera();
     }
 
@@ -192,30 +209,30 @@ export class Viewer {
      */
     updateCamera() {
 
-        this._camera.aspect = this._aspectRatio;
-        this._camera.lookAt(this._cameraTarget);
-        this._camera.updateProjectionMatrix();
+        this.camera.aspect = this.aspectRatio;
+        this.camera.lookAt(this._cameraTarget);
+        this.camera.updateProjectionMatrix();
     }
 
     /**
      * Performs the WebGL render of the scene
      */
-    renderGL() {
+    renderWebGL() {
 
         if (!this._renderer.autoClear) 
             this._renderer.clear();
 
         this._controls.update();
-        this._renderer.render(this._scene, this._camera);
+        this._renderer.render(this._scene, this.camera);
     }
 
     /**
      * Main DOM render loop
      */
-    render() {
+    animate() {
 
-        requestAnimationFrame(this.render.bind(this));
-        this.renderGL();
+        requestAnimationFrame(this.animate.bind(this));
+        this.renderWebGL();
     }
 
     /**
@@ -223,7 +240,7 @@ export class Viewer {
      */
     initializeInputControls() {
 
-        this._controls = new TrackballControls(this._camera, this._renderer.domElement);
+        this._controls = new TrackballControls(this.camera, this._renderer.domElement);
     }
 
     /**
@@ -231,7 +248,7 @@ export class Viewer {
      */
     clearAllAssests() {
         
-        Graphics.removeSceneObjectChildren(this._scene, this.root, false);
+        Graphics.removeSceneObjectChildren(this._scene, this._root, false);
         this.createRoot();
     } 
 
