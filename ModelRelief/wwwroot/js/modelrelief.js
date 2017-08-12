@@ -1023,23 +1023,24 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthB
          * @param parameters Initialization parameters (DepthBufferFactoryParameters)
          */
         function DepthBufferFactory(parameters) {
+            this._scene = null; // target scene
+            this._model = null; // target model
+            this._renderer = null; // scene renderer
+            this._canvas = null; // DOM canvas supporting renderer
             this._width = DepthBufferFactory.DefaultResolution; // width resolution of the DB
             this._height = DepthBufferFactory.DefaultResolution; // height resolution of the DB
+            this._camera = null; // perspective camera to generate the depth buffer
             this._logDepthBuffer = false; // use a logarithmic buffer for more accuracy in large scenes
             this._boundedClipping = true; // override camera clipping planes; set near and far to bound model for improved accuracy
             this._depthBuffer = null; // depth buffer 
             this._target = null; // WebGL render target for creating the WebGL depth buffer when rendering the scene
             this._encodedTarget = null; // WebGL render target for encodin the WebGL depth buffer into a floating point (RGBA format)
-            this._canvas = null; // DOM canvas supporting renderer
-            this._renderer = null; // scene renderer
-            this._scene = null; // target scene
-            this._model = null; // target model
-            this._camera = null; // perspective camera to generate the depth buffer
             this._postScene = null; // single polygon scene use to generate the encoded RGBA buffer
             this._postCamera = null; // orthographic camera
             this._postMaterial = null; // shader material that encodes the WebGL depth buffer into a floating point RGBA format
             this._minimumWebGL = true; // true if minimum WeGL requirementat are present
             this._logger = null; // logger
+            this._canvas = this.initializeCanvas();
             // required
             this._width = parameters.width;
             this._height = parameters.height;
@@ -1050,28 +1051,34 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthB
             this._boundedClipping = parameters.boundedClipping || true;
             this.initialize();
         }
+        //#region Properties
+        //#endregion
+        //#region Initialization    
         /**
-         * Initialize default lighting in the scene.
-         * Lighting does not affect the depth buffer. It is only used if the canvas is made visible.
+         * Verifies the minimum WebGL extensions are present.
+         * @param renderer WebGL renderer.
          */
-        DepthBufferFactory.prototype.initializeLighting = function (scene) {
-            var ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-            scene.add(ambientLight);
-            var directionalLight1 = new THREE.DirectionalLight(0xffffff);
-            directionalLight1.position.set(1, 1, 1);
-            scene.add(directionalLight1);
+        DepthBufferFactory.prototype.verifyWebGLExtensions = function () {
+            if (!this._renderer.extensions.get('WEBGL_depth_texture')) {
+                this._minimumWebGL = false;
+                this._logger.addErrorMessage('The minimum WebGL extensions are not supported in the browser.');
+                return false;
+            }
+            return true;
         };
         /**
-         * Adds a background plane at the origin.
+         * Constructs a WebGL target canvas.
          */
-        DepthBufferFactory.prototype.addBackgroundPlane = function (size) {
-            // background plane
-            var geometry = new THREE.PlaneGeometry(size, size);
-            var material = new THREE.MeshPhongMaterial({ color: 0xffffff });
-            var mesh = new THREE.Mesh(geometry, material);
-            var center = new THREE.Vector3(0.0, 0.0, 0.0);
-            mesh.position.set(center.x, center.y, center.z);
-            this._scene.add(mesh);
+        DepthBufferFactory.prototype.initializeCanvas = function () {
+            this._canvas = document.createElement('canvas');
+            this._canvas.setAttribute('name', Tools_1.Tools.generatePseudoGUID());
+            // render dimensions    
+            this._canvas.width = this._width;
+            this._canvas.height = this._height;
+            // DOM element dimensions (may be different than render dimensions)
+            this._canvas.style.width = this._width + "px";
+            this._canvas.style.height = this._height + "px";
+            return this._canvas;
         };
         /**
          * Perform setup and initialization of the render scene.
@@ -1080,20 +1087,65 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthB
             this._scene = new THREE.Scene();
             if (this._model)
                 this._scene.add(this._model);
-            this.initializeLighting(this._scene);
+            this.initializeLighting();
         };
         /**
-         * Constructs the orthographic camera used to convert the WebGL depth buffer to the encoded RGBA buffer
+         * Initialize the  model view.
          */
-        DepthBufferFactory.prototype.initializePostCamera = function () {
-            // Setup post processing stage
-            var left = -1;
-            var right = 1;
-            var top = 1;
-            var bottom = -1;
-            var near = 0;
-            var far = 1;
-            this._postCamera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
+        DepthBufferFactory.prototype.initializeRenderer = function () {
+            this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas, logarithmicDepthBuffer: this._logDepthBuffer });
+            this._renderer.setPixelRatio(window.devicePixelRatio);
+            this._renderer.setSize(this._width, this._height);
+            // Model Scene -> (Render Texture, Depth Texture)
+            this._target = this.constructDepthTextureRenderTarget();
+            // Encoded RGBA Texture from Depth Texture
+            this._encodedTarget = new THREE.WebGLRenderTarget(this._width, this._height);
+            this.verifyWebGLExtensions();
+        };
+        /**
+         * Initialize default lighting in the scene.
+         * Lighting does not affect the depth buffer. It is only used if the canvas is made visible.
+         */
+        DepthBufferFactory.prototype.initializeLighting = function () {
+            var ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+            this._scene.add(ambientLight);
+            var directionalLight1 = new THREE.DirectionalLight(0xffffff);
+            directionalLight1.position.set(1, 1, 1);
+            this._scene.add(directionalLight1);
+        };
+        /**
+         * Perform setup and initialization.
+         */
+        DepthBufferFactory.prototype.initializePrimary = function () {
+            this.initializeScene();
+            this.initializeRenderer();
+        };
+        /**
+         * Perform setup and initialization.
+         */
+        DepthBufferFactory.prototype.initialize = function () {
+            this._logger = Services_3.Services.consoleLogger;
+            this.initializePrimary();
+            this.initializePost();
+        };
+        //#endregion
+        //#region PostProcessing
+        /**
+         * Constructs a render target <with a depth texture buffer>.
+         */
+        DepthBufferFactory.prototype.constructDepthTextureRenderTarget = function () {
+            // Model Scene -> (Render Texture, Depth Texture)
+            var renderTarget = new THREE.WebGLRenderTarget(this._width, this._height);
+            renderTarget.texture.format = THREE.RGBAFormat;
+            renderTarget.texture.type = THREE.UnsignedByteType;
+            renderTarget.texture.minFilter = THREE.NearestFilter;
+            renderTarget.texture.magFilter = THREE.NearestFilter;
+            renderTarget.texture.generateMipmaps = false;
+            renderTarget.stencilBuffer = false;
+            renderTarget.depthBuffer = true;
+            renderTarget.depthTexture = new THREE.DepthTexture(this._width, this._height);
+            renderTarget.depthTexture.type = THREE.UnsignedIntType;
+            return renderTarget;
         };
         /**
          * Perform setup and initialization of the post scene used to create the final RGBA encoded depth buffer.
@@ -1114,74 +1166,30 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthB
             this._postScene = new THREE.Scene();
             this._postScene.add(postMeshQuad);
             this.initializePostCamera();
-            this.initializeLighting(this._postScene);
+            this.initializeLighting();
+        };
+        /**
+         * Constructs the orthographic camera used to convert the WebGL depth buffer to the encoded RGBA buffer
+         */
+        DepthBufferFactory.prototype.initializePostCamera = function () {
+            // Setup post processing stage
+            var left = -1;
+            var right = 1;
+            var top = 1;
+            var bottom = -1;
+            var near = 0;
+            var far = 1;
+            this._postCamera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
         };
         /**
          * Perform setup and initialization.
          */
-        DepthBufferFactory.prototype.initialize = function () {
-            this._logger = Services_3.Services.consoleLogger;
-            this.initializeRenderer();
-            this.initializeScene();
+        DepthBufferFactory.prototype.initializePost = function () {
             this.initializePostScene();
+            this.initializePostCamera();
         };
-        /**
-         * Verifies the minimum WebGL extensions are present.
-         * @param renderer WebGL renderer.
-         */
-        DepthBufferFactory.prototype.verifyWebGLExtensions = function () {
-            if (!this._renderer.extensions.get('WEBGL_depth_texture')) {
-                this._minimumWebGL = false;
-                this._logger.addErrorMessage('The minimum WebGL extensions are not supported in the browser.');
-                return false;
-            }
-            return true;
-        };
-        /**
-         * Constructs a render target <with a depth texture buffer>.
-         */
-        DepthBufferFactory.prototype.constructDepthTextureRenderTarget = function () {
-            // Model Scene -> (Render Texture, Depth Texture)
-            var renderTarget = new THREE.WebGLRenderTarget(this._width, this._height);
-            renderTarget.texture.format = THREE.RGBAFormat;
-            renderTarget.texture.type = THREE.UnsignedByteType;
-            renderTarget.texture.minFilter = THREE.NearestFilter;
-            renderTarget.texture.magFilter = THREE.NearestFilter;
-            renderTarget.texture.generateMipmaps = false;
-            renderTarget.stencilBuffer = false;
-            renderTarget.depthBuffer = true;
-            renderTarget.depthTexture = new THREE.DepthTexture(this._width, this._height);
-            renderTarget.depthTexture.type = THREE.UnsignedIntType;
-            return renderTarget;
-        };
-        /**
-         * Initialize the  model view.
-         */
-        DepthBufferFactory.prototype.initializeRenderer = function () {
-            this._canvas = this.initializeCanvas();
-            this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas, logarithmicDepthBuffer: this._logDepthBuffer });
-            this._renderer.setPixelRatio(window.devicePixelRatio);
-            this._renderer.setSize(this._width, this._height);
-            // Model Scene -> (Render Texture, Depth Texture)
-            this._target = this.constructDepthTextureRenderTarget();
-            // Encoded RGBA Texture from Depth Texture
-            this._encodedTarget = new THREE.WebGLRenderTarget(this._width, this._height);
-            this.verifyWebGLExtensions();
-        };
-        /**
-         * Constructs a WebGL target canvas.
-         */
-        DepthBufferFactory.prototype.initializeCanvas = function () {
-            this._canvas = document.createElement('canvas');
-            this._canvas.setAttribute('name', Tools_1.Tools.generatePseudoGUID());
-            // render dimensions    
-            this._canvas.width = this._width;
-            this._canvas.height = this._height;
-            // DOM element dimensions (may be different than render dimensions)
-            this._canvas.style.width = this._width + "px";
-            this._canvas.style.height = this._height + "px";
-            return this._canvas;
-        };
+        //#endregion
+        //#region Generation
         /**
          * Verifies the pre-requisite settings are defined to create a mesh.
          */
@@ -1197,24 +1205,6 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthB
                 minimumSettings = false;
             }
             return minimumSettings;
-        };
-        /**
-         * Generates a mesh from the active model and camera
-         * @param parameters Generation parameters (MeshGenerateParameters)
-         */
-        DepthBufferFactory.prototype.meshGenerate = function (parameters) {
-            if (!this.verifyMeshSettings())
-                return null;
-            this.createDepthBuffer();
-            var mesh = this._depthBuffer.mesh(parameters.modelWidth, parameters.material);
-            return mesh;
-        };
-        /**
-         * Generates an image from the active model and camera
-         * @param parameters Generation parameters (ImageGenerateParameters)
-         */
-        DepthBufferFactory.prototype.imageGenerate = function (parameters) {
-            return null;
         };
         /**
          * Constructs an RGBA string with the byte values of a pixel.
@@ -1262,6 +1252,24 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthB
             this._renderer.readRenderTargetPixels(this._encodedTarget, 0, 0, this._width, this._height, depthBufferRGBA);
             this._depthBuffer = new DepthBuffer_1.DepthBuffer(depthBufferRGBA, this._width, this._height, this._camera);
             this.analyzeTargets();
+        };
+        /**
+         * Generates a mesh from the active model and camera
+         * @param parameters Generation parameters (MeshGenerateParameters)
+         */
+        DepthBufferFactory.prototype.meshGenerate = function (parameters) {
+            if (!this.verifyMeshSettings())
+                return null;
+            this.createDepthBuffer();
+            var mesh = this._depthBuffer.mesh(parameters.modelWidth, parameters.material);
+            return mesh;
+        };
+        /**
+         * Generates an image from the active model and camera
+         * @param parameters Generation parameters (ImageGenerateParameters)
+         */
+        DepthBufferFactory.prototype.imageGenerate = function (parameters) {
+            return null;
         };
         DepthBufferFactory.DefaultResolution = 1024; // default DB resolution
         return DepthBufferFactory;
@@ -2814,9 +2822,9 @@ define("ModelRelief", ["require", "exports", "dat-gui", "DepthBuffer/DepthBuffer
             // Loader
             this._loader = new Loader_1.Loader();
             //      this._loader.loadOBJModel (this._modelViewer);
-            //      this._loader.loadTorusModel (this._modelViewer);
+            this._loader.loadTorusModel(this._modelViewer);
             //      this._loader.loadBoxModel (this._modelViewer);
-            this._loader.loadSphereModel(this._modelViewer);
+            //      this._loader.loadSphereModel (this._modelViewer);
         };
         return ModelRelief;
     }());
