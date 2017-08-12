@@ -11,6 +11,14 @@ import {Logger, ConsoleLogger}  from 'Logger'
 import {ModelRelief}            from 'ModelRelief'
 import {Services}               from 'Services'
 
+export interface CameraSettings {
+    position:       THREE.Vector3;        // location of camera
+    target:         THREE.Vector3;        // target point
+    near:           number;               // near clipping plane
+    far:            number;               // far clipping plane
+    fieldOfView:    number;               // field of view
+}
+
 /**
  *  General THREE.js/WebGL support routines
  *  Graphics Library

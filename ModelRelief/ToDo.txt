@@ -6,10 +6,9 @@
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
 
-Initialize all class variable.
 aspectRatio property of viewing classes
 
-Share CameraDefaults -> CameraSettings. Class?
+Share CameraSettings. Class?
 
 Graphics
     ModelHelpers

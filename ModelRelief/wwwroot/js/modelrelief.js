@@ -2240,30 +2240,30 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
          */
         function Viewer(modelCanvasId) {
             this.camera = null;
+            this._defaultCameraSettings = null;
             this._renderer = null;
             this._canvas = null;
             this._width = 0;
             this._height = 0;
             this._scene = null;
             this._root = null;
-            this._cameraSettings = null;
-            this._cameraTarget = null;
             this._controls = null;
             this._logger = null;
             this._logger = Services_4.Services.consoleLogger;
             this._canvas = document.getElementById(modelCanvasId);
             this._width = this._canvas.offsetWidth;
             this._height = this._canvas.offsetHeight;
-            this.initializeScene();
-            var useTestCamera = false;
-            this.initializeGL(useTestCamera);
+            var useTestCamera = true;
+            this.initialize(useTestCamera);
             this.animate();
         }
         ;
-        ;
-        ;
         Object.defineProperty(Viewer.prototype, "model", {
             //#region Properties
+            /**
+             * Sets the active model.
+             * @param value New model to activate.
+             */
             set: function (value) {
                 Graphics_1.Graphics.removeSceneObjectChildren(this._scene, this._root, false);
                 this._root.add(value);
@@ -2271,19 +2271,40 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(Viewer.prototype, "aspectRatio", {
+            /**
+             * Calculates the aspect ratio of the canvas afer a window resize
+             */
+            get: function () {
+                var aspectRatio = this._width / this._height;
+                return aspectRatio;
+            },
+            enumerable: true,
+            configurable: true
+        });
         //#endregion
+        //#region Initialization    
         /**
-         * Adds lighting to the scene
+         * Initialize Scene
          */
-        Viewer.prototype.initializeLighting = function () {
-            var ambientLight = new THREE.AmbientLight(0x404040);
-            this._scene.add(ambientLight);
-            var directionalLight1 = new THREE.DirectionalLight(0xC0C090);
-            directionalLight1.position.set(-100, -50, 100);
-            this._scene.add(directionalLight1);
-            var directionalLight2 = new THREE.DirectionalLight(0xC0C090);
-            directionalLight2.position.set(100, 50, -100);
-            this._scene.add(directionalLight2);
+        Viewer.prototype.initializeScene = function () {
+            this._scene = new THREE.Scene();
+            this.createRoot();
+            var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
+            helper.name = ObjectNames.Grid;
+            this._scene.add(helper);
+        };
+        /**
+         * Initialize the WebGL renderer.
+         */
+        Viewer.prototype.initializeRenderer = function () {
+            this._renderer = new THREE.WebGLRenderer({
+                logarithmicDepthBuffer: false,
+                canvas: this._canvas,
+                antialias: true
+            });
+            this._renderer.autoClear = true;
+            this._renderer.setClearColor(0x000000);
         };
         /**
          * Initialize the viewer camera
@@ -2305,44 +2326,59 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
                 far: 10.0,
                 fieldOfView: 37 // https://www.nikonians.org/reviews/fov-tables
             };
-            this._cameraSettings = useTestCamera ? settingsTestModels : settingsOBJ;
-            this.camera = null;
-            this._cameraTarget = this._cameraSettings.target;
-            this.camera = new THREE.PerspectiveCamera(this._cameraSettings.fieldOfView, this.aspectRatio, this._cameraSettings.near, this._cameraSettings.far);
+            this._defaultCameraSettings = useTestCamera ? settingsTestModels : settingsOBJ;
+            this.camera = new THREE.PerspectiveCamera(this._defaultCameraSettings.fieldOfView, this.aspectRatio, this._defaultCameraSettings.near, this._defaultCameraSettings.far);
+            this.camera.position.copy(this._defaultCameraSettings.position);
             this.resetCamera();
+        };
+        /**
+         * Adds lighting to the scene
+         */
+        Viewer.prototype.initializeLighting = function () {
+            var ambientLight = new THREE.AmbientLight(0x404040);
+            this._scene.add(ambientLight);
+            var directionalLight1 = new THREE.DirectionalLight(0xC0C090);
+            directionalLight1.position.set(-100, -50, 100);
+            this._scene.add(directionalLight1);
+            var directionalLight2 = new THREE.DirectionalLight(0xC0C090);
+            directionalLight2.position.set(100, 50, -100);
+            this._scene.add(directionalLight2);
+        };
+        /**
+         * Sets up the user input controls (Trackball)
+         */
+        Viewer.prototype.initializeInputControls = function () {
+            this._controls = new TrackballControls_1.TrackballControls(this.camera, this._renderer.domElement);
         };
         /**
          * Initialize the scene with the base objects
          */
-        Viewer.prototype.initializeScene = function () {
-            this._scene = new THREE.Scene();
-            this.createRoot();
-            var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
-            helper.name = ObjectNames.Grid;
-            this._scene.add(helper);
-        };
-        /**
-         * Initialize the WebGL settings
-         */
-        Viewer.prototype.initializeGL = function (useTestCamera) {
-            this._renderer = new THREE.WebGLRenderer({
-                logarithmicDepthBuffer: false,
-                canvas: this._canvas,
-                antialias: true
-            });
-            this._renderer.autoClear = true;
-            this._renderer.setClearColor(0x000000);
+        Viewer.prototype.initialize = function (useTestCamera) {
+            this.initializeScene();
+            this.initializeRenderer();
             this.initializeCamera(useTestCamera);
             this.initializeLighting();
             this.initializeInputControls();
             this.resizeDisplayWebGL();
             window.addEventListener('resize', this.resizeWindow.bind(this), false);
         };
+        //#endregion
+        //#region Camera
         /**
-         * Handles a window resize event
+         * Resets all camera properties to the defaults
          */
-        Viewer.prototype.resizeWindow = function () {
-            this.resizeDisplayWebGL();
+        Viewer.prototype.resetCamera = function () {
+            this.camera.position.copy(this._defaultCameraSettings.position);
+            this.updateCamera();
+        };
+        //#endregion
+        //#region Scene
+        /**
+         * Removes all scene objects
+         */
+        Viewer.prototype.clearAllAssests = function () {
+            Graphics_1.Graphics.removeSceneObjectChildren(this._scene, this._root, false);
+            this.createRoot();
         };
         /**
          * Creates the root object in the scene
@@ -2351,6 +2387,24 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
             this._root = new THREE.Object3D();
             this._root.name = ObjectNames.Root;
             this._scene.add(this._root);
+        };
+        /**
+         * Display the reference grid.
+         */
+        Viewer.prototype.displayGrid = function (visible) {
+            var gridGeometry = this._scene.getObjectByName(ObjectNames.Grid);
+            gridGeometry.visible = visible;
+            this._logger.addInfoMessage("Display grid = " + visible);
+        };
+        //#endregion
+        //#region Window Resize
+        /**
+         * Updates the scene camera to match the new window size
+         */
+        Viewer.prototype.updateCamera = function () {
+            this.camera.aspect = this.aspectRatio;
+            this.camera.lookAt(this._defaultCameraSettings.target);
+            this.camera.updateProjectionMatrix();
         };
         /**
          * Handles the WebGL processing for a DOM window 'resize' event
@@ -2362,33 +2416,13 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
             this._controls.handleResize();
             this.updateCamera();
         };
-        Object.defineProperty(Viewer.prototype, "aspectRatio", {
-            /**
-             * Calculates the aspect ratio of the canvas afer a window resize
-             */
-            get: function () {
-                var aspectRatio = this._width / this._height;
-                return aspectRatio;
-            },
-            enumerable: true,
-            configurable: true
-        });
         /**
-         * Resets all camera properties to the defaults
+         * Handles a window resize event
          */
-        Viewer.prototype.resetCamera = function () {
-            this.camera.position.copy(this._cameraSettings.position);
-            this._cameraTarget.copy(this._cameraSettings.target);
-            this.updateCamera();
+        Viewer.prototype.resizeWindow = function () {
+            this.resizeDisplayWebGL();
         };
-        /**
-         * Updates the scene camera to match the new window size
-         */
-        Viewer.prototype.updateCamera = function () {
-            this.camera.aspect = this.aspectRatio;
-            this.camera.lookAt(this._cameraTarget);
-            this.camera.updateProjectionMatrix();
-        };
+        //#endregion
         /**
          * Performs the WebGL render of the scene
          */
@@ -2404,27 +2438,6 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
         Viewer.prototype.animate = function () {
             requestAnimationFrame(this.animate.bind(this));
             this.renderWebGL();
-        };
-        /**
-         * Sets up the user input controls (Trackball)
-         */
-        Viewer.prototype.initializeInputControls = function () {
-            this._controls = new TrackballControls_1.TrackballControls(this.camera, this._renderer.domElement);
-        };
-        /**
-         * Removes all scene objects
-         */
-        Viewer.prototype.clearAllAssests = function () {
-            Graphics_1.Graphics.removeSceneObjectChildren(this._scene, this._root, false);
-            this.createRoot();
-        };
-        /**
-         * Display the reference grid.
-         */
-        Viewer.prototype.displayGrid = function (visible) {
-            var gridGeometry = this._scene.getObjectByName(ObjectNames.Grid);
-            gridGeometry.visible = visible;
-            this._logger.addInfoMessage("Display grid = " + visible);
         };
         return Viewer;
     }());
@@ -2740,10 +2753,10 @@ define("ModelRelief", ["require", "exports", "dat-gui", "DepthBuffer/DepthBuffer
             this.initializeViewerControls();
             // Loader
             this._loader = new Loader_1.Loader();
-            this._loader.loadOBJModel(this._modelViewer);
+            //      this._loader.loadOBJModel (this._modelViewer);
             //      this._loader.loadTorusModel (this._modelViewer);
             //      this._loader.loadBoxModel (this._modelViewer);
-            //      this._loader.loadSphereModel (this._modelViewer);
+            this._loader.loadSphereModel(this._modelViewer);
         };
         return ModelRelief;
     }());

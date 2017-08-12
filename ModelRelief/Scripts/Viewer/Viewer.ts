@@ -5,21 +5,13 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE               from 'three'
+import * as THREE                   from 'three'
 
-import {TrackballControls}      from 'TrackballControls'
-import {Graphics}               from 'Graphics'
-import {Logger}                 from 'Logger'
-import {Materials}              from 'Materials'
-import {Services}               from 'Services'
-
-interface CameraSettings {
-    position:       THREE.Vector3;        // location of camera
-    target:         THREE.Vector3;        // target point
-    near:           number;               // near clipping plane
-    far:            number;               // far clipping plane
-    fieldOfView:    number;               // field of view
-}
+import {TrackballControls}          from 'TrackballControls'
+import {CameraSettings, Graphics}   from 'Graphics'
+import {Logger}                     from 'Logger'
+import {Materials}                  from 'Materials'
+import {Services}                   from 'Services'
 
 const ObjectNames = {
     Root :  'Root',
@@ -31,21 +23,20 @@ const ObjectNames = {
  */
 export class Viewer {
    
-    camera           : THREE.PerspectiveCamera     = null;
+    camera                  : THREE.PerspectiveCamera   = null;
+    _defaultCameraSettings  : CameraSettings            = null;
+                                                        
+    _renderer               : THREE.WebGLRenderer       = null;;
+    _canvas                 : HTMLCanvasElement         = null;
+    _width                  : number                    = 0;
+    _height                 : number                    = 0;
 
-    _renderer        : THREE.WebGLRenderer         = null;;
-    _canvas          : HTMLCanvasElement           = null;
-    _width           : number                      = 0;
-    _height          : number                      = 0;
+    _scene                  : THREE.Scene               = null;
+    _root                   : THREE.Object3D            = null;      
 
-    _scene           : THREE.Scene                 = null;
-    _root            : THREE.Object3D               = null;      
+    _controls               : TrackballControls         = null;
 
-    _cameraSettings  : CameraSettings              = null;;
-    _cameraTarget    : THREE.Vector3               = null;;
-
-    _controls        : TrackballControls           = null;
-    _logger          : Logger                      = null;
+    _logger                 : Logger                    = null;
 
     /**
      * Default constructor
@@ -61,23 +52,96 @@ export class Viewer {
         this._width  = this._canvas.offsetWidth;
         this._height = this._canvas.offsetHeight;
 
-        this.initializeScene();
-
-        let useTestCamera = false;
-        this.initializeGL(useTestCamera);
+        let useTestCamera = true;
+        this.initialize(useTestCamera);
 
         this.animate();
     }
 
 //#region Properties
+    /**
+     * Sets the active model.
+     * @param value New model to activate.
+     */
     set model(value : THREE.Group) {
 
         Graphics.removeSceneObjectChildren(this._scene, this._root, false);
         this._root.add(value);
     }
 
+    /**
+     * Calculates the aspect ratio of the canvas afer a window resize
+     */
+    get aspectRatio() : number {
+
+        let aspectRatio : number = this._width / this._height;
+        return aspectRatio;
+    } 
+
 //#endregion
-    
+
+//#region Initialization    
+    /**
+     * Initialize Scene
+     */
+    initializeScene () {
+
+        this._scene = new THREE.Scene();
+        this.createRoot();
+
+        var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
+        helper.name = ObjectNames.Grid;
+        this._scene.add(helper);
+    }
+
+    /**
+     * Initialize the WebGL renderer.
+     */
+    initializeRenderer () {
+
+        this._renderer = new THREE.WebGLRenderer({
+
+            logarithmicDepthBuffer  : false,
+            canvas                  : this._canvas,
+            antialias               : true
+        });
+        this._renderer.autoClear = true;
+        this._renderer.setClearColor(0x000000);
+    }
+
+    /**
+     * Initialize the viewer camera
+     */
+    initializeCamera(useTestCamera : boolean) {
+
+        let settingsOBJ : CameraSettings = {
+            // Baseline : near = 0.1, far = 10000
+            // ZBuffer  : near = 100, far = 300
+
+            position:       new THREE.Vector3(0.0, 175.0, 500.0),
+            target:         new THREE.Vector3(0, 0, 0),
+            near:           0.1,
+            far:            10000,
+            fieldOfView:    45
+        };
+
+        let settingsTestModels : CameraSettings = {
+
+            position:       new THREE.Vector3(0.0, 0.0, 4.0),
+            target:         new THREE.Vector3(0, 0, 0),
+            near:           2.0,
+            far:            10.0,
+            fieldOfView:    37                                  // https://www.nikonians.org/reviews/fov-tables
+        };
+
+        this._defaultCameraSettings = useTestCamera ? settingsTestModels : settingsOBJ;    
+
+        this.camera = new THREE.PerspectiveCamera(this._defaultCameraSettings.fieldOfView, this.aspectRatio, this._defaultCameraSettings.near, this._defaultCameraSettings.far);
+        this.camera.position.copy(this._defaultCameraSettings.position);
+
+        this.resetCamera();
+    }
+
     /**
      * Adds lighting to the scene
      */
@@ -96,67 +160,20 @@ export class Viewer {
     }
 
     /**
-     * Initialize the viewer camera
+     * Sets up the user input controls (Trackball)
      */
-    initializeCamera(useTestCamera : boolean) {
+    initializeInputControls() {
 
-        let settingsOBJ : CameraSettings = {
-            // Baseline : near = 0.1, far = 10000
-            // ZBuffer  : near = 100, far = 300
-
-            position:       new THREE.Vector3(0.0, 175.0, 500.0),
-            target:         new THREE.Vector3(0, 0, 0),
-            near:           0.1,
-            far:            10000,
-            fieldOfView:            45
-        };
-
-        let settingsTestModels : CameraSettings = {
-
-            position:       new THREE.Vector3(0.0, 0.0, 4.0),
-            target:         new THREE.Vector3(0, 0, 0),
-            near:           2.0,
-            far:            10.0,
-            fieldOfView:    37                                  // https://www.nikonians.org/reviews/fov-tables
-        };
-
-        this._cameraSettings = useTestCamera ? settingsTestModels : settingsOBJ;
-
-        this.camera = null;
-        this._cameraTarget = this._cameraSettings.target;
-
-        this.camera = new THREE.PerspectiveCamera(this._cameraSettings.fieldOfView, this.aspectRatio, this._cameraSettings.near, this._cameraSettings.far);
-        this.resetCamera();
+        this._controls = new TrackballControls(this.camera, this._renderer.domElement);
     }
 
     /**
      * Initialize the scene with the base objects
      */
-    initializeScene () {
+    initialize (useTestCamera : boolean) {
 
-        this._scene = new THREE.Scene();
-        this.createRoot();
-
-        var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
-        helper.name = ObjectNames.Grid;
-        this._scene.add(helper);
-    }
-
-    /**
-     * Initialize the WebGL settings
-     */
-    initializeGL(useTestCamera : boolean) {
-
-        this._renderer = new THREE.WebGLRenderer({
-
-            logarithmicDepthBuffer  : false,
-            canvas                  : this._canvas,
-            antialias               : true
-        });
-        this._renderer.autoClear = true;
-        this._renderer.setClearColor(0x000000);
-
-
+        this.initializeScene();
+        this.initializeRenderer();
         this.initializeCamera(useTestCamera);
         this.initializeLighting();
         this.initializeInputControls();
@@ -164,14 +181,28 @@ export class Viewer {
         this.resizeDisplayWebGL();  
         window.addEventListener('resize', this.resizeWindow.bind(this), false);
     }
+//#endregion
 
+//#region Camera
     /**
-     * Handles a window resize event
+     * Resets all camera properties to the defaults
      */
-    resizeWindow () {
+    resetCamera() {
 
-        this.resizeDisplayWebGL();
+        this.camera.position.copy(this._defaultCameraSettings.position);
+        this.updateCamera();
     }
+//#endregion
+
+//#region Scene
+    /**
+     * Removes all scene objects
+     */
+    clearAllAssests() {
+        
+        Graphics.removeSceneObjectChildren(this._scene, this._root, false);
+        this.createRoot();
+    } 
 
     /**
      * Creates the root object in the scene
@@ -181,6 +212,28 @@ export class Viewer {
         this._root = new THREE.Object3D();
         this._root.name = ObjectNames.Root;
         this._scene.add(this._root);
+    }
+
+    /**
+     * Display the reference grid.
+     */
+    displayGrid(visible : boolean) {
+
+        let gridGeometry : THREE.Object3D = this._scene.getObjectByName(ObjectNames.Grid);
+        gridGeometry.visible = visible;
+        this._logger.addInfoMessage(`Display grid = ${visible}`);
+    } 
+//#endregion
+
+//#region Window Resize
+    /**
+     * Updates the scene camera to match the new window size
+     */
+    updateCamera() {
+
+        this.camera.aspect = this.aspectRatio;
+        this.camera.lookAt(this._defaultCameraSettings.target);
+        this.camera.updateProjectionMatrix();
     }
 
     /**
@@ -197,34 +250,13 @@ export class Viewer {
     }
 
     /**
-     * Calculates the aspect ratio of the canvas afer a window resize
+     * Handles a window resize event
      */
-    get aspectRatio() : number {
+    resizeWindow () {
 
-        let aspectRatio : number = this._width / this._height;
-
-        return aspectRatio;
-    } 
-
-    /**
-     * Resets all camera properties to the defaults
-     */
-    resetCamera() {
-
-        this.camera.position.copy(this._cameraSettings.position);
-        this._cameraTarget.copy(this._cameraSettings.target);
-        this.updateCamera();
+        this.resizeDisplayWebGL();
     }
-
-    /**
-     * Updates the scene camera to match the new window size
-     */
-    updateCamera() {
-
-        this.camera.aspect = this.aspectRatio;
-        this.camera.lookAt(this._cameraTarget);
-        this.camera.updateProjectionMatrix();
-    }
+//#endregion
 
     /**
      * Performs the WebGL render of the scene
@@ -246,32 +278,5 @@ export class Viewer {
         requestAnimationFrame(this.animate.bind(this));
         this.renderWebGL();
     }
-
-    /**
-     * Sets up the user input controls (Trackball)
-     */
-    initializeInputControls() {
-
-        this._controls = new TrackballControls(this.camera, this._renderer.domElement);
-    }
-
-    /**
-     * Removes all scene objects
-     */
-    clearAllAssests() {
-        
-        Graphics.removeSceneObjectChildren(this._scene, this._root, false);
-        this.createRoot();
-    } 
-
-    /**
-     * Display the reference grid.
-     */
-    displayGrid(visible : boolean) {
-
-        let gridGeometry : THREE.Object3D = this._scene.getObjectByName(ObjectNames.Grid);
-        gridGeometry.visible = visible;
-        this._logger.addInfoMessage(`Display grid = ${visible}`);
-    } 
 } 
 
