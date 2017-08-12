@@ -50,7 +50,7 @@ function setupModelScene() {
  */
 function initializeModelRenderer() {
 
-    modelCanvas = initializeCanvas('modelCanvas', Resolution.viewModel);
+    modelCanvas = Graphics.initializeCanvas('modelCanvas', Resolution.viewModel, Resolution.viewModel);
     modelRenderer = new THREE.WebGLRenderer( {canvas : modelCanvas});
     modelRenderer.setPixelRatio(window.devicePixelRatio);
     modelRenderer.setSize(Resolution.viewModel, Resolution.viewModel);
@@ -228,31 +228,6 @@ function addBackgroundPlane () {
 }
 
 /**
- * Constructs a WebGL target canvas.
- * @param id DOM id for canvas.
- * @param resolution Resolution (square) for canvas.
- */
-function initializeCanvas(id : string, resolution : number) : HTMLCanvasElement {
-    
-    let canvas : HTMLCanvasElement = <HTMLCanvasElement> document.querySelector(`#${id}`);
-    if (!canvas)
-        {
-        console.error(`Canvas element id = ${id} not found`);
-        return null;
-        }
-
-    // render dimensions    
-    canvas.width  = resolution;
-    canvas.height = resolution;
-
-    // DOM element dimensions (may be different than render dimensions)
-    canvas.style.width  = `${resolution}px`;
-    canvas.style.height = `${resolution}px`;
-
-    return canvas;
-}
-
-/**
  * Animation loop.
  */
 function animate() {
@@ -284,7 +259,7 @@ function initializeModelViewer() {
 
 function initializeMeshPreviewViewer() {
     
-    meshPreviewViewer = new MeshPreviewViewer();
+    meshPreviewViewer = new MeshPreviewViewer('meshCanvas');
 }
 
 /**

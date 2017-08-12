@@ -726,9 +726,9 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
         function Graphics() {
         }
         //#region Geometry
-        // --------------------------------------------------------------------------------------------------------------------------------------//
+        /* --------------------------------------------------------------------------------------------------------------------------------------//
         //			Geometry
-        // --------------------------------------------------------------------------------------------------------------------------------------//
+        // --------------------------------------------------------------------------------------------------------------------------------------*/
         /**
          * Removes an object and all children from a scene.
          * @param scene Scene holding object to be removed.
@@ -891,7 +891,7 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
         //#region Coordinate Conversion
         /*
         // --------------------------------------------------------------------------------------------------------------------------------------//
-        //			Coordinate Systems
+        //  Coordinate Systems
         // --------------------------------------------------------------------------------------------------------------------------------------//
         FRAME	            EXAMPLE										SPACE                      UNITS                       NOTES
     
@@ -1032,10 +1032,10 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
             return screenContainerCoordinates;
         };
         //#endregion
-        //#region Helpers
-        // --------------------------------------------------------------------------------------------------------------------------------------//
-        //			Helpers
-        // --------------------------------------------------------------------------------------------------------------------------------------//
+        //#region Intersections
+        /* --------------------------------------------------------------------------------------------------------------------------------------//
+        //  Intersections
+        // --------------------------------------------------------------------------------------------------------------------------------------*/
         /**
          * Creates a Raycaster through the mouse world position.
          * @param mouseWorld World coordinates.
@@ -1077,6 +1077,34 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
             }
             ;
             return null;
+        };
+        //#endregion
+        //#region Helpers
+        /* --------------------------------------------------------------------------------------------------------------------------------------//
+        //  Helpers
+        // --------------------------------------------------------------------------------------------------------------------------------------*/
+        /**
+         * Constructs a WebGL target canvas.
+         * @param id DOM id for canvas.
+         * @param width Width of canvas.
+         * @param height Height of canvas.
+         */
+        Graphics.initializeCanvas = function (id, width, height) {
+            var canvas = document.querySelector("#" + id);
+            if (!canvas) {
+                Services_1.Services.consoleLogger.addErrorMessage("Canvas element id = " + id + " not found");
+                return null;
+            }
+            // CSS controls the size
+            if (!width || !height)
+                return canvas;
+            // render dimensions    
+            canvas.width = width;
+            canvas.height = height;
+            // DOM element dimensions (may be different than render dimensions)
+            canvas.style.width = width + "px";
+            canvas.style.height = height + "px";
+            return canvas;
         };
         Graphics.BoundingBoxName = 'Bounding Box';
         return Graphics;
@@ -1494,7 +1522,7 @@ define("Viewer/TrackballControls", ["require", "exports", "three"], function (re
     TrackballControls.prototype = Object.create(THREE.EventDispatcher.prototype);
     TrackballControls.prototype.constructor = TrackballControls;
 });
-define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "System/Services", "Viewer/TrackballControls"], function (require, exports, THREE, Services_2, TrackballControls_1) {
+define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "Viewer/Graphics", "System/Services", "Viewer/TrackballControls"], function (require, exports, THREE, Graphics_1, Services_2, TrackballControls_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -1510,28 +1538,39 @@ define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "System/Servi
         /**
          * @constructor
          */
-        function MeshPreviewViewer() {
-            this._width = MeshPreviewViewer.DefaultResolution;
-            this._height = MeshPreviewViewer.DefaultResolution;
+        function MeshPreviewViewer(previewCanvasId) {
+            this.scene = null;
+            this.root = null;
+            this._canvas = null;
+            this._width = 0;
+            this._height = 0;
+            this._renderer = null;
+            this._camera = null;
+            this._controls = null;
             this._cameraZPosition = 4;
             this._cameraNearPlane = 2;
             this._cameraFarPlane = 10.0;
             this._fieldOfView = 37; // https://www.nikonians.org/reviews/fov-tables
+            this._logger = null;
+            this._canvas = Graphics_1.Graphics.initializeCanvas(previewCanvasId);
+            this._width = this._canvas.offsetWidth;
+            this._height = this._canvas.offsetHeight;
             this.initialize();
             this.animate();
         }
+        ;
+        ;
         /**
          * Initializes the preview renderer used to view the 3D mesh.
          */
-        MeshPreviewViewer.prototype.initializePreviewRenderer = function () {
-            this._canvas = this.initializeCanvas('previewCanvas', this._width, this._height);
+        MeshPreviewViewer.prototype.initializeRenderer = function () {
             this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas });
             this._renderer.setPixelRatio(window.devicePixelRatio);
             this._renderer.setSize(this._width, this._height);
             this._camera = new THREE.PerspectiveCamera(this._fieldOfView, this._width / this._height, this._cameraNearPlane, this._cameraFarPlane);
             this._camera.position.z = this._cameraZPosition;
             this._controls = new TrackballControls_1.TrackballControls(this._camera, this._renderer.domElement);
-            this.setupPreviewScene();
+            this.setupScene();
             this.initializeLighting(this.scene);
         };
         /**
@@ -1539,7 +1578,7 @@ define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "System/Servi
          */
         MeshPreviewViewer.prototype.initialize = function () {
             this._logger = Services_2.Services.htmlLogger;
-            this.initializePreviewRenderer();
+            this.initializeRenderer();
             this.onWindowResize();
             window.addEventListener('resize', this.onWindowResize, false);
         };
@@ -1597,29 +1636,10 @@ define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "System/Servi
         /**
          * Constructs the scene used to visualize the 3D mesh.
          */
-        MeshPreviewViewer.prototype.setupPreviewScene = function () {
+        MeshPreviewViewer.prototype.setupScene = function () {
             this.scene = new THREE.Scene();
             this.root = new THREE.Group();
             this.scene.add(this.root);
-        };
-        /**
-         * Constructs a WebGL target canvas.
-         * @param id DOM id for canvas.
-         * @param resolution Resolution (square) for canvas.
-         */
-        MeshPreviewViewer.prototype.initializeCanvas = function (id, width, height) {
-            var canvas = document.querySelector("#" + id);
-            if (!canvas) {
-                console.error("Canvas element id = " + id + " not found");
-                return null;
-            }
-            // render dimensions    
-            canvas.width = width;
-            canvas.height = height;
-            // DOM element dimensions (may be different than render dimensions)
-            canvas.style.width = width + "px";
-            canvas.style.height = height + "px";
-            return canvas;
         };
         /**
          * Animation loop.
@@ -1629,7 +1649,6 @@ define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "System/Servi
             this._controls.update();
             this._renderer.render(this.scene, this._camera);
         };
-        MeshPreviewViewer.DefaultResolution = 512; // default MPV resolution
         return MeshPreviewViewer;
     }());
     exports.MeshPreviewViewer = MeshPreviewViewer;
@@ -1698,7 +1717,7 @@ define("Viewer/Materials", ["require", "exports", "three"], function (require, e
     }());
     exports.Materials = Materials;
 });
-define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControls", "Viewer/Graphics", "System/Services"], function (require, exports, THREE, TrackballControls_2, Graphics_1, Services_3) {
+define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControls", "Viewer/Graphics", "System/Services"], function (require, exports, THREE, TrackballControls_2, Graphics_2, Services_3) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -1720,38 +1739,45 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
          * @constructor
          * @param elementToBindTo HTML element to host the viewer.
          */
-        function Viewer(elementToBindTo) {
-            this.logger = Services_3.Services.consoleLogger;
-            this.renderer = null;
-            this.canvas = elementToBindTo;
-            this.aspectRatio = 1;
-            this.recalcAspectRatio();
-            this.scene = null;
+        function Viewer(modelCanvasId) {
             this.root = null;
-            this.controls = null;
+            this._renderer = null;
+            this._canvas = null;
+            this._aspectRatio = 1.0;
+            this._scene = null;
+            this._camera = null;
+            this._cameraDefaults = null;
+            this._cameraTarget = null;
+            this._controls = null;
+            this._logger = null;
+            this._logger = Services_3.Services.consoleLogger;
+            this._canvas = document.getElementById(modelCanvasId);
+            this.recalcAspectRatio();
             this.initializeScene();
             this.initializeGL();
-            // start render loop
             this.render();
         }
+        ;
+        ;
+        ;
         /**
          * Adds lighting to the scene
          */
         Viewer.prototype.initializeLighting = function () {
             var ambientLight = new THREE.AmbientLight(0x404040);
-            this.scene.add(ambientLight);
+            this._scene.add(ambientLight);
             var directionalLight1 = new THREE.DirectionalLight(0xC0C090);
             directionalLight1.position.set(-100, -50, 100);
-            this.scene.add(directionalLight1);
+            this._scene.add(directionalLight1);
             var directionalLight2 = new THREE.DirectionalLight(0xC0C090);
             directionalLight2.position.set(100, 50, -100);
-            this.scene.add(directionalLight2);
+            this._scene.add(directionalLight2);
         };
         /**
          * Initialize the viewer camera
          */
         Viewer.prototype.initializeCamera = function () {
-            this.cameraDefaults = {
+            this._cameraDefaults = {
                 // Baseline : near = 0.1, far = 10000
                 // ZBuffer  : near = 100, far = 300
                 position: new THREE.Vector3(0.0, 175.0, 500.0),
@@ -1760,32 +1786,32 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
                 far: 10000,
                 fov: 45
             };
-            this.camera = null;
-            this.cameraTarget = this.cameraDefaults.target;
-            this.camera = new THREE.PerspectiveCamera(this.cameraDefaults.fov, this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far);
+            this._camera = null;
+            this._cameraTarget = this._cameraDefaults.target;
+            this._camera = new THREE.PerspectiveCamera(this._cameraDefaults.fov, this._aspectRatio, this._cameraDefaults.near, this._cameraDefaults.far);
             this.resetCamera();
         };
         /**
          * Initialize the scene with the base objects
          */
         Viewer.prototype.initializeScene = function () {
-            this.scene = new THREE.Scene();
+            this._scene = new THREE.Scene();
             this.createRoot();
             var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
             helper.name = ObjectNames.Grid;
-            this.scene.add(helper);
+            this._scene.add(helper);
         };
         /**
          * Initialize the WebGL settings
          */
         Viewer.prototype.initializeGL = function () {
-            this.renderer = new THREE.WebGLRenderer({
+            this._renderer = new THREE.WebGLRenderer({
                 logarithmicDepthBuffer: false,
-                canvas: this.canvas,
+                canvas: this._canvas,
                 antialias: true
             });
-            this.renderer.autoClear = true;
-            this.renderer.setClearColor(0x000000);
+            this._renderer.autoClear = true;
+            this._renderer.setClearColor(0x000000);
             this.initializeCamera();
             this.initializeLighting();
             this.initializeInputControls();
@@ -1804,47 +1830,47 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
         Viewer.prototype.createRoot = function () {
             this.root = new THREE.Object3D();
             this.root.name = ObjectNames.Root;
-            this.scene.add(this.root);
+            this._scene.add(this.root);
         };
         /**
          * Handles the WebGL processing for a DOM window 'resize' event
          */
         Viewer.prototype.resizeDisplayGL = function () {
-            this.controls.handleResize();
+            this._controls.handleResize();
             this.recalcAspectRatio();
-            this.renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight, false);
+            this._renderer.setSize(this._canvas.offsetWidth, this._canvas.offsetHeight, false);
             this.updateCamera();
         };
         /**
          * Calculates the aspect ratio of the canvas afer a window resize
          */
         Viewer.prototype.recalcAspectRatio = function () {
-            this.aspectRatio = (this.canvas.offsetHeight === 0) ? 1 : this.canvas.offsetWidth / this.canvas.offsetHeight;
+            this._aspectRatio = (this._canvas.offsetHeight === 0) ? 1 : this._canvas.offsetWidth / this._canvas.offsetHeight;
         };
         /**
          * Resets all camera properties to the defaults
          */
         Viewer.prototype.resetCamera = function () {
-            this.camera.position.copy(this.cameraDefaults.position);
-            this.cameraTarget.copy(this.cameraDefaults.target);
+            this._camera.position.copy(this._cameraDefaults.position);
+            this._cameraTarget.copy(this._cameraDefaults.target);
             this.updateCamera();
         };
         /**
          * Updates the scene camera to match the new window size
          */
         Viewer.prototype.updateCamera = function () {
-            this.camera.aspect = this.aspectRatio;
-            this.camera.lookAt(this.cameraTarget);
-            this.camera.updateProjectionMatrix();
+            this._camera.aspect = this._aspectRatio;
+            this._camera.lookAt(this._cameraTarget);
+            this._camera.updateProjectionMatrix();
         };
         /**
          * Performs the WebGL render of the scene
          */
         Viewer.prototype.renderGL = function () {
-            if (!this.renderer.autoClear)
-                this.renderer.clear();
-            this.controls.update();
-            this.renderer.render(this.scene, this.camera);
+            if (!this._renderer.autoClear)
+                this._renderer.clear();
+            this._controls.update();
+            this._renderer.render(this._scene, this._camera);
         };
         /**
          * Main DOM render loop
@@ -1857,22 +1883,22 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
          * Sets up the user input controls (Trackball)
          */
         Viewer.prototype.initializeInputControls = function () {
-            this.controls = new TrackballControls_2.TrackballControls(this.camera, this.renderer.domElement);
+            this._controls = new TrackballControls_2.TrackballControls(this._camera, this._renderer.domElement);
         };
         /**
          * Removes all scene objects
          */
         Viewer.prototype.clearAllAssests = function () {
-            Graphics_1.Graphics.removeSceneObjectChildren(this.scene, this.root, false);
+            Graphics_2.Graphics.removeSceneObjectChildren(this._scene, this.root, false);
             this.createRoot();
         };
         /**
          * Display the reference grid.
          */
         Viewer.prototype.displayGrid = function (visible) {
-            var gridGeometry = this.scene.getObjectByName(ObjectNames.Grid);
+            var gridGeometry = this._scene.getObjectByName(ObjectNames.Grid);
             gridGeometry.visible = visible;
-            this.logger.addInfoMessage("Display grid = " + visible);
+            this._logger.addInfoMessage("Display grid = " + visible);
         };
         return Viewer;
     }());
@@ -1938,7 +1964,7 @@ define("ModelRelief", ["require", "exports", "three", "dat-gui", "ModelLoaders/O
                 autoPlace: false,
                 width: 320
             });
-            var menuDiv = document.getElementById('dat');
+            var menuDiv = document.getElementById('settingsControls');
             menuDiv.appendChild(gui.domElement);
             var folderOptions = gui.addFolder('ModelViewer Options');
             // Grid
@@ -1958,9 +1984,12 @@ define("ModelRelief", ["require", "exports", "three", "dat-gui", "ModelLoaders/O
          */
         ModelRelief.prototype.run = function () {
             Services_4.Services.consoleLogger.addInfoMessage('ModelRelief started');
-            this._modelViewer = new Viewer_1.Viewer(document.getElementById('model3D'));
+            // Model Viewer    
+            this._modelViewer = new Viewer_1.Viewer('modelCanvas');
             this.loadModel(this._modelViewer);
-            this._meshPreviewViewer = new MeshPreviewViewer_1.MeshPreviewViewer();
+            // Mesh Preview
+            this._meshPreviewViewer = new MeshPreviewViewer_1.MeshPreviewViewer('meshCanvas');
+            // UI Controls
             this.initializeViewerControls();
         };
         return ModelRelief;
@@ -2680,7 +2709,7 @@ define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function 
     }());
     exports.UnitTests = UnitTests;
 });
-define("Workbench/DepthBufferTest", ["require", "exports", "three", "DepthBuffer/DepthBufferFactory", "Viewer/Graphics", "Viewer/MeshPreviewViewer", "System/Services", "Viewer/TrackballControls"], function (require, exports, THREE, DepthBufferFactory_1, Graphics_2, MeshPreviewViewer_2, Services_7, TrackballControls_3) {
+define("Workbench/DepthBufferTest", ["require", "exports", "three", "DepthBuffer/DepthBufferFactory", "Viewer/Graphics", "Viewer/MeshPreviewViewer", "System/Services", "Viewer/TrackballControls"], function (require, exports, THREE, DepthBufferFactory_1, Graphics_3, MeshPreviewViewer_2, Services_7, TrackballControls_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var modelCanvas;
@@ -2714,7 +2743,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "DepthBuffer
      * Initialize the primary model view.
      */
     function initializeModelRenderer() {
-        modelCanvas = initializeCanvas('modelCanvas', Resolution.viewModel);
+        modelCanvas = Graphics_3.Graphics.initializeCanvas('modelCanvas', Resolution.viewModel, Resolution.viewModel);
         modelRenderer = new THREE.WebGLRenderer({ canvas: modelCanvas });
         modelRenderer.setPixelRatio(window.devicePixelRatio);
         modelRenderer.setSize(Resolution.viewModel, Resolution.viewModel);
@@ -2850,25 +2879,6 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "DepthBuffer
         modelRoot.add(mesh);
     }
     /**
-     * Constructs a WebGL target canvas.
-     * @param id DOM id for canvas.
-     * @param resolution Resolution (square) for canvas.
-     */
-    function initializeCanvas(id, resolution) {
-        var canvas = document.querySelector("#" + id);
-        if (!canvas) {
-            console.error("Canvas element id = " + id + " not found");
-            return null;
-        }
-        // render dimensions    
-        canvas.width = resolution;
-        canvas.height = resolution;
-        // DOM element dimensions (may be different than render dimensions)
-        canvas.style.width = resolution + "px";
-        canvas.style.height = resolution + "px";
-        return canvas;
-    }
-    /**
      * Animation loop.
      */
     function animate() {
@@ -2891,7 +2901,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "DepthBuffer
         animate();
     }
     function initializeMeshPreviewViewer() {
-        meshPreviewViewer = new MeshPreviewViewer_2.MeshPreviewViewer();
+        meshPreviewViewer = new MeshPreviewViewer_2.MeshPreviewViewer('meshCanvas');
     }
     /**
      *  Event handler to create depth buffers.
@@ -2900,7 +2910,7 @@ define("Workbench/DepthBufferTest", ["require", "exports", "three", "DepthBuffer
         var size = 768;
         var factory = new DepthBufferFactory_1.DepthBufferFactory({ width: size, height: size, model: modelRoot, camera: modelCamera });
         var previewMesh = factory.meshGenerate({ modelWidth: 2, camera: modelCamera });
-        Graphics_2.Graphics.removeSceneObjectChildren(meshPreviewViewer.scene, meshPreviewViewer.root, false);
+        Graphics_3.Graphics.removeSceneObjectChildren(meshPreviewViewer.scene, meshPreviewViewer.root, false);
         meshPreviewViewer.root.add(previewMesh);
     }
     function main() {

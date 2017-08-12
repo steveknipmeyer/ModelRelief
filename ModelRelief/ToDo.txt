@@ -6,10 +6,15 @@
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
 
+Initialize all class variable.
+aspectRatio property of viewing classes
+
 Share CameraDefaults -> CameraSettings. Class?
 
 Graphics
     ModelHelpers
+        Grid helper
+        World Axes helper
     initializeCanvas
 
 Core

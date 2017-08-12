@@ -21,7 +21,7 @@
     z-Index: 200;
 }
 
-#model3D {
+#modelCanvas, #meshCanvas {
     width:  512px;
     height: 512px;
     background-color: #000000;

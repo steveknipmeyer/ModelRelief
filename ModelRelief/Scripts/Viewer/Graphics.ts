@@ -27,9 +27,9 @@ export class Graphics {
     }
 
 //#region Geometry
-    // --------------------------------------------------------------------------------------------------------------------------------------//
+    /* --------------------------------------------------------------------------------------------------------------------------------------//
     //			Geometry
-    // --------------------------------------------------------------------------------------------------------------------------------------//
+    // --------------------------------------------------------------------------------------------------------------------------------------*/
 
     /**
      * Removes an object and all children from a scene.
@@ -262,7 +262,7 @@ export class Graphics {
 //#region Coordinate Conversion
     /*
     // --------------------------------------------------------------------------------------------------------------------------------------//
-    //			Coordinate Systems
+    //  Coordinate Systems
     // --------------------------------------------------------------------------------------------------------------------------------------//
     FRAME	            EXAMPLE										SPACE                      UNITS                       NOTES
 
@@ -456,10 +456,10 @@ export class Graphics {
     }
 //#endregion
 
-//#region Helpers
-    // --------------------------------------------------------------------------------------------------------------------------------------//
-    //			Helpers
-    // --------------------------------------------------------------------------------------------------------------------------------------//
+//#region Intersections
+    /* --------------------------------------------------------------------------------------------------------------------------------------//
+    //  Intersections
+    // --------------------------------------------------------------------------------------------------------------------------------------*/
     /**
      * Creates a Raycaster through the mouse world position.
      * @param mouseWorld World coordinates.
@@ -517,4 +517,42 @@ export class Graphics {
         return null;
     }
 //#endregion
+
+//#region Helpers
+    /* --------------------------------------------------------------------------------------------------------------------------------------//
+    //  Helpers
+    // --------------------------------------------------------------------------------------------------------------------------------------*/
+    /**
+     * Constructs a WebGL target canvas.
+     * @param id DOM id for canvas.
+     * @param width Width of canvas.
+     * @param height Height of canvas.
+     */
+    static initializeCanvas(id : string, width? : number, height? : number) : HTMLCanvasElement {
+    
+        let canvas : HTMLCanvasElement = <HTMLCanvasElement> document.querySelector(`#${id}`);
+        if (!canvas)
+            {
+            Services.consoleLogger.addErrorMessage(`Canvas element id = ${id} not found`);
+            return null;
+            }
+        
+        // CSS controls the size
+        if (!width || !height)
+            return canvas;
+
+        // render dimensions    
+        canvas.width  = width;
+        canvas.height = height;
+
+        // DOM element dimensions (may be different than render dimensions)
+        canvas.style.width  = `${width}px`;
+        canvas.style.height = `${height}px`;
+
+        return canvas;
+    }
+
+
+//#endregion
+
 }

@@ -19,30 +19,32 @@ import {TrackballControls}      from 'TrackballControls'
  */
 export class MeshPreviewViewer {
 
-    static DefaultResolution : number       = 512;     // default MPV resolution
+    scene               : THREE.Scene               = null;;
+    root                : THREE.Group               = null;
 
-    _width       : number                   = MeshPreviewViewer.DefaultResolution;  
-    _height      : number                   = MeshPreviewViewer.DefaultResolution;  
+    _canvas             : HTMLCanvasElement         = null;
+    _width              : number                    = 0;
+    _height             : number                    = 0;
 
-    _canvas       : HTMLCanvasElement;
-    _renderer     : THREE.WebGLRenderer;
-    _camera       : THREE.PerspectiveCamera;
-    _controls     : TrackballControls;
-
-    scene         : THREE.Scene;
-    root          : THREE.Group;
-
-    _logger        : Logger;
+    _renderer           : THREE.WebGLRenderer       = null;;
+    _camera             : THREE.PerspectiveCamera   = null;
+    _controls           : TrackballControls         = null;
     
-    _cameraZPosition     : number = 4
-    _cameraNearPlane     : number = 2;
-    _cameraFarPlane      : number = 10.0;
-    _fieldOfView         : number = 37;              // https://www.nikonians.org/reviews/fov-tables
+    _cameraZPosition    : number                    = 4
+    _cameraNearPlane    : number                    = 2;
+    _cameraFarPlane     : number                    = 10.0;
+    _fieldOfView        : number                    = 37;                                   // https://www.nikonians.org/reviews/fov-tables
+
+    _logger             : Logger                    = null;
     
     /**
      * @constructor
      */
-    constructor() {
+    constructor(previewCanvasId : string) {
+
+        this._canvas = Graphics.initializeCanvas(previewCanvasId);
+        this._width  = this._canvas.offsetWidth;
+        this._height = this._canvas.offsetHeight;
 
         this.initialize()
         this.animate();
@@ -51,9 +53,8 @@ export class MeshPreviewViewer {
     /**
      * Initializes the preview renderer used to view the 3D mesh.
      */
-    initializePreviewRenderer() {
+    initializeRenderer() {
 
-        this._canvas = this.initializeCanvas('previewCanvas', this._width, this._height);
         this._renderer = new THREE.WebGLRenderer( {canvas : this._canvas});
         this._renderer.setPixelRatio(window.devicePixelRatio);
         this._renderer.setSize(this._width, this._height);
@@ -63,7 +64,7 @@ export class MeshPreviewViewer {
 
         this._controls = new TrackballControls(this._camera, this._renderer.domElement);
 
-        this.setupPreviewScene();
+        this.setupScene();
 
         this.initializeLighting(this.scene);
     }
@@ -75,7 +76,7 @@ export class MeshPreviewViewer {
     
         this._logger = Services.htmlLogger;       
 
-        this.initializePreviewRenderer();
+        this.initializeRenderer();
 
         this.onWindowResize();
         window.addEventListener('resize', this.onWindowResize, false);
@@ -145,36 +146,11 @@ export class MeshPreviewViewer {
     /**
      * Constructs the scene used to visualize the 3D mesh.
      */
-    setupPreviewScene() {
+    setupScene() {
     
         this.scene = new THREE.Scene();
         this.root = new THREE.Group();
         this.scene.add(this.root);
-    }
-
-    /**
-     * Constructs a WebGL target canvas.
-     * @param id DOM id for canvas.
-     * @param resolution Resolution (square) for canvas.
-     */
-    initializeCanvas(id : string, width : number, height : number) : HTMLCanvasElement {
-    
-        let canvas : HTMLCanvasElement = <HTMLCanvasElement> document.querySelector(`#${id}`);
-        if (!canvas)
-            {
-            console.error(`Canvas element id = ${id} not found`);
-            return null;
-            }
-
-        // render dimensions    
-        canvas.width  = width;
-        canvas.height = height;
-
-        // DOM element dimensions (may be different than render dimensions)
-        canvas.style.width  = `${width}px`;
-        canvas.style.height = `${height}px`;
-
-        return canvas;
     }
 
     /**

@@ -88,7 +88,7 @@ export class ModelRelief {
             autoPlace: false,
             width: 320
         });
-        var menuDiv = document.getElementById('dat');
+        var menuDiv = document.getElementById('settingsControls');
         menuDiv.appendChild(gui.domElement);
         var folderOptions = gui.addFolder('ModelViewer Options');
 
@@ -116,11 +116,14 @@ export class ModelRelief {
 
         Services.consoleLogger.addInfoMessage ('ModelRelief started');   
 
-        this._modelViewer = new Viewer(<HTMLCanvasElement> document.getElementById('model3D'));
+        // Model Viewer    
+        this._modelViewer = new Viewer('modelCanvas');
         this.loadModel (this._modelViewer);
+        
+        // Mesh Preview
+        this._meshPreviewViewer =  new MeshPreviewViewer('meshCanvas');
 
-        this._meshPreviewViewer =  new MeshPreviewViewer();
-
+        // UI Controls
         this.initializeViewerControls();
     }
 }

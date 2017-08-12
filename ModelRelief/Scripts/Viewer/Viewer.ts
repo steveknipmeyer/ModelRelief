@@ -31,19 +31,20 @@ const ObjectNames = {
  */
 export class Viewer {
    
-    renderer:       THREE.WebGLRenderer;
-    canvas:         HTMLCanvasElement;
-    aspectRatio:    number;
+    root            : THREE.Object3D               = null;      
 
-    scene:          THREE.Scene;
-    root:           THREE.Object3D; 
+    _renderer        : THREE.WebGLRenderer         = null;;
+    _canvas          : HTMLCanvasElement           = null;
+    _aspectRatio     : number                      = 1.0;
 
-    camera:         THREE.PerspectiveCamera;
-    cameraDefaults: CameraDefaults;
-    cameraTarget:   THREE.Vector3;
+    _scene           : THREE.Scene                 = null;
 
-    controls :      TrackballControls;
-    logger   :      Logger;
+    _camera          : THREE.PerspectiveCamera     = null;
+    _cameraDefaults  : CameraDefaults              = null;;
+    _cameraTarget    : THREE.Vector3               = null;;
+
+    _controls        : TrackballControls           = null;
+    _logger          : Logger                      = null;
 
     /**
      * Default constructor
@@ -51,25 +52,17 @@ export class Viewer {
      * @constructor
      * @param elementToBindTo HTML element to host the viewer.
      */
-    constructor(elementToBindTo: HTMLCanvasElement) {
+    constructor(modelCanvasId : string) {
                     
-        this.logger = Services.consoleLogger;
+        this._logger = Services.consoleLogger;
 
-        this.renderer = null;
-        this.canvas = elementToBindTo;
-        this.aspectRatio = 1;
+        this._canvas         = <HTMLCanvasElement> document.getElementById(modelCanvasId);
         this.recalcAspectRatio();
-
-        this.scene = null;
-        this.root  = null;
-
-        this.controls = null;
 
         this.initializeScene();
 
         this.initializeGL();
 
-        // start render loop
         this.render();
     }
     
@@ -79,15 +72,15 @@ export class Viewer {
     initializeLighting() {
 
         let ambientLight = new THREE.AmbientLight(0x404040);
-        this.scene.add(ambientLight);
+        this._scene.add(ambientLight);
 
         let directionalLight1 = new THREE.DirectionalLight(0xC0C090);
         directionalLight1.position.set(-100, -50, 100);
-        this.scene.add(directionalLight1);
+        this._scene.add(directionalLight1);
 
         let directionalLight2 = new THREE.DirectionalLight(0xC0C090);
         directionalLight2.position.set(100, 50, -100);
-        this.scene.add(directionalLight2);
+        this._scene.add(directionalLight2);
     }
 
     /**
@@ -95,7 +88,7 @@ export class Viewer {
      */
     initializeCamera() {
 
-        this.cameraDefaults = {
+        this._cameraDefaults = {
             // Baseline : near = 0.1, far = 10000
             // ZBuffer  : near = 100, far = 300
             position:       new THREE.Vector3(0.0, 175.0, 500.0),
@@ -105,10 +98,10 @@ export class Viewer {
             fov:            45
         };
 
-        this.camera = null;
-        this.cameraTarget = this.cameraDefaults.target;
+        this._camera = null;
+        this._cameraTarget = this._cameraDefaults.target;
 
-        this.camera = new THREE.PerspectiveCamera(this.cameraDefaults.fov, this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far);
+        this._camera = new THREE.PerspectiveCamera(this._cameraDefaults.fov, this._aspectRatio, this._cameraDefaults.near, this._cameraDefaults.far);
         this.resetCamera();
     }
 
@@ -117,12 +110,12 @@ export class Viewer {
      */
     initializeScene () {
 
-        this.scene = new THREE.Scene();
+        this._scene = new THREE.Scene();
         this.createRoot();
 
         var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
         helper.name = ObjectNames.Grid;
-        this.scene.add(helper);
+        this._scene.add(helper);
     }
 
     /**
@@ -130,13 +123,13 @@ export class Viewer {
      */
     initializeGL() {
 
-        this.renderer = new THREE.WebGLRenderer({
+        this._renderer = new THREE.WebGLRenderer({
             logarithmicDepthBuffer: false,
-            canvas: this.canvas,
+            canvas: this._canvas,
             antialias: true
         });
-        this.renderer.autoClear = true;
-        this.renderer.setClearColor(0x000000);
+        this._renderer.autoClear = true;
+        this._renderer.setClearColor(0x000000);
 
 
         this.initializeCamera();
@@ -162,7 +155,7 @@ export class Viewer {
 
         this.root = new THREE.Object3D();
         this.root.name = ObjectNames.Root;
-        this.scene.add(this.root);
+        this._scene.add(this.root);
     }
 
     /**
@@ -170,9 +163,9 @@ export class Viewer {
      */
     resizeDisplayGL() {
 
-        this.controls.handleResize();
+        this._controls.handleResize();
         this.recalcAspectRatio();
-        this.renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight, false);
+        this._renderer.setSize(this._canvas.offsetWidth, this._canvas.offsetHeight, false);
         this.updateCamera();
     }
 
@@ -181,7 +174,7 @@ export class Viewer {
      */
     recalcAspectRatio() {
 
-        this.aspectRatio = (this.canvas.offsetHeight === 0) ? 1 : this.canvas.offsetWidth / this.canvas.offsetHeight;
+        this._aspectRatio = (this._canvas.offsetHeight === 0) ? 1 : this._canvas.offsetWidth / this._canvas.offsetHeight;
     } 
 
     /**
@@ -189,8 +182,8 @@ export class Viewer {
      */
     resetCamera() {
 
-        this.camera.position.copy(this.cameraDefaults.position);
-        this.cameraTarget.copy(this.cameraDefaults.target);
+        this._camera.position.copy(this._cameraDefaults.position);
+        this._cameraTarget.copy(this._cameraDefaults.target);
         this.updateCamera();
     }
 
@@ -199,9 +192,9 @@ export class Viewer {
      */
     updateCamera() {
 
-        this.camera.aspect = this.aspectRatio;
-        this.camera.lookAt(this.cameraTarget);
-        this.camera.updateProjectionMatrix();
+        this._camera.aspect = this._aspectRatio;
+        this._camera.lookAt(this._cameraTarget);
+        this._camera.updateProjectionMatrix();
     }
 
     /**
@@ -209,11 +202,11 @@ export class Viewer {
      */
     renderGL() {
 
-        if (!this.renderer.autoClear) 
-            this.renderer.clear();
+        if (!this._renderer.autoClear) 
+            this._renderer.clear();
 
-        this.controls.update();
-        this.renderer.render(this.scene, this.camera);
+        this._controls.update();
+        this._renderer.render(this._scene, this._camera);
     }
 
     /**
@@ -230,7 +223,7 @@ export class Viewer {
      */
     initializeInputControls() {
 
-        this.controls = new TrackballControls(this.camera, this.renderer.domElement);
+        this._controls = new TrackballControls(this._camera, this._renderer.domElement);
     }
 
     /**
@@ -238,7 +231,7 @@ export class Viewer {
      */
     clearAllAssests() {
         
-        Graphics.removeSceneObjectChildren(this.scene, this.root, false);
+        Graphics.removeSceneObjectChildren(this._scene, this.root, false);
         this.createRoot();
     } 
 
@@ -247,9 +240,9 @@ export class Viewer {
      */
     displayGrid(visible : boolean) {
 
-        let gridGeometry : THREE.Object3D = this.scene.getObjectByName(ObjectNames.Grid);
+        let gridGeometry : THREE.Object3D = this._scene.getObjectByName(ObjectNames.Grid);
         gridGeometry.visible = visible;
-        this.logger.addInfoMessage(`Display grid = ${visible}`);
+        this._logger.addInfoMessage(`Display grid = ${visible}`);
     } 
 } 
 
