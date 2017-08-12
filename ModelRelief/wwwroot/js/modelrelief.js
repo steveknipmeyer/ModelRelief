@@ -2152,147 +2152,6 @@ define("Viewer/TrackballControls", ["require", "exports", "three"], function (re
     TrackballControls.prototype = Object.create(THREE.EventDispatcher.prototype);
     TrackballControls.prototype.constructor = TrackballControls;
 });
-define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "Viewer/Graphics", "System/Services", "Viewer/TrackballControls"], function (require, exports, THREE, Graphics_1, Services_4, TrackballControls_1) {
-    // ------------------------------------------------------------------------// 
-    // ModelRelief                                                             //
-    //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
-    // ------------------------------------------------------------------------//
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * @class
-     * MeshViewer
-     */
-    var MeshPreviewViewer = (function () {
-        /**
-         * @constructor
-         */
-        function MeshPreviewViewer(previewCanvasId) {
-            this._scene = null;
-            this._root = null;
-            this._canvas = null;
-            this._width = 0;
-            this._height = 0;
-            this._renderer = null;
-            this._camera = null;
-            this._controls = null;
-            this._cameraZPosition = 4;
-            this._cameraNearPlane = 2;
-            this._cameraFarPlane = 10.0;
-            this._fieldOfView = 37; // https://www.nikonians.org/reviews/fov-tables
-            this._logger = null;
-            this._canvas = Graphics_1.Graphics.initializeCanvas(previewCanvasId);
-            this._width = this._canvas.offsetWidth;
-            this._height = this._canvas.offsetHeight;
-            this.initialize();
-            this.animate();
-        }
-        ;
-        ;
-        Object.defineProperty(MeshPreviewViewer.prototype, "model", {
-            //#region Properties
-            set: function (value) {
-                Graphics_1.Graphics.removeSceneObjectChildren(this._scene, this._root, false);
-                this._root.add(value);
-            },
-            enumerable: true,
-            configurable: true
-        });
-        //#endregion
-        /**
-         * Initializes the preview renderer used to view the 3D mesh.
-         */
-        MeshPreviewViewer.prototype.initializeRenderer = function () {
-            this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas });
-            this._renderer.setPixelRatio(window.devicePixelRatio);
-            this._renderer.setSize(this._width, this._height);
-            this._camera = new THREE.PerspectiveCamera(this._fieldOfView, this._width / this._height, this._cameraNearPlane, this._cameraFarPlane);
-            this._camera.position.z = this._cameraZPosition;
-            this._controls = new TrackballControls_1.TrackballControls(this._camera, this._renderer.domElement);
-            this.setupScene();
-            this.initializeLighting(this._scene);
-        };
-        /**
-         * Initialize the application.
-         */
-        MeshPreviewViewer.prototype.initialize = function () {
-            this._logger = Services_4.Services.htmlLogger;
-            this.initializeRenderer();
-            this.onWindowResize();
-            window.addEventListener('resize', this.onWindowResize.bind(this), false);
-        };
-        /**
-         * Updates a renderer properties.
-         * Event handler called on window resize.
-         * @param renderer Renderer to update.
-         * @param width Width of the renderer.
-         * @param height Height of the renderer.
-         * @param camera Renderer's camera.
-         */
-        MeshPreviewViewer.prototype.updateViewOnWindowResize = function (renderer, width, height, camera) {
-            var aspect = width / height;
-            if (camera) {
-                camera.aspect = aspect;
-                camera.updateProjectionMatrix();
-            }
-            renderer.setSize(width, height);
-        };
-        /**
-         * Event handler called on window resize.
-         */
-        MeshPreviewViewer.prototype.onWindowResize = function () {
-            this.updateViewOnWindowResize(this._renderer, this._width, this._height, this._camera);
-        };
-        /**
-         * Adds lighting to the scene.
-         * param theScene Scene to add lighting.
-         */
-        MeshPreviewViewer.prototype.initializeLighting = function (theScene) {
-            var ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-            theScene.add(ambientLight);
-            var directionalLight1 = new THREE.DirectionalLight(0xffffff);
-            directionalLight1.position.set(4, 4, 4);
-            theScene.add(directionalLight1);
-        };
-        /**
-         * Adds helpers to the scene to visualize camera, coordinates, etc.
-         * @param scene Scene to annotate.
-         * @param camera Camera to construct helper (may be null).
-         * @param addAxisHelper Add a helper for the cartesian axes.
-         */
-        MeshPreviewViewer.prototype.initializeModelHelpers = function (scene, camera, addAxisHelper) {
-            if (camera) {
-                var cameraHelper = new THREE.CameraHelper(camera);
-                cameraHelper.visible = true;
-                scene.add(cameraHelper);
-            }
-            if (addAxisHelper) {
-                var axisHelper = new THREE.AxisHelper(2);
-                axisHelper.visible = true;
-                scene.add(axisHelper);
-            }
-        };
-        /**
-         * Constructs the scene used to visualize the 3D mesh.
-         */
-        MeshPreviewViewer.prototype.setupScene = function () {
-            this._scene = new THREE.Scene();
-            this._root = new THREE.Group();
-            this._scene.add(this._root);
-        };
-        /**
-         * Animation loop.
-         */
-        MeshPreviewViewer.prototype.animate = function () {
-            requestAnimationFrame(this.animate.bind(this));
-            this._controls.update();
-            this._renderer.render(this._scene, this._camera);
-        };
-        return MeshPreviewViewer;
-    }());
-    exports.MeshPreviewViewer = MeshPreviewViewer;
-});
 define("Viewer/Materials", ["require", "exports", "three"], function (require, exports, THREE) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
@@ -2357,7 +2216,7 @@ define("Viewer/Materials", ["require", "exports", "three"], function (require, e
     }());
     exports.Materials = Materials;
 });
-define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControls", "Viewer/Graphics", "System/Services"], function (require, exports, THREE, TrackballControls_2, Graphics_2, Services_5) {
+define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControls", "Viewer/Graphics", "System/Services"], function (require, exports, THREE, TrackballControls_1, Graphics_1, Services_4) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -2391,12 +2250,13 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
             this._cameraTarget = null;
             this._controls = null;
             this._logger = null;
-            this._logger = Services_5.Services.consoleLogger;
+            this._logger = Services_4.Services.consoleLogger;
             this._canvas = document.getElementById(modelCanvasId);
             this._width = this._canvas.offsetWidth;
             this._height = this._canvas.offsetHeight;
             this.initializeScene();
-            this.initializeGL();
+            var useTestCamera = false;
+            this.initializeGL(useTestCamera);
             this.animate();
         }
         ;
@@ -2405,7 +2265,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
         Object.defineProperty(Viewer.prototype, "model", {
             //#region Properties
             set: function (value) {
-                Graphics_2.Graphics.removeSceneObjectChildren(this._scene, this._root, false);
+                Graphics_1.Graphics.removeSceneObjectChildren(this._scene, this._root, false);
                 this._root.add(value);
             },
             enumerable: true,
@@ -2428,19 +2288,27 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
         /**
          * Initialize the viewer camera
          */
-        Viewer.prototype.initializeCamera = function () {
-            this._cameraSettings = {
+        Viewer.prototype.initializeCamera = function (useTestCamera) {
+            var settingsOBJ = {
                 // Baseline : near = 0.1, far = 10000
                 // ZBuffer  : near = 100, far = 300
                 position: new THREE.Vector3(0.0, 175.0, 500.0),
                 target: new THREE.Vector3(0, 0, 0),
                 near: 0.1,
                 far: 10000,
-                fov: 45
+                fieldOfView: 45
             };
+            var settingsTestModels = {
+                position: new THREE.Vector3(0.0, 0.0, 4.0),
+                target: new THREE.Vector3(0, 0, 0),
+                near: 2.0,
+                far: 10.0,
+                fieldOfView: 37 // https://www.nikonians.org/reviews/fov-tables
+            };
+            this._cameraSettings = useTestCamera ? settingsTestModels : settingsOBJ;
             this.camera = null;
             this._cameraTarget = this._cameraSettings.target;
-            this.camera = new THREE.PerspectiveCamera(this._cameraSettings.fov, this.aspectRatio, this._cameraSettings.near, this._cameraSettings.far);
+            this.camera = new THREE.PerspectiveCamera(this._cameraSettings.fieldOfView, this.aspectRatio, this._cameraSettings.near, this._cameraSettings.far);
             this.resetCamera();
         };
         /**
@@ -2456,7 +2324,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
         /**
          * Initialize the WebGL settings
          */
-        Viewer.prototype.initializeGL = function () {
+        Viewer.prototype.initializeGL = function (useTestCamera) {
             this._renderer = new THREE.WebGLRenderer({
                 logarithmicDepthBuffer: false,
                 canvas: this._canvas,
@@ -2464,7 +2332,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
             });
             this._renderer.autoClear = true;
             this._renderer.setClearColor(0x000000);
-            this.initializeCamera();
+            this.initializeCamera(useTestCamera);
             this.initializeLighting();
             this.initializeInputControls();
             this.resizeDisplayWebGL();
@@ -2541,13 +2409,13 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
          * Sets up the user input controls (Trackball)
          */
         Viewer.prototype.initializeInputControls = function () {
-            this._controls = new TrackballControls_2.TrackballControls(this.camera, this._renderer.domElement);
+            this._controls = new TrackballControls_1.TrackballControls(this.camera, this._renderer.domElement);
         };
         /**
          * Removes all scene objects
          */
         Viewer.prototype.clearAllAssests = function () {
-            Graphics_2.Graphics.removeSceneObjectChildren(this._scene, this._root, false);
+            Graphics_1.Graphics.removeSceneObjectChildren(this._scene, this._root, false);
             this.createRoot();
         };
         /**
@@ -2562,7 +2430,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
     }());
     exports.Viewer = Viewer;
 });
-define("ModelRelief", ["require", "exports", "three", "dat-gui", "DepthBuffer/DepthBufferFactory", "ModelLoaders/OBJLoader", "Viewer/MeshPreviewViewer", "System/Services", "Viewer/Viewer"], function (require, exports, THREE, dat, DepthBufferFactory_1, OBJLoader_1, MeshPreviewViewer_1, Services_6, Viewer_1) {
+define("ModelLoaders/Loader", ["require", "exports", "three", "ModelLoaders/OBJLoader"], function (require, exports, THREE, OBJLoader_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -2570,18 +2438,19 @@ define("ModelRelief", ["require", "exports", "three", "dat-gui", "DepthBuffer/De
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var ModelRelief = (function () {
+    var testModelColor = '#558de8';
+    var Loader = (function () {
         /** Default constructor
-         * @class ModelRelief
+         * @class Loader
          * @constructor
          */
-        function ModelRelief() {
+        function Loader() {
         }
         /**
          * Loads a model based on the model name and path embedded in the HTML page.
-         * @param viewer Instance of the Viewer to display the model
+         * @param viewer Instance of the Viewer to display the model.
          */
-        ModelRelief.prototype.loadModel = function (viewer) {
+        Loader.prototype.loadOBJModel = function (viewer) {
             var modelNameElement = window.document.getElementById('modelName');
             var modelPathElement = window.document.getElementById('modelPath');
             var modelName = modelNameElement.textContent;
@@ -2601,6 +2470,220 @@ define("ModelRelief", ["require", "exports", "three", "dat-gui", "DepthBuffer/De
                 viewer.model = group;
             }, onProgress, onError);
         };
+        /**
+         * Adds a torus to a scene.
+         * @param viewer Instance of the Viewer to display the model
+         */
+        Loader.prototype.loadTorusModel = function (viewer) {
+            var torusScene = new THREE.Group();
+            // Setup some geometries
+            var geometry = new THREE.TorusKnotGeometry(1, 0.3, 128, 64);
+            var material = new THREE.MeshPhongMaterial({ color: testModelColor });
+            var count = 50;
+            var scale = 5;
+            for (var i = 0; i < count; i++) {
+                var r = Math.random() * 2.0 * Math.PI;
+                var z = (Math.random() * 2.0) - 1.0;
+                var zScale = Math.sqrt(1.0 - z * z) * scale;
+                var mesh = new THREE.Mesh(geometry, material);
+                mesh.position.set(Math.cos(r) * zScale, Math.sin(r) * zScale, z * scale);
+                mesh.rotation.set(Math.random(), Math.random(), Math.random());
+                torusScene.add(mesh);
+            }
+            viewer.model = torusScene;
+        };
+        /**
+         * Adds a test sphere to a scene.
+         * @param viewer Instance of the Viewer to display the model.
+         */
+        Loader.prototype.loadSphereModel = function (viewer) {
+            // geometry
+            var radius = 2;
+            var segments = 64;
+            var geometry = new THREE.SphereGeometry(radius, segments, segments);
+            var material = new THREE.MeshPhongMaterial({ color: testModelColor });
+            var mesh = new THREE.Mesh(geometry, material);
+            var center = new THREE.Vector3(0.0, 0.0, 0.0);
+            mesh.position.set(center.x, center.y, center.z);
+            viewer.model = mesh;
+        };
+        /**
+         * Add a test box to a scene.
+         * @param viewer Instance of the Viewer to display the model.
+         */
+        Loader.prototype.loadBoxModel = function (viewer) {
+            // box
+            var dimensions = 2.0;
+            var width = dimensions;
+            var height = dimensions;
+            var depth = dimensions;
+            var geometry = new THREE.BoxGeometry(width, height, depth);
+            var material = new THREE.MeshPhongMaterial({ color: testModelColor });
+            var mesh = new THREE.Mesh(geometry, material);
+            var center = new THREE.Vector3(0.0, 0.0, 0.0);
+            mesh.position.set(center.x, center.y, center.z);
+            viewer.model = mesh;
+        };
+        return Loader;
+    }());
+    exports.Loader = Loader;
+});
+define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "Viewer/Graphics", "System/Services", "Viewer/TrackballControls"], function (require, exports, THREE, Graphics_2, Services_5, TrackballControls_2) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * @class
+     * MeshViewer
+     */
+    var MeshPreviewViewer = (function () {
+        /**
+         * @constructor
+         */
+        function MeshPreviewViewer(previewCanvasId) {
+            this._scene = null;
+            this._root = null;
+            this._canvas = null;
+            this._width = 0;
+            this._height = 0;
+            this._renderer = null;
+            this._camera = null;
+            this._controls = null;
+            this._cameraZPosition = 4;
+            this._cameraNearPlane = 2;
+            this._cameraFarPlane = 10.0;
+            this._fieldOfView = 37; // https://www.nikonians.org/reviews/fov-tables
+            this._logger = null;
+            this._canvas = Graphics_2.Graphics.initializeCanvas(previewCanvasId);
+            this._width = this._canvas.offsetWidth;
+            this._height = this._canvas.offsetHeight;
+            this.initialize();
+            this.animate();
+        }
+        ;
+        ;
+        Object.defineProperty(MeshPreviewViewer.prototype, "model", {
+            //#region Properties
+            set: function (value) {
+                Graphics_2.Graphics.removeSceneObjectChildren(this._scene, this._root, false);
+                this._root.add(value);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        //#endregion
+        /**
+         * Initializes the preview renderer used to view the 3D mesh.
+         */
+        MeshPreviewViewer.prototype.initializeRenderer = function () {
+            this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas });
+            this._renderer.setPixelRatio(window.devicePixelRatio);
+            this._renderer.setSize(this._width, this._height);
+            this._camera = new THREE.PerspectiveCamera(this._fieldOfView, this._width / this._height, this._cameraNearPlane, this._cameraFarPlane);
+            this._camera.position.z = this._cameraZPosition;
+            this._controls = new TrackballControls_2.TrackballControls(this._camera, this._renderer.domElement);
+            this.setupScene();
+            this.initializeLighting(this._scene);
+        };
+        /**
+         * Initialize the application.
+         */
+        MeshPreviewViewer.prototype.initialize = function () {
+            this._logger = Services_5.Services.htmlLogger;
+            this.initializeRenderer();
+            this.onWindowResize();
+            window.addEventListener('resize', this.onWindowResize.bind(this), false);
+        };
+        /**
+         * Updates a renderer properties.
+         * Event handler called on window resize.
+         * @param renderer Renderer to update.
+         * @param width Width of the renderer.
+         * @param height Height of the renderer.
+         * @param camera Renderer's camera.
+         */
+        MeshPreviewViewer.prototype.updateViewOnWindowResize = function (renderer, width, height, camera) {
+            var aspect = width / height;
+            if (camera) {
+                camera.aspect = aspect;
+                camera.updateProjectionMatrix();
+            }
+            renderer.setSize(width, height);
+        };
+        /**
+         * Event handler called on window resize.
+         */
+        MeshPreviewViewer.prototype.onWindowResize = function () {
+            this.updateViewOnWindowResize(this._renderer, this._width, this._height, this._camera);
+        };
+        /**
+         * Adds lighting to the scene.
+         * param theScene Scene to add lighting.
+         */
+        MeshPreviewViewer.prototype.initializeLighting = function (theScene) {
+            var ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+            theScene.add(ambientLight);
+            var directionalLight1 = new THREE.DirectionalLight(0xffffff);
+            directionalLight1.position.set(4, 4, 4);
+            theScene.add(directionalLight1);
+        };
+        /**
+         * Adds helpers to the scene to visualize camera, coordinates, etc.
+         * @param scene Scene to annotate.
+         * @param camera Camera to construct helper (may be null).
+         * @param addAxisHelper Add a helper for the cartesian axes.
+         */
+        MeshPreviewViewer.prototype.initializeModelHelpers = function (scene, camera, addAxisHelper) {
+            if (camera) {
+                var cameraHelper = new THREE.CameraHelper(camera);
+                cameraHelper.visible = true;
+                scene.add(cameraHelper);
+            }
+            if (addAxisHelper) {
+                var axisHelper = new THREE.AxisHelper(2);
+                axisHelper.visible = true;
+                scene.add(axisHelper);
+            }
+        };
+        /**
+         * Constructs the scene used to visualize the 3D mesh.
+         */
+        MeshPreviewViewer.prototype.setupScene = function () {
+            this._scene = new THREE.Scene();
+            this._root = new THREE.Group();
+            this._scene.add(this._root);
+        };
+        /**
+         * Animation loop.
+         */
+        MeshPreviewViewer.prototype.animate = function () {
+            requestAnimationFrame(this.animate.bind(this));
+            this._controls.update();
+            this._renderer.render(this._scene, this._camera);
+        };
+        return MeshPreviewViewer;
+    }());
+    exports.MeshPreviewViewer = MeshPreviewViewer;
+});
+define("ModelRelief", ["require", "exports", "dat-gui", "DepthBuffer/DepthBufferFactory", "ModelLoaders/Loader", "Viewer/MeshPreviewViewer", "System/Services", "Viewer/Viewer"], function (require, exports, dat, DepthBufferFactory_1, Loader_1, MeshPreviewViewer_1, Services_6, Viewer_1) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var ModelRelief = (function () {
+        /** Default constructor
+         * @class ModelRelief
+         * @constructor
+         */
+        function ModelRelief() {
+        }
         /**
          * Generates a relief from the current model camera.
          */
@@ -2651,11 +2734,16 @@ define("ModelRelief", ["require", "exports", "three", "dat-gui", "DepthBuffer/De
             Services_6.Services.consoleLogger.addInfoMessage('ModelRelief started');
             // Model Viewer    
             this._modelViewer = new Viewer_1.Viewer('modelCanvas');
-            this.loadModel(this._modelViewer);
             // Mesh Preview
             this._meshPreviewViewer = new MeshPreviewViewer_1.MeshPreviewViewer('meshCanvas');
             // UI Controls
             this.initializeViewerControls();
+            // Loader
+            this._loader = new Loader_1.Loader();
+            this._loader.loadOBJModel(this._modelViewer);
+            //      this._loader.loadTorusModel (this._modelViewer);
+            //      this._loader.loadBoxModel (this._modelViewer);
+            //      this._loader.loadSphereModel (this._modelViewer);
         };
         return ModelRelief;
     }());

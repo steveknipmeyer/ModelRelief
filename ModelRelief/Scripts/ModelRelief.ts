@@ -8,8 +8,9 @@
 import * as THREE  from 'three' 
 import * as dat    from 'dat-gui'
 
-import {Logger, ConsoleLogger}  from 'Logger'
 import {DepthBufferFactory}     from "DepthBufferFactory"
+import {Loader}                 from 'Loader'
+import {Logger, ConsoleLogger}  from 'Logger'
 import {Graphics}               from "Graphics"
 import {OBJLoader}              from "OBJLoader"
 import {MeshPreviewViewer}      from "MeshPreviewViewer"
@@ -18,6 +19,7 @@ import {Viewer}                 from "Viewer"
 
 export class ModelRelief {
 
+    _loader             : Loader;
     _modelViewer        : Viewer;
     _meshPreviewViewer  : MeshPreviewViewer;
 
@@ -26,40 +28,6 @@ export class ModelRelief {
      * @constructor
      */
     constructor() {  
-    }
-
-    /**
-     * Loads a model based on the model name and path embedded in the HTML page.
-     * @param viewer Instance of the Viewer to display the model
-     */    
-    loadModel (viewer : Viewer) {
-
-        let modelNameElement : HTMLElement = window.document.getElementById('modelName');
-        let modelPathElement : HTMLElement = window.document.getElementById('modelPath');
-
-        let modelName    : string = modelNameElement.textContent;
-        let modelPath    : string = modelPathElement.textContent;
-        let fileName     : string = modelPath + modelName;
-
-        let manager = new THREE.LoadingManager();
-        let loader  = new OBJLoader(manager);
-        
-        let onProgress = function (xhr) {
-
-            if (xhr.lengthComputable) {
-                var percentComplete = xhr.loaded / xhr.total * 100;
-                console.log(percentComplete.toFixed(2) + '% downloaded');
-            }
-        };
-
-        let onError = function (xhr) {
-        };        
-
-        loader.load(fileName, function (group : THREE.Group) {
-            
-            viewer.model = group;
-
-        }, onProgress, onError);
     }
 
     /**
@@ -126,16 +94,23 @@ export class ModelRelief {
     run () {
 
         Services.consoleLogger.addInfoMessage ('ModelRelief started');   
-
+        
         // Model Viewer    
         this._modelViewer = new Viewer('modelCanvas');
-        this.loadModel (this._modelViewer);
         
         // Mesh Preview
         this._meshPreviewViewer =  new MeshPreviewViewer('meshCanvas');
 
         // UI Controls
         this.initializeViewerControls();
+
+        // Loader
+        this._loader = new Loader();
+
+        this._loader.loadOBJModel (this._modelViewer);
+//      this._loader.loadTorusModel (this._modelViewer);
+//      this._loader.loadBoxModel (this._modelViewer);
+//      this._loader.loadSphereModel (this._modelViewer);
     }
 }
 

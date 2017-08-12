@@ -14,11 +14,11 @@ import {Materials}              from 'Materials'
 import {Services}               from 'Services'
 
 interface CameraSettings {
-    position:   THREE.Vector3;        // location of camera
-    target:     THREE.Vector3;        // target point
-    near:       number;               // near clipping plane
-    far:        number;               // far clipping plane
-    fov:        number;               // field of view
+    position:       THREE.Vector3;        // location of camera
+    target:         THREE.Vector3;        // target point
+    near:           number;               // near clipping plane
+    far:            number;               // far clipping plane
+    fieldOfView:    number;               // field of view
 }
 
 const ObjectNames = {
@@ -63,7 +63,8 @@ export class Viewer {
 
         this.initializeScene();
 
-        this.initializeGL();
+        let useTestCamera = false;
+        this.initializeGL(useTestCamera);
 
         this.animate();
     }
@@ -97,9 +98,9 @@ export class Viewer {
     /**
      * Initialize the viewer camera
      */
-    initializeCamera() {
+    initializeCamera(useTestCamera : boolean) {
 
-        this._cameraSettings = {
+        let settingsOBJ : CameraSettings = {
             // Baseline : near = 0.1, far = 10000
             // ZBuffer  : near = 100, far = 300
 
@@ -107,13 +108,24 @@ export class Viewer {
             target:         new THREE.Vector3(0, 0, 0),
             near:           0.1,
             far:            10000,
-            fov:            45
+            fieldOfView:            45
         };
+
+        let settingsTestModels : CameraSettings = {
+
+            position:       new THREE.Vector3(0.0, 0.0, 4.0),
+            target:         new THREE.Vector3(0, 0, 0),
+            near:           2.0,
+            far:            10.0,
+            fieldOfView:    37                                  // https://www.nikonians.org/reviews/fov-tables
+        };
+
+        this._cameraSettings = useTestCamera ? settingsTestModels : settingsOBJ;
 
         this.camera = null;
         this._cameraTarget = this._cameraSettings.target;
 
-        this.camera = new THREE.PerspectiveCamera(this._cameraSettings.fov, this.aspectRatio, this._cameraSettings.near, this._cameraSettings.far);
+        this.camera = new THREE.PerspectiveCamera(this._cameraSettings.fieldOfView, this.aspectRatio, this._cameraSettings.near, this._cameraSettings.far);
         this.resetCamera();
     }
 
@@ -133,7 +145,7 @@ export class Viewer {
     /**
      * Initialize the WebGL settings
      */
-    initializeGL() {
+    initializeGL(useTestCamera : boolean) {
 
         this._renderer = new THREE.WebGLRenderer({
 
@@ -145,7 +157,7 @@ export class Viewer {
         this._renderer.setClearColor(0x000000);
 
 
-        this.initializeCamera();
+        this.initializeCamera(useTestCamera);
         this.initializeLighting();
         this.initializeInputControls();
 

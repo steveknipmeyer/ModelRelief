@@ -19,7 +19,7 @@ import {TrackballControls}      from 'TrackballControls'
  */
 export class MeshPreviewViewer {
 
-    _scene               : THREE.Scene               = null;;
+    _scene              : THREE.Scene               = null;;
     _root               : THREE.Group               = null;
 
     _canvas             : HTMLCanvasElement         = null;
