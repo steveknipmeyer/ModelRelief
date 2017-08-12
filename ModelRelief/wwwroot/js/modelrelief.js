@@ -2833,217 +2833,33 @@ define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function 
     }());
     exports.UnitTests = UnitTests;
 });
-define("Workbench/DepthBufferTest", ["require", "exports", "three", "DepthBuffer/DepthBufferFactory", "Viewer/Graphics", "Viewer/MeshPreviewViewer", "System/Services", "Viewer/TrackballControls"], function (require, exports, THREE, DepthBufferFactory_2, Graphics_3, MeshPreviewViewer_2, Services_7, TrackballControls_3) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var modelCanvas;
-    var modelRenderer;
-    var modelCamera;
-    var modelControls;
-    var modelScene;
-    var modelRoot;
-    var cameraZPosition = 4;
-    var cameraNearPlane = 2;
-    var cameraFarPlane = 10.0;
-    var fieldOfView = 37; // https://www.nikonians.org/reviews/fov-tables
-    var Resolution;
-    (function (Resolution) {
-        Resolution[Resolution["viewModel"] = 768] = "viewModel";
-    })(Resolution || (Resolution = {}));
-    /**
-     * Setup the primary model scene.
-     */
-    function setupModelScene() {
-        modelScene = new THREE.Scene();
-        modelRoot = new THREE.Group();
-        modelScene.add(modelRoot);
-        setupTorusScene();
-        //  setupSphereScene();
-        //  setupBoxScene();
-        initializeLighting(modelScene);
-        initializeModelHelpers(modelScene, null, false);
-    }
-    /**
-     * Initialize the primary model view.
-     */
-    function initializeModelRenderer() {
-        modelCanvas = Graphics_3.Graphics.initializeCanvas('modelCanvas', Resolution.viewModel, Resolution.viewModel);
-        modelRenderer = new THREE.WebGLRenderer({ canvas: modelCanvas });
-        modelRenderer.setPixelRatio(window.devicePixelRatio);
-        modelRenderer.setSize(Resolution.viewModel, Resolution.viewModel);
-        modelCamera = new THREE.PerspectiveCamera(fieldOfView, Resolution.viewModel / Resolution.viewModel, cameraNearPlane, cameraFarPlane);
-        modelCamera.position.z = cameraZPosition;
-        modelControls = new TrackballControls_3.TrackballControls(modelCamera, modelRenderer.domElement);
-        setupModelScene();
-    }
-    /**
-     * Initialize the application.
-     */
-    function initialize() {
-        initializeModelRenderer();
-        onWindowResize();
-        window.addEventListener('resize', onWindowResize, false);
-    }
-    /**
-     * Updates a renderer properties.
-     * Event handler called on window resize.
-     * @param renderer Renderer to update.
-     * @param width Width of the renderer.
-     * @param height Height of the renderer.
-     * @param camera Renderer's camera.
-     */
-    function updateViewOnWindowResize(renderer, width, height, camera) {
-        var aspect = width / height;
-        if (camera) {
-            camera.aspect = aspect;
-            camera.updateProjectionMatrix();
-        }
-        renderer.setSize(width, height);
-    }
-    /**
-     * Event handler called on window resize.
-     */
-    function onWindowResize() {
-        updateViewOnWindowResize(modelRenderer, Resolution.viewModel, Resolution.viewModel, modelCamera);
-    }
-    /**
-     * Adds lighting to the scene.
-     * param theScene Scene to add lighting.
-     */
-    function initializeLighting(theScene) {
-        var ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-        theScene.add(ambientLight);
-        var directionalLight1 = new THREE.DirectionalLight(0xffffff);
-        directionalLight1.position.set(4, 4, 4);
-        theScene.add(directionalLight1);
-    }
-    /**
-     * Adds helpers to the scene to visualize camera, coordinates, etc.
-     * @param scene Scene to annotate.
-     * @param camera Camera to construct helper (may be null).
-     * @param addAxisHelper Add a helper for the cartesian axes.
-     */
-    function initializeModelHelpers(scene, camera, addAxisHelper) {
-        if (camera) {
-            var cameraHelper = new THREE.CameraHelper(camera);
-            cameraHelper.visible = true;
-            scene.add(cameraHelper);
-        }
-        if (addAxisHelper) {
-            var axisHelper = new THREE.AxisHelper(2);
-            axisHelper.visible = true;
-            scene.add(axisHelper);
-        }
-    }
-    /**
-     * Adds a torus to a scene.
-     * @param scene Target scene.
-     */
-    function setupTorusScene() {
-        // Setup some geometries
-        var geometry = new THREE.TorusKnotGeometry(1, 0.3, 128, 64);
-        var material = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
-        var count = 50;
-        var scale = 5;
-        for (var i = 0; i < count; i++) {
-            var r = Math.random() * 2.0 * Math.PI;
-            var z = (Math.random() * 2.0) - 1.0;
-            var zScale = Math.sqrt(1.0 - z * z) * scale;
-            var mesh = new THREE.Mesh(geometry, material);
-            mesh.position.set(Math.cos(r) * zScale, Math.sin(r) * zScale, z * scale);
-            mesh.rotation.set(Math.random(), Math.random(), Math.random());
-            modelRoot.add(mesh);
-        }
-    }
-    /**
-     * Adds a test sphere to a scene.
-     * @param scene Target scene.
-     */
-    function setupSphereScene() {
-        // geometry
-        var radius = 2;
-        var segments = 64;
-        var geometry = new THREE.SphereGeometry(radius, segments, segments);
-        var material = new THREE.MeshPhongMaterial({ color: 0xb35bcc });
-        var mesh = new THREE.Mesh(geometry, material);
-        var center = new THREE.Vector3(0.0, 0.0, 0.0);
-        mesh.position.set(center.x, center.y, center.z);
-        modelRoot.add(mesh);
-    }
-    /**
-     * Add a test box to a scene.
-     * @param scene Target scene.
-     */
-    function setupBoxScene() {
-        // box
-        var dimensions = 2.0;
-        var width = dimensions;
-        var height = dimensions;
-        var depth = dimensions;
-        var geometry = new THREE.BoxGeometry(width, height, depth);
-        var material = new THREE.MeshPhongMaterial({ color: 0xffffff });
-        var mesh = new THREE.Mesh(geometry, material);
-        var center = new THREE.Vector3(0.0, 0.0, 0.0);
-        mesh.position.set(center.x, center.y, center.z);
-        modelRoot.add(mesh);
-    }
-    /**
-     * Adds a backgroun plane at the origin.
-     * @param scene Target scene.
-     */
-    function addBackgroundPlane() {
-        // background plane
-        var width = 4;
-        var height = 4;
-        var geometry = new THREE.PlaneGeometry(width, height);
-        var material = new THREE.MeshPhongMaterial({ color: 0x5555cc });
-        var mesh = new THREE.Mesh(geometry, material);
-        var center = new THREE.Vector3(0.0, 0.0, 0.0);
-        mesh.position.set(center.x, center.y, center.z);
-        modelRoot.add(mesh);
-    }
-    /**
-     * Animation loop.
-     */
-    function animate() {
-        requestAnimationFrame(animate);
-        modelControls.update();
-        modelRenderer.render(modelScene, modelCamera);
-    }
+define("Workbench/DepthBufferTest", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
     // Copyright (c) <2017> Steve Knipmeyer                                    //
     // ------------------------------------------------------------------------//
-    var logger;
-    var CameraButtonId = 'camera';
-    var modelViewer;
-    var meshPreviewViewer;
-    function initializeModelViewer() {
-        //  modelViewer = new Viewer();
-        initialize();
-        animate();
-    }
-    function initializeMeshPreviewViewer() {
-        meshPreviewViewer = new MeshPreviewViewer_2.MeshPreviewViewer('meshCanvas');
-    }
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     /**
-     *  Event handler to create depth buffers.
+     * @class
+     * DepthBufferTest
      */
-    function generateRelief() {
-        var size = 768;
-        var factory = new DepthBufferFactory_2.DepthBufferFactory({ width: size, height: size, model: modelRoot, camera: modelCamera });
-        var previewMesh = factory.meshGenerate({ modelWidth: 2, camera: modelCamera });
-        Graphics_3.Graphics.removeSceneObjectChildren(meshPreviewViewer._scene, meshPreviewViewer._root, false);
-        meshPreviewViewer._root.add(previewMesh);
-    }
-    function main() {
-        logger = Services_7.Services.htmlLogger;
-        initializeModelViewer();
-        initializeMeshPreviewViewer();
-        var cameraButton = document.querySelector("#" + CameraButtonId).onclick = generateRelief;
-        generateRelief();
-    }
-    main();
+    var DepthBufferTest = (function () {
+        /**
+         * @constructor
+         */
+        function DepthBufferTest() {
+        }
+        /**
+         * Main
+         */
+        DepthBufferTest.prototype.main = function () {
+        };
+        return DepthBufferTest;
+    }());
+    exports.DepthBufferTest = DepthBufferTest;
+    var depthBufferTest = new DepthBufferTest();
+    depthBufferTest.main();
 });
 //# sourceMappingURL=modelrelief.js.map
