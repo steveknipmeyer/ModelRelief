@@ -15,7 +15,7 @@ import {MeshPreviewViewer}      from "MeshPreviewViewer"
 import {Services}               from 'Services'
 import {TrackballControls}      from 'TrackballControls'
 import {UnitTests}              from 'UnitTests'
-import {Viewer}                 from "Viewer"
+import {ModelViewer}            from "ModelViewer"
 
 /**
  * @class

@@ -19,9 +19,9 @@ const ObjectNames = {
 }
 
 /**
- * @exports Viewer/Viewer
+ * @exports Viewer/ModelViewer
  */
-export class Viewer {
+export class ModelViewer {
 
     _scene                  : THREE.Scene               = null;
     _root                   : THREE.Object3D            = null;      

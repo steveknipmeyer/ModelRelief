@@ -2234,7 +2234,7 @@ define("Viewer/Materials", ["require", "exports", "three"], function (require, e
     }());
     exports.Materials = Materials;
 });
-define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControls", "Viewer/Graphics", "System/Services"], function (require, exports, THREE, TrackballControls_1, Graphics_1, Services_4) {
+define("Viewer/ModelViewer", ["require", "exports", "three", "Viewer/TrackballControls", "Viewer/Graphics", "System/Services"], function (require, exports, THREE, TrackballControls_1, Graphics_1, Services_4) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -2247,16 +2247,16 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
         Grid: 'Grid'
     };
     /**
-     * @exports Viewer/Viewer
+     * @exports Viewer/ModelViewer
      */
-    var Viewer = (function () {
+    var ModelViewer = (function () {
         /**
          * Default constructor
          * @class Viewer
          * @constructor
          * @param elementToBindTo HTML element to host the viewer.
          */
-        function Viewer(modelCanvasId) {
+        function ModelViewer(modelCanvasId) {
             this._scene = null;
             this._root = null;
             this._renderer = null;
@@ -2276,7 +2276,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
             this.animate();
         }
         ;
-        Object.defineProperty(Viewer.prototype, "model", {
+        Object.defineProperty(ModelViewer.prototype, "model", {
             //#region Properties
             /**
              * Sets the active model.
@@ -2289,7 +2289,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(Viewer.prototype, "camera", {
+        Object.defineProperty(ModelViewer.prototype, "camera", {
             /**
              * Gets the camera.
              */
@@ -2299,7 +2299,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(Viewer.prototype, "aspectRatio", {
+        Object.defineProperty(ModelViewer.prototype, "aspectRatio", {
             /**
              * Calculates the aspect ratio of the canvas afer a window resize
              */
@@ -2315,7 +2315,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
         /**
          * Initialize Scene
          */
-        Viewer.prototype.initializeScene = function () {
+        ModelViewer.prototype.initializeScene = function () {
             this._scene = new THREE.Scene();
             this.createRoot();
             var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
@@ -2325,7 +2325,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
         /**
          * Initialize the WebGL renderer.
          */
-        Viewer.prototype.initializeRenderer = function () {
+        ModelViewer.prototype.initializeRenderer = function () {
             this._renderer = new THREE.WebGLRenderer({
                 logarithmicDepthBuffer: false,
                 canvas: this._canvas,
@@ -2337,7 +2337,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
         /**
          * Initialize the viewer camera
          */
-        Viewer.prototype.initializeCamera = function (useTestCamera) {
+        ModelViewer.prototype.initializeCamera = function (useTestCamera) {
             var settingsOBJ = {
                 // Baseline : near = 0.1, far = 10000
                 // ZBuffer  : near = 100, far = 300
@@ -2362,7 +2362,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
         /**
          * Adds lighting to the scene
          */
-        Viewer.prototype.initializeLighting = function () {
+        ModelViewer.prototype.initializeLighting = function () {
             var ambientLight = new THREE.AmbientLight(0x404040);
             this._scene.add(ambientLight);
             var directionalLight1 = new THREE.DirectionalLight(0xC0C090);
@@ -2375,13 +2375,13 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
         /**
          * Sets up the user input controls (Trackball)
          */
-        Viewer.prototype.initializeInputControls = function () {
+        ModelViewer.prototype.initializeInputControls = function () {
             this._controls = new TrackballControls_1.TrackballControls(this.camera, this._renderer.domElement);
         };
         /**
          * Initialize the scene with the base objects
          */
-        Viewer.prototype.initialize = function (useTestCamera) {
+        ModelViewer.prototype.initialize = function (useTestCamera) {
             this.initializeScene();
             this.initializeRenderer();
             this.initializeCamera(useTestCamera);
@@ -2395,14 +2395,14 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
         /**
          * Removes all scene objects
          */
-        Viewer.prototype.clearAllAssests = function () {
+        ModelViewer.prototype.clearAllAssests = function () {
             Graphics_1.Graphics.removeSceneObjectChildren(this._scene, this._root, false);
             this.createRoot();
         };
         /**
          * Creates the root object in the scene
          */
-        Viewer.prototype.createRoot = function () {
+        ModelViewer.prototype.createRoot = function () {
             this._root = new THREE.Object3D();
             this._root.name = ObjectNames.Root;
             this._scene.add(this._root);
@@ -2410,7 +2410,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
         /**
          * Display the reference grid.
          */
-        Viewer.prototype.displayGrid = function (visible) {
+        ModelViewer.prototype.displayGrid = function (visible) {
             var gridGeometry = this._scene.getObjectByName(ObjectNames.Grid);
             gridGeometry.visible = visible;
             this._logger.addInfoMessage("Display grid = " + visible);
@@ -2420,7 +2420,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
         /**
          * Resets all camera properties to the defaults
          */
-        Viewer.prototype.resetCamera = function () {
+        ModelViewer.prototype.resetCamera = function () {
             this.camera.position.copy(this._defaultCameraSettings.position);
             this.updateCamera();
         };
@@ -2429,7 +2429,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
         /**
          * Updates the scene camera to match the new window size
          */
-        Viewer.prototype.updateCamera = function () {
+        ModelViewer.prototype.updateCamera = function () {
             this.camera.aspect = this.aspectRatio;
             this.camera.lookAt(this._defaultCameraSettings.target);
             this.camera.updateProjectionMatrix();
@@ -2437,7 +2437,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
         /**
          * Handles the WebGL processing for a DOM window 'resize' event
          */
-        Viewer.prototype.resizeDisplayWebGL = function () {
+        ModelViewer.prototype.resizeDisplayWebGL = function () {
             this._width = this._canvas.offsetWidth;
             this._height = this._canvas.offsetHeight;
             this._renderer.setSize(this._width, this._height, false);
@@ -2447,7 +2447,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
         /**
          * Handles a window resize event
          */
-        Viewer.prototype.onResizeWindow = function () {
+        ModelViewer.prototype.onResizeWindow = function () {
             this.resizeDisplayWebGL();
         };
         //#endregion
@@ -2455,20 +2455,20 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
         /**
          * Performs the WebGL render of the scene
          */
-        Viewer.prototype.renderWebGL = function () {
+        ModelViewer.prototype.renderWebGL = function () {
             this._controls.update();
             this._renderer.render(this._scene, this.camera);
         };
         /**
          * Main DOM render loop
          */
-        Viewer.prototype.animate = function () {
+        ModelViewer.prototype.animate = function () {
             requestAnimationFrame(this.animate.bind(this));
             this.renderWebGL();
         };
-        return Viewer;
+        return ModelViewer;
     }());
-    exports.Viewer = Viewer;
+    exports.ModelViewer = ModelViewer;
 });
 define("ModelLoaders/Loader", ["require", "exports", "three", "ModelLoaders/OBJLoader"], function (require, exports, THREE, OBJLoader_1) {
     // ------------------------------------------------------------------------// 
@@ -2760,7 +2760,7 @@ define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "Viewer/Graph
     }());
     exports.MeshPreviewViewer = MeshPreviewViewer;
 });
-define("ModelRelief", ["require", "exports", "dat-gui", "DepthBuffer/DepthBufferFactory", "ModelLoaders/Loader", "Viewer/MeshPreviewViewer", "System/Services", "Viewer/Viewer"], function (require, exports, dat, DepthBufferFactory_1, Loader_1, MeshPreviewViewer_1, Services_6, Viewer_1) {
+define("ModelRelief", ["require", "exports", "dat-gui", "DepthBuffer/DepthBufferFactory", "ModelLoaders/Loader", "Viewer/MeshPreviewViewer", "System/Services", "Viewer/ModelViewer"], function (require, exports, dat, DepthBufferFactory_1, Loader_1, MeshPreviewViewer_1, Services_6, ModelViewer_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -2824,7 +2824,7 @@ define("ModelRelief", ["require", "exports", "dat-gui", "DepthBuffer/DepthBuffer
         ModelRelief.prototype.run = function () {
             Services_6.Services.consoleLogger.addInfoMessage('ModelRelief started');
             // Model Viewer    
-            this._modelViewer = new Viewer_1.Viewer('modelCanvas');
+            this._modelViewer = new ModelViewer_1.ModelViewer('modelCanvas');
             // Mesh Preview
             this._meshPreviewViewer = new MeshPreviewViewer_1.MeshPreviewViewer('meshCanvas');
             // UI Controls

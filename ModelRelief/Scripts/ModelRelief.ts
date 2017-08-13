@@ -15,12 +15,12 @@ import {Graphics}               from "Graphics"
 import {OBJLoader}              from "OBJLoader"
 import {MeshPreviewViewer}      from "MeshPreviewViewer"
 import {Services}               from 'Services'
-import {Viewer}                 from "Viewer"
+import {ModelViewer}            from "ModelViewer"
 
 export class ModelRelief {
 
     _loader             : Loader;
-    _modelViewer        : Viewer;
+    _modelViewer        : ModelViewer;
     _meshPreviewViewer  : MeshPreviewViewer;
 
     /** Default constructor
@@ -96,7 +96,7 @@ export class ModelRelief {
         Services.consoleLogger.addInfoMessage ('ModelRelief started');   
         
         // Model Viewer    
-        this._modelViewer = new Viewer('modelCanvas');
+        this._modelViewer = new ModelViewer('modelCanvas');
         
         // Mesh Preview
         this._meshPreviewViewer =  new MeshPreviewViewer('meshCanvas');

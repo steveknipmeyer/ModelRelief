@@ -11,7 +11,7 @@ import {Logger, ConsoleLogger}  from 'Logger'
 import {Graphics}               from "Graphics"
 import {OBJLoader}              from "OBJLoader"
 import {Services}               from 'Services'
-import {Viewer}                 from 'Viewer'
+import {ModelViewer}            from 'ModelViewer'
 
 const testModelColor = '#558de8';
 
@@ -28,7 +28,7 @@ export class Loader {
      * Loads a model based on the model name and path embedded in the HTML page.
      * @param viewer Instance of the Viewer to display the model.
      */    
-    loadOBJModel (viewer : Viewer) {
+    loadOBJModel (viewer : ModelViewer) {
 
         let modelNameElement : HTMLElement = window.document.getElementById('modelName');
         let modelPathElement : HTMLElement = window.document.getElementById('modelPath');
@@ -62,7 +62,7 @@ export class Loader {
      * Adds a torus to a scene.
      * @param viewer Instance of the Viewer to display the model
      */
-    loadTorusModel (viewer : Viewer) {
+    loadTorusModel (viewer : ModelViewer) {
         
         let torusScene = new THREE.Group();
 
@@ -96,7 +96,7 @@ export class Loader {
      * Adds a test sphere to a scene.
      * @param viewer Instance of the Viewer to display the model.
      */
-    loadSphereModel (viewer : Viewer) {
+    loadSphereModel (viewer : ModelViewer) {
 
         // geometry
         let radius   : number = 2;
@@ -116,7 +116,7 @@ export class Loader {
      * Add a test box to a scene.
      * @param viewer Instance of the Viewer to display the model.
      */
-    loadBoxModel (viewer : Viewer) {
+    loadBoxModel (viewer : ModelViewer) {
 
         // box
         let dimensions : number = 2.0

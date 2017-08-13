@@ -15,7 +15,6 @@ import {MeshPreviewViewer}      from "MeshPreviewViewer"
 import {Services}               from 'Services'
 import {TrackballControls}      from 'TrackballControls'
 import {UnitTests}              from 'UnitTests'
-import {Viewer}                 from "Viewer"
 
 let logger = new HTMLLogger();
 
