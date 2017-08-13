@@ -9,9 +9,9 @@ import * as THREE  from 'three'
 
 import {Logger, ConsoleLogger}  from 'Logger'
 import {Graphics}               from "Graphics"
+import {ModelViewer}            from 'ModelViewer'
 import {OBJLoader}              from "OBJLoader"
 import {Services}               from 'Services'
-import {ModelViewer}            from 'ModelViewer'
 
 const testModelColor = '#558de8';
 

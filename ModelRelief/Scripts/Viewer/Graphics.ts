@@ -265,6 +265,31 @@ export class Graphics {
 
         return gridGroup;
     }
+
+     /**
+      * Adds a camera helper to a scene to visualize the camera position.
+      * @param scene Scene to annotate.
+      * @param camera Camera to construct helper (may be null).
+      */
+    static createCameraHelper (scene : THREE.Scene, camera : THREE.Camera) {
+
+        if (camera) {
+            let cameraHelper = new THREE.CameraHelper(camera );
+            cameraHelper.visible = true;
+            scene.add(cameraHelper);
+        }
+    }
+
+     /**
+      * Adds a coordinate axis helper to a scene to visualize the world axes.
+      * @param scene Scene to annotate.
+      */
+    static createAxisHelper (scene : THREE.Scene, size : number) {
+
+        let axisHelper = new THREE.AxisHelper(size);
+        axisHelper.visible = true;
+        scene.add(axisHelper);
+    }
 //#endregion
 
 //#region Coordinate Conversion

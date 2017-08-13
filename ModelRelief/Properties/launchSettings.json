@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:60655//Workbench/Inheritance",
+      "applicationUrl": "http://localhost:60655//Models/Viewer/6",
       "sslPort": 44368
     }
   },

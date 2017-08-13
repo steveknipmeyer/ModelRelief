@@ -12,10 +12,11 @@ import {DepthBufferFactory}     from "DepthBufferFactory"
 import {Loader}                 from 'Loader'
 import {Logger, ConsoleLogger}  from 'Logger'
 import {Graphics}               from "Graphics"
-import {OBJLoader}              from "OBJLoader"
 import {MeshPreviewViewer}      from "MeshPreviewViewer"
-import {Services}               from 'Services'
 import {ModelViewer}            from "ModelViewer"
+import {OBJLoader}              from "OBJLoader"
+import {Services}               from 'Services'
+import {Viewer}                 from "Viewer"
 
 export class ModelRelief {
 
@@ -94,6 +95,9 @@ export class ModelRelief {
     run () {
 
         Services.consoleLogger.addInfoMessage ('ModelRelief started');   
+
+        // Model Viewer    
+        let viewer = new Viewer('viewerCanvas');
         
         // Model Viewer    
         this._modelViewer = new ModelViewer('modelCanvas');
@@ -107,8 +111,8 @@ export class ModelRelief {
         // Loader
         this._loader = new Loader();
 
-//      this._loader.loadOBJModel (this._modelViewer);
-        this._loader.loadTorusModel (this._modelViewer);
+        this._loader.loadOBJModel (this._modelViewer);
+//      this._loader.loadTorusModel (this._modelViewer);
 //      this._loader.loadBoxModel (this._modelViewer);
 //      this._loader.loadSphereModel (this._modelViewer);
     }
