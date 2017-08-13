@@ -2387,8 +2387,8 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
             this.initializeCamera(useTestCamera);
             this.initializeLighting();
             this.initializeInputControls();
-            this.resizeDisplayWebGL();
-            window.addEventListener('resize', this.resizeWindow.bind(this), false);
+            this.onResizeWindow();
+            window.addEventListener('resize', this.onResizeWindow.bind(this), false);
         };
         //#endregion
         //#region Scene
@@ -2447,7 +2447,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
         /**
          * Handles a window resize event
          */
-        Viewer.prototype.resizeWindow = function () {
+        Viewer.prototype.onResizeWindow = function () {
             this.resizeDisplayWebGL();
         };
         //#endregion

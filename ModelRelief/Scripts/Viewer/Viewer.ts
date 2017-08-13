@@ -186,8 +186,8 @@ export class Viewer {
         this.initializeLighting();
         this.initializeInputControls();
 
-        this.resizeDisplayWebGL();  
-        window.addEventListener('resize', this.resizeWindow.bind(this), false);
+        this.onResizeWindow();
+        window.addEventListener('resize', this.onResizeWindow.bind(this), false);
     }
 //#endregion
 
@@ -260,7 +260,7 @@ export class Viewer {
     /**
      * Handles a window resize event
      */
-    resizeWindow () {
+    onResizeWindow () {
 
         this.resizeDisplayWebGL();
     }
