@@ -13,6 +13,7 @@ namespace ModelRelief.Controllers
     {
     public class WorkbenchController : Controller
         {
+#region DepthBufferTest
         // GET: /<controller>/
         public IActionResult DepthBufferTest()
             {
@@ -46,5 +47,15 @@ namespace ModelRelief.Controllers
 
             return true;
             }
+#endregion
+
+#region Inheritance
+        // GET: /<controller>/
+        public IActionResult Inheritance()
+            {
+            return View();
+            }
+#endregion
+
         }
     }

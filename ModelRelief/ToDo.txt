@@ -5,6 +5,9 @@
 // ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
+Viewer
+    ModelViewer
+    MeshPreviewViewer
 
 Graphics
     ModelHelpers
@@ -18,9 +21,7 @@ Core
 
     How should the vertex (translated) Z position be calculated from the depth buffer?
         Experiment with precision setting in THREE.WebGLRenderer.
-
-OBJ Model Support
-    
+   
 Viewing
     Progress Indicator
     OrbitControls versus Trackball
@@ -46,6 +47,7 @@ Code Quality
     Add types to all methods.
         TrackballControls
         OBJLoader
+
 // ------------------------------------------------------------------------// 
 //      Depth Buffer Notes                                                 //
 // ------------------------------------------------------------------------//

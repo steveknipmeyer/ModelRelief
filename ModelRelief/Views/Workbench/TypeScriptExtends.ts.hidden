@@ -1,0 +1,116 @@
+﻿
+var __extends = (this && this.__extends) || (function() {
+    var extendStatics = Object.setPrototypeOf ||
+        ({
+                __proto__: []
+            }
+            instanceof Array && function(derived, base) {
+                derived.__proto__ = base;
+            }) ||
+        function(derived, base) {
+            for (var p in base)
+                if (base.hasOwnProperty(p)) derived[p] = base[p];
+        };
+    return function(derived, base) {
+        extendStatics(derived, base);
+
+        function __() {
+            this.constructor = derived;
+        }
+        derived.prototype = base === null ? Object.create(base) : (__.prototype = base.prototype, new __());
+    };
+})();
+
+/* --------------------------------------------------------------------------------------------------------------------------------------//
+//  Generated JavaScript
+// --------------------------------------------------------------------------------------------------------------------------------------*/
+
+    var Widget = (function () {
+        /**
+         * @constructor
+         */
+        function Widget(name, price) {
+            this.name = name;
+            this.price = price;
+        }
+        /**
+         * Operate
+         */
+        Widget.prototype.operate = function () {
+            logger.addInfoMessage(this.name + " operating....");
+        };
+        return Widget;
+    }());
+
+    /**
+     * @class
+     * SuperWidget
+     */
+    var ColorWidget = (function (_super) {
+        __extends(ColorWidget, _super);
+        /**
+         * @constructor
+         */
+        function ColorWidget(name, price, color) {
+            var _this = _super.call(this, name, price) || this;
+            _this.color = color;
+            return _this;
+        }
+        /**
+         * Operate
+         */
+        ColorWidget.prototype.operate = function () {
+            logger.addInfoMessage(this.name + " operating....");
+        };
+        return ColorWidget;
+    }(Widget));
+
+/* --------------------------------------------------------------------------------------------------------------------------------------//
+//  TypeScript
+// --------------------------------------------------------------------------------------------------------------------------------------*/
+    import {Logger, ConsoleLogger} from 'Logger'
+    var logger = new ConsoleLogger();
+
+    /**
+     * @class
+     * Widget
+     */
+    export class WidgetT {
+    
+        name  : string;
+        price : number;
+
+        /**
+         * @constructor
+         */
+        constructor(name : string, price : number) {
+
+            this.name  = name;
+            this.price = price;
+        }
+
+        /**
+         * Operate
+         */
+        operate () {
+            logger.addInfoMessage(`${this.name} operating....`);        
+        }
+    }
+
+    /**
+     * @class
+     * SuperWidget
+     */
+    export class ColorWidgetT extends WidgetT {
+
+        color : string;
+
+        /**
+         * @constructor
+         */
+        constructor(name : string, price : number, color : string) {
+
+            super (name, price);
+            this.color = color;
+        }
+    }

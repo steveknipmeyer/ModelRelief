@@ -1,0 +1,29 @@
+﻿<body>
+    <div id="inheritanceContainer" >
+    </div>
+
+    <!------------------------------------------------------------------------------------------------>
+    <!--                                    Libraries                                               -->
+    <!------------------------------------------------------------------------------------------------>
+    <script src="/lib/require.js"></script>
+
+    <!------------------------------------------------------------------------------------------------>
+    <!--                                    ModelRelief                                             -->
+    <!------------------------------------------------------------------------------------------------>
+    <script src="/js/shaders.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '.',
+            paths: {
+                'Workbench/Inheritance'                      : '/js/modelrelief',
+
+                 chai                                        : '/lib/chai',
+                'three'                                      : '/lib/threejs/three',
+                'dat-gui'                                    : '/lib/threejs/dat.gui.min'
+            }
+        });
+        window.onload = function () {
+            requirejs(['Workbench/Inheritance']);
+        }
+    </script>
+</body>

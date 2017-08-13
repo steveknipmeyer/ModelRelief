@@ -1,3 +1,13 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 define("System/Logger", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
@@ -2942,5 +2952,105 @@ define("Workbench/DepthBufferTest", ["require", "exports"], function (require, e
     exports.DepthBufferTest = DepthBufferTest;
     var depthBufferTest = new DepthBufferTest();
     depthBufferTest.main();
+});
+define("Workbench/Inheritance", ["require", "exports", "System/Logger"], function (require, exports, Logger_2) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var logger = new Logger_2.HTMLLogger();
+    /**
+     * @class
+     * Widget
+     */
+    var Widget = (function () {
+        /**
+         * @constructor
+         */
+        function Widget(name, price) {
+            this.name = name;
+            this.price = price;
+        }
+        /**
+         * Operate
+         */
+        Widget.prototype.operate = function () {
+            logger.addInfoMessage(this.name + " operating....");
+        };
+        return Widget;
+    }());
+    exports.Widget = Widget;
+    /**
+     * @class
+     * SuperWidget
+     */
+    var ColorWidget = (function (_super) {
+        __extends(ColorWidget, _super);
+        /**
+         * @constructor
+         */
+        function ColorWidget(name, price, color) {
+            var _this = _super.call(this, name, price) || this;
+            _this.color = color;
+            return _this;
+        }
+        return ColorWidget;
+    }(Widget));
+    exports.ColorWidget = ColorWidget;
+    var GrandParent = (function () {
+        function GrandParent(grandparentProperty) {
+            this.grandparentProperty = grandparentProperty;
+        }
+        return GrandParent;
+    }());
+    exports.GrandParent = GrandParent;
+    var Parent = (function (_super) {
+        __extends(Parent, _super);
+        function Parent(grandparentProperty, parentProperty) {
+            var _this = _super.call(this, grandparentProperty) || this;
+            _this.parentProperty = parentProperty;
+            return _this;
+        }
+        return Parent;
+    }(GrandParent));
+    exports.Parent = Parent;
+    var Child = (function (_super) {
+        __extends(Child, _super);
+        function Child(grandparentProperty, parentProperty, childProperty) {
+            var _this = _super.call(this, grandparentProperty, parentProperty) || this;
+            _this.childProperty = childProperty;
+            return _this;
+        }
+        return Child;
+    }(Parent));
+    exports.Child = Child;
+    /**
+     * @class
+     * Inheritance
+     */
+    var Inheritance = (function () {
+        /**
+         * @constructor
+         */
+        function Inheritance() {
+        }
+        /**
+         * Main
+         */
+        Inheritance.prototype.main = function () {
+            var widget = new Widget('Widget', 1.0);
+            widget.operate();
+            var colorWidget = new ColorWidget('ColorWidget', 1.0, 'red');
+            colorWidget.operate();
+            var child = new Child('GaGa', 'Dad', 'Steve');
+        };
+        return Inheritance;
+    }());
+    exports.Inheritance = Inheritance;
+    var inheritance = new Inheritance;
+    inheritance.main();
 });
 //# sourceMappingURL=modelrelief.js.map
