@@ -95,10 +95,7 @@ export class ModelRelief {
     run () {
 
         Services.consoleLogger.addInfoMessage ('ModelRelief started');   
-
-        // Model Viewer    
-        let viewer = new Viewer('viewerCanvas');
-        
+       
         // Model Viewer    
         this._modelViewer = new ModelViewer('modelCanvas');
         

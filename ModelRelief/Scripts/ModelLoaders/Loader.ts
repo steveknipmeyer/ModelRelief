@@ -9,9 +9,9 @@ import * as THREE  from 'three'
 
 import {Logger, ConsoleLogger}  from 'Logger'
 import {Graphics}               from "Graphics"
-import {ModelViewer}            from 'ModelViewer'
 import {OBJLoader}              from "OBJLoader"
 import {Services}               from 'Services'
+import {Viewer}                 from 'Viewer'
 
 const testModelColor = '#558de8';
 
@@ -28,7 +28,7 @@ export class Loader {
      * Loads a model based on the model name and path embedded in the HTML page.
      * @param viewer Instance of the Viewer to display the model.
      */    
-    loadOBJModel (viewer : ModelViewer) {
+    loadOBJModel (viewer : Viewer) {
 
         let modelNameElement : HTMLElement = window.document.getElementById('modelName');
         let modelPathElement : HTMLElement = window.document.getElementById('modelPath');
@@ -62,7 +62,7 @@ export class Loader {
      * Adds a torus to a scene.
      * @param viewer Instance of the Viewer to display the model
      */
-    loadTorusModel (viewer : ModelViewer) {
+    loadTorusModel(viewer : Viewer) {
         
         let torusScene = new THREE.Group();
 
@@ -87,6 +87,7 @@ export class Loader {
             );
             mesh.rotation.set(Math.random(), Math.random(), Math.random());
 
+            mesh.name = 'Torus Component';
             torusScene.add(mesh);
         }
         viewer.model = torusScene;
@@ -96,7 +97,7 @@ export class Loader {
      * Adds a test sphere to a scene.
      * @param viewer Instance of the Viewer to display the model.
      */
-    loadSphereModel (viewer : ModelViewer) {
+    loadSphereModel (viewer : Viewer) {
 
         // geometry
         let radius   : number = 2;
@@ -109,6 +110,7 @@ export class Loader {
         let center : THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0);
         mesh.position.set(center.x, center.y, center.z);
 
+        mesh.name = 'Sphere';
         viewer.model = mesh;
     }
 
@@ -116,7 +118,7 @@ export class Loader {
      * Add a test box to a scene.
      * @param viewer Instance of the Viewer to display the model.
      */
-    loadBoxModel (viewer : ModelViewer) {
+    loadBoxModel (viewer : Viewer) {
 
         // box
         let dimensions : number = 2.0
@@ -131,6 +133,7 @@ export class Loader {
         let center : THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0);
         mesh.position.set(center.x, center.y, center.z);
 
+        mesh.name = 'Box';
         viewer.model = mesh;
     }
 }

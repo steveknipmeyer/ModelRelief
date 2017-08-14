@@ -11,6 +11,8 @@ Core
         Transform model by camera transform.
         Calculate bounding box.
 
+    Set default CameraSettings based on model.
+
     How should the vertex (translated) Z position be calculated from the depth buffer?
         Experiment with precision setting in THREE.WebGLRenderer.
    

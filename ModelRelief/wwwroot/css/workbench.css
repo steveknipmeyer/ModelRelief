@@ -8,13 +8,12 @@
     width : 1800px;
 }
 
-.depth {
-    border-width : 1px;
-    border-style : solid;
+#viewerCanvas {
+    width:  768px;
+    height: 768px;
 
-    margin: 10px;
-    display: inline-block;
-    vertical-align: baseline;
+    position: relative;
+    left : 20%;
+    background-color: #000000;
 }
-
 

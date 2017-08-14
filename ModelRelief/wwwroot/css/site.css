@@ -11,9 +11,9 @@
     z-Index: 200;
 }
 
-#modelCanvas, #meshCanvas, #viewerCanvas {
-    width: 256px;
-    height: 256px;
+#modelCanvas, #meshCanvas{
+    width: 512px;
+    height: 512px;
     background-color: #000000;
 }
 

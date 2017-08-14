@@ -59,6 +59,14 @@ export class Viewer {
 
 //#region Properties
     /**
+     * Gets the active model.
+     */
+    get model() : THREE.Group {
+
+        return this._root;
+    }
+
+    /**
      * Sets the active model.
      * @param value New model to activate.
      */

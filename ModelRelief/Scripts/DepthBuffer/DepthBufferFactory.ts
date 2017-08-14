@@ -15,6 +15,7 @@
 
 import * as THREE               from 'three'
 
+import {Camera}                 from 'Camera'
 import {DepthBuffer}            from 'DepthBuffer'
 import {Graphics}               from 'Graphics'
 import {Logger, ConsoleLogger}  from 'Logger'
@@ -146,7 +147,7 @@ export class DepthBufferFactory {
         if (this._model)
             this._scene.add(this._model);
 
-        this.initializeLighting();
+        this.initializeLighting(this._scene);
     }
 
     /**
@@ -171,14 +172,14 @@ export class DepthBufferFactory {
      * Initialize default lighting in the scene.
      * Lighting does not affect the depth buffer. It is only used if the canvas is made visible.
      */
-    initializeLighting () : void {
+    initializeLighting (scene : THREE.Scene) : void {
 
         let ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-        this._scene.add(ambientLight);
+        scene.add(ambientLight);
 
         let directionalLight1 = new THREE.DirectionalLight(0xffffff);
         directionalLight1.position.set(1, 1, 1);
-        this._scene.add(directionalLight1);
+        scene.add(directionalLight1);
     }
 
     /**
@@ -250,7 +251,7 @@ export class DepthBufferFactory {
         this._postScene.add(postMeshQuad);
 
         this.initializePostCamera();
-        this.initializeLighting();
+        this.initializeLighting(this._postScene);
     }
 
     /**
@@ -371,7 +372,7 @@ export class DepthBufferFactory {
         
         if (!this.verifyMeshSettings()) 
             return null;
-
+                    
         this.createDepthBuffer();
         let mesh = this._depthBuffer.mesh(parameters.modelWidth, parameters.material);
 

@@ -95,7 +95,7 @@ export class Child extends Parent{
  * @class
  * Inheritance
  */
-export class Inheritance {
+export class InheritanceTest {
 
     /**
      * @constructor
@@ -118,5 +118,5 @@ export class Inheritance {
     }
 }
 
-let inheritance = new Inheritance;
+let inheritance = new InheritanceTest;
 inheritance.main();

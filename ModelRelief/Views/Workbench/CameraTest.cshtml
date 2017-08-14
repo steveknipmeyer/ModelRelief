@@ -1,5 +1,6 @@
 ﻿<body>
-    <div id="inheritanceContainer" >
+    <div id="cameraContainer" >
+        <canvas id="viewerCanvas"></canvas>
     </div>
 
     <!------------------------------------------------------------------------------------------------>
@@ -15,7 +16,7 @@
         requirejs.config({
             baseUrl: '.',
             paths: {
-                'Workbench/Inheritance'                      : '/js/modelrelief',
+                'Workbench/CameraTest'                       : '/js/modelrelief',
 
                  chai                                        : '/lib/chai',
                 'three'                                      : '/lib/threejs/three',
@@ -23,7 +24,7 @@
             }
         });
         window.onload = function () {
-            requirejs(['Workbench/Inheritance']);
+            requirejs(['Workbench/CameraTest']);
         }
     </script>
 </body>

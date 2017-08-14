@@ -49,9 +49,17 @@ namespace ModelRelief.Controllers
             }
 #endregion
 
-#region Inheritance
+#region InheritanceTest
         // GET: /<controller>/
-        public IActionResult Inheritance()
+        public IActionResult InheritanceTest()
+            {
+            return View();
+            }
+#endregion
+
+#region CameraTest
+        // GET: /<controller>/
+        public IActionResult CameraTest()
             {
             return View();
             }

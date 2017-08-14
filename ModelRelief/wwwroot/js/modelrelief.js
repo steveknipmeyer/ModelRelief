@@ -8,6 +8,35 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+define("Viewer/Camera", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * Camera
+     * General camera utility methods.
+     * @class
+     */
+    var Camera = (function () {
+        /**
+         * @constructor
+         */
+        function Camera() {
+        }
+        //#region Clipping Planes
+        Camera.optimizeClippingPlanes = function (camera, model) {
+            var modelClone = model.clone(true);
+            modelClone.applyMatrix(camera.matrixWorldInverse);
+            model = modelClone;
+        };
+        return Camera;
+    }());
+    exports.Camera = Camera;
+});
 define("System/Logger", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
@@ -1118,7 +1147,7 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthB
             this._scene = new THREE.Scene();
             if (this._model)
                 this._scene.add(this._model);
-            this.initializeLighting();
+            this.initializeLighting(this._scene);
         };
         /**
          * Initialize the  model view.
@@ -1137,12 +1166,12 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthB
          * Initialize default lighting in the scene.
          * Lighting does not affect the depth buffer. It is only used if the canvas is made visible.
          */
-        DepthBufferFactory.prototype.initializeLighting = function () {
+        DepthBufferFactory.prototype.initializeLighting = function (scene) {
             var ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-            this._scene.add(ambientLight);
+            scene.add(ambientLight);
             var directionalLight1 = new THREE.DirectionalLight(0xffffff);
             directionalLight1.position.set(1, 1, 1);
-            this._scene.add(directionalLight1);
+            scene.add(directionalLight1);
         };
         /**
          * Perform setup and initialization.
@@ -1197,7 +1226,7 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthB
             this._postScene = new THREE.Scene();
             this._postScene.add(postMeshQuad);
             this.initializePostCamera();
-            this.initializeLighting();
+            this.initializeLighting(this._postScene);
         };
         /**
          * Constructs the orthographic camera used to convert the WebGL depth buffer to the encoded RGBA buffer
@@ -1306,769 +1335,6 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthB
         return DepthBufferFactory;
     }());
     exports.DepthBufferFactory = DepthBufferFactory;
-});
-/**
- * @author Eberhard Graether / http://egraether.com/
- * @author Mark Lundin 	/ http://mark-lundin.com
- * @author Simone Manini / http://daron1337.github.io
- * @author Luca Antiga 	/ http://lantiga.github.io
- */
-define("Viewer/TrackballControls", ["require", "exports", "three"], function (require, exports, THREE) {
-    'use strict';
-    Object.defineProperty(exports, "__esModule", { value: true });
-    function TrackballControls(object, domElement) {
-        var _this = this;
-        var STATE = { NONE: -1, ROTATE: 0, ZOOM: 1, PAN: 2, TOUCH_ROTATE: 3, TOUCH_ZOOM_PAN: 4 };
-        this.object = object;
-        this.domElement = (domElement !== undefined) ? domElement : document;
-        // API
-        this.enabled = true;
-        this.screen = { left: 0, top: 0, width: 0, height: 0 };
-        this.rotateSpeed = 1.0;
-        this.zoomSpeed = 1.2;
-        this.panSpeed = 0.3;
-        this.noRotate = false;
-        this.noZoom = false;
-        this.noPan = false;
-        this.staticMoving = true;
-        this.dynamicDampingFactor = 0.2;
-        this.minDistance = 0;
-        this.maxDistance = Infinity;
-        this.keys = [65 /*A*/, 83 /*S*/, 68 /*D*/];
-        // internals
-        this.target = new THREE.Vector3();
-        var EPS = 0.000001;
-        var lastPosition = new THREE.Vector3();
-        var _state = STATE.NONE, _prevState = STATE.NONE, _eye = new THREE.Vector3(), _movePrev = new THREE.Vector2(), _moveCurr = new THREE.Vector2(), _lastAxis = new THREE.Vector3(), _lastAngle = 0, _zoomStart = new THREE.Vector2(), _zoomEnd = new THREE.Vector2(), _touchZoomDistanceStart = 0, _touchZoomDistanceEnd = 0, _panStart = new THREE.Vector2(), _panEnd = new THREE.Vector2();
-        // for reset
-        this.target0 = this.target.clone();
-        this.position0 = this.object.position.clone();
-        this.up0 = this.object.up.clone();
-        // events
-        var changeEvent = { type: 'change' };
-        var startEvent = { type: 'start' };
-        var endEvent = { type: 'end' };
-        // methods
-        this.handleResize = function () {
-            if (this.domElement === document) {
-                this.screen.left = 0;
-                this.screen.top = 0;
-                this.screen.width = window.innerWidth;
-                this.screen.height = window.innerHeight;
-            }
-            else {
-                var box = this.domElement.getBoundingClientRect();
-                // adjustments come from similar code in the jquery offset() function
-                var d = this.domElement.ownerDocument.documentElement;
-                this.screen.left = box.left + window.pageXOffset - d.clientLeft;
-                this.screen.top = box.top + window.pageYOffset - d.clientTop;
-                this.screen.width = box.width;
-                this.screen.height = box.height;
-            }
-        };
-        this.handleEvent = function (event) {
-            if (typeof this[event.type] === 'function') {
-                this[event.type](event);
-            }
-        };
-        var getMouseOnScreen = (function () {
-            var vector = new THREE.Vector2();
-            return function getMouseOnScreen(pageX, pageY) {
-                vector.set((pageX - _this.screen.left) / _this.screen.width, (pageY - _this.screen.top) / _this.screen.height);
-                return vector;
-            };
-        }());
-        var getMouseOnCircle = (function () {
-            var vector = new THREE.Vector2();
-            return function getMouseOnCircle(pageX, pageY) {
-                vector.set(((pageX - _this.screen.width * 0.5 - _this.screen.left) / (_this.screen.width * 0.5)), ((_this.screen.height + 2 * (_this.screen.top - pageY)) / _this.screen.width) // screen.width intentional
-                );
-                return vector;
-            };
-        }());
-        this.rotateCamera = (function () {
-            var axis = new THREE.Vector3(), quaternion = new THREE.Quaternion(), eyeDirection = new THREE.Vector3(), objectUpDirection = new THREE.Vector3(), objectSidewaysDirection = new THREE.Vector3(), moveDirection = new THREE.Vector3(), angle;
-            return function rotateCamera() {
-                moveDirection.set(_moveCurr.x - _movePrev.x, _moveCurr.y - _movePrev.y, 0);
-                angle = moveDirection.length();
-                if (angle) {
-                    _eye.copy(_this.object.position).sub(_this.target);
-                    eyeDirection.copy(_eye).normalize();
-                    objectUpDirection.copy(_this.object.up).normalize();
-                    objectSidewaysDirection.crossVectors(objectUpDirection, eyeDirection).normalize();
-                    objectUpDirection.setLength(_moveCurr.y - _movePrev.y);
-                    objectSidewaysDirection.setLength(_moveCurr.x - _movePrev.x);
-                    moveDirection.copy(objectUpDirection.add(objectSidewaysDirection));
-                    axis.crossVectors(moveDirection, _eye).normalize();
-                    angle *= _this.rotateSpeed;
-                    quaternion.setFromAxisAngle(axis, angle);
-                    _eye.applyQuaternion(quaternion);
-                    _this.object.up.applyQuaternion(quaternion);
-                    _lastAxis.copy(axis);
-                    _lastAngle = angle;
-                }
-                else if (!_this.staticMoving && _lastAngle) {
-                    _lastAngle *= Math.sqrt(1.0 - _this.dynamicDampingFactor);
-                    _eye.copy(_this.object.position).sub(_this.target);
-                    quaternion.setFromAxisAngle(_lastAxis, _lastAngle);
-                    _eye.applyQuaternion(quaternion);
-                    _this.object.up.applyQuaternion(quaternion);
-                }
-                _movePrev.copy(_moveCurr);
-            };
-        }());
-        this.zoomCamera = function () {
-            var factor;
-            if (_state === STATE.TOUCH_ZOOM_PAN) {
-                factor = _touchZoomDistanceStart / _touchZoomDistanceEnd;
-                _touchZoomDistanceStart = _touchZoomDistanceEnd;
-                _eye.multiplyScalar(factor);
-            }
-            else {
-                factor = 1.0 + (_zoomEnd.y - _zoomStart.y) * _this.zoomSpeed;
-                if (factor !== 1.0 && factor > 0.0) {
-                    _eye.multiplyScalar(factor);
-                }
-                if (_this.staticMoving) {
-                    _zoomStart.copy(_zoomEnd);
-                }
-                else {
-                    _zoomStart.y += (_zoomEnd.y - _zoomStart.y) * this.dynamicDampingFactor;
-                }
-            }
-        };
-        this.panCamera = (function () {
-            var mouseChange = new THREE.Vector2(), objectUp = new THREE.Vector3(), pan = new THREE.Vector3();
-            return function panCamera() {
-                mouseChange.copy(_panEnd).sub(_panStart);
-                if (mouseChange.lengthSq()) {
-                    mouseChange.multiplyScalar(_eye.length() * _this.panSpeed);
-                    pan.copy(_eye).cross(_this.object.up).setLength(mouseChange.x);
-                    pan.add(objectUp.copy(_this.object.up).setLength(mouseChange.y));
-                    _this.object.position.add(pan);
-                    _this.target.add(pan);
-                    if (_this.staticMoving) {
-                        _panStart.copy(_panEnd);
-                    }
-                    else {
-                        _panStart.add(mouseChange.subVectors(_panEnd, _panStart).multiplyScalar(_this.dynamicDampingFactor));
-                    }
-                }
-            };
-        }());
-        this.checkDistances = function () {
-            if (!_this.noZoom || !_this.noPan) {
-                if (_eye.lengthSq() > _this.maxDistance * _this.maxDistance) {
-                    _this.object.position.addVectors(_this.target, _eye.setLength(_this.maxDistance));
-                    _zoomStart.copy(_zoomEnd);
-                }
-                if (_eye.lengthSq() < _this.minDistance * _this.minDistance) {
-                    _this.object.position.addVectors(_this.target, _eye.setLength(_this.minDistance));
-                    _zoomStart.copy(_zoomEnd);
-                }
-            }
-        };
-        this.update = function () {
-            _eye.subVectors(_this.object.position, _this.target);
-            if (!_this.noRotate) {
-                _this.rotateCamera();
-            }
-            if (!_this.noZoom) {
-                _this.zoomCamera();
-            }
-            if (!_this.noPan) {
-                _this.panCamera();
-            }
-            _this.object.position.addVectors(_this.target, _eye);
-            _this.checkDistances();
-            _this.object.lookAt(_this.target);
-            if (lastPosition.distanceToSquared(_this.object.position) > EPS) {
-                _this.dispatchEvent(changeEvent);
-                lastPosition.copy(_this.object.position);
-            }
-        };
-        this.reset = function () {
-            _state = STATE.NONE;
-            _prevState = STATE.NONE;
-            _this.target.copy(_this.target0);
-            _this.object.position.copy(_this.position0);
-            _this.object.up.copy(_this.up0);
-            _eye.subVectors(_this.object.position, _this.target);
-            _this.object.lookAt(_this.target);
-            _this.dispatchEvent(changeEvent);
-            lastPosition.copy(_this.object.position);
-        };
-        // listeners
-        function keydown(event) {
-            if (_this.enabled === false)
-                return;
-            window.removeEventListener('keydown', keydown);
-            _prevState = _state;
-            if (_state !== STATE.NONE) {
-                return;
-            }
-            else if (event.keyCode === _this.keys[STATE.ROTATE] && !_this.noRotate) {
-                _state = STATE.ROTATE;
-            }
-            else if (event.keyCode === _this.keys[STATE.ZOOM] && !_this.noZoom) {
-                _state = STATE.ZOOM;
-            }
-            else if (event.keyCode === _this.keys[STATE.PAN] && !_this.noPan) {
-                _state = STATE.PAN;
-            }
-        }
-        function keyup(event) {
-            if (_this.enabled === false)
-                return;
-            _state = _prevState;
-            window.addEventListener('keydown', keydown, false);
-        }
-        function mousedown(event) {
-            if (_this.enabled === false)
-                return;
-            event.preventDefault();
-            event.stopPropagation();
-            if (_state === STATE.NONE) {
-                _state = event.button;
-            }
-            if (_state === STATE.ROTATE && !_this.noRotate) {
-                _moveCurr.copy(getMouseOnCircle(event.pageX, event.pageY));
-                _movePrev.copy(_moveCurr);
-            }
-            else if (_state === STATE.ZOOM && !_this.noZoom) {
-                _zoomStart.copy(getMouseOnScreen(event.pageX, event.pageY));
-                _zoomEnd.copy(_zoomStart);
-            }
-            else if (_state === STATE.PAN && !_this.noPan) {
-                _panStart.copy(getMouseOnScreen(event.pageX, event.pageY));
-                _panEnd.copy(_panStart);
-            }
-            document.addEventListener('mousemove', mousemove, false);
-            document.addEventListener('mouseup', mouseup, false);
-            _this.dispatchEvent(startEvent);
-        }
-        function mousemove(event) {
-            if (_this.enabled === false)
-                return;
-            event.preventDefault();
-            event.stopPropagation();
-            if (_state === STATE.ROTATE && !_this.noRotate) {
-                _movePrev.copy(_moveCurr);
-                _moveCurr.copy(getMouseOnCircle(event.pageX, event.pageY));
-            }
-            else if (_state === STATE.ZOOM && !_this.noZoom) {
-                _zoomEnd.copy(getMouseOnScreen(event.pageX, event.pageY));
-            }
-            else if (_state === STATE.PAN && !_this.noPan) {
-                _panEnd.copy(getMouseOnScreen(event.pageX, event.pageY));
-            }
-        }
-        function mouseup(event) {
-            if (_this.enabled === false)
-                return;
-            event.preventDefault();
-            event.stopPropagation();
-            _state = STATE.NONE;
-            document.removeEventListener('mousemove', mousemove);
-            document.removeEventListener('mouseup', mouseup);
-            _this.dispatchEvent(endEvent);
-        }
-        function mousewheel(event) {
-            if (_this.enabled === false)
-                return;
-            event.preventDefault();
-            event.stopPropagation();
-            switch (event.deltaMode) {
-                case 2:
-                    // Zoom in pages
-                    _zoomStart.y -= event.deltaY * 0.025;
-                    break;
-                case 1:
-                    // Zoom in lines
-                    _zoomStart.y -= event.deltaY * 0.01;
-                    break;
-                default:
-                    // undefined, 0, assume pixels
-                    _zoomStart.y -= event.deltaY * 0.00025;
-                    break;
-            }
-            _this.dispatchEvent(startEvent);
-            _this.dispatchEvent(endEvent);
-        }
-        function touchstart(event) {
-            if (_this.enabled === false)
-                return;
-            switch (event.touches.length) {
-                case 1:
-                    _state = STATE.TOUCH_ROTATE;
-                    _moveCurr.copy(getMouseOnCircle(event.touches[0].pageX, event.touches[0].pageY));
-                    _movePrev.copy(_moveCurr);
-                    break;
-                default:// 2 or more
-                    _state = STATE.TOUCH_ZOOM_PAN;
-                    var dx = event.touches[0].pageX - event.touches[1].pageX;
-                    var dy = event.touches[0].pageY - event.touches[1].pageY;
-                    _touchZoomDistanceEnd = _touchZoomDistanceStart = Math.sqrt(dx * dx + dy * dy);
-                    var x = (event.touches[0].pageX + event.touches[1].pageX) / 2;
-                    var y = (event.touches[0].pageY + event.touches[1].pageY) / 2;
-                    _panStart.copy(getMouseOnScreen(x, y));
-                    _panEnd.copy(_panStart);
-                    break;
-            }
-            _this.dispatchEvent(startEvent);
-        }
-        function touchmove(event) {
-            if (_this.enabled === false)
-                return;
-            event.preventDefault();
-            event.stopPropagation();
-            switch (event.touches.length) {
-                case 1:
-                    _movePrev.copy(_moveCurr);
-                    _moveCurr.copy(getMouseOnCircle(event.touches[0].pageX, event.touches[0].pageY));
-                    break;
-                default:// 2 or more
-                    var dx = event.touches[0].pageX - event.touches[1].pageX;
-                    var dy = event.touches[0].pageY - event.touches[1].pageY;
-                    _touchZoomDistanceEnd = Math.sqrt(dx * dx + dy * dy);
-                    var x = (event.touches[0].pageX + event.touches[1].pageX) / 2;
-                    var y = (event.touches[0].pageY + event.touches[1].pageY) / 2;
-                    _panEnd.copy(getMouseOnScreen(x, y));
-                    break;
-            }
-        }
-        function touchend(event) {
-            if (_this.enabled === false)
-                return;
-            switch (event.touches.length) {
-                case 0:
-                    _state = STATE.NONE;
-                    break;
-                case 1:
-                    _state = STATE.TOUCH_ROTATE;
-                    _moveCurr.copy(getMouseOnCircle(event.touches[0].pageX, event.touches[0].pageY));
-                    _movePrev.copy(_moveCurr);
-                    break;
-            }
-            _this.dispatchEvent(endEvent);
-        }
-        function contextmenu(event) {
-            if (_this.enabled === false)
-                return;
-            event.preventDefault();
-        }
-        this.dispose = function () {
-            this.domElement.removeEventListener('contextmenu', contextmenu, false);
-            this.domElement.removeEventListener('mousedown', mousedown, false);
-            this.domElement.removeEventListener('wheel', mousewheel, false);
-            this.domElement.removeEventListener('touchstart', touchstart, false);
-            this.domElement.removeEventListener('touchend', touchend, false);
-            this.domElement.removeEventListener('touchmove', touchmove, false);
-            document.removeEventListener('mousemove', mousemove, false);
-            document.removeEventListener('mouseup', mouseup, false);
-            window.removeEventListener('keydown', keydown, false);
-            window.removeEventListener('keyup', keyup, false);
-        };
-        this.domElement.addEventListener('contextmenu', contextmenu, false);
-        this.domElement.addEventListener('mousedown', mousedown, false);
-        this.domElement.addEventListener('wheel', mousewheel, false);
-        this.domElement.addEventListener('touchstart', touchstart, false);
-        this.domElement.addEventListener('touchend', touchend, false);
-        this.domElement.addEventListener('touchmove', touchmove, false);
-        window.addEventListener('keydown', keydown, false);
-        window.addEventListener('keyup', keyup, false);
-        this.handleResize();
-        // force an update at start
-        this.update();
-    }
-    exports.TrackballControls = TrackballControls;
-    TrackballControls.prototype = Object.create(THREE.EventDispatcher.prototype);
-    TrackballControls.prototype.constructor = TrackballControls;
-});
-define("Viewer/Materials", ["require", "exports", "three"], function (require, exports, THREE) {
-    // ------------------------------------------------------------------------// 
-    // ModelRelief                                                             //
-    //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
-    // ------------------------------------------------------------------------//
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * Materials
-     * General THREE.js Material classes and helpers
-     * @class
-     */
-    var Materials = (function () {
-        /**
-         * @constructor
-         */
-        function Materials() {
-        }
-        //#region Materials
-        /**
-         * Create a texture material from an image URL.
-         * @param image Image to use in texture.
-         * @returns Texture material.
-         */
-        Materials.createTextureMaterial = function (image) {
-            var texture, textureMaterial;
-            texture = new THREE.Texture(image);
-            texture.needsUpdate = true;
-            texture.generateMipmaps = false;
-            texture.magFilter = THREE.NearestFilter; // The magnification and minification filters sample the texture map elements when mapping to a pixel.
-            texture.minFilter = THREE.NearestFilter; // The default modes oversample which leads to blending with the black background. 
-            // This produces colored (black) artifacts around the edges of the texture map elements.
-            texture.repeat = new THREE.Vector2(1.0, 1.0);
-            textureMaterial = new THREE.MeshBasicMaterial({ map: texture });
-            textureMaterial.transparent = true;
-            return textureMaterial;
-        };
-        /**
-         *  Create a bump map Phong material from a texture map.
-         * @param designTexture Bump map texture.
-         * @returns Phong bump mapped material.
-         */
-        Materials.createMeshPhongMaterial = function (designTexture) {
-            var material;
-            material = new THREE.MeshPhongMaterial({
-                color: 0xffffff,
-                bumpMap: designTexture,
-                bumpScale: -1.0,
-                shading: THREE.SmoothShading,
-            });
-            return material;
-        };
-        /**
-         * Create a transparent material.
-         * @returns Transparent material.
-         */
-        Materials.createTransparentMaterial = function () {
-            return new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 0.0, transparent: true });
-        };
-        return Materials;
-    }());
-    exports.Materials = Materials;
-});
-define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControls", "Viewer/Graphics", "System/Services"], function (require, exports, THREE, TrackballControls_1, Graphics_1, Services_4) {
-    // ------------------------------------------------------------------------// 
-    // ModelRelief                                                             //
-    //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
-    // ------------------------------------------------------------------------//
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var ObjectNames = {
-        Root: 'Root'
-    };
-    /**
-     * @exports Viewer/Viewer
-     */
-    var Viewer = (function () {
-        /**
-         * Default constructor
-         * @class Viewer
-         * @constructor
-         * @param elementToBindTo HTML element to host the viewer.
-         */
-        function Viewer(modelCanvasId) {
-            this._scene = null;
-            this._root = null;
-            this._renderer = null;
-            this._canvas = null;
-            this._width = 0;
-            this._height = 0;
-            this._camera = null;
-            this._defaultCameraSettings = null;
-            this._controls = null;
-            this._logger = null;
-            this._logger = Services_4.Services.consoleLogger;
-            this._canvas = Graphics_1.Graphics.initializeCanvas(modelCanvasId);
-            this._width = this._canvas.offsetWidth;
-            this._height = this._canvas.offsetHeight;
-            var useTestCamera = true;
-            this.initialize(useTestCamera);
-            this.animate();
-        }
-        ;
-        Object.defineProperty(Viewer.prototype, "model", {
-            //#region Properties
-            /**
-             * Sets the active model.
-             * @param value New model to activate.
-             */
-            set: function (value) {
-                Graphics_1.Graphics.removeSceneObjectChildren(this._scene, this._root, false);
-                this._root.add(value);
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(Viewer.prototype, "aspectRatio", {
-            /**
-             * Calculates the aspect ratio of the canvas afer a window resize
-             */
-            get: function () {
-                var aspectRatio = this._width / this._height;
-                return aspectRatio;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        //#endregion
-        //#region Initialization    
-        /**
-         * Adds a test sphere to a scene.
-         */
-        Viewer.prototype.populateScene = function () {
-            // geometry
-            var radius = 2;
-            var segments = 64;
-            var geometry = new THREE.SphereGeometry(radius, segments, segments);
-            var material = new THREE.MeshPhongMaterial({ color: 0x0000ff });
-            var mesh = new THREE.Mesh(geometry, material);
-            var center = new THREE.Vector3(0.0, 0.0, 0.0);
-            mesh.position.set(center.x, center.y, center.z);
-            this._root.add(mesh);
-        };
-        /**
-         * Initialize Scene
-         */
-        Viewer.prototype.initializeScene = function () {
-            this._scene = new THREE.Scene();
-            this.createRoot();
-            this.populateScene();
-        };
-        /**
-         * Initialize the WebGL renderer.
-         */
-        Viewer.prototype.initializeRenderer = function () {
-            this._renderer = new THREE.WebGLRenderer({
-                logarithmicDepthBuffer: false,
-                canvas: this._canvas,
-                antialias: true
-            });
-            this._renderer.autoClear = true;
-            this._renderer.setClearColor(0x000000);
-        };
-        /**
-         * Initialize the default camera settings.
-         */
-        Viewer.prototype.initializeDefaultCameraSettings = function () {
-            var settings = {
-                position: new THREE.Vector3(0.0, 0.0, 10.0),
-                target: new THREE.Vector3(0, 0, 0),
-                near: 0.1,
-                far: 10000,
-                fieldOfView: 45
-            };
-            return settings;
-        };
-        /**
-         * Initialize the viewer camera
-         */
-        Viewer.prototype.initializeCamera = function () {
-            this._defaultCameraSettings = this.initializeDefaultCameraSettings();
-            this._camera = new THREE.PerspectiveCamera(this._defaultCameraSettings.fieldOfView, this.aspectRatio, this._defaultCameraSettings.near, this._defaultCameraSettings.far);
-            this._camera.position.copy(this._defaultCameraSettings.position);
-            this.resetCamera();
-        };
-        /**
-         * Adds lighting to the scene
-         */
-        Viewer.prototype.initializeLighting = function () {
-            var ambientLight = new THREE.AmbientLight(0x404040);
-            this._scene.add(ambientLight);
-            var directionalLight1 = new THREE.DirectionalLight(0xC0C090);
-            directionalLight1.position.set(-100, -50, 100);
-            this._scene.add(directionalLight1);
-            var directionalLight2 = new THREE.DirectionalLight(0xC0C090);
-            directionalLight2.position.set(100, 50, -100);
-            this._scene.add(directionalLight2);
-        };
-        /**
-         * Sets up the user input controls (Trackball)
-         */
-        Viewer.prototype.initializeInputControls = function () {
-            this._controls = new TrackballControls_1.TrackballControls(this._camera, this._renderer.domElement);
-        };
-        /**
-         * Initialize the scene with the base objects
-         */
-        Viewer.prototype.initialize = function (useTestCamera) {
-            this.initializeScene();
-            this.initializeRenderer();
-            this.initializeCamera();
-            this.initializeLighting();
-            this.initializeInputControls();
-            this.onResizeWindow();
-            window.addEventListener('resize', this.onResizeWindow.bind(this), false);
-        };
-        //#endregion
-        //#region Scene
-        /**
-         * Removes all scene objects
-         */
-        Viewer.prototype.clearAllAssests = function () {
-            Graphics_1.Graphics.removeSceneObjectChildren(this._scene, this._root, false);
-        };
-        /**
-         * Creates the root object in the scene
-         */
-        Viewer.prototype.createRoot = function () {
-            this._root = new THREE.Object3D();
-            this._root.name = ObjectNames.Root;
-            this._scene.add(this._root);
-        };
-        //#endregion
-        //#region Camera
-        /**
-         * Resets all camera properties to the defaults
-         */
-        Viewer.prototype.resetCamera = function () {
-            this._camera.position.copy(this._defaultCameraSettings.position);
-            this.updateCamera();
-        };
-        //#endregion
-        //#region Window Resize
-        /**
-         * Updates the scene camera to match the new window size
-         */
-        Viewer.prototype.updateCamera = function () {
-            this._camera.aspect = this.aspectRatio;
-            this._camera.lookAt(this._defaultCameraSettings.target);
-            this._camera.updateProjectionMatrix();
-        };
-        /**
-         * Handles the WebGL processing for a DOM window 'resize' event
-         */
-        Viewer.prototype.resizeDisplayWebGL = function () {
-            this._width = this._canvas.offsetWidth;
-            this._height = this._canvas.offsetHeight;
-            this._renderer.setSize(this._width, this._height, false);
-            this._controls.handleResize();
-            this.updateCamera();
-        };
-        /**
-         * Handles a window resize event
-         */
-        Viewer.prototype.onResizeWindow = function () {
-            this.resizeDisplayWebGL();
-        };
-        //#endregion
-        //#region Render Loop
-        /**
-         * Performs the WebGL render of the scene
-         */
-        Viewer.prototype.renderWebGL = function () {
-            this._controls.update();
-            this._renderer.render(this._scene, this._camera);
-        };
-        /**
-         * Main DOM render loop
-         */
-        Viewer.prototype.animate = function () {
-            requestAnimationFrame(this.animate.bind(this));
-            this.renderWebGL();
-        };
-        return Viewer;
-    }());
-    exports.Viewer = Viewer;
-});
-define("Viewer/ModelViewer", ["require", "exports", "three", "Viewer/Viewer"], function (require, exports, THREE, Viewer_1) {
-    // ------------------------------------------------------------------------// 
-    // ModelRelief                                                             //
-    //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
-    // ------------------------------------------------------------------------//
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var ObjectNames = {
-        Grid: 'Grid'
-    };
-    /**
-     * @exports Viewer/ModelViewer
-     */
-    var ModelViewer = (function (_super) {
-        __extends(ModelViewer, _super);
-        /**
-         * Default constructor
-         * @class ModelViewer
-         * @constructor
-         * @param modelCanvasId HTML element to host the viewer.
-         */
-        function ModelViewer(modelCanvasId) {
-            return _super.call(this, modelCanvasId) || this;
-        }
-        Object.defineProperty(ModelViewer.prototype, "camera", {
-            //#region Properties
-            /**
-             * Gets the camera.
-             */
-            get: function () {
-                return this._camera;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        //#endregion
-        //#region Initialization    
-        /**
-         * Populate scene.
-         */
-        ModelViewer.prototype.populateScene = function () {
-            var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
-            helper.name = ObjectNames.Grid;
-            this._scene.add(helper);
-        };
-        /**
-         * Initialize the viewer camera
-         */
-        ModelViewer.prototype.initializeDefaultCameraSettings = function () {
-            var useTestCamera = false;
-            var settingsOBJ = {
-                // Baseline : near = 0.1, far = 10000
-                // ZBuffer  : near = 100, far = 300
-                position: new THREE.Vector3(0.0, 175.0, 500.0),
-                target: new THREE.Vector3(0, 0, 0),
-                near: 0.1,
-                far: 10000,
-                fieldOfView: 45
-            };
-            var settingsTestModels = {
-                position: new THREE.Vector3(0.0, 0.0, 4.0),
-                target: new THREE.Vector3(0, 0, 0),
-                near: 2.0,
-                far: 10.0,
-                fieldOfView: 37 // https://www.nikonians.org/reviews/fov-tables
-            };
-            return useTestCamera ? settingsTestModels : settingsOBJ;
-        };
-        /**
-         * Adds lighting to the scene
-         */
-        ModelViewer.prototype.initializeLighting = function () {
-            var ambientLight = new THREE.AmbientLight(0x404040);
-            this._scene.add(ambientLight);
-            var directionalLight1 = new THREE.DirectionalLight(0xC0C090);
-            directionalLight1.position.set(-100, -50, 100);
-            this._scene.add(directionalLight1);
-            var directionalLight2 = new THREE.DirectionalLight(0xC0C090);
-            directionalLight2.position.set(100, 50, -100);
-            this._scene.add(directionalLight2);
-        };
-        //#endregion
-        //#region Scene
-        /**
-         * Display the reference grid.
-         */
-        ModelViewer.prototype.displayGrid = function (visible) {
-            var gridGeometry = this._scene.getObjectByName(ObjectNames.Grid);
-            gridGeometry.visible = visible;
-            this._logger.addInfoMessage("Display grid = " + visible);
-        };
-        return ModelViewer;
-    }(Viewer_1.Viewer));
-    exports.ModelViewer = ModelViewer;
 });
 // ------------------------------------------------------------------------// 
 // ModelRelief                                                             //
@@ -2576,6 +1842,679 @@ define("ModelLoaders/OBJLoader", ["require", "exports", "three"], function (requ
         }
     };
 });
+/**
+ * @author Eberhard Graether / http://egraether.com/
+ * @author Mark Lundin 	/ http://mark-lundin.com
+ * @author Simone Manini / http://daron1337.github.io
+ * @author Luca Antiga 	/ http://lantiga.github.io
+ */
+define("Viewer/TrackballControls", ["require", "exports", "three"], function (require, exports, THREE) {
+    'use strict';
+    Object.defineProperty(exports, "__esModule", { value: true });
+    function TrackballControls(object, domElement) {
+        var _this = this;
+        var STATE = { NONE: -1, ROTATE: 0, ZOOM: 1, PAN: 2, TOUCH_ROTATE: 3, TOUCH_ZOOM_PAN: 4 };
+        this.object = object;
+        this.domElement = (domElement !== undefined) ? domElement : document;
+        // API
+        this.enabled = true;
+        this.screen = { left: 0, top: 0, width: 0, height: 0 };
+        this.rotateSpeed = 1.0;
+        this.zoomSpeed = 1.2;
+        this.panSpeed = 0.3;
+        this.noRotate = false;
+        this.noZoom = false;
+        this.noPan = false;
+        this.staticMoving = true;
+        this.dynamicDampingFactor = 0.2;
+        this.minDistance = 0;
+        this.maxDistance = Infinity;
+        this.keys = [65 /*A*/, 83 /*S*/, 68 /*D*/];
+        // internals
+        this.target = new THREE.Vector3();
+        var EPS = 0.000001;
+        var lastPosition = new THREE.Vector3();
+        var _state = STATE.NONE, _prevState = STATE.NONE, _eye = new THREE.Vector3(), _movePrev = new THREE.Vector2(), _moveCurr = new THREE.Vector2(), _lastAxis = new THREE.Vector3(), _lastAngle = 0, _zoomStart = new THREE.Vector2(), _zoomEnd = new THREE.Vector2(), _touchZoomDistanceStart = 0, _touchZoomDistanceEnd = 0, _panStart = new THREE.Vector2(), _panEnd = new THREE.Vector2();
+        // for reset
+        this.target0 = this.target.clone();
+        this.position0 = this.object.position.clone();
+        this.up0 = this.object.up.clone();
+        // events
+        var changeEvent = { type: 'change' };
+        var startEvent = { type: 'start' };
+        var endEvent = { type: 'end' };
+        // methods
+        this.handleResize = function () {
+            if (this.domElement === document) {
+                this.screen.left = 0;
+                this.screen.top = 0;
+                this.screen.width = window.innerWidth;
+                this.screen.height = window.innerHeight;
+            }
+            else {
+                var box = this.domElement.getBoundingClientRect();
+                // adjustments come from similar code in the jquery offset() function
+                var d = this.domElement.ownerDocument.documentElement;
+                this.screen.left = box.left + window.pageXOffset - d.clientLeft;
+                this.screen.top = box.top + window.pageYOffset - d.clientTop;
+                this.screen.width = box.width;
+                this.screen.height = box.height;
+            }
+        };
+        this.handleEvent = function (event) {
+            if (typeof this[event.type] === 'function') {
+                this[event.type](event);
+            }
+        };
+        var getMouseOnScreen = (function () {
+            var vector = new THREE.Vector2();
+            return function getMouseOnScreen(pageX, pageY) {
+                vector.set((pageX - _this.screen.left) / _this.screen.width, (pageY - _this.screen.top) / _this.screen.height);
+                return vector;
+            };
+        }());
+        var getMouseOnCircle = (function () {
+            var vector = new THREE.Vector2();
+            return function getMouseOnCircle(pageX, pageY) {
+                vector.set(((pageX - _this.screen.width * 0.5 - _this.screen.left) / (_this.screen.width * 0.5)), ((_this.screen.height + 2 * (_this.screen.top - pageY)) / _this.screen.width) // screen.width intentional
+                );
+                return vector;
+            };
+        }());
+        this.rotateCamera = (function () {
+            var axis = new THREE.Vector3(), quaternion = new THREE.Quaternion(), eyeDirection = new THREE.Vector3(), objectUpDirection = new THREE.Vector3(), objectSidewaysDirection = new THREE.Vector3(), moveDirection = new THREE.Vector3(), angle;
+            return function rotateCamera() {
+                moveDirection.set(_moveCurr.x - _movePrev.x, _moveCurr.y - _movePrev.y, 0);
+                angle = moveDirection.length();
+                if (angle) {
+                    _eye.copy(_this.object.position).sub(_this.target);
+                    eyeDirection.copy(_eye).normalize();
+                    objectUpDirection.copy(_this.object.up).normalize();
+                    objectSidewaysDirection.crossVectors(objectUpDirection, eyeDirection).normalize();
+                    objectUpDirection.setLength(_moveCurr.y - _movePrev.y);
+                    objectSidewaysDirection.setLength(_moveCurr.x - _movePrev.x);
+                    moveDirection.copy(objectUpDirection.add(objectSidewaysDirection));
+                    axis.crossVectors(moveDirection, _eye).normalize();
+                    angle *= _this.rotateSpeed;
+                    quaternion.setFromAxisAngle(axis, angle);
+                    _eye.applyQuaternion(quaternion);
+                    _this.object.up.applyQuaternion(quaternion);
+                    _lastAxis.copy(axis);
+                    _lastAngle = angle;
+                }
+                else if (!_this.staticMoving && _lastAngle) {
+                    _lastAngle *= Math.sqrt(1.0 - _this.dynamicDampingFactor);
+                    _eye.copy(_this.object.position).sub(_this.target);
+                    quaternion.setFromAxisAngle(_lastAxis, _lastAngle);
+                    _eye.applyQuaternion(quaternion);
+                    _this.object.up.applyQuaternion(quaternion);
+                }
+                _movePrev.copy(_moveCurr);
+            };
+        }());
+        this.zoomCamera = function () {
+            var factor;
+            if (_state === STATE.TOUCH_ZOOM_PAN) {
+                factor = _touchZoomDistanceStart / _touchZoomDistanceEnd;
+                _touchZoomDistanceStart = _touchZoomDistanceEnd;
+                _eye.multiplyScalar(factor);
+            }
+            else {
+                factor = 1.0 + (_zoomEnd.y - _zoomStart.y) * _this.zoomSpeed;
+                if (factor !== 1.0 && factor > 0.0) {
+                    _eye.multiplyScalar(factor);
+                }
+                if (_this.staticMoving) {
+                    _zoomStart.copy(_zoomEnd);
+                }
+                else {
+                    _zoomStart.y += (_zoomEnd.y - _zoomStart.y) * this.dynamicDampingFactor;
+                }
+            }
+        };
+        this.panCamera = (function () {
+            var mouseChange = new THREE.Vector2(), objectUp = new THREE.Vector3(), pan = new THREE.Vector3();
+            return function panCamera() {
+                mouseChange.copy(_panEnd).sub(_panStart);
+                if (mouseChange.lengthSq()) {
+                    mouseChange.multiplyScalar(_eye.length() * _this.panSpeed);
+                    pan.copy(_eye).cross(_this.object.up).setLength(mouseChange.x);
+                    pan.add(objectUp.copy(_this.object.up).setLength(mouseChange.y));
+                    _this.object.position.add(pan);
+                    _this.target.add(pan);
+                    if (_this.staticMoving) {
+                        _panStart.copy(_panEnd);
+                    }
+                    else {
+                        _panStart.add(mouseChange.subVectors(_panEnd, _panStart).multiplyScalar(_this.dynamicDampingFactor));
+                    }
+                }
+            };
+        }());
+        this.checkDistances = function () {
+            if (!_this.noZoom || !_this.noPan) {
+                if (_eye.lengthSq() > _this.maxDistance * _this.maxDistance) {
+                    _this.object.position.addVectors(_this.target, _eye.setLength(_this.maxDistance));
+                    _zoomStart.copy(_zoomEnd);
+                }
+                if (_eye.lengthSq() < _this.minDistance * _this.minDistance) {
+                    _this.object.position.addVectors(_this.target, _eye.setLength(_this.minDistance));
+                    _zoomStart.copy(_zoomEnd);
+                }
+            }
+        };
+        this.update = function () {
+            _eye.subVectors(_this.object.position, _this.target);
+            if (!_this.noRotate) {
+                _this.rotateCamera();
+            }
+            if (!_this.noZoom) {
+                _this.zoomCamera();
+            }
+            if (!_this.noPan) {
+                _this.panCamera();
+            }
+            _this.object.position.addVectors(_this.target, _eye);
+            _this.checkDistances();
+            _this.object.lookAt(_this.target);
+            if (lastPosition.distanceToSquared(_this.object.position) > EPS) {
+                _this.dispatchEvent(changeEvent);
+                lastPosition.copy(_this.object.position);
+            }
+        };
+        this.reset = function () {
+            _state = STATE.NONE;
+            _prevState = STATE.NONE;
+            _this.target.copy(_this.target0);
+            _this.object.position.copy(_this.position0);
+            _this.object.up.copy(_this.up0);
+            _eye.subVectors(_this.object.position, _this.target);
+            _this.object.lookAt(_this.target);
+            _this.dispatchEvent(changeEvent);
+            lastPosition.copy(_this.object.position);
+        };
+        // listeners
+        function keydown(event) {
+            if (_this.enabled === false)
+                return;
+            window.removeEventListener('keydown', keydown);
+            _prevState = _state;
+            if (_state !== STATE.NONE) {
+                return;
+            }
+            else if (event.keyCode === _this.keys[STATE.ROTATE] && !_this.noRotate) {
+                _state = STATE.ROTATE;
+            }
+            else if (event.keyCode === _this.keys[STATE.ZOOM] && !_this.noZoom) {
+                _state = STATE.ZOOM;
+            }
+            else if (event.keyCode === _this.keys[STATE.PAN] && !_this.noPan) {
+                _state = STATE.PAN;
+            }
+        }
+        function keyup(event) {
+            if (_this.enabled === false)
+                return;
+            _state = _prevState;
+            window.addEventListener('keydown', keydown, false);
+        }
+        function mousedown(event) {
+            if (_this.enabled === false)
+                return;
+            event.preventDefault();
+            event.stopPropagation();
+            if (_state === STATE.NONE) {
+                _state = event.button;
+            }
+            if (_state === STATE.ROTATE && !_this.noRotate) {
+                _moveCurr.copy(getMouseOnCircle(event.pageX, event.pageY));
+                _movePrev.copy(_moveCurr);
+            }
+            else if (_state === STATE.ZOOM && !_this.noZoom) {
+                _zoomStart.copy(getMouseOnScreen(event.pageX, event.pageY));
+                _zoomEnd.copy(_zoomStart);
+            }
+            else if (_state === STATE.PAN && !_this.noPan) {
+                _panStart.copy(getMouseOnScreen(event.pageX, event.pageY));
+                _panEnd.copy(_panStart);
+            }
+            document.addEventListener('mousemove', mousemove, false);
+            document.addEventListener('mouseup', mouseup, false);
+            _this.dispatchEvent(startEvent);
+        }
+        function mousemove(event) {
+            if (_this.enabled === false)
+                return;
+            event.preventDefault();
+            event.stopPropagation();
+            if (_state === STATE.ROTATE && !_this.noRotate) {
+                _movePrev.copy(_moveCurr);
+                _moveCurr.copy(getMouseOnCircle(event.pageX, event.pageY));
+            }
+            else if (_state === STATE.ZOOM && !_this.noZoom) {
+                _zoomEnd.copy(getMouseOnScreen(event.pageX, event.pageY));
+            }
+            else if (_state === STATE.PAN && !_this.noPan) {
+                _panEnd.copy(getMouseOnScreen(event.pageX, event.pageY));
+            }
+        }
+        function mouseup(event) {
+            if (_this.enabled === false)
+                return;
+            event.preventDefault();
+            event.stopPropagation();
+            _state = STATE.NONE;
+            document.removeEventListener('mousemove', mousemove);
+            document.removeEventListener('mouseup', mouseup);
+            _this.dispatchEvent(endEvent);
+        }
+        function mousewheel(event) {
+            if (_this.enabled === false)
+                return;
+            event.preventDefault();
+            event.stopPropagation();
+            switch (event.deltaMode) {
+                case 2:
+                    // Zoom in pages
+                    _zoomStart.y -= event.deltaY * 0.025;
+                    break;
+                case 1:
+                    // Zoom in lines
+                    _zoomStart.y -= event.deltaY * 0.01;
+                    break;
+                default:
+                    // undefined, 0, assume pixels
+                    _zoomStart.y -= event.deltaY * 0.00025;
+                    break;
+            }
+            _this.dispatchEvent(startEvent);
+            _this.dispatchEvent(endEvent);
+        }
+        function touchstart(event) {
+            if (_this.enabled === false)
+                return;
+            switch (event.touches.length) {
+                case 1:
+                    _state = STATE.TOUCH_ROTATE;
+                    _moveCurr.copy(getMouseOnCircle(event.touches[0].pageX, event.touches[0].pageY));
+                    _movePrev.copy(_moveCurr);
+                    break;
+                default:// 2 or more
+                    _state = STATE.TOUCH_ZOOM_PAN;
+                    var dx = event.touches[0].pageX - event.touches[1].pageX;
+                    var dy = event.touches[0].pageY - event.touches[1].pageY;
+                    _touchZoomDistanceEnd = _touchZoomDistanceStart = Math.sqrt(dx * dx + dy * dy);
+                    var x = (event.touches[0].pageX + event.touches[1].pageX) / 2;
+                    var y = (event.touches[0].pageY + event.touches[1].pageY) / 2;
+                    _panStart.copy(getMouseOnScreen(x, y));
+                    _panEnd.copy(_panStart);
+                    break;
+            }
+            _this.dispatchEvent(startEvent);
+        }
+        function touchmove(event) {
+            if (_this.enabled === false)
+                return;
+            event.preventDefault();
+            event.stopPropagation();
+            switch (event.touches.length) {
+                case 1:
+                    _movePrev.copy(_moveCurr);
+                    _moveCurr.copy(getMouseOnCircle(event.touches[0].pageX, event.touches[0].pageY));
+                    break;
+                default:// 2 or more
+                    var dx = event.touches[0].pageX - event.touches[1].pageX;
+                    var dy = event.touches[0].pageY - event.touches[1].pageY;
+                    _touchZoomDistanceEnd = Math.sqrt(dx * dx + dy * dy);
+                    var x = (event.touches[0].pageX + event.touches[1].pageX) / 2;
+                    var y = (event.touches[0].pageY + event.touches[1].pageY) / 2;
+                    _panEnd.copy(getMouseOnScreen(x, y));
+                    break;
+            }
+        }
+        function touchend(event) {
+            if (_this.enabled === false)
+                return;
+            switch (event.touches.length) {
+                case 0:
+                    _state = STATE.NONE;
+                    break;
+                case 1:
+                    _state = STATE.TOUCH_ROTATE;
+                    _moveCurr.copy(getMouseOnCircle(event.touches[0].pageX, event.touches[0].pageY));
+                    _movePrev.copy(_moveCurr);
+                    break;
+            }
+            _this.dispatchEvent(endEvent);
+        }
+        function contextmenu(event) {
+            if (_this.enabled === false)
+                return;
+            event.preventDefault();
+        }
+        this.dispose = function () {
+            this.domElement.removeEventListener('contextmenu', contextmenu, false);
+            this.domElement.removeEventListener('mousedown', mousedown, false);
+            this.domElement.removeEventListener('wheel', mousewheel, false);
+            this.domElement.removeEventListener('touchstart', touchstart, false);
+            this.domElement.removeEventListener('touchend', touchend, false);
+            this.domElement.removeEventListener('touchmove', touchmove, false);
+            document.removeEventListener('mousemove', mousemove, false);
+            document.removeEventListener('mouseup', mouseup, false);
+            window.removeEventListener('keydown', keydown, false);
+            window.removeEventListener('keyup', keyup, false);
+        };
+        this.domElement.addEventListener('contextmenu', contextmenu, false);
+        this.domElement.addEventListener('mousedown', mousedown, false);
+        this.domElement.addEventListener('wheel', mousewheel, false);
+        this.domElement.addEventListener('touchstart', touchstart, false);
+        this.domElement.addEventListener('touchend', touchend, false);
+        this.domElement.addEventListener('touchmove', touchmove, false);
+        window.addEventListener('keydown', keydown, false);
+        window.addEventListener('keyup', keyup, false);
+        this.handleResize();
+        // force an update at start
+        this.update();
+    }
+    exports.TrackballControls = TrackballControls;
+    TrackballControls.prototype = Object.create(THREE.EventDispatcher.prototype);
+    TrackballControls.prototype.constructor = TrackballControls;
+});
+define("Viewer/Materials", ["require", "exports", "three"], function (require, exports, THREE) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * Materials
+     * General THREE.js Material classes and helpers
+     * @class
+     */
+    var Materials = (function () {
+        /**
+         * @constructor
+         */
+        function Materials() {
+        }
+        //#region Materials
+        /**
+         * Create a texture material from an image URL.
+         * @param image Image to use in texture.
+         * @returns Texture material.
+         */
+        Materials.createTextureMaterial = function (image) {
+            var texture, textureMaterial;
+            texture = new THREE.Texture(image);
+            texture.needsUpdate = true;
+            texture.generateMipmaps = false;
+            texture.magFilter = THREE.NearestFilter; // The magnification and minification filters sample the texture map elements when mapping to a pixel.
+            texture.minFilter = THREE.NearestFilter; // The default modes oversample which leads to blending with the black background. 
+            // This produces colored (black) artifacts around the edges of the texture map elements.
+            texture.repeat = new THREE.Vector2(1.0, 1.0);
+            textureMaterial = new THREE.MeshBasicMaterial({ map: texture });
+            textureMaterial.transparent = true;
+            return textureMaterial;
+        };
+        /**
+         *  Create a bump map Phong material from a texture map.
+         * @param designTexture Bump map texture.
+         * @returns Phong bump mapped material.
+         */
+        Materials.createMeshPhongMaterial = function (designTexture) {
+            var material;
+            material = new THREE.MeshPhongMaterial({
+                color: 0xffffff,
+                bumpMap: designTexture,
+                bumpScale: -1.0,
+                shading: THREE.SmoothShading,
+            });
+            return material;
+        };
+        /**
+         * Create a transparent material.
+         * @returns Transparent material.
+         */
+        Materials.createTransparentMaterial = function () {
+            return new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 0.0, transparent: true });
+        };
+        return Materials;
+    }());
+    exports.Materials = Materials;
+});
+define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControls", "Viewer/Graphics", "System/Services"], function (require, exports, THREE, TrackballControls_1, Graphics_1, Services_4) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var ObjectNames = {
+        Root: 'Root'
+    };
+    /**
+     * @exports Viewer/Viewer
+     */
+    var Viewer = (function () {
+        /**
+         * Default constructor
+         * @class Viewer
+         * @constructor
+         * @param elementToBindTo HTML element to host the viewer.
+         */
+        function Viewer(modelCanvasId) {
+            this._scene = null;
+            this._root = null;
+            this._renderer = null;
+            this._canvas = null;
+            this._width = 0;
+            this._height = 0;
+            this._camera = null;
+            this._defaultCameraSettings = null;
+            this._controls = null;
+            this._logger = null;
+            this._logger = Services_4.Services.consoleLogger;
+            this._canvas = Graphics_1.Graphics.initializeCanvas(modelCanvasId);
+            this._width = this._canvas.offsetWidth;
+            this._height = this._canvas.offsetHeight;
+            var useTestCamera = true;
+            this.initialize(useTestCamera);
+            this.animate();
+        }
+        ;
+        Object.defineProperty(Viewer.prototype, "model", {
+            //#region Properties
+            /**
+             * Gets the active model.
+             */
+            get: function () {
+                return this._root;
+            },
+            /**
+             * Sets the active model.
+             * @param value New model to activate.
+             */
+            set: function (value) {
+                Graphics_1.Graphics.removeSceneObjectChildren(this._scene, this._root, false);
+                this._root.add(value);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Viewer.prototype, "aspectRatio", {
+            /**
+             * Calculates the aspect ratio of the canvas afer a window resize
+             */
+            get: function () {
+                var aspectRatio = this._width / this._height;
+                return aspectRatio;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        //#endregion
+        //#region Initialization    
+        /**
+         * Adds a test sphere to a scene.
+         */
+        Viewer.prototype.populateScene = function () {
+            // geometry
+            var radius = 2;
+            var segments = 64;
+            var geometry = new THREE.SphereGeometry(radius, segments, segments);
+            var material = new THREE.MeshPhongMaterial({ color: 0x0000ff });
+            var mesh = new THREE.Mesh(geometry, material);
+            var center = new THREE.Vector3(0.0, 0.0, 0.0);
+            mesh.position.set(center.x, center.y, center.z);
+            this._root.add(mesh);
+        };
+        /**
+         * Initialize Scene
+         */
+        Viewer.prototype.initializeScene = function () {
+            this._scene = new THREE.Scene();
+            this.createRoot();
+            this.populateScene();
+        };
+        /**
+         * Initialize the WebGL renderer.
+         */
+        Viewer.prototype.initializeRenderer = function () {
+            this._renderer = new THREE.WebGLRenderer({
+                logarithmicDepthBuffer: false,
+                canvas: this._canvas,
+                antialias: true
+            });
+            this._renderer.autoClear = true;
+            this._renderer.setClearColor(0x000000);
+        };
+        /**
+         * Initialize the default camera settings.
+         */
+        Viewer.prototype.initializeDefaultCameraSettings = function () {
+            var settings = {
+                position: new THREE.Vector3(0.0, 0.0, 10.0),
+                target: new THREE.Vector3(0, 0, 0),
+                near: 0.1,
+                far: 10000,
+                fieldOfView: 45
+            };
+            return settings;
+        };
+        /**
+         * Initialize the viewer camera
+         */
+        Viewer.prototype.initializeCamera = function () {
+            this._defaultCameraSettings = this.initializeDefaultCameraSettings();
+            this._camera = new THREE.PerspectiveCamera(this._defaultCameraSettings.fieldOfView, this.aspectRatio, this._defaultCameraSettings.near, this._defaultCameraSettings.far);
+            this._camera.position.copy(this._defaultCameraSettings.position);
+            this.resetCamera();
+        };
+        /**
+         * Adds lighting to the scene
+         */
+        Viewer.prototype.initializeLighting = function () {
+            var ambientLight = new THREE.AmbientLight(0x404040);
+            this._scene.add(ambientLight);
+            var directionalLight1 = new THREE.DirectionalLight(0xC0C090);
+            directionalLight1.position.set(-100, -50, 100);
+            this._scene.add(directionalLight1);
+            var directionalLight2 = new THREE.DirectionalLight(0xC0C090);
+            directionalLight2.position.set(100, 50, -100);
+            this._scene.add(directionalLight2);
+        };
+        /**
+         * Sets up the user input controls (Trackball)
+         */
+        Viewer.prototype.initializeInputControls = function () {
+            this._controls = new TrackballControls_1.TrackballControls(this._camera, this._renderer.domElement);
+        };
+        /**
+         * Initialize the scene with the base objects
+         */
+        Viewer.prototype.initialize = function (useTestCamera) {
+            this.initializeScene();
+            this.initializeRenderer();
+            this.initializeCamera();
+            this.initializeLighting();
+            this.initializeInputControls();
+            this.onResizeWindow();
+            window.addEventListener('resize', this.onResizeWindow.bind(this), false);
+        };
+        //#endregion
+        //#region Scene
+        /**
+         * Removes all scene objects
+         */
+        Viewer.prototype.clearAllAssests = function () {
+            Graphics_1.Graphics.removeSceneObjectChildren(this._scene, this._root, false);
+        };
+        /**
+         * Creates the root object in the scene
+         */
+        Viewer.prototype.createRoot = function () {
+            this._root = new THREE.Object3D();
+            this._root.name = ObjectNames.Root;
+            this._scene.add(this._root);
+        };
+        //#endregion
+        //#region Camera
+        /**
+         * Resets all camera properties to the defaults
+         */
+        Viewer.prototype.resetCamera = function () {
+            this._camera.position.copy(this._defaultCameraSettings.position);
+            this.updateCamera();
+        };
+        //#endregion
+        //#region Window Resize
+        /**
+         * Updates the scene camera to match the new window size
+         */
+        Viewer.prototype.updateCamera = function () {
+            this._camera.aspect = this.aspectRatio;
+            this._camera.lookAt(this._defaultCameraSettings.target);
+            this._camera.updateProjectionMatrix();
+        };
+        /**
+         * Handles the WebGL processing for a DOM window 'resize' event
+         */
+        Viewer.prototype.resizeDisplayWebGL = function () {
+            this._width = this._canvas.offsetWidth;
+            this._height = this._canvas.offsetHeight;
+            this._renderer.setSize(this._width, this._height, false);
+            this._controls.handleResize();
+            this.updateCamera();
+        };
+        /**
+         * Handles a window resize event
+         */
+        Viewer.prototype.onResizeWindow = function () {
+            this.resizeDisplayWebGL();
+        };
+        //#endregion
+        //#region Render Loop
+        /**
+         * Performs the WebGL render of the scene
+         */
+        Viewer.prototype.renderWebGL = function () {
+            this._controls.update();
+            this._renderer.render(this._scene, this._camera);
+        };
+        /**
+         * Main DOM render loop
+         */
+        Viewer.prototype.animate = function () {
+            requestAnimationFrame(this.animate.bind(this));
+            this.renderWebGL();
+        };
+        return Viewer;
+    }());
+    exports.Viewer = Viewer;
+});
 define("ModelLoaders/Loader", ["require", "exports", "three", "ModelLoaders/OBJLoader"], function (require, exports, THREE, OBJLoader_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
@@ -2634,6 +2573,7 @@ define("ModelLoaders/Loader", ["require", "exports", "three", "ModelLoaders/OBJL
                 var mesh = new THREE.Mesh(geometry, material);
                 mesh.position.set(Math.cos(r) * zScale, Math.sin(r) * zScale, z * scale);
                 mesh.rotation.set(Math.random(), Math.random(), Math.random());
+                mesh.name = 'Torus Component';
                 torusScene.add(mesh);
             }
             viewer.model = torusScene;
@@ -2651,6 +2591,7 @@ define("ModelLoaders/Loader", ["require", "exports", "three", "ModelLoaders/OBJL
             var mesh = new THREE.Mesh(geometry, material);
             var center = new THREE.Vector3(0.0, 0.0, 0.0);
             mesh.position.set(center.x, center.y, center.z);
+            mesh.name = 'Sphere';
             viewer.model = mesh;
         };
         /**
@@ -2668,13 +2609,14 @@ define("ModelLoaders/Loader", ["require", "exports", "three", "ModelLoaders/OBJL
             var mesh = new THREE.Mesh(geometry, material);
             var center = new THREE.Vector3(0.0, 0.0, 0.0);
             mesh.position.set(center.x, center.y, center.z);
+            mesh.name = 'Box';
             viewer.model = mesh;
         };
         return Loader;
     }());
     exports.Loader = Loader;
 });
-define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "System/Services", "Viewer/Viewer"], function (require, exports, THREE, Services_5, Viewer_2) {
+define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "System/Services", "Viewer/Viewer"], function (require, exports, THREE, Services_5, Viewer_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -2729,10 +2671,106 @@ define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "System/Servi
             this._scene.add(directionalLight1);
         };
         return MeshPreviewViewer;
-    }(Viewer_2.Viewer));
+    }(Viewer_1.Viewer));
     exports.MeshPreviewViewer = MeshPreviewViewer;
 });
-define("ModelRelief", ["require", "exports", "dat-gui", "DepthBuffer/DepthBufferFactory", "ModelLoaders/Loader", "Viewer/MeshPreviewViewer", "Viewer/ModelViewer", "System/Services", "Viewer/Viewer"], function (require, exports, dat, DepthBufferFactory_1, Loader_1, MeshPreviewViewer_1, ModelViewer_1, Services_6, Viewer_3) {
+define("Viewer/ModelViewer", ["require", "exports", "three", "Viewer/Viewer"], function (require, exports, THREE, Viewer_2) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var ObjectNames = {
+        Grid: 'Grid'
+    };
+    /**
+     * @exports Viewer/ModelViewer
+     */
+    var ModelViewer = (function (_super) {
+        __extends(ModelViewer, _super);
+        /**
+         * Default constructor
+         * @class ModelViewer
+         * @constructor
+         * @param modelCanvasId HTML element to host the viewer.
+         */
+        function ModelViewer(modelCanvasId) {
+            return _super.call(this, modelCanvasId) || this;
+        }
+        Object.defineProperty(ModelViewer.prototype, "camera", {
+            //#region Properties
+            /**
+             * Gets the camera.
+             */
+            get: function () {
+                return this._camera;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        //#endregion
+        //#region Initialization    
+        /**
+         * Populate scene.
+         */
+        ModelViewer.prototype.populateScene = function () {
+            var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
+            helper.name = ObjectNames.Grid;
+            this._scene.add(helper);
+        };
+        /**
+         * Initialize the viewer camera
+         */
+        ModelViewer.prototype.initializeDefaultCameraSettings = function () {
+            var useTestCamera = false;
+            var settingsOBJ = {
+                // Baseline : near = 0.1, far = 10000
+                // ZBuffer  : near = 100, far = 300
+                position: new THREE.Vector3(0.0, 175.0, 500.0),
+                target: new THREE.Vector3(0, 0, 0),
+                near: 0.1,
+                far: 10000,
+                fieldOfView: 45
+            };
+            var settingsTestModels = {
+                position: new THREE.Vector3(0.0, 0.0, 4.0),
+                target: new THREE.Vector3(0, 0, 0),
+                near: 2.0,
+                far: 10.0,
+                fieldOfView: 37 // https://www.nikonians.org/reviews/fov-tables
+            };
+            return useTestCamera ? settingsTestModels : settingsOBJ;
+        };
+        /**
+         * Adds lighting to the scene
+         */
+        ModelViewer.prototype.initializeLighting = function () {
+            var ambientLight = new THREE.AmbientLight(0x404040);
+            this._scene.add(ambientLight);
+            var directionalLight1 = new THREE.DirectionalLight(0xC0C090);
+            directionalLight1.position.set(-100, -50, 100);
+            this._scene.add(directionalLight1);
+            var directionalLight2 = new THREE.DirectionalLight(0xC0C090);
+            directionalLight2.position.set(100, 50, -100);
+            this._scene.add(directionalLight2);
+        };
+        //#endregion
+        //#region Scene
+        /**
+         * Display the reference grid.
+         */
+        ModelViewer.prototype.displayGrid = function (visible) {
+            var gridGeometry = this._scene.getObjectByName(ObjectNames.Grid);
+            gridGeometry.visible = visible;
+            this._logger.addInfoMessage("Display grid = " + visible);
+        };
+        return ModelViewer;
+    }(Viewer_2.Viewer));
+    exports.ModelViewer = ModelViewer;
+});
+define("ModelRelief", ["require", "exports", "dat-gui", "DepthBuffer/DepthBufferFactory", "ModelLoaders/Loader", "Viewer/MeshPreviewViewer", "Viewer/ModelViewer", "System/Services"], function (require, exports, dat, DepthBufferFactory_1, Loader_1, MeshPreviewViewer_1, ModelViewer_1, Services_6) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -2795,8 +2833,6 @@ define("ModelRelief", ["require", "exports", "dat-gui", "DepthBuffer/DepthBuffer
          */
         ModelRelief.prototype.run = function () {
             Services_6.Services.consoleLogger.addInfoMessage('ModelRelief started');
-            // Model Viewer    
-            var viewer = new Viewer_3.Viewer('viewerCanvas');
             // Model Viewer    
             this._modelViewer = new ModelViewer_1.ModelViewer('modelCanvas');
             // Mesh Preview
@@ -2898,6 +2934,66 @@ define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function 
     }());
     exports.UnitTests = UnitTests;
 });
+define("Workbench/CameraTest", ["require", "exports", "three", "ModelLoaders/Loader", "System/Logger", "Viewer/Viewer"], function (require, exports, THREE, Loader_2, Logger_2, Viewer_3) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var logger = new Logger_2.HTMLLogger();
+    /**
+     * @class
+     * CameraWorkbench
+     */
+    var CameraViewer = (function (_super) {
+        __extends(CameraViewer, _super);
+        function CameraViewer() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /**
+         * Initialize the viewer camera
+         */
+        CameraViewer.prototype.initializeDefaultCameraSettings = function () {
+            var settings = {
+                position: new THREE.Vector3(0.0, 0.0, 6.0),
+                target: new THREE.Vector3(0, 0, 0),
+                near: 2.0,
+                far: 10.0,
+                fieldOfView: 37 // https://www.nikonians.org/reviews/fov-tables
+            };
+            return settings;
+        };
+        return CameraViewer;
+    }(Viewer_3.Viewer));
+    exports.CameraViewer = CameraViewer;
+    /**
+     * @class
+     * App
+     */
+    var App = (function () {
+        /**
+         * @constructor
+         */
+        function App() {
+        }
+        /**
+         * Main
+         */
+        App.prototype.run = function () {
+            // Viewer    
+            this._viewer = new CameraViewer('viewerCanvas');
+            // Loader
+            this._loader = new Loader_2.Loader();
+            this._loader.loadBoxModel(this._viewer);
+        };
+        return App;
+    }());
+    exports.App = App;
+    var app = new App;
+    app.run();
+});
 define("Workbench/DepthBufferTest", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
@@ -2927,7 +3023,7 @@ define("Workbench/DepthBufferTest", ["require", "exports"], function (require, e
     var depthBufferTest = new DepthBufferTest();
     depthBufferTest.main();
 });
-define("Workbench/Inheritance", ["require", "exports", "System/Logger"], function (require, exports, Logger_2) {
+define("Workbench/InheritanceTest", ["require", "exports", "System/Logger"], function (require, exports, Logger_3) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -2935,7 +3031,7 @@ define("Workbench/Inheritance", ["require", "exports", "System/Logger"], functio
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var logger = new Logger_2.HTMLLogger();
+    var logger = new Logger_3.HTMLLogger();
     /**
      * @class
      * Widget
@@ -3005,26 +3101,26 @@ define("Workbench/Inheritance", ["require", "exports", "System/Logger"], functio
      * @class
      * Inheritance
      */
-    var Inheritance = (function () {
+    var InheritanceTest = (function () {
         /**
          * @constructor
          */
-        function Inheritance() {
+        function InheritanceTest() {
         }
         /**
          * Main
          */
-        Inheritance.prototype.main = function () {
+        InheritanceTest.prototype.main = function () {
             var widget = new Widget('Widget', 1.0);
             widget.operate();
             var colorWidget = new ColorWidget('ColorWidget', 1.0, 'red');
             colorWidget.operate();
             var child = new Child('GaGa', 'Dad', 'Steve');
         };
-        return Inheritance;
+        return InheritanceTest;
     }());
-    exports.Inheritance = Inheritance;
-    var inheritance = new Inheritance;
+    exports.InheritanceTest = InheritanceTest;
+    var inheritance = new InheritanceTest;
     inheritance.main();
 });
 //# sourceMappingURL=modelrelief.js.map
