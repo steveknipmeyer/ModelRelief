@@ -2934,7 +2934,7 @@ define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function 
     }());
     exports.UnitTests = UnitTests;
 });
-define("Workbench/CameraTest", ["require", "exports", "three", "ModelLoaders/Loader", "System/Logger", "Viewer/Viewer"], function (require, exports, THREE, Loader_2, Logger_2, Viewer_3) {
+define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "ModelLoaders/Loader", "System/Services", "Viewer/Viewer"], function (require, exports, THREE, dat, Loader_2, Services_7, Viewer_3) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -2942,7 +2942,6 @@ define("Workbench/CameraTest", ["require", "exports", "three", "ModelLoaders/Loa
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var logger = new Logger_2.HTMLLogger();
     /**
      * @class
      * CameraWorkbench
@@ -2952,6 +2951,16 @@ define("Workbench/CameraTest", ["require", "exports", "three", "ModelLoaders/Loa
         function CameraViewer() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
+        Object.defineProperty(CameraViewer.prototype, "camera", {
+            /**
+             * Camera
+             */
+            get: function () {
+                return this._camera;
+            },
+            enumerable: true,
+            configurable: true
+        });
         /**
          * Initialize the viewer camera
          */
@@ -2979,14 +2988,75 @@ define("Workbench/CameraTest", ["require", "exports", "three", "ModelLoaders/Loa
         function App() {
         }
         /**
+         * Initialize the view settings that are controllable by the user
+         */
+        App.prototype.initializeViewerControls = function () {
+            var scope = this;
+            var ViewerControls = (function () {
+                function ViewerControls() {
+                    this.nearClippingPlane = scope._viewer.camera.near;
+                    this.farClippingPlane = scope._viewer.camera.far;
+                    this.fieldOfView = scope._viewer.camera.fov;
+                    this.transform = function () {
+                        scope._logger.addInfoMessage('Transform....');
+                    };
+                }
+                return ViewerControls;
+            }());
+            var viewerControls = new ViewerControls();
+            // Init dat.gui and controls for the UI
+            var gui = new dat.GUI({
+                autoPlace: false,
+                width: 320
+            });
+            var settingsDiv = document.getElementById('settingsControls');
+            settingsDiv.appendChild(gui.domElement);
+            var folderOptions = gui.addFolder('Camera Options');
+            // Near Clipping Plane
+            var minimum = 0;
+            var maximum = 20;
+            var stepSize = 0.1;
+            var controlNearClippingPlane = folderOptions.add(viewerControls, 'nearClippingPlane').name('Near Clipping Plane').min(minimum).max(maximum).step(stepSize);
+            controlNearClippingPlane.onChange(function (value) {
+                scope._viewer.camera.near = value;
+                scope._viewer.camera.updateProjectionMatrix();
+            }.bind(this));
+            // Far Clipping Plane
+            minimum = 1;
+            maximum = 20;
+            stepSize = 0.1;
+            var controlFarClippingPlane = folderOptions.add(viewerControls, 'farClippingPlane').name('Far Clipping Plane').min(minimum).max(maximum).step(stepSize);
+            ;
+            controlFarClippingPlane.onChange(function (value) {
+                scope._viewer.camera.far = value;
+                scope._viewer.camera.updateProjectionMatrix();
+            }.bind(this));
+            // Field of View
+            minimum = 25;
+            maximum = 75;
+            stepSize = 1;
+            var controlFieldOfView = folderOptions.add(viewerControls, 'fieldOfView').name('Field of View').min(minimum).max(maximum).step(stepSize);
+            ;
+            controlFieldOfView.onChange(function (value) {
+                scope._viewer.camera.fov = value;
+                scope._viewer.camera.updateProjectionMatrix();
+            }.bind(this));
+            folderOptions.open();
+            // Transform
+            var controlTransform = folderOptions.add(viewerControls, 'transform').name('Transform');
+        };
+        /**
          * Main
          */
         App.prototype.run = function () {
+            this._logger = Services_7.Services.consoleLogger;
             // Viewer    
             this._viewer = new CameraViewer('viewerCanvas');
             // Loader
             this._loader = new Loader_2.Loader();
             this._loader.loadBoxModel(this._viewer);
+            // UI Controls
+            this.initializeViewerControls();
         };
         return App;
     }());
@@ -3023,7 +3093,7 @@ define("Workbench/DepthBufferTest", ["require", "exports"], function (require, e
     var depthBufferTest = new DepthBufferTest();
     depthBufferTest.main();
 });
-define("Workbench/InheritanceTest", ["require", "exports", "System/Logger"], function (require, exports, Logger_3) {
+define("Workbench/InheritanceTest", ["require", "exports", "System/Logger"], function (require, exports, Logger_2) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -3031,7 +3101,7 @@ define("Workbench/InheritanceTest", ["require", "exports", "System/Logger"], fun
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var logger = new Logger_3.HTMLLogger();
+    var logger = new Logger_2.HTMLLogger();
     /**
      * @class
      * Widget
