@@ -6,6 +6,9 @@
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
 
+Add option in CreateBoundingBox to pass geometry instead of a Mesh.
+Improve option handling in CreateBoundingBox.
+
 Core
     Calculate model extents so the clip planes can be optimized in DepthBuferFactory.
         Transform model by camera transform.
@@ -23,6 +26,8 @@ Viewing
     Add axes helper to mesh viewer.
 
 Performance
+    Profileing
+        Install additional IIS components?
     Optimize!
     Memory management!
         Make sure if you use scene.remove(mesh), you also call mesh.geometry.dispose(), mesh.material.dispose() and mesh.texture.dispose() else you'll get memory leaks I think (r71).

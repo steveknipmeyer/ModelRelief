@@ -308,20 +308,22 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
         /**
          * @param position Location of bounding box.
          * @param mesh Mesh from which to create bounding box.
+         * @param color Color of the bounding box.
+         * @param opactity Opacity of the bounding box.
+         * @param visible Visibility.
          * @ returns Mesh of the bounding box.
          */
-        Graphics.createTransparentBoundingBox = function (position, mesh) {
-            var targetGeometry, boundingBox, width, height, depth, material, box;
-            targetGeometry = mesh.geometry;
-            targetGeometry.computeBoundingBox();
-            boundingBox = targetGeometry.boundingBox;
+        Graphics.createBoundingBox = function (position, geometry, materialParameters, visible) {
+            var boundingBox, width, height, depth, material, box;
+            geometry.computeBoundingBox();
+            boundingBox = geometry.boundingBox;
             width = boundingBox.max.x - boundingBox.min.x;
             height = boundingBox.max.y - boundingBox.min.y;
             depth = boundingBox.max.z - boundingBox.min.z;
-            material = new THREE.MeshBasicMaterial({ color: 0x0000ff, opacity: 1.0, transparent: true, wireframe: true });
+            material = new THREE.MeshPhongMaterial(materialParameters);
             box = this.createBox(position, width, height, depth, material);
             box.name = Graphics.BoundingBoxName;
-            box.visible = false;
+            box.visible = visible;
             return box;
         };
         /**
@@ -2934,7 +2936,7 @@ define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function 
     }());
     exports.UnitTests = UnitTests;
 });
-define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "ModelLoaders/Loader", "System/Services", "Viewer/Viewer"], function (require, exports, THREE, dat, Loader_2, Services_7, Viewer_3) {
+define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewer/Graphics", "ModelLoaders/Loader", "System/Services", "Viewer/Viewer"], function (require, exports, THREE, dat, Graphics_2, Loader_2, Services_7, Viewer_3) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -2969,7 +2971,7 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Model
                 position: new THREE.Vector3(0.0, 0.0, 6.0),
                 target: new THREE.Vector3(0, 0, 0),
                 near: 2.0,
-                far: 10.0,
+                far: 50.0,
                 fieldOfView: 37 // https://www.nikonians.org/reviews/fov-tables
             };
             return settings;
@@ -2988,6 +2990,23 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Model
         function App() {
         }
         /**
+         * Transform the model by camera inverse.
+         */
+        App.prototype.transformModel = function () {
+            var sceneModel = this._viewer.model;
+            var meshName = 'Box';
+            var mesh = sceneModel.getObjectByName(meshName);
+            var meshGeometryClone = mesh.geometry.clone();
+            var cameraMatrixWorldInverse = this._viewer.camera.matrixWorldInverse;
+            meshGeometryClone.applyMatrix(this._viewer.camera.matrixWorldInverse);
+            var boundingBox = Graphics_2.Graphics.createBoundingBox(new THREE.Vector3(), meshGeometryClone, { color: 0x0000ff, opacity: 1.0, wireframe: true }, true);
+            var cameraRotationMatrix = new THREE.Matrix4();
+            cameraRotationMatrix.extractRotation(this._viewer.camera.matrix);
+            boundingBox.applyMatrix(cameraRotationMatrix);
+            sceneModel.remove(sceneModel.getObjectByName(Graphics_2.Graphics.BoundingBoxName));
+            sceneModel.add(boundingBox);
+        };
+        /**
          * Initialize the view settings that are controllable by the user
          */
         App.prototype.initializeViewerControls = function () {
@@ -2998,7 +3017,7 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Model
                     this.farClippingPlane = scope._viewer.camera.far;
                     this.fieldOfView = scope._viewer.camera.fov;
                     this.transform = function () {
-                        scope._logger.addInfoMessage('Transform....');
+                        scope.transformModel();
                     };
                 }
                 return ViewerControls;
@@ -3023,7 +3042,7 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Model
             }.bind(this));
             // Far Clipping Plane
             minimum = 1;
-            maximum = 20;
+            maximum = 100;
             stepSize = 0.1;
             var controlFarClippingPlane = folderOptions.add(viewerControls, 'farClippingPlane').name('Far Clipping Plane').min(minimum).max(maximum).step(stepSize);
             ;
@@ -3041,9 +3060,9 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Model
                 scope._viewer.camera.fov = value;
                 scope._viewer.camera.updateProjectionMatrix();
             }.bind(this));
-            folderOptions.open();
             // Transform
             var controlTransform = folderOptions.add(viewerControls, 'transform').name('Transform');
+            folderOptions.open();
         };
         /**
          * Main

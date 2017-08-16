@@ -42,8 +42,8 @@ export class CameraViewer extends Viewer {
 
             position:       new THREE.Vector3(0.0, 0.0, 6.0),
             target:         new THREE.Vector3(0, 0, 0),
-            near:           2.0,
-            far:            10.0,
+            near:            2.0,
+            far:            50.0,
             fieldOfView:    37                                  // https://www.nikonians.org/reviews/fov-tables
         };
 
@@ -65,6 +65,27 @@ export class App {
      * @constructor
      */
     constructor() {
+    }
+    /**
+     * Transform the model by camera inverse.
+     */
+    transformModel() {
+
+        let sceneModel               : THREE.Group = this._viewer.model;
+        let meshName                 : string = 'Box';
+        let mesh                     : THREE.Mesh = <THREE.Mesh> sceneModel.getObjectByName(meshName);
+        let meshGeometryClone        : THREE.Geometry = <THREE.Geometry> mesh.geometry.clone();
+        let cameraMatrixWorldInverse : THREE.Matrix4 = this._viewer.camera.matrixWorldInverse;
+        
+        meshGeometryClone.applyMatrix(this._viewer.camera.matrixWorldInverse);
+        let boundingBox = Graphics.createBoundingBox(new THREE.Vector3(), meshGeometryClone, {color : 0x0000ff, opacity : 1.0, wireframe : true}, true);
+
+        let cameraRotationMatrix : THREE.Matrix4 = new THREE.Matrix4();
+        cameraRotationMatrix.extractRotation(this._viewer.camera.matrix);
+        boundingBox.applyMatrix(cameraRotationMatrix);
+
+        sceneModel.remove(sceneModel.getObjectByName(Graphics.BoundingBoxName));
+        sceneModel.add(boundingBox);
     }
 
     /**
@@ -89,7 +110,7 @@ export class App {
                 this.fieldOfView          = scope._viewer.camera.fov;
 
                 this.transform = function() {
-                   scope._logger.addInfoMessage('Transform....');
+                   scope.transformModel();
                 };
             }
         }
@@ -105,9 +126,9 @@ export class App {
         var folderOptions = gui.addFolder('Camera Options');
 
         // Near Clipping Plane
-        let minimum  = 0;
+        let minimum  =  0;
         let maximum  = 20;
-        let stepSize = 0.1;
+        let stepSize =  0.1;
         let controlNearClippingPlane = folderOptions.add(viewerControls, 'nearClippingPlane').name('Near Clipping Plane').min(minimum).max(maximum).step(stepSize);
         controlNearClippingPlane .onChange (function (value) {
 
@@ -116,9 +137,9 @@ export class App {
         }.bind(this));
 
         // Far Clipping Plane
-        minimum  = 1;
-        maximum  = 20;
-        stepSize = 0.1;
+        minimum  =   1;
+        maximum  = 100;
+        stepSize =   0.1;
         let controlFarClippingPlane = folderOptions.add(viewerControls, 'farClippingPlane').name('Far Clipping Plane').min(minimum).max(maximum).step(stepSize);;
         controlFarClippingPlane .onChange (function (value) {
 
@@ -129,7 +150,7 @@ export class App {
         // Field of View
         minimum  = 25;
         maximum  = 75;
-        stepSize = 1;
+        stepSize =  1;
         let controlFieldOfView= folderOptions.add(viewerControls, 'fieldOfView').name('Field of View').min(minimum).max(maximum).step(stepSize);;
         controlFieldOfView .onChange (function (value) {
 
@@ -137,10 +158,10 @@ export class App {
             scope._viewer.camera.updateProjectionMatrix();
         }.bind(this));
 
-        folderOptions.open();
-
         // Transform
         let controlTransform = folderOptions.add(viewerControls, 'transform').name('Transform');
+
+        folderOptions.open();
     }
 
     /**

@@ -97,31 +97,32 @@ export class Graphics {
     /**
      * @param position Location of bounding box.
      * @param mesh Mesh from which to create bounding box.
+     * @param color Color of the bounding box.
+     * @param opactity Opacity of the bounding box.
+     * @param visible Visibility.
      * @ returns Mesh of the bounding box.
      */
-    static createTransparentBoundingBox(position : THREE.Vector3, mesh : THREE.Mesh) : THREE.Mesh{
+    static createBoundingBox(position : THREE.Vector3, geometry : THREE.Geometry, materialParameters : THREE.MeshPhongMaterialParameters, visible : boolean) : THREE.Mesh{
 
-        var targetGeometry  : THREE.Geometry,
-            boundingBox     : THREE.Box3,
+        var boundingBox     : THREE.Box3,
             width           : number,
             height          : number,
             depth           : number,
-            material        : THREE.MeshBasicMaterial,
+            material        : THREE.MeshPhongMaterial,
             box             : THREE.Mesh;
 
-        targetGeometry = <THREE.Geometry> mesh.geometry;
-        targetGeometry.computeBoundingBox();
+        geometry.computeBoundingBox();
 
-        boundingBox = targetGeometry.boundingBox;
+        boundingBox = geometry.boundingBox;
         width  = boundingBox.max.x - boundingBox.min.x;
         height = boundingBox.max.y - boundingBox.min.y;
         depth  = boundingBox.max.z - boundingBox.min.z;
 
-        material = new THREE.MeshBasicMaterial( { color: 0x0000ff, opacity: 1.0, transparent: true, wireframe: true} );
+        material = new THREE.MeshPhongMaterial( materialParameters);
         box = this.createBox (position, width, height, depth, material);
 
         box.name    = Graphics.BoundingBoxName;
-        box.visible = false;
+        box.visible = visible;
 
         return box;
     }
