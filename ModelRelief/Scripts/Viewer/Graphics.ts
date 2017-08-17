@@ -100,7 +100,7 @@ export class Graphics {
      * @param material Material of the bounding box.
      * @ returns Mesh of the bounding box.
      */
-    static createBoundingBoxFromGeometry(position : THREE.Vector3, geometry : THREE.Geometry, material : THREE.Material) : THREE.Mesh{
+    static createBoundingBoxMeshFromGeometry(position : THREE.Vector3, geometry : THREE.Geometry, material : THREE.Material) : THREE.Mesh{
 
         var boundingBox     : THREE.Box3,
             width           : number,
@@ -111,7 +111,7 @@ export class Graphics {
         geometry.computeBoundingBox();
         boundingBox = geometry.boundingBox;
 
-        boxMesh = this.createBoundingBoxFromBox (position, boundingBox, material);
+        boxMesh = this.createBoundingBoxMeshFromBox (position, boundingBox, material);
 
         return boxMesh;
     }
@@ -122,7 +122,7 @@ export class Graphics {
      * @param material Material of the box.
      * @ returns Mesh of the box.
      */
-    static createBoundingBoxFromBox(position : THREE.Vector3, boundingBox : THREE.Box3, material : THREE.Material) : THREE.Mesh{
+    static createBoundingBoxMeshFromBox(position : THREE.Vector3, boundingBox : THREE.Box3, material : THREE.Material) : THREE.Mesh {
 
         var width           : number,
             height          : number,
@@ -133,10 +133,65 @@ export class Graphics {
         height = boundingBox.max.y - boundingBox.min.y;
         depth  = boundingBox.max.z - boundingBox.min.z;
 
-        boxMesh = this.createBox (position, width, height, depth, material);
+        boxMesh = this.createBoxMesh (position, width, height, depth, material);
         boxMesh.name = Graphics.BoundingBoxName;
 
         return boxMesh;
+    }
+
+    /**
+     * Gets the extends of an object optionally including all children.
+     */
+    static getBoundingBoxFromObject(rootObject : THREE.Object3D) : THREE.Box3 {
+
+        let boundingBox : THREE.Box3 = null;
+
+        /**
+         * Get the bounding box of an object.
+         * @param object Object to calculate bounding box.
+         */
+        function getBoundingBox(object : THREE.Object3D) : THREE.Box3 {
+
+            if (!(object instanceof(THREE.Mesh)))
+                return null;
+
+            let mesh = <THREE.Mesh> object;
+            mesh.geometry.computeBoundingBox();
+            let boundingBox : THREE.Box3 = mesh.geometry.boundingBox.clone();           
+
+            // bounding box is local; translate to object
+            boundingBox = boundingBox.translate(object.position)
+
+            // debug : add object mesh to scene
+            let color = (<THREE.MeshPhongMaterial>mesh.material).color;
+            let boundingBoxMesh = Graphics.createBoundingBoxMeshFromBox(boundingBox.getCenter(), boundingBox, new THREE.MeshPhongMaterial({color : color.getHexString()}));
+            rootObject.add(boundingBoxMesh);
+
+            return boundingBox;
+        }
+
+        /**
+         * Unions the bounding box of the object with the existing bounding box.
+         * @param object3d Object to add.
+         */
+        function unionBoundingBox (object3d) {
+
+            let objectBoundingBox : THREE.Box3 = getBoundingBox(object3d);
+            if (objectBoundingBox) {
+
+                // create if first
+                if (!boundingBox) {
+                    boundingBox = objectBoundingBox;
+                }
+                else {
+                    boundingBox = boundingBox.union(objectBoundingBox);
+                }
+            }
+        };
+
+        rootObject.traverse(unionBoundingBox);
+
+        return boundingBox;        
     }
 
     /**
@@ -148,7 +203,7 @@ export class Graphics {
      * @param material Optional material.
      * @returns Box mesh.
      */
-    static createBox(position : THREE.Vector3, width : number, height : number, depth : number, material? : THREE.Material) : THREE.Mesh {
+    static createBoxMesh(position : THREE.Vector3, width : number, height : number, depth : number, material? : THREE.Material) : THREE.Mesh {
 
         var 
             boxGeometry  : THREE.BoxGeometry,
@@ -173,18 +228,18 @@ export class Graphics {
      * @param color Color.
      * @param segments Mesh segments.
      */
-    static createSphere(position : THREE.Vector3, radius : number, color : number, segments? : number) : THREE.Mesh {
+    static createSphereMesh(position : THREE.Vector3, radius : number, material? : THREE.Material) : THREE.Mesh {
         var sphereGeometry  : THREE.SphereGeometry,
-            material        : THREE.MeshBasicMaterial,
-            segmentCount    : number = segments || 32,
+            segmentCount    : number = 32,
+            sphereMaterial  : THREE.Material,
             sphere          : THREE.Mesh;
-         Graphics.createBox       
+
         sphereGeometry = new THREE.SphereGeometry(radius, segmentCount, segmentCount);
         sphereGeometry.computeBoundingBox();
 
-        material = new THREE.MeshPhongMaterial( { color: color, opacity: 1.0, transparent: false, wireframe: false} );
+        sphereMaterial = material || new THREE.MeshPhongMaterial({ color: 0xff0000, opacity: 1.0} );
 
-        sphere = new THREE.Mesh( sphereGeometry, material );
+        sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
         sphere.position.copy(position);
 
         return sphere;
@@ -284,7 +339,7 @@ export class Graphics {
       * @param scene Scene to annotate.
       * @param camera Camera to construct helper (may be null).
       */
-    static createCameraHelper (scene : THREE.Scene, camera : THREE.Camera) {
+    static addCameraHelper (scene : THREE.Scene, camera : THREE.Camera) : void{
 
         if (camera) {
             let cameraHelper = new THREE.CameraHelper(camera );
@@ -297,7 +352,7 @@ export class Graphics {
       * Adds a coordinate axis helper to a scene to visualize the world axes.
       * @param scene Scene to annotate.
       */
-    static createAxisHelper (scene : THREE.Scene, size : number) {
+    static addAxisHelper (scene : THREE.Scene, size : number) : void{
 
         let axisHelper = new THREE.AxisHelper(size);
         axisHelper.visible = true;

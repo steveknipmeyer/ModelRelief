@@ -32,8 +32,17 @@ export class CameraViewer extends Viewer {
     get camera () {
         return this._camera;
     }
+    
+    populateScene() {
 
-    /**
+        let box : THREE.Mesh = Graphics.createBoxMesh(new THREE.Vector3(-1, 1, -2), 1, 2, 2, new THREE.MeshPhongMaterial({color : 0xff0000}));
+        this.model.add(box);
+
+        let sphere : THREE.Mesh = Graphics.createSphereMesh(new THREE.Vector3(2, -1, 1), 1, new THREE.MeshPhongMaterial({color : 0x00ff00}));
+        this.model.add(sphere);
+    }
+    
+     /**
      * Initialize the viewer camera
      */
     initializeDefaultCameraSettings () : CameraSettings {
@@ -66,33 +75,30 @@ export class App {
      */
     constructor() {
     }
+
     /**
      * Transform the model by camera inverse.
      */
     transformModel() {
 
-        let sceneModel               : THREE.Group = this._viewer.model;
-        let meshName                 : string = 'Box';
-        let mesh                     : THREE.Mesh = <THREE.Mesh> sceneModel.getObjectByName(meshName);
-        let cameraMatrixWorldInverse : THREE.Matrix4 = this._viewer.camera.matrixWorldInverse;
-        
+        // remove existing BB
+        let sceneModel : THREE.Group = this._viewer.model;
+        sceneModel.remove(sceneModel.getObjectByName(Graphics.BoundingBoxName));
 
-        mesh.geometry.computeBoundingBox();
-        let meshBoundingBox : THREE.Box3 = mesh.geometry.boundingBox.clone();
-        meshBoundingBox.applyMatrix4(this._viewer.camera.matrixWorldInverse);
-        
-        
-        
-        
+        let modelBoundingBox : THREE.Box3 = Graphics.getBoundingBoxFromObject(this._viewer.model);
+
+        let cameraMatrixWorldInverse : THREE.Matrix4 = this._viewer.camera.matrixWorldInverse;
+        modelBoundingBox.applyMatrix4(this._viewer.camera.matrixWorldInverse);
         
         let material = new THREE.MeshPhongMaterial( {color : 0xff00ff, opacity : 1.0, wireframe : true});       
-        let boundingBox = Graphics.createBoundingBoxFromBox(new THREE.Vector3(), meshBoundingBox, material);
-
+        let boundingBox = Graphics.createBoundingBoxMeshFromBox(modelBoundingBox.getCenter(), modelBoundingBox, material);
+        
+        // rotate to align with camera line
         let cameraRotationMatrix : THREE.Matrix4 = new THREE.Matrix4();
         cameraRotationMatrix.extractRotation(this._viewer.camera.matrix);
         boundingBox.applyMatrix(cameraRotationMatrix);
 
-        sceneModel.remove(sceneModel.getObjectByName(Graphics.BoundingBoxName));
+        // add new
         sceneModel.add(boundingBox);
     }
 
@@ -181,10 +187,6 @@ export class App {
         // Viewer    
         this._viewer = new CameraViewer('viewerCanvas');
         
-        // Loader
-        this._loader = new Loader();
-        this._loader.loadBoxModel (this._viewer);
-
         // UI Controls
         this.initializeViewerControls();
     }

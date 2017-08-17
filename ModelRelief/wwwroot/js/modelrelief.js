@@ -311,11 +311,11 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
          * @param material Material of the bounding box.
          * @ returns Mesh of the bounding box.
          */
-        Graphics.createBoundingBoxFromGeometry = function (position, geometry, material) {
+        Graphics.createBoundingBoxMeshFromGeometry = function (position, geometry, material) {
             var boundingBox, width, height, depth, boxMesh;
             geometry.computeBoundingBox();
             boundingBox = geometry.boundingBox;
-            boxMesh = this.createBoundingBoxFromBox(position, boundingBox, material);
+            boxMesh = this.createBoundingBoxMeshFromBox(position, boundingBox, material);
             return boxMesh;
         };
         /**
@@ -324,14 +324,57 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
          * @param material Material of the box.
          * @ returns Mesh of the box.
          */
-        Graphics.createBoundingBoxFromBox = function (position, boundingBox, material) {
+        Graphics.createBoundingBoxMeshFromBox = function (position, boundingBox, material) {
             var width, height, depth, boxMesh;
             width = boundingBox.max.x - boundingBox.min.x;
             height = boundingBox.max.y - boundingBox.min.y;
             depth = boundingBox.max.z - boundingBox.min.z;
-            boxMesh = this.createBox(position, width, height, depth, material);
+            boxMesh = this.createBoxMesh(position, width, height, depth, material);
             boxMesh.name = Graphics.BoundingBoxName;
             return boxMesh;
+        };
+        /**
+         * Gets the extends of an object optionally including all children.
+         */
+        Graphics.getBoundingBoxFromObject = function (rootObject) {
+            var boundingBox = null;
+            /**
+             * Get the bounding box of an object.
+             * @param object Object to calculate bounding box.
+             */
+            function getBoundingBox(object) {
+                if (!(object instanceof (THREE.Mesh)))
+                    return null;
+                var mesh = object;
+                mesh.geometry.computeBoundingBox();
+                var boundingBox = mesh.geometry.boundingBox.clone();
+                // bounding box is local; translate to object
+                boundingBox = boundingBox.translate(object.position);
+                // debug : add object mesh to scene
+                var color = mesh.material.color;
+                var boundingBoxMesh = Graphics.createBoundingBoxMeshFromBox(boundingBox.getCenter(), boundingBox, new THREE.MeshPhongMaterial({ color: color.getHexString() }));
+                rootObject.add(boundingBoxMesh);
+                return boundingBox;
+            }
+            /**
+             * Unions the bounding box of the object with the existing bounding box.
+             * @param object3d Object to add.
+             */
+            function unionBoundingBox(object3d) {
+                var objectBoundingBox = getBoundingBox(object3d);
+                if (objectBoundingBox) {
+                    // create if first
+                    if (!boundingBox) {
+                        boundingBox = objectBoundingBox;
+                    }
+                    else {
+                        boundingBox = boundingBox.union(objectBoundingBox);
+                    }
+                }
+            }
+            ;
+            rootObject.traverse(unionBoundingBox);
+            return boundingBox;
         };
         /**
          * Creates a box mesh.
@@ -342,7 +385,7 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
          * @param material Optional material.
          * @returns Box mesh.
          */
-        Graphics.createBox = function (position, width, height, depth, material) {
+        Graphics.createBoxMesh = function (position, width, height, depth, material) {
             var boxGeometry, boxMaterial, box;
             boxGeometry = new THREE.BoxGeometry(width, height, depth);
             boxGeometry.computeBoundingBox();
@@ -358,13 +401,12 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
          * @param color Color.
          * @param segments Mesh segments.
          */
-        Graphics.createSphere = function (position, radius, color, segments) {
-            var sphereGeometry, material, segmentCount = segments || 32, sphere;
-            Graphics.createBox;
+        Graphics.createSphereMesh = function (position, radius, material) {
+            var sphereGeometry, segmentCount = 32, sphereMaterial, sphere;
             sphereGeometry = new THREE.SphereGeometry(radius, segmentCount, segmentCount);
             sphereGeometry.computeBoundingBox();
-            material = new THREE.MeshPhongMaterial({ color: color, opacity: 1.0, transparent: false, wireframe: false });
-            sphere = new THREE.Mesh(sphereGeometry, material);
+            sphereMaterial = material || new THREE.MeshPhongMaterial({ color: 0xff0000, opacity: 1.0 });
+            sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
             sphere.position.copy(position);
             return sphere;
         };
@@ -434,7 +476,7 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
          * @param scene Scene to annotate.
          * @param camera Camera to construct helper (may be null).
          */
-        Graphics.createCameraHelper = function (scene, camera) {
+        Graphics.addCameraHelper = function (scene, camera) {
             if (camera) {
                 var cameraHelper = new THREE.CameraHelper(camera);
                 cameraHelper.visible = true;
@@ -445,7 +487,7 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
          * Adds a coordinate axis helper to a scene to visualize the world axes.
          * @param scene Scene to annotate.
          */
-        Graphics.createAxisHelper = function (scene, size) {
+        Graphics.addAxisHelper = function (scene, size) {
             var axisHelper = new THREE.AxisHelper(size);
             axisHelper.visible = true;
             scene.add(axisHelper);
@@ -2943,7 +2985,7 @@ define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function 
     }());
     exports.UnitTests = UnitTests;
 });
-define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewer/Graphics", "ModelLoaders/Loader", "System/Services", "Viewer/Viewer"], function (require, exports, THREE, dat, Graphics_2, Loader_2, Services_7, Viewer_3) {
+define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewer/Graphics", "System/Services", "Viewer/Viewer"], function (require, exports, THREE, dat, Graphics_2, Services_7, Viewer_3) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -2970,9 +3012,15 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
             enumerable: true,
             configurable: true
         });
+        CameraViewer.prototype.populateScene = function () {
+            var box = Graphics_2.Graphics.createBoxMesh(new THREE.Vector3(-1, 1, -2), 1, 2, 2, new THREE.MeshPhongMaterial({ color: 0xff0000 }));
+            this.model.add(box);
+            var sphere = Graphics_2.Graphics.createSphereMesh(new THREE.Vector3(2, -1, 1), 1, new THREE.MeshPhongMaterial({ color: 0x00ff00 }));
+            this.model.add(sphere);
+        };
         /**
-         * Initialize the viewer camera
-         */
+        * Initialize the viewer camera
+        */
         CameraViewer.prototype.initializeDefaultCameraSettings = function () {
             var settings = {
                 position: new THREE.Vector3(0.0, 0.0, 6.0),
@@ -3000,19 +3048,19 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
          * Transform the model by camera inverse.
          */
         App.prototype.transformModel = function () {
+            // remove existing BB
             var sceneModel = this._viewer.model;
-            var meshName = 'Box';
-            var mesh = sceneModel.getObjectByName(meshName);
+            sceneModel.remove(sceneModel.getObjectByName(Graphics_2.Graphics.BoundingBoxName));
+            var modelBoundingBox = Graphics_2.Graphics.getBoundingBoxFromObject(this._viewer.model);
             var cameraMatrixWorldInverse = this._viewer.camera.matrixWorldInverse;
-            mesh.geometry.computeBoundingBox();
-            var meshBoundingBox = mesh.geometry.boundingBox.clone();
-            meshBoundingBox.applyMatrix4(this._viewer.camera.matrixWorldInverse);
+            modelBoundingBox.applyMatrix4(this._viewer.camera.matrixWorldInverse);
             var material = new THREE.MeshPhongMaterial({ color: 0xff00ff, opacity: 1.0, wireframe: true });
-            var boundingBox = Graphics_2.Graphics.createBoundingBoxFromBox(new THREE.Vector3(), meshBoundingBox, material);
+            var boundingBox = Graphics_2.Graphics.createBoundingBoxMeshFromBox(modelBoundingBox.getCenter(), modelBoundingBox, material);
+            // rotate to align with camera line
             var cameraRotationMatrix = new THREE.Matrix4();
             cameraRotationMatrix.extractRotation(this._viewer.camera.matrix);
             boundingBox.applyMatrix(cameraRotationMatrix);
-            sceneModel.remove(sceneModel.getObjectByName(Graphics_2.Graphics.BoundingBoxName));
+            // add new
             sceneModel.add(boundingBox);
         };
         /**
@@ -3080,9 +3128,6 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
             this._logger = Services_7.Services.consoleLogger;
             // Viewer    
             this._viewer = new CameraViewer('viewerCanvas');
-            // Loader
-            this._loader = new Loader_2.Loader();
-            this._loader.loadBoxModel(this._viewer);
             // UI Controls
             this.initializeViewerControls();
         };
