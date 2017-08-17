@@ -337,43 +337,9 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
          * Gets the extends of an object optionally including all children.
          */
         Graphics.getBoundingBoxFromObject = function (rootObject) {
+            // https://stackoverflow.com/questions/15492857/any-way-to-get-a-bounding-box-from-a-three-js-object3d
             var boundingBox = null;
-            /**
-             * Get the bounding box of an object.
-             * @param object Object to calculate bounding box.
-             */
-            function getBoundingBox(object) {
-                if (!(object instanceof (THREE.Mesh)))
-                    return null;
-                var mesh = object;
-                mesh.geometry.computeBoundingBox();
-                var boundingBox = mesh.geometry.boundingBox.clone();
-                // bounding box is local; translate to object
-                boundingBox = boundingBox.translate(object.position);
-                // debug : add object mesh to scene
-                var color = mesh.material.color;
-                var boundingBoxMesh = Graphics.createBoundingBoxMeshFromBox(boundingBox.getCenter(), boundingBox, new THREE.MeshPhongMaterial({ color: color.getHexString() }));
-                rootObject.add(boundingBoxMesh);
-                return boundingBox;
-            }
-            /**
-             * Unions the bounding box of the object with the existing bounding box.
-             * @param object3d Object to add.
-             */
-            function unionBoundingBox(object3d) {
-                var objectBoundingBox = getBoundingBox(object3d);
-                if (objectBoundingBox) {
-                    // create if first
-                    if (!boundingBox) {
-                        boundingBox = objectBoundingBox;
-                    }
-                    else {
-                        boundingBox = boundingBox.union(objectBoundingBox);
-                    }
-                }
-            }
-            ;
-            rootObject.traverse(unionBoundingBox);
+            boundingBox = boundingBox.setFromObject(rootObject);
             return boundingBox;
         };
         /**
@@ -3013,9 +2979,12 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
             configurable: true
         });
         CameraViewer.prototype.populateScene = function () {
-            var box = Graphics_2.Graphics.createBoxMesh(new THREE.Vector3(-1, 1, -2), 1, 2, 2, new THREE.MeshPhongMaterial({ color: 0xff0000 }));
+            var triad = Graphics_2.Graphics.createWorldAxesTriad(new THREE.Vector3(), 1, 0.25, 0.25);
+            this._scene.add(triad);
+            var box = Graphics_2.Graphics.createBoxMesh(new THREE.Vector3(1, 1, -2), 1, 2, 2, new THREE.MeshPhongMaterial({ color: 0xff0000 }));
+            box.rotation.set(Math.random(), Math.random(), Math.random());
             this.model.add(box);
-            var sphere = Graphics_2.Graphics.createSphereMesh(new THREE.Vector3(2, -1, 1), 1, new THREE.MeshPhongMaterial({ color: 0x00ff00 }));
+            var sphere = Graphics_2.Graphics.createSphereMesh(new THREE.Vector3(4, 2, -1), 1, new THREE.MeshPhongMaterial({ color: 0x00ff00 }));
             this.model.add(sphere);
         };
         /**
@@ -3023,7 +2992,7 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
         */
         CameraViewer.prototype.initializeDefaultCameraSettings = function () {
             var settings = {
-                position: new THREE.Vector3(0.0, 0.0, 6.0),
+                position: new THREE.Vector3(0.0, 0.0, 20.0),
                 target: new THREE.Vector3(0, 0, 0),
                 near: 2.0,
                 far: 50.0,
@@ -3048,20 +3017,37 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
          * Transform the model by camera inverse.
          */
         App.prototype.transformModel = function () {
-            // remove existing BB
-            var sceneModel = this._viewer.model;
-            sceneModel.remove(sceneModel.getObjectByName(Graphics_2.Graphics.BoundingBoxName));
-            var modelBoundingBox = Graphics_2.Graphics.getBoundingBoxFromObject(this._viewer.model);
+            var camera = this._viewer.camera;
+            this._logger.addInfoMessage("camera.position = " + camera.position.x + ", " + camera.position.y + ", " + camera.position.z);
+            var model = this._viewer.model;
+            // remove existing BoundingBox
+            model.remove(model.getObjectByName(Graphics_2.Graphics.BoundingBoxName));
+            // clone model (and geometry!)
+            var modelClone = model.clone();
+            modelClone.traverse(function (object) {
+                if (object instanceof (THREE.Mesh))
+                    object.geometry = object.geometry.clone();
+            });
             var cameraMatrixWorldInverse = this._viewer.camera.matrixWorldInverse;
-            modelBoundingBox.applyMatrix4(this._viewer.camera.matrixWorldInverse);
-            var material = new THREE.MeshPhongMaterial({ color: 0xff00ff, opacity: 1.0, wireframe: true });
+            modelClone.applyMatrix(cameraMatrixWorldInverse);
+            var modelBoundingBox = new THREE.Box3();
+            modelBoundingBox = modelBoundingBox.setFromObject(modelClone);
+            var cameraMatrixWorld = this._viewer.camera.matrixWorld;
+            modelBoundingBox.applyMatrix4(cameraMatrixWorld);
+            var material = new THREE.MeshPhongMaterial({ color: 0xff0000, opacity: 1.0, wireframe: true });
             var boundingBox = Graphics_2.Graphics.createBoundingBoxMeshFromBox(modelBoundingBox.getCenter(), modelBoundingBox, material);
-            // rotate to align with camera line
-            var cameraRotationMatrix = new THREE.Matrix4();
-            cameraRotationMatrix.extractRotation(this._viewer.camera.matrix);
-            boundingBox.applyMatrix(cameraRotationMatrix);
-            // add new
-            sceneModel.add(boundingBox);
+            /*
+                    // rotate to align with camera line
+                    let cameraRotationMatrix : THREE.Matrix4 = new THREE.Matrix4();
+                    cameraRotationMatrix.extractRotation(this._viewer.camera.matrix);
+                    boundingBox.applyMatrix(cameraRotationMatrix);
+            
+            
+                    // translate by camera position
+                    boundingBox.position.add(this._viewer.camera.position);
+            */
+            // add new BoundingBox
+            model.add(boundingBox);
         };
         /**
          * Initialize the view settings that are controllable by the user

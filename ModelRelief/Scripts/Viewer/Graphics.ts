@@ -143,56 +143,12 @@ export class Graphics {
      * Gets the extends of an object optionally including all children.
      */
     static getBoundingBoxFromObject(rootObject : THREE.Object3D) : THREE.Box3 {
-
+        // https://stackoverflow.com/questions/15492857/any-way-to-get-a-bounding-box-from-a-three-js-object3d
         let boundingBox : THREE.Box3 = null;
+        boundingBox = boundingBox.setFromObject(rootObject);
 
-        /**
-         * Get the bounding box of an object.
-         * @param object Object to calculate bounding box.
-         */
-        function getBoundingBox(object : THREE.Object3D) : THREE.Box3 {
-
-            if (!(object instanceof(THREE.Mesh)))
-                return null;
-
-            let mesh = <THREE.Mesh> object;
-            mesh.geometry.computeBoundingBox();
-            let boundingBox : THREE.Box3 = mesh.geometry.boundingBox.clone();           
-
-            // bounding box is local; translate to object
-            boundingBox = boundingBox.translate(object.position)
-
-            // debug : add object mesh to scene
-            let color = (<THREE.MeshPhongMaterial>mesh.material).color;
-            let boundingBoxMesh = Graphics.createBoundingBoxMeshFromBox(boundingBox.getCenter(), boundingBox, new THREE.MeshPhongMaterial({color : color.getHexString()}));
-            rootObject.add(boundingBoxMesh);
-
-            return boundingBox;
+        return boundingBox;
         }
-
-        /**
-         * Unions the bounding box of the object with the existing bounding box.
-         * @param object3d Object to add.
-         */
-        function unionBoundingBox (object3d) {
-
-            let objectBoundingBox : THREE.Box3 = getBoundingBox(object3d);
-            if (objectBoundingBox) {
-
-                // create if first
-                if (!boundingBox) {
-                    boundingBox = objectBoundingBox;
-                }
-                else {
-                    boundingBox = boundingBox.union(objectBoundingBox);
-                }
-            }
-        };
-
-        rootObject.traverse(unionBoundingBox);
-
-        return boundingBox;        
-    }
 
     /**
      * Creates a box mesh.

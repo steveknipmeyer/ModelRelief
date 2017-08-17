@@ -35,10 +35,14 @@ export class CameraViewer extends Viewer {
     
     populateScene() {
 
-        let box : THREE.Mesh = Graphics.createBoxMesh(new THREE.Vector3(-1, 1, -2), 1, 2, 2, new THREE.MeshPhongMaterial({color : 0xff0000}));
+        let triad = Graphics.createWorldAxesTriad(new THREE.Vector3(), 1, 0.25, 0.25);
+        this._scene.add(triad);
+
+        let box : THREE.Mesh = Graphics.createBoxMesh(new THREE.Vector3(1, 1, -2), 1, 2, 2, new THREE.MeshPhongMaterial({color : 0xff0000}));
+        box.rotation.set(Math.random(), Math.random(), Math.random());
         this.model.add(box);
 
-        let sphere : THREE.Mesh = Graphics.createSphereMesh(new THREE.Vector3(2, -1, 1), 1, new THREE.MeshPhongMaterial({color : 0x00ff00}));
+        let sphere : THREE.Mesh = Graphics.createSphereMesh(new THREE.Vector3(4, 2, -1), 1, new THREE.MeshPhongMaterial({color : 0x00ff00}));
         this.model.add(sphere);
     }
     
@@ -49,7 +53,7 @@ export class CameraViewer extends Viewer {
 
         let settings : CameraSettings = {
 
-            position:       new THREE.Vector3(0.0, 0.0, 6.0),
+            position:       new THREE.Vector3(0.0, 0.0, 20.0),
             target:         new THREE.Vector3(0, 0, 0),
             near:            2.0,
             far:            50.0,
@@ -80,26 +84,45 @@ export class App {
      * Transform the model by camera inverse.
      */
     transformModel() {
+        let camera : THREE.PerspectiveCamera = this._viewer.camera;
+        this._logger.addInfoMessage(`camera.position = ${camera.position.x}, ${camera.position.y}, ${camera.position.z}`);
 
-        // remove existing BB
-        let sceneModel : THREE.Group = this._viewer.model;
-        sceneModel.remove(sceneModel.getObjectByName(Graphics.BoundingBoxName));
+        let model : THREE.Group = this._viewer.model;
 
-        let modelBoundingBox : THREE.Box3 = Graphics.getBoundingBoxFromObject(this._viewer.model);
+        // remove existing BoundingBox
+        model.remove(model.getObjectByName(Graphics.BoundingBoxName));
+
+        // clone model (and geometry!)
+        let modelClone = model.clone();
+        modelClone.traverse(object => {
+            if (object instanceof(THREE.Mesh))
+                object.geometry = object.geometry.clone();
+        });
 
         let cameraMatrixWorldInverse : THREE.Matrix4 = this._viewer.camera.matrixWorldInverse;
-        modelBoundingBox.applyMatrix4(this._viewer.camera.matrixWorldInverse);
-        
-        let material = new THREE.MeshPhongMaterial( {color : 0xff00ff, opacity : 1.0, wireframe : true});       
+        modelClone.applyMatrix(cameraMatrixWorldInverse);
+
+        let modelBoundingBox : THREE.Box3 = new THREE.Box3();
+        modelBoundingBox = modelBoundingBox.setFromObject(modelClone);
+
+        let cameraMatrixWorld : THREE.Matrix4 = this._viewer.camera.matrixWorld;
+        modelBoundingBox.applyMatrix4(cameraMatrixWorld);
+
+        let material = new THREE.MeshPhongMaterial( {color : 0xff0000, opacity : 1.0, wireframe : true});       
         let boundingBox = Graphics.createBoundingBoxMeshFromBox(modelBoundingBox.getCenter(), modelBoundingBox, material);
-        
+
+/*
         // rotate to align with camera line
         let cameraRotationMatrix : THREE.Matrix4 = new THREE.Matrix4();
         cameraRotationMatrix.extractRotation(this._viewer.camera.matrix);
         boundingBox.applyMatrix(cameraRotationMatrix);
 
-        // add new
-        sceneModel.add(boundingBox);
+
+        // translate by camera position
+        boundingBox.position.add(this._viewer.camera.position);
+*/
+        // add new BoundingBox
+        model.add(boundingBox);
     }
 
     /**
