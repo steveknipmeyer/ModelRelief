@@ -74,11 +74,19 @@ export class App {
         let sceneModel               : THREE.Group = this._viewer.model;
         let meshName                 : string = 'Box';
         let mesh                     : THREE.Mesh = <THREE.Mesh> sceneModel.getObjectByName(meshName);
-        let meshGeometryClone        : THREE.Geometry = <THREE.Geometry> mesh.geometry.clone();
         let cameraMatrixWorldInverse : THREE.Matrix4 = this._viewer.camera.matrixWorldInverse;
         
-        meshGeometryClone.applyMatrix(this._viewer.camera.matrixWorldInverse);
-        let boundingBox = Graphics.createBoundingBox(new THREE.Vector3(), meshGeometryClone, {color : 0x0000ff, opacity : 1.0, wireframe : true}, true);
+
+        mesh.geometry.computeBoundingBox();
+        let meshBoundingBox : THREE.Box3 = mesh.geometry.boundingBox.clone();
+        meshBoundingBox.applyMatrix4(this._viewer.camera.matrixWorldInverse);
+        
+        
+        
+        
+        
+        let material = new THREE.MeshPhongMaterial( {color : 0xff00ff, opacity : 1.0, wireframe : true});       
+        let boundingBox = Graphics.createBoundingBoxFromBox(new THREE.Vector3(), meshBoundingBox, material);
 
         let cameraRotationMatrix : THREE.Matrix4 = new THREE.Matrix4();
         cameraRotationMatrix.extractRotation(this._viewer.camera.matrix);

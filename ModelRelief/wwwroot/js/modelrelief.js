@@ -308,23 +308,30 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
         /**
          * @param position Location of bounding box.
          * @param mesh Mesh from which to create bounding box.
-         * @param color Color of the bounding box.
-         * @param opactity Opacity of the bounding box.
-         * @param visible Visibility.
+         * @param material Material of the bounding box.
          * @ returns Mesh of the bounding box.
          */
-        Graphics.createBoundingBox = function (position, geometry, materialParameters, visible) {
-            var boundingBox, width, height, depth, material, box;
+        Graphics.createBoundingBoxFromGeometry = function (position, geometry, material) {
+            var boundingBox, width, height, depth, boxMesh;
             geometry.computeBoundingBox();
             boundingBox = geometry.boundingBox;
+            boxMesh = this.createBoundingBoxFromBox(position, boundingBox, material);
+            return boxMesh;
+        };
+        /**
+         * @param position Location of box.
+         * @param box Geometry Box from which to create box mesh.
+         * @param material Material of the box.
+         * @ returns Mesh of the box.
+         */
+        Graphics.createBoundingBoxFromBox = function (position, boundingBox, material) {
+            var width, height, depth, boxMesh;
             width = boundingBox.max.x - boundingBox.min.x;
             height = boundingBox.max.y - boundingBox.min.y;
             depth = boundingBox.max.z - boundingBox.min.z;
-            material = new THREE.MeshPhongMaterial(materialParameters);
-            box = this.createBox(position, width, height, depth, material);
-            box.name = Graphics.BoundingBoxName;
-            box.visible = visible;
-            return box;
+            boxMesh = this.createBox(position, width, height, depth, material);
+            boxMesh.name = Graphics.BoundingBoxName;
+            return boxMesh;
         };
         /**
          * Creates a box mesh.
@@ -2996,10 +3003,12 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
             var sceneModel = this._viewer.model;
             var meshName = 'Box';
             var mesh = sceneModel.getObjectByName(meshName);
-            var meshGeometryClone = mesh.geometry.clone();
             var cameraMatrixWorldInverse = this._viewer.camera.matrixWorldInverse;
-            meshGeometryClone.applyMatrix(this._viewer.camera.matrixWorldInverse);
-            var boundingBox = Graphics_2.Graphics.createBoundingBox(new THREE.Vector3(), meshGeometryClone, { color: 0x0000ff, opacity: 1.0, wireframe: true }, true);
+            mesh.geometry.computeBoundingBox();
+            var meshBoundingBox = mesh.geometry.boundingBox.clone();
+            meshBoundingBox.applyMatrix4(this._viewer.camera.matrixWorldInverse);
+            var material = new THREE.MeshPhongMaterial({ color: 0xff00ff, opacity: 1.0, wireframe: true });
+            var boundingBox = Graphics_2.Graphics.createBoundingBoxFromBox(new THREE.Vector3(), meshBoundingBox, material);
             var cameraRotationMatrix = new THREE.Matrix4();
             cameraRotationMatrix.extractRotation(this._viewer.camera.matrix);
             boundingBox.applyMatrix(cameraRotationMatrix);

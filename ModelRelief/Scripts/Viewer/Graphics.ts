@@ -97,34 +97,46 @@ export class Graphics {
     /**
      * @param position Location of bounding box.
      * @param mesh Mesh from which to create bounding box.
-     * @param color Color of the bounding box.
-     * @param opactity Opacity of the bounding box.
-     * @param visible Visibility.
+     * @param material Material of the bounding box.
      * @ returns Mesh of the bounding box.
      */
-    static createBoundingBox(position : THREE.Vector3, geometry : THREE.Geometry, materialParameters : THREE.MeshPhongMaterialParameters, visible : boolean) : THREE.Mesh{
+    static createBoundingBoxFromGeometry(position : THREE.Vector3, geometry : THREE.Geometry, material : THREE.Material) : THREE.Mesh{
 
         var boundingBox     : THREE.Box3,
             width           : number,
             height          : number,
             depth           : number,
-            material        : THREE.MeshPhongMaterial,
-            box             : THREE.Mesh;
+            boxMesh         : THREE.Mesh;
 
         geometry.computeBoundingBox();
-
         boundingBox = geometry.boundingBox;
+
+        boxMesh = this.createBoundingBoxFromBox (position, boundingBox, material);
+
+        return boxMesh;
+    }
+
+    /**
+     * @param position Location of box.
+     * @param box Geometry Box from which to create box mesh.
+     * @param material Material of the box.
+     * @ returns Mesh of the box.
+     */
+    static createBoundingBoxFromBox(position : THREE.Vector3, boundingBox : THREE.Box3, material : THREE.Material) : THREE.Mesh{
+
+        var width           : number,
+            height          : number,
+            depth           : number,
+            boxMesh         : THREE.Mesh;
+
         width  = boundingBox.max.x - boundingBox.min.x;
         height = boundingBox.max.y - boundingBox.min.y;
         depth  = boundingBox.max.z - boundingBox.min.z;
 
-        material = new THREE.MeshPhongMaterial( materialParameters);
-        box = this.createBox (position, width, height, depth, material);
+        boxMesh = this.createBox (position, width, height, depth, material);
+        boxMesh.name = Graphics.BoundingBoxName;
 
-        box.name    = Graphics.BoundingBoxName;
-        box.visible = visible;
-
-        return box;
+        return boxMesh;
     }
 
     /**
