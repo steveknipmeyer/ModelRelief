@@ -737,7 +737,7 @@ define("System/Math", ["require", "exports"], function (require, exports) {
     }());
     exports.MathLibrary = MathLibrary;
 });
-define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "System/Math", "System/Services"], function (require, exports, chai_1, THREE, Math_1, Services_2) {
+define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "System/Services"], function (require, exports, chai_1, THREE, Services_2) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -765,56 +765,23 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Syste
             this.camera = camera;
             this.initialize();
         }
-        /**
-         * Initialize
-         */
-        DepthBuffer.prototype.initialize = function () {
-            this._logger = Services_2.Services.htmlLogger;
-            this._nearClipPlane = this.camera.near;
-            this._farClipPlane = this.camera.far;
-            this._cameraClipRange = this._farClipPlane - this._nearClipPlane;
-            // RGBA -> Float32
-            this.depths = new Float32Array(this._rgbaArray.buffer);
-        };
-        /**
-         * Convert a normalized depth [0,1] to depth in model units.
-         * @param normalizedDepth Normalized depth [0,1].
-         */
-        DepthBuffer.prototype.normalizedToModelDepth = function (normalizedDepth) {
-            var modelDepth = normalizedDepth; // * this._cameraClipRange;
-            return modelDepth;
-        };
-        /**
-         * Returns the normalized depth value at a pixel index
-         * @param row Buffer row.
-         * @param column Buffer column.
-         */
-        DepthBuffer.prototype.depthNormalized = function (row, column) {
-            var index = (row * this.width) + column;
-            return this.depths[index];
-        };
-        /**
-         * Returns the depth value at a pixel index
-         * @param row Map row.
-         * @param pixelColumn Map column.
-         */
-        DepthBuffer.prototype.depth = function (row, column) {
-            var depthNormalized = this.depthNormalized(row, column);
-            var depth = this.normalizedToModelDepth(depthNormalized);
-            return depth;
-        };
+        Object.defineProperty(DepthBuffer.prototype, "aspectRatio", {
+            //#region Properties
+            /**
+             * Returns the aspect ration of the depth buffer.
+             */
+            get: function () {
+                return this.width / this.height;
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(DepthBuffer.prototype, "minimumNormalized", {
             /**
              * Returns the minimum normalized depth value.
              */
             get: function () {
-                var minimumNormalized = Number.MAX_VALUE;
-                for (var index = 0; index < this.depths.length; index++) {
-                    var depthValue = this.depths[index];
-                    if (depthValue < minimumNormalized)
-                        minimumNormalized = depthValue;
-                }
-                return minimumNormalized;
+                return this._minimumNormalized;
             },
             enumerable: true,
             configurable: true
@@ -824,7 +791,7 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Syste
              * Returns the minimum depth value.
              */
             get: function () {
-                var minimum = this.normalizedToModelDepth(this.minimumNormalized);
+                var minimum = this.normalizedToModelDepth(this._minimumNormalized);
                 return minimum;
             },
             enumerable: true,
@@ -835,16 +802,7 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Syste
              * Returns the maximum normalized depth value.
              */
             get: function () {
-                var maximumNormalized = Number.MIN_VALUE;
-                for (var index = 0; index < this.depths.length; index++) {
-                    var depthValue = this.depths[index];
-                    // skip values at far plane
-                    if (Math_1.MathLibrary.numbersEqualWithinTolerance(depthValue, 1.0, DepthBuffer.normalizedTolerance))
-                        continue;
-                    if (depthValue > maximumNormalized)
-                        maximumNormalized = depthValue;
-                }
-                return maximumNormalized;
+                return this._maximumNormalized;
             },
             enumerable: true,
             configurable: true
@@ -865,7 +823,7 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Syste
              * Returns the normalized depth range of the buffer.
              */
             get: function () {
-                var depthNormalized = this.maximumNormalized - this.minimumNormalized;
+                var depthNormalized = this._maximumNormalized - this._minimumNormalized;
                 return depthNormalized;
             },
             enumerable: true,
@@ -876,22 +834,95 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Syste
              * Returns the normalized depth of the buffer.
              */
             get: function () {
-                var depth = this.normalizedToModelDepth(this.rangeNormalized);
+                var depth = this.maximum - this.minimum;
                 return depth;
             },
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(DepthBuffer.prototype, "aspectRatio", {
-            /**
-             * Returns the aspect ration of the depth buffer.
-             */
-            get: function () {
-                return this.width / this.height;
-            },
-            enumerable: true,
-            configurable: true
-        });
+        //#endregion
+        /**
+         * Calculate the extents of the depth buffer.
+         */
+        DepthBuffer.prototype.calculateExtents = function () {
+            this.setMinimumNormalized();
+            this.setMaximumNormalized();
+        };
+        /**
+         * Initialize
+         */
+        DepthBuffer.prototype.initialize = function () {
+            this._logger = Services_2.Services.htmlLogger;
+            this._nearClipPlane = this.camera.near;
+            this._farClipPlane = this.camera.far;
+            this._cameraClipRange = this._farClipPlane - this._nearClipPlane;
+            // RGBA -> Float32
+            this.depths = new Float32Array(this._rgbaArray.buffer);
+            // calculate extrema of depth buffer values
+            this.calculateExtents();
+        };
+        /**
+         * Convert a normalized depth [0,1] to depth in model units.
+         * @param normalizedDepth Normalized depth [0,1].
+         */
+        DepthBuffer.prototype.normalizedToModelDepth = function (normalizedDepth) {
+            // https://stackoverflow.com/questions/6652253/getting-the-true-z-value-from-the-depth-buffer
+            normalizedDepth = 2.0 * normalizedDepth - 1.0;
+            var zLinear = 2.0 * this.camera.near * this.camera.far / (this.camera.far + this.camera.near - normalizedDepth * (this.camera.far - this.camera.near));
+            /*
+                    // zLinear is the distance from the camera; reverse to yield height from mesh plane
+                    zLinear = zLinear - this.camera.near + this._cameraClipRange;
+            */
+            return zLinear;
+        };
+        /**
+         * Returns the normalized depth value at a pixel index
+         * @param row Buffer row.
+         * @param column Buffer column.
+         */
+        DepthBuffer.prototype.depthNormalized = function (row, column) {
+            var index = (row * this.width) + column;
+            return this.depths[index];
+        };
+        /**
+         * Returns the depth value at a pixel index
+         * @param row Map row.
+         * @param pixelColumn Map column.
+         */
+        DepthBuffer.prototype.depth = function (row, column) {
+            var depthNormalized = this.depthNormalized(row, column);
+            var depth = this.normalizedToModelDepth(depthNormalized);
+            return depth;
+        };
+        /**
+         * Calculates the minimum normalized depth value.
+         */
+        DepthBuffer.prototype.setMinimumNormalized = function () {
+            var minimumNormalized = Number.MAX_VALUE;
+            for (var index = 0; index < this.depths.length; index++) {
+                var depthValue = this.depths[index];
+                if (depthValue < minimumNormalized)
+                    minimumNormalized = depthValue;
+            }
+            this._minimumNormalized = minimumNormalized;
+        };
+        /**
+         * Calculates the maximum normalized depth value.
+         */
+        DepthBuffer.prototype.setMaximumNormalized = function () {
+            var maximumNormalized = Number.MIN_VALUE;
+            for (var index = 0; index < this.depths.length; index++) {
+                var depthValue = this.depths[index];
+                /*
+                            // skip values at far plane
+                            if (MathLibrary.numbersEqualWithinTolerance(depthValue, 1.0, DepthBuffer.normalizedTolerance))
+                                continue;
+                */
+                if (depthValue > maximumNormalized)
+                    maximumNormalized = depthValue;
+            }
+            this._maximumNormalized = maximumNormalized;
+        };
         /**
              * Returns the linear index of a model point in world coordinates.
              * @param worldVertex Vertex of model.
@@ -924,52 +955,7 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Syste
             return index;
         };
         /**
-         * Transforms the vertices of a mesh plane to match the depth offsets of the DB.
-         * @param meshPlane Mesh plane to transform.
-         */
-        DepthBuffer.prototype.transformMeshPlaneToMesh = function (meshPlane) {
-            var meshGeometry = meshPlane.geometry;
-            meshGeometry.computeBoundingBox();
-            var vertexCount = meshGeometry.vertices.length;
-            var clipRange = this._farClipPlane - this._nearClipPlane;
-            for (var iVertex = 0; iVertex < vertexCount; iVertex++) {
-                // calculate index of vertex in depth buffer based on view extents and camera transform
-                var vertex = meshGeometry.vertices[iVertex];
-                var depthBufferVertex = this.getModelVertexIndex(vertex, meshGeometry.boundingBox);
-                var depth = -this.depths[depthBufferVertex];
-                meshGeometry.vertices[iVertex].z = depth;
-            }
-            meshGeometry.computeFaceNormals();
-            meshGeometry.computeVertexNormals(true);
-            meshGeometry.verticesNeedUpdate = true;
-            meshGeometry.normalsNeedUpdate = true;
-        };
-        /**
-         * Constructs a mesh plane of the given base dimension.
-         * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ration.
-         * @param material Material to assign to mesh.
-         */
-        DepthBuffer.prototype.constructMeshPlane = function (modelWidth, material) {
-            var modelHeight = modelWidth * this.aspectRatio;
-            var meshGeometry = new THREE.PlaneGeometry(modelWidth, modelHeight, this.width, this.height);
-            var mesh = new THREE.Mesh(meshGeometry, material);
-            mesh.name = DepthBuffer.MeshModelName;
-            return mesh;
-        };
-        /**
-         * Constructs a mesh of the given base dimension.
-         * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ratio.
-         * @param material Material to assign to mesh.
-         */
-        DepthBuffer.prototype.meshByMeshPlane = function (modelWidth, material) {
-            if (!material)
-                material = new THREE.MeshPhongMaterial({ wireframe: false, color: 0xff00ff, reflectivity: 0.75, shininess: 0.75 });
-            // construct plane of given dimensions; resolution = depth buffer
-            var mesh = this.constructMeshPlane(modelWidth, material);
-            // tranlate mesh points to respective depths
-            this.transformMeshPlaneToMesh(mesh);
-            return mesh;
-        };
+    
         /**
          * Constructs a mesh of the given base dimension.
          * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ratio.
@@ -1015,10 +1001,10 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Syste
             // mesh center will be at the world origin
             var originX = (column * faceSize) - (meshWidth / 2);
             var originY = (row * faceSize) - (meshHeight / 2);
-            var lowerLeft = new THREE.Vector3(originX + 0, originY + 0, -this.depth(row + 0, column + 0)); // baseVertexIndex + 0
-            var lowerRight = new THREE.Vector3(originX + faceSize, originY + 0, -this.depth(row + 0, column + 1)); // baseVertexIndex + 1
-            var upperLeft = new THREE.Vector3(originX + 0, originY + faceSize, -this.depth(row + 1, column + 0)); // baseVertexIndex + 2
-            var upperRight = new THREE.Vector3(originX + faceSize, originY + faceSize, -this.depth(row + 1, column + 1)); // baseVertexIndex + 3
+            var lowerLeft = new THREE.Vector3(originX + 0, originY + 0, this.depth(row + 0, column + 0)); // baseVertexIndex + 0
+            var lowerRight = new THREE.Vector3(originX + faceSize, originY + 0, this.depth(row + 0, column + 1)); // baseVertexIndex + 1
+            var upperLeft = new THREE.Vector3(originX + 0, originY + faceSize, this.depth(row + 1, column + 0)); // baseVertexIndex + 2
+            var upperRight = new THREE.Vector3(originX + faceSize, originY + faceSize, this.depth(row + 1, column + 1)); // baseVertexIndex + 3
             facePair.vertices.push(lowerLeft, // baseVertexIndex + 0
             lowerRight, // baseVertexIndex + 1
             upperLeft, // baseVertexIndex + 2
@@ -2803,7 +2789,7 @@ define("Viewer/ModelViewer", ["require", "exports", "three", "Viewer/Viewer"], f
          * Initialize the viewer camera
          */
         ModelViewer.prototype.initializeDefaultCameraSettings = function () {
-            var useTestCamera = false;
+            var useTestCamera = true;
             var settingsOBJ = {
                 // Baseline : near = 0.1, far = 10000
                 // ZBuffer  : near = 100, far = 300
@@ -2816,8 +2802,8 @@ define("Viewer/ModelViewer", ["require", "exports", "three", "Viewer/Viewer"], f
             var settingsTestModels = {
                 position: new THREE.Vector3(0.0, 0.0, 4.0),
                 target: new THREE.Vector3(0, 0, 0),
-                near: 2.0,
-                far: 10.0,
+                near: 0.1,
+                far: 10000,
                 fieldOfView: 37 // https://www.nikonians.org/reviews/fov-tables
             };
             return useTestCamera ? settingsTestModels : settingsOBJ;
@@ -2920,10 +2906,10 @@ define("ModelRelief", ["require", "exports", "dat-gui", "DepthBuffer/DepthBuffer
             this.initializeViewerControls();
             // Loader
             this._loader = new Loader_1.Loader();
-            this._loader.loadOBJModel(this._modelViewer);
+            //      this._loader.loadOBJModel (this._modelViewer);
             //      this._loader.loadTorusModel (this._modelViewer);
             //      this._loader.loadBoxModel (this._modelViewer);
-            //      this._loader.loadSphereModel (this._modelViewer);
+            this._loader.loadSphereModel(this._modelViewer);
         };
         return ModelRelief;
     }());
