@@ -781,6 +781,7 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Syste
          * @param normalizedDepth Normalized depth [0,1].
          */
         DepthBuffer.prototype.normalizedToModelDepth = function (normalizedDepth) {
+            var modelDepth = normalizedDepth; // * this._cameraClipRange;
             return modelDepth;
         };
         /**

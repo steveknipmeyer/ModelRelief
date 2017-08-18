@@ -80,6 +80,7 @@ export class DepthBuffer {
      */
     normalizedToModelDepth(normalizedDepth : number) : number {
 
+        let modelDepth : number =  normalizedDepth // * this._cameraClipRange;
 
         return modelDepth;
     }
