@@ -20,30 +20,6 @@ import {TrackballControls}          from 'TrackballControls'
 import {UnitTests}                  from 'UnitTests'
 import {Viewer}                     from 'Viewer'
 
-/**
-     * Clone and transform an object.
-     * @param object Object to clone and transform.
-     * @param matrix Transformation matrix.
-     */
-    function cloneAndTransformObject (object : THREE.Object3D, matrix : THREE.Matrix4) : THREE.Object3D {
-
-        // clone object (and geometry!)
-        let objectClone : THREE.Object3D = object.clone();
-        objectClone.traverse(object => {
-            if (object instanceof(THREE.Mesh))
-                object.geometry = object.geometry.clone();
-        });
-
-        // N.B. Important! The postion, rotation (quaternion) and scale are correcy but the matrix has not been updated.
-        // THREE.js updates the matrix is updated in the render() loop.
-        objectClone.updateMatrix();     
-
-        // transform
-        objectClone.applyMatrix(matrix);
-
-        return objectClone;
-    }
-
     /**
      * Create a bounding box mesh.
      * @param object Target object.
@@ -81,7 +57,7 @@ export class CameraViewer extends Viewer {
         box.rotation.set(Math.random(), Math.random(), Math.random());
         box.updateMatrix();
 
-        let boxClone = cloneAndTransformObject(box, new THREE.Matrix4());
+        let boxClone = Graphics.cloneAndTransformObject(box, new THREE.Matrix4());
         this.model.add(boxClone);
 
         let sphere : THREE.Mesh = Graphics.createSphereMesh(new THREE.Vector3(4, 2, -1), 1, new THREE.MeshPhongMaterial({color : 0x00ff00}));
@@ -156,7 +132,7 @@ export class App {
         let cameraMatrixWorldInverse : THREE.Matrix4 = this._viewer.camera.matrixWorldInverse;
 
         // clone model (and geometry!)
-        let modelView = cloneAndTransformObject(model, cameraMatrixWorldInverse);
+        let modelView = Graphics.cloneAndTransformObject(model, cameraMatrixWorldInverse);
         let boundingBoxView = Graphics.getBoundingBoxFromObject(modelView);
 
         // The bounding box is world-axis aligned. 
@@ -189,7 +165,7 @@ export class App {
         model.remove(model.getObjectByName(Graphics.BoundingBoxName));
 
         // clone model (and geometry!)
-        let modelView = cloneAndTransformObject(model, cameraMatrixWorldInverse);
+        let modelView =  Graphics.cloneAndTransformObject(model, cameraMatrixWorldInverse);
 
         // clear entire scene
         Graphics.removeObjectChildren(model, false);
@@ -200,11 +176,11 @@ export class App {
         model.add(boundingBoxView);
 
         // transform model back from View to World
-        let modelWorld = cloneAndTransformObject(modelView, cameraMatrixWorld);
+        let modelWorld =  Graphics.cloneAndTransformObject(modelView, cameraMatrixWorld);
         model.add(modelWorld);
 
         // transform bounding box back from View to World
-        let boundingBoxWorld = cloneAndTransformObject(boundingBoxView, cameraMatrixWorld);
+        let boundingBoxWorld =  Graphics.cloneAndTransformObject(boundingBoxView, cameraMatrixWorld);
         model.add(boundingBoxWorld);
     }
 

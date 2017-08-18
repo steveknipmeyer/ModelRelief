@@ -66,8 +66,8 @@ export class DepthBuffer {
         
         this._logger = Services.htmlLogger;       
 
-        this._nearClipPlane = this.camera.near;
-        this._farClipPlane  = this.camera.far;
+        this._nearClipPlane   = this.camera.near;
+        this._farClipPlane    = this.camera.far;
         this._cameraClipRange = this._farClipPlane - this._nearClipPlane;
 
         // RGBA -> Float32
@@ -80,8 +80,8 @@ export class DepthBuffer {
      */
     normalizedToModelDepth(normalizedDepth : number) : number {
 
-        return normalizedDepth;
-//      return normalizedDepth * this.cameraClipRange;
+
+        return modelDepth;
     }
 
     /**
@@ -179,7 +179,7 @@ export class DepthBuffer {
      */
     get range() : number{
 
-        let depth : number = this.normalizedToModelDepth( this.rangeNormalized);
+        let depth : number = this.normalizedToModelDepth(this.rangeNormalized);
 
         return depth;
     }
@@ -394,14 +394,14 @@ export class DepthBuffer {
 
         this._logger.addMessage('Normalized', headerStyle);
         this._logger.addMessage(`Center Depth = ${this.depthNormalized(middle, middle).toFixed(decimalPlaces)}`, messageStyle);
-        this._logger.addMessage(`Z Depth = ${this.rangeNormalized.toFixed(decimalPlaces)}`, messageStyle);
+        this._logger.addMessage(`Z Range = ${this.rangeNormalized.toFixed(decimalPlaces)}`, messageStyle);
         this._logger.addMessage(`Minimum = ${this.minimumNormalized.toFixed(decimalPlaces)}`, messageStyle);
         this._logger.addMessage(`Maximum = ${this.maximumNormalized.toFixed(decimalPlaces)}`, messageStyle);
         this._logger.addEmptyLine();
 
         this._logger.addMessage('Model Units', headerStyle);
         this._logger.addMessage(`Center Depth = ${this.depth(middle, middle).toFixed(decimalPlaces)}`, messageStyle);
-        this._logger.addMessage(`Z Depth = ${this.range.toFixed(decimalPlaces)}`, messageStyle);
+        this._logger.addMessage(`Z Range = ${this.range.toFixed(decimalPlaces)}`, messageStyle);
         this._logger.addMessage(`Minimum = ${this.minimum.toFixed(decimalPlaces)}`, messageStyle);
         this._logger.addMessage(`Maximum = ${this.maximum.toFixed(decimalPlaces)}`, messageStyle);
     }

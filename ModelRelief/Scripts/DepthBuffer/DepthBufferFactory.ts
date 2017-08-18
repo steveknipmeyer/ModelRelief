@@ -363,6 +363,35 @@ export class DepthBufferFactory {
 
         this.analyzeTargets();
     }
+    /**
+     * Sets the camera clipping planes for mesh generation.
+     */
+    setCameraClippingPlanes () {
+
+        // copy camera; shared with ModelViewer
+        let camera = new THREE.PerspectiveCamera();
+        camera.copy (this._camera);
+        this._camera = camera;
+
+        let cameraMatrixWorldInverse : THREE.Matrix4 = this._camera.matrixWorldInverse;
+
+        // clone model (and geometry!)
+        let modelView       =  Graphics.cloneAndTransformObject(this._model, cameraMatrixWorldInverse);
+        let boundingBoxView = Graphics.getBoundingBoxFromObject(modelView);
+
+        // The bounding box is world-axis aligned. 
+        // In View coordinates, the camera is at the origin.
+        // The bounding near plane is the maximum Z of the bounding box.
+        // The bounding far plane is the minimum Z of the bounding box.
+        let nearPlane = -boundingBoxView.max.z;
+        let farPlane  = -boundingBoxView.min.z;
+
+        this._camera.near = nearPlane;
+        this._camera.far  = farPlane;
+
+        // WIP: Or this._viewer.updateCamera()?
+        this._camera.updateProjectionMatrix();
+   }
 
     /**
      * Generates a mesh from the active model and camera
@@ -372,7 +401,9 @@ export class DepthBufferFactory {
         
         if (!this.verifyMeshSettings()) 
             return null;
-                    
+
+        this.setCameraClippingPlanes();
+
         this.createDepthBuffer();
         let mesh = this._depthBuffer.mesh(parameters.modelWidth, parameters.material);
 

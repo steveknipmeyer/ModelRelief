@@ -304,6 +304,25 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
                 rootObject.parent.remove(rootObject);
         };
         /**
+         * Clone and transform an object.
+         * @param object Object to clone and transform.
+         * @param matrix Transformation matrix.
+         */
+        Graphics.cloneAndTransformObject = function (object, matrix) {
+            // clone object (and geometry!)
+            var objectClone = object.clone();
+            objectClone.traverse(function (object) {
+                if (object instanceof (THREE.Mesh))
+                    object.geometry = object.geometry.clone();
+            });
+            // N.B. Important! The postion, rotation (quaternion) and scale are correcy but the matrix has not been updated.
+            // THREE.js updates the matrix is updated in the render() loop.
+            objectClone.updateMatrix();
+            // transform
+            objectClone.applyMatrix(matrix);
+            return objectClone;
+        };
+        /**
          * @param position Location of bounding box.
          * @param mesh Mesh from which to create bounding box.
          * @param material Material of the bounding box.
@@ -762,8 +781,7 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Syste
          * @param normalizedDepth Normalized depth [0,1].
          */
         DepthBuffer.prototype.normalizedToModelDepth = function (normalizedDepth) {
-            return normalizedDepth;
-            //      return normalizedDepth * this.cameraClipRange;
+            return modelDepth;
         };
         /**
          * Returns the normalized depth value at a pixel index
@@ -1025,13 +1043,13 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Syste
             this._logger.addEmptyLine();
             this._logger.addMessage('Normalized', headerStyle);
             this._logger.addMessage("Center Depth = " + this.depthNormalized(middle, middle).toFixed(decimalPlaces), messageStyle);
-            this._logger.addMessage("Z Depth = " + this.rangeNormalized.toFixed(decimalPlaces), messageStyle);
+            this._logger.addMessage("Z Range = " + this.rangeNormalized.toFixed(decimalPlaces), messageStyle);
             this._logger.addMessage("Minimum = " + this.minimumNormalized.toFixed(decimalPlaces), messageStyle);
             this._logger.addMessage("Maximum = " + this.maximumNormalized.toFixed(decimalPlaces), messageStyle);
             this._logger.addEmptyLine();
             this._logger.addMessage('Model Units', headerStyle);
             this._logger.addMessage("Center Depth = " + this.depth(middle, middle).toFixed(decimalPlaces), messageStyle);
-            this._logger.addMessage("Z Depth = " + this.range.toFixed(decimalPlaces), messageStyle);
+            this._logger.addMessage("Z Range = " + this.range.toFixed(decimalPlaces), messageStyle);
             this._logger.addMessage("Minimum = " + this.minimum.toFixed(decimalPlaces), messageStyle);
             this._logger.addMessage("Maximum = " + this.maximum.toFixed(decimalPlaces), messageStyle);
         };
@@ -1090,7 +1108,7 @@ define("System/Tools", ["require", "exports"], function (require, exports) {
     JSON compatible constructor parameters
     Fixed resolution; resizing support is not required.
 */
-define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthBuffer/DepthBuffer", "System/Services", "System/Tools"], function (require, exports, THREE, DepthBuffer_1, Services_3, Tools_1) {
+define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthBuffer/DepthBuffer", "Viewer/Graphics", "System/Services", "System/Tools"], function (require, exports, THREE, DepthBuffer_1, Graphics_1, Services_3, Tools_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
@@ -1334,12 +1352,36 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthB
             this.analyzeTargets();
         };
         /**
+         * Sets the camera clipping planes for mesh generation.
+         */
+        DepthBufferFactory.prototype.setCameraClippingPlanes = function () {
+            // copy camera; shared with ModelViewer
+            var camera = new THREE.PerspectiveCamera();
+            camera.copy(this._camera);
+            this._camera = camera;
+            var cameraMatrixWorldInverse = this._camera.matrixWorldInverse;
+            // clone model (and geometry!)
+            var modelView = Graphics_1.Graphics.cloneAndTransformObject(this._model, cameraMatrixWorldInverse);
+            var boundingBoxView = Graphics_1.Graphics.getBoundingBoxFromObject(modelView);
+            // The bounding box is world-axis aligned. 
+            // In View coordinates, the camera is at the origin.
+            // The bounding near plane is the maximum Z of the bounding box.
+            // The bounding far plane is the minimum Z of the bounding box.
+            var nearPlane = -boundingBoxView.max.z;
+            var farPlane = -boundingBoxView.min.z;
+            this._camera.near = nearPlane;
+            this._camera.far = farPlane;
+            // WIP: Or this._viewer.updateCamera()?
+            this._camera.updateProjectionMatrix();
+        };
+        /**
          * Generates a mesh from the active model and camera
          * @param parameters Generation parameters (MeshGenerateParameters)
          */
         DepthBufferFactory.prototype.meshGenerate = function (parameters) {
             if (!this.verifyMeshSettings())
                 return null;
+            this.setCameraClippingPlanes();
             this.createDepthBuffer();
             var mesh = this._depthBuffer.mesh(parameters.modelWidth, parameters.material);
             return mesh;
@@ -2304,7 +2346,7 @@ define("Viewer/Materials", ["require", "exports", "three"], function (require, e
     }());
     exports.Materials = Materials;
 });
-define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControls", "Viewer/Graphics", "System/Services"], function (require, exports, THREE, TrackballControls_1, Graphics_1, Services_4) {
+define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControls", "Viewer/Graphics", "System/Services"], function (require, exports, THREE, TrackballControls_1, Graphics_2, Services_4) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -2337,11 +2379,10 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
             this._controls = null;
             this._logger = null;
             this._logger = Services_4.Services.consoleLogger;
-            this._canvas = Graphics_1.Graphics.initializeCanvas(modelCanvasId);
+            this._canvas = Graphics_2.Graphics.initializeCanvas(modelCanvasId);
             this._width = this._canvas.offsetWidth;
             this._height = this._canvas.offsetHeight;
-            var useTestCamera = true;
-            this.initialize(useTestCamera);
+            this.initialize();
             this.animate();
         }
         ;
@@ -2358,7 +2399,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
              * @param value New model to activate.
              */
             set: function (value) {
-                Graphics_1.Graphics.removeObjectChildren(this._root, false);
+                Graphics_2.Graphics.removeObjectChildren(this._root, false);
                 this._root.add(value);
             },
             enumerable: true,
@@ -2470,7 +2511,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
         /**
          * Initialize the scene with the base objects
          */
-        Viewer.prototype.initialize = function (useTestCamera) {
+        Viewer.prototype.initialize = function () {
             this.initializeScene();
             this.initializeRenderer();
             this.initializeCamera();
@@ -2486,7 +2527,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
          * Removes all scene objects
          */
         Viewer.prototype.clearAllAssests = function () {
-            Graphics_1.Graphics.removeObjectChildren(this._root, false);
+            Graphics_2.Graphics.removeObjectChildren(this._root, false);
         };
         /**
          * Creates the root object in the scene
@@ -2691,8 +2732,8 @@ define("Viewer/MeshPreviewViewer", ["require", "exports", "three", "System/Servi
             var settings = {
                 position: new THREE.Vector3(0.0, 0.0, 4.0),
                 target: new THREE.Vector3(0, 0, 0),
-                near: 2.0,
-                far: 10.0,
+                near: 0.1,
+                far: 1000.0,
                 fieldOfView: 37 // https://www.nikonians.org/reviews/fov-tables
             };
             return settings;
@@ -2971,7 +3012,7 @@ define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function 
     }());
     exports.UnitTests = UnitTests;
 });
-define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewer/Graphics", "System/Services", "Viewer/Viewer"], function (require, exports, THREE, dat, Graphics_2, Services_7, Viewer_3) {
+define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewer/Graphics", "System/Services", "Viewer/Viewer"], function (require, exports, THREE, dat, Graphics_3, Services_7, Viewer_3) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -2979,25 +3020,6 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-         * Clone and transform an object.
-         * @param object Object to clone and transform.
-         * @param matrix Transformation matrix.
-         */
-    function cloneAndTransformObject(object, matrix) {
-        // clone object (and geometry!)
-        var objectClone = object.clone();
-        objectClone.traverse(function (object) {
-            if (object instanceof (THREE.Mesh))
-                object.geometry = object.geometry.clone();
-        });
-        // N.B. Important! The postion, rotation (quaternion) and scale are correcy but the matrix has not been updated.
-        // THREE.js updates the matrix is updated in the render() loop.
-        objectClone.updateMatrix();
-        // transform
-        objectClone.applyMatrix(matrix);
-        return objectClone;
-    }
     /**
      * Create a bounding box mesh.
      * @param object Target object.
@@ -3007,7 +3029,7 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
         var boundingBox = new THREE.Box3();
         boundingBox = boundingBox.setFromObject(object);
         var material = new THREE.MeshPhongMaterial({ color: color, opacity: 1.0, wireframe: true });
-        var boundingBoxMesh = Graphics_2.Graphics.createBoundingBoxMeshFromBoundingBox(boundingBox.getCenter(), boundingBox, material);
+        var boundingBoxMesh = Graphics_3.Graphics.createBoundingBoxMeshFromBoundingBox(boundingBox.getCenter(), boundingBox, material);
         return boundingBoxMesh;
     }
     /**
@@ -3030,14 +3052,14 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
             configurable: true
         });
         CameraViewer.prototype.populateScene = function () {
-            var triad = Graphics_2.Graphics.createWorldAxesTriad(new THREE.Vector3(), 1, 0.25, 0.25);
+            var triad = Graphics_3.Graphics.createWorldAxesTriad(new THREE.Vector3(), 1, 0.25, 0.25);
             this._scene.add(triad);
-            var box = Graphics_2.Graphics.createBoxMesh(new THREE.Vector3(1, 1, -2), 1, 2, 2, new THREE.MeshPhongMaterial({ color: 0xff0000 }));
+            var box = Graphics_3.Graphics.createBoxMesh(new THREE.Vector3(1, 1, -2), 1, 2, 2, new THREE.MeshPhongMaterial({ color: 0xff0000 }));
             box.rotation.set(Math.random(), Math.random(), Math.random());
             box.updateMatrix();
-            var boxClone = cloneAndTransformObject(box, new THREE.Matrix4());
+            var boxClone = Graphics_3.Graphics.cloneAndTransformObject(box, new THREE.Matrix4());
             this.model.add(boxClone);
-            var sphere = Graphics_2.Graphics.createSphereMesh(new THREE.Vector3(4, 2, -1), 1, new THREE.MeshPhongMaterial({ color: 0x00ff00 }));
+            var sphere = Graphics_3.Graphics.createSphereMesh(new THREE.Vector3(4, 2, -1), 1, new THREE.MeshPhongMaterial({ color: 0x00ff00 }));
             this.model.add(sphere);
         };
         /**
@@ -3087,8 +3109,8 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
             var model = this._viewer.model;
             var cameraMatrixWorldInverse = this._viewer.camera.matrixWorldInverse;
             // clone model (and geometry!)
-            var modelView = cloneAndTransformObject(model, cameraMatrixWorldInverse);
-            var boundingBoxView = Graphics_2.Graphics.getBoundingBoxFromObject(modelView);
+            var modelView = Graphics_3.Graphics.cloneAndTransformObject(model, cameraMatrixWorldInverse);
+            var boundingBoxView = Graphics_3.Graphics.getBoundingBoxFromObject(modelView);
             // The bounding box is world-axis aligned. 
             // INv View coordinates, the camera is at the origin.
             // The bounding near plane is the maximum Z of the bounding box.
@@ -3110,19 +3132,19 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
             var cameraMatrixWorld = this._viewer.camera.matrixWorld;
             var cameraMatrixWorldInverse = this._viewer.camera.matrixWorldInverse;
             // remove existing BoundingBox
-            model.remove(model.getObjectByName(Graphics_2.Graphics.BoundingBoxName));
+            model.remove(model.getObjectByName(Graphics_3.Graphics.BoundingBoxName));
             // clone model (and geometry!)
-            var modelView = cloneAndTransformObject(model, cameraMatrixWorldInverse);
+            var modelView = Graphics_3.Graphics.cloneAndTransformObject(model, cameraMatrixWorldInverse);
             // clear entire scene
-            Graphics_2.Graphics.removeObjectChildren(model, false);
+            Graphics_3.Graphics.removeObjectChildren(model, false);
             model.add(modelView);
             var boundingBoxView = createBoundingBox(modelView, 0xff00ff);
             model.add(boundingBoxView);
             // transform model back from View to World
-            var modelWorld = cloneAndTransformObject(modelView, cameraMatrixWorld);
+            var modelWorld = Graphics_3.Graphics.cloneAndTransformObject(modelView, cameraMatrixWorld);
             model.add(modelWorld);
             // transform bounding box back from View to World
-            var boundingBoxWorld = cloneAndTransformObject(boundingBoxView, cameraMatrixWorld);
+            var boundingBoxWorld = Graphics_3.Graphics.cloneAndTransformObject(boundingBoxView, cameraMatrixWorld);
             model.add(boundingBoxWorld);
         };
         /**

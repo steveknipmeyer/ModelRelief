@@ -50,8 +50,8 @@ export class MeshPreviewViewer extends Viewer {
 
             position:       new THREE.Vector3(0.0, 0.0, 4.0),
             target:         new THREE.Vector3(0, 0, 0),
-            near:           2.0,
-            far:            10.0,
+            near:           0.1,
+            far:         1000.0,
             fieldOfView:    37                                  // https://www.nikonians.org/reviews/fov-tables
         };
         

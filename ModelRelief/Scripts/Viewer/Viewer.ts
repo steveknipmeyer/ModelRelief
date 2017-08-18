@@ -51,8 +51,7 @@ export class Viewer {
         this._width  = this._canvas.offsetWidth;
         this._height = this._canvas.offsetHeight;
 
-        let useTestCamera = true;
-        this.initialize(useTestCamera);
+        this.initialize();
 
         this.animate();
     }
@@ -208,7 +207,7 @@ export class Viewer {
     /**
      * Initialize the scene with the base objects
      */
-    initialize (useTestCamera : boolean) {
+    initialize () {
 
         this.initializeScene();
         this.initializeRenderer();

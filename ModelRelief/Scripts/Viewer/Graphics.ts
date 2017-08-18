@@ -96,6 +96,30 @@ export class Graphics {
     } 
 
     /**
+     * Clone and transform an object.
+     * @param object Object to clone and transform.
+     * @param matrix Transformation matrix.
+     */
+    static cloneAndTransformObject (object : THREE.Object3D, matrix : THREE.Matrix4) : THREE.Object3D {
+
+        // clone object (and geometry!)
+        let objectClone : THREE.Object3D = object.clone();
+        objectClone.traverse(object => {
+            if (object instanceof(THREE.Mesh))
+                object.geometry = object.geometry.clone();
+        });
+
+        // N.B. Important! The postion, rotation (quaternion) and scale are correcy but the matrix has not been updated.
+        // THREE.js updates the matrix is updated in the render() loop.
+        objectClone.updateMatrix();     
+
+        // transform
+        objectClone.applyMatrix(matrix);
+
+        return objectClone;
+    }
+
+    /**
      * @param position Location of bounding box.
      * @param mesh Mesh from which to create bounding box.
      * @param material Material of the bounding box.
