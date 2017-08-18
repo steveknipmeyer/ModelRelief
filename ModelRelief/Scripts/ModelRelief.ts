@@ -108,10 +108,10 @@ export class ModelRelief {
         // Loader
         this._loader = new Loader();
 
-        this._loader.loadOBJModel (this._modelViewer);
+//      this._loader.loadOBJModel (this._modelViewer);
 //      this._loader.loadTorusModel (this._modelViewer);
 //      this._loader.loadBoxModel (this._modelViewer);
-//      this._loader.loadSphereModel (this._modelViewer);
+        this._loader.loadSphereModel (this._modelViewer);
     }
 }
 

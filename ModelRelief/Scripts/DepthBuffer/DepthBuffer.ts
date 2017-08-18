@@ -31,14 +31,17 @@ export class DepthBuffer {
     _logger : Logger;
 
     _rgbaArray : Uint8Array;
-    depths    : Float32Array;
-    width     : number;
-    height    : number;
+    depths     : Float32Array;
+    width      : number;
+    height     : number;
 
-    camera          : THREE.PerspectiveCamera;
+    camera           : THREE.PerspectiveCamera;
     _nearClipPlane   : number;
     _farClipPlane    : number;
     _cameraClipRange : number;
+    
+    _minimumNormalized : number;
+    _maximumNormalized : number;
 
     /**
      * @constructor
@@ -59,6 +62,81 @@ export class DepthBuffer {
         this.initialize();
     }
 
+    //#region Properties
+    /**
+     * Returns the aspect ration of the depth buffer.
+     */
+    get aspectRatio () : number {
+
+        return this.width / this.height;
+    }
+
+    /**
+     * Returns the minimum normalized depth value.
+     */
+    get minimumNormalized () : number{
+
+        return this._minimumNormalized;
+    }
+
+    /**
+     * Returns the minimum depth value.
+     */
+    get minimum() : number{
+
+        let minimum = this.normalizedToModelDepth(this._minimumNormalized);
+
+        return minimum;
+    }
+
+    /**
+     * Returns the maximum normalized depth value.
+     */
+    get maximumNormalized () : number{
+
+        return this._maximumNormalized;
+    }
+
+    /**
+     * Returns the maximum depth value.
+     */
+    get maximum() : number{
+
+        let maximum = this.normalizedToModelDepth(this.maximumNormalized);
+
+        return maximum;
+    }
+
+    /**
+     * Returns the normalized depth range of the buffer.
+     */
+    get rangeNormalized() : number{
+
+        let depthNormalized : number = this._maximumNormalized - this._minimumNormalized;
+
+        return depthNormalized;
+    }
+
+    /**
+     * Returns the normalized depth of the buffer.
+     */
+    get range() : number{
+
+        let depth : number = this.maximum - this.minimum;
+
+        return depth;
+    }
+    //#endregion
+
+    /**
+     * Calculate the extents of the depth buffer.
+     */       
+    calculateExtents () {
+
+        this.setMinimumNormalized();        
+        this.setMaximumNormalized();        
+    }
+
     /**
      * Initialize
      */       
@@ -72,6 +150,9 @@ export class DepthBuffer {
 
         // RGBA -> Float32
         this.depths = new Float32Array(this._rgbaArray.buffer);
+        
+        // calculate extrema of depth buffer values
+        this.calculateExtents();
     }
 
     /**
@@ -80,9 +161,15 @@ export class DepthBuffer {
      */
     normalizedToModelDepth(normalizedDepth : number) : number {
 
-        let modelDepth : number =  normalizedDepth // * this._cameraClipRange;
+        // https://stackoverflow.com/questions/6652253/getting-the-true-z-value-from-the-depth-buffer
+        normalizedDepth = 2.0 * normalizedDepth - 1.0;
+        let zLinear = 2.0 * this.camera.near * this.camera.far / (this.camera.far + this.camera.near - normalizedDepth * (this.camera.far - this.camera.near));
 
-        return modelDepth;
+/*
+        // zLinear is the distance from the camera; reverse to yield height from mesh plane
+        zLinear = zLinear - this.camera.near + this._cameraClipRange;
+*/
+        return zLinear;
     }
 
     /**
@@ -110,9 +197,9 @@ export class DepthBuffer {
     }
 
     /**
-     * Returns the minimum normalized depth value.
+     * Calculates the minimum normalized depth value.
      */
-    get minimumNormalized() : number{
+    setMinimumNormalized() {
 
         let minimumNormalized : number = Number.MAX_VALUE;
         for (let index: number = 0; index < this.depths.length; index++)
@@ -122,75 +209,29 @@ export class DepthBuffer {
             if (depthValue < minimumNormalized)
                 minimumNormalized = depthValue;
             }
-        return minimumNormalized;
+
+        this._minimumNormalized = minimumNormalized;
     }
 
     /**
-     * Returns the minimum depth value.
+     * Calculates the maximum normalized depth value.
      */
-    get minimum() : number{
-
-        let minimum = this.normalizedToModelDepth(this.minimumNormalized);
-
-        return minimum;
-    }
-
-    /**
-     * Returns the maximum normalized depth value.
-     */
-    get maximumNormalized() : number{
+    setMaximumNormalized() {
 
         let maximumNormalized : number = Number.MIN_VALUE;
         for (let index: number = 0; index < this.depths.length; index++)
             {
             let depthValue : number = this.depths[index];
-
+/*
             // skip values at far plane
             if (MathLibrary.numbersEqualWithinTolerance(depthValue, 1.0, DepthBuffer.normalizedTolerance))
                 continue;
-
+*/
             if (depthValue > maximumNormalized)
                 maximumNormalized = depthValue;
             }
-        return maximumNormalized;
-    }
 
-    /**
-     * Returns the maximum depth value.
-     */
-    get maximum() : number{
-
-        let maximum = this.normalizedToModelDepth(this.maximumNormalized);
-
-        return maximum;
-    }
-
-    /**
-     * Returns the normalized depth range of the buffer.
-     */
-    get rangeNormalized() : number{
-
-        let depthNormalized : number = this.maximumNormalized - this.minimumNormalized;
-
-        return depthNormalized;
-    }
-
-    /**
-     * Returns the normalized depth of the buffer.
-     */
-    get range() : number{
-
-        let depth : number = this.normalizedToModelDepth(this.rangeNormalized);
-
-        return depth;
-    }
-
-    /**
-     * Returns the aspect ration of the depth buffer.
-     */
-        get aspectRatio () : number {
-
-        return this.width / this.height;
+        this._maximumNormalized = maximumNormalized;
     }
 
 /**
@@ -234,67 +275,6 @@ export class DepthBuffer {
         return index;
     }
     /**
-     * Transforms the vertices of a mesh plane to match the depth offsets of the DB.
-     * @param meshPlane Mesh plane to transform.
-     */
-    transformMeshPlaneToMesh (meshPlane : THREE.Mesh) {
-
-        let meshGeometry : THREE.Geometry = <THREE.Geometry> meshPlane.geometry;
-        meshGeometry.computeBoundingBox();
-
-        let vertexCount : number = meshGeometry.vertices.length;
-        let clipRange   : number = this._farClipPlane - this._nearClipPlane;
-        for (let iVertex : number = 0; iVertex < vertexCount; iVertex++) {
-
-            // calculate index of vertex in depth buffer based on view extents and camera transform
-            let vertex = meshGeometry.vertices[iVertex];
-            let depthBufferVertex = this.getModelVertexIndex (vertex, meshGeometry.boundingBox);
-
-            var depth = -this.depths[depthBufferVertex];
-            meshGeometry.vertices[iVertex].z = depth;
-        }
-
-        meshGeometry.computeFaceNormals();
-        meshGeometry.computeVertexNormals(true);
-
-        meshGeometry.verticesNeedUpdate = true;
-        meshGeometry.normalsNeedUpdate = true;
-    }
-
-    /**
-     * Constructs a mesh plane of the given base dimension.
-     * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ration.
-     * @param material Material to assign to mesh.
-     */
-    constructMeshPlane (modelWidth : number, material : THREE.Material) : THREE.Mesh {
-
-        let modelHeight = modelWidth * this.aspectRatio;
-
-        let meshGeometry = new THREE.PlaneGeometry(modelWidth, modelHeight, this.width, this.height);
-        let mesh         = new THREE.Mesh(meshGeometry, material);
-        mesh.name = DepthBuffer.MeshModelName;
-
-        return mesh;
-    }
-
-    /**
-     * Constructs a mesh of the given base dimension.
-     * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ratio.
-     * @param material Material to assign to mesh.
-     */
-    meshByMeshPlane (modelWidth : number, material? : THREE.Material) : THREE.Mesh {
-
-        if (!material)
-            material = new THREE.MeshPhongMaterial({wireframe : false, color : 0xff00ff, reflectivity : 0.75, shininess : 0.75});
-
-        // construct plane of given dimensions; resolution = depth buffer
-        let mesh : THREE.Mesh = this.constructMeshPlane(modelWidth, material);
-
-        // tranlate mesh points to respective depths
-        this.transformMeshPlaneToMesh(mesh);
-
-        return mesh;
-    }
 
     /**
      * Constructs a mesh of the given base dimension.
@@ -355,10 +335,10 @@ export class DepthBuffer {
         let originX : number = (column * faceSize) - (meshWidth / 2);
         let originY : number = (row    * faceSize) - (meshHeight / 2);
 
-        let lowerLeft   = new THREE.Vector3(originX + 0,         originY + 0,        -this.depth(row + 0, column+ 0));             // baseVertexIndex + 0
-        let lowerRight  = new THREE.Vector3(originX + faceSize,  originY + 0,        -this.depth(row + 0, column + 1));            // baseVertexIndex + 1
-        let upperLeft   = new THREE.Vector3(originX + 0,         originY + faceSize, -this.depth(row + 1, column + 0));            // baseVertexIndex + 2
-        let upperRight  = new THREE.Vector3(originX + faceSize,  originY + faceSize, -this.depth(row + 1, column + 1));            // baseVertexIndex + 3
+        let lowerLeft   = new THREE.Vector3(originX + 0,         originY + 0,        this.depth(row + 0, column+ 0));             // baseVertexIndex + 0
+        let lowerRight  = new THREE.Vector3(originX + faceSize,  originY + 0,        this.depth(row + 0, column + 1));            // baseVertexIndex + 1
+        let upperLeft   = new THREE.Vector3(originX + 0,         originY + faceSize, this.depth(row + 1, column + 0));            // baseVertexIndex + 2
+        let upperRight  = new THREE.Vector3(originX + faceSize,  originY + faceSize, this.depth(row + 1, column + 1));            // baseVertexIndex + 3
 
         facePair.vertices.push(
              lowerLeft,             // baseVertexIndex + 0

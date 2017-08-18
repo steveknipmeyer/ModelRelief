@@ -93,12 +93,14 @@ float readDepth (sampler2D depthSampler, vec2 uvCoordinate) {
 /// </summary>
 void main() {
 
-    vec3 normal = normalize(vNormal);
+    vec3 normal = normalize(vNormal); 
     vec3 viewPosition = normalize(vViewPosition);
 
     vec3 diffuse = texture2D(tDiffuse, vUV).rgb;
 
-    float depth = readDepth(tDepth, vUV);
+//  float depth = readDepth(tDepth, vUV);
+    float depth = texture2D(tDepth, vUV).x;
+
     gl_FragColor = encode_float(depth);
 
 #if defined (DEBUG)

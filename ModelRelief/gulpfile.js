@@ -244,9 +244,9 @@ gulp.task('buildShaders', function() {
     generateShaders();
 });
 
-/// <summary>
+/// <summary> 
 /// Default build task
-/// </summary>
+/// </summary> 
 gulp.task('default', function () {
   runSequence('copyNPM', 'buildShaders');
 });

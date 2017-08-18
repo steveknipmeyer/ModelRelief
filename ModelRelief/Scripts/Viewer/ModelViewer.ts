@@ -61,7 +61,7 @@ export class ModelViewer extends Viewer {
      */
     initializeDefaultCameraSettings () : CameraSettings {
 
-        let useTestCamera : boolean = false;
+        let useTestCamera : boolean = true;
         let settingsOBJ : CameraSettings = {
             // Baseline : near = 0.1, far = 10000
             // ZBuffer  : near = 100, far = 300
@@ -77,8 +77,8 @@ export class ModelViewer extends Viewer {
 
             position:       new THREE.Vector3(0.0, 0.0, 4.0),
             target:         new THREE.Vector3(0, 0, 0),
-            near:           2.0,
-            far:            10.0,
+            near:           0.1,
+            far:            10000,
             fieldOfView:    37                                  // https://www.nikonians.org/reviews/fov-tables
         };
 
