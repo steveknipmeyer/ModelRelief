@@ -27,6 +27,9 @@ export interface CameraSettings {
 export class Graphics {
 
     static BoundingBoxName     : string = 'Bounding Box';
+    static BoxName             : string = 'Box';
+    static SphereName          : string = 'Sphere';
+    static TriadName           : string = 'Triad';
 
     /**
      * @constructor
@@ -44,9 +47,9 @@ export class Graphics {
      * @param scene Scene holding object to be removed.
      * @param rootObject Parent object (possibly with children).
      */
-    static removeSceneObjectChildren(scene : THREE.Scene, rootObject : THREE.Object3D, removeRoot : boolean) {
+    static removeObjectChildren(rootObject : THREE.Object3D, removeRoot : boolean) {
 
-        if (!scene || !rootObject)
+        if (!rootObject)
             return;
 
         let logger  = Services.consoleLogger;
@@ -57,8 +60,6 @@ export class Graphics {
             }
 
             logger.addInfoMessage ('Removing: ' + object3d.name);
-            scene.remove(object3d);
-
             if (object3d.hasOwnProperty('geometry')) {
                 object3d.geometry.dispose();
             }
@@ -80,18 +81,18 @@ export class Graphics {
                 object3d.texture.dispose();
             }
         };
-        // remove root children from scene
+
         rootObject.traverse(remover);
 
-        // remove root children from root
-        for (let iChild : number = 0; iChild < rootObject.children.length; iChild++) {
+        // remove root children from root (backwards!)
+        for (let iChild : number = (rootObject.children.length - 1); iChild >= 0; iChild--) {
 
             let child : THREE.Object3D = rootObject.children[iChild];
             rootObject.remove (child);
         }
 
-        if (removeRoot)
-            scene.remove(rootObject);
+        if (removeRoot && rootObject.parent)
+            rootObject.parent.remove(rootObject);
     } 
 
     /**
@@ -111,7 +112,7 @@ export class Graphics {
         geometry.computeBoundingBox();
         boundingBox = geometry.boundingBox;
 
-        boxMesh = this.createBoundingBoxMeshFromBox (position, boundingBox, material);
+        boxMesh = this.createBoundingBoxMeshFromBoundingBox (position, boundingBox, material);
 
         return boxMesh;
     }
@@ -122,7 +123,7 @@ export class Graphics {
      * @param material Material of the box.
      * @ returns Mesh of the box.
      */
-    static createBoundingBoxMeshFromBox(position : THREE.Vector3, boundingBox : THREE.Box3, material : THREE.Material) : THREE.Mesh {
+    static createBoundingBoxMeshFromBoundingBox(position : THREE.Vector3, boundingBox : THREE.Box3, material : THREE.Material) : THREE.Mesh {
 
         var width           : number,
             height          : number,
@@ -143,6 +144,7 @@ export class Graphics {
      * Gets the extends of an object optionally including all children.
      */
     static getBoundingBoxFromObject(rootObject : THREE.Object3D) : THREE.Box3 {
+
         // https://stackoverflow.com/questions/15492857/any-way-to-get-a-bounding-box-from-a-three-js-object3d
         let boundingBox : THREE.Box3 = null;
         boundingBox = boundingBox.setFromObject(rootObject);
@@ -172,6 +174,7 @@ export class Graphics {
         boxMaterial = material || new THREE.MeshPhongMaterial( { color: 0x0000ff, opacity: 1.0} );
 
         box = new THREE.Mesh( boxGeometry, boxMaterial);
+        box.name = Graphics.BoxName;
         box.position.copy(position);
 
         return box;
@@ -196,6 +199,7 @@ export class Graphics {
         sphereMaterial = material || new THREE.MeshPhongMaterial({ color: 0xff0000, opacity: 1.0} );
 
         sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+        sphere.name = Graphics.SphereName;
         sphere.position.copy(position);
 
         return sphere;

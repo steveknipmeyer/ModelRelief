@@ -72,7 +72,7 @@ export class Viewer {
      */
     set model(value : THREE.Group) {
 
-        Graphics.removeSceneObjectChildren(this._scene, this._root, false);
+        Graphics.removeObjectChildren(this._root, false);
         this._root.add(value);
     }
 
@@ -188,6 +188,24 @@ export class Viewer {
     }
 
     /**
+     * Sets up the keyboard shortcuts.
+     */
+    initializeKeyboardShortcuts() {
+
+        document.addEventListener('keyup', (event : KeyboardEvent) => {
+
+            // https://css-tricks.com/snippets/javascript/javascript-keycodes/
+            let keyCode : number = event.keyCode;
+            switch (keyCode) {
+
+                case 70:                // F                    
+                    this.resetCamera();
+                    break;
+            }
+            }, false);
+    }
+
+    /**
      * Initialize the scene with the base objects
      */
     initialize (useTestCamera : boolean) {
@@ -197,6 +215,7 @@ export class Viewer {
         this.initializeCamera();
         this.initializeLighting();
         this.initializeInputControls();
+        this.initializeKeyboardShortcuts();
 
         this.onResizeWindow();
         window.addEventListener('resize', this.onResizeWindow.bind(this), false);
@@ -209,7 +228,7 @@ export class Viewer {
      */
     clearAllAssests() {
         
-        Graphics.removeSceneObjectChildren(this._scene, this._root, false);
+        Graphics.removeObjectChildren(this._root, false);
     } 
 
     /**
@@ -231,6 +250,7 @@ export class Viewer {
     resetCamera() {
 
         this._camera.position.copy(this._defaultCameraSettings.position);
+        this._camera.up.set(0, 1, 0);
         this.updateCamera();
     }
 //#endregion

@@ -267,8 +267,8 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
          * @param scene Scene holding object to be removed.
          * @param rootObject Parent object (possibly with children).
          */
-        Graphics.removeSceneObjectChildren = function (scene, rootObject, removeRoot) {
-            if (!scene || !rootObject)
+        Graphics.removeObjectChildren = function (rootObject, removeRoot) {
+            if (!rootObject)
                 return;
             var logger = Services_1.Services.consoleLogger;
             var remover = function (object3d) {
@@ -276,7 +276,6 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
                     return;
                 }
                 logger.addInfoMessage('Removing: ' + object3d.name);
-                scene.remove(object3d);
                 if (object3d.hasOwnProperty('geometry')) {
                     object3d.geometry.dispose();
                 }
@@ -295,15 +294,14 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
                     object3d.texture.dispose();
                 }
             };
-            // remove root children from scene
             rootObject.traverse(remover);
-            // remove root children from root
-            for (var iChild = 0; iChild < rootObject.children.length; iChild++) {
+            // remove root children from root (backwards!)
+            for (var iChild = (rootObject.children.length - 1); iChild >= 0; iChild--) {
                 var child = rootObject.children[iChild];
                 rootObject.remove(child);
             }
-            if (removeRoot)
-                scene.remove(rootObject);
+            if (removeRoot && rootObject.parent)
+                rootObject.parent.remove(rootObject);
         };
         /**
          * @param position Location of bounding box.
@@ -315,7 +313,7 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
             var boundingBox, width, height, depth, boxMesh;
             geometry.computeBoundingBox();
             boundingBox = geometry.boundingBox;
-            boxMesh = this.createBoundingBoxMeshFromBox(position, boundingBox, material);
+            boxMesh = this.createBoundingBoxMeshFromBoundingBox(position, boundingBox, material);
             return boxMesh;
         };
         /**
@@ -324,7 +322,7 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
          * @param material Material of the box.
          * @ returns Mesh of the box.
          */
-        Graphics.createBoundingBoxMeshFromBox = function (position, boundingBox, material) {
+        Graphics.createBoundingBoxMeshFromBoundingBox = function (position, boundingBox, material) {
             var width, height, depth, boxMesh;
             width = boundingBox.max.x - boundingBox.min.x;
             height = boundingBox.max.y - boundingBox.min.y;
@@ -357,6 +355,7 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
             boxGeometry.computeBoundingBox();
             boxMaterial = material || new THREE.MeshPhongMaterial({ color: 0x0000ff, opacity: 1.0 });
             box = new THREE.Mesh(boxGeometry, boxMaterial);
+            box.name = Graphics.BoxName;
             box.position.copy(position);
             return box;
         };
@@ -373,6 +372,7 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
             sphereGeometry.computeBoundingBox();
             sphereMaterial = material || new THREE.MeshPhongMaterial({ color: 0xff0000, opacity: 1.0 });
             sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            sphere.name = Graphics.SphereName;
             sphere.position.copy(position);
             return sphere;
         };
@@ -678,6 +678,9 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
             return canvas;
         };
         Graphics.BoundingBoxName = 'Bounding Box';
+        Graphics.BoxName = 'Box';
+        Graphics.SphereName = 'Sphere';
+        Graphics.TriadName = 'Triad';
         return Graphics;
     }());
     exports.Graphics = Graphics;
@@ -2355,7 +2358,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
              * @param value New model to activate.
              */
             set: function (value) {
-                Graphics_1.Graphics.removeSceneObjectChildren(this._scene, this._root, false);
+                Graphics_1.Graphics.removeObjectChildren(this._root, false);
                 this._root.add(value);
             },
             enumerable: true,
@@ -2450,6 +2453,21 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
             this._controls = new TrackballControls_1.TrackballControls(this._camera, this._renderer.domElement);
         };
         /**
+         * Sets up the keyboard shortcuts.
+         */
+        Viewer.prototype.initializeKeyboardShortcuts = function () {
+            var _this = this;
+            document.addEventListener('keyup', function (event) {
+                // https://css-tricks.com/snippets/javascript/javascript-keycodes/
+                var keyCode = event.keyCode;
+                switch (keyCode) {
+                    case 70:// F                    
+                        _this.resetCamera();
+                        break;
+                }
+            }, false);
+        };
+        /**
          * Initialize the scene with the base objects
          */
         Viewer.prototype.initialize = function (useTestCamera) {
@@ -2458,6 +2476,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
             this.initializeCamera();
             this.initializeLighting();
             this.initializeInputControls();
+            this.initializeKeyboardShortcuts();
             this.onResizeWindow();
             window.addEventListener('resize', this.onResizeWindow.bind(this), false);
         };
@@ -2467,7 +2486,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
          * Removes all scene objects
          */
         Viewer.prototype.clearAllAssests = function () {
-            Graphics_1.Graphics.removeSceneObjectChildren(this._scene, this._root, false);
+            Graphics_1.Graphics.removeObjectChildren(this._root, false);
         };
         /**
          * Creates the root object in the scene
@@ -2484,6 +2503,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
          */
         Viewer.prototype.resetCamera = function () {
             this._camera.position.copy(this._defaultCameraSettings.position);
+            this._camera.up.set(0, 1, 0);
             this.updateCamera();
         };
         //#endregion
@@ -2960,6 +2980,34 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
+         * Clone and transform an object.
+         * @param object Object to clone and transform.
+         * @param matrix Transformation matrix.
+         */
+    function cloneAndTransformObject(object, matrix) {
+        // clone object (and geometry!)
+        var objectClone = object.clone();
+        objectClone.traverse(function (object) {
+            if (object instanceof (THREE.Mesh))
+                object.geometry = object.geometry.clone();
+        });
+        // transform
+        objectClone.applyMatrix(matrix);
+        return objectClone;
+    }
+    /**
+     * Create a bounding box mesh.
+     * @param object Target object.
+     * @param color Color of bounding box mesh.
+     */
+    function createBoundingBox(object, color) {
+        var boundingBox = new THREE.Box3();
+        boundingBox = boundingBox.setFromObject(object);
+        var material = new THREE.MeshPhongMaterial({ color: color, opacity: 1.0, wireframe: true });
+        var boundingBoxMesh = Graphics_2.Graphics.createBoundingBoxMeshFromBoundingBox(boundingBox.getCenter(), boundingBox, material);
+        return boundingBoxMesh;
+    }
+    /**
      * @class
      * CameraWorkbench
      */
@@ -2983,7 +3031,9 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
             this._scene.add(triad);
             var box = Graphics_2.Graphics.createBoxMesh(new THREE.Vector3(1, 1, -2), 1, 2, 2, new THREE.MeshPhongMaterial({ color: 0xff0000 }));
             box.rotation.set(Math.random(), Math.random(), Math.random());
-            this.model.add(box);
+            box.updateMatrix();
+            var boxClone = cloneAndTransformObject(box, new THREE.Matrix4());
+            this.model.add(boxClone);
             var sphere = Graphics_2.Graphics.createSphereMesh(new THREE.Vector3(4, 2, -1), 1, new THREE.MeshPhongMaterial({ color: 0x00ff00 }));
             this.model.add(sphere);
         };
@@ -3017,37 +3067,25 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
          * Transform the model by camera inverse.
          */
         App.prototype.transformModel = function () {
-            var camera = this._viewer.camera;
-            this._logger.addInfoMessage("camera.position = " + camera.position.x + ", " + camera.position.y + ", " + camera.position.z);
             var model = this._viewer.model;
+            var cameraMatrixWorld = this._viewer.camera.matrixWorld;
+            var cameraMatrixWorldInverse = this._viewer.camera.matrixWorldInverse;
             // remove existing BoundingBox
             model.remove(model.getObjectByName(Graphics_2.Graphics.BoundingBoxName));
             // clone model (and geometry!)
-            var modelClone = model.clone();
-            modelClone.traverse(function (object) {
-                if (object instanceof (THREE.Mesh))
-                    object.geometry = object.geometry.clone();
-            });
-            var cameraMatrixWorldInverse = this._viewer.camera.matrixWorldInverse;
-            modelClone.applyMatrix(cameraMatrixWorldInverse);
-            var modelBoundingBox = new THREE.Box3();
-            modelBoundingBox = modelBoundingBox.setFromObject(modelClone);
-            var cameraMatrixWorld = this._viewer.camera.matrixWorld;
-            modelBoundingBox.applyMatrix4(cameraMatrixWorld);
-            var material = new THREE.MeshPhongMaterial({ color: 0xff0000, opacity: 1.0, wireframe: true });
-            var boundingBox = Graphics_2.Graphics.createBoundingBoxMeshFromBox(modelBoundingBox.getCenter(), modelBoundingBox, material);
-            /*
-                    // rotate to align with camera line
-                    let cameraRotationMatrix : THREE.Matrix4 = new THREE.Matrix4();
-                    cameraRotationMatrix.extractRotation(this._viewer.camera.matrix);
-                    boundingBox.applyMatrix(cameraRotationMatrix);
-            
-            
-                    // translate by camera position
-                    boundingBox.position.add(this._viewer.camera.position);
-            */
-            // add new BoundingBox
-            model.add(boundingBox);
+            var modelView = cloneAndTransformObject(model, cameraMatrixWorldInverse);
+            // clear entire scene
+            Graphics_2.Graphics.removeObjectChildren(model, false);
+            model.add(modelView);
+            var boundingBoxView = createBoundingBox(modelView, 0xff00ff);
+            boundingBoxView.updateMatrix();
+            model.add(boundingBoxView);
+            // transform model back from View to World
+            var modelWorld = cloneAndTransformObject(modelView, cameraMatrixWorld);
+            model.add(modelWorld);
+            // transform bounding box back from View to World
+            var boundingBoxWorld = cloneAndTransformObject(boundingBoxView, cameraMatrixWorld);
+            model.add(boundingBoxWorld);
         };
         /**
          * Initialize the view settings that are controllable by the user
