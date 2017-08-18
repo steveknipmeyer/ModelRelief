@@ -336,7 +336,7 @@ define("Viewer/Graphics", ["require", "exports", "three", "System/Services"], fu
          */
         Graphics.getBoundingBoxFromObject = function (rootObject) {
             // https://stackoverflow.com/questions/15492857/any-way-to-get-a-bounding-box-from-a-three-js-object3d
-            var boundingBox = null;
+            var boundingBox = new THREE.Box3();
             boundingBox = boundingBox.setFromObject(rootObject);
             return boundingBox;
         };
@@ -2991,6 +2991,9 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
             if (object instanceof (THREE.Mesh))
                 object.geometry = object.geometry.clone();
         });
+        // N.B. Important! The postion, rotation (quaternion) and scale are correcy but the matrix has not been updated.
+        // THREE.js updates the matrix is updated in the render() loop.
+        objectClone.updateMatrix();
         // transform
         objectClone.applyMatrix(matrix);
         return objectClone;
@@ -3055,6 +3058,20 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
     exports.CameraViewer = CameraViewer;
     /**
      * @class
+     * ViewerControls
+     */
+    var ViewerControls = (function () {
+        function ViewerControls(camera, showBoundingBoxes, setClippingPlanes) {
+            this.nearClippingPlane = camera.near;
+            this.farClippingPlane = camera.far;
+            this.fieldOfView = camera.fov;
+            this.showBoundingBoxes = showBoundingBoxes;
+            this.setClippingPlanes = setClippingPlanes;
+        }
+        return ViewerControls;
+    }());
+    /**
+     * @class
      * App
      */
     var App = (function () {
@@ -3064,9 +3081,31 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
         function App() {
         }
         /**
-         * Transform the model by camera inverse.
+         * Set the camera clipping planes to the model extents in View coordinates.
          */
-        App.prototype.transformModel = function () {
+        App.prototype.setClippingPlanes = function () {
+            var model = this._viewer.model;
+            var cameraMatrixWorldInverse = this._viewer.camera.matrixWorldInverse;
+            // clone model (and geometry!)
+            var modelView = cloneAndTransformObject(model, cameraMatrixWorldInverse);
+            var boundingBoxView = Graphics_2.Graphics.getBoundingBoxFromObject(modelView);
+            // The bounding box is world-axis aligned. 
+            // INv View coordinates, the camera is at the origin.
+            // The bounding near plane is the maximum Z of the bounding box.
+            // The bounding far plane is the minimum Z of the bounding box.
+            var nearPlane = -boundingBoxView.max.z;
+            var farPlane = -boundingBoxView.min.z;
+            this._viewerControls.nearClippingPlane = nearPlane;
+            this._viewerControls.farClippingPlane = farPlane;
+            this._viewer.camera.near = nearPlane;
+            this._viewer.camera.far = farPlane;
+            // WIP: Or this._viewer.updateCamera()?
+            this._viewer.camera.updateProjectionMatrix();
+        };
+        /**
+         * Show the clipping planes of the model in View and World coordinates.
+         */
+        App.prototype.showBoundingBoxes = function () {
             var model = this._viewer.model;
             var cameraMatrixWorld = this._viewer.camera.matrixWorld;
             var cameraMatrixWorldInverse = this._viewer.camera.matrixWorldInverse;
@@ -3078,7 +3117,6 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
             Graphics_2.Graphics.removeObjectChildren(model, false);
             model.add(modelView);
             var boundingBoxView = createBoundingBox(modelView, 0xff00ff);
-            boundingBoxView.updateMatrix();
             model.add(boundingBoxView);
             // transform model back from View to World
             var modelWorld = cloneAndTransformObject(modelView, cameraMatrixWorld);
@@ -3092,18 +3130,7 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
          */
         App.prototype.initializeViewerControls = function () {
             var scope = this;
-            var ViewerControls = (function () {
-                function ViewerControls() {
-                    this.nearClippingPlane = scope._viewer.camera.near;
-                    this.farClippingPlane = scope._viewer.camera.far;
-                    this.fieldOfView = scope._viewer.camera.fov;
-                    this.transform = function () {
-                        scope.transformModel();
-                    };
-                }
-                return ViewerControls;
-            }());
-            var viewerControls = new ViewerControls();
+            this._viewerControls = new ViewerControls(this._viewer.camera, this.showBoundingBoxes.bind(this), this.setClippingPlanes.bind(this));
             // Init dat.gui and controls for the UI
             var gui = new dat.GUI({
                 autoPlace: false,
@@ -3114,18 +3141,18 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
             var folderOptions = gui.addFolder('Camera Options');
             // Near Clipping Plane
             var minimum = 0;
-            var maximum = 20;
+            var maximum = 100;
             var stepSize = 0.1;
-            var controlNearClippingPlane = folderOptions.add(viewerControls, 'nearClippingPlane').name('Near Clipping Plane').min(minimum).max(maximum).step(stepSize);
+            var controlNearClippingPlane = folderOptions.add(this._viewerControls, 'nearClippingPlane').name('Near Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
             controlNearClippingPlane.onChange(function (value) {
                 scope._viewer.camera.near = value;
                 scope._viewer.camera.updateProjectionMatrix();
             }.bind(this));
             // Far Clipping Plane
             minimum = 1;
-            maximum = 100;
+            maximum = 500;
             stepSize = 0.1;
-            var controlFarClippingPlane = folderOptions.add(viewerControls, 'farClippingPlane').name('Far Clipping Plane').min(minimum).max(maximum).step(stepSize);
+            var controlFarClippingPlane = folderOptions.add(this._viewerControls, 'farClippingPlane').name('Far Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
             ;
             controlFarClippingPlane.onChange(function (value) {
                 scope._viewer.camera.far = value;
@@ -3135,14 +3162,16 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
             minimum = 25;
             maximum = 75;
             stepSize = 1;
-            var controlFieldOfView = folderOptions.add(viewerControls, 'fieldOfView').name('Field of View').min(minimum).max(maximum).step(stepSize);
+            var controlFieldOfView = folderOptions.add(this._viewerControls, 'fieldOfView').name('Field of View').min(minimum).max(maximum).step(stepSize).listen();
             ;
             controlFieldOfView.onChange(function (value) {
                 scope._viewer.camera.fov = value;
                 scope._viewer.camera.updateProjectionMatrix();
             }.bind(this));
-            // Transform
-            var controlTransform = folderOptions.add(viewerControls, 'transform').name('Transform');
+            // Show Bounding Boxes
+            var controlShowBoundingBoxes = folderOptions.add(this._viewerControls, 'showBoundingBoxes').name('Show Bounding Boxes');
+            // Clipping Planes
+            var controlSetClippingPlanes = folderOptions.add(this._viewerControls, 'setClippingPlanes').name('Set Clipping Planes');
             folderOptions.open();
         };
         /**

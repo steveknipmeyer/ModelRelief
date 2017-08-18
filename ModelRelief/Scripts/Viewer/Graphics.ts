@@ -146,7 +146,7 @@ export class Graphics {
     static getBoundingBoxFromObject(rootObject : THREE.Object3D) : THREE.Box3 {
 
         // https://stackoverflow.com/questions/15492857/any-way-to-get-a-bounding-box-from-a-three-js-object3d
-        let boundingBox : THREE.Box3 = null;
+        let boundingBox : THREE.Box3 = new THREE.Box3();
         boundingBox = boundingBox.setFromObject(rootObject);
 
         return boundingBox;

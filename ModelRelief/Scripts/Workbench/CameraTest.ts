@@ -34,6 +34,10 @@ import {Viewer}                     from 'Viewer'
                 object.geometry = object.geometry.clone();
         });
 
+        // N.B. Important! The postion, rotation (quaternion) and scale are correcy but the matrix has not been updated.
+        // THREE.js updates the matrix is updated in the render() loop.
+        objectClone.updateMatrix();     
+
         // transform
         objectClone.applyMatrix(matrix);
 
@@ -104,13 +108,38 @@ export class CameraViewer extends Viewer {
 
 /**
  * @class
+ * ViewerControls
+ */
+class ViewerControls {
+
+    nearClippingPlane  : number;
+    farClippingPlane   : number;
+    fieldOfView        : number;
+
+    showBoundingBoxes : () => void;
+    setClippingPlanes : () => void;
+
+    constructor(camera: THREE.PerspectiveCamera, showBoundingBoxes : () => any, setClippingPlanes : () => any) {
+
+        this.nearClippingPlane    = camera.near;
+        this.farClippingPlane     = camera.far;
+        this.fieldOfView          = camera.fov;
+
+        this.showBoundingBoxes = showBoundingBoxes;
+        this.setClippingPlanes  = setClippingPlanes;
+    }
+}
+
+/**
+ * @class
  * App
  */
 export class App {
     
-    _logger : ConsoleLogger;
-    _loader : Loader;
-    _viewer : CameraViewer;
+    _logger         : ConsoleLogger;
+    _loader         : Loader;
+    _viewer         : CameraViewer;
+    _viewerControls : ViewerControls;
 
     /**
      * @constructor
@@ -119,11 +148,40 @@ export class App {
     }
 
     /**
-     * Transform the model by camera inverse.
+     * Set the camera clipping planes to the model extents in View coordinates.
      */
-    transformModel() {
+    setClippingPlanes() {
 
-        let model                    : THREE.Group = this._viewer.model;
+        let model                    : THREE.Group   = this._viewer.model;
+        let cameraMatrixWorldInverse : THREE.Matrix4 = this._viewer.camera.matrixWorldInverse;
+
+        // clone model (and geometry!)
+        let modelView = cloneAndTransformObject(model, cameraMatrixWorldInverse);
+        let boundingBoxView = Graphics.getBoundingBoxFromObject(modelView);
+
+        // The bounding box is world-axis aligned. 
+        // INv View coordinates, the camera is at the origin.
+        // The bounding near plane is the maximum Z of the bounding box.
+        // The bounding far plane is the minimum Z of the bounding box.
+        let nearPlane = -boundingBoxView.max.z;
+        let farPlane  = -boundingBoxView.min.z;
+
+        this._viewerControls.nearClippingPlane = nearPlane;
+        this._viewerControls.farClippingPlane  = farPlane;
+
+        this._viewer.camera.near = nearPlane;
+        this._viewer.camera.far  = farPlane;
+
+        // WIP: Or this._viewer.updateCamera()?
+        this._viewer.camera.updateProjectionMatrix();
+    }
+
+    /**
+     * Show the clipping planes of the model in View and World coordinates.
+     */
+    showBoundingBoxes() {
+
+        let model                    : THREE.Group   = this._viewer.model;
         let cameraMatrixWorld        : THREE.Matrix4 = this._viewer.camera.matrixWorld;
         let cameraMatrixWorldInverse : THREE.Matrix4 = this._viewer.camera.matrixWorldInverse;
 
@@ -139,7 +197,6 @@ export class App {
         model.add(modelView);
 
         let boundingBoxView = createBoundingBox(modelView, 0xff00ff);
-        boundingBoxView.updateMatrix();
         model.add(boundingBoxView);
 
         // transform model back from View to World
@@ -158,26 +215,7 @@ export class App {
 
         let scope = this;
 
-        class ViewerControls {
-
-            nearClippingPlane  : number;
-            farClippingPlane   : number;
-            fieldOfView        : number;
-
-            transform : () => void;
-
-            constructor() {
-
-                this.nearClippingPlane    = scope._viewer.camera.near;
-                this.farClippingPlane     = scope._viewer.camera.far;
-                this.fieldOfView          = scope._viewer.camera.fov;
-
-                this.transform = function() {
-                   scope.transformModel();
-                };
-            }
-        }
-        let viewerControls = new ViewerControls();
+        this._viewerControls = new ViewerControls(this._viewer.camera, this.showBoundingBoxes.bind(this), this.setClippingPlanes.bind(this));
 
         // Init dat.gui and controls for the UI
         var gui = new dat.GUI({
@@ -189,10 +227,10 @@ export class App {
         var folderOptions = gui.addFolder('Camera Options');
 
         // Near Clipping Plane
-        let minimum  =  0;
-        let maximum  = 20;
-        let stepSize =  0.1;
-        let controlNearClippingPlane = folderOptions.add(viewerControls, 'nearClippingPlane').name('Near Clipping Plane').min(minimum).max(maximum).step(stepSize);
+        let minimum  =   0;
+        let maximum  = 100;
+        let stepSize =   0.1;
+        let controlNearClippingPlane = folderOptions.add(this._viewerControls, 'nearClippingPlane').name('Near Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
         controlNearClippingPlane .onChange (function (value) {
 
             scope._viewer.camera.near = value;
@@ -201,9 +239,9 @@ export class App {
 
         // Far Clipping Plane
         minimum  =   1;
-        maximum  = 100;
+        maximum  = 500;
         stepSize =   0.1;
-        let controlFarClippingPlane = folderOptions.add(viewerControls, 'farClippingPlane').name('Far Clipping Plane').min(minimum).max(maximum).step(stepSize);;
+        let controlFarClippingPlane = folderOptions.add(this._viewerControls, 'farClippingPlane').name('Far Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();;
         controlFarClippingPlane .onChange (function (value) {
 
             scope._viewer.camera.far = value;
@@ -214,15 +252,18 @@ export class App {
         minimum  = 25;
         maximum  = 75;
         stepSize =  1;
-        let controlFieldOfView= folderOptions.add(viewerControls, 'fieldOfView').name('Field of View').min(minimum).max(maximum).step(stepSize);;
+        let controlFieldOfView= folderOptions.add(this._viewerControls, 'fieldOfView').name('Field of View').min(minimum).max(maximum).step(stepSize).listen();;
         controlFieldOfView .onChange (function (value) {
 
             scope._viewer.camera.fov = value;
             scope._viewer.camera.updateProjectionMatrix();
         }.bind(this));
 
-        // Transform
-        let controlTransform = folderOptions.add(viewerControls, 'transform').name('Transform');
+        // Show Bounding Boxes
+        let controlShowBoundingBoxes = folderOptions.add(this._viewerControls, 'showBoundingBoxes').name('Show Bounding Boxes');
+
+        // Clipping Planes
+        let controlSetClippingPlanes = folderOptions.add(this._viewerControls, 'setClippingPlanes').name('Set Clipping Planes');
 
         folderOptions.open();
     }
