@@ -2692,16 +2692,19 @@ define("ModelLoaders/Loader", ["require", "exports", "three", "Viewer/Graphics",
             var originY = originX;
             var originZ = cellHeight / 2;
             var origin = new THREE.Vector3(originX, originY, originZ);
+            var baseColor = 0xc07df2;
+            var colorDelta = 3 * Math.pow(256, 2);
             var group = new THREE.Group();
             var cellOrigin = origin.clone();
+            var cellColor = baseColor;
             for (var iRow = 0; iRow < gridDivisions; iRow++) {
                 for (var iColumn = 0; iColumn < gridDivisions; iColumn++) {
-                    var cellColor = Math.random() * 0xffffff;
                     var cellMaterial = new THREE.MeshPhongMaterial({ color: cellColor });
                     var cell = Graphics_3.Graphics.createBoxMesh(cellOrigin, cellBase, cellBase, cellHeight, cellMaterial);
                     group.add(cell);
                     cellOrigin.x += cellBase;
                     cellOrigin.z += cellHeight;
+                    cellColor += colorDelta;
                 }
                 cellOrigin.x = origin.x;
                 cellOrigin.y += cellBase;

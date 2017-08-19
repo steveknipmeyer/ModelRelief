@@ -156,19 +156,22 @@ export class Loader {
         let originZ : number = cellHeight / 2;
         let origin  : THREE.Vector3 = new THREE.Vector3(originX, originY, originZ);
 
+        let baseColor      : number = 0x007070;
+        let colorDelta     : number = (256 / totalCells) * Math.pow(256, 2);
+
         let group      : THREE.Group = new THREE.Group();
         let cellOrigin : THREE.Vector3 = origin.clone();
+        let cellColor  : number = baseColor;
         for (let iRow : number = 0; iRow < gridDivisions; iRow++) {
             for (let iColumn : number = 0; iColumn < gridDivisions; iColumn++) {
-                
-                let cellColor : number = Math.random() * 0xffffff;
+                               
                 let cellMaterial = new THREE.MeshPhongMaterial({color : cellColor});
-
                 let cell : THREE.Mesh = Graphics.createBoxMesh(cellOrigin, cellBase, cellBase, cellHeight, cellMaterial);
                 group.add (cell);
 
                 cellOrigin.x += cellBase;
                 cellOrigin.z += cellHeight;
+                cellColor    += colorDelta;
             }
         cellOrigin.x = origin.x;
         cellOrigin.y += cellBase;
