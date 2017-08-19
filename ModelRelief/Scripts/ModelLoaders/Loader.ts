@@ -136,4 +136,43 @@ export class Loader {
         mesh.name = 'Box';
         viewer.model = mesh;
     }
+
+    /**
+     * Add a test model consisting of a tiered checkerboard
+     * @param viewer Instance of the Viewer to display the model.
+     */
+    loadCheckerboardModel (viewer : Viewer) {
+        
+        let gridLength     : number = 2
+        let totalHeight    : number = 1;       
+        let gridDivisions  : number = 4;
+        let totalCells     : number = Math.pow(gridDivisions, 2);
+
+        let cellBase       : number = gridLength / gridDivisions;
+        let cellHeight     : number = totalHeight / totalCells;
+
+        let originX : number = -(cellBase * (gridDivisions / 2)) + (cellBase / 2);
+        let originY : number = originX;
+        let originZ : number = cellHeight / 2;
+        let origin  : THREE.Vector3 = new THREE.Vector3(originX, originY, originZ);
+
+        let group      : THREE.Group = new THREE.Group();
+        let cellOrigin : THREE.Vector3 = origin.clone();
+        for (let iRow : number = 0; iRow < gridDivisions; iRow++) {
+            for (let iColumn : number = 0; iColumn < gridDivisions; iColumn++) {
+                
+                let cellColor : number = Math.random() * 0xffffff;
+                let cellMaterial = new THREE.MeshPhongMaterial({color : cellColor});
+
+                let cell : THREE.Mesh = Graphics.createBoxMesh(cellOrigin, cellBase, cellBase, cellHeight, cellMaterial);
+                group.add (cell);
+
+                cellOrigin.x += cellBase;
+                cellOrigin.z += cellHeight;
+            }
+        cellOrigin.x = origin.x;
+        cellOrigin.y += cellBase;
+        }       
+        viewer.model = group;
+    }
 }

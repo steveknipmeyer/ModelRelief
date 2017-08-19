@@ -2580,7 +2580,7 @@ define("Viewer/Viewer", ["require", "exports", "three", "Viewer/TrackballControl
     }());
     exports.Viewer = Viewer;
 });
-define("ModelLoaders/Loader", ["require", "exports", "three", "ModelLoaders/OBJLoader"], function (require, exports, THREE, OBJLoader_1) {
+define("ModelLoaders/Loader", ["require", "exports", "three", "Viewer/Graphics", "ModelLoaders/OBJLoader"], function (require, exports, THREE, Graphics_3, OBJLoader_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -2676,6 +2676,37 @@ define("ModelLoaders/Loader", ["require", "exports", "three", "ModelLoaders/OBJL
             mesh.position.set(center.x, center.y, center.z);
             mesh.name = 'Box';
             viewer.model = mesh;
+        };
+        /**
+         * Add a test model consisting of a tiered checkerboard
+         * @param viewer Instance of the Viewer to display the model.
+         */
+        Loader.prototype.loadCheckerboardModel = function (viewer) {
+            var gridLength = 2;
+            var totalHeight = 1;
+            var gridDivisions = 4;
+            var totalCells = Math.pow(gridDivisions, 2);
+            var cellBase = gridLength / gridDivisions;
+            var cellHeight = totalHeight / totalCells;
+            var originX = -(cellBase * (gridDivisions / 2)) + (cellBase / 2);
+            var originY = originX;
+            var originZ = cellHeight / 2;
+            var origin = new THREE.Vector3(originX, originY, originZ);
+            var group = new THREE.Group();
+            var cellOrigin = origin.clone();
+            for (var iRow = 0; iRow < gridDivisions; iRow++) {
+                for (var iColumn = 0; iColumn < gridDivisions; iColumn++) {
+                    var cellColor = Math.random() * 0xffffff;
+                    var cellMaterial = new THREE.MeshPhongMaterial({ color: cellColor });
+                    var cell = Graphics_3.Graphics.createBoxMesh(cellOrigin, cellBase, cellBase, cellHeight, cellMaterial);
+                    group.add(cell);
+                    cellOrigin.x += cellBase;
+                    cellOrigin.z += cellHeight;
+                }
+                cellOrigin.x = origin.x;
+                cellOrigin.y += cellBase;
+            }
+            viewer.model = group;
         };
         return Loader;
     }());
@@ -2907,9 +2938,10 @@ define("ModelRelief", ["require", "exports", "dat-gui", "DepthBuffer/DepthBuffer
             // Loader
             this._loader = new Loader_1.Loader();
             //      this._loader.loadOBJModel (this._modelViewer);
+            this._loader.loadCheckerboardModel(this._modelViewer);
             //      this._loader.loadTorusModel (this._modelViewer);
             //      this._loader.loadBoxModel (this._modelViewer);
-            this._loader.loadSphereModel(this._modelViewer);
+            //      this._loader.loadSphereModel (this._modelViewer);
         };
         return ModelRelief;
     }());
@@ -2999,7 +3031,7 @@ define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function 
     }());
     exports.UnitTests = UnitTests;
 });
-define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewer/Graphics", "System/Services", "Viewer/Viewer"], function (require, exports, THREE, dat, Graphics_3, Services_7, Viewer_3) {
+define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewer/Graphics", "System/Services", "Viewer/Viewer"], function (require, exports, THREE, dat, Graphics_4, Services_7, Viewer_3) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -3016,7 +3048,7 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
         var boundingBox = new THREE.Box3();
         boundingBox = boundingBox.setFromObject(object);
         var material = new THREE.MeshPhongMaterial({ color: color, opacity: 1.0, wireframe: true });
-        var boundingBoxMesh = Graphics_3.Graphics.createBoundingBoxMeshFromBoundingBox(boundingBox.getCenter(), boundingBox, material);
+        var boundingBoxMesh = Graphics_4.Graphics.createBoundingBoxMeshFromBoundingBox(boundingBox.getCenter(), boundingBox, material);
         return boundingBoxMesh;
     }
     /**
@@ -3039,14 +3071,14 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
             configurable: true
         });
         CameraViewer.prototype.populateScene = function () {
-            var triad = Graphics_3.Graphics.createWorldAxesTriad(new THREE.Vector3(), 1, 0.25, 0.25);
+            var triad = Graphics_4.Graphics.createWorldAxesTriad(new THREE.Vector3(), 1, 0.25, 0.25);
             this._scene.add(triad);
-            var box = Graphics_3.Graphics.createBoxMesh(new THREE.Vector3(1, 1, -2), 1, 2, 2, new THREE.MeshPhongMaterial({ color: 0xff0000 }));
+            var box = Graphics_4.Graphics.createBoxMesh(new THREE.Vector3(1, 1, -2), 1, 2, 2, new THREE.MeshPhongMaterial({ color: 0xff0000 }));
             box.rotation.set(Math.random(), Math.random(), Math.random());
             box.updateMatrix();
-            var boxClone = Graphics_3.Graphics.cloneAndTransformObject(box, new THREE.Matrix4());
+            var boxClone = Graphics_4.Graphics.cloneAndTransformObject(box, new THREE.Matrix4());
             this.model.add(boxClone);
-            var sphere = Graphics_3.Graphics.createSphereMesh(new THREE.Vector3(4, 2, -1), 1, new THREE.MeshPhongMaterial({ color: 0x00ff00 }));
+            var sphere = Graphics_4.Graphics.createSphereMesh(new THREE.Vector3(4, 2, -1), 1, new THREE.MeshPhongMaterial({ color: 0x00ff00 }));
             this.model.add(sphere);
         };
         /**
@@ -3096,8 +3128,8 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
             var model = this._viewer.model;
             var cameraMatrixWorldInverse = this._viewer.camera.matrixWorldInverse;
             // clone model (and geometry!)
-            var modelView = Graphics_3.Graphics.cloneAndTransformObject(model, cameraMatrixWorldInverse);
-            var boundingBoxView = Graphics_3.Graphics.getBoundingBoxFromObject(modelView);
+            var modelView = Graphics_4.Graphics.cloneAndTransformObject(model, cameraMatrixWorldInverse);
+            var boundingBoxView = Graphics_4.Graphics.getBoundingBoxFromObject(modelView);
             // The bounding box is world-axis aligned. 
             // INv View coordinates, the camera is at the origin.
             // The bounding near plane is the maximum Z of the bounding box.
@@ -3119,19 +3151,19 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Viewe
             var cameraMatrixWorld = this._viewer.camera.matrixWorld;
             var cameraMatrixWorldInverse = this._viewer.camera.matrixWorldInverse;
             // remove existing BoundingBox
-            model.remove(model.getObjectByName(Graphics_3.Graphics.BoundingBoxName));
+            model.remove(model.getObjectByName(Graphics_4.Graphics.BoundingBoxName));
             // clone model (and geometry!)
-            var modelView = Graphics_3.Graphics.cloneAndTransformObject(model, cameraMatrixWorldInverse);
+            var modelView = Graphics_4.Graphics.cloneAndTransformObject(model, cameraMatrixWorldInverse);
             // clear entire scene
-            Graphics_3.Graphics.removeObjectChildren(model, false);
+            Graphics_4.Graphics.removeObjectChildren(model, false);
             model.add(modelView);
             var boundingBoxView = createBoundingBox(modelView, 0xff00ff);
             model.add(boundingBoxView);
             // transform model back from View to World
-            var modelWorld = Graphics_3.Graphics.cloneAndTransformObject(modelView, cameraMatrixWorld);
+            var modelWorld = Graphics_4.Graphics.cloneAndTransformObject(modelView, cameraMatrixWorld);
             model.add(modelWorld);
             // transform bounding box back from View to World
-            var boundingBoxWorld = Graphics_3.Graphics.cloneAndTransformObject(boundingBoxView, cameraMatrixWorld);
+            var boundingBoxWorld = Graphics_4.Graphics.cloneAndTransformObject(boundingBoxView, cameraMatrixWorld);
             model.add(boundingBoxWorld);
         };
         /**
