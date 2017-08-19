@@ -15,9 +15,11 @@ Documents\bin\DebugGulp.bat
 // Gulp
 var gulp         = require('gulp');
 var gutil        = require('gulp-util');
+var exec         = require('child_process').exec;
 
 // Node.js
 var beep         = require('beepbeep');
+var browserSync  = require('browser-sync');
 var fs           = require('fs');
 var path         = require('path');
 var robocopy     = require('robocopy');
@@ -244,6 +246,20 @@ gulp.task('buildShaders', function() {
     generateShaders();
 });
 
+/// <summary>
+/// Compile TypeScript
+/// The TypeScript compiler is invoked through the Windows path. 
+/// This is initialized in the development shell to the desired TypeScript compiler version.
+/// "C:\Program Files (x86)\Microsoft SDKs\TypeScript\2.4""
+/// </summary>
+gulp.task('compileTypeScript', function (callback) {
+  exec('tsc.exe', function (err, stdout, stderr) {
+    console.log(stdout);
+    console.log(stderr);
+    callback(err);
+  });
+});
+
 /// <summary> 
 /// Default build task
 /// </summary> 
@@ -255,9 +271,19 @@ gulp.task('default', function () {
 //  Watch and Build Tasks
 //-----------------------------------------------------------------------------
 /// <summary>
-/// Watch development files for changes and build.
+/// Launch development browser-sync.
+/// Watch development files for changes and reload.
 /// </summary>
 gulp.task('serve', function () {
+
+  browserSync({
+    notify: false,
+    port: 60655,
+    server: {
+        baseDir: siteConfig.wwwRoot
+    }
+  });
     
   gulp.watch([sourceConfig.shaders + '*.glsl'],                   ['buildShaders']);
+  gulp.watch([sourceConfig.scriptsRoot + '**/*.ts'],              ['compileTypeScript']);
 });

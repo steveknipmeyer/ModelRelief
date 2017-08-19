@@ -1125,7 +1125,7 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthB
             this._postMaterial = null; // shader material that encodes the WebGL depth buffer into a floating point RGBA format
             this._minimumWebGL = true; // true if minimum WeGL requirementat are present
             this._logger = null; // logger
-            this._canvas = this.initializeCanvas();
+            this._addCanvasToDOM = false; // visible canvas; add to HTML page
             // required
             this._width = parameters.width;
             this._height = parameters.height;
@@ -1134,6 +1134,8 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthB
             this._camera = parameters.camera || null;
             this._logDepthBuffer = parameters.logDepthBuffer || false;
             this._boundedClipping = parameters.boundedClipping || true;
+            this._addCanvasToDOM = parameters.addCanvasToDOM || false;
+            this._canvas = this.initializeCanvas();
             this.initialize();
         }
         //#region Properties
@@ -1157,12 +1159,16 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthB
         DepthBufferFactory.prototype.initializeCanvas = function () {
             this._canvas = document.createElement('canvas');
             this._canvas.setAttribute('name', Tools_1.Tools.generatePseudoGUID());
+            this._canvas.setAttribute('class', DepthBufferFactory.CssClassName);
             // render dimensions    
             this._canvas.width = this._width;
             this._canvas.height = this._height;
             // DOM element dimensions (may be different than render dimensions)
             this._canvas.style.width = this._width + "px";
             this._canvas.style.height = this._height + "px";
+            // add to DOM?
+            if (this._addCanvasToDOM)
+                document.querySelector("#" + DepthBufferFactory.RootContainerId).appendChild(this._canvas);
             return this._canvas;
         };
         /**
@@ -1368,7 +1374,8 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthB
         DepthBufferFactory.prototype.meshGenerate = function (parameters) {
             if (!this.verifyMeshSettings())
                 return null;
-            this.setCameraClippingPlanes();
+            if (this._boundedClipping)
+                this.setCameraClippingPlanes();
             this.createDepthBuffer();
             var mesh = this._depthBuffer.mesh(parameters.modelWidth, parameters.material);
             return mesh;
@@ -1381,6 +1388,8 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "DepthB
             return null;
         };
         DepthBufferFactory.DefaultResolution = 1024; // default DB resolution
+        DepthBufferFactory.CssClassName = 'DepthBufferFactory'; // CSS class
+        DepthBufferFactory.RootContainerId = 'rootContainer'; // root container for viewers
         return DepthBufferFactory;
     }());
     exports.DepthBufferFactory = DepthBufferFactory;
@@ -2684,7 +2693,7 @@ define("ModelLoaders/Loader", ["require", "exports", "three", "Viewer/Graphics",
         Loader.prototype.loadCheckerboardModel = function (viewer) {
             var gridLength = 2;
             var totalHeight = 1;
-            var gridDivisions = 4;
+            var gridDivisions = 5;
             var totalCells = Math.pow(gridDivisions, 2);
             var cellBase = gridLength / gridDivisions;
             var cellHeight = totalHeight / totalCells;
@@ -2692,8 +2701,8 @@ define("ModelLoaders/Loader", ["require", "exports", "three", "Viewer/Graphics",
             var originY = originX;
             var originZ = cellHeight / 2;
             var origin = new THREE.Vector3(originX, originY, originZ);
-            var baseColor = 0xc07df2;
-            var colorDelta = 3 * Math.pow(256, 2);
+            var baseColor = 0x007070;
+            var colorDelta = (256 / totalCells) * Math.pow(256, 2);
             var group = new THREE.Group();
             var cellOrigin = origin.clone();
             var cellColor = baseColor;
@@ -2888,8 +2897,8 @@ define("ModelRelief", ["require", "exports", "dat-gui", "DepthBuffer/DepthBuffer
          * Generates a relief from the current model camera.
          */
         ModelRelief.prototype.generateRelief = function () {
-            var size = 768;
-            var factory = new DepthBufferFactory_1.DepthBufferFactory({ width: size, height: size, model: this._modelViewer._root, camera: this._modelViewer.camera });
+            var size = 512;
+            var factory = new DepthBufferFactory_1.DepthBufferFactory({ width: size, height: size, model: this._modelViewer._root, camera: this._modelViewer.camera, addCanvasToDOM: true });
             var previewMesh = factory.meshGenerate({ modelWidth: 2 });
             this._meshPreviewViewer.model = previewMesh;
             Services_6.Services.consoleLogger.addInfoMessage('Relief generated');

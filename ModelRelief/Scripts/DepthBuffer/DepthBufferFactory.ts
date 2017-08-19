@@ -26,13 +26,16 @@ import {Tools}                  from 'Tools'
 
 export interface DepthBufferFactoryParameters {
 
-    width            : number,
-    height           : number
-    model            : THREE.Group,
+    width            : number,                  // width of DB
+    height           : number                   // height of DB        
+    model            : THREE.Group,             // model root
 
-    camera?          : THREE.PerspectiveCamera,
-    logDepthBuffer?  : boolean
-    boundedClipping? : boolean
+    camera?          : THREE.PerspectiveCamera, // camera
+    
+    logDepthBuffer?  : boolean,                 // use logarithmic depth buffer for higher resolution (better distribution) in scenes with large extents
+    boundedClipping? : boolean,                 // overrrid camera clipping planes to bound model
+    
+    addCanvasToDOM?  : boolean                  // visible canvas; add to HTML
 }
 
 export interface MeshGenerateParameters {
@@ -51,7 +54,9 @@ export interface ImageGenerateParameters {
  */
 export class DepthBufferFactory {
 
-    static DefaultResolution : number           = 1024;     // default DB resolution
+    static DefaultResolution : number           = 1024;                     // default DB resolution
+    static CssClassName      : string           = 'DepthBufferFactory';     // CSS class
+    static RootContainerId   : string           = 'rootContainer';          // root container for viewers
 
     _scene           : THREE.Scene              = null;     // target scene
     _model           : THREE.Group              = null;     // target model
@@ -77,14 +82,13 @@ export class DepthBufferFactory {
 
     _minimumWebGL    : boolean                  = true;     // true if minimum WeGL requirementat are present
     _logger          : Logger                   = null;     // logger
+    _addCanvasToDOM  : boolean                  = false;    // visible canvas; add to HTML page
 
     /**
      * @constructor
      * @param parameters Initialization parameters (DepthBufferFactoryParameters)
      */
     constructor(parameters : DepthBufferFactoryParameters) {
-
-        this._canvas = this.initializeCanvas();
 
         // required
         this._width           = parameters.width;
@@ -95,7 +99,9 @@ export class DepthBufferFactory {
         this._camera          = parameters.camera          || null;
         this._logDepthBuffer  = parameters.logDepthBuffer  || false;
         this._boundedClipping = parameters.boundedClipping || true;
+        this._addCanvasToDOM  = parameters.addCanvasToDOM  || false;
 
+        this._canvas = this.initializeCanvas();
         this.initialize();
     }
 
@@ -108,7 +114,7 @@ export class DepthBufferFactory {
      * Verifies the minimum WebGL extensions are present.
      * @param renderer WebGL renderer.
      */
-    verifyWebGLExtensions() : boolean {
+    verifyWebGLExtensions() : boolean { 
     
         if (!this._renderer.extensions.get('WEBGL_depth_texture')) {
             this._minimumWebGL = false;
@@ -126,16 +132,21 @@ export class DepthBufferFactory {
     
         this._canvas = document.createElement('canvas');
         this._canvas.setAttribute('name', Tools.generatePseudoGUID());
+        this._canvas.setAttribute('class', DepthBufferFactory.CssClassName);
 
         // render dimensions    
         this._canvas.width  = this._width;
-        this._canvas.height = this._height;
+        this._canvas.height = this._height; 
 
         // DOM element dimensions (may be different than render dimensions)
         this._canvas.style.width  = `${this._width}px`;
         this._canvas.style.height = `${this._height}px`;
 
-        return this._canvas;
+        // add to DOM?
+        if (this._addCanvasToDOM)
+            document.querySelector(`#${DepthBufferFactory.RootContainerId}`).appendChild(this._canvas);
+    
+            return this._canvas;
     }
 
     /**
@@ -401,8 +412,9 @@ export class DepthBufferFactory {
         
         if (!this.verifyMeshSettings()) 
             return null;
-
-        this.setCameraClippingPlanes();
+        
+        if (this._boundedClipping)
+            this.setCameraClippingPlanes();
 
         this.createDepthBuffer();
         let mesh = this._depthBuffer.mesh(parameters.modelWidth, parameters.material);

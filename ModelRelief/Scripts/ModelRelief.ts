@@ -36,8 +36,8 @@ export class ModelRelief {
      */
     generateRelief() : void {
 
-        let size = 768;
-        let factory = new DepthBufferFactory({width : size, height : size, model : this._modelViewer._root, camera : this._modelViewer.camera});   
+        let size = 512;
+        let factory = new DepthBufferFactory({width : size, height : size, model : this._modelViewer._root, camera : this._modelViewer.camera, addCanvasToDOM : true});   
         let previewMesh : THREE.Mesh = factory.meshGenerate({modelWidth : 2});
 
         this._meshPreviewViewer.model = previewMesh;

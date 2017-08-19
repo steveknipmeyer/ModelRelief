@@ -1,6 +1,7 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Commit Notes                                                       //
 // ------------------------------------------------------------------------//
+DepthBufferFactory: respect boundedClipping option to override camera clipping planes.
 
 // ------------------------------------------------------------------------// 
 //      Tasks                                                              //
@@ -29,6 +30,8 @@ Performance
 
 Development Workflow
     Add gulp TypeScript compilation.
+        Install TypeScript for node.
+        Browser-sync?
     Why does the shader code not reload?
 
 Image File Creation
