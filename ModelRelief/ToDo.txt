@@ -30,7 +30,7 @@ Performance
 
 Development Workflow
     Add gulp TypeScript compilation.
-        Install TypeScript for node.
+        Install TypeScript for node?
         Browser-sync?
     Why does the shader code not reload?
 
@@ -43,6 +43,10 @@ Code Quality
         TrackballControls
         OBJLoader
 
+ What is the cause of these NET Warnings? They seem to be related to the Entity Framework.
+    1701;1702;1705
+
+// ------------------------------------------------------------------------//
 // ------------------------------------------------------------------------// 
 //      Depth Buffer Notes                                                 //
 // ------------------------------------------------------------------------//

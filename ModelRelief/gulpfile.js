@@ -271,19 +271,27 @@ gulp.task('default', function () {
 //  Watch and Build Tasks
 //-----------------------------------------------------------------------------
 /// <summary>
+/// Trigger a browser-sync reload.
+/// </summary>
+gulp.task ('reload', function() {
+    console.log('browser reload');
+    browserSync.reload();
+});
+
+/// <summary>
 /// Launch development browser-sync.
 /// Watch development files for changes and reload.
 /// </summary>
 gulp.task('serve', function () {
 
   browserSync({
-    notify: false,
-    port: 60655,
-    server: {
-        baseDir: siteConfig.wwwRoot
+    notify: true,
+    proxy: {
+
+        target: "localhost:60655/Models/Viewer/5",
     }
   });
-    
-  gulp.watch([sourceConfig.shaders + '*.glsl'],                   ['buildShaders']);
-  gulp.watch([sourceConfig.scriptsRoot + '**/*.ts'],              ['compileTypeScript']);
+
+  gulp.watch([sourceConfig.shaders + '*.glsl'],                   ['buildShaders', 'reload']);
+  gulp.watch([sourceConfig.scriptsRoot + '**/*.ts'],              ['compileTypeScript', 'reload']);
 });

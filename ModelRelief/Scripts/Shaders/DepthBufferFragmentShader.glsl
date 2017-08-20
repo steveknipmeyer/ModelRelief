@@ -109,7 +109,7 @@ void main() {
 
     // solid color
     gl_FragColor.rgb = diffuse;
-    gl_FragColor.a = 1.0;
+    gl_FragColor.a = 1.0; 
 
     // raw depth buffer
     gl_FragColor = texture2D(tDepth, vUV);

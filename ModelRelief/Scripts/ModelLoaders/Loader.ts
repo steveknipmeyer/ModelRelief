@@ -145,7 +145,7 @@ export class Loader {
         
         let gridLength     : number = 2
         let totalHeight    : number = 1;       
-        let gridDivisions  : number = 5;
+        let gridDivisions  : number = 4;
         let totalCells     : number = Math.pow(gridDivisions, 2);
 
         let cellBase       : number = gridLength / gridDivisions;
@@ -155,7 +155,7 @@ export class Loader {
         let originY : number = originX;
         let originZ : number = cellHeight / 2;
         let origin  : THREE.Vector3 = new THREE.Vector3(originX, originY, originZ);
-
+        
         let baseColor      : number = 0x007070;
         let colorDelta     : number = (256 / totalCells) * Math.pow(256, 2);
 
