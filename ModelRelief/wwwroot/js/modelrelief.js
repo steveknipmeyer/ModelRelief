@@ -2693,7 +2693,7 @@ define("ModelLoaders/Loader", ["require", "exports", "three", "Viewer/Graphics",
         Loader.prototype.loadCheckerboardModel = function (viewer) {
             var gridLength = 2;
             var totalHeight = 1;
-            var gridDivisions = 4;
+            var gridDivisions = 5;
             var totalCells = Math.pow(gridDivisions, 2);
             var cellBase = gridLength / gridDivisions;
             var cellHeight = totalHeight / totalCells;
