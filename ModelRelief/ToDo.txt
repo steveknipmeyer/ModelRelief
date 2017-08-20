@@ -1,11 +1,11 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Commit Notes                                                       //
 // ------------------------------------------------------------------------//
-DepthBufferFactory: respect boundedClipping option to override camera clipping planes.
 
 // ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
+Source map is not created.
 
 Core
     Set default CameraSettings based on model.

@@ -16,6 +16,8 @@ Documents\bin\DebugGulp.bat
 var gulp         = require('gulp');
 var gutil        = require('gulp-util');
 var exec         = require('child_process').exec;
+var sourcemaps   = require('gulp-sourcemaps');
+var ts           = require('gulp-typescript');
 
 // Node.js
 var beep         = require('beepbeep');
@@ -51,6 +53,7 @@ var onError = function (err) {
     gutil.log(gutil.colors.red(err));
 };
 
+var tsProject = ts.createProject('tsconfig.json');
 //-----------------------------------------------------------------------------
 //  Utilities
 //-----------------------------------------------------------------------------
@@ -247,17 +250,45 @@ gulp.task('buildShaders', function() {
 });
 
 /// <summary>
+/// Compile shaders and reload the browser.
+/// </summary>
+gulp.task('buildShadersReload', function () {
+
+    runSequence('buildShaders', 'reload')
+});
+
+/// <summary>
 /// Compile TypeScript
 /// The TypeScript compiler is invoked through the Windows path. 
 /// This is initialized in the development shell to the desired TypeScript compiler version.
 /// "C:\Program Files (x86)\Microsoft SDKs\TypeScript\2.4""
 /// </summary>
-gulp.task('compileTypeScript', function (callback) {
+gulp.task('compileTypeScriptExec', function (callback) {
   exec('tsc.exe', function (err, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);
     callback(err);
   });
+});
+
+/// <summary>
+/// Compile TypeScript
+/// The TypeScript compiler is invoked through the npm-installed version of node.
+/// </summary>
+gulp.task('compileTypeScript', function () {
+    
+    var tsResult = tsProject.src() 
+        .pipe(tsProject());
+ 
+    return tsResult.js.pipe(gulp.dest(''));
+});
+
+/// <summary>
+/// Compile TypeScript and reload the browser.
+/// </summary>
+gulp.task('compileTypeScriptReload', function () {
+
+    runSequence('compileTypeScript', 'reload')
 });
 
 /// <summary> 
@@ -274,7 +305,6 @@ gulp.task('default', function () {
 /// Trigger a browser-sync reload.
 /// </summary>
 gulp.task ('reload', function() {
-    console.log('browser reload');
     browserSync.reload();
 });
 
@@ -292,6 +322,6 @@ gulp.task('serve', function () {
     }
   });
 
-  gulp.watch([sourceConfig.shaders + '*.glsl'],                   ['buildShaders', 'reload']);
-  gulp.watch([sourceConfig.scriptsRoot + '**/*.ts'],              ['compileTypeScript', 'reload']);
+  gulp.watch([sourceConfig.shaders + '*.glsl'],                   ['buildShadersReload']);
+  gulp.watch([sourceConfig.scriptsRoot + '**/*.ts'],              ['compileTypeScriptReload']);
 });
