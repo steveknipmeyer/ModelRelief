@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
-Source map is not created.
+Evaluate Visual Studio Code.
 
 Core
     Set default CameraSettings based on model.
@@ -29,10 +29,7 @@ Performance
             mesh: 7068.237060546875ms
 
 Development Workflow
-    Add gulp TypeScript compilation.
-        Install TypeScript for node?
-        Browser-sync?
-    Why does the shader code not reload?
+    Webpack
 
 Image File Creation
     Create a 16 bit PNG from the depth data.

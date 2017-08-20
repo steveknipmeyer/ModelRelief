@@ -103,7 +103,6 @@ void main() {
 
     gl_FragColor = encode_float(depth);
 
-
 #if defined (DEBUG)
     // float constant
     gl_FragColor = encode_float(3.141592653);

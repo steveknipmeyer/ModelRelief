@@ -278,9 +278,12 @@ gulp.task('compileTypeScriptExec', function (callback) {
 gulp.task('compileTypeScript', function () {
     
     var tsResult = tsProject.src() 
+        .pipe(sourcemaps.init())        // sourcemaps will be generated 
         .pipe(tsProject());
  
-    return tsResult.js.pipe(gulp.dest(''));
+    return tsResult.js
+        .pipe(sourcemaps.write())       // sourcemaps are added to the .js file 
+        .pipe(gulp.dest(''));
 });
 
 /// <summary>

@@ -143,9 +143,9 @@ export class Loader {
      */
     loadCheckerboardModel (viewer : Viewer) {
         
-        let gridLength     : number = 2
+        let gridLength     : number = 2;
         let totalHeight    : number = 1;       
-        let gridDivisions  : number = 5;
+        let gridDivisions  : number = 4;
         let totalCells     : number = Math.pow(gridDivisions, 2);
 
         let cellBase       : number = gridLength / gridDivisions;
