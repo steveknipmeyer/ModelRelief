@@ -1,20 +1,20 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Commit Notes                                                       //
 // ------------------------------------------------------------------------//
-Remove PreBuild task from ModelRelief.
 
 // ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
-Evaluate Visual Studio Code.
-
 Core
     Set default CameraSettings based on model.
 
-    How should the vertex (translated) Z position be calculated from the depth buffer?
+    The near clip plane can clip goemetry such as the highest face of the checkerboard. Move by epsilon?
+
         Experiment with precision setting in THREE.WebGLRenderer.
         Move depth calculations from TS to shader (ex. readDepth)
-   
+            createDepthBuffer: 61.994140625ms
+            mesh: 873.432373046875ms
+            
 Viewing
     Progress Indicator
     OrbitControls versus Trackball

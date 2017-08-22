@@ -433,9 +433,13 @@ export class DepthBufferFactory {
         if (this._boundedClipping)
             this.setCameraClippingPlanes();
 
+        console.time("createDepthBuffer");
         this.createDepthBuffer();
+        console.timeEnd("createDepthBuffer");
+        console.time("mesh");        
         let mesh = this._depthBuffer.mesh(parameters.modelWidth, parameters.material);
-
+        console.timeEnd("mesh");        
+        
         return mesh;
     }
 

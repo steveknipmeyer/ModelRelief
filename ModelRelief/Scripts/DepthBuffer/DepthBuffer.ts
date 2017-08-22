@@ -165,10 +165,9 @@ export class DepthBuffer {
         normalizedDepth = 2.0 * normalizedDepth - 1.0;
         let zLinear = 2.0 * this.camera.near * this.camera.far / (this.camera.far + this.camera.near - normalizedDepth * (this.camera.far - this.camera.near));
 
-/*
         // zLinear is the distance from the camera; reverse to yield height from mesh plane
-        zLinear = zLinear - this.camera.near + this._cameraClipRange;
-*/
+        zLinear = -(zLinear - this.camera.far);
+
         return zLinear;
     }
 
@@ -184,7 +183,7 @@ export class DepthBuffer {
     }
 
     /**
-     * Returns the depth value at a pixel index
+     * Returns the depth value at a pixel index.
      * @param row Map row.
      * @param pixelColumn Map column.
      */
@@ -192,7 +191,7 @@ export class DepthBuffer {
 
         let depthNormalized = this.depthNormalized(row, column);
         let depth = this.normalizedToModelDepth(depthNormalized);
-
+        
         return depth;
     }
 
