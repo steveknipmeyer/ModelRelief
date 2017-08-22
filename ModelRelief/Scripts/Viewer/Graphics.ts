@@ -28,6 +28,7 @@ export class Graphics {
 
     static BoundingBoxName     : string = 'Bounding Box';
     static BoxName             : string = 'Box';
+    static PlaneName           : string = 'Plane';
     static SphereName          : string = 'Sphere';
     static TriadName           : string = 'Triad';
 
@@ -204,6 +205,31 @@ export class Graphics {
         return box;
     }
 
+    /**
+     * Creates a plane mesh.
+     * @param position Location of the plane.
+     * @param width Width.
+     * @param height Height.
+     * @param material Optional material.
+     * @returns Plane mesh.
+     */
+    static createPlaneMesh(position : THREE.Vector3, width : number, height : number, material? : THREE.Material) : THREE.Mesh {
+        
+                var 
+                    planeGeometry  : THREE.PlaneGeometry,
+                    planeMaterial  : THREE.Material,
+                    plane          : THREE.Mesh;
+        
+                planeGeometry = new THREE.PlaneGeometry(width, height);       
+                planeMaterial = material || new THREE.MeshPhongMaterial( { color: 0x0000ff, opacity: 1.0} );
+        
+                plane = new THREE.Mesh(planeGeometry, planeMaterial);
+                plane.name = Graphics.PlaneName;
+                plane.position.copy(position);
+        
+                return plane;
+            }
+        
     /**
      * Creates a sphere mesh.
      * @param position Origin of the sphere.

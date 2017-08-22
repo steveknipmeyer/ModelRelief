@@ -32,7 +32,7 @@ export class Loader {
 
         let modelNameElement : HTMLElement = window.document.getElementById('modelName');
         let modelPathElement : HTMLElement = window.document.getElementById('modelPath');
-
+            
         let modelName    : string = modelNameElement.textContent;
         let modelPath    : string = modelPathElement.textContent;
         let fileName     : string = modelPath + modelName;
@@ -144,8 +144,8 @@ export class Loader {
     loadCheckerboardModel (viewer : Viewer) {
         
         let gridLength     : number = 2;
-        let totalHeight    : number = 1;       
-        let gridDivisions  : number = 4;
+        let totalHeight    : number = 1.0;       
+        let gridDivisions  : number = 2;
         let totalCells     : number = Math.pow(gridDivisions, 2);
 
         let cellBase       : number = gridLength / gridDivisions;
@@ -153,7 +153,8 @@ export class Loader {
 
         let originX : number = -(cellBase * (gridDivisions / 2)) + (cellBase / 2);
         let originY : number = originX;
-        let originZ : number = cellHeight / 2;
+        let originZ : number = -cellHeight / 2;
+//      let originZ : number = 0.0;
         let origin  : THREE.Vector3 = new THREE.Vector3(originX, originY, originZ);
         
         let baseColor      : number = 0x007070;
@@ -167,6 +168,7 @@ export class Loader {
                                
                 let cellMaterial = new THREE.MeshPhongMaterial({color : cellColor});
                 let cell : THREE.Mesh = Graphics.createBoxMesh(cellOrigin, cellBase, cellBase, cellHeight, cellMaterial);
+//              let cell : THREE.Mesh = Graphics.createPlaneMesh(cellOrigin, cellBase, cellBase, cellMaterial);
                 group.add (cell);
 
                 cellOrigin.x += cellBase;

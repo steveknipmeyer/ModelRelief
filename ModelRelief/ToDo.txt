@@ -1,6 +1,7 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Commit Notes                                                       //
 // ------------------------------------------------------------------------//
+Remove PreBuild task from ModelRelief.
 
 // ------------------------------------------------------------------------// 
 //      Tasks                                                              //
@@ -12,6 +13,7 @@ Core
 
     How should the vertex (translated) Z position be calculated from the depth buffer?
         Experiment with precision setting in THREE.WebGLRenderer.
+        Move depth calculations from TS to shader (ex. readDepth)
    
 Viewing
     Progress Indicator

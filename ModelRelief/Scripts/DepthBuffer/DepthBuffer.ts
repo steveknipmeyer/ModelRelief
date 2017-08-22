@@ -179,7 +179,7 @@ export class DepthBuffer {
      */
     depthNormalized (row : number, column) : number {
 
-        let index = (row * this.width) + column;
+        let index = (Math.round(row) * this.width) + Math.round(column);
         return this.depths[index]
     }
 

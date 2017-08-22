@@ -126,6 +126,21 @@ export class DepthBufferFactory {
     }
 
     /**
+     * Handle a mouse down event on the canvas.
+     */
+    onMouseDown(event : JQueryEventObject) : void {
+
+        let deviceCoordinates : THREE.Vector2 = Graphics.deviceCoordinatesFromJQEvent(event, $(event.target));
+        this._logger.addInfoMessage(`device = ${deviceCoordinates.x}, ${deviceCoordinates.y}`);
+
+        let decimalPlaces   : number = 2;
+        let row             : number = (deviceCoordinates.y + 1) / 2 * this._depthBuffer.height;
+        let column          : number = (deviceCoordinates.x + 1) / 2 * this._depthBuffer.width;
+        this._logger.addInfoMessage(`Offset = [${row}, ${column}]`);       
+        this._logger.addInfoMessage(`Depth = ${this._depthBuffer.depth(row, column).toFixed(decimalPlaces)}`);       
+    }
+        
+    /**
      * Constructs a WebGL target canvas.
      */
     initializeCanvas() : HTMLCanvasElement {
@@ -145,7 +160,9 @@ export class DepthBufferFactory {
         // add to DOM?
         if (this._addCanvasToDOM)
             document.querySelector(`#${DepthBufferFactory.RootContainerId}`).appendChild(this._canvas);
-    
+
+            let $canvas = $(this._canvas).on('mousedown', this.onMouseDown.bind(this));
+        
             return this._canvas;
     }
 

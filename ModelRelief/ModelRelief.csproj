@@ -36,10 +36,4 @@
     <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
-  
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="cd $(ProjectDir)wwwroot\js&#xD;&#xA;del modelrelief.js&#xD;&#xA;del modelrelief.js.map&#xD;&#xA;&#xD;&#xA;" />
-  </Target>
-
-
 </Project>
