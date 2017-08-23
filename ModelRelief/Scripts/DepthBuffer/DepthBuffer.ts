@@ -161,9 +161,6 @@ export class DepthBuffer {
      */
     normalizedToModelDepth(normalizedDepth : number) : number {
 
-        //N.B. This does not yield the correct result. 
-        // The values are too large (~10000).
-
         // https://stackoverflow.com/questions/6652253/getting-the-true-z-value-from-the-depth-buffer
         normalizedDepth = 2.0 * normalizedDepth - 1.0;
         let zLinear = 2.0 * this.camera.near * this.camera.far / (this.camera.far + this.camera.near - normalizedDepth * (this.camera.far - this.camera.near));
@@ -271,7 +268,50 @@ export class DepthBuffer {
 
         return index;
     }
-    /**
+
+     /**
+      * Constructs a pair of triangular faces at the given offset in the DepthBuffer.
+      * @param row Row offset (Lower Left).
+      * @param column Column offset (Lower Left).
+      * @param faceSize Size of a face edge (not hypotenuse).
+      * @param baseVertexIndex Beginning offset in mesh geometry vertex array.
+      */
+     constructTriFacesAtOffset (row : number, column : number, meshLowerLeft : THREE.Vector2, faceSize : number, baseVertexIndex : number) : FacePair {
+         
+         let facePair : FacePair = {
+             vertices : [],
+             faces    : []
+         }
+ 
+         //  Vertices
+         //   2    3       
+         //   0    1
+ 
+     
+         // complete mesh center will be at the world origin
+         let originX : number = meshLowerLeft.x + (column * faceSize);
+         let originY : number = meshLowerLeft.y + (row    * faceSize);
+ 
+         let lowerLeft   = new THREE.Vector3(originX + 0,         originY + 0,        this.depth(row + 0, column+ 0));             // baseVertexIndex + 0
+         let lowerRight  = new THREE.Vector3(originX + faceSize,  originY + 0,        this.depth(row + 0, column + 1));            // baseVertexIndex + 1
+         let upperLeft   = new THREE.Vector3(originX + 0,         originY + faceSize, this.depth(row + 1, column + 0));            // baseVertexIndex + 2
+         let upperRight  = new THREE.Vector3(originX + faceSize,  originY + faceSize, this.depth(row + 1, column + 1));            // baseVertexIndex + 3
+ 
+         facePair.vertices.push(
+              lowerLeft,             // baseVertexIndex + 0
+              lowerRight,            // baseVertexIndex + 1
+              upperLeft,             // baseVertexIndex + 2
+              upperRight             // baseVertexIndex + 3
+          );
+ 
+          // right hand rule for polygon winding
+          facePair.faces.push(
+              new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 1, baseVertexIndex + 3),
+              new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 3, baseVertexIndex + 2)
+          );
+             
+         return facePair;
+     }
 
     /**
      * Constructs a mesh of the given base dimension.
@@ -284,13 +324,18 @@ export class DepthBuffer {
             material = new THREE.MeshPhongMaterial({wireframe : false, color : 0xff00ff, reflectivity : 0.75, shininess : 0.75});
 
         let meshGeometry = new THREE.Geometry();
+        
         let faceSize        : number = modelWidth / (this.width - 1);
         let baseVertexIndex : number = 0;
+
+        let meshWidth  : number = (this.width - 1) * faceSize;
+        let meshHeight : number = (this.height- 1) * faceSize;
+        let meshLowerLeft : THREE.Vector2 = new THREE.Vector2(-(meshWidth / 2), -(meshHeight / 2) )
 
         for (let iRow = 0; iRow < (this.height - 1); iRow++) {
             for (let iColumn = 0; iColumn < (this.width - 1); iColumn++) {
                 
-                let facePair = this.constructTriFacesAtOffset(iRow, iColumn, faceSize, baseVertexIndex);
+                let facePair = this.constructTriFacesAtOffset(iRow, iColumn, meshLowerLeft, faceSize, baseVertexIndex);
 
                 meshGeometry.vertices.push(...facePair.vertices);
                 meshGeometry.faces.push(...facePair.faces);
@@ -305,52 +350,6 @@ export class DepthBuffer {
         mesh.name = DepthBuffer.MeshModelName;
 
         return mesh;
-    }
-
-    /**
-     * Constructs a pair of triangular faces at the given offset in the DepthBuffer.
-     * @param row Row offset (Lower Left).
-     * @param column Column offset (Lower Left).
-     * @param faceSize Size of a face edge (not hypotenuse).
-     * @param baseVertexIndex Beginning offset in mesh geometry vertex array.
-     */
-    constructTriFacesAtOffset (row : number, column : number, faceSize : number, baseVertexIndex : number) : FacePair {
-        
-        let facePair : FacePair = {
-            vertices : [],
-            faces    : []
-        }
-
-        //  Vertices
-        //   2    3       
-        //   0    1
-
-        let meshWidth  : number = (this.width - 1) * faceSize;
-        let meshHeight : number = (this.height- 1) * faceSize;
-
-        // mesh center will be at the world origin
-        let originX : number = (column * faceSize) - (meshWidth / 2);
-        let originY : number = (row    * faceSize) - (meshHeight / 2);
-
-        let lowerLeft   = new THREE.Vector3(originX + 0,         originY + 0,        this.depth(row + 0, column+ 0));             // baseVertexIndex + 0
-        let lowerRight  = new THREE.Vector3(originX + faceSize,  originY + 0,        this.depth(row + 0, column + 1));            // baseVertexIndex + 1
-        let upperLeft   = new THREE.Vector3(originX + 0,         originY + faceSize, this.depth(row + 1, column + 0));            // baseVertexIndex + 2
-        let upperRight  = new THREE.Vector3(originX + faceSize,  originY + faceSize, this.depth(row + 1, column + 1));            // baseVertexIndex + 3
-
-        facePair.vertices.push(
-             lowerLeft,             // baseVertexIndex + 0
-             lowerRight,            // baseVertexIndex + 1
-             upperLeft,             // baseVertexIndex + 2
-             upperRight             // baseVertexIndex + 3
-         );
-
-         // right hand rule for polygon winding
-         facePair.faces.push(
-             new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 1, baseVertexIndex + 3),
-             new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 3, baseVertexIndex + 2)
-         );
-            
-        return facePair;
     }
 
     /**
