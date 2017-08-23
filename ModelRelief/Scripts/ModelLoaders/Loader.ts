@@ -138,14 +138,38 @@ export class Loader {
     }
 
     /**
+     * Add a sloped plane to a scene.
+     * @param viewer Instance of the Viewer to display the model.
+     */
+    loadSlopedPlaneModel (viewer : Viewer) {
+        
+        // plane
+        let dimensions : number = 2.0
+        let width  : number = dimensions;
+        let height : number = dimensions;
+
+        let geometry : THREE.Geometry = new THREE.PlaneGeometry(width, height, 1, 1);
+        let material : THREE.Material = new THREE.MeshPhongMaterial({ color: testModelColor });
+
+        let mesh = new THREE.Mesh(geometry, material);
+        let center : THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0);
+        mesh.position.set(center.x, center.y, center.z);
+        mesh.rotateX(Math.PI / 4);
+
+        
+        mesh.name = 'SlopedPlane';
+        viewer.model = mesh;
+    }
+
+    /**
      * Add a test model consisting of a tiered checkerboard
      * @param viewer Instance of the Viewer to display the model.
      */
     loadCheckerboardModel (viewer : Viewer) {
         
         let gridLength     : number = 2;
-        let totalHeight    : number = 1.0;       
-        let gridDivisions  : number = 10;
+        let totalHeight    : number = 1.0;        
+        let gridDivisions  : number = 2;
         let totalCells     : number = Math.pow(gridDivisions, 2);
 
         let cellBase       : number = gridLength / gridDivisions;

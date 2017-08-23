@@ -84,7 +84,7 @@ export class DepthBuffer {
      */
     get minimum() : number{
 
-        let minimum = this.normalizedToModelDepth(this._minimumNormalized);
+        let minimum = this.normalizedToModelDepth(this._maximumNormalized);
 
         return minimum;
     }
@@ -102,7 +102,7 @@ export class DepthBuffer {
      */
     get maximum() : number{
 
-        let maximum = this.normalizedToModelDepth(this.maximumNormalized);
+        let maximum = this.normalizedToModelDepth(this.minimumNormalized);
 
         return maximum;
     }
@@ -282,11 +282,10 @@ export class DepthBuffer {
              vertices : [],
              faces    : []
          }
- 
+
          //  Vertices
          //   2    3       
          //   0    1
- 
      
          // complete mesh center will be at the world origin
          let originX : number = meshLowerLeft.x + (column * faceSize);

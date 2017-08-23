@@ -6,16 +6,18 @@
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
 Core
+    Add a far clipping plane control to the ModelViewer to provide greater control over scene composition..
+        Do not set the far plane based on the model extents. The precision is not improved
+
     Set default CameraSettings based on model.
 
     The near clip plane can clip goemetry such as the highest face of the checkerboard. Move by epsilon?
 
-        Experiment with precision setting in THREE.WebGLRenderer.
-        Optimize constructTriFacesAtOffset!
-        
-        Move depth calculations from TS to shader (ex. readDepth)
-            createDepthBuffer: 61.994140625ms
-            mesh: 873.432373046875ms
+    Experiment with precision setting in THREE.WebGLRenderer.
+
+    Optimize constructTriFacesAtOffset       
+        createDepthBuffer: 61.994140625ms
+        mesh: 873.432373046875ms
 
 Viewing
     Progress Indicator

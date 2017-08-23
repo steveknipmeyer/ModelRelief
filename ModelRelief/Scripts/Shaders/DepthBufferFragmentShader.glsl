@@ -94,6 +94,9 @@ float readDepth (sampler2D depthSampler, vec2 uvCoordinate) {
 //
 float normalizedToModelDepth(sampler2D depthSampler, vec2 uvCoordinate) {
 
+    //N.B. This does not yield the correct result. 
+    // The values are too large (~10000).
+
     float fragCoordZ = texture2D(depthSampler, uvCoordinate).x;
 
     // https://stackoverflow.com/questions/6652253/getting-the-true-z-value-from-the-depth-buffer
