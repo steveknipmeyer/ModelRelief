@@ -161,6 +161,9 @@ export class DepthBuffer {
      */
     normalizedToModelDepth(normalizedDepth : number) : number {
 
+        //N.B. This does not yield the correct result. 
+        // The values are too large (~10000).
+
         // https://stackoverflow.com/questions/6652253/getting-the-true-z-value-from-the-depth-buffer
         normalizedDepth = 2.0 * normalizedDepth - 1.0;
         let zLinear = 2.0 * this.camera.near * this.camera.far / (this.camera.far + this.camera.near - normalizedDepth * (this.camera.far - this.camera.near));
@@ -221,11 +224,6 @@ export class DepthBuffer {
         for (let index: number = 0; index < this.depths.length; index++)
             {
             let depthValue : number = this.depths[index];
-/*
-            // skip values at far plane
-            if (MathLibrary.numbersEqualWithinTolerance(depthValue, 1.0, DepthBuffer.normalizedTolerance))
-                continue;
-*/
             if (depthValue > maximumNormalized)
                 maximumNormalized = depthValue;
             }

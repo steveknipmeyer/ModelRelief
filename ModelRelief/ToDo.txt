@@ -11,10 +11,12 @@ Core
     The near clip plane can clip goemetry such as the highest face of the checkerboard. Move by epsilon?
 
         Experiment with precision setting in THREE.WebGLRenderer.
+        Optimize constructTriFacesAtOffset!
+        
         Move depth calculations from TS to shader (ex. readDepth)
             createDepthBuffer: 61.994140625ms
             mesh: 873.432373046875ms
-            
+
 Viewing
     Progress Indicator
     OrbitControls versus Trackball

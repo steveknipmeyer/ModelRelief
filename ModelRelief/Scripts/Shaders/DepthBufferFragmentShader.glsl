@@ -1,7 +1,7 @@
 ﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
 //                                                                         //
-// Copyright (c) <2012-2017> Steve Knipmeyer                               //
+// Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 
 // enable extensions (e.g. dFdx, dFdy)
@@ -88,6 +88,24 @@ float readDepth (sampler2D depthSampler, vec2 uvCoordinate) {
     return viewZToOrthographicDepth( viewZ, cameraNear, cameraFar );
 }
 
+//
+// Convert a normalized depth [0,1] to depth in model units.
+// @param normalizedDepth Normalized depth [0,1].
+//
+float normalizedToModelDepth(sampler2D depthSampler, vec2 uvCoordinate) {
+
+    float fragCoordZ = texture2D(depthSampler, uvCoordinate).x;
+
+    // https://stackoverflow.com/questions/6652253/getting-the-true-z-value-from-the-depth-buffer
+    fragCoordZ = 2.0 * fragCoordZ - 1.0;
+    float zLinear = 2.0 * cameraNear * cameraFar / (cameraFar + cameraNear - fragCoordZ * (cameraFar - cameraNear));
+
+    // zLinear is the distance from the camera; reverse to yield height from mesh plane
+    zLinear = -(zLinear - cameraFar);
+
+    return zLinear;
+}
+
 /// <summary>
 ///  Main entry point
 /// </summary>
@@ -98,7 +116,13 @@ void main() {
 
     vec3 diffuse = texture2D(tDiffuse, vUV).rgb;
 
+//  original : threejs
 //  float depth = readDepth(tDepth, vUV);
+
+//  model coordinates
+//  float depth = normalizedToModelDepth(tDepth, vUV);
+
+//  raw normalized [0, 1] WebGL 
     float depth = texture2D(tDepth, vUV).x;
 
     gl_FragColor = encode_float(depth);
