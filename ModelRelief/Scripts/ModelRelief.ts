@@ -18,7 +18,31 @@ import {OBJLoader}              from "OBJLoader"
 import {Services}               from 'Services'
 import {Viewer}                 from "Viewer"
 
-export class ModelRelief {
+/**
+ * @class
+ * ViewerControls
+ */
+class ViewerControls {
+    
+        displayGrid    : (visible : boolean) => void;
+        generateRelief : () => void;
+
+        nearClippingPlane  : number;
+        farClippingPlane   : number;
+        fieldOfView        : number;
+       
+        constructor(camera: THREE.PerspectiveCamera, displayGrid : (visible : boolean) => any,  generateRelief : () => any) {
+            
+            this.displayGrid    = displayGrid; 
+            this.generateRelief = generateRelief;
+
+            this.nearClippingPlane    = camera.near;
+            this.farClippingPlane     = camera.far;
+            this.fieldOfView          = camera.fov;
+        }
+    }
+    
+    export class ModelRelief {
 
     _loader             : Loader;
     _modelViewer        : ModelViewer;
@@ -58,41 +82,68 @@ export class ModelRelief {
 
         let scope = this;
 
-        class ViewerControls {
-            displayGrid: boolean;
-            generateRelief : () => void;
-
-            constructor() {
-                this.displayGrid   = true;
-                this.generateRelief = function() {};
-            }
-        }
-        let viewerControls = new ViewerControls();
+        let viewerControls = new ViewerControls(this._modelViewer.camera, this._modelViewer.displayGrid.bind(this), this.generateRelief.bind(this));
 
         // Init dat.gui and controls for the UI
-        var gui = new dat.GUI({
+        let gui = new dat.GUI({
             autoPlace: false,
             width: 320
         });
-        var menuDiv = document.getElementById('settingsControls');
+        let menuDiv = document.getElementById('settingsControls');
         menuDiv.appendChild(gui.domElement);
-        var folderOptions = gui.addFolder('ModelViewer Options');
+
+        // ----------------------//
+        //    ModelViewer        //      
+        // ----------------------//
+        let modelViewerOptions = gui.addFolder('ModelViewer Options');
 
         // Grid
-        var controlDisplayGrid = folderOptions.add(viewerControls, 'displayGrid').name('Display Grid');
-        controlDisplayGrid.onChange (function (value) {
-
-            scope._modelViewer.displayGrid (value);
-        }.bind(this));
+        let controlDisplayGrid = modelViewerOptions.add(viewerControls, 'displayGrid').name('Display Grid');
 
         // Depth Buffer
-        var controlGenerateRelief = folderOptions.add(viewerControls, 'generateRelief').name('Generate Relief');
-        controlGenerateRelief.onChange (function () {
+        let controlGenerateRelief = modelViewerOptions.add(viewerControls, 'generateRelief').name('Generate Relief');
 
-            scope.generateRelief();
+        modelViewerOptions.open();
+
+        // ----------------------//
+        //        Camera         //      
+        // ----------------------//
+        let cameraOptions = gui.addFolder('Camera Options');
+        
+        // Near Clipping Plane
+        let minimum  =   0;
+        let maximum  = 100;
+        let stepSize =   0.1;
+        let controlNearClippingPlane = cameraOptions.add(viewerControls, 'nearClippingPlane').name('Near Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
+        controlNearClippingPlane .onChange (function (value) {
+
+            scope._modelViewer.camera.near = value;
+            scope._modelViewer.camera.updateProjectionMatrix();
         }.bind(this));
 
-        folderOptions.open();
+        // Far Clipping Plane
+        minimum  =   1;
+        maximum  = 500;
+        stepSize =   0.1;
+        let controlFarClippingPlane = cameraOptions.add(viewerControls, 'farClippingPlane').name('Far Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();;
+        controlFarClippingPlane .onChange (function (value) {
+
+            scope._modelViewer.camera.far = value;
+            scope._modelViewer.camera.updateProjectionMatrix();
+        }.bind(this));
+
+        // Field of View
+        minimum  = 25;
+        maximum  = 75;
+        stepSize =  1;
+        let controlFieldOfView= cameraOptions.add(viewerControls, 'fieldOfView').name('Field of View').min(minimum).max(maximum).step(stepSize).listen();;
+        controlFieldOfView .onChange (function (value) {
+
+            scope._modelViewer.camera.fov = value;
+            scope._modelViewer.camera.updateProjectionMatrix();
+        }.bind(this));
+
+        cameraOptions.open();       
     }
 
     /**
@@ -115,7 +166,7 @@ export class ModelRelief {
         this._loader = new Loader();
 
         this._loader.loadOBJModel (this._modelViewer);
-        this._loader.loadCheckerboardModel (this._modelViewer);
+//      this._loader.loadCheckerboardModel (this._modelViewer);
 //      this._loader.loadTorusModel (this._modelViewer);
 //      this._loader.loadBoxModel (this._modelViewer);
 //      this._loader.loadSlopedPlaneModel (this._modelViewer);

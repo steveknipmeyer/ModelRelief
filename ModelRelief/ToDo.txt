@@ -7,17 +7,13 @@ Allow DepthBuffer, DepthBuffer-generated mesh to be rectangular.
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
 Core
-    Create a utility StopWatch class.
-    Configure JSDoc.
-    Syntax coloring.
-
-    Scaling to fit mesh base!
-
-    Cache template meshes.  
-        Clone and then set only the Z value.
+    Move ViewSettings from ModelRelief to ModelViewer class.
+        Remove scope?
 
     Add a far clipping plane control to the ModelViewer to provide greater control over scene composition..
         Do not set the far plane based on the model extents. The precision is not improved
+
+    Create a utility StopWatch class.
 
     Set default CameraSettings based on model.
 
@@ -28,6 +24,9 @@ Core
     Optimize constructTriFacesAtOffset       
         createDepthBuffer: 61.994140625ms
         mesh: 873.432373046875ms
+
+        Cache template meshes.  
+            Clone and then set only the Z value.
 
 Viewing
     Progress Indicator

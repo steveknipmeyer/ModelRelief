@@ -419,7 +419,7 @@ export class DepthBufferFactory {
         let farPlane  = -boundingBoxView.min.z;
 
         this._camera.near = nearPlane;
-        this._camera.far  = farPlane;
+        this._camera.far  = Math.min(this._camera.far, farPlane);
         this._camera.updateProjectionMatrix();
    }
 
