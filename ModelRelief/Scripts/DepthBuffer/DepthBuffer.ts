@@ -314,22 +314,23 @@ export class DepthBuffer {
 
     /**
      * Constructs a mesh of the given base dimension.
-     * @param modelWidth Base dimension (model units). Height is controlled by DB aspect ratio.
+     * @param meshXYExtents Base dimensions (model units). Height is controlled by DB aspect ratio.
      * @param material Material to assign to mesh.
      */
-    mesh(modelWidth : number, material? : THREE.Material) : THREE.Mesh {
+    mesh(meshXYExtents : THREE.Vector2, material? : THREE.Material) : THREE.Mesh {
 
+        console.time("mesh");
+        meshXYExtents = Graphics.getCameraNearPlaneExtents(this.camera);
+        
         if (!material)
             material = new THREE.MeshPhongMaterial({wireframe : false, color : 0xff00ff, reflectivity : 0.75, shininess : 0.75});
 
         let meshGeometry = new THREE.Geometry();
         
-        let faceSize        : number = modelWidth / (this.width - 1);
+        let faceSize        : number = meshXYExtents.x / (this.width - 1);
         let baseVertexIndex : number = 0;
 
-        let meshWidth  : number = (this.width - 1) * faceSize;
-        let meshHeight : number = (this.height- 1) * faceSize;
-        let meshLowerLeft : THREE.Vector2 = new THREE.Vector2(-(meshWidth / 2), -(meshHeight / 2) )
+        let meshLowerLeft : THREE.Vector2 = new THREE.Vector2(-(meshXYExtents.x / 2), -(meshXYExtents.y / 2) )
 
         for (let iRow = 0; iRow < (this.height - 1); iRow++) {
             for (let iColumn = 0; iColumn < (this.width - 1); iColumn++) {
@@ -348,6 +349,7 @@ export class DepthBuffer {
         let mesh  = new THREE.Mesh(meshGeometry, material);
         mesh.name = DepthBuffer.MeshModelName;
 
+        console.timeEnd("mesh");       
         return mesh;
     }
 

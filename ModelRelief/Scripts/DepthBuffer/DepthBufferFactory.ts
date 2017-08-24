@@ -40,7 +40,7 @@ export interface DepthBufferFactoryParameters {
 
 export interface MeshGenerateParameters {
 
-    modelWidth       : number;
+    meshXYExtents   : THREE.Vector2;
     camera?          : THREE.PerspectiveCamera;
     material?        : THREE.Material;
 }
@@ -373,6 +373,8 @@ export class DepthBufferFactory {
      */
     createDepthBuffer() {
 
+        console.time("createDepthBuffer");
+        
         this._renderer.render(this._scene, this._camera, this._target);    
     
         // (optional) preview encoded RGBA texture; drawn by shader but not persisted
@@ -390,6 +392,8 @@ export class DepthBufferFactory {
         this._depthBuffer = new DepthBuffer(depthBufferRGBA, this._width, this._height, this._camera);    
 
         this.analyzeTargets();
+
+        console.timeEnd("createDepthBuffer");       
     }
     /**
      * Sets the camera clipping planes for mesh generation.
@@ -416,8 +420,6 @@ export class DepthBufferFactory {
 
         this._camera.near = nearPlane;
         this._camera.far  = farPlane;
-
-        // WIP: Or this._viewer.updateCamera()?
         this._camera.updateProjectionMatrix();
    }
 
@@ -433,12 +435,8 @@ export class DepthBufferFactory {
         if (this._boundedClipping)
             this.setCameraClippingPlanes();
 
-        console.time("createDepthBuffer");
         this.createDepthBuffer();
-        console.timeEnd("createDepthBuffer");
-        console.time("mesh");        
-        let mesh = this._depthBuffer.mesh(parameters.modelWidth, parameters.material);
-        console.timeEnd("mesh");        
+        let mesh = this._depthBuffer.mesh(parameters.meshXYExtents, parameters.material);
         
         return mesh;
     }

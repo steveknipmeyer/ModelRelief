@@ -1,11 +1,21 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Commit Notes                                                       //
 // ------------------------------------------------------------------------//
+Allow DepthBuffer, DepthBuffer-generated mesh to be rectangular.
 
 // ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
 Core
+    Create a utility StopWatch class.
+    Configure JSDoc.
+    Syntax coloring.
+
+    Scaling to fit mesh base!
+
+    Cache template meshes.  
+        Clone and then set only the Z value.
+
     Add a far clipping plane control to the ModelViewer to provide greater control over scene composition..
         Do not set the far plane based on the model extents. The precision is not improved
 
@@ -23,13 +33,14 @@ Viewing
     Progress Indicator
     OrbitControls versus Trackball
     Add Orthographic view controls.
+        CombinedCamera
     Add axes helper to mesh viewer.
 
 Performance
     Profiling
         Install additional IIS components?
-    Optimize!
     Memory management!
+        https://stackoverflow.com/questions/18357529/threejs-remove-object-from-scene        
         Make sure if you use scene.remove(mesh), you also call mesh.geometry.dispose(), mesh.material.dispose() and mesh.texture.dispose() else you'll get memory leaks I think (r71).
             meshByMeshPlane: 66080.48974609375ms
             mesh: 7068.237060546875ms

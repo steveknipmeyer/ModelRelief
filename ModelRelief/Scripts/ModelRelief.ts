@@ -36,9 +36,15 @@ export class ModelRelief {
      */
     generateRelief() : void {
 
-        let size = 512;
-        let factory = new DepthBufferFactory({width : size, height : size, model : this._modelViewer._root, camera : this._modelViewer.camera, addCanvasToDOM : true});   
-        let previewMesh : THREE.Mesh = factory.meshGenerate({modelWidth : 2});
+        // pixels
+        let width  = 512;
+        let height = width / this._modelViewer.aspectRatio;
+        let factory = new DepthBufferFactory({width : width, height : height, model : this._modelViewer._root, camera : this._modelViewer.camera, addCanvasToDOM : true});   
+
+        // mesh units
+        let meshWidth = 2;
+        let meshXYExtents = new THREE.Vector2(meshWidth, meshWidth / this._modelViewer.aspectRatio);
+        let previewMesh : THREE.Mesh = factory.meshGenerate({meshXYExtents : meshXYExtents});
 
         this._meshPreviewViewer.model = previewMesh;
             
@@ -109,7 +115,7 @@ export class ModelRelief {
         this._loader = new Loader();
 
         this._loader.loadOBJModel (this._modelViewer);
-//      this._loader.loadCheckerboardModel (this._modelViewer);
+        this._loader.loadCheckerboardModel (this._modelViewer);
 //      this._loader.loadTorusModel (this._modelViewer);
 //      this._loader.loadBoxModel (this._modelViewer);
 //      this._loader.loadSlopedPlaneModel (this._modelViewer);

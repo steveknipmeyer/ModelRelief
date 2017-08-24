@@ -582,7 +582,7 @@ export class Graphics {
         var rayOrigin  : THREE.Vector3 = new THREE.Vector3 (mouseWorld.x, mouseWorld.y, camera.position.z),
             worldPoint : THREE.Vector3 = new THREE.Vector3(mouseWorld.x, mouseWorld.y, mouseWorld.z);
 
-//          Tools.consoleLog('World mouse coordinates: ' + worldPoint.x + ', ' + worldPoint.y);
+            // Tools.consoleLog('World mouse coordinates: ' + worldPoint.x + ', ' + worldPoint.y);
 
         // construct ray from camera to mouse world
         var raycaster = new THREE.Raycaster (rayOrigin, worldPoint.sub (rayOrigin).normalize());
@@ -663,6 +663,23 @@ export class Graphics {
         return canvas;
     }
 
+    /**
+     * Returns the extents of the near camera plane.
+     * @static
+     * @param {THREE.PerspectiveCamera} camera Camera.
+     * @returns {THREE.Vector2} 
+     * @memberof Graphics
+     */
+    static getCameraNearPlaneExtents(camera : THREE.PerspectiveCamera) : THREE.Vector2 {
+
+        let cameraFOVRadians = camera.fov * (Math.PI / 180);
+ 
+        let nearHeight = Math.tan(cameraFOVRadians) * camera.near;
+        let nearWidth  = camera.aspect * nearHeight;
+        let extents = new THREE.Vector2(nearWidth, nearHeight);
+        
+        return extents;
+    }
 
 //#endregion
 
