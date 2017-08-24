@@ -55,9 +55,11 @@ export interface ImageGenerateParameters {
 export class DepthBufferFactory {
 
     static DefaultResolution : number           = 1024;                     // default DB resolution
+    static NearPlaneEpsilone : number           = .001;                     // adjustment to avoid clipping geometry on the near plane
+    
     static CssClassName      : string           = 'DepthBufferFactory';     // CSS class
     static RootContainerId   : string           = 'rootContainer';          // root container for viewers
-
+    
     _scene           : THREE.Scene              = null;     // target scene
     _model           : THREE.Group              = null;     // target model
 
@@ -418,8 +420,12 @@ export class DepthBufferFactory {
         let nearPlane = -boundingBoxView.max.z;
         let farPlane  = -boundingBoxView.min.z;
 
-        this._camera.near = nearPlane;
+        // adjust by epsilon to avoid clipping geometry at the near plane edge
+        this._camera.near = (1 - DepthBufferFactory.NearPlaneEpsilone) * nearPlane;
+
+        // allow user to override calculated far plane
         this._camera.far  = Math.min(this._camera.far, farPlane);
+
         this._camera.updateProjectionMatrix();
    }
 

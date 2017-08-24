@@ -61,7 +61,7 @@ export class ModelViewer extends Viewer {
      */
     initializeDefaultCameraSettings () : CameraSettings {
 
-        let useTestCamera : boolean = false;
+        let useTestCamera : boolean = true;
         let settingsOBJ : CameraSettings = {
             // Baseline : near = 0.1, far = 10000
             // ZBuffer  : near = 100, far = 300

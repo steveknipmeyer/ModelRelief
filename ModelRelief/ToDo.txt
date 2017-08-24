@@ -1,7 +1,6 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Commit Notes                                                       //
 // ------------------------------------------------------------------------//
-Allow DepthBuffer, DepthBuffer-generated mesh to be rectangular.
 
 // ------------------------------------------------------------------------// 
 //      Tasks                                                              //
@@ -9,9 +8,6 @@ Allow DepthBuffer, DepthBuffer-generated mesh to be rectangular.
 Core
     Move ViewSettings from ModelRelief to ModelViewer class.
         Remove scope?
-
-    Add a far clipping plane control to the ModelViewer to provide greater control over scene composition..
-        Do not set the far plane based on the model extents. The precision is not improved
 
     Create a utility StopWatch class.
 
