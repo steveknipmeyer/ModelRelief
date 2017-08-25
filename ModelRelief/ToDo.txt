@@ -1,19 +1,20 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Commit Notes                                                       //
 // ------------------------------------------------------------------------//
+Set default CameraSettings based on model.
 
 // ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
 Core
+    DepthBuffer.mesh does not scale the mesh based on the MeshGenerateParameters.
+
     Move ViewSettings from ModelRelief to ModelViewer class.
         Remove scope?
+        ViewerControls do not show the correct value when the camera is changed.
+        Update whenever the camera is reset.
 
     Create a utility StopWatch class.
-
-    Set default CameraSettings based on model.
-
-    The near clip plane can clip goemetry such as the highest face of the checkerboard. Move by epsilon?
 
     Experiment with precision setting in THREE.WebGLRenderer.
 
@@ -25,6 +26,7 @@ Core
             Clone and then set only the Z value.
 
 Viewing
+    Choose a better material.
     Progress Indicator
     OrbitControls versus Trackball
     Add Orthographic view controls.
@@ -41,6 +43,7 @@ Performance
             mesh: 7068.237060546875ms
 
 Development Workflow
+    Configure VSCOde tasks (Build, etc.)
     Webpack
 
 Image File Creation
@@ -124,8 +127,14 @@ Create a set of sample materials such as wood, glass, plaster, etc.
 // ------------------------------------------------------------------------//
 
 // ------------------------------------------------------------------------// 
-//      TypeScript Typings                                                 //
+//      TypeScript                                                         //
 // ------------------------------------------------------------------------//
+How can a subclass call the property (method) of a super class?
+    ModelViewer extends Viewer
+        set model (model : THREE.Object) {
+            super.model(model);     // not valid
+        }            
+
 TypeScript Typings management
     Where is the Visual Studio instance of node.s installed?
         "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\Microsoft\Web Tools\External"

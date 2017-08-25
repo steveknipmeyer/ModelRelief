@@ -8,6 +8,7 @@
 import {assert}             from 'chai'
 import * as THREE           from 'three'
 
+import {Camera}             from 'Camera'
 import {Graphics}           from 'Graphics'
 import {Logger, HTMLLogger} from 'Logger'
 import {MathLibrary}        from 'Math'
@@ -320,7 +321,7 @@ export class DepthBuffer {
     mesh(meshXYExtents : THREE.Vector2, material? : THREE.Material) : THREE.Mesh {
 
         console.time("mesh");
-        meshXYExtents = Graphics.getCameraNearPlaneExtents(this.camera);
+        meshXYExtents = Camera.getNearPlaneExtents(this.camera);
         
         if (!material)
             material = new THREE.MeshPhongMaterial({wireframe : false, color : 0xff00ff, reflectivity : 0.75, shininess : 0.75});

@@ -5,14 +5,15 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE                   from 'three'
+import * as THREE                       from 'three'
 
-import {TrackballControls}          from 'TrackballControls'
-import {CameraSettings, Graphics}   from 'Graphics'
-import {Logger}                     from 'Logger'
-import {Materials}                  from 'Materials'
-import {Services}                   from 'Services'
-import {Viewer}                     from 'Viewer'
+import {CameraSettings, StandardView}   from 'Camera'
+import {TrackballControls}              from 'TrackballControls'
+import {Graphics}                       from 'Graphics'
+import {Logger}                         from 'Logger'
+import {Materials}                      from 'Materials'
+import {Services}                       from 'Services'
+import {Viewer}                         from 'Viewer'
 
 const ObjectNames = {
     Grid :  'Grid'
@@ -42,7 +43,7 @@ export class ModelViewer extends Viewer {
 
         return this._camera;
     }
-
+        
 //#endregion
 
 //#region Initialization    
@@ -54,35 +55,6 @@ export class ModelViewer extends Viewer {
         var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
         helper.name = ObjectNames.Grid;
         this._scene.add(helper);
-    }
-
-    /**
-     * Initialize the viewer camera
-     */
-    initializeDefaultCameraSettings () : CameraSettings {
-
-        let useTestCamera : boolean = true;
-        let settingsOBJ : CameraSettings = {
-            // Baseline : near = 0.1, far = 10000
-            // ZBuffer  : near = 100, far = 300
-
-            position:       new THREE.Vector3(0.0, 175.0, 500.0),
-            target:         new THREE.Vector3(0, 0, 0),
-            near:           0.1,
-            far:            10000,
-            fieldOfView:    45
-        };
-
-        let settingsTestModels : CameraSettings = {
-
-            position:       new THREE.Vector3(0.0, 0.0, 4.0),
-            target:         new THREE.Vector3(0, 0, 0),
-            near:           0.1,
-            far:            10000,
-            fieldOfView:    37                                  // https://www.nikonians.org/reviews/fov-tables
-        };
-
-        return useTestCamera ? settingsTestModels : settingsOBJ;    
     }
 
     /**

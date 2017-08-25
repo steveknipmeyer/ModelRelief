@@ -8,9 +8,9 @@
 import * as THREE                   from 'three'
 import * as dat    from 'dat-gui'
 
-import {Camera}                     from 'Camera'
+import {CameraSettings, Camera}     from 'Camera'
 import {DepthBufferFactory}         from 'DepthBufferFactory'
-import {CameraSettings, Graphics}   from 'Graphics'
+import {Graphics}                   from 'Graphics'
 import {Loader}                     from 'Loader'
 import {Logger, ConsoleLogger}      from 'Logger'
 import {MathLibrary}                from 'Math'

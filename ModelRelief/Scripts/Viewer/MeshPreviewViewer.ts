@@ -7,7 +7,8 @@
 
 import * as THREE                   from 'three'
 
-import {CameraSettings, Graphics}   from 'Graphics'
+import {CameraSettings, Camera}     from 'Camera'
+import {Graphics}                   from 'Graphics'
 import {Logger, HTMLLogger}         from 'Logger'
 import {MathLibrary}                from 'Math'
 import {Services}                   from 'Services'
@@ -39,23 +40,6 @@ export class MeshPreviewViewer extends Viewer {
      * Populate scene.
      */
     populateScene () {       
-    }
-
-    /**
-     * Initializes perspective camera.
-     */
-    initializeDefaultCameraSettings() : CameraSettings {
-
-        let settings : CameraSettings = {
-
-            position:       new THREE.Vector3(0.0, 0.0, 4.0),
-            target:         new THREE.Vector3(0, 0, 0),
-            near:           0.1,
-            far:         1000.0,
-            fieldOfView:    37                                  // https://www.nikonians.org/reviews/fov-tables
-        };
-        
-        return settings;
     }
 
     /**

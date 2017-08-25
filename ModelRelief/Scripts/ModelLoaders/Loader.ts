@@ -7,6 +7,7 @@
 
 import * as THREE  from 'three' 
 
+import {StandardView}           from 'Camera'
 import {Logger, ConsoleLogger}  from 'Logger'
 import {Graphics}               from "Graphics"
 import {OBJLoader}              from "OBJLoader"
@@ -54,7 +55,7 @@ export class Loader {
         loader.load(fileName, function (group : THREE.Group) {
             
             viewer.model = group;
-
+            viewer.setCameraToStandardView(StandardView.Front)                       
         }, onProgress, onError);
     }
 
@@ -107,7 +108,7 @@ export class Loader {
         let material = new THREE.MeshPhongMaterial({ color: testModelColor });
 
         let mesh = new THREE.Mesh(geometry, material);
-        let center : THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0);
+        let center : THREE.Vector3 = new THREE.Vector3(0, 0, 0);
         mesh.position.set(center.x, center.y, center.z);
 
         mesh.name = 'Sphere';

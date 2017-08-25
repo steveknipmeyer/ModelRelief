@@ -11,14 +11,6 @@ import {Logger, ConsoleLogger}  from 'Logger'
 import {ModelRelief}            from 'ModelRelief'
 import {Services}               from 'Services'
 
-export interface CameraSettings {
-    position:       THREE.Vector3;        // location of camera
-    target:         THREE.Vector3;        // target point
-    near:           number;               // near clipping plane
-    far:            number;               // far clipping plane
-    fieldOfView:    number;               // field of view
-}
-
 /**
  *  General THREE.js/WebGL support routines
  *  Graphics Library
@@ -662,25 +654,5 @@ export class Graphics {
 
         return canvas;
     }
-
-    /**
-     * Returns the extents of the near camera plane.
-     * @static
-     * @param {THREE.PerspectiveCamera} camera Camera.
-     * @returns {THREE.Vector2} 
-     * @memberof Graphics
-     */
-    static getCameraNearPlaneExtents(camera : THREE.PerspectiveCamera) : THREE.Vector2 {
-
-        let cameraFOVRadians = camera.fov * (Math.PI / 180);
- 
-        let nearHeight = Math.tan(cameraFOVRadians) * camera.near;
-        let nearWidth  = camera.aspect * nearHeight;
-        let extents = new THREE.Vector2(nearWidth, nearHeight);
-        
-        return extents;
-    }
-
 //#endregion
-
 }

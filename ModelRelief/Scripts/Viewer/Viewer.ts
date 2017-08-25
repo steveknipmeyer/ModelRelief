@@ -5,13 +5,13 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE                   from 'three'
-
-import {TrackballControls}          from 'TrackballControls'
-import {CameraSettings, Graphics}   from 'Graphics'
-import {Logger}                     from 'Logger'
-import {Materials}                  from 'Materials'
-import {Services}                   from 'Services'
+import * as THREE                               from 'three'
+import {Camera, CameraSettings, StandardView}   from 'Camera'
+import {TrackballControls}                      from 'TrackballControls'
+import {Graphics}                               from 'Graphics'
+import {Logger}                                 from 'Logger'
+import {Materials}                              from 'Materials'
+import {Services}                               from 'Services'
 
 const ObjectNames = {
     Root :  'Root'
@@ -70,7 +70,7 @@ export class Viewer {
      * @param value New model to activate.
      */
     set model(value : THREE.Group) {
-
+ 
         Graphics.removeObjectChildren(this._root, false);
         this._root.add(value);
     }
@@ -133,32 +133,22 @@ export class Viewer {
     }
 
     /**
-     * Initialize the default camera settings.
+     * Initialize the viewer camera
      */
-    initializeDefaultCameraSettings() : CameraSettings {
+    initializeDefaultCameraSettings () : CameraSettings {
 
-        let settings : CameraSettings = {
-            position:       new THREE.Vector3(0.0, 0.0, 10.0),
-            target:         new THREE.Vector3(0, 0, 0),
-            near:           0.1,
-            far:            10000,
-            fieldOfView:    45
-        };
-
-        return settings;
+        return Camera.getStandardViewSettings(this.model, StandardView.Front, this.aspectRatio);
     }
-
+        
     /**
      * Initialize the viewer camera
      */
     initializeCamera() {
     
         this._defaultCameraSettings = this.initializeDefaultCameraSettings();
-
         this._camera = new THREE.PerspectiveCamera(this._defaultCameraSettings.fieldOfView, this.aspectRatio, this._defaultCameraSettings.near, this._defaultCameraSettings.far);
-        this._camera.position.copy(this._defaultCameraSettings.position);
 
-        this.resetCamera();
+        this.resetCameraToDefaultSettings();
     }
 
     /**
@@ -184,6 +174,10 @@ export class Viewer {
     initializeInputControls() {
 
         this._controls = new TrackballControls(this._camera, this._renderer.domElement);
+
+        // N.B. https://stackoverflow.com/questions/10325095/threejs-camera-lookat-has-no-effect-is-there-something-im-doing-wrong
+        this._controls.position0.copy(this._camera.position);
+        this._controls.target.copy(this._defaultCameraSettings.target);
     }
 
     /**
@@ -198,7 +192,8 @@ export class Viewer {
             switch (keyCode) {
 
                 case 70:                // F                    
-                    this.resetCamera();
+                    let settings : CameraSettings = Camera.getStandardViewSettings(this.model, StandardView.Front, this.aspectRatio);
+                    this.applyCameraSettings(settings);
                     break;
             }
             }, false);
@@ -243,14 +238,41 @@ export class Viewer {
 //#endregion
 
 //#region Camera
-    /**
-     * Resets all camera properties to the defaults
-     */
-    resetCamera() {
 
-        this._camera.position.copy(this._defaultCameraSettings.position);
+    /**
+     * @description Resets all camera properties to the defaults
+     * @param {CameraSettings} settings Settings to apply to camera.
+     */
+    applyCameraSettings(settings : CameraSettings) {
+        
+        this._camera.position.copy(settings.position);       
+        this._camera.lookAt(settings.target);
+        this._camera.near = settings.near;
+        this._camera.far  = settings.far;
+        this._camera.fov  = settings.fieldOfView;
+        
         this._camera.up.set(0, 1, 0);
-        this.updateCamera();
+
+        this.updateCameraOnWindowResize();
+        this.initializeInputControls();
+    }
+    
+    /**
+     * @description Sets the view camera properties to the given settings.
+     * @param {StandardView} view Camera settings to apply.
+     */
+    setCameraToStandardView(view : StandardView) {
+
+        this._defaultCameraSettings = Camera.getStandardViewSettings(this.model, view, this.aspectRatio);
+        this.resetCameraToDefaultSettings();
+    }
+            
+    /**
+     * @description Resets all camera properties to the defaults.
+     */
+    resetCameraToDefaultSettings() {
+        
+        this.applyCameraSettings (this._defaultCameraSettings);
     }
 //#endregion
 
@@ -258,10 +280,10 @@ export class Viewer {
     /**
      * Updates the scene camera to match the new window size
      */
-    updateCamera() {
+    updateCameraOnWindowResize() {
 
         this._camera.aspect = this.aspectRatio;
-        this._camera.lookAt(this._defaultCameraSettings.target);
+        // this._camera.lookAt(this._defaultCameraSettings.target);
         this._camera.updateProjectionMatrix();
     }
 
@@ -275,7 +297,7 @@ export class Viewer {
         this._renderer.setSize(this._width, this._height, false);
 
         this._controls.handleResize();
-        this.updateCamera();
+        this.updateCameraOnWindowResize();
     }
 
     /**

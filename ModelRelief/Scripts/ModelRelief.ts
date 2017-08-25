@@ -8,6 +8,7 @@
 import * as THREE  from 'three' 
 import * as dat    from 'dat-gui'
 
+import {StandardView}           from "Camera"
 import {DepthBufferFactory}     from "DepthBufferFactory"
 import {Loader}                 from 'Loader'
 import {Logger, ConsoleLogger}  from 'Logger'
@@ -23,17 +24,17 @@ import {Viewer}                 from "Viewer"
  * ViewerControls
  */
 class ViewerControls {
-    
-        displayGrid    : (visible : boolean) => void;
+
+        displayGrid    : boolean;
         generateRelief : () => void;
 
         nearClippingPlane  : number;
         farClippingPlane   : number;
         fieldOfView        : number;
        
-        constructor(camera: THREE.PerspectiveCamera, displayGrid : (visible : boolean) => any,  generateRelief : () => any) {
+        constructor(camera: THREE.PerspectiveCamera, generateRelief : () => any) {
             
-            this.displayGrid    = displayGrid; 
+            this.displayGrid    = true; 
             this.generateRelief = generateRelief;
 
             this.nearClippingPlane    = camera.near;
@@ -82,7 +83,7 @@ class ViewerControls {
 
         let scope = this;
 
-        let viewerControls = new ViewerControls(this._modelViewer.camera, this._modelViewer.displayGrid.bind(this), this.generateRelief.bind(this));
+        let viewerControls = new ViewerControls(this._modelViewer.camera, this.generateRelief.bind(this));
 
         // Init dat.gui and controls for the UI
         let gui = new dat.GUI({
@@ -99,6 +100,10 @@ class ViewerControls {
 
         // Grid
         let controlDisplayGrid = modelViewerOptions.add(viewerControls, 'displayGrid').name('Display Grid');
+        controlDisplayGrid.onChange ((value : boolean) => {
+
+            scope._modelViewer.displayGrid(value);
+        });
 
         // Depth Buffer
         let controlGenerateRelief = modelViewerOptions.add(viewerControls, 'generateRelief').name('Generate Relief');
@@ -111,22 +116,22 @@ class ViewerControls {
         let cameraOptions = gui.addFolder('Camera Options');
         
         // Near Clipping Plane
-        let minimum  =   0;
+        let minimum  =   0.1;
         let maximum  = 100;
         let stepSize =   0.1;
         let controlNearClippingPlane = cameraOptions.add(viewerControls, 'nearClippingPlane').name('Near Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
-        controlNearClippingPlane .onChange (function (value) {
+        controlNearClippingPlane.onChange (function (value) {
 
             scope._modelViewer.camera.near = value;
             scope._modelViewer.camera.updateProjectionMatrix();
         }.bind(this));
 
         // Far Clipping Plane
-        minimum  =   1;
-        maximum  = 500;
-        stepSize =   0.1;
+        minimum  =     1;
+        maximum  = 10000;
+        stepSize =     0.1;
         let controlFarClippingPlane = cameraOptions.add(viewerControls, 'farClippingPlane').name('Far Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();;
-        controlFarClippingPlane .onChange (function (value) {
+        controlFarClippingPlane.onChange (function (value) {
 
             scope._modelViewer.camera.far = value;
             scope._modelViewer.camera.updateProjectionMatrix();
@@ -160,17 +165,21 @@ class ViewerControls {
         this._meshPreviewViewer =  new MeshPreviewViewer('meshCanvas');
 
         // UI Controls
-        this.initializeViewerControls();
+//      this.initializeViewerControls();
 
         // Loader
         this._loader = new Loader();
 
-//      this._loader.loadOBJModel (this._modelViewer);
-        this._loader.loadCheckerboardModel (this._modelViewer);
+        this._loader.loadOBJModel (this._modelViewer);
+
+        // Test Models
+//      this._loader.loadCheckerboardModel (this._modelViewer);
 //      this._loader.loadTorusModel (this._modelViewer);
 //      this._loader.loadBoxModel (this._modelViewer);
 //      this._loader.loadSlopedPlaneModel (this._modelViewer);
-//      this._loader.loadSphereModel (this._modelViewer);
+//      this._loader.loadSphereModel (this._modelViewer);           
+
+        this._modelViewer.setCameraToStandardView(StandardView.Front);
     }
 }
 
