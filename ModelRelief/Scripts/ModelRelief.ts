@@ -165,7 +165,7 @@ class ViewerControls {
         this._meshPreviewViewer =  new MeshPreviewViewer('meshCanvas');
 
         // UI Controls
-//      this.initializeViewerControls();
+        this.initializeViewerControls();
 
         // Loader
         this._loader = new Loader();
