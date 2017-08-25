@@ -12,7 +12,7 @@ Core
     Move ViewSettings from ModelRelief to ModelViewer class.
         Remove scope?
         ViewerControls do not show the correct value when the camera is changed.
-        Update whenever the camera is reset.
+            Update whenever the camera is reset.
 
     Create a utility StopWatch class.
 

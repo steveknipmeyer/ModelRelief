@@ -1,4 +1,11 @@
-﻿
+﻿/* ----------------------    
+    Botstrap Overrides
+------------------------*/
+body { 
+    background: #413D3D !important; 
+    color: #5C98B7 !important;
+}  
+
 /* ----------------------    
     Model3D Viewer
 ------------------------*/

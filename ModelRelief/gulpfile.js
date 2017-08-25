@@ -327,4 +327,5 @@ gulp.task('serve', function () {
 
   gulp.watch([sourceConfig.shaders + '*.glsl'],                   ['buildShadersReload']);
   gulp.watch([sourceConfig.scriptsRoot + '**/*.ts'],              ['compileTypeScriptReload']);
+  gulp.watch([siteConfig.cssRoot + '**/*.css'],                   ['reload']);
 });

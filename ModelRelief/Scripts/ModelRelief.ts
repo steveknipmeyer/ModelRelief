@@ -178,7 +178,6 @@ class ViewerControls {
 //      this._loader.loadBoxModel (this._modelViewer);
 //      this._loader.loadSlopedPlaneModel (this._modelViewer);
 //      this._loader.loadSphereModel (this._modelViewer);           
-
         this._modelViewer.setCameraToStandardView(StandardView.Front);
     }
 }
