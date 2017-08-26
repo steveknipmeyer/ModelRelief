@@ -7,7 +7,8 @@
 // ------------------------------------------------------------------------//
 Design Questions
 
-    Revisit overrides of parent class.
+    How can the ModelViewer be notified of a change to the Camera?
+        event emitted by Viewer?
 
 Core
 

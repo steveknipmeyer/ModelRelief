@@ -41,7 +41,6 @@ export class ModelViewer extends Viewer {
         super (modelCanvasId);
 
         this._meshPreviewViewer = meshPreviewViewer;
-        this.initializeUIControls();               
     }
 
 //#region Properties
@@ -66,6 +65,16 @@ export class ModelViewer extends Viewer {
         this._scene.add(helper);
     }
 
+    /**
+     * General initialization
+     */
+    initialize() {
+        
+        super.initialize();
+
+        this.initializeUIControls();
+    }
+        
     /**
      * UI controls initialization.
      */
