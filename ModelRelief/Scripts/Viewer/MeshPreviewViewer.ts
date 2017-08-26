@@ -8,6 +8,7 @@
 import * as THREE                   from 'three'
 
 import {CameraSettings, Camera}     from 'Camera'
+import {DepthBuffer}                from 'DepthBuffer'
 import {Graphics}                   from 'Graphics'
 import {Logger, HTMLLogger}         from 'Logger'
 import {MathLibrary}                from 'Math'
@@ -40,6 +41,11 @@ export class MeshPreviewViewer extends Viewer {
      * Populate scene.
      */
     populateScene () {       
+
+        let height = 1;
+        let width  = 1;
+        let mesh = Graphics.createPlaneMesh(new THREE.Vector3(), height, width, new THREE.MeshPhongMaterial(DepthBuffer.DefaultMeshPhongMaterialParameters));
+        this._root.add(mesh);
     }
 
     /**

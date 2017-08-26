@@ -26,9 +26,11 @@ interface FacePair {
  */
 export class DepthBuffer {
 
-    static readonly MeshModelName       : string = 'ModelMesh';
-    static readonly normalizedTolerance : number = .001;    
+    static readonly MeshModelName         : string = 'ModelMesh';
+    static readonly NormalizedTolerance   : number = .001;    
 
+    static DefaultMeshPhongMaterialParameters : THREE.MeshPhongMaterialParameters = {wireframe : false, color : 0xff00ff, reflectivity : 0.75, shininess : 0.75};
+    
     _logger : Logger;
 
     _rgbaArray : Uint8Array;
@@ -324,7 +326,7 @@ export class DepthBuffer {
         meshXYExtents = Camera.getNearPlaneExtents(this.camera);
         
         if (!material)
-            material = new THREE.MeshPhongMaterial({wireframe : false, color : 0xff00ff, reflectivity : 0.75, shininess : 0.75});
+            material = new THREE.MeshPhongMaterial(DepthBuffer.DefaultMeshPhongMaterialParameters);
 
         let meshGeometry = new THREE.Geometry();
         

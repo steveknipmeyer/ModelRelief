@@ -176,7 +176,6 @@ class ViewerControls {
 
         // Test Models
         // this._loader.loadParametricTestModel(this._modelViewer, TestModel.Box);
-        // this._modelViewer.setCameraToStandardView(StandardView.Front);
     }
 }
 

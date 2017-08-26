@@ -1,17 +1,14 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Commit Notes                                                       //
 // ------------------------------------------------------------------------//
-Set default CameraSettings based on model.
+
 
 // ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
 Design Questions
-    Is the ModelViewer class designed only to display models? Or is it also a ReliefGenerator?
-        ReliefGenerator extends ModelView    
 
 Core
-    Abstract test models with an enum.
 
     Separate mesh scaling from mesh generation.
 

@@ -73,6 +73,8 @@ export class Viewer {
  
         Graphics.removeObjectChildren(this._root, false);
         this._root.add(value);
+
+        this.setCameraToStandardView(StandardView.Front);
     }
 
     /**

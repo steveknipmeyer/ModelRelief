@@ -56,7 +56,6 @@ export class Loader {
         loader.load(fileName, function (group : THREE.Group) {
             
             viewer.model = group;
-            viewer.setCameraToStandardView(StandardView.Front)                       
         }, onProgress, onError);
     }
 
