@@ -8,16 +8,17 @@
 import * as THREE  from 'three' 
 import * as dat    from 'dat-gui'
 
-import {StandardView}           from "Camera"
-import {DepthBufferFactory}     from "DepthBufferFactory"
-import {Loader}                 from 'Loader'
-import {Logger, ConsoleLogger}  from 'Logger'
-import {Graphics}               from "Graphics"
-import {MeshPreviewViewer}      from "MeshPreviewViewer"
-import {ModelViewer}            from "ModelViewer"
-import {OBJLoader}              from "OBJLoader"
-import {Services}               from 'Services'
-import {Viewer}                 from "Viewer"
+import {StandardView}               from "Camera"
+import {DepthBufferFactory}         from "DepthBufferFactory"
+import {Loader}                     from 'Loader'
+import {Logger, ConsoleLogger}      from 'Logger'
+import {Graphics}                   from "Graphics"
+import {MeshPreviewViewer}          from "MeshPreviewViewer"
+import {ModelViewer}                from "ModelViewer"
+import {OBJLoader}                  from "OBJLoader"
+import {Services}                   from 'Services'
+import {TestModel}                  from 'TestModelLoader'
+import {Viewer}                     from "Viewer"
 
 /**
  * @class
@@ -170,15 +171,12 @@ class ViewerControls {
         // Loader
         this._loader = new Loader();
 
+        // OBJ Models
         this._loader.loadOBJModel (this._modelViewer);
 
         // Test Models
-//      this._loader.loadCheckerboardModel (this._modelViewer);
-//      this._loader.loadTorusModel (this._modelViewer);
-//      this._loader.loadBoxModel (this._modelViewer);
-//      this._loader.loadSlopedPlaneModel (this._modelViewer);
-//      this._loader.loadSphereModel (this._modelViewer);           
-        this._modelViewer.setCameraToStandardView(StandardView.Front);
+        // this._loader.loadParametricTestModel(this._modelViewer, TestModel.Box);
+        // this._modelViewer.setCameraToStandardView(StandardView.Front);
     }
 }
 

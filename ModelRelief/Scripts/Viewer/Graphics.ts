@@ -207,27 +207,26 @@ export class Graphics {
      */
     static createPlaneMesh(position : THREE.Vector3, width : number, height : number, material? : THREE.Material) : THREE.Mesh {
         
-                var 
-                    planeGeometry  : THREE.PlaneGeometry,
-                    planeMaterial  : THREE.Material,
-                    plane          : THREE.Mesh;
-        
-                planeGeometry = new THREE.PlaneGeometry(width, height);       
-                planeMaterial = material || new THREE.MeshPhongMaterial( { color: 0x0000ff, opacity: 1.0} );
-        
-                plane = new THREE.Mesh(planeGeometry, planeMaterial);
-                plane.name = Graphics.PlaneName;
-                plane.position.copy(position);
-        
-                return plane;
-            }
+        var 
+            planeGeometry  : THREE.PlaneGeometry,
+            planeMaterial  : THREE.Material,
+            plane          : THREE.Mesh;
+
+        planeGeometry = new THREE.PlaneGeometry(width, height);       
+        planeMaterial = material || new THREE.MeshPhongMaterial( { color: 0x0000ff, opacity: 1.0} );
+
+        plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane.name = Graphics.PlaneName;
+        plane.position.copy(position);
+
+        return plane;
+    }
         
     /**
      * Creates a sphere mesh.
      * @param position Origin of the sphere.
      * @param radius Radius.
-     * @param color Color.
-     * @param segments Mesh segments.
+     * @param material Material.
      */
     static createSphereMesh(position : THREE.Vector3, radius : number, material? : THREE.Material) : THREE.Mesh {
         var sphereGeometry  : THREE.SphereGeometry,

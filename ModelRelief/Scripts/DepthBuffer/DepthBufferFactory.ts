@@ -82,7 +82,7 @@ export class DepthBufferFactory {
     _postCamera      : THREE.OrthographicCamera = null;     // orthographic camera
     _postMaterial    : THREE.ShaderMaterial     = null;     // shader material that encodes the WebGL depth buffer into a floating point RGBA format
 
-    _minimumWebGL    : boolean                  = true;     // true if minimum WeGL requirementat are present
+    _minimumWebGL    : boolean                  = true;     // true if minimum WeGL requirements are present
     _logger          : Logger                   = null;     // logger
     _addCanvasToDOM  : boolean                  = false;    // visible canvas; add to HTML page
 

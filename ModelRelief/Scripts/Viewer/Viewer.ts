@@ -92,17 +92,7 @@ export class Viewer {
      */
     populateScene () {
 
-        // geometry
-        let radius   : number = 2;
-        let segments : number = 64;
-        let geometry = new THREE.SphereGeometry(radius, segments, segments);
-
-        let material = new THREE.MeshPhongMaterial({ color: 0x0000ff });
-
-        let mesh = new THREE.Mesh(geometry, material);
-        let center : THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0);
-        mesh.position.set(center.x, center.y, center.z);
-
+        let mesh = Graphics.createSphereMesh(new THREE.Vector3(), 2);
         this._root.add(mesh);
     }
 

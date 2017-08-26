@@ -62,16 +62,7 @@ export class ModelViewer extends Viewer {
      */
     initializeLighting() {
 
-        let ambientLight = new THREE.AmbientLight(0x404040);
-        this._scene.add(ambientLight);
-
-        let directionalLight1 = new THREE.DirectionalLight(0xC0C090);
-        directionalLight1.position.set(-100, -50, 100);
-        this._scene.add(directionalLight1);
-
-        let directionalLight2 = new THREE.DirectionalLight(0xC0C090);
-        directionalLight2.position.set(100, 50, -100);
-        this._scene.add(directionalLight2);
+        super.initializeLighting();
     }   
 //#endregion
 
