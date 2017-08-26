@@ -9,23 +9,18 @@ Design Questions
 
 Core
 
-    Separate mesh scaling from mesh generation.
-
     ModelViewer
-        Create a new UI class for ModelViewer ViewSettings.
-            Construct a ViewSettingsControl object.
-            Update ViewSettingsControl object when settings change internally.
+
+        Update ModelViewerSettings object when settings change internally.
 
         Add event emission to ModelView viewer.
             modelLoaded
-            eventMeshGenerate
+            meshGenerate
 
     Introduce asynchronous handling in ModelRelief
         onMeshGenerated () {
             meshViewer.model = model;
         }
-
-
 
     Create a utility StopWatch class.
 
