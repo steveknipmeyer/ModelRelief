@@ -7,11 +7,13 @@
 // ------------------------------------------------------------------------//
 Design Questions
 
+    Revisit overrides of parent class.
+
 Core
 
     ModelViewer
-
         Update ModelViewerSettings object when settings change internally.
+            synchronizeCameraSettings
 
         Add event emission to ModelView viewer.
             modelLoaded

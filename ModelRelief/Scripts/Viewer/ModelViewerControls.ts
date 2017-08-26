@@ -146,4 +146,15 @@ export class ModelViewerControls {
 
         cameraOptions.open();       
     }
+
+    /**
+     * Synchronize the UI camera settings with the target camera.
+     * @param camera 
+     */
+    synchronizeCameraSettings (camera : THREE.PerspectiveCamera) {
+
+        this._modelViewerSettings.nearClippingPlane = camera.near;
+        this._modelViewerSettings.farClippingPlane  = camera.far;
+        this._modelViewerSettings.fieldOfView       = camera.fov;
+    }
 }
