@@ -40,7 +40,6 @@ export interface DepthBufferFactoryParameters {
 
 export interface MeshGenerateParameters {
 
-    meshXYExtents   : THREE.Vector2;
     camera?          : THREE.PerspectiveCamera;
     material?        : THREE.Material;
 }
@@ -442,7 +441,7 @@ export class DepthBufferFactory {
             this.setCameraClippingPlanes();
 
         this.createDepthBuffer();
-        let mesh = this._depthBuffer.mesh(parameters.meshXYExtents, parameters.material);
+        let mesh = this._depthBuffer.mesh(parameters.material);
         
         return mesh;
     }

@@ -320,10 +320,10 @@ export class DepthBuffer {
      * @param meshXYExtents Base dimensions (model units). Height is controlled by DB aspect ratio.
      * @param material Material to assign to mesh.
      */
-    mesh(meshXYExtents : THREE.Vector2, material? : THREE.Material) : THREE.Mesh {
+    mesh(material? : THREE.Material) : THREE.Mesh {
 
         console.time("mesh");
-        meshXYExtents = Camera.getNearPlaneExtents(this.camera);
+        let meshXYExtents : THREE.Vector2 = Camera.getNearPlaneExtents(this.camera);
         
         if (!material)
             material = new THREE.MeshPhongMaterial(DepthBuffer.DefaultMeshPhongMaterialParameters);

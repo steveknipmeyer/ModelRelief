@@ -2,7 +2,6 @@
 //      Commit Notes                                                       //
 // ------------------------------------------------------------------------//
 
-
 // ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
@@ -21,26 +20,12 @@ Core
             modelLoaded
             eventMeshGenerate
 
-    MeshPreviewViewer
-        Construct a placeholder mesh.
-
-    Viewer
-        model property
-            setCameraToStandardView(StandardView.Front);                       
-
     Introduce asynchronous handling in ModelRelief
         onMeshGenerated () {
             meshViewer.model = model;
         }
 
-    MeshPreviewViewer does not fit model when loaded.
 
-    DepthBuffer.mesh does not scale the mesh based on the MeshGenerateParameters.
-
-    Move ViewControls from ModelRelief to ModelViewer class.
-        Remove scope?
-        ViewerControls do not show the correct value when the camera is changed.
-            Update whenever the camera is reset.
 
     Create a utility StopWatch class.
 

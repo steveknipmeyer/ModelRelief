@@ -67,11 +67,7 @@ class ViewerControls {
         let height = width / this._modelViewer.aspectRatio;
         let factory = new DepthBufferFactory({width : width, height : height, model : this._modelViewer._root, camera : this._modelViewer.camera, addCanvasToDOM : true});   
 
-        // mesh units
-        let meshWidth = 2;
-        let meshXYExtents = new THREE.Vector2(meshWidth, meshWidth / this._modelViewer.aspectRatio);
-        let previewMesh : THREE.Mesh = factory.meshGenerate({meshXYExtents : meshXYExtents});
-
+        let previewMesh : THREE.Mesh = factory.meshGenerate({});
         this._meshPreviewViewer.model = previewMesh;
             
         Services.consoleLogger.addInfoMessage('Relief generated');
