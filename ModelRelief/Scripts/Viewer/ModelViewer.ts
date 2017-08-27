@@ -51,7 +51,19 @@ export class ModelViewer extends Viewer {
 
         return this._camera;
     }
-        
+
+    /**
+     * Sets the model.
+     */
+    setModel(value : THREE.Group) {
+
+        // Call base class property via super
+        // https://github.com/Microsoft/TypeScript/issues/4465        
+        super.setModel(value);
+
+        this._modelViewerControls.synchronizeCameraSettings(this.camera);
+    }
+                
 //#endregion
 
 //#region Initialization    
@@ -109,7 +121,7 @@ export class ModelViewer extends Viewer {
 
     // WIP: trigger an event that can be consumed by the MeshPreviewViewer?
     let previewMesh : THREE.Mesh = factory.meshGenerate({});
-    this._meshPreviewViewer.model = previewMesh;
+    this._meshPreviewViewer.setModel(previewMesh);
         
     Services.consoleLogger.addInfoMessage('Relief generated');
 }

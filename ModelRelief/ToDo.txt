@@ -142,7 +142,9 @@ Create a set of sample materials such as wood, glass, plaster, etc.
 // ------------------------------------------------------------------------// 
 //      TypeScript                                                         //
 // ------------------------------------------------------------------------//
+
 How can a subclass call the property (method) of a super class?
+    https://github.com/Microsoft/TypeScript/issues/4465
     ModelViewer extends Viewer
         set model (model : THREE.Object) {
             super.model(model);     // not valid

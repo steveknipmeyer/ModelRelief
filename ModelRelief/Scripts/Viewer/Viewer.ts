@@ -69,7 +69,7 @@ export class Viewer {
      * Sets the active model.
      * @param value New model to activate.
      */
-    set model(value : THREE.Group) {
+    setModel(value : THREE.Group) {
  
         Graphics.removeObjectChildren(this._root, false);
         this._root.add(value);

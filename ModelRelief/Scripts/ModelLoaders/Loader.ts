@@ -55,7 +55,7 @@ export class Loader {
 
         loader.load(fileName, function (group : THREE.Group) {
             
-            viewer.model = group;
+            viewer.setModel(group);
         }, onProgress, onError);
     }
 

@@ -53,7 +53,7 @@ export class ModelRelief {
         this._loader.loadOBJModel (this._modelViewer);
 
         // Test Models
-        // this._loader.loadParametricTestModel(this._modelViewer, TestModel.Box);
+//      this._loader.loadParametricTestModel(this._modelViewer, TestModel.Checkerboard);
     }
 }
 

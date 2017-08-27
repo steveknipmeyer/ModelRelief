@@ -94,7 +94,7 @@ export class TestModelLoader {
             mesh.name = 'Torus Component';
             torusScene.add(mesh);
         }
-        viewer.model = torusScene;
+        viewer.setModel (torusScene);
     }
 
     /**
@@ -105,7 +105,7 @@ export class TestModelLoader {
 
         let radius = 2;    
         let mesh = Graphics.createSphereMesh(new THREE.Vector3, radius, new THREE.MeshPhongMaterial({ color: testModelColor }))
-        viewer.model = mesh;
+        viewer.setModel(mesh);
     }
 
     /**
@@ -119,7 +119,7 @@ export class TestModelLoader {
         let depth  = 2;    
         let mesh = Graphics.createBoxMesh(new THREE.Vector3, width, height, depth, new THREE.MeshPhongMaterial({ color: testModelColor }))
 
-        viewer.model = mesh;
+        viewer.setModel(mesh);
     }
 
     /**
@@ -134,7 +134,7 @@ export class TestModelLoader {
         mesh.rotateX(Math.PI / 4);
         
         mesh.name = 'SlopedPlane';
-        viewer.model = mesh;
+        viewer.setModel(mesh);
     }
 
     /**
@@ -178,6 +178,6 @@ export class TestModelLoader {
         }       
 
         group.name = 'Checkerboard';
-        viewer.model = group;
+        viewer.setModel(group);
     }
 }
