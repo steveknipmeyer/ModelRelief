@@ -7,11 +7,12 @@
 
 import * as THREE                               from 'three'
 import {Camera, CameraSettings, StandardView}   from 'Camera'
-import {TrackballControls}                      from 'TrackballControls'
+import {EventManager}                           from 'EventManager'
 import {Graphics}                               from 'Graphics'
 import {Logger}                                 from 'Logger'
 import {Materials}                              from 'Materials'
 import {Services}                               from 'Services'
+import {TrackballControls}                      from 'TrackballControls'
 
 const ObjectNames = {
     Root :  'Root'
@@ -22,6 +23,9 @@ const ObjectNames = {
  */
 export class Viewer {
 
+    _eventManager           : EventManager              = null;
+    _logger                 : Logger                    = null;
+    
     _scene                  : THREE.Scene               = null;
     _root                   : THREE.Object3D            = null;      
                                                         
@@ -35,8 +39,6 @@ export class Viewer {
 
     _controls               : TrackballControls         = null;
 
-    _logger                 : Logger                    = null;
-
     /**
      * Default constructor
      * @class Viewer
@@ -45,7 +47,8 @@ export class Viewer {
      */
     constructor(modelCanvasId : string) {
                     
-        this._logger = Services.consoleLogger;
+        this._eventManager = new EventManager();
+        this._logger       = Services.consoleLogger;
 
         this._canvas = Graphics.initializeCanvas(modelCanvasId);
         this._width  = this._canvas.offsetWidth;
@@ -65,6 +68,14 @@ export class Viewer {
         return this._root;
     }
 
+    /**
+     * Gets the EventManager.
+     */
+    get eventManager() : EventManager {
+        
+        return this._eventManager;
+    }
+        
     /**
      * Sets the active model.
      * @param value New model to activate.

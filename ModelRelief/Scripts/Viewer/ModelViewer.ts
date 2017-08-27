@@ -9,9 +9,9 @@ import * as THREE                       from 'three'
 
 import {CameraSettings, StandardView}   from 'Camera'
 import {DepthBufferFactory}             from "DepthBufferFactory"
+import {EventManager, EventType}        from 'EventManager'
 import {Graphics}                       from 'Graphics'
 import {Materials}                      from 'Materials'
-import {MeshPreviewViewer}              from "MeshPreviewViewer"
 import {ModelViewerControls}            from "ModelViewerControls"
 import {Logger}                         from 'Logger'
 import {TrackballControls}              from 'TrackballControls'
@@ -26,8 +26,7 @@ const ObjectNames = {
  * @exports Viewer/ModelViewer
  */
 export class ModelViewer extends Viewer {
-    
-    _meshPreviewViewer : MeshPreviewViewer;                 // associated preview
+
     _modelViewerControls : ModelViewerControls;             // UI controls
 
     /**
@@ -36,11 +35,9 @@ export class ModelViewer extends Viewer {
      * @constructor
      * @param modelCanvasId HTML element to host the viewer.
      */
-    constructor(modelCanvasId : string, meshPreviewViewer : MeshPreviewViewer) {
+    constructor(modelCanvasId : string) {
         
-        super (modelCanvasId);
-
-        this._meshPreviewViewer = meshPreviewViewer;
+        super (modelCanvasId);       
     }
 
 //#region Properties
@@ -121,8 +118,8 @@ export class ModelViewer extends Viewer {
 
     // WIP: trigger an event that can be consumed by the MeshPreviewViewer?
     let previewMesh : THREE.Mesh = factory.meshGenerate({});
-    this._meshPreviewViewer.setModel(previewMesh);
-        
+    
+    this._eventManager.dispatchEvent(this, EventType.MeshGenerate, previewMesh);
     Services.consoleLogger.addInfoMessage('Relief generated');
 }
 //#endregion
