@@ -366,7 +366,7 @@ export class DepthBufferFactory {
     analyzeTargets ()  {
 
 //      this.analyzeRenderBuffer();
-        this._depthBuffer.analyze();
+//      this._depthBuffer.analyze();
     }
 
     /**

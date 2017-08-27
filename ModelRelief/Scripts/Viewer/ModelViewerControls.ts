@@ -49,6 +49,8 @@ class ModelViewerSettings {
  */    
 export class ModelViewerControls {
 
+    static ContainerId   : string = 'modelContainer';
+
     _modelViewer         : ModelViewer;                     // associated viewer
     _modelViewerSettings : ModelViewerSettings;             // UI settings
 
@@ -86,7 +88,7 @@ export class ModelViewerControls {
             autoPlace: false,
             width: 320
         });
-        let menuDiv = document.getElementById('settingsControls');
+        let menuDiv = document.getElementById(ModelViewerControls.ContainerId);
         menuDiv.appendChild(gui.domElement);
 
         // ---------------------------------------------------------------------------------------------------------------------------------------------//

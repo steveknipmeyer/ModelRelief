@@ -3,26 +3,55 @@
 ------------------------*/
 body { 
     background: #413D3D !important; 
-    color: #5C98B7 !important;
+    color: #FFFFFF !important;
 }  
+
+/* ----------------------    
+    General
+------------------------*/
+#rootContainer {
+    position : relative;
+}
 
 /* ----------------------    
     Model3D Viewer
 ------------------------*/
-
-#settingsControls {
-    user-select: none;
-    position: absolute;
-    right: 0;
-    top: 0;
-    z-Index: 200;
+#modelContainer {
+    position : relative;
+    width:  512px;
 }
 
-#modelCanvas, #meshCanvas{
+#modelCanvas{
     width:  512px;
     height: 512px;
     background-color: #000000;
 }
+
+/* ----------------------    
+      Mesh Viewer
+------------------------*/
+#meshContainer {
+    position : absolute;
+    top : 0px;
+    right: 0px;
+    width:  512px;
+}
+
+#meshCanvas{
+    width:  512px;
+    height: 512px;
+    background-color: #000000;
+}
+
+/* ----------------------    
+      UI Controls
+------------------------*/
+.dg.main {
+    user-select: none;
+    z-Index: 200;
+}
+
+
 
 .DepthBufferFactory {
     background-color: #000000;
@@ -42,13 +71,13 @@ body {
 }
 
 .logError {
-    color : red;
+    color : #B6CFDC;
 }
 
 .logWarning {
-    color: purple;
+    color: #B771B7;
 }
 
 .logInfo {
-    color: black;
+    color: rgb(255, 255, 255);
 }

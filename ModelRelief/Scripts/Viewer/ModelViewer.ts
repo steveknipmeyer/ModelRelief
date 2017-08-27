@@ -117,7 +117,7 @@ export class ModelViewer extends Viewer {
     // pixels
     let width  = 512;
     let height = width / this.aspectRatio;
-    let factory = new DepthBufferFactory({width : width, height : height, model : this.model, camera : this.camera, addCanvasToDOM : true});   
+    let factory = new DepthBufferFactory({width : width, height : height, model : this.model, camera : this.camera, addCanvasToDOM : false});   
 
     // WIP: trigger an event that can be consumed by the MeshPreviewViewer?
     let previewMesh : THREE.Mesh = factory.meshGenerate({});

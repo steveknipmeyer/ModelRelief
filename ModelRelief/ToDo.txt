@@ -7,15 +7,9 @@
 // ------------------------------------------------------------------------//
 Design Questions
 
-    How can the ModelViewer be notified of a change to the Camera?
-        event emitted by Viewer?
-
 Core
 
     ModelViewer
-        Update ModelViewerSettings object when settings change internally.
-            synchronizeCameraSettings
-
         Add event emission to ModelView viewer.
             modelLoaded
             meshGenerate
