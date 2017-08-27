@@ -8,15 +8,6 @@
 Design Questions
 
 Core
-    TypeScript Declaration
-        dispatchEvent(event: { type: string; [attachment: string]: any; }): void;
-        {
-        type                 : string; 
-        [attachment: string] : any; 
-        }
-
-        What is the semantics of 'type'?
-
     Create a utility StopWatch class.
 
     Experiment with precision setting in THREE.WebGLRenderer.

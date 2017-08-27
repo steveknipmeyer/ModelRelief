@@ -18,6 +18,9 @@ export enum EventType {
     MeshGenerate
 }
 
+type Listener = (event: MREvent, ...args : any[]) => void;
+type ListenerArray = Listener[][];  // Listener[][EventType];
+
 /**
  * Event Manager
  * General event management and dispatching.
@@ -25,8 +28,8 @@ export enum EventType {
  */
 export class EventManager {
 
-    _listeners : (((event: MREvent, ...args : any[]) => void)[])[];
-
+    _listeners : ListenerArray;
+    
     /**
     /*
      * Creates EventManager object. It needs to be called with '.call' to add the functionality to an object.
@@ -43,7 +46,7 @@ export class EventManager {
     addEventListener(type: EventType, listener: (event: MREvent, ...args : any[]) => void ): void {
 
         if (this._listeners === undefined) {
-            this._listeners = []; 
+            this._listeners = [];
             this._listeners[EventType.None] = [];
         }            
         
@@ -55,7 +58,7 @@ export class EventManager {
             listeners[type] = [];
         }
 
-        // do nothing if listner registered
+        // do nothing if listener registered
         if (listeners[type].indexOf(listener) === -1) {
 
             // add new listener to this event
