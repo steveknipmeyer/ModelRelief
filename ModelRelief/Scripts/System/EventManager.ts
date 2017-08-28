@@ -136,7 +136,7 @@ export class EventManager {
             let length = array.length;
             for (let index = 0 ; index < length; index++) {
 
-                array[index](theEvent, args); 
+                array[index](theEvent, ...args); 
             }
         }
     }

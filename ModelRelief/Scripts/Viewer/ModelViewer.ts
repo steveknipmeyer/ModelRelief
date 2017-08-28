@@ -116,10 +116,9 @@ export class ModelViewer extends Viewer {
     let height = width / this.aspectRatio;
     let factory = new DepthBufferFactory({width : width, height : height, model : this.model, camera : this.camera, addCanvasToDOM : false});   
 
-    // WIP: trigger an event that can be consumed by the MeshPreviewViewer?
-    let previewMesh : THREE.Mesh = factory.meshGenerate({});
-    
-    this._eventManager.dispatchEvent(this, EventType.MeshGenerate, previewMesh);
+    let previewMesh : THREE.Mesh = factory.meshGenerate({});   
+    this._eventManager.dispatchEvent(this, EventType.MeshGenerate, previewMesh, 'SLK');
+
     Services.consoleLogger.addInfoMessage('Relief generated');
 }
 //#endregion

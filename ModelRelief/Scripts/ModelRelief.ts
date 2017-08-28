@@ -39,9 +39,8 @@ export class ModelRelief {
      * @param event Mesh generation event.
      * @param args args[0] = THREE.Mesh
      */
-    onMeshGenerate (event : MREvent, args : any[]) {
-        
-        let mesh : THREE.Mesh = args[0];
+    onMeshGenerate (event : MREvent, mesh : THREE.Mesh, name : string) {
+
         this._meshPreviewViewer.setModel(mesh);
         console.log('mesh received');
     }
