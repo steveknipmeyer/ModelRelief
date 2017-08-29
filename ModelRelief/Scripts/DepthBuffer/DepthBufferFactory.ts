@@ -94,7 +94,7 @@ export class DepthBufferFactory {
         // required
         this._width           = parameters.width;
         this._height          = parameters.height;
-        this._model           = parameters.model.clone();
+        this._model           = parameters.model.clone(true);
 
         // optional
         this._camera          = parameters.camera          || null;

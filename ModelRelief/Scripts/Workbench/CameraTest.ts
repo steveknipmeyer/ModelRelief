@@ -14,7 +14,7 @@ import {Graphics}                   from 'Graphics'
 import {Loader}                     from 'Loader'
 import {Logger, ConsoleLogger}      from 'Logger'
 import {MathLibrary}                from 'Math'
-import {MeshPreviewViewer}          from "MeshPreviewViewer"
+import {MeshViewer}                 from "MeshViewer"
 import {Services}                   from 'Services'
 import {TrackballControls}          from 'TrackballControls'
 import {UnitTests}                  from 'UnitTests'

@@ -59,6 +59,9 @@ export class ModelViewer extends Viewer {
         super.setModel(value);
 
         this._modelViewerControls.synchronizeCameraSettings(this.camera);
+
+        // dispatch NewModel event
+        this._eventManager.dispatchEvent(this, EventType.NewModel, value);
     }
                 
 //#endregion
@@ -117,7 +120,7 @@ export class ModelViewer extends Viewer {
     let factory = new DepthBufferFactory({width : width, height : height, model : this.model, camera : this.camera, addCanvasToDOM : false});   
 
     let previewMesh : THREE.Mesh = factory.meshGenerate({});   
-    this._eventManager.dispatchEvent(this, EventType.MeshGenerate, previewMesh, 'SLK');
+    this._eventManager.dispatchEvent(this, EventType.MeshGenerate, previewMesh);
 
     Services.consoleLogger.addInfoMessage('Relief generated');
 }

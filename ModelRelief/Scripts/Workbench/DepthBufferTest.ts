@@ -11,7 +11,6 @@ import {DepthBufferFactory}     from 'DepthBufferFactory'
 import {Graphics}               from 'Graphics'
 import {Logger, HTMLLogger}     from 'Logger'
 import {MathLibrary}            from 'Math'
-import {MeshPreviewViewer}      from "MeshPreviewViewer"
 import {ModelViewer}            from "ModelViewer"
 import {Services}               from 'Services'
 import {TrackballControls}      from 'TrackballControls'

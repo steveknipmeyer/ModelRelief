@@ -44,13 +44,7 @@ export class Camera {
     }
 
 //#region Clipping Planes
-    static optimizeClippingPlanes (camera : THREE.PerspectiveCamera, model : THREE.Group) {
-        
-        let modelClone : THREE.Group = model.clone(true);
-        modelClone.applyMatrix(camera.matrixWorldInverse);
-        
-        model = modelClone;
-    }
+
     /**
      * Returns the extents of the near camera plane.
      * @static
@@ -113,13 +107,11 @@ export class Camera {
         let cameraZHorizontalExtents : number = (boundingBox.getSize().x / 2) / Math.tan (horizontalFieldOfViewRadians);       
         let cameraZ = Math.max(cameraZVerticalExtents, cameraZHorizontalExtents);
 
-        let farPlane    : number = Camera.DefaultFarClippingPlane;
-
         return { 
             position:       new THREE.Vector3(boundingBox.getCenter().x, boundingBox.getCenter().y, boundingBox.max.z + cameraZ),         
             target:         boundingBox.getCenter(),
             near:           Camera.DefaultNearClippingPlane,              
-            far:            farPlane,               
+            far:            Camera.DefaultFarClippingPlane,               
             fieldOfView:    Camera.DefaultFieldOfView             
         }           
     }

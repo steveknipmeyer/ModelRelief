@@ -14,7 +14,7 @@ export interface MREvent {
 export enum EventType {
 
     None,
-    ModelLoaded,
+    NewModel,
     MeshGenerate
 }
 

@@ -8,6 +8,26 @@
 Design Questions
 
 Core
+    Add source code attributions to THREE.js.
+
+    Export 
+        ASPNET Core?
+        https://github.com/eligrey/FileSaver.js/
+        https://github.com/jimmywarting/StreamSaver.js
+
+    Clipping Planes
+        Far plane 
+            The MeshPreviewViewer (=>MeshViewer?) and ModelViewer are different.
+                The clipping planes should only be set in the ModelViewer.
+                    Activate a special clipping plane mode?
+                    Show the clipping planes graphically.
+
+            Camera  
+                Set the far plane based on the model extents.
+            ModelViewerControls
+                Dynamically set the range of the far plane based on the model.
+                This will provide more control over scene composition.
+
     Create a utility StopWatch class.
 
     Experiment with precision setting in THREE.WebGLRenderer.

@@ -14,7 +14,7 @@ import {EventType, MREvent, EventManager}   from 'EventManager'
 import {Loader}                             from 'Loader'
 import {Logger, ConsoleLogger}              from 'Logger'
 import {Graphics}                           from "Graphics"
-import {MeshPreviewViewer}                  from "MeshPreviewViewer"
+import {MeshViewer}                         from "MeshViewer"
 import {ModelViewer}                        from "ModelViewer"
 import {OBJLoader}                          from "OBJLoader"
 import {Services}                           from 'Services'
@@ -23,7 +23,7 @@ import {Viewer}                             from "Viewer"
     
 export class ModelRelief {
 
-    _meshPreviewViewer  : MeshPreviewViewer;
+    _meshViewer         : MeshViewer;
     _modelViewer        : ModelViewer;
     _loader             : Loader;
     
@@ -34,16 +34,28 @@ export class ModelRelief {
     constructor() {  
     }
 
+//#region Event Handlers
     /**
      * Event handler for mesh generation.
      * @param event Mesh generation event.
-     * @param args args[0] = THREE.Mesh
+     * @params mesh Newly-generated mesh.
      */
-    onMeshGenerate (event : MREvent, mesh : THREE.Mesh, name : string) {
+    onMeshGenerate (event : MREvent, mesh : THREE.Mesh) {
 
-        this._meshPreviewViewer.setModel(mesh);
-        console.log('mesh received');
+        this._meshViewer.setModel(mesh);
     }
+
+    /**
+     * Event handler for new model.
+     * @param event NewModel event.
+     * @param model Newly loaded model.
+     */
+    onNewModel (event : MREvent, model : THREE.Group) {
+        
+        this._modelViewer.setCameraToStandardView(StandardView.Front);              
+        this._meshViewer.setCameraToStandardView(StandardView.Front);       
+    }
+//#endregion
 
     /**
      * Launch the model Viewer.
@@ -53,12 +65,13 @@ export class ModelRelief {
         Services.consoleLogger.addInfoMessage ('ModelRelief started');   
        
         // Mesh Preview
-        this._meshPreviewViewer =  new MeshPreviewViewer('meshCanvas');
+        this._meshViewer =  new MeshViewer('meshCanvas');
         
         // Model Viewer    
         this._modelViewer = new ModelViewer('modelCanvas');
         this._modelViewer.eventManager.addEventListener(EventType.MeshGenerate, this.onMeshGenerate.bind(this));
-
+        this._modelViewer.eventManager.addEventListener(EventType.NewModel,     this.onNewModel.bind(this));
+        
         // Loader
         this._loader = new Loader();
 

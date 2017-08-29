@@ -81,11 +81,12 @@ export class Viewer {
      * @param value New model to activate.
      */
     setModel(value : THREE.Group) {
- 
+
+        // N.B. This is a method not a property so a sub class can override.
+        // https://github.com/Microsoft/TypeScript/issues/4465
+
         Graphics.removeObjectChildren(this._root, false);
         this._root.add(value);
-
-        this.setCameraToStandardView(StandardView.Front);
     }
 
     /**

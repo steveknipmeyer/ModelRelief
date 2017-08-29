@@ -20,7 +20,7 @@ import {Viewer}                     from 'Viewer'
  * @class
  * MeshViewer
  */
-export class MeshPreviewViewer extends Viewer {
+export class MeshViewer extends Viewer {
     
     /**
      * @constructor

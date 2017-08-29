@@ -13,7 +13,6 @@ import {DepthBufferFactory}         from "DepthBufferFactory"
 import {Loader}                     from 'Loader'
 import {Logger, ConsoleLogger}      from 'Logger'
 import {Graphics}                   from "Graphics"
-import {MeshPreviewViewer}          from "MeshPreviewViewer"
 import {ModelViewer}                from "ModelViewer"
 import {OBJLoader}                  from "OBJLoader"
 import {Services}                   from 'Services'
