@@ -396,6 +396,7 @@ export class DepthBufferFactory {
 
         console.timeEnd("createDepthBuffer");       
     }
+    
     /**
      * Sets the camera clipping planes for mesh generation.
      */

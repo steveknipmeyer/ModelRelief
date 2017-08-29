@@ -141,7 +141,7 @@ export class Viewer {
      */
     initializeDefaultCameraSettings () : CameraSettings {
 
-        return Camera.getStandardViewSettings(this.model, StandardView.Front, this.aspectRatio);
+        return Camera.getStandardViewSettings(StandardView.Front, this.model, this.aspectRatio);
     }
         
     /**
@@ -196,7 +196,7 @@ export class Viewer {
             switch (keyCode) {
 
                 case 70:                // F                    
-                    let settings : CameraSettings = Camera.getStandardViewSettings(this.model, StandardView.Front, this.aspectRatio);
+                    let settings : CameraSettings = Camera.getStandardViewSettings(StandardView.Front, this.model, this.aspectRatio);
                     this.applyCameraSettings(settings);
                     break;
             }
@@ -267,7 +267,7 @@ export class Viewer {
      */
     setCameraToStandardView(view : StandardView) {
 
-        this._defaultCameraSettings = Camera.getStandardViewSettings(this.model, view, this.aspectRatio);
+        this._defaultCameraSettings = Camera.getStandardViewSettings(view, this.model,  this.aspectRatio);
         this.resetCameraToDefaultSettings();
     }
             
@@ -278,6 +278,16 @@ export class Viewer {
         
         this.applyCameraSettings (this._defaultCameraSettings);
     }
+
+    /**
+     * @description Fits the active view.
+     */
+    fitView() {
+
+        let fitViewSettings = Camera.getFitViewSettings (this.model, this._camera.aspect);
+        this.applyCameraSettings(fitViewSettings);
+    }
+    
 //#endregion
 
 //#region Window Resize

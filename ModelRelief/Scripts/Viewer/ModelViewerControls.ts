@@ -28,6 +28,7 @@ class ModelViewerSettings {
     displayGrid    : boolean;
     generateRelief : () => void;
 
+    standardView       : StandardView;
     nearClippingPlane  : number;
     farClippingPlane   : number;
     fieldOfView        : number;
@@ -37,6 +38,7 @@ class ModelViewerSettings {
         this.displayGrid    = true; 
         this.generateRelief = generateRelief;
 
+        this.standardView         = StandardView.Front;
         this.nearClippingPlane    = camera.near;
         this.farClippingPlane     = camera.far;
         this.fieldOfView          = camera.fov;
@@ -65,6 +67,7 @@ export class ModelViewerControls {
         this.initializeControls();
     }
 
+//#region Event Handlers
     /**
      * Generates a relief from the current model camera.
      */
@@ -72,6 +75,7 @@ export class ModelViewerControls {
 
         this._modelViewer.generateRelief();
     }
+//#endregion
 
     /**
      * Initialize the view settings that are controllable by the user
@@ -112,6 +116,22 @@ export class ModelViewerControls {
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         let cameraOptions = gui.addFolder('Camera Options');
         
+        // Standard Views
+        let viewOptions = {
+            Front   : StandardView.Front,
+            Top     : StandardView.Top,
+            Iso     : StandardView.Isometric,
+            Left    : StandardView.Left,
+            Right   : StandardView.Right,
+            Bottom  : StandardView.Bottom
+        };
+
+        let controlStandardViews = cameraOptions.add(this._modelViewerSettings, 'standardView', viewOptions).name('Standard View');
+        controlStandardViews.onChange ((view : StandardView) => {
+            
+            scope._modelViewer.setCameraToStandardView(view);
+        });
+
         // Near Clipping Plane
         let minimum  =   0.1;
         let maximum  = 100;

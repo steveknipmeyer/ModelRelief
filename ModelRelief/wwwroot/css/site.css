@@ -1,5 +1,5 @@
 ﻿/* ----------------------    
-    Botstrap Overrides
+    Bootstrap Overrides
 ------------------------*/
 body { 
     background: #413D3D !important; 
@@ -51,6 +51,10 @@ body {
     z-Index: 200;
 }
 
+/* Standard View select element */
+div.c > select {
+    color: #000000;
+}
 
 
 .DepthBufferFactory {

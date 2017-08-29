@@ -14,19 +14,19 @@ Core
         ASPNET Core?
         https://github.com/eligrey/FileSaver.js/
         https://github.com/jimmywarting/StreamSaver.js
-
+    
+    Camera.getFitViewSettings
+        Assumes front orientation.
+        Calculatations must be done in View coordinates.
+            The camera position must be translated along the camera sight line.
+    
+    MeshViewer    
+        Add MeshViewerControls.
+    
     Clipping Planes
-        Far plane 
-            The MeshPreviewViewer (=>MeshViewer?) and ModelViewer are different.
-                The clipping planes should only be set in the ModelViewer.
-                    Activate a special clipping plane mode?
-                    Show the clipping planes graphically.
-
-            Camera  
-                Set the far plane based on the model extents.
-            ModelViewerControls
-                Dynamically set the range of the far plane based on the model.
-                This will provide more control over scene composition.
+        Create a 'Set Far Plane' control.
+            Dynamically set the range of the far plane based on the model.
+            This will provide more control over scene composition.
 
     Create a utility StopWatch class.
 

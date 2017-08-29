@@ -89,19 +89,18 @@ export class Camera {
     }
 
     /**
-     * @description Returns the camera settings to fit the model in a standard view.
+     * @description Returns the camera settings to fit the model in the current view.
      * @static
-     * @param {THREE.Object3D} model Model to fit.
-     * @param {Camera.StandardView} view Standard view (Top, Left, etc.)
-     * @param {number} aspectRatio Aspect ratio of window.
+     * @param {THREE.Group} model Model to fit.
+     * @param {number} viewAspect Aspect ratio of view.
      * @returns {CameraSettings} 
      */
-    static getStandardViewSettings (model : THREE.Object3D, view : StandardView, aspectRatio : number) : CameraSettings { 
+    static getFitViewSettings (model : THREE.Group, viewAAspect : number) : CameraSettings { 
         
         let boundingBox = Camera.getDefaultBoundingBox(model);
 
         let verticalFieldOfViewRadians   : number = (Camera.DefaultFieldOfView / 2) * (Math.PI / 180);
-        let horizontalFieldOfViewRadians : number = Math.atan(aspectRatio * Math.tan(verticalFieldOfViewRadians));       
+        let horizontalFieldOfViewRadians : number = Math.atan(viewAAspect * Math.tan(verticalFieldOfViewRadians));       
 
         let cameraZVerticalExtents   : number = (boundingBox.getSize().y / 2) / Math.tan (verticalFieldOfViewRadians);       
         let cameraZHorizontalExtents : number = (boundingBox.getSize().x / 2) / Math.tan (horizontalFieldOfViewRadians);       
@@ -110,11 +109,23 @@ export class Camera {
         return { 
             position:       new THREE.Vector3(boundingBox.getCenter().x, boundingBox.getCenter().y, boundingBox.max.z + cameraZ),         
             target:         boundingBox.getCenter(),
-            near:           Camera.DefaultNearClippingPlane,              
-            far:            Camera.DefaultFarClippingPlane,               
+            near:           Camera.DefaultNearClippingPlane,
+            far:            Camera.DefaultFarClippingPlane,
             fieldOfView:    Camera.DefaultFieldOfView             
         }           
     }
         
+    /**
+     * @description Returns the camera settings to fit the model in a standard view.
+     * @static
+     * @param {Camera.StandardView} view Standard view (Top, Left, etc.)
+     * @param {THREE.Object3D} model Model to fit.
+     * @param {number} viewAspect Aspect ratio of view.
+     * @returns {CameraSettings} 
+     */
+    static getStandardViewSettings (view: StandardView, model : THREE.Group, viewAspect : number) : CameraSettings { 
+        
+        return Camera.getFitViewSettings(model, viewAspect);
+    }
 //#endregion
 }
