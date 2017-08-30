@@ -136,10 +136,10 @@ export class CameraControls {
      * Synchronize the UI camera settings with the target camera.
      * @param camera 
      */
-    synchronizeCameraSettings (camera : THREE.PerspectiveCamera) {
+    synchronizeCameraSettings () {
 
-        this._cameraSettings.nearClippingPlane = camera.near;
-        this._cameraSettings.farClippingPlane  = camera.far;
-        this._cameraSettings.fieldOfView       = camera.fov;
+        this._cameraSettings.nearClippingPlane = this._viewer.camera.near;
+        this._cameraSettings.farClippingPlane  = this._viewer.camera.far;
+        this._cameraSettings.fieldOfView       = this._viewer.camera.fov;
     }
 }

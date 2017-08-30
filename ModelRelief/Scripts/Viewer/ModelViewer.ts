@@ -50,7 +50,7 @@ export class ModelViewer extends Viewer {
         // https://github.com/Microsoft/TypeScript/issues/4465        
         super.setModel(value);
 
-        this._modelViewerControls.synchronizeCameraSettings(this.camera);
+        this._cameraControls.synchronizeCameraSettings();
 
         // dispatch NewModel event
         this._eventManager.dispatchEvent(this, EventType.NewModel, value);

@@ -49,6 +49,7 @@ body {
 .dg.main {
     user-select: none;
     z-Index: 200;
+    margin-bottom: 25px;
 }
 
 /* Standard View select element */

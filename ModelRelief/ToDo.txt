@@ -14,16 +14,7 @@ Core
         ASPNET Core?
         https://github.com/eligrey/FileSaver.js/
         https://github.com/jimmywarting/StreamSaver.js
-
-    CameraControls
-         synchronizeCameraSettings (camera : THREE.PerspectiveCamera)
-            Pass Viewer or?
-
-    ModelVieweControls.
-    
-    MeshViewer    
-        Add MeshViewerControls.
-    
+   
     Camera.getFitViewSettings
         Assumes front orientation.
         Calculatations must be done in View coordinates.
