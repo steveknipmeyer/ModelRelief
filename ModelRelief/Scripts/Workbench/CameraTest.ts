@@ -41,13 +41,6 @@ import {Viewer}                     from 'Viewer'
  */
 export class CameraViewer extends Viewer {
 
-    /**
-     * Camera
-     */
-    get camera () {
-        return this._camera;
-    }
-
     populateScene() {
 
         let triad = Graphics.createWorldAxesTriad(new THREE.Vector3(), 1, 0.25, 0.25);

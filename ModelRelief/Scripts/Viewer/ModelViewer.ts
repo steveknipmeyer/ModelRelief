@@ -42,14 +42,6 @@ export class ModelViewer extends Viewer {
 
 //#region Properties
     /**
-     * Gets the camera.
-     */
-    get camera() {
-
-        return this._camera;
-    }
-
-    /**
      * Sets the model.
      */
     setModel(value : THREE.Group) {
@@ -83,8 +75,6 @@ export class ModelViewer extends Viewer {
     initialize() {
         
         super.initialize();
-
-        this.initializeUIControls();
     }
         
     /**
@@ -92,8 +82,10 @@ export class ModelViewer extends Viewer {
      */
     initializeUIControls() {
 
+        super.initializeUIControls();        
         this._modelViewerControls = new ModelViewerControls(this);
     }
+
 //#endregion
 
 //#region Scene

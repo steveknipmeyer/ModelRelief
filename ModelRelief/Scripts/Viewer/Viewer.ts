@@ -7,6 +7,7 @@
 
 import * as THREE                               from 'three'
 import {Camera, CameraSettings, StandardView}   from 'Camera'
+import {CameraControls}                         from 'CameraControls'
 import {EventManager}                           from 'EventManager'
 import {Graphics}                               from 'Graphics'
 import {Logger}                                 from 'Logger'
@@ -38,7 +39,8 @@ export class Viewer {
     _defaultCameraSettings  : CameraSettings            = null;
 
     _controls               : TrackballControls         = null;
-
+    _cameraControls         : CameraControls            = null;
+    
     /**
      * Default constructor
      * @class Viewer
@@ -61,6 +63,14 @@ export class Viewer {
 
 //#region Properties
     /**
+     * Gets the camera.
+     */
+    get camera() {
+        
+        return this._camera;
+    }
+
+     /**
      * Gets the active model.
      */
     get model() : THREE.Group {
@@ -98,6 +108,15 @@ export class Viewer {
         return aspectRatio;
     } 
 
+    /**
+     * Gets the DOM Id of the Viewer parent container.
+     */
+    get containerId() : string {
+        
+        let parentElement : HTMLElement = this._canvas.parentElement;
+        return parentElement.id;
+    } 
+        
 //#endregion
 
 //#region Initialization    
@@ -180,8 +199,16 @@ export class Viewer {
         this._controls = new TrackballControls(this._camera, this._renderer.domElement);
 
         // N.B. https://stackoverflow.com/questions/10325095/threejs-camera-lookat-has-no-effect-is-there-something-im-doing-wrong
-        this._controls.position0.copy(this._camera.position);
+        this._controls.position0.copy(this.camera.position);
         this._controls.target.copy(this._defaultCameraSettings.target);
+    }
+
+    /**
+     * Sets up the user input controls (Settings)
+     */
+    initializeUIControls() {
+
+        this._cameraControls = new CameraControls(this);       
     }
 
     /**
@@ -213,6 +240,7 @@ export class Viewer {
         this.initializeCamera();
         this.initializeLighting();
         this.initializeInputControls();
+        this.initializeUIControls();
         this.initializeKeyboardShortcuts();
 
         this.onResizeWindow();
@@ -249,13 +277,13 @@ export class Viewer {
      */
     applyCameraSettings(settings : CameraSettings) {
         
-        this._camera.position.copy(settings.position);       
-        this._camera.lookAt(settings.target);
-        this._camera.near = settings.near;
-        this._camera.far  = settings.far;
-        this._camera.fov  = settings.fieldOfView;
+        this.camera.position.copy(settings.position);       
+        this.camera.lookAt(settings.target);
+        this.camera.near = settings.near;
+        this.camera.far  = settings.far;
+        this.camera.fov  = settings.fieldOfView;
         
-        this._camera.up.set(0, 1, 0);
+        this.camera.up.set(0, 1, 0);
 
         this.updateCameraOnWindowResize();
         this.initializeInputControls();
@@ -284,7 +312,7 @@ export class Viewer {
      */
     fitView() {
 
-        let fitViewSettings = Camera.getFitViewSettings (this.model, this._camera.aspect);
+        let fitViewSettings = Camera.getFitViewSettings (this.model, this.camera.aspect);
         this.applyCameraSettings(fitViewSettings);
     }
     
@@ -296,9 +324,9 @@ export class Viewer {
      */
     updateCameraOnWindowResize() {
 
-        this._camera.aspect = this.aspectRatio;
-        // this._camera.lookAt(this._defaultCameraSettings.target);
-        this._camera.updateProjectionMatrix();
+        this.camera.aspect = this.aspectRatio;
+        // this.camera.lookAt(this._defaultCameraSettings.target);
+        this.camera.updateProjectionMatrix();
     }
 
     /**
