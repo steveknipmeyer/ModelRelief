@@ -16,9 +16,17 @@ Core
         https://github.com/jimmywarting/StreamSaver.js
    
     Camera.getFitViewSettings
-        Assumes front orientation.
-        Calculatations must be done in View coordinates.
-            The camera position must be translated along the camera sight line.
+        Camera.up should be preserved.
+
+    Camera.getStandardViewSettings    
+        Camera nominal view based on the StandardView should be defined before Camera.getFitViewSettings.
+            Front           ( 0,  0, 1)
+            Top             ( 0,  1, 0)
+            Bottom          ( 0, -1, 0)
+            Left            (-1,  0, 0)
+            Right           ( 1,  0, 0)
+            Isometric       ( 1,  0, 1)
+        
 
     Clipping Planes
         Create a 'Set Far Plane' control.

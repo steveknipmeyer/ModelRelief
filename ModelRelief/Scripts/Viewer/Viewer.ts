@@ -24,6 +24,7 @@ const ObjectNames = {
  */
 export class Viewer {
 
+    _name                   : string                    = '';
     _eventManager           : EventManager              = null;
     _logger                 : Logger                    = null;
     
@@ -45,10 +46,12 @@ export class Viewer {
      * Default constructor
      * @class Viewer
      * @constructor
+     * @param name Viewer name.
      * @param elementToBindTo HTML element to host the viewer.
      */
-    constructor(modelCanvasId : string) {
-                    
+    constructor(name : string, modelCanvasId : string) {
+
+        this._name         = name;                    
         this._eventManager = new EventManager();
         this._logger       = Services.consoleLogger;
 
@@ -62,6 +65,15 @@ export class Viewer {
     }
 
 //#region Properties
+
+    /**
+     * Gets the Viewer name.
+     */
+    get name() {
+        
+        return this._name;
+    }
+
     /**
      * Gets the camera.
      */
@@ -160,7 +172,7 @@ export class Viewer {
      */
     initializeDefaultCameraSettings () : CameraSettings {
 
-        return Camera.getStandardViewSettings(StandardView.Front, this.model, this.aspectRatio);
+        return Camera.getStandardViewSettings(StandardView.Front, this.model, Camera.getDefaultCamera(this.camera, this.aspectRatio));
     }
         
     /**
@@ -170,6 +182,7 @@ export class Viewer {
     
         this._defaultCameraSettings = this.initializeDefaultCameraSettings();
         this._camera = new THREE.PerspectiveCamera(this._defaultCameraSettings.fieldOfView, this.aspectRatio, this._defaultCameraSettings.near, this._defaultCameraSettings.far);
+        this._camera.name = this.name;
 
         this.resetCameraToDefaultSettings();
     }
@@ -223,7 +236,7 @@ export class Viewer {
             switch (keyCode) {
 
                 case 70:                // F                    
-                    let settings : CameraSettings = Camera.getStandardViewSettings(StandardView.Front, this.model, this.aspectRatio);
+                    let settings : CameraSettings = Camera.getStandardViewSettings(StandardView.Front, this.model, Camera.getDefaultCamera(this.camera, this.aspectRatio));
                     this.applyCameraSettings(settings);
                     break;
             }
@@ -295,7 +308,7 @@ export class Viewer {
      */
     setCameraToStandardView(view : StandardView) {
 
-        this._defaultCameraSettings = Camera.getStandardViewSettings(view, this.model,  this.aspectRatio);
+        this._defaultCameraSettings = Camera.getStandardViewSettings(view, this.model,  Camera.getDefaultCamera(this.camera, this.aspectRatio));
         this.resetCameraToDefaultSettings();
     }
             
@@ -312,7 +325,7 @@ export class Viewer {
      */
     fitView() {
 
-        let fitViewSettings = Camera.getFitViewSettings (this.model, this.camera.aspect);
+        let fitViewSettings = Camera.getFitViewSettings (this.model, Camera.getDefaultCamera(this.camera, this.aspectRatio));
         this.applyCameraSettings(fitViewSettings);
     }
     

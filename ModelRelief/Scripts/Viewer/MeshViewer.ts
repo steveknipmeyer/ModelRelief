@@ -24,10 +24,19 @@ export class MeshViewer extends Viewer {
     
     /**
      * @constructor
+     * @constructor
      */
-    constructor(previewCanvasId : string) {
+
+    /**
+     * Default constructor
+     * @class MeshViewer
+     * @constructor
+     * @param name Viewer name.
+     * @param previewCanvasId HTML element to host the viewer.
+     */
+    constructor(name : string, previewCanvasId : string) {
         
-        super(previewCanvasId);
+        super(name, previewCanvasId);
 
         //override
         this._logger = Services.htmlLogger;       

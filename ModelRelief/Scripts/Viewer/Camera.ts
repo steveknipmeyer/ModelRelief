@@ -95,24 +95,44 @@ export class Camera {
      * @param {number} viewAspect Aspect ratio of view.
      * @returns {CameraSettings} 
      */
-    static getFitViewSettings (model : THREE.Group, viewAAspect : number) : CameraSettings { 
+    static getFitViewSettings (model : THREE.Group, camera : THREE.PerspectiveCamera) : CameraSettings { 
+
+        let boundingBoxWorld         : THREE.Box3    = Camera.getDefaultBoundingBox(model);
+        let cameraMatrixWorld        : THREE.Matrix4 = camera.matrixWorld;
+        let cameraMatrixWorldInverse : THREE.Matrix4 = camera.matrixWorldInverse;
         
-        let boundingBox = Camera.getDefaultBoundingBox(model);
+        // Find camera position in View coordinates...
+
+        // clone model (and geometry!)
+        let modelView       =  Graphics.cloneAndTransformObject(model, cameraMatrixWorldInverse);
+        let boundingBoxView = Camera.getDefaultBoundingBox(modelView);
 
         let verticalFieldOfViewRadians   : number = (Camera.DefaultFieldOfView / 2) * (Math.PI / 180);
-        let horizontalFieldOfViewRadians : number = Math.atan(viewAAspect * Math.tan(verticalFieldOfViewRadians));       
+        let horizontalFieldOfViewRadians : number = Math.atan(camera.aspect * Math.tan(verticalFieldOfViewRadians));       
 
-        let cameraZVerticalExtents   : number = (boundingBox.getSize().y / 2) / Math.tan (verticalFieldOfViewRadians);       
-        let cameraZHorizontalExtents : number = (boundingBox.getSize().x / 2) / Math.tan (horizontalFieldOfViewRadians);       
+        let cameraZVerticalExtents   : number = (boundingBoxView.getSize().y / 2) / Math.tan (verticalFieldOfViewRadians);       
+        let cameraZHorizontalExtents : number = (boundingBoxView.getSize().x / 2) / Math.tan (horizontalFieldOfViewRadians);       
         let cameraZ = Math.max(cameraZVerticalExtents, cameraZHorizontalExtents);
 
-        return { 
-            position:       new THREE.Vector3(boundingBox.getCenter().x, boundingBox.getCenter().y, boundingBox.max.z + cameraZ),         
-            target:         boundingBox.getCenter(),
+        // find distance from cameraZ to boundingBox.center
+        // find distance from current camera to boundingBox.center
+        // find offset
+        // find unit vector from camera to target
+        // translate camera by offset along unit vector
+
+        let positionView = new THREE.Vector3(boundingBoxView.getCenter().x, boundingBoxView.getCenter().y, boundingBoxView.max.z + cameraZ);       
+
+        // Now, transform back to World coordinates...
+        let positionWorld = positionView.applyMatrix4(cameraMatrixWorld);
+
+        let cameraSettings : CameraSettings = {
+            position:       positionWorld,
+            target:         boundingBoxWorld.getCenter(),
             near:           Camera.DefaultNearClippingPlane,
             far:            Camera.DefaultFarClippingPlane,
             fieldOfView:    Camera.DefaultFieldOfView             
-        }           
+        };
+        return cameraSettings;
     }
         
     /**
@@ -123,9 +143,34 @@ export class Camera {
      * @param {number} viewAspect Aspect ratio of view.
      * @returns {CameraSettings} 
      */
-    static getStandardViewSettings (view: StandardView, model : THREE.Group, viewAspect : number) : CameraSettings { 
+    static getStandardViewSettings (view: StandardView, model : THREE.Group, camera : THREE.PerspectiveCamera) : CameraSettings { 
         
-        return Camera.getFitViewSettings(model, viewAspect);
+        let cameraSettings = Camera.getFitViewSettings(model, camera);
+        return cameraSettings;
+    }
+
+    /**
+     * Returns the default camera.
+     * Creates a default if the current camera has not been constructed.
+     * @param camera Active camera.
+     * @param viewAspect View aspect ratio.
+     */
+    static getDefaultCamera (camera: THREE.PerspectiveCamera, viewAspect : number) : THREE.PerspectiveCamera {
+
+        if (camera)
+            return camera;
+
+        let proxyCamera = new THREE.PerspectiveCamera();
+        proxyCamera.position.copy (new THREE.Vector3 (0, 0, 1));
+        proxyCamera.lookAt(new THREE.Vector3);
+        proxyCamera.near   = Camera.DefaultNearClippingPlane;
+        proxyCamera.far    = Camera.DefaultFarClippingPlane;
+        proxyCamera.fov    = Camera.DefaultFieldOfView;
+        proxyCamera.aspect = viewAspect;
+
+        proxyCamera.updateProjectionMatrix;
+
+        return proxyCamera;
     }
 //#endregion
 }

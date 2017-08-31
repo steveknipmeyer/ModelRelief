@@ -65,10 +65,10 @@ export class ModelRelief {
         Services.consoleLogger.addInfoMessage ('ModelRelief started');   
        
         // Mesh Preview
-        this._meshViewer =  new MeshViewer('meshCanvas');
+        this._meshViewer =  new MeshViewer('MeshViewer', 'meshCanvas');
         
         // Model Viewer    
-        this._modelViewer = new ModelViewer('modelCanvas');
+        this._modelViewer = new ModelViewer('ModelViewer', 'modelCanvas');
         this._modelViewer.eventManager.addEventListener(EventType.MeshGenerate, this.onMeshGenerate.bind(this));
         this._modelViewer.eventManager.addEventListener(EventType.NewModel,     this.onNewModel.bind(this));
         

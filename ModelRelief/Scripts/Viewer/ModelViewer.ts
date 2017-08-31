@@ -33,11 +33,12 @@ export class ModelViewer extends Viewer {
      * Default constructor
      * @class ModelViewer
      * @constructor
+     * @param name Viewer name.
      * @param modelCanvasId HTML element to host the viewer.
      */
-    constructor(modelCanvasId : string) {
+    constructor(name : string, modelCanvasId : string) {
         
-        super (modelCanvasId);       
+        super (name, modelCanvasId);       
     }
 
 //#region Properties
