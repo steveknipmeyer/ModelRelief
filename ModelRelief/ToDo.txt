@@ -1,7 +1,8 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Commit Notes                                                       //
 // ------------------------------------------------------------------------//
-
+Replace CameraSettings with Camera.
+The CameraSettings do not contain all information about the camera (e.g. rotation);
 
 // ------------------------------------------------------------------------// 
 //      Tasks                                                              //
@@ -12,8 +13,12 @@ Core
     Camera
         Center model when loaded at BoundingBox.
         Use CameraHelpers to debug the Cameras.
-        The CameraSettings do not contain all information about the camera (e.g. rotation);
-            Replace CameraSettings with Camera.
+
+        // Valid assumption : camera lookat = boundingBox.center?
+        // Change only Z; preserve XY?
+
+        // How to find camera.lookat?
+        // Experiment : see if camera.lookat is changing through FitViews
             
     Add a Fit View.
 

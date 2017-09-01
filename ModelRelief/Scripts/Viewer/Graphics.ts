@@ -343,7 +343,9 @@ export class Graphics {
     static addCameraHelper (scene : THREE.Scene, camera : THREE.Camera) : void{
 
         if (camera) {
-            let cameraHelper = new THREE.CameraHelper(camera );
+            
+            let cloneCamera = camera.clone(true);
+            let cameraHelper = new THREE.CameraHelper(cloneCamera );
             cameraHelper.visible = true;
             scene.add(cameraHelper);
         }

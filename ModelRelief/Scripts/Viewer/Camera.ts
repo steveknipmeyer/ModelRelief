@@ -9,16 +9,9 @@ import * as THREE from 'three'
 
 import {Graphics}             from 'Graphics'
 
-export interface CameraSettings {
-    position:       THREE.Vector3;        // location of camera
-    target:         THREE.Vector3;        // target point
-    near:           number;               // near clipping plane
-    far:            number;               // far clipping plane
-    fieldOfView:    number;               // field of view
-}
-
 export enum StandardView {
     Front,
+    Back,
     Top,
     Bottom,
     Left,
@@ -89,20 +82,15 @@ export class Camera {
     }
 
     /**
-     * @description Returns the camera settings to fit the model in the current view.
+     * @description Updates the camera to fit the model in the current view.
      * @static
+     * @param {THREE.PerspectiveCamera} camera Camera to update.
      * @param {THREE.Group} model Model to fit.
-     * @param {number} viewAspect Aspect ratio of view.
      * @returns {CameraSettings} 
      */
-    static getFitViewSettings (model : THREE.Group, camera : THREE.PerspectiveCamera) : CameraSettings { 
+    static getFitViewCamera (cameraTemplate : THREE.PerspectiveCamera, model : THREE.Group, ) : THREE.PerspectiveCamera { 
 
-        // Valid assumption : camera lookat = boundingBox.center?
-        // Change only Z; preserve XY?
-
-        // How to find camera.lookat?
-        // Experiment : see if camera.lookat is changing through FitViews
-
+        let camera = cameraTemplate.clone(true);
         let boundingBoxWorld         : THREE.Box3    = Camera.getDefaultBoundingBox(model);
         let cameraMatrixWorld        : THREE.Matrix4 = camera.matrixWorld;
         let cameraMatrixWorldInverse : THREE.Matrix4 = camera.matrixWorldInverse;
@@ -125,14 +113,13 @@ export class Camera {
         // Now, transform back to World coordinates...
         let positionWorld = positionView.applyMatrix4(cameraMatrixWorld);
 
-        let cameraSettings : CameraSettings = {
-            position:       positionWorld,
-            target:         boundingBoxWorld.getCenter(),
-            near:           Camera.DefaultNearClippingPlane,
-            far:            Camera.DefaultFarClippingPlane,
-            fieldOfView:    Camera.DefaultFieldOfView             
-        };
-        return cameraSettings;
+        camera.position.copy (positionWorld);
+        camera.lookAt(boundingBoxWorld.getCenter());
+
+        // Is this necessary? The clipping planes and field of view have not been changed.
+        camera.updateProjectionMatrix();
+
+        return camera;
     }
         
     /**
@@ -140,18 +127,20 @@ export class Camera {
      * @static
      * @param {Camera.StandardView} view Standard view (Top, Left, etc.)
      * @param {THREE.Object3D} model Model to fit.
-     * @param {number} viewAspect Aspect ratio of view.
-     * @returns {CameraSettings} 
+     * @returns {THREE.PerspectiveCamera} 
      */
-    static getStandardViewSettings (view: StandardView, model : THREE.Group, camera : THREE.PerspectiveCamera) : CameraSettings { 
+    static getStandardViewCamera (view: StandardView, viewAspect : number, model : THREE.Group) : THREE.PerspectiveCamera { 
        
-        camera.lookAt(new THREE.Vector3(0, 0, 0));
-        camera.up.set(0, 1, 0);
-        
+        let camera = Camera.getDefaultCamera(viewAspect);               
         switch (view) {
 
             case StandardView.Front: {
                 camera.position.copy (new THREE.Vector3(0,  0, 1));
+                camera.up.set(0, 1, 0);
+                break;
+            }
+            case StandardView.Back: {
+                camera.position.copy (new THREE.Vector3(0,  0, -1));
                 camera.up.set(0, 1, 0);
                 break;
             }
@@ -183,32 +172,42 @@ export class Camera {
         }
         camera.updateProjectionMatrix();
 
-        let cameraSettings = Camera.getFitViewSettings(model, camera);
-        return cameraSettings;
+        camera = Camera.getFitViewCamera(camera, model);
+        return camera;
     }
 
     /**
-     * Returns the default camera.
-     * Creates a default if the current camera has not been constructed.
-     * @param camera Active camera.
+     * Creates a default scene camera.
      * @param viewAspect View aspect ratio.
      */
-    static getDefaultCamera (camera: THREE.PerspectiveCamera, viewAspect : number) : THREE.PerspectiveCamera {
+    static getDefaultCamera (viewAspect : number) : THREE.PerspectiveCamera {
+        
+        let defaultCamera = new THREE.PerspectiveCamera();
+        defaultCamera.position.copy (new THREE.Vector3 (0, 0, 1));
+        defaultCamera.lookAt(new THREE.Vector3());
+        defaultCamera.near   = Camera.DefaultNearClippingPlane;
+        defaultCamera.far    = Camera.DefaultFarClippingPlane;
+        defaultCamera.fov    = Camera.DefaultFieldOfView;
+        defaultCamera.aspect = viewAspect;
+
+        defaultCamera.updateProjectionMatrix;
+
+        return defaultCamera;
+    }
+        
+    /**
+     * Returns the default scene camera.
+     * Creates a default if the current camera has not been constructed.
+     * @param camera Active camera (possibly null).
+     * @param viewAspect View aspect ratio.
+     */
+    static getSceneCamera (camera: THREE.PerspectiveCamera, viewAspect : number) : THREE.PerspectiveCamera {
 
         if (camera)
             return camera;
 
-        let proxyCamera = new THREE.PerspectiveCamera();
-        proxyCamera.position.copy (new THREE.Vector3 (0, 0, 1));
-        proxyCamera.lookAt(new THREE.Vector3);
-        proxyCamera.near   = Camera.DefaultNearClippingPlane;
-        proxyCamera.far    = Camera.DefaultFarClippingPlane;
-        proxyCamera.fov    = Camera.DefaultFieldOfView;
-        proxyCamera.aspect = viewAspect;
-
-        proxyCamera.updateProjectionMatrix;
-
-        return proxyCamera;
+        let defaultCamera = Camera.getDefaultCamera(viewAspect);
+        return defaultCamera;
     }
 //#endregion
 }

@@ -97,6 +97,7 @@ export class CameraControls {
         // Standard Views
         let viewOptions = {
             Front   : StandardView.Front,
+            Back    : StandardView.Back,
             Top     : StandardView.Top,
             Iso     : StandardView.Isometric,
             Left    : StandardView.Left,
