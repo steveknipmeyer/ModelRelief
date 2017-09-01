@@ -43,6 +43,7 @@ export class ModelRelief {
     onMeshGenerate (event : MREvent, mesh : THREE.Mesh) {
 
         this._meshViewer.setModel(mesh);
+        this._meshViewer.fitView();
     }
 
     /**

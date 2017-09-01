@@ -9,6 +9,8 @@ Design Questions
 
 Core  
     Camera
+        MeshViewer orientations do not match the StandardViews of the ModelViewer.
+        
         Write a CameraHelper!
 
         http://jsfiddle.net/VsWb9/991/

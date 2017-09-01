@@ -96,13 +96,13 @@ export class CameraControls {
 
         // Standard Views
         let viewOptions = {
-            Front   : StandardView.Front,
-            Back    : StandardView.Back,
-            Top     : StandardView.Top,
-            Iso     : StandardView.Isometric,
-            Left    : StandardView.Left,
-            Right   : StandardView.Right,
-            Bottom  : StandardView.Bottom
+            Front       : StandardView.Front,
+            Back        : StandardView.Back,
+            Top         : StandardView.Top,
+            Isometric   : StandardView.Isometric,
+            Left        : StandardView.Left,
+            Right       : StandardView.Right,
+            Bottom      : StandardView.Bottom
         };
 
         let controlStandardViews = cameraOptions.add(this._cameraSettings, 'standardView', viewOptions).name('Standard View');
