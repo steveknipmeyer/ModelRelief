@@ -116,7 +116,8 @@ export class Camera {
         camera.position.copy (positionWorld);
         camera.lookAt(boundingBoxWorld.getCenter());
 
-        // Is this necessary? The clipping planes and field of view have not been changed.
+        // force camera matrix to update; matrixAutoUpdate happens in render loop
+        camera.updateMatrixWorld(true);
         camera.updateProjectionMatrix();
 
         return camera;
@@ -168,8 +169,13 @@ export class Camera {
                 camera.position.copy (new THREE.Vector3(1,  0, 1));
                 camera.up.set(-1, 1, -1);
                 break;
-            }
+            }       
         }
+        // Force orientation before Fit View calculation
+        camera.lookAt(new THREE.Vector3());
+
+        // force camera matrix to update; matrixAutoUpdate happens in render loop
+        camera.updateMatrixWorld(true);
         camera.updateProjectionMatrix();
 
         camera = Camera.getFitViewCamera(camera, model);
@@ -190,6 +196,8 @@ export class Camera {
         defaultCamera.fov    = Camera.DefaultFieldOfView;
         defaultCamera.aspect = viewAspect;
 
+        // force camera matrix to update; matrixAutoUpdate happens in render loop
+        defaultCamera.updateMatrixWorld(true);       
         defaultCamera.updateProjectionMatrix;
 
         return defaultCamera;

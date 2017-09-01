@@ -11,18 +11,22 @@ import {Logger, ConsoleLogger}  from 'Logger'
 import {ModelRelief}            from 'ModelRelief'
 import {Services}               from 'Services'
 
+export enum ObjectNames {
+
+    BoundingBox   = 'Bounding Box',
+    Box           = 'Box',
+    CameraHelper  = 'CameraHelper',
+    Plane         = 'Plane',
+    Sphere        = 'Sphere',
+    Triad         = 'Triad'
+}
+
 /**
  *  General THREE.js/WebGL support routines
  *  Graphics Library
  *  @class
  */
 export class Graphics {
-
-    static BoundingBoxName     : string = 'Bounding Box';
-    static BoxName             : string = 'Box';
-    static PlaneName           : string = 'Plane';
-    static SphereName          : string = 'Sphere';
-    static TriadName           : string = 'Triad';
 
     /**
      * @constructor
@@ -152,7 +156,7 @@ export class Graphics {
         depth  = boundingBox.max.z - boundingBox.min.z;
 
         boxMesh = this.createBoxMesh (position, width, height, depth, material);
-        boxMesh.name = Graphics.BoundingBoxName;
+        boxMesh.name = ObjectNames.BoundingBox;
 
         return boxMesh;
     }
@@ -191,7 +195,7 @@ export class Graphics {
         boxMaterial = material || new THREE.MeshPhongMaterial( { color: 0x0000ff, opacity: 1.0} );
 
         box = new THREE.Mesh( boxGeometry, boxMaterial);
-        box.name = Graphics.BoxName;
+        box.name = ObjectNames.Box;
         box.position.copy(position);
 
         return box;
@@ -216,7 +220,7 @@ export class Graphics {
         planeMaterial = material || new THREE.MeshPhongMaterial( { color: 0x0000ff, opacity: 1.0} );
 
         plane = new THREE.Mesh(planeGeometry, planeMaterial);
-        plane.name = Graphics.PlaneName;
+        plane.name = ObjectNames.Plane;
         plane.position.copy(position);
 
         return plane;
@@ -240,7 +244,7 @@ export class Graphics {
         sphereMaterial = material || new THREE.MeshPhongMaterial({ color: 0xff0000, opacity: 1.0} );
 
         sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
-        sphere.name = Graphics.SphereName;
+        sphere.name = ObjectNames.Sphere;
         sphere.position.copy(position);
 
         return sphere;
@@ -340,15 +344,24 @@ export class Graphics {
       * @param scene Scene to annotate.
       * @param camera Camera to construct helper (may be null).
       */
-    static addCameraHelper (scene : THREE.Scene, camera : THREE.Camera) : void{
+    static addCameraHelper (scene : THREE.Scene, camera : THREE.Camera) : void {
 
-        if (camera) {
-            
-            let cloneCamera = camera.clone(true);
-            let cameraHelper = new THREE.CameraHelper(cloneCamera );
-            cameraHelper.visible = true;
-            scene.add(cameraHelper);
-        }
+        // remove existing
+        let existingCameraHelper : THREE.Group = scene.getObjectByName(ObjectNames.CameraHelper);
+        if (existingCameraHelper)
+            scene.remove(existingCameraHelper);
+
+        if (!camera)
+            return;
+        
+        let cameraHelper = new THREE.Group();
+        cameraHelper.name = ObjectNames.CameraHelper;       
+        cameraHelper.visible = true;
+
+        let position = Graphics.createSphereMesh(camera.position, 5);
+        cameraHelper.add(position);
+
+        scene.add(cameraHelper);
     }
 
      /**

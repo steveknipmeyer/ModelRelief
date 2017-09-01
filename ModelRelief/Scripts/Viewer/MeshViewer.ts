@@ -7,7 +7,7 @@
 
 import * as THREE                   from 'three'
 
-import {CameraSettings, Camera}     from 'Camera'
+import {Camera}                     from 'Camera'
 import {DepthBuffer}                from 'DepthBuffer'
 import {Graphics}                   from 'Graphics'
 import {Logger, HTMLLogger}         from 'Logger'

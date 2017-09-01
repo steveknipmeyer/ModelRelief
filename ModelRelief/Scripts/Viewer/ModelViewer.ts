@@ -7,7 +7,7 @@
 
 import * as THREE                       from 'three'
 
-import {CameraSettings, StandardView}   from 'Camera'
+import {StandardView}                   from 'Camera'
 import {DepthBufferFactory}             from "DepthBufferFactory"
 import {EventManager, EventType}        from 'EventManager'
 import {Graphics}                       from 'Graphics'

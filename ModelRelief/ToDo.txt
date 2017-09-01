@@ -1,8 +1,6 @@
 ﻿// ------------------------------------------------------------------------// 
 //      Commit Notes                                                       //
 // ------------------------------------------------------------------------//
-Replace CameraSettings with Camera.
-The CameraSettings do not contain all information about the camera (e.g. rotation);
 
 // ------------------------------------------------------------------------// 
 //      Tasks                                                              //
@@ -11,17 +9,17 @@ Design Questions
 
 Core  
     Camera
-        Center model when loaded at BoundingBox.
-        Use CameraHelpers to debug the Cameras.
+        Write a CameraHelper!
 
-        // Valid assumption : camera lookat = boundingBox.center?
-        // Change only Z; preserve XY?
+        http://jsfiddle.net/VsWb9/991/
 
-        // How to find camera.lookat?
-        // Experiment : see if camera.lookat is changing through FitViews
+        Valid assumption : camera lookat = boundingBox.center?
+        Change only Z; preserve XY?
+
+        How to find camera.lookat / target?
+            This is probably the quaternion of the camera. The position of the camera plus a rotation (quaternion) yields a target.
+            Experiment : see if camera.lookat is changing through FitViews
             
-    Add a Fit View.
-
     Camera.getFitViewSettings
         Successive applications are not consistent. 
             There is "drift" in the view.

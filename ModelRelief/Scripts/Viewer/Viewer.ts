@@ -48,7 +48,7 @@ export class Viewer {
      * @param name Viewer name.
      * @param elementToBindTo HTML element to host the viewer.
      */
-    constructor(name : string, modelCanvasId : string) {
+    constructor(name : string, modelCanvasId : string) { 
 
         this._name         = name;                    
         this._eventManager = new EventManager();
@@ -89,7 +89,7 @@ export class Viewer {
         this._camera = camera;
         this.initializeInputControls();
 
-//      Graphics.addCameraHelper(this._scene, this.camera);        
+        Graphics.addCameraHelper(this._scene, this.camera);        
         }
 
      /**
@@ -206,7 +206,7 @@ export class Viewer {
      */
     initializeInputControls() {
 
-        this._controls = new TrackballControls(this._camera, this._renderer.domElement);
+        this._controls = new TrackballControls(this.camera, this._renderer.domElement);
 
         // N.B. https://stackoverflow.com/questions/10325095/threejs-camera-lookat-has-no-effect-is-there-something-im-doing-wrong
         this._controls.position0.copy(this.camera.position);
@@ -288,7 +288,8 @@ export class Viewer {
      */
     setCameraToStandardView(view : StandardView) {
 
-        this.camera = Camera.getStandardViewCamera(view, this.aspectRatio, this.model);
+        let standardViewCamera = Camera.getStandardViewCamera(view, this.aspectRatio, this.model);
+        this.camera = standardViewCamera;
     }
 
     /**
@@ -340,7 +341,7 @@ export class Viewer {
     renderWebGL() {
 
         this._controls.update();
-        this._renderer.render(this._scene, this._camera);
+        this._renderer.render(this._scene, this.camera);
     }
 
     /**

@@ -8,9 +8,9 @@
 import * as THREE                   from 'three'
 import * as dat    from 'dat-gui'
 
-import {CameraSettings, Camera}     from 'Camera'
+import {Camera}                     from 'Camera'
 import {DepthBufferFactory}         from 'DepthBufferFactory'
-import {Graphics}                   from 'Graphics'
+import {Graphics, ObjectNames}     from 'Graphics'
 import {Loader}                     from 'Loader'
 import {Logger, ConsoleLogger}      from 'Logger'
 import {MathLibrary}                from 'Math'
@@ -20,21 +20,15 @@ import {TrackballControls}          from 'TrackballControls'
 import {UnitTests}                  from 'UnitTests'
 import {Viewer}                     from 'Viewer'
 
-    /**
-     * Create a bounding box mesh.
-     * @param object Target object.
-     * @param color Color of bounding box mesh.
-     */
-    function createBoundingBox (object : THREE.Object3D, color : number) : THREE.Mesh {
 
-        let boundingBox : THREE.Box3 = new THREE.Box3();
-        boundingBox = boundingBox.setFromObject(object);
-        
-        let material = new THREE.MeshPhongMaterial( {color : color, opacity : 1.0, wireframe : true});       
-        let boundingBoxMesh : THREE.Mesh = Graphics.createBoundingBoxMeshFromBoundingBox(boundingBox.getCenter(), boundingBox, material);
+export interface CameraSettings {
+    position:       THREE.Vector3;        // location of camera
+    target:         THREE.Vector3;        // target point
+    near:           number;               // near clipping plane
+    far:            number;               // far clipping plane
+    fieldOfView:    number;               // field of view
+}
 
-        return boundingBoxMesh;
-    }
 /**
  * @class
  * CameraWorkbench
@@ -141,10 +135,25 @@ export class App {
         this._viewer.camera.near = nearPlane;
         this._viewer.camera.far  = farPlane;
 
-        // WIP: Or this._viewer.updateCamera()?
         this._viewer.camera.updateProjectionMatrix();
     }
 
+    /**
+     * Create a bounding box mesh.
+     * @param object Target object.
+     * @param color Color of bounding box mesh.
+     */
+    createBoundingBox (object : THREE.Object3D, color : number) : THREE.Mesh {
+        
+            let boundingBox : THREE.Box3 = new THREE.Box3();
+            boundingBox = boundingBox.setFromObject(object);
+            
+            let material = new THREE.MeshPhongMaterial( {color : color, opacity : 1.0, wireframe : true});       
+            let boundingBoxMesh : THREE.Mesh = Graphics.createBoundingBoxMeshFromBoundingBox(boundingBox.getCenter(), boundingBox, material);
+        
+            return boundingBoxMesh;
+        }
+    
     /**
      * Show the clipping planes of the model in View and World coordinates.
      */
@@ -155,7 +164,7 @@ export class App {
         let cameraMatrixWorldInverse : THREE.Matrix4 = this._viewer.camera.matrixWorldInverse;
 
         // remove existing BoundingBox
-        model.remove(model.getObjectByName(Graphics.BoundingBoxName));
+        model.remove(model.getObjectByName(ObjectNames.BoundingBox));
 
         // clone model (and geometry!)
         let modelView =  Graphics.cloneAndTransformObject(model, cameraMatrixWorldInverse);
@@ -165,7 +174,7 @@ export class App {
 
         model.add(modelView);
 
-        let boundingBoxView = createBoundingBox(modelView, 0xff00ff);
+        let boundingBoxView = this.createBoundingBox(modelView, 0xff00ff);
         model.add(boundingBoxView);
 
         // transform model back from View to World
