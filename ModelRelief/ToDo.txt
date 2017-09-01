@@ -9,8 +9,11 @@ Design Questions
 
 Core  
     Camera
-        MeshViewer orientations do not match the StandardViews of the ModelViewer.
-        
+        Should a Fit View be done in the MeshViewer after a mesh generation event?
+        Why does Isometric not show the mesh plane in the MeshViewer?
+        Why is changing views slow?
+            BoundingBox calculation?
+
         Write a CameraHelper!
 
         http://jsfiddle.net/VsWb9/991/

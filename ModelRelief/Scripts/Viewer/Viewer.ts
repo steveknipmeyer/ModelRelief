@@ -89,6 +89,9 @@ export class Viewer {
         this._camera = camera;
         this.initializeInputControls();
 
+        if (this._cameraControls)
+            this._cameraControls.synchronizeCameraSettings();
+        
         Graphics.addCameraHelper(this._scene, this.camera);        
         }
 
@@ -290,6 +293,8 @@ export class Viewer {
 
         let standardViewCamera = Camera.getStandardViewCamera(view, this.aspectRatio, this.model);
         this.camera = standardViewCamera;
+
+        this._cameraControls.synchronizeCameraSettings(view);
     }
 
     /**

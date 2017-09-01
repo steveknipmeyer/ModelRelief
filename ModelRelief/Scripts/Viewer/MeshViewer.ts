@@ -7,7 +7,7 @@
 
 import * as THREE                   from 'three'
 
-import {Camera}                     from 'Camera'
+import {Camera, StandardView}       from 'Camera'
 import {DepthBuffer}                from 'DepthBuffer'
 import {Graphics}                   from 'Graphics'
 import {Logger, HTMLLogger}         from 'Logger'
@@ -54,6 +54,8 @@ export class MeshViewer extends Viewer {
         let height = 1;
         let width  = 1;
         let mesh = Graphics.createPlaneMesh(new THREE.Vector3(), height, width, new THREE.MeshPhongMaterial(DepthBuffer.DefaultMeshPhongMaterialParameters));
+        mesh.rotateX(-Math.PI / 2);
+
         this._root.add(mesh);
     }
 

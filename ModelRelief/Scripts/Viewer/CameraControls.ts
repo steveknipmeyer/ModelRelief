@@ -105,7 +105,7 @@ export class CameraControls {
             Bottom      : StandardView.Bottom
         };
 
-        let controlStandardViews = cameraOptions.add(this._cameraSettings, 'standardView', viewOptions).name('Standard View');
+        let controlStandardViews = cameraOptions.add(this._cameraSettings, 'standardView', viewOptions).name('Standard View').listen();
         controlStandardViews.onChange ((viewSetting : string) => {
 
             let view : StandardView = parseInt(viewSetting, 10);
@@ -152,8 +152,11 @@ export class CameraControls {
      * Synchronize the UI camera settings with the target camera.
      * @param camera 
      */
-    synchronizeCameraSettings () {
+    synchronizeCameraSettings (view? : StandardView) {
 
+        if (view)
+            this._cameraSettings.standardView = view;
+        
         this._cameraSettings.nearClippingPlane = this._viewer.camera.near;
         this._cameraSettings.farClippingPlane  = this._viewer.camera.far;
         this._cameraSettings.fieldOfView       = this._viewer.camera.fov;

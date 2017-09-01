@@ -54,7 +54,7 @@ export class ModelRelief {
     onNewModel (event : MREvent, model : THREE.Group) {
         
         this._modelViewer.setCameraToStandardView(StandardView.Front);              
-        this._meshViewer.setCameraToStandardView(StandardView.Front);       
+        this._meshViewer.setCameraToStandardView(StandardView.Top);       
     }
 //#endregion
 

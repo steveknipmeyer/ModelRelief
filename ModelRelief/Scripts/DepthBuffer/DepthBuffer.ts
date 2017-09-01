@@ -352,6 +352,10 @@ export class DepthBuffer {
         let mesh  = new THREE.Mesh(meshGeometry, material);
         mesh.name = DepthBuffer.MeshModelName;
 
+        // Mesh was constructed with Z = depth buffer(X,Y).
+        // Now rotate mesh to align with viewer XY plane so Top view is looking down on the mesh.
+        mesh.rotateX(-Math.PI / 2);
+
         console.timeEnd("mesh");       
         return mesh;
     }
