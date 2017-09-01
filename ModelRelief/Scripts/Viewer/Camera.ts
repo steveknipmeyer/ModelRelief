@@ -108,8 +108,10 @@ export class Camera {
         let cameraZHorizontalExtents : number = (boundingBoxView.getSize().x / 2) / Math.tan (horizontalFieldOfViewRadians);       
         let cameraZ = Math.max(cameraZVerticalExtents, cameraZHorizontalExtents);
 
-        let positionView = new THREE.Vector3(boundingBoxView.getCenter().x, boundingBoxView.getCenter().y, boundingBoxView.max.z + cameraZ);
-
+        // preserve XY; set Z to include extents
+        let cameraPositionView = camera.position.applyMatrix4(cameraMatrixWorldInverse);
+        let positionView = new THREE.Vector3(cameraPositionView.x, cameraPositionView.y, boundingBoxView.max.z + cameraZ);
+        
         // Now, transform back to World coordinates...
         let positionWorld = positionView.applyMatrix4(cameraMatrixWorld);
 

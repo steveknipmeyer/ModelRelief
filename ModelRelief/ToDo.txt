@@ -9,25 +9,13 @@ Design Questions
 
 Core  
     Camera
+        Why does the Front View change after the 2nd Fit View?
         Should a Fit View be done in the MeshViewer after a mesh generation event?
-        Why does Isometric not show the mesh plane in the MeshViewer?
+        Why does Isometric not show the (empty) mesh plane in the MeshViewer?
         Why is changing views slow?
             BoundingBox calculation?
 
         Write a CameraHelper!
-
-        http://jsfiddle.net/VsWb9/991/
-
-        Valid assumption : camera lookat = boundingBox.center?
-        Change only Z; preserve XY?
-
-        How to find camera.lookat / target?
-            This is probably the quaternion of the camera. The position of the camera plus a rotation (quaternion) yields a target.
-            Experiment : see if camera.lookat is changing through FitViews
-            
-    Camera.getFitViewSettings
-        Successive applications are not consistent. 
-            There is "drift" in the view.
         
     Add source code attributions to THREE.js.
 
