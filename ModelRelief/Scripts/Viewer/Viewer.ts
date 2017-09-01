@@ -296,8 +296,6 @@ export class Viewer {
         this.camera.far  = settings.far;
         this.camera.fov  = settings.fieldOfView;
         
-        this.camera.up.set(0, 1, 0);
-
         this.updateCameraOnWindowResize();
         this.initializeInputControls();
     }

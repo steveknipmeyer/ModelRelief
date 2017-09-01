@@ -2,31 +2,31 @@
 //      Commit Notes                                                       //
 // ------------------------------------------------------------------------//
 
+
 // ------------------------------------------------------------------------// 
 //      Tasks                                                              //
 // ------------------------------------------------------------------------//
 Design Questions
 
-Core
+Core  
+    Camera
+        Center model when loaded at BoundingBox.
+        Use CameraHelpers to debug the Cameras.
+        The CameraSettings do not contain all information about the camera (e.g. rotation);
+            Replace CameraSettings with Camera.
+            
+    Add a Fit View.
+
+    Camera.getFitViewSettings
+        Successive applications are not consistent. 
+            There is "drift" in the view.
+        
     Add source code attributions to THREE.js.
 
     Export 
         ASPNET Core?
         https://github.com/eligrey/FileSaver.js/
         https://github.com/jimmywarting/StreamSaver.js
-   
-    Camera.getFitViewSettings
-        Camera.up should be preserved.
-
-    Camera.getStandardViewSettings    
-        Camera nominal view based on the StandardView should be defined before Camera.getFitViewSettings.
-            Front           ( 0,  0, 1)
-            Top             ( 0,  1, 0)
-            Bottom          ( 0, -1, 0)
-            Left            (-1,  0, 0)
-            Right           ( 1,  0, 0)
-            Isometric       ( 1,  0, 1)
-        
 
     Clipping Planes
         Create a 'Set Far Plane' control.

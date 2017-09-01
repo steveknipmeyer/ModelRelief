@@ -97,6 +97,12 @@ export class Camera {
      */
     static getFitViewSettings (model : THREE.Group, camera : THREE.PerspectiveCamera) : CameraSettings { 
 
+        // Valid assumption : camera lookat = boundingBox.center?
+        // Change only Z; preserve XY?
+
+        // How to find camera.lookat?
+        // Experiment : see if camera.lookat is changing through FitViews
+
         let boundingBoxWorld         : THREE.Box3    = Camera.getDefaultBoundingBox(model);
         let cameraMatrixWorld        : THREE.Matrix4 = camera.matrixWorld;
         let cameraMatrixWorldInverse : THREE.Matrix4 = camera.matrixWorldInverse;
@@ -107,20 +113,14 @@ export class Camera {
         let modelView       =  Graphics.cloneAndTransformObject(model, cameraMatrixWorldInverse);
         let boundingBoxView = Camera.getDefaultBoundingBox(modelView);
 
-        let verticalFieldOfViewRadians   : number = (Camera.DefaultFieldOfView / 2) * (Math.PI / 180);
+        let verticalFieldOfViewRadians   : number = (camera.fov / 2) * (Math.PI / 180);
         let horizontalFieldOfViewRadians : number = Math.atan(camera.aspect * Math.tan(verticalFieldOfViewRadians));       
 
         let cameraZVerticalExtents   : number = (boundingBoxView.getSize().y / 2) / Math.tan (verticalFieldOfViewRadians);       
         let cameraZHorizontalExtents : number = (boundingBoxView.getSize().x / 2) / Math.tan (horizontalFieldOfViewRadians);       
         let cameraZ = Math.max(cameraZVerticalExtents, cameraZHorizontalExtents);
 
-        // find distance from cameraZ to boundingBox.center
-        // find distance from current camera to boundingBox.center
-        // find offset
-        // find unit vector from camera to target
-        // translate camera by offset along unit vector
-
-        let positionView = new THREE.Vector3(boundingBoxView.getCenter().x, boundingBoxView.getCenter().y, boundingBoxView.max.z + cameraZ);       
+        let positionView = new THREE.Vector3(boundingBoxView.getCenter().x, boundingBoxView.getCenter().y, boundingBoxView.max.z + cameraZ);
 
         // Now, transform back to World coordinates...
         let positionWorld = positionView.applyMatrix4(cameraMatrixWorld);
@@ -144,7 +144,45 @@ export class Camera {
      * @returns {CameraSettings} 
      */
     static getStandardViewSettings (view: StandardView, model : THREE.Group, camera : THREE.PerspectiveCamera) : CameraSettings { 
+       
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
+        camera.up.set(0, 1, 0);
         
+        switch (view) {
+
+            case StandardView.Front: {
+                camera.position.copy (new THREE.Vector3(0,  0, 1));
+                camera.up.set(0, 1, 0);
+                break;
+            }
+            case StandardView.Top: {
+                camera.position.copy (new THREE.Vector3(0,  1, 0));
+                camera.up.set(0, 0, -1);
+                break;
+            }
+            case StandardView.Bottom: {
+                camera.position.copy (new THREE.Vector3(0, -1, 0));
+                camera.up.set(0, 0, 1);
+                break;
+            }
+            case StandardView.Left: {
+                camera.position.copy (new THREE.Vector3(-1,  0, 0));
+                camera.up.set(0, 1, 0);
+                break;
+            }
+            case StandardView.Right: {
+                camera.position.copy (new THREE.Vector3(1,  0, 0));
+                camera.up.set(0, 1, 0);
+                break;
+            }
+            case StandardView.Isometric: {
+                camera.position.copy (new THREE.Vector3(1,  0, 1));
+                camera.up.set(-1, 1, -1);
+                break;
+            }
+        }
+        camera.updateProjectionMatrix();
+
         let cameraSettings = Camera.getFitViewSettings(model, camera);
         return cameraSettings;
     }

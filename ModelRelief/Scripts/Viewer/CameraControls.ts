@@ -20,17 +20,21 @@ import {Viewer}                     from "Viewer"
  */
 class CameraSettings {
 
+    fitView            : () => void;
+    
     standardView       : StandardView;
     nearClippingPlane  : number;
     farClippingPlane   : number;
     fieldOfView        : number;
     
-    constructor(camera: THREE.PerspectiveCamera) {
+    constructor(camera: THREE.PerspectiveCamera, fitView : () => any) {
 
-        this.standardView         = StandardView.Front;
-        this.nearClippingPlane    = camera.near;
-        this.farClippingPlane     = camera.far;
-        this.fieldOfView          = camera.fov;
+        this.fitView = fitView;
+        
+        this.standardView      = StandardView.Front;
+        this.nearClippingPlane = camera.near;
+        this.farClippingPlane  = camera.far;
+        this.fieldOfView       = camera.fov;
     }
 }
 
@@ -55,7 +59,14 @@ export class CameraControls {
     }
 
 //#region Event Handlers
-//#endregion
+    /**
+     * Fits the active view.
+     */
+    fitView() : void { 
+        
+        this._viewer.fitView();
+    }
+    //#endregion
 
     /**
      * Initialize the view settings that are controllable by the user
@@ -64,7 +75,7 @@ export class CameraControls {
 
         let scope = this;
 
-        this._cameraSettings = new CameraSettings(this._viewer.camera, );
+        this._cameraSettings = new CameraSettings(this._viewer.camera, this.fitView.bind(this));
 
         // Init dat.gui and controls for the UI
         let gui = new dat.GUI({
@@ -80,6 +91,9 @@ export class CameraControls {
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         let cameraOptions = gui.addFolder('Camera Options');
         
+        // Generate Relief
+        let controlFitView = cameraOptions.add(this._cameraSettings, 'fitView').name('Fit View');
+
         // Standard Views
         let viewOptions = {
             Front   : StandardView.Front,
@@ -91,8 +105,9 @@ export class CameraControls {
         };
 
         let controlStandardViews = cameraOptions.add(this._cameraSettings, 'standardView', viewOptions).name('Standard View');
-        controlStandardViews.onChange ((view : StandardView) => {
-            
+        controlStandardViews.onChange ((viewSetting : string) => {
+
+            let view : StandardView = parseInt(viewSetting, 10);
             scope._viewer.setCameraToStandardView(view);
         });
 
