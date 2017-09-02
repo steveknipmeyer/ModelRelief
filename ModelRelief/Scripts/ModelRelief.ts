@@ -23,10 +23,12 @@ import {Viewer}                             from "Viewer"
     
 export class ModelRelief {
 
-    _meshViewer         : MeshViewer;
-    _modelViewer        : ModelViewer;
-    _loader             : Loader;
+    _meshViewer             : MeshViewer;
+    _modelViewer            : ModelViewer;
+    _loader                 : Loader;
     
+    _initialMeshGeneration  : boolean = true;
+
     /** Default constructor
      * @class ModelRelief
      * @constructor
@@ -43,7 +45,11 @@ export class ModelRelief {
     onMeshGenerate (event : MREvent, mesh : THREE.Mesh) {
 
         this._meshViewer.setModel(mesh);
-        this._meshViewer.fitView();
+
+        if (this._initialMeshGeneration) {
+            this._meshViewer.fitView();
+            this._initialMeshGeneration = false;            
+        }
     }
 
     /**

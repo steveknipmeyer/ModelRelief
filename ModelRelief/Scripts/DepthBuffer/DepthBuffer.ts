@@ -29,7 +29,7 @@ export class DepthBuffer {
     static readonly MeshModelName         : string = 'ModelMesh';
     static readonly NormalizedTolerance   : number = .001;    
 
-    static DefaultMeshPhongMaterialParameters : THREE.MeshPhongMaterialParameters = {wireframe : false, color : 0xff00ff, reflectivity : 0.75, shininess : 0.75};
+    static DefaultMeshPhongMaterialParameters : THREE.MeshPhongMaterialParameters = {side: THREE.DoubleSide, wireframe : false, color : 0xff00ff, reflectivity : 0.75, shininess : 0.75};
     
     _logger : Logger;
 

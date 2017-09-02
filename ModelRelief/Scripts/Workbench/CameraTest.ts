@@ -90,7 +90,7 @@ export class App {
 
         let model                    : THREE.Group   = this._viewer.model;
         let cameraMatrixWorldInverse : THREE.Matrix4 = this._viewer.camera.matrixWorldInverse;
-
+        
         // clone model (and geometry!)
         let modelView = Graphics.cloneAndTransformObject(model, cameraMatrixWorldInverse);
         let boundingBoxView = Graphics.getBoundingBoxFromObject(modelView);

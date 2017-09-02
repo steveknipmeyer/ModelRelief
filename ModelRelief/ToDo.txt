@@ -9,15 +9,10 @@ Design Questions
 
 Core  
     Camera
+
         Why does the View change slightly after the 2nd Fit View?
             Fit View is not correct when there are rotations.
-
-        Should a Fit View be done in the MeshViewer after a mesh generation event?
-            Fit View only after 1st generation?
-
-        Isometric
-            Why does Isometric not show the (empty) mesh plane in the MeshViewer?
-            Should the Isometric view be based on the BoundingBox?
+            This happens only in the ModelViewer not the MeshViewer!
 
         Why is changing StandartViews slow?
             BoundingBox calculation?

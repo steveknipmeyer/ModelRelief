@@ -135,46 +135,61 @@ export class Camera {
     static getStandardViewCamera (view: StandardView, viewAspect : number, model : THREE.Group) : THREE.PerspectiveCamera { 
        
         let camera = Camera.getDefaultCamera(viewAspect);               
-        switch (view) {
+        console.time('boundingBox')
+        let boundingBox = Graphics.getBoundingBoxFromObject(model);
+        console.timeEnd('boundingBox');
+        
+        let centerX = boundingBox.getCenter().x;
+        let centerY = boundingBox.getCenter().y;
+        let centerZ = boundingBox.getCenter().z;
 
+        let minX    = boundingBox.min.x;
+        let minY    = boundingBox.min.y;
+        let minZ    = boundingBox.min.z;
+        let maxX    = boundingBox.max.x;
+        let maxY    = boundingBox.max.y;
+        let maxZ    = boundingBox.max.z;
+        
+        switch (view) {           
             case StandardView.Front: {
-                camera.position.copy (new THREE.Vector3(0,  0, 1));
+                camera.position.copy (new THREE.Vector3(centerX,  centerY, maxZ));
                 camera.up.set(0, 1, 0);
                 break;
             }
             case StandardView.Back: {
-                camera.position.copy (new THREE.Vector3(0,  0, -1));
+                camera.position.copy (new THREE.Vector3(centerX,  centerY, minZ));
                 camera.up.set(0, 1, 0);
                 break;
             }
             case StandardView.Top: {
-                camera.position.copy (new THREE.Vector3(0,  1, 0));
+                camera.position.copy (new THREE.Vector3(centerX,  maxY, centerZ));
                 camera.up.set(0, 0, -1);
                 break;
             }
             case StandardView.Bottom: {
-                camera.position.copy (new THREE.Vector3(0, -1, 0));
+                camera.position.copy (new THREE.Vector3(centerX, minY, centerZ));
                 camera.up.set(0, 0, 1);
                 break;
             }
             case StandardView.Left: {
-                camera.position.copy (new THREE.Vector3(-1,  0, 0));
+                camera.position.copy (new THREE.Vector3(minX, centerY, centerZ));
                 camera.up.set(0, 1, 0);
                 break;
             }
             case StandardView.Right: {
-                camera.position.copy (new THREE.Vector3(1,  0, 0));
+                camera.position.copy (new THREE.Vector3(maxX, centerY, centerZ));
                 camera.up.set(0, 1, 0);
                 break;
             }
             case StandardView.Isometric: {
-                camera.position.copy (new THREE.Vector3(1,  0, 1));
+                let side = Math.max(Math.max(boundingBox.getSize().x, boundingBox.getSize().y), boundingBox.getSize().z);
+                camera.position.copy (new THREE.Vector3(side,  side, side));
                 camera.up.set(-1, 1, -1);
                 break;
             }       
         }
         // Force orientation before Fit View calculation
-        camera.lookAt(new THREE.Vector3());
+        camera.lookAt(boundingBox.getCenter());
 
         // force camera matrix to update; matrixAutoUpdate happens in render loop
         camera.updateMatrixWorld(true);
