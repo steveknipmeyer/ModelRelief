@@ -378,6 +378,19 @@ export class Graphics {
         let position = Graphics.createSphereMesh(camera.position, 3);
         cameraHelper.add(position);
 
+        // camera target line
+        let unitTarget = new THREE.Vector3(0, 0, -1);
+        unitTarget.applyQuaternion(camera.quaternion);
+        let scaledTarget : THREE.Vector3;
+
+        scaledTarget = unitTarget.multiplyScalar(-boundingBoxView.max.z);
+
+        let startPoint : THREE.Vector3 = camera.position;
+        let endPoint   : THREE.Vector3 = new THREE.Vector3();
+        endPoint.addVectors(startPoint, unitTarget);
+        let targetLine : THREE.Line = Graphics.createLine(startPoint, endPoint, 0x00ff00);
+        cameraHelper.add(targetLine);
+
         scene.add(cameraHelper);
     }
 
