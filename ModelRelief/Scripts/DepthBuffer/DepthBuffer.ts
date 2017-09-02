@@ -13,6 +13,7 @@ import {Graphics}           from 'Graphics'
 import {Logger, HTMLLogger} from 'Logger'
 import {MathLibrary}        from 'Math'
 import {Services}           from 'Services'
+import {StopWatch}          from 'StopWatch'
 
 interface FacePair {
         
@@ -322,8 +323,10 @@ export class DepthBuffer {
      */
     mesh(material? : THREE.Material) : THREE.Mesh {
 
-        console.time("mesh");
-        let meshXYExtents : THREE.Vector2 = Camera.getNearPlaneExtents(this.camera);
+        let timerTag : string = 'DepthBuffer.mesh';
+        Services.timer.mark(timerTag);        
+
+        let meshXYExtents : THREE.Vector2 = Camera.getNearPlaneExtents(this.camera);       
         
         if (!material)
             material = new THREE.MeshPhongMaterial(DepthBuffer.DefaultMeshPhongMaterialParameters);
@@ -356,7 +359,7 @@ export class DepthBuffer {
         // Now rotate mesh to align with viewer XY plane so Top view is looking down on the mesh.
         mesh.rotateX(-Math.PI / 2);
 
-        console.timeEnd("mesh");       
+        Services.timer.logElapsedTime(timerTag)
         return mesh;
     }
 

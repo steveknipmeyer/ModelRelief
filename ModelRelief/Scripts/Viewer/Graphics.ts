@@ -58,7 +58,7 @@ export class Graphics {
                 return;
             }
 
-            logger.addInfoMessage ('Removing: ' + object3d.name);
+            // logger.addInfoMessage ('Removing: ' + object3d.name);
             if (object3d.hasOwnProperty('geometry')) {
                 object3d.geometry.dispose();
             }
@@ -168,10 +168,14 @@ export class Graphics {
      */
     static getBoundingBoxFromObject(rootObject : THREE.Object3D) : THREE.Box3 {
 
+        let boundingBoxTag : string = 'BoundingBox';
+        Services.timer.mark(boundingBoxTag);        
+
         // https://stackoverflow.com/questions/15492857/any-way-to-get-a-bounding-box-from-a-three-js-object3d
         let boundingBox : THREE.Box3 = new THREE.Box3();
         boundingBox = boundingBox.setFromObject(rootObject);
 
+        Services.timer.logElapsedTime(boundingBoxTag);
         return boundingBox;
         }
 
@@ -382,7 +386,6 @@ export class Graphics {
         let unitTarget = new THREE.Vector3(0, 0, -1);
         unitTarget.applyQuaternion(camera.quaternion);
         let scaledTarget : THREE.Vector3;
-
         scaledTarget = unitTarget.multiplyScalar(-boundingBoxView.max.z);
 
         let startPoint : THREE.Vector3 = camera.position;

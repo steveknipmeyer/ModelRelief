@@ -113,7 +113,7 @@ export class ModelViewer extends Viewer {
     let previewMesh : THREE.Mesh = factory.meshGenerate({});   
     this._eventManager.dispatchEvent(this, EventType.MeshGenerate, previewMesh);
 
-    Services.consoleLogger.addInfoMessage('Relief generated');
+    // Services.consoleLogger.addInfoMessage('Relief generated');
 }
 //#endregion
 } 

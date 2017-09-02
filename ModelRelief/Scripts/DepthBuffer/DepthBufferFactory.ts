@@ -22,6 +22,7 @@ import {Logger, ConsoleLogger}  from 'Logger'
 import {MathLibrary}            from 'Math'
 import {ModelRelief}            from 'ModelRelief'
 import {Services}               from 'Services'
+import {StopWatch}              from 'StopWatch'
 import {Tools}                  from 'Tools'
 
 export interface DepthBufferFactoryParameters {
@@ -374,8 +375,9 @@ export class DepthBufferFactory {
      */
     createDepthBuffer() {
 
-        console.time("createDepthBuffer");
-        
+        let timerTag : string = 'DepthBufferFactory.createDepthBuffer';
+        Services.timer.mark(timerTag);        
+
         this._renderer.render(this._scene, this._camera, this._target);    
     
         // (optional) preview encoded RGBA texture; drawn by shader but not persisted
@@ -394,7 +396,7 @@ export class DepthBufferFactory {
 
         this.analyzeTargets();
 
-        console.timeEnd("createDepthBuffer");       
+        Services.timer.logElapsedTime(timerTag);
     }
     
     /**

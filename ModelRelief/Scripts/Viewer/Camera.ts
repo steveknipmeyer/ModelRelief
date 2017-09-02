@@ -5,9 +5,11 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE from 'three'
+import * as THREE        from 'three'
 
-import {Graphics}             from 'Graphics'
+import {Graphics}        from 'Graphics'
+import {Services}        from 'Services'
+import {StopWatch}       from 'StopWatch'
 
 export enum StandardView {
     Front,
@@ -90,6 +92,9 @@ export class Camera {
      */
     static getFitViewCamera (cameraTemplate : THREE.PerspectiveCamera, model : THREE.Group, ) : THREE.PerspectiveCamera { 
 
+        let timerTag : string = 'Camera.getFitViewCamera';
+        Services.timer.mark(timerTag);        
+
         let camera = cameraTemplate.clone(true);
         let boundingBoxWorld         : THREE.Box3    = Camera.getDefaultBoundingBox(model);
         let cameraMatrixWorld        : THREE.Matrix4 = camera.matrixWorld;
@@ -122,6 +127,7 @@ export class Camera {
         camera.updateMatrixWorld(true);
         camera.updateProjectionMatrix();
 
+        Services.timer.logElapsedTime(timerTag);       
         return camera;
     }
         
@@ -133,22 +139,23 @@ export class Camera {
      * @returns {THREE.PerspectiveCamera} 
      */
     static getStandardViewCamera (view: StandardView, viewAspect : number, model : THREE.Group) : THREE.PerspectiveCamera { 
-       
+
+        let timerTag : string = 'Camera.getStandardView';
+        Services.timer.mark(timerTag);        
+
         let camera = Camera.getDefaultCamera(viewAspect);               
-        console.time('boundingBox')
         let boundingBox = Graphics.getBoundingBoxFromObject(model);
-        console.timeEnd('boundingBox');
         
         let centerX = boundingBox.getCenter().x;
         let centerY = boundingBox.getCenter().y;
         let centerZ = boundingBox.getCenter().z;
 
-        let minX    = boundingBox.min.x;
-        let minY    = boundingBox.min.y;
-        let minZ    = boundingBox.min.z;
-        let maxX    = boundingBox.max.x;
-        let maxY    = boundingBox.max.y;
-        let maxZ    = boundingBox.max.z;
+        let minX = boundingBox.min.x;
+        let minY = boundingBox.min.y;
+        let minZ = boundingBox.min.z;
+        let maxX = boundingBox.max.x;
+        let maxY = boundingBox.max.y;
+        let maxZ = boundingBox.max.z;
         
         switch (view) {           
             case StandardView.Front: {
@@ -196,6 +203,8 @@ export class Camera {
         camera.updateProjectionMatrix();
 
         camera = Camera.getFitViewCamera(camera, model);
+
+        Services.timer.logElapsedTime(timerTag);
         return camera;
     }
 

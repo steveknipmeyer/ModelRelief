@@ -5,7 +5,11 @@
 // ------------------------------------------------------------------------//
 
 "use strict";
-import * as THREE from 'three'
+
+import * as THREE   from 'three'
+
+import {Services}   from 'Services'
+import {StopWatch}  from 'StopWatch'
 
 export function OBJLoader ( manager ) {
 
@@ -427,7 +431,8 @@ OBJLoader.prototype = {
 
     parse: function ( text ) {
 
-        console.time( 'OBJLoader' );
+        let timerTag : string = 'OBJLoader.parse';
+        Services.timer.mark(timerTag);        
 
         var state = this._createParserState();
 
@@ -760,10 +765,8 @@ OBJLoader.prototype = {
 
         }
 
-        console.timeEnd( 'OBJLoader' );
-
+        Services.timer.logElapsedTime(timerTag);
         return container;
-
     }
 
 }
