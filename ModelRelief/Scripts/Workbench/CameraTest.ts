@@ -40,33 +40,14 @@ export class CameraViewer extends Viewer {
         let triad = Graphics.createWorldAxesTriad(new THREE.Vector3(), 1, 0.25, 0.25);
         this._scene.add(triad);
 
-        let box : THREE.Mesh = Graphics.createBoxMesh(new THREE.Vector3(1, 1, -2), 1, 2, 2, new THREE.MeshPhongMaterial({color : 0xff0000}));
+        let box : THREE.Mesh = Graphics.createBoxMesh(new THREE.Vector3(4, 6, -2), 1, 2, 2, new THREE.MeshPhongMaterial({color : 0xff0000}));
         box.rotation.set(Math.random(), Math.random(), Math.random());
         box.updateMatrix();
+        this.model.add(box);
 
-        let boxClone = Graphics.cloneAndTransformObject(box, new THREE.Matrix4());
-        this.model.add(boxClone);
-
-        let sphere : THREE.Mesh = Graphics.createSphereMesh(new THREE.Vector3(4, 2, -1), 1, new THREE.MeshPhongMaterial({color : 0x00ff00}));
+        let sphere : THREE.Mesh = Graphics.createSphereMesh(new THREE.Vector3(-3, 10, -1), 1, new THREE.MeshPhongMaterial({color : 0x00ff00}));
         this.model.add(sphere);
-    }
-    
-     /**
-     * Initialize the viewer camera
-     */
-    initializeDefaultCameraSettings () : CameraSettings {
-
-        let settings : CameraSettings = {
-
-            position:       new THREE.Vector3(0.0, 0.0, 20.0),
-            target:         new THREE.Vector3(0, 0, 0),
-            near:            2.0,
-            far:            50.0,
-            fieldOfView:    37                                  // https://www.nikonians.org/reviews/fov-tables
-        };
-
-        return settings;    
-    }
+    }   
 }
 
 /**
@@ -75,18 +56,10 @@ export class CameraViewer extends Viewer {
  */
 class ViewerControls {
 
-    nearClippingPlane  : number;
-    farClippingPlane   : number;
-    fieldOfView        : number;
-
     showBoundingBoxes : () => void;
     setClippingPlanes : () => void;
 
     constructor(camera: THREE.PerspectiveCamera, showBoundingBoxes : () => any, setClippingPlanes : () => any) {
-
-        this.nearClippingPlane    = camera.near;
-        this.farClippingPlane     = camera.far;
-        this.fieldOfView          = camera.fov;
 
         this.showBoundingBoxes = showBoundingBoxes;
         this.setClippingPlanes  = setClippingPlanes;
@@ -129,8 +102,8 @@ export class App {
         let nearPlane = -boundingBoxView.max.z;
         let farPlane  = -boundingBoxView.min.z;
 
-        this._viewerControls.nearClippingPlane = nearPlane;
-        this._viewerControls.farClippingPlane  = farPlane;
+        this._viewer._cameraControls._cameraSettings.nearClippingPlane = nearPlane;
+        this._viewer._cameraControls._cameraSettings.farClippingPlane  = farPlane;
 
         this._viewer.camera.near = nearPlane;
         this._viewer.camera.far  = farPlane;
@@ -202,40 +175,7 @@ export class App {
         });
         let settingsDiv = document.getElementById('settingsControls');
         settingsDiv.appendChild(gui.domElement);
-        var folderOptions = gui.addFolder('Camera Options');
-
-        // Near Clipping Plane
-        let minimum  =   0;
-        let maximum  = 100;
-        let stepSize =   0.1;
-        let controlNearClippingPlane = folderOptions.add(this._viewerControls, 'nearClippingPlane').name('Near Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
-        controlNearClippingPlane .onChange (function (value) {
-
-            scope._viewer.camera.near = value;
-            scope._viewer.camera.updateProjectionMatrix();
-        }.bind(this));
-
-        // Far Clipping Plane
-        minimum  =   1;
-        maximum  = 500;
-        stepSize =   0.1;
-        let controlFarClippingPlane = folderOptions.add(this._viewerControls, 'farClippingPlane').name('Far Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();;
-        controlFarClippingPlane .onChange (function (value) {
-
-            scope._viewer.camera.far = value;
-            scope._viewer.camera.updateProjectionMatrix();
-        }.bind(this));
-
-        // Field of View
-        minimum  = 25;
-        maximum  = 75;
-        stepSize =  1;
-        let controlFieldOfView= folderOptions.add(this._viewerControls, 'fieldOfView').name('Field of View').min(minimum).max(maximum).step(stepSize).listen();;
-        controlFieldOfView .onChange (function (value) {
-
-            scope._viewer.camera.fov = value;
-            scope._viewer.camera.updateProjectionMatrix();
-        }.bind(this));
+        var folderOptions = gui.addFolder('CameraTest Options');
 
         // Show Bounding Boxes
         let controlShowBoundingBoxes = folderOptions.add(this._viewerControls, 'showBoundingBoxes').name('Show Bounding Boxes');

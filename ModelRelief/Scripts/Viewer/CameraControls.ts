@@ -21,15 +21,17 @@ import {Viewer}                     from "Viewer"
 class CameraSettings {
 
     fitView            : () => void;
+    addCameraHelper    : () => void;
     
     standardView       : StandardView;
     nearClippingPlane  : number;
     farClippingPlane   : number;
     fieldOfView        : number;
     
-    constructor(camera: THREE.PerspectiveCamera, fitView : () => any) {
+    constructor(camera: THREE.PerspectiveCamera, fitView : () => any, addCwmeraHelper : () => any) {
 
-        this.fitView = fitView;
+        this.fitView         = fitView;
+        this.addCameraHelper = addCwmeraHelper;
         
         this.standardView      = StandardView.Front;
         this.nearClippingPlane = camera.near;
@@ -66,6 +68,15 @@ export class CameraControls {
         
         this._viewer.fitView();
     }
+
+    /**
+     * Adds a camera visualization graphic to the scene.
+     */
+    addCameraHelper() : void { 
+        
+        Graphics.addCameraHelper(this._viewer.camera, this._viewer._scene, this._viewer.model);
+    }
+
     //#endregion
 
     /**
@@ -75,7 +86,7 @@ export class CameraControls {
 
         let scope = this;
 
-        this._cameraSettings = new CameraSettings(this._viewer.camera, this.fitView.bind(this));
+        this._cameraSettings = new CameraSettings(this._viewer.camera, this.fitView.bind(this), this.addCameraHelper.bind(this));
 
         // Init dat.gui and controls for the UI
         let gui = new dat.GUI({
@@ -91,9 +102,12 @@ export class CameraControls {
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         let cameraOptions = gui.addFolder('Camera Options');
         
-        // Generate Relief
+        // Fit View
         let controlFitView = cameraOptions.add(this._cameraSettings, 'fitView').name('Fit View');
 
+        // CameraHelper
+        let controlCameraHelper = cameraOptions.add(this._cameraSettings, 'addCameraHelper').name('Camera Helper');
+        
         // Standard Views
         let viewOptions = {
             Front       : StandardView.Front,

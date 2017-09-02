@@ -9,10 +9,17 @@ Design Questions
 
 Core  
     Camera
-        Why does the Front View change after the 2nd Fit View?
+        Why does the View change slightly after the 2nd Fit View?
+            Fit View is not correct when there are rotations.
+
         Should a Fit View be done in the MeshViewer after a mesh generation event?
-        Why does Isometric not show the (empty) mesh plane in the MeshViewer?
-        Why is changing views slow?
+            Fit View only after 1st generation?
+
+        Isometric
+            Why does Isometric not show the (empty) mesh plane in the MeshViewer?
+            Should the Isometric view be based on the BoundingBox?
+
+        Why is changing StandartViews slow?
             BoundingBox calculation?
 
         Write a CameraHelper!
@@ -205,6 +212,11 @@ What is the recommended way to split a module over multiple files?
 // ------------------------------------------------------------------------// 
 //      THREE.js                                                           //
 // ------------------------------------------------------------------------//
+    Object clone <only> copies Object3d properties.
+
+    Object matrices are updated only during the render loop. The property matrixAutoUpdate enables this update but not update the matrix when dependent properties are changed.
+        Use Object3d.updateMatrixWorld(true) to force an update.
+
     A Group can belong to only one Scene.
         let sceneA   = new THREE.Scene();
         let theGroup = new THREE.Group();

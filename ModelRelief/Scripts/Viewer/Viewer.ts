@@ -9,15 +9,11 @@ import * as THREE               from 'three'
 import {Camera, StandardView}   from 'Camera'
 import {CameraControls}         from 'CameraControls'
 import {EventManager}           from 'EventManager'
-import {Graphics}               from 'Graphics'
+import {Graphics, ObjectNames}     from 'Graphics'
 import {Logger}                 from 'Logger'
 import {Materials}              from 'Materials'
 import {Services}               from 'Services'
 import {TrackballControls}      from 'TrackballControls'
-
-const ObjectNames = {
-    Root :  'Root'
-}
 
 /**
  * @exports Viewer/Viewer
@@ -87,12 +83,11 @@ export class Viewer {
     set camera(camera : THREE.PerspectiveCamera) {
         
         this._camera = camera;
+        this.camera.name = this.name;
         this.initializeInputControls();
 
         if (this._cameraControls)
             this._cameraControls.synchronizeCameraSettings();
-        
-        Graphics.addCameraHelper(this._scene, this.camera);        
         }
 
      /**
@@ -184,7 +179,7 @@ export class Viewer {
      * Initialize the viewer camera
      */
     initializeCamera() {
-        this.camera = Camera.getStandardViewCamera(StandardView.Front, this.aspectRatio, this.model);
+        this.camera = Camera.getStandardViewCamera(StandardView.Front, this.aspectRatio, this.model);       
     }
 
     /**
@@ -304,7 +299,7 @@ export class Viewer {
 
         this.camera = Camera.getFitViewCamera (Camera.getSceneCamera(this.camera, this.aspectRatio), this.model);
     }
-    
+           
 //#endregion
 
 //#region Window Resize

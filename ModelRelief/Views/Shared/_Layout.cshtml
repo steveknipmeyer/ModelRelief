@@ -10,7 +10,7 @@
         <!------------------------------------------------------------------------------------------------>
         <link rel="stylesheet" href="/css/site.css">
         <link rel="stylesheet" href="/css/bootstrap.css">
-        @if (String.Equals("Workbench", this.ViewContext.RouteData.Values["controller"].ToString()))
+        @if (String.Equals("workbench", this.ViewContext.RouteData.Values["controller"].ToString().ToLower()))
             {
             <link rel="stylesheet" href="/css/workbench.css">           
             }

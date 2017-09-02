@@ -13,6 +13,8 @@ import {Services}               from 'Services'
 
 export enum ObjectNames {
 
+    Root          =  'Root',
+
     BoundingBox   = 'Bounding Box',
     Box           = 'Box',
     CameraHelper  = 'CameraHelper',
@@ -106,8 +108,8 @@ export class Graphics {
                 object.geometry = object.geometry.clone();
         });
 
-        // N.B. Important! The postion, rotation (quaternion) and scale are correcy but the matrix has not been updated.
-        // THREE.js updates the matrix is updated in the render() loop.
+        // N.B. Important! The postion, rotation (quaternion) and scale are correct but the matrix has not been updated.
+        // THREE.js updates the matrix in the render() loop.
         objectClone.updateMatrix();     
 
         // transform
@@ -344,7 +346,7 @@ export class Graphics {
       * @param scene Scene to annotate.
       * @param camera Camera to construct helper (may be null).
       */
-    static addCameraHelper (scene : THREE.Scene, camera : THREE.Camera) : void {
+    static addCameraHelper (camera : THREE.Camera, scene : THREE.Scene, model : THREE.Group, ) : void {
 
         // remove existing
         let existingCameraHelper : THREE.Group = scene.getObjectByName(ObjectNames.CameraHelper);
@@ -353,12 +355,27 @@ export class Graphics {
 
         if (!camera)
             return;
+
+        // camera properties
+        let cameraMatrixWorld        : THREE.Matrix4 = camera.matrixWorld;
+        let cameraMatrixWorldInverse : THREE.Matrix4 = camera.matrixWorldInverse;
         
+        // construct root object of the helper
         let cameraHelper = new THREE.Group();
         cameraHelper.name = ObjectNames.CameraHelper;       
         cameraHelper.visible = true;
 
-        let position = Graphics.createSphereMesh(camera.position, 5);
+        // model bounding box (View coordinates)
+        let modelView           =  Graphics.cloneAndTransformObject(model, cameraMatrixWorldInverse);
+        let boundingBoxView     = Graphics.getBoundingBoxFromObject(modelView);
+        let boundingBoxMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, wireframe: true, transparent : false, opacity: 0.2})
+        let boundingBoxMesh     = Graphics.createBoundingBoxMeshFromBoundingBox(boundingBoxView.getCenter(), boundingBoxView, boundingBoxMaterial);
+
+        let boundingBoxWorld =  Graphics.cloneAndTransformObject(boundingBoxMesh, cameraMatrixWorld);
+        cameraHelper.add(boundingBoxWorld);
+
+        // position
+        let position = Graphics.createSphereMesh(camera.position, 3);
         cameraHelper.add(position);
 
         scene.add(cameraHelper);
