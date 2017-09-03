@@ -323,8 +323,7 @@ export class DepthBuffer {
      */
     mesh(material? : THREE.Material) : THREE.Mesh {
 
-        let timerTag : string = 'DepthBuffer.mesh';
-        Services.timer.mark(timerTag);        
+        let timerTag = Services.timer.mark('DepthBuffer.mesh');        
 
         let meshXYExtents : THREE.Vector2 = Camera.getNearPlaneExtents(this.camera);       
         

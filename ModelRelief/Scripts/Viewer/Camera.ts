@@ -92,8 +92,7 @@ export class Camera {
      */
     static getFitViewCamera (cameraTemplate : THREE.PerspectiveCamera, model : THREE.Group, ) : THREE.PerspectiveCamera { 
 
-        let timerTag : string = 'Camera.getFitViewCamera';
-        Services.timer.mark(timerTag);        
+        let timerTag = Services.timer.mark('Camera.getFitViewCamera');              
 
         let camera = cameraTemplate.clone(true);
         let boundingBoxWorld         : THREE.Box3    = Camera.getDefaultBoundingBox(model);
@@ -140,9 +139,8 @@ export class Camera {
      */
     static getStandardViewCamera (view: StandardView, viewAspect : number, model : THREE.Group) : THREE.PerspectiveCamera { 
 
-        let timerTag : string = 'Camera.getStandardView';
-        Services.timer.mark(timerTag);        
-
+        let timerTag = Services.timer.mark('Camera.getStandardView');              
+        
         let camera = Camera.getDefaultCamera(viewAspect);               
         let boundingBox = Graphics.getBoundingBoxFromObject(model);
         

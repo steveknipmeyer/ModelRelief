@@ -431,8 +431,7 @@ OBJLoader.prototype = {
 
     parse: function ( text ) {
 
-        let timerTag : string = 'OBJLoader.parse';
-        Services.timer.mark(timerTag);        
+        let timerTag = Services.timer.mark('OBJLoader.parse');        
 
         var state = this._createParserState();
 

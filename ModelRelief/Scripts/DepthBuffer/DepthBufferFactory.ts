@@ -375,8 +375,7 @@ export class DepthBufferFactory {
      */
     createDepthBuffer() {
 
-        let timerTag : string = 'DepthBufferFactory.createDepthBuffer';
-        Services.timer.mark(timerTag);        
+        let timerTag = Services.timer.mark('DepthBufferFactory.createDepthBuffer');        
 
         this._renderer.render(this._scene, this._camera, this._target);    
     

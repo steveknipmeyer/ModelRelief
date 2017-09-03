@@ -9,6 +9,16 @@ import {Logger}                 from 'Logger'
 import {Services}               from 'Services'
 
 /**
+ * @description Timer record.
+ * @interface TimerEntry
+ */
+interface TimerEntry {
+
+    startTime : number;
+    indent    : string;
+}
+
+/**
  * StopWatch
  * General debugger timer.
  * @class
@@ -20,7 +30,7 @@ export class StopWatch {
     _logger            : Logger;
     _name              : string;
 
-    _events            : {};
+    _events            : any;
     _baselineTime      : number;
     
     /**
@@ -38,16 +48,42 @@ export class StopWatch {
     }
 
 //#region Properties
+    /**
+     * @description Returns the mumber of pending events.
+     * @readonly
+     * @type {number}
+     */
+    get eventCount () : number {
+
+        return Object.keys(this._events).length;
+    }
+
+    /**
+     * @description Returns the current indent level.
+     * @readonly
+     * @type {string}
+     */
+    get indentPrefix(): string {
+
+        let indent: string = '    ';
+        return indent.repeat(this.eventCount);
+    }
+            
 //#endregion
 
     /**
      * @description Resets the timer.
      */
-    mark(event : string) {
+    mark(event : string) : string {
 
         let startMilliseconds : number = Date.now();
-        this._events[event] = startMilliseconds;
-        this._logger.addInfoMessage(`${event} : mark`);       
+        let indentPrefix      : string = this.indentPrefix;
+        let timerEntry        : TimerEntry = { startTime: startMilliseconds, indent : indentPrefix};
+        this._events[event] = timerEntry;
+
+        this._logger.addMessage(`${indentPrefix}${event}`);
+
+        return event;
     }
 
     /**
@@ -56,10 +92,11 @@ export class StopWatch {
     logElapsedTime(event : string) {
 
         let timerElapsedTime   : number = Date.now();
-        let eventElapsedTime   : number = (timerElapsedTime - (<number> (this._events[event]))) / 1000;
+        let eventElapsedTime   : number = (timerElapsedTime - (<number> (this._events[event].startTime))) / 1000;
         let elapsedTimeMessage : string = eventElapsedTime.toFixed(StopWatch.precision);
+        let indentPrefix       : string = this._events[event].indent;
 
-        this._logger.addInfoMessage(`${event} : ${elapsedTimeMessage} sec`);
+        this._logger.addInfoMessage(`${indentPrefix}${event} : ${elapsedTimeMessage} sec`);
 
         // remove event from log
         delete this._events[event];

@@ -1,26 +1,14 @@
-﻿// ------------------------------------------------------------------------// 
-//      Commit Notes                                                       //
-// ------------------------------------------------------------------------//
+﻿<-- Commit Notes
 
-// ------------------------------------------------------------------------// 
-//      Tasks                                                              //
-// ------------------------------------------------------------------------//
-Design Questions
+<-- Tasks
 
-Core  
-    Camera
-        Why does the View change slightly after the 2nd Fit View?
-            This happens only if the view has been <panned>.
-            
-        Why is changing StandartViews slow?
-            Mesh clone?
+    Why is changing StandartViews slow?
+        Mesh clone?
         
     Clipping Planes
         Create a 'Set Far Plane' control.
             Dynamically set the range of the far plane based on the model.
             This will provide more control over scene composition.
-
-
 
     Add source code attributions to THREE.js.
 
@@ -31,6 +19,41 @@ Core
 
     Experiment with precision setting in THREE.WebGLRenderer.
 
+
+    Image File Creation
+        Create a 16 bit PNG from the depth data.
+            Investigate jQuery ajax support for posting the file to the server.
+
+    Code Quality
+        Add types to all methods.
+            TrackballControls
+            OBJLoader
+
+        Optimize constructTriFacesAtOffset       
+            createDepthBuffer: 61.994140625ms
+            mesh: 873.432373046875ms
+
+            Cache template meshes.  
+                Clone and then set only the Z value.
+
+<-- Viewer
+
+    Choose a better material.
+    Progress Indicator
+    OrbitControls versus Trackball
+
+    Add MaterialLoader.
+
+    Create a set of sample materials such as wood, glass, plaster, etc.
+
+    Camera
+        Why does the View change slightly after the 2nd Fit View?
+            This happens only if the view has been <panned>.
+
+
+
+<-- Optimization
+
     Optimize constructTriFacesAtOffset       
         createDepthBuffer: 61.994140625ms
         mesh: 873.432373046875ms
@@ -38,51 +61,44 @@ Core
         Cache template meshes.  
             Clone and then set only the Z value.
 
-Viewing
-    Choose a better material.
-    Progress Indicator
-    OrbitControls versus Trackball
-
-Performance
     Profiling
         Install additional IIS components?
+
     Memory management!
         https://stackoverflow.com/questions/18357529/threejs-remove-object-from-scene        
         Make sure if you use scene.remove(mesh), you also call mesh.geometry.dispose(), mesh.material.dispose() and mesh.texture.dispose() else you'll get memory leaks I think (r71).
             meshByMeshPlane: 66080.48974609375ms
             mesh: 7068.237060546875ms
 
-Development Workflow
+
+<-- Tools
+
     Configure VSCOde tasks (Build, etc.)
     https://stackoverflow.com/questions/43628397/debug-typescript-in-vscode-with-asp-net-core
-    
+
     Webpack
 
-Image File Creation
-    Create a 16 bit PNG from the depth data.
-        Investigate jQuery ajax support for posting the file to the server.
+    Why does closing Chrome not terminate the debugger process?
+        This is an ASPNET Core issue. Works fine with pure JavaScript.
 
-Code Quality
-    Add types to all methods.
-        TrackballControls
-        OBJLoader
 
- What is the cause of these NET Warnings? They seem to be related to the Entity Framework.
-    1701;1702;1705
+<-- ASPNET Core
 
-// ------------------------------------------------------------------------//
-// ------------------------------------------------------------------------// 
-//      Depth Buffer Notes                                                 //
-// ------------------------------------------------------------------------//
-Precision is substantially improved by moving the Near plane as close to the model as possible.
-    Pulling in the Far plane does not seem to improve the precision.
+    What is the cause of these NET Warnings? They seem to be related to the Entity Framework.
+        1701;1702;1705
 
-The range of the depth buffer is based on the distance between the Near and Far planes. 
-    If the Near and Far planes bound the model, the range will be [0.1].
 
-// ------------------------------------------------------------------------// 
-//      Database Design                                                    //
-// ------------------------------------------------------------------------//
+<-- Depth Buffer Notes
+
+    Precision is substantially improved by moving the Near plane as close to the model as possible.
+        Pulling in the Far plane does not seem to improve the precision.
+
+    The range of the depth buffer is based on the distance between the Near and Far planes. 
+        If the Near and Far planes bound the model, the range will be [0.1].
+
+
+<-- Database Design   
+
     How can JSON files be used to configure the projects?
     JSON will be used to drive the API!
 
@@ -128,78 +144,66 @@ The range of the depth buffer is based on the distance between the Near and Far 
 
      Lighting Configurations
        
-// ------------------------------------------------------------------------// 
-//      Viewer                                                             //
-// ------------------------------------------------------------------------//
-Add MaterialLoader.
-Create a set of sample materials such as wood, glass, plaster, etc.
 
-// ------------------------------------------------------------------------// 
-//      GitHub                                                             //
-// ------------------------------------------------------------------------//
+<-- Git
+    TBD
 
-// ------------------------------------------------------------------------// 
-//      TypeScript                                                         //
-// ------------------------------------------------------------------------//
+<-- TypeScript
 
-How can a subclass call the property (method) of a super class?
-    https://github.com/Microsoft/TypeScript/issues/4465
-    ModelViewer extends Viewer
-        set model (model : THREE.Object) {
-            super.model(model);     // not valid
-        }            
+    How can a subclass call the property (method) of a super class?
+        https://github.com/Microsoft/TypeScript/issues/4465
+        ModelViewer extends Viewer
+            set model (model : THREE.Object) {
+                super.model(model);     // not valid
+            }            
 
-TypeScript Typings management
-    Where is the Visual Studio instance of node.s installed?
-        "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\Microsoft\Web Tools\External"
-        Where are the Visual Studio (automatic) npm typings?
-            C:\Users\Steve Knipmeyer\AppData\Local\Microsoft\TypeScript\node_modules\@types
-            https://stackoverflow.com/questions/42663010/typescript-in-visual-studio-2017-automatic-definition-inclusion-causes-duplicat
-            https://blogs.msdn.microsoft.com/visualstudio/2016/11/28/more-productive-javascript-in-visual-studio-2017-rc/
-                (Note: This feature is disabled by default if using a tsconfig.json configuration file
+    TypeScript Typings management
+        Where is the Visual Studio instance of node.s installed?
+            "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\Microsoft\Web Tools\External"
+            Where are the Visual Studio (automatic) npm typings?
+                C:\Users\Steve Knipmeyer\AppData\Local\Microsoft\TypeScript\node_modules\@types
+                https://stackoverflow.com/questions/42663010/typescript-in-visual-studio-2017-automatic-definition-inclusion-causes-duplicat
+                https://blogs.msdn.microsoft.com/visualstudio/2016/11/28/more-productive-javascript-in-visual-studio-2017-rc/
+                    (Note: This feature is disabled by default if using a tsconfig.json configuration file
 
-    var uint8Array = new Uint8Array((<any>fileDataObj.target).result);
-    EventTarget does not contain a member result.
-    https://github.com/Microsoft/TSJS-lib-generator/pull/207
+        var uint8Array = new Uint8Array((<any>fileDataObj.target).result);
+        EventTarget does not contain a member result.
+        https://github.com/Microsoft/TSJS-lib-generator/pull/207
 
-// ------------------------------------------------------------------------// 
-//      Questions                                                          //
-// ------------------------------------------------------------------------//
-Why does closing Chrome not terminate the debugger process?
-    This is an ASPNET Core issue. Works fine with pure JavaScript.
 
-HTML
+<-- HTML
+
     What is the correct use of user-scalable-no? Should it appear only on the Model Viewer page and not be included in the _Layout.cshtml?
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
-// ------------------------------------------------------------------------// 
-//      Modules                                                            //
-// ------------------------------------------------------------------------//
-http://davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd/
 
-What is the recommended way to split a module over multiple files?
-    Using a d.ts file and 'export as namespace' works but it led to issues loading MR in require.js. 
-        modelrelief.d.ts
-            export as namespace MR
+<-- Modules
 
-            export * from "fileA"
-            export * from "fileB"
+    http://davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd/
 
-        MR is composed of multiple disk files. How is that handled with AMD modules in require.js?
-            When TypeScript creates the AMD output, the module name is the disk file. There is no definition of MR as an aggregate.
-            Is there a require.config that maps a module name to multiple separate modules?
-                MR -> fileA,fileB
-        
-        Can a module name have a period such as MR.Graphics?
-            import * as MR.Graphics from "Graphics" led to an error.
+    What is the recommended way to split a module over multiple files?
+        Using a d.ts file and 'export as namespace' works but it led to issues loading MR in require.js. 
+            modelrelief.d.ts
+                export as namespace MR
 
-        Can multiple modules be imported into the same alias? This construct is not valid.
-             import * as MR from"Graphics"
-             import * as MR from"Views"
+                export * from "fileA"
+                export * from "fileB"
 
-// ------------------------------------------------------------------------// 
-//      THREE.js                                                           //
-// ------------------------------------------------------------------------//
+            MR is composed of multiple disk files. How is that handled with AMD modules in require.js?
+                When TypeScript creates the AMD output, the module name is the disk file. There is no definition of MR as an aggregate.
+                Is there a require.config that maps a module name to multiple separate modules?
+                    MR -> fileA,fileB
+            
+            Can a module name have a period such as MR.Graphics?
+                import * as MR.Graphics from "Graphics" led to an error.
+
+            Can multiple modules be imported into the same alias? This construct is not valid.
+                import * as MR from"Graphics"
+                import * as MR from"Views"
+
+
+<-- THREE.js
+
     Object clone <only> copies Object3d properties.
 
     Object matrices are updated only during the render loop. The property matrixAutoUpdate enables this update but not update the matrix when dependent properties are changed.

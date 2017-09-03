@@ -46,7 +46,7 @@ export class ConsoleLogger implements Logger{
      */
     addMessageEntry (message : string, messageClass : MessageClass) : void {
 
-        const prefix = 'ModelRelief: ';
+        const prefix = 'MR: ';
         let logMessage = `${prefix}${message}`;
 
         switch (messageClass) {

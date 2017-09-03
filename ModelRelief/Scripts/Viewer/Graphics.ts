@@ -101,20 +101,27 @@ export class Graphics {
      */
     static cloneAndTransformObject (object : THREE.Object3D, matrix : THREE.Matrix4) : THREE.Object3D {
 
+        let methodTag : string = Services.timer.mark('cloneAndTransformObject');
+
         // clone object (and geometry!)
+        let cloneTag: string = Services.timer.mark('clone');
         let objectClone : THREE.Object3D = object.clone();
         objectClone.traverse(object => {
             if (object instanceof(THREE.Mesh))
                 object.geometry = object.geometry.clone();
         });
-
+        Services.timer.logElapsedTime(cloneTag);
+        
         // N.B. Important! The postion, rotation (quaternion) and scale are correct but the matrix has not been updated.
         // THREE.js updates the matrix in the render() loop.
+        let transformTag: string = Services.timer.mark('transform');
         objectClone.updateMatrix();     
 
         // transform
         objectClone.applyMatrix(matrix);
-
+        Services.timer.logElapsedTime(transformTag);
+        
+        Services.timer.logElapsedTime(methodTag);
         return objectClone;
     }
 
@@ -168,14 +175,13 @@ export class Graphics {
      */
     static getBoundingBoxFromObject(rootObject : THREE.Object3D) : THREE.Box3 {
 
-        let boundingBoxTag : string = 'BoundingBox';
-        Services.timer.mark(boundingBoxTag);        
-
+        let timerTag = Services.timer.mark('BoundingBox');              
+        
         // https://stackoverflow.com/questions/15492857/any-way-to-get-a-bounding-box-from-a-three-js-object3d
         let boundingBox : THREE.Box3 = new THREE.Box3();
         boundingBox = boundingBox.setFromObject(rootObject);
 
-        Services.timer.logElapsedTime(boundingBoxTag);
+        Services.timer.logElapsedTime(timerTag);
         return boundingBox;
         }
 
