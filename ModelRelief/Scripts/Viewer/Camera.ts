@@ -210,8 +210,8 @@ export class Camera {
     static getDefaultCamera (viewAspect : number) : THREE.PerspectiveCamera {
         
         let defaultCamera = new THREE.PerspectiveCamera();
-        defaultCamera.position.copy (new THREE.Vector3 (0, 0, 1));
-        defaultCamera.lookAt(new THREE.Vector3());
+        defaultCamera.position.copy (new THREE.Vector3 (0, 0, 0));
+        defaultCamera.lookAt(new THREE.Vector3(0, 0, -1));
         defaultCamera.near   = Camera.DefaultNearClippingPlane;
         defaultCamera.far    = Camera.DefaultFarClippingPlane;
         defaultCamera.fov    = Camera.DefaultFieldOfView;

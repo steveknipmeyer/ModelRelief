@@ -378,13 +378,15 @@ export class Graphics {
       * Adds a camera helper to a scene to visualize the camera position.
       * @param scene Scene to annotate.
       * @param camera Camera to construct helper (may be null).
+      * @param removeExisting Delete existing helpers.
       */
-    static addCameraHelper (camera : THREE.Camera, scene : THREE.Scene, model : THREE.Group, ) : void {
+    static addCameraHelper (camera : THREE.Camera, scene : THREE.Scene, model : THREE.Group, removeExisting = true) : void {
 
         // remove existing
-        let existingCameraHelper : THREE.Group = scene.getObjectByName(ObjectNames.CameraHelper);
-        if (existingCameraHelper)
-            scene.remove(existingCameraHelper);
+        if (removeExisting) {
+            scene.remove(scene.getObjectByName(ObjectNames.CameraHelper));
+            scene.remove(scene.getObjectByName(ObjectNames.CameraHelper));
+        }
 
         if (!camera)
             return;
