@@ -146,6 +146,7 @@ export class Viewer {
     populateScene () {
 
         let mesh = Graphics.createSphereMesh(new THREE.Vector3(), 2);
+        mesh.visible = false;
         this._root.add(mesh);
     }
 

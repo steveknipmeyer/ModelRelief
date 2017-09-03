@@ -409,10 +409,7 @@ export class DepthBufferFactory {
         this._camera = camera;
 
         let cameraMatrixWorldInverse : THREE.Matrix4 = this._camera.matrixWorldInverse;
-
-        // clone model (and geometry!)
-        let modelView       =  Graphics.cloneAndTransformObject(this._model, cameraMatrixWorldInverse);
-        let boundingBoxView = Graphics.getBoundingBoxFromObject(modelView);
+        let boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(this._model, cameraMatrixWorldInverse);
 
         // The bounding box is world-axis aligned. 
         // In View coordinates, the camera is at the origin.

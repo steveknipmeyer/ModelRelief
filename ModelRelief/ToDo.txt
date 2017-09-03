@@ -2,9 +2,9 @@
 
 <-- Tasks
 
-    Why is changing StandartViews slow?
-        Mesh clone?
-        
+    CamerHelper does not release resources? Performance is slower after use.
+    Does CameraHelper go through the correct location?
+
     Clipping Planes
         Create a 'Set Far Plane' control.
             Dynamically set the range of the far plane based on the model.

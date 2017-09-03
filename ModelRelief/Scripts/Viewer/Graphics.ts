@@ -18,6 +18,7 @@ export enum ObjectNames {
     BoundingBox   = 'Bounding Box',
     Box           = 'Box',
     CameraHelper  = 'CameraHelper',
+    ModelClone    = 'Model Clone',
     Plane         = 'Plane',
     Sphere        = 'Sphere',
     Triad         = 'Triad'
@@ -115,7 +116,7 @@ export class Graphics {
         // N.B. Important! The postion, rotation (quaternion) and scale are correct but the matrix has not been updated.
         // THREE.js updates the matrix in the render() loop.
         let transformTag: string = Services.timer.mark('transform');
-        objectClone.updateMatrix();     
+        objectClone.updateMatrixWorld(true);     
 
         // transform
         objectClone.applyMatrix(matrix);
@@ -123,6 +124,28 @@ export class Graphics {
         
         Services.timer.logElapsedTime(methodTag);
         return objectClone;
+    }
+        
+    /**
+     * Gets the bounding box of a transformed object.
+     * @param object Object to transform.
+     * @param matrix Transformation matrix.
+     */
+    static getTransformedBoundingBox(object: THREE.Object3D, matrix: THREE.Matrix4): THREE.Box3 {
+
+        let methodTag: string = Services.timer.mark('getTransformedBoundingBox');
+
+        object.updateMatrixWorld(true);
+        object.applyMatrix(matrix);
+        let boundingBox: THREE.Box3 = Graphics.getBoundingBoxFromObject(object);
+
+        // restore object
+        let matrixIdentity = new THREE.Matrix4();
+        let matrixInverse = matrixIdentity.getInverse(matrix, true);
+        object.applyMatrix(matrixInverse);
+
+        Services.timer.logElapsedTime(methodTag);
+        return boundingBox;
     }
 
     /**
@@ -371,18 +394,17 @@ export class Graphics {
         let cameraMatrixWorldInverse : THREE.Matrix4 = camera.matrixWorldInverse;
         
         // construct root object of the helper
-        let cameraHelper = new THREE.Group();
+        let cameraHelper  = new THREE.Group();
         cameraHelper.name = ObjectNames.CameraHelper;       
         cameraHelper.visible = true;
 
         // model bounding box (View coordinates)
-        let modelView           =  Graphics.cloneAndTransformObject(model, cameraMatrixWorldInverse);
-        let boundingBoxView     = Graphics.getBoundingBoxFromObject(modelView);
-        let boundingBoxMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, wireframe: true, transparent : false, opacity: 0.2})
-        let boundingBoxMesh     = Graphics.createBoundingBoxMeshFromBoundingBox(boundingBoxView.getCenter(), boundingBoxView, boundingBoxMaterial);
+        let boundingBoxMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000, wireframe: true, transparent: false, opacity: 0.2 })
+        let boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(model, cameraMatrixWorldInverse);        
+        let boundingBoxViewMesh = Graphics.createBoundingBoxMeshFromBoundingBox(boundingBoxView.getCenter(), boundingBoxView, boundingBoxMaterial);
 
-        let boundingBoxWorld =  Graphics.cloneAndTransformObject(boundingBoxMesh, cameraMatrixWorld);
-        cameraHelper.add(boundingBoxWorld);
+        let boundingBoxWorldMesh = Graphics.cloneAndTransformObject(boundingBoxViewMesh, cameraMatrixWorld);
+        cameraHelper.add(boundingBoxWorldMesh);
 
         // position
         let position = Graphics.createSphereMesh(camera.position, 3);
@@ -396,7 +418,7 @@ export class Graphics {
 
         let startPoint : THREE.Vector3 = camera.position;
         let endPoint   : THREE.Vector3 = new THREE.Vector3();
-        endPoint.addVectors(startPoint, unitTarget);
+        endPoint.addVectors(startPoint, scaledTarget);
         let targetLine : THREE.Line = Graphics.createLine(startPoint, endPoint, 0x00ff00);
         cameraHelper.add(targetLine);
 

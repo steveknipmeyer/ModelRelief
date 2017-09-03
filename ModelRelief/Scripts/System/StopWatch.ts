@@ -25,7 +25,7 @@ interface TimerEntry {
  */
 export class StopWatch {
     
-    static precision : number = 2;
+    static precision : number = 3;
 
     _logger            : Logger;
     _name              : string;

@@ -100,10 +100,7 @@ export class Camera {
         let cameraMatrixWorldInverse : THREE.Matrix4 = camera.matrixWorldInverse;
         
         // Find camera position in View coordinates...
-
-        // clone model (and geometry!)
-        let modelView       =  Graphics.cloneAndTransformObject(model, cameraMatrixWorldInverse);
-        let boundingBoxView = Camera.getDefaultBoundingBox(modelView);
+        let boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(model, cameraMatrixWorldInverse);
 
         let verticalFieldOfViewRadians   : number = (camera.fov / 2) * (Math.PI / 180);
         let horizontalFieldOfViewRadians : number = Math.atan(camera.aspect * Math.tan(verticalFieldOfViewRadians));       

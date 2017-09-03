@@ -62,6 +62,8 @@ export class ModelViewer extends Viewer {
      * Populate scene.
      */
     populateScene () {
+
+        super.populateScene(); 
         
         var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
         helper.name = ObjectNames.Grid;
