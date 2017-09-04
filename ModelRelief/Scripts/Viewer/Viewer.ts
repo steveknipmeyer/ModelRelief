@@ -64,15 +64,31 @@ export class Viewer {
     /**
      * Gets the Viewer name.
      */
-    get name() {
+    get name() : string {
         
         return this._name;
     }
 
     /**
+     * Gets the Viewer scene.
+     */
+    get scene() : THREE.Scene {
+
+        return this._scene;
+    }
+
+    /**
+     * Sets the Viewer scene.
+     */
+    set scene(value: THREE.Scene) {
+
+        this._scene = value;
+    }
+        
+    /**
      * Gets the camera.
      */
-    get camera() {
+    get camera() : THREE.PerspectiveCamera{
         
         return this._camera;
     }
@@ -155,7 +171,7 @@ export class Viewer {
      */
     initializeScene () {
 
-        this._scene = new THREE.Scene();
+        this.scene = new THREE.Scene();
         this.createRoot();
 
         this.populateScene();
@@ -189,15 +205,15 @@ export class Viewer {
     initializeLighting() {
 
         let ambientLight = new THREE.AmbientLight(0x404040);
-        this._scene.add(ambientLight);
+        this.scene.add(ambientLight);
 
         let directionalLight1 = new THREE.DirectionalLight(0xC0C090);
         directionalLight1.position.set(-100, -50, 100);
-        this._scene.add(directionalLight1);
+        this.scene.add(directionalLight1);
 
         let directionalLight2 = new THREE.DirectionalLight(0xC0C090);
         directionalLight2.position.set(100, 50, -100);
-        this._scene.add(directionalLight2);
+        this.scene.add(directionalLight2);
     }
 
     /**
@@ -274,7 +290,7 @@ export class Viewer {
 
         this._root = new THREE.Object3D();
         this._root.name = ObjectNames.Root;
-        this._scene.add(this._root);
+        this.scene.add(this._root);
     }
 
 //#endregion
@@ -342,7 +358,7 @@ export class Viewer {
     renderWebGL() {
 
         this._controls.update();
-        this._renderer.render(this._scene, this.camera);
+        this._renderer.render(this.scene, this.camera);
     }
 
     /**

@@ -15,7 +15,7 @@
 
 import * as THREE               from 'three'
 
-import {Camera}                 from 'Camera'
+import {Camera, ClippingPlanes} from 'Camera'
 import {DepthBuffer}            from 'DepthBuffer'
 import {Graphics}               from 'Graphics'
 import {Logger, ConsoleLogger}  from 'Logger'
@@ -55,7 +55,7 @@ export interface ImageGenerateParameters {
 export class DepthBufferFactory {
 
     static DefaultResolution : number           = 1024;                     // default DB resolution
-    static NearPlaneEpsilone : number           = .001;                     // adjustment to avoid clipping geometry on the near plane
+    static NearPlaneEpsilon  : number           = .001;                     // adjustment to avoid clipping geometry on the near plane
     
     static CssClassName      : string           = 'DepthBufferFactory';     // CSS class
     static RootContainerId   : string           = 'rootContainer';          // root container for viewers
@@ -72,7 +72,7 @@ export class DepthBufferFactory {
 
 
     _logDepthBuffer  : boolean                  = false;    // use a logarithmic buffer for more accuracy in large scenes
-    _boundedClipping : boolean                  = true;     // override camera clipping planes; set near and far to bound model for improved accuracy
+    _boundedClipping : boolean                  = false;    // override camera clipping planes; set near and far to bound model for improved accuracy
 
     _depthBuffer     : DepthBuffer              = null;     // depth buffer 
     _target          : THREE.WebGLRenderTarget  = null;     // WebGL render target for creating the WebGL depth buffer when rendering the scene
@@ -100,7 +100,7 @@ export class DepthBufferFactory {
         // optional
         this._camera          = parameters.camera          || null;
         this._logDepthBuffer  = parameters.logDepthBuffer  || false;
-        this._boundedClipping = parameters.boundedClipping || true;
+        this._boundedClipping = parameters.boundedClipping || false;
         this._addCanvasToDOM  = parameters.addCanvasToDOM  || false;
 
         this._canvas = this.initializeCanvas();
@@ -408,22 +408,10 @@ export class DepthBufferFactory {
         camera.copy (this._camera);
         this._camera = camera;
 
-        let cameraMatrixWorldInverse : THREE.Matrix4 = this._camera.matrixWorldInverse;
-        let boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(this._model, cameraMatrixWorldInverse);
-
-        // The bounding box is world-axis aligned. 
-        // In View coordinates, the camera is at the origin.
-        // The bounding near plane is the maximum Z of the bounding box.
-        // The bounding far plane is the minimum Z of the bounding box.
-        let nearPlane = -boundingBoxView.max.z;
-        let farPlane  = -boundingBoxView.min.z;
-
-        // adjust by epsilon to avoid clipping geometry at the near plane edge
-        this._camera.near = (1 - DepthBufferFactory.NearPlaneEpsilone) * nearPlane;
-
-        // allow user to override calculated far plane
-        this._camera.far  = Math.min(this._camera.far, farPlane);
-
+        let clippingPlanes : ClippingPlanes = Camera.getBoundingClippingPlanes(this._camera, this._model);
+        this._camera.near = clippingPlanes.near;
+        this._camera.far  = clippingPlanes.far;
+        
         this._camera.updateProjectionMatrix();
    }
 

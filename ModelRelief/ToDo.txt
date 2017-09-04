@@ -2,8 +2,6 @@
 
 <-- Tasks
 
-    Add utility method to remove all objects of a given name (e.g. CameraHelper, BoundingBox).
-
     Clipping Planes
         Create a 'Set Far Plane' control.
             Dynamically set the range of the far plane based on the model.

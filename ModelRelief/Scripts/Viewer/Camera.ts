@@ -7,9 +7,10 @@
 
 import * as THREE        from 'three'
 
-import {Graphics}        from 'Graphics'
-import {Services}        from 'Services'
-import {StopWatch}       from 'StopWatch'
+import { DepthBufferFactory } from 'DepthBufferFactory'
+import {Graphics}             from 'Graphics'
+import {Services}             from 'Services'
+import {StopWatch}            from 'StopWatch'
 
 export enum StandardView {
     Front,
@@ -19,6 +20,15 @@ export enum StandardView {
     Left,
     Right,
     Isometric
+}
+/**
+ * @description Camera clipping planes tuple.
+ * @export
+ * @interface ClippingPlanes
+ */
+export interface ClippingPlanes {
+    near : number;
+    far  : number;
 }
 
 /**
@@ -57,6 +67,32 @@ export class Camera {
         
         return extents;
     }
+
+    /**
+     * Finds the bounding clipping planes for the given model. 
+     * 
+     */
+    static getBoundingClippingPlanes(camera : THREE.PerspectiveCamera, model : THREE.Object3D) : ClippingPlanes{
+
+        let cameraMatrixWorldInverse: THREE.Matrix4 = camera.matrixWorldInverse;
+        let boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(model, cameraMatrixWorldInverse);
+
+        // The bounding box is world-axis aligned. 
+        // In View coordinates, the camera is at the origin.
+        // The bounding near plane is the maximum Z of the bounding box.
+        // The bounding far plane is the minimum Z of the bounding box.
+        let nearPlane = -boundingBoxView.max.z;
+        let farPlane = -boundingBoxView.min.z;
+
+        let clippingPlanes : ClippingPlanes = {
+
+            // adjust by epsilon to avoid clipping geometry at the near plane edge
+            near :  (1 - DepthBufferFactory.NearPlaneEpsilon) * nearPlane,
+            far  : farPlane
+        }
+        return clippingPlanes;
+    }  
+
 //#endregion
 
 //#region Settings

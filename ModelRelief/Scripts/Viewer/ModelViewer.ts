@@ -67,7 +67,7 @@ export class ModelViewer extends Viewer {
         
         var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
         helper.name = ObjectNames.Grid;
-        this._scene.add(helper);
+        this.scene.add(helper);
     }
 
     /**
@@ -95,7 +95,7 @@ export class ModelViewer extends Viewer {
      */
     displayGrid(visible : boolean) {
 
-        let gridGeometry : THREE.Object3D = this._scene.getObjectByName(ObjectNames.Grid);
+        let gridGeometry : THREE.Object3D = this.scene.getObjectByName(ObjectNames.Grid);
         gridGeometry.visible = visible;
         this._logger.addInfoMessage(`Display grid = ${visible}`);
     } 

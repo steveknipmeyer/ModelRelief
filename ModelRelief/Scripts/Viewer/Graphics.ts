@@ -223,7 +223,7 @@ export class Graphics {
      */
     static getBoundingBoxFromObject(rootObject : THREE.Object3D) : THREE.Box3 {
 
-        let timerTag = Services.timer.mark('BoundingBox');              
+        let timerTag = Services.timer.mark(`${rootObject.name}: BoundingBox`);              
         
         // https://stackoverflow.com/questions/15492857/any-way-to-get-a-bounding-box-from-a-three-js-object3d
         let boundingBox : THREE.Box3 = new THREE.Box3();

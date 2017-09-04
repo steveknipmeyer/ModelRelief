@@ -65,11 +65,11 @@ export class MeshViewer extends Viewer {
     initializeLighting() {
 
         let ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-        this._scene.add(ambientLight);
+        this.scene.add(ambientLight);
 
         let directionalLight1 = new THREE.DirectionalLight(0xffffff);
         directionalLight1.position.set(4, 4, 4);
-        this._scene.add(directionalLight1);
+        this.scene.add(directionalLight1);
     }
 //#endregion
 }
