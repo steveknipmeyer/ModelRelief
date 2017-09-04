@@ -136,9 +136,8 @@ export class App {
         let cameraMatrixWorldInverse : THREE.Matrix4 = this._viewer.camera.matrixWorldInverse;
 
         // remove existing BoundingBoxes and model clone (View coordinates)
-        model.remove(model.getObjectByName(ObjectNames.BoundingBox));
-        model.remove(model.getObjectByName(ObjectNames.BoundingBox));
-        model.remove(model.getObjectByName(ObjectNames.ModelClone));
+        Graphics.removeAllByName(this._viewer._scene, ObjectNames.BoundingBox);
+        Graphics.removeAllByName(this._viewer._scene, ObjectNames.ModelClone);
         
         // clone model (and geometry!)
         let modelView  =  Graphics.cloneAndTransformObject(model, cameraMatrixWorldInverse);

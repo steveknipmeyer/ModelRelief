@@ -10,7 +10,7 @@ import * as dat    from 'dat-gui'
 
 import {Camera, StandardView}       from "Camera"
 import {Logger, ConsoleLogger}      from 'Logger'
-import {Graphics}                   from "Graphics"
+import {Graphics, ObjectNames}      from "Graphics"
 import {Services}                   from 'Services'
 import {Viewer}                     from "Viewer"
 
@@ -74,13 +74,16 @@ export class CameraControls {
      */
     addCameraHelper() : void { 
 
+        // remove existing
+        Graphics.removeAllByName(this._viewer._scene, ObjectNames.CameraHelper);
+        
         // World
         Graphics.addCameraHelper(this._viewer.camera, this._viewer._scene, this._viewer.model);
 
         // View
         let modelView = Graphics.cloneAndTransformObject(this._viewer.model, this._viewer.camera.matrixWorldInverse);
         let cameraView = Camera.getDefaultCamera(this._viewer.aspectRatio);
-        Graphics.addCameraHelper(cameraView, this._viewer._scene, modelView, false);
+        Graphics.addCameraHelper(cameraView, this._viewer._scene, modelView);
     }
 
     //#endregion

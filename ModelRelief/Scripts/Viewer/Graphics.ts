@@ -42,6 +42,37 @@ export class Graphics {
     //			Geometry
     // --------------------------------------------------------------------------------------------------------------------------------------*/
 
+    /** 
+     * @description Dispose of resources held by a graphical object.
+     * @static
+     * @param {any} object3d Object to process.
+     */
+    static disposeResources(object3d) : void {
+
+        // logger.addInfoMessage ('Removing: ' + object3d.name);
+        if (object3d.hasOwnProperty('geometry')) {
+            object3d.geometry.dispose();
+        }
+
+        if (object3d.hasOwnProperty('material')) {
+
+            var material = object3d.material;
+            if (material.hasOwnProperty('materials')) {
+
+                var materials = material.materials;
+                for (var iMaterial in materials) {
+                    if (materials.hasOwnProperty(iMaterial)) {
+                        materials[iMaterial].dispose();
+                    }
+                }
+            }
+        }
+
+        if (object3d.hasOwnProperty('texture')) {
+            object3d.texture.dispose();
+        }
+    }
+
     /**
      * Removes an object and all children from a scene.
      * @param scene Scene holding object to be removed.
@@ -58,33 +89,12 @@ export class Graphics {
             if (object3d === rootObject) {
                 return;
             }
-
-            // logger.addInfoMessage ('Removing: ' + object3d.name);
-            if (object3d.hasOwnProperty('geometry')) {
-                object3d.geometry.dispose();
-            }
-
-            if (object3d.hasOwnProperty('material')) {
-
-                var material = object3d.material;
-                if (material.hasOwnProperty('materials')) {
-
-                    var materials = material.materials;
-                    for (var iMaterial in materials) {
-                        if (materials.hasOwnProperty(iMaterial)) {
-                            materials[iMaterial].dispose();
-                        }
-                    }
-                }
-            }
-            if (object3d.hasOwnProperty('texture')) {
-                object3d.texture.dispose();
-            }
+            Graphics.disposeResources(object3d);
         };
 
         rootObject.traverse(remover);
 
-        // remove root children from root (backwards!)
+        // remove root children from rootObject (backwards!)
         for (let iChild : number = (rootObject.children.length - 1); iChild >= 0; iChild--) {
 
             let child : THREE.Object3D = rootObject.children[iChild];
@@ -94,6 +104,21 @@ export class Graphics {
         if (removeRoot && rootObject.parent)
             rootObject.parent.remove(rootObject);
     } 
+
+    /**
+     * Remove all objects of a given name from the scene.
+     * @param scene Scene to process.
+     * @param objectName Object name to find.
+     */
+    static removeAllByName (scene : THREE.Scene, objectName : string) : void {
+
+        let object: THREE.Object3D;
+        while (object = scene.getObjectByName(objectName)) {
+
+            Graphics.disposeResources(object);
+            scene.remove(object);
+        }
+    }
 
     /**
      * Clone and transform an object.
@@ -378,15 +403,8 @@ export class Graphics {
       * Adds a camera helper to a scene to visualize the camera position.
       * @param scene Scene to annotate.
       * @param camera Camera to construct helper (may be null).
-      * @param removeExisting Delete existing helpers.
       */
-    static addCameraHelper (camera : THREE.Camera, scene : THREE.Scene, model : THREE.Group, removeExisting = true) : void {
-
-        // remove existing
-        if (removeExisting) {
-            scene.remove(scene.getObjectByName(ObjectNames.CameraHelper));
-            scene.remove(scene.getObjectByName(ObjectNames.CameraHelper));
-        }
+    static addCameraHelper (camera : THREE.Camera, scene : THREE.Scene, model : THREE.Group) : void {
 
         if (!camera)
             return;
