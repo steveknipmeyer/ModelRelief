@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pylab as plt
 
-im = plt.imread("Lucy.png")
+im = plt.imread("D:/Users/Steve Knipmeyer/Documents/GitHub/ModelRelief/Solver/Lucy.png")
 
 print (im.shape)
 

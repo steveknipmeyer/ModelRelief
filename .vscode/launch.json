@@ -41,6 +41,24 @@
             "type": "coreclr",
             "request": "attach",
             "processId": "${command:pickProcess}"
-        }
+        },
+        {
+            "name": "Python",
+            "type": "python",
+            "pythonPath": "${config:python.pythonPath}",
+            "request": "launch",
+            "stopOnEntry": true,
+            "console": "none",
+            "program": "${file}",
+            "cwd": "${workspaceRoot}",
+            "debugOptions": [
+                "WaitOnAbnormalExit",
+                "WaitOnNormalExit",
+                "RedirectOutput"
+            ],
+            "env": {
+                "name": "value"
+            }
+        }        
     ]
 }

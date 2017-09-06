@@ -2,11 +2,7 @@
 
 <-- Tasks
 
-    Clipping Planes
-        Create a 'Set Far Plane' control.
-            Dynamically set the range of the far plane based on the model.
-            This will provide more control over scene composition.
-
+    "Force" StandardViews to set view even if the active view does not change.
     Add source code attributions to THREE.js.
 
     Export 
