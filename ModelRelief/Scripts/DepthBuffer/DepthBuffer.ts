@@ -20,13 +20,70 @@ interface FacePair {
     vertices : THREE.Vector3[];
     faces    : THREE.Face3[];
 }
-          
+
+/**
+ *  Mesh cache to optimize mesh creation.
+ * If a mesh exists in the cache of the required dimensions, it is used as a template.
+ *  @class
+ */
+class MeshCache {
+    _cache : Map<string, THREE.Mesh>;
+
+    /**
+     * Constructor
+     */
+    constructor() {       
+        this._cache = new Map();
+    }
+
+    /**
+     * @description Generates the map key for a mesh.
+     * @param {number} width Width of mesh.
+     * @param {number} height Height of mesh.
+     * @returns {string}
+     */
+    generateKey(width : number, height : number) : string{
+        
+        return `${Math.round(width).toString()}:${Math.round(height).toString()}`;
+    }
+
+    /**
+     * @description Returns a mesh from the cache as a template (or null);
+     * @param {number} width Width of mesh.
+     * @param {number} height Height of mesh.
+     * @returns {THREE.Mesh}
+     */
+    getMesh(width: number, height: number) : THREE.Mesh{
+        
+        let key : string = this.generateKey(width, height);
+        return this._cache[key];
+    }
+
+    /**
+     * @description Adds a mesh instance to the cache.
+     * @param {number} width Width of mesh.
+     * @param {number} height Height of mesh.
+     * @param {THREE.Mesh} Mesh instance to add.
+     * @returns {void} 
+     */
+    addMesh(width: number, height: number, mesh : THREE.Mesh) : void {
+
+        let key: string = this.generateKey(width, height);
+        if (this._cache[key])
+            return;
+
+        let meshClone = Graphics.cloneAndTransformObject(mesh, new THREE.Matrix4());
+        this._cache[key] = meshClone;
+    }
+}   
+
 /**
  *  DepthBuffer 
  *  @class
  */
 export class DepthBuffer {
 
+    static Cache                          : MeshCache = new MeshCache();
     static readonly MeshModelName         : string = 'ModelMesh';
     static readonly NormalizedTolerance   : number = .001;    
 
@@ -232,7 +289,7 @@ export class DepthBuffer {
         this._maximumNormalized = maximumNormalized;
     }
 
-/**
+    /**
      * Returns the linear index of a model point in world coordinates.
      * @param worldVertex Vertex of model.
      */
@@ -316,6 +373,41 @@ export class DepthBuffer {
          return facePair;
      }
 
+     /**
+      * @description Constructs a new mesh from a collecttion of triangles.
+      * @param {THREE.Vector2} meshXYExtents Extents of the mesh.
+      * @param {THREE.Material} material Material to assign to the mesh.
+      * @returns {THREE.Mesh} 
+      */
+    constructMesh(meshXYExtents : THREE.Vector2, material : THREE.Material) : THREE.Mesh {
+        let meshGeometry = new THREE.Geometry();
+        let faceSize: number = meshXYExtents.x / (this.width - 1);
+        let baseVertexIndex: number = 0;
+
+        let meshLowerLeft: THREE.Vector2 = new THREE.Vector2(-(meshXYExtents.x / 2), -(meshXYExtents.y / 2))
+
+        for (let iRow = 0; iRow < (this.height - 1); iRow++) {
+            for (let iColumn = 0; iColumn < (this.width - 1); iColumn++) {
+
+                let facePair = this.constructTriFacesAtOffset(iRow, iColumn, meshLowerLeft, faceSize, baseVertexIndex);
+
+                meshGeometry.vertices.push(...facePair.vertices);
+                meshGeometry.faces.push(...facePair.faces);
+
+                baseVertexIndex += 4;
+            }
+        }
+        meshGeometry.mergeVertices();
+        let mesh = new THREE.Mesh(meshGeometry, material);
+        mesh.name = DepthBuffer.MeshModelName;
+
+        // Mesh was constructed with Z = depth buffer(X,Y).
+        // Now rotate mesh to align with viewer XY plane so Top view is looking down on the mesh.
+        mesh.rotateX(-Math.PI / 2);
+
+        return mesh; 
+    }
+
     /**
      * Constructs a mesh of the given base dimension.
      * @param meshXYExtents Base dimensions (model units). Height is controlled by DB aspect ratio.
@@ -324,41 +416,25 @@ export class DepthBuffer {
     mesh(material? : THREE.Material) : THREE.Mesh {
 
         let timerTag = Services.timer.mark('DepthBuffer.mesh');        
-
+        
+        // The mesh size is in real world units to match the depth buffer offsets which are also in real world units.
+        // Find the size of the near plane to size the mesh to the model units.
         let meshXYExtents : THREE.Vector2 = Camera.getNearPlaneExtents(this.camera);       
         
         if (!material)
             material = new THREE.MeshPhongMaterial(DepthBuffer.DefaultMeshPhongMaterialParameters);
 
-        let meshGeometry = new THREE.Geometry();
-        
-        let faceSize        : number = meshXYExtents.x / (this.width - 1);
-        let baseVertexIndex : number = 0;
+        let meshCache : THREE.Mesh = DepthBuffer.Cache.getMesh(meshXYExtents.x, meshXYExtents.y);
+        let mesh: THREE.Mesh = meshCache ? this.constructMesh(meshXYExtents, material) : this.constructMesh(meshXYExtents, material);   
 
-        let meshLowerLeft : THREE.Vector2 = new THREE.Vector2(-(meshXYExtents.x / 2), -(meshXYExtents.y / 2) )
-
-        for (let iRow = 0; iRow < (this.height - 1); iRow++) {
-            for (let iColumn = 0; iColumn < (this.width - 1); iColumn++) {
-                
-                let facePair = this.constructTriFacesAtOffset(iRow, iColumn, meshLowerLeft, faceSize, baseVertexIndex);
-
-                meshGeometry.vertices.push(...facePair.vertices);
-                meshGeometry.faces.push(...facePair.faces);
-
-                baseVertexIndex += 4;
-            }    
-        }
-        
-        meshGeometry.computeFaceNormals();            
-
-        let mesh  = new THREE.Mesh(meshGeometry, material);
-        mesh.name = DepthBuffer.MeshModelName;
-
-        // Mesh was constructed with Z = depth buffer(X,Y).
-        // Now rotate mesh to align with viewer XY plane so Top view is looking down on the mesh.
-        mesh.rotateX(-Math.PI / 2);
+        let faceNormalsTag = Services.timer.mark('meshGeometry.computeFaceNormals');
+        let meshGeometry = <THREE.Geometry>mesh.geometry;
+        meshGeometry.computeFaceNormals();
+        Services.timer.logElapsedTime(faceNormalsTag);
 
         Services.timer.logElapsedTime(timerTag)
+
+        DepthBuffer.Cache.addMesh(meshXYExtents.x, meshXYExtents.y, mesh);
         return mesh;
     }
 

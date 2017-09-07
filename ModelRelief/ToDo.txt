@@ -1,7 +1,14 @@
 ﻿<-- Commit Notes
-    Add source code attributions to THREE.js.
 
 <-- Tasks
+    Add error beep on failed TypeScript compilation.
+    
+    constructMeshFromTemplate
+        There are too many vertices in the mesh (X4). Mesh vertices are shared!
+        Add a compound key based on both the near plane and the device extents.
+
+    DepthBufferCache       
+        Dispose periodically?
 
     "Force" StandardViews to set view even if the active view does not change.
 
