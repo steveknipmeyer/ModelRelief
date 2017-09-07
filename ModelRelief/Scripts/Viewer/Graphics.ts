@@ -46,9 +46,10 @@ export class Graphics {
      * @description Dispose of resources held by a graphical object.
      * @static
      * @param {any} object3d Object to process.
+     * https://stackoverflow.com/questions/18357529/threejs-remove-object-from-scene
      */
     static disposeResources(object3d) : void {
-
+ 
         // logger.addInfoMessage ('Removing: ' + object3d.name);
         if (object3d.hasOwnProperty('geometry')) {
             object3d.geometry.dispose();
@@ -232,7 +233,6 @@ export class Graphics {
         Services.timer.logElapsedTime(timerTag);
         return boundingBox;
         }
-
     /**
      * Creates a box mesh.
      * @param position Location of the box.

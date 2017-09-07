@@ -97,6 +97,12 @@ export class CameraControls {
 
         let clippingPlanes = Camera.getBoundingClippingPlanes(this._viewer.camera, this._viewer.model);
 
+        // camera
+        this._viewer.camera.near = clippingPlanes.near;
+        this._viewer.camera.far  = clippingPlanes.far;
+        this._viewer.camera.updateProjectionMatrix();
+
+        // UI controls
         this._cameraSettings.nearClippingPlane = clippingPlanes.near;
         this._controlNearClippingPlane.min(clippingPlanes.near);
         this._controlNearClippingPlane.max (clippingPlanes.far);

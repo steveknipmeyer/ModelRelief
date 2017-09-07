@@ -107,16 +107,16 @@ export class ModelViewer extends Viewer {
      */
     generateRelief() : void { 
         
-    // pixels
-    let width  = 512;
-    let height = width / this.aspectRatio;
-    let factory = new DepthBufferFactory({width : width, height : height, model : this.model, camera : this.camera, addCanvasToDOM : false});   
+        // pixels
+        let width  = 512;
+        let height = width / this.aspectRatio;
+        let factory = new DepthBufferFactory({width : width, height : height, model : this.model, camera : this.camera, addCanvasToDOM : false});   
 
-    let previewMesh : THREE.Mesh = factory.meshGenerate({});   
-    this._eventManager.dispatchEvent(this, EventType.MeshGenerate, previewMesh);
+        let previewMesh : THREE.Mesh = factory.meshGenerate({});   
+        this._eventManager.dispatchEvent(this, EventType.MeshGenerate, previewMesh);
 
-    // Services.consoleLogger.addInfoMessage('Relief generated');
-}
+        // Services.consoleLogger.addInfoMessage('Relief generated');
+    }
 //#endregion
 } 
 

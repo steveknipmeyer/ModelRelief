@@ -1,9 +1,9 @@
 ﻿<-- Commit Notes
+    Add source code attributions to THREE.js.
 
 <-- Tasks
 
     "Force" StandardViews to set view even if the active view does not change.
-    Add source code attributions to THREE.js.
 
     Export 
         ASPNET Core?
@@ -12,22 +12,9 @@
 
     Experiment with precision setting in THREE.WebGLRenderer.
 
-
     Image File Creation
         Create a 16 bit PNG from the depth data.
             Investigate jQuery ajax support for posting the file to the server.
-
-    Code Quality
-        Add types to all methods.
-            TrackballControls
-            OBJLoader
-
-        Optimize constructTriFacesAtOffset       
-            createDepthBuffer: 61.994140625ms
-            mesh: 873.432373046875ms
-
-            Cache template meshes.  
-                Clone and then set only the Z value.
 
 <-- Viewer
 
@@ -47,22 +34,17 @@
 
 <-- Optimization
 
+    Cache template meshes.  
+        Clone and then set only the Z value.
+
     Optimize constructTriFacesAtOffset       
         createDepthBuffer: 61.994140625ms
         mesh: 873.432373046875ms
-
-        Cache template meshes.  
-            Clone and then set only the Z value.
 
     Profiling
         Install additional IIS components?
 
     Memory management!
-        https://stackoverflow.com/questions/18357529/threejs-remove-object-from-scene        
-        Make sure if you use scene.remove(mesh), you also call mesh.geometry.dispose(), mesh.material.dispose() and mesh.texture.dispose() else you'll get memory leaks I think (r71).
-            meshByMeshPlane: 66080.48974609375ms
-            mesh: 7068.237060546875ms
-
 
 <-- Tools
 
@@ -99,18 +81,31 @@
         Id
     
     Project
+        Id
         Scene
-        Transform
+        MeshTransform
     
-    Transform
+     Scene
+        Id
+        Name
+        Model
+        Material
+        Lighting
+        Camera
+
+    MeshTransform
+        Id
         Mesh Depth
+        MeshDimensions
+            Aspect
+            Base
         Bas Relief Parameters
             Tau Threshold
             Sigma1 Gaussian Blur 
             Sigma2 Gaussian Smooth
-            Lambsa Linear Scaling
+            Lambda Linear Scaling
 
-    Models
+    Model
         Id
         Name
         File System Path?
@@ -120,22 +115,15 @@
         Id
         Name
         File System Path?
-        Type (Depth, Mask)
+       ?Type (Depth, Mask)
        ?Format (PNG, JPG, EXR)
-
-     Scenes
-        Id
-        Name
-        Model
-        Material
-        Lighting
-        Camera Position
 
      Materials
         Id
-        Name
+        Name       
 
-     Lighting Configurations
+     Lighting
+        Light[]
        
 
 <-- Git
@@ -160,8 +148,9 @@
                     (Note: This feature is disabled by default if using a tsconfig.json configuration file
 
         var uint8Array = new Uint8Array((<any>fileDataObj.target).result);
-        EventTarget does not contain a member result.
-        https://github.com/Microsoft/TSJS-lib-generator/pull/207
+            EventTarget does not contain a member result.
+            https://github.com/Microsoft/TSJS-lib-generator/pull/207
+            https://github.com/Microsoft/TypeScript/issues/299
 
 
 <-- HTML
@@ -195,7 +184,7 @@
                 import * as MR from"Views"
 
 
-<-- THREE.js
+<-- THREE.js Notes
 
     Object clone <only> copies Object3d properties.
 
