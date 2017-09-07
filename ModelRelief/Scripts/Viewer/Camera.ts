@@ -65,10 +65,10 @@ export class Camera {
         let nearWidth  = camera.aspect * nearHeight;
         let extents = new THREE.Vector2(nearWidth, nearHeight);
         
-        return extents;
+        return extents;       
     }
 
-    /**
+    /** 
      * Finds the bounding clipping planes for the given model. 
      * 
      */
@@ -258,7 +258,7 @@ export class Camera {
         defaultCamera.updateProjectionMatrix;
 
         return defaultCamera;
-    }
+    } 
         
     /**
      * Returns the default scene camera.
@@ -274,5 +274,5 @@ export class Camera {
         let defaultCamera = Camera.getDefaultCamera(viewAspect);
         return defaultCamera;
     }
-//#endregion
+//#endregion 
 }

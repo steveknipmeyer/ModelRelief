@@ -254,7 +254,7 @@ gulp.task('buildShaders', function() {
 /// </summary>
 gulp.task('buildShadersReload', function () {
 
-    runSequence('buildShaders', 'reload')
+    runSequence('buildShaders', 'reload');
 });
 
 /// <summary>
@@ -276,11 +276,21 @@ gulp.task('compileTypeScriptExec', function (callback) {
 /// The TypeScript compiler is invoked through the npm-installed version of node.
 /// </summary>
 gulp.task('compileTypeScript', function () {
-    
-    var tsResult = tsProject.src() 
+
+    // N.B. Errors are emitted twice.
+    // https://github.com/ivogabe/gulp-typescript/issues/438
+    let beepSounded = false;
+    let tsResult = tsProject.src() 
         .pipe(sourcemaps.init())        // sourcemaps will be generated 
-        .pipe(tsProject());
- 
+        .pipe(tsProject())
+        .on('error', function (err) {
+            // N.B. called after <every> compilation error...
+            if (!beepSounded)
+                beep();                    
+           beepSounded = true; 
+        }
+    );
+
     return tsResult.js
         .pipe(sourcemaps.write())       // sourcemaps are added to the .js file 
         .pipe(gulp.dest(''));
@@ -291,9 +301,16 @@ gulp.task('compileTypeScript', function () {
 /// </summary>
 gulp.task('compileTypeScriptReload', function () {
 
-    runSequence('compileTypeScript', 'reload')
+    runSequence('compileTypeScript', 'reload');
 });
 
+/// <summary> 
+/// Test task.
+/// </summary> 
+gulp.task('test', function () {
+    beep();
+});
+  
 /// <summary> 
 /// Default build task
 /// </summary> 
@@ -321,7 +338,7 @@ gulp.task('serve', function () {
     notify: true,
     proxy: {
 
-        target: "localhost:60655/Models/Viewer/5",
+        target: "localhost:60655/Models/Viewer/5"
     }
   });
 
