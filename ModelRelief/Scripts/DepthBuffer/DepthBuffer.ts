@@ -21,6 +21,12 @@ interface FacePair {
     faces    : THREE.Face3[];
 }
 
+interface FacePair {
+
+    vertices: THREE.Vector3[];
+    faces: THREE.Face3[];
+}
+
 /**
  *  Mesh cache to optimize mesh creation.
  * If a mesh exists in the cache of the required dimensions, it is used as a template.
@@ -38,37 +44,37 @@ class MeshCache {
 
     /**
      * @description Generates the map key for a mesh.
-     * @param {number} width Width of mesh.
-     * @param {number} height Height of mesh.
+     * @param {THREE.Vector2} modelExtents Extents of the camera near plane; model units.
+     * @param {THREE.Vector2} pixelExtents Extents of the pixel array used to subdivide the mesh.
      * @returns {string}
      */
-    generateKey(width : number, height : number) : string{
-        
-        return `${Math.round(width).toString()}:${Math.round(height).toString()}`;
+    generateKey(modelExtents : THREE.Vector2, pixelExtents : THREE.Vector2) : string{
+    
+        return `Model = (${Math.round(modelExtents.x).toString()}, ${Math.round(modelExtents.y).toString()}) : Pixels = (${Math.round(pixelExtents.x).toString()}, ${Math.round(pixelExtents.y).toString()})`;
     }
 
     /**
      * @description Returns a mesh from the cache as a template (or null);
-     * @param {number} width Width of mesh.
-     * @param {number} height Height of mesh.
+     * @param {THREE.Vector2} modelExtents Extents of the camera near plane; model units.
+     * @param {THREE.Vector2} pixelExtents Extents of the pixel array used to subdivide the mesh.
      * @returns {THREE.Mesh}
      */
-    getMesh(width: number, height: number) : THREE.Mesh{
+    getMesh(modelExtents: THREE.Vector2, pixelExtents: THREE.Vector2) : THREE.Mesh{
         
-        let key : string = this.generateKey(width, height);
+        let key: string = this.generateKey(modelExtents, pixelExtents);
         return this._cache[key];
     }
 
     /**
      * @description Adds a mesh instance to the cache.
-     * @param {number} width Width of mesh.
-     * @param {number} height Height of mesh.
+     * @param {THREE.Vector2} modelExtents Extents of the camera near plane; model units.
+     * @param {THREE.Vector2} pixelExtents Extents of the pixel array used to subdivide the mesh.
      * @param {THREE.Mesh} Mesh instance to add.
      * @returns {void} 
      */
-    addMesh(width: number, height: number, mesh : THREE.Mesh) : void {
+    addMesh(modelExtents: THREE.Vector2, pixelExtents: THREE.Vector2, mesh : THREE.Mesh) : void {
 
-        let key: string = this.generateKey(width, height);
+        let key: string = this.generateKey(modelExtents, pixelExtents);
         if (this._cache[key])
             return;
 
@@ -424,7 +430,7 @@ export class DepthBuffer {
         if (!material)
             material = new THREE.MeshPhongMaterial(DepthBuffer.DefaultMeshPhongMaterialParameters);
 
-        let meshCache : THREE.Mesh = DepthBuffer.Cache.getMesh(meshXYExtents.x, meshXYExtents.y);
+        let meshCache: THREE.Mesh = DepthBuffer.Cache.getMesh(meshXYExtents, new THREE.Vector2(this.width, this.height));
         let mesh: THREE.Mesh = meshCache ? this.constructMesh(meshXYExtents, material) : this.constructMesh(meshXYExtents, material);   
 
         let faceNormalsTag = Services.timer.mark('meshGeometry.computeFaceNormals');
@@ -434,7 +440,7 @@ export class DepthBuffer {
 
         Services.timer.logElapsedTime(timerTag)
 
-        DepthBuffer.Cache.addMesh(meshXYExtents.x, meshXYExtents.y, mesh);
+        DepthBuffer.Cache.addMesh(meshXYExtents, new THREE.Vector2(this.width, this.height), mesh);
         return mesh;
     }
 
