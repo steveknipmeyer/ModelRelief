@@ -3,16 +3,21 @@
 <-- Tasks
 
     "Force" StandardViews to set view even if the active view does not change.
-
+    Local rule for HTTPS Everywhere.
     Export 
+        Refactor Save to use async/await.
+        Document ReadToEnd.
+            How does ReadEnd use a 4096 buffer?
+        Create an ASPNET Server class to hold server-side processing classes.
 
         ASPNET Core?
-        https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
-        https://stackoverflow.com/questions/17810063/jquery-ajax-post-huge-string-value        
+            https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
+            https://stackoverflow.com/questions/17810063/jquery-ajax-post-huge-string-value        
 
-        These solutions are for saving files on the client (not server) side/.
-            https://github.com/eligrey/FileSaver.js/
-            https://github.com/jimmywarting/StreamSaver.js
+        JavaScript
+            These solutions are for saving files on the client (not server) side/.
+                https://github.com/eligrey/FileSaver.js/
+                https://github.com/jimmywarting/StreamSaver.js
 
     Image File Creation
         Create a 16 bit PNG from the depth data.

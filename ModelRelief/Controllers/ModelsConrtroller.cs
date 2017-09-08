@@ -1,8 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 
@@ -15,11 +18,13 @@ namespace ModelRelief.Controllers
     [Authorize]
     public class ModelsController : Controller
         {
-        IModel3dLocator _modelLocator;
-        
-        public ModelsController(IModel3dLocator modelLocator)
+        IHostingEnvironment _hostingEnvironment;
+        IModel3dLocator     _modelLocator;
+
+        public ModelsController(IHostingEnvironment hostingEnvironment, IModel3dLocator modelLocator)
             {
-            _modelLocator = modelLocator;
+            _hostingEnvironment = hostingEnvironment;
+            _modelLocator       = modelLocator;
             }
 
         [AllowAnonymous]
@@ -32,7 +37,7 @@ namespace ModelRelief.Controllers
         [Route ("[controller]/[action]/{modelId}")]
         public IActionResult Viewer(int modelid)
             {           
-            Model3d model = _modelLocator.Find(modelid);cd %<R%
+            Model3d model = _modelLocator.Find(modelid);
 
             if (model == null)
                 return Content(String.Format("Model not found: {0}", modelid));
@@ -109,5 +114,74 @@ namespace ModelRelief.Controllers
             return RedirectToAction ("Viewer", new { Id = model.Id});           
             }
 
-        }
+        [Route("[controller]/[action]/{modelId}")]
+        public IActionResult Save(int modelid)
+            {
+            Model3d model = _modelLocator.Find(modelid);
+
+            if (model == null)
+                return Content(String.Format("Model not found: {0}", modelid));
+
+            var body = this.Request.Body;
+            byte[] file = ReadToEnd(body);
+
+            string fileName = $"{_hostingEnvironment.WebRootPath}{model.Path}{Path.GetFileNameWithoutExtension(model.Name)}.relief.obj";
+            System.IO.File.WriteAllBytes(fileName, file);
+
+            return View(model);
+            }
+
+        public static byte[] ReadToEnd(System.IO.Stream stream)
+            {
+            // https://stackoverflow.com/questions/1080442/how-to-convert-an-stream-into-a-byte-in-c                
+            long originalPosition = 0;
+
+            if (stream.CanSeek)
+                {
+                originalPosition = stream.Position;
+                stream.Position = 0;
+                }   
+
+            try
+                {
+                byte[] readBuffer = new byte[4096];
+
+                int totalBytesRead = 0;
+                int bytesRead;
+
+                while ((bytesRead = stream.Read(readBuffer, totalBytesRead, readBuffer.Length - totalBytesRead)) > 0)
+                    {
+                    totalBytesRead += bytesRead;
+
+                    if (totalBytesRead == readBuffer.Length)
+                        {
+                        int nextByte = stream.ReadByte();
+                        if (nextByte != -1)
+                            {
+                            byte[] temp = new byte[readBuffer.Length * 2];
+                            Buffer.BlockCopy(readBuffer, 0, temp, 0, readBuffer.Length);
+                            Buffer.SetByte(temp, totalBytesRead, (byte)nextByte);
+                            readBuffer = temp;
+                            totalBytesRead++;
+                            }
+                        }
+                    }
+
+                byte[] buffer = readBuffer;
+                if (readBuffer.Length != totalBytesRead)
+                    {
+                    buffer = new byte[totalBytesRead];
+                    Buffer.BlockCopy(readBuffer, 0, buffer, 0, totalBytesRead);
+                    }
+                return buffer;
+                }
+            finally
+                {
+                if (stream.CanSeek)
+                    {
+                    stream.Position = originalPosition;
+                    }
+                }
+            }
+        }        
     }

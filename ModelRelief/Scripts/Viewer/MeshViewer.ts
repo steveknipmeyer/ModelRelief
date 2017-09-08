@@ -90,6 +90,19 @@ export class MeshViewer extends Viewer {
         let exportTag = Services.timer.mark('Export OBJ');
         let exporter = new OBJExporter();
         let result = exporter.parse(this.model);
+
+        let request = new XMLHttpRequest();
+
+        let viewerUrl = window.location.href;
+        let postUrl   = viewerUrl.replace('Viewer', 'Save');
+        request.open("POST", postUrl, true);
+        request.onload = function (oEvent) {
+            // uploaded...
+        };
+
+        let blob = new Blob([result], {type: 'text/plain'});
+        request.send(blob)        
+
         Services.timer.logElapsedTime(exportTag);
     }
 //#endregion
