@@ -32,7 +32,8 @@ namespace ModelRelief.Controllers
         [Route ("[controller]/[action]/{modelId}")]
         public IActionResult Viewer(int modelid)
             {           
-            Model3d model = _modelLocator.Find(modelid);
+            Model3d model = _modelLocator.Find(modelid);cd %<R%
+
             if (model == null)
                 return Content(String.Format("Model not found: {0}", modelid));
 
@@ -51,7 +52,7 @@ namespace ModelRelief.Controllers
             {           
             if (!ModelState.IsValid)
                 {
-                // re-display with validation messages
+                // re-display with validation messages 
                 return View();
                 }
 

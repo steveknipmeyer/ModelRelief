@@ -16,6 +16,7 @@ import {Logger, ConsoleLogger}              from 'Logger'
 import {Graphics}                           from "Graphics"
 import {MeshViewer}                         from "MeshViewer"
 import {ModelViewer}                        from "ModelViewer"
+import { OBJExporter }                      from "OBJExporter"
 import {OBJLoader}                          from "OBJLoader"
 import {Services}                           from 'Services'
 import {TestModel}                          from 'TestModelLoader'
@@ -50,6 +51,11 @@ export class ModelRelief {
             this._meshViewer.fitView();
             this._initialMeshGeneration = false;            
         }
+
+        let exportTag = Services.timer.mark('Export OBJ');
+        let exporter = new OBJExporter();
+        let result = exporter.parse(mesh);
+        Services.timer.logElapsedTime(exportTag);
     }
 
     /**

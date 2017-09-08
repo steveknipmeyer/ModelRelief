@@ -21,6 +21,7 @@
         "*",
         "Scripts/*",
         "Scripts/DepthBuffer/*",
+        "Scripts/ModelExporters/*",
         "Scripts/ModelLoaders/*",
         "Scripts/System/*",
         "Scripts/UnitTests/*",
