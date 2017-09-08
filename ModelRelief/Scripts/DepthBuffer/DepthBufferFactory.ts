@@ -425,7 +425,7 @@ export class DepthBufferFactory {
             return null;
         
         if (this._boundedClipping || 
-            ((this._camera.near || Camera.DefaultNearClippingPlane) && (this._camera.far || Camera.DefaultFarClippingPlane)))
+            ((this._camera.near === Camera.DefaultNearClippingPlane) && (this._camera.far === Camera.DefaultFarClippingPlane)))
             this.setCameraClippingPlanes();
 
         this.createDepthBuffer();

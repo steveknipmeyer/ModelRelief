@@ -5,9 +5,14 @@
     "Force" StandardViews to set view even if the active view does not change.
 
     Export 
+
         ASPNET Core?
-        https://github.com/eligrey/FileSaver.js/
-        https://github.com/jimmywarting/StreamSaver.js
+        https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
+        https://stackoverflow.com/questions/17810063/jquery-ajax-post-huge-string-value        
+
+        These solutions are for saving files on the client (not server) side/.
+            https://github.com/eligrey/FileSaver.js/
+            https://github.com/jimmywarting/StreamSaver.js
 
     Image File Creation
         Create a 16 bit PNG from the depth data.
