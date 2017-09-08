@@ -16,7 +16,7 @@ import {Services}                   from 'Services'
 
 /**
  * @class
- * ViewerControls
+ * ModelViewer Settings
  */
 class ModelViewerSettings {
 

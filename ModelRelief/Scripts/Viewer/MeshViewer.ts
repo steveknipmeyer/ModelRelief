@@ -12,6 +12,8 @@ import {DepthBuffer}                from 'DepthBuffer'
 import {Graphics}                   from 'Graphics'
 import {Logger, HTMLLogger}         from 'Logger'
 import {MathLibrary}                from 'Math'
+import {MeshViewerControls}         from 'MeshViewerControls'
+import {OBJExporter}                from "OBJExporter"
 import {Services}                   from 'Services'
 import {TrackballControls}          from 'TrackballControls'
 import {Viewer}                     from 'Viewer'
@@ -22,10 +24,7 @@ import {Viewer}                     from 'Viewer'
  */
 export class MeshViewer extends Viewer {
     
-    /**
-     * @constructor
-     * @constructor
-     */
+    _meshViewerControls: MeshViewerControls;             // UI controls
 
     /**
      * Default constructor
@@ -70,6 +69,28 @@ export class MeshViewer extends Viewer {
         let directionalLight1 = new THREE.DirectionalLight(0xffffff);
         directionalLight1.position.set(4, 4, 4);
         this.scene.add(directionalLight1);
+    }
+    /**
+     * UI controls initialization.
+     */
+    initializeUIControls() {
+
+        super.initializeUIControls();
+        this._meshViewerControls = new MeshViewerControls(this);
+    }
+    
+//#endregion
+
+//#region Save Operations
+    /**
+     * Saves a relief to a disk file.
+     */
+    saveRelief(): void {
+
+        let exportTag = Services.timer.mark('Export OBJ');
+        let exporter = new OBJExporter();
+        let result = exporter.parse(this.model);
+        Services.timer.logElapsedTime(exportTag);
     }
 //#endregion
 }
