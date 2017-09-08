@@ -1,10 +1,12 @@
 ﻿<-- Commit Notes
+        Internal Server Error : 500
+        Save does not overwrite an existing file.
 
 <-- Tasks
 
     "Force" StandardViews to set view even if the active view does not change.
-    Save does not overwrite an existing file.
     Local rule for HTTPS Everywhere.
+    
     Export 
         Refactor Save to use async/await.
         Document ReadToEnd.

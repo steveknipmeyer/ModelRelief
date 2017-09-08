@@ -115,20 +115,19 @@ namespace ModelRelief.Controllers
             }
 
         [Route("[controller]/[action]/{modelId}")]
-        public IActionResult Save(int modelid)
+        public void Save(int modelid)
             {
             Model3d model = _modelLocator.Find(modelid);
 
             if (model == null)
-                return Content(String.Format("Model not found: {0}", modelid));
+                return;
 
             var body = this.Request.Body;
             byte[] file = ReadToEnd(body);
 
             string fileName = $"{_hostingEnvironment.WebRootPath}{model.Path}{Path.GetFileNameWithoutExtension(model.Name)}.relief.obj";
+            System.IO.File.Delete(fileName);
             System.IO.File.WriteAllBytes(fileName, file);
-
-            return View(model);
             }
 
         public static byte[] ReadToEnd(System.IO.Stream stream)
