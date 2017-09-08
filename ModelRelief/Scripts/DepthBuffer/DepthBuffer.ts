@@ -468,6 +468,7 @@ export class DepthBuffer {
         meshGeometry.elementsNeedUpdate = true;
 
         let faceNormalsTag = Services.timer.mark('meshGeometry.computeFaceNormals');
+        meshGeometry.computeVertexNormals();
         meshGeometry.computeFaceNormals();
         Services.timer.logElapsedTime(faceNormalsTag);
 

@@ -1243,6 +1243,7 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Viewe
             meshGeometry.normalsNeedUpdate = true;
             meshGeometry.elementsNeedUpdate = true;
             var faceNormalsTag = Services_2.Services.timer.mark('meshGeometry.computeFaceNormals');
+            meshGeometry.computeVertexNormals();
             meshGeometry.computeFaceNormals();
             Services_2.Services.timer.logElapsedTime(faceNormalsTag);
             // Mesh was constructed with Z = depth buffer(X,Y).
