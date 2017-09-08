@@ -41,8 +41,8 @@ export interface DepthBufferFactoryParameters {
 
 export interface MeshGenerateParameters {
 
-    camera?          : THREE.PerspectiveCamera;
-    material?        : THREE.Material;
+    camera?     : THREE.PerspectiveCamera;      // override not yet implemented 
+    material?   : THREE.Material;
 }
 
 export interface ImageGenerateParameters {
@@ -424,7 +424,8 @@ export class DepthBufferFactory {
         if (!this.verifyMeshSettings()) 
             return null;
         
-        if (this._boundedClipping)
+        if (this._boundedClipping || 
+            ((this._camera.near || Camera.DefaultNearClippingPlane) && (this._camera.far || Camera.DefaultFarClippingPlane)))
             this.setCameraClippingPlanes();
 
         this.createDepthBuffer();

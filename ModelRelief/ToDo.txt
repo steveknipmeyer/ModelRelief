@@ -1,15 +1,6 @@
 ﻿<-- Commit Notes
 
 <-- Tasks
-    Why does an unclipped mesh lead to incorrect subsequent meshes?
-    
-    Optimize BoundingBox procesing.
-    constructMeshFromTemplate
-        The template is not cloned so therefore the new mesh instance modifies the template.
-            This introduces the same issue of shared mesh instances that motivated copying meshes before adding them to the cache.
-
-    DepthBufferCache       
-        Dispose periodically?
 
     "Force" StandardViews to set view even if the active view does not change.
 
@@ -18,11 +9,11 @@
         https://github.com/eligrey/FileSaver.js/
         https://github.com/jimmywarting/StreamSaver.js
 
-    Experiment with precision setting in THREE.WebGLRenderer.
-
     Image File Creation
         Create a 16 bit PNG from the depth data.
             Investigate jQuery ajax support for posting the file to the server.
+
+    Experiment with precision setting in THREE.WebGLRenderer.
 
 <-- Viewer
 
@@ -42,12 +33,7 @@
 
 <-- Optimization
 
-    Cache template meshes.  
-        Clone and then set only the Z value.
-
-    Optimize constructTriFacesAtOffset       
-        createDepthBuffer: 61.994140625ms
-        mesh: 873.432373046875ms
+    Optimize BoundingBox procesing.
 
     Profiling
         Install additional IIS components?
