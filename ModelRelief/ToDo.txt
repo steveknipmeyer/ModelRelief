@@ -1,6 +1,7 @@
 ﻿<-- Commit Notes
 
 <-- Tasks
+    Why does an unclipped mesh lead to incorrect subsequent meshes?
     
     Optimize BoundingBox procesing.
     constructMeshFromTemplate

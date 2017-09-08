@@ -388,10 +388,8 @@ export class DepthBuffer {
       * @param {THREE.Material} material Material to assign to the mesh.
       * @returns {THREE.Mesh} 
       */
-     constructMeshFromTemplate(meshTemplate : THREE.Mesh, meshExtents: THREE.Vector2, material: THREE.Material): THREE.Mesh {
-
-        let mesh = <THREE.Mesh> Graphics.cloneAndTransformObject(meshTemplate);
-
+     constructMeshFromTemplate(mesh : THREE.Mesh, meshExtents: THREE.Vector2, material: THREE.Material): THREE.Mesh {
+       
         // The mesh template matches the aspect ratio of the template.
         // Now, scale the mesh to the final target dimensions.
         let boundingBox = Graphics.getBoundingBoxFromObject(mesh);
@@ -406,9 +404,10 @@ export class DepthBuffer {
         for (let iDepth = 0; iDepth < depthCount; iDepth++) {
 
             let modelDepth = this.normalizedToModelDepth(this.depths[iDepth]);
-            meshVertices[iDepth].z = modelDepth;
+            meshVertices[iDepth].set(meshVertices[iDepth].x, meshVertices[iDepth].y, modelDepth);
         }
-        mesh = new THREE.Mesh(<THREE.Geometry>mesh.geometry, material);
+        let meshGeometry: THREE.Geometry = <THREE.Geometry>mesh.geometry;
+        mesh = new THREE.Mesh(meshGeometry, material);
         
         return mesh;
      }
@@ -461,14 +460,16 @@ export class DepthBuffer {
 
         let meshCache: THREE.Mesh = DepthBuffer.Cache.getMesh(meshXYExtents, new THREE.Vector2(this.width, this.height));
         let mesh: THREE.Mesh = meshCache ? this.constructMeshFromTemplate(meshCache, meshXYExtents, material) : this.constructMesh(meshXYExtents, material);   
-//      let mesh: THREE.Mesh = this.constructMesh(meshXYExtents, material);   
+        mesh.name = DepthBuffer.MeshModelName;
         
-        let faceNormalsTag = Services.timer.mark('meshGeometry.computeFaceNormals');
         let meshGeometry = <THREE.Geometry>mesh.geometry;
+        meshGeometry.verticesNeedUpdate = true;
+        meshGeometry.normalsNeedUpdate  = true;
+        meshGeometry.elementsNeedUpdate = true;
+
+        let faceNormalsTag = Services.timer.mark('meshGeometry.computeFaceNormals');
         meshGeometry.computeFaceNormals();
         Services.timer.logElapsedTime(faceNormalsTag);
-
-        mesh.name = DepthBuffer.MeshModelName;
 
         // Mesh was constructed with Z = depth buffer(X,Y).
         // Now rotate mesh to align with viewer XY plane so Top view is looking down on the mesh.
