@@ -126,9 +126,11 @@ export class Graphics {
      * @param object Object to clone and transform.
      * @param matrix Transformation matrix.
      */
-    static cloneAndTransformObject (object : THREE.Object3D, matrix : THREE.Matrix4) : THREE.Object3D {
+    static cloneAndTransformObject (object : THREE.Object3D, matrix? : THREE.Matrix4) : THREE.Object3D {
 
         let methodTag : string = Services.timer.mark('cloneAndTransformObject');
+        if (!matrix)
+            matrix = new THREE.Matrix4();
 
         // clone object (and geometry!)
         let cloneTag: string = Services.timer.mark('clone');

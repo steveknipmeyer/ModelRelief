@@ -49,8 +49,10 @@ class MeshCache {
      * @returns {string}
      */
     generateKey(modelExtents : THREE.Vector2, pixelExtents : THREE.Vector2) : string{
-    
-        return `Model = (${Math.round(modelExtents.x).toString()}, ${Math.round(modelExtents.y).toString()}) : Pixels = (${Math.round(pixelExtents.x).toString()}, ${Math.round(pixelExtents.y).toString()})`;
+        
+        let aspectRatio = (modelExtents.x / modelExtents.y ).toFixed(2).toString();
+
+        return `Aspect = ${aspectRatio} : Pixels = (${Math.round(pixelExtents.x).toString()}, ${Math.round(pixelExtents.y).toString()})`;
     }
 
     /**
@@ -78,7 +80,7 @@ class MeshCache {
         if (this._cache[key])
             return;
 
-        let meshClone = Graphics.cloneAndTransformObject(mesh, new THREE.Matrix4());
+        let meshClone = Graphics.cloneAndTransformObject(mesh);
         this._cache[key] = meshClone;
     }
 }   
@@ -209,7 +211,7 @@ export class DepthBuffer {
      */       
     initialize () {
         
-        this._logger = Services.htmlLogger;       
+        this._logger = Services.consoleLogger;       
 
         this._nearClipPlane   = this.camera.near;
         this._farClipPlane    = this.camera.far;
@@ -380,7 +382,39 @@ export class DepthBuffer {
      }
 
      /**
-      * @description Constructs a new mesh from a collecttion of triangles.
+      * @description Constructs a new mesh from an existing mesh of the same dimensions.
+      * @param {THREE.Mesh} mesh Template mesh identical in model <and> pixel extents.
+      * @param {THREE.Vector2} meshExtents Final mesh extents.
+      * @param {THREE.Material} material Material to assign to the mesh.
+      * @returns {THREE.Mesh} 
+      */
+     constructMeshFromTemplate(meshTemplate : THREE.Mesh, meshExtents: THREE.Vector2, material: THREE.Material): THREE.Mesh {
+
+        let mesh = <THREE.Mesh> Graphics.cloneAndTransformObject(meshTemplate);
+
+        // The mesh template matches the aspect ratio of the template.
+        // Now, scale the mesh to the final target dimensions.
+        let boundingBox = Graphics.getBoundingBoxFromObject(mesh);
+        let scale = meshExtents.x / boundingBox.getSize().x;
+        mesh.scale.x = scale;
+        mesh.scale.y = scale;
+        
+        let meshVertices = (<THREE.Geometry>mesh.geometry).vertices;
+        let depthCount = this.depths.length;
+        assert(meshVertices.length === depthCount);
+
+        for (let iDepth = 0; iDepth < depthCount; iDepth++) {
+
+            let modelDepth = this.normalizedToModelDepth(this.depths[iDepth]);
+            meshVertices[iDepth].z = modelDepth;
+        }
+        mesh = new THREE.Mesh(<THREE.Geometry>mesh.geometry, material);
+        
+        return mesh;
+     }
+
+     /**
+      * @description Constructs a new mesh from a collection of triangles.
       * @param {THREE.Vector2} meshXYExtents Extents of the mesh.
       * @param {THREE.Material} material Material to assign to the mesh.
       * @returns {THREE.Mesh} 
@@ -405,11 +439,6 @@ export class DepthBuffer {
         }
         meshGeometry.mergeVertices();
         let mesh = new THREE.Mesh(meshGeometry, material);
-        mesh.name = DepthBuffer.MeshModelName;
-
-        // Mesh was constructed with Z = depth buffer(X,Y).
-        // Now rotate mesh to align with viewer XY plane so Top view is looking down on the mesh.
-        mesh.rotateX(-Math.PI / 2);
 
         return mesh; 
     }
@@ -431,18 +460,25 @@ export class DepthBuffer {
             material = new THREE.MeshPhongMaterial(DepthBuffer.DefaultMeshPhongMaterialParameters);
 
         let meshCache: THREE.Mesh = DepthBuffer.Cache.getMesh(meshXYExtents, new THREE.Vector2(this.width, this.height));
-        let mesh: THREE.Mesh = meshCache ? this.constructMesh(meshXYExtents, material) : this.constructMesh(meshXYExtents, material);   
-
+        let mesh: THREE.Mesh = meshCache ? this.constructMeshFromTemplate(meshCache, meshXYExtents, material) : this.constructMesh(meshXYExtents, material);   
+//      let mesh: THREE.Mesh = this.constructMesh(meshXYExtents, material);   
+        
         let faceNormalsTag = Services.timer.mark('meshGeometry.computeFaceNormals');
         let meshGeometry = <THREE.Geometry>mesh.geometry;
         meshGeometry.computeFaceNormals();
         Services.timer.logElapsedTime(faceNormalsTag);
 
+        mesh.name = DepthBuffer.MeshModelName;
+
+        // Mesh was constructed with Z = depth buffer(X,Y).
+        // Now rotate mesh to align with viewer XY plane so Top view is looking down on the mesh.
+        mesh.rotateX(-Math.PI / 2);
+        
+        DepthBuffer.Cache.addMesh(meshXYExtents, new THREE.Vector2(this.width, this.height), mesh);
         Services.timer.logElapsedTime(timerTag)
 
-        DepthBuffer.Cache.addMesh(meshXYExtents, new THREE.Vector2(this.width, this.height), mesh);
         return mesh;
-    }
+    } 
 
     /**
      * Analyzes properties of a depth buffer.

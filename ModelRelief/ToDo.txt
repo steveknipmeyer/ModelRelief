@@ -2,8 +2,10 @@
 
 <-- Tasks
     
+    Optimize BoundingBox procesing.
     constructMeshFromTemplate
-        Add a compound key based on both the near plane and the device extents.
+        The template is not cloned so therefore the new mesh instance modifies the template.
+            This introduces the same issue of shared mesh instances that motivated copying meshes before adding them to the cache.
 
     DepthBufferCache       
         Dispose periodically?
