@@ -1,6 +1,9 @@
 ﻿<-- Commit Notes
-        Internal Server Error : 500
-        Save does not overwrite an existing file.
+
+<-- Debugger
+    https://stackoverflow.com/questions/43628397/debug-typescript-in-vscode-with-asp-net-core
+    https://code.visualstudio.com/blogs/2016/02/23/introducing-chrome-debugger-for-vs-code
+    https://github.com/Microsoft/vscode-chrome-debug
 
 <-- Tasks
 

@@ -1,3 +1,6 @@
+// https://stackoverflow.com/questions/44645775/launchsettings-json-commandname-usage
+// https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments
+
 {
   "iisSettings": {
     "windowsAuthentication": false,
@@ -8,6 +11,7 @@
     }
   },
   "profiles": {
+    // IISExpress (commandName = IISExpress) is used to start the project.
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
@@ -16,12 +20,14 @@
       }
     },
     "ModelRelief": {
+      // ASPNET CORE CLI (commandName = Project) is used to start the project as in "dotnet run". A command shell will open and show the Kestrel log.
+      // This profile will use the applicationUrl below. If no applicationUrl is defined in this profile, the default port will be used ("http://localhost:5000").
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:60656"
+      "applicationUrl": "http://localhost:60655"
     }
   }
 }
