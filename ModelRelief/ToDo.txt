@@ -1,19 +1,35 @@
 ﻿<-- Commit Notes
 
-<-- Debugger
-    https://stackoverflow.com/questions/43628397/debug-typescript-in-vscode-with-asp-net-core
-    https://code.visualstudio.com/blogs/2016/02/23/introducing-chrome-debugger-for-vs-code
-    https://github.com/Microsoft/vscode-chrome-debug
+<-- Debugging Workflows
+
+    Command Line
+        FE: Chrome   BE: VSCode  TypeScript: automatic  Reload: automatic
+            dotnet run
+            gulp serve (automatic TypeScript/reload)
+            VSCode Profile: .NET Core Attach
+                Edit launch.json to set processId!
+    
+    VSCode Profile: ASP.Net Core With Browser
+        FE: VSCode   BE: VSCode  TypeScript: DNW  Reload: DNW
+
+    VSCode Profile: .NET Core Attach
+        https://github.com/OmniSharp/omnisharp-vscode/issues/897
+        An error happens running the command below. It should open a UI to pick the process.
+            D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief>wmic process get Name,ProcessId,CommandLine
+            Invalid XML content.
+    
+    VSCode Resources
+        https://stackoverflow.com/questions/43628397/debug-typescript-in-vscode-with-asp-net-core
+        https://code.visualstudio.com/blogs/2016/02/23/introducing-chrome-debugger-for-vs-code
+        https://github.com/Microsoft/vscode-chrome-debug
 
 <-- Tasks
 
     "Force" StandardViews to set view even if the active view does not change.
-    Local rule for HTTPS Everywhere.
     
     Export 
         Refactor Save to use async/await.
         Document ReadToEnd.
-            How does ReadEnd use a 4096 buffer?
         Create an ASPNET Server class to hold server-side processing classes.
 
         ASPNET Core?
