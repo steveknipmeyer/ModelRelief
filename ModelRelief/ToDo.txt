@@ -49,14 +49,7 @@
 
 <-- Tools
 
-    Configure VSCOde tasks (Build, etc.)
-    https://stackoverflow.com/questions/43628397/debug-typescript-in-vscode-with-asp-net-core
-
     Webpack
-
-    Why does closing Chrome not terminate the debugger process?
-        This is an ASPNET Core issue. Works fine with pure JavaScript.
-
 
 <-- ASPNET Core
 
@@ -72,11 +65,11 @@
             VSCode Profile: .NET Core Attach
                 Edit launch.json to set processId!
 
-    VSCode Profile: .Net Core Launch (web)
-        FE: Chrome   BE: VSCode  TypeScript: DNW  Reload: DNW
-       
     VSCode Profile: .Net Core With Browser
         FE: VSCode   BE: VSCode  TypeScript: DNW  Reload: DNW
+
+    VSCode Profile: .Net Core Launch (web)
+        FE: Chrome   BE: VSCode  TypeScript: DNW  Reload: DNW
 
     VSCode Profile: .NET Core Attach
         Edit launch.json to set processId!
