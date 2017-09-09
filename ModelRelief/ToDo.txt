@@ -4,6 +4,11 @@
    
     Export 
         Refactor Save to use async/await.
+            
+        Images in ASPNET
+            https://github.com/SixLabors/ImageSharp
+            https://blogs.msdn.microsoft.com/dotnet/2017/01/19/net-core-image-processing/
+            https://andrewlock.net/using-imagesharp-to-resize-images-in-asp-net-core-a-comparison-with-corecompat-system-drawing/
 
         ASPNET Core?
             https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
