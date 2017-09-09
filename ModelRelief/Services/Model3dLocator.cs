@@ -1,4 +1,9 @@
-﻿using ModelRelief.Entitities;
+﻿// ------------------------------------------------------------------------// 
+// ModelRelief                                                             //
+//                                                                         //                                                                          
+// Copyright (c) <2017> Steve Knipmeyer                                    //
+// ------------------------------------------------------------------------//
+using ModelRelief.Entitities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

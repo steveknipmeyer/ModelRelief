@@ -1,4 +1,9 @@
-﻿using System;
+﻿// ------------------------------------------------------------------------// 
+// ModelRelief                                                             //
+//                                                                         //                                                                          
+// Copyright (c) <2017> Steve Knipmeyer                                    //
+// ------------------------------------------------------------------------//
+using System;
 using Microsoft.AspNetCore.Mvc;
 
 using ModelRelief.Entitities;

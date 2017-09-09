@@ -159,7 +159,7 @@ export class CameraControls {
             let view : StandardView = parseInt(viewSetting, 10);
             scope._viewer.setCameraToStandardView(view);
         });
-
+            
         // Field of View
         let minimum = 25;
         let maximum = 75;

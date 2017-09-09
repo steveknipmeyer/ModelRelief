@@ -13,6 +13,7 @@ import {Services}             from 'Services'
 import {StopWatch}            from 'StopWatch'
 
 export enum StandardView {
+    None,
     Front,
     Back,
     Top,

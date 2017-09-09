@@ -5,7 +5,7 @@
    "version": "0.2.0",
    "compounds": [
     {
-        "name": "ASP.Net Core With Browser",
+        "name": ".Net Core With Browser",
         "configurations": [
             ".NET Core Launch (web)",
             "Launch Chrome"
@@ -16,11 +16,11 @@
            "type": "chrome",
            "request": "launch",
            "name": "Launch Chrome",
-           "url": "http://localhost:60655",
+           "url": "http://localhost:60655/Models/Viewer/5",
            "webRoot": "${workspaceRoot}/ModelRelief/wwwroot",
-           "sourceMaps": true,
+           "sourceMaps": true
            // N.B. outFiles, outDir are not recognized by Intellisense.
-           "outDir": "${workspaceRoot}/ModelRelief/wwwroot/js"
+           // "outDir": "${workspaceRoot}/ModelRelief/wwwroot/js"
        },
         {
             "name": ".NET Core Launch (web)",
@@ -40,7 +40,7 @@
                 "windows": {
                     "command": "cmd.exe",
                     // "args": "/C start ${auto-detect-url}"
-                    "args": "/C start http://localhost:60655/"                   
+                    "args": "/C start http://localhost:60655/Models/Viewer/5"                   
                 },
                 "osx": {
                     "command": "open"
