@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "ASPNET .Core Build",
+            "taskName": "ASPNET .Core Build", 
             "command": "dotnet build",
             "type": "shell",
             "group": "build",

@@ -26,7 +26,7 @@
             "name": ".NET Core Launch (web)",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "ASPNET .Core Build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceRoot}/ModelRelief/bin/Debug/netcoreapp1.1/ModelRelief.dll",
             "args": [],

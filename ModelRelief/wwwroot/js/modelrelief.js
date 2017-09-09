@@ -1282,7 +1282,14 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Viewe
         DepthBuffer.Cache = new MeshCache();
         DepthBuffer.MeshModelName = 'ModelMesh';
         DepthBuffer.NormalizedTolerance = .001;
-        DepthBuffer.DefaultMeshPhongMaterialParameters = { side: THREE.DoubleSide, wireframe: false, color: 0xff00ff, reflectivity: 0.75, shininess: 0.75 };
+        DepthBuffer.DefaultMeshPhongMaterialParameters = {
+            side: THREE.DoubleSide,
+            wireframe: false,
+            color: 0x42eef4,
+            specular: 0xffffff,
+            reflectivity: 0.75,
+            shininess: 100
+        };
         return DepthBuffer;
     }());
     exports.DepthBuffer = DepthBuffer;

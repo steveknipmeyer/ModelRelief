@@ -4,8 +4,6 @@
    
     Export 
         Refactor Save to use async/await.
-        Document ReadToEnd.
-        Create an ASPNET Server class to hold server-side processing classes.
 
         ASPNET Core?
             https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
@@ -24,7 +22,6 @@
 
 <-- Viewer
 
-    Choose a better material.
     Progress Indicator
     OrbitControls versus Trackball
 
@@ -35,8 +32,6 @@
     Camera
         Why does the View change slightly after the 2nd Fit View?
             This happens only if the view has been <panned>.
-
-
 
 <-- Optimization
 
