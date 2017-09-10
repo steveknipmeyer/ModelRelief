@@ -92,8 +92,7 @@ export class ComposerController {
     /**
      * Saves the relief to a disk file.
      */
-    saveRelief(): void {
-
+    saveMesh(): void {
         let exportTag = Services.timer.mark('Export OBJ');
         let exporter = new OBJExporter();
         let result = exporter.parse(this._relief.mesh);
@@ -101,7 +100,7 @@ export class ComposerController {
         let request = new XMLHttpRequest();
 
         let viewerUrl = window.location.href;
-        let postUrl = viewerUrl.replace('Viewer', 'Save');
+        let postUrl = viewerUrl.replace('Viewer', 'SaveMesh');
         request.open("POST", postUrl, true);
         request.onload = function (oEvent) {
             // uploaded...
@@ -111,6 +110,36 @@ export class ComposerController {
         request.send(blob)
 
         Services.timer.logElapsedTime(exportTag);
+    }        
+
+    /**
+     * Saves the depth buffer to a disk file.
+     */
+    saveDepthBuffer(): void {
+
+        let exportTag = Services.timer.mark('Export DepthBuffer');
+
+        let request = new XMLHttpRequest();
+
+        let viewerUrl = window.location.href;
+        let postUrl = viewerUrl.replace('Viewer', 'SaveDepthBuffer');
+        request.open("POST", postUrl, true);       
+        request.onload = function (oEvent) {
+            // uploaded...
+        };
+
+        request.send(this._relief.depthBuffer);
+
+        Services.timer.logElapsedTime(exportTag);
+    }        
+        
+    /**
+     * Saves the relief to a disk file.
+     */
+    saveRelief(): void {
+
+        this.saveMesh();
+        this.saveDepthBuffer();
     }
     //#endregion
 
