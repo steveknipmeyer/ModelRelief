@@ -22,11 +22,13 @@
         "Scripts/*",
         "Scripts/Controllers/*",
         "Scripts/DepthBuffer/*",
+        "Scripts/Graphics/*",
         "Scripts/ModelExporters/*",
         "Scripts/ModelLoaders/*",
         "Scripts/System/*",
         "Scripts/UnitTests/*",
-        "Scripts/Views/*"
+        "Scripts/Views/*",
+        "Scripts/Viewer/*"
       ]
     }
   },

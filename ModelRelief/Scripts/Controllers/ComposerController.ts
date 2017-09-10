@@ -9,29 +9,29 @@ import * as THREE  from 'three'
 import * as dat    from 'dat-gui'
 
 import {StandardView}                       from "Camera"
+import {ComposerView}                       from "ComposerView"
 import {DepthBufferFactory}                 from "DepthBufferFactory"
 import {EventManager, EventType, MREvent}   from 'EventManager'
 import {Loader}                             from 'Loader'
 import {Logger, ConsoleLogger}              from 'Logger'
 import {MeshViewer}                         from "MeshViewer"
-import {ModelReliefView}                    from "ModelReliefView"
 import {ModelViewer}                        from "ModelViewer"
 import {OBJLoader}                          from "OBJLoader"
 import {Services}                           from 'Services'
 import {Viewer}                             from "Viewer"
     
-export class ModelReliefController {  
+export class ComposerController {  
 
-    _modelReliefView            : ModelReliefView;
+    _composerView            : ComposerView;
 
     /** Default constructor
      * @class ModelReliefController
-     * @param modelReliefView Mesh generation event.
+     * @param composerView Mesh generation event.
      * @constructor
      */
-    constructor(modelReliefView : ModelReliefView) {  
+    constructor(composerView : ComposerView) {  
 
-        this._modelReliefView = modelReliefView;
+        this._composerView = composerView;
         this.initialize();
     }
 
@@ -41,7 +41,7 @@ export class ModelReliefController {
      */
     initialize() {
 
-        this._modelReliefView._modelViewer.eventManager.addEventListener(EventType.NewModel, this.onNewModel.bind(this));
+        this._composerView._modelViewer.eventManager.addEventListener(EventType.NewModel, this.onNewModel.bind(this));
     }
 //#endregion
 
@@ -62,8 +62,8 @@ export class ModelReliefController {
      */
     onNewModel (event : MREvent, model : THREE.Group) {
         
-        this._modelReliefView._modelViewer.setCameraToStandardView(StandardView.Front);              
-        this._modelReliefView._meshViewer.setCameraToStandardView(StandardView.Top);       
+        this._composerView._modelViewer.setCameraToStandardView(StandardView.Front);              
+        this._composerView._meshViewer.setCameraToStandardView(StandardView.Top);       
     }
 //#endregion
 }

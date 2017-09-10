@@ -8,33 +8,33 @@
 import * as THREE  from 'three' 
 import * as dat    from 'dat-gui'
 
+import {ComposerController}                 from "ComposerController"
+import {ComposerViewControls}               from "ComposerViewControls"
 import {EventType, MREvent, EventManager}   from 'EventManager'
 import {Loader}                             from 'Loader'
 import {Logger, ConsoleLogger}              from 'Logger'
 import {MeshViewer}                         from "MeshViewer"
 import {ContainerIds}                       from "ModelRelief"
-import {ModelReliefController}              from "ModelReliefController"
-import {ModelReliefViewControls}            from "ModelReliefViewControls"
 import {ModelViewer}                        from "ModelViewer"
 import {OBJLoader}                          from "OBJLoader"
 import {Services}                           from 'Services'
 import {TestModel}                          from 'TestModelLoader'
 import {Viewer}                             from "Viewer"
     
-export class ModelReliefView {
+export class ComposerView {
 
     _containerId                : string;
     _meshViewer                 : MeshViewer;
     _modelViewer                : ModelViewer;
     _loader                     : Loader;
 
-    _modelReliefController      : ModelReliefController;
-    _modelReliefViewControls    : ModelReliefViewControls;
+    _composerController         : ComposerController;
+    _composerViewControls       : ComposerViewControls; 
     
     /** Default constructor
      * @class ModelRelief
      * @constructor
-     */
+     */ 
     constructor(containerId : string) {  
 
         this._containerId = containerId;    
@@ -103,10 +103,10 @@ export class ModelReliefView {
 //      this._loader.loadParametricTestModel(this._modelViewer, TestModel.Checkerboard);
 
         // View Controller
-        this._modelReliefController = new ModelReliefController(this);
+        this._composerController = new ComposerController(this);
 
         // View UI Controls
-        this._modelReliefViewControls = new ModelReliefViewControls(this);
+        this._composerViewControls = new ComposerViewControls(this);
     }
     
 //#endregion

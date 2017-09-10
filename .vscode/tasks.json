@@ -10,7 +10,7 @@
             "group": "build",
             "presentation": {
                 "reveal": "always", 
-                "panel": "new"
+                "panel": "dedicated"
             },
             "problemMatcher": "$msCompile"
         },
@@ -24,7 +24,7 @@
             "group": "build",
             "presentation": {
                 "reveal": "always",
-                "panel": "new"
+                "panel": "dedicated"
             },
             "problemMatcher": [
                 "$tsc"

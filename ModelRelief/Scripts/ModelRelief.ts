@@ -15,7 +15,7 @@ export enum ContainerIds {
     MeshCanvas    = "meshCanvas",
 }
 
-import {ModelReliefView}  from "ModelReliefView"
+import {ComposerView}  from "ComposerView"
 
-let modelReliefView = new ModelReliefView(ContainerIds.ComposerView);
+let composerView = new ComposerView(ContainerIds.ComposerView);
 
