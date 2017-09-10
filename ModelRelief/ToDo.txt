@@ -1,50 +1,53 @@
 ﻿<-- Commit Notes
 
 <-- Tasks
+    Create a TypeScript library for HTTP support.
+        saveMesh
+        saveDepthBuffer
+    
+    Image File Creation
+        ImageSharp
+        Create a 16 bit PNG from the depth data.
 
-    MVC
-        Viewer.cshtml
-            Models
-                3D Model
-                DepthBuffer
-
-            Views
-                ComposerView
-
-                ModelView
-                    ModelViewer
-                        ModelViewerControls
-                MeshView
-                    MeshViewer
-                        MeshViewerControls
-
-            Controllers
-                ComposerController
-                (ModelController)
-                (MeshController)
-
-    Export 
+    Export    
         Refactor Save to use async/await.
-            
-        Images in ASPNET
-            https://github.com/SixLabors/ImageSharp
-            https://blogs.msdn.microsoft.com/dotnet/2017/01/19/net-core-image-processing/
-            https://andrewlock.net/using-imagesharp-to-resize-images-in-asp-net-core-a-comparison-with-corecompat-system-drawing/
 
-        ASPNET Core?
-            https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
-            https://stackoverflow.com/questions/17810063/jquery-ajax-post-huge-string-value        
+    Experiment with precision setting in THREE.WebGLRenderer.
 
+<-- File Transfers
         JavaScript
             These solutions are for saving files on the client (not server) side/.
                 https://github.com/eligrey/FileSaver.js/
                 https://github.com/jimmywarting/StreamSaver.js
 
-    Image File Creation
-        Create a 16 bit PNG from the depth data.
-            Investigate jQuery ajax support for posting the file to the server.
+<-- Image processing
+    Images in ASPNET
+        https://github.com/SixLabors/ImageSharp
+        https://blogs.msdn.microsoft.com/dotnet/2017/01/19/net-core-image-processing/
+        https://andrewlock.net/using-imagesharp-to-resize-images-in-asp-net-core-a-comparison-with-corecompat-system-drawing/
 
-    Experiment with precision setting in THREE.WebGLRenderer.
+<-- MVC
+
+    Viewer.cshtml
+        Models
+            3D Model
+            DepthBuffer
+
+        Views
+            ComposerView
+
+            ModelView
+                ModelViewer
+                    ModelViewerControls
+            MeshView
+                MeshViewer
+                    MeshViewerControls
+
+        Controllers
+            ComposerController
+            (ModelController)
+            (MeshController)
+
 
 <-- Viewer
 

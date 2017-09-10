@@ -117,6 +117,7 @@ export class ComposerController {
      */
     saveDepthBuffer(): void {
 
+        // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
         let exportTag = Services.timer.mark('Export DepthBuffer');
 
         let request = new XMLHttpRequest();
