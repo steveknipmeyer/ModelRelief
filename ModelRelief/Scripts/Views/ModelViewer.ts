@@ -52,7 +52,7 @@ export class ModelViewer extends Viewer {
         super.setModel(value);
 
         // dispatch NewModel event
-        this._eventManager.dispatchEvent(this, EventType.NewModel, value);
+        this.eventManager.dispatchEvent(this, EventType.NewModel, value);
     }
                 
 //#endregion
@@ -99,24 +99,6 @@ export class ModelViewer extends Viewer {
         gridGeometry.visible = visible;
         this._logger.addInfoMessage(`Display grid = ${visible}`);
     } 
-//#endregion
-
-//#region Mesh Generation
-    /**
-     * Generates a relief from the current model camera.
-     */
-    generateRelief() : void { 
-        
-        // pixels
-        let width  = 512;
-        let height = width / this.aspectRatio;
-        let factory = new DepthBufferFactory({width : width, height : height, model : this.model, camera : this.camera, addCanvasToDOM : false});   
-
-        let previewMesh : THREE.Mesh = factory.meshGenerate({});   
-        this._eventManager.dispatchEvent(this, EventType.MeshGenerate, previewMesh);
-
-        // Services.consoleLogger.addInfoMessage('Relief generated');
-    }
 //#endregion
 } 
 

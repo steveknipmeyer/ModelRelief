@@ -8,7 +8,6 @@
 import * as THREE               from 'three'
 
 import {Logger, ConsoleLogger}  from 'Logger'
-import {ModelRelief}            from 'ModelRelief'
 import {Services}               from 'Services'
 
 export enum ObjectNames {

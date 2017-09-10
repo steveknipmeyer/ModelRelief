@@ -21,7 +21,7 @@ import {TrackballControls}      from 'TrackballControls'
 export class Viewer {
 
     _name                   : string                    = '';
-    _eventManager           : EventManager              = null;
+    _eventManager          : EventManager              = null;
     _logger                 : Logger                    = null;
     
     _scene                  : THREE.Scene               = null;
@@ -47,7 +47,7 @@ export class Viewer {
     constructor(name : string, modelCanvasId : string) { 
 
         this._name         = name;                    
-        this._eventManager = new EventManager();
+        this._eventManager  = new EventManager();
         this._logger       = Services.consoleLogger;
 
         this._canvas = Graphics.initializeCanvas(modelCanvasId);
@@ -105,7 +105,7 @@ export class Viewer {
         if (this._cameraControls)
             this._cameraControls.synchronizeCameraSettings();
         }
-
+        
      /**
      * Gets the active model.
      */
@@ -114,14 +114,6 @@ export class Viewer {
         return this._root;
     }
 
-    /**
-     * Gets the EventManager.
-     */
-    get eventManager() : EventManager {
-        
-        return this._eventManager;
-    }
-        
     /**
      * Sets the active model.
      * @param value New model to activate.
@@ -152,6 +144,14 @@ export class Viewer {
         let parentElement : HTMLElement = this._canvas.parentElement;
         return parentElement.id;
     } 
+
+    /**
+     * Gets the Event Manager.
+     */
+    get eventManager(): EventManager {
+
+        return this._eventManager;
+    }
         
 //#endregion
 

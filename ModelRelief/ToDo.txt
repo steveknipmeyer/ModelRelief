@@ -1,6 +1,9 @@
 ﻿<-- Commit Notes
 
 <-- Tasks
+    Consolidate ModelReliefController and ModelReliefViewControls.
+    ModelReliefView -> ComposerView
+
     MVC
         Viewer.cshtml
             Models
@@ -8,12 +11,18 @@
                 DepthBuffer
 
             Views
-                ModelRelief
+                ComposerView
+
+                ModelView
                     ModelViewer
+                MeshView
                     MeshViewer
 
             Controllers
-                ModelReliefController
+                ComposerController
+                ModelController 
+                MeshController
+                
 
     ModelRelief Controls 
         Generate Relief

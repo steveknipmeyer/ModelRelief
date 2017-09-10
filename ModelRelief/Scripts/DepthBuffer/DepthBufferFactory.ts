@@ -20,7 +20,6 @@ import {DepthBuffer}            from 'DepthBuffer'
 import {Graphics}               from 'Graphics'
 import {Logger, ConsoleLogger}  from 'Logger'
 import {MathLibrary}            from 'Math'
-import {ModelRelief}            from 'ModelRelief'
 import {Services}               from 'Services'
 import {StopWatch}              from 'StopWatch'
 import {Tools}                  from 'Tools'
@@ -39,7 +38,7 @@ export interface DepthBufferFactoryParameters {
     addCanvasToDOM?  : boolean                  // visible canvas; add to HTML
 }
 
-export interface MeshGenerateParameters {
+export interface MeshGenerateParameters { 
 
     camera?     : THREE.PerspectiveCamera;      // override not yet implemented 
     material?   : THREE.Material;

@@ -18,12 +18,9 @@ import {Services}                   from 'Services'
  * MeshViewer Settings
  */
 class MeshViewerSettings {
+   
+    constructor() {
 
-    saveRelief : () => void;
-    
-    constructor(saveRelief : () => any) {
-        
-        this.saveRelief = saveRelief;
     }
 }
 
@@ -48,13 +45,6 @@ export class MeshViewerControls {
     }
 
 //#region Event Handlers
-    /**
-     * Saves the relief to a disk file.
-     */
-    saveRelief() : void { 
-
-        this._meshViewer.saveRelief();
-    }
 //#endregion
 
     /**
@@ -64,7 +54,7 @@ export class MeshViewerControls {
 
         let scope = this;
 
-        this._meshViewerSettings = new MeshViewerSettings(this.saveRelief.bind(this));
+        this._meshViewerSettings = new MeshViewerSettings();
 
         // Init dat.gui and controls for the UI
         let gui = new dat.GUI({
@@ -78,9 +68,6 @@ export class MeshViewerControls {
         //                                                                   MeshViewer                                                                 //      
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         let meshViewerOptions = gui.addFolder('MeshViewer Options');
-
-        // Save Relief
-        let controlSaveRelief = meshViewerOptions.add(this._meshViewerSettings, 'saveRelief').name('Save Relief');
 
         meshViewerOptions.open();
     }    

@@ -13,7 +13,6 @@ import {Graphics}                   from 'Graphics'
 import {Logger, HTMLLogger}         from 'Logger'
 import {MathLibrary}                from 'Math'
 import {MeshViewerControls}         from 'MeshViewerControls'
-import {OBJExporter}                from "OBJExporter"
 import {Services}                   from 'Services'
 import {TrackballControls}          from 'TrackballControls'
 import {Viewer}                     from 'Viewer'
@@ -77,33 +76,6 @@ export class MeshViewer extends Viewer {
 
         super.initializeUIControls();
         this._meshViewerControls = new MeshViewerControls(this);
-    }
-    
-//#endregion
-
-//#region Save Operations
-    /**
-     * Saves a relief to a disk file.
-     */
-    saveRelief(): void {
-
-        let exportTag = Services.timer.mark('Export OBJ');
-        let exporter = new OBJExporter();
-        let result = exporter.parse(this.model);
-
-        let request = new XMLHttpRequest();
-
-        let viewerUrl = window.location.href;
-        let postUrl   = viewerUrl.replace('Viewer', 'Save');
-        request.open("POST", postUrl, true);
-        request.onload = function (oEvent) {
-            // uploaded...
-        };
-
-        let blob = new Blob([result], {type: 'text/plain'});
-        request.send(blob)        
-
-        Services.timer.logElapsedTime(exportTag);
-    }
+    }   
 //#endregion
 }

@@ -9,7 +9,8 @@
             "type": "shell",
             "group": "build",
             "presentation": {
-                "reveal": "silent"
+                "reveal": "always", 
+                "panel": "new"
             },
             "problemMatcher": "$msCompile"
         },

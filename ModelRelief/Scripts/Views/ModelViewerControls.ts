@@ -21,12 +21,10 @@ import {Services}                   from 'Services'
 class ModelViewerSettings {
 
     displayGrid    : boolean;
-    generateRelief : () => void;
     
-    constructor(generateRelief : () => any) {
+    constructor() {
         
         this.displayGrid    = true; 
-        this.generateRelief = generateRelief;
     }
 }
 
@@ -51,13 +49,6 @@ export class ModelViewerControls {
     }
 
 //#region Event Handlers
-    /**
-     * Generates a relief from the current model camera.
-     */
-    generateRelief() : void { 
-
-        this._modelViewer.generateRelief();
-    }
 //#endregion
 
     /**
@@ -67,7 +58,7 @@ export class ModelViewerControls {
 
         let scope = this;
 
-        this._modelViewerSettings = new ModelViewerSettings(this.generateRelief.bind(this));
+        this._modelViewerSettings = new ModelViewerSettings();
 
         // Init dat.gui and controls for the UI
         let gui = new dat.GUI({
@@ -88,10 +79,6 @@ export class ModelViewerControls {
 
             scope._modelViewer.displayGrid(value);
         });
-
-        // Generate Relief
-        let controlGenerateRelief = modelViewerOptions.add(this._modelViewerSettings, 'generateRelief').name('Generate Relief');
-
         modelViewerOptions.open();
     }    
 }

@@ -14,7 +14,7 @@ import {EventManager, EventType, MREvent}   from 'EventManager'
 import {Loader}                             from 'Loader'
 import {Logger, ConsoleLogger}              from 'Logger'
 import {MeshViewer}                         from "MeshViewer"
-import {ModelRelief}                        from "ModelRelief"
+import {ModelReliefView}                    from "ModelReliefView"
 import {ModelViewer}                        from "ModelViewer"
 import {OBJLoader}                          from "OBJLoader"
 import {Services}                           from 'Services'
@@ -22,17 +22,16 @@ import {Viewer}                             from "Viewer"
     
 export class ModelReliefController {  
 
-    _modelRelief            : ModelRelief;
-    
-    _initialMeshGeneration  : boolean = true;
+    _modelReliefView            : ModelReliefView;
 
     /** Default constructor
      * @class ModelReliefController
+     * @param modelReliefView Mesh generation event.
      * @constructor
      */
-    constructor(modelRelief : ModelRelief) {  
+    constructor(modelReliefView : ModelReliefView) {  
 
-        this._modelRelief = modelRelief;
+        this._modelReliefView = modelReliefView;
         this.initialize();
     }
 
@@ -41,9 +40,8 @@ export class ModelReliefController {
      * Initialziation.
      */
     initialize() {
-        
-        this._modelRelief.modelViewer.eventManager.addEventListener(EventType.MeshGenerate, this.onMeshGenerate.bind(this));
-        this._modelRelief.modelViewer.eventManager.addEventListener(EventType.NewModel, this.onNewModel.bind(this));
+
+        this._modelReliefView._modelViewer.eventManager.addEventListener(EventType.NewModel, this.onNewModel.bind(this));
     }
 //#endregion
 
@@ -51,16 +49,10 @@ export class ModelReliefController {
     /**
      * Event handler for mesh generation.
      * @param event Mesh generation event.
-     * @params mesh Newly-generated mesh.
+     * @param mesh Newly-generated mesh.
      */
     onMeshGenerate (event : MREvent, mesh : THREE.Mesh) {
 
-        this._modelRelief.meshViewer.setModel(mesh);
-
-        if (this._initialMeshGeneration) {
-            this._modelRelief.meshViewer.fitView();
-            this._initialMeshGeneration = false;            
-        }
     }
 
     /**
@@ -70,8 +62,8 @@ export class ModelReliefController {
      */
     onNewModel (event : MREvent, model : THREE.Group) {
         
-        this._modelRelief.modelViewer.setCameraToStandardView(StandardView.Front);              
-        this._modelRelief.meshViewer.setCameraToStandardView(StandardView.Top);       
+        this._modelReliefView._modelViewer.setCameraToStandardView(StandardView.Front);              
+        this._modelReliefView._meshViewer.setCameraToStandardView(StandardView.Top);       
     }
 //#endregion
 }

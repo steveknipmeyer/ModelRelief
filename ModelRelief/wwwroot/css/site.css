@@ -14,9 +14,9 @@ body {
 }
 
 /* ----------------------    
-    Model3D Viewer
+    Model3D View
 ------------------------*/
-#modelContainer {
+#modelView {
     position : relative;
     width:  512px;
 }
@@ -28,9 +28,9 @@ body {
 }
 
 /* ----------------------    
-      Mesh Viewer
+      Mesh View
 ------------------------*/
-#meshContainer {
+#meshView {
     position : absolute;
     top : 0px;
     right: 0px;
