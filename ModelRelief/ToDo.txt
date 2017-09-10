@@ -1,8 +1,6 @@
 ﻿<-- Commit Notes
 
 <-- Tasks
-    Consolidate ModelReliefController and ModelReliefViewControls.
-    ModelReliefView -> ComposerView
 
     MVC
         Viewer.cshtml
@@ -15,18 +13,15 @@
 
                 ModelView
                     ModelViewer
+                        ModelViewerControls
                 MeshView
                     MeshViewer
+                        MeshViewerControls
 
             Controllers
                 ComposerController
-                ModelController 
-                MeshController
-                
-
-    ModelRelief Controls 
-        Generate Relief
-        Save Relief
+                (ModelController)
+                (MeshController)
 
     Export 
         Refactor Save to use async/await.

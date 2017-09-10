@@ -47,6 +47,14 @@ export interface MeshGenerateParameters {
 export interface ImageGenerateParameters {
 }
 
+export interface Relief {
+
+    width       : number;                   // width of relief             
+    height      : number;                   // height of relief
+    mesh        : THREE.Mesh;               // mesh
+    depthBuffer : Float32Array;             // depth buffer
+}
+
 /**
  * @class
  * DepthBufferFactory
@@ -418,7 +426,7 @@ export class DepthBufferFactory {
      * Generates a mesh from the active model and camera
      * @param parameters Generation parameters (MeshGenerateParameters)
      */
-    meshGenerate (parameters : MeshGenerateParameters) : THREE.Mesh {
+    generateRelief (parameters : MeshGenerateParameters) : Relief {
         
         if (!this.verifyMeshSettings()) 
             return null;
@@ -430,7 +438,15 @@ export class DepthBufferFactory {
         this.createDepthBuffer();
         let mesh = this._depthBuffer.mesh(parameters.material);
         
-        return mesh;
+        let relief : Relief = {
+
+            width       : this._width,
+            height      : this._height,
+            mesh        : mesh,
+            depthBuffer : this._depthBuffer.depths
+        };
+
+        return relief;
     }
 
     /**

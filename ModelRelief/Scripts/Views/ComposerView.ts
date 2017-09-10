@@ -9,7 +9,6 @@ import * as THREE  from 'three'
 import * as dat    from 'dat-gui'
 
 import {ComposerController}                 from "ComposerController"
-import {ComposerViewControls}               from "ComposerViewControls"
 import {EventType, MREvent, EventManager}   from 'EventManager'
 import {Loader}                             from 'Loader'
 import {Logger, ConsoleLogger}              from 'Logger'
@@ -31,7 +30,6 @@ export class ComposerView {
     _loader                     : Loader;
 
     _composerController         : ComposerController;
-    _composerViewControls       : ComposerViewControls; 
     
     /** Default constructor
      * @class ComposerView
@@ -93,7 +91,7 @@ export class ComposerView {
         this._meshView = new MeshView(ContainerIds.MeshCanvas);
 
         // Model View
-        this._modelView = new ModelView(ContainerIds.ModelCanvas);
+        this._modelView = new ModelView(ContainerIds.ModelCanvas); 
 
         // Loader
         this._loader = new Loader();
@@ -104,11 +102,8 @@ export class ComposerView {
         // Test Models
 //      this._loader.loadParametricTestModel(this._modelViewer, TestModel.Checkerboard);
 
-        // View Controller
+        // Composer Controller
         this._composerController = new ComposerController(this);
-
-        // View UI Controls
-        this._composerViewControls = new ComposerViewControls(this);
     }
     
 //#endregion
