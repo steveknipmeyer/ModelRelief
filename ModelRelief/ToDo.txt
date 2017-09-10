@@ -1,7 +1,24 @@
 ﻿<-- Commit Notes
 
 <-- Tasks
-   
+    MVC
+        Viewer.cshtml
+            Models
+                3D Model
+                DepthBuffer
+
+            Views
+                ModelRelief
+                    ModelViewer
+                    MeshViewer
+
+            Controllers
+                ModelReliefController
+
+    ModelRelief Controls 
+        Generate Relief
+        Save Relief
+
     Export 
         Refactor Save to use async/await.
             

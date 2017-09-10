@@ -20,12 +20,13 @@
       "*": [
         "*",
         "Scripts/*",
+        "Scripts/Controllers/*",
         "Scripts/DepthBuffer/*",
         "Scripts/ModelExporters/*",
         "Scripts/ModelLoaders/*",
         "Scripts/System/*",
         "Scripts/UnitTests/*",
-        "Scripts/Viewer/*"
+        "Scripts/Views/*"
       ]
     }
   },
