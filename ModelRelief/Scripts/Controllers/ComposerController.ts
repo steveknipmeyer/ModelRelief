@@ -41,7 +41,7 @@ export class ComposerController {
      */
     initialize() {
 
-        this._composerView._modelViewer.eventManager.addEventListener(EventType.NewModel, this.onNewModel.bind(this));
+        this._composerView._modelView.modelViewer.eventManager.addEventListener(EventType.NewModel, this.onNewModel.bind(this));
     }
 //#endregion
 
@@ -62,8 +62,8 @@ export class ComposerController {
      */
     onNewModel (event : MREvent, model : THREE.Group) {
         
-        this._composerView._modelViewer.setCameraToStandardView(StandardView.Front);              
-        this._composerView._meshViewer.setCameraToStandardView(StandardView.Top);       
+        this._composerView._modelView.modelViewer.setCameraToStandardView(StandardView.Front);              
+        this._composerView._meshView.meshViewer.setCameraToStandardView(StandardView.Top);       
     }
 //#endregion
 }

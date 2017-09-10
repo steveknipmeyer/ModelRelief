@@ -18,7 +18,7 @@ import {Services}                   from 'Services'
 
 /**
  * @class
- * ModelReliefView Settings
+ * ComposerViewSettings
  */
 class ComposerViewSettings {
 
@@ -33,7 +33,7 @@ class ComposerViewSettings {
 }
 
 /**
- * ModelReliefView UI Controls.
+ * ComposerView UI Controls.
  */    
 export class ComposerViewControls {
 
@@ -43,7 +43,7 @@ export class ComposerViewControls {
     _initialMeshGeneration: boolean = true;
     
     /** Default constructor
-     * @class ModelReliefViewerControls
+     * @class ComposerViewControls
      * @constructor
      */
     constructor(composerView : ComposerView) {  
@@ -62,14 +62,14 @@ export class ComposerViewControls {
 
         // pixels
         let width = 512;
-        let height = width / this._composerView.modelViewer.aspectRatio;
-        let factory = new DepthBufferFactory({ width: width, height: height, model: this._composerView.modelViewer.model, camera: this._composerView.modelViewer.camera, addCanvasToDOM: false });
+        let height = width / this._composerView.modelView.modelViewer.aspectRatio;
+        let factory = new DepthBufferFactory({ width: width, height: height, model: this._composerView.modelView.modelViewer.model, camera: this._composerView.modelView.modelViewer.camera, addCanvasToDOM: false });
 
         let previewMesh: THREE.Mesh = factory.meshGenerate({});
 
-        this._composerView._meshViewer.setModel(previewMesh);
+        this._composerView._meshView.meshViewer.setModel(previewMesh);
         if (this._initialMeshGeneration) {
-            this._composerView._meshViewer.fitView();
+            this._composerView._meshView.meshViewer.fitView();
             this._initialMeshGeneration = false;
         }
        
@@ -83,7 +83,7 @@ export class ComposerViewControls {
 
         let exportTag = Services.timer.mark('Export OBJ');
         let exporter = new OBJExporter();
-        let result = exporter.parse(this._composerView.meshViewer.model);
+        let result = exporter.parse(this._composerView.meshView.meshViewer.model);
 
         let request = new XMLHttpRequest();
 
@@ -121,14 +121,14 @@ export class ComposerViewControls {
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         //                                                                   ModelRelief                                                                //      
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
-        let modelReliefViewOptions = gui.addFolder('ModelRelief Options');
+        let composerViewOptions = gui.addFolder('Composer Options');
 
         // Generate Relief
-        let controlGenerateRelief = modelReliefViewOptions.add(this._composerViewSettings, 'generateRelief').name('Generate Relief');
+        let controlGenerateRelief = composerViewOptions.add(this._composerViewSettings, 'generateRelief').name('Generate Relief');
 
         // Save Relief
-        let controlSaveRelief = modelReliefViewOptions.add(this._composerViewSettings, 'saveRelief').name('Save Relief');
+        let controlSaveRelief = composerViewOptions.add(this._composerViewSettings, 'saveRelief').name('Save Relief');
 
-        modelReliefViewOptions.open();
+        composerViewOptions.open();
     }    
 }

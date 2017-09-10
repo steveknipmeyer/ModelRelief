@@ -13,8 +13,10 @@ import {ComposerViewControls}               from "ComposerViewControls"
 import {EventType, MREvent, EventManager}   from 'EventManager'
 import {Loader}                             from 'Loader'
 import {Logger, ConsoleLogger}              from 'Logger'
+import {MeshView}                           from "MeshView"
 import {MeshViewer}                         from "MeshViewer"
 import {ContainerIds}                       from "ModelRelief"
+import {ModelView}                          from "ModelView"
 import {ModelViewer}                        from "ModelViewer"
 import {OBJLoader}                          from "OBJLoader"
 import {Services}                           from 'Services'
@@ -24,15 +26,15 @@ import {Viewer}                             from "Viewer"
 export class ComposerView {
 
     _containerId                : string;
-    _meshViewer                 : MeshViewer;
-    _modelViewer                : ModelViewer;
+    _meshView                   : MeshView;
+    _modelView                  : ModelView;
     _loader                     : Loader;
 
     _composerController         : ComposerController;
     _composerViewControls       : ComposerViewControls; 
     
     /** Default constructor
-     * @class ModelRelief
+     * @class ComposerView
      * @constructor
      */ 
     constructor(containerId : string) {  
@@ -51,19 +53,19 @@ export class ComposerView {
     }
 
     /**
-     * Gets the ModelViewer.
+     * Gets the ModelView.
      */
-    get modelViewer(): ModelViewer {
+    get modelView(): ModelView {
 
-        return this._modelViewer;
+        return this._modelView;
     }
 
     /**
      * Gets the MeshViewer.
      */
-    get meshViewer(): MeshViewer {
+    get meshView(): MeshView {
 
-        return this._meshViewer;
+        return this._meshView;
     }
             
     /**
@@ -87,17 +89,17 @@ export class ComposerView {
 
         Services.consoleLogger.addInfoMessage('ModelRelief started');
 
-        // Mesh Preview
-        this._meshViewer = new MeshViewer('MeshViewer', ContainerIds.MeshCanvas);
+        // Mesh View
+        this._meshView = new MeshView(ContainerIds.MeshCanvas);
 
-        // Model Viewer    
-        this._modelViewer = new ModelViewer('ModelViewer', ContainerIds.ModelCanvas);
+        // Model View
+        this._modelView = new ModelView(ContainerIds.ModelCanvas);
 
         // Loader
         this._loader = new Loader();
 
         // OBJ Models
-        this._loader.loadOBJModel(this._modelViewer);
+        this._loader.loadOBJModel(this._modelView.modelViewer);
 
         // Test Models
 //      this._loader.loadParametricTestModel(this._modelViewer, TestModel.Checkerboard);
