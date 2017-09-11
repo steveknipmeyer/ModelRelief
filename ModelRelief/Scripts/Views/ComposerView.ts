@@ -10,11 +10,11 @@ import * as dat    from 'dat-gui'
 
 import {ComposerController}                 from "ComposerController"
 import {EventType, MREvent, EventManager}   from 'EventManager'
+import {HtmlLibrary, ContainerIds}          from "Html"
 import {Loader}                             from 'Loader'
 import {Logger, ConsoleLogger}              from 'Logger'
 import {MeshView}                           from "MeshView"
 import {MeshViewer}                         from "MeshViewer"
-import {ContainerIds}                       from "ModelRelief"
 import {ModelView}                          from "ModelView"
 import {ModelViewer}                        from "ModelViewer"
 import {OBJLoader}                          from "OBJLoader"

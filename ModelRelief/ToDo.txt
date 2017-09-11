@@ -4,12 +4,8 @@
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
 
-    Composer Settings
-        Dimensions
-        Relief Parameters
-
     Base64 encoding for HttpRequest.
-    https://github.com/hughsk/tab64
+        https://github.com/hughsk/tab64
 
     Create a TypeScript library for HTTP support.
         saveMesh

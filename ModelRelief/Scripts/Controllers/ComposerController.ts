@@ -12,6 +12,7 @@ import {StandardView}                       from "Camera"
 import {ComposerView}                       from "ComposerView"
 import {DepthBufferFactory, Relief}         from "DepthBufferFactory"
 import {EventManager, EventType, MREvent}   from 'EventManager'
+import {HtmlAttributes}                     from "Html"
 import {Logger, ConsoleLogger}              from 'Logger'
 import {Graphics}                           from "Graphics"
 import {ModelViewer}                        from "ModelViewer"
@@ -24,11 +25,29 @@ import {Services}                           from 'Services'
  */
 class ComposerViewSettings {
 
-    generateRelief : () => void;
-    saveRelief     : () => void;
+    _width                   : number;               // width of mesh (model units)
+    _height                  : number;               // height of mesh (model units)
+    _depth                   : number;               // depth of mesh (model units)
+
+    _tauThreshold            : number;               // attenutation
+    _sigmaGaussianBlur       : number;               // Gaussian blur
+    _sigmaGaussianSmooth     : number;               // Gaussian smoothing
+    _lambdaLinearScaling     : number;               // scaling
+
+    generateRelief          : () => void;
+    saveRelief              : () => void;
 
     constructor(generateRelief: () => any, saveRelief: () => any) {
-        
+
+        this._width                  = 100.0;
+        this._height                 = 100.0;    
+        this._depth                  =   5.0;    
+
+        this._tauThreshold           = 1.0;    
+        this._sigmaGaussianBlur      = 1.0;    
+        this._sigmaGaussianSmooth    = 1.0;    
+        this._lambdaLinearScaling    = 1.0;    
+            
         this.generateRelief = generateRelief;
         this.saveRelief     = saveRelief;
     }
@@ -166,22 +185,48 @@ export class ComposerController {
         // Init dat.gui and controls for the UI
         let gui = new dat.GUI({
             autoPlace: false,
-            width: 320
+            width: HtmlAttributes.DatGuiWidth
         });
         let menuDiv = document.getElementById(this._composerView.containerId);
         menuDiv.appendChild(gui.domElement);
+        let minimum     : number;
+        let maximum     : number;
+        let stepSize    : number;
 
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         //                                                                   ModelRelief                                                                //      
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         let composerViewOptions = gui.addFolder('Composer Options');
 
+        let dimensionsOptions = composerViewOptions.addFolder('Mesh Dimensions');
+        minimum  =    1.0;
+        maximum  = 1000.0;
+        stepSize =    1.0;
+
+        // Mesh Dimensions
+        let controlMeshWidth  = dimensionsOptions.add(this._composerViewSettings, '_width').name('Width').min(minimum).max(maximum).step(stepSize).listen();
+        let controlMeshHeight = dimensionsOptions.add(this._composerViewSettings, '_height').name('Height').min(minimum).max(maximum).step(stepSize).listen();
+        let controlMeshDepth  = dimensionsOptions.add(this._composerViewSettings, '_depth').name('Depth').min(minimum).max(maximum).step(stepSize).listen();
+        
+        let reliefProcessingOptions = composerViewOptions.addFolder('Relief Processing');
+        minimum  =    0.0;
+        maximum  =    1.0;
+        stepSize =    0.1;
+
+        // Relief Processing Parameters
+        let controlTauThreshold        = reliefProcessingOptions.add(this._composerViewSettings, '_tauThreshold').name('Tau Threshold').min(minimum).max(maximum).step(stepSize).listen();
+        let controlSigmaGaussianBlur   = reliefProcessingOptions.add(this._composerViewSettings, '_sigmaGaussianBlur').name('Sigma Gaussian Blur').min(minimum).max(maximum).step(stepSize).listen();
+        let controlSigmaGaussianSmooth = reliefProcessingOptions.add(this._composerViewSettings, '_sigmaGaussianSmooth').name('Sigma Gaussian Smooth').min(minimum).max(maximum).step(stepSize).listen();
+        let controlLamdaLinearScaling  = reliefProcessingOptions.add(this._composerViewSettings, '_lambdaLinearScaling').name('Lambda Linear Scaling').min(minimum).max(maximum).step(stepSize).listen();
+        
         // Generate Relief
-        let controlGenerateRelief = composerViewOptions.add(this._composerViewSettings, 'generateRelief').name('Generate Relief');
+        let controlGenerateRelief = reliefProcessingOptions.add(this._composerViewSettings, 'generateRelief').name('Generate Relief');
 
         // Save Relief
-        let controlSaveRelief = composerViewOptions.add(this._composerViewSettings, 'saveRelief').name('Save Relief');
+        let controlSaveRelief = reliefProcessingOptions.add(this._composerViewSettings, 'saveRelief').name('Save Relief');
 
         composerViewOptions.open();
+        dimensionsOptions.open();
+        reliefProcessingOptions.open();
     }    
 }

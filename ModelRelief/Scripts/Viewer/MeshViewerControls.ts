@@ -8,6 +8,7 @@
 import * as THREE  from 'three' 
 import * as dat    from 'dat-gui'
 
+import {HtmlAttributes}             from "Html"
 import {Logger, ConsoleLogger}      from 'Logger'
 import {Graphics}                   from "Graphics"
 import {MeshViewer}                 from "MeshViewer"
@@ -59,7 +60,7 @@ export class MeshViewerControls {
         // Init dat.gui and controls for the UI
         let gui = new dat.GUI({
             autoPlace: false,
-            width: 320
+            width: HtmlAttributes.DatGuiWidth
         });
         let menuDiv = document.getElementById(this._meshViewer.containerId);
         menuDiv.appendChild(gui.domElement);

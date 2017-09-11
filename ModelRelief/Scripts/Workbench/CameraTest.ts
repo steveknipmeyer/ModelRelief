@@ -10,7 +10,8 @@ import * as dat    from 'dat-gui'
 
 import {Camera}                     from 'Camera'
 import {DepthBufferFactory}         from 'DepthBufferFactory'
-import {Graphics, ObjectNames}     from 'Graphics'
+import {Graphics, ObjectNames}      from 'Graphics'
+import {HtmlAttributes}             from "Html"
 import {Loader}                     from 'Loader'
 import {Logger, ConsoleLogger}      from 'Logger'
 import {MathLibrary}                from 'Math'
@@ -164,8 +165,9 @@ export class App {
         // Init dat.gui and controls for the UI
         var gui = new dat.GUI({
             autoPlace: false,
-            width: 320
+            width: HtmlAttributes.DatGuiWidth
         });
+            
         let settingsDiv = document.getElementById('settingsControls');
         settingsDiv.appendChild(gui.domElement);
         var folderOptions = gui.addFolder('CameraTest Options');

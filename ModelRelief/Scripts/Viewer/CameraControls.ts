@@ -9,6 +9,7 @@ import * as THREE  from 'three'
 import * as dat    from 'dat-gui'
 
 import {Camera, StandardView}       from 'Camera'
+import {HtmlAttributes}             from "Html"
 import {Logger, ConsoleLogger}      from 'Logger'
 import {Graphics, ObjectNames}      from "Graphics"
 import {Services}                   from 'Services'
@@ -125,8 +126,11 @@ export class CameraControls {
         // Init dat.gui and controls for the UI
         let gui = new dat.GUI({
             autoPlace: false,
-            width: 320
+            width: HtmlAttributes.DatGuiWidth
         });
+        let minimum     : number;
+        let maximum     : number;
+        let stepSize    : number;
 
         let menuDiv = document.getElementById(this._viewer.containerId);
         menuDiv.appendChild(gui.domElement);
@@ -161,9 +165,9 @@ export class CameraControls {
         });
             
         // Field of View
-        let minimum = 25;
-        let maximum = 75;
-        let stepSize = 1;
+        minimum = 25;
+        maximum = 75;
+        stepSize = 1;
         let controlFieldOfView = cameraOptions.add(this._cameraSettings, 'fieldOfView').name('Field of View').min(minimum).max(maximum).step(stepSize).listen();;
         controlFieldOfView.onChange(function (value) {
 

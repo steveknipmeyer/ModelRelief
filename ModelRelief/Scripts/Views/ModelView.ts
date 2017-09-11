@@ -8,8 +8,8 @@
 import * as THREE  from 'three' 
 import * as dat    from 'dat-gui'
 
+import {HtmlLibrary, ContainerIds}          from "Html"
 import {Logger, ConsoleLogger}              from 'Logger'
-import {ContainerIds}                       from "ModelRelief"
 import {ModelViewer}                        from "ModelViewer"
 import {Services}                           from 'Services'
 import {Viewer}                             from "Viewer"
