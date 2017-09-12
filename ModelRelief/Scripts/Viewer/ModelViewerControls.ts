@@ -9,7 +9,7 @@ import * as THREE  from 'three'
 import * as dat    from 'dat-gui'
 
 import {DepthBufferFactory}         from "DepthBufferFactory"
-import {HtmlAttributes}             from "Html"
+import {ElementAttributes, ElementIds} from "Html"
 import {Logger, ConsoleLogger}      from 'Logger'
 import {Graphics}                   from "Graphics"
 import {ModelViewer}                from "ModelViewer"
@@ -64,11 +64,12 @@ export class ModelViewerControls {
         // Init dat.gui and controls for the UI
         let gui = new dat.GUI({
             autoPlace: false,
-            width: HtmlAttributes.DatGuiWidth
+            width: ElementAttributes.DatGuiWidth,
         });
-        
-        let menuDiv = document.getElementById(this._modelViewer.containerId);
-        menuDiv.appendChild(gui.domElement);
+        gui.domElement.id = ElementIds.ModelViewerControls;
+
+        let containerDiv = document.getElementById(this._modelViewer.containerId);
+        containerDiv.appendChild(gui.domElement);
 
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         //                                                                   ModelViewer                                                                //      

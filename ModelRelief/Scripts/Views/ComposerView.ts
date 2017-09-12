@@ -10,7 +10,7 @@ import * as dat    from 'dat-gui'
 
 import {ComposerController}                 from "ComposerController"
 import {EventType, MREvent, EventManager}   from 'EventManager'
-import {HtmlLibrary, ContainerIds}          from "Html"
+import {HtmlLibrary, ElementIds}            from "Html"
 import {Loader}                             from 'Loader'
 import {Logger, ConsoleLogger}              from 'Logger'
 import {MeshView}                           from "MeshView"
@@ -88,10 +88,10 @@ export class ComposerView {
         Services.consoleLogger.addInfoMessage('ModelRelief started');
 
         // Mesh View
-        this._meshView = new MeshView(ContainerIds.MeshCanvas);
+        this._meshView = new MeshView(ElementIds.MeshCanvas);
 
         // Model View
-        this._modelView = new ModelView(ContainerIds.ModelCanvas); 
+        this._modelView = new ModelView(ElementIds.ModelCanvas); 
 
         // Loader
         this._loader = new Loader();

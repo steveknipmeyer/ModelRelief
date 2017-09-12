@@ -8,7 +8,7 @@
 import * as THREE  from 'three' 
 import * as dat    from 'dat-gui'
 
-import {HtmlLibrary, ContainerIds}          from "Html"
+import {HtmlLibrary, ElementIds}            from "Html"
 import {Logger, ConsoleLogger}              from 'Logger'
 import {MeshViewer}                         from "MeshViewer"
 import {Services}                           from 'Services'

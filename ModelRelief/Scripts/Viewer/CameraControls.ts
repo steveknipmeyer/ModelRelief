@@ -8,12 +8,12 @@
 import * as THREE  from 'three' 
 import * as dat    from 'dat-gui'
 
-import {Camera, StandardView}       from 'Camera'
-import {HtmlAttributes}             from "Html"
-import {Logger, ConsoleLogger}      from 'Logger'
-import {Graphics, ObjectNames}      from "Graphics"
-import {Services}                   from 'Services'
-import {Viewer}                     from "Viewer"
+import {Camera, StandardView}           from 'Camera'
+import {ElementAttributes, ElementIds}  from "Html"
+import {Logger, ConsoleLogger}          from 'Logger'
+import {Graphics, ObjectNames}          from "Graphics"
+import {Services}                       from 'Services'
+import {Viewer}                         from "Viewer"
 
 /**
  * @class
@@ -126,14 +126,16 @@ export class CameraControls {
         // Init dat.gui and controls for the UI
         let gui = new dat.GUI({
             autoPlace: false,
-            width: HtmlAttributes.DatGuiWidth
+            width: ElementAttributes.DatGuiWidth
         });
+        gui.domElement.id = ElementIds.CameraControls;
+
         let minimum     : number;
         let maximum     : number;
         let stepSize    : number;
 
-        let menuDiv = document.getElementById(this._viewer.containerId);
-        menuDiv.appendChild(gui.domElement);
+        let containerDiv = document.getElementById(this._viewer.containerId);
+        containerDiv.appendChild(gui.domElement);
 
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         //                                                                     Camera                                                                   //      

@@ -8,11 +8,11 @@
 import * as THREE  from 'three' 
 import * as dat    from 'dat-gui'
 
-import {HtmlAttributes}             from "Html"
-import {Logger, ConsoleLogger}      from 'Logger'
-import {Graphics}                   from "Graphics"
-import {MeshViewer}                 from "MeshViewer"
-import {Services}                   from 'Services'
+import {ElementAttributes, ElementIds}  from "Html"
+import {Logger, ConsoleLogger}          from 'Logger'
+import {Graphics}                       from "Graphics"
+import {MeshViewer}                     from "MeshViewer"
+import {Services}                       from 'Services'
 
 /**
  * @class
@@ -60,10 +60,12 @@ export class MeshViewerControls {
         // Init dat.gui and controls for the UI
         let gui = new dat.GUI({
             autoPlace: false,
-            width: HtmlAttributes.DatGuiWidth
+            width: ElementAttributes.DatGuiWidth
         });
-        let menuDiv = document.getElementById(this._meshViewer.containerId);
-        menuDiv.appendChild(gui.domElement);
+        gui.domElement.id = ElementIds.MeshViewerControls;
+        
+        let containerDiv = document.getElementById(this._meshViewer.containerId);
+        containerDiv.appendChild(gui.domElement);
 
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         //                                                                   MeshViewer                                                                 //      

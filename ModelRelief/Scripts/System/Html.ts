@@ -5,17 +5,22 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-export enum ContainerIds {
+export enum ElementIds {
 
     Root            = "rootContainer",
     ComposerView    = "composerView",
     ModelView       = "modelView",
     ModelCanvas     = "modelCanvas",
     MeshView        = "meshView",
-    MeshCanvas      = "meshCanvas"
+    MeshCanvas      = "meshCanvas",
+
+    CameraControls       = "cameraControls",
+    ModelViewerControls  = "modelViewerControls",
+    MeshViewerControls   = "meshViewerControls",
+    ComposerControls     = "composerControls"
 }
 
-export let HtmlAttributes = {
+export let ElementAttributes = {
 
     DatGuiWidth :  256
 }

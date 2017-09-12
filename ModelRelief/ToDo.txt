@@ -1,6 +1,8 @@
 ﻿<-- Commit Notes
 
 <-- Tasks
+    Style the UI settings.
+    
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
 

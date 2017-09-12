@@ -52,11 +52,18 @@ body {
     margin-bottom: 25px;
 }
 
-/* Standard View select element */
+#cameraControls {
+    float: right
+}
+#modelViewerControls, #meshViewerControls, #composerControls {
+    float: left
+}
+
+
+/* 'Standard View' select element */
 div.c > select {
     color: #000000;
 }
-
 
 .DepthBufferFactory {
     background-color: #000000;

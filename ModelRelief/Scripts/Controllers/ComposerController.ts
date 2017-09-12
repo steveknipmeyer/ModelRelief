@@ -12,7 +12,7 @@ import {StandardView}                       from "Camera"
 import {ComposerView}                       from "ComposerView"
 import {DepthBufferFactory, Relief}         from "DepthBufferFactory"
 import {EventManager, EventType, MREvent}   from 'EventManager'
-import {HtmlAttributes}                     from "Html"
+import {ElementAttributes, ElementIds}      from "Html"
 import {Logger, ConsoleLogger}              from 'Logger'
 import {Graphics}                           from "Graphics"
 import {ModelViewer}                        from "ModelViewer"
@@ -185,10 +185,12 @@ export class ComposerController {
         // Init dat.gui and controls for the UI
         let gui = new dat.GUI({
             autoPlace: false,
-            width: HtmlAttributes.DatGuiWidth
+            width: ElementAttributes.DatGuiWidth
         });
-        let menuDiv = document.getElementById(this._composerView.containerId);
-        menuDiv.appendChild(gui.domElement);
+        gui.domElement.id = ElementIds.ComposerControls;
+
+        let containerDiv = document.getElementById(this._composerView.containerId);
+        containerDiv.appendChild(gui.domElement);
         let minimum     : number;
         let maximum     : number;
         let stepSize    : number;
