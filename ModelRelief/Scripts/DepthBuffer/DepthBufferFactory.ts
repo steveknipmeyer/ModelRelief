@@ -24,6 +24,11 @@ import {Services}               from 'Services'
 import {StopWatch}              from 'StopWatch'
 import {Tools}                  from 'Tools'
 
+/**
+ * @description Constructor parameters for DepthBufferFactory.
+ * @export
+ * @interface DepthBufferFactoryParameters
+ */
 export interface DepthBufferFactoryParameters {
 
     width            : number,                  // width of DB
@@ -38,15 +43,22 @@ export interface DepthBufferFactoryParameters {
     addCanvasToDOM?  : boolean                  // visible canvas; add to HTML
 }
 
+/**
+ * @description Mesh generation parameters.
+ * @export
+ * @interface MeshGenerateParameters
+ */
 export interface MeshGenerateParameters { 
 
     camera?     : THREE.PerspectiveCamera;      // override not yet implemented 
     material?   : THREE.Material;
 }
 
-export interface ImageGenerateParameters {
-}
-
+/**
+ * @description Relief.
+ * @export
+ * @interface Relief
+ */
 export interface Relief {
 
     width       : number;                   // width of relief             
@@ -447,15 +459,6 @@ export class DepthBufferFactory {
         };
 
         return relief;
-    }
-
-    /**
-     * Generates an image from the active model and camera
-     * @param parameters Generation parameters (ImageGenerateParameters)
-     */
-    imageGenerate (parameters : ImageGenerateParameters) : Uint8Array {
-
-        return null;
     }
 //#endregion
 }

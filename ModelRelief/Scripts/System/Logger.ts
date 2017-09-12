@@ -6,8 +6,9 @@
 "use strict";
 
 /**
- * Logging Interface
- * Diagnostic logging
+ * @description Diagnostic logging.
+ * @export
+ * @interface Logger
  */
 export interface Logger {
     addErrorMessage (errorMessage : string);
@@ -19,7 +20,11 @@ export interface Logger {
 
     clearLog();
 }
-         
+
+/**
+ * @description Logging message class.
+ * @enum {number}
+ */
 enum MessageClass {
     Error   = 'logError',
     Warning = 'logWarning',

@@ -21,7 +21,11 @@ import {TrackballControls}          from 'TrackballControls'
 import {UnitTests}                  from 'UnitTests'
 import {Viewer}                     from 'Viewer'
 
-
+/**
+ * @description Caamera settings.
+ * @export
+ * @interface CameraSettings
+ */
 export interface CameraSettings {
     position:       THREE.Vector3;        // location of camera
     target:         THREE.Vector3;        // target point

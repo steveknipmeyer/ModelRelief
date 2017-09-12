@@ -4,13 +4,23 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 "use strict";
-         
+
+/**
+ * @description System event.
+ * @export
+ * @interface MREvent
+ */
 export interface MREvent {
 
     type    : EventType;
     target  : any;
 }
 
+/**
+ * @description System event type.
+ * @export
+ * @enum {number}
+ */
 export enum EventType {
 
     None,

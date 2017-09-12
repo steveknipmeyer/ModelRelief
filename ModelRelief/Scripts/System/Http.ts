@@ -6,6 +6,18 @@
 "use strict";
 
 import {Services}                           from 'Services'
+import {ReliefSettings}                     from 'ComposerController'
+
+/**
+ * @description HTTP Request to generate a relief.
+ * @interface ReliefGenerationRequest
+ */
+interface ReliefGenerationRequest {
+
+    name        : string,
+    settings    : ReliefSettings,           // UI settings
+    depthBuffer : Float32Array              // depth buffer
+}
 
 /**
  * HTTP Library
@@ -13,12 +25,19 @@ import {Services}                           from 'Services'
  * @class
  */
 export class HttpLibrary {
+
     /**
      * @constructor
      */
     constructor() {
     }
 
+    /**
+     * Post an XMLHttpRequest.
+     * @param postUrl Url to post.
+     * @param postContents Contents to post. Converted to Blob.
+     * @param onLoad  Callback for post complete.
+     */
     static postRequest(postUrl : string, postContents : any, onLoad : (this: XMLHttpRequestEventTarget, ev: Event) => any): void {
 
         let exportTag = Services.timer.mark(`Post Request: ${postUrl}`);

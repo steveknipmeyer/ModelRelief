@@ -21,33 +21,45 @@ import {OBJExporter}                        from "OBJExporter"
 import {Services}                           from 'Services'
 
 /**
+ * @description UI settings that control relief generation.
+ * @export
+ * @interface ReliefSettings
+ */
+export interface ReliefSettings {
+
+    width                   : number;               // width of mesh (model units)
+    height                  : number;               // height of mesh (model units)
+    depth                   : number;               // depth of mesh (model units)
+
+    tauThreshold            : number;               // attenutation
+    sigmaGaussianBlur       : number;               // Gaussian blur
+    sigmaGaussianSmooth     : number;               // Gaussian smoothing
+    lambdaLinearScaling     : number;               // scaling
+}
+
+/**
  * @class
  * ComposerViewSettings
  */
 class ComposerViewSettings {
 
-    _width                   : number;               // width of mesh (model units)
-    _height                  : number;               // height of mesh (model units)
-    _depth                   : number;               // depth of mesh (model units)
+    meshSettings    : ReliefSettings;
 
-    _tauThreshold            : number;               // attenutation
-    _sigmaGaussianBlur       : number;               // Gaussian blur
-    _sigmaGaussianSmooth     : number;               // Gaussian smoothing
-    _lambdaLinearScaling     : number;               // scaling
-
-    generateRelief          : () => void;
-    saveRelief              : () => void;
+    generateRelief  : () => void;
+    saveRelief      : () => void;
 
     constructor(generateRelief: () => any, saveRelief: () => any) {
 
-        this._width                  = 100.0;
-        this._height                 = 100.0;    
-        this._depth                  =   5.0;    
-
-        this._tauThreshold           = 1.0;    
-        this._sigmaGaussianBlur      = 1.0;    
-        this._sigmaGaussianSmooth    = 1.0;    
-        this._lambdaLinearScaling    = 1.0;    
+        this.meshSettings = {
+            width                  : 100.0,
+            height                 : 100.0,    
+            depth                  :   5.0,    
+    
+            tauThreshold           : 1.0,    
+            sigmaGaussianBlur      : 1.0,    
+            sigmaGaussianSmooth    : 1.0,    
+            lambdaLinearScaling    : 1.0    
+        }
             
         this.generateRelief = generateRelief;
         this.saveRelief     = saveRelief;
@@ -201,9 +213,9 @@ export class ComposerController {
         stepSize =    1.0;
 
         // Mesh Dimensions
-        let controlMeshWidth  = dimensionsOptions.add(this._composerViewSettings, '_width').name('Width').min(minimum).max(maximum).step(stepSize).listen();
-        let controlMeshHeight = dimensionsOptions.add(this._composerViewSettings, '_height').name('Height').min(minimum).max(maximum).step(stepSize).listen();
-        let controlMeshDepth  = dimensionsOptions.add(this._composerViewSettings, '_depth').name('Depth').min(minimum).max(maximum).step(stepSize).listen();
+        let controlMeshWidth  = dimensionsOptions.add(this._composerViewSettings.meshSettings, 'width').name('Width').min(minimum).max(maximum).step(stepSize).listen();
+        let controlMeshHeight = dimensionsOptions.add(this._composerViewSettings.meshSettings, 'height').name('Height').min(minimum).max(maximum).step(stepSize).listen();
+        let controlMeshDepth  = dimensionsOptions.add(this._composerViewSettings.meshSettings, 'depth').name('Depth').min(minimum).max(maximum).step(stepSize).listen();
         
         let reliefProcessingOptions = composerViewOptions.addFolder('Relief Processing');
         minimum  =    0.0;
@@ -211,10 +223,10 @@ export class ComposerController {
         stepSize =    0.1;
 
         // Relief Processing Parameters
-        let controlTauThreshold        = reliefProcessingOptions.add(this._composerViewSettings, '_tauThreshold').name('Tau Threshold').min(minimum).max(maximum).step(stepSize).listen();
-        let controlSigmaGaussianBlur   = reliefProcessingOptions.add(this._composerViewSettings, '_sigmaGaussianBlur').name('Sigma Gaussian Blur').min(minimum).max(maximum).step(stepSize).listen();
-        let controlSigmaGaussianSmooth = reliefProcessingOptions.add(this._composerViewSettings, '_sigmaGaussianSmooth').name('Sigma Gaussian Smooth').min(minimum).max(maximum).step(stepSize).listen();
-        let controlLamdaLinearScaling  = reliefProcessingOptions.add(this._composerViewSettings, '_lambdaLinearScaling').name('Lambda Linear Scaling').min(minimum).max(maximum).step(stepSize).listen();
+        let controlTauThreshold        = reliefProcessingOptions.add(this._composerViewSettings.meshSettings, 'tauThreshold').name('Tau Threshold').min(minimum).max(maximum).step(stepSize).listen();
+        let controlSigmaGaussianBlur   = reliefProcessingOptions.add(this._composerViewSettings.meshSettings, 'sigmaGaussianBlur').name('Sigma Gaussian Blur').min(minimum).max(maximum).step(stepSize).listen();
+        let controlSigmaGaussianSmooth = reliefProcessingOptions.add(this._composerViewSettings.meshSettings, 'sigmaGaussianSmooth').name('Sigma Gaussian Smooth').min(minimum).max(maximum).step(stepSize).listen();
+        let controlLamdaLinearScaling  = reliefProcessingOptions.add(this._composerViewSettings.meshSettings, 'lambdaLinearScaling').name('Lambda Linear Scaling').min(minimum).max(maximum).step(stepSize).listen();
         
         // Generate Relief
         let controlGenerateRelief = reliefProcessingOptions.add(this._composerViewSettings, 'generateRelief').name('Generate Relief');
