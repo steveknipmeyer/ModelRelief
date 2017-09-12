@@ -13,6 +13,7 @@ import {ComposerView}                       from "ComposerView"
 import {DepthBufferFactory, Relief}         from "DepthBufferFactory"
 import {EventManager, EventType, MREvent}   from 'EventManager'
 import {ElementAttributes, ElementIds}      from "Html"
+import {HttpLibrary}                        from "Http"
 import {Logger, ConsoleLogger}              from 'Logger'
 import {Graphics}                           from "Graphics"
 import {ModelViewer}                        from "ModelViewer"
@@ -112,22 +113,19 @@ export class ComposerController {
      * Saves the relief to a disk file.
      */
     saveMesh(): void {
+
         let exportTag = Services.timer.mark('Export OBJ');
         let exporter = new OBJExporter();
         let result = exporter.parse(this._relief.mesh);
 
-        let request = new XMLHttpRequest();
-
         let viewerUrl = window.location.href;
         let postUrl = viewerUrl.replace('Viewer', 'SaveMesh');
-        request.open("POST", postUrl, true);
-        request.onload = function (oEvent) {
-            // uploaded...
+        
+        let onLoad = function(ev: Event) {
+            Services.consoleLogger.addInfoMessage('Mesh saved');
         };
 
-        let blob = new Blob([result], { type: 'text/plain' });
-        request.send(blob)
-
+        HttpLibrary.postRequest(postUrl, result, onLoad);
         Services.timer.logElapsedTime(exportTag);
     }        
 
@@ -139,17 +137,14 @@ export class ComposerController {
         // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
         let exportTag = Services.timer.mark('Export DepthBuffer');
 
-        let request = new XMLHttpRequest();
-
         let viewerUrl = window.location.href;
         let postUrl = viewerUrl.replace('Viewer', 'SaveDepthBuffer');
-        request.open("POST", postUrl, true);       
-        request.onload = function (oEvent) {
-            // uploaded...
+
+        let onLoad = function(ev: Event) {
+            Services.consoleLogger.addInfoMessage('DepthBuffer saved');
         };
 
-        request.send(this._relief.depthBuffer);
-
+        HttpLibrary.postRequest(postUrl, this._relief.depthBuffer, onLoad);
         Services.timer.logElapsedTime(exportTag);
     }        
         

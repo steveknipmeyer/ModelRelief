@@ -1,17 +1,17 @@
 ﻿<-- Commit Notes
 
 <-- Tasks
-    Style the UI settings.
     
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
 
-    Base64 encoding for HttpRequest.
-        https://github.com/hughsk/tab64
-
     Create a TypeScript library for HTTP support.
         saveMesh
         saveDepthBuffer
+
+    Base64 encoding for HttpRequest.
+        https://github.com/hughsk/tab64
+
     
     Image File Creation
         ImageSharp
