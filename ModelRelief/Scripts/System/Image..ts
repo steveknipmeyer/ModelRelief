@@ -5,8 +5,26 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import {HtmlLibrary, ElementIds}   from "Html"
-import {ComposerView}              from "ComposerView"
+import {Services}                           from 'Services'
 
-let composerView = new ComposerView(ElementIds.ComposerView);
+/**
+ * @description Image formats.
+ * @export
+ * @enum {number}
+ */
+export enum ImageFormat {
+}
 
+/**
+ * Image Library
+ * General image processing support.
+ * @class
+ */
+export class ImageLibrary {
+
+    /**
+     * @constructor
+     */
+    constructor() {
+    }
+}

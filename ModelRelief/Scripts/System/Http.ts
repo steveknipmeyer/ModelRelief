@@ -5,18 +5,38 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
+import {DepthBufferFormat}                  from 'DepthBuffer'
 import {Services}                           from 'Services'
-import {ReliefSettings}                     from 'ComposerController'
+import {ReliefSettings}                     from 'Relief'
 
+export enum ServerControllerUrl {
+
+    SaveMesh        = '/Models/Save/Mesh/${id}',
+    SaveDepthBuffer = '/Models/Save/DepthBuffer/${id}'
+}
+
+/**
+ * @description Header of the Http request used to generate a relief.
+ * @interface ReliefGenerationRequestHeader
+ */
+export interface ReliefGenerationRequestHeader {
+
+        headerLength        : number,                   // total header length (bytes); fixed 10 byte hexadecimal format 0xXXXXXXXX 
+        name                : string,                   // friendly namme
+        id                  : string;                   // GUID
+        settings            : ReliefSettings,           // UI settings
+        format              : DepthBufferFormat,        // depth buffer format
+        depthBufferLength   : number                    // depth buffer length (bytes)
+    }
+    
 /**
  * @description HTTP Request to generate a relief.
  * @interface ReliefGenerationRequest
  */
-interface ReliefGenerationRequest {
+export interface ReliefGenerationRequest {
 
-    name        : string,
-    settings    : ReliefSettings,           // UI settings
-    depthBuffer : Float32Array              // depth buffer
+    header      : ReliefGenerationRequestHeader     // header
+    depthBuffer : any                               // depth buffer
 }
 
 /**

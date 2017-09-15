@@ -22,3 +22,7 @@
     height: 512px;
     background-color: #000000;
 }
+
+#cameraTestControls {
+    float: left
+}

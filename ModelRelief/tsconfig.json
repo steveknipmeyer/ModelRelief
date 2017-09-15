@@ -25,10 +25,11 @@
         "Scripts/Graphics/*",
         "Scripts/ModelExporters/*",
         "Scripts/ModelLoaders/*",
+        "Scripts/Relief/*",
         "Scripts/System/*",
         "Scripts/UnitTests/*",
         "Scripts/Views/*",
-        "Scripts/Viewer/*"
+        "Scripts/Viewers/*"
       ]
     }
   },

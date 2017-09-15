@@ -12,6 +12,22 @@ import {Graphics}             from 'Graphics'
 import {Services}             from 'Services'
 import {StopWatch}            from 'StopWatch'
 
+/**
+ * @description Caamera settings.
+ * @export
+ * @interface CameraSettings
+ */
+export interface CameraSettings {
+
+    position        : THREE.Vector3;        // location of camera
+    target          : THREE.Vector3;        // target point
+    near            : number;               // near clipping plane
+    far             : number;               // far clipping plane
+    fieldOfView     : number;               // field of view
+    
+    standardView    : StandardView;   
+}
+
 export enum StandardView {
     None,
     Front,
@@ -125,7 +141,7 @@ export class Camera {
      * @static
      * @param {THREE.PerspectiveCamera} camera Camera to update.
      * @param {THREE.Group} model Model to fit.
-     * @returns {CameraSettings} 
+     * @returns {THREE.PerspectiveCamera} 
      */
     static getFitViewCamera (cameraTemplate : THREE.PerspectiveCamera, model : THREE.Group, ) : THREE.PerspectiveCamera { 
 

@@ -5,6 +5,20 @@
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
 
+    HTTP
+        GenerateRelief : Process a relief from a DepthBuffer.
+            HTTP Request
+                ReliefSettings
+                DepthBuffer
+            HTTP Response Response
+                DepthBuffer                
+
+        SaveRelief : Save the settings used to generate a relief.
+            CameraSettings
+            ReliefSettings
+            Mesh
+            DepthBuffer
+
     Base64 encoding for HttpRequest.
         https://github.com/beatgammit/base64-js
         https://github.com/hughsk/tab64
@@ -123,6 +137,7 @@
 
 <-- Database Design   
 
+    SqlLite
     How can JSON files be used to configure the projects?
     JSON will be used to drive the API!
 

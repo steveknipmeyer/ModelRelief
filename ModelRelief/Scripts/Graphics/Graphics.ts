@@ -30,7 +30,7 @@ export enum ObjectNames {
  */
 export class Graphics {
 
-    /**
+    /** 
      * @constructor
      */
     constructor() {

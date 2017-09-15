@@ -340,6 +340,9 @@ gulp.task('serve', function () {
 
         target: "localhost:60655/Models/Viewer/5"
     }
+    // browser: 'google chrome canary'
+//  Canary    
+//  browser: "C:/Users/Steve Knipmeyer/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
   });
 
   gulp.watch([sourceConfig.shaders + '*.glsl'],                   ['buildShadersReload']);

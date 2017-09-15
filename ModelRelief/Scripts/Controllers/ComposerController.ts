@@ -18,24 +18,8 @@ import {Logger, ConsoleLogger}              from 'Logger'
 import {Graphics}                           from "Graphics"
 import {ModelViewer}                        from "ModelViewer"
 import {OBJExporter}                        from "OBJExporter"
+import {ReliefSettings}                     from 'Relief'
 import {Services}                           from 'Services'
-
-/**
- * @description UI settings that control relief generation.
- * @export
- * @interface ReliefSettings
- */
-export interface ReliefSettings {
-
-    width                   : number;               // width of mesh (model units)
-    height                  : number;               // height of mesh (model units)
-    depth                   : number;               // depth of mesh (model units)
-
-    tauThreshold            : number;               // attenutation
-    sigmaGaussianBlur       : number;               // Gaussian blur
-    sigmaGaussianSmooth     : number;               // Gaussian smoothing
-    lambdaLinearScaling     : number;               // scaling
-}
 
 /**
  * @class

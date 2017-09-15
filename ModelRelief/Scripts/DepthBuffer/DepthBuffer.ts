@@ -15,6 +15,13 @@ import {MathLibrary}        from 'Math'
 import {Services}           from 'Services'
 import {StopWatch}          from 'StopWatch'
 
+export enum DepthBufferFormat {
+    
+    Raw,        // floating point array
+    PNG,        // PNG format
+    JPG         // JPG format
+}
+
 interface FacePair {
         
     vertices : THREE.Vector3[];

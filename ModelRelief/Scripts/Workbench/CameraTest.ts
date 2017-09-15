@@ -8,31 +8,19 @@
 import * as THREE                   from 'three'
 import * as dat    from 'dat-gui'
 
-import {Camera}                     from 'Camera'
-import {DepthBufferFactory}         from 'DepthBufferFactory'
-import {Graphics, ObjectNames}      from 'Graphics'
-import {ElementAttributes}             from "Html"
-import {Loader}                     from 'Loader'
-import {Logger, ConsoleLogger}      from 'Logger'
-import {MathLibrary}                from 'Math'
-import {MeshViewer}                 from "MeshViewer"
-import {Services}                   from 'Services'
-import {TrackballControls}          from 'TrackballControls'
-import {UnitTests}                  from 'UnitTests'
-import {Viewer}                     from 'Viewer'
+import {Camera}                         from 'Camera'
+import {DepthBufferFactory}             from 'DepthBufferFactory'
+import {Graphics, ObjectNames}          from 'Graphics'
+import {ElementAttributes, ElementIds}  from "Html"
+import {Loader}                         from 'Loader'
+import {Logger, ConsoleLogger}          from 'Logger'
+import {MathLibrary}                    from 'Math'
+import {MeshViewer}                     from "MeshViewer"
+import {Services}                       from 'Services'
+import {TrackballControls}              from 'TrackballControls'
+import {UnitTests}                      from 'UnitTests'
+import {Viewer}                         from 'Viewer'
 
-/**
- * @description Caamera settings.
- * @export
- * @interface CameraSettings
- */
-export interface CameraSettings {
-    position:       THREE.Vector3;        // location of camera
-    target:         THREE.Vector3;        // target point
-    near:           number;               // near clipping plane
-    far:            number;               // far clipping plane
-    fieldOfView:    number;               // field of view
-}
 
 /**
  * @class
@@ -106,8 +94,8 @@ export class App {
         let nearPlane = -boundingBoxView.max.z;
         let farPlane  = -boundingBoxView.min.z;
 
-        this._viewer._cameraControls._cameraSettings.nearClippingPlane = nearPlane;
-        this._viewer._cameraControls._cameraSettings.farClippingPlane  = farPlane;
+        this._viewer._cameraControls._cameraControlSettings.cameraSettings.near = nearPlane;
+        this._viewer._cameraControls._cameraControlSettings.cameraSettings.far  = farPlane;
 
         this._viewer.camera.near = nearPlane;
         this._viewer.camera.far  = farPlane;
@@ -171,7 +159,8 @@ export class App {
             autoPlace: false,
             width: ElementAttributes.DatGuiWidth
         });
-            
+        gui.domElement.id = ElementIds.CameraTestControls;
+        
         let settingsDiv = document.getElementById('settingsControls');
         settingsDiv.appendChild(gui.domElement);
         var folderOptions = gui.addFolder('CameraTest Options');
