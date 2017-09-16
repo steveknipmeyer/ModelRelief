@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Identity;
 
 using ModelRelief.Entitities;
 using ModelRelief.Services;
-using ModelRelief.Server;
+using ModelRelief.Utility;
 using ModelRelief.ViewModels;
 
 namespace ModelRelief.Controllers
@@ -118,28 +118,6 @@ namespace ModelRelief.Controllers
             _modelLocator.Commit();
 
             return RedirectToAction ("Viewer", new { Id = model.Id});           
-        }
-
-        [Route("[controller]/[action]/{modelId}")]
-        public void SaveMesh(int modelid)
-        {
-            Model3d model = _modelLocator.Find(modelid);
-            if (model == null)
-                return;
-
-            string fileName = $"{_hostingEnvironment.WebRootPath}{model.Path}{Path.GetFileNameWithoutExtension(model.Name)}.relief.obj";
-            Files.WriteFileFromStream(fileName, this.Request.Body);
-        }
-
-        [Route("[controller]/[action]/{modelId}")]
-        public void SaveDepthBuffer(int modelid)
-        {
-            Model3d model = _modelLocator.Find(modelid);
-            if (model == null)
-                return;
-
-            string fileName = $"{_hostingEnvironment.WebRootPath}{model.Path}{Path.GetFileNameWithoutExtension(model.Name)}.depthBuffer";
-            Files.WriteFileFromStream(fileName, this.Request.Body);
         }
     }        
 }

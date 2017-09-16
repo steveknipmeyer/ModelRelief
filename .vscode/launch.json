@@ -62,7 +62,7 @@
             "request": "attach",
             // https: //github.com/OmniSharp/omnisharp-vscode/issues/897
             // "processId": "${command:pickProcess}",
-            "processId": "12292"
+            "processId": "8628"
         },
         {
             "name": "Python",

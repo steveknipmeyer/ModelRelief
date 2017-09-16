@@ -9,35 +9,10 @@ import {DepthBufferFormat}                  from 'DepthBuffer'
 import {Services}                           from 'Services'
 import {ReliefSettings}                     from 'Relief'
 
-export enum ServerControllerUrl {
-
-    SaveMesh        = '/Models/Save/Mesh/${id}',
-    SaveDepthBuffer = '/Models/Save/DepthBuffer/${id}'
-}
-
-/**
- * @description Header of the Http request used to generate a relief.
- * @interface ReliefGenerationRequestHeader
- */
-export interface ReliefGenerationRequestHeader {
-
-        headerLength        : number,                   // total header length (bytes); fixed 10 byte hexadecimal format 0xXXXXXXXX 
-        name                : string,                   // friendly namme
-        id                  : string;                   // GUID
-        settings            : ReliefSettings,           // UI settings
-        format              : DepthBufferFormat,        // depth buffer format
-        depthBufferLength   : number                    // depth buffer length (bytes)
+export enum ServerEndPoints {
+        MeshesPost        = '/Meshes/Create',
+        DepthBuffersPost  = '/DepthBuffers/Create'
     }
-    
-/**
- * @description HTTP Request to generate a relief.
- * @interface ReliefGenerationRequest
- */
-export interface ReliefGenerationRequest {
-
-    header      : ReliefGenerationRequestHeader     // header
-    depthBuffer : any                               // depth buffer
-}
 
 /**
  * HTTP Library

@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ModelRelief.Server
+namespace ModelRelief.Utility
 {
     public class Images
     {

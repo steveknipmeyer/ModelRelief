@@ -13,7 +13,7 @@ import {ComposerView}                       from "ComposerView"
 import {DepthBufferFactory, Relief}         from "DepthBufferFactory"
 import {EventManager, EventType, MREvent}   from 'EventManager'
 import {ElementAttributes, ElementIds}      from "Html"
-import {HttpLibrary}                        from "Http"
+import {HttpLibrary, ServerEndPoints}       from "Http"
 import {Logger, ConsoleLogger}              from 'Logger'
 import {Graphics}                           from "Graphics"
 import {ModelViewer}                        from "ModelViewer"
@@ -114,8 +114,7 @@ export class ComposerController {
         let exporter = new OBJExporter();
         let result = exporter.parse(this._relief.mesh);
 
-        let viewerUrl = window.location.href;
-        let postUrl = viewerUrl.replace('Viewer', 'SaveMesh');
+        let postUrl = `${window.location.protocol}//${window.location.host}//${ServerEndPoints.MeshesPost}`;
         
         let onLoad = function(ev: Event) {
             Services.consoleLogger.addInfoMessage('Mesh saved');
@@ -133,9 +132,8 @@ export class ComposerController {
         // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
         let exportTag = Services.timer.mark('Export DepthBuffer');
 
-        let viewerUrl = window.location.href;
-        let postUrl = viewerUrl.replace('Viewer', 'SaveDepthBuffer');
-
+        let postUrl = `${window.location.protocol}//${window.location.host}//${ServerEndPoints.DepthBuffersPost}`;
+        
         let onLoad = function(ev: Event) {
             Services.consoleLogger.addInfoMessage('DepthBuffer saved');
         };
