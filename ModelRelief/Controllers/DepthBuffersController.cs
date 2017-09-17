@@ -22,8 +22,7 @@ using ModelRelief.ViewModels;
 namespace ModelRelief.Controllers
 {
     [Authorize]
-    public class DepthBuffersController 
-     : Controller
+    public class DepthBuffersController : Controller
     {
         IHostingEnvironment _hostingEnvironment;
         IModel3dLocator     _modelLocator;

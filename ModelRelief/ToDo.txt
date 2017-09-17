@@ -1,43 +1,44 @@
 ﻿<-- Commit Notes
 
 <-- Tasks
+
+<-- API
+    Goal : Roundtrip a scaled mesh.
+        Scale with a Python processor.
+
     Add api to path for API requests.
     Database schema?
     Introduce user folders for owned resources.
     API authentication?
     ModelLocator -> ResourceLocator
 
-    Goal : Roundtrip a scaled mesh.
-        Scale with a Python processor.
-
-    API
-        How is byte ordering (little/big endian) handled in HTTP requests?
-            http://calculist.org/blog/2012/04/25/the-little-endian-web/
-            
-        URI Resources
-            Model
-            Mesh
-            Camera
-            MeshTransform
-            DepthBuffer
-            Image
+    How is byte ordering (little/big endian) handled in HTTP requests?
+        http://calculist.org/blog/2012/04/25/the-little-endian-web/
         
-        First create resources and then reference them in query parameters?
+    URI Resources
+        Model
+        Mesh
+        Camera
+        MeshTransform
+        DepthBuffer
+        Image
+    
+    First create resources and then reference them in query parameters?
 
-        https://stackoverflow.com/questions/33279153/rest-api-file-ie-images-processing-best-practices
+    https://stackoverflow.com/questions/33279153/rest-api-file-ie-images-processing-best-practices
 
-        DepthBuffer Post
-        Mesh Post
-        MeshTransform Post
-        Camera Post
+    DepthBuffer Post
+    Mesh Post
+    MeshTransform Post
+    Camera Post
 
-        Relief Post: Process a relief from a DepthBuffer.
-            HTTP Request
-                MeshTransform Id
-                DepthBuffer Id
-            HTTP Response
-                URL (DepthBuffer)
-                URL (Mesh)
+    Relief Post: Process a relief from a DepthBuffer.
+        HTTP Request
+            MeshTransform Id
+            DepthBuffer Id
+        HTTP Response
+            URL (DepthBuffer)
+            URL (Mesh)
 
     Base64 encoding for HttpRequest.
         https://github.com/beatgammit/base64-js
@@ -48,7 +49,7 @@
         Create a 16 bit PNG from the depth data.
 
     Export    
-        Refactor Save to use async/await.
+        Refactor FileSave to use async/await.
 
     Experiment with precision setting in THREE.WebGLRenderer.
 
@@ -108,6 +109,7 @@
         Install additional IIS components?
 
     Memory management!
+        https://blog.sessionstack.com/how-javascript-works-memory-management-how-to-handle-4-common-memory-leaks-3f28b94cfbec
 
 <-- Tools
 

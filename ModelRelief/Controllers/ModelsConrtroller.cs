@@ -25,11 +25,13 @@ namespace ModelRelief.Controllers
     public class ModelsController : Controller
     {
         IHostingEnvironment _hostingEnvironment;
+        UserManager<User>   _userManager;
         IModel3dLocator     _modelLocator;
 
-        public ModelsController(IHostingEnvironment hostingEnvironment, IModel3dLocator modelLocator)
+        public ModelsController(IHostingEnvironment hostingEnvironment, UserManager<User> userManager, IModel3dLocator modelLocator)
         {
             _hostingEnvironment = hostingEnvironment;
+            _userManager        = userManager;
             _modelLocator       = modelLocator;
         }
 
@@ -42,7 +44,8 @@ namespace ModelRelief.Controllers
 
         [Route ("[controller]/[action]/{modelId}")]
         public IActionResult Viewer(int modelid)
-        {           
+        {   
+            string userId = this.User.GetUserId();
             Model3d model = _modelLocator.Find(modelid);
 
             if (model == null)
