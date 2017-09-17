@@ -26,27 +26,27 @@ namespace ModelRelief.Controllers
     {
         IHostingEnvironment _hostingEnvironment;
         UserManager<User>   _userManager;
-        IResourcesLocator     _resourceLocator;
+        IResourcesProvider  _resourceProvider;
 
-        public ModelsController(IHostingEnvironment hostingEnvironment, UserManager<User> userManager, IResourcesLocator resourceLocator)
+        public ModelsController(IHostingEnvironment hostingEnvironment, UserManager<User> userManager, IResourcesProvider resourceProvider)
         {
             _hostingEnvironment = hostingEnvironment;
             _userManager        = userManager;
-            _resourceLocator    = resourceLocator;
+            _resourceProvider   = resourceProvider;
         }
 
         [AllowAnonymous]
         public IActionResult Index()
         {    
-            IEnumerable<Model3d> models = _resourceLocator.Models.GetAll();
+            IEnumerable<Model3d> models = _resourceProvider.Models.GetAll();
             return View(models);
         }
 
         [Route ("[controller]/[action]/{modelId}")]
-        public IActionResult Viewer(int modelid)
+        public IActionResult Viewer(string modelid)
         {   
             string userId = this.User.GetUserId();
-            Model3d model = _resourceLocator.Models.Find(modelid);
+            Model3d model = _resourceProvider.Models.Find(modelid);
 
             if (model == null)
                 return Content(String.Format("Model not found: {0}", modelid));
@@ -76,17 +76,17 @@ namespace ModelRelief.Controllers
                 Format = editModel.Format
             };
 
-            model = _resourceLocator.Models.Add (model);
-            _resourceLocator.Models.Commit();
+            model = _resourceProvider.Models.Add (model);
+            _resourceProvider.Models.Commit();
 
             return RedirectToAction ("Viewer", new { Id = model.Id});           
         }
 
         [HttpGet]
         [Route ("[controller]/[action]/{modelId}")]
-        public IActionResult Edit(int modelId)
+        public IActionResult Edit(string modelId)
         {           
-            Model3d model = _resourceLocator.Models.Find(modelId);
+            Model3d model = _resourceProvider.Models.Find(modelId);
             if (model == null)
                 return Content(String.Format("Model not found: {0}", modelId));
 
@@ -102,7 +102,7 @@ namespace ModelRelief.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route ("[controller]/[action]/{modelId}")]
-        public IActionResult Edit(int modelId, Model3dEditViewModel editModel)
+        public IActionResult Edit(string modelId, Model3dEditViewModel editModel)
             {           
             if (!ModelState.IsValid)
             {
@@ -110,7 +110,7 @@ namespace ModelRelief.Controllers
                 return View();
             }
 
-            Model3d model = _resourceLocator.Models.Find(modelId);
+            Model3d model = _resourceProvider.Models.Find(modelId);
             if (model == null)
                 return Content(String.Format("Model not found: {0}", modelId));
 
@@ -118,7 +118,7 @@ namespace ModelRelief.Controllers
             model.Name   = editModel.Name;
             model.Format = editModel.Format;
 
-            _resourceLocator.Models.Commit();
+            _resourceProvider.Models.Commit();
 
             return RedirectToAction ("Viewer", new { Id = model.Id});           
         }

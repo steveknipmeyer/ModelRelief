@@ -25,11 +25,11 @@ namespace ModelRelief.Controllers
     public class MeshesController : Controller
     {
         IHostingEnvironment _hostingEnvironment;
-        IResourcesLocator    _resourceLocator;
-        public MeshesController(IHostingEnvironment hostingEnvironment, IResourcesLocator resourceLocator)
+        IResourcesProvider  _resourceProvider;
+        public MeshesController(IHostingEnvironment hostingEnvironment, IResourcesProvider resourceProvider)
         {
             _hostingEnvironment = hostingEnvironment;
-            _resourceLocator    = resourceLocator;
+            _resourceProvider   = resourceProvider;
         }
 
         [HttpPost]

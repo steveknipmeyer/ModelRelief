@@ -1,19 +1,18 @@
 ﻿<-- Commit Notes
+    Change resource id to string so it can be used with the FileSystemResourcesLocater. 
 
 <-- Tasks
 
 <-- API
+
+    Locator -> Provider
+
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
 
-    Generics!
-    IResourceLocator
-    
     Add api to path for API requests.
-    Design database schema?
-    Introduce user folders for owned resources.
-    API authentication?
-    ModelLocator -> ResourceLocator
+    Design database schema.
+    API authentication.
 
     How is byte ordering (little/big endian) handled in HTTP requests?
         http://calculist.org/blog/2012/04/25/the-little-endian-web/

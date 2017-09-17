@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ModelRelief.Services
     {
-    public class SqlModel3dLocator : IResourceLocator<Model3d>
+    public class SqlModel3dProvider : IResourceProvider<Model3d>
         {
         private ModelReliefDbContext _context;
 
@@ -19,7 +19,7 @@ namespace ModelRelief.Services
         /// Constructor
         /// </summary>
         /// <param name="context">Database context.</param>
-        public SqlModel3dLocator(ModelReliefDbContext context)
+        public SqlModel3dProvider(ModelReliefDbContext context)
             {
             _context = context;
             }
@@ -38,9 +38,10 @@ namespace ModelRelief.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Model3d Find(int id)
+        public Model3d Find(string id)
             {
-            return _context.Models.FirstOrDefault (m => m.Id == id);
+            int modelId = Convert.ToInt32(id);
+            return _context.Models.FirstOrDefault (m => m.Id == modelId);
             }
 
         /// <summary>

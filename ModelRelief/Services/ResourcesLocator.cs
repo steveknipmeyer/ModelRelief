@@ -15,10 +15,10 @@ namespace ModelRelief.Services
     /// <summary>
     /// Interface for a generic resource.
     /// </summary>
-    public interface IResourceLocator<TResource> 
+    public interface IResourceProvider<TResource> 
     {
     IEnumerable<TResource> GetAll();
-    TResource Find (int id);
+    TResource Find (string id);
 
     TResource Add (TResource model);
     void Commit ();
@@ -27,8 +27,9 @@ namespace ModelRelief.Services
     /// <summary>
     /// Interface for locating resources.
     /// </summary>
-    public interface IResourcesLocator
+    public interface IResourcesProvider
+    
     {
-        IResourceLocator<Model3d>  Models {get;}
+        IResourceProvider<Model3d>  Models {get;}
     }
 }

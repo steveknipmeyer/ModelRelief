@@ -22,59 +22,102 @@ namespace ModelRelief.Services
         Mesh
     }
 
-    class FileSystemResourceLocator {
+    /// <summary>
+    /// File system resource provider.
+    /// </summary>
+    class FileSystemResourceProvider {
 
         const string ModelsFolder       = "models/";
         const string DepthBuffersFolder = "depthbuffers/";
         const string MeshesFolder       = "meshes/";
-        
-        public FileSystemResourceLocator()
+
+        ResourceType _resourceType;
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public FileSystemResourceProvider(ResourceType resourceType)
             {
+            _resourceType = resourceType;
             }
 
-        public IEnumerable<Model3d> GetAll()
+        /// <summary>
+        /// Returns the default folder for a given resource type.
+        /// </summary>
+        /// <returns></returns>
+        string DefaultFolder {
+            get 
+            {
+                switch(_resourceType)
+                {
+                    case ResourceType.Model:
+                        return ModelsFolder;
+
+                    case ResourceType.DepthBuffer:
+                        return DepthBuffersFolder;
+
+                    case ResourceType.Mesh:
+                        return MeshesFolder;
+
+                    default:
+                        return "";                        
+                }
+            }
+        }
+
+        /// <summary>
+        /// Return all files.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<string> GetAll()
             {
             return null;
             }
 
-        public Model3d Find(int id)
+        /// <summary>
+        /// Find the path of a given file.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns>File path.</returns>
+        public string Find(string fileName)
             {
             return null;
             }
 
-        public Model3d Add(Model3d newModel)
+        /// <summary>
+        /// Adds a given stream as the named file.
+        /// </summary>
+        /// <param name="fileName">File name to create.</param>
+        /// <param name="stream">Stream.</param>
+        /// <returns>True/False success for file creation.</returns>
+        public bool Add(string fileName, System.IO.Stream stream)
             {
-            return null;
-            }
-
-        public void Commit()
-            {
+            return false;
             }
     }
 
     /// <summary>
-    /// File system implementation of IResourcesLocator.
+    /// File system implementation of IResourcesProvider.
     /// </summary>
-    public class FileSystemResourcesLocator : IResourcesLocator
-    {
-        
-        private IResourceLocator<Model3d> _modelLocator;
+    public class FileSystemResourcesProvider : IResourcesProvider
+    {   
+        private IResourceProvider<Model3d> _modelProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public FileSystemResourcesLocator()
+        public FileSystemResourcesProvider()
         {
-            _modelLocator = null;
+            _modelProvider = null;
         }
 
         /// <summary>
-        /// Returns the Model3d locator.
+        /// Returns the Model3d provider.
         /// </summary>
-        /// <returns>IModel3d locator</returns>
-        public IResourceLocator<Model3d> Models
+        /// <returns>IModel3d provider</returns>
+        public IResourceProvider<Model3d> Models
         {
-            get { return _modelLocator; }
+            get { return _modelProvider; }
         }
     }           
 }

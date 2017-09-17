@@ -13,30 +13,30 @@ using ModelRelief.Entitities;
 namespace ModelRelief.Services
 {
     /// <summary>
-    /// SQL implementation of IResourcesLocator.
+    /// SQL implementation of IResourcesProvider.
     /// </summary>
-    public class SqlResourcesLocator : IResourcesLocator
+    public class SqlResourcesProvider : IResourcesProvider
     {
         private ModelReliefDbContext        _context;
-        private IResourceLocator<Model3d>   _modelLocator;
+        private IResourceProvider<Model3d>   _modelProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="context">Database context.</param>
-        public SqlResourcesLocator(ModelReliefDbContext context)
+        public SqlResourcesProvider(ModelReliefDbContext context)
         {
             _context      = context;
-            _modelLocator = (new SqlModel3dLocator(_context)) as IResourceLocator<Model3d>;
+            _modelProvider = (new SqlModel3dProvider(_context)) as IResourceProvider<Model3d>;
         }
 
         /// <summary>
-        /// Returns the Model3dLocator.
+        /// Returns the Model3dProvider.
         /// </summary>
-        /// <returns>IModel3d locator</returns>
-        public IResourceLocator<Model3d> Models
+        /// <returns>IModel3d provider</returns>
+        public IResourceProvider<Model3d> Models
         {
-            get { return _modelLocator; }
+            get { return _modelProvider; }
         }
     }        
 }
