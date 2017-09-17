@@ -41,7 +41,7 @@ namespace ModelRelief
             services.AddSingleton(Configuration);
             services.AddMvc();
             services.AddSingleton<IGreeter, Greeter>();
-            services.AddScoped<IModel3dLocator, SqlModel3dLocator>();
+            services.AddScoped<IResourcesLocator, SqlResourcesLocator>();
             services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ModelRelief")));
             services.AddIdentity<User, IdentityRole>()
                     .AddEntityFrameworkStores<ModelReliefDbContext>();

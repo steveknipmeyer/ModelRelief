@@ -25,12 +25,12 @@ namespace ModelRelief.Controllers
     public class DepthBuffersController : Controller
     {
         IHostingEnvironment _hostingEnvironment;
-        IModel3dLocator     _modelLocator;
+        IResourcesLocator     _resourceLocator;
 
-        public DepthBuffersController(IHostingEnvironment hostingEnvironment, IModel3dLocator modelLocator)
+        public DepthBuffersController(IHostingEnvironment hostingEnvironment, IResourcesLocator resourceLocator)
         {
             _hostingEnvironment = hostingEnvironment;
-            _modelLocator       = modelLocator;
+            _resourceLocator    = resourceLocator;
         }
 
         [HttpPost]

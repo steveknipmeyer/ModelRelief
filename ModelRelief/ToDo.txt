@@ -6,8 +6,11 @@
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
 
+    Generics!
+    IResourceLocator
+    
     Add api to path for API requests.
-    Database schema?
+    Design database schema?
     Introduce user folders for owned resources.
     API authentication?
     ModelLocator -> ResourceLocator

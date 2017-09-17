@@ -26,19 +26,19 @@ namespace ModelRelief.Controllers
     {
         IHostingEnvironment _hostingEnvironment;
         UserManager<User>   _userManager;
-        IModel3dLocator     _modelLocator;
+        IResourcesLocator     _resourceLocator;
 
-        public ModelsController(IHostingEnvironment hostingEnvironment, UserManager<User> userManager, IModel3dLocator modelLocator)
+        public ModelsController(IHostingEnvironment hostingEnvironment, UserManager<User> userManager, IResourcesLocator resourceLocator)
         {
             _hostingEnvironment = hostingEnvironment;
             _userManager        = userManager;
-            _modelLocator       = modelLocator;
+            _resourceLocator    = resourceLocator;
         }
 
         [AllowAnonymous]
         public IActionResult Index()
         {    
-            IEnumerable<Model3d> models = _modelLocator.GetAll();
+            IEnumerable<Model3d> models = _resourceLocator.Models.GetAll();
             return View(models);
         }
 
@@ -46,7 +46,7 @@ namespace ModelRelief.Controllers
         public IActionResult Viewer(int modelid)
         {   
             string userId = this.User.GetUserId();
-            Model3d model = _modelLocator.Find(modelid);
+            Model3d model = _resourceLocator.Models.Find(modelid);
 
             if (model == null)
                 return Content(String.Format("Model not found: {0}", modelid));
@@ -76,8 +76,8 @@ namespace ModelRelief.Controllers
                 Format = editModel.Format
             };
 
-            model = _modelLocator.Add (model);
-            _modelLocator.Commit();
+            model = _resourceLocator.Models.Add (model);
+            _resourceLocator.Models.Commit();
 
             return RedirectToAction ("Viewer", new { Id = model.Id});           
         }
@@ -86,7 +86,7 @@ namespace ModelRelief.Controllers
         [Route ("[controller]/[action]/{modelId}")]
         public IActionResult Edit(int modelId)
         {           
-            Model3d model = _modelLocator.Find(modelId);
+            Model3d model = _resourceLocator.Models.Find(modelId);
             if (model == null)
                 return Content(String.Format("Model not found: {0}", modelId));
 
@@ -110,7 +110,7 @@ namespace ModelRelief.Controllers
                 return View();
             }
 
-            Model3d model = _modelLocator.Find(modelId);
+            Model3d model = _resourceLocator.Models.Find(modelId);
             if (model == null)
                 return Content(String.Format("Model not found: {0}", modelId));
 
@@ -118,7 +118,7 @@ namespace ModelRelief.Controllers
             model.Name   = editModel.Name;
             model.Format = editModel.Format;
 
-            _modelLocator.Commit();
+            _resourceLocator.Models.Commit();
 
             return RedirectToAction ("Viewer", new { Id = model.Id});           
         }
