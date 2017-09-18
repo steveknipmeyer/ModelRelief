@@ -23,9 +23,9 @@ namespace ModelRelief.Services
     }
 
     /// <summary>
-    /// File system resource provider.
+    /// File system resource helper.
     /// </summary>
-    class FileSystemResourceProvider {
+    class FileSystemResourceHelper {
 
         const string ModelsFolder       = "models/";
         const string DepthBuffersFolder = "depthbuffers/";
@@ -36,7 +36,7 @@ namespace ModelRelief.Services
         /// <summary>
         /// Constructor.
         /// </summary>
-        public FileSystemResourceProvider(ResourceType resourceType)
+        public FileSystemResourceHelper(ResourceType resourceType)
             {
             _resourceType = resourceType;
             }

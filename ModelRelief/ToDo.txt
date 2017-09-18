@@ -1,11 +1,10 @@
 ﻿<-- Commit Notes
     Change resource id to string so it can be used with the FileSystemResourcesLocater. 
+    Locator -> Provider
 
 <-- Tasks
 
 <-- API
-
-    Locator -> Provider
 
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
@@ -20,9 +19,10 @@
     URI Resources
         Model
         Mesh
+        DepthBuffer
+        
         Camera
         MeshTransform
-        DepthBuffer
         Image
     
     First create resources and then reference them in query parameters?

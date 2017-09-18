@@ -11,8 +11,9 @@ using System.Threading.Tasks;
 
 namespace ModelRelief.Services
     {
+#region SQL        
     public class SqlModel3dProvider : IResourceProvider<Model3d>
-        {
+    {
         private ModelReliefDbContext _context;
 
         /// <summary>
@@ -20,9 +21,64 @@ namespace ModelRelief.Services
         /// </summary>
         /// <param name="context">Database context.</param>
         public SqlModel3dProvider(ModelReliefDbContext context)
-            {
+        {
             _context = context;
-            }
+        }
+
+        /// <summary>
+        /// Return all models.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Model3d> GetAll()
+        {
+            return _context.Models;
+        }
+
+        /// <summary>
+        /// Find a specific model by Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Model3d Find(string id)
+        {
+            int modelId = Convert.ToInt32(id);
+            return _context.Models.FirstOrDefault (m => m.Id == modelId);
+        }
+
+        /// <summary>
+        /// Add a new model.
+        /// </summary>
+        /// <param name="newModel"></param>
+        /// <returns></returns>
+        public Model3d Add(Model3d newModel)
+        {
+            _context.Add (newModel);
+            _context.SaveChanges();
+            return newModel;
+        }
+
+        /// <summary>
+        /// Commit all pending changes.
+        /// </summary>
+        public void Commit()
+        {
+            _context.SaveChanges();
+        }
+    }
+#endregion
+
+#region File System
+    public class FileSystemModel3dProvider : IResourceProvider<Model3d>
+    {
+        FileSystemResourceHelper _fileSystemHelper;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public FileSystemModel3dProvider()
+        {
+            _fileSystemHelper = new FileSystemResourceHelper(ResourceType.Model);
+        }
 
         /// <summary>
         /// Return all models.
@@ -30,7 +86,8 @@ namespace ModelRelief.Services
         /// <returns></returns>
         public IEnumerable<Model3d> GetAll()
             {
-            return _context.Models;
+            IEnumerable<string> models = _fileSystemHelper.GetAll();
+            return null;
             }
 
         /// <summary>
@@ -40,8 +97,7 @@ namespace ModelRelief.Services
         /// <returns></returns>
         public Model3d Find(string id)
             {
-            int modelId = Convert.ToInt32(id);
-            return _context.Models.FirstOrDefault (m => m.Id == modelId);
+            return null;
             }
 
         /// <summary>
@@ -51,9 +107,7 @@ namespace ModelRelief.Services
         /// <returns></returns>
         public Model3d Add(Model3d newModel)
             {
-            _context.Add (newModel);
-            _context.SaveChanges();
-            return newModel;
+            return null;
             }
 
         /// <summary>
@@ -61,7 +115,8 @@ namespace ModelRelief.Services
         /// </summary>
         public void Commit()
             {
-            _context.SaveChanges();
+            // NOOP
             }
         }
     }
+#endregion    
