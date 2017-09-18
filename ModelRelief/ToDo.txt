@@ -3,8 +3,16 @@
     Locator -> Provider
 
 <-- Tasks
+    Centralize path definitions.
+        $"{rootPath}/store/users/${UserId}/${resourcePath}"
+
+    Perform server logging.
+    Throwing policy.
+        https://stackoverflow.com/questions/2999298/difference-between-throw-and-throw-new-exception        
 
 <-- API
+    Store paths in database!
+        https://stackoverflow.com/questions/25604894/do-we-really-need-a-table-in-database-to-store-file-path-of-image-if-images-are
 
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.

@@ -45,7 +45,6 @@ namespace ModelRelief.Controllers
         [Route ("[controller]/[action]/{modelId}")]
         public IActionResult Viewer(string modelid)
         {   
-            string userId = this.User.GetUserId();
             Model3d model = _resourceProvider.Models.Find(modelid);
 
             if (model == null)

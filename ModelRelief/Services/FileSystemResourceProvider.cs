@@ -8,7 +8,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+
 using ModelRelief.Entitities;
+using ModelRelief.Utility;
 
 namespace ModelRelief.Services
 {
@@ -23,45 +27,69 @@ namespace ModelRelief.Services
     }
 
     /// <summary>
-    /// File system resource helper.
+    /// File system resource provider.
     /// </summary>
-    class FileSystemResourceHelper {
+    class FileSystemResourceProvider {
 
-        const string ModelsFolder       = "models/";
-        const string DepthBuffersFolder = "depthbuffers/";
-        const string MeshesFolder       = "meshes/";
+        const string ModelsFolder       = @"models\";
+        const string DepthBuffersFolder = @"depthbuffers\";
+        const string MeshesFolder       = @"meshes\";
 
-        ResourceType _resourceType;
+        private ResourceType         _resourceType;
+        private IHttpContextAccessor _httpContext;
+        private IHostingEnvironment  _hostingEnvironment;
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public FileSystemResourceHelper(ResourceType resourceType)
+        public FileSystemResourceProvider(ResourceType resourceType, IHttpContextAccessor httpContext, IHostingEnvironment hostingEnvironment)
             {
-            _resourceType = resourceType;
+            _resourceType       = resourceType;
+            _httpContext        = httpContext;
+            _hostingEnvironment = hostingEnvironment;
             }
 
         /// <summary>
         /// Returns the default folder for a given resource type.
         /// </summary>
-        /// <returns></returns>
-        string DefaultFolder {
+        /// <returns>Default folder</returns>
+        public string DefaultFolder {
             get 
             {
+                string resourcePath = "";    
                 switch(_resourceType)
                 {
                     case ResourceType.Model:
-                        return ModelsFolder;
+                        resourcePath =  ModelsFolder;
+                        break;
 
                     case ResourceType.DepthBuffer:
-                        return DepthBuffersFolder;
+                        resourcePath =  DepthBuffersFolder;
+                        break;
 
                     case ResourceType.Mesh:
-                        return MeshesFolder;
+                        resourcePath =  MeshesFolder;
+                        break;
 
                     default:
-                        return "";                        
+                        {
+                            var ex = new Exception($"Invalid resource type: {_resourceType}");
+                            throw ex;
+                        }
                 }
+                var rootPath = _hostingEnvironment.WebRootPath;
+                var defaulFolder = $@"{rootPath}\store\users\{UserId}\{resourcePath}";
+                return defaulFolder;
+            }
+        }
+        /// <summary>
+        /// Returns the current user ID.
+        /// </summary>
+        /// <returns>User ID</returns>
+        public string UserId {
+            get
+            {
+                return _httpContext.HttpContext.User.GetUserId();
             }
         }
 
@@ -95,29 +123,4 @@ namespace ModelRelief.Services
             return false;
             }
     }
-
-    /// <summary>
-    /// File system implementation of IResourcesProvider.
-    /// </summary>
-    public class FileSystemResourcesProvider : IResourcesProvider
-    {   
-        private IResourceProvider<Model3d> _modelProvider;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public FileSystemResourcesProvider()
-        {
-            _modelProvider = null;
-        }
-
-        /// <summary>
-        /// Returns the Model3d provider.
-        /// </summary>
-        /// <returns>IModel3d provider</returns>
-        public IResourceProvider<Model3d> Models
-        {
-            get { return _modelProvider; }
-        }
-    }           
 }

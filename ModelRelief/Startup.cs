@@ -40,7 +40,7 @@ namespace ModelRelief
             {
             services.AddSingleton(Configuration);
             services.AddMvc();
-            services.AddSingleton<IGreeter, Greeter>();
+            services.AddSingleton<Services.IConfigurationProvider, Services.ConfigurationProvider>();
             services.AddScoped<IResourcesProvider, SqlResourcesProvider>();
             services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ModelRelief")));
             services.AddIdentity<User, IdentityRole>()
@@ -48,7 +48,7 @@ namespace ModelRelief
             }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IGreeter greeter)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, Services.IConfigurationProvider greeter)
             {
             loggerFactory.AddConsole();
 

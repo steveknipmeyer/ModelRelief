@@ -32,6 +32,7 @@
             "args": [],
             "cwd": "${workspaceRoot}/ModelRelief",
             "stopAtEntry": false,
+            "enableStepFiltering": false,
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {
                 // N.B. Set to true when using independently of the compound profiles.

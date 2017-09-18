@@ -11,23 +11,23 @@ using System.Threading.Tasks;
 
 namespace ModelRelief.Services
     {
-    public interface IGreeter
+    public interface IConfigurationProvider
         {
-        string GetGreeting();
+        string GetSetting(string settingName);
         }
 
-    public class Greeter : IGreeter
+    public class ConfigurationProvider : IConfigurationProvider
         {
         public IConfiguration _configuration { get; private set; }
 
-        public Greeter(IConfiguration configuration)
+        public ConfigurationProvider(IConfiguration configuration)
             {
             _configuration = configuration;
             }
 
-        public string GetGreeting()
+        public string GetSetting(string settingName)
             {
-            return _configuration["Greeting"];
+            return _configuration[settingName];
             }
         }
     }

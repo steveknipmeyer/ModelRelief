@@ -15,11 +15,11 @@ namespace ModelRelief.ViewComponents
     {
     public class FooterViewComponent : ViewComponent
         {
-        private IGreeter _greeter;
+        private IConfigurationProvider _configurationProvider;
 
-        public FooterViewComponent(IGreeter greeter)
+        public FooterViewComponent(IConfigurationProvider configurationProvider)
             {
-            _greeter = greeter;
+            _configurationProvider = configurationProvider;
             }
 
 #if false        
@@ -27,7 +27,7 @@ namespace ModelRelief.ViewComponents
             {
             // Invoke was removed from ViewComponent however this still compiles.
 
-            var greetingMessage = _greeter.GetGreeting();
+            var greetingMessage = _configurationProvider.GetGreeting("Greeting");
             return View ("Default", greetingMessage);
             }
 #endif
@@ -37,7 +37,7 @@ namespace ModelRelief.ViewComponents
             {
             // This form explicitly converts the return result to a Task.
 
-            var greetingMessage = _greeter.GetGreeting();
+            var greetingMessage = _configurationProvider.GetGreeting("Greeting");
             return Task.FromResult<IViewComponentResult>(View ("Default", greetingMessage));
             }
 #endif
@@ -51,7 +51,7 @@ namespace ModelRelief.ViewComponents
             // https://stackoverflow.com/questions/36024748/viewcomponents-in-asp-net-mvc-6-are-not-async    
             await Task.Delay(0);
 
-            var greetingMessage = _greeter.GetGreeting();
+            var greetingMessage = _configurationProvider.GetSetting("Greeting");
             return View ("Default", greetingMessage);
             }
 #endif

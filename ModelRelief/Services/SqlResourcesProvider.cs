@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+
 using ModelRelief.Entitities;
 
 namespace ModelRelief.Services
@@ -17,17 +20,15 @@ namespace ModelRelief.Services
     /// </summary>
     public class SqlResourcesProvider : IResourcesProvider
     {
-        private ModelReliefDbContext        _context;
-        private IResourceProvider<Model3d>   _modelProvider;
+        private IResourceProvider<Model3d>  _modelProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="context">Database context.</param>
-        public SqlResourcesProvider(ModelReliefDbContext context)
+        /// <param name="databaseContext">Database context.</param>
+        public SqlResourcesProvider(ModelReliefDbContext databaseContext, IHttpContextAccessor httpContextAccessor, IHostingEnvironment hostingEnvironment)
         {
-            _context      = context;
-            _modelProvider = (new SqlModel3dProvider(_context)) as IResourceProvider<Model3d>;
+            _modelProvider = (new SqlModel3dProvider(databaseContext, httpContextAccessor, hostingEnvironment)) as IResourceProvider<Model3d>;
         }
 
         /// <summary>
