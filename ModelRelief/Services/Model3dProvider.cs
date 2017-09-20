@@ -22,7 +22,6 @@ namespace ModelRelief.Services
         private ModelReliefDbContext        _databaseContext;
         private IHttpContextAccessor        _httpContext;
         private IHostingEnvironment         _hostingEnvironment;
-        private FileSystemResourceProvider  _fileSystemHelper;
 
         /// <summary>
         /// Constructor
@@ -33,8 +32,6 @@ namespace ModelRelief.Services
             _databaseContext    = databaseContext;
             _httpContext        = httpContextAccessor;
             _hostingEnvironment = hostingEnvironment;
-
-            _fileSystemHelper = new FileSystemResourceProvider(ResourceType.Model, httpContextAccessor, hostingEnvironment);
         }
 
         /// <summary>
@@ -43,7 +40,6 @@ namespace ModelRelief.Services
         /// <returns>Collection of all models.</returns>
         public IEnumerable<Model3d> GetAll()
         {   
-            string userId = _fileSystemHelper.UserId;    
             return _databaseContext.Models;
         }
 
@@ -54,7 +50,6 @@ namespace ModelRelief.Services
         /// <returns>Model with the target ID.</returns>
         public Model3d Find(string id)
         {
-            var defaultFolder = _fileSystemHelper.DefaultFolder;    
             int modelId = Convert.ToInt32(id);
             return _databaseContext.Models.FirstOrDefault (m => m.Id == modelId);
         }

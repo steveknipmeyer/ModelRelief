@@ -1,46 +1,42 @@
 ﻿<-- Commit Notes
-    Change resource id to string so it can be used with the FileSystemResourcesLocater. 
-    Locator -> Provider
 
 <-- Tasks
-    Centralize path definitions.
-        $"{rootPath}/store/users/${UserId}/${resourcePath}"
 
     Perform server logging.
     Throwing policy.
         https://stackoverflow.com/questions/2999298/difference-between-throw-and-throw-new-exception        
 
-<-- API
-    Store paths in database!
-        https://stackoverflow.com/questions/25604894/do-we-really-need-a-table-in-database-to-store-file-path-of-image-if-images-are
-
+<-- API   
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
+
+    Should URLs be lowercase?
+        https://stackoverflow.com/questions/37423468/lowercase-urls-in-net-core-rc2
+    
+    Model3d->Model ?
+        Are there any potential conflicts with the ASPNET Model property in views?
+        Differentiated through namespace?
+
+    Simplify SqlResourcesProvider?
 
     Add api to path for API requests.
     Design database schema.
     API authentication.
-
-    How is byte ordering (little/big endian) handled in HTTP requests?
-        http://calculist.org/blog/2012/04/25/the-little-endian-web/
         
     URI Resources
         Model
         Mesh
         DepthBuffer
-        
         Camera
         MeshTransform
-        Image
     
     First create resources and then reference them in query parameters?
 
-    https://stackoverflow.com/questions/33279153/rest-api-file-ie-images-processing-best-practices
+    Best Practices
+        https://stackoverflow.com/questions/33279153/rest-api-file-ie-images-processing-best-practices
 
-    DepthBuffer Post
-    Mesh Post
-    MeshTransform Post
-    Camera Post
+        How is byte ordering (little/big endian) handled in HTTP requests?
+            http://calculist.org/blog/2012/04/25/the-little-endian-web/
 
     Relief Post: Process a relief from a DepthBuffer.
         HTTP Request
@@ -169,58 +165,81 @@
 
 <-- Database Design   
 
-    SqlLite
-    How can JSON files be used to configure the projects?
-    JSON will be used to drive the API!
-
     Users
         Id
-    
-    Project
+
+    Model3d
         Id
-        Scene
-        MeshTransform
+        Name
+        Description
+        Path
+        Format (OBJ, STL)
+
+    Mesh (or Relief?)
+        Id
+        Name
+        Description
+        Path
+        Format (OBJ, STL)
     
      Scene
         Id
         Name
-        Model
-        Material
-        Lighting
-        Camera
+        Description
+
+        Model Id
+        Material Id
+        Lighting Id
+        Camera Id
 
     MeshTransform
         Id
-        Mesh Depth
-        MeshDimensions
-            Aspect
-            Base
-        Bas Relief Parameters
-            Tau Threshold
-            Sigma1 Gaussian Blur 
-            Sigma2 Gaussian Smooth
-            Lambda Linear Scaling
+        Name
+        Description
 
-    Model
+        Depth
+        Width : Height = Height(Aspect, Base)
+        
+        Tau Threshold
+        Sigma1 Gaussian Blur 
+        Sigma2 Gaussian Smooth
+        Lambda Linear Scaling
+
+    Project
         Id
         Name
-        File System Path?
-       ?Format (OBJ, STL)
+        Description
+
+        Scene Id
+        MeshTransform Id
        
     Images
         Id
         Name
-        File System Path?
-       ?Type (Depth, Mask)
-       ?Format (PNG, JPG, EXR)
+        Path
+        Type (Depth, Mask)
+        Format (PNG, JPG, EXR)
 
      Materials
         Id
-        Name       
+        Name
 
      Lighting
-        Light[]
-       
+        Light[]      
+
+    SQL Server Studio
+        http://nikgupta.net/2015/12/10/connect-localdb-from-management-studio/
+
+        C:\Program Files\Microsoft SQL Server\130\Tools\Binn
+            λ SqlLocalDB.exe info MSSQLLOCALDB
+            Name:               MSSQLLocalDB
+            Version:            13.1.4001.0
+            Shared name:
+            Owner:              VECTOR\Steve Knipmeyer
+            Auto-create:        Yes
+            State:              Running
+            Last start time:    9/19/2017 6:57:25 AM
+            Instance pipe name: np:\\.\pipe\LOCALDB#9A6B632F\tsql\query
 
 <-- Git
     TBD

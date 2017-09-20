@@ -27,6 +27,8 @@ namespace ModelRelief.Entitities
         public string Name { get; set; }
 
         public Format3d Format { get; set; }
+        
+        // https://stackoverflow.com/questions/25604894/do-we-really-need-a-table-in-database-to-store-file-path-of-image-if-images-are
         public string Path { get; set; }
 
         public Model3d()
