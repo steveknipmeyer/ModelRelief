@@ -108,13 +108,13 @@ export class ComposerController {
     /**
      * Saves the relief to a disk file.
      */
-    saveMesh(): void {
+    postMesh(): void {
 
         let exportTag = Services.timer.mark('Export OBJ');
         let exporter = new OBJExporter();
         let result = exporter.parse(this._relief.mesh);
 
-        let postUrl = `${window.location.protocol}//${window.location.host}//${ServerEndPoints.MeshesPost}`;
+        let postUrl = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiMeshes}`;
         
         let onLoad = function(ev: Event) {
             Services.consoleLogger.addInfoMessage('Mesh saved');
@@ -127,12 +127,12 @@ export class ComposerController {
     /**
      * Saves the depth buffer to a disk file.
      */
-    saveDepthBuffer(): void {
+    postDepthBuffer(): void {
 
         // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
         let exportTag = Services.timer.mark('Export DepthBuffer');
 
-        let postUrl = `${window.location.protocol}//${window.location.host}//${ServerEndPoints.DepthBuffersPost}`;
+        let postUrl = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiDepthBuffers}`;
         
         let onLoad = function(ev: Event) {
             Services.consoleLogger.addInfoMessage('DepthBuffer saved');
@@ -147,8 +147,8 @@ export class ComposerController {
      */
     saveRelief(): void {
 
-        this.saveMesh();
-        this.saveDepthBuffer();
+        this.postMesh();
+        this.postDepthBuffer();
     }
     //#endregion
 

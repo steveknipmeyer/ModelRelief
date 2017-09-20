@@ -940,9 +940,10 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Viewe
     Object.defineProperty(exports, "__esModule", { value: true });
     var DepthBufferFormat;
     (function (DepthBufferFormat) {
-        DepthBufferFormat[DepthBufferFormat["Raw"] = 0] = "Raw";
-        DepthBufferFormat[DepthBufferFormat["PNG"] = 1] = "PNG";
-        DepthBufferFormat[DepthBufferFormat["JPG"] = 2] = "JPG"; // JPG format
+        DepthBufferFormat[DepthBufferFormat["None"] = 0] = "None";
+        DepthBufferFormat[DepthBufferFormat["Raw"] = 1] = "Raw";
+        DepthBufferFormat[DepthBufferFormat["PNG"] = 2] = "PNG";
+        DepthBufferFormat[DepthBufferFormat["JPG"] = 3] = "JPG"; // JPG format
     })(DepthBufferFormat = exports.DepthBufferFormat || (exports.DepthBufferFormat = {}));
     /**
      *  Mesh cache to optimize mesh creation.
@@ -2069,8 +2070,8 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
     Object.defineProperty(exports, "__esModule", { value: true });
     var ServerEndPoints;
     (function (ServerEndPoints) {
-        ServerEndPoints["MeshesPost"] = "/Meshes/Create";
-        ServerEndPoints["DepthBuffersPost"] = "/DepthBuffers/Create";
+        ServerEndPoints["ApiMeshes"] = "api/meshes";
+        ServerEndPoints["ApiDepthBuffers"] = "api/depthbuffers";
     })(ServerEndPoints = exports.ServerEndPoints || (exports.ServerEndPoints = {}));
     /**
      * HTTP Library
@@ -3415,11 +3416,11 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
         /**
          * Saves the relief to a disk file.
          */
-        ComposerController.prototype.saveMesh = function () {
+        ComposerController.prototype.postMesh = function () {
             var exportTag = Services_7.Services.timer.mark('Export OBJ');
             var exporter = new OBJExporter_1.OBJExporter();
             var result = exporter.parse(this._relief.mesh);
-            var postUrl = window.location.protocol + "//" + window.location.host + "//" + Http_1.ServerEndPoints.MeshesPost;
+            var postUrl = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiMeshes;
             var onLoad = function (ev) {
                 Services_7.Services.consoleLogger.addInfoMessage('Mesh saved');
             };
@@ -3429,10 +3430,10 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
         /**
          * Saves the depth buffer to a disk file.
          */
-        ComposerController.prototype.saveDepthBuffer = function () {
+        ComposerController.prototype.postDepthBuffer = function () {
             // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
             var exportTag = Services_7.Services.timer.mark('Export DepthBuffer');
-            var postUrl = window.location.protocol + "//" + window.location.host + "//" + Http_1.ServerEndPoints.DepthBuffersPost;
+            var postUrl = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiDepthBuffers;
             var onLoad = function (ev) {
                 Services_7.Services.consoleLogger.addInfoMessage('DepthBuffer saved');
             };
@@ -3443,8 +3444,8 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
          * Saves the relief to a disk file.
          */
         ComposerController.prototype.saveRelief = function () {
-            this.saveMesh();
-            this.saveDepthBuffer();
+            this.postMesh();
+            this.postDepthBuffer();
         };
         //#endregion
         /**

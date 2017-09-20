@@ -79,7 +79,9 @@ namespace ModelRelief.Utility
         {
             byte[] fileStream = Files.ReadToEnd(stream);
 
-            System.IO.File.Delete(fileName);
+            if (System.IO.File.Exists(fileName))
+                System.IO.File.Delete(fileName);
+
             System.IO.File.WriteAllBytes(fileName, fileStream);
         }
     }        

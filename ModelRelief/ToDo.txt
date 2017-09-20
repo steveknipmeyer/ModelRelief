@@ -6,20 +6,38 @@
     Throwing policy.
         https://stackoverflow.com/questions/2999298/difference-between-throw-and-throw-new-exception        
 
-<-- API   
+<-- API 
+    Design Guidelines
+        https://blog.octo.com/en/design-a-rest-api/
+        http://blog.restcase.com/5-basic-rest-api-design-guidelines/
+        https://blog.octo.com/wp-content/uploads/2014/12/OCTO-Refcard_API_Design_EN_3.0.pdf
+        https://stackoverflow.com/questions/37423468/lowercase-urls-in-net-core-rc2
+
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
 
-    Should URLs be lowercase?
-        https://stackoverflow.com/questions/37423468/lowercase-urls-in-net-core-rc2
+    Create a utility URL composer.
     
+    Is a mult-part form required to post both the JSON attributes as well as the file data?
+
+    Should the URL path DepthBuffer be hyphenated?
+        depth-buffer
+
+    IResourcesProvider
+        HTTP Verb   API
+        Get         GetAll, Find
+        Post        Create
+
+        Put         Update
+        Delete      Delete  
+
     Model3d->Model ?
         Are there any potential conflicts with the ASPNET Model property in views?
         Differentiated through namespace?
 
     Simplify SqlResourcesProvider?
+        Are all the DI parameters required?
 
-    Add api to path for API requests.
     Design database schema.
     API authentication.
         

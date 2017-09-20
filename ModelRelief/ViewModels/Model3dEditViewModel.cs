@@ -19,6 +19,6 @@ namespace ModelRelief.ViewModels
         [MaxLength(64)]
         public string Name { get; set; }
 
-        public Format3d Format { get; set; }
+        public Model3dFormat Format { get; set; }
         }
     }

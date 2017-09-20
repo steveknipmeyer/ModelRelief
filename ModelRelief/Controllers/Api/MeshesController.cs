@@ -22,10 +22,12 @@ using ModelRelief.ViewModels;
 namespace ModelRelief.Controllers
 {
     [Authorize]
+    [Route("api/[controller]")]
     public class MeshesController : Controller
     {
         IHostingEnvironment _hostingEnvironment;
         IResourcesProvider  _resourceProvider;
+
         public MeshesController(IHostingEnvironment hostingEnvironment, IResourcesProvider resourceProvider)
         {
             _hostingEnvironment = hostingEnvironment;
@@ -33,20 +35,17 @@ namespace ModelRelief.Controllers
         }
 
         [HttpPost]
-        [Route("[controller]/[action]")]
-        public void Create()
+//      public void Post([FromBody] Mesh mesh )
+        public void Post()
         { 
-        #if false            
-            // How is the mesh name passed in the request? Possibly, as part of the URL.
-            // mesh/create/<meshName>
-            string meshPath = "";
-            string meshName = "";
+            // How is the mesh name passed in the request? Is a multi-part form required?
+            string meshPath = "/store/users/10754914-7e02-4bdc-ac7d-d22e6f5efebf/meshes/apiTest/";
+            string meshName = "mesh.obj";
 
-            string fileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{Path.GetFileNameWithoutExtension(meshName)}.relief.obj";
+            string fileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{meshName}";
             Files.WriteFileFromStream(fileName, this.Request.Body);
             
             // Return the mesh URL in the HTTP Response...
-        #endif            
         }
     }        
 }

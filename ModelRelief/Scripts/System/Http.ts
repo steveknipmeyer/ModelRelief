@@ -10,8 +10,8 @@ import {Services}                           from 'Services'
 import {ReliefSettings}                     from 'Relief'
 
 export enum ServerEndPoints {
-        MeshesPost        = '/Meshes/Create',
-        DepthBuffersPost  = '/DepthBuffers/Create'
+        ApiMeshes        = 'api/meshes',
+        ApiDepthBuffers  = 'api/depthbuffers'
     }
 
 /**

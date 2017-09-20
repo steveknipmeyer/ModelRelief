@@ -22,6 +22,7 @@ using ModelRelief.ViewModels;
 namespace ModelRelief.Controllers
 {
     [Authorize]
+    [Route ("api/[controller]")]
     public class DepthBuffersController : Controller
     {
         IHostingEnvironment _hostingEnvironment;
@@ -34,20 +35,17 @@ namespace ModelRelief.Controllers
         }
 
         [HttpPost]
-        [Route("[controller]/[action]")]
-        public void Create()
+//      public void Post([FromBody] DepthBuffer depthBuffer)
+        public void Post()
         { 
-        #if false            
-            // How is the depth buffer name passed in the request? Possibly, as part of the URL.
-            // mesh/create/<meshName>
-            string depthBufferPath = "";
-            string depthBufferName = "";
+            // How is the depthbuffer name passed in the request? Is a multi-part form required?
+            string depthBufferPath = "/store/users/10754914-7e02-4bdc-ac7d-d22e6f5efebf/depthbuffers/apiTest/";
+            string depthBufferName = "depthBuffer.raw";
 
-            string fileName = $"{_hostingEnvironment.WebRootPath}{depthBufferPath}{Path.GetFileNameWithoutExtension(depthBufferName)}.relief.obj";
+            string fileName = $"{_hostingEnvironment.WebRootPath}{depthBufferPath}{depthBufferName}";
             Files.WriteFileFromStream(fileName, this.Request.Body);
             
             // Return the depth buffer URL in the HTTP Response...
-        #endif            
         }
     }        
 }
