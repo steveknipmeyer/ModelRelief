@@ -41,7 +41,7 @@
                 "windows": {
                     "command": "cmd.exe",
                     // "args": "/C start ${auto-detect-url}"
-                    "args": "/C start http://localhost:60655/Models/Viewer/5"                   
+                    "args": "/C start http://localhost:60655/models/viewer/5"                   
                 },
                 "osx": {
                     "command": "open"

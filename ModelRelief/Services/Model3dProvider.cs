@@ -48,10 +48,9 @@ namespace ModelRelief.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Model with the target ID.</returns>
-        public Model3d Find(string id)
+        public Model3d Find(int id)
         {
-            int modelId = Convert.ToInt32(id);
-            return _databaseContext.Models.FirstOrDefault (m => m.Id == modelId);
+            return _databaseContext.Models.FirstOrDefault (m => m.Id == id);
         }
 
         /// <summary>

@@ -68,7 +68,7 @@ namespace ModelRelief
             // Set up custom content types -associating file extension to MIME type
             var provider = new FileExtensionContentTypeProvider();
             // Add new mappings
-            provider.Mappings[".obj"] = "text/plain";
+//          provider.Mappings[".obj"] = "text/plain";
             provider.Mappings[".mtl"] = "text/plain";
             app.UseStaticFiles(new StaticFileOptions {  
                 ContentTypeProvider = provider
@@ -89,7 +89,8 @@ namespace ModelRelief
         /// <param name="obj"></param>
         private void ConfigureRoutes(IRouteBuilder routeBuilder)
             {
-            routeBuilder.MapRoute("Default", "{controller=Home}/{action=Index}/{id?}");
+            routeBuilder.MapAreaRoute(name: "Api", areaName: "Api", template: "api/{controller}/{id?}");
+            routeBuilder.MapRoute(name: "Default", template: "{controller=Home}/{action=Index}/{id?}");
             }
 
 #if false

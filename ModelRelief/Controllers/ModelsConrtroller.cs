@@ -42,13 +42,13 @@ namespace ModelRelief.Controllers
             return View(models);
         }
 
-        [Route ("[controller]/[action]/{modelId}")]
-        public IActionResult Viewer(string modelid)
+        [Route ("[controller]/[action]/{id}")]
+        public IActionResult Viewer(int id)
         {   
-            Model3d model = _resourceProvider.Models.Find(modelid);
+            Model3d model = _resourceProvider.Models.Find(id);
 
             if (model == null)
-                return Content(String.Format("Model not found: {0}", modelid));
+                return Content(String.Format("Model not found: {0}", id));
 
             return View (model);
         }
@@ -82,12 +82,12 @@ namespace ModelRelief.Controllers
         }
 
         [HttpGet]
-        [Route ("[controller]/[action]/{modelId}")]
-        public IActionResult Edit(string modelId)
+        [Route ("[controller]/[action]/{id}")]
+        public IActionResult Edit(int id)
         {           
-            Model3d model = _resourceProvider.Models.Find(modelId);
+            Model3d model = _resourceProvider.Models.Find(id);
             if (model == null)
-                return Content(String.Format("Model not found: {0}", modelId));
+                return Content(String.Format("Model not found: {0}", id));
 
             var editModel = new Model3dEditViewModel
             {
@@ -100,8 +100,8 @@ namespace ModelRelief.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route ("[controller]/[action]/{modelId}")]
-        public IActionResult Edit(string modelId, Model3dEditViewModel editModel)
+        [Route ("[controller]/[action]/{id}")]
+        public IActionResult Edit(int id, Model3dEditViewModel editModel)
             {           
             if (!ModelState.IsValid)
             {
@@ -109,9 +109,9 @@ namespace ModelRelief.Controllers
                 return View();
             }
 
-            Model3d model = _resourceProvider.Models.Find(modelId);
+            Model3d model = _resourceProvider.Models.Find(id);
             if (model == null)
-                return Content(String.Format("Model not found: {0}", modelId));
+                return Content(String.Format("Model not found: {0}", id));
 
             // copy properties
             model.Name   = editModel.Name;

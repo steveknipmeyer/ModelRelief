@@ -23,29 +23,42 @@ namespace ModelRelief.Controllers.Api
 {
     // [Authorize]
     [Area("Api")]
-    public class DepthBuffersController : Controller
+    [Route ("api/[controller]")]        
+    public class ModelsController : Controller
     {
         IHostingEnvironment _hostingEnvironment;
         IResourcesProvider  _resourceProvider;
 
-        public DepthBuffersController(IHostingEnvironment hostingEnvironment, IResourcesProvider resourceProvider)
+        public ModelsController(IHostingEnvironment hostingEnvironment, IResourcesProvider resourceProvider)
         {
             _hostingEnvironment = hostingEnvironment;
             _resourceProvider   = resourceProvider;
         }
 
-        [HttpPost]
-//      public void Post([FromBody] DepthBuffer depthBuffer)
-        public void Post()
+        [HttpGet]
+        public IEnumerable<Model3d> Get()
         { 
-            // How is the depthbuffer name passed in the request? Is a multi-part form required?
-            string depthBufferPath = "/store/users/10754914-7e02-4bdc-ac7d-d22e6f5efebf/depthbuffers/apiTest/";
-            string depthBufferName = "depthBuffer.raw";
+            IEnumerable<Model3d> models = _resourceProvider.Models.GetAll();
+            return models;
+        }
 
-            string fileName = $"{_hostingEnvironment.WebRootPath}{depthBufferPath}{depthBufferName}";
-            Files.WriteFileFromStream(fileName, this.Request.Body);
-            
-            // Return the depth buffer URL in the HTTP Response...
+        [HttpGet("{id}")]
+        public Model3d Get(int id)
+        {
+            Model3d model = _resourceProvider.Models.Find(id);
+            return model;
+        } 
+
+        [HttpPost]
+        public Model3d Post([FromBody] Model3d model)
+        { 
+            Model3d newModel = _resourceProvider.Models.Add(new Model3d {
+                Name = model.Name
+            });                    
+            if (newModel != null)
+                _resourceProvider.Models.Commit();
+
+            return newModel;
         }
     }        
 }

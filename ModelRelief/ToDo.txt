@@ -8,10 +8,15 @@
 
 <-- API 
     Design Guidelines
-        https://blog.octo.com/en/design-a-rest-api/
-        http://blog.restcase.com/5-basic-rest-api-design-guidelines/
-        https://blog.octo.com/wp-content/uploads/2014/12/OCTO-Refcard_API_Design_EN_3.0.pdf
-        https://stackoverflow.com/questions/37423468/lowercase-urls-in-net-core-rc2
+        General
+            https://blog.octo.com/en/design-a-rest-api/
+            http://blog.restcase.com/5-basic-rest-api-design-guidelines/
+            https://blog.octo.com/wp-content/uploads/2014/12/OCTO-Refcard_API_Design_EN_3.0.pdf
+            https://stackoverflow.com/questions/37423468/lowercase-urls-in-net-core-rc2
+        Images
+            https://stackoverflow.com/questions/33279153/rest-api-file-ie-images-processing-best-practices
+        Documentation
+            https://github.com/domaindrivendev/Swashbuckle.AspNetCore
 
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
@@ -31,27 +36,26 @@
         Put         Update
         Delete      Delete  
 
+    Simplify SqlResourcesProvider?
+        Are all the DI parameters required?
+
     Model3d->Model ?
         Are there any potential conflicts with the ASPNET Model property in views?
         Differentiated through namespace?
 
-    Simplify SqlResourcesProvider?
-        Are all the DI parameters required?
-
-    Design database schema.
     API authentication.
         
     URI Resources
-        Model
-        Mesh
-        DepthBuffer
-        Camera
-        MeshTransform
+        model
+        mesh
+        depth-buffer
+        camera
+        mesh-transform
     
-    First create resources and then reference them in query parameters?
+    Existing Resources can be referenced through:
+        JSON properties
+        query parameters
 
-    Best Practices
-        https://stackoverflow.com/questions/33279153/rest-api-file-ie-images-processing-best-practices
 
         How is byte ordering (little/big endian) handled in HTTP requests?
             http://calculist.org/blog/2012/04/25/the-little-endian-web/

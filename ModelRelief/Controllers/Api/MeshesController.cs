@@ -19,10 +19,10 @@ using ModelRelief.Services;
 using ModelRelief.Utility;
 using ModelRelief.ViewModels;
 
-namespace ModelRelief.Controllers
+namespace ModelRelief.Controllers.Api
 {
-    [Authorize]
-    [Route("api/[controller]")]
+    // [Authorize]
+    [Area("Api")]
     public class MeshesController : Controller
     {
         IHostingEnvironment _hostingEnvironment;

@@ -18,7 +18,7 @@ namespace ModelRelief.Services
     public interface IResourceProvider<TResource> 
     {
     IEnumerable<TResource> GetAll();
-    TResource Find (string id);
+    TResource Find (int id);
 
     TResource Add (TResource model);
     void Commit ();
