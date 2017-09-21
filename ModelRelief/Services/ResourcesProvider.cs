@@ -19,8 +19,10 @@ namespace ModelRelief.Services
     {
     IEnumerable<TResource> GetAll();
     TResource Find (int id);
-
     TResource Add (TResource model);
+    TResource Update (TResource model);
+    void Delete (int id);
+
     void Commit ();
     }
 

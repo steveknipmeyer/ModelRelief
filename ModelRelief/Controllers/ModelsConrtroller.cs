@@ -74,9 +74,7 @@ namespace ModelRelief.Controllers
                 Name   = editModel.Name,
                 Format = editModel.Format
             };
-
             model = _resourceProvider.Models.Add (model);
-            _resourceProvider.Models.Commit();
 
             return RedirectToAction ("Viewer", new { Id = model.Id});           
         }
@@ -117,7 +115,7 @@ namespace ModelRelief.Controllers
             model.Name   = editModel.Name;
             model.Format = editModel.Format;
 
-            _resourceProvider.Models.Commit();
+            _resourceProvider.Models.Update(model);
 
             return RedirectToAction ("Viewer", new { Id = model.Id});           
         }

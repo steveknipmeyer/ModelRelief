@@ -55,10 +55,20 @@ namespace ModelRelief.Controllers.Api
             Model3d newModel = _resourceProvider.Models.Add(new Model3d {
                 Name = model.Name
             });                    
-            if (newModel != null)
-                _resourceProvider.Models.Commit();
-
             return newModel;
         }
+
+        [HttpPut]
+        public Model3d Put([FromBody] Model3d model)
+        { 
+            _resourceProvider.Models.Update(model);
+            return model;
+        }
+
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        { 
+            _resourceProvider.Models.Delete(id);
+        }        
     }        
 }

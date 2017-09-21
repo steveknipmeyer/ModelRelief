@@ -46,7 +46,7 @@ namespace ModelRelief.Services
         /// <summary>
         /// Find a specific model by Id.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Id of model</param>
         /// <returns>Model with the target ID.</returns>
         public Model3d Find(int id)
         {
@@ -57,12 +57,43 @@ namespace ModelRelief.Services
         /// Add a new model.
         /// </summary>
         /// <param name="newModel"></param>
-        /// <returns>Newly-added model.</returns>
+        /// <returns>New model.</returns>
         public Model3d Add(Model3d newModel)
         {
+            if (newModel == null)
+                return null;
+
             _databaseContext.Add (newModel);
-            _databaseContext.SaveChanges();
+            Commit();
             return newModel;
+        }
+
+        /// <summary>
+        /// Updates a model.
+        /// </summary>
+        /// <param model>Model to update</param>
+        /// <returns>Updated model.</returns>
+        public Model3d Update(Model3d model)
+        {
+            if (model == null)
+                return null;
+
+            _databaseContext.Update(model);
+            Commit();           
+            return model;
+        }
+
+        /// <summary>
+        /// Deletes a model.
+        /// </summary>
+        /// <param id>Id of model to delete</param>
+        public void Delete(int id)
+        {
+            Model3d model = _databaseContext.Models.FirstOrDefault (m => m.Id == id);
+            if (model == null)
+                return;
+            _databaseContext.Remove(model);
+            Commit();
         }
 
         /// <summary>

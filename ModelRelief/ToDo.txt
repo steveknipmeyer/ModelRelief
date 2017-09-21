@@ -7,6 +7,19 @@
         https://stackoverflow.com/questions/2999298/difference-between-throw-and-throw-new-exception        
 
 <-- API 
+    IResourcesProvider
+        HTTP Verb   API
+        Get         GetAll, Find
+        Post        Create
+        Put         Update
+        Delete      Delete  
+
+    How can database entities share a generic resource provider?
+    Simplify SqlResourcesProvider?
+        Are all the DI parameters required?
+
+    Is a mult-part form required to post both the JSON attributes as well as the file data?
+
     Design Guidelines
         General
             https://blog.octo.com/en/design-a-rest-api/
@@ -22,22 +35,9 @@
         Scale with a Python processor.
 
     Create a utility URL composer.
-    
-    Is a mult-part form required to post both the JSON attributes as well as the file data?
 
     Should the URL path DepthBuffer be hyphenated?
         depth-buffer
-
-    IResourcesProvider
-        HTTP Verb   API
-        Get         GetAll, Find
-        Post        Create
-
-        Put         Update
-        Delete      Delete  
-
-    Simplify SqlResourcesProvider?
-        Are all the DI parameters required?
 
     Model3d->Model ?
         Are there any potential conflicts with the ASPNET Model property in views?
@@ -56,10 +56,6 @@
         JSON properties
         query parameters
 
-
-        How is byte ordering (little/big endian) handled in HTTP requests?
-            http://calculist.org/blog/2012/04/25/the-little-endian-web/
-
     Relief Post: Process a relief from a DepthBuffer.
         HTTP Request
             MeshTransform Id
@@ -72,6 +68,9 @@
         https://github.com/beatgammit/base64-js
         https://github.com/hughsk/tab64
     
+        How is byte ordering (little/big endian) handled in HTTP requests?
+            http://calculist.org/blog/2012/04/25/the-little-endian-web/
+
     Image File Creation
         ImageSharp
         Create a 16 bit PNG from the depth data.
