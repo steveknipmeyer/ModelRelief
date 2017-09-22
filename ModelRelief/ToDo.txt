@@ -8,15 +8,11 @@
 
 <-- API 
     IResourcesProvider
-        HTTP Verb   API
-        Get         GetAll, Find
-        Post        Create
-        Put         Update
-        Delete      Delete  
-
-    How can database entities share a generic resource provider?
-    Simplify SqlResourcesProvider?
-        Are all the DI parameters required?
+        HTTP Verb   API             CRUD
+        Get         GetAll, Find    Read 
+        Post        Create          Create 
+        Put         Update          Update 
+        Delete      Delete          Delete
 
     Is a mult-part form required to post both the JSON attributes as well as the file data?
 

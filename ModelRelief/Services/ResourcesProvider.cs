@@ -12,18 +12,25 @@ using ModelRelief.Entitities;
 
 namespace ModelRelief.Services
 {
+    public class ModelReliefResource 
+    {
+        public int Id { get; set; }
+    }
+
     /// <summary>
     /// Interface for a generic resource.
     /// </summary>
     public interface IResourceProvider<TResource> 
-    {
-    IEnumerable<TResource> GetAll();
-    TResource Find (int id);
-    TResource Add (TResource model);
-    TResource Update (TResource model);
-    void Delete (int id);
+        where TResource : ModelReliefResource
 
-    void Commit ();
+    {
+        IEnumerable<TResource> GetAll();
+        TResource Find (int id);
+        TResource Add (TResource model);
+        TResource Update (TResource model);
+        void Delete (int id);
+
+        void Commit ();
     }
 
     /// <summary>

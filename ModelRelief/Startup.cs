@@ -68,7 +68,7 @@ namespace ModelRelief
             // Set up custom content types -associating file extension to MIME type
             var provider = new FileExtensionContentTypeProvider();
             // Add new mappings
-//          provider.Mappings[".obj"] = "text/plain";
+            provider.Mappings[".obj"] = "text/plain";
             provider.Mappings[".mtl"] = "text/plain";
             app.UseStaticFiles(new StaticFileOptions {  
                 ContentTypeProvider = provider

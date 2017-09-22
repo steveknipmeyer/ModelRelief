@@ -9,6 +9,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
+using ModelRelief.Services;
+
 namespace ModelRelief.Entitities
 {
     public enum DepthBufferFormat
@@ -19,10 +21,8 @@ namespace ModelRelief.Entitities
         JPG         // JPG format
     }
 
-    public class DepthBuffer
-        {
-        public int Id { get; set; }
-        
+    public class DepthBuffer  : ModelReliefResource
+        {       
         [Required, Display (Name = "DepthBuffer Name")]
         [MaxLength(64)]
         public string Name { get; set; }

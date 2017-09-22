@@ -9,6 +9,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
+using ModelRelief.Services;
+
 namespace ModelRelief.Entitities
     {
     public enum MeshFormat
@@ -18,10 +20,8 @@ namespace ModelRelief.Entitities
         STL             // Stereolithography
         }
 
-    public class Mesh
+    public class Mesh  : ModelReliefResource
     {
-        public int Id { get; set; }
-        
         [Required, Display (Name = "Mesh Name")]
         [MaxLength(64)]
         public string Name { get; set; }

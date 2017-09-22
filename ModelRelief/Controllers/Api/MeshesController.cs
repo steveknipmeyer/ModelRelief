@@ -23,6 +23,7 @@ namespace ModelRelief.Controllers.Api
 {
     // [Authorize]
     [Area("Api")]
+    [Route ("api/[controller]")]        
     public class MeshesController : Controller
     {
         IHostingEnvironment _hostingEnvironment;

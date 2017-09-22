@@ -9,6 +9,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
+using ModelRelief.Services;
+
 namespace ModelRelief.Entitities
     {
     public enum Model3dFormat
@@ -18,10 +20,8 @@ namespace ModelRelief.Entitities
         STL             // Stereolithography
         }
 
-    public class Model3d
-        {
-        public int Id { get; set; }
-        
+    public class Model3d : ModelReliefResource
+        {       
         [Required, Display (Name = "Model Name")]
         [MaxLength(64)]
         public string Name { get; set; }
