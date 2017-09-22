@@ -69,10 +69,17 @@ export class HttpLibrary {
         request.ontimeout  = onTimeout;
 
         request.upload.onprogress = onProgress;
-        
-        let blob = new Blob([postContents], { type: 'text/plain' }); 
+/*        
+        // file
+        let blob = new Blob([postContents], { type: 'application/octet-stream' }); 
         request.open("POST", postUrl, true);
         request.send(blob)
+*/
+        // metadata
+        let fileMetadata = JSON.stringify({name : postUrl});
+        request.open("POST", postUrl, true);
+        request.setRequestHeader("Content-type", "application/json");
+        request.send(fileMetadata);
 
         Services.timer.logElapsedTime(exportTag);
     }        

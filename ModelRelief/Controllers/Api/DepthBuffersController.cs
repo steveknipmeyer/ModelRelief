@@ -36,7 +36,7 @@ namespace ModelRelief.Controllers.Api
         }
 
         [HttpPost]
-//      public void Post([FromBody] DepthBuffer depthBuffer)
+        [Consumes("application/octet-stream")]       
         public void Post()
         { 
             // How is the depthbuffer name passed in the request? Is a multi-part form required?
@@ -47,6 +47,12 @@ namespace ModelRelief.Controllers.Api
             Files.WriteFileFromStream(fileName, this.Request.Body);
             
             // Return the depth buffer URL in the HTTP Response...
+        }
+
+        [HttpPost]
+        [Consumes("application/json")]
+        public void Post([FromBody] DepthBuffer depthBuffer)
+        { 
         }
     }        
 }

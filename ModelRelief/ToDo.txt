@@ -14,7 +14,31 @@
         Put         Update          Update 
         Delete      Delete          Delete
 
-    Is a mult-part form required to post both the JSON attributes as well as the file data?
+    File Upload
+        Use jQuery!
+        Wait for file POST to complete before initiating the second metadata POST.
+
+        // File Upload
+        Url: api/depth-buffers
+        [HttpPost]
+        [Consumes "application/octet-stream"]
+        // Returns Id
+
+        // Metadata (JSON) Upload
+        Url: api/depth-buffers
+        [HttpPost]
+        [Consumes "application/json]
+        {Id : <from 1st post>}
+
+        https://stackoverflow.com/questions/3938569/how-do-i-upload-a-file-with-metadata-using-a-rest-web-service
+
+            https://stackoverflow.com/questions/4083702/posting-a-file-and-associated-data-to-a-restful-webservice-preferably-as-json
+            https://stackoverflow.com/questions/30655582/uploading-files-and-json-data-in-the-same-request-with-jquery-ajax
+
+        https://stackoverflow.com/questions/43674504/multipart-form-data-file-upload-in-asp-net-core-web-api
+
+        MIMETypes
+            Similarly, for binary documents without specific or known subtype, application/octet-stream should be used.
 
     Design Guidelines
         General

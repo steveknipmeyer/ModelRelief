@@ -2115,9 +2115,17 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
             request.onload = onLoad;
             request.ontimeout = onTimeout;
             request.upload.onprogress = onProgress;
-            var blob = new Blob([postContents], { type: 'text/plain' });
+            /*
+                    // file
+                    let blob = new Blob([postContents], { type: 'application/octet-stream' });
+                    request.open("POST", postUrl, true);
+                    request.send(blob)
+            */
+            // metadata
+            var fileMetadata = JSON.stringify({ name: postUrl });
             request.open("POST", postUrl, true);
-            request.send(blob);
+            request.setRequestHeader("Content-type", "application/json");
+            request.send(fileMetadata);
             Services_5.Services.timer.logElapsedTime(exportTag);
         };
         return HttpLibrary;
