@@ -7,6 +7,12 @@
         https://stackoverflow.com/questions/2999298/difference-between-throw-and-throw-new-exception        
 
 <-- API 
+    https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-api/
+    ASPNET Core 2.0
+    Fluent Validation
+        https://github.com/JeremySkinner/FluentValidation
+    Mediatr
+    e-Book on API Design
     IResourcesProvider
         HTTP Verb   API             CRUD
         Get         GetAll, Find    Read 
