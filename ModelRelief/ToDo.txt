@@ -9,10 +9,12 @@
 <-- API 
     https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-api/
     ASPNET Core 2.0
+        https://stackoverflow.com/questions/45732236/the-current-net-sdk-does-not-support-targeting-net-standard-2-0-error-in-visua
     Fluent Validation
         https://github.com/JeremySkinner/FluentValidation
     Mediatr
     e-Book on API Design
+
     IResourcesProvider
         HTTP Verb   API             CRUD
         Get         GetAll, Find    Read 
