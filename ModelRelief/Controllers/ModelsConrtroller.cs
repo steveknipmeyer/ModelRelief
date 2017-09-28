@@ -13,26 +13,31 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 using ModelRelief.Entitities;
 using ModelRelief.Services;
 using ModelRelief.Utility;
 using ModelRelief.ViewModels;
 
+using Serilog;
+
 namespace ModelRelief.Controllers
 {
     [Authorize]
     public class ModelsController : Controller
     {
-        IHostingEnvironment _hostingEnvironment;
-        UserManager<User>   _userManager;
-        IResourcesProvider  _resourceProvider;
+        IHostingEnvironment         _hostingEnvironment;
+        UserManager<User>           _userManager;
+        IResourcesProvider          _resourceProvider;
+        ILogger<ModelsController>   _logger;
 
-        public ModelsController(IHostingEnvironment hostingEnvironment, UserManager<User> userManager, IResourcesProvider resourceProvider)
+        public ModelsController(IHostingEnvironment hostingEnvironment, UserManager<User> userManager, IResourcesProvider resourceProvider, ILogger<ModelsController> logger)
         {
             _hostingEnvironment = hostingEnvironment;
             _userManager        = userManager;
             _resourceProvider   = resourceProvider;
+            _logger             = logger;
         }
 
         [AllowAnonymous]
@@ -45,6 +50,9 @@ namespace ModelRelief.Controllers
         [Route ("[controller]/[action]/{id}")]
         public IActionResult Viewer(int id)
         {   
+            _logger.LogInformation("ModelsController: model = {model}", id);
+            _logger.LogWarning("ModelsController: model = {model}", id);
+
             Model3d model = _resourceProvider.Models.Find(id);
 
             if (model == null)

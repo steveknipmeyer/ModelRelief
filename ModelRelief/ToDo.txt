@@ -3,13 +3,15 @@
 <-- Tasks
 
     Perform server logging.
+        NLog
+        https://stackify.com/asp-net-core-logging-what-changed/
+        Prefix Log Viewer (Stackify) : https://stackify.com/best-log-viewer-prefix/
+
     Throwing policy.
         https://stackoverflow.com/questions/2999298/difference-between-throw-and-throw-new-exception        
 
 <-- API 
     https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-api/
-    ASPNET Core 2.0
-        https://stackoverflow.com/questions/45732236/the-current-net-sdk-does-not-support-targeting-net-standard-2-0-error-in-visua
     Fluent Validation
         https://github.com/JeremySkinner/FluentValidation
     Mediatr
@@ -80,10 +82,6 @@
         camera
         mesh-transform
     
-    Existing Resources can be referenced through:
-        JSON properties
-        query parameters
-
     Relief Post: Process a relief from a DepthBuffer.
         HTTP Request
             MeshTransform Id
@@ -141,7 +139,6 @@
             ComposerController
             (ModelController)
             (MeshController)
-
 
 <-- Viewer
 

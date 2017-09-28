@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 
+using Serilog;
+
 using ModelRelief.Entitities;
 using ModelRelief.Services;
 using ModelRelief.Utility;
@@ -53,6 +55,7 @@ namespace ModelRelief.Controllers.Api
         [Consumes("application/json")]
         public void Post([FromBody] Mesh mesh )
         { 
+            Log.Information("Model GET {@mesh}", mesh);
         }
     }        
 }
