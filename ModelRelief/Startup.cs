@@ -23,18 +23,20 @@ namespace ModelRelief
     {
         public IConfiguration Configuration { get; set; }
 
-        public Startup(IHostingEnvironment env)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="configuration">Configuration service</param>
+        public Startup(IConfiguration configuration)
         {
-            var configurationBuilder = new ConfigurationBuilder()
-                          .SetBasePath(env.ContentRootPath)
-                          .AddJsonFile("appsettings.json")
-                          .AddEnvironmentVariables();
-
-            Configuration = configurationBuilder.Build();
+            Configuration = configuration;
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to add services to the container. 
+        /// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(Configuration);
@@ -46,7 +48,13 @@ namespace ModelRelief
                     .AddEntityFrameworkStores<ModelReliefDbContext>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // 
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline. 
+        /// </summary>
+        /// <param name="app">DI IApplicationBuilder</param>
+        /// <param name="env">DI IHostingEnvironment</param>
+        /// <param name="configurationProvider">DI IConfigurationProvider</param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, Services.IConfigurationProvider configurationProvider)
         {
             if (env.IsDevelopment())
@@ -75,19 +83,6 @@ namespace ModelRelief
 
             #if false
             app.Run((context) => context.Response.WriteAsync("Invalid route"));
-            #endif
-
-            #if false
-            // N.B. Remove in production!
-            app.UseDirectoryBrowser();
-
-            app.UseWelcomePage("/welcome");
-
-            app.Run(async (context) =>
-            {
-                var message = configurationProvider.GetSetting("Greeting");
-                await context.Response.WriteAsync(message);
-           });
             #endif
         }
 

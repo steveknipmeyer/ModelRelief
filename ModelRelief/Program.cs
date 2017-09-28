@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Hosting;
 
 using Serilog;
 using Serilog.Events;
+using Microsoft.Extensions.Configuration;
 
 namespace ModelRelief
 {
@@ -24,20 +25,24 @@ namespace ModelRelief
         /// <param name="args">Arguments</param>
         public static void Main(string[] args)
         {   
-            ConfigureLogging();
+            var configuration = new ConfigurationBuilder()
+                          .SetBasePath(Directory.GetCurrentDirectory())
+                          .AddJsonFile("appsettings.json")
+                          .AddEnvironmentVariables()
+                          .Build();
+                        
+            ConfigureLogging(configuration);
             BuildWebHost(args).Run();
         }
 
         /// <summary>
         /// Configure (Serilog) Logging
         /// </summary>
-        private static void ConfigureLogging()
+        /// <param name="configuration">IConfiguration</param>
+        private static void ConfigureLogging(IConfiguration configuration)
         {
             Log.Logger = new LoggerConfiguration()
-                        .MinimumLevel.Debug()
-                        .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-                        .Enrich.FromLogContext()
-                        .WriteTo.Console()
+                        .ReadFrom.Configuration(configuration)
                         .CreateLogger();
         }
 
