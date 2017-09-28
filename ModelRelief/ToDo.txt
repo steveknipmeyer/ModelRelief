@@ -3,8 +3,10 @@
 <-- Tasks
 
     Perform server logging.
-        NLog
-        https://stackify.com/asp-net-core-logging-what-changed/
+
+        How is IConfiguration constructed?
+            Is the ConfigurationBuilder in Program active?
+
         Prefix Log Viewer (Stackify) : https://stackify.com/best-log-viewer-prefix/
 
     Throwing policy.

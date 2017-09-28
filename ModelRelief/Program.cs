@@ -25,22 +25,20 @@ namespace ModelRelief
         /// <param name="args">Arguments</param>
         public static void Main(string[] args)
         {   
-            var configuration = new ConfigurationBuilder()
-                          .SetBasePath(Directory.GetCurrentDirectory())
-                          .AddJsonFile("appsettings.json")
-                          .AddEnvironmentVariables()
-                          .Build();
-                        
-            ConfigureLogging(configuration);
+            ConfigureLogging();
             BuildWebHost(args).Run();
         }
 
         /// <summary>
         /// Configure (Serilog) Logging
         /// </summary>
-        /// <param name="configuration">IConfiguration</param>
-        private static void ConfigureLogging(IConfiguration configuration)
+        private static void ConfigureLogging()
         {
+            var configuration = new ConfigurationBuilder()
+                          .SetBasePath(Directory.GetCurrentDirectory())
+                          .AddJsonFile("appsettings.json")
+                          .Build();
+
             Log.Logger = new LoggerConfiguration()
                         .ReadFrom.Configuration(configuration)
                         .CreateLogger();
