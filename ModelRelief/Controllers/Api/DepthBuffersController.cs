@@ -23,7 +23,7 @@ namespace ModelRelief.Controllers.Api
 {
     // [Authorize]
     [Area("Api")]
-    [Route ("api/[controller]")]        
+    [Route ("api/depth-buffers")]        
     public class DepthBuffersController : Controller
     {
         IHostingEnvironment _hostingEnvironment;

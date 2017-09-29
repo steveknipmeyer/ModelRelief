@@ -63,7 +63,7 @@ namespace ModelRelief
             }
             else
             {
-                app.UseExceptionHandler(new ExceptionHandlerOptions
+            app.UseExceptionHandler(new ExceptionHandlerOptions
                 {
                     ExceptionHandler = context => context.Response.WriteAsync("Application error")
                 });

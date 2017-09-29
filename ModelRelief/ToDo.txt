@@ -1,23 +1,32 @@
 ﻿<-- Commit Notes
 
+Autoload appsettings.json for Serilog logging.
+
 <-- Tasks
 
-    Perform server logging.
-
-        How is IConfiguration constructed?
-            Is the ConfigurationBuilder in Program active?
-
-        Prefix Log Viewer (Stackify) : https://stackify.com/best-log-viewer-prefix/
-
-    Throwing policy.
-        https://stackoverflow.com/questions/2999298/difference-between-throw-and-throw-new-exception        
+    Export    
+        Refactor FileSave to use async/await.
 
 <-- API 
+    Goal : Roundtrip a scaled mesh.
+        Scale with a Python processor.
+
     https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-api/
     Fluent Validation
         https://github.com/JeremySkinner/FluentValidation
     Mediatr
     e-Book on API Design
+
+    Design Guidelines
+        General
+            https://blog.octo.com/en/design-a-rest-api/
+            http://blog.restcase.com/5-basic-rest-api-design-guidelines/
+            https://blog.octo.com/wp-content/uploads/2014/12/OCTO-Refcard_API_Design_EN_3.0.pdf
+            https://stackoverflow.com/questions/37423468/lowercase-urls-in-net-core-rc2
+        Images
+            https://stackoverflow.com/questions/33279153/rest-api-file-ie-images-processing-best-practices
+        Documentation
+            https://github.com/domaindrivendev/Swashbuckle.AspNetCore
 
     IResourcesProvider
         HTTP Verb   API             CRUD
@@ -26,7 +35,7 @@
         Put         Update          Update 
         Delete      Delete          Delete
 
-    File Upload
+    File Transfer
         Use jQuery!
         Wait for file POST to complete before initiating the second metadata POST.
 
@@ -41,30 +50,14 @@
         [HttpPost]
         [Consumes "application/json]
         {Id : <from 1st post>}
-
-        https://stackoverflow.com/questions/3938569/how-do-i-upload-a-file-with-metadata-using-a-rest-web-service
-
-            https://stackoverflow.com/questions/4083702/posting-a-file-and-associated-data-to-a-restful-webservice-preferably-as-json
-            https://stackoverflow.com/questions/30655582/uploading-files-and-json-data-in-the-same-request-with-jquery-ajax
-
-        https://stackoverflow.com/questions/43674504/multipart-form-data-file-upload-in-asp-net-core-web-api
-
-        MIMETypes
-            Similarly, for binary documents without specific or known subtype, application/octet-stream should be used.
-
-    Design Guidelines
-        General
-            https://blog.octo.com/en/design-a-rest-api/
-            http://blog.restcase.com/5-basic-rest-api-design-guidelines/
-            https://blog.octo.com/wp-content/uploads/2014/12/OCTO-Refcard_API_Design_EN_3.0.pdf
-            https://stackoverflow.com/questions/37423468/lowercase-urls-in-net-core-rc2
-        Images
-            https://stackoverflow.com/questions/33279153/rest-api-file-ie-images-processing-best-practices
-        Documentation
-            https://github.com/domaindrivendev/Swashbuckle.AspNetCore
-
-    Goal : Roundtrip a scaled mesh.
-        Scale with a Python processor.
+        
+        Relief Post: Process a relief from a DepthBuffer.
+            HTTP Request
+                MeshTransform Id
+                DepthBuffer Id
+            HTTP Response
+                URL (DepthBuffer)
+                URL (Mesh)
 
     Create a utility URL composer.
 
@@ -83,30 +76,10 @@
         depth-buffer
         camera
         mesh-transform
-    
-    Relief Post: Process a relief from a DepthBuffer.
-        HTTP Request
-            MeshTransform Id
-            DepthBuffer Id
-        HTTP Response
-            URL (DepthBuffer)
-            URL (Mesh)
 
-    Base64 encoding for HttpRequest.
-        https://github.com/beatgammit/base64-js
-        https://github.com/hughsk/tab64
-    
-        How is byte ordering (little/big endian) handled in HTTP requests?
-            http://calculist.org/blog/2012/04/25/the-little-endian-web/
-
-    Image File Creation
-        ImageSharp
-        Create a 16 bit PNG from the depth data.
-
-    Export    
-        Refactor FileSave to use async/await.
-
-    Experiment with precision setting in THREE.WebGLRenderer.
+<-- System
+    Throwing policy.
+        https://stackoverflow.com/questions/2999298/difference-between-throw-and-throw-new-exception        
 
 <-- File Transfers
         JavaScript
@@ -115,6 +88,11 @@
                 https://github.com/jimmywarting/StreamSaver.js
 
 <-- Image processing
+
+    Image File Creation
+        ImageSharp
+        Create a 16 bit PNG from the depth data.
+
     Images in ASPNET
         https://github.com/SixLabors/ImageSharp
         https://blogs.msdn.microsoft.com/dotnet/2017/01/19/net-core-image-processing/
@@ -203,6 +181,7 @@
 
 
 <-- Depth Buffer Notes
+    Experiment with precision setting in THREE.WebGLRenderer.
 
     Precision is substantially improved by moving the Near plane as close to the model as possible.
         Pulling in the Far plane does not seem to improve the precision.
@@ -212,68 +191,71 @@
 
 
 <-- Database Design   
+    How can the database be backed up?
+        Can it be relocated to another location?
 
-    Users
-        Id
+    Schema
+        Users
+            Id
 
-    Model3d
-        Id
-        Name
-        Description
-        Path
-        Format (OBJ, STL)
+        Model3d
+            Id
+            Name
+            Description
+            Path
+            Format (OBJ, STL)
 
-    Mesh (or Relief?)
-        Id
-        Name
-        Description
-        Path
-        Format (OBJ, STL)
+        Mesh (or Relief?)
+            Id
+            Name
+            Description
+            Path
+            Format (OBJ, STL)
     
-     Scene
-        Id
-        Name
-        Description
+         Scene
+            Id
+            Name
+            Description
 
-        Model Id
-        Material Id
-        Lighting Id
-        Camera Id
+            Model Id
+            Material Id
+            Lighting Id
+            Camera Id
 
-    MeshTransform
-        Id
-        Name
-        Description
+        MeshTransform
+            Id
+            Name
+            Description
 
-        Depth
-        Width : Height = Height(Aspect, Base)
+            Depth
+            Width : Height = Height(Aspect, Base)
         
-        Tau Threshold
-        Sigma1 Gaussian Blur 
-        Sigma2 Gaussian Smooth
-        Lambda Linear Scaling
+            Tau Threshold
+            Sigma1 Gaussian Blur 
+            Sigma2 Gaussian Smooth
+            Lambda Linear Scaling
 
-    Project
-        Id
-        Name
-        Description
+        Project
+            Id
+            Name
+            Description
 
-        Scene Id
-        MeshTransform Id
+            Scene Id
+            MeshTransform Id
        
-    Images
-        Id
-        Name
-        Path
-        Type (Depth, Mask)
-        Format (PNG, JPG, EXR)
+        Images
+            Id
+            Name
+            Path
+            Type (Depth, Mask)
+            Format (PNG, JPG, EXR)
 
-     Materials
-        Id
-        Name
+         Materials
+            Id
+            Name
 
-     Lighting
-        Light[]      
+         Lighting
+            Light[]      
 
     SQL Server Studio
         http://nikgupta.net/2015/12/10/connect-localdb-from-management-studio/
@@ -322,7 +304,7 @@
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
 
-<-- Modules1
+<-- Modules
 
     http://davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd/
 
@@ -362,5 +344,27 @@
         let sceneB = new THREE.Scene();
         sceneB.add(theGroup);
 
+<-- Technical Notes
+
+    Base64 encoding for HttpRequest.
+        https://github.com/beatgammit/base64-js
+        https://github.com/hughsk/tab64
+    
+    How is byte ordering (little/big endian) handled in HTTP requests?
+        http://calculist.org/blog/2012/04/25/the-little-endian-web/
+
+    MultiPart Form
+        https://stackoverflow.com/questions/3938569/how-do-i-upload-a-file-with-metadata-using-a-rest-web-service
+
+            https://stackoverflow.com/questions/4083702/posting-a-file-and-associated-data-to-a-restful-webservice-preferably-as-json
+            https://stackoverflow.com/questions/30655582/uploading-files-and-json-data-in-the-same-request-with-jquery-ajax
+
+        https://stackoverflow.com/questions/43674504/multipart-form-data-file-upload-in-asp-net-core-web-api
+
+    MIMETypes
+        Similarly, for binary documents without specific or known subtype, application/octet-stream should be used.
+
 <-- Licenses
     THREE.js
+    Serilog
+

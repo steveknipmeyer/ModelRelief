@@ -11,7 +11,7 @@ import {ReliefSettings}                     from 'Relief'
 
 export enum ServerEndPoints {
         ApiMeshes        = 'api/meshes',
-        ApiDepthBuffers  = 'api/depthbuffers'
+        ApiDepthBuffers  = 'api/depth-buffers'
     }
 
 /**

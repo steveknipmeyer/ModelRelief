@@ -19,7 +19,12 @@ namespace ModelRelief.Controllers
 
         public IActionResult Index()
             {           
+#if true
+            // stackoverflow.com/questions/46406525/net-core-2-0-basepath-error
+            return RedirectToAction ("Viewer", "Models", new { Id = 5});           
+#else
             return View ();
+#endif
             }
         }
     }
