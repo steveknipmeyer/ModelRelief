@@ -4,20 +4,32 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.IO;
+
 using Microsoft.AspNetCore.Mvc;
 
 using ModelRelief.ViewModels;
-using System.IO;
+using ModelRelief.Workbench;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ModelRelief.Controllers
-    {
+{
     public class WorkbenchController : Controller
         {
+        F<int, int>             _fInteger;
+        F<double, int>          _fDoubleInteger;
+        IFunctionOne<int>       _iInt;
+        IFunctionTwo<double>    _iDouble;
+
+        public WorkbenchController(F<int, int> fInteger, F<double, int> fDoubleInteger, IFunctionOne<int> iInt, IFunctionTwo<double> iDouble)
+        {
+        _fInteger           = fInteger; 
+        _fDoubleInteger     = fDoubleInteger;
+        _iInt               = iInt;    
+        _iDouble            = iDouble;
+        }
+
 #region DepthBufferTest
         // GET: /<controller>/
         public IActionResult DepthBufferTest()
@@ -70,5 +82,20 @@ namespace ModelRelief.Controllers
             }
 #endregion
 
+#region Autofac Dependency Injection
+        // GET: /<controller>/
+        // Model bind to Interface via DI
+        // https://github.com/aspnet/Mvc/issues/6014
+        public string DI()
+            {
+            string resultF1 = _fInteger.F1(1, 1);
+            string resultF2 = _fDoubleInteger.F2(1, 1);
+            
+            resultF1 = _iInt.F1(1, 1);
+            resultF2 = _iDouble.F2(1.0, 1.0);
+
+            return resultF1;
+            }
+#endregion
         }
     }

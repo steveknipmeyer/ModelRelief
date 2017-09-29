@@ -3,6 +3,9 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
+using System;
+using System.Collections.Generic;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,12 +13,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
-
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using MediatR;
+
 using ModelRelief.Entitities;
 using ModelRelief.Services;
-using Serilog;
+using ModelRelief.Workbench;
 
 namespace ModelRelief
 {
@@ -30,6 +37,44 @@ namespace ModelRelief
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            
+        }
+
+        /// <summary>
+        /// Registers types with Autofac to be used for DI.
+        /// </summary>
+        /// <param name="services">Existing service collection.</param>
+        /// <returns>IServiceProvider to provide DI support.</returns>
+        private IServiceProvider ConfigureAutoServices(IServiceCollection services)
+        {
+            var builder = new ContainerBuilder();
+            builder.Populate(services);
+
+            // module scanning: all types are registered for each interrace supported
+            builder.RegisterAssemblyTypes(typeof(IMediator).Assembly).AsImplementedInterfaces();
+            builder.RegisterAssemblyTypes(typeof(Startup).Assembly).AsImplementedInterfaces();
+
+            // generic types
+            builder.RegisterGeneric(typeof(F<,>)).AsImplementedInterfaces();
+            builder.RegisterGeneric(typeof(F<,>));
+
+            builder.RegisterType<F<int, double>>().As<IFunctionOne<int>>();
+            builder.RegisterType<FConcrete>().As<IFunctionTwo<double>>();
+
+            // MediatR
+            builder.Register<SingleInstanceFactory>(context =>
+            {
+                var componentContext = context.Resolve<IComponentContext>();
+                return t => componentContext.Resolve(t);
+            });
+            builder.Register<MultiInstanceFactory>(context =>
+            {
+                var componentContext = context.Resolve<IComponentContext>();
+                return t => (IEnumerable<object>)componentContext.Resolve(typeof(IEnumerable<>).MakeGenericType(t));
+            });
+
+            var container = builder.Build();
+            return container.Resolve<IServiceProvider>();
         }
 
         /// <summary>
@@ -37,7 +82,7 @@ namespace ModelRelief
         /// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         /// </summary>
         /// <param name="services"></param>
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(Configuration);
             services.AddMvc();
@@ -46,7 +91,10 @@ namespace ModelRelief
             services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ModelRelief")));
             services.AddIdentity<User, IdentityRole>()
                     .AddEntityFrameworkStores<ModelReliefDbContext>();
+
+            return ConfigureAutoServices (services);
         }
+
 
         // 
         /// <summary>

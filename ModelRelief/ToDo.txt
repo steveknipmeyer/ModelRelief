@@ -1,6 +1,5 @@
 ﻿<-- Commit Notes
 
-Autoload appsettings.json for Serilog logging.
 
 <-- Tasks
 
@@ -11,9 +10,22 @@ Autoload appsettings.json for Serilog logging.
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
 
+    Opinionated API
     https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-api/
+    
+    Autofac
+        ASP.NET Core
+        https://autofac.readthedocs.io/en/latest/integration/aspnetcore.html
+
+        Example
+        https://github.com/autofac/Examples/tree/master/src/AspNetCoreExample
+
+        Getting along with AutoMapper and Autofac
+        https://kevsoft.net/2015/09/14/getting-along-with-automapper-and-autofac.html
+
     Fluent Validation
         https://github.com/JeremySkinner/FluentValidation
+
     Mediatr
     e-Book on API Design
 
@@ -60,9 +72,6 @@ Autoload appsettings.json for Serilog logging.
                 URL (Mesh)
 
     Create a utility URL composer.
-
-    Should the URL path DepthBuffer be hyphenated?
-        depth-buffer
 
     Model3d->Model ?
         Are there any potential conflicts with the ASPNET Model property in views?
@@ -365,6 +374,8 @@ Autoload appsettings.json for Serilog logging.
         Similarly, for binary documents without specific or known subtype, application/octet-stream should be used.
 
 <-- Licenses
-    THREE.js
-    Serilog
+    THREE.js        MIT
+    Serilog         Apache https://www.apache.org/licenses/LICENSE-2.0
+    Autofac         MIT
+    MediatR         Apache https://github.com/jbogard/MediatR/blob/master/LICENSE
 
