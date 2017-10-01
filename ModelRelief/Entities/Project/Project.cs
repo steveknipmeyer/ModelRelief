@@ -6,34 +6,32 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-using ModelRelief.Services;
-
 namespace ModelRelief.Entities
+{
+    public class Project : ModelReliefEntity
     {
-    public enum MeshFormat
-        {
-        None,           // unknown
-        OBJ,            // Wavefront OBJ
-        STL             // Stereolithography
-        }
-
-    public class Mesh  : ModelReliefEntity
-    {
-        [Required, Display (Name = "Mesh Name")]
+        [Required, Display (Name = "Project Name")]
         [MaxLength(256)]
         public string Name { get; set; }
 
         [MaxLength(256)]
         public string Description { get; set; }
 
-        public MeshFormat Format { get; set; }
-       
-        public string Path { get; set; }
+        public string UserId { get;set; }
+        
+#region Reference Properties
+        [ForeignKey(nameof(UserId))]
+        public User User { get; set; }
+#endregion
 
-        public Mesh()
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public Project()
         {
         }
     }

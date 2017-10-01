@@ -197,56 +197,10 @@
 
 
 <-- Database Design   
+    https://stackoverflow.com/questions/33197402/link-asp-net-identity-users-to-user-detail-table
+
     How can the database be backed up?
         Can it be relocated to another location?
-
-    Phase I       
-        Users
-            Id
-
-        Model3d
-            Id
-            Name
-            Description
-
-            Path
-            Format (OBJ, STL)
-
-        Camera
-            Id
-            Name
-            Description
-            
-            TBD
-
-        DepthBufer
-            Id
-            Name
-            Description
-
-            Path
-            Format (Raw, PNG, JPG, EXR)
-
-        Mesh
-            Id
-            Name
-            Description
-
-            Path
-            Format (OBJ, STL)
-    
-        MeshTransform
-            Id
-            Name
-            Description
-
-            Depth
-            Width : Height = Height(Aspect, Base)
-        
-            Tau Threshold
-            Sigma1 Gaussian Blur 
-            Sigma2 Gaussian Smooth
-            Lambda Linear Scaling
 
     Phase II       
          Materials
@@ -266,14 +220,6 @@
             Material Id
             Lighting Id
             Camera Id
-
-        Project
-            Id
-            Name
-            Description
-
-            Scene Id
-            MeshTransform[]
 
     SQL Server Studio
         http://nikgupta.net/2015/12/10/connect-localdb-from-management-studio/
@@ -388,3 +334,6 @@
     Autofac         MIT
     MediatR         Apache https://github.com/jbogard/MediatR/blob/master/LICENSE
 
+<-- Visual Studio 
+    Performance
+        https://developercommunity.visualstudio.com/content/problem/43364/visual-studio-2017-increadibly-slow-and-laggy.html

@@ -23,7 +23,7 @@ namespace ModelRelief.Entities
     public class Model3d : ModelReliefEntity
         {       
         [Required, Display (Name = "Model Name")]
-        [MaxLength(64)]
+        [MaxLength(256)]
         public string Name { get; set; }
 
         public Model3dFormat Format { get; set; }

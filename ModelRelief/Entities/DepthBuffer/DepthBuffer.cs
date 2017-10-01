@@ -25,8 +25,11 @@ namespace ModelRelief.Entities
     public class DepthBuffer  : ModelReliefEntity
         {       
         [Required, Display (Name = "DepthBuffer Name")]
-        [MaxLength(64)]
+        [MaxLength(256)]
         public string Name { get; set; }
+
+        [MaxLength(256)]
+        public string Description { get; set; }
 
         public DepthBufferFormat Format { get; set; }
         
@@ -34,14 +37,6 @@ namespace ModelRelief.Entities
 
         public DepthBuffer()
         {
-        }
-
-        public DepthBuffer(int id, string name, DepthBufferFormat format, string path)
-        {
-            Id     = id;
-            Name   = name;
-            Format = format;
-            Path   = path;
         }
     }
 }
