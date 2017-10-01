@@ -20,7 +20,25 @@ namespace ModelRelief.Entities
             {
             }
 
+        public DbSet<Camera> Cameras
+            { get ; set; }
+
+        public DbSet<DepthBuffer> DepthBuffers
+            { get ; set; }
+
+        public DbSet<Mesh> Meshes
+            { get ; set; }
+
+        public DbSet<MeshTransform> MeshTransforms
+            { get ; set; }
+
         public DbSet<Model3d> Models 
+            { get ; set; }
+
+        public DbSet<Project> Projects
+            { get ; set; }
+
+        public DbSet<Vector3d> Vector3ds
             { get ; set; }
 
 #region Dynamic DbSet<T>   
