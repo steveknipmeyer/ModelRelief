@@ -11,36 +11,36 @@ using System.Threading.Tasks;
 
 using ModelRelief.Services;
 
-namespace ModelRelief.Entitities
-{
-    public enum DepthBufferFormat
+namespace ModelRelief.Entities
     {
-        None,       // unknown
-        Raw,        // floating point array
-        PNG,        // PNG format
-        JPG         // JPG format
-    }
+    public enum Model3dFormat
+        {
+        None,           // unknown
+        OBJ,            // Wavefront OBJ
+        STL             // Stereolithography
+        }
 
-    public class DepthBuffer  : ModelReliefResource
+    public class Model3d : ModelReliefEntity
         {       
-        [Required, Display (Name = "DepthBuffer Name")]
+        [Required, Display (Name = "Model Name")]
         [MaxLength(64)]
         public string Name { get; set; }
 
-        public DepthBufferFormat Format { get; set; }
+        public Model3dFormat Format { get; set; }
         
+        // https://stackoverflow.com/questions/25604894/do-we-really-need-a-table-in-database-to-store-file-path-of-image-if-images-are
         public string Path { get; set; }
 
-        public DepthBuffer()
-        {
-        }
+        public Model3d()
+            {
+            }
 
-        public DepthBuffer(int id, string name, DepthBufferFormat format, string path)
-        {
+        public Model3d(int id, string name, Model3dFormat format, string path)
+            {
             Id     = id;
             Name   = name;
             Format = format;
             Path   = path;
+            }
         }
     }
-}

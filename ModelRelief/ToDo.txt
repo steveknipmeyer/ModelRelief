@@ -63,7 +63,7 @@
         [Consumes "application/json]
         {Id : <from 1st post>}
         
-        Relief Post: Process a relief from a DepthBuffer.
+        Mesh Post: Process a relief from a DepthBuffer.
             HTTP Request
                 MeshTransform Id
                 DepthBuffer Id
@@ -78,13 +78,10 @@
         Differentiated through namespace?
 
     API authentication.
-        
-    URI Resources
-        model
-        mesh
-        depth-buffer
-        camera
-        mesh-transform
+
+<-- Unit Testing
+    MOQ
+    https://github.com/moq/moq
 
 <-- System
     Throwing policy.
@@ -203,7 +200,7 @@
     How can the database be backed up?
         Can it be relocated to another location?
 
-    Schema
+    Phase I       
         Users
             Id
 
@@ -211,26 +208,33 @@
             Id
             Name
             Description
+
             Path
             Format (OBJ, STL)
 
-        Mesh (or Relief?)
+        Camera
             Id
             Name
             Description
+            
+            TBD
+
+        DepthBufer
+            Id
+            Name
+            Description
+
+            Path
+            Format (Raw, PNG, JPG, EXR)
+
+        Mesh
+            Id
+            Name
+            Description
+
             Path
             Format (OBJ, STL)
     
-         Scene
-            Id
-            Name
-            Description
-
-            Model Id
-            Material Id
-            Lighting Id
-            Camera Id
-
         MeshTransform
             Id
             Name
@@ -244,27 +248,32 @@
             Sigma2 Gaussian Smooth
             Lambda Linear Scaling
 
+    Phase II       
+         Materials
+            Id
+            Name
+            Description
+
+         Lighting
+            Light[]      
+
+         Scene
+            Id
+            Name
+            Description
+
+            Model3d Id
+            Material Id
+            Lighting Id
+            Camera Id
+
         Project
             Id
             Name
             Description
 
             Scene Id
-            MeshTransform Id
-       
-        Images
-            Id
-            Name
-            Path
-            Type (Depth, Mask)
-            Format (PNG, JPG, EXR)
-
-         Materials
-            Id
-            Name
-
-         Lighting
-            Light[]      
+            MeshTransform[]
 
     SQL Server Studio
         http://nikgupta.net/2015/12/10/connect-localdb-from-management-studio/

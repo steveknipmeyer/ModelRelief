@@ -8,20 +8,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using ModelRelief.Entitities;
+using ModelRelief.Entities;
 
 namespace ModelRelief.Services
 {
-    public class ModelReliefResource 
-    {
-        public int Id { get; set; }
-    }
-
     /// <summary>
     /// Interface for a generic resource.
     /// </summary>
     public interface IResourceProvider<TResource> 
-        where TResource : ModelReliefResource
+        where TResource : ModelReliefEntity
 
     {
         IEnumerable<TResource> GetAll();

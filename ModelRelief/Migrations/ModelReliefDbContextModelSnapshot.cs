@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using ModelRelief.Entitities;
+using ModelRelief.Entities;
 
 namespace ModelRelief.Migrations
 {
@@ -123,7 +123,7 @@ namespace ModelRelief.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("ModelRelief.Entitities.Model3d", b =>
+            modelBuilder.Entity("ModelRelief.Entities.Model3d", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -141,7 +141,7 @@ namespace ModelRelief.Migrations
                     b.ToTable("Models");
                 });
 
-            modelBuilder.Entity("ModelRelief.Entitities.User", b =>
+            modelBuilder.Entity("ModelRelief.Entities.User", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -201,7 +201,7 @@ namespace ModelRelief.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("ModelRelief.Entitities.User")
+                    b.HasOne("ModelRelief.Entities.User")
                         .WithMany("Claims")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -209,7 +209,7 @@ namespace ModelRelief.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("ModelRelief.Entitities.User")
+                    b.HasOne("ModelRelief.Entities.User")
                         .WithMany("Logins")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -222,7 +222,7 @@ namespace ModelRelief.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ModelRelief.Entitities.User")
+                    b.HasOne("ModelRelief.Entities.User")
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

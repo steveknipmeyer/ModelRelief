@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using ModelRelief.Entitities;
+using ModelRelief.Entities;
 
 namespace ModelRelief.Migrations
 {
@@ -17,7 +17,7 @@ namespace ModelRelief.Migrations
                 .HasAnnotation("ProductVersion", "1.1.2")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("ModelRelief.Entitities.Model3d", b =>
+            modelBuilder.Entity("ModelRelief.Entities.Model3d", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();

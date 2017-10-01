@@ -36,6 +36,7 @@
 
   
   <ItemGroup>
+    <Folder Include="Entities\MeshTransform\" />
     <Folder Include="wwwroot\js\" />
   </ItemGroup>
 

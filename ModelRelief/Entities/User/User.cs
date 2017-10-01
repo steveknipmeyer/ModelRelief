@@ -3,22 +3,19 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-using ModelRelief.Entities;
-
-namespace ModelRelief.ViewModels
+namespace ModelRelief.Entities
     {
-    public class Model3dEditViewModel
+    public class User : IdentityUser
         {
-        [Required, Display (Name = "Model Name")]
-        [MaxLength(64)]
-        public string Name { get; set; }
-
-        public Model3dFormat Format { get; set; }
+        public User()
+            {
+            }
         }
     }

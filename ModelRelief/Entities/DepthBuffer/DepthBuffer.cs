@@ -1,4 +1,5 @@
-﻿// ------------------------------------------------------------------------// 
+﻿
+// ------------------------------------------------------------------------// 
 // ModelRelief                                                             //
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
@@ -11,30 +12,31 @@ using System.Threading.Tasks;
 
 using ModelRelief.Services;
 
-namespace ModelRelief.Entitities
+namespace ModelRelief.Entities
+{
+    public enum DepthBufferFormat
     {
-    public enum MeshFormat
-        {
-        None,           // unknown
-        OBJ,            // Wavefront OBJ
-        STL             // Stereolithography
-        }
+        None,       // unknown
+        Raw,        // floating point array
+        PNG,        // PNG format
+        JPG         // JPG format
+    }
 
-    public class Mesh  : ModelReliefResource
-    {
-        [Required, Display (Name = "Mesh Name")]
+    public class DepthBuffer  : ModelReliefEntity
+        {       
+        [Required, Display (Name = "DepthBuffer Name")]
         [MaxLength(64)]
         public string Name { get; set; }
 
-        public MeshFormat Format { get; set; }
-       
+        public DepthBufferFormat Format { get; set; }
+        
         public string Path { get; set; }
 
-        public Mesh()
+        public DepthBuffer()
         {
         }
 
-        public Mesh(int id, string name, MeshFormat format, string path)
+        public DepthBuffer(int id, string name, DepthBufferFormat format, string path)
         {
             Id     = id;
             Name   = name;

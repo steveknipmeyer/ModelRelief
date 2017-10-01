@@ -20,7 +20,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using MediatR;
 
-using ModelRelief.Entitities;
+using ModelRelief.Entities;
 using ModelRelief.Services;
 using ModelRelief.Workbench;
 

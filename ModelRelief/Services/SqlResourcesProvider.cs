@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using ModelRelief.Entitities;
+using ModelRelief.Entities;
 
 namespace ModelRelief.Services
 {
@@ -19,7 +19,7 @@ namespace ModelRelief.Services
 // https://stackoverflow.com/questions/33940507/find-a-generic-dbset-in-a-dbcontext-dynamically
 
     public class SqlResourceProvider<TResource> : IResourceProvider<TResource>  
-        where TResource: ModelReliefResource
+        where TResource: ModelReliefEntity
     {
         private ModelReliefDbContext        _databaseContext;
         private IHttpContextAccessor        _httpContext;
