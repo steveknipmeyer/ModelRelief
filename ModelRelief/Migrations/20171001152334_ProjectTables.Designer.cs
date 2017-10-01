@@ -11,9 +11,10 @@ using System;
 namespace ModelRelief.Migrations
 {
     [DbContext(typeof(ModelReliefDbContext))]
-    partial class ModelReliefDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171001152334_ProjectTables")]
+    partial class ProjectTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
