@@ -99,15 +99,13 @@ namespace ModelRelief
             return ConfigureAutoServices (services);
         }
 
-
         // 
         /// <summary>
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline. 
         /// </summary>
         /// <param name="app">DI IApplicationBuilder</param>
         /// <param name="env">DI IHostingEnvironment</param>
-        /// <param name="configurationProvider">DI IConfigurationProvider</param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Services.IConfigurationProvider configurationProvider)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {

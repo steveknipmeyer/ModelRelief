@@ -1,14 +1,13 @@
 ﻿<-- Commit Notes
-    Convert to SQLite.
-    Use convention-based relationships with collections and navigation properties.
 
 <-- Tasks
     SQLite
         Multi-user Access
             Cookies are used so tests must be done from an external computer.
-        ModelRelief DGML
         64 bit support
 
+    Simplify the model storage. Use an application setting.
+        Configuration setting?
 
     EntityFramework Core
         https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/
@@ -33,11 +32,11 @@
 
         Example
         https://github.com/autofac/Examples/tree/master/src/AspNetCoreExample
-
+   
+    AutoMapper
         Getting along with AutoMapper and Autofac
         https://kevsoft.net/2015/09/14/getting-along-with-automapper-and-autofac.html
-    
-    AutoMapper
+
     Fluent Validation
         https://github.com/JeremySkinner/FluentValidation
 

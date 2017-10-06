@@ -42,7 +42,7 @@ namespace ModelRelief.Controllers.Api
         public void Post()
         { 
             // How is the mesh name passed in the request? Is a multi-part form required?
-            string meshPath = "/store/users/10754914-7e02-4bdc-ac7d-d22e6f5efebf/meshes/apiTest/";
+            string meshPath = "/store/users/7b4f6c4a-9113-4f7b-9ca2-9d1358ad5f20/meshes/apiTest/";
             string meshName = "mesh.obj";
 
             string fileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{meshName}";

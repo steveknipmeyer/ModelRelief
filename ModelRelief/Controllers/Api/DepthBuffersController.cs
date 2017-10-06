@@ -40,7 +40,7 @@ namespace ModelRelief.Controllers.Api
         public void Post()
         { 
             // How is the depthbuffer name passed in the request? Is a multi-part form required?
-            string depthBufferPath = "/store/users/10754914-7e02-4bdc-ac7d-d22e6f5efebf/depthbuffers/apiTest/";
+            string depthBufferPath = "/store/users/7b4f6c4a-9113-4f7b-9ca2-9d1358ad5f20/depthbuffers/apiTest/";
             string depthBufferName = "depthBuffer.raw";
 
             string fileName = $"{_hostingEnvironment.WebRootPath}{depthBufferPath}{depthBufferName}";
