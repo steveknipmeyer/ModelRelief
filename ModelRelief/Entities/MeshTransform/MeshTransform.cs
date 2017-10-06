@@ -10,16 +10,27 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
+using ModelRelief.Entities;
+
 namespace ModelRelief.Entities
 {
     public class MeshTransform : ModelReliefEntity
     {
         [Required, Display (Name = "Mesh Transform Name")]
-        [MaxLength(256)]
         public string Name { get; set; }
-
-        [MaxLength(256)]
         public string Description { get; set; }
+        
+        public float Depth { get; set; }
+        public float Width { get; set; }
+
+        public float Tau { get; set; }
+        public float SigmaGaussianBlur { get; set; }
+        public float SigmaGaussianSmooth { get; set; }
+        public float LambdaLinearScaling { get; set; }
+
+        // Navigation Properties
+        public User User { get; set; }
+        public Project Project { get; set; }
 
         /// <summary>
         /// Default constructor.

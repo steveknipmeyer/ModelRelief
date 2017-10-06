@@ -6,10 +6,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-using ModelRelief.Services;
+using ModelRelief.Entities;
 
 namespace ModelRelief.Entities
     {
@@ -23,15 +24,19 @@ namespace ModelRelief.Entities
     public class Mesh  : ModelReliefEntity
     {
         [Required, Display (Name = "Mesh Name")]
-        [MaxLength(256)]
         public string Name { get; set; }
-
-        [MaxLength(256)]
         public string Description { get; set; }
 
-        public MeshFormat Format { get; set; }
-       
+        public MeshFormat Format { get; set; }      
         public string Path { get; set; }
+
+        // Navigation Properties
+        public User User { get; set; }
+        public Project Project { get; set; }
+        public DepthBuffer DepthBuffer { get; set; }
+        public MeshTransform MeshTransform { get; set; }
+
+        public Camera Camera { get; set; }
 
         public Mesh()
         {

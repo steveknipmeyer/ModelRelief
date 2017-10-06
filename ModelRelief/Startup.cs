@@ -88,7 +88,11 @@ namespace ModelRelief
             services.AddMvc();
             services.AddSingleton<Services.IConfigurationProvider, Services.ConfigurationProvider>();
             services.AddScoped<IResourcesProvider, SqlResourcesProvider>();
-            services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ModelRelief")));
+#if SQLServer
+            services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SQLServer")));
+#else
+            services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("SQLite")));
+#endif
             services.AddIdentity<User, IdentityRole>()
                     .AddEntityFrameworkStores<ModelReliefDbContext>();
 

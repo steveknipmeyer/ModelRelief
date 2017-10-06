@@ -38,9 +38,6 @@ namespace ModelRelief.Entities
         public DbSet<Project> Projects
             { get ; set; }
 
-        public DbSet<Vector3d> Vector3ds
-            { get ; set; }
-
 #region Dynamic DbSet<T>   
 // https://stackoverflow.com/questions/33940507/find-a-generic-dbset-in-a-dbcontext-dynamically
 

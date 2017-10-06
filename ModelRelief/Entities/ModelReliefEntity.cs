@@ -5,15 +5,16 @@
 // ------------------------------------------------------------------------//
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-
-using ModelRelief.Entities;
 
 namespace ModelRelief.Entities
 {
     public class ModelReliefEntity
     {
+        [Key]
+        [Required]   
         public int Id { get; set; }
     }
 }

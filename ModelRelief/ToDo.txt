@@ -1,7 +1,21 @@
 ﻿<-- Commit Notes
-
+    Convert to SQLite.
+    Use convention-based relationships with collections and navigation properties.
 
 <-- Tasks
+    SQLite
+        Multi-user Access
+            Cookies are used so tests must be done from an external computer.
+        ModelRelief DGML
+        64 bit support
+
+
+    EntityFramework Core
+        https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/
+
+    Log Visual Studio performance problem.
+    Singular or plural table names?
+    Singular or plural controller names?
 
     Export    
         Refactor FileSave to use async/await.
@@ -22,7 +36,8 @@
 
         Getting along with AutoMapper and Autofac
         https://kevsoft.net/2015/09/14/getting-along-with-automapper-and-autofac.html
-
+    
+    AutoMapper
     Fluent Validation
         https://github.com/JeremySkinner/FluentValidation
 
@@ -68,7 +83,6 @@
                 MeshTransform Id
                 DepthBuffer Id
             HTTP Response
-                URL (DepthBuffer)
                 URL (Mesh)
 
     Create a utility URL composer.
@@ -199,6 +213,9 @@
 <-- Database Design   
     https://stackoverflow.com/questions/33197402/link-asp-net-identity-users-to-user-detail-table
 
+    Why are navigation properties virtual?
+        https://stackoverflow.com/questions/25715474/why-navigation-properties-are-virtual-by-default-in-ef
+
     How can the database be backed up?
         Can it be relocated to another location?
 
@@ -234,6 +251,35 @@
             State:              Running
             Last start time:    9/19/2017 6:57:25 AM
             Instance pipe name: np:\\.\pipe\LOCALDB#9A6B632F\tsql\query
+
+
+
+        PM> Add-Migration AddProjectTableColumns
+        An operation was scaffolded that may result in the loss of data. Please review the migration for accuracy.
+        To undo this action, use Remove-Migration.
+        PM> Update-Database
+        System.Data.SqlClient.SqlException (0x80131904): Introducing FOREIGN KEY constraint 'FK_Cameras_Vector3ds_PositionId' on table 'Cameras' may cause cycles or multiple cascade paths. Specify ON DELETE NO ACTION or ON UPDATE NO ACTION, or modify other FOREIGN KEY constraints.
+        Could not create constraint or index. See previous errors.
+           at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+           at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+           at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+           at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+           at System.Data.SqlClient.SqlCommand.RunExecuteNonQueryTds(String methodName, Boolean async, Int32 timeout, Boolean asyncWrite)
+           at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite, String methodName)
+           at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+           at Microsoft.EntityFrameworkCore.Storage.Internal.RelationalCommand.Execute(IRelationalConnection connection, DbCommandMethod executeMethod, IReadOnlyDictionary`2 parameterValues)
+           at Microsoft.EntityFrameworkCore.Storage.Internal.RelationalCommand.ExecuteNonQuery(IRelationalConnection connection, IReadOnlyDictionary`2 parameterValues)
+           at Microsoft.EntityFrameworkCore.Migrations.MigrationCommand.ExecuteNonQuery(IRelationalConnection connection, IReadOnlyDictionary`2 parameterValues)
+           at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQuery(IEnumerable`1 migrationCommands, IRelationalConnection connection)
+           at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.Migrate(String targetMigration)
+           at Microsoft.EntityFrameworkCore.Design.Internal.MigrationsOperations.UpdateDatabase(String targetMigration, String contextType)
+           at Microsoft.EntityFrameworkCore.Design.OperationExecutor.UpdateDatabase.<>c__DisplayClass0_1.<.ctor>b__0()
+           at Microsoft.EntityFrameworkCore.Design.OperationExecutor.OperationBase.Execute(Action action)
+        ClientConnectionId:2f66363c-9668-472b-a8ce-e0a38e1b3db8
+        Error Number:1785,State:0,Class:16
+        Introducing FOREIGN KEY constraint 'FK_Cameras_Vector3ds_PositionId' on table 'Cameras' may cause cycles or multiple cascade paths. Specify ON DELETE NO ACTION or ON UPDATE NO ACTION, or modify other FOREIGN KEY constraints.
+        Could not create constraint or index. See previous errors.
+        PM> 
 
 <-- Git
     TBD
@@ -337,3 +383,4 @@
 <-- Visual Studio 
     Performance
         https://developercommunity.visualstudio.com/content/problem/43364/visual-studio-2017-increadibly-slow-and-laggy.html
+

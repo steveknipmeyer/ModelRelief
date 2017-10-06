@@ -7,10 +7,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-using ModelRelief.Services;
+using ModelRelief.Entities;
 
 namespace ModelRelief.Entities
 {
@@ -25,15 +26,17 @@ namespace ModelRelief.Entities
     public class DepthBuffer  : ModelReliefEntity
         {       
         [Required, Display (Name = "DepthBuffer Name")]
-        [MaxLength(256)]
         public string Name { get; set; }
-
-        [MaxLength(256)]
         public string Description { get; set; }
 
         public DepthBufferFormat Format { get; set; }
-        
         public string Path { get; set; }
+
+        // Navigation Properties
+        public User User { get; set; }
+        public Project Project { get; set; }
+        public Model3d Model { get; set; }
+        public Camera Camera { get; set; }
 
         public DepthBuffer()
         {

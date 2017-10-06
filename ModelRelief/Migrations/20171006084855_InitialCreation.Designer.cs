@@ -11,15 +11,14 @@ using System;
 namespace ModelRelief.Migrations
 {
     [DbContext(typeof(ModelReliefDbContext))]
-    [Migration("20171001153308_AddProjectTables")]
-    partial class AddProjectTables
+    [Migration("20171006084855_InitialCreation")]
+    partial class InitialCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452");
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -39,8 +38,7 @@ namespace ModelRelief.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                        .HasName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -134,14 +132,42 @@ namespace ModelRelief.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(256);
+                    b.Property<bool>("BoundClippingPlanes");
+
+                    b.Property<string>("Description");
+
+                    b.Property<float>("Far");
+
+                    b.Property<float>("FieldOfView");
+
+                    b.Property<float>("LookAtX");
+
+                    b.Property<float>("LookAtY");
+
+                    b.Property<float>("LookAtZ");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(256);
+                        .IsRequired();
+
+                    b.Property<float>("Near");
+
+                    b.Property<float>("PositionX");
+
+                    b.Property<float>("PositionY");
+
+                    b.Property<float>("PositionZ");
+
+                    b.Property<int?>("ProjectId");
+
+                    b.Property<int>("StandardView");
+
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Cameras");
                 });
@@ -151,18 +177,32 @@ namespace ModelRelief.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(256);
+                    b.Property<int?>("CameraId");
+
+                    b.Property<string>("Description");
 
                     b.Property<int>("Format");
 
+                    b.Property<int?>("ModelId");
+
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(256);
+                        .IsRequired();
 
                     b.Property<string>("Path");
 
+                    b.Property<int?>("ProjectId");
+
+                    b.Property<string>("UserId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CameraId");
+
+                    b.HasIndex("ModelId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("DepthBuffers");
                 });
@@ -172,18 +212,36 @@ namespace ModelRelief.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(256);
+                    b.Property<int?>("CameraId");
+
+                    b.Property<int?>("DepthBufferId");
+
+                    b.Property<string>("Description");
 
                     b.Property<int>("Format");
 
+                    b.Property<int?>("MeshTransformId");
+
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(256);
+                        .IsRequired();
 
                     b.Property<string>("Path");
 
+                    b.Property<int?>("ProjectId");
+
+                    b.Property<string>("UserId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CameraId");
+
+                    b.HasIndex("DepthBufferId");
+
+                    b.HasIndex("MeshTransformId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Meshes");
                 });
@@ -193,14 +251,32 @@ namespace ModelRelief.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(256);
+                    b.Property<float>("Depth");
+
+                    b.Property<string>("Description");
+
+                    b.Property<float>("LambdaLinearScaling");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(256);
+                        .IsRequired();
+
+                    b.Property<int?>("ProjectId");
+
+                    b.Property<float>("SigmaGaussianBlur");
+
+                    b.Property<float>("SigmaGaussianSmooth");
+
+                    b.Property<float>("Tau");
+
+                    b.Property<string>("UserId");
+
+                    b.Property<float>("Width");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("MeshTransforms");
                 });
@@ -210,15 +286,28 @@ namespace ModelRelief.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("CameraId");
+
+                    b.Property<string>("Description");
+
                     b.Property<int>("Format");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(256);
+                        .IsRequired();
 
                     b.Property<string>("Path");
 
+                    b.Property<int?>("ProjectId");
+
+                    b.Property<string>("UserId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CameraId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Models");
                 });
@@ -228,12 +317,10 @@ namespace ModelRelief.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(256);
+                    b.Property<string>("Description");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(256);
+                        .IsRequired();
 
                     b.Property<string>("UserId");
 
@@ -289,27 +376,9 @@ namespace ModelRelief.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                        .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("ModelRelief.Entities.Vector3d", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Vector3ds");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -355,6 +424,85 @@ namespace ModelRelief.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ModelRelief.Entities.Camera", b =>
+                {
+                    b.HasOne("ModelRelief.Entities.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId");
+
+                    b.HasOne("ModelRelief.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("ModelRelief.Entities.DepthBuffer", b =>
+                {
+                    b.HasOne("ModelRelief.Entities.Camera", "Camera")
+                        .WithMany()
+                        .HasForeignKey("CameraId");
+
+                    b.HasOne("ModelRelief.Entities.Model3d", "Model")
+                        .WithMany()
+                        .HasForeignKey("ModelId");
+
+                    b.HasOne("ModelRelief.Entities.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId");
+
+                    b.HasOne("ModelRelief.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("ModelRelief.Entities.Mesh", b =>
+                {
+                    b.HasOne("ModelRelief.Entities.Camera", "Camera")
+                        .WithMany()
+                        .HasForeignKey("CameraId");
+
+                    b.HasOne("ModelRelief.Entities.DepthBuffer", "DepthBuffer")
+                        .WithMany()
+                        .HasForeignKey("DepthBufferId");
+
+                    b.HasOne("ModelRelief.Entities.MeshTransform", "MeshTransform")
+                        .WithMany()
+                        .HasForeignKey("MeshTransformId");
+
+                    b.HasOne("ModelRelief.Entities.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId");
+
+                    b.HasOne("ModelRelief.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("ModelRelief.Entities.MeshTransform", b =>
+                {
+                    b.HasOne("ModelRelief.Entities.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId");
+
+                    b.HasOne("ModelRelief.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("ModelRelief.Entities.Model3d", b =>
+                {
+                    b.HasOne("ModelRelief.Entities.Camera", "Camera")
+                        .WithMany()
+                        .HasForeignKey("CameraId");
+
+                    b.HasOne("ModelRelief.Entities.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId");
+
+                    b.HasOne("ModelRelief.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ModelRelief.Entities.Project", b =>
