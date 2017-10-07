@@ -20,6 +20,7 @@ using ModelRelief.Services;
 using ModelRelief.Utility;
 using ModelRelief.ViewModels;
 
+using AutoMapper;
 using Serilog;
 
 namespace ModelRelief.Controllers
@@ -31,13 +32,15 @@ namespace ModelRelief.Controllers
         UserManager<User>           _userManager;
         IResourcesProvider          _resourceProvider;
         ILogger<ModelsController>   _logger;
+        IMapper                     _mapper;
 
-        public ModelsController(IHostingEnvironment hostingEnvironment, UserManager<User> userManager, IResourcesProvider resourceProvider, ILogger<ModelsController> logger)
+        public ModelsController(IHostingEnvironment hostingEnvironment, UserManager<User> userManager, IResourcesProvider resourceProvider, ILogger<ModelsController> logger, IMapper mapper)
         {
             _hostingEnvironment = hostingEnvironment;
             _userManager        = userManager;
             _resourceProvider   = resourceProvider;
             _logger             = logger;
+            _mapper             = mapper;
         }
 
         [AllowAnonymous]
@@ -77,11 +80,7 @@ namespace ModelRelief.Controllers
                 return View();
             }
 
-            var model = new Model3d()
-            {
-                Name   = editModel.Name,
-                Format = editModel.Format
-            };
+            var model = _mapper.Map<Model3dEditViewModel, Model3d> (editModel);
             model = _resourceProvider.Models.Add (model);
 
             return RedirectToAction ("Viewer", new { Id = model.Id});           
@@ -95,11 +94,7 @@ namespace ModelRelief.Controllers
             if (model == null)
                 return Content(String.Format("Model not found: {0}", id));
 
-            var editModel = new Model3dEditViewModel
-            {
-                Name   = model.Name,
-                Format = model.Format
-            };
+            var editModel = _mapper.Map<Model3d, Model3dEditViewModel> (model);
 
             return View (editModel);
         }
@@ -119,9 +114,7 @@ namespace ModelRelief.Controllers
             if (model == null)
                 return Content(String.Format("Model not found: {0}", id));
 
-            // copy properties
-            model.Name   = editModel.Name;
-            model.Format = editModel.Format;
+            _mapper.Map<Model3dEditViewModel, Model3d> (editModel, model);
 
             _resourceProvider.Models.Update(model);
 

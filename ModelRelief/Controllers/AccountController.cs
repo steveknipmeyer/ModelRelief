@@ -15,7 +15,7 @@ using ModelRelief.ViewModels;
 using ModelRelief.Entities;
 
 namespace ModelRelief.Controllers
-        {
+    {
     public class AccountController : Controller
         {
         private UserManager<User>   _userManager;

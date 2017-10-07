@@ -18,6 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
 using MediatR;
 
 using ModelRelief.Entities;
@@ -95,6 +96,9 @@ namespace ModelRelief
 #endif
             services.AddIdentity<User, IdentityRole>()
                     .AddEntityFrameworkStores<ModelReliefDbContext>();
+            
+            services.AddAutoMapper(typeof(Startup));
+            Mapper.AssertConfigurationIsValid();
 
             return ConfigureAutoServices (services);
         }
