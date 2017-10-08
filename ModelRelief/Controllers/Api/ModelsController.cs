@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 
-using ModelRelief.Entities;
+using ModelRelief.Models;
 using ModelRelief.Services;
 using ModelRelief.Utility;
 using ModelRelief.ViewModels;

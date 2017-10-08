@@ -10,9 +10,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-using ModelRelief.Entities;
+using ModelRelief.Models;
 
-namespace ModelRelief.Entities
+namespace ModelRelief.Models
 {
     public enum StandardView 
     {

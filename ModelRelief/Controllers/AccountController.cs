@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 using ModelRelief.ViewModels;
-using ModelRelief.Entities;
+using ModelRelief.Models;
 
 namespace ModelRelief.Controllers
     {

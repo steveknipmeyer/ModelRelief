@@ -1,4 +1,5 @@
-﻿// ------------------------------------------------------------------------// 
+﻿
+// ------------------------------------------------------------------------// 
 // ModelRelief                                                             //
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
@@ -10,35 +11,34 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-using ModelRelief.Entities;
+using ModelRelief.Models;
 
-namespace ModelRelief.Entities
+namespace ModelRelief.Models
+{
+    public enum DepthBufferFormat
     {
-    public enum MeshFormat
-        {
-        None,           // unknown
-        OBJ,            // Wavefront OBJ
-        STL             // Stereolithography
-        }
+        None,       // unknown
+        Raw,        // floating point array
+        PNG,        // PNG format
+        JPG         // JPG format
+    }
 
-    public class Mesh  : ModelReliefEntity
-    {
-        [Required, Display (Name = "Mesh Name")]
+    public class DepthBuffer  : ModelReliefEntity
+        {       
+        [Required, Display (Name = "DepthBuffer Name")]
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public MeshFormat Format { get; set; }      
+        public DepthBufferFormat Format { get; set; }
         public string Path { get; set; }
 
         // Navigation Properties
         public User User { get; set; }
         public Project Project { get; set; }
-        public DepthBuffer DepthBuffer { get; set; }
-        public MeshTransform MeshTransform { get; set; }
-
+        public Model3d Model { get; set; }
         public Camera Camera { get; set; }
 
-        public Mesh()
+        public DepthBuffer()
         {
         }
     }

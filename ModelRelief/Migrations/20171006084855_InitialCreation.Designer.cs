@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
-using ModelRelief.Entities;
+using ModelRelief.Models;
 using System;
 
 namespace ModelRelief.Migrations
@@ -127,7 +127,7 @@ namespace ModelRelief.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("ModelRelief.Entities.Camera", b =>
+            modelBuilder.Entity("ModelRelief.Models.Camera", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -172,7 +172,7 @@ namespace ModelRelief.Migrations
                     b.ToTable("Cameras");
                 });
 
-            modelBuilder.Entity("ModelRelief.Entities.DepthBuffer", b =>
+            modelBuilder.Entity("ModelRelief.Models.DepthBuffer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -207,7 +207,7 @@ namespace ModelRelief.Migrations
                     b.ToTable("DepthBuffers");
                 });
 
-            modelBuilder.Entity("ModelRelief.Entities.Mesh", b =>
+            modelBuilder.Entity("ModelRelief.Models.Mesh", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -246,7 +246,7 @@ namespace ModelRelief.Migrations
                     b.ToTable("Meshes");
                 });
 
-            modelBuilder.Entity("ModelRelief.Entities.MeshTransform", b =>
+            modelBuilder.Entity("ModelRelief.Models.MeshTransform", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -281,7 +281,7 @@ namespace ModelRelief.Migrations
                     b.ToTable("MeshTransforms");
                 });
 
-            modelBuilder.Entity("ModelRelief.Entities.Model3d", b =>
+            modelBuilder.Entity("ModelRelief.Models.Model3d", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -312,7 +312,7 @@ namespace ModelRelief.Migrations
                     b.ToTable("Models");
                 });
 
-            modelBuilder.Entity("ModelRelief.Entities.Project", b =>
+            modelBuilder.Entity("ModelRelief.Models.Project", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -331,7 +331,7 @@ namespace ModelRelief.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("ModelRelief.Entities.User", b =>
+            modelBuilder.Entity("ModelRelief.Models.User", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -391,7 +391,7 @@ namespace ModelRelief.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("ModelRelief.Entities.User")
+                    b.HasOne("ModelRelief.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -399,7 +399,7 @@ namespace ModelRelief.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("ModelRelief.Entities.User")
+                    b.HasOne("ModelRelief.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -412,7 +412,7 @@ namespace ModelRelief.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ModelRelief.Entities.User")
+                    b.HasOne("ModelRelief.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -420,94 +420,94 @@ namespace ModelRelief.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("ModelRelief.Entities.User")
+                    b.HasOne("ModelRelief.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("ModelRelief.Entities.Camera", b =>
+            modelBuilder.Entity("ModelRelief.Models.Camera", b =>
                 {
-                    b.HasOne("ModelRelief.Entities.Project", "Project")
+                    b.HasOne("ModelRelief.Models.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId");
 
-                    b.HasOne("ModelRelief.Entities.User", "User")
+                    b.HasOne("ModelRelief.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("ModelRelief.Entities.DepthBuffer", b =>
+            modelBuilder.Entity("ModelRelief.Models.DepthBuffer", b =>
                 {
-                    b.HasOne("ModelRelief.Entities.Camera", "Camera")
+                    b.HasOne("ModelRelief.Models.Camera", "Camera")
                         .WithMany()
                         .HasForeignKey("CameraId");
 
-                    b.HasOne("ModelRelief.Entities.Model3d", "Model")
+                    b.HasOne("ModelRelief.Models.Model3d", "Model")
                         .WithMany()
                         .HasForeignKey("ModelId");
 
-                    b.HasOne("ModelRelief.Entities.Project", "Project")
+                    b.HasOne("ModelRelief.Models.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId");
 
-                    b.HasOne("ModelRelief.Entities.User", "User")
+                    b.HasOne("ModelRelief.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("ModelRelief.Entities.Mesh", b =>
+            modelBuilder.Entity("ModelRelief.Models.Mesh", b =>
                 {
-                    b.HasOne("ModelRelief.Entities.Camera", "Camera")
+                    b.HasOne("ModelRelief.Models.Camera", "Camera")
                         .WithMany()
                         .HasForeignKey("CameraId");
 
-                    b.HasOne("ModelRelief.Entities.DepthBuffer", "DepthBuffer")
+                    b.HasOne("ModelRelief.Models.DepthBuffer", "DepthBuffer")
                         .WithMany()
                         .HasForeignKey("DepthBufferId");
 
-                    b.HasOne("ModelRelief.Entities.MeshTransform", "MeshTransform")
+                    b.HasOne("ModelRelief.Models.MeshTransform", "MeshTransform")
                         .WithMany()
                         .HasForeignKey("MeshTransformId");
 
-                    b.HasOne("ModelRelief.Entities.Project", "Project")
+                    b.HasOne("ModelRelief.Models.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId");
 
-                    b.HasOne("ModelRelief.Entities.User", "User")
+                    b.HasOne("ModelRelief.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("ModelRelief.Entities.MeshTransform", b =>
+            modelBuilder.Entity("ModelRelief.Models.MeshTransform", b =>
                 {
-                    b.HasOne("ModelRelief.Entities.Project", "Project")
+                    b.HasOne("ModelRelief.Models.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId");
 
-                    b.HasOne("ModelRelief.Entities.User", "User")
+                    b.HasOne("ModelRelief.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("ModelRelief.Entities.Model3d", b =>
+            modelBuilder.Entity("ModelRelief.Models.Model3d", b =>
                 {
-                    b.HasOne("ModelRelief.Entities.Camera", "Camera")
+                    b.HasOne("ModelRelief.Models.Camera", "Camera")
                         .WithMany()
                         .HasForeignKey("CameraId");
 
-                    b.HasOne("ModelRelief.Entities.Project", "Project")
+                    b.HasOne("ModelRelief.Models.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId");
 
-                    b.HasOne("ModelRelief.Entities.User", "User")
+                    b.HasOne("ModelRelief.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("ModelRelief.Entities.Project", b =>
+            modelBuilder.Entity("ModelRelief.Models.Project", b =>
                 {
-                    b.HasOne("ModelRelief.Entities.User", "User")
+                    b.HasOne("ModelRelief.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });

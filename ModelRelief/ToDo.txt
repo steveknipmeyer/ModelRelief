@@ -4,6 +4,8 @@
     Add enum for ResourcePaths in IConfigurationProvider.
     Extract POST file logic from MeshesController.
     Create DTOs for Mesh, etc.
+    Accessing Model From JavaScript
+    https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
 
     SQLite
         Multi-user Access

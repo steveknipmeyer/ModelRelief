@@ -10,33 +10,38 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-using ModelRelief.Entities;
-
-namespace ModelRelief.Entities
-{
-    public class MeshTransform : ModelReliefEntity
+namespace ModelRelief.Models
     {
-        [Required, Display (Name = "Mesh Transform Name")]
+    public enum Model3dFormat
+        {
+        None,           // unknown
+        OBJ,            // Wavefront OBJ
+        STL             // Stereolithography
+        }
+
+    public class Model3d : ModelReliefEntity
+        {       
+        [Required, Display (Name = "Model Name")]
         public string Name { get; set; }
         public string Description { get; set; }
-        
-        public float Depth { get; set; }
-        public float Width { get; set; }
-
-        public float Tau { get; set; }
-        public float SigmaGaussianBlur { get; set; }
-        public float SigmaGaussianSmooth { get; set; }
-        public float LambdaLinearScaling { get; set; }
+        public Model3dFormat Format { get; set; }
+        public string Path { get; set; }
 
         // Navigation Properties
         public User User { get; set; }
         public Project Project { get; set; }
+        public Camera Camera { get; set; }
 
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public MeshTransform()
-        {
+        public Model3d()
+            {
+            }
+
+        public Model3d(int id, string name, Model3dFormat format, string path)
+            {
+            Id     = id;
+            Name   = name;
+            Format = format;
+            Path   = path;
+            }
         }
     }
-}

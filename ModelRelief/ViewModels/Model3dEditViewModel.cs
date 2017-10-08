@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-using ModelRelief.Entities;
+using ModelRelief.Models;
 
 namespace ModelRelief.ViewModels
     {

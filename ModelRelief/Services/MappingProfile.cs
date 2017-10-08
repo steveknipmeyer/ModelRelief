@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 using AutoMapper;
 
-using ModelRelief.Entities;
+using ModelRelief.Models;
 using ModelRelief.ViewModels;
 
 namespace ModelRelief.Services

@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
-using ModelRelief.Entities;
+using ModelRelief.Models;
 using ModelRelief.Services;
 using ModelRelief.Utility;
 using ModelRelief.ViewModels;

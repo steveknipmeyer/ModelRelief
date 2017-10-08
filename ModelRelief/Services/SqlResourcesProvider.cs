@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using ModelRelief.Entities;
+using ModelRelief.Models;
 
 namespace ModelRelief.Services
 {

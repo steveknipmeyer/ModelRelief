@@ -6,7 +6,7 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
 
-using ModelRelief.Entities;
+using ModelRelief.Models;
 using ModelRelief.Services;
 
 namespace ModelRelief.Controllers
