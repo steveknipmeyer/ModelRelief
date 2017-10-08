@@ -2038,6 +2038,15 @@ define("System/EventManager", ["require", "exports"], function (require, exports
     }());
     exports.EventManager = EventManager;
 });
+define("DataTransferObjects/IFilePath", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
 define("Relief/Relief", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
@@ -2068,6 +2077,25 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * HTTP Content-type
+     */
+    var ContentType;
+    (function (ContentType) {
+        ContentType["Json"] = "application/json";
+        ContentType["OctetStream"] = "application/octet-stream";
+    })(ContentType || (ContentType = {}));
+    /**
+     * HTTP Method
+     */
+    var MethodType;
+    (function (MethodType) {
+        MethodType["Post"] = "POST";
+        MethodType["Put"] = "PUT";
+    })(MethodType || (MethodType = {}));
+    /**
+     * Server Endpoints
+     */
     var ServerEndPoints;
     (function (ServerEndPoints) {
         ServerEndPoints["ApiMeshes"] = "api/meshes";
@@ -2085,13 +2113,32 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
         function HttpLibrary() {
         }
         /**
-         * Post an XMLHttpRequest.
+         * Posts a file and the supporting metadata to the specified URL
          * @param postUrl Url to post.
-         * @param postContents Contents to post. Converted to Blob.
-         * @param onLoad  Callback for post complete.
+         * @param fileData File data, may be binary.
+         * @param fileMetadata JSON metadata
          */
-        HttpLibrary.postRequest = function (postUrl, postContents, onLoad) {
-            var exportTag = Services_5.Services.timer.mark("Post Request: " + postUrl);
+        HttpLibrary.postFile = function (postUrl, fileData, fileMetadata) {
+            var onComplete = function (request) {
+                Services_5.Services.consoleLogger.addInfoMessage('File saved');
+                var filePath = request.responseText;
+                fileMetadata.path = filePath;
+                // now send JSON metadata since we now know the URL
+                HttpLibrary.sendXMLHttpRequest(filePath, MethodType.Put, ContentType.Json, JSON.stringify(fileMetadata), null);
+            };
+            var blob = new Blob([fileData], { type: ContentType.OctetStream });
+            HttpLibrary.sendXMLHttpRequest(postUrl, MethodType.Post, ContentType.OctetStream, blob, onComplete);
+            return true;
+        };
+        /**
+         * Post an XMLHttpRequest.
+         * @param endpoint Url endpoint.
+         * @param requestData Data for request.
+         * @param onComplete  Callback for request completion.
+         */
+        HttpLibrary.sendXMLHttpRequest = function (endpoint, methodType, contentType, requestData, onComplete) {
+            var exportTag = Services_5.Services.timer.mark("Post Request: " + endpoint);
+            var request = new XMLHttpRequest();
             // Abort 
             var onAbort = function (ev) {
                 Services_5.Services.consoleLogger.addErrorMessage('postRequest: onAbort');
@@ -2109,23 +2156,24 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
             var onTimeout = function (ev) {
                 Services_5.Services.consoleLogger.addErrorMessage('postRequest: onTimeout');
             };
-            var request = new XMLHttpRequest();
+            // Load
+            var onLoad = function (ev) {
+                if (request.readyState === request.DONE) {
+                    if (request.status === 200) {
+                        Services_5.Services.consoleLogger.addErrorMessage('postRequest: onLoad');
+                        if (onComplete)
+                            onComplete(request);
+                    }
+                }
+            };
             request.onabort = onAbort;
             request.onerror = onError;
             request.onload = onLoad;
             request.ontimeout = onTimeout;
             request.upload.onprogress = onProgress;
-            /*
-                    // file
-                    let blob = new Blob([postContents], { type: 'application/octet-stream' });
-                    request.open("POST", postUrl, true);
-                    request.send(blob)
-            */
-            // metadata
-            var fileMetadata = JSON.stringify({ name: postUrl });
-            request.open("POST", postUrl, true);
-            request.setRequestHeader("Content-type", "application/json");
-            request.send(fileMetadata);
+            request.open(methodType, endpoint, true);
+            request.setRequestHeader("Content-type", contentType);
+            request.send(requestData);
             Services_5.Services.timer.logElapsedTime(exportTag);
         };
         return HttpLibrary;
@@ -3429,10 +3477,11 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
             var exporter = new OBJExporter_1.OBJExporter();
             var result = exporter.parse(this._relief.mesh);
             var postUrl = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiMeshes;
-            var onLoad = function (ev) {
-                Services_7.Services.consoleLogger.addInfoMessage('Mesh saved');
+            var fileMetadata = {
+                name: 'mesh.obj',
+                path: ''
             };
-            Http_1.HttpLibrary.postRequest(postUrl, result, onLoad);
+            Http_1.HttpLibrary.postFile(postUrl, result, fileMetadata);
             Services_7.Services.timer.logElapsedTime(exportTag);
         };
         /**
@@ -3442,10 +3491,11 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
             // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
             var exportTag = Services_7.Services.timer.mark('Export DepthBuffer');
             var postUrl = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiDepthBuffers;
-            var onLoad = function (ev) {
-                Services_7.Services.consoleLogger.addInfoMessage('DepthBuffer saved');
+            var fileMetadata = {
+                name: 'depthbuffer.raw',
+                path: ''
             };
-            Http_1.HttpLibrary.postRequest(postUrl, this._relief.depthBuffer, onLoad);
+            Http_1.HttpLibrary.postFile(postUrl, this._relief.depthBuffer, fileMetadata);
             Services_7.Services.timer.logElapsedTime(exportTag);
         };
         /**
@@ -3453,7 +3503,7 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
          */
         ComposerController.prototype.saveRelief = function () {
             this.postMesh();
-            this.postDepthBuffer();
+            //      this.postDepthBuffer();
         };
         //#endregion
         /**

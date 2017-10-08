@@ -29,15 +29,13 @@ namespace ModelRelief.Controllers
     public class ModelsController : Controller
     {
         IHostingEnvironment         _hostingEnvironment;
-        UserManager<User>           _userManager;
         IResourcesProvider          _resourceProvider;
         ILogger<ModelsController>   _logger;
         IMapper                     _mapper;
 
-        public ModelsController(IHostingEnvironment hostingEnvironment, UserManager<User> userManager, IResourcesProvider resourceProvider, ILogger<ModelsController> logger, IMapper mapper)
+        public ModelsController(IHostingEnvironment hostingEnvironment, IResourcesProvider resourceProvider, ILogger<ModelsController> logger, IMapper mapper)
         {
             _hostingEnvironment = hostingEnvironment;
-            _userManager        = userManager;
             _resourceProvider   = resourceProvider;
             _logger             = logger;
             _mapper             = mapper;

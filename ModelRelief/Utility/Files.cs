@@ -82,6 +82,7 @@ namespace ModelRelief.Utility
             if (System.IO.File.Exists(fileName))
                 System.IO.File.Delete(fileName);
 
+            Directory.CreateDirectory(Path.GetDirectoryName(fileName));
             System.IO.File.WriteAllBytes(fileName, fileStream);
         }
     }        

@@ -6,13 +6,33 @@
 "use strict";
 
 import {DepthBufferFormat}                  from 'DepthBuffer'
+import {IFilePath}                          from 'IFilePath'
 import {Services}                           from 'Services'
 import {ReliefSettings}                     from 'Relief'
 
+/**
+ * HTTP Content-type
+ */
+enum ContentType {
+    Json          = 'application/json',
+    OctetStream   = 'application/octet-stream'
+}
+
+/**
+ * HTTP Method
+ */
+enum MethodType {
+    Post  = 'POST',
+    Put   = 'PUT'
+}
+
+/**
+ * Server Endpoints
+ */
 export enum ServerEndPoints {
         ApiMeshes        = 'api/meshes',
         ApiDepthBuffers  = 'api/depth-buffers'
-    }
+}
 
 /**
  * HTTP Library
@@ -28,14 +48,38 @@ export class HttpLibrary {
     }
 
     /**
-     * Post an XMLHttpRequest.
+     * Posts a file and the supporting metadata to the specified URL
      * @param postUrl Url to post.
-     * @param postContents Contents to post. Converted to Blob.
-     * @param onLoad  Callback for post complete.
+     * @param fileData File data, may be binary.
+     * @param fileMetadata JSON metadata
      */
-    static postRequest(postUrl : string, postContents : any, onLoad : (this: XMLHttpRequestEventTarget, ev: Event) => any): void {
+    static postFile (postUrl : string, fileData : any, fileMetadata : IFilePath) : boolean {
 
-        let exportTag = Services.timer.mark(`Post Request: ${postUrl}`);
+       let onComplete = function(request: XMLHttpRequest) {
+
+            Services.consoleLogger.addInfoMessage('File saved');
+            let filePath = request.responseText;
+            fileMetadata.path = filePath;
+
+            // now send JSON metadata since we now know the URL
+            HttpLibrary.sendXMLHttpRequest(filePath, MethodType.Put, ContentType.Json, JSON.stringify(fileMetadata), null);
+        };
+        let blob = new Blob([fileData], { type: ContentType.OctetStream }); 
+        HttpLibrary.sendXMLHttpRequest(postUrl, MethodType.Post, ContentType.OctetStream, blob, onComplete);
+
+        return true;
+    }
+
+    /**
+     * Post an XMLHttpRequest.
+     * @param endpoint Url endpoint.
+     * @param requestData Data for request.
+     * @param onComplete  Callback for request completion.
+     */
+    static sendXMLHttpRequest(endpoint : string, methodType : MethodType, contentType : ContentType, requestData : any, onComplete : (request: XMLHttpRequest) => any): void {
+
+        let exportTag = Services.timer.mark(`Post Request: ${endpoint}`);
+        let request = new XMLHttpRequest(); 
 
         // Abort 
         let onAbort = function (this: XMLHttpRequestEventTarget, ev: Event) : any {
@@ -62,24 +106,28 @@ export class HttpLibrary {
             Services.consoleLogger.addErrorMessage('postRequest: onTimeout');
         };
 
-        let request = new XMLHttpRequest(); 
+        // Load
+        let onLoad = function (this: XMLHttpRequestEventTarget, ev: Event) : any {
+
+            if (request.readyState === request.DONE) {
+                if (request.status === 200) {
+
+                    Services.consoleLogger.addErrorMessage('postRequest: onLoad');
+                    if (onComplete)
+                        onComplete(request);
+                }
+            }
+        };
+
         request.onabort    = onAbort;
         request.onerror    = onError;
         request.onload     = onLoad;
         request.ontimeout  = onTimeout;
-
         request.upload.onprogress = onProgress;
-/*        
-        // file
-        let blob = new Blob([postContents], { type: 'application/octet-stream' }); 
-        request.open("POST", postUrl, true);
-        request.send(blob)
-*/
-        // metadata
-        let fileMetadata = JSON.stringify({name : postUrl});
-        request.open("POST", postUrl, true);
-        request.setRequestHeader("Content-type", "application/json");
-        request.send(fileMetadata);
+
+        request.open(methodType, endpoint, true);
+        request.setRequestHeader("Content-type", contentType);
+        request.send(requestData);
 
         Services.timer.logElapsedTime(exportTag);
     }        

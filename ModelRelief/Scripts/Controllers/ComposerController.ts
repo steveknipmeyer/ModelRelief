@@ -115,12 +115,12 @@ export class ComposerController {
         let result = exporter.parse(this._relief.mesh);
 
         let postUrl = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiMeshes}`;
-        
-        let onLoad = function(ev: Event) {
-            Services.consoleLogger.addInfoMessage('Mesh saved');
-        };
 
-        HttpLibrary.postRequest(postUrl, result, onLoad);
+        let fileMetadata = {
+            name : 'mesh.obj',
+            path : ''
+        };
+        HttpLibrary.postFile (postUrl, result, fileMetadata);
         Services.timer.logElapsedTime(exportTag);
     }        
 
@@ -134,11 +134,11 @@ export class ComposerController {
 
         let postUrl = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiDepthBuffers}`;
         
-        let onLoad = function(ev: Event) {
-            Services.consoleLogger.addInfoMessage('DepthBuffer saved');
+        let fileMetadata = {
+            name : 'depthbuffer.raw',
+            path : ''
         };
-
-        HttpLibrary.postRequest(postUrl, this._relief.depthBuffer, onLoad);
+        HttpLibrary.postFile (postUrl, this._relief.depthBuffer, fileMetadata);
         Services.timer.logElapsedTime(exportTag);
     }        
         
@@ -148,7 +148,7 @@ export class ComposerController {
     saveRelief(): void {
 
         this.postMesh();
-        this.postDepthBuffer();
+//      this.postDepthBuffer();
     }
     //#endregion
 

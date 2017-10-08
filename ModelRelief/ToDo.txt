@@ -1,20 +1,19 @@
 ﻿<-- Commit Notes
 
 <-- Tasks
+    Add enum for ResourcePaths in IConfigurationProvider.
+    Extract POST file logic from MeshesController.
+    Create DTOs for Mesh, etc.
+
     SQLite
         Multi-user Access
             Cookies are used so tests must be done from an external computer.
         64 bit support
 
-    Simplify the model storage. Use an application setting.
-        Configuration setting?
-
     EntityFramework Core
         https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/
 
     Log Visual Studio performance problem.
-    Singular or plural table names?
-    Singular or plural controller names?
 
     Export    
         Refactor FileSave to use async/await.
@@ -40,7 +39,7 @@
     Fluent Validation
         https://github.com/JeremySkinner/FluentValidation
 
-    Mediatr
+    MediatR
     e-Book on API Design
 
     Design Guidelines

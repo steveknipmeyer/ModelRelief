@@ -20,6 +20,8 @@ using ModelRelief.Entities;
 using ModelRelief.Services;
 using ModelRelief.Utility;
 using ModelRelief.ViewModels;
+using Microsoft.Extensions.Logging;
+using AutoMapper;
 
 namespace ModelRelief.Controllers.Api
 {
@@ -28,34 +30,66 @@ namespace ModelRelief.Controllers.Api
     [Route ("api/[controller]")]        
     public class MeshesController : Controller
     {
-        IHostingEnvironment _hostingEnvironment;
-        IResourcesProvider  _resourceProvider;
+        IHostingEnvironment             _hostingEnvironment;
+        IResourcesProvider              _resourceProvider;
+        ILogger<MeshesController>       _logger;
+        Services.IConfigurationProvider _configurationProvider;
+        IMapper                         _mapper;
 
-        public MeshesController(IHostingEnvironment hostingEnvironment, IResourcesProvider resourceProvider)
+        public MeshesController(IHostingEnvironment hostingEnvironment, IResourcesProvider resourceProvider, ILogger<MeshesController> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper)
         {
-            _hostingEnvironment = hostingEnvironment;
-            _resourceProvider   = resourceProvider;
+            _hostingEnvironment     = hostingEnvironment;
+            _resourceProvider       = resourceProvider;
+            _logger                 = logger;
+            _configurationProvider  = configurationProvider;
+            _mapper                 = mapper;
         }
 
         [HttpPost]
         [Consumes("application/octet-stream")]
-        public void Post()
+        [DisableRequestSizeLimit]
+        public ContentResult Post()
         { 
-            // How is the mesh name passed in the request? Is a multi-part form required?
-            string meshPath = "/store/users/7b4f6c4a-9113-4f7b-9ca2-9d1358ad5f20/meshes/apiTest/";
-            string meshName = "mesh.obj";
+            var userId     = Identity.GetUserId(User);
+
+            var newMesh = new Mesh() {Name=$"{userId}"};
+            _resourceProvider.Meshes.Add(newMesh);
+            var newMeshId = newMesh.Id;
+
+            var storeUsers = _configurationProvider.GetSetting("ResourcePaths:StoreUsers");
+            string meshPath = $"{storeUsers}{userId}/meshes/{newMeshId}/";
+            string meshName = $"{newMeshId}.obj";
 
             string fileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{meshName}";
             Files.WriteFileFromStream(fileName, this.Request.Body);
-            
-            // Return the mesh URL in the HTTP Response...
+
+            var meshUri = new Uri($"{Request.Scheme}://{Request.Host}/api/meshes/{newMeshId}", UriKind.Absolute);
+
+            // Return the mesh URI in the HTTP Response
+            return Content(meshUri.AbsoluteUri);
         }
 
-        [HttpPost]
+        [HttpPut ("{id}")]
         [Consumes("application/json")]
-        public void Post([FromBody] Mesh mesh )
+        public void Post([FromBody] Mesh mesh, int id )
         { 
-            Log.Information("Model GET {@mesh}", mesh);
+            var userId      = Identity.GetUserId(User);
+            var storeUsers  = _configurationProvider.GetSetting("ResourcePaths:StoreUsers");
+            string meshPath = $"{storeUsers}{userId}/meshes/{id}/";
+            string meshName = $"{mesh.Name}";
+            string fileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{meshName}";
+
+            var existingMesh = _resourceProvider.Meshes.Find(id);
+            existingMesh.Name = mesh.Name;
+            existingMesh.Path = fileName;
+
+            _resourceProvider.Meshes.Update(existingMesh);
+
+            // now rename temporary file to match the final name
+            string existingFileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{id}.obj";
+            System.IO.File.Move(existingFileName, fileName);
+
+            Log.Information("Mesh PUT {@mesh}", mesh);
         }
     }        
 }

@@ -34,6 +34,8 @@ namespace ModelRelief.Services
     public interface IResourcesProvider
     
     {
-        IResourceProvider<Model3d>  Models {get;}
+        IResourceProvider<Model3d>      Models {get;}
+        IResourceProvider<DepthBuffer>  DepthBuffers {get;}
+        IResourceProvider<Mesh>         Meshes {get;}
     }
 }

@@ -21,6 +21,7 @@
         "*",
         "Scripts/*",
         "Scripts/Controllers/*",
+        "Scripts/DataTransferObjects/*",
         "Scripts/DepthBuffer/*",
         "Scripts/Graphics/*",
         "Scripts/ModelExporters/*",
