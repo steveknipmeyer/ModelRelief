@@ -14,6 +14,12 @@ using Microsoft.AspNetCore.Hosting;
 using Serilog;
 using Serilog.Events;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+
+using ModelRelief.Database;
+using ModelRelief.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace ModelRelief
 {
@@ -26,7 +32,27 @@ namespace ModelRelief
         public static void Main(string[] args)
         {   
             ConfigureLogging();
-            BuildWebHost(args).Run();
+
+            var host = BuildWebHost(args);
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    var logger  = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogInformation("Preparing to initialize database.");
+  
+                    var initializer = new DbInitializer(services);
+                    initializer.Populate();
+                }
+                catch (Exception ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An error occurred while seeding the database.");
+                }
+            }
+
+            host.Run();
         }
 
         /// <summary>

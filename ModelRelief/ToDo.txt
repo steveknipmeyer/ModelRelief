@@ -1,11 +1,18 @@
 ﻿<-- Commit Notes
 
+<--- Reading
+    https://andrewlock.net/introduction-to-authentication-with-asp-net-core/
+
 <-- Tasks
+    Seed database with sample data in DbInitializer.Initialize.
+        Add new Model3d constructor.
+        
     Add enum for ResourcePaths in IConfigurationProvider.
     Extract POST file logic from MeshesController.
     Create DTOs for Mesh, etc.
     Accessing Model From JavaScript
-    https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
+        Use <input type="hidden" asp-for="ID" />?
+        https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
 
     SQLite
         Multi-user Access

@@ -12,7 +12,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-namespace ModelRelief.Models
+using ModelRelief.Models;
+
+namespace ModelRelief.Database
     {
     public class ModelReliefDbContext : IdentityDbContext<User>
         {

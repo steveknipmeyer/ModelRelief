@@ -36,12 +36,19 @@ namespace ModelRelief.Models
             {
             }
 
-        public Model3d(int id, string name, Model3dFormat format, string path)
+        public Model3d(int id, string name, string description, Model3dFormat format, string path,
+                       string userId, int projectId, int cameraId)
             {
-            Id     = id;
-            Name   = name;
-            Format = format;
-            Path   = path;
+            Id          = id;
+            Name        = name;
+            Description = description;
+            Format      = format;
+            Path        = path;
+/*
+            UserId    = userId
+            ProjectId = projectId;
+            CameraId = cameraId;
+*/
             }
         }
     }

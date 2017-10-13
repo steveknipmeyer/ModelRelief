@@ -13,18 +13,19 @@ using Microsoft.AspNetCore.Mvc;
 
 using ModelRelief.ViewModels;
 using ModelRelief.Models;
+using System.Security.Claims;
 
 namespace ModelRelief.Controllers
     {
     public class AccountController : Controller
         {
         private UserManager<User>   _userManager;
-        private SignInManager<User> _signInManger;
+        private SignInManager<User> _signInManager;
 
         public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
             {
             _userManager  = userManager;
-            _signInManger = signInManager;
+            _signInManager = signInManager;
             }
 
         [HttpGet]
@@ -55,14 +56,14 @@ namespace ModelRelief.Controllers
                 }
 
             // success
-            await _signInManger.SignInAsync(user, false);
+            await _signInManager.SignInAsync(user, false);
             return RedirectToAction("Index", "Home");
             }
 
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
             {
-            await _signInManger.SignOutAsync();
+            await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
             }
 
@@ -81,7 +82,7 @@ namespace ModelRelief.Controllers
                 return View();
                 }
             
-            var loginResult = await _signInManger.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
+            var loginResult = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
             if (!loginResult.Succeeded)
                 {
                 ModelState.AddModelError("", "Login was not successful. Please try again.");

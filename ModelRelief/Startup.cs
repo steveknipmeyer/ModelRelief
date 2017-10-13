@@ -21,6 +21,7 @@ using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using MediatR;
 
+using ModelRelief.Database;
 using ModelRelief.Models;
 using ModelRelief.Services;
 using ModelRelief.Workbench;

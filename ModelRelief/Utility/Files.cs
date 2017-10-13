@@ -85,5 +85,20 @@ namespace ModelRelief.Utility
             Directory.CreateDirectory(Path.GetDirectoryName(fileName));
             System.IO.File.WriteAllBytes(fileName, fileStream);
         }
+
+        /// <summary>
+        /// Copies a folder and all children.
+        /// https://stackoverflow.com/questions/58744/copy-the-entire-contents-of-a-directory-in-c-sharp
+        /// </summary>
+        /// <param name="source">Source</param>
+        /// <param name="target">Target</param>
+        public static void CopyFilesRecursively(DirectoryInfo source, DirectoryInfo target) 
+        {
+            foreach (DirectoryInfo dir in source.GetDirectories())
+                CopyFilesRecursively(dir, target.CreateSubdirectory(dir.Name));
+
+            foreach (FileInfo file in source.GetFiles())
+                file.CopyTo(Path.Combine(target.FullName, file.Name));
+        }
     }        
 }
