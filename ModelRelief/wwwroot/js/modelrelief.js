@@ -2160,7 +2160,7 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
             var onLoad = function (ev) {
                 if (request.readyState === request.DONE) {
                     if (request.status === 200) {
-                        Services_5.Services.consoleLogger.addErrorMessage('postRequest: onLoad');
+                        Services_5.Services.consoleLogger.addInfoMessage('postRequest: onLoad');
                         if (onComplete)
                             onComplete(request);
                     }

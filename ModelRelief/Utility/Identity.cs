@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using ModelRelief.Models;
 
 namespace ModelRelief.Utility
 {
@@ -27,5 +29,15 @@ namespace ModelRelief.Utility
             var claim = claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
             return claim.Value;
         }
+
+        /// <summary>
+        /// Returns the current user from the HttpContext.User.
+        /// https://stackoverflow.com/questions/30701006/how-to-get-the-current-logged-in-user-id-asp-net-core
+        /// </summary>
+        /// <param name="userManager">User Manager from DI</param>
+        /// <param name="claimsPrincipal">HttpContext.User</param>
+        /// <returns>USer</returns>
+        public static async Task<User> GetCurrentUserAsync (UserManager<User> userManager, ClaimsPrincipal claimsPrincipal) =>
+            await userManager.GetUserAsync(claimsPrincipal);
     }        
 }

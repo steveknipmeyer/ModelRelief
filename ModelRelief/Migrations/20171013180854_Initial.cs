@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ModelRelief.Migrations
 {
-    public partial class InitialCreation : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -182,16 +182,16 @@ namespace ModelRelief.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     BoundClippingPlanes = table.Column<bool>(type: "INTEGER", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
-                    Far = table.Column<float>(type: "REAL", nullable: false),
-                    FieldOfView = table.Column<float>(type: "REAL", nullable: false),
-                    LookAtX = table.Column<float>(type: "REAL", nullable: false),
-                    LookAtY = table.Column<float>(type: "REAL", nullable: false),
-                    LookAtZ = table.Column<float>(type: "REAL", nullable: false),
+                    Far = table.Column<double>(type: "REAL", nullable: false),
+                    FieldOfView = table.Column<double>(type: "REAL", nullable: false),
+                    LookAtX = table.Column<double>(type: "REAL", nullable: false),
+                    LookAtY = table.Column<double>(type: "REAL", nullable: false),
+                    LookAtZ = table.Column<double>(type: "REAL", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Near = table.Column<float>(type: "REAL", nullable: false),
-                    PositionX = table.Column<float>(type: "REAL", nullable: false),
-                    PositionY = table.Column<float>(type: "REAL", nullable: false),
-                    PositionZ = table.Column<float>(type: "REAL", nullable: false),
+                    Near = table.Column<double>(type: "REAL", nullable: false),
+                    PositionX = table.Column<double>(type: "REAL", nullable: false),
+                    PositionY = table.Column<double>(type: "REAL", nullable: false),
+                    PositionZ = table.Column<double>(type: "REAL", nullable: false),
                     ProjectId = table.Column<int>(type: "INTEGER", nullable: true),
                     StandardView = table.Column<int>(type: "INTEGER", nullable: false),
                     UserId = table.Column<string>(type: "TEXT", nullable: true)
@@ -219,16 +219,16 @@ namespace ModelRelief.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Depth = table.Column<float>(type: "REAL", nullable: false),
+                    Depth = table.Column<double>(type: "REAL", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
-                    LambdaLinearScaling = table.Column<float>(type: "REAL", nullable: false),
+                    LambdaLinearScaling = table.Column<double>(type: "REAL", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     ProjectId = table.Column<int>(type: "INTEGER", nullable: true),
-                    SigmaGaussianBlur = table.Column<float>(type: "REAL", nullable: false),
-                    SigmaGaussianSmooth = table.Column<float>(type: "REAL", nullable: false),
-                    Tau = table.Column<float>(type: "REAL", nullable: false),
+                    SigmaGaussianBlur = table.Column<double>(type: "REAL", nullable: false),
+                    SigmaGaussianSmooth = table.Column<double>(type: "REAL", nullable: false),
+                    Tau = table.Column<double>(type: "REAL", nullable: false),
                     UserId = table.Column<string>(type: "TEXT", nullable: true),
-                    Width = table.Column<float>(type: "REAL", nullable: false)
+                    Width = table.Column<double>(type: "REAL", nullable: false)
                 },
                 constraints: table =>
                 {

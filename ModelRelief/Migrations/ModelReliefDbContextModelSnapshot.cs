@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using ModelRelief.Database;
+using ModelRelief.Models;
 using System;
 
 namespace ModelRelief.Migrations
@@ -135,26 +136,26 @@ namespace ModelRelief.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<float>("Far");
+                    b.Property<double>("Far");
 
-                    b.Property<float>("FieldOfView");
+                    b.Property<double>("FieldOfView");
 
-                    b.Property<float>("LookAtX");
+                    b.Property<double>("LookAtX");
 
-                    b.Property<float>("LookAtY");
+                    b.Property<double>("LookAtY");
 
-                    b.Property<float>("LookAtZ");
+                    b.Property<double>("LookAtZ");
 
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<float>("Near");
+                    b.Property<double>("Near");
 
-                    b.Property<float>("PositionX");
+                    b.Property<double>("PositionX");
 
-                    b.Property<float>("PositionY");
+                    b.Property<double>("PositionY");
 
-                    b.Property<float>("PositionZ");
+                    b.Property<double>("PositionZ");
 
                     b.Property<int?>("ProjectId");
 
@@ -250,26 +251,26 @@ namespace ModelRelief.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<float>("Depth");
+                    b.Property<double>("Depth");
 
                     b.Property<string>("Description");
 
-                    b.Property<float>("LambdaLinearScaling");
+                    b.Property<double>("LambdaLinearScaling");
 
                     b.Property<string>("Name")
                         .IsRequired();
 
                     b.Property<int?>("ProjectId");
 
-                    b.Property<float>("SigmaGaussianBlur");
+                    b.Property<double>("SigmaGaussianBlur");
 
-                    b.Property<float>("SigmaGaussianSmooth");
+                    b.Property<double>("SigmaGaussianSmooth");
 
-                    b.Property<float>("Tau");
+                    b.Property<double>("Tau");
 
                     b.Property<string>("UserId");
 
-                    b.Property<float>("Width");
+                    b.Property<double>("Width");
 
                     b.HasKey("Id");
 

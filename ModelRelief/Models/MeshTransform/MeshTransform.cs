@@ -20,13 +20,13 @@ namespace ModelRelief.Models
         public string Name { get; set; }
         public string Description { get; set; }
         
-        public float Depth { get; set; }
-        public float Width { get; set; }
+        public double Depth { get; set; }
+        public double Width { get; set; }
 
-        public float Tau { get; set; }
-        public float SigmaGaussianBlur { get; set; }
-        public float SigmaGaussianSmooth { get; set; }
-        public float LambdaLinearScaling { get; set; }
+        public double Tau { get; set; }
+        public double SigmaGaussianBlur { get; set; }
+        public double SigmaGaussianSmooth { get; set; }
+        public double LambdaLinearScaling { get; set; }
 
         // Navigation Properties
         public User User { get; set; }

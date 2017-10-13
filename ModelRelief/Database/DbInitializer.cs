@@ -15,12 +15,12 @@ namespace ModelRelief.Database
 {
     public class DbInitializer
     {
-        IServiceProvider                _services;
-        IHostingEnvironment             _hostingEnvironment;
-        Services.IConfigurationProvider _configurationProvider;
-        ModelReliefDbContext            _context;
-        UserManager<User>               _userManager;
-        SignInManager<User>             _signInManager;
+        private IServiceProvider                _services { get; set; }
+        private IHostingEnvironment             _hostingEnvironment  { get; set; }
+        private Services.IConfigurationProvider _configurationProvider  { get; set; }
+        private ModelReliefDbContext            _context  { get; set; }
+        private UserManager<User>               _userManager  { get; set; }
+        private SignInManager<User>             _signInManager  { get; set; }
 
         public DbInitializer(IServiceProvider services)
         {
@@ -64,8 +64,8 @@ namespace ModelRelief.Database
             CopyTestFiles();
 
             AddProjects();
-            AddModels();
             AddCameras();
+            AddModels();
             AddMeshTransforms();
 
             AddDepthBuffers();
@@ -90,13 +90,13 @@ namespace ModelRelief.Database
         /// </summary>
         private void CopyTestFiles()
         {
-            var user = _context.Users.FirstOrDefault<User>();
+            var user   = _context.Users.FirstOrDefault<User>();
 
-            var testdataPartialPath  = _configurationProvider.GetSetting("ResourcePaths:TestData");
-            string testDataPath      = $"{_hostingEnvironment.ContentRootPath}{testdataPartialPath}";
+            var testdataPartialPath = _configurationProvider.GetSetting(ResourcePaths.TestDataUser);
+            string testDataPath     = $"{_hostingEnvironment.ContentRootPath}{testdataPartialPath}";
 
-            var storeUsersPartialPath  = _configurationProvider.GetSetting("ResourcePaths:StoreUsers");
-            string storeUsersPath      = $"{_hostingEnvironment.WebRootPath}{storeUsersPartialPath}{user.Id}/";
+            var storeUsersPartialPath = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
+            string storeUsersPath     = $"{_hostingEnvironment.WebRootPath}{storeUsersPartialPath}{user.Id}/";
 
             DirectoryInfo source = new DirectoryInfo(testDataPath);
             DirectoryInfo target = new DirectoryInfo(storeUsersPath);
@@ -108,28 +108,14 @@ namespace ModelRelief.Database
         /// </summary>
         private void AddProjects()
         {
-        }
-
-        /// <summary>
-        /// Add test models.
-        /// </summary>
-        private void AddModels()
-        {
             var user = _context.Users.FirstOrDefault<User>();
-            var models = new Model3d[]
+            var projects = new Project[]
             {
-                new Model3d{Id = 1, Name = "lucy,obj", Description = "Standford test model", Format = Model3dFormat.OBJ, Path = $"/store/users/{user.Id}/models/1/"},
+                new Project{Id = 1, Name = "ModelRelief", Description = "Development and Test", User = user},
             };
-/*
-	    Id	CameraId	Description	Format	Name	            Path	                                                    ProjectId	UserId
-        1		        Stanford	1	    lucy.obj	        /store/users/7b4f6c4a-9113-4f7b-9ca2-9d1358ad5f20/models/1	1	        7b4f6c4a-9113-4f7b-9ca2-9d1358ad5f20
-        2		        Stanford	1	    armadillo.obj	    /store/users/7b4f6c4a-9113-4f7b-9ca2-9d1358ad5f20/models/2	1	        7b4f6c4a-9113-4f7b-9ca2-9d1358ad5f20
-        3		        Stanford	1	    bunny.obj	        /store/users/7b4f6c4a-9113-4f7b-9ca2-9d1358ad5f20/models/3	1	        7b4f6c4a-9113-4f7b-9ca2-9d1358ad5f20
-        4		        Stanford	1	    dragon.obj	        /store/users/7b4f6c4a-9113-4f7b-9ca2-9d1358ad5f20/models/4	1	        7b4f6c4a-9113-4f7b-9ca2-9d1358ad5f20
-        5		        Stanford	1	    tyrannosaurus.obj	/store/users/7b4f6c4a-9113-4f7b-9ca2-9d1358ad5f20/models/5	1	        7b4f6c4a-9113-4f7b-9ca2-9d1358ad5f20*/
-            foreach (Model3d model in models)
+            foreach (Project project in projects)
             {
-                _context.Models.Add(model);
+                _context.Projects.Add(project);
             }
             _context.SaveChanges();
         }
@@ -139,6 +125,55 @@ namespace ModelRelief.Database
         /// </summary>
         private void AddCameras()
         {
+            var user    = _context.Users.FirstOrDefault<User>();
+            var project = _context.Projects.FirstOrDefault<Project>();
+
+            var cameras = new Camera[]
+            {
+                new Camera{Id = 1, Name = "Top Camera", Description = "Aligned with negative Z", StandardView = StandardView.Top,
+                           PositionX = 0.0, PositionY = 0.0, PositionZ = 100.0,
+                           LookAtX   = 0.0, LookAtY = 0.0, LookAtZ = 0.0,
+                           FieldOfView = 35.0,
+                           Near = 0.0, Far = 1000.0,
+                           BoundClippingPlanes = false,
+                           User = user, Project = project}
+            };
+
+            foreach (Camera camera in cameras)
+            {
+                _context.Cameras.Add(camera);
+            }
+            _context.SaveChanges();
+        }
+
+        /// <summary>
+        /// Add test models.
+        /// </summary>
+        private void AddModels()
+        {
+            var user    = _context.Users.FirstOrDefault<User>();
+            var project = _context.Projects.FirstOrDefault<Project>();
+            var camera = _context.Cameras.FirstOrDefault<Camera>();
+
+            var models = new Model3d[]
+            {
+                new Model3d{Id = 1, Name = "lucy.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"/store/users/{user.Id}/models/1/",
+                            User = user, Project = project, Camera = camera},
+                new Model3d{Id = 2, Name = "armadillo.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"/store/users/{user.Id}/models/2/",
+                            User = user, Project = project, Camera = camera},
+                new Model3d{Id = 3, Name = "bunny.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"/store/users/{user.Id}/models/3/",
+                            User = user, Project = project, Camera = camera},
+                new Model3d{Id = 4, Name = "dragon.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"/store/users/{user.Id}/models/4/",
+                            User = user, Project = project, Camera = camera},
+                new Model3d{Id = 5, Name = "tyrannosaurus.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"/store/users/{user.Id}/models/5/",
+                            User = user, Project = project, Camera = camera},
+            };
+
+            foreach (Model3d model in models)
+            {
+                _context.Models.Add(model);
+            }
+            _context.SaveChanges();
         }
 
         /// <summary>
@@ -146,6 +181,22 @@ namespace ModelRelief.Database
         /// </summary>
         private void AddMeshTransforms()
         {
+            var user    = _context.Users.FirstOrDefault<User>();
+            var project = _context.Projects.FirstOrDefault<Project>();
+
+            var meshTransforms = new MeshTransform[]
+            {
+                new MeshTransform{Id = 1, Name = "Identity", Description = "Default transform",
+                            Depth = 1.0, Width = 100.0,
+                            Tau = 1.0, SigmaGaussianBlur = 1.0, SigmaGaussianSmooth = 1.0, LambdaLinearScaling = 1.0,
+                            User = user, Project = project}
+            };
+
+            foreach (MeshTransform meshTransform in meshTransforms)
+            {
+                _context.MeshTransforms.Add(meshTransform);
+            }
+            _context.SaveChanges();
         }
 
         /// <summary>

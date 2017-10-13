@@ -1,13 +1,9 @@
 ﻿<-- Commit Notes
 
 <--- Reading
-    https://andrewlock.net/introduction-to-authentication-with-asp-net-core/
+
 
 <-- Tasks
-    Seed database with sample data in DbInitializer.Initialize.
-        Add new Model3d constructor.
-        
-    Add enum for ResourcePaths in IConfigurationProvider.
     Extract POST file logic from MeshesController.
     Create DTOs for Mesh, etc.
     Accessing Model From JavaScript
@@ -391,3 +387,5 @@
     Performance
         https://developercommunity.visualstudio.com/content/problem/43364/visual-studio-2017-increadibly-slow-and-laggy.html
 
+<-- Identity
+    https://andrewlock.net/introduction-to-authentication-with-asp-net-core/

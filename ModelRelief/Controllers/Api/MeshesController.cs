@@ -31,14 +31,16 @@ namespace ModelRelief.Controllers.Api
     public class MeshesController : Controller
     {
         IHostingEnvironment             _hostingEnvironment;
+        UserManager<User>               _userManager;
         IResourcesProvider              _resourceProvider;
         ILogger<MeshesController>       _logger;
         Services.IConfigurationProvider _configurationProvider;
         IMapper                         _mapper;
 
-        public MeshesController(IHostingEnvironment hostingEnvironment, IResourcesProvider resourceProvider, ILogger<MeshesController> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper)
+        public MeshesController(IHostingEnvironment hostingEnvironment, UserManager<User> userManager, IResourcesProvider resourceProvider, ILogger<MeshesController> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper)
         {
             _hostingEnvironment     = hostingEnvironment;
+            _userManager            = userManager;
             _resourceProvider       = resourceProvider;
             _logger                 = logger;
             _configurationProvider  = configurationProvider;
@@ -48,16 +50,16 @@ namespace ModelRelief.Controllers.Api
         [HttpPost]
         [Consumes("application/octet-stream")]
         [DisableRequestSizeLimit]
-        public ContentResult Post()
+        public async Task<ContentResult> Post()
         { 
-            var userId     = Identity.GetUserId(User);
+            var user = await Identity.GetCurrentUserAsync(_userManager, User);
 
-            var newMesh = new Mesh() {Name=$"{userId}"};
+            var newMesh = new Mesh() {Name=$"{user.Id}"};
             _resourceProvider.Meshes.Add(newMesh);
             var newMeshId = newMesh.Id;
 
-            var storeUsers = _configurationProvider.GetSetting("ResourcePaths:StoreUsers");
-            string meshPath = $"{storeUsers}{userId}/meshes/{newMeshId}/";
+            var storeUsers = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
+            string meshPath = $"{storeUsers}{user.Id}/meshes/{newMeshId}/";
             string meshName = $"{newMeshId}.obj";
 
             string fileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{meshName}";
@@ -71,11 +73,12 @@ namespace ModelRelief.Controllers.Api
 
         [HttpPut ("{id}")]
         [Consumes("application/json")]
-        public void Post([FromBody] Mesh mesh, int id )
+        public async void Post([FromBody] Mesh mesh, int id )
         { 
-            var userId      = Identity.GetUserId(User);
-            var storeUsers  = _configurationProvider.GetSetting("ResourcePaths:StoreUsers");
-            string meshPath = $"{storeUsers}{userId}/meshes/{id}/";
+            var user = await Identity.GetCurrentUserAsync(_userManager, User);
+
+            var storeUsers  = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
+            string meshPath = $"{storeUsers}{user.Id}/meshes/{id}/";
             string meshName = $"{mesh.Name}";
             string fileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{meshName}";
 

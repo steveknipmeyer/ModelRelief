@@ -112,7 +112,7 @@ export class HttpLibrary {
             if (request.readyState === request.DONE) {
                 if (request.status === 200) {
 
-                    Services.consoleLogger.addErrorMessage('postRequest: onLoad');
+                    Services.consoleLogger.addInfoMessage('postRequest: onLoad');
                     if (onComplete)
                         onComplete(request);
                 }

@@ -34,17 +34,17 @@ namespace ModelRelief.Models
 
         public StandardView StandardView { get; set; }
 
-        public float PositionX { get; set; }
-        public float PositionY { get; set; }
-        public float PositionZ { get; set; }
+        public double PositionX { get; set; }
+        public double PositionY { get; set; }
+        public double PositionZ { get; set; }
 
-        public float LookAtX { get; set; }
-        public float LookAtY { get; set; }
-        public float LookAtZ { get; set; }
+        public double LookAtX { get; set; }
+        public double LookAtY { get; set; }
+        public double LookAtZ { get; set; }
 
-        public float Near{ get; set; }
-        public float Far{ get; set; }
-        public float FieldOfView { get; set; }
+        public double Near{ get; set; }
+        public double Far{ get; set; }
+        public double FieldOfView { get; set; }
         public bool BoundClippingPlanes { get; set; }
 
         // Navigation Properties
