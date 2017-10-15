@@ -1,6 +1,4 @@
 ﻿<-- Commit Notes
-        Refactor FileSave to use async/await.
-        Return Created status from Mesh Post.
 
 <--- Reading
     EntityFramework Core
