@@ -50,7 +50,7 @@ namespace ModelRelief.Controllers.Api
         [HttpPost]
         [Consumes("application/octet-stream")]
         [DisableRequestSizeLimit]
-        public async Task<ContentResult> Post()
+        public async Task<CreatedResult> Post()
         { 
             var user = await Identity.GetCurrentUserAsync(_userManager, User);
 
@@ -63,12 +63,12 @@ namespace ModelRelief.Controllers.Api
             string meshName = $"{newMeshId}.obj";
 
             string fileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{meshName}";
-            Files.WriteFileFromStream(fileName, this.Request.Body);
+            await Files.WriteFileFromStream(fileName, this.Request.Body);
 
             var meshUri = new Uri($"{Request.Scheme}://{Request.Host}/api/meshes/{newMeshId}", UriKind.Absolute);
 
             // Return the mesh URI in the HTTP Response
-            return Content(meshUri.AbsoluteUri);
+            return Created(Url.RouteUrl(newMesh.Id), newMesh.Id);
         }
 
         [HttpPut ("{id}")]

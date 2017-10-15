@@ -2121,7 +2121,8 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
         HttpLibrary.postFile = function (postUrl, fileData, fileMetadata) {
             var onComplete = function (request) {
                 Services_5.Services.consoleLogger.addInfoMessage('File saved');
-                var filePath = request.responseText;
+                var objectId = request.responseText;
+                var filePath = request.responseURL + "/" + objectId;
                 fileMetadata.path = filePath;
                 // now send JSON metadata since we now know the URL
                 HttpLibrary.sendXMLHttpRequest(filePath, MethodType.Put, ContentType.Json, JSON.stringify(fileMetadata), null);
@@ -2159,10 +2160,13 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
             // Load
             var onLoad = function (ev) {
                 if (request.readyState === request.DONE) {
-                    if (request.status === 200) {
-                        Services_5.Services.consoleLogger.addInfoMessage('postRequest: onLoad');
-                        if (onComplete)
-                            onComplete(request);
+                    switch (request.status) {
+                        case 200:
+                        case 201:
+                            Services_5.Services.consoleLogger.addInfoMessage('postRequest: onLoad');
+                            if (onComplete)
+                                onComplete(request);
+                            break;
                     }
                 }
             };

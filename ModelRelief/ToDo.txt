@@ -1,27 +1,21 @@
 ﻿<-- Commit Notes
+        Refactor FileSave to use async/await.
+        Return Created status from Mesh Post.
 
 <--- Reading
-
-
-<-- Tasks
-    Extract POST file logic from MeshesController.
-    Create DTOs for Mesh, etc.
-    Accessing Model From JavaScript
-        Use <input type="hidden" asp-for="ID" />?
-        https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
-
-    SQLite
-        Multi-user Access
-            Cookies are used so tests must be done from an external computer.
-        64 bit support
-
     EntityFramework Core
         https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/
 
-    Log Visual Studio performance problem.
+<-- Tasks
+    Extract POST file logic from MeshesController.
+
+    Create DTOs for Mesh, etc.
+
+    Accessing Model From JavaScript
+        https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
 
     Export    
-        Refactor FileSave to use async/await.
+        Refactor Export OBJ to use async/await.
 
 <-- API 
     Goal : Roundtrip a scaled mesh.
@@ -45,6 +39,7 @@
         https://github.com/JeremySkinner/FluentValidation
 
     MediatR
+
     e-Book on API Design
 
     Design Guidelines
@@ -76,15 +71,15 @@
         // Returns Id
 
         // Metadata (JSON) Upload
-        Url: api/depth-buffers
-        [HttpPost]
+        Url: api/depth-buffers/id
+        [HttpPut]
         [Consumes "application/json]
         {Id : <from 1st post>}
         
-        Mesh Post: Process a relief from a DepthBuffer.
-            HTTP Request
-                MeshTransform Id
+        Mesh Post: Process a relief from a DepthBuffer and a MeshTransform.
+            HTTP Post
                 DepthBuffer Id
+                MeshTransform Id
             HTTP Response
                 URL (Mesh)
 
@@ -389,3 +384,9 @@
 
 <-- Identity
     https://andrewlock.net/introduction-to-authentication-with-asp-net-core/
+
+<-- SQLite
+
+        Multi-user Access
+            Cookies are used so tests must be done from an external computer.
+        64 bit support

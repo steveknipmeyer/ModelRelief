@@ -58,7 +58,8 @@ export class HttpLibrary {
        let onComplete = function(request: XMLHttpRequest) {
 
             Services.consoleLogger.addInfoMessage('File saved');
-            let filePath = request.responseText;
+            let objectId = request.responseText;
+            let filePath = `${request.responseURL}/${objectId}`;
             fileMetadata.path = filePath;
 
             // now send JSON metadata since we now know the URL
@@ -110,11 +111,13 @@ export class HttpLibrary {
         let onLoad = function (this: XMLHttpRequestEventTarget, ev: Event) : any {
 
             if (request.readyState === request.DONE) {
-                if (request.status === 200) {
-
-                    Services.consoleLogger.addInfoMessage('postRequest: onLoad');
-                    if (onComplete)
-                        onComplete(request);
+                switch (request.status) {
+                    case 200:
+                    case 201:
+                        Services.consoleLogger.addInfoMessage('postRequest: onLoad');
+                        if (onComplete)
+                            onComplete(request);
+                        break;
                 }
             }
         };

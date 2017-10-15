@@ -75,7 +75,7 @@ namespace ModelRelief.Utility
         /// </summary>
         /// <param name="fileName">Filename (overwritten if exists)</param>
         /// <param name="stream">Stream to read</param>
-        public static void WriteFileFromStream(string fileName, System.IO.Stream stream)
+        public static async Task WriteFileFromStream(string fileName, System.IO.Stream stream)
         {
             byte[] fileStream = Files.ReadToEnd(stream);
 
@@ -83,7 +83,7 @@ namespace ModelRelief.Utility
                 System.IO.File.Delete(fileName);
 
             Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-            System.IO.File.WriteAllBytes(fileName, fileStream);
+            await System.IO.File.WriteAllBytesAsync(fileName, fileStream);
         }
 
         /// <summary>
