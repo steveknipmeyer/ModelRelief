@@ -2121,8 +2121,8 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
         HttpLibrary.postFile = function (postUrl, fileData, fileMetadata) {
             var onComplete = function (request) {
                 Services_5.Services.consoleLogger.addInfoMessage('File saved');
-                var objectId = request.responseText;
-                var filePath = request.responseURL + "/" + objectId;
+                var newObject = JSON.parse(request.responseText);
+                var filePath = request.responseURL + "/" + newObject.id;
                 fileMetadata.path = filePath;
                 // now send JSON metadata since we now know the URL
                 HttpLibrary.sendXMLHttpRequest(filePath, MethodType.Put, ContentType.Json, JSON.stringify(fileMetadata), null);

@@ -5,6 +5,8 @@
         https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/
 
 <-- Tasks
+    Why does Create (Uri, object) not return the full Uri?
+
     Extract POST file logic from MeshesController.
 
     Create DTOs for Mesh, etc.

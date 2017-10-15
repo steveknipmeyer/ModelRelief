@@ -54,10 +54,12 @@ namespace ModelRelief.Controllers.Api
         { 
             var user = await Identity.GetCurrentUserAsync(_userManager, User);
 
+            // persist mesh : Name = User.Id
             var newMesh = new Mesh() {Name=$"{user.Id}"};
             _resourceProvider.Meshes.Add(newMesh);
             var newMeshId = newMesh.Id;
 
+            // write file : file name = newly-created Mesh Id
             var storeUsers = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
             string meshPath = $"{storeUsers}{user.Id}/meshes/{newMeshId}/";
             string meshName = $"{newMeshId}.obj";
@@ -68,7 +70,11 @@ namespace ModelRelief.Controllers.Api
             var meshUri = new Uri($"{Request.Scheme}://{Request.Host}/api/meshes/{newMeshId}", UriKind.Absolute);
 
             // Return the mesh URI in the HTTP Response
-            return Created(Url.RouteUrl(newMesh.Id), newMesh.Id);
+            //  XMLHttpRequest.responseUrl  = http://localhost:60655/api/meshes
+            //  XMLHttpRequest.responseText = (JSON) { id : 10 }
+            var responseUrl = Url.RouteUrl(new {id = newMesh.Id});
+
+            return Created(responseUrl, new {id = newMesh.Id});
         }
 
         [HttpPut ("{id}")]
