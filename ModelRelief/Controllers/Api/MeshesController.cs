@@ -67,14 +67,13 @@ namespace ModelRelief.Controllers.Api
             string fileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{meshName}";
             await Files.WriteFileFromStream(fileName, this.Request.Body);
 
-            var meshUri = new Uri($"{Request.Scheme}://{Request.Host}/api/meshes/{newMeshId}", UriKind.Absolute);
-
-            // Return the mesh URI in the HTTP Response
-            //  XMLHttpRequest.responseUrl  = http://localhost:60655/api/meshes
+            // Return the mesh URI in the HTTP Response Location Header
+            //  XMLHttpRequest.getResponseHeader('Location') :  http://localhost:60655/api/meshes/10
             //  XMLHttpRequest.responseText = (JSON) { id : 10 }
             var responseUrl = Url.RouteUrl(new {id = newMesh.Id});
+            var responseUrlAbsolute = new Uri($"{Request.Scheme}://{Request.Host}{responseUrl}");
 
-            return Created(responseUrl, new {id = newMesh.Id});
+            return Created(responseUrlAbsolute, new {id = newMesh.Id});
         }
 
         [HttpPut ("{id}")]

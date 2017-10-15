@@ -58,8 +58,7 @@ export class HttpLibrary {
        let onComplete = function(request: XMLHttpRequest) {
 
             Services.consoleLogger.addInfoMessage('File saved');
-            let newObject = <any>JSON.parse(request.responseText);
-            let filePath = `${request.responseURL}/${newObject.id}`;
+            let filePath = request.getResponseHeader('Location');
             fileMetadata.path = filePath;
 
             // now send JSON metadata since we now know the URL
