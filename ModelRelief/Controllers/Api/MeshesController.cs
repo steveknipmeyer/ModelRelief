@@ -22,6 +22,7 @@ using ModelRelief.Utility;
 using ModelRelief.ViewModels;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
+using System.ComponentModel.DataAnnotations;
 
 namespace ModelRelief.Controllers.Api
 {
@@ -80,24 +81,24 @@ namespace ModelRelief.Controllers.Api
         [Consumes("application/json")]
         public async void Post([FromBody] Mesh mesh, int id )
         { 
+            // construct final mesh name from POST Mesh object
             var user = await Identity.GetCurrentUserAsync(_userManager, User);
-
             var storeUsers  = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
             string meshPath = $"{storeUsers}{user.Id}/meshes/{id}/";
-            string meshName = $"{mesh.Name}";
-            string fileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{meshName}";
+            string finalMeshFileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{mesh.Name}";
 
+            // update mesh object
             var existingMesh = _resourceProvider.Meshes.Find(id);
             existingMesh.Name = mesh.Name;
-            existingMesh.Path = fileName;
-
+            existingMesh.Path = finalMeshFileName;
             _resourceProvider.Meshes.Update(existingMesh);
 
             // now rename temporary file to match the final name
-            string existingFileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{id}.obj";
-            System.IO.File.Move(existingFileName, fileName);
+            string placeholderMeshFileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{id}.obj";
+            System.IO.File.Move(placeholderMeshFileName, finalMeshFileName);
 
             Log.Information("Mesh PUT {@mesh}", mesh);
+
         }
     }        
 }

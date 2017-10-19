@@ -18,6 +18,17 @@
 <-- API 
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
+    Ideas
+        Stormpath
+            Use UUID not sequential integer keys.
+            Rich error message:
+                Status Code
+                Code
+                Message
+                DeveloperMessage
+                API Reference
+            Express relationships as "href" properties to abosulte URLs.
+            Provide "reference exapansion" to allow references to be expanded into the principal object.
 
     Opinionated API
     https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-api/
@@ -177,7 +188,7 @@
             VSCode Profile: .NET Core Attach
                 Edit launch.json to set processId!
 
-    VSCode Profile: .Net Core With Browser
+    VSCode Profile: .Net Core With B rowser
         FE: VSCode   BE: VSCode  TypeScript: DNW  Reload: DNW
 
     VSCode Profile: .Net Core Launch (web)
