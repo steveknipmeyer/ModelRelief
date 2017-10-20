@@ -23,6 +23,7 @@ using ModelRelief.ViewModels;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http.Internal;
 
 namespace ModelRelief.Controllers.Api
 {
@@ -79,8 +80,19 @@ namespace ModelRelief.Controllers.Api
 
         [HttpPut ("{id}")]
         [Consumes("application/json")]
-        public async void Post([FromBody] Mesh mesh, int id )
+        public async Task<ObjectResult> Post([FromBody] MeshPostRequest mesh, int id )
         { 
+            this.HttpContext.Request.EnableRewind();
+
+            var streamReader = new StreamReader(this.HttpContext.Request.Body);
+            string jsonData = streamReader.ReadToEnd();
+            streamReader.BaseStream.Seek(0, SeekOrigin.Begin);
+            jsonData = streamReader.ReadToEnd();
+
+            
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             // construct final mesh name from POST Mesh object
             var user = await Identity.GetCurrentUserAsync(_userManager, User);
             var storeUsers  = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
@@ -99,6 +111,7 @@ namespace ModelRelief.Controllers.Api
 
             Log.Information("Mesh PUT {@mesh}", mesh);
 
+            return Ok("");
         }
     }        
 }

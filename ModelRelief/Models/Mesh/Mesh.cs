@@ -42,4 +42,21 @@ namespace ModelRelief.Models
         {
         }
     }
+
+    public class MeshPostRequest : IValidatableObject
+    {
+        [Required]
+        public string Name { get; set; }
+        public string Description { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var results = new List<ValidationResult>();
+
+            if (String.IsNullOrEmpty(Description))
+            {
+                yield return new ValidationResult("A mesh description cannot be empty.", new[] { nameof(Description) });
+            }
+        }
+    }
 }
