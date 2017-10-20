@@ -88,8 +88,8 @@ namespace ModelRelief
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(Configuration);
-            services.AddMvc(
-                options => options.Filters.Add(typeof(ValidatorActionFilter)));
+            services.AddMvc();
+//              options => options.Filters.Add(typeof(ValidatorActionFilter)));
 
             services.AddSingleton<Services.IConfigurationProvider, Services.ConfigurationProvider>();
             services.AddScoped<IResourcesProvider, SqlResourcesProvider>();
@@ -150,8 +150,10 @@ namespace ModelRelief
         /// <param name="obj"></param>
         private void ConfigureRoutes(IRouteBuilder routeBuilder)
         {
-            routeBuilder.MapAreaRoute(name: "DefaultApi", areaName: "Api", template: "api/{controller}/{id?}");
             routeBuilder.MapRoute(name: "Default", template: "{controller=Home}/{action=Index}/{id?}");
+
+            routeBuilder.MapAreaRoute(name: "DefaultApi", areaName: "Api", template: "api/{controller}/{id?}");
+            routeBuilder.MapRoute(name: "ApiDocumentation", template: "api/documentation/{controller}/{id?}");
         }
     }
 }

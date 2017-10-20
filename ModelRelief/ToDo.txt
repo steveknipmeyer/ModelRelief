@@ -5,6 +5,8 @@
         https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/
 
 <-- Tasks
+    Jpw can all routes be forece to lowercase?
+
     Extract POST file logic from MeshesController.
 
     Create DTOs for Mesh, etc.

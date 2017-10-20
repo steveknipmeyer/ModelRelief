@@ -80,6 +80,7 @@ namespace ModelRelief.Controllers.Api
 
         [HttpPut ("{id?}")]
         [Consumes("application/json")]
+        [ValidateMeshPutModel]
         public async Task<ObjectResult> Put([FromBody] MeshPutRequest mesh, int id )
         { 
             // ModelState validation check in ValidatorActionFilter
