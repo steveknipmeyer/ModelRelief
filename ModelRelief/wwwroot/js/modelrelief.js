@@ -2137,24 +2137,24 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
          * @param onComplete  Callback for request completion.
          */
         HttpLibrary.sendXMLHttpRequest = function (endpoint, methodType, contentType, requestData, onComplete) {
-            var exportTag = Services_5.Services.timer.mark("Post Request: " + endpoint);
+            var exportTag = Services_5.Services.timer.mark(methodType + " Request: " + endpoint);
             var request = new XMLHttpRequest();
             // Abort 
             var onAbort = function (ev) {
-                Services_5.Services.consoleLogger.addErrorMessage('postRequest: onAbort');
+                Services_5.Services.consoleLogger.addErrorMessage(methodType + ": onAbort");
             };
             // Error
             var onError = function (ev) {
-                Services_5.Services.consoleLogger.addErrorMessage('postRequest: onError');
+                Services_5.Services.consoleLogger.addErrorMessage(methodType + ": onError");
             };
             // Progress
             var onProgress = function (ev) {
                 var percentComplete = ((ev.loaded / ev.total) * 100).toFixed(0);
-                Services_5.Services.consoleLogger.addInfoMessage("postRequest: onProgress = " + percentComplete + "%");
+                Services_5.Services.consoleLogger.addInfoMessage(methodType + ": onProgress = " + percentComplete + "%");
             };
             // Timeout
             var onTimeout = function (ev) {
-                Services_5.Services.consoleLogger.addErrorMessage('postRequest: onTimeout');
+                Services_5.Services.consoleLogger.addErrorMessage(methodType + ": onTimeout");
             };
             // Load
             var onLoad = function (ev) {
@@ -2162,7 +2162,7 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
                     switch (request.status) {
                         case 200:
                         case 201:
-                            Services_5.Services.consoleLogger.addInfoMessage('postRequest: onLoad');
+                            Services_5.Services.consoleLogger.addInfoMessage(methodType + ": onLoad");
                             if (onComplete)
                                 onComplete(request);
                             break;

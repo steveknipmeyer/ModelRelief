@@ -28,7 +28,7 @@ using Microsoft.AspNetCore.Http.Internal;
 namespace ModelRelief.Controllers.Api
 {
     // [Authorize]
-    [Area("Api")]
+    [Area("api")]
     [Route ("api/[controller]")]        
     public class MeshesController : Controller
     {
@@ -78,20 +78,11 @@ namespace ModelRelief.Controllers.Api
             return Created(responseUrlAbsolute, new {id = newMesh.Id});
         }
 
-        [HttpPut ("{id}")]
+        [HttpPut ("{id?}")]
         [Consumes("application/json")]
-        public async Task<ObjectResult> Post([FromBody] MeshPostRequest mesh, int id )
+        public async Task<ObjectResult> Put([FromBody] MeshPutRequest mesh, int id )
         { 
-            this.HttpContext.Request.EnableRewind();
-
-            var streamReader = new StreamReader(this.HttpContext.Request.Body);
-            string jsonData = streamReader.ReadToEnd();
-            streamReader.BaseStream.Seek(0, SeekOrigin.Begin);
-            jsonData = streamReader.ReadToEnd();
-
-            
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            // ModelState validation check in ValidatorActionFilter
 
             // construct final mesh name from POST Mesh object
             var user = await Identity.GetCurrentUserAsync(_userManager, User);

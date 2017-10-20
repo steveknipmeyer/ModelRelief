@@ -21,7 +21,7 @@ using ModelRelief.Database;
 using ModelRelief.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace ModelRelief
+namespace ModelRelief.Infrastructure
 {
     public class Program
     {

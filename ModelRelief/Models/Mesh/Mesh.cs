@@ -43,12 +43,21 @@ namespace ModelRelief.Models
         }
     }
 
-    public class MeshPostRequest : IValidatableObject
+    /// <summary>
+    /// Mesh PUT request.
+    /// </summary>
+    public class MeshPutRequest : IValidatableObject
     {
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
+        public string PropertyPrime { get; set; }
 
+        /// <summary>
+        /// Validates the model properties.
+        /// </summary>
+        /// <param name="validationContext">Validation context.</param>
+        /// <returns>Collection of ValidationResults</returns>
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var results = new List<ValidationResult>();
@@ -56,6 +65,11 @@ namespace ModelRelief.Models
             if (String.IsNullOrEmpty(Description))
             {
                 yield return new ValidationResult("A mesh description cannot be empty.", new[] { nameof(Description) });
+            }
+
+            if (String.IsNullOrEmpty(PropertyPrime))
+            {
+                yield return new ValidationResult("A custom error message for PropertyPrime.", new[] { "PropertyPrime" });
             }
         }
     }

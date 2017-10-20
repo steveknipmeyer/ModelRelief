@@ -12,7 +12,7 @@
         </div>
         <div>
             @Html.LabelFor(m => m.Format)
-            @Html.DropDownListFor(m => m.Format, Html.GetEnumSelectList(typeof(Format3d)));
+            @Html.DropDownListFor(m => m.Format, Html.GetEnumSelectList(typeof(Model3dFormat)));
         </div>
         <div>
             <input type="submit" value="Add" />

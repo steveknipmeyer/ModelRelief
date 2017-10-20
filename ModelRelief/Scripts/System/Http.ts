@@ -78,32 +78,32 @@ export class HttpLibrary {
      */
     static sendXMLHttpRequest(endpoint : string, methodType : MethodType, contentType : ContentType, requestData : any, onComplete : (request: XMLHttpRequest) => any): void {
 
-        let exportTag = Services.timer.mark(`Post Request: ${endpoint}`);
+        let exportTag = Services.timer.mark(`${methodType} Request: ${endpoint}`);
         let request = new XMLHttpRequest(); 
 
         // Abort 
         let onAbort = function (this: XMLHttpRequestEventTarget, ev: Event) : any {
 
-            Services.consoleLogger.addErrorMessage('postRequest: onAbort');
+            Services.consoleLogger.addErrorMessage(`${methodType}: onAbort`);
         };
 
         // Error
         let onError = function (this: XMLHttpRequestEventTarget, ev: ErrorEvent) : any { 
 
-            Services.consoleLogger.addErrorMessage('postRequest: onError');
+            Services.consoleLogger.addErrorMessage(`${methodType}: onError`);
         };
 
         // Progress
         let onProgress = function (this: XMLHttpRequestEventTarget, ev: ProgressEvent) : any { 
 
             let percentComplete = ((ev.loaded / ev.total) * 100).toFixed(0);
-            Services.consoleLogger.addInfoMessage(`postRequest: onProgress = ${percentComplete}%`);
+            Services.consoleLogger.addInfoMessage(`${methodType}: onProgress = ${percentComplete}%`);
         };
 
         // Timeout
         let onTimeout = function (this: XMLHttpRequestEventTarget, ev: ProgressEvent) : any {
 
-            Services.consoleLogger.addErrorMessage('postRequest: onTimeout');
+            Services.consoleLogger.addErrorMessage(`${methodType}: onTimeout`);
         };
 
         // Load
@@ -113,7 +113,7 @@ export class HttpLibrary {
                 switch (request.status) {
                     case 200:
                     case 201:
-                        Services.consoleLogger.addInfoMessage('postRequest: onLoad');
+                        Services.consoleLogger.addInfoMessage(`${methodType}: onLoad`);
                         if (onComplete)
                             onComplete(request);
                         break;
