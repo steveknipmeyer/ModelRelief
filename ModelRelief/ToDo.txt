@@ -1,13 +1,15 @@
 ﻿<-- Commit Notes    
+    Validate an octet-stream POST file.
 
 <--- Reading
     EntityFramework Core
         https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/
 
 <-- Tasks
-    Validate an octet-stream POST file.
+    Why does the Mesh POST request take so long?
+    Generalize the RawRequestBodyFormatter to handle many types of file POST.
 
-    Extract POST file logic from MeshesController.
+    Extract POST file logic from MeshesController.  
 
     Create DTOs for Mesh, etc.
 

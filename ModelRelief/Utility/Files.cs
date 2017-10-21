@@ -77,13 +77,22 @@ namespace ModelRelief.Utility
         /// <param name="stream">Stream to read</param>
         public static async Task WriteFileFromStream(string fileName, System.IO.Stream stream)
         {
-            byte[] fileStream = Files.ReadToEnd(stream);
+            byte[] byteArray = Files.ReadToEnd(stream);
+            await WriteFileFromByteArray(fileName, byteArray);
+        }
 
+        /// <summary>
+        /// Writes a disk file from a byte array.
+        /// </summary>
+        /// <param name="fileName">Filename (overwritten if exists)</param>
+        /// <param name="stream">Stream to read</param>
+        public static async Task WriteFileFromByteArray(string fileName, byte[] byteArray)
+        {
             if (System.IO.File.Exists(fileName))
                 System.IO.File.Delete(fileName);
 
             Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-            await System.IO.File.WriteAllBytesAsync(fileName, fileStream);
+            await System.IO.File.WriteAllBytesAsync(fileName, byteArray);
         }
 
         /// <summary>

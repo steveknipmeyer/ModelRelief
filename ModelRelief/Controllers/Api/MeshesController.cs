@@ -52,7 +52,8 @@ namespace ModelRelief.Controllers.Api
         [HttpPost]
         [Consumes("application/octet-stream")]
         [DisableRequestSizeLimit]
-        public async Task<ObjectResult> Post()
+        [ValidateMeshPostModel]
+        public async Task<ObjectResult> Post([FromBody] MeshPostRequest meshPostRequest)
         { 
             var user = await Identity.GetCurrentUserAsync(_userManager, User);
 
@@ -67,7 +68,7 @@ namespace ModelRelief.Controllers.Api
             string meshName = $"{newMeshId}.obj";
 
             string fileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{meshName}";
-            await Files.WriteFileFromStream(fileName, this.Request.Body);
+            await Files.WriteFileFromByteArray(fileName, meshPostRequest.Raw);
 
             // Return the mesh URI in the HTTP Response Location Header
             //  XMLHttpRequest.getResponseHeader('Location') :  http://localhost:60655/api/meshes/10
@@ -81,18 +82,18 @@ namespace ModelRelief.Controllers.Api
         [HttpPut ("{id?}")]
         [Consumes("application/json")]
         [ValidateMeshPutModel]
-        public async Task<ObjectResult> Put([FromBody] MeshPutRequest mesh, int id )
+        public async Task<ObjectResult> Put([FromBody] MeshPutRequest meshPutRequest, int id )
         { 
             var user = await Identity.GetCurrentUserAsync(_userManager, User);
 
             // construct final mesh name from POST Mesh object
             var storeUsers  = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
             string meshPath = $"{storeUsers}{user.Id}/meshes/{id}/";
-            string finalMeshFileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{mesh.Name}";
+            string finalMeshFileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{meshPutRequest.Name}";
 
             // update mesh object
             var existingMesh = _resourceProvider.Meshes.Find(id);
-            existingMesh.Name = mesh.Name;
+            existingMesh.Name = meshPutRequest.Name;
             existingMesh.Path = finalMeshFileName;
             _resourceProvider.Meshes.Update(existingMesh);
 
@@ -101,7 +102,7 @@ namespace ModelRelief.Controllers.Api
             string placeholderMeshFileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{id}.obj";
             System.IO.File.Move(placeholderMeshFileName, finalMeshFileName);
 #endif
-            Log.Information("Mesh PUT {@mesh}", mesh);
+            Log.Information("Mesh PUT {@mesh}", meshPutRequest);
 
             return Ok("");
         }

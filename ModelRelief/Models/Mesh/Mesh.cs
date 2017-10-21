@@ -53,6 +53,53 @@ namespace ModelRelief.Models
     }
 
     /// <summary>
+    /// Mesh POST request.
+    /// </summary>
+    public class MeshPostRequest : IValidatableObject
+    {
+        public byte[] Raw { get; set; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="raw">Byte array from the request body</param>
+        public MeshPostRequest (byte[] raw)
+        {
+            Raw = raw;
+        }
+
+        /// <summary>
+        /// Validates the file properties.
+        /// </summary>
+        /// <param name="validationContext">Validation context.</param>
+        /// <returns>Collection of ValidationResults</returns>
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var results = new List<ValidationResult>();
+            return results;
+        }
+    }
+
+    public class ValidateMeshPostModelAttribute : ActionFilterAttribute
+    {
+        // http://www.jerriepelser.com/blog/validation-response-aspnet-core-webapi/
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            if (context.ModelState.IsValid)
+                return;
+
+            var httpStatusCode       = StatusCodes.Status400BadRequest;
+            var apiStatusCode        = (int) ApiStatusCode.MeshPostValidationError;
+            string developerMessage  = "The Mesh POST properties are invalid.";
+
+            var contentResult = new ApiValidationResult(context, httpStatusCode, apiStatusCode, developerMessage).ContentResult();
+
+            context.HttpContext.Response.StatusCode = httpStatusCode;
+            context.Result = contentResult;
+        }
+    }
+
+    /// <summary>
     /// Mesh PUT request.
     /// </summary>
     public class MeshPutRequest : IValidatableObject
@@ -83,9 +130,9 @@ namespace ModelRelief.Models
         }
     }
 
-    // http://www.jerriepelser.com/blog/validation-response-aspnet-core-webapi/
     public class ValidateMeshPutModelAttribute : ActionFilterAttribute
     {
+        // http://www.jerriepelser.com/blog/validation-response-aspnet-core-webapi/
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             if (context.ModelState.IsValid)

@@ -24,6 +24,7 @@ namespace ModelRelief.Infrastructure
 
         // Mesh
         MeshPutValidationError              = 3000,
+        MeshPostValidationError             = 3001,
 
         // MeshTransform
         MeshTransformPutValidationError     = 4000,
