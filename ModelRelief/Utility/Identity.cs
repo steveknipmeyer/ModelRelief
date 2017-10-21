@@ -38,6 +38,11 @@ namespace ModelRelief.Utility
         /// <param name="claimsPrincipal">HttpContext.User</param>
         /// <returns>USer</returns>
         public static async Task<User> GetCurrentUserAsync (UserManager<User> userManager, ClaimsPrincipal claimsPrincipal) =>
+        #if FullAuthentication
             await userManager.GetUserAsync(claimsPrincipal);
+        #else
+            // mock authentication to work with PostMan
+            await userManager.FindByIdAsync("c6d3fe5f-0e26-4f24-a6a3-df0766338f94");
+        #endif
     }        
 }

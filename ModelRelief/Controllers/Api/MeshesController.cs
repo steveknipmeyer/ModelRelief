@@ -83,8 +83,9 @@ namespace ModelRelief.Controllers.Api
         [ValidateMeshPutModel]
         public async Task<ObjectResult> Put([FromBody] MeshPutRequest mesh, int id )
         { 
-            // construct final mesh name from POST Mesh object
             var user = await Identity.GetCurrentUserAsync(_userManager, User);
+
+            // construct final mesh name from POST Mesh object
             var storeUsers  = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
             string meshPath = $"{storeUsers}{user.Id}/meshes/{id}/";
             string finalMeshFileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{mesh.Name}";

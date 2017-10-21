@@ -1,13 +1,10 @@
 ﻿<-- Commit Notes    
-    Force route names to lowercase.
-    Introduce RouteName class with route name definitions.
 
 <--- Reading
     EntityFramework Core
         https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/
 
 <-- Tasks
-    Add API version.
     Validate an octet-stream POST file.
 
     Extract POST file logic from MeshesController.
@@ -23,6 +20,9 @@
 <-- API 
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
+
+    Add API version.
+
     Ideas
         Stormpath
             Use UUID not sequential integer keys in database. This will scale better.
