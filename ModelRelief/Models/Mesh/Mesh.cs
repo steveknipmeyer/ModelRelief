@@ -8,16 +8,18 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
-using ModelRelief.Models;
-using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Filters;
+
+using ModelRelief.Infrastructure;
+using ModelRelief.Models;
 
 using Newtonsoft.Json;
-using System.Net;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ModelRelief.Models
     {
@@ -81,72 +83,6 @@ namespace ModelRelief.Models
         }
     }
 
-    public enum ApiStatusCode
-    {
-        MeshPutValidationError = 1000
-    }
-
-    public class ValidationError
-    {
-        [JsonProperty(NullValueHandling=NullValueHandling.Ignore)]
-        public string Field { get; }
-
-        public string Message { get; }
-
-        public ValidationError(string field, string message)
-        {
-            Field = field != string.Empty ? field : null;
-            Message = message;
-        }
-    }
-
-    public class ApiValidationResult
-    {
-        ActionExecutingContext  _context;
-        int                     _httpStatusCode;
-        int                     _apiStatusCode;
-        string                  _developerMessage;
-
-        public ApiValidationResult (ActionExecutingContext context, int httpStatusCode, int apiStatusCode, string developerMessage)
-            {
-            _context          = context;
-            _httpStatusCode   = httpStatusCode;
-            _apiStatusCode    = apiStatusCode;
-            _developerMessage = developerMessage;
-            }
-
-        public ContentResult ContentResult()
-            {
-            var contentResult = new ContentResult();
-
-            string apiReferenceRelative = ((Controller) _context.Controller).Url.RouteUrl("ApiDocumentation", new {id = _apiStatusCode});
-            var apiReferenceAbsolute    = string.Format("{0}://{1}{2}", _context.HttpContext.Request.Scheme, _context.HttpContext.Request.Host, apiReferenceRelative);
-
-            IEnumerable<ValidationError> Errors = _context.ModelState.Keys
-                    .SelectMany(key => _context.ModelState[key].Errors.Select(x => new ValidationError(key, x.ErrorMessage)))
-                    .ToList();
-
-            var jsonResult    = new
-            {
-                httpStatusCode   = _httpStatusCode,
-                apiStatusCode    = _apiStatusCode,
-                developerMessage = _developerMessage,
-                apiReferencee    = apiReferenceAbsolute,
-                errors           = Errors
-            };
-
-            string content = JsonConvert.SerializeObject(jsonResult,
-                new JsonSerializerSettings
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                });
-            contentResult.Content = content;
-            contentResult.ContentType = "application/json";
-
-            return contentResult;
-            }
-    }
-
     // http://www.jerriepelser.com/blog/validation-response-aspnet-core-webapi/
     public class ValidateMeshPutModelAttribute : ActionFilterAttribute
     {
@@ -155,14 +91,14 @@ namespace ModelRelief.Models
             if (context.ModelState.IsValid)
                 return;
 
-            var httpStatusCode       = StatusCodes.Status422UnprocessableEntity;
+            var httpStatusCode       = StatusCodes.Status400BadRequest;
             var apiStatusCode        = (int) ApiStatusCode.MeshPutValidationError;
             string developerMessage  = "The Mesh PUT properties are invalid.";
 
-            var result = new ApiValidationResult(context, httpStatusCode, apiStatusCode, developerMessage).ContentResult();
+            var contentResult = new ApiValidationResult(context, httpStatusCode, apiStatusCode, developerMessage).ContentResult();
 
             context.HttpContext.Response.StatusCode = httpStatusCode;
-            context.Result = result;
+            context.Result = contentResult;
         }
     }
 }

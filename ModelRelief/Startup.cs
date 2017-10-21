@@ -88,6 +88,7 @@ namespace ModelRelief
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(Configuration);
+            services.AddRouting(options => options.LowercaseUrls = true);
             services.AddMvc();
 //              options => options.Filters.Add(typeof(ValidatorActionFilter)));
 
@@ -150,10 +151,10 @@ namespace ModelRelief
         /// <param name="obj"></param>
         private void ConfigureRoutes(IRouteBuilder routeBuilder)
         {
-            routeBuilder.MapRoute(name: "Default", template: "{controller=Home}/{action=Index}/{id?}");
+            routeBuilder.MapRoute(name: RouteNames.Default, template: "{controller=Home}/{action=Index}/{id?}");
 
-            routeBuilder.MapAreaRoute(name: "DefaultApi", areaName: "Api", template: "api/{controller}/{id?}");
-            routeBuilder.MapRoute(name: "ApiDocumentation", template: "api/documentation/{controller}/{id?}");
+            routeBuilder.MapAreaRoute(name: RouteNames.DefaultApi, areaName: "Api", template: "api/{controller}/{id?}");
+            routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/documentation/{controller}/{id?}");
         }
     }
 }

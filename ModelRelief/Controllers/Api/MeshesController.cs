@@ -52,12 +52,12 @@ namespace ModelRelief.Controllers.Api
         [HttpPost]
         [Consumes("application/octet-stream")]
         [DisableRequestSizeLimit]
-        public async Task<CreatedResult> Post()
+        public async Task<ObjectResult> Post()
         { 
             var user = await Identity.GetCurrentUserAsync(_userManager, User);
 
             // persist mesh : Name = User.Id
-            var newMesh = new Mesh() {Name=$"{user.Id}"};
+            var newMesh = new Mesh() {Name = $"{user.Id}"};
             _resourceProvider.Meshes.Add(newMesh);
             var newMeshId = newMesh.Id;
 
@@ -72,8 +72,8 @@ namespace ModelRelief.Controllers.Api
             // Return the mesh URI in the HTTP Response Location Header
             //  XMLHttpRequest.getResponseHeader('Location') :  http://localhost:60655/api/meshes/10
             //  XMLHttpRequest.responseText = (JSON) { id : 10 }
-            var responseUrl = Url.RouteUrl(new {id = newMesh.Id});
-            var responseUrlAbsolute = new Uri($"{Request.Scheme}://{Request.Host}{responseUrl}");
+            string responseUrl = Url.RouteUrl( new {id = newMesh.Id});
+            Uri responseUrlAbsolute = new Uri($"{Request.Scheme}://{Request.Host}{responseUrl}");
 
             return Created(responseUrlAbsolute, new {id = newMesh.Id});
         }
@@ -83,8 +83,6 @@ namespace ModelRelief.Controllers.Api
         [ValidateMeshPutModel]
         public async Task<ObjectResult> Put([FromBody] MeshPutRequest mesh, int id )
         { 
-            // ModelState validation check in ValidatorActionFilter
-
             // construct final mesh name from POST Mesh object
             var user = await Identity.GetCurrentUserAsync(_userManager, User);
             var storeUsers  = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
@@ -97,10 +95,11 @@ namespace ModelRelief.Controllers.Api
             existingMesh.Path = finalMeshFileName;
             _resourceProvider.Meshes.Update(existingMesh);
 
+#if false
             // now rename temporary file to match the final name
             string placeholderMeshFileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{id}.obj";
             System.IO.File.Move(placeholderMeshFileName, finalMeshFileName);
-
+#endif
             Log.Information("Mesh PUT {@mesh}", mesh);
 
             return Ok("");

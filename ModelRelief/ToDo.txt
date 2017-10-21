@@ -1,11 +1,14 @@
 ﻿<-- Commit Notes    
+    Force route names to lowercase.
+    Introduce RouteName class with route name definitions.
 
 <--- Reading
     EntityFramework Core
         https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/
 
 <-- Tasks
-    Jpw can all routes be forece to lowercase?
+    Add API version.
+    Validate an octet-stream POST file.
 
     Extract POST file logic from MeshesController.
 
@@ -22,15 +25,15 @@
         Scale with a Python processor.
     Ideas
         Stormpath
-            Use UUID not sequential integer keys.
+            Use UUID not sequential integer keys in database. This will scale better.
             Rich error message:
                 Status Code
                 Code
                 Message
                 DeveloperMessage
                 API Reference
-            Express relationships as "href" properties to abosulte URLs.
-            Provide "reference exapansion" to allow references to be expanded into the principal object.
+            Express relationships as "href" properties to absolute URLs.
+            Provide "reference expansion" to allow references to be expanded into the principal object.
 
     Opinionated API
     https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-api/
