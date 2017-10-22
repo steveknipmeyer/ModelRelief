@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using ModelRelief.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ModelRelief.Services
 {
@@ -17,8 +18,9 @@ namespace ModelRelief.Services
     /// </summary>
     public interface IResourceProvider<TResource> 
         where TResource : ModelReliefEntity
-
     {
+        DbSet<TResource> DbSet {get;}
+
         IEnumerable<TResource> GetAll();
         TResource Find (int id);
         TResource Add (TResource model);

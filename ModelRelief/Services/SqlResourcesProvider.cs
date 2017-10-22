@@ -3,22 +3,19 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-
 using ModelRelief.Database;
 using ModelRelief.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ModelRelief.Services
 {
-#region Dynamic DbSet<T>    
-// https://stackoverflow.com/questions/33940507/find-a-generic-dbset-in-a-dbcontext-dynamically
+    #region Dynamic DbSet<T>    
+    // https://stackoverflow.com/questions/33940507/find-a-generic-dbset-in-a-dbcontext-dynamically
 
     public class SqlResourceProvider<TResource> : IResourceProvider<TResource>  
         where TResource: ModelReliefEntity
@@ -42,7 +39,7 @@ namespace ModelRelief.Services
         /// Returns the DbSet<T> for the generic type.
         /// </summary>
         /// <returns>DbSet<T></returns>
-        private DbSet<TResource> DbSet
+        public DbSet<TResource> DbSet
         {
             get
             {

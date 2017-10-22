@@ -13,9 +13,6 @@
         The ActionFilter can check ModelState.Valid and then set the ActionExecutingContext.Result so the controller action is never called.
 
 <-- Tasks
-    Why does the Mesh POST request take so long?
-    Generalize the RawRequestBodyFormatter to handle many types of file POST.
-
     Extract POST file logic from MeshesController.  
 
     Accessing Model From JavaScript

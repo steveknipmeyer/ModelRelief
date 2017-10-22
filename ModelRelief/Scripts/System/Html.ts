@@ -7,20 +7,20 @@
 
 export enum ElementIds {
 
-    Root            = 'rootContainer',
-    ComposerView    = 'composerView',
-    ModelView       = 'modelView',
-    ModelCanvas     = 'modelCanvas',
-    MeshView        = 'meshView',
-    MeshCanvas      = 'meshCanvas',
+    Root                = 'rootContainer',
+    ComposerView        = 'composerView',
+    ModelView           = 'modelView',
+    ModelCanvas         = 'modelCanvas',
+    MeshView            = 'meshView',
+    MeshCanvas          = 'meshCanvas',
 
-    CameraControls       = 'cameraControls',
-    ModelViewerControls  = 'modelViewerControls',
-    MeshViewerControls   = 'meshViewerControls',
-    ComposerControls     = 'composerControls',
+    CameraControls      = 'cameraControls',
+    ModelViewerControls = 'modelViewerControls',
+    MeshViewerControls  = 'meshViewerControls',
+    ComposerControls    = 'composerControls',
 
     // Workbench
-    CameraTestControls   = 'cameraTestControls'
+    CameraTestControls  = 'cameraTestControls'
 }
 
 export let ElementAttributes = {

@@ -59,14 +59,15 @@ namespace ModelRelief.Controllers.Api
             var meshPostRequest = new MeshPostRequest(Files.ReadToEnd(Request.Body));
 
             // initial validation
-            meshPostRequest.Validate(ModelState);
+            var user = await Identity.GetCurrentUserAsync(_userManager, User);
+            meshPostRequest.Validate(user, _resourceProvider, ModelState);
             if (!ModelState.IsValid)
                 return meshPostRequest.ErrorResult(HttpContext, this);
 
-            var user = await Identity.GetCurrentUserAsync(_userManager, User);
-
-            // persist mesh : Name = User.Id
+            // populate Mesh properties
             var newMesh = new Mesh() {Name = $"{user.Id}"};
+            newMesh.User = user;
+
             _resourceProvider.Meshes.Add(newMesh);
             var newMeshId = newMesh.Id;
 
@@ -92,11 +93,10 @@ namespace ModelRelief.Controllers.Api
         public async Task<ObjectResult> Put([FromBody] MeshPutRequest meshPutRequest, int id )
         { 
             // initial validation
-            meshPutRequest.Validate(ModelState);
+            var user = await Identity.GetCurrentUserAsync(_userManager, User);
+            meshPutRequest.Validate(user, _resourceProvider, ModelState, id);
             if (!ModelState.IsValid)
                 return meshPutRequest.ErrorResult(HttpContext, this);
-
-            var user = await Identity.GetCurrentUserAsync(_userManager, User);
 
             // construct final mesh name from POST Mesh object
             var storeUsers  = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
