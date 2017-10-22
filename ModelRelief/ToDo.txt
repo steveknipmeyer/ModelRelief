@@ -1,17 +1,22 @@
 ﻿<-- Commit Notes    
-    Validate an octet-stream POST file.
 
 <--- Reading
     EntityFramework Core
         https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/
+
+<-- Validation
+    A registered InputFormatter maps the Request.Body to a type. By default, MVC supports a limited number of formatters.
+        This allows a strongly typed [FromBody] action parameter to be used.
+    The DataAnnotation attributes (e.g. [Required]) are checked first and MVC sets ModelState.Valid based on the results.
+    If the bound model implements IValidatableObject then additional validation checks may be performed, adding additional ValidationResults.
+    If an ActionFilter is registered, control passes there.
+        The ActionFilter can check ModelState.Valid and then set the ActionExecutingContext.Result so the controller action is never called.
 
 <-- Tasks
     Why does the Mesh POST request take so long?
     Generalize the RawRequestBodyFormatter to handle many types of file POST.
 
     Extract POST file logic from MeshesController.  
-
-    Create DTOs for Mesh, etc.
 
     Accessing Model From JavaScript
         https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript

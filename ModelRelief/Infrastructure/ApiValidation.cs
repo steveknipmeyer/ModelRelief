@@ -3,14 +3,14 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-
-using Newtonsoft.Json;
 
 namespace ModelRelief.Infrastructure
 {
@@ -52,28 +52,29 @@ namespace ModelRelief.Infrastructure
 
     public class ApiValidationResult
     {
-        ActionExecutingContext  _context;
-        int                     _httpStatusCode;
-        int                     _apiStatusCode;
-        string                  _developerMessage;
+        HttpContext  _context;
+        Controller   _controller;
+        int          _httpStatusCode;
+        int          _apiStatusCode;
+        string       _developerMessage;
 
-        public ApiValidationResult (ActionExecutingContext context, int httpStatusCode, int apiStatusCode, string developerMessage)
-            {
+        public ApiValidationResult (HttpContext context, Controller controller, int httpStatusCode, int apiStatusCode, string developerMessage)
+        {
             _context          = context;
+            _controller       = controller;
             _httpStatusCode   = httpStatusCode;
             _apiStatusCode    = apiStatusCode;
             _developerMessage = developerMessage;
-            }
+        }
 
-        public ContentResult ContentResult()
-            {
-            var contentResult = new ContentResult();
+        public ObjectResult ObjectResult()
+        {
 
-            string apiReferenceRelative = ((Controller) _context.Controller).Url.RouteUrl(RouteNames.ApiDocumentation, new {id = _apiStatusCode});
-            var apiReferenceAbsolute    = string.Format($"{_context.HttpContext.Request.Scheme}://{_context.HttpContext.Request.Host}{apiReferenceRelative}");
+            string apiReferenceRelative = (_controller).Url.RouteUrl(RouteNames.ApiDocumentation, new {id = _apiStatusCode});
+            var apiReferenceAbsolute    = string.Format($"{_context.Request.Scheme}://{_context.Request.Host}{apiReferenceRelative}");
 
-            IEnumerable<ValidationError> Errors = _context.ModelState.Keys
-                    .SelectMany(key => _context.ModelState[key].Errors.Select(x => new ValidationError(key, x.ErrorMessage)))
+            IEnumerable<ValidationError> Errors = _controller.ModelState.Keys
+                    .SelectMany(key => _controller.ModelState[key].Errors.Select(x => new ValidationError(key, x.ErrorMessage)))
                     .ToList();
 
             var jsonResult    = new
@@ -85,15 +86,10 @@ namespace ModelRelief.Infrastructure
                 errors           = Errors
             };
 
-            string content = JsonConvert.SerializeObject(jsonResult,
-                new JsonSerializerSettings
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                });
-            contentResult.Content = content;
-            contentResult.ContentType = "application/json";
+            var objectResult = new ObjectResult(jsonResult);
+            objectResult.StatusCode= _httpStatusCode;
 
-            return contentResult;
-            }
+            return objectResult;
+        }
     }
 }

@@ -7,6 +7,7 @@ using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Authorization;
@@ -52,9 +53,16 @@ namespace ModelRelief.Controllers.Api
         [HttpPost]
         [Consumes("application/octet-stream")]
         [DisableRequestSizeLimit]
-        [ValidateMeshPostModel]
-        public async Task<ObjectResult> Post([FromBody] MeshPostRequest meshPostRequest)
+        public async Task<ObjectResult> Post()
         { 
+            // construct from body
+            var meshPostRequest = new MeshPostRequest(Files.ReadToEnd(Request.Body));
+
+            // initial validation
+            meshPostRequest.Validate(ModelState);
+            if (!ModelState.IsValid)
+                return meshPostRequest.ErrorResult(HttpContext, this);
+
             var user = await Identity.GetCurrentUserAsync(_userManager, User);
 
             // persist mesh : Name = User.Id
@@ -81,9 +89,13 @@ namespace ModelRelief.Controllers.Api
 
         [HttpPut ("{id?}")]
         [Consumes("application/json")]
-        [ValidateMeshPutModel]
         public async Task<ObjectResult> Put([FromBody] MeshPutRequest meshPutRequest, int id )
         { 
+            // initial validation
+            meshPutRequest.Validate(ModelState);
+            if (!ModelState.IsValid)
+                return meshPutRequest.ErrorResult(HttpContext, this);
+
             var user = await Identity.GetCurrentUserAsync(_userManager, User);
 
             // construct final mesh name from POST Mesh object
@@ -97,11 +109,10 @@ namespace ModelRelief.Controllers.Api
             existingMesh.Path = finalMeshFileName;
             _resourceProvider.Meshes.Update(existingMesh);
 
-#if false
             // now rename temporary file to match the final name
             string placeholderMeshFileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{id}.obj";
             System.IO.File.Move(placeholderMeshFileName, finalMeshFileName);
-#endif
+
             Log.Information("Mesh PUT {@mesh}", meshPutRequest);
 
             return Ok("");

@@ -58,14 +58,15 @@ namespace ModelRelief.Infrastructure
         /// <returns></returns>
         public override async Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context)
         {
-            var request = context.HttpContext.Request;
+            var request     = context.HttpContext.Request;
             var contentType = context.HttpContext.Request.ContentType;
 
-            if (string.IsNullOrEmpty(contentType) || contentType == "text/plain")
+            if (contentType == "text/plain" ||
+                string.IsNullOrEmpty(contentType))
             {
                 using (var reader = new StreamReader(request.Body))
                 {
-                    var content = await reader.ReadToEndAsync();
+                    string content = await reader.ReadToEndAsync();
                     return await InputFormatterResult.SuccessAsync(content);
                 }
             }
@@ -75,9 +76,8 @@ namespace ModelRelief.Infrastructure
                 using (var ms = new MemoryStream(2048))
                 {
                     await request.Body.CopyToAsync(ms);
-                    var content = ms.ToArray();
-                    var meshPostRequest = new MeshPostRequest(content);
-                    return await InputFormatterResult.SuccessAsync(meshPostRequest);
+                    byte[] content = ms.ToArray();
+                    return await InputFormatterResult.SuccessAsync(content);
                 }
             }
 

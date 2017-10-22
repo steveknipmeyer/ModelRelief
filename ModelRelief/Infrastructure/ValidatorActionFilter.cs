@@ -57,19 +57,7 @@ namespace ModelRelief.Infrastructure
                 case "POST":
                 case "PUT":
                     {
-                    IEnumerable<string> Errors = filterContext.ModelState.SelectMany(x => x.Value.Errors)
-                                                                         .Select(x => x.ErrorMessage).ToArray();
-
-                    var result = new ContentResult();
-                    string content = JsonConvert.SerializeObject(Errors,
-                        new JsonSerializerSettings
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                        });
-                    result.Content = content;
-                    result.ContentType = "application/json";
-
-                    filterContext.HttpContext.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                    var result = new BadRequestResult();
                     filterContext.Result = result;
                     }
                     break;

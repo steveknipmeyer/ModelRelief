@@ -91,7 +91,6 @@ namespace ModelRelief
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddMvc(
                 options => options.InputFormatters.Insert(0, new RawRequestBodyFormatter()));
-//              options => options.Filters.Add(typeof(ValidatorActionFilter)));
 
             services.AddSingleton<Services.IConfigurationProvider, Services.ConfigurationProvider>();
             services.AddScoped<IResourcesProvider, SqlResourcesProvider>();

@@ -3,26 +3,17 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.Filters;
-
 using ModelRelief.Infrastructure;
-using ModelRelief.Models;
-
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ModelRelief.Models
-    {
+{
     public enum MeshFormat
         {
         None,           // unknown
@@ -55,7 +46,7 @@ namespace ModelRelief.Models
     /// <summary>
     /// Mesh POST request.
     /// </summary>
-    public class MeshPostRequest : IValidatableObject
+    public class MeshPostRequest 
     {
         public byte[] Raw { get; set; }
 
@@ -71,81 +62,71 @@ namespace ModelRelief.Models
         /// <summary>
         /// Validates the file properties.
         /// </summary>
-        /// <param name="validationContext">Validation context.</param>
-        /// <returns>Collection of ValidationResults</returns>
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        /// <param name="modelState">ModelState</param>
+        /// <returns>true if valid</returns>
+        public bool Validate(ModelStateDictionary modelState)
         {
             var results = new List<ValidationResult>();
-            return results;
+
+            return modelState.IsValid;
         }
-    }
 
-    public class ValidateMeshPostModelAttribute : ActionFilterAttribute
-    {
-        // http://www.jerriepelser.com/blog/validation-response-aspnet-core-webapi/
-        public override void OnActionExecuting(ActionExecutingContext context)
+        /// <summary>
+        /// Formats a JSON object containing the extended error result.
+        /// </summary>
+        /// <param name="context">Current HttpContext</param>
+        /// <param name="controller">Active controller</param>
+        /// <returns>Api JSON result</returns>
+        public ObjectResult ErrorResult (HttpContext context, Controller controller)
         {
-            if (context.ModelState.IsValid)
-                return;
-
             var httpStatusCode       = StatusCodes.Status400BadRequest;
             var apiStatusCode        = (int) ApiStatusCode.MeshPostValidationError;
             string developerMessage  = "The Mesh POST properties are invalid.";
 
-            var contentResult = new ApiValidationResult(context, httpStatusCode, apiStatusCode, developerMessage).ContentResult();
-
-            context.HttpContext.Response.StatusCode = httpStatusCode;
-            context.Result = contentResult;
+            var objectResult = new ApiValidationResult(context, controller, httpStatusCode, apiStatusCode, developerMessage).ObjectResult();
+            return objectResult;
         }
     }
 
     /// <summary>
     /// Mesh PUT request.
     /// </summary>
-    public class MeshPutRequest : IValidatableObject
+    public class MeshPutRequest
     {
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
-        public string PropertyPrime { get; set; }
 
         /// <summary>
         /// Validates the model properties.
         /// </summary>
-        /// <param name="validationContext">Validation context.</param>
-        /// <returns>Collection of ValidationResults</returns>
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        /// <param name="modelState">ModelState</param>
+        /// <returns>true if valid</returns>
+        public bool Validate(ModelStateDictionary modelState)
         {
             var results = new List<ValidationResult>();
 
+#if false
             if (String.IsNullOrEmpty(Description))
-            {
-                yield return new ValidationResult("A mesh description cannot be empty.", new[] { nameof(Description) });
-            }
-
-            if (String.IsNullOrEmpty(PropertyPrime))
-            {
-                yield return new ValidationResult("A custom error message for PropertyPrime.", new[] { "PropertyPrime" });
-            }
+                modelState.AddModelError(nameof(Description), "A mesh description cannot be empty.");
+#endif            
+            return modelState.IsValid;
         }
-    }
 
-    public class ValidateMeshPutModelAttribute : ActionFilterAttribute
-    {
-        // http://www.jerriepelser.com/blog/validation-response-aspnet-core-webapi/
-        public override void OnActionExecuting(ActionExecutingContext context)
+        /// <summary>
+        /// Formats a JSON object containing the extended error result.
+        /// </summary>
+        /// <param name="context">Current HttpContext</param>
+        /// <param name="controller">Active controller</param>
+        /// <returns>Api JSON result</returns>
+        public ObjectResult ErrorResult (HttpContext context, Controller controller)
         {
-            if (context.ModelState.IsValid)
-                return;
-
             var httpStatusCode       = StatusCodes.Status400BadRequest;
             var apiStatusCode        = (int) ApiStatusCode.MeshPutValidationError;
             string developerMessage  = "The Mesh PUT properties are invalid.";
 
-            var contentResult = new ApiValidationResult(context, httpStatusCode, apiStatusCode, developerMessage).ContentResult();
-
-            context.HttpContext.Response.StatusCode = httpStatusCode;
-            context.Result = contentResult;
+            var objectResult = new ApiValidationResult(context, controller, httpStatusCode, apiStatusCode, developerMessage).ObjectResult();
+            return objectResult;
         }
     }
 }
