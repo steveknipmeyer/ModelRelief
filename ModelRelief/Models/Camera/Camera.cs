@@ -29,8 +29,8 @@ namespace ModelRelief.Models
     public class Camera : ModelReliefEntity
     {
         [Required, Display (Name = "Camera Name")]
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public override string Name { get; set; }
+        public override string Description { get; set; }
 
         public StandardView StandardView { get; set; }
 
@@ -48,7 +48,6 @@ namespace ModelRelief.Models
         public bool BoundClippingPlanes { get; set; }
 
         // Navigation Properties
-        public User User { get; set; }
         public Project Project { get; set; }
 
         /// <summary>

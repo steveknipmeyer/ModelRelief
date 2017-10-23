@@ -17,11 +17,10 @@ namespace ModelRelief.Models
     public class Project : ModelReliefEntity
     {
         [Required, Display (Name = "Project Name")]
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public override string Name { get; set; }
+        public override string Description { get; set; }
 
         // Navigation Properties
-        public User User { get; set; }
 
         /// <summary>
         /// Default constructor.

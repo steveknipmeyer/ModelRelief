@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using ModelRelief.Services;
+using ModelRelief.Controllers.Api;
 
 namespace ModelRelief.Models
 {
-    public interface IValidatable
+    public interface IValidatable<TResource>
+        where TResource : ModelReliefEntity
     {
         ObjectResult ErrorResult(HttpContext context, Controller controller);
-        bool Validate(User user, IResourcesProvider resourceProvider, ModelStateDictionary modelState, int? id = null);
+        bool Validate(User user, ApiController<TResource> controller, int? id = null);
     }
 }

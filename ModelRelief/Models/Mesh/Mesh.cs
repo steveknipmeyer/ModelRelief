@@ -6,6 +6,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using ModelRelief.Controllers.Api;
 using ModelRelief.Infrastructure;
 using ModelRelief.Services;
 using Newtonsoft.Json;
@@ -25,14 +26,13 @@ namespace ModelRelief.Models
     public class Mesh  : ModelReliefEntity
     {
         [Required, Display (Name = "Mesh Name")]
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public override string Name { get; set; }
+        public override string Description { get; set; }
 
         public MeshFormat Format { get; set; }      
         public string Path { get; set; }
 
         // Navigation Properties
-        public User User { get; set; }
         public Project Project { get; set; }
         public DepthBuffer DepthBuffer { get; set; }
         public MeshTransform MeshTransform { get; set; }
@@ -47,7 +47,7 @@ namespace ModelRelief.Models
     /// <summary>
     /// Mesh POST request.
     /// </summary>
-    public class MeshPostRequest : IValidatable
+    public class MeshPostRequest : IValidatable<Mesh>
     {
         public byte[] Raw { get; set; }
 
@@ -65,11 +65,11 @@ namespace ModelRelief.Models
         /// </summary>
         /// <param name="modelState">ModelState</param>
         /// <returns>true if valid</returns>
-        public bool Validate(User user, IResourcesProvider resourceProvider, ModelStateDictionary modelState, int? id = null)
+        public bool Validate(User user, ApiController<Mesh> controller, int? id = null)
         {
             var results = new List<ValidationResult>();
 
-            return modelState.IsValid;
+            return controller.ModelState.IsValid;
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace ModelRelief.Models
     /// <summary>
     /// Mesh PUT request.
     /// </summary>
-    public class MeshPutRequest : IValidatable
+    public class MeshPutRequest : IValidatable<Mesh>
     {
         [Required]
         public string Name { get; set; }
@@ -103,20 +103,20 @@ namespace ModelRelief.Models
         /// </summary>
         /// <param name="modelState">ModelState</param>
         /// <returns>true if valid</returns>
-        public bool Validate(User user, IResourcesProvider resourceProvider, ModelStateDictionary modelState, int? id = null)
+        public bool Validate(User user, ApiController<Mesh> controller, int? id = null)
         {
             var results = new List<ValidationResult>();
             
             // verify target resource exists (and is owned by user)
-            IEnumerable<Mesh> meshes = resourceProvider.Meshes.GetAll().Where(mesh => ((mesh.Id == id) && (mesh.User.Id == user.Id)));
+            IEnumerable<Mesh> meshes = controller.ResourceProvider.GetAll().Where(mesh => ((mesh.Id == id) && (mesh.User.Id == user.Id)));
             if (meshes.Count() != 1)
-                modelState.AddModelError(nameof(MeshPutRequest), $"The mesh resource (id = {id ?? 0}) does not exist.");
+                controller.ModelState.AddModelError(nameof(MeshPutRequest), $"The mesh resource (id = {id ?? 0}) does not exist.");
 
 #if false
             if (String.IsNullOrEmpty(Description))
                 modelState.AddModelError(nameof(Description), "A mesh description cannot be empty.");
 #endif            
-            return modelState.IsValid;
+            return controller.ModelState.IsValid;
         }
 
         /// <summary>

@@ -17,8 +17,8 @@ namespace ModelRelief.Models
     public class MeshTransform : ModelReliefEntity
     {
         [Required, Display (Name = "Mesh Transform Name")]
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public override string Name { get; set; }
+        public override string Description { get; set; }
         
         public double Depth { get; set; }
         public double Width { get; set; }
@@ -29,7 +29,6 @@ namespace ModelRelief.Models
         public double LambdaLinearScaling { get; set; }
 
         // Navigation Properties
-        public User User { get; set; }
         public Project Project { get; set; }
 
         /// <summary>

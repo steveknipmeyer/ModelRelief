@@ -22,13 +22,13 @@ namespace ModelRelief.Models
     public class Model3d : ModelReliefEntity
     {       
         [Required, Display (Name = "Model Name")]
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public override string Name { get; set; }
+        public override string Description { get; set; }
+
         public Model3dFormat Format { get; set; }
         public string Path { get; set; }
 
         // Navigation Properties
-        public User User { get; set; }
         public Project Project { get; set; }
         public Camera Camera { get; set; }
 

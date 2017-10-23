@@ -32,23 +32,11 @@ namespace ModelRelief.Controllers.Api
     // [Authorize]
     [Area("api")]
     [Route ("api/[controller]")]        
-    public class MeshesController : Controller
+    public class MeshesController : ApiController<Mesh>
     {
-        IHostingEnvironment             _hostingEnvironment;
-        UserManager<User>               _userManager;
-        IResourcesProvider              _resourceProvider;
-        ILogger<MeshesController>       _logger;
-        Services.IConfigurationProvider _configurationProvider;
-        IMapper                         _mapper;
-
-        public MeshesController(IHostingEnvironment hostingEnvironment, UserManager<User> userManager, IResourcesProvider resourceProvider, ILogger<MeshesController> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper)
+        public MeshesController(IHostingEnvironment hostingEnvironment, UserManager<User> userManager, IResourcesProvider resourcesProvider, ILogger<MeshesController> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper) :
+            base (hostingEnvironment, userManager, resourcesProvider.Meshes, logger, configurationProvider, mapper)
         {
-            _hostingEnvironment     = hostingEnvironment;
-            _userManager            = userManager;
-            _resourceProvider       = resourceProvider;
-            _logger                 = logger;
-            _configurationProvider  = configurationProvider;
-            _mapper                 = mapper;
         }
 
         [HttpPost]
@@ -60,33 +48,13 @@ namespace ModelRelief.Controllers.Api
             var meshPostRequest = new MeshPostRequest(Files.ReadToEnd(Request.Body));
 
             // initial validation
-            var user = await Identity.GetCurrentUserAsync(_userManager, User);
-            meshPostRequest.Validate(user, _resourceProvider, ModelState);
+            var user = await Identity.GetCurrentUserAsync(UserManager, User);
+            meshPostRequest.Validate(user, this);
             if (!ModelState.IsValid)
                 return meshPostRequest.ErrorResult(HttpContext, this);
 
-            // populate Mesh properties
-            var newMesh = new Mesh() {Name = $"{user.Id}"};
-            newMesh.User = user;
-
-            _resourceProvider.Meshes.Add(newMesh);
-            var newMeshId = newMesh.Id;
-
-            // write file : file name = newly-created Mesh Id
-            var storeUsers = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
-            string meshPath = $"{storeUsers}{user.Id}/meshes/{newMeshId}/";
-            string meshName = $"{newMeshId}.obj";
-
-            string fileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{meshName}";
-            await Files.WriteFileFromByteArray(fileName, meshPostRequest.Raw);
-
-            // Return the mesh URI in the HTTP Response Location Header
-            //  XMLHttpRequest.getResponseHeader('Location') :  http://localhost:60655/api/meshes/10
-            //  XMLHttpRequest.responseText = (JSON) { id : 10 }
-            string responseUrl = Url.RouteUrl( new {id = newMesh.Id});
-            Uri responseUrlAbsolute = new Uri($"{Request.Scheme}://{Request.Host}{responseUrl}");
-
-            return Created(responseUrlAbsolute, new {id = newMesh.Id});
+            var filePostCommandProcessor = new FilePostCommandProcessor<Mesh>(user, this, meshPostRequest.Raw);
+            return await filePostCommandProcessor.Process();
         }
 
         [HttpPut ("{id?}")]
@@ -94,24 +62,24 @@ namespace ModelRelief.Controllers.Api
         public async Task<ObjectResult> Put([FromBody] MeshPutRequest meshPutRequest, int id )
         { 
             // initial validation
-            var user = await Identity.GetCurrentUserAsync(_userManager, User);
-            meshPutRequest.Validate(user, _resourceProvider, ModelState, id);
+            var user = await Identity.GetCurrentUserAsync(UserManager, User);
+            meshPutRequest.Validate(user, this, id);
             if (!ModelState.IsValid)
                 return meshPutRequest.ErrorResult(HttpContext, this);
 
             // construct final mesh name from POST Mesh object
-            var storeUsers  = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
+            var storeUsers  = ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
             string meshPath = $"{storeUsers}{user.Id}/meshes/{id}/";
-            string finalMeshFileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{meshPutRequest.Name}";
+            string finalMeshFileName = $"{HostingEnvironment.WebRootPath}{meshPath}{meshPutRequest.Name}";
 
             // update mesh object
-            var existingMesh = _resourceProvider.Meshes.Find(id);
+            var existingMesh = ResourceProvider.Find(id);
             existingMesh.Name = meshPutRequest.Name;
             existingMesh.Path = finalMeshFileName;
-            _resourceProvider.Meshes.Update(existingMesh);
+            ResourceProvider.Update(existingMesh);
 
             // now rename temporary file to match the final name
-            string placeholderMeshFileName = $"{_hostingEnvironment.WebRootPath}{meshPath}{id}.obj";
+            string placeholderMeshFileName = $"{HostingEnvironment.WebRootPath}{meshPath}{id}.obj";
             System.IO.File.Move(placeholderMeshFileName, finalMeshFileName);
 
             Log.Information("Mesh PUT {@mesh}", meshPutRequest);

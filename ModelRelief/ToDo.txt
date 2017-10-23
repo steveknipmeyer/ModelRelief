@@ -14,6 +14,13 @@
 
 <-- Tasks
     Extract POST file logic from MeshesController.  
+    Extend the Authorize attribute to allow checking for a user-owned resource.
+    TResource
+        TResource -> TModel?
+        Should Description be included?
+        Should Project be included?
+        Can ModelReliefEntity be an interface instead of a base class?
+            This would remove the need for virtual properties in the derived class.
 
     Accessing Model From JavaScript
         https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
