@@ -39,7 +39,7 @@ namespace ModelRelief.Services
         /// Returns the DbSet<T> for the generic type.
         /// </summary>
         /// <returns>DbSet<T></returns>
-        public DbSet<TResource> DbSet
+        private DbSet<TResource> DbSet
         {
             get
             {

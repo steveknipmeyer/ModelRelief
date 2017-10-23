@@ -47,7 +47,7 @@ namespace ModelRelief.Models
     /// <summary>
     /// Mesh POST request.
     /// </summary>
-    public class MeshPostRequest 
+    public class MeshPostRequest : IValidatable
     {
         public byte[] Raw { get; set; }
 
@@ -92,7 +92,7 @@ namespace ModelRelief.Models
     /// <summary>
     /// Mesh PUT request.
     /// </summary>
-    public class MeshPutRequest
+    public class MeshPutRequest : IValidatable
     {
         [Required]
         public string Name { get; set; }
@@ -108,7 +108,7 @@ namespace ModelRelief.Models
             var results = new List<ValidationResult>();
             
             // verify target resource exists (and is owned by user)
-            IEnumerable<Mesh> meshes = resourceProvider.Meshes.DbSet.Where(mesh => ((mesh.Id == id) && (mesh.User.Id == user.Id)));
+            IEnumerable<Mesh> meshes = resourceProvider.Meshes.GetAll().Where(mesh => ((mesh.Id == id) && (mesh.User.Id == user.Id)));
             if (meshes.Count() != 1)
                 modelState.AddModelError(nameof(MeshPutRequest), $"The mesh resource (id = {id ?? 0}) does not exist.");
 

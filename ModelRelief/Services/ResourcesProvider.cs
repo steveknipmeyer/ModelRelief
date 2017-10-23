@@ -19,8 +19,6 @@ namespace ModelRelief.Services
     public interface IResourceProvider<TResource> 
         where TResource : ModelReliefEntity
     {
-        DbSet<TResource> DbSet {get;}
-
         IEnumerable<TResource> GetAll();
         TResource Find (int id);
         TResource Add (TResource model);
