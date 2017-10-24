@@ -23,7 +23,7 @@ namespace ModelRelief.Models
         JPG         // JPG format
     }
 
-    public class DepthBuffer  : ModelReliefEntity
+    public class DepthBuffer  : ModelReliefEntity, IFileResource
         {       
         [Required, Display (Name = "DepthBuffer Name")]
         public override string Name { get; set; }

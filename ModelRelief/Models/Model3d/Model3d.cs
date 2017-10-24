@@ -19,7 +19,7 @@ namespace ModelRelief.Models
         STL             // Stereolithography
     }
 
-    public class Model3d : ModelReliefEntity
+    public class Model3d : ModelReliefEntity, IFileResource
     {       
         [Required, Display (Name = "Model Name")]
         public override string Name { get; set; }

@@ -53,8 +53,8 @@ namespace ModelRelief.Controllers.Api
             if (!ModelState.IsValid)
                 return meshPostRequest.ErrorResult(HttpContext, this);
 
-            var filePostCommandProcessor = new FilePostCommandProcessor<Mesh>(user, this, meshPostRequest.Raw);
-            return await filePostCommandProcessor.Process();
+            var filePostCommandProcessor = new FilePostCommandProcessor<Mesh>(user, this);
+            return await filePostCommandProcessor.Process(meshPostRequest.Raw);
         }
 
         [HttpPut ("{id?}")]
@@ -67,6 +67,7 @@ namespace ModelRelief.Controllers.Api
             if (!ModelState.IsValid)
                 return meshPutRequest.ErrorResult(HttpContext, this);
 
+#if false
             // construct final mesh name from POST Mesh object
             var storeUsers  = ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
             string meshPath = $"{storeUsers}{user.Id}/meshes/{id}/";
@@ -85,6 +86,10 @@ namespace ModelRelief.Controllers.Api
             Log.Information("Mesh PUT {@mesh}", meshPutRequest);
 
             return Ok("");
+#else
+            var filePutCommandProcessor = new FilePutCommandProcessor<MeshPutRequest, Mesh>(user, this);
+            return await filePutCommandProcessor.Process(id, meshPutRequest);
+#endif
         }
     }        
 }

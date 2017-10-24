@@ -26,4 +26,9 @@ namespace ModelRelief.Models
         // Navigation Properties
         public User User { get; set; }
     }
+
+    public interface IFileResource
+    {
+        string Path { get; set; }
+    }
 }

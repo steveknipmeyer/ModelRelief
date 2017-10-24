@@ -1,4 +1,6 @@
 ﻿<-- Commit Notes    
+Add interface for file resource with a Path property.
+Add Models MappingProfile to initialize AutoMapper.
 
 <--- Reading
     EntityFramework Core
@@ -13,13 +15,24 @@
         The ActionFilter can check ModelState.Valid and then set the ActionExecutingContext.Result so the controller action is never called.
 
 <-- Tasks
-    Extract POST file logic from MeshesController.  
+    Add validation to FilePutCommandProcessor.
+    Add validation to FilePostCommandProcessor.
+
+    Add enum for storage folder of resources.
+        string resourcePath = $"{storeUsers}{_user.Id}/meshes/{newResource.Id}/";
+
     Extend the Authorize attribute to allow checking for a user-owned resource.
     TResource
-        TResource -> TModel?
+        TResource            -> TModel
+        TPutResource         -> TPutModel
+        IResourceProvider    -> IModelProvider
+        SqlResourcedProvider -> SqlModelsProvider
+        resource             -> model
+        ModelReliefEntity    -> Model
+
         Should Description be included?
         Should Project be included?
-        Can ModelReliefEntity be an interface instead of a base class?
+        Should ModelReliefEntity be an interface instead of a base class?
             This would remove the need for virtual properties in the derived class.
 
     Accessing Model From JavaScript

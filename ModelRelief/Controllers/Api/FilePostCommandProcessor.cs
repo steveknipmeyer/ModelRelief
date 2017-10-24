@@ -21,20 +21,18 @@ namespace ModelRelief.Controllers.Api
     {
         User                     _user;
         ApiController<TResource> _controller;
-        byte[]                   _byteArray;
 
-        public FilePostCommandProcessor(User user, ApiController<TResource> controller, byte[] byteArray)
+        public FilePostCommandProcessor(User user, ApiController<TResource> controller)
         {
         _user       = user;
         _controller = controller;
-         _byteArray = byteArray;
         }
 
         /// <summary>
         /// Create a file resource from a POST request.
         /// </summary>
         /// <returns></returns>
-        async public Task<ObjectResult> Process()
+        async public Task<ObjectResult> Process(byte[] byteArray)
         {
             // populate resource properties
             var newResource = new TResource() {Name = $"{_user.Id}"};
@@ -44,13 +42,13 @@ namespace ModelRelief.Controllers.Api
 
             // write file : file name = newly-created resource Id
             var storeUsers = _controller.ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
-            string meshPath = $"{storeUsers}{_user.Id}/meshes/{newResource.Id}/";
-            string meshName = $"{newResource.Id}.obj";
+            string resourcePath = $"{storeUsers}{_user.Id}/meshes/{newResource.Id}/";
+            string resourceName = $"{newResource.Id}.obj";
 
-            string fileName = $"{_controller.HostingEnvironment.WebRootPath}{meshPath}{meshName}";
-            await Files.WriteFileFromByteArray(fileName, _byteArray);
+            string fileName = $"{_controller.HostingEnvironment.WebRootPath}{resourcePath}{resourceName}";
+            await Files.WriteFileFromByteArray(fileName, byteArray);
 
-            // Return the mesh URI in the HTTP Response Location Header
+            // Return the resource3 URI in the HTTP Response Location Header
             //  XMLHttpRequest.getResponseHeader('Location') :  http://localhost:60655/api/meshes/10
             //  XMLHttpRequest.responseText = (JSON) { id : 10 }
             string responseUrl = _controller.Url.RouteUrl( new {id = newResource.Id});
