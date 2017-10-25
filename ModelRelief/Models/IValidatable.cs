@@ -7,7 +7,7 @@ namespace ModelRelief.Models
     public interface IValidatable<TModel>
         where TModel : ModelReliefModel
     {
-        ObjectResult ErrorResult(HttpContext context, Controller controller);
+        ObjectResult ErrorResult(Controller controller);
         bool Validate(User user, ApiController<TModel> controller, int? id = null);
     }
 }

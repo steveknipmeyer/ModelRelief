@@ -4,8 +4,14 @@
     EntityFramework Core
         https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/
 <-- Tasks
-    Add validation to FilePutCommandProcessor.
+    Add overrides to ErrorResult to allow specialized return values such as developerMessage.
+        MeshPutRequest -> MeshPutModel
+        MeshPostRequest -> MeshPostModel
+
     Add validation to FilePostCommandProcessor.
+        Improve exception ErrorResult.
+
+    Add validation to FilePutCommandProcessor.
 
     Extend the Authorize attribute to allow checking for a user-owned resource.
 

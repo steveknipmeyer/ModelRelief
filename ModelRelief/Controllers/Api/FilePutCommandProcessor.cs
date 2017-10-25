@@ -50,6 +50,7 @@ namespace ModelRelief.Controllers.Api
             string finalFileName = $"{_controller.HostingEnvironment.WebRootPath}{filePath}{model.Name}";
             model.Path = finalFileName;
 
+            // update repository
             _controller.ModelProvider.Update(model);
 
             // now rename temporary file to match the final name
@@ -58,7 +59,7 @@ namespace ModelRelief.Controllers.Api
 
             Log.Information("File PUT {@TModel}", putputModel);
 
-            return _controller.Ok("");
+            return await Task.FromResult<ObjectResult>(_controller.Ok(""));
         }
     }
 }

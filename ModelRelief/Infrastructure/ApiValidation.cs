@@ -52,15 +52,13 @@ namespace ModelRelief.Infrastructure
 
     public class ApiValidationResult
     {
-        HttpContext  _context;
         Controller   _controller;
         int          _httpStatusCode;
         int          _apiStatusCode;
         string       _developerMessage;
 
-        public ApiValidationResult (HttpContext context, Controller controller, int httpStatusCode, int apiStatusCode, string developerMessage)
+        public ApiValidationResult (Controller controller, int httpStatusCode, int apiStatusCode, string developerMessage)
         {
-            _context          = context;
             _controller       = controller;
             _httpStatusCode   = httpStatusCode;
             _apiStatusCode    = apiStatusCode;
@@ -71,7 +69,7 @@ namespace ModelRelief.Infrastructure
         {
 
             string apiReferenceRelative = (_controller).Url.RouteUrl(RouteNames.ApiDocumentation, new {id = _apiStatusCode});
-            var apiReferenceAbsolute    = string.Format($"{_context.Request.Scheme}://{_context.Request.Host}{apiReferenceRelative}");
+            var apiReferenceAbsolute    = string.Format($"{_controller.HttpContext.Request.Scheme}://{_controller.HttpContext.Request.Host}{apiReferenceRelative}");
 
             IEnumerable<ValidationError> Errors = _controller.ModelState.Keys
                     .SelectMany(key => _controller.ModelState[key].Errors.Select(x => new ValidationError(key, x.ErrorMessage)))

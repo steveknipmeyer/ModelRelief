@@ -75,16 +75,15 @@ namespace ModelRelief.Models
         /// <summary>
         /// Formats a JSON object containing the extended error result.
         /// </summary>
-        /// <param name="context">Current HttpContext</param>
         /// <param name="controller">Active controller</param>
         /// <returns>Api JSON result</returns>
-        public ObjectResult ErrorResult (HttpContext context, Controller controller)
+        public ObjectResult ErrorResult (Controller controller)
         {
             var httpStatusCode       = StatusCodes.Status400BadRequest;
             var apiStatusCode        = (int) ApiStatusCode.MeshPostValidationError;
             string developerMessage  = "The Mesh POST properties are invalid.";
 
-            var objectResult = new ApiValidationResult(context, controller, httpStatusCode, apiStatusCode, developerMessage).ObjectResult();
+            var objectResult = new ApiValidationResult(controller, httpStatusCode, apiStatusCode, developerMessage).ObjectResult();
             return objectResult;
         }
     }
@@ -122,16 +121,15 @@ namespace ModelRelief.Models
         /// <summary>
         /// Formats a JSON object containing the extended error result.
         /// </summary>
-        /// <param name="context">Current HttpContext</param>
         /// <param name="controller">Active controller</param>
         /// <returns>Api JSON result</returns>
-        public ObjectResult ErrorResult (HttpContext context, Controller controller)
+        public ObjectResult ErrorResult (Controller controller)
         {
             var httpStatusCode       = StatusCodes.Status400BadRequest;
             var apiStatusCode        = (int) ApiStatusCode.MeshPutValidationError;
             string developerMessage  = "The Mesh PUT properties are invalid.";
 
-            var objectResult = new ApiValidationResult(context, controller, httpStatusCode, apiStatusCode, developerMessage).ObjectResult();
+            var objectResult = new ApiValidationResult(controller, httpStatusCode, apiStatusCode, developerMessage).ObjectResult();
             return objectResult;
         }
     }

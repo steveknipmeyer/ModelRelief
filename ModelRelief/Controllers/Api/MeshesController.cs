@@ -51,10 +51,10 @@ namespace ModelRelief.Controllers.Api
             var user = await Identity.GetCurrentUserAsync(UserManager, User);
             meshPostRequest.Validate(user, this);
             if (!ModelState.IsValid)
-                return meshPostRequest.ErrorResult(HttpContext, this);
+                return meshPostRequest.ErrorResult(this);
 
-            var filePostCommandProcessor = new FilePostCommandProcessor<Mesh>(user, this);
-            return await filePostCommandProcessor.Process(meshPostRequest.Raw);
+            var filePostCommandProcessor = new FilePostCommandProcessor<MeshPostRequest, Mesh>(user, this);
+            return await filePostCommandProcessor.Process(meshPostRequest, meshPostRequest.Raw);
         }
 
         [HttpPut ("{id?}")]
@@ -65,7 +65,7 @@ namespace ModelRelief.Controllers.Api
             var user = await Identity.GetCurrentUserAsync(UserManager, User);
             meshPutRequest.Validate(user, this, id);
             if (!ModelState.IsValid)
-                return meshPutRequest.ErrorResult(HttpContext, this);
+                return meshPutRequest.ErrorResult(this);
 
             var filePutCommandProcessor = new FilePutCommandProcessor<MeshPutRequest, Mesh>(user, this);
             return await filePutCommandProcessor.Process(id, meshPutRequest);
