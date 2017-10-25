@@ -43,9 +43,7 @@ namespace ModelRelief.Services
         {
             get
             {
-                Type t = typeof(TModel);
-                DbSet<TModel> dbSet = _databaseContext.GetDbSetByReflection(t.FullName);
-                return dbSet;
+                return _databaseContext.Set<TModel>();
             }
         }
 
@@ -55,7 +53,7 @@ namespace ModelRelief.Services
         /// <returns>Collection of all models.</returns>
         public IEnumerable<TModel> GetAll()
         {   
-            return this.DbSet;
+            return this.DbSet.AsEnumerable<TModel>();
         }
 
         /// <summary>
