@@ -14,28 +14,28 @@ using Microsoft.EntityFrameworkCore;
 namespace ModelRelief.Services
 {
     /// <summary>
-    /// Interface for a generic resource.
+    /// Interface for a generic model.
     /// </summary>
-    public interface IResourceProvider<TResource> 
-        where TResource : ModelReliefEntity
+    public interface IModelProvider<TModel> 
+        where TModel : ModelReliefModel
     {
-        IEnumerable<TResource> GetAll();
-        TResource Find (int id);
-        TResource Add (TResource model);
-        TResource Update (TResource model);
+        IEnumerable<TModel> GetAll();
+        TModel Find (int id);
+        TModel Add (TModel model);
+        TModel Update (TModel model);
         void Delete (int id);
 
         void Commit ();
     }
 
     /// <summary>
-    /// Interface for locating resources.
+    /// Interface for locating models.
     /// </summary>
-    public interface IResourcesProvider
+    public interface IModelsProvider
     
     {
-        IResourceProvider<Model3d>      Models {get;}
-        IResourceProvider<DepthBuffer>  DepthBuffers {get;}
-        IResourceProvider<Mesh>         Meshes {get;}
+        IModelProvider<Model3d>      Model3ds {get;}
+        IModelProvider<DepthBuffer>  DepthBuffers {get;}
+        IModelProvider<Mesh>         Meshes {get;}
     }
 }

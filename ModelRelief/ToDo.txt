@@ -1,18 +1,15 @@
 ﻿<-- Commit Notes    
-Add interface for file resource with a Path property.
-Add Models MappingProfile to initialize AutoMapper.
+ModelReliefEntity -> ModelReliefModel
+Models -> Model3ds
+IResourceProvider -> IModelProvider
+SqlResourcedProvider -> SqlModelsProvider
+TResource -> TModel
+TPutResource -> TPutModel
+resource -> model
 
 <--- Reading
     EntityFramework Core
         https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/
-
-<-- Validation
-    A registered InputFormatter maps the Request.Body to a type. By default, MVC supports a limited number of formatters.
-        This allows a strongly typed [FromBody] action parameter to be used.
-    The DataAnnotation attributes (e.g. [Required]) are checked first and MVC sets ModelState.Valid based on the results.
-    If the bound model implements IValidatableObject then additional validation checks may be performed, adding additional ValidationResults.
-    If an ActionFilter is registered, control passes there.
-        The ActionFilter can check ModelState.Valid and then set the ActionExecutingContext.Result so the controller action is never called.
 
 <-- Tasks
     Add validation to FilePutCommandProcessor.
@@ -21,18 +18,28 @@ Add Models MappingProfile to initialize AutoMapper.
     Add enum for storage folder of resources.
         string resourcePath = $"{storeUsers}{_user.Id}/meshes/{newResource.Id}/";
 
+    Review the ILogger interface. How should this work with a Controller?
+        namespace Microsoft.Extensions.Logging
+        {
+            //
+            // Summary:
+            //     A generic interface for logging where the category name is derived from the specified
+            //     TCategoryName type name. Generally used to enable activation of a named Microsoft.Extensions.Logging.ILogger
+            //     from dependency injection.
+            //
+            // Type parameters:
+            //   TCategoryName:
+            //     The type who's name is used for the logger category name.
+            public interface ILogger<out TCategoryName> : ILogger
+            {
+            }
+        }
+
     Extend the Authorize attribute to allow checking for a user-owned resource.
-    TResource
-        TResource            -> TModel
-        TPutResource         -> TPutModel
-        IResourceProvider    -> IModelProvider
-        SqlResourcedProvider -> SqlModelsProvider
-        resource             -> model
-        ModelReliefEntity    -> Model
 
         Should Description be included?
         Should Project be included?
-        Should ModelReliefEntity be an interface instead of a base class?
+        Should ModelReliefModel be an interface instead of a base class?
             This would remove the need for virtual properties in the derived class.
 
     Accessing Model From JavaScript
@@ -428,3 +435,11 @@ Add Models MappingProfile to initialize AutoMapper.
         Multi-user Access
             Cookies are used so tests must be done from an external computer.
         64 bit support
+
+<-- ASP.NET Core Model Validation
+    A registered InputFormatter maps the Request.Body to a type. By default, MVC supports a limited number of formatters.
+        This allows a strongly typed [FromBody] action parameter to be used.
+    The DataAnnotation attributes (e.g. [Required]) are checked first and MVC sets ModelState.Valid based on the results.
+    If the bound model implements IValidatableObject then additional validation checks may be performed, adding additional ValidationResults.
+    If an ActionFilter is registered, control passes there.
+        The ActionFilter can check ModelState.Valid and then set the ActionExecutingContext.Result so the controller action is never called.

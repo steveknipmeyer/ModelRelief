@@ -4,10 +4,10 @@ using ModelRelief.Controllers.Api;
 
 namespace ModelRelief.Models
 {
-    public interface IValidatable<TResource>
-        where TResource : ModelReliefEntity
+    public interface IValidatable<TModel>
+        where TModel : ModelReliefModel
     {
         ObjectResult ErrorResult(HttpContext context, Controller controller);
-        bool Validate(User user, ApiController<TResource> controller, int? id = null);
+        bool Validate(User user, ApiController<TModel> controller, int? id = null);
     }
 }

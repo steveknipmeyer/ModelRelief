@@ -29,14 +29,14 @@ namespace ModelRelief.Controllers
     public class ModelsController : Controller
     {
         IHostingEnvironment         _hostingEnvironment;
-        IResourcesProvider          _resourceProvider;
+        IModelsProvider             _modelsProvider;
         ILogger<ModelsController>   _logger;
         IMapper                     _mapper;
 
-        public ModelsController(IHostingEnvironment hostingEnvironment, IResourcesProvider resourceProvider, ILogger<ModelsController> logger, IMapper mapper)
+        public ModelsController(IHostingEnvironment hostingEnvironment, IModelsProvider modelsrovider, ILogger<ModelsController> logger, IMapper mapper)
         {
             _hostingEnvironment = hostingEnvironment;
-            _resourceProvider   = resourceProvider;
+            _modelsProvider     = modelsrovider;
             _logger             = logger;
             _mapper             = mapper;
         }
@@ -44,7 +44,7 @@ namespace ModelRelief.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {    
-            IEnumerable<Model3d> models = _resourceProvider.Models.GetAll();
+            IEnumerable<Model3d> models = _modelsProvider.Model3ds.GetAll();
             return View(models);
         }
 
@@ -54,7 +54,7 @@ namespace ModelRelief.Controllers
             _logger.LogInformation("ModelsController: model = {model}", id);
             _logger.LogWarning("ModelsController: model = {model}", id);
 
-            Model3d model = _resourceProvider.Models.Find(id);
+            Model3d model = _modelsProvider.Model3ds.Find(id);
 
             if (model == null)
                 return Content(String.Format("Model not found: {0}", id));
@@ -79,7 +79,7 @@ namespace ModelRelief.Controllers
             }
 
             var model = _mapper.Map<Model3dEditViewModel, Model3d> (editModel);
-            model = _resourceProvider.Models.Add (model);
+            model = _modelsProvider.Model3ds.Add (model);
 
             return RedirectToAction ("Viewer", new { Id = model.Id});           
         }
@@ -88,7 +88,7 @@ namespace ModelRelief.Controllers
         [Route ("[controller]/[action]/{id}")]
         public IActionResult Edit(int id)
         {           
-            Model3d model = _resourceProvider.Models.Find(id);
+            Model3d model = _modelsProvider.Model3ds.Find(id);
             if (model == null)
                 return Content(String.Format("Model not found: {0}", id));
 
@@ -108,13 +108,13 @@ namespace ModelRelief.Controllers
                 return View();
             }
 
-            Model3d model = _resourceProvider.Models.Find(id);
+            Model3d model = _modelsProvider.Model3ds.Find(id);
             if (model == null)
                 return Content(String.Format("Model not found: {0}", id));
 
             _mapper.Map<Model3dEditViewModel, Model3d> (editModel, model);
 
-            _resourceProvider.Models.Update(model);
+            _modelsProvider.Model3ds.Update(model);
 
             return RedirectToAction ("Viewer", new { Id = model.Id});           
         }

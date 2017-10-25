@@ -34,8 +34,8 @@ namespace ModelRelief.Controllers.Api
     [Route ("api/[controller]")]        
     public class MeshesController : ApiController<Mesh>
     {
-        public MeshesController(IHostingEnvironment hostingEnvironment, UserManager<User> userManager, IResourcesProvider resourcesProvider, ILogger<MeshesController> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper) :
-            base (hostingEnvironment, userManager, resourcesProvider.Meshes, logger, configurationProvider, mapper)
+        public MeshesController(IHostingEnvironment hostingEnvironment, UserManager<User> userManager, IModelsProvider modelsProvider, ILogger<Mesh> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper) :
+            base (hostingEnvironment, userManager, modelsProvider.Meshes, logger, configurationProvider, mapper)
         {
         }
 
@@ -67,29 +67,8 @@ namespace ModelRelief.Controllers.Api
             if (!ModelState.IsValid)
                 return meshPutRequest.ErrorResult(HttpContext, this);
 
-#if false
-            // construct final mesh name from POST Mesh object
-            var storeUsers  = ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
-            string meshPath = $"{storeUsers}{user.Id}/meshes/{id}/";
-            string finalMeshFileName = $"{HostingEnvironment.WebRootPath}{meshPath}{meshPutRequest.Name}";
-
-            // update mesh object
-            var existingMesh = ResourceProvider.Find(id);
-            existingMesh.Name = meshPutRequest.Name;
-            existingMesh.Path = finalMeshFileName;
-            ResourceProvider.Update(existingMesh);
-
-            // now rename temporary file to match the final name
-            string placeholderMeshFileName = $"{HostingEnvironment.WebRootPath}{meshPath}{id}.obj";
-            System.IO.File.Move(placeholderMeshFileName, finalMeshFileName);
-
-            Log.Information("Mesh PUT {@mesh}", meshPutRequest);
-
-            return Ok("");
-#else
             var filePutCommandProcessor = new FilePutCommandProcessor<MeshPutRequest, Mesh>(user, this);
             return await filePutCommandProcessor.Process(id, meshPutRequest);
-#endif
         }
     }        
 }

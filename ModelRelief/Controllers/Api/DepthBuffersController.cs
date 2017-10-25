@@ -3,36 +3,26 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-using System;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ModelRelief.Models;
 using ModelRelief.Services;
-using ModelRelief.Utility;
-using ModelRelief.ViewModels;
 
 namespace ModelRelief.Controllers.Api
 {
     // [Authorize]
     [Area("Api")]
     [Route ("api/depth-buffers")]        
-    public class DepthBuffersController : Controller
+    public class DepthBuffersController : ApiController<DepthBuffer>
     {
-        IHostingEnvironment _hostingEnvironment;
-        IResourcesProvider  _resourceProvider;
 
-        public DepthBuffersController(IHostingEnvironment hostingEnvironment, IResourcesProvider resourceProvider)
+        public DepthBuffersController(IHostingEnvironment hostingEnvironment, UserManager<User> userManager, IModelsProvider modelsProvider, ILogger<DepthBuffer> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper) :
+            base (hostingEnvironment, userManager, modelsProvider.DepthBuffers, logger, configurationProvider, mapper)
         {
-            _hostingEnvironment = hostingEnvironment;
-            _resourceProvider   = resourceProvider;
         }
 
         [HttpPost]

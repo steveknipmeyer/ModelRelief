@@ -15,46 +15,46 @@ namespace ModelRelief.Controllers.Api
     /// <summary>
     /// Handles file creation from a POST request.
     /// </summary>
-    /// <typeparam name="TResource"></typeparam>
-    public class FilePostCommandProcessor<TResource> 
-        where TResource: ModelReliefEntity, new()
+    /// <typeparam name="TModel"></typeparam>
+    public class FilePostCommandProcessor<TModel> 
+        where TModel: ModelReliefModel, new()
     {
-        User                     _user;
-        ApiController<TResource> _controller;
+        User                   _user;
+        ApiController<TModel>  _controller;
 
-        public FilePostCommandProcessor(User user, ApiController<TResource> controller)
+        public FilePostCommandProcessor(User user, ApiController<TModel> controller)
         {
         _user       = user;
         _controller = controller;
         }
 
         /// <summary>
-        /// Create a file resource from a POST request.
+        /// Create a file from a POST request.
         /// </summary>
         /// <returns></returns>
         async public Task<ObjectResult> Process(byte[] byteArray)
         {
-            // populate resource properties
-            var newResource = new TResource() {Name = $"{_user.Id}"};
-            newResource.User = _user;
+            // populate model properties
+            var newModel = new TModel() {Name = $"{_user.Id}"};
+            newModel.User = _user;
 
-            _controller.ResourceProvider.Add(newResource);
+            _controller.ModelProvider.Add(newModel);
 
-            // write file : file name = newly-created resource Id
+            // write file : file name = newly-created model Id
             var storeUsers = _controller.ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
-            string resourcePath = $"{storeUsers}{_user.Id}/meshes/{newResource.Id}/";
-            string resourceName = $"{newResource.Id}.obj";
+            string modelPath = $"{storeUsers}{_user.Id}/meshes/{newModel.Id}/";
+            string modelName = $"{newModel.Id}.obj";
 
-            string fileName = $"{_controller.HostingEnvironment.WebRootPath}{resourcePath}{resourceName}";
+            string fileName = $"{_controller.HostingEnvironment.WebRootPath}{modelPath}{modelName}";
             await Files.WriteFileFromByteArray(fileName, byteArray);
 
-            // Return the resource3 URI in the HTTP Response Location Header
+            // Return the model URI in the HTTP Response Location Header
             //  XMLHttpRequest.getResponseHeader('Location') :  http://localhost:60655/api/meshes/10
             //  XMLHttpRequest.responseText = (JSON) { id : 10 }
-            string responseUrl = _controller.Url.RouteUrl( new {id = newResource.Id});
+            string responseUrl = _controller.Url.RouteUrl( new {id = newModel.Id});
             Uri responseUrlAbsolute = new Uri($"{_controller.Request.Scheme}://{_controller.Request.Host}{responseUrl}");
 
-            return _controller.Created(responseUrlAbsolute, new {id = newResource.Id});
+            return _controller.Created(responseUrlAbsolute, new {id = newModel.Id});
         }
     }
 }

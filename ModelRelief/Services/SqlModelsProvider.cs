@@ -17,8 +17,8 @@ namespace ModelRelief.Services
     #region Dynamic DbSet<T>    
     // https://stackoverflow.com/questions/33940507/find-a-generic-dbset-in-a-dbcontext-dynamically
 
-    public class SqlResourceProvider<TResource> : IResourceProvider<TResource>  
-        where TResource: ModelReliefEntity
+    public class SqlModelProvider<TModel> : IModelProvider<TModel>  
+        where TModel: ModelReliefModel
     {
         private ModelReliefDbContext        _databaseContext;
         private IHttpContextAccessor        _httpContext;
@@ -28,7 +28,7 @@ namespace ModelRelief.Services
         /// Constructor
         /// </summary>
         /// <param name="databaseContext">Database context.</param>
-        public SqlResourceProvider(ModelReliefDbContext databaseContext, IHttpContextAccessor httpContextAccessor, IHostingEnvironment hostingEnvironment)
+        public SqlModelProvider(ModelReliefDbContext databaseContext, IHttpContextAccessor httpContextAccessor, IHostingEnvironment hostingEnvironment)
         {
             _databaseContext    = databaseContext;
             _httpContext        = httpContextAccessor;
@@ -39,76 +39,76 @@ namespace ModelRelief.Services
         /// Returns the DbSet<T> for the generic type.
         /// </summary>
         /// <returns>DbSet<T></returns>
-        private DbSet<TResource> DbSet
+        private DbSet<TModel> DbSet
         {
             get
             {
-                Type t = typeof(TResource);
-                DbSet<TResource> dbSet = _databaseContext.GetDbSetByReflection(t.FullName);
+                Type t = typeof(TModel);
+                DbSet<TModel> dbSet = _databaseContext.GetDbSetByReflection(t.FullName);
                 return dbSet;
             }
         }
 
         /// <summary>
-        /// Return all resources.
+        /// Return all models.
         /// </summary>
-        /// <returns>Collection of all resources.</returns>
-        public IEnumerable<TResource> GetAll()
+        /// <returns>Collection of all models.</returns>
+        public IEnumerable<TModel> GetAll()
         {   
             return this.DbSet;
         }
 
         /// <summary>
-        /// Find a specific resource by Id.
+        /// Find a specific model by Id.
         /// </summary>
-        /// <param name="id">Id of resource</param>
-        /// <returns>Resource with the target ID.</returns>
-        public TResource Find(int id)
+        /// <param name="id">Id of model</param>
+        /// <returns>Model with the target ID.</returns>
+        public TModel Find(int id)
         {
             return this.DbSet.FirstOrDefault (m => m.Id == id);
         }
 
         /// <summary>
-        /// Add a new resource.
+        /// Add a new model.
         /// </summary>
-        /// <param name="newResource"></param>
-        /// <returns>New resource.</returns>
-        public TResource Add(TResource newResource)
+        /// <param name="newModel"></param>
+        /// <returns>New model.</returns>
+        public TModel Add(TModel newModel)
         {
-            if (newResource == null)
+            if (newModel == null)
                 return null;
 
-            _databaseContext.Add (newResource);
+            _databaseContext.Add (newModel);
             Commit();
-            return newResource;
+            return newModel;
         }
 
         /// <summary>
-        /// Updates a resource.
+        /// Updates a model.
         /// </summary>
-        /// <param resource>resource to update</param>
-        /// <returns>Updated resource.</returns>
-        public TResource Update(TResource resource)
+        /// <param model>Model to update</param>
+        /// <returns>Updated model.</returns>
+        public TModel Update(TModel model)
         {
-            if (resource == null)
+            if (model == null)
                 return null;
 
-            _databaseContext.Update(resource);
+            _databaseContext.Update(model);
             Commit();           
-            return resource;
+            return model;
         }
 
         /// <summary>
-        /// Deletes a resource.
+        /// Deletes a model.
         /// </summary>
-        /// <param id>Id of resource to delete</param>
+        /// <param id>Id of model to delete</param>
         public void Delete(int id)
         {
-            TResource resource = this.DbSet.FirstOrDefault (m => m.Id == id);
-            if (resource == null)
+            TModel model = this.DbSet.FirstOrDefault (m => m.Id == id);
+            if (model == null)
                 return;
 
-            _databaseContext.Remove(resource);
+            _databaseContext.Remove(model);
             Commit();
         }
 
@@ -124,30 +124,30 @@ namespace ModelRelief.Services
 #endregion
 
     /// <summary>
-    /// SQL implementation of IResourcesProvider.
+    /// SQL implementation of IModelsProvider.
     /// </summary>
-    public class SqlResourcesProvider : IResourcesProvider
+    public class SqlModelsProvider : IModelsProvider
     {
-        private IResourceProvider<Model3d>      _modelProvider;
-        private IResourceProvider<DepthBuffer>  _depthBufferProvider;
-        private IResourceProvider<Mesh>         _meshProvider;
+        private IModelProvider<Model3d>      _modelProvider;
+        private IModelProvider<DepthBuffer>  _depthBufferProvider;
+        private IModelProvider<Mesh>         _meshProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="databaseContext">Database context.</param>
-        public SqlResourcesProvider(ModelReliefDbContext databaseContext, IHttpContextAccessor httpContextAccessor, IHostingEnvironment hostingEnvironment)
+        public SqlModelsProvider(ModelReliefDbContext databaseContext, IHttpContextAccessor httpContextAccessor, IHostingEnvironment hostingEnvironment)
         {
-            _modelProvider       = (new SqlResourceProvider<Model3d>(databaseContext, httpContextAccessor, hostingEnvironment)) as IResourceProvider<Model3d>;
-            _depthBufferProvider = (new SqlResourceProvider<DepthBuffer>(databaseContext, httpContextAccessor, hostingEnvironment)) as IResourceProvider<DepthBuffer>;
-            _meshProvider        = (new SqlResourceProvider<Mesh>(databaseContext, httpContextAccessor, hostingEnvironment)) as IResourceProvider<Mesh>;
+            _modelProvider       = (new SqlModelProvider<Model3d>(databaseContext, httpContextAccessor, hostingEnvironment)) as IModelProvider<Model3d>;
+            _depthBufferProvider = (new SqlModelProvider<DepthBuffer>(databaseContext, httpContextAccessor, hostingEnvironment)) as IModelProvider<DepthBuffer>;
+            _meshProvider        = (new SqlModelProvider<Mesh>(databaseContext, httpContextAccessor, hostingEnvironment)) as IModelProvider<Mesh>;
         }
 
         /// <summary>
         /// Returns the Model3d provider.
         /// </summary>
         /// <returns>Model3d provider</returns>
-        public IResourceProvider<Model3d> Models
+        public IModelProvider<Model3d> Model3ds
         {
             get { return _modelProvider; }
         }
@@ -156,7 +156,7 @@ namespace ModelRelief.Services
         /// Returns the DepthBuffer provider.
         /// </summary>
         /// <returns>DepthBuffer provider</returns>
-        public IResourceProvider<DepthBuffer> DepthBuffers
+        public IModelProvider<DepthBuffer> DepthBuffers
         {
             get { return _depthBufferProvider; }
         }
@@ -165,7 +165,7 @@ namespace ModelRelief.Services
         /// Returns the Mesh provider.
         /// </summary>
         /// <returns>Mesh provider</returns>
-        public IResourceProvider<Mesh> Meshes
+        public IModelProvider<Mesh> Meshes
         {
             get { return _meshProvider; }
         }

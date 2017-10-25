@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ModelRelief.Models
 {
-    public class ModelReliefEntity
+    public class ModelReliefModel
     {
         [Key]
         [Required]   

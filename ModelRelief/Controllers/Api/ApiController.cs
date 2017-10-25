@@ -4,49 +4,34 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 
-using System;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-
-using Serilog;
-
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ModelRelief.Models;
 using ModelRelief.Services;
-using ModelRelief.Utility;
-using ModelRelief.ViewModels;
-using Microsoft.Extensions.Logging;
-using AutoMapper;
-using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Http.Internal;
 
 namespace ModelRelief.Controllers.Api
 {
     // [Authorize]
     [Area("api")]
     [Route ("api/[controller]")]        
-    public class ApiController<TResource>: Controller
-        where TResource : ModelReliefEntity
+    public class ApiController<TModel>: Controller
+        where TModel : ModelReliefModel
     {
-        public IHostingEnvironment             HostingEnvironment { get; set; }
-        public UserManager<User>               UserManager { get; set; }
-        public IResourceProvider<TResource>    ResourceProvider { get; set; }
-        public ILogger<MeshesController>       Logger { get; set; }
-        public Services.IConfigurationProvider ConfigurationProvider { get; set; }
-        public IMapper                         Mapper { get; set; }
+        public IHostingEnvironment              HostingEnvironment { get; set; }
+        public UserManager<User>                UserManager { get; set; }
+        public IModelProvider<TModel>           ModelProvider { get; set; }
+        public ILogger<TModel>                  Logger { get; set; }
+        public Services.IConfigurationProvider  ConfigurationProvider { get; set; }
+        public IMapper                          Mapper { get; set; }
 
-        public ApiController (IHostingEnvironment hostingEnvironment, UserManager<User> userManager, IResourceProvider<TResource> resourceProvider, ILogger<MeshesController> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper)
+        public ApiController (IHostingEnvironment hostingEnvironment, UserManager<User> userManager, IModelProvider<TModel> modelProvider, ILogger<TModel> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper)
         {
             HostingEnvironment     = hostingEnvironment;
             UserManager            = userManager;
-            ResourceProvider       = resourceProvider;
+            ModelProvider          = modelProvider;
             Logger                 = logger;
             ConfigurationProvider  = configurationProvider;
             Mapper                 = mapper;

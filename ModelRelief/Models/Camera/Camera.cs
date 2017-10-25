@@ -26,7 +26,7 @@ namespace ModelRelief.Models
         Isometric
     }
 
-    public class Camera : ModelReliefEntity
+    public class Camera : ModelReliefModel
     {
         [Required, Display (Name = "Camera Name")]
         public override string Name { get; set; }

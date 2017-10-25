@@ -23,7 +23,7 @@ namespace ModelRelief.Models
         STL             // Stereolithography
         }
 
-    public class Mesh  : ModelReliefEntity, IFileResource
+    public class Mesh  : ModelReliefModel, IFileResource
     {
         [Required, Display (Name = "Mesh Name")]
         public override string Name { get; set; }
@@ -107,10 +107,10 @@ namespace ModelRelief.Models
         {
             var results = new List<ValidationResult>();
             
-            // verify target resource exists (and is owned by user)
-            IEnumerable<Mesh> meshes = controller.ResourceProvider.GetAll().Where(mesh => ((mesh.Id == id) && (mesh.User.Id == user.Id)));
+            // verify target model exists (and is owned by user)
+            IEnumerable<Mesh> meshes = controller.ModelProvider.GetAll().Where(mesh => ((mesh.Id == id) && (mesh.User.Id == user.Id)));
             if (meshes.Count() != 1)
-                controller.ModelState.AddModelError(nameof(MeshPutRequest), $"The mesh resource (id = {id ?? 0}) does not exist.");
+                controller.ModelState.AddModelError(nameof(MeshPutRequest), $"The mesh model (id = {id ?? 0}) does not exist.");
 
 #if false
             if (String.IsNullOrEmpty(Description))

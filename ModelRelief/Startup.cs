@@ -93,7 +93,7 @@ namespace ModelRelief
                 options => options.InputFormatters.Insert(0, new RawRequestBodyFormatter()));
 
             services.AddSingleton<Services.IConfigurationProvider, Services.ConfigurationProvider>();
-            services.AddScoped<IResourcesProvider, SqlResourcesProvider>();
+            services.AddScoped<IModelsProvider, SqlModelsProvider>();
 #if SQLServer
             services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SQLServer")));
 #else
@@ -151,6 +151,7 @@ namespace ModelRelief
         /// <param name="obj"></param>
         private void ConfigureRoutes(IRouteBuilder routeBuilder)
         {
+
             routeBuilder.MapRoute(name: RouteNames.Default, template: "{controller=Home}/{action=Index}/{id?}");
 
             routeBuilder.MapAreaRoute(name: RouteNames.DefaultApi, areaName: "Api", template: "api/{controller}/{id?}");

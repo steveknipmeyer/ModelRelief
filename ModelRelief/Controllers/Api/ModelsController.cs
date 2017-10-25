@@ -3,22 +3,12 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-using System;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
-
 using ModelRelief.Models;
 using ModelRelief.Services;
-using ModelRelief.Utility;
-using ModelRelief.ViewModels;
-using Serilog;
+using System.Collections.Generic;
 
 namespace ModelRelief.Controllers.Api
 {
@@ -28,32 +18,32 @@ namespace ModelRelief.Controllers.Api
     public class ModelsController : Controller
     {
         IHostingEnvironment _hostingEnvironment;
-        IResourcesProvider  _resourceProvider;
+        IModelsProvider     _modelsProvider;
 
-        public ModelsController(IHostingEnvironment hostingEnvironment, IResourcesProvider resourceProvider)
+        public ModelsController(IHostingEnvironment hostingEnvironment, IModelsProvider modelsProvider)
         {
             _hostingEnvironment = hostingEnvironment;
-            _resourceProvider   = resourceProvider;
+            _modelsProvider     = modelsProvider;
         }
 
         [HttpGet]
         public IEnumerable<Model3d> Get()
         { 
-            IEnumerable<Model3d> models = _resourceProvider.Models.GetAll();
+            IEnumerable<Model3d> models = _modelsProvider.Model3ds.GetAll();
             return models;
         }
 
         [HttpGet("{id}")]
         public Model3d Get(int id)
         {
-            Model3d model = _resourceProvider.Models.Find(id);
+            Model3d model = _modelsProvider.Model3ds.Find(id);
             return model;
         } 
 
         [HttpPost]
         public Model3d Post([FromBody] Model3d model)
         { 
-            Model3d newModel = _resourceProvider.Models.Add(new Model3d {
+            Model3d newModel = _modelsProvider.Model3ds.Add(new Model3d {
                 Name = model.Name
             });                    
             return newModel;
@@ -62,14 +52,14 @@ namespace ModelRelief.Controllers.Api
         [HttpPut]
         public Model3d Put([FromBody] Model3d model)
         { 
-            _resourceProvider.Models.Update(model);
+            _modelsProvider.Model3ds.Update(model);
             return model;
         }
 
         [HttpDelete("{id}")]
         public void Delete(int id)
         { 
-            _resourceProvider.Models.Delete(id);
+            _modelsProvider.Model3ds.Delete(id);
         }        
     }        
 }

@@ -15,17 +15,17 @@ using System.Threading.Tasks;
 namespace ModelRelief.Controllers.Api
 {
     /// <summary>
-    /// Handles resouce update from a PUT request.
+    /// Handles a file update from a PUT request.
     /// </summary>
-    /// <typeparam name="TResource"></typeparam>
-    public class FilePutCommandProcessor<TPutResource, TResource> 
-        where TPutResource : class
-        where TResource: ModelReliefEntity, IFileResource, new() 
+    /// <typeparam name="TModel"></typeparam>
+    public class FilePutCommandProcessor<TPutModel, TModel> 
+        where TPutModel : class
+        where TModel: ModelReliefModel, IFileResource, new() 
     {
-        User                     _user;
-        ApiController<TResource> _controller;
+        User                    _user;
+        ApiController<TModel>   _controller;
 
-        public FilePutCommandProcessor(User user, ApiController<TResource> controller)
+        public FilePutCommandProcessor(User user, ApiController<TModel> controller)
         {
         _user       = user;
         _controller = controller;
@@ -35,27 +35,27 @@ namespace ModelRelief.Controllers.Api
         /// Handles resouce update from a PUT request.
         /// </summary>
         /// <returns>Created HttpStatus</returns>
-        public async Task<ObjectResult> Process(int id, TPutResource putResource)
+        public async Task<ObjectResult> Process(int id, TPutModel putputModel)
         {
-            // find existing resource
-            var resource = _controller.ResourceProvider.Find(id);
+            // find existing model
+            var model = _controller.ModelProvider.Find(id);
 
             // update properties from incoming request
-            Mapper.Map<TPutResource, TResource>(putResource, resource);
+            Mapper.Map<TPutModel, TModel>(putputModel, model);
 
             // construct final file name from PUT request
             var storeUsers  = _controller.ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
-            string resourcePath = $"{storeUsers}{_user.Id}/meshes/{id}/";
-            string finalFileName = $"{_controller.HostingEnvironment.WebRootPath}{resourcePath}{resource.Name}";
-            resource.Path = finalFileName;
+            string filePath = $"{storeUsers}{_user.Id}/meshes/{id}/";
+            string finalFileName = $"{_controller.HostingEnvironment.WebRootPath}{filePath}{model.Name}";
+            model.Path = finalFileName;
 
-            _controller.ResourceProvider.Update(resource);
+            _controller.ModelProvider.Update(model);
 
             // now rename temporary file to match the final name
-            string placeholderFileName = $"{_controller.HostingEnvironment.WebRootPath}{resourcePath}{id}.obj";
+            string placeholderFileName = $"{_controller.HostingEnvironment.WebRootPath}{filePath}{id}.obj";
             System.IO.File.Move(placeholderFileName, finalFileName);
 
-            Log.Information("File PUT {@TResource}", putResource);
+            Log.Information("File PUT {@TModel}", putputModel);
 
             return _controller.Ok("");
 

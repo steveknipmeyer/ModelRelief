@@ -14,7 +14,7 @@ using ModelRelief.Models;
 
 namespace ModelRelief.Models
 {
-    public class Project : ModelReliefEntity
+    public class Project : ModelReliefModel
     {
         [Required, Display (Name = "Project Name")]
         public override string Name { get; set; }

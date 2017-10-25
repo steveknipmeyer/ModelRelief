@@ -14,7 +14,7 @@ using ModelRelief.Models;
 
 namespace ModelRelief.Models
 {
-    public class MeshTransform : ModelReliefEntity
+    public class MeshTransform : ModelReliefModel
     {
         [Required, Display (Name = "Mesh Transform Name")]
         public override string Name { get; set; }
