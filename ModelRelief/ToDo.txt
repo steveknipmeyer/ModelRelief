@@ -5,8 +5,6 @@
         https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/
 <-- Tasks
     Add overrides to ErrorResult to allow specialized return values such as developerMessage.
-        MeshPutRequest -> MeshPutModel
-        MeshPostRequest -> MeshPostModel
 
     Add validation to FilePostCommandProcessor.
         Improve exception ErrorResult.

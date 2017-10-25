@@ -12,7 +12,7 @@ namespace ModelRelief.Models
     {
         public MappingProfile()
         {
-            CreateMap<MeshPutRequest, Mesh>(MemberList.Source);
+            CreateMap<MeshPutModel, Mesh>(MemberList.Source);
         }
     }
 }

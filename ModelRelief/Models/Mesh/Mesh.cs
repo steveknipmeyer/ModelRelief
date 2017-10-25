@@ -45,9 +45,9 @@ namespace ModelRelief.Models
     }
 
     /// <summary>
-    /// Mesh POST request.
+    /// Mesh POST model.
     /// </summary>
-    public class MeshPostRequest : IValidatable<Mesh>
+    public class MeshPostModel : IValidatable<Mesh>
     {
         public byte[] Raw { get; set; }
 
@@ -55,7 +55,7 @@ namespace ModelRelief.Models
         /// Constructor
         /// </summary>
         /// <param name="raw">Byte array from the request body</param>
-        public MeshPostRequest (byte[] raw)
+        public MeshPostModel (byte[] raw)
         {
             Raw = raw;
         }
@@ -91,7 +91,7 @@ namespace ModelRelief.Models
     /// <summary>
     /// Mesh PUT request.
     /// </summary>
-    public class MeshPutRequest : IValidatable<Mesh>
+    public class MeshPutModel : IValidatable<Mesh>
     {
         [Required]
         public string Name { get; set; }
@@ -109,7 +109,7 @@ namespace ModelRelief.Models
             // verify target model exists (and is owned by user)
             IEnumerable<Mesh> meshes = controller.ModelProvider.GetAll().Where(mesh => ((mesh.Id == id) && (mesh.User.Id == user.Id)));
             if (meshes.Count() != 1)
-                controller.ModelState.AddModelError(nameof(MeshPutRequest), $"The mesh model (id = {id ?? 0}) does not exist.");
+                controller.ModelState.AddModelError(nameof(MeshPutModel), $"The mesh model (id = {id ?? 0}) does not exist.");
 
 #if false
             if (String.IsNullOrEmpty(Description))

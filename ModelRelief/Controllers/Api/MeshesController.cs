@@ -45,7 +45,7 @@ namespace ModelRelief.Controllers.Api
         public async Task<ObjectResult> Post()
         { 
             // construct from body
-            var meshPostRequest = new MeshPostRequest(Files.ReadToEnd(Request.Body));
+            var meshPostRequest = new MeshPostModel(Files.ReadToEnd(Request.Body));
 
             // initial validation
             var user = await Identity.GetCurrentUserAsync(UserManager, User);
@@ -53,13 +53,13 @@ namespace ModelRelief.Controllers.Api
             if (!ModelState.IsValid)
                 return meshPostRequest.ErrorResult(this);
 
-            var filePostCommandProcessor = new FilePostCommandProcessor<MeshPostRequest, Mesh>(user, this);
+            var filePostCommandProcessor = new FilePostCommandProcessor<MeshPostModel, Mesh>(user, this);
             return await filePostCommandProcessor.Process(meshPostRequest, meshPostRequest.Raw);
         }
 
         [HttpPut ("{id?}")]
         [Consumes("application/json")]
-        public async Task<ObjectResult> Put([FromBody] MeshPutRequest meshPutRequest, int id )
+        public async Task<ObjectResult> Put([FromBody] MeshPutModel meshPutRequest, int id )
         { 
             // initial validation
             var user = await Identity.GetCurrentUserAsync(UserManager, User);
@@ -67,7 +67,7 @@ namespace ModelRelief.Controllers.Api
             if (!ModelState.IsValid)
                 return meshPutRequest.ErrorResult(this);
 
-            var filePutCommandProcessor = new FilePutCommandProcessor<MeshPutRequest, Mesh>(user, this);
+            var filePutCommandProcessor = new FilePutCommandProcessor<MeshPutModel, Mesh>(user, this);
             return await filePutCommandProcessor.Process(id, meshPutRequest);
         }
     }        
