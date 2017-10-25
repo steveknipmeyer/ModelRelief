@@ -18,6 +18,7 @@ namespace ModelRelief.Services
     {
         public static string StoreUsers   = "ResourcePaths:StoreUsers";
         public static string TestDataUser = "ResourcePaths:TestDataUser";
+        public static string ModelFolders = "ResourcePaths:ModelFolders";
     }
 
     public interface IConfigurationProvider

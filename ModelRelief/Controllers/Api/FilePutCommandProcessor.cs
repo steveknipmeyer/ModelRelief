@@ -45,7 +45,8 @@ namespace ModelRelief.Controllers.Api
 
             // construct final file name from PUT request
             var storeUsers  = _controller.ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
-            string filePath = $"{storeUsers}{_user.Id}/meshes/{id}/";
+            var modelFolder = _controller.ConfigurationProvider.GetSetting($"{ResourcePaths.ModelFolders}:{typeof(TModel).Name}");
+            string filePath = $"{storeUsers}{_user.Id}/{modelFolder}/{id}/";
             string finalFileName = $"{_controller.HostingEnvironment.WebRootPath}{filePath}{model.Name}";
             model.Path = finalFileName;
 
@@ -58,7 +59,6 @@ namespace ModelRelief.Controllers.Api
             Log.Information("File PUT {@TModel}", putputModel);
 
             return _controller.Ok("");
-
         }
     }
 }

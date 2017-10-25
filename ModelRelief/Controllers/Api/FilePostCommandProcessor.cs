@@ -41,8 +41,9 @@ namespace ModelRelief.Controllers.Api
             _controller.ModelProvider.Add(newModel);
 
             // write file : file name = newly-created model Id
-            var storeUsers = _controller.ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
-            string modelPath = $"{storeUsers}{_user.Id}/meshes/{newModel.Id}/";
+            var storeUsers  = _controller.ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
+            var modelFolder = _controller.ConfigurationProvider.GetSetting(($"{ResourcePaths.ModelFolders}:{typeof(TModel).Name}"));
+            string modelPath = $"{storeUsers}{_user.Id}/{modelFolder}/{newModel.Id}/";
             string modelName = $"{newModel.Id}.obj";
 
             string fileName = $"{_controller.HostingEnvironment.WebRootPath}{modelPath}{modelName}";

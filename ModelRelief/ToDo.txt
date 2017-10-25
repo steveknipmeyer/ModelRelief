@@ -1,42 +1,15 @@
-﻿<-- Commit Notes    
-ModelReliefEntity -> ModelReliefModel
-Models -> Model3ds
-IResourceProvider -> IModelProvider
-SqlResourcedProvider -> SqlModelsProvider
-TResource -> TModel
-TPutResource -> TPutModel
-resource -> model
+﻿Add ResourcePaths.ModelFolders to define file folders for models.
 
 <--- Reading
     EntityFramework Core
         https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/
-
 <-- Tasks
     Add validation to FilePutCommandProcessor.
     Add validation to FilePostCommandProcessor.
 
-    Add enum for storage folder of resources.
-        string resourcePath = $"{storeUsers}{_user.Id}/meshes/{newResource.Id}/";
-
-    Review the ILogger interface. How should this work with a Controller?
-        namespace Microsoft.Extensions.Logging
-        {
-            //
-            // Summary:
-            //     A generic interface for logging where the category name is derived from the specified
-            //     TCategoryName type name. Generally used to enable activation of a named Microsoft.Extensions.Logging.ILogger
-            //     from dependency injection.
-            //
-            // Type parameters:
-            //   TCategoryName:
-            //     The type who's name is used for the logger category name.
-            public interface ILogger<out TCategoryName> : ILogger
-            {
-            }
-        }
-
     Extend the Authorize attribute to allow checking for a user-owned resource.
 
+    ModelReliefModel
         Should Description be included?
         Should Project be included?
         Should ModelReliefModel be an interface instead of a base class?
@@ -443,3 +416,21 @@ resource -> model
     If the bound model implements IValidatableObject then additional validation checks may be performed, adding additional ValidationResults.
     If an ActionFilter is registered, control passes there.
         The ActionFilter can check ModelState.Valid and then set the ActionExecutingContext.Result so the controller action is never called.
+
+<-- Logging
+    Review the ILogger interface. How should this work with a Controller?
+        namespace Microsoft.Extensions.Logging
+        {
+            //
+            // Summary:
+            //     A generic interface for logging where the category name is derived from the specified
+            //     TCategoryName type name. Generally used to enable activation of a named Microsoft.Extensions.Logging.ILogger
+            //     from dependency injection.
+            //
+            // Type parameters:
+            //   TCategoryName:
+            //     The type who's name is used for the logger category name.
+            public interface ILogger<out TCategoryName> : ILogger
+            {
+            }
+        }
