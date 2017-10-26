@@ -26,6 +26,7 @@ namespace ModelRelief.Infrastructure
 
         // DepthBuffer
         DepthBufferPutValidationError       = 2000,
+        DepthBufferPostValidationError      = 2001,
 
         // Mesh
         MeshPutValidationError              = 3000,

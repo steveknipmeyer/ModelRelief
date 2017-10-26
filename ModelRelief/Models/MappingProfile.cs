@@ -12,7 +12,8 @@ namespace ModelRelief.Models
     {
         public MappingProfile()
         {
-            CreateMap<MeshPutModel, Mesh>(MemberList.Source);
+            CreateMap<MeshPutModel,        Mesh>(MemberList.Source);
+            CreateMap<DepthBufferPutModel, DepthBuffer>(MemberList.Source);
         }
     }
 }

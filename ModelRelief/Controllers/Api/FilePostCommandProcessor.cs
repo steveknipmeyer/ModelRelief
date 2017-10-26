@@ -50,7 +50,7 @@ namespace ModelRelief.Controllers.Api
                 var storeUsers  = _controller.ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
                 var modelFolder = _controller.ConfigurationProvider.GetSetting(($"{ResourcePaths.ModelFolders}:{typeof(TModel).Name}"));
                 string modelPath = $"{storeUsers}{_user.Id}/{modelFolder}/{newModel.Id}/";
-                string modelName = $"{newModel.Id}.obj";
+                string modelName = $"{newModel.Id}";
 
                 string fileName = $"{_controller.HostingEnvironment.WebRootPath}{modelPath}{modelName}";
                 await Files.WriteFileFromByteArray(fileName, byteArray);
@@ -65,7 +65,7 @@ namespace ModelRelief.Controllers.Api
             }
             catch (Exception)
             {
-                return model.ErrorResult(_controller, httpStatusCode: StatusCodes.Status500InternalServerError, apiStatusCode : (int) ApiStatusCode.FileCreation, developerMessage : $"An error occurred creating the file resource {typeof(TModel).FullName}.");
+                return model.ErrorResult(_controller, httpStatusCode: StatusCodes.Status500InternalServerError, apiStatusCode : (int) ApiStatusCode.FileCreation, developerMessage : $"An error occurred creating the file resource {typeof(TModel).Name}.");
             }
         }
     }

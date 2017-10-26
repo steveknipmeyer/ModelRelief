@@ -8,6 +8,7 @@ Improve exception ErrorResult.
         https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/
 
 <-- Tasks
+    Support DepthBuffer POST/PUT.
 
     Extend the Authorize attribute to allow checking for a user-owned resource.
 

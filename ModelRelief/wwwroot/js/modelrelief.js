@@ -3506,7 +3506,7 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
          */
         ComposerController.prototype.saveRelief = function () {
             this.postMesh();
-            //      this.postDepthBuffer();
+            this.postDepthBuffer();
         };
         //#endregion
         /**

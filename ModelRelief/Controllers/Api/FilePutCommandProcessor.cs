@@ -40,7 +40,6 @@ namespace ModelRelief.Controllers.Api
         {
             try
             {
-
                 // find existing model
                 var model = _controller.ModelProvider.Find(id);
 
@@ -58,7 +57,7 @@ namespace ModelRelief.Controllers.Api
                 _controller.ModelProvider.Update(model);
 
                 // now rename temporary file to match the final name
-                string placeholderFileName = $"{_controller.HostingEnvironment.WebRootPath}{filePath}{id}.obj";
+                string placeholderFileName = $"{_controller.HostingEnvironment.WebRootPath}{filePath}{id}";
                 System.IO.File.Move(placeholderFileName, finalFileName);
 
                 Log.Information("File PUT {@TModel}", putModel);
@@ -67,7 +66,7 @@ namespace ModelRelief.Controllers.Api
             }
             catch (Exception)
             {
-                return putModel.ErrorResult(_controller, httpStatusCode: StatusCodes.Status500InternalServerError, apiStatusCode : (int) ApiStatusCode.FileCreation, developerMessage : $"An error occurred updating the file resource {typeof(TModel).FullName}.");
+                return putModel.ErrorResult(_controller, httpStatusCode: StatusCodes.Status500InternalServerError, apiStatusCode : (int) ApiStatusCode.FileCreation, developerMessage : $"An error occurred updating the file resource {typeof(TModel).Name}.");
             }
         }
     }

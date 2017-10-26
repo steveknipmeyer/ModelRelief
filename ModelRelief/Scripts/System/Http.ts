@@ -82,6 +82,7 @@ export class HttpLibrary {
         let request = new XMLHttpRequest(); 
 
         // Abort 
+
         let onAbort = function (this: XMLHttpRequestEventTarget, ev: Event) : any {
 
             Services.consoleLogger.addErrorMessage(`${methodType}: onAbort`);

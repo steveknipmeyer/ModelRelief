@@ -159,6 +159,7 @@ HTML5Assist_Browser_Cache/*
 #################
 ## SLK
 #################
+*.raw
 *.rhl
 *.bak
 hidden/
