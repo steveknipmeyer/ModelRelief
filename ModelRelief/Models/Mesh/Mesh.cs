@@ -77,12 +77,12 @@ namespace ModelRelief.Models
         /// </summary>
         /// <param name="controller">Active controller</param>
         /// <returns>Api JSON result</returns>
-        public ObjectResult ErrorResult (Controller controller)
+        public ObjectResult ErrorResult (Controller controller,
+            int httpStatusCode       = StatusCodes.Status400BadRequest,
+            int apiStatusCode        = (int) ApiStatusCode.MeshPostValidationError,
+            string developerMessage  = "The Mesh POST properties are invalid."
+            )
         {
-            var httpStatusCode       = StatusCodes.Status400BadRequest;
-            var apiStatusCode        = (int) ApiStatusCode.MeshPostValidationError;
-            string developerMessage  = "The Mesh POST properties are invalid.";
-
             var objectResult = new ApiValidationResult(controller, httpStatusCode, apiStatusCode, developerMessage).ObjectResult();
             return objectResult;
         }
@@ -123,12 +123,12 @@ namespace ModelRelief.Models
         /// </summary>
         /// <param name="controller">Active controller</param>
         /// <returns>Api JSON result</returns>
-        public ObjectResult ErrorResult (Controller controller)
+        public ObjectResult ErrorResult (Controller controller,
+            int httpStatusCode       = StatusCodes.Status400BadRequest,
+            int apiStatusCode        = (int) ApiStatusCode.MeshPutValidationError,
+            string developerMessage  = "The Mesh PUT properties are invalid."
+            )
         {
-            var httpStatusCode       = StatusCodes.Status400BadRequest;
-            var apiStatusCode        = (int) ApiStatusCode.MeshPutValidationError;
-            string developerMessage  = "The Mesh PUT properties are invalid.";
-
             var objectResult = new ApiValidationResult(controller, httpStatusCode, apiStatusCode, developerMessage).ObjectResult();
             return objectResult;
         }

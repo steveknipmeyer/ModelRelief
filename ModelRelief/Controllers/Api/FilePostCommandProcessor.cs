@@ -3,7 +3,9 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ModelRelief.Infrastructure;
 using ModelRelief.Models;
 using ModelRelief.Services;
 using ModelRelief.Utility;
@@ -61,10 +63,9 @@ namespace ModelRelief.Controllers.Api
                  
                 return _controller.Created(responseUrlAbsolute, new {id = newModel.Id});
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _controller.ModelState.AddModelError("File Creation", ex.Message);
-                return model.ErrorResult(_controller);
+                return model.ErrorResult(_controller, httpStatusCode: StatusCodes.Status500InternalServerError, apiStatusCode : (int) ApiStatusCode.FileCreation, developerMessage : $"An error occurred creating the file resource {typeof(TModel).FullName}.");
             }
         }
     }

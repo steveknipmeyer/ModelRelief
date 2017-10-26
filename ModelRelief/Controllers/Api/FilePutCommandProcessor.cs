@@ -4,10 +4,11 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ModelRelief.Infrastructure;
 using ModelRelief.Models;
 using ModelRelief.Services;
-using ModelRelief.Utility;
 using Serilog;
 using System;
 using System.Threading.Tasks;
@@ -19,8 +20,8 @@ namespace ModelRelief.Controllers.Api
     /// </summary>
     /// <typeparam name="TModel"></typeparam>
     public class FilePutCommandProcessor<TPutModel, TModel> 
-        where TPutModel : class
-        where TModel: ModelReliefModel, IFileResource, new() 
+        where TPutModel : class, IValidatable<TModel>
+        where TModel: ModelReliefModel, IFileResource, new()
     {
         User                    _user;
         ApiController<TModel>   _controller;
@@ -35,31 +36,39 @@ namespace ModelRelief.Controllers.Api
         /// Handles resouce update from a PUT request.
         /// </summary>
         /// <returns>Created HttpStatus</returns>
-        public async Task<ObjectResult> Process(int id, TPutModel putputModel)
+        public async Task<ObjectResult> Process(int id, TPutModel putModel)
         {
-            // find existing model
-            var model = _controller.ModelProvider.Find(id);
+            try
+            {
 
-            // update properties from incoming request
-            Mapper.Map<TPutModel, TModel>(putputModel, model);
+                // find existing model
+                var model = _controller.ModelProvider.Find(id);
 
-            // construct final file name from PUT request
-            var storeUsers  = _controller.ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
-            var modelFolder = _controller.ConfigurationProvider.GetSetting($"{ResourcePaths.ModelFolders}:{typeof(TModel).Name}");
-            string filePath = $"{storeUsers}{_user.Id}/{modelFolder}/{id}/";
-            string finalFileName = $"{_controller.HostingEnvironment.WebRootPath}{filePath}{model.Name}";
-            model.Path = finalFileName;
+                // update properties from incoming request
+                Mapper.Map<TPutModel, TModel>(putModel, model);
 
-            // update repository
-            _controller.ModelProvider.Update(model);
+                // construct final file name from PUT request
+                var storeUsers  = _controller.ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
+                var modelFolder = _controller.ConfigurationProvider.GetSetting($"{ResourcePaths.ModelFolders}:{typeof(TModel).Name}");
+                string filePath = $"{storeUsers}{_user.Id}/{modelFolder}/{id}/";
+                string finalFileName = $"{_controller.HostingEnvironment.WebRootPath}{filePath}{model.Name}";
+                model.Path = finalFileName;
 
-            // now rename temporary file to match the final name
-            string placeholderFileName = $"{_controller.HostingEnvironment.WebRootPath}{filePath}{id}.obj";
-            System.IO.File.Move(placeholderFileName, finalFileName);
+                // update repository
+                _controller.ModelProvider.Update(model);
 
-            Log.Information("File PUT {@TModel}", putputModel);
+                // now rename temporary file to match the final name
+                string placeholderFileName = $"{_controller.HostingEnvironment.WebRootPath}{filePath}{id}.obj";
+                System.IO.File.Move(placeholderFileName, finalFileName);
 
-            return await Task.FromResult<ObjectResult>(_controller.Ok(""));
+                Log.Information("File PUT {@TModel}", putModel);
+
+                return await Task.FromResult<ObjectResult>(_controller.Ok(""));
+            }
+            catch (Exception)
+            {
+                return putModel.ErrorResult(_controller, httpStatusCode: StatusCodes.Status500InternalServerError, apiStatusCode : (int) ApiStatusCode.FileCreation, developerMessage : $"An error occurred updating the file resource {typeof(TModel).FullName}.");
+            }
         }
     }
 }

@@ -16,6 +16,11 @@ namespace ModelRelief.Infrastructure
 {
     public enum ApiStatusCode
     {
+        // General
+        Default                             = 100,
+        FileCreation                        = 101,
+        FileUpdate                          = 102,
+        
         // Camera
         CameraPutValidationError            = 1000,
 
@@ -75,7 +80,7 @@ namespace ModelRelief.Infrastructure
                     .SelectMany(key => _controller.ModelState[key].Errors.Select(x => new ValidationError(key, x.ErrorMessage)))
                     .ToList();
 
-            var jsonResult    = new
+            var jsonResult = new
             {
                 httpStatusCode   = _httpStatusCode,
                 apiStatusCode    = _apiStatusCode,
