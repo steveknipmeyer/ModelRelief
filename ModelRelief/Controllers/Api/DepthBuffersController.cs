@@ -21,7 +21,7 @@ namespace ModelRelief.Controllers.Api
     [Route ("api/depth-buffers")]        
     public class DepthBuffersController : ApiController<DepthBuffer>
     {
-        public DepthBuffersController(IHostingEnvironment hostingEnvironment, UserManager<User> userManager, IModelsProvider modelsProvider, ILogger<DepthBuffer> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper) :
+        public DepthBuffersController(IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, IModelsProvider modelsProvider, ILogger<DepthBuffer> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper) :
             base (hostingEnvironment, userManager, modelsProvider.DepthBuffers, logger, configurationProvider, mapper)
         {
         }
@@ -46,16 +46,16 @@ namespace ModelRelief.Controllers.Api
 
         [HttpPut ("{id?}")]
         [Consumes("application/json")]
-        public async Task<ObjectResult> Put([FromBody] DepthBufferPutModel depthBufferPutRequest, int id )
+        public async Task<ObjectResult> Put([FromBody] DepthBufferPutModel depthBufferPutModel, int id )
         { 
             // initial validation
             var user = await Identity.GetCurrentUserAsync(UserManager, User);
-            depthBufferPutRequest.Validate(user, this, id);
+            depthBufferPutModel.Validate(user, this, id);
             if (!ModelState.IsValid)
-                return depthBufferPutRequest.ErrorResult(this);
+                return depthBufferPutModel.ErrorResult(this);
 
             var filePutCommandProcessor = new FilePutCommandProcessor<DepthBufferPutModel, DepthBuffer>(user, this);
-            return await filePutCommandProcessor.Process(id, depthBufferPutRequest);
+            return await filePutCommandProcessor.Process(id, depthBufferPutModel);
         }
     }        
 }

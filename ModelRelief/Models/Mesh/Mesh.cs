@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using ModelRelief.Controllers.Api;
 using ModelRelief.Infrastructure;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -63,7 +64,7 @@ namespace ModelRelief.Models
         /// </summary>
         /// <param name="modelState">ModelState</param>
         /// <returns>true if valid</returns>
-        public bool Validate(User user, ApiController<Mesh> controller, int? id = null)
+        public bool Validate(ApplicationUser user, ApiController<Mesh> controller, int? id = null)
         {
             var results = new List<ValidationResult>();
 
@@ -100,18 +101,20 @@ namespace ModelRelief.Models
         /// </summary>
         /// <param name="modelState">ModelState</param>
         /// <returns>true if valid</returns>
-        public bool Validate(User user, ApiController<Mesh> controller, int? id = null)
+        public bool Validate(ApplicationUser user, ApiController<Mesh> controller, int? id = null)
         {
             var results = new List<ValidationResult>();
-            
+
             // verify target model exists (and is owned by user)
             IEnumerable<Mesh> meshes = controller.ModelProvider.GetAll().Where(mesh => ((mesh.Id == id) && (mesh.User.Id == user.Id)));
             if (meshes.Count() != 1)
                 controller.ModelState.AddModelError(nameof(MeshPutModel), $"The mesh model (id = {id ?? 0}) does not exist.");
 
+            if (String.IsNullOrEmpty(Name))
+                controller.ModelState.AddModelError(nameof(Name), "A mesh name cannot be empty.");
 #if false
             if (String.IsNullOrEmpty(Description))
-                modelState.AddModelError(nameof(Description), "A mesh description cannot be empty.");
+                controller.modelState.AddModelError(nameof(Description), "A mesh description cannot be empty.");
 #endif            
             return controller.ModelState.IsValid;
         }

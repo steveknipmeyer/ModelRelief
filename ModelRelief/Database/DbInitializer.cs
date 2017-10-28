@@ -19,8 +19,8 @@ namespace ModelRelief.Database
         private IHostingEnvironment             _hostingEnvironment  { get; set; }
         private Services.IConfigurationProvider _configurationProvider  { get; set; }
         private ModelReliefDbContext            _context  { get; set; }
-        private UserManager<User>               _userManager  { get; set; }
-        private SignInManager<User>             _signInManager  { get; set; }
+        private UserManager<ApplicationUser>               _userManager  { get; set; }
+        private SignInManager<ApplicationUser>             _signInManager  { get; set; }
 
         public DbInitializer(IServiceProvider services)
         {
@@ -40,11 +40,11 @@ namespace ModelRelief.Database
             if (_context == null)
                 throw new ArgumentNullException(nameof(_context));
 
-            _userManager = _services.GetRequiredService<UserManager<User>>();
+            _userManager = _services.GetRequiredService<UserManager<ApplicationUser>>();
             if (_userManager == null)
                 throw new ArgumentNullException(nameof(_userManager));
 
-            _signInManager = _services.GetRequiredService<SignInManager<User>>();
+            _signInManager = _services.GetRequiredService<SignInManager<ApplicationUser>>();
             if (_signInManager == null)
                 throw new ArgumentNullException(nameof(_signInManager));
         }
@@ -75,9 +75,9 @@ namespace ModelRelief.Database
         /// <summary>
         /// Add test users.
         /// </summary>
-        private async Task<User> AddUsers()
+        private async Task<ApplicationUser> AddUsers()
         {
-            var user = new User() { UserName = "test@modelrelief.com"};
+            var user = new ApplicationUser() { UserName = "test@modelrelief.com"};
             var createResult = await _userManager.CreateAsync (user, "ModelRelief2020!");
             if (!createResult.Succeeded)
                 throw new Exception(createResult.ToString());
@@ -90,7 +90,7 @@ namespace ModelRelief.Database
         /// </summary>
         private void CopyTestFiles()
         {
-            var user   = _context.Users.FirstOrDefault<User>();
+            var user   = _context.Users.FirstOrDefault<ApplicationUser>();
 
             var testdataPartialPath = _configurationProvider.GetSetting(ResourcePaths.TestDataUser);
             string testDataPath     = $"{_hostingEnvironment.ContentRootPath}{testdataPartialPath}";
@@ -108,7 +108,7 @@ namespace ModelRelief.Database
         /// </summary>
         private void AddProjects()
         {
-            var user = _context.Users.FirstOrDefault<User>();
+            var user = _context.Users.FirstOrDefault<ApplicationUser>();
             var projects = new Project[]
             {
                 new Project{Id = 1, Name = "ModelRelief", Description = "Development and Test", User = user},
@@ -125,7 +125,7 @@ namespace ModelRelief.Database
         /// </summary>
         private void AddCameras()
         {
-            var user    = _context.Users.FirstOrDefault<User>();
+            var user    = _context.Users.FirstOrDefault<ApplicationUser>();
             var project = _context.Projects.FirstOrDefault<Project>();
 
             var cameras = new Camera[]
@@ -151,7 +151,7 @@ namespace ModelRelief.Database
         /// </summary>
         private void AddModels()
         {
-            var user    = _context.Users.FirstOrDefault<User>();
+            var user    = _context.Users.FirstOrDefault<ApplicationUser>();
             var project = _context.Projects.FirstOrDefault<Project>();
             var camera = _context.Cameras.FirstOrDefault<Camera>();
 
@@ -181,7 +181,7 @@ namespace ModelRelief.Database
         /// </summary>
         private void AddMeshTransforms()
         {
-            var user    = _context.Users.FirstOrDefault<User>();
+            var user    = _context.Users.FirstOrDefault<ApplicationUser>();
             var project = _context.Projects.FirstOrDefault<Project>();
 
             var meshTransforms = new MeshTransform[]

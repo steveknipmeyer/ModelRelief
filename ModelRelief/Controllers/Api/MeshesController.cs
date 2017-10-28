@@ -34,7 +34,7 @@ namespace ModelRelief.Controllers.Api
     [Route ("api/[controller]")]        
     public class MeshesController : ApiController<Mesh>
     {
-        public MeshesController(IHostingEnvironment hostingEnvironment, UserManager<User> userManager, IModelsProvider modelsProvider, ILogger<Mesh> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper) :
+        public MeshesController(IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, IModelsProvider modelsProvider, ILogger<Mesh> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper) :
             base (hostingEnvironment, userManager, modelsProvider.Meshes, logger, configurationProvider, mapper)
         {
         }
@@ -59,16 +59,16 @@ namespace ModelRelief.Controllers.Api
 
         [HttpPut ("{id?}")]
         [Consumes("application/json")]
-        public async Task<ObjectResult> Put([FromBody] MeshPutModel meshPutRequest, int id )
+        public async Task<ObjectResult> Put([FromBody] MeshPutModel meshPutModel, int id )
         { 
             // initial validation
             var user = await Identity.GetCurrentUserAsync(UserManager, User);
-            meshPutRequest.Validate(user, this, id);
+            meshPutModel.Validate(user, this, id);
             if (!ModelState.IsValid)
-                return meshPutRequest.ErrorResult(this);
+                return meshPutModel.ErrorResult(this);
 
             var filePutCommandProcessor = new FilePutCommandProcessor<MeshPutModel, Mesh>(user, this);
-            return await filePutCommandProcessor.Process(id, meshPutRequest);
+            return await filePutCommandProcessor.Process(id, meshPutModel);
         }
     }        
 }

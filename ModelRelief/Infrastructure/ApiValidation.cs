@@ -56,6 +56,15 @@ namespace ModelRelief.Infrastructure
         }
     }
 
+    public class ApiResult
+    {
+        public int     HttpStatusCode;
+        public int     ApiStatusCode;
+        public string  DeveloperMessage;
+        public string  ApiReference;
+        public IEnumerable<ValidationError> Errors;
+    }
+
     public class ApiValidationResult
     {
         Controller   _controller;
@@ -74,20 +83,20 @@ namespace ModelRelief.Infrastructure
         public ObjectResult ObjectResult()
         {
 
-            string apiReferenceRelative = (_controller).Url.RouteUrl(RouteNames.ApiDocumentation, new {id = _apiStatusCode});
+            string apiReferenceRelative = _controller.Url.RouteUrl(RouteNames.ApiDocumentation, new {id = _apiStatusCode});
             var apiReferenceAbsolute    = string.Format($"{_controller.HttpContext.Request.Scheme}://{_controller.HttpContext.Request.Host}{apiReferenceRelative}");
 
             IEnumerable<ValidationError> Errors = _controller.ModelState.Keys
                     .SelectMany(key => _controller.ModelState[key].Errors.Select(x => new ValidationError(key, x.ErrorMessage)))
                     .ToList();
 
-            var jsonResult = new
+            var jsonResult = new ApiResult()
             {
-                httpStatusCode   = _httpStatusCode,
-                apiStatusCode    = _apiStatusCode,
-                developerMessage = _developerMessage,
-                apiReferencee    = apiReferenceAbsolute,
-                errors           = Errors
+                HttpStatusCode   = _httpStatusCode,
+                ApiStatusCode    = _apiStatusCode,
+                DeveloperMessage = _developerMessage,
+                ApiReference     = apiReferenceAbsolute,
+                Errors           = Errors
             };
 
             var objectResult = new ObjectResult(jsonResult);

@@ -24,7 +24,7 @@ namespace ModelRelief.Models
         public virtual string Description { get; set; }
 
         // Navigation Properties
-        public User User { get; set; }
+        public ApplicationUser User { get; set; }
     }
 
     public interface IFileResource

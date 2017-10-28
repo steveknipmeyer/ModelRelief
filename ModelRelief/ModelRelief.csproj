@@ -45,10 +45,5 @@
   <ItemGroup>
     <Folder Include="wwwroot\js\" />
   </ItemGroup>
-
-  
-  <ItemGroup>
-    <TypeScriptCompile Include="Scripts\DataTransferObjects\IFilePath.ts" />
-  </ItemGroup>
-
+    
 </Project>

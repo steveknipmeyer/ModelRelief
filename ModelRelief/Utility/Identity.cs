@@ -17,6 +17,8 @@ namespace ModelRelief.Utility
 {
     public static class Identity
     {
+        public static string MockUserId { get {return "c6d3fe5f-0e26-4f24-a6a3-df0766338f94";} }
+
         /// <summary>
         /// IPrincipal extension method to retrieve the User Id.
         /// https://stackoverflow.com/questions/38543193/proper-way-to-get-current-user-id-in-entity-framework-core
@@ -37,12 +39,12 @@ namespace ModelRelief.Utility
         /// <param name="userManager">User Manager from DI</param>
         /// <param name="claimsPrincipal">HttpContext.User</param>
         /// <returns>USer</returns>
-        public static async Task<User> GetCurrentUserAsync (UserManager<User> userManager, ClaimsPrincipal claimsPrincipal) =>
-        #if !PostmanAuthentication
+        public static async Task<ApplicationUser> GetCurrentUserAsync (UserManager<ApplicationUser> userManager, ClaimsPrincipal claimsPrincipal) =>
+        #if true
             await userManager.GetUserAsync(claimsPrincipal);
         #else
-            // mock authentication to work with PostMan
-            await userManager.FindByIdAsync("c6d3fe5f-0e26-4f24-a6a3-df0766338f94");
+            // mock authentication to work with PostMan and xUnit
+            await userManager.FindByIdAsync(MockUserId);
         #endif
     }        
 }

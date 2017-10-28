@@ -99,7 +99,7 @@ namespace ModelRelief
 #else
             services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("SQLite")));
 #endif
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<ModelReliefDbContext>();
             
             services.AddAutoMapper(typeof(Startup));

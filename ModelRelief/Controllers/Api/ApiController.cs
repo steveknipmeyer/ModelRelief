@@ -21,13 +21,13 @@ namespace ModelRelief.Controllers.Api
         where TModel : ModelReliefModel
     {
         public IHostingEnvironment              HostingEnvironment { get; set; }
-        public UserManager<User>                UserManager { get; set; }
+        public UserManager<ApplicationUser>                UserManager { get; set; }
         public IModelProvider<TModel>           ModelProvider { get; set; }
         public ILogger<TModel>                  Logger { get; set; }
         public Services.IConfigurationProvider  ConfigurationProvider { get; set; }
         public IMapper                          Mapper { get; set; }
 
-        public ApiController (IHostingEnvironment hostingEnvironment, UserManager<User> userManager, IModelProvider<TModel> modelProvider, ILogger<TModel> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper)
+        public ApiController (IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, IModelProvider<TModel> modelProvider, ILogger<TModel> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper)
         {
             HostingEnvironment     = hostingEnvironment;
             UserManager            = userManager;

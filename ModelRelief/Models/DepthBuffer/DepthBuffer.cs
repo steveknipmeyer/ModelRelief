@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ModelRelief.Controllers.Api;
 using ModelRelief.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -61,7 +62,7 @@ namespace ModelRelief.Models
         /// </summary>
         /// <param name="modelState">ModelState</param>
         /// <returns>true if valid</returns>
-        public bool Validate(User user, ApiController<DepthBuffer> controller, int? id = null)
+        public bool Validate(ApplicationUser user, ApiController<DepthBuffer> controller, int? id = null)
         {
             var results = new List<ValidationResult>();
 
@@ -98,7 +99,7 @@ namespace ModelRelief.Models
         /// </summary>
         /// <param name="modelState">ModelState</param>
         /// <returns>true if valid</returns>
-        public bool Validate(User user, ApiController<DepthBuffer> controller, int? id = null)
+        public bool Validate(ApplicationUser user, ApiController<DepthBuffer> controller, int? id = null)
         {
             var results = new List<ValidationResult>();
             
@@ -107,6 +108,8 @@ namespace ModelRelief.Models
             if (depthBuffers.Count() != 1)
                 controller.ModelState.AddModelError(nameof(DepthBufferPutModel), $"The DepthBuffer model (id = {id ?? 0}) does not exist.");
 
+            if (String.IsNullOrEmpty(Name))
+                controller.ModelState.AddModelError(nameof(Name), "A depth buffer name cannot be empty.");
 #if false
             if (String.IsNullOrEmpty(Description))
                 modelState.AddModelError(nameof(Description), "A DepthBuffer description cannot be empty.");

@@ -16,7 +16,7 @@ using ModelRelief.Models;
 
 namespace ModelRelief.Database
     {
-    public class ModelReliefDbContext : IdentityDbContext<User>
+    public class ModelReliefDbContext : IdentityDbContext<ApplicationUser>
         {
         public ModelReliefDbContext (DbContextOptions options) : base (options)
             {

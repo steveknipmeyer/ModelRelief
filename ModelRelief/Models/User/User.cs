@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace ModelRelief.Models
     {
-    public class User : IdentityUser
+    public class ApplicationUser : IdentityUser
         {
-        public User()
+        public ApplicationUser()
             {
             }
         }

@@ -8,7 +8,7 @@ namespace ModelRelief.Models
     public interface IValidatable<TModel>
         where TModel : ModelReliefModel
     {
-        bool Validate(User user, ApiController<TModel> controller, int? id = null);
+        bool Validate(ApplicationUser user, ApiController<TModel> controller, int? id = null);
 
         ObjectResult ErrorResult(Controller controller, 
             int httpStatusCode      = StatusCodes.Status400BadRequest, 

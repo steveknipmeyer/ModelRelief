@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelRelief", "ModelRelief\ModelRelief.csproj", "{E49C608C-860C-4FFA-A914-B3DABB3B0AAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelRelief", "ModelRelief\ModelRelief.csproj", "{E49C608C-860C-4FFA-A914-B3DABB3B0AAC}"
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Solver", "Solver\Solver.pyproj", "{4D128880-4790-41DF-8A6B-0D34F9B65E4F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelRelief.Test", "ModelRelief.Test\ModelRelief.Test.csproj", "{A077692C-A7C6-4B0D-83E3-59971619EE53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,8 +21,15 @@ Global
 		{E49C608C-860C-4FFA-A914-B3DABB3B0AAC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4D128880-4790-41DF-8A6B-0D34F9B65E4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4D128880-4790-41DF-8A6B-0D34F9B65E4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A077692C-A7C6-4B0D-83E3-59971619EE53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A077692C-A7C6-4B0D-83E3-59971619EE53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A077692C-A7C6-4B0D-83E3-59971619EE53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A077692C-A7C6-4B0D-83E3-59971619EE53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C9E654D7-52C7-4D21-8503-FCC19F9E0BAD}
 	EndGlobalSection
 EndGlobal

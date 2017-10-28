@@ -22,10 +22,10 @@ namespace ModelRelief.Controllers.Api
         where TPostModel : class, IValidatable<TModel>
         where TModel: ModelReliefModel, new()
     {
-        User                   _user;
+        ApplicationUser                   _user;
         ApiController<TModel>  _controller;
 
-        public FilePostCommandProcessor(User user, ApiController<TModel> controller)
+        public FilePostCommandProcessor(ApplicationUser user, ApiController<TModel> controller)
         {
         _user       = user;
         _controller = controller;

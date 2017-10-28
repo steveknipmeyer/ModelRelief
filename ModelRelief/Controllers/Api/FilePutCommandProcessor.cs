@@ -23,10 +23,10 @@ namespace ModelRelief.Controllers.Api
         where TPutModel : class, IValidatable<TModel>
         where TModel: ModelReliefModel, IFileResource, new()
     {
-        User                    _user;
+        ApplicationUser                    _user;
         ApiController<TModel>   _controller;
 
-        public FilePutCommandProcessor(User user, ApiController<TModel> controller)
+        public FilePutCommandProcessor(ApplicationUser user, ApiController<TModel> controller)
         {
         _user       = user;
         _controller = controller;

@@ -19,10 +19,10 @@ namespace ModelRelief.Controllers
     {
     public class AccountController : Controller
         {
-        private UserManager<User>   _userManager;
-        private SignInManager<User> _signInManager;
+        private UserManager<ApplicationUser>   _userManager;
+        private SignInManager<ApplicationUser> _signInManager;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
             {
             _userManager  = userManager;
             _signInManager = signInManager;
@@ -43,7 +43,7 @@ namespace ModelRelief.Controllers
                 return View();
                 }
 
-            var user = new User() { UserName = model.Username};
+            var user = new ApplicationUser() { UserName = model.Username};
             var createResult = await _userManager.CreateAsync (user, model.Password);
             if (!createResult.Succeeded)
                 {
