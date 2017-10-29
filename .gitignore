@@ -178,5 +178,4 @@ node_modules/
 #################
 ## ModelRelief
 #################
-#Database\*
-#wwwwroot\store\*
+wwwroot\store\*

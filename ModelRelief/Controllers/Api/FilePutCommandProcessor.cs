@@ -48,17 +48,18 @@ namespace ModelRelief.Controllers.Api
 
                 // construct final file name from PUT request
                 var storeUsers  = _controller.ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
-                var modelFolder = _controller.ConfigurationProvider.GetSetting($"{ResourcePaths.ModelFolders}:{typeof(TModel).Name}");
-                string filePath = $"{storeUsers}{_user.Id}/{modelFolder}/{id}/";
-                string finalFileName = $"{_controller.HostingEnvironment.WebRootPath}{filePath}{model.Name}";
-                model.Path = finalFileName;
+                var modelRootFolder = _controller.ConfigurationProvider.GetSetting($"{ResourcePaths.ModelFolders}:{typeof(TModel).Name}");
+                string fileRelativeFolder = $"{storeUsers}{_user.Id}/{modelRootFolder}/{id}/";
+                string fileRelativePath = $"{fileRelativeFolder}{model.Name}";
+                string fileAbsolutePath = $"{_controller.HostingEnvironment.WebRootPath}{fileRelativePath}";
+                model.Path = fileRelativeFolder;
 
                 // update repository
                 _controller.ModelProvider.Update(model);
 
-                // now rename temporary file to match the final name
-                string placeholderFileName = $"{_controller.HostingEnvironment.WebRootPath}{filePath}{id}";
-                System.IO.File.Move(placeholderFileName, finalFileName);
+                // now rename temporary file (name = Id) to match the final name
+                string placeholderFileName = $"{_controller.HostingEnvironment.WebRootPath}{fileRelativeFolder}{id}";
+                System.IO.File.Move(placeholderFileName, fileAbsolutePath);
 
                 Log.Information("File PUT {@TModel}", putModel);
 
