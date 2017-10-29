@@ -40,7 +40,7 @@ namespace ModelRelief.Utility
         /// <param name="claimsPrincipal">HttpContext.User</param>
         /// <returns>USer</returns>
         public static async Task<ApplicationUser> GetCurrentUserAsync (UserManager<ApplicationUser> userManager, ClaimsPrincipal claimsPrincipal) =>
-        #if true
+        #if false
             await userManager.GetUserAsync(claimsPrincipal);
         #else
             // mock authentication to work with PostMan and xUnit

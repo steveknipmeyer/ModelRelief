@@ -26,7 +26,7 @@ namespace ModelRelief.Test.Api
     public class Meshes
     {
         /// <summary>
-        /// Test that an invalid PutMeshModel returns BadRequests.
+        /// Test that an invalid PutMeshModel returns BadRequest.
         /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
         /// </summary>
         [Fact]
@@ -43,7 +43,7 @@ namespace ModelRelief.Test.Api
             // Arrange
             var userStoreMock   = new Mock<IUserStore<ApplicationUser>>();
             var userManagerMock = new Mock<UserManager<ApplicationUser>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
-            userManagerMock.Setup(userManager => userManager.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+            userManagerMock.Setup(userManager => userManager.FindByIdAsync(It.IsAny<string>()))
                            .Returns(Task.FromResult<ApplicationUser>(new ApplicationUser() { Id = Identity.MockUserId }));
 
             var meshProviderMock = new Mock<IModelProvider<Mesh>>();

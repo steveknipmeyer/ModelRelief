@@ -4,11 +4,16 @@
     EntityFramework Core
         https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/
 
-<-- Tasks
-    How can RouteNames.ApiDocumentation be registered as a route?
-    How can an HttpContext.Request be constructed?
+<-- Unit Testing
+    Support authentication instead of Identity.MockUserId.
+
+    API Testing Mocks
+        How can RouteNames.ApiDocumentation be registered as a route?
         Schema
         Host
+        Port
+
+<-- Tasks
 
     Extend the Authorize attribute to allow checking for a user-owned resource.
 

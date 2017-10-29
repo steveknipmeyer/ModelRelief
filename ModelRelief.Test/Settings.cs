@@ -15,6 +15,7 @@ namespace ModelRelief.Test
         public static readonly string Host   = "localhost";
         public static readonly int Port      = 60655;
 
+        public static string ContentRootFolder = "ModelRelief";
         public static readonly string ApiDocumentatioRelative  ="/api/documentation";
     }
 }
