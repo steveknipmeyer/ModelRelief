@@ -178,4 +178,5 @@ node_modules/
 #################
 ## ModelRelief
 #################
-wwwroot/store/*
+*/wwwroot/store/users/
+
