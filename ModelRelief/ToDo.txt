@@ -1,23 +1,14 @@
-﻿
-Add overrides to ErrorResult to allow specialized return values such as developerMessage.
-Add validation to FilePutCommandProcessor.
-Improve exception ErrorResult.
+﻿<--- Commit
 
 <--- Reading
     EntityFramework Core
         https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/
 
 <-- Tasks
-    Why is RouteNames not resolved?
+    How can RouteNames.ApiDocumentation be registered as a route?
     How can an HttpContext.Request be constructed?
         Schema
         Host
-    Add documentation to new methods.
-        xUnit classes
-        Validation
-    Verify that the MVC serializer uses camelcase for returned ObjectResults.
-    
-    How can the JSON conversion be done to camelcase?
 
     Extend the Authorize attribute to allow checking for a user-owned resource.
 

@@ -1,3 +1,8 @@
+// ------------------------------------------------------------------------// 
+// ModelRelief                                                             //
+//                                                                         //                                                                          
+// Copyright (c) <2017> Steve Knipmeyer                                    //
+// ------------------------------------------------------------------------//
 using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -20,7 +25,10 @@ namespace ModelRelief.Test.Api
 {
     public class Meshes
     {
-
+        /// <summary>
+        /// Test that an invalid PutMeshModel returns BadRequests.
+        /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
+        /// </summary>
         [Fact]
         public void PUT_WithInvalidData_ReturnsBadRequest()
         {
@@ -54,12 +62,17 @@ namespace ModelRelief.Test.Api
 
             var controller = new MeshesController(hostingEnvironment, userManagerMock.Object, modelsProviderMock.Object, logger, configurationProvider, mapper);
             var mockUrlHelper = new Mock<IUrlHelper>();
+
+            var apiReferenceRelative = $"{Settings.ApiDocumentatioRelative}/meshes/{(int) ApiStatusCode.MeshPutValidationError}";
+            // https://stackoverflow.com/questions/45855999/mocking-url-routeurl
             mockUrlHelper
-                .Setup(x => x.Action(It.IsAny<UrlActionContext>()))
-                .Returns("PUT");
+                .Setup(x => x.RouteUrl(It.IsAny<UrlRouteContext>()))
+                .Returns(apiReferenceRelative);
 
             controller.Url = mockUrlHelper.Object;
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
+            controller.Request.Scheme = Settings.Scheme;
+            controller.Request.Host   = new HostString(Settings.Host, Settings.Port);
 
             var meshId = 1;
             var meshPutModel = new MeshPutModel() { Name = "", Description = "meshPutModel with an empty Name"};

@@ -1,4 +1,9 @@
-﻿using AutoMapper;
+﻿// ------------------------------------------------------------------------// 
+// ModelRelief                                                             //
+//                                                                         //                                                                          
+// Copyright (c) <2017> Steve Knipmeyer                                    //
+// ------------------------------------------------------------------------//
+using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -9,10 +14,13 @@ using Moq;
 using System.Collections.Generic;
 using Xunit;
 
-namespace ModelRelief.Test
+namespace ModelRelief.Test.Models
 {
     public class Models
     {
+        /// <summary>
+        /// Test that a Models Index returns a ViewResult.
+        /// </summary>
         [Fact]
         public void Index_ReturnsModels()
         {

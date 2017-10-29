@@ -151,7 +151,6 @@ namespace ModelRelief
         /// <param name="obj"></param>
         private void ConfigureRoutes(IRouteBuilder routeBuilder)
         {
-
             routeBuilder.MapRoute(name: RouteNames.Default, template: "{controller=Home}/{action=Index}/{id?}");
 
             routeBuilder.MapAreaRoute(name: RouteNames.DefaultApi, areaName: "Api", template: "api/{controller}/{id?}");
