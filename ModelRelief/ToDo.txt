@@ -1,52 +1,35 @@
 ﻿<--- Commit
 
 <--- Reading
-    EntityFramework Core
-        https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/
-
-<-- Unit Testing
-    Support authentication instead of Identity.MockUserId.
-
-    API Testing Mocks
-        How can RouteNames.ApiDocumentation be registered as a route?
-        Schema
-        Host
-        Port
 
 <-- Tasks
+    Goal : Roundtrip a scaled mesh.
+        Scale with a Python processor.
+    
+    SqlModelProvider should be async.
 
     Extend the Authorize attribute to allow checking for a user-owned resource.
+        MediatT pipeline?
 
     ModelReliefModel
         Should Description be included?
         Should Project be included?
         Should ModelReliefModel be an interface instead of a base class?
-            This would remove the need for virtual properties in the derived class.
+            This would remove the need for virtual properties (supporting [Display (Name="")] attribute in the derived class.
 
     Accessing Model From JavaScript
         https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
 
+    Create a utility URL composer.
+
+    File Transfer
+        Use jQuery!
+        Wait for file POST to complete before initiating the second metadata POST.
+
     Export    
         Refactor Export OBJ to use async/await.
 
-<-- API 
-    Goal : Roundtrip a scaled mesh.
-        Scale with a Python processor.
-
-    Add API version.
-
-    Ideas
-        Stormpath
-            Use UUID not sequential integer keys in database. This will scale better.
-            Rich error message:
-                Status Code
-                Code
-                Message
-                DeveloperMessage
-                API Reference
-            Express relationships as "href" properties to absolute URLs.
-            Provide "reference expansion" to allow references to be expanded into the principal object.
-
+<-- Architecture
     Opinionated API
     https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-api/
     
@@ -79,16 +62,28 @@
         Documentation
             https://github.com/domaindrivendev/Swashbuckle.AspNetCore
 
-    IResourcesProvider
+<-- API 
+
+    Add API version.
+
+    Ideas
+        Stormpath
+            Use UUID not sequential integer keys in database. This will scale better.
+            Rich error message:
+                Status Code
+                Code
+                Message
+                DeveloperMessage
+                API Reference
+            Express relationships as "href" properties to absolute URLs.
+            Provide "reference expansion" to allow references to be expanded into the principal object.
+
+    IModelProvider
         HTTP Verb   API             CRUD
         Get         GetAll, Find    Read 
         Post        Create          Create 
         Put         Update          Update 
         Delete      Delete          Delete
-
-    File Transfer
-        Use jQuery!
-        Wait for file POST to complete before initiating the second metadata POST.
 
         // File Upload
         Url: api/depth-buffers
@@ -109,17 +104,15 @@
             HTTP Response
                 URL (Mesh)
 
-    Create a utility URL composer.
-
-    Model3d->Model ?
-        Are there any potential conflicts with the ASPNET Model property in views?
-        Differentiated through namespace?
-
-    API authentication.
-
 <-- Unit Testing
-    MOQ
-    https://github.com/moq/moq
+    Base the authentication on an environment/runtime setting so Identity.MockUserId is always used for unit tests.
+    Support database authentication.
+
+    API Testing Mocks
+        How can RouteNames.ApiDocumentation be registered as a route?
+        Schema
+        Host
+        Port
 
 <-- System
     Throwing policy.
@@ -205,7 +198,7 @@
             VSCode Profile: .NET Core Attach
                 Edit launch.json to set processId!
 
-    VSCode Profile: .Net Core With B rowser
+    VSCode Profile: .Net Core With Browser
         FE: VSCode   BE: VSCode  TypeScript: DNW  Reload: DNW
 
     VSCode Profile: .Net Core Launch (web)
@@ -263,6 +256,7 @@
             Camera Id
 
     SQL Server Studio
+        Connnect to a locadb from Studio
         http://nikgupta.net/2015/12/10/connect-localdb-from-management-studio/
 
         C:\Program Files\Microsoft SQL Server\130\Tools\Binn
@@ -275,35 +269,6 @@
             State:              Running
             Last start time:    9/19/2017 6:57:25 AM
             Instance pipe name: np:\\.\pipe\LOCALDB#9A6B632F\tsql\query
-
-
-
-        PM> Add-Migration AddProjectTableColumns
-        An operation was scaffolded that may result in the loss of data. Please review the migration for accuracy.
-        To undo this action, use Remove-Migration.
-        PM> Update-Database
-        System.Data.SqlClient.SqlException (0x80131904): Introducing FOREIGN KEY constraint 'FK_Cameras_Vector3ds_PositionId' on table 'Cameras' may cause cycles or multiple cascade paths. Specify ON DELETE NO ACTION or ON UPDATE NO ACTION, or modify other FOREIGN KEY constraints.
-        Could not create constraint or index. See previous errors.
-           at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
-           at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
-           at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
-           at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
-           at System.Data.SqlClient.SqlCommand.RunExecuteNonQueryTds(String methodName, Boolean async, Int32 timeout, Boolean asyncWrite)
-           at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite, String methodName)
-           at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
-           at Microsoft.EntityFrameworkCore.Storage.Internal.RelationalCommand.Execute(IRelationalConnection connection, DbCommandMethod executeMethod, IReadOnlyDictionary`2 parameterValues)
-           at Microsoft.EntityFrameworkCore.Storage.Internal.RelationalCommand.ExecuteNonQuery(IRelationalConnection connection, IReadOnlyDictionary`2 parameterValues)
-           at Microsoft.EntityFrameworkCore.Migrations.MigrationCommand.ExecuteNonQuery(IRelationalConnection connection, IReadOnlyDictionary`2 parameterValues)
-           at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQuery(IEnumerable`1 migrationCommands, IRelationalConnection connection)
-           at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.Migrate(String targetMigration)
-           at Microsoft.EntityFrameworkCore.Design.Internal.MigrationsOperations.UpdateDatabase(String targetMigration, String contextType)
-           at Microsoft.EntityFrameworkCore.Design.OperationExecutor.UpdateDatabase.<>c__DisplayClass0_1.<.ctor>b__0()
-           at Microsoft.EntityFrameworkCore.Design.OperationExecutor.OperationBase.Execute(Action action)
-        ClientConnectionId:2f66363c-9668-472b-a8ce-e0a38e1b3db8
-        Error Number:1785,State:0,Class:16
-        Introducing FOREIGN KEY constraint 'FK_Cameras_Vector3ds_PositionId' on table 'Cameras' may cause cycles or multiple cascade paths. Specify ON DELETE NO ACTION or ON UPDATE NO ACTION, or modify other FOREIGN KEY constraints.
-        Could not create constraint or index. See previous errors.
-        PM> 
 
 <-- Git
     TBD
@@ -418,6 +383,7 @@
         64 bit support
 
 <-- ASP.NET Core Model Validation
+
     A registered InputFormatter maps the Request.Body to a type. By default, MVC supports a limited number of formatters.
         This allows a strongly typed [FromBody] action parameter to be used.
     The DataAnnotation attributes (e.g. [Required]) are checked first and MVC sets ModelState.Valid based on the results.
@@ -426,6 +392,7 @@
         The ActionFilter can check ModelState.Valid and then set the ActionExecutingContext.Result so the controller action is never called.
 
 <-- Logging
+
     Review the ILogger interface. How should this work with a Controller?
         namespace Microsoft.Extensions.Logging
         {

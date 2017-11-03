@@ -69,10 +69,10 @@ namespace ModelRelief.Test.Api
                 .Setup(x => x.RouteUrl(It.IsAny<UrlRouteContext>()))
                 .Returns(apiReferenceRelative);
 
-            controller.Url = mockUrlHelper.Object;
+            controller.Url                           = mockUrlHelper.Object;
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
-            controller.Request.Scheme = Settings.Scheme;
-            controller.Request.Host   = new HostString(Settings.Host, Settings.Port);
+            controller.Request.Scheme                = Settings.Scheme;
+            controller.Request.Host                  = new HostString(Settings.Host, Settings.Port);
 
             var meshId = 1;
             var meshPutModel = new MeshPutModel() { Name = "", Description = "meshPutModel with an empty Name"};

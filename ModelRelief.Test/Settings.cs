@@ -9,6 +9,10 @@ using System.Text;
 
 namespace ModelRelief.Test
 {
+    /// <summary>
+    /// Unit test settings that describe the host and runtime environment.
+    /// These should be mocked.
+    /// </summary>
     class Settings
     {
         public static readonly string Scheme = "http";
