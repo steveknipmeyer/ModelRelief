@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 using Microsoft.AspNetCore.Mvc;
 
-namespace ModelRelief.Features.Homeg
+namespace ModelRelief.Features.Home
 {
     public class HomeController : Controller
         {
@@ -15,7 +15,7 @@ namespace ModelRelief.Features.Homeg
 
         public IActionResult Index()
             {           
-#if true
+#if false
             // stackoverflow.com/questions/46406525/net-core-2-0-basepath-error
             return RedirectToAction ("Viewer", "Models", new { Id = 1});           
 #else

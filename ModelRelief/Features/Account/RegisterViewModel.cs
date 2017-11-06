@@ -3,17 +3,24 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-using ModelRelief.Domain;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace ModelRelief.ViewModels
-{
-    public class Model3dEditViewModel
+namespace ModelRelief.Features.Account
+
+    {
+    public class RegisterViewModel
         {
-        [Required, Display (Name = "Model Name")]
-        [MaxLength(64)]
-        public string Name { get; set; }
+        [Required, MaxLength(256)]
+        public string Username { get; set; }
 
-        public Model3dFormat Format { get; set; }
+        [Required, DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        [Required, DataType(DataType.Password), Compare(nameof(Password))]
+        public string ConfirmPassword { get; set; }
         }
     }

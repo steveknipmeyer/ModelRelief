@@ -4,15 +4,10 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-using ModelRelief.Services;
-
-namespace ModelRelief.ViewComponents
-    {
+namespace ModelRelief.Features.Shared.ViewComponents
+{
     public class LoginLogoutViewComponent : ViewComponent
         {
         #pragma warning disable 1998

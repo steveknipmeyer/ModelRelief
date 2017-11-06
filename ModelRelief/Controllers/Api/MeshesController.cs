@@ -3,29 +3,15 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-
-using System;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-
-using Serilog;
-
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ModelRelief.Domain;
 using ModelRelief.Services;
 using ModelRelief.Utility;
-using ModelRelief.ViewModels;
-using Microsoft.Extensions.Logging;
-using AutoMapper;
-using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Http.Internal;
+using System.Threading.Tasks;
 
 namespace ModelRelief.Controllers.Api
 {

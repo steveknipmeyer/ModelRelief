@@ -4,7 +4,6 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 using Microsoft.AspNetCore.Mvc;
-using ModelRelief.ViewModels;
 using ModelRelief.Workbench;
 using System;
 using System.IO;

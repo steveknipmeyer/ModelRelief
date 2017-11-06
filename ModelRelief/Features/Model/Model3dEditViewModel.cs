@@ -3,17 +3,17 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-using System;
-using System.Collections.Generic;
+using ModelRelief.Domain;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace ModelRelief.ViewModels
-    {
-    public class DepthBufferTestViewModel
+namespace ModelRelief.Features.Model
+{
+    public class Model3dEditViewModel
         {
-        [Required]
-        public string ImageUrl { get; set; }
+        [Required, Display (Name = "Model Name")]
+        [MaxLength(64)]
+        public string Name { get; set; }
+
+        public Model3dFormat Format { get; set; }
         }
     }

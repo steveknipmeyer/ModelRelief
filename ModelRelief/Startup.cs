@@ -21,6 +21,7 @@ using ModelRelief.Domain;
 using ModelRelief.Infrastructure;
 using ModelRelief.Services;
 using ModelRelief.Workbench;
+using OdeToCode.AddFeatureFolders;
 using System;
 using System.Collections.Generic;
 
@@ -86,8 +87,9 @@ namespace ModelRelief
         {
             services.AddSingleton(Configuration);
             services.AddRouting(options => options.LowercaseUrls = true);
-            services.AddMvc(
-                options => options.InputFormatters.Insert(0, new RawRequestBodyFormatter()));
+
+            services.AddMvc(options => options.InputFormatters.Insert(0, new RawRequestBodyFormatter()))
+                .AddFeatureFolders();
 
             services.AddSingleton<Services.IConfigurationProvider, Services.ConfigurationProvider>();
             services.AddScoped<IModelsProvider, SqlModelsProvider>();

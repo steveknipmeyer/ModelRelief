@@ -1,10 +1,11 @@
-﻿@model LoginViewModel
+﻿@using ModelRelief.Features.Account
+@model RegisterViewModel
 
 @{
-    ViewBag.Title = "Login";
+    ViewBag.Title = "Register";
 }
 
-<h2>Login</h2>
+<h2>Register</h2>
 <form method="post" asp-antiforgery="true">
     <div asp-validation-summary="ModelOnly"></div>
 
@@ -19,10 +20,10 @@
         <span asp-validation-for="Password"></span>
     </div>
     <div>
-        <label asp-for="RememberMe"></label>
-        <input asp-for="RememberMe" />
-        <span asp-validation-for="RememberMe"></span>
+        <label asp-for="ConfirmPassword"></label>
+        <input asp-for="ConfirmPassword" />
+        <span asp-validation-for="ConfirmPassword"></span>
     </div>
     
-    <input type="submit" value="Login" />
+    <input type="submit" value="Register" />
 </form>

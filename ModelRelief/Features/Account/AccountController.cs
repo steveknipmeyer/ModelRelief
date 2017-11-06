@@ -6,7 +6,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ModelRelief.Domain;
-using ModelRelief.ViewModels;
 using System.Threading.Tasks;
 
 namespace ModelRelief.Features.Account

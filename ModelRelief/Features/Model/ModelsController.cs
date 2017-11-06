@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ModelRelief.Services;
-using ModelRelief.ViewModels;
 using System;
 using System.Collections.Generic;
 using ModelRelief.Domain;

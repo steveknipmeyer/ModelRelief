@@ -1,6 +1,4 @@
 ﻿<--- Commit
-Add Feature folders.
-
 
 <--- Reading
 
@@ -8,6 +6,8 @@ Add Feature folders.
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
 
+    ViewComponents
+    VinewModels -> Features Folder
     
     SqlModelProvider should be async.
 
