@@ -6,9 +6,8 @@
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
 
-    ViewComponents
-    VinewModels -> Features Folder
-    
+    Shoould the API be separated into a project (ApiV1)?
+
     SqlModelProvider should be async.
 
     Extend the Authorize attribute to allow checking for a user-owned resource.
