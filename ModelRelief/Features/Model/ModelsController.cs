@@ -3,27 +3,18 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-using System;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-
-using ModelRelief.Models;
 using ModelRelief.Services;
-using ModelRelief.Utility;
 using ModelRelief.ViewModels;
+using System;
+using System.Collections.Generic;
+using ModelRelief.Domain;
 
-using AutoMapper;
-using Serilog;
-
-namespace ModelRelief.Controllers
+namespace ModelRelief.Features.Model
 {
     [Authorize]
     public class ModelsController : Controller

@@ -7,34 +7,40 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+// ------------------------------------------------------------------------// 
+// ModelRelief                                                             //
+//                                                                         //                                                                          
+// Copyright (c) <2017> Steve Knipmeyer                                    //
+// ------------------------------------------------------------------------//
 using System.Linq;
 using System.Threading.Tasks;
 
-using ModelRelief.Models;
-
-namespace ModelRelief.Models
+namespace ModelRelief.Domain
 {
-    public class MeshTransform : ModelReliefModel
+    public enum Model3dFormat
     {
-        [Required, Display (Name = "Mesh Transform Name")]
+        None,           // unknown
+        OBJ,            // Wavefront OBJ
+        STL             // Stereolithography
+    }
+
+    public class Model3d : ModelReliefModel, IFileResource
+    {       
+        [Required, Display (Name = "Model Name")]
         public override string Name { get; set; }
         public override string Description { get; set; }
-        
-        public double Depth { get; set; }
-        public double Width { get; set; }
 
-        public double Tau { get; set; }
-        public double SigmaGaussianBlur { get; set; }
-        public double SigmaGaussianSmooth { get; set; }
-        public double LambdaLinearScaling { get; set; }
+        public Model3dFormat Format { get; set; }
+        public string Path { get; set; }
 
         // Navigation Properties
         public Project Project { get; set; }
+        public Camera Camera { get; set; }
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public MeshTransform()
+        public Model3d()
         {
         }
     }

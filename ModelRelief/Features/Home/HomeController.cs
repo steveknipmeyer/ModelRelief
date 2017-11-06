@@ -3,19 +3,24 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
-namespace ModelRelief.Models
-    {
-    public class ApplicationUser : IdentityUser
+namespace ModelRelief.Features.Homeg
+{
+    public class HomeController : Controller
         {
-        public ApplicationUser()
+        public HomeController()
             {
+            }
+
+        public IActionResult Index()
+            {           
+#if true
+            // stackoverflow.com/questions/46406525/net-core-2-0-basepath-error
+            return RedirectToAction ("Viewer", "Models", new { Id = 1});           
+#else
+            return View ();
+#endif
             }
         }
     }

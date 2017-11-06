@@ -1,9 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿// ------------------------------------------------------------------------// 
+// ModelRelief                                                             //
+//                                                                         //                                                                          
+// Copyright (c) <2017> Steve Knipmeyer                                    //
+// ------------------------------------------------------------------------//
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ModelRelief.Controllers.Api;
 using ModelRelief.Infrastructure;
+using ModelRelief.Domain;
 
-namespace ModelRelief.Models
+namespace ModelRelief.Features
 {
     public interface IValidatable<TModel>
         where TModel : ModelReliefModel

@@ -6,7 +6,7 @@
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using ModelRelief.Models;
+using ModelRelief.Domain;
 using ModelRelief.Services;
 using System.Collections.Generic;
 

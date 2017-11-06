@@ -3,20 +3,14 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
+using ModelRelief.Domain;
 using ModelRelief.ViewModels;
-using ModelRelief.Models;
-using System.Security.Claims;
+using System.Threading.Tasks;
 
-namespace ModelRelief.Controllers
-    {
+namespace ModelRelief.Features.Account
+{
     public class AccountController : Controller
         {
         private UserManager<ApplicationUser>   _userManager;

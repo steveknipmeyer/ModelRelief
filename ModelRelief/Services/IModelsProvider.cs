@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using ModelRelief.Models;
+using ModelRelief.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace ModelRelief.Services

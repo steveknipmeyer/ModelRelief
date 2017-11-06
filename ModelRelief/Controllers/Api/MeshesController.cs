@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Identity;
 
 using Serilog;
 
-using ModelRelief.Models;
+using ModelRelief.Domain;
 using ModelRelief.Services;
 using ModelRelief.Utility;
 using ModelRelief.ViewModels;

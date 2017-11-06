@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 using FluentAssertions;
 using ModelRelief.Infrastructure;
-using ModelRelief.Models;
+using ModelRelief.Domain;
 using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http;

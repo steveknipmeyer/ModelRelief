@@ -3,21 +3,19 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace ModelRelief.Controllers
+namespace ModelRelief.Domain
     {
-    public class AboutController : Controller
+    public class ApplicationUser : IdentityUser
         {
-        public IActionResult Phone()
+        public ApplicationUser()
             {
-            return Content("571 730 7138");
-            }
-
-        [Route ("special/{id?}")]
-        public IActionResult Company()
-            {
-            return Content("ModelRelief, LLC");
             }
         }
     }

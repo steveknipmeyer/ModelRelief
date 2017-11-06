@@ -3,17 +3,13 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
+using Microsoft.AspNetCore.Mvc;
+using ModelRelief.ViewModels;
+using ModelRelief.Workbench;
 using System;
 using System.IO;
 
-using Microsoft.AspNetCore.Mvc;
-
-using ModelRelief.ViewModels;
-using ModelRelief.Workbench;
-
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-namespace ModelRelief.Controllers
+namespace ModelRelief.Features.Workbench
 {
     public class WorkbenchController : Controller
         {

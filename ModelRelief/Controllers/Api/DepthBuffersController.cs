@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ModelRelief.Models;
+using ModelRelief.Domain;
 using ModelRelief.Services;
 using ModelRelief.Utility;
 using System.Threading.Tasks;

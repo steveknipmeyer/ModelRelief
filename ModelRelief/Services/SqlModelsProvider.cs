@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using ModelRelief.Database;
-using ModelRelief.Models;
+using ModelRelief.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;

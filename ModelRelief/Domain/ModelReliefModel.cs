@@ -3,13 +3,10 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-using System;
-using System.Collections.Generic;
+using ModelRelief.Domain;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace ModelRelief.Models
+namespace ModelRelief.Domain
 {
     public class ModelReliefModel
     {

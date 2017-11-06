@@ -32,6 +32,7 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.0.1" />
     <PackageReference Include="MediatR" Version="3.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <PackageReference Include="OdeToCode.AddFeatureFolders" Version="1.0.4" />
     <PackageReference Include="Serilog.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Serilog.Enrichers.Environment" Version="2.1.2" />
     <PackageReference Include="Serilog.Enrichers.Thread" Version="3.0.0" />
@@ -43,6 +44,10 @@
 
   
   <ItemGroup>
+    <Folder Include="Features\Mesh\" />
+    <Folder Include="Features\DepthBuffer\" />
+    <Folder Include="Features\Camera\" />
+    <Folder Include="Features\Project\" />
     <Folder Include="wwwroot\js\" />
   </ItemGroup>
     

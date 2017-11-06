@@ -3,15 +3,11 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-using System;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using ModelRelief.Domain;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using ModelRelief.Models;
 
 namespace ModelRelief.Utility
 {

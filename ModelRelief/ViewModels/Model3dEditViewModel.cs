@@ -3,16 +3,11 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-using System;
-using System.Collections.Generic;
+using ModelRelief.Domain;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-
-using ModelRelief.Models;
 
 namespace ModelRelief.ViewModels
-    {
+{
     public class Model3dEditViewModel
         {
         [Required, Display (Name = "Model Name")]

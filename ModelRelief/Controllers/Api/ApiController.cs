@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ModelRelief.Models;
+using ModelRelief.Features;
+using ModelRelief.Domain;
 using ModelRelief.Services;
 
 namespace ModelRelief.Controllers.Api
@@ -21,7 +22,7 @@ namespace ModelRelief.Controllers.Api
         where TModel : ModelReliefModel
     {
         public IHostingEnvironment              HostingEnvironment { get; set; }
-        public UserManager<ApplicationUser>                UserManager { get; set; }
+        public UserManager<ApplicationUser>     UserManager { get; set; }
         public IModelProvider<TModel>           ModelProvider { get; set; }
         public ILogger<TModel>                  Logger { get; set; }
         public Services.IConfigurationProvider  ConfigurationProvider { get; set; }

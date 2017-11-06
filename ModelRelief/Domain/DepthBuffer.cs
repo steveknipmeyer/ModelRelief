@@ -6,47 +6,45 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ModelRelief.Controllers.Api;
+using ModelRelief.Features;
 using ModelRelief.Infrastructure;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace ModelRelief.Models
+namespace ModelRelief.Domain
 {
-    public enum MeshFormat
-        {
-        None,           // unknown
-        OBJ,            // Wavefront OBJ
-        STL             // Stereolithography
-        }
-
-    public class Mesh  : ModelReliefModel, IFileResource
+    public enum DepthBufferFormat
     {
-        [Required, Display (Name = "Mesh Name")]
+        None,       // unknown
+        Raw,        // floating point array
+        PNG,        // PNG format
+        JPG         // JPG format
+    }
+
+    public class DepthBuffer  : ModelReliefModel, IFileResource
+    {       
+        [Required, Display (Name = "DepthBuffer Name")]
         public override string Name { get; set; }
         public override string Description { get; set; }
 
-        public MeshFormat Format { get; set; }      
+        public DepthBufferFormat Format { get; set; }
         public string Path { get; set; }
 
         // Navigation Properties
         public Project Project { get; set; }
-        public DepthBuffer DepthBuffer { get; set; }
-        public MeshTransform MeshTransform { get; set; }
-
+        public Model3d Model { get; set; }
         public Camera Camera { get; set; }
 
-        public Mesh()
+        public DepthBuffer()
         {
         }
     }
-
     /// <summary>
-    /// Mesh POST model.
+    /// DepthBuffer POST model.
     /// </summary>
-    public class MeshPostModel : IValidatable<Mesh>
+    public class DepthBufferPostModel : IValidatable<DepthBuffer>
     {
         public byte[] Raw { get; set; }
 
@@ -54,7 +52,7 @@ namespace ModelRelief.Models
         /// Constructor
         /// </summary>
         /// <param name="raw">Byte array from the request body</param>
-        public MeshPostModel (byte[] raw)
+        public DepthBufferPostModel (byte[] raw)
         {
             Raw = raw;
         }
@@ -64,7 +62,7 @@ namespace ModelRelief.Models
         /// </summary>
         /// <param name="modelState">ModelState</param>
         /// <returns>true if valid</returns>
-        public bool Validate(ApplicationUser user, ApiController<Mesh> controller, int? id = null)
+        public bool Validate(ApplicationUser user, ApiController<DepthBuffer> controller, int? id = null)
         {
             var results = new List<ValidationResult>();
 
@@ -78,8 +76,8 @@ namespace ModelRelief.Models
         /// <returns>Api JSON result</returns>
         public ObjectResult ErrorResult (Controller controller,
             int httpStatusCode       = StatusCodes.Status400BadRequest,
-            int apiStatusCode        = (int) ApiStatusCode.MeshPostValidationError,
-            string developerMessage  = "The Mesh POST properties are invalid."
+            int apiStatusCode        = (int) ApiStatusCode.DepthBufferPostValidationError,
+            string developerMessage  = "The DepthBuffer POST properties are invalid."
             )
         {
             var objectResult = new ApiValidationResult(controller, httpStatusCode, apiStatusCode, developerMessage).ObjectResult();
@@ -88,9 +86,9 @@ namespace ModelRelief.Models
     }
 
     /// <summary>
-    /// Mesh PUT request.
+    /// DepthBuffer PUT request.
     /// </summary>
-    public class MeshPutModel : IValidatable<Mesh>
+    public class DepthBufferPutModel : IValidatable<DepthBuffer>
     {
         [Required]
         public string Name { get; set; }
@@ -101,20 +99,20 @@ namespace ModelRelief.Models
         /// </summary>
         /// <param name="modelState">ModelState</param>
         /// <returns>true if valid</returns>
-        public bool Validate(ApplicationUser user, ApiController<Mesh> controller, int? id = null)
+        public bool Validate(ApplicationUser user, ApiController<DepthBuffer> controller, int? id = null)
         {
             var results = new List<ValidationResult>();
-
+            
             // verify target model exists (and is owned by user)
-            IEnumerable<Mesh> meshes = controller.ModelProvider.GetAll().Where(mesh => ((mesh.Id == id) && (mesh.User.Id == user.Id)));
-            if (meshes.Count() != 1)
-                controller.ModelState.AddModelError(nameof(MeshPutModel), $"The mesh model (id = {id ?? 0}) does not exist.");
+            IEnumerable<DepthBuffer> depthBuffers = controller.ModelProvider.GetAll().Where(depthBuffer => ((depthBuffer.Id == id) && (depthBuffer.User.Id == user.Id)));
+            if (depthBuffers.Count() != 1)
+                controller.ModelState.AddModelError(nameof(DepthBufferPutModel), $"The DepthBuffer model (id = {id ?? 0}) does not exist.");
 
             if (String.IsNullOrEmpty(Name))
-                controller.ModelState.AddModelError(nameof(Name), "A mesh name cannot be empty.");
+                controller.ModelState.AddModelError(nameof(Name), "A depth buffer name cannot be empty.");
 #if false
             if (String.IsNullOrEmpty(Description))
-                controller.modelState.AddModelError(nameof(Description), "A mesh description cannot be empty.");
+                modelState.AddModelError(nameof(Description), "A DepthBuffer description cannot be empty.");
 #endif            
             return controller.ModelState.IsValid;
         }
@@ -126,8 +124,8 @@ namespace ModelRelief.Models
         /// <returns>Api JSON result</returns>
         public ObjectResult ErrorResult (Controller controller,
             int httpStatusCode       = StatusCodes.Status400BadRequest,
-            int apiStatusCode        = (int) ApiStatusCode.MeshPutValidationError,
-            string developerMessage  = "The Mesh PUT properties are invalid."
+            int apiStatusCode        = (int) ApiStatusCode.DepthBufferPutValidationError,
+            string developerMessage  = "The DepthBuffer PUT properties are invalid."
             )
         {
             var objectResult = new ApiValidationResult(controller, httpStatusCode, apiStatusCode, developerMessage).ObjectResult();

@@ -3,9 +3,10 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-using System;
-using System.Collections.Generic;
-
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -15,17 +16,13 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using AutoMapper;
-using MediatR;
-
 using ModelRelief.Database;
+using ModelRelief.Domain;
 using ModelRelief.Infrastructure;
-using ModelRelief.Models;
 using ModelRelief.Services;
 using ModelRelief.Workbench;
+using System;
+using System.Collections.Generic;
 
 namespace ModelRelief
 {

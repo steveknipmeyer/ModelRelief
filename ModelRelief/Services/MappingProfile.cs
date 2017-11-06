@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// ------------------------------------------------------------------------// 
+// ModelRelief                                                             //
+//                                                                         //                                                                          
+// Copyright (c) <2017> Steve Knipmeyer                                    //
+// ------------------------------------------------------------------------//
 
 using AutoMapper;
 
-using ModelRelief.Models;
+using ModelRelief.Domain;
 using ModelRelief.ViewModels;
 
 namespace ModelRelief.Services

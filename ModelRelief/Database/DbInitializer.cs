@@ -1,15 +1,17 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-
+﻿// ------------------------------------------------------------------------// 
+// ModelRelief                                                             //
+//                                                                         //                                                                          
+// Copyright (c) <2017> Steve Knipmeyer                                    //
+// ------------------------------------------------------------------------//
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-
-
-using ModelRelief.Models;
+using ModelRelief.Domain;
 using ModelRelief.Services;
-using Microsoft.AspNetCore.Hosting;
+using System;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ModelRelief.Database
 {

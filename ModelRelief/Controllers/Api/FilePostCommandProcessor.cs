@@ -6,7 +6,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ModelRelief.Infrastructure;
-using ModelRelief.Models;
+using ModelRelief.Domain;
+using ModelRelief.Features;
 using ModelRelief.Services;
 using ModelRelief.Utility;
 using System;

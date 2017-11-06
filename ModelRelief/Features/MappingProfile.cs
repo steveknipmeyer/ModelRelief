@@ -4,9 +4,9 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 using AutoMapper;
-using ModelRelief.Models;
+using ModelRelief.Domain;
 
-namespace ModelRelief.Models
+namespace ModelRelief.Features
 {
     public class MappingProfile : Profile
     {

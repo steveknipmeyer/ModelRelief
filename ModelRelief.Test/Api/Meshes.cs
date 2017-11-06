@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Logging;
 using ModelRelief.Controllers.Api;
 using ModelRelief.Infrastructure;
-using ModelRelief.Models;
+using ModelRelief.Domain;
 using ModelRelief.Services;
 using ModelRelief.Utility;
 using Moq;

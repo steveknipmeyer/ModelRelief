@@ -1,10 +1,13 @@
 ﻿<--- Commit
+Add Feature folders.
+
 
 <--- Reading
 
 <-- Tasks
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
+
     
     SqlModelProvider should be async.
 
@@ -368,6 +371,7 @@
     Serilog         Apache https://www.apache.org/licenses/LICENSE-2.0
     Autofac         MIT
     MediatR         Apache https://github.com/jbogard/MediatR/blob/master/LICENSE
+    FeatureFolders  MIT https://raw.githubusercontent.com/OdeToCode/AddFeatureFolders/master/LICENSE
 
 <-- Visual Studio 
     Performance

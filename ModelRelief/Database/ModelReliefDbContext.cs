@@ -3,19 +3,15 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using ModelRelief.Domain;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
-
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
-using ModelRelief.Models;
 
 namespace ModelRelief.Database
-    {
+{
     public class ModelReliefDbContext : IdentityDbContext<ApplicationUser>
         {
         public ModelReliefDbContext (DbContextOptions options) : base (options)

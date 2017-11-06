@@ -5,14 +5,11 @@
 // ------------------------------------------------------------------------//
 // https://weblog.west-wind.com/posts/2017/Sep/14/Accepting-Raw-Request-Body-Content-in-ASPNET-Core-API-Controllers
 
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.Net.Http.Headers;
-
-using ModelRelief.Models;
 
 namespace ModelRelief.Infrastructure
 {
