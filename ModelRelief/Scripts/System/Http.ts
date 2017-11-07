@@ -30,8 +30,8 @@ enum MethodType {
  * Server Endpoints
  */
 export enum ServerEndPoints {
-        ApiMeshes        = 'api/meshes',
-        ApiDepthBuffers  = 'api/depth-buffers'
+        ApiMeshes        = 'api/v1/meshes',
+        ApiDepthBuffers  = 'api/v1/depth-buffers'
 }
 
 /**

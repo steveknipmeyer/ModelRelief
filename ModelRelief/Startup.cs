@@ -152,8 +152,8 @@ namespace ModelRelief
         {
             routeBuilder.MapRoute(name: RouteNames.Default, template: "{controller=Home}/{action=Index}/{id?}");
 
-            routeBuilder.MapAreaRoute(name: RouteNames.DefaultApi, areaName: "Api", template: "api/{controller}/{id?}");
-            routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/documentation/{controller}/{id?}");
+            routeBuilder.MapAreaRoute(name: RouteNames.DefaultApi, areaName: "ApiV1", template: "api/v1/{controller}/{id?}");
+            routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/v1/documentation/{controller}/{id?}");
         }
     }
 }

@@ -5,9 +5,9 @@
 // ------------------------------------------------------------------------//
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ModelRelief.Controllers.Api;
-using ModelRelief.Infrastructure;
+using ModelRelief.Api.V1;
 using ModelRelief.Domain;
+using ModelRelief.Infrastructure;
 
 namespace ModelRelief.Features
 {

@@ -14,11 +14,11 @@ using ModelRelief.Services;
 using ModelRelief.Utility;
 using System.Threading.Tasks;
 
-namespace ModelRelief.Controllers.Api
+namespace ModelRelief.Api.V1
 {
     // [Authorize]
-    [Area("api")]
-    [Route ("api/depth-buffers")]        
+    [Area("ApiV1")]
+    [Route ("api/v1/depth-buffers")]        
     public class DepthBuffersController : ApiController<DepthBuffer>
     {
         public DepthBuffersController(IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, IModelsProvider modelsProvider, ILogger<DepthBuffer> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper) :

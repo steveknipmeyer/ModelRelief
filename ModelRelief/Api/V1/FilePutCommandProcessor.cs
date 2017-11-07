@@ -14,7 +14,7 @@ using Serilog;
 using System;
 using System.Threading.Tasks;
 
-namespace ModelRelief.Controllers.Api
+namespace ModelRelief.Api.V1
 {
     /// <summary>
     /// Handles a file update from a PUT request.

@@ -36,7 +36,7 @@ namespace ModelRelief.Test.Api
             var stringContent = new StringContent(content, Encoding.UTF8, "application/json");
 
             // Act
-            var response = await framework.Client.PutAsync("/api/meshes/0", stringContent);
+            var response = await framework.Client.PutAsync("/api/v1/meshes/0", stringContent);
             var responseString = await response.Content.ReadAsStringAsync();
 
             // Assert

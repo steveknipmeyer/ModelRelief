@@ -13,11 +13,11 @@ using ModelRelief.Services;
 using ModelRelief.Utility;
 using System.Threading.Tasks;
 
-namespace ModelRelief.Controllers.Api
+namespace ModelRelief.Api.V1
 {
     // [Authorize]
-    [Area("api")]
-    [Route ("api/[controller]")]        
+    [Area("ApiV1")]
+    [Route ("api/v1/[controller]")]        
     public class MeshesController : ApiController<Mesh>
     {
         public MeshesController(IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, IModelsProvider modelsProvider, ILogger<Mesh> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper) :

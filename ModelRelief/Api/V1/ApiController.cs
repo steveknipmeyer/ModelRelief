@@ -13,11 +13,10 @@ using ModelRelief.Features;
 using ModelRelief.Domain;
 using ModelRelief.Services;
 
-namespace ModelRelief.Controllers.Api
+namespace ModelRelief.Api.V1
 {
     // [Authorize]
-    [Area("api")]
-    [Route ("api/[controller]")]        
+    [Area("ApiV1")]
     public class ApiController<TModel>: Controller
         where TModel : ModelReliefModel
     {

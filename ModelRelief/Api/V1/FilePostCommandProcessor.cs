@@ -13,7 +13,7 @@ using ModelRelief.Utility;
 using System;
 using System.Threading.Tasks;
 
-namespace ModelRelief.Controllers.Api
+namespace ModelRelief.Api.V1
 {
     /// <summary>
     /// Handles file creation from a POST request.
@@ -57,7 +57,7 @@ namespace ModelRelief.Controllers.Api
                 await Files.WriteFileFromByteArray(fileName, byteArray);
 
                 // Return the model URI in the HTTP Response Location Header
-                //  XMLHttpRequest.getResponseHeader('Location') :  http://localhost:60655/api/meshes/10
+                //  XMLHttpRequest.getResponseHeader('Location') :  http://localhost:60655/api/v1/meshes/10
                 //  XMLHttpRequest.responseText = (JSON) { id : 10 }
                 string responseUrl = _controller.Url.RouteUrl( new {id = newModel.Id});
                 Uri responseUrlAbsolute = new Uri($"{_controller.Request.Scheme}://{_controller.Request.Host}{responseUrl}");

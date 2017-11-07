@@ -10,14 +10,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Logging;
-using ModelRelief.Controllers.Api;
-using ModelRelief.Infrastructure;
+using ModelRelief.Api.V1;
 using ModelRelief.Domain;
+using ModelRelief.Infrastructure;
 using ModelRelief.Services;
 using ModelRelief.Utility;
 using Moq;
 using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
 

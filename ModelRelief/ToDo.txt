@@ -6,8 +6,6 @@
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
 
-    Shoould the API be separated into a project (ApiV1)?
-
     SqlModelProvider should be async.
 
     Extend the Authorize attribute to allow checking for a user-owned resource.
@@ -65,8 +63,6 @@
             https://github.com/domaindrivendev/Swashbuckle.AspNetCore
 
 <-- API 
-
-    Add API version.
 
     Ideas
         Stormpath

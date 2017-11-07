@@ -10,7 +10,7 @@ using ModelRelief.Domain;
 using ModelRelief.Services;
 using System.Collections.Generic;
 
-namespace ModelRelief.Controllers.Api
+namespace ModelRelief.Api.V1
 {
     // [Authorize]
     [Area("Api")]

@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ModelRelief.Controllers.Api;
+using ModelRelief.Api.V1;
 using ModelRelief.Features;
 using ModelRelief.Infrastructure;
 using Newtonsoft.Json;

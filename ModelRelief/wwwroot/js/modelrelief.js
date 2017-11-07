@@ -2098,8 +2098,8 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
      */
     var ServerEndPoints;
     (function (ServerEndPoints) {
-        ServerEndPoints["ApiMeshes"] = "api/meshes";
-        ServerEndPoints["ApiDepthBuffers"] = "api/depth-buffers";
+        ServerEndPoints["ApiMeshes"] = "api/v1/meshes";
+        ServerEndPoints["ApiDepthBuffers"] = "api/v1/depth-buffers";
     })(ServerEndPoints = exports.ServerEndPoints || (exports.ServerEndPoints = {}));
     /**
      * HTTP Library
