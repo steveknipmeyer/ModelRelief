@@ -4,6 +4,7 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 using AutoMapper;
+using ModelRelief.Api.V1;
 using ModelRelief.Domain;
 
 namespace ModelRelief.Features

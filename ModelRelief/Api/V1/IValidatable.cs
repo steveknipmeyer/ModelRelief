@@ -9,7 +9,7 @@ using ModelRelief.Api.V1;
 using ModelRelief.Domain;
 using ModelRelief.Infrastructure;
 
-namespace ModelRelief.Features
+namespace ModelRelief.Api.V1
 {
     public interface IValidatable<TModel>
         where TModel : ModelReliefModel
