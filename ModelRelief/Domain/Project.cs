@@ -18,7 +18,6 @@ namespace ModelRelief.Domain
     {
         [Required, Display (Name = "Project Name")]
         public override string Name { get; set; }
-        public override string Description { get; set; }
 
         // Navigation Properties
 

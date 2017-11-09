@@ -18,7 +18,6 @@ namespace ModelRelief.Domain
     {
         [Required, Display (Name = "Mesh Transform Name")]
         public override string Name { get; set; }
-        public override string Description { get; set; }
         
         public double Depth { get; set; }
         public double Width { get; set; }

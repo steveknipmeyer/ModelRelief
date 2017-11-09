@@ -23,7 +23,6 @@ namespace ModelRelief.Domain
     {
         [Required, Display (Name = "Camera Name")]
         public override string Name { get; set; }
-        public override string Description { get; set; }
 
         public StandardView StandardView { get; set; }
 

@@ -19,13 +19,13 @@ namespace ModelRelief.Domain
     {       
         [Required, Display (Name = "DepthBuffer Name")]
         public override string Name { get; set; }
-        public override string Description { get; set; }
 
         public DepthBufferFormat Format { get; set; }
         public string Path { get; set; }
 
         // Navigation Properties
         public Project Project { get; set; }
+
         public Model3d Model { get; set; }
         public Camera Camera { get; set; }
 

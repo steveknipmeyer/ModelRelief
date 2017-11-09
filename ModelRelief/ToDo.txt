@@ -12,8 +12,6 @@
         MediatT pipeline?
 
     ModelReliefModel
-        Should Description be included?
-        Should Project be included?
         Should ModelReliefModel be an interface instead of a base class?
             This would remove the need for virtual properties (supporting [Display (Name="")] attribute in the derived class.
 

@@ -28,13 +28,13 @@ namespace ModelRelief.Domain
     {       
         [Required, Display (Name = "Model Name")]
         public override string Name { get; set; }
-        public override string Description { get; set; }
 
         public Model3dFormat Format { get; set; }
         public string Path { get; set; }
 
         // Navigation Properties
         public Project Project { get; set; }
+
         public Camera Camera { get; set; }
 
         /// <summary>

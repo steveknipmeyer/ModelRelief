@@ -13,8 +13,6 @@
   <ItemGroup>
     <Compile Remove="node_modules\**" />
     <Compile Remove="out\**" />
-    <Content Remove="node_modules\**" />
-    <Content Remove="out\**" />
     <EmbeddedResource Remove="node_modules\**" />
     <EmbeddedResource Remove="out\**" />
     <None Remove="node_modules\**" />
@@ -42,13 +40,12 @@
     <PackageReference Include="Serilog.Sinks.File" Version="3.2.0" />
   </ItemGroup>
 
-  
   <ItemGroup>
-    <Folder Include="Features\Mesh\" />
-    <Folder Include="Features\DepthBuffer\" />
-    <Folder Include="Features\Camera\" />
-    <Folder Include="Features\Project\" />
-    <Folder Include="wwwroot\js\" />
-  </ItemGroup>
-    
+    <DotNetCliToolReference
+        Include="Microsoft.EntityFrameworkCore.Tools"
+        Version="2.0.0" />
+    <DotNetCliToolReference
+        Include="Microsoft.EntityFrameworkCore.Tools.DotNet"
+        Version="2.0.0" />
+  </ItemGroup>    
 </Project>

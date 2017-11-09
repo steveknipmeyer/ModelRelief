@@ -27,13 +27,13 @@ namespace ModelRelief.Domain
     {
         [Required, Display (Name = "Mesh Name")]
         public override string Name { get; set; }
-        public override string Description { get; set; }
 
         public MeshFormat Format { get; set; }      
         public string Path { get; set; }
 
         // Navigation Properties
         public Project Project { get; set; }
+
         public DepthBuffer DepthBuffer { get; set; }
         public MeshTransform MeshTransform { get; set; }
 
