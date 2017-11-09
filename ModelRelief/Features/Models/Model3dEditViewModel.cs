@@ -6,7 +6,7 @@
 using ModelRelief.Domain;
 using System.ComponentModel.DataAnnotations;
 
-namespace ModelRelief.Features.Model
+namespace ModelRelief.Features.Models
 {
     public class Model3dEditViewModel
         {

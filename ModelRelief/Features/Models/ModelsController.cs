@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using ModelRelief.Domain;
 
-namespace ModelRelief.Features.Model
+namespace ModelRelief.Features.Models
 {
     [Authorize]
     public class ModelsController : Controller

@@ -7,7 +7,7 @@
 using AutoMapper;
 
 using ModelRelief.Domain;
-using ModelRelief.Features.Model;
+using ModelRelief.Features.Models;
 
 namespace ModelRelief.Features
 {

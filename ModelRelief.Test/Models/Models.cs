@@ -7,7 +7,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ModelRelief.Features.Model;
+using ModelRelief.Features.Models;
 using ModelRelief.Domain;
 using ModelRelief.Services;
 using Moq;

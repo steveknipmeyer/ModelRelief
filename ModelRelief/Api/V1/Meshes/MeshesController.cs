@@ -13,7 +13,7 @@ using ModelRelief.Services;
 using ModelRelief.Utility;
 using System.Threading.Tasks;
 
-namespace ModelRelief.Api.V1
+namespace ModelRelief.Api.V1.Meshes
 {
     // [Authorize]
     [Area("ApiV1")]

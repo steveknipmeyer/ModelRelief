@@ -10,8 +10,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Logging;
-using ModelRelief.Api.V1;
+using ModelRelief.Api.V1.Meshes;
 using ModelRelief.Domain;
+using ModelRelief.Features.Meshes;
 using ModelRelief.Infrastructure;
 using ModelRelief.Services;
 using ModelRelief.Utility;
@@ -19,6 +20,8 @@ using Moq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
+
+using ApiV1Meshes =  ModelRelief.Api.V1.Meshes;
 
 namespace ModelRelief.Test.Api
 {
@@ -59,7 +62,7 @@ namespace ModelRelief.Test.Api
                               .Returns(meshProviderMock.Object);
 
 
-            var controller = new MeshesController(hostingEnvironment, userManagerMock.Object, modelsProviderMock.Object, logger, configurationProvider, mapper);
+            var controller = new ApiV1Meshes.MeshesController(hostingEnvironment, userManagerMock.Object, modelsProviderMock.Object, logger, configurationProvider, mapper);
             var mockUrlHelper = new Mock<IUrlHelper>();
 
             var apiReferenceRelative = $"{Settings.ApiDocumentatioRelative}/meshes/{(int) ApiStatusCode.MeshPutValidationError}";

@@ -10,12 +10,12 @@ using ModelRelief.Infrastructure;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace ModelRelief.Api.V1
+namespace ModelRelief.Api.V1.Meshes
 {
     /// <summary>
-    /// DepthBuffer POST model.
+    /// Mesh POST model.
     /// </summary>
-    public class DepthBufferPostModel : IValidatable<DepthBuffer>
+    public class MeshPostModel : IValidatable<Mesh>
     {
         public byte[] Raw { get; set; }
 
@@ -23,7 +23,7 @@ namespace ModelRelief.Api.V1
         /// Constructor
         /// </summary>
         /// <param name="raw">Byte array from the request body</param>
-        public DepthBufferPostModel (byte[] raw)
+        public MeshPostModel (byte[] raw)
         {
             Raw = raw;
         }
@@ -33,7 +33,7 @@ namespace ModelRelief.Api.V1
         /// </summary>
         /// <param name="modelState">ModelState</param>
         /// <returns>true if valid</returns>
-        public bool Validate(ApplicationUser user, ApiController<DepthBuffer> controller, int? id = null)
+        public bool Validate(ApplicationUser user, ApiController<Mesh> controller, int? id = null)
         {
             var results = new List<ValidationResult>();
 
@@ -47,8 +47,8 @@ namespace ModelRelief.Api.V1
         /// <returns>Api JSON result</returns>
         public ObjectResult ErrorResult (Controller controller,
             int httpStatusCode       = StatusCodes.Status400BadRequest,
-            int apiStatusCode        = (int) ApiStatusCode.DepthBufferPostValidationError,
-            string developerMessage  = "The DepthBuffer POST properties are invalid."
+            int apiStatusCode        = (int) ApiStatusCode.MeshPostValidationError,
+            string developerMessage  = "The Mesh POST properties are invalid."
             )
         {
             var objectResult = new ApiValidationResult(controller, httpStatusCode, apiStatusCode, developerMessage).ObjectResult();

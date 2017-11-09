@@ -5,19 +5,19 @@
 // ------------------------------------------------------------------------//
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ModelRelief.Api.V1;
+using ModelRelief.Domain;
 using ModelRelief.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace ModelRelief.Domain
+namespace ModelRelief.Api.V1.Meshes
 {
     /// <summary>
-    /// DepthBuffer PUT request.
+    /// Mesh PUT request.
     /// </summary>
-    public class DepthBufferPutModel : IValidatable<DepthBuffer>
+    public class MeshPutModel : IValidatable<Mesh>
     {
         [Required]
         public string Name { get; set; }
@@ -28,20 +28,20 @@ namespace ModelRelief.Domain
         /// </summary>
         /// <param name="modelState">ModelState</param>
         /// <returns>true if valid</returns>
-        public bool Validate(ApplicationUser user, ApiController<DepthBuffer> controller, int? id = null)
+        public bool Validate(ApplicationUser user, ApiController<Mesh> controller, int? id = null)
         {
             var results = new List<ValidationResult>();
-            
+
             // verify target model exists (and is owned by user)
-            IEnumerable<DepthBuffer> depthBuffers = controller.ModelProvider.GetAll().Where(depthBuffer => ((depthBuffer.Id == id) && (depthBuffer.User.Id == user.Id)));
-            if (depthBuffers.Count() != 1)
-                controller.ModelState.AddModelError(nameof(DepthBufferPutModel), $"The DepthBuffer model (id = {id ?? 0}) does not exist.");
+            IEnumerable<Mesh> meshes = controller.ModelProvider.GetAll().Where(mesh => ((mesh.Id == id) && (mesh.User.Id == user.Id)));
+            if (meshes.Count() != 1)
+                controller.ModelState.AddModelError(nameof(MeshPutModel), $"The mesh model (id = {id ?? 0}) does not exist.");
 
             if (String.IsNullOrEmpty(Name))
-                controller.ModelState.AddModelError(nameof(Name), "A depth buffer name cannot be empty.");
+                controller.ModelState.AddModelError(nameof(Name), "A mesh name cannot be empty.");
 #if false
             if (String.IsNullOrEmpty(Description))
-                modelState.AddModelError(nameof(Description), "A DepthBuffer description cannot be empty.");
+                controller.modelState.AddModelError(nameof(Description), "A mesh description cannot be empty.");
 #endif            
             return controller.ModelState.IsValid;
         }
@@ -53,8 +53,8 @@ namespace ModelRelief.Domain
         /// <returns>Api JSON result</returns>
         public ObjectResult ErrorResult (Controller controller,
             int httpStatusCode       = StatusCodes.Status400BadRequest,
-            int apiStatusCode        = (int) ApiStatusCode.DepthBufferPutValidationError,
-            string developerMessage  = "The DepthBuffer PUT properties are invalid."
+            int apiStatusCode        = (int) ApiStatusCode.MeshPutValidationError,
+            string developerMessage  = "The Mesh PUT properties are invalid."
             )
         {
             var objectResult = new ApiValidationResult(controller, httpStatusCode, apiStatusCode, developerMessage).ObjectResult();

@@ -14,7 +14,7 @@ using ModelRelief.Services;
 using ModelRelief.Utility;
 using System.Threading.Tasks;
 
-namespace ModelRelief.Api.V1
+namespace ModelRelief.Api.V1.DepthBuffers
 {
     // [Authorize]
     [Area("ApiV1")]
