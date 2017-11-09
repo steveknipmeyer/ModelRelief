@@ -3,8 +3,13 @@
 ------------------------*/
 body { 
     background: #413D3D !important; 
-    color: #686464 !important;
-}  
+    color: rgb(255, 255, 255) !important;
+}
+
+.panel-body {
+    color: #413D3D !important;
+}
+
 button {
     color: #0F0F0F !important;
 }

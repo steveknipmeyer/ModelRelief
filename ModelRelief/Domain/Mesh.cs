@@ -3,16 +3,8 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using ModelRelief.Api.V1;
-using ModelRelief.Features;
-using ModelRelief.Infrastructure;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace ModelRelief.Domain
 {
