@@ -206,19 +206,25 @@ function generateShaders() {
 /// Populate wwwroot with NPM content
 /// </summary>
 gulp.task('copyNPM', function () {
-    
+
+    // FOLDERS
+
     // Bootstrap
-    let bootstrapFolder = siteConfig.nodeModulesRoot + 'bootstrap/dist/css/';
-    copyFile('bootstrap.css',     bootstrapFolder, siteConfig.cssRoot);
-    copyFile('bootstrap.css.map', bootstrapFolder, siteConfig.cssRoot);
-    
+    let bootstrapSubFolder = 'bootstrap/dist/'
+    let bootstrapFolder    = siteConfig.nodeModulesRoot + bootstrapSubFolder;
+    gulp.src([bootstrapFolder + '**/*']).pipe(gulp.dest(siteConfig.libRoot + bootstrapSubFolder ));
+
     // jquery
-    let jqueryFolder = siteConfig.nodeModulesRoot + 'jquery/dist/';
-    copyFile('jquery.js', jqueryFolder, siteConfig.libRoot);
+    let jQuerySubFolder = 'jquery/dist/'
+    let jQueryFolder = siteConfig.nodeModulesRoot + jQuerySubFolder;
+    gulp.src([jQueryFolder + '**/*']).pipe(gulp.dest(siteConfig.libRoot + jQuerySubFolder ));
 
     // jquery-validation
-    let jqueryValidationFolder = siteConfig.nodeModulesRoot + 'jquery-validation/dist/';
-    copyFile('jquery.validate.js', jqueryValidationFolder, siteConfig.libRoot);
+    let jQueryValidationSubFolder = 'jquery-validation/dist/'
+    let jQueryValidationFolder = siteConfig.nodeModulesRoot + jQueryValidationSubFolder;
+    gulp.src([jQueryValidationFolder + '**/*']).pipe(gulp.dest(siteConfig.libRoot + jQueryValidationSubFolder ));
+
+    // FILES
 
     //jquery-validation-unobtrusive
     let jqueryValidationUobtrusiveFolder = siteConfig.nodeModulesRoot + 'jquery-validation-unobtrusive/';

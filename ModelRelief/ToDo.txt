@@ -298,6 +298,10 @@
     What is the correct use of user-scalable-no? Should it appear only on the Model Viewer page and not be included in the _Layout.cshtml?
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
+    What is the asp-fallback-test for jquery-validation-unobtrusive?
+
+    Why does jQuery need to be loaded before require.js (module mismatch error)?
+        https://stackoverflow.com/questions/4535926/how-do-i-use-requirejs-and-jquery-together
 
 <-- Modules
 

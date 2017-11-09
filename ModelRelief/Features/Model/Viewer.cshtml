@@ -20,32 +20,34 @@
     <text id="modelName">@Model.Name</text>
     <text id="modelPath">@Model.Path</text>
 
-    <!------------------------------------------------------------------------------------------------>
-    <!--                                    Libraries                                               -->
-    <!------------------------------------------------------------------------------------------------>
-    <script src="/lib/threejs/Detector.js"></script>
-    <script src="/lib/require.js"></script>
+    @section scripts {
+        <!------------------------------------------------------------------------------------------------>
+        <!--                                    Libraries                                               -->
+        <!------------------------------------------------------------------------------------------------>
+        <script src="/lib/threejs/Detector.js"></script>
+        <script src="/lib/require.js"></script>
 
-    <!------------------------------------------------------------------------------------------------>
-    <!--                                    ModelRelief                                             -->
-    <!------------------------------------------------------------------------------------------------>
-    <script src="/js/shaders.js"></script>
-    <script>
-        requirejs.config({
-            baseUrl: '.',
-            paths: {
-                ModelRelief                             : '/js/modelrelief',
+        <!------------------------------------------------------------------------------------------------>
+        <!--                                    ModelRelief                                             -->
+        <!------------------------------------------------------------------------------------------------>
+        <script src="/js/shaders.js"></script>
+        <script>
+            requirejs.config({
+                baseUrl: '.',
+                paths: {
+                    ModelRelief                             : '/js/modelrelief',
 
-                chai                                    : '/lib/chai',
-                three                                   : '/lib/threejs/three',
-               'dat-gui'                                : '/lib/threejs/dat.gui.min'
+                    chai                                    : '/lib/chai',
+                    three                                   : '/lib/threejs/three',
+                   'dat-gui'                                : '/lib/threejs/dat.gui.min'
+                }
+            });
+            window.onload = function () {
+
+                requirejs(['ModelRelief']);
             }
-        });
-        window.onload = function () {
-        
-            requirejs(['ModelRelief']);
-        }
-    </script>
+        </script>
+    }
    
 </body>
 

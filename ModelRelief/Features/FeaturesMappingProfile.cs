@@ -3,18 +3,19 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
+
 using AutoMapper;
-using ModelRelief.Api.V1;
+
 using ModelRelief.Domain;
+using ModelRelief.Features.Model;
 
 namespace ModelRelief.Features
 {
-    public class MappingProfile : Profile
+    public class FeaturesMappingProfile : Profile
     {
-        public MappingProfile()
-        {
-            CreateMap<MeshPutModel,        Mesh>(MemberList.Source);
-            CreateMap<DepthBufferPutModel, DepthBuffer>(MemberList.Source);
-        }
+        public FeaturesMappingProfile() 
+            {
+            CreateMap<Model3d, Model3dEditViewModel>().ReverseMap();
+            }
     }
 }
