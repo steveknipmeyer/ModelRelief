@@ -1,10 +1,14 @@
 ﻿<--- Commit
+Add ServiceCollectionExtensions to allow service additions to be isolated from Startup.ConfigureServices.
+Add FluentValidation.
 
 <--- Reading
 
 <-- Tasks
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
+
+    The Format enum is not handled properly in the Mesh Edit page.
 
     SqlModelProvider should be async.
 
@@ -370,6 +374,9 @@
     MediatR         Apache https://github.com/jbogard/MediatR/blob/master/LICENSE
     FeatureFolders  MIT https://raw.githubusercontent.com/OdeToCode/AddFeatureFolders/master/LICENSE
 
+    OpinionatedApiController : Spencer Schneidenbach
+    ContosoCore              : Jimmy Bogard
+
 <-- Visual Studio 
     Performance
         https://developercommunity.visualstudio.com/content/problem/43364/visual-studio-2017-increadibly-slow-and-laggy.html
@@ -410,3 +417,21 @@
             {
             }
         }
+
+<-- Variance
+
+    Invariance
+        The types must match exactly.
+
+    Covariance (out parameters)
+        publi interface IEnumerable (out T)
+
+        A more derived type can be substituted.
+        The parameter can be returned because it satisfies the type because it is of type Base.
+
+    Contravariance (in parameters)
+        public interface IComparer<in T>
+
+        A less derived type can be substituted.
+        When the method is called, the actual parameter passed to the method will be <more derived> so it will satisfy the type of the actual method that is invoked.
+

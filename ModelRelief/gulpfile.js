@@ -210,42 +210,55 @@ gulp.task('copyNPM', function () {
     // FOLDERS
 
     // Bootstrap
-    let bootstrapSubFolder = 'bootstrap/dist/'
-    let bootstrapFolder    = siteConfig.nodeModulesRoot + bootstrapSubFolder;
-    gulp.src([bootstrapFolder + '**/*']).pipe(gulp.dest(siteConfig.libRoot + bootstrapSubFolder ));
+    let subFolder         = 'bootstrap/dist/';
+    let sourceFolder      = siteConfig.nodeModulesRoot + subFolder;
+    let destinationFolder = siteConfig.libRoot + subFolder;
+    gulp.src([sourceFolder + '**/*']).pipe(gulp.dest(destinationFolder ));
 
     // jquery
-    let jQuerySubFolder = 'jquery/dist/'
-    let jQueryFolder = siteConfig.nodeModulesRoot + jQuerySubFolder;
-    gulp.src([jQueryFolder + '**/*']).pipe(gulp.dest(siteConfig.libRoot + jQuerySubFolder ));
+    subFolder         = 'jquery/dist/';
+    sourceFolder      = siteConfig.nodeModulesRoot + subFolder;
+    destinationFolder = siteConfig.libRoot + subFolder;
+    gulp.src([sourceFolder + '**/*']).pipe(gulp.dest(destinationFolder ));
 
     // jquery-validation
-    let jQueryValidationSubFolder = 'jquery-validation/dist/'
-    let jQueryValidationFolder = siteConfig.nodeModulesRoot + jQueryValidationSubFolder;
-    gulp.src([jQueryValidationFolder + '**/*']).pipe(gulp.dest(siteConfig.libRoot + jQueryValidationSubFolder ));
+    subFolder         = 'jquery-validation/dist/';
+    sourceFolder      = siteConfig.nodeModulesRoot + subFolder;
+    destinationFolder = siteConfig.libRoot + subFolder;
+    gulp.src([sourceFolder + '**/*']).pipe(gulp.dest(destinationFolder ));
 
     // FILES
 
     //jquery-validation-unobtrusive
-    let jqueryValidationUobtrusiveFolder = siteConfig.nodeModulesRoot + 'jquery-validation-unobtrusive/';
-    copyFile('jquery.validate.unobtrusive.js', jqueryValidationUobtrusiveFolder, siteConfig.libRoot);
+    subFolder         = 'jquery-validation-unobtrusive/';
+    sourceFolder      = siteConfig.nodeModulesRoot + subFolder;
+    destinationFolder = siteConfig.libRoot + subFolder;
+    gulp.src([sourceFolder + 'jquery.validate.unobtrusive.js']).pipe(gulp.dest(destinationFolder ));
 
-    // three/build
-    let threeBuildFolder = siteConfig.nodeModulesRoot + 'three/build/';
-    copyFile('three.js', threeBuildFolder, siteConfig.libRoot + 'threejs/');
+    // threejs
+    subFolder         = 'threejs/';
+    sourceFolder      = siteConfig.nodeModulesRoot + 'three/build/';
+    destinationFolder = siteConfig.libRoot + subFolder;
+    gulp.src([sourceFolder + 'three.js']).pipe(gulp.dest(destinationFolder ));
 
     // three/examples/js
-    let threeExamplesFolder = siteConfig.nodeModulesRoot + 'three/examples/js/';
-    copyFile('Detector.js',             threeExamplesFolder,                siteConfig.libRoot + 'threejs/');
-    copyFile('dat.gui.min.js',          threeExamplesFolder + 'libs/',      siteConfig.libRoot + 'threejs/');
+    subFolder         = 'threejs/';
+    sourceFolder      = siteConfig.nodeModulesRoot + 'three/examples/js/'; 
+    destinationFolder = siteConfig.libRoot + subFolder;
+    gulp.src([sourceFolder + 'Detector.js']).pipe(gulp.dest(destinationFolder ));
+    gulp.src([sourceFolder + 'libs/' + 'dat.gui.min.js']).pipe(gulp.dest(destinationFolder ));
 
     // requirejs
-    let requirejsFolder = siteConfig.nodeModulesRoot + 'requirejs/';
-    copyFile('require.js', requirejsFolder, siteConfig.libRoot);
+    subFolder         = 'requirejs/';
+    sourceFolder      = siteConfig.nodeModulesRoot + subFolder;
+    destinationFolder = siteConfig.libRoot + subFolder;
+    gulp.src([sourceFolder + 'require.js']).pipe(gulp.dest(destinationFolder ));
 
     // chai assertion library
-    let chaiFolder = siteConfig.nodeModulesRoot + 'chai/';
-    copyFile('chai.js', chaiFolder, siteConfig.libRoot);
+    subFolder         = 'chai/';
+    sourceFolder      = siteConfig.nodeModulesRoot + subFolder;
+    destinationFolder = siteConfig.libRoot + subFolder;
+    gulp.src([sourceFolder + 'chai.js']).pipe(gulp.dest(destinationFolder ));
 });
 
 /// <summary>

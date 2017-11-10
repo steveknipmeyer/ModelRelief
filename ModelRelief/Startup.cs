@@ -5,7 +5,9 @@
 // ------------------------------------------------------------------------//
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Autofac.Features.Variance;
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,7 +23,6 @@ using ModelRelief.Domain;
 using ModelRelief.Infrastructure;
 using ModelRelief.Services;
 using ModelRelief.Workbench;
-using OdeToCode.AddFeatureFolders;
 using System;
 using System.Collections.Generic;
 
@@ -51,7 +52,11 @@ namespace ModelRelief
             var builder = new ContainerBuilder();
             builder.Populate(services);
 
-            // module scanning: all types are registered for each interrace supported
+            // generics with <in> contravariant parameter
+            builder.RegisterSource(new ContravariantRegistrationSource());
+
+#if AutoFacExperiments
+            // module scanning: all types are registered for each interface supported
             builder.RegisterAssemblyTypes(typeof(IMediator).Assembly).AsImplementedInterfaces();
             builder.RegisterAssemblyTypes(typeof(Startup).Assembly).AsImplementedInterfaces();
 
@@ -59,15 +64,16 @@ namespace ModelRelief
             builder.RegisterGeneric(typeof(F<,>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(F<,>));
 
-            builder.RegisterType<F<int, double>>().As<IFunctionOne<int>>();
-            builder.RegisterType<FConcrete>().As<IFunctionTwo<double>>();
-
-            // MediatR
+            builder.RegisterType<F<int, double>>().As<IFunctionOne<int>>();         // provide F<int, double> instance when an IFunctionOne<int> is required
+            builder.RegisterType<FConcrete>().As<IFunctionTwo<double>>();           // provide FConcrete instance when an IFunctionTwo<double> is required
+#endif
+            // MediatR : register delegates as types
             builder.Register<SingleInstanceFactory>(context =>
             {
                 var componentContext = context.Resolve<IComponentContext>();
                 return t => componentContext.Resolve(t);
             });
+
             builder.Register<MultiInstanceFactory>(context =>
             {
                 var componentContext = context.Resolve<IComponentContext>();
@@ -89,20 +95,18 @@ namespace ModelRelief
             services.AddRouting(options => options.LowercaseUrls = true);
 
             services.AddMvc(options => options.InputFormatters.Insert(0, new RawRequestBodyFormatter()))
-                .AddFeatureFolders();
+                .AddFeatureFolders()
+                .AddFluentValidation(config => { config.RegisterValidatorsFromAssemblyContaining<Startup>(); });
 
             services.AddSingleton<Services.IConfigurationProvider, Services.ConfigurationProvider>();
             services.AddScoped<IModelsProvider, SqlModelsProvider>();
-#if SQLServer
-            services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SQLServer")));
-#else
-            services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("SQLite")));
-#endif
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                    .AddEntityFrameworkStores<ModelReliefDbContext>();
+
+            services.AddDatabaseServices(Configuration);
             
             services.AddAutoMapper(typeof(Startup));
             Mapper.AssertConfigurationIsValid();
+
+            services.AddMediatR(typeof(Startup));
 
             return ConfigureAutoServices (services);
         }

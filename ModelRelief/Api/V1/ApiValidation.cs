@@ -3,16 +3,14 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.Net.Http.Headers;
+using ModelRelief.Infrastructure;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ModelRelief.Infrastructure
+namespace ModelRelief.Api.V1
 {
     /// <summary>
     /// JSON status result returned by the API.
