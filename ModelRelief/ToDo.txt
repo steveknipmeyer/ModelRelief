@@ -8,9 +8,16 @@ Add FluentValidation.
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
 
+    How can AutoMapper.ProjectToListAsync be used?
+
+    Is there a need for SqlModelsProvider (or can the InMemory provider be used?
+        SqlModelProvider must be async.
+
+    Severity	Code	Description	Project	File	Line	Suppression State
+    Warning	TS6053	(JS) File 'D:/Users/Steve Knipmeyer/Documents/GitHub/ModelRelief/ModelRelief/Features/Workbench/lib/require.js' not found.	ModelRelief (tsconfig project)	D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\Features\Workbench\DepthBufferTest.cshtml	1	Active
+
     The Format enum is not handled properly in the Mesh Edit page.
 
-    SqlModelProvider should be async.
 
     Extend the Authorize attribute to allow checking for a user-owned resource.
         MediatT pipeline?

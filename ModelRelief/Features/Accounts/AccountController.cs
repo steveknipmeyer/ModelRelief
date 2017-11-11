@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using ModelRelief.Domain;
 using System.Threading.Tasks;
 
-namespace ModelRelief.Features.Account
+namespace ModelRelief.Features.Accounts
 {
     public class AccountController : Controller
         {

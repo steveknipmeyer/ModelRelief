@@ -20,6 +20,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ModelRelief.Database;
 using ModelRelief.Domain;
+using ModelRelief.Features;
 using ModelRelief.Infrastructure;
 using ModelRelief.Services;
 using ModelRelief.Workbench;
@@ -47,7 +48,7 @@ namespace ModelRelief
         /// </summary>
         /// <param name="services">Existing service collection.</param>
         /// <returns>IServiceProvider to provide DI support.</returns>
-        private IServiceProvider ConfigureAutoServices(IServiceCollection services)
+        private IServiceProvider ConfigureAutofacServices(IServiceCollection services)
         {
             var builder = new ContainerBuilder();
             builder.Populate(services);
@@ -55,25 +56,30 @@ namespace ModelRelief
             // generics with <in> contravariant parameter
             builder.RegisterSource(new ContravariantRegistrationSource());
 
-#if AutoFacExperiments
             // module scanning: all types are registered for each interface supported
             builder.RegisterAssemblyTypes(typeof(IMediator).Assembly).AsImplementedInterfaces();
             builder.RegisterAssemblyTypes(typeof(Startup).Assembly).AsImplementedInterfaces();
 
-            // generic types
+#if !AutofacExperiments
+#if false
+            // generic types: Are these needed? It seems AF will discover all implmentations of interfaces in a module.
             builder.RegisterGeneric(typeof(F<,>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(F<,>));
-
-            builder.RegisterType<F<int, double>>().As<IFunctionOne<int>>();         // provide F<int, double> instance when an IFunctionOne<int> is required
-            builder.RegisterType<FConcrete>().As<IFunctionTwo<double>>();           // provide FConcrete instance when an IFunctionTwo<double> is required
 #endif
-            // MediatR : register delegates as types
-            builder.Register<SingleInstanceFactory>(context =>
+            builder.RegisterType<F<int, double>>().As<IFunctionOne<int>>();         // provide F<int, double> instance when an IFunctionOne<int> is required
+            builder.RegisterType<FConcretePrime>().As<IFunctionTwo<double>>();      // provide FConcrete instance when an IFunctionTwo<double> is required
+#endif
+            // MediatR : register delegates as SingleInstanceFactory and MultiInstanceFactory types
+            builder.Register<SingleInstanceFactory>(ctx =>
             {
-                var componentContext = context.Resolve<IComponentContext>();
-                return t => componentContext.Resolve(t);
+                // https://github.com/jbogard/MediatR/issues/123
+                var c = ctx.Resolve<IComponentContext>();
+                return t =>
+                {
+                    object o;
+                    return c.TryResolve(t, out o) ? o : null;
+                };
             });
-
             builder.Register<MultiInstanceFactory>(context =>
             {
                 var componentContext = context.Resolve<IComponentContext>();
@@ -107,8 +113,9 @@ namespace ModelRelief
             Mapper.AssertConfigurationIsValid();
 
             services.AddMediatR(typeof(Startup));
-
-            return ConfigureAutoServices (services);
+#if true
+            return ConfigureAutofacServices (services);
+#endif
         }
 
         // 

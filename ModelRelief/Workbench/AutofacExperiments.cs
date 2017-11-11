@@ -45,7 +45,7 @@ namespace ModelRelief.Workbench
 
         public string F2(T2 first, T2 second)
         {
-            return $"F2 : {typeof(T1).ToString()}";
+            return $"F2 : {typeof(T2).ToString()}";
         }
     }
 
@@ -57,12 +57,47 @@ namespace ModelRelief.Workbench
 
         public string F1(int first, int second)
         {
-            return $"F1 : {typeof(int).ToString()}";
+            return $"FConcrete.F1 : {typeof(int).ToString()}";
         }
 
         public string F2(double first, double second)
         {
-            return $"F2 : {typeof(double).ToString()} ";
+            return $"FConcrete.F2 : {typeof(double).ToString()} ";
+        }
+    }
+
+    public class FConcretePrime : IFunctionOne<int>, IFunctionTwo<double>
+    {
+        public FConcretePrime()
+        {
+        }
+
+        public string F1(int first, int second)
+        {
+            return $"FConcretePrime.F1 : {typeof(int).ToString()}";
+        }
+
+        public string F2(double first, double second)
+        {
+            return $"FConcretePrime.F2 : {typeof(double).ToString()} ";
+        }
+    }
+
+   public class FConcreteDoublePrime : IFunctionOne<int>, IFunctionTwo<double>
+    {
+        public FConcreteDoublePrime()
+        {
+        }
+
+        public string F1(int first, int second)
+        {
+            return $"FConcreteDoublePrime.F1 : {typeof(int).ToString()}";
+        }
+
+        public string F2(double first, double second)
+        {
+            return $"FConcreteDoublePrime.F2 : {typeof(double).ToString()} ";
         }
     }
 }
+

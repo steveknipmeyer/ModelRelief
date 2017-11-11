@@ -1,9 +1,9 @@
-﻿@model DepthBufferTestViewModel
+﻿@model ModelRelief.Features.Workbench.DepthBufferTestViewModel
 
 <body>
     <div id="depthBufferContainer" >
         <canvas id="modelCanvas" class="depth"></canvas>
-        <canvas id="meshCanvas" class="depth" "></canvas>
+        <canvas id="meshCanvas" class="depth"></canvas>
     </div>
     <button type="button" id="camera">Take Photograph</button>
     <div>
@@ -16,7 +16,7 @@
                 <span asp-validation-for="ImageUrl" />
             </div>
             <div>
-                <input type="submit" value="Save" />
+                <input type="submit" value="Save" />#
             </div>
         </form>
     </div>
@@ -24,12 +24,12 @@
     <!------------------------------------------------------------------------------------------------>
     <!--                                    Libraries                                               -->
     <!------------------------------------------------------------------------------------------------>
-    <script src="/lib/require.js"></script>
+    <script src="~/lib/requirejs/require.js"></script>
 
     <!------------------------------------------------------------------------------------------------>
     <!--                                    ModelRelief                                             -->
     <!------------------------------------------------------------------------------------------------>
-    <script src="/js/shaders.js"></script>
+    <script src="~/js/shaders.js"></script>
     <script>
         requirejs.config({
             baseUrl: '.',

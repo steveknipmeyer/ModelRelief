@@ -4,14 +4,20 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 using Microsoft.AspNetCore.Mvc;
+using ModelRelief.Workbench;
+using System;
 
 namespace ModelRelief.Features.Home
 {
     public class HomeController : Controller
         {
-        public HomeController()
+        private readonly IFunctionTwo<double> _function;
+
+        public HomeController(IFunctionTwo<double> function)
             {
-            }
+            this._function = function;
+            Console.WriteLine(function.F2(1.0, 2.0));
+        }
 
         public IActionResult Index()
             {           
