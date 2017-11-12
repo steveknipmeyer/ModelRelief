@@ -8,6 +8,15 @@ Implement Database transactions.
         Scale with a Python processor.
 
     Mediator Conversion
+        Deprecated Files
+            IModelsProvider
+            SqlModelsProvider
+            MeshesControllerDefault
+
+        In Features.Models.Controller.Edit is _dbContext.Update required?
+            If Update begins tracking an entity when is the SaveChanges done?
+                In the Mediator database transaction pipeline?
+
         How is the model binding used?
 
         Why does the ModelRelief Delete display the JSON ContentResult instead of the IndexView?
@@ -22,19 +31,14 @@ Implement Database transactions.
         Features.Models
         Api
 
+        Make all controller actions async?
+            Where should ToLlistAsync be used instead of _dbContext.X?
+
         Implement Integration Tests per ContostoUniversity Core
             Features
             Api
 
-        Make all controller actions async?
-            Where should ToLlistAsync be used instead of _dbContext.X?
-
         Add validation pipeline (exclude API?)
-
-        In Features.Models.Controller.Edit is _dbContext.Update required?
-            If Update begins tracking an entity when is the SaveChanges done?
-                In the Mediator database transaction pipeline?
-
 
     Extend the Authorize attribute to allow checking for a user-owned resource.
         MediatR pipeline?
