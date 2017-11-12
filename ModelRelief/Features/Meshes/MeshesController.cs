@@ -45,5 +45,22 @@ namespace ModelRelief.Features.Meshes
 
             return View(model);
         }
+
+        public async Task<IActionResult> Delete(Delete.Query query)
+        {
+            var model = await _mediator.Send(query);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(Delete.Command command)
+        {
+            await _mediator.Send(command);
+
+//          return this.RedirectToActionJson(nameof(Index));
+            return this.RedirectToAction(nameof(Index));
+        }
     }
 }

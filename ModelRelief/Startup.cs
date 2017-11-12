@@ -95,9 +95,14 @@ namespace ModelRelief
             services.AddSingleton(Configuration);
             services.AddRouting(options => options.LowercaseUrls = true);
 
-            services.AddMvc(options => options.InputFormatters.Insert(0, new RawRequestBodyFormatter()))
+            services.AddMvc(options => 
+                { 
+                    options.InputFormatters.Insert(0, new RawRequestBodyFormatter());
+                    options.Filters.Add(typeof(DbContextTransactionFilter));
+                })
                 .AddFeatureFolders()
                 .AddFluentValidation(config => { config.RegisterValidatorsFromAssemblyContaining<Startup>(); });
+
 
             // ModelRelief                                
             services.AddSingleton<Services.IConfigurationProvider, Services.ConfigurationProvider>();

@@ -1,34 +1,43 @@
 ﻿<--- Commit
-Refactor Meshes.Index and Meshes.Details to use async calls with ModelReliefDbContext;
-Replace IMpdelProvider with ModelReliefDbContext;
+Implement Database transactions.
 
 <--- Reading
 
 <-- Tasks
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
+
     Mediator Conversion
+        How is the model binding used?
+
+        Why does the ModelRelief Delete display the JSON ContentResult instead of the IndexView?
+
+        How should the ValidatorActionFilter be used?
+
         Features.Meshes
             Create
+            Delete           
             Edit
-            Delete
+                The Format enum is not handled properly in the Mesh Edit page.  
         Features.Models
-        Implement Integration Tests per ContostoUniversity Core
         Api
 
-    Make all controller actions async?
-        Where should ToLlistAsync be used instead of _dbContext.X?
+        Implement Integration Tests per ContostoUniversity Core
+            Features
+            Api
 
-    Add validation pipeline (exclude API?)
-    In Features.Models.Controller.Edit is _dbContext.Update required?
-        If Update begins tracking an entity when is the SaveChanges done?
-            In the Mediator database transaction pipeline?
+        Make all controller actions async?
+            Where should ToLlistAsync be used instead of _dbContext.X?
 
-    The Format enum is not handled properly in the Mesh Edit page.
+        Add validation pipeline (exclude API?)
+
+        In Features.Models.Controller.Edit is _dbContext.Update required?
+            If Update begins tracking an entity when is the SaveChanges done?
+                In the Mediator database transaction pipeline?
+
 
     Extend the Authorize attribute to allow checking for a user-owned resource.
         MediatR pipeline?
-
 
     ModelReliefModel
         Should ModelReliefModel be an interface instead of a base class?
