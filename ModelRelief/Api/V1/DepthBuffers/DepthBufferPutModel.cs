@@ -33,7 +33,7 @@ namespace ModelRelief.Api.V1.DepthBuffers
             var results = new List<ValidationResult>();
             
             // verify target model exists (and is owned by user)
-            IEnumerable<DepthBuffer> depthBuffers = controller.ModelProvider.GetAll().Where(depthBuffer => ((depthBuffer.Id == id) && (depthBuffer.User.Id == user.Id)));
+            IEnumerable<DepthBuffer> depthBuffers = controller.DBContext.DepthBuffers.Where(depthBuffer => ((depthBuffer.Id == id) && (depthBuffer.User.Id == user.Id)));
             if (depthBuffers.Count() != 1)
                 controller.ModelState.AddModelError(nameof(DepthBufferPutModel), $"The DepthBuffer model (id = {id ?? 0}) does not exist.");
 

@@ -9,9 +9,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ModelRelief.Features;
+using ModelRelief.Database;
 using ModelRelief.Domain;
-using ModelRelief.Services;
 
 namespace ModelRelief.Api.V1
 {
@@ -22,16 +21,16 @@ namespace ModelRelief.Api.V1
     {
         public IHostingEnvironment              HostingEnvironment { get; set; }
         public UserManager<ApplicationUser>     UserManager { get; set; }
-        public IModelProvider<TModel>           ModelProvider { get; set; }
+        public ModelReliefDbContext             DBContext { get; set; }
         public ILogger<TModel>                  Logger { get; set; }
         public Services.IConfigurationProvider  ConfigurationProvider { get; set; }
         public IMapper                          Mapper { get; set; }
 
-        public ApiController (IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, IModelProvider<TModel> modelProvider, ILogger<TModel> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper)
+        public ApiController (IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, ILogger<TModel> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper)
         {
             HostingEnvironment     = hostingEnvironment;
             UserManager            = userManager;
-            ModelProvider          = modelProvider;
+            DBContext              = dbContext;
             Logger                 = logger;
             ConfigurationProvider  = configurationProvider;
             Mapper                 = mapper;

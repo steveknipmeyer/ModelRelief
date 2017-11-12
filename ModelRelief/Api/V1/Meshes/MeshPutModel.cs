@@ -33,7 +33,7 @@ namespace ModelRelief.Api.V1.Meshes
             var results = new List<ValidationResult>();
 
             // verify target model exists (and is owned by user)
-            IEnumerable<Mesh> meshes = controller.ModelProvider.GetAll().Where(mesh => ((mesh.Id == id) && (mesh.User.Id == user.Id)));
+            IEnumerable<Mesh> meshes = controller.DBContext.Meshes.Where(mesh => ((mesh.Id == id) && (mesh.User.Id == user.Id)));
             if (meshes.Count() != 1)
                 controller.ModelState.AddModelError(nameof(MeshPutModel), $"The mesh model (id = {id ?? 0}) does not exist.");
 

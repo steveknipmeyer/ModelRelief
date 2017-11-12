@@ -99,9 +99,8 @@ namespace ModelRelief
                 .AddFeatureFolders()
                 .AddFluentValidation(config => { config.RegisterValidatorsFromAssemblyContaining<Startup>(); });
 
+            // ModelRelief                                
             services.AddSingleton<Services.IConfigurationProvider, Services.ConfigurationProvider>();
-            services.AddScoped<IModelsProvider, SqlModelsProvider>();
-
             services.AddDatabaseServices(Configuration);
             
             services.AddAutoMapper(typeof(Startup));

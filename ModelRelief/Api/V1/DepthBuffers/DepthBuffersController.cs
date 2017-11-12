@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ModelRelief.Database;
 using ModelRelief.Domain;
-using ModelRelief.Services;
 using ModelRelief.Utility;
 using System.Threading.Tasks;
 
@@ -21,8 +21,8 @@ namespace ModelRelief.Api.V1.DepthBuffers
     [Route ("api/v1/depth-buffers")]        
     public class DepthBuffersController : ApiController<DepthBuffer>
     {
-        public DepthBuffersController(IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, IModelsProvider modelsProvider, ILogger<DepthBuffer> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper) :
-            base (hostingEnvironment, userManager, modelsProvider.DepthBuffers, logger, configurationProvider, mapper)
+        public DepthBuffersController(IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, ILogger<DepthBuffer> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper) :
+            base (hostingEnvironment, userManager, dbContext, logger, configurationProvider, mapper)
         {
         }
 

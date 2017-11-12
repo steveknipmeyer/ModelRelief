@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ModelRelief.Database;
 using ModelRelief.Domain;
-using ModelRelief.Services;
 using ModelRelief.Utility;
 using System.Threading.Tasks;
 
@@ -20,8 +20,8 @@ namespace ModelRelief.Api.V1.Meshes
     [Route ("api/v1/[controller]")]        
     public class MeshesController : ApiController<Mesh>
     {
-        public MeshesController(IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, IModelsProvider modelsProvider, ILogger<Mesh> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper) :
-            base (hostingEnvironment, userManager, modelsProvider.Meshes, logger, configurationProvider, mapper)
+        public MeshesController(IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, ILogger<Mesh> logger, Services.IConfigurationProvider configurationProvider, IMapper mapper) :
+            base (hostingEnvironment, userManager, dbContext, logger, configurationProvider, mapper)
         {
         }
 

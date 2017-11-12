@@ -10,6 +10,7 @@ using ModelRelief.Database;
 using ModelRelief.Domain;
 using ModelRelief.Services;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ModelRelief.Features.Meshes
@@ -33,22 +34,19 @@ namespace ModelRelief.Features.Meshes
 
         public class Handler : IAsyncRequestHandler<Query, List<Mesh>>
         {
-            private readonly IModelsProvider _modelsProvider;
+            private readonly ModelReliefDbContext _dbContext;
             private readonly IMapper _mapper;
 
-            public Handler(IModelsProvider modelsProvider, IMapper mapper)
+            public Handler(ModelReliefDbContext dbContext, IMapper mapper)
             {
-                _modelsProvider = modelsProvider;
+                _dbContext = dbContext;
                 _mapper = mapper;
             }
 
             public async Task<List<Mesh>> Handle(Query message)
             {
-                // prevent async (no await) warning
-                //https://stackoverflow.com/questions/44096253/await-task-completedtask-for-what
-                await Task.CompletedTask;
+                var meshes =  await _dbContext.Meshes.ToListAsync();
 
-                var meshes =  _modelsProvider.Meshes.GetAll();
                 var meshList = new List<Mesh>();
                 foreach (Domain.Mesh mesh in meshes)
                     {

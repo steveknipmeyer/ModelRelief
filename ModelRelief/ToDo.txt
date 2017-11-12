@@ -1,24 +1,33 @@
 ﻿<--- Commit
+Refactor Meshes.Index and Meshes.Details to use async calls with ModelReliefDbContext;
+Replace IMpdelProvider with ModelReliefDbContext;
 
 <--- Reading
 
 <-- Tasks
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
+    Mediator Conversion
+        Features.Meshes
+            Create
+            Edit
+            Delete
+        Features.Models
+        Implement Integration Tests per ContostoUniversity Core
+        Api
 
-    Refactor Meshes.Index to use async calls with ModelReliefDbContext;
+    Make all controller actions async?
+        Where should ToLlistAsync be used instead of _dbContext.X?
 
     Add validation pipeline (exclude API?)
-
-    How can AutoMapper.ProjectToListAsync be used without a dependency on NET Framework 4.5?
-
-    Is there a need for SqlModelsProvider (or can the InMemory provider be used?
-        SqlModelProvider must be async.
+    In Features.Models.Controller.Edit is _dbContext.Update required?
+        If Update begins tracking an entity when is the SaveChanges done?
+            In the Mediator database transaction pipeline?
 
     The Format enum is not handled properly in the Mesh Edit page.
 
     Extend the Authorize attribute to allow checking for a user-owned resource.
-        MediatT pipeline?
+        MediatR pipeline?
 
 
     ModelReliefModel
@@ -442,3 +451,8 @@
         A less derived type can be substituted.
         When the method is called, the actual parameter passed to the method will be <more derived> so it will satisfy the type of the actual method that is invoked.
 
+<-- Tasks
+
+        // prevent async (no await) warning
+        //https://stackoverflow.com/questions/44096253/await-task-completedtask-for-what
+        await Task.CompletedTask;

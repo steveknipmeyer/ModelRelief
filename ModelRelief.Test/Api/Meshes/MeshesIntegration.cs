@@ -6,6 +6,7 @@
 using FluentAssertions;
 using ModelRelief.Api.V1;
 using ModelRelief.Api.V1.Meshes;
+using ModelRelief.Test.Api;
 using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http;
@@ -13,7 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ModelRelief.Test.Api
+namespace ModelRelief.Test.Api.Meshes
 {
     public class MeshesIntegration
     {

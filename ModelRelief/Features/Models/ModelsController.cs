@@ -12,6 +12,9 @@ using ModelRelief.Services;
 using System;
 using System.Collections.Generic;
 using ModelRelief.Domain;
+using ModelRelief.Database;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace ModelRelief.Features.Models
 {
@@ -19,22 +22,22 @@ namespace ModelRelief.Features.Models
     public class ModelsController : Controller
     {
         IHostingEnvironment         _hostingEnvironment;
-        IModelsProvider             _modelsProvider;
+        ModelReliefDbContext        _dbContext;
         ILogger<ModelsController>   _logger;
         IMapper                     _mapper;
 
-        public ModelsController(IHostingEnvironment hostingEnvironment, IModelsProvider modelsrovider, ILogger<ModelsController> logger, IMapper mapper)
+        public ModelsController(IHostingEnvironment hostingEnvironment, ModelReliefDbContext dbContext, ILogger<ModelsController> logger, IMapper mapper)
         {
             _hostingEnvironment = hostingEnvironment;
-            _modelsProvider     = modelsrovider;
+            _dbContext          = dbContext;
             _logger             = logger;
             _mapper             = mapper;
         }
 
         [AllowAnonymous]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {    
-            IEnumerable<Model3d> models = _modelsProvider.Model3ds.GetAll();
+            IEnumerable<Model3d> models = await _dbContext.Models.ToListAsync();
             return View(models);
         }
 
@@ -44,7 +47,7 @@ namespace ModelRelief.Features.Models
             _logger.LogInformation("ModelsController: model = {model}", id);
             _logger.LogWarning("ModelsController: model = {model}", id);
 
-            Model3d model = _modelsProvider.Model3ds.Find(id);
+            Model3d model = _dbContext.Models.Find(id);
 
             if (model == null)
                 return Content(String.Format("Model not found: {0}", id));
@@ -69,7 +72,7 @@ namespace ModelRelief.Features.Models
             }
 
             var model = _mapper.Map<Model3dEditViewModel, Model3d> (editModel);
-            model = _modelsProvider.Model3ds.Add (model);
+            _dbContext.Models.Add (model);
 
             return RedirectToAction ("Viewer", new { Id = model.Id});           
         }
@@ -78,7 +81,7 @@ namespace ModelRelief.Features.Models
         [Route ("[controller]/[action]/{id}")]
         public IActionResult Edit(int id)
         {           
-            Model3d model = _modelsProvider.Model3ds.Find(id);
+            Model3d model = _dbContext.Models.Find(id);
             if (model == null)
                 return Content(String.Format("Model not found: {0}", id));
 
@@ -98,13 +101,12 @@ namespace ModelRelief.Features.Models
                 return View();
             }
 
-            Model3d model = _modelsProvider.Model3ds.Find(id);
+            Model3d model = _dbContext.Models.Find(id);
             if (model == null)
                 return Content(String.Format("Model not found: {0}", id));
 
             _mapper.Map<Model3dEditViewModel, Model3d> (editModel, model);
-
-            _modelsProvider.Model3ds.Update(model);
+            _dbContext.Models.Update(model);
 
             return RedirectToAction ("Viewer", new { Id = model.Id});           
         }

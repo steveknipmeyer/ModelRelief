@@ -42,22 +42,18 @@ namespace ModelRelief.Features.Meshes
 
         public class Handler : IAsyncRequestHandler<Query, Details.Mesh>
         {
-            private readonly IModelsProvider _modelsProvider;
+            private readonly ModelReliefDbContext _dbContext;
             private readonly IMapper _mapper;
 
-            public Handler(IModelsProvider modelsProvider, IMapper mapper)
+            public Handler(ModelReliefDbContext dbContext, IMapper mapper)
             {
-                _modelsProvider = modelsProvider;
+                _dbContext = dbContext;
                 _mapper = mapper;
             }
 
             public async Task<Details.Mesh> Handle(Query message)
             {
-                // prevent async (no await) warning
-                //https://stackoverflow.com/questions/44096253/await-task-completedtask-for-what
-                await Task.CompletedTask;
-
-                var mesh =  _modelsProvider.Meshes.Find (message.Id?? 0);               
+                var mesh =  await _dbContext.Meshes.FindAsync (message.Id);               
                 return _mapper.Map<Domain.Mesh, Details.Mesh> (mesh);
             }
         }

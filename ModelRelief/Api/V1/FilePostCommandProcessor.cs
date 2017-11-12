@@ -45,7 +45,10 @@ namespace ModelRelief.Api.V1
                 newModel.User = _user;
             
                 // add to repository
-                _controller.ModelProvider.Add(newModel);
+                _controller.DBContext.Set<TModel>().Add(newModel);
+
+                // commit; force Id to be assigned
+                _controller.DBContext.SaveChanges();
 
                 // write file : file name = newly-created model Id
                 var storeUsers  = _controller.ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);

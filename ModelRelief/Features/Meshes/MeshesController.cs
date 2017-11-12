@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ModelRelief.Services;
+using ModelRelief.Database;
 using System.Threading.Tasks;
 
 namespace ModelRelief.Features.Meshes
@@ -18,15 +18,15 @@ namespace ModelRelief.Features.Meshes
     public class MeshesController : Controller
     {
         IHostingEnvironment         _hostingEnvironment;
-        IModelsProvider             _modelsProvider;
+        ModelReliefDbContext        _dbContext;
         ILogger<MeshesController>   _logger;
         IMediator                   _mediator;
         IMapper                     _mapper;
 
-        public MeshesController(IHostingEnvironment hostingEnvironment, IModelsProvider modelsrovider, ILogger<MeshesController> logger, IMediator mediator, IMapper mapper)
+        public MeshesController(IHostingEnvironment hostingEnvironment, ModelReliefDbContext dbContext, ILogger<MeshesController> logger, IMediator mediator, IMapper mapper)
         {
             _hostingEnvironment = hostingEnvironment;
-            _modelsProvider     = modelsrovider;
+            _dbContext          = dbContext;
             _logger             = logger;
             _mediator           = mediator;
             _mapper             = mapper;

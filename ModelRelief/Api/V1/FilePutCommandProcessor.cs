@@ -42,7 +42,7 @@ namespace ModelRelief.Api.V1
             try
             {
                 // find existing model
-                var model = _controller.ModelProvider.Find(id);
+                var model = await _controller.DBContext.Set<TModel>().FindAsync(id);
 
                 // update properties from incoming request
                 Mapper.Map<TPutModel, TModel>(putModel, model);
@@ -56,7 +56,7 @@ namespace ModelRelief.Api.V1
                 model.Path = fileRelativeFolder;
 
                 // update repository
-                _controller.ModelProvider.Update(model);
+                _controller.DBContext.Set<TModel>().Update(model);
 
                 // now rename temporary file (name = Id) to match the final name
                 string placeholderFileName = $"{_controller.HostingEnvironment.WebRootPath}{fileRelativeFolder}{id}";
