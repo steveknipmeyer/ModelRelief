@@ -5,17 +5,15 @@
 // ------------------------------------------------------------------------//
 
 using AutoMapper;
-
 using ModelRelief.Domain;
-using ModelRelief.Features.Models;
 
-namespace ModelRelief.Features
+namespace ModelRelief.Features.Models
 {
-    public class FeaturesMappingProfile : Profile
+    public class MappingProfile : Profile
     {
-        public FeaturesMappingProfile() 
+        public MappingProfile() 
             {
-            CreateMap<Model3d, Model3dEditViewModel>().ReverseMap();
+            CreateMap<Domain.Model3d, Model3dEditViewModel>().ReverseMap();
             }
     }
 }

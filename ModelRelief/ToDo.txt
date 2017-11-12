@@ -1,6 +1,4 @@
 ﻿<--- Commit
-Add ServiceCollectionExtensions to allow service additions to be isolated from Startup.ConfigureServices.
-Add FluentValidation.
 
 <--- Reading
 
@@ -8,23 +6,25 @@ Add FluentValidation.
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
 
-    How can AutoMapper.ProjectToListAsync be used?
+    Refactor Meshes.Index to use async calls with ModelReliefDbContext;
+
+    Add validation pipeline (exclude API?)
+
+    How can AutoMapper.ProjectToListAsync be used without a dependency on NET Framework 4.5?
 
     Is there a need for SqlModelsProvider (or can the InMemory provider be used?
         SqlModelProvider must be async.
 
-    Severity	Code	Description	Project	File	Line	Suppression State
-    Warning	TS6053	(JS) File 'D:/Users/Steve Knipmeyer/Documents/GitHub/ModelRelief/ModelRelief/Features/Workbench/lib/require.js' not found.	ModelRelief (tsconfig project)	D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\Features\Workbench\DepthBufferTest.cshtml	1	Active
-
     The Format enum is not handled properly in the Mesh Edit page.
-
 
     Extend the Authorize attribute to allow checking for a user-owned resource.
         MediatT pipeline?
 
+
     ModelReliefModel
         Should ModelReliefModel be an interface instead of a base class?
             This would remove the need for virtual properties (supporting [Display (Name="")] attribute in the derived class.
+            There is probably little benefit since the Domain model is never exposed in the UX.
 
     Accessing Model From JavaScript
         https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript

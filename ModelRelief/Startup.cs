@@ -12,15 +12,10 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using ModelRelief.Features;
 using ModelRelief.Infrastructure;
 using ModelRelief.Services;
 using ModelRelief.Workbench;
@@ -70,10 +65,10 @@ namespace ModelRelief
             builder.RegisterType<FConcretePrime>().As<IFunctionTwo<double>>();      // provide FConcrete instance when an IFunctionTwo<double> is required
 #endif
             // MediatR : register delegates as SingleInstanceFactory and MultiInstanceFactory types
-            builder.Register<SingleInstanceFactory>(ctx =>
+            builder.Register<SingleInstanceFactory>(context =>
             {
                 // https://github.com/jbogard/MediatR/issues/123
-                var c = ctx.Resolve<IComponentContext>();
+                var c = context.Resolve<IComponentContext>();
                 return t =>
                 {
                     object o;
@@ -113,9 +108,8 @@ namespace ModelRelief
             Mapper.AssertConfigurationIsValid();
 
             services.AddMediatR(typeof(Startup));
-#if true
+
             return ConfigureAutofacServices (services);
-#endif
         }
 
         // 

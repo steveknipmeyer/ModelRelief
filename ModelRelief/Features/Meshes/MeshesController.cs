@@ -3,27 +3,43 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using ModelRelief.Services;
+using System.Threading.Tasks;
 
 namespace ModelRelief.Features.Meshes
 {
+    [Authorize]
     public class MeshesController : Controller
     {
-        private readonly IMediator _mediator;
+        IHostingEnvironment         _hostingEnvironment;
+        IModelsProvider             _modelsProvider;
+        ILogger<MeshesController>   _logger;
+        IMediator                   _mediator;
+        IMapper                     _mapper;
 
-        public MeshesController(IMediator mediator)
+        public MeshesController(IHostingEnvironment hostingEnvironment, IModelsProvider modelsrovider, ILogger<MeshesController> logger, IMediator mediator, IMapper mapper)
         {
-            this._mediator = mediator;
+            _hostingEnvironment = hostingEnvironment;
+            _modelsProvider     = modelsrovider;
+            _logger             = logger;
+            _mediator           = mediator;
+            _mapper             = mapper;
         }
 
-
         public async Task<IActionResult> Index (Index.Query query)
+        {
+            var model = await _mediator.Send (query);
+
+            return View(model);
+        }
+
+       public async Task<IActionResult> Details (Details.Query query)
         {
             var model = await _mediator.Send (query);
 

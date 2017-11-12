@@ -8,13 +8,12 @@ using ModelRelief.Api.V1.DepthBuffers;
 using ModelRelief.Api.V1.Meshes;
 using ModelRelief.Domain;
 
-namespace ModelRelief.Api.V1
+namespace ModelRelief.Api.V1.DepthBuffers
 {
-    public class ApiMappingProfile : Profile
+    public class MappingProfile : Profile
     {
-        public ApiMappingProfile()
+        public MappingProfile()
         {
-            CreateMap<MeshPutModel,        Mesh>(MemberList.Source);
             CreateMap<DepthBufferPutModel, DepthBuffer>(MemberList.Source);
         }
     }

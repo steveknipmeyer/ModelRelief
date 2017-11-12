@@ -4,6 +4,7 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 using AutoMapper;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ModelRelief.Database;
@@ -14,11 +15,11 @@ using System.Threading.Tasks;
 
 namespace ModelRelief.Features.Meshes
 {
-    public class Index
+    public class Details
     {
-        public class Query : IRequest<List<Mesh>>
+        public class Query : IRequest<Details.Mesh>
         {
-        // How is the model binding done?
+            public int? Id { get; set; }
         }
     
         public class Mesh
@@ -31,7 +32,15 @@ namespace ModelRelief.Features.Meshes
             public string Path { get; set; }
         }
 
-        public class Handler : IAsyncRequestHandler<Query, List<Mesh>>
+        public class Validator : AbstractValidator<Query>
+        {
+            public Validator()
+            {
+                RuleFor(m => m.Id).NotNull();
+            }
+        }
+
+        public class Handler : IAsyncRequestHandler<Query, Details.Mesh>
         {
             private readonly IModelsProvider _modelsProvider;
             private readonly IMapper _mapper;
@@ -42,20 +51,14 @@ namespace ModelRelief.Features.Meshes
                 _mapper = mapper;
             }
 
-            public async Task<List<Mesh>> Handle(Query message)
+            public async Task<Details.Mesh> Handle(Query message)
             {
                 // prevent async (no await) warning
                 //https://stackoverflow.com/questions/44096253/await-task-completedtask-for-what
                 await Task.CompletedTask;
 
-                var meshes =  _modelsProvider.Meshes.GetAll();
-                var meshList = new List<Mesh>();
-                foreach (Domain.Mesh mesh in meshes)
-                    {
-                    meshList.Add( _mapper.Map<Domain.Mesh, Index.Mesh> (mesh));
-                    }
-                
-                return meshList;
+                var mesh =  _modelsProvider.Meshes.Find (message.Id?? 0);               
+                return _mapper.Map<Domain.Mesh, Details.Mesh> (mesh);
             }
         }
     }
