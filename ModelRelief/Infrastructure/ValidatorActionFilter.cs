@@ -5,6 +5,7 @@
 // ------------------------------------------------------------------------//
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Newtonsoft.Json;
 using System;
 
 namespace ModelRelief.Infrastructure
@@ -17,7 +18,39 @@ namespace ModelRelief.Infrastructure
         /// <summary>
         /// Pre-process action method. 
         /// Called before request reaches controller method.
-        /// ModelState has been constructed based on model IValidatorObject validation.
+        /// ModelState has been constructed based on model IValidatableObject, FluentValidation.AbstractValidatorr and DataAnnotation validation.
+        /// </summary>
+        /// <param name="filterContext">Filter context.</param>
+       public void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            if (filterContext.ModelState.IsValid)
+                return;
+
+            if (filterContext.HttpContext.Request.Method == "GET")
+            {
+                var result = new BadRequestResult();
+                filterContext.Result = result;
+            }
+            else
+            {
+                var result = new ContentResult();
+                string content = JsonConvert.SerializeObject(filterContext.ModelState,
+                    new JsonSerializerSettings
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    });
+                result.Content = content;
+                result.ContentType = "application/json";
+
+                filterContext.HttpContext.Response.StatusCode = 400;
+                filterContext.Result = result;
+            }
+        }
+#if false
+        /// <summary>
+        /// Pre-process action method. 
+        /// Called before request reaches controller method.
+        /// ModelState has been constructed based on model IValidatableObject, FluentValidation.AbstractValidatorr and DataAnnotation validation.
         /// </summary>
         /// <param name="filterContext">Filter context.</param>
         public void OnActionExecuting(ActionExecutingContext filterContext)
@@ -51,7 +84,7 @@ namespace ModelRelief.Infrastructure
                     break;
             }
         }
-
+#endif
         /// <summary>
         /// Post-process action method.
         /// </summary>

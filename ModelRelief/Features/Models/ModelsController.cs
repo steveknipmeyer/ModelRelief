@@ -108,7 +108,7 @@ namespace ModelRelief.Features.Models
             _mapper.Map<Model3dEditViewModel, Model3d> (editModel, model);
             _dbContext.Models.Update(model);
 
-            return RedirectToAction ("Viewer", new { Id = model.Id});           
+            return RedirectToAction (nameof(Index));           
         }
     }        
 }

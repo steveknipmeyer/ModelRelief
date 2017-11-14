@@ -14,6 +14,10 @@ namespace ModelRelief.Features.Models
         [MaxLength(64)]
         public string Name { get; set; }
 
+        [Required]
+        [MaxLength(64)]
+        public string Description { get; set; }
+
         public Model3dFormat Format { get; set; }
         }
     }

@@ -1,5 +1,4 @@
 ﻿<--- Commit
-Implement Database transactions.
 
 <--- Reading
 
@@ -7,25 +6,25 @@ Implement Database transactions.
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
 
+    Should the CQRS pattern be implemented in the core and then consumed by the API?
+    How should logging and exception handling be done in the Mediator pipeline?
+        Should Handlers have an IMapper dependency?
+        Or should there be top-level logging and exception handling in a pipeline wrapper?
+            https://codeopinion.com/fat-controller-cqrs-diet-command-pipeline/
+
+    Add validation pipeline (exclude API?)
+        How should the ValidatorActionFilter be used?
+        DataAnnotation validation is being applied.
+            Will FluentValidation.AbstractValidator supplement or replace DataAnnotation?
+
     Mediator Conversion
         Deprecated Files
             IModelsProvider
             SqlModelsProvider
             MeshesControllerDefault
 
-        In Features.Models.Controller.Edit is _dbContext.Update required?
-            If Update begins tracking an entity when is the SaveChanges done?
-                In the Mediator database transaction pipeline?
-
-        How is the model binding used?
-
-        Why does the ModelRelief Delete display the JSON ContentResult instead of the IndexView?
-
-        How should the ValidatorActionFilter be used?
-
         Features.Meshes
             Create
-            Delete           
             Edit
                 The Format enum is not handled properly in the Mesh Edit page.  
         Features.Models
@@ -37,8 +36,6 @@ Implement Database transactions.
         Implement Integration Tests per ContostoUniversity Core
             Features
             Api
-
-        Add validation pipeline (exclude API?)
 
     Extend the Authorize attribute to allow checking for a user-owned resource.
         MediatR pipeline?
@@ -299,6 +296,10 @@ Implement Database transactions.
             Last start time:    9/19/2017 6:57:25 AM
             Instance pipe name: np:\\.\pipe\LOCALDB#9A6B632F\tsql\query
 
+<-- Database 
+    In Features.Models.Controller.Edit is _dbContext.Models.Update required?
+        The model is updated in the database even when this is not called.
+
 <-- Git
     TBD
 
@@ -423,10 +424,27 @@ Implement Database transactions.
 
     A registered InputFormatter maps the Request.Body to a type. By default, MVC supports a limited number of formatters.
         This allows a strongly typed [FromBody] action parameter to be used.
-    The DataAnnotation attributes (e.g. [Required]) are checked first and MVC sets ModelState.Valid based on the results.
-    If the bound model implements IValidatableObject then additional validation checks may be performed, adding additional ValidationResults.
+
+    The DataAnnotation attributes (e.g. [Required]) are checked first and client-side validation will display the results on the form.
+        Validation
+            Property ON form: A client-side error will be displayed and the controller action will not be called.
+            Property not present on form: Validation will be done in the server. ModelState will contain errors when the controller action is called.
+        N.B. ContosoUniversityCore uses server-side validation (in conjunction with site.js and HtmlHelperExtensions error handling). The DataAnnotation attributes are not used.
+            If a DataAnnotation rule was violated (e.g. [Required]) and there was no FluentValidation (AbstractValidator rule) the property was not marked as invalid.
+            This seems odd because although the form did not contain the client-side validation attributes, why did MVC not validate the object on the incoming model-bound object?
+            Is this due to the custom model-binding?
+        
+        [StringLength(50, MinimumLength = 3)]
+        public string Name { get; set; }
+    
+    If the bound model implements any of these interfaces then additional validation checks may be performed, adding additional results to ModelState.
+        IValidatableObject 
+        FluentValidation.AbstractValidator
+
     If an ActionFilter is registered, control passes there.
         The ActionFilter can check ModelState.Valid and then set the ActionExecutingContext.Result so the controller action is never called.
+    
+    Finally, the controller action is invoked.
 
 <-- Logging
 
@@ -469,3 +487,17 @@ Implement Database transactions.
         // prevent async (no await) warning
         //https://stackoverflow.com/questions/44096253/await-task-completedtask-for-what
         await Task.CompletedTask;
+
+<-- ContosoUniversity Core
+    Why is the project named "Core" when it has these dependencies? 
+        AutoMapper.EF6
+            EntityFramework 6.13
+
+    Why does the ModelRelief Delete display the JSON ContentResult instead of the IndexView?
+        The site.js file includes a jQuery call back on all form post submits.
+        site.js provides client-side error validation.
+
+    How is the ContosoUniversityCore model binding used?
+        public class EntityModelBinder : IModelBinder
+        It binds a database <model> looked up from the incomping Id.
+

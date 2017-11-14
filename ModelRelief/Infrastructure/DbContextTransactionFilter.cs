@@ -3,6 +3,7 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Logging;
 using ModelRelief.Database;
 using System;
 using System.Threading.Tasks;
@@ -16,14 +17,16 @@ namespace ModelRelief.Infrastructure
     public class DbContextTransactionFilter : IAsyncActionFilter
     {
         private readonly ModelReliefDbContext _dbContext;
+        private readonly ILogger<DatabaseLogger> _logger;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
-        public DbContextTransactionFilter(ModelReliefDbContext dbContext)
+        public DbContextTransactionFilter(ModelReliefDbContext dbContext, ILogger<DatabaseLogger> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         /// <summary>
@@ -36,7 +39,7 @@ namespace ModelRelief.Infrastructure
         {
             try
             {
-               using (var transaction =  _dbContext.Database.BeginTransaction())
+               using (var transaction = _dbContext.Database.BeginTransaction())
                {
                     await next();
 
@@ -44,9 +47,9 @@ namespace ModelRelief.Infrastructure
                     transaction.Commit();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                _dbContext.Database.RollbackTransaction();
+                _logger.LogError(ex, "A transaction error occurred for controller: {0}.", context.HttpContext.Request.Path);
             }
         }
     }

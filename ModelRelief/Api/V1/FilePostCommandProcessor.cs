@@ -47,7 +47,7 @@ namespace ModelRelief.Api.V1
                 // add to repository
                 _controller.DBContext.Set<TModel>().Add(newModel);
 
-                // commit; force Id to be assigned
+                // commit; force Id to be assigned immediately
                 _controller.DBContext.SaveChanges();
 
                 // write file : file name = newly-created model Id

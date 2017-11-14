@@ -109,5 +109,18 @@ namespace ModelRelief.Utility
             foreach (FileInfo file in source.GetFiles())
                 file.CopyTo(Path.Combine(target.FullName, file.Name));
         }
+        
+        /// <summary>
+        /// Deletes a folder and all of the contents.
+        /// </summary>
+        /// <param name="path">Path to delete</param>
+        /// <param name="recursive">true to remove directories, subdirectories, and files in path; otherwise, false</param>
+        public static void DeleteFolder(string path, bool recursive)
+        {
+            if (!Directory.Exists(path))
+                return;
+
+            Directory.Delete(path, recursive);
+        }
     }        
 }

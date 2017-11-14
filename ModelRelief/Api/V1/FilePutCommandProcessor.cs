@@ -24,7 +24,7 @@ namespace ModelRelief.Api.V1
         where TPutModel : class, IValidatable<TModel>
         where TModel: ModelReliefModel, IFileResource, new()
     {
-        ApplicationUser                    _user;
+        ApplicationUser         _user;
         ApiController<TModel>   _controller;
 
         public FilePutCommandProcessor(ApplicationUser user, ApiController<TModel> controller)

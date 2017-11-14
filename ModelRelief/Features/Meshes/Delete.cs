@@ -6,10 +6,15 @@
 using AutoMapper;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ModelRelief.Database;
 using ModelRelief.Domain;
+using ModelRelief.Infrastructure;
 using ModelRelief.Services;
+using ModelRelief.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -62,15 +67,31 @@ namespace ModelRelief.Features.Meshes
         public class CommandHandler : IAsyncRequestHandler<Delete.Command>
         {
             private readonly ModelReliefDbContext _dbContext;
+            private readonly ILogger<PipelineLogger> _logger;
+            private readonly IHostingEnvironment _hostingEnvironment;
 
-            public CommandHandler(ModelReliefDbContext dbContext)
+            public CommandHandler(ModelReliefDbContext dbContext, ILogger<PipelineLogger> logger, IHostingEnvironment hostingEnvironment)
             {
                 _dbContext = dbContext;
+                _logger = logger;
+                _hostingEnvironment = hostingEnvironment;
             }
 
-            public async Task Handle(Command message)
+            public async Task Handle(Delete.Command message)
             {
                 var mesh = await _dbContext.Meshes.FindAsync(message.Id);
+                if (mesh == null)
+                    return;
+
+                try
+                {
+                    var absolutePath = $"{_hostingEnvironment.WebRootPath}{mesh.Path}";
+                    Files.DeleteFolder(absolutePath, true);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "An exception occurred deleting a folder: {0}", mesh.Path);
+                }
 
                 _dbContext.Meshes.Remove(mesh);
             }

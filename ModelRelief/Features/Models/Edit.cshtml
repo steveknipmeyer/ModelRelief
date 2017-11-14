@@ -16,6 +16,11 @@
             <span asp-validation-for="Name"/>
         </div>
         <div>
+            <label asp-for="Description" />
+            <input asp-for="Description" />
+            <span asp-validation-for="Description" />
+        </div>
+        <div>
             <label asp-for="Format" />
             <select asp-for="Format" asp-items="@Html.GetEnumSelectList(typeof(Model3dFormat))"></select>
             <span asp-validation-for="Format" />
