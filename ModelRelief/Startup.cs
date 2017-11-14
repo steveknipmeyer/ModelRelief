@@ -99,7 +99,7 @@ namespace ModelRelief
                 { 
                     options.InputFormatters.Insert(0, new RawRequestBodyFormatter());
                     options.Filters.Add(typeof(DbContextTransactionFilter));
-//                  options.Filters.Add(typeof(ValidatorActionFilter));
+                    options.Filters.Add(typeof(ValidatorActionFilter));
                 })
                 .AddFeatureFolders()
                 .AddFluentValidation(config => { config.RegisterValidatorsFromAssemblyContaining<Startup>(); });

@@ -25,7 +25,7 @@ namespace Microsoft.AspNetCore.Builder
         public static IApplicationBuilder AddStaticFilePath (this IApplicationBuilder app, string root, string staticFilePath)
             {
             var path = Path.Combine(root, staticFilePath);
-            if (!File.Exists(path))
+            if (!Directory.Exists(path))
                 return app;
 
             var provider = new PhysicalFileProvider(path);

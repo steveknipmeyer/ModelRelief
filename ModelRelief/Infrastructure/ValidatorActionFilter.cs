@@ -26,6 +26,11 @@ namespace ModelRelief.Infrastructure
             if (filterContext.ModelState.IsValid)
                 return;
 
+            // skip api requests; a custom error is constructed in the API controller
+            string areaValue = filterContext.RouteData.Values["area"] as string;
+            if (areaValue.ToLower().StartsWith("api"))
+                return;
+
             if (filterContext.HttpContext.Request.Method == "GET")
             {
                 var result = new BadRequestResult();
