@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace ModelRelief.Infrastructure
 {
@@ -23,12 +24,17 @@ namespace ModelRelief.Infrastructure
         /// <param name="filterContext">Filter context.</param>
        public void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            // This method fires after these validation checks have been applied to nodel-bound objects.
+            //    IValidatableObject interface
+            //    DataAnnotation attributes
+            //    <T>Validator class implementing FluentValidation: AbstractValidator<T> (found by Mediator through reflection)
+
             if (filterContext.ModelState.IsValid)
                 return;
 
             // skip api requests; a custom error is constructed in the API controller
             string areaValue = filterContext.RouteData.Values["area"] as string;
-            if (areaValue.ToLower().StartsWith("api"))
+            if (!String.IsNullOrEmpty(areaValue) && areaValue.ToLower().StartsWith("api"))
                 return;
 
             if (filterContext.HttpContext.Request.Method == "GET")

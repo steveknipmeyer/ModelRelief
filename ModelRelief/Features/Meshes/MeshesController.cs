@@ -8,8 +8,12 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using ModelRelief.Database;
+using ModelRelief.Domain;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ModelRelief.Features.Meshes
@@ -63,6 +67,21 @@ namespace ModelRelief.Features.Meshes
             // requires jQuery ajax hook to process result and redirect from the client side
             return this.RedirectToActionJson(nameof(Index));
 #endif
+            return this.RedirectToAction(nameof(Index));
+        }
+
+        public ActionResult Create()
+        {
+            ViewBag.MeshFormats = ViewHelpers.PopulateEnumDropDownList<MeshFormat>("Select Mesh Format");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Create.Command command)
+        {
+            await _mediator.Send(command);
+
             return this.RedirectToAction(nameof(Index));
         }
     }

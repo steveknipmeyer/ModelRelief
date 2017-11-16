@@ -1,4 +1,4 @@
-﻿@model ModelRelief.Domain.Mesh
+﻿@model ModelRelief.Features.Meshes.Create.Command
 
 @{
     ViewData["Title"] = "Create";
@@ -18,19 +18,14 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Format" class="control-label"></label>
-                <select asp-for="Format" class="form-control"></select>
-                <span asp-validation-for="Format" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Path" class="control-label"></label>
-                <input asp-for="Path" class="form-control" />
-                <span asp-validation-for="Path" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Format" class="control-label"></label>
+                <select asp-for="Format" class="form-control" asp-items="ViewBag.MeshFormats"></select>
+                <span asp-validation-for="Format" class="text-danger" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />

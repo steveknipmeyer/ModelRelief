@@ -13,9 +13,10 @@ namespace ModelRelief.Features.Meshes
     {
         public MappingProfile() 
             {
-            CreateMap<Domain.Mesh, Details.Mesh>().ReverseMap();
-            CreateMap<Domain.Mesh, Index.Mesh>().ReverseMap();
-            CreateMap<Domain.Mesh, Delete.Command>().ReverseMap();
+            CreateMap<Domain.Mesh, Details.Mesh>();
+            CreateMap<Domain.Mesh, Index.Mesh>();
+            CreateMap<Domain.Mesh, Delete.Command>();
+            CreateMap<Create.Command, Domain.Mesh>(MemberList.Source);
             }
     }
 }

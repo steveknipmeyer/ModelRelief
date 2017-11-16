@@ -85,8 +85,13 @@ namespace ModelRelief.Features.Meshes
 
                 try
                 {
+                    if (String.IsNullOrEmpty(mesh.Path))
+                        return;
+#if false
+                    // N.B. verify that mesh.Path is <below> store/user!
                     var absolutePath = $"{_hostingEnvironment.WebRootPath}{mesh.Path}";
                     Files.DeleteFolder(absolutePath, true);
+#endif
                 }
                 catch (Exception ex)
                 {

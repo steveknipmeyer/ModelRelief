@@ -1,21 +1,26 @@
 ﻿<--- Commit
 
+
 <--- Reading
 
 <-- Tasks
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
 
-    Should the CQRS pattern be implemented in the core and then consumed by the API?
-    How should logging and exception handling be done in the Mediator pipeline?
-        Should Handlers have an IMapper dependency?
-        Or should there be top-level logging and exception handling in a pipeline wrapper?
-            https://codeopinion.com/fat-controller-cqrs-diet-command-pipeline/
+    Should the ValidationActionFilter return an application/json ContentResult (or the View)?
 
-    Add validation pipeline (exclude API?)
-        How should the ValidatorActionFilter be used?
-        DataAnnotation validation is being applied.
-            Will FluentValidation.AbstractValidator supplement or replace DataAnnotation?
+    How are related entities handled in Views?
+        Examine pure ContosoUniversity Course processing.
+
+    Should the CQRS pattern be implemented in the core and then consumed by the API?
+    
+    Mediator Pipeline
+        Should there be top-level logging and exception handling in a pipeline wrapper?
+        https://codeopinion.com/fat-controller-cqrs-diet-command-pipeline/
+        Authorization
+            Extend the Authorize attribute to allow checking for a user-owned resource.
+        Logging
+        Exception Handling
 
     Mediator Conversion
         Deprecated Files
@@ -36,9 +41,6 @@
         Implement Integration Tests per ContostoUniversity Core
             Features
             Api
-
-    Extend the Authorize attribute to allow checking for a user-owned resource.
-        MediatR pipeline?
 
     ModelReliefModel
         Should ModelReliefModel be an interface instead of a base class?
@@ -438,8 +440,9 @@
         public string Name { get; set; }
     
     If the bound model implements any of these interfaces then additional validation checks may be performed, adding additional results to ModelState.
+    N.B. These are all called by a View if present!
         IValidatableObject 
-        FluentValidation.AbstractValidator
+        FluentValidation.AbstractValidator<T>
 
     If an ActionFilter is registered, control passes there.
         The ActionFilter can check ModelState.Valid and then set the ActionExecutingContext.Result so the controller action is never called.
