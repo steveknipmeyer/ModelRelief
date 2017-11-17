@@ -56,7 +56,10 @@ namespace ModelRelief.Database
         /// </summary>
         public async void Populate()
         {
-            _context.Database.EnsureCreated();
+
+            // SQLite Error 1: 'table "AspNetRoles" already exists'.
+            // https://github.com/aspnet/EntityFrameworkCore/issues/4649
+           _context.Database.EnsureCreated();
 
             // existing models?
             if (_context.Models.Any())
@@ -114,6 +117,8 @@ namespace ModelRelief.Database
             var projects = new Project[]
             {
                 new Project{Id = 1, Name = "ModelRelief", Description = "Development and Test", User = user},
+                new Project{Id = 2, Name = "Architecture", Description = "Architectural woodwork, panels and details", User = user},
+                new Project{Id = 3, Name = "Jewelry", Description = "Jewelry watch faces, bracelets and pendants", User = user},
             };
             foreach (Project project in projects)
             {
@@ -162,13 +167,13 @@ namespace ModelRelief.Database
                 new Model3d{Id = 1, Name = "lucy.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"/store/users/{user.Id}/models/1/",
                             User = user, Project = project, Camera = camera},
                 new Model3d{Id = 2, Name = "armadillo.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"/store/users/{user.Id}/models/2/",
-                            User = user, Project = project, Camera = camera},
+                            User = user, ProjectId = 1, Camera = camera},
                 new Model3d{Id = 3, Name = "bunny.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"/store/users/{user.Id}/models/3/",
-                            User = user, Project = project, Camera = camera},
+                            User = user, ProjectId = 2, Camera = camera},
                 new Model3d{Id = 4, Name = "dragon.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"/store/users/{user.Id}/models/4/",
-                            User = user, Project = project, Camera = camera},
+                            User = user, ProjectId = 2, Camera = camera},
                 new Model3d{Id = 5, Name = "tyrannosaurus.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"/store/users/{user.Id}/models/5/",
-                            User = user, Project = project, Camera = camera},
+                            User = user, ProjectId = 3, Camera = camera},
             };
 
             foreach (Model3d model in models)

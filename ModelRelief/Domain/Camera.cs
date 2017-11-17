@@ -40,6 +40,7 @@ namespace ModelRelief.Domain
         public bool BoundClippingPlanes { get; set; }
 
         // Navigation Properties
+        public int? ProjectId { get; set; }
         public Project Project { get; set; }
 
         /// <summary>

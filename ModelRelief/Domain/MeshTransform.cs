@@ -28,6 +28,7 @@ namespace ModelRelief.Domain
         public double LambdaLinearScaling { get; set; }
 
         // Navigation Properties
+        public int? ProjectId { get; set; }
         public Project Project { get; set; }
 
         /// <summary>

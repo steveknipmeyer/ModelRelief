@@ -24,11 +24,16 @@ namespace ModelRelief.Domain
         public string Path { get; set; }
 
         // Navigation Properties
+        public int? ProjectId { get; set; }
         public Project Project { get; set; }
 
+        public int? DepthBufferId { get; set; }
         public DepthBuffer DepthBuffer { get; set; }
+
+        public int? MeshTransformId { get; set; }
         public MeshTransform MeshTransform { get; set; }
 
+        public int? CameraId { get; set; }
         public Camera Camera { get; set; }
 
         public Mesh()

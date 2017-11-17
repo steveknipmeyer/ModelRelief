@@ -21,6 +21,7 @@ namespace ModelRelief.Domain
         public virtual string Description { get; set; }
 
         // Navigation Properties
+        public string UserId { get; set; }
         public ApplicationUser User { get; set; }
     }
 

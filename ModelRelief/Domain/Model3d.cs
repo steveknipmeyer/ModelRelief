@@ -33,8 +33,10 @@ namespace ModelRelief.Domain
         public string Path { get; set; }
 
         // Navigation Properties
+        public int? ProjectId { get; set; }
         public Project Project { get; set; }
 
+        public int? CameraId { get; set; }
         public Camera Camera { get; set; }
 
         /// <summary>
