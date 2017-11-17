@@ -12,6 +12,7 @@ using ModelRelief.Database;
 using ModelRelief.Domain;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ModelRelief.Features.Meshes
 {
@@ -34,7 +35,7 @@ namespace ModelRelief.Features.Meshes
             }
         }
 
-        public class CommandHandler : IRequestHandler<Command>
+        public class CommandHandler : IAsyncRequestHandler<Command>
         {
             private readonly ModelReliefDbContext _dbContext;
 
@@ -43,11 +44,11 @@ namespace ModelRelief.Features.Meshes
                 _dbContext = dbContext;
             }
 
-            public void Handle(Command message)
+            public async Task Handle(Command message)
             {
                 var mesh = Mapper.Map<Command, Domain.Mesh>(message);
 
-                _dbContext.Meshes.Add(mesh);
+                await _dbContext.Meshes.AddAsync(mesh);
             }
         }
      }

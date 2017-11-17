@@ -18,7 +18,7 @@ namespace ModelRelief.Features.Meshes
 {
     public class Edit
     {
-        public class Query : IRequest<Edit.Command>
+        public class Query : IRequest<Command>
         {
             public int? Id { get; set; }
         }
@@ -39,7 +39,7 @@ namespace ModelRelief.Features.Meshes
             }
         }
 
-        public class QueryHandler : IAsyncRequestHandler<Query, Edit.Command>
+        public class QueryHandler : IAsyncRequestHandler<Query, Command>
         {
             private readonly ModelReliefDbContext _dbContext;
 
@@ -48,10 +48,10 @@ namespace ModelRelief.Features.Meshes
                 _dbContext = dbContext;
             }
 
-            public async Task<Edit.Command>  Handle(Query message)
+            public async Task<Command>  Handle(Query message)
             {
                 var mesh =  await _dbContext.Meshes.FindAsync (message.Id);               
-                return Mapper.Map<Domain.Mesh, Edit.Command> (mesh);
+                return Mapper.Map<Domain.Mesh, Command> (mesh);
             }
         }
 
@@ -74,9 +74,9 @@ namespace ModelRelief.Features.Meshes
                 _dbContext = dbContext;
             }
 
-            public void Handle(Edit.Command message)
+            public void Handle(Command message)
             {
-                var mesh = Mapper.Map<Edit.Command, Domain.Mesh>(message);
+                var mesh = Mapper.Map<Command, Domain.Mesh>(message);
 
                 _dbContext.Meshes.Update(mesh);
             }

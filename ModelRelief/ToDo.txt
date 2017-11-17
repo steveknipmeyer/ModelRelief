@@ -12,8 +12,6 @@
         Add Model property for Meshes.
         Examine pure ContosoUniversity Course processing.
 
-    Should the CQRS pattern be implemented in the core and then consumed by the API?
-    
     Mediator Pipeline
         Should there be top-level logging and exception handling in a pipeline wrapper?
         https://codeopinion.com/fat-controller-cqrs-diet-command-pipeline/
@@ -22,12 +20,13 @@
         Logging
         Exception Handling
 
+    Should the CQRS pattern be implemented in the core and then consumed by the API?
+
     Mediator Conversion
         Features.Models
+            Make all controller actions async?
+                Where should ToLlistAsync be used instead of _dbContext.X?
         Api
-
-        Make all controller actions async?
-            Where should ToLlistAsync be used instead of _dbContext.X?
 
         Implement Integration Tests per ContostoUniversity Core
             Features

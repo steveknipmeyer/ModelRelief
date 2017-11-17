@@ -43,7 +43,7 @@ namespace ModelRelief.Infrastructure
                {
                     await next();
 
-                    _dbContext.SaveChanges();
+                    await _dbContext.SaveChangesAsync();
                     transaction.Commit();
                 }
             }

@@ -20,7 +20,7 @@ namespace ModelRelief.Features.Meshes
 {
     public class Delete
     {
-        public class Query : IRequest<Delete.Command>
+        public class Query : IRequest<Command>
         {
             public int? Id {get; set;}
         }
@@ -33,7 +33,7 @@ namespace ModelRelief.Features.Meshes
             }
         }
 
-        public class QueryHandler : IAsyncRequestHandler<Query, Delete.Command>
+        public class QueryHandler : IAsyncRequestHandler<Query, Command>
         {           
             private readonly ModelReliefDbContext _dbContext;
             private readonly IMapper _mapper;
@@ -44,10 +44,10 @@ namespace ModelRelief.Features.Meshes
                 _mapper    = mapper;
             }
 
-            public async Task<Delete.Command> Handle (Query message)
+            public async Task<Command> Handle (Query message)
             {
                 var mesh = await _dbContext.Meshes.Where (m => m.Id == message.Id).FirstOrDefaultAsync();
-                return _mapper.Map<Domain.Mesh, Delete.Command>(mesh);
+                return _mapper.Map<Domain.Mesh, Command>(mesh);
             }
         }
 
@@ -61,7 +61,7 @@ namespace ModelRelief.Features.Meshes
             public string Path { get; set; }
         }
 
-        public class CommandHandler : IAsyncRequestHandler<Delete.Command>
+        public class CommandHandler : IAsyncRequestHandler<Command>
         {
             private readonly ModelReliefDbContext _dbContext;
             private readonly ILogger<PipelineLogger> _logger;
@@ -74,7 +74,7 @@ namespace ModelRelief.Features.Meshes
                 _hostingEnvironment = hostingEnvironment;
             }
 
-            public async Task Handle(Delete.Command message)
+            public async Task Handle(Command message)
             {
                 var mesh = await _dbContext.Meshes.FindAsync(message.Id);
                 if (mesh == null)
