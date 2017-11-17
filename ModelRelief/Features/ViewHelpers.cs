@@ -24,6 +24,8 @@ namespace ModelRelief.Features
         /// Create a SelectList from an enum.
         /// Note: None is skipped.
         /// </summary>
+        /// <param name="prompt">Control selection prompt</param>
+        /// <returns></returns>
         public static List<SelectListItem> PopulateEnumDropDownList<TEnum>(string prompt)
             where TEnum : struct,  IComparable, IFormattable, IConvertible
         {
@@ -43,10 +45,14 @@ namespace ModelRelief.Features
         }
 
         /// <summary>
-        /// Create a SelectList from a model.
-        /// Note: None is skipped.
+        /// Creates a SelectListModel from the Name properties in a database table.
         /// </summary>
-        public static List<SelectListItem> PopulateModelDropDownList<TModel>(DbSet<TModel> models, string prompt)
+        /// <typeparam name="TModel">Model type</typeparam>
+        /// <param name="models">DbSet</param>
+        /// <param name="prompt">Control selection prompt</param>
+        /// <param name="selectedRow">(Optional) Primary key of selected row</param>
+        /// <returns></returns>
+        public static List<SelectListItem> PopulateModelDropDownList<TModel>(DbSet<TModel> models, string prompt, int? selectedRow = 0)
             where TModel : ModelReliefModel
         {
             var modelSelectList = new List<SelectListItem>();
@@ -58,10 +64,10 @@ namespace ModelRelief.Features
             foreach (TModel model in models)
             {
                 string modelText = model.Name;
-                modelSelectList.Add(new SelectListItem { Text = modelText, Value = model.Id.ToString() });
+                bool selectedState = model.Id == (selectedRow ?? 0);
+                modelSelectList.Add(new SelectListItem { Text = modelText, Value = model.Id.ToString(), Selected = selectedState });
             }
             return modelSelectList;
         }
-
     }
 }

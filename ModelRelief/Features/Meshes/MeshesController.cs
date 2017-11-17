@@ -73,6 +73,7 @@ namespace ModelRelief.Features.Meshes
         public ActionResult Create()
         {
             ViewBag.MeshFormats = ViewHelpers.PopulateEnumDropDownList<MeshFormat>("Select Mesh Format");
+            ViewBag.ProjectId   = ViewHelpers.PopulateModelDropDownList<Project>(_dbContext.Projects, "Select a project");
             return View();
         }
 
@@ -90,6 +91,7 @@ namespace ModelRelief.Features.Meshes
             var model = await _mediator.Send (message);
 
             ViewBag.MeshFormats = ViewHelpers.PopulateEnumDropDownList<MeshFormat>("Select Mesh Format");
+            ViewBag.ProjectId   = ViewHelpers.PopulateModelDropDownList<Project>(_dbContext.Projects, "Select a project", model.ProjectId);
             return View(model);
         }
 

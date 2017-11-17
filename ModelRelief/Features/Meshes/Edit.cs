@@ -29,6 +29,10 @@ namespace ModelRelief.Features.Meshes
             public string Name { get; set; }
             public string Description { get; set; }
             public MeshFormat Format { get; set; }
+
+            // Navigation Properties
+            public int? ProjectId { get; set; }
+            public Project Project { get; set; }
         }
 
         public class QueryValidator : AbstractValidator<Query>
