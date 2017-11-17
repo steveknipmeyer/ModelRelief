@@ -1,6 +1,5 @@
 ﻿<--- Commit
 
-
 <--- Reading
 
 <-- Tasks
@@ -10,6 +9,7 @@
     Should the ValidationActionFilter return an application/json ContentResult (or the View)?
 
     How are related entities handled in Views?
+        Add Model property for Meshes.
         Examine pure ContosoUniversity Course processing.
 
     Should the CQRS pattern be implemented in the core and then consumed by the API?
@@ -23,15 +23,6 @@
         Exception Handling
 
     Mediator Conversion
-        Deprecated Files
-            IModelsProvider
-            SqlModelsProvider
-            MeshesControllerDefault
-
-        Features.Meshes
-            Create
-            Edit
-                The Format enum is not handled properly in the Mesh Edit page.  
         Features.Models
         Api
 

@@ -84,5 +84,22 @@ namespace ModelRelief.Features.Meshes
 
             return this.RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Edit(Edit.Query message)
+        {
+            var model = await _mediator.Send (message);
+
+            ViewBag.MeshFormats = ViewHelpers.PopulateEnumDropDownList<MeshFormat>("Select Mesh Format");
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Edit.Command command)
+        {
+            await _mediator.Send(command);
+
+            return this.RedirectToAction(nameof(Index));
+        }
     }
 }

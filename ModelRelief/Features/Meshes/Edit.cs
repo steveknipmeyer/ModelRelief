@@ -12,16 +12,47 @@ using ModelRelief.Database;
 using ModelRelief.Domain;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ModelRelief.Features.Meshes
 {
-    public class Create
+    public class Edit
     {
+        public class Query : IRequest<Edit.Command>
+        {
+            public int? Id { get; set; }
+        }
+
         public class Command : IRequest
         {
+            public int Id { get; set; }
             public string Name { get; set; }
             public string Description { get; set; }
             public MeshFormat Format { get; set; }
+        }
+
+        public class QueryValidator : AbstractValidator<Query>
+        {
+            public QueryValidator()
+            {
+                RuleFor(m => m.Id).NotNull().WithMessage("The Id property is required..");
+            }
+        }
+
+        public class QueryHandler : IAsyncRequestHandler<Query, Edit.Command>
+        {
+            private readonly ModelReliefDbContext _dbContext;
+
+            public QueryHandler(ModelReliefDbContext dbContext)
+            {
+                _dbContext = dbContext;
+            }
+
+            public async Task<Edit.Command>  Handle(Query message)
+            {
+                var mesh =  await _dbContext.Meshes.FindAsync (message.Id);               
+                return Mapper.Map<Domain.Mesh, Edit.Command> (mesh);
+            }
         }
 
         public class CommandValidator : AbstractValidator<Command>
@@ -43,11 +74,11 @@ namespace ModelRelief.Features.Meshes
                 _dbContext = dbContext;
             }
 
-            public void Handle(Command message)
+            public void Handle(Edit.Command message)
             {
-                var mesh = Mapper.Map<Command, Domain.Mesh>(message);
+                var mesh = Mapper.Map<Edit.Command, Domain.Mesh>(message);
 
-                _dbContext.Meshes.Add(mesh);
+                _dbContext.Meshes.Update(mesh);
             }
         }
      }

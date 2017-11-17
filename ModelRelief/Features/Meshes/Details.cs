@@ -32,29 +32,27 @@ namespace ModelRelief.Features.Meshes
             public string Path { get; set; }
         }
 
-        public class Validator : AbstractValidator<Query>
+        public class QueryValidator : AbstractValidator<Query>
         {
-            public Validator()
+            public QueryValidator()
             {
                 RuleFor(m => m.Id).NotNull();
             }
         }
 
-        public class Handler : IAsyncRequestHandler<Query, Details.Mesh>
+        public class QueryHandler : IAsyncRequestHandler<Query, Details.Mesh>
         {
             private readonly ModelReliefDbContext _dbContext;
-            private readonly IMapper _mapper;
 
-            public Handler(ModelReliefDbContext dbContext, IMapper mapper)
+            public QueryHandler(ModelReliefDbContext dbContext)
             {
                 _dbContext = dbContext;
-                _mapper = mapper;
             }
 
             public async Task<Details.Mesh> Handle(Query message)
             {
                 var mesh =  await _dbContext.Meshes.FindAsync (message.Id);               
-                return _mapper.Map<Domain.Mesh, Details.Mesh> (mesh);
+                return Mapper.Map<Domain.Mesh, Details.Mesh> (mesh);
             }
         }
     }

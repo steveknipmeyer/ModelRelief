@@ -57,45 +57,6 @@ namespace ModelRelief.Infrastructure
                 filterContext.Result = result;
             }
         }
-#if false
-        /// <summary>
-        /// Pre-process action method. 
-        /// Called before request reaches controller method.
-        /// ModelState has been constructed based on model IValidatableObject, FluentValidation.AbstractValidatorr and DataAnnotation validation.
-        /// </summary>
-        /// <param name="filterContext">Filter context.</param>
-        public void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            // filter only api requests
-            string areaValue = filterContext.RouteData.Values["area"] as string;
-            if (!String.Equals(areaValue, "api", StringComparison.InvariantCultureIgnoreCase))
-                return;
-            
-            if (filterContext.ModelState.IsValid)
-                return;
-            
-            switch (filterContext.HttpContext.Request.Method)
-            {
-                case "GET":
-                    {
-                    var result = new BadRequestResult();
-                    filterContext.Result = result;
-                    break;
-                    }
-
-                case "POST":
-                case "PUT":
-                    {
-                    var result = new BadRequestResult();
-                    filterContext.Result = result;
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-        }
-#endif
         /// <summary>
         /// Post-process action method.
         /// </summary>

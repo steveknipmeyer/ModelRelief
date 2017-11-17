@@ -17,7 +17,6 @@ namespace ModelRelief.Features.Meshes
     {
         public class Query : IRequest<List<Mesh>>
         {
-        // How is the model binding done?
         }
     
         public class Mesh
@@ -30,15 +29,13 @@ namespace ModelRelief.Features.Meshes
             public string Path { get; set; }
         }
 
-        public class Handler : IAsyncRequestHandler<Query, List<Mesh>>
+        public class QueryHandler : IAsyncRequestHandler<Query, List<Mesh>>
         {
             private readonly ModelReliefDbContext _dbContext;
-            private readonly IMapper _mapper;
 
-            public Handler(ModelReliefDbContext dbContext, IMapper mapper)
+            public QueryHandler(ModelReliefDbContext dbContext)
             {
                 _dbContext = dbContext;
-                _mapper = mapper;
             }
 
             public async Task<List<Mesh>> Handle(Query message)
@@ -48,7 +45,7 @@ namespace ModelRelief.Features.Meshes
                 var meshList = new List<Mesh>();
                 foreach (Domain.Mesh mesh in meshes)
                     {
-                    meshList.Add( _mapper.Map<Domain.Mesh, Index.Mesh> (mesh));
+                    meshList.Add( Mapper.Map<Domain.Mesh, Index.Mesh> (mesh));
                     }
                 
                 return meshList;
