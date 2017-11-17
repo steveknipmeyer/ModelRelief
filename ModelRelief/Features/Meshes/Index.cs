@@ -27,6 +27,9 @@ namespace ModelRelief.Features.Meshes
 
             public MeshFormat Format { get; set; }      
             public string Path { get; set; }
+
+            // Navigation Properties
+            public Project Project { get; set; }
         }
 
         public class QueryHandler : IAsyncRequestHandler<Query, List<Mesh>>
@@ -40,7 +43,8 @@ namespace ModelRelief.Features.Meshes
 
             public async Task<List<Mesh>> Handle(Query message)
             {
-                var meshes =  await _dbContext.Meshes.ToListAsync();
+                var meshes =  await _dbContext.Meshes
+                    .Include(m => m.Project).ToListAsync();
 
                 var meshList = new List<Mesh>();
                 foreach (Domain.Mesh mesh in meshes)

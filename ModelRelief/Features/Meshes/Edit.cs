@@ -65,7 +65,7 @@ namespace ModelRelief.Features.Meshes
             }
         }
 
-        public class CommandHandler : IRequestHandler<Command>
+        public class CommandHandler : IAsyncRequestHandler<Command>
         {
             private readonly ModelReliefDbContext _dbContext;
 
@@ -74,9 +74,10 @@ namespace ModelRelief.Features.Meshes
                 _dbContext = dbContext;
             }
 
-            public void Handle(Command message)
+            public async Task Handle(Command message)
             {
-                var mesh = Mapper.Map<Command, Domain.Mesh>(message);
+                var mesh =  await _dbContext.Meshes.FindAsync (message.Id);               
+                Mapper.Map<Command, Domain.Mesh>(message, mesh);
 
                 _dbContext.Meshes.Update(mesh);
             }

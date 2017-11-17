@@ -46,7 +46,10 @@ namespace ModelRelief.Features.Meshes
 
             public async Task<Command> Handle (Query message)
             {
-                var mesh = await _dbContext.Meshes.Where (m => m.Id == message.Id).FirstOrDefaultAsync();
+                var mesh =  await _dbContext.Meshes
+                    .Include(m => m.Project)
+                    .SingleOrDefaultAsync (m => m.Id == message.Id);
+
                 return _mapper.Map<Domain.Mesh, Command>(mesh);
             }
         }
@@ -59,6 +62,9 @@ namespace ModelRelief.Features.Meshes
 
             public MeshFormat Format { get; set; }      
             public string Path { get; set; }
+
+            // Navigation Properties
+            public Project Project { get; set; }
         }
 
         public class CommandHandler : IAsyncRequestHandler<Command>

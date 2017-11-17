@@ -18,6 +18,18 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Project.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Project.Name)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.Format)
         </dt>
         <dd>
@@ -28,12 +40,6 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Path)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
         </dd>
     </dl>
     
