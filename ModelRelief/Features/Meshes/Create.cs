@@ -26,7 +26,9 @@ namespace ModelRelief.Features.Meshes
         {
             public CommandValidator()
             {
-            RuleFor(m => m.Description).NotEqual("Stephen").WithMessage("The Description cannot be Stephen.");
+            // Chain rules from base class.
+            // https://stackoverflow.com/questions/30730937/c-sharp-fluentvalidation-for-a-hierarchy-of-classes
+            Include( new Dto.MeshValidator());
             }
         }
 

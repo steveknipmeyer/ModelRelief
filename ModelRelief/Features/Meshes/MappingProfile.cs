@@ -9,6 +9,7 @@ using ModelRelief.Domain;
 using System.ComponentModel.DataAnnotations;
 using System;
 using FluentValidation;
+using FluentValidation.Attributes;
 
 namespace ModelRelief.Dto
 {
@@ -37,8 +38,9 @@ namespace ModelRelief.Dto
             public Dto.MeshTransform MeshTransform { get; set; }
         }
 
-        public class MeshValidator : AbstractValidator<Mesh>
+        public class MeshValidator : AbstractValidator<Dto.Mesh>
         {
+
             public MeshValidator()
             {
             RuleFor(m => m.Name).NotNull().MinimumLength(4).WithMessage("The Name property is required..");

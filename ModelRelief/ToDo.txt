@@ -7,13 +7,6 @@
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
     
-    Validation
-        How can the server-side validation share the same rules as the client-side?
-            Create.Command = Dto.Mesh
-        How are missing properties in the View handled?
-            They will override the target during mapping because they will have a default value.
-            The DTO should expose only those properies which are editable!
-
     Should the ValidationActionFilter return an application/json ContentResult (or the View)? This context is limited to:       
             * UX only
             * Validation checks not done on the client-side
@@ -29,11 +22,6 @@
         Implement Integration Tests per ContostoUniversity Core
             Features
             Api
-
-    ModelReliefModel
-        Should ModelReliefModel be an interface instead of a base class?
-            This would remove the need for virtual properties (supporting [Display (Name="")] attribute in the derived class.
-            There is probably little benefit since the Domain model is never exposed in the UX.
 
     Accessing Model From JavaScript
         https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
@@ -412,7 +400,7 @@
 
 <-- ASP.NET Core Model Validation
 
-
+    <---------------------------------------------------------------------------------------------------------------------------------------------------->
     Client-side Validation
         The View model (e.g. Dto.Mesh) provides the client-side validation rules.
 
@@ -451,6 +439,11 @@
             The ActionFilter can check ModelState.Valid and then set the ActionExecutingContext.Result so the controller action is never called.
     
     Finally, the controller action is invoked.
+    <---------------------------------------------------------------------------------------------------------------------------------------------------->
+
+    How are missing properties in the View handled?
+        They will override the target during mapping because they will have a default value.
+        The DTO should expose only those properies which are editable!
 
 <-- Logging
 
