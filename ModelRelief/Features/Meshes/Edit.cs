@@ -58,8 +58,6 @@ namespace ModelRelief.Features.Meshes
         {
             public CommandValidator()
             {
-            RuleFor(m => m.Name).NotNull().MinimumLength(4).WithMessage("The Name property is required..");
-            RuleFor(m => m.Format).NotEmpty().WithMessage("Choose a file format value from the list.");
             }
         }
 

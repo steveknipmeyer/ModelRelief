@@ -29,7 +29,7 @@ namespace ModelRelief.Features.Meshes
         {
             public QueryValidator()
             {
-                RuleFor(m => m.Id).NotNull();
+                RuleFor(m => m.Id).NotNull().WithMessage("Model ID cannot be null");
             }
         }
 

@@ -6,6 +6,7 @@
 
 using AutoMapper;
 using FluentValidation;
+using FluentValidation.Attributes;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ModelRelief.Database;
@@ -21,13 +22,11 @@ namespace ModelRelief.Features.Meshes
         public class Command : Dto.Mesh, IRequest
         {
         }
-
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-            RuleFor(m => m.Name).NotNull().MinimumLength(4).WithMessage("The Name property is required..");
-            RuleFor(m => m.Format).NotEmpty().WithMessage("Choose a file format value from the list.");
+            RuleFor(m => m.Description).NotEqual("Stephen").WithMessage("The Description cannot be Stephen.");
             }
         }
 

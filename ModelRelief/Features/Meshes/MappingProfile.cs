@@ -7,6 +7,8 @@
 using AutoMapper;
 using ModelRelief.Domain;
 using System.ComponentModel.DataAnnotations;
+using System;
+using FluentValidation;
 
 namespace ModelRelief.Dto
 {
@@ -34,6 +36,16 @@ namespace ModelRelief.Dto
             public int? MeshTransformId { get; set; }
             public Dto.MeshTransform MeshTransform { get; set; }
         }
+
+        public class MeshValidator : AbstractValidator<Mesh>
+        {
+            public MeshValidator()
+            {
+            RuleFor(m => m.Name).NotNull().MinimumLength(4).WithMessage("The Name property is required..");
+            RuleFor(m => m.Description).MinimumLength(4).WithMessage("The Description must be more than four characters..");
+            RuleFor(m => m.Format).NotEmpty().WithMessage("The file format is not valid.");
+            }
+    }
 }
 
 namespace ModelRelief.Features.Meshes

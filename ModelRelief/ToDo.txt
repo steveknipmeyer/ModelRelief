@@ -6,12 +6,13 @@
 <-- Tasks
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
-
-
-    Where should the validation be done?
-        Display attributes
-        FluentValidation
-            These rulles appear to run on the server side.
+    
+    Validation
+        How can the server-side validation share the same rules as the client-side?
+            Create.Command = Dto.Mesh
+        How are missing properties in the View handled?
+            They will override the target during mapping because they will have a default value.
+            The DTO should expose only those properies which are editable!
 
     Should the ValidationActionFilter return an application/json ContentResult (or the View)? This context is limited to:       
             * UX only
@@ -411,28 +412,43 @@
 
 <-- ASP.NET Core Model Validation
 
-    A registered InputFormatter maps the Request.Body to a type. By default, MVC supports a limited number of formatters.
-        This allows a strongly typed [FromBody] action parameter to be used.
 
-    The DataAnnotation attributes (e.g. [Required]) are checked first and client-side validation will display the results on the form.
-        Validation
-            Property ON form: A client-side error will be displayed and the controller action will not be called.
-            Property not present on form: Validation will be done in the server. ModelState will contain errors when the controller action is called.
-        N.B. ContosoUniversityCore uses server-side validation (in conjunction with site.js and HtmlHelperExtensions error handling). The DataAnnotation attributes are not used.
-            If a DataAnnotation rule was violated (e.g. [Required]) and there was no FluentValidation (AbstractValidator rule) the property was not marked as invalid.
-            This seems odd because although the form did not contain the client-side validation attributes, why did MVC not validate the object on the incoming model-bound object?
-            Is this due to the custom model-binding?
+    Client-side Validation
+        The View model (e.g. Dto.Mesh) provides the client-side validation rules.
+
+        DataAnnotation Attributes
+                Property ON form: A client-side error will be displayed and the controller action will not be called.
+                Property not present on form: Validation will be done in the server IF the model-bound action parameter contains a validation rule. 
+                    ModelState will contain errors when the controller action is called.
+
+            N.B. ContosoUniversityCore uses server-side validation (in conjunction with site.js and HtmlHelperExtensions error handling). The DataAnnotation attributes are not used.
+                If a DataAnnotation rule was violated (e.g. [Required]) and there was no FluentValidation (AbstractValidator rule) the property was not marked as invalid.
+                This seems odd because although the form did not contain the client-side validation attributes, why did MVC not validate the object on the incoming model-bound object?
+                Is this due to the custom model-binding?
         
-        [StringLength(50, MinimumLength = 3)]
-        public string Name { get; set; }
-    
-    If the bound model implements any of these interfaces then additional validation checks may be performed, adding additional results to ModelState.
-    N.B. These are all called by a View if present!
-        IValidatableObject 
-        FluentValidation.AbstractValidator<T>
+            [StringLength(50, MinimumLength = 3)]
+            public string Name { get; set; }
 
-    If an ActionFilter is registered, control passes there.
-        The ActionFilter can check ModelState.Valid and then set the ActionExecutingContext.Result so the controller action is never called.
+        Other Validation Rules
+            If View model implements any of these interfaces then additional validation checks will be added the complete list of checks, adding additional results to ModelState.
+                IValidatableObject 
+                FluentValidation.AbstractValidator<T>
+            N.B. These are all used by a View if present! Each of these validations contribute rules (in the form of data-val attributes) that are used in the client-side processing.
+    
+    Server-Side Validation
+        The controller action parameters (e.g. Create.Command) control the server-side validation rules.
+
+        A registered InputFormatter maps the Request.Body to the parameters of the controller action. By default, MVC supports a limited number of formatters.
+            This allows a strongly typed [FromBody] action parameter to be used.
+
+        All validation providers can contribute rules to the validation.
+            DataAnnotation Attribute
+            IValidatable
+            FluentValidation
+
+    ValidationActionFilter
+        If an ActionFilter is registered, control passes there.
+            The ActionFilter can check ModelState.Valid and then set the ActionExecutingContext.Result so the controller action is never called.
     
     Finally, the controller action is invoked.
 

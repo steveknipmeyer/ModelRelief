@@ -5,6 +5,7 @@
 // ------------------------------------------------------------------------//
 using AutoMapper;
 using FluentValidation;
+using FluentValidation.Attributes;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ModelRelief.Database;
@@ -23,7 +24,7 @@ namespace ModelRelief.Features.Meshes
         {
             public QueryValidator()
             {
-                RuleFor(m => m.Id).NotNull();
+                RuleFor(m => m.Id).NotNull().WithMessage("Model ID cannot be null.");
             }
         }
 
