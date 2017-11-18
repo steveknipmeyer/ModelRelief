@@ -18,15 +18,8 @@ namespace ModelRelief.Features.Meshes
 {
     public class Create
     {
-        public class Command : IRequest
+        public class Command : Dto.Mesh, IRequest
         {
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public MeshFormat Format { get; set; }
-
-            // Navigation Properties
-            public int? ProjectId { get; set; }
-            public Project Project { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
@@ -34,7 +27,6 @@ namespace ModelRelief.Features.Meshes
             public CommandValidator()
             {
             RuleFor(m => m.Name).NotNull().MinimumLength(4).WithMessage("The Name property is required..");
-            RuleFor(m => m.Description).NotNull().WithMessage("The Description property is required.");
             RuleFor(m => m.Format).NotEmpty().WithMessage("Choose a file format value from the list.");
             }
         }
@@ -50,7 +42,7 @@ namespace ModelRelief.Features.Meshes
 
             public async Task Handle(Command message)
             {
-                var mesh = Mapper.Map<Command, Domain.Mesh>(message);
+                var mesh = Mapper.Map<Dto.Mesh, Domain.Mesh>(message);
 
                 await _dbContext.Meshes.AddAsync(mesh);
             }

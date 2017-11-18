@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ModelRelief.Features.Meshes.Index.Mesh>
+﻿@model IEnumerable<ModelRelief.Dto.Mesh>
 
 @{
     ViewData["Title"] = "Index";
@@ -27,6 +27,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.Path)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Camera.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DepthBuffer.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MeshTransform.Name)
+            </th>
         <th></th>
         </tr>
     </thead>
@@ -48,6 +57,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Path)
             </td>
+            <th>
+                @Html.DisplayFor(modelItem => item.Camera.Name)
+            </th>
+            <th>
+                @Html.DisplayFor(modelItem => item.DepthBuffer.Name)
+            </th>
+            <th>
+                @Html.DisplayFor(modelItem => item.MeshTransform.Name)
+            </th>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |

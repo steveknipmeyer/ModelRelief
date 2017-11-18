@@ -13,7 +13,7 @@ namespace ModelRelief.Utility
 {
     public static class Identity
     {
-        public static string MockUserId { get {return "ccde9d51-b97e-44d7-8962-1b234228a2b3";} }
+        public static string MockUserId { get {return "b04bbda2-3187-4734-88dd-a092e5477f8f";} }
 
         /// <summary>
         /// IPrincipal extension method to retrieve the User Id.

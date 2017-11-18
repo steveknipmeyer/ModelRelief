@@ -15,10 +15,7 @@ using ModelRelief.Domain;
 namespace ModelRelief.Domain
 {
     public class MeshTransform : ModelReliefModel
-    {
-        [Required, Display (Name = "Mesh Transform Name")]
-        public override string Name { get; set; }
-        
+    {       
         public double Depth { get; set; }
         public double Width { get; set; }
 

@@ -3,24 +3,22 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
+
+using AutoMapper;
+using FluentValidation.Attributes;
+using ModelRelief.Domain;
 using System.ComponentModel.DataAnnotations;
 
-namespace ModelRelief.Domain
+namespace ModelRelief.Dto
 {
-    public enum StandardView 
+    public class Camera
     {
-        None,
-        Front,
-        Back,
-        Top,
-        Bottom,
-        Left,
-        Right,
-        Isometric
-    }
+        public int Id { get; set; }
 
-    public class Camera : ModelReliefModel
-    {
+        [Required, Display (Name = "Camera Name")]
+        public string Name { get; set; }
+        public string Description { get; set; }
+
         public StandardView StandardView { get; set; }
 
         public double PositionX { get; set; }
@@ -38,13 +36,17 @@ namespace ModelRelief.Domain
 
         // Navigation Properties
         public int? ProjectId { get; set; }
-        public Project Project { get; set; }
+        public Dto.Project Project { get; set; }
+    }
+}
 
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public Camera()
+namespace ModelRelief.Features.Cameras
+{
+    public class MappingProfile : Profile
+    {
+        public MappingProfile() 
         {
+        CreateMap<Domain.Camera, Dto.Camera>().ReverseMap();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model ModelRelief.Features.Meshes.Create.Command
+﻿@model ModelRelief.Dto.Mesh
 
 @{
     ViewData["Title"] = "Create";
@@ -24,14 +24,33 @@
             </div>
             <div class="form-group">
                 <label asp-for="Project" class="control-label"></label>
-                <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId">
-                </select>
+                <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
                 <span asp-validation-for="ProjectId" class="text-danger" />
             </div>
             <div class="form-group">
                 <label asp-for="Format" class="control-label"></label>
                 <select asp-for="Format" class="form-control" asp-items="ViewBag.MeshFormats"></select>
                 <span asp-validation-for="Format" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Path" class="control-label"></label>
+                <input asp-for="Path" class="form-control" />
+                <span asp-validation-for="Path" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Camera" class="control-label"></label>
+                <select asp-for="CameraId" class="form-control" asp-items="ViewBag.CameraId"></select>
+                <span asp-validation-for="CameraId" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label asp-for="DepthBuffer" class="control-label"></label>
+                <select asp-for="DepthBufferId" class="form-control" asp-items="ViewBag.DepthBufferId"></select>
+                <span asp-validation-for="DepthBufferId" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label asp-for="MeshTransform" class="control-label"></label>
+                <select asp-for="MeshTransformId" class="form-control" asp-items="ViewBag.MeshTransformId"></select>
+                <span asp-validation-for="MeshTransformId" class="text-danger" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
@@ -44,3 +63,7 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+
+    @Html.DisplayNameFor(model => model.Camera.Name)
+    @Html.DisplayNameFor(model => model.DepthBuffer.Name)
+    @Html.DisplayNameFor(model => model.MeshTransform.Name)

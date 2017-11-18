@@ -1,4 +1,4 @@
-﻿@model ModelRelief.Features.Meshes.Edit.Command
+﻿@model ModelRelief.Dto.Mesh
 
 @{
     ViewData["Title"] = "Edit";
@@ -33,6 +33,27 @@
                 <select asp-for="Format" class="form-control" asp-items="ViewBag.MeshFormats"></select>
                 <span asp-validation-for="Format" class="text-danger" />
             </div>
+            <div class="form-group">
+                <label asp-for="Path" class="control-label"></label>
+                <input asp-for="Path" class="form-control" />
+                <span asp-validation-for="Path" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Camera" class="control-label"></label>
+                <select asp-for="CameraId" class="form-control" asp-items="ViewBag.CameraId"></select>
+                <span asp-validation-for="CameraId" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label asp-for="DepthBuffer" class="control-label"></label>
+                <select asp-for="DepthBufferId" class="form-control" asp-items="ViewBag.DepthBufferId"></select>
+                <span asp-validation-for="DepthBufferId" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label asp-for="MeshTransform" class="control-label"></label>
+                <select asp-for="MeshTransformId" class="form-control" asp-items="ViewBag.MeshTransformId"></select>
+                <span asp-validation-for="MeshTransformId" class="text-danger" />
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>

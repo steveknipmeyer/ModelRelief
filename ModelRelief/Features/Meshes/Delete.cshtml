@@ -1,4 +1,4 @@
-﻿@model ModelRelief.Features.Meshes.Delete.Command
+﻿@model ModelRelief.Dto.Mesh
 
 @{
     ViewData["Title"] = "Delete";
@@ -40,6 +40,24 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Path)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Camera.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Camera.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DepthBuffer.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DepthBuffer.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MeshTransform.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MeshTransform.Name)
         </dd>
     </dl>
     

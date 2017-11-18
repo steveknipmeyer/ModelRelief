@@ -7,7 +7,15 @@
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
 
-    Should the ValidationActionFilter return an application/json ContentResult (or the View)?
+
+    Where should the validation be done?
+        Display attributes
+        FluentValidation
+            These rulles appear to run on the server side.
+
+    Should the ValidationActionFilter return an application/json ContentResult (or the View)? This context is limited to:       
+            * UX only
+            * Validation checks not done on the client-side
 
     Should the CQRS pattern be implemented in the core and then consumed by the API?
 

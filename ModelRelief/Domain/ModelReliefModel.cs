@@ -14,11 +14,10 @@ namespace ModelRelief.Domain
         [Required]   
         public int Id { get; set; }
 
-        // These properties are common to all models. They are marked virtual so that the Display attribute can be set on a per-model basis.
-        // https://stackoverflow.com/questions/12735757/mvc-4-data-annotations-display-attribute
+        // These properties are common to all models. 
         [Required]
-        public virtual string Name { get; set; }
-        public virtual string Description { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
 
         // Navigation Properties
         public string UserId { get; set; }

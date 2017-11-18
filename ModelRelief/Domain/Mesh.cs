@@ -17,9 +17,6 @@ namespace ModelRelief.Domain
 
     public class Mesh  : ModelReliefModel, IFileResource
     {
-        [Required, Display (Name = "Mesh Name")]
-        public override string Name { get; set; }
-
         public MeshFormat Format { get; set; }      
         public string Path { get; set; }
 
@@ -27,14 +24,14 @@ namespace ModelRelief.Domain
         public int? ProjectId { get; set; }
         public Project Project { get; set; }
 
+        public int? CameraId { get; set; }
+        public Camera Camera { get; set; }
+
         public int? DepthBufferId { get; set; }
         public DepthBuffer DepthBuffer { get; set; }
 
         public int? MeshTransformId { get; set; }
         public MeshTransform MeshTransform { get; set; }
-
-        public int? CameraId { get; set; }
-        public Camera Camera { get; set; }
 
         public Mesh()
         {

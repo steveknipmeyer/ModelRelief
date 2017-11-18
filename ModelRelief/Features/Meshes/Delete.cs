@@ -20,7 +20,7 @@ namespace ModelRelief.Features.Meshes
 {
     public class Delete
     {
-        public class Query : IRequest<Command>
+        public class Query : IRequest<Dto.Mesh>
         {
             public int? Id {get; set;}
         }
@@ -33,7 +33,7 @@ namespace ModelRelief.Features.Meshes
             }
         }
 
-        public class QueryHandler : IAsyncRequestHandler<Query, Command>
+        public class QueryHandler : IAsyncRequestHandler<Query, Dto.Mesh>
         {           
             private readonly ModelReliefDbContext _dbContext;
             private readonly IMapper _mapper;
@@ -44,27 +44,22 @@ namespace ModelRelief.Features.Meshes
                 _mapper    = mapper;
             }
 
-            public async Task<Command> Handle (Query message)
+            public async Task<Dto.Mesh> Handle (Query message)
             {
                 var mesh =  await _dbContext.Meshes
                     .Include(m => m.Project)
+                    .Include(m => m.Camera)
+                    .Include(m => m.DepthBuffer)
+                    .Include(m => m.MeshTransform)
                     .SingleOrDefaultAsync (m => m.Id == message.Id);
 
-                return _mapper.Map<Domain.Mesh, Command>(mesh);
+                return _mapper.Map<Domain.Mesh, Dto.Mesh>(mesh);
             }
         }
 
         public class Command : IRequest
         {
             public int Id { get; set; }
-            public string Name { get; set; }
-            public string Description { get; set; }
-
-            public MeshFormat Format { get; set; }      
-            public string Path { get; set; }
-
-            // Navigation Properties
-            public Project Project { get; set; }
         }
 
         public class CommandHandler : IAsyncRequestHandler<Command>

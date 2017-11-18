@@ -7,7 +7,6 @@ using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ModelRelief.Database;
-using ModelRelief.Domain;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,24 +14,11 @@ namespace ModelRelief.Features.Meshes
 {
     public class Index
     {
-        public class Query : IRequest<List<Mesh>>
+        public class Query : IRequest<List<Dto.Mesh>>
         {
         }
-    
-        public class Mesh
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
-            public string Description { get; set; }
 
-            public MeshFormat Format { get; set; }      
-            public string Path { get; set; }
-
-            // Navigation Properties
-            public Project Project { get; set; }
-        }
-
-        public class QueryHandler : IAsyncRequestHandler<Query, List<Mesh>>
+        public class QueryHandler : IAsyncRequestHandler<Query, List<Dto.Mesh>>
         {
             private readonly ModelReliefDbContext _dbContext;
 
@@ -41,15 +27,19 @@ namespace ModelRelief.Features.Meshes
                 _dbContext = dbContext;
             }
 
-            public async Task<List<Mesh>> Handle(Query message)
+            public async Task<List<Dto.Mesh>> Handle(Query message)
             {
                 var meshes =  await _dbContext.Meshes
-                    .Include(m => m.Project).ToListAsync();
+                    .Include(m => m.Project)
+                    .Include(m => m.Camera)
+                    .Include(m => m.DepthBuffer)
+                    .Include(m => m.MeshTransform)
+                    .ToListAsync();
 
-                var meshList = new List<Mesh>();
+                var meshList = new List<Dto.Mesh>();
                 foreach (Domain.Mesh mesh in meshes)
                     {
-                    meshList.Add( Mapper.Map<Domain.Mesh, Index.Mesh> (mesh));
+                    meshList.Add( Mapper.Map<Domain.Mesh, Dto.Mesh> (mesh));
                     }
                 
                 return meshList;

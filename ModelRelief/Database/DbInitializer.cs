@@ -143,7 +143,15 @@ namespace ModelRelief.Database
                            FieldOfView = 35.0,
                            Near = 0.0, Far = 1000.0,
                            BoundClippingPlanes = false,
+                           User = user, Project = project},
+                new Camera{Id = 2, Name = "Isometric Camera", Description = "Isometric", StandardView = StandardView.Isometric,
+                           PositionX = 50.0, PositionY = 50.0, PositionZ = 50.0,
+                           LookAtX   = 0.0, LookAtY = 0.0, LookAtZ = 0.0,
+                           FieldOfView = 35.0,
+                           Near = 0.0, Far = 1000.0,
+                           BoundClippingPlanes = false,
                            User = user, Project = project}
+
             };
 
             foreach (Camera camera in cameras)
@@ -196,6 +204,10 @@ namespace ModelRelief.Database
                 new MeshTransform{Id = 1, Name = "Identity", Description = "Default transform",
                             Depth = 1.0, Width = 100.0,
                             Tau = 1.0, SigmaGaussianBlur = 1.0, SigmaGaussianSmooth = 1.0, LambdaLinearScaling = 1.0,
+                            User = user, Project = project},
+                new MeshTransform{Id = 2, Name = "Pendant", Description = "Pendant transform",
+                            Depth = 0.5, Width = 10.0,
+                            Tau = 0.75, SigmaGaussianBlur = 0.5, SigmaGaussianSmooth = 0.25, LambdaLinearScaling = 1.0,
                             User = user, Project = project}
             };
 
@@ -212,6 +224,25 @@ namespace ModelRelief.Database
         private void AddDepthBuffers()
         {
             // copy test data into user store?
+
+            var user    = _context.Users.FirstOrDefault<ApplicationUser>();
+            var project = _context.Projects.FirstOrDefault<Project>();
+
+            var depthBuffers = new DepthBuffer[]
+            {
+                new DepthBuffer{Id = 1, Name = "Lucy", Description = "Generated in Maya", CameraId = 1, ModelId = 2,
+                                User = user, Project = project},
+                new DepthBuffer{Id = 2, Name = "Bunny", Description = "Generated in VRay", CameraId = 2, ModelId = 3,
+                                User = user, ProjectId = 2},
+                new DepthBuffer{Id = 3, Name = "Armadillo", Description = "Generated in Rhino",CameraId = 2, ModelId = 2,
+                                User = user, ProjectId = 3},
+            };
+
+            foreach (DepthBuffer depthBuffer in depthBuffers)
+            {
+                _context.DepthBuffers.Add(depthBuffer);
+            }
+            _context.SaveChanges();
         }
 
         /// <summary>
@@ -220,6 +251,25 @@ namespace ModelRelief.Database
         private void AddMeshes()
         {
             // copy test data into user store?
+
+            var user    = _context.Users.FirstOrDefault<ApplicationUser>();
+            var project = _context.Projects.FirstOrDefault<Project>();
+
+            var meshes = new Mesh[]
+            {
+                new Mesh{Id = 1, Name = "Lucy", Description = "Isometric", CameraId = 2, DepthBufferId = 2, MeshTransformId = 1,
+                                User = user, Project = project},
+                new Mesh{Id = 2, Name = "Bunny", Description = "Top", CameraId = 1, DepthBufferId = 2, MeshTransformId = 1,
+                                User = user, ProjectId = 2},
+                new Mesh{Id = 3, Name = "Armadillo", Description = "Top", CameraId = 1, DepthBufferId = 3, MeshTransformId = 2,
+                                User = user, ProjectId = 3},
+            };
+
+            foreach (Mesh mesh in meshes)
+            {
+                _context.Meshes.Add(mesh);
+            }
+            _context.SaveChanges();
         }
     }
 }

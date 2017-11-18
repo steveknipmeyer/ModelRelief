@@ -26,9 +26,6 @@ namespace ModelRelief.Domain
 
     public class Model3d : ModelReliefModel, IFileResource
     {       
-        [Required, Display (Name = "Model Name")]
-        public override string Name { get; set; }
-
         public Model3dFormat Format { get; set; }
         public string Path { get; set; }
 

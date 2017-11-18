@@ -17,9 +17,6 @@ namespace ModelRelief.Domain
 
     public class DepthBuffer  : ModelReliefModel, IFileResource
     {       
-        [Required, Display (Name = "DepthBuffer Name")]
-        public override string Name { get; set; }
-
         public DepthBufferFormat Format { get; set; }
         public string Path { get; set; }
 
