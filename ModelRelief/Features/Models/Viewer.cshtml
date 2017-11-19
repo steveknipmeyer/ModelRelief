@@ -1,5 +1,4 @@
-﻿@using ModelRelief.Features.Models
-@model ModelRelief.Domain.Model3d
+﻿@model ModelRelief.Dto.Model3d
 
 @{
     ViewBag.Title = "Model Viewer";
@@ -14,7 +13,7 @@
             <div id="meshView">
                 <canvas id="meshCanvas"></canvas>
             </div>
-        </div>        
+        </div>
     </div>
 
     <text id="modelName">@Model.Name</text>
@@ -48,7 +47,7 @@
             }
         </script>
     }
-   
+
 </body>
 
 

@@ -6,17 +6,10 @@
 <-- Tasks
     Goal : Roundtrip a scaled mesh.
         Scale with a Python processor.
-    
-    Should the ValidationActionFilter return an application/json ContentResult (or the View)? This context is limited to:       
-            * UX only
-            * Validation checks not done on the client-side
 
     Should the CQRS pattern be implemented in the core and then consumed by the API?
 
     Mediator Conversion
-        Features.Models
-            Make all controller actions async?
-                Where should ToLlistAsync be used instead of _dbContext.X?
         Api
 
         Implement Integration Tests per ContostoUniversity Core
@@ -388,6 +381,8 @@
 <-- Visual Studio 
     Performance
         https://developercommunity.visualstudio.com/content/problem/43364/visual-studio-2017-increadibly-slow-and-laggy.html
+    Private Hive
+    https://stackoverflow.com/questions/42916299/access-visual-studio-2017s-private-registry-hive
 
 <-- Identity
     https://andrewlock.net/introduction-to-authentication-with-asp-net-core/

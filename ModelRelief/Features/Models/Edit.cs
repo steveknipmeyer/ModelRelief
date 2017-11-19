@@ -11,16 +11,16 @@ using Microsoft.EntityFrameworkCore;
 using ModelRelief.Database;
 using System.Threading.Tasks;
 
-namespace ModelRelief.Features.Meshes
+namespace ModelRelief.Features.Models
 {
     public class Edit
     {
-        public class Query : IRequest<Dto.Mesh>
+        public class Query : IRequest<Dto.Model3d>
         {
             public int? Id { get; set; }
         }
 
-        public class Command : Dto.Mesh, IRequest
+        public class Command : Dto.Model3d, IRequest
         {
         }
 
@@ -32,7 +32,7 @@ namespace ModelRelief.Features.Meshes
             }
         }
 
-        public class QueryHandler : IAsyncRequestHandler<Query, Dto.Mesh>
+        public class QueryHandler : IAsyncRequestHandler<Query, Dto.Model3d>
         {
             private readonly ModelReliefDbContext _dbContext;
 
@@ -41,16 +41,14 @@ namespace ModelRelief.Features.Meshes
                 _dbContext = dbContext;
             }
 
-            public async Task<Dto.Mesh>  Handle(Query message)
+            public async Task<Dto.Model3d>  Handle(Query message)
             {
-                var mesh =  await _dbContext.Meshes
+                var model =  await _dbContext.Models
                     .Include(m => m.Project)
                     .Include(m => m.Camera)
-                    .Include(m => m.DepthBuffer)
-                    .Include(m => m.MeshTransform)
                     .SingleOrDefaultAsync (m => m.Id == message.Id);
 
-                return Mapper.Map<Domain.Mesh, Dto.Mesh> (mesh);
+                return Mapper.Map<Domain.Model3d, Dto.Model3d> (model);
             }
         }
 
@@ -59,7 +57,7 @@ namespace ModelRelief.Features.Meshes
             public CommandValidator()
             {
             // chain rules from base class
-            Include( new Dto.MeshValidator());
+            Include( new Dto.Model3dValidator());
             }
         }
 
@@ -74,10 +72,10 @@ namespace ModelRelief.Features.Meshes
 
             public async Task Handle(Command message)
             {
-                var mesh =  await _dbContext.Meshes.FindAsync (message.Id);               
-                Mapper.Map<Dto.Mesh, Domain.Mesh>(message, mesh);
+                var model =  await _dbContext.Models.FindAsync (message.Id);               
+                Mapper.Map<Dto.Model3d, Domain.Model3d>(message, model);
 
-                _dbContext.Meshes.Update(mesh);
+                _dbContext.Models.Update(model);
             }
         }
      }

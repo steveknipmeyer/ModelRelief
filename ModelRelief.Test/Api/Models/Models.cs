@@ -16,6 +16,7 @@ using Xunit;
 using ModelRelief.Database;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using MediatR;
 
 namespace ModelRelief.Test.Api.Models
 {
@@ -32,11 +33,10 @@ namespace ModelRelief.Test.Api.Models
         public void Index_ReturnsModels()
         {
             // Arrange
-            IHostingEnvironment         hostingEnvironment = null;
 //          ModelReliefDbContext        dbContext          = null;
             ILogger<ModelsController>   logger             = null;
             IMapper                     mapper             = null;
-
+            IMediator                   mediator           = null;
             var dbContextMock = new Mock<ModelReliefDbContext>();
             dbContextMock.Setup(mock => mock.Models.ToList()).Returns(new List<Model3d>() 
                     {
@@ -45,10 +45,10 @@ namespace ModelRelief.Test.Api.Models
                     }
             );
 
-            var controller = new ModelsController(hostingEnvironment, dbContextMock.Object, logger, mapper);
+            var controller = new ModelsController(dbContextMock.Object, logger, mapper, mediator);
 
             // Act
-            var result = controller.Index();
+            var result = controller.Index(new Index.Query());
 
             // Assert
             Assert.IsType<ViewResult>(result);

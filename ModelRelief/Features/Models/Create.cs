@@ -6,29 +6,24 @@
 
 using AutoMapper;
 using FluentValidation;
-using FluentValidation.Attributes;
 using MediatR;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using ModelRelief.Database;
-using ModelRelief.Domain;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ModelRelief.Features.Meshes
+namespace ModelRelief.Features.Models
 {
     public class Create
     {
-        public class Command : Dto.Mesh, IRequest
+        public class Command : Dto.Model3d, IRequest
         {
         }
+
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
             // chain rules from base class
-            // https://stackoverflow.com/questions/30730937/c-sharp-fluentvalidation-for-a-hierarchy-of-classes
-            Include( new Dto.MeshValidator());
+            Include( new Dto.Model3dValidator());
             }
         }
 
@@ -43,9 +38,9 @@ namespace ModelRelief.Features.Meshes
 
             public async Task Handle(Command message)
             {
-                var mesh = Mapper.Map<Dto.Mesh, Domain.Mesh>(message);
+                var model = Mapper.Map<Dto.Model3d, Domain.Model3d>(message);
 
-                await _dbContext.Meshes.AddAsync(mesh);
+                await _dbContext.Models.AddAsync(model);
             }
         }
      }

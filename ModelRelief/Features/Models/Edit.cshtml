@@ -1,33 +1,57 @@
-﻿@using ModelRelief.Features.Models
-@model Model3dEditViewModel
+﻿@model ModelRelief.Dto.Model3d
 
 @{
-    ViewBag.Title = (null == @Model) ? "null" : $"Editing {@Model.Name}";
+    ViewData["Title"] = "Edit";
 }
 
 <h2>Edit</h2>
-<div>
-    <form method="post" asp-antiforgery="true">
-        <div asp-validation-summary="All"></div>
 
-        <div>
-            <label asp-for="Name"/>
-            <input asp-for="Name"/>
-            <span asp-validation-for="Name"/>
-        </div>
-        <div>
-            <label asp-for="Description" />
-            <input asp-for="Description" />
-            <span asp-validation-for="Description" />
-        </div>
-        <div>
-            <label asp-for="Format" />
-            <select asp-for="Format" asp-items="@Html.GetEnumSelectList(typeof(Model3dFormat))"></select>
-            <span asp-validation-for="Format" />
-        </div>
+<h4>Model3d</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
 
-        <div>
-            <input type="submit" value="Edit" />
-        </div>
-    </form>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProjectId" class="control-label"></label>
+                <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
+                <span asp-validation-for="ProjectId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Format" class="control-label"></label>
+                <select asp-for="Format" class="form-control" asp-items="ViewBag.ModelFormats"></select>
+                <span asp-validation-for="Format" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Path" class="control-label"></label>
+                <input asp-for="Path" class="form-control" />
+                <span asp-validation-for="Path" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CameraId" class="control-label"></label>
+                <select asp-for="CameraId" class="form-control" asp-items="ViewBag.CameraId"></select>
+                <span asp-validation-for="CameraId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
 </div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

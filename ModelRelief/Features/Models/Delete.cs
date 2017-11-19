@@ -10,17 +10,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ModelRelief.Database;
-using ModelRelief.Domain;
 using ModelRelief.Infrastructure;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace ModelRelief.Features.Meshes
+namespace ModelRelief.Features.Models
 {
     public class Delete
     {
-        public class Query : IRequest<Dto.Mesh>
+        public class Query : IRequest<Dto.Model3d>
         {
             public int? Id {get; set;}
         }
@@ -33,7 +31,7 @@ namespace ModelRelief.Features.Meshes
             }
         }
 
-        public class QueryHandler : IAsyncRequestHandler<Query, Dto.Mesh>
+        public class QueryHandler : IAsyncRequestHandler<Query, Dto.Model3d>
         {           
             private readonly ModelReliefDbContext _dbContext;
             private readonly IMapper _mapper;
@@ -44,16 +42,14 @@ namespace ModelRelief.Features.Meshes
                 _mapper    = mapper;
             }
 
-            public async Task<Dto.Mesh> Handle (Query message)
+            public async Task<Dto.Model3d> Handle (Query message)
             {
-                var mesh =  await _dbContext.Meshes
+                var model =  await _dbContext.Models
                     .Include(m => m.Project)
                     .Include(m => m.Camera)
-                    .Include(m => m.DepthBuffer)
-                    .Include(m => m.MeshTransform)
                     .SingleOrDefaultAsync (m => m.Id == message.Id);
 
-                return _mapper.Map<Domain.Mesh, Dto.Mesh>(mesh);
+                return _mapper.Map<Domain.Model3d, Dto.Model3d>(model);
             }
         }
 
@@ -72,11 +68,11 @@ namespace ModelRelief.Features.Meshes
 
         public class CommandHandler : IAsyncRequestHandler<Command>
         {
-            private readonly ModelReliefDbContext _dbContext;
-            private readonly ILogger<PipelineLogger> _logger;
-            private readonly IHostingEnvironment _hostingEnvironment;
+            private readonly ModelReliefDbContext    _dbContext;
+            private readonly ILogger<Delete.Command> _logger;
+            private readonly IHostingEnvironment     _hostingEnvironment;
 
-            public CommandHandler(ModelReliefDbContext dbContext, ILogger<PipelineLogger> logger, IHostingEnvironment hostingEnvironment)
+            public CommandHandler(ModelReliefDbContext dbContext, ILogger<Delete.Command> logger, IHostingEnvironment hostingEnvironment)
             {
                 _dbContext = dbContext;
                 _logger = logger;
@@ -85,26 +81,26 @@ namespace ModelRelief.Features.Meshes
 
             public async Task Handle(Command message)
             {
-                var mesh = await _dbContext.Meshes.FindAsync(message.Id);
-                if (mesh == null)
+                var model = await _dbContext.Models.FindAsync(message.Id);
+                if (model == null)
                     return;
 
                 try
                 {
-                    if (String.IsNullOrEmpty(mesh.Path))
+                    if (String.IsNullOrEmpty(model.Path))
                         return;
 #if false
-                    // N.B. verify that mesh.Path is <below> store/user!
-                    var absolutePath = $"{_hostingEnvironment.WebRootPath}{mesh.Path}";
+                    // N.B. verify that model.Path is <below> store/user!
+                    var absolutePath = $"{_hostingEnvironment.WebRootPath}{model.Path}";
                     Files.DeleteFolder(absolutePath, true);
 #endif
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "An exception occurred deleting a folder: {0}", mesh.Path);
+                    _logger.LogError(ex, "An exception occurred deleting a folder: {0}", model.Path);
                 }
 
-                _dbContext.Meshes.Remove(mesh);
+                _dbContext.Models.Remove(model);
             }
         }
     }

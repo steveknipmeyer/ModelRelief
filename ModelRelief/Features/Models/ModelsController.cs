@@ -1,114 +1,115 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017> Steve Knipmeyer                                    //
-// ------------------------------------------------------------------------//
-using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using ModelRelief.Domain;
-using ModelRelief.Database;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ModelRelief.Database;
+using ModelRelief.Domain;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
+using AutoMapper;
+using MediatR;
 
 namespace ModelRelief.Features.Models
 {
-    [Authorize]
     public class ModelsController : Controller
     {
-        IHostingEnvironment         _hostingEnvironment;
         ModelReliefDbContext        _dbContext;
         ILogger<ModelsController>   _logger;
         IMapper                     _mapper;
+        IMediator                   _mediator;
 
-        public ModelsController(IHostingEnvironment hostingEnvironment, ModelReliefDbContext dbContext, ILogger<ModelsController> logger, IMapper mapper)
+        public ModelsController(ModelReliefDbContext dbContext, ILogger<ModelsController> logger, IMapper mapper, IMediator mediator)
         {
-            _hostingEnvironment = hostingEnvironment;
             _dbContext          = dbContext;
             _logger             = logger;
             _mapper             = mapper;
+            _mediator           = mediator;
         }
 
-        [AllowAnonymous]
-        public async Task<IActionResult> Index()
-        {    
-            IEnumerable<Model3d> models = await _dbContext.Models.ToListAsync();
-            return View(models);
+        public async Task<IActionResult> Index (Index.Query query)
+        {
+            var model = await _mediator.Send (query);
+
+            return View(model);
         }
 
-        [Route ("[controller]/[action]/{id}")]
-        public IActionResult Viewer(int id)
-        {   
-            _logger.LogInformation("ModelsController: model = {model}", id);
-            _logger.LogWarning("ModelsController: model = {model}", id);
+       public async Task<IActionResult> Details (Details.Query query)
+       {
+            var model = await _mediator.Send (query);
 
-            Model3d model = _dbContext.Models.Find(id);
+            return View(model);
+       }
 
-            if (model == null)
-                return Content(String.Format("Model not found: {0}", id));
+       public async Task<IActionResult> Viewer (Details.Query query)
+       {
+            var model = await _mediator.Send (query);
 
-            return View (model);
-        }
+            return View(model);
+       }
 
-        [HttpGet]
-        public IActionResult Create()
-        {           
-            return View ();
-        }
+        public async Task<IActionResult> Delete(Delete.Query query)
+        {
+            var model = await _mediator.Send(query);
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(Model3dEditViewModel editModel)
-        {           
-            if (!ModelState.IsValid)
-            {
-                // re-display with validation messages 
-                return View();
-            }
-
-            var model = _mapper.Map<Model3dEditViewModel, Model3d> (editModel);
-            _dbContext.Models.Add (model);
-
-            return RedirectToAction ("Viewer", new { Id = model.Id});           
-        }
-
-        [HttpGet]
-        [Route ("[controller]/[action]/{id}")]
-        public IActionResult Edit(int id)
-        {           
-            Model3d model = _dbContext.Models.Find(id);
-            if (model == null)
-                return Content(String.Format("Model not found: {0}", id));
-
-            var editModel = _mapper.Map<Model3d, Model3dEditViewModel> (model);
-
-            return View (editModel);
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route ("[controller]/[action]/{id}")]
-        public IActionResult Edit(int id, Model3dEditViewModel editModel)
-            {           
-            if (!ModelState.IsValid)
-            {
-                // re-display with validation messages
-                return View();
-            }
+        public async Task<IActionResult> Delete(Delete.Command command)
+        {
+            await _mediator.Send(command);
 
-            Model3d model = _dbContext.Models.Find(id);
-            if (model == null)
-                return Content(String.Format("Model not found: {0}", id));
-
-            _mapper.Map<Model3dEditViewModel, Model3d> (editModel, model);
-            _dbContext.Models.Update(model);
-
-            return RedirectToAction (nameof(Index));           
+            return this.RedirectToAction(nameof(Index));
         }
-    }        
+
+
+        [HttpGet]
+        public ActionResult Create()
+        {
+            InitializeViewHelpers();
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Create.Command command)
+        {
+            await _mediator.Send(command);
+
+            return this.RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Edit.Query message)
+        {
+            var model = await _mediator.Send(message);
+
+            InitializeViewHelpers(model);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Edit.Command command)
+        {
+            await _mediator.Send(command);
+
+            return this.RedirectToAction(nameof(Index));
+        }
+
+        /// <summary>
+        /// Setup View controls for select controls, etc.
+        /// </summary>
+        /// <param name="projectId">Project Id to select</param>
+        private void InitializeViewHelpers(Dto.Model3d model = null)
+        {
+            ViewBag.ModelFormats    = ViewHelpers.PopulateEnumDropDownList<Model3dFormat>("Select Model Format");
+            ViewBag.ProjectId       = ViewHelpers.PopulateModelDropDownList<Project>(_dbContext.Projects, "Select a project", model?.ProjectId);
+            ViewBag.CameraId        = ViewHelpers.PopulateModelDropDownList<Camera>(_dbContext.Cameras, "Select a camera", model?.CameraId);
+        }
+    }
 }

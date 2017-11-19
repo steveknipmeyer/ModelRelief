@@ -59,10 +59,6 @@ namespace ModelRelief.Features.Meshes
         {
             await _mediator.Send(command);
 
-#if false
-            // requires jQuery ajax hook to process result and redirect from the client side
-            return this.RedirectToActionJson(nameof(Index));
-#endif
             return this.RedirectToAction(nameof(Index));
         }
 

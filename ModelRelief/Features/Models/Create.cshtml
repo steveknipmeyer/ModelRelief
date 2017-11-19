@@ -1,22 +1,55 @@
-﻿@using ModelRelief.Features.Models
-@model Model3dEditViewModel
+﻿@model ModelRelief.Dto.Model3d
+
+@{
+    ViewData["Title"] = "Create";
+}
 
 <h2>Create</h2>
-<div>
-    @using (Html.BeginForm())
-        {
-        @Html.ValidationSummary()
-        <div>
-            @Html.LabelFor(m => m.Name)
-            @Html.TextBoxFor(m => m.Name)
-            @Html.ValidationMessageFor(m => m.Name)
-        </div>
-        <div>
-            @Html.LabelFor(m => m.Format)
-            @Html.DropDownListFor(m => m.Format, Html.GetEnumSelectList(typeof(Model3dFormat)));
-        </div>
-        <div>
-            <input type="submit" value="Add" />
-        </div>
-        }
+
+<h4>Model3d</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProjectId" class="control-label"></label>
+                <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Format" class="control-label"></label>
+                <select asp-for="Format" class="form-control" asp-items="ViewBag.ModelFormats"></select>
+                <span asp-validation-for="Format" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Path" class="control-label"></label>
+                <input asp-for="Path" class="form-control" />
+                <span asp-validation-for="Path" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CameraId" class="control-label"></label>
+                <select asp-for="CameraId" class ="form-control" asp-items="ViewBag.CameraId"></select>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
 </div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
