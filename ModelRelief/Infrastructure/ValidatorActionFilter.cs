@@ -49,10 +49,13 @@ namespace ModelRelief.Infrastructure
                 }
 
                 // A request was received that "passed" the client-side validation BUT not the server-side validation.
-                // From a View, if the client-side validation failed, the request would not have been submitted.
-                // So, it is likely that this request BYPASSED the front end.
-                // This may have happened if a POST request (intended for the API) was submitted to a non-API endpoint.
-                // Therefore, we send back application/json because this was probably a misdirected API request.
+                // Possible scenarios:
+                //      Server-side rules failed that are not present (or supported) in the client. Some FluentValidation rules are not supported on the client.
+                //          In a View, if the client-side validation fail, the request will not be submitted. But the client validation may not cover everything.
+                //       A PUT/POST/DELETE request (intended for the API) was submitted to a non-API endpoint. So, the client-side rules were bypassed.
+                // Options:
+                //      Return an ActionResult with a View and the incoming model so the results can be displayed.
+                //      (If it can be determined it was was a misdirected API request), send back application/json.
                 default:
                 {
                     var result = new ContentResult();

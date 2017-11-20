@@ -103,6 +103,7 @@ namespace ModelRelief
                     options.Filters.Add(typeof(ValidatorActionFilter));
                 })
                 .AddFeatureFolders()
+                // automatically register all validators within this assembly
                 .AddFluentValidation(config => { config.RegisterValidatorsFromAssemblyContaining<Startup>(); });
 
             // ModelRelief                                

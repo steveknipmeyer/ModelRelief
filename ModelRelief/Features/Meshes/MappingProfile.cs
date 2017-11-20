@@ -15,7 +15,7 @@ namespace ModelRelief.Dto
     {
         public int Id { get; set; }
 
-        [Required, Display (Name = "Mesh Name")]
+        [Display (Name = "Mesh Name")]
         public string Name { get; set; }
         public string Description { get; set; }
 
@@ -40,9 +40,15 @@ namespace ModelRelief.Dto
     {
         public MeshValidator()
         {
-            RuleFor(m => m.Name).NotNull().MinimumLength(4).WithMessage("The Name property is required..");
-            RuleFor(m => m.Description).MinimumLength(4).WithMessage("The Description must be more than four characters..");
-            RuleFor(m => m.Format).NotEmpty().WithMessage("The file format is not valid.");
+            RuleFor(m => m.Name)
+                .NotNull().WithMessage("The Name property is required.");
+         
+            RuleFor(m => m.Description)
+                .NotNull().WithMessage("The Description property is required.")
+                .MinimumLength(4).WithMessage("The Description must be more than four characters.");
+
+            RuleFor(m => m.Format)
+                .NotEmpty().WithMessage("The file format must be provided.");
         }
     }
 }
