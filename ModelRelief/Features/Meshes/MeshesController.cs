@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace ModelRelief.Features.Meshes
 {
-    [Authorize]
+//  [Authorize]
     public class MeshesController : Controller
     {
         ModelReliefDbContext        _dbContext;
@@ -70,7 +70,7 @@ namespace ModelRelief.Features.Meshes
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+//      [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Create.Command command)
         {
             await _mediator.Send(command);
@@ -89,6 +89,7 @@ namespace ModelRelief.Features.Meshes
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Edit(Edit.Command command)
         {
             await _mediator.Send(command);

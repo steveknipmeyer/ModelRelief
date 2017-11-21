@@ -1,17 +1,18 @@
 ﻿<--- Commit
-
+ValidationActionFilter : Return a ViewResult is ModelState is not valid.
 
 <--- Reading
 
 <-- Tasks
     Goal : Roundtrip a scaled mesh.       
         Scale with a Python processor.
-    
-    Workplan
-        Investigate returning a View(model) from ValidationActionFilter.
 
+    Workplan
         Review Spencer Schneidenback's Opinionated API.
         How should database exceptions, such as those violating Domain DataAnnotation rules, be handled?
+
+        Is this comment invalid?
+            <!------------------------------------------------------------------------------------------------>    
 
     Should the CQRS pattern be implemented in the core and then consumed by the API?
 
