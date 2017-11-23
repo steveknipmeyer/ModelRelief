@@ -15,7 +15,6 @@ using ModelRelief.Domain;
 namespace ModelRelief.Api.V1
 {
     // [Authorize]
-    [Area("ApiV1")]
     public class ApiController<TModel>: Controller
         where TModel : ModelReliefModel
     {

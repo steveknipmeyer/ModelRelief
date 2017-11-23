@@ -67,9 +67,11 @@ namespace ModelRelief
             builder.RegisterType<FConcretePrime>().As<IFunctionTwo<double>>();      // provide FConcrete instance when an IFunctionTwo<double> is required
 #endif
             // generics
-            // WIP Why is AsImplementedInterfaces required for the Handler?
+            // WIP Why is AsImplementedInterfaces required for the Handlers?
             builder.RegisterGeneric(typeof(GetSingleRequestHandler<,>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(GetSingleRequest<,>));
+            builder.RegisterGeneric(typeof(GetListRequestHandler<,>)).AsImplementedInterfaces();
+            builder.RegisterGeneric(typeof(GetListRequest<,>));
 
             // MediatR : register delegates as SingleInstanceFactory and MultiInstanceFactory types
             builder.Register<SingleInstanceFactory>(context =>
@@ -124,6 +126,7 @@ namespace ModelRelief
             // WIP This leads to a runtime error during where the type GetSingleRequestHandler cannot be used with service ICancellableAsynRequestHandler.
             //     The error happens in ConfigureAutofacServices when builder.Build is called.
             //     AddMediatR is used in CUC but not in OAPI.
+            //     This method requires MediatR.Extensions.Microsoft.DependencyInjection
             services.AddMediatR(typeof(Startup));
 #endif
 
@@ -175,7 +178,8 @@ namespace ModelRelief
         {
             routeBuilder.MapRoute(name: RouteNames.Default, template: "{controller=Home}/{action=Index}/{id?}");
 
-            routeBuilder.MapAreaRoute(name: RouteNames.DefaultApi, areaName: "ApiV1", template: "api/v1/{controller}/{id?}");
+            routeBuilder.MapRoute(name: RouteNames.DefaultApiV1, template: "api/v1/{controller}/{id?}");
+            routeBuilder.MapRoute(name: RouteNames.DefaultApiV2, template: "api/v2/{controller}/{id?}");
             routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/v1/documentation/{controller}/{id?}");
         }
     }

@@ -24,6 +24,6 @@ namespace ModelRelief.Api.V2.Shared.Rest
         /// <summary>
         /// Gets or sets the number of records to receive.
         /// </summary>
-        public int NumberOfRecords { get; set; } = 50;
+        public int NumberOfRecords { get; set; } = 2;
     }
 }

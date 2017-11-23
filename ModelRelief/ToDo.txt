@@ -1,5 +1,4 @@
 ﻿<--- Commit
-ValidationActionFilter : Return a ViewResult is ModelState is not valid.
 
 <--- Reading
 

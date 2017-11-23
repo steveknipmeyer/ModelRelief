@@ -22,7 +22,6 @@ namespace ModelRelief.Api.V2.Meshes
     /// </summary>
     // WIP How are API controllers authorized?
     // [Authorize]
-    [Area("ApiV2")]
     [Route ("api/v2/[controller]")]        
     public class MeshesController : RestController<Domain.Mesh, Dto.Mesh, Dto.Mesh, Dto.Mesh>
     {

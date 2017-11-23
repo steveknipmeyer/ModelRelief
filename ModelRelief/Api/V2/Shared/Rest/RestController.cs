@@ -8,6 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ModelRelief.Database;
 using ModelRelief.Domain;
+using ModelRelief.Infrastructure;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -47,7 +48,7 @@ namespace ModelRelief.Api.V2.Shared.Rest
         }
         
         [HttpGet("{id:int}")]
-        // WIP Why is Get (and not Get(list) virtual?
+        // WIP Why is Get (and not GetList) virtual?
         public virtual Task<IActionResult> Get(int id) 
         {
             return HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel> {
@@ -59,6 +60,12 @@ namespace ModelRelief.Api.V2.Shared.Rest
         public Task<IActionResult> Get([FromQuery] GetRequest getRequest)
         {
             getRequest = getRequest ?? new GetRequest();
+            var link = Url?.Link(RouteNames.DefaultApiV2, new {
+                                 pageNumber =3,
+                                 pageSize = 1,
+                                 orderBy = "Id",
+                                 ascending = true
+            });
 
             return HandleRequestAsync(new GetListRequest<TEntity, TGetModel> 
             {

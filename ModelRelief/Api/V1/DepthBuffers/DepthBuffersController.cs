@@ -17,7 +17,6 @@ using System.Threading.Tasks;
 namespace ModelRelief.Api.V1.DepthBuffers
 {
     // [Authorize]
-    [Area("ApiV1")]
     [Route ("api/v1/depth-buffers")]        
     public class DepthBuffersController : ApiController<DepthBuffer>
     {

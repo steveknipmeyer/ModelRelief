@@ -4,20 +4,12 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 
+using Microsoft.AspNetCore.Mvc;
 
-
-namespace ModelRelief.Infrastructure
+namespace ModelRelief.Api.V2.Shared
 {
-    /// <summary>
-    /// The collection of named routes.
-    /// </summary>
-    public class RouteNames
+    public interface IUrlHelperContainer
     {
-        public const string Default          = "Default";
-        public const string DefaultApiV1     = "DefaultApiV1";
-        public const string DefaultApiV2     = "DefaultApiV2";
-        public const string ApiDocumentation = "ApiDocumentation";
+        IUrlHelper Url { get; }
     }
-
-
 }

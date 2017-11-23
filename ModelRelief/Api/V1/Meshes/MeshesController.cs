@@ -16,7 +16,6 @@ using System.Threading.Tasks;
 namespace ModelRelief.Api.V1.Meshes
 {
     // [Authorize]
-    [Area("ApiV1")]
     [Route ("api/v1/[controller]")]        
     public class MeshesController : ApiController<Mesh>
     {

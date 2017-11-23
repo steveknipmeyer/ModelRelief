@@ -48,7 +48,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Api\V2\Extensions\" />
     <Folder Include="Migrations\" />
   </ItemGroup>    
 </Project>
