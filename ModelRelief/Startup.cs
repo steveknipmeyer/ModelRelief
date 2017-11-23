@@ -16,10 +16,12 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ModelRelief.Api.V2.Shared.Rest;
 using ModelRelief.Infrastructure;
 using ModelRelief.Services;
 using ModelRelief.Workbench;
 using System;
+using System.Reflection;
 using System.Collections.Generic;
 
 namespace ModelRelief
@@ -64,6 +66,11 @@ namespace ModelRelief
             builder.RegisterType<F<int, double>>().As<IFunctionOne<int>>();         // provide F<int, double> instance when an IFunctionOne<int> is required
             builder.RegisterType<FConcretePrime>().As<IFunctionTwo<double>>();      // provide FConcrete instance when an IFunctionTwo<double> is required
 #endif
+            // generics
+            // WIP Why is AsImplementedInterfaces required for the Handler?
+            builder.RegisterGeneric(typeof(GetSingleRequestHandler<,>)).AsImplementedInterfaces();
+            builder.RegisterGeneric(typeof(GetSingleRequest<,>));
+
             // MediatR : register delegates as SingleInstanceFactory and MultiInstanceFactory types
             builder.Register<SingleInstanceFactory>(context =>
             {
@@ -113,7 +120,12 @@ namespace ModelRelief
             services.AddAutoMapper(typeof(Startup));
             Mapper.AssertConfigurationIsValid();
 
+#if false
+            // WIP This leads to a runtime error during where the type GetSingleRequestHandler cannot be used with service ICancellableAsynRequestHandler.
+            //     The error happens in ConfigureAutofacServices when builder.Build is called.
+            //     AddMediatR is used in CUC but not in OAPI.
             services.AddMediatR(typeof(Startup));
+#endif
 
             return ConfigureAutofacServices (services);
         }

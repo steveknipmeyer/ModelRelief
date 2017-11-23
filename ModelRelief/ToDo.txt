@@ -7,21 +7,47 @@ ValidationActionFilter : Return a ViewResult is ModelState is not valid.
     Goal : Roundtrip a scaled mesh.       
         Scale with a Python processor.
 
-    Workplan
-        Review Spencer Schneidenback's Opinionated API.
-        How should database exceptions, such as those violating Domain DataAnnotation rules, be handled?
+    When server-side validation fails, InitializeViewHelpers is not called in the returned ViewResult.
+        The DropDownList items are not populated.
+    
+    API Goals
+        Share across UX and API
+            Query and Command handlers?
+                    GetRequest
+                    GetListRequest
+                    PutRequest
+                    PostRequest
+                    DeleteRe
+            Dto models
+            Validation
+            Issues
+                Population of related properties
+                Exception handling
+                InitializeViewHelpers -> InitializeViewControls
 
-        Is this comment invalid?
-            <!------------------------------------------------------------------------------------------------>    
+    OAPI Design
+        Benefits
+            Paging
+            PUT (partial property list) support
+            GET populates related entities
 
-    Should the CQRS pattern be implemented in the core and then consumed by the API?
+        abstract ApiController
+                HandleRequestAsync
+            abstract RestController
+                HttpGet
+                HttpPost
+                HttpPut
+                HttpDelete
 
-    Mediator Conversion
+    Questions
+        How are navigation properties expanded in GET requests in OAPI?
+        Exceptions
+            How should database exceptions, such as those violating Domain DataAnnotation rules, be handled?
+            Concurrency exceptions?
+
+    Implement Integration Tests per ContostoUniversity Core
+        Features
         Api
-
-        Implement Integration Tests per ContostoUniversity Core
-            Features
-            Api
 
     Accessing Model From JavaScript
         https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript

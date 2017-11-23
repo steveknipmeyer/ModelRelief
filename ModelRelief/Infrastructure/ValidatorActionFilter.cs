@@ -61,7 +61,7 @@ namespace ModelRelief.Infrastructure
 #if true
                     filterContext.Result = new ViewResult();
 #else
-                    // This is the case where the request did not originate from a View Misdirected API request?    
+                    // This is the case where the request did not originate from a View - misdirected API request?    
                     var result = new ContentResult();
                     string content = JsonConvert.SerializeObject(filterContext.ModelState,
                         new JsonSerializerSettings

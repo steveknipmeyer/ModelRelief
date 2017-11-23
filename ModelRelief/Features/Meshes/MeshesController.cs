@@ -70,7 +70,7 @@ namespace ModelRelief.Features.Meshes
         }
 
         [HttpPost]
-//      [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Create.Command command)
         {
             await _mediator.Send(command);
