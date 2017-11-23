@@ -5,6 +5,7 @@
 // ------------------------------------------------------------------------//
 
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using ModelRelief.Domain;
 
 namespace ModelRelief.Api.V2.Shared.Rest
@@ -32,5 +33,10 @@ namespace ModelRelief.Api.V2.Shared.Rest
         /// Gets or sets whether to use paging in the returned collection.
         /// </summary>
         public bool UsePaging { get; set; }
+
+        /// <summary>
+        /// UrlHelper from the active controller; used for generating paging links.
+        /// </summary>
+        public IUrlHelperContainer UrlHelperContainer { get; set; }
     }
 }

@@ -30,19 +30,14 @@ namespace ModelRelief.Api.V2.Shared.Rest
         where TEntity   : ModelReliefModel
         where TGetModel : IGetModel
     {
-        public IUrlHelper UrlHelper { get; }
-        
         /// <summary>
         /// Contstructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
         /// <param name="mapper">IMapper</param>
-        /// WIP How is IUrlHelperContainer injected?
-        /// <param name="urlHelperContainer">IUrlHelperContainer</param>
-        public GetListRequestHandler(ModelReliefDbContext dbContext, IMapper mapper, IUrlHelperContainer urlHelperContainer)
+        public GetListRequestHandler(ModelReliefDbContext dbContext, IMapper mapper)
             : base(dbContext, mapper, null)
         {
-            UrlHelper = urlHelperContainer.Url;
         }
 
         /// <summary>
@@ -56,7 +51,7 @@ namespace ModelRelief.Api.V2.Shared.Rest
             IQueryable<TEntity> results = DbContext.Set<TEntity>();
 
             if (message.UsePaging) {
-                var page = await CreatePagedResultsAsync<TEntity, TGetModel>(results, message.PageNumber, message.NumberOfRecords, nameof(ModelReliefModel.Id), true);
+                var page = await CreatePagedResultsAsync<TEntity, TGetModel>(results, message.UrlHelperContainer, message.PageNumber, message.NumberOfRecords, nameof(ModelReliefModel.Id), true);
                 return page;
             }
 
@@ -69,6 +64,7 @@ namespace ModelRelief.Api.V2.Shared.Rest
         /// <typeparam name="T">The type of the source IQueryable.</typeparam>
         /// <typeparam name="TReturn">The type of the returned paged results.</typeparam>
         /// <param name="queryable">The source IQueryable.</param>
+        /// <param name="urlHelperContainer">IUrlHelper to construct paging links (from active controller)</param>
         /// <param name="pageNumber">The page number you want to retrieve.</param>
         /// <param name="pageSize">The size of the page.</param>
         /// <param name="orderBy">The field or property to order by.</param>
@@ -77,6 +73,7 @@ namespace ModelRelief.Api.V2.Shared.Rest
         protected async Task<PagedResults<TReturn>> CreatePagedResultsAsync<T, TReturn>
         (
             IQueryable<T> queryable,
+            IUrlHelperContainer urlHelperContainer,
             int pageNumber,
             int pageSize,
             string orderBy,
@@ -100,8 +97,8 @@ namespace ModelRelief.Api.V2.Shared.Rest
                 pageNumber == totalPageCount
                     ? null
                     // WIP How can "DefaultApiV2" be resolved to a specific route? UrlHelper.Url is null.
-                    : UrlHelper?.Link(RouteNames.DefaultApiV2, new {
-                        page = pageNumber + 1,
+                    : urlHelperContainer.Url?.Link(RouteNames.DefaultApiV2, new {
+                        pageNumber = pageNumber + 1,
                         pageSize,
                         // WIP Are the 'orderBy' and 'ascending' query parameters supported?
                         orderBy,

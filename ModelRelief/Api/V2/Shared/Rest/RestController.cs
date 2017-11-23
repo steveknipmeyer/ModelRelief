@@ -60,18 +60,12 @@ namespace ModelRelief.Api.V2.Shared.Rest
         public Task<IActionResult> Get([FromQuery] GetRequest getRequest)
         {
             getRequest = getRequest ?? new GetRequest();
-            var link = Url?.Link(RouteNames.DefaultApiV2, new {
-                                 pageNumber =3,
-                                 pageSize = 1,
-                                 orderBy = "Id",
-                                 ascending = true
-            });
-
             return HandleRequestAsync(new GetListRequest<TEntity, TGetModel> 
             {
-                PageNumber      = getRequest.PageNumber,
-                NumberOfRecords = getRequest.NumberOfRecords,
-                UsePaging       = RestControllerOptions.UsePaging
+                PageNumber          = getRequest.PageNumber,
+                NumberOfRecords     = getRequest.NumberOfRecords,
+                UsePaging           = RestControllerOptions.UsePaging,
+                UrlHelperContainer  = this
             });
         }
 
