@@ -18,9 +18,6 @@ namespace ModelRelief.Api.V2.Shared
 {
     [Route("apiV2/[controller]")]
     [Produces("application/json")]
-    // WIP: Why is IUrlHelperContainer required?
-    //      The Controller class has a Url property.
-    //      Without this interface declaration GetListRequestHandler (which uses paging) fails.
     public abstract class ApiController : Controller, IUrlHelperContainer
     {
         public ModelReliefDbContext DbContext { get; }

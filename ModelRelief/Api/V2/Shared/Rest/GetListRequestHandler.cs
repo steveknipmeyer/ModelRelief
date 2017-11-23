@@ -51,7 +51,7 @@ namespace ModelRelief.Api.V2.Shared.Rest
             IQueryable<TEntity> results = DbContext.Set<TEntity>();
 
             if (message.UsePaging) {
-                var page = await CreatePagedResultsAsync<TEntity, TGetModel>(results, message.UrlHelperContainer, message.PageNumber, message.NumberOfRecords, nameof(ModelReliefModel.Id), true);
+                var page = await CreatePagedResultsAsync<TEntity, TGetModel>(results, message.UrlHelperContainer, message.PageNumber, message.NumberOfRecords, message.OrderBy, message.Ascending);
                 return page;
             }
 
@@ -96,11 +96,9 @@ namespace ModelRelief.Api.V2.Shared.Rest
             var nextPageUrl =
                 pageNumber == totalPageCount
                     ? null
-                    // WIP How can "DefaultApiV2" be resolved to a specific route? UrlHelper.Url is null.
                     : urlHelperContainer.Url?.Link(RouteNames.DefaultApiV2, new {
                         pageNumber = pageNumber + 1,
                         pageSize,
-                        // WIP Are the 'orderBy' and 'ascending' query parameters supported?
                         orderBy,
                         ascending
                     });

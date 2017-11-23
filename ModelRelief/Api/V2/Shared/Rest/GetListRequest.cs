@@ -20,6 +20,11 @@ namespace ModelRelief.Api.V2.Shared.Rest
         where TGetModel : IGetModel
     {
         /// <summary>
+        /// UrlHelper from the active controller; used for generating paging links.
+        /// </summary>
+        public IUrlHelperContainer UrlHelperContainer { get; set; }
+
+        /// <summary>
         /// Gets or sets the page number to fetch.
         /// </summary>
         public int PageNumber { get; set; }
@@ -30,13 +35,18 @@ namespace ModelRelief.Api.V2.Shared.Rest
         public int NumberOfRecords { get; set; }
 
         /// <summary>
+        /// Gets or sets the propery name to sort the collection.
+        /// </summary>
+        public string OrderBy { get; set; } = nameof (ModelReliefModel.Id);
+
+        /// <summary>
+        /// Gets or sets the order of the collectionn sort; ascending or descending.
+        /// </summary>
+        public bool Ascending { get; set; } = true;
+
+        /// <summary>
         /// Gets or sets whether to use paging in the returned collection.
         /// </summary>
         public bool UsePaging { get; set; }
-
-        /// <summary>
-        /// UrlHelper from the active controller; used for generating paging links.
-        /// </summary>
-        public IUrlHelperContainer UrlHelperContainer { get; set; }
     }
 }

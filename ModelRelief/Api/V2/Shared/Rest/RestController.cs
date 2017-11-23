@@ -62,10 +62,14 @@ namespace ModelRelief.Api.V2.Shared.Rest
             getRequest = getRequest ?? new GetRequest();
             return HandleRequestAsync(new GetListRequest<TEntity, TGetModel> 
             {
+                UrlHelperContainer  = this,
+
                 PageNumber          = getRequest.PageNumber,
                 NumberOfRecords     = getRequest.NumberOfRecords,
+                OrderBy             = getRequest.OrderBy,
+                Ascending           = getRequest.Ascending,
+
                 UsePaging           = RestControllerOptions.UsePaging,
-                UrlHelperContainer  = this
             });
         }
 
