@@ -8,9 +8,11 @@
 
     When server-side validation fails, InitializeViewHelpers is not called in the returned ViewResult.
         The DropDownList items are not populated.
-    
+
     API Goals
         Share across UX and API
+            Replace the ApiController base class with UxController that has different error handling (returns View) rather than BadRequest.
+
             Query and Command handlers?
                     GetRequest
                     GetListRequest
@@ -51,11 +53,9 @@
                     ValidationActionFilter.OnActionExecuted
                 end transaction
             
-    Questions
-        How are navigation properties expanded in GET requests in OAPI?
-        Exceptions
-            How should database exceptions, such as those violating Domain DataAnnotation rules, be handled?
-            Concurrency exceptions?
+    Exceptions
+        How should database exceptions, such as those violating Domain DataAnnotation rules, be handled?
+        Concurrency exceptions?
 
     Implement Integration Tests per ContostoUniversity Core
         Features
@@ -73,26 +73,33 @@
     Export    
         Refactor Export OBJ to use async/await.
 
-<-- Architecture
-    Opinionated API
+
+<-- Opinionated API
     https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-api/
     
-    Autofac
-        ASP.NET Core
-        https://autofac.readthedocs.io/en/latest/integration/aspnetcore.html
+<-- Autofac
+    ASP.NET Core
+    https://autofac.readthedocs.io/en/latest/integration/aspnetcore.html
 
-        Example
-        https://github.com/autofac/Examples/tree/master/src/AspNetCoreExample
+    Example
+    https://github.com/autofac/Examples/tree/master/src/AspNetCoreExample
    
-    AutoMapper
-        Getting along with AutoMapper and Autofac
-        https://kevsoft.net/2015/09/14/getting-along-with-automapper-and-autofac.html
+<-- AutoMapper
+    The AutoMapper.QueryableExtensions ProjectTo will populate an object graph when used with a query. 
+    Otherwise, navigation properties will be null.
+        var result = await DbContext.Set<TEntity>()
+                .ProjectTo<TGetModel>(Mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync(m => m.Id == message.Id);
 
-    Fluent Validation
-        https://github.com/JeremySkinner/FluentValidation
+    Getting along with AutoMapper and Autofac
+    https://kevsoft.net/2015/09/14/getting-along-with-automapper-and-autofac.html
 
-    MediatR
+<-- Fluent Validation
+    https://github.com/JeremySkinner/FluentValidation
 
+<-- MediatR
+
+<-- API Design
     e-Book on API Design
 
     Design Guidelines
@@ -119,13 +126,6 @@
                 API Reference
             Express relationships as "href" properties to absolute URLs.
             Provide "reference expansion" to allow references to be expanded into the principal object.
-
-    IModelProvider
-        HTTP Verb   API             CRUD
-        Get         GetAll, Find    Read 
-        Post        Create          Create 
-        Put         Update          Update 
-        Delete      Delete          Delete
 
         // File Upload
         Url: api/depth-buffers
@@ -551,7 +551,7 @@
 
     How is the ContosoUniversityCore model binding used?
         public class EntityModelBinder : IModelBinder
-        It binds a database <model> looked up from the incomping Id.
+        It binds a database <model> looked up from the incoming Id.
 
 <-- Mediator
 

@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace ModelRelief.Api.V2.Shared
 {
+    [Area("ApiV2")]
     [Route("apiV2/[controller]")]
     [Produces("application/json")]
     public abstract class ApiController : Controller, IUrlHelperContainer

@@ -74,6 +74,8 @@ namespace ModelRelief
             builder.RegisterGeneric(typeof(GetListRequest<,>));
             builder.RegisterGeneric(typeof(DeleteRequestHandler<>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(DeleteRequest<>));
+            builder.RegisterGeneric(typeof(PostRequestHandler<,,>)).AsImplementedInterfaces();
+            builder.RegisterGeneric(typeof(PostRequest<,,>));
 
             // MediatR : register delegates as SingleInstanceFactory and MultiInstanceFactory types
             builder.Register<SingleInstanceFactory>(context =>

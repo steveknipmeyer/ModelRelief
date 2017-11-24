@@ -48,7 +48,6 @@ namespace ModelRelief.Api.V2.Shared.Rest
         }
         
         [HttpGet("{id:int}")]
-        // WIP Why is Get (and not GetList) virtual?
         public virtual Task<IActionResult> Get(int id) 
         {
             return HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel> {
@@ -57,7 +56,7 @@ namespace ModelRelief.Api.V2.Shared.Rest
         }
 
         [HttpGet("")]
-        public Task<IActionResult> Get([FromQuery] GetRequest getRequest)
+        public virtual Task<IActionResult> Get([FromQuery] GetRequest getRequest)
         {
             getRequest = getRequest ?? new GetRequest();
             return HandleRequestAsync(new GetListRequest<TEntity, TGetModel> 
@@ -74,7 +73,6 @@ namespace ModelRelief.Api.V2.Shared.Rest
         }
 
         [HttpPost]
-        // WIP Why is Post virtual?
         public virtual Task<IActionResult> Post([FromBody] TPostModel postRequest)
         {
             return HandleRequestAsync(new PostRequest<TEntity, TPostModel, TGetModel> 
@@ -85,7 +83,7 @@ namespace ModelRelief.Api.V2.Shared.Rest
 
         [HttpPut("{id:int}")]
         // WIP How is the Dictionary model-bound?
-        public Task<IActionResult> Put(int id, [FromBody] Dictionary<string, object> data) 
+        public virtual Task<IActionResult> Put(int id, [FromBody] Dictionary<string, object> data) 
         {
             return HandleRequestAsync(new PutRequest<TEntity, TGetModel> 
             {
@@ -95,7 +93,7 @@ namespace ModelRelief.Api.V2.Shared.Rest
         }
 
         [HttpDelete("{id:int}")]
-        public Task<IActionResult> Delete(int id) 
+        public virtual Task<IActionResult> Delete(int id) 
         {
             return HandleRequestAsync(new DeleteRequest<TEntity> 
             {

@@ -45,13 +45,12 @@ namespace ModelRelief.Api.V2.Shared.Rest
         public override async Task<TGetModel> OnHandle(GetSingleRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
             var result = await DbContext.Set<TEntity>()
-                .ProjectTo<TGetModel>(Mapper.ConfigurationProvider)
+                 .ProjectTo<TGetModel>(Mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(m => m.Id == message.Id);
 
             if (result == null) {
                 throw new EntityNotFoundException(typeof(TEntity), message.Id);
             }
-
             return result;
         }
     }

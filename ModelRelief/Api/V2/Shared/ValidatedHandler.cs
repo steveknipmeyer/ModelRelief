@@ -41,16 +41,12 @@ namespace ModelRelief.Api.V2.Shared
         {
             DbContext = dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
             Mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
-            Validators = validators;
+
+            // WIP Why are duplicate validators injected here?
+            Validators = validators
+                .GroupBy(v => v.GetType().Name)
+                .Select(group => group.First());
         }
-        
-        /// <summary>
-        /// Abstract handler; implemented in concrete class.
-        /// </summary>
-        /// <param name="message">Request object</param>
-        /// <param name="cancellationToken">Token to allow asyn request to be cancelled.</param>
-        /// <returns></returns>
-        public abstract Task<TResponse> OnHandle(TRequest message, CancellationToken cancellationToken);
 
         /// <summary>
         /// Validation pre-processor for request.
@@ -76,5 +72,13 @@ namespace ModelRelief.Api.V2.Shared
             }
             return await OnHandle(message, cancellationToken);
         }
+
+        /// <summary>
+        /// Abstract handler; implemented in concrete class.
+        /// </summary>
+        /// <param name="message">Request object</param>
+        /// <param name="cancellationToken">Token to allow asyn request to be cancelled.</param>
+        /// <returns></returns>
+        public abstract Task<TResponse> OnHandle(TRequest message, CancellationToken cancellationToken);
     }
 }

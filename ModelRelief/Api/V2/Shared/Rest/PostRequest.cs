@@ -21,7 +21,7 @@ namespace ModelRelief.Api.V2.Shared.Rest
         where TGetModel  : IGetModel
     {
         /// <summary>
-        ///  Gets or sets the incoming POST model to be used to create the new domain model.
+        ///  Gets or sets the incoming model to be used to create the new domain model.
         /// </summary>
         public TPostModel NewEntity { get; set; }
     }
