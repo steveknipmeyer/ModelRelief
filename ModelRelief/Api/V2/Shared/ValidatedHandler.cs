@@ -43,6 +43,7 @@ namespace ModelRelief.Api.V2.Shared
             Mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
 
             // WIP Why are duplicate validators injected here?
+            //     Remove duplicates by grouping by Type name.
             Validators = validators
                 .GroupBy(v => v.GetType().Name)
                 .Select(group => group.First());

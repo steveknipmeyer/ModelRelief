@@ -14,7 +14,7 @@ namespace ModelRelief.Api.V2.Shared.Rest
     /// </summary>
     /// <typeparam name="TEntity">The domain type of the model.</typeparam>
     /// <typeparam name="TPostModel">The DTO POST model.</typeparam>
-    /// <typeparam name="TGetModel">The DTO GET model.</typeparam>
+    /// <typeparam name="TGetModel">The DTO POST model.</typeparam>
    public class PostRequest<TEntity, TPostModel, TGetModel> : IRequest<TGetModel>
         where TEntity    : ModelReliefModel
         where TPostModel : class
