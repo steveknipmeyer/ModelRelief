@@ -87,6 +87,7 @@ namespace ModelRelief.Api.V2.Shared
             }
             catch (EntityNotFoundException ex)
             {
+                // WIP Should EntityNotFoundException return a structured results instead of a simple message?
                 return NotFound(ex.Message);
             }
             catch (Exception)

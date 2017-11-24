@@ -37,7 +37,20 @@
                 HttpPost
                 HttpPut
                 HttpDelete
-
+                <Model>Controller
+                    overrides
+        Pipeline
+            DbContextTransactionFilter.OnActionExecutionAsync
+                begin transaction
+                    ValidationActionFilter.OnActionExecuting
+                        RestController HTTP Action
+                            ApiController.HandleAsyncRequest
+                                var response = await Mediator.Send(request);
+                                    ValidatatedHandler.Handle
+                                        RequestHandler.Handle
+                    ValidationActionFilter.OnActionExecuted
+                end transaction
+            
     Questions
         How are navigation properties expanded in GET requests in OAPI?
         Exceptions

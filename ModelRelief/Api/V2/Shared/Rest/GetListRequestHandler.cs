@@ -22,7 +22,7 @@ using ModelRelief.Infrastructure;
 namespace ModelRelief.Api.V2.Shared.Rest
 {
     /// <summary>
-    /// Represents a handler for returning a collection of models.
+    /// Represents a handler for a GET request for a collection of models.
     /// </summary>
     /// <typeparam name="TEntity">Domain model</typeparam>
     /// <typeparam name="TGetModel">DTO model.</typeparam>

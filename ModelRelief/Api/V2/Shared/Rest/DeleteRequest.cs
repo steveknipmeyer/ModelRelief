@@ -13,7 +13,7 @@ namespace ModelRelief.Api.V2.Shared.Rest
     ///  Represents a DELETE request for a single model.
     /// </summary>
     /// <typeparam name="TEntity">The domain type of the model.</typeparam>
-    /// WIP Why does DeleteRequest return an object?
+    /// <remarks>The returned object (always null) is not used. It is later passed to OK(response) where is generates a 204 (Success:No Content) return result.</remarks>
     public class DeleteRequest<TEntity> : IRequest<object>
         where TEntity   : ModelReliefModel
     {
