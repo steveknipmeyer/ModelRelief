@@ -7,8 +7,11 @@
         Scale with a Python processor.
 
     Issues
-        Loggingg
+        Logging
         Exception handling
+            Create a production exception page.
+                How should EntityNotFoundException and NullRequestException be presented to the user?
+
             How should database exceptions, such as those violating Domain DataAnnotation rules, be handled?
             https://andrewlock.net/using-cancellationtokens-in-asp-net-core-mvc-controllers/
             Concurrency exceptions?

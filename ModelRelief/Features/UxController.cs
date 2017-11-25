@@ -43,22 +43,7 @@ namespace ModelRelief.Features
         protected async Task<object> HandleRequestAsync<TReturn>(IRequest<TReturn> request)
         {
             if (request == null)
-            {
-                var error = new ErrorResponse
-                {
-                    Error = new Error
-                    {
-                        Message = "A bad request was received.",
-                        Details = new[] { 
-                            new ErrorDetail
-                            {
-                                Message = "The body of the request contained no usable content."
-                            }
-                        }
-                    }
-                };
-                return BadRequest(error);
-            }
+                throw new NullRequestException(this.Request.Path, request.GetType());
             
             try
             {
@@ -68,12 +53,12 @@ namespace ModelRelief.Features
             }
             catch (ValidationException)
             {
+                // action method returns View(model) when result is null
                 return null;
             }
-            catch (EntityNotFoundException ex)
+            catch (EntityNotFoundException)
             {
-                // WIP Should EntityNotFoundException return a structured results instead of a simple message?
-                return NotFound(ex.Message);
+                throw;
             }
             catch (Exception)
             {
