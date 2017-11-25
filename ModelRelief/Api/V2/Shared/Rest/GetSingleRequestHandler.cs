@@ -39,7 +39,6 @@ namespace ModelRelief.Api.V2.Shared.Rest
         /// Handles the Get single model request.
         /// </summary>
         /// <param name="message">Request message</param>
-        /// WIP How is an async request cancelled using a CancellationToken?
         /// <param name="cancellationToken">Token to allows operation to be cancelled</param>
         /// <returns></returns>
         public override async Task<TGetModel> OnHandle(GetSingleRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)

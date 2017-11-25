@@ -6,15 +6,19 @@
     Goal : Roundtrip a scaled mesh.       
         Scale with a Python processor.
 
-    When server-side validation fails, InitializeViewHelpers is not called in the returned ViewResult.
-        The DropDownList items are not populated.
+    View Edit needs to do a PutRequest because PostRequestHandler always performs a database Add.
+    Validation
+        How can PostRequest share validation with TPostModel (e.g. Dto.Mesh)?
+            PostRequest holds the TPostModel in the NewEntity property.
+    Issues
+        Loggingg
+        Exception handling
+            How should database exceptions, such as those violating Domain DataAnnotation rules, be handled?
+            https://andrewlock.net/using-cancellationtokens-in-asp-net-core-mvc-controllers/
+            Concurrency exceptions?
 
     API Goals
         Share across UX and API
-
-            Replace the ApiController base class with UxController that has different error handling (returns View) rather than BadRequest.
-            Remove ValidatorActionFilter.
-
             Query and Command handlers?
                     GetRequest
                     GetListRequest
@@ -22,10 +26,6 @@
                     PostRequest
                     DeleteRequest
             Dto models
-            Validation
-            Issues
-                Exception handling
-                InitializeViewHelpers -> InitializeViewControls
 
     OAPI Design
         Benefits
@@ -53,11 +53,6 @@
                                         RequestHandler.Handle
                     ValidationActionFilter.OnActionExecuted
                 end transaction
-            
-    Exceptions
-        How should database exceptions, such as those violating Domain DataAnnotation rules, be handled?
-        https://andrewlock.net/using-cancellationtokens-in-asp-net-core-mvc-controllers/
-        Concurrency exceptions?
 
     Implement Integration Tests per ContostoUniversity Core
         Features

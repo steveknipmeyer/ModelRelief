@@ -28,8 +28,8 @@ namespace ModelRelief.Api.V2.Meshes
          
             RuleFor(m => m.NewEntity.Description)
                 .NotNull().WithMessage("The Description property is required.")
-                .MinimumLength(3).WithMessage("The Description must be three or more characters.");
-//              .Must(description => "SLK".Equals(description)).WithMessage("The Description absolutely must be SLK.");
+                .MinimumLength(3).WithMessage("The Description must be three or more characters.")
+                .Must(description => "SLK".Equals(description)).WithMessage("The Description absolutely must be SLK.");
 
             RuleFor(m => m.NewEntity.Format)
                 .NotEmpty().WithMessage("The file format must be provided.");

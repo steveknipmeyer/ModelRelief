@@ -17,6 +17,7 @@ using ModelRelief.Database;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using MediatR;
+using ModelRelief.Api.V2.Shared.Rest;
 
 namespace ModelRelief.Test.Api.Models
 {
@@ -34,7 +35,7 @@ namespace ModelRelief.Test.Api.Models
         {
             // Arrange
 //          ModelReliefDbContext        dbContext          = null;
-            ILogger<ModelsController>   logger             = null;
+//          ILogger<ModelsController>   logger             = null;
             IMapper                     mapper             = null;
             IMediator                   mediator           = null;
             var dbContextMock = new Mock<ModelReliefDbContext>();
@@ -45,10 +46,10 @@ namespace ModelRelief.Test.Api.Models
                     }
             );
 
-            var controller = new ModelsController(dbContextMock.Object, logger, mapper, mediator);
+            var controller = new ModelsController(dbContextMock.Object, mapper, mediator);
 
             // Act
-            var result = controller.Index(new Index.Query());
+            var result = controller.Index(new GetRequest());
 
             // Assert
             Assert.IsType<ViewResult>(result);

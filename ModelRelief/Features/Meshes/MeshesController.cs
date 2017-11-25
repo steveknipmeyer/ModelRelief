@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using ModelRelief.Api.V2.Shared.Rest;
 using ModelRelief.Database;
 using ModelRelief.Domain;
 using System;
@@ -18,96 +19,34 @@ using System.Threading.Tasks;
 
 namespace ModelRelief.Features.Meshes
 {
-//  [Authorize]
-    public class MeshesController : Controller
+    /// <summary>
+    /// Represents a controller to handle Mesh API requests.
+    /// </summary>
+    [Authorize]
+    public class MeshesController : ViewController<Domain.Mesh, Dto.Mesh, Dto.Mesh, Dto.Mesh>
     {
-        ModelReliefDbContext        _dbContext;
-        ILogger<MeshesController>   _logger;
-        IMediator                   _mediator;
-
-        public MeshesController(ModelReliefDbContext dbContext, ILogger<MeshesController> logger, IMediator mediator)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="dbContext">Database context</param>
+        /// <param name="mapper">IMapper</param>
+        /// <param name="mediator">IMediator</param>
+        public MeshesController(ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator)
+            : base(dbContext, mapper, mediator)
         {
-            _dbContext          = dbContext;
-            _logger             = logger;
-            _mediator           = mediator;
-        }
-
-        public async Task<IActionResult> Index (Index.Query query)
-        {
-            var model = await _mediator.Send (query);
-
-            return View(model);
-        }
-
-       public async Task<IActionResult> Details (Details.Query query)
-       {
-            var model = await _mediator.Send (query);
-
-            return View(model);
-       }
-
-        public async Task<IActionResult> Delete(Delete.Query query)
-        {
-            var model = await _mediator.Send(query);
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(Delete.Command command)
-        {
-            await _mediator.Send(command);
-
-            return this.RedirectToAction(nameof(Index));
-        }
-
-        [HttpGet]
-        public ActionResult Create()
-        {
-            InitializeViewControls();
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Create.Command command)
-        {
-            await _mediator.Send(command);
-
-            return this.RedirectToAction(nameof(Index));
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Edit(Edit.Query message)
-        {
-            var model = await _mediator.Send(message);
-
-            InitializeViewControls(model);
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [AllowAnonymous]
-        public async Task<IActionResult> Edit(Edit.Command command)
-        {
-            await _mediator.Send(command);
-
-            return this.RedirectToAction(nameof(Index));
         }
         
         /// <summary>
         /// Setup View controls for select controls, etc.
         /// </summary>
         /// <param name="projectId">Project Id to select</param>
-        private void InitializeViewControls(Dto.Mesh mesh = null)
+        protected override void InitializeViewControls(Dto.Mesh mesh = null)
         {
             ViewBag.MeshFormats     = ViewHelpers.PopulateEnumDropDownList<MeshFormat>("Select Mesh Format");
-            ViewBag.ProjectId       = ViewHelpers.PopulateModelDropDownList<Project>(_dbContext.Projects, "Select a project", mesh?.ProjectId);
-            ViewBag.CameraId        = ViewHelpers.PopulateModelDropDownList<Camera>(_dbContext.Cameras, "Select a camera", mesh?.CameraId);
-            ViewBag.DepthBufferId   = ViewHelpers.PopulateModelDropDownList<DepthBuffer>(_dbContext.DepthBuffers, "Select a depth buffer", mesh?.DepthBufferId);
-            ViewBag.MeshTransformId = ViewHelpers.PopulateModelDropDownList<MeshTransform>(_dbContext.MeshTransforms, "Select a mesh transform", mesh?.CameraId);
+            ViewBag.ProjectId       = ViewHelpers.PopulateModelDropDownList<Project>(DbContext.Projects, "Select a project", mesh?.ProjectId);
+            ViewBag.CameraId        = ViewHelpers.PopulateModelDropDownList<Camera>(DbContext.Cameras, "Select a camera", mesh?.CameraId);
+            ViewBag.DepthBufferId   = ViewHelpers.PopulateModelDropDownList<DepthBuffer>(DbContext.DepthBuffers, "Select a depth buffer", mesh?.DepthBufferId);
+            ViewBag.MeshTransformId = ViewHelpers.PopulateModelDropDownList<MeshTransform>(DbContext.MeshTransforms, "Select a mesh transform", mesh?.CameraId);
         }
     }
 }

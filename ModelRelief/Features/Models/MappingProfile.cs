@@ -6,13 +6,13 @@
 
 using AutoMapper;
 using FluentValidation;
+using ModelRelief.Api.V2.Shared.Rest;
 using ModelRelief.Domain;
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace ModelRelief.Dto
 {
-    public class Model3d
+    public class Model3d : IGetModel
     {
         public int Id { get; set; }
 

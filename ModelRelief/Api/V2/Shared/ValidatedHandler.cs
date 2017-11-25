@@ -41,7 +41,8 @@ namespace ModelRelief.Api.V2.Shared
 
             // WIP Why are duplicate validators injected here?
             //     Remove duplicates by grouping by Type name.
-            Validators = validators
+
+            Validators = validators?
                 .GroupBy(v => v.GetType().Name)
                 .Select(group => group.First());
         }

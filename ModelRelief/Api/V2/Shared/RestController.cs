@@ -11,12 +11,11 @@ using ModelRelief.Domain;
 using ModelRelief.Infrastructure;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ModelRelief.Api.V2.Shared.Rest;
 
-namespace ModelRelief.Api.V2.Shared.Rest
+namespace ModelRelief.Api.V2.Shared
 {
     public abstract class RestController<TEntity, TGetModel, TSingleGetModel, TPostModel> : ApiController
-        // WIP When would a TSingleGetModel be different than TGetModel?
-        //     Possibly, TGetModel would contain additional detail not returned in a collection.
         where TEntity         : ModelReliefModel
         where TGetModel       : IGetModel           
         where TSingleGetModel : IGetModel

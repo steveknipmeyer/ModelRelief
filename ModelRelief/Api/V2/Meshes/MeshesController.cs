@@ -10,7 +10,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using ModelRelief.Api.V2.Shared.Rest;
+using ModelRelief.Api.V2.Shared;
 using ModelRelief.Database;
 using ModelRelief;
 using Microsoft.AspNetCore.Mvc;

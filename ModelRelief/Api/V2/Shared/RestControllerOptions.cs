@@ -4,7 +4,7 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 
-namespace ModelRelief.Api.V2.Shared.Rest
+namespace ModelRelief.Api.V2.Shared
 {
     /// <summary>
     /// Represents the options for an instance of a RestController.
