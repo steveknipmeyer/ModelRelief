@@ -22,12 +22,12 @@ using ModelRelief.Infrastructure;
 namespace ModelRelief.Api.V2.Shared.Rest
 {
     /// <summary>
-    /// Represents a handler for a POST request for a model.
+    /// Represents a handler for a POST request to create a new model.
     /// </summary>
     /// <typeparam name="TEntity">Domain model</typeparam>
     /// <typeparam name="TPostModel">DTO POST model.</typeparam>
     /// <typeparam name="TGetModel">DTO GET model.</typeparam>
-    public class PostRequestHandler<TEntity, TPostModel, TGetModel> : ValidatedHandler<PostRequest<TEntity, TPostModel, TGetModel>, TGetModel>
+    public class PostAddRequestHandler<TEntity, TPostModel, TGetModel> : ValidatedHandler<PostAddRequest<TEntity, TPostModel, TGetModel>, TGetModel>
         where TEntity    : ModelReliefModel
         where TPostModel : class
         where TGetModel  : IGetModel
@@ -37,7 +37,7 @@ namespace ModelRelief.Api.V2.Shared.Rest
         /// </summary>
         /// <param name="dbContext">Database context</param>
         /// <param name="mapper">IMapper</param>
-        public PostRequestHandler(ModelReliefDbContext dbContext, IMapper mapper, IEnumerable<IValidator<PostRequest<TEntity, TPostModel, TGetModel>>> validators)
+        public PostAddRequestHandler(ModelReliefDbContext dbContext, IMapper mapper, IEnumerable<IValidator<PostAddRequest<TEntity, TPostModel, TGetModel>>> validators)
             : base(dbContext, mapper, validators)
         {
         }
@@ -48,12 +48,12 @@ namespace ModelRelief.Api.V2.Shared.Rest
         /// <param name="message">POST request.</param>
         /// <param name="cancellationToken">Token to allow the async operation to be cancelled.</param>
         /// <returns></returns>
-        public override async Task<TGetModel> OnHandle(PostRequest<TEntity, TPostModel, TGetModel> message, CancellationToken cancellationToken)
+        public override async Task<TGetModel> OnHandle(PostAddRequest<TEntity, TPostModel, TGetModel> message, CancellationToken cancellationToken)
         {
             var newModel = Mapper.Map<TEntity>(message.NewEntity);
             DbContext.Set<TEntity>().Add(newModel);
-
             await DbContext.SaveChangesAsync(cancellationToken);
+
             return Mapper.Map<TGetModel>(newModel);
         }
     }

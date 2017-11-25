@@ -137,7 +137,7 @@ namespace ModelRelief.Features
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> Create(TPostModel postRequest)
         {
-            var newModel = await HandleRequestAsync(new PostRequest<TEntity, TPostModel, TGetModel> 
+            var newModel = await HandleRequestAsync(new PostAddRequest<TEntity, TPostModel, TGetModel> 
             {
                 NewEntity = postRequest
             });
@@ -178,9 +178,9 @@ namespace ModelRelief.Features
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> Edit(TPostModel postRequest)
         {
-            var model = await HandleRequestAsync(new PostRequest<TEntity, TPostModel, TGetModel> 
+            var model = await HandleRequestAsync(new PostUpdateRequest<TEntity, TPostModel, TGetModel> 
             {
-                NewEntity = postRequest
+                UpdatedModel = postRequest
             });
 
             // validation failed; return to View

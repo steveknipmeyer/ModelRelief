@@ -74,7 +74,7 @@ namespace ModelRelief.Api.V2.Shared
         [HttpPost]
         public virtual Task<IActionResult> Post([FromBody] TPostModel postRequest)
         {
-            return HandleRequestAsync(new PostRequest<TEntity, TPostModel, TGetModel> 
+            return HandleRequestAsync(new PostAddRequest<TEntity, TPostModel, TGetModel> 
             {
                 NewEntity = postRequest
             });

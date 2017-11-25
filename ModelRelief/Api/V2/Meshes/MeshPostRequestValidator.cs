@@ -14,7 +14,7 @@ namespace ModelRelief.Api.V2.Meshes
     /// <summary>
     /// Represents a validator for a Mesh PostRequest.
     /// </summary>
-    public class MeshPostRequestValidator : RequestValidator<PostRequest<Domain.Mesh, Dto.Mesh, Dto.Mesh>>
+    public class MeshPostRequestValidator : RequestValidator<PostAddRequest<Domain.Mesh, Dto.Mesh, Dto.Mesh>>
     {
         /// <summary>
         /// Constructor.
