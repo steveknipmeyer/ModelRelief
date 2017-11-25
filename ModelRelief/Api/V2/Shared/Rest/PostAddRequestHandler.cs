@@ -50,7 +50,7 @@ namespace ModelRelief.Api.V2.Shared.Rest
         /// <returns></returns>
         public override async Task<TGetModel> OnHandle(PostAddRequest<TEntity, TPostModel, TGetModel> message, CancellationToken cancellationToken)
         {
-            var newModel = Mapper.Map<TEntity>(message.NewEntity);
+            var newModel = Mapper.Map<TEntity>(message.NewModel);
             DbContext.Set<TEntity>().Add(newModel);
             await DbContext.SaveChangesAsync(cancellationToken);
 

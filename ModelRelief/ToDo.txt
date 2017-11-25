@@ -6,10 +6,6 @@
     Goal : Roundtrip a scaled mesh.       
         Scale with a Python processor.
 
-    View Edit needs to do a PutRequest because PostRequestHandler always performs a database Add.
-    Validation
-        How can PostRequest share validation with TPostModel (e.g. Dto.Mesh)?
-            PostRequest holds the TPostModel in the NewEntity property.
     Issues
         Loggingg
         Exception handling

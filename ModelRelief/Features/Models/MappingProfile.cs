@@ -32,7 +32,6 @@ namespace ModelRelief.Dto
     }
     public class Model3dValidator : AbstractValidator<Dto.Model3d>
     {
-
         public Model3dValidator()
         {
             RuleFor(m => m.Name)

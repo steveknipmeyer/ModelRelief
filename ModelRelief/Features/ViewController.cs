@@ -139,7 +139,7 @@ namespace ModelRelief.Features
         {
             var newModel = await HandleRequestAsync(new PostAddRequest<TEntity, TPostModel, TGetModel> 
             {
-                NewEntity = postRequest
+                NewModel = postRequest
             });
 
             // validation failed; return to View

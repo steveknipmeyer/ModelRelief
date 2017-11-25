@@ -23,6 +23,6 @@ namespace ModelRelief.Api.V2.Shared.Rest
         /// <summary>
         ///  Gets or sets the incoming model to be used to create the new domain model.
         /// </summary>
-        public TPostModel NewEntity { get; set; }
+        public TPostModel NewModel { get; set; }
     }
 }

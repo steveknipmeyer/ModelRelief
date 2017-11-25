@@ -76,7 +76,7 @@ namespace ModelRelief.Api.V2.Shared
         {
             return HandleRequestAsync(new PostAddRequest<TEntity, TPostModel, TGetModel> 
             {
-                NewEntity = postRequest
+                NewModel = postRequest
             });
         }
 
