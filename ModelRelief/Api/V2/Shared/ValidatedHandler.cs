@@ -26,9 +26,6 @@ namespace ModelRelief.Api.V2.Shared
         public ModelReliefDbContext DbContext { get; }
         public IMapper Mapper { get; }
 
-        // WIP How are the validators injected into the handler?
-        //     Does Mediator find all validators for the TGetModel and create a list?
-        //     Does this include both FV as well as DataAnnotation validators?
         public IEnumerable<IValidator<TRequest>> Validators { get; }
 
         /// <summary>

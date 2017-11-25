@@ -65,7 +65,7 @@ namespace ModelRelief.Features.Meshes
         [HttpGet]
         public ActionResult Create()
         {
-            InitializeViewHelpers();
+            InitializeViewControls();
             return View();
         }
 
@@ -83,7 +83,7 @@ namespace ModelRelief.Features.Meshes
         {
             var model = await _mediator.Send(message);
 
-            InitializeViewHelpers(model);
+            InitializeViewControls(model);
             return View(model);
         }
 
@@ -101,7 +101,7 @@ namespace ModelRelief.Features.Meshes
         /// Setup View controls for select controls, etc.
         /// </summary>
         /// <param name="projectId">Project Id to select</param>
-        private void InitializeViewHelpers(Dto.Mesh mesh = null)
+        private void InitializeViewControls(Dto.Mesh mesh = null)
         {
             ViewBag.MeshFormats     = ViewHelpers.PopulateEnumDropDownList<MeshFormat>("Select Mesh Format");
             ViewBag.ProjectId       = ViewHelpers.PopulateModelDropDownList<Project>(_dbContext.Projects, "Select a project", mesh?.ProjectId);

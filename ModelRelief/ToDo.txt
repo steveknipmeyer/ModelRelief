@@ -11,18 +11,19 @@
 
     API Goals
         Share across UX and API
+
             Replace the ApiController base class with UxController that has different error handling (returns View) rather than BadRequest.
+            Remove ValidatorActionFilter.
 
             Query and Command handlers?
                     GetRequest
                     GetListRequest
                     PutRequest
                     PostRequest
-                    DeleteRe
+                    DeleteRequest
             Dto models
             Validation
             Issues
-                Population of related properties
                 Exception handling
                 InitializeViewHelpers -> InitializeViewControls
 
@@ -55,6 +56,7 @@
             
     Exceptions
         How should database exceptions, such as those violating Domain DataAnnotation rules, be handled?
+        https://andrewlock.net/using-cancellationtokens-in-asp-net-core-mvc-controllers/
         Concurrency exceptions?
 
     Implement Integration Tests per ContostoUniversity Core
@@ -72,7 +74,6 @@
 
     Export    
         Refactor Export OBJ to use async/await.
-
 
 <-- Opinionated API
     https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-api/
