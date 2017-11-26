@@ -23,6 +23,7 @@ using ModelRelief.Workbench;
 using System;
 using System.Reflection;
 using System.Collections.Generic;
+using ModelRelief.Features.Errors;
 
 namespace ModelRelief
 {
@@ -36,8 +37,7 @@ namespace ModelRelief
         /// <param name="configuration">Configuration service</param>
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
-            
+            Configuration = configuration;            
         }
 
         /// <summary>
@@ -116,6 +116,7 @@ namespace ModelRelief
                 { 
                     options.InputFormatters.Insert(0, new RawRequestBodyFormatter());
                     // N.B. Order matters!    
+                    options.Filters.Add(typeof(GlobalExceptionFilter));
                     options.Filters.Add(typeof(DbContextTransactionFilter));
 //                  options.Filters.Add(typeof(ValidatorActionFilter));
                 })
@@ -150,16 +151,9 @@ namespace ModelRelief
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-            app.UseExceptionHandler(new ExceptionHandlerOptions
-                {
-                    ExceptionHandler = context => context.Response.WriteAsync("Application error")
-                });
-            }
+
+            app.UseStatusCodePagesWithReExecute("/Errors/Error/{0}");
 
             // Set up custom content types, associating file extension to MIME type
             var provider = new FileExtensionContentTypeProvider();
@@ -172,10 +166,6 @@ namespace ModelRelief
             app.AddStaticFilePaths(env.ContentRootPath, new string[] {"node_modules", "Scripts"});
             app.UseAuthentication();
             app.UseMvc(ConfigureRoutes);
-
-            #if false
-            app.Run((context) => context.Response.WriteAsync("Invalid route"));
-            #endif
         }
 
         /// <summary>

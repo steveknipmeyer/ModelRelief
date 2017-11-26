@@ -56,6 +56,8 @@ namespace ModelRelief.Features
             {
                 Id = id
             });
+            if (model == null)
+                return NotFound();
 
             return View(model);
         }
@@ -96,6 +98,8 @@ namespace ModelRelief.Features
             {
                 Id = id
             });
+            if (model == null)
+                return NotFound();
 
             return View(model);
         }
@@ -164,6 +168,8 @@ namespace ModelRelief.Features
             {
                 Id = id
             });
+            if (model == null)
+                return NotFound();
 
             InitializeViewControls((TGetModel) model);
             return View(model);

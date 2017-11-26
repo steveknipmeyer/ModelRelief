@@ -9,12 +9,15 @@
     Issues
         Logging
         Exception handling
-            Create a production exception page.
-                How should EntityNotFoundException and NullRequestException be presented to the user?
+            Throw a new ApiValidationException (that packages FV ValidationException) in ValidatedHandler.
 
             How should database exceptions, such as those violating Domain DataAnnotation rules, be handled?
             https://andrewlock.net/using-cancellationtokens-in-asp-net-core-mvc-controllers/
             Concurrency exceptions?
+
+        ApiV1 -> ApiV2
+            Support for binary POST requests.
+            File renaming?
 
     API Goals
         Share across UX and API

@@ -15,15 +15,26 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "ModelRelief": {
+    "ModelRelief Development": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "https": null, 
+      "https": null,
+      // stackoverflow.com/questions/46406525/net-core-2-0-basepath-error
+      "applicationUrl": "http://localhost:60655"
+    },
+    "ModelRelief Production": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      },
+      "https": null,
       // stackoverflow.com/questions/46406525/net-core-2-0-basepath-error
       "applicationUrl": "http://localhost:60655"
     }
+
   }
 }
