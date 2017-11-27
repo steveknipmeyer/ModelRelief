@@ -66,7 +66,7 @@ namespace ModelRelief.Api.V2.Shared
 
                 if (validationResult.Any())
                 {
-                    // WIP Throw ApiValidationException here that packages FV ValidationException.
+                    // WIP Throw ApiValidationException here that packages FV ValidationException, including the TRequest type.
                     throw new ValidationException(validationResult);
                 }
             }

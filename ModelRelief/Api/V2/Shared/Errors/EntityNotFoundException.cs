@@ -22,6 +22,6 @@ namespace ModelRelief.Api.V2.Shared.Errors
         /// <param name="entityType">Type of entity.</param>
         /// <param name="id">Unique Id of entity.</param>
         public EntityNotFoundException(Type entityType, int id) 
-            : base($"A {entityType.Name} with ID {id} was not found.") {}
+            : base($"A {entityType.Name} with Id {id} was not found.") {}
     }
 }

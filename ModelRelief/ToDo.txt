@@ -9,8 +9,6 @@
     Issues
         Logging
         Exception handling
-            Throw a new ApiValidationException (that packages FV ValidationException) in ValidatedHandler.
-
             How should database exceptions, such as those violating Domain DataAnnotation rules, be handled?
             https://andrewlock.net/using-cancellationtokens-in-asp-net-core-mvc-controllers/
             Concurrency exceptions?
@@ -18,6 +16,7 @@
         ApiV1 -> ApiV2
             Support for binary POST requests.
             File renaming?
+                Introduce a post-processing step for REST operations.
 
     API Goals
         Share across UX and API
@@ -44,6 +43,13 @@
                 HttpDelete
                 <Model>Controller
                     overrides
+
+        abstract ValidatedHandler
+            <Request>Handler
+
+        abstract RequestValidator
+            <Model><Request>Validator
+
         Pipeline
             DbContextTransactionFilter.OnActionExecutionAsync
                 begin transaction

@@ -9,9 +9,11 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ModelRelief.Api.V2.Shared.Errors;
+using ModelRelief.Api.V2.Shared.Rest;
 using ModelRelief.Database;
 using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace ModelRelief.Api.V2.Shared
@@ -47,20 +49,13 @@ namespace ModelRelief.Api.V2.Shared
         {
             if (request == null)
             {
-                var error = new ErrorResponse
-                {
-                    Error = new Error
-                    {
-                        Message = "A bad request was received.",
-                        Details = new[] { 
-                            new ErrorDetail
-                            {
-                                Message = "The body of the request contained no usable content."
-                            }
-                        }
-                    }
-                };
-                return BadRequest(error);
+                var apiValidationResult = new ApiValidationResult(
+                    this, 
+                    HttpStatusCode.BadRequest, 
+                    ApiStatusCode.NullRequest, 
+                    "The body of the request contained no usable content.");
+
+                return apiValidationResult.ObjectResult();
             }
             
             try
@@ -70,26 +65,26 @@ namespace ModelRelief.Api.V2.Shared
 
                 return Ok(response);
             }
-            catch (ValidationException ex)
+            catch (ValidationException)
             {
-                var error = new ErrorResponse
-                {
-                    Error = new Error
-                    {
-                        Message = "A bad request was received.",
-                        Details = ex.Errors.Select(e => new ErrorDetail
-                        {
-                            Message = e.ErrorMessage,
-                            Target  = e.PropertyName
-                        }).ToArray()
-                    }
-                };
-                return BadRequest(error);
+                // WIP: Create a helper method to map a validation error into a specific ApiStatusCode(Model, Request).
+                var apiValidationResult = new ApiValidationResult(
+                    this, 
+                    HttpStatusCode.BadRequest, 
+                    ApiStatusCode.Default, 
+                    "One or more of the properties are invalid in the submitted request.");
+
+                return apiValidationResult.ObjectResult();
             }
             catch (EntityNotFoundException ex)
             {
-                // WIP Should EntityNotFoundException return a structured results instead of a simple message?
-                return NotFound(ex.Message);
+                var apiValidationResult = new ApiValidationResult(
+                    this, 
+                    HttpStatusCode.NotFound, 
+                    ApiStatusCode.NotFound, 
+                    ex.Message);
+
+                return apiValidationResult.ObjectResult();
             }
             catch (Exception)
             {

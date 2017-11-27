@@ -81,7 +81,6 @@ namespace ModelRelief.Api.V2.Shared
         }
 
         [HttpPut("{id:int}")]
-        // WIP How is the Dictionary model-bound?
         public virtual Task<IActionResult> Put(int id, [FromBody] Dictionary<string, object> data) 
         {
             return HandleRequestAsync(new PutRequest<TEntity, TGetModel> 
