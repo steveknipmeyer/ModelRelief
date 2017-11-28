@@ -3,6 +3,7 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ModelRelief.Infrastructure;
 using Newtonsoft.Json;
@@ -25,39 +26,153 @@ namespace ModelRelief.Api.V2.Shared.Rest
         public IEnumerable<ValidationError> Errors;
     }
 
+    public enum StatusCodeBaseOffsets
+    {
+        Unknown         = 0,
+
+        General         = 100,
+        Files           = 500,
+
+        Camera          = 1000,
+        DepthBuffer     = 2000,
+        Mesh            = 3000,
+        MeshTransform   = 4000,
+        Model3d         = 5000,
+        Project         = 6000,
+    }
+
+    public enum HttpRequestBaseOffsets
+    {
+        Unknown         = 0,
+
+        Get             = 1,
+        Post            = 2,
+        Put             = 3,
+        Delete          = 4,
+    }
+
     /// <summary>
     /// API status codes returned by the controllers.
     /// </summary>
     public enum ApiStatusCode
     {
         // General
-        Default                             = 100,
-        NullRequest                         = 101,    
-        NotFound                            = 102,    
+        Default                             = StatusCodeBaseOffsets.General + 1,
+        NullRequest                         = StatusCodeBaseOffsets.General + 2,    
+        NotFound                            = StatusCodeBaseOffsets.General + 3,
 
         // Files
-        FileCreation                        = 500,
-        FileUpdate                          = 501,
+        FileCreation                        = StatusCodeBaseOffsets.Files + 1,    
+        FileUpdate                          = StatusCodeBaseOffsets.Files + 2,
         
         // Camera
-        CameraPutValidationError            = 1000,
+        CameraGetValidationError            = StatusCodeBaseOffsets.Camera + HttpRequestBaseOffsets.Get,
+        CameraPostValidationError           = StatusCodeBaseOffsets.Camera + HttpRequestBaseOffsets.Post,
+        CameraPutValidationError            = StatusCodeBaseOffsets.Camera + HttpRequestBaseOffsets.Put,
+        CameraDeleteValidationError            = StatusCodeBaseOffsets.Camera + HttpRequestBaseOffsets.Delete,
 
         // DepthBuffer
-        DepthBufferPutValidationError       = 2000,
-        DepthBufferPostValidationError      = 2001,
+        DepthBufferGetValidationError       = StatusCodeBaseOffsets.DepthBuffer + HttpRequestBaseOffsets.Get,
+        DepthBufferPostValidationError      = StatusCodeBaseOffsets.DepthBuffer + HttpRequestBaseOffsets.Post,
+        DepthBufferPutValidationError       = StatusCodeBaseOffsets.DepthBuffer + HttpRequestBaseOffsets.Put,
+        DepthBufferDeleteValidationError    = StatusCodeBaseOffsets.DepthBuffer + HttpRequestBaseOffsets.Delete,
 
         // Mesh
-        MeshPutValidationError              = 3000,
-        MeshPostValidationError             = 3001,
+        MeshGetValidationError              = StatusCodeBaseOffsets.Mesh + HttpRequestBaseOffsets.Get,
+        MeshPostValidationError             = StatusCodeBaseOffsets.Mesh + HttpRequestBaseOffsets.Post,
+        MeshPutValidationError              = StatusCodeBaseOffsets.Mesh + HttpRequestBaseOffsets.Put,
+        MeshDeleteValidationError           = StatusCodeBaseOffsets.Mesh + HttpRequestBaseOffsets.Delete,
 
         // MeshTransform
-        MeshTransformPutValidationError     = 4000,
+        MeshTransformGetValidationError     = StatusCodeBaseOffsets.DepthBuffer + HttpRequestBaseOffsets.Get,
+        MeshTransformPostValidationError    = StatusCodeBaseOffsets.DepthBuffer + HttpRequestBaseOffsets.Post,
+        MeshTransformPutValidationError     = StatusCodeBaseOffsets.DepthBuffer + HttpRequestBaseOffsets.Put,
+        MeshTransformDeleteValidationError  = StatusCodeBaseOffsets.DepthBuffer + HttpRequestBaseOffsets.Delete,
 
         // Model3d
-        ModelPutValidationError             = 5000,
+        ModelGetValidationError             = StatusCodeBaseOffsets.Model3d + HttpRequestBaseOffsets.Get,
+        ModelPostValidationError            = StatusCodeBaseOffsets.Model3d + HttpRequestBaseOffsets.Post,
+        ModelPutValidationError             = StatusCodeBaseOffsets.Model3d + HttpRequestBaseOffsets.Put,
+        ModelDeleteValidationError          = StatusCodeBaseOffsets.Model3d + HttpRequestBaseOffsets.Delete,
 
         // Project
-        ProjectPutValidationError           = 6000
+        ProjectgetValidationError           = StatusCodeBaseOffsets.Project + HttpRequestBaseOffsets.Get,
+        ProjectPostValidationError          = StatusCodeBaseOffsets.Project + HttpRequestBaseOffsets.Post,
+        ProjectPutValidationError           = StatusCodeBaseOffsets.Project + HttpRequestBaseOffsets.Put,
+        ProjectDeleteValidationError        = StatusCodeBaseOffsets.Project + HttpRequestBaseOffsets.Delete,
+    }
+
+    /// <summary>
+    /// Helper class to look up an ApiStatusCode based on the HTTP request and the domain model.
+    /// </summary>
+    public static class ApiValidationHelper
+    {
+        /// <summary>
+        /// Returns an ApiStatusCode for a validation error given the HTTP request and the CQRS request type.
+        /// </summary>
+        /// <param name="httpRequest">HTTP request.</param>
+        /// <param name="apiRequestType">CQRS request.</param>
+        /// <returns></returns>
+        public static ApiStatusCode MapRequestToApiStatusCode (HttpRequest httpRequest, Type apiRequestType)
+        {
+            // 1st generic type is the domain model
+            Type domainModelType = apiRequestType.GenericTypeArguments?.First();
+
+            if (domainModelType == null)
+                return ApiStatusCode.Default;
+
+            // find base offset of domain model
+            var baseOffset = StatusCodeBaseOffsets.Unknown;
+
+            if (domainModelType == typeof(Domain.Camera))
+                baseOffset = StatusCodeBaseOffsets.Camera;
+
+            if (domainModelType == typeof(Domain.DepthBuffer))
+                baseOffset = StatusCodeBaseOffsets.DepthBuffer;
+
+            if (domainModelType == typeof(Domain.Mesh))
+                baseOffset = StatusCodeBaseOffsets.Mesh;
+
+            if (domainModelType == typeof(Domain.MeshTransform))
+                baseOffset = StatusCodeBaseOffsets.MeshTransform;
+
+            if (domainModelType == typeof(Domain.Model3d))
+                baseOffset = StatusCodeBaseOffsets.Model3d;
+
+            if (domainModelType == typeof(Domain.Project))
+                baseOffset = StatusCodeBaseOffsets.Project;
+
+            // no domain model match; stop
+            if (baseOffset == StatusCodeBaseOffsets.Unknown)
+                return ApiStatusCode.Default;
+
+
+
+            // now map HTTP request type to an offet
+            var requestOffset = HttpRequestBaseOffsets.Unknown;
+
+            var requestType = httpRequest.Method;
+
+            if (String.Equals(requestType, "GET", StringComparison.CurrentCultureIgnoreCase))
+                requestOffset = HttpRequestBaseOffsets.Get;
+
+            if (String.Equals(requestType, "POST", StringComparison.CurrentCultureIgnoreCase))
+                requestOffset = HttpRequestBaseOffsets.Post;
+
+            if (String.Equals(requestType, "PUT", StringComparison.CurrentCultureIgnoreCase))
+                requestOffset = HttpRequestBaseOffsets.Put;
+
+            if (String.Equals(requestType, "DELETE", StringComparison.CurrentCultureIgnoreCase))
+                requestOffset = HttpRequestBaseOffsets.Delete;
+
+            // no HTTP request type match; stop
+            if (requestOffset == HttpRequestBaseOffsets.Unknown)
+                return ApiStatusCode.Default;
+
+
+            var statusCode = (ApiStatusCode) ((int) baseOffset + (int) requestOffset);
+            return statusCode;
+        }
     }
 
     /// <summary>

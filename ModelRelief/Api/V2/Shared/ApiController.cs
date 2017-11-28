@@ -65,14 +65,15 @@ namespace ModelRelief.Api.V2.Shared
 
                 return Ok(response);
             }
-            catch (ValidationException)
+            catch (ApiValidationException ex)
             {
-                // WIP: Create a helper method to map a validation error into a specific ApiStatusCode(Model, Request).
+                var typeArguments = ex.RequestType.GenericTypeArguments;
+
                 var apiValidationResult = new ApiValidationResult(
                     this, 
                     HttpStatusCode.BadRequest, 
-                    ApiStatusCode.Default, 
-                    "One or more of the properties are invalid in the submitted request.");
+                    ApiValidationHelper.MapRequestToApiStatusCode(this.Request, ex.RequestType), 
+                    $"One or more of the properties are invalid in the submitted request: {ex.RequestType}.");
 
                 return apiValidationResult.ObjectResult();
             }

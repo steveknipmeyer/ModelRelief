@@ -7,6 +7,9 @@
         Scale with a Python processor.
 
     Issues
+        Refactor ApiValidationHelper.MapRequestToApiStatusCode.
+        Implement PUT validation.
+
         Logging
         Exception handling
             How should database exceptions, such as those violating Domain DataAnnotation rules, be handled?
@@ -18,15 +21,44 @@
             File renaming?
                 Introduce a post-processing step for REST operations.
 
-    API Goals
-        Share across UX and API
-            Query and Command handlers?
-                    GetRequest
-                    GetListRequest
-                    PutRequest
-                    PostRequest
-                    DeleteRequest
-            Dto models
+        Implement Integration Tests per ContostoUniversity Core
+            Features
+            Api
+
+    Accessing Model From JavaScript
+        https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
+
+    Create a utility URL composer.
+
+    File Transfer
+        Use jQuery!
+        Wait for file POST to complete before initiating the second metadata POST.
+
+    Export    
+        Refactor Export OBJ to use async/await.
+
+<-- Unit Testing
+    Base the authentication on an environment/runtime setting so Identity.MockUserId is always used for unit tests.
+    Support database authentication.
+
+    API Testing Mocks
+        How can RouteNames.ApiDocumentation be registered as a route?
+        Schema
+        Host
+        Port
+
+<-- Mediator
+
+    Mediator Pipeline
+        Should there be top-level logging and exception handling in a pipeline wrapper?
+        https://codeopinion.com/fat-controller-cqrs-diet-command-pipeline/
+        Authorization
+            Extend the Authorize attribute to allow checking for a user-owned resource.
+        Logging
+        Exception Handling
+
+<-- Opinionated API
+    https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-api/
 
     OAPI Design
         Benefits
@@ -61,25 +93,6 @@
                                         RequestHandler.Handle
                     ValidationActionFilter.OnActionExecuted
                 end transaction
-
-    Implement Integration Tests per ContostoUniversity Core
-        Features
-        Api
-
-    Accessing Model From JavaScript
-        https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
-
-    Create a utility URL composer.
-
-    File Transfer
-        Use jQuery!
-        Wait for file POST to complete before initiating the second metadata POST.
-
-    Export    
-        Refactor Export OBJ to use async/await.
-
-<-- Opinionated API
-    https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-api/
     
 <-- Autofac
     ASP.NET Core
@@ -101,7 +114,6 @@
 <-- Fluent Validation
     https://github.com/JeremySkinner/FluentValidation
 
-<-- MediatR
 
 <-- API Design
     e-Book on API Design
@@ -149,16 +161,6 @@
                 MeshTransform Id
             HTTP Response
                 URL (Mesh)
-
-<-- Unit Testing
-    Base the authentication on an environment/runtime setting so Identity.MockUserId is always used for unit tests.
-    Support database authentication.
-
-    API Testing Mocks
-        How can RouteNames.ApiDocumentation be registered as a route?
-        Schema
-        Host
-        Port
 
 <-- System
     Throwing policy.
@@ -557,12 +559,3 @@
         public class EntityModelBinder : IModelBinder
         It binds a database <model> looked up from the incoming Id.
 
-<-- Mediator
-
-    Mediator Pipeline
-        Should there be top-level logging and exception handling in a pipeline wrapper?
-        https://codeopinion.com/fat-controller-cqrs-diet-command-pipeline/
-        Authorization
-            Extend the Authorize attribute to allow checking for a user-owned resource.
-        Logging
-        Exception Handling

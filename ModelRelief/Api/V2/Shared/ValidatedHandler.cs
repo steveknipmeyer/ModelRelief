@@ -12,6 +12,7 @@ using AutoMapper;
 using FluentValidation;
 using MediatR;
 using ModelRelief.Database;
+using ModelRelief.Api.V2.Shared.Errors;
 
 namespace ModelRelief.Api.V2.Shared
 {
@@ -41,7 +42,6 @@ namespace ModelRelief.Api.V2.Shared
 
             // WIP Why are duplicate validators injected here?
             //     Remove duplicates by grouping by Type name.
-
             Validators = validators?
                 .GroupBy(v => v.GetType().Name)
                 .Select(group => group.First());
@@ -66,8 +66,8 @@ namespace ModelRelief.Api.V2.Shared
 
                 if (validationResult.Any())
                 {
-                    // WIP Throw ApiValidationException here that packages FV ValidationException, including the TRequest type.
-                    throw new ValidationException(validationResult);
+                    // package TRequest type with FV ValidationException
+                    throw new ApiValidationException(typeof(TRequest), validationResult);
                 }
             }
             return await OnHandle(message, cancellationToken);
