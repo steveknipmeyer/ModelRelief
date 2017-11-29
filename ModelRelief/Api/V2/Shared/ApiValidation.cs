@@ -26,7 +26,11 @@ namespace ModelRelief.Api.V2.Shared.Rest
         public IEnumerable<ValidationError> Errors;
     }
 
-    public enum StatusCodeBaseOffsets
+    /// <summary>
+    /// Status code offsets for resource groups.
+    /// Messages for each resource type begin at the offset.
+    /// </summary>
+    public enum StatusCodeBase
     {
         Unknown         = 0,
 
@@ -41,7 +45,11 @@ namespace ModelRelief.Api.V2.Shared.Rest
         Project         = 6000,
     }
 
-    public enum HttpRequestBaseOffsets
+    /// <summary>
+    /// Status code offsets for HTTP method types.
+    /// Messages for each method begin at the offset.
+    /// </summary>
+    public enum HttpRequestBaseOffset
     {
         Unknown         = 0,
 
@@ -57,56 +65,114 @@ namespace ModelRelief.Api.V2.Shared.Rest
     public enum ApiStatusCode
     {
         // General
-        Default                             = StatusCodeBaseOffsets.General + 1,
-        NullRequest                         = StatusCodeBaseOffsets.General + 2,    
-        NotFound                            = StatusCodeBaseOffsets.General + 3,
+        Default                             = StatusCodeBase.General + 1,
+        NullRequest                         = StatusCodeBase.General + 2,    
+        NotFound                            = StatusCodeBase.General + 3,
 
         // Files
-        FileCreation                        = StatusCodeBaseOffsets.Files + 1,    
-        FileUpdate                          = StatusCodeBaseOffsets.Files + 2,
+        FileCreation                        = StatusCodeBase.Files + 1,    
+        FileUpdate                          = StatusCodeBase.Files + 2,
         
         // Camera
-        CameraGetValidationError            = StatusCodeBaseOffsets.Camera + HttpRequestBaseOffsets.Get,
-        CameraPostValidationError           = StatusCodeBaseOffsets.Camera + HttpRequestBaseOffsets.Post,
-        CameraPutValidationError            = StatusCodeBaseOffsets.Camera + HttpRequestBaseOffsets.Put,
-        CameraDeleteValidationError            = StatusCodeBaseOffsets.Camera + HttpRequestBaseOffsets.Delete,
+        CameraGetValidationError            = StatusCodeBase.Camera + HttpRequestBaseOffset.Get,
+        CameraPostValidationError           = StatusCodeBase.Camera + HttpRequestBaseOffset.Post,
+        CameraPutValidationError            = StatusCodeBase.Camera + HttpRequestBaseOffset.Put,
+        CameraDeleteValidationError            = StatusCodeBase.Camera + HttpRequestBaseOffset.Delete,
 
         // DepthBuffer
-        DepthBufferGetValidationError       = StatusCodeBaseOffsets.DepthBuffer + HttpRequestBaseOffsets.Get,
-        DepthBufferPostValidationError      = StatusCodeBaseOffsets.DepthBuffer + HttpRequestBaseOffsets.Post,
-        DepthBufferPutValidationError       = StatusCodeBaseOffsets.DepthBuffer + HttpRequestBaseOffsets.Put,
-        DepthBufferDeleteValidationError    = StatusCodeBaseOffsets.DepthBuffer + HttpRequestBaseOffsets.Delete,
+        DepthBufferGetValidationError       = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Get,
+        DepthBufferPostValidationError      = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Post,
+        DepthBufferPutValidationError       = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Put,
+        DepthBufferDeleteValidationError    = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Delete,
 
         // Mesh
-        MeshGetValidationError              = StatusCodeBaseOffsets.Mesh + HttpRequestBaseOffsets.Get,
-        MeshPostValidationError             = StatusCodeBaseOffsets.Mesh + HttpRequestBaseOffsets.Post,
-        MeshPutValidationError              = StatusCodeBaseOffsets.Mesh + HttpRequestBaseOffsets.Put,
-        MeshDeleteValidationError           = StatusCodeBaseOffsets.Mesh + HttpRequestBaseOffsets.Delete,
+        MeshGetValidationError              = StatusCodeBase.Mesh + HttpRequestBaseOffset.Get,
+        MeshPostValidationError             = StatusCodeBase.Mesh + HttpRequestBaseOffset.Post,
+        MeshPutValidationError              = StatusCodeBase.Mesh + HttpRequestBaseOffset.Put,
+        MeshDeleteValidationError           = StatusCodeBase.Mesh + HttpRequestBaseOffset.Delete,
 
         // MeshTransform
-        MeshTransformGetValidationError     = StatusCodeBaseOffsets.DepthBuffer + HttpRequestBaseOffsets.Get,
-        MeshTransformPostValidationError    = StatusCodeBaseOffsets.DepthBuffer + HttpRequestBaseOffsets.Post,
-        MeshTransformPutValidationError     = StatusCodeBaseOffsets.DepthBuffer + HttpRequestBaseOffsets.Put,
-        MeshTransformDeleteValidationError  = StatusCodeBaseOffsets.DepthBuffer + HttpRequestBaseOffsets.Delete,
+        MeshTransformGetValidationError     = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Get,
+        MeshTransformPostValidationError    = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Post,
+        MeshTransformPutValidationError     = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Put,
+        MeshTransformDeleteValidationError  = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Delete,
 
         // Model3d
-        ModelGetValidationError             = StatusCodeBaseOffsets.Model3d + HttpRequestBaseOffsets.Get,
-        ModelPostValidationError            = StatusCodeBaseOffsets.Model3d + HttpRequestBaseOffsets.Post,
-        ModelPutValidationError             = StatusCodeBaseOffsets.Model3d + HttpRequestBaseOffsets.Put,
-        ModelDeleteValidationError          = StatusCodeBaseOffsets.Model3d + HttpRequestBaseOffsets.Delete,
+        ModelGetValidationError             = StatusCodeBase.Model3d + HttpRequestBaseOffset.Get,
+        ModelPostValidationError            = StatusCodeBase.Model3d + HttpRequestBaseOffset.Post,
+        ModelPutValidationError             = StatusCodeBase.Model3d + HttpRequestBaseOffset.Put,
+        ModelDeleteValidationError          = StatusCodeBase.Model3d + HttpRequestBaseOffset.Delete,
 
         // Project
-        ProjectgetValidationError           = StatusCodeBaseOffsets.Project + HttpRequestBaseOffsets.Get,
-        ProjectPostValidationError          = StatusCodeBaseOffsets.Project + HttpRequestBaseOffsets.Post,
-        ProjectPutValidationError           = StatusCodeBaseOffsets.Project + HttpRequestBaseOffsets.Put,
-        ProjectDeleteValidationError        = StatusCodeBaseOffsets.Project + HttpRequestBaseOffsets.Delete,
+        ProjectgetValidationError           = StatusCodeBase.Project + HttpRequestBaseOffset.Get,
+        ProjectPostValidationError          = StatusCodeBase.Project + HttpRequestBaseOffset.Post,
+        ProjectPutValidationError           = StatusCodeBase.Project + HttpRequestBaseOffset.Put,
+        ProjectDeleteValidationError        = StatusCodeBase.Project + HttpRequestBaseOffset.Delete,
     }
+    
 
     /// <summary>
     /// Helper class to look up an ApiStatusCode based on the HTTP request and the domain model.
     /// </summary>
     public static class ApiValidationHelper
     {
+        /// <summary>
+        /// Map a domain model to an API status code base offset.
+        /// </summary>
+        /// <param name="domainModelType">Domain model type.</param>
+        /// <returns>Base of status code.</returns>
+        private static StatusCodeBase MapDomainModelToStatusCodeBase(Type domainModelType)
+        {
+            // find base offset of domain model
+            var baseOffset = StatusCodeBase.Unknown;
+
+            if (domainModelType == typeof(Domain.Camera))
+                baseOffset = StatusCodeBase.Camera;
+
+            if (domainModelType == typeof(Domain.DepthBuffer))
+                baseOffset = StatusCodeBase.DepthBuffer;
+
+            if (domainModelType == typeof(Domain.Mesh))
+                baseOffset = StatusCodeBase.Mesh;
+
+            if (domainModelType == typeof(Domain.MeshTransform))
+                baseOffset = StatusCodeBase.MeshTransform;
+
+            if (domainModelType == typeof(Domain.Model3d))
+                baseOffset = StatusCodeBase.Model3d;
+
+            if (domainModelType == typeof(Domain.Project))
+                baseOffset = StatusCodeBase.Project;
+
+            // no domain model match
+            return baseOffset;
+        }
+
+        /// <summary>
+        /// Map an HTTP request type to a status code offset from the base resource.
+        /// </summary>
+        /// <param name="requestType">HTTP request.</param>
+        /// <returns>Offset of status code message from base.</returns>
+        private static HttpRequestBaseOffset MapRequestTypeToBaseOffset (string requestType)
+        {
+            // now map HTTP request type to an offset
+            var requestOffset = HttpRequestBaseOffset.Unknown;
+
+            if (String.Equals(requestType, "GET", StringComparison.CurrentCultureIgnoreCase))
+                requestOffset = HttpRequestBaseOffset.Get;
+
+            if (String.Equals(requestType, "POST", StringComparison.CurrentCultureIgnoreCase))
+                requestOffset = HttpRequestBaseOffset.Post;
+
+            if (String.Equals(requestType, "PUT", StringComparison.CurrentCultureIgnoreCase))
+                requestOffset = HttpRequestBaseOffset.Put;
+
+            if (String.Equals(requestType, "DELETE", StringComparison.CurrentCultureIgnoreCase))
+                requestOffset = HttpRequestBaseOffset.Delete;
+
+            return requestOffset;
+        }
+
         /// <summary>
         /// Returns an ApiStatusCode for a validation error given the HTTP request and the CQRS request type.
         /// </summary>
@@ -117,56 +183,21 @@ namespace ModelRelief.Api.V2.Shared.Rest
         {
             // 1st generic type is the domain model
             Type domainModelType = apiRequestType.GenericTypeArguments?.First();
-
             if (domainModelType == null)
                 return ApiStatusCode.Default;
 
-            // find base offset of domain model
-            var baseOffset = StatusCodeBaseOffsets.Unknown;
-
-            if (domainModelType == typeof(Domain.Camera))
-                baseOffset = StatusCodeBaseOffsets.Camera;
-
-            if (domainModelType == typeof(Domain.DepthBuffer))
-                baseOffset = StatusCodeBaseOffsets.DepthBuffer;
-
-            if (domainModelType == typeof(Domain.Mesh))
-                baseOffset = StatusCodeBaseOffsets.Mesh;
-
-            if (domainModelType == typeof(Domain.MeshTransform))
-                baseOffset = StatusCodeBaseOffsets.MeshTransform;
-
-            if (domainModelType == typeof(Domain.Model3d))
-                baseOffset = StatusCodeBaseOffsets.Model3d;
-
-            if (domainModelType == typeof(Domain.Project))
-                baseOffset = StatusCodeBaseOffsets.Project;
-
+            var baseOffset = MapDomainModelToStatusCodeBase(domainModelType);
+            
             // no domain model match; stop
-            if (baseOffset == StatusCodeBaseOffsets.Unknown)
+            if (StatusCodeBase.Unknown == baseOffset)    
                 return ApiStatusCode.Default;
 
-
-
-            // now map HTTP request type to an offet
-            var requestOffset = HttpRequestBaseOffsets.Unknown;
-
+            // now map HTTP request type to an offset
             var requestType = httpRequest.Method;
-
-            if (String.Equals(requestType, "GET", StringComparison.CurrentCultureIgnoreCase))
-                requestOffset = HttpRequestBaseOffsets.Get;
-
-            if (String.Equals(requestType, "POST", StringComparison.CurrentCultureIgnoreCase))
-                requestOffset = HttpRequestBaseOffsets.Post;
-
-            if (String.Equals(requestType, "PUT", StringComparison.CurrentCultureIgnoreCase))
-                requestOffset = HttpRequestBaseOffsets.Put;
-
-            if (String.Equals(requestType, "DELETE", StringComparison.CurrentCultureIgnoreCase))
-                requestOffset = HttpRequestBaseOffsets.Delete;
+            var requestOffset = MapRequestTypeToBaseOffset(requestType);
 
             // no HTTP request type match; stop
-            if (requestOffset == HttpRequestBaseOffsets.Unknown)
+            if (HttpRequestBaseOffset.Unknown == requestOffset)    
                 return ApiStatusCode.Default;
 
 
