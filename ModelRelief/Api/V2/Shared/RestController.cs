@@ -12,6 +12,7 @@ using ModelRelief.Infrastructure;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ModelRelief.Api.V2.Shared.Rest;
+using System;
 
 namespace ModelRelief.Api.V2.Shared
 {
@@ -72,16 +73,29 @@ namespace ModelRelief.Api.V2.Shared
         }
 
         [HttpPost]
-        public virtual Task<IActionResult> Post([FromBody] TPostModel postRequest)
+        public virtual async Task<IActionResult> Post([FromBody] TPostModel postRequest)
         {
-            return HandleRequestAsync(new PostAddRequest<TEntity, TPostModel, TGetModel> 
+            var result =  await HandleRequestAsync(new PostAddRequest<TEntity, TPostModel, TGetModel> 
             {
                 NewModel = postRequest
             });
+
+            // Return the model URI in the HTTP Response Location Header
+            //  XMLHttpRequest.getResponseHeader('Location') :  http://localhost:60655/api/v1/meshes/10
+            //  XMLHttpRequest.responseText = (JSON) { id : 10 }
+            if (result is OkObjectResult)
+            {
+                var newModel = (TGetModel)((OkObjectResult) result).Value;
+                string responseUrl = Url.RouteUrl( new {id = newModel.Id});
+                Uri responseUrlAbsolute = new Uri($"{Request.Scheme}://{Request.Host}{responseUrl}");
+                Response.Headers["Location"] = responseUrlAbsolute.AbsoluteUri;
+            }
+
+            return result;
         }
 
         [HttpPut("{id:int}")]
-        public virtual Task<IActionResult> PutAsync(int id, [FromBody] Dictionary<string, object> data) 
+        public virtual Task<IActionResult> Put(int id, [FromBody] Dictionary<string, object> data) 
         {
             return HandleRequestAsync (new PutRequest<TEntity, TGetModel>
             { 

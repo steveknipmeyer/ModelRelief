@@ -7,7 +7,7 @@
         Scale with a Python processor.
 
     Issues
-        Set the Location header for POST requests.
+        GetSingle does not recognize query parameters.
 
         ApiV1 -> ApiV2
             Support for binary POST requests.
