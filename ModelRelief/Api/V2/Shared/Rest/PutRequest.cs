@@ -45,29 +45,14 @@ namespace ModelRelief.Api.V2.Shared.Rest
         /// Gets or sets the updated model after applying the collection of incoming properties to the domain model.
         /// </summary>
         public TGetModel UpdatedModel { get; set; }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="id">Model Id.</param>
-        /// <param name="parameters">Dictionary of moderl properties to set.</param>
-        /// <param name="dbContext">Database context.</param>
-        public PutRequest(int id, Dictionary<string, object> parameters, ModelReliefDbContext dbContext)
-        {
-            Id = id;
-            Parameters = parameters;
-            DbContext = dbContext;
-
-            BuildUpdatedModel();
-        }
         
         /// <summary>
         /// Builds the UpdatedModel property containing the complete composition of old and new properties.
         /// </summary>
         /// <returns>TGetModel</returns>
-        public TGetModel BuildUpdatedModel ()
+        public async Task<TGetModel> BuildUpdatedModel ()
         {
-            var domainModel = BuildDomainModel();
+            var domainModel = await BuildDomainModel();
             UpdatedModel = Mapper.Map<TEntity, TGetModel>(domainModel);
 
             return UpdatedModel;
@@ -78,11 +63,11 @@ namespace ModelRelief.Api.V2.Shared.Rest
         /// </summary>
         /// <param name="dbContext">Database context.</param>
         /// <returns>Domain model</returns>
-        public TEntity BuildDomainModel ()
+        public async Task<TEntity> BuildDomainModel ()
         {
             // find target model
-            var model = DbContext.Set<TEntity>()
-                .SingleOrDefault(m => m.Id == this.Id);
+            var model = await DbContext.Set<TEntity>()
+                .SingleOrDefaultAsync(m => m.Id == this.Id);
 
             if (model == null)
                 throw new EntityNotFoundException(typeof(TEntity), this.Id);

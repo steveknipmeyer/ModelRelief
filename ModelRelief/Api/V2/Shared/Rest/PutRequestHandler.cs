@@ -48,7 +48,7 @@ namespace ModelRelief.Api.V2.Shared.Rest
         public override async Task<TGetModel> OnHandle(PutRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
             // find target model
-            var model = message.BuildDomainModel();
+            var model = await message.BuildDomainModel();
 
             await DbContext.SaveChangesAsync();
             return Mapper.Map<TGetModel>(model);
