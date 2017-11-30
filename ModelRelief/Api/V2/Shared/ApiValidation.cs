@@ -3,6 +3,7 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ModelRelief.Infrastructure;
@@ -263,15 +264,21 @@ namespace ModelRelief.Api.V2.Shared.Rest
         /// Constructs the ObjectResult that will be later serialized by the middleware into JSON.
         /// </summary>
         /// <returns></returns>
-        public ObjectResult ObjectResult()
+        public ObjectResult ObjectResult(IEnumerable<ValidationFailure> validationFailures = null)
         {
             string documentation = RouteNames.ApiDocumentation;
             string apiReferenceRelative = _controller.Url.RouteUrl(documentation, new {id = (int) _apiStatusCode});
-            var apiReferenceAbsolute    = string.Format($"{_controller.HttpContext.Request.Scheme}://{_controller.HttpContext.Request.Host}{apiReferenceRelative}");
+            var apiReferenceAbsolute = string.Format($"{_controller.HttpContext.Request.Scheme}://{_controller.HttpContext.Request.Host}{apiReferenceRelative}");
 
-            IEnumerable<ValidationError> Errors = _controller.ModelState.Keys
-                    .SelectMany(key => _controller.ModelState[key].Errors.Select(x => new ValidationError(key, x.ErrorMessage)))
-                    .ToList();
+            var errors = new List<ValidationError>();
+            foreach (var validationFailure in validationFailures)
+            {
+                var qualifiedPropertyName = validationFailure.PropertyName;
+                var segments = qualifiedPropertyName.Split('.');
+                var propertyName = segments.Last();
+                var message = validationFailure.ErrorMessage;
+                errors.Add (new ValidationError(field: propertyName, message: message));
+            }
 
             var jsonResult = new ApiResult()
             {
@@ -279,7 +286,7 @@ namespace ModelRelief.Api.V2.Shared.Rest
                 ApiStatusCode    = (int) _apiStatusCode,
                 DeveloperMessage = _developerMessage,
                 ApiReference     = apiReferenceAbsolute,
-                Errors           = Errors
+                Errors           = errors
             };
 
             var objectResult = new ObjectResult(jsonResult);

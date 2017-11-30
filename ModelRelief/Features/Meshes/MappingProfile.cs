@@ -53,7 +53,6 @@ namespace ModelRelief.Dto
                 .NotEmpty().WithMessage("The file format must be provided.");
         }
     }
-
 }
 
 namespace ModelRelief.Features.Meshes

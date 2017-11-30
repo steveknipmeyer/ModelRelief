@@ -75,7 +75,7 @@ namespace ModelRelief.Api.V2.Shared
                     ApiValidationHelper.MapRequestToApiStatusCode(this.Request, ex.RequestType), 
                     $"One or more of the properties are invalid in the submitted request: {ex.RequestType}.");
 
-                return apiValidationResult.ObjectResult();
+                return apiValidationResult.ObjectResult(ex.ValidationException.Errors);
             }
             catch (EntityNotFoundException ex)
             {
