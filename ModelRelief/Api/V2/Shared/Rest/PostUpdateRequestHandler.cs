@@ -51,11 +51,15 @@ namespace ModelRelief.Api.V2.Shared.Rest
         /// <returns></returns>
         public override async Task<TGetModel> OnHandle(PostUpdateRequest<TEntity, TPostModel, TGetModel> message, CancellationToken cancellationToken)
         {
-            var newModel = Mapper.Map<TEntity>(message.UpdatedModel);
-            DbContext.Set<TEntity>().Update(newModel);
+            var updatedModel = Mapper.Map<TEntity>(message.UpdatedModel);
+            DbContext.Set<TEntity>().Update(updatedModel);
             await DbContext.SaveChangesAsync(cancellationToken);
 
-            return Mapper.Map<TGetModel>(newModel);
+            var expandedUpdatedModel = await DbContext.Set<TEntity>()
+                 .ProjectTo<TGetModel>(Mapper.ConfigurationProvider)
+                 .SingleOrDefaultAsync(m => m.Id == updatedModel.Id);
+
+            return expandedUpdatedModel;
         }
     }
 }

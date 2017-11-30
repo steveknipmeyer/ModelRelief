@@ -45,7 +45,7 @@ namespace ModelRelief.Api.V2.Shared.Rest
         {
             var result = await DbContext.Set<TEntity>()
                  .ProjectTo<TGetModel>(Mapper.ConfigurationProvider)
-                .SingleOrDefaultAsync(m => m.Id == message.Id);
+                 .SingleOrDefaultAsync(m => m.Id == message.Id);
 
             if (result == null) {
                 throw new EntityNotFoundException(typeof(TEntity), message.Id);

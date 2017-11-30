@@ -54,7 +54,13 @@ namespace ModelRelief.Api.V2.Shared.Rest
             DbContext.Set<TEntity>().Add(newModel);
             await DbContext.SaveChangesAsync(cancellationToken);
 
-            return Mapper.Map<TGetModel>(newModel);
+            // N.B. ProjectTo populates all navigation properties. 
+            //      Mapper.Map<TGetModel>(newModel) would return only the primary model.
+            var expandedNewModel = await DbContext.Set<TEntity>()
+                 .ProjectTo<TGetModel>(Mapper.ConfigurationProvider)
+                 .SingleOrDefaultAsync(m => m.Id == newModel.Id);
+
+            return expandedNewModel;
         }
     }
 }

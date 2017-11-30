@@ -51,7 +51,12 @@ namespace ModelRelief.Api.V2.Shared.Rest
             var model = await message.BuildDomainModel();
 
             await DbContext.SaveChangesAsync();
-            return Mapper.Map<TGetModel>(model);
+
+            var expandedModel = await DbContext.Set<TEntity>()
+                 .ProjectTo<TGetModel>(Mapper.ConfigurationProvider)
+                 .SingleOrDefaultAsync(m => m.Id == message.Id);
+
+            return expandedModel;
         }
     }
 }

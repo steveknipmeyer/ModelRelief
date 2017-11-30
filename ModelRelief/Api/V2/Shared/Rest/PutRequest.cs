@@ -86,7 +86,8 @@ namespace ModelRelief.Api.V2.Shared.Rest
                 // now set property in target
                 var domainValue = property.PropertyType.IsEnum ? 
                     Enum.ToObject(property.PropertyType, value) : 
-                    Convert.ChangeType(value, property.PropertyType);
+                    // https://stackoverflow.com/questions/19811583/invalid-cast-from-system-double-to-system-nullable
+                    Convert.ChangeType(value, Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType);
 
                 property.SetValue(model, value: domainValue);
             }

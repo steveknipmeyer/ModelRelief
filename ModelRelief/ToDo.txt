@@ -7,8 +7,26 @@
         Scale with a Python processor.
 
     Issues
-            Return to async BuildDomainModel?
-                There may be no need for a PutRequest constructor and an UpdateModel property...l
+        API 404s serve an HTML Error page. They should return a JSON response.
+
+        Should the PutRequest always use the UpdatedModel (rather than processing the Parameters at all )?
+        Set the Location header for POST requests.
+
+        ApiV1 -> ApiV2
+            Support for binary POST requests.
+            File Names
+                IDs
+                    The resource ID is permanent and invariant.
+                    There is overhead keeping the disk file name in synch with the resource name.
+                Resource Names
+                    There is an adminsitrative advantage; reviewing a user folder will have semantic names.
+
+            File renaming?
+                Introduce a post-processing step for REST operations.
+
+        Implement Integration Tests per ContostoUniversity Core
+            Features
+            Api
 
         Logging
         Exception handling
@@ -16,14 +34,7 @@
             https://andrewlock.net/using-cancellationtokens-in-asp-net-core-mvc-controllers/
             Concurrency exceptions?
 
-        ApiV1 -> ApiV2
-            Support for binary POST requests.
-            File renaming?
-                Introduce a post-processing step for REST operations.
 
-        Implement Integration Tests per ContostoUniversity Core
-            Features
-            Api
 
     Accessing Model From JavaScript
         https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
