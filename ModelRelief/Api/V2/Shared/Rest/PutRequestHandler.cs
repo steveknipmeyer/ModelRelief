@@ -37,13 +37,7 @@ namespace ModelRelief.Api.V2.Shared.Rest
         /// <param name="dbContext">Database context</param>
         /// <param name="mapper">IMapper</param>
         public PutRequestHandler(ModelReliefDbContext dbContext, IMapper mapper, IEnumerable<IValidator<PutRequest<TEntity, TGetModel>>> validators)
-            : base(dbContext, mapper, validators)
-        {
-            // WIP: How should validation be done for a PUT request?
-            //      Can the validation be applied after the target model has been updated (but before it is written to the database)?
-            //      The validators could be applied and then an exception could be thrown if there are errors.
-            //      The validation exception would be caught by ApiController and then a structured ErrorResponse result returned.
-        }
+            : base(dbContext, mapper, validators) {}
 
         /// <summary>
         /// Handles a PUT model request.
@@ -54,28 +48,7 @@ namespace ModelRelief.Api.V2.Shared.Rest
         public override async Task<TGetModel> OnHandle(PutRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
             // find target model
-            var model = await DbContext.Set<TEntity>()
-                .SingleOrDefaultAsync(m => m.Id == message.Id);
-
-            if (model == null) {
-                throw new EntityNotFoundException(typeof(TEntity), message.Id);
-            }
-
-            var properties = typeof(TEntity).GetProperties();
-
-            foreach (var putProperty in message.Parameters) {
-                var name  = putProperty.Key;
-                var value = putProperty.Value;
-
-                // find matching property in target object
-                var property = properties.Single(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-                if (property == null) {
-                    continue;
-                }
-
-                // now set property in target
-                property.SetValue(model, Convert.ChangeType(value, property.PropertyType));
-            }
+            var model = message.BuildDomainModel();
 
             await DbContext.SaveChangesAsync();
             return Mapper.Map<TGetModel>(model);

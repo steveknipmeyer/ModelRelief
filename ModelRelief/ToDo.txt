@@ -7,7 +7,12 @@
         Scale with a Python processor.
 
     Issues
-        Implement PUT validation.
+        ModelState is not set for a PUT request.
+            Theory: the model-binding does not happen because there is no validator for the PUT parameters.
+            Other requests have a Dto.Mesh (e.g. TPostModel) parameter so the FV AbstractValidators are found.
+            Refactor ObjectResult to use the ValidationResult.Errors not the ModelState.Errors.
+            Return to async BuildDomainModel?
+                There may be no need for a PutRequest constructor and an UpdateModel property...l
 
         Logging
         Exception handling

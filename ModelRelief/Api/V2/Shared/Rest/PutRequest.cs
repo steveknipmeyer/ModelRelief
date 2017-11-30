@@ -7,6 +7,13 @@
 using System.Collections.Generic;
 using MediatR;
 using ModelRelief.Domain;
+using ModelRelief.Api.V2.Shared.Errors;
+using System.Linq;
+using System;
+using ModelRelief.Database;
+using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using System.Threading.Tasks;
 
 namespace ModelRelief.Api.V2.Shared.Rest
 {
@@ -28,6 +35,78 @@ namespace ModelRelief.Api.V2.Shared.Rest
         /// Gets or sets the Dictionary of key:values to use to update the model properties.
         /// </summary>
         public Dictionary<string, object> Parameters { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the Database context.
+        /// </summary>
+        public ModelReliefDbContext DbContext  { get; set; }
+
+        /// <summary>
+        /// Gets or sets the updated model after applying the collection of incoming properties to the domain model.
+        /// </summary>
+        public TGetModel UpdatedModel { get; set; }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="id">Model Id.</param>
+        /// <param name="parameters">Dictionary of moderl properties to set.</param>
+        /// <param name="dbContext">Database context.</param>
+        public PutRequest(int id, Dictionary<string, object> parameters, ModelReliefDbContext dbContext)
+        {
+            Id = id;
+            Parameters = parameters;
+            DbContext = dbContext;
+
+            BuildUpdatedModel();
+        }
+        
+        /// <summary>
+        /// Builds the UpdatedModel property containing the complete composition of old and new properties.
+        /// </summary>
+        /// <returns>TGetModel</returns>
+        public TGetModel BuildUpdatedModel ()
+        {
+            var domainModel = BuildDomainModel();
+            UpdatedModel = Mapper.Map<TEntity, TGetModel>(domainModel);
+
+            return UpdatedModel;
+        }
+
+        /// <summary>
+        /// Converts a PUT request to a domain model (for validation).
+        /// </summary>
+        /// <param name="dbContext">Database context.</param>
+        /// <returns>Domain model</returns>
+        public TEntity BuildDomainModel ()
+        {
+            // find target model
+            var model = DbContext.Set<TEntity>()
+                .SingleOrDefault(m => m.Id == this.Id);
+
+            if (model == null)
+                throw new EntityNotFoundException(typeof(TEntity), this.Id);
+
+            var properties = typeof(TEntity).GetProperties();
+            foreach (var putProperty in this.Parameters) 
+            {
+                var name  = putProperty.Key;
+                var value = putProperty.Value;
+
+                // find matching property in target object
+                var property = properties.Single(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                if (property == null)
+                    continue;
+
+                // now set property in target
+                var domainValue = property.PropertyType.IsEnum ? 
+                    Enum.ToObject(property.PropertyType, value) : 
+                    Convert.ChangeType(value, property.PropertyType);
+
+                property.SetValue(model, value: domainValue);
+            }
+
+            return model;
+        }
     }
 }
-

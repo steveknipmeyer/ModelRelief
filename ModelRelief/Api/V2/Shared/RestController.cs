@@ -81,13 +81,11 @@ namespace ModelRelief.Api.V2.Shared
         }
 
         [HttpPut("{id:int}")]
-        public virtual Task<IActionResult> Put(int id, [FromBody] Dictionary<string, object> data) 
+        public virtual Task<IActionResult> PutAsync(int id, [FromBody] Dictionary<string, object> data) 
         {
-            return HandleRequestAsync(new PutRequest<TEntity, TGetModel> 
-            {
-                Parameters = data,
-                Id = id
-            });
+            var putRequest = new PutRequest<TEntity, TGetModel> (id, data, DbContext);
+
+            return HandleRequestAsync(putRequest);
         }
 
         [HttpDelete("{id:int}")]
