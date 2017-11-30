@@ -7,7 +7,6 @@
         Scale with a Python processor.
 
     Issues
-
         Set the Location header for POST requests.
 
         ApiV1 -> ApiV2

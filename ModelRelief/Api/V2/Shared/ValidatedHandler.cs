@@ -13,6 +13,7 @@ using FluentValidation;
 using MediatR;
 using ModelRelief.Database;
 using ModelRelief.Api.V2.Shared.Errors;
+using System;
 
 namespace ModelRelief.Api.V2.Shared
 {
@@ -53,9 +54,9 @@ namespace ModelRelief.Api.V2.Shared
         /// <param name="message">Request object</param>
         /// <param name="cancellationToken">Token to allow asyn request to be cancelled.</param>
         /// <returns></returns>
-        public virtual Task<object> PreHandle(TRequest message, CancellationToken cancellationToken)
+        public virtual async Task PreHandle(TRequest message, CancellationToken cancellationToken)
         {
-             return null;
+            await Task.CompletedTask;
         }
 
         /// <summary>

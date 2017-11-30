@@ -45,10 +45,9 @@ namespace ModelRelief.Api.V2.Shared.Rest
         /// <param name="message">Request object</param>
         /// <param name="cancellationToken">Token to allow asyn request to be cancelled.</param>
         /// <returns></returns>
-        public override async Task<object> PreHandle(PutRequest<TEntity, TGetModel> message, CancellationToken cancellationToken) 
+        public override async Task PreHandle(PutRequest<TEntity, TGetModel> message, CancellationToken cancellationToken) 
         { 
             await message.BuildUpdatedModel(); 
-            return null;
         }
 
         /// <summary>
