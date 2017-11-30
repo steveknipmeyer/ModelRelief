@@ -7,9 +7,7 @@
         Scale with a Python processor.
 
     Issues
-        API 404s serve an HTML Error page. They should return a JSON response.
 
-        Should the PutRequest always use the UpdatedModel (rather than processing the Parameters at all )?
         Set the Location header for POST requests.
 
         ApiV1 -> ApiV2
@@ -33,8 +31,6 @@
             How should database exceptions, such as those violating Domain DataAnnotation rules, be handled?
             https://andrewlock.net/using-cancellationtokens-in-asp-net-core-mvc-controllers/
             Concurrency exceptions?
-
-
 
     Accessing Model From JavaScript
         https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript

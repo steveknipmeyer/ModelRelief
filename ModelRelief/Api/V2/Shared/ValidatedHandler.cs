@@ -48,6 +48,17 @@ namespace ModelRelief.Api.V2.Shared
         }
 
         /// <summary>
+        /// Abstract pre-handler; performns any initialization or setup required before the request is handled..
+        /// </summary>
+        /// <param name="message">Request object</param>
+        /// <param name="cancellationToken">Token to allow asyn request to be cancelled.</param>
+        /// <returns></returns>
+        public virtual Task<object> PreHandle(TRequest message, CancellationToken cancellationToken)
+        {
+             return null;
+        }
+
+        /// <summary>
         /// Validation pre-processor for request.
         /// </summary>
         /// <param name="message">Request object</param>
@@ -55,6 +66,9 @@ namespace ModelRelief.Api.V2.Shared
         /// <returns></returns>
         public async Task<TResponse> Handle(TRequest message, CancellationToken cancellationToken)
         {
+            // perform any setup required before validation
+            await PreHandle(message, cancellationToken);
+
             // All request validators will run through here first before moving onto the OnHandle request.
             if (Validators != null)
             {
@@ -74,7 +88,7 @@ namespace ModelRelief.Api.V2.Shared
         }
 
         /// <summary>
-        /// Abstract handler; implemented in concrete class.
+        /// Abstract request handler; implemented in concrete class.
         /// </summary>
         /// <param name="message">Request object</param>
         /// <param name="cancellationToken">Token to allow asyn request to be cancelled.</param>

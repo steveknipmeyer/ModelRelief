@@ -48,7 +48,7 @@ namespace ModelRelief.Features.Errors
             _logger.LogInformation($"A {context.Exception.GetType().FullName} exception happened in ModelRelief.");
             var statusCode = HttpStatusCode.BadRequest;
 
-            // WIP: Can a custom status code be used to provide fine-grained control over the page type that will be displayed?
+            // WIP: Can a custom status code be used to provide+ fine-grained control over the page type that will be displayed?
             if (context.Exception is NullRequestException)
                 statusCode = HttpStatusCode.BadRequest;
 

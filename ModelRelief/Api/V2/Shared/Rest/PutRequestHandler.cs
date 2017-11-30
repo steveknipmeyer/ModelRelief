@@ -40,6 +40,18 @@ namespace ModelRelief.Api.V2.Shared.Rest
             : base(dbContext, mapper, validators) {}
 
         /// <summary>
+        /// Pre-handler; performns any initialization or setup required before the request is handled.
+        /// </summary>
+        /// <param name="message">Request object</param>
+        /// <param name="cancellationToken">Token to allow asyn request to be cancelled.</param>
+        /// <returns></returns>
+        public override async Task<object> PreHandle(PutRequest<TEntity, TGetModel> message, CancellationToken cancellationToken) 
+        { 
+            await message.BuildUpdatedModel(); 
+            return null;
+        }
+
+        /// <summary>
         /// Handles a PUT model request.
         /// </summary>
         /// <param name="message">PUT request.</param>
@@ -47,6 +59,8 @@ namespace ModelRelief.Api.V2.Shared.Rest
         /// <returns></returns>
         public override async Task<TGetModel> OnHandle(PutRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
+            // N.B. All validators have been run. If there was an error, an ApiValidationExveption was thrown.
+
             // find target model
             var model = await message.BuildDomainModel();
 

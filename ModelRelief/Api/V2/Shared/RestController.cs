@@ -81,22 +81,14 @@ namespace ModelRelief.Api.V2.Shared
         }
 
         [HttpPut("{id:int}")]
-        public virtual async Task<IActionResult> PutAsync(int id, [FromBody] Dictionary<string, object> data) 
+        public virtual Task<IActionResult> PutAsync(int id, [FromBody] Dictionary<string, object> data) 
         {
-            var putRequest = new PutRequest<TEntity, TGetModel>
+            return HandleRequestAsync (new PutRequest<TEntity, TGetModel>
             { 
             Id = id, 
             Parameters = data,
             DbContext = DbContext
-            };
-
-            // Construct the complete DTO from the PUT dictionary so it will be available for validation.
-            // The required method is async so it cannot be done in the PutRequest constructor.
-            // Instead, it is a sepatate method call after the PutRequest has been constructed.
-            await putRequest.BuildUpdatedModel();
-            var result = await HandleRequestAsync(putRequest);
-
-            return result;
+            });
         }
 
         [HttpDelete("{id:int}")]

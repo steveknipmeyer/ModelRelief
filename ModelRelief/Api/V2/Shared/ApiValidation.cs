@@ -271,13 +271,16 @@ namespace ModelRelief.Api.V2.Shared.Rest
             var apiReferenceAbsolute = string.Format($"{_controller.HttpContext.Request.Scheme}://{_controller.HttpContext.Request.Host}{apiReferenceRelative}");
 
             var errors = new List<ValidationError>();
-            foreach (var validationFailure in validationFailures)
+            if (null != validationFailures)
             {
-                var qualifiedPropertyName = validationFailure.PropertyName;
-                var segments = qualifiedPropertyName.Split('.');
-                var propertyName = segments.Last();
-                var message = validationFailure.ErrorMessage;
-                errors.Add (new ValidationError(field: propertyName, message: message));
+                foreach (var validationFailure in validationFailures)
+                {
+                    var qualifiedPropertyName = validationFailure.PropertyName;
+                    var segments = qualifiedPropertyName.Split('.');
+                    var propertyName = segments.Last();
+                    var message = validationFailure.ErrorMessage;
+                    errors.Add (new ValidationError(field: propertyName, message: message));
+                }
             }
 
             var jsonResult = new ApiResult()
