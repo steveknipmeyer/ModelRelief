@@ -5,14 +5,16 @@
 // ------------------------------------------------------------------------//
 
 using AutoMapper;
-using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ModelRelief.Api.V2.Shared.Errors;
 using ModelRelief.Api.V2.Shared.Rest;
 using ModelRelief.Database;
+using ModelRelief.Domain;
 using System;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -21,22 +23,35 @@ namespace ModelRelief.Api.V2.Shared
     [Area("ApiV2")]
     [Route("apiV2/[controller]")]
     [Produces("application/json")]
-    public abstract class ApiController : Controller, IUrlHelperContainer
+    public abstract class ApiController<TEntity> : Controller, IUrlHelperContainer
+            where TEntity: ModelReliefModel
     {
-        public ModelReliefDbContext DbContext { get; }
-        public IMapper Mapper { get; }
-        public IMediator Mediator { get; }
+        public ModelReliefDbContext             DbContext { get; }
+        public ILogger<TEntity>                 Logger { get; }
+        public IMapper                          Mapper { get; }
+        public IMediator                        Mediator { get; }
+        public UserManager<ApplicationUser>     UserManager { get; }
+        public IHostingEnvironment              HostingEnvironment { get; }
+        public Services.IConfigurationProvider  ConfigurationProvider { get; }
 
         /// <summary>
         /// Base API Controller
         /// </summary>
-        /// <param name="dbContext">Database context</param>
-        /// <param name="mapper">IMapper from DI</param>
-        /// <param name="mediator">IMediator from DI</param>
-        protected ApiController(ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator) {
+        /// <param name="dbContext">Database context.</param>
+        /// <param name="logger">ILogger.</param>
+        /// <param name="mapper">IMapper.</param>
+        /// <param name="mediator">IMediator.</param>
+        /// <param name="userManager">UserManager.</param>
+        /// <param name="hostingEnvironment">IHostingEnvironment.</param>
+        /// <param name="configurationProvider">IConfigurationProvider.</param>
+        protected ApiController (ModelReliefDbContext dbContext, ILogger<TEntity> logger, IMapper mapper, IMediator mediator, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider ) {
             DbContext = dbContext;
+            Logger = logger;
             Mapper = mapper;
             Mediator = mediator;
+            UserManager = userManager;
+            HostingEnvironment = hostingEnvironment;
+            ConfigurationProvider = configurationProvider;
         }
 
         /// <summary>

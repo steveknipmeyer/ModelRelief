@@ -7,17 +7,19 @@
         Scale with a Python processor.
 
     Issues
-        ApiV1 -> ApiV2
-            Support for binary POST requests.
-            File Names
-                IDs
-                    The resource ID is permanent and invariant.
-                    There is overhead keeping the disk file name in synch with the resource name.
-                Resource Names
-                    There is an adminsitrative advantage; reviewing a user folder will have semantic names.
+        Generate Documentation.
+        Increase warning level.
 
-            File renaming?
-                Introduce a post-processing step for REST operations.
+        ApiV1 -> ApiV2
+            Introduce a new generic type TFile for the ApiController to handle POST file requests.
+
+            Validation
+                User is authenticated.
+                    POST
+                    All Others
+                        Resource is owned by user.
+            
+            Support for POST file requests.
 
         Implement Integration Tests per ContostoUniversity Core
             Features
@@ -321,6 +323,13 @@
             State:              Running
             Last start time:    9/19/2017 6:57:25 AM
             Instance pipe name: np:\\.\pipe\LOCALDB#9A6B632F\tsql\query
+
+    Resource File Names
+        IDs
+            The resource ID is permanent and invariant.
+            There is overhead keeping the disk file name in synch with the resource name.
+        Resource Names
+            There is an administrative advantage; reviewing a user folder will have semantic names.
 
 <-- Database 
     In Features.Models.Controller.Edit is _dbContext.Models.Update required?

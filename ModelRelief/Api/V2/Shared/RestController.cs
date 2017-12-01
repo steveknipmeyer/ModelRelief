@@ -5,18 +5,20 @@
 // ------------------------------------------------------------------------//
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using ModelRelief.Api.V2.Shared.Rest;
 using ModelRelief.Database;
 using ModelRelief.Domain;
-using ModelRelief.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ModelRelief.Api.V2.Shared.Rest;
-using System;
 
 namespace ModelRelief.Api.V2.Shared
 {
-    public abstract class RestController<TEntity, TGetModel, TSingleGetModel, TPostModel> : ApiController
+    public abstract class RestController<TEntity, TGetModel, TSingleGetModel, TPostModel> : ApiController<TEntity>
         where TEntity         : ModelReliefModel
         where TGetModel       : IGetModel           
         where TSingleGetModel : IGetModel
@@ -27,22 +29,30 @@ namespace ModelRelief.Api.V2.Shared
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="dbContext">Database context</param>
-        /// <param name="mapper">IMapper</param>
-        /// <param name="mediator">IMediator</param>
+        /// <param name="dbContext">Database context.</param>
+        /// <param name="logger">ILogger.</param>
+        /// <param name="mapper">IMapper.</param>
+        /// <param name="mediator">IMediator.</param>
+        /// <param name="userManager">UserManager.</param>
+        /// <param name="hostingEnvironment">IHostingEnvironment.</param>
+        /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <remarks>Defaults to use paging.</remarks>
-        protected RestController(ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator)
-            : this(dbContext, mapper, mediator, new RestControllerOptions {UsePaging = true}) {}
+        protected RestController(ModelReliefDbContext dbContext, ILogger<TEntity> logger, IMapper mapper, IMediator mediator, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider)
+            : this(dbContext, logger, mapper, mediator, userManager, hostingEnvironment, configurationProvider, new RestControllerOptions {UsePaging = true}) {}
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="dbContext">Database context</param>
-        /// <param name="mapper">IMapper</param>
-        /// <param name="mediator">IMediator</param>
+        /// <param name="dbContext">Database context.</param>
+        /// <param name="logger">ILogger.</param>
+        /// <param name="mapper">IMapper.</param>
+        /// <param name="mediator">IMediator.</param>
+        /// <param name="userManager">UserManager.</param>
+        /// <param name="hostingEnvironment">IHostingEnvironment.</param>
+        /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="restControllerOptions">Options for paging, etc.</param>
-        protected RestController(ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator, RestControllerOptions restControllerOptions)
-            : base(dbContext, mapper, mediator) 
+        protected RestController(ModelReliefDbContext dbContext, ILogger<TEntity> logger, IMapper mapper, IMediator mediator, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, RestControllerOptions restControllerOptions )
+            : base(dbContext, logger, mapper, mediator, userManager, hostingEnvironment, configurationProvider) 
         {
             RestControllerOptions = restControllerOptions;
         }
@@ -92,6 +102,32 @@ namespace ModelRelief.Api.V2.Shared
             }
 
             return result;
+        }
+
+        [HttpPost]
+        [Consumes("application/octet-stream")]
+        [DisableRequestSizeLimit]
+        public Task<ObjectResult> PostFile()
+        { 
+            return Task.FromResult(new ObjectResult(""));
+#if false
+            var result =  await HandleRequestAsync(new PostAddRequest<TEntity, TPostModel, TGetModel> 
+            {
+                NewModel = postRequest
+            });
+
+            // construct from body
+            var meshPostRequest = new MeshPostModel(Files.ReadToEnd(Request.Body));
+
+            // initial validation
+            var user = await Identity.GetCurrentUserAsync(UserManager, User);
+            meshPostRequest.Validate(user, this);
+            if (!ModelState.IsValid)
+                return meshPostRequest.ErrorResult(this);
+
+            var filePostCommandProcessor = new FilePostCommandProcessor<MeshPostModel, Mesh>(user, this);
+            return await filePostCommandProcessor.Process(meshPostRequest, meshPostRequest.Raw);
+#endif
         }
 
         [HttpPut("{id:int}")]
