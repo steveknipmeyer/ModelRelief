@@ -27,7 +27,6 @@ namespace ModelRelief.Api.V2.Shared
     {
         public ModelReliefDbContext DbContext { get; }
         public IMapper Mapper { get; }
-
         public IEnumerable<IValidator<TRequest>> Validators { get; }
 
         /// <summary>

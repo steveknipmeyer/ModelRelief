@@ -57,7 +57,6 @@ namespace ModelRelief.Dto
 
 namespace ModelRelief.Features.Meshes
 {
-
     public class MappingProfile : Profile
     {
         public MappingProfile() 

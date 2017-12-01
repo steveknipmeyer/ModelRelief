@@ -15,7 +15,7 @@ namespace ModelRelief.Api.V2.Shared.Rest
     /// <remarks>All properties are updated.</remarks>
     /// <typeparam name="TEntity">The domain type of the model.</typeparam>
     /// <typeparam name="TPostModel">The DTO POST model.</typeparam>
-    /// <typeparam name="TGetModel">The DTO POST model.</typeparam>
+    /// <typeparam name="TGetModel">The DTO GET model.</typeparam>
    public class PostUpdateRequest<TEntity, TPostModel, TGetModel> : IRequest<TGetModel>
         where TEntity    : ModelReliefModel
         where TPostModel : class

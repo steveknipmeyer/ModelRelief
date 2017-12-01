@@ -12,17 +12,20 @@ using Microsoft.Extensions.Logging;
 using ModelRelief.Api.V2.Shared.Rest;
 using ModelRelief.Database;
 using ModelRelief.Domain;
+using ModelRelief.Dto;
+using ModelRelief.Utility;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ModelRelief.Api.V2.Shared
 {
-    public abstract class RestController<TEntity, TGetModel, TSingleGetModel, TPostModel> : ApiController<TEntity>
+    public abstract class RestController<TEntity, TGetModel, TSingleGetModel, TPostModel, TPostFile> : ApiController<TEntity>
         where TEntity         : ModelReliefModel
         where TGetModel       : IGetModel           
         where TSingleGetModel : IGetModel
         where TPostModel      : class               // WIP Should TPostModel implement a particular interface?
+        where TPostFile       : class, new()        // WIP Should TPostFile implement a particular interface?
     {
         public RestControllerOptions RestControllerOptions { get; }
 
@@ -107,27 +110,28 @@ namespace ModelRelief.Api.V2.Shared
         [HttpPost]
         [Consumes("application/octet-stream")]
         [DisableRequestSizeLimit]
-        public Task<ObjectResult> PostFile()
+        public virtual async Task<IActionResult> PostFile()
         { 
-            return Task.FromResult(new ObjectResult(""));
-#if false
-            var result =  await HandleRequestAsync(new PostAddRequest<TEntity, TPostModel, TGetModel> 
+            // construct from request body
+            var postFile = new PostFile { Raw = Files.ReadToEnd(Request.Body) };
+
+            var result =  await HandleRequestAsync(new PostFileRequest<TEntity, TGetModel> 
             {
-                NewModel = postRequest
+                NewFile = postFile
             });
 
-            // construct from body
-            var meshPostRequest = new MeshPostModel(Files.ReadToEnd(Request.Body));
+            // Return the model URI in the HTTP Response Location Header
+            // XMLHttpRequest.getResponseHeader('Location') :  http://localhost:60655/api/v1/meshes/10
+            // XMLHttpRequest.responseText = (JSON) { id : 10 }
+            if (result is OkObjectResult)
+            {
+                var newModel = (TGetModel)((OkObjectResult) result).Value;
+                string responseUrl = $"{Url.RouteUrl( new {})}/{newModel.Id}";
+                Uri responseUrlAbsolute = new Uri($"{Request.Scheme}://{Request.Host}{responseUrl}");
+                Response.Headers["Location"] = responseUrlAbsolute.AbsoluteUri;
+            }
 
-            // initial validation
-            var user = await Identity.GetCurrentUserAsync(UserManager, User);
-            meshPostRequest.Validate(user, this);
-            if (!ModelState.IsValid)
-                return meshPostRequest.ErrorResult(this);
-
-            var filePostCommandProcessor = new FilePostCommandProcessor<MeshPostModel, Mesh>(user, this);
-            return await filePostCommandProcessor.Process(meshPostRequest, meshPostRequest.Raw);
-#endif
+            return result;
         }
 
         [HttpPut("{id:int}")]

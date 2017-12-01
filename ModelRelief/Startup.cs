@@ -68,18 +68,20 @@ namespace ModelRelief
 #endif
             // generics
             // WIP Why is AsImplementedInterfaces required for the Handlers?
-            builder.RegisterGeneric(typeof(GetSingleRequestHandler<,>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(GetSingleRequest<,>));
-            builder.RegisterGeneric(typeof(GetListRequestHandler<,>)).AsImplementedInterfaces();
+            builder.RegisterGeneric(typeof(GetSingleRequestHandler<,>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(GetListRequest<,>));
+            builder.RegisterGeneric(typeof(GetListRequestHandler<,>)).AsImplementedInterfaces();
+            builder.RegisterGeneric(typeof(PostAddRequest<,,>));
             builder.RegisterGeneric(typeof(PostAddRequestHandler<,,>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(PostUpdateRequest<,,>));
             builder.RegisterGeneric(typeof(PostUpdateRequestHandler<,,>)).AsImplementedInterfaces();
-            builder.RegisterGeneric(typeof(PostAddRequest<,,>));
-            builder.RegisterGeneric(typeof(PutRequestHandler<,>)).AsImplementedInterfaces();
+            builder.RegisterGeneric(typeof(PostFileRequest<,>));
+            builder.RegisterGeneric(typeof(PostFileRequestHandler<,>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(PutRequest<,>));
-            builder.RegisterGeneric(typeof(DeleteRequestHandler<>)).AsImplementedInterfaces();
+            builder.RegisterGeneric(typeof(PutRequestHandler<,>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(DeleteRequest<>));
+            builder.RegisterGeneric(typeof(DeleteRequestHandler<>)).AsImplementedInterfaces();
 
             // MediatR : register delegates as SingleInstanceFactory and MultiInstanceFactory types
             builder.Register<SingleInstanceFactory>(context =>

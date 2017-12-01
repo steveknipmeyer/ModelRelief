@@ -4,23 +4,35 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 
-using MediatR;
+using AutoMapper;
+using FluentValidation;
+using ModelRelief.Api.V2.Shared.Rest;
 using ModelRelief.Domain;
+using System.ComponentModel.DataAnnotations;
 
-namespace ModelRelief.Api.V2.Shared.Rest
+namespace ModelRelief.Dto
 {
     /// <summary>
-    ///  Represents a GET request for a single model.
+    /// POST file model.
     /// </summary>
-    /// <typeparam name="TEntity">The domain type of the model.</typeparam>
-    /// <typeparam name="TGetModel">The DTO GET model.</typeparam>
-    public class GetSingleRequest<TEntity, TGetModel> : IRequest<TGetModel>
-        where TEntity   : ModelReliefModel
-        where TGetModel : IGetModel
+    public class PostFile
     {
+        public byte[] Raw { get; set; }
+
         /// <summary>
-        /// Gets or sets the Id for the single model to be returned.
+        /// Constructor
         /// </summary>
-        public int Id { get; set; }
+        public PostFile ()
+        {
+        }
+    }
+
+    public class PostFileValidator : AbstractValidator<Dto.PostFile>
+    {
+        public PostFileValidator()
+        {
+            RuleFor(m => m.Raw)
+                .NotNull().WithMessage("An array of bytes is required..");
+        }
     }
 }

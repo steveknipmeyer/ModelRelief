@@ -6,23 +6,22 @@
 
 using MediatR;
 using ModelRelief.Domain;
+using ModelRelief.Dto;
 
 namespace ModelRelief.Api.V2.Shared.Rest
 {
     /// <summary>
-    ///  Represents a POST request to create a model.
+    ///  Represents a POST request of a file to create a model.
     /// </summary>
     /// <typeparam name="TEntity">The domain type of the model.</typeparam>
-    /// <typeparam name="TPostModel">The DTO POST model.</typeparam>
     /// <typeparam name="TGetModel">The DTO GET model.</typeparam>
-   public class PostAddRequest<TEntity, TPostModel, TGetModel> : IRequest<TGetModel>
+   public class PostFileRequest<TEntity, TGetModel> : IRequest<TGetModel>
         where TEntity    : ModelReliefModel
-        where TPostModel : class
         where TGetModel  : IGetModel
     {
         /// <summary>
-        ///  Gets or sets the incoming model to be used to create the new domain model.
+        ///  Gets or sets the incoming file to be used to create the new domain model.
         /// </summary>
-        public TPostModel NewModel { get; set; }
+        public PostFile NewFile { get; set; }
     }
 }
