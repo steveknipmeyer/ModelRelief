@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ModelRelief.Api.V2.Shared.Rest;
+using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Infrastructure;
 using ModelRelief.Services;
 using ModelRelief.Workbench;
@@ -179,7 +179,6 @@ namespace ModelRelief
             routeBuilder.MapRoute(name: RouteNames.Default, template: "{controller=Home}/{action=Index}/{id?}");
 
             routeBuilder.MapRoute(name: RouteNames.DefaultApiV1, template: "api/v1/{controller}/{id?}");
-            routeBuilder.MapRoute(name: RouteNames.DefaultApiV2, template: "api/v2/{controller}/{id?}");
             routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/v1/documentation/{controller}/{id?}");
         }
     }

@@ -6,7 +6,7 @@
 
 using AutoMapper;
 using FluentValidation;
-using ModelRelief.Api.V2.Shared.Rest;
+using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Domain;
 using System.ComponentModel.DataAnnotations;
 
@@ -21,7 +21,6 @@ namespace ModelRelief.Dto
         public string Description { get; set; }
 
         public Model3dFormat Format { get; set; }
-        public string Path { get; set; }
 
         // Navigation Properties
         public int? ProjectId { get; set; }

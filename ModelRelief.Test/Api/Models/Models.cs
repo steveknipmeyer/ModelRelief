@@ -17,7 +17,7 @@ using ModelRelief.Database;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using MediatR;
-using ModelRelief.Api.V2.Shared.Rest;
+using ModelRelief.Api.V1.Shared.Rest;
 
 namespace ModelRelief.Test.Api.Models
 {

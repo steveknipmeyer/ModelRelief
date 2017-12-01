@@ -6,7 +6,7 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ModelRelief.Api.V2.Shared.Rest;
+using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Database;
 using ModelRelief.Domain;
 using System.Collections.Generic;

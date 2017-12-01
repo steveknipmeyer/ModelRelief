@@ -4,19 +4,22 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-
-namespace ModelRelief.Infrastructure
+namespace ModelRelief.Api.V1.Shared.Errors
 {
     /// <summary>
-    /// The collection of named routes.
+    ///  Represents an exception when a CQRS request is null.
     /// </summary>
-    public class RouteNames
+    public class NullRequestException : Exception
     {
-        public const string Default          = "Default";
-        public const string DefaultApiV1     = "DefaultApiV1";
-        public const string ApiDocumentation = "ApiDocumentation";
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public NullRequestException(string requestPath, Type request) 
+            : base($"{requestPath} received an empty {request.Name}.") {}
     }
-
-
 }

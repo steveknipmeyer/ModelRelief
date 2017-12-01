@@ -6,17 +6,19 @@
         Scale with a Python processor.
 
     Issues
-        ApiV1 -> ApiV2
-            Simplify controller constructors. Request handlers can receive their services through DI.
-            Remove User from DTOs!
-                ModelReliefModel -> ModelReliefDomainModel
-                + ModelReliefDtoModel
+        Should API Post return HTTP Created?
 
-            Validation
-                User is authenticated.
-                    POST
-                    All Others
-                        Resource is owned by user.
+        ModelReliefModel -> ModelReliefDomainModel
+        + ModelReliefDtoModel
+
+        Validation
+            BuildDomainModel   
+                An invalid property name causes an exception.
+                An invalid enum (string instead of an integer) causes an exception.
+            User must be authenticated.
+                POST
+                All Others
+                    Resource is owned by user.
 
         Implement Integration Tests per ContostoUniversity Core
             Features
@@ -27,6 +29,8 @@
             How should database exceptions, such as those violating Domain DataAnnotation rules, be handled?
             https://andrewlock.net/using-cancellationtokens-in-asp-net-core-mvc-controllers/
             Concurrency exceptions?
+            SqliteException: SQLite Error 5: 'database is locked'.
+                PostFileRequestHandler : DbContext.SaveChanges();
 
     Accessing Model From JavaScript
         https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
@@ -569,3 +573,42 @@
         public class EntityModelBinder : IModelBinder
         It binds a database <model> looked up from the incoming Id.
 
+<-- Clipboard
+        /// <summary>
+        /// Handles resource update from a PUT request.
+        /// </summary>
+        /// <returns>Created HttpStatus</returns>
+        public async Task<ObjectResult> Process(int id, TPutModel putModel)
+        {
+            try
+            {
+                // find existing model
+                var model = await _controller.DBContext.Set<TModel>().FindAsync(id);
+
+                // update properties from incoming request
+                Mapper.Map<TPutModel, TModel>(putModel, model);
+
+                // construct final file name from PUT request
+                var storeUsers  = _controller.ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
+                var modelRootFolder = _controller.ConfigurationProvider.GetSetting($"{ResourcePaths.ModelFolders}:{typeof(TModel).Name}");
+                string fileRelativeFolder = $"{storeUsers}{_user.Id}/{modelRootFolder}/{id}/";
+                string fileRelativePath = $"{fileRelativeFolder}{model.Name}";
+                string fileAbsolutePath = $"{_controller.HostingEnvironment.WebRootPath}{fileRelativePath}";
+                model.Path = fileRelativeFolder;
+
+                // update repository
+                _controller.DBContext.Set<TModel>().Update(model);
+
+                // now rename temporary file (name = Id) to match the final name
+                string placeholderFileName = $"{_controller.HostingEnvironment.WebRootPath}{fileRelativeFolder}{id}";
+                System.IO.File.Move(placeholderFileName, fileAbsolutePath);
+
+                Log.Information("File PUT {@TModel}", putModel);
+
+                return await Task.FromResult<ObjectResult>(_controller.Ok(""));
+            }
+            catch (Exception)
+            {
+                return putModel.ErrorResult(_controller, httpStatusCode: StatusCodes.Status500InternalServerError, apiStatusCode : (int) ApiStatusCode.FileCreation, developerMessage : $"An error occurred updating the file resource {typeof(TModel).Name}.");
+            }
+        }

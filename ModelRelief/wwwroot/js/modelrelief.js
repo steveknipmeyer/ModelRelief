@@ -2122,7 +2122,6 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
             var onComplete = function (request) {
                 Services_5.Services.consoleLogger.addInfoMessage('File saved');
                 var filePath = request.getResponseHeader('Location');
-                fileMetadata.path = filePath;
                 // now send JSON metadata since we now know the URL
                 HttpLibrary.sendXMLHttpRequest(filePath, MethodType.Put, ContentType.Json, JSON.stringify(fileMetadata), null);
             };
@@ -3482,7 +3481,8 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
             var postUrl = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiMeshes;
             var fileMetadata = {
                 name: 'mesh.obj',
-                path: ''
+                description: 'Mesh Description',
+                format: 1,
             };
             Http_1.HttpLibrary.postFile(postUrl, result, fileMetadata);
             Services_7.Services.timer.logElapsedTime(exportTag);
@@ -3496,7 +3496,8 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
             var postUrl = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiDepthBuffers;
             var fileMetadata = {
                 name: 'depthbuffer.raw',
-                path: ''
+                description: 'DepthBuffer Description',
+                format: 1,
             };
             Http_1.HttpLibrary.postFile(postUrl, this._relief.depthBuffer, fileMetadata);
             Services_7.Services.timer.logElapsedTime(exportTag);

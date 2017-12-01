@@ -3,11 +3,13 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-"use strict";
 
-import {assert}             from 'chai'
-import {Services}           from 'Services'
+using Microsoft.AspNetCore.Mvc;
 
-export interface IResourceFile {
-        
+namespace ModelRelief.Api.V1.Shared
+{
+    public interface IUrlHelperContainer
+    {
+        IUrlHelper Url { get; }
+    }
 }

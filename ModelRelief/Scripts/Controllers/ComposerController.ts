@@ -118,7 +118,8 @@ export class ComposerController {
 
         let fileMetadata = {
             name : 'mesh.obj',
-            path : ''
+            description : 'Mesh Description',
+            format : 1,
         };
         HttpLibrary.postFile (postUrl, result, fileMetadata);
         Services.timer.logElapsedTime(exportTag);
@@ -136,7 +137,8 @@ export class ComposerController {
         
         let fileMetadata = {
             name : 'depthbuffer.raw',
-            path : ''
+            description : 'DepthBuffer Description',
+            format : 1,
         };
         HttpLibrary.postFile (postUrl, this._relief.depthBuffer, fileMetadata);
         Services.timer.logElapsedTime(exportTag);

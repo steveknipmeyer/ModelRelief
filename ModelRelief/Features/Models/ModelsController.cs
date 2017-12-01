@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using ModelRelief.Api.V2.Shared.Rest;
+using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Database;
 using ModelRelief.Domain;
 using System;
@@ -47,6 +47,10 @@ namespace ModelRelief.Features.Models
             {
                 Id = id
             });
+
+            // WIP: Publish path of model for THREE loader.
+            var domainModel = await DbContext.Set<Domain.Model3d>().FindAsync(new object[] {id});
+            ViewData["ModelPath"] = domainModel.Path;
 
             return View(model);
         }

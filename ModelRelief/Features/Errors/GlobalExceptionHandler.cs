@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
-using ModelRelief.Api.V2.Shared.Errors;
+using ModelRelief.Api.V1.Shared.Errors;
 using System;
 using System.Collections.Generic;
 using System.Linq;

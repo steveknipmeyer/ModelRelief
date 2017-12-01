@@ -4,30 +4,26 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using ModelRelief.Api.V1.Shared;
+using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Database;
+using ModelRelief.Dto;
 
 namespace ModelRelief.Api.V1.DepthBuffers
 {
     /// <summary>
-    /// Represents a controller to handle DepthBuffer API requests.
+    /// Represents a validator for a DepthBuffer PostUpdateRequest.
     /// </summary>
-    // [Authorize]
-    [Route ("api/v1/depth-buffers")]        
-    public class DepthBuffersController : RestController<Domain.DepthBuffer, Dto.DepthBuffer, Dto.DepthBuffer, Dto.DepthBuffer, Dto.PostFile>
+    public class DepthBufferPostUpdateRequestValidator : RequestValidator<PostUpdateRequest<Domain.DepthBuffer, Dto.DepthBuffer, Dto.DepthBuffer>>
     {
         /// <summary>
-        /// Constructor
+        /// Constructor.
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        /// <param name="logger">ILogger.</param>
-        /// <param name="mediator">IMediator.</param>
-        public DepthBuffersController(ModelReliefDbContext dbContext, ILogger<Domain.DepthBuffer> logger, IMediator mediator)
-            : base(dbContext, logger, mediator)
+        public DepthBufferPostUpdateRequestValidator (ModelReliefDbContext dbContext)
+            : base (dbContext)
         {
+            RuleFor(m => m.UpdatedModel).SetValidator(new DepthBufferValidator());
         }
     }
 }

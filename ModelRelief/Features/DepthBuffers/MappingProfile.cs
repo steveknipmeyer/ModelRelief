@@ -5,12 +5,14 @@
 // ------------------------------------------------------------------------//
 
 using AutoMapper;
+using FluentValidation;
+using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Domain;
 using System.ComponentModel.DataAnnotations;
 
 namespace ModelRelief.Dto
 {
-    public class DepthBuffer
+    public class DepthBuffer : IGetModel
     {
         public int Id { get; set; }
 
@@ -19,7 +21,6 @@ namespace ModelRelief.Dto
         public string Description { get; set; }
 
         public DepthBufferFormat Format { get; set; }
-        public string Path { get; set; }
 
         // Navigation Properties
         public int? ProjectId { get; set; }
@@ -31,6 +32,21 @@ namespace ModelRelief.Dto
         public int? CameraId { get; set; }
         public Dto.Camera Camera { get; set; }
 
+    }
+
+    public class DepthBufferValidator : AbstractValidator<Dto.DepthBuffer>
+    {
+        public DepthBufferValidator()
+        {
+            RuleFor(m => m.Name)
+                .NotNull().WithMessage("The Name property is required.");
+         
+            RuleFor(m => m.Description)
+                .NotNull().WithMessage("The Description property is required.");
+
+            RuleFor(m => m.Format)
+                .NotEmpty().WithMessage("The file format must be provided.");
+        }
     }
 }
 

@@ -6,7 +6,7 @@
 "use strict";
 
 import {DepthBufferFormat}                  from 'DepthBuffer'
-import {IFilePath}                          from 'IFilePath'
+import {IResourceFile}                      from 'IFilePath'
 import {Services}                           from 'Services'
 import {ReliefSettings}                     from 'Relief'
 
@@ -53,13 +53,12 @@ export class HttpLibrary {
      * @param fileData File data, may be binary.
      * @param fileMetadata JSON metadata
      */
-    static postFile (postUrl : string, fileData : any, fileMetadata : IFilePath) : boolean {
+    static postFile (postUrl : string, fileData : any, fileMetadata : IResourceFile) : boolean {
 
        let onComplete = function(request: XMLHttpRequest) {
 
             Services.consoleLogger.addInfoMessage('File saved');
             let filePath = request.getResponseHeader('Location');
-            fileMetadata.path = filePath;
 
             // now send JSON metadata since we now know the URL
             HttpLibrary.sendXMLHttpRequest(filePath, MethodType.Put, ContentType.Json, JSON.stringify(fileMetadata), null);

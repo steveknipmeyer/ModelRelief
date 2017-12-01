@@ -4,36 +4,28 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 
-using AutoMapper;
 using FluentValidation;
+using ModelRelief.Api.V1.Shared;
 using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Domain;
-using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
+using ModelRelief.Database;
+using ModelRelief.Dto;
 
-namespace ModelRelief.Dto
+namespace ModelRelief.Api.V1.Meshes
 {
     /// <summary>
-    /// POST file model.
+    /// Represents a validator for a Mesh PostAddRequest.
     /// </summary>
-    public class PostFile
+    public class MeshPostAddRequestValidator : RequestValidator<PostAddRequest<Domain.Mesh, Dto.Mesh, Dto.Mesh>>
     {
-        public byte[] Raw { get; set;}
-        
         /// <summary>
-        /// Constructor
+        /// Constructor.
         /// </summary>
-        public PostFile ()
+        /// <param name="dbContext">Database context.</param>
+        public MeshPostAddRequestValidator (ModelReliefDbContext dbContext)
+            : base (dbContext)
         {
-        }
-    }
-
-    public class PostFileValidator : AbstractValidator<Dto.PostFile>
-    {
-        public PostFileValidator()
-        {
-            RuleFor(m => m.Raw)
-                .NotNull().WithMessage("An array of bytes is required..");
+            RuleFor(m => m.NewModel).SetValidator(new MeshValidator());
         }
     }
 }
+ 

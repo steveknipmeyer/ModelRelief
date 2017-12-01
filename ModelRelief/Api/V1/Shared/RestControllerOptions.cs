@@ -3,11 +3,17 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
-"use strict";
 
-import {assert}             from 'chai'
-import {Services}           from 'Services'
-
-export interface IResourceFile {
-        
+namespace ModelRelief.Api.V1.Shared
+{
+    /// <summary>
+    /// Represents the options for an instance of a RestController.
+    /// </summary>
+    public class RestControllerOptions
+    {
+        /// <summary>
+        /// Gets or sets whether to page a collection of results.
+        /// </summary>
+        public bool UsePaging { get; set; }
+    }
 }
