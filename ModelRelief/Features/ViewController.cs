@@ -202,7 +202,7 @@ namespace ModelRelief.Features
         /// <summary>
         /// Setup View controls for select controls, etc.
         /// </summary>
-        /// <param name="projectId">Project Id to select</param>
+        /// <param name="model">Model instance for View.</param>
         protected virtual void InitializeViewControls(TGetModel model = null)
         {
         }

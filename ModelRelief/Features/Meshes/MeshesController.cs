@@ -39,7 +39,7 @@ namespace ModelRelief.Features.Meshes
         /// <summary>
         /// Setup View controls for select controls, etc.
         /// </summary>
-        /// <param name="projectId">Project Id to select</param>
+        /// <param name="mesh">Mesh instance for View.</param>
         protected override void InitializeViewControls(Dto.Mesh mesh = null)
         {
             ViewBag.MeshFormats     = ViewHelpers.PopulateEnumDropDownList<MeshFormat>("Select Mesh Format");

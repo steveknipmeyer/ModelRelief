@@ -1,5 +1,4 @@
 ﻿<--- Commit
-
 <--- Reading
 
 <-- Tasks
@@ -7,8 +6,8 @@
         Scale with a Python processor.
 
     Issues
-        Generate Documentation.
-        Increase warning level.
+        Enable XML Documentation.
+            CS1591 : Missing XML documentation for type or member.
 
         ApiV1 -> ApiV2
             Introduce a new generic type TFile for the ApiController to handle POST file requests.

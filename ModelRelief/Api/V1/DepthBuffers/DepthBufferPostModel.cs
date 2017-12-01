@@ -10,6 +10,7 @@ using ModelRelief.Infrastructure;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
+#pragma warning disable 1572, 1573
 namespace ModelRelief.Api.V1.DepthBuffers
 {
     /// <summary>

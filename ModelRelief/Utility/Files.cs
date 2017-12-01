@@ -85,7 +85,7 @@ namespace ModelRelief.Utility
         /// Writes a disk file from a byte array.
         /// </summary>
         /// <param name="fileName">Filename (overwritten if exists)</param>
-        /// <param name="stream">Stream to read</param>
+        /// <param name="byteArray">Byte array to write to file.</param>
         public static async Task WriteFileFromByteArray(string fileName, byte[] byteArray)
         {
             if (System.IO.File.Exists(fileName))

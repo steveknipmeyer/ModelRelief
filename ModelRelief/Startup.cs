@@ -169,9 +169,9 @@ namespace ModelRelief
         }
 
         /// <summary>
-        /// 
+        /// Configures the routes and their associated route templates.
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="routeBuilder">IRouterBuilder.</param>
         private void ConfigureRoutes(IRouteBuilder routeBuilder)
         {
             routeBuilder.MapRoute(name: RouteNames.Default, template: "{controller=Home}/{action=Index}/{id?}");

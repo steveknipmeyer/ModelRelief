@@ -38,6 +38,7 @@ namespace ModelRelief.Api.V2.Shared.Rest
         /// </summary>
         /// <param name="dbContext">Database context</param>
         /// <param name="mapper">IMapper</param>
+        /// <param name="validators">All validators matching IValidator for the given request.</param>
         public PostUpdateRequestHandler(ModelReliefDbContext dbContext, IMapper mapper, IEnumerable<IValidator<PostUpdateRequest<TEntity, TPostModel, TGetModel>>> validators)
             : base(dbContext, mapper, validators)
         {

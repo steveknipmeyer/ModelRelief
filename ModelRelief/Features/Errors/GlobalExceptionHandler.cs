@@ -29,7 +29,8 @@ namespace ModelRelief.Features.Errors
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="loggerFactory">Logger factory</param>
+        /// <param name="loggerFactory">Logger factory.</param>
+        /// <param name="hostingEnvironment">IHostingEnvironment from DI.</param>
         public GlobalExceptionFilter(ILoggerFactory loggerFactory, IHostingEnvironment hostingEnvironment)
         {
             _logger = loggerFactory.CreateLogger<GlobalExceptionFilter>();

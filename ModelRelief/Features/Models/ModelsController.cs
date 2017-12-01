@@ -54,7 +54,7 @@ namespace ModelRelief.Features.Models
         /// <summary>
         /// Setup View controls for select controls, etc.
         /// </summary>
-        /// <param name="projectId">Project Id to select</param>
+        /// <param name="model">Model instance for View.</param>
         protected override void InitializeViewControls(Dto.Model3d model)
         {
             ViewBag.ModelFormats = ViewHelpers.PopulateEnumDropDownList<Model3dFormat>("Select Model Format");

@@ -61,7 +61,6 @@ namespace ModelRelief.Api.V2.Shared.Rest
         /// <summary>
         /// Converts a PUT request to a domain model (for validation).
         /// </summary>
-        /// <param name="dbContext">Database context.</param>
         /// <returns>Domain model</returns>
         public async Task<TEntity> BuildDomainModel ()
         {

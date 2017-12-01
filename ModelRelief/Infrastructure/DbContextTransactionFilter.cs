@@ -22,7 +22,8 @@ namespace ModelRelief.Infrastructure
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="dbContext">Database context</param>
+        /// <param name="dbContext">Database context.</param>
+        /// <param name="logger">ILogger.</param>
         public DbContextTransactionFilter(ModelReliefDbContext dbContext, ILogger<DatabaseLogger> logger)
         {
             _dbContext = dbContext;

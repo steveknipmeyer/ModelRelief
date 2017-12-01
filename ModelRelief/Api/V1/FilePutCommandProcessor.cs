@@ -14,6 +14,7 @@ using Serilog;
 using System;
 using System.Threading.Tasks;
 
+#pragma warning disable 1572, 1573, 1712
 namespace ModelRelief.Api.V1
 {
     /// <summary>
