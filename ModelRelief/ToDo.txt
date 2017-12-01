@@ -7,8 +7,6 @@
         Scale with a Python processor.
 
     Issues
-        GetSingle does not recognize query parameters.
-
         ApiV1 -> ApiV2
             Support for binary POST requests.
             File Names

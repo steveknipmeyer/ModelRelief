@@ -81,12 +81,12 @@ namespace ModelRelief.Api.V2.Shared
             });
 
             // Return the model URI in the HTTP Response Location Header
-            //  XMLHttpRequest.getResponseHeader('Location') :  http://localhost:60655/api/v1/meshes/10
-            //  XMLHttpRequest.responseText = (JSON) { id : 10 }
+            // XMLHttpRequest.getResponseHeader('Location') :  http://localhost:60655/api/v1/meshes/10
+            // XMLHttpRequest.responseText = (JSON) { id : 10 }
             if (result is OkObjectResult)
             {
                 var newModel = (TGetModel)((OkObjectResult) result).Value;
-                string responseUrl = Url.RouteUrl( new {id = newModel.Id});
+                string responseUrl = $"{Url.RouteUrl( new {})}/{newModel.Id}";
                 Uri responseUrlAbsolute = new Uri($"{Request.Scheme}://{Request.Host}{responseUrl}");
                 Response.Headers["Location"] = responseUrlAbsolute.AbsoluteUri;
             }
