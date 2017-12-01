@@ -29,13 +29,9 @@ namespace ModelRelief.Api.V2.Meshes
         /// </summary>
         /// <param name="dbContext">Database context.</param>
         /// <param name="logger">ILogger.</param>
-        /// <param name="mapper">IMapper.</param>
         /// <param name="mediator">IMediator.</param>
-        /// <param name="userManager">UserManager.</param>
-        /// <param name="hostingEnvironment">IHostingEnvironment.</param>
-        /// <param name="configurationProvider">IConfigurationProvider.</param>
-        public MeshesController(ModelReliefDbContext dbContext, ILogger<Domain.Mesh> logger, IMapper mapper, IMediator mediator, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider)
-            : base(dbContext, logger, mapper, mediator, userManager, hostingEnvironment, configurationProvider)
+        public MeshesController(ModelReliefDbContext dbContext, ILogger<Domain.Mesh> logger, IMediator mediator)
+            : base(dbContext, logger, mediator)
         {
         }
     }

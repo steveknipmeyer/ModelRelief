@@ -7,8 +7,10 @@
 
     Issues
         ApiV1 -> ApiV2
-            Support for POST file requests.
-            Introduce a new generic type TFile for the ApiController to handle POST file requests.
+            Simplify controller constructors. Request handlers can receive their services through DI.
+            Remove User from DTOs!
+                ModelReliefModel -> ModelReliefDomainModel
+                + ModelReliefDtoModel
 
             Validation
                 User is authenticated.

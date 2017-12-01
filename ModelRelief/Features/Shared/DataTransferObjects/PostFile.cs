@@ -9,6 +9,7 @@ using FluentValidation;
 using ModelRelief.Api.V2.Shared.Rest;
 using ModelRelief.Domain;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 
 namespace ModelRelief.Dto
 {
@@ -17,8 +18,8 @@ namespace ModelRelief.Dto
     /// </summary>
     public class PostFile
     {
-        public byte[] Raw { get; set; }
-
+        public byte[] Raw { get; set;}
+        
         /// <summary>
         /// Constructor
         /// </summary>

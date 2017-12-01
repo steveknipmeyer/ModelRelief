@@ -34,28 +34,20 @@ namespace ModelRelief.Api.V2.Shared
         /// </summary>
         /// <param name="dbContext">Database context.</param>
         /// <param name="logger">ILogger.</param>
-        /// <param name="mapper">IMapper.</param>
         /// <param name="mediator">IMediator.</param>
-        /// <param name="userManager">UserManager.</param>
-        /// <param name="hostingEnvironment">IHostingEnvironment.</param>
-        /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <remarks>Defaults to use paging.</remarks>
-        protected RestController(ModelReliefDbContext dbContext, ILogger<TEntity> logger, IMapper mapper, IMediator mediator, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider)
-            : this(dbContext, logger, mapper, mediator, userManager, hostingEnvironment, configurationProvider, new RestControllerOptions {UsePaging = true}) {}
+        protected RestController(ModelReliefDbContext dbContext, ILogger<TEntity> logger, IMediator mediator)
+            : this(dbContext, logger, mediator, new RestControllerOptions {UsePaging = true}) {}
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context.</param>
         /// <param name="logger">ILogger.</param>
-        /// <param name="mapper">IMapper.</param>
         /// <param name="mediator">IMediator.</param>
-        /// <param name="userManager">UserManager.</param>
-        /// <param name="hostingEnvironment">IHostingEnvironment.</param>
-        /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="restControllerOptions">Options for paging, etc.</param>
-        protected RestController(ModelReliefDbContext dbContext, ILogger<TEntity> logger, IMapper mapper, IMediator mediator, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, RestControllerOptions restControllerOptions )
-            : base(dbContext, logger, mapper, mediator, userManager, hostingEnvironment, configurationProvider) 
+        protected RestController(ModelReliefDbContext dbContext, ILogger<TEntity> logger, IMediator mediator, RestControllerOptions restControllerOptions )
+            : base(dbContext, logger, mediator) 
         {
             RestControllerOptions = restControllerOptions;
         }
@@ -93,16 +85,7 @@ namespace ModelRelief.Api.V2.Shared
                 NewModel = postRequest
             });
 
-            // Return the model URI in the HTTP Response Location Header
-            // XMLHttpRequest.getResponseHeader('Location') :  http://localhost:60655/api/v1/meshes/10
-            // XMLHttpRequest.responseText = (JSON) { id : 10 }
-            if (result is OkObjectResult)
-            {
-                var newModel = (TGetModel)((OkObjectResult) result).Value;
-                string responseUrl = $"{Url.RouteUrl( new {})}/{newModel.Id}";
-                Uri responseUrlAbsolute = new Uri($"{Request.Scheme}://{Request.Host}{responseUrl}");
-                Response.Headers["Location"] = responseUrlAbsolute.AbsoluteUri;
-            }
+            AddNewResourceUrlToLocationHeader(result);
 
             return result;
         }
@@ -111,25 +94,20 @@ namespace ModelRelief.Api.V2.Shared
         [Consumes("application/octet-stream")]
         [DisableRequestSizeLimit]
         public virtual async Task<IActionResult> PostFile()
-        { 
+        {
             // construct from request body
-            var postFile = new PostFile { Raw = Files.ReadToEnd(Request.Body) };
+            var postFile = new PostFile 
+            { 
+                Raw = Files.ReadToEnd(Request.Body),
+            };
 
-            var result =  await HandleRequestAsync(new PostFileRequest<TEntity, TGetModel> 
+            var result = await HandleRequestAsync(new PostFileRequest<TEntity, TGetModel>
             {
+                User = User,
                 NewFile = postFile
             });
 
-            // Return the model URI in the HTTP Response Location Header
-            // XMLHttpRequest.getResponseHeader('Location') :  http://localhost:60655/api/v1/meshes/10
-            // XMLHttpRequest.responseText = (JSON) { id : 10 }
-            if (result is OkObjectResult)
-            {
-                var newModel = (TGetModel)((OkObjectResult) result).Value;
-                string responseUrl = $"{Url.RouteUrl( new {})}/{newModel.Id}";
-                Uri responseUrlAbsolute = new Uri($"{Request.Scheme}://{Request.Host}{responseUrl}");
-                Response.Headers["Location"] = responseUrlAbsolute.AbsoluteUri;
-            }
+            AddNewResourceUrlToLocationHeader(result);
 
             return result;
         }
@@ -152,6 +130,24 @@ namespace ModelRelief.Api.V2.Shared
             {
                 Id = id
             });
+        }
+
+        /// <summary>
+        /// Set the Location header of the Response to the Url of the newly-created resources.
+        /// </summary>
+        /// <param name="result"></param>
+        private void AddNewResourceUrlToLocationHeader(IActionResult result)
+        {
+            // Return the model URI in the HTTP Response Location Header
+            // XMLHttpRequest.getResponseHeader('Location') :  http://localhost:60655/api/v1/meshes/10
+            // XMLHttpRequest.responseText = (JSON) { id : 10 }
+            if (result is OkObjectResult)
+            {
+                var newModel = ( TGetModel )(( OkObjectResult )result).Value;
+                string responseUrl = $"{Url.RouteUrl(new { })}/{newModel.Id}";
+                Uri responseUrlAbsolute = new Uri($"{Request.Scheme}://{Request.Host}{responseUrl}");
+                Response.Headers["Location"] = responseUrlAbsolute.AbsoluteUri;
+            }
         }
     }
 }

@@ -7,6 +7,7 @@
 using MediatR;
 using ModelRelief.Domain;
 using ModelRelief.Dto;
+using System.Security.Claims;
 
 namespace ModelRelief.Api.V2.Shared.Rest
 {
@@ -19,6 +20,11 @@ namespace ModelRelief.Api.V2.Shared.Rest
         where TEntity    : ModelReliefModel
         where TGetModel  : IGetModel
     {
+        /// <summary>
+        /// Gets or sets the User posting the file request.
+        /// </summary>
+        public ClaimsPrincipal User { get; set;}
+
         /// <summary>
         ///  Gets or sets the incoming file to be used to create the new domain model.
         /// </summary>

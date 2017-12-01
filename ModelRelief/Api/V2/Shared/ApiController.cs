@@ -26,32 +26,20 @@ namespace ModelRelief.Api.V2.Shared
     public abstract class ApiController<TEntity> : Controller, IUrlHelperContainer
             where TEntity: ModelReliefModel
     {
-        public ModelReliefDbContext             DbContext { get; }
-        public ILogger<TEntity>                 Logger { get; }
-        public IMapper                          Mapper { get; }
-        public IMediator                        Mediator { get; }
-        public UserManager<ApplicationUser>     UserManager { get; }
-        public IHostingEnvironment              HostingEnvironment { get; }
-        public Services.IConfigurationProvider  ConfigurationProvider { get; }
+        public ModelReliefDbContext DbContext { get; }
+        public ILogger<TEntity>     Logger { get; }
+        public IMediator            Mediator { get; }
 
         /// <summary>
         /// Base API Controller
         /// </summary>
         /// <param name="dbContext">Database context.</param>
         /// <param name="logger">ILogger.</param>
-        /// <param name="mapper">IMapper.</param>
         /// <param name="mediator">IMediator.</param>
-        /// <param name="userManager">UserManager.</param>
-        /// <param name="hostingEnvironment">IHostingEnvironment.</param>
-        /// <param name="configurationProvider">IConfigurationProvider.</param>
-        protected ApiController (ModelReliefDbContext dbContext, ILogger<TEntity> logger, IMapper mapper, IMediator mediator, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider ) {
+        protected ApiController (ModelReliefDbContext dbContext, ILogger<TEntity> logger, IMediator mediator) {
             DbContext = dbContext;
             Logger = logger;
-            Mapper = mapper;
             Mediator = mediator;
-            UserManager = userManager;
-            HostingEnvironment = hostingEnvironment;
-            ConfigurationProvider = configurationProvider;
         }
 
         /// <summary>
