@@ -1,4 +1,6 @@
 ﻿<--- Commit
+
+
 <--- Reading
 
 <-- Tasks
@@ -8,13 +10,11 @@
     Issues
         Should API Post return HTTP Created?
 
-        ModelReliefModel -> ModelReliefDomainModel
-        + ModelReliefDtoModel
+        ModelReliefModel -> DomainModel
+        + DtoModel
+            Can validation be shared?
 
         Validation
-            BuildDomainModel   
-                An invalid property name causes an exception.
-                An invalid enum (string instead of an integer) causes an exception.
             User must be authenticated.
                 POST
                 All Others
@@ -26,6 +26,7 @@
 
         Logging
         Exception handling
+            The ApiValidationResult exposes too much about internals in the developer message (RequestType).
             How should database exceptions, such as those violating Domain DataAnnotation rules, be handled?
             https://andrewlock.net/using-cancellationtokens-in-asp-net-core-mvc-controllers/
             Concurrency exceptions?

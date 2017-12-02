@@ -140,7 +140,6 @@ namespace ModelRelief
             //     This method requires MediatR.Extensions.Microsoft.DependencyInjection
             services.AddMediatR(typeof(Startup));
 #endif
-
             return ConfigureAutofacServices (services);
         }
 

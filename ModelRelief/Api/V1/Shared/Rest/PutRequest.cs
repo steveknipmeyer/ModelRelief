@@ -5,6 +5,7 @@
 // ------------------------------------------------------------------------//
 
 using System.Collections.Generic;
+using System.Reflection;
 using MediatR;
 using ModelRelief.Domain;
 using ModelRelief.Api.V1.Shared.Errors;
@@ -14,6 +15,8 @@ using ModelRelief.Database;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using System.Threading.Tasks;
+using FluentValidation.Results;
+using FluentValidation;
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
@@ -78,15 +81,33 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 var value = putProperty.Value;
 
                 // find matching property in target object
-                var property = properties.Single(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-                if (property == null)
-                    continue;
+                PropertyInfo property = null;
+                try
+                {
+                    property = properties.Single(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                    if (property == null)
+                        continue;
+                }
+                catch (Exception )
+                {
+                    var validationFailure = new ValidationFailure(name, $"The property {name} is not a valid property for this resource.");
+                    throw new ApiValidationException(typeof(PutRequest<TEntity, TGetModel>), new List<ValidationFailure> {validationFailure});
+                }
 
                 // now set property in target
-                var domainValue = property.PropertyType.IsEnum ? 
-                    Enum.ToObject(property.PropertyType, value) : 
-                    // https://stackoverflow.com/questions/19811583/invalid-cast-from-system-double-to-system-nullable
-                    Convert.ChangeType(value, Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType);
+                object domainValue = null;
+                try
+                {
+                    domainValue = property.PropertyType.IsEnum ? 
+                        Enum.ToObject(property.PropertyType, value) : 
+                        // https://stackoverflow.com/questions/19811583/invalid-cast-from-system-double-to-system-nullable
+                        Convert.ChangeType(value, Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType);
+                 }
+                catch (Exception )
+                {
+                    var validationFailure = new ValidationFailure(name, $"The property value {value} cannot be converted to a valid property value.");
+                    throw new ApiValidationException(typeof(PutRequest<TEntity, TGetModel>), new List<ValidationFailure> {validationFailure});
+                }
 
                 property.SetValue(model, value: domainValue);
             }

@@ -4,24 +4,21 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 using AutoMapper;
-using Microsoft.AspNetCore.Hosting;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Features.Models;
+using Microsoft.EntityFrameworkCore;
+using ModelRelief.Api.V1.Shared.Rest;
+using ModelRelief.Database;
 using ModelRelief.Domain;
-using ModelRelief.Services;
+using ModelRelief.Features.Models;
 using Moq;
 using System.Collections.Generic;
-using Xunit;
-using ModelRelief.Database;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using MediatR;
-using ModelRelief.Api.V1.Shared.Rest;
+using Xunit;
 
-namespace ModelRelief.Test.Api.Models
+namespace ModelRelief.Test.Unit.Models
 {
-    public class Models
+    public class ModelsUnitTests
     {
         /// <summary>
         /// Test that a Models Index returns a ViewResult.
@@ -31,22 +28,17 @@ namespace ModelRelief.Test.Api.Models
         // 1) It is difficult to mock extensions methods such as the EF ToListAsync.
         // 2) Jimmy Bogard and K. Scott Allen do not recommend mocking a DbContext. 
         // Instead, use integration tests such as those in ContosoUniversityCore.
-        public void Index_ReturnsModels()
+        public void Index__returns_models()
         {
             // Arrange
-//          ModelReliefDbContext        dbContext          = null;
-//          ILogger<ModelsController>   logger             = null;
-            IMapper                     mapper             = null;
-            IMediator                   mediator           = null;
-            var dbContextMock = new Mock<ModelReliefDbContext>();
-            dbContextMock.Setup(mock => mock.Models.ToList()).Returns(new List<Model3d>() 
-                    {
-                        new Model3d() { Id = 1, Name = "M1", Description = "Model One"},
-                        new Model3d() { Id = 2, Name = "M2", Description = "Model Two"}
-                    }
-            );
+            var optionsBuilder = new DbContextOptionsBuilder()
+                .UseSqlite("Data Source=Database\\ModelRelief.db");
+            ModelReliefDbContext  dbContext  = new ModelReliefDbContext(optionsBuilder.Options);
 
-            var controller = new ModelsController(dbContextMock.Object, mapper, mediator);
+            IMapper               mapper     = null;        // AutoMapper must be initialized with all the MappingProfiles.
+            IMediator             mediator   = null;        // Mediator requires all the Request/Handler types to be registered for DI.
+
+            var controller = new ModelsController(dbContext, mapper, mediator);
 
             // Act
             var result = controller.Index(new GetRequest());
