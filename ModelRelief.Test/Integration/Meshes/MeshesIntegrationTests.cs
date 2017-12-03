@@ -23,6 +23,14 @@ namespace ModelRelief.Test.Integration.Meshes
         private const string MeshesUrl = "/api/v1/meshes";
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public MeshesIntegrationTests()
+        {
+            Framework.RefreshTestDatabase();
+        }
+
+        /// <summary>
         /// Test that a valid Mesh can be created through POST.
         /// </summary>
         [Fact]

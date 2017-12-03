@@ -45,23 +45,50 @@ namespace ModelRelief.Test.Integration
 
         public Framework()
         {
-          // e.g. D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief.Test\bin\Debug\netcoreapp2.0
-          var currentDirectory = Directory.GetCurrentDirectory();
+            var contentRootPath = GetContentRootPath();           
+            Directory.SetCurrentDirectory(contentRootPath);
 
-          // reset path from <top> down
-          var contentRootPath = currentDirectory.Remove (currentDirectory.IndexOf(Settings.ContentRootFolder) + Settings.ContentRootFolder.Length);
-          contentRootPath = Path.Combine (contentRootPath, Settings.ContentRootFolder) + @"\";
+            Server = new TestServer(WebHost.CreateDefaultBuilder(null)
+                                            .UseEnvironment("Test")
+                                            .UseContentRoot(contentRootPath)
+                                            .UseStartup<Startup>());
 
-          Directory.SetCurrentDirectory(contentRootPath);
-
-          Server = new TestServer(WebHost.CreateDefaultBuilder(null)
-                                         .UseEnvironment("Test")
-                                         .UseContentRoot(contentRootPath)
-                                         .UseStartup<Startup>());
-
-          Client = Server.CreateClient();
+            Client = Server.CreateClient();
         }
-    
+
+        /// <summary>
+        /// Returns the root of the content folder. wwwroot is below this folder.
+        /// </summary>
+        /// <returns>Content folder root.</returns>
+        public static string GetContentRootPath()
+        {
+            // e.g. D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief.Test\bin\Debug\netcoreapp2.0
+            var currentDirectory = Directory.GetCurrentDirectory();
+
+            // reset path from <top> down
+            var contentRootPath = currentDirectory.Remove (currentDirectory.IndexOf(Settings.ContentRootFolder) + Settings.ContentRootFolder.Length);
+            contentRootPath = Path.Combine (contentRootPath, Settings.ContentRootFolder) + @"\";
+
+            return contentRootPath;
+        }
+
+        /// <summary>
+        /// Replaces the test database with a fresh baseline copy.
+        /// </summary>
+        public static void RefreshTestDatabase()
+        {
+            var contentRootPath = GetContentRootPath();
+            var databaseFolder = $"{contentRootPath}/{Settings.DatabaseFolder}";
+
+            var sourceDatabase = "ModelReliefBaseline.db";
+            var targetDatabase = "ModelReliefTest.db";
+
+            var sourceDatbasePath = Path.Combine(databaseFolder, sourceDatabase);
+            var targetDatbasePath = Path.Combine(databaseFolder, targetDatabase);
+
+            File.Copy(sourceDatbasePath, targetDatbasePath, overwrite: true);
+        }
+
         /// <summary>
         /// Submits an object to a given endpoint using the HTTP method.
         /// </summary>
