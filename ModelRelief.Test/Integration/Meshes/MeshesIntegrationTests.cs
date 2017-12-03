@@ -26,7 +26,7 @@ namespace ModelRelief.Test.Integration.Meshes
         /// Test that a valid Mesh can be created through POST.
         /// </summary>
         [Fact]
-        public async Task POST_can_create_a_mesh()
+        public async Task POST_CanCreateNewMesh()
         {
             // Arrange
             var meshPostModel = new Dto.Mesh() 
@@ -37,10 +37,12 @@ namespace ModelRelief.Test.Integration.Meshes
                 };
 
             // Act
-            var responseString = await Framework.SubmitHttpRequest(HttpRequestType.Post, MeshesUrl, meshPostModel);
+            var requestResponse = await Framework.SubmitHttpRequest(HttpRequestType.Post, MeshesUrl, meshPostModel);
 
             // Assert
-            var newMesh = JsonConvert.DeserializeObject<Dto.Mesh>(responseString);
+            requestResponse.Message.EnsureSuccessStatusCode();
+
+            var newMesh = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
             newMesh.Name.Should().Be("Test Mesh");
         }
     
@@ -48,7 +50,7 @@ namespace ModelRelief.Test.Integration.Meshes
         /// Test that an invalid Mesh POST returns BadRequest.
         /// </summary>
         [Fact]
-        public async Task POST_with_invalid_data_returns_BadRequest()
+        public async Task POST_InvalidPropertyValueReturnsBadRequest()
         {
             // Arrange
             var meshPostModel = new Dto.Mesh() 
@@ -57,10 +59,12 @@ namespace ModelRelief.Test.Integration.Meshes
                 };
 
             // Act
-            var responseString = await Framework.SubmitHttpRequest(HttpRequestType.Post, MeshesUrl, meshPostModel);
+            var requestResponse = await Framework.SubmitHttpRequest(HttpRequestType.Post, MeshesUrl, meshPostModel);
 
             // Assert
-            var apiResult = JsonConvert.DeserializeObject<ApiResult>(responseString);
+            Assert.False(requestResponse.Message.IsSuccessStatusCode);
+
+            var apiResult = JsonConvert.DeserializeObject<ApiResult>(requestResponse.ContentString);
             apiResult.HttpStatusCode.Should().Be((int) HttpStatusCode.BadRequest);
         }
 
@@ -68,7 +72,7 @@ namespace ModelRelief.Test.Integration.Meshes
         /// Test that an invalid Mesh PUT with an umknown property returns BadRequest.
         /// </summary>
         [Fact]
-        public async Task PUT_with_invalid_property_name_returns_BadRequest()
+        public async Task PUT_InvalidPropertyNameReturnsBadRequest()
         {
             // Arrange
             var meshPostModel = new Dto.Mesh
@@ -78,8 +82,8 @@ namespace ModelRelief.Test.Integration.Meshes
                 Format = Domain.MeshFormat.OBJ,
                 };
 
-            var responseString = await Framework.SubmitHttpRequest(HttpRequestType.Post, MeshesUrl, meshPostModel);
-            var newModel = JsonConvert.DeserializeObject<Dto.Mesh>(responseString);
+            var requestResponse = await Framework.SubmitHttpRequest(HttpRequestType.Post, MeshesUrl, meshPostModel);
+            var newModel = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
 
             var invalidMeshPostModel = new
                 {
@@ -87,10 +91,12 @@ namespace ModelRelief.Test.Integration.Meshes
                 };
 
             // Act
-            responseString = await Framework.SubmitHttpRequest(HttpRequestType.Put, $"{MeshesUrl}/{newModel.Id}", invalidMeshPostModel);
+            requestResponse = await Framework.SubmitHttpRequest(HttpRequestType.Put, $"{MeshesUrl}/{newModel.Id}", invalidMeshPostModel);
 
             // Assert
-            var apiResult = JsonConvert.DeserializeObject<ApiResult>(responseString);
+            Assert.False(requestResponse.Message.IsSuccessStatusCode);
+
+            var apiResult = JsonConvert.DeserializeObject<ApiResult>(requestResponse.ContentString);
             apiResult.HttpStatusCode.Should().Be((int) HttpStatusCode.BadRequest);
         }
 
@@ -98,7 +104,7 @@ namespace ModelRelief.Test.Integration.Meshes
         /// Test that an invalid Mesh PUT with an invalid enum property value returns BadRequest.
         /// </summary>
         [Fact]
-        public async Task PUT_with_invalid_enum_property_value_returns_BadRequest()
+        public async Task PUT_InvalidEnumPropertyValueReturnsBadRequest()
         {
             // Arrange
             var meshPostModel = new Dto.Mesh
@@ -108,8 +114,8 @@ namespace ModelRelief.Test.Integration.Meshes
                 Format = Domain.MeshFormat.OBJ,
                 };
 
-            var responseString = await Framework.SubmitHttpRequest(HttpRequestType.Post, MeshesUrl, meshPostModel);
-            var newModel = JsonConvert.DeserializeObject<Dto.Mesh>(responseString);
+            var requestResponse = await Framework.SubmitHttpRequest(HttpRequestType.Post, MeshesUrl, meshPostModel);
+            var newModel = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
 
             var invalidMeshPostModel = new
                 {
@@ -117,10 +123,12 @@ namespace ModelRelief.Test.Integration.Meshes
                 };
 
             // Act
-            responseString = await Framework.SubmitHttpRequest(HttpRequestType.Put, $"{MeshesUrl}/{newModel.Id}", invalidMeshPostModel);
+            requestResponse = await Framework.SubmitHttpRequest(HttpRequestType.Put, $"{MeshesUrl}/{newModel.Id}", invalidMeshPostModel);
 
             // Assert
-            var apiResult = JsonConvert.DeserializeObject<ApiResult>(responseString);
+            Assert.False(requestResponse.Message.IsSuccessStatusCode);
+
+            var apiResult = JsonConvert.DeserializeObject<ApiResult>(requestResponse.ContentString);
             apiResult.HttpStatusCode.Should().Be((int) HttpStatusCode.BadRequest);
         }
     }

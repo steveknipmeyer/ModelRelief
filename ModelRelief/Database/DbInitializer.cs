@@ -95,7 +95,7 @@ namespace ModelRelief.Database
         /// </summary>
         private void CopyTestFiles()
         {
-            var user   = _context.Users.FirstOrDefault<ApplicationUser>();
+            var user = _context.Users.FirstOrDefault<ApplicationUser>();
 
             var testdataPartialPath = _configurationProvider.GetSetting(ResourcePaths.TestDataUser);
             string testDataPath     = $"{_hostingEnvironment.ContentRootPath}{testdataPartialPath}";

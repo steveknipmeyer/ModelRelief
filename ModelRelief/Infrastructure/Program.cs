@@ -54,7 +54,7 @@ namespace ModelRelief.Infrastructure
         {
             var configuration = new ConfigurationBuilder()
                           .SetBasePath(Directory.GetCurrentDirectory())
-                          .AddJsonFile("appsettings.json", optional:false, reloadOnChange:false)
+                          .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
                           .Build();
 
             Log.Logger = new LoggerConfiguration()

@@ -26,6 +26,15 @@ namespace ModelRelief.Test.Integration
     }
 
     /// <summary>
+    /// Represents the result of a client request.
+    /// </summary>
+    public class RequestResponse
+    {
+        public HttpResponseMessage Message { get; set; }
+        public string              ContentString { get; set; }
+    }
+
+    /// <summary>
     /// Sets up a test server and HTTP client for integration testing.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
@@ -36,8 +45,6 @@ namespace ModelRelief.Test.Integration
 
         public Framework()
         {
-          // Arrange
-
           // e.g. D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief.Test\bin\Debug\netcoreapp2.0
           var currentDirectory = Directory.GetCurrentDirectory();
 
@@ -48,6 +55,7 @@ namespace ModelRelief.Test.Integration
           Directory.SetCurrentDirectory(contentRootPath);
 
           Server = new TestServer(WebHost.CreateDefaultBuilder(null)
+                                         .UseEnvironment("Test")
                                          .UseContentRoot(contentRootPath)
                                          .UseStartup<Startup>());
 
@@ -61,7 +69,7 @@ namespace ModelRelief.Test.Integration
         /// <param name="endPoint">Endpoint.</param>
         /// <param name="contentObject">Object to serlize and send in the body of the request.</param>
         /// <returns></returns>
-        public static async Task<string> SubmitHttpRequest (HttpRequestType requestType, string endPoint, object contentObject = null)
+        public static async Task<RequestResponse> SubmitHttpRequest (HttpRequestType requestType, string endPoint, object contentObject = null)
         {
             var framework = new Framework();
 
@@ -89,7 +97,7 @@ namespace ModelRelief.Test.Integration
             }
             var responseString = await response.Content.ReadAsStringAsync();
 
-            return responseString;
+            return new RequestResponse { Message = response, ContentString = responseString};
         }
     }
 }
