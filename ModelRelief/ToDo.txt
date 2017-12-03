@@ -8,12 +8,8 @@
         Scale with a Python processor.
 
     Issues
-        Should API Post return HTTP Created?
-        The RestController action methods should define the type of the response!
-        The ApiController should directly return the IActionResult from HandleRequestAsync.
-            Ok(object)
-            Created (string, object)
-            The action method should not need to explicitly set the Location header. This is done by the CreatedResult.
+        How can XUnit be used to test all properties of a resource?
+            Iterate through the property list of a Domain model.
 
         ModelReliefModel -> DomainModel
         + DtoModel

@@ -80,14 +80,12 @@ namespace ModelRelief.Api.V1.Shared
         [HttpPost]
         public virtual async Task<IActionResult> Post([FromBody] TPostModel postRequest)
         {
-            var result =  await HandleRequestAsync(new PostAddRequest<TEntity, TPostModel, TGetModel> 
+            var result = await HandleRequestAsync(new PostAddRequest<TEntity, TPostModel, TGetModel>
             {
                 NewModel = postRequest
             });
 
-            AddNewResourceUrlToLocationHeader(result);
-
-            return result;
+            return PostResult(result);
         }
 
         [HttpPost]
@@ -107,9 +105,7 @@ namespace ModelRelief.Api.V1.Shared
                 NewFile = postFile
             });
 
-            AddNewResourceUrlToLocationHeader(result);
-
-            return result;
+            return PostResult(result);
         }
 
         [HttpPut("{id:int}")]
@@ -133,21 +129,32 @@ namespace ModelRelief.Api.V1.Shared
         }
 
         /// <summary>
-        /// Set the Location header of the Response to the Url of the newly-created resources.
+        /// Gets the Uri of a newly-created resource.
         /// </summary>
-        /// <param name="result"></param>
-        private void AddNewResourceUrlToLocationHeader(IActionResult result)
+        /// <param name="okResult"></param>
+        private Uri GetCreatedUri(OkObjectResult okResult)
         {
-            // Return the model URI in the HTTP Response Location Header
-            // XMLHttpRequest.getResponseHeader('Location') :  http://localhost:60655/api/v1/meshes/10
-            // XMLHttpRequest.responseText = (JSON) { id : 10 }
-            if (result is OkObjectResult)
-            {
-                var newModel = ( TGetModel )(( OkObjectResult )result).Value;
-                string responseUrl = $"{Url.RouteUrl(new { })}/{newModel.Id}";
-                Uri responseUrlAbsolute = new Uri($"{Request.Scheme}://{Request.Host}{responseUrl}");
-                Response.Headers["Location"] = responseUrlAbsolute.AbsoluteUri;
-            }
+            var newModel = (TGetModel)((OkObjectResult)okResult).Value;
+            string responseUrl = $"{Url.RouteUrl(new { })}/{newModel.Id}";
+            Uri responseUrlAbsolute = new Uri($"{Request.Scheme}://{Request.Host}{responseUrl}");
+
+            return responseUrlAbsolute;
         }
+
+        /// <summary>
+        /// Packages a POST result into the appropriate HTTP response.
+        /// </summary>
+        /// <param name="result">IActionResult from processing.</param>
+        /// <returns>Created(201) is successful; otherwise raw result (typically ApiResult)</returns>
+        private IActionResult PostResult(IActionResult result)
+        {
+            if (!(result is OkObjectResult))
+                return result;
+
+            var okResult = result as OkObjectResult;
+            var createdResult = Created(GetCreatedUri(okResult), okResult.Value);
+            return createdResult;
+        }
+
     }
 }

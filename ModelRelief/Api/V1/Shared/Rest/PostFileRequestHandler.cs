@@ -66,8 +66,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
             // find ApplicationUser
             var user = await Identity.GetCurrentUserAsync(UserManager, message.User);
 
-            // populate model properties (placeholder Name = User.Id)
-            var newModel = new TEntity() {Name = $"{user.Id}"};
+            // populate model properties (placeholder Name)
+            var newModel = new TEntity() {Name = "TBD"};
             newModel.User = user;
             
             // add to repository
@@ -86,6 +86,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             await Files.WriteFileFromByteArray(fileName, message.NewFile.Raw);
 
             // file path is known now
+            newModel.Name = newModel.Id.ToString();
             newModel.Path = fileName;
 
             return Mapper.Map<TGetModel>(newModel);
