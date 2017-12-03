@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using ModelRelief.Domain;
 using ModelRelief.Services;
+using ModelRelief.Utility;
 using System;
 using System.IO;
 using System.Linq;
@@ -82,7 +83,7 @@ namespace ModelRelief.Database
         /// </summary>
         private async Task<ApplicationUser> AddUsers()
         {
-            var user = new ApplicationUser() { UserName = "test@modelrelief.com"};
+            var user = new ApplicationUser() { UserName = "test@modelrelief.com", Id = Identity.MockUserId};
             var createResult = await _userManager.CreateAsync (user, "ModelRelief2020!");
             if (!createResult.Succeeded)
                 throw new Exception(createResult.ToString());
@@ -104,7 +105,10 @@ namespace ModelRelief.Database
             string storeUsersPath     = $"{_hostingEnvironment.WebRootPath}{storeUsersPartialPath}{user.Id}/";
 
             DirectoryInfo source = new DirectoryInfo(testDataPath);
+
+            Directory.CreateDirectory(storeUsersPath);
             DirectoryInfo target = new DirectoryInfo(storeUsersPath);
+
             Utility.Files.CopyFilesRecursively(source, target);
         }
 

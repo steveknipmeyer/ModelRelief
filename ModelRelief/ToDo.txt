@@ -8,10 +8,6 @@
         Scale with a Python processor.
 
     Issues
-        Arrange the integration tests to use a private database that can be restored before each run.
-            Separate appsettings.json?
-        How can a separate /users/store location be used for testing?
-
         Should API Post return HTTP Created?
         The RestController action methods should define the type of the response!
         The ApiController should directly return the IActionResult from HandleRequestAsync.

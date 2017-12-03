@@ -34,7 +34,16 @@
       "https": null,
       // stackoverflow.com/questions/46406525/net-core-2-0-basepath-error
       "applicationUrl": "http://localhost:60655"
+    },
+    "ModelRelief Test": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Test"
+      },
+      "https": null,
+      // stackoverflow.com/questions/46406525/net-core-2-0-basepath-error
+      "applicationUrl": "http://localhost:60655"
     }
-
   }
 }
