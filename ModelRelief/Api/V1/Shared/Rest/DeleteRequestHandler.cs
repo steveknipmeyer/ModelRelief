@@ -21,7 +21,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// </summary>
     /// <typeparam name="TEntity">Domain model.</typeparam>
     public class DeleteRequestHandler<TEntity>  : ValidatedHandler<DeleteRequest<TEntity>, object>
-        where TEntity   : ModelReliefModel
+        where TEntity   : DomainModel
     {
         /// <summary>
         /// Constructor

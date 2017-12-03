@@ -16,7 +16,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TEntity">The domain type of the model.</typeparam>
     /// <typeparam name="TGetModel">The DTO model in the collection.</typeparam>
     public class GetListRequest<TEntity, TGetModel> : IRequest<object>
-        where TEntity   : ModelReliefModel
+        where TEntity   : DomainModel
         where TGetModel : IGetModel
     {
         /// <summary>
@@ -37,7 +37,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Gets or sets the propery name to sort the collection.
         /// </summary>
-        public string OrderBy { get; set; } = nameof (ModelReliefModel.Id);
+        public string OrderBy { get; set; } = nameof (DomainModel.Id);
 
         /// <summary>
         /// Gets or sets the order of the collectionn sort; ascending or descending.

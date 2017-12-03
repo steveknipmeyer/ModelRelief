@@ -22,7 +22,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TEntity">Domain model.</typeparam>
     /// <typeparam name="TGetModel">DTO Get model.</typeparam>
     public class GetSingleRequestHandler<TEntity, TGetModel>  : ValidatedHandler<GetSingleRequest<TEntity, TGetModel>, TGetModel>
-        where TEntity   : ModelReliefModel
+        where TEntity   : DomainModel
         where TGetModel : IGetModel
     {
         /// <summary>

@@ -53,7 +53,7 @@ namespace ModelRelief.Features
         /// <param name="selectedRow">(Optional) Primary key of selected row</param>
         /// <returns></returns>
         public static List<SelectListItem> PopulateModelDropDownList<TModel>(DbSet<TModel> models, string prompt, int? selectedRow = 0)
-            where TModel : ModelReliefModel
+            where TModel : DomainModel
         {
             var modelSelectList = new List<SelectListItem>();
             modelSelectList.Add(new SelectListItem

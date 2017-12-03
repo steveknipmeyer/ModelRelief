@@ -14,7 +14,7 @@ using ModelRelief.Domain;
 
 namespace ModelRelief.Domain
 {
-    public class Project : ModelReliefModel
+    public class Project : DomainModel
     {
         // Navigation Properties
 

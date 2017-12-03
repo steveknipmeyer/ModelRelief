@@ -14,7 +14,7 @@ using ModelRelief.Domain;
 
 namespace ModelRelief.Domain
 {
-    public class MeshTransform : ModelReliefModel
+    public class MeshTransform : DomainModel
     {       
         public double Depth { get; set; }
         public double Width { get; set; }

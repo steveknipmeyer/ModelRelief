@@ -31,7 +31,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TEntity">Domain model</typeparam>
     /// <typeparam name="TGetModel">DTO GET model.</typeparam>
     public class PostFileRequestHandler<TEntity, TGetModel> : ValidatedHandler<PostFileRequest<TEntity, TGetModel>, TGetModel>
-        where TEntity    : ModelReliefModel, IFileResource, new()
+        where TEntity    : DomainModel, IFileResource, new()
         where TGetModel  : IGetModel
     {
         public UserManager<ApplicationUser> UserManager { get; }

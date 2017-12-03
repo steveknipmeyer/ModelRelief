@@ -26,7 +26,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TEntity">The domain type of the model.</typeparam>
     /// <typeparam name="TGetModel">The DTO GET model.</typeparam>
     public class PutRequest<TEntity, TGetModel> : IRequest<TGetModel>
-        where TEntity   : ModelReliefModel
+        where TEntity   : DomainModel
         where TGetModel : IGetModel
     {
         /// <summary>

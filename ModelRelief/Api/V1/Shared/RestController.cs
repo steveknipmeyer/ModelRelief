@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 namespace ModelRelief.Api.V1.Shared
 {
     public abstract class RestController<TEntity, TGetModel, TSingleGetModel, TPostModel, TPostFile> : ApiController<TEntity>
-        where TEntity         : ModelReliefModel
+        where TEntity         : DomainModel
         where TGetModel       : IGetModel           
         where TSingleGetModel : IGetModel
         where TPostModel      : class               // WIP Should TPostModel implement a particular interface?

@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ModelRelief.Domain
 {
-    public abstract class ModelReliefModel
+    public abstract class DomainModel
     {
         [Key]
         [Required]   

@@ -24,7 +24,7 @@ namespace ModelRelief.Api.V1.Shared
     [Route("apiV1/[controller]")]
     [Produces("application/json")]
     public abstract class ApiController<TEntity> : Controller, IUrlHelperContainer
-            where TEntity: ModelReliefModel
+            where TEntity: DomainModel
     {
         public ModelReliefDbContext DbContext { get; }
         public ILogger<TEntity>     Logger { get; }

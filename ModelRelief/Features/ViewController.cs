@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace ModelRelief.Features
 {
     public abstract class ViewController<TEntity, TGetModel, TSingleGetModel, TPostModel> : UxController
-        where TEntity         : ModelReliefModel
+        where TEntity         : DomainModel
         where TGetModel       : class, IGetModel           
         where TSingleGetModel : IGetModel
         where TPostModel      : class               

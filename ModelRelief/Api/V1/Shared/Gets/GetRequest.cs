@@ -30,7 +30,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Gets or sets the propery name to sort the collection.
         /// </summary>
-        public string OrderBy { get; set; } = nameof (ModelReliefModel.Id);
+        public string OrderBy { get; set; } = nameof (DomainModel.Id);
 
         /// <summary>
         /// Gets or sets the order of the collectionn sort; ascending or descending.

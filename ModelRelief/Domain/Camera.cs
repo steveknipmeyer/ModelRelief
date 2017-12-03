@@ -19,7 +19,7 @@ namespace ModelRelief.Domain
         Isometric
     }
 
-    public class Camera : ModelReliefModel
+    public class Camera : DomainModel
     {
         public StandardView StandardView { get; set; }
 

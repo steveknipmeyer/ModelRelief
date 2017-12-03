@@ -22,8 +22,9 @@ namespace ModelRelief.Database
         private IHostingEnvironment             _hostingEnvironment  { get; set; }
         private Services.IConfigurationProvider _configurationProvider  { get; set; }
         private ModelReliefDbContext            _context  { get; set; }
-        private UserManager<ApplicationUser>               _userManager  { get; set; }
-        private SignInManager<ApplicationUser>             _signInManager  { get; set; }
+        private UserManager<ApplicationUser>    _userManager  { get; set; }
+        private SignInManager<ApplicationUser>  _signInManager  { get; set; }
+        private string                          _storeUsers { get; set; }
 
         public DbInitializer(IServiceProvider services)
         {
@@ -50,6 +51,8 @@ namespace ModelRelief.Database
             _signInManager = _services.GetRequiredService<SignInManager<ApplicationUser>>();
             if (_signInManager == null)
                 throw new ArgumentNullException(nameof(_signInManager));
+
+            _storeUsers = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
         }
 
         /// <summary>
@@ -176,15 +179,15 @@ namespace ModelRelief.Database
 
             var models = new Model3d[]
             {
-                new Model3d{Id = 1, Name = "lucy.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"/store/users/{user.Id}/models/1/",
+                new Model3d{Id = 1, Name = "lucy.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"{_storeUsers}{user.Id}/models/1/",
                             User = user, Project = project, Camera = camera},
-                new Model3d{Id = 2, Name = "armadillo.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"/store/users/{user.Id}/models/2/",
+                new Model3d{Id = 2, Name = "armadillo.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"{_storeUsers}{user.Id}/models/2/",
                             User = user, ProjectId = 1, Camera = camera},
-                new Model3d{Id = 3, Name = "bunny.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"/store/users/{user.Id}/models/3/",
+                new Model3d{Id = 3, Name = "bunny.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"{_storeUsers}{user.Id}/models/3/",
                             User = user, ProjectId = 2, Camera = camera},
-                new Model3d{Id = 4, Name = "dragon.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"/store/users/{user.Id}/models/4/",
+                new Model3d{Id = 4, Name = "dragon.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"{_storeUsers}{user.Id}/models/4/",
                             User = user, ProjectId = 2, Camera = camera},
-                new Model3d{Id = 5, Name = "tyrannosaurus.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"/store/users/{user.Id}/models/5/",
+                new Model3d{Id = 5, Name = "tyrannosaurus.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"{_storeUsers}{user.Id}/models/5/",
                             User = user, ProjectId = 3, Camera = camera},
             };
 
