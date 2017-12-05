@@ -6,6 +6,7 @@
 
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,8 @@ using System.Threading.Tasks;
 
 namespace ModelRelief.Api.V1.Shared
 {
+//  WIP: What is the best practive for API authorization?
+//  [Authorize]
     [Area("ApiV1")]
     [Route("apiV1/[controller]")]
     [Produces("application/json")]

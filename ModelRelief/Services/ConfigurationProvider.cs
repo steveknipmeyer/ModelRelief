@@ -21,6 +21,15 @@ namespace ModelRelief.Services
         public static string ModelFolders = "ResourcePaths:ModelFolders";
     }
 
+    /// <summary>
+    /// User secret configuration settings.
+    /// </summary>
+    public class UserSecrets
+    {
+        public static string TestAccountUserName = "TestAccount:UserName";
+        public static string TestAccountPassword = "TestAccount:Password";
+    }
+
     public interface IConfigurationProvider
     {
        string GetSetting(string settingName);

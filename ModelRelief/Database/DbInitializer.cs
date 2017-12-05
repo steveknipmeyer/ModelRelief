@@ -86,8 +86,11 @@ namespace ModelRelief.Database
         /// </summary>
         private async Task<ApplicationUser> AddUsers()
         {
-            var user = new ApplicationUser() { UserName = "test@modelrelief.com", Id = Identity.MockUserId};
-            var createResult = await _userManager.CreateAsync (user, "ModelRelief2020!");
+            var userName = _configurationProvider.GetSetting(UserSecrets.TestAccountUserName);
+            var password = _configurationProvider.GetSetting(UserSecrets.TestAccountPassword);
+
+            var user = new ApplicationUser() { UserName = $"{userName}", Id = Identity.MockUserId};
+            var createResult = await _userManager.CreateAsync (user, $"{password}");
             if (!createResult.Succeeded)
                 throw new Exception(createResult.ToString());
 

@@ -1,6 +1,5 @@
 ﻿<--- Commit
 
-
 <--- Reading
 
 <-- Tasks
@@ -8,28 +7,34 @@
         Scale with a Python processor.
 
     Issues
-        How can XUnit be used to test all properties of a resource?
-            Iterate through the property list of a Domain model.
+        Complete Views for Ux.
+        Complete controllers for Api.
+        Research API authorization.
+        Design the mechanism for generating a Mesh.
+            Mesh Post (create) or Mesh Put (update)?
+        Manning AspNet Core book.
 
-        ModelReliefModel -> DomainModel
-        + DtoModel
-            Can validation be shared?
+        User Validation
+            User must be authenticated and authorized.
+            Resource is owned by user.
+                For any updated resource (Get, GetList, Put, Delete), the resource ID must belong to the user.
+                For any navigation property, the referenced resource ID must belong to the user.
 
-        Validation
-            User must be authenticated.
-                POST
-                All Others
-                    Resource is owned by user.
+            Reference properies in Views can be populated only with owned resources.
 
-        Implement Integration Tests per ContostoUniversity Core
+        Integration Tests
             Api
+                How can XUnit be used to test all properties of a resource?
+                    Iterate through the property list of a Domain model.
 
         Logging
         Exception handling
             The ApiValidationResult exposes too much about internals in the developer message (RequestType).
+
             How should database exceptions, such as those violating Domain DataAnnotation rules, be handled?
             https://andrewlock.net/using-cancellationtokens-in-asp-net-core-mvc-controllers/
             Concurrency exceptions?
+
             SqliteException: SQLite Error 5: 'database is locked'.
                 PostFileRequestHandler : DbContext.SaveChanges();
 
@@ -46,7 +51,8 @@
         Refactor Export OBJ to use async/await.
 
 <-- Unit Testing
-    Base the authentication on an environment/runtime setting so Identity.MockUserId is always used for unit tests.
+    Base the authentication on an environ
+    ment/runtime setting so Identity.MockUserId is always used for unit tests.
     Support database authentication.
 
     API Testing Mocks

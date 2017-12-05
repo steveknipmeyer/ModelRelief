@@ -12,6 +12,7 @@ using ModelRelief.Database;
 using Serilog;
 using System;
 using System.IO;
+using System.Reflection;
 
 namespace ModelRelief.Infrastructure
 {
@@ -73,6 +74,17 @@ namespace ModelRelief.Infrastructure
             {
                 Log.Information("Starting web host");
                 var webHost = WebHost.CreateDefaultBuilder(args)
+                                     .ConfigureAppConfiguration((builderContext, config) =>
+                                     {
+                                         // WIP: Implement secret store for Production environments. Azure?
+                                         // https://joonasw.net/view/aspnet-core-2-configuration-changes
+                                         var env = builderContext.HostingEnvironment;
+                                         var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
+                                         if (appAssembly != null)
+                                         {
+                                             config.AddUserSecrets(appAssembly, optional: true);
+                                         }
+                                     })
                                      .UseStartup<Startup>()
                                      .UseSerilog()
                                      .Build();

@@ -6,6 +6,7 @@
 
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,8 +20,6 @@ namespace ModelRelief.Api.V1.Meshes
     /// <summary>
     /// Represents a controller to handle Mesh API requests.
     /// </summary>
-    // WIP How are API controllers authorized?
-    // [Authorize]
     [Route ("api/v1/[controller]")]        
     public class MeshesController : RestController<Domain.Mesh, Dto.Mesh, Dto.Mesh, Dto.Mesh, Dto.PostFile>
     {

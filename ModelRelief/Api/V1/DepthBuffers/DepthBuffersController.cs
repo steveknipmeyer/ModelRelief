@@ -5,6 +5,7 @@
 // ------------------------------------------------------------------------//
 
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ModelRelief.Api.V1.Shared;
@@ -15,7 +16,6 @@ namespace ModelRelief.Api.V1.DepthBuffers
     /// <summary>
     /// Represents a controller to handle DepthBuffer API requests.
     /// </summary>
-    // [Authorize]
     [Route ("api/v1/depth-buffers")]        
     public class DepthBuffersController : RestController<Domain.DepthBuffer, Dto.DepthBuffer, Dto.DepthBuffer, Dto.DepthBuffer, Dto.PostFile>
     {
