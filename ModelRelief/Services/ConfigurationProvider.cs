@@ -16,18 +16,12 @@ namespace ModelRelief.Services
     /// </summary>
     public class ResourcePaths 
     {
-        public static string StoreUsers   = "ResourcePaths:StoreUsers";
-        public static string TestDataUser = "ResourcePaths:TestDataUser";
-        public static string ModelFolders = "ResourcePaths:ModelFolders";
-    }
+        public static string TestDataUsers      = "ResourcePaths:TestDataUsers";
+        public static string StoreUsers         = "ResourcePaths:StoreUsers";
 
-    /// <summary>
-    /// User secret configuration settings.
-    /// </summary>
-    public class UserSecrets
-    {
-        public static string TestAccountUserName = "TestAccount:UserName";
-        public static string TestAccountPassword = "TestAccount:Password";
+        public static string ModelsFolder       = "ResourcePaths:ModelFolders:Models";
+        public static string MeshesFolder       = "ResourcePaths:ModelFolders:Meshes";
+        public static string DepthBuffersFolder = "ResourcePaths:ModelFolders:DepthBuffers";
     }
 
     public interface IConfigurationProvider

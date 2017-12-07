@@ -5,11 +5,13 @@
 // ------------------------------------------------------------------------//
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ModelRelief.Domain;
 using ModelRelief.Services;
-using ModelRelief.Utility;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,11 +23,11 @@ namespace ModelRelief.Database
         private IServiceProvider                _services { get; set; }
         private IHostingEnvironment             _hostingEnvironment  { get; set; }
         private Services.IConfigurationProvider _configurationProvider  { get; set; }
-        private ModelReliefDbContext            _context  { get; set; }
+        private ModelReliefDbContext            _dbContext  { get; set; }
         private UserManager<ApplicationUser>    _userManager  { get; set; }
-        private SignInManager<ApplicationUser>  _signInManager  { get; set; }
         private string                          _storeUsers { get; set; }
-
+        private ApplicationUser                 _user;
+        
         public DbInitializer(IServiceProvider services)
         {
             if (null == services)
@@ -40,17 +42,13 @@ namespace ModelRelief.Database
             if (_configurationProvider == null)
                 throw new ArgumentNullException(nameof(_configurationProvider));
 
-            _context = _services.GetRequiredService<ModelReliefDbContext>();
-            if (_context == null)
-                throw new ArgumentNullException(nameof(_context));
+            _dbContext = _services.GetRequiredService<ModelReliefDbContext>();
+            if (_dbContext == null)
+                throw new ArgumentNullException(nameof(_dbContext));
 
             _userManager = _services.GetRequiredService<UserManager<ApplicationUser>>();
             if (_userManager == null)
                 throw new ArgumentNullException(nameof(_userManager));
-
-            _signInManager = _services.GetRequiredService<SignInManager<ApplicationUser>>();
-            if (_signInManager == null)
-                throw new ArgumentNullException(nameof(_signInManager));
 
             _storeUsers = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
         }
@@ -63,33 +61,70 @@ namespace ModelRelief.Database
 
             // SQLite Error 1: 'table "AspNetRoles" already exists'.
             // https://github.com/aspnet/EntityFrameworkCore/issues/4649
-           _context.Database.EnsureCreated();
+            _dbContext.Database.EnsureCreated();
 
             // existing models?
-            if (_context.Models.Any())
+            if (_dbContext.Models.Any())
                 return;   // DB has been seeded
-            
-            await AddUsers();
-            CopyTestFiles();
 
-            AddProjects();
-            AddCameras();
-            AddModels();
-            AddMeshTransforms();
+            await SeedDatabase();
+        }
 
-            AddDepthBuffers();
-            AddMeshes();
+        /// <summary>
+        /// Seeds the database with test data.
+        /// </summary>
+        /// <returns></returns>
+        private async Task SeedDatabase()
+        {
+            var userAccounts = new List<string>
+            {
+                "TestAccount",
+                "ArtCAMAccount",
+                "VectricAccount"
+            };
+
+            foreach (var account in userAccounts)
+            {
+                _user = await AddUser(account);
+
+                // database
+                AddProjects();
+                AddCameras();
+                AddModels();
+                AddMeshTransforms();
+
+                AddDepthBuffers();
+                AddMeshes();
+
+                CreateUserStore();
+            }
+        }
+
+        /// <summary>
+        /// Create the user store in the file system.
+        /// Copy the test data files into the web user store.
+        /// </summary>
+        private void CreateUserStore()
+        {
+            CopyTestFiles<Domain.Model3d>(ResourcePaths.ModelsFolder);
+            CopyTestFiles<Domain.DepthBuffer>(ResourcePaths.DepthBuffersFolder);
+            CopyTestFiles<Domain.Mesh>(ResourcePaths.MeshesFolder);
         }
 
         /// <summary>
         /// Add test users.
         /// </summary>
-        private async Task<ApplicationUser> AddUsers()
+        private async Task<ApplicationUser> AddUser(string accountName)
         {
-            var userName = _configurationProvider.GetSetting(UserSecrets.TestAccountUserName);
-            var password = _configurationProvider.GetSetting(UserSecrets.TestAccountPassword);
+            var userNameSetting = $"{accountName}:UserName";
+            var passwordSetting = $"{accountName}:Password";
+            var idSetting = $"{accountName}:Id";
 
-            var user = new ApplicationUser() { UserName = $"{userName}", Id = Identity.MockUserId};
+            var userName = _configurationProvider.GetSetting(userNameSetting);
+            var password = _configurationProvider.GetSetting(passwordSetting);
+            var id       = _configurationProvider.GetSetting(idSetting);
+
+            var user = new ApplicationUser() { UserName = $"{userName}", Id = $"{id}"};
             var createResult = await _userManager.CreateAsync (user, $"{password}");
             if (!createResult.Succeeded)
                 throw new Exception(createResult.ToString());
@@ -98,43 +133,21 @@ namespace ModelRelief.Database
         }
 
         /// <summary>
-        /// Copy the seed test files to the user store.
-        /// </summary>
-        private void CopyTestFiles()
-        {
-            var user = _context.Users.FirstOrDefault<ApplicationUser>();
-
-            var testdataPartialPath = _configurationProvider.GetSetting(ResourcePaths.TestDataUser);
-            string testDataPath     = $"{_hostingEnvironment.ContentRootPath}{testdataPartialPath}";
-
-            var storeUsersPartialPath = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
-            string storeUsersPath     = $"{_hostingEnvironment.WebRootPath}{storeUsersPartialPath}{user.Id}/";
-
-            DirectoryInfo source = new DirectoryInfo(testDataPath);
-
-            Directory.CreateDirectory(storeUsersPath);
-            DirectoryInfo target = new DirectoryInfo(storeUsersPath);
-
-            Utility.Files.CopyFilesRecursively(source, target);
-        }
-
-        /// <summary>
         /// Add test projects.
         /// </summary>
         private void AddProjects()
         {
-            var user = _context.Users.FirstOrDefault<ApplicationUser>();
             var projects = new Project[]
             {
-                new Project{Id = 1, Name = "ModelRelief", Description = "Development and Test", User = user},
-                new Project{Id = 2, Name = "Architecture", Description = "Architectural woodwork, panels and details", User = user},
-                new Project{Id = 3, Name = "Jewelry", Description = "Jewelry watch faces, bracelets and pendants", User = user},
+                new Project{Name = "ModelRelief", Description = "Development and Test", User = _user},
+                new Project{Name = "Architecture", Description = "Architectural woodwork, panels and details", User = _user},
+                new Project{Name = "Jewelry", Description = "Jewelry watch faces, bracelets and pendants", User = _user},
             };
             foreach (Project project in projects)
             {
-                _context.Projects.Add(project);
+                _dbContext.Projects.Add(project);
             }
-            _context.SaveChanges();
+            _dbContext.SaveChanges();
         }
 
         /// <summary>
@@ -142,33 +155,31 @@ namespace ModelRelief.Database
         /// </summary>
         private void AddCameras()
         {
-            var user    = _context.Users.FirstOrDefault<ApplicationUser>();
-            var project = _context.Projects.FirstOrDefault<Project>();
-
             var cameras = new Camera[]
             {
-                new Camera{Id = 1, Name = "Top Camera", Description = "Aligned with negative Z", StandardView = StandardView.Top,
+                new Camera{Name = "Top Camera", Description = "Aligned with negative Z", StandardView = StandardView.Top,
                            PositionX = 0.0, PositionY = 0.0, PositionZ = 100.0,
                            LookAtX   = 0.0, LookAtY = 0.0, LookAtZ = 0.0,
                            FieldOfView = 35.0,
                            Near = 0.0, Far = 1000.0,
                            BoundClippingPlanes = false,
-                           User = user, Project = project},
-                new Camera{Id = 2, Name = "Isometric Camera", Description = "Isometric", StandardView = StandardView.Isometric,
+                           User = _user, Project = FindByName<Project>("ModelRelief")},
+
+                new Camera{Name = "Isometric Camera", Description = "Isometric", StandardView = StandardView.Isometric,
                            PositionX = 50.0, PositionY = 50.0, PositionZ = 50.0,
                            LookAtX   = 0.0, LookAtY = 0.0, LookAtZ = 0.0,
                            FieldOfView = 35.0,
                            Near = 0.0, Far = 1000.0,
                            BoundClippingPlanes = false,
-                           User = user, Project = project}
+                           User = _user, Project = FindByName<Project>("Architecture")}
 
             };
 
             foreach (Camera camera in cameras)
             {
-                _context.Cameras.Add(camera);
+                _dbContext.Cameras.Add(camera);
             }
-            _context.SaveChanges();
+            _dbContext.SaveChanges();
         }
 
         /// <summary>
@@ -176,29 +187,31 @@ namespace ModelRelief.Database
         /// </summary>
         private void AddModels()
         {
-            var user    = _context.Users.FirstOrDefault<ApplicationUser>();
-            var project = _context.Projects.FirstOrDefault<Project>();
-            var camera = _context.Cameras.FirstOrDefault<Camera>();
-
             var models = new Model3d[]
             {
-                new Model3d{Id = 1, Name = "lucy.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"{_storeUsers}{user.Id}/models/1/",
-                            User = user, Project = project, Camera = camera},
-                new Model3d{Id = 2, Name = "armadillo.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"{_storeUsers}{user.Id}/models/2/",
-                            User = user, ProjectId = 1, Camera = camera},
-                new Model3d{Id = 3, Name = "bunny.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"{_storeUsers}{user.Id}/models/3/",
-                            User = user, ProjectId = 2, Camera = camera},
-                new Model3d{Id = 4, Name = "dragon.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"{_storeUsers}{user.Id}/models/4/",
-                            User = user, ProjectId = 2, Camera = camera},
-                new Model3d{Id = 5, Name = "tyrannosaurus.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ, Path = $"{_storeUsers}{user.Id}/models/5/",
-                            User = user, ProjectId = 3, Camera = camera},
+                new Model3d{Name = "lucy", Description = "Stanford test model", Format = Model3dFormat.OBJ,
+                            User = _user, Project = FindByName<Project>("ModelRelief"), Camera = FindByName<Camera>("Top Camera")},
+                new Model3d{Name = "armadillo", Description = "Stanford test model", Format = Model3dFormat.OBJ,
+                            User = _user, Project = FindByName<Project>("ModelRelief"), Camera = FindByName<Camera>("Isometric Camera")},
+                new Model3d{Name = "bunny", Description = "Stanford test model", Format = Model3dFormat.OBJ,
+                            User = _user, Project = FindByName<Project>("Architecture"), Camera = FindByName<Camera>("Top Camera")},
+                new Model3d{Name = "dragon", Description = "Stanford test model", Format = Model3dFormat.OBJ,
+                            User = _user, Project = FindByName<Project>("Jewelry"), Camera = FindByName<Camera>("Top Camera")},
+                new Model3d{Name = "tyrannosaurus", Description = "Stanford test model", Format = Model3dFormat.OBJ,
+                            User = _user, Project = FindByName<Project>("Jewelry"), Camera = FindByName<Camera>("Isometric Camera")},
             };
 
             foreach (Model3d model in models)
             {
-                _context.Models.Add(model);
+                _dbContext.Models.Add(model);
             }
-            _context.SaveChanges();
+            _dbContext.SaveChanges();
+
+            // model Ids are known now; set paths
+            foreach (Model3d model in models)
+                model.Path = $"{_storeUsers}{_user.Id}/models/{model.Id}/";
+
+            _dbContext.SaveChanges();
         }
 
         /// <summary>
@@ -206,26 +219,24 @@ namespace ModelRelief.Database
         /// </summary>
         private void AddMeshTransforms()
         {
-            var user    = _context.Users.FirstOrDefault<ApplicationUser>();
-            var project = _context.Projects.FirstOrDefault<Project>();
-
             var meshTransforms = new MeshTransform[]
             {
-                new MeshTransform{Id = 1, Name = "Identity", Description = "Default transform",
+                new MeshTransform{Name = "Identity", Description = "Default transform",
                             Depth = 1.0, Width = 100.0,
                             Tau = 1.0, SigmaGaussianBlur = 1.0, SigmaGaussianSmooth = 1.0, LambdaLinearScaling = 1.0,
-                            User = user, Project = project},
-                new MeshTransform{Id = 2, Name = "Pendant", Description = "Pendant transform",
+                            User = _user, Project = FindByName<Project>("ModelRelief")},
+
+                new MeshTransform{Name = "Pendant", Description = "Pendant transform",
                             Depth = 0.5, Width = 10.0,
                             Tau = 0.75, SigmaGaussianBlur = 0.5, SigmaGaussianSmooth = 0.25, LambdaLinearScaling = 1.0,
-                            User = user, Project = project}
+                            User = _user, Project = FindByName<Project>("Architecture")}
             };
 
             foreach (MeshTransform meshTransform in meshTransforms)
             {
-                _context.MeshTransforms.Add(meshTransform);
+                _dbContext.MeshTransforms.Add(meshTransform);
             }
-            _context.SaveChanges();
+            _dbContext.SaveChanges();
         }
 
         /// <summary>
@@ -233,26 +244,21 @@ namespace ModelRelief.Database
         /// </summary>
         private void AddDepthBuffers()
         {
-            // copy test data into user store?
-
-            var user    = _context.Users.FirstOrDefault<ApplicationUser>();
-            var project = _context.Projects.FirstOrDefault<Project>();
-
             var depthBuffers = new DepthBuffer[]
             {
-                new DepthBuffer{Id = 1, Name = "Lucy", Description = "Generated in Maya", CameraId = 1, ModelId = 2,
-                                User = user, Project = project},
-                new DepthBuffer{Id = 2, Name = "Bunny", Description = "Generated in VRay", CameraId = 2, ModelId = 3,
-                                User = user, ProjectId = 2},
-                new DepthBuffer{Id = 3, Name = "Armadillo", Description = "Generated in Rhino",CameraId = 2, ModelId = 2,
-                                User = user, ProjectId = 3},
+                new DepthBuffer{Name = "Lucy", Description = "Generated in Maya", Camera = FindByName<Camera>("Top Camera"), Model = FindByName<Model3d>("lucy"),
+                                User = _user, Project = FindByName<Project>("ModelRelief")},
+                new DepthBuffer{Name = "Bunny", Description = "Generated in VRay", Camera = FindByName<Camera>("Isometric Camera"), Model = FindByName<Model3d>("bunny"),
+                                User = _user, Project = FindByName<Project>("Architecture")},
+                new DepthBuffer{Name = "Armadillo", Description = "Generated in Rhino",Camera = FindByName<Camera>("Isometric Camera"), Model = FindByName<Model3d>("armadillo"),
+                                User = _user, Project = FindByName<Project>("Jewelry")},
             };
 
             foreach (DepthBuffer depthBuffer in depthBuffers)
             {
-                _context.DepthBuffers.Add(depthBuffer);
+                _dbContext.DepthBuffers.Add(depthBuffer);
             }
-            _context.SaveChanges();
+            _dbContext.SaveChanges();
         }
 
         /// <summary>
@@ -260,26 +266,78 @@ namespace ModelRelief.Database
         /// </summary>
         private void AddMeshes()
         {
-            // copy test data into user store?
-
-            var user    = _context.Users.FirstOrDefault<ApplicationUser>();
-            var project = _context.Projects.FirstOrDefault<Project>();
-
             var meshes = new Mesh[]
             {
-                new Mesh{Id = 1, Name = "Lucy", Description = "Isometric", CameraId = 2, DepthBufferId = 2, MeshTransformId = 1,
-                                User = user, Project = project},
-                new Mesh{Id = 2, Name = "Bunny", Description = "Top", CameraId = 1, DepthBufferId = 2, MeshTransformId = 1,
-                                User = user, ProjectId = 2},
-                new Mesh{Id = 3, Name = "Armadillo", Description = "Top", CameraId = 1, DepthBufferId = 3, MeshTransformId = 2,
-                                User = user, ProjectId = 3},
+                new Mesh{Name = "Lucy", Description = "Isometric", Camera = FindByName<Camera>("Isometric Camera"), DepthBuffer = FindByName<DepthBuffer>("Lucy"), MeshTransform =  FindByName<MeshTransform>("Identity"),
+                         User = _user, Project = FindByName<Project>("ModelRelief")},
+                new Mesh{Name = "Bunny", Description = "Top", Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("Bunny"), MeshTransform =  FindByName<MeshTransform>("Identity"),
+                         User = _user, Project = FindByName<Project>("Architecture")},
+                new Mesh{Name = "Armadillo", Description = "Top", Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("Armadillo"), MeshTransform = FindByName<MeshTransform>("Pendant"),
+                         User = _user, Project = FindByName<Project>("Architecture")},
             };
 
             foreach (Mesh mesh in meshes)
             {
-                _context.Meshes.Add(mesh);
+                _dbContext.Meshes.Add(mesh);
             }
-            _context.SaveChanges();
+            _dbContext.SaveChanges();
+        }
+
+        /// <summary>
+        /// Create the user store for a particular model type.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="folderType">Type of folder</param>
+        private void CopyTestFiles<TEntity>(string folderType)
+            where TEntity : DomainModel
+        {
+            var sourceFolderPartialPath = $"{_configurationProvider.GetSetting(ResourcePaths.TestDataUsers)}/{_configurationProvider.GetSetting(folderType)}";
+            var sourceFolderPath        = $"{_hostingEnvironment.ContentRootPath}{sourceFolderPartialPath}";
+
+            var storeUsersPartialPath = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
+            var destinationFolderPath   = $"{_hostingEnvironment.WebRootPath}{storeUsersPartialPath}{_user.Id}/{_configurationProvider.GetSetting(folderType)}";
+            Directory.CreateDirectory(destinationFolderPath);
+
+            // iterate over all folders
+            var rootSourceDirectory = new System.IO.DirectoryInfo(sourceFolderPath);
+            System.IO.DirectoryInfo[] subDirs = rootSourceDirectory.GetDirectories();
+            foreach (System.IO.DirectoryInfo dirInfo in subDirs)
+            {
+                // parent directory name = database resource ID
+                var model = _dbContext.Set<TEntity>()
+                    .Where(m => (m.Name == dirInfo.Name)).First();
+                if (model == null)
+                    Debug.Assert (false, $"DbInitializer: Model name ${dirInfo.Name} not found in database for type ${typeof(TEntity).Name}.");
+
+                // create target folder
+                var targetDirectory = Directory.CreateDirectory(Path.Combine(destinationFolderPath, model.Id.ToString())).FullName;
+
+                System.IO.FileInfo[] files = dirInfo.GetFiles("*.*");
+                foreach (var file in files)
+                {
+                    var destinationFileName = Path.Combine (targetDirectory, file.Name);
+                    Console.WriteLine(destinationFileName);
+//                  File.Copy(file.FullName, destinationFileName);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Find a resource by Name that is owned by the active user.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="name">Name property to match.</param>
+        /// <returns>Matching entity.</returns>
+        private TEntity FindByName<TEntity> (string name)
+            where TEntity : DomainModel
+        {
+            var resource = _dbContext.Set<TEntity>()
+                .Where(r => ((r.Name == name) && (r.UserId == _user.Id))).First();
+
+            if (resource == null)
+                Debug.Assert (false, $"DbInitializer: {typeof(TEntity).Name} = '{name}' not found)");
+
+            return resource;
         }
     }
 }

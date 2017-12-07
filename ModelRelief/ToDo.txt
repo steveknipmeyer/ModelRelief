@@ -1,5 +1,6 @@
 ﻿<--- Commit
-
+Extend DbInitializer.Populate to seed multiple users.
+Database paths and user store folders are based on Ids of user account.
 <--- Reading
 
 <-- Tasks
@@ -7,6 +8,19 @@
         Scale with a Python processor.
 
     Issues
+        CopyTestFiles
+            Complete copying of tests models.
+            Generalize to other types of test files.
+
+        Tools folder
+            Create a script to purge the test data.
+            Place development shell under source code control.
+
+        Verify Path is not used in any Views.
+        How should file extensions be handled?
+        Create realistic project configurations.
+            Description = UserName
+
         Complete Views for Ux.
         Complete controllers for Api.
         Research API authorization.
@@ -580,6 +594,11 @@
         public class EntityModelBinder : IModelBinder
         It binds a database <model> looked up from the incoming Id.
 
+<-- Cmder
+    ModelReliefShell.bat is started through this batch file located in D:\Users\Steve Knipmeyer\Documents\Bin\cmder\config\profile.d:
+        StartModelReliefShell.bat
+            "D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\Tools\ModelReliefShell.bat"
+            
 <-- Clipboard
         /// <summary>
         /// Handles resource update from a PUT request.

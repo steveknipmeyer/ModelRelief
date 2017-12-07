@@ -13,6 +13,7 @@ namespace ModelRelief.Utility
 {
     public static class Identity
     {
+        // N.B. Must match TestAccount!
         public static string MockUserId { get {return "7ab4676b-563b-4c42-b6f9-27c11208f33f";} }
 
         /// <summary>

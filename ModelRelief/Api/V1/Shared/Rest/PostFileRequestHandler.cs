@@ -78,7 +78,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
             // write file : file name = newly-created model Id
             var storeUsers  = ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
-            var modelFolder = ConfigurationProvider.GetSetting(($"{ResourcePaths.ModelFolders}:{typeof(TEntity).Name}"));
+            var modelFolder = ConfigurationProvider.GetSetting(($"{ResourcePaths.ModelsFolder}:{typeof(TEntity).Name}"));
             string modelPath = $"{storeUsers}{user.Id}/{modelFolder}/{newModel.Id}/";
             string modelName = $"{newModel.Id}";
 
