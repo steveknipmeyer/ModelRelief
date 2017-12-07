@@ -7,17 +7,6 @@
         Scale with a Python processor.
 
     Issues
-        Description = UserName?
-        Verify Path is not used in any Views.
-
-        How should file extensions be handled?
-
-        Complete Views for Ux.
-        Complete controllers for Api.
-        Research API authorization.
-        Design the mechanism for generating a Mesh.
-            Mesh Post (create) or Mesh Put (update)?
-        Manning AspNet Core book.
 
         User Validation
             User must be authenticated and authorized.
@@ -26,6 +15,15 @@
                 For any navigation property, the referenced resource ID must belong to the user.
 
             Reference properies in Views can be populated only with owned resources.
+
+        Complete Views for Ux.
+        Complete controllers for Api.
+        How should file extensions be handled?
+
+        Research API authorization.
+        Design the mechanism for generating a Mesh.
+            Mesh Post (create) or Mesh Put (update)?
+        Manning AspNet Core book.
 
         Integration Tests
             Api

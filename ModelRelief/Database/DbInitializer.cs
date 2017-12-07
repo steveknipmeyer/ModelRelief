@@ -148,6 +148,8 @@ namespace ModelRelief.Database
                 _dbContext.Projects.Add(project);
             }
             _dbContext.SaveChanges();
+
+            QualifyDescription<Project>(_user.UserName);
         }
 
         /// <summary>
@@ -180,6 +182,8 @@ namespace ModelRelief.Database
                 _dbContext.Cameras.Add(camera);
             }
             _dbContext.SaveChanges();
+
+            QualifyDescription<Camera>(_user.UserName);
         }
 
         /// <summary>
@@ -212,6 +216,8 @@ namespace ModelRelief.Database
                 model.Path = $"{_storeUsers}{_user.Id}/models/{model.Id}/";
 
             _dbContext.SaveChanges();
+
+            QualifyDescription<Model3d>(_user.UserName);
         }
 
         /// <summary>
@@ -237,6 +243,8 @@ namespace ModelRelief.Database
                 _dbContext.MeshTransforms.Add(meshTransform);
             }
             _dbContext.SaveChanges();
+
+            QualifyDescription<MeshTransform>(_user.UserName);
         }
 
         /// <summary>
@@ -259,6 +267,8 @@ namespace ModelRelief.Database
                 _dbContext.DepthBuffers.Add(depthBuffer);
             }
             _dbContext.SaveChanges();
+
+            QualifyDescription<DepthBuffer>(_user.UserName);
         }
 
         /// <summary>
@@ -281,6 +291,8 @@ namespace ModelRelief.Database
                 _dbContext.Meshes.Add(mesh);
             }
             _dbContext.SaveChanges();
+
+            QualifyDescription<Mesh>(_user.UserName);
         }
 
         /// <summary>
@@ -341,6 +353,24 @@ namespace ModelRelief.Database
                 Debug.Assert (false, $"DbInitializer: {typeof(TEntity).Name} = '{name}' not found)");
 
             return resource;
+        }
+        
+        /// <summary>
+        /// Adds a qualifying suffix to the end of the Description property.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="descriptionSuffix">Suffix to end.</param>
+        private void QualifyDescription <TEntity> (string descriptionSuffix)
+            where TEntity : DomainModel
+        {
+            var models = _dbContext.Set<TEntity>()
+                            .Where(m => (m.User.Id == _user.Id));
+
+            foreach (var model in models)
+                {
+                model.Description += $" ({descriptionSuffix})";
+                }
+            _dbContext.SaveChanges();
         }
     }
 }
