@@ -1,8 +1,13 @@
 echo off
 title ModelRelief Shell
 
-set MRRoot="D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\"
-set MR=%MRRoot%ModelRelief\
+:: move up from batch file directory to solution root
+cd %~dp0\..\..
+set MRSolution=%cd%\
+set MR=%MRSolution%ModelRelief\
+echo MRsolution=%MRSolution%
+echo MR=%MR%
+echo
 
 path=%path%;"D:\Users\Steve Knipmeyer\Documents\Bin"
 path=%path%;%MR%tools
@@ -15,7 +20,6 @@ call "C:\Program Files\nodejs\nodevars.bat"
 :: path=%path%;C:\Python27\Tools\
 :: set PythonPath=C:\Python27\Tools\Lib\
 
-echo on
 :: Visual Studio 2017
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x64
 
@@ -29,6 +33,5 @@ path=%path%;C:\Program Files (x86)\Microsoft SDKs\TypeScript\2.4
 ::  VSCode                    : launch.json
 set ASPNETCORE_URLS=https://*:60655
 
-cd /D %MRRoot%
-::start code
 cd /D %MR%
+:end
