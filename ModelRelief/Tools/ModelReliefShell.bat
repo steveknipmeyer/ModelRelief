@@ -29,11 +29,6 @@ path=%path%;C:\Program Files (x86)\Microsoft SDKs\TypeScript\2.4
 ::  VSCode                    : launch.json
 set ASPNETCORE_URLS=https://*:60655
 
-d:
-cd %MRRoot%
+cd /D %MRRoot%
 ::start code
-cd %MR%
-
-::Cmder Initialization
-::call "D:\Users\Steve Knipmeyer\Documents\Bin\cmder\vendor\init.bat"
-
+cd /D %MR%

@@ -50,6 +50,8 @@ namespace ModelRelief.Features.Models
 
             // WIP: Publish path of model for THREE loader.
             var domainModel = await DbContext.Set<Domain.Model3d>().FindAsync(new object[] {id});
+            // WIP: How will model file extensions be handled?
+            ViewData["ModelName"] = $"{domainModel.Name}.obj";
             ViewData["ModelPath"] = domainModel.Path;
 
             return View(model);

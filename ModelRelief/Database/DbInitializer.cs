@@ -305,7 +305,10 @@ namespace ModelRelief.Database
             {
                 // parent directory name = database resource ID
                 var model = _dbContext.Set<TEntity>()
-                    .Where(m => (m.Name == dirInfo.Name)).First();
+                    .Where(m => (m.Name == dirInfo.Name))
+                    .Where(m => (m.UserId == _user.Id))
+                    .First();
+
                 if (model == null)
                     Debug.Assert (false, $"DbInitializer: Model name ${dirInfo.Name} not found in database for type ${typeof(TEntity).Name}.");
 
@@ -317,7 +320,7 @@ namespace ModelRelief.Database
                 {
                     var destinationFileName = Path.Combine (targetDirectory, file.Name);
                     Console.WriteLine(destinationFileName);
-//                  File.Copy(file.FullName, destinationFileName);
+                    File.Copy(file.FullName, destinationFileName);
                 }
             }
         }

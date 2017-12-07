@@ -1,6 +1,5 @@
 ﻿<--- Commit
-Extend DbInitializer.Populate to seed multiple users.
-Database paths and user store folders are based on Ids of user account.
+
 <--- Reading
 
 <-- Tasks
@@ -8,18 +7,10 @@ Database paths and user store folders are based on Ids of user account.
         Scale with a Python processor.
 
     Issues
-        CopyTestFiles
-            Complete copying of tests models.
-            Generalize to other types of test files.
-
-        Tools folder
-            Create a script to purge the test data.
-            Place development shell under source code control.
-
+        Description = UserName?
         Verify Path is not used in any Views.
+
         How should file extensions be handled?
-        Create realistic project configurations.
-            Description = UserName
 
         Complete Views for Ux.
         Complete controllers for Api.
