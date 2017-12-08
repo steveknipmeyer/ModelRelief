@@ -1,7 +1,4 @@
 ﻿<--- Commit
-Add UserManager DI to both UxController and ApiController.
-Add FindApplicationUser method to RestController and ViewController.
-Reference properies in Views are now populated only with owned resources.
 
 <--- Reading
 
@@ -10,11 +7,20 @@ Reference properies in Views are now populated only with owned resources.
         Scale with a Python processor.
 
     Issues
+        The Project is populating the object graph too deeply.
+
         Include ApplicationUser property in all requests.
         User Validation
             User must be authenticated and authorized.
             Resource is owned by user.
                 For any accessed resource (Get, GetList, Put, Delete), the resource ID must belong to the user.
+                    GetSingle
+                    GetList
+                    Put
+                    PostUpdate
+                    PostAdd
+                    PostFile
+                    Delete 
                 For any reference property, the referenced resource ID must belong to the user.
             
         Complete Views for Ux.
@@ -22,13 +28,14 @@ Reference properies in Views are now populated only with owned resources.
 
         How should file extensions be handled?
 
-        Research API authorization.
         Design the mechanism for generating a Mesh.
             Mesh Post (create) or Mesh Put (update)?
+
         Manning AspNet Core book.
 
         Integration Tests
             Api
+                Add authentication support!
                 How can XUnit be used to test all properties of a resource?
                     Iterate through the property list of a Domain model.
 
@@ -589,7 +596,10 @@ Reference properies in Views are now populated only with owned resources.
     ModelReliefShell.bat is started through this batch file located in D:\Users\Steve Knipmeyer\Documents\Bin\cmder\config\profile.d:
         StartModelReliefShell.bat
             "D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\Tools\ModelReliefShell.bat"
-            
+
+<-- Authentication and Authorization            
+    https://stackoverflow.com/questions/40351870/asp-net-core-custom-authentication-tying-request-to-user
+
 <-- Clipboard
         /// <summary>
         /// Handles resource update from a PUT request.

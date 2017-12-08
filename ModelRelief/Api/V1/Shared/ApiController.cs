@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 namespace ModelRelief.Api.V1.Shared
 {
 //  WIP: What is the best practive for API authorization?
-//  [Authorize]
+    [Authorize]
     [Area("ApiV1")]
     [Route("apiV1/[controller]")]
     [Produces("application/json")]

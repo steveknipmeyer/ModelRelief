@@ -24,6 +24,11 @@ using System;
 using System.Reflection;
 using System.Collections.Generic;
 using ModelRelief.Features.Errors;
+using System.Security.Principal;
+using Microsoft.AspNetCore.Identity;
+using ModelRelief.Domain;
+using System.Security.Claims;
+using ModelRelief.Utility;
 
 namespace ModelRelief
 {
@@ -149,7 +154,10 @@ namespace ModelRelief
         /// </summary>
         /// <param name="app">DI IApplicationBuilder</param>
         /// <param name="env">DI IHostingEnvironment</param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        /// <param name="configurationProvider">Configuration provider.</param>
+        /// <param name="userManager">Identity UserManager.</param>
+        /// <param name="signInManager">SignIn Manager.</param>
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Services.IConfigurationProvider configurationProvider, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
@@ -166,6 +174,30 @@ namespace ModelRelief
 
             app.AddStaticFilePaths(env.ContentRootPath, new string[] {"node_modules", "Scripts"});
             app.UseAuthentication();
+
+            // custom authentication middleware
+            app.Use(async (context, next) =>
+            {
+                bool isAuthenticated = context.User.Identity.IsAuthenticated;
+                if (env.IsEnvironment("Test") && !isAuthenticated)
+                {
+                    context.User = new System.Security.Claims.ClaimsPrincipal(new GenericIdentity(Identity.MockUserName));
+#if false
+                    // WIP: Creating a ClaimsPrincipal here yields an exception about access of a Disposed object.    
+                    var userName = configurationProvider.GetSetting("TestAccount:UserName");
+                    var password = configurationProvider.GetSetting("TestAccount:Password");
+
+                    var user = await userManager.FindByNameAsync(userName);
+                    ClaimsPrincipal claimsPrincipal = await signInManager.CreateUserPrincipalAsync(user);
+                    context.User = new System.Security.Claims.ClaimsPrincipal(claimsPrincipal);
+#endif                    
+                    isAuthenticated = context.User.Identity.IsAuthenticated;
+                    Console.WriteLine($"{Identity.MockUserName} authenticated: {isAuthenticated}");
+                }
+
+                await next();
+            });
+
             app.UseMvc(ConfigureRoutes);
         }
 

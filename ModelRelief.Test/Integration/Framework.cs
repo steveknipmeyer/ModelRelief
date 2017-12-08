@@ -6,9 +6,11 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.IO;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -51,6 +53,17 @@ namespace ModelRelief.Test.Integration
             Server = new TestServer(WebHost.CreateDefaultBuilder(null)
                                             .UseEnvironment("Test")
                                             .UseContentRoot(contentRootPath)
+                                             .ConfigureAppConfiguration((builderContext, config) =>
+                                             {
+                                                 // WIP: Implement secret store for Production environments. Azure?
+                                                 // https://joonasw.net/view/aspnet-core-2-configuration-changes
+                                                 var env = builderContext.HostingEnvironment;
+                                                 var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
+                                                 if (appAssembly != null)
+                                                 {
+                                                     config.AddUserSecrets(appAssembly, optional: true);
+                                                 }
+                                             })
                                             .UseStartup<Startup>());
 
             Client = Server.CreateClient();
