@@ -27,10 +27,11 @@ namespace ModelRelief.Api.V1.Meshes
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context.</param>
+        /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
         /// <param name="logger">ILogger.</param>
         /// <param name="mediator">IMediator.</param>
-        public MeshesController(ModelReliefDbContext dbContext, ILogger<Domain.Mesh> logger, IMediator mediator)
-            : base(dbContext, logger, mediator)
+        public MeshesController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<Domain.Mesh> logger, IMediator mediator)
+            : base(dbContext, userManager, logger, mediator)
         {
         }
     }

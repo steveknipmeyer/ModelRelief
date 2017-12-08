@@ -7,10 +7,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ModelRelief.Database;
 using ModelRelief.Domain;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ModelRelief.Features
 {
@@ -47,13 +49,14 @@ namespace ModelRelief.Features
         /// <summary>
         /// Creates a SelectListModel from the Name properties in a database table.
         /// </summary>
-        /// <typeparam name="TModel">Model type</typeparam>
-        /// <param name="models">DbSet</param>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="dbContext">Database context.</param>
+        /// <param name="userId">Owning User Id; permit only authorized models.</param>
         /// <param name="prompt">Control selection prompt</param>
         /// <param name="selectedRow">(Optional) Primary key of selected row</param>
         /// <returns></returns>
-        public static List<SelectListItem> PopulateModelDropDownList<TModel>(DbSet<TModel> models, string prompt, int? selectedRow = 0)
-            where TModel : DomainModel
+        public static List<SelectListItem> PopulateModelDropDownList<TEntity>(ModelReliefDbContext dbContext, string userId, string prompt, int? selectedRow = 0)
+            where TEntity : DomainModel
         {
             var modelSelectList = new List<SelectListItem>();
             modelSelectList.Add(new SelectListItem
@@ -61,7 +64,11 @@ namespace ModelRelief.Features
                 Text = prompt,
                 Value = ""
             });
-            foreach (TModel model in models)
+
+            var models = dbContext.Set<TEntity>()
+                .Where(m => (m.UserId == userId));
+
+            foreach (TEntity model in models)
             {
                 string modelText = model.Name;
                 bool selectedState = model.Id == (selectedRow ?? 0);

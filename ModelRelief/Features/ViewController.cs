@@ -5,10 +5,12 @@
 // ------------------------------------------------------------------------//
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Database;
 using ModelRelief.Domain;
+using ModelRelief.Utility;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -26,23 +28,34 @@ namespace ModelRelief.Features
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
+        /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="mediator">IMediator</param>
         /// <remarks>Defaults to use paging.</remarks>
-        protected ViewController(ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator)
-            : this(dbContext, mapper, mediator, new ViewControllerOptions {UsePaging = true}) {}
+        protected ViewController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, IMapper mapper, IMediator mediator)
+            : this(dbContext, userManager, mapper, mediator, new ViewControllerOptions {UsePaging = true}) {}
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
+        /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="mediator">IMediator</param>
         /// <param name="viewControllerOptions">Options for paging, etc.</param>
-        protected ViewController(ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator, ViewControllerOptions viewControllerOptions)
-            : base(dbContext, mapper, mediator) 
+        protected ViewController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, IMapper mapper, IMediator mediator, ViewControllerOptions viewControllerOptions)
+            : base(dbContext, userManager, mapper, mediator) 
         {
             ViewControllerOptions = viewControllerOptions;
+        }
+
+        /// <summary>
+        /// Finds the ApplicationUser from the HttpContext ClaimsPrincipal.
+        /// </summary>
+        /// <returns>ApplicationUser</returns>
+        public async Task<ApplicationUser> FindApplicationUser()
+        {
+            return await Identity.GetCurrentUserAsync(UserManager, User);
         }
 
         /// <summary>
@@ -126,9 +139,9 @@ namespace ModelRelief.Features
         /// </summary>
         /// <returns>Create page.</returns>
         [HttpGet]
-        public virtual ActionResult Create()
+        public async virtual Task<ActionResult> Create()
         {
-            InitializeViewControls();
+            await InitializeViewControls();
             return View();
         }
 
@@ -149,7 +162,7 @@ namespace ModelRelief.Features
             // validation failed; return to View
             if (newModel == null)
                 { 
-                InitializeViewControls(Mapper.Map<TGetModel> (postRequest));
+                await InitializeViewControls(Mapper.Map<TGetModel> (postRequest));
                 return View(postRequest);
                 }
 
@@ -171,7 +184,7 @@ namespace ModelRelief.Features
             if (model == null)
                 return NotFound();
 
-            InitializeViewControls((TGetModel) model);
+            await InitializeViewControls((TGetModel) model);
             return View(model);
         }
 
@@ -192,7 +205,7 @@ namespace ModelRelief.Features
             // validation failed; return to View
             if (model == null)
                 { 
-                InitializeViewControls(Mapper.Map<TGetModel> (postRequest));
+                await InitializeViewControls(Mapper.Map<TGetModel> (postRequest));
                 return View(postRequest);
                 }
 
@@ -203,8 +216,9 @@ namespace ModelRelief.Features
         /// Setup View controls for select controls, etc.
         /// </summary>
         /// <param name="model">Model instance for View.</param>
-        protected virtual void InitializeViewControls(TGetModel model = null)
+        protected async virtual Task InitializeViewControls(TGetModel model = null)
         {
+            await Task.CompletedTask;
         }
     }
 }

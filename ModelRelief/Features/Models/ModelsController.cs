@@ -7,6 +7,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
@@ -29,10 +30,11 @@ namespace ModelRelief.Features.Models
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
+        /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="mediator">IMediator</param>
-        public ModelsController(ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator)
-            : base(dbContext, mapper, mediator)
+        public ModelsController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, IMapper mapper, IMediator mediator)
+            : base(dbContext, userManager, mapper, mediator)
         {
         }
 
@@ -61,11 +63,14 @@ namespace ModelRelief.Features.Models
         /// Setup View controls for select controls, etc.
         /// </summary>
         /// <param name="model">Model instance for View.</param>
-        protected override void InitializeViewControls(Dto.Model3d model)
+        protected async override Task InitializeViewControls(Dto.Model3d model)
         {
+            var applicationUser = await FindApplicationUser();
+            var userId = applicationUser.Id;
+
             ViewBag.ModelFormats = ViewHelpers.PopulateEnumDropDownList<Model3dFormat>("Select Model Format");
-            ViewBag.ProjectId    = ViewHelpers.PopulateModelDropDownList<Project>(DbContext.Projects, "Select a project", model?.ProjectId);
-            ViewBag.CameraId     = ViewHelpers.PopulateModelDropDownList<Camera>(DbContext.Cameras, "Select a camera", model?.CameraId);
+            ViewBag.ProjectId    = ViewHelpers.PopulateModelDropDownList<Project>(DbContext, userId, "Select a project", model?.ProjectId);
+            ViewBag.CameraId     = ViewHelpers.PopulateModelDropDownList<Camera>(DbContext, userId, "Select a camera", model?.CameraId);
         }
     }
 }

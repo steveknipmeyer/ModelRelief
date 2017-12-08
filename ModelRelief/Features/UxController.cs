@@ -7,10 +7,12 @@
 using AutoMapper;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ModelRelief.Api.V1.Shared;
 using ModelRelief.Api.V1.Shared.Errors;
 using ModelRelief.Database;
+using ModelRelief.Domain;
 using System;
 using System.Threading.Tasks;
 
@@ -19,6 +21,7 @@ namespace ModelRelief.Features
     public abstract class UxController : Controller, IUrlHelperContainer
     {
         public ModelReliefDbContext DbContext { get; }
+        public UserManager<ApplicationUser> UserManager { get; }
         public IMapper Mapper { get; }
         public IMediator Mediator { get; }
 
@@ -26,12 +29,14 @@ namespace ModelRelief.Features
         /// Base UX Controller
         /// </summary>
         /// <param name="dbContext">Database context</param>
+        /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
         /// <param name="mapper">IMapper from DI</param>
         /// <param name="mediator">IMediator from DI</param>
-        protected UxController(ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator) {
-            DbContext = dbContext;
-            Mapper = mapper;
-            Mediator = mediator;
+        protected UxController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, IMapper mapper, IMediator mediator) {
+            DbContext   = dbContext;
+            UserManager = userManager;
+            Mapper      = mapper;
+            Mediator    = mediator;
         }
 
         /// <summary>

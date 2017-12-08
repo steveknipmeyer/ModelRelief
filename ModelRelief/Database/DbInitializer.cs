@@ -106,9 +106,9 @@ namespace ModelRelief.Database
         /// </summary>
         private void CreateUserStore()
         {
-            CopyTestFiles<Domain.Model3d>(ResourcePaths.ModelsFolder);
-            CopyTestFiles<Domain.DepthBuffer>(ResourcePaths.DepthBuffersFolder);
-            CopyTestFiles<Domain.Mesh>(ResourcePaths.MeshesFolder);
+            CopyTestFiles<Domain.Model3d>("ResourcePaths:Folders:Model");
+            CopyTestFiles<Domain.DepthBuffer>("ResourcePaths:Folders:DepthBuffer");
+            CopyTestFiles<Domain.Mesh>("ResourcePaths:Folders:Mesh");
         }
 
         /// <summary>

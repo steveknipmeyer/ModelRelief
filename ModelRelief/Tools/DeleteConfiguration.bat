@@ -59,9 +59,9 @@ goto end
 
 :: ------------- deleteFiles
 :deleteFiles
-
-if not exist %StoreRoot%%1%\users goto return
 cd %StoreRoot%%1%
+if not exist users\nul goto return
+echo Deleting %StoreRoot%%1%\users
 rmdir/s users
 
 :return

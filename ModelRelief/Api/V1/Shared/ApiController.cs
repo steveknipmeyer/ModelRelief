@@ -30,6 +30,7 @@ namespace ModelRelief.Api.V1.Shared
             where TEntity: DomainModel
     {
         public ModelReliefDbContext DbContext { get; }
+        public UserManager<ApplicationUser> UserManager { get; }
         public ILogger<TEntity>     Logger { get; }
         public IMediator            Mediator { get; }
 
@@ -37,12 +38,14 @@ namespace ModelRelief.Api.V1.Shared
         /// Base API Controller
         /// </summary>
         /// <param name="dbContext">Database context.</param>
+        /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
         /// <param name="logger">ILogger.</param>
         /// <param name="mediator">IMediator.</param>
-        protected ApiController (ModelReliefDbContext dbContext, ILogger<TEntity> logger, IMediator mediator) {
-            DbContext = dbContext;
-            Logger = logger;
-            Mediator = mediator;
+        protected ApiController (ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<TEntity> logger, IMediator mediator) {
+            DbContext   = dbContext;
+            UserManager = userManager;
+            Logger      = logger;
+            Mediator    = mediator;
         }
 
         /// <summary>

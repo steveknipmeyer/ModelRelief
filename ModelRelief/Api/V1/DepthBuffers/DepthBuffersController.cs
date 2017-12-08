@@ -6,10 +6,12 @@
 
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ModelRelief.Api.V1.Shared;
 using ModelRelief.Database;
+using ModelRelief.Domain;
 
 namespace ModelRelief.Api.V1.DepthBuffers
 {
@@ -23,10 +25,11 @@ namespace ModelRelief.Api.V1.DepthBuffers
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context.</param>
+        /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
         /// <param name="logger">ILogger.</param>
         /// <param name="mediator">IMediator.</param>
-        public DepthBuffersController(ModelReliefDbContext dbContext, ILogger<Domain.DepthBuffer> logger, IMediator mediator)
-            : base(dbContext, logger, mediator)
+        public DepthBuffersController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<Domain.DepthBuffer> logger, IMediator mediator)
+            : base(dbContext, userManager, logger, mediator)
         {
         }
     }

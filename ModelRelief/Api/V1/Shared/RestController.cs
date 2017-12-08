@@ -33,23 +33,34 @@ namespace ModelRelief.Api.V1.Shared
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context.</param>
+        /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
         /// <param name="logger">ILogger.</param>
         /// <param name="mediator">IMediator.</param>
         /// <remarks>Defaults to use paging.</remarks>
-        protected RestController(ModelReliefDbContext dbContext, ILogger<TEntity> logger, IMediator mediator)
-            : this(dbContext, logger, mediator, new RestControllerOptions {UsePaging = true}) {}
+        protected RestController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<TEntity> logger, IMediator mediator)
+            : this(dbContext, userManager, logger, mediator, new RestControllerOptions {UsePaging = true}) {}
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context.</param>
+        /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
         /// <param name="logger">ILogger.</param>
         /// <param name="mediator">IMediator.</param>
         /// <param name="restControllerOptions">Options for paging, etc.</param>
-        protected RestController(ModelReliefDbContext dbContext, ILogger<TEntity> logger, IMediator mediator, RestControllerOptions restControllerOptions )
-            : base(dbContext, logger, mediator) 
+        protected RestController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<TEntity> logger, IMediator mediator, RestControllerOptions restControllerOptions )
+            : base(dbContext, userManager, logger, mediator) 
         {
             RestControllerOptions = restControllerOptions;
+        }
+
+        /// <summary>
+        /// Finds the ApplicationUser from the HttpContext ClaimsPrincipal.
+        /// </summary>
+        /// <returns>ApplicationUser</returns>
+        public async Task<ApplicationUser> FindApplicationUser()
+        {
+            return await Identity.GetCurrentUserAsync(UserManager, User);
         }
         
         [HttpGet("{id:int}")]
@@ -101,7 +112,7 @@ namespace ModelRelief.Api.V1.Shared
 
             var result = await HandleRequestAsync(new PostFileRequest<TEntity, TGetModel>
             {
-                User = User,
+                ApplicationUser = await FindApplicationUser(),
                 NewFile = postFile
             });
 
@@ -155,6 +166,5 @@ namespace ModelRelief.Api.V1.Shared
             var createdResult = Created(GetCreatedUri(okResult), okResult.Value);
             return createdResult;
         }
-
     }
 }

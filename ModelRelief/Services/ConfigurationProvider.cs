@@ -18,10 +18,6 @@ namespace ModelRelief.Services
     {
         public static string TestDataUsers      = "ResourcePaths:TestDataUsers";
         public static string StoreUsers         = "ResourcePaths:StoreUsers";
-
-        public static string ModelsFolder       = "ResourcePaths:ModelFolders:Models";
-        public static string MeshesFolder       = "ResourcePaths:ModelFolders:Meshes";
-        public static string DepthBuffersFolder = "ResourcePaths:ModelFolders:DepthBuffers";
     }
 
     public interface IConfigurationProvider

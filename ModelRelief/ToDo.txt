@@ -1,4 +1,7 @@
 ﻿<--- Commit
+Add UserManager DI to both UxController and ApiController.
+Add FindApplicationUser method to RestController and ViewController.
+Reference properies in Views are now populated only with owned resources.
 
 <--- Reading
 
@@ -7,17 +10,16 @@
         Scale with a Python processor.
 
     Issues
-
+        Include ApplicationUser property in all requests.
         User Validation
             User must be authenticated and authorized.
             Resource is owned by user.
-                For any updated resource (Get, GetList, Put, Delete), the resource ID must belong to the user.
-                For any navigation property, the referenced resource ID must belong to the user.
-
-            Reference properies in Views can be populated only with owned resources.
-
+                For any accessed resource (Get, GetList, Put, Delete), the resource ID must belong to the user.
+                For any reference property, the referenced resource ID must belong to the user.
+            
         Complete Views for Ux.
         Complete controllers for Api.
+
         How should file extensions be handled?
 
         Research API authorization.

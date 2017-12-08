@@ -21,7 +21,7 @@ call "C:\Program Files\nodejs\nodevars.bat"
 :: set PythonPath=C:\Python27\Tools\Lib\
 
 :: Visual Studio 2017
-call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x64
+call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\VsDevCmd.bat"
 
 :: TypeScript
 echo TypeScript Version = 2.4

@@ -64,7 +64,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public override async Task<TGetModel> OnHandle(PostFileRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
             // find ApplicationUser
-            var user = await Identity.GetCurrentUserAsync(UserManager, message.User);
+            var user = message.ApplicationUser;
 
             // populate model properties (placeholder Name)
             var newModel = new TEntity() {Name = "TBD"};
@@ -78,7 +78,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
             // write file : file name = newly-created model Id
             var storeUsers  = ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
-            var modelFolder = ConfigurationProvider.GetSetting(($"{ResourcePaths.ModelsFolder}:{typeof(TEntity).Name}"));
+            var modelFolder = ConfigurationProvider.GetSetting(($"ResourcePaths:Folders:{typeof(TEntity).Name}"));
             string modelPath = $"{storeUsers}{user.Id}/{modelFolder}/{newModel.Id}/";
             string modelName = $"{newModel.Id}";
 

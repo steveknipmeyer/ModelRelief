@@ -23,7 +23,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Gets or sets the User posting the file request.
         /// </summary>
-        public ClaimsPrincipal User { get; set;}
+        public ApplicationUser ApplicationUser { get; set;}
 
         /// <summary>
         ///  Gets or sets the incoming file to be used to create the new domain model.
