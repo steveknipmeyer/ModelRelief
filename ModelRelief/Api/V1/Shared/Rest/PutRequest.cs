@@ -4,19 +4,19 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 
-using System.Collections.Generic;
-using System.Reflection;
-using MediatR;
-using ModelRelief.Domain;
-using ModelRelief.Api.V1.Shared.Errors;
-using System.Linq;
-using System;
-using ModelRelief.Database;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper;
-using System.Threading.Tasks;
 using FluentValidation.Results;
-using FluentValidation;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using ModelRelief.Api.V1.Shared.Errors;
+using ModelRelief.Database;
+using ModelRelief.Domain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
@@ -29,6 +29,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
         where TEntity   : DomainModel
         where TGetModel : IGetModel
     {
+        /// <summary>
+        /// Gets or sets the User posting the Put request.
+        /// </summary>
+        public ClaimsPrincipal User { get; set;}
+
         /// <summary>
         /// Gets or sets the Id of the model to update.
         /// </summary>
@@ -53,10 +58,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// Builds the UpdatedModel property containing the complete composition of old and new properties.
         /// </summary>
         /// <returns>TGetModel</returns>
-        public async Task<TGetModel> BuildUpdatedModel ()
+        public async Task<TGetModel> BuildUpdatedModel (IMapper mapper)
         {
             var domainModel = await BuildDomainModel();
-            UpdatedModel = Mapper.Map<TEntity, TGetModel>(domainModel);
+            UpdatedModel = mapper.Map<TEntity, TGetModel>(domainModel);
 
             return UpdatedModel;
         }

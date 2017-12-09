@@ -27,35 +27,26 @@ namespace ModelRelief.Features
         /// <summary>
         /// Constructor
         /// </summary>
+        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
-        /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="mediator">IMediator</param>
         /// <remarks>Defaults to use paging.</remarks>
-        protected ViewController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, IMapper mapper, IMediator mediator)
-            : this(dbContext, userManager, mapper, mediator, new ViewControllerOptions {UsePaging = true}) {}
+        protected ViewController(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator)
+            : this(userManager, dbContext, mapper, mediator, new ViewControllerOptions {UsePaging = true}) {}
 
         /// <summary>
         /// Constructor
         /// </summary>
+        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
-        /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="mediator">IMediator</param>
         /// <param name="viewControllerOptions">Options for paging, etc.</param>
-        protected ViewController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, IMapper mapper, IMediator mediator, ViewControllerOptions viewControllerOptions)
-            : base(dbContext, userManager, mapper, mediator) 
+        protected ViewController(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator, ViewControllerOptions viewControllerOptions)
+            : base(userManager, dbContext, mapper, mediator) 
         {
             ViewControllerOptions = viewControllerOptions;
-        }
-
-        /// <summary>
-        /// Finds the ApplicationUser from the HttpContext ClaimsPrincipal.
-        /// </summary>
-        /// <returns>ApplicationUser</returns>
-        public async Task<ApplicationUser> FindApplicationUser()
-        {
-            return await Identity.GetCurrentUserAsync(UserManager, User);
         }
 
         /// <summary>
@@ -67,6 +58,7 @@ namespace ModelRelief.Features
         {
             var model = await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel> 
             {
+                User = User,
                 Id = id
             });
             if (model == null)
@@ -86,7 +78,8 @@ namespace ModelRelief.Features
             getRequest = getRequest ?? new GetRequest();
             var pagedResults = await HandleRequestAsync(new GetListRequest<TEntity, TGetModel> 
             {
-               UrlHelperContainer  = this,
+                User = User,
+                UrlHelperContainer  = this,
                
                 PageNumber          = getRequest.PageNumber,
                 NumberOfRecords     = getRequest.NumberOfRecords,
@@ -109,6 +102,7 @@ namespace ModelRelief.Features
         {
             var model = await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel> 
             {
+                User = User,
                 Id = id
             });
             if (model == null)
@@ -128,6 +122,7 @@ namespace ModelRelief.Features
         {
             var result = await HandleRequestAsync(new DeleteRequest<TEntity> 
             {
+                User = User,
                 Id = id
             });
 
@@ -156,6 +151,7 @@ namespace ModelRelief.Features
         {
             var newModel = await HandleRequestAsync(new PostAddRequest<TEntity, TPostModel, TGetModel> 
             {
+                User = User,
                 NewModel = postRequest
             });
 
@@ -179,6 +175,7 @@ namespace ModelRelief.Features
         {
             var model = await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel> 
             {
+                User = User,
                 Id = id
             });
             if (model == null)
@@ -199,6 +196,7 @@ namespace ModelRelief.Features
         {
             var model = await HandleRequestAsync(new PostUpdateRequest<TEntity, TPostModel, TGetModel> 
             {
+                User = User,
                 UpdatedModel = postRequest
             });
 

@@ -6,6 +6,7 @@
 
 using MediatR;
 using ModelRelief.Domain;
+using System.Security.Claims;
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
@@ -16,11 +17,16 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TEntity">The domain type of the model.</typeparam>
     /// <typeparam name="TPostModel">The DTO POST model.</typeparam>
     /// <typeparam name="TGetModel">The DTO GET model.</typeparam>
-   public class PostUpdateRequest<TEntity, TPostModel, TGetModel> : IRequest<TGetModel>
+    public class PostUpdateRequest<TEntity, TPostModel, TGetModel> : IRequest<TGetModel>
         where TEntity    : DomainModel
         where TPostModel : class
         where TGetModel  : IGetModel
     {
+        /// <summary>
+        /// Gets or sets the User posting the PostUpdate request.
+        /// </summary>
+        public ClaimsPrincipal User { get; set;}
+
         /// <summary>
         ///  Gets or sets the incoming model to be used to update the existing model.
         /// </summary>

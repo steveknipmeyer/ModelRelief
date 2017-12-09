@@ -14,6 +14,8 @@ using MediatR;
 using ModelRelief.Database;
 using ModelRelief.Api.V1.Shared.Errors;
 using System;
+using Microsoft.AspNetCore.Identity;
+using ModelRelief.Domain;
 
 namespace ModelRelief.Api.V1.Shared
 {
@@ -25,6 +27,7 @@ namespace ModelRelief.Api.V1.Shared
     public abstract class ValidatedHandler<TRequest, TResponse> : ICancellableAsyncRequestHandler<TRequest, TResponse> 
         where TRequest : IRequest<TResponse>
     {
+        public UserManager<ApplicationUser> UserManager { get; }
         public ModelReliefDbContext DbContext { get; }
         public IMapper Mapper { get; }
         public IEnumerable<IValidator<TRequest>> Validators { get; }
@@ -32,11 +35,13 @@ namespace ModelRelief.Api.V1.Shared
         /// <summary>
         /// Constructor
         /// </summary>
+        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="validators">List of validators</param>
-        public ValidatedHandler(ModelReliefDbContext dbContext, IMapper mapper, IEnumerable<IValidator<TRequest>> validators)
+        public ValidatedHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IEnumerable<IValidator<TRequest>> validators)
         {
+            UserManager = userManager ?? throw new System.ArgumentNullException(nameof(dbContext));
             DbContext = dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
             Mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
 

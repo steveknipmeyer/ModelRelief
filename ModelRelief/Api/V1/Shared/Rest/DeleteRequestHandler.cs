@@ -5,9 +5,7 @@
 // ------------------------------------------------------------------------//
 
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using ModelRelief.Api.V1.Shared.Errors;
 using ModelRelief.Database;
 using ModelRelief.Domain;
@@ -26,10 +24,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Constructor
         /// </summary>
+        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
         /// <param name="mapper">IMapper</param>
-        public DeleteRequestHandler(ModelReliefDbContext dbContext, IMapper mapper)
-            : base(dbContext, mapper, null)
+        public DeleteRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper)
+            : base(userManager, dbContext, mapper, null)
         {
         }
 

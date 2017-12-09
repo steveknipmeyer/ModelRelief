@@ -7,6 +7,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ModelRelief.Domain;
+using System.Security.Claims;
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
@@ -19,6 +20,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
         where TEntity   : DomainModel
         where TGetModel : IGetModel
     {
+        /// <summary>
+        /// Gets or sets the User posting the GetList request.
+        /// </summary>
+        public ClaimsPrincipal User { get; set;}
+
         /// <summary>
         /// UrlHelper from the active controller; used for generating paging links.
         /// </summary>

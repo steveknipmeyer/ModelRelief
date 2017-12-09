@@ -139,5 +139,45 @@ namespace ModelRelief.Test.Integration.Meshes
             var apiResult = JsonConvert.DeserializeObject<ApiResult>(requestResponse.ContentString);
             apiResult.HttpStatusCode.Should().Be((int) HttpStatusCode.BadRequest);
         }
+
+        /// <summary>
+        /// Test that a Mesh GET with an valid Id property value returns correct model.
+        /// </summary>
+        [Fact]
+        public async Task GET_ValidIdPropertyValueReturnsOk()
+        {
+            // Arrange
+            // Test user owns Mesh resources [1,3].
+            var meshId = 1;
+
+            // Act
+            var requestResponse = await Framework.SubmitHttpRequest(HttpRequestType.Get, $"{MeshesUrl}/{meshId}");
+
+            // Assert
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+
+            var mesh = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
+            mesh.Name.Should().Be("Lucy");
+        }
+
+        /// <summary>
+        /// Test that a Mesh GET with an invalid Id property value returns NotFound.
+        /// </summary>
+        [Fact]
+        public async Task GET_InvalidIdPropertyValueReturnsNotFound()
+        {
+            // Arrange
+            // Test user owns Mesh resources [1,3].
+            var meshId = 4;
+
+            // Act
+            var requestResponse = await Framework.SubmitHttpRequest(HttpRequestType.Get, $"{MeshesUrl}/{meshId}");
+
+            // Assert
+            Assert.False(requestResponse.Message.IsSuccessStatusCode);
+
+            var apiResult = JsonConvert.DeserializeObject<ApiResult>(requestResponse.ContentString);
+            apiResult.HttpStatusCode.Should().Be((int) HttpStatusCode.NotFound);
+        }
     }
 }

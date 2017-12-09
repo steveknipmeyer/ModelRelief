@@ -1,20 +1,19 @@
 ﻿<--- Commit
 
-<--- Reading
-
 <-- Tasks
     Goal : Roundtrip a scaled mesh.       
         Scale with a Python processor.
 
     Issues
-        The Project is populating the object graph too deeply.
+        ApiResult -> ApiErrorResult
 
-        Include ApplicationUser property in all requests.
+        The Project is populating the object graph too deeply.
+        
         User Validation
             User must be authenticated and authorized.
             Resource is owned by user.
                 For any accessed resource (Get, GetList, Put, Delete), the resource ID must belong to the user.
-                    GetSingle
+                  * GetSingle
                     GetList
                     Put
                     PostUpdate
@@ -30,6 +29,9 @@
 
         Design the mechanism for generating a Mesh.
             Mesh Post (create) or Mesh Put (update)?
+            Is a FilePutRequest required to update an existing file. It is analogous to FilePostRequest.
+                FilePostRequest, FilePutRequest
+                PostAddRequest, PostUpdateRequest
 
         Manning AspNet Core book.
 

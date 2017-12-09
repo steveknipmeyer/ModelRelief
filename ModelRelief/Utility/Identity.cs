@@ -4,6 +4,7 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 using Microsoft.AspNetCore.Identity;
+using ModelRelief.Api.V1.Shared.Errors;
 using ModelRelief.Domain;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -31,14 +32,17 @@ namespace ModelRelief.Utility
         }
 
         /// <summary>
-        /// Returns the current user from the HttpContext.User.
+        /// Returns the current user from a ClaimsPrincipal.
         /// https://stackoverflow.com/questions/30701006/how-to-get-the-current-logged-in-user-id-asp-net-core
         /// </summary>
         /// <param name="userManager">User Manager from DI</param>
         /// <param name="claimsPrincipal">HttpContext.User</param>
         /// <returns>USer</returns>
-        public static async Task<ApplicationUser> GetCurrentUserAsync (UserManager<ApplicationUser> userManager, ClaimsPrincipal claimsPrincipal)
+        public static async Task<ApplicationUser> GetApplicationUserAsync (UserManager<ApplicationUser> userManager, ClaimsPrincipal claimsPrincipal)
         {
+        if ((claimsPrincipal == null) || (!claimsPrincipal.Identity.IsAuthenticated))
+            throw new UserAuthenticationException();
+
         // mock authentication to work with PostMan and xUnit; assign a User Id to the GenericIdentity that was created in the middleware
         if (claimsPrincipal.Identity.Name == Identity.MockUserName)
             return await userManager.FindByIdAsync(MockUserId);

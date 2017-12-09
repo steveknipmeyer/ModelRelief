@@ -4,20 +4,17 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 
-using System;
-using System.Collections.Generic;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using ModelRelief.Api.V1.Extensions;
+using ModelRelief.Database;
+using ModelRelief.Domain;
+using ModelRelief.Infrastructure;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using ModelRelief.Api.V1.Extensions;
-using ModelRelief.Infrastructure;
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
@@ -33,10 +30,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Contstructor
         /// </summary>
+        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
         /// <param name="mapper">IMapper</param>
-        public GetListRequestHandler(ModelReliefDbContext dbContext, IMapper mapper)
-            : base(dbContext, mapper, null)
+        public GetListRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper)
+            : base(userManager, dbContext, mapper, null)
         {
         }
 

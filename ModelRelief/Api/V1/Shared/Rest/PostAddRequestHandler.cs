@@ -4,20 +4,16 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ModelRelief.Database;
 using ModelRelief.Domain;
-using ModelRelief.Api.V1.Extensions;
-using ModelRelief.Infrastructure;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
@@ -35,11 +31,12 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Constructor
         /// </summary>
+        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="validators">All validators matching IValidator for the given request.</param>
-        public PostAddRequestHandler(ModelReliefDbContext dbContext, IMapper mapper, IEnumerable<IValidator<PostAddRequest<TEntity, TPostModel, TGetModel>>> validators)
-            : base(dbContext, mapper, validators)
+        public PostAddRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IEnumerable<IValidator<PostAddRequest<TEntity, TPostModel, TGetModel>>> validators)
+            : base(userManager, dbContext, mapper, validators)
         {
         }
 

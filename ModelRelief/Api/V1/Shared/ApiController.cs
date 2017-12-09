@@ -96,6 +96,16 @@ namespace ModelRelief.Api.V1.Shared
 
                 return apiValidationResult.ObjectResult();
             }
+            catch (UserAuthenticationException ex)
+            {
+                var apiValidationResult = new ApiValidationResult(
+                    this, 
+                    HttpStatusCode.Unauthorized, 
+                    ApiStatusCode.Unauthorized, 
+                    ex.Message);
+
+                return apiValidationResult.ObjectResult();
+            }
             catch (Exception)
             {
                 throw;

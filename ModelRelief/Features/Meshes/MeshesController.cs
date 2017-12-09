@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Database;
 using ModelRelief.Domain;
+using ModelRelief.Utility;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -29,12 +30,12 @@ namespace ModelRelief.Features.Meshes
         /// <summary>
         /// Constructor
         /// </summary>
+        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
-        /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="mediator">IMediator</param>
-        public MeshesController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, IMapper mapper, IMediator mediator)
-            : base(dbContext, userManager, mapper, mediator)
+        public MeshesController(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator)
+            : base(userManager, dbContext, mapper, mediator)
         {
         }
         
@@ -44,8 +45,8 @@ namespace ModelRelief.Features.Meshes
         /// <param name="mesh">Mesh instance for View.</param>
         protected async override Task InitializeViewControls(Dto.Mesh mesh = null)
         {
-            var applicationUser = await FindApplicationUser();
-            var userId = applicationUser.Id;
+            var applicationUser = await Identity.GetApplicationUserAsync(UserManager, User);
+            var userId = applicationUser?.Id ?? "";
 
             ViewBag.MeshFormats     = ViewHelpers.PopulateEnumDropDownList<MeshFormat>("Select Mesh Format");
             ViewBag.ProjectId       = ViewHelpers.PopulateModelDropDownList<Project>(DbContext, userId, "Select a project", mesh?.ProjectId);

@@ -20,21 +20,21 @@ namespace ModelRelief.Features
 {
     public abstract class UxController : Controller, IUrlHelperContainer
     {
-        public ModelReliefDbContext DbContext { get; }
         public UserManager<ApplicationUser> UserManager { get; }
+        public ModelReliefDbContext DbContext { get; }
         public IMapper Mapper { get; }
         public IMediator Mediator { get; }
 
         /// <summary>
         /// Base UX Controller
         /// </summary>
+        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
-        /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
         /// <param name="mapper">IMapper from DI</param>
         /// <param name="mediator">IMediator from DI</param>
-        protected UxController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, IMapper mapper, IMediator mediator) {
-            DbContext   = dbContext;
+        protected UxController(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator) {
             UserManager = userManager;
+            DbContext   = dbContext;
             Mapper      = mapper;
             Mediator    = mediator;
         }
@@ -62,6 +62,10 @@ namespace ModelRelief.Features
                 return null;
             }
             catch (EntityNotFoundException)
+            {
+                throw;
+            }
+            catch (UserAuthenticationException)
             {
                 throw;
             }

@@ -6,6 +6,7 @@
 
 using MediatR;
 using ModelRelief.Domain;
+using System.Security.Claims;
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
@@ -18,6 +19,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
         where TEntity   : DomainModel
         where TGetModel : IGetModel
     {
+        /// <summary>
+        /// Gets or sets the User posting the GetSingle request.
+        /// </summary>
+        public ClaimsPrincipal User { get; set;}
+
         /// <summary>
         /// Gets or sets the Id for the single model to be returned.
         /// </summary>

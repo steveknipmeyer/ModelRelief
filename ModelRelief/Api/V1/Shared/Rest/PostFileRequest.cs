@@ -21,9 +21,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
         where TGetModel  : IGetModel
     {
         /// <summary>
-        /// Gets or sets the User posting the file request.
+        /// Gets or sets the User posting the PostFile request.
         /// </summary>
-        public ApplicationUser ApplicationUser { get; set;}
+        public ClaimsPrincipal User { get; set;}
 
         /// <summary>
         ///  Gets or sets the incoming file to be used to create the new domain model.

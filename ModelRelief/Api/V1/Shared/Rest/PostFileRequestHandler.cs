@@ -34,23 +34,21 @@ namespace ModelRelief.Api.V1.Shared.Rest
         where TEntity    : DomainModel, IFileResource, new()
         where TGetModel  : IGetModel
     {
-        public UserManager<ApplicationUser> UserManager { get; }
         public IHostingEnvironment HostingEnvironment { get; }
         public Services.IConfigurationProvider ConfigurationProvider { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
+        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
         /// <param name="mapper">IMapper</param>
-        /// <param name="userManager">UserManager.</param>
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="validators">All validators matching IValidator for the given request.</param>
-        public PostFileRequestHandler(ModelReliefDbContext dbContext, IMapper mapper, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, IEnumerable<IValidator<PostFileRequest<TEntity, TGetModel>>> validators)
-            : base(dbContext, mapper, validators)
+        public PostFileRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, IEnumerable<IValidator<PostFileRequest<TEntity, TGetModel>>> validators)
+            : base(userManager, dbContext, mapper, validators)
         {
-            UserManager = userManager;
             HostingEnvironment = hostingEnvironment;
             ConfigurationProvider = configurationProvider;
         }
@@ -64,7 +62,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public override async Task<TGetModel> OnHandle(PostFileRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
             // find ApplicationUser
-            var user = message.ApplicationUser;
+            var user = await Identity.GetApplicationUserAsync(UserManager, message.User);
 
             // populate model properties (placeholder Name)
             var newModel = new TEntity() {Name = "TBD"};

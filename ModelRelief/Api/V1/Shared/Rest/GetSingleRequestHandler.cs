@@ -7,10 +7,13 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ModelRelief.Api.V1.Shared.Errors;
 using ModelRelief.Database;
 using ModelRelief.Domain;
+using ModelRelief.Utility;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,10 +31,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Constructor
         /// </summary>
+        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
         /// <param name="mapper">IMapper</param>
-        public GetSingleRequestHandler(ModelReliefDbContext dbContext, IMapper mapper)
-            : base(dbContext, mapper, null)
+        public GetSingleRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper)
+            : base(userManager, dbContext, mapper, null)
         {
         }
 
@@ -43,13 +47,17 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns></returns>
         public override async Task<TGetModel> OnHandle(GetSingleRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
-            var result = await DbContext.Set<TEntity>()
-                 .ProjectTo<TGetModel>(Mapper.ConfigurationProvider)
-                 .SingleOrDefaultAsync(m => m.Id == message.Id);
+            var user = await Identity.GetApplicationUserAsync(UserManager, message.User);
 
-            if (result == null) {
+            var result = await DbContext.Set<TEntity>()
+                                .Where(m => (m.Id == message.Id) && 
+                                            (m.UserId == user.Id))
+                                .ProjectTo<TGetModel>(Mapper.ConfigurationProvider)
+                                .FirstOrDefaultAsync();
+
+            if (result == null)
                 throw new EntityNotFoundException(typeof(TEntity), message.Id);
-            }
+
             return result;
         }
     }

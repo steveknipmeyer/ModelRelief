@@ -6,6 +6,7 @@
 
 using MediatR;
 using ModelRelief.Domain;
+using System.Security.Claims;
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
@@ -17,6 +18,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
     public class DeleteRequest<TEntity> : IRequest<object>
         where TEntity   : DomainModel
     {
+        /// <summary>
+        /// Gets or sets the User posting the Delete request.
+        /// </summary>
+        public ClaimsPrincipal User { get; set;}
+
         /// <summary>
         /// Gets or sets the Id for the single model to be deleted.
         /// </summary>

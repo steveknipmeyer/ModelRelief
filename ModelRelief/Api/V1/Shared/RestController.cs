@@ -53,30 +53,23 @@ namespace ModelRelief.Api.V1.Shared
         {
             RestControllerOptions = restControllerOptions;
         }
-
-        /// <summary>
-        /// Finds the ApplicationUser from the HttpContext ClaimsPrincipal.
-        /// </summary>
-        /// <returns>ApplicationUser</returns>
-        public async Task<ApplicationUser> FindApplicationUser()
-        {
-            return await Identity.GetCurrentUserAsync(UserManager, User);
-        }
         
         [HttpGet("{id:int}")]
-        public virtual Task<IActionResult> Get(int id) 
+        public virtual async Task<IActionResult> Get(int id) 
         {
-            return HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel> {
+            return await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel> {
+                User = User,
                 Id = id
             });
         }
 
         [HttpGet("")]
-        public virtual Task<IActionResult> Get([FromQuery] GetRequest getRequest)
+        public virtual async Task<IActionResult> Get([FromQuery] GetRequest getRequest)
         {
             getRequest = getRequest ?? new GetRequest();
-            return HandleRequestAsync(new GetListRequest<TEntity, TGetModel> 
+            return await HandleRequestAsync(new GetListRequest<TEntity, TGetModel> 
             {
+                User = User,
                 UrlHelperContainer  = this,
 
                 PageNumber          = getRequest.PageNumber,
@@ -93,6 +86,7 @@ namespace ModelRelief.Api.V1.Shared
         {
             var result = await HandleRequestAsync(new PostAddRequest<TEntity, TPostModel, TGetModel>
             {
+                User = User,
                 NewModel = postRequest
             });
 
@@ -112,7 +106,7 @@ namespace ModelRelief.Api.V1.Shared
 
             var result = await HandleRequestAsync(new PostFileRequest<TEntity, TGetModel>
             {
-                ApplicationUser = await FindApplicationUser(),
+                User = User,
                 NewFile = postFile
             });
 
@@ -120,10 +114,11 @@ namespace ModelRelief.Api.V1.Shared
         }
 
         [HttpPut("{id:int}")]
-        public virtual Task<IActionResult> Put(int id, [FromBody] Dictionary<string, object> data) 
+        public virtual async Task<IActionResult> Put(int id, [FromBody] Dictionary<string, object> data) 
         {
-            return HandleRequestAsync (new PutRequest<TEntity, TGetModel>
+            return await HandleRequestAsync (new PutRequest<TEntity, TGetModel>
             { 
+            User = User,
             Id = id, 
             Parameters = data,
             DbContext = DbContext
@@ -131,10 +126,11 @@ namespace ModelRelief.Api.V1.Shared
         }
 
         [HttpDelete("{id:int}")]
-        public virtual Task<IActionResult> Delete(int id) 
+        public virtual async Task<IActionResult> Delete(int id) 
         {
-            return HandleRequestAsync(new DeleteRequest<TEntity> 
+            return await HandleRequestAsync(new DeleteRequest<TEntity> 
             {
+                User = User,
                 Id = id
             });
         }

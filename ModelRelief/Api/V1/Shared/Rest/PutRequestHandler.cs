@@ -19,6 +19,7 @@ using ModelRelief.Domain;
 using ModelRelief.Api.V1.Extensions;
 using ModelRelief.Infrastructure;
 using ModelRelief.Api.V1.Shared.Errors;
+using Microsoft.AspNetCore.Identity;
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
@@ -34,11 +35,12 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Contstructor
         /// </summary>
+        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="validators">All validators matching IValidator for the given request.</param>
-        public PutRequestHandler(ModelReliefDbContext dbContext, IMapper mapper, IEnumerable<IValidator<PutRequest<TEntity, TGetModel>>> validators)
-            : base(dbContext, mapper, validators) {}
+        public PutRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IEnumerable<IValidator<PutRequest<TEntity, TGetModel>>> validators)
+            : base(userManager, dbContext, mapper, validators) {}
 
         /// <summary>
         /// Pre-handler; performns any initialization or setup required before the request is handled.
@@ -48,7 +50,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns></returns>
         public override async Task PreHandle(PutRequest<TEntity, TGetModel> message, CancellationToken cancellationToken) 
         { 
-            await message.BuildUpdatedModel(); 
+            await message.BuildUpdatedModel(Mapper); 
         }
 
         /// <summary>

@@ -39,7 +39,7 @@ namespace ModelRelief.Test.Unit.Models
             IMapper                         mapper     = null;        // AutoMapper must be initialized with all the MappingProfiles.
             IMediator                       mediator   = null;        // Mediator requires all the Request/Handler types to be registered for DI.
 
-            var controller = new ModelsController(dbContext, userManager, mapper, mediator);
+            var controller = new ModelsController(userManager, dbContext, mapper, mediator);
 
             // Act
             var result = controller.Index(new GetRequest());

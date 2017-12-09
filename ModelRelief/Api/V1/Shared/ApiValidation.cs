@@ -69,6 +69,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         Default                             = StatusCodeBase.General + 1,
         NullRequest                         = StatusCodeBase.General + 2,    
         NotFound                            = StatusCodeBase.General + 3,
+        Unauthorized                        = StatusCodeBase.General + 4,
 
         // Files
         FileCreation                        = StatusCodeBase.Files + 1,    

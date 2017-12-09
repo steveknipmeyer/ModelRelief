@@ -56,6 +56,9 @@ namespace ModelRelief.Features.Errors
             if (context.Exception is EntityNotFoundException)
                 statusCode = HttpStatusCode.NotFound;
 
+            if (context.Exception is UserAuthenticationException)
+                statusCode = HttpStatusCode.Unauthorized;
+
             context.ExceptionHandled = true;
             context.Result = new StatusCodeResult((int) statusCode);
         }
