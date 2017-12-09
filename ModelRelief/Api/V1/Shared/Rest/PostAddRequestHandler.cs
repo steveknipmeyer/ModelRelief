@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ModelRelief.Database;
 using ModelRelief.Domain;
+using ModelRelief.Utility;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -49,6 +50,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public override async Task<TGetModel> OnHandle(PostAddRequest<TEntity, TPostModel, TGetModel> message, CancellationToken cancellationToken)
         {
             var newModel = Mapper.Map<TEntity>(message.NewModel);
+            
+            // set ownership
+            newModel.User = await Identity.GetApplicationUserAsync(UserManager, message.User);
+
             DbContext.Set<TEntity>().Add(newModel);
             await DbContext.SaveChangesAsync(cancellationToken);
 

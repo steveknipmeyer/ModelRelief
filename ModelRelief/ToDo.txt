@@ -5,7 +5,12 @@
         Scale with a Python processor.
 
     Issues
-        ApiResult -> ApiErrorResult
+        Why is MeshValidator called several time during a Put request?
+        
+        Reuse the Framework TestServer?
+
+        IntegrationTests
+            UserAuthenticatiosnException
 
         The Project is populating the object graph too deeply.
         
@@ -14,13 +19,19 @@
             Resource is owned by user.
                 For any accessed resource (Get, GetList, Put, Delete), the resource ID must belong to the user.
                   * GetSingle
+                  * GetList
+                  * Put
+                    PostUpdate
+                    Delete
+
+                For any reference property, the referenced resource ID must belong to the user.
+                    GetSingle
                     GetList
                     Put
                     PostUpdate
                     PostAdd
                     PostFile
                     Delete 
-                For any reference property, the referenced resource ID must belong to the user.
             
         Complete Views for Ux.
         Complete controllers for Api.

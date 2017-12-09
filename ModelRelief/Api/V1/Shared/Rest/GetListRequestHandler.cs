@@ -12,6 +12,7 @@ using ModelRelief.Api.V1.Extensions;
 using ModelRelief.Database;
 using ModelRelief.Domain;
 using ModelRelief.Infrastructure;
+using ModelRelief.Utility;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -46,7 +47,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns></returns>
         public override async Task<object> OnHandle(GetListRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
-            IQueryable<TEntity> results = DbContext.Set<TEntity>();
+            var user = await Identity.GetApplicationUserAsync(UserManager, message.User);
+
+            IQueryable<TEntity> results = DbContext.Set<TEntity>()
+                                                .Where(m => (m.UserId == user.Id));
 
             if (message.UsePaging) {
                 var page = await CreatePagedResultsAsync<TEntity, TGetModel>(results, message.UrlHelperContainer, message.PageNumber, message.NumberOfRecords, message.OrderBy, message.Ascending);

@@ -9,6 +9,7 @@ using ModelRelief.Api.V1.Meshes;
 using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Test.Integration;
 using Newtonsoft.Json;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -17,6 +18,11 @@ using Xunit;
 
 namespace ModelRelief.Test.Integration.Meshes
 {
+    public class DatabaseFixture
+    {
+
+    }
+
     public class MeshesIntegrationTests
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     {
@@ -72,8 +78,56 @@ namespace ModelRelief.Test.Integration.Meshes
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
 
-            var apiResult = JsonConvert.DeserializeObject<ApiResult>(requestResponse.ContentString);
-            apiResult.HttpStatusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
+            apiErrorResult.HttpStatusCode.Should().Be((int) HttpStatusCode.BadRequest);
+        }
+
+        /// <summary>
+        /// Test that a Mesh PUT updates the target property.
+        /// </summary>
+        [Fact]
+        public async Task PUT_TargetPropertyIsUpdated()
+        {
+            // Arrange
+            var meshId = 1;
+            var updatedDescription = "This description has been updated.";
+            var meshPutModel = new 
+                {
+                Description = updatedDescription,
+                };
+
+            // Act
+            var requestResponse = await Framework.SubmitHttpRequest(HttpRequestType.Put, $"{MeshesUrl}/{meshId}", meshPutModel);
+
+            // Assert
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+
+            var updatedMesh = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
+            updatedMesh.Description.Should().Be(updatedDescription);
+        }
+
+        /// <summary>
+        /// Test that a Mesh PUT with an invalid Id returns NotFound.
+        /// </summary>
+        [Fact]
+        public async Task PUT_InvalidIdPropertyReturnsNotFound()
+        {
+            // Arrange
+            var meshId = 100;
+            var updatedDescription = "This description has been updated.";
+            var meshPutModel = new 
+                {
+                Description = updatedDescription,
+                };
+
+            // Act
+            var requestResponse = await Framework.SubmitHttpRequest(HttpRequestType.Put, $"{MeshesUrl}/{meshId}", meshPutModel);
+
+            // Assert
+            Assert.False(requestResponse.Message.IsSuccessStatusCode);
+
+            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
+            apiErrorResult.HttpStatusCode.Should().Be((int) HttpStatusCode.NotFound);
         }
 
         /// <summary>
@@ -104,8 +158,8 @@ namespace ModelRelief.Test.Integration.Meshes
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
 
-            var apiResult = JsonConvert.DeserializeObject<ApiResult>(requestResponse.ContentString);
-            apiResult.HttpStatusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
+            apiErrorResult.HttpStatusCode.Should().Be((int) HttpStatusCode.BadRequest);
         }
 
         /// <summary>
@@ -136,8 +190,8 @@ namespace ModelRelief.Test.Integration.Meshes
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
 
-            var apiResult = JsonConvert.DeserializeObject<ApiResult>(requestResponse.ContentString);
-            apiResult.HttpStatusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
+            apiErrorResult.HttpStatusCode.Should().Be((int) HttpStatusCode.BadRequest);
         }
 
         /// <summary>
@@ -176,8 +230,26 @@ namespace ModelRelief.Test.Integration.Meshes
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
 
-            var apiResult = JsonConvert.DeserializeObject<ApiResult>(requestResponse.ContentString);
-            apiResult.HttpStatusCode.Should().Be((int) HttpStatusCode.NotFound);
+            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
+            apiErrorResult.HttpStatusCode.Should().Be((int) HttpStatusCode.NotFound);
+        }
+
+        /// <summary>
+        /// Test that a Mesh GET (List) returns the correct count of meshes.
+        /// </summary>
+        [Fact]
+        public async Task GET_ListReturnsCorrectCount()
+        {
+            // Arrange
+
+            // Act
+            var requestResponse = await Framework.SubmitHttpRequest(HttpRequestType.Get, MeshesUrl);
+
+            // Assert
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+
+            var pagedResults = JsonConvert.DeserializeObject<PagedResults<Dto.Mesh>>(requestResponse.ContentString);
+            pagedResults.Results.Count().Should().Be(3);
         }
     }
 }

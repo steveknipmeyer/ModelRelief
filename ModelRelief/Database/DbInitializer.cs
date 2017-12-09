@@ -278,11 +278,11 @@ namespace ModelRelief.Database
         {
             var meshes = new Mesh[]
             {
-                new Mesh{Name = "Lucy", Description = "Isometric", Camera = FindByName<Camera>("Isometric Camera"), DepthBuffer = FindByName<DepthBuffer>("Lucy"), MeshTransform =  FindByName<MeshTransform>("Identity"),
+                new Mesh{Name = "Lucy", Description = "Isometric", Format = MeshFormat.OBJ, Camera = FindByName<Camera>("Isometric Camera"), DepthBuffer = FindByName<DepthBuffer>("Lucy"), MeshTransform =  FindByName<MeshTransform>("Identity"),
                          User = _user, Project = FindByName<Project>("ModelRelief")},
-                new Mesh{Name = "Bunny", Description = "Top", Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("Bunny"), MeshTransform =  FindByName<MeshTransform>("Identity"),
+                new Mesh{Name = "Bunny", Description = "Top", Format = MeshFormat.OBJ, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("Bunny"), MeshTransform =  FindByName<MeshTransform>("Identity"),
                          User = _user, Project = FindByName<Project>("Architecture")},
-                new Mesh{Name = "Armadillo", Description = "Top", Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("Armadillo"), MeshTransform = FindByName<MeshTransform>("Pendant"),
+                new Mesh{Name = "Armadillo", Description = "Top", Format = MeshFormat.OBJ, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("Armadillo"), MeshTransform = FindByName<MeshTransform>("Pendant"),
                          User = _user, Project = FindByName<Project>("Architecture")},
             };
 

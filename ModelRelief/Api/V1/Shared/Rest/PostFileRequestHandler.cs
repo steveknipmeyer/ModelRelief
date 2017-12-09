@@ -66,6 +66,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
             // populate model properties (placeholder Name)
             var newModel = new TEntity() {Name = "TBD"};
+
+            // set ownership
             newModel.User = user;
             
             // add to repository

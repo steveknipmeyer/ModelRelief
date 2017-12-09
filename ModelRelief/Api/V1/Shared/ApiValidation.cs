@@ -16,9 +16,9 @@ using System.Net;
 namespace ModelRelief.Api.V1.Shared.Rest
 {
     /// <summary>
-    /// JSON status result returned by the API.
+    /// JSON error status result returned by the API.
     /// </summary>
-    public class ApiResult
+    public class ApiErrorResult
     {
         public int     HttpStatusCode;
         public int     ApiStatusCode;
@@ -284,7 +284,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 }
             }
 
-            var jsonResult = new ApiResult()
+            var jsonResult = new ApiErrorResult()
             {
                 HttpStatusCode   = (int) _httpStatusCode,
                 ApiStatusCode    = (int) _apiStatusCode,

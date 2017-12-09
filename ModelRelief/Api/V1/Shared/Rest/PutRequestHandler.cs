@@ -50,7 +50,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns></returns>
         public override async Task PreHandle(PutRequest<TEntity, TGetModel> message, CancellationToken cancellationToken) 
         { 
-            await message.BuildUpdatedModel(Mapper); 
+            await message.BuildUpdatedModel(UserManager, Mapper); 
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             // N.B. All validators have been run. If there was an error, an ApiValidationExveption was thrown.
 
             // find target model
-            var model = await message.BuildDomainModel();
+            var model = await message.BuildDomainModel(UserManager);
 
             await DbContext.SaveChangesAsync();
 

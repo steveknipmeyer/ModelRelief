@@ -7,10 +7,12 @@
 using AutoMapper;
 using FluentValidation.Results;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ModelRelief.Api.V1.Shared.Errors;
 using ModelRelief.Database;
 using ModelRelief.Domain;
+using ModelRelief.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,9 +60,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// Builds the UpdatedModel property containing the complete composition of old and new properties.
         /// </summary>
         /// <returns>TGetModel</returns>
-        public async Task<TGetModel> BuildUpdatedModel (IMapper mapper)
+        public async Task<TGetModel> BuildUpdatedModel (UserManager<ApplicationUser> userManager, IMapper mapper)
         {
-            var domainModel = await BuildDomainModel();
+            var domainModel = await BuildDomainModel(userManager);
             UpdatedModel = mapper.Map<TEntity, TGetModel>(domainModel);
 
             return UpdatedModel;
@@ -70,11 +72,14 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// Converts a PUT request to a domain model (for validation).
         /// </summary>
         /// <returns>Domain model</returns>
-        public async Task<TEntity> BuildDomainModel ()
+        public async Task<TEntity> BuildDomainModel (UserManager<ApplicationUser> userManager)
         {
             // find target model
+            var user = await Identity.GetApplicationUserAsync(userManager, User);
             var model = await DbContext.Set<TEntity>()
-                .SingleOrDefaultAsync(m => m.Id == this.Id);
+                .Where(m => ((m.Id == this.Id) &&
+                             (m.User.Id == user.Id)))
+                .SingleOrDefaultAsync();
 
             if (model == null)
                 throw new EntityNotFoundException(typeof(TEntity), this.Id);
@@ -106,7 +111,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
                     domainValue = property.PropertyType.IsEnum ? 
                         Enum.ToObject(property.PropertyType, value) : 
                         // https://stackoverflow.com/questions/19811583/invalid-cast-from-system-double-to-system-nullable
-                        Convert.ChangeType(value, Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType);
+                        System.Convert.ChangeType(value, Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType);
                  }
                 catch (Exception )
                 {
