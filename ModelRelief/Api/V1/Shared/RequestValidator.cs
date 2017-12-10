@@ -12,6 +12,7 @@ using AutoMapper;
 using FluentValidation;
 using MediatR;
 using ModelRelief.Database;
+using ModelRelief.Domain;
 
 namespace ModelRelief.Api.V1.Shared
 {
@@ -40,7 +41,7 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="cancellationToken">Token to allow async request to be cancelled.</param>
         /// <returns>True if model exists.</returns>
         protected async Task<bool> ExistAsync<TEntity>(int id, CancellationToken cancellationToken)
-            where TEntity : class
+            where TEntity : DomainModel
         {
             return (await DbContext.Set<TEntity>().FindAsync(new object[] {id}, cancellationToken)) != null;
         }

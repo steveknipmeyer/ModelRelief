@@ -12,7 +12,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ModelRelief.Dto
 {
-    public class Model3d : IGetModel
+    public class Model3d : IIdModel
     {
         public int Id { get; set; }
 

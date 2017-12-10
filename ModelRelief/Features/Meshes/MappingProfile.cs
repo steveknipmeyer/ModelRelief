@@ -12,7 +12,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ModelRelief.Dto
 {
-    public class Mesh : IGetModel
+    public class Mesh : IIdModel
     {
         public int Id { get; set; }
 

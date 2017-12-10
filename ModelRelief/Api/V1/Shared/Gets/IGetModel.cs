@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 namespace ModelRelief.Api.V1.Shared.Rest
 {
     /// <summary>
-    /// Represents an interface for a REST GET request model.
+    /// Represents an interface for a request model.
     /// </summary>
-    public interface IGetModel
+    public interface IIdModel
     {
         int Id { get; }
     }

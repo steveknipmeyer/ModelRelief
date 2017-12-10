@@ -6,9 +6,12 @@
 
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using ModelRelief.Api.V1.Shared.Errors;
 using ModelRelief.Database;
 using ModelRelief.Domain;
+using ModelRelief.Utility;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -41,8 +44,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public override async Task<object> OnHandle(DeleteRequest<TEntity> message, CancellationToken cancellationToken)
         {
             // WIP: Qualify model query to include test for ownership.
-
-            var modelToRemove = await DbContext.Set<TEntity>().FindAsync(message.Id);
+            var user = await Identity.GetApplicationUserAsync(UserManager, message.User);
+            var modelToRemove = await DbContext.Set<TEntity>()
+                                .Where(m => (m.Id == message.Id) && 
+                                            (m.UserId == user.Id))
+                                .SingleOrDefaultAsync();
 
             if (modelToRemove == null) {
                 throw new EntityNotFoundException(typeof(TEntity), message.Id);

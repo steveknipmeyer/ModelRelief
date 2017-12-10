@@ -19,8 +19,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TGetModel">The DTO GET model.</typeparam>
     public class PostUpdateRequest<TEntity, TPostModel, TGetModel> : IRequest<TGetModel>
         where TEntity    : DomainModel
-        where TPostModel : class
-        where TGetModel  : IGetModel
+        where TPostModel : IIdModel
+        where TGetModel  : IIdModel
     {
         /// <summary>
         /// Gets or sets the User posting the PostUpdate request.

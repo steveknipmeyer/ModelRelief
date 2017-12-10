@@ -18,7 +18,8 @@ namespace ModelRelief.Test.Unit.Infrastructure
     public class AutoMapperUnitTests
     {
         [Fact]
-        public void Should_have_valid_configuration() 
+        [Trait ("Category", "Infrastructure")]
+        public void AutoMapperConfigurationIsValid() 
         {
             var hostMock = new Mock<IHostingEnvironment>();
             hostMock.Setup(mock => mock.ContentRootPath).Returns(Directory.GetCurrentDirectory());

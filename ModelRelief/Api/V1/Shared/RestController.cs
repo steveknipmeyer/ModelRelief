@@ -22,9 +22,9 @@ namespace ModelRelief.Api.V1.Shared
 {
     public abstract class RestController<TEntity, TGetModel, TSingleGetModel, TPostModel, TPostFile> : ApiController<TEntity>
         where TEntity         : DomainModel
-        where TGetModel       : IGetModel           
-        where TSingleGetModel : IGetModel
-        where TPostModel      : class               // WIP Should TPostModel implement a particular interface?
+        where TGetModel       : IIdModel           
+        where TSingleGetModel : IIdModel
+        where TPostModel      : IIdModel
         where TPostFile       : class, new()        // WIP Should TPostFile implement a particular interface?
     {
         public RestControllerOptions RestControllerOptions { get; }
@@ -55,7 +55,7 @@ namespace ModelRelief.Api.V1.Shared
         }
         
         [HttpGet("{id:int}")]
-        public virtual async Task<IActionResult> Get(int id) 
+        public virtual async Task<IActionResult> GetSingle(int id) 
         {
             return await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel> {
                 User = User,
@@ -64,7 +64,7 @@ namespace ModelRelief.Api.V1.Shared
         }
 
         [HttpGet("")]
-        public virtual async Task<IActionResult> Get([FromQuery] GetRequest getRequest)
+        public virtual async Task<IActionResult> GetList([FromQuery] GetRequest getRequest)
         {
             getRequest = getRequest ?? new GetRequest();
             return await HandleRequestAsync(new GetListRequest<TEntity, TGetModel> 
@@ -82,7 +82,7 @@ namespace ModelRelief.Api.V1.Shared
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> Post([FromBody] TPostModel postRequest)
+        public virtual async Task<IActionResult> PostAdd([FromBody] TPostModel postRequest)
         {
             var result = await HandleRequestAsync(new PostAddRequest<TEntity, TPostModel, TGetModel>
             {
@@ -90,7 +90,17 @@ namespace ModelRelief.Api.V1.Shared
                 NewModel = postRequest
             });
 
-            return PostResult(result);
+            return PostCreatedResult(result);
+        }
+
+        [HttpPost("{id:int}")]
+        public virtual async Task<IActionResult> PostUpdate(int id, [FromBody] TPostModel postRequest)
+        {
+            return await HandleRequestAsync(new PostUpdateRequest<TEntity, TPostModel, TGetModel>
+            {
+                User = User,
+                UpdatedModel = postRequest
+            });
         }
 
         [HttpPost]
@@ -110,7 +120,7 @@ namespace ModelRelief.Api.V1.Shared
                 NewFile = postFile
             });
 
-            return PostResult(result);
+            return PostCreatedResult(result);
         }
 
         [HttpPut("{id:int}")]
@@ -149,12 +159,13 @@ namespace ModelRelief.Api.V1.Shared
         }
 
         /// <summary>
-        /// Packages a POST result into the appropriate HTTP response.
+        /// Conditions a POST result into the appropriate HTTP response.
         /// </summary>
         /// <param name="result">IActionResult from processing.</param>
         /// <returns>Created(201) is successful; otherwise raw result (typically ApiResult)</returns>
-        private IActionResult PostResult(IActionResult result)
+        private IActionResult PostCreatedResult(IActionResult result)
         {
+            // return ApiErrorResult if not OK; all successful requests return OK 
             if (!(result is OkObjectResult))
                 return result;
 

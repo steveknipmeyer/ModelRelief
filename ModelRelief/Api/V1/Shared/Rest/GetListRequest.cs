@@ -18,7 +18,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TGetModel">The DTO model in the collection.</typeparam>
     public class GetListRequest<TEntity, TGetModel> : IRequest<object>
         where TEntity   : DomainModel
-        where TGetModel : IGetModel
+        where TGetModel : IIdModel
     {
         /// <summary>
         /// Gets or sets the User posting the GetList request.

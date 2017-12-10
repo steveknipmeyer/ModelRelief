@@ -9,9 +9,12 @@ using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ModelRelief.Api.V1.Shared.Errors;
 using ModelRelief.Database;
 using ModelRelief.Domain;
+using ModelRelief.Utility;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,8 +29,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TGetModel">DTO GET model.</typeparam>
     public class PostUpdateRequestHandler<TEntity, TPostModel, TGetModel> : ValidatedHandler<PostUpdateRequest<TEntity, TPostModel, TGetModel>, TGetModel>
         where TEntity    : DomainModel
-        where TPostModel : class
-        where TGetModel  : IGetModel
+        where TPostModel : IIdModel
+        where TGetModel  : IIdModel
     {
         /// <summary>
         /// Contstructor
@@ -49,14 +52,26 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns></returns>
         public override async Task<TGetModel> OnHandle(PostUpdateRequest<TEntity, TPostModel, TGetModel> message, CancellationToken cancellationToken)
         {
-            // WIP: Validate message.UpdatedModel is owned by current User.
+            var user = await Identity.GetApplicationUserAsync(UserManager, message.User);
+            var targetModel = await DbContext.Set<TEntity>()
+                                .AsNoTracking()
+                                .Where(m => (m.Id == message.UpdatedModel.Id) && 
+                                            (m.UserId == user.Id))
+                                .SingleOrDefaultAsync();
+
+            if (targetModel == null)
+                throw new EntityNotFoundException(typeof(TEntity), message.UpdatedModel.Id);
 
             // update database model
             var updatedModel = Mapper.Map<TEntity>(message.UpdatedModel);
+
+             // set ownership
+             updatedModel.User = await Identity.GetApplicationUserAsync(UserManager, message.User);
+
             DbContext.Set<TEntity>().Update(updatedModel);
             await DbContext.SaveChangesAsync(cancellationToken);
 
-            // expand return value
+            // expand returned model
             var expandedUpdatedModel = await DbContext.Set<TEntity>()
                  .ProjectTo<TGetModel>(Mapper.ConfigurationProvider)
                  .SingleOrDefaultAsync(m => m.Id == updatedModel.Id);

@@ -73,7 +73,7 @@ namespace ModelRelief.Test.Integration
         /// Returns the root of the content folder. wwwroot is below this folder.
         /// </summary>
         /// <returns>Content folder root.</returns>
-        public static string GetContentRootPath()
+        public string GetContentRootPath()
         {
             // e.g. D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief.Test\bin\Debug\netcoreapp2.0
             var currentDirectory = Directory.GetCurrentDirectory();
@@ -88,7 +88,7 @@ namespace ModelRelief.Test.Integration
         /// <summary>
         /// Replaces the test database with a fresh baseline copy.
         /// </summary>
-        public static void RefreshTestDatabase()
+        public void RefreshTestDatabase()
         {
             var contentRootPath = GetContentRootPath();
             var databaseFolder = $"{contentRootPath}/{Settings.DatabaseFolder}";
@@ -109,10 +109,8 @@ namespace ModelRelief.Test.Integration
         /// <param name="endPoint">Endpoint.</param>
         /// <param name="contentObject">Object to serlize and send in the body of the request.</param>
         /// <returns></returns>
-        public static async Task<RequestResponse> SubmitHttpRequest (HttpRequestType requestType, string endPoint, object contentObject = null)
+        public async Task<RequestResponse> SubmitHttpRequest (HttpRequestType requestType, string endPoint, object contentObject = null)
         {
-            var framework = new Framework();
-
             var jsonContent = JsonConvert.SerializeObject(contentObject);
             var stringContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
@@ -120,19 +118,19 @@ namespace ModelRelief.Test.Integration
             switch (requestType)
             {
                 case HttpRequestType.Get:
-                    response = await framework.Client.GetAsync(endPoint);
+                    response = await Client.GetAsync(endPoint);
                     break;
                     
                 case HttpRequestType.Post:
-                    response = await framework.Client.PostAsync(endPoint, stringContent);
+                    response = await Client.PostAsync(endPoint, stringContent);
                     break;
 
                 case HttpRequestType.Put:
-                    response = await framework.Client.PutAsync(endPoint, stringContent);
+                    response = await Client.PutAsync(endPoint, stringContent);
                     break;
 
                 case HttpRequestType.Delete:
-                    response = await framework.Client.DeleteAsync(endPoint);
+                    response = await Client.DeleteAsync(endPoint);
                     break;
             }
             var responseString = await response.Content.ReadAsStringAsync();
