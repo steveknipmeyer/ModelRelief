@@ -16,6 +16,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// </summary>
     public interface IIdModel
     {
-        int Id { get; }
+        int Id { get; set; }
     }
 }

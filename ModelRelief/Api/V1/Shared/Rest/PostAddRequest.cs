@@ -14,8 +14,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
     ///  Represents a POST request to create a model.
     /// </summary>
     /// <typeparam name="TEntity">The domain type of the model.</typeparam>
-    /// <typeparam name="TPostModel">The DTO POST model.</typeparam>
+    /// <typeparam name="TPostModel">The DTO POST model.  Does not contain an Id because it is assigned.</typeparam>
     /// <typeparam name="TGetModel">The DTO GET model.</typeparam>
+    /// <remarks>This request is used to create a new model.</remarks>
     public class PostAddRequest<TEntity, TPostModel, TGetModel> : IRequest<TGetModel>
         where TEntity    : DomainModel
         where TPostModel : IIdModel

@@ -16,6 +16,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// </summary>
     /// <typeparam name="TEntity">The domain type of the model.</typeparam>
     /// <typeparam name="TGetModel">The DTO model in the collection.</typeparam>
+    /// <remarks>Returned request object is a PagedResult which contains a collection of TGetModel.</remarks>
     public class GetListRequest<TEntity, TGetModel> : IRequest<object>
         where TEntity   : DomainModel
         where TGetModel : IIdModel

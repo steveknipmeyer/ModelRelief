@@ -1,14 +1,15 @@
-
+// ------------------------------------------------------------------------// 
+// ModelRelief                                                             //
+//                                                                         //                                                                          
+// Copyright (c) <2017> Steve Knipmeyer                                    //
+// ------------------------------------------------------------------------//
 using FluentAssertions;
-using ModelRelief.Api.V1;
-using ModelRelief.Api.V1.Meshes;
 using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Test.Integration;
 using Newtonsoft.Json;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -36,6 +37,8 @@ namespace ModelRelief.Test.Integration.Meshes
     /// </summary>
     public class MeshesIntegrationTests : IClassFixture<ServerFixture>
     {
+        private static IEnumerable<int> IdRange = Enumerable.Range(1, 3);
+
         private const string ApiMeshesUrl = "/api/v1/meshes";
         private const string UxMeshesUrl  = "/meshes";
 
@@ -49,26 +52,65 @@ namespace ModelRelief.Test.Integration.Meshes
             ServerFixture = serverFixture;
             ServerFixture.Framework.RefreshTestDatabase();
         }
+
+        /// <summary>
+        /// Finds an existing model.
+        /// </summary>
+        /// <param name="id">Id of model to retrieve.</param>
+        /// <returns>Existing model.</returns>
+        private async Task<Dto.Mesh> FindModel(int modelId)
+        {
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiMeshesUrl}/{modelId}");
+
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+
+            var existingModel = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
+            return existingModel;
+        }
+
+        /// <summary>
+        /// Constructs a valid Dto.Mesh.
+        /// </summary>
+        /// <returns>Valid model.</returns>
+        private Dto.Mesh ConstructValidModel()
+        {
+            var validModel = new Dto.Mesh()
+            {
+                Name = "Test Mesh",
+                Description = "This mesh was updated through automated testing.",
+                Format = Domain.MeshFormat.OBJ
+            };
+            return validModel;
+        }
+
+        /// <summary>
+        /// Constructs an invalid Dto.Mesh.
+        /// </summary>
+        /// <returns>Invalid model.</returns>
+        private Dto.Mesh ConstructInvalidModel()
+        {
+            // Required properties are missing.
+            //  Name 
+            //  Description 
+            //  Format 
+            var invalidModel = new Dto.Mesh()
+            {
+            };
+            return invalidModel;
+        }
+
 #region Get
         /// <summary>
         /// Test that a Mesh GET with an valid Id property value returns correct model.
         /// </summary>
         [Fact]
         [Trait ("Category", "Api Mesh")]
-        public async Task GetSingle_ValidIdPropertyValueReturnsOk()
+        public async Task GetSingle_ValidIdPropertyValueReturnsCorrectModel()
         {
-            // Arrange
-            // Test user owns Mesh resources [1,3].
-            var meshId = 1;
+            var modelId = IdRange.Min();
+            var existingModel = await FindModel(modelId);
 
-            // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiMeshesUrl}/{meshId}");
-
-            // Assert
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
-
-            var mesh = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
-            mesh.Name.Should().Be("Lucy");
+            existingModel.Name.Should().Be("Lucy");
         }
 
         /// <summary>
@@ -79,11 +121,10 @@ namespace ModelRelief.Test.Integration.Meshes
         public async Task GetSingle_InvalidIdPropertyValueReturnsNotFound()
         {
             // Arrange
-            // Test user owns Mesh resources [1,3].
-            var meshId = 4;
+            var modelId = IdRange.Max() + 1;
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiMeshesUrl}/{meshId}");
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiMeshesUrl}/{modelId}");
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
@@ -108,7 +149,8 @@ namespace ModelRelief.Test.Integration.Meshes
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
             var pagedResults = JsonConvert.DeserializeObject<PagedResults<Dto.Mesh>>(requestResponse.ContentString);
-            pagedResults.Results.Count().Should().Be(3);
+            var expectedCount = IdRange.Max() - IdRange.Min() + 1;
+            pagedResults.Results.Count().Should().Be(expectedCount);
         }
 #endregion
 #region Post
@@ -120,22 +162,16 @@ namespace ModelRelief.Test.Integration.Meshes
         public async Task PostAdd_CanCreateNewMesh()
         {
             // Arrange
-            var meshName = "Api Test Mesh";
-            var meshPostModel = new Dto.Mesh() 
-                {
-                Name = meshName,
-                Description = "This mesh was created through an integration test.",
-                Format = Domain.MeshFormat.STL
-                };
+            var validModel = ConstructValidModel();
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, ApiMeshesUrl, meshPostModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, ApiMeshesUrl, validModel);
 
             // Assert
             requestResponse.Message.EnsureSuccessStatusCode();
 
-            var newMesh = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
-            newMesh.Name.Should().Be(meshName);
+            var newModel = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
+            newModel.Name.Should().Be(validModel.Name);
         }
     
         /// <summary>
@@ -146,13 +182,10 @@ namespace ModelRelief.Test.Integration.Meshes
         public async Task PostAdd_InvalidPropertyValueReturnsBadRequest()
         {
             // Arrange
-            var meshPostModel = new Dto.Mesh() 
-                {
-                Name = ""
-                };
+            var invalidModel = ConstructInvalidModel();
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, ApiMeshesUrl, meshPostModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, ApiMeshesUrl, invalidModel);
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
@@ -169,24 +202,20 @@ namespace ModelRelief.Test.Integration.Meshes
         public async Task PostUpdate_CanUpdateModel()
         {
             // Arrange
-            var meshName = "Api Test Mesh";
-            var meshId = 1;
-            var meshPostModel = new  
-                {
-                Id = meshId,
-                Name = meshName,
-                Description = "This mesh was updated through an integration test.",
-                Format = Domain.MeshFormat.STL
-            };
+            var modelId = IdRange.Min();
+            var existingModel = await FindModel(modelId);
+
+            var updatedName = "Updated Name Property";
+            existingModel.Name = updatedName;
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiMeshesUrl}/{meshId}", meshPostModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiMeshesUrl}/{modelId}", existingModel);
 
             // Assert
             requestResponse.Message.EnsureSuccessStatusCode();
 
-            var newMesh = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
-            newMesh.Name.Should().Be(meshName);
+            var newModel = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
+            newModel.Name.Should().Be(updatedName);
         }
 
         /// <summary>
@@ -194,21 +223,14 @@ namespace ModelRelief.Test.Integration.Meshes
         /// </summary>
         [Fact]
         [Trait ("Category", "Api Mesh")]
-        public async Task PostUpdate_InvalidIdPropertyReturnsNotFound()
+        public async Task PostUpdate_InvalidIdReturnsNotFound()
         {
             // Arrange
-            var meshName = "Api Test Mesh";
-            var meshId = 100;
-            var meshPostModel = new  
-                {
-                Id = meshId,
-                Name = meshName,
-                Description = "This mesh has an invalid ID.",
-                Format = Domain.MeshFormat.STL
-            };
+            var modelId = IdRange.Max();
+            var existingModel = await FindModel (modelId);
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiMeshesUrl}/{meshId}", meshPostModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiMeshesUrl}/{modelId + 1}", existingModel);
 
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
 
@@ -226,21 +248,26 @@ namespace ModelRelief.Test.Integration.Meshes
         public async Task Put_TargetPropertyIsUpdated()
         {
             // Arrange
-            var meshId = 1;
-            var updatedDescription = "This description has been updated.";
-            var meshPutModel = new 
-                {
-                Description = updatedDescription,
-                };
+            var modelId = IdRange.Min();
+            var updatedName = "Updated Name Property";
+            var putModel = new 
+            {
+                Name = updatedName
+            };
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiMeshesUrl}/{meshId}", meshPutModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiMeshesUrl}/{modelId}", putModel);
 
             // Assert
+            if (!requestResponse.Message.IsSuccessStatusCode)
+            {
+                var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
+            }
+
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
-            var updatedMesh = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
-            updatedMesh.Description.Should().Be(updatedDescription);
+            var updatedModel = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
+            updatedModel.Name.Should().Be(updatedName);
         }
 
         /// <summary>
@@ -251,17 +278,16 @@ namespace ModelRelief.Test.Integration.Meshes
         public async Task Put_InvalidIdPropertyReturnsNotFound()
         {
             // Arrange
-            var meshId = 100;
-            var updatedDescription = "This description has been updated.";
-            var meshPutModel = new 
-                {
-                Description = updatedDescription,
-                };
+            var modelId = IdRange.Max();
+            var updatedName = "Updated Name Property";
+            var putModel = new 
+            {
+                Name = updatedName
+            };
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiMeshesUrl}/{meshId}", meshPutModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiMeshesUrl}/{modelId + 1}", putModel);
 
-            // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
 
             var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
@@ -276,23 +302,14 @@ namespace ModelRelief.Test.Integration.Meshes
         public async Task Put_InvalidPropertyNameReturnsBadRequest()
         {
             // Arrange
-            var meshPostModel = new Dto.Mesh
-                {
-                Name = "Api Test Mesh",
-                Description = "This mesh was created through an integration test.",
-                Format = Domain.MeshFormat.OBJ,
-                };
-
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, ApiMeshesUrl, meshPostModel);
-            var newModel = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
-
-            var invalidMeshPostModel = new
+            var modelId = IdRange.Max();
+            var invalidPutModel = new
                 {
                 InvalidProperty = "NonExistent"
                 };
 
             // Act
-            requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiMeshesUrl}/{newModel.Id}", invalidMeshPostModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiMeshesUrl}/{modelId}", invalidPutModel);
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
@@ -309,23 +326,14 @@ namespace ModelRelief.Test.Integration.Meshes
         public async Task Put_InvalidEnumPropertyValueReturnsBadRequest()
         {
             // Arrange
-            var meshPostModel = new Dto.Mesh
+            var modelId = IdRange.Max();
+            var invalidPutModel = new
                 {
-                Name = "Api Test Mesh",
-                Description = "This mesh was created through an integration test.",
-                Format = Domain.MeshFormat.OBJ,
-                };
-
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, ApiMeshesUrl, meshPostModel);
-            var newModel = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
-
-            var invalidMeshPostModel = new
-                {
-                Format = "WavefrontOBJ"
+                Format = "Invalid Format"
                 };
 
             // Act
-            requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiMeshesUrl}/{newModel.Id}", invalidMeshPostModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiMeshesUrl}/{modelId}", invalidPutModel);
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
@@ -344,16 +352,16 @@ namespace ModelRelief.Test.Integration.Meshes
         public async Task Delete_TargetModelIsDeleted()
         {
             // Arrange
-            var meshId = 1;
+            var modelId = IdRange.Min();
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Delete, $"{ApiMeshesUrl}/{meshId}");
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Delete, $"{ApiMeshesUrl}/{modelId}");
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
             // Now attempt to access the deleted model.....
-            requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiMeshesUrl}/{meshId}");
+            requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiMeshesUrl}/{modelId}");
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
@@ -370,11 +378,10 @@ namespace ModelRelief.Test.Integration.Meshes
         public async Task Delete_InvalidIdPropertyValueReturnsNotFound()
         {
             // Arrange
-            // Test user owns Mesh resources [1,3].
-            var meshId = 4;
+            var modelId = IdRange.Max() + 1;
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Delete, $"{ApiMeshesUrl}/{meshId}");
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Delete, $"{ApiMeshesUrl}/{modelId}");
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);

@@ -27,6 +27,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// </summary>
     /// <typeparam name="TEntity">The domain type of the model.</typeparam>
     /// <typeparam name="TGetModel">The DTO GET model.</typeparam>
+    /// <remarks>This request is used to update a subset of the properties of an existing model.</remarks>
     public class PutRequest<TEntity, TGetModel> : IRequest<TGetModel>
         where TEntity   : DomainModel
         where TGetModel : IIdModel

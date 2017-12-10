@@ -6,17 +6,6 @@
         Scale with a Python processor.
 
     Issues
-        MeshIntegrationTests
-            Add a test object Factory (Valid, Invalid)
-            Introduce constants for valid ranges, invalid ID value.
-        Document RestController action methods (PostAdd, PostUpdate, Put)
-        TPostModel : IIdModel
-            Are there cases where TPostModel does not contain an Id property?
-            Should PostUpdate set the Id from request?
-                How does this happen in the View/Edit logic?       
-        When is this valid in an integration test?
-            new Dto.Mesh()
-            Default properties are created.
         Why is MeshValidator called several time during a Put request?
 
         The Project is populating the object graph too deeply.
@@ -39,8 +28,8 @@
 
         Design the mechanism for generating a Mesh.
             Mesh Post (create) or Mesh Put (update)?
-            Is a FilePutRequest required to update an existing file. It is analogous to FilePostRequest.
-                FilePostRequest, FilePutRequest
+            Is a PutFileRequest required to update an existing file. It is analogous to PostFileRequest.
+                PostFileRequest, PutFileRequest
                 PostAddRequest, PostUpdateRequest
 
         Manning AspNet Core book.

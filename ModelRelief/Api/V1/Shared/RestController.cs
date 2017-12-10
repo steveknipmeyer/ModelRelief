@@ -53,7 +53,12 @@ namespace ModelRelief.Api.V1.Shared
         {
             RestControllerOptions = restControllerOptions;
         }
-        
+
+        /// <summary>
+        /// Action method for GetSingleRequest.
+        /// </summary>
+        /// <param name="id">Model Id to fetch.</param>
+        /// <returns>TGetModel of target model.</returns>
         [HttpGet("{id:int}")]
         public virtual async Task<IActionResult> GetSingle(int id) 
         {
@@ -63,6 +68,11 @@ namespace ModelRelief.Api.V1.Shared
             });
         }
 
+        /// <summary>
+        /// Action method for GetListRequest.
+        /// </summary>
+        /// <param name="getRequest">Parameters for returning a collection of models including page number, size.</param>
+        /// <returns>A collection of models in a PagedResult.</returns>
         [HttpGet("")]
         public virtual async Task<IActionResult> GetList([FromQuery] GetRequest getRequest)
         {
@@ -80,7 +90,11 @@ namespace ModelRelief.Api.V1.Shared
                 UsePaging           = RestControllerOptions.UsePaging,
             });
         }
-
+        /// <summary>
+        /// Action method for a PostAddRequest to create a new model.
+        /// </summary>
+        /// <param name="postRequest">TPostModel of model to create. Does not contain a model Id.</param>
+        /// <returns>TGetModel of the newly-created model.</returns>
         [HttpPost]
         public virtual async Task<IActionResult> PostAdd([FromBody] TPostModel postRequest)
         {
@@ -93,9 +107,19 @@ namespace ModelRelief.Api.V1.Shared
             return PostCreatedResult(result);
         }
 
+        /// <summary>
+        /// Action method for PostUpdate Request. Updates ALL properties of a model.
+        /// </summary>
+        /// <param name="id">Id of model to update.</param>
+        /// <param name="postRequest">TPost model containing a complete model.</param>
+        /// <returns>TGetModel of updated model.</returns>
+        /// <remarks>The Id in the request parameters is reduntant with the TPostModel. It is present to differentiate from the signature of PostAdd.</remarks>
         [HttpPost("{id:int}")]
         public virtual async Task<IActionResult> PostUpdate(int id, [FromBody] TPostModel postRequest)
         {
+            // ensure Id is set
+            postRequest.Id = id;
+
             return await HandleRequestAsync(new PostUpdateRequest<TEntity, TPostModel, TGetModel>
             {
                 User = User,
@@ -103,6 +127,10 @@ namespace ModelRelief.Api.V1.Shared
             });
         }
 
+        /// <summary>
+        /// Action method to create a file that is associated with a model.
+        /// </summary>
+        /// <returns>TGetModel of newly-created model.</returns>
         [HttpPost]
         [Consumes("application/octet-stream")]
         [DisableRequestSizeLimit]
@@ -123,6 +151,12 @@ namespace ModelRelief.Api.V1.Shared
             return PostCreatedResult(result);
         }
 
+        /// <summary>
+        /// Action method for PutRequest. Updates a subset of model properties.
+        /// </summary>
+        /// <param name="id">Id of model to update.</param>
+        /// <param name="data">Dictionary of property key:values.</param>
+        /// <returns>TGetModel of update model.</returns>
         [HttpPut("{id:int}")]
         public virtual async Task<IActionResult> Put(int id, [FromBody] Dictionary<string, object> data) 
         {
@@ -135,6 +169,11 @@ namespace ModelRelief.Api.V1.Shared
             });
         }
 
+        /// <summary>
+        /// Action method for DeleteRequest.
+        /// </summary>
+        /// <param name="id">Id of model to delete.</param>
+        /// <returns>Ok if successfully deleted.</returns>
         [HttpDelete("{id:int}")]
         public virtual async Task<IActionResult> Delete(int id) 
         {
