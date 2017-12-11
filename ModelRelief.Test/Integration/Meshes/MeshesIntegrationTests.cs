@@ -69,7 +69,7 @@ namespace ModelRelief.Test.Integration.Meshes
         }
 
         /// <summary>
-        /// Constructs a valid Dto.Mesh.
+        /// Constructs a valid model.
         /// </summary>
         /// <returns>Valid model.</returns>
         private Dto.Mesh ConstructValidModel()
@@ -84,7 +84,7 @@ namespace ModelRelief.Test.Integration.Meshes
         }
 
         /// <summary>
-        /// Constructs an invalid Dto.Mesh.
+        /// Constructs an invalid model.
         /// </summary>
         /// <returns>Invalid model.</returns>
         private Dto.Mesh ConstructInvalidModel()
@@ -101,7 +101,7 @@ namespace ModelRelief.Test.Integration.Meshes
 
 #region Get
         /// <summary>
-        /// Test that a Mesh GET with an valid Id property value returns correct model.
+        /// Test that a GetSingle request with an valid Id property value returns correct model.
         /// </summary>
         [Fact]
         [Trait ("Category", "Api Mesh")]
@@ -114,7 +114,7 @@ namespace ModelRelief.Test.Integration.Meshes
         }
 
         /// <summary>
-        /// Test that a Mesh GET with an invalid Id property value returns NotFound.
+        /// Test that a GetSingle request with an invalid Id property value returns NotFound.
         /// </summary>
         [Fact]
         [Trait ("Category", "Api Mesh")]
@@ -134,7 +134,7 @@ namespace ModelRelief.Test.Integration.Meshes
         }
 
         /// <summary>
-        /// Test that a Mesh GET (List) returns the correct count of meshes.
+        /// Test that a GetList request returns the correct count of models.
         /// </summary>
         [Fact]
         [Trait ("Category", "Api Mesh")]
@@ -155,11 +155,11 @@ namespace ModelRelief.Test.Integration.Meshes
 #endregion
 #region Post
         /// <summary>
-        /// Test that a valid Mesh can be created through POST.
+        /// Test that a PostAdd request can create a model.
         /// </summary>
         [Fact]
         [Trait ("Category", "Api Mesh")]
-        public async Task PostAdd_CanCreateNewMesh()
+        public async Task PostAdd_CanCreateNewModel()
         {
             // Arrange
             var validModel = ConstructValidModel();
@@ -175,7 +175,7 @@ namespace ModelRelief.Test.Integration.Meshes
         }
     
         /// <summary>
-        /// Test that an invalid Mesh POST returns BadRequest.
+        /// Test that an PostAdd request returns BadRequest.
         /// </summary>
         [Fact]
         [Trait ("Category", "Api Mesh")]
@@ -195,7 +195,50 @@ namespace ModelRelief.Test.Integration.Meshes
         }
 
         /// <summary>
-        /// Test that a valid Mesh can be updated through a POST.
+        /// Test that a PostAdd request with a valid reference property creates the model.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "Api Mesh")]
+        public async Task PostAdd_ValidReferencePropertyCreatesModel()
+        {
+            // Arrange
+            var validModel = ConstructValidModel();
+            var projectId = 1;
+            validModel.ProjectId = projectId;
+
+            // Act
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, ApiMeshesUrl, validModel);
+
+            // Assert
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+
+            var newModel = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
+            newModel.ProjectId.Should().Be(projectId);
+        }
+
+        /// <summary>
+        /// Test that an model PostAdd with an invalid reference property returns BadRequest.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "Api Mesh")]
+        public async Task PostAdd_InvalidReferencePropertyReturnsBadRequest()
+        {
+            // Arrange
+            var invalidModel = ConstructValidModel();
+            invalidModel.ProjectId = 0;
+
+            // Act
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, ApiMeshesUrl, invalidModel);
+
+            // Assert
+            Assert.False(requestResponse.Message.IsSuccessStatusCode);
+
+            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
+            apiErrorResult.HttpStatusCode.Should().Be((int) HttpStatusCode.BadRequest);
+        }
+
+        /// <summary>
+        /// Test that a PostUpdate can update a model.
         /// </summary>
         [Fact]
         [Trait ("Category", "Api Mesh")]
@@ -219,7 +262,7 @@ namespace ModelRelief.Test.Integration.Meshes
         }
 
         /// <summary>
-        /// Test that a Mesh with an invalid ID returns NotFound.
+        /// Test that a PostUpdate request with an invalid Id returns NotFound.
         /// </summary>
         [Fact]
         [Trait ("Category", "Api Mesh")]
@@ -238,10 +281,55 @@ namespace ModelRelief.Test.Integration.Meshes
             apiErrorResult.HttpStatusCode.Should().Be((int) HttpStatusCode.NotFound);
         }
 
+        /// <summary>
+        /// Test that a PostUpdate a valid reference property can be updated.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "Api Mesh")]
+        public async Task PostUpdate_ValidReferencePropertyUpdatesModel()
+        {
+            // Arrange
+            var modelId = IdRange.Max();
+            var existingModel = await FindModel (modelId);
+
+            var projectId = 1;
+            existingModel.ProjectId = 1;
+
+            // Act
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiMeshesUrl}/{modelId}", existingModel);
+
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+
+            var updatedModel = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
+            updatedModel.ProjectId.Should().Be(projectId);
+        }
+
+        /// <summary>
+        /// Test that a PostUpdate with an invalid reference property returns BadRequest.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "Api Mesh")]
+        public async Task PostUpdate_InvalidReferencePropertyReturndBadRequest()
+        {
+            // Arrange
+            var modelId = IdRange.Max();
+            var existingModel = await FindModel (modelId);
+
+            existingModel.ProjectId = 0;
+
+            // Act
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiMeshesUrl}/{modelId}", existingModel);
+
+            Assert.False(requestResponse.Message.IsSuccessStatusCode);
+
+            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
+            apiErrorResult.HttpStatusCode.Should().Be((int) HttpStatusCode.BadRequest);
+        }
+
 #endregion
 #region Put
         /// <summary>
-        /// Test that a Mesh PUT updates the target property.
+        /// Test that a Put request updates the target property.
         /// </summary>
         [Fact]
         [Trait ("Category", "Api Mesh")]
@@ -271,7 +359,7 @@ namespace ModelRelief.Test.Integration.Meshes
         }
 
         /// <summary>
-        /// Test that a Mesh PUT with an invalid Id returns NotFound.
+        /// Test that a Put request with an invalid Id returns NotFound.
         /// </summary>
         [Fact]
         [Trait ("Category", "Api Mesh")]
@@ -295,7 +383,7 @@ namespace ModelRelief.Test.Integration.Meshes
         }
 
         /// <summary>
-        /// Test that an invalid Mesh PUT with an umknown property returns BadRequest.
+        /// Test that a Put request with an umknown property returns BadRequest.
         /// </summary>
         [Fact]
         [Trait ("Category", "Api Mesh")]
@@ -319,7 +407,7 @@ namespace ModelRelief.Test.Integration.Meshes
         }
 
         /// <summary>
-        /// Test that an invalid Mesh PUT with an invalid enum property value returns BadRequest.
+        /// Test that a Put request with an invalid enum property value returns BadRequest.
         /// </summary>
         [Fact]
         [Trait ("Category", "Api Mesh")]
@@ -341,11 +429,60 @@ namespace ModelRelief.Test.Integration.Meshes
             var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
             apiErrorResult.HttpStatusCode.Should().Be((int) HttpStatusCode.BadRequest);
         }
+
+        /// <summary>
+        /// Test that a Put request with an valid reference property value returns BadRequest.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "Api Mesh")]
+        public async Task Put_InvalidReferencePropertyReturnsBadRequest()
+        {
+            // Arrange
+            var modelId = IdRange.Max();
+            var invalidPutModel = new
+                {
+                ProjectId = 0
+                };
+
+            // Act
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiMeshesUrl}/{modelId}", invalidPutModel);
+
+            // Assert
+            Assert.False(requestResponse.Message.IsSuccessStatusCode);
+
+            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
+            apiErrorResult.HttpStatusCode.Should().Be((int) HttpStatusCode.BadRequest);
+        }
+
+        /// <summary>
+        /// Test that an Put request with an invalid reference property value returns BadRequest.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "Api Mesh")]
+        public async Task Put_ValidReferencePropertyUpdatesModel()
+        {
+            // Arrange
+            var modelId = IdRange.Max();
+            var projectId = 1;
+            var validPutModel = new
+                {
+                ProjectId = projectId
+                };
+
+            // Act
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiMeshesUrl}/{modelId}", validPutModel);
+
+            // Assert
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+
+            var updatedModel = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
+            updatedModel.ProjectId.Should().Be(projectId);
+        }
         #endregion
 
 #region Delete
         /// <summary>
-        /// Test that a Mesh DELETE deletes the target model.
+        /// Test that a Delete request deletes the target model.
         /// </summary>
         [Fact]
         [Trait ("Category", "Api Mesh")]
@@ -371,7 +508,7 @@ namespace ModelRelief.Test.Integration.Meshes
         }
 
         /// <summary>
-        /// Test that a Mesh DELETE with an invalid Id property value returns NotFound.
+        /// Test that a Delete request with an invalid Id property value returns NotFound.
         /// </summary>
         [Fact]
         [Trait ("Category", "Api Mesh")]

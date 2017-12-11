@@ -6,9 +6,13 @@
 
 using AutoMapper;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using ModelRelief.Api.V1.Shared.Rest;
+using ModelRelief.Database;
 using ModelRelief.Domain;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ModelRelief.Dto
 {
@@ -50,6 +54,30 @@ namespace ModelRelief.Dto
 
             RuleFor(m => m.Format)
                 .NotEmpty().WithMessage("The file format must be provided.");
+        }
+
+        public MeshValidator(ModelReliefDbContext dbContext)
+        {
+            RuleFor(m => m.Name)
+                .NotNull().WithMessage("The Name property is required.");
+         
+            RuleFor(m => m.Description)
+                .NotNull().WithMessage("The Description property is required.")
+                .MinimumLength(3).WithMessage("The Description must be three or more characters.");
+//              .Must(description => "SLK".Equals(description)).WithMessage("The Description absolutely must be SLK.");
+
+            RuleFor(m => m.Format)
+                .NotEmpty().WithMessage("The file format must be provided.");
+        }
+
+        private async Task<bool> IsOwned<TEntity> (ModelReliefDbContext dbContext, int id, string userId)
+            where TEntity : DomainModel
+        {
+            var domainModel = await dbContext.Set<TEntity>()
+                        .Where(m => (m.Id == id) && 
+                                    (m.UserId == userId))
+                        .SingleOrDefaultAsync();
+            return domainModel != null;
         }
     }
 }

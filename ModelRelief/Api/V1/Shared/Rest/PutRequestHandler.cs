@@ -61,10 +61,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns></returns>
         public override async Task<TGetModel> OnHandle(PutRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
-            // N.B. All validators have been run. If there was an error, an ApiValidationExveption was thrown.
-
             // find target model
             var model = await message.BuildUpdatedDomainModel(UserManager);
+
+            // validate all references are owned
+            await ValidateReferences<TEntity>(model, message.User);
 
             await DbContext.SaveChangesAsync();
 

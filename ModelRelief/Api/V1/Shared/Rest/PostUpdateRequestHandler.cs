@@ -62,6 +62,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
             // update domain model
             var updatedModel = Mapper.Map<TEntity>(message.UpdatedModel);
 
+            // validate all references are owned
+            await ValidateReferences<TEntity>(updatedModel, message.User);
+
             // ensure Id is set; PostModel may not have included the Id but it is always present in the PostUpdateRequest.
             updatedModel.Id = message.Id;
 

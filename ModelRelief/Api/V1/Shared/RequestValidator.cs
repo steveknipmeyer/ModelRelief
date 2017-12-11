@@ -4,15 +4,11 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
 using FluentValidation;
-using MediatR;
 using ModelRelief.Database;
 using ModelRelief.Domain;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ModelRelief.Api.V1.Shared
 {
@@ -32,7 +28,10 @@ namespace ModelRelief.Api.V1.Shared
         {
             DbContext = dbContext;
 
-            // N.B. Existence cannot be tested here. A RequestValidator 
+            // N.B. Existence could be tested in validators if <all> requests, including Get and Delete requests, had FV validators defined.
+            //      Currently, only requests that modify the database (PutRequest, PostAddRequest, PostUpdateRequest) have validators defined.
+            //      Also a specialized type of RequestValidator would be needed that used a generic type parameter (e.g. IExistingModelRequest) 
+            //      to ensure that the User and Id properties are present in the request.
         }
 
         /// <summary>

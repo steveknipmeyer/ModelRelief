@@ -50,7 +50,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public override async Task<TGetModel> OnHandle(PostAddRequest<TEntity, TPostModel, TGetModel> message, CancellationToken cancellationToken)
         {
             var newModel = Mapper.Map<TEntity>(message.NewModel);
-            
+
+             // validate all references are owned
+            await ValidateReferences<TEntity>(newModel, message.User);
+           
             // set ownership
             newModel.User = await Identity.FindApplicationUserAsync(UserManager, message.User);
 

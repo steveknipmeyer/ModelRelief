@@ -5,10 +5,14 @@
 // ------------------------------------------------------------------------//
 
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using ModelRelief.Api.V1.Shared;
 using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Database;
+using ModelRelief.Domain;
 using ModelRelief.Dto;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ModelRelief.Api.V1.Meshes
 {
@@ -24,7 +28,7 @@ namespace ModelRelief.Api.V1.Meshes
         public MeshPostAddRequestValidator (ModelReliefDbContext dbContext)
             : base (dbContext)
         {
-            RuleFor(m => m.NewModel).SetValidator(new MeshValidator());
+            RuleFor(r=> r.NewModel).SetValidator(new MeshValidator(dbContext));
         }
     }
 }

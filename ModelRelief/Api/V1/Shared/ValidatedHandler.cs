@@ -19,6 +19,9 @@ using ModelRelief.Domain;
 using System.Security.Claims;
 using ModelRelief.Utility;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation.Results;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace ModelRelief.Api.V1.Shared
 {
@@ -84,8 +87,85 @@ namespace ModelRelief.Api.V1.Shared
             where TEntity : DomainModel
         {
             var domainModel = await FindModelAsync<TEntity>(claimsPrincipal, id);
-            return domainModel == null;
+            return domainModel != null;
         }           
+
+        /// <summary>
+        /// Validated the property references of the given model to ensure they exist and are owned by the active user.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="model">Model to validate.</param>
+        /// <param name="claimsPrincipal">Active user for this request.</param>
+        public async Task ValidateReferences<TEntity> (TEntity model, ClaimsPrincipal claimsPrincipal)
+            where TEntity : DomainModel
+        {
+            var validationFailures = new List<ValidationFailure>();
+
+            Type type = model.GetType();
+            PropertyInfo[] properties = type.GetProperties();
+            foreach (PropertyInfo property in properties)
+            {
+                var propertyName  = property.Name;
+                var propertyValue = property.GetValue(model, null);
+
+                if (propertyName == "Id")
+                    continue;
+                if (propertyValue == null)
+                    continue;
+
+                // foreign key?
+                if (!propertyName.EndsWith("Id"))
+                    continue;
+
+                // find actual reference property
+                var referencePropertyName = propertyName.Substring(0, propertyName.LastIndexOf("Id"));
+                var referenceType         = type.GetProperty(referencePropertyName)?.PropertyType;
+                
+                if (referenceType == null)
+                    continue;
+
+                Console.WriteLine("Verifying reference property: " + propertyName + ", Value: " + propertyValue, null);
+
+                // https://stackoverflow.com/questions/298976/is-there-a-better-alternative-than-this-to-switch-on-type
+                var modelExists = false;
+                Func<ClaimsPrincipal, int, Task<bool>> modelExistsAsyncMethod = null;
+
+                switch(referenceType.Name) {
+                    case nameof(Domain.Camera):
+                        modelExistsAsyncMethod = ModelExistsAsync<Domain.Camera>;
+                        break;
+                    case nameof(Domain.DepthBuffer):
+                        modelExistsAsyncMethod = ModelExistsAsync<Domain.DepthBuffer>;
+                        break;
+                    case nameof(Domain.MeshTransform):
+                        modelExistsAsyncMethod = ModelExistsAsync<Domain.MeshTransform>;
+                        break;
+                    case nameof(Domain.Model3d):
+                        modelExistsAsyncMethod = ModelExistsAsync<Domain.Model3d>;
+                        break;
+                    case nameof(Domain.Project):
+                        modelExistsAsyncMethod = ModelExistsAsync<Domain.Project>;
+                        break;
+
+                    case nameof(ApplicationUser):
+                        continue;
+                    default:
+                        var message = "Unexpected type encountered in ValidatedHandler:ValidateReferences";
+                        Debug.Assert(false, message);
+                        throw new ArgumentException(message);
+                }
+
+                modelExists = await modelExistsAsyncMethod (claimsPrincipal, (int) propertyValue);
+                if (!modelExists)
+                    validationFailures.Add(new ValidationFailure(propertyName, $"Property '{propertyName}' references an entity that does not exist."));
+            }
+
+            if (validationFailures.Count() > 0)
+            {
+                // package TRequest type with FV ValidationException
+                throw new ApiValidationException(typeof(TRequest), validationFailures);
+            }
+        }
 
         /// <summary>
         /// Abstract pre-handler; performns any initialization or setup required before the request is handled..
