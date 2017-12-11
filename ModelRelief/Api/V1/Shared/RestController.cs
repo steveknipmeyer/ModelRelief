@@ -113,16 +113,13 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="id">Id of model to update.</param>
         /// <param name="postRequest">TPost model containing a complete model.</param>
         /// <returns>TGetModel of updated model.</returns>
-        /// <remarks>The Id in the request parameters is reduntant with the TPostModel. It is present to differentiate from the signature of PostAdd.</remarks>
         [HttpPost("{id:int}")]
         public virtual async Task<IActionResult> PostUpdate(int id, [FromBody] TPostModel postRequest)
         {
-            // ensure Id is set
-            postRequest.Id = id;
-
             return await HandleRequestAsync(new PostUpdateRequest<TEntity, TPostModel, TGetModel>
             {
                 User = User,
+                Id = id,
                 UpdatedModel = postRequest
             });
         }

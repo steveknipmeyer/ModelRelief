@@ -278,7 +278,7 @@ namespace ModelRelief.Test.Integration.Meshes
         public async Task Put_InvalidIdPropertyReturnsNotFound()
         {
             // Arrange
-            var modelId = IdRange.Max();
+            var modelId = IdRange.Max() + 1;
             var updatedName = "Updated Name Property";
             var putModel = new 
             {
@@ -286,7 +286,7 @@ namespace ModelRelief.Test.Integration.Meshes
             };
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiMeshesUrl}/{modelId + 1}", putModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiMeshesUrl}/{modelId}", putModel);
 
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
 

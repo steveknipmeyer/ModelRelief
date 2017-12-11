@@ -188,15 +188,17 @@ namespace ModelRelief.Features
         /// <summary>
         /// Action handler for an Edit request.
         /// </summary>
+        /// <param name="id">Id of model to edit.</param>
         /// <param name="postRequest">Edited model to update.</param>
         /// <returns>Index page.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public virtual async Task<IActionResult> Edit(TPostModel postRequest)
+        public virtual async Task<IActionResult> Edit(int id, TPostModel postRequest)
         {
             var model = await HandleRequestAsync(new PostUpdateRequest<TEntity, TPostModel, TGetModel> 
             {
                 User = User,
+                Id = id,
                 UpdatedModel = postRequest
             });
 

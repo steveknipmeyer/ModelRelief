@@ -55,15 +55,18 @@ namespace ModelRelief.Api.V1.Shared.Rest
             var user = await Identity.GetApplicationUserAsync(UserManager, message.User);
             var targetModel = await DbContext.Set<TEntity>()
                                 .AsNoTracking()
-                                .Where(m => (m.Id == message.UpdatedModel.Id) && 
+                                .Where(m => (m.Id == message.Id) && 
                                             (m.UserId == user.Id))
                                 .SingleOrDefaultAsync();
 
             if (targetModel == null)
-                throw new EntityNotFoundException(typeof(TEntity), message.UpdatedModel.Id);
+                throw new EntityNotFoundException(typeof(TEntity), message.Id);
 
             // update database model
             var updatedModel = Mapper.Map<TEntity>(message.UpdatedModel);
+
+            // ensure Id is set; PostModel may not have included the Id but it is always present in the PostUpdateRequest.
+            updatedModel.Id = message.Id;
 
              // set ownership
              updatedModel.User = await Identity.GetApplicationUserAsync(UserManager, message.User);

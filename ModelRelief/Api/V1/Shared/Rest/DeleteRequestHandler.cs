@@ -43,7 +43,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns></returns>
         public override async Task<object> OnHandle(DeleteRequest<TEntity> message, CancellationToken cancellationToken)
         {
-            // WIP: Qualify model query to include test for ownership.
             var user = await Identity.GetApplicationUserAsync(UserManager, message.User);
             var modelToRemove = await DbContext.Set<TEntity>()
                                 .Where(m => (m.Id == message.Id) && 

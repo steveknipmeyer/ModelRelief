@@ -6,7 +6,10 @@
         Scale with a Python processor.
 
     Issues
-        
+        Should the EntityNotFoundException be thrown by the RequestValidator instead of OnHandle?
+            OnHandle assumes the validation has already been done....
+            A RequestvValidator has an ExistsAsync method.
+
         User Validation
             User must be authenticated and authorized.
                 For any reference property, the referenced resource ID must belong to the user.

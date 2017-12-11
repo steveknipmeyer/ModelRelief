@@ -29,6 +29,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public ClaimsPrincipal User { get; set;}
 
         /// <summary>
+        /// Gets or sets the Id for the single model to be updated.
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         ///  Gets or sets the incoming model to be used to update the existing model.
         /// </summary>
         public TPostModel UpdatedModel { get; set; }
