@@ -48,6 +48,7 @@ namespace ModelRelief.Features.Models
         {
             var model = await HandleRequestAsync(new GetSingleRequest<Domain.Model3d, Dto.Model3d> 
             {
+                User = User,
                 Id = id
             });
 

@@ -6,9 +6,6 @@
         Scale with a Python processor.
 
     Issues
-        Why is MeshValidator called several time during a Put request?
-
-        The Project is populating the object graph too deeply.
         
         User Validation
             User must be authenticated and authorized.
@@ -20,6 +17,9 @@
                     PostAdd
                     PostFile
                     Delete 
+
+        The Project is populating the object graph too deeply.
+        Why is MeshValidator called several time during a Put request?
             
         Complete Views for Ux.
         Complete controllers for Api.
