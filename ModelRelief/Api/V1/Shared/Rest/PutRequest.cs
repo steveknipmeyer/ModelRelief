@@ -61,10 +61,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// Builds the UpdatedModel property containing the complete composition of old and new properties.
         /// </summary>
         /// <returns>TGetModel</returns>
-        public async Task<TGetModel> BuildUpdatedModel (UserManager<ApplicationUser> userManager, IMapper mapper)
+        public async Task<TGetModel> BuildUpdatedTGetModel (UserManager<ApplicationUser> userManager, IMapper mapper)
         {
-            var domainModel = await BuildDomainModel(userManager);
-            UpdatedModel = mapper.Map<TEntity, TGetModel>(domainModel);
+            var updatedDomainModel = await BuildUpdatedDomainModel(userManager);
+            UpdatedModel = mapper.Map<TEntity, TGetModel>(updatedDomainModel);
 
             return UpdatedModel;
         }
@@ -73,10 +73,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// Converts a PUT request to a domain model (for validation).
         /// </summary>
         /// <returns>Domain model</returns>
-        public async Task<TEntity> BuildDomainModel (UserManager<ApplicationUser> userManager)
+        public async Task<TEntity> BuildUpdatedDomainModel (UserManager<ApplicationUser> userManager)
         {
             // find target model
-            var user = await Identity.GetApplicationUserAsync(userManager, User);
+            var user = await Identity.FindApplicationUserAsync(userManager, User);
             var model = await DbContext.Set<TEntity>()
                 .Where(m => ((m.Id == this.Id) &&
                              (m.User.Id == user.Id)))

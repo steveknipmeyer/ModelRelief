@@ -38,7 +38,7 @@ namespace ModelRelief.Utility
         /// <param name="userManager">User Manager from DI</param>
         /// <param name="claimsPrincipal">HttpContext.User</param>
         /// <returns>USer</returns>
-        public static async Task<ApplicationUser> GetApplicationUserAsync (UserManager<ApplicationUser> userManager, ClaimsPrincipal claimsPrincipal)
+        public static async Task<ApplicationUser> FindApplicationUserAsync (UserManager<ApplicationUser> userManager, ClaimsPrincipal claimsPrincipal)
         {
         if ((claimsPrincipal == null) || (!claimsPrincipal.Identity.IsAuthenticated))
             throw new UserAuthenticationException();

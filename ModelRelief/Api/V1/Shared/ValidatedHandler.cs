@@ -16,6 +16,9 @@ using ModelRelief.Api.V1.Shared.Errors;
 using System;
 using Microsoft.AspNetCore.Identity;
 using ModelRelief.Domain;
+using System.Security.Claims;
+using ModelRelief.Utility;
+using Microsoft.EntityFrameworkCore;
 
 namespace ModelRelief.Api.V1.Shared
 {
@@ -51,6 +54,38 @@ namespace ModelRelief.Api.V1.Shared
                 .GroupBy(v => v.GetType().Name)
                 .Select(group => group.First());
         }
+
+        /// <summary>
+        /// Returns the domain model for a given Id.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="claimsPrincipal">Current HttpContext User.</param>
+        /// <param name="id">Target id to retrieve.</param>
+        /// <returns>Domain model if exists, null otherwise.</returns>
+        public virtual async Task<TEntity> FindModelAsync<TEntity> (ClaimsPrincipal claimsPrincipal, int id)
+            where TEntity : DomainModel
+        {
+            var user = await Identity.FindApplicationUserAsync(UserManager, claimsPrincipal);
+            var domainModel = await DbContext.Set<TEntity>()
+                                .Where(m => (m.Id == id) && 
+                                            (m.UserId == user.Id))
+                                .SingleOrDefaultAsync();
+            return domainModel;
+        }
+
+        /// <summary>
+        /// Returns true if the domain model exists for a given Id.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="claimsPrincipal">Current HttpContext User.</param>
+        /// <param name="id">Target id to test.</param>
+        /// <returns>True if model exists.</returns>
+        public virtual async Task<bool> ModelExistsAsync<TEntity> (ClaimsPrincipal claimsPrincipal, int id)
+            where TEntity : DomainModel
+        {
+            var domainModel = await FindModelAsync<TEntity>(claimsPrincipal, id);
+            return domainModel == null;
+        }           
 
         /// <summary>
         /// Abstract pre-handler; performns any initialization or setup required before the request is handled..

@@ -43,15 +43,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns></returns>
         public override async Task<object> OnHandle(DeleteRequest<TEntity> message, CancellationToken cancellationToken)
         {
-            var user = await Identity.GetApplicationUserAsync(UserManager, message.User);
-            var modelToRemove = await DbContext.Set<TEntity>()
-                                .Where(m => (m.Id == message.Id) && 
-                                            (m.UserId == user.Id))
-                                .SingleOrDefaultAsync();
-
-            if (modelToRemove == null) {
+            var modelToRemove = await FindModelAsync<TEntity>(message.User, message.Id);
+            if (modelToRemove == null)
                 throw new EntityNotFoundException(typeof(TEntity), message.Id);
-            }
 
             DbContext.Remove(modelToRemove);
 

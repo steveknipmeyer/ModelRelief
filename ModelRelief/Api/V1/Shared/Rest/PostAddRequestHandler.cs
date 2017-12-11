@@ -52,7 +52,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             var newModel = Mapper.Map<TEntity>(message.NewModel);
             
             // set ownership
-            newModel.User = await Identity.GetApplicationUserAsync(UserManager, message.User);
+            newModel.User = await Identity.FindApplicationUserAsync(UserManager, message.User);
 
             DbContext.Set<TEntity>().Add(newModel);
             await DbContext.SaveChangesAsync(cancellationToken);

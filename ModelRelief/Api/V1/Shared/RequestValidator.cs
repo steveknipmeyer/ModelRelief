@@ -31,6 +31,8 @@ namespace ModelRelief.Api.V1.Shared
         public RequestValidator(ModelReliefDbContext dbContext)
         {
             DbContext = dbContext;
+
+            // N.B. Existence cannot be tested here. A RequestValidator 
         }
 
         /// <summary>

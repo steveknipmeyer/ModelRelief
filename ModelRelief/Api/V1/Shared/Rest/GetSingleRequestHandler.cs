@@ -13,6 +13,7 @@ using ModelRelief.Api.V1.Shared.Errors;
 using ModelRelief.Database;
 using ModelRelief.Domain;
 using ModelRelief.Utility;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -47,17 +48,19 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns></returns>
         public override async Task<TGetModel> OnHandle(GetSingleRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
-            var user = await Identity.GetApplicationUserAsync(UserManager, message.User);
-            var result = await DbContext.Set<TEntity>()
-                                .Where(m => (m.Id == message.Id) && 
-                                            (m.UserId == user.Id))
-                                .ProjectTo<TGetModel>(Mapper.ConfigurationProvider)
-                                .SingleOrDefaultAsync();
-
-            if (result == null)
+            var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
+            if (targetModel == null)
                 throw new EntityNotFoundException(typeof(TEntity), message.Id);
 
-            return result;
+            // stop tracking to avoid conflicting tracking with updatedModel
+            DbContext.Entry(targetModel).State = EntityState.Detached;
+
+            // expand returned model
+            var expandedUpdatedModel = await DbContext.Set<TEntity>()
+                 .ProjectTo<TGetModel>(Mapper.ConfigurationProvider)
+                 .SingleOrDefaultAsync(m => m.Id == message.Id);
+
+            return expandedUpdatedModel;
         }
     }
 }

@@ -52,24 +52,21 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns></returns>
         public override async Task<TGetModel> OnHandle(PostUpdateRequest<TEntity, TPostModel, TGetModel> message, CancellationToken cancellationToken)
         {
-            var user = await Identity.GetApplicationUserAsync(UserManager, message.User);
-            var targetModel = await DbContext.Set<TEntity>()
-                                .AsNoTracking()
-                                .Where(m => (m.Id == message.Id) && 
-                                            (m.UserId == user.Id))
-                                .SingleOrDefaultAsync();
-
+            var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
             if (targetModel == null)
                 throw new EntityNotFoundException(typeof(TEntity), message.Id);
 
-            // update database model
+            // stop trackiing to avoid conflicting tracking with updatedModel
+            DbContext.Entry(targetModel).State = EntityState.Detached;
+
+            // update domain model
             var updatedModel = Mapper.Map<TEntity>(message.UpdatedModel);
 
             // ensure Id is set; PostModel may not have included the Id but it is always present in the PostUpdateRequest.
             updatedModel.Id = message.Id;
 
              // set ownership
-             updatedModel.User = await Identity.GetApplicationUserAsync(UserManager, message.User);
+             updatedModel.User = await Identity.FindApplicationUserAsync(UserManager, message.User);
 
             DbContext.Set<TEntity>().Update(updatedModel);
             await DbContext.SaveChangesAsync(cancellationToken);

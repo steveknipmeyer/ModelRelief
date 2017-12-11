@@ -62,7 +62,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public override async Task<TGetModel> OnHandle(PostFileRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
             // find ApplicationUser
-            var user = await Identity.GetApplicationUserAsync(UserManager, message.User);
+            var user = await Identity.FindApplicationUserAsync(UserManager, message.User);
 
             // populate model properties (placeholder Name)
             var newModel = new TEntity() {Name = "TBD"};
