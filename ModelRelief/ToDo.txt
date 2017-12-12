@@ -1,5 +1,4 @@
 ﻿<--- Commit
-Add ValidateReferences method to ValidatedHanndler to validate that all non-null reference properties are owned.
 
 <-- Tasks
     Goal : Roundtrip a scaled mesh.       
@@ -7,10 +6,6 @@ Add ValidateReferences method to ValidatedHanndler to validate that all non-null
 
     Issues
         Study notes.
-
-        Create a helper method in MeshesIntegrationTests.
-            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
-            apiErrorResult.HttpStatusCode.Should().Be((int) HttpStatusCode.BadRequest);
 
         The Project is populating the object graph too deeply.
         Why is MeshValidator called several time during a Put request?

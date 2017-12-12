@@ -99,6 +99,19 @@ namespace ModelRelief.Test.Integration.Meshes
             return invalidModel;
         }
 
+        /// <summary>
+        /// Asserts that the request returned a specific HTTP status code.
+        /// </summary>
+        /// <param name="requestResponse">Response.</param>
+        /// <param name="statusCode">Expected status code.</param>
+        private void AssertHttpStatusCode(RequestResponse requestResponse, HttpStatusCode statusCode)
+        {
+            Assert.False(requestResponse.Message.IsSuccessStatusCode);
+
+            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
+            apiErrorResult.HttpStatusCode.Should().Be(( int )statusCode);
+        }
+
 #region Get
         /// <summary>
         /// Test that a GetSingle request with an valid Id property value returns correct model.
@@ -188,10 +201,7 @@ namespace ModelRelief.Test.Integration.Meshes
             var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, ApiMeshesUrl, invalidModel);
 
             // Assert
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
-
-            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
-            apiErrorResult.HttpStatusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            AssertHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
 
         /// <summary>
@@ -231,10 +241,7 @@ namespace ModelRelief.Test.Integration.Meshes
             var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, ApiMeshesUrl, invalidModel);
 
             // Assert
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
-
-            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
-            apiErrorResult.HttpStatusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            AssertHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
 
         /// <summary>
@@ -275,10 +282,8 @@ namespace ModelRelief.Test.Integration.Meshes
             // Act
             var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiMeshesUrl}/{modelId + 1}", existingModel);
 
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
-
-            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
-            apiErrorResult.HttpStatusCode.Should().Be((int) HttpStatusCode.NotFound);
+            // Assert    
+            AssertHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
         }
 
         /// <summary>
@@ -319,11 +324,9 @@ namespace ModelRelief.Test.Integration.Meshes
 
             // Act
             var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiMeshesUrl}/{modelId}", existingModel);
-
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
-
-            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
-            apiErrorResult.HttpStatusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            
+            // Assert
+            AssertHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
 
 #endregion
@@ -347,11 +350,6 @@ namespace ModelRelief.Test.Integration.Meshes
             var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiMeshesUrl}/{modelId}", putModel);
 
             // Assert
-            if (!requestResponse.Message.IsSuccessStatusCode)
-            {
-                var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
-            }
-
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
             var updatedModel = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
@@ -376,10 +374,8 @@ namespace ModelRelief.Test.Integration.Meshes
             // Act
             var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiMeshesUrl}/{modelId}", putModel);
 
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
-
-            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
-            apiErrorResult.HttpStatusCode.Should().Be((int) HttpStatusCode.NotFound);
+            // Assert
+            AssertHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
         }
 
         /// <summary>
@@ -400,10 +396,7 @@ namespace ModelRelief.Test.Integration.Meshes
             var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiMeshesUrl}/{modelId}", invalidPutModel);
 
             // Assert
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
-
-            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
-            apiErrorResult.HttpStatusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            AssertHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
 
         /// <summary>
@@ -424,14 +417,11 @@ namespace ModelRelief.Test.Integration.Meshes
             var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiMeshesUrl}/{modelId}", invalidPutModel);
 
             // Assert
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
-
-            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
-            apiErrorResult.HttpStatusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            AssertHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
 
         /// <summary>
-        /// Test that a Put request with an valid reference property value returns BadRequest.
+        /// Test that a Put request with an invalid reference property value returns BadRequest.
         /// </summary>
         [Fact]
         [Trait ("Category", "Api Mesh")]
@@ -440,18 +430,43 @@ namespace ModelRelief.Test.Integration.Meshes
             // Arrange
             var modelId = IdRange.Max();
             var invalidPutModel = new
-                {
+            {
                 ProjectId = 0
-                };
+            };
 
             // Act
             var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiMeshesUrl}/{modelId}", invalidPutModel);
 
             // Assert
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
+            AssertHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+        }
+
+        /// <summary>
+        /// Test that a Put request with two invalid reference properties returns BadRequest and two validation errors.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "Api Mesh")]
+        public async Task Put_MultipleInvalidReferencePropertiesReturnsMultipleValidationErrorsAndBadRequest()
+        {
+            // Arrange
+            var modelId = IdRange.Max();
+            var invalidReferenceProperties = 3;
+            var invalidPutModel = new
+            {
+                ProjectId = 0,
+                CameraId  = 0,
+                DepthBufferId = 0
+            };
+
+            // Act
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiMeshesUrl}/{modelId}", invalidPutModel);
+
+            // Assert
+            AssertHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
 
             var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
-            apiErrorResult.HttpStatusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            apiErrorResult.Errors.Count().Should().Be(invalidReferenceProperties);
+
         }
 
         /// <summary>
@@ -501,10 +516,7 @@ namespace ModelRelief.Test.Integration.Meshes
             requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiMeshesUrl}/{modelId}");
 
             // Assert
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
-
-            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
-            apiErrorResult.HttpStatusCode.Should().Be((int) HttpStatusCode.NotFound);
+            AssertHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
         }
 
         /// <summary>
@@ -521,10 +533,7 @@ namespace ModelRelief.Test.Integration.Meshes
             var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Delete, $"{ApiMeshesUrl}/{modelId}");
 
             // Assert
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
-
-            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
-            apiErrorResult.HttpStatusCode.Should().Be((int) HttpStatusCode.NotFound);
+            AssertHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
         }
 #endregion
     }
