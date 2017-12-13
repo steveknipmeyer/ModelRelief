@@ -1,0 +1,71 @@
+﻿@model ModelRelief.Dto.MeshTransform
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<h4>MeshTransform</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProjectId" class="control-label"></label>
+                <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Depth" class="control-label"></label>
+                <input asp-for="Depth" class="form-control" />
+                <span asp-validation-for="Depth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Width" class="control-label"></label>
+                <input asp-for="Width" class="form-control" />
+                <span asp-validation-for="Width" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Tau" class="control-label"></label>
+                <input asp-for="Tau" class="form-control" />
+                <span asp-validation-for="Tau" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SigmaGaussianBlur" class="control-label"></label>
+                <input asp-for="SigmaGaussianBlur" class="form-control" />
+                <span asp-validation-for="SigmaGaussianBlur" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SigmaGaussianSmooth" class="control-label"></label>
+                <input asp-for="SigmaGaussianSmooth" class="form-control" />
+                <span asp-validation-for="SigmaGaussianSmooth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LambdaLinearScaling" class="control-label"></label>
+                <input asp-for="LambdaLinearScaling" class="form-control" />
+                <span asp-validation-for="LambdaLinearScaling" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

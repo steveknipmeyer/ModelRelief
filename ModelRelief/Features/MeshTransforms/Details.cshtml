@@ -1,0 +1,74 @@
+﻿@model ModelRelief.Dto.MeshTransform
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>MeshTransform</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Project)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Project.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Depth)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Depth)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Width)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Width)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tau)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Tau)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SigmaGaussianBlur)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SigmaGaussianBlur)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SigmaGaussianSmooth)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SigmaGaussianSmooth)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LambdaLinearScaling)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LambdaLinearScaling)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

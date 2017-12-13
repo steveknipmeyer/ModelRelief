@@ -1,0 +1,77 @@
+﻿@model ModelRelief.Dto.MeshTransform
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>MeshTransform</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Project)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Project.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Depth)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Depth)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Width)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Width)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tau)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Tau)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SigmaGaussianBlur)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SigmaGaussianBlur)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SigmaGaussianSmooth)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SigmaGaussianSmooth)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LambdaLinearScaling)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LambdaLinearScaling)
+        </dd>
+    </dl>
+    
+    <form asp-action="DeleteConfirmed">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>
