@@ -1,4 +1,5 @@
 ﻿<--- Commit
+Add Project Views.
 
 <-- Tasks
     Goal : Roundtrip a scaled mesh.       
@@ -11,25 +12,6 @@
     Checklist
         Edit view must include the model ID in the form post.
         Delete button posts to DeleteConfirmed.
-
-    Complete Views for Ux.
-
-        MeshTransform
-            Name 
-            Description
-            Project
-    
-            Depth
-            Width
-
-            Tau
-            SigmaGaussianBlur
-            SigmaGaussianSmooth
-            LambdaLinearScaling
-
-        Project
-            Name 
-            Description
 
     Complete controllers for Api.
         Camera
