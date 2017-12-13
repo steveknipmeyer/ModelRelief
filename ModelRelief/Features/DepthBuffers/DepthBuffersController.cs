@@ -12,13 +12,13 @@ using ModelRelief.Domain;
 using ModelRelief.Utility;
 using System.Threading.Tasks;
 
-namespace ModelRelief.Features.Meshes
+namespace ModelRelief.Features.DepthBuffers
 {
     /// <summary>
-    /// Represents a controller to handle Mesh Ux requests.
+    /// Represents a controller to handle DepthBuffer Ux requests.
     /// </summary>
     [Authorize]
-    public class MeshesController : ViewController<Domain.Mesh, Dto.Mesh, Dto.Mesh, Dto.Mesh>
+    public class DepthBuffersController : ViewController<Domain.DepthBuffer, Dto.DepthBuffer, Dto.DepthBuffer, Dto.DepthBuffer>
     {
         /// <summary>
         /// Constructor
@@ -27,7 +27,7 @@ namespace ModelRelief.Features.Meshes
         /// <param name="dbContext">Database context</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="mediator">IMediator</param>
-        public MeshesController(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator)
+        public DepthBuffersController(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator)
             : base(userManager, dbContext, mapper, mediator)
         {
         }
@@ -35,18 +35,17 @@ namespace ModelRelief.Features.Meshes
         /// <summary>
         /// Setup View controls for select controls, etc.
         /// </summary>
-        /// <param name="mesh">Mesh instance for View.</param>
-        protected async override Task InitializeViewControls(Dto.Mesh mesh = null)
+        /// <param name="depthBuffer">DepthBuffer instance for View.</param>
+        protected async override Task InitializeViewControls(Dto.DepthBuffer depthBuffer = null)
         {
             var applicationUser = await Identity.FindApplicationUserAsync(UserManager, User);
             var userId = applicationUser?.Id ?? "";
 
-            ViewBag.MeshFormats     = ViewHelpers.PopulateEnumDropDownList<MeshFormat>("Select mesh format");
+            ViewBag.DepthBufferFormats  = ViewHelpers.PopulateEnumDropDownList<DepthBufferFormat>("Select depth buffer format");
 
-            ViewBag.ProjectId       = ViewHelpers.PopulateModelDropDownList<Project>(DbContext, userId, "Select a project", mesh?.ProjectId);
-            ViewBag.CameraId        = ViewHelpers.PopulateModelDropDownList<Camera>(DbContext, userId, "Select a camera", mesh?.CameraId);
-            ViewBag.DepthBufferId   = ViewHelpers.PopulateModelDropDownList<DepthBuffer>(DbContext, userId, "Select a depth buffer", mesh?.DepthBufferId);
-            ViewBag.MeshTransformId = ViewHelpers.PopulateModelDropDownList<MeshTransform>(DbContext, userId, "Select a mesh transform", mesh?.CameraId);
+            ViewBag.ProjectId = ViewHelpers.PopulateModelDropDownList<Project>(DbContext, userId, "Select a project", depthBuffer?.ProjectId);
+            ViewBag.ModelId   = ViewHelpers.PopulateModelDropDownList<Model3d>(DbContext, userId, "Select a model", depthBuffer?.ModelId);
+            ViewBag.CameraId  = ViewHelpers.PopulateModelDropDownList<Camera>(DbContext, userId, "Select a camera", depthBuffer?.CameraId);
         }
     }
 }

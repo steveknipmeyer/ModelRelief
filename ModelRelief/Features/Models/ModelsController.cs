@@ -70,7 +70,8 @@ namespace ModelRelief.Features.Models
             var applicationUser = await Identity.FindApplicationUserAsync(UserManager, User);
             var userId = applicationUser?.Id ?? "";
 
-            ViewBag.ModelFormats = ViewHelpers.PopulateEnumDropDownList<Model3dFormat>("Select Model Format");
+            ViewBag.ModelFormats = ViewHelpers.PopulateEnumDropDownList<Model3dFormat>("Select model format");
+
             ViewBag.ProjectId    = ViewHelpers.PopulateModelDropDownList<Project>(DbContext, userId, "Select a project", model?.ProjectId);
             ViewBag.CameraId     = ViewHelpers.PopulateModelDropDownList<Camera>(DbContext, userId, "Select a camera", model?.CameraId);
         }
