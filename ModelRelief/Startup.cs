@@ -29,6 +29,7 @@ using Microsoft.AspNetCore.Identity;
 using ModelRelief.Domain;
 using System.Security.Claims;
 using ModelRelief.Utility;
+using ModelRelief.Middleware;
 
 namespace ModelRelief
 {
@@ -174,28 +175,11 @@ namespace ModelRelief
 
             app.AddStaticFilePaths(env.ContentRootPath, new string[] {"node_modules", "Scripts"});
             app.UseAuthentication();
-
-            // custom authentication middleware
+            
+            // authentication middleware for testing
             app.Use(async (context, next) =>
             {
-                bool isAuthenticated = context.User.Identity.IsAuthenticated;
-                if (env.IsEnvironment("Test") && !isAuthenticated)
-                {
-                    context.User = new System.Security.Claims.ClaimsPrincipal(new GenericIdentity(Identity.MockUserName));
-#if false
-                    // WIP: Creating a ClaimsPrincipal here yields an exception about access of a Disposed object.    
-                    var userName = configurationProvider.GetSetting("TestAccount:UserName");
-                    var password = configurationProvider.GetSetting("TestAccount:Password");
-
-                    var user = await userManager.FindByNameAsync(userName);
-                    ClaimsPrincipal claimsPrincipal = await signInManager.CreateUserPrincipalAsync(user);
-                    context.User = new System.Security.Claims.ClaimsPrincipal(claimsPrincipal);
-#endif                    
-                    isAuthenticated = context.User.Identity.IsAuthenticated;
-                    Console.WriteLine($"{Identity.MockUserName} authenticated: {isAuthenticated}");
-                }
-
-                await next();
+                await Authentication.Test(env, context, next);
             });
 
             app.UseMvc(ConfigureRoutes);
