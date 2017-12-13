@@ -18,7 +18,7 @@ namespace ModelRelief.Features
 {
     public abstract class ViewController<TEntity, TGetModel, TSingleGetModel, TPostModel> : UxController
         where TEntity         : DomainModel
-        where TGetModel       : class, IIdModel           // class to allow default null parameter in InitializeViewControls
+        where TGetModel       : class, IIdModel, new()            // class to allow default null parameter in InitializeViewControls
         where TSingleGetModel : IIdModel
         where TPostModel      : IIdModel               
     {
@@ -137,7 +137,7 @@ namespace ModelRelief.Features
         public async virtual Task<ActionResult> Create()
         {
             await InitializeViewControls();
-            return View();
+            return View(new TGetModel());
         }
 
         /// <summary>

@@ -3,16 +3,49 @@
 <-- Tasks
     Goal : Roundtrip a scaled mesh.       
         Scale with a Python processor.
+    
+    Edit and Create Views are identical. Should they use a shared ViewComponent?
+    
+    Checklist
+        Edit view must include the model ID in the form post.
+        Delete button posts to DeleteConfirmed.
 
-    Issues
-        Separate middelware for authentication (Test).
+    Complete Views for Ux.
 
-        Why is MeshValidator called several time during a Put request?
-            
-        Complete Views for Ux.
-        Complete controllers for Api.
+        DepthBuffer
+            Name 
+            Description
+            Project
 
-        How should file extensions be handled?
+            Format
+
+            Model
+            Camera
+
+        MeshTransform
+            Name 
+            Description
+            Project
+    
+            Depth
+            Width
+
+            Tau
+            SigmaGaussianBlur
+            SigmaGaussianSmooth
+            LambdaLinearScaling
+
+        Project
+            Name 
+            Description
+
+    Complete controllers for Api.
+        Camera
+        MeshTransform
+        Model3d
+        Project
+
+    How should file extensions be handled?
 
 <-- Technical Education
         Manning AspNet Core book.
@@ -258,6 +291,7 @@
             This happens only if the view has been <panned>.
 
 <-- Optimization
+    Why is MeshValidator called several time during a Put request?
 
     Optimize BoundingBox procesing.
 

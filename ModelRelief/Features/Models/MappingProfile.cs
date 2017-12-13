@@ -12,6 +12,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ModelRelief.Dto
 {
+    /// <summary>
+    /// Represents a DataTransferObject (DTO) for a Model3d.
+    /// </summary>
     public class Model3d : IIdModel
     {
         public int Id { get; set; }
@@ -28,9 +31,23 @@ namespace ModelRelief.Dto
 
         public int? CameraId { get; set; }
         public Dto.Camera Camera { get; set; }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public Model3d()
+        {
+        }
     }
+
+    /// <summary>
+    /// FV validator to support Views and model-binding validation.
+    /// </summary>
     public class Model3dValidator : AbstractValidator<Dto.Model3d>
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public Model3dValidator()
         {
             RuleFor(m => m.Name)
@@ -46,10 +63,16 @@ namespace ModelRelief.Dto
     }
 }
 
-namespace ModelRelief.Features.ModelsBaseline
+namespace ModelRelief.Features.Models
 {
+    /// <summary>
+    /// AutoMapper mapping profile.
+    /// </summary>
     public class MappingProfile : Profile
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public MappingProfile() 
             {
                 CreateMap<Domain.Model3d, Dto.Model3d>().ReverseMap();

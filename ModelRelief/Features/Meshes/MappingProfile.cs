@@ -16,6 +16,9 @@ using System.Threading.Tasks;
 
 namespace ModelRelief.Dto
 {
+    /// <summary>
+    /// Represents a DataTransferObject (DTO) for a Mesh.
+    /// </summary>
     public class Mesh : IIdModel
     {
         public int Id { get; set; }
@@ -38,10 +41,23 @@ namespace ModelRelief.Dto
 
         public int? MeshTransformId { get; set; }
         public Dto.MeshTransform MeshTransform { get; set; }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public Mesh()
+        {
+        }
     }
 
+    /// <summary>
+    /// FV validator to support Views and model-binding validation.
+    /// </summary>
     public class MeshValidator : AbstractValidator<Dto.Mesh>
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public MeshValidator()
         {
             RuleFor(m => m.Name)
@@ -55,23 +71,19 @@ namespace ModelRelief.Dto
             RuleFor(m => m.Format)
                 .NotEmpty().WithMessage("The file format must be provided.");
         }
-
-        private async Task<bool> IsOwned<TEntity> (ModelReliefDbContext dbContext, int id, string userId)
-            where TEntity : DomainModel
-        {
-            var domainModel = await dbContext.Set<TEntity>()
-                        .Where(m => (m.Id == id) && 
-                                    (m.UserId == userId))
-                        .SingleOrDefaultAsync();
-            return domainModel != null;
-        }
     }
 }
 
 namespace ModelRelief.Features.Meshes
 {
+    /// <summary>
+    /// AutoMapper mapping profile.
+    /// </summary>
     public class MappingProfile : Profile
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public MappingProfile() 
         {
             CreateMap<Domain.Mesh, Dto.Mesh>().ReverseMap();

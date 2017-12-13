@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 namespace ModelRelief.Features.Models
 {
     /// <summary>
-    /// Represents a controller to handle Model API requests.
+    /// Represents a controller to handle Model Ux requests.
     /// </summary>
     [Authorize]
     public class ModelsController : ViewController<Domain.Model3d, Dto.Model3d, Dto.Model3d, Dto.Model3d>

@@ -1,0 +1,105 @@
+﻿@model ModelRelief.Dto.Camera
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Camera</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Project)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Project.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StandardView)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StandardView)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FieldOfView)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FieldOfView)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Near)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Near)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Far)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Far)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BoundClippingPlanes)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BoundClippingPlanes)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PositionX)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PositionX)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PositionY)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PositionY)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PositionZ)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PositionZ)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LookAtX)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LookAtX)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LookAtY)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LookAtY)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LookAtZ)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LookAtZ)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

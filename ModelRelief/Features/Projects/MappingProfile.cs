@@ -5,12 +5,13 @@
 // ------------------------------------------------------------------------//
 
 using AutoMapper;
-using ModelRelief.Domain;
+using FluentValidation;
+using ModelRelief.Api.V1.Shared.Rest;
 using System.ComponentModel.DataAnnotations;
 
 namespace ModelRelief.Dto
 {
-    public class Project
+    public class Project: IIdModel
     {
         public int Id { get; set; }
 
@@ -18,11 +19,23 @@ namespace ModelRelief.Dto
         public string Name { get; set; }
         public string Description { get; set; }
     }
+
+    public class ProjectValidator : AbstractValidator<Dto.Project>
+    {
+        public ProjectValidator()
+        {
+            RuleFor(m => m.Name)
+                .NotNull().WithMessage("The Name property is required.");
+         
+            RuleFor(m => m.Description)
+                .NotNull().WithMessage("The Description property is required.");
+        }
+    }
 }
 
 namespace ModelRelief.Features.Projects
-{
-    public class MappingProfile : Profile
+    {
+        public class MappingProfile : Profile
     {
         public MappingProfile() 
         {

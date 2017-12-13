@@ -12,13 +12,13 @@ using ModelRelief.Domain;
 using ModelRelief.Utility;
 using System.Threading.Tasks;
 
-namespace ModelRelief.Features.Meshes
+namespace ModelRelief.Features.Cameras
 {
     /// <summary>
-    /// Represents a controller to handle Mesh Ux requests.
+    /// Represents a controller to handle Camera Ux requests.
     /// </summary>
     [Authorize]
-    public class MeshesController : ViewController<Domain.Mesh, Dto.Mesh, Dto.Mesh, Dto.Mesh>
+    public class CamerasController : ViewController<Domain.Camera, Dto.Camera, Dto.Camera, Dto.Camera>
     {
         /// <summary>
         /// Constructor
@@ -27,7 +27,7 @@ namespace ModelRelief.Features.Meshes
         /// <param name="dbContext">Database context</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="mediator">IMediator</param>
-        public MeshesController(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator)
+        public CamerasController(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator)
             : base(userManager, dbContext, mapper, mediator)
         {
         }
@@ -35,17 +35,14 @@ namespace ModelRelief.Features.Meshes
         /// <summary>
         /// Setup View controls for select controls, etc.
         /// </summary>
-        /// <param name="mesh">Mesh instance for View.</param>
-        protected async override Task InitializeViewControls(Dto.Mesh mesh = null)
+        /// <param name="camera">Camera instance for View.</param>
+        protected async override Task InitializeViewControls(Dto.Camera camera = null)
         {
             var applicationUser = await Identity.FindApplicationUserAsync(UserManager, User);
             var userId = applicationUser?.Id ?? "";
 
-            ViewBag.MeshFormats     = ViewHelpers.PopulateEnumDropDownList<MeshFormat>("Select Mesh Format");
-            ViewBag.ProjectId       = ViewHelpers.PopulateModelDropDownList<Project>(DbContext, userId, "Select a project", mesh?.ProjectId);
-            ViewBag.CameraId        = ViewHelpers.PopulateModelDropDownList<Camera>(DbContext, userId, "Select a camera", mesh?.CameraId);
-            ViewBag.DepthBufferId   = ViewHelpers.PopulateModelDropDownList<DepthBuffer>(DbContext, userId, "Select a depth buffer", mesh?.DepthBufferId);
-            ViewBag.MeshTransformId = ViewHelpers.PopulateModelDropDownList<MeshTransform>(DbContext, userId, "Select a mesh transform", mesh?.CameraId);
+            ViewBag.StandardViews   = ViewHelpers.PopulateEnumDropDownList<StandardView>("Select a standard camera view");
+            ViewBag.ProjectId       = ViewHelpers.PopulateModelDropDownList<Project>(DbContext, userId, "Select a project", camera?.ProjectId);
         }
     }
 }

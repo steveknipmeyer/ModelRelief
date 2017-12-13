@@ -1,0 +1,99 @@
+﻿@model ModelRelief.Dto.Camera
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<h4>Camera</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProjectId" class="control-label"></label>
+                <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="StandardView" class="control-label"></label>
+                <select asp-for="StandardView" class="form-control" asp-items="ViewBag.StandardViews"></select>
+                <span asp-validation-for="StandardView" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FieldOfView" class="control-label"></label>
+                <input asp-for="FieldOfView" class="form-control" />
+                <span asp-validation-for="FieldOfView" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Near" class="control-label"></label>
+                <input asp-for="Near" class="form-control" />
+                <span asp-validation-for="Near" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Far" class="control-label"></label>
+                <input asp-for="Far" class="form-control" />
+                <span asp-validation-for="Far" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="BoundClippingPlanes" /> @Html.DisplayNameFor(model => model.BoundClippingPlanes)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PositionX" class="control-label"></label>
+                <input asp-for="PositionX" class="form-control" />
+                <span asp-validation-for="PositionX" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PositionY" class="control-label"></label>
+                <input asp-for="PositionY" class="form-control" />
+                <span asp-validation-for="PositionY" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PositionZ" class="control-label"></label>
+                <input asp-for="PositionZ" class="form-control" />
+                <span asp-validation-for="PositionZ" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LookAtX" class="control-label"></label>
+                <input asp-for="LookAtX" class="form-control" />
+                <span asp-validation-for="LookAtX" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LookAtY" class="control-label"></label>
+                <input asp-for="LookAtY" class="form-control" />
+                <span asp-validation-for="LookAtY" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LookAtZ" class="control-label"></label>
+                <input asp-for="LookAtZ" class="form-control" />
+                <span asp-validation-for="LookAtZ" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
