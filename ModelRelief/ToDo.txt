@@ -5,9 +5,8 @@
         Scale with a Python processor.
 
     Issues
-        Study notes.
+        Separate middelware for authentication (Test).
 
-        The Project is populating the object graph too deeply.
         Why is MeshValidator called several time during a Put request?
             
         Complete Views for Ux.
@@ -15,39 +14,54 @@
 
         How should file extensions be handled?
 
-        Design the mechanism for generating a Mesh.
-            Mesh Post (create) or Mesh Put (update)?
-            Is a PutFileRequest required to update an existing file. It is analogous to PostFileRequest.
-                PostFileRequest, PutFileRequest
-                PostAddRequest, PostUpdateRequest
-
+<-- Technical Education
         Manning AspNet Core book.
         Manning Dependency Injection book.
 
-        Integration Tests
-            UserAuthenticatiosnException
-            How can XUnit be used to test all properties of a resource?
-                Iterate through the property list of a Domain model.
-            Ux Endpoints                    
-                Data must be form-encoded not JSON?
-                The [ValidateAntiForgeryToken] attribute leads to an exception.
-                Why is an exception thrown during the Razor compilation of the Error View?
-            Split Api and Ux into separate assemblies?
-                Can the ServerFixture be in a separate assembly?
+<-- Api Design
+    Add authentication support!
+    The Project is populating the object graph too deeply.
 
-        Api
-            Add authentication support!
+    Design the mechanism for generating a Mesh.
+        Mesh Post (create) or Mesh Put (update)?
+        Is a PutFileRequest required to update an existing file. It is analogous to PostFileRequest.
+            PostFileRequest, PutFileRequest
+            PostAddRequest, PostUpdateRequest
 
-        Logging
-        Exception handling
-            The ApiValidationResult exposes too much about internals in the developer message (RequestType).
+        // File Upload
+        Url: api/depth-buffers
+        [HttpPost]
+        [Consumes "application/octet-stream"]
+        // Returns Id
 
-            How should database exceptions, such as those violating Domain DataAnnotation rules, be handled?
-            https://andrewlock.net/using-cancellationtokens-in-asp-net-core-mvc-controllers/
-            Concurrency exceptions?
+        // Metadata (JSON) Upload
+        Url: api/depth-buffers/id
+        [HttpPut]
+        [Consumes "application/json]
+        {Id : <from 1st post>}
+        
+        Mesh Post: Create a mesh from a DepthBuffer and a MeshTransform.
+            HTTP Post
+                DepthBuffer Id
+                MeshTransform Id
+            HTTP Response
+                URL (newly-created Mesh)
 
-            SqliteException: SQLite Error 5: 'database is locked'.
-                PostFileRequestHandler : DbContext.SaveChanges();
+    Enhancements
+        Express relationships as "href" properties to absolute URLs.
+        Provide "reference expansion" to allow references to be expanded into the principal object.
+
+    Stormpath Pattern
+        Rich error message:
+            Status Code         HttpStatusCode                   
+            Code                ApiStatusCode
+            Message             Errors[]
+            DeveloperMessage    DeveloperMessage   
+            API Reference       ApiReference
+
+<-- Front End
+    Export    
+        Refactor Export OBJ to use async/await.
 
     Accessing Model From JavaScript
         https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
@@ -58,27 +72,65 @@
         Use jQuery!
         Wait for file POST to complete before initiating the second metadata POST.
 
-    Export    
-        Refactor Export OBJ to use async/await.
+    Webpack
 
-<-- Unit Testing
+<-- Logging
+    Review the ILogger interface. How should this work with a Controller?
+        namespace Microsoft.Extensions.Logging
+        {
+            //
+            // Summary:
+            //     A generic interface for logging where the category name is derived from the specified
+            //     TCategoryName type name. Generally used to enable activation of a named Microsoft.Extensions.Logging.ILogger
+            //     from dependency injection.
+            //
+            // Type parameters:
+            //   TCategoryName:
+            //     The type who's name is used for the logger category name.
+            public interface ILogger<out TCategoryName> : ILogger
+            {
+            }
+        }
+
+<-- Exception handling
+    The ApiValidationResult exposes too much about internals in the developer message (RequestType).
+
+    How should database exceptions, such as those violating Domain DataAnnotation rules, be handled?
+    https://andrewlock.net/using-cancellationtokens-in-asp-net-core-mvc-controllers/
+    Concurrency exceptions?
+
+    SqliteException: SQLite Error 5: 'database is locked'.
+        PostFileRequestHandler : DbContext.SaveChanges();
+
+    Throwing policy.
+        https://stackoverflow.com/questions/2999298/difference-between-throw-and-throw-new-exception        
+
+<-- Testing
     Support database authentication.
 
-    API Testing Mocks
-        How can RouteNames.ApiDocumentation be registered as a route?
-        Schema
-        Host
-        Port
+    Integration Tests
+        UserAuthenticatiosnException
+        How can XUnit be used to test all properties of a resource?
+            Iterate through the property list of a Domain model.
+        Ux Endpoints                    
+            Data must be form-encoded not JSON?
+            The [ValidateAntiForgeryToken] attribute leads to an exception.
+            Why is an exception thrown during the Razor compilation of the Error View?
+        Split Api and Ux into separate assemblies?
+            Can the ServerFixture be in a separate assembly?
+
+    Unit Tests                
+        API Testing Mocks
+            How can RouteNames.ApiDocumentation be registered as a route?
+            Schema
+            Host
+            Port
 
 <-- Mediator
 
     Mediator Pipeline
         Should there be top-level logging and exception handling in a pipeline wrapper?
         https://codeopinion.com/fat-controller-cqrs-diet-command-pipeline/
-        Authorization
-            Extend the Authorize attribute to allow checking for a user-owned resource.
-        Logging
-        Exception Handling
 
 <-- Opinionated API
     https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-api/
@@ -87,7 +139,7 @@
         Benefits
             Paging
             PUT (partial property list) support
-            GET populates related entities
+            GET populates related entities (ProjectTo)
 
         abstract ApiController
                 HandleRequestAsync
@@ -98,6 +150,8 @@
                 HttpDelete
                 <Model>Controller
                     overrides
+                    extensions
+                        Viewer
 
         abstract ValidatedHandler
             <Request>Handler
@@ -106,16 +160,16 @@
             <Model><Request>Validator
 
         Pipeline
-            DbContextTransactionFilter.OnActionExecutionAsync
-                begin transaction
-                    ValidationActionFilter.OnActionExecuting
-                        RestController HTTP Action
-                            ApiController.HandleAsyncRequest
-                                var response = await Mediator.Send(request);
-                                    ValidatatedHandler.Handle
-                                        RequestHandler.Handle
-                    ValidationActionFilter.OnActionExecuted
-                end transaction
+            Custom authentication middleware (Test)
+                DbContextTransactionFilter.OnActionExecutionAsync
+                    begin transaction
+                        Validators (Model-binding before action method)
+                            RestController HTTP Action
+                                ApiController.HandleAsyncRequest
+                                    var response = await Mediator.Send(request);
+                                        ValidatatedHandler.Handle
+                                            RequestHandler.Handle
+                    end transaction
     
 <-- Autofac
     ASP.NET Core
@@ -137,8 +191,7 @@
 <-- Fluent Validation
     https://github.com/JeremySkinner/FluentValidation
 
-
-<-- API Design
+<-- API Best Practices
     e-Book on API Design
 
     Design Guidelines
@@ -152,46 +205,9 @@
         Documentation
             https://github.com/domaindrivendev/Swashbuckle.AspNetCore
 
-<-- API 
-
-    Ideas
-        Stormpath
-            Use UUID not sequential integer keys in database. This will scale better.
-            Rich error message:
-                Status Code
-                Code
-                Message
-                DeveloperMessage
-                API Reference
-            Express relationships as "href" properties to absolute URLs.
-            Provide "reference expansion" to allow references to be expanded into the principal object.
-
-        // File Upload
-        Url: api/depth-buffers
-        [HttpPost]
-        [Consumes "application/octet-stream"]
-        // Returns Id
-
-        // Metadata (JSON) Upload
-        Url: api/depth-buffers/id
-        [HttpPut]
-        [Consumes "application/json]
-        {Id : <from 1st post>}
-        
-        Mesh Post: Process a relief from a DepthBuffer and a MeshTransform.
-            HTTP Post
-                DepthBuffer Id
-                MeshTransform Id
-            HTTP Response
-                URL (Mesh)
-
-<-- System
-    Throwing policy.
-        https://stackoverflow.com/questions/2999298/difference-between-throw-and-throw-new-exception        
-
 <-- File Transfers
         JavaScript
-            These solutions are for saving files on the client (not server) side/.
+            These solutions are for saving files on the client (not server) side.
                 https://github.com/eligrey/FileSaver.js/
                 https://github.com/jimmywarting/StreamSaver.js
 
@@ -211,7 +227,8 @@
     Viewer.cshtml
         Models
             3D Model
-            DepthBuffer
+            DepthBuffer (created by View settings)
+            Mesh (created by mesh generation)
 
         Views
             ComposerView
@@ -232,7 +249,6 @@
 
     Progress Indicator
     OrbitControls versus Trackball
-
     Add MaterialLoader.
 
     Create a set of sample materials such as wood, glass, plaster, etc.
@@ -251,16 +267,12 @@
     Memory management!
         https://blog.sessionstack.com/how-javascript-works-memory-management-how-to-handle-4-common-memory-leaks-3f28b94cfbec
 
-<-- Tools
-
-    Webpack
-
 <-- ASPNET Core
 
     What is the cause of these NET Warnings? They seem to be related to the Entity Framework.
         1701;1702;1705
 
-<-- Debugging Workflows
+<-- VSCode Debugging Workflows
 
     Command Line
         FE: Chrome   BE: VSCode  TypeScript: automatic  Reload: automatic
@@ -285,7 +297,6 @@
     VSCode Resources
         https://stackoverflow.com/questions/43628397/debug-typescript-in-vscode-with-asp-net-core
         https://code.visualstudio.com/blogs/2016/02/23/introducing-chrome-debugger-for-vs-code
-        https://github.com/Microsoft/vscode-chrome-debug
 
 
 <-- Depth Buffer Notes
@@ -296,7 +307,6 @@
 
     The range of the depth buffer is based on the distance between the Near and Far planes. 
         If the Near and Far planes bound the model, the range will be [0.1].
-
 
 <-- Database Design   
     https://stackoverflow.com/questions/33197402/link-asp-net-identity-users-to-user-detail-table
@@ -309,22 +319,20 @@
 
     Phase II       
          Materials
-            Id
-            Name
-            Description
+            DomainModel
 
-         Lighting
-            Light[]      
+        Model3d
+            Material
+            LightingSetup
 
-         Scene
-            Id
-            Name
-            Description
+        LightingSetup
+            DomainModel
 
-            Model3d Id
-            Material Id
-            Lighting Id
-            Camera Id
+        LightingSetupLights (join table)
+            DomainModel
+            Lighting ID
+            Light ID
+            A supporting join table is needed to connect a lighting configuration with the individual lights.
 
     SQL Server Studio
         Connnect to a locadb from Studio
@@ -341,16 +349,13 @@
             Last start time:    9/19/2017 6:57:25 AM
             Instance pipe name: np:\\.\pipe\LOCALDB#9A6B632F\tsql\query
 
-    Resource File Names
-        IDs
-            The resource ID is permanent and invariant.
-            There is overhead keeping the disk file name in synch with the resource name.
-        Resource Names
-            There is an administrative advantage; reviewing a user folder will have semantic names.
-
 <-- Database 
-    In Features.Models.Controller.Edit is _dbContext.Models.Update required?
-        The model is updated in the database even when this is not called.
+    Use UUID not sequential integer keys in database. This will scale better.
+
+    SQLite
+        Multi-user Access
+            Cookies are used so tests must be done from an external computer.
+        64 bit support
 
 <-- Git
     TBD
@@ -377,7 +382,6 @@
             EventTarget does not contain a member result.
             https://github.com/Microsoft/TSJS-lib-generator/pull/207
             https://github.com/Microsoft/TypeScript/issues/299
-
 
 <-- HTML
 
@@ -413,7 +417,6 @@
                 import * as MR from"Graphics"
                 import * as MR from"Views"
 
-
 <-- THREE.js Notes
 
     Object clone <only> copies Object3d properties.
@@ -441,8 +444,8 @@
     MultiPart Form
         https://stackoverflow.com/questions/3938569/how-do-i-upload-a-file-with-metadata-using-a-rest-web-service
 
-            https://stackoverflow.com/questions/4083702/posting-a-file-and-associated-data-to-a-restful-webservice-preferably-as-json
-            https://stackoverflow.com/questions/30655582/uploading-files-and-json-data-in-the-same-request-with-jquery-ajax
+        https://stackoverflow.com/questions/4083702/posting-a-file-and-associated-data-to-a-restful-webservice-preferably-as-json
+        https://stackoverflow.com/questions/30655582/uploading-files-and-json-data-in-the-same-request-with-jquery-ajax
 
         https://stackoverflow.com/questions/43674504/multipart-form-data-file-upload-in-asp-net-core-web-api
 
@@ -468,12 +471,6 @@
 <-- Identity
     https://andrewlock.net/introduction-to-authentication-with-asp-net-core/
 
-<-- SQLite
-
-        Multi-user Access
-            Cookies are used so tests must be done from an external computer.
-        64 bit support
-
 <-- ASP.NET Core Model Validation
     https://github.com/JeremySkinner/FluentValidation/wiki/i.-ASP.NET-Core-integration
 
@@ -483,6 +480,7 @@
             They provide display formatting and other UX support.
         The Domain models should also use DataAnnotation attributes. 
             Validation will be done when a model (created OUTSIDE) the UX is transacted with the database.
+            This happens as a part of model-binding.
         The DTO should expose only those properies which are editable!
             Missing properties in the View will override the target during mapping because they will have a default value.
 
@@ -517,6 +515,7 @@
     Server-Side Validation
         The controller action parameters (e.g. Create.Command) control the server-side validation rules.
             Any associated validators for this specific type will run.
+            This happens during model-binding.
 
         Model-binding maps the Request.Body, route data and query strings to the parameters of the controller action. 
             By default, MVC supports a limited number of formatters.
@@ -533,42 +532,22 @@
     Finally, the controller action is invoked.
     <---------------------------------------------------------------------------------------------------------------------------------------------------->
 
-
-<-- Logging
-
-    Review the ILogger interface. How should this work with a Controller?
-        namespace Microsoft.Extensions.Logging
-        {
-            //
-            // Summary:
-            //     A generic interface for logging where the category name is derived from the specified
-            //     TCategoryName type name. Generally used to enable activation of a named Microsoft.Extensions.Logging.ILogger
-            //     from dependency injection.
-            //
-            // Type parameters:
-            //   TCategoryName:
-            //     The type who's name is used for the logger category name.
-            public interface ILogger<out TCategoryName> : ILogger
-            {
-            }
-        }
-
 <-- Variance
 
     Invariance
         The types must match exactly.
 
-    Covariance (out parameters)
-        publi interface IEnumerable (out T)
+    Covariance (out parameters) : More Derived
+        public interface IEnumerable (out T)
 
         A more derived type can be substituted.
         The parameter can be returned because it satisfies the type because it is of type Base.
 
-    Contravariance (in parameters)
+    Contravariance (in parameters) : Less Derived
         public interface IComparer<in T>
 
         A less derived type can be substituted.
-        When the method is called, the actual parameter passed to the method will be <more derived> so it will satisfy the type of the actual method that is invoked.
+        When the method is called, the <actual> parameter passed to the method will be <more derived> so it will satisfy the type of the actual method that is invoked.
 
 <-- Tasks
 
@@ -581,7 +560,7 @@
         AutoMapper.EF6
             EntityFramework 6.13
 
-    Why does the ModelRelief Delete display the JSON ContentResult instead of the IndexView?
+    Why does Delete display the JSON ContentResult instead of the IndexView?
         The site.js file includes a jQuery call back on all form post submits.
         site.js provides client-side error validation.
 
@@ -598,5 +577,3 @@
     https://odetocode.com/blogs/scott/archive/2017/02/06/anti-forgery-tokens-and-asp-net-core-apis.aspx
 
     https://stackoverflow.com/questions/40351870/asp-net-core-custom-authentication-tying-request-to-user
-
-<-- Clipboard

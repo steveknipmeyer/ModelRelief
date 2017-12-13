@@ -28,7 +28,7 @@ namespace ModelRelief.Api.V1.Meshes
         public MeshPostAddRequestValidator (ModelReliefDbContext dbContext)
             : base (dbContext)
         {
-            RuleFor(r=> r.NewModel).SetValidator(new MeshValidator(dbContext));
+            RuleFor(r=> r.NewModel).SetValidator(new MeshValidator());
         }
     }
 }

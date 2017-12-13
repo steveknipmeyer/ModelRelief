@@ -263,9 +263,9 @@ namespace ModelRelief.Test.Integration.Meshes
 
             // Assert
             requestResponse.Message.EnsureSuccessStatusCode();
-
-            var newModel = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
-            newModel.Name.Should().Be(updatedName);
+            
+            var updatedModel = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
+            updatedModel.Name.Should().Be(updatedName);
         }
 
         /// <summary>
