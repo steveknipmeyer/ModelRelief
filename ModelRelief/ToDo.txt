@@ -1,5 +1,5 @@
 ﻿<--- Commit
-Add Project Views.
+
 
 <-- Tasks
     Goal : Roundtrip a scaled mesh.       
@@ -8,16 +8,6 @@ Add Project Views.
     Some Views are identical. Should they use a shared ViewComponent?
         Create, Edit
         Details, Delete
-
-    Checklist
-        Edit view must include the model ID in the form post.
-        Delete button posts to DeleteConfirmed.
-
-    Complete controllers for Api.
-        Camera
-        MeshTransform
-        Model3d
-        Project
 
     How should file extensions be handled?
 
