@@ -36,6 +36,17 @@ namespace ModelRelief.Database
         public DbSet<Project> Projects
             { get ; set; }
 
+        // https://stackoverflow.com/questions/34768976/specifying-on-delete-no-action-in-entity-framework-7
+        protected override void OnModelCreating(ModelBuilder modelbuilder)
+        {
+            foreach (var relationship in modelbuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.SetNull;
+            }
+
+            base.OnModelCreating(modelbuilder);
+        }
+
 #region Dynamic DbSet<T>   
 // https://stackoverflow.com/questions/33940507/find-a-generic-dbset-in-a-dbcontext-dynamically
 

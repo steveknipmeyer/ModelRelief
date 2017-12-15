@@ -8,8 +8,23 @@
         Create, Edit
         Details, Delete
 
+    Create ModelReliefBaseline.db from ModelReliefTest.db.
+
+    Analyze the correct behavior of OnDelete.
+        Some dependent entities (e.g. Mesh) may potentially be delete if the parent (e.g. DepthBuffer) is deleted.
+    Referential Integrity!
+    Should <all> entities have a direct relationship to Project or only "principal" entities.
+        For example a Mesh is directly related to a Project but that relationship is also inditectly captured by Mesh->DepthBuffer->Model->Project.
+    Should principal entities have a collection property that holds all children? These can be found with a query.
+        For example:
+            Project
+                Cameras
+                DepthBuffers
+                Meshes
+                Models
+                MeshTransforms
+
     Test Abstractions
-        Referential Integrity!
 
         virtual SetValidPropertyReference    
         virtual SetInvalidPropertyReference    
