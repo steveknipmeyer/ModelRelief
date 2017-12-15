@@ -12,6 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -53,7 +54,8 @@ namespace ModelRelief.Test.Integration
         public string ApiUrl { get; set; }
         public string UxUrl  {get; set; }
         public string FirstModelName { get; set; }
-        
+
+        public string ReferencePropertyName  { get; set; }
         public int? InvalidReferenceProperty { get; set; }
         public int? ValidReferenceProperty { get; set; }
 
@@ -147,32 +149,42 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
-        /// Sets a valid reference property.
+        /// Returns the reference property.
         /// </summary>
-        /// <param name="model">Model to update.</param>
-        /// <returns>Model with valid reference property.</returns>
-        public virtual TGetModel  SetValidReferenceProperty(TGetModel model)
+        /// <param name="model"></param>
+        /// <returns>Reference property for testing.</returns>
+        private PropertyInfo GetReferencePropertyPropertyInfo (TGetModel model)
         {
-            return model;
+            Type type = model.GetType();
+            PropertyInfo[] properties = type.GetProperties();
+
+            var referenceProperty  = type.GetProperty(ReferencePropertyName);
+            return referenceProperty;
         }
 
         /// <summary>
-        /// Tests the value of a reference property.
+        /// Gets the reference property.
         /// </summary>
-        /// <param name="model">MOdel</param>
-        /// <returns>True if valid.</returns>
-        public virtual bool ReferencePropertyIsValid (TGetModel model)
-        {
-            return true;
+        /// <param name="model">Model to query.</param>
+        /// <returns>Reference property value.</returns>
+        public int?  GetReferenceProperty(TGetModel model)
+        {           
+            var referenceProperty  = GetReferencePropertyPropertyInfo(model);
+            var propertyValue = (int?) referenceProperty.GetValue(model, null);
+
+            return propertyValue;
         }
 
         /// <summary>
-        /// Sets an invalid reference property.
+        /// Sets the reference property.
         /// </summary>
         /// <param name="model">Model to update.</param>
-        /// <returns>Model with invalid reference property.</returns>
-        public virtual TGetModel  SetInvalidReferenceProperty(TGetModel model)
+        /// <returns>Model with updated reference property.</returns>
+        public TGetModel  SetReferenceProperty(TGetModel model, int? value)
         {
+            var referenceProperty  = GetReferencePropertyPropertyInfo(model);
+            referenceProperty.SetValue(model, value);
+
             return model;
         }
 
@@ -239,7 +251,7 @@ namespace ModelRelief.Test.Integration
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
-            var pagedResults = JsonConvert.DeserializeObject<PagedResults<Dto.Mesh>>(requestResponse.ContentString);
+            var pagedResults = JsonConvert.DeserializeObject<PagedResults<TGetModel>>(requestResponse.ContentString);
             var expectedCount = IdRange.Max() - IdRange.Min() + 1;
             pagedResults.Results.Count().Should().Be(expectedCount);
         }
@@ -280,7 +292,6 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, ApiUrl, invalidModel);
 
             // Assert
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
@@ -294,7 +305,7 @@ namespace ModelRelief.Test.Integration
         {
             // Arrange
             var validModel = ConstructValidModel();
-            SetValidReferenceProperty(validModel);
+            SetReferenceProperty(validModel, ValidReferenceProperty);
 
             // Act
             var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, ApiUrl, validModel);
@@ -303,7 +314,7 @@ namespace ModelRelief.Test.Integration
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
             var newModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
-            Assert.True(ReferencePropertyIsValid(newModel));
+            GetReferenceProperty(newModel).Should().Be(ValidReferenceProperty);
         }
 
         /// <summary>
@@ -315,7 +326,7 @@ namespace ModelRelief.Test.Integration
         {
             // Arrange
             var invalidModel = ConstructValidModel();
-            SetInvalidReferenceProperty(invalidModel);
+            SetReferenceProperty(invalidModel, InvalidReferenceProperty);
 
             // Act
             var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, ApiUrl, invalidModel);
@@ -324,12 +335,12 @@ namespace ModelRelief.Test.Integration
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
             AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
-#if false
+
         /// <summary>
         /// Test that a PostUpdate can update a model.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Mesh")]
+        [Trait ("Category", "Api PostUpdate")]
         public async Task PostUpdate_CanUpdateModel()
         {
             // Arrange
@@ -340,12 +351,12 @@ namespace ModelRelief.Test.Integration
             existingModel.Name = updatedName;
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiMeshesUrl}/{modelId}", existingModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiUrl}/{modelId}", existingModel);
 
             // Assert
             requestResponse.Message.EnsureSuccessStatusCode();
             
-            var updatedModel = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
+            var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
             updatedModel.Name.Should().Be(updatedName);
         }
 
@@ -353,7 +364,7 @@ namespace ModelRelief.Test.Integration
         /// Test that a PostUpdate request with an invalid Id returns NotFound.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Mesh")]
+        [Trait ("Category", "Api PostUpdate")]
         public async Task PostUpdate_InvalidIdReturnsNotFound()
         {
             // Arrange
@@ -361,57 +372,219 @@ namespace ModelRelief.Test.Integration
             var existingModel = await FindModel (modelId);
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiMeshesUrl}/{modelId + 1}", existingModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiUrl}/{modelId + 1}", existingModel);
 
             // Assert    
-            AssertHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
+            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
         }
 
         /// <summary>
         /// Test that a PostUpdate a valid reference property can be updated.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Mesh")]
+        [Trait ("Category", "Api PostUpdate")]
         public async Task PostUpdate_ValidReferencePropertyUpdatesModel()
         {
             // Arrange
             var modelId = IdRange.Max();
             var existingModel = await FindModel (modelId);
-
-            var projectId = 1;
-            existingModel.ProjectId = 1;
+            SetReferenceProperty(existingModel, ValidReferenceProperty);
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiMeshesUrl}/{modelId}", existingModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiUrl}/{modelId}", existingModel);
 
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
-            var updatedModel = JsonConvert.DeserializeObject<Dto.Mesh>(requestResponse.ContentString);
-            updatedModel.ProjectId.Should().Be(projectId);
+            var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            GetReferenceProperty(updatedModel).Should().Be(ValidReferenceProperty);
         }
 
         /// <summary>
         /// Test that a PostUpdate with an invalid reference property returns BadRequest.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Mesh")]
+        [Trait ("Category", "Api PostUpdate")]
         public async Task PostUpdate_InvalidReferencePropertyReturndBadRequest()
         {
             // Arrange
             var modelId = IdRange.Max();
             var existingModel = await FindModel (modelId);
-
-            existingModel.ProjectId = 0;
+            SetReferenceProperty(existingModel, InvalidReferenceProperty);
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiMeshesUrl}/{modelId}", existingModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiUrl}/{modelId}", existingModel);
             
             // Assert
-            AssertHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            Assert.False(requestResponse.Message.IsSuccessStatusCode);
+            AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
-#endif
 #endregion
 #region Put
+        /// <summary>
+        /// Test that a Put request updates the target property.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "Api Put")]
+        public async Task Put_TargetPropertyIsUpdated()
+        {
+            // Arrange
+            var modelId = IdRange.Min();
+            var updatedName = "Updated Name Property";
+            var putModel = new 
+            {
+                Name = updatedName
+            };
+
+            // Act
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", putModel);
+
+            // Assert
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+
+            var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            updatedModel.Name.Should().Be(updatedName);
+        }
+
+        /// <summary>
+        /// Test that a Put request with an invalid Id returns NotFound.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "Api Put")]
+        public async Task Put_InvalidIdPropertyReturnsNotFound()
+        {
+            // Arrange
+            var modelId = IdRange.Max() + 1;
+            var updatedName = "Updated Name Property";
+            var putModel = new 
+            {
+                Name = updatedName
+            };
+
+            // Act
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", putModel);
+
+            // Assert
+            Assert.False(requestResponse.Message.IsSuccessStatusCode);
+            AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
+        }
+
+        /// <summary>
+        /// Test that a Put request with an umknown property returns BadRequest.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "Api Put")]
+        public async Task Put_InvalidPropertyNameReturnsBadRequest()
+        {
+            // Arrange
+            var modelId = IdRange.Max();
+            var invalidPutModel = new
+                {
+                InvalidProperty = "NonExistent"
+                };
+
+            // Act
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", invalidPutModel);
+
+            // Assert
+            Assert.False(requestResponse.Message.IsSuccessStatusCode);
+            AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+        }
+#if false
+        /// <summary>
+        /// Test that a Put request with an invalid enum property value returns BadRequest.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "Api Put")]
+        public async Task Put_InvalidEnumPropertyValueReturnsBadRequest()
+        {
+            // Arrange
+            var modelId = IdRange.Max();
+            var invalidPutModel = new
+                {
+                Format = "Invalid Format"
+                };
+
+            // Act
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", invalidPutModel);
+
+            // Assert
+            Assert.False(requestResponse.Message.IsSuccessStatusCode);
+            AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+        }
+#endif
+        /// <summary>
+        /// Test that a Put request with an invalid reference property value returns BadRequest.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "Api Put")]
+        public async Task Put_InvalidReferencePropertyReturnsBadRequest()
+        {
+            // Arrange
+            var modelId = IdRange.Max();
+            var invalidPutModel = await FindModel(modelId);
+            SetReferenceProperty(invalidPutModel, InvalidReferenceProperty);
+
+            // Act
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", invalidPutModel);
+
+            // Assert
+            Assert.False(requestResponse.Message.IsSuccessStatusCode);
+            AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+        }
+#if false
+        /// <summary>
+        /// Test that a Put request with two invalid reference properties returns BadRequest and two validation errors.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "Api Put")]
+        public async Task Put_MultipleInvalidReferencePropertiesReturnsMultipleValidationErrorsAndBadRequest()
+        {
+            // Arrange
+            var modelId = IdRange.Max();
+            var invalidReferenceProperties = 3;
+            var invalidPutModel = new
+            {
+                ProjectId = 0,
+                CameraId  = 0,
+                DepthBufferId = 0
+            };
+
+            // Act
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", invalidPutModel);
+
+            // Assert
+            AssertHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+
+            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
+            apiErrorResult.Errors.Count().Should().Be(invalidReferenceProperties);
+
+        }
+#endif
+        /// <summary>
+        /// Test that an Put request with an invalid reference property value returns BadRequest.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "Api Put")]
+        public async Task Put_ValidReferencePropertyUpdatesModel()
+        {
+            // Arrange
+            var modelId = IdRange.Max();
+            // https://stackoverflow.com/questions/6044482/setting-anonymous-type-property-name
+            var validPutModel = new Dictionary<string, int?>
+            {
+                { ReferencePropertyName, ValidReferenceProperty }
+            };
+
+            // Act
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", validPutModel);
+
+            // Assert
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+
+            var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            GetReferenceProperty(updatedModel).Should().Be(ValidReferenceProperty);
+        }
 #endregion
 
 #region Delete
@@ -435,6 +608,7 @@ namespace ModelRelief.Test.Integration
             requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiUrl}/{modelId}");
 
             // Assert
+            Assert.False(requestResponse.Message.IsSuccessStatusCode);
             AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
         }
         #endregion

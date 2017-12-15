@@ -39,7 +39,8 @@ namespace ModelRelief.Test.Integration.DepthBuffers
             
             IdRange = Enumerable.Range(1, 3);
             FirstModelName = "Lucy";
-
+            
+            ReferencePropertyName = "ProjectId";
             InvalidReferenceProperty = 0;
             ValidReferenceProperty   = 1;
         }
@@ -54,40 +55,6 @@ namespace ModelRelief.Test.Integration.DepthBuffers
             validModel.Format = Domain.DepthBufferFormat.Raw;
 
             return validModel;
-        }
-
-        /// <summary>
-        /// Sets a valid reference property.
-        /// </summary>
-        /// <param name="model">Model to update.</param>
-        /// <returns>Model with valid reference property.</returns>
-        public override Dto.DepthBuffer  SetValidReferenceProperty(Dto.DepthBuffer model)
-        {
-            model.ProjectId = ValidReferenceProperty;
-
-            return model;
-        }
-
-        /// <summary>
-        /// Sets an invalid reference property.
-        /// </summary>
-        /// <param name="model">Model to update.</param>
-        /// <returns>Model with invalid reference property.</returns>
-        public override Dto.DepthBuffer  SetInvalidReferenceProperty(Dto.DepthBuffer model)
-        {
-            model.ProjectId = InvalidReferenceProperty;
-
-            return model;
-        }
-
-        /// <summary>
-        /// Tests the value of a reference property.
-        /// </summary>
-        /// <param name="model">MOdel</param>
-        /// <returns>True if valid.</returns>
-        public override bool ReferencePropertyIsValid (Dto.DepthBuffer model)
-        {
-            return (model.ProjectId == 1);
         }
 
 #region Get
