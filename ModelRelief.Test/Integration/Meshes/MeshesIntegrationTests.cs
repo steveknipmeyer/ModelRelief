@@ -40,6 +40,9 @@ namespace ModelRelief.Test.Integration.Meshes
             
             IdRange = Enumerable.Range(1, 3);
             FirstModelName = "Lucy";
+
+            InvalidReferenceProperty = 0;
+            ValidReferenceProperty   = 1;
         }
 
         /// <summary>
@@ -52,6 +55,30 @@ namespace ModelRelief.Test.Integration.Meshes
             validModel.Format = Domain.MeshFormat.OBJ;
 
             return validModel;
+        }
+
+        /// <summary>
+        /// Sets a valid reference property.
+        /// </summary>
+        /// <param name="model">Model to update.</param>
+        /// <returns>Model with valid reference property.</returns>
+        public override Dto.Mesh  SetValidReferenceProperty(Dto.Mesh model)
+        {
+            model.ProjectId = ValidReferenceProperty;
+
+            return model;
+        }
+
+        /// <summary>
+        /// Sets an invalid reference property.
+        /// </summary>
+        /// <param name="model">Model to update.</param>
+        /// <returns>Model with invalid reference property.</returns>
+        public override Dto.Mesh  SetInvalidReferenceProperty(Dto.Mesh model)
+        {
+            model.ProjectId = InvalidReferenceProperty;
+
+            return model;
         }
 
 #region Get

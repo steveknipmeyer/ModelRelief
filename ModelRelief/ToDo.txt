@@ -10,32 +10,27 @@
 
     Create ModelReliefBaseline.db from ModelReliefTest.db.
 
-    Analyze the correct behavior of OnDelete.
-        Some dependent entities (e.g. Mesh) may potentially be delete if the parent (e.g. DepthBuffer) is deleted.
-    Referential Integrity!
-    Should <all> entities have a direct relationship to Project or only "principal" entities.
-        For example a Mesh is directly related to a Project but that relationship is also inditectly captured by Mesh->DepthBuffer->Model->Project.
-    Should principal entities have a collection property that holds all children? These can be found with a query.
-        For example:
-            Project
-                Cameras
-                DepthBuffers
-                Meshes
-                Models
-                MeshTransforms
-
     Test Abstractions
-
-        virtual SetValidPropertyReference    
-        virtual SetInvalidPropertyReference    
-
+        
         virtual ModelHasEnumProperties
         virtual SetInvalidEnumProperty
 
-        virtual SetValidReferenceProperty
-        virtual SetInvalidReferenceProperty
-
     How should file extensions be handled?
+
+    Database DesignIssues
+        Analyze the correct behavior of OnDelete.
+            Some dependent entities (e.g. Mesh) may potentially be deleted if the parent (e.g. DepthBuffer) is deleted.
+        Referential Integrity!
+        Should <all> entities have a direct relationship to Project or only "principal" entities.
+            For example a Mesh is directly related to a Project but that relationship is also inditectly captured by Mesh->DepthBuffer->Model->Project.
+        Should principal entities have a collection property that holds all children? These <can> be found with a query.
+            For example:
+                Project
+                    Cameras
+                    DepthBuffers
+                    Meshes
+                    Models
+                    MeshTransforms
 
 <-- Technical Education
         Manning AspNet Core book.
