@@ -32,7 +32,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TGetModel">DTO GET model.</typeparam>
     public class PostFileRequestHandler<TEntity, TGetModel> : ValidatedHandler<PostFileRequest<TEntity, TGetModel>, TGetModel>
         where TEntity    : DomainModel, IFileResource, new()
-        where TGetModel  : IIdModel
+        where TGetModel  : ITGetModel
     {
         public IHostingEnvironment HostingEnvironment { get; }
         public Services.IConfigurationProvider ConfigurationProvider { get; }

@@ -64,12 +64,20 @@ namespace ModelRelief.Test.Integration
             Initialize();
         }
 
+        /// <summary>
+        /// Called before class is used. Opportunity to use an async method for setup.
+        /// </summary>
+        /// <returns></returns>
         public Task InitializeAsync()
         {
             ServerFixture.Framework.RefreshTestDatabase();
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// Called before class is destroyed. Opportunity to use an async method for teardown.
+        /// </summary>
+        /// <returns></returns>
         public Task DisposeAsync()
         {
             return Task.CompletedTask;

@@ -12,7 +12,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ModelRelief.Dto
 {
-    public class DepthBuffer : IIdModel, ITGetModel
+    public class DepthBuffer : ITGetModel
     {
         public int Id { get; set; }
 

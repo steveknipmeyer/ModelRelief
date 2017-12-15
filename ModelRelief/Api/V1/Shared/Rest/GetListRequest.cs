@@ -19,7 +19,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <remarks>Returned request object is a PagedResult which contains a collection of TGetModel.</remarks>
     public class GetListRequest<TEntity, TGetModel> : IRequest<object>
         where TEntity   : DomainModel
-        where TGetModel : IIdModel
+        where TGetModel : ITGetModel
     {
         /// <summary>
         /// Gets or sets the User posting the GetList request.

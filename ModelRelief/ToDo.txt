@@ -10,10 +10,6 @@
 
     Test Abstractions
         Referential Integrity!
-        Is IAsynLifetime actually required?
-
-        https://github.com/xunit/xunit/issues/1066
-        Replace IIdModel with ITGetModel;
 
         virtual SetValidPropertyReference    
         virtual SetInvalidPropertyReference    
@@ -23,7 +19,6 @@
 
         virtual SetValidReferenceProperty
         virtual SetInvalidReferenceProperty
-        
 
     How should file extensions be handled?
 
@@ -119,6 +114,9 @@
         https://stackoverflow.com/questions/2999298/difference-between-throw-and-throw-new-exception        
 
 <-- Testing
+    xUnit Async
+        https://github.com/xunit/xunit/issues/1066
+
     Support database authentication.
 
     Integration Tests

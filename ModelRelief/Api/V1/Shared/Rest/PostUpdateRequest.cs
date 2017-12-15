@@ -20,8 +20,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <remarks>This request is used to update all the properties of an existing model.</remarks>
     public class PostUpdateRequest<TEntity, TPostModel, TGetModel> : IRequest<TGetModel>
         where TEntity    : DomainModel
-        where TPostModel : IIdModel
-        where TGetModel  : IIdModel
+        where TPostModel : ITGetModel
+        where TGetModel  : ITGetModel
     {
         /// <summary>
         /// Gets or sets the User posting the PostUpdate request.

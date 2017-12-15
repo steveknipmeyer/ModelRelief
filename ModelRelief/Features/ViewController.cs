@@ -18,9 +18,9 @@ namespace ModelRelief.Features
 {
     public abstract class ViewController<TEntity, TGetModel, TSingleGetModel, TPostModel> : UxController
         where TEntity         : DomainModel
-        where TGetModel       : class, IIdModel, new()            // class to allow default null parameter in InitializeViewControls
-        where TSingleGetModel : IIdModel
-        where TPostModel      : IIdModel               
+        where TGetModel       : class, ITGetModel, new()            // class to allow default null parameter in InitializeViewControls
+        where TSingleGetModel : ITGetModel
+        where TPostModel      : ITGetModel               
     {
         public ViewControllerOptions ViewControllerOptions { get; }
 

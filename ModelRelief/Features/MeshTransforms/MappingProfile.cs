@@ -11,7 +11,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ModelRelief.Dto
 {
-    public class MeshTransform: IIdModel
+    public class MeshTransform: ITGetModel
     {
         public int Id { get; set; }
 

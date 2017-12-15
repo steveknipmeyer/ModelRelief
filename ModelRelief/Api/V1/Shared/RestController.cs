@@ -22,9 +22,9 @@ namespace ModelRelief.Api.V1.Shared
 {
     public abstract class RestController<TEntity, TGetModel, TSingleGetModel, TPostModel, TPostFile> : ApiController<TEntity>
         where TEntity         : DomainModel
-        where TGetModel       : IIdModel           
-        where TSingleGetModel : IIdModel
-        where TPostModel      : IIdModel
+        where TGetModel       : ITGetModel           
+        where TSingleGetModel : ITGetModel
+        where TPostModel      : ITGetModel
         where TPostFile       : class, new()        // WIP Should TPostFile implement a particular interface?
     {
         public RestControllerOptions RestControllerOptions { get; }

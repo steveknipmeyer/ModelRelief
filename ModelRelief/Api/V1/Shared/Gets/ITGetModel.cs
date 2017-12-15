@@ -18,4 +18,17 @@ namespace ModelRelief.Api.V1.Shared.Rest
     {
         int Id { get; set; }
     }
+
+    /// <summary>
+    /// Common interface for all TGetModel types.
+    /// </summary>
+    public interface ITGetModel
+    {
+        int Id { get; set; }
+
+        // These properties support integration testing across models.
+        string Name { get; set; }
+        string Description { get; set; }
+    }
+
 }

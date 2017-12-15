@@ -19,7 +19,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <remarks>This request is used to create a new file that is a associated with a model.</remarks>
    public class PostFileRequest<TEntity, TGetModel> : IRequest<TGetModel>
         where TEntity    : DomainModel
-        where TGetModel  : IIdModel
+        where TGetModel  : ITGetModel
     {
         /// <summary>
         /// Gets or sets the User posting the PostFile request.

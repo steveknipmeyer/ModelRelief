@@ -26,8 +26,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TGetModel">DTO GET model.</typeparam>
     public class PostAddRequestHandler<TEntity, TPostModel, TGetModel> : ValidatedHandler<PostAddRequest<TEntity, TPostModel, TGetModel>, TGetModel>
         where TEntity    : DomainModel
-        where TPostModel : IIdModel
-        where TGetModel  : IIdModel
+        where TPostModel : ITGetModel
+        where TGetModel  : ITGetModel
     {
         /// <summary>
         /// Constructor

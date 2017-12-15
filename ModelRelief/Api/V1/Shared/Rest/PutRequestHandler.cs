@@ -30,7 +30,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TGetModel">DTO PUT model.</typeparam>
     public class PutRequestHandler<TEntity, TGetModel> : ValidatedHandler<PutRequest<TEntity, TGetModel>, TGetModel>
         where TEntity    : DomainModel
-        where TGetModel  : IIdModel
+        where TGetModel  : ITGetModel
     {
         /// <summary>
         /// Contstructor

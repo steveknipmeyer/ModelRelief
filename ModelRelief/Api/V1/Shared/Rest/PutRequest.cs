@@ -30,7 +30,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <remarks>This request is used to update a subset of the properties of an existing model.</remarks>
     public class PutRequest<TEntity, TGetModel> : IRequest<TGetModel>
         where TEntity   : DomainModel
-        where TGetModel : IIdModel
+        where TGetModel : ITGetModel
     {
         /// <summary>
         /// Gets or sets the User posting the Put request.

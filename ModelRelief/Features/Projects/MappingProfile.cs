@@ -11,7 +11,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ModelRelief.Dto
 {
-    public class Project: IIdModel
+    public class Project: ITGetModel
     {
         public int Id { get; set; }
 

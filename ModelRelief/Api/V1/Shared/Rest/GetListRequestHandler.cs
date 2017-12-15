@@ -26,11 +26,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TGetModel">DTO model.</typeparam>
     public class GetListRequestHandler<TEntity, TGetModel> : ValidatedHandler<GetListRequest<TEntity, TGetModel>, object>
         where TEntity   : DomainModel
-        where TGetModel : IIdModel
+        where TGetModel : ITGetModel
     {
         /// <summary>
         /// Contstructor
-        /// </summary>
+        /// </summary>TIGetModel,
         /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
         /// <param name="mapper">IMapper</param>
