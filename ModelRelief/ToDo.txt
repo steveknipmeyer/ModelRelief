@@ -11,9 +11,8 @@
     Create ModelReliefBaseline.db from ModelReliefTest.db.
 
     Test Abstractions
-        
-        virtual ModelHasEnumProperties
-        virtual SetInvalidEnumProperty
+        Enum
+        MultipleReferenceProperties
 
     How should file extensions be handled?
 

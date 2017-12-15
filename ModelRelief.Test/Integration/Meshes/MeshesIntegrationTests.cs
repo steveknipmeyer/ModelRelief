@@ -41,9 +41,11 @@ namespace ModelRelief.Test.Integration.Meshes
             IdRange = Enumerable.Range(1, 3);
             FirstModelName = "Lucy";
 
-            ReferencePropertyName = "ProjectId";
+            ReferencePropertyNames = new List<string> {"ProjectId", "CameraId", "DepthBufferId", "MeshTransformId"};
             InvalidReferenceProperty = 0;
             ValidReferenceProperty   = 1;
+
+            EnumPropertyName = "Format";
         }
 
         /// <summary>

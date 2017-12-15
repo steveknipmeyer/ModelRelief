@@ -51,13 +51,16 @@ namespace ModelRelief.Test.Integration
         private ServerFixture ServerFixture { get; set; }
 
         public static IEnumerable<int> IdRange  { get; set; }
+
         public string ApiUrl { get; set; }
         public string UxUrl  {get; set; }
         public string FirstModelName { get; set; }
 
-        public string ReferencePropertyName  { get; set; }
+        public List<string> ReferencePropertyNames  { get; set; }
         public int? InvalidReferenceProperty { get; set; }
         public int? ValidReferenceProperty { get; set; }
+        
+        public string EnumPropertyName { get; set; }
 
         /// <summary>
         /// Constructor
@@ -99,8 +102,11 @@ namespace ModelRelief.Test.Integration
             IdRange = Enumerable.Range(0, 0);
             FirstModelName = "";
 
+            ReferencePropertyNames = new List<string>();
             InvalidReferenceProperty = 0;
             ValidReferenceProperty   = null;
+
+            EnumPropertyName = null;
         }
 
         /// <summary>
@@ -158,7 +164,7 @@ namespace ModelRelief.Test.Integration
             Type type = model.GetType();
             PropertyInfo[] properties = type.GetProperties();
 
-            var referenceProperty  = type.GetProperty(ReferencePropertyName);
+            var referenceProperty  = type.GetProperty(ReferencePropertyNames.FirstOrDefault());
             return referenceProperty;
         }
 
@@ -303,6 +309,13 @@ namespace ModelRelief.Test.Integration
         [Trait ("Category", "Api PostAdd")]
         public async Task PostAdd_ValidReferencePropertyCreatesModel()
         {
+            // early exit if model has no reference properties properties
+            if (ReferencePropertyNames.Count() <= 0)
+            {
+                Assert.True(true);
+                return;
+            }
+
             // Arrange
             var validModel = ConstructValidModel();
             SetReferenceProperty(validModel, ValidReferenceProperty);
@@ -324,7 +337,15 @@ namespace ModelRelief.Test.Integration
         [Trait ("Category", "Api PostAdd")]
         public async Task PostAdd_InvalidReferencePropertyReturnsBadRequest()
         {
+            // early exit if model has no reference properties properties
+            if (ReferencePropertyNames.Count() <= 0)
+            {
+                Assert.True(true);
+                return;
+            }
+
             // Arrange
+
             var invalidModel = ConstructValidModel();
             SetReferenceProperty(invalidModel, InvalidReferenceProperty);
 
@@ -386,6 +407,13 @@ namespace ModelRelief.Test.Integration
         [Trait ("Category", "Api PostUpdate")]
         public async Task PostUpdate_ValidReferencePropertyUpdatesModel()
         {
+            // early exit if model has no reference properties properties
+            if (ReferencePropertyNames.Count() <= 0)
+            {
+                Assert.True(true);
+                return;
+            }
+
             // Arrange
             var modelId = IdRange.Max();
             var existingModel = await FindModel (modelId);
@@ -407,6 +435,13 @@ namespace ModelRelief.Test.Integration
         [Trait ("Category", "Api PostUpdate")]
         public async Task PostUpdate_InvalidReferencePropertyReturndBadRequest()
         {
+            // early exit if model has no reference properties properties
+            if (ReferencePropertyNames.Count() <= 0)
+            {
+                Assert.True(true);
+                return;
+            }
+
             // Arrange
             var modelId = IdRange.Max();
             var existingModel = await FindModel (modelId);
@@ -490,7 +525,7 @@ namespace ModelRelief.Test.Integration
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
             AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
-#if false
+
         /// <summary>
         /// Test that a Put request with an invalid enum property value returns BadRequest.
         /// </summary>
@@ -498,12 +533,19 @@ namespace ModelRelief.Test.Integration
         [Trait ("Category", "Api Put")]
         public async Task Put_InvalidEnumPropertyValueReturnsBadRequest()
         {
+            // early exit if model has no enum properties
+            if (String.IsNullOrEmpty(EnumPropertyName))
+            {
+                Assert.True(true);
+                return;
+            }
+
             // Arrange
             var modelId = IdRange.Max();
-            var invalidPutModel = new
-                {
-                Format = "Invalid Format"
-                };
+            var invalidPutModel = new Dictionary<string, string>
+            {
+                { EnumPropertyName, "Invalid Enum" }
+            };
 
             // Act
             var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", invalidPutModel);
@@ -512,7 +554,7 @@ namespace ModelRelief.Test.Integration
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
             AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
-#endif
+
         /// <summary>
         /// Test that a Put request with an invalid reference property value returns BadRequest.
         /// </summary>
@@ -520,6 +562,13 @@ namespace ModelRelief.Test.Integration
         [Trait ("Category", "Api Put")]
         public async Task Put_InvalidReferencePropertyReturnsBadRequest()
         {
+            // early exit if model has no reference properties properties
+            if (ReferencePropertyNames.Count() <= 0)
+            {
+                Assert.True(true);
+                return;
+            }
+
             // Arrange
             var modelId = IdRange.Max();
             var invalidPutModel = await FindModel(modelId);
@@ -532,7 +581,7 @@ namespace ModelRelief.Test.Integration
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
             AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
-#if false
+
         /// <summary>
         /// Test that a Put request with two invalid reference properties returns BadRequest and two validation errors.
         /// </summary>
@@ -540,27 +589,30 @@ namespace ModelRelief.Test.Integration
         [Trait ("Category", "Api Put")]
         public async Task Put_MultipleInvalidReferencePropertiesReturnsMultipleValidationErrorsAndBadRequest()
         {
+            // early exit if model has no reference properties properties
+            if (ReferencePropertyNames.Count() <= 0)
+            {
+                Assert.True(true);
+                return;
+            }
+
             // Arrange
             var modelId = IdRange.Max();
-            var invalidReferenceProperties = 3;
-            var invalidPutModel = new
-            {
-                ProjectId = 0,
-                CameraId  = 0,
-                DepthBufferId = 0
-            };
+            var invalidPutModel = new Dictionary<string, int?>();
+            foreach (var propertyName in ReferencePropertyNames)
+                invalidPutModel.Add(propertyName, 0);
 
             // Act
             var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", invalidPutModel);
 
             // Assert
-            AssertHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
 
             var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
-            apiErrorResult.Errors.Count().Should().Be(invalidReferenceProperties);
+            apiErrorResult.Errors.Count().Should().Be(ReferencePropertyNames.Count());
 
         }
-#endif
+
         /// <summary>
         /// Test that an Put request with an invalid reference property value returns BadRequest.
         /// </summary>
@@ -568,12 +620,19 @@ namespace ModelRelief.Test.Integration
         [Trait ("Category", "Api Put")]
         public async Task Put_ValidReferencePropertyUpdatesModel()
         {
+            // early exit if model has no reference properties properties
+            if (ReferencePropertyNames.Count() <= 0)
+            {
+                Assert.True(true);
+                return;
+            }
+
             // Arrange
             var modelId = IdRange.Max();
             // https://stackoverflow.com/questions/6044482/setting-anonymous-type-property-name
             var validPutModel = new Dictionary<string, int?>
             {
-                { ReferencePropertyName, ValidReferenceProperty }
+                { ReferencePropertyNames.FirstOrDefault(), ValidReferenceProperty }
             };
 
             // Act

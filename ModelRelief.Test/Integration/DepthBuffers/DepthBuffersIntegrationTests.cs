@@ -40,9 +40,11 @@ namespace ModelRelief.Test.Integration.DepthBuffers
             IdRange = Enumerable.Range(1, 3);
             FirstModelName = "Lucy";
             
-            ReferencePropertyName = "ProjectId";
+            ReferencePropertyNames = new List<string> {"ProjectId", "ModelId", "CameraId"};
             InvalidReferenceProperty = 0;
             ValidReferenceProperty   = 1;
+
+            EnumPropertyName = "Format";
         }
 
         /// <summary>
