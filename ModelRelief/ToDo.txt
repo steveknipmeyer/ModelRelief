@@ -10,10 +10,6 @@
 
     Create ModelReliefBaseline.db from ModelReliefTest.db.
 
-    Test Abstractions
-        Enum
-        MultipleReferenceProperties
-
     How should file extensions be handled?
 
     Database DesignIssues
