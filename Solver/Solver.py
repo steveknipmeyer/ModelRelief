@@ -3,7 +3,7 @@ import matplotlib.pylab as plt
 
 im = plt.imread("D:/Users/Steve Knipmeyer/Documents/GitHub/ModelRelief/Solver/Lucy.png")
 
-print (im.shape)
+print(im.shape)
 
 def plti(im, h=8, **kwargs):
     """
@@ -21,7 +21,7 @@ def plti(im, h=8, **kwargs):
     plt.imshow(im, interpolation="none", **kwargs)
     plt.axis('off')
 
-#plti(im, 5)
+plti(im, 5)
 
 plt.plot([1,2,3,4])
 plt.ylabel('some numbers')

@@ -41,7 +41,7 @@ namespace ModelRelief.Features.Meshes
             var applicationUser = await Identity.FindApplicationUserAsync(UserManager, User);
             var userId = applicationUser?.Id ?? "";
 
-            ViewBag.MeshFormats     = ViewHelpers.PopulateEnumDropDownList<MeshFormat>("Select mesh format");
+            ViewBag.MeshFormat      = ViewHelpers.PopulateEnumDropDownList<MeshFormat>("Select mesh format");
 
             ViewBag.ProjectId       = ViewHelpers.PopulateModelDropDownList<Project>(DbContext, userId, "Select a project", mesh?.ProjectId);
             ViewBag.CameraId        = ViewHelpers.PopulateModelDropDownList<Camera>(DbContext, userId, "Select a camera", mesh?.CameraId);

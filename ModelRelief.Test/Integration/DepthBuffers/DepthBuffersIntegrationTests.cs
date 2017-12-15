@@ -12,20 +12,19 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
-
 #if true
-namespace ModelRelief.Test.Integration.Meshes
+namespace ModelRelief.Test.Integration.DepthBuffers
 {
     /// <summary>
-    /// Base integration Tests.
+    /// DepthBuffer integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
-    public class MeshesIntegrationTests : BaseIntegrationTests<Dto.Mesh>
+    public class DepthBuffersIntegrationTests : BaseIntegrationTests<Dto.DepthBuffer>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public MeshesIntegrationTests(ServerFixture serverFixture) :
+        public DepthBuffersIntegrationTests(ServerFixture serverFixture) :
             base (serverFixture)
         {
         }
@@ -35,8 +34,8 @@ namespace ModelRelief.Test.Integration.Meshes
         /// </summary>
         public override void Initialize()
         {
-            ApiUrl = "/api/v1/meshes";
-            UxUrl  = "/meshes";
+            ApiUrl = "/api/v1/depth-buffers";
+            UxUrl  = "/depthbuffers";
             
             IdRange = Enumerable.Range(1, 3);
             FirstModelName = "Lucy";
@@ -46,10 +45,10 @@ namespace ModelRelief.Test.Integration.Meshes
         /// Constructs a valid model.
         /// </summary>
         /// <returns>Valid model.</returns>
-        public override Dto.Mesh ConstructValidModel()
+        public override Dto.DepthBuffer ConstructValidModel()
         {
             var validModel = base.ConstructValidModel();
-            validModel.Format = Domain.MeshFormat.OBJ;
+            validModel.Format = Domain.DepthBufferFormat.Raw;
 
             return validModel;
         }

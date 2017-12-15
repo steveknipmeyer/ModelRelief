@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using ModelRelief.Database;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace ModelRelief.Infrastructure
@@ -50,7 +51,11 @@ namespace ModelRelief.Infrastructure
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "A transaction error occurred for controller: {0}.", context.HttpContext.Request.Path);
+                var message = $"A transaction error occurred for controller: {context.HttpContext.Request.Path}.";
+                _logger.LogError(ex, message);
+
+                // WIP: Debug.Assert does not open a dialog. It also causes the TestRunner to abort the active test run.
+                Debug.WriteLine(message);
             }
         }
     }

@@ -17,9 +17,20 @@ using System.Threading.Tasks;
 namespace ModelRelief.Dto
 {
     /// <summary>
+    /// Common interface for all TGetModel types.
+    /// </summary>
+    public interface ITGetModel
+    {
+        int Id { get; set; }
+
+        string Name { get; set; }
+        string Description { get; set; }
+    }
+
+    /// <summary>
     /// Represents a DataTransferObject (DTO) for a Mesh.
     /// </summary>
-    public class Mesh : IIdModel
+    public class Mesh : IIdModel, ITGetModel
     {
         public int Id { get; set; }
 

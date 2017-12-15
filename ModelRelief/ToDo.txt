@@ -1,6 +1,5 @@
 ﻿<--- Commit
 
-
 <-- Tasks
     Goal : Roundtrip a scaled mesh.       
         Scale with a Python processor.
@@ -8,6 +7,23 @@
     Some Views are identical. Should they use a shared ViewComponent?
         Create, Edit
         Details, Delete
+
+    Test Abstractions
+        Referential Integrity!
+        Is IAsynLifetime actually required?
+
+        https://github.com/xunit/xunit/issues/1066
+        Replace IIdModel with ITGetModel;
+
+        virtual SetValidPropertyReference    
+        virtual SetInvalidPropertyReference    
+
+        virtual ModelHasEnumProperties
+        virtual SetInvalidEnumProperty
+
+        virtual SetValidReferenceProperty
+        virtual SetInvalidReferenceProperty
+        
 
     How should file extensions be handled?
 

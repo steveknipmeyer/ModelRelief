@@ -1,4 +1,5 @@
 ﻿{
-  "methodDisplay" :  "method"
+  "methodDisplay": "method",
+  "maxParallelThreads": 1
 }
 
