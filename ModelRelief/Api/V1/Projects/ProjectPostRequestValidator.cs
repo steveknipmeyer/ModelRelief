@@ -9,21 +9,21 @@ using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Database;
 using ModelRelief.Dto;
 
-namespace ModelRelief.Api.V1.Models
+namespace ModelRelief.Api.V1.Projects
 {
     /// <summary>
-    /// Represents a validator for a Model3d PostAddRequest.
+    /// Represents a validator for a Project PostRequest.
     /// </summary>
-    public class ModelPostAddRequestValidator : RequestValidator<PostAddRequest<Domain.Model3d, Dto.Model3d, Dto.Model3d>>
+    public class ProjectPostRequestValidator : RequestValidator<PostRequest<Domain.Project, Dto.Project, Dto.Project>>
     {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        public ModelPostAddRequestValidator (ModelReliefDbContext dbContext)
+        public ProjectPostRequestValidator (ModelReliefDbContext dbContext)
             : base (dbContext)
         {
-            RuleFor(r=> r.NewModel).SetValidator(new Model3dValidator());
+            RuleFor(r=> r.NewModel).SetValidator(new ProjectValidator());
         }
     }
 }

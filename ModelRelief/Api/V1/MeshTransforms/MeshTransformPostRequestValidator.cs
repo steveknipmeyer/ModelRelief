@@ -4,31 +4,26 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 
-using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 using ModelRelief.Api.V1.Shared;
 using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Database;
-using ModelRelief.Domain;
 using ModelRelief.Dto;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace ModelRelief.Api.V1.Meshes
+namespace ModelRelief.Api.V1.MeshTransforms
 {
     /// <summary>
-    /// Represents a validator for a Mesh PostAddRequest.
+    /// Represents a validator for a MeshTransform PostRequest.
     /// </summary>
-    public class MeshPostAddRequestValidator : RequestValidator<PostAddRequest<Domain.Mesh, Dto.Mesh, Dto.Mesh>>
+    public class MeshTransformPostRequestValidator : RequestValidator<PostRequest<Domain.MeshTransform, Dto.MeshTransform, Dto.MeshTransform>>
     {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        public MeshPostAddRequestValidator (ModelReliefDbContext dbContext)
+        public MeshTransformPostRequestValidator (ModelReliefDbContext dbContext)
             : base (dbContext)
         {
-            RuleFor(r=> r.NewModel).SetValidator(new MeshValidator());
+            RuleFor(r=> r.NewModel).SetValidator(new MeshTransformValidator());
         }
     }
 }

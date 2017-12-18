@@ -9,21 +9,21 @@ using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Database;
 using ModelRelief.Dto;
 
-namespace ModelRelief.Api.V1.Projects
+namespace ModelRelief.Api.V1.Cameras
 {
     /// <summary>
-    /// Represents a validator for a Project PostAddRequest.
+    /// Represents a validator for a Camera PostRequest.
     /// </summary>
-    public class ProjectPostAddRequestValidator : RequestValidator<PostAddRequest<Domain.Project, Dto.Project, Dto.Project>>
+    public class CameraPostRequestValidator : RequestValidator<PostRequest<Domain.Camera, Dto.Camera, Dto.Camera>>
     {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        public ProjectPostAddRequestValidator (ModelReliefDbContext dbContext)
+        public CameraPostRequestValidator (ModelReliefDbContext dbContext)
             : base (dbContext)
         {
-            RuleFor(r=> r.NewModel).SetValidator(new ProjectValidator());
+            RuleFor(r=> r.NewModel).SetValidator(new CameraValidator());
         }
     }
 }

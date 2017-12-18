@@ -9,21 +9,21 @@ using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Database;
 using ModelRelief.Dto;
 
-namespace ModelRelief.Api.V1.MeshTransforms
+namespace ModelRelief.Api.V1.DepthBuffers
 {
     /// <summary>
-    /// Represents a validator for a MeshTransform PostAddRequest.
+    /// Represents a validator for a DepthBuffer PostRequest.
     /// </summary>
-    public class MeshTransformPostAddRequestValidator : RequestValidator<PostAddRequest<Domain.MeshTransform, Dto.MeshTransform, Dto.MeshTransform>>
+    public class DepthBufferPostRequestValidator : RequestValidator<PostRequest<Domain.DepthBuffer, Dto.DepthBuffer, Dto.DepthBuffer>>
     {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        public MeshTransformPostAddRequestValidator (ModelReliefDbContext dbContext)
+        public DepthBufferPostRequestValidator (ModelReliefDbContext dbContext)
             : base (dbContext)
         {
-            RuleFor(r=> r.NewModel).SetValidator(new MeshTransformValidator());
+            RuleFor(m => m.NewModel).SetValidator(new DepthBufferValidator());
         }
     }
 }

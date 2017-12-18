@@ -4,26 +4,31 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 
+using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using ModelRelief.Api.V1.Shared;
 using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Database;
+using ModelRelief.Domain;
 using ModelRelief.Dto;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace ModelRelief.Api.V1.DepthBuffers
+namespace ModelRelief.Api.V1.Meshes
 {
     /// <summary>
-    /// Represents a validator for a DepthBuffer PostAddRequest.
+    /// Represents a validator for a Mesh PostRequest.
     /// </summary>
-    public class DepthBufferPostAddRequestValidator : RequestValidator<PostAddRequest<Domain.DepthBuffer, Dto.DepthBuffer, Dto.DepthBuffer>>
+    public class MeshPostRequestValidator : RequestValidator<PostRequest<Domain.Mesh, Dto.Mesh, Dto.Mesh>>
     {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        public DepthBufferPostAddRequestValidator (ModelReliefDbContext dbContext)
+        public MeshPostRequestValidator (ModelReliefDbContext dbContext)
             : base (dbContext)
         {
-            RuleFor(m => m.NewModel).SetValidator(new DepthBufferValidator());
+            RuleFor(r=> r.NewModel).SetValidator(new MeshValidator());
         }
     }
 }

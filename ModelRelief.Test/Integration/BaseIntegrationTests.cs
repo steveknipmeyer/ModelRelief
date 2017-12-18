@@ -265,11 +265,11 @@ namespace ModelRelief.Test.Integration
 #endregion
 #region Post
         /// <summary>
-        /// Test that a PostAdd request can create a model.
+        /// Test that a Post request can create a model.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api PostAdd")]
-        public async Task PostAdd_CanCreateNewModel()
+        [Trait ("Category", "Api Post")]
+        public async Task Post_CanCreateNewModel()
         {
             // Arrange
             var validModel = ConstructValidModel();
@@ -285,11 +285,11 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
-        /// Test that an PostAdd request returns BadRequest.
+        /// Test that an Post request returns BadRequest.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api PostAdd")]
-        public async Task PostAdd_InvalidPropertyValueReturnsBadRequest()
+        [Trait ("Category", "Api Post")]
+        public async Task Post_InvalidPropertyValueReturnsBadRequest()
         {
             // Arrange
             var invalidModel = ConstructInvalidModel();
@@ -303,11 +303,11 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
-        /// Test that a PostAdd request with a valid reference property creates the model.
+        /// Test that a Post request with a valid reference property creates the model.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api PostAdd")]
-        public async Task PostAdd_ValidReferencePropertyCreatesModel()
+        [Trait ("Category", "Api Post")]
+        public async Task Post_ValidReferencePropertyCreatesModel()
         {
             // early exit if model has no reference properties properties
             if (ReferencePropertyNames.Count() <= 0)
@@ -331,11 +331,11 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
-        /// Test that an model PostAdd with an invalid reference property returns BadRequest.
+        /// Test that an model Post with an invalid reference property returns BadRequest.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api PostAdd")]
-        public async Task PostAdd_InvalidReferencePropertyReturnsBadRequest()
+        [Trait ("Category", "Api Post")]
+        public async Task Post_InvalidReferencePropertyReturnsBadRequest()
         {
             // early exit if model has no reference properties properties
             if (ReferencePropertyNames.Count() <= 0)
@@ -345,7 +345,6 @@ namespace ModelRelief.Test.Integration
             }
 
             // Arrange
-
             var invalidModel = ConstructValidModel();
             SetReferenceProperty(invalidModel, InvalidReferenceProperty);
 

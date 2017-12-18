@@ -29,7 +29,7 @@ namespace ModelRelief.Api.V1.Shared
             DbContext = dbContext;
 
             // N.B. Existence could be tested in validators if <all> requests, including Get and Delete requests, had FV validators defined.
-            //      Currently, only requests that modify the database (PatchRequest, PostAddRequest, PutRequest) have validators defined.
+            //      Currently, only requests that modify the database (PostRequest, PutRequest, PatchRequest) have validators defined.
             //      Also a specialized type of RequestValidator would be needed that used a generic type parameter (e.g. IExistingModelRequest) 
             //      to ensure that the User and Id properties are present in the request.
         }

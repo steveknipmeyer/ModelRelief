@@ -17,13 +17,13 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TPostModel">The DTO POST model.  Does not contain an Id because it is assigned.</typeparam>
     /// <typeparam name="TGetModel">The DTO GET model.</typeparam>
     /// <remarks>This request is used to create a new model.</remarks>
-    public class PostAddRequest<TEntity, TPostModel, TGetModel> : IRequest<TGetModel>
+    public class PostRequest<TEntity, TPostModel, TGetModel> : IRequest<TGetModel>
         where TEntity    : DomainModel
         where TPostModel : ITGetModel
         where TGetModel  : ITGetModel
     {
         /// <summary>
-        /// Gets or sets the User posting the PostAdd request.
+        /// Gets or sets the User posting the PostRequest.
         /// </summary>
         public ClaimsPrincipal User { get; set;}
 
