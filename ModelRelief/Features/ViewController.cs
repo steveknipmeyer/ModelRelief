@@ -164,7 +164,7 @@ namespace ModelRelief.Features
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> Edit(int id, TPostModel postRequest)
         {
-            var model = await HandleRequestAsync(new PostUpdateRequest<TEntity, TPostModel, TGetModel> 
+            var model = await HandleRequestAsync(new PutRequest<TEntity, TPostModel, TGetModel> 
             {
                 User = User,
                 Id = id,

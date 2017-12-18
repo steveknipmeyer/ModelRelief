@@ -358,11 +358,11 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
-        /// Test that a PostUpdate can update a model.
+        /// Test that a Put can update a model.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api PostUpdate")]
-        public async Task PostUpdate_CanUpdateModel()
+        [Trait ("Category", "Api Put")]
+        public async Task Put_CanUpdateModel()
         {
             // Arrange
             var modelId = IdRange.Min();
@@ -372,7 +372,7 @@ namespace ModelRelief.Test.Integration
             existingModel.Name = updatedName;
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiUrl}/{modelId}", existingModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", existingModel);
 
             // Assert
             requestResponse.Message.EnsureSuccessStatusCode();
@@ -382,18 +382,18 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
-        /// Test that a PostUpdate request with an invalid Id returns NotFound.
+        /// Test that a Put request with an invalid Id returns NotFound.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api PostUpdate")]
-        public async Task PostUpdate_InvalidIdReturnsNotFound()
+        [Trait ("Category", "Api Put")]
+        public async Task Put_InvalidIdReturnsNotFound()
         {
             // Arrange
             var modelId = IdRange.Max();
             var existingModel = await FindModel (modelId);
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiUrl}/{modelId + 1}", existingModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId + 1}", existingModel);
 
             // Assert    
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -401,11 +401,11 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
-        /// Test that a PostUpdate a valid reference property can be updated.
+        /// Test that a Put a valid reference property can be updated.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api PostUpdate")]
-        public async Task PostUpdate_ValidReferencePropertyUpdatesModel()
+        [Trait ("Category", "Api Put")]
+        public async Task Put_ValidReferencePropertyUpdatesModel()
         {
             // early exit if model has no reference properties properties
             if (ReferencePropertyNames.Count() <= 0)
@@ -420,7 +420,7 @@ namespace ModelRelief.Test.Integration
             SetReferenceProperty(existingModel, ValidReferenceProperty);
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiUrl}/{modelId}", existingModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", existingModel);
 
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
@@ -429,11 +429,11 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
-        /// Test that a PostUpdate with an invalid reference property returns BadRequest.
+        /// Test that a Put with an invalid reference property returns BadRequest.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api PostUpdate")]
-        public async Task PostUpdate_InvalidReferencePropertyReturndBadRequest()
+        [Trait ("Category", "Api Put")]
+        public async Task Put_InvalidReferencePropertyReturndBadRequest()
         {
             // early exit if model has no reference properties properties
             if (ReferencePropertyNames.Count() <= 0)
@@ -448,7 +448,7 @@ namespace ModelRelief.Test.Integration
             SetReferenceProperty(existingModel, InvalidReferenceProperty);
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiUrl}/{modelId}", existingModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", existingModel);
             
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);

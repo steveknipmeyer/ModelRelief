@@ -41,7 +41,9 @@
     
     Refactoring
         TPostModel -> TInModel
+            DTO POST Model -> DTP POST or PUT Model
         TGetModel -> TOutModel (?)
+        Check the names of all action method parameters.
 
         UX Refactoring
         --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -65,18 +67,10 @@
 
         Requests, Handlers, Validators
             PostAdd* -> Post*.
-            PostUpdate -> Put*.
+       +    PostUpdate -> Put*.
        +    Put* -> Patch*.
 
             Data structure GetRequest -> GetListRequest.
-        
-        Controllers
-            JSON
-                Edit
-                    [HttpPost]
-                    [ValidateAntiForgeryToken]
-                    public virtual async Task<IActionResult> Edit(int id, TPostModel postRequest)
-                 *      PostUpdateRequest -> PutRequest
 
         API Refactoring
         --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -111,19 +105,6 @@
                     [HttpPost]
                  *  public virtual async Task<IActionResult> Post([FromBody] TPostModel postRequest)
                  *      PostAddRequest -> PostRequest
-
-                PostUpdate
-                    [HttpPut("{id:int}")]
-                 *  public virtual async Task<IActionResult> Put (int id, [FromBody] TPostModel postRequest)
-                 *      PostUpdateRequest -> PutRequest
-
-                    [HttpPut("{id:int}/patch")]
-                    public virtual async Task<IActionResult> PutPatch(int id, [FromBody] Dictionary<string, object> data) 
-                       PatchRequest
-
-                    [HttpPatch("{id:int}")]
-                    public virtual async Task<IActionResult> Patch(int id, [FromBody] Dictionary<string, object> data) 
-                       PatchRequest
 
             Binary
                 (new)

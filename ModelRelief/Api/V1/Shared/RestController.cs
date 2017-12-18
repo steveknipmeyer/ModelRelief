@@ -138,15 +138,15 @@ namespace ModelRelief.Api.V1.Shared
 
         #region Update
         /// <summary>
-        /// Action method for PostUpdate Request. Updates ALL properties of a model.
+        /// Action method for Put Request. Updates ALL properties of a model.
         /// </summary>
         /// <param name="id">Id of model to update.</param>
         /// <param name="postRequest">TPost model containing a complete model.</param>
         /// <returns>TGetModel of updated model.</returns>
-        [HttpPost("{id:int}")]
-        public virtual async Task<IActionResult> PostUpdate(int id, [FromBody] TPostModel postRequest)
+        [HttpPut("{id:int}")]
+        public virtual async Task<IActionResult> Put(int id, [FromBody] TPostModel postRequest)
         {
-            return await HandleRequestAsync(new PostUpdateRequest<TEntity, TPostModel, TGetModel>
+            return await HandleRequestAsync(new PutRequest<TEntity, TPostModel, TGetModel>
             {
                 User = User,
                 Id = id,
@@ -164,13 +164,6 @@ namespace ModelRelief.Api.V1.Shared
         public virtual async Task<IActionResult> PutPatch(int id, [FromBody] Dictionary<string, object> data) 
         {
             return await Patch (id, data);
-            //return await HandleRequestAsync (new PatchRequest<TEntity, TGetModel>
-            //{ 
-            //User = User,
-            //Id = id, 
-            //Parameters = data,
-            //DbContext = DbContext
-            //});
         }
         /// <summary>
         /// Action method for PatchRequest. Updates a subset of model properties.
@@ -190,23 +183,23 @@ namespace ModelRelief.Api.V1.Shared
             });
         }
 
-        /// <summary>
-        /// Action method for PatchRequest. Updates a subset of model properties.
-        /// </summary>
-        /// <param name="id">Id of model to update.</param>
-        /// <param name="data">Dictionary of property key:values.</param>
-        /// <returns>TGetModel of update model.</returns>
-        [HttpPut("{id:int}")]
-        public virtual async Task<IActionResult> Put(int id, [FromBody] Dictionary<string, object> data) 
-        {
-            return await HandleRequestAsync (new PatchRequest<TEntity, TGetModel>
-            { 
-            User = User,
-            Id = id, 
-            Parameters = data,
-            DbContext = DbContext
-            });
-        }
+        ///// <summary>
+        ///// Action method for PatchRequest. Updates a subset of model properties.
+        ///// </summary>
+        ///// <param name="id">Id of model to update.</param>
+        ///// <param name="data">Dictionary of property key:values.</param>
+        ///// <returns>TGetModel of update model.</returns>
+        //[HttpPut("{id:int}")]
+        //public virtual async Task<IActionResult> Put(int id, [FromBody] Dictionary<string, object> data) 
+        //{
+        //    return await HandleRequestAsync (new PatchRequest<TEntity, TGetModel>
+        //    { 
+        //    User = User,
+        //    Id = id, 
+        //    Parameters = data,
+        //    DbContext = DbContext
+        //    });
+        //}
         #endregion
 
         #region Delete

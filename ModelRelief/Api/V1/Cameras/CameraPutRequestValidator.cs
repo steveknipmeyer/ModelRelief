@@ -12,15 +12,15 @@ using ModelRelief.Dto;
 namespace ModelRelief.Api.V1.Cameras
 {
     /// <summary>
-    /// Represents a validator for a Camera PostUpdateRequest.
+    /// Represents a validator for a Camera PutRequest.
     /// </summary>
-    public class CameraPostUpdateRequestValidator : RequestValidator<PostUpdateRequest<Domain.Camera, Dto.Camera, Dto.Camera>>
+    public class CameraPutRequestValidator : RequestValidator<PutRequest<Domain.Camera, Dto.Camera, Dto.Camera>>
     {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        public CameraPostUpdateRequestValidator (ModelReliefDbContext dbContext)
+        public CameraPutRequestValidator (ModelReliefDbContext dbContext)
             : base (dbContext)
         {
             RuleFor(m => m.UpdatedModel).SetValidator(new CameraValidator());

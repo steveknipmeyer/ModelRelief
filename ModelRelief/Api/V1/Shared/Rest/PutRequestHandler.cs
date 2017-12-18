@@ -27,7 +27,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TEntity">Domain model</typeparam>
     /// <typeparam name="TPostModel">DTO POST model.</typeparam>
     /// <typeparam name="TGetModel">DTO GET model.</typeparam>
-    public class PostUpdateRequestHandler<TEntity, TPostModel, TGetModel> : ValidatedHandler<PostUpdateRequest<TEntity, TPostModel, TGetModel>, TGetModel>
+    public class PutRequestHandler<TEntity, TPostModel, TGetModel> : ValidatedHandler<PutRequest<TEntity, TPostModel, TGetModel>, TGetModel>
         where TEntity    : DomainModel
         where TPostModel : ITGetModel
         where TGetModel  : ITGetModel
@@ -39,7 +39,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="dbContext">Database context</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="validators">All validators matching IValidator for the given request.</param>
-        public PostUpdateRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IEnumerable<IValidator<PostUpdateRequest<TEntity, TPostModel, TGetModel>>> validators)
+        public PutRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IEnumerable<IValidator<PutRequest<TEntity, TPostModel, TGetModel>>> validators)
             : base(userManager, dbContext, mapper, validators)
         {
         }
@@ -50,7 +50,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="message">POST request.</param>
         /// <param name="cancellationToken">Token to allow the async operation to be cancelled.</param>
         /// <returns></returns>
-        public override async Task<TGetModel> OnHandle(PostUpdateRequest<TEntity, TPostModel, TGetModel> message, CancellationToken cancellationToken)
+        public override async Task<TGetModel> OnHandle(PutRequest<TEntity, TPostModel, TGetModel> message, CancellationToken cancellationToken)
         {
             var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
             if (targetModel == null)
@@ -65,7 +65,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             // validate all references are owned
             await ValidateReferences<TEntity>(updatedModel, message.User);
 
-            // ensure Id is set; PostModel may not have included the Id but it is always present in the PostUpdateRequest.
+            // ensure Id is set; PostModel may not have included the Id but it is always present in the PutRequest.
             updatedModel.Id = message.Id;
 
              // set ownership

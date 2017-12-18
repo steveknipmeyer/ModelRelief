@@ -9,21 +9,21 @@ using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Database;
 using ModelRelief.Dto;
 
-namespace ModelRelief.Api.V1.Models
+namespace ModelRelief.Api.V1.MeshTransforms
 {
     /// <summary>
-    /// Represents a validator for a Model3d PostUpdateRequest.
+    /// Represents a validator for a MeshTransform PutRequest.
     /// </summary>
-    public class ModelPostUpdateRequestValidator : RequestValidator<PostUpdateRequest<Domain.Model3d, Dto.Model3d, Dto.Model3d>>
+    public class MeshTransformPutRequestValidator : RequestValidator<PutRequest<Domain.MeshTransform, Dto.MeshTransform, Dto.MeshTransform>>
     {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        public ModelPostUpdateRequestValidator (ModelReliefDbContext dbContext)
+        public MeshTransformPutRequestValidator (ModelReliefDbContext dbContext)
             : base (dbContext)
         {
-            RuleFor(m => m.UpdatedModel).SetValidator(new Model3dValidator());
+            RuleFor(m => m.UpdatedModel).SetValidator(new MeshTransformValidator());
         }
     }
 }

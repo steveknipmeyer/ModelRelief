@@ -12,15 +12,15 @@ using ModelRelief.Dto;
 namespace ModelRelief.Api.V1.Projects
 {
     /// <summary>
-    /// Represents a validator for a Project PostUpdateRequest.
+    /// Represents a validator for a Project PutRequest.
     /// </summary>
-    public class ProjectPostUpdateRequestValidator : RequestValidator<PostUpdateRequest<Domain.Project, Dto.Project, Dto.Project>>
+    public class ProjectPutRequestValidator : RequestValidator<PutRequest<Domain.Project, Dto.Project, Dto.Project>>
     {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        public ProjectPostUpdateRequestValidator (ModelReliefDbContext dbContext)
+        public ProjectPutRequestValidator (ModelReliefDbContext dbContext)
             : base (dbContext)
         {
             RuleFor(m => m.UpdatedModel).SetValidator(new ProjectValidator());
