@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace ModelRelief.Api.V1.Shared
 {
-    public abstract class RestController<TEntity, TGetModel, TSingleGetModel, TPostModel, TPostFile> : ApiController<TEntity>
+    public abstract class RestController<TEntity, TGetModel, TSingleGetModel, TRequestModel, TPostFile> : ApiController<TEntity>
         where TEntity         : DomainModel
         where TGetModel       : ITGetModel           
         where TSingleGetModel : ITGetModel
@@ -96,12 +96,12 @@ namespace ModelRelief.Api.V1.Shared
         /// <summary>
         /// Action method for a PostRequest to create a new model.
         /// </summary>
-        /// <param name="postRequest">TPostModel of model to create. Does not contain a model Id.</param>
+        /// <param name="postRequest">TRequestModel of model to create. Does not contain a model Id.</param>
         /// <returns>TGetModel of the newly-created model.</returns>
         [HttpPost]
-        public virtual async Task<IActionResult> Post([FromBody] TPostModel postRequest)
+        public virtual async Task<IActionResult> Post([FromBody] TRequestModel postRequest)
         {
-            var result = await HandleRequestAsync(new PostRequest<TEntity, TPostModel, TGetModel>
+            var result = await HandleRequestAsync(new PostRequest<TEntity, TRequestModel, TGetModel>
             {
                 User = User,
                 NewModel = postRequest
@@ -143,9 +143,9 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="putRequest">TPost model containing a complete model.</param>
         /// <returns>TGetModel of updated model.</returns>
         [HttpPut("{id:int}")]
-        public virtual async Task<IActionResult> Put(int id, [FromBody] TPostModel putRequest)
+        public virtual async Task<IActionResult> Put(int id, [FromBody] TRequestModel putRequest)
         {
-            return await HandleRequestAsync(new PutRequest<TEntity, TPostModel, TGetModel>
+            return await HandleRequestAsync(new PutRequest<TEntity, TRequestModel, TGetModel>
             {
                 User = User,
                 Id = id,

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace ModelRelief.Features
 {
-    public abstract class ViewController<TEntity, TGetModel, TSingleGetModel, TPostModel> : UxController
+    public abstract class ViewController<TEntity, TGetModel, TSingleGetModel, TRequestModel> : UxController
         where TEntity         : DomainModel
         where TGetModel       : class, ITGetModel, new()            // class to allow default null parameter in InitializeViewControls
         where TSingleGetModel : ITGetModel
@@ -111,9 +111,9 @@ namespace ModelRelief.Features
         /// <returns>Index page.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public virtual async Task<IActionResult> Create(TPostModel postRequest)
+        public virtual async Task<IActionResult> Create(TRequestModel postRequest)
         {
-            var newModel = await HandleRequestAsync(new PostRequest<TEntity, TPostModel, TGetModel> 
+            var newModel = await HandleRequestAsync(new PostRequest<TEntity, TRequestModel, TGetModel> 
             {
                 User = User,
                 NewModel = postRequest
@@ -159,9 +159,9 @@ namespace ModelRelief.Features
         /// <returns>Index page.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public virtual async Task<IActionResult> Edit(int id, TPostModel postRequest)
+        public virtual async Task<IActionResult> Edit(int id, TRequestModel postRequest)
         {
-            var model = await HandleRequestAsync(new PutRequest<TEntity, TPostModel, TGetModel> 
+            var model = await HandleRequestAsync(new PutRequest<TEntity, TRequestModel, TGetModel> 
             {
                 User = User,
                 Id = id,

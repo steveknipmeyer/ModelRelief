@@ -1,11 +1,5 @@
-﻿{
-	"Name" : "Peanut Butter",
-	"Description" : "SLK",
-	"Format" : 2
-}
+﻿<--- Commit
 
-<--- Commit
-Rename GetRequest -> GetListRequest.
 
 <-- Technical Education
         Manning AspNet Core book.
@@ -34,10 +28,15 @@ Rename GetRequest -> GetListRequest.
                     DepthBuffer
                     MeshTransform
                 Whenever a dependent is updated, the synchronized property is set to false.
-    
-    Refactoring
-        TPostModel -> TInModel
-        TGetModel -> TOutModel (?)
+
+    Support the new /api/v1/resource/id/file endpoint.
+
+    Implement the Mesh property-change trigger to generate a Mesh.
+
+    Disallow the invalid endpoints.
+
+    Add file-based integration tests.
+
 
         UX Refactoring
         --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -100,9 +99,6 @@ Rename GetRequest -> GetListRequest.
                 public virtual async Task<IActionResult> Delete(int id)
                     DeleteFileRequest
 
-        IntegrationTesting Refactoring
-        --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        Add file-based integration tests.
 
     How should file names and extensions be handled?
 
@@ -121,8 +117,6 @@ Rename GetRequest -> GetListRequest.
             Message             Errors[]
             DeveloperMessage    DeveloperMessage   
             API Reference       ApiReference
-
-
 
 <-- Front End
 
