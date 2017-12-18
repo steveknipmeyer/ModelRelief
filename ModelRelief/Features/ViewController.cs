@@ -49,24 +49,7 @@ namespace ModelRelief.Features
             ViewControllerOptions = viewControllerOptions;
         }
 
-        /// <summary>
-        /// Action handler for a Details page.
-        /// </summary>
-        /// <param name="id">Model Id.</param>
-        /// <returns>Details page.</returns>
-        public virtual async Task<IActionResult> Details(int id) 
-        {
-            var model = await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel> 
-            {
-                User = User,
-                Id = id
-            });
-            if (model == null)
-                return NotFound();
-
-            return View(model);
-        }
-
+        #region Get
         /// <summary>
         /// Action handler for an Index page.
         /// Returns a collection of models.
@@ -94,11 +77,11 @@ namespace ModelRelief.Features
         }
 
         /// <summary>
-        /// Action handler for a Delete confirmation page.
+        /// Action handler for a Details page.
         /// </summary>
         /// <param name="id">Model Id.</param>
-        /// <returns>Delete confirmation page.</returns>
-        public virtual async Task<IActionResult> Delete(int id)
+        /// <returns>Details page.</returns>
+        public virtual async Task<IActionResult> Details(int id) 
         {
             var model = await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel> 
             {
@@ -110,25 +93,9 @@ namespace ModelRelief.Features
 
             return View(model);
         }
+        #endregion
 
-        /// <summary>
-        /// Action handler for a Delete operation.
-        /// </summary>
-        /// <param name="id">Model Id to delete.</param>
-        /// <returns>Index page.</returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public virtual async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var result = await HandleRequestAsync(new DeleteRequest<TEntity> 
-            {
-                User = User,
-                Id = id
-            });
-
-            return this.RedirectToAction(nameof(Index));
-        }
-
+        #region Create
         /// <summary>
         /// Action handler for Create Get.
         /// </summary>
@@ -164,7 +131,9 @@ namespace ModelRelief.Features
 
             return this.RedirectToAction(nameof(Index));
         }
+        #endregion
 
+        #region Edit
         /// <summary>
         /// Action handler for an Edit Get.
         /// </summary>
@@ -211,6 +180,45 @@ namespace ModelRelief.Features
 
             return this.RedirectToAction(nameof(Index));
         }
+        #endregion
+
+        #region Delete
+        /// <summary>
+        /// Action handler for a Delete confirmation page.
+        /// </summary>
+        /// <param name="id">Model Id.</param>
+        /// <returns>Delete confirmation page.</returns>
+        public virtual async Task<IActionResult> Delete(int id)
+        {
+            var model = await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel> 
+            {
+                User = User,
+                Id = id
+            });
+            if (model == null)
+                return NotFound();
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// Action handler for a Delete operation.
+        /// </summary>
+        /// <param name="id">Model Id to delete.</param>
+        /// <returns>Index page.</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public virtual async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var result = await HandleRequestAsync(new DeleteRequest<TEntity> 
+            {
+                User = User,
+                Id = id
+            });
+
+            return this.RedirectToAction(nameof(Index));
+        }
+        #endregion
 
         /// <summary>
         /// Setup View controls for select controls, etc.

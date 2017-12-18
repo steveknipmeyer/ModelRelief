@@ -54,20 +54,7 @@ namespace ModelRelief.Api.V1.Shared
             RestControllerOptions = restControllerOptions;
         }
 
-        /// <summary>
-        /// Action method for GetSingleRequest.
-        /// </summary>
-        /// <param name="id">Model Id to fetch.</param>
-        /// <returns>TGetModel of target model.</returns>
-        [HttpGet("{id:int}")]
-        public virtual async Task<IActionResult> GetSingle(int id) 
-        {
-            return await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel> {
-                User = User,
-                Id = id
-            });
-        }
-
+        #region Get
         /// <summary>
         /// Action method for GetListRequest.
         /// </summary>
@@ -90,6 +77,23 @@ namespace ModelRelief.Api.V1.Shared
                 UsePaging           = RestControllerOptions.UsePaging,
             });
         }
+        
+        /// <summary>
+        /// Action method for GetSingleRequest.
+        /// </summary>
+        /// <param name="id">Model Id to fetch.</param>
+        /// <returns>TGetModel of target model.</returns>
+        [HttpGet("{id:int}")]
+        public virtual async Task<IActionResult> GetSingle(int id) 
+        {
+            return await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel> {
+                User = User,
+                Id = id
+            });
+        }
+        #endregion
+
+        #region Create
         /// <summary>
         /// Action method for a PostAddRequest to create a new model.
         /// </summary>
@@ -105,23 +109,6 @@ namespace ModelRelief.Api.V1.Shared
             });
 
             return PostCreatedResult(result);
-        }
-
-        /// <summary>
-        /// Action method for PostUpdate Request. Updates ALL properties of a model.
-        /// </summary>
-        /// <param name="id">Id of model to update.</param>
-        /// <param name="postRequest">TPost model containing a complete model.</param>
-        /// <returns>TGetModel of updated model.</returns>
-        [HttpPost("{id:int}")]
-        public virtual async Task<IActionResult> PostUpdate(int id, [FromBody] TPostModel postRequest)
-        {
-            return await HandleRequestAsync(new PostUpdateRequest<TEntity, TPostModel, TGetModel>
-            {
-                User = User,
-                Id = id,
-                UpdatedModel = postRequest
-            });
         }
 
         /// <summary>
@@ -147,6 +134,26 @@ namespace ModelRelief.Api.V1.Shared
 
             return PostCreatedResult(result);
         }
+        #endregion
+
+        #region Update
+        /// <summary>
+        /// Action method for PostUpdate Request. Updates ALL properties of a model.
+        /// </summary>
+        /// <param name="id">Id of model to update.</param>
+        /// <param name="postRequest">TPost model containing a complete model.</param>
+        /// <returns>TGetModel of updated model.</returns>
+        [HttpPost("{id:int}")]
+        public virtual async Task<IActionResult> PostUpdate(int id, [FromBody] TPostModel postRequest)
+        {
+            return await HandleRequestAsync(new PostUpdateRequest<TEntity, TPostModel, TGetModel>
+            {
+                User = User,
+                Id = id,
+                UpdatedModel = postRequest
+            });
+        }
+
 
         /// <summary>
         /// Action method for PutRequest. Updates a subset of model properties.
@@ -165,7 +172,9 @@ namespace ModelRelief.Api.V1.Shared
             DbContext = DbContext
             });
         }
+        #endregion
 
+        #region Delete
         /// <summary>
         /// Action method for DeleteRequest.
         /// </summary>
@@ -180,7 +189,8 @@ namespace ModelRelief.Api.V1.Shared
                 Id = id
             });
         }
-
+        #endregion
+        
         /// <summary>
         /// Gets the Uri of a newly-created resource.
         /// </summary>
