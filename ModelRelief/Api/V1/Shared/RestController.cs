@@ -154,9 +154,44 @@ namespace ModelRelief.Api.V1.Shared
             });
         }
 
+        /// <summary>
+        /// Action method for PatchRequest. Updates a subset of model properties.
+        /// </summary>
+        /// <param name="id">Id of model to update.</param>
+        /// <param name="data">Dictionary of property key:values.</param>
+        /// <returns>TGetModel of update model.</returns>
+        [HttpPut("{id:int}/patch")]
+        public virtual async Task<IActionResult> PutPatch(int id, [FromBody] Dictionary<string, object> data) 
+        {
+            return await Patch (id, data);
+            //return await HandleRequestAsync (new PatchRequest<TEntity, TGetModel>
+            //{ 
+            //User = User,
+            //Id = id, 
+            //Parameters = data,
+            //DbContext = DbContext
+            //});
+        }
+        /// <summary>
+        /// Action method for PatchRequest. Updates a subset of model properties.
+        /// </summary>
+        /// <param name="id">Id of model to update.</param>
+        /// <param name="data">Dictionary of property key:values.</param>
+        /// <returns>TGetModel of update model.</returns>
+        [HttpPatch("{id:int}")]
+        public virtual async Task<IActionResult> Patch(int id, [FromBody] Dictionary<string, object> data) 
+        {
+            return await HandleRequestAsync (new PatchRequest<TEntity, TGetModel>
+            { 
+            User = User,
+            Id = id, 
+            Parameters = data,
+            DbContext = DbContext
+            });
+        }
 
         /// <summary>
-        /// Action method for PutRequest. Updates a subset of model properties.
+        /// Action method for PatchRequest. Updates a subset of model properties.
         /// </summary>
         /// <param name="id">Id of model to update.</param>
         /// <param name="data">Dictionary of property key:values.</param>
@@ -164,7 +199,7 @@ namespace ModelRelief.Api.V1.Shared
         [HttpPut("{id:int}")]
         public virtual async Task<IActionResult> Put(int id, [FromBody] Dictionary<string, object> data) 
         {
-            return await HandleRequestAsync (new PutRequest<TEntity, TGetModel>
+            return await HandleRequestAsync (new PatchRequest<TEntity, TGetModel>
             { 
             User = User,
             Id = id, 

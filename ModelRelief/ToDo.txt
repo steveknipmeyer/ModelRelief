@@ -1,4 +1,10 @@
-﻿<--- Commit
+﻿{
+	"Name" : "Peanut Butter",
+	"Description" : "SLK",
+	"Format" : 2
+}
+
+<--- Commit
 
 <-- Technical Education
         Manning AspNet Core book.
@@ -60,7 +66,7 @@
         Requests, Handlers, Validators
             PostAdd* -> Post*.
             PostUpdate -> Put*.
-            Put* -> Patch*.
+       +    Put* -> Patch*.
 
             Data structure GetRequest -> GetListRequest.
         
@@ -82,6 +88,7 @@
         JSON            create                                  POST           /api/v1/resource                         Post                PostAdd                 Created; new id returned and default metadata       
         JSON            update (full)                           PUT            /api/v1/resource/id                      Put                 PostUpdate              OK; JSON object
         JSON            update (partial)                        PATCH          /api/v1/resource/id                      Patch               Put                     OK; JSON object
+        JSON            update (partial)                        PUT            /api/v1/resource/id/patch                Patch               Put                     OK; JSON object
         JSON            delete                                  DELETE         /api/v1/resource/id                      Delete                                      OK
 
         binary          read (colleciton)       disallow   
@@ -110,10 +117,13 @@
                  *  public virtual async Task<IActionResult> Put (int id, [FromBody] TPostModel postRequest)
                  *      PostUpdateRequest -> PutRequest
 
-                Put
-                    [HttpPost("{id:int}")]
-                 *  public virtual async Task<IActionResult> Patch(int id, [FromBody] Dictionary<string, object> data) 
-                 *      PutRequest -> PatchRequest
+                    [HttpPut("{id:int}/patch")]
+                    public virtual async Task<IActionResult> PutPatch(int id, [FromBody] Dictionary<string, object> data) 
+                       PatchRequest
+
+                    [HttpPatch("{id:int}")]
+                    public virtual async Task<IActionResult> Patch(int id, [FromBody] Dictionary<string, object> data) 
+                       PatchRequest
 
             Binary
                 (new)

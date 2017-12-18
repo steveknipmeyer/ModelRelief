@@ -455,24 +455,28 @@ namespace ModelRelief.Test.Integration
             AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
 #endregion
-#region Put
+#region Patch
+        // N.B. The ASP.NET Core TestServer does not support HTTP PATCH.
+        //      So, the request is packaged as a PUT request to the <resource>/id/patch endpoint.
+        //      Applications that can generate PATCH can use the conventional endpoint <resource>/id.
+
         /// <summary>
-        /// Test that a Put request updates the target property.
+        /// Test that a Patch request updates the target property.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Put")]
-        public async Task Put_TargetPropertyIsUpdated()
+        [Trait ("Category", "Api Patch")]
+        public async Task Patch_TargetPropertyIsUpdated()
         {
             // Arrange
             var modelId = IdRange.Min();
             var updatedName = "Updated Name Property";
-            var putModel = new 
+            var patchModel = new 
             {
                 Name = updatedName
             };
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", putModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}/patch", patchModel);
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
@@ -482,22 +486,22 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
-        /// Test that a Put request with an invalid Id returns NotFound.
+        /// Test that a Patch request with an invalid Id returns NotFound.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Put")]
-        public async Task Put_InvalidIdPropertyReturnsNotFound()
+        [Trait ("Category", "Api Patch")]
+        public async Task Patch_InvalidIdPropertyReturnsNotFound()
         {
             // Arrange
             var modelId = IdRange.Max() + 1;
             var updatedName = "Updated Name Property";
-            var putModel = new 
+            var patchModel = new 
             {
                 Name = updatedName
             };
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", putModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}/patch", patchModel);
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
@@ -505,21 +509,21 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
-        /// Test that a Put request with an umknown property returns BadRequest.
+        /// Test that a Patch request with an umknown property returns BadRequest.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Put")]
-        public async Task Put_InvalidPropertyNameReturnsBadRequest()
+        [Trait ("Category", "Api Patch")]
+        public async Task Patch_InvalidPropertyNameReturnsBadRequest()
         {
             // Arrange
             var modelId = IdRange.Max();
-            var invalidPutModel = new
+            var invalidPatchModel = new
                 {
                 InvalidProperty = "NonExistent"
                 };
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", invalidPutModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}/patch", invalidPatchModel);
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
@@ -527,11 +531,11 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
-        /// Test that a Put request with an invalid enum property value returns BadRequest.
+        /// Test that a Patch request with an invalid enum property value returns BadRequest.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Put")]
-        public async Task Put_InvalidEnumPropertyValueReturnsBadRequest()
+        [Trait ("Category", "Api Patch")]
+        public async Task Patch_InvalidEnumPropertyValueReturnsBadRequest()
         {
             // early exit if model has no enum properties
             if (String.IsNullOrEmpty(EnumPropertyName))
@@ -542,13 +546,13 @@ namespace ModelRelief.Test.Integration
 
             // Arrange
             var modelId = IdRange.Max();
-            var invalidPutModel = new Dictionary<string, string>
+            var invalidPatchModel = new Dictionary<string, string>
             {
                 { EnumPropertyName, "Invalid Enum" }
             };
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", invalidPutModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}/patch", invalidPatchModel);
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
@@ -556,11 +560,11 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
-        /// Test that a Put request with an invalid reference property value returns BadRequest.
+        /// Test that a Patch request with an invalid reference property value returns BadRequest.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Put")]
-        public async Task Put_InvalidReferencePropertyReturnsBadRequest()
+        [Trait ("Category", "Api Patch")]
+        public async Task Patch_InvalidReferencePropertyReturnsBadRequest()
         {
             // early exit if model has no reference properties properties
             if (ReferencePropertyNames.Count() <= 0)
@@ -571,11 +575,11 @@ namespace ModelRelief.Test.Integration
 
             // Arrange
             var modelId = IdRange.Max();
-            var invalidPutModel = await FindModel(modelId);
-            SetReferenceProperty(invalidPutModel, InvalidReferenceProperty);
+            var invalidPatchModel = await FindModel(modelId);
+            SetReferenceProperty(invalidPatchModel, InvalidReferenceProperty);
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", invalidPutModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}/patch", invalidPatchModel);
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
@@ -583,11 +587,11 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
-        /// Test that a Put request with two invalid reference properties returns BadRequest and two validation errors.
+        /// Test that a Patch request with two invalid reference properties returns BadRequest and two validation errors.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Put")]
-        public async Task Put_MultipleInvalidReferencePropertiesReturnsMultipleValidationErrorsAndBadRequest()
+        [Trait ("Category", "Api Patch")]
+        public async Task Patch_MultipleInvalidReferencePropertiesReturnsMultipleValidationErrorsAndBadRequest()
         {
             // early exit if model has no reference properties properties
             if (ReferencePropertyNames.Count() <= 0)
@@ -598,12 +602,12 @@ namespace ModelRelief.Test.Integration
 
             // Arrange
             var modelId = IdRange.Max();
-            var invalidPutModel = new Dictionary<string, int?>();
+            var invalidPatchModel = new Dictionary<string, int?>();
             foreach (var propertyName in ReferencePropertyNames)
-                invalidPutModel.Add(propertyName, 0);
+                invalidPatchModel.Add(propertyName, 0);
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", invalidPutModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}/patch", invalidPatchModel);
 
             // Assert
             AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
@@ -614,11 +618,11 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
-        /// Test that an Put request with an invalid reference property value returns BadRequest.
+        /// Test that an Patch request with an invalid reference property value returns BadRequest.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Put")]
-        public async Task Put_ValidReferencePropertyUpdatesModel()
+        [Trait ("Category", "Api Patch")]
+        public async Task Patch_ValidReferencePropertyUpdatesModel()
         {
             // early exit if model has no reference properties properties
             if (ReferencePropertyNames.Count() <= 0)
@@ -630,13 +634,13 @@ namespace ModelRelief.Test.Integration
             // Arrange
             var modelId = IdRange.Max();
             // https://stackoverflow.com/questions/6044482/setting-anonymous-type-property-name
-            var validPutModel = new Dictionary<string, int?>
+            var validPatchModel = new Dictionary<string, int?>
             {
                 { ReferencePropertyNames.FirstOrDefault(), ValidReferenceProperty }
             };
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", validPutModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}/patch", validPatchModel);
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);

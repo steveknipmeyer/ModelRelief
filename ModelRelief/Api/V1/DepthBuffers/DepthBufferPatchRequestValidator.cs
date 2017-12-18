@@ -12,15 +12,15 @@ using ModelRelief.Dto;
 namespace ModelRelief.Api.V1.DepthBuffers
 {
     /// <summary>
-    /// Represents a validator for a DepthBuffer PutRequest.
+    /// Represents a validator for a DepthBuffer PatchRequest.
     /// </summary>
-    public class DepthBufferPutRequestValidator : RequestValidator<PutRequest<Domain.DepthBuffer, Dto.DepthBuffer>>
+    public class DepthBufferPatchRequestValidator : RequestValidator<PatchRequest<Domain.DepthBuffer, Dto.DepthBuffer>>
     {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        public DepthBufferPutRequestValidator (ModelReliefDbContext dbContext)
+        public DepthBufferPatchRequestValidator (ModelReliefDbContext dbContext)
             : base (dbContext)
         {
            RuleFor(m => m.UpdatedModel).SetValidator(new DepthBufferValidator());

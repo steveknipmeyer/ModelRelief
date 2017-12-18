@@ -28,7 +28,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// </summary>
     /// <typeparam name="TEntity">Domain model</typeparam>
     /// <typeparam name="TGetModel">DTO PUT model.</typeparam>
-    public class PutRequestHandler<TEntity, TGetModel> : ValidatedHandler<PutRequest<TEntity, TGetModel>, TGetModel>
+    public class PatchRequestHandler<TEntity, TGetModel> : ValidatedHandler<PatchRequest<TEntity, TGetModel>, TGetModel>
         where TEntity    : DomainModel
         where TGetModel  : ITGetModel
     {
@@ -39,7 +39,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="dbContext">Database context</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="validators">All validators matching IValidator for the given request.</param>
-        public PutRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IEnumerable<IValidator<PutRequest<TEntity, TGetModel>>> validators)
+        public PatchRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IEnumerable<IValidator<PatchRequest<TEntity, TGetModel>>> validators)
             : base(userManager, dbContext, mapper, validators) {}
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="message">Request object</param>
         /// <param name="cancellationToken">Token to allow asyn request to be cancelled.</param>
         /// <returns></returns>
-        public override async Task PreHandle(PutRequest<TEntity, TGetModel> message, CancellationToken cancellationToken) 
+        public override async Task PreHandle(PatchRequest<TEntity, TGetModel> message, CancellationToken cancellationToken) 
         { 
             await message.BuildUpdatedTGetModel(UserManager, Mapper); 
         }
@@ -59,7 +59,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="message">PUT request.</param>
         /// <param name="cancellationToken">Token to allow the async operation to be cancelled.</param>
         /// <returns></returns>
-        public override async Task<TGetModel> OnHandle(PutRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
+        public override async Task<TGetModel> OnHandle(PatchRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
             // find target model
             var model = await message.BuildUpdatedDomainModel(UserManager);

@@ -12,15 +12,15 @@ using ModelRelief.Dto;
 namespace ModelRelief.Api.V1.MeshTransforms
 {
     /// <summary>
-    /// Represents a validator for a MeshTransform PutRequest.
+    /// Represents a validator for a MeshTransform PatchRequest.
     /// </summary>
-    public class MeshTransformPutRequestValidator : RequestValidator<PutRequest<Domain.MeshTransform, Dto.MeshTransform>>
+    public class MeshTransformPatchRequestValidator : RequestValidator<PatchRequest<Domain.MeshTransform, Dto.MeshTransform>>
     {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        public MeshTransformPutRequestValidator (ModelReliefDbContext dbContext)
+        public MeshTransformPatchRequestValidator (ModelReliefDbContext dbContext)
             : base (dbContext)
         {
            RuleFor(m => m.UpdatedModel).SetValidator(new MeshTransformValidator());

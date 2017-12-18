@@ -11,21 +11,21 @@ using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Database;
 using ModelRelief.Dto;
 
-namespace ModelRelief.Api.V1.Meshes
+namespace ModelRelief.Api.V1.Cameras
 {
     /// <summary>
-    /// Represents a validator for a Mesh PutRequest.
+    /// Represents a validator for a Camera PatchRequest.
     /// </summary>
-    public class MeshPutRequestValidator : RequestValidator<PutRequest<Domain.Mesh, Dto.Mesh>>
+    public class CameraPatchRequestValidator : RequestValidator<PatchRequest<Domain.Camera, Dto.Camera>>
     {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        public MeshPutRequestValidator (ModelReliefDbContext dbContext)
+        public CameraPatchRequestValidator (ModelReliefDbContext dbContext)
             : base (dbContext)
         {
-           RuleFor(m => m.UpdatedModel).SetValidator(new MeshValidator());
+           RuleFor(m => m.UpdatedModel).SetValidator(new CameraValidator());
         }
     }
 }

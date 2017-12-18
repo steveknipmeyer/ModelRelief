@@ -28,7 +28,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TEntity">The domain type of the model.</typeparam>
     /// <typeparam name="TGetModel">The DTO GET model.</typeparam>
     /// <remarks>This request is used to update a subset of the properties of an existing model.</remarks>
-    public class PutRequest<TEntity, TGetModel> : IRequest<TGetModel>
+    public class PatchRequest<TEntity, TGetModel> : IRequest<TGetModel>
         where TEntity   : DomainModel
         where TGetModel : ITGetModel
     {
@@ -102,7 +102,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 catch (Exception )
                 {
                     var validationFailure = new ValidationFailure(name, $"The property {name} is not a valid property for this resource.");
-                    throw new ApiValidationException(typeof(PutRequest<TEntity, TGetModel>), new List<ValidationFailure> {validationFailure});
+                    throw new ApiValidationException(typeof(PatchRequest<TEntity, TGetModel>), new List<ValidationFailure> {validationFailure});
                 }
 
                 // now set property in target
@@ -117,7 +117,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 catch (Exception )
                 {
                     var validationFailure = new ValidationFailure(name, $"The property value {value} cannot be converted to a valid property value.");
-                    throw new ApiValidationException(typeof(PutRequest<TEntity, TGetModel>), new List<ValidationFailure> {validationFailure});
+                    throw new ApiValidationException(typeof(PatchRequest<TEntity, TGetModel>), new List<ValidationFailure> {validationFailure});
                 }
 
                 property.SetValue(model, value: domainValue);
