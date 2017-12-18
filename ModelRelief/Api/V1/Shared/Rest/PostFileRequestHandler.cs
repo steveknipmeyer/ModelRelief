@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using ModelRelief.Utility;
 using ModelRelief.Services;
+using ModelRelief.Api.V1.Shared.Errors;
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
@@ -61,35 +62,26 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns></returns>
         public override async Task<TGetModel> OnHandle(PostFileRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
-            // find ApplicationUser
-            var user = await Identity.FindApplicationUserAsync(UserManager, message.User);
+            var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
+            if (targetModel == null)
+                throw new EntityNotFoundException(typeof(TEntity), message.Id);
 
-            // populate model properties (placeholder Name)
-            var newModel = new TEntity() {Name = "TBD"};
+            // ApplicationUser determines file path
+            var user = targetModel.User;
 
-            // set ownership
-            newModel.User = user;
-            
-            // add to repository
-            DbContext.Set<TEntity>().Add(newModel);
-
-            // commit; force Id to be assigned immediately
-            DbContext.SaveChanges();
-
-            // write file : file name = newly-created model Id
+            // write file : file name = resource Name
             var storeUsers  = ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
             var modelFolder = ConfigurationProvider.GetSetting(($"ResourcePaths:Folders:{typeof(TEntity).Name}"));
-            string modelPath = $"{storeUsers}{user.Id}/{modelFolder}/{newModel.Id}/";
-            string modelName = $"{newModel.Id}";
+            string modelPath = $"{storeUsers}{user.Id}/{modelFolder}/{targetModel.Id}/";
+            string modelName = $"{targetModel.Id}";
 
             string fileName = $"{HostingEnvironment.WebRootPath}{modelPath}{modelName}";
             await Files.WriteFileFromByteArray(fileName, message.NewFile.Raw);
 
             // file path is known now
-            newModel.Name = newModel.Id.ToString();
-            newModel.Path = fileName;
+            targetModel.Path = fileName;
 
-            return Mapper.Map<TGetModel>(newModel);
+            return Mapper.Map<TGetModel>(targetModel);
         }
     }
 }

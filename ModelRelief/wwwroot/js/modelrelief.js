@@ -2113,20 +2113,20 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
         function HttpLibrary() {
         }
         /**
-         * Posts a file and the supporting metadata to the specified URL
+         * Posts a file and the supporting metadata to the specified URL.
          * @param postUrl Url to post.
          * @param fileData File data, may be binary.
-         * @param fileMetadata JSON metadata
+         * @param fileMetadata JSON metadata.
          */
         HttpLibrary.postFile = function (postUrl, fileData, fileMetadata) {
             var onComplete = function (request) {
-                Services_5.Services.consoleLogger.addInfoMessage('File saved');
+                Services_5.Services.consoleLogger.addInfoMessage('Metadata saved');
                 var filePath = request.getResponseHeader('Location');
-                // now send JSON metadata since we now know the URL
-                HttpLibrary.sendXMLHttpRequest(filePath, MethodType.Put, ContentType.Json, JSON.stringify(fileMetadata), null);
+                var blob = new Blob([fileData], { type: ContentType.OctetStream });
+                HttpLibrary.sendXMLHttpRequest(filePath + "/file", MethodType.Post, ContentType.OctetStream, blob, null);
             };
-            var blob = new Blob([fileData], { type: ContentType.OctetStream });
-            HttpLibrary.sendXMLHttpRequest(postUrl, MethodType.Post, ContentType.OctetStream, blob, onComplete);
+            // send JSON metadata first to create the resource and obtain the Id
+            HttpLibrary.sendXMLHttpRequest(postUrl, MethodType.Post, ContentType.Json, JSON.stringify(fileMetadata), onComplete);
             return true;
         };
         /**

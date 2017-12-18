@@ -16,11 +16,11 @@
     Design the mechanism for creating a file-based resource such as a Model, DepthBuffer or Mesh.
     https://stackoverflow.com/questions/16877968/call-a-server-side-method-on-a-resource-in-a-restful-way
 
-        Separate the file resource from the metadata.
-                Resources   Models, DepthBuffers, (Meshes)
-                File        /api/v1/<resource>/id/file                   
-                Metadata    /api/v1/<resource>/id
-        
+    Support the new /api/v1/resource/id/file endpoint.       
+        How should the file be named?
+            Resource Id or TEntity.Name?
+    
+    Implement the Mesh property-change trigger to generate a Mesh.
         Mesh Generation
             Add a "synchronized" property that reflects whether the state of the mesh file matches the dependents.
                 FileSynchronized
@@ -29,14 +29,9 @@
                     MeshTransform
                 Whenever a dependent is updated, the synchronized property is set to false.
 
-    Support the new /api/v1/resource/id/file endpoint.
-
-    Implement the Mesh property-change trigger to generate a Mesh.
-
-    Disallow the invalid endpoints.
+    Disallow the invalid endpoints.      
 
     Add file-based integration tests.
-
 
         UX Refactoring
         --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

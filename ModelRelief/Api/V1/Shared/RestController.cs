@@ -13,6 +13,7 @@ using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Database;
 using ModelRelief.Domain;
 using ModelRelief.Dto;
+using ModelRelief.Infrastructure;
 using ModelRelief.Utility;
 using System;
 using System.Collections.Generic;
@@ -114,7 +115,7 @@ namespace ModelRelief.Api.V1.Shared
         /// Action method to create a file that is associated with a model.
         /// </summary>
         /// <returns>TGetModel of newly-created model.</returns>
-        [HttpPost]
+        [HttpPost("{id:int}/file")]
         [Consumes("application/octet-stream")]
         [DisableRequestSizeLimit]
         public virtual async Task<IActionResult> PostFile()
@@ -128,10 +129,11 @@ namespace ModelRelief.Api.V1.Shared
             var result = await HandleRequestAsync(new PostFileRequest<TEntity, TGetModel>
             {
                 User = User,
+                Id = System.Convert.ToInt32(this.RouteData.Values["id"]),
                 NewFile = postFile
             });
 
-            return PostCreatedResult(result);
+            return PostCreatedResult(result, postFile: true);
         }
         #endregion
 
@@ -204,14 +206,24 @@ namespace ModelRelief.Api.V1.Shared
         /// <summary>
         /// Gets the Uri of a newly-created resource.
         /// </summary>
-        /// <param name="okResult"></param>
-        private Uri GetCreatedUri(OkObjectResult okResult)
+        /// <param name="okResult">OKResult from successful post</param>
+        /// <param name="postFile">File resource posted; not metadata</param>
+        private Uri GetCreatedUri(OkObjectResult okResult, bool postFile)
         {
-            var newModel = (TGetModel)((OkObjectResult)okResult).Value;
-            string responseUrl = $"{Url.RouteUrl(new { })}/{newModel.Id}";
-            Uri responseUrlAbsolute = new Uri($"{Request.Scheme}://{Request.Host}{responseUrl}");
+            // N.B. Files are posted to a 'file' subresource (e.g. resource/id/file while metadata is posted to the root resource.
+            //   Type       Post Endpoint       Created Endpoint
+            //   file       resource/id/file    resource/id/file     
+            //   JSON       resource            resource/id
+            // Therefore, the created URL that is returned must be handled differently. 
+            // For JSON, the new id is appended while for a file the created endpoint is the same as the POST endpoint.
 
-            return responseUrlAbsolute;
+            var newModel = (TGetModel)((OkObjectResult)okResult).Value;
+            string subResource = postFile ? "/file" : "";
+            string createdUrl = $"{Url.RouteUrl(RouteNames.DefaultApiV1, new {id = newModel.Id})}{subResource}";
+
+            Uri createdUrlAbsolute = new Uri($"{Request.Scheme}://{Request.Host}{createdUrl}");
+
+            return createdUrlAbsolute;
         }
 
         /// <summary>
@@ -219,14 +231,15 @@ namespace ModelRelief.Api.V1.Shared
         /// </summary>
         /// <param name="result">IActionResult from processing.</param>
         /// <returns>Created(201) is successful; otherwise raw result (typically ApiResult)</returns>
-        private IActionResult PostCreatedResult(IActionResult result)
+        /// <param name="postFile">File resource posted; not metadata</param>
+        private IActionResult PostCreatedResult(IActionResult result, bool postFile = false)
         {
             // return ApiErrorResult if not OK; all successful requests return OK 
             if (!(result is OkObjectResult))
                 return result;
 
             var okResult = result as OkObjectResult;
-            var createdResult = Created(GetCreatedUri(okResult), okResult.Value);
+            var createdResult = Created(GetCreatedUri(okResult, postFile), okResult.Value);
             return createdResult;
         }
     }
