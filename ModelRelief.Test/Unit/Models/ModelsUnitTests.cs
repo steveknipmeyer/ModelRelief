@@ -42,7 +42,7 @@ namespace ModelRelief.Test.Unit.Models
             var controller = new ModelsController(userManager, dbContext, mapper, mediator);
 
             // Act
-            var result = controller.Index(new GetRequest());
+            var result = controller.Index(new GetListRequest());
 
             // Assert
             Assert.IsType<ViewResult>(result);

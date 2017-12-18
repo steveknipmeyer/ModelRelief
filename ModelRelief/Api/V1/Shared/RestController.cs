@@ -24,7 +24,6 @@ namespace ModelRelief.Api.V1.Shared
         where TEntity         : DomainModel
         where TGetModel       : ITGetModel           
         where TSingleGetModel : ITGetModel
-        where TPostModel      : ITGetModel
         where TPostFile       : class, new()        // WIP Should TPostFile implement a particular interface?
     {
         public RestControllerOptions RestControllerOptions { get; }
@@ -61,9 +60,9 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="getRequest">Parameters for returning a collection of models including page number, size.</param>
         /// <returns>A collection of models in a PagedResult.</returns>
         [HttpGet("")]
-        public virtual async Task<IActionResult> GetList([FromQuery] GetRequest getRequest)
+        public virtual async Task<IActionResult> GetList([FromQuery] GetListRequest getRequest)
         {
-            getRequest = getRequest ?? new GetRequest();
+            getRequest = getRequest ?? new GetListRequest();
             return await HandleRequestAsync(new GetListRequest<TEntity, TGetModel> 
             {
                 User = User,
@@ -141,16 +140,16 @@ namespace ModelRelief.Api.V1.Shared
         /// Action method for Put Request. Updates ALL properties of a model.
         /// </summary>
         /// <param name="id">Id of model to update.</param>
-        /// <param name="postRequest">TPost model containing a complete model.</param>
+        /// <param name="putRequest">TPost model containing a complete model.</param>
         /// <returns>TGetModel of updated model.</returns>
         [HttpPut("{id:int}")]
-        public virtual async Task<IActionResult> Put(int id, [FromBody] TPostModel postRequest)
+        public virtual async Task<IActionResult> Put(int id, [FromBody] TPostModel putRequest)
         {
             return await HandleRequestAsync(new PutRequest<TEntity, TPostModel, TGetModel>
             {
                 User = User,
                 Id = id,
-                UpdatedModel = postRequest
+                UpdatedModel = putRequest
             });
         }
 
@@ -165,6 +164,7 @@ namespace ModelRelief.Api.V1.Shared
         {
             return await Patch (id, data);
         }
+
         /// <summary>
         /// Action method for PatchRequest. Updates a subset of model properties.
         /// </summary>
@@ -182,24 +182,6 @@ namespace ModelRelief.Api.V1.Shared
             DbContext = DbContext
             });
         }
-
-        ///// <summary>
-        ///// Action method for PatchRequest. Updates a subset of model properties.
-        ///// </summary>
-        ///// <param name="id">Id of model to update.</param>
-        ///// <param name="data">Dictionary of property key:values.</param>
-        ///// <returns>TGetModel of update model.</returns>
-        //[HttpPut("{id:int}")]
-        //public virtual async Task<IActionResult> Put(int id, [FromBody] Dictionary<string, object> data) 
-        //{
-        //    return await HandleRequestAsync (new PatchRequest<TEntity, TGetModel>
-        //    { 
-        //    User = User,
-        //    Id = id, 
-        //    Parameters = data,
-        //    DbContext = DbContext
-        //    });
-        //}
         #endregion
 
         #region Delete

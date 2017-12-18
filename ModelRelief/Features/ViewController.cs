@@ -10,8 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Database;
 using ModelRelief.Domain;
-using ModelRelief.Utility;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ModelRelief.Features
@@ -20,7 +18,6 @@ namespace ModelRelief.Features
         where TEntity         : DomainModel
         where TGetModel       : class, ITGetModel, new()            // class to allow default null parameter in InitializeViewControls
         where TSingleGetModel : ITGetModel
-        where TPostModel      : ITGetModel               
     {
         public ViewControllerOptions ViewControllerOptions { get; }
 
@@ -56,9 +53,9 @@ namespace ModelRelief.Features
         /// </summary>
         /// <param name="getRequest">Request with paging options such as PageNumber, PageSize, etc.</param>
         /// <returns>Index page.</returns>
-        public virtual async Task<IActionResult> Index([FromQuery] GetRequest getRequest)
+        public virtual async Task<IActionResult> Index([FromQuery] GetListRequest getRequest)
         {
-            getRequest = getRequest ?? new GetRequest();
+            getRequest = getRequest ?? new GetListRequest();
             var pagedResults = await HandleRequestAsync(new GetListRequest<TEntity, TGetModel> 
             {
                 User = User,

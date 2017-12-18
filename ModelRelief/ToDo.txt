@@ -5,6 +5,7 @@
 }
 
 <--- Commit
+Rename GetRequest -> GetListRequest.
 
 <-- Technical Education
         Manning AspNet Core book.
@@ -33,17 +34,10 @@
                     DepthBuffer
                     MeshTransform
                 Whenever a dependent is updated, the synchronized property is set to false.
-
-            Introduce specifif (POST) endpoint for Mesh generation actions.
-                https://softwareengineering.stackexchange.com/questions/338666/how-does-a-rest-api-fit-for-a-command-action-based-domain
-                    POST /api/v1/meshes/id/generate
-                    Mesh resources should not support POST creation since they are calculated on the server.
     
     Refactoring
         TPostModel -> TInModel
-            DTO POST Model -> DTP POST or PUT Model
         TGetModel -> TOutModel (?)
-        Check the names of all action method parameters.
 
         UX Refactoring
         --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -57,20 +51,6 @@
         Edit            update                                  POST            /api/v1/resource/edit/id                Put                 PostUpdate              View; JSON object
         Delete          delete                                  POST            /api/v1/resource/deleteconfirmed/id     Delete                                      Index
 
-        Existing
-            GetSingle
-            GetList
-            PostAdd
-            PostUpdate
-            Put
-            Delete
-
-        Requests, Handlers, Validators
-            PostAdd* -> Post*.
-       +    PostUpdate -> Put*.
-       +    Put* -> Patch*.
-
-            Data structure GetRequest -> GetListRequest.
 
         API Refactoring
         --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -99,12 +79,6 @@
             Create DeleteFile*
 
         Controllers
-        
-            JSON
-                PostAdd
-                    [HttpPost]
-                 *  public virtual async Task<IActionResult> Post([FromBody] TPostModel postRequest)
-                 *      PostAddRequest -> PostRequest
 
             Binary
                 (new)
@@ -128,7 +102,6 @@
 
         IntegrationTesting Refactoring
         --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        Rename tests to match new request nomenclature.
         Add file-based integration tests.
 
     How should file names and extensions be handled?

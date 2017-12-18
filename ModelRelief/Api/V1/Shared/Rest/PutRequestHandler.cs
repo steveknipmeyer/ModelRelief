@@ -25,11 +25,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// </summary>
     /// <remarks>All properties are updated.</remarks>
     /// <typeparam name="TEntity">Domain model</typeparam>
-    /// <typeparam name="TPostModel">DTO POST model.</typeparam>
+    /// <typeparam name="TPostModel">DTO PUT model.</typeparam>
     /// <typeparam name="TGetModel">DTO GET model.</typeparam>
     public class PutRequestHandler<TEntity, TPostModel, TGetModel> : ValidatedHandler<PutRequest<TEntity, TPostModel, TGetModel>, TGetModel>
         where TEntity    : DomainModel
-        where TPostModel : ITGetModel
         where TGetModel  : ITGetModel
     {
         /// <summary>

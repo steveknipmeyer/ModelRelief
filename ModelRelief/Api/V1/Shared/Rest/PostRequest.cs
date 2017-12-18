@@ -19,7 +19,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <remarks>This request is used to create a new model.</remarks>
     public class PostRequest<TEntity, TPostModel, TGetModel> : IRequest<TGetModel>
         where TEntity    : DomainModel
-        where TPostModel : ITGetModel
         where TGetModel  : ITGetModel
     {
         /// <summary>

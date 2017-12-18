@@ -15,12 +15,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// </summary>
     /// <remarks>All properties are updated.</remarks>
     /// <typeparam name="TEntity">The domain type of the model.</typeparam>
-    /// <typeparam name="TPostModel">The DTO POST model. Contains a model Id</typeparam>
+    /// <typeparam name="TPostModel">The DTO PUT model. Contains a model Id</typeparam>
     /// <typeparam name="TGetModel">The DTO GET model.</typeparam>
     /// <remarks>This request is used to update all the properties of an existing model.</remarks>
     public class PutRequest<TEntity, TPostModel, TGetModel> : IRequest<TGetModel>
         where TEntity    : DomainModel
-        where TPostModel : ITGetModel
         where TGetModel  : ITGetModel
     {
         /// <summary>
