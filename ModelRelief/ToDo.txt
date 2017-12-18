@@ -1,5 +1,6 @@
 ﻿<--- Commit
-
+Add PutFile action method to support a PUT to an existing resource. 
+It chains to PostFile since there it is not meaningful to update a portion of a file.
 
 <-- Technical Education
         Manning AspNet Core book.
@@ -16,9 +17,11 @@
     Design the mechanism for creating a file-based resource such as a Model, DepthBuffer or Mesh.
     https://stackoverflow.com/questions/16877968/call-a-server-side-method-on-a-resource-in-a-restful-way
 
-    Support the new /api/v1/resource/id/file endpoint.       
-        How should the file be named?
+    File Names
+        How should files be named?
             Resource Id or TEntity.Name?
+            Extensions
+            File types?
     
     Implement the Mesh property-change trigger to generate a Mesh.
         Mesh Generation
@@ -29,73 +32,56 @@
                     MeshTransform
                 Whenever a dependent is updated, the synchronized property is set to false.
 
+    DeleteRequest
+        Remove file system resources in addition to the database rows.
+
+    Create GetFile.
+
     Disallow the invalid endpoints.      
 
+    Review and organize the Postman tests.
+
     Add file-based integration tests.
+        Implement as a new abstract class.
+            Refactor BaseIntegrationTests to move some common methods to Framework?
+        PostFile
+            Put
+        GetFile       
+        Delete
+            Confirm associated files are also deleted.
 
-        UX Refactoring
-        --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        Browser forms support only GET or POST.
+    UX Refactoring
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    Browser forms support only GET or POST.
                                                                                                                                                                                                                                                                                                                                                                          
-        View            Operation               Note            HTTP            Endpoint                                Internal Request    Legacy Request          Return
-        ---------       ---------               ------------    ------------    ---------------------                   -----------------   -----------------       -------------------------
-        Index           read (collection)                       GET             /api/v1/resource                        GetList                                     View; paged collection
-        Details         read (single)                           GET             /api/v1/resource/details/id             GetSingle                                   View; JSON object
-        Create          create                                  POST            /api/v1/resource                        PostAdd                                     View; JSON object
-        Edit            update                                  POST            /api/v1/resource/edit/id                Put                 PostUpdate              View; JSON object
-        Delete          delete                                  POST            /api/v1/resource/deleteconfirmed/id     Delete                                      Index
+    View            Operation               Note            HTTP            Endpoint                                Internal Request    Legacy Request          Return
+    ---------       ---------               ------------    ------------    ---------------------                   -----------------   -----------------       -------------------------
+    Index           read (collection)                       GET             /api/v1/resource                        GetList                                     View; paged collection
+    Details         read (single)                           GET             /api/v1/resource/details/id             GetSingle                                   View; JSON object
+    Create          create                                  POST            /api/v1/resource                        PostAdd                                     View; JSON object
+    Edit            update                                  POST            /api/v1/resource/edit/id                Put                 PostUpdate              View; JSON object
+    Delete          delete                                  POST            /api/v1/resource/deleteconfirmed/id     Delete                                      Index
 
 
-        API Refactoring
-        --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    API Refactoring
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        Format          Operation               Note            HTTP           Endpoint                                 Internal Request    Legacy Request          Return
-        ---------       ---------               ------------    ------------   ---------------------                    -----------------   -----------------      -------------------------
-        JSON            read (collection)                       GET            /api/v1/resource/id                      GetList                                     OK; JSON collection
-        JSON            read (single)                           GET            /api/v1/resource/id                      GetSingle                                   OK; JSON object
-        JSON            create                                  POST           /api/v1/resource                         Post                PostAdd                 Created; new id returned and default metadata       
-        JSON            update (full)                           PUT            /api/v1/resource/id                      Put                 PostUpdate              OK; JSON object
-        JSON            update (partial)                        PATCH          /api/v1/resource/id                      Patch               Put                     OK; JSON object
-        JSON            update (partial)                        PUT            /api/v1/resource/id/patch                Patch               Put                     OK; JSON object
-        JSON            delete                                  DELETE         /api/v1/resource/id                      Delete                                      OK
+    Format          Operation               Note            HTTP           Endpoint                                 Internal Request    Legacy Request          Return
+    ---------       ---------               ------------    ------------   ---------------------                    -----------------   -----------------      -------------------------
+    JSON            read (collection)                       GET            /api/v1/resource/id                      GetList                                     OK; JSON collection
+    JSON            read (single)                           GET            /api/v1/resource/id                      GetSingle                                   OK; JSON object
+    JSON            create                                  POST           /api/v1/resource                         Post                PostAdd                 Created; new id returned and default metadata       
+    JSON            update (full)                           PUT            /api/v1/resource/id                      Put                 PostUpdate              OK; JSON object
+    JSON            update (partial)                        PATCH          /api/v1/resource/id                      Patch               Put                     OK; JSON object
+    JSON            update (partial)                        PUT            /api/v1/resource/id/patch                Patch               Put                     OK; JSON object
+    JSON            delete                                  DELETE         /api/v1/resource/id                      Delete                                      OK
 
-        binary          read (colleciton)       disallow   
-        binary          read (single)                           GET            /api/v1/resource/id/file                 GetFile             new                     OK; octet-stream
-        binary          create                  disallow Mesh   POST           /api/v1/resource                         PostFile                                    Created; new id returned and default metadata       
-        binary          update (full)                           PUT            /api/v1/resource/id/file                 PutFile             new                     OK
-        binary          update (partial)        disallow   
-        binary          delete                                  DELETE         /api/v1/resource/id/File                 DeleteFile          new                     OK
-
-        Requests, Handlers, Validators
-
-            Create PutFile*.
-            Create GetFile*.
-            Create DeleteFile*
-
-        Controllers
-
-            Binary
-                (new)
-                [HttpGet("{id:int}/file")]
-                [Produces("application/octet-stream")]
-                [DisableRequestSizeLimit]
-                public virtual async Task<IActionResult> GetFile(int id)
-                    GetFileRequest
-
-                (new)
-                [HttpPut("{id:int}/file")]
-                [consumes("application/octet-stream")]
-                [DisableRequestSizeLimit]
-                public virtual async Task<IActionResult> PutFile(int id)
-                    PutFileRequest
-
-                (new)
-                [HttpDelete("{id:int}/file")]
-                public virtual async Task<IActionResult> Delete(int id)
-                    DeleteFileRequest
-
-
-    How should file names and extensions be handled?
+    binary          read (colleciton)       disallow   
+    binary          read (single)                           GET            /api/v1/resource/id/file                 GetFile             new                     OK; octet-stream
+    binary          create                  disallow Mesh   POST           /api/v1/resource                         PostFile                                    Created; new id returned and default metadata       
+    binary          update (full)                           PUT            /api/v1/resource/id/file                 PutFile             new                     OK
+    binary          update (partial)        disallow   
+    binary          delete                                  DELETE         /api/v1/resource/id/File                 DeleteFile          new                     OK
 
     Add authentication support!
 

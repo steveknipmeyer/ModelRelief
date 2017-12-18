@@ -91,6 +91,17 @@ namespace ModelRelief.Api.V1.Shared
                 Id = id
             });
         }
+
+        [HttpGet("{id:int}/file")]
+        [Produces("application/octet-stream")]
+        [DisableRequestSizeLimit]
+        public virtual async Task<IActionResult> GetFile(int id)
+        {
+            return await HandleRequestAsync(new GetFileRequest<TEntity> {
+                User = User,
+                Id = id
+            });
+        }
         #endregion
 
         #region Create
@@ -153,6 +164,18 @@ namespace ModelRelief.Api.V1.Shared
                 Id = id,
                 UpdatedModel = putRequest
             });
+        }
+
+        /// <summary>
+        /// Action method to update a file in its entirey that is associated with a model.
+        /// </summary>
+        /// <returns>TGetModel of updated model.</returns>
+        [HttpPut("{id:int}/file")]
+        [Consumes("application/octet-stream")]
+        [DisableRequestSizeLimit]
+        public virtual async Task<IActionResult> PutFile()
+        {
+            return await PostFile();
         }
 
         /// <summary>
