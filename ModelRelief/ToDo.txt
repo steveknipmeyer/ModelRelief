@@ -1,5 +1,6 @@
 ﻿<--- Commit
 
+
 <-- Technical Education
         Manning AspNet Core book.
         Manning Dependency Injection book.
@@ -11,13 +12,10 @@
     Create ModelReliefBaseline.db from ModelReliefTest.db.
 
 <-- Api Design
+    
+    Review DI order.
 
-    Add logging to RequestHandlers.
-
-    DeleteRequest
-        Remove file system resources in addition to the database rows.
-
-    Disallow the invalid endpoints.      
+    Disallow the invalid endpoints?     
 
     Design the mechanism for creating a file-based resource such as a Model, DepthBuffer or Mesh.
     https://stackoverflow.com/questions/16877968/call-a-server-side-method-on-a-resource-in-a-restful-way
@@ -49,7 +47,7 @@
         Delete
             Confirm associated files are also deleted.
 
-    UX Refactoring
+    UX Requests
     --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     Browser forms support only GET or POST.
                                                                                                                                                                                                                                                                                                                                                                          
@@ -62,7 +60,7 @@
     Delete          delete                                  POST            /api/v1/resource/deleteconfirmed/id     Delete                                      Index
 
 
-    API Refactoring
+    API Requests
     --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     Format          Operation               Note            HTTP           Endpoint                                 Internal Request    Legacy Request          Return
@@ -75,9 +73,8 @@
     JSON            update (partial)                        PUT            /api/v1/resource/id/patch                Patch               Put                     OK; JSON object
     JSON            delete                                  DELETE         /api/v1/resource/id                      Delete                                      OK
 
-    binary          read (colleciton)       disallow   
     binary          read (single)                           GET            /api/v1/resource/id/file                 GetFile             new                     OK; octet-stream
-    binary          create                  disallow Mesh   POST           /api/v1/resource                         PostFile                                    Created; new id returned and default metadata       
+    binary          create                  disallow Mesh   POST           /api/v1/resource/id/file                 PostFile                                    Created; new id returned and default metadata       
     binary          update (full)                           PUT            /api/v1/resource/id/file                 PutFile             new                     OK
     binary          update (partial)        disallow   
     binary          delete                                  DELETE         /api/v1/resource/id/File                 DeleteFile          new                     OK

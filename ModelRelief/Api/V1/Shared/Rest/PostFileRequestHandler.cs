@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Hosting;
 using ModelRelief.Utility;
 using ModelRelief.Services;
 using ModelRelief.Api.V1.Shared.Errors;
+using Microsoft.Extensions.Logging;
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
@@ -35,8 +36,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         where TEntity    : DomainModel, IFileResource, new()
         where TGetModel  : ITGetModel
     {
-        public IHostingEnvironment HostingEnvironment { get; }
-        public Services.IConfigurationProvider ConfigurationProvider { get; }
+        private ILogger<TEntity> Logger { get; }
 
         /// <summary>
         /// Constructor
@@ -46,12 +46,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="mapper">IMapper</param>
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
-        /// <param name="validators">All validators matching IValidator for the given request.</param>
-        public PostFileRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, IEnumerable<IValidator<PostFileRequest<TEntity, TGetModel>>> validators)
-            : base(userManager, dbContext, mapper, validators)
+        /// <param name="logger">ILogger.</param>
+       public PostFileRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, ILogger<TEntity> logger)
+            : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, null)
         {
-            HostingEnvironment = hostingEnvironment;
-            ConfigurationProvider = configurationProvider;
+            Logger = logger;
         }
 
         /// <summary>
@@ -69,7 +68,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             // ApplicationUser determines file path
             var user = targetModel.User;
 
-            var fileName = Files.ModelFileName(targetModel, user, ConfigurationProvider, HostingEnvironment);
+            var fileName = ModelFileName(targetModel, user);
             await Files.WriteFileFromByteArray(fileName, message.NewFile.Raw);
 
             // file path is known now

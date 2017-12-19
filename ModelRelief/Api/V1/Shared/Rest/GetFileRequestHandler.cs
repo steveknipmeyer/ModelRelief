@@ -8,6 +8,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ModelRelief.Api.V1.Shared.Errors;
 using ModelRelief.Database;
 using ModelRelief.Domain;
@@ -25,8 +26,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     public class GetFileRequestHandler<TEntity>  : ValidatedHandler<GetFileRequest<TEntity>, FileContentResult>
         where TEntity   : DomainModel
     {
-        public IHostingEnvironment HostingEnvironment { get; }
-        public Services.IConfigurationProvider ConfigurationProvider { get; }
+        private ILogger<TEntity> Logger { get; }
 
         /// <summary>
         /// Constructor
@@ -36,11 +36,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="mapper">IMapper</param>
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
-        public GetFileRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider)
-            : base(userManager, dbContext, mapper, null)
+        /// <param name="logger">ILogger.</param>
+       public GetFileRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, ILogger<TEntity> logger)
+            : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, null)
         {
-            HostingEnvironment = hostingEnvironment;
-            ConfigurationProvider = configurationProvider;
+            Logger = logger;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             // ApplicationUser determines file path
             var user = targetModel.User;
 
-            var fileName = Files.ModelFileName(targetModel, user, ConfigurationProvider, HostingEnvironment);
+            var fileName = ModelFileName(targetModel, user);
 
             var contents = File.ReadAllBytes(fileName);
             var response = new FileContentResult(contents, "application/json"); 

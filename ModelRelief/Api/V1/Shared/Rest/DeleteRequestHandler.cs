@@ -8,6 +8,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ModelRelief.Api.V1.Shared.Errors;
 using ModelRelief.Database;
 using ModelRelief.Domain;
@@ -27,8 +28,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     public class DeleteRequestHandler<TEntity>  : ValidatedHandler<DeleteRequest<TEntity>, object>
         where TEntity   : DomainModel
     {
-        public IHostingEnvironment HostingEnvironment { get; }
-        public Services.IConfigurationProvider ConfigurationProvider { get; }
+        private ILogger<TEntity> Logger { get; }
 
         /// <summary>
         /// Constructor
@@ -38,11 +38,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="mapper">IMapper</param>
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
-        public DeleteRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider)
-            : base(userManager, dbContext, mapper, null)
+        /// <param name="logger">ILogger.</param>
+        public DeleteRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider, ILogger<TEntity> logger)
+            : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, null)
         {
-            HostingEnvironment = hostingEnvironment;
-            ConfigurationProvider = configurationProvider;
+            Logger = logger;
         }
 
         /// <summary>
@@ -58,10 +58,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 throw new EntityNotFoundException(typeof(TEntity), message.Id);
             
             // remove user storage
-            var modelStorageFolder = Files.ModelStorageFolder(modelToRemove, modelToRemove.User, ConfigurationProvider, HostingEnvironment);
-            Debug.WriteLine ($"Deleting model storage folder: {modelStorageFolder}");
-//          Files.DeleteFolder(modelStorageFolder, true);
-
+            var modelStorageFolder = ModelStorageFolder(modelToRemove, modelToRemove.User);
+            Logger.LogWarning ($"Deleting model storage folder: {modelStorageFolder}");
+#if false
+            Files.DeleteFolder(modelStorageFolder, true);
+#endif
             DbContext.Remove(modelToRemove);
 
             return null;

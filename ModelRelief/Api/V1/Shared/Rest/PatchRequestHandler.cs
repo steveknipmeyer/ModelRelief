@@ -20,6 +20,8 @@ using ModelRelief.Api.V1.Extensions;
 using ModelRelief.Infrastructure;
 using ModelRelief.Api.V1.Shared.Errors;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
@@ -32,15 +34,23 @@ namespace ModelRelief.Api.V1.Shared.Rest
         where TEntity    : DomainModel
         where TGetModel  : ITGetModel
     {
+        private ILogger<TEntity> Logger { get; }
+
         /// <summary>
-        /// Contstructor
+        /// Constructor
         /// </summary>
         /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
         /// <param name="mapper">IMapper</param>
+        /// <param name="hostingEnvironment">IHostingEnvironment.</param>
+        /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="validators">All validators matching IValidator for the given request.</param>
-        public PatchRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IEnumerable<IValidator<PatchRequest<TEntity, TGetModel>>> validators)
-            : base(userManager, dbContext, mapper, validators) {}
+        /// <param name="logger">ILogger.</param>
+       public PatchRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, IEnumerable<IValidator<PatchRequest<TEntity, TGetModel>>> validators, ILogger<TEntity> logger)
+            : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, validators)
+        {
+            Logger = logger;
+        }
 
         /// <summary>
         /// Pre-handler; performns any initialization or setup required before the request is handled.

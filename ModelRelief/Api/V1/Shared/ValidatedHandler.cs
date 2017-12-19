@@ -22,6 +22,9 @@ using Microsoft.EntityFrameworkCore;
 using FluentValidation.Results;
 using System.Reflection;
 using System.Diagnostics;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Hosting;
+using ModelRelief.Services;
 
 namespace ModelRelief.Api.V1.Shared
 {
@@ -36,6 +39,8 @@ namespace ModelRelief.Api.V1.Shared
         public UserManager<ApplicationUser> UserManager { get; }
         public ModelReliefDbContext DbContext { get; }
         public IMapper Mapper { get; }
+        public IHostingEnvironment HostingEnvironment { get; }
+        public Services.IConfigurationProvider ConfigurationProvider { get; }
         public IEnumerable<IValidator<TRequest>> Validators { get; }
 
         /// <summary>
@@ -44,12 +49,16 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context.</param>
         /// <param name="mapper">IMapper</param>
+        /// <param name="hostingEnvironment">IHostingEnvironment.</param>
+        /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="validators">List of validators</param>
-        public ValidatedHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IEnumerable<IValidator<TRequest>> validators)
+        public ValidatedHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, IEnumerable<IValidator<TRequest>> validators)
         {
             UserManager = userManager ?? throw new System.ArgumentNullException(nameof(dbContext));
             DbContext = dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
             Mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
+            HostingEnvironment = hostingEnvironment;
+            ConfigurationProvider = configurationProvider;
 
             // WIP Why are duplicate validators injected here?
             //     Remove duplicates by grouping by Type name.
@@ -89,6 +98,40 @@ namespace ModelRelief.Api.V1.Shared
             var domainModel = await FindModelAsync<TEntity>(claimsPrincipal, id);
             return domainModel != null;
         }           
+
+        /// <summary>
+        /// Returns the associated model storage folder for a given model instance.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="model">Model instance. </param>
+        /// <param name="user">Owning user.</param>
+        /// <returns></returns>
+        public string ModelStorageFolder<TEntity> (TEntity model, ApplicationUser user)
+            where TEntity : DomainModel
+        {
+            var storeUsers  = ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
+            var modelRootFolder = ConfigurationProvider.GetSetting(($"ResourcePaths:Folders:{typeof(TEntity).Name}"));
+
+            string modelStorageFolder = $"{HostingEnvironment.WebRootPath}{storeUsers}{user.Id}/{modelRootFolder}/{model.Id}/";
+            return modelStorageFolder;
+        }
+
+        /// <summary>
+        /// Returns the associated disk file for a given model instance.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="model">Model instance. The filename is the model ID.</param>
+        /// <param name="user">Owning user.</param>
+        /// <returns></returns>
+        public string ModelFileName<TEntity> (TEntity model, ApplicationUser user)
+            where TEntity : DomainModel
+        {
+            string modelStorageFolder = ModelStorageFolder(model, user);
+            string modelName = $"{model.Id}";
+
+            string fileName = $"{modelStorageFolder}{modelName}";
+            return fileName;
+        }
 
         /// <summary>
         /// Validated the property references of the given model to ensure they exist and are owned by the active user.

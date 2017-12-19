@@ -6,8 +6,10 @@
 
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ModelRelief.Api.V1.Extensions;
 using ModelRelief.Database;
 using ModelRelief.Domain;
@@ -28,15 +30,21 @@ namespace ModelRelief.Api.V1.Shared.Rest
         where TEntity   : DomainModel
         where TGetModel : ITGetModel
     {
+        private ILogger<TEntity> Logger { get; }
+
         /// <summary>
-        /// Contstructor
-        /// </summary>TIGetModel,
+        /// Constructor
+        /// </summary>
         /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
         /// <param name="mapper">IMapper</param>
-        public GetListRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper)
-            : base(userManager, dbContext, mapper, null)
+        /// <param name="hostingEnvironment">IHostingEnvironment.</param>
+        /// <param name="configurationProvider">IConfigurationProvider.</param>
+        /// <param name="logger">ILogger.</param>
+       public GetListRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, ILogger<TEntity> logger)
+            : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, null)
         {
+            Logger = logger;
         }
 
         /// <summary>

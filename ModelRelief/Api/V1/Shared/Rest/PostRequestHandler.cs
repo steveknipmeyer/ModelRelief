@@ -7,8 +7,10 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FluentValidation;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ModelRelief.Database;
 using ModelRelief.Domain;
 using ModelRelief.Utility;
@@ -28,16 +30,22 @@ namespace ModelRelief.Api.V1.Shared.Rest
         where TEntity    : DomainModel
         where TGetModel  : ITGetModel
     {
+        private ILogger<TEntity> Logger { get; }
+
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
         /// <param name="mapper">IMapper</param>
+        /// <param name="hostingEnvironment">IHostingEnvironment.</param>
+        /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="validators">All validators matching IValidator for the given request.</param>
-        public PostRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IEnumerable<IValidator<PostRequest<TEntity, TRequestModel, TGetModel>>> validators)
-            : base(userManager, dbContext, mapper, validators)
+        /// <param name="logger">ILogger.</param>
+       public PostRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, IEnumerable<IValidator<PostRequest<TEntity, TRequestModel, TGetModel>>> validators, ILogger<TEntity> logger)
+            : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, validators)
         {
+            Logger = logger;
         }
 
         /// <summary>
