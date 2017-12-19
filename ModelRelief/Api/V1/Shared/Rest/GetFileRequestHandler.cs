@@ -6,9 +6,11 @@
 
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using ModelRelief.Api.V1.Shared.Errors;
 using ModelRelief.Database;
 using ModelRelief.Domain;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -37,15 +39,18 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// </summary>
         /// <param name="message">Request message</param>
         /// <param name="cancellationToken">Token to allows operation to be cancelled</param>
+        /// https://stackoverflow.com/questions/42460198/return-file-in-asp-net-core-web-api
         /// <returns></returns>
         public override async Task<object> OnHandle(GetFileRequest<TEntity> message, CancellationToken cancellationToken)
         {
             var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
             if (targetModel == null)
                 throw new EntityNotFoundException(typeof(TEntity), message.Id);
+            
+            var stream = File.OpenRead(@"C:\Users\Steve\Documents\GitHub\ModelRelief\ModelRelief\ToDo.txt");
 
-            var stream = "Stephen";
-            return stream;
+            var response = new FileStreamResult(stream, "application/octet-stream"); 
+            return Task.FromResult<object>(response);
         }
     }
 }
