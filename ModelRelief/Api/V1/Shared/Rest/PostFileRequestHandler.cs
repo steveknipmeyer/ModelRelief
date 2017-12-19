@@ -69,13 +69,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             // ApplicationUser determines file path
             var user = targetModel.User;
 
-            // write file : file name = resource Name
-            var storeUsers  = ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
-            var modelFolder = ConfigurationProvider.GetSetting(($"ResourcePaths:Folders:{typeof(TEntity).Name}"));
-            string modelPath = $"{storeUsers}{user.Id}/{modelFolder}/{targetModel.Id}/";
-            string modelName = $"{targetModel.Id}";
-
-            string fileName = $"{HostingEnvironment.WebRootPath}{modelPath}{modelName}";
+            var fileName = Files.ModelFileName(targetModel, user, ConfigurationProvider, HostingEnvironment);
             await Files.WriteFileFromByteArray(fileName, message.NewFile.Raw);
 
             // file path is known now

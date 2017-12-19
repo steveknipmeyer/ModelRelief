@@ -8,6 +8,10 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ModelRelief.Domain;
+using Microsoft.Extensions.Configuration;
+using ModelRelief.Services;
+using Microsoft.AspNetCore.Hosting;
 
 namespace ModelRelief.Utility
 {
@@ -121,6 +125,28 @@ namespace ModelRelief.Utility
                 return;
 
             Directory.Delete(path, recursive);
+        }
+
+        /// <summary>
+        /// Returns the associated disk file for a given model instance.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="model">Model instance. The filename is the model ID.</param>
+        /// <param name="user">Owning user.</param>
+        /// <param name="configurationProvider">Configuration settings.</param>
+        /// <param name="hostingEnvironment">Hosting environment.</param>
+        /// <returns></returns>
+        public static string ModelFileName<TEntity> (TEntity model, ApplicationUser user, Services.IConfigurationProvider configurationProvider, IHostingEnvironment hostingEnvironment)
+            where TEntity : DomainModel
+        {
+            var storeUsers  = configurationProvider.GetSetting(ResourcePaths.StoreUsers);
+            var modelFolder = configurationProvider.GetSetting(($"ResourcePaths:Folders:{typeof(TEntity).Name}"));
+
+            string modelPath = $"{storeUsers}{user.Id}/{modelFolder}/{model.Id}/";
+            string modelName = $"{model.Id}";
+
+            string fileName = $"{hostingEnvironment.WebRootPath}{modelPath}{modelName}";
+            return fileName;
         }
     }        
 }

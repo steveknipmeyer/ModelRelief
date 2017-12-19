@@ -5,11 +5,13 @@
 // ------------------------------------------------------------------------//
 
 using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ModelRelief.Api.V1.Shared.Errors;
 using ModelRelief.Database;
 using ModelRelief.Domain;
+using ModelRelief.Utility;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,18 +22,25 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// Represents the concrete handler for a GET single file request.
     /// </summary>
     /// <typeparam name="TEntity">Domain model.</typeparam>
-    public class GetFileRequestHandler<TEntity>  : ValidatedHandler<GetFileRequest<TEntity>, object>
+    public class GetFileRequestHandler<TEntity>  : ValidatedHandler<GetFileRequest<TEntity>, FileContentResult>
         where TEntity   : DomainModel
     {
+        public IHostingEnvironment HostingEnvironment { get; }
+        public Services.IConfigurationProvider ConfigurationProvider { get; }
+
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
         /// <param name="mapper">IMapper</param>
-        public GetFileRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper)
+        /// <param name="hostingEnvironment">IHostingEnvironment.</param>
+        /// <param name="configurationProvider">IConfigurationProvider.</param>
+        public GetFileRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider)
             : base(userManager, dbContext, mapper, null)
         {
+            HostingEnvironment = hostingEnvironment;
+            ConfigurationProvider = configurationProvider;
         }
 
         /// <summary>
@@ -41,16 +50,21 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="cancellationToken">Token to allows operation to be cancelled</param>
         /// https://stackoverflow.com/questions/42460198/return-file-in-asp-net-core-web-api
         /// <returns></returns>
-        public override async Task<object> OnHandle(GetFileRequest<TEntity> message, CancellationToken cancellationToken)
+        public override async Task<FileContentResult> OnHandle(GetFileRequest<TEntity> message, CancellationToken cancellationToken)
         {
             var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
             if (targetModel == null)
                 throw new EntityNotFoundException(typeof(TEntity), message.Id);
-            
-            var stream = File.OpenRead(@"C:\Users\Steve\Documents\GitHub\ModelRelief\ModelRelief\ToDo.txt");
 
-            var response = new FileStreamResult(stream, "application/octet-stream"); 
-            return Task.FromResult<object>(response);
+            // ApplicationUser determines file path
+            var user = targetModel.User;
+
+            var fileName = Files.ModelFileName(targetModel, user, ConfigurationProvider, HostingEnvironment);
+
+            var contents = File.ReadAllBytes(fileName);
+            var response = new FileContentResult(contents, "application/json"); 
+
+            return response;
         }
     }
 }

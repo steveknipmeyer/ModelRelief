@@ -5,6 +5,7 @@
 // ------------------------------------------------------------------------//
 
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using ModelRelief.Domain;
 using System.Security.Claims;
 
@@ -14,7 +15,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     ///  Represents a GET request for a single file.
     /// </summary>
     /// <typeparam name="TEntity">The domain type of the model.</typeparam>
-    public class GetFileRequest<TEntity> : IRequest<object>
+    public class GetFileRequest<TEntity> : IRequest<FileContentResult>
         where TEntity   : DomainModel
     {
         /// <summary>

@@ -3506,7 +3506,7 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
          * Saves the relief to a disk file.
          */
         ComposerController.prototype.saveRelief = function () {
-            this.postMesh();
+            //      this.postMesh();
             this.postDepthBuffer();
         };
         //#endregion

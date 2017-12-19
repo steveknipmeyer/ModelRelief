@@ -93,7 +93,6 @@ namespace ModelRelief.Api.V1.Shared
         }
 
         [HttpGet("{id:int}/file")]
-        [Produces("application/octet-stream")]
         [DisableRequestSizeLimit]
         public virtual async Task<IActionResult> GetFile(int id)
         {
@@ -242,7 +241,7 @@ namespace ModelRelief.Api.V1.Shared
 
             var newModel = (TGetModel)((OkObjectResult)okResult).Value;
             string subResource = postFile ? "/file" : "";
-            string createdUrl = $"{Url.RouteUrl(RouteNames.DefaultApiV1, new {id = newModel.Id})}{subResource}";
+            string createdUrl = $"{this.Request.Path}/{newModel.Id}{subResource}";
 
             Uri createdUrlAbsolute = new Uri($"{Request.Scheme}://{Request.Host}{createdUrl}");
 

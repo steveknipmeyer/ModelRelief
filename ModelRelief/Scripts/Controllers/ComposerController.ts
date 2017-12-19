@@ -149,7 +149,7 @@ export class ComposerController {
      */
     saveRelief(): void {
 
-        this.postMesh();
+//      this.postMesh();
         this.postDepthBuffer();
     }
     //#endregion
