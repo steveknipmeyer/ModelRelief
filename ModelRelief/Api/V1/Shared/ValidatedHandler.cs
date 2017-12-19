@@ -162,9 +162,6 @@ namespace ModelRelief.Api.V1.Shared
 
             if (validationFailures.Count() > 0)
             {
-                // N.B. Stop tracking. There are errors so this model is invalid.
-         //     DbContext.Entry(model).State = EntityState.Detached;
-
                 // package TRequest type with FV ValidationException
                 throw new ApiValidationException(typeof(TRequest), validationFailures);
             }

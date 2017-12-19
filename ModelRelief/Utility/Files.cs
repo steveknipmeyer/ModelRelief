@@ -128,6 +128,25 @@ namespace ModelRelief.Utility
         }
 
         /// <summary>
+        /// Returns the associated model storage folder for a given model instance.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="model">Model instance. </param>
+        /// <param name="user">Owning user.</param>
+        /// <param name="configurationProvider">Configuration settings.</param>
+        /// <param name="hostingEnvironment">Hosting environment.</param>
+        /// <returns></returns>
+        public static string ModelStorageFolder<TEntity> (TEntity model, ApplicationUser user, Services.IConfigurationProvider configurationProvider, IHostingEnvironment hostingEnvironment)
+            where TEntity : DomainModel
+        {
+            var storeUsers  = configurationProvider.GetSetting(ResourcePaths.StoreUsers);
+            var modelRootFolder = configurationProvider.GetSetting(($"ResourcePaths:Folders:{typeof(TEntity).Name}"));
+
+            string modelStorageFolder = $"{hostingEnvironment.WebRootPath}{storeUsers}{user.Id}/{modelRootFolder}/{model.Id}/";
+            return modelStorageFolder;
+        }
+
+        /// <summary>
         /// Returns the associated disk file for a given model instance.
         /// </summary>
         /// <typeparam name="TEntity">Domain model.</typeparam>
@@ -139,13 +158,10 @@ namespace ModelRelief.Utility
         public static string ModelFileName<TEntity> (TEntity model, ApplicationUser user, Services.IConfigurationProvider configurationProvider, IHostingEnvironment hostingEnvironment)
             where TEntity : DomainModel
         {
-            var storeUsers  = configurationProvider.GetSetting(ResourcePaths.StoreUsers);
-            var modelFolder = configurationProvider.GetSetting(($"ResourcePaths:Folders:{typeof(TEntity).Name}"));
-
-            string modelPath = $"{storeUsers}{user.Id}/{modelFolder}/{model.Id}/";
+            string modelStorageFolder = Files.ModelStorageFolder(model, user, configurationProvider, hostingEnvironment);
             string modelName = $"{model.Id}";
 
-            string fileName = $"{hostingEnvironment.WebRootPath}{modelPath}{modelName}";
+            string fileName = $"{modelStorageFolder}{modelName}";
             return fileName;
         }
     }        

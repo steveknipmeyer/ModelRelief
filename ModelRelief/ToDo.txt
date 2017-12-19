@@ -1,6 +1,4 @@
 ﻿<--- Commit
-Add PutFile action method to support a PUT to an existing resource. 
-It chains to PostFile since there it is not meaningful to update a portion of a file.
 
 <-- Technical Education
         Manning AspNet Core book.
@@ -13,6 +11,13 @@ It chains to PostFile since there it is not meaningful to update a portion of a 
     Create ModelReliefBaseline.db from ModelReliefTest.db.
 
 <-- Api Design
+
+    Add logging to RequestHandlers.
+
+    DeleteRequest
+        Remove file system resources in addition to the database rows.
+
+    Disallow the invalid endpoints.      
 
     Design the mechanism for creating a file-based resource such as a Model, DepthBuffer or Mesh.
     https://stackoverflow.com/questions/16877968/call-a-server-side-method-on-a-resource-in-a-restful-way
@@ -32,16 +37,10 @@ It chains to PostFile since there it is not meaningful to update a portion of a 
                     MeshTransform
                 Whenever a dependent is updated, the synchronized property is set to false.
 
-    DeleteRequest
-        Remove file system resources in addition to the database rows.
-
-    Create GetFile.
-
-    Disallow the invalid endpoints.      
-
     Review and organize the Postman tests.
 
     Add file-based integration tests.
+        Add test files for DepthBuffers to support testing.
         Implement as a new abstract class.
             Refactor BaseIntegrationTests to move some common methods to Framework?
         PostFile
