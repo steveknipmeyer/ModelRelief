@@ -5,6 +5,7 @@
 // ------------------------------------------------------------------------//
 using FluentAssertions;
 using ModelRelief.Api.V1.Shared.Rest;
+using ModelRelief.Domain;
 using ModelRelief.Dto;
 using Newtonsoft.Json;
 using System;
@@ -19,57 +20,25 @@ using Xunit;
 namespace ModelRelief.Test.Integration
 {
     /// <summary>
-    /// Represents the shared instance of the TestServer to support multiple tests.
-    /// </summary>
-    public class ServerFixture : IDisposable
-    {
-        public Framework Framework { get; }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        public ServerFixture()
-        {
-            Framework = new Framework();
-        }
-
-        /// <summary>
-        /// Dispose of unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-        }
-    }
-
-    /// <summary>
     /// Base Integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
-    public abstract class BaseIntegrationTests <TGetModel>: IClassFixture<ServerFixture>, IAsyncLifetime
+    public abstract class BaseIntegrationTests <TEntity, TGetModel>: IClassFixture<ServerFixture>, IAsyncLifetime
+        where TEntity   : DomainModel
         where TGetModel : class, ITGetModel, new()
     {
         private ServerFixture ServerFixture { get; set; }
-
-        public static IEnumerable<int> IdRange  { get; set; }
-
-        public string ApiUrl { get; set; }
-        public string UxUrl  {get; set; }
-        public string FirstModelName { get; set; }
-
-        public List<string> ReferencePropertyNames  { get; set; }
-        public int? InvalidReferenceProperty { get; set; }
-        public int? ValidReferenceProperty { get; set; }
-        
-        public string EnumPropertyName { get; set; }
+        private TestModel<TEntity, TGetModel> TestModel { get; set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BaseIntegrationTests(ServerFixture serverFixture)
+        public BaseIntegrationTests(ServerFixture serverFixture, TestModel<TEntity, TGetModel> testModel)
         {
             ServerFixture = serverFixture;
+            TestModel     = testModel;
 
-            Initialize();
+            TestModel.Initialize();
         }
 
         /// <summary>
@@ -91,122 +60,6 @@ namespace ModelRelief.Test.Integration
             return Task.CompletedTask;
         }
 
-        /// <summary>
-        /// Initialize the model-specific settings such as the API endpoints.
-        /// </summary>
-        public virtual void Initialize()
-        {
-            ApiUrl = "";
-            UxUrl  = "";
-            
-            IdRange = Enumerable.Range(0, 0);
-            FirstModelName = "";
-
-            ReferencePropertyNames = new List<string>();
-            InvalidReferenceProperty = 0;
-            ValidReferenceProperty   = null;
-
-            EnumPropertyName = null;
-        }
-
-        /// <summary>
-        /// Finds an existing model.
-        /// </summary>
-        /// <param name="id">Id of model to retrieve.</param>
-        /// <returns>Existing model.</returns>
-        private async Task<TGetModel> FindModel(int modelId)
-        {
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiUrl}/{modelId}");
-
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
-
-            var existingModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
-            return existingModel;
-        }
-
-        /// <summary>
-        /// Constructs a valid model.
-        /// </summary>
-        /// <returns>Valid model.</returns>
-        public  virtual TGetModel ConstructValidModel()
-        {
-            var validModel = new TGetModel()
-            {
-                Name = "Test Model",
-                Description = "This model was constructed through automated testing.",
-            };
-            return validModel;
-        }
-
-        /// <summary>
-        /// Constructs an invalid model.
-        /// </summary>
-        /// <returns>Invalid model.</returns>
-        private TGetModel ConstructInvalidModel()
-        {
-            // Required properties are missing.
-            //  Name 
-            //  Description 
-            //  Format 
-            var invalidModel = new TGetModel()
-            {
-            };
-            return invalidModel;
-        }
-
-        /// <summary>
-        /// Returns the reference property.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns>Reference property for testing.</returns>
-        private PropertyInfo GetReferencePropertyPropertyInfo (TGetModel model)
-        {
-            Type type = model.GetType();
-            PropertyInfo[] properties = type.GetProperties();
-
-            var referenceProperty  = type.GetProperty(ReferencePropertyNames.FirstOrDefault());
-            return referenceProperty;
-        }
-
-        /// <summary>
-        /// Gets the reference property.
-        /// </summary>
-        /// <param name="model">Model to query.</param>
-        /// <returns>Reference property value.</returns>
-        public int?  GetReferenceProperty(TGetModel model)
-        {           
-            var referenceProperty  = GetReferencePropertyPropertyInfo(model);
-            var propertyValue = (int?) referenceProperty.GetValue(model, null);
-
-            return propertyValue;
-        }
-
-        /// <summary>
-        /// Sets the reference property.
-        /// </summary>
-        /// <param name="model">Model to update.</param>
-        /// <returns>Model with updated reference property.</returns>
-        public TGetModel  SetReferenceProperty(TGetModel model, int? value)
-        {
-            var referenceProperty  = GetReferencePropertyPropertyInfo(model);
-            referenceProperty.SetValue(model, value);
-
-            return model;
-        }
-
-        /// <summary>
-        /// Asserts that the request returned a specific HTTP status code.
-        /// </summary>
-        /// <param name="requestResponse">Response.</param>
-        /// <param name="statusCode">Expected status code.</param>
-        private void AssertApiErrorResultHttpStatusCode(RequestResponse requestResponse, HttpStatusCode statusCode)
-        {
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
-
-            var apiErrorResult = JsonConvert.DeserializeObject<ApiError>(requestResponse.ContentString);
-            apiErrorResult.HttpStatusCode.Should().Be(( int )statusCode);
-        }
-
 #region Get
         /// <summary>
         /// Test that a GetSingle request with an valid Id property value returns correct model.
@@ -216,13 +69,13 @@ namespace ModelRelief.Test.Integration
         public virtual async Task GetSingle_ValidIdPropertyValueReturnsCorrectModel()
         {
             // Arrange
-            var modelId = IdRange.Min();
+            var modelId = TestModel.IdRange.Min();
 
             // Act
-            var existingModel = await FindModel(modelId);
+            var existingModel = await TestModel.FindModel(ServerFixture, modelId);
 
             // Assert
-            existingModel.Name.Should().Be(FirstModelName);
+            existingModel.Name.Should().Be(TestModel.FirstModelName);
         }
 
         /// <summary>
@@ -233,13 +86,13 @@ namespace ModelRelief.Test.Integration
         public async Task GetSingle_InvalidIdPropertyValueReturnsNotFound()
         {
             // Arrange
-            var modelId = IdRange.Max() + 1;
+            var modelId = TestModel.IdRange.Max() + 1;
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiUrl}/{modelId}");
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModel.ApiUrl}/{modelId}");
 
             // Assert
-            AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
+            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
         }
 
         /// <summary>
@@ -252,13 +105,13 @@ namespace ModelRelief.Test.Integration
             // Arrange
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, ApiUrl);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, TestModel.ApiUrl);
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
             var pagedResults = JsonConvert.DeserializeObject<PagedResults<TGetModel>>(requestResponse.ContentString);
-            var expectedCount = IdRange.Max() - IdRange.Min() + 1;
+            var expectedCount = TestModel.IdRange.Max() - TestModel.IdRange.Min() + 1;
             pagedResults.Results.Count().Should().Be(expectedCount);
         }
 
@@ -272,10 +125,10 @@ namespace ModelRelief.Test.Integration
         public async Task Post_CanCreateNewModel()
         {
             // Arrange
-            var validModel = ConstructValidModel();
+            var validModel = TestModel.ConstructValidModel();
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, ApiUrl, validModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, TestModel.ApiUrl, validModel);
 
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -292,14 +145,14 @@ namespace ModelRelief.Test.Integration
         public async Task Post_InvalidPropertyValueReturnsBadRequest()
         {
             // Arrange
-            var invalidModel = ConstructInvalidModel();
+            var invalidModel = TestModel.ConstructInvalidModel();
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, ApiUrl, invalidModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, TestModel.ApiUrl, invalidModel);
 
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
 
         /// <summary>
@@ -310,24 +163,24 @@ namespace ModelRelief.Test.Integration
         public async Task Post_ValidReferencePropertyCreatesModel()
         {
             // early exit if model has no reference properties properties
-            if (ReferencePropertyNames.Count() <= 0)
+            if (TestModel.ReferencePropertyNames.Count() <= 0)
             {
                 Assert.True(true);
                 return;
             }
 
             // Arrange
-            var validModel = ConstructValidModel();
-            SetReferenceProperty(validModel, ValidReferenceProperty);
+            var validModel = TestModel.ConstructValidModel();
+            TestModel.SetReferenceProperty(validModel, TestModel.ValidReferenceProperty);
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, ApiUrl, validModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, TestModel.ApiUrl, validModel);
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
             var newModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
-            GetReferenceProperty(newModel).Should().Be(ValidReferenceProperty);
+            TestModel.GetReferenceProperty(newModel).Should().Be(TestModel.ValidReferenceProperty);
         }
 
         /// <summary>
@@ -338,22 +191,22 @@ namespace ModelRelief.Test.Integration
         public async Task Post_InvalidReferencePropertyReturnsBadRequest()
         {
             // early exit if model has no reference properties properties
-            if (ReferencePropertyNames.Count() <= 0)
+            if (TestModel.ReferencePropertyNames.Count() <= 0)
             {
                 Assert.True(true);
                 return;
             }
 
             // Arrange
-            var invalidModel = ConstructValidModel();
-            SetReferenceProperty(invalidModel, InvalidReferenceProperty);
+            var invalidModel = TestModel.ConstructValidModel();
+            TestModel.SetReferenceProperty(invalidModel, TestModel.InvalidReferenceProperty);
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, ApiUrl, invalidModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, TestModel.ApiUrl, invalidModel);
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
 
         /// <summary>
@@ -364,14 +217,14 @@ namespace ModelRelief.Test.Integration
         public async Task Put_CanUpdateModel()
         {
             // Arrange
-            var modelId = IdRange.Min();
-            var existingModel = await FindModel(modelId);
+            var modelId = TestModel.IdRange.Min();
+            var existingModel = await TestModel.FindModel(ServerFixture, modelId);
 
             var updatedName = "Updated Name Property";
             existingModel.Name = updatedName;
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", existingModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{modelId}", existingModel);
 
             // Assert
             requestResponse.Message.EnsureSuccessStatusCode();
@@ -388,15 +241,15 @@ namespace ModelRelief.Test.Integration
         public async Task Put_InvalidIdReturnsNotFound()
         {
             // Arrange
-            var modelId = IdRange.Max();
-            var existingModel = await FindModel (modelId);
+            var modelId = TestModel.IdRange.Max();
+            var existingModel = await TestModel.FindModel(ServerFixture, modelId);
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId + 1}", existingModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{modelId + 1}", existingModel);
 
             // Assert    
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.NotFound);
-            AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
+            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
         }
 
         /// <summary>
@@ -407,24 +260,24 @@ namespace ModelRelief.Test.Integration
         public async Task Put_ValidReferencePropertyUpdatesModel()
         {
             // early exit if model has no reference properties properties
-            if (ReferencePropertyNames.Count() <= 0)
+            if (TestModel.ReferencePropertyNames.Count() <= 0)
             {
                 Assert.True(true);
                 return;
             }
 
             // Arrange
-            var modelId = IdRange.Max();
-            var existingModel = await FindModel (modelId);
-            SetReferenceProperty(existingModel, ValidReferenceProperty);
+            var modelId = TestModel.IdRange.Max();
+            var existingModel = await TestModel.FindModel(ServerFixture, modelId);
+            TestModel.SetReferenceProperty(existingModel, TestModel.ValidReferenceProperty);
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", existingModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{modelId}", existingModel);
 
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
             var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
-            GetReferenceProperty(updatedModel).Should().Be(ValidReferenceProperty);
+            TestModel.GetReferenceProperty(updatedModel).Should().Be(TestModel.ValidReferenceProperty);
         }
 
         /// <summary>
@@ -435,23 +288,23 @@ namespace ModelRelief.Test.Integration
         public async Task Put_InvalidReferencePropertyReturndBadRequest()
         {
             // early exit if model has no reference properties properties
-            if (ReferencePropertyNames.Count() <= 0)
+            if (TestModel.ReferencePropertyNames.Count() <= 0)
             {
                 Assert.True(true);
                 return;
             }
 
             // Arrange
-            var modelId = IdRange.Max();
-            var existingModel = await FindModel (modelId);
-            SetReferenceProperty(existingModel, InvalidReferenceProperty);
+            var modelId = TestModel.IdRange.Max();
+            var existingModel = await TestModel.FindModel(ServerFixture, modelId);
+            TestModel.SetReferenceProperty(existingModel, TestModel.InvalidReferenceProperty);
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}", existingModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{modelId}", existingModel);
             
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
 #endregion
 #region Patch
@@ -467,7 +320,7 @@ namespace ModelRelief.Test.Integration
         public async Task Patch_TargetPropertyIsUpdated()
         {
             // Arrange
-            var modelId = IdRange.Min();
+            var modelId = TestModel.IdRange.Min();
             var updatedName = "Updated Name Property";
             var patchModel = new 
             {
@@ -475,7 +328,7 @@ namespace ModelRelief.Test.Integration
             };
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}/patch", patchModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{modelId}/patch", patchModel);
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
@@ -492,7 +345,7 @@ namespace ModelRelief.Test.Integration
         public async Task Patch_InvalidIdPropertyReturnsNotFound()
         {
             // Arrange
-            var modelId = IdRange.Max() + 1;
+            var modelId = TestModel.IdRange.Max() + 1;
             var updatedName = "Updated Name Property";
             var patchModel = new 
             {
@@ -500,11 +353,11 @@ namespace ModelRelief.Test.Integration
             };
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}/patch", patchModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{modelId}/patch", patchModel);
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
+            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
         }
 
         /// <summary>
@@ -515,18 +368,18 @@ namespace ModelRelief.Test.Integration
         public async Task Patch_InvalidPropertyNameReturnsBadRequest()
         {
             // Arrange
-            var modelId = IdRange.Max();
+            var modelId = TestModel.IdRange.Max();
             var invalidPatchModel = new
                 {
                 InvalidProperty = "NonExistent"
                 };
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}/patch", invalidPatchModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{modelId}/patch", invalidPatchModel);
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
 
         /// <summary>
@@ -537,25 +390,25 @@ namespace ModelRelief.Test.Integration
         public async Task Patch_InvalidEnumPropertyValueReturnsBadRequest()
         {
             // early exit if model has no enum properties
-            if (String.IsNullOrEmpty(EnumPropertyName))
+            if (String.IsNullOrEmpty(TestModel.EnumPropertyName))
             {
                 Assert.True(true);
                 return;
             }
 
             // Arrange
-            var modelId = IdRange.Max();
+            var modelId = TestModel.IdRange.Max();
             var invalidPatchModel = new Dictionary<string, string>
             {
-                { EnumPropertyName, "Invalid Enum" }
+                { TestModel.EnumPropertyName, "Invalid Enum" }
             };
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}/patch", invalidPatchModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{modelId}/patch", invalidPatchModel);
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
 
         /// <summary>
@@ -566,23 +419,23 @@ namespace ModelRelief.Test.Integration
         public async Task Patch_InvalidReferencePropertyReturnsBadRequest()
         {
             // early exit if model has no reference properties properties
-            if (ReferencePropertyNames.Count() <= 0)
+            if (TestModel.ReferencePropertyNames.Count() <= 0)
             {
                 Assert.True(true);
                 return;
             }
 
             // Arrange
-            var modelId = IdRange.Max();
-            var invalidPatchModel = await FindModel(modelId);
-            SetReferenceProperty(invalidPatchModel, InvalidReferenceProperty);
+            var modelId = TestModel.IdRange.Max();
+            var invalidPatchModel = await TestModel.FindModel(ServerFixture, modelId);
+            TestModel.SetReferenceProperty(invalidPatchModel, TestModel.InvalidReferenceProperty);
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}/patch", invalidPatchModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{modelId}/patch", invalidPatchModel);
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
 
         /// <summary>
@@ -593,26 +446,26 @@ namespace ModelRelief.Test.Integration
         public async Task Patch_MultipleInvalidReferencePropertiesReturnsMultipleValidationErrorsAndBadRequest()
         {
             // early exit if model has no reference properties properties
-            if (ReferencePropertyNames.Count() <= 0)
+            if (TestModel.ReferencePropertyNames.Count() <= 0)
             {
                 Assert.True(true);
                 return;
             }
 
             // Arrange
-            var modelId = IdRange.Max();
+            var modelId = TestModel.IdRange.Max();
             var invalidPatchModel = new Dictionary<string, int?>();
-            foreach (var propertyName in ReferencePropertyNames)
+            foreach (var propertyName in TestModel.ReferencePropertyNames)
                 invalidPatchModel.Add(propertyName, 0);
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}/patch", invalidPatchModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{modelId}/patch", invalidPatchModel);
 
             // Assert
-            AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
 
             var apiErrorResult = JsonConvert.DeserializeObject<ApiError>(requestResponse.ContentString);
-            apiErrorResult.Errors.Count().Should().Be(ReferencePropertyNames.Count());
+            apiErrorResult.Errors.Count().Should().Be(TestModel.ReferencePropertyNames.Count());
 
         }
 
@@ -624,28 +477,28 @@ namespace ModelRelief.Test.Integration
         public async Task Patch_ValidReferencePropertyUpdatesModel()
         {
             // early exit if model has no reference properties properties
-            if (ReferencePropertyNames.Count() <= 0)
+            if (TestModel.ReferencePropertyNames.Count() <= 0)
             {
                 Assert.True(true);
                 return;
             }
 
             // Arrange
-            var modelId = IdRange.Max();
+            var modelId = TestModel.IdRange.Max();
             // https://stackoverflow.com/questions/6044482/setting-anonymous-type-property-name
             var validPatchModel = new Dictionary<string, int?>
             {
-                { ReferencePropertyNames.FirstOrDefault(), ValidReferenceProperty }
+                { TestModel.ReferencePropertyNames.FirstOrDefault(), TestModel.ValidReferenceProperty }
             };
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}/patch", validPatchModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{modelId}/patch", validPatchModel);
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
             var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
-            GetReferenceProperty(updatedModel).Should().Be(ValidReferenceProperty);
+            TestModel.GetReferenceProperty(updatedModel).Should().Be(TestModel.ValidReferenceProperty);
         }
 #endregion
 
@@ -658,20 +511,20 @@ namespace ModelRelief.Test.Integration
         public async Task Delete_TargetModelIsDeleted()
         {
             // Arrange
-            var modelId = IdRange.Min();
+            var modelId = TestModel.IdRange.Min();
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Delete, $"{ApiUrl}/{modelId}");
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Delete, $"{TestModel.ApiUrl}/{modelId}");
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
             // Now attempt to access the deleted model...
-            requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiUrl}/{modelId}");
+            requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModel.ApiUrl}/{modelId}");
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
+            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
         }
         #endregion
     }

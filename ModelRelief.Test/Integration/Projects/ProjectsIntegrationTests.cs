@@ -14,49 +14,20 @@ using System.Threading.Tasks;
 using Xunit;
 
 #if true
-namespace ModelRelief.Test.Integration.Meshes
+namespace ModelRelief.Test.Integration.Projects
 {
     /// <summary>
     /// Base integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
-    public class ProjectsIntegrationTests : BaseIntegrationTests<Dto.Project>
+    public class ProjectsIntegrationTests : BaseIntegrationTests<Domain.Project, Dto.Project>
     {
         /// <summary>
         /// Constructor
         /// </summary>
         public ProjectsIntegrationTests(ServerFixture serverFixture) :
-            base (serverFixture)
+            base (serverFixture, new ProjectTestModel())
         {
-        }
-
-        /// <summary>
-        /// Initialize the model-specific settings such as the API endpoints.
-        /// </summary>
-        public override void Initialize()
-        {
-            ApiUrl = "/api/v1/projects";
-            UxUrl  = "/projects";
-            
-            IdRange = Enumerable.Range(1, 3);
-            FirstModelName = "ModelRelief";
-
-            ReferencePropertyNames = new List<string>();
-            InvalidReferenceProperty = 0;
-            ValidReferenceProperty   = 1;
-
-            EnumPropertyName = null;
-        }
-
-        /// <summary>
-        /// Constructs a valid model.
-        /// </summary>
-        /// <returns>Valid model.</returns>
-        public override Dto.Project ConstructValidModel()
-        {
-            var validModel = base.ConstructValidModel();
-
-            return validModel;
         }
 
 #region Get

@@ -20,44 +20,14 @@ namespace ModelRelief.Test.Integration.Meshes
     /// Base integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
-    public class MeshesIntegrationTests : BaseIntegrationTests<Dto.Mesh>
+    public class MeshesIntegrationTests : BaseIntegrationTests<Domain.Mesh, Dto.Mesh>
     {
         /// <summary>
         /// Constructor
         /// </summary>
         public MeshesIntegrationTests(ServerFixture serverFixture) :
-            base (serverFixture)
+            base (serverFixture, new MeshTestModel())
         {
-        }
-
-        /// <summary>
-        /// Initialize the model-specific settings such as the API endpoints.
-        /// </summary>
-        public override void Initialize()
-        {
-            ApiUrl = "/api/v1/meshes";
-            UxUrl  = "/meshes";
-            
-            IdRange = Enumerable.Range(1, 3);
-            FirstModelName = "Lucy";
-
-            ReferencePropertyNames = new List<string> {"ProjectId", "CameraId", "DepthBufferId", "MeshTransformId"};
-            InvalidReferenceProperty = 0;
-            ValidReferenceProperty   = 1;
-
-            EnumPropertyName = "Format";
-        }
-
-        /// <summary>
-        /// Constructs a valid model.
-        /// </summary>
-        /// <returns>Valid model.</returns>
-        public override Dto.Mesh ConstructValidModel()
-        {
-            var validModel = base.ConstructValidModel();
-            validModel.Format = Domain.MeshFormat.OBJ;
-
-            return validModel;
         }
 
 #region Get

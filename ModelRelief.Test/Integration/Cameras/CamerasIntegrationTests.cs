@@ -14,49 +14,20 @@ using System.Threading.Tasks;
 using Xunit;
 
 #if true
-namespace ModelRelief.Test.Integration.Meshes
+namespace ModelRelief.Test.Integration.Cameras
 {
     /// <summary>
     /// Base integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
-    public class CamerasIntegrationTests : BaseIntegrationTests<Dto.Camera>
+    public class CamerasIntegrationTests : BaseIntegrationTests<Domain.Camera, Dto.Camera>
     {
         /// <summary>
         /// Constructor
         /// </summary>
         public CamerasIntegrationTests(ServerFixture serverFixture) :
-            base (serverFixture)
+            base (serverFixture, new CameraTestModel())
         {
-        }
-
-        /// <summary>
-        /// Initialize the model-specific settings such as the API endpoints.
-        /// </summary>
-        public override void Initialize()
-        {
-            ApiUrl = "/api/v1/cameras";
-            UxUrl  = "/cameras";
-            
-            IdRange = Enumerable.Range(1, 2);
-            FirstModelName = "Top Camera";
-
-            ReferencePropertyNames = new List<string> {"ProjectId"};
-            InvalidReferenceProperty = 0;
-            ValidReferenceProperty   = 1;
-
-            EnumPropertyName = "StandardView";
-        }
-
-        /// <summary>
-        /// Constructs a valid model.
-        /// </summary>
-        /// <returns>Valid model.</returns>
-        public override Dto.Camera ConstructValidModel()
-        {
-            var validModel = base.ConstructValidModel();
-
-            return validModel;
         }
 
 #region Get

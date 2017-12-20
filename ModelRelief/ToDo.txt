@@ -1,5 +1,7 @@
 ﻿<--- Commit
 
+
+
 <-- Technical Education
         Manning AspNet Core book.
         Manning Dependency Injection book.
@@ -10,19 +12,17 @@
 
 <-- Api Design
     Create ModelReliefBaseline.db from ModelReliefTest.db.
-    
-    Review and organize the Postman tests.
+
     Log ApiErrorResult?
 
     Add file-based integration tests.       
-        Implement as a new abstract class.
-            Refactor BaseIntegrationTests to move some common methods to Framework?
-
         PostFile
             Put
         GetFile       
         Delete
             Confirm associated files are also deleted.
+
+    Review and organize the Postman tests.
 
     Design the mechanism for creating a file-based resource such as a Model, DepthBuffer or Mesh.
     https://stackoverflow.com/questions/16877968/call-a-server-side-method-on-a-resource-in-a-restful-way

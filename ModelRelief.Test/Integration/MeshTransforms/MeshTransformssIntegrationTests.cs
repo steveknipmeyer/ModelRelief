@@ -14,49 +14,20 @@ using System.Threading.Tasks;
 using Xunit;
 
 #if true
-namespace ModelRelief.Test.Integration.Meshes
+namespace ModelRelief.Test.Integration.MeshTransforms
 {
     /// <summary>
     /// Base integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
-    public class MeshTransformsIntegrationTests : BaseIntegrationTests<Dto.MeshTransform>
+    public class MeshTransformsIntegrationTests : BaseIntegrationTests<Domain.MeshTransform, Dto.MeshTransform>
     {
         /// <summary>
         /// Constructor
         /// </summary>
         public MeshTransformsIntegrationTests(ServerFixture serverFixture) :
-            base (serverFixture)
+            base (serverFixture, new MeshTransformTestModel())
         {
-        }
-
-        /// <summary>
-        /// Initialize the model-specific settings such as the API endpoints.
-        /// </summary>
-        public override void Initialize()
-        {
-            ApiUrl = "/api/v1/meshtransforms";
-            UxUrl  = "/meshtransforms";
-            
-            IdRange = Enumerable.Range(1, 2);
-            FirstModelName = "Identity";
-
-            ReferencePropertyNames = new List<string> {"ProjectId"};
-            InvalidReferenceProperty = 0;
-            ValidReferenceProperty   = 1;
-
-            EnumPropertyName = null;
-        }
-
-        /// <summary>
-        /// Constructs a valid model.
-        /// </summary>
-        /// <returns>Valid model.</returns>
-        public override Dto.MeshTransform ConstructValidModel()
-        {
-            var validModel = base.ConstructValidModel();
-
-            return validModel;
         }
 
 #region Get
