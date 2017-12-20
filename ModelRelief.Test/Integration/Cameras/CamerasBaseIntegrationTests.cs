@@ -12,22 +12,24 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
+
 #if true
-namespace ModelRelief.Test.Integration.DepthBuffers
+namespace ModelRelief.Test.Integration.Cameras
 {
     /// <summary>
-    /// DepthBuffer integration Tests.
+    /// Base integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
-    public class DepthBuffersIntegrationTests : BaseIntegrationTests<Domain.DepthBuffer, Dto.DepthBuffer>
+    public class CamerasBaseIntegrationTests : BaseIntegrationTests<Domain.Camera, Dto.Camera>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public DepthBuffersIntegrationTests(ServerFixture serverFixture) :
-            base (serverFixture, new DepthBufferTestModel())
+        public CamerasBaseIntegrationTests(ServerFixture serverFixture) :
+            base (serverFixture, new CameraTestModel())
         {
         }
+
 #region Get
 #endregion
 

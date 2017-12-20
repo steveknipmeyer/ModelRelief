@@ -14,19 +14,19 @@ using System.Threading.Tasks;
 using Xunit;
 
 #if true
-namespace ModelRelief.Test.Integration.Cameras
+namespace ModelRelief.Test.Integration.Meshes
 {
     /// <summary>
     /// Base integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
-    public class CamerasIntegrationTests : BaseIntegrationTests<Domain.Camera, Dto.Camera>
+    public class MeshesBaseIntegrationTests : BaseIntegrationTests<Domain.Mesh, Dto.Mesh>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public CamerasIntegrationTests(ServerFixture serverFixture) :
-            base (serverFixture, new CameraTestModel())
+        public MeshesBaseIntegrationTests(ServerFixture serverFixture) :
+            base (serverFixture, new MeshTestModel())
         {
         }
 

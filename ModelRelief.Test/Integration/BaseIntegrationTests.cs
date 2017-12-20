@@ -60,7 +60,7 @@ namespace ModelRelief.Test.Integration
             return Task.CompletedTask;
         }
 
-#region Get
+        #region Get
         /// <summary>
         /// Test that a GetSingle request with an valid Id property value returns correct model.
         /// </summary>
@@ -115,8 +115,8 @@ namespace ModelRelief.Test.Integration
             pagedResults.Results.Count().Should().Be(expectedCount);
         }
 
-#endregion
-#region Post
+        #endregion
+        #region Post
         /// <summary>
         /// Test that a Post request can create a model.
         /// </summary>
@@ -208,7 +208,8 @@ namespace ModelRelief.Test.Integration
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
             ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
-
+        #endregion
+        #region Put
         /// <summary>
         /// Test that a Put can update a model.
         /// </summary>
@@ -306,8 +307,8 @@ namespace ModelRelief.Test.Integration
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
             ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
-#endregion
-#region Patch
+        #endregion
+        #region Patch
         // N.B. The ASP.NET Core TestServer does not support HTTP PATCH.
         //      So, the request is packaged as a PUT request to the <resource>/id/patch endpoint.
         //      Applications that can generate PATCH can use the conventional endpoint <resource>/id.
@@ -466,7 +467,6 @@ namespace ModelRelief.Test.Integration
 
             var apiErrorResult = JsonConvert.DeserializeObject<ApiError>(requestResponse.ContentString);
             apiErrorResult.Errors.Count().Should().Be(TestModel.ReferencePropertyNames.Count());
-
         }
 
         /// <summary>
@@ -500,9 +500,9 @@ namespace ModelRelief.Test.Integration
             var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
             TestModel.GetReferenceProperty(updatedModel).Should().Be(TestModel.ValidReferenceProperty);
         }
-#endregion
+        #endregion
 
-#region Delete
+        #region Delete
         /// <summary>
         /// Test that a Delete request deletes the target model.
         /// </summary>

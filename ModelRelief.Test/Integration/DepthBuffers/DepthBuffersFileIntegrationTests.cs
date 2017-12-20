@@ -12,35 +12,22 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
-
 #if true
-namespace ModelRelief.Test.Integration.Projects
+namespace ModelRelief.Test.Integration.DepthBuffers
 {
     /// <summary>
-    /// Base integration Tests.
+    /// DepthBuffer integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
-    public class ProjectsIntegrationTests : BaseIntegrationTests<Domain.Project, Dto.Project>
+    public class DepthBuffersFileIntegrationTests : FileIntegrationTests<Domain.DepthBuffer, Dto.DepthBuffer>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProjectsIntegrationTests(ServerFixture serverFixture) :
-            base (serverFixture, new ProjectTestModel())
+        public DepthBuffersFileIntegrationTests(ServerFixture serverFixture) :
+            base (serverFixture, new DepthBufferTestModel())
         {
         }
-
-#region Get
-#endregion
-
-#region Post
-#endregion
-
-#region Put
-#endregion
-
-#region Delete
-#endregion
     }
 }
 #endif

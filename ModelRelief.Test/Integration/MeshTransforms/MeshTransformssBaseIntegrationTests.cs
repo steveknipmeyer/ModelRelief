@@ -20,12 +20,12 @@ namespace ModelRelief.Test.Integration.MeshTransforms
     /// Base integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
-    public class MeshTransformsIntegrationTests : BaseIntegrationTests<Domain.MeshTransform, Dto.MeshTransform>
+    public class MeshTransformsBaseIntegrationTests : BaseIntegrationTests<Domain.MeshTransform, Dto.MeshTransform>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public MeshTransformsIntegrationTests(ServerFixture serverFixture) :
+        public MeshTransformsBaseIntegrationTests(ServerFixture serverFixture) :
             base (serverFixture, new MeshTransformTestModel())
         {
         }

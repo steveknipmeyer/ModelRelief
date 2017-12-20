@@ -20,12 +20,12 @@ namespace ModelRelief.Test.Integration.Models
     /// Base integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
-    public class ModelsIntegrationTests : BaseIntegrationTests<Domain.Model3d, Dto.Model3d>
+    public class ModelsBaseIntegrationTests : BaseIntegrationTests<Domain.Model3d, Dto.Model3d>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public ModelsIntegrationTests(ServerFixture serverFixture) :
+        public ModelsBaseIntegrationTests(ServerFixture serverFixture) :
             base (serverFixture, new Model3dTestModel())
         {
         }
