@@ -3404,7 +3404,7 @@ define("ModelExporters/OBJExporter", ["require", "exports", "three"], function (
     }());
     exports.OBJExporter = OBJExporter;
 });
-define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Viewers/Camera", "DepthBuffer/DepthBufferFactory", "System/EventManager", "System/Html", "System/Http", "ModelExporters/OBJExporter", "System/Services"], function (require, exports, dat, Camera_5, DepthBufferFactory_2, EventManager_3, Html_3, Http_1, OBJExporter_1, Services_7) {
+define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Viewers/Camera", "DepthBuffer/DepthBufferFactory", "System/EventManager", "System/Html", "System/Http", "System/Services"], function (require, exports, dat, Camera_5, DepthBufferFactory_2, EventManager_3, Html_3, Http_1, Services_7) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -3472,30 +3472,14 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
             // Services.consoleLogger.addInfoMessage('Relief generated');
         };
         /**
-         * Saves the relief to a disk file.
-         */
-        ComposerController.prototype.postMesh = function () {
-            var exportTag = Services_7.Services.timer.mark('Export OBJ');
-            var exporter = new OBJExporter_1.OBJExporter();
-            var result = exporter.parse(this._relief.mesh);
-            var postUrl = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiMeshes;
-            var fileMetadata = {
-                name: 'mesh.obj',
-                description: 'Mesh Description',
-                format: 1,
-            };
-            Http_1.HttpLibrary.postFile(postUrl, result, fileMetadata);
-            Services_7.Services.timer.logElapsedTime(exportTag);
-        };
-        /**
          * Saves the depth buffer to a disk file.
          */
-        ComposerController.prototype.postDepthBuffer = function () {
+        ComposerController.prototype.postDepthBuffer = function (fileName) {
             // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
             var exportTag = Services_7.Services.timer.mark('Export DepthBuffer');
             var postUrl = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiDepthBuffers;
             var fileMetadata = {
-                name: 'depthbuffer.raw',
+                name: fileName,
                 description: 'DepthBuffer Description',
                 format: 1,
             };
@@ -3506,8 +3490,8 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
          * Saves the relief to a disk file.
          */
         ComposerController.prototype.saveRelief = function () {
-            //      this.postMesh();
-            this.postDepthBuffer();
+            var fileName = this._composerView.modelView.modelViewer.model.name + ".raw";
+            this.postDepthBuffer(fileName);
         };
         //#endregion
         /**

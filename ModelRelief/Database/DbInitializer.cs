@@ -106,7 +106,7 @@ namespace ModelRelief.Database
         /// </summary>
         private void CreateUserStore()
         {
-            CopyTestFiles<Domain.Model3d>("ResourcePaths:Folders:Model");
+            CopyTestFiles<Domain.Model3d>("ResourcePaths:Folders:Model3d");
             CopyTestFiles<Domain.DepthBuffer>("ResourcePaths:Folders:DepthBuffer");
             CopyTestFiles<Domain.Mesh>("ResourcePaths:Folders:Mesh");
         }
@@ -193,15 +193,15 @@ namespace ModelRelief.Database
         {
             var models = new Model3d[]
             {
-                new Model3d{Name = "lucy", Description = "Stanford test model", Format = Model3dFormat.OBJ,
+                new Model3d{Name = "lucy.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ,
                             User = _user, Project = FindByName<Project>("ModelRelief"), Camera = FindByName<Camera>("Top Camera")},
-                new Model3d{Name = "armadillo", Description = "Stanford test model", Format = Model3dFormat.OBJ,
+                new Model3d{Name = "armadillo.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ,
                             User = _user, Project = FindByName<Project>("ModelRelief"), Camera = FindByName<Camera>("Isometric Camera")},
-                new Model3d{Name = "bunny", Description = "Stanford test model", Format = Model3dFormat.OBJ,
+                new Model3d{Name = "bunny.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ,
                             User = _user, Project = FindByName<Project>("Architecture"), Camera = FindByName<Camera>("Top Camera")},
-                new Model3d{Name = "dragon", Description = "Stanford test model", Format = Model3dFormat.OBJ,
+                new Model3d{Name = "dragon.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ,
                             User = _user, Project = FindByName<Project>("Jewelry"), Camera = FindByName<Camera>("Top Camera")},
-                new Model3d{Name = "tyrannosaurus", Description = "Stanford test model", Format = Model3dFormat.OBJ,
+                new Model3d{Name = "tyrannosaurus.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ,
                             User = _user, Project = FindByName<Project>("Jewelry"), Camera = FindByName<Camera>("Isometric Camera")},
             };
 
@@ -254,11 +254,11 @@ namespace ModelRelief.Database
         {
             var depthBuffers = new DepthBuffer[]
             {
-                new DepthBuffer{Name = "Lucy", Description = "Generated in Maya", Format = DepthBufferFormat.Raw, Camera = FindByName<Camera>("Top Camera"), Model = FindByName<Model3d>("lucy"),
+                new DepthBuffer{Name = "lucy.raw", Description = "Generated in Maya", Format = DepthBufferFormat.Raw, Camera = FindByName<Camera>("Top Camera"), Model = FindByName<Model3d>("lucy.obj"),
                                 User = _user, Project = FindByName<Project>("ModelRelief")},
-                new DepthBuffer{Name = "Bunny", Description = "Generated in VRay", Format = DepthBufferFormat.Raw, Camera = FindByName<Camera>("Isometric Camera"), Model = FindByName<Model3d>("bunny"),
+                new DepthBuffer{Name = "bunny.raw", Description = "Generated in VRay", Format = DepthBufferFormat.Raw, Camera = FindByName<Camera>("Isometric Camera"), Model = FindByName<Model3d>("bunny.obj"),
                                 User = _user, Project = FindByName<Project>("Architecture")},
-                new DepthBuffer{Name = "Armadillo", Description = "Generated in Rhino",Format = DepthBufferFormat.Raw, Camera = FindByName<Camera>("Isometric Camera"), Model = FindByName<Model3d>("armadillo"),
+                new DepthBuffer{Name = "armadillo.raw", Description = "Generated in Rhino",Format = DepthBufferFormat.Raw, Camera = FindByName<Camera>("Isometric Camera"), Model = FindByName<Model3d>("armadillo.obj"),
                                 User = _user, Project = FindByName<Project>("Jewelry")},
             };
 
@@ -278,11 +278,11 @@ namespace ModelRelief.Database
         {
             var meshes = new Mesh[]
             {
-                new Mesh{Name = "Lucy", Description = "Isometric", Format = MeshFormat.OBJ, Camera = FindByName<Camera>("Isometric Camera"), DepthBuffer = FindByName<DepthBuffer>("Lucy"), MeshTransform =  FindByName<MeshTransform>("Identity"),
+                new Mesh{Name = "Lucy", Description = "Isometric", Format = MeshFormat.OBJ, Camera = FindByName<Camera>("Isometric Camera"), DepthBuffer = FindByName<DepthBuffer>("lucy.raw"), MeshTransform =  FindByName<MeshTransform>("Identity"),
                          User = _user, Project = FindByName<Project>("ModelRelief")},
-                new Mesh{Name = "Bunny", Description = "Top", Format = MeshFormat.OBJ, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("Bunny"), MeshTransform =  FindByName<MeshTransform>("Identity"),
+                new Mesh{Name = "Bunny", Description = "Top", Format = MeshFormat.OBJ, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("bunny.raw"), MeshTransform =  FindByName<MeshTransform>("Identity"),
                          User = _user, Project = FindByName<Project>("Architecture")},
-                new Mesh{Name = "Armadillo", Description = "Top", Format = MeshFormat.OBJ, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("Armadillo"), MeshTransform = FindByName<MeshTransform>("Pendant"),
+                new Mesh{Name = "Armadillo", Description = "Top", Format = MeshFormat.OBJ, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("armadillo.raw"), MeshTransform = FindByName<MeshTransform>("Pendant"),
                          User = _user, Project = FindByName<Project>("Architecture")},
             };
 
@@ -317,9 +317,9 @@ namespace ModelRelief.Database
             {
                 // parent directory name = database resource ID
                 var model = _dbContext.Set<TEntity>()
-                    .Where(m => (m.Name == dirInfo.Name))
+                    .Where(m => (m.Name.StartsWith(dirInfo.Name)))
                     .Where(m => (m.UserId == _user.Id))
-                    .First();
+                    .FirstOrDefault();
 
                 if (model == null)
                     Debug.Assert (false, $"DbInitializer: Model name ${dirInfo.Name} not found in database for type ${typeof(TEntity).Name}.");

@@ -127,9 +127,8 @@ namespace ModelRelief.Api.V1.Shared
             where TEntity : DomainModel
         {
             string modelStorageFolder = ModelStorageFolder(model, user);
-            string modelName = $"{model.Id}";
+            string fileName = $"{modelStorageFolder}{model.Name}";
 
-            string fileName = $"{modelStorageFolder}{modelName}";
             return fileName;
         }
 

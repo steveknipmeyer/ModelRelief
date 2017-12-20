@@ -1,6 +1,5 @@
 ﻿<--- Commit
 
-
 <-- Technical Education
         Manning AspNet Core book.
         Manning Dependency Injection book.
@@ -9,17 +8,16 @@
     Goal : Roundtrip a scaled mesh.       
         Scale with a Python processor.
 
-    Create ModelReliefBaseline.db from ModelReliefTest.db.
-
 <-- Api Design
+    Create ModelReliefBaseline.db from ModelReliefTest.db.
     
     Review and organize the Postman tests.
     Log ApiErrorResult?
 
-    Add file-based integration tests.
-        Add test files for DepthBuffers to support testing.
+    Add file-based integration tests.       
         Implement as a new abstract class.
             Refactor BaseIntegrationTests to move some common methods to Framework?
+
         PostFile
             Put
         GetFile       
@@ -29,12 +27,13 @@
     Design the mechanism for creating a file-based resource such as a Model, DepthBuffer or Mesh.
     https://stackoverflow.com/questions/16877968/call-a-server-side-method-on-a-resource-in-a-restful-way
 
-    File Names
-        How should files be named?
-            Resource Id or TEntity.Name?
-            Extensions
-            File types?
-    
+    Files
+        How will the Format property be used for Models, DepthBuffers and Meshes?
+            Is it necessary if the file type can be found through reflection?
+        How should the model name be held in the ModelViewer?
+            The model.Name property is now 'Root'.
+        Implement support for renaming the disk file when the metadata Name property changes.
+        
     Implement the Mesh property-change trigger to generate a Mesh.
         Mesh Generation
             Add a "synchronized" property that reflects whether the state of the mesh file matches the dependents.

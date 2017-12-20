@@ -106,29 +106,9 @@ export class ComposerController {
     }
 
     /**
-     * Saves the relief to a disk file.
-     */
-    postMesh(): void {
-
-        let exportTag = Services.timer.mark('Export OBJ');
-        let exporter = new OBJExporter();
-        let result = exporter.parse(this._relief.mesh);
-
-        let postUrl = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiMeshes}`;
-
-        let fileMetadata = {
-            name : 'mesh.obj',
-            description : 'Mesh Description',
-            format : 1,
-        };
-        HttpLibrary.postFile (postUrl, result, fileMetadata);
-        Services.timer.logElapsedTime(exportTag);
-    }        
-
-    /**
      * Saves the depth buffer to a disk file.
      */
-    postDepthBuffer(): void {
+    postDepthBuffer(fileName : string): void {
 
         // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
         let exportTag = Services.timer.mark('Export DepthBuffer');
@@ -136,7 +116,7 @@ export class ComposerController {
         let postUrl = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiDepthBuffers}`;
         
         let fileMetadata = {
-            name : 'depthbuffer.raw',
+            name : fileName,
             description : 'DepthBuffer Description',
             format : 1,
         };
@@ -149,8 +129,9 @@ export class ComposerController {
      */
     saveRelief(): void {
 
-//      this.postMesh();
-        this.postDepthBuffer();
+        let fileName = `${this._composerView.modelView.modelViewer.model.name}.raw`;
+
+        this.postDepthBuffer(fileName);
     }
     //#endregion
 
