@@ -58,7 +58,7 @@ namespace ModelRelief.Api.V1.Shared
         {
             if (request == null)
             {
-                var apiValidationResult = new ApiValidationResult(
+                var apiValidationResult = new ApiErrorResult(
                     this, 
                     HttpStatusCode.BadRequest, 
                     ApiStatusCode.NullRequest, 
@@ -78,7 +78,7 @@ namespace ModelRelief.Api.V1.Shared
             {
                 var typeArguments = ex.RequestType.GenericTypeArguments;
 
-                var apiValidationResult = new ApiValidationResult(
+                var apiValidationResult = new ApiErrorResult(
                     this, 
                     HttpStatusCode.BadRequest, 
                     ApiValidationHelper.MapRequestToApiStatusCode(this.Request, ex.RequestType), 
@@ -88,7 +88,7 @@ namespace ModelRelief.Api.V1.Shared
             }
             catch (EntityNotFoundException ex)
             {
-                var apiValidationResult = new ApiValidationResult(
+                var apiValidationResult = new ApiErrorResult(
                     this, 
                     HttpStatusCode.NotFound, 
                     ApiStatusCode.NotFound, 
@@ -98,7 +98,7 @@ namespace ModelRelief.Api.V1.Shared
             }
             catch (UserAuthenticationException ex)
             {
-                var apiValidationResult = new ApiValidationResult(
+                var apiValidationResult = new ApiErrorResult(
                     this, 
                     HttpStatusCode.Unauthorized, 
                     ApiStatusCode.Unauthorized, 

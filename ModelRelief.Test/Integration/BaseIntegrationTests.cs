@@ -203,7 +203,7 @@ namespace ModelRelief.Test.Integration
         {
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
 
-            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
+            var apiErrorResult = JsonConvert.DeserializeObject<ApiError>(requestResponse.ContentString);
             apiErrorResult.HttpStatusCode.Should().Be(( int )statusCode);
         }
 
@@ -611,7 +611,7 @@ namespace ModelRelief.Test.Integration
             // Assert
             AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
 
-            var apiErrorResult = JsonConvert.DeserializeObject<ApiErrorResult>(requestResponse.ContentString);
+            var apiErrorResult = JsonConvert.DeserializeObject<ApiError>(requestResponse.ContentString);
             apiErrorResult.Errors.Count().Should().Be(ReferencePropertyNames.Count());
 
         }

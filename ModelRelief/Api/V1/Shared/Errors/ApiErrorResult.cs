@@ -18,7 +18,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <summary>
     /// JSON error status result returned by the API.
     /// </summary>
-    public class ApiErrorResult
+    public class ApiError
     {
         public int     HttpStatusCode;
         public int     ApiStatusCode;
@@ -57,7 +57,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
         Get             = 1,
         Post            = 2,
         Put             = 3,
-        Delete          = 4,
+        Patch           = 4,
+        Delete          = 5,
     }
 
     /// <summary>
@@ -79,36 +80,42 @@ namespace ModelRelief.Api.V1.Shared.Rest
         CameraGetValidationError            = StatusCodeBase.Camera + HttpRequestBaseOffset.Get,
         CameraPostValidationError           = StatusCodeBase.Camera + HttpRequestBaseOffset.Post,
         CameraPutValidationError            = StatusCodeBase.Camera + HttpRequestBaseOffset.Put,
-        CameraDeleteValidationError            = StatusCodeBase.Camera + HttpRequestBaseOffset.Delete,
+        CameraPatchValidationError          = StatusCodeBase.Camera + HttpRequestBaseOffset.Patch,
+        CameraDeleteValidationError         = StatusCodeBase.Camera + HttpRequestBaseOffset.Delete,
 
         // DepthBuffer
         DepthBufferGetValidationError       = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Get,
         DepthBufferPostValidationError      = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Post,
         DepthBufferPutValidationError       = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Put,
+        DepthBufferPatchValidationError     = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Patch,
         DepthBufferDeleteValidationError    = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Delete,
 
         // Mesh
         MeshGetValidationError              = StatusCodeBase.Mesh + HttpRequestBaseOffset.Get,
         MeshPostValidationError             = StatusCodeBase.Mesh + HttpRequestBaseOffset.Post,
         MeshPutValidationError              = StatusCodeBase.Mesh + HttpRequestBaseOffset.Put,
+        MeshPatchValidationError            = StatusCodeBase.Mesh + HttpRequestBaseOffset.Patch,
         MeshDeleteValidationError           = StatusCodeBase.Mesh + HttpRequestBaseOffset.Delete,
 
         // MeshTransform
         MeshTransformGetValidationError     = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Get,
         MeshTransformPostValidationError    = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Post,
         MeshTransformPutValidationError     = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Put,
+        MeshTransformPatchValidationError   = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Patch,
         MeshTransformDeleteValidationError  = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Delete,
 
         // Model3d
         ModelGetValidationError             = StatusCodeBase.Model3d + HttpRequestBaseOffset.Get,
         ModelPostValidationError            = StatusCodeBase.Model3d + HttpRequestBaseOffset.Post,
         ModelPutValidationError             = StatusCodeBase.Model3d + HttpRequestBaseOffset.Put,
+        ModelPatchValidationError           = StatusCodeBase.Model3d + HttpRequestBaseOffset.Patch,
         ModelDeleteValidationError          = StatusCodeBase.Model3d + HttpRequestBaseOffset.Delete,
 
         // Project
         ProjectgetValidationError           = StatusCodeBase.Project + HttpRequestBaseOffset.Get,
         ProjectPostValidationError          = StatusCodeBase.Project + HttpRequestBaseOffset.Post,
         ProjectPutValidationError           = StatusCodeBase.Project + HttpRequestBaseOffset.Put,
+        ProjectPatchValidationError         = StatusCodeBase.Project + HttpRequestBaseOffset.Patch,
         ProjectDeleteValidationError        = StatusCodeBase.Project + HttpRequestBaseOffset.Delete,
     }
     
@@ -168,6 +175,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
             if (String.Equals(requestType, "PUT", StringComparison.CurrentCultureIgnoreCase))
                 requestOffset = HttpRequestBaseOffset.Put;
+
+            if (String.Equals(requestType, "PATCH", StringComparison.CurrentCultureIgnoreCase))
+                requestOffset = HttpRequestBaseOffset.Patch;
 
             if (String.Equals(requestType, "DELETE", StringComparison.CurrentCultureIgnoreCase))
                 requestOffset = HttpRequestBaseOffset.Delete;
@@ -237,9 +247,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
     }
 
     /// <summary>
-    /// Helper class to construct a model validation result.
+    /// Helper class to construct an API error result.
     /// </summary>
-    public class ApiValidationResult
+    public class ApiErrorResult
     {
         Controller      _controller;
         HttpStatusCode  _httpStatusCode;
@@ -253,7 +263,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="httpStatusCode">HTTP status code to return.</param>
         /// <param name="apiStatusCode">ModelRelief API status code (more specialized than httpStatusCode)</param>
         /// <param name="developerMessage">Additional information for the developer.</param>
-        public ApiValidationResult (Controller controller, HttpStatusCode httpStatusCode, ApiStatusCode apiStatusCode, string developerMessage)
+        public ApiErrorResult (Controller controller, HttpStatusCode httpStatusCode, ApiStatusCode apiStatusCode, string developerMessage)
         {
             _controller       = controller;
             _httpStatusCode   = httpStatusCode;
@@ -284,7 +294,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 }
             }
 
-            var jsonResult = new ApiErrorResult()
+            var errorResult = new ApiError()
             {
                 HttpStatusCode   = (int) _httpStatusCode,
                 ApiStatusCode    = (int) _apiStatusCode,
@@ -293,7 +303,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 Errors           = errors
             };
 
-            var objectResult = new ObjectResult(jsonResult);
+            var objectResult = new ObjectResult(errorResult);
             objectResult.StatusCode= (int) _httpStatusCode;
 
             return objectResult;

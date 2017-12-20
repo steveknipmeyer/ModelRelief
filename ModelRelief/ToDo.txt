@@ -13,9 +13,18 @@
 
 <-- Api Design
     
-    Review DI order.
+    Review and organize the Postman tests.
+    Log ApiErrorResult?
 
-    Disallow the invalid endpoints?     
+    Add file-based integration tests.
+        Add test files for DepthBuffers to support testing.
+        Implement as a new abstract class.
+            Refactor BaseIntegrationTests to move some common methods to Framework?
+        PostFile
+            Put
+        GetFile       
+        Delete
+            Confirm associated files are also deleted.
 
     Design the mechanism for creating a file-based resource such as a Model, DepthBuffer or Mesh.
     https://stackoverflow.com/questions/16877968/call-a-server-side-method-on-a-resource-in-a-restful-way
@@ -35,17 +44,6 @@
                     MeshTransform
                 Whenever a dependent is updated, the synchronized property is set to false.
 
-    Review and organize the Postman tests.
-
-    Add file-based integration tests.
-        Add test files for DepthBuffers to support testing.
-        Implement as a new abstract class.
-            Refactor BaseIntegrationTests to move some common methods to Framework?
-        PostFile
-            Put
-        GetFile       
-        Delete
-            Confirm associated files are also deleted.
 
     UX Requests
     --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -74,9 +72,9 @@
     JSON            delete                                  DELETE         /api/v1/resource/id                      Delete                                      OK
 
     binary          read (single)                           GET            /api/v1/resource/id/file                 GetFile             new                     OK; octet-stream
-    binary          create                  disallow Mesh   POST           /api/v1/resource/id/file                 PostFile                                    Created; new id returned and default metadata       
+    binary          create                  Mesh disallowed POST           /api/v1/resource/id/file                 PostFile                                    Created; new id returned and default metadata       
     binary          update (full)                           PUT            /api/v1/resource/id/file                 PutFile             new                     OK
-    binary          update (partial)        disallow   
+    binary          update (partial)        no endpoint   
     binary          delete                                  DELETE         /api/v1/resource/id/File                 DeleteFile          new                     OK
 
     Add authentication support!
