@@ -38,7 +38,7 @@ namespace ModelRelief.Test.Integration.DepthBuffers
             UxUrl  = "/depthbuffers";
             
             IdRange = Enumerable.Range(1, 3);
-            FirstModelName = "Lucy";
+            FirstModelName = "lucy.raw";
             
             ReferencePropertyNames = new List<string> {"ProjectId", "ModelId", "CameraId"};
             InvalidReferenceProperty = 0;

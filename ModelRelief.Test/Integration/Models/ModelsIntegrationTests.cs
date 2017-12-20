@@ -39,7 +39,7 @@ namespace ModelRelief.Test.Integration.Meshes
             UxUrl  = "/models";
             
             IdRange = Enumerable.Range(1, 5);
-            FirstModelName = "lucy";
+            FirstModelName = "lucy.obj";
 
             ReferencePropertyNames = new List<string> {"ProjectId", "CameraId"};
             InvalidReferenceProperty = 0;
