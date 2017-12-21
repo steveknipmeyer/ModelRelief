@@ -26,7 +26,7 @@ namespace ModelRelief.Services
         /// <param name="configuration">IConfiguration</param>
         public static void AddDatabaseServices (this IServiceCollection services, IConfiguration configuration)
         {
-#if SQLServer
+#if !SQLServer
             services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("SQLServer")));
 #else
             services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlite(configuration.GetConnectionString("SQLite")));

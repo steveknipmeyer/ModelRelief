@@ -56,7 +56,7 @@ namespace ModelRelief.Database
         /// <summary>
         /// Populate test database with sample data.
         /// </summary>
-        public async void Populate()
+        public async Task Populate()
         {
 
             // SQLite Error 1: 'table "AspNetRoles" already exists'.

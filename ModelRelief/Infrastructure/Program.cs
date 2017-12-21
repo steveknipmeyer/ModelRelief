@@ -13,6 +13,7 @@ using Serilog;
 using System;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace ModelRelief.Infrastructure
 {
@@ -36,7 +37,7 @@ namespace ModelRelief.Infrastructure
                     logger.LogInformation("Preparing to initialize database.");
   
                     var initializer = new DbInitializer(services);
-                    initializer.Populate();
+                    initializer.Populate().Wait();
                 }
                 catch (Exception ex)
                 {
