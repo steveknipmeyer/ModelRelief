@@ -23,41 +23,16 @@ namespace ModelRelief.Test.Integration
     /// Base Integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
-    public abstract class BaseIntegrationTests <TEntity, TGetModel>: IClassFixture<ServerFixture>, IAsyncLifetime
+    public abstract class BaseIntegrationTests <TEntity, TGetModel>: IntegrationTests<TEntity, TGetModel>
         where TEntity   : DomainModel
         where TGetModel : class, ITGetModel, new()
     {
-        private ServerFixture ServerFixture { get; set; }
-        private TestModel<TEntity, TGetModel> TestModel { get; set; }
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public BaseIntegrationTests(ServerFixture serverFixture, TestModel<TEntity, TGetModel> testModel)
+        public BaseIntegrationTests(ServerFixture serverFixture, TestModel<TEntity, TGetModel> testModel) :
+            base (serverFixture, testModel)
         {
-            ServerFixture = serverFixture;
-            TestModel     = testModel;
-
-            TestModel.Initialize();
-        }
-
-        /// <summary>
-        /// Called before class is used. Opportunity to use an async method for setup.
-        /// </summary>
-        /// <returns></returns>
-        public Task InitializeAsync()
-        {
-            ServerFixture.Framework.RefreshTestDatabase();
-            return Task.CompletedTask;
-        }
-
-        /// <summary>
-        /// Called before class is destroyed. Opportunity to use an async method for teardown.
-        /// </summary>
-        /// <returns></returns>
-        public Task DisposeAsync()
-        {
-            return Task.CompletedTask;
         }
 
         #region Get
@@ -92,7 +67,7 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModel.ApiUrl}/{modelId}");
 
             // Assert
-            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
+            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
         }
 
         /// <summary>
@@ -152,7 +127,7 @@ namespace ModelRelief.Test.Integration
 
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
 
         /// <summary>
@@ -206,7 +181,7 @@ namespace ModelRelief.Test.Integration
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
         #endregion
         #region Put
@@ -250,7 +225,7 @@ namespace ModelRelief.Test.Integration
 
             // Assert    
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.NotFound);
-            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
+            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
         }
 
         /// <summary>
@@ -305,7 +280,7 @@ namespace ModelRelief.Test.Integration
             
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
         #endregion
         #region Patch
@@ -358,7 +333,7 @@ namespace ModelRelief.Test.Integration
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
+            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
         }
 
         /// <summary>
@@ -380,7 +355,7 @@ namespace ModelRelief.Test.Integration
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
 
         /// <summary>
@@ -409,7 +384,7 @@ namespace ModelRelief.Test.Integration
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
 
         /// <summary>
@@ -436,7 +411,7 @@ namespace ModelRelief.Test.Integration
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
 
         /// <summary>
@@ -463,7 +438,7 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{modelId}/patch", invalidPatchModel);
 
             // Assert
-            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
 
             var apiErrorResult = JsonConvert.DeserializeObject<ApiError>(requestResponse.ContentString);
             apiErrorResult.Errors.Count().Should().Be(TestModel.ReferencePropertyNames.Count());
@@ -524,7 +499,7 @@ namespace ModelRelief.Test.Integration
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            ServerFixture.AssertApiErrorResultHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
+            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
         }
         #endregion
     }

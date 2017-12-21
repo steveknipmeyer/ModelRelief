@@ -13,7 +13,6 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-#if true
 namespace ModelRelief.Test.Integration.Cameras
 {
     /// <summary>
@@ -39,8 +38,10 @@ namespace ModelRelief.Test.Integration.Cameras
 #region Put
 #endregion
 
+#region Patch
+#endregion
+
 #region Delete
 #endregion
     }
 }
-#endif

@@ -12,7 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
-#if true
+
 namespace ModelRelief.Test.Integration.DepthBuffers
 {
     /// <summary>
@@ -37,8 +37,10 @@ namespace ModelRelief.Test.Integration.DepthBuffers
 #region Put
 #endregion
 
+#region Patch
+#endregion
+
 #region Delete
 #endregion
     }
 }
-#endif

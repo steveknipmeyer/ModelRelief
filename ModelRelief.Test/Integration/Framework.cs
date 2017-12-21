@@ -53,7 +53,7 @@ namespace ModelRelief.Test.Integration
             Server = new TestServer(WebHost.CreateDefaultBuilder(null)
                                             .UseEnvironment("Test")
                                             .UseContentRoot(contentRootPath)
-                                             .ConfigureAppConfiguration((builderContext, config) =>
+                                            .ConfigureAppConfiguration((builderContext, config) =>
                                              {
                                                  // WIP: Implement secret store for Production environments. Azure?
                                                  // https://joonasw.net/view/aspnet-core-2-configuration-changes

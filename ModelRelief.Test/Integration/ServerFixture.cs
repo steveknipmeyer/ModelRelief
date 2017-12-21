@@ -39,19 +39,5 @@ namespace ModelRelief.Test.Integration
         public void Dispose()
         {
         }
-
-        /// <summary>
-        /// Asserts that the request returned a specific HTTP status code.
-        /// </summary>
-        /// <param name="requestResponse">Response.</param>
-        /// <param name="statusCode">Expected status code.</param>
-        public void AssertApiErrorResultHttpStatusCode(RequestResponse requestResponse, HttpStatusCode statusCode)
-        {
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
-
-            var apiErrorResult = JsonConvert.DeserializeObject<ApiError>(requestResponse.ContentString);
-            apiErrorResult.HttpStatusCode.Should().Be(( int )statusCode);
-        }
-
     }
 }

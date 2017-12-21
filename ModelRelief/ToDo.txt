@@ -1,7 +1,5 @@
 ﻿<--- Commit
 
-
-
 <-- Technical Education
         Manning AspNet Core book.
         Manning Dependency Injection book.
@@ -16,9 +14,13 @@
     Log ApiErrorResult?
 
     Add file-based integration tests.       
-        PostFile
-            Put
         GetFile       
+            Decode64 support.
+            Test specific contents?
+        PostFile
+            Mesh endpoint is disallowed.
+            Create metadata. Post file. Verify contents.
+            Put is equivalent to Post.
         Delete
             Confirm associated files are also deleted.
 

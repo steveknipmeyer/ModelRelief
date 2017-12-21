@@ -60,6 +60,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
             var user = targetModel.User;
 
             var fileName = ModelFileName(targetModel, user);
+            if (!File.Exists(fileName))
+                throw new ModelFileNotFoundException(typeof(TEntity), targetModel.Name);
 
             var contents = File.ReadAllBytes(fileName);
             var response = new FileContentResult(contents, "application/json"); 

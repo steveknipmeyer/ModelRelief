@@ -13,35 +13,20 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ModelRelief.Test.Integration.MeshTransforms
+namespace ModelRelief.Test.Integration.Models
 {
     /// <summary>
-    /// Base integration Tests.
+    /// DepthBuffer integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
-    public class MeshTransformsBaseIntegrationTests : BaseIntegrationTests<Domain.MeshTransform, Dto.MeshTransform>
+    public class ModelsFileIntegrationTests : FileIntegrationTests<Domain.Model3d, Dto.Model3d>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public MeshTransformsBaseIntegrationTests(ServerFixture serverFixture) :
-            base (serverFixture, new MeshTransformTestModel())
+        public ModelsFileIntegrationTests(ServerFixture serverFixture) :
+            base (serverFixture, new Model3dTestModel())
         {
         }
-
-#region Get
-#endregion
-
-#region Post
-#endregion
-
-#region Put
-#endregion
-
-#region Patch
-#endregion
-
-#region Delete
-#endregion
     }
 }

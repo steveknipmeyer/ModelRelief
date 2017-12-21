@@ -33,7 +33,7 @@ namespace ModelRelief.Test.Integration.DepthBuffers
         /// </summary>
         public override void Initialize()
         {
-         ApiUrl = "/api/v1/depth-buffers";
+            ApiUrl = "/api/v1/depth-buffers";
             UxUrl  = "/depthbuffers";
             
             IdRange = Enumerable.Range(1, 3);

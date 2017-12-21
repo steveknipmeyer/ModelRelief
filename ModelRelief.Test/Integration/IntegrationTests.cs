@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -58,6 +59,48 @@ namespace ModelRelief.Test.Integration
         public Task DisposeAsync()
         {
             return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Unpacks the ApiError from a response.
+        /// </summary>
+        /// <param name="requestResponse">Response.</param>
+        private ApiError UnpackApiError(RequestResponse requestResponse)
+        {
+            Assert.False(requestResponse.Message.IsSuccessStatusCode);
+
+            var apiError = new ApiError();
+            try
+            {
+                apiError = JsonConvert.DeserializeObject<ApiError>(requestResponse.ContentString);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"JSON Deserialization: {ex.Message}");
+            }
+            return apiError;
+        }
+
+        /// <summary>
+        /// Asserts that the request returned a specific HTTP status code.
+        /// </summary>
+        /// <param name="requestResponse">Response.</param>
+        /// <param name="statusCode">Expected status code.</param>
+        public void AssertApiErrorHttpStatusCode(RequestResponse requestResponse, HttpStatusCode statusCode)
+        {
+            var apiError = UnpackApiError(requestResponse);
+            apiError.HttpStatusCode.Should().Be(( int )statusCode);
+        }
+
+        /// <summary>
+        /// Asserts that the request returned a specific API status code.
+        /// </summary>
+        /// <param name="requestResponse">Response.</param>
+        /// <param name="statusCode">Expected status code.</param>
+        public void AssertApiErrorApiStatusCode(RequestResponse requestResponse, ApiStatusCode statusCode)
+        {
+            var apiError = UnpackApiError(requestResponse);
+            apiError.ApiStatusCode.Should().Be(( int )statusCode);
         }
     }
 }
