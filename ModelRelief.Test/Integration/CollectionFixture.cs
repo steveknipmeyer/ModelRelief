@@ -53,7 +53,7 @@ namespace ModelRelief.Test.Integration
             var fileList = new Dictionary<string, string>
             {
                 {"ModelReliefBaseline.mdf",     "ModelReliefTest.mdf" },
-                {"ModelReliefBaseline_log.ldf", "ModelReliefTest_log.mdf" }
+                {"ModelReliefBaseline_log.ldf", "ModelReliefTest_log.ldf" }
             };
             try
             {
