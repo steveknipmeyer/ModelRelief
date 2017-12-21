@@ -10,6 +10,8 @@
         Scale with a Python processor.
 
 <-- Api Design
+    Remove .gitignore filters on Test\Data folder.
+
     How can a SQL Server database be rolled back to a known state?
 
     Log ApiErrorResult?
