@@ -24,7 +24,7 @@ namespace ModelRelief.Test.Integration.Projects
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProjectsBaseIntegrationTests(ServerFixture serverFixture) :
+        public ProjectsBaseIntegrationTests(ClassFixture serverFixture) :
             base (serverFixture, new ProjectTestModel())
         {
         }

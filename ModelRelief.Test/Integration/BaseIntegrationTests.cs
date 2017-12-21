@@ -30,7 +30,7 @@ namespace ModelRelief.Test.Integration
         /// <summary>
         /// Constructor
         /// </summary>
-        public BaseIntegrationTests(ServerFixture serverFixture, TestModel<TEntity, TGetModel> testModel) :
+        public BaseIntegrationTests(ClassFixture serverFixture, TestModel<TEntity, TGetModel> testModel) :
             base (serverFixture, testModel)
         {
         }
@@ -100,20 +100,23 @@ namespace ModelRelief.Test.Integration
         public async Task Post_CanCreateNewModel()
         {
             // Arrange
-            var validModel = TestModel.ConstructValidModel();
+            var newModel = TestModel.ConstructValidModel();
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, TestModel.ApiUrl, validModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, TestModel.ApiUrl, newModel);
 
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
 
-            var newModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
-            newModel.Name.Should().Be(validModel.Name);
+            var addedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            addedModel.Name.Should().Be(newModel.Name);
+
+            // Rollback
+            await DeleteModel(addedModel);
         }
 
         /// <summary>
-        /// Test that an Post request returns BadRequest.
+        /// Test that an invalid Post request returns BadRequest.
         /// </summary>
         [Fact]
         [Trait ("Category", "Api Post")]
@@ -145,17 +148,20 @@ namespace ModelRelief.Test.Integration
             }
 
             // Arrange
-            var validModel = TestModel.ConstructValidModel();
-            TestModel.SetReferenceProperty(validModel, TestModel.ValidReferenceProperty);
+            var newModel = TestModel.ConstructValidModel();
+            TestModel.SetReferenceProperty(newModel, TestModel.ValidReferenceProperty);
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, TestModel.ApiUrl, validModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, TestModel.ApiUrl, newModel);
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
-            var newModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
-            TestModel.GetReferenceProperty(newModel).Should().Be(TestModel.ValidReferenceProperty);
+            var addedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            TestModel.GetReferenceProperty(addedModel).Should().Be(TestModel.ValidReferenceProperty);
+
+            // Rollback
+            await DeleteModel(addedModel);
         }
 
         /// <summary>
@@ -193,20 +199,21 @@ namespace ModelRelief.Test.Integration
         public async Task Put_CanUpdateModel()
         {
             // Arrange
-            var modelId = TestModel.IdRange.Min();
-            var existingModel = await TestModel.FindModel(ServerFixture, modelId);
-
+            var newModel = await CreateNewModel();
             var updatedName = "Updated Name Property";
-            existingModel.Name = updatedName;
+            newModel.Name = updatedName;
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{modelId}", existingModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{newModel.Id}", newModel);
 
             // Assert
             requestResponse.Message.EnsureSuccessStatusCode();
             
             var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
             updatedModel.Name.Should().Be(updatedName);
+
+            // Rollback
+            await DeleteModel(newModel);
         }
 
         /// <summary>
@@ -243,17 +250,20 @@ namespace ModelRelief.Test.Integration
             }
 
             // Arrange
-            var modelId = TestModel.IdRange.Max();
-            var existingModel = await TestModel.FindModel(ServerFixture, modelId);
-            TestModel.SetReferenceProperty(existingModel, TestModel.ValidReferenceProperty);
+            var newModel = await CreateNewModel();
+            TestModel.SetReferenceProperty(newModel, TestModel.ValidReferenceProperty);
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{modelId}", existingModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{newModel.Id}", newModel);
 
+            // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
             var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
             TestModel.GetReferenceProperty(updatedModel).Should().Be(TestModel.ValidReferenceProperty);
+
+            // Rollback
+            await DeleteModel(newModel);
         }
 
         /// <summary>
@@ -296,7 +306,7 @@ namespace ModelRelief.Test.Integration
         public async Task Patch_TargetPropertyIsUpdated()
         {
             // Arrange
-            var modelId = TestModel.IdRange.Min();
+            var newModel = await CreateNewModel();
             var updatedName = "Updated Name Property";
             var patchModel = new 
             {
@@ -304,13 +314,16 @@ namespace ModelRelief.Test.Integration
             };
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{modelId}/patch", patchModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{newModel.Id}/patch", patchModel);
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
             var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
             updatedModel.Name.Should().Be(updatedName);
+
+            // Rollback
+            await DeleteModel(newModel);
         }
 
         /// <summary>
@@ -459,7 +472,7 @@ namespace ModelRelief.Test.Integration
             }
 
             // Arrange
-            var modelId = TestModel.IdRange.Max();
+            var newModel = await CreateNewModel();
             // https://stackoverflow.com/questions/6044482/setting-anonymous-type-property-name
             var validPatchModel = new Dictionary<string, int?>
             {
@@ -467,13 +480,16 @@ namespace ModelRelief.Test.Integration
             };
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{modelId}/patch", validPatchModel);
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{newModel.Id}/patch", validPatchModel);
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
             var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
             TestModel.GetReferenceProperty(updatedModel).Should().Be(TestModel.ValidReferenceProperty);
+
+            // Rollback
+            await DeleteModel (newModel);
         }
         #endregion
 
@@ -486,16 +502,16 @@ namespace ModelRelief.Test.Integration
         public async Task Delete_TargetModelIsDeleted()
         {
             // Arrange
-            var modelId = TestModel.IdRange.Min();
+            var newModel = await CreateNewModel();
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Delete, $"{TestModel.ApiUrl}/{modelId}");
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Delete, $"{TestModel.ApiUrl}/{newModel.Id}");
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
             // Now attempt to access the deleted model...
-            requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModel.ApiUrl}/{modelId}");
+            requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModel.ApiUrl}/{newModel.Id}");
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);

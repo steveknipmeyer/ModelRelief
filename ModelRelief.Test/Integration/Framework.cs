@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
@@ -95,23 +97,6 @@ namespace ModelRelief.Test.Integration
             var testFilesFolder = $"{contentRootPath}/{Settings.TestFilesFolder}";
 
             return testFilesFolder;
-        }
-
-        /// <summary>
-        /// Replaces the test database with a fresh baseline copy.
-        /// </summary>
-        public void RefreshTestDatabase()
-        {
-            var contentRootPath = GetContentRootPath();
-            var databaseFolder = $"{contentRootPath}/{Settings.DatabaseFolder}";
-
-            var sourceDatabase = "ModelReliefBaseline.db";
-            var targetDatabase = "ModelReliefTest.db";
-
-            var sourceDatbasePath = Path.Combine(databaseFolder, sourceDatabase);
-            var targetDatbasePath = Path.Combine(databaseFolder, targetDatabase);
-
-            File.Copy(sourceDatbasePath, targetDatbasePath, overwrite: true);
         }
 
         /// <summary>

@@ -24,17 +24,18 @@ namespace ModelRelief.Test.Integration
     /// Integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
-    public abstract class IntegrationTests <TEntity, TGetModel>: IClassFixture<ServerFixture>, IAsyncLifetime
+    [Collection("Integration")]
+    public abstract class IntegrationTests <TEntity, TGetModel>: IClassFixture<ClassFixture>, IAsyncLifetime
         where TEntity   : DomainModel
         where TGetModel : class, ITGetModel, new()
     {
-        public ServerFixture ServerFixture { get; set; }
+        public ClassFixture ServerFixture { get; set; }
         public TestModel<TEntity, TGetModel> TestModel { get; set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public IntegrationTests(ServerFixture serverFixture, TestModel<TEntity, TGetModel> testModel)
+        public IntegrationTests(ClassFixture serverFixture, TestModel<TEntity, TGetModel> testModel)
         {
             ServerFixture = serverFixture;
             TestModel     = testModel;
@@ -48,7 +49,6 @@ namespace ModelRelief.Test.Integration
         /// <returns></returns>
         public Task InitializeAsync()
         {
-            ServerFixture.Framework.RefreshTestDatabase();
             return Task.CompletedTask;
         }
 
@@ -101,6 +101,40 @@ namespace ModelRelief.Test.Integration
         {
             var apiError = UnpackApiError(requestResponse);
             apiError.ApiStatusCode.Should().Be(( int )statusCode);
+        }
+
+        /// <summary>
+        /// Creates a new resource.
+        /// </summary>
+        public virtual async Task<TGetModel> CreateNewModel()
+        {
+            // Arrange
+            var validModel = TestModel.ConstructValidModel();
+
+            // Act
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, TestModel.ApiUrl, validModel);
+
+            // Assert
+            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            var newModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            newModel.Name.Should().Be(validModel.Name);
+
+            return newModel;
+        }
+
+        /// <summary>
+        /// Delete an existing model.
+        /// </summary>
+        public virtual async Task DeleteModel(TGetModel existingModel)
+        {
+            // Arrange
+
+            // Act
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Delete, $"{TestModel.ApiUrl}/{existingModel.Id}");
+
+            // Assert
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
         }
     }
 }

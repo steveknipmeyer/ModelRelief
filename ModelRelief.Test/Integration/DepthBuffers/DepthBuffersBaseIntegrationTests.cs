@@ -24,7 +24,7 @@ namespace ModelRelief.Test.Integration.DepthBuffers
         /// <summary>
         /// Constructor
         /// </summary>
-        public DepthBuffersBaseIntegrationTests(ServerFixture serverFixture) :
+        public DepthBuffersBaseIntegrationTests(ClassFixture serverFixture) :
             base (serverFixture, new DepthBufferTestModel())
         {
         }

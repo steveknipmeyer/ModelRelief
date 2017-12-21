@@ -31,7 +31,7 @@ namespace ModelRelief.Test.Integration
         /// <summary>
         /// Constructor
         /// </summary>
-        public FileIntegrationTests(ServerFixture serverFixture, TestModel<TEntity, TGetModel> testModel) :
+        public FileIntegrationTests(ClassFixture serverFixture, TestModel<TEntity, TGetModel> testModel) :
             base (serverFixture, testModel)
         {
         }
@@ -50,26 +50,6 @@ namespace ModelRelief.Test.Integration
             var byteArray = File.ReadAllBytes(fileNamePath);
 
             return byteArray;
-        }
-
-        /// <summary>
-        /// Creates a new resource.
-        /// </summary>
-        public virtual async Task<TGetModel> CreateNewModel()
-        {
-            // Arrange
-            var validModel = TestModel.ConstructValidModel();
-
-            // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, TestModel.ApiUrl, validModel);
-
-            // Assert
-            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
-
-            var newModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
-            newModel.Name.Should().Be(validModel.Name);
-
-            return newModel;
         }
 
         #region GetFile
@@ -127,6 +107,9 @@ namespace ModelRelief.Test.Integration
 
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            // Rollback
+            await DeleteModel(newModel);
         }
         #endregion
     }

@@ -24,7 +24,7 @@ namespace ModelRelief.Test.Integration.MeshTransforms
         /// <summary>
         /// Constructor
         /// </summary>
-        public MeshTransformsBaseIntegrationTests(ServerFixture serverFixture) :
+        public MeshTransformsBaseIntegrationTests(ClassFixture serverFixture) :
             base (serverFixture, new MeshTransformTestModel())
         {
         }

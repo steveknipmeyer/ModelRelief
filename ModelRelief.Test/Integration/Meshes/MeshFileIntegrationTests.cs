@@ -24,7 +24,7 @@ namespace ModelRelief.Test.Integration.Meshes
         /// <summary>
         /// Constructor
         /// </summary>
-        public MeshesFileIntegrationTests(ServerFixture serverFixture) :
+        public MeshesFileIntegrationTests(ClassFixture serverFixture) :
             base (serverFixture, new MeshTestModel())
         {
         }
@@ -42,7 +42,7 @@ namespace ModelRelief.Test.Integration.Meshes
         public override async Task PostFile_NewFileCanBePosted()
         {
             // Arrange
-            var newModel = CreateNewModel();
+            var newModel = await CreateNewModel();
 
             // Act            
             var byteArray = ByteArrayFromFile ("UnitCube.obj");
@@ -51,6 +51,9 @@ namespace ModelRelief.Test.Integration.Meshes
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
             AssertApiErrorApiStatusCode(requestResponse, ApiStatusCode.FileCreation);
+
+            // Rollback
+            await DeleteModel(newModel);
         }
         #endregion
     }

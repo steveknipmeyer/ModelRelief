@@ -24,7 +24,7 @@ namespace ModelRelief.Test.Integration.Cameras
         /// <summary>
         /// Constructor
         /// </summary>
-        public CamerasBaseIntegrationTests(ServerFixture serverFixture) :
+        public CamerasBaseIntegrationTests(ClassFixture serverFixture) :
             base (serverFixture, new CameraTestModel())
         {
         }

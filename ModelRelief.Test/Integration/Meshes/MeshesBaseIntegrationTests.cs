@@ -24,7 +24,7 @@ namespace ModelRelief.Test.Integration.Meshes
         /// <summary>
         /// Constructor
         /// </summary>
-        public MeshesBaseIntegrationTests(ServerFixture serverFixture) :
+        public MeshesBaseIntegrationTests(ClassFixture serverFixture) :
             base (serverFixture, new MeshTestModel())
         {
         }

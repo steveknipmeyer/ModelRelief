@@ -6,7 +6,12 @@ echo off
 if [%1]==[] goto usageError
 set Configuration=%~1%
 
-set DatabaseRoot=%MR%Database
+:: SQLite
+::set DatabaseRoot=%MR%Database
+:: SQLServer
+set DatabaseRoot=%USERPROFILE%
+
+:: user test data
 set StoreRoot=%MR%wwwroot\store\
 
 echo DatabaseRoot  = %DatabaseRoot%
@@ -21,10 +26,15 @@ goto invalidConfiguration
 
 :All
 :: Database
-cd %DatabaseRoot%
-if exist ModelReliefDevelopment.db del/P  ModelReliefDevelopment.db
-if exist ModelReliefProduction.db del/P  ModelReliefProduction.db
-if exist ModelReliefTest.db del/P  ModelReliefTest.db
+cd/d %DatabaseRoot%
+if exist ModelReliefDevelopment.mdf del/P  ModelReliefDevelopment.mdf
+if exist ModelReliefDevelopment_log.ldf del/P  ModelReliefDevelopment_log.ldf
+
+if exist ModelReliefProduction.mdf del/P  ModelReliefProduction.mdf
+if exist ModelReliefProduction_log.ldf del/P  ModelReliefProduction_log.ldf
+
+if exist ModelReliefTest.mdf del/P  ModelReliefTest.mdf
+if exist ModelReliefTest_log.ldf del/P  ModelReliefTest_log.ldf
 
 :: Files
 call :deleteFiles Development
@@ -34,8 +44,9 @@ goto end
 
 :Development
 :: Database
-cd %DatabaseRoot%
-if exist ModelReliefDevelopment.db del/P  ModelReliefDevelopment.db
+cd/d %DatabaseRoot%
+if exist ModelReliefDevelopment.mdf del/P  ModelReliefDevelopment.mdf
+if exist ModelReliefDevelopment_log.ldf del/P  ModelReliefDevelopment_log.ldf
 
 :: Files
 call :deleteFiles Development
@@ -43,7 +54,9 @@ goto end
 
 :Production
 :: Database
-if exist ModelReliefProduction.db del/P  ModelReliefProduction.db
+cd/d %DatabaseRoot%
+if exist ModelReliefProduction.mdf del/P  ModelReliefProduction.mdf
+if exist ModelReliefProduction_log.ldf del/P  ModelReliefProduction_log.ldf
 
 :: Files
 call :deleteFiles Production
@@ -51,7 +64,9 @@ goto end
 
 :Test
 :: Database
-if exist ModelReliefTest.db del/P  ModelReliefTest.db
+cd/d %DatabaseRoot%
+if exist ModelReliefTest.mdf del/P  ModelReliefTest.mdf
+if exist ModelReliefTest_log.ldf del/P  ModelReliefTest_log.ldf
 
 :: Files
 call :deleteFiles Test
@@ -59,7 +74,7 @@ goto end
 
 :: ------------- deleteFiles
 :deleteFiles
-cd %StoreRoot%%1%
+cd/d %StoreRoot%%1%
 if not exist users\nul goto return
 echo Deleting %StoreRoot%%1%\users
 rmdir/s users
@@ -81,4 +96,4 @@ goto end
 set Configuration=
 set DatabaseRoot=
 set StoreRoot=
-cd %MR%
+cd/d %MR%

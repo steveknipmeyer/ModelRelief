@@ -20,15 +20,16 @@ namespace ModelRelief.Test.Integration
 {
     /// <summary>
     /// Represents the shared instance of the TestServer to support multiple tests.
+    /// This is run once for every class.
     /// </summary>
-    public class ServerFixture : IDisposable
+    public class ClassFixture : IDisposable
     {
         public Framework Framework { get; }
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public ServerFixture()
+        public ClassFixture()
         {
             Framework = new Framework();
         }

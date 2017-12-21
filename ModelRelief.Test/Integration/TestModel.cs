@@ -70,7 +70,7 @@ namespace ModelRelief.Test.Integration
         /// </summary>
         /// <param name="id">Id of model to retrieve.</param>
         /// <returns>Existing model.</returns>
-        public async Task<TGetModel> FindModel(ServerFixture serverFixture, int modelId)
+        public async Task<TGetModel> FindModel(ClassFixture serverFixture, int modelId)
         {
             var requestResponse = await serverFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiUrl}/{modelId}");
 

@@ -1,5 +1,6 @@
 ﻿<--- Commit
 
+
 <-- Technical Education
         Manning AspNet Core book.
         Manning Dependency Injection book.
@@ -9,7 +10,7 @@
         Scale with a Python processor.
 
 <-- Api Design
-    Create ModelReliefBaseline.db from ModelReliefTest.db.
+    How can a SQL Server database be rolled back to a known state?
 
     Log ApiErrorResult?
 
