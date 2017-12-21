@@ -21,6 +21,8 @@ namespace ModelRelief.Test
 
         public static string ContentRootFolder = "ModelRelief";
         public static string DatabaseFolder = "Database";
+        public static string TestFilesFolder = "Test/Data/Files";
+
         public static readonly string ApiDocumentatioRelative  ="/api/v1/documentation";
     }
 }

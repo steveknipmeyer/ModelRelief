@@ -20,7 +20,7 @@ namespace ModelRelief.Api.V1.Shared.Errors
         /// Constructor.
         /// </summary>
         /// <param name="entityType">Type of entity.</param>
-        /// <param fileName="name">Name of file.</param>
+        /// <param name="fileName">Name of file.</param>
         public ModelFileNotFoundException(Type entityType, string fileName) 
             : base($"A {entityType.Name} file {fileName} was not found.") {}
     }

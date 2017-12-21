@@ -30,27 +30,28 @@ namespace ModelRelief.Test.Integration.Meshes
         }
 
         #region GetFile
+        #endregion
+
+        #region PostFile
         /// <summary>
-        /// Tests whether the POST endpoint is disallowed.
-        /// Mesh files are generated from their dependents.
+        /// Tests whether a file can be posted to the resource.
+        /// Mesh files are generated from their dependents. They are not posted.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api GetFile")]
-        public override async Task GetFile_ReturnsTheEntireFile()
+        [Trait ("Category", "Api PostFile")]
+        public override async Task PostFile_NewFileCanBePosted()
         {
             // Arrange
-            var modelId = TestModel.IdRange.Min();
+            var newModel = CreateNewModel();
 
-            // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModel.ApiUrl}/{modelId}/file");
+            // Act            
+            var byteArray = ByteArrayFromFile ("UnitCube.obj");
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{TestModel.ApiUrl}/{newModel.Id}/file", byteArray, binaryContent: true);
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
-            AssertApiErrorApiStatusCode(requestResponse, ApiStatusCode.NotFound);
+            AssertApiErrorApiStatusCode(requestResponse, ApiStatusCode.FileCreation);
         }
         #endregion
-
     }
-
 }

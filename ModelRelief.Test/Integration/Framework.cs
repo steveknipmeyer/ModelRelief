@@ -86,6 +86,18 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
+        /// Returns the root of the test files folder. 
+        /// </summary>
+        /// <returns>Test files folder.</returns>
+        public string GetTestFilesPath()
+        {
+            var contentRootPath = GetContentRootPath();
+            var testFilesFolder = $"{contentRootPath}/{Settings.TestFilesFolder}";
+
+            return testFilesFolder;
+        }
+
+        /// <summary>
         /// Replaces the test database with a fresh baseline copy.
         /// </summary>
         public void RefreshTestDatabase()
@@ -109,10 +121,18 @@ namespace ModelRelief.Test.Integration
         /// <param name="endPoint">Endpoint.</param>
         /// <param name="contentObject">Object to serlize and send in the body of the request.</param>
         /// <returns></returns>
-        public async Task<RequestResponse> SubmitHttpRequest (HttpRequestType requestType, string endPoint, object contentObject = null)
+        public async Task<RequestResponse> SubmitHttpRequest (HttpRequestType requestType, string endPoint, object contentObject = null, bool binaryContent = false)
         {
-            var jsonContent = JsonConvert.SerializeObject(contentObject);
-            var stringContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            HttpContent content = null;
+            if (!binaryContent)
+            {
+                var jsonContent = JsonConvert.SerializeObject(contentObject);
+                content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            }
+            else
+            {
+                content = new ByteArrayContent(contentObject as byte[]);
+            }
 
             HttpResponseMessage response = null;;
             switch (requestType)
@@ -122,11 +142,11 @@ namespace ModelRelief.Test.Integration
                     break;
                     
                 case HttpRequestType.Post:
-                    response = await Client.PostAsync(endPoint, stringContent);
+                    response = await Client.PostAsync(endPoint, content);
                     break;
 
                 case HttpRequestType.Put:
-                    response = await Client.PutAsync(endPoint, stringContent);
+                    response = await Client.PutAsync(endPoint, content);
                     break;
 
                 case HttpRequestType.Delete:

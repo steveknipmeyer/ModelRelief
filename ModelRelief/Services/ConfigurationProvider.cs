@@ -17,6 +17,7 @@ namespace ModelRelief.Services
     public class ResourcePaths 
     {
         public static string TestDataUsers      = "ResourcePaths:TestDataUsers";
+        public static string TestDataFiles      = "ResourcePaths:TestDataFiles";
         public static string StoreUsers         = "ResourcePaths:StoreUsers";
     }
 

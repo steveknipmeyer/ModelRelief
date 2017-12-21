@@ -240,8 +240,8 @@ namespace ModelRelief.Api.V1.Shared
             // For JSON, the new id is appended while for a file the created endpoint is the same as the POST endpoint.
 
             var newModel = (TGetModel)((OkObjectResult)okResult).Value;
-            string subResource = postFile ? "/file" : "";
-            string createdUrl = $"{this.Request.Path}/{newModel.Id}{subResource}";
+            string subPath = postFile ? "" : $"/{newModel.Id}";
+            string createdUrl = $"{this.Request.Path}{subPath}";
 
             Uri createdUrlAbsolute = new Uri($"{Request.Scheme}://{Request.Host}{createdUrl}");
 

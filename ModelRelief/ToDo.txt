@@ -13,13 +13,12 @@
 
     Log ApiErrorResult?
 
+    ApiStatusCode -> ApiErrorStatusCode?
+
     Add file-based integration tests.       
         GetFile       
             Decode64 support.
             Test specific contents?
-        PostFile
-            Mesh endpoint is disallowed.
-            Create metadata. Post file. Verify contents.
             Put is equivalent to Post.
         Delete
             Confirm associated files are also deleted.
