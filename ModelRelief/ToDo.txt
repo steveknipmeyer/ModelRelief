@@ -12,14 +12,11 @@
 <-- Api Design
     Remove .gitignore filters on Test\Data folder.
 
-    How can a SQL Server database be rolled back to a known state?
-
-    Retest SQLite.
-
     ApiStatusCode -> ApiErrorStatusCode?
 
     Add file-based integration tests.       
         Delete
+            Enable Delete folder in DeleteRequestHandler.#
             Confirm associated files are also deleted.
 
     Review and organize the Postman tests.

@@ -56,7 +56,8 @@ namespace ModelRelief.Test.Integration
                 {"ModelReliefBaseline_log.ldf", "ModelReliefTest_log.ldf" }
             };
 #else
-            var contentRootPath = Framework.GetContentRootPath();
+            var framework = new Framework();
+            var contentRootPath = framework.GetContentRootPath();
             var databaseFolder = $"{contentRootPath}/{Settings.DatabaseFolder}";
             var fileList = new Dictionary<string, string>
             {
