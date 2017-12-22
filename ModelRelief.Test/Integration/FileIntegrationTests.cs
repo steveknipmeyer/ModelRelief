@@ -4,6 +4,7 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Domain;
 using ModelRelief.Dto;
@@ -52,6 +53,43 @@ namespace ModelRelief.Test.Integration
             return byteArray;
         }
 
+        /// <summary>
+        /// Posts a new new file.
+        /// </summary>
+        public virtual async Task<RequestResponse> PostNewFile(int modelId,  string fileName)
+        {
+            // Arrange
+            var byteArray = ByteArrayFromFile (fileName);
+
+            // Act
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{TestModel.ApiUrl}/{modelId}/file", byteArray, binaryContent: true);
+
+            // Assert
+            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            return requestResponse;
+        }
+        /// <summary>
+        /// Compare two byte arrays for equslity.
+        /// http://www.techmikael.com/2009/01/fast-byte-array-comparison-in-c.html
+        /// </summary>
+        /// <param name="first">First array to compare.</param>
+        /// <param name="second">Second array to compare.</param>
+        /// <returns>True if identical.</returns>
+        private static bool EqualByteArrays(byte[] first, byte[] second)
+            {
+                int length = first.Length;
+                if (length != second.Length)
+                    return false;
+
+                for (int i = 0; i < length; i++)
+                {
+                    if( first[i] != second[i] ) 
+                        return false;
+                }
+                return true;
+            }
+
         #region GetFile
         /// <summary>
         /// Tests whether an existing file can be returned.
@@ -88,6 +126,33 @@ namespace ModelRelief.Test.Integration
             AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
             AssertApiErrorApiStatusCode(requestResponse, ApiStatusCode.NotFound);
         }
+
+        /// <summary>
+        /// Tests whether a file can be roundtripped to an endpoint.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "Api GetFile")]
+        public virtual async Task GetFile_FileCanBeRoundTripped()
+        {
+            // Arrange
+            var fileName = "ModelRelief.txt";
+            var newModel = await PostNewModel();
+            var requestResponse = await PostNewFile(newModel.Id, fileName);
+            var writtenByteArray = ByteArrayFromFile (fileName);
+
+            // Act            
+            requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModel.ApiUrl}/{newModel.Id}/file");
+            var fileContentResult = (Newtonsoft.Json.Linq.JObject) JsonConvert.DeserializeObject(requestResponse.ContentString);
+            var encodedString = fileContentResult.GetValue("fileContents");
+            var readByteArray = Convert.FromBase64String(encodedString.ToString());
+
+            // Assert
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True (EqualByteArrays(writtenByteArray, readByteArray));
+
+            // Rollback
+            await DeleteModel(newModel);
+        }
         #endregion
 
         #region PostFile
@@ -99,11 +164,33 @@ namespace ModelRelief.Test.Integration
         public virtual async Task PostFile_NewFileCanBePosted()
         {
             // Arrange
-            var newModel = await CreateNewModel();
+            var newModel = await PostNewModel();
 
             // Act            
-            var byteArray = ByteArrayFromFile ("UnitCube.obj");
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{TestModel.ApiUrl}/{newModel.Id}/file", byteArray, binaryContent: true);
+            var requestResponse = await PostNewFile(newModel.Id, "UnitCube.obj");
+
+            // Assert
+            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            // Rollback
+            await DeleteModel(newModel);
+        }
+        #endregion
+
+        #region PutFile
+        /// <summary>
+        /// Tests whether a file can be PUT to the resource.
+        /// N.B. PUT and POST are equivalent for files. Both replace the destination completely.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "Api PutFile")]
+        public virtual async Task PutFile_NewFileCanBePosted()
+        {
+            // Arrange
+            var newModel = await PostNewModel();
+
+            // Act            
+            var requestResponse = await PostNewFile(newModel.Id, "UnitCube.obj");
 
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);

@@ -55,6 +55,14 @@ namespace ModelRelief.Test.Integration
                 {"ModelReliefBaseline.mdf",     "ModelReliefTest.mdf" },
                 {"ModelReliefBaseline_log.ldf", "ModelReliefTest_log.ldf" }
             };
+#else
+            var contentRootPath = Framework.GetContentRootPath();
+            var databaseFolder = $"{contentRootPath}/{Settings.DatabaseFolder}";
+            var fileList = new Dictionary<string, string>
+            {
+                {"ModelReliefBaseline.db",     "ModelReliefTest.db" }
+            };
+#endif
             try
             {
                 foreach (KeyValuePair<string, string> entry in fileList)
@@ -68,18 +76,6 @@ namespace ModelRelief.Test.Integration
             {
                 Debug.Assert(false, $"RefreshTestDatabase: {ex.Message}");
             }
-#else
-            var contentRootPath = GetContentRootPath();
-            var databaseFolder = $"{contentRootPath}/{Settings.DatabaseFolder}";
-
-            var sourceDatabase = "ModelReliefBaseline.db";
-            var targetDatabase = "ModelReliefTest.db";
-
-            var sourceDatbasePath = Path.Combine(databaseFolder, sourceDatabase);
-            var targetDatbasePath = Path.Combine(databaseFolder, targetDatabase);
-
-            File.Copy(sourceDatbasePath, targetDatbasePath, overwrite: true);
-#endif
         }
     }
 

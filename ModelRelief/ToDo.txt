@@ -12,15 +12,11 @@
 <-- Api Design
     How can a SQL Server database be rolled back to a known state?
 
-    Log ApiErrorResult?
+    Retest SQLite.
 
     ApiStatusCode -> ApiErrorStatusCode?
 
     Add file-based integration tests.       
-        GetFile       
-            Decode64 support.
-            Test specific contents?
-            Put is equivalent to Post.
         Delete
             Confirm associated files are also deleted.
 
@@ -117,6 +113,8 @@
         Details, Delete
 
 <-- Logging
+    Log ApiErrorResult?
+
     Review the ILogger interface. How should this work with a Controller?
         namespace Microsoft.Extensions.Logging
         {

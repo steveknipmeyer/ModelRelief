@@ -106,7 +106,7 @@ namespace ModelRelief.Test.Integration
         /// <summary>
         /// Creates a new resource.
         /// </summary>
-        public virtual async Task<TGetModel> CreateNewModel()
+        public virtual async Task<TGetModel> PostNewModel()
         {
             // Arrange
             var validModel = TestModel.ConstructValidModel();

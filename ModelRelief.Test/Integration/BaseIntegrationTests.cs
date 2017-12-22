@@ -199,7 +199,7 @@ namespace ModelRelief.Test.Integration
         public async Task Put_CanUpdateModel()
         {
             // Arrange
-            var newModel = await CreateNewModel();
+            var newModel = await PostNewModel();
             var updatedName = "Updated Name Property";
             newModel.Name = updatedName;
 
@@ -250,7 +250,7 @@ namespace ModelRelief.Test.Integration
             }
 
             // Arrange
-            var newModel = await CreateNewModel();
+            var newModel = await PostNewModel();
             TestModel.SetReferenceProperty(newModel, TestModel.ValidReferenceProperty);
 
             // Act
@@ -306,7 +306,7 @@ namespace ModelRelief.Test.Integration
         public async Task Patch_TargetPropertyIsUpdated()
         {
             // Arrange
-            var newModel = await CreateNewModel();
+            var newModel = await PostNewModel();
             var updatedName = "Updated Name Property";
             var patchModel = new 
             {
@@ -472,7 +472,7 @@ namespace ModelRelief.Test.Integration
             }
 
             // Arrange
-            var newModel = await CreateNewModel();
+            var newModel = await PostNewModel();
             // https://stackoverflow.com/questions/6044482/setting-anonymous-type-property-name
             var validPatchModel = new Dictionary<string, int?>
             {
@@ -502,7 +502,7 @@ namespace ModelRelief.Test.Integration
         public async Task Delete_TargetModelIsDeleted()
         {
             // Arrange
-            var newModel = await CreateNewModel();
+            var newModel = await PostNewModel();
 
             // Act
             var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Delete, $"{TestModel.ApiUrl}/{newModel.Id}");

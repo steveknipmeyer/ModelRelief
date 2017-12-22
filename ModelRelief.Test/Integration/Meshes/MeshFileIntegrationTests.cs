@@ -30,6 +30,16 @@ namespace ModelRelief.Test.Integration.Meshes
         }
 
         #region GetFile
+        [Fact]
+        [Trait ("Category", "Api GetFile")]
+        public override async Task GetFile_FileCanBeRoundTripped()
+        {
+            // N.B. POST is disallowed for Meshes. This condition is tested by PostFile_NewFileCanBePosted.
+            // Assert
+            Assert.True(true);
+
+            await Task.CompletedTask;
+        }
         #endregion
 
         #region PostFile
@@ -42,7 +52,7 @@ namespace ModelRelief.Test.Integration.Meshes
         public override async Task PostFile_NewFileCanBePosted()
         {
             // Arrange
-            var newModel = await CreateNewModel();
+            var newModel = await PostNewModel();
 
             // Act            
             var byteArray = ByteArrayFromFile ("UnitCube.obj");
@@ -56,5 +66,31 @@ namespace ModelRelief.Test.Integration.Meshes
             await DeleteModel(newModel);
         }
         #endregion
+
+        #region PutFile
+        /// <summary>
+        /// Tests whether a file can be PUT to the resource.
+        /// Mesh files are generated from their dependents. They are not posted.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "Api PutFile")]
+        public override async Task PutFile_NewFileCanBePosted()
+        {
+            // Arrange
+            var newModel = await PostNewModel();
+
+            // Act            
+            var byteArray = ByteArrayFromFile ("UnitCube.obj");
+            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{newModel.Id}/file", byteArray, binaryContent: true);
+
+            // Assert
+            Assert.False(requestResponse.Message.IsSuccessStatusCode);
+            AssertApiErrorApiStatusCode(requestResponse, ApiStatusCode.FileCreation);
+
+            // Rollback
+            await DeleteModel(newModel);
+        }
+        #endregion
+
     }
 }
