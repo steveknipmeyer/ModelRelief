@@ -26,6 +26,7 @@ namespace ModelRelief.Domain
 
     public interface IFileResource
     {
+        string Name { get; set; }
         string Path { get; set; }
     }
 }

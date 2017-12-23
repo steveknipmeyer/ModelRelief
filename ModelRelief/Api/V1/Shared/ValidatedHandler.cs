@@ -25,6 +25,7 @@ using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Hosting;
 using ModelRelief.Services;
+using System.IO;
 
 namespace ModelRelief.Api.V1.Shared
 {
@@ -113,7 +114,7 @@ namespace ModelRelief.Api.V1.Shared
             var modelRootFolder = ConfigurationProvider.GetSetting(($"ResourcePaths:Folders:{typeof(TEntity).Name}"));
 
             string modelStorageFolder = $"{HostingEnvironment.WebRootPath}{storeUsers}{user.Id}/{modelRootFolder}/{model.Id}/";
-            return modelStorageFolder;
+            return Path.GetFullPath(modelStorageFolder);
         }
 
         /// <summary>

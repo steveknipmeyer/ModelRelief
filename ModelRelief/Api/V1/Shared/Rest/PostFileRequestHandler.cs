@@ -24,6 +24,7 @@ using ModelRelief.Utility;
 using ModelRelief.Services;
 using ModelRelief.Api.V1.Shared.Errors;
 using Microsoft.Extensions.Logging;
+using System.IO;
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
@@ -72,7 +73,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             await Files.WriteFileFromByteArray(fileName, message.NewFile.Raw);
 
             // file path is known now
-            targetModel.Path = fileName;
+            targetModel.Path = $"{Path.GetDirectoryName(fileName)}/";
 
             return Mapper.Map<TGetModel>(targetModel);
         }

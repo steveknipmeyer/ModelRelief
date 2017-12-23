@@ -12,6 +12,7 @@ using ModelRelief.Domain;
 using Microsoft.Extensions.Configuration;
 using ModelRelief.Services;
 using Microsoft.AspNetCore.Hosting;
+using System.Linq;
 
 namespace ModelRelief.Utility
 {
@@ -125,6 +126,17 @@ namespace ModelRelief.Utility
                 return;
 
             Directory.Delete(path, recursive);
+        }
+
+        /// <summary>
+        /// Returns whether a folder contains any files.
+        /// https://stackoverflow.com/questions/755574/how-to-quickly-check-if-folder-is-empty-net
+        /// </summary>
+        /// <param name="path">Path of folder to check.</param>
+        /// <returns>True if empty.</returns>
+        public static bool IsFolderEmpty(string path)
+        {
+            return !Directory.EnumerateFileSystemEntries(path).Any();
         }
     }        
 }

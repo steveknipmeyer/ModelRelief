@@ -15,6 +15,7 @@ using ModelRelief.Domain;
 using ModelRelief.Utility;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -46,6 +47,52 @@ namespace ModelRelief.Api.V1.Shared.Rest
         }
 
         /// <summary>
+        /// Removes files associated with a resource.
+        /// WIP: Should orphan folder paring be done as an adminstrative tool?    
+        /// </summary>
+        private void DeleteModelStorage(TEntity modelToRemove)
+        {
+            // not a file-backed model?
+            if (!typeof(IFileResource).IsAssignableFrom(typeof(TEntity)))
+                return;
+
+            var modelFileResourceToRemove = modelToRemove as IFileResource;                
+            
+            // The Path exists only if an associated file has been posted. 
+            // There is no mechanism for deleting <only> the file once a model has been created.
+            if (String.IsNullOrEmpty(modelFileResourceToRemove.Path))
+                return;
+
+            var modelStorageFolder = ModelStorageFolder(modelToRemove, modelToRemove.User);
+            var fileFolder = Path.GetFullPath(modelFileResourceToRemove.Path);
+
+            // confirm that parent folder of file matches the storage folder
+            if (!String.Equals(modelStorageFolder, fileFolder, StringComparison.InvariantCultureIgnoreCase))
+            {
+                Logger.LogError($"DeleteRequest: The parent folder of the file to be deleted '{fileFolder}' does not match the user storage folder '{modelStorageFolder}'.");
+                return;
+            }
+
+            // check for existence of model file
+            var fileName = $"{fileFolder}/{modelFileResourceToRemove.Name}";
+            if (!File.Exists(fileName))
+            {
+                Logger.LogError($"DeleteRequest: The file to be deleted '{fileName}' does not exist.");
+                return;
+            }           
+
+            Logger.LogWarning ($"Deleting model file: {fileName}");
+            File.Delete(fileName);
+
+            // remove parent folder (only if empty)
+            if (Files.IsFolderEmpty(modelStorageFolder))
+            {
+                // https://stackoverflow.com/questions/5617320/given-full-path-check-if-path-is-subdirectory-of-some-other-path-or-otherwise
+                Files.DeleteFolder(modelStorageFolder, false);
+            }
+        }
+
+        /// <summary>
         /// Handles the DELETE model request.
         /// </summary>
         /// <param name="message">Request message</param>
@@ -56,16 +103,14 @@ namespace ModelRelief.Api.V1.Shared.Rest
             var modelToRemove = await FindModelAsync<TEntity>(message.User, message.Id);
             if (modelToRemove == null)
                 throw new EntityNotFoundException(typeof(TEntity), message.Id);
-            
-            // remove user storage
-            var modelStorageFolder = ModelStorageFolder(modelToRemove, modelToRemove.User);
-            Logger.LogWarning ($"Deleting model storage folder: {modelStorageFolder}");
-#if false
-            Files.DeleteFolder(modelStorageFolder, true);
-#endif
+
+            // remove model file if present
+            DeleteModelStorage(modelToRemove);
+
             DbContext.Remove(modelToRemove);
 
             return null;
         }
+
     }
 }
