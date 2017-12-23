@@ -34,7 +34,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TEntity">Domain model</typeparam>
     /// <typeparam name="TGetModel">DTO GET model.</typeparam>
     public class PostFileRequestHandler<TEntity, TGetModel> : ValidatedHandler<PostFileRequest<TEntity, TGetModel>, TGetModel>
-        where TEntity    : DomainModel, IFileResource, new()
+        where TEntity    : DomainModel, new()
         where TGetModel  : ITGetModel
     {
         private ILogger<TEntity> Logger { get; }
@@ -62,18 +62,23 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns></returns>
         public override async Task<TGetModel> OnHandle(PostFileRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
+            // not a file-backed model?
+            if (!typeof(IFileResource).IsAssignableFrom(typeof(TEntity)))
+                throw new ModelNotBackedByFileException(typeof(TEntity));
+
             var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
             if (targetModel == null)
                 throw new EntityNotFoundException(typeof(TEntity), message.Id);
 
             // ApplicationUser determines file path
             var user = targetModel.User;
-
+                
             var fileName = ModelFileName(targetModel, user);
             await Files.WriteFileFromByteArray(fileName, message.NewFile.Raw);
 
             // file path is known now
-            targetModel.Path = $"{Path.GetDirectoryName(fileName)}/";
+            var targetModelFileResource = targetModel as IFileResource;                
+            targetModelFileResource.Path = $"{Path.GetDirectoryName(fileName)}/";
 
             return Mapper.Map<TGetModel>(targetModel);
         }

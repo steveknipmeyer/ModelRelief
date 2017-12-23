@@ -75,6 +75,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         // Files
         FileCreation                        = StatusCodeBase.Files + 1,    
         FileUpdate                          = StatusCodeBase.Files + 2,
+        NoBackingFile                       = StatusCodeBase.Files + 3,
         
         // Camera
         CameraGetValidationError            = StatusCodeBase.Camera + HttpRequestBaseOffset.Get,

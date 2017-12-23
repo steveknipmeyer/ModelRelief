@@ -52,6 +52,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns></returns>
         public override async Task<FileContentResult> OnHandle(GetFileRequest<TEntity> message, CancellationToken cancellationToken)
         {
+            // not a file-backed model?
+            if (!typeof(IFileResource).IsAssignableFrom(typeof(TEntity)))
+                throw new ModelNotBackedByFileException(typeof(TEntity));
+
             var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
             if (targetModel == null)
                 throw new EntityNotFoundException(typeof(TEntity), message.Id);

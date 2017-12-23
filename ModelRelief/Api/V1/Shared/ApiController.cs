@@ -106,6 +106,16 @@ namespace ModelRelief.Api.V1.Shared
 
                 return apiValidationResult.ObjectResult();
             }
+            catch (ModelNotBackedByFileException ex)
+            {
+                var apiValidationResult = new ApiErrorResult(
+                    this, 
+                    HttpStatusCode.NotFound, 
+                    ApiStatusCode.NoBackingFile, 
+                    ex.Message);
+
+                return apiValidationResult.ObjectResult();
+            }
             catch (UserAuthenticationException ex)
             {
                 var apiValidationResult = new ApiErrorResult(

@@ -26,6 +26,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Hosting;
 using ModelRelief.Services;
 using System.IO;
+using ModelRelief.Api.V1.Shared.Rest;
 
 namespace ModelRelief.Api.V1.Shared
 {
@@ -127,7 +128,7 @@ namespace ModelRelief.Api.V1.Shared
         public string ModelFileName<TEntity> (TEntity model, ApplicationUser user)
             where TEntity : DomainModel
         {
-            string modelStorageFolder = ModelStorageFolder(model, user);
+            var modelStorageFolder = ModelStorageFolder(model, user);
             string fileName = $"{modelStorageFolder}{model.Name}";
 
             return fileName;

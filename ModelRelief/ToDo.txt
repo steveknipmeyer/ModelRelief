@@ -1,5 +1,6 @@
 ﻿<--- Commit
 
+
 <-- Technical Education
         Manning AspNet Core book.
         Manning Dependency Injection book.
@@ -9,9 +10,12 @@
         Scale with a Python processor.
 
 <-- Api Design
+
+    ModelFileName uses the model storage folder not the database Path property. This limits storage flexibility.  
+        
+    The Delete integration tests remove the backing file!
+
     Remove .gitignore filters on Test\Data folder.
-    
-    Should GetFile check of IFileResource?
     
     ApiStatusCode -> ApiErrorStatusCode?
 
