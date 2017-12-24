@@ -22,6 +22,9 @@ using ModelRelief.Api.V1.Shared.Errors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
+using ModelRelief.Utility;
+using System.Reflection;
+using FluentValidation.Results;
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
@@ -53,6 +56,67 @@ namespace ModelRelief.Api.V1.Shared.Rest
         }
 
         /// <summary>
+        /// Builds the UpdatedModel property containing the complete composition of old and new properties.
+        /// </summary>
+        /// <returns>TGetModel</returns>
+        public async Task<TGetModel> BuildUpdatedTGetModel (PatchRequest<TEntity, TGetModel> message)
+        {
+            var domainModel = await FindModelAsync<TEntity>(message.User, message.Id);
+
+            var updatedDomainModel = BuildUpdatedDomainModel(message, domainModel);
+            message.UpdatedModel = Mapper.Map<TEntity, TGetModel>(updatedDomainModel);
+
+            return message.UpdatedModel;
+        }
+
+        /// <summary>
+        /// Converts a PUT request to a domain model (for validation).
+        /// </summary>
+        /// <returns>Domain model</returns>
+        public TEntity BuildUpdatedDomainModel (PatchRequest<TEntity, TGetModel> message, TEntity model)
+        {
+            var properties = typeof(TEntity).GetProperties();
+            foreach (var putProperty in message.Parameters) 
+            {
+                var name  = putProperty.Key;
+                var value = putProperty.Value;
+
+                // find matching property in target object
+                PropertyInfo property = null;
+                try
+                {
+                    property = properties.Single(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                    if (property == null)
+                        continue;
+                }
+                catch (Exception )
+                {
+                    var validationFailure = new ValidationFailure(name, $"The property {name} is not a valid property for this resource.");
+                    throw new ApiValidationException(typeof(PatchRequest<TEntity, TGetModel>), new List<ValidationFailure> {validationFailure});
+                }
+
+                // now set property in target
+                object domainValue = null;
+                try
+                {
+                    domainValue = property.PropertyType.IsEnum ? 
+                        Enum.ToObject(property.PropertyType, value) : 
+                        // https://stackoverflow.com/questions/19811583/invalid-cast-from-system-double-to-system-nullable
+                        System.Convert.ChangeType(value, Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType);
+                 }
+                catch (Exception )
+                {
+                    var validationFailure = new ValidationFailure(name, $"The property value {value} cannot be converted to a valid property value.");
+                    throw new ApiValidationException(typeof(PatchRequest<TEntity, TGetModel>), new List<ValidationFailure> {validationFailure});
+                }
+
+                property.SetValue(model, value: domainValue);
+            }
+
+            return model;
+        }
+
+        /// <summary>
         /// Pre-handler; performns any initialization or setup required before the request is handled.
         /// </summary>
         /// <param name="message">Request object</param>
@@ -60,7 +124,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns></returns>
         public override async Task PreHandle(PatchRequest<TEntity, TGetModel> message, CancellationToken cancellationToken) 
         { 
-            await message.BuildUpdatedTGetModel(UserManager, Mapper); 
+            // construct to support validation
+            await BuildUpdatedTGetModel(message); 
         }
 
         /// <summary>
@@ -70,9 +135,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="cancellationToken">Token to allow the async operation to be cancelled.</param>
         /// <returns></returns>
         public override async Task<TGetModel> OnHandle(PatchRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
-        {
+        {           
+            var model = await FindModelAsync<TEntity>(message.User, message.Id);
+
             // find target model
-            var model = await message.BuildUpdatedDomainModel(UserManager);
+            model = BuildUpdatedDomainModel(message, model);
 
             // validate all references are owned
             await ValidateReferences<TEntity>(model, message.User);

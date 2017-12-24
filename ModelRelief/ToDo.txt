@@ -1,6 +1,5 @@
 ﻿<--- Commit
 
-
 <-- Technical Education
         Manning AspNet Core book.
         Manning Dependency Injection book.
@@ -10,9 +9,29 @@
         Scale with a Python processor.
 
 <-- Api Design
+    Handlers should share common validation code.
+                                Entity Exists   StorageFolder   File Exists     Formatting
+        GetSingle               X                                               X
+        GetList                                                                 X
+
+        Delete                  X               
+            DeleteStorage                       X               X
+        Put                     X                                               X
+        Patch                   X                                               X
+        GetFile                 X               X               X
+
+        Post                                                                    X
+        PostFile                                X                               X
+
+        EntityNotFoundException
+        IFileResource
+
+        PreHandle?  
 
     ModelFileName uses the model storage folder not the database Path property. This limits storage flexibility.  
-        
+
+    ModelStorageFolder must use a type parameter of IFileResource.
+
     The Delete integration tests remove the backing file!
 
     Remove .gitignore filters on Test\Data folder.

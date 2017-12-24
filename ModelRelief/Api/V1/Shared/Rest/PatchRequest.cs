@@ -4,21 +4,11 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 
-using AutoMapper;
-using FluentValidation.Results;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using ModelRelief.Api.V1.Shared.Errors;
 using ModelRelief.Database;
 using ModelRelief.Domain;
-using ModelRelief.Utility;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
@@ -55,75 +45,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Gets or sets the updated model after applying the collection of incoming properties to the domain model.
         /// </summary>
-        public TGetModel UpdatedModel { get; set; }
-        
-        /// <summary>
-        /// Builds the UpdatedModel property containing the complete composition of old and new properties.
-        /// </summary>
-        /// <returns>TGetModel</returns>
-        public async Task<TGetModel> BuildUpdatedTGetModel (UserManager<ApplicationUser> userManager, IMapper mapper)
-        {
-            var updatedDomainModel = await BuildUpdatedDomainModel(userManager);
-            UpdatedModel = mapper.Map<TEntity, TGetModel>(updatedDomainModel);
-
-            return UpdatedModel;
-        }
-
-        /// <summary>
-        /// Converts a PUT request to a domain model (for validation).
-        /// </summary>
-        /// <returns>Domain model</returns>
-        public async Task<TEntity> BuildUpdatedDomainModel (UserManager<ApplicationUser> userManager)
-        {
-            // find target model
-            var user = await Identity.FindApplicationUserAsync(userManager, User);
-            var model = await DbContext.Set<TEntity>()
-                .Where(m => ((m.Id == this.Id) &&
-                             (m.User.Id == user.Id)))
-                .SingleOrDefaultAsync();
-
-            if (model == null)
-                throw new EntityNotFoundException(typeof(TEntity), this.Id);
-
-            var properties = typeof(TEntity).GetProperties();
-            foreach (var putProperty in this.Parameters) 
-            {
-                var name  = putProperty.Key;
-                var value = putProperty.Value;
-
-                // find matching property in target object
-                PropertyInfo property = null;
-                try
-                {
-                    property = properties.Single(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-                    if (property == null)
-                        continue;
-                }
-                catch (Exception )
-                {
-                    var validationFailure = new ValidationFailure(name, $"The property {name} is not a valid property for this resource.");
-                    throw new ApiValidationException(typeof(PatchRequest<TEntity, TGetModel>), new List<ValidationFailure> {validationFailure});
-                }
-
-                // now set property in target
-                object domainValue = null;
-                try
-                {
-                    domainValue = property.PropertyType.IsEnum ? 
-                        Enum.ToObject(property.PropertyType, value) : 
-                        // https://stackoverflow.com/questions/19811583/invalid-cast-from-system-double-to-system-nullable
-                        System.Convert.ChangeType(value, Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType);
-                 }
-                catch (Exception )
-                {
-                    var validationFailure = new ValidationFailure(name, $"The property value {value} cannot be converted to a valid property value.");
-                    throw new ApiValidationException(typeof(PatchRequest<TEntity, TGetModel>), new List<ValidationFailure> {validationFailure});
-                }
-
-                property.SetValue(model, value: domainValue);
-            }
-
-            return model;
-        }
+        public TGetModel UpdatedModel { get; set; }        
     }
 }

@@ -60,10 +60,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public override async Task<TGetModel> OnHandle(PutRequest<TEntity, TRequestModel, TGetModel> message, CancellationToken cancellationToken)
         {
             var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
-            if (targetModel == null)
-                throw new EntityNotFoundException(typeof(TEntity), message.Id);
 
-            // stop trackiing to avoid conflicting tracking with updatedModel
+            // stop tracking to avoid conflicting tracking with updatedModel
             DbContext.Entry(targetModel).State = EntityState.Detached;
 
             // update domain model
@@ -75,8 +73,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
             // ensure Id is set; PostModel may not have included the Id but it is always present in the PutRequest.
             updatedModel.Id = message.Id;
 
-             // set ownership
-             updatedModel.User = await Identity.FindApplicationUserAsync(UserManager, message.User);
+            // set ownership
+            updatedModel.User = await Identity.FindApplicationUserAsync(UserManager, message.User);
 
             DbContext.Set<TEntity>().Update(updatedModel);
             await DbContext.SaveChangesAsync(cancellationToken);

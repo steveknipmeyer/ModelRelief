@@ -75,8 +75,9 @@ namespace ModelRelief.Api.V1.Shared
         /// <typeparam name="TEntity">Domain model.</typeparam>
         /// <param name="claimsPrincipal">Current HttpContext User.</param>
         /// <param name="id">Target id to retrieve.</param>
+        /// <param name="throwIfNotFound">Throw EntityNotFoundException if not found.</param>
         /// <returns>Domain model if exists, null otherwise.</returns>
-        public virtual async Task<TEntity> FindModelAsync<TEntity> (ClaimsPrincipal claimsPrincipal, int id)
+        public virtual async Task<TEntity> FindModelAsync<TEntity> (ClaimsPrincipal claimsPrincipal, int id, bool throwIfNotFound = true)
             where TEntity : DomainModel
         {
             var user = await Identity.FindApplicationUserAsync(UserManager, claimsPrincipal);
@@ -84,6 +85,10 @@ namespace ModelRelief.Api.V1.Shared
                                 .Where(m => (m.Id == id) && 
                                             (m.UserId == user.Id))
                                 .SingleOrDefaultAsync();
+
+            if (throwIfNotFound && (domainModel == null))
+                throw new EntityNotFoundException(typeof(TEntity), id);
+
             return domainModel;
         }
 
@@ -97,7 +102,7 @@ namespace ModelRelief.Api.V1.Shared
         public virtual async Task<bool> ModelExistsAsync<TEntity> (ClaimsPrincipal claimsPrincipal, int id)
             where TEntity : DomainModel
         {
-            var domainModel = await FindModelAsync<TEntity>(claimsPrincipal, id);
+            var domainModel = await FindModelAsync<TEntity>(claimsPrincipal, id, throwIfNotFound: false);
             return domainModel != null;
         }           
 

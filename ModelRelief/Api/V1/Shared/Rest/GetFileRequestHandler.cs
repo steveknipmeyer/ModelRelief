@@ -57,8 +57,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 throw new ModelNotBackedByFileException(typeof(TEntity));
 
             var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
-            if (targetModel == null)
-                throw new EntityNotFoundException(typeof(TEntity), message.Id);
 
             // ApplicationUser determines file path
             var user = targetModel.User;

@@ -57,8 +57,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public override async Task<TGetModel> OnHandle(GetSingleRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
             var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
-            if (targetModel == null)
-                throw new EntityNotFoundException(typeof(TEntity), message.Id);
 
             // stop tracking to avoid conflicting tracking with updatedModel
             DbContext.Entry(targetModel).State = EntityState.Detached;
