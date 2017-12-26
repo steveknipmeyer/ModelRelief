@@ -34,12 +34,13 @@ namespace ModelRelief.Test.Unit.Models
             // Arrange
             var optionsBuilder = new DbContextOptionsBuilder()
                 .UseSqlite("Data Source=Database\\ModelRelief.db");
-            ModelReliefDbContext            dbContext  = new ModelReliefDbContext(optionsBuilder.Options);
-            UserManager<ApplicationUser>    userManager = null;       // ?
-            IMapper                         mapper     = null;        // AutoMapper must be initialized with all the MappingProfiles.
-            IMediator                       mediator   = null;        // Mediator requires all the Request/Handler types to be registered for DI.
-
-            var controller = new ModelsController(userManager, dbContext, mapper, mediator);
+            ModelReliefDbContext            dbContext             = new ModelReliefDbContext(optionsBuilder.Options);
+            UserManager<ApplicationUser>    userManager           = null;        // ?
+            IMapper                         mapper                = null;        // AutoMapper must be initialized with all the MappingProfiles.
+            IMediator                       mediator              = null;        // Mediator requires all the Request/Handler types to be registered for DI.
+            Services.IConfigurationProvider configurationProvider = null;
+            
+            var controller = new ModelsController(userManager, dbContext, mapper, mediator, configurationProvider);
 
             // Act
             var result = controller.Index(new GetListRequest());

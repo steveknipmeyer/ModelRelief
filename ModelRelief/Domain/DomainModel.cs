@@ -39,18 +39,14 @@ namespace ModelRelief.Domain
         /// <summary>
         /// Returns the relative path of the model file.
         /// </summary>
-        /// <returns>Relative storage folder.</returns>
-        public string RelativePath
+        /// <param name="storeRoot">Store users root.</param>
+        /// <returns>Path of model file relative to wwwroot.</returns>
+        public string GetRelativePath (string storeRoot)
         {
-            get
-            {
             if (string.IsNullOrEmpty(Path))
                 return "";
 
-            // WIP: Generalize the location of the web root.
-            var webRoot = "wwwroot";
-            return Path.Substring(Path.IndexOf(webRoot) + webRoot.Length);
-            }
+            return Path.Substring(Path.IndexOf(storeRoot));
         }
 
         /// <summary>

@@ -21,8 +21,7 @@
         Review the calculated properties (RelativePath, etc.) that depend on a non-null Path.
             Reflection iteration through the properties requires all properties be valid.
 
-        // WIP: Generalize the location of the web root.
-        var webRoot = "wwwroot";
+        ModelsController requires Services.IConfigurationProvider to resolve store root.       
 
     StorageManager 
         Is DI support an advantage?
@@ -46,7 +45,6 @@
 
         Post                                                                    X
         PostFile                                X                               X
-
 
     The Delete integration tests remove the backing file!
 

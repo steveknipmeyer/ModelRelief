@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Database;
 using ModelRelief.Domain;
+using ModelRelief.Services;
 using ModelRelief.Utility;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,8 @@ namespace ModelRelief.Features.Models
     [Authorize]
     public class ModelsController : ViewController<Domain.Model3d, Dto.Model3d, Dto.Model3d, Dto.Model3d>
     {
+        public Services.IConfigurationProvider ConfigurationProvider { get; }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -34,10 +37,13 @@ namespace ModelRelief.Features.Models
         /// <param name="dbContext">Database context</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="mediator">IMediator</param>
-        public ModelsController(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator)
+        /// <param name="configurationProvider">Configuration provider.</param>
+        public ModelsController(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator, Services.IConfigurationProvider configurationProvider)
             : base(userManager, dbContext, mapper, mediator)
         {
+            ConfigurationProvider = configurationProvider;
         }
+
 
         /// <summary>
         /// Action handler for a Viewer request.
@@ -55,8 +61,7 @@ namespace ModelRelief.Features.Models
             // WIP: Publish path of model for THREE loader.
             var domainModel = await DbContext.Set<Domain.Model3d>().FindAsync(new object[] {id});
             ViewData["ModelName"] = domainModel.Name;
-            ViewData["ModelPath"] = domainModel.RelativePath;
-
+            ViewData["ModelPath"] = domainModel.GetRelativePath(ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers));
             return View(model);
         }
         
