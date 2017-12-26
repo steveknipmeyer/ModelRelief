@@ -26,11 +26,25 @@
         EntityNotFoundException
         IFileResource
 
-        PreHandle?  
+    Introduce a StorageManager. 
+        Is DI support an advantage?
+
+    Normalize the database path using Path.GetDirectory.
+    Should Paths end with a directory separator?
 
     ModelFileName uses the model storage folder not the database Path property. This limits storage flexibility.  
+        While the model storage folder is configurable, the Path property would need to be assigned on a per-user basis. How would this be done?
+            An ApplicationUser could have a storage folder property that is used by the StorageManager to define the default location.
 
     ModelStorageFolder must use a type parameter of IFileResource.
+        ModelStorageFolder is used for two different purposes.
+            Location of existing resource (GetFile, Delete) : Model.Path is available.
+            Location of new resource (Post) : Model.Path is undefined.
+
+    DomainModel
+        DomainFileModel : DomainModel
+            FileName : Path.Combine (Path, Name)
+            StorageFolder : parent folder of FileName
 
     The Delete integration tests remove the backing file!
 

@@ -74,7 +74,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             }
 
             // check for existence of model file
-            var fileName = $"{fileFolder}/{modelFileResourceToRemove.Name}";
+            var fileName = Path.Combine(fileFolder, modelFileResourceToRemove.Name);
             if (!File.Exists(fileName))
             {
                 Logger.LogError($"DeleteRequest: The file to be deleted '{fileName}' does not exist.");

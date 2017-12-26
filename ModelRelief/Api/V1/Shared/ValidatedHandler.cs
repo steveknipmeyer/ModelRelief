@@ -120,6 +120,7 @@ namespace ModelRelief.Api.V1.Shared
             var modelRootFolder = ConfigurationProvider.GetSetting(($"ResourcePaths:Folders:{typeof(TEntity).Name}"));
 
             string modelStorageFolder = $"{HostingEnvironment.WebRootPath}{storeUsers}{user.Id}/{modelRootFolder}/{model.Id}/";
+            // normalize
             return Path.GetFullPath(modelStorageFolder);
         }
 
@@ -134,7 +135,7 @@ namespace ModelRelief.Api.V1.Shared
             where TEntity : DomainModel
         {
             var modelStorageFolder = ModelStorageFolder(model, user);
-            string fileName = $"{modelStorageFolder}{model.Name}";
+            string fileName = Path.Combine(modelStorageFolder, model.Name);
 
             return fileName;
         }
