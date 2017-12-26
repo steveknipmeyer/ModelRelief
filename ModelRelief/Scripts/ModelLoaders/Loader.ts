@@ -37,7 +37,7 @@ export class Loader {
             
         let modelName    : string = modelNameElement.textContent;
         let modelPath    : string = modelPathElement.textContent;
-        let fileName     : string = modelPath + modelName;
+        let fileName     : string = `${modelPath}${modelName}`;       
 
         let manager = new THREE.LoadingManager();
         let loader  = new OBJLoader(manager);

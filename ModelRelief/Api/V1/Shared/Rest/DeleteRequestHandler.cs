@@ -53,17 +53,17 @@ namespace ModelRelief.Api.V1.Shared.Rest
         private void DeleteModelStorage(TEntity modelToRemove)
         {
             // not a file-backed model?
-            if (!typeof(IFileResource).IsAssignableFrom(typeof(TEntity)))
+            if (!typeof(FileDomainModel).IsAssignableFrom(typeof(TEntity)))
                 return;
 
-            var modelFileResourceToRemove = modelToRemove as IFileResource;                
+            var modelFileResourceToRemove = modelToRemove as FileDomainModel;                
             
             // The Path exists only if an associated file has been posted. 
             // There is no mechanism for deleting <only> the file once a model has been created.
             if (String.IsNullOrEmpty(modelFileResourceToRemove.Path))
                 return;
-
-            var modelStorageFolder = ModelStorageFolder(modelToRemove, modelToRemove.User);
+            
+            var modelStorageFolder = modelFileResourceToRemove.StorageFolder;
             var fileFolder = Path.GetFullPath(modelFileResourceToRemove.Path);
 
             // confirm that parent folder of file matches the storage folder

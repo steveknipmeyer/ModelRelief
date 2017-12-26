@@ -15,10 +15,9 @@ namespace ModelRelief.Domain
         STL             // Stereolithography
         }
 
-    public class Mesh  : DomainModel, IFileResource
+    public class Mesh  : FileDomainModel
     {
         public MeshFormat Format { get; set; }      
-        public string Path { get; set; }
 
         // Navigation Properties
         public int? ProjectId { get; set; }

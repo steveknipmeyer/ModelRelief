@@ -15,10 +15,9 @@ namespace ModelRelief.Domain
         JPG         // JPG format
     }
 
-    public class DepthBuffer  : DomainModel, IFileResource
+    public class DepthBuffer  : FileDomainModel
     {       
         public DepthBufferFormat Format { get; set; }
-        public string Path { get; set; }
 
         // Navigation Properties
         public int? ProjectId { get; set; }

@@ -5,9 +5,13 @@
 // ------------------------------------------------------------------------//
 using ModelRelief.Domain;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 
 namespace ModelRelief.Domain
 {
+    /// <summary>
+    /// Represents the base class for a model that is not file-backed.
+    /// </summary>
     public abstract class DomainModel
     {
         [Key]
@@ -24,9 +28,61 @@ namespace ModelRelief.Domain
         public ApplicationUser User { get; set; }
     }
 
-    public interface IFileResource
+    /// <summary>
+    /// Represents the base class for a file-backed model resource.
+    /// </summary>
+    public abstract class FileDomainModel : DomainModel
     {
-        string Name { get; set; }
-        string Path { get; set; }
+        // absolute file path
+        public string Path { get; set; }
+
+        /// <summary>
+        /// Returns the relative path of the model file.
+        /// </summary>
+        /// <returns>Relative storage folder.</returns>
+        public string RelativePath
+        {
+            get
+            {
+            if (string.IsNullOrEmpty(Path))
+                return "";
+
+            // WIP: Generalize the location of the web root.
+            var webRoot = "wwwroot";
+            return Path.Substring(Path.IndexOf(webRoot) + webRoot.Length);
+            }
+        }
+
+        /// <summary>
+        /// Returns the model storage folder for a given model instance.
+        /// </summary>
+        /// <returns>Storage folder.</returns>
+        public string StorageFolder
+        {
+            get 
+            {
+                if (string.IsNullOrEmpty(Path))
+                    return "";
+
+                DirectoryInfo directoryInfo = Directory.GetParent(FileName);
+                return directoryInfo.FullName;
+            }
+        }
+
+        /// <summary>
+        /// Returns the associated disk file for a given model instance.
+        /// </summary>
+        /// <returns>Disk file name.</returns>
+        public string FileName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Path))
+                    return "";
+
+                var path = System.IO.Path.Combine (Path, Name);
+                return System.IO.Path.GetFullPath (path);
+            }
+        }
     }
 }

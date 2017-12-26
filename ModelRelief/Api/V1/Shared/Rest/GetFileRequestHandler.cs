@@ -53,15 +53,16 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public override async Task<FileContentResult> OnHandle(GetFileRequest<TEntity> message, CancellationToken cancellationToken)
         {
             // not a file-backed model?
-            if (!typeof(IFileResource).IsAssignableFrom(typeof(TEntity)))
+            if (!typeof(FileDomainModel).IsAssignableFrom(typeof(TEntity)))
                 throw new ModelNotBackedByFileException(typeof(TEntity));
 
             var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
+            var targetModelFileResource = targetModel as FileDomainModel;
 
             // ApplicationUser determines file path
             var user = targetModel.User;
 
-            var fileName = ModelFileName(targetModel, user);
+            var fileName = targetModelFileResource.FileName;
             if (!File.Exists(fileName))
                 throw new ModelFileNotFoundException(typeof(TEntity), targetModel.Name);
 

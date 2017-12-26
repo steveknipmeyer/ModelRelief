@@ -63,19 +63,21 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public override async Task<TGetModel> OnHandle(PostFileRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
             // not a file-backed model?
-            if (!typeof(IFileResource).IsAssignableFrom(typeof(TEntity)))
+            if (!typeof(FileDomainModel).IsAssignableFrom(typeof(TEntity)))
                 throw new ModelNotBackedByFileException(typeof(TEntity));
 
             var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
+            var targetModelFileResource = targetModel as FileDomainModel;
 
             // ApplicationUser determines file path
             var user = targetModel.User;
-                
-            var fileName = ModelFileName(targetModel, user);
+            
+            var storageManager = new StorageManager(HostingEnvironment, ConfigurationProvider);
+            var fileName = Path.Combine(storageManager.DefaultModelStorageFolder(targetModel), targetModel.Name);
+
             await Files.WriteFileFromByteArray(fileName, message.NewFile.Raw);
 
             // file path is known now
-            var targetModelFileResource = targetModel as IFileResource;                
             targetModelFileResource.Path = $"{Path.GetDirectoryName(fileName)}/";
 
             return Mapper.Map<TGetModel>(targetModel);

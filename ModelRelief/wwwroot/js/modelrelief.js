@@ -4225,7 +4225,7 @@ define("ModelLoaders/Loader", ["require", "exports", "three", "ModelLoaders/OBJL
             var modelPathElement = window.document.getElementById('modelPath');
             var modelName = modelNameElement.textContent;
             var modelPath = modelPathElement.textContent;
-            var fileName = modelPath + modelName;
+            var fileName = "" + modelPath + modelName;
             var manager = new THREE.LoadingManager();
             var loader = new OBJLoader_1.OBJLoader(manager);
             var onProgress = function (xhr) {

@@ -9,6 +9,30 @@
         Scale with a Python processor.
 
 <-- Api Design
+    FileDomainModel is a leaf class so it does not yield the correct Type.Name for settings lookups.
+        PostFile
+            var fileName = Path.Combine(storageManager.DefaultModelStorageFolder(targetModel), targetModel.Name);
+        Casting to FileDomainModel can only be done when access to the specific type is not needed.
+
+    Automatically copy ModelReliefTest.db to ModelReliefBaseline.db.
+        A full absolute Path in IFileDomainModel means the database is not portable between machines.
+
+    FileDomainModel
+        Review the calculated properties (RelativePath, etc.) that depend on a non-null Path.
+            Reflection iteration through the properties requires all properties be valid.
+
+        // WIP: Generalize the location of the web root.
+        var webRoot = "wwwroot";
+
+    StorageManager 
+        Is DI support an advantage?
+        An ApplicationUser could have a storage folder property that is used by the StorageManager to define the default location.
+
+    DomainModel
+        Format : Generalize the file format types.
+
+    Generalize the validation for file-based resources.
+
     Handlers should share common validation code.
                                 Entity Exists   StorageFolder   File Exists     Formatting
         GetSingle               X                                               X
@@ -23,28 +47,6 @@
         Post                                                                    X
         PostFile                                X                               X
 
-        EntityNotFoundException
-        IFileResource
-
-    Introduce a StorageManager. 
-        Is DI support an advantage?
-
-    Normalize the database path using Path.GetDirectory.
-    Should Paths end with a directory separator?
-
-    ModelFileName uses the model storage folder not the database Path property. This limits storage flexibility.  
-        While the model storage folder is configurable, the Path property would need to be assigned on a per-user basis. How would this be done?
-            An ApplicationUser could have a storage folder property that is used by the StorageManager to define the default location.
-
-    ModelStorageFolder must use a type parameter of IFileResource.
-        ModelStorageFolder is used for two different purposes.
-            Location of existing resource (GetFile, Delete) : Model.Path is available.
-            Location of new resource (Post) : Model.Path is undefined.
-
-    DomainModel
-        DomainFileModel : DomainModel
-            FileName : Path.Combine (Path, Name)
-            StorageFolder : parent folder of FileName
 
     The Delete integration tests remove the backing file!
 

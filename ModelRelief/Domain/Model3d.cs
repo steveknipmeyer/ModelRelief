@@ -24,10 +24,9 @@ namespace ModelRelief.Domain
         STL             // Stereolithography
     }
 
-    public class Model3d : DomainModel, IFileResource
+    public class Model3d : FileDomainModel
     {       
         public Model3dFormat Format { get; set; }
-        public string Path { get; set; }
 
         // Navigation Properties
         public int? ProjectId { get; set; }

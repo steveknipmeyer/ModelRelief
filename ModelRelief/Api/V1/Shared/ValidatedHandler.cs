@@ -107,40 +107,6 @@ namespace ModelRelief.Api.V1.Shared
         }           
 
         /// <summary>
-        /// Returns the associated model storage folder for a given model instance.
-        /// </summary>
-        /// <typeparam name="TEntity">Domain model.</typeparam>
-        /// <param name="model">Model instance. </param>
-        /// <param name="user">Owning user.</param>
-        /// <returns></returns>
-        public string ModelStorageFolder<TEntity> (TEntity model, ApplicationUser user)
-            where TEntity : DomainModel
-        {
-            var storeUsers  = ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
-            var modelRootFolder = ConfigurationProvider.GetSetting(($"ResourcePaths:Folders:{typeof(TEntity).Name}"));
-
-            string modelStorageFolder = $"{HostingEnvironment.WebRootPath}{storeUsers}{user.Id}/{modelRootFolder}/{model.Id}/";
-            // normalize
-            return Path.GetFullPath(modelStorageFolder);
-        }
-
-        /// <summary>
-        /// Returns the associated disk file for a given model instance.
-        /// </summary>
-        /// <typeparam name="TEntity">Domain model.</typeparam>
-        /// <param name="model">Model instance. The filename is the model ID.</param>
-        /// <param name="user">Owning user.</param>
-        /// <returns></returns>
-        public string ModelFileName<TEntity> (TEntity model, ApplicationUser user)
-            where TEntity : DomainModel
-        {
-            var modelStorageFolder = ModelStorageFolder(model, user);
-            string fileName = Path.Combine(modelStorageFolder, model.Name);
-
-            return fileName;
-        }
-
-        /// <summary>
         /// Validated the property references of the given model to ensure they exist and are owned by the active user.
         /// </summary>
         /// <typeparam name="TEntity">Domain model.</typeparam>

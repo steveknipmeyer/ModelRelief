@@ -25,8 +25,10 @@ namespace ModelRelief.Database
         private Services.IConfigurationProvider _configurationProvider  { get; set; }
         private ModelReliefDbContext            _dbContext  { get; set; }
         private UserManager<ApplicationUser>    _userManager  { get; set; }
-        private string                          _storeUsers { get; set; }
+
         private ApplicationUser                 _user;
+        private string                          _storeUsers { get; set; }
+        private StorageManager                  _storageManager;
         
         public DbInitializer(IServiceProvider services)
         {
@@ -51,6 +53,8 @@ namespace ModelRelief.Database
                 throw new ArgumentNullException(nameof(_userManager));
 
             _storeUsers = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
+
+            _storageManager = new StorageManager(_hostingEnvironment, _configurationProvider);
         }
 
         /// <summary>
@@ -211,12 +215,7 @@ namespace ModelRelief.Database
             }
             _dbContext.SaveChanges();
 
-            // model Ids are known now; set paths
-            foreach (Model3d model in models)
-                model.Path = $"{_storeUsers}{_user.Id}/models/{model.Id}/";
-
-            _dbContext.SaveChanges();
-
+            SetModelPaths(models);
             QualifyDescription<Model3d>(_user.UserName);
         }
 
@@ -268,6 +267,7 @@ namespace ModelRelief.Database
             }
             _dbContext.SaveChanges();
 
+            SetModelPaths(depthBuffers);
             QualifyDescription<DepthBuffer>(_user.UserName);
         }
 
@@ -292,6 +292,7 @@ namespace ModelRelief.Database
             }
             _dbContext.SaveChanges();
 
+            SetModelPaths(meshes);
             QualifyDescription<Mesh>(_user.UserName);
         }
 
@@ -370,6 +371,21 @@ namespace ModelRelief.Database
                 {
                 model.Description += $" ({descriptionSuffix})";
                 }
+            _dbContext.SaveChanges();
+        }
+
+        /// <summary>
+        /// Sets the file paths of the model collection.
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="models"></param>
+        private void SetModelPaths<TEntity>(IEnumerable<TEntity> models)
+            where TEntity : FileDomainModel
+        {
+           // model Ids are known now; set paths
+            foreach (TEntity model in models)
+                model.Path = _storageManager.DefaultModelStorageFolder(model);
+
             _dbContext.SaveChanges();
         }
     }
