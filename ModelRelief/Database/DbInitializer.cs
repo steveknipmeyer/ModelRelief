@@ -75,6 +75,51 @@ namespace ModelRelief.Database
         }
 
         /// <summary>
+        /// Synchronizes the test database with the baseline copy.
+        /// </summary>
+        /// <param name="restore">Restore from baseline (versus create baseline).</param>
+        public void SynchronizeTestDatabase(bool restore)
+        {
+            string databaseFolder;
+            Dictionary<string, string> fileList;
+
+            switch (_configurationProvider.Database)
+            {
+                case RelationalDatabaseProvider.SQLite:
+                    databaseFolder = Path.Combine(_hostingEnvironment.ContentRootPath, "Database");
+                    fileList = new Dictionary<string, string>
+                    {
+                        {"ModelReliefBaseline.db",     "ModelReliefTest.db" }
+                    };
+                    break;
+
+                case RelationalDatabaseProvider.SQLServer:
+                default:
+                    databaseFolder = Environment.ExpandEnvironmentVariables("%USERPROFILE%");
+                    fileList = new Dictionary<string, string>
+                    {
+                        {"ModelReliefBaseline.mdf",     "ModelReliefTest.mdf" },
+                        {"ModelReliefBaseline_log.ldf", "ModelReliefTest_log.ldf" }
+                    };
+                    break;
+            }
+
+            try
+            {
+                foreach (KeyValuePair<string, string> entry in fileList)
+                {
+                    var sourcePath = Path.Combine(databaseFolder, restore? entry.Key : entry.Value);
+                    var targetPath = Path.Combine(databaseFolder, restore? entry.Value : entry.Key);
+                    File.Copy(sourcePath, targetPath, overwrite: true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Assert(false, $"RefreshTestDatabase: {ex.Message}");
+            }
+        }
+
+        /// <summary>
         /// Seeds the database with test data.
         /// </summary>
         /// <returns></returns>
@@ -102,6 +147,13 @@ namespace ModelRelief.Database
 
                 CreateUserStore();
             }
+
+            if (String.Equals(_hostingEnvironment.EnvironmentName, "Test", StringComparison.CurrentCultureIgnoreCase))
+            {
+                // create the baseline copy of the test
+                _dbContext.SaveChanges();
+                SynchronizeTestDatabase(restore: false);
+            }            
         }
 
         /// <summary>
@@ -333,7 +385,7 @@ namespace ModelRelief.Database
                 {
                     var destinationFileName = Path.Combine (targetDirectory, file.Name);
                     Console.WriteLine(destinationFileName);
-                    File.Copy(file.FullName, destinationFileName);
+                    File.Copy(file.FullName, destinationFileName, overwrite: true);
                 }
             }
         }

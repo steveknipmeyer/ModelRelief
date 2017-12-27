@@ -5,8 +5,11 @@ title ModelRelief Shell
 cd %~dp0\..\..
 set MRSolution=%cd%\
 set MR=%MRSolution%ModelRelief\
+set ModelReliefDatabase=SQLServer
+
 echo MRsolution=%MRSolution%
 echo MR=%MR%
+echo ModelReliefDatabase=%ModelReliefDatabase%
 echo
 
 path=%path%;"D:\Users\Steve Knipmeyer\Documents\Bin"

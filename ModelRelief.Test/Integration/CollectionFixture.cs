@@ -5,6 +5,7 @@
 // ------------------------------------------------------------------------//
 using FluentAssertions;
 using ModelRelief.Api.V1.Shared.Rest;
+using ModelRelief.Database;
 using ModelRelief.Dto;
 using Newtonsoft.Json;
 using System;
@@ -33,7 +34,11 @@ namespace ModelRelief.Test.Integration
         /// </summary>
         public CollectionFixture()
         {
-            RefreshTestDatabase();
+            var framework = new Framework();
+            var serviceProvider = framework.ServiceProvider;
+
+            var dbInitializer = new DbInitializer(serviceProvider);
+            dbInitializer.SynchronizeTestDatabase(restore: true);
         }
 
         /// <summary>
@@ -41,42 +46,6 @@ namespace ModelRelief.Test.Integration
         /// </summary>
         public void Dispose()
         {
-        }
-
-        /// <summary>
-        /// Replaces the test database with a fresh baseline copy.
-        /// </summary>
-        public void RefreshTestDatabase()
-        {
-#if !SQLServer
-            var databaseFolder = Environment.ExpandEnvironmentVariables("%USERPROFILE%");
-            var fileList = new Dictionary<string, string>
-            {
-                {"ModelReliefBaseline.mdf",     "ModelReliefTest.mdf" },
-                {"ModelReliefBaseline_log.ldf", "ModelReliefTest_log.ldf" }
-            };
-#else
-            var framework = new Framework();
-            var contentRootPath = framework.GetContentRootPath();
-            var databaseFolder = $"{contentRootPath}/{Settings.DatabaseFolder}";
-            var fileList = new Dictionary<string, string>
-            {
-                {"ModelReliefBaseline.db",     "ModelReliefTest.db" }
-            };
-#endif
-            try
-            {
-                foreach (KeyValuePair<string, string> entry in fileList)
-                {
-                    var sourcePath = Path.Combine(databaseFolder, entry.Key);
-                    var targetPath = Path.Combine(databaseFolder, entry.Value);
-                    File.Copy(sourcePath, targetPath, overwrite: true);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.Assert(false, $"RefreshTestDatabase: {ex.Message}");
-            }
         }
     }
 

@@ -9,13 +9,16 @@
         Scale with a Python processor.
 
 <-- Api Design
+
+    Python
+        DeleteConfiguration : SQLite, SQLServer
+        ModelReliefTest.db -> ModelReliefBaseline.db.
+            If all integration and unit tests are non-destructive, is it necessary to refresh the Test database from the Baseline?
+
     FileDomainModel is a leaf class so it does not yield the correct Type.Name for settings lookups.
         PostFile
             var fileName = Path.Combine(storageManager.DefaultModelStorageFolder(targetModel), targetModel.Name);
         Casting to FileDomainModel can only be done when access to the specific type is not needed.
-
-    Automatically copy ModelReliefTest.db to ModelReliefBaseline.db.
-        A full absolute Path in IFileDomainModel means the database is not portable between machines.
 
     FileDomainModel
         Review the calculated properties (RelativePath, etc.) that depend on a non-null Path.

@@ -23,14 +23,23 @@ namespace ModelRelief.Services
         /// Extension method to add the database services.
         /// </summary>
         /// <param name="services">IServiceCollection</param>
-        /// <param name="configuration">IConfiguration</param>
-        public static void AddDatabaseServices (this IServiceCollection services, IConfiguration configuration)
+        public static void AddDatabaseServices (this IServiceCollection services)
         {
-#if !SQLServer
-            services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("SQLServer")));
-#else
-            services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlite(configuration.GetConnectionString("SQLite")));
-#endif
+            // build the intermediate service provider
+            var serviceProvider = services.BuildServiceProvider();
+            var configurationProvider = serviceProvider.GetService<Services.IConfigurationProvider>();
+
+            switch (configurationProvider.Database)
+            {
+                case RelationalDatabaseProvider.SQLite:
+                    services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlite(configurationProvider.Configuration.GetConnectionString("SQLite")));
+                    break;
+
+                case RelationalDatabaseProvider.SQLServer:
+                default:
+                    services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlServer(configurationProvider.Configuration.GetConnectionString("SQLServer")));
+                    break;
+            }
             services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<ModelReliefDbContext>();
         }            

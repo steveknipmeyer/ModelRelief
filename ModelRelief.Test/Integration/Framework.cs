@@ -46,6 +46,7 @@ namespace ModelRelief.Test.Integration
     {
         public TestServer Server { get; set; }
         public HttpClient Client { get; set; }
+        public IServiceProvider ServiceProvider { get; set; }
 
         public Framework()
         {
@@ -69,6 +70,7 @@ namespace ModelRelief.Test.Integration
                                             .UseStartup<Startup>());
 
             Client = Server.CreateClient();
+            ServiceProvider = Server.Host.Services;
         }
 
         /// <summary>

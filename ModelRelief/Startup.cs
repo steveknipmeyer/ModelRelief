@@ -136,7 +136,7 @@ namespace ModelRelief
 
             // ModelRelief                                
             services.AddSingleton<Services.IConfigurationProvider, Services.ConfigurationProvider>();
-            services.AddDatabaseServices(Configuration);
+            services.AddDatabaseServices();
             
             services.AddAutoMapper(typeof(Startup));
             Mapper.AssertConfigurationIsValid();
