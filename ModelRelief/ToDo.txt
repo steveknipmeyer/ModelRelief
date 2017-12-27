@@ -27,9 +27,6 @@
         Is DI support an advantage?
         An ApplicationUser could have a storage folder property that is used by the StorageManager to define the default location.
 
-    DomainModel
-        Format : Generalize the file format types.
-
     Generalize the validation for file-based resources.
 
     Handlers should share common validation code.
@@ -46,9 +43,12 @@
         Post                                                                    X
         PostFile                                X                               X
 
-    The Delete integration tests remove the backing file!
+    DomainModel
+        Format : Generalize the file format types.
+            This complicates the UI presentation since incompatible file formats (e.g. OBJ for DepthBuffer) are bundled.
 
     Remove .gitignore filters on Test\Data folder.
+        What is the practical limit for git binary files? Are the GitHub restrictions?
     
     ApiStatusCode -> ApiErrorStatusCode?
 

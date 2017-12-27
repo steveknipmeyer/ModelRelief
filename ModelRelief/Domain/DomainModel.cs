@@ -61,7 +61,11 @@ namespace ModelRelief.Domain
                     return "";
 
                 DirectoryInfo directoryInfo = Directory.GetParent(FileName);
-                return directoryInfo.FullName;
+
+                // path convention: always include trailing delimiter
+                var storageFolder = directoryInfo.FullName + System.IO.Path.DirectorySeparatorChar;
+
+                return storageFolder;
             }
         }
 

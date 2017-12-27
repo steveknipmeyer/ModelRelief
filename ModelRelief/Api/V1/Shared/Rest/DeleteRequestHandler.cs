@@ -82,8 +82,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
             }           
 
             Logger.LogWarning ($"Deleting model file: {fileName}");
-            // WIP: DeleteRequest removes the backing file. The rollback step must restore it.
-#if false
             File.Delete(fileName);
 
             // remove parent folder (only if empty)
@@ -92,7 +90,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 // https://stackoverflow.com/questions/5617320/given-full-path-check-if-path-is-subdirectory-of-some-other-path-or-otherwise
                 Files.DeleteFolder(modelStorageFolder, false);
             }
-#endif        
         }
 
         /// <summary>
