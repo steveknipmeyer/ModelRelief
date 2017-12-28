@@ -66,21 +66,18 @@ namespace ModelRelief.Api.V1.Shared.Rest
             if (!typeof(FileDomainModel).IsAssignableFrom(typeof(TEntity)))
                 throw new ModelNotBackedByFileException(typeof(TEntity));
 
-            var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
-            var targetModelFileResource = targetModel as FileDomainModel;
-
-            // ApplicationUser determines file path
-            var user = targetModel.User;
+            var domainModel = await FindModelAsync<TEntity>(message.User, message.Id, throwIfNotFound: true);
+            var fileDomainModel = domainModel as FileDomainModel;
             
             var storageManager = new StorageManager(HostingEnvironment, ConfigurationProvider);
-            var fileName = Path.Combine(storageManager.DefaultModelStorageFolder(targetModel), targetModel.Name);
+            var fileName = Path.Combine(storageManager.DefaultModelStorageFolder(domainModel), domainModel.Name);
 
             await Files.WriteFileFromByteArray(fileName, message.NewFile.Raw);
 
             // file path is known now
-            targetModelFileResource.Path = $"{Path.GetDirectoryName(fileName)}/";
+            fileDomainModel.Path = $"{Path.GetDirectoryName(fileName)}/";
 
-            return Mapper.Map<TGetModel>(targetModel);
+            return Mapper.Map<TGetModel>(domainModel);
         }
     }
 }

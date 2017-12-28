@@ -76,10 +76,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public TEntity BuildUpdatedDomainModel (PatchRequest<TEntity, TGetModel> message, TEntity model)
         {
             var properties = typeof(TEntity).GetProperties();
-            foreach (var putProperty in message.Parameters) 
+            foreach (var patchProperty in message.Parameters) 
             {
-                var name  = putProperty.Key;
-                var value = putProperty.Value;
+                var name  = patchProperty.Key;
+                var value = patchProperty.Value;
 
                 // find matching property in target object
                 PropertyInfo property = null;

@@ -56,15 +56,12 @@ namespace ModelRelief.Api.V1.Shared.Rest
             if (!typeof(FileDomainModel).IsAssignableFrom(typeof(TEntity)))
                 throw new ModelNotBackedByFileException(typeof(TEntity));
 
-            var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
-            var targetModelFileResource = targetModel as FileDomainModel;
+            var domainModel = await FindModelAsync<TEntity>(message.User, message.Id, throwIfNotFound: true);
+            var fileDomainModel = domainModel as FileDomainModel;
 
-            // ApplicationUser determines file path
-            var user = targetModel.User;
-
-            var fileName = targetModelFileResource.FileName;
+            var fileName = fileDomainModel.FileName;
             if (!File.Exists(fileName))
-                throw new ModelFileNotFoundException(typeof(TEntity), targetModel.Name);
+                throw new ModelFileNotFoundException(typeof(TEntity), domainModel.Name);
 
             var contents = File.ReadAllBytes(fileName);
             var response = new FileContentResult(contents, "application/json"); 

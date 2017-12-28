@@ -57,9 +57,6 @@ namespace ModelRelief.Domain
         {
             get 
             {
-                if (string.IsNullOrEmpty(Path))
-                    return "";
-
                 DirectoryInfo directoryInfo = Directory.GetParent(FileName);
 
                 // path convention: always include trailing delimiter
@@ -77,10 +74,7 @@ namespace ModelRelief.Domain
         {
             get
             {
-                if (string.IsNullOrEmpty(Path))
-                    return "";
-
-                var path = System.IO.Path.Combine (Path, Name);
+                var path = System.IO.Path.Combine (Path ?? "", Name);
                 return System.IO.Path.GetFullPath (path);
             }
         }

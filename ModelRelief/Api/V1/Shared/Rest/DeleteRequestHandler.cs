@@ -50,21 +50,21 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// Removes files associated with a resource.
         /// WIP: Should orphan folder paring be done as an adminstrative tool?    
         /// </summary>
-        private void DeleteModelStorage(TEntity modelToRemove)
+        private void DeleteModelStorage(TEntity domainModel)
         {
             // not a file-backed model?
             if (!typeof(FileDomainModel).IsAssignableFrom(typeof(TEntity)))
                 return;
 
-            var modelFileResourceToRemove = modelToRemove as FileDomainModel;                
+            var fileDomainModel = domainModel as FileDomainModel;                
             
             // The Path exists only if an associated file has been posted. 
             // There is no mechanism for deleting <only> the file once a model has been created.
-            if (String.IsNullOrEmpty(modelFileResourceToRemove.Path))
+            if (String.IsNullOrEmpty(fileDomainModel.Path))
                 return;
             
-            var modelStorageFolder = modelFileResourceToRemove.StorageFolder;
-            var fileFolder = Path.GetFullPath(modelFileResourceToRemove.Path);
+            var modelStorageFolder = fileDomainModel.StorageFolder;
+            var fileFolder = Path.GetFullPath(fileDomainModel.Path);
 
             // confirm that parent folder of file matches the storage folder
             if (!String.Equals(modelStorageFolder, fileFolder, StringComparison.InvariantCultureIgnoreCase))
@@ -74,7 +74,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             }
 
             // check for existence of model file
-            var fileName = Path.Combine(fileFolder, modelFileResourceToRemove.Name);
+            var fileName = Path.Combine(fileFolder, fileDomainModel.Name);
             if (!File.Exists(fileName))
             {
                 Logger.LogError($"DeleteRequest: The file to be deleted '{fileName}' does not exist.");

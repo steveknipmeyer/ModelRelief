@@ -121,6 +121,10 @@ namespace ModelRelief.Api.V1.Shared
             PropertyInfo[] properties = type.GetProperties();
             foreach (PropertyInfo property in properties)
             {
+                // skip read-only properties (e.g. calculated FileDomainModel properties)
+                if (!property.CanWrite)
+                    continue;
+
                 var propertyName  = property.Name;
                 var propertyValue = property.GetValue(model, null);
 

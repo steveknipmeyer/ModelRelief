@@ -16,41 +16,6 @@
             If all integration and unit tests are non-destructive, is it necessary to refresh the Test database from the Baseline?
             This does not work with SQLServer as it seems to maintain an exclusive file lock during DbInitializer execution.
 
-    FileDomainModel is a leaf class so it does not yield the correct Type.Name for settings lookups.
-        PostFile
-            var fileName = Path.Combine(storageManager.DefaultModelStorageFolder(targetModel), targetModel.Name);
-        Casting to FileDomainModel can only be done when access to the specific type is not needed.
-
-    FileDomainModel
-        Review the calculated properties (RelativePath, etc.) that depend on a non-null Path.
-            Reflection iteration through the properties requires all properties be valid.
-
-        ModelsController requires Services.IConfigurationProvider to resolve store root.       
-
-    StorageManager 
-        Is DI support an advantage?
-        An ApplicationUser could have a storage folder property that is used by the StorageManager to define the default location.
-
-    Generalize the validation for file-based resources.
-
-    Handlers should share common validation code.
-                                Entity Exists   StorageFolder   File Exists     Formatting
-        GetSingle               X                                               X
-        GetList                                                                 X
-
-        Delete                  X               
-            DeleteStorage                       X               X
-        Put                     X                                               X
-        Patch                   X                                               X
-        GetFile                 X               X               X
-
-        Post                                                                    X
-        PostFile                                X                               X
-
-    DomainModel
-        Format : Generalize the file format types.
-            This complicates the UI presentation since incompatible file formats (e.g. OBJ for DepthBuffer) are bundled.
-
     Remove .gitignore filters on Test\Data folder.
         What is the practical limit for git binary files? Are the GitHub restrictions?
     
@@ -75,37 +40,39 @@
                     MeshTransform
                 Whenever a dependent is updated, the synchronized property is set to false.
 
+<-- API Design
+
     UX Requests
     --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     Browser forms support only GET or POST.
                                                                                                                                                                                                                                                                                                                                                                          
-    View            Operation               Note            HTTP            Endpoint                                Internal Request    Legacy Request          Return
-    ---------       ---------               ------------    ------------    ---------------------                   -----------------   -----------------       -------------------------
-    Index           read (collection)                       GET             /api/v1/resource                        GetList                                     View; paged collection
-    Details         read (single)                           GET             /api/v1/resource/details/id             GetSingle                                   View; JSON object
-    Create          create                                  POST            /api/v1/resource                        PostAdd                                     View; JSON object
-    Edit            update                                  POST            /api/v1/resource/edit/id                Put                 PostUpdate              View; JSON object
-    Delete          delete                                  POST            /api/v1/resource/deleteconfirmed/id     Delete                                      Index
+    View            Operation               Note            HTTP            Endpoint                                Internal Request        Return
+    ---------       ---------               ------------    ------------    ---------------------                   -----------------       -------------------------
+    Index           read (collection)                       GET             /api/v1/resource                        GetList                 View; paged collection
+    Details         read (single)                           GET             /api/v1/resource/details/id             GetSingle               View; JSON object
+    Create          create                                  POST            /api/v1/resource                        PostAdd                 View; JSON object
+    Edit            update                                  POST            /api/v1/resource/edit/id                Put                     View; JSON object
+    Delete          delete                                  POST            /api/v1/resource/deleteconfirmed/id     Delete                  Index
 
 
     API Requests
-    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    Format          Operation               Note            HTTP           Endpoint                                 Internal Request    Legacy Request          Return
-    ---------       ---------               ------------    ------------   ---------------------                    -----------------   -----------------      -------------------------
-    JSON            read (collection)                       GET            /api/v1/resource/id                      GetList                                     OK; JSON collection
-    JSON            read (single)                           GET            /api/v1/resource/id                      GetSingle                                   OK; JSON object
-    JSON            create                                  POST           /api/v1/resource                         Post                PostAdd                 Created; new id returned and default metadata       
-    JSON            update (full)                           PUT            /api/v1/resource/id                      Put                 PostUpdate              OK; JSON object
-    JSON            update (partial)                        PATCH          /api/v1/resource/id                      Patch               Put                     OK; JSON object
-    JSON            update (partial)                        PUT            /api/v1/resource/id/patch                Patch               Put                     OK; JSON object
-    JSON            delete                                  DELETE         /api/v1/resource/id                      Delete                                      OK
+    Format          Operation               Note            HTTP           Endpoint                                 Internal Request        Return
+    ---------       ---------               ------------    ------------   ---------------------                    -----------------      -------------------------
+    JSON            read (collection)                       GET            /api/v1/resource/id                      GetList                 OK; JSON collection
+    JSON            read (single)                           GET            /api/v1/resource/id                      GetSingle               OK; JSON object
+    JSON            create                                  POST           /api/v1/resource                         Post                    Created; new id returned and default metadata       
+    JSON            update (full)                           PUT            /api/v1/resource/id                      Put                     OK; JSON object
+    JSON            update (partial)                        PATCH          /api/v1/resource/id                      Patch                   OK; JSON object
+    JSON            update (partial)                        PUT            /api/v1/resource/id/patch                Patch                   OK; JSON object
+    JSON            delete                                  DELETE         /api/v1/resource/id                      Delete                  OK
 
-    binary          read (single)                           GET            /api/v1/resource/id/file                 GetFile             new                     OK; octet-stream
-    binary          create                  Mesh disallowed POST           /api/v1/resource/id/file                 PostFile                                    Created; new id returned and default metadata       
-    binary          update (full)                           PUT            /api/v1/resource/id/file                 PutFile             new                     OK
+    binary          read (single)                           GET            /api/v1/resource/id/file                 GetFile                 OK; octet-stream
+    binary          create                  Mesh disallowed POST           /api/v1/resource/id/file                 PostFile                Created; new id returned and default metadata       
+    binary          update (full)                           PUT            /api/v1/resource/id/file                 PutFile                 OK
     binary          update (partial)        no endpoint   
-    binary          delete                                  DELETE         /api/v1/resource/id/File                 DeleteFile          new                     OK
+    binary          delete                                  DELETE         /api/v1/resource/id/File                 DeleteFile              OK
 
     Add authentication support!
 
@@ -165,6 +132,20 @@
             }
         }
 
+<-- StorageManager 
+    Is DI support an advantage beyond possible unit testing?
+    An ApplicationUser could have a storage folder property that is used by the StorageManager to define the default location.
+
+<-- DomainModel
+    Format : Generalize the file format types.
+        This complicates the UI presentation since incompatible file formats (e.g. OBJ for DepthBuffer) are bundled.
+
+<-- FileDomainModel 
+    Casting from DomainModel to FileDomainModel can only be done when access to the specific type is not needed.
+    PostFile
+        var fileName = Path.Combine(storageManager.DefaultModelStorageFolder(domainModel), domainModel.Name);
+        The resolution of a storage location depends on looking up the TEntity.Name as a resource.
+
 <-- Exception handling
     The ApiValidationResult exposes too much about internals in the developer message (RequestType).
 
@@ -185,13 +166,13 @@
     Support database authentication.
 
     Integration Tests
-        UserAuthenticatiosnException
         How can XUnit be used to test all properties of a resource?
             Iterate through the property list of a Domain model.
+
         Ux Endpoints                    
             Data must be form-encoded not JSON?
             The [ValidateAntiForgeryToken] attribute leads to an exception.
-            Why is an exception thrown during the Razor compilation of the Error View?
+
         Split Api and Ux into separate assemblies?
             Can the ServerFixture be in a separate assembly?
 
@@ -634,6 +615,20 @@
     
     Finally, the controller action is invoked.
     <---------------------------------------------------------------------------------------------------------------------------------------------------->
+
+    Can the request handlers share common validation code?
+                                Entity Exists   StorageFolder   File Exists     Formatting
+        GetSingle               X                                               X
+        GetList                                                                 X
+
+        Delete                  X               
+            DeleteStorage                       X               X
+        Put                     X                                               X
+        Patch                   X                                               X
+        GetFile                 X               X               X
+
+        Post                                                                    X
+        PostFile                                X                               X
 
 <-- Variance
 
