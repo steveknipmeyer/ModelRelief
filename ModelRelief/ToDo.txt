@@ -14,6 +14,7 @@
         DeleteConfiguration : SQLite, SQLServer
         ModelReliefTest.db -> ModelReliefBaseline.db.
             If all integration and unit tests are non-destructive, is it necessary to refresh the Test database from the Baseline?
+            This does not work with SQLServer as it seems to maintain an exclusive file lock during DbInitializer execution.
 
     FileDomainModel is a leaf class so it does not yield the correct Type.Name for settings lookups.
         PostFile
