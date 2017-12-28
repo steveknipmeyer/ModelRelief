@@ -61,7 +61,7 @@ namespace ModelRelief.Api.V1.Shared
                 var apiValidationResult = new ApiErrorResult(
                     this, 
                     HttpStatusCode.BadRequest, 
-                    ApiStatusCode.NullRequest, 
+                    ApiErrorCode.NullRequest, 
                     "The body of the request contained no usable content.");
 
                 return apiValidationResult.ObjectResult();
@@ -81,7 +81,7 @@ namespace ModelRelief.Api.V1.Shared
                 var apiValidationResult = new ApiErrorResult(
                     this, 
                     HttpStatusCode.BadRequest, 
-                    ApiValidationHelper.MapRequestToApiStatusCode(this.Request, ex.RequestType), 
+                    ApiValidationHelper.MapRequestToApiErrorCode(this.Request, ex.RequestType), 
                     $"One or more of the properties are invalid in the submitted request: {ex.RequestType}.");
 
                 return apiValidationResult.ObjectResult(ex.ValidationException.Errors);
@@ -91,7 +91,7 @@ namespace ModelRelief.Api.V1.Shared
                 var apiValidationResult = new ApiErrorResult(
                     this, 
                     HttpStatusCode.NotFound, 
-                    ApiStatusCode.NotFound, 
+                    ApiErrorCode.NotFound, 
                     ex.Message);
 
                 return apiValidationResult.ObjectResult();
@@ -101,7 +101,7 @@ namespace ModelRelief.Api.V1.Shared
                 var apiValidationResult = new ApiErrorResult(
                     this, 
                     HttpStatusCode.NotFound, 
-                    ApiStatusCode.NotFound, 
+                    ApiErrorCode.NotFound, 
                     ex.Message);
 
                 return apiValidationResult.ObjectResult();
@@ -111,7 +111,7 @@ namespace ModelRelief.Api.V1.Shared
                 var apiValidationResult = new ApiErrorResult(
                     this, 
                     HttpStatusCode.NotFound, 
-                    ApiStatusCode.NoBackingFile, 
+                    ApiErrorCode.NoBackingFile, 
                     ex.Message);
 
                 return apiValidationResult.ObjectResult();
@@ -121,7 +121,7 @@ namespace ModelRelief.Api.V1.Shared
                 var apiValidationResult = new ApiErrorResult(
                     this, 
                     HttpStatusCode.Unauthorized, 
-                    ApiStatusCode.Unauthorized, 
+                    ApiErrorCode.Unauthorized, 
                     ex.Message);
 
                 return apiValidationResult.ObjectResult();

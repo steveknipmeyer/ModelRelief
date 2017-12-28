@@ -124,7 +124,7 @@ namespace ModelRelief.Test.Integration
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
             AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
-            AssertApiErrorApiStatusCode(requestResponse, ApiStatusCode.NotFound);
+            AssertApiErrorCode(requestResponse, ApiErrorCode.NotFound);
         }
 
         /// <summary>

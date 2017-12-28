@@ -51,7 +51,7 @@ namespace ModelRelief.Api.V1.Meshes
             (
                 this, 
                 HttpStatusCode.BadRequest, 
-                ApiStatusCode.FileCreation, 
+                ApiErrorCode.FileCreation, 
                 "Meshes cannot be created through POST.  Create a Mesh by synchronizing the object with its dependents."
             );
             return await Task.FromResult(errorResult.ObjectResult());

@@ -60,7 +60,7 @@ namespace ModelRelief.Test.Integration.Meshes
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            AssertApiErrorApiStatusCode(requestResponse, ApiStatusCode.FileCreation);
+            AssertApiErrorCode(requestResponse, ApiErrorCode.FileCreation);
 
             // Rollback
             await DeleteModel(newModel);
@@ -85,7 +85,7 @@ namespace ModelRelief.Test.Integration.Meshes
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            AssertApiErrorApiStatusCode(requestResponse, ApiStatusCode.FileCreation);
+            AssertApiErrorCode(requestResponse, ApiErrorCode.FileCreation);
 
             // Rollback
             await DeleteModel(newModel);

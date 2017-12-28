@@ -93,14 +93,14 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
-        /// Asserts that the request returned a specific API status code.
+        /// Asserts that the request returned a specific API error code.
         /// </summary>
         /// <param name="requestResponse">Response.</param>
-        /// <param name="statusCode">Expected status code.</param>
-        public void AssertApiErrorApiStatusCode(RequestResponse requestResponse, ApiStatusCode statusCode)
+        /// <param name="statusCode">Expected error code.</param>
+        public void AssertApiErrorCode(RequestResponse requestResponse, ApiErrorCode statusCode)
         {
             var apiError = UnpackApiError(requestResponse);
-            apiError.ApiStatusCode.Should().Be(( int )statusCode);
+            apiError.ApiErrorCode.Should().Be(( int )statusCode);
         }
 
         /// <summary>

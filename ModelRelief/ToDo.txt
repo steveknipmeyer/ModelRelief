@@ -19,8 +19,6 @@
     Remove .gitignore filters on Test\Data folder.
         What is the practical limit for git binary files? Are the GitHub restrictions?
     
-    ApiStatusCode -> ApiErrorStatusCode?
-
     Review and organize the Postman tests.
 
     Files
@@ -85,7 +83,7 @@
     Stormpath Pattern
         Rich error message:
             Status Code         HttpStatusCode                   
-            Code                ApiStatusCode
+            Code                ApiErrorCode
             Message             Errors[]
             DeveloperMessage    DeveloperMessage   
             API Reference       ApiReference

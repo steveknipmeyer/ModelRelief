@@ -21,17 +21,17 @@ namespace ModelRelief.Api.V1.Shared.Rest
     public class ApiError
     {
         public int     HttpStatusCode;
-        public int     ApiStatusCode;
+        public int     ApiErrorCode;
         public string  DeveloperMessage;
         public string  ApiReference;
         public IEnumerable<ValidationError> Errors;
     }
 
     /// <summary>
-    /// Status code offsets for resource groups.
+    /// Error code offsets for resource groups.
     /// Messages for each resource type begin at the offset.
     /// </summary>
-    public enum StatusCodeBase
+    public enum ErrorCodeBase
     {
         Unknown         = 0,
 
@@ -47,7 +47,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     }
 
     /// <summary>
-    /// Status code offsets for HTTP method types.
+    /// Error code offsets for HTTP method types.
     /// Messages for each method begin at the offset.
     /// </summary>
     public enum HttpRequestBaseOffset
@@ -62,67 +62,67 @@ namespace ModelRelief.Api.V1.Shared.Rest
     }
 
     /// <summary>
-    /// API status codes returned by the controllers.
+    /// API error codes returned by the controllers.
     /// </summary>
-    public enum ApiStatusCode
+    public enum ApiErrorCode
     {
         // General
-        Default                             = StatusCodeBase.General + 1,
-        NullRequest                         = StatusCodeBase.General + 2,    
-        NotFound                            = StatusCodeBase.General + 3,
-        Unauthorized                        = StatusCodeBase.General + 4,
+        Default                             = ErrorCodeBase.General + 1,
+        NullRequest                         = ErrorCodeBase.General + 2,    
+        NotFound                            = ErrorCodeBase.General + 3,
+        Unauthorized                        = ErrorCodeBase.General + 4,
 
         // Files
-        FileCreation                        = StatusCodeBase.Files + 1,    
-        FileUpdate                          = StatusCodeBase.Files + 2,
-        NoBackingFile                       = StatusCodeBase.Files + 3,
+        FileCreation                        = ErrorCodeBase.Files + 1,    
+        FileUpdate                          = ErrorCodeBase.Files + 2,
+        NoBackingFile                       = ErrorCodeBase.Files + 3,
         
         // Camera
-        CameraGetValidationError            = StatusCodeBase.Camera + HttpRequestBaseOffset.Get,
-        CameraPostValidationError           = StatusCodeBase.Camera + HttpRequestBaseOffset.Post,
-        CameraPutValidationError            = StatusCodeBase.Camera + HttpRequestBaseOffset.Put,
-        CameraPatchValidationError          = StatusCodeBase.Camera + HttpRequestBaseOffset.Patch,
-        CameraDeleteValidationError         = StatusCodeBase.Camera + HttpRequestBaseOffset.Delete,
+        CameraGetValidationError            = ErrorCodeBase.Camera + HttpRequestBaseOffset.Get,
+        CameraPostValidationError           = ErrorCodeBase.Camera + HttpRequestBaseOffset.Post,
+        CameraPutValidationError            = ErrorCodeBase.Camera + HttpRequestBaseOffset.Put,
+        CameraPatchValidationError          = ErrorCodeBase.Camera + HttpRequestBaseOffset.Patch,
+        CameraDeleteValidationError         = ErrorCodeBase.Camera + HttpRequestBaseOffset.Delete,
 
         // DepthBuffer
-        DepthBufferGetValidationError       = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Get,
-        DepthBufferPostValidationError      = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Post,
-        DepthBufferPutValidationError       = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Put,
-        DepthBufferPatchValidationError     = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Patch,
-        DepthBufferDeleteValidationError    = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Delete,
+        DepthBufferGetValidationError       = ErrorCodeBase.DepthBuffer + HttpRequestBaseOffset.Get,
+        DepthBufferPostValidationError      = ErrorCodeBase.DepthBuffer + HttpRequestBaseOffset.Post,
+        DepthBufferPutValidationError       = ErrorCodeBase.DepthBuffer + HttpRequestBaseOffset.Put,
+        DepthBufferPatchValidationError     = ErrorCodeBase.DepthBuffer + HttpRequestBaseOffset.Patch,
+        DepthBufferDeleteValidationError    = ErrorCodeBase.DepthBuffer + HttpRequestBaseOffset.Delete,
 
         // Mesh
-        MeshGetValidationError              = StatusCodeBase.Mesh + HttpRequestBaseOffset.Get,
-        MeshPostValidationError             = StatusCodeBase.Mesh + HttpRequestBaseOffset.Post,
-        MeshPutValidationError              = StatusCodeBase.Mesh + HttpRequestBaseOffset.Put,
-        MeshPatchValidationError            = StatusCodeBase.Mesh + HttpRequestBaseOffset.Patch,
-        MeshDeleteValidationError           = StatusCodeBase.Mesh + HttpRequestBaseOffset.Delete,
+        MeshGetValidationError              = ErrorCodeBase.Mesh + HttpRequestBaseOffset.Get,
+        MeshPostValidationError             = ErrorCodeBase.Mesh + HttpRequestBaseOffset.Post,
+        MeshPutValidationError              = ErrorCodeBase.Mesh + HttpRequestBaseOffset.Put,
+        MeshPatchValidationError            = ErrorCodeBase.Mesh + HttpRequestBaseOffset.Patch,
+        MeshDeleteValidationError           = ErrorCodeBase.Mesh + HttpRequestBaseOffset.Delete,
 
         // MeshTransform
-        MeshTransformGetValidationError     = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Get,
-        MeshTransformPostValidationError    = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Post,
-        MeshTransformPutValidationError     = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Put,
-        MeshTransformPatchValidationError   = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Patch,
-        MeshTransformDeleteValidationError  = StatusCodeBase.DepthBuffer + HttpRequestBaseOffset.Delete,
+        MeshTransformGetValidationError     = ErrorCodeBase.DepthBuffer + HttpRequestBaseOffset.Get,
+        MeshTransformPostValidationError    = ErrorCodeBase.DepthBuffer + HttpRequestBaseOffset.Post,
+        MeshTransformPutValidationError     = ErrorCodeBase.DepthBuffer + HttpRequestBaseOffset.Put,
+        MeshTransformPatchValidationError   = ErrorCodeBase.DepthBuffer + HttpRequestBaseOffset.Patch,
+        MeshTransformDeleteValidationError  = ErrorCodeBase.DepthBuffer + HttpRequestBaseOffset.Delete,
 
         // Model3d
-        ModelGetValidationError             = StatusCodeBase.Model3d + HttpRequestBaseOffset.Get,
-        ModelPostValidationError            = StatusCodeBase.Model3d + HttpRequestBaseOffset.Post,
-        ModelPutValidationError             = StatusCodeBase.Model3d + HttpRequestBaseOffset.Put,
-        ModelPatchValidationError           = StatusCodeBase.Model3d + HttpRequestBaseOffset.Patch,
-        ModelDeleteValidationError          = StatusCodeBase.Model3d + HttpRequestBaseOffset.Delete,
+        ModelGetValidationError             = ErrorCodeBase.Model3d + HttpRequestBaseOffset.Get,
+        ModelPostValidationError            = ErrorCodeBase.Model3d + HttpRequestBaseOffset.Post,
+        ModelPutValidationError             = ErrorCodeBase.Model3d + HttpRequestBaseOffset.Put,
+        ModelPatchValidationError           = ErrorCodeBase.Model3d + HttpRequestBaseOffset.Patch,
+        ModelDeleteValidationError          = ErrorCodeBase.Model3d + HttpRequestBaseOffset.Delete,
 
         // Project
-        ProjectgetValidationError           = StatusCodeBase.Project + HttpRequestBaseOffset.Get,
-        ProjectPostValidationError          = StatusCodeBase.Project + HttpRequestBaseOffset.Post,
-        ProjectPutValidationError           = StatusCodeBase.Project + HttpRequestBaseOffset.Put,
-        ProjectPatchValidationError         = StatusCodeBase.Project + HttpRequestBaseOffset.Patch,
-        ProjectDeleteValidationError        = StatusCodeBase.Project + HttpRequestBaseOffset.Delete,
+        ProjectgetValidationError           = ErrorCodeBase.Project + HttpRequestBaseOffset.Get,
+        ProjectPostValidationError          = ErrorCodeBase.Project + HttpRequestBaseOffset.Post,
+        ProjectPutValidationError           = ErrorCodeBase.Project + HttpRequestBaseOffset.Put,
+        ProjectPatchValidationError         = ErrorCodeBase.Project + HttpRequestBaseOffset.Patch,
+        ProjectDeleteValidationError        = ErrorCodeBase.Project + HttpRequestBaseOffset.Delete,
     }
     
 
     /// <summary>
-    /// Helper class to look up an ApiStatusCode based on the HTTP request and the domain model.
+    /// Helper class to look up an ApiErrorCode based on the HTTP request and the domain model.
     /// </summary>
     public static class ApiValidationHelper
     {
@@ -131,28 +131,28 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// </summary>
         /// <param name="domainModelType">Domain model type.</param>
         /// <returns>Base of status code.</returns>
-        private static StatusCodeBase MapDomainModelToStatusCodeBase(Type domainModelType)
+        private static ErrorCodeBase MapDomainModelToStatusCodeBase(Type domainModelType)
         {
             // find base offset of domain model
-            var baseOffset = StatusCodeBase.Unknown;
+            var baseOffset = ErrorCodeBase.Unknown;
 
             if (domainModelType == typeof(Domain.Camera))
-                baseOffset = StatusCodeBase.Camera;
+                baseOffset = ErrorCodeBase.Camera;
 
             if (domainModelType == typeof(Domain.DepthBuffer))
-                baseOffset = StatusCodeBase.DepthBuffer;
+                baseOffset = ErrorCodeBase.DepthBuffer;
 
             if (domainModelType == typeof(Domain.Mesh))
-                baseOffset = StatusCodeBase.Mesh;
+                baseOffset = ErrorCodeBase.Mesh;
 
             if (domainModelType == typeof(Domain.MeshTransform))
-                baseOffset = StatusCodeBase.MeshTransform;
+                baseOffset = ErrorCodeBase.MeshTransform;
 
             if (domainModelType == typeof(Domain.Model3d))
-                baseOffset = StatusCodeBase.Model3d;
+                baseOffset = ErrorCodeBase.Model3d;
 
             if (domainModelType == typeof(Domain.Project))
-                baseOffset = StatusCodeBase.Project;
+                baseOffset = ErrorCodeBase.Project;
 
             // no domain model match
             return baseOffset;
@@ -187,23 +187,23 @@ namespace ModelRelief.Api.V1.Shared.Rest
         }
 
         /// <summary>
-        /// Returns an ApiStatusCode for a validation error given the HTTP request and the CQRS request type.
+        /// Returns an ApiErrorCode for a validation error given the HTTP request and the CQRS request type.
         /// </summary>
         /// <param name="httpRequest">HTTP request.</param>
         /// <param name="apiRequestType">CQRS request.</param>
         /// <returns></returns>
-        public static ApiStatusCode MapRequestToApiStatusCode (HttpRequest httpRequest, Type apiRequestType)
+        public static ApiErrorCode MapRequestToApiErrorCode (HttpRequest httpRequest, Type apiRequestType)
         {
             // 1st generic type is the domain model
             Type domainModelType = apiRequestType.GenericTypeArguments?.First();
             if (domainModelType == null)
-                return ApiStatusCode.Default;
+                return ApiErrorCode.Default;
 
             var baseOffset = MapDomainModelToStatusCodeBase(domainModelType);
             
             // no domain model match; stop
-            if (StatusCodeBase.Unknown == baseOffset)    
-                return ApiStatusCode.Default;
+            if (ErrorCodeBase.Unknown == baseOffset)    
+                return ApiErrorCode.Default;
 
             // now map HTTP request type to an offset
             var requestType = httpRequest.Method;
@@ -211,11 +211,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
             // no HTTP request type match; stop
             if (HttpRequestBaseOffset.Unknown == requestOffset)    
-                return ApiStatusCode.Default;
+                return ApiErrorCode.Default;
 
 
-            var statusCode = (ApiStatusCode) ((int) baseOffset + (int) requestOffset);
-            return statusCode;
+            var errorCode = (ApiErrorCode) ((int) baseOffset + (int) requestOffset);
+            return errorCode;
         }
     }
 
@@ -254,7 +254,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     {
         Controller      _controller;
         HttpStatusCode  _httpStatusCode;
-        ApiStatusCode   _apiStatusCode;
+        ApiErrorCode   _apiErrorCode;
         string          _developerMessage;
 
         /// <summary>
@@ -262,13 +262,13 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// </summary>
         /// <param name="controller">Active controller.</param>
         /// <param name="httpStatusCode">HTTP status code to return.</param>
-        /// <param name="apiStatusCode">ModelRelief API status code (more specialized than httpStatusCode)</param>
+        /// <param name="apiErrorCode">ModelRelief API error code (more specialized than httpStatusCode)</param>
         /// <param name="developerMessage">Additional information for the developer.</param>
-        public ApiErrorResult (Controller controller, HttpStatusCode httpStatusCode, ApiStatusCode apiStatusCode, string developerMessage)
+        public ApiErrorResult (Controller controller, HttpStatusCode httpStatusCode, ApiErrorCode apiErrorCode, string developerMessage)
         {
             _controller       = controller;
             _httpStatusCode   = httpStatusCode;
-            _apiStatusCode    = apiStatusCode;
+            _apiErrorCode     = apiErrorCode;
             _developerMessage = developerMessage;
         }
 
@@ -279,7 +279,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public ObjectResult ObjectResult(IEnumerable<ValidationFailure> validationFailures = null)
         {
             string documentation = RouteNames.ApiDocumentation;
-            string apiReferenceRelative = _controller.Url.RouteUrl(documentation, new {id = (int) _apiStatusCode});
+            string apiReferenceRelative = _controller.Url.RouteUrl(documentation, new {id = (int) _apiErrorCode});
             var apiReferenceAbsolute = string.Format($"{_controller.HttpContext.Request.Scheme}://{_controller.HttpContext.Request.Host}{apiReferenceRelative}");
 
             var errors = new List<ValidationError>();
@@ -298,7 +298,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             var errorResult = new ApiError()
             {
                 HttpStatusCode   = (int) _httpStatusCode,
-                ApiStatusCode    = (int) _apiStatusCode,
+                ApiErrorCode    = (int) _apiErrorCode,
                 DeveloperMessage = _developerMessage,
                 ApiReference     = apiReferenceAbsolute,
                 Errors           = errors
