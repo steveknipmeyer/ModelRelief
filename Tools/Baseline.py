@@ -21,78 +21,69 @@ from shutil import copyfile
 
 class Baseline:
 
-    solutionRoot = os.path.normpath(r"D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief")
-    modelReliefRoot = os.path.join(solutionRoot, os.path.normpath("ModelRelief"))
-    wwwwRoot = os.path.join(modelReliefRoot, os.path.normpath("wwwroot"))
-    store = os.path.join(wwwwRoot, os.path.normpath("store"))
+    toolsFolder   = os.path.dirname(os.path.realpath(__file__))
+    solutionRoot    = os.path.abspath(os.path.join(toolsFolder, os.pardir))
+    modelReliefRoot = os.path.join(solutionRoot, "ModelRelief")
+
+    sqliteFolder    = os.path.join(modelReliefRoot, "Database")
+    sqlserverFolder = os.environ["USERPROFILE"]
 
     def __init__(self): 
         
         return
 
-    @property
-    def scene(self):
+    def showFolderLocations (self):
         """
-            Returns the active scene.
-        """
-
-        return modo.scene.current()
-        
-    def imageMapName(self, imageMapPrefix, imageMapResolution):
-        """
-            Constructs the name of an Image map given the root prefix and resolution.
+            Displays the resolved values of key folders.
         """
 
-        name = "%s%s" % (imageMapPrefix, str(imageMapResolution))
-        return name
+        #print("solutionRoot = %s" % Baseline.solutionRoot)
+        #print("modelReliefRoot = %s" % Baseline.modelReliefRoot)
 
-    def getTargetImageRelativeFolder (self, modelPath):
+        print("sqliteFolder = %s" % Baseline.sqliteFolder)
+        print("sqlserverFolder = %s\n" % Baseline.sqlserverFolder)
+
+    def copyDatabaseFile (self, sourceFile, destinationFile):
         """
-            Constructs the relative output folder of a model image.
-        """
-        # https://metarabbit.wordpress.com/2013/09/25/removing-a-string-prefix-in-python/
-        modelFolder  = os.path.dirname(modelPath)
-
-        # up one level
-        modelFolder = modelFolder[:-len(os.path.normpath("\Rhino"))]
-
-        # strip common root + trailing slash
-        relativePath = modelFolder[len(Baseline.bandElementsRoot) + 1:]
-
-        return relativePath
-
-    def copyImage (self, relativePath, model, imageName):
-        """
-            Copy a single image to the export folder.
-        """
-
-        # create complete target path
-        targetFolder = os.path.join(Baseline.exportRoot, relativePath)
-        if not os.path.exists(targetFolder):
-            os.makedirs(targetFolder)
-
-        source = os.path.join(Baseline.bakeFactoryRoot, imageName)
-        target = os.path.join(targetFolder, model + imageName)
+            Copy a single file. The destination is overwritten if it exists.
+        """ 
 
         # copyfile does not overwrite...
-        if os.path.isfile(target):
-            os.remove(target)    
+        if os.path.isfile(destinationFile):
+            os.remove(destinationFile)    
 
-        copyfile(source, target)
+        print ("%s -> %s" % (sourceFile, destinationFile))
+        copyfile(sourceFile, destinationFile)
 
-    def copyImages (self, relativePath, model):
+    def createBaselineDatabase (self):
         """
-            Copy all images to the export folder.
-        """
-        self.copyImage (relativePath, model, self.normalMapFileName)
-        self.copyImage (relativePath, model, self.displacementlMapFileName)
-        self.copyImage (relativePath, model, self.renderFileName)
+            Creates the baseline test database by copying the primary test database.
+        """ 
+        database = os.environ["ModelReliefDatabase"]
 
-    def walkModels(self):
+        if (database == "SQLite"):
+            databaseFolder = Baseline.sqliteFolder
+            fileList = [
+                ("ModelReliefTest.db", "ModelReliefBaseline.db")
+            ]
+        else:
+            databaseFolder = Baseline.sqlserverFolder
+            fileList = [
+                ("ModelReliefTest.mdf",     "ModelReliefBaseline.mdf"),
+                ("ModelReliefTest_log.ldf", "ModelReliefBaseline_log.ldf")
+            ]
+        
+        print ("The active database is %s." % database)        
+        for filePair in fileList:
+            sourceFile = os.path.join(databaseFolder, filePair[0])
+            destinationFile = os.path.join(databaseFolder, filePair[1])
+            self.copyDatabaseFile(sourceFile, destinationFile)
+
+    def recurseFolder(self, folder):
         """
-            Recurse the project folder and process each model.
+            Recurse a folder and process each file.
         """
-        rootdir = Baseline.store
+        rootdir = folder
         for root, subfolders, files in os.walk(rootdir):
             currentFolder = os.path.basename(root)
 
@@ -104,7 +95,9 @@ class Baseline:
                     print (modelPath)
 
 if __name__ == "__main__":
+
     print (sys.version)
+
     baseline = Baseline()
-    baseline.walkModels();
-    input("Press Enter to continue...")
+    baseline.showFolderLocations()
+    baseline.createBaselineDatabase()

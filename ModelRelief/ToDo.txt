@@ -16,7 +16,7 @@
             If all integration and unit tests are non-destructive, is it necessary to refresh the Test database from the Baseline?
             This does not work with SQLServer as it seems to maintain an exclusive file lock during DbInitializer execution.
 
-    Remove .gitignore filters on Test\Data folder.
+    Remove .gitignore filters on Test\Data folder?
         What is the practical limit for git binary files? Are the GitHub restrictions?
     
     Review and organize the Postman tests.
