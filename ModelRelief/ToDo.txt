@@ -15,17 +15,8 @@
         ModelReliefTest.db -> ModelReliefBaseline.db.
             If all integration and unit tests are non-destructive, is it necessary to refresh the Test database from the Baseline?
             This does not work with SQLServer as it seems to maintain an exclusive file lock during DbInitializer execution.
-
-    Remove .gitignore filters on Test\Data folder?
-        What is the practical limit for git binary files? Are the GitHub restrictions?
     
     Review and organize the Postman tests.
-
-    Files
-        How will the Format property be used for Models, DepthBuffers and Meshes?
-            Is it necessary if the file type can be found through reflection?
-        How should the model name be held in the ModelViewer?
-            The model.Name property is now 'Root'.
 
     Property Change Handlers
         Implement support for renaming the disk file when the metadata Name property changes.
@@ -37,6 +28,15 @@
                     DepthBuffer
                     MeshTransform
                 Whenever a dependent is updated, the synchronized property is set to false.
+
+    Files
+        How will the Format property be used for Models, DepthBuffers and Meshes?
+            Is it necessary if the file type can be found through reflection?
+        How should the model name be held in the ModelViewer?
+            The model.Name property is now 'Root'.
+
+    Remove .gitignore filters on Test\Data folder?
+        What is the practical limit for git binary files? Are the GitHub restrictions?
 
 <-- API Design
 

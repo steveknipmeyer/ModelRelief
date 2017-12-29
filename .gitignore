@@ -164,6 +164,7 @@ HTML5Assist_Browser_Cache/*
 *.bak
 hidden/
 temp/
+__pycache__
 
 #################
 ## JSDoc

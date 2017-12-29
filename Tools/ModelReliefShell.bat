@@ -13,7 +13,8 @@ echo ModelReliefDatabase=%ModelReliefDatabase%
 echo
 
 path=%path%;"D:\Users\Steve Knipmeyer\Documents\Bin"
-path=%path%;%MR%tools
+path=%path%;%MR%Tools
+path=%path%;%MRSolution%Tools
 path=%path%;C:\Program Files (x86)\WinMerge
 path=%path%;C:\Program Files\KDiff3
 

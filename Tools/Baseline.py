@@ -17,87 +17,61 @@ import os
 import sys
 import math
 
-from shutil import copyfile
+from Environment import Environment
+from Tools import Colors, Tools
 
 class Baseline:
 
-    toolsFolder   = os.path.dirname(os.path.realpath(__file__))
-    solutionRoot    = os.path.abspath(os.path.join(toolsFolder, os.pardir))
-    modelReliefRoot = os.path.join(solutionRoot, "ModelRelief")
-
-    sqliteFolder    = os.path.join(modelReliefRoot, "Database")
-    sqlserverFolder = os.environ["USERPROFILE"]
-
-    def __init__(self): 
-        
+    def __init__(self, database): 
+        _potato = 'SLK'
+        self._database = database
         return
+
+    @property
+    def database(self):
+        return self._database
 
     def showFolderLocations (self):
         """
             Displays the resolved values of key folders.
         """
-
-        #print("solutionRoot = %s" % Baseline.solutionRoot)
-        #print("modelReliefRoot = %s" % Baseline.modelReliefRoot)
-
-        print("sqliteFolder = %s" % Baseline.sqliteFolder)
-        print("sqlserverFolder = %s\n" % Baseline.sqlserverFolder)
-
-    def copyDatabaseFile (self, sourceFile, destinationFile):
-        """
-            Copy a single file. The destination is overwritten if it exists.
-        """ 
-
-        # copyfile does not overwrite...
-        if os.path.isfile(destinationFile):
-            os.remove(destinationFile)    
-
-        print ("%s -> %s" % (sourceFile, destinationFile))
-        copyfile(sourceFile, destinationFile)
+        print (Colors.Magenta)
+        print("sqliteFolder = %s" % Environment.sqliteFolder)
+        print("sqlserverFolder = %s" % Environment.sqlserverFolder)
+        print (Colors.Reset)
 
     def createBaselineDatabase (self):
         """
             Creates the baseline test database by copying the primary test database.
         """ 
-        database = os.environ["ModelReliefDatabase"]
 
-        if (database == "SQLite"):
-            databaseFolder = Baseline.sqliteFolder
+        if (self.database == "SQLite"):
+            databaseFolder = Environment.sqliteFolder
             fileList = [
                 ("ModelReliefTest.db", "ModelReliefBaseline.db")
             ]
-        else:
-            databaseFolder = Baseline.sqlserverFolder
+        elif (self.database == "SQLServer"):
+            databaseFolder = Environment.sqlserverFolder
             fileList = [
                 ("ModelReliefTest.mdf",     "ModelReliefBaseline.mdf"),
                 ("ModelReliefTest_log.ldf", "ModelReliefBaseline_log.ldf")
             ]
-        
-        print ("The active database is %s." % database)        
+        else:
+            print (Colors.Red, "invalid database: %s" % self.database)
+            return
+
+        print ("Creating baseline for %s." % self.database)        
         for filePair in fileList:
             sourceFile = os.path.join(databaseFolder, filePair[0])
             destinationFile = os.path.join(databaseFolder, filePair[1])
-            self.copyDatabaseFile(sourceFile, destinationFile)
-
-    def recurseFolder(self, folder):
-        """
-            Recurse a folder and process each file.
-        """
-        rootdir = folder
-        for root, subfolders, files in os.walk(rootdir):
-            currentFolder = os.path.basename(root)
-
-            for file in files:
-                fileName, fileExtension = os.path.splitext(file)
-
-                if (fileExtension.lower() == ".obj"):
-                    modelPath = os.path.join(root, file)
-                    print (modelPath)
-
+            Tools.copyFile(sourceFile, destinationFile)
+    
 if __name__ == "__main__":
-
+    
     print (sys.version)
 
-    baseline = Baseline()
+    database = os.environ["ModelReliefDatabase"] if (len(sys.argv) <= 1) else sys.argv[1]
+    baseline = Baseline(database)
+
     baseline.showFolderLocations()
     baseline.createBaselineDatabase()

@@ -25,7 +25,13 @@
     <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda36-64" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Tools.py" />
+    <Compile Include="Environment.py" />
     <Compile Include="Baseline.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DeleteConfiguration.bat" />
+    <Content Include="ModelReliefShell.bat" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
