@@ -7,8 +7,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using ModelRelief.Domain;
 using ModelRelief.Services;
+using ModelRelief.Utility;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -25,6 +27,7 @@ namespace ModelRelief.Database
         private Services.IConfigurationProvider _configurationProvider  { get; set; }
         private ModelReliefDbContext            _dbContext  { get; set; }
         private UserManager<ApplicationUser>    _userManager  { get; set; }
+        private ILogger<DbInitializer>          _logger  { get; set; }
 
         private ApplicationUser                 _user;
         private string                          _storeUsers { get; set; }
@@ -52,9 +55,39 @@ namespace ModelRelief.Database
             if (_userManager == null)
                 throw new ArgumentNullException(nameof(_userManager));
 
-            _storeUsers = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
+            _logger  = services.GetRequiredService<ILogger<DbInitializer>>();
+            if (_logger == null)
+                throw new ArgumentNullException(nameof(_logger));
 
+            _storeUsers     = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
             _storageManager = new StorageManager(_hostingEnvironment, _configurationProvider);
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Parses a boolean environment variable.
+        /// </summary>
+        /// <param name="variableName">Name of environment variable.</param>
+        /// <returns></returns>
+        private bool ParseBooleanEnvironmentVariable(string variableName)
+        {
+            var variableValue = _configurationProvider.GetSetting(variableName, throwIfNotFound: false);
+            var result = false;
+            Boolean.TryParse(variableValue, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Process the command line arguments and initialize.
+        /// </summary>
+        private void Initialize ()
+        {
+            if (ParseBooleanEnvironmentVariable("InitializeUserStore"))
+                DeleteUserStore();
+
+            if (ParseBooleanEnvironmentVariable("InitializeDatabase"))
+                Populate().Wait();
         }
 
         /// <summary>
@@ -62,16 +95,23 @@ namespace ModelRelief.Database
         /// </summary>
         public async Task Populate()
         {
+            _logger.LogInformation("Preparing to initialize database.");
+            try
+            {
+                await _dbContext.Database.EnsureDeletedAsync();
 
-            // SQLite Error 1: 'table "AspNetRoles" already exists'.
-            // https://github.com/aspnet/EntityFrameworkCore/issues/4649
-            _dbContext.Database.EnsureCreated();
+                // SQLite Error 1: 'table "AspNetRoles" already exists'.
+                // https://github.com/aspnet/EntityFrameworkCore/issues/4649
+                await _dbContext.Database.EnsureCreatedAsync();
 
-            // existing models?
-            if (_dbContext.Models.Any())
-                return;   // DB has been seeded
+                await SeedDatabase();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while initializing the database: {ex.Message}");
+            }
 
-            await SeedDatabase();
+            _logger.LogInformation("Database initialized.");
         }
 
         /// <summary>
@@ -152,8 +192,37 @@ namespace ModelRelief.Database
             {
                 // create the baseline copy of the test
                 _dbContext.SaveChanges();
-                SynchronizeTestDatabase(restore: false);
+                switch (_configurationProvider.Database)
+                {
+                    case RelationalDatabaseProvider.SQLServer:
+                        // WIP: The Test database cannot be copied to create the baseline due to a locking error.    
+                        break;
+
+                    default:
+                    case RelationalDatabaseProvider.SQLite:
+                        SynchronizeTestDatabase(restore: false);
+                        break;
+                }
             }            
+        }
+
+        /// <summary>
+        /// Delete the user store.
+        /// </summary>
+        private void DeleteUserStore()
+        {
+            var storeUsersPartialPath = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
+            var storeUsersPath   = $"{_hostingEnvironment.WebRootPath}{storeUsersPartialPath}";
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Delete the user store folder: {storeUsersPath} (Y/N)?");
+            Console.ForegroundColor = ConsoleColor.White;
+            var response = Console.ReadLine();
+            if (!String.Equals(response, "Y"))
+                return;
+
+            Files.DeleteFolder(storeUsersPath, true);
+            _logger.LogWarning($"User store ({storeUsersPath}) deleted.");
         }
 
         /// <summary>
@@ -161,7 +230,7 @@ namespace ModelRelief.Database
         /// Copy the test data files into the web user store.
         /// </summary>
         private void CreateUserStore()
-        {
+        {   
             CopyTestFiles<Domain.Model3d>("ResourcePaths:Folders:Model3d");
             CopyTestFiles<Domain.DepthBuffer>("ResourcePaths:Folders:DepthBuffer");
             CopyTestFiles<Domain.Mesh>("ResourcePaths:Folders:Mesh");

@@ -9,12 +9,8 @@
         Scale with a Python processor.
 
 <-- Api Design
-
-    Python
-        DeleteConfiguration : SQLite, SQLServer
-        ModelReliefTest.db -> ModelReliefBaseline.db.
-            If all integration and unit tests are non-destructive, is it necessary to refresh the Test database from the Baseline?
-            This does not work with SQLServer as it seems to maintain an exclusive file lock during DbInitializer execution.
+    If all integration and unit tests are non-destructive, is it necessary to refresh the Test database from the Baseline?
+        This does not work with SQLServer as it seems to maintain an exclusive file lock during DbInitializer execution.
     
     Review and organize the Postman tests.
 

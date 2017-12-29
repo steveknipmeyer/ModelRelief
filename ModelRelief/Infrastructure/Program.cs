@@ -31,19 +31,7 @@ namespace ModelRelief.Infrastructure
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-                try
-                {
-                    var logger  = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogInformation("Preparing to initialize database.");
-  
-                    var initializer = new DbInitializer(services);
-                    initializer.Populate().Wait();
-                }
-                catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred while seeding the database.");
-                }
+                var initializer = new DbInitializer(services);
             }
 
             host.Run();

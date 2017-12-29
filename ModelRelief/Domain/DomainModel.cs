@@ -46,7 +46,18 @@ namespace ModelRelief.Domain
             if (string.IsNullOrEmpty(Path))
                 return "";
 
-            return Path.Substring(Path.IndexOf(storeRoot));
+            // https://stackoverflow.com/questions/7772520/removing-drive-or-network-name-from-path-in-c-sharp
+            // form absolute path; normalizing directory separator characters                    
+            var normalizedStoreRoot = System.IO.Path.GetFullPath(storeRoot);
+            // strip drive or network share
+            normalizedStoreRoot = normalizedStoreRoot.Substring (System.IO.Path.GetPathRoot(normalizedStoreRoot).Length);
+
+            // include leading directory separator
+            var relativePathIndex = Path.IndexOf(normalizedStoreRoot) - 1;
+            if (relativePathIndex < 0)
+                return "";
+
+            return Path.Substring(relativePathIndex);
         }
 
         /// <summary>

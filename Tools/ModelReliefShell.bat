@@ -5,15 +5,20 @@ title ModelRelief Shell
 cd %~dp0\..\..
 set MRSolution=%cd%\
 set MR=%MRSolution%ModelRelief\
-set ModelReliefDatabase=SQLServer
-
 echo MRsolution=%MRSolution%
+
+:: ModelRelief runtime settings
+set ModelReliefDatabase=SQLServer
+set InitializeDatabase=False
+set InitializeUserStore=False
+
 echo MR=%MR%
 echo ModelReliefDatabase=%ModelReliefDatabase%
+echo InitializeDatabase=%InitializeDatabase%
+echo InitializeUserStore=%InitializeUserStore%
 echo
 
 path=%path%;"D:\Users\Steve Knipmeyer\Documents\Bin"
-path=%path%;%MR%Tools
 path=%path%;%MRSolution%Tools
 path=%path%;C:\Program Files (x86)\WinMerge
 path=%path%;C:\Program Files\KDiff3
