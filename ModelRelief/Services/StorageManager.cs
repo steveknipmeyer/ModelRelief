@@ -15,11 +15,22 @@ using System.Threading.Tasks;
 namespace ModelRelief.Services
 {
     /// <summary>
+    /// User storage manager interface. 
+    /// Provides file services for file-based resources.
+    /// </summary>
+    public interface IStorageManager
+    {
+        IConfigurationProvider ConfigurationProvider { get; }
+        IHostingEnvironment HostingEnvironment { get; }
+
+        string DefaultModelStorageFolder<TEntity>(TEntity model) where TEntity : DomainModel;
+    }
+
+    /// <summary>
     /// User storage manager. 
     /// Provides file services for file-based resources.
     /// </summary>
-    
-    public class StorageManager
+    public class StorageManager : IStorageManager
     {
         public IHostingEnvironment HostingEnvironment { get; }
         public IConfigurationProvider ConfigurationProvider { get; }

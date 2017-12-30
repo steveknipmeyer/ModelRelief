@@ -8,23 +8,64 @@
     Goal : Roundtrip a scaled mesh.       
         Scale with a Python processor.
 
-<-- Short Tem
-    Limit the size of the log file.
+<-- Short Term
 
-    Review and organize the Postman tests.
+    Dependency Manager
+        ProcessChanges
+            PreProcess
+                Find and update all dependencies.
+                Create PostProcess list of tasks.
+            Save
+                await DbContext.SaveChangesAsync()
+            PostProcess
+                Generate all files that need to be updated.
+                    MeshGenerationRequest
+                    DepthBufferGenerationRequest(?, requires graphics)
+                Update disk file names to match metadata Name.
 
-    Property Change Handlers
-        https://msdn.microsoft.com/magazine/mt694083
-        https://msdn.microsoft.com/en-us/magazine/mt767693.aspx
-        Implement support for renaming the disk file when the metadata Name property changes.
+        Modify Event
+        Delete Event
+            Find all FileTrigger properties that have changed.
+                Find all FileDomainModel (FileDependent = true) dependencies of the modified model.
+                    Set FileSynchronized = false.
+            
+        Add Event
+            If the model is FileDomainModel and FileSynchronized = true, schedule a file generation.
 
-        Implement the Mesh property-change trigger to generate a Mesh.
-            Add a "synchronized" property that reflects whether the state of the mesh file matches the dependents.
-                FileSynchronized
-                    Dependents
-                        DepthBuffer
-                        MeshTransform
-                Whenever a dependent is updated, the synchronized property is set to false.
+        FileDomainModel
+            FileDependent
+                A boolean vale representing whether the associated file is generated from dependents.
+            FileSynchronized
+                This represents whether the backing file is synchronized with the model (AND the model's dependencies).
+            FileTimeStamp
+                This is used for triggering dependent updates.
+
+        FileDomainModelDependencyHandler
+            Implement support for renaming the disk file when the metadata Name property changes.
+        
+        Schema Changes
+                Mesh.Camera  -> Mesh.ViewCamera
+                Model.Camera -> Model.ViewCamera
+
+        FileDomainModel Dependencies
+                                                Metadata    File        Note
+            DepthBuffer
+                Project
+                Model                                       X
+                Camera                          X
+            Mesh
+                Project
+                Camera                                                  Viewer
+                DepthBuffer                                 X
+                MeshTransform                   X
+            Model 
+                Project
+                Camera                                                  Viewer           
+        
+        Property Change Handlers
+            https://msdn.microsoft.com/magazine/mt694083
+            https://msdn.microsoft.com/en-us/magazine/mt767693.aspx
+
 
     Files
         How will the Format property be used for Models, DepthBuffers and Meshes?
@@ -34,6 +75,10 @@
 
     Remove .gitignore filters on Test\Data folder?
         What is the practical limit for git binary files? Are the GitHub restrictions?
+
+    Limit the size of the log file.
+
+    Review and organize the Postman tests.
 
 <-- API Design
 
@@ -128,7 +173,6 @@
         }
 
 <-- StorageManager 
-    Is DI support an advantage beyond possible unit testing?
     An ApplicationUser could have a storage folder property that is used by the StorageManager to define the default location.
 
 <-- DomainModel

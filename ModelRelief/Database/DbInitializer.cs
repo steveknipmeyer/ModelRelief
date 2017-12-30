@@ -22,45 +22,48 @@ namespace ModelRelief.Database
 {
     public class DbInitializer
     {
-        private IServiceProvider                _services { get; set; }
-        private IHostingEnvironment             _hostingEnvironment  { get; set; }
-        private Services.IConfigurationProvider _configurationProvider  { get; set; }
-        private ModelReliefDbContext            _dbContext  { get; set; }
-        private UserManager<ApplicationUser>    _userManager  { get; set; }
-        private ILogger<DbInitializer>          _logger  { get; set; }
+        private IServiceProvider                Services { get; set; }
+        private IHostingEnvironment             HostingEnvironment  { get; set; }
+        private Services.IConfigurationProvider ConfigurationProvider  { get; set; }
+        private ModelReliefDbContext            DbContext  { get; set; }
+        private UserManager<ApplicationUser>    UserManager  { get; set; }
+        private ILogger<DbInitializer>          Logger  { get; set; }
+        private IStorageManager                 StorageManager { get; set; }
 
         private ApplicationUser                 _user;
         private string                          _storeUsers { get; set; }
-        private StorageManager                  _storageManager;
         
         public DbInitializer(IServiceProvider services)
         {
             if (null == services)
                 throw new ArgumentNullException(nameof(services));
-            _services = services;
+            Services = services;
 
-            _hostingEnvironment = _services.GetRequiredService<IHostingEnvironment>();
-            if (_hostingEnvironment == null)
-                throw new ArgumentNullException(nameof(_hostingEnvironment));
+            HostingEnvironment = Services.GetRequiredService<IHostingEnvironment>();
+            if (HostingEnvironment == null)
+                throw new ArgumentNullException(nameof(HostingEnvironment));
 
-            _configurationProvider = services.GetRequiredService<Services.IConfigurationProvider>();
-            if (_configurationProvider == null)
-                throw new ArgumentNullException(nameof(_configurationProvider));
+            ConfigurationProvider = services.GetRequiredService<Services.IConfigurationProvider>();
+            if (ConfigurationProvider == null)
+                throw new ArgumentNullException(nameof(ConfigurationProvider));
 
-            _dbContext = _services.GetRequiredService<ModelReliefDbContext>();
-            if (_dbContext == null)
-                throw new ArgumentNullException(nameof(_dbContext));
+            DbContext = Services.GetRequiredService<ModelReliefDbContext>();
+            if (DbContext == null)
+                throw new ArgumentNullException(nameof(DbContext));
 
-            _userManager = _services.GetRequiredService<UserManager<ApplicationUser>>();
-            if (_userManager == null)
-                throw new ArgumentNullException(nameof(_userManager));
+            UserManager = Services.GetRequiredService<UserManager<ApplicationUser>>();
+            if (UserManager == null)
+                throw new ArgumentNullException(nameof(UserManager));
 
-            _logger  = services.GetRequiredService<ILogger<DbInitializer>>();
-            if (_logger == null)
-                throw new ArgumentNullException(nameof(_logger));
+            Logger  = services.GetRequiredService<ILogger<DbInitializer>>();
+            if (Logger == null)
+                throw new ArgumentNullException(nameof(Logger));
 
-            _storeUsers     = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
-            _storageManager = new StorageManager(_hostingEnvironment, _configurationProvider);
+            StorageManager = services.GetRequiredService<IStorageManager>();
+            if (StorageManager == null)
+                throw new ArgumentNullException(nameof(StorageManager));
+
+            _storeUsers = ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
 
             Initialize();
         }
@@ -72,7 +75,7 @@ namespace ModelRelief.Database
         /// <returns></returns>
         private bool ParseBooleanEnvironmentVariable(string variableName)
         {
-            var variableValue = _configurationProvider.GetSetting(variableName, throwIfNotFound: false);
+            var variableValue = ConfigurationProvider.GetSetting(variableName, throwIfNotFound: false);
             var result = false;
             Boolean.TryParse(variableValue, out result);
             return result;
@@ -95,23 +98,23 @@ namespace ModelRelief.Database
         /// </summary>
         public async Task Populate()
         {
-            _logger.LogInformation("Preparing to initialize database.");
+            Logger.LogInformation("Preparing to initialize database.");
             try
             {
-                await _dbContext.Database.EnsureDeletedAsync();
+                await DbContext.Database.EnsureDeletedAsync();
 
                 // SQLite Error 1: 'table "AspNetRoles" already exists'.
                 // https://github.com/aspnet/EntityFrameworkCore/issues/4649
-                await _dbContext.Database.EnsureCreatedAsync();
+                await DbContext.Database.EnsureCreatedAsync();
 
                 await SeedDatabase();
             }
             catch (Exception ex)
             {
-                _logger.LogError($"An error occurred while initializing the database: {ex.Message}");
+                Logger.LogError($"An error occurred while initializing the database: {ex.Message}");
             }
 
-            _logger.LogInformation("Database initialized.");
+            Logger.LogInformation("Database initialized.");
         }
 
         /// <summary>
@@ -123,10 +126,10 @@ namespace ModelRelief.Database
             string databaseFolder;
             Dictionary<string, string> fileList;
 
-            switch (_configurationProvider.Database)
+            switch (ConfigurationProvider.Database)
             {
                 case RelationalDatabaseProvider.SQLite:
-                    databaseFolder = Path.Combine(_hostingEnvironment.ContentRootPath, "Database");
+                    databaseFolder = Path.Combine(HostingEnvironment.ContentRootPath, "Database");
                     fileList = new Dictionary<string, string>
                     {
                         {"ModelReliefBaseline.db",     "ModelReliefTest.db" }
@@ -188,11 +191,11 @@ namespace ModelRelief.Database
                 CreateUserStore();
             }
 
-            if (String.Equals(_hostingEnvironment.EnvironmentName, "Test", StringComparison.CurrentCultureIgnoreCase))
+            if (String.Equals(HostingEnvironment.EnvironmentName, "Test", StringComparison.CurrentCultureIgnoreCase))
             {
                 // create the baseline copy of the test
-                _dbContext.SaveChanges();
-                switch (_configurationProvider.Database)
+                DbContext.SaveChanges();
+                switch (ConfigurationProvider.Database)
                 {
                     case RelationalDatabaseProvider.SQLServer:
                         // WIP: The Test database cannot be copied to create the baseline due to a locking error.    
@@ -211,8 +214,8 @@ namespace ModelRelief.Database
         /// </summary>
         private void DeleteUserStore()
         {
-            var storeUsersPartialPath = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
-            var storeUsersPath   = $"{_hostingEnvironment.WebRootPath}{storeUsersPartialPath}";
+            var storeUsersPartialPath = ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
+            var storeUsersPath   = $"{HostingEnvironment.WebRootPath}{storeUsersPartialPath}";
 
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"Delete the user store folder: {storeUsersPath} (Y/N)?");
@@ -222,7 +225,7 @@ namespace ModelRelief.Database
                 return;
 
             Files.DeleteFolder(storeUsersPath, true);
-            _logger.LogWarning($"User store ({storeUsersPath}) deleted.");
+            Logger.LogWarning($"User store ({storeUsersPath}) deleted.");
         }
 
         /// <summary>
@@ -245,12 +248,12 @@ namespace ModelRelief.Database
             var passwordSetting = $"{accountName}:Password";
             var idSetting = $"{accountName}:Id";
 
-            var userName = _configurationProvider.GetSetting(userNameSetting);
-            var password = _configurationProvider.GetSetting(passwordSetting);
-            var id       = _configurationProvider.GetSetting(idSetting);
+            var userName = ConfigurationProvider.GetSetting(userNameSetting);
+            var password = ConfigurationProvider.GetSetting(passwordSetting);
+            var id       = ConfigurationProvider.GetSetting(idSetting);
 
             var user = new ApplicationUser() { UserName = $"{userName}", Id = $"{id}"};
-            var createResult = await _userManager.CreateAsync (user, $"{password}");
+            var createResult = await UserManager.CreateAsync (user, $"{password}");
             if (!createResult.Succeeded)
                 throw new Exception(createResult.ToString());
 
@@ -270,9 +273,9 @@ namespace ModelRelief.Database
             };
             foreach (Project project in projects)
             {
-                _dbContext.Projects.Add(project);
+                DbContext.Projects.Add(project);
             }
-            _dbContext.SaveChanges();
+            DbContext.SaveChanges();
 
             QualifyDescription<Project>(_user.UserName);
         }
@@ -304,9 +307,9 @@ namespace ModelRelief.Database
 
             foreach (Camera camera in cameras)
             {
-                _dbContext.Cameras.Add(camera);
+                DbContext.Cameras.Add(camera);
             }
-            _dbContext.SaveChanges();
+            DbContext.SaveChanges();
 
             QualifyDescription<Camera>(_user.UserName);
         }
@@ -332,9 +335,9 @@ namespace ModelRelief.Database
 
             foreach (Model3d model in models)
             {
-                _dbContext.Models.Add(model);
+                DbContext.Models.Add(model);
             }
-            _dbContext.SaveChanges();
+            DbContext.SaveChanges();
 
             SetModelPaths(models);
             QualifyDescription<Model3d>(_user.UserName);
@@ -360,9 +363,9 @@ namespace ModelRelief.Database
 
             foreach (MeshTransform meshTransform in meshTransforms)
             {
-                _dbContext.MeshTransforms.Add(meshTransform);
+                DbContext.MeshTransforms.Add(meshTransform);
             }
-            _dbContext.SaveChanges();
+            DbContext.SaveChanges();
 
             QualifyDescription<MeshTransform>(_user.UserName);
         }
@@ -384,9 +387,9 @@ namespace ModelRelief.Database
 
             foreach (DepthBuffer depthBuffer in depthBuffers)
             {
-                _dbContext.DepthBuffers.Add(depthBuffer);
+                DbContext.DepthBuffers.Add(depthBuffer);
             }
-            _dbContext.SaveChanges();
+            DbContext.SaveChanges();
 
             SetModelPaths(depthBuffers);
             QualifyDescription<DepthBuffer>(_user.UserName);
@@ -409,9 +412,9 @@ namespace ModelRelief.Database
 
             foreach (Mesh mesh in meshes)
             {
-                _dbContext.Meshes.Add(mesh);
+                DbContext.Meshes.Add(mesh);
             }
-            _dbContext.SaveChanges();
+            DbContext.SaveChanges();
 
             SetModelPaths(meshes);
             QualifyDescription<Mesh>(_user.UserName);
@@ -425,11 +428,11 @@ namespace ModelRelief.Database
         private void CopyTestFiles<TEntity>(string folderType)
             where TEntity : DomainModel
         {
-            var sourceFolderPartialPath = $"{_configurationProvider.GetSetting(ResourcePaths.TestDataUsers)}/{_configurationProvider.GetSetting(folderType)}";
-            var sourceFolderPath        = $"{_hostingEnvironment.ContentRootPath}{sourceFolderPartialPath}";
+            var sourceFolderPartialPath = $"{ConfigurationProvider.GetSetting(ResourcePaths.TestDataUsers)}/{ConfigurationProvider.GetSetting(folderType)}";
+            var sourceFolderPath        = $"{HostingEnvironment.ContentRootPath}{sourceFolderPartialPath}";
 
-            var storeUsersPartialPath = _configurationProvider.GetSetting(ResourcePaths.StoreUsers);
-            var destinationFolderPath   = $"{_hostingEnvironment.WebRootPath}{storeUsersPartialPath}{_user.Id}/{_configurationProvider.GetSetting(folderType)}";
+            var storeUsersPartialPath = ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
+            var destinationFolderPath   = $"{HostingEnvironment.WebRootPath}{storeUsersPartialPath}{_user.Id}/{ConfigurationProvider.GetSetting(folderType)}";
             Directory.CreateDirectory(destinationFolderPath);
 
             // iterate over all folders
@@ -438,7 +441,7 @@ namespace ModelRelief.Database
             foreach (System.IO.DirectoryInfo dirInfo in subDirs)
             {
                 // parent directory name = database resource ID
-                var model = _dbContext.Set<TEntity>()
+                var model = DbContext.Set<TEntity>()
                     .Where(m => (m.Name.StartsWith(dirInfo.Name)))
                     .Where(m => (m.UserId == _user.Id))
                     .FirstOrDefault();
@@ -468,7 +471,7 @@ namespace ModelRelief.Database
         private TEntity FindByName<TEntity> (string name)
             where TEntity : DomainModel
         {
-            var resource = _dbContext.Set<TEntity>()
+            var resource = DbContext.Set<TEntity>()
                 .Where(r => ((r.Name == name) && (r.UserId == _user.Id))).First();
 
             if (resource == null)
@@ -485,14 +488,14 @@ namespace ModelRelief.Database
         private void QualifyDescription <TEntity> (string descriptionSuffix)
             where TEntity : DomainModel
         {
-            var models = _dbContext.Set<TEntity>()
+            var models = DbContext.Set<TEntity>()
                             .Where(m => (m.User.Id == _user.Id));
 
             foreach (var model in models)
                 {
                 model.Description += $" ({descriptionSuffix})";
                 }
-            _dbContext.SaveChanges();
+            DbContext.SaveChanges();
         }
 
         /// <summary>
@@ -505,9 +508,9 @@ namespace ModelRelief.Database
         {
            // model Ids are known now; set paths
             foreach (TEntity model in models)
-                model.Path = _storageManager.DefaultModelStorageFolder(model);
+                model.Path = StorageManager.DefaultModelStorageFolder(model);
 
-            _dbContext.SaveChanges();
+            DbContext.SaveChanges();
         }
     }
 }

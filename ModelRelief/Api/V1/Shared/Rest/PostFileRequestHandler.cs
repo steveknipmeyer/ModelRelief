@@ -38,6 +38,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         where TGetModel  : ITGetModel
     {
         private ILogger<TEntity> Logger { get; }
+        private IStorageManager StorageManager { get; }
 
         /// <summary>
         /// Constructor
@@ -48,10 +49,12 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="logger">ILogger.</param>
-       public PostFileRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, ILogger<TEntity> logger)
+        /// <param name="storageManager">Services for file system storage.</param>
+        public PostFileRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, ILogger<TEntity> logger, IStorageManager storageManager)
             : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, null)
         {
             Logger = logger;
+            StorageManager = storageManager;
         }
 
         /// <summary>
@@ -69,8 +72,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             var domainModel = await FindModelAsync<TEntity>(message.User, message.Id, throwIfNotFound: true);
             var fileDomainModel = domainModel as FileDomainModel;
             
-            var storageManager = new StorageManager(HostingEnvironment, ConfigurationProvider);
-            var fileName = Path.Combine(storageManager.DefaultModelStorageFolder(domainModel), domainModel.Name);
+            var fileName = Path.Combine(StorageManager.DefaultModelStorageFolder(domainModel), domainModel.Name);
 
             await Files.WriteFileFromByteArray(fileName, message.NewFile.Raw);
 
