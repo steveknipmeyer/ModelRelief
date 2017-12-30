@@ -4,29 +4,26 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
-using MediatR;
-using ModelRelief.Database;
-using ModelRelief.Api.V1.Shared.Errors;
-using System;
-using Microsoft.AspNetCore.Identity;
-using ModelRelief.Domain;
-using System.Security.Claims;
-using ModelRelief.Utility;
-using Microsoft.EntityFrameworkCore;
 using FluentValidation.Results;
-using System.Reflection;
-using System.Diagnostics;
-using Microsoft.Extensions.Logging;
+using MediatR;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using ModelRelief.Api.V1.Shared.Errors;
+using ModelRelief.Database;
+using ModelRelief.Domain;
 using ModelRelief.Services;
-using System.IO;
-using ModelRelief.Api.V1.Shared.Rest;
+using ModelRelief.Utility;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
+using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ModelRelief.Api.V1.Shared
 {
@@ -43,6 +40,7 @@ namespace ModelRelief.Api.V1.Shared
         public IMapper Mapper { get; }
         public IHostingEnvironment HostingEnvironment { get; }
         public Services.IConfigurationProvider ConfigurationProvider { get; }
+        public IDependencyManager DependencyManager { get; }
         public IEnumerable<IValidator<TRequest>> Validators { get; }
 
         /// <summary>
@@ -53,14 +51,16 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="mapper">IMapper</param>
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
+        /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="validators">List of validators</param>
-        public ValidatedHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, IEnumerable<IValidator<TRequest>> validators)
+        public ValidatedHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, IDependencyManager dependencyManager, IEnumerable<IValidator<TRequest>> validators)
         {
             UserManager = userManager ?? throw new System.ArgumentNullException(nameof(dbContext));
             DbContext = dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
             Mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
             HostingEnvironment = hostingEnvironment;
             ConfigurationProvider = configurationProvider;
+            DependencyManager = dependencyManager;
 
             // WIP Why are duplicate validators injected here?
             //     Remove duplicates by grouping by Type name.

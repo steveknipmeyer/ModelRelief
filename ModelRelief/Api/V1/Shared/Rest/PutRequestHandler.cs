@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using ModelRelief.Api.V1.Shared.Errors;
 using ModelRelief.Database;
 using ModelRelief.Domain;
+using ModelRelief.Services;
 using ModelRelief.Utility;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,9 +45,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="validators">All validators matching IValidator for the given request.</param>
+        /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="logger">ILogger.</param>
-       public PutRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, IEnumerable<IValidator<PutRequest<TEntity, TRequestModel, TGetModel>>> validators, ILogger<TEntity> logger)
-            : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, null)
+       public PutRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, IDependencyManager dependencyManager, IEnumerable<IValidator<PutRequest<TEntity, TRequestModel, TGetModel>>> validators, ILogger<TEntity> logger)
+            : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators)
         {
             Logger = logger;
         }
@@ -77,7 +79,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             updatedModel.User = await Identity.FindApplicationUserAsync(UserManager, message.User);
 
             DbContext.Set<TEntity>().Update(updatedModel);
-            await DbContext.SaveChangesAsync(cancellationToken);
+            await DependencyManager.PersistChangesAsync(updatedModel, cancellationToken);
 
             // expand returned model
             var expandedUpdatedModel = await DbContext.Set<TEntity>()

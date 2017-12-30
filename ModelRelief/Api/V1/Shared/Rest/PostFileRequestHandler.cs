@@ -48,10 +48,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="mapper">IMapper</param>
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
+        /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="logger">ILogger.</param>
         /// <param name="storageManager">Services for file system storage.</param>
-        public PostFileRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, ILogger<TEntity> logger, IStorageManager storageManager)
-            : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, null)
+        public PostFileRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, IDependencyManager dependencyManager, ILogger<TEntity> logger, IStorageManager storageManager)
+            : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, dependencyManager, null)
         {
             Logger = logger;
             StorageManager = storageManager;

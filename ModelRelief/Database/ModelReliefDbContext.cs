@@ -51,69 +51,6 @@ namespace ModelRelief.Database
 
             base.OnModelCreating(modelbuilder);
         }
-
-        /// <summary>
-        /// Process all pending object changes before they are written to the database.
-        /// </summary>
-        private void ProcessChanges()
-        {
-            // https://www.exceptionnotfound.net/entity-change-tracking-using-dbcontext-in-entity-framework-6/
-            try
-            {
-                var addedEntities = ChangeTracker.Entries()
-                    .Where(p => p.State == EntityState.Added).ToList();
-
-                var modifiedEntities = ChangeTracker.Entries()
-                    .Where(p => p.State == EntityState.Modified).ToList();
-                var now = DateTime.UtcNow;
-
-                foreach (var change in modifiedEntities)
-                {
-                    var entityName = change.Entity.GetType().Name;
-                    var primaryKey = change.CurrentValues["Id"];
-
-                    foreach(var prop in change.OriginalValues.Properties)
-                    {
-                        var originalValue = change.GetDatabaseValues().GetValue<object>(prop);
-                        var originalValueString = originalValue?.ToString();
-
-                        var currentValue  = change.CurrentValues[prop];
-                        var currentValueString = currentValue?.ToString();
-
-                        if (originalValueString != currentValueString)
-                        {
-                            // create the change log
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"ModelReliefDbContext.SaveChanges : {ex.Message}");
-            }
-        }
-
-        /// <summary>
-        /// Save database changes asynchronously.
-        /// </summary>
-        /// <param name="cancellationToken">Token to allow operation to be cancelled.</param>
-        /// <returns>Number of state entries written to the database.</returns>
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
-        {
-            ProcessChanges();
-            return await base.SaveChangesAsync();
-        }
-
-        /// <summary>
-        /// Save database changes synchronously.
-        /// </summary>
-        /// <returns>Number of state entries written to the database.</returns>
-        public override int SaveChanges()
-        {
-            ProcessChanges();
-            return base.SaveChanges();
-        }
-
 #region Dynamic DbSet<T>   
 // https://stackoverflow.com/questions/33940507/find-a-generic-dbset-in-a-dbcontext-dynamically
 

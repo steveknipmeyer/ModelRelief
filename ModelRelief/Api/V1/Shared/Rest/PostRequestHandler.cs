@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ModelRelief.Database;
 using ModelRelief.Domain;
+using ModelRelief.Services;
 using ModelRelief.Utility;
 using System.Collections.Generic;
 using System.Threading;
@@ -40,10 +41,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="mapper">IMapper</param>
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
+        /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="validators">All validators matching IValidator for the given request.</param>
         /// <param name="logger">ILogger.</param>
-       public PostRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, IEnumerable<IValidator<PostRequest<TEntity, TRequestModel, TGetModel>>> validators, ILogger<TEntity> logger)
-            : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, validators)
+       public PostRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, IDependencyManager dependencyManager, IEnumerable<IValidator<PostRequest<TEntity, TRequestModel, TGetModel>>> validators, ILogger<TEntity> logger)
+            : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators)
         {
             Logger = logger;
         }
@@ -65,7 +67,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             newModel.User = await Identity.FindApplicationUserAsync(UserManager, message.User);
 
             DbContext.Set<TEntity>().Add(newModel);
-            await DbContext.SaveChangesAsync(cancellationToken);
+            await DependencyManager.PersistChangesAsync(newModel, cancellationToken);
 
             // N.B. ProjectTo populates all navigation properties. 
             //      Mapper.Map<TGetModel>(newModel) would return only the primary model.

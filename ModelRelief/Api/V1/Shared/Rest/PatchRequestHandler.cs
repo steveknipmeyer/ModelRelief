@@ -25,14 +25,15 @@ using Microsoft.Extensions.Logging;
 using ModelRelief.Utility;
 using System.Reflection;
 using FluentValidation.Results;
+using ModelRelief.Services;
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
     /// <summary>
-    /// Represents a handler for a PUT request for a model.
+    /// Represents a handler for a PATCH request for a model.
     /// </summary>
     /// <typeparam name="TEntity">Domain model</typeparam>
-    /// <typeparam name="TGetModel">DTO PUT model.</typeparam>
+    /// <typeparam name="TGetModel">DTO PATCH model.</typeparam>
     public class PatchRequestHandler<TEntity, TGetModel> : ValidatedHandler<PatchRequest<TEntity, TGetModel>, TGetModel>
         where TEntity    : DomainModel
         where TGetModel  : ITGetModel
@@ -48,9 +49,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="validators">All validators matching IValidator for the given request.</param>
+        /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="logger">ILogger.</param>
-       public PatchRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, IEnumerable<IValidator<PatchRequest<TEntity, TGetModel>>> validators, ILogger<TEntity> logger)
-            : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, validators)
+       public PatchRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, IDependencyManager dependencyManager, IEnumerable<IValidator<PatchRequest<TEntity, TGetModel>>> validators, ILogger<TEntity> logger)
+            : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators)
         {
             Logger = logger;
         }
@@ -70,7 +72,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         }
 
         /// <summary>
-        /// Converts a PUT request to a domain model (for validation).
+        /// Converts a PATCH request to a domain model (for validation).
         /// </summary>
         /// <returns>Domain model</returns>
         public TEntity BuildUpdatedDomainModel (PatchRequest<TEntity, TGetModel> message, TEntity model)
@@ -129,22 +131,23 @@ namespace ModelRelief.Api.V1.Shared.Rest
         }
 
         /// <summary>
-        /// Handles a PUT model request.
+        /// Handles a PATCH model request.
         /// </summary>
-        /// <param name="message">PUT request.</param>
+        /// <param name="message">PATCH request.</param>
         /// <param name="cancellationToken">Token to allow the async operation to be cancelled.</param>
         /// <returns></returns>
         public override async Task<TGetModel> OnHandle(PatchRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {           
-            var model = await FindModelAsync<TEntity>(message.User, message.Id);
-
             // find target model
-            model = BuildUpdatedDomainModel(message, model);
+            var model = await FindModelAsync<TEntity>(message.User, message.Id);
+            
+            // update from request
+            var updatedModel = BuildUpdatedDomainModel(message, model);
 
             // validate all references are owned
-            await ValidateReferences<TEntity>(model, message.User);
+            await ValidateReferences<TEntity>(updatedModel, message.User);
 
-            await DbContext.SaveChangesAsync(cancellationToken);
+            await DependencyManager.PersistChangesAsync(updatedModel, cancellationToken);
 
             var expandedModel = await DbContext.Set<TEntity>()
                  .ProjectTo<TGetModel>(Mapper.ConfigurationProvider)

@@ -23,8 +23,18 @@ namespace ModelRelief.Services
     /// Dependency manager manager. 
     /// Provides support for persisting changes and updating dependencies.
     /// </summary>
-    
-    public class DependencyManager
+    public interface IDependencyManager
+    {
+        ModelReliefDbContext DbContext { get; }
+
+        Task<int> PersistChangesAsync(DomainModel model, CancellationToken cancellationToken = default(CancellationToken));
+    }
+
+    /// <summary>
+    /// Dependency manager manager. 
+    /// Provides support for persisting changes and updating dependencies.
+    /// </summary>
+    public class DependencyManager : IDependencyManager
     {
         public ModelReliefDbContext DbContext { get; }
 
@@ -34,9 +44,10 @@ namespace ModelRelief.Services
         }
 
         /// <summary>
-        /// Process all pending object changes before they are written to the database.
+        /// Pre-process all pending object changes before they are written to the database.
         /// </summary>
-        private void ProcessChanges()
+        /// <param name="model">Model to persist.</param>
+        private void PreProcessChanges(DomainModel model)
         {
             // https://www.exceptionnotfound.net/entity-change-tracking-using-dbcontext-in-entity-framework-6/
             try
@@ -71,29 +82,39 @@ namespace ModelRelief.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"ModelReliefDbContext.SaveChanges : {ex.Message}");
+                Debug.WriteLine($"DependencyManager.PostProcess : {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Post-process all pending object changes after they have been written to the database.
+        /// </summary>
+        private void PostProcessChanges()
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"DependencyManager.PostProcess : {ex.Message}");
             }
         }
 
         /// <summary>
         /// Save database changes asynchronously.
         /// </summary>
+        /// <param name="model">Model to persist.</param>
         /// <param name="cancellationToken">Token to allow operation to be cancelled.</param>
         /// <returns>Number of state entries written to the database.</returns>
-        public async Task<int> PersistChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<int> PersistChangesAsync(DomainModel model, CancellationToken cancellationToken = default(CancellationToken))
         {
-            ProcessChanges();
-            return await DbContext.SaveChangesAsync();
-        }
+            PreProcessChanges(model);
 
-        /// <summary>
-        /// Save database changes synchronously.
-        /// </summary>
-        /// <returns>Number of state entries written to the database.</returns>
-        public int PersistChanges()
-        {
-            ProcessChanges();
-            return DbContext.SaveChanges();
+            var result = await DbContext.SaveChangesAsync();
+
+            PostProcessChanges();
+
+            return result;
         }
     }
 }

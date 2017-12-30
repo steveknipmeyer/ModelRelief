@@ -5,6 +5,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using ModelRelief.Database;
+using ModelRelief.Services;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -18,16 +19,19 @@ namespace ModelRelief.Infrastructure
     public class DbContextTransactionFilter : IAsyncActionFilter
     {
         private readonly ModelReliefDbContext _dbContext;
+        private IDependencyManager _dependencyManager;
         private readonly ILogger<DatabaseLogger> _logger;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context.</param>
+        /// <param name="dependencyManager">Services for persistence and dependency manager.</param>
         /// <param name="logger">ILogger.</param>
-        public DbContextTransactionFilter(ModelReliefDbContext dbContext, ILogger<DatabaseLogger> logger)
+        public DbContextTransactionFilter(ModelReliefDbContext dbContext, IDependencyManager dependencyManager, ILogger<DatabaseLogger> logger)
         {
             _dbContext = dbContext;
+            _dependencyManager = dependencyManager;
             _logger = logger;
         }
 
@@ -45,7 +49,7 @@ namespace ModelRelief.Infrastructure
                {
                     await next();
 
-                    await _dbContext.SaveChangesAsync();
+                    await _dependencyManager.PersistChangesAsync(null);
                     transaction.Commit();
                 }
             }

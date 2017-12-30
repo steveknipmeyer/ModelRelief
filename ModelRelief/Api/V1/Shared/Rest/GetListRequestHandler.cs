@@ -14,6 +14,7 @@ using ModelRelief.Api.V1.Extensions;
 using ModelRelief.Database;
 using ModelRelief.Domain;
 using ModelRelief.Infrastructure;
+using ModelRelief.Services;
 using ModelRelief.Utility;
 using System.Linq;
 using System.Threading;
@@ -40,9 +41,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="mapper">IMapper</param>
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
+        /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="logger">ILogger.</param>
-       public GetListRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, ILogger<TEntity> logger)
-            : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, null)
+       public GetListRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, IDependencyManager dependencyManager, ILogger<TEntity> logger)
+            : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, dependencyManager, null)
         {
             Logger = logger;
         }

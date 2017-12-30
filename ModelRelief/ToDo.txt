@@ -9,6 +9,19 @@
         Scale with a Python processor.
 
 <-- Short Term
+    Update copyright notices.
+
+    Schema Changes
+        FileDomainModel
+            FileDependency
+                A boolean value representing whether the associated file is generated from dependents.
+            FileSynchronized
+                This represents whether the backing file is synchronized with the model (AND the model's dependencies).
+            FileTimeStamp
+                This is used for triggering dependent updates.
+        
+        Custom Attributes
+        https://stackoverflow.com/questions/6637679/reflection-get-attribute-name-and-value-on-property
 
     Dependency Manager
         ProcessChanges
@@ -17,6 +30,7 @@
                 Create PostProcess list of tasks.
             Save
                 await DbContext.SaveChangesAsync()
+
             PostProcess
                 Generate all files that need to be updated.
                     MeshGenerationRequest
@@ -32,20 +46,8 @@
         Add Event
             If the model is FileDomainModel and FileSynchronized = true, schedule a file generation.
 
-        FileDomainModel
-            FileDependent
-                A boolean vale representing whether the associated file is generated from dependents.
-            FileSynchronized
-                This represents whether the backing file is synchronized with the model (AND the model's dependencies).
-            FileTimeStamp
-                This is used for triggering dependent updates.
-
         FileDomainModelDependencyHandler
             Implement support for renaming the disk file when the metadata Name property changes.
-        
-        Schema Changes
-                Mesh.Camera  -> Mesh.ViewCamera
-                Model.Camera -> Model.ViewCamera
 
         FileDomainModel Dependencies
                                                 Metadata    File        Note
