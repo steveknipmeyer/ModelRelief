@@ -9,6 +9,8 @@ using ModelRelief.Domain;
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ModelRelief.Database
 {
@@ -45,6 +47,35 @@ namespace ModelRelief.Database
             }
 
             base.OnModelCreating(modelbuilder);
+        }
+
+        public override int SaveChanges()
+        {
+            var modifiedEntities = ChangeTracker.Entries()
+                .Where(p => p.State == EntityState.Modified).ToList();
+            var now = DateTime.UtcNow;
+
+            foreach (var change in modifiedEntities)
+            {
+                var entityName = change.Entity.GetType().Name;
+     //         var primaryKey = GetPrimaryKeyValue(change);
+
+                foreach(var prop in change.OriginalValues.Properties)
+                {
+                    var originalValue = change.OriginalValues[prop].ToString();
+                    var currentValue = change.CurrentValues[prop].ToString();
+                    if (originalValue != currentValue) //Only create a log if the value changes
+                    {
+                        //Create the Change Log
+                    }
+                }
+            }
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return Task.FromResult(SaveChanges());
         }
 
 #region Dynamic DbSet<T>   

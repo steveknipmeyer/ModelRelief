@@ -9,6 +9,12 @@
         Scale with a Python processor.
 
 <-- Api Design
+    DepthBuffers, Meshes, MeshTransforms, etc. are not seen in Epsilon Views.
+    Implement DbContext.SaveChangesAsync as asynchronous.
+    Db.Context.SaveChangesAsync throws an error.
+    https://www.exceptionnotfound.net/entity-change-tracking-using-dbcontext-in-entity-framework-6/
+        The OriginalValue is the same as the new value.
+
     If all integration and unit tests are non-destructive, is it necessary to refresh the Test database from the Baseline?
         This does not work with SQLServer as it seems to maintain an exclusive file lock during DbInitializer execution.
     
