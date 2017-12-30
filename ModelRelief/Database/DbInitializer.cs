@@ -339,7 +339,7 @@ namespace ModelRelief.Database
             }
             DbContext.SaveChanges();
 
-            SetModelPaths(models);
+            SetFileProperties(models);
             QualifyDescription<Model3d>(_user.UserName);
         }
 
@@ -391,7 +391,7 @@ namespace ModelRelief.Database
             }
             DbContext.SaveChanges();
 
-            SetModelPaths(depthBuffers);
+            SetFileProperties(depthBuffers);
             QualifyDescription<DepthBuffer>(_user.UserName);
         }
 
@@ -416,7 +416,7 @@ namespace ModelRelief.Database
             }
             DbContext.SaveChanges();
 
-            SetModelPaths(meshes);
+            SetFileProperties(meshes);
             QualifyDescription<Mesh>(_user.UserName);
         }
 
@@ -499,16 +499,21 @@ namespace ModelRelief.Database
         }
 
         /// <summary>
-        /// Sets the file paths of the model collection.
+        /// Sets the file properties of the model.
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="models"></param>
-        private void SetModelPaths<TEntity>(IEnumerable<TEntity> models)
+        private void SetFileProperties<TEntity>(IEnumerable<TEntity> models)
             where TEntity : FileDomainModel
         {
-           // model Ids are known now; set paths
+           // model Ids are known now; set paths, etc.
             foreach (TEntity model in models)
+                {
+                model.FileIsSynchronized = true;
+                model.FileTimeStamp = DateTime.Now;
+
                 model.Path = StorageManager.DefaultModelStorageFolder(model);
+                }
 
             DbContext.SaveChanges();
         }

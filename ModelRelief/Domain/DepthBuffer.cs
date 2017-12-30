@@ -31,6 +31,9 @@ namespace ModelRelief.Domain
 
         public DepthBuffer()
         {
+            FileIsGenerated     = true;
+            FileIsSynchronized  = false;
+            FileTimeStamp       = null;
         }
     }
 }

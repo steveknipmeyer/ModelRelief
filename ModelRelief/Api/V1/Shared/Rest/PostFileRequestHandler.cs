@@ -77,8 +77,12 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
             await Files.WriteFileFromByteArray(fileName, message.NewFile.Raw);
 
-            // file path is known now
+            // update file metadata
             fileDomainModel.Path = $"{Path.GetDirectoryName(fileName)}/";
+            fileDomainModel.FileIsSynchronized = true;
+            fileDomainModel.FileTimeStamp = DateTime.Now;
+
+            await DependencyManager.PersistChangesAsync(fileDomainModel, cancellationToken);
 
             return Mapper.Map<TGetModel>(domainModel);
         }

@@ -44,8 +44,22 @@ namespace ModelRelief.Test.Integration.Meshes
 
         #region PostFile
         /// <summary>
+        /// Tests whether the file metadata is updated correctly after a file POST.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "Api PostFile")]
+        public override  async Task PostFile_MetadataIsUpdatedAfterFileIsPosted()
+        {
+            // N.B. POST is disallowed for Meshes. This condition is tested by PostFile_NewFileCanBePosted.
+            // Assert
+            Assert.True(true);
+
+            await Task.CompletedTask;
+        }
+
+        /// <summary>
         /// Tests whether a file can be posted to the resource.
-        /// Mesh files are generated from their dependents. They are not posted.
+        /// Mesh files are generated from their dependencies. They are not posted.
         /// </summary>
         [Fact]
         [Trait ("Category", "Api PostFile")]
@@ -70,7 +84,7 @@ namespace ModelRelief.Test.Integration.Meshes
         #region PutFile
         /// <summary>
         /// Tests whether a file can be PUT to the resource.
-        /// Mesh files are generated from their dependents. They are not posted.
+        /// Mesh files are generated from their dependencies. They are not posted.
         /// </summary>
         [Fact]
         [Trait ("Category", "Api PutFile")]

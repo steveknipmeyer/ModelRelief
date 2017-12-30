@@ -34,6 +34,9 @@ namespace ModelRelief.Domain
 
         public Mesh()
         {
+            FileIsGenerated     = true;
+            FileIsSynchronized  = false;
+            FileTimeStamp       = null;
         }
     }
 }

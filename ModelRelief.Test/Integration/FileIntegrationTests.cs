@@ -26,8 +26,8 @@ namespace ModelRelief.Test.Integration
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
     public abstract class FileIntegrationTests <TEntity, TGetModel>: IntegrationTests<TEntity, TGetModel>
-        where TEntity   : DomainModel
-        where TGetModel : class, ITGetModel, new()
+        where TEntity   : FileDomainModel
+        where TGetModel : class, ITGetModel, IFileIsSynchronized, new()
     {
         /// <summary>
         /// Constructor
@@ -172,6 +172,33 @@ namespace ModelRelief.Test.Integration
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
 
+            // Rollback
+            await DeleteModel(newModel);
+        }
+
+        /// <summary>
+        /// Tests whether the file metadata is updated correctly after a file POST.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "Api PostFile")]
+        public virtual async Task PostFile_MetadataIsUpdatedAfterFileIsPosted()
+        {
+            // Arrange
+            var newModel = await PostNewModel();
+
+            // Act            
+            var requestResponse = await PostNewFile(newModel.Id, "UnitCube.obj");
+
+            // Assert
+            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            // before PostFile
+            newModel.FileIsSynchronized.Should().Be(false);
+
+            // after PostFile
+            var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            updatedModel.FileIsSynchronized.Should().Be(true);
+            
             // Rollback
             await DeleteModel(newModel);
         }

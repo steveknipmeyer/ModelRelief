@@ -4,6 +4,7 @@
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 using ModelRelief.Domain;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 
@@ -33,7 +34,11 @@ namespace ModelRelief.Domain
     /// </summary>
     public abstract class FileDomainModel : DomainModel
     {
-        // absolute file path
+        public bool FileIsGenerated { get; set; }               // associated file is generated from dependencies
+        public bool FileIsSynchronized { get; set; }            // associated file is synchronized with the model (AND all of the the model's dependencies)                
+        public DateTime? FileTimeStamp  { get; set; }           // time of last update; used to trigger updates in dependents
+
+        // associated file absolute path
         public string Path { get; set; }
 
         /// <summary>

@@ -40,6 +40,9 @@ namespace ModelRelief.Domain
         /// </summary>
         public Model3d()
         {
+            FileIsGenerated     = false;
+            FileIsSynchronized  = false;
+            FileTimeStamp       = null;
         }
     }
 }

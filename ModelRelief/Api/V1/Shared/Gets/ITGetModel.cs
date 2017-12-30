@@ -12,14 +12,6 @@ using System.Threading.Tasks;
 namespace ModelRelief.Api.V1.Shared.Rest
 {
     /// <summary>
-    /// Represents an interface for a request model.
-    /// </summary>
-    public interface IIdModel
-    {
-        int Id { get; set; }
-    }
-
-    /// <summary>
     /// Common interface for all TGetModel types.
     /// </summary>
     public interface ITGetModel
@@ -31,4 +23,12 @@ namespace ModelRelief.Api.V1.Shared.Rest
         string Description { get; set; }
     }
 
+    /// <summary>
+    /// Common interface for all TGetModel ( = FileDomainModel) types.
+    /// This interface is used to support integration testing where the file metadata is updated after a PostFile.
+    /// </summary>
+    public interface IFileIsSynchronized
+    {
+        bool FileIsSynchronized { get; set; }
+    }
 }

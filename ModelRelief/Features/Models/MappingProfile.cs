@@ -15,7 +15,7 @@ namespace ModelRelief.Dto
     /// <summary>
     /// Represents a DataTransferObject (DTO) for a Model3d.
     /// </summary>
-    public class Model3d : ITGetModel
+    public class Model3d : ITGetModel, IFileIsSynchronized
     {
         public int Id { get; set; }
 
@@ -31,6 +31,9 @@ namespace ModelRelief.Dto
 
         public int? CameraId { get; set; }
         public Dto.Camera Camera { get; set; }
+
+        // not exposed in UX; API only
+        public bool FileIsSynchronized { get; set; }
 
         /// <summary>
         /// Constructor.

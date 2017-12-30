@@ -12,7 +12,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ModelRelief.Dto
 {
-    public class DepthBuffer : ITGetModel
+    public class DepthBuffer : ITGetModel, IFileIsSynchronized
     {
         public int Id { get; set; }
 
@@ -32,6 +32,8 @@ namespace ModelRelief.Dto
         public int? CameraId { get; set; }
         public Dto.Camera Camera { get; set; }
 
+        // not exposed in UX; API only
+        public bool FileIsSynchronized { get; set; }
     }
 
     public class DepthBufferValidator : AbstractValidator<Dto.DepthBuffer>

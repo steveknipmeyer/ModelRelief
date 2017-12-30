@@ -19,7 +19,7 @@ namespace ModelRelief.Dto
     /// <summary>
     /// Represents a DataTransferObject (DTO) for a Mesh.
     /// </summary>
-    public class Mesh : ITGetModel
+    public class Mesh : ITGetModel, IFileIsSynchronized
     {
         public int Id { get; set; }
 
@@ -41,6 +41,9 @@ namespace ModelRelief.Dto
 
         public int? MeshTransformId { get; set; }
         public Dto.MeshTransform MeshTransform { get; set; }
+
+        // not exposed in UX; API only
+        public bool FileIsSynchronized { get; set; }
 
         /// <summary>
         /// Constructor.

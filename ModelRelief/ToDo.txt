@@ -11,15 +11,7 @@
 <-- Short Term
     Update copyright notices.
 
-    Schema Changes
-        FileDomainModel
-            FileDependency
-                A boolean value representing whether the associated file is generated from dependents.
-            FileSynchronized
-                This represents whether the backing file is synchronized with the model (AND the model's dependencies).
-            FileTimeStamp
-                This is used for triggering dependent updates.
-        
+    Schema Changes       
         Custom Attributes
         https://stackoverflow.com/questions/6637679/reflection-get-attribute-name-and-value-on-property
 
@@ -40,11 +32,11 @@
         Modify Event
         Delete Event
             Find all FileTrigger properties that have changed.
-                Find all FileDomainModel (FileDependent = true) dependencies of the modified model.
-                    Set FileSynchronized = false.
+                Find all FileDomainModel (FileIsGenerated = true) dependencies of the modified model.
+                    Set FileIsSynchronized = false.
             
         Add Event
-            If the model is FileDomainModel and FileSynchronized = true, schedule a file generation.
+            If the model is FileDomainModel and FileIsSynchronized = true, schedule a file generation.
 
         FileDomainModelDependencyHandler
             Implement support for renaming the disk file when the metadata Name property changes.
@@ -67,7 +59,6 @@
         Property Change Handlers
             https://msdn.microsoft.com/magazine/mt694083
             https://msdn.microsoft.com/en-us/magazine/mt767693.aspx
-
 
     Files
         How will the Format property be used for Models, DepthBuffers and Meshes?

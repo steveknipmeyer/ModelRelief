@@ -109,6 +109,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
             DbContext.Remove(modelToRemove);
 
+            await DependencyManager.PersistChangesAsync(modelToRemove, cancellationToken);
+
             return null;
         }
 
