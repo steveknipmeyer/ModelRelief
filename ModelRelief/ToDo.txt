@@ -8,21 +8,21 @@
     Goal : Roundtrip a scaled mesh.       
         Scale with a Python processor.
 
-<-- Api Design
-    If all integration and unit tests are non-destructive, is it necessary to refresh the Test database from the Baseline?
-        This does not work with SQLServer as it seems to maintain an exclusive file lock during DbInitializer execution.
+<-- Short Tem
     
     Review and organize the Postman tests.
 
     Property Change Handlers
+        https://msdn.microsoft.com/magazine/mt694083
+        https://msdn.microsoft.com/en-us/magazine/mt767693.aspx
         Implement support for renaming the disk file when the metadata Name property changes.
 
         Implement the Mesh property-change trigger to generate a Mesh.
             Add a "synchronized" property that reflects whether the state of the mesh file matches the dependents.
                 FileSynchronized
-                Dependents
-                    DepthBuffer
-                    MeshTransform
+                    Dependents
+                        DepthBuffer
+                        MeshTransform
                 Whenever a dependent is updated, the synchronized property is set to false.
 
     Files
@@ -160,6 +160,9 @@
     Support database authentication.
 
     Integration Tests
+        If all integration and unit tests are non-destructive, is it necessary to refresh the Test database from the Baseline?
+            This does not work with SQLServer as it seems to maintain an exclusive file lock during DbInitializer execution.
+
         How can XUnit be used to test all properties of a resource?
             Iterate through the property list of a Domain model.
 

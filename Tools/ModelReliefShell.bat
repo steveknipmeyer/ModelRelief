@@ -1,8 +1,8 @@
 echo off
 title ModelRelief Shell
 
-:: move up from batch file directory to solution root
-cd %~dp0\..\..
+:: move up from Tools folder to solution root
+cd %~dp0\..
 set MRSolution=%cd%\
 set MR=%MRSolution%ModelRelief\
 echo MRsolution=%MRSolution%
