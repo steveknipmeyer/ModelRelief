@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 namespace ModelRelief.Api.V1.Shared.Rest
 {
     /// <summary>
-    /// Represents a handler for a POST request to update an existing model.
+    /// Represents a handler for a PUT request to update an existing model.
     /// </summary>
     /// <remarks>All properties are updated.</remarks>
     /// <typeparam name="TEntity">Domain model</typeparam>
@@ -52,9 +52,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
         }
 
         /// <summary>
-        /// Handles a POST model request.
+        /// Handles a PUT model request.
         /// </summary>
-        /// <param name="message">POST request.</param>
+        /// <param name="message">PUT request.</param>
         /// <param name="cancellationToken">Token to allow the async operation to be cancelled.</param>
         /// <returns></returns>
         public override async Task<TGetModel> OnHandle(PutRequest<TEntity, TRequestModel, TGetModel> message, CancellationToken cancellationToken)
@@ -65,12 +65,12 @@ namespace ModelRelief.Api.V1.Shared.Rest
             DbContext.Entry(targetModel).State = EntityState.Detached;
 
             // update domain model
-            var updatedModel = Mapper.Map<TEntity>(message.UpdatedModel);
+            var updatedModel = Mapper.Map<TRequestModel, TEntity>(message.UpdatedModel, targetModel);
 
             // validate all references are owned
             await ValidateReferences<TEntity>(updatedModel, message.User);
 
-            // ensure Id is set; PostModel may not have included the Id but it is always present in the PutRequest.
+            // ensure Id is set; PutModel may not have included the Id but it is always present in the PutRequest.
             updatedModel.Id = message.Id;
 
             // set ownership

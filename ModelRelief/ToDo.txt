@@ -9,7 +9,8 @@
         Scale with a Python processor.
 
 <-- Short Tem
-    
+    Limit the size of the log file.
+
     Review and organize the Postman tests.
 
     Property Change Handlers

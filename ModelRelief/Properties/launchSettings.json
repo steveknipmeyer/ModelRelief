@@ -35,7 +35,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ModelReliefDatabase": "SQLite",
+        "ModelReliefDatabase": "SQLServer",
         "ASPNETCORE_ENVIRONMENT": "Test",
         "InitializeUserStore": "True",
         "InitializeDatabase": "True"

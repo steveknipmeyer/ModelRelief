@@ -5,8 +5,10 @@
 // ------------------------------------------------------------------------//
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ModelRelief.Domain;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -17,8 +19,8 @@ namespace ModelRelief.Database
     public class ModelReliefDbContext : IdentityDbContext<ApplicationUser>
         {
         public ModelReliefDbContext (DbContextOptions options) : base (options)
-            {
-            }
+        {
+        }
 
         public DbSet<Camera> Cameras
             { get ; set; }
@@ -38,6 +40,7 @@ namespace ModelRelief.Database
         public DbSet<Project> Projects
             { get ; set; }
 
+
         // https://stackoverflow.com/questions/34768976/specifying-on-delete-no-action-in-entity-framework-7
         protected override void OnModelCreating(ModelBuilder modelbuilder)
         {
@@ -49,33 +52,66 @@ namespace ModelRelief.Database
             base.OnModelCreating(modelbuilder);
         }
 
-        public override int SaveChanges()
+        /// <summary>
+        /// Process all pending object changes before they are written to the database.
+        /// </summary>
+        private void ProcessChanges()
         {
-            var modifiedEntities = ChangeTracker.Entries()
-                .Where(p => p.State == EntityState.Modified).ToList();
-            var now = DateTime.UtcNow;
-
-            foreach (var change in modifiedEntities)
+            // https://www.exceptionnotfound.net/entity-change-tracking-using-dbcontext-in-entity-framework-6/
+            try
             {
-                var entityName = change.Entity.GetType().Name;
-     //         var primaryKey = GetPrimaryKeyValue(change);
+                var addedEntities = ChangeTracker.Entries()
+                    .Where(p => p.State == EntityState.Added).ToList();
 
-                foreach(var prop in change.OriginalValues.Properties)
+                var modifiedEntities = ChangeTracker.Entries()
+                    .Where(p => p.State == EntityState.Modified).ToList();
+                var now = DateTime.UtcNow;
+
+                foreach (var change in modifiedEntities)
                 {
-                    var originalValue = change.OriginalValues[prop].ToString();
-                    var currentValue = change.CurrentValues[prop].ToString();
-                    if (originalValue != currentValue) //Only create a log if the value changes
+                    var entityName = change.Entity.GetType().Name;
+                    var primaryKey = change.CurrentValues["Id"];
+
+                    foreach(var prop in change.OriginalValues.Properties)
                     {
-                        //Create the Change Log
+                        var originalValue = change.GetDatabaseValues().GetValue<object>(prop);
+                        var originalValueString = originalValue?.ToString();
+
+                        var currentValue  = change.CurrentValues[prop];
+                        var currentValueString = currentValue?.ToString();
+
+                        if (originalValueString != currentValueString)
+                        {
+                            // create the change log
+                        }
                     }
                 }
             }
-            return base.SaveChanges();
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"ModelReliefDbContext.SaveChanges : {ex.Message}");
+            }
         }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Save database changes asynchronously.
+        /// </summary>
+        /// <param name="cancellationToken">Token to allow operation to be cancelled.</param>
+        /// <returns>Number of state entries written to the database.</returns>
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return Task.FromResult(SaveChanges());
+            ProcessChanges();
+            return await base.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Save database changes synchronously.
+        /// </summary>
+        /// <returns>Number of state entries written to the database.</returns>
+        public override int SaveChanges()
+        {
+            ProcessChanges();
+            return base.SaveChanges();
         }
 
 #region Dynamic DbSet<T>   
