@@ -144,7 +144,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             // validate all references are owned
             await ValidateReferences<TEntity>(model, message.User);
 
-            await DbContext.SaveChangesAsync();
+            await DbContext.SaveChangesAsync(cancellationToken);
 
             var expandedModel = await DbContext.Set<TEntity>()
                  .ProjectTo<TGetModel>(Mapper.ConfigurationProvider)
