@@ -3,6 +3,7 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
+using ModelRelief.Services;
 using System.ComponentModel.DataAnnotations;
 
 namespace ModelRelief.Domain
@@ -19,6 +20,7 @@ namespace ModelRelief.Domain
         Isometric
     }
 
+    [Dependents(nameof(DepthBuffer))]
     public class Camera : DomainModel
     {
         public StandardView StandardView { get; set; }

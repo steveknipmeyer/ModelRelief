@@ -11,9 +11,11 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using ModelRelief.Domain;
+using ModelRelief.Services;
 
 namespace ModelRelief.Domain
 {
+    [Dependents(nameof(Mesh))]
     public class MeshTransform : DomainModel
     {       
         public double Depth { get; set; }

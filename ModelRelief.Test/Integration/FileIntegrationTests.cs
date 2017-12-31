@@ -27,7 +27,7 @@ namespace ModelRelief.Test.Integration
     /// </summary>
     public abstract class FileIntegrationTests <TEntity, TGetModel>: IntegrationTests<TEntity, TGetModel>
         where TEntity   : FileDomainModel
-        where TGetModel : class, ITGetModel, IFileIsSynchronized, new()
+        where TGetModel : class, ITGetModel, new()
     {
         /// <summary>
         /// Constructor
@@ -185,6 +185,7 @@ namespace ModelRelief.Test.Integration
         {
             // Arrange
             var newModel = await PostNewModel();
+            var newGeneratedFileModel = newModel as IGeneratedFile;
 
             // Act            
             var requestResponse = await PostNewFile(newModel.Id, "UnitCube.obj");
@@ -193,11 +194,12 @@ namespace ModelRelief.Test.Integration
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
 
             // before PostFile
-            newModel.FileIsSynchronized.Should().Be(false);
+            newGeneratedFileModel.FileIsSynchronized.Should().Be(false);
 
             // after PostFile
             var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
-            updatedModel.FileIsSynchronized.Should().Be(true);
+            var updatedGeneratedFileModel = updatedModel as IGeneratedFile;
+            updatedGeneratedFileModel.FileIsSynchronized.Should().Be(true);
             
             // Rollback
             await DeleteModel(newModel);

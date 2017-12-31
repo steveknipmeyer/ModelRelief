@@ -19,7 +19,7 @@ namespace ModelRelief.Dto
     /// <summary>
     /// Represents a DataTransferObject (DTO) for a Mesh.
     /// </summary>
-    public class Mesh : ITGetModel, IFileIsSynchronized
+    public class Mesh : ITGetModel, IGeneratedFile
     {
         public int Id { get; set; }
 

@@ -60,7 +60,7 @@ class Baseline:
             print (Colors.Red, "invalid database: %s" % self.database)
             return
 
-        print ("Creating baseline for %s." % self.database)        
+        print (Colors.Red, "Creating baseline for %s." % self.database, Colors.Reset)        
         for filePair in fileList:
             sourceFile = os.path.join(databaseFolder, filePair[0])
             destinationFile = os.path.join(databaseFolder, filePair[1])

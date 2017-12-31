@@ -37,7 +37,7 @@ namespace ModelRelief.Api.V1.Meshes
             : base(dbContext, userManager, logger, mediator)
         {
         }
-
+#if false
         /// <summary>
         /// Action method to create a file that is associated with a model.
         /// </summary>
@@ -56,6 +56,7 @@ namespace ModelRelief.Api.V1.Meshes
             );
             return await Task.FromResult(errorResult.ObjectResult());
         }
+#endif
     }
 }
  

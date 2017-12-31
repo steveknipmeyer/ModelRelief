@@ -3,6 +3,7 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
+using ModelRelief.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -24,6 +25,7 @@ namespace ModelRelief.Domain
         STL             // Stereolithography
     }
 
+    [Dependents(nameof(DepthBuffer))]
     public class Model3d : FileDomainModel
     {       
         public Model3dFormat Format { get; set; }
@@ -40,9 +42,6 @@ namespace ModelRelief.Domain
         /// </summary>
         public Model3d()
         {
-            FileIsGenerated     = false;
-            FileIsSynchronized  = false;
-            FileTimeStamp       = null;
         }
     }
 }

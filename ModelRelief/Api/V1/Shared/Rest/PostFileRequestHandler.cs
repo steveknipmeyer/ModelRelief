@@ -79,8 +79,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
             // update file metadata
             fileDomainModel.Path = $"{Path.GetDirectoryName(fileName)}/";
-            fileDomainModel.FileIsSynchronized = true;
             fileDomainModel.FileTimeStamp = DateTime.Now;
+
+            var generatedFileDomainModel = fileDomainModel as GeneratedFileDomainModel;
+            if (generatedFileDomainModel != null)
+                generatedFileDomainModel.FileIsSynchronized = true;
 
             await DependencyManager.PersistChangesAsync(fileDomainModel, cancellationToken);
 

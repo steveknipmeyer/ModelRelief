@@ -15,7 +15,7 @@ namespace ModelRelief.Domain
         STL             // Stereolithography
         }
 
-    public class Mesh  : FileDomainModel
+    public class Mesh  : GeneratedFileDomainModel
     {
         public MeshFormat Format { get; set; }      
 
@@ -34,9 +34,6 @@ namespace ModelRelief.Domain
 
         public Mesh()
         {
-            FileIsGenerated     = true;
-            FileIsSynchronized  = false;
-            FileTimeStamp       = null;
         }
     }
 }

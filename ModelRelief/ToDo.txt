@@ -29,20 +29,20 @@
                     DepthBufferGenerationRequest(?, requires graphics)
                 Update disk file names to match metadata Name.
 
-        Modify Event
-        Delete Event
+        EntityState.Modified.Modified
+        EntityState.Deleted
             Find all IndependentVariable properties that have changed.
-                Find all FileDomainModel (FileIsGenerated = true) dependencies of the modified model.
+                Find all Dependents of the modified model.
                     Set FileIsSynchronized = false.
             
-        Add Event
-            If the model is FileDomainModel and FileIsSynchronized = true, schedule a file generation.
+        EntityState.Added
+            If the model is GeneratedFileDomainModel and FileIsSynchronized = true, schedule a file generation.
 
         FileDomainModelDependencyHandler
             Implement support for renaming the disk file when the metadata Name property changes.
 
         FileDomainModel Dependencies
-                                                Metadata    File        Note
+                                                Metadata    FileStamp    Note
             DepthBuffer
                 Project
                 Model                                       X
@@ -55,7 +55,7 @@
             Model 
                 Project
                 Camera                                                  Viewer           
-        
+
         Property Change Handlers
             https://msdn.microsoft.com/magazine/mt694083
             https://msdn.microsoft.com/en-us/magazine/mt767693.aspx

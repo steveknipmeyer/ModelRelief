@@ -509,10 +509,12 @@ namespace ModelRelief.Database
            // model Ids are known now; set paths, etc.
             foreach (TEntity model in models)
                 {
-                model.FileIsSynchronized = true;
                 model.FileTimeStamp = DateTime.Now;
-
                 model.Path = StorageManager.DefaultModelStorageFolder(model);
+
+                var generatedModel = model as GeneratedFileDomainModel;
+                if (generatedModel != null)
+                    generatedModel.FileIsSynchronized = true;
                 }
 
             DbContext.SaveChanges();

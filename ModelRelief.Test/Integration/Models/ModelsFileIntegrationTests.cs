@@ -28,5 +28,19 @@ namespace ModelRelief.Test.Integration.Models
             base (serverFixture, new Model3dTestModel())
         {
         }
+
+        /// <summary>
+        /// Tests whether the file metadata is updated correctly after a file POST.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "Api PostFile")]
+        public override  async Task PostFile_MetadataIsUpdatedAfterFileIsPosted()
+        {
+            // N.B. A Model is not a generated file so it does not support IGeneratedFile.
+            // Assert
+            Assert.True(true);
+
+            await Task.CompletedTask;
+        }
     }
 }

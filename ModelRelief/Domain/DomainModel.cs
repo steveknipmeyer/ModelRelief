@@ -34,12 +34,12 @@ namespace ModelRelief.Domain
     /// </summary>
     public abstract class FileDomainModel : DomainModel
     {
-        public bool FileIsGenerated { get; set; }               // associated file is generated from dependencies
-        public bool FileIsSynchronized { get; set; }            // associated file is synchronized with the model (AND all of the the model's dependencies)                
         public DateTime? FileTimeStamp  { get; set; }           // time of last update; used to trigger updates in dependents
-
-        // associated file absolute path
-        public string Path { get; set; }
+        public string Path { get; set; }                        // associated file absolute path
+        
+        public FileDomainModel()
+        {
+        }
 
         /// <summary>
         /// Returns the relative path of the model file.
@@ -93,6 +93,21 @@ namespace ModelRelief.Domain
                 var path = System.IO.Path.Combine (Path ?? "", Name);
                 return System.IO.Path.GetFullPath (path);
             }
+        }
+    }
+
+    /// <summary>
+    /// Represents a file-backed model that is generated from dependencies.
+    /// </summary>
+    public abstract class GeneratedFileDomainModel : FileDomainModel
+    {
+        public bool FileIsSynchronized { get; set; }       // associated file is synchronized with the model (AND all of the the model's dependencies)                
+        
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public GeneratedFileDomainModel()
+        {
         }
     }
 }

@@ -3,6 +3,7 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
+using ModelRelief.Services;
 using System.ComponentModel.DataAnnotations;
 
 namespace ModelRelief.Domain
@@ -15,7 +16,8 @@ namespace ModelRelief.Domain
         JPG         // JPG format
     }
 
-    public class DepthBuffer  : FileDomainModel
+    [Dependents(nameof(Mesh))]
+    public class DepthBuffer  : GeneratedFileDomainModel
     {       
         public DepthBufferFormat Format { get; set; }
 
@@ -31,9 +33,6 @@ namespace ModelRelief.Domain
 
         public DepthBuffer()
         {
-            FileIsGenerated     = true;
-            FileIsSynchronized  = false;
-            FileTimeStamp       = null;
         }
     }
 }
