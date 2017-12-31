@@ -1,7 +1,7 @@
 ﻿// ------------------------------------------------------------------------// 
 // ModelRelief                                                             //
 //                                                                         //                                                                          
-// Copyright (c) <2017> Steve Knipmeyer                                    //
+// Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 // ------------------------------------------------------------------------// 
 // ModelRelief                                                             //
 //                                                                         //                                                                          
-// Copyright (c) <2017> Steve Knipmeyer                                    //
+// Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 using System.Linq;
 using System.Threading.Tasks;

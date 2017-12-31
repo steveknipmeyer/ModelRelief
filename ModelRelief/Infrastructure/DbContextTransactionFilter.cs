@@ -1,6 +1,6 @@
 ﻿// ModelRelief                                                             //
 //                                                                         //                                                                          
-// Copyright (c) <2017> Steve Knipmeyer                                    //
+// Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;

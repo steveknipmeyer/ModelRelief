@@ -12,7 +12,7 @@ define("System/Html", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -53,7 +53,7 @@ define("System/Logger", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -234,7 +234,7 @@ define("System/StopWatch", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -315,7 +315,7 @@ define("System/Services", ["require", "exports", "System/Logger", "System/StopWa
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -341,7 +341,7 @@ define("Graphics/Graphics", ["require", "exports", "three", "System/Services"], 
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -901,7 +901,7 @@ define("System/Math", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -934,7 +934,7 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Viewe
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1350,7 +1350,7 @@ define("System/Tools", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1386,7 +1386,7 @@ define("System/Tools", ["require", "exports"], function (require, exports) {
 // ------------------------------------------------------------------------// 
 // ModelRelief                                                             //
 //                                                                         //                                                                          
-// Copyright (c) <2017> Steve Knipmeyer                                    //
+// Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 /*
   Requirements
@@ -1704,7 +1704,7 @@ define("Viewers/Camera", ["require", "exports", "three", "DepthBuffer/DepthBuffe
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1925,7 +1925,7 @@ define("System/EventManager", ["require", "exports"], function (require, exports
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2042,7 +2042,7 @@ define("DataTransferObjects/IFilePath", ["require", "exports"], function (requir
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2051,7 +2051,7 @@ define("Relief/Relief", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2073,7 +2073,7 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2186,7 +2186,7 @@ define("Graphics/Materials", ["require", "exports", "three"], function (require,
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2250,7 +2250,7 @@ define("Viewers/ModelViewerControls", ["require", "exports", "dat-gui", "System/
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2691,7 +2691,7 @@ define("Viewers/CameraControls", ["require", "exports", "three", "dat-gui", "Vie
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2857,7 +2857,7 @@ define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "View
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -3170,7 +3170,7 @@ define("Viewers/ModelViewer", ["require", "exports", "three", "System/EventManag
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -3408,7 +3408,7 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4062,7 +4062,7 @@ define("ModelLoaders/TestModelLoader", ["require", "exports", "three", "Graphics
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4204,7 +4204,7 @@ define("ModelLoaders/Loader", ["require", "exports", "three", "ModelLoaders/OBJL
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4257,7 +4257,7 @@ define("Viewers/MeshViewerControls", ["require", "exports", "dat-gui", "System/H
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4313,7 +4313,7 @@ define("Viewers/MeshViewer", ["require", "exports", "three", "DepthBuffer/DepthB
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4374,7 +4374,7 @@ define("Views/MeshView", ["require", "exports", "Viewers/MeshViewer"], function 
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4427,7 +4427,7 @@ define("Views/ModelView", ["require", "exports", "Viewers/ModelViewer"], functio
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4480,7 +4480,7 @@ define("Views/ComposerView", ["require", "exports", "Controllers/ComposerControl
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4564,7 +4564,7 @@ define("ModelRelief", ["require", "exports", "System/Html", "Views/ComposerView"
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4574,7 +4574,7 @@ define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function 
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4656,7 +4656,7 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Graph
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4796,7 +4796,7 @@ define("Workbench/DepthBufferTest", ["require", "exports"], function (require, e
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4825,7 +4825,7 @@ define("Workbench/InheritanceTest", ["require", "exports", "System/Logger"], fun
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4925,7 +4925,7 @@ define("System/Image.", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
-    // Copyright (c) <2017> Steve Knipmeyer                                    //
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });

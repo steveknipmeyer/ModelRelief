@@ -12,7 +12,7 @@
     Update copyright notices.
 
     Schema Changes       
-        Custom Attributes
+        Custom Attributes: IndependentVariable
         https://stackoverflow.com/questions/6637679/reflection-get-attribute-name-and-value-on-property
 
     Dependency Manager
@@ -31,7 +31,7 @@
 
         Modify Event
         Delete Event
-            Find all FileTrigger properties that have changed.
+            Find all IndependentVariable properties that have changed.
                 Find all FileDomainModel (FileIsGenerated = true) dependencies of the modified model.
                     Set FileIsSynchronized = false.
             
