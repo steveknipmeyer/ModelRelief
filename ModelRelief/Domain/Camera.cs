@@ -20,22 +20,32 @@ namespace ModelRelief.Domain
         Isometric
     }
 
-    [Dependents(nameof(DepthBuffer))]
+    [DependentFiles(nameof(DepthBuffer))]
     public class Camera : DomainModel
     {
         public StandardView StandardView { get; set; }
 
+        [DependentFileProperty]
         public double PositionX { get; set; }
+        [DependentFileProperty]
         public double PositionY { get; set; }
+        [DependentFileProperty]
         public double PositionZ { get; set; }
 
+        [DependentFileProperty]
         public double LookAtX { get; set; }
+        [DependentFileProperty]
         public double LookAtY { get; set; }
+        [DependentFileProperty]
         public double LookAtZ { get; set; }
 
+        [DependentFileProperty]
         public double Near{ get; set; }
+        [DependentFileProperty]
         public double Far{ get; set; }
+        [DependentFileProperty]
         public double FieldOfView { get; set; }
+        [DependentFileProperty]
         public bool BoundClippingPlanes { get; set; }
 
         // Navigation Properties

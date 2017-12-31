@@ -19,14 +19,30 @@ using System.Threading.Tasks;
 
 namespace ModelRelief.Services
 {
+    /// <summary>
+    /// Reprsents a class that has dependents.
+    /// WHen this class had a key property change (FileProperty) the dependent classes must re-generate their file-backed resources.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class DependentsAttribute : Attribute
+    public class DependentFiles : Attribute
     {
         public string[] Classes { get; }
 
-        public DependentsAttribute(params string[] classes)
+        public DependentFiles(params string[] classes)
         {
             Classes = classes;
         }
     }
+    /// <summary>
+    /// Represents a property on which a dependent file is partially based.
+    /// When this property changes, the dependent files must be regenerated.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    public class DependentFileProperty : Attribute
+    {
+        public DependentFileProperty()
+        {
+        }
+    }
+
 }

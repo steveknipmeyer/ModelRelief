@@ -4,6 +4,7 @@
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 using ModelRelief.Domain;
+using ModelRelief.Services;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
@@ -34,6 +35,7 @@ namespace ModelRelief.Domain
     /// </summary>
     public abstract class FileDomainModel : DomainModel
     {
+        [DependentFileProperty]
         public DateTime? FileTimeStamp  { get; set; }           // time of last update; used to trigger updates in dependents
         public string Path { get; set; }                        // associated file absolute path
         

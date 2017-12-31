@@ -1,5 +1,5 @@
 ﻿<--- Commit
-
+Add the FileProperty
 <-- Technical Education
         Manning AspNet Core book.
         Manning Dependency Injection book.
@@ -9,7 +9,7 @@
         Scale with a Python processor.
 
 <-- Short Term
-    Update copyright notices.
+    Should FileTimeStamp be exposed?
 
     Schema Changes       
         Custom Attributes: IndependentVariable
@@ -41,20 +41,14 @@
         FileDomainModelDependencyHandler
             Implement support for renaming the disk file when the metadata Name property changes.
 
-        FileDomainModel Dependencies
-                                                Metadata    FileStamp    Note
+        GeneratedFileDomainModel Dependencies
+                                                Metadata    FileTimeStamp
             DepthBuffer
-                Project
                 Model                                       X
                 Camera                          X
             Mesh
-                Project
-                Camera                                                  Viewer
                 DepthBuffer                                 X
                 MeshTransform                   X
-            Model 
-                Project
-                Camera                                                  Viewer           
 
         Property Change Handlers
             https://msdn.microsoft.com/magazine/mt694083

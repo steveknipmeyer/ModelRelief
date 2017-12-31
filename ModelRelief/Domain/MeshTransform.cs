@@ -15,15 +15,21 @@ using ModelRelief.Services;
 
 namespace ModelRelief.Domain
 {
-    [Dependents(nameof(Mesh))]
+    [DependentFiles(nameof(Mesh))]
     public class MeshTransform : DomainModel
     {       
+        [DependentFileProperty]
         public double Depth { get; set; }
+        [DependentFileProperty]
         public double Width { get; set; }
 
+        [DependentFileProperty]
         public double Tau { get; set; }
+        [DependentFileProperty]
         public double SigmaGaussianBlur { get; set; }
+        [DependentFileProperty]
         public double SigmaGaussianSmooth { get; set; }
+        [DependentFileProperty]
         public double LambdaLinearScaling { get; set; }
 
         // Navigation Properties

@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -44,6 +45,34 @@ namespace ModelRelief.Services
         }
 
         /// <summary>
+        /// Determines whether a property has the given CustomAttribute.
+        /// </summary>
+        /// <param name="propertyAttribute">Attribute (if found; null otherwise)</param>
+        /// <param name="classType">Class of property.</param>
+        /// <param name="propertyName">Name of property.</param>
+        /// <param name="attributeType">CustomAttribute to find.</param>
+        /// <returns></returns>
+        public bool PropertyHasAttribute(out Attribute propertyAttribute, Type classType, string propertyName, Type attributeType)
+        {
+            PropertyInfo property = classType.GetProperty(propertyName);
+            propertyAttribute = property.GetCustomAttribute(attributeType, true);
+            return propertyAttribute != null;
+        }
+
+        /// <summary>
+        /// determines whether a class has the given CustomAttribute.
+        /// </summary>
+        /// <param name="classAttribute">Attribute (if found, null otherwise)</param>
+        /// <param name="classType">Type of class.</param>
+        /// <param name="attributeType">CustomAttribute to find.</param>
+        /// <returns></returns>
+        public bool ClassHasAttribute (out Attribute classAttribute, Type classType, Type attributeType)
+        {
+            classAttribute = classType.GetCustomAttribute(attributeType, true);
+            return classAttribute != null;
+        }
+
+        /// <summary>
         /// Pre-process all pending object changes before they are written to the database.
         /// </summary>
         /// <param name="model">Model to persist.</param>
@@ -58,24 +87,35 @@ namespace ModelRelief.Services
                 var modifiedEntities = DbContext.ChangeTracker.Entries()
                     .Where(p => p.State == EntityState.Modified).ToList();
 
-                var now = DateTime.UtcNow;
-
                 foreach (var change in modifiedEntities)
                 {
                     var entityName = change.Entity.GetType().Name;
                     var primaryKey = change.CurrentValues["Id"];
 
-                    foreach(var prop in change.OriginalValues.Properties)
+                    foreach(var property in change.OriginalValues.Properties)
                     {
-                        var originalValue = change.GetDatabaseValues().GetValue<object>(prop);
+                        var originalValue = change.GetDatabaseValues().GetValue<object>(property);
                         var originalValueString = originalValue?.ToString();
 
-                        var currentValue  = change.CurrentValues[prop];
+                        var currentValue  = change.CurrentValues[property];
                         var currentValueString = currentValue?.ToString();
 
                         if (originalValueString != currentValueString)
                         {
-                            // process changed properties
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Attribute dependentFileProperty;
+                            if (PropertyHasAttribute(out dependentFileProperty, change.Entity.GetType(), property.Name, typeof(DependentFileProperty)))
+                            {
+                                Console.WriteLine($"DependentFileProperty {property.Name} has been modified.");
+                            }
+
+                            Attribute classAttribute;
+                            if (ClassHasAttribute(out classAttribute, change.Entity.GetType(), typeof(DependentFiles)))
+                            {
+                                DependentFiles dependentFiles = classAttribute as DependentFiles;
+                                Console.WriteLine($"Class {change.Entity.GetType()} has dependent file: {dependentFiles.Classes[0]}.");
+                            }
+                            Console.ForegroundColor = ConsoleColor.White;
                         }
                     }
                 }
@@ -95,7 +135,7 @@ namespace ModelRelief.Services
             {
             }
             catch (Exception ex)
-            {
+            {   
                 Debug.WriteLine($"DependencyManager.PostProcess : {ex.Message}");
             }
         }
