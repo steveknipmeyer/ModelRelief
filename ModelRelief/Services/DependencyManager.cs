@@ -6,6 +6,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Logging;
 using ModelRelief.Database;
 using ModelRelief.Domain;
 using System;
@@ -19,7 +20,7 @@ using System.Threading.Tasks;
 namespace ModelRelief.Services
 {
     /// <summary>
-    /// Dependency manager manager. 
+    /// Dependency manager. 
     /// Provides support for persisting changes and updating dependencies.
     /// </summary>
     public interface IDependencyManager
@@ -35,7 +36,6 @@ namespace ModelRelief.Services
     public class TransactionEntity
     {
         public EntityEntry  ChangeTrackerEntity { get; }
-        public object       PrimaryKey { get; set; }
         public List<Type>   DependentTypes { get; set; } 
 
         /// <summary>
@@ -54,9 +54,19 @@ namespace ModelRelief.Services
         public Type EntityType => ChangeTrackerEntity.Entity.GetType();
 
         /// <summary>
-        /// Returns the Type name of the entity.
+        /// Returns the name of the entity.
         /// </summary>
         public string Name => EntityType.Name;
+
+        /// <summary>
+        /// Returns the primary key entity.
+        /// </summary>
+        public int PrimaryKey => Convert.ToInt32(ChangeTrackerEntity.CurrentValues["Id"]);
+
+        /// <summary>
+        /// Returns the User Id of the entity.
+        /// </summary>
+        public string UserId => ChangeTrackerEntity.CurrentValues.GetValue<string>("UserId");
 
         /// <summary>
         /// Returns whether the entity has any dependent types.
@@ -68,8 +78,6 @@ namespace ModelRelief.Services
         /// </summary>
         private void Initialize()
         {
-            PrimaryKey = ChangeTrackerEntity.CurrentValues["Id"];
-
             DependentTypes = new List<Type>();
             // no class dependencies?; skip
             if (DependencyManager.ClassHasAttribute(out Attribute classAttribute, EntityType, typeof(DependentFiles)))
@@ -81,7 +89,7 @@ namespace ModelRelief.Services
     }
 
     /// <summary>
-    /// Represents the difference in a propery state.
+    /// Represents the difference in a property state.
     /// </summary>
     public class PropertyModification
     {
@@ -133,10 +141,12 @@ namespace ModelRelief.Services
     public class DependencyManager : IDependencyManager
     {
         public ModelReliefDbContext DbContext { get; }
+        public ILogger Logger { get; }
 
-        public DependencyManager(ModelReliefDbContext dbContext)
+        public DependencyManager(ModelReliefDbContext dbContext, ILogger<DependencyManager> logger)
         {
             DbContext = dbContext;
+            Logger = logger;
         }
 
         /// <summary>
@@ -168,13 +178,75 @@ namespace ModelRelief.Services
         }
 
         /// <summary>
+        /// Find all models that reference the given root (type and primary key).
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="rootType">Type of root.</param>
+        /// <param name="rootPrimaryId">Primary key of root.</param>
+        /// <param name="userId">User ID.</param>
+        /// <returns>Collection of models referencing the given root primary key and type.</returns>
+        public async Task<List<DomainModel>> FindDependentModels<TEntity> (Type rootType, int rootPrimaryId, string userId)
+            where TEntity : DomainModel
+        {
+            var dependentModels = new List<DomainModel>();
+            // find all owned models
+            var candidateDependentModels = await DbContext.Set<TEntity>()
+                                                    .Where(m => (m.UserId == userId))
+                                                    .ToListAsync();
+            
+            // find foreign key on candidate dependent models
+            var foreignKeyPropertyName = $"{rootType.Name}Id";
+            var foreignKeyProperty = typeof(TEntity).GetProperty(foreignKeyPropertyName);
+            foreach (var candidateDependentModel in candidateDependentModels)
+            {
+                try
+                {
+                    // compare foreign key
+                    int foreignKey = Convert.ToInt32(foreignKeyProperty.GetValue(candidateDependentModel));
+                    if (foreignKey == rootPrimaryId)
+                        dependentModels.Add (candidateDependentModel as DomainModel);
+                }
+                catch (Exception)
+                {
+                    Debug.WriteLine($"DependencyManager.FindDependentModels: error looking up foreign key: Class = {candidateDependentModel.GetType()}, Id = {candidateDependentModel.Id}");
+                }
+            }
+            return dependentModels;
+        }           
+
+        /// <summary>
         /// Finds the dependent models for a given model.
         /// </summary>
         /// <param name="transactionEntity">Entity scheduled by ChangeTracker.</param>
         /// <returns>Collection of the dependent models.</returns>
-        public List<DomainModel> FindDependentModels(TransactionEntity transactionEntity)
+        public async Task<List<DomainModel>> FindDependentModels(TransactionEntity transactionEntity)
         {
             var dependentModels = new List<DomainModel>();
+
+            // primary key
+            if (!(transactionEntity.PrimaryKey > 0))
+                return dependentModels;
+
+            Func<Type, int, string , Task<List<DomainModel>>> findDependentModelsAsyncMethod = null;
+            foreach (Type dependentType in transactionEntity.DependentTypes)
+            {
+                switch(dependentType.Name) 
+                {
+                    case nameof(Domain.DepthBuffer):
+                        findDependentModelsAsyncMethod = FindDependentModels<Domain.DepthBuffer>;
+                        break;
+                    case nameof(Domain.Mesh):
+                        findDependentModelsAsyncMethod = FindDependentModels<Domain.Mesh>;
+                        break;
+
+                    default:
+                        var message = "Unexpected type encountered in DependencyManger.FindDependentModels";
+                        Debug.Assert(false, message);
+                        throw new ArgumentException(message);
+                }
+                var dependentModelsByType = await findDependentModelsAsyncMethod (transactionEntity.EntityType, transactionEntity.PrimaryKey, transactionEntity.UserId);
+                dependentModels.AddRange(dependentModelsByType);
+            }
 
             return dependentModels;
         }
@@ -183,7 +255,7 @@ namespace ModelRelief.Services
         /// Pre-process all pending object changes before they are written to the database.
         /// </summary>
         /// <param name="model">Model to persist.</param>
-        private void PreProcessChanges(DomainModel model)
+        private async Task PreProcessChanges(DomainModel model)
         {
             // https://www.exceptionnotfound.net/entity-change-tracking-using-dbcontext-in-entity-framework-6/
             try
@@ -199,15 +271,15 @@ namespace ModelRelief.Services
                     switch (changedEntity.State)
                     {
                         case EntityState.Added:
-                            dependentModelsEntity = ProcessAddedEntity(transactionEntity);
+                            dependentModelsEntity = await ProcessAddedEntity(transactionEntity);
                             break;
 
                         case EntityState.Deleted:
-                            dependentModelsEntity = ProcessDeletedEntity(transactionEntity);
+                            dependentModelsEntity = await ProcessDeletedEntity(transactionEntity);
                             break;
 
                         case EntityState.Modified:
-                            dependentModelsEntity = ProcessModifiedEntity(transactionEntity);
+                            dependentModelsEntity = await ProcessModifiedEntity(transactionEntity);
                             break;
 
                         default:
@@ -231,7 +303,7 @@ namespace ModelRelief.Services
         /// </summary>
         /// <param name="transactionEntity">Entity scheduled for modification.</param>
         /// <returns>List of dependent models.</returns>
-        private List<DomainModel> ProcessModifiedEntity(TransactionEntity transactionEntity)
+        private async Task<List<DomainModel>> ProcessModifiedEntity(TransactionEntity transactionEntity)
         {
             var dependentModels = new List<DomainModel>();
             foreach(var property in transactionEntity.ChangeTrackerEntity.OriginalValues.Properties)
@@ -244,10 +316,10 @@ namespace ModelRelief.Services
                         continue;
 
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine($"Class {transactionEntity.EntityType} has (first) dependent files {transactionEntity.DependentTypes[0]}.");
+                    Console.WriteLine($"Class {transactionEntity.EntityType} has (first) dependent file {transactionEntity.DependentTypes[0]}.");
                     Console.ForegroundColor = ConsoleColor.White;
 
-                    dependentModels = FindDependentModels(transactionEntity);
+                    dependentModels = await FindDependentModels(transactionEntity);
 
                     // no more properties need to be examined; all dependent models found from first DependentFileProperty
                     return dependentModels;
@@ -261,7 +333,7 @@ namespace ModelRelief.Services
         /// </summary>
         /// <param name="transactionEntity">Entity scheduled for deletion.</param>
         /// <returns>List of dependent models.</returns>
-        private List<DomainModel> ProcessDeletedEntity(TransactionEntity transactionEntity)
+        private async Task<List<DomainModel>> ProcessDeletedEntity(TransactionEntity transactionEntity)
         {
             var dependentModels = new List<DomainModel>();
 
@@ -272,7 +344,7 @@ namespace ModelRelief.Services
             Console.WriteLine($"Deleted class {transactionEntity.EntityType} has (first) dependent file {transactionEntity.DependentTypes[0]}.");
             Console.ForegroundColor = ConsoleColor.White;
 
-            dependentModels = FindDependentModels(transactionEntity);
+            dependentModels = await FindDependentModels(transactionEntity);
             return dependentModels;
         }
 
@@ -281,13 +353,15 @@ namespace ModelRelief.Services
         /// </summary>
         /// <param name="transactionEntity">Entity scheduled for addition.</param>
         /// <returns>List of dependent models.</returns>
-        private List<DomainModel> ProcessAddedEntity(TransactionEntity transactionEntity)
+        private async Task<List<DomainModel>> ProcessAddedEntity(TransactionEntity transactionEntity)
         {
             var dependentModels = new List<DomainModel>();
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"Class {transactionEntity.EntityType} has been added.");
             Console.ForegroundColor = ConsoleColor.White;
+
+            await Task.CompletedTask;
 
             return dependentModels;
         }
@@ -303,7 +377,9 @@ namespace ModelRelief.Services
                 GeneratedFileDomainModel generatedFileModel = model as GeneratedFileDomainModel;
                 Debug.Assert (generatedFileModel != null);
 
+                Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine($"Dependent model : Type = {generatedFileModel.GetType()}, Primary Id = {generatedFileModel.Id}, Name = {generatedFileModel.Name}");
+                Console.ForegroundColor = ConsoleColor.White;
             }
         }
 
@@ -329,7 +405,7 @@ namespace ModelRelief.Services
         /// <returns>Number of state entries written to the database.</returns>
         public async Task<int> PersistChangesAsync(DomainModel model, CancellationToken cancellationToken = default(CancellationToken))
         {
-            PreProcessChanges(model);
+            await PreProcessChanges(model);
 
             var result = await DbContext.SaveChangesAsync();
 

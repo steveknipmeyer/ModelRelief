@@ -1,5 +1,5 @@
 ﻿<--- Commit
-Add the FileProperty
+
 <-- Technical Education
         Manning AspNet Core book.
         Manning Dependency Injection book.
@@ -9,17 +9,16 @@ Add the FileProperty
         Scale with a Python processor.
 
 <-- Short Term
+    Indirect Dependency
+        Camera->DepthBuffer->Mesh?
     Should FileTimeStamp be exposed?
-
-    Schema Changes       
-        Custom Attributes: IndependentVariable
-        https://stackoverflow.com/questions/6637679/reflection-get-attribute-name-and-value-on-property
 
     Dependency Manager
         ProcessChanges
             PreProcess
                 Find and update all dependencies.
                 Create PostProcess list of tasks.
+
             Save
                 await DbContext.SaveChangesAsync()
 
@@ -31,9 +30,7 @@ Add the FileProperty
 
         EntityState.Modified.Modified
         EntityState.Deleted
-            Find all IndependentVariable properties that have changed.
-                Find all Dependents of the modified model.
-                    Set FileIsSynchronized = false.
+            Set FileIsSynchronized = false.
             
         EntityState.Added
             If the model is GeneratedFileDomainModel and FileIsSynchronized = true, schedule a file generation.
@@ -704,3 +701,9 @@ Add the FileProperty
     https://odetocode.com/blogs/scott/archive/2017/02/06/anti-forgery-tokens-and-asp-net-core-apis.aspx
 
     https://stackoverflow.com/questions/40351870/asp-net-core-custom-authentication-tying-request-to-user
+
+<-- C#
+    Conversion of List of derived class to the base class.
+            // https://stackoverflow.com/questions/1817300/convert-listderivedclass-to-listbaseclass
+            dependentModels = new List<DomainModel>(candidateDependentModels).ConvertAll(m => (DomainModel)m);
+

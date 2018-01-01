@@ -150,12 +150,16 @@ namespace ModelRelief.Api.V1.Shared
                 var modelExists = false;
                 Func<ClaimsPrincipal, int, Task<bool>> modelExistsAsyncMethod = null;
 
-                switch(referenceType.Name) {
+                switch(referenceType.Name) 
+                {
                     case nameof(Domain.Camera):
                         modelExistsAsyncMethod = ModelExistsAsync<Domain.Camera>;
                         break;
                     case nameof(Domain.DepthBuffer):
                         modelExistsAsyncMethod = ModelExistsAsync<Domain.DepthBuffer>;
+                        break;
+                    case nameof(Domain.Mesh):
+                        modelExistsAsyncMethod = ModelExistsAsync<Domain.Mesh>;
                         break;
                     case nameof(Domain.MeshTransform):
                         modelExistsAsyncMethod = ModelExistsAsync<Domain.MeshTransform>;
@@ -169,6 +173,7 @@ namespace ModelRelief.Api.V1.Shared
 
                     case nameof(ApplicationUser):
                         continue;
+
                     default:
                         var message = "Unexpected type encountered in ValidatedHandler:ValidateReferences";
                         Debug.Assert(false, message);
