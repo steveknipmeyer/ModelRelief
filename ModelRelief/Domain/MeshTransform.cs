@@ -15,7 +15,7 @@ using ModelRelief.Services;
 
 namespace ModelRelief.Domain
 {
-    [DependentFiles(nameof(Mesh))]
+    [DependentFiles(typeof(Mesh))]
     public class MeshTransform : DomainModel
     {       
         [DependentFileProperty]

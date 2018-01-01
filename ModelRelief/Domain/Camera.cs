@@ -20,7 +20,7 @@ namespace ModelRelief.Domain
         Isometric
     }
 
-    [DependentFiles(nameof(DepthBuffer))]
+    [DependentFiles(typeof(DepthBuffer))]
     public class Camera : DomainModel
     {
         public StandardView StandardView { get; set; }

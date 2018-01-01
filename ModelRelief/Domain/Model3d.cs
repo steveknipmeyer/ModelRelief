@@ -25,7 +25,7 @@ namespace ModelRelief.Domain
         STL             // Stereolithography
     }
 
-    [DependentFiles(nameof(DepthBuffer))]
+    [DependentFiles(typeof(DepthBuffer))]
     public class Model3d : FileDomainModel
     {       
         public Model3dFormat Format { get; set; }

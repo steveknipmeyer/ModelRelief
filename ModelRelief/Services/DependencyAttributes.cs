@@ -26,11 +26,11 @@ namespace ModelRelief.Services
     [AttributeUsage(AttributeTargets.Class)]
     public class DependentFiles : Attribute
     {
-        public string[] Classes { get; }
+        public List<Type> Classes { get; }
 
-        public DependentFiles(params string[] classes)
+        public DependentFiles(params Type[] classes)
         {
-            Classes = classes;
+            Classes = classes.ToList();
         }
     }
     /// <summary>

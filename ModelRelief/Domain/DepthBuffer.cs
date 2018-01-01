@@ -16,7 +16,7 @@ namespace ModelRelief.Domain
         JPG         // JPG format
     }
 
-    [DependentFiles(nameof(Mesh))]
+    [DependentFiles(typeof(Mesh))]
     public class DepthBuffer  : GeneratedFileDomainModel
     {       
         public DepthBufferFormat Format { get; set; }

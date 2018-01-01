@@ -51,6 +51,7 @@ namespace ModelRelief.Database
 
             base.OnModelCreating(modelbuilder);
         }
+
 #region Dynamic DbSet<T>   
 // https://stackoverflow.com/questions/33940507/find-a-generic-dbset-in-a-dbcontext-dynamically
 
@@ -65,23 +66,23 @@ namespace ModelRelief.Database
                 }
             }
 
-            public dynamic GetDbSetByReflection(string fullname)
-            {
-                Type targetType = Type.GetType(fullname);
-                var model = GetType()
-                    .GetRuntimeProperties()
-                    .Where(o => 
-                     // https://stackoverflow.com/questions/39169231/isgenerictype-isvaluetype-missing-from-net-core
-                     // o.PropertyType.IsGenericType &&
-                        o.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>) &&
-                        o.PropertyType.GenericTypeArguments.Contains(targetType))
-                    .FirstOrDefault();
+        public dynamic GetDbSetByReflection(string fullname)
+        {
+            Type targetType = Type.GetType(fullname);
+            PropertyInfo property = this.GetType()
+                .GetRuntimeProperties()
+                .Where(p => 
+                    // https://stackoverflow.com/questions/39169231/isgenerictype-isvaluetype-missing-from-net-core
+                    // o.PropertyType.IsGenericType &&
+                    p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>) &&
+                    p.PropertyType.GenericTypeArguments.Contains(targetType))
+                .FirstOrDefault();
 
-                if (null != model)
-                    return model.GetValue(this);
+            if (null != property)
+                return property.GetValue(this);
 
-                return null;
-            }        
+            return null;
+        }        
 #endregion            
         }          
    }
