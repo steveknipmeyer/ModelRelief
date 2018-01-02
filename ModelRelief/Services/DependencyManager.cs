@@ -270,9 +270,20 @@ namespace ModelRelief.Services
                 }
                 var dependentModelsByType = await findDependentModelsAsyncMethod (rootType, rootPrimaryKey, userId);
 
-                // WIP" recursion here...
-
+                // recursively find dependents
                 dependentModels.AddRange(dependentModelsByType);
+                if (dependentModelsByType.Any())
+                {
+                    foreach (var dependentModel in dependentModelsByType)
+                    {
+                        var rootTypePrime        = dependentModel.GetType();
+                        var rootPrimaryKeyPrime  = dependentModel.Id;
+                        var dependentTypesPrime  = DependencyManager.GetClassDependentTypes(rootTypePrime);
+                        var dependentModelsPrime = await FindDependentModels(dependentModel.UserId, rootTypePrime, rootPrimaryKeyPrime, dependentTypesPrime);
+
+                        dependentModels.AddRange(dependentModelsPrime);
+                    }
+                }
             }
             return dependentModels;
         }

@@ -10,10 +10,6 @@
 
 <-- Short Term
     How can properties be excluded from entity processing?
-
-    Indirect Dependency
-        Camera->DepthBuffer->Mesh?
-
     Develop integration tests for the Dependency Manager.
     Should FileTimeStamp be exposed?
 
