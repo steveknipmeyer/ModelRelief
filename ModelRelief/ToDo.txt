@@ -9,8 +9,12 @@
         Scale with a Python processor.
 
 <-- Short Term
+    How can properties be excluded from entity processing?
+
     Indirect Dependency
         Camera->DepthBuffer->Mesh?
+
+    Develop integration tests for the Dependency Manager.
     Should FileTimeStamp be exposed?
 
     Dependency Manager
@@ -28,12 +32,14 @@
                     DepthBufferGenerationRequest(?, requires graphics)
                 Update disk file names to match metadata Name.
 
-        EntityState.Modified.Modified
-        EntityState.Deleted
-            Set FileIsSynchronized = false.
-            
-        EntityState.Added
-            If the model is GeneratedFileDomainModel and FileIsSynchronized = true, schedule a file generation.
+        Dependency Handling                    
+            Modified           
+                For GeneratedFileDomainModel root models, if FileIsSynchronized = true, schedule a file generation.                                                
+                For all GeneratedFileDomainModel dependents, set FileIsSynchronized = false.
+            Deleted
+                For all GeneratedFileDomainModel dependents, set FileIsSynchronized = false.
+            Added
+                For all GeneratedFileDomainModel dependents, if FileIsSynchronized = true, schedule a file generation.
 
         FileDomainModelDependencyHandler
             Implement support for renaming the disk file when the metadata Name property changes.

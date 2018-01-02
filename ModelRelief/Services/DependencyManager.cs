@@ -78,13 +78,7 @@ namespace ModelRelief.Services
         /// </summary>
         private void Initialize()
         {
-            DependentTypes = new List<Type>();
-            // no class dependencies?; skip
-            if (DependencyManager.ClassHasAttribute(out Attribute classAttribute, EntityType, typeof(DependentFiles)))
-            {
-                DependentFiles dependentFiles = classAttribute as DependentFiles;
-                DependentTypes = dependentFiles.Classes;
-            }
+            DependentTypes = DependencyManager.GetClassDependentTypes(EntityType);
         }
     }
 
@@ -178,6 +172,23 @@ namespace ModelRelief.Services
         }
 
         /// <summary>
+        /// Returns a collection of dependent types.
+        /// Dependent classes are marked with the DependentFiles attribute.
+        /// </summary>
+        public static List<Type> GetClassDependentTypes (Type classType)
+        {
+            var dependentTypes = new List<Type>();
+
+            // class attribute exists?
+            if (DependencyManager.ClassHasAttribute(out Attribute classAttribute, classType, typeof(DependentFiles)))
+            {
+                DependentFiles dependentFiles = classAttribute as DependentFiles;
+                dependentTypes = dependentFiles.Classes;
+            }
+            return dependentTypes;
+        }
+
+        /// <summary>
         /// Find all models that reference the given root (type and primary key).
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
@@ -221,14 +232,27 @@ namespace ModelRelief.Services
         /// <returns>Collection of the dependent models.</returns>
         public async Task<List<DomainModel>> FindDependentModels(TransactionEntity transactionEntity)
         {
+            return await FindDependentModels(transactionEntity.UserId, transactionEntity.EntityType, transactionEntity.PrimaryKey, transactionEntity.DependentTypes);
+        }
+
+        /// <summary>
+        /// Finds the dependent models for a given model.
+        /// </summary>
+        /// <param name="userId">Owning user.</param>
+        /// <param name="rootType">Type of root.</param>
+        /// <param name="rootPrimaryKey">Primary key of root.</param>
+        /// <param name="dependentTypes">Types dependent on the root.</param>
+        /// <returns>Collection of dependent models.</returns>
+        public async Task<List<DomainModel>> FindDependentModels(string userId, Type rootType, int rootPrimaryKey, List<Type> dependentTypes)
+        {
             var dependentModels = new List<DomainModel>();
 
             // primary key
-            if (!(transactionEntity.PrimaryKey > 0))
+            if (!(rootPrimaryKey > 0))
                 return dependentModels;
 
             Func<Type, int, string , Task<List<DomainModel>>> findDependentModelsAsyncMethod = null;
-            foreach (Type dependentType in transactionEntity.DependentTypes)
+            foreach (Type dependentType in dependentTypes)
             {
                 switch(dependentType.Name) 
                 {
@@ -244,10 +268,12 @@ namespace ModelRelief.Services
                         Debug.Assert(false, message);
                         throw new ArgumentException(message);
                 }
-                var dependentModelsByType = await findDependentModelsAsyncMethod (transactionEntity.EntityType, transactionEntity.PrimaryKey, transactionEntity.UserId);
+                var dependentModelsByType = await findDependentModelsAsyncMethod (rootType, rootPrimaryKey, userId);
+
+                // WIP" recursion here...
+
                 dependentModels.AddRange(dependentModelsByType);
             }
-
             return dependentModels;
         }
 
@@ -267,19 +293,19 @@ namespace ModelRelief.Services
                     if (!transactionEntity.HasDependents)
                         continue;
 
-                    var dependentModelsEntity = new List<DomainModel> ();
+                    var dependentModelsByEntity = new List<DomainModel> ();
                     switch (changedEntity.State)
                     {
                         case EntityState.Added:
-                            dependentModelsEntity = await ProcessAddedEntity(transactionEntity);
+                            dependentModelsByEntity = await ProcessAddedEntity(transactionEntity);
                             break;
 
                         case EntityState.Deleted:
-                            dependentModelsEntity = await ProcessDeletedEntity(transactionEntity);
+                            dependentModelsByEntity = await ProcessDeletedEntity(transactionEntity);
                             break;
 
                         case EntityState.Modified:
-                            dependentModelsEntity = await ProcessModifiedEntity(transactionEntity);
+                            dependentModelsByEntity = await ProcessModifiedEntity(transactionEntity);
                             break;
 
                         default:
@@ -288,7 +314,7 @@ namespace ModelRelief.Services
                             break;
                     }
 
-                    dependentModelsAll.AddRange(dependentModelsEntity);
+                    dependentModelsAll.AddRange(dependentModelsByEntity);
                 }
                 ProcessDependentModels(dependentModelsAll);
             }
@@ -306,6 +332,7 @@ namespace ModelRelief.Services
         private async Task<List<DomainModel>> ProcessModifiedEntity(TransactionEntity transactionEntity)
         {
             var dependentModels = new List<DomainModel>();
+            bool propertyChanged = false;
             foreach(var property in transactionEntity.ChangeTrackerEntity.OriginalValues.Properties)
             {
                 var propertyModification = new PropertyModification(transactionEntity.ChangeTrackerEntity, property);
@@ -315,16 +342,20 @@ namespace ModelRelief.Services
                     if (!PropertyHasAttribute(out Attribute dependentFileProperty, transactionEntity.EntityType, property.Name, typeof(DependentFileProperty)))
                         continue;
 
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine($"Class {transactionEntity.EntityType} has (first) dependent file {transactionEntity.DependentTypes[0]}.");
-                    Console.ForegroundColor = ConsoleColor.White;
-
-                    dependentModels = await FindDependentModels(transactionEntity);
-
-                    // no more properties need to be examined; all dependent models found from first DependentFileProperty
-                    return dependentModels;
+                    propertyChanged = true;
+                    // WIP: Based on context of property change, construct a postprocess request (e.g. FileGeneration, FileRename).
                 }
             }
+
+            if (propertyChanged)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"Class {transactionEntity.EntityType} has (first) dependent file {transactionEntity.DependentTypes[0]}.");
+                Console.ForegroundColor = ConsoleColor.White;
+
+                dependentModels = await FindDependentModels(transactionEntity);
+            }
+
             return dependentModels;
         }
 
