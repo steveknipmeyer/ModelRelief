@@ -6,15 +6,11 @@
 using FluentAssertions;
 using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Domain;
-using ModelRelief.Dto;
+using ModelRelief.Test.TestModels;
 using Newtonsoft.Json;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -24,20 +20,20 @@ namespace ModelRelief.Test.Integration
     /// Integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
-    [Collection("Integration")]
+    [Collection("Database")]
     public abstract class IntegrationTests <TEntity, TGetModel>: IClassFixture<ClassFixture>, IAsyncLifetime
         where TEntity   : DomainModel
         where TGetModel : class, ITGetModel, new()
     {
-        public ClassFixture ServerFixture { get; set; }
+        public ClassFixture ClassFixture { get; set; }
         public TestModel<TEntity, TGetModel> TestModel { get; set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public IntegrationTests(ClassFixture serverFixture, TestModel<TEntity, TGetModel> testModel)
+        public IntegrationTests(ClassFixture classFixture, TestModel<TEntity, TGetModel> testModel)
         {
-            ServerFixture = serverFixture;
+            ClassFixture = classFixture;
             TestModel     = testModel;
 
             TestModel.Initialize();
@@ -112,7 +108,7 @@ namespace ModelRelief.Test.Integration
             var validModel = TestModel.ConstructValidModel();
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, TestModel.ApiUrl, validModel);
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Post, TestModel.ApiUrl, validModel);
 
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -131,7 +127,7 @@ namespace ModelRelief.Test.Integration
             // Arrange
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Delete, $"{TestModel.ApiUrl}/{existingModel.Id}");
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Delete, $"{TestModel.ApiUrl}/{existingModel.Id}");
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);

@@ -13,17 +13,17 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ModelRelief.Test.Integration.MeshTransforms
+namespace ModelRelief.Test.TestModels.DepthBuffers
 {
     /// <summary>
-    /// MeshTransform test model.
+    /// DepthBuffer test model.
     /// </summary>
-    public class MeshTransformTestModel : TestModel<Domain.MeshTransform, Dto.MeshTransform>
+    public class DepthBufferTestModel : TestModel<Domain.DepthBuffer, Dto.DepthBuffer>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public MeshTransformTestModel() :
+        public DepthBufferTestModel() :
             base ()
         {
         }
@@ -33,26 +33,27 @@ namespace ModelRelief.Test.Integration.MeshTransforms
         /// </summary>
         public override void Initialize()
         {
-            ApiUrl = "/api/v1/meshtransforms";
-            UxUrl  = "/meshtransforms";
+            ApiUrl = "/api/v1/depth-buffers";
+            UxUrl  = "/depthbuffers";
             
-            IdRange = Enumerable.Range(1, 2);
-            FirstModelName = "Identity";
-
-            ReferencePropertyNames = new List<string> {"ProjectId"};
+            IdRange = Enumerable.Range(1, 3);
+            FirstModelName = "lucy.raw";
+            
+            ReferencePropertyNames = new List<string> {"ProjectId", "ModelId", "CameraId"};
             InvalidReferenceProperty = 0;
             ValidReferenceProperty   = 1;
 
-            EnumPropertyName = null;
+            EnumPropertyName = "Format";
         }
 
         /// <summary>
         /// Constructs a valid model.
         /// </summary>
         /// <returns>Valid model.</returns>
-        public override Dto.MeshTransform ConstructValidModel()
+        public override Dto.DepthBuffer ConstructValidModel()
         {
             var validModel = base.ConstructValidModel();
+            validModel.Format = Domain.DepthBufferFormat.Raw;
 
             return validModel;
         }

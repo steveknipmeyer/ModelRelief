@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Domain;
 using ModelRelief.Dto;
+using ModelRelief.Test.TestModels;
+using ModelRelief.Test.TestModels.DepthBuffers;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -32,8 +34,8 @@ namespace ModelRelief.Test.Integration
         /// <summary>
         /// Constructor
         /// </summary>
-        public FileIntegrationTests(ClassFixture serverFixture, TestModel<TEntity, TGetModel> testModel) :
-            base (serverFixture, testModel)
+        public FileIntegrationTests(ClassFixture classFixture, TestModel<TEntity, TGetModel> testModel) :
+            base (classFixture, testModel)
         {
         }
 
@@ -44,7 +46,7 @@ namespace ModelRelief.Test.Integration
         /// <returns></returns>
         public byte[] ByteArrayFromFile(string fileName)
         {
-            var fileNamePath = $"{ServerFixture.Framework.GetTestFilesPath()}/{fileName}";
+            var fileNamePath = $"{Settings.GetTestFilesPath()}/{fileName}";
             if (!File.Exists(fileNamePath))
                 return null;
 
@@ -62,7 +64,7 @@ namespace ModelRelief.Test.Integration
             var byteArray = ByteArrayFromFile (fileName);
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Post, $"{TestModel.ApiUrl}/{modelId}/file", byteArray, binaryContent: true);
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Post, $"{TestModel.ApiUrl}/{modelId}/file", byteArray, binaryContent: true);
 
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -102,7 +104,7 @@ namespace ModelRelief.Test.Integration
             var modelId = TestModel.IdRange.Min();
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModel.ApiUrl}/{modelId}/file");
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModel.ApiUrl}/{modelId}/file");
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
@@ -119,7 +121,7 @@ namespace ModelRelief.Test.Integration
             var modelId = TestModel.IdRange.Max() + 1;
 
             // Act
-            var requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModel.ApiUrl}/{modelId}/file");
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModel.ApiUrl}/{modelId}/file");
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
@@ -141,7 +143,7 @@ namespace ModelRelief.Test.Integration
             var writtenByteArray = ByteArrayFromFile (fileName);
 
             // Act            
-            requestResponse = await ServerFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModel.ApiUrl}/{newModel.Id}/file");
+            requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModel.ApiUrl}/{newModel.Id}/file");
             var fileContentResult = (Newtonsoft.Json.Linq.JObject) JsonConvert.DeserializeObject(requestResponse.ContentString);
             var encodedString = fileContentResult.GetValue("fileContents");
             var readByteArray = Convert.FromBase64String(encodedString.ToString());

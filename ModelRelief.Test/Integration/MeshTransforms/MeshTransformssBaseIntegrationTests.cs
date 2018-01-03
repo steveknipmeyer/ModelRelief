@@ -5,6 +5,7 @@
 // ------------------------------------------------------------------------//
 using FluentAssertions;
 using ModelRelief.Api.V1.Shared.Rest;
+using ModelRelief.Test.TestModels.MeshTransforms;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,8 +25,8 @@ namespace ModelRelief.Test.Integration.MeshTransforms
         /// <summary>
         /// Constructor
         /// </summary>
-        public MeshTransformsBaseIntegrationTests(ClassFixture serverFixture) :
-            base (serverFixture, new MeshTransformTestModel())
+        public MeshTransformsBaseIntegrationTests(ClassFixture classFixture) :
+            base (classFixture, new MeshTransformTestModel())
         {
         }
 

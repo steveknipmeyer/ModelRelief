@@ -5,6 +5,7 @@
 // ------------------------------------------------------------------------//
 using FluentAssertions;
 using ModelRelief.Api.V1.Shared.Rest;
+using ModelRelief.Test.TestModels.Models;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,8 +25,8 @@ namespace ModelRelief.Test.Integration.Models
         /// <summary>
         /// Constructor
         /// </summary>
-        public ModelsFileIntegrationTests(ClassFixture serverFixture) :
-            base (serverFixture, new Model3dTestModel())
+        public ModelsFileIntegrationTests(ClassFixture classFixture) :
+            base (classFixture, new Model3dTestModel())
         {
         }
 

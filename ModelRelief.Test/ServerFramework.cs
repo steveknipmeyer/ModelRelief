@@ -16,7 +16,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ModelRelief.Test.Integration
+namespace ModelRelief.Test
 {
     /// <summary>
     /// HTTP request types.
@@ -42,15 +42,14 @@ namespace ModelRelief.Test.Integration
     /// Sets up a test server and HTTP client for integration testing.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
-    public class Framework
+    public class ServerFramework
     {
         public TestServer Server { get; set; }
         public HttpClient Client { get; set; }
-        public IServiceProvider ServiceProvider { get; set; }
 
-        public Framework()
+        public ServerFramework()
         {
-            var contentRootPath = GetContentRootPath();           
+            var contentRootPath = Settings.GetContentRootPath();           
             Directory.SetCurrentDirectory(contentRootPath);
 
             Server = new TestServer(WebHost.CreateDefaultBuilder(null)
@@ -70,35 +69,6 @@ namespace ModelRelief.Test.Integration
                                             .UseStartup<Startup>());
 
             Client = Server.CreateClient();
-            ServiceProvider = Server.Host.Services;
-        }
-
-        /// <summary>
-        /// Returns the root of the content folder. wwwroot is below this folder.
-        /// </summary>
-        /// <returns>Content folder root.</returns>
-        public string GetContentRootPath()
-        {
-            // e.g. D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief.Test\bin\Debug\netcoreapp2.0
-            var currentDirectory = Directory.GetCurrentDirectory();
-
-            // reset path from <top> down
-            var contentRootPath = currentDirectory.Remove (currentDirectory.IndexOf(Settings.ContentRootFolder) + Settings.ContentRootFolder.Length);
-            contentRootPath = Path.Combine (contentRootPath, Settings.ContentRootFolder) + @"\";
-
-            return contentRootPath;
-        }
-
-        /// <summary>
-        /// Returns the root of the test files folder. 
-        /// </summary>
-        /// <returns>Test files folder.</returns>
-        public string GetTestFilesPath()
-        {
-            var contentRootPath = GetContentRootPath();
-            var testFilesFolder = $"{contentRootPath}/{Settings.TestFilesFolder}";
-
-            return testFilesFolder;
         }
 
         /// <summary>

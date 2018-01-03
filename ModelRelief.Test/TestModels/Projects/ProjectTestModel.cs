@@ -13,17 +13,17 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ModelRelief.Test.Integration.DepthBuffers
+namespace ModelRelief.Test.TestModels.Projects
 {
     /// <summary>
-    /// DepthBuffer test model.
+    /// Project test model.
     /// </summary>
-    public class DepthBufferTestModel : TestModel<Domain.DepthBuffer, Dto.DepthBuffer>
+    public class ProjectTestModel : TestModel<Domain.Project, Dto.Project>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public DepthBufferTestModel() :
+        public ProjectTestModel() :
             base ()
         {
         }
@@ -33,27 +33,26 @@ namespace ModelRelief.Test.Integration.DepthBuffers
         /// </summary>
         public override void Initialize()
         {
-            ApiUrl = "/api/v1/depth-buffers";
-            UxUrl  = "/depthbuffers";
+            ApiUrl = "/api/v1/projects";
+            UxUrl  = "/projects";
             
             IdRange = Enumerable.Range(1, 3);
-            FirstModelName = "lucy.raw";
-            
-            ReferencePropertyNames = new List<string> {"ProjectId", "ModelId", "CameraId"};
+            FirstModelName = "ModelRelief";
+
+            ReferencePropertyNames = new List<string>();
             InvalidReferenceProperty = 0;
             ValidReferenceProperty   = 1;
 
-            EnumPropertyName = "Format";
+            EnumPropertyName = null;
         }
 
         /// <summary>
         /// Constructs a valid model.
         /// </summary>
         /// <returns>Valid model.</returns>
-        public override Dto.DepthBuffer ConstructValidModel()
+        public override Dto.Project ConstructValidModel()
         {
             var validModel = base.ConstructValidModel();
-            validModel.Format = Domain.DepthBufferFormat.Raw;
 
             return validModel;
         }

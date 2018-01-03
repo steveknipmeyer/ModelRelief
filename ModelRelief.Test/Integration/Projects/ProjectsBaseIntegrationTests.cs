@@ -5,6 +5,7 @@
 // ------------------------------------------------------------------------//
 using FluentAssertions;
 using ModelRelief.Api.V1.Shared.Rest;
+using ModelRelief.Test.TestModels.Projects;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,8 +25,8 @@ namespace ModelRelief.Test.Integration.Projects
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProjectsBaseIntegrationTests(ClassFixture serverFixture) :
-            base (serverFixture, new ProjectTestModel())
+        public ProjectsBaseIntegrationTests(ClassFixture classFixture) :
+            base (classFixture, new ProjectTestModel())
         {
         }
 

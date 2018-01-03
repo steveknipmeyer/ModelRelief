@@ -228,16 +228,6 @@ namespace ModelRelief.Services
         /// <summary>
         /// Finds the dependent models for a given model.
         /// </summary>
-        /// <param name="transactionEntity">Entity scheduled by ChangeTracker.</param>
-        /// <returns>Collection of the dependent models.</returns>
-        public async Task<List<DomainModel>> FindDependentModels(TransactionEntity transactionEntity)
-        {
-            return await FindDependentModels(transactionEntity.UserId, transactionEntity.EntityType, transactionEntity.PrimaryKey, transactionEntity.DependentTypes);
-        }
-
-        /// <summary>
-        /// Finds the dependent models for a given model.
-        /// </summary>
         /// <param name="userId">Owning user.</param>
         /// <param name="rootType">Type of root.</param>
         /// <param name="rootPrimaryKey">Primary key of root.</param>
@@ -286,6 +276,16 @@ namespace ModelRelief.Services
                 }
             }
             return dependentModels;
+        }
+
+        /// <summary>
+        /// Finds the dependent models for a given model.
+        /// </summary>
+        /// <param name="transactionEntity">Entity scheduled by ChangeTracker.</param>
+        /// <returns>Collection of the dependent models.</returns>
+        public async Task<List<DomainModel>> FindDependentModels(TransactionEntity transactionEntity)
+        {
+            return await FindDependentModels(transactionEntity.UserId, transactionEntity.EntityType, transactionEntity.PrimaryKey, transactionEntity.DependentTypes);
         }
 
         /// <summary>

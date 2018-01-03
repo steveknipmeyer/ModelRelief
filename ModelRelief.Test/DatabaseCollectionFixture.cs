@@ -19,38 +19,36 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ModelRelief.Test.Integration
+namespace ModelRelief.Test
 {
     /// <summary>
     /// Represents the shared setup for all classes (of the same collection name).
     /// This is run once for every collection.
     /// </summary>
-    public class CollectionFixture : IDisposable
+    public class DatabaseCollectionFixture : IDisposable
     {
-        public Framework Framework { get; }
-
         /// <summary>
         /// Constructor.
         /// </summary>
-        public CollectionFixture()
+        public DatabaseCollectionFixture()
         {
-            var framework = new Framework();
-            var serviceProvider = framework.ServiceProvider;
+            var serverFramework = new ServerFramework();
+            var serviceProvider = serverFramework.Server.Host.Services;
 
             var dbInitializer = new DbInitializer(serviceProvider);
             dbInitializer.SynchronizeTestDatabase(restore: true);
         }
 
         /// <summary>
-        /// Dispose of unmanaged resources.
+        /// Dispose of owned managed resources.
         /// </summary>
         public void Dispose()
         {
         }
     }
 
-    [CollectionDefinition("Integration")]
-    public class IntegrationTestCollection : ICollectionFixture<CollectionFixture>
+    [CollectionDefinition("Database")]
+    public class DatabaseCollection : ICollectionFixture<DatabaseCollectionFixture>
     {
         // This class has no code, and is never created. Its purpose is simply
         // to be the place to apply [CollectionDefinition] and all the

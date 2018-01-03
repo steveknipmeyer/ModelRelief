@@ -13,7 +13,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ModelRelief.Test.Integration.Models
+namespace ModelRelief.Test.TestModels.Models
 {
     /// <summary>
     /// Model3d test model.

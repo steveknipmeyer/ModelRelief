@@ -9,8 +9,8 @@
         Scale with a Python processor.
 
 <-- Short Term
+
     How can properties be excluded from entity processing?
-    Develop integration tests for the Dependency Manager.
     Should FileTimeStamp be exposed?
 
     Dependency Manager

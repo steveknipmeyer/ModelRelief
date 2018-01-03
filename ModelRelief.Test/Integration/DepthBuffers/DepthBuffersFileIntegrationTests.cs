@@ -5,6 +5,7 @@
 // ------------------------------------------------------------------------//
 using FluentAssertions;
 using ModelRelief.Api.V1.Shared.Rest;
+using ModelRelief.Test.TestModels.DepthBuffers;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,8 +25,8 @@ namespace ModelRelief.Test.Integration.DepthBuffers
         /// <summary>
         /// Constructor
         /// </summary>
-        public DepthBuffersFileIntegrationTests(ClassFixture serverFixture) :
-            base (serverFixture, new DepthBufferTestModel())
+        public DepthBuffersFileIntegrationTests(ClassFixture classFixture) :
+            base (classFixture, new DepthBufferTestModel())
         {
         }
     }

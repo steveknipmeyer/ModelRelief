@@ -3,20 +3,9 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
-using FluentAssertions;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Dto;
-using Newtonsoft.Json;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Threading.Tasks;
-using Xunit;
 
-namespace ModelRelief.Test.Integration
+namespace ModelRelief.Test
 {
     /// <summary>
     /// Represents the shared instance of the TestServer to support multiple tests.
@@ -24,18 +13,23 @@ namespace ModelRelief.Test.Integration
     /// </summary>
     public class ClassFixture : IDisposable
     {
-        public Framework Framework { get; }
+        public ServerFramework ServerFramework { get; }
+        public IServiceProvider ServiceProvider { get; set; }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         public ClassFixture()
         {
-            Framework = new Framework();
+            // WIP: Only the integration tests directly require the TestServer. However, all tests (integration, unit) require IServiceProvider.
+            // The TestServer provides access to IServiceProvider through Server.Host so the ServerFramework is present in all tests.
+            ServerFramework = new ServerFramework();
+
+            ServiceProvider = ServerFramework.Server.Host.Services;
         }
 
         /// <summary>
-        /// Dispose of unmanaged resources.
+        /// Dispose of owned managed resources.
         /// </summary>
         public void Dispose()
         {

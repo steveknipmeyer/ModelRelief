@@ -13,7 +13,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ModelRelief.Test.Integration.Cameras
+namespace ModelRelief.Test.TestModels.Cameras
 
 {
     /// <summary>

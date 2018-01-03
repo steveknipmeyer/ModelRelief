@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace ModelRelief.Test.Unit.Models
+namespace ModelRelief.Test.Unit
 {
     public class ModelsUnitTests
     {

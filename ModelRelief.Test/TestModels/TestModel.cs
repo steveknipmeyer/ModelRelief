@@ -3,21 +3,17 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
-using FluentAssertions;
 using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Domain;
-using ModelRelief.Dto;
 using Newtonsoft.Json;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ModelRelief.Test.Integration
+namespace ModelRelief.Test.TestModels
 {
     /// <summary>
     /// Represents a test model under integration testing.
@@ -70,9 +66,9 @@ namespace ModelRelief.Test.Integration
         /// </summary>
         /// <param name="id">Id of model to retrieve.</param>
         /// <returns>Existing model.</returns>
-        public async Task<TGetModel> FindModel(ClassFixture serverFixture, int modelId)
+        public async Task<TGetModel> FindModel(ClassFixture classFixture, int modelId)
         {
-            var requestResponse = await serverFixture.Framework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiUrl}/{modelId}");
+            var requestResponse = await classFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiUrl}/{modelId}");
 
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 

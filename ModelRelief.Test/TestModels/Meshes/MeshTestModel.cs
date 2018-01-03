@@ -13,17 +13,17 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ModelRelief.Test.Integration.Projects
+namespace ModelRelief.Test.TestModels.Meshes
 {
     /// <summary>
-    /// Project test model.
+    /// Mesh test model.
     /// </summary>
-    public class ProjectTestModel : TestModel<Domain.Project, Dto.Project>
+    public class MeshTestModel : TestModel<Domain.Mesh, Dto.Mesh>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProjectTestModel() :
+        public MeshTestModel() :
             base ()
         {
         }
@@ -33,26 +33,27 @@ namespace ModelRelief.Test.Integration.Projects
         /// </summary>
         public override void Initialize()
         {
-            ApiUrl = "/api/v1/projects";
-            UxUrl  = "/projects";
+            ApiUrl = "/api/v1/meshes";
+            UxUrl  = "/meshes";
             
             IdRange = Enumerable.Range(1, 3);
-            FirstModelName = "ModelRelief";
+            FirstModelName = "lucy.obj";
 
-            ReferencePropertyNames = new List<string>();
+            ReferencePropertyNames = new List<string> {"ProjectId", "CameraId", "DepthBufferId", "MeshTransformId"};
             InvalidReferenceProperty = 0;
             ValidReferenceProperty   = 1;
 
-            EnumPropertyName = null;
+            EnumPropertyName = "Format";
         }
 
         /// <summary>
         /// Constructs a valid model.
         /// </summary>
         /// <returns>Valid model.</returns>
-        public override Dto.Project ConstructValidModel()
+        public override Dto.Mesh ConstructValidModel()
         {
             var validModel = base.ConstructValidModel();
+            validModel.Format = Domain.MeshFormat.OBJ;
 
             return validModel;
         }

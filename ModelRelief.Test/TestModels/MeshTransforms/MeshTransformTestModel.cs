@@ -13,17 +13,17 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ModelRelief.Test.Integration.Meshes
+namespace ModelRelief.Test.TestModels.MeshTransforms
 {
     /// <summary>
-    /// Mesh test model.
+    /// MeshTransform test model.
     /// </summary>
-    public class MeshTestModel : TestModel<Domain.Mesh, Dto.Mesh>
+    public class MeshTransformTestModel : TestModel<Domain.MeshTransform, Dto.MeshTransform>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public MeshTestModel() :
+        public MeshTransformTestModel() :
             base ()
         {
         }
@@ -33,27 +33,26 @@ namespace ModelRelief.Test.Integration.Meshes
         /// </summary>
         public override void Initialize()
         {
-            ApiUrl = "/api/v1/meshes";
-            UxUrl  = "/meshes";
+            ApiUrl = "/api/v1/meshtransforms";
+            UxUrl  = "/meshtransforms";
             
-            IdRange = Enumerable.Range(1, 3);
-            FirstModelName = "lucy.obj";
+            IdRange = Enumerable.Range(1, 2);
+            FirstModelName = "Identity";
 
-            ReferencePropertyNames = new List<string> {"ProjectId", "CameraId", "DepthBufferId", "MeshTransformId"};
+            ReferencePropertyNames = new List<string> {"ProjectId"};
             InvalidReferenceProperty = 0;
             ValidReferenceProperty   = 1;
 
-            EnumPropertyName = "Format";
+            EnumPropertyName = null;
         }
 
         /// <summary>
         /// Constructs a valid model.
         /// </summary>
         /// <returns>Valid model.</returns>
-        public override Dto.Mesh ConstructValidModel()
+        public override Dto.MeshTransform ConstructValidModel()
         {
             var validModel = base.ConstructValidModel();
-            validModel.Format = Domain.MeshFormat.OBJ;
 
             return validModel;
         }

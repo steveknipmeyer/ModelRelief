@@ -3,15 +3,7 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
-using FluentAssertions;
-using ModelRelief.Api.V1.Shared.Rest;
-using Newtonsoft.Json;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Xunit;
+using ModelRelief.Test.TestModels.Cameras;
 
 namespace ModelRelief.Test.Integration.Cameras
 {
@@ -24,8 +16,8 @@ namespace ModelRelief.Test.Integration.Cameras
         /// <summary>
         /// Constructor
         /// </summary>
-        public CamerasBaseIntegrationTests(ClassFixture serverFixture) :
-            base (serverFixture, new CameraTestModel())
+        public CamerasBaseIntegrationTests(ClassFixture classFixture) :
+            base (classFixture, new CameraTestModel())
         {
         }
 

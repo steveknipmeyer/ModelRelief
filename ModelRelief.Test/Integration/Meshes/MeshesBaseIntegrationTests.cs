@@ -3,15 +3,7 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
-using FluentAssertions;
-using ModelRelief.Api.V1.Shared.Rest;
-using Newtonsoft.Json;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Xunit;
+using ModelRelief.Test.TestModels.Meshes;
 
 namespace ModelRelief.Test.Integration.Meshes
 {
@@ -24,8 +16,8 @@ namespace ModelRelief.Test.Integration.Meshes
         /// <summary>
         /// Constructor
         /// </summary>
-        public MeshesBaseIntegrationTests(ClassFixture serverFixture) :
-            base (serverFixture, new MeshTestModel())
+        public MeshesBaseIntegrationTests(ClassFixture classFixture) :
+            base (classFixture, new MeshTestModel())
         {
         }
 
