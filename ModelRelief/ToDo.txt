@@ -9,6 +9,8 @@
         Scale with a Python processor.
 
 <-- Short Term
+    DependencyManager Tests
+        GetClassDependentTypes
 
     How can properties be excluded from entity processing?
     Should FileTimeStamp be exposed?

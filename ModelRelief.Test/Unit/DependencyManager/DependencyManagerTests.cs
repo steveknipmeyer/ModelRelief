@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ModelRelief.Domain;
 using ModelRelief.Utility;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -30,44 +32,119 @@ namespace ModelRelief.Test.Unit.DependencyManager
         }
 
         /// <summary>
-        /// Finds all dependencies of the TopCamera.
+        /// Find the dependent models of a given model.
         /// </summary>
-        [Fact]
-        [Trait ("Category", "DependencyManager")]
-        public async Task TopCameraFindsAllDependencies() 
+        /// <param name="rootType">Type of root.</param>
+        /// <param name="rootPrimaryKey">Prinary key of root.</param>
+        /// <returns></returns>
+        private async Task<List<DomainModel>> FindDependentModels(Type rootType, int rootPrimaryKey)
         {
-            // Arrange
-
-            // Act
-            var model = DbContext.Models
-                            .Where(m => (m.Id == 1))
+            var rootModel = DbContext.Models
+                            .Where(m => (m.Id == rootPrimaryKey))
                             .FirstOrDefault();
-            var dependentTypes = Services.DependencyManager.GetClassDependentTypes(typeof(Camera));
-            var dependentModels = await Manager.FindDependentModels(Identity.MockUserId, rootType: typeof(Camera), rootPrimaryKey: 1, dependentTypes: dependentTypes);
 
-            // Assert
-            dependentModels.Count.Should().Be(2);
+            var dependentTypes = Services.DependencyManager.GetClassDependentTypes(rootType);
+            var dependentModels = await Manager.FindDependentModels(Identity.MockUserId, rootType, rootPrimaryKey, dependentTypes);
+
+            return dependentModels;
         }
 
         /// <summary>
-        /// Finds all dependencies of the IsometricCamera.
+        /// Verifies that the target model exists in the given list.
+        /// </summary>
+        /// <param name="modelList">List of models.</param>
+        /// <param name="dependentType">Type of target model.</param>
+        /// <param name="dependentName">Name of target model</param>
+        private void AssertModelExists (List<DomainModel> modelList, Type dependentType, string dependentName)
+        {
+            var model = modelList
+                                .Where (m => ((m.GetType() == dependentType) &&
+                                             (m.Name == dependentName)))
+                                .SingleOrDefault();
+            model.Should().NotBeNull();                            
+        }
+
+        /// <summary>
+        /// Finds all dependents of the TopCamera.
         /// </summary>
         [Fact]
         [Trait ("Category", "DependencyManager")]
-        public async Task IsometricCameraFindsAllDependencies() 
+        public async Task TopCameraFindsAllDependents() 
         {
             // Arrange
+            var topCameraPrimaryKey = 1;
 
             // Act
-            var model = DbContext.Models
-                            .Where(m => (m.Id == 1))
-                            .FirstOrDefault();
-            var dependentTypes = Services.DependencyManager.GetClassDependentTypes(typeof(Camera));
-            var dependentModels = await Manager.FindDependentModels(Identity.MockUserId, rootType: typeof(Camera), rootPrimaryKey: 2, dependentTypes: dependentTypes);
+            var dependentModels = await FindDependentModels(typeof(Camera), topCameraPrimaryKey);
+
+            // Assert
+            dependentModels.Count.Should().Be(2);
+
+            // TopCamera <= DepthBuffer("lucy.raw") <= Mesh("lucy.obj")
+            AssertModelExists(dependentModels, typeof(Domain.DepthBuffer), "lucy.raw");
+            AssertModelExists(dependentModels, typeof(Domain.Mesh), "lucy.obj");
+        }
+
+        /// <summary>
+        /// Finds all dependents of the IsometricCamera.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "DependencyManager")]
+        public async Task IsometricCameraFindsAllDependents()
+        {
+            // Arrange
+            var isometricCameraPrimaryKey = 2;
+
+            // Act
+            var dependentModels = await FindDependentModels(typeof(Camera), isometricCameraPrimaryKey);
 
             // Assert
             dependentModels.Count.Should().Be(4);
+
+            // IsometricCamera <= DepthBuffer("bunny.raw") <= Mesh("bunny.ob")
+            AssertModelExists(dependentModels, typeof(Domain.DepthBuffer), "bunny.raw");
+            AssertModelExists(dependentModels, typeof(Domain.Mesh), "bunny.obj");
+
+            // IsometricCamera <= DepthBuffer("armadillo.raw") <= Mesh("armadillo.obj")
+            AssertModelExists(dependentModels, typeof(Domain.DepthBuffer), "armadillo.raw");
+            AssertModelExists(dependentModels, typeof(Domain.Mesh), "armadillo.obj");
         }
 
+        /// <summary>
+        /// Finds all dependents of the Armadillo DepthBuffer.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "DependencyManager")]
+        public async Task LucyDepthBufferFindsOneDependent()
+        {
+            // Arrange
+            var lucyDepthBufferPrimaryKey = 1;
+
+            // Act
+            var dependentModels = await FindDependentModels(typeof(DepthBuffer), lucyDepthBufferPrimaryKey);
+
+            // Assert
+            dependentModels.Count.Should().Be(1);
+
+            // DepthBuffer("lucy.raw") <= Mesh("lucy.ob")
+            AssertModelExists(dependentModels, typeof(Domain.Mesh), "lucy.obj");
+        }
+
+        /// <summary>
+        /// Finds no dependents on the Lucy Model3d.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "DependencyManager")]
+        public async Task LucyModel3dHasNoDependents()
+        {
+            // Arrange
+            var lucyPrimaryKey = 1;
+
+            // Act
+            var dependentModels = await FindDependentModels(typeof(Model3d), lucyPrimaryKey);
+
+            // Assert
+            dependentModels.Count.Should().Be(0);
+        }
     }
 }
