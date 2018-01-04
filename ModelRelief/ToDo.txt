@@ -9,6 +9,11 @@
         Scale with a Python processor.
 
 <-- Short Term
+
+    Can all database transactions be handled in DbContextTransactionFilter?
+        Why do the controllers persist changes?
+            Those requests that create models (Post)
+
     DependencyManager Tests
         Test property changes.
             Construct a new dependency chain.
@@ -16,14 +21,16 @@
             Confirm that the DependentFile was invalidated.
 
     How can properties be excluded from entity processing?
+
     Should FileTimeStamp be exposed?
 
-    DepthBuffers should have an optional dependency on a Model3d.
-        If the Model3d relationship is present, the dependency exists.
-        Otherwise, the DepthBuffer exists independently, probably due to an explicit upload of a file created in another application.
-        The DependencyManager invalidates DependentFiles only if a dependency changed. So, an existing DepthBuffer with (FileSynchronized = true) would not be impacted.
-
     Dependency Manager
+
+        DepthBuffers should have an optional dependency on a Model3d.
+            If the Model3d relationship is present, the dependency exists.
+            Otherwise, the DepthBuffer exists independently, probably due to an explicit upload of a file created in another application.
+            The DependencyManager invalidates DependentFiles only if a dependency changed. So, an existing DepthBuffer with (FileSynchronized = true) would not be impacted.
+
         ProcessChanges
             PreProcess
                 Find and update all dependencies.

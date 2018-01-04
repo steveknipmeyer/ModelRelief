@@ -126,8 +126,8 @@ namespace ModelRelief
                 { 
                     options.InputFormatters.Insert(0, new RawRequestBodyFormatter());
                     // N.B. Order matters!    
+//                  options.Filters.Add(typeof(DbContextTransactionFilter));
                     options.Filters.Add(typeof(GlobalExceptionFilter));
-                    options.Filters.Add(typeof(DbContextTransactionFilter));
 //                  options.Filters.Add(typeof(ValidatorActionFilter));
                 })
                 .AddFeatureFolders()

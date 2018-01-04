@@ -47,6 +47,9 @@ namespace ModelRelief.Infrastructure
             {
                using (var transaction = _dbContext.Database.BeginTransaction())
                {
+                    // WIP: This filter is disabled. It is generally not necessary to use explicit transactions as DbContext.SaveChanges(Async) employs transactions internally.
+                    //      So, all database operations succees or fail.
+                    //      Moreover, exceptions thrown by asynchronous tasks below here (e.g. await next()) are swallowed so the catch block is never reached here.
                     await next();
 
                     await _dependencyManager.PersistChangesAsync(null);
@@ -55,6 +58,8 @@ namespace ModelRelief.Infrastructure
             }
             catch (Exception ex)
             {
+                _dbContext.Database.RollbackTransaction();
+
                 var message = $"A transaction error occurred for controller: {context.HttpContext.Request.Path}.";
                 _logger.LogError(ex, message);
 

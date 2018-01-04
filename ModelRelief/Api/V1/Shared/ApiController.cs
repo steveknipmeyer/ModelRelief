@@ -126,9 +126,9 @@ namespace ModelRelief.Api.V1.Shared
 
                 return apiValidationResult.ObjectResult();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
     }
