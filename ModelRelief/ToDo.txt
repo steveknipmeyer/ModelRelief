@@ -10,10 +10,18 @@
 
 <-- Short Term
     DependencyManager Tests
-        GetClassDependentTypes
+        Test property changes.
+            Construct a new dependency chain.
+            Modify a DependentFile property.
+            Confirm that the DependentFile was invalidated.
 
     How can properties be excluded from entity processing?
     Should FileTimeStamp be exposed?
+
+    DepthBuffers should have an optional dependency on a Model3d.
+        If the Model3d relationship is present, the dependency exists.
+        Otherwise, the DepthBuffer exists independently, probably due to an explicit upload of a file created in another application.
+        The DependencyManager invalidates DependentFiles only if a dependency changed. So, an existing DepthBuffer with (FileSynchronized = true) would not be impacted.
 
     Dependency Manager
         ProcessChanges

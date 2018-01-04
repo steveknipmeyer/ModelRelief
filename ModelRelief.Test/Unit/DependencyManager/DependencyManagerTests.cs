@@ -43,7 +43,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
                             .Where(m => (m.Id == rootPrimaryKey))
                             .FirstOrDefault();
 
-            var dependentTypes = Services.DependencyManager.GetClassDependentTypes(rootType);
+            var dependentTypes = Services.DependencyManager.GetClassDependentFiles(rootType);
             var dependentModels = await Manager.FindDependentModels(Identity.MockUserId, rootType, rootPrimaryKey, dependentTypes);
 
             return dependentModels;
@@ -62,6 +62,25 @@ namespace ModelRelief.Test.Unit.DependencyManager
                                              (m.Name == dependentName)))
                                 .SingleOrDefault();
             model.Should().NotBeNull();                            
+        }
+
+        /// <summary>
+        /// Assert a given class has the expected DependentFile classes.
+        /// </summary>
+        /// <param name="rootClass">Type of root class.</param>
+        /// <param name="dependentClasses">List of dependent classes.</param>
+        private void AssertClassHasExpectedDependentFiles(Type rootClass, params Type[] dependentClasses)
+        {
+            var dependentFiles = Services.DependencyManager.GetClassDependentFiles(rootClass);
+            dependentFiles.Count.Should().Be(dependentClasses.Count());
+
+            foreach (var dependentFile in dependentFiles)
+            {
+                var dependentType = dependentFiles
+                    .Where( f => (f.Name == dependentFile.Name))
+                    .SingleOrDefault();
+                dependentType.Should().NotBeNull();
+            }
         }
 
         /// <summary>
@@ -145,6 +164,50 @@ namespace ModelRelief.Test.Unit.DependencyManager
 
             // Assert
             dependentModels.Count.Should().Be(0);
+        }
+
+        /// <summary>
+        /// Test whether the Camera class has the exepected dependent types.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "DependencyManager")]
+        public void CameraHasExpectedDependentFiles()
+        {
+            // Assert
+            AssertClassHasExpectedDependentFiles(typeof(Domain.Camera), typeof(Domain.DepthBuffer));
+        }
+
+        /// <summary>
+        /// Test whether the DepthBuffer class has the exepected dependent types.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "DependencyManager")]
+        public void DepthBufferHasExpectedDependentFiles()
+        {
+            // Assert
+            AssertClassHasExpectedDependentFiles(typeof(Domain.DepthBuffer), typeof(Domain.Mesh));
+        }
+
+        /// <summary>
+        /// Test whether the MeshTransform class has the exepected dependent types.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "DependencyManager")]
+        public void MeshTransformHasExpectedDependentFiles()
+        {
+            // Assert
+            AssertClassHasExpectedDependentFiles(typeof(Domain.MeshTransform), typeof(Domain.Mesh));
+        }
+
+        /// <summary>
+        /// Test whether the Model3d class has the exepected dependent types.
+        /// </summary>
+        [Fact]
+        [Trait ("Category", "DependencyManager")]
+        public void Model3dHasExpectedDependentFiles()
+        {
+            // Assert
+            AssertClassHasExpectedDependentFiles(typeof(Domain.Model3d), typeof(Domain.DepthBuffer));
         }
     }
 }

@@ -78,7 +78,7 @@ namespace ModelRelief.Services
         /// </summary>
         private void Initialize()
         {
-            DependentTypes = DependencyManager.GetClassDependentTypes(EntityType);
+            DependentTypes = DependencyManager.GetClassDependentFiles(EntityType);
         }
     }
 
@@ -172,20 +172,20 @@ namespace ModelRelief.Services
         }
 
         /// <summary>
-        /// Returns a collection of dependent types.
+        /// Returns a collection of dependent classes.
         /// Dependent classes are marked with the DependentFiles attribute.
         /// </summary>
-        public static List<Type> GetClassDependentTypes (Type classType)
+        public static List<Type> GetClassDependentFiles (Type classType)
         {
-            var dependentTypes = new List<Type>();
+            var dependentClasses = new List<Type>();
 
             // class attribute exists?
             if (DependencyManager.ClassHasAttribute(out Attribute classAttribute, classType, typeof(DependentFiles)))
             {
                 DependentFiles dependentFiles = classAttribute as DependentFiles;
-                dependentTypes = dependentFiles.Classes;
+                dependentClasses = dependentFiles.Classes;
             }
-            return dependentTypes;
+            return dependentClasses;
         }
 
         /// <summary>
@@ -268,7 +268,7 @@ namespace ModelRelief.Services
                     {
                         var rootTypePrime        = dependentModel.GetType();
                         var rootPrimaryKeyPrime  = dependentModel.Id;
-                        var dependentTypesPrime  = DependencyManager.GetClassDependentTypes(rootTypePrime);
+                        var dependentTypesPrime  = DependencyManager.GetClassDependentFiles(rootTypePrime);
                         var dependentModelsPrime = await FindDependentModels(dependentModel.UserId, rootTypePrime, rootPrimaryKeyPrime, dependentTypesPrime);
 
                         dependentModels.AddRange(dependentModelsPrime);
