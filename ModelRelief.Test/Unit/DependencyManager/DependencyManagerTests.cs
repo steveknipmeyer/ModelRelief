@@ -4,6 +4,7 @@
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 using FluentAssertions;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ModelRelief.Domain;
@@ -28,7 +29,8 @@ namespace ModelRelief.Test.Unit.DependencyManager
             base (classFixture)
         {
             ILogger<Services.DependencyManager> logger = ClassFixture.ServiceProvider.GetRequiredService<ILogger<Services.DependencyManager>>();
-            Manager = new Services.DependencyManager(DbContext, logger);
+            IMediator mediator = ClassFixture.ServiceProvider.GetRequiredService<IMediator>();
+            Manager = new Services.DependencyManager(DbContext, logger, mediator);
         }
 
         /// <summary>

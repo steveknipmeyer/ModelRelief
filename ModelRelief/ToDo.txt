@@ -10,40 +10,39 @@
 
 <-- Short Term
 
-    Can all database transactions be handled in DbContextTransactionFilter?
-        Why do the controllers persist changes?
-            Those requests that create models (Post)
-
     DependencyManager Tests
         Test property changes.
             Construct a new dependency chain.
             Modify a DependentFile property.
             Confirm that the DependentFile was invalidated.
 
-    How can properties be excluded from entity processing?
+    Where should FileRequest be dispatched?
+        DependencyManager
+            The domain model type would need to drive switch statements.
+                new FileRequest<TEntity>
+
+    Should there be specialized implementations of FileRequestHandler?
+        There is no parent class that provides the TEntity type parameter.
+        The implementation of Generate will be very different for Mesh and DepthBuffer.
+            DepthBuffer will be a no-op (for now) since it requires access to graphics hardward.
 
     Should FileTimeStamp be exposed?
+        Should the assignment of FileSynchronized be deferred until the request has completed.
+        FileStamp could serve as the "complete" flag for a long-running request.
 
     Dependency Manager
-
         DepthBuffers should have an optional dependency on a Model3d.
             If the Model3d relationship is present, the dependency exists.
             Otherwise, the DepthBuffer exists independently, probably due to an explicit upload of a file created in another application.
             The DependencyManager invalidates DependentFiles only if a dependency changed. So, an existing DepthBuffer with (FileSynchronized = true) would not be impacted.
 
-        ProcessChanges
-            PreProcess
-                Find and update all dependencies.
-                Create PostProcess list of tasks.
-
-            Save
-                await DbContext.SaveChangesAsync()
-
-            PostProcess
-                Generate all files that need to be updated.
-                    MeshGenerationRequest
-                    DepthBufferGenerationRequest(?, requires graphics)
-                Update disk file names to match metadata Name.
+        New Requests
+               
+            https://stackoverflow.com/questions/33009721/long-running-rest-api-with-queues
+            FileRequest<TEntity> : IRequest<?>
+                MeshGenerateFileRequest
+                DepthBufferGenerateFileRequest
+                    no-op?; requires graphics
 
         Dependency Handling                    
             Modified           
@@ -69,6 +68,8 @@
         Property Change Handlers
             https://msdn.microsoft.com/magazine/mt694083
             https://msdn.microsoft.com/en-us/magazine/mt767693.aspx
+
+    How can properties be excluded (e.g. Attribute) from entity processing?
 
     Files
         How will the Format property be used for Models, DepthBuffers and Meshes?

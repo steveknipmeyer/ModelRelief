@@ -74,6 +74,8 @@ namespace ModelRelief
 #endif
             // generics
             // WIP Why is AsImplementedInterfaces required for the Handlers?
+            builder.RegisterGeneric(typeof(FileRequest<>));
+            builder.RegisterGeneric(typeof(FileRequestHandler<>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(GetSingleRequest<,>));
             builder.RegisterGeneric(typeof(GetSingleRequestHandler<,>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(GetListRequest<,>));

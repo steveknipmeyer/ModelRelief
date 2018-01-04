@@ -3,10 +3,12 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
+using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Database;
 using ModelRelief.Domain;
 using System;
@@ -136,11 +138,13 @@ namespace ModelRelief.Services
     {
         public ModelReliefDbContext DbContext { get; }
         public ILogger Logger { get; }
+        public IMediator Mediator { get; }
 
-        public DependencyManager(ModelReliefDbContext dbContext, ILogger<DependencyManager> logger)
+        public DependencyManager(ModelReliefDbContext dbContext, ILogger<DependencyManager> logger, IMediator mediator)
         {
             DbContext = dbContext;
             Logger = logger;
+            Mediator = mediator;
         }
 
         /// <summary>
@@ -327,7 +331,7 @@ namespace ModelRelief.Services
 
                     dependentModelsAll.AddRange(dependentModelsByEntity);
                 }
-                ProcessDependentModels(dependentModelsAll);
+                await ProcessDependentModels(dependentModelsAll);
             }
             catch (Exception ex)
             {
@@ -412,7 +416,7 @@ namespace ModelRelief.Services
         /// Process an entity scheduled for addition by the ChangeTracker.
         /// </summary>
         /// <param name="dependentModels">All models that are dependent on the current transaction.</param>
-        private void ProcessDependentModels (List<DomainModel> dependentModels)
+        private async Task ProcessDependentModels (List<DomainModel> dependentModels)
         {
             foreach (DomainModel model in dependentModels)
             {
@@ -422,6 +426,15 @@ namespace ModelRelief.Services
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine($"Dependent model : Type = {generatedFileModel.GetType()}, Primary Id = {generatedFileModel.Id}, Name = {generatedFileModel.Name}");
                 Console.ForegroundColor = ConsoleColor.White;
+
+                // dispatch to registered handler
+                var fileRequest = new FileRequest<Mesh>()
+                    {
+                        Operation = FileOperation.Generate,
+                        User = model.User,
+                        Id = model.Id
+                    };
+                var response = await HandleRequestAsync(fileRequest);
             }
         }
 
@@ -437,6 +450,19 @@ namespace ModelRelief.Services
             {   
                 Debug.WriteLine($"DependencyManager.PostProcess : {ex.Message}");
             }
+        }
+
+        /// <summary>
+        /// Dispatches a request (commonly FileRequest).
+        /// </summary>
+        /// <typeparam name="TReturn">Return type of the request.</typeparam>
+        /// <param name="request">FileRequest</param>
+        /// <returns></returns>
+        private async Task<TReturn> HandleRequestAsync<TReturn> (IRequest<TReturn> request)
+        {
+            var response = await Mediator.Send(request);
+
+            return response;
         }
 
         /// <summary>
