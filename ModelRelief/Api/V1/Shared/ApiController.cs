@@ -41,7 +41,8 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
         /// <param name="logger">ILogger.</param>
         /// <param name="mediator">IMediator.</param>
-        protected ApiController (ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<TEntity> logger, IMediator mediator) {
+        protected ApiController (ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<TEntity> logger, IMediator mediator) 
+        {
             DbContext   = dbContext;
             UserManager = userManager;
             Logger      = logger;

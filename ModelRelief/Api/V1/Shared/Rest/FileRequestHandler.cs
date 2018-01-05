@@ -32,7 +32,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     public class FileRequestHandler<TEntity>  : ValidatedHandler<FileRequest<TEntity>, bool>
         where TEntity   : DomainModel
     {
-        private ILogger<TEntity> Logger { get; }
+        private ILogger<FileRequestHandler<TEntity>> Logger { get; }
         public IStorageManager StorageManager { get; }
 
         /// <summary>
@@ -47,10 +47,12 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="validators">List of validators</param>
         /// <param name="logger">ILogger.</param>
         /// <param name="storageManager">Services for file system storage.</param>
-        public FileRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider, IDependencyManager dependencyManager, IEnumerable<IValidator<FileRequest<TEntity>>> validators, ILogger<TEntity> logger, IStorageManager storageManager)
+        public FileRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, 
+                                  Services.IConfigurationProvider configurationProvider, IDependencyManager dependencyManager, IEnumerable<IValidator<FileRequest<TEntity>>> validators, 
+                                  ILogger<FileRequestHandler<TEntity>> logger, IStorageManager storageManager)
             : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators)
         {
-            Logger = logger;
+            Logger         = logger;
             StorageManager = storageManager;
         }
 

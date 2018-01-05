@@ -47,7 +47,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="validators">All validators matching IValidator for the given request.</param>
         /// <param name="logger">ILogger.</param>
-        public PutRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, IDependencyManager dependencyManager, IEnumerable<IValidator<PutRequest<TEntity, TRequestModel, TGetModel>>> validators, ILogger<TEntity> logger)
+        public PutRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, 
+                                 Services.IConfigurationProvider  configurationProvider, IDependencyManager dependencyManager, 
+                                 IEnumerable<IValidator<PutRequest<TEntity, TRequestModel, TGetModel>>> validators, ILogger<TEntity> logger)
             : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators)
         {
             Logger = logger;

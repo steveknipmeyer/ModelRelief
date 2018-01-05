@@ -5,8 +5,7 @@
 // ------------------------------------------------------------------------//
 
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using MediatR;
+using FluentValidation;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +15,10 @@ using ModelRelief.Database;
 using ModelRelief.Domain;
 using ModelRelief.Services;
 using ModelRelief.Utility;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,16 +26,10 @@ using System.Threading.Tasks;
 namespace ModelRelief.Api.V1.Shared.Rest
 {
     /// <summary>
-    /// Represents the concrete handler for a GET single model request.
+    /// Represents the concrete handler for a Mesh FileRequest.
     /// </summary>
-    /// <typeparam name="TEntity">Domain model.</typeparam>
-    /// <typeparam name="TGetModel">DTO Get model.</typeparam>
-    public class GetSingleRequestHandler<TEntity, TGetModel>  : ValidatedHandler<GetSingleRequest<TEntity, TGetModel>, TGetModel>
-        where TEntity   : DomainModel
-        where TGetModel : ITGetModel
+    public class MeshFileRequestHandler : FileRequestHandler<Domain.Mesh>
     {
-        private ILogger<TEntity> Logger { get; }
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -43,33 +39,25 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
+        /// <param name="validators">List of validators</param>
         /// <param name="logger">ILogger.</param>
-       public GetSingleRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, 
-                                      Services.IConfigurationProvider  configurationProvider, IDependencyManager dependencyManager, ILogger<TEntity> logger)
-            : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, dependencyManager, null)
+        /// <param name="storageManager">Services for file system storage.</param>
+        public MeshFileRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, 
+                                      Services.IConfigurationProvider configurationProvider, IDependencyManager dependencyManager, IEnumerable<IValidator<FileRequest<Domain.Mesh>>> validators, 
+                                      ILogger<FileRequestHandler<Domain.Mesh>> logger, IStorageManager storageManager)
+            : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators, logger, storageManager)
         {
-            Logger = logger;
         }
 
         /// <summary>
-        /// Handles the Get single model request.
+        /// Handles the FileRequest.
         /// </summary>
         /// <param name="message">Request message</param>
         /// <param name="cancellationToken">Token to allows operation to be cancelled</param>
         /// <returns></returns>
-        public override async Task<TGetModel> OnHandle(GetSingleRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
+        public override async Task<bool> OnHandle(FileRequest<Domain.Mesh> message, CancellationToken cancellationToken)
         {
-            var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
-
-            // stop tracking to avoid conflicting tracking with updatedModel
-            DbContext.Entry(targetModel).State = EntityState.Detached;
-
-            // expand returned model
-            var expandedUpdatedModel = await DbContext.Set<TEntity>()
-                 .ProjectTo<TGetModel>(Mapper.ConfigurationProvider)
-                 .SingleOrDefaultAsync(m => m.Id == message.Id);
-
-            return expandedUpdatedModel;
+            return await base.OnHandle(message, cancellationToken);
         }
     }
 }

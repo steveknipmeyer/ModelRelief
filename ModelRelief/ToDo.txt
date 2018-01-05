@@ -9,16 +9,20 @@
         Scale with a Python processor.
 
 <-- Short Term
+    Review order of DI parameters and formatting in constructors.
 
-    DependencyManager Tests
-        Test property changes.
-            Construct a new dependency chain.
-            Modify a DependentFile property.
-            Confirm that the DependentFile was invalidated.
+    Examine all ILogger<T> references!
+
+    Introduce factory methods to construct:
+        Generic method delegates
+        FileRequests
+
+    Refactor the dependency processing to use IRequest<bool> or IRequest (FileRequest).
+
 
     Where should FileRequest be dispatched?
         DependencyManager
-            The domain model type would need to drive switch statements.
+            The domain model type would need to drive switch statements since generic types must be known at compile-time.
                 new FileRequest<TEntity>
 
     Should there be specialized implementations of FileRequestHandler?
@@ -31,18 +35,9 @@
         FileStamp could serve as the "complete" flag for a long-running request.
 
     Dependency Manager
-        DepthBuffers should have an optional dependency on a Model3d.
-            If the Model3d relationship is present, the dependency exists.
-            Otherwise, the DepthBuffer exists independently, probably due to an explicit upload of a file created in another application.
-            The DependencyManager invalidates DependentFiles only if a dependency changed. So, an existing DepthBuffer with (FileSynchronized = true) would not be impacted.
-
-        New Requests
-               
-            https://stackoverflow.com/questions/33009721/long-running-rest-api-with-queues
-            FileRequest<TEntity> : IRequest<?>
-                MeshGenerateFileRequest
-                DepthBufferGenerateFileRequest
-                    no-op?; requires graphics
+        FileRequest
+            Long-running Requests
+                https://stackoverflow.com/questions/33009721/long-running-rest-api-with-queues
 
         Dependency Handling                    
             Modified           
@@ -53,9 +48,6 @@
             Added
                 For all GeneratedFileDomainModel dependents, if FileIsSynchronized = true, schedule a file generation.
 
-        FileDomainModelDependencyHandler
-            Implement support for renaming the disk file when the metadata Name property changes.
-
         GeneratedFileDomainModel Dependencies
                                                 Metadata    FileTimeStamp
             DepthBuffer
@@ -65,9 +57,20 @@
                 DepthBuffer                                 X
                 MeshTransform                   X
 
+        DepthBuffers should have an optional dependency on a Model3d.
+            If the Model3d relationship is present, the dependency exists.
+            Otherwise, the DepthBuffer exists independently, probably due to an explicit upload of a file created in another application.
+            The DependencyManager invalidates DependentFiles only if a dependency changed. So, an existing DepthBuffer with (FileSynchronized = true) would not be impacted.
+
         Property Change Handlers
             https://msdn.microsoft.com/magazine/mt694083
             https://msdn.microsoft.com/en-us/magazine/mt767693.aspx
+
+    DependencyManager Tests
+        Test property changes.
+            Construct a new dependency chain.
+            Modify a DependentFile property.
+            Confirm that the DependentFile was invalidated.
 
     How can properties be excluded (e.g. Attribute) from entity processing?
 

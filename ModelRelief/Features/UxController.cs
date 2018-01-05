@@ -32,7 +32,8 @@ namespace ModelRelief.Features
         /// <param name="dbContext">Database context</param>
         /// <param name="mapper">IMapper from DI</param>
         /// <param name="mediator">IMediator from DI</param>
-        protected UxController(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator) {
+        protected UxController(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator) 
+        {
             UserManager = userManager;
             DbContext   = dbContext;
             Mapper      = mapper;

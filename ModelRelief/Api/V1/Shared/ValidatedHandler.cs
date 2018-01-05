@@ -53,14 +53,15 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="validators">List of validators</param>
-        public ValidatedHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider, IDependencyManager dependencyManager, IEnumerable<IValidator<TRequest>> validators)
+        public ValidatedHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, 
+                                Services.IConfigurationProvider  configurationProvider, IDependencyManager dependencyManager, IEnumerable<IValidator<TRequest>> validators)
         {
-            UserManager = userManager ?? throw new System.ArgumentNullException(nameof(dbContext));
-            DbContext = dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
-            Mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
-            HostingEnvironment = hostingEnvironment;
-            ConfigurationProvider = configurationProvider;
-            DependencyManager = dependencyManager;
+            UserManager =           userManager ?? throw new System.ArgumentNullException(nameof(dbContext));
+            DbContext =             dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
+            Mapper =                mapper ?? throw new System.ArgumentNullException(nameof(mapper));
+            HostingEnvironment =    hostingEnvironment ?? throw new System.ArgumentNullException(nameof(hostingEnvironment));
+            ConfigurationProvider = configurationProvider ?? throw new System.ArgumentNullException(nameof(configurationProvider));
+            DependencyManager =     dependencyManager ?? throw new System.ArgumentNullException(nameof(dependencyManager));
 
             // WIP Why are duplicate validators injected here?
             //     Remove duplicates by grouping by Type name.

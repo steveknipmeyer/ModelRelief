@@ -426,15 +426,48 @@ namespace ModelRelief.Services
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine($"Dependent model : Type = {generatedFileModel.GetType()}, Primary Id = {generatedFileModel.Id}, Name = {generatedFileModel.Name}");
                 Console.ForegroundColor = ConsoleColor.White;
+            }
+            await ProcessRequests<bool>(null, dependentModels);
+        }
 
-                // dispatch to registered handler
-                var fileRequest = new FileRequest<Mesh>()
-                    {
-                        Operation = FileOperation.Generate,
-                        User = model.User,
-                        Id = model.Id
-                    };
-                var response = await HandleRequestAsync(fileRequest);
+        /// <summary>
+        /// Process the requests resulting from the dependency processing.
+        /// </summary>
+        /// <param name="requests">All requests resulting from the current transaction.</param>
+        /// <param name="dependentModels">All dependent models.</param>
+        private async Task ProcessRequests<TReturn> (List<IRequest<TReturn>> requests, List<DomainModel> dependentModels)
+        {
+            var model = dependentModels.FirstOrDefault();
+            if (model == null)
+                return;
+
+            // dispatch to registered handler
+            var fileRequests = new List<IRequest<bool>>();
+            var modelRequest = new FileRequest<Model3d>()
+                {
+                    Operation = FileOperation.Rename,
+                    User = model.User,
+                    Id = model.Id
+                };
+            fileRequests.Add(modelRequest);
+            var meshRequest = new FileRequest<Mesh>()
+                {
+                    Operation = FileOperation.Generate,
+                    User = model.User,
+                    Id = model.Id
+                };
+            fileRequests.Add(meshRequest);
+            var depthBufferRequest = new FileRequest<DepthBuffer>()
+                {
+                    Operation = FileOperation.Generate,
+                    User = model.User,
+                    Id = model.Id
+                };
+            fileRequests.Add(depthBufferRequest);
+
+            foreach (var request in fileRequests)
+            {
+                var response = await HandleRequestAsync(request);
             }
         }
 
