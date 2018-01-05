@@ -27,7 +27,7 @@ namespace ModelRelief.Api.V1.Projects
         /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
         /// <param name="logger">ILogger.</param>
         /// <param name="mediator">IMediator.</param>
-        public ProjectsController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<Domain.Project> logger, IMediator mediator)
+        public ProjectsController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<ApiController<Domain.Project>> logger, IMediator mediator)
             : base(dbContext, userManager, logger, mediator)
         {
         }

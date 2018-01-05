@@ -37,7 +37,7 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="logger">ILogger.</param>
         /// <param name="mediator">IMediator.</param>
         /// <remarks>Defaults to use paging.</remarks>
-        protected RestController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<TEntity> logger, IMediator mediator)
+        protected RestController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<ApiController<TEntity>> logger, IMediator mediator)
             : this(dbContext, userManager, logger, mediator, new RestControllerOptions {UsePaging = true}) {}
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="logger">ILogger.</param>
         /// <param name="mediator">IMediator.</param>
         /// <param name="restControllerOptions">Options for paging, etc.</param>
-        protected RestController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<TEntity> logger, IMediator mediator, RestControllerOptions restControllerOptions )
+        protected RestController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<ApiController<TEntity>> logger, IMediator mediator, RestControllerOptions restControllerOptions )
             : base(dbContext, userManager, logger, mediator) 
         {
             RestControllerOptions = restControllerOptions;

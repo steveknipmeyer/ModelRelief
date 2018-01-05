@@ -27,7 +27,7 @@ namespace ModelRelief.Api.V1.MeshTransforms
         /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
         /// <param name="logger">ILogger.</param>
         /// <param name="mediator">IMediator.</param>
-        public MeshTransformsController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<Domain.MeshTransform> logger, IMediator mediator)
+        public MeshTransformsController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<ApiController<Domain.MeshTransform>> logger, IMediator mediator)
             : base(dbContext, userManager, logger, mediator)
         {
         }

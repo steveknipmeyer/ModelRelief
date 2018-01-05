@@ -64,6 +64,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns></returns>
         public override async Task<bool> OnHandle(FileRequest<TEntity> message, CancellationToken cancellationToken)
         {
+            Logger.LogInformation($"FileRequestHandler: Id = {message.Id}");
             // not a file-backed model?
             if (!typeof(FileDomainModel).IsAssignableFrom(typeof(TEntity)))
                 throw new ModelNotBackedByFileException(typeof(TEntity));
