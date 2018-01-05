@@ -32,27 +32,25 @@ namespace ModelRelief.Api.V1.Shared.Rest
     public class FileRequestHandler<TEntity>  : ValidatedHandler<FileRequest<TEntity>, bool>
         where TEntity   : DomainModel
     {
-        private ILogger<FileRequestHandler<TEntity>> Logger { get; }
         public IStorageManager StorageManager { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
+        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
+        /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="validators">List of validators</param>
-        /// <param name="logger">ILogger.</param>
         /// <param name="storageManager">Services for file system storage.</param>
-        public FileRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, 
+        public FileRequestHandler(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IHostingEnvironment hostingEnvironment, 
                                   Services.IConfigurationProvider configurationProvider, IDependencyManager dependencyManager, IEnumerable<IValidator<FileRequest<TEntity>>> validators, 
-                                  ILogger<FileRequestHandler<TEntity>> logger, IStorageManager storageManager)
-            : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators)
+                                  IStorageManager storageManager)
+            : base(dbContext, userManager, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators)
         {
-            Logger         = logger;
             StorageManager = storageManager;
         }
 
@@ -64,7 +62,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns></returns>
         public override async Task<bool> OnHandle(FileRequest<TEntity> message, CancellationToken cancellationToken)
         {
-            Logger.LogInformation($"FileRequestHandler: Id = {message.Id}");
             // not a file-backed model?
             if (!typeof(FileDomainModel).IsAssignableFrom(typeof(TEntity)))
                 throw new ModelNotBackedByFileException(typeof(TEntity));

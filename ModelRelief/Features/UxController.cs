@@ -9,6 +9,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ModelRelief.Api.V1.Shared;
 using ModelRelief.Api.V1.Shared.Errors;
 using ModelRelief.Database;
@@ -20,22 +21,25 @@ namespace ModelRelief.Features
 {
     public abstract class UxController : Controller, IUrlHelperContainer
     {
+        public ModelReliefDbContext         DbContext { get; }
         public UserManager<ApplicationUser> UserManager { get; }
-        public ModelReliefDbContext DbContext { get; }
-        public IMapper Mapper { get; }
-        public IMediator Mediator { get; }
+        public ILogger                      Logger { get; }
+        public IMapper                      Mapper { get; }
+        public IMediator                    Mediator { get; }
 
         /// <summary>
         /// Base UX Controller
         /// </summary>
-        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
+        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
+        /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper from DI</param>
         /// <param name="mediator">IMediator from DI</param>
-        protected UxController(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator) 
+        protected UxController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator) 
         {
-            UserManager = userManager;
             DbContext   = dbContext;
+            UserManager = userManager;
+            Logger      = loggerFactory.CreateLogger(typeof(UxController).Name);
             Mapper      = mapper;
             Mediator    = mediator;
         }

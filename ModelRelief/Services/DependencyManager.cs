@@ -136,9 +136,9 @@ namespace ModelRelief.Services
     /// </summary>
     public class DependencyManager : IDependencyManager
     {
-        public ModelReliefDbContext DbContext { get; }
-        public ILogger Logger { get; }
-        public IMediator Mediator { get; }
+        public ModelReliefDbContext         DbContext { get; }
+        public ILogger<DependencyManager>   Logger { get; }
+        public IMediator                    Mediator { get; }
 
         public DependencyManager(ModelReliefDbContext dbContext, ILogger<DependencyManager> logger, IMediator mediator)
         {

@@ -7,6 +7,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using ModelRelief.Database;
 using ModelRelief.Domain;
 using ModelRelief.Utility;
@@ -23,12 +24,13 @@ namespace ModelRelief.Features.MeshTransforms
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
+        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
+        /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="mediator">IMediator</param>
-        public MeshTransformsController(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator)
-            : base(userManager, dbContext, mapper, mediator)
+        public MeshTransformsController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator)
+            : base(dbContext, userManager, loggerFactory, mapper, mediator)
         {
         }
         

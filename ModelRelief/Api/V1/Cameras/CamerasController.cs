@@ -25,10 +25,10 @@ namespace ModelRelief.Api.V1.Cameras
         /// </summary>
         /// <param name="dbContext">Database context.</param>
         /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
-        /// <param name="logger">ILogger.</param>
+        /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mediator">IMediator.</param>
-        public CamerasController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<ApiController<Domain.Camera>> logger, IMediator mediator)
-            : base(dbContext, userManager, logger, mediator)
+        public CamerasController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMediator mediator)
+            : base(dbContext, userManager, loggerFactory, mediator)
         {
         }
     }

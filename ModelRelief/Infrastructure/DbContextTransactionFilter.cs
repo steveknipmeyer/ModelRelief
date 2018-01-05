@@ -18,8 +18,8 @@ namespace ModelRelief.Infrastructure
     /// </summary>
     public class DbContextTransactionFilter : IAsyncActionFilter
     {
-        private readonly ModelReliefDbContext _dbContext;
-        private IDependencyManager _dependencyManager;
+        private readonly ModelReliefDbContext    _dbContext;
+        private IDependencyManager               _dependencyManager;
         private readonly ILogger<DatabaseLogger> _logger;
 
         /// <summary>

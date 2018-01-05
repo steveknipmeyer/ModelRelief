@@ -7,6 +7,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Database;
 using ModelRelief.Domain;
@@ -20,30 +21,34 @@ namespace ModelRelief.Features
         where TSingleGetModel : ITGetModel
     {
         public ViewControllerOptions ViewControllerOptions { get; }
+        public new ILogger           Logger { get; }                // base class Logger category is UxController
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
+        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
+        /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="mediator">IMediator</param>
         /// <remarks>Defaults to use paging.</remarks>
-        protected ViewController(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator)
-            : this(userManager, dbContext, mapper, mediator, new ViewControllerOptions {UsePaging = true}) {}
+        protected ViewController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator)
+            : this(dbContext, userManager, loggerFactory, mapper, mediator, new ViewControllerOptions {UsePaging = true}) {}
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
+        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
+        /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="mediator">IMediator</param>
         /// <param name="viewControllerOptions">Options for paging, etc.</param>
-        protected ViewController(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator, ViewControllerOptions viewControllerOptions)
-            : base(userManager, dbContext, mapper, mediator) 
+        protected ViewController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator, ViewControllerOptions viewControllerOptions)
+            : base(dbContext, userManager, loggerFactory, mapper, mediator) 
         {
             ViewControllerOptions = viewControllerOptions;
+            Logger                = loggerFactory.CreateLogger(typeof(ViewController<TEntity, TGetModel, TSingleGetModel, TRequestModel>).Name);
         }
 
         #region Get

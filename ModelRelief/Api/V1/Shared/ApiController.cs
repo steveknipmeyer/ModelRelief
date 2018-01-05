@@ -31,7 +31,7 @@ namespace ModelRelief.Api.V1.Shared
     {
         public ModelReliefDbContext             DbContext { get; }
         public UserManager<ApplicationUser>     UserManager { get; }
-        public ILogger<ApiController<TEntity>>  Logger { get; }
+        public ILogger                          Logger { get; }
         public IMediator                        Mediator { get; }
 
         /// <summary>
@@ -39,13 +39,13 @@ namespace ModelRelief.Api.V1.Shared
         /// </summary>
         /// <param name="dbContext">Database context.</param>
         /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
-        /// <param name="logger">ILogger.</param>
+        /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mediator">IMediator.</param>
-        protected ApiController (ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<ApiController<TEntity>> logger, IMediator mediator) 
+        protected ApiController (ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMediator mediator) 
         {
             DbContext   = dbContext;
             UserManager = userManager;
-            Logger      = logger;
+            Logger      = loggerFactory.CreateLogger(typeof(ApiController<TEntity>).Name);
             Mediator    = mediator;
         }
 

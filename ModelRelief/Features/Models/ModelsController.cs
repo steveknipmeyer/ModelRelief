@@ -6,18 +6,14 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using ModelRelief.Api.V1.Shared.Rest;
 using ModelRelief.Database;
 using ModelRelief.Domain;
 using ModelRelief.Services;
 using ModelRelief.Utility;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ModelRelief.Features.Models
@@ -28,22 +24,23 @@ namespace ModelRelief.Features.Models
     [Authorize]
     public class ModelsController : ViewController<Domain.Model3d, Dto.Model3d, Dto.Model3d, Dto.Model3d>
     {
+
         public Services.IConfigurationProvider ConfigurationProvider { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
+        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
+        /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="mediator">IMediator</param>
         /// <param name="configurationProvider">Configuration provider.</param>
-        public ModelsController(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IMediator mediator, Services.IConfigurationProvider configurationProvider)
-            : base(userManager, dbContext, mapper, mediator)
+        public ModelsController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator, Services.IConfigurationProvider configurationProvider)
+            : base(dbContext, userManager, loggerFactory, mapper, mediator)
         {
             ConfigurationProvider = configurationProvider;
         }
-
 
         /// <summary>
         /// Action handler for a Viewer request.

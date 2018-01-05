@@ -37,25 +37,23 @@ namespace ModelRelief.Api.V1.Shared.Rest
         where TEntity    : DomainModel, new()
         where TGetModel  : ITGetModel
     {
-        private ILogger<TEntity> Logger { get; }
         private IStorageManager StorageManager { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
+        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
+        /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
-        /// <param name="logger">ILogger.</param>
         /// <param name="storageManager">Services for file system storage.</param>
-        public PostFileRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, 
-                                      Services.IConfigurationProvider  configurationProvider, IDependencyManager dependencyManager, ILogger<TEntity> logger, IStorageManager storageManager)
-            : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, dependencyManager, null)
+        public PostFileRequestHandler(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IHostingEnvironment hostingEnvironment, 
+                                      Services.IConfigurationProvider  configurationProvider, IDependencyManager dependencyManager, IStorageManager storageManager)
+            : base(dbContext, userManager, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, null)
         {
-            Logger = logger;
             StorageManager = storageManager;
         }
 

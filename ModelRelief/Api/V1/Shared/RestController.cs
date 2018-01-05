@@ -34,22 +34,22 @@ namespace ModelRelief.Api.V1.Shared
         /// </summary>
         /// <param name="dbContext">Database context.</param>
         /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
-        /// <param name="logger">ILogger.</param>
+        /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mediator">IMediator.</param>
         /// <remarks>Defaults to use paging.</remarks>
-        protected RestController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<ApiController<TEntity>> logger, IMediator mediator)
-            : this(dbContext, userManager, logger, mediator, new RestControllerOptions {UsePaging = true}) {}
+        protected RestController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMediator mediator)
+            : this(dbContext, userManager, loggerFactory, mediator, new RestControllerOptions {UsePaging = true}) {}
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context.</param>
         /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
-        /// <param name="logger">ILogger.</param>
+        /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mediator">IMediator.</param>
         /// <param name="restControllerOptions">Options for paging, etc.</param>
-        protected RestController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<ApiController<TEntity>> logger, IMediator mediator, RestControllerOptions restControllerOptions )
-            : base(dbContext, userManager, logger, mediator) 
+        protected RestController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMediator mediator, RestControllerOptions restControllerOptions )
+            : base(dbContext, userManager, loggerFactory, mediator) 
         {
             RestControllerOptions = restControllerOptions;
         }

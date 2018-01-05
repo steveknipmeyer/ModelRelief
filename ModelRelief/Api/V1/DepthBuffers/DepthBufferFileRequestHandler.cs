@@ -33,20 +33,20 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context</param>
+        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
+        /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="validators">List of validators</param>
-        /// <param name="logger">ILogger.</param>
         /// <param name="storageManager">Services for file system storage.</param>
-        public DepthBufferFileRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, 
+        public DepthBufferFileRequestHandler(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IHostingEnvironment hostingEnvironment, 
                                              Services.IConfigurationProvider configurationProvider, IDependencyManager dependencyManager, 
-                                             IEnumerable<IValidator<FileRequest<Domain.DepthBuffer>>> validators, ILogger<FileRequestHandler<Domain.DepthBuffer>> logger, 
+                                             IEnumerable<IValidator<FileRequest<Domain.DepthBuffer>>> validators,  
                                              IStorageManager storageManager)
-            : base(userManager, dbContext, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators, logger, storageManager)
+            : base(dbContext, userManager, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators, storageManager)
         {
         }
 

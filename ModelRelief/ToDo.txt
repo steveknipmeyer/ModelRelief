@@ -9,16 +9,11 @@
         Scale with a Python processor.
 
 <-- Short Term
-    Review order of DI parameters and formatting in constructors.
-
-    Examine all ILogger<T> references!
-
     Introduce factory methods to construct:
         Generic method delegates
         FileRequests
 
     Refactor the dependency processing to use IRequest<bool> or IRequest (FileRequest).
-
 
     Where should FileRequest be dispatched?
         DependencyManager

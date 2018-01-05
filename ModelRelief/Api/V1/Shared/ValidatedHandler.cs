@@ -11,6 +11,7 @@ using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ModelRelief.Api.V1.Shared.Errors;
 using ModelRelief.Database;
 using ModelRelief.Domain;
@@ -35,29 +36,32 @@ namespace ModelRelief.Api.V1.Shared
     public abstract class ValidatedHandler<TRequest, TResponse> : ICancellableAsyncRequestHandler<TRequest, TResponse> 
         where TRequest : IRequest<TResponse>
     {
-        public UserManager<ApplicationUser> UserManager { get; }
-        public ModelReliefDbContext DbContext { get; }
-        public IMapper Mapper { get; }
-        public IHostingEnvironment HostingEnvironment { get; }
-        public Services.IConfigurationProvider ConfigurationProvider { get; }
-        public IDependencyManager DependencyManager { get; }
-        public IEnumerable<IValidator<TRequest>> Validators { get; }
+        public ModelReliefDbContext             DbContext { get; }
+        public UserManager<ApplicationUser>     UserManager { get; }
+        public ILogger                          Logger { get; }
+        public IMapper                          Mapper { get; }
+        public IHostingEnvironment              HostingEnvironment { get; }
+        public Services.IConfigurationProvider  ConfigurationProvider { get; }
+        public IDependencyManager               DependencyManager { get; }
+        public IEnumerable<IValidator<TRequest>>Validators { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="dbContext">Database context.</param>
+        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
+        /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="validators">List of validators</param>
-        public ValidatedHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, IMapper mapper, IHostingEnvironment hostingEnvironment, 
-                                Services.IConfigurationProvider  configurationProvider, IDependencyManager dependencyManager, IEnumerable<IValidator<TRequest>> validators)
+        public ValidatedHandler(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IHostingEnvironment hostingEnvironment, 
+                                Services.IConfigurationProvider configurationProvider, IDependencyManager dependencyManager, IEnumerable<IValidator<TRequest>> validators)
         {
-            UserManager =           userManager ?? throw new System.ArgumentNullException(nameof(dbContext));
             DbContext =             dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
+            UserManager =           userManager ?? throw new System.ArgumentNullException(nameof(dbContext));
+            Logger =                (loggerFactory == null) ? throw new System.ArgumentNullException(nameof(loggerFactory)) : loggerFactory.CreateLogger(typeof(ValidatedHandler<TRequest, TResponse>).Name);
             Mapper =                mapper ?? throw new System.ArgumentNullException(nameof(mapper));
             HostingEnvironment =    hostingEnvironment ?? throw new System.ArgumentNullException(nameof(hostingEnvironment));
             ConfigurationProvider = configurationProvider ?? throw new System.ArgumentNullException(nameof(configurationProvider));

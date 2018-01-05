@@ -26,10 +26,10 @@ namespace ModelRelief.Api.V1.DepthBuffers
         /// </summary>
         /// <param name="dbContext">Database context.</param>
         /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
-        /// <param name="logger">ILogger.</param>
+        /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mediator">IMediator.</param>
-        public DepthBuffersController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<ApiController<Domain.DepthBuffer>> logger, IMediator mediator)
-            : base(dbContext, userManager, logger, mediator)
+        public DepthBuffersController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMediator mediator)
+            : base(dbContext, userManager, loggerFactory, mediator)
         {
         }
     }
