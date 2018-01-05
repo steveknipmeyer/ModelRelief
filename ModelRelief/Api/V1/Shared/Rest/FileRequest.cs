@@ -50,5 +50,13 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// Gets or sets the Id for the file metadata model.
         /// </summary>
         public int Id { get; set; }
+
+        /// <summary>
+        /// Constructor
+        /// A public constructor is needed so it can be located through reflection.
+        /// </summary>
+        public FileRequest()
+        {
+        }
     }
 }

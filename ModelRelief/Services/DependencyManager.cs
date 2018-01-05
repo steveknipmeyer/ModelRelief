@@ -317,6 +317,21 @@ namespace ModelRelief.Services
         }
 
         /// <summary>
+        /// Uses reflection to construct a FileRequest of the given type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private IFileRequest ConstructFileRequest(Type type)
+        {
+            // https://stackoverflow.com/questions/8376622/create-constructor-for-generic-class-using-reflection
+            var fileRequestType = typeof(FileRequest<>).MakeGenericType(type);
+            ConstructorInfo constructor = fileRequestType.GetConstructor(new Type[]{});
+            var fileRequest = constructor.Invoke(new object[]{});
+
+            return fileRequest as IFileRequest;
+        }
+
+        /// <summary>
         /// Constructs a FileRequest for a model that has changed the metadata Name.
         /// The FileRequest will rename the disk file to match the metadata.
         /// </summary>
@@ -324,13 +339,13 @@ namespace ModelRelief.Services
         private async Task<IFileRequest> ConstructRenameFileRequest(TransactionEntity transactionEntity)
         {
             var domainModel = await transactionEntity.GetDomainModel();
-            var fileRequest = new FileRequest<Mesh>            
-                {
-                Operation = FileOperation.Rename,
-                User = domainModel.User,
-                Id = domainModel.Id
-                };
-            return fileRequest;
+            var renameFileRequest = ConstructFileRequest (domainModel.GetType());
+
+            renameFileRequest.Operation = FileOperation.Rename;
+            renameFileRequest.User      = domainModel.User;
+            renameFileRequest.Id        = domainModel.Id;
+            
+            return renameFileRequest;
         }
 
         /// <summary>
@@ -341,13 +356,13 @@ namespace ModelRelief.Services
         private async Task<IFileRequest> ConstructGenerateFileRequest(TransactionEntity transactionEntity)
         {
             var domainModel = await transactionEntity.GetDomainModel();
-            var fileRequest = new FileRequest<Mesh>            
-                {
-                Operation = FileOperation.Generate,
-                User = domainModel.User,
-                Id = domainModel.Id
-                };
-            return fileRequest;
+            var generateFileRequest = ConstructFileRequest (domainModel.GetType());
+
+            generateFileRequest.Operation = FileOperation.Generate;
+            generateFileRequest.User      = domainModel.User;
+            generateFileRequest.Id        = domainModel.Id;
+            
+            return generateFileRequest;
         }
 
         /// <summary>
@@ -363,8 +378,6 @@ namespace ModelRelief.Services
                 foreach (var changedEntity in DbContext.ChangeTracker.Entries().ToList())
                 {
                     var transactionEntity = new TransactionEntity(changedEntity, DbContext);
-                    if (!transactionEntity.HasDependents)
-                        continue;
 
                     var fileRequestsByEntity = new List<IFileRequest> ();
                     switch (changedEntity.State)
@@ -493,7 +506,7 @@ namespace ModelRelief.Services
         }
 
         /// <summary>
-        /// Process the requests resulting from the dependen.
+        /// Process the requests resulting from the transactions.
         /// </summary>
         /// <param name="fileRequests">All FileRequests resulting from the current transaction.</param>
         private async Task ProcessRequests(List<IFileRequest> fileRequests)
