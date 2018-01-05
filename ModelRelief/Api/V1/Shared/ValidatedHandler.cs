@@ -164,42 +164,20 @@ namespace ModelRelief.Api.V1.Shared
                     continue;
 
                 Console.WriteLine("Verifying reference property: " + propertyName + ", Value: " + propertyValue, null);
-
-                // https://stackoverflow.com/questions/298976/is-there-a-better-alternative-than-this-to-switch-on-type
-                var modelExists = false;
-                Func<ClaimsPrincipal, int, Task<bool>> modelExistsAsyncMethod = null;
-
                 switch(referenceType.Name) 
                 {
-                    case nameof(Domain.Camera):
-                        modelExistsAsyncMethod = ModelExistsAsync<Domain.Camera>;
-                        break;
-                    case nameof(Domain.DepthBuffer):
-                        modelExistsAsyncMethod = ModelExistsAsync<Domain.DepthBuffer>;
-                        break;
-                    case nameof(Domain.Mesh):
-                        modelExistsAsyncMethod = ModelExistsAsync<Domain.Mesh>;
-                        break;
-                    case nameof(Domain.MeshTransform):
-                        modelExistsAsyncMethod = ModelExistsAsync<Domain.MeshTransform>;
-                        break;
-                    case nameof(Domain.Model3d):
-                        modelExistsAsyncMethod = ModelExistsAsync<Domain.Model3d>;
-                        break;
-                    case nameof(Domain.Project):
-                        modelExistsAsyncMethod = ModelExistsAsync<Domain.Project>;
-                        break;
-
                     case nameof(ApplicationUser):
+                        // ModelExistsAsync requires the primary key to be an integer.
                         continue;
 
                     default:
-                        var message = "Unexpected type encountered in ValidatedHandler:ValidateReferences";
-                        Debug.Assert(false, message);
-                        throw new ArgumentException(message);
+                        break;
                 }
 
-                modelExists = await modelExistsAsyncMethod (claimsPrincipal, (int) propertyValue);
+                // https://stackoverflow.com/questions/4101784/calling-a-generic-method-with-a-dynamic-type
+                // https://stackoverflow.com/questions/16153047/net-invoke-async-method-and-await
+                var method = typeof(ValidatedHandler<TRequest, TResponse>).GetMethod(nameof(ModelExistsAsync)).MakeGenericMethod(referenceType);
+                var modelExists = await (Task<bool>)method.Invoke(this, new object[] {claimsPrincipal, (int) propertyValue});
                 if (!modelExists)
                     validationFailures.Add(new ValidationFailure(propertyName, $"Property '{propertyName}' references an entity that does not exist."));
             }

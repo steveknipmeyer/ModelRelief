@@ -722,6 +722,12 @@
 
 <-- C#
     Conversion of List of derived class to the base class.
-            // https://stackoverflow.com/questions/1817300/convert-listderivedclass-to-listbaseclass
-            dependentModels = new List<DomainModel>(candidateDependentModels).ConvertAll(m => (DomainModel)m);
+        // https://stackoverflow.com/questions/1817300/convert-listderivedclass-to-listbaseclass
+        dependentModels = new List<DomainModel>(candidateDependentModels).ConvertAll(m => (DomainModel)m);
+    
+    Using reflection to call a generic method:
+        // https://stackoverflow.com/questions/4101784/calling-a-generic-method-with-a-dynamic-type
+        // https://stackoverflow.com/questions/16153047/net-invoke-async-method-and-await
+        var method = typeof(ValidatedHandler<TRequest, TResponse>).GetMethod(nameof(ModelExistsAsync)).MakeGenericMethod(referenceType);
+        var modelExists = await (Task<bool>)method.Invoke(this, new object[] {claimsPrincipal, (int) propertyValue});
 

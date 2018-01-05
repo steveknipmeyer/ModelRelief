@@ -200,7 +200,7 @@ namespace ModelRelief.Services
         /// <param name="rootPrimaryId">Primary key of root.</param>
         /// <param name="userId">User ID.</param>
         /// <returns>Collection of models referencing the given root primary key and type.</returns>
-        public async Task<List<DomainModel>> FindDependentModels<TEntity> (Type rootType, int rootPrimaryId, string userId)
+        public async Task<List<DomainModel>> FindRootDependentModels<TEntity> (Type rootType, int rootPrimaryId, string userId)
             where TEntity : DomainModel
         {
             var dependentModels = new List<DomainModel>();
@@ -245,24 +245,10 @@ namespace ModelRelief.Services
             if (!(rootPrimaryKey > 0))
                 return dependentModels;
 
-            Func<Type, int, string , Task<List<DomainModel>>> findDependentModelsAsyncMethod = null;
             foreach (Type dependentType in dependentTypes)
             {
-                switch(dependentType.Name) 
-                {
-                    case nameof(Domain.DepthBuffer):
-                        findDependentModelsAsyncMethod = FindDependentModels<Domain.DepthBuffer>;
-                        break;
-                    case nameof(Domain.Mesh):
-                        findDependentModelsAsyncMethod = FindDependentModels<Domain.Mesh>;
-                        break;
-
-                    default:
-                        var message = "Unexpected type encountered in DependencyManger.FindDependentModels";
-                        Debug.Assert(false, message);
-                        throw new ArgumentException(message);
-                }
-                var dependentModelsByType = await findDependentModelsAsyncMethod (rootType, rootPrimaryKey, userId);
+                var method = typeof(DependencyManager).GetMethod(nameof(FindRootDependentModels)).MakeGenericMethod(dependentType);
+                var dependentModelsByType = await (Task<List<DomainModel>>)method.Invoke(this, new object[] {rootType, rootPrimaryKey, userId});
 
                 // recursively find dependents
                 dependentModels.AddRange(dependentModelsByType);
