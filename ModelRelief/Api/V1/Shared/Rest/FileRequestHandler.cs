@@ -71,8 +71,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
             
             var fileName = Path.Combine(StorageManager.DefaultModelStorageFolder(domainModel), domainModel.Name);
 
-            await Task.CompletedTask;
-
             return true;
         }
     }

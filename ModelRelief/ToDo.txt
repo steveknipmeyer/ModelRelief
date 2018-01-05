@@ -9,16 +9,7 @@
         Scale with a Python processor.
 
 <-- Short Term
-    Introduce factory methods to construct:
-        Generic method delegates
-        FileRequests
-
-    Refactor the dependency processing to use IRequest<bool> or IRequest (FileRequest).
-
-    Where should FileRequest be dispatched?
-        DependencyManager
-            The domain model type would need to drive switch statements since generic types must be known at compile-time.
-                new FileRequest<TEntity>
+    Abstract the identification of the Name and FileIsSynchronized propeties!
 
     Should there be specialized implementations of FileRequestHandler?
         There is no parent class that provides the TEntity type parameter.
@@ -27,7 +18,7 @@
 
     Should FileTimeStamp be exposed?
         Should the assignment of FileSynchronized be deferred until the request has completed.
-        FileStamp could serve as the "complete" flag for a long-running request.
+        FileStamp could potentially serve as the "complete" flag for a long-running request.
 
     Dependency Manager
         FileRequest
@@ -36,8 +27,10 @@
 
         Dependency Handling                    
             Modified           
-                For GeneratedFileDomainModel root models, if FileIsSynchronized = true, schedule a file generation.                                                
-                For all GeneratedFileDomainModel dependents, set FileIsSynchronized = false.
+            *   For GeneratedFileDomainModel root models, if FileIsSynchronized <changed> to true, schedule a FileOperation.Generation.
+            *   For FileDomainModel root models, if Name <changed>, schedule a FileOperation.Rename.
+            *   For all GeneratedFileDomainModel dependents, set FileIsSynchronized = false.
+
             Deleted
                 For all GeneratedFileDomainModel dependents, set FileIsSynchronized = false.
             Added

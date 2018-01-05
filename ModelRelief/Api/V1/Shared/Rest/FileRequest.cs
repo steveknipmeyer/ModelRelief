@@ -6,6 +6,7 @@
 
 using MediatR;
 using ModelRelief.Domain;
+using System;
 using System.Security.Claims;
 
 namespace ModelRelief.Api.V1.Shared.Rest
@@ -19,13 +20,20 @@ namespace ModelRelief.Api.V1.Shared.Rest
         Rename,                 // rename the file to match the metadata name
         Generate                // generate a new version from the file's dependencies
     }
+    public interface IFileRequest
+    {
+        FileOperation       Operation { get; set; }
+        ApplicationUser     User { get; set;}
+        int                 Id { get; set; }
+
+    }
 
     /// <summary>
     ///  Represents a request to perform an operation on a backing file.
     /// </summary>
     /// <typeparam name="TEntity">The domain type of the model.</typeparam>
     /// <remarks>The returned object represents the status of the operation.</remarks>
-    public class FileRequest<TEntity> : IRequest<bool>
+    public class FileRequest<TEntity> : IFileRequest, IRequest<bool>
         where TEntity : DomainModel
     {
         /// <summary>

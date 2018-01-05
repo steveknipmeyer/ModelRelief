@@ -37,15 +37,17 @@ namespace ModelRelief.Services
     /// </summary>
     public class TransactionEntity
     {
-        public EntityEntry  ChangeTrackerEntity { get; }
-        public List<Type>   DependentTypes { get; set; } 
+        public EntityEntry          ChangeTrackerEntity { get; }
+        public ModelReliefDbContext DbContext { get; }
+        public List<Type>           DependentTypes { get; set; } 
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public TransactionEntity (EntityEntry entity)
+        public TransactionEntity (EntityEntry entity, ModelReliefDbContext dbContext)
         {
             ChangeTrackerEntity = entity;
+            DbContext = dbContext;
 
             Initialize();
         }
@@ -56,7 +58,7 @@ namespace ModelRelief.Services
         public Type EntityType => ChangeTrackerEntity.Entity.GetType();
 
         /// <summary>
-        /// Returns the name of the entity.
+        /// Returns the name of the entity type.
         /// </summary>
         public string Name => EntityType.Name;
 
@@ -76,12 +78,48 @@ namespace ModelRelief.Services
         public bool HasDependents => DependentTypes.Any();
 
         /// <summary>
+        /// Returns the DomainModel of the transaction entity.
+        /// </summary>
+        public async Task<DomainModel> GetDomainModel()
+        {
+            var findMethod = typeof(TransactionEntity).GetMethod(nameof(FindDomainModelAsync)).MakeGenericMethod(EntityType);
+            var model = await (Task<DomainModel>)findMethod.Invoke(this, null);
+            return model;
+        }
+
+        /// <summary>
+        /// Returns whether the entity is a GeneratedFileDomainModel.
+        /// </summary>
+        public async Task<bool> IsGeneratedFileDomainModel()
+        {
+            var generatedFileDomainModel = await GetDomainModel() as GeneratedFileDomainModel;
+            return generatedFileDomainModel != null;
+        }
+
+        /// <summary>
+        /// Helper method to return the DomainModel corresponding to the TransactionEntity.
+        /// This method is always called through reflection since the type is not known at compile time.
+        /// </summary>
+        /// <typeparam name="TEntity">DomainModel</typeparam>
+        public async Task<DomainModel> FindDomainModelAsync<TEntity>()
+            where TEntity : DomainModel
+        {
+            var domainModel = await DbContext.Set<TEntity>()
+                                .Where(m => (m.Id == PrimaryKey) && 
+                                            (m.UserId == UserId))
+                                .SingleOrDefaultAsync();
+            return domainModel;
+        }
+
+        /// <summary>
         /// Perform initialization.
         /// </summary>
         private void Initialize()
         {
             DependentTypes = DependencyManager.GetClassDependentFiles(EntityType);
         }
+
+
     }
 
     /// <summary>
@@ -279,6 +317,40 @@ namespace ModelRelief.Services
         }
 
         /// <summary>
+        /// Constructs a FileRequest for a model that has changed the metadata Name.
+        /// The FileRequest will rename the disk file to match the metadata.
+        /// </summary>
+        /// <param name="transactionEntity"></param>
+        private async Task<IFileRequest> ConstructRenameFileRequest(TransactionEntity transactionEntity)
+        {
+            var domainModel = await transactionEntity.GetDomainModel();
+            var fileRequest = new FileRequest<Mesh>            
+                {
+                Operation = FileOperation.Rename,
+                User = domainModel.User,
+                Id = domainModel.Id
+                };
+            return fileRequest;
+        }
+
+        /// <summary>
+        /// Constructs a FileRequest for a model that has toggled the FileIsSynchronized property to true.
+        /// The FileRequest will regenerate the disk file to match its dependents.
+        /// </summary>
+        /// <param name="transactionEntity"></param>
+        private async Task<IFileRequest> ConstructGenerateFileRequest(TransactionEntity transactionEntity)
+        {
+            var domainModel = await transactionEntity.GetDomainModel();
+            var fileRequest = new FileRequest<Mesh>            
+                {
+                Operation = FileOperation.Generate,
+                User = domainModel.User,
+                Id = domainModel.Id
+                };
+            return fileRequest;
+        }
+
+        /// <summary>
         /// Pre-process all pending object changes before they are written to the database.
         /// </summary>
         /// <param name="model">Model to persist.</param>
@@ -287,26 +359,26 @@ namespace ModelRelief.Services
             // https://www.exceptionnotfound.net/entity-change-tracking-using-dbcontext-in-entity-framework-6/
             try
             {
-                List<DomainModel> dependentModelsAll = new List<DomainModel>();
+                var fileRequestsAll = new List<IFileRequest>();
                 foreach (var changedEntity in DbContext.ChangeTracker.Entries().ToList())
                 {
-                    var transactionEntity = new TransactionEntity(changedEntity);
+                    var transactionEntity = new TransactionEntity(changedEntity, DbContext);
                     if (!transactionEntity.HasDependents)
                         continue;
 
-                    var dependentModelsByEntity = new List<DomainModel> ();
+                    var fileRequestsByEntity = new List<IFileRequest> ();
                     switch (changedEntity.State)
                     {
                         case EntityState.Added:
-                            dependentModelsByEntity = await ProcessAddedEntity(transactionEntity);
+                            fileRequestsByEntity = await ProcessAddedEntity(transactionEntity);
                             break;
 
                         case EntityState.Deleted:
-                            dependentModelsByEntity = await ProcessDeletedEntity(transactionEntity);
+                            fileRequestsByEntity = await ProcessDeletedEntity(transactionEntity);
                             break;
 
                         case EntityState.Modified:
-                            dependentModelsByEntity = await ProcessModifiedEntity(transactionEntity);
+                            fileRequestsByEntity = await ProcessModifiedEntity(transactionEntity);
                             break;
 
                         default:
@@ -315,9 +387,9 @@ namespace ModelRelief.Services
                             break;
                     }
 
-                    dependentModelsAll.AddRange(dependentModelsByEntity);
+                    fileRequestsAll.AddRange(fileRequestsByEntity);
                 }
-                await ProcessDependentModels(dependentModelsAll);
+                await ProcessRequests(fileRequestsAll);
             }
             catch (Exception ex)
             {
@@ -329,65 +401,85 @@ namespace ModelRelief.Services
         /// Process an entity scheduled for modification by the ChangeTracker.
         /// </summary>
         /// <param name="transactionEntity">Entity scheduled for modification.</param>
-        /// <returns>List of dependent models.</returns>
-        private async Task<List<DomainModel>> ProcessModifiedEntity(TransactionEntity transactionEntity)
+        /// <returns>List of FileRequests.</returns>
+        private async Task<List<IFileRequest>> ProcessModifiedEntity(TransactionEntity transactionEntity)
         {
-            var dependentModels = new List<DomainModel>();
-            bool propertyChanged = false;
+            var fileRequests = new List<IFileRequest>() ;
+            var isGeneratedFileDomainModel = await transactionEntity.IsGeneratedFileDomainModel();
+
+            bool dependentFIlePropertyChanged = false;
             foreach(var property in transactionEntity.ChangeTrackerEntity.OriginalValues.Properties)
             {
                 var propertyModification = new PropertyModification(transactionEntity.ChangeTrackerEntity, property);
                 if (propertyModification.Changed)
                 {
-                    // not an independent variable; skip
-                    if (!PropertyHasAttribute(out Attribute dependentFileProperty, transactionEntity.EntityType, property.Name, typeof(DependentFileProperty)))
-                        continue;
+                    if (isGeneratedFileDomainModel)
+                    {
+                        if (String.Equals(property.Name, "Name"))
+                            fileRequests.Add (await ConstructRenameFileRequest(transactionEntity));
 
-                    propertyChanged = true;
-                    // WIP: Based on context of property change, construct a postprocess request (e.g. FileGeneration, FileRename).
+                        if ((String.Equals(property.Name, "FileIsSynchronized")) && ((bool) propertyModification.ModifiedValue))
+                            fileRequests.Add (await ConstructGenerateFileRequest(transactionEntity));
+                     }
+                     
+                    // independent variables invalidate the backing file of their dependent models
+                    if (PropertyHasAttribute(out Attribute dependentFileProperty, transactionEntity.EntityType, property.Name, typeof(DependentFileProperty)))
+                        dependentFIlePropertyChanged = true;
                 }
             }
 
-            if (propertyChanged)
+            if (dependentFIlePropertyChanged)
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine($"Class {transactionEntity.EntityType} has (first) dependent file {transactionEntity.DependentTypes[0]}.");
-                Console.ForegroundColor = ConsoleColor.White;
-
-                dependentModels = await FindDependentModels(transactionEntity);
+                var dependentModels = await FindDependentModels(transactionEntity);
+                foreach (var dependentModel in dependentModels)    
+                {
+                    // all dependent models that have backing files are no longer synchronized
+                    var generatedFileDomainModel = dependentModel as GeneratedFileDomainModel;
+                    if (generatedFileDomainModel != null)
+                    {
+                        generatedFileDomainModel.FileIsSynchronized = false;
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        Console.WriteLine($"The dependent file {generatedFileDomainModel.Name} of type {generatedFileDomainModel.GetType().Name} is no longer synchronized.");
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+                }                        
             }
 
-            return dependentModels;
+            return fileRequests;
         }
 
         /// <summary>
         /// Process an entity scheduled for deletion by the ChangeTracker.
         /// </summary>
         /// <param name="transactionEntity">Entity scheduled for deletion.</param>
-        /// <returns>List of dependent models.</returns>
-        private async Task<List<DomainModel>> ProcessDeletedEntity(TransactionEntity transactionEntity)
+        /// <returns>List of FileRequests.</returns>
+        private async Task<List<IFileRequest>> ProcessDeletedEntity(TransactionEntity transactionEntity)
         {
+            var fileRequests = new List<IFileRequest>() ;
             var dependentModels = new List<DomainModel>();
 
             if (!transactionEntity.HasDependents)
-                return dependentModels;
+                return fileRequests;
 
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"Deleted class {transactionEntity.EntityType} has (first) dependent file {transactionEntity.DependentTypes[0]}.");
             Console.ForegroundColor = ConsoleColor.White;
 
             dependentModels = await FindDependentModels(transactionEntity);
-            return dependentModels;
+
+            // WIP: Construct FileRequests...
+
+            return fileRequests;
         }
 
         /// <summary>
         /// Process an entity scheduled for addition by the ChangeTracker.
         /// </summary>
         /// <param name="transactionEntity">Entity scheduled for addition.</param>
-        /// <returns>List of dependent models.</returns>
-        private async Task<List<DomainModel>> ProcessAddedEntity(TransactionEntity transactionEntity)
+        /// <returns>List of FileRequests.</returns>
+        private async Task<List<IFileRequest>> ProcessAddedEntity(TransactionEntity transactionEntity)
         {
-            var dependentModels = new List<DomainModel>();
+            var fileRequests = new List<IFileRequest>() ;
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"Class {transactionEntity.EntityType} has been added.");
@@ -395,65 +487,24 @@ namespace ModelRelief.Services
 
             await Task.CompletedTask;
 
-            return dependentModels;
+            // WIP: Construct FileRequests...
+
+            return fileRequests;
         }
 
         /// <summary>
-        /// Process an entity scheduled for addition by the ChangeTracker.
+        /// Process the requests resulting from the dependen.
         /// </summary>
-        /// <param name="dependentModels">All models that are dependent on the current transaction.</param>
-        private async Task ProcessDependentModels (List<DomainModel> dependentModels)
+        /// <param name="fileRequests">All FileRequests resulting from the current transaction.</param>
+        private async Task ProcessRequests(List<IFileRequest> fileRequests)
         {
-            foreach (DomainModel model in dependentModels)
-            {
-                GeneratedFileDomainModel generatedFileModel = model as GeneratedFileDomainModel;
-                Debug.Assert (generatedFileModel != null);
-
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.WriteLine($"Dependent model : Type = {generatedFileModel.GetType()}, Primary Id = {generatedFileModel.Id}, Name = {generatedFileModel.Name}");
-                Console.ForegroundColor = ConsoleColor.White;
-            }
-            await ProcessRequests<bool>(null, dependentModels);
-        }
-
-        /// <summary>
-        /// Process the requests resulting from the dependency processing.
-        /// </summary>
-        /// <param name="requests">All requests resulting from the current transaction.</param>
-        /// <param name="dependentModels">All dependent models.</param>
-        private async Task ProcessRequests<TReturn> (List<IRequest<TReturn>> requests, List<DomainModel> dependentModels)
-        {
-            var model = dependentModels.FirstOrDefault();
-            if (model == null)
-                return;
-
-            // dispatch to registered handler
-            var fileRequests = new List<IRequest<bool>>();
-            var modelRequest = new FileRequest<Model3d>()
-                {
-                    Operation = FileOperation.Rename,
-                    User = model.User,
-                    Id = model.Id
-                };
-            fileRequests.Add(modelRequest);
-            var meshRequest = new FileRequest<Mesh>()
-                {
-                    Operation = FileOperation.Generate,
-                    User = model.User,
-                    Id = model.Id
-                };
-            fileRequests.Add(meshRequest);
-            var depthBufferRequest = new FileRequest<DepthBuffer>()
-                {
-                    Operation = FileOperation.Generate,
-                    User = model.User,
-                    Id = model.Id
-                };
-            fileRequests.Add(depthBufferRequest);
-
             foreach (var request in fileRequests)
             {
-                var response = await HandleRequestAsync(request);
+                var result = await HandleRequestAsync(request);
+
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.WriteLine($"{request.GetType()} Operation = {request.Operation.ToString()}");
+                Console.ForegroundColor = ConsoleColor.White;
             }
         }
 
@@ -474,14 +525,12 @@ namespace ModelRelief.Services
         /// <summary>
         /// Dispatches a request (commonly FileRequest).
         /// </summary>
-        /// <typeparam name="TReturn">Return type of the request.</typeparam>
-        /// <param name="request">FileRequest</param>
+        /// <param name="fileRequest">FileRequest</param>
         /// <returns></returns>
-        private async Task<TReturn> HandleRequestAsync<TReturn> (IRequest<TReturn> request)
+        private async Task<bool> HandleRequestAsync (IFileRequest fileRequest)
         {
-            var response = await Mediator.Send(request);
-
-            return response;
+            var request = fileRequest as IRequest<bool>;
+            return await Mediator.Send(request);
         }
 
         /// <summary>
