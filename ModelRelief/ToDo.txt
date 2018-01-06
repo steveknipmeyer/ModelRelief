@@ -10,11 +10,21 @@
         Scale with a Python processor.
 
 <-- Short Term
-    How are Add operations handled?
-        Can it be done exclusively in the PostProcess step from the target model parameter?
-            Is any information needed from the PreProcess step?
-
     Abstract the identification of the Name and FileIsSynchronized propeties!
+        "Name"
+        "FileIsSynchronized"
+
+    FileOperation.Generate
+        Introduce a CustomAttribute for a required property for GeneratedFileDomainModels.
+            These are verified during the FileOperation.Generate.
+            Mesh
+                DepthBuffer
+                MeshTransform
+        Reset FileIsSynchronized. This will be finally set after a successful generation.
+        Validate the required properties are present.
+
+    Convert ToDo.txt to Markdown.
+        https://marketplace.visualstudio.com/items?itemName=MadsKristensen.MarkdownEditor
 
     DependencyManager FileRequest Tests
         FileOperationGenerate
@@ -49,7 +59,7 @@
             Deleted
             *   For all GeneratedFileDomainModel dependents, set FileIsSynchronized = false.
             Added
-                For all GeneratedFileDomainModel dependents, if FileIsSynchronized = true, schedule a file generation.
+            *   For all GeneratedFileDomainModel root models, if FileIsSynchronized = true, schedule a file generation if the dependents are resolved.
 
         GeneratedFileDomainModel Dependencies
                                                 Metadata    FileTimeStamp
@@ -74,8 +84,7 @@
 
     Files
         The name property for FileDomainModels is expected to include the extension.    
-            API Validation is needed to ensure that the extension is always present.
-            UI handling is needed to ensure the submitted Name includes the extension.
+            API  and Ux validation is needed to ensure that the extension is always present.
                 Can it be inferred from the Format?
         How will the Format property be used for Models, DepthBuffers and Meshes?
             Is it necessary if the file type can be found through reflection?

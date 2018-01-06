@@ -2,7 +2,7 @@
 
 This is a simple introduction to compiling Markdown in VS Code.
 
-Things you'll need:
+Things you'll need to do this well.
 
 * [node](https://nodejs.org)
 * [markdown-it](https://www.npmjs.com/package/markdown-it)

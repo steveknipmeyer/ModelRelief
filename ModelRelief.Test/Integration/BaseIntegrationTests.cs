@@ -198,8 +198,8 @@ namespace ModelRelief.Test.Integration
         {
             // Arrange
             var newModel = await PostNewModel();
-            var updatedName = "Updated Name Property";
-            newModel.Name = updatedName;
+            var updatedDescription = "Updated Description Property";
+            newModel.Description = updatedDescription;
 
             // Act
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{newModel.Id}", newModel);
@@ -208,7 +208,7 @@ namespace ModelRelief.Test.Integration
             requestResponse.Message.EnsureSuccessStatusCode();
             
             var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
-            updatedModel.Name.Should().Be(updatedName);
+            updatedModel.Description.Should().Be(updatedDescription);
 
             // Rollback
             await DeleteModel(newModel);
@@ -305,10 +305,10 @@ namespace ModelRelief.Test.Integration
         {
             // Arrange
             var newModel = await PostNewModel();
-            var updatedName = "Updated Name Property";
+            var updatedDescription = "Updated Description Property";
             var patchModel = new 
             {
-                Name = updatedName
+                Description = updatedDescription
             };
 
             // Act
@@ -318,7 +318,7 @@ namespace ModelRelief.Test.Integration
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
             var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
-            updatedModel.Name.Should().Be(updatedName);
+            updatedModel.Description.Should().Be(updatedDescription);
 
             // Rollback
             await DeleteModel(newModel);

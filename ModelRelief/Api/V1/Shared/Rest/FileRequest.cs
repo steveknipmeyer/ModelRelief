@@ -21,9 +21,22 @@ namespace ModelRelief.Api.V1.Shared.Rest
         Rename,                 // rename the file to match the metadata name
         Generate                // generate a new version from the file's dependencies
     }
+
+    /// <summary>
+    /// Represents the processing stage that the FileRequest will be handled.
+    /// Added entities are deferred to the PostProcess stage so that the newly-assigned primary key will be available.
+    /// </summary>
+    public enum ProcessingStage
+    {
+        Unknown,
+        PreProcess,
+        PostProcess
+    }
+
     public interface IFileRequest
     {
         FileOperation       Operation { get; set; }
+        ProcessingStage     Stage { get; set; }
         TransactionEntity   TransactionEntity { get; set;}
     }
 
@@ -39,6 +52,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// Gets or sets the operation to be performed on the file store.
         /// </summary>
         public FileOperation Operation { get; set;}
+
+        /// <summary>
+        /// Gets or sets the processing stage that the FileRequest will be executed.
+        /// </summary>
+        public ProcessingStage Stage { get; set;}
 
         /// <summary>
         /// Gets or sets the ChangeTracker transaction entity.

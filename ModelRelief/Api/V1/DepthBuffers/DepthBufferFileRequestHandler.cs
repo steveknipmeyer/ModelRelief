@@ -60,6 +60,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public override async Task<bool> ProcessGenerate(FileRequest<Domain.DepthBuffer> fileRequest, FileDomainModel fileDomainModel, string fileName)
         {
             Logger.LogInformation($"DepthBuffer [Model Id = {fileRequest.TransactionEntity.PrimaryKey}, UserId = {fileRequest.TransactionEntity.UserId}, file = {fileName}] has been queued for file generation.");
+
             await Task.CompletedTask;
             return true;    
         }

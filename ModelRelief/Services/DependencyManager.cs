@@ -80,7 +80,14 @@ namespace ModelRelief.Services
         /// <summary>
         /// Returns the DomainModel of the transaction entity.
         /// </summary>
-        public async Task<DomainModel> GetDomainModel()
+        public DomainModel GetDomainModel()
+        {
+            return ChangeTrackerEntity.Entity as DomainModel;
+        }
+        /// <summary>
+        /// Returns the DomainModel of the transaction entity from the database.
+        /// </summary>
+        public async Task<DomainModel> GetDatabaseDomainModel()
         {
             var findMethod = typeof(TransactionEntity).GetMethod(nameof(FindDomainModelAsync)).MakeGenericMethod(EntityType);
             var model = await (Task<DomainModel>)findMethod.Invoke(this, null);
@@ -90,9 +97,9 @@ namespace ModelRelief.Services
         /// <summary>
         /// Returns whether the entity is a GeneratedFileDomainModel.
         /// </summary>
-        public async Task<bool> IsGeneratedFileDomainModel()
+        public bool IsGeneratedFileDomainModel()
         {
-            var generatedFileDomainModel = await GetDomainModel() as GeneratedFileDomainModel;
+            var generatedFileDomainModel = GetDomainModel() as GeneratedFileDomainModel;
             return generatedFileDomainModel != null;
         }
 
@@ -336,12 +343,13 @@ namespace ModelRelief.Services
         /// The FileRequest will rename the disk file to match the metadata.
         /// </summary>
         /// <param name="transactionEntity"></param>
-        private async Task<IFileRequest> ConstructRenameFileRequest(TransactionEntity transactionEntity)
+        private IFileRequest ConstructRenameFileRequest(TransactionEntity transactionEntity)
         {
-            var domainModel = await transactionEntity.GetDomainModel();
+            var domainModel = transactionEntity.GetDomainModel();
             var renameFileRequest = ConstructFileRequest (domainModel.GetType());
 
             renameFileRequest.Operation = FileOperation.Rename;
+            renameFileRequest.Stage     = ProcessingStage.PreProcess;
             renameFileRequest.TransactionEntity = transactionEntity;
             
             return renameFileRequest;
@@ -352,12 +360,14 @@ namespace ModelRelief.Services
         /// The FileRequest will regenerate the disk file to match its dependents.
         /// </summary>
         /// <param name="transactionEntity"></param>
-        private async Task<IFileRequest> ConstructGenerateFileRequest(TransactionEntity transactionEntity)
+        /// <param name="stage">The processing stage (e.g. Pre, Post) that the FileRequest will be serviced.</param>
+        private IFileRequest ConstructGenerateFileRequest(TransactionEntity transactionEntity, ProcessingStage stage)
         {
-            var domainModel = await transactionEntity.GetDomainModel();
+            var domainModel = transactionEntity.GetDomainModel();
             var generateFileRequest = ConstructFileRequest (domainModel.GetType());
 
             generateFileRequest.Operation = FileOperation.Generate;
+            generateFileRequest.Stage     = stage;
             generateFileRequest.TransactionEntity = transactionEntity;
             
             return generateFileRequest;
@@ -388,10 +398,10 @@ namespace ModelRelief.Services
         /// Pre-process all pending object changes before they are written to the database.
         /// </summary>
         /// <param name="model">Model to persist.</param>
-        private async Task PreProcessChanges(DomainModel model)
+        /// <param name="fileRequests">FileRequest commands triggered by dependency processing.</param>
+        private async Task PreProcessChanges(DomainModel model, List<IFileRequest> fileRequests)
         {
             // https://www.exceptionnotfound.net/entity-change-tracking-using-dbcontext-in-entity-framework-6/
-            var fileRequestsAll = new List<IFileRequest>();
             foreach (var changedEntity in DbContext.ChangeTracker.Entries().ToList())
             {
                 var transactionEntity = new TransactionEntity(changedEntity, DbContext);
@@ -400,7 +410,7 @@ namespace ModelRelief.Services
                 switch (changedEntity.State)
                 {
                     case EntityState.Added:
-                        fileRequestsByEntity = await ProcessAddedEntity(transactionEntity);
+                        fileRequestsByEntity = ProcessAddedEntity(transactionEntity);
                         break;
 
                     case EntityState.Deleted:
@@ -417,9 +427,9 @@ namespace ModelRelief.Services
                         break;
                 }
 
-                fileRequestsAll.AddRange(fileRequestsByEntity);
+                fileRequests.AddRange(fileRequestsByEntity);
             }
-            await ProcessRequests(fileRequestsAll);
+            await HandlePreProcessFileRequests(fileRequests);
         }
 
         /// <summary>
@@ -430,7 +440,7 @@ namespace ModelRelief.Services
         private async Task<List<IFileRequest>> ProcessModifiedEntity(TransactionEntity transactionEntity)
         {
             var fileRequests = new List<IFileRequest>() ;
-            var isGeneratedFileDomainModel = await transactionEntity.IsGeneratedFileDomainModel();
+            var isGeneratedFileDomainModel = transactionEntity.IsGeneratedFileDomainModel();
 
             bool dependentFIlePropertyChanged = false;
             foreach(var property in transactionEntity.ChangeTrackerEntity.OriginalValues.Properties)
@@ -441,10 +451,10 @@ namespace ModelRelief.Services
                     if (isGeneratedFileDomainModel)
                     {
                         if (String.Equals(property.Name, "Name"))
-                            fileRequests.Add (await ConstructRenameFileRequest(transactionEntity));
+                            fileRequests.Add (ConstructRenameFileRequest(transactionEntity));
 
                         if ((String.Equals(property.Name, "FileIsSynchronized")) && ((bool) propertyModification.ModifiedValue))
-                            fileRequests.Add (await ConstructGenerateFileRequest(transactionEntity));
+                            fileRequests.Add (ConstructGenerateFileRequest(transactionEntity, stage: ProcessingStage.PreProcess));
                      }
                      
                     // independent variables invalidate the backing file of their dependent models
@@ -486,49 +496,65 @@ namespace ModelRelief.Services
         /// </summary>
         /// <param name="transactionEntity">Entity scheduled for addition.</param>
         /// <returns>List of FileRequests.</returns>
-        private async Task<List<IFileRequest>> ProcessAddedEntity(TransactionEntity transactionEntity)
+        private List<IFileRequest> ProcessAddedEntity(TransactionEntity transactionEntity)
         {
-            var fileRequests = new List<IFileRequest>() ;
+            var fileRequests = new List<IFileRequest>();
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"Class {transactionEntity.EntityType} has been added.");
-            Console.ForegroundColor = ConsoleColor.White;
-
-            await Task.CompletedTask;
-
-            // WIP: Construct FileRequests...
-
+            if (transactionEntity.IsGeneratedFileDomainModel() &&
+               ((bool) transactionEntity.ChangeTrackerEntity.CurrentValues["FileIsSynchronized"]))
+               {
+               fileRequests.Add(ConstructGenerateFileRequest(transactionEntity, stage: ProcessingStage.PostProcess));
+               }
             return fileRequests;
         }
 
         /// <summary>
-        /// Process the requests resulting from the transactions.
+        /// Process the requests resulting from the pre-processing of the transactions.
         /// </summary>
         /// <param name="fileRequests">All FileRequests resulting from the current transaction.</param>
-        private async Task ProcessRequests(List<IFileRequest> fileRequests)
+        private async Task HandlePreProcessFileRequests(List<IFileRequest> fileRequests)
         {
             foreach (var request in fileRequests)
             {
-                var result = await HandleRequestAsync(request);
+                if (request.Stage == ProcessingStage.PreProcess)
+                {
+                    var result = await HandleRequestAsync(request);
 
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.WriteLine($"{request.GetType()} Operation = {request.Operation.ToString()}");
-                Console.ForegroundColor = ConsoleColor.White;
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.WriteLine($"PreProcess {request.GetType()} Operation = {request.Operation.ToString()}");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Process the requests resulting from the post-processing transactions.
+        /// </summary>
+        /// <param name="fileRequests">All FileRequests resulting from the current transaction.</param>
+        private async Task HandlePostProcessFileRequests(List<IFileRequest> fileRequests)
+        {
+            foreach (var request in fileRequests)
+            {
+                if (request.Stage == ProcessingStage.PostProcess)
+                {
+                    // Added entities are processed here after the database save so that the primary key is known.
+                    var result = await HandleRequestAsync(request);
+
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.WriteLine($"PostProcess {request.GetType()} Operation = {request.Operation.ToString()}");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
             }
         }
 
         /// <summary>
         /// Post-process all pending object changes after they have been written to the database.
         /// </summary>
-        private void PostProcessChanges()
+        /// <param name="model">Model to persist.</param>
+        /// <param name="fileRequests">FileRequest commands triggered by dependency processing.</param>
+        private async Task PostProcessChanges(DomainModel model, List<IFileRequest> fileRequests)
         {
-            try
-            {
-            }
-            catch (Exception ex)
-            {   
-                Debug.WriteLine($"DependencyManager.PostProcess : {ex.Message}");
-            }
+            await HandlePostProcessFileRequests(fileRequests);
         }
 
         /// <summary>
@@ -550,11 +576,13 @@ namespace ModelRelief.Services
         /// <returns>Number of state entries written to the database.</returns>
         public async Task<int> PersistChangesAsync(DomainModel model, CancellationToken cancellationToken = default(CancellationToken))
         {
-            await PreProcessChanges(model);
+            var fileRequests = new List<IFileRequest>();
+
+            await PreProcessChanges(model, fileRequests);
 
             var result = await DbContext.SaveChangesAsync();
 
-            PostProcessChanges();
+            await PostProcessChanges(model, fileRequests);
 
             return result;
         }
