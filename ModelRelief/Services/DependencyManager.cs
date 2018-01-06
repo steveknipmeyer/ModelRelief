@@ -342,8 +342,7 @@ namespace ModelRelief.Services
             var renameFileRequest = ConstructFileRequest (domainModel.GetType());
 
             renameFileRequest.Operation = FileOperation.Rename;
-            renameFileRequest.User      = domainModel.User;
-            renameFileRequest.Id        = domainModel.Id;
+            renameFileRequest.TransactionEntity = transactionEntity;
             
             return renameFileRequest;
         }
@@ -359,10 +358,30 @@ namespace ModelRelief.Services
             var generateFileRequest = ConstructFileRequest (domainModel.GetType());
 
             generateFileRequest.Operation = FileOperation.Generate;
-            generateFileRequest.User      = domainModel.User;
-            generateFileRequest.Id        = domainModel.Id;
+            generateFileRequest.TransactionEntity = transactionEntity;
             
             return generateFileRequest;
+        }
+
+        /// <summary>
+        /// Invalidates (FileIsSynchronized = false) all dependent models.
+        /// If a root model changes, the backing file of all dependents is invalidated.
+        /// </summary>
+        /// <param name="dependentModels">Collection of dependent models.</param>
+        private void InvalidateDependentModels(List<DomainModel> dependentModels)
+        {
+            foreach (var dependentModel in dependentModels)    
+            {
+                // all dependent models that have backing files are no longer synchronized
+                var generatedFileDomainModel = dependentModel as GeneratedFileDomainModel;
+                if (generatedFileDomainModel != null)
+                {
+                    generatedFileDomainModel.FileIsSynchronized = false;
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.WriteLine($"The dependent file {generatedFileDomainModel.Name} of type {generatedFileDomainModel.GetType().Name} is no longer synchronized.");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+            }
         }
 
         /// <summary>
@@ -372,42 +391,35 @@ namespace ModelRelief.Services
         private async Task PreProcessChanges(DomainModel model)
         {
             // https://www.exceptionnotfound.net/entity-change-tracking-using-dbcontext-in-entity-framework-6/
-            try
+            var fileRequestsAll = new List<IFileRequest>();
+            foreach (var changedEntity in DbContext.ChangeTracker.Entries().ToList())
             {
-                var fileRequestsAll = new List<IFileRequest>();
-                foreach (var changedEntity in DbContext.ChangeTracker.Entries().ToList())
+                var transactionEntity = new TransactionEntity(changedEntity, DbContext);
+
+                var fileRequestsByEntity = new List<IFileRequest> ();
+                switch (changedEntity.State)
                 {
-                    var transactionEntity = new TransactionEntity(changedEntity, DbContext);
+                    case EntityState.Added:
+                        fileRequestsByEntity = await ProcessAddedEntity(transactionEntity);
+                        break;
 
-                    var fileRequestsByEntity = new List<IFileRequest> ();
-                    switch (changedEntity.State)
-                    {
-                        case EntityState.Added:
-                            fileRequestsByEntity = await ProcessAddedEntity(transactionEntity);
-                            break;
+                    case EntityState.Deleted:
+                        fileRequestsByEntity = await ProcessDeletedEntity(transactionEntity);
+                        break;
 
-                        case EntityState.Deleted:
-                            fileRequestsByEntity = await ProcessDeletedEntity(transactionEntity);
-                            break;
+                    case EntityState.Modified:
+                        fileRequestsByEntity = await ProcessModifiedEntity(transactionEntity);
+                        break;
 
-                        case EntityState.Modified:
-                            fileRequestsByEntity = await ProcessModifiedEntity(transactionEntity);
-                            break;
-
-                        default:
-                        case EntityState.Detached:
-                        case EntityState.Unchanged:
-                            break;
-                    }
-
-                    fileRequestsAll.AddRange(fileRequestsByEntity);
+                    default:
+                    case EntityState.Detached:
+                    case EntityState.Unchanged:
+                        break;
                 }
-                await ProcessRequests(fileRequestsAll);
+
+                fileRequestsAll.AddRange(fileRequestsByEntity);
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"DependencyManager.PostProcess : {ex.Message}");
-            }
+            await ProcessRequests(fileRequestsAll);
         }
 
         /// <summary>
@@ -444,18 +456,7 @@ namespace ModelRelief.Services
             if (dependentFIlePropertyChanged)
             {
                 var dependentModels = await FindDependentModels(transactionEntity);
-                foreach (var dependentModel in dependentModels)    
-                {
-                    // all dependent models that have backing files are no longer synchronized
-                    var generatedFileDomainModel = dependentModel as GeneratedFileDomainModel;
-                    if (generatedFileDomainModel != null)
-                    {
-                        generatedFileDomainModel.FileIsSynchronized = false;
-                        Console.ForegroundColor = ConsoleColor.Magenta;
-                        Console.WriteLine($"The dependent file {generatedFileDomainModel.Name} of type {generatedFileDomainModel.GetType().Name} is no longer synchronized.");
-                        Console.ForegroundColor = ConsoleColor.White;
-                    }
-                }                        
+                InvalidateDependentModels(dependentModels);
             }
 
             return fileRequests;
@@ -474,13 +475,8 @@ namespace ModelRelief.Services
             if (!transactionEntity.HasDependents)
                 return fileRequests;
 
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Deleted class {transactionEntity.EntityType} has (first) dependent file {transactionEntity.DependentTypes[0]}.");
-            Console.ForegroundColor = ConsoleColor.White;
-
             dependentModels = await FindDependentModels(transactionEntity);
-
-            // WIP: Construct FileRequests...
+            InvalidateDependentModels(dependentModels);
 
             return fileRequests;
         }

@@ -1,5 +1,6 @@
 ﻿<--- Commit
 
+
 <-- Technical Education
         Manning AspNet Core book.
         Manning Dependency Injection book.
@@ -9,12 +10,26 @@
         Scale with a Python processor.
 
 <-- Short Term
+    How are Add operations handled?
+        Can it be done exclusively in the PostProcess step from the target model parameter?
+            Is any information needed from the PreProcess step?
+
     Abstract the identification of the Name and FileIsSynchronized propeties!
 
-    Should there be specialized implementations of FileRequestHandler?
-        There is no parent class that provides the TEntity type parameter.
-        The implementation of Generate will be very different for Mesh and DepthBuffer.
-            DepthBuffer will be a no-op (for now) since it requires access to graphics hardward.
+    DependencyManager FileRequest Tests
+        FileOperationGenerate
+        FileOperation.Request
+        Test property changes.
+            Construct a new dependency chain.
+            Modify a property. of a class with a DependentFile.
+            Confirm that the DependentFile was invalidated.
+
+    Replace Console output with Logger operations.
+        Add color support for logging.
+
+    Style
+        What is the best practice for the order of private and public methods?
+        StyleCop?
 
     Should FileTimeStamp be exposed?
         Should the assignment of FileSynchronized be deferred until the request has completed.
@@ -32,7 +47,7 @@
             *   For all GeneratedFileDomainModel dependents, set FileIsSynchronized = false.
 
             Deleted
-                For all GeneratedFileDomainModel dependents, set FileIsSynchronized = false.
+            *   For all GeneratedFileDomainModel dependents, set FileIsSynchronized = false.
             Added
                 For all GeneratedFileDomainModel dependents, if FileIsSynchronized = true, schedule a file generation.
 
@@ -54,19 +69,18 @@
             https://msdn.microsoft.com/magazine/mt694083
             https://msdn.microsoft.com/en-us/magazine/mt767693.aspx
 
-    DependencyManager Tests
-        Test property changes.
-            Construct a new dependency chain.
-            Modify a DependentFile property.
-            Confirm that the DependentFile was invalidated.
 
     How can properties be excluded (e.g. Attribute) from entity processing?
 
     Files
+        The name property for FileDomainModels is expected to include the extension.    
+            API Validation is needed to ensure that the extension is always present.
+            UI handling is needed to ensure the submitted Name includes the extension.
+                Can it be inferred from the Format?
         How will the Format property be used for Models, DepthBuffers and Meshes?
             Is it necessary if the file type can be found through reflection?
         How should the model name be held in the ModelViewer?
-            The model.Name property is now 'Root'.
+            The model.Name property is now 'Root' (Three).
 
     Remove .gitignore filters on Test\Data folder?
         What is the practical limit for git binary files? Are the GitHub restrictions?

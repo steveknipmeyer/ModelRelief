@@ -51,6 +51,20 @@ namespace ModelRelief.Api.V1.Shared.Rest
         }
 
         /// <summary>
+        /// Gnerates a file-backed resource when its dependencies have changed.
+        /// </summary>
+        /// <param name="fileRequest">FileRequest created during dependency processing.</param>
+        /// <param name="fileDomainModel">Domain model.</param>
+        /// <param name="fileName">Filename to generate.</param>
+        /// <returns>True if succesful.</returns>
+        public override async Task<bool> ProcessGenerate(FileRequest<Domain.Mesh> fileRequest, FileDomainModel fileDomainModel, string fileName)
+        {
+            Logger.LogInformation($"Mesh [Model Id = {fileRequest.TransactionEntity.PrimaryKey}, UserId = {fileRequest.TransactionEntity.UserId}, file = {fileName}] has been queued for file generation.");
+            await Task.CompletedTask;
+            return true;    
+        }
+
+        /// <summary>
         /// Handles the FileRequest.
         /// </summary>
         /// <param name="message">Request message</param>

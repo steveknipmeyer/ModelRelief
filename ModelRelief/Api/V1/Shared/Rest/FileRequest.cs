@@ -6,6 +6,7 @@
 
 using MediatR;
 using ModelRelief.Domain;
+using ModelRelief.Services;
 using System;
 using System.Security.Claims;
 
@@ -23,9 +24,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     public interface IFileRequest
     {
         FileOperation       Operation { get; set; }
-        ApplicationUser     User { get; set;}
-        int                 Id { get; set; }
-
+        TransactionEntity   TransactionEntity { get; set;}
     }
 
     /// <summary>
@@ -42,14 +41,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public FileOperation Operation { get; set;}
 
         /// <summary>
-        /// Gets or sets the User of the file owner.
+        /// Gets or sets the ChangeTracker transaction entity.
         /// </summary>
-        public ApplicationUser User { get; set;}
-
-        /// <summary>
-        /// Gets or sets the Id for the file metadata model.
-        /// </summary>
-        public int Id { get; set; }
+        public TransactionEntity TransactionEntity { get; set;}
 
         /// <summary>
         /// Constructor

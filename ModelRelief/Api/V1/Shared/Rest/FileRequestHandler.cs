@@ -8,18 +8,13 @@ using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ModelRelief.Api.V1.Shared.Errors;
 using ModelRelief.Database;
 using ModelRelief.Domain;
 using ModelRelief.Services;
-using ModelRelief.Utility;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -55,6 +50,47 @@ namespace ModelRelief.Api.V1.Shared.Rest
         }
 
         /// <summary>
+        /// Gnerates a file-backed resource when its dependencies have changed.
+        /// </summary>
+        /// <param name="fileRequest">FileRequest created during dependency processing.</param>
+        /// <param name="fileDomainModel">Domain model.</param>
+        /// <param name="fileName">Filename to generate.</param>
+        /// <returns>True if succesful.</returns>
+        public virtual async Task<bool> ProcessGenerate(FileRequest<TEntity> fileRequest, FileDomainModel fileDomainModel, string fileName)
+        {
+            Logger.LogError($"FileRequestHandler: Generate is not implemented: Type = {typeof(TEntity).Name}, Model Id = {fileRequest.TransactionEntity.PrimaryKey}, UserId = {fileRequest.TransactionEntity.UserId}");
+            await Task.CompletedTask;
+            return false;    
+        }
+
+        /// <summary>
+        /// Renames a file-backed resource when the metadata has changed.
+        /// </summary>
+        /// <param name="fileRequest">FileRequest created during dependency processing.</param>
+        /// <param name="fileDomainModel">Domain model.</param>
+        /// <param name="fileName">Filename to generate.</param>
+        /// <returns>True if succesful.</returns>
+        public virtual async Task<bool> ProcessRename(FileRequest<TEntity> fileRequest, FileDomainModel fileDomainModel, string fileName)
+        {
+            // find original Name property
+            string originalName = fileRequest.TransactionEntity.ChangeTrackerEntity.OriginalValues["Name"] as string;
+
+            var filePath = Path.GetDirectoryName(fileName);
+            var originalFile = Path.Combine(filePath, $"{originalName}");
+
+            if (!File.Exists(originalFile))
+            {
+                Logger.LogError($"FileRequestHandler: {originalFile} does not exist.");
+                throw new ModelFileNotFoundException(typeof(TEntity), originalName);
+            }                
+            Logger.LogInformation($"FileRequestHandler: {originalFile} will be renamed to {fileName}.");
+            File.Move(originalFile, fileName);
+
+            await Task.CompletedTask;
+            return true;    
+        }
+
+        /// <summary>
         /// Handles the FileRequest.
         /// </summary>
         /// <param name="message">Request message</param>
@@ -66,12 +102,23 @@ namespace ModelRelief.Api.V1.Shared.Rest
             if (!typeof(FileDomainModel).IsAssignableFrom(typeof(TEntity)))
                 throw new ModelNotBackedByFileException(typeof(TEntity));
 
-            var domainModel = await FindModelAsync<TEntity>(message.User, message.Id, throwIfNotFound: true);
+            var domainModel = await FindModelAsync<TEntity>(message.TransactionEntity.UserId, message.TransactionEntity.PrimaryKey, throwIfNotFound: true);
             var fileDomainModel = domainModel as FileDomainModel;
             
             var fileName = Path.Combine(StorageManager.DefaultModelStorageFolder(domainModel), domainModel.Name);
 
-            return true;
+            switch(message.Operation)
+            {
+                case FileOperation.Rename:
+                    return await ProcessRename(message, fileDomainModel, fileName);
+
+                case FileOperation.Generate:
+                    return await ProcessGenerate(message, fileDomainModel, fileName);
+
+                default:
+                    Logger.LogError($"FileRequestHandler: Invalid operation {message.Operation}, UserId = {message.TransactionEntity.UserId}, Model Id = {message.TransactionEntity.PrimaryKey}");
+                    return false;
+            }
         }
     }
 }

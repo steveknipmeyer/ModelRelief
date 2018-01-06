@@ -100,9 +100,23 @@ namespace ModelRelief.Api.V1.Shared
         public virtual async Task<TEntity> FindModelAsync<TEntity> (ApplicationUser applicationUser, int id, bool throwIfNotFound = true)
             where TEntity : DomainModel
         {
+            return await FindModelAsync<TEntity>(applicationUser.Id, id, throwIfNotFound);
+        }
+
+        /// <summary>
+        /// Returns the domain model for a given Id.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="userId">ApplicationUser Id.</param>
+        /// <param name="id">Target id to retrieve.</param>
+        /// <param name="throwIfNotFound">Throw EntityNotFoundException if not found.</param>
+        /// <returns>Domain model if exists, null otherwise.</returns>
+        public virtual async Task<TEntity> FindModelAsync<TEntity> (string userId, int id, bool throwIfNotFound = true)
+            where TEntity : DomainModel
+        {
             var domainModel = await DbContext.Set<TEntity>()
                                 .Where(m => (m.Id == id) && 
-                                            (m.UserId == applicationUser.Id))
+                                            (m.UserId == userId))
                                 .SingleOrDefaultAsync();
 
             if (throwIfNotFound && (domainModel == null))
