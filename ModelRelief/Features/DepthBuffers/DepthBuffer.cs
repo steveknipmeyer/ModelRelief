@@ -1,22 +1,26 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using AutoMapper;
-using FluentValidation;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Domain;
-using System.ComponentModel.DataAnnotations;
+﻿// -----------------------------------------------------------------------
+// <copyright file="DepthBuffer.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Dto
 {
+    using System.ComponentModel.DataAnnotations;
+    using AutoMapper;
+    using FluentValidation;
+    using ModelRelief.Api.V1.Shared.Rest;
+    using ModelRelief.Domain;
+
+    /// <summary>
+    /// Represents a DataTransferObject (DTO) for a DepthBuffer.
+    /// </summary>
     public class DepthBuffer : ITGetModel, IGeneratedFile
     {
         public int Id { get; set; }
 
-        [Required, Display (Name = "DepthBuffer Name")]
+        [Required]
+        [Display(Name = "DepthBuffer Name")]
         public string Name { get; set; }
         public string Description { get; set; }
 
@@ -36,13 +40,16 @@ namespace ModelRelief.Dto
         public bool FileIsSynchronized { get; set; }
     }
 
+    /// <summary>
+    /// FV validator to support Views and model-binding validation.
+    /// </summary>
     public class DepthBufferValidator : AbstractValidator<Dto.DepthBuffer>
     {
         public DepthBufferValidator()
         {
             RuleFor(m => m.Name)
                 .NotNull().WithMessage("The Name property is required.");
-         
+
             RuleFor(m => m.Description)
                 .NotNull().WithMessage("The Description property is required.");
 
@@ -50,16 +57,19 @@ namespace ModelRelief.Dto
                 .NotEmpty().WithMessage("The file format must be provided.");
         }
     }
-}
 
-namespace ModelRelief.Features.DepthBuffers
-{
-    public class MappingProfile : Profile
+    /// <summary>
+    /// AutoMapper mapping profile.
+    /// </summary>
+    public class DepthBufferMappingProfile : Profile
     {
-        public MappingProfile() 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DepthBufferMappingProfile"/> class.
+        /// Constructor.
+        /// </summary>
+        public DepthBufferMappingProfile()
         {
         CreateMap<Domain.DepthBuffer, Dto.DepthBuffer>().ReverseMap();
-
         }
     }
 }

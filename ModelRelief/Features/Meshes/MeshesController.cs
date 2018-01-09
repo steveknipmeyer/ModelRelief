@@ -1,20 +1,21 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using AutoMapper;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using ModelRelief.Utility;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="MeshesController.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Features.Meshes
 {
+    using System.Threading.Tasks;
+    using AutoMapper;
+    using MediatR;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.Extensions.Logging;
+    using ModelRelief.Database;
+    using ModelRelief.Domain;
+    using ModelRelief.Utility;
+
     /// <summary>
     /// Represents a controller to handle Mesh Ux requests.
     /// </summary>
@@ -22,6 +23,7 @@ namespace ModelRelief.Features.Meshes
     public class MeshesController : ViewController<Domain.Mesh, Dto.Mesh, Dto.Mesh, Dto.Mesh>
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="MeshesController"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
@@ -33,7 +35,7 @@ namespace ModelRelief.Features.Meshes
             : base(dbContext, userManager, loggerFactory, mapper, mediator)
         {
         }
-        
+
         /// <summary>
         /// Setup View controls for select controls, etc.
         /// </summary>
@@ -41,7 +43,7 @@ namespace ModelRelief.Features.Meshes
         protected async override Task InitializeViewControls(Dto.Mesh mesh = null)
         {
             var applicationUser = await Identity.FindApplicationUserAsync(UserManager, User);
-            var userId = applicationUser?.Id ?? "";
+            var userId = applicationUser?.Id ?? string.Empty;
 
             ViewBag.MeshFormat      = ViewHelpers.PopulateEnumDropDownList<MeshFormat>("Select mesh format");
 

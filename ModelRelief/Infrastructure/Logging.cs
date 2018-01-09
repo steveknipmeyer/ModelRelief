@@ -1,12 +1,8 @@
-﻿// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Database;
-using System;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="Logging.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Infrastructure
 {
@@ -24,4 +20,3 @@ namespace ModelRelief.Infrastructure
     {
     }
 }
-

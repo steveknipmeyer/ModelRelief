@@ -1,27 +1,30 @@
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using FluentAssertions;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Domain;
-using ModelRelief.Test.TestModels;
-using Newtonsoft.Json;
-using System;
-using System.Diagnostics;
-using System.Net;
-using System.Threading.Tasks;
-using Xunit;
+// -----------------------------------------------------------------------
+// <copyright file="IntegrationTests.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Test.Integration
 {
+    using System;
+    using System.Diagnostics;
+    using System.Net;
+    using System.Threading.Tasks;
+    using FluentAssertions;
+    using ModelRelief.Api.V1.Shared.Rest;
+    using ModelRelief.Domain;
+    using ModelRelief.Test.TestModels;
+    using Newtonsoft.Json;
+    using Xunit;
+
     /// <summary>
     /// Integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
+    /// <typeparam name="TEntity">Domain model.</typeparam>
+    /// <typeparam name="TGetModel">DTO Get model.</typeparam>
     [Collection("Database")]
-    public abstract class IntegrationTests <TEntity, TGetModel>: IClassFixture<ClassFixture>, IAsyncLifetime
+    public abstract class IntegrationTests<TEntity, TGetModel> : IClassFixture<ClassFixture>, IAsyncLifetime
         where TEntity   : DomainModel
         where TGetModel : class, ITGetModel, new()
     {
@@ -29,8 +32,11 @@ namespace ModelRelief.Test.Integration
         public TestModel<TEntity, TGetModel> TestModel { get; set; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="IntegrationTests{TEntity, TGetModel}"/> class.
         /// Constructor
         /// </summary>
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        /// <param name="testModel">A test model under integration testing.</param>
         public IntegrationTests(ClassFixture classFixture, TestModel<TEntity, TGetModel> testModel)
         {
             ClassFixture = classFixture;
@@ -85,7 +91,7 @@ namespace ModelRelief.Test.Integration
         public void AssertApiErrorHttpStatusCode(RequestResponse requestResponse, HttpStatusCode statusCode)
         {
             var apiError = UnpackApiError(requestResponse);
-            apiError.HttpStatusCode.Should().Be(( int )statusCode);
+            apiError.HttpStatusCode.Should().Be((int)statusCode);
         }
 
         /// <summary>
@@ -96,7 +102,7 @@ namespace ModelRelief.Test.Integration
         public void AssertApiErrorCode(RequestResponse requestResponse, ApiErrorCode statusCode)
         {
             var apiError = UnpackApiError(requestResponse);
-            apiError.ApiErrorCode.Should().Be(( int )statusCode);
+            apiError.ApiErrorCode.Should().Be((int)statusCode);
         }
 
         /// <summary>
@@ -122,6 +128,7 @@ namespace ModelRelief.Test.Integration
         /// <summary>
         /// Delete an existing model.
         /// </summary>
+        /// <param name="existingModel">Model to delete.</param>
         public virtual async Task DeleteModel(TGetModel existingModel)
         {
             // Arrange

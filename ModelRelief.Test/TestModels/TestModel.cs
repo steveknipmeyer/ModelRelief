@@ -1,41 +1,44 @@
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Domain;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Xunit;
+// -----------------------------------------------------------------------
+// <copyright file="TestModel.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Test.TestModels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using System.Threading.Tasks;
+    using ModelRelief.Api.V1.Shared.Rest;
+    using ModelRelief.Domain;
+    using Newtonsoft.Json;
+    using Xunit;
+
     /// <summary>
     /// Represents a test model under integration testing.
     /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TEntity">Domain model.</typeparam>
+    /// <typeparam name="TGetModel">DTO Get model.</typeparam>
     public abstract class TestModel<TEntity, TGetModel>
         where TEntity : DomainModel
         where TGetModel : class, ITGetModel, new()
-    { 
+    {
         public IEnumerable<int> IdRange  { get; set; }
 
         public string ApiUrl { get; set; }
-        public string UxUrl  {get; set; }
+        public string UxUrl  { get; set; }
         public string FirstModelName { get; set; }
 
         public List<string> ReferencePropertyNames  { get; set; }
         public int? InvalidReferenceProperty { get; set; }
         public int? ValidReferenceProperty { get; set; }
-        
+
         public string EnumPropertyName { get; set; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="TestModel{TEntity, TGetModel}"/> class.
         /// Constructor.
         /// </summary>
         public TestModel()
@@ -48,11 +51,11 @@ namespace ModelRelief.Test.TestModels
         /// </summary>
         public virtual void Initialize()
         {
-            ApiUrl = "";
-            UxUrl  = "";
-            
+            ApiUrl = string.Empty;
+            UxUrl  = string.Empty;
+
             IdRange = Enumerable.Range(0, 0);
-            FirstModelName = "";
+            FirstModelName = string.Empty;
 
             ReferencePropertyNames = new List<string>();
             InvalidReferenceProperty = 0;
@@ -64,7 +67,8 @@ namespace ModelRelief.Test.TestModels
         /// <summary>
         /// Finds an existing model.
         /// </summary>
-        /// <param name="id">Id of model to retrieve.</param>
+        /// <param name="classFixture">Class fixture.</param>
+        /// <param name="modelId">Id of model to retrieve.</param>
         /// <returns>Existing model.</returns>
         public async Task<TGetModel> FindModel(ClassFixture classFixture, int modelId)
         {
@@ -76,13 +80,12 @@ namespace ModelRelief.Test.TestModels
             return existingModel;
         }
 
-
         /// <summary>
         /// Returns the reference property.
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="model">DTO Get model.</param>
         /// <returns>Reference property for testing.</returns>
-        private PropertyInfo GetReferencePropertyPropertyInfo (TGetModel model)
+        private PropertyInfo GetReferencePropertyPropertyInfo(TGetModel model)
         {
             Type type = model.GetType();
             PropertyInfo[] properties = type.GetProperties();
@@ -97,9 +100,9 @@ namespace ModelRelief.Test.TestModels
         /// <param name="model">Model to query.</param>
         /// <returns>Reference property value.</returns>
         public int?  GetReferenceProperty(TGetModel model)
-        {           
+        {
             var referenceProperty  = GetReferencePropertyPropertyInfo(model);
-            var propertyValue = (int?) referenceProperty.GetValue(model, null);
+            var propertyValue = (int?)referenceProperty.GetValue(model, null);
 
             return propertyValue;
         }
@@ -108,12 +111,13 @@ namespace ModelRelief.Test.TestModels
         /// Sets the reference property.
         /// </summary>
         /// <param name="model">Model to update.</param>
+        /// <param name="value">Property value to set.</param>
         /// <returns>Model with updated reference property.</returns>
         public TGetModel  SetReferenceProperty(TGetModel model, int? value)
         {
             var referenceProperty  = GetReferencePropertyPropertyInfo(model);
             referenceProperty.SetValue(model, value);
-            
+
             return model;
         }
 
@@ -137,9 +141,9 @@ namespace ModelRelief.Test.TestModels
         public TGetModel ConstructInvalidModel()
         {
             // Required properties are missing.
-            //  Name 
-            //  Description 
-            //  Format 
+            //  Name
+            //  Description
+            //  Format
             var invalidModel = new TGetModel()
             {
             };

@@ -1,16 +1,8 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
-
-using ModelRelief.Domain;
+﻿// -----------------------------------------------------------------------
+// <copyright file="Project.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Domain
 {
@@ -19,6 +11,7 @@ namespace ModelRelief.Domain
         // Navigation Properties
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Project"/> class.
         /// Default constructor.
         /// </summary>
         public Project()

@@ -1,20 +1,18 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿// -----------------------------------------------------------------------
+// <copyright file="Settings.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Test
 {
+    using System.IO;
+
     /// <summary>
     /// Unit test settings that describe the host and runtime environment.
     /// These should be mocked.
     /// </summary>
-    class Settings
+    public class Settings
     {
         public static readonly string Scheme = "http";
         public static readonly string Host   = "localhost";
@@ -36,14 +34,14 @@ namespace ModelRelief.Test
             var currentDirectory = Directory.GetCurrentDirectory();
 
             // reset path from <top> down
-            var contentRootPath = currentDirectory.Remove (currentDirectory.IndexOf(Settings.ContentRootFolder) + Settings.ContentRootFolder.Length);
-            contentRootPath = Path.Combine (contentRootPath, Settings.ContentRootFolder) + @"\";
+            var contentRootPath = currentDirectory.Remove(currentDirectory.IndexOf(Settings.ContentRootFolder) + Settings.ContentRootFolder.Length);
+            contentRootPath = Path.Combine(contentRootPath, Settings.ContentRootFolder) + @"\";
 
             return contentRootPath;
         }
 
         /// <summary>
-        /// Returns the root of the test files folder. 
+        /// Returns the root of the test files folder.
         /// </summary>
         /// <returns>Test files folder.</returns>
         public static string GetTestFilesPath()

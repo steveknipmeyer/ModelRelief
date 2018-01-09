@@ -1,26 +1,21 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.FileProviders;
-using System.IO;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using ModelRelief.Utility;
-using System.Security.Principal;
+﻿// -----------------------------------------------------------------------
+// <copyright file="TestAuthentication.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Middleware
-    {
+{
+    using System;
+    using System.Security.Principal;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
+    using ModelRelief.Utility;
+
     public class Authentication
     {
-        public static async Task Test (IHostingEnvironment env, HttpContext context, Func<Task> next)
+        public static async Task Test(IHostingEnvironment env, HttpContext context, Func<Task> next)
         {
             bool isAuthenticated = context.User.Identity.IsAuthenticated;
             if (env.IsEnvironment("Test") && !isAuthenticated)
@@ -34,7 +29,7 @@ namespace ModelRelief.Middleware
                 var user = await userManager.FindByNameAsync(userName);
                 ClaimsPrincipal claimsPrincipal = await signInManager.CreateUserPrincipalAsync(user);
                 context.User = new System.Security.Claims.ClaimsPrincipal(claimsPrincipal);
-#endif                    
+#endif
                 isAuthenticated = context.User.Identity.IsAuthenticated;
                 Console.WriteLine($"{Identity.MockUserName} authenticated: {isAuthenticated}");
             }

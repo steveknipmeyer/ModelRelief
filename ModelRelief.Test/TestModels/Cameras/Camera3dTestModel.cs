@@ -1,31 +1,25 @@
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using FluentAssertions;
-using ModelRelief.Api.V1.Shared.Rest;
-using Newtonsoft.Json;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Xunit;
+// -----------------------------------------------------------------------
+// <copyright file="Camera3dTestModel.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Test.TestModels.Cameras
-
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     /// <summary>
     /// Camera test model.
     /// </summary>
     public class CameraTestModel : TestModel<Domain.Camera, Dto.Camera>
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="CameraTestModel"/> class.
         /// Constructor
         /// </summary>
-        public CameraTestModel() :
-            base ()
+        public CameraTestModel()
+            : base()
         {
         }
 
@@ -36,11 +30,11 @@ namespace ModelRelief.Test.TestModels.Cameras
         {
             ApiUrl = "/api/v1/cameras";
             UxUrl  = "/cameras";
-            
+
             IdRange = Enumerable.Range(1, 2);
             FirstModelName = "Top Camera";
 
-            ReferencePropertyNames = new List<string> {"ProjectId"};
+            ReferencePropertyNames = new List<string> { "ProjectId" };
             InvalidReferenceProperty = 0;
             ValidReferenceProperty   = 1;
 

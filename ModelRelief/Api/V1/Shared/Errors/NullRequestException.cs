@@ -1,25 +1,27 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="NullRequestException.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Api.V1.Shared.Errors
 {
+    using System;
+
     /// <summary>
     ///  Represents an exception when a CQRS request is null.
     /// </summary>
     public class NullRequestException : Exception
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="NullRequestException"/> class.
         /// Constructor.
         /// </summary>
-        public NullRequestException(string requestPath, Type request) 
-            : base($"{requestPath} received an empty {request.Name}.") {}
+        /// <param name="requestPath">HTTP endpoint that led to the exception.</param>
+        /// <param name="request">Type of the request.</param>
+        public NullRequestException(string requestPath, Type request)
+            : base($"{requestPath} received an empty {request.Name}.")
+        {
+        }
     }
 }

@@ -1,15 +1,16 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using ModelRelief.Domain;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="AccountController.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Features.Accounts
 {
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using ModelRelief.Domain;
+
     public class AccountController : Controller
         {
         private UserManager<ApplicationUser>   _userManager;
@@ -27,7 +28,8 @@ namespace ModelRelief.Features.Accounts
             return View();
             }
 
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
             {
             if (!ModelState.IsValid)
@@ -36,16 +38,16 @@ namespace ModelRelief.Features.Accounts
                 return View();
                 }
 
-            var user = new ApplicationUser() { UserName = model.Username};
-            var createResult = await _userManager.CreateAsync (user, model.Password);
+            var user = new ApplicationUser() { UserName = model.Username };
+            var createResult = await _userManager.CreateAsync(user, model.Password);
             if (!createResult.Succeeded)
                 {
                 foreach (var error in createResult.Errors)
                     {
-                    ModelState.AddModelError("", error.Description);
+                    ModelState.AddModelError(string.Empty, error.Description);
                     }
                 // re-display with validation messages
-                return View();               
+                return View();
                 }
 
             // success
@@ -53,7 +55,8 @@ namespace ModelRelief.Features.Accounts
             return RedirectToAction("Index", "Home");
             }
 
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
             {
             await _signInManager.SignOutAsync();
@@ -66,7 +69,8 @@ namespace ModelRelief.Features.Accounts
             return View();
             }
 
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
             {
             if (!ModelState.IsValid)
@@ -74,11 +78,11 @@ namespace ModelRelief.Features.Accounts
                 // re-display with validation messages
                 return View();
                 }
-            
+
             var loginResult = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
             if (!loginResult.Succeeded)
                 {
-                ModelState.AddModelError("", "Login was not successful. Please try again.");
+                ModelState.AddModelError(string.Empty, "Login was not successful. Please try again.");
 
                 // re-display with validation messages
                 return View();

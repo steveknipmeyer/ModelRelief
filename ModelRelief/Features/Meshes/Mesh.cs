@@ -1,21 +1,17 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using AutoMapper;
-using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="Mesh.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Dto
 {
+    using System.ComponentModel.DataAnnotations;
+    using AutoMapper;
+    using FluentValidation;
+    using ModelRelief.Api.V1.Shared.Rest;
+    using ModelRelief.Domain;
+
     /// <summary>
     /// Represents a DataTransferObject (DTO) for a Mesh.
     /// </summary>
@@ -23,7 +19,7 @@ namespace ModelRelief.Dto
     {
         public int Id { get; set; }
 
-        [Display (Name = "Mesh Name")]
+        [Display(Name = "Mesh Name")]
         public string Name { get; set; }
         public string Description { get; set; }
 
@@ -46,6 +42,7 @@ namespace ModelRelief.Dto
         public bool FileIsSynchronized { get; set; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Mesh"/> class.
         /// Constructor.
         /// </summary>
         public Mesh()
@@ -59,13 +56,14 @@ namespace ModelRelief.Dto
     public class MeshValidator : AbstractValidator<Dto.Mesh>
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="MeshValidator"/> class.
         /// Constructor.
         /// </summary>
         public MeshValidator()
         {
             RuleFor(m => m.Name)
                 .NotNull().WithMessage("The Name property is required.");
-         
+
             RuleFor(m => m.Description)
                 .NotNull().WithMessage("The Description property is required.")
                 .MinimumLength(3).WithMessage("The Description must be three or more characters.");
@@ -75,19 +73,17 @@ namespace ModelRelief.Dto
                 .NotEmpty().WithMessage("The file format must be provided.");
         }
     }
-}
 
-namespace ModelRelief.Features.Meshes
-{
     /// <summary>
     /// AutoMapper mapping profile.
     /// </summary>
-    public class MappingProfile : Profile
+    public class MeshMappingProfile : Profile
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="MeshMappingProfile"/> class.
         /// Constructor.
         /// </summary>
-        public MappingProfile() 
+        public MeshMappingProfile()
         {
             CreateMap<Domain.Mesh, Dto.Mesh>().ReverseMap();
         }

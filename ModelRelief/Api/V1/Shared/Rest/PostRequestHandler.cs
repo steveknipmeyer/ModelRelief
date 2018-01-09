@@ -1,26 +1,26 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using FluentValidation;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using ModelRelief.Services;
-using ModelRelief.Utility;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="PostRequestHandler.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
+    using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
+    using FluentValidation;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Logging;
+    using ModelRelief.Database;
+    using ModelRelief.Domain;
+    using ModelRelief.Services;
+    using ModelRelief.Utility;
+
     /// <summary>
     /// Represents a handler for a POST request to create a new model.
     /// </summary>
@@ -32,6 +32,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         where TGetModel  : ITGetModel
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="PostRequestHandler{TEntity, TRequestModel, TGetModel}"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
@@ -42,9 +43,15 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="validators">All validators matching IValidator for the given request.</param>
-       public PostRequestHandler(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IHostingEnvironment hostingEnvironment, 
-                                 Services.IConfigurationProvider  configurationProvider, IDependencyManager dependencyManager, 
-                                 IEnumerable<IValidator<PostRequest<TEntity, TRequestModel, TGetModel>>> validators)
+        public PostRequestHandler(
+            ModelReliefDbContext dbContext,
+            UserManager<ApplicationUser> userManager,
+            ILoggerFactory loggerFactory,
+            IMapper mapper,
+            IHostingEnvironment hostingEnvironment,
+            Services.IConfigurationProvider  configurationProvider,
+            IDependencyManager dependencyManager,
+            IEnumerable<IValidator<PostRequest<TEntity, TRequestModel, TGetModel>>> validators)
             : base(dbContext, userManager, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators)
         {
         }
@@ -61,14 +68,14 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
              // validate all references are owned
             await ValidateReferences<TEntity>(newModel, message.User);
-           
+
             // set ownership
             newModel.User = await Identity.FindApplicationUserAsync(UserManager, message.User);
 
             DbContext.Set<TEntity>().Add(newModel);
             await DependencyManager.PersistChangesAsync(newModel, cancellationToken);
 
-            // N.B. ProjectTo populates all navigation properties. 
+            // N.B. ProjectTo populates all navigation properties.
             //      Mapper.Map<TGetModel>(newModel) would return only the primary model.
             var expandedNewModel = await DbContext.Set<TEntity>()
                  .ProjectTo<TGetModel>(Mapper.ConfigurationProvider)

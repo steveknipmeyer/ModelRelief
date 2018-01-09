@@ -1,22 +1,21 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Database;
-using Serilog;
-using System;
-using System.IO;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="Program.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Infrastructure
 {
+    using System;
+    using System.IO;
+    using System.Reflection;
+    using Microsoft.AspNetCore;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using ModelRelief.Database;
+    using Serilog;
+
     public class Program
     {
         /// <summary>
@@ -24,7 +23,7 @@ namespace ModelRelief.Infrastructure
         /// </summary>
         /// <param name="args">Arguments</param>
         public static void Main(string[] args)
-        {   
+        {
             ConfigureLogging();
 
             var host = BuildWebHost(args);
@@ -78,7 +77,7 @@ namespace ModelRelief.Infrastructure
                                      .UseSerilog()
                                      .Build();
 
-                return webHost;            
+                return webHost;
             }
             catch (Exception ex)
             {

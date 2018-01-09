@@ -1,17 +1,13 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using ModelRelief.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="GetListRequest.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
+    using ModelRelief.Domain;
+
     /// <summary>
     /// Represents a GET request of a collection that supports paging.
     /// </summary>
@@ -30,10 +26,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Gets or sets the propery name to sort the collection.
         /// </summary>
-        public string OrderBy { get; set; } = nameof (DomainModel.Id);
+        public string OrderBy { get; set; } = nameof(DomainModel.Id);
 
         /// <summary>
-        /// Gets or sets the order of the collectionn sort; ascending or descending.
+        /// Gets or sets a value indicating whether gets or sets the order of the collectionn sort; ascending or descending.
         /// </summary>
         public bool Ascending { get; set; } = true;
     }

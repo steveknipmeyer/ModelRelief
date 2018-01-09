@@ -1,25 +1,25 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Domain;
-using ModelRelief.Services;
-using ModelRelief.Utility;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="DbInitializer.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Database
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+    using ModelRelief.Domain;
+    using ModelRelief.Services;
+    using ModelRelief.Utility;
+
     public class DbInitializer
     {
         private IServiceProvider                Services { get; set; }
@@ -32,12 +32,10 @@ namespace ModelRelief.Database
 
         private ApplicationUser                 _user;
         private string                          _storeUsers { get; set; }
-        
+
         public DbInitializer(IServiceProvider services)
         {
-            if (null == services)
-                throw new ArgumentNullException(nameof(services));
-            Services = services;
+            Services = services ?? throw new ArgumentNullException(nameof(services));
 
             HostingEnvironment = Services.GetRequiredService<IHostingEnvironment>();
             if (HostingEnvironment == null)
@@ -76,15 +74,14 @@ namespace ModelRelief.Database
         private bool ParseBooleanEnvironmentVariable(string variableName)
         {
             var variableValue = ConfigurationProvider.GetSetting(variableName, throwIfNotFound: false);
-            var result = false;
-            Boolean.TryParse(variableValue, out result);
+            bool.TryParse(variableValue, out bool result);
             return result;
         }
 
         /// <summary>
         /// Process the command line arguments and initialize.
         /// </summary>
-        private void Initialize ()
+        private void Initialize()
         {
             if (ParseBooleanEnvironmentVariable("InitializeUserStore"))
                 DeleteUserStore();
@@ -132,7 +129,7 @@ namespace ModelRelief.Database
                     databaseFolder = Path.Combine(HostingEnvironment.ContentRootPath, "Database");
                     fileList = new Dictionary<string, string>
                     {
-                        {"ModelReliefBaseline.db",     "ModelReliefTest.db" }
+                        { "ModelReliefBaseline.db",     "ModelReliefTest.db" },
                     };
                     break;
 
@@ -141,8 +138,8 @@ namespace ModelRelief.Database
                     databaseFolder = Environment.ExpandEnvironmentVariables("%USERPROFILE%");
                     fileList = new Dictionary<string, string>
                     {
-                        {"ModelReliefBaseline.mdf",     "ModelReliefTest.mdf" },
-                        {"ModelReliefBaseline_log.ldf", "ModelReliefTest_log.ldf" }
+                        { "ModelReliefBaseline.mdf",     "ModelReliefTest.mdf" },
+                        { "ModelReliefBaseline_log.ldf", "ModelReliefTest_log.ldf" },
                     };
                     break;
             }
@@ -151,8 +148,8 @@ namespace ModelRelief.Database
             {
                 foreach (KeyValuePair<string, string> entry in fileList)
                 {
-                    var sourcePath = Path.Combine(databaseFolder, restore? entry.Key : entry.Value);
-                    var targetPath = Path.Combine(databaseFolder, restore? entry.Value : entry.Key);
+                    var sourcePath = Path.Combine(databaseFolder, restore ? entry.Key : entry.Value);
+                    var targetPath = Path.Combine(databaseFolder, restore ? entry.Value : entry.Key);
                     File.Copy(sourcePath, targetPath, overwrite: true);
                 }
             }
@@ -172,7 +169,7 @@ namespace ModelRelief.Database
             {
                 "TestAccount",
                 "ArtCAMAccount",
-                "VectricAccount"
+                "VectricAccount",
             };
 
             foreach (var account in userAccounts)
@@ -191,14 +188,14 @@ namespace ModelRelief.Database
                 CreateUserStore();
             }
 
-            if (String.Equals(HostingEnvironment.EnvironmentName, "Test", StringComparison.CurrentCultureIgnoreCase))
+            if (string.Equals(HostingEnvironment.EnvironmentName, "Test", StringComparison.CurrentCultureIgnoreCase))
             {
                 // create the baseline copy of the test
                 DbContext.SaveChanges();
                 switch (ConfigurationProvider.Database)
                 {
                     case RelationalDatabaseProvider.SQLServer:
-                        // WIP: The Test database cannot be copied to create the baseline due to a locking error.    
+                        // WIP: The Test database cannot be copied to create the baseline due to a locking error.
                         break;
 
                     default:
@@ -206,7 +203,7 @@ namespace ModelRelief.Database
                         SynchronizeTestDatabase(restore: false);
                         break;
                 }
-            }            
+            }
         }
 
         /// <summary>
@@ -221,7 +218,7 @@ namespace ModelRelief.Database
             Console.WriteLine($"Delete the user store folder: {storeUsersPath} (Y/N)?");
             Console.ForegroundColor = ConsoleColor.White;
             var response = Console.ReadLine();
-            if (!String.Equals(response, "Y"))
+            if (!string.Equals(response, "Y"))
                 return;
 
             Files.DeleteFolder(storeUsersPath, true);
@@ -233,7 +230,7 @@ namespace ModelRelief.Database
         /// Copy the test data files into the web user store.
         /// </summary>
         private void CreateUserStore()
-        {   
+        {
             CopyTestFiles<Domain.Model3d>("ResourcePaths:Folders:Model3d");
             CopyTestFiles<Domain.DepthBuffer>("ResourcePaths:Folders:DepthBuffer");
             CopyTestFiles<Domain.Mesh>("ResourcePaths:Folders:Mesh");
@@ -252,8 +249,8 @@ namespace ModelRelief.Database
             var password = ConfigurationProvider.GetSetting(passwordSetting);
             var id       = ConfigurationProvider.GetSetting(idSetting);
 
-            var user = new ApplicationUser() { UserName = $"{userName}", Id = $"{id}"};
-            var createResult = await UserManager.CreateAsync (user, $"{password}");
+            var user = new ApplicationUser() { UserName = $"{userName}", Id = $"{id}" };
+            var createResult = await UserManager.CreateAsync(user, $"{password}");
             if (!createResult.Succeeded)
                 throw new Exception(createResult.ToString());
 
@@ -267,9 +264,9 @@ namespace ModelRelief.Database
         {
             var projects = new Project[]
             {
-                new Project{Name = "ModelRelief", Description = "Development and Test", User = _user},
-                new Project{Name = "Architecture", Description = "Architectural woodwork, panels and details", User = _user},
-                new Project{Name = "Jewelry", Description = "Jewelry watch faces, bracelets and pendants", User = _user},
+                new Project { Name = "ModelRelief", Description = "Development and Test", User = _user },
+                new Project { Name = "Architecture", Description = "Architectural woodwork, panels and details", User = _user },
+                new Project { Name = "Jewelry", Description = "Jewelry watch faces, bracelets and pendants", User = _user },
             };
             foreach (Project project in projects)
             {
@@ -287,22 +284,27 @@ namespace ModelRelief.Database
         {
             var cameras = new Camera[]
             {
-                new Camera{Name = "Top Camera", Description = "Aligned with negative Z", StandardView = StandardView.Top,
-                           PositionX = 0.0, PositionY = 0.0, PositionZ = 100.0,
-                           LookAtX   = 0.0, LookAtY = 0.0, LookAtZ = 0.0,
-                           FieldOfView = 35.0,
-                           Near = 0.0, Far = 1000.0,
-                           BoundClippingPlanes = false,
-                           User = _user, Project = FindByName<Project>("ModelRelief")},
+                new Camera
+                {
+                    Name = "Top Camera", Description = "Aligned with negative Z", StandardView = StandardView.Top,
+                    PositionX = 0.0, PositionY = 0.0, PositionZ = 100.0,
+                    LookAtX   = 0.0, LookAtY = 0.0, LookAtZ = 0.0,
+                    FieldOfView = 35.0,
+                    Near = 0.0, Far = 1000.0,
+                    BoundClippingPlanes = false,
+                    User = _user, Project = FindByName<Project>("ModelRelief"),
+                },
 
-                new Camera{Name = "Isometric Camera", Description = "Isometric", StandardView = StandardView.Isometric,
-                           PositionX = 50.0, PositionY = 50.0, PositionZ = 50.0,
-                           LookAtX   = 0.0, LookAtY = 0.0, LookAtZ = 0.0,
-                           FieldOfView = 35.0,
-                           Near = 0.0, Far = 1000.0,
-                           BoundClippingPlanes = false,
-                           User = _user, Project = FindByName<Project>("Architecture")}
-
+                new Camera
+                {
+                    Name = "Isometric Camera", Description = "Isometric", StandardView = StandardView.Isometric,
+                    PositionX = 50.0, PositionY = 50.0, PositionZ = 50.0,
+                    LookAtX   = 0.0, LookAtY = 0.0, LookAtZ = 0.0,
+                    FieldOfView = 35.0,
+                    Near = 0.0, Far = 1000.0,
+                    BoundClippingPlanes = false,
+                    User = _user, Project = FindByName<Project>("Architecture"),
+                },
             };
 
             foreach (Camera camera in cameras)
@@ -321,16 +323,31 @@ namespace ModelRelief.Database
         {
             var models = new Model3d[]
             {
-                new Model3d{Name = "lucy.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ,
-                            User = _user, Project = FindByName<Project>("ModelRelief"), Camera = FindByName<Camera>("Top Camera")},
-                new Model3d{Name = "armadillo.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ,
-                            User = _user, Project = FindByName<Project>("ModelRelief"), Camera = FindByName<Camera>("Isometric Camera")},
-                new Model3d{Name = "bunny.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ,
-                            User = _user, Project = FindByName<Project>("Architecture"), Camera = FindByName<Camera>("Top Camera")},
-                new Model3d{Name = "dragon.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ,
-                            User = _user, Project = FindByName<Project>("Jewelry"), Camera = FindByName<Camera>("Top Camera")},
-                new Model3d{Name = "tyrannosaurus.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ,
-                            User = _user, Project = FindByName<Project>("Jewelry"), Camera = FindByName<Camera>("Isometric Camera")},
+                new Model3d
+                {
+                    Name = "lucy.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ,
+                    User = _user, Project = FindByName<Project>("ModelRelief"), Camera = FindByName<Camera>("Top Camera"),
+                },
+                new Model3d
+                {
+                    Name = "armadillo.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ,
+                    User = _user, Project = FindByName<Project>("ModelRelief"), Camera = FindByName<Camera>("Isometric Camera"),
+                },
+                new Model3d
+                {
+                    Name = "bunny.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ,
+                    User = _user, Project = FindByName<Project>("Architecture"), Camera = FindByName<Camera>("Top Camera"),
+                },
+                new Model3d
+                {
+                    Name = "dragon.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ,
+                    User = _user, Project = FindByName<Project>("Jewelry"), Camera = FindByName<Camera>("Top Camera"),
+                },
+                new Model3d
+                {
+                    Name = "tyrannosaurus.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ,
+                    User = _user, Project = FindByName<Project>("Jewelry"), Camera = FindByName<Camera>("Isometric Camera"),
+                },
             };
 
             foreach (Model3d model in models)
@@ -350,15 +367,21 @@ namespace ModelRelief.Database
         {
             var meshTransforms = new MeshTransform[]
             {
-                new MeshTransform{Name = "Identity", Description = "Default transform",
-                            Depth = 1.0, Width = 100.0,
-                            Tau = 1.0, SigmaGaussianBlur = 1.0, SigmaGaussianSmooth = 1.0, LambdaLinearScaling = 1.0,
-                            User = _user, Project = FindByName<Project>("ModelRelief")},
+                new MeshTransform
+                {
+                    Name = "Identity", Description = "Default transform",
+                    Depth = 1.0, Width = 100.0,
+                    Tau = 1.0, SigmaGaussianBlur = 1.0, SigmaGaussianSmooth = 1.0, LambdaLinearScaling = 1.0,
+                    User = _user, Project = FindByName<Project>("ModelRelief"),
+                },
 
-                new MeshTransform{Name = "Pendant", Description = "Pendant transform",
-                            Depth = 0.5, Width = 10.0,
-                            Tau = 0.75, SigmaGaussianBlur = 0.5, SigmaGaussianSmooth = 0.25, LambdaLinearScaling = 1.0,
-                            User = _user, Project = FindByName<Project>("Architecture")}
+                new MeshTransform
+                {
+                    Name = "Pendant", Description = "Pendant transform",
+                    Depth = 0.5, Width = 10.0,
+                    Tau = 0.75, SigmaGaussianBlur = 0.5, SigmaGaussianSmooth = 0.25, LambdaLinearScaling = 1.0,
+                    User = _user, Project = FindByName<Project>("Architecture"),
+                },
             };
 
             foreach (MeshTransform meshTransform in meshTransforms)
@@ -377,12 +400,21 @@ namespace ModelRelief.Database
         {
             var depthBuffers = new DepthBuffer[]
             {
-                new DepthBuffer{Name = "lucy.raw", Description = "Generated in Maya", Format = DepthBufferFormat.Raw, Camera = FindByName<Camera>("Top Camera"), Model = FindByName<Model3d>("lucy.obj"),
-                                User = _user, Project = FindByName<Project>("ModelRelief")},
-                new DepthBuffer{Name = "bunny.raw", Description = "Generated in VRay", Format = DepthBufferFormat.Raw, Camera = FindByName<Camera>("Isometric Camera"), Model = FindByName<Model3d>("bunny.obj"),
-                                User = _user, Project = FindByName<Project>("Architecture")},
-                new DepthBuffer{Name = "armadillo.raw", Description = "Generated in Rhino",Format = DepthBufferFormat.Raw, Camera = FindByName<Camera>("Isometric Camera"), Model = FindByName<Model3d>("armadillo.obj"),
-                                User = _user, Project = FindByName<Project>("Jewelry")},
+                new DepthBuffer
+                {
+                    Name = "lucy.raw", Description = "Generated in Maya", Format = DepthBufferFormat.Raw, Camera = FindByName<Camera>("Top Camera"), Model = FindByName<Model3d>("lucy.obj"),
+                    User = _user, Project = FindByName<Project>("ModelRelief"),
+                },
+                new DepthBuffer
+                {
+                    Name = "bunny.raw", Description = "Generated in VRay", Format = DepthBufferFormat.Raw, Camera = FindByName<Camera>("Isometric Camera"), Model = FindByName<Model3d>("bunny.obj"),
+                    User = _user, Project = FindByName<Project>("Architecture"),
+                },
+                new DepthBuffer
+                {
+                    Name = "armadillo.raw", Description = "Generated in Rhino", Format = DepthBufferFormat.Raw, Camera = FindByName<Camera>("Isometric Camera"), Model = FindByName<Model3d>("armadillo.obj"),
+                    User = _user, Project = FindByName<Project>("Jewelry"),
+                },
             };
 
             foreach (DepthBuffer depthBuffer in depthBuffers)
@@ -402,12 +434,21 @@ namespace ModelRelief.Database
         {
             var meshes = new Mesh[]
             {
-                new Mesh{Name = "lucy.obj", Description = "Isometric", Format = MeshFormat.OBJ, Camera = FindByName<Camera>("Isometric Camera"), DepthBuffer = FindByName<DepthBuffer>("lucy.raw"), MeshTransform =  FindByName<MeshTransform>("Identity"),
-                         User = _user, Project = FindByName<Project>("ModelRelief")},
-                new Mesh{Name = "bunny.obj", Description = "Top", Format = MeshFormat.OBJ, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("bunny.raw"), MeshTransform =  FindByName<MeshTransform>("Identity"),
-                         User = _user, Project = FindByName<Project>("Architecture")},
-                new Mesh{Name = "armadillo.obj", Description = "Top", Format = MeshFormat.OBJ, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("armadillo.raw"), MeshTransform = FindByName<MeshTransform>("Pendant"),
-                         User = _user, Project = FindByName<Project>("Architecture")},
+                new Mesh
+                {
+                    Name = "lucy.obj", Description = "Isometric", Format = MeshFormat.OBJ, Camera = FindByName<Camera>("Isometric Camera"), DepthBuffer = FindByName<DepthBuffer>("lucy.raw"), MeshTransform =  FindByName<MeshTransform>("Identity"),
+                    User = _user, Project = FindByName<Project>("ModelRelief"),
+                },
+                new Mesh
+                {
+                    Name = "bunny.obj", Description = "Top", Format = MeshFormat.OBJ, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("bunny.raw"), MeshTransform =  FindByName<MeshTransform>("Identity"),
+                    User = _user, Project = FindByName<Project>("Architecture"),
+                },
+                new Mesh
+                {
+                    Name = "armadillo.obj", Description = "Top", Format = MeshFormat.OBJ, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("armadillo.raw"), MeshTransform = FindByName<MeshTransform>("Pendant"),
+                    User = _user, Project = FindByName<Project>("Architecture"),
+                },
             };
 
             foreach (Mesh mesh in meshes)
@@ -442,12 +483,12 @@ namespace ModelRelief.Database
             {
                 // parent directory name = database resource ID
                 var model = DbContext.Set<TEntity>()
-                    .Where(m => (m.Name.StartsWith(dirInfo.Name)))
+                    .Where(m => m.Name.StartsWith(dirInfo.Name))
                     .Where(m => (m.UserId == _user.Id))
                     .FirstOrDefault();
 
                 if (model == null)
-                    Debug.Assert (false, $"DbInitializer: Model name ${dirInfo.Name} not found in database for type ${typeof(TEntity).Name}.");
+                    Debug.Assert(false, $"DbInitializer: Model name ${dirInfo.Name} not found in database for type ${typeof(TEntity).Name}.");
 
                 // create target folder
                 var targetDirectory = Directory.CreateDirectory(Path.Combine(destinationFolderPath, model.Id.ToString())).FullName;
@@ -455,7 +496,7 @@ namespace ModelRelief.Database
                 System.IO.FileInfo[] files = dirInfo.GetFiles("*.*");
                 foreach (var file in files)
                 {
-                    var destinationFileName = Path.Combine (targetDirectory, file.Name);
+                    var destinationFileName = Path.Combine(targetDirectory, file.Name);
                     Console.WriteLine(destinationFileName);
                     File.Copy(file.FullName, destinationFileName, overwrite: true);
                 }
@@ -468,24 +509,24 @@ namespace ModelRelief.Database
         /// <typeparam name="TEntity">Domain model.</typeparam>
         /// <param name="name">Name property to match.</param>
         /// <returns>Matching entity.</returns>
-        private TEntity FindByName<TEntity> (string name)
+        private TEntity FindByName<TEntity>(string name)
             where TEntity : DomainModel
         {
             var resource = DbContext.Set<TEntity>()
                 .Where(r => ((r.Name == name) && (r.UserId == _user.Id))).First();
 
             if (resource == null)
-                Debug.Assert (false, $"DbInitializer: {typeof(TEntity).Name} = '{name}' not found)");
+                Debug.Assert(false, $"DbInitializer: {typeof(TEntity).Name} = '{name}' not found)");
 
             return resource;
         }
-        
+
         /// <summary>
         /// Adds a qualifying suffix to the end of the Description property.
         /// </summary>
         /// <typeparam name="TEntity">Domain model.</typeparam>
         /// <param name="descriptionSuffix">Suffix to end.</param>
-        private void QualifyDescription <TEntity> (string descriptionSuffix)
+        private void QualifyDescription<TEntity>(string descriptionSuffix)
             where TEntity : DomainModel
         {
             var models = DbContext.Set<TEntity>()
@@ -501,8 +542,8 @@ namespace ModelRelief.Database
         /// <summary>
         /// Sets the file properties of the model.
         /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <param name="models"></param>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="models">Collection of models to update.</param>
         private void SetFileProperties<TEntity>(IEnumerable<TEntity> models)
             where TEntity : FileDomainModel
         {
@@ -512,10 +553,9 @@ namespace ModelRelief.Database
                 model.FileTimeStamp = DateTime.Now;
                 model.Path = StorageManager.DefaultModelStorageFolder(model);
 
-                var generatedModel = model as GeneratedFileDomainModel;
-                if (generatedModel != null)
+                if (model is GeneratedFileDomainModel generatedModel)
                     generatedModel.FileIsSynchronized = true;
-                }
+            }
 
             DbContext.SaveChanges();
         }

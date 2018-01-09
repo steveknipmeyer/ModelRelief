@@ -1,20 +1,21 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using FluentValidation.Results;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using ModelRelief.Infrastructure;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿// -----------------------------------------------------------------------
+// <copyright file="ApiErrorResult.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using FluentValidation.Results;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using ModelRelief.Infrastructure;
+    using Newtonsoft.Json;
+
     /// <summary>
     /// JSON error status result returned by the API.
     /// </summary>
@@ -68,15 +69,15 @@ namespace ModelRelief.Api.V1.Shared.Rest
     {
         // General
         Default                             = ErrorCodeBase.General + 1,
-        NullRequest                         = ErrorCodeBase.General + 2,    
+        NullRequest                         = ErrorCodeBase.General + 2,
         NotFound                            = ErrorCodeBase.General + 3,
         Unauthorized                        = ErrorCodeBase.General + 4,
 
         // Files
-        FileCreation                        = ErrorCodeBase.Files + 1,    
+        FileCreation                        = ErrorCodeBase.Files + 1,
         FileUpdate                          = ErrorCodeBase.Files + 2,
         NoBackingFile                       = ErrorCodeBase.Files + 3,
-        
+
         // Camera
         CameraGetValidationError            = ErrorCodeBase.Camera + HttpRequestBaseOffset.Get,
         CameraPostValidationError           = ErrorCodeBase.Camera + HttpRequestBaseOffset.Post,
@@ -119,7 +120,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
         ProjectPatchValidationError         = ErrorCodeBase.Project + HttpRequestBaseOffset.Patch,
         ProjectDeleteValidationError        = ErrorCodeBase.Project + HttpRequestBaseOffset.Delete,
     }
-    
 
     /// <summary>
     /// Helper class to look up an ApiErrorCode based on the HTTP request and the domain model.
@@ -163,24 +163,24 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// </summary>
         /// <param name="requestType">HTTP request.</param>
         /// <returns>Offset of status code message from base.</returns>
-        private static HttpRequestBaseOffset MapRequestTypeToBaseOffset (string requestType)
+        private static HttpRequestBaseOffset MapRequestTypeToBaseOffset(string requestType)
         {
             // now map HTTP request type to an offset
             var requestOffset = HttpRequestBaseOffset.Unknown;
 
-            if (String.Equals(requestType, "GET", StringComparison.CurrentCultureIgnoreCase))
+            if (string.Equals(requestType, "GET", StringComparison.CurrentCultureIgnoreCase))
                 requestOffset = HttpRequestBaseOffset.Get;
 
-            if (String.Equals(requestType, "POST", StringComparison.CurrentCultureIgnoreCase))
+            if (string.Equals(requestType, "POST", StringComparison.CurrentCultureIgnoreCase))
                 requestOffset = HttpRequestBaseOffset.Post;
 
-            if (String.Equals(requestType, "PUT", StringComparison.CurrentCultureIgnoreCase))
+            if (string.Equals(requestType, "PUT", StringComparison.CurrentCultureIgnoreCase))
                 requestOffset = HttpRequestBaseOffset.Put;
 
-            if (String.Equals(requestType, "PATCH", StringComparison.CurrentCultureIgnoreCase))
+            if (string.Equals(requestType, "PATCH", StringComparison.CurrentCultureIgnoreCase))
                 requestOffset = HttpRequestBaseOffset.Patch;
 
-            if (String.Equals(requestType, "DELETE", StringComparison.CurrentCultureIgnoreCase))
+            if (string.Equals(requestType, "DELETE", StringComparison.CurrentCultureIgnoreCase))
                 requestOffset = HttpRequestBaseOffset.Delete;
 
             return requestOffset;
@@ -192,7 +192,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="httpRequest">HTTP request.</param>
         /// <param name="apiRequestType">CQRS request.</param>
         /// <returns></returns>
-        public static ApiErrorCode MapRequestToApiErrorCode (HttpRequest httpRequest, Type apiRequestType)
+        public static ApiErrorCode MapRequestToApiErrorCode(HttpRequest httpRequest, Type apiRequestType)
         {
             // 1st generic type is the domain model
             Type domainModelType = apiRequestType.GenericTypeArguments?.First();
@@ -200,9 +200,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 return ApiErrorCode.Default;
 
             var baseOffset = MapDomainModelToStatusCodeBase(domainModelType);
-            
+
             // no domain model match; stop
-            if (ErrorCodeBase.Unknown == baseOffset)    
+            if (baseOffset == ErrorCodeBase.Unknown)
                 return ApiErrorCode.Default;
 
             // now map HTTP request type to an offset
@@ -210,11 +210,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
             var requestOffset = MapRequestTypeToBaseOffset(requestType);
 
             // no HTTP request type match; stop
-            if (HttpRequestBaseOffset.Unknown == requestOffset)    
+            if (requestOffset == HttpRequestBaseOffset.Unknown)
                 return ApiErrorCode.Default;
 
-
-            var errorCode = (ApiErrorCode) ((int) baseOffset + (int) requestOffset);
+            var errorCode = (ApiErrorCode)((int)baseOffset + (int)requestOffset);
             return errorCode;
         }
     }
@@ -225,24 +224,25 @@ namespace ModelRelief.Api.V1.Shared.Rest
     public class ValidationError
     {
         /// <summary>
-        /// Model field for the error.
+        /// Gets the model field for the error.
         /// </summary>
         [JsonProperty(NullValueHandling=NullValueHandling.Ignore)]
         public string Field { get; }
 
         /// <summary>
-        /// Error message for the model field.
+        /// Gets the error message for the model field.
         /// </summary>
         public string Message { get; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ValidationError"/> class.
         /// Constructor
         /// </summary>
         /// <param name="field">Model field for which the error was generated.</param>
         /// <param name="message">Error message.</param>
         public ValidationError(string field, string message)
         {
-            Field = (field != String.Empty) ? field : null;
+            Field = (field != string.Empty) ? field : null;
             Message = message;
         }
     }
@@ -252,19 +252,20 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// </summary>
     public class ApiErrorResult
     {
-        Controller      _controller;
-        HttpStatusCode  _httpStatusCode;
-        ApiErrorCode   _apiErrorCode;
-        string          _developerMessage;
+        public Controller      _controller;
+        public HttpStatusCode  _httpStatusCode;
+        public ApiErrorCode   _apiErrorCode;
+        public string          _developerMessage;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ApiErrorResult"/> class.
         /// Constructor.
         /// </summary>
         /// <param name="controller">Active controller.</param>
         /// <param name="httpStatusCode">HTTP status code to return.</param>
         /// <param name="apiErrorCode">ModelRelief API error code (more specialized than httpStatusCode)</param>
         /// <param name="developerMessage">Additional information for the developer.</param>
-        public ApiErrorResult (Controller controller, HttpStatusCode httpStatusCode, ApiErrorCode apiErrorCode, string developerMessage)
+        public ApiErrorResult(Controller controller, HttpStatusCode httpStatusCode, ApiErrorCode apiErrorCode, string developerMessage)
         {
             _controller       = controller;
             _httpStatusCode   = httpStatusCode;
@@ -275,15 +276,15 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Constructs the ObjectResult that will be later serialized by the middleware into JSON.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="validationFailures">Collection of validation errors.</param>
         public ObjectResult ObjectResult(IEnumerable<ValidationFailure> validationFailures = null)
         {
             string documentation = RouteNames.ApiDocumentation;
-            string apiReferenceRelative = _controller.Url.RouteUrl(documentation, new {id = (int) _apiErrorCode});
+            string apiReferenceRelative = _controller.Url.RouteUrl(documentation, new { id = (int)_apiErrorCode });
             var apiReferenceAbsolute = string.Format($"{_controller.HttpContext.Request.Scheme}://{_controller.HttpContext.Request.Host}{apiReferenceRelative}");
 
             var errors = new List<ValidationError>();
-            if (null != validationFailures)
+            if (validationFailures != null)
             {
                 foreach (var validationFailure in validationFailures)
                 {
@@ -291,21 +292,23 @@ namespace ModelRelief.Api.V1.Shared.Rest
                     var segments = qualifiedPropertyName.Split('.');
                     var propertyName = segments.Last();
                     var message = validationFailure.ErrorMessage;
-                    errors.Add (new ValidationError(field: propertyName, message: message));
+                    errors.Add(new ValidationError(field: propertyName, message: message));
                 }
             }
 
             var errorResult = new ApiError()
             {
-                HttpStatusCode   = (int) _httpStatusCode,
-                ApiErrorCode    = (int) _apiErrorCode,
+                HttpStatusCode   = (int)_httpStatusCode,
+                ApiErrorCode    = (int)_apiErrorCode,
                 DeveloperMessage = _developerMessage,
                 ApiReference     = apiReferenceAbsolute,
-                Errors           = errors
+                Errors           = errors,
             };
 
-            var objectResult = new ObjectResult(errorResult);
-            objectResult.StatusCode= (int) _httpStatusCode;
+            var objectResult = new ObjectResult(errorResult)
+            {
+                StatusCode = (int)_httpStatusCode,
+            };
 
             return objectResult;
         }

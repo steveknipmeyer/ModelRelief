@@ -1,18 +1,19 @@
-﻿// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Database;
-using ModelRelief.Services;
-using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="DbContextTransactionFilter.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Infrastructure
-
 {
+    using System;
+    using System.Diagnostics;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc.Filters;
+    using Microsoft.Extensions.Logging;
+    using ModelRelief.Database;
+    using ModelRelief.Services;
+
     /// <summary>
     /// Wraps each Action in a database transaction.
     /// </summary>
@@ -23,6 +24,7 @@ namespace ModelRelief.Infrastructure
         private readonly ILogger<DatabaseLogger> _logger;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="DbContextTransactionFilter"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context.</param>

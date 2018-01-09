@@ -1,12 +1,13 @@
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using System;
+// -----------------------------------------------------------------------
+// <copyright file="ClassFixture.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Test
 {
+    using System;
+
     /// <summary>
     /// Represents the shared instance of the TestServer to support multiple tests.
     /// This is run once for every class.
@@ -17,6 +18,7 @@ namespace ModelRelief.Test
         public IServiceProvider ServiceProvider { get; set; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ClassFixture"/> class.
         /// Constructor.
         /// </summary>
         public ClassFixture()

@@ -1,23 +1,22 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Newtonsoft.Json;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿// -----------------------------------------------------------------------
+// <copyright file="ValidatorActionFilter.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Infrastructure
 {
+    using System;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Filters;
+
     /// <summary>
     /// Action filter for processing all action methods.
     /// </summary>
     public class ValidatorActionFilter : IActionFilter
     {
         /// <summary>
-        /// Pre-process action method. 
+        /// Pre-process action method.
         /// Called before request reaches controller method.
         /// ModelState has been constructed based on model IValidatableObject, FluentValidation.AbstractValidatorr and DataAnnotation validation.
         /// </summary>
@@ -34,7 +33,7 @@ namespace ModelRelief.Infrastructure
 
             // skip api requests; a custom error is constructed in the API controller
             string areaValue = filterContext.RouteData.Values["area"] as string;
-            if (!String.IsNullOrEmpty(areaValue) && areaValue.ToLower().StartsWith("api"))
+            if (!string.IsNullOrEmpty(areaValue) && areaValue.ToLower().StartsWith("api"))
                 return;
 
             switch (filterContext.HttpContext.Request.Method)
@@ -82,7 +81,7 @@ namespace ModelRelief.Infrastructure
         /// Post-process action method.
         /// </summary>
         /// <param name="filterContext">Filter context</param>
-        public void OnActionExecuted(ActionExecutedContext filterContext)
+       public void OnActionExecuted(ActionExecutedContext filterContext)
         {
         }
     }

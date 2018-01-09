@@ -1,35 +1,41 @@
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using FluentAssertions;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Domain;
-using ModelRelief.Test.TestModels;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Xunit;
+// -----------------------------------------------------------------------
+// <copyright file="BaseIntegrationTests.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Test.Integration
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Threading.Tasks;
+    using FluentAssertions;
+    using ModelRelief.Api.V1.Shared.Rest;
+    using ModelRelief.Domain;
+    using ModelRelief.Test.TestModels;
+    using Newtonsoft.Json;
+    using Xunit;
+
     /// <summary>
     /// Base Integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
-    public abstract class BaseIntegrationTests <TEntity, TGetModel>: IntegrationTests<TEntity, TGetModel>
+    /// <typeparam name="TEntity">Domain model.</typeparam>
+    /// <typeparam name="TGetModel">DTO Get model.</typeparam>
+    public abstract class BaseIntegrationTests<TEntity, TGetModel> : IntegrationTests<TEntity, TGetModel>
         where TEntity   : DomainModel
         where TGetModel : class, ITGetModel, new()
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="BaseIntegrationTests{TEntity, TGetModel}"/> class.
         /// Constructor
         /// </summary>
-        public BaseIntegrationTests(ClassFixture classFixture, TestModel<TEntity, TGetModel> testModel) :
-            base (classFixture, testModel)
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        /// <param name="testModel">A test model under integration testing.</param>
+        public BaseIntegrationTests(ClassFixture classFixture, TestModel<TEntity, TGetModel> testModel)
+            : base(classFixture, testModel)
         {
         }
 
@@ -38,7 +44,7 @@ namespace ModelRelief.Test.Integration
         /// Test that a GetSingle request with an valid Id property value returns correct model.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api GetSingle")]
+        [Trait("Category", "Api GetSingle")]
         public virtual async Task GetSingle_ValidIdPropertyValueReturnsCorrectModel()
         {
             // Arrange
@@ -55,7 +61,7 @@ namespace ModelRelief.Test.Integration
         /// Test that a GetSingle request with an invalid Id property value returns NotFound.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api GetSingle")]
+        [Trait("Category", "Api GetSingle")]
         public async Task GetSingle_InvalidIdPropertyValueReturnsNotFound()
         {
             // Arrange
@@ -72,7 +78,7 @@ namespace ModelRelief.Test.Integration
         /// Test that a GetList request returns the correct count of models.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api GetList")]
+        [Trait("Category", "Api GetList")]
         public async Task GetList_ListReturnsCorrectCount()
         {
             // Arrange
@@ -94,7 +100,7 @@ namespace ModelRelief.Test.Integration
         /// Test that a Post request can create a model.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Post")]
+        [Trait("Category", "Api Post")]
         public async Task Post_CanCreateNewModel()
         {
             // Arrange
@@ -117,7 +123,7 @@ namespace ModelRelief.Test.Integration
         /// Test that an invalid Post request returns BadRequest.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Post")]
+        [Trait("Category", "Api Post")]
         public async Task Post_InvalidPropertyValueReturnsBadRequest()
         {
             // Arrange
@@ -135,7 +141,7 @@ namespace ModelRelief.Test.Integration
         /// Test that a Post request with a valid reference property creates the model.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Post")]
+        [Trait("Category", "Api Post")]
         public async Task Post_ValidReferencePropertyCreatesModel()
         {
             // early exit if model has no reference properties properties
@@ -166,7 +172,7 @@ namespace ModelRelief.Test.Integration
         /// Test that an model Post with an invalid reference property returns BadRequest.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Post")]
+        [Trait("Category", "Api Post")]
         public async Task Post_InvalidReferencePropertyReturnsBadRequest()
         {
             // early exit if model has no reference properties properties
@@ -193,7 +199,7 @@ namespace ModelRelief.Test.Integration
         /// Test that a Put can update a model.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Put")]
+        [Trait("Category", "Api Put")]
         public async Task Put_CanUpdateModel()
         {
             // Arrange
@@ -206,7 +212,7 @@ namespace ModelRelief.Test.Integration
 
             // Assert
             requestResponse.Message.EnsureSuccessStatusCode();
-            
+
             var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
             updatedModel.Description.Should().Be(updatedDescription);
 
@@ -218,7 +224,7 @@ namespace ModelRelief.Test.Integration
         /// Test that a Put request with an invalid Id returns NotFound.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Put")]
+        [Trait("Category", "Api Put")]
         public async Task Put_InvalidIdReturnsNotFound()
         {
             // Arrange
@@ -228,7 +234,7 @@ namespace ModelRelief.Test.Integration
             // Act
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{modelId + 1}", existingModel);
 
-            // Assert    
+            // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.NotFound);
             AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
         }
@@ -237,7 +243,7 @@ namespace ModelRelief.Test.Integration
         /// Test that a Put a valid reference property can be updated.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Put")]
+        [Trait("Category", "Api Put")]
         public async Task Put_ValidReferencePropertyUpdatesModel()
         {
             // early exit if model has no reference properties properties
@@ -268,7 +274,7 @@ namespace ModelRelief.Test.Integration
         /// Test that a Put with an invalid reference property returns BadRequest.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Put")]
+        [Trait("Category", "Api Put")]
         public async Task Put_InvalidReferencePropertyReturndBadRequest()
         {
             // early exit if model has no reference properties properties
@@ -285,7 +291,7 @@ namespace ModelRelief.Test.Integration
 
             // Act
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{modelId}", existingModel);
-            
+
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
             AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
@@ -300,15 +306,15 @@ namespace ModelRelief.Test.Integration
         /// Test that a Patch request updates the target property.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Patch")]
+        [Trait("Category", "Api Patch")]
         public async Task Patch_TargetPropertyIsUpdated()
         {
             // Arrange
             var newModel = await PostNewModel();
             var updatedDescription = "Updated Description Property";
-            var patchModel = new 
+            var patchModel = new
             {
-                Description = updatedDescription
+                Description = updatedDescription,
             };
 
             // Act
@@ -328,15 +334,15 @@ namespace ModelRelief.Test.Integration
         /// Test that a Patch request with an invalid Id returns NotFound.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Patch")]
+        [Trait("Category", "Api Patch")]
         public async Task Patch_InvalidIdPropertyReturnsNotFound()
         {
             // Arrange
             var modelId = TestModel.IdRange.Max() + 1;
             var updatedName = "Updated Name Property";
-            var patchModel = new 
+            var patchModel = new
             {
-                Name = updatedName
+                Name = updatedName,
             };
 
             // Act
@@ -351,14 +357,14 @@ namespace ModelRelief.Test.Integration
         /// Test that a Patch request with an umknown property returns BadRequest.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Patch")]
+        [Trait("Category", "Api Patch")]
         public async Task Patch_InvalidPropertyNameReturnsBadRequest()
         {
             // Arrange
             var modelId = TestModel.IdRange.Max();
             var invalidPatchModel = new
                 {
-                InvalidProperty = "NonExistent"
+                InvalidProperty = "NonExistent",
                 };
 
             // Act
@@ -373,11 +379,11 @@ namespace ModelRelief.Test.Integration
         /// Test that a Patch request with an invalid enum property value returns BadRequest.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Patch")]
+        [Trait("Category", "Api Patch")]
         public async Task Patch_InvalidEnumPropertyValueReturnsBadRequest()
         {
             // early exit if model has no enum properties
-            if (String.IsNullOrEmpty(TestModel.EnumPropertyName))
+            if (string.IsNullOrEmpty(TestModel.EnumPropertyName))
             {
                 Assert.True(true);
                 return;
@@ -387,7 +393,7 @@ namespace ModelRelief.Test.Integration
             var modelId = TestModel.IdRange.Max();
             var invalidPatchModel = new Dictionary<string, string>
             {
-                { TestModel.EnumPropertyName, "Invalid Enum" }
+                { TestModel.EnumPropertyName, "Invalid Enum" },
             };
 
             // Act
@@ -402,7 +408,7 @@ namespace ModelRelief.Test.Integration
         /// Test that a Patch request with an invalid reference property value returns BadRequest.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Patch")]
+        [Trait("Category", "Api Patch")]
         public async Task Patch_InvalidReferencePropertyReturnsBadRequest()
         {
             // early exit if model has no reference properties properties
@@ -429,7 +435,7 @@ namespace ModelRelief.Test.Integration
         /// Test that a Patch request with two invalid reference properties returns BadRequest and two validation errors.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Patch")]
+        [Trait("Category", "Api Patch")]
         public async Task Patch_MultipleInvalidReferencePropertiesReturnsMultipleValidationErrorsAndBadRequest()
         {
             // early exit if model has no reference properties properties
@@ -459,7 +465,7 @@ namespace ModelRelief.Test.Integration
         /// Test that an Patch request with an invalid reference property value returns BadRequest.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Patch")]
+        [Trait("Category", "Api Patch")]
         public async Task Patch_ValidReferencePropertyUpdatesModel()
         {
             // early exit if model has no reference properties properties
@@ -474,7 +480,7 @@ namespace ModelRelief.Test.Integration
             // https://stackoverflow.com/questions/6044482/setting-anonymous-type-property-name
             var validPatchModel = new Dictionary<string, int?>
             {
-                { TestModel.ReferencePropertyNames.FirstOrDefault(), TestModel.ValidReferenceProperty }
+                { TestModel.ReferencePropertyNames.FirstOrDefault(), TestModel.ValidReferenceProperty },
             };
 
             // Act
@@ -487,16 +493,15 @@ namespace ModelRelief.Test.Integration
             TestModel.GetReferenceProperty(updatedModel).Should().Be(TestModel.ValidReferenceProperty);
 
             // Rollback
-            await DeleteModel (newModel);
+            await DeleteModel(newModel);
         }
         #endregion
-
         #region Delete
         /// <summary>
         /// Test that a Delete request deletes the target model.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api Delete")]
+        [Trait("Category", "Api Delete")]
         public async Task Delete_TargetModelIsDeleted()
         {
             // Arrange

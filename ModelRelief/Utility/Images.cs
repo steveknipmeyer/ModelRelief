@@ -1,16 +1,13 @@
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using System;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+// -----------------------------------------------------------------------
+// <copyright file="Images.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Utility
 {
+    using System.IO;
+
     public class Images
     {
         public Stream SetImage(Stream file, int? qualityRate, int? compressRate)
@@ -34,9 +31,8 @@ namespace ModelRelief.Utility
 
                 client.SaveAsPng(fileStream, pngEncoderOptions);
             }
-#endif            
+#endif
             return fileStream;
         }
     }
-}    
-    
+}

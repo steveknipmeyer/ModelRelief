@@ -1,20 +1,21 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using AutoMapper;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="ViewController.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Features
 {
+    using System.Threading.Tasks;
+    using AutoMapper;
+    using MediatR;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+    using ModelRelief.Api.V1.Shared.Rest;
+    using ModelRelief.Database;
+    using ModelRelief.Domain;
+
     public abstract class ViewController<TEntity, TGetModel, TSingleGetModel, TRequestModel> : UxController
         where TEntity         : DomainModel
         where TGetModel       : class, ITGetModel, new()            // class to allow default null parameter in InitializeViewControls
@@ -24,6 +25,7 @@ namespace ModelRelief.Features
         public new ILogger           Logger { get; }                // base class Logger category is UxController
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ViewController{TEntity, TGetModel, TSingleGetModel, TRequestModel}"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
@@ -33,9 +35,12 @@ namespace ModelRelief.Features
         /// <param name="mediator">IMediator</param>
         /// <remarks>Defaults to use paging.</remarks>
         protected ViewController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator)
-            : this(dbContext, userManager, loggerFactory, mapper, mediator, new ViewControllerOptions {UsePaging = true}) {}
+            : this(dbContext, userManager, loggerFactory, mapper, mediator, new ViewControllerOptions { UsePaging = true })
+        {
+        }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ViewController{TEntity, TGetModel, TSingleGetModel, TRequestModel}"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
@@ -45,7 +50,7 @@ namespace ModelRelief.Features
         /// <param name="mediator">IMediator</param>
         /// <param name="viewControllerOptions">Options for paging, etc.</param>
         protected ViewController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator, ViewControllerOptions viewControllerOptions)
-            : base(dbContext, userManager, loggerFactory, mapper, mediator) 
+            : base(dbContext, userManager, loggerFactory, mapper, mediator)
         {
             ViewControllerOptions = viewControllerOptions;
             Logger                = loggerFactory.CreateLogger(typeof(ViewController<TEntity, TGetModel, TSingleGetModel, TRequestModel>).Name);
@@ -61,11 +66,11 @@ namespace ModelRelief.Features
         public virtual async Task<IActionResult> Index([FromQuery] GetListRequest getRequest)
         {
             getRequest = getRequest ?? new GetListRequest();
-            var pagedResults = await HandleRequestAsync(new GetListRequest<TEntity, TGetModel> 
+            var pagedResults = await HandleRequestAsync(new GetListRequest<TEntity, TGetModel>
             {
                 User = User,
                 UrlHelperContainer  = this,
-               
+
                 PageNumber          = getRequest.PageNumber,
                 NumberOfRecords     = getRequest.NumberOfRecords,
                 OrderBy             = getRequest.OrderBy,
@@ -74,7 +79,7 @@ namespace ModelRelief.Features
                 UsePaging           = ViewControllerOptions.UsePaging,
             });
 
-            var modelCollection = ((PagedResults<TGetModel>) pagedResults).Results;
+            var modelCollection = ((PagedResults<TGetModel>)pagedResults).Results;
             return View(modelCollection);
         }
 
@@ -83,12 +88,12 @@ namespace ModelRelief.Features
         /// </summary>
         /// <param name="id">Model Id.</param>
         /// <returns>Details page.</returns>
-        public virtual async Task<IActionResult> Details(int id) 
+        public virtual async Task<IActionResult> Details(int id)
         {
-            var model = await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel> 
+            var model = await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel>
             {
                 User = User,
-                Id = id
+                Id = id,
             });
             if (model == null)
                 return NotFound();
@@ -118,16 +123,16 @@ namespace ModelRelief.Features
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> Create(TRequestModel postRequest)
         {
-            var newModel = await HandleRequestAsync(new PostRequest<TEntity, TRequestModel, TGetModel> 
+            var newModel = await HandleRequestAsync(new PostRequest<TEntity, TRequestModel, TGetModel>
             {
                 User = User,
-                NewModel = postRequest
+                NewModel = postRequest,
             });
 
             // validation failed; return to View
             if (newModel == null)
-                { 
-                await InitializeViewControls(Mapper.Map<TGetModel> (postRequest));
+                {
+                await InitializeViewControls(Mapper.Map<TGetModel>(postRequest));
                 return View(postRequest);
                 }
 
@@ -144,15 +149,15 @@ namespace ModelRelief.Features
         [HttpGet]
         public virtual async Task<IActionResult> Edit(int id)
         {
-            var model = await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel> 
+            var model = await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel>
             {
                 User = User,
-                Id = id
+                Id = id,
             });
             if (model == null)
                 return NotFound();
 
-            await InitializeViewControls((TGetModel) model);
+            await InitializeViewControls((TGetModel)model);
             return View(model);
         }
 
@@ -166,17 +171,17 @@ namespace ModelRelief.Features
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> Edit(int id, TRequestModel postRequest)
         {
-            var model = await HandleRequestAsync(new PutRequest<TEntity, TRequestModel, TGetModel> 
+            var model = await HandleRequestAsync(new PutRequest<TEntity, TRequestModel, TGetModel>
             {
                 User = User,
                 Id = id,
-                UpdatedModel = postRequest
+                UpdatedModel = postRequest,
             });
 
             // validation failed; return to View
             if (model == null)
-                { 
-                await InitializeViewControls(Mapper.Map<TGetModel> (postRequest));
+                {
+                await InitializeViewControls(Mapper.Map<TGetModel>(postRequest));
                 return View(postRequest);
                 }
 
@@ -192,10 +197,10 @@ namespace ModelRelief.Features
         /// <returns>Delete confirmation page.</returns>
         public virtual async Task<IActionResult> Delete(int id)
         {
-            var model = await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel> 
+            var model = await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel>
             {
                 User = User,
-                Id = id
+                Id = id,
             });
             if (model == null)
                 return NotFound();
@@ -212,10 +217,10 @@ namespace ModelRelief.Features
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var result = await HandleRequestAsync(new DeleteRequest<TEntity> 
+            var result = await HandleRequestAsync(new DeleteRequest<TEntity>
             {
                 User = User,
-                Id = id
+                Id = id,
             });
 
             return this.RedirectToAction(nameof(Index));

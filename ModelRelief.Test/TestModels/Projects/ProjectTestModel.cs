@@ -1,30 +1,25 @@
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using FluentAssertions;
-using ModelRelief.Api.V1.Shared.Rest;
-using Newtonsoft.Json;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Xunit;
+// -----------------------------------------------------------------------
+// <copyright file="ProjectTestModel.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Test.TestModels.Projects
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     /// <summary>
     /// Project test model.
     /// </summary>
     public class ProjectTestModel : TestModel<Domain.Project, Dto.Project>
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="ProjectTestModel"/> class.
         /// Constructor
         /// </summary>
-        public ProjectTestModel() :
-            base ()
+        public ProjectTestModel()
+            : base()
         {
         }
 
@@ -35,7 +30,7 @@ namespace ModelRelief.Test.TestModels.Projects
         {
             ApiUrl = "/api/v1/projects";
             UxUrl  = "/projects";
-            
+
             IdRange = Enumerable.Range(1, 3);
             FirstModelName = "ModelRelief";
 

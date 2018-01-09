@@ -1,17 +1,17 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using AutoMapper;
-using FluentValidation;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Domain;
-using System.ComponentModel.DataAnnotations;
+﻿// -----------------------------------------------------------------------
+// <copyright file="Model3d.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Dto
 {
+    using System.ComponentModel.DataAnnotations;
+    using AutoMapper;
+    using FluentValidation;
+    using ModelRelief.Api.V1.Shared.Rest;
+    using ModelRelief.Domain;
+
     /// <summary>
     /// Represents a DataTransferObject (DTO) for a Model3d.
     /// </summary>
@@ -19,7 +19,7 @@ namespace ModelRelief.Dto
     {
         public int Id { get; set; }
 
-        [Display (Name = "Model Name")]
+        [Display(Name = "Model Name")]
         public string Name { get; set; }
         public string Description { get; set; }
 
@@ -33,6 +33,7 @@ namespace ModelRelief.Dto
         public Dto.Camera Camera { get; set; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Model3d"/> class.
         /// Constructor.
         /// </summary>
         public Model3d()
@@ -46,6 +47,7 @@ namespace ModelRelief.Dto
     public class Model3dValidator : AbstractValidator<Dto.Model3d>
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="Model3dValidator"/> class.
         /// Constructor.
         /// </summary>
         public Model3dValidator()
@@ -61,21 +63,19 @@ namespace ModelRelief.Dto
                 .NotEmpty().WithMessage("The file format must be provided.");
         }
     }
-}
 
-namespace ModelRelief.Features.Models
-{
     /// <summary>
     /// AutoMapper mapping profile.
     /// </summary>
-    public class MappingProfile : Profile
+    public class Model3dMappingProfile : Profile
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="Model3dMappingProfile"/> class.
         /// Constructor.
         /// </summary>
-        public MappingProfile() 
-            {
-                CreateMap<Domain.Model3d, Dto.Model3d>().ReverseMap();
-            }
+        public Model3dMappingProfile()
+        {
+            CreateMap<Domain.Model3d, Dto.Model3d>().ReverseMap();
+        }
     }
 }

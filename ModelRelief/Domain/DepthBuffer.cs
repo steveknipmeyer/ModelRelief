@@ -1,24 +1,24 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using ModelRelief.Services;
-using System.ComponentModel.DataAnnotations;
+﻿// -----------------------------------------------------------------------
+// <copyright file="DepthBuffer.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Domain
 {
+    using ModelRelief.Services;
+
     public enum DepthBufferFormat
     {
         None,       // unknown
         Raw,        // floating point array
         PNG,        // PNG format
-        JPG         // JPG format
+        JPG,         // JPG format
     }
 
     [DependentFiles(typeof(Mesh))]
     public class DepthBuffer  : GeneratedFileDomainModel
-    {       
+    {
         public DepthBufferFormat Format { get; set; }
 
         // Navigation Properties

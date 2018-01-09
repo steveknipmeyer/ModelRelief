@@ -1,32 +1,34 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using FluentAssertions;
-using MediatR;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Domain;
-using ModelRelief.Utility;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
+﻿// -----------------------------------------------------------------------
+// <copyright file="DependencyManagerTests.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Test.Unit.DependencyManager
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using FluentAssertions;
+    using MediatR;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+    using ModelRelief.Domain;
+    using ModelRelief.Utility;
+    using Xunit;
+
     public class DependencyManagerTests : UnitTests
     {
-        Services.DependencyManager Manager { get; set; }
+        private Services.DependencyManager Manager { get; set; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="DependencyManagerTests"/> class.
         /// Constructor.
         /// </summary>
-        /// <param name="classFixture"></param>
-        public DependencyManagerTests(ClassFixture classFixture) :
-            base (classFixture)
+        /// <param name="classFixture">Test fixture instantiated for a class before any test methods execute.</param>
+        public DependencyManagerTests(ClassFixture classFixture)
+            : base(classFixture)
         {
             ILogger<Services.DependencyManager> logger = ClassFixture.ServiceProvider.GetRequiredService<ILogger<Services.DependencyManager>>();
             IMediator mediator = ClassFixture.ServiceProvider.GetRequiredService<IMediator>();
@@ -57,13 +59,13 @@ namespace ModelRelief.Test.Unit.DependencyManager
         /// <param name="modelList">List of models.</param>
         /// <param name="dependentType">Type of target model.</param>
         /// <param name="dependentName">Name of target model</param>
-        private void AssertModelExists (List<DomainModel> modelList, Type dependentType, string dependentName)
+        private void AssertModelExists(List<DomainModel> modelList, Type dependentType, string dependentName)
         {
             var model = modelList
-                                .Where (m => ((m.GetType() == dependentType) &&
+                                .Where(m => ((m.GetType() == dependentType) &&
                                              (m.Name == dependentName)))
                                 .SingleOrDefault();
-            model.Should().NotBeNull();                            
+            model.Should().NotBeNull();
         }
 
         /// <summary>
@@ -79,7 +81,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
             foreach (var dependentFile in dependentFiles)
             {
                 var dependentType = dependentFiles
-                    .Where( f => (f.Name == dependentFile.Name))
+                    .Where(f => (f.Name == dependentFile.Name))
                     .SingleOrDefault();
                 dependentType.Should().NotBeNull();
             }
@@ -89,8 +91,8 @@ namespace ModelRelief.Test.Unit.DependencyManager
         /// Finds all dependents of the TopCamera.
         /// </summary>
         [Fact]
-        [Trait ("Category", "DependencyManager")]
-        public async Task TopCameraFindsAllDependents() 
+        [Trait("Category", "DependencyManager")]
+        public async Task TopCameraFindsAllDependents()
         {
             // Arrange
             var topCameraPrimaryKey = 1;
@@ -110,7 +112,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
         /// Finds all dependents of the IsometricCamera.
         /// </summary>
         [Fact]
-        [Trait ("Category", "DependencyManager")]
+        [Trait("Category", "DependencyManager")]
         public async Task IsometricCameraFindsAllDependents()
         {
             // Arrange
@@ -135,7 +137,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
         /// Finds all dependents of the Armadillo DepthBuffer.
         /// </summary>
         [Fact]
-        [Trait ("Category", "DependencyManager")]
+        [Trait("Category", "DependencyManager")]
         public async Task LucyDepthBufferFindsOneDependent()
         {
             // Arrange
@@ -155,7 +157,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
         /// Finds no dependents on the Lucy Model3d.
         /// </summary>
         [Fact]
-        [Trait ("Category", "DependencyManager")]
+        [Trait("Category", "DependencyManager")]
         public async Task LucyModel3dHasNoDependents()
         {
             // Arrange
@@ -172,7 +174,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
         /// Test whether the Camera class has the exepected dependent types.
         /// </summary>
         [Fact]
-        [Trait ("Category", "DependencyManager")]
+        [Trait("Category", "DependencyManager")]
         public void CameraHasExpectedDependentFiles()
         {
             // Assert
@@ -183,7 +185,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
         /// Test whether the DepthBuffer class has the exepected dependent types.
         /// </summary>
         [Fact]
-        [Trait ("Category", "DependencyManager")]
+        [Trait("Category", "DependencyManager")]
         public void DepthBufferHasExpectedDependentFiles()
         {
             // Assert
@@ -194,7 +196,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
         /// Test whether the MeshTransform class has the exepected dependent types.
         /// </summary>
         [Fact]
-        [Trait ("Category", "DependencyManager")]
+        [Trait("Category", "DependencyManager")]
         public void MeshTransformHasExpectedDependentFiles()
         {
             // Assert
@@ -205,7 +207,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
         /// Test whether the Model3d class has the exepected dependent types.
         /// </summary>
         [Fact]
-        [Trait ("Category", "DependencyManager")]
+        [Trait("Category", "DependencyManager")]
         public void Model3dHasExpectedDependentFiles()
         {
             // Assert

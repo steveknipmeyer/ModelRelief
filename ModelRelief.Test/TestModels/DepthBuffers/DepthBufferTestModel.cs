@@ -1,30 +1,25 @@
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using FluentAssertions;
-using ModelRelief.Api.V1.Shared.Rest;
-using Newtonsoft.Json;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Xunit;
+// -----------------------------------------------------------------------
+// <copyright file="DepthBufferTestModel.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Test.TestModels.DepthBuffers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     /// <summary>
     /// DepthBuffer test model.
     /// </summary>
     public class DepthBufferTestModel : TestModel<Domain.DepthBuffer, Dto.DepthBuffer>
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="DepthBufferTestModel"/> class.
         /// Constructor
         /// </summary>
-        public DepthBufferTestModel() :
-            base ()
+        public DepthBufferTestModel()
+            : base()
         {
         }
 
@@ -35,11 +30,11 @@ namespace ModelRelief.Test.TestModels.DepthBuffers
         {
             ApiUrl = "/api/v1/depth-buffers";
             UxUrl  = "/depthbuffers";
-            
+
             IdRange = Enumerable.Range(1, 3);
             FirstModelName = "lucy.raw";
-            
-            ReferencePropertyNames = new List<string> {"ProjectId", "ModelId", "CameraId"};
+
+            ReferencePropertyNames = new List<string> { "ProjectId", "ModelId", "CameraId" };
             InvalidReferenceProperty = 0;
             ValidReferenceProperty   = 1;
 

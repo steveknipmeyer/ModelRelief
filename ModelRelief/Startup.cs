@@ -1,49 +1,46 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using Autofac.Features.Variance;
-using AutoMapper;
-using FluentValidation.AspNetCore;
-using MediatR;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Infrastructure;
-using ModelRelief.Services;
-using ModelRelief.Workbench;
-using System;
-using System.Reflection;
-using System.Collections.Generic;
-using ModelRelief.Features.Errors;
-using System.Security.Principal;
-using Microsoft.AspNetCore.Identity;
-using ModelRelief.Domain;
-using System.Security.Claims;
-using ModelRelief.Utility;
-using ModelRelief.Middleware;
+﻿// -----------------------------------------------------------------------
+// <copyright file="Startup.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief
 {
+    using System;
+    using System.Collections.Generic;
+    using Autofac;
+    using Autofac.Extensions.DependencyInjection;
+    using Autofac.Features.Variance;
+    using AutoMapper;
+    using FluentValidation.AspNetCore;
+    using MediatR;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Routing;
+    using Microsoft.AspNetCore.StaticFiles;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using ModelRelief.Api.V1.Shared.Rest;
+    using ModelRelief.Domain;
+    using ModelRelief.Features.Errors;
+    using ModelRelief.Infrastructure;
+    using ModelRelief.Middleware;
+    using ModelRelief.Services;
+    using ModelRelief.Workbench;
+
     public class Startup
     {
         public IConfiguration Configuration { get; set; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Startup"/> class.
         /// Constructor
         /// </summary>
         /// <param name="configuration">Configuration service</param>
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;            
+            Configuration = configuration;
         }
 
         /// <summary>
@@ -100,8 +97,7 @@ namespace ModelRelief
                 var c = context.Resolve<IComponentContext>();
                 return t =>
                 {
-                    object o;
-                    return c.TryResolve(t, out o) ? o : null;
+                    return c.TryResolve(t, out object o) ? o : null;
                 };
             });
             builder.Register<MultiInstanceFactory>(context =>
@@ -115,19 +111,19 @@ namespace ModelRelief
         }
 
         /// <summary>
-        /// This method gets called by the runtime. Use this method to add services to the container. 
+        /// This method gets called by the runtime. Use this method to add services to the container.
         /// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         /// </summary>
-        /// <param name="services"></param>
+        /// <param name="services">DI Service collection.</param>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(Configuration);
             services.AddRouting(options => options.LowercaseUrls = true);
 
-            services.AddMvc(options => 
-                { 
+            services.AddMvc(options =>
+                {
                     options.InputFormatters.Insert(0, new RawRequestBodyFormatter());
-                    // N.B. Order matters!    
+                    // N.B. Order matters!
 //                  options.Filters.Add(typeof(DbContextTransactionFilter));
                     options.Filters.Add(typeof(GlobalExceptionFilter));
 //                  options.Filters.Add(typeof(ValidatorActionFilter));
@@ -136,12 +132,12 @@ namespace ModelRelief
                 // automatically register all validators within this assembly
                 .AddFluentValidation(config => { config.RegisterValidatorsFromAssemblyContaining<Startup>(); });
 
-            // ModelRelief                                
+            // ModelRelief
             services.AddSingleton<Services.IConfigurationProvider, Services.ConfigurationProvider>();
             services.AddSingleton<IStorageManager, StorageManager>();
             services.AddSingleton<IDependencyManager, DependencyManager>();
             services.AddDatabaseServices();
-            
+
             services.AddAutoMapper(typeof(Startup));
             Mapper.AssertConfigurationIsValid();
 
@@ -152,12 +148,11 @@ namespace ModelRelief
             //     This method requires MediatR.Extensions.Microsoft.DependencyInjection
             services.AddMediatR(typeof(Startup));
 #endif
-            return ConfigureAutofacServices (services);
+            return ConfigureAutofacServices(services);
         }
 
-        // 
         /// <summary>
-        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline. 
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </summary>
         /// <param name="app">DI IApplicationBuilder</param>
         /// <param name="env">DI IHostingEnvironment</param>
@@ -175,13 +170,14 @@ namespace ModelRelief
             var provider = new FileExtensionContentTypeProvider();
             provider.Mappings[".obj"] = "text/plain";
             provider.Mappings[".mtl"] = "text/plain";
-            app.UseStaticFiles(new StaticFileOptions {  
-                ContentTypeProvider = provider
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                ContentTypeProvider = provider,
             });
 
-            app.AddStaticFilePaths(env.ContentRootPath, new string[] {"node_modules", "Scripts"});
+            app.AddStaticFilePaths(env.ContentRootPath, new string[] { "node_modules", "Scripts" });
             app.UseAuthentication();
-            
+
             // authentication middleware for testing
             app.Use(async (context, next) =>
             {

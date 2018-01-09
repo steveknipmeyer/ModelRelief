@@ -1,26 +1,27 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using FluentValidation;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using System.Threading;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="RequestValidator.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Api.V1.Shared
 {
+    using System.Threading;
+    using System.Threading.Tasks;
+    using FluentValidation;
+    using ModelRelief.Database;
+    using ModelRelief.Domain;
+
     /// <summary>
     /// Abstract representation of a REST request validator.
     /// </summary>
-    /// <typeparam name="TRequest"></typeparam>
+    /// <typeparam name="TRequest">Request type to validate.</typeparam>
     public abstract class RequestValidator<TRequest> : AbstractValidator<TRequest>
     {
         public ModelReliefDbContext DbContext { get; set; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="RequestValidator{TRequest}"/> class.
         /// Constructor.
         /// </summary>
         /// <param name="dbContext">Database context.</param>
@@ -30,7 +31,7 @@ namespace ModelRelief.Api.V1.Shared
 
             // N.B. Existence could be tested in validators if <all> requests, including Get and Delete requests, had FV validators defined.
             //      Currently, only requests that modify the database (PostRequest, PutRequest, PatchRequest) have validators defined.
-            //      Also a specialized type of RequestValidator would be needed that used a generic type parameter (e.g. IExistingModelRequest) 
+            //      Also a specialized type of RequestValidator would be needed that used a generic type parameter (e.g. IExistingModelRequest)
             //      to ensure that the User and Id properties are present in the request.
         }
 
@@ -44,7 +45,7 @@ namespace ModelRelief.Api.V1.Shared
         protected async Task<bool> ExistAsync<TEntity>(int id, CancellationToken cancellationToken)
             where TEntity : DomainModel
         {
-            return (await DbContext.Set<TEntity>().FindAsync(new object[] {id}, cancellationToken)) != null;
+            return (await DbContext.Set<TEntity>().FindAsync(new object[] { id }, cancellationToken)) != null;
         }
     }
 }

@@ -1,27 +1,28 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using Microsoft.AspNetCore.Mvc;
-using ModelRelief.Workbench;
-using System;
-using System.IO;
+﻿// -----------------------------------------------------------------------
+// <copyright file="WorkbenchController.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Features.Workbench
 {
+    using System;
+    using System.IO;
+    using Microsoft.AspNetCore.Mvc;
+    using ModelRelief.Workbench;
+
     public class WorkbenchController : Controller
         {
-        F<int, int>             _fInteger;
-        F<double, int>          _fDoubleInteger;
-        IFunctionOne<int>       _iInt;
-        IFunctionTwo<double>    _iDouble;
+        public F<int, int>             _fInteger;
+        public F<double, int>          _fDoubleInteger;
+        public IFunctionOne<int>       _iInt;
+        public IFunctionTwo<double>    _iDouble;
 
         public WorkbenchController(F<int, int> fInteger, F<double, int> fDoubleInteger, IFunctionOne<int> iInt, IFunctionTwo<double> iDouble)
         {
-        _fInteger           = fInteger; 
+        _fInteger           = fInteger;
         _fDoubleInteger     = fDoubleInteger;
-        _iInt               = iInt;    
+        _iInt               = iInt;
         _iDouble            = iDouble;
         }
 
@@ -85,7 +86,7 @@ namespace ModelRelief.Features.Workbench
             {
             string resultF1 = _fInteger.F1(1, 1);
             string resultF2 = _fDoubleInteger.F2(1, 1);
-            
+
             resultF1 = _iInt.F1(1, 1);
             resultF2 = _iDouble.F2(1.0, 1.0);
 

@@ -1,8 +1,8 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
+﻿// -----------------------------------------------------------------------
+// <copyright file="RestControllerOptions.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Api.V1.Shared
 {
@@ -12,7 +12,7 @@ namespace ModelRelief.Api.V1.Shared
     public class RestControllerOptions
     {
         /// <summary>
-        /// Gets or sets whether to page a collection of results.
+        /// Gets or sets a value indicating whether to page a collection of results.
         /// </summary>
         public bool UsePaging { get; set; }
     }

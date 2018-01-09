@@ -1,14 +1,14 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using ModelRelief.Services;
-using System.ComponentModel.DataAnnotations;
+﻿// -----------------------------------------------------------------------
+// <copyright file="Camera.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Domain
 {
-    public enum StandardView 
+    using ModelRelief.Services;
+
+    public enum StandardView
     {
         None,
         Front,
@@ -17,7 +17,7 @@ namespace ModelRelief.Domain
         Bottom,
         Left,
         Right,
-        Isometric
+        Isometric,
     }
 
     [DependentFiles(typeof(DepthBuffer))]
@@ -40,9 +40,9 @@ namespace ModelRelief.Domain
         public double LookAtZ { get; set; }
 
         [DependentFileProperty]
-        public double Near{ get; set; }
+        public double Near { get; set; }
         [DependentFileProperty]
-        public double Far{ get; set; }
+        public double Far { get; set; }
         [DependentFileProperty]
         public double FieldOfView { get; set; }
         [DependentFileProperty]
@@ -53,6 +53,7 @@ namespace ModelRelief.Domain
         public Project Project { get; set; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Camera"/> class.
         /// Default constructor.
         /// </summary>
         public Camera()

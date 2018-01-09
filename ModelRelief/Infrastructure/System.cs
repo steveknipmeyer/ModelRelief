@@ -1,10 +1,8 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-
+﻿// -----------------------------------------------------------------------
+// <copyright file="System.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Infrastructure
 {
@@ -17,6 +15,4 @@ namespace ModelRelief.Infrastructure
         public const string DefaultApiV1     = "DefaultApiV1";
         public const string ApiDocumentation = "ApiDocumentation";
     }
-
-
 }

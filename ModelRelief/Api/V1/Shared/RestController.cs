@@ -1,35 +1,34 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using AutoMapper;
-using MediatR;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using ModelRelief.Dto;
-using ModelRelief.Infrastructure;
-using ModelRelief.Utility;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="RestController.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Api.V1.Shared
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using MediatR;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+    using ModelRelief.Api.V1.Shared.Rest;
+    using ModelRelief.Database;
+    using ModelRelief.Domain;
+    using ModelRelief.Dto;
+    using ModelRelief.Utility;
+
     public abstract class RestController<TEntity, TGetModel, TSingleGetModel, TRequestModel, TPostFile> : ApiController<TEntity>
         where TEntity         : DomainModel
-        where TGetModel       : ITGetModel           
+        where TGetModel       : ITGetModel
         where TSingleGetModel : ITGetModel
         where TPostFile       : class, new()        // WIP Should TPostFile implement a particular interface?
     {
         public RestControllerOptions RestControllerOptions { get; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="RestController{TEntity, TGetModel, TSingleGetModel, TRequestModel, TPostFile}"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context.</param>
@@ -38,9 +37,12 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="mediator">IMediator.</param>
         /// <remarks>Defaults to use paging.</remarks>
         protected RestController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMediator mediator)
-            : this(dbContext, userManager, loggerFactory, mediator, new RestControllerOptions {UsePaging = true}) {}
+            : this(dbContext, userManager, loggerFactory, mediator, new RestControllerOptions { UsePaging = true })
+        {
+        }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="RestController{TEntity, TGetModel, TSingleGetModel, TRequestModel, TPostFile}"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context.</param>
@@ -48,8 +50,8 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mediator">IMediator.</param>
         /// <param name="restControllerOptions">Options for paging, etc.</param>
-        protected RestController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMediator mediator, RestControllerOptions restControllerOptions )
-            : base(dbContext, userManager, loggerFactory, mediator) 
+        protected RestController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMediator mediator, RestControllerOptions restControllerOptions)
+            : base(dbContext, userManager, loggerFactory, mediator)
         {
             RestControllerOptions = restControllerOptions;
         }
@@ -64,7 +66,7 @@ namespace ModelRelief.Api.V1.Shared
         public virtual async Task<IActionResult> GetList([FromQuery] GetListRequest getRequest)
         {
             getRequest = getRequest ?? new GetListRequest();
-            return await HandleRequestAsync(new GetListRequest<TEntity, TGetModel> 
+            return await HandleRequestAsync(new GetListRequest<TEntity, TGetModel>
             {
                 User = User,
                 UrlHelperContainer  = this,
@@ -77,18 +79,19 @@ namespace ModelRelief.Api.V1.Shared
                 UsePaging           = RestControllerOptions.UsePaging,
             });
         }
-        
+
         /// <summary>
         /// Action method for GetSingleRequest.
         /// </summary>
         /// <param name="id">Model Id to fetch.</param>
         /// <returns>TGetModel of target model.</returns>
         [HttpGet("{id:int}")]
-        public virtual async Task<IActionResult> GetSingle(int id) 
+        public virtual async Task<IActionResult> GetSingle(int id)
         {
-            return await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel> {
+            return await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel>
+            {
                 User = User,
-                Id = id
+                Id = id,
             });
         }
 
@@ -96,9 +99,10 @@ namespace ModelRelief.Api.V1.Shared
         [DisableRequestSizeLimit]
         public virtual async Task<IActionResult> GetFile(int id)
         {
-            return await HandleRequestAsync(new GetFileRequest<TEntity> {
+            return await HandleRequestAsync(new GetFileRequest<TEntity>
+            {
                 User = User,
-                Id = id
+                Id = id,
             });
         }
         #endregion
@@ -115,7 +119,7 @@ namespace ModelRelief.Api.V1.Shared
             var result = await HandleRequestAsync(new PostRequest<TEntity, TRequestModel, TGetModel>
             {
                 User = User,
-                NewModel = postRequest
+                NewModel = postRequest,
             });
 
             return PostCreatedResult(result);
@@ -131,8 +135,8 @@ namespace ModelRelief.Api.V1.Shared
         public virtual async Task<IActionResult> PostFile()
         {
             // construct from request body
-            var postFile = new PostFile 
-            { 
+            var postFile = new PostFile
+            {
                 Raw = Files.ReadToEnd(Request.Body),
             };
 
@@ -140,7 +144,7 @@ namespace ModelRelief.Api.V1.Shared
             {
                 User = User,
                 Id = System.Convert.ToInt32(this.RouteData.Values["id"]),
-                NewFile = postFile
+                NewFile = postFile,
             });
 
             return PostCreatedResult(result, postFile: true);
@@ -161,7 +165,7 @@ namespace ModelRelief.Api.V1.Shared
             {
                 User = User,
                 Id = id,
-                UpdatedModel = putRequest
+                UpdatedModel = putRequest,
             });
         }
 
@@ -184,9 +188,9 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="data">Dictionary of property key:values.</param>
         /// <returns>TGetModel of update model.</returns>
         [HttpPut("{id:int}/patch")]
-        public virtual async Task<IActionResult> PutPatch(int id, [FromBody] Dictionary<string, object> data) 
+        public virtual async Task<IActionResult> PutPatch(int id, [FromBody] Dictionary<string, object> data)
         {
-            return await Patch (id, data);
+            return await Patch(id, data);
         }
 
         /// <summary>
@@ -196,14 +200,14 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="data">Dictionary of property key:values.</param>
         /// <returns>TGetModel of update model.</returns>
         [HttpPatch("{id:int}")]
-        public virtual async Task<IActionResult> Patch(int id, [FromBody] Dictionary<string, object> data) 
+        public virtual async Task<IActionResult> Patch(int id, [FromBody] Dictionary<string, object> data)
         {
-            return await HandleRequestAsync (new PatchRequest<TEntity, TGetModel>
-            { 
+            return await HandleRequestAsync(new PatchRequest<TEntity, TGetModel>
+            {
             User = User,
-            Id = id, 
+            Id = id,
             Parameters = data,
-            DbContext = DbContext
+            DbContext = DbContext,
             });
         }
         #endregion
@@ -215,16 +219,16 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="id">Id of model to delete.</param>
         /// <returns>Ok if successfully deleted.</returns>
         [HttpDelete("{id:int}")]
-        public virtual async Task<IActionResult> Delete(int id) 
+        public virtual async Task<IActionResult> Delete(int id)
         {
-            return await HandleRequestAsync(new DeleteRequest<TEntity> 
+            return await HandleRequestAsync(new DeleteRequest<TEntity>
             {
                 User = User,
-                Id = id
+                Id = id,
             });
         }
         #endregion
-        
+
         /// <summary>
         /// Gets the Uri of a newly-created resource.
         /// </summary>
@@ -234,13 +238,13 @@ namespace ModelRelief.Api.V1.Shared
         {
             // N.B. Files are posted to a 'file' subresource (e.g. resource/id/file while metadata is posted to the root resource.
             //   Type       Post Endpoint       Created Endpoint
-            //   file       resource/id/file    resource/id/file     
+            //   file       resource/id/file    resource/id/file
             //   JSON       resource            resource/id
-            // Therefore, the created URL that is returned must be handled differently. 
+            // Therefore, the created URL that is returned must be handled differently.
             // For JSON, the new id is appended while for a file the created endpoint is the same as the POST endpoint.
 
             var newModel = (TGetModel)((OkObjectResult)okResult).Value;
-            string subPath = postFile ? "" : $"/{newModel.Id}";
+            string subPath = postFile ? string.Empty : $"/{newModel.Id}";
             string createdUrl = $"{this.Request.Path}{subPath}";
 
             Uri createdUrlAbsolute = new Uri($"{Request.Scheme}://{Request.Host}{createdUrl}");
@@ -256,7 +260,7 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="postFile">File resource posted; not metadata</param>
         private IActionResult PostCreatedResult(IActionResult result, bool postFile = false)
         {
-            // return ApiError if not OK; all successful requests return OK 
+            // return ApiError if not OK; all successful requests return OK
             if (!(result is OkObjectResult))
                 return result;
 

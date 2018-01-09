@@ -1,12 +1,13 @@
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using ModelRelief.Test.TestModels.Meshes;
+// -----------------------------------------------------------------------
+// <copyright file="MeshesBaseIntegrationTests.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Test.Integration.Meshes
 {
+    using ModelRelief.Test.TestModels.Meshes;
+
     /// <summary>
     /// Base integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
@@ -14,10 +15,12 @@ namespace ModelRelief.Test.Integration.Meshes
     public class MeshesBaseIntegrationTests : BaseIntegrationTests<Domain.Mesh, Dto.Mesh>
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="MeshesBaseIntegrationTests"/> class.
         /// Constructor
         /// </summary>
-        public MeshesBaseIntegrationTests(ClassFixture classFixture) :
-            base (classFixture, new MeshTestModel())
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        public MeshesBaseIntegrationTests(ClassFixture classFixture)
+            : base(classFixture, new MeshTestModel())
         {
         }
 

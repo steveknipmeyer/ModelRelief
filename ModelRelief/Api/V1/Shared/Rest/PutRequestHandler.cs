@@ -1,28 +1,26 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using FluentValidation;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Api.V1.Shared.Errors;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using ModelRelief.Services;
-using ModelRelief.Utility;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="PutRequestHandler.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
+    using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
+    using FluentValidation;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Logging;
+    using ModelRelief.Database;
+    using ModelRelief.Domain;
+    using ModelRelief.Services;
+    using ModelRelief.Utility;
+
     /// <summary>
     /// Represents a handler for a PUT request to update an existing model.
     /// </summary>
@@ -35,6 +33,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         where TGetModel  : ITGetModel
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="PutRequestHandler{TEntity, TRequestModel, TGetModel}"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
@@ -45,9 +44,15 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="validators">All validators matching IValidator for the given request.</param>
-        public PutRequestHandler(UserManager<ApplicationUser> userManager, ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, IHostingEnvironment hostingEnvironment, 
-                                 Services.IConfigurationProvider  configurationProvider, IDependencyManager dependencyManager, 
-                                 IEnumerable<IValidator<PutRequest<TEntity, TRequestModel, TGetModel>>> validators)
+        public PutRequestHandler(
+            UserManager<ApplicationUser> userManager,
+            ModelReliefDbContext dbContext,
+            ILoggerFactory loggerFactory,
+            IMapper mapper,
+            IHostingEnvironment hostingEnvironment,
+            Services.IConfigurationProvider  configurationProvider,
+            IDependencyManager dependencyManager,
+            IEnumerable<IValidator<PutRequest<TEntity, TRequestModel, TGetModel>>> validators)
             : base(dbContext, userManager, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators)
         {
         }

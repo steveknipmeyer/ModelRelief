@@ -1,21 +1,13 @@
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using FluentAssertions;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Test.TestModels.MeshTransforms;
-using Newtonsoft.Json;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Xunit;
+// -----------------------------------------------------------------------
+// <copyright file="MeshTransformssBaseIntegrationTests.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Test.Integration.MeshTransforms
 {
+    using ModelRelief.Test.TestModels.MeshTransforms;
+
     /// <summary>
     /// Base integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
@@ -23,10 +15,12 @@ namespace ModelRelief.Test.Integration.MeshTransforms
     public class MeshTransformsBaseIntegrationTests : BaseIntegrationTests<Domain.MeshTransform, Dto.MeshTransform>
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="MeshTransformsBaseIntegrationTests"/> class.
         /// Constructor
         /// </summary>
-        public MeshTransformsBaseIntegrationTests(ClassFixture classFixture) :
-            base (classFixture, new MeshTransformTestModel())
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        public MeshTransformsBaseIntegrationTests(ClassFixture classFixture)
+            : base(classFixture, new MeshTransformTestModel())
         {
         }
 

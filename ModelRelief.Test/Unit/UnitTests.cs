@@ -1,41 +1,36 @@
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using ModelRelief.Test.TestModels;
-using Newtonsoft.Json;
-using System;
-using System.Diagnostics;
-using System.Net;
-using System.Threading.Tasks;
-using Xunit;
+// -----------------------------------------------------------------------
+// <copyright file="UnitTests.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Test.Unit
 {
+    using System.Threading.Tasks;
+    using Microsoft.EntityFrameworkCore;
+    using ModelRelief.Database;
+    using Xunit;
+
     /// <summary>
     /// Base class for unit tests.
     /// </summary>
     [Collection("Database")]
-    public abstract class UnitTests: IClassFixture<ClassFixture>, IAsyncLifetime
+    public abstract class UnitTests : IClassFixture<ClassFixture>, IAsyncLifetime
     {
         public ClassFixture ClassFixture { get; set; }
 
         /// <summary>
-        /// Returns the primary database context.
+        /// Gets or sets the primary database context.
         ///     It is difficult to mock extensions methods such as the EF ToListAsync.
-        //      Jimmy Bogard and K. Scott Allen do not recommend mocking a DbContext. 
+        ///     Jimmy Bogard and K. Scott Allen do not recommend mocking a DbContext.
         /// </summary>
         public ModelReliefDbContext DbContext { get; set; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="UnitTests"/> class.
         /// Constructor
         /// </summary>
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         public UnitTests(ClassFixture classFixture)
         {
             ClassFixture = classFixture;

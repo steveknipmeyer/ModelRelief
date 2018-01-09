@@ -1,27 +1,27 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Api.V1.Extensions;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using ModelRelief.Infrastructure;
-using ModelRelief.Services;
-using ModelRelief.Utility;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="GetListRequestHandler.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Logging;
+    using ModelRelief.Api.V1.Extensions;
+    using ModelRelief.Database;
+    using ModelRelief.Domain;
+    using ModelRelief.Infrastructure;
+    using ModelRelief.Services;
+    using ModelRelief.Utility;
+
     /// <summary>
     /// Represents a handler for a GET request for a collection of models.
     /// </summary>
@@ -32,6 +32,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         where TGetModel : ITGetModel
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="GetListRequestHandler{TEntity, TGetModel}"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
@@ -41,8 +42,14 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
-       public GetListRequestHandler(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IHostingEnvironment hostingEnvironment, 
-                                    Services.IConfigurationProvider  configurationProvider, IDependencyManager dependencyManager)
+        public GetListRequestHandler(
+            ModelReliefDbContext dbContext,
+            UserManager<ApplicationUser> userManager,
+            ILoggerFactory loggerFactory,
+            IMapper mapper,
+            IHostingEnvironment hostingEnvironment,
+            Services.IConfigurationProvider  configurationProvider,
+            IDependencyManager dependencyManager)
             : base(dbContext, userManager, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, null)
         {
         }
@@ -60,7 +67,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
             IQueryable<TEntity> results = DbContext.Set<TEntity>()
                                                 .Where(m => (m.UserId == user.Id));
 
-            if (message.UsePaging) {
+            if (message.UsePaging)
+            {
                 var page = await CreatePagedResultsAsync<TEntity, TGetModel>(results, message.UrlHelperContainer, message.PageNumber, message.NumberOfRecords, message.OrderBy, message.Ascending);
                 return page;
             }
@@ -80,8 +88,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="orderBy">The field or property to order by.</param>
         /// <param name="ascending">Indicates whether or not the order should be ascending (true) or descending (false.)</param>
         /// <returns>Returns a paged set of results.</returns>
-        protected async Task<PagedResults<TReturn>> CreatePagedResultsAsync<T, TReturn>
-        (
+        protected async Task<PagedResults<TReturn>> CreatePagedResultsAsync<T, TReturn>(
             IQueryable<T> queryable,
             IUrlHelperContainer urlHelperContainer,
             int pageNumber,
@@ -106,12 +113,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
             var nextPageUrl =
                 pageNumber == totalPageCount
                     ? null
-                    : urlHelperContainer.Url?.Link(RouteNames.DefaultApiV1, new {
-                        pageNumber = pageNumber + 1,
-                        pageSize,
-                        orderBy,
-                        ascending
-                    });
+                    : urlHelperContainer.Url?.Link(
+                        RouteNames.DefaultApiV1,
+                        new { pageNumber = pageNumber + 1, pageSize, orderBy, ascending });
 
             return new PagedResults<TReturn>
             {
@@ -120,7 +124,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 PageSize = results.Count,
                 TotalNumberOfPages = totalPageCount,
                 TotalNumberOfRecords = totalNumberOfRecords,
-                NextPageUrl = nextPageUrl
+                NextPageUrl = nextPageUrl,
             };
         }
     }

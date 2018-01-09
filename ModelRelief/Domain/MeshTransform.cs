@@ -1,23 +1,16 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
-
-using ModelRelief.Domain;
-using ModelRelief.Services;
+﻿// -----------------------------------------------------------------------
+// <copyright file="MeshTransform.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Domain
 {
+    using ModelRelief.Services;
+
     [DependentFiles(typeof(Mesh))]
     public class MeshTransform : DomainModel
-    {       
+    {
         [DependentFileProperty]
         public double Depth { get; set; }
         [DependentFileProperty]
@@ -37,6 +30,7 @@ namespace ModelRelief.Domain
         public Project Project { get; set; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="MeshTransform"/> class.
         /// Default constructor.
         /// </summary>
         public MeshTransform()

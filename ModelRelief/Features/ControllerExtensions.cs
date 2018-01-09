@@ -1,14 +1,14 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿// -----------------------------------------------------------------------
+// <copyright file="ControllerExtensions.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Features
 {
+    using Microsoft.AspNetCore.Mvc;
+    using Newtonsoft.Json;
+
     /// <summary>
     /// MVC Controller extensions.
     /// ContosoUniverityCore
@@ -28,9 +28,8 @@ namespace ModelRelief.Features
         {
             return controller.JsonContentResult(new
                 {
-                    redirect = controller.Url.Action(action)
-                }
-            );
+                    redirect = controller.Url.Action(action),
+                });
         }
 
         /// <summary>
@@ -43,13 +42,13 @@ namespace ModelRelief.Features
         {
             var serializedContent = JsonConvert.SerializeObject(model, new JsonSerializerSettings
             {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             });
 
             return new ContentResult
             {
                ContentType = "application/json",
-               Content     = serializedContent
+               Content     = serializedContent,
             };
         }
     }
