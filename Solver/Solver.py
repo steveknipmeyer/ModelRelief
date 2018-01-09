@@ -1,7 +1,11 @@
+import os.path
 import numpy as np
 import matplotlib.pylab as plt
 
-im = plt.imread("D:/Users/Steve Knipmeyer/Documents/GitHub/ModelRelief/Solver/Lucy.png")
+currentDirectory = os.path.dirname(__file__)
+fileName = os.path.join(currentDirectory, "Lucy.png");
+
+im = plt.imread(fileName)
 
 print(im.shape)
 
