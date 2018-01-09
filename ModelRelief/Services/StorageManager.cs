@@ -1,21 +1,17 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using ModelRelief.Domain;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="StorageManager.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Services
 {
+    using System.IO;
+    using Microsoft.AspNetCore.Hosting;
+    using ModelRelief.Domain;
+
     /// <summary>
-    /// User storage manager interface. 
+    /// User storage manager interface.
     /// Provides file services for file-based resources.
     /// </summary>
     public interface IStorageManager
@@ -23,11 +19,12 @@ namespace ModelRelief.Services
         IConfigurationProvider ConfigurationProvider { get; }
         IHostingEnvironment HostingEnvironment { get; }
 
-        string DefaultModelStorageFolder<TEntity>(TEntity model) where TEntity : DomainModel;
+        string DefaultModelStorageFolder<TEntity>(TEntity model)
+            where TEntity : DomainModel;
     }
 
     /// <summary>
-    /// User storage manager. 
+    /// User storage manager.
     /// Provides file services for file-based resources.
     /// </summary>
     public class StorageManager : IStorageManager
@@ -47,11 +44,11 @@ namespace ModelRelief.Services
         /// <typeparam name="TEntity">Domain model.</typeparam>
         /// <param name="model">Model instance. </param>
         /// <returns></returns>
-        public string DefaultModelStorageFolder<TEntity> (TEntity model)
+        public string DefaultModelStorageFolder<TEntity>(TEntity model)
             where TEntity : DomainModel
         {
             var storeUsers  = ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
-            var modelRootFolder = ConfigurationProvider.GetSetting(($"ResourcePaths:Folders:{typeof(TEntity).Name}"));
+            var modelRootFolder = ConfigurationProvider.GetSetting($"ResourcePaths:Folders:{typeof(TEntity).Name}");
 
             string modelStorageFolder = $"{HostingEnvironment.WebRootPath}{storeUsers}{model.User.Id}/{modelRootFolder}/{model.Id}/";
 

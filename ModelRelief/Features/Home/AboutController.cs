@@ -1,12 +1,13 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using Microsoft.AspNetCore.Mvc;
+﻿// -----------------------------------------------------------------------
+// <copyright file="AboutController.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Features.Home
 {
+    using Microsoft.AspNetCore.Mvc;
+
     public class AboutController : Controller
         {
         public IActionResult Phone()
@@ -14,7 +15,7 @@ namespace ModelRelief.Features.Home
             return Content("571 730 7138");
             }
 
-        [Route ("special/{id?}")]
+        [Route("special/{id?}")]
         public IActionResult Company()
             {
             return Content("ModelRelief, LLC");

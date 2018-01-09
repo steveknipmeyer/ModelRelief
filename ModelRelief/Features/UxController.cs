@@ -1,24 +1,23 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using AutoMapper;
-using FluentValidation;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Api.V1.Shared;
-using ModelRelief.Api.V1.Shared.Errors;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using System;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="UxController.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Features
 {
+    using System;
+    using System.Threading.Tasks;
+    using AutoMapper;
+    using MediatR;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+    using ModelRelief.Api.V1.Shared;
+    using ModelRelief.Api.V1.Shared.Errors;
+    using ModelRelief.Database;
+    using ModelRelief.Domain;
+
     public abstract class UxController : Controller, IUrlHelperContainer
     {
         public ModelReliefDbContext         DbContext { get; }
@@ -28,6 +27,7 @@ namespace ModelRelief.Features
         public IMediator                    Mediator { get; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="UxController"/> class.
         /// Base UX Controller
         /// </summary>
         /// <param name="dbContext">Database context</param>
@@ -35,7 +35,7 @@ namespace ModelRelief.Features
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper from DI</param>
         /// <param name="mediator">IMediator from DI</param>
-        protected UxController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator) 
+        protected UxController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator)
         {
             DbContext   = dbContext;
             UserManager = userManager;
@@ -54,7 +54,7 @@ namespace ModelRelief.Features
         {
             if (request == null)
                 throw new NullRequestException(this.Request.Path, request.GetType());
-            
+
             try
             {
                 // dispatch to registered handler

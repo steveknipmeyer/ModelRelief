@@ -1,14 +1,15 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using Microsoft.AspNetCore.Mvc;
-using ModelRelief.Services;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="FooterViewComponent.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Features.Shared.ViewComponents
 {
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc;
+    using ModelRelief.Services;
+
     public class FooterViewComponent : ViewComponent
         {
         private IConfigurationProvider _configurationProvider;
@@ -18,7 +19,7 @@ namespace ModelRelief.Features.Shared.ViewComponents
             _configurationProvider = configurationProvider;
             }
 
-#if false        
+#if false
         public IViewComponentResult Invoke()
             {
             // Invoke was removed from ViewComponent however this still compiles.
@@ -42,13 +43,13 @@ namespace ModelRelief.Features.Shared.ViewComponents
             {
             // This is the preferred form. It allows the use of await.
             // The async modifier converts the return result to a Task.
-        
+
             // Server Side Async is not Client Side Async
-            // https://stackoverflow.com/questions/36024748/viewcomponents-in-asp-net-mvc-6-are-not-async    
+            // https://stackoverflow.com/questions/36024748/viewcomponents-in-asp-net-mvc-6-are-not-async
             await Task.Delay(0);
 
             var greetingMessage = _configurationProvider.GetSetting("Greeting");
-            return View ("Default", greetingMessage);
+            return View("Default", greetingMessage);
             }
 #endif
         }

@@ -1,21 +1,13 @@
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using FluentAssertions;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Test.TestModels.Projects;
-using Newtonsoft.Json;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Xunit;
+// -----------------------------------------------------------------------
+// <copyright file="ProjectsBaseIntegrationTests.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Test.Integration.Projects
 {
+    using ModelRelief.Test.TestModels.Projects;
+
     /// <summary>
     /// Base integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
@@ -23,10 +15,12 @@ namespace ModelRelief.Test.Integration.Projects
     public class ProjectsBaseIntegrationTests : BaseIntegrationTests<Domain.Project, Dto.Project>
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="ProjectsBaseIntegrationTests"/> class.
         /// Constructor
         /// </summary>
-        public ProjectsBaseIntegrationTests(ClassFixture classFixture) :
-            base (classFixture, new ProjectTestModel())
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        public ProjectsBaseIntegrationTests(ClassFixture classFixture)
+            : base(classFixture, new ProjectTestModel())
         {
         }
 

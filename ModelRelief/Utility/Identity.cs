@@ -1,22 +1,30 @@
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using Microsoft.AspNetCore.Identity;
-using ModelRelief.Api.V1.Shared.Errors;
-using ModelRelief.Domain;
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Threading.Tasks;
+// -----------------------------------------------------------------------
+// <copyright file="Identity.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Utility
 {
+    using System.Security.Claims;
+    using System.Security.Principal;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Identity;
+    using ModelRelief.Api.V1.Shared.Errors;
+    using ModelRelief.Domain;
+
     public static class Identity
     {
         // N.B. Must match TestAccount!
-        public static string MockUserId { get {return "7ab4676b-563b-4c42-b6f9-27c11208f33f";} }
-        public static string MockUserName { get {return "MockTestUser";} }
+        public static string MockUserId
+        {
+            get { return "7ab4676b-563b-4c42-b6f9-27c11208f33f"; }
+        }
+
+        public static string MockUserName
+        {
+            get { return "MockTestUser"; }
+        }
 
         /// <summary>
         /// IPrincipal extension method to retrieve the User Id.
@@ -38,7 +46,7 @@ namespace ModelRelief.Utility
         /// <param name="userManager">User Manager from DI</param>
         /// <param name="claimsPrincipal">HttpContext.User</param>
         /// <returns>USer</returns>
-        public static async Task<ApplicationUser> FindApplicationUserAsync (UserManager<ApplicationUser> userManager, ClaimsPrincipal claimsPrincipal)
+        public static async Task<ApplicationUser> FindApplicationUserAsync(UserManager<ApplicationUser> userManager, ClaimsPrincipal claimsPrincipal)
         {
         if ((claimsPrincipal == null) || (!claimsPrincipal.Identity.IsAuthenticated))
             throw new UserAuthenticationException();
@@ -46,8 +54,8 @@ namespace ModelRelief.Utility
         // mock authentication to work with PostMan and xUnit; assign a User Id to the GenericIdentity that was created in the middleware
         if (claimsPrincipal.Identity.Name == Identity.MockUserName)
             return await userManager.FindByIdAsync(MockUserId);
-        else        
+        else
             return await userManager.GetUserAsync(claimsPrincipal);
         }
-    }        
+    }
 }

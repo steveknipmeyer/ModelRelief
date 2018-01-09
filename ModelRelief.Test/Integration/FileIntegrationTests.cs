@@ -1,48 +1,48 @@
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Domain;
-using ModelRelief.Dto;
-using ModelRelief.Test.TestModels;
-using ModelRelief.Test.TestModels.DepthBuffers;
-using Newtonsoft.Json;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Threading.Tasks;
-using Xunit;
+// -----------------------------------------------------------------------
+// <copyright file="FileIntegrationTests.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Test.Integration
 {
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Threading.Tasks;
+    using FluentAssertions;
+    using ModelRelief.Api.V1.Shared.Rest;
+    using ModelRelief.Domain;
+    using ModelRelief.Test.TestModels;
+    using Newtonsoft.Json;
+    using Xunit;
+
     /// <summary>
     /// Base Integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
-    public abstract class FileIntegrationTests <TEntity, TGetModel>: IntegrationTests<TEntity, TGetModel>
+    /// <typeparam name="TEntity">Domain model.</typeparam>
+    /// <typeparam name="TGetModel">DTO Get model.</typeparam>
+    public abstract class FileIntegrationTests<TEntity, TGetModel> : IntegrationTests<TEntity, TGetModel>
         where TEntity   : FileDomainModel
         where TGetModel : class, ITGetModel, new()
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="FileIntegrationTests{TEntity, TGetModel}"/> class.
         /// Constructor
         /// </summary>
-        public FileIntegrationTests(ClassFixture classFixture, TestModel<TEntity, TGetModel> testModel) :
-            base (classFixture, testModel)
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        /// <param name="testModel">A test model under integration testing.</param>
+        public FileIntegrationTests(ClassFixture classFixture, TestModel<TEntity, TGetModel> testModel)
+            : base(classFixture, testModel)
         {
         }
 
         /// <summary>
         /// Returns a byte array from a file. The file must exist in Test\Data\Files.
         /// </summary>
-        /// <param name="fileName"></param>
+        /// <param name="fileName">File to read.</param>
         /// <returns></returns>
         public byte[] ByteArrayFromFile(string fileName)
         {
@@ -58,10 +58,12 @@ namespace ModelRelief.Test.Integration
         /// <summary>
         /// Posts a new new file.
         /// </summary>
+        /// <param name="modelId">Id of the backing metadata model.</param>
+        /// <param name="fileName">Name of the file to POST.</param>
         public virtual async Task<RequestResponse> PostNewFile(int modelId,  string fileName)
         {
             // Arrange
-            var byteArray = ByteArrayFromFile (fileName);
+            var byteArray = ByteArrayFromFile(fileName);
 
             // Act
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Post, $"{TestModel.ApiUrl}/{modelId}/file", byteArray, binaryContent: true);
@@ -86,7 +88,7 @@ namespace ModelRelief.Test.Integration
 
                 for (int i = 0; i < length; i++)
                 {
-                    if( first[i] != second[i] ) 
+                    if (first[i] != second[i])
                         return false;
                 }
                 return true;
@@ -97,7 +99,7 @@ namespace ModelRelief.Test.Integration
         /// Tests whether an existing file can be returned.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api GetFile")]
+        [Trait("Category", "Api GetFile")]
         public virtual async Task GetFile_ExistingFileReturnsSuccess()
         {
             // Arrange
@@ -114,7 +116,7 @@ namespace ModelRelief.Test.Integration
         /// Tests whether a non-existent file return NotFound.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api GetFile")]
+        [Trait("Category", "Api GetFile")]
         public virtual async Task GetFile_NonExistentFileReturnsNotFound()
         {
             // Arrange
@@ -133,24 +135,24 @@ namespace ModelRelief.Test.Integration
         /// Tests whether a file can be roundtripped to an endpoint.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api GetFile")]
+        [Trait("Category", "Api GetFile")]
         public virtual async Task GetFile_FileCanBeRoundTripped()
         {
             // Arrange
             var fileName = "ModelRelief.txt";
             var newModel = await PostNewModel();
             var requestResponse = await PostNewFile(newModel.Id, fileName);
-            var writtenByteArray = ByteArrayFromFile (fileName);
+            var writtenByteArray = ByteArrayFromFile(fileName);
 
-            // Act            
+            // Act
             requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModel.ApiUrl}/{newModel.Id}/file");
-            var fileContentResult = (Newtonsoft.Json.Linq.JObject) JsonConvert.DeserializeObject(requestResponse.ContentString);
+            var fileContentResult = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(requestResponse.ContentString);
             var encodedString = fileContentResult.GetValue("fileContents");
             var readByteArray = Convert.FromBase64String(encodedString.ToString());
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
-            Assert.True (EqualByteArrays(writtenByteArray, readByteArray));
+            Assert.True(EqualByteArrays(writtenByteArray, readByteArray));
 
             // Rollback
             await DeleteModel(newModel);
@@ -162,13 +164,13 @@ namespace ModelRelief.Test.Integration
         /// Tests whether a file can be posted to the resource.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api PostFile")]
+        [Trait("Category", "Api PostFile")]
         public virtual async Task PostFile_NewFileCanBePosted()
         {
             // Arrange
             var newModel = await PostNewModel();
 
-            // Act            
+            // Act
             var requestResponse = await PostNewFile(newModel.Id, "UnitCube.obj");
 
             // Assert
@@ -182,14 +184,14 @@ namespace ModelRelief.Test.Integration
         /// Tests whether the file metadata is updated correctly after a file POST.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api PostFile")]
+        [Trait("Category", "Api PostFile")]
         public virtual async Task PostFile_MetadataIsUpdatedAfterFileIsPosted()
         {
             // Arrange
             var newModel = await PostNewModel();
             var newGeneratedFileModel = newModel as IGeneratedFile;
 
-            // Act            
+            // Act
             var requestResponse = await PostNewFile(newModel.Id, "UnitCube.obj");
 
             // Assert
@@ -202,7 +204,7 @@ namespace ModelRelief.Test.Integration
             var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
             var updatedGeneratedFileModel = updatedModel as IGeneratedFile;
             updatedGeneratedFileModel.FileIsSynchronized.Should().Be(true);
-            
+
             // Rollback
             await DeleteModel(newModel);
         }
@@ -214,13 +216,13 @@ namespace ModelRelief.Test.Integration
         /// N.B. PUT and POST are equivalent for files. Both replace the destination completely.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api PutFile")]
+        [Trait("Category", "Api PutFile")]
         public virtual async Task PutFile_NewFileCanBePosted()
         {
             // Arrange
             var newModel = await PostNewModel();
 
-            // Act            
+            // Act
             var requestResponse = await PostNewFile(newModel.Id, "UnitCube.obj");
 
             // Assert

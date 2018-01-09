@@ -1,22 +1,23 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using AutoMapper;
-using FluentValidation;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Domain;
-using System.ComponentModel.DataAnnotations;
+﻿// -----------------------------------------------------------------------
+// <copyright file="MappingProfile.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Dto
 {
+    using System.ComponentModel.DataAnnotations;
+    using AutoMapper;
+    using FluentValidation;
+    using ModelRelief.Api.V1.Shared.Rest;
+    using ModelRelief.Domain;
+
     public class DepthBuffer : ITGetModel, IGeneratedFile
     {
         public int Id { get; set; }
 
-        [Required, Display (Name = "DepthBuffer Name")]
+        [Required]
+        [Display(Name = "DepthBuffer Name")]
         public string Name { get; set; }
         public string Description { get; set; }
 
@@ -42,7 +43,7 @@ namespace ModelRelief.Dto
         {
             RuleFor(m => m.Name)
                 .NotNull().WithMessage("The Name property is required.");
-         
+
             RuleFor(m => m.Description)
                 .NotNull().WithMessage("The Description property is required.");
 
@@ -54,12 +55,17 @@ namespace ModelRelief.Dto
 
 namespace ModelRelief.Features.DepthBuffers
 {
+    using System.ComponentModel.DataAnnotations;
+    using AutoMapper;
+    using FluentValidation;
+    using ModelRelief.Api.V1.Shared.Rest;
+    using ModelRelief.Domain;
+
     public class MappingProfile : Profile
     {
-        public MappingProfile() 
+        public MappingProfile()
         {
         CreateMap<Domain.DepthBuffer, Dto.DepthBuffer>().ReverseMap();
-
         }
     }
 }

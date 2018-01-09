@@ -1,39 +1,38 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using AutoMapper;
-using FluentValidation;
-using FluentValidation.Results;
-using MediatR;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Api.V1.Shared.Errors;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using ModelRelief.Services;
-using ModelRelief.Utility;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Security.Claims;
-using System.Threading;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="ValidatedHandler.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Api.V1.Shared
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using System.Security.Claims;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using AutoMapper;
+    using FluentValidation;
+    using FluentValidation.Results;
+    using MediatR;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Logging;
+    using ModelRelief.Api.V1.Shared.Errors;
+    using ModelRelief.Database;
+    using ModelRelief.Domain;
+    using ModelRelief.Services;
+    using ModelRelief.Utility;
+
     /// <summary>
     /// Abstract representation of request handler that supports validation.
     /// </summary>
     /// <typeparam name="TRequest">Request object.</typeparam>
     /// <typeparam name="TResponse">Response object.</typeparam>
-    public abstract class ValidatedHandler<TRequest, TResponse> : ICancellableAsyncRequestHandler<TRequest, TResponse> 
+    public abstract class ValidatedHandler<TRequest, TResponse> : ICancellableAsyncRequestHandler<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
         public ModelReliefDbContext             DbContext { get; }
@@ -43,9 +42,10 @@ namespace ModelRelief.Api.V1.Shared
         public IHostingEnvironment              HostingEnvironment { get; }
         public Services.IConfigurationProvider  ConfigurationProvider { get; }
         public IDependencyManager               DependencyManager { get; }
-        public IEnumerable<IValidator<TRequest>>Validators { get; }
+        public IEnumerable<IValidator<TRequest>> Validators { get; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ValidatedHandler{TRequest, TResponse}"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context.</param>
@@ -56,8 +56,15 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="validators">List of validators</param>
-        public ValidatedHandler(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IHostingEnvironment hostingEnvironment, 
-                                Services.IConfigurationProvider configurationProvider, IDependencyManager dependencyManager, IEnumerable<IValidator<TRequest>> validators)
+        public ValidatedHandler(
+            ModelReliefDbContext dbContext,
+            UserManager<ApplicationUser> userManager,
+            ILoggerFactory loggerFactory,
+            IMapper mapper,
+            IHostingEnvironment hostingEnvironment,
+            Services.IConfigurationProvider configurationProvider,
+            IDependencyManager dependencyManager,
+            IEnumerable<IValidator<TRequest>> validators)
         {
             DbContext =             dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
             UserManager =           userManager ?? throw new System.ArgumentNullException(nameof(dbContext));
@@ -82,7 +89,7 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="id">Target id to retrieve.</param>
         /// <param name="throwIfNotFound">Throw EntityNotFoundException if not found.</param>
         /// <returns>Domain model if exists, null otherwise.</returns>
-        public virtual async Task<TEntity> FindModelAsync<TEntity> (ClaimsPrincipal claimsPrincipal, int id, bool throwIfNotFound = true)
+        public virtual async Task<TEntity> FindModelAsync<TEntity>(ClaimsPrincipal claimsPrincipal, int id, bool throwIfNotFound = true)
             where TEntity : DomainModel
         {
             var user = await Identity.FindApplicationUserAsync(UserManager, claimsPrincipal);
@@ -97,7 +104,7 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="id">Target id to retrieve.</param>
         /// <param name="throwIfNotFound">Throw EntityNotFoundException if not found.</param>
         /// <returns>Domain model if exists, null otherwise.</returns>
-        public virtual async Task<TEntity> FindModelAsync<TEntity> (ApplicationUser applicationUser, int id, bool throwIfNotFound = true)
+        public virtual async Task<TEntity> FindModelAsync<TEntity>(ApplicationUser applicationUser, int id, bool throwIfNotFound = true)
             where TEntity : DomainModel
         {
             return await FindModelAsync<TEntity>(applicationUser.Id, id, throwIfNotFound);
@@ -111,11 +118,11 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="id">Target id to retrieve.</param>
         /// <param name="throwIfNotFound">Throw EntityNotFoundException if not found.</param>
         /// <returns>Domain model if exists, null otherwise.</returns>
-        public virtual async Task<TEntity> FindModelAsync<TEntity> (string userId, int id, bool throwIfNotFound = true)
+        public virtual async Task<TEntity> FindModelAsync<TEntity>(string userId, int id, bool throwIfNotFound = true)
             where TEntity : DomainModel
         {
             var domainModel = await DbContext.Set<TEntity>()
-                                .Where(m => (m.Id == id) && 
+                                .Where(m => (m.Id == id) &&
                                             (m.UserId == userId))
                                 .SingleOrDefaultAsync();
 
@@ -132,12 +139,12 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="claimsPrincipal">Current HttpContext User.</param>
         /// <param name="id">Target id to test.</param>
         /// <returns>True if model exists.</returns>
-        public virtual async Task<bool> ModelExistsAsync<TEntity> (ClaimsPrincipal claimsPrincipal, int id)
+        public virtual async Task<bool> ModelExistsAsync<TEntity>(ClaimsPrincipal claimsPrincipal, int id)
             where TEntity : DomainModel
         {
             var domainModel = await FindModelAsync<TEntity>(claimsPrincipal, id, throwIfNotFound: false);
             return domainModel != null;
-        }           
+        }
 
         /// <summary>
         /// Validated the property references of the given model to ensure they exist and are owned by the active user.
@@ -145,7 +152,7 @@ namespace ModelRelief.Api.V1.Shared
         /// <typeparam name="TEntity">Domain model.</typeparam>
         /// <param name="model">Model to validate.</param>
         /// <param name="claimsPrincipal">Active user for this request.</param>
-        public async Task ValidateReferences<TEntity> (TEntity model, ClaimsPrincipal claimsPrincipal)
+        public async Task ValidateReferences<TEntity>(TEntity model, ClaimsPrincipal claimsPrincipal)
             where TEntity : DomainModel
         {
             var validationFailures = new List<ValidationFailure>();
@@ -173,12 +180,12 @@ namespace ModelRelief.Api.V1.Shared
                 // find actual reference property
                 var referencePropertyName = propertyName.Substring(0, propertyName.LastIndexOf("Id"));
                 var referenceType         = type.GetProperty(referencePropertyName)?.PropertyType;
-                
+
                 if (referenceType == null)
                     continue;
 
                 Console.WriteLine("Verifying reference property: " + propertyName + ", Value: " + propertyValue, null);
-                switch(referenceType.Name) 
+                switch (referenceType.Name)
                 {
                     case nameof(ApplicationUser):
                         // ModelExistsAsync requires the primary key to be an integer.
@@ -191,7 +198,7 @@ namespace ModelRelief.Api.V1.Shared
                 // https://stackoverflow.com/questions/4101784/calling-a-generic-method-with-a-dynamic-type
                 // https://stackoverflow.com/questions/16153047/net-invoke-async-method-and-await
                 var method = typeof(ValidatedHandler<TRequest, TResponse>).GetMethod(nameof(ModelExistsAsync)).MakeGenericMethod(referenceType);
-                var modelExists = await (Task<bool>)method.Invoke(this, new object[] {claimsPrincipal, (int) propertyValue});
+                var modelExists = await (Task<bool>)method.Invoke(this, new object[] { claimsPrincipal, (int)propertyValue });
                 if (!modelExists)
                     validationFailures.Add(new ValidationFailure(propertyName, $"Property '{propertyName}' references an entity that does not exist."));
             }
@@ -204,7 +211,7 @@ namespace ModelRelief.Api.V1.Shared
         }
 
         /// <summary>
-        /// Abstract pre-handler; performns any initialization or setup required before the request is handled..
+        /// Abstract pre-handler; performns any initialization or setup required before the request is handled.
         /// </summary>
         /// <param name="message">Request object</param>
         /// <param name="cancellationToken">Token to allow asyn request to be cancelled.</param>

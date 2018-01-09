@@ -1,16 +1,14 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="ConfigurationProvider.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Services
 {
+    using System;
+    using Microsoft.Extensions.Configuration;
+
     /// <summary>
     /// Configuration settings.
     /// </summary>
@@ -22,7 +20,7 @@ namespace ModelRelief.Services
     /// <summary>
     /// Configuration resource paths.
     /// </summary>
-    public class ResourcePaths 
+    public class ResourcePaths
     {
         public static string TestDataUsers      = "ResourcePaths:TestDataUsers";
         public static string TestDataFiles      = "ResourcePaths:TestDataFiles";
@@ -36,7 +34,7 @@ namespace ModelRelief.Services
     {
         None,
         SQLServer,
-        SQLite
+        SQLite,
     }
 
     /// <summary>
@@ -58,6 +56,7 @@ namespace ModelRelief.Services
         public IConfiguration Configuration { get; private set; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ConfigurationProvider"/> class.
         /// Constructor.
         /// </summary>
         /// <param name="configuration">Default IConfiguration.</param>
@@ -69,24 +68,24 @@ namespace ModelRelief.Services
         /// <summary>
         /// Returns a given setting.
         /// </summary>
-        /// <param name="settingName"></param>
+        /// <param name="settingName">Configuration setting to lookup.</param>
         /// <param name="throwIfNotFound">Throw an exception if the setting is not found.</param>
         /// <returns></returns>
         public string GetSetting(string settingName, bool throwIfNotFound = true)
         {
             var setting = Configuration[settingName];
 
-            if (throwIfNotFound && String.IsNullOrEmpty(setting))
-                throw new Exception ($"Configuration setting {settingName} not found");
+            if (throwIfNotFound && string.IsNullOrEmpty(setting))
+                throw new Exception($"Configuration setting {settingName} not found");
 
             return setting;
         }
 
         /// <summary>
-        /// Returns the active database provider based on the configuration.
+        /// Gets the active database provider based on the configuration.
         /// </summary>
-        public RelationalDatabaseProvider Database  
-        { 
+        public RelationalDatabaseProvider Database
+        {
             get
             {
                 var modelReliefDatabase = GetSetting(ConfigurationSettings.ModelReliefDatabase, false);

@@ -1,32 +1,29 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Api.V1.Shared.Errors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="GlobalExceptionHandler.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Features.Errors
 {
+    using System.Net;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Filters;
+    using Microsoft.Extensions.Logging;
+    using ModelRelief.Api.V1.Shared.Errors;
+
     /// <summary>
     /// A global exception handler.
     /// https://andrewlock.net/using-cancellationtokens-in-asp-net-core-mvc-controllers/
     /// </summary>
-    public class GlobalExceptionFilter : ExceptionFilterAttribute  
+    public class GlobalExceptionFilter : ExceptionFilterAttribute
     {
         private readonly ILogger _logger;
         private readonly IHostingEnvironment _hostingEnvironment;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="GlobalExceptionFilter"/> class.
         /// Constructor.
         /// </summary>
         /// <param name="loggerFactory">Logger factory.</param>
@@ -60,7 +57,7 @@ namespace ModelRelief.Features.Errors
                 statusCode = HttpStatusCode.Unauthorized;
 
             context.ExceptionHandled = true;
-            context.Result = new StatusCodeResult((int) statusCode);
+            context.Result = new StatusCodeResult((int)statusCode);
         }
     }
 }

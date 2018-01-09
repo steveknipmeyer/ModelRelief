@@ -1,16 +1,14 @@
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using System;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+// -----------------------------------------------------------------------
+// <copyright file="Convert.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Utility
 {
+    using System;
+    using System.IO;
+
     public class Convert
     {
         /// <summary>
@@ -21,13 +19,13 @@ namespace ModelRelief.Utility
         /// <returns>Byte array</returns>
         public static byte[] StreamToByteArray(Stream input)
         {
-            byte[] buffer = new byte[16*1024];
+            byte[] buffer = new byte[16 * 1024];
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 input.CopyTo(memoryStream);
                 return memoryStream.ToArray();
             }
-        }        
+        }
 
         /// <summary>
         /// Converts a byte array to an array of single precision floats.
@@ -35,18 +33,18 @@ namespace ModelRelief.Utility
         /// </summary>
         /// <param name="byteArray">Byte array to convert</param>
         /// <returns></returns>
-        public static float[] ByteArrayToFloatArray(byte[] byteArray) 
+        public static float[] ByteArrayToFloatArray(byte[] byteArray)
         {
             float[] floatArray = new float[byteArray.Length / 4];
-            for (int iFloat = 0; iFloat < floatArray.Length; iFloat++) 
+            for (int iFloat = 0; iFloat < floatArray.Length; iFloat++)
             {
-            #if false                    
+            #if false
                 if (BitConverter.IsLittleEndian) {
                     Array.Reverse(byteArray, iFloat * 4, 4);
-            #endif                    
+            #endif
             floatArray[iFloat] = BitConverter.ToSingle(byteArray, iFloat * 4);
             }
-        return floatArray;
-        }            
-    }        
+            return floatArray;
+        }
+    }
 }

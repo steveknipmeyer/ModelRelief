@@ -1,17 +1,15 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using MediatR;
-using ModelRelief.Domain;
-using ModelRelief.Services;
-using System;
-using System.Security.Claims;
+﻿// -----------------------------------------------------------------------
+// <copyright file="FileRequest.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
+    using MediatR;
+    using ModelRelief.Domain;
+    using ModelRelief.Services;
+
     /// <summary>
     /// Represents the possible operations that can be performed on a backing file.
     /// </summary>
@@ -19,7 +17,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     {
         Unknown,                // no operation
         Rename,                 // rename the file to match the metadata name
-        Generate                // generate a new version from the file's dependencies
+        Generate,                // generate a new version from the file's dependencies
     }
 
     /// <summary>
@@ -30,14 +28,14 @@ namespace ModelRelief.Api.V1.Shared.Rest
     {
         Unknown,
         PreProcess,
-        PostProcess
+        PostProcess,
     }
 
     public interface IFileRequest
     {
         FileOperation       Operation { get; set; }
         ProcessingStage     Stage { get; set; }
-        TransactionEntity   TransactionEntity { get; set;}
+        TransactionEntity   TransactionEntity { get; set; }
     }
 
     /// <summary>
@@ -51,19 +49,20 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Gets or sets the operation to be performed on the file store.
         /// </summary>
-        public FileOperation Operation { get; set;}
+        public FileOperation Operation { get; set; }
 
         /// <summary>
         /// Gets or sets the processing stage that the FileRequest will be executed.
         /// </summary>
-        public ProcessingStage Stage { get; set;}
+        public ProcessingStage Stage { get; set; }
 
         /// <summary>
         /// Gets or sets the ChangeTracker transaction entity.
         /// </summary>
-        public TransactionEntity TransactionEntity { get; set;}
+        public TransactionEntity TransactionEntity { get; set; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="FileRequest{TEntity}"/> class.
         /// Constructor
         /// A public constructor is needed so it can be located through reflection.
         /// </summary>

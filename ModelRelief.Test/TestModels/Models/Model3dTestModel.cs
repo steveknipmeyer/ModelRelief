@@ -1,30 +1,25 @@
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using FluentAssertions;
-using ModelRelief.Api.V1.Shared.Rest;
-using Newtonsoft.Json;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Xunit;
+// -----------------------------------------------------------------------
+// <copyright file="Model3dTestModel.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Test.TestModels.Models
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     /// <summary>
     /// Model3d test model.
     /// </summary>
     public class Model3dTestModel : TestModel<Domain.Model3d, Dto.Model3d>
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="Model3dTestModel"/> class.
         /// Constructor
         /// </summary>
-        public Model3dTestModel() :
-            base ()
+        public Model3dTestModel()
+            : base()
         {
         }
 
@@ -35,11 +30,11 @@ namespace ModelRelief.Test.TestModels.Models
         {
             ApiUrl = "/api/v1/models";
             UxUrl  = "/models";
-            
+
             IdRange = Enumerable.Range(1, 5);
             FirstModelName = "lucy.obj";
 
-            ReferencePropertyNames = new List<string> {"ProjectId", "CameraId"};
+            ReferencePropertyNames = new List<string> { "ProjectId", "CameraId" };
             InvalidReferenceProperty = 0;
             ValidReferenceProperty   = 1;
 

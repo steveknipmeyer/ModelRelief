@@ -1,35 +1,36 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="DependencyManager.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Reflection;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using MediatR;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.ChangeTracking;
+    using Microsoft.EntityFrameworkCore.Metadata;
+    using Microsoft.Extensions.Logging;
+    using ModelRelief.Api.V1.Shared.Rest;
+    using ModelRelief.Database;
+    using ModelRelief.Domain;
+
     /// <summary>
-    /// Dependency manager. 
+    /// Dependency manager.
     /// Provides support for persisting changes and updating dependencies.
     /// </summary>
     public interface IDependencyManager
     {
         ModelReliefDbContext DbContext { get; }
 
-        Task<int> PersistChangesAsync(DomainModel model, CancellationToken cancellationToken = default(CancellationToken));
+        Task<int> PersistChangesAsync(DomainModel model, CancellationToken cancellationToken = default);
     }
 
     /// <summary>
@@ -39,12 +40,15 @@ namespace ModelRelief.Services
     {
         public EntityEntry          ChangeTrackerEntity { get; }
         public ModelReliefDbContext DbContext { get; }
-        public List<Type>           DependentTypes { get; set; } 
+        public List<Type>           DependentTypes { get; set; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="TransactionEntity"/> class.
         /// Constructor.
         /// </summary>
-        public TransactionEntity (EntityEntry entity, ModelReliefDbContext dbContext)
+        /// <param name="entity">ChangeTracker entity.</param>
+        /// <param name="dbContext">Database context.</param>
+        public TransactionEntity(EntityEntry entity, ModelReliefDbContext dbContext)
         {
             ChangeTrackerEntity = entity;
             DbContext = dbContext;
@@ -53,39 +57,39 @@ namespace ModelRelief.Services
         }
 
         /// <summary>
-        /// Returns the Type of the entity.
+        /// Gets the Type of the entity.
         /// </summary>
         public Type EntityType => ChangeTrackerEntity.Entity.GetType();
 
         /// <summary>
-        /// Returns the name of the entity type.
+        /// Gets the name of the entity type.
         /// </summary>
         public string Name => EntityType.Name;
 
         /// <summary>
-        /// Returns the primary key entity.
+        /// Gets the primary key entity.
         /// </summary>
         public int PrimaryKey => Convert.ToInt32(ChangeTrackerEntity.CurrentValues["Id"]);
 
         /// <summary>
-        /// Returns the User Id of the entity.
+        /// Gets the User Id of the entity.
         /// </summary>
         public string UserId => ChangeTrackerEntity.CurrentValues.GetValue<string>("UserId");
 
         /// <summary>
-        /// Returns whether the entity has any dependent types.
+        /// Gets a value indicating whether the entity has any dependent types.
         /// </summary>
         public bool HasDependents => DependentTypes.Any();
 
         /// <summary>
-        /// Returns the DomainModel of the transaction entity.
+        /// Gets the DomainModel of the transaction entity.
         /// </summary>
         public DomainModel GetDomainModel()
         {
             return ChangeTrackerEntity.Entity as DomainModel;
         }
         /// <summary>
-        /// Returns the DomainModel of the transaction entity from the database.
+        /// Gets the DomainModel of the transaction entity from the database.
         /// </summary>
         public async Task<DomainModel> GetDatabaseDomainModel()
         {
@@ -112,7 +116,7 @@ namespace ModelRelief.Services
             where TEntity : DomainModel
         {
             var domainModel = await DbContext.Set<TEntity>()
-                                .Where(m => (m.Id == PrimaryKey) && 
+                                .Where(m => (m.Id == PrimaryKey) &&
                                             (m.UserId == UserId))
                                 .SingleOrDefaultAsync();
             return domainModel;
@@ -125,8 +129,6 @@ namespace ModelRelief.Services
         {
             DependentTypes = DependencyManager.GetClassDependentFiles(EntityType);
         }
-
-
     }
 
     /// <summary>
@@ -142,16 +144,17 @@ namespace ModelRelief.Services
         public object ModifiedValue { get; set; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="PropertyModification"/> class.
         /// Constructor.
         /// </summary>
         /// <param name="modifiedEntity">Entity that has changed.</param>
         /// <param name="property">Property that has changed.</param>
-        public PropertyModification (EntityEntry modifiedEntity, IProperty property)
+        public PropertyModification(EntityEntry modifiedEntity, IProperty property)
         {
             ModifiedEntity = modifiedEntity;
             Property = property;
 
-            Initialize ();
+            Initialize();
         }
 
         private void Initialize()
@@ -161,22 +164,22 @@ namespace ModelRelief.Services
         }
 
         /// <summary>
-        /// Returns whether the property has changed.
+        /// Gets a value indicating whether the property has changed.
         /// </summary>
-        public bool Changed  
-        { 
+        public bool Changed
+        {
             get
-            {   
+            {
                 // convert to string for comparison
                 var originalValueString = OriginalValue?.ToString();
                 var modifiedValueString = ModifiedValue?.ToString();
-                return !String.Equals(originalValueString, modifiedValueString);
+                return !string.Equals(originalValueString, modifiedValueString);
             }
         }
     }
 
     /// <summary>
-    /// Dependency manager manager. 
+    /// Dependency manager manager.
     /// Provides support for persisting changes and updating dependencies.
     /// </summary>
     public class DependencyManager : IDependencyManager
@@ -195,7 +198,7 @@ namespace ModelRelief.Services
         /// <summary>
         /// Determines whether a property has the given CustomAttribute.
         /// </summary>
-        /// <param name="propertyAttribute">Attribute (if found; null otherwise)</param>
+        /// <param name="propertyAttribute">Attribute (if found; null otherwise).</param>
         /// <param name="classType">Class of property.</param>
         /// <param name="propertyName">Name of property.</param>
         /// <param name="attributeType">CustomAttribute to find.</param>
@@ -214,7 +217,7 @@ namespace ModelRelief.Services
         /// <param name="classType">Type of class.</param>
         /// <param name="attributeType">CustomAttribute to find.</param>
         /// <returns></returns>
-        public static bool ClassHasAttribute (out Attribute classAttribute, Type classType, Type attributeType)
+        public static bool ClassHasAttribute(out Attribute classAttribute, Type classType, Type attributeType)
         {
             classAttribute = classType.GetCustomAttribute(attributeType, true);
             return classAttribute != null;
@@ -224,7 +227,8 @@ namespace ModelRelief.Services
         /// Returns a collection of dependent classes.
         /// Dependent classes are marked with the DependentFiles attribute.
         /// </summary>
-        public static List<Type> GetClassDependentFiles (Type classType)
+        /// <param name="classType">Type of class.</param>
+        public static List<Type> GetClassDependentFiles(Type classType)
         {
             var dependentClasses = new List<Type>();
 
@@ -240,12 +244,12 @@ namespace ModelRelief.Services
         /// <summary>
         /// Find all models that reference the given root (type and primary key).
         /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
         /// <param name="rootType">Type of root.</param>
         /// <param name="rootPrimaryId">Primary key of root.</param>
         /// <param name="userId">User ID.</param>
         /// <returns>Collection of models referencing the given root primary key and type.</returns>
-        public async Task<List<DomainModel>> FindRootDependentModels<TEntity> (Type rootType, int rootPrimaryId, string userId)
+        public async Task<List<DomainModel>> FindRootDependentModels<TEntity>(Type rootType, int rootPrimaryId, string userId)
             where TEntity : DomainModel
         {
             var dependentModels = new List<DomainModel>();
@@ -253,7 +257,7 @@ namespace ModelRelief.Services
             var candidateDependentModels = await DbContext.Set<TEntity>()
                                                     .Where(m => (m.UserId == userId))
                                                     .ToListAsync();
-            
+
             // find foreign key on candidate dependent models
             var foreignKeyPropertyName = $"{rootType.Name}Id";
             var foreignKeyProperty = typeof(TEntity).GetProperty(foreignKeyPropertyName);
@@ -264,7 +268,7 @@ namespace ModelRelief.Services
                     // compare foreign key
                     int foreignKey = Convert.ToInt32(foreignKeyProperty.GetValue(candidateDependentModel));
                     if (foreignKey == rootPrimaryId)
-                        dependentModels.Add (candidateDependentModel as DomainModel);
+                        dependentModels.Add(candidateDependentModel as DomainModel);
                 }
                 catch (Exception)
                 {
@@ -272,7 +276,7 @@ namespace ModelRelief.Services
                 }
             }
             return dependentModels;
-        }           
+        }
 
         /// <summary>
         /// Finds the dependent models for a given model.
@@ -293,7 +297,7 @@ namespace ModelRelief.Services
             foreach (Type dependentType in dependentTypes)
             {
                 var method = typeof(DependencyManager).GetMethod(nameof(FindRootDependentModels)).MakeGenericMethod(dependentType);
-                var dependentModelsByType = await (Task<List<DomainModel>>)method.Invoke(this, new object[] {rootType, rootPrimaryKey, userId});
+                var dependentModelsByType = await (Task<List<DomainModel>>)method.Invoke(this, new object[] { rootType, rootPrimaryKey, userId });
 
                 // recursively find dependents
                 dependentModels.AddRange(dependentModelsByType);
@@ -326,14 +330,14 @@ namespace ModelRelief.Services
         /// <summary>
         /// Uses reflection to construct a FileRequest of the given type.
         /// </summary>
-        /// <param name="type"></param>
+        /// <param name="type">FileRequest type (e.g. GenerateFileRequest).</param>
         /// <returns></returns>
         private IFileRequest ConstructFileRequest(Type type)
         {
             // https://stackoverflow.com/questions/8376622/create-constructor-for-generic-class-using-reflection
             var fileRequestType = typeof(FileRequest<>).MakeGenericType(type);
-            ConstructorInfo constructor = fileRequestType.GetConstructor(new Type[]{});
-            var fileRequest = constructor.Invoke(new object[]{});
+            ConstructorInfo constructor = fileRequestType.GetConstructor(new Type[] { });
+            var fileRequest = constructor.Invoke(new object[] { });
 
             return fileRequest as IFileRequest;
         }
@@ -342,16 +346,16 @@ namespace ModelRelief.Services
         /// Constructs a FileRequest for a model that has changed the metadata Name.
         /// The FileRequest will rename the disk file to match the metadata.
         /// </summary>
-        /// <param name="transactionEntity"></param>
+        /// <param name="transactionEntity">ChangeTracker entity.</param>
         private IFileRequest ConstructRenameFileRequest(TransactionEntity transactionEntity)
         {
             var domainModel = transactionEntity.GetDomainModel();
-            var renameFileRequest = ConstructFileRequest (domainModel.GetType());
+            var renameFileRequest = ConstructFileRequest(domainModel.GetType());
 
             renameFileRequest.Operation = FileOperation.Rename;
             renameFileRequest.Stage     = ProcessingStage.PreProcess;
             renameFileRequest.TransactionEntity = transactionEntity;
-            
+
             return renameFileRequest;
         }
 
@@ -359,17 +363,17 @@ namespace ModelRelief.Services
         /// Constructs a FileRequest for a model that has toggled the FileIsSynchronized property to true.
         /// The FileRequest will regenerate the disk file to match its dependents.
         /// </summary>
-        /// <param name="transactionEntity"></param>
+        /// <param name="transactionEntity">ChangeTracker entity.</param>
         /// <param name="stage">The processing stage (e.g. Pre, Post) that the FileRequest will be serviced.</param>
         private IFileRequest ConstructGenerateFileRequest(TransactionEntity transactionEntity, ProcessingStage stage)
         {
             var domainModel = transactionEntity.GetDomainModel();
-            var generateFileRequest = ConstructFileRequest (domainModel.GetType());
+            var generateFileRequest = ConstructFileRequest(domainModel.GetType());
 
             generateFileRequest.Operation = FileOperation.Generate;
             generateFileRequest.Stage     = stage;
             generateFileRequest.TransactionEntity = transactionEntity;
-            
+
             return generateFileRequest;
         }
 
@@ -380,11 +384,10 @@ namespace ModelRelief.Services
         /// <param name="dependentModels">Collection of dependent models.</param>
         private void InvalidateDependentModels(List<DomainModel> dependentModels)
         {
-            foreach (var dependentModel in dependentModels)    
+            foreach (var dependentModel in dependentModels)
             {
                 // all dependent models that have backing files are no longer synchronized
-                var generatedFileDomainModel = dependentModel as GeneratedFileDomainModel;
-                if (generatedFileDomainModel != null)
+                if (dependentModel is GeneratedFileDomainModel generatedFileDomainModel)
                 {
                     generatedFileDomainModel.FileIsSynchronized = false;
                     Console.ForegroundColor = ConsoleColor.Magenta;
@@ -406,7 +409,7 @@ namespace ModelRelief.Services
             {
                 var transactionEntity = new TransactionEntity(changedEntity, DbContext);
 
-                var fileRequestsByEntity = new List<IFileRequest> ();
+                var fileRequestsByEntity = new List<IFileRequest>();
                 switch (changedEntity.State)
                 {
                     case EntityState.Added:
@@ -439,24 +442,24 @@ namespace ModelRelief.Services
         /// <returns>List of FileRequests.</returns>
         private async Task<List<IFileRequest>> ProcessModifiedEntity(TransactionEntity transactionEntity)
         {
-            var fileRequests = new List<IFileRequest>() ;
+            var fileRequests = new List<IFileRequest>();
             var isGeneratedFileDomainModel = transactionEntity.IsGeneratedFileDomainModel();
 
             bool dependentFIlePropertyChanged = false;
-            foreach(var property in transactionEntity.ChangeTrackerEntity.OriginalValues.Properties)
+            foreach (var property in transactionEntity.ChangeTrackerEntity.OriginalValues.Properties)
             {
                 var propertyModification = new PropertyModification(transactionEntity.ChangeTrackerEntity, property);
                 if (propertyModification.Changed)
                 {
                     if (isGeneratedFileDomainModel)
                     {
-                        if (String.Equals(property.Name, "Name"))
-                            fileRequests.Add (ConstructRenameFileRequest(transactionEntity));
+                        if (string.Equals(property.Name, "Name"))
+                            fileRequests.Add(ConstructRenameFileRequest(transactionEntity));
 
-                        if ((String.Equals(property.Name, "FileIsSynchronized")) && ((bool) propertyModification.ModifiedValue))
-                            fileRequests.Add (ConstructGenerateFileRequest(transactionEntity, stage: ProcessingStage.PreProcess));
+                        if (string.Equals(property.Name, "FileIsSynchronized") && ((bool)propertyModification.ModifiedValue))
+                            fileRequests.Add(ConstructGenerateFileRequest(transactionEntity, stage: ProcessingStage.PreProcess));
                      }
-                     
+
                     // independent variables invalidate the backing file of their dependent models
                     if (PropertyHasAttribute(out Attribute dependentFileProperty, transactionEntity.EntityType, property.Name, typeof(DependentFileProperty)))
                         dependentFIlePropertyChanged = true;
@@ -479,7 +482,7 @@ namespace ModelRelief.Services
         /// <returns>List of FileRequests.</returns>
         private async Task<List<IFileRequest>> ProcessDeletedEntity(TransactionEntity transactionEntity)
         {
-            var fileRequests = new List<IFileRequest>() ;
+            var fileRequests = new List<IFileRequest>();
             var dependentModels = new List<DomainModel>();
 
             if (!transactionEntity.HasDependents)
@@ -501,7 +504,7 @@ namespace ModelRelief.Services
             var fileRequests = new List<IFileRequest>();
 
             if (transactionEntity.IsGeneratedFileDomainModel() &&
-               ((bool) transactionEntity.ChangeTrackerEntity.CurrentValues["FileIsSynchronized"]))
+               ((bool)transactionEntity.ChangeTrackerEntity.CurrentValues["FileIsSynchronized"]))
                {
                fileRequests.Add(ConstructGenerateFileRequest(transactionEntity, stage: ProcessingStage.PostProcess));
                }
@@ -562,7 +565,7 @@ namespace ModelRelief.Services
         /// </summary>
         /// <param name="fileRequest">FileRequest</param>
         /// <returns></returns>
-        private async Task<bool> HandleRequestAsync (IFileRequest fileRequest)
+        private async Task<bool> HandleRequestAsync(IFileRequest fileRequest)
         {
             var request = fileRequest as IRequest<bool>;
             return await Mediator.Send(request);
@@ -574,7 +577,7 @@ namespace ModelRelief.Services
         /// <param name="model">Model to persist.</param>
         /// <param name="cancellationToken">Token to allow operation to be cancelled.</param>
         /// <returns>Number of state entries written to the database.</returns>
-        public async Task<int> PersistChangesAsync(DomainModel model, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<int> PersistChangesAsync(DomainModel model, CancellationToken cancellationToken = default)
         {
             var fileRequests = new List<IFileRequest>();
 

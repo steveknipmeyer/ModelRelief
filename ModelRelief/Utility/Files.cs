@@ -1,22 +1,17 @@
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using System;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using ModelRelief.Domain;
-using Microsoft.Extensions.Configuration;
-using ModelRelief.Services;
-using Microsoft.AspNetCore.Hosting;
-using System.Linq;
+// -----------------------------------------------------------------------
+// <copyright file="Files.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Utility
 {
-    public class Files 
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    public class Files
     {
         /// <summary>
         /// Reads a stream and returns an array of bytes.
@@ -25,7 +20,7 @@ namespace ModelRelief.Utility
         /// <returns>Byte array</returns>
         public static byte[] ReadToEnd(System.IO.Stream stream)
         {
-            // https://stackoverflow.com/questions/1080442/how-to-convert-an-stream-into-a-byte-in-c                
+            // https://stackoverflow.com/questions/1080442/how-to-convert-an-stream-into-a-byte-in-c
             long originalPosition = 0;
 
             if (stream.CanSeek)
@@ -106,7 +101,7 @@ namespace ModelRelief.Utility
         /// </summary>
         /// <param name="source">Source</param>
         /// <param name="target">Target</param>
-        public static void CopyFilesRecursively(DirectoryInfo source, DirectoryInfo target) 
+        public static void CopyFilesRecursively(DirectoryInfo source, DirectoryInfo target)
         {
             foreach (DirectoryInfo dir in source.GetDirectories())
                 CopyFilesRecursively(dir, target.CreateSubdirectory(dir.Name));
@@ -114,7 +109,7 @@ namespace ModelRelief.Utility
             foreach (FileInfo file in source.GetFiles())
                 file.CopyTo(Path.Combine(target.FullName, file.Name));
         }
-        
+
         /// <summary>
         /// Deletes a folder and all of the contents.
         /// </summary>
@@ -138,5 +133,5 @@ namespace ModelRelief.Utility
         {
             return !Directory.EnumerateFileSystemEntries(path).Any();
         }
-    }        
+    }
 }

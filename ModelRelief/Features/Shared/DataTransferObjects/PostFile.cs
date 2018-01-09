@@ -1,29 +1,25 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using AutoMapper;
-using FluentValidation;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Domain;
-using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
+﻿// -----------------------------------------------------------------------
+// <copyright file="PostFile.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Dto
 {
+    using FluentValidation;
+
     /// <summary>
     /// POST file model.
     /// </summary>
     public class PostFile
     {
-        public byte[] Raw { get; set;}
-        
+        public byte[] Raw { get; set; }
+
         /// <summary>
+        /// Initializes a new instance of the <see cref="PostFile"/> class.
         /// Constructor
         /// </summary>
-        public PostFile ()
+        public PostFile()
         {
         }
     }
@@ -33,7 +29,7 @@ namespace ModelRelief.Dto
         public PostFileValidator()
         {
             RuleFor(m => m.Raw)
-                .NotNull().WithMessage("An array of bytes is required..");
+                .NotNull().WithMessage("An array of bytes is required.");
         }
     }
 }

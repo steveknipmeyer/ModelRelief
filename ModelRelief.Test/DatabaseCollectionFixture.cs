@@ -1,26 +1,15 @@
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using FluentAssertions;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Database;
-using ModelRelief.Dto;
-using Newtonsoft.Json;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Threading.Tasks;
-using Xunit;
+// -----------------------------------------------------------------------
+// <copyright file="DatabaseCollectionFixture.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Test
 {
+    using System;
+    using ModelRelief.Database;
+    using Xunit;
+
     /// <summary>
     /// Represents the shared setup for all classes (of the same collection name).
     /// This is run once for every collection.
@@ -28,6 +17,7 @@ namespace ModelRelief.Test
     public class DatabaseCollectionFixture : IDisposable
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="DatabaseCollectionFixture"/> class.
         /// Constructor.
         /// </summary>
         public DatabaseCollectionFixture()

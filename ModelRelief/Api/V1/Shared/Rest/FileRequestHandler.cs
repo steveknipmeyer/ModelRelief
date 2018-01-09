@@ -1,25 +1,25 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using AutoMapper;
-using FluentValidation;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Api.V1.Shared.Errors;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using ModelRelief.Services;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="FileRequestHandler.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using AutoMapper;
+    using FluentValidation;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.Extensions.Logging;
+    using ModelRelief.Api.V1.Shared.Errors;
+    using ModelRelief.Database;
+    using ModelRelief.Domain;
+    using ModelRelief.Services;
+
     /// <summary>
     /// Represents the concrete handler for a FileRequest.
     /// </summary>
@@ -30,6 +30,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public IStorageManager StorageManager { get; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="FileRequestHandler{TEntity}"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
@@ -41,9 +42,16 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="validators">List of validators</param>
         /// <param name="storageManager">Services for file system storage.</param>
-        public FileRequestHandler(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IHostingEnvironment hostingEnvironment, 
-                                  Services.IConfigurationProvider configurationProvider, IDependencyManager dependencyManager, IEnumerable<IValidator<FileRequest<TEntity>>> validators, 
-                                  IStorageManager storageManager)
+        public FileRequestHandler(
+            ModelReliefDbContext dbContext,
+            UserManager<ApplicationUser> userManager,
+            ILoggerFactory loggerFactory,
+            IMapper mapper,
+            IHostingEnvironment hostingEnvironment,
+            Services.IConfigurationProvider configurationProvider,
+            IDependencyManager dependencyManager,
+            IEnumerable<IValidator<FileRequest<TEntity>>> validators,
+            IStorageManager storageManager)
             : base(dbContext, userManager, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators)
         {
             StorageManager = storageManager;
@@ -60,7 +68,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         {
             Logger.LogError($"FileRequestHandler: Generate is not implemented: Type = {typeof(TEntity).Name}, Model Id = {fileRequest.TransactionEntity.PrimaryKey}, UserId = {fileRequest.TransactionEntity.UserId}");
             await Task.CompletedTask;
-            return false;    
+            return false;
         }
 
         /// <summary>
@@ -82,12 +90,12 @@ namespace ModelRelief.Api.V1.Shared.Rest
             {
                 Logger.LogError($"FileRequestHandler: {originalFile} does not exist.");
                 throw new ModelFileNotFoundException(typeof(TEntity), originalName);
-            }                
+            }
             Logger.LogInformation($"FileRequestHandler: {originalFile} will be renamed to {fileName}.");
             File.Move(originalFile, fileName);
 
             await Task.CompletedTask;
-            return true;    
+            return true;
         }
 
         /// <summary>
@@ -104,10 +112,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
             var domainModel = await FindModelAsync<TEntity>(message.TransactionEntity.UserId, message.TransactionEntity.PrimaryKey, throwIfNotFound: true);
             var fileDomainModel = domainModel as FileDomainModel;
-            
+
             var fileName = Path.Combine(StorageManager.DefaultModelStorageFolder(domainModel), domainModel.Name);
 
-            switch(message.Operation)
+            switch (message.Operation)
             {
                 case FileOperation.Rename:
                     return await ProcessRename(message, fileDomainModel, fileName);

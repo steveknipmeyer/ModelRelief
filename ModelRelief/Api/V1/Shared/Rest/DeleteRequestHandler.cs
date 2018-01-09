@@ -1,28 +1,24 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using AutoMapper;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Api.V1.Shared.Errors;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using ModelRelief.Services;
-using ModelRelief.Utility;
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="DeleteRequestHandler.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
+    using System;
+    using System.IO;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using AutoMapper;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.Extensions.Logging;
+    using ModelRelief.Database;
+    using ModelRelief.Domain;
+    using ModelRelief.Services;
+    using ModelRelief.Utility;
+
     /// <summary>
     /// Represents the concrete handler for a DELETE model request.
     /// </summary>
@@ -31,6 +27,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         where TEntity   : DomainModel
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="DeleteRequestHandler{TEntity}"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
@@ -40,15 +37,21 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
-        public DeleteRequestHandler(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IHostingEnvironment hostingEnvironment, 
-                                    Services.IConfigurationProvider configurationProvider, IDependencyManager dependencyManager)
+        public DeleteRequestHandler(
+            ModelReliefDbContext dbContext,
+            UserManager<ApplicationUser> userManager,
+            ILoggerFactory loggerFactory,
+            IMapper mapper,
+            IHostingEnvironment hostingEnvironment,
+            Services.IConfigurationProvider configurationProvider,
+            IDependencyManager dependencyManager)
             : base(dbContext, userManager, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, null)
         {
         }
 
         /// <summary>
         /// Removes files associated with a resource.
-        /// WIP: Should orphan folder paring be done as an adminstrative tool?    
+        /// WIP: Should orphan folder paring be done as an adminstrative tool?
         /// </summary>
         private void DeleteModelStorage(TEntity domainModel)
         {
@@ -56,18 +59,18 @@ namespace ModelRelief.Api.V1.Shared.Rest
             if (!typeof(FileDomainModel).IsAssignableFrom(typeof(TEntity)))
                 return;
 
-            var fileDomainModel = domainModel as FileDomainModel;                
-            
-            // The Path exists only if an associated file has been posted. 
+            var fileDomainModel = domainModel as FileDomainModel;
+
+            // The Path exists only if an associated file has been posted.
             // There is no mechanism for deleting <only> the file once a model has been created.
-            if (String.IsNullOrEmpty(fileDomainModel.Path))
+            if (string.IsNullOrEmpty(fileDomainModel.Path))
                 return;
-            
+
             var modelStorageFolder = fileDomainModel.StorageFolder;
             var fileFolder = Path.GetFullPath(fileDomainModel.Path);
 
             // confirm that parent folder of file matches the storage folder
-            if (!String.Equals(modelStorageFolder, fileFolder, StringComparison.InvariantCultureIgnoreCase))
+            if (!string.Equals(modelStorageFolder, fileFolder, StringComparison.InvariantCultureIgnoreCase))
             {
                 Logger.LogError($"DeleteRequest: The parent folder of the file to be deleted '{fileFolder}' does not match the user storage folder '{modelStorageFolder}'.");
                 return;
@@ -79,9 +82,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
             {
                 Logger.LogError($"DeleteRequest: The file to be deleted '{fileName}' does not exist.");
                 return;
-            }           
+            }
 
-            Logger.LogWarning ($"Deleting model file: {fileName}");
+            Logger.LogWarning($"Deleting model file: {fileName}");
             File.Delete(fileName);
 
             // remove parent folder (only if empty)
@@ -111,6 +114,5 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
             return null;
         }
-
     }
 }

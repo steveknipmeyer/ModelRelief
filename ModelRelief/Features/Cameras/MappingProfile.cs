@@ -1,48 +1,48 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using AutoMapper;
-using FluentValidation;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Domain;
-using System.ComponentModel.DataAnnotations;
+﻿// -----------------------------------------------------------------------
+// <copyright file="MappingProfile.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Dto
 {
+    using System.ComponentModel.DataAnnotations;
+    using FluentValidation;
+    using ModelRelief.Api.V1.Shared.Rest;
+    using ModelRelief.Domain;
+
     /// <summary>
     /// Represents a DataTransferObject (DTO) for a Camera.
     /// </summary>
-    public class Camera: ITGetModel
+    public class Camera : ITGetModel
     {
         public int Id { get; set; }
 
-        [Required, Display (Name = "Camera Name")]
+        [Required]
+        [Display(Name = "Camera Name")]
         public string Name { get; set; }
         public string Description { get; set; }
 
         public StandardView StandardView { get; set; }
         public double FieldOfView { get; set; }
 
-        public double Near{ get; set; }
-        public double Far{ get; set; }
-        [Display (Name = "Bounded")]
+        public double Near { get; set; }
+        public double Far { get; set; }
+        [Display(Name = "Bounded")]
         public bool BoundClippingPlanes { get; set; }
 
-        [Display (Name = "P(x)")]
+        [Display(Name = "P(x)")]
         public double PositionX { get; set; }
-        [Display (Name = "P(y)")]
+        [Display(Name = "P(y)")]
         public double PositionY { get; set; }
-        [Display (Name = "P(z)")]
+        [Display(Name = "P(z)")]
         public double PositionZ { get; set; }
 
-        [Display (Name = "Target(x)")]
+        [Display(Name = "Target(x)")]
         public double LookAtX { get; set; }
-        [Display (Name = "Target(y)")]
+        [Display(Name = "Target(y)")]
         public double LookAtY { get; set; }
-        [Display (Name = "Target(z)")]
+        [Display(Name = "Target(z)")]
         public double LookAtZ { get; set; }
 
         // Navigation Properties
@@ -50,6 +50,7 @@ namespace ModelRelief.Dto
         public Dto.Project Project { get; set; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Camera"/> class.
         /// Constructor.
         /// </summary>
         public Camera()
@@ -63,13 +64,14 @@ namespace ModelRelief.Dto
     public class CameraValidator : AbstractValidator<Dto.Camera>
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="CameraValidator"/> class.
         /// Constructor.
         /// </summary>
         public CameraValidator()
         {
             RuleFor(m => m.Name)
                 .NotNull().WithMessage("The Name property is required.");
-         
+
             RuleFor(m => m.Description)
                 .NotNull().WithMessage("The Description property is required.");
         }
@@ -78,15 +80,18 @@ namespace ModelRelief.Dto
 
 namespace ModelRelief.Features.Cameras
 {
+    using AutoMapper;
+
     /// <summary>
     /// AutoMapper mapping profile.
     /// </summary>
     public class MappingProfile : Profile
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="MappingProfile"/> class.
         /// Constructor.
         /// </summary>
-        public MappingProfile() 
+        public MappingProfile()
         {
         CreateMap<Domain.Camera, Dto.Camera>().ReverseMap();
         }

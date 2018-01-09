@@ -1,21 +1,15 @@
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using FluentAssertions;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Test.TestModels.Models;
-using Newtonsoft.Json;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Xunit;
+// -----------------------------------------------------------------------
+// <copyright file="ModelsFileIntegrationTests.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Test.Integration.Models
 {
+    using System.Threading.Tasks;
+    using ModelRelief.Test.TestModels.Models;
+    using Xunit;
+
     /// <summary>
     /// DepthBuffer integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
@@ -23,10 +17,12 @@ namespace ModelRelief.Test.Integration.Models
     public class ModelsFileIntegrationTests : FileIntegrationTests<Domain.Model3d, Dto.Model3d>
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="ModelsFileIntegrationTests"/> class.
         /// Constructor
         /// </summary>
-        public ModelsFileIntegrationTests(ClassFixture classFixture) :
-            base (classFixture, new Model3dTestModel())
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        public ModelsFileIntegrationTests(ClassFixture classFixture)
+            : base(classFixture, new Model3dTestModel())
         {
         }
 
@@ -34,7 +30,7 @@ namespace ModelRelief.Test.Integration.Models
         /// Tests whether the file metadata is updated correctly after a file POST.
         /// </summary>
         [Fact]
-        [Trait ("Category", "Api PostFile")]
+        [Trait("Category", "Api PostFile")]
         public override  async Task PostFile_MetadataIsUpdatedAfterFileIsPosted()
         {
             // N.B. A Model is not a generated file so it does not support IGeneratedFile.

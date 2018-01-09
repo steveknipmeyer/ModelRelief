@@ -1,33 +1,34 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using AutoMapper;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using ModelRelief.Services;
-using ModelRelief.Utility;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="ModelsController.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Features.Models
 {
+    using System.Threading.Tasks;
+    using AutoMapper;
+    using MediatR;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+    using ModelRelief.Api.V1.Shared.Rest;
+    using ModelRelief.Database;
+    using ModelRelief.Domain;
+    using ModelRelief.Services;
+    using ModelRelief.Utility;
+
     /// <summary>
     /// Represents a controller to handle Model Ux requests.
     /// </summary>
     [Authorize]
     public class ModelsController : ViewController<Domain.Model3d, Dto.Model3d, Dto.Model3d, Dto.Model3d>
     {
-
         public Services.IConfigurationProvider ConfigurationProvider { get; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ModelsController"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
@@ -47,21 +48,21 @@ namespace ModelRelief.Features.Models
         /// </summary>
         /// <param name="id">Model Id.</param>
         /// <returns>Viewer page.</returns>
-        public async Task<IActionResult> Viewer (int id)
+        public async Task<IActionResult> Viewer(int id)
         {
-            var model = await HandleRequestAsync(new GetSingleRequest<Domain.Model3d, Dto.Model3d> 
+            var model = await HandleRequestAsync(new GetSingleRequest<Domain.Model3d, Dto.Model3d>
             {
                 User = User,
-                Id = id
+                Id = id,
             });
 
             // WIP: Publish path of model for THREE loader.
-            var domainModel = await DbContext.Set<Domain.Model3d>().FindAsync(new object[] {id});
+            var domainModel = await DbContext.Set<Domain.Model3d>().FindAsync(new object[] { id });
             ViewData["ModelName"] = domainModel.Name;
             ViewData["ModelPath"] = domainModel.GetRelativePath(ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers));
             return View(model);
         }
-        
+
         /// <summary>
         /// Setup View controls for select controls, etc.
         /// </summary>
@@ -69,7 +70,7 @@ namespace ModelRelief.Features.Models
         protected async override Task InitializeViewControls(Dto.Model3d model)
         {
             var applicationUser = await Identity.FindApplicationUserAsync(UserManager, User);
-            var userId = applicationUser?.Id ?? "";
+            var userId = applicationUser?.Id ?? string.Empty;
 
             ViewBag.ModelFormat  = ViewHelpers.PopulateEnumDropDownList<Model3dFormat>("Select model format");
 

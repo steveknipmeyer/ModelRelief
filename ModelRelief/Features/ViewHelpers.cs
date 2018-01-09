@@ -1,21 +1,18 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿// -----------------------------------------------------------------------
+// <copyright file="ViewHelpers.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Features
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using ModelRelief.Database;
+    using ModelRelief.Domain;
+
     /// <summary>
     /// MVC Controller extensions.
     /// ContosoUniverityCore
@@ -26,21 +23,24 @@ namespace ModelRelief.Features
         /// Create a SelectList from an enum.
         /// Note: None is skipped.
         /// </summary>
+        /// <typeparam name="TEnum">The enum type of the list.</typeparam>
         /// <param name="prompt">Control selection prompt</param>
         /// <returns></returns>
         public static List<SelectListItem> PopulateEnumDropDownList<TEnum>(string prompt)
             where TEnum : struct,  IComparable, IFormattable, IConvertible
         {
-            var enumSelectList = new List<SelectListItem>();
-            enumSelectList.Add(new SelectListItem
+            var enumSelectList = new List<SelectListItem>
             {
-                Text = prompt,
-                Value = ""
-            });
+                new SelectListItem
+                {
+                    Text = prompt,
+                    Value = string.Empty,
+                },
+            };
             foreach (TEnum enumValue in Enum.GetValues(typeof(TEnum)))
             {
                 string enumText = Enum.GetName(typeof(TEnum), enumValue);
-                if (!String.Equals(enumText, "None", StringComparison.CurrentCultureIgnoreCase))
+                if (!string.Equals(enumText, "None", StringComparison.CurrentCultureIgnoreCase))
                     enumSelectList.Add(new SelectListItem { Text = Enum.GetName(typeof(TEnum), enumValue), Value = enumValue.ToString() });
             }
             return enumSelectList;
@@ -58,12 +58,14 @@ namespace ModelRelief.Features
         public static List<SelectListItem> PopulateModelDropDownList<TEntity>(ModelReliefDbContext dbContext, string userId, string prompt, int? selectedRow = 0)
             where TEntity : DomainModel
         {
-            var modelSelectList = new List<SelectListItem>();
-            modelSelectList.Add(new SelectListItem
+            var modelSelectList = new List<SelectListItem>
             {
-                Text = prompt,
-                Value = ""
-            });
+                new SelectListItem
+                {
+                    Text = prompt,
+                    Value = string.Empty,
+                },
+            };
 
             var models = dbContext.Set<TEntity>()
                 .Where(m => (m.UserId == userId));

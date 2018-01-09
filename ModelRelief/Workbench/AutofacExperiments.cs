@@ -1,35 +1,19 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using System;
-using System.Collections.Generic;
+﻿// -----------------------------------------------------------------------
+// <copyright file="AutofacExperiments.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using MediatR;
-
-namespace ModelRelief.Workbench 
+namespace ModelRelief.Workbench
 {
     public interface IFunctionOne<T>
     {
-        string F1 (T first, T second);
+        string F1(T first, T second);
     }
 
     public interface IFunctionTwo<T>
     {
-        string F2 (T first, T second);
+        string F2(T first, T second);
     }
 
     public class F<T1, T2> : IFunctionOne<T1>, IFunctionTwo<T2>
@@ -83,7 +67,7 @@ namespace ModelRelief.Workbench
         }
     }
 
-   public class FConcreteDoublePrime : IFunctionOne<int>, IFunctionTwo<double>
+    public class FConcreteDoublePrime : IFunctionOne<int>, IFunctionTwo<double>
     {
         public FConcreteDoublePrime()
         {
@@ -100,4 +84,3 @@ namespace ModelRelief.Workbench
         }
     }
 }
-

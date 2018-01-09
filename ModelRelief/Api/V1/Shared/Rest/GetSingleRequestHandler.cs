@@ -1,28 +1,23 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using MediatR;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Api.V1.Shared.Errors;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using ModelRelief.Services;
-using ModelRelief.Utility;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="GetSingleRequestHandler.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
+    using System.Threading;
+    using System.Threading.Tasks;
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Logging;
+    using ModelRelief.Database;
+    using ModelRelief.Domain;
+    using ModelRelief.Services;
+
     /// <summary>
     /// Represents the concrete handler for a GET single model request.
     /// </summary>
@@ -33,6 +28,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         where TGetModel : ITGetModel
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="GetSingleRequestHandler{TEntity, TGetModel}"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
@@ -42,8 +38,14 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
-       public GetSingleRequestHandler(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IHostingEnvironment hostingEnvironment, 
-                                      Services.IConfigurationProvider  configurationProvider, IDependencyManager dependencyManager)
+        public GetSingleRequestHandler(
+            ModelReliefDbContext dbContext,
+            UserManager<ApplicationUser> userManager,
+            ILoggerFactory loggerFactory,
+            IMapper mapper,
+            IHostingEnvironment hostingEnvironment,
+            Services.IConfigurationProvider  configurationProvider,
+            IDependencyManager dependencyManager)
             : base(dbContext, userManager, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, null)
         {
         }

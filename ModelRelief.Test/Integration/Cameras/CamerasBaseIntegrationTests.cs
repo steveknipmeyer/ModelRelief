@@ -1,12 +1,13 @@
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using ModelRelief.Test.TestModels.Cameras;
+// -----------------------------------------------------------------------
+// <copyright file="CamerasBaseIntegrationTests.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Test.Integration.Cameras
 {
+    using ModelRelief.Test.TestModels.Cameras;
+
     /// <summary>
     /// Base integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
@@ -14,10 +15,12 @@ namespace ModelRelief.Test.Integration.Cameras
     public class CamerasBaseIntegrationTests : BaseIntegrationTests<Domain.Camera, Dto.Camera>
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="CamerasBaseIntegrationTests"/> class.
         /// Constructor
         /// </summary>
-        public CamerasBaseIntegrationTests(ClassFixture classFixture) :
-            base (classFixture, new CameraTestModel())
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        public CamerasBaseIntegrationTests(ClassFixture classFixture)
+            : base(classFixture, new CameraTestModel())
         {
         }
 

@@ -1,36 +1,30 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using AutoMapper;
-using FluentValidation;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Api.V1.Shared.Errors;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using ModelRelief.Services;
-using ModelRelief.Utility;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="MeshFileRequestHandler.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
+    using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using AutoMapper;
+    using FluentValidation;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.Extensions.Logging;
+    using ModelRelief.Database;
+    using ModelRelief.Domain;
+    using ModelRelief.Services;
+
     /// <summary>
     /// Represents the concrete handler for a Mesh FileRequest.
     /// </summary>
     public class MeshFileRequestHandler : FileRequestHandler<Domain.Mesh>
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="MeshFileRequestHandler"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
@@ -42,10 +36,16 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="validators">List of validators</param>
         /// <param name="storageManager">Services for file system storage.</param>
-        public MeshFileRequestHandler(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IHostingEnvironment hostingEnvironment, 
-                                             Services.IConfigurationProvider configurationProvider, IDependencyManager dependencyManager, 
-                                             IEnumerable<IValidator<FileRequest<Domain.Mesh>>> validators,  
-                                             IStorageManager storageManager)
+        public MeshFileRequestHandler(
+            ModelReliefDbContext dbContext,
+            UserManager<ApplicationUser> userManager,
+            ILoggerFactory loggerFactory,
+            IMapper mapper,
+            IHostingEnvironment hostingEnvironment,
+            Services.IConfigurationProvider configurationProvider,
+            IDependencyManager dependencyManager,
+            IEnumerable<IValidator<FileRequest<Domain.Mesh>>> validators,
+            IStorageManager storageManager)
             : base(dbContext, userManager, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators, storageManager)
         {
         }
@@ -61,7 +61,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         {
             Logger.LogInformation($"Mesh [Model Id = {fileRequest.TransactionEntity.PrimaryKey}, UserId = {fileRequest.TransactionEntity.UserId}, file = {fileName}] has been queued for file generation.");
             await Task.CompletedTask;
-            return true;    
+            return true;
         }
 
         /// <summary>

@@ -1,27 +1,26 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using ModelRelief.Domain;
-using ModelRelief.Services;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
+﻿// -----------------------------------------------------------------------
+// <copyright file="DomainModel.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Domain
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.IO;
+    using ModelRelief.Services;
+
     /// <summary>
     /// Represents the base class for a model that is not file-backed.
     /// </summary>
     public abstract class DomainModel
     {
         [Key]
-        [Required]   
+        [Required]
         public int Id { get; set; }
 
-        // These properties are common to all models. 
+        // These properties are common to all models.
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
@@ -39,7 +38,7 @@ namespace ModelRelief.Domain
         [DependentFileProperty]
         public DateTime? FileTimeStamp  { get; set; }           // time of last update; used to trigger updates in dependents
         public string Path { get; set; }                        // associated file absolute path
-        
+
         public FileDomainModel()
         {
         }
@@ -49,32 +48,32 @@ namespace ModelRelief.Domain
         /// </summary>
         /// <param name="storeRoot">Store users root.</param>
         /// <returns>Path of model file relative to wwwroot.</returns>
-        public string GetRelativePath (string storeRoot)
+        public string GetRelativePath(string storeRoot)
         {
             if (string.IsNullOrEmpty(Path))
-                return "";
+                return string.Empty;
 
             // https://stackoverflow.com/questions/7772520/removing-drive-or-network-name-from-path-in-c-sharp
-            // form absolute path; normalizing directory separator characters                    
+            // form absolute path; normalizing directory separator characters
             var normalizedStoreRoot = System.IO.Path.GetFullPath(storeRoot);
             // strip drive or network share
-            normalizedStoreRoot = normalizedStoreRoot.Substring (System.IO.Path.GetPathRoot(normalizedStoreRoot).Length);
+            normalizedStoreRoot = normalizedStoreRoot.Substring(System.IO.Path.GetPathRoot(normalizedStoreRoot).Length);
 
             // include leading directory separator
             var relativePathIndex = Path.IndexOf(normalizedStoreRoot) - 1;
             if (relativePathIndex < 0)
-                return "";
+                return string.Empty;
 
             return Path.Substring(relativePathIndex);
         }
 
         /// <summary>
-        /// Returns the model storage folder for a given model instance.
+        /// Gets the model storage folder for a given model instance.
         /// </summary>
         /// <returns>Storage folder.</returns>
         public string StorageFolder
         {
-            get 
+            get
             {
                 DirectoryInfo directoryInfo = Directory.GetParent(FileName);
 
@@ -86,15 +85,15 @@ namespace ModelRelief.Domain
         }
 
         /// <summary>
-        /// Returns the associated disk file for a given model instance.
+        /// Gets the associated disk file for a given model instance.
         /// </summary>
         /// <returns>Disk file name.</returns>
         public string FileName
         {
             get
             {
-                var path = System.IO.Path.Combine (Path ?? "", Name);
-                return System.IO.Path.GetFullPath (path);
+                var path = System.IO.Path.Combine(Path ?? string.Empty, Name);
+                return System.IO.Path.GetFullPath(path);
             }
         }
     }
@@ -104,9 +103,10 @@ namespace ModelRelief.Domain
     /// </summary>
     public abstract class GeneratedFileDomainModel : FileDomainModel
     {
-        public bool FileIsSynchronized { get; set; }       // associated file is synchronized with the model (AND all of the the model's dependencies)                
-        
+        public bool FileIsSynchronized { get; set; }       // associated file is synchronized with the model (AND all of the the model's dependencies)
+
         /// <summary>
+        /// Initializes a new instance of the <see cref="GeneratedFileDomainModel"/> class.
         /// Constructor
         /// </summary>
         public GeneratedFileDomainModel()

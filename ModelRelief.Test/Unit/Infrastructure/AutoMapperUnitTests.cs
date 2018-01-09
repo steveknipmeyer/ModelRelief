@@ -1,25 +1,24 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using AutoMapper;
-using MediatR;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using ModelRelief.Database;
-using Moq;
-using System.IO;
-using Xunit;
+﻿// -----------------------------------------------------------------------
+// <copyright file="AutoMapperUnitTests.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Test.Unit.Infrastructure
 {
+    using System.IO;
+    using AutoMapper;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Moq;
+    using Xunit;
+
     public class AutoMapperUnitTests
     {
         [Fact]
-        [Trait ("Category", "Infrastructure")]
-        public void AutoMapperConfigurationIsValid() 
+        [Trait("Category", "Infrastructure")]
+        public void AutoMapperConfigurationIsValid()
         {
             var hostMock = new Mock<IHostingEnvironment>();
             hostMock.Setup(mock => mock.ContentRootPath).Returns(Directory.GetCurrentDirectory());

@@ -1,15 +1,15 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using MediatR;
-using ModelRelief.Domain;
-using System.Security.Claims;
+﻿// -----------------------------------------------------------------------
+// <copyright file="PostRequest.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
+    using System.Security.Claims;
+    using MediatR;
+    using ModelRelief.Domain;
+
     /// <summary>
     ///  Represents a POST request to create a model.
     /// </summary>
@@ -24,7 +24,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Gets or sets the User posting the PostRequest.
         /// </summary>
-        public ClaimsPrincipal User { get; set;}
+        public ClaimsPrincipal User { get; set; }
 
         /// <summary>
         ///  Gets or sets the incoming model to be used to create the new domain model.

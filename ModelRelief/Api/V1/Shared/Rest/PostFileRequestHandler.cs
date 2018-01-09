@@ -1,33 +1,25 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using ModelRelief.Api.V1.Extensions;
-using ModelRelief.Infrastructure;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Hosting;
-using ModelRelief.Utility;
-using ModelRelief.Services;
-using ModelRelief.Api.V1.Shared.Errors;
-using Microsoft.Extensions.Logging;
-using System.IO;
+﻿// -----------------------------------------------------------------------
+// <copyright file="PostFileRequestHandler.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
+    using System;
+    using System.IO;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using AutoMapper;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.Extensions.Logging;
+    using ModelRelief.Api.V1.Shared.Errors;
+    using ModelRelief.Database;
+    using ModelRelief.Domain;
+    using ModelRelief.Services;
+    using ModelRelief.Utility;
+
     /// <summary>
     /// Represents a handler for a POST request to create a new model.
     /// </summary>
@@ -40,6 +32,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         private IStorageManager StorageManager { get; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="PostFileRequestHandler{TEntity, TGetModel}"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
@@ -50,8 +43,15 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="storageManager">Services for file system storage.</param>
-        public PostFileRequestHandler(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IHostingEnvironment hostingEnvironment, 
-                                      Services.IConfigurationProvider  configurationProvider, IDependencyManager dependencyManager, IStorageManager storageManager)
+        public PostFileRequestHandler(
+            ModelReliefDbContext dbContext,
+            UserManager<ApplicationUser> userManager,
+            ILoggerFactory loggerFactory,
+            IMapper mapper,
+            IHostingEnvironment hostingEnvironment,
+            Services.IConfigurationProvider  configurationProvider,
+            IDependencyManager dependencyManager,
+            IStorageManager storageManager)
             : base(dbContext, userManager, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, null)
         {
             StorageManager = storageManager;
@@ -71,7 +71,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
             var domainModel = await FindModelAsync<TEntity>(message.User, message.Id, throwIfNotFound: true);
             var fileDomainModel = domainModel as FileDomainModel;
-            
+
             var fileName = Path.Combine(StorageManager.DefaultModelStorageFolder(domainModel), domainModel.Name);
 
             await Files.WriteFileFromByteArray(fileName, message.NewFile.Raw);
@@ -80,8 +80,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             fileDomainModel.Path = $"{Path.GetDirectoryName(fileName)}/";
             fileDomainModel.FileTimeStamp = DateTime.Now;
 
-            var generatedFileDomainModel = fileDomainModel as GeneratedFileDomainModel;
-            if (generatedFileDomainModel != null)
+            if (fileDomainModel is GeneratedFileDomainModel generatedFileDomainModel)
                 generatedFileDomainModel.FileIsSynchronized = true;
 
             await DependencyManager.PersistChangesAsync(fileDomainModel, cancellationToken);

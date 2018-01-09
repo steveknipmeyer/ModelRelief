@@ -1,13 +1,8 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="ITGetModel.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
@@ -29,6 +24,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// </summary>
     public interface IGeneratedFile
     {
-        bool FileIsSynchronized { get; set; }       // associated file is synchronized with the model (AND all of the the model's dependencies)                
+        bool FileIsSynchronized { get; set; }       // associated file is synchronized with the model (AND all of the the model's dependencies)
     }
 }

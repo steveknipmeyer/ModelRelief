@@ -1,29 +1,25 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
-using ModelRelief.Database;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using ModelRelief.Domain;
-using Microsoft.Extensions.Configuration;
+﻿// -----------------------------------------------------------------------
+// <copyright file="ServiceCollectionExtensions.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Services
 {
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using ModelRelief.Database;
+    using ModelRelief.Domain;
+
     public static class ServiceCollectionExtensions
     {
         /// <summary>
         /// Extension method to add the database services.
         /// </summary>
         /// <param name="services">IServiceCollection</param>
-        public static void AddDatabaseServices (this IServiceCollection services)
+        public static void AddDatabaseServices(this IServiceCollection services)
         {
             // build the intermediate service provider
             var serviceProvider = services.BuildServiceProvider();
@@ -42,6 +38,6 @@ namespace ModelRelief.Services
             }
             services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<ModelReliefDbContext>();
-        }            
+        }
     }
 }

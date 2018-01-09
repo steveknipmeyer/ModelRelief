@@ -1,12 +1,13 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using Microsoft.AspNetCore.Identity;
+﻿// -----------------------------------------------------------------------
+// <copyright file="User.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Domain
 {
+    using Microsoft.AspNetCore.Identity;
+
     public class ApplicationUser : IdentityUser
         {
         public ApplicationUser()

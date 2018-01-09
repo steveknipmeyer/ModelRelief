@@ -5,11 +5,32 @@
         Manning AspNet Core book.
         Manning Dependency Injection book.
 
+<-- Lambda
+    Python programs must be invoked by py <program>. This is not necessary on Vector.
+    SQLite
+    Postman
+    Changes are shown in the wwwroot folder.
+
 <-- Tasks
     Goal : Roundtrip a scaled mesh.       
         Scale with a Python processor.
 
 <-- Short Term
+    Style
+        What is the best practice for the order of private and public methods?
+        StyleCop?
+
+    Rename MappingProfile.
+    
+    Review warning suppressions.
+        1591,1701;1702;1705
+        NU1605
+        
+    CodeAnalysis
+        NET Core
+
+    Refactoring Suggestion Code Size
+
     Abstract the identification of the Name and FileIsSynchronized propeties!
         "Name"
         "FileIsSynchronized"
@@ -37,9 +58,6 @@
     Replace Console output with Logger operations.
         Add color support for logging.
 
-    Style
-        What is the best practice for the order of private and public methods?
-        StyleCop?
 
     Should FileTimeStamp be exposed?
         Should the assignment of FileSynchronized be deferred until the request has completed.
@@ -730,6 +748,13 @@
     ModelReliefShell.bat is started through this batch file located in D:\Users\Steve Knipmeyer\Documents\Bin\cmder\config\profile.d:
         StartModelReliefShell.bat
             "D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\Tools\ModelReliefShell.bat"
+
+<-- New Computer Setup
+    The Test files are not restored from Git because some (e.g. .obj) are excluded by .gitignore.
+    gulp must be installed globally.
+        npm install --global gulp-cli
+    Unit tests require running Baseline.py after running ModelRelief.Test to create the initial Test database.
+    node must be installed.
 
 <-- Authentication and Authorization            
     https://odetocode.com/blogs/scott/archive/2017/02/06/anti-forgery-tokens-and-asp-net-core-apis.aspx

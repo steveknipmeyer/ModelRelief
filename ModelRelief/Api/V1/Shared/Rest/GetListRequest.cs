@@ -1,16 +1,15 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using ModelRelief.Domain;
-using System.Security.Claims;
+﻿// -----------------------------------------------------------------------
+// <copyright file="GetListRequest.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
+    using System.Security.Claims;
+    using MediatR;
+    using ModelRelief.Domain;
+
     /// <summary>
     ///  Represents a GET request for a collection of models.
     /// </summary>
@@ -24,10 +23,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Gets or sets the User posting the GetList request.
         /// </summary>
-        public ClaimsPrincipal User { get; set;}
+        public ClaimsPrincipal User { get; set; }
 
         /// <summary>
-        /// UrlHelper from the active controller; used for generating paging links.
+        /// Gets or sets the UrlHelper from the active controller; used for generating paging links.
         /// </summary>
         public IUrlHelperContainer UrlHelperContainer { get; set; }
 
@@ -44,15 +43,15 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Gets or sets the propery name to sort the collection.
         /// </summary>
-        public string OrderBy { get; set; } = nameof (DomainModel.Id);
+        public string OrderBy { get; set; } = nameof(DomainModel.Id);
 
         /// <summary>
-        /// Gets or sets the order of the collectionn sort; ascending or descending.
+        /// Gets or sets a value indicating whether the order of the collectionn sort; ascending or descending.
         /// </summary>
         public bool Ascending { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets whether to use paging in the returned collection.
+        /// Gets or sets a value indicating whether to use paging in the returned collection.
         /// </summary>
         public bool UsePaging { get; set; }
     }

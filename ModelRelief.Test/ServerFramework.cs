@@ -1,23 +1,22 @@
-// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net.Http;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+// -----------------------------------------------------------------------
+// <copyright file="ServerFramework.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Test
 {
+    using System.IO;
+    using System.Net.Http;
+    using System.Reflection;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.TestHost;
+    using Microsoft.Extensions.Configuration;
+    using Newtonsoft.Json;
+
     /// <summary>
     /// HTTP request types.
     /// </summary>
@@ -26,7 +25,7 @@ namespace ModelRelief.Test
         Get,
         Post,
         Put,
-        Delete
+        Delete,
     }
 
     /// <summary>
@@ -49,7 +48,7 @@ namespace ModelRelief.Test
 
         public ServerFramework()
         {
-            var contentRootPath = Settings.GetContentRootPath();           
+            var contentRootPath = Settings.GetContentRootPath();
             Directory.SetCurrentDirectory(contentRootPath);
 
             Server = new TestServer(WebHost.CreateDefaultBuilder(null)
@@ -77,8 +76,9 @@ namespace ModelRelief.Test
         /// <param name="requestType">HTTP request type.</param>
         /// <param name="endPoint">Endpoint.</param>
         /// <param name="contentObject">Object to serlize and send in the body of the request.</param>
+        /// <param name="binaryContent">File content for the requwst.</param>
         /// <returns></returns>
-        public async Task<RequestResponse> SubmitHttpRequest (HttpRequestType requestType, string endPoint, object contentObject = null, bool binaryContent = false)
+        public async Task<RequestResponse> SubmitHttpRequest(HttpRequestType requestType, string endPoint, object contentObject = null, bool binaryContent = false)
         {
             HttpContent content = null;
             if (!binaryContent)
@@ -91,13 +91,13 @@ namespace ModelRelief.Test
                 content = new ByteArrayContent(contentObject as byte[]);
             }
 
-            HttpResponseMessage response = null;;
+            HttpResponseMessage response = null;
             switch (requestType)
             {
                 case HttpRequestType.Get:
                     response = await Client.GetAsync(endPoint);
                     break;
-                    
+
                 case HttpRequestType.Post:
                     response = await Client.PostAsync(endPoint, content);
                     break;
@@ -112,7 +112,7 @@ namespace ModelRelief.Test
             }
             var responseString = await response.Content.ReadAsStringAsync();
 
-            return new RequestResponse { Message = response, ContentString = responseString};
+            return new RequestResponse { Message = response, ContentString = responseString };
         }
     }
 }

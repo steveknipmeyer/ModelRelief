@@ -1,34 +1,30 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ModelRelief.Database;
-using ModelRelief.Domain;
-using ModelRelief.Api.V1.Extensions;
-using ModelRelief.Infrastructure;
-using ModelRelief.Api.V1.Shared.Errors;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Logging;
-using ModelRelief.Utility;
-using System.Reflection;
-using FluentValidation.Results;
-using ModelRelief.Services;
+﻿// -----------------------------------------------------------------------
+// <copyright file="PatchRequestHandler.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
+    using FluentValidation;
+    using FluentValidation.Results;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Logging;
+    using ModelRelief.Api.V1.Shared.Errors;
+    using ModelRelief.Database;
+    using ModelRelief.Domain;
+    using ModelRelief.Services;
+
     /// <summary>
     /// Represents a handler for a PATCH request for a model.
     /// </summary>
@@ -39,6 +35,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         where TGetModel  : ITGetModel
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="PatchRequestHandler{TEntity, TGetModel}"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
@@ -49,9 +46,16 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="validators">All validators matching IValidator for the given request.</param>
-       public PatchRequestHandler(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IHostingEnvironment hostingEnvironment, 
-                                  Services.IConfigurationProvider  configurationProvider, IDependencyManager dependencyManager, IEnumerable<IValidator<PatchRequest<TEntity, 
-                                  TGetModel>>> validators)
+        public PatchRequestHandler(
+            ModelReliefDbContext dbContext,
+            UserManager<ApplicationUser> userManager,
+            ILoggerFactory loggerFactory,
+            IMapper mapper,
+            IHostingEnvironment hostingEnvironment,
+            Services.IConfigurationProvider  configurationProvider,
+            IDependencyManager dependencyManager,
+            IEnumerable<IValidator<PatchRequest<TEntity,
+            TGetModel>>> validators)
             : base(dbContext, userManager, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators)
         {
         }
@@ -59,8 +63,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Builds the UpdatedModel property containing the complete composition of old and new properties.
         /// </summary>
+        /// <param name="message">PATCH request.</param>
         /// <returns>TGetModel</returns>
-        public async Task<TGetModel> BuildUpdatedTGetModel (PatchRequest<TEntity, TGetModel> message)
+        public async Task<TGetModel> BuildUpdatedTGetModel(PatchRequest<TEntity, TGetModel> message)
         {
             var domainModel = await FindModelAsync<TEntity>(message.User, message.Id);
 
@@ -73,11 +78,13 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Converts a PATCH request to a domain model (for validation).
         /// </summary>
+        /// <param name="message">PATCH request.</param>
+        /// <param name="model">Domain model.</param>
         /// <returns>Domain model</returns>
-        public TEntity BuildUpdatedDomainModel (PatchRequest<TEntity, TGetModel> message, TEntity model)
+        public TEntity BuildUpdatedDomainModel(PatchRequest<TEntity, TGetModel> message, TEntity model)
         {
             var properties = typeof(TEntity).GetProperties();
-            foreach (var patchProperty in message.Parameters) 
+            foreach (var patchProperty in message.Parameters)
             {
                 var name  = patchProperty.Key;
                 var value = patchProperty.Value;
@@ -90,25 +97,25 @@ namespace ModelRelief.Api.V1.Shared.Rest
                     if (property == null)
                         continue;
                 }
-                catch (Exception )
+                catch (Exception)
                 {
                     var validationFailure = new ValidationFailure(name, $"The property {name} is not a valid property for this resource.");
-                    throw new ApiValidationException(typeof(PatchRequest<TEntity, TGetModel>), new List<ValidationFailure> {validationFailure});
+                    throw new ApiValidationException(typeof(PatchRequest<TEntity, TGetModel>), new List<ValidationFailure> { validationFailure });
                 }
 
                 // now set property in target
                 object domainValue = null;
                 try
                 {
-                    domainValue = property.PropertyType.IsEnum ? 
-                        Enum.ToObject(property.PropertyType, value) : 
+                    domainValue = property.PropertyType.IsEnum ?
+                        Enum.ToObject(property.PropertyType, value) :
                         // https://stackoverflow.com/questions/19811583/invalid-cast-from-system-double-to-system-nullable
                         System.Convert.ChangeType(value, Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType);
                  }
-                catch (Exception )
+                catch (Exception)
                 {
                     var validationFailure = new ValidationFailure(name, $"The property value {value} cannot be converted to a valid property value.");
-                    throw new ApiValidationException(typeof(PatchRequest<TEntity, TGetModel>), new List<ValidationFailure> {validationFailure});
+                    throw new ApiValidationException(typeof(PatchRequest<TEntity, TGetModel>), new List<ValidationFailure> { validationFailure });
                 }
 
                 property.SetValue(model, value: domainValue);
@@ -123,10 +130,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="message">Request object</param>
         /// <param name="cancellationToken">Token to allow asyn request to be cancelled.</param>
         /// <returns></returns>
-        public override async Task PreHandle(PatchRequest<TEntity, TGetModel> message, CancellationToken cancellationToken) 
-        { 
+        public override async Task PreHandle(PatchRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
+        {
             // construct to support validation
-            await BuildUpdatedTGetModel(message); 
+            await BuildUpdatedTGetModel(message);
         }
 
         /// <summary>
@@ -136,10 +143,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="cancellationToken">Token to allow the async operation to be cancelled.</param>
         /// <returns></returns>
         public override async Task<TGetModel> OnHandle(PatchRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
-        {           
+        {
             // find target model
             var model = await FindModelAsync<TEntity>(message.User, message.Id);
-            
+
             // update from request
             var updatedModel = BuildUpdatedDomainModel(message, model);
 

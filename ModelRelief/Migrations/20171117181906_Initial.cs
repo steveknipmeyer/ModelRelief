@@ -1,9 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
-using System.Collections.Generic;
+﻿// -----------------------------------------------------------------------
+// <copyright file="20171117181906_Initial.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Migrations
 {
+    using System;
+    using Microsoft.EntityFrameworkCore.Migrations;
+
+    /// <summary>
+    /// Represents a partial class for a database migration.
+    /// </summary>
     public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,7 +23,7 @@ namespace ModelRelief.Migrations
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true),
                     Name = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true)
+                    NormalizedName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                 },
                 constraints: table =>
                 {
@@ -40,7 +48,7 @@ namespace ModelRelief.Migrations
                     PhoneNumberConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
                     SecurityStamp = table.Column<string>(type: "TEXT", nullable: true),
                     TwoFactorEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
-                    UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true)
+                    UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                 },
                 constraints: table =>
                 {
@@ -55,7 +63,7 @@ namespace ModelRelief.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     ClaimType = table.Column<string>(type: "TEXT", nullable: true),
                     ClaimValue = table.Column<string>(type: "TEXT", nullable: true),
-                    RoleId = table.Column<string>(type: "TEXT", nullable: false)
+                    RoleId = table.Column<string>(type: "TEXT", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -76,7 +84,7 @@ namespace ModelRelief.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     ClaimType = table.Column<string>(type: "TEXT", nullable: true),
                     ClaimValue = table.Column<string>(type: "TEXT", nullable: true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: false)
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -96,7 +104,7 @@ namespace ModelRelief.Migrations
                     LoginProvider = table.Column<string>(type: "TEXT", nullable: false),
                     ProviderKey = table.Column<string>(type: "TEXT", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "TEXT", nullable: true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: false)
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -114,7 +122,7 @@ namespace ModelRelief.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "TEXT", nullable: false),
-                    RoleId = table.Column<string>(type: "TEXT", nullable: false)
+                    RoleId = table.Column<string>(type: "TEXT", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -140,7 +148,7 @@ namespace ModelRelief.Migrations
                     UserId = table.Column<string>(type: "TEXT", nullable: false),
                     LoginProvider = table.Column<string>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Value = table.Column<string>(type: "TEXT", nullable: true)
+                    Value = table.Column<string>(type: "TEXT", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -161,7 +169,7 @@ namespace ModelRelief.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    UserId = table.Column<string>(type: "TEXT", nullable: true)
+                    UserId = table.Column<string>(type: "TEXT", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -194,7 +202,7 @@ namespace ModelRelief.Migrations
                     PositionZ = table.Column<double>(type: "REAL", nullable: false),
                     ProjectId = table.Column<int>(type: "INTEGER", nullable: true),
                     StandardView = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<string>(type: "TEXT", nullable: true)
+                    UserId = table.Column<string>(type: "TEXT", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -228,7 +236,7 @@ namespace ModelRelief.Migrations
                     SigmaGaussianSmooth = table.Column<double>(type: "REAL", nullable: false),
                     Tau = table.Column<double>(type: "REAL", nullable: false),
                     UserId = table.Column<string>(type: "TEXT", nullable: true),
-                    Width = table.Column<double>(type: "REAL", nullable: false)
+                    Width = table.Column<double>(type: "REAL", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -259,7 +267,7 @@ namespace ModelRelief.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Path = table.Column<string>(type: "TEXT", nullable: true),
                     ProjectId = table.Column<int>(type: "INTEGER", nullable: true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: true)
+                    UserId = table.Column<string>(type: "TEXT", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -297,7 +305,7 @@ namespace ModelRelief.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Path = table.Column<string>(type: "TEXT", nullable: true),
                     ProjectId = table.Column<int>(type: "INTEGER", nullable: true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: true)
+                    UserId = table.Column<string>(type: "TEXT", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -342,7 +350,7 @@ namespace ModelRelief.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Path = table.Column<string>(type: "TEXT", nullable: true),
                     ProjectId = table.Column<int>(type: "INTEGER", nullable: true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: true)
+                    UserId = table.Column<string>(type: "TEXT", nullable: true),
                 },
                 constraints: table =>
                 {

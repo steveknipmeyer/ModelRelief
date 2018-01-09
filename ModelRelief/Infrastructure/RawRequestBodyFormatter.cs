@@ -1,22 +1,21 @@
-﻿// ------------------------------------------------------------------------// 
-// ModelRelief                                                             //
-//                                                                         //                                                                          
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
-// ------------------------------------------------------------------------//
-// https://weblog.west-wind.com/posts/2017/Sep/14/Accepting-Raw-Request-Body-Content-in-ASPNET-Core-API-Controllers
-
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.Net.Http.Headers;
-using System;
-using System.IO;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="RawRequestBodyFormatter.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ModelRelief.Infrastructure
 {
+    using System;
+    using System.IO;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc.Formatters;
+    using Microsoft.Net.Http.Headers;
+
     /// <summary>
     /// Formatter that allows content of type text/plain and application/octet stream
     /// or no content type to be parsed to raw data. Allows for a single input parameter in the form of:
-    /// 
+    ///
     /// public string RawString([FromBody] string data)
     /// public byte[] RawData([FromBody] byte[] data)
     /// </summary>
@@ -31,15 +30,15 @@ namespace ModelRelief.Infrastructure
         /// <summary>
         /// Allow text/plain, application/octet-stream and no content type to be processed
         /// </summary>
-        /// <param name="context"></param>
+        /// <param name="context">InputFormatterContext</param>
         /// <returns></returns>
-        public override Boolean CanRead(InputFormatterContext context)
+        public override bool CanRead(InputFormatterContext context)
         {
-            if (context == null) 
+            if (context == null)
                 throw new ArgumentNullException(nameof(context));
 
             var contentType = context.HttpContext.Request.ContentType;
-            if (string.IsNullOrEmpty(contentType) || 
+            if (string.IsNullOrEmpty(contentType) ||
                 contentType == "text/plain" ||
                 contentType == "application/octet-stream")
                 return true;
@@ -51,7 +50,7 @@ namespace ModelRelief.Infrastructure
         /// Handle text/plain or no content type for string results
         /// Handle application/octet-stream for byte[] results
         /// </summary>
-        /// <param name="context"></param>
+        /// <param name="context">InputFormatterContext</param>
         /// <returns></returns>
         public override async Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context)
         {
