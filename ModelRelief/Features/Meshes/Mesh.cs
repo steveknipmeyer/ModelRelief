@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="MappingProfile.cs" company="ModelRelief">
+// <copyright file="Mesh.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -73,26 +73,17 @@ namespace ModelRelief.Dto
                 .NotEmpty().WithMessage("The file format must be provided.");
         }
     }
-}
-
-namespace ModelRelief.Features.Meshes
-{
-    using System.ComponentModel.DataAnnotations;
-    using AutoMapper;
-    using FluentValidation;
-    using ModelRelief.Api.V1.Shared.Rest;
-    using ModelRelief.Domain;
 
     /// <summary>
     /// AutoMapper mapping profile.
     /// </summary>
-    public class MappingProfile : Profile
+    public class MeshMappingProfile : Profile
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MappingProfile"/> class.
+        /// Initializes a new instance of the <see cref="MeshMappingProfile"/> class.
         /// Constructor.
         /// </summary>
-        public MappingProfile()
+        public MeshMappingProfile()
         {
             CreateMap<Domain.Mesh, Dto.Mesh>().ReverseMap();
         }

@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="MappingProfile.cs" company="ModelRelief">
+// <copyright file="Camera.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -7,6 +7,7 @@
 namespace ModelRelief.Dto
 {
     using System.ComponentModel.DataAnnotations;
+    using AutoMapper;
     using FluentValidation;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Domain;
@@ -76,24 +77,19 @@ namespace ModelRelief.Dto
                 .NotNull().WithMessage("The Description property is required.");
         }
     }
-}
-
-namespace ModelRelief.Features.Cameras
-{
-    using AutoMapper;
 
     /// <summary>
     /// AutoMapper mapping profile.
     /// </summary>
-    public class MappingProfile : Profile
+    public class CameraMappingProfile : Profile
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MappingProfile"/> class.
+        /// Initializes a new instance of the <see cref="CameraMappingProfile"/> class.
         /// Constructor.
         /// </summary>
-        public MappingProfile()
+        public CameraMappingProfile()
         {
-        CreateMap<Domain.Camera, Dto.Camera>().ReverseMap();
+            CreateMap<Domain.Camera, Dto.Camera>().ReverseMap();
         }
     }
 }

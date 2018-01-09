@@ -19,17 +19,11 @@
     Style
         What is the best practice for the order of private and public methods?
         StyleCop?
-
-    Rename MappingProfile.
-    
-    Review warning suppressions.
-        1591,1701;1702;1705
-        NU1605
         
     CodeAnalysis
-        NET Core
+        NET Core?
 
-    Refactoring Suggestion Code Size
+    Refactoring Suggestion Font Size
 
     Abstract the identification of the Name and FileIsSynchronized propeties!
         "Name"

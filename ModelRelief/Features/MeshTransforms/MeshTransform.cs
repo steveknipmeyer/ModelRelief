@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="MappingProfile.cs" company="ModelRelief">
+// <copyright file="MeshTransform.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -11,6 +11,9 @@ namespace ModelRelief.Dto
     using FluentValidation;
     using ModelRelief.Api.V1.Shared.Rest;
 
+    /// <summary>
+    /// Represents a DataTransferObject (DTO) for a MeshTransform.
+    /// </summary>
     public class MeshTransform : ITGetModel
     {
         public int Id { get; set; }
@@ -33,6 +36,9 @@ namespace ModelRelief.Dto
         public Dto.Project Project { get; set; }
     }
 
+    /// <summary>
+    /// FV validator to support Views and model-binding validation.
+    /// </summary>
     public class MeshTransformValidator : AbstractValidator<Dto.MeshTransform>
     {
         public MeshTransformValidator()
@@ -44,15 +50,17 @@ namespace ModelRelief.Dto
                 .NotNull().WithMessage("The Description property is required.");
         }
     }
-}
 
-namespace ModelRelief.Features.Meshtransforms
-{
-    using AutoMapper;
-
-    public class MappingProfile : Profile
+    /// <summary>
+    /// AutoMapper mapping profile.
+    /// </summary>
+    public class MeshTransformMappingProfile : Profile
     {
-        public MappingProfile()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MeshTransformMappingProfile"/> class.
+        /// Constructor.
+        /// </summary>
+        public MeshTransformMappingProfile()
         {
         CreateMap<Domain.MeshTransform, Dto.MeshTransform>().ReverseMap();
         }

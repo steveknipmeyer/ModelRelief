@@ -1,21 +1,21 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="MappingProfile.cs" company="ModelRelief">
+// <copyright file="Model3d.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
 namespace ModelRelief.Dto
 {
-using System.ComponentModel.DataAnnotations;
-using AutoMapper;
-using FluentValidation;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Domain;
+    using System.ComponentModel.DataAnnotations;
+    using AutoMapper;
+    using FluentValidation;
+    using ModelRelief.Api.V1.Shared.Rest;
+    using ModelRelief.Domain;
 
     /// <summary>
     /// Represents a DataTransferObject (DTO) for a Model3d.
     /// </summary>
-public class Model3d : ITGetModel
+    public class Model3d : ITGetModel
     {
         public int Id { get; set; }
 
@@ -44,7 +44,7 @@ public class Model3d : ITGetModel
     /// <summary>
     /// FV validator to support Views and model-binding validation.
     /// </summary>
-public class Model3dValidator : AbstractValidator<Dto.Model3d>
+    public class Model3dValidator : AbstractValidator<Dto.Model3d>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Model3dValidator"/> class.
@@ -63,28 +63,19 @@ public class Model3dValidator : AbstractValidator<Dto.Model3d>
                 .NotEmpty().WithMessage("The file format must be provided.");
         }
     }
-}
-
-namespace ModelRelief.Features.Models
-{
-using System.ComponentModel.DataAnnotations;
-using AutoMapper;
-using FluentValidation;
-using ModelRelief.Api.V1.Shared.Rest;
-using ModelRelief.Domain;
 
     /// <summary>
     /// AutoMapper mapping profile.
     /// </summary>
-public class MappingProfile : Profile
+    public class Model3dMappingProfile : Profile
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MappingProfile"/> class.
+        /// Initializes a new instance of the <see cref="Model3dMappingProfile"/> class.
         /// Constructor.
         /// </summary>
-        public MappingProfile()
-            {
-                CreateMap<Domain.Model3d, Dto.Model3d>().ReverseMap();
-            }
+        public Model3dMappingProfile()
+        {
+            CreateMap<Domain.Model3d, Dto.Model3d>().ReverseMap();
+        }
     }
 }
