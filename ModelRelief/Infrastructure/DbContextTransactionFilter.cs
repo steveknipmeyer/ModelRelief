@@ -19,9 +19,9 @@ namespace ModelRelief.Infrastructure
     /// </summary>
     public class DbContextTransactionFilter : IAsyncActionFilter
     {
-        private readonly ModelReliefDbContext    _dbContext;
-        private IDependencyManager               _dependencyManager;
+        private readonly ModelReliefDbContext                _dbContext;
         private readonly ILogger<DbContextTransactionFilter> _logger;
+        private IDependencyManager                           _dependencyManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DbContextTransactionFilter"/> class.

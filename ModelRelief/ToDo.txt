@@ -16,9 +16,7 @@
         Scale with a Python processor.
 
 <-- Short Term
-    StyleAnalysis
-        What is the best practice for the order of private and public methods?
-        
+     
     CodeAnalysis
         NET Core?
 
