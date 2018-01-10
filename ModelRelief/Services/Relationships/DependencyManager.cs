@@ -285,6 +285,7 @@ namespace ModelRelief.Services.Relationships
         private async Task<List<IFileRequest>> ProcessModifiedEntity(TransactionEntity transactionEntity)
         {
             var fileRequests = new List<IFileRequest>();
+            var isFileDomainModel          = transactionEntity.IsFileDomainModel();
             var isGeneratedFileDomainModel = transactionEntity.IsGeneratedFileDomainModel();
 
             bool dependentFIlePropertyChanged = false;
@@ -293,14 +294,17 @@ namespace ModelRelief.Services.Relationships
                 var propertyModification = new PropertyModification(transactionEntity.ChangeTrackerEntity, property);
                 if (propertyModification.Changed)
                 {
-                    if (isGeneratedFileDomainModel)
+                    if (isFileDomainModel)
                     {
                         if (string.Equals(property.Name, PropertyNames.Name))
                             fileRequests.Add(ConstructRenameFileRequest(transactionEntity));
 
-                        if (string.Equals(property.Name, PropertyNames.FileIsSynchronized) && ((bool)propertyModification.ModifiedValue))
-                            fileRequests.Add(ConstructGenerateFileRequest(transactionEntity, stage: ProcessingStage.PreProcess));
-                     }
+                        if (isGeneratedFileDomainModel)
+                        {
+                            if (string.Equals(property.Name, PropertyNames.FileIsSynchronized) && ((bool)propertyModification.ModifiedValue))
+                                fileRequests.Add(ConstructGenerateFileRequest(transactionEntity, stage: ProcessingStage.PreProcess));
+                        }
+                    }
 
                     // independent variables invalidate the backing file of their dependent models
                     if (PropertyHasAttribute(out Attribute dependentFileProperty, transactionEntity.EntityType, property.Name, typeof(DependentFileProperty)))

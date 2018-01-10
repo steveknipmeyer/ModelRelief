@@ -14,6 +14,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using FluentValidation;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore.ChangeTracking;
+    using Microsoft.EntityFrameworkCore.Metadata;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Errors;
     using ModelRelief.Database;
@@ -82,7 +84,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public virtual async Task<bool> ProcessRename(FileRequest<TEntity> fileRequest, FileDomainModel fileDomainModel, string fileName)
         {
             // find original Name property
-            string originalName = fileRequest.TransactionEntity.ChangeTrackerEntity.OriginalValues[PropertyNames.Name] as string;
+            var originalName = fileRequest.TransactionEntity.ChangeTrackerEntity.GetDatabaseValues()[PropertyNames.Name] as string;
 
             var filePath = Path.GetDirectoryName(fileName);
             var originalFile = Path.Combine(filePath, $"{originalName}");

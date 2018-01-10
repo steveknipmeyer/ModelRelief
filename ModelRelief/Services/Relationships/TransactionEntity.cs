@@ -90,6 +90,15 @@ namespace ModelRelief.Services.Relationships
         }
 
         /// <summary>
+        /// Returns whether the entity is a FileDomainModel.
+        /// </summary>
+        public bool IsFileDomainModel()
+        {
+            var fileDomainModel = GetDomainModel() as FileDomainModel;
+            return fileDomainModel != null;
+        }
+
+        /// <summary>
         /// Helper method to return the DomainModel corresponding to the TransactionEntity.
         /// This method is always called through reflection since the type is not known at compile time.
         /// </summary>

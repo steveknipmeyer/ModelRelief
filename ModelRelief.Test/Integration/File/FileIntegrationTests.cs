@@ -56,7 +56,7 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
-        /// Posts a new new file.
+        /// Posts a new file.
         /// </summary>
         /// <param name="modelId">Id of the backing metadata model.</param>
         /// <param name="fileName">Name of the file to POST.</param>
@@ -73,6 +73,26 @@ namespace ModelRelief.Test.Integration
 
             return requestResponse;
         }
+
+        /// <summary>
+        /// Puts a file.
+        /// </summary>
+        /// <param name="modelId">Id of the backing metadata model.</param>
+        /// <param name="fileName">Name of the file to PUT.</param>
+        public virtual async Task<RequestResponse> PutFile(int modelId, string fileName)
+        {
+            // Arrange
+            var byteArray = ByteArrayFromFile(fileName);
+
+            // Act
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{modelId}/file", byteArray, binaryContent: true);
+
+            // Assert
+            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            return requestResponse;
+        }
+
         /// <summary>
         /// Compare two byte arrays for equslity.
         /// http://www.techmikael.com/2009/01/fast-byte-array-comparison-in-c.html
@@ -139,8 +159,8 @@ namespace ModelRelief.Test.Integration
         public virtual async Task GetFile_FileCanBeRoundTripped()
         {
             // Arrange
-            var fileName = "ModelRelief.txt";
             var newModel = await PostNewModel();
+            var fileName = "ModelRelief.txt";
             var requestResponse = await PostNewFile(newModel.Id, fileName);
             var writtenByteArray = ByteArrayFromFile(fileName);
 
@@ -212,21 +232,81 @@ namespace ModelRelief.Test.Integration
 
         #region PutFile
         /// <summary>
-        /// Tests whether a file can be PUT to the resource.
+        /// Tests whether a new file can be PUT to the resource.
         /// N.B. PUT and POST are equivalent for files. Both replace the destination completely.
         /// </summary>
         [Fact]
         [Trait("Category", "Api PutFile")]
-        public virtual async Task PutFile_NewFileCanBePosted()
+        public virtual async Task PutFile_NewFileCanBePut()
         {
             // Arrange
             var newModel = await PostNewModel();
 
             // Act
-            var requestResponse = await PostNewFile(newModel.Id, "UnitCube.obj");
+            var requestResponse = await PutFile(newModel.Id, "UnitCube.obj");
 
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            // Rollback
+            await DeleteModel(newModel);
+        }
+
+        /// <summary>
+        /// Tests whether a file can be updated through a PUT.
+        /// N.B. PUT and POST are equivalent for files. Both replace the destination completely.
+        /// </summary>
+        [Fact]
+        [Trait("Category", "Api PutFile")]
+        public virtual async Task PutFile_FileCanBeUpdated()
+        {
+            // Arrange
+            var newModel = await PostNewModel();
+            // initial create
+            var requestResponse = await PostNewFile(newModel.Id, "UnitCube.obj");
+            // update
+            var fileName = "ModelRelief.txt";
+            requestResponse = await PutFile(newModel.Id, fileName);
+            var writtenByteArray = ByteArrayFromFile(fileName);
+
+            // Act
+            requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModel.ApiUrl}/{newModel.Id}/file");
+            var fileContentResult = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(requestResponse.ContentString);
+            var encodedString = fileContentResult.GetValue("fileContents");
+            var readByteArray = Convert.FromBase64String(encodedString.ToString());
+
+            // Assert
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True(EqualByteArrays(writtenByteArray, readByteArray));
+
+            // Rollback
+            await DeleteModel(newModel);
+        }
+        #endregion
+
+        #region FileOperation
+        /// <summary>
+        /// Tests whether a GET succeeds after a file has been renamed.
+        /// </summary>
+        [Fact]
+        [Trait("Category", "Api FileRequest")]
+        public virtual async Task FileRequest_FileCanBeReadAfterRename()
+        {
+            // Arrange
+            var newModel = await PostNewModel();
+            var requestResponse = await PostNewFile(newModel.Id, "UnitCube.obj");
+            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            // rename model (and file)
+            newModel.Name = "New Name";
+            requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{newModel.Id}", newModel);
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+
+            // Act
+            requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModel.ApiUrl}/{newModel.Id}/file");
+
+            // Assert
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
             // Rollback
             await DeleteModel(newModel);

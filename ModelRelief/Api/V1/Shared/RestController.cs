@@ -170,7 +170,7 @@ namespace ModelRelief.Api.V1.Shared
         }
 
         /// <summary>
-        /// Action method to update a file in its entirey that is associated with a model.
+        /// Action method to update a file in its entirety that is associated with a model.
         /// </summary>
         /// <returns>TGetModel of updated model.</returns>
         [HttpPut("{id:int}/file")]

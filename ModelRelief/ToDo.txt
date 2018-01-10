@@ -1,7 +1,5 @@
 ﻿<--- Commit
 
-
-
 <-- Technical Education
         Manning AspNet Core book.
         Manning Dependency Injection book.
@@ -18,20 +16,15 @@
 
 <-- Short Term
 
-    DependencyManager FileRequest Tests
+    FileRequest IntegrationTests
         FileOperationGenerate
-        FileOperation.Request
-        Test property changes.
-            Construct a new dependency chain.
-            Modify a property. of a class with a DependentFile.
-            Confirm that the DependentFile was invalidated.
+            Test property changes.
+                Construct a new dependency chain.
+                Modify a property of a class with a DependentFile.
+                Confirm that the DependentFile was invalidated.
 
-    FileOperation.Generate
-            Mesh
-                DepthBuffer
-                MeshTransform
+    FileOperationGenerate
         Validate the required properties are present.
-
         Reset FileIsSynchronized. This will be finally set after a successful generation.
 
     Convert ToDo.txt to Markdown.
