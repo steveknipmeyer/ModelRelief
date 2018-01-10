@@ -1,24 +1,24 @@
 // -----------------------------------------------------------------------
-// <copyright file="Model3dTestModel.cs" company="ModelRelief">
+// <copyright file="MeshTransformTestModelFactory.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ModelRelief.Test.TestModels.Models
+namespace ModelRelief.Test.TestModels.MeshTransforms
 {
     using System.Collections.Generic;
     using System.Linq;
 
     /// <summary>
-    /// Model3d test model.
+    /// MeshTransform test model.
     /// </summary>
-    public class Model3dTestModel : TestModel<Domain.Model3d, Dto.Model3d>
+    public class MeshTransformTestModelFactory : TestModelFactory<Domain.MeshTransform, Dto.MeshTransform>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Model3dTestModel"/> class.
+        /// Initializes a new instance of the <see cref="MeshTransformTestModelFactory"/> class.
         /// Constructor
         /// </summary>
-        public Model3dTestModel()
+        public MeshTransformTestModelFactory()
             : base()
         {
         }
@@ -28,27 +28,26 @@ namespace ModelRelief.Test.TestModels.Models
         /// </summary>
         public override void Initialize()
         {
-            ApiUrl = "/api/v1/models";
-            UxUrl  = "/models";
+            ApiUrl = "/api/v1/meshtransforms";
+            UxUrl  = "/meshtransforms";
 
-            IdRange = Enumerable.Range(1, 5);
-            FirstModelName = "lucy.obj";
+            IdRange = Enumerable.Range(1, 2);
+            FirstModelName = "Identity";
 
-            ReferencePropertyNames = new List<string> { "ProjectId", "CameraId" };
+            ReferencePropertyNames = new List<string> { "ProjectId" };
             InvalidReferenceProperty = 0;
             ValidReferenceProperty   = 1;
 
-            EnumPropertyName = "Format";
+            EnumPropertyName = null;
         }
 
         /// <summary>
         /// Constructs a valid model.
         /// </summary>
         /// <returns>Valid model.</returns>
-        public override Dto.Model3d ConstructValidModel()
+        public override Dto.MeshTransform ConstructValidModel()
         {
             var validModel = base.ConstructValidModel();
-            validModel.Format = Domain.Model3dFormat.OBJ;
 
             return validModel;
         }

@@ -20,7 +20,7 @@ namespace ModelRelief.Test.Integration.Cameras
         /// </summary>
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         public CamerasBaseIntegrationTests(ClassFixture classFixture)
-            : base(classFixture, new CameraTestModel())
+            : base(classFixture, new CameraTestModelFactory())
         {
         }
 

@@ -29,7 +29,7 @@ namespace ModelRelief.Test.Integration
         where TGetModel : class, ITGetModel, new()
     {
         public ClassFixture ClassFixture { get; set; }
-        public TestModel<TEntity, TGetModel> TestModel { get; set; }
+        public TestModelFactory<TEntity, TGetModel> TestModelFactory { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IntegrationTests{TEntity, TGetModel}"/> class.
@@ -37,30 +37,30 @@ namespace ModelRelief.Test.Integration
         /// </summary>
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         /// <param name="testModel">A test model under integration testing.</param>
-        public IntegrationTests(ClassFixture classFixture, TestModel<TEntity, TGetModel> testModel)
+        public IntegrationTests(ClassFixture classFixture, TestModelFactory<TEntity, TGetModel> testModel)
         {
-            ClassFixture = classFixture;
-            TestModel     = testModel;
+            ClassFixture      = classFixture;
+            TestModelFactory  = testModel;
 
-            TestModel.Initialize();
+            TestModelFactory.Initialize();
         }
 
         /// <summary>
         /// Called before class is used. Opportunity to use an async method for setup.
         /// </summary>
         /// <returns></returns>
-        public Task InitializeAsync()
+        public async Task InitializeAsync()
         {
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
         /// <summary>
         /// Called before class is destroyed. Opportunity to use an async method for teardown.
         /// </summary>
         /// <returns></returns>
-        public Task DisposeAsync()
+        public async Task DisposeAsync()
         {
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
         /// <summary>
@@ -110,19 +110,7 @@ namespace ModelRelief.Test.Integration
         /// </summary>
         public virtual async Task<TGetModel> PostNewModel()
         {
-            // Arrange
-            var validModel = TestModel.ConstructValidModel();
-
-            // Act
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Post, TestModel.ApiUrl, validModel);
-
-            // Assert
-            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
-
-            var newModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
-            newModel.Name.Should().Be(validModel.Name);
-
-            return newModel;
+            return await TestModelFactory.PostNewModel(ClassFixture);
         }
 
         /// <summary>
@@ -131,13 +119,7 @@ namespace ModelRelief.Test.Integration
         /// <param name="existingModel">Model to delete.</param>
         public virtual async Task DeleteModel(TGetModel existingModel)
         {
-            // Arrange
-
-            // Act
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Delete, $"{TestModel.ApiUrl}/{existingModel.Id}");
-
-            // Assert
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            await TestModelFactory.DeleteModel(ClassFixture, existingModel);
         }
     }
 }

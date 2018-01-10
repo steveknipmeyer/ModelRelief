@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-// <copyright file="TestModel.cs" company="ModelRelief">
+// <copyright file="TestModelFactory.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -9,10 +9,13 @@ namespace ModelRelief.Test.TestModels
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
     using System.Reflection;
     using System.Threading.Tasks;
+    using FluentAssertions;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Domain;
+    using ModelRelief.Test.Integration;
     using Newtonsoft.Json;
     using Xunit;
 
@@ -21,7 +24,7 @@ namespace ModelRelief.Test.TestModels
     /// </summary>
     /// <typeparam name="TEntity">Domain model.</typeparam>
     /// <typeparam name="TGetModel">DTO Get model.</typeparam>
-    public abstract class TestModel<TEntity, TGetModel>
+    public abstract class TestModelFactory<TEntity, TGetModel>
         where TEntity : DomainModel
         where TGetModel : class, ITGetModel, new()
     {
@@ -38,10 +41,10 @@ namespace ModelRelief.Test.TestModels
         public string EnumPropertyName { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TestModel{TEntity, TGetModel}"/> class.
+        /// Initializes a new instance of the <see cref="TestModelFactory{TEntity, TGetModel}"/> class.
         /// Constructor.
         /// </summary>
-        public TestModel()
+        public TestModelFactory()
         {
             Initialize();
         }
@@ -148,6 +151,92 @@ namespace ModelRelief.Test.TestModels
             {
             };
             return invalidModel;
+        }
+
+        /// <summary>
+        /// Creates a new resource.
+        /// </summary>
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        /// <param name="model">New model to POST.</param>
+        public virtual async Task<TGetModel> PostNewModel(ClassFixture classFixture, TGetModel model)
+        {
+            // Arrange
+
+            // Act
+            var requestResponse = await classFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Post, ApiUrl, model);
+
+            // Assert
+            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            var newModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            newModel.Name.Should().Be(model.Name);
+
+            return newModel;
+        }
+
+        /// <summary>
+        /// Creates a new resource.
+        /// </summary>
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        public virtual async Task<TGetModel> PostNewModel(ClassFixture classFixture)
+        {
+            return await PostNewModel(classFixture, ConstructValidModel());
+        }
+
+        /// <summary>
+        /// Delete an existing model.
+        /// </summary>
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        /// <param name="existingModel">Model to delete.</param>
+        public virtual async Task DeleteModel(ClassFixture classFixture, TGetModel existingModel)
+        {
+            // Arrange
+
+            // Act
+            var requestResponse = await classFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Delete, $"{ApiUrl}/{existingModel.Id}");
+
+            // Assert
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+        }
+
+        /// <summary>
+        /// Posts a new file.
+        /// </summary>
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        /// <param name="modelId">Id of the backing metadata model.</param>
+        /// <param name="fileName">Name of the file to POST.</param>
+        public virtual async Task<RequestResponse> PostNewFile(ClassFixture classFixture, int modelId, string fileName)
+        {
+            // Arrange
+            var byteArray = Utility.ByteArrayFromFile(fileName);
+
+            // Act
+            var requestResponse = await classFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiUrl}/{modelId}/file", byteArray, binaryContent: true);
+
+            // Assert
+            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            return requestResponse;
+        }
+
+        /// <summary>
+        /// Puts a file.
+        /// </summary>
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        /// <param name="modelId">Id of the backing metadata model.</param>
+        /// <param name="fileName">Name of the file to PUT.</param>
+        public virtual async Task<RequestResponse> PutFile(ClassFixture classFixture, int modelId, string fileName)
+        {
+            // Arrange
+            var byteArray = Utility.ByteArrayFromFile(fileName);
+
+            // Act
+            var requestResponse = await classFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}/file", byteArray, binaryContent: true);
+
+            // Assert
+            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            return requestResponse;
         }
     }
 }

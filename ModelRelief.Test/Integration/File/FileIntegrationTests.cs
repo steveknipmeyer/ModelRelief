@@ -34,25 +34,9 @@ namespace ModelRelief.Test.Integration
         /// </summary>
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         /// <param name="testModel">A test model under integration testing.</param>
-        public FileIntegrationTests(ClassFixture classFixture, TestModel<TEntity, TGetModel> testModel)
+        public FileIntegrationTests(ClassFixture classFixture, TestModelFactory<TEntity, TGetModel> testModel)
             : base(classFixture, testModel)
         {
-        }
-
-        /// <summary>
-        /// Returns a byte array from a file. The file must exist in Test\Data\Files.
-        /// </summary>
-        /// <param name="fileName">File to read.</param>
-        /// <returns></returns>
-        public byte[] ByteArrayFromFile(string fileName)
-        {
-            var fileNamePath = $"{Settings.GetTestFilesPath()}/{fileName}";
-            if (!File.Exists(fileNamePath))
-                return null;
-
-            var byteArray = File.ReadAllBytes(fileNamePath);
-
-            return byteArray;
         }
 
         /// <summary>
@@ -62,16 +46,7 @@ namespace ModelRelief.Test.Integration
         /// <param name="fileName">Name of the file to POST.</param>
         public virtual async Task<RequestResponse> PostNewFile(int modelId,  string fileName)
         {
-            // Arrange
-            var byteArray = ByteArrayFromFile(fileName);
-
-            // Act
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Post, $"{TestModel.ApiUrl}/{modelId}/file", byteArray, binaryContent: true);
-
-            // Assert
-            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
-
-            return requestResponse;
+            return await TestModelFactory.PostNewFile(ClassFixture, modelId, fileName);
         }
 
         /// <summary>
@@ -81,38 +56,8 @@ namespace ModelRelief.Test.Integration
         /// <param name="fileName">Name of the file to PUT.</param>
         public virtual async Task<RequestResponse> PutFile(int modelId, string fileName)
         {
-            // Arrange
-            var byteArray = ByteArrayFromFile(fileName);
-
-            // Act
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{modelId}/file", byteArray, binaryContent: true);
-
-            // Assert
-            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
-
-            return requestResponse;
+            return await TestModelFactory.PutFile(ClassFixture, modelId, fileName);
         }
-
-        /// <summary>
-        /// Compare two byte arrays for equslity.
-        /// http://www.techmikael.com/2009/01/fast-byte-array-comparison-in-c.html
-        /// </summary>
-        /// <param name="first">First array to compare.</param>
-        /// <param name="second">Second array to compare.</param>
-        /// <returns>True if identical.</returns>
-        private static bool EqualByteArrays(byte[] first, byte[] second)
-            {
-                int length = first.Length;
-                if (length != second.Length)
-                    return false;
-
-                for (int i = 0; i < length; i++)
-                {
-                    if (first[i] != second[i])
-                        return false;
-                }
-                return true;
-            }
 
         #region GetFile
         /// <summary>
@@ -123,10 +68,10 @@ namespace ModelRelief.Test.Integration
         public virtual async Task GetFile_ExistingFileReturnsSuccess()
         {
             // Arrange
-            var modelId = TestModel.IdRange.Min();
+            var modelId = TestModelFactory.IdRange.Min();
 
             // Act
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModel.ApiUrl}/{modelId}/file");
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{modelId}/file");
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
@@ -140,10 +85,10 @@ namespace ModelRelief.Test.Integration
         public virtual async Task GetFile_NonExistentFileReturnsNotFound()
         {
             // Arrange
-            var modelId = TestModel.IdRange.Max() + 1;
+            var modelId = TestModelFactory.IdRange.Max() + 1;
 
             // Act
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModel.ApiUrl}/{modelId}/file");
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{modelId}/file");
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
@@ -162,17 +107,17 @@ namespace ModelRelief.Test.Integration
             var newModel = await PostNewModel();
             var fileName = "ModelRelief.txt";
             var requestResponse = await PostNewFile(newModel.Id, fileName);
-            var writtenByteArray = ByteArrayFromFile(fileName);
+            var writtenByteArray = Utility.ByteArrayFromFile(fileName);
 
             // Act
-            requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModel.ApiUrl}/{newModel.Id}/file");
+            requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{newModel.Id}/file");
             var fileContentResult = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(requestResponse.ContentString);
             var encodedString = fileContentResult.GetValue("fileContents");
             var readByteArray = Convert.FromBase64String(encodedString.ToString());
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
-            Assert.True(EqualByteArrays(writtenByteArray, readByteArray));
+            Assert.True(Utility.EqualByteArrays(writtenByteArray, readByteArray));
 
             // Rollback
             await DeleteModel(newModel);
@@ -267,17 +212,17 @@ namespace ModelRelief.Test.Integration
             // update
             var fileName = "ModelRelief.txt";
             requestResponse = await PutFile(newModel.Id, fileName);
-            var writtenByteArray = ByteArrayFromFile(fileName);
+            var writtenByteArray = Utility.ByteArrayFromFile(fileName);
 
             // Act
-            requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModel.ApiUrl}/{newModel.Id}/file");
+            requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{newModel.Id}/file");
             var fileContentResult = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(requestResponse.ContentString);
             var encodedString = fileContentResult.GetValue("fileContents");
             var readByteArray = Convert.FromBase64String(encodedString.ToString());
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
-            Assert.True(EqualByteArrays(writtenByteArray, readByteArray));
+            Assert.True(Utility.EqualByteArrays(writtenByteArray, readByteArray));
 
             // Rollback
             await DeleteModel(newModel);
@@ -299,11 +244,11 @@ namespace ModelRelief.Test.Integration
 
             // rename model (and file)
             newModel.Name = "New Name";
-            requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModel.ApiUrl}/{newModel.Id}", newModel);
+            requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModelFactory.ApiUrl}/{newModel.Id}", newModel);
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
             // Act
-            requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModel.ApiUrl}/{newModel.Id}/file");
+            requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{newModel.Id}/file");
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);

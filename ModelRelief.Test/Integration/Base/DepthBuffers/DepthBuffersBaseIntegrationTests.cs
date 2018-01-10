@@ -20,7 +20,7 @@ namespace ModelRelief.Test.Integration.DepthBuffers
         /// </summary>
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         public DepthBuffersBaseIntegrationTests(ClassFixture classFixture)
-            : base(classFixture, new DepthBufferTestModel())
+            : base(classFixture, new DepthBufferTestModelFactory())
         {
         }
 #region Get

@@ -20,7 +20,7 @@ namespace ModelRelief.Test.Integration.Projects
         /// </summary>
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         public ProjectsBaseIntegrationTests(ClassFixture classFixture)
-            : base(classFixture, new ProjectTestModel())
+            : base(classFixture, new ProjectTestModelFactory())
         {
         }
 

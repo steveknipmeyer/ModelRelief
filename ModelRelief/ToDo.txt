@@ -30,7 +30,6 @@
     Convert ToDo.txt to Markdown.
         https://marketplace.visualstudio.com/items?itemName=MadsKristensen.MarkdownEditor
 
-
     CodeAnalysis
         NET Core?
 

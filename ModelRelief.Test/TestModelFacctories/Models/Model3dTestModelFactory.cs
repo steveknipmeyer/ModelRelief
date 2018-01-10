@@ -1,24 +1,24 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="CameraTestModel.cs" company="ModelRelief">
+// -----------------------------------------------------------------------
+// <copyright file="Model3dTestModelFactory.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ModelRelief.Test.TestModels.Cameras
+namespace ModelRelief.Test.TestModels.Models
 {
     using System.Collections.Generic;
     using System.Linq;
 
     /// <summary>
-    /// Camera test model.
+    /// Model3d test model.
     /// </summary>
-    public class CameraTestModel : TestModel<Domain.Camera, Dto.Camera>
+    public class Model3dTestModelFactory : TestModelFactory<Domain.Model3d, Dto.Model3d>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CameraTestModel"/> class.
+        /// Initializes a new instance of the <see cref="Model3dTestModelFactory"/> class.
         /// Constructor
         /// </summary>
-        public CameraTestModel()
+        public Model3dTestModelFactory()
             : base()
         {
         }
@@ -28,26 +28,27 @@ namespace ModelRelief.Test.TestModels.Cameras
         /// </summary>
         public override void Initialize()
         {
-            ApiUrl = "/api/v1/cameras";
-            UxUrl  = "/cameras";
+            ApiUrl = "/api/v1/models";
+            UxUrl  = "/models";
 
-            IdRange = Enumerable.Range(1, 2);
-            FirstModelName = "Top Camera";
+            IdRange = Enumerable.Range(1, 5);
+            FirstModelName = "lucy.obj";
 
-            ReferencePropertyNames = new List<string> { "ProjectId" };
+            ReferencePropertyNames = new List<string> { "ProjectId", "CameraId" };
             InvalidReferenceProperty = 0;
             ValidReferenceProperty   = 1;
 
-            EnumPropertyName = "StandardView";
+            EnumPropertyName = "Format";
         }
 
         /// <summary>
         /// Constructs a valid model.
         /// </summary>
         /// <returns>Valid model.</returns>
-        public override Dto.Camera ConstructValidModel()
+        public override Dto.Model3d ConstructValidModel()
         {
             var validModel = base.ConstructValidModel();
+            validModel.Format = Domain.Model3dFormat.OBJ;
 
             return validModel;
         }

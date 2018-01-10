@@ -20,7 +20,7 @@ namespace ModelRelief.Test.Integration.MeshTransforms
         /// </summary>
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         public MeshTransformsBaseIntegrationTests(ClassFixture classFixture)
-            : base(classFixture, new MeshTransformTestModel())
+            : base(classFixture, new MeshTransformTestModelFactory())
         {
         }
 
