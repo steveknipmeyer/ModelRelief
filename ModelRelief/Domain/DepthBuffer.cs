@@ -26,10 +26,12 @@ namespace ModelRelief.Domain
         public Project Project { get; set; }
 
         [DependentFileProperty]
+        [GeneratedFileProperty]
         public int? ModelId { get; set; }
         public Model3d Model { get; set; }
 
         [DependentFileProperty]
+        [GeneratedFileProperty]
         public int? CameraId { get; set; }
         public Camera Camera { get; set; }
 

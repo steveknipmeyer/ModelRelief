@@ -1,6 +1,7 @@
 ﻿<--- Commit
 
 
+
 <-- Technical Education
         Manning AspNet Core book.
         Manning Dependency Injection book.
@@ -16,27 +17,6 @@
         Scale with a Python processor.
 
 <-- Short Term
-     
-    CodeAnalysis
-        NET Core?
-
-    Refactoring Suggestion Font Size
-
-    Abstract the identification of the Name and FileIsSynchronized propeties!
-        "Name"
-        "FileIsSynchronized"
-
-    FileOperation.Generate
-        Introduce a CustomAttribute for a required property for GeneratedFileDomainModels.
-            These are verified during the FileOperation.Generate.
-            Mesh
-                DepthBuffer
-                MeshTransform
-        Reset FileIsSynchronized. This will be finally set after a successful generation.
-        Validate the required properties are present.
-
-    Convert ToDo.txt to Markdown.
-        https://marketplace.visualstudio.com/items?itemName=MadsKristensen.MarkdownEditor
 
     DependencyManager FileRequest Tests
         FileOperationGenerate
@@ -45,6 +25,23 @@
             Construct a new dependency chain.
             Modify a property. of a class with a DependentFile.
             Confirm that the DependentFile was invalidated.
+
+    FileOperation.Generate
+            Mesh
+                DepthBuffer
+                MeshTransform
+        Validate the required properties are present.
+
+        Reset FileIsSynchronized. This will be finally set after a successful generation.
+
+    Convert ToDo.txt to Markdown.
+        https://marketplace.visualstudio.com/items?itemName=MadsKristensen.MarkdownEditor
+
+
+    CodeAnalysis
+        NET Core?
+
+    Refactoring Suggestion Font Size
 
     Replace Console output with Logger operations.
         Add color support for logging.

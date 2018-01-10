@@ -295,10 +295,10 @@ namespace ModelRelief.Services.Relationships
                 {
                     if (isGeneratedFileDomainModel)
                     {
-                        if (string.Equals(property.Name, "Name"))
+                        if (string.Equals(property.Name, PropertyNames.Name))
                             fileRequests.Add(ConstructRenameFileRequest(transactionEntity));
 
-                        if (string.Equals(property.Name, "FileIsSynchronized") && ((bool)propertyModification.ModifiedValue))
+                        if (string.Equals(property.Name, PropertyNames.FileIsSynchronized) && ((bool)propertyModification.ModifiedValue))
                             fileRequests.Add(ConstructGenerateFileRequest(transactionEntity, stage: ProcessingStage.PreProcess));
                      }
 
@@ -346,7 +346,7 @@ namespace ModelRelief.Services.Relationships
             var fileRequests = new List<IFileRequest>();
 
             if (transactionEntity.IsGeneratedFileDomainModel() &&
-               ((bool)transactionEntity.ChangeTrackerEntity.CurrentValues["FileIsSynchronized"]))
+               ((bool)transactionEntity.ChangeTrackerEntity.CurrentValues[PropertyNames.FileIsSynchronized]))
                {
                fileRequests.Add(ConstructGenerateFileRequest(transactionEntity, stage: ProcessingStage.PostProcess));
                }

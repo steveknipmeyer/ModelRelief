@@ -82,7 +82,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public virtual async Task<bool> ProcessRename(FileRequest<TEntity> fileRequest, FileDomainModel fileDomainModel, string fileName)
         {
             // find original Name property
-            string originalName = fileRequest.TransactionEntity.ChangeTrackerEntity.OriginalValues["Name"] as string;
+            string originalName = fileRequest.TransactionEntity.ChangeTrackerEntity.OriginalValues[PropertyNames.Name] as string;
 
             var filePath = Path.GetDirectoryName(fileName);
             var originalFile = Path.Combine(filePath, $"{originalName}");

@@ -6,14 +6,16 @@
 
 namespace ModelRelief.Domain
 {
+    using ModelRelief.Services.Relationships;
+
     public enum MeshFormat
-        {
+    {
         None,           // unknown
         OBJ,            // Wavefront OBJ
         STL,             // Stereolithography
-        }
+    }
 
-    public class Mesh  : GeneratedFileDomainModel
+    public class Mesh : GeneratedFileDomainModel
     {
         public MeshFormat Format { get; set; }
 
@@ -24,9 +26,11 @@ namespace ModelRelief.Domain
         public int? CameraId { get; set; }
         public Camera Camera { get; set; }
 
+        [GeneratedFileProperty]
         public int? DepthBufferId { get; set; }
         public DepthBuffer DepthBuffer { get; set; }
 
+        [GeneratedFileProperty]
         public int? MeshTransformId { get; set; }
         public MeshTransform MeshTransform { get; set; }
 
