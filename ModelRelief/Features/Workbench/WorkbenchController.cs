@@ -13,17 +13,22 @@ namespace ModelRelief.Features.Workbench
 
     public class WorkbenchController : Controller
         {
-        public F<int, int>             _fInteger;
-        public F<double, int>          _fDoubleInteger;
-        public IFunctionOne<int>       _iInt;
-        public IFunctionTwo<double>    _iDouble;
+        private F<int, int>             _fInteger;
+        private F<double, int>          _fDoubleInteger;
+        private IFunctionOne<int>       _iInt;
+        private IFunctionTwo<double>    _iDouble;
+
+        public F<int, int> FInteger { get => _fInteger; set => _fInteger = value; }
+        public F<double, int> FDoubleInteger { get => _fDoubleInteger; set => _fDoubleInteger = value; }
+        public IFunctionOne<int> IInt { get => _iInt; set => _iInt = value; }
+        public IFunctionTwo<double> IDouble { get => _iDouble; set => _iDouble = value; }
 
         public WorkbenchController(F<int, int> fInteger, F<double, int> fDoubleInteger, IFunctionOne<int> iInt, IFunctionTwo<double> iDouble)
         {
         _fInteger           = fInteger;
         _fDoubleInteger     = fDoubleInteger;
-        _iInt               = iInt;
-        _iDouble            = iDouble;
+        IInt               = iInt;
+        IDouble            = iDouble;
         }
 
 #region DepthBufferTest
@@ -87,8 +92,8 @@ namespace ModelRelief.Features.Workbench
             string resultF1 = _fInteger.F1(1, 1);
             string resultF2 = _fDoubleInteger.F2(1, 1);
 
-            resultF1 = _iInt.F1(1, 1);
-            resultF2 = _iDouble.F2(1.0, 1.0);
+            resultF1 = IInt.F1(1, 1);
+            resultF2 = IDouble.F2(1.0, 1.0);
 
             return resultF1;
             }

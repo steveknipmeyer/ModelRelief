@@ -14,15 +14,18 @@ namespace ModelRelief.Test
     /// </summary>
     public class Settings
     {
-        public static readonly string Scheme = "http";
-        public static readonly string Host   = "localhost";
-        public static readonly int Port      = 60655;
+        public const string Scheme = "http";
+        public const string Host   = "localhost";
+        public const int Port      = 60655;
 
-        public static string ContentRootFolder = "ModelRelief";
-        public static string TestFilesFolder   = "Test/Data/Files";
+        public const string ContentRootFolder = "ModelRelief";
+        public const string TestFilesFolder   = "Test/Data/Files";
 
-        public static string SQLiteDatabaseFolder   = $"{GetContentRootPath()}Database";
-        public static string SQLiteConnectionString = $"Data Source={SQLiteDatabaseFolder}\\ModelReliefTest.db";
+        private static string _databaseFolderSQLite = $"{GetContentRootPath()}Database";
+        private static string _connectionStringSQLite = $"Data Source={SQLiteDatabaseFolder}\\ModelReliefTest.db";
+
+        public static string SQLiteDatabaseFolder { get => _databaseFolderSQLite; set => _databaseFolderSQLite = value; }
+        public static string SQLiteConnectionString { get => _connectionStringSQLite; set => _connectionStringSQLite = value; }
 
         /// <summary>
         /// Returns the root of the content folder. wwwroot is below this folder.

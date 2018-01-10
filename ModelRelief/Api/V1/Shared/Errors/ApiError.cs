@@ -21,11 +21,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// </summary>
     public class ApiError
     {
-        public int     HttpStatusCode;
-        public int     ApiErrorCode;
-        public string  DeveloperMessage;
-        public string  ApiReference;
-        public IEnumerable<ValidationError> Errors;
+        public int      HttpStatusCode { get; set; }
+        public int      ApiErrorCode { get; set; }
+        public string   DeveloperMessage { get; set; }
+        public string   ApiReference { get; set; }
+        public IEnumerable<ValidationError> Errors { get; set; }
     }
 
     /// <summary>
@@ -252,10 +252,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// </summary>
     public class ApiErrorResult
     {
-        public Controller      _controller;
-        public HttpStatusCode  _httpStatusCode;
-        public ApiErrorCode   _apiErrorCode;
-        public string          _developerMessage;
+        public Controller Controller { get; set; }
+        public HttpStatusCode HttpStatusCode { get; set; }
+        public ApiErrorCode ApiErrorCode { get; set; }
+        public string DeveloperMessage { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApiErrorResult"/> class.
@@ -267,10 +267,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="developerMessage">Additional information for the developer.</param>
         public ApiErrorResult(Controller controller, HttpStatusCode httpStatusCode, ApiErrorCode apiErrorCode, string developerMessage)
         {
-            _controller       = controller;
-            _httpStatusCode   = httpStatusCode;
-            _apiErrorCode     = apiErrorCode;
-            _developerMessage = developerMessage;
+            Controller       = controller;
+            HttpStatusCode   = httpStatusCode;
+            ApiErrorCode     = apiErrorCode;
+            DeveloperMessage = developerMessage;
         }
 
         /// <summary>
@@ -280,8 +280,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public ObjectResult ObjectResult(IEnumerable<ValidationFailure> validationFailures = null)
         {
             string documentation = RouteNames.ApiDocumentation;
-            string apiReferenceRelative = _controller.Url.RouteUrl(documentation, new { id = (int)_apiErrorCode });
-            var apiReferenceAbsolute = string.Format($"{_controller.HttpContext.Request.Scheme}://{_controller.HttpContext.Request.Host}{apiReferenceRelative}");
+            string apiReferenceRelative = Controller.Url.RouteUrl(documentation, new { id = (int)ApiErrorCode });
+            var apiReferenceAbsolute = string.Format($"{Controller.HttpContext.Request.Scheme}://{Controller.HttpContext.Request.Host}{apiReferenceRelative}");
 
             var errors = new List<ValidationError>();
             if (validationFailures != null)
@@ -298,16 +298,16 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
             var errorResult = new ApiError()
             {
-                HttpStatusCode   = (int)_httpStatusCode,
-                ApiErrorCode    = (int)_apiErrorCode,
-                DeveloperMessage = _developerMessage,
+                HttpStatusCode   = (int)HttpStatusCode,
+                ApiErrorCode    = (int)ApiErrorCode,
+                DeveloperMessage = DeveloperMessage,
                 ApiReference     = apiReferenceAbsolute,
                 Errors           = errors,
             };
 
             var objectResult = new ObjectResult(errorResult)
             {
-                StatusCode = (int)_httpStatusCode,
+                StatusCode = (int)HttpStatusCode,
             };
 
             return objectResult;

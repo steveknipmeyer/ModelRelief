@@ -69,7 +69,7 @@ namespace ModelRelief.Services
     /// </summary>
     public class ConfigurationSettings
     {
-        public static string ModelReliefDatabase = "ModelReliefDatabase";
+        public const string ModelReliefDatabase = "ModelReliefDatabase";
     }
 
     /// <summary>
@@ -77,9 +77,9 @@ namespace ModelRelief.Services
     /// </summary>
     public class ResourcePaths
     {
-        public static string TestDataUsers      = "ResourcePaths:TestDataUsers";
-        public static string TestDataFiles      = "ResourcePaths:TestDataFiles";
-        public static string StoreUsers         = "ResourcePaths:StoreUsers";
+        public const string TestDataUsers = "ResourcePaths:TestDataUsers";
+        public const string TestDataFiles = "ResourcePaths:TestDataFiles";
+        public const string StoreUsers    = "ResourcePaths:StoreUsers";
     }
 
     /// <summary>
