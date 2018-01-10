@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="ErrorsController.cs" company="ModelRelief">
+// <copyright file="Errors.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -9,6 +9,11 @@ namespace ModelRelief.Features.Errors
     using System.Net;
     using Microsoft.AspNetCore.Mvc;
 
+    /// <summary>
+    /// Represents the controller endpoint for error handling.
+    /// Startup routes erorrs :
+    ///     app.UseStatusCodePagesWithReExecute("/Errors/Error/{0}");
+    /// </summary>
     public class Errors : Controller
     {
         /// <summary>

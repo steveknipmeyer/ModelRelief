@@ -1,5 +1,5 @@
-// -----------------------------------------------------------------------
-// <copyright file="Camera3dTestModel.cs" company="ModelRelief">
+﻿// -----------------------------------------------------------------------
+// <copyright file="CameraTestModel.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------

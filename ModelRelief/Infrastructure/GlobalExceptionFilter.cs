@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="GlobalExceptionHandler.cs" company="ModelRelief">
+// <copyright file="GlobalExceptionFilter.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------

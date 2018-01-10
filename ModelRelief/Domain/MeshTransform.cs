@@ -6,7 +6,7 @@
 
 namespace ModelRelief.Domain
 {
-    using ModelRelief.Services;
+    using ModelRelief.Services.Relationships;
 
     [DependentFiles(typeof(Mesh))]
     public class MeshTransform : DomainModel

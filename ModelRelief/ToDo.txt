@@ -16,9 +16,8 @@
         Scale with a Python processor.
 
 <-- Short Term
-    Style
+    StyleAnalysis
         What is the best practice for the order of private and public methods?
-        StyleCop?
         
     CodeAnalysis
         NET Core?
@@ -51,7 +50,6 @@
 
     Replace Console output with Logger operations.
         Add color support for logging.
-
 
     Should FileTimeStamp be exposed?
         Should the assignment of FileSynchronized be deferred until the request has completed.

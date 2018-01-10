@@ -6,7 +6,7 @@
 
 namespace ModelRelief.Domain
 {
-    using ModelRelief.Services;
+    using ModelRelief.Services.Relationships;
 
     public enum Model3dFormat
     {

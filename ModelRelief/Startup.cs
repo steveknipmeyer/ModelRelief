@@ -27,6 +27,7 @@ namespace ModelRelief
     using ModelRelief.Infrastructure;
     using ModelRelief.Middleware;
     using ModelRelief.Services;
+    using ModelRelief.Services.Relationships;
     using ModelRelief.Workbench;
 
     public class Startup
@@ -181,7 +182,7 @@ namespace ModelRelief
             // authentication middleware for testing
             app.Use(async (context, next) =>
             {
-                await Authentication.Test(env, context, next);
+                await TestAuthentication.Test(env, context, next);
             });
 
             app.UseMvc(ConfigureRoutes);

@@ -19,7 +19,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using ModelRelief.Database;
     using ModelRelief.Domain;
     using ModelRelief.Infrastructure;
-    using ModelRelief.Services;
+    using ModelRelief.Services.Relationships;
     using ModelRelief.Utility;
 
     /// <summary>

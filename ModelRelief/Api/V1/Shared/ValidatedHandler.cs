@@ -24,7 +24,7 @@ namespace ModelRelief.Api.V1.Shared
     using ModelRelief.Api.V1.Shared.Errors;
     using ModelRelief.Database;
     using ModelRelief.Domain;
-    using ModelRelief.Services;
+    using ModelRelief.Services.Relationships;
     using ModelRelief.Utility;
 
     /// <summary>

@@ -10,44 +10,6 @@ namespace ModelRelief.Services
     using Microsoft.Extensions.Configuration;
 
     /// <summary>
-    /// Configuration settings.
-    /// </summary>
-    public class ConfigurationSettings
-    {
-        public static string ModelReliefDatabase = "ModelReliefDatabase";
-    }
-
-    /// <summary>
-    /// Configuration resource paths.
-    /// </summary>
-    public class ResourcePaths
-    {
-        public static string TestDataUsers      = "ResourcePaths:TestDataUsers";
-        public static string TestDataFiles      = "ResourcePaths:TestDataFiles";
-        public static string StoreUsers         = "ResourcePaths:StoreUsers";
-    }
-
-    /// <summary>
-    /// Represents the active relational database.
-    /// </summary>
-    public enum RelationalDatabaseProvider
-    {
-        None,
-        SQLServer,
-        SQLite,
-    }
-
-    /// <summary>
-    /// Interface for providing configuration services.
-    /// </summary>
-    public interface IConfigurationProvider
-    {
-        IConfiguration Configuration { get; }
-        string GetSetting(string settingName, bool throwIfNotFound = true);
-        RelationalDatabaseProvider Database  { get; }
-    }
-
-    /// <summary>
     /// Provides configuration services.
     /// Wraps IConfigurationProvider.
     /// </summary>
@@ -100,5 +62,33 @@ namespace ModelRelief.Services
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Configuration settings.
+    /// </summary>
+    public class ConfigurationSettings
+    {
+        public static string ModelReliefDatabase = "ModelReliefDatabase";
+    }
+
+    /// <summary>
+    /// Configuration resource paths.
+    /// </summary>
+    public class ResourcePaths
+    {
+        public static string TestDataUsers      = "ResourcePaths:TestDataUsers";
+        public static string TestDataFiles      = "ResourcePaths:TestDataFiles";
+        public static string StoreUsers         = "ResourcePaths:StoreUsers";
+    }
+
+    /// <summary>
+    /// Represents the active relational database.
+    /// </summary>
+    public enum RelationalDatabaseProvider
+    {
+        None,
+        SQLServer,
+        SQLite,
     }
 }

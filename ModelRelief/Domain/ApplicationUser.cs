@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="User.cs" company="ModelRelief">
+// <copyright file="ApplicationUser.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------

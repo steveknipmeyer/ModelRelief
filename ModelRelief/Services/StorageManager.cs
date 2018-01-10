@@ -11,19 +11,6 @@ namespace ModelRelief.Services
     using ModelRelief.Domain;
 
     /// <summary>
-    /// User storage manager interface.
-    /// Provides file services for file-based resources.
-    /// </summary>
-    public interface IStorageManager
-    {
-        IConfigurationProvider ConfigurationProvider { get; }
-        IHostingEnvironment HostingEnvironment { get; }
-
-        string DefaultModelStorageFolder<TEntity>(TEntity model)
-            where TEntity : DomainModel;
-    }
-
-    /// <summary>
     /// User storage manager.
     /// Provides file services for file-based resources.
     /// </summary>

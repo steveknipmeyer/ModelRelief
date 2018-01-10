@@ -13,7 +13,7 @@ namespace ModelRelief.Middleware
     using Microsoft.AspNetCore.Http;
     using ModelRelief.Utility;
 
-    public class Authentication
+    public class TestAuthentication
     {
         public static async Task Test(IHostingEnvironment env, HttpContext context, Func<Task> next)
         {

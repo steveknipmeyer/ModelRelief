@@ -12,7 +12,7 @@ namespace ModelRelief.Infrastructure
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Database;
-    using ModelRelief.Services;
+    using ModelRelief.Services.Relationships;
 
     /// <summary>
     /// Wraps each Action in a database transaction.
@@ -21,7 +21,7 @@ namespace ModelRelief.Infrastructure
     {
         private readonly ModelReliefDbContext    _dbContext;
         private IDependencyManager               _dependencyManager;
-        private readonly ILogger<DatabaseLogger> _logger;
+        private readonly ILogger<DbContextTransactionFilter> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DbContextTransactionFilter"/> class.
@@ -30,7 +30,7 @@ namespace ModelRelief.Infrastructure
         /// <param name="dbContext">Database context.</param>
         /// <param name="dependencyManager">Services for persistence and dependency manager.</param>
         /// <param name="logger">ILogger.</param>
-        public DbContextTransactionFilter(ModelReliefDbContext dbContext, IDependencyManager dependencyManager, ILogger<DatabaseLogger> logger)
+        public DbContextTransactionFilter(ModelReliefDbContext dbContext, IDependencyManager dependencyManager, ILogger<DbContextTransactionFilter> logger)
         {
             _dbContext = dbContext;
             _dependencyManager = dependencyManager;

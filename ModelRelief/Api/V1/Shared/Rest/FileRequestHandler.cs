@@ -19,6 +19,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using ModelRelief.Database;
     using ModelRelief.Domain;
     using ModelRelief.Services;
+    using ModelRelief.Services.Relationships;
 
     /// <summary>
     /// Represents the concrete handler for a FileRequest.

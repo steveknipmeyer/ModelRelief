@@ -6,6 +6,10 @@
 
 namespace ModelRelief.Workbench
 {
+    public class AutofacExperiments
+    {
+    }
+
     public interface IFunctionOne<T>
     {
         string F1(T first, T second);

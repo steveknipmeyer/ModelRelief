@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-// <copyright file="MeshTransformssBaseIntegrationTests.cs" company="ModelRelief">
+// <copyright file="MeshTransformsBaseIntegrationTests.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------

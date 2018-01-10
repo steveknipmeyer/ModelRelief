@@ -9,7 +9,7 @@ namespace ModelRelief.Domain
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.IO;
-    using ModelRelief.Services;
+    using ModelRelief.Services.Relationships;
 
     /// <summary>
     /// Represents the base class for a model that is not file-backed.

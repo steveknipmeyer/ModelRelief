@@ -8,7 +8,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
 {
     using MediatR;
     using ModelRelief.Domain;
-    using ModelRelief.Services;
+    using ModelRelief.Services.Relationships;
 
     /// <summary>
     /// Represents the possible operations that can be performed on a backing file.
@@ -29,13 +29,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
         Unknown,
         PreProcess,
         PostProcess,
-    }
-
-    public interface IFileRequest
-    {
-        FileOperation       Operation { get; set; }
-        ProcessingStage     Stage { get; set; }
-        TransactionEntity   TransactionEntity { get; set; }
     }
 
     /// <summary>

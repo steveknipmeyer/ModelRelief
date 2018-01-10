@@ -15,12 +15,13 @@ namespace ModelRelief.Test.Unit.DependencyManager
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Domain;
+    using ModelRelief.Services.Relationships;
     using ModelRelief.Utility;
     using Xunit;
 
     public class DependencyManagerTests : UnitTests
     {
-        private Services.DependencyManager Manager { get; set; }
+        private DependencyManager Manager { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DependencyManagerTests"/> class.
@@ -30,9 +31,9 @@ namespace ModelRelief.Test.Unit.DependencyManager
         public DependencyManagerTests(ClassFixture classFixture)
             : base(classFixture)
         {
-            ILogger<Services.DependencyManager> logger = ClassFixture.ServiceProvider.GetRequiredService<ILogger<Services.DependencyManager>>();
+            ILogger<DependencyManager> logger = ClassFixture.ServiceProvider.GetRequiredService<ILogger<DependencyManager>>();
             IMediator mediator = ClassFixture.ServiceProvider.GetRequiredService<IMediator>();
-            Manager = new Services.DependencyManager(DbContext, logger, mediator);
+            Manager = new DependencyManager(DbContext, logger, mediator);
         }
 
         /// <summary>
@@ -47,7 +48,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
                             .Where(m => (m.Id == rootPrimaryKey))
                             .FirstOrDefault();
 
-            var dependentTypes = Services.DependencyManager.GetClassDependentFiles(rootType);
+            var dependentTypes  = DependencyManager.GetClassDependentFiles(rootType);
             var dependentModels = await Manager.FindDependentModels(Identity.MockUserId, rootType, rootPrimaryKey, dependentTypes);
 
             return dependentModels;
@@ -75,7 +76,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
         /// <param name="dependentClasses">List of dependent classes.</param>
         private void AssertClassHasExpectedDependentFiles(Type rootClass, params Type[] dependentClasses)
         {
-            var dependentFiles = Services.DependencyManager.GetClassDependentFiles(rootClass);
+            var dependentFiles = DependencyManager.GetClassDependentFiles(rootClass);
             dependentFiles.Count.Should().Be(dependentClasses.Count());
 
             foreach (var dependentFile in dependentFiles)

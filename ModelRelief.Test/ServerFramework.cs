@@ -18,26 +18,6 @@ namespace ModelRelief.Test
     using Newtonsoft.Json;
 
     /// <summary>
-    /// HTTP request types.
-    /// </summary>
-    public enum HttpRequestType
-    {
-        Get,
-        Post,
-        Put,
-        Delete,
-    }
-
-    /// <summary>
-    /// Represents the result of a client request.
-    /// </summary>
-    public class RequestResponse
-    {
-        public HttpResponseMessage Message { get; set; }
-        public string              ContentString { get; set; }
-    }
-
-    /// <summary>
     /// Sets up a test server and HTTP client for integration testing.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
@@ -55,16 +35,16 @@ namespace ModelRelief.Test
                                             .UseEnvironment("Test")
                                             .UseContentRoot(contentRootPath)
                                             .ConfigureAppConfiguration((builderContext, config) =>
-                                             {
-                                                 // WIP: Implement secret store for Production environments. Azure?
-                                                 // https://joonasw.net/view/aspnet-core-2-configuration-changes
-                                                 var env = builderContext.HostingEnvironment;
-                                                 var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
-                                                 if (appAssembly != null)
-                                                 {
-                                                     config.AddUserSecrets(appAssembly, optional: true);
-                                                 }
-                                             })
+                                            {
+                                                // WIP: Implement secret store for Production environments. Azure?
+                                                // https://joonasw.net/view/aspnet-core-2-configuration-changes
+                                                var env = builderContext.HostingEnvironment;
+                                                var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
+                                                if (appAssembly != null)
+                                                {
+                                                    config.AddUserSecrets(appAssembly, optional: true);
+                                                }
+                                            })
                                             .UseStartup<Startup>());
 
             Client = Server.CreateClient();
