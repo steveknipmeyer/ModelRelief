@@ -1,24 +1,24 @@
 // -----------------------------------------------------------------------
-// <copyright file="MeshTestModelFactory.cs" company="ModelRelief">
+// <copyright file="DepthBufferTestFileModelFactory.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ModelRelief.Test.TestModels.Meshes
+namespace ModelRelief.Test.TestModels.DepthBuffers
 {
     using System.Collections.Generic;
     using System.Linq;
 
     /// <summary>
-    /// Mesh test model.
+    /// DepthBuffer test model.
     /// </summary>
-    public class MeshTestModelFactory : TestModelFactory<Domain.Mesh, Dto.Mesh>
+    public class DepthBufferTestFileModelFactory : TestFileModelFactory<Domain.DepthBuffer, Dto.DepthBuffer>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MeshTestModelFactory"/> class.
+        /// Initializes a new instance of the <see cref="DepthBufferTestFileModelFactory"/> class.
         /// Constructor
         /// </summary>
-        public MeshTestModelFactory()
+        public DepthBufferTestFileModelFactory()
             : base()
         {
         }
@@ -28,13 +28,13 @@ namespace ModelRelief.Test.TestModels.Meshes
         /// </summary>
         public override void Initialize()
         {
-            ApiUrl = "/api/v1/meshes";
-            UxUrl  = "/meshes";
+            ApiUrl = "/api/v1/depth-buffers";
+            UxUrl  = "/depthbuffers";
 
             IdRange = Enumerable.Range(1, 3);
-            FirstModelName = "lucy.obj";
+            FirstModelName = "lucy.raw";
 
-            ReferencePropertyNames = new List<string> { "ProjectId", "CameraId", "DepthBufferId", "MeshTransformId" };
+            ReferencePropertyNames = new List<string> { "ProjectId", "ModelId", "CameraId" };
             InvalidReferenceProperty = 0;
             ValidReferenceProperty   = 1;
 
@@ -45,10 +45,10 @@ namespace ModelRelief.Test.TestModels.Meshes
         /// Constructs a valid model.
         /// </summary>
         /// <returns>Valid model.</returns>
-        public override Dto.Mesh ConstructValidModel()
+        public override Dto.DepthBuffer ConstructValidModel()
         {
             var validModel = base.ConstructValidModel();
-            validModel.Format = Domain.MeshFormat.OBJ;
+            validModel.Format = Domain.DepthBufferFormat.Raw;
 
             return validModel;
         }

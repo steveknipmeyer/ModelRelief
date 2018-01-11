@@ -26,21 +26,21 @@ namespace ModelRelief.Test.Integration.DepthBuffers
         /// </summary>
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         public DepthBuffersFileIntegrationTests(ClassFixture classFixture)
-            : base(classFixture, new DepthBufferTestModelFactory())
+            : base(classFixture, new DepthBufferTestFileModelFactory())
         {
         }
 
         #region FileOperation
         private async Task ConstructDepthBufferWithDependencies()
         {
-            var model3dFactory = new Model3dTestModelFactory();
+            var model3dFactory = new Model3dTestFileModelFactory();
             var model3d = await model3dFactory.PostNewModel(ClassFixture);
             await model3dFactory.PostNewFile(ClassFixture, model3d.Id, "UnitCube.obj");
 
             var cameraFactory = new CameraTestModelFactory();
             var camera = await cameraFactory.PostNewModel(ClassFixture);
 
-            var depthBufferFactory = new DepthBufferTestModelFactory();
+            var depthBufferFactory = new DepthBufferTestFileModelFactory();
             var depthBuffer = depthBufferFactory.ConstructValidModel();
             depthBuffer.ModelId  = model3d.Id;
             depthBuffer.CameraId = camera.Id;

@@ -28,13 +28,15 @@ namespace ModelRelief.Test.Integration
         where TEntity   : FileDomainModel
         where TGetModel : class, ITGetModel, new()
     {
+        public TestFileModelFactory<TEntity, TGetModel> TestFileModelFactory => TestModelFactory as TestFileModelFactory<TEntity, TGetModel>;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FileIntegrationTests{TEntity, TGetModel}"/> class.
         /// Constructor
         /// </summary>
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         /// <param name="testModel">A test model under integration testing.</param>
-        public FileIntegrationTests(ClassFixture classFixture, TestModelFactory<TEntity, TGetModel> testModel)
+        public FileIntegrationTests(ClassFixture classFixture, TestFileModelFactory<TEntity, TGetModel> testModel)
             : base(classFixture, testModel)
         {
         }
@@ -46,7 +48,7 @@ namespace ModelRelief.Test.Integration
         /// <param name="fileName">Name of the file to POST.</param>
         public virtual async Task<RequestResponse> PostNewFile(int modelId,  string fileName)
         {
-            return await TestModelFactory.PostNewFile(ClassFixture, modelId, fileName);
+            return await TestFileModelFactory.PostNewFile(ClassFixture, modelId, fileName);
         }
 
         /// <summary>
@@ -56,7 +58,7 @@ namespace ModelRelief.Test.Integration
         /// <param name="fileName">Name of the file to PUT.</param>
         public virtual async Task<RequestResponse> PutFile(int modelId, string fileName)
         {
-            return await TestModelFactory.PutFile(ClassFixture, modelId, fileName);
+            return await TestFileModelFactory.PutFile(ClassFixture, modelId, fileName);
         }
 
         #region GetFile

@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-// <copyright file="Model3dTestModelFactory.cs" company="ModelRelief">
+// <copyright file="Model3dTestFileModelFactory.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -12,13 +12,13 @@ namespace ModelRelief.Test.TestModels.Models
     /// <summary>
     /// Model3d test model.
     /// </summary>
-    public class Model3dTestModelFactory : TestModelFactory<Domain.Model3d, Dto.Model3d>
+    public class Model3dTestFileModelFactory : TestFileModelFactory<Domain.Model3d, Dto.Model3d>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Model3dTestModelFactory"/> class.
+        /// Initializes a new instance of the <see cref="Model3dTestFileModelFactory"/> class.
         /// Constructor
         /// </summary>
-        public Model3dTestModelFactory()
+        public Model3dTestFileModelFactory()
             : base()
         {
         }

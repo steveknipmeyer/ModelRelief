@@ -13,7 +13,7 @@ namespace ModelRelief.Domain
         None,       // unknown
         Raw,        // floating point array
         PNG,        // PNG format
-        JPG,         // JPG format
+        JPG,        // JPG format
     }
 
     [DependentFiles(typeof(Mesh))]

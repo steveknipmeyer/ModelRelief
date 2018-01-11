@@ -20,7 +20,7 @@ namespace ModelRelief.Test.Integration.Meshes
         /// </summary>
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         public MeshesFileIntegrationTests(ClassFixture classFixture)
-            : base(classFixture, new MeshTestModelFactory())
+            : base(classFixture, new MeshTestFileModelFactory())
         {
         }
     }
