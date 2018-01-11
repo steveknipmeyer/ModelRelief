@@ -114,7 +114,7 @@ namespace ModelRelief.Services.Relationships
                 }
                 catch (Exception)
                 {
-                    Debug.WriteLine($"DependencyManager.FindDependentModels: error looking up foreign key: Class = {candidateDependentModel.GetType()}, Id = {candidateDependentModel.Id}");
+                    Logger.LogError($"DependencyManager.FindDependentModels: error looking up foreign key: Class = {candidateDependentModel.GetType()}, Id = {candidateDependentModel.Id}");
                 }
             }
             return dependentModels;
@@ -231,7 +231,10 @@ namespace ModelRelief.Services.Relationships
                 // all dependent models that have backing files are no longer synchronized
                 if (dependentModel is GeneratedFileDomainModel generatedFileDomainModel)
                 {
+                    DbContext.Entry(generatedFileDomainModel).State = EntityState.Modified;
                     generatedFileDomainModel.FileIsSynchronized = false;
+
+                    Logger.LogInformation($"The dependent file {generatedFileDomainModel.Name} of type {generatedFileDomainModel.GetType().Name} is no longer synchronized.");
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.WriteLine($"The dependent file {generatedFileDomainModel.Name} of type {generatedFileDomainModel.GetType().Name} is no longer synchronized.");
                     Console.ForegroundColor = ConsoleColor.White;
@@ -294,6 +297,7 @@ namespace ModelRelief.Services.Relationships
                 var propertyModification = new PropertyModification(transactionEntity.ChangeTrackerEntity, property);
                 if (propertyModification.Changed)
                 {
+                    Logger.LogInformation($"Property Change: {property.Name}, Original = {propertyModification.OriginalValue?.ToString()}, New = {propertyModification.ModifiedValue?.ToString()}");
                     if (isFileDomainModel)
                     {
                         if (string.Equals(property.Name, PropertyNames.Name))

@@ -8,6 +8,7 @@ namespace ModelRelief.Test.Integration
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using ModelRelief.Api.V1.Shared.Rest;
@@ -91,7 +92,16 @@ namespace ModelRelief.Test.Integration
             {
                 // model persisted?
                 if (node.Model.Id != default)
-                    await node.Factory.DeleteModel(ClassFixture, node.Model);
+                {
+                    try
+                    {
+                        await node.Factory.DeleteModel(ClassFixture, node.Model);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Delete Model: {ex.Message}");
+                    }
+                }
             }
         }
     }

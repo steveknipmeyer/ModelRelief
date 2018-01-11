@@ -19,7 +19,7 @@ namespace ModelRelief.Test.Integration.DepthBuffers
     using Xunit;
 
     /// <summary>
-    /// DepthBuffer integration Tests.
+    /// DepthBuffer file integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
     public class DepthBuffersFileIntegrationTests : FileIntegrationTests<Domain.DepthBuffer, Dto.DepthBuffer>
@@ -27,14 +27,14 @@ namespace ModelRelief.Test.Integration.DepthBuffers
         /// <summary>
         /// Represents a graph of a DepthBuffer and its dependencies.
         /// </summary>
-        public class DepthBuffersDependencyGraph : DependencyGraph
+        public class DepthBufferDependencyGraph : DependencyGraph
         {
             /// <summary>
-            /// Initializes a new instance of the <see cref="DepthBuffersDependencyGraph"/> class.
+            /// Initializes a new instance of the <see cref="DepthBufferDependencyGraph"/> class.
             /// </summary>
             /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
             /// <param name="factories">List of test model factories.</param>
-            public DepthBuffersDependencyGraph(ClassFixture classFixture, List<ITestModelFactory> factories)
+            public DepthBufferDependencyGraph(ClassFixture classFixture, List<ITestModelFactory> factories)
                 : base(classFixture, factories)
             {
             }
@@ -69,12 +69,22 @@ namespace ModelRelief.Test.Integration.DepthBuffers
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="DepthBuffersFileIntegrationTests"/> class.
+        /// Constructor
+        /// </summary>
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        public DepthBuffersFileIntegrationTests(ClassFixture classFixture)
+            : base(classFixture, new DepthBufferTestFileModelFactory())
+        {
+        }
+
+        /// <summary>
         /// Constructs a DepthBuffer and its dependent models.
         /// </summary>
         /// <returns></returns>
         private async Task<DependencyGraph> InitializeDependencyGraph()
         {
-            var dependencyGraph = new DepthBuffersDependencyGraph(ClassFixture, new List<ITestModelFactory>
+            var dependencyGraph = new DepthBufferDependencyGraph(ClassFixture, new List<ITestModelFactory>
             {
                 new DepthBufferTestFileModelFactory(),
                 new Model3dTestFileModelFactory(),
@@ -83,16 +93,6 @@ namespace ModelRelief.Test.Integration.DepthBuffers
             await dependencyGraph.ConstructGraph();
 
             return dependencyGraph;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DepthBuffersFileIntegrationTests"/> class.
-        /// Constructor
-        /// </summary>
-        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
-        public DepthBuffersFileIntegrationTests(ClassFixture classFixture)
-            : base(classFixture, new DepthBufferTestFileModelFactory())
-        {
         }
 
         #region FileOperation
@@ -105,27 +105,31 @@ namespace ModelRelief.Test.Integration.DepthBuffers
         {
             // Arrange
             var dependencyGraph = await InitializeDependencyGraph();
+            try
+            {
+                var depthBufferNode    = dependencyGraph.NodeCollection[typeof(Domain.DepthBuffer)];
+                var depthBufferModel   = depthBufferNode.Model as Dto.DepthBuffer;
+                var depthBufferFactory = depthBufferNode.Factory;
+                depthBufferModel       = await depthBufferFactory.FindModel(ClassFixture, depthBufferModel.Id) as Dto.DepthBuffer;
+                depthBufferModel.FileIsSynchronized.Should().Be(true);
 
-            var depthBufferNode    = dependencyGraph.NodeCollection[typeof(Domain.DepthBuffer)];
-            var depthBufferModel   = depthBufferNode.Model as Dto.DepthBuffer;
-            var depthBufferFactory = depthBufferNode.Factory;
-            depthBufferModel = await depthBufferFactory.FindModel(ClassFixture, depthBufferModel.Id) as Dto.DepthBuffer;
-            depthBufferModel.FileIsSynchronized.Should().Be(true);
+                // Act
+                var cameraNode    = dependencyGraph.NodeCollection[typeof(Domain.Camera)];
+                var cameraModel   = cameraNode.Model as Dto.Camera;
+                var cameraFactory = cameraNode.Factory;
+                cameraModel       = await cameraFactory.FindModel(ClassFixture, cameraModel.Id) as Dto.Camera;
+                cameraModel.PositionX += 1.0;
+                await cameraFactory.PutModel(ClassFixture, cameraModel);
 
-            // Act
-            var cameraNode    = dependencyGraph.NodeCollection[typeof(Domain.Camera)];
-            var cameraModel   = cameraNode.Model as Dto.Camera;
-            var cameraFactory = cameraNode.Factory;
-            cameraModel = await cameraFactory.FindModel(ClassFixture, cameraModel.Id) as Dto.Camera;
-            cameraModel.PositionX += 1.0;
-            await cameraFactory.PutModel(ClassFixture, cameraModel);
-
-            // Assert
-            depthBufferModel = await depthBufferFactory.FindModel(ClassFixture, depthBufferModel.Id) as Dto.DepthBuffer;
-            depthBufferModel.FileIsSynchronized.Should().Be(false);
-
-            // Rollback
-            await dependencyGraph.Rollback();
+                // Assert
+                depthBufferModel = await depthBufferFactory.FindModel(ClassFixture, depthBufferModel.Id) as Dto.DepthBuffer;
+                depthBufferModel.FileIsSynchronized.Should().Be(false);
+            }
+            finally
+            {
+                // Rollback
+                await dependencyGraph.Rollback();
+            }
         }
         #endregion
     }

@@ -1,4 +1,6 @@
 ﻿<--- Commit
+Reset FileDomainModel.FileTimeStamp in DeleteRequest handling.
+Define GeneratedFileDomainModel.FileIsSynchronized as a DependentFileProperty.
 
 <-- Technical Education
         Manning AspNet Core book.
@@ -15,6 +17,9 @@
         Scale with a Python processor.
 
 <-- Short Term
+    Rollback
+        Finally?
+
     FileRequest IntegrationTests
         FileOperationGenerate
             Test property changes.

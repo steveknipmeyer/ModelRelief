@@ -103,6 +103,7 @@ namespace ModelRelief.Domain
     /// </summary>
     public abstract class GeneratedFileDomainModel : FileDomainModel
     {
+        [DependentFileProperty]
         public bool FileIsSynchronized { get; set; }       // associated file is synchronized with the model (AND all of the the model's dependencies)
 
         /// <summary>

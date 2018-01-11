@@ -60,6 +60,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 return;
 
             var fileDomainModel = domainModel as FileDomainModel;
+            fileDomainModel.FileTimeStamp = null;
 
             // The Path exists only if an associated file has been posted.
             // There is no mechanism for deleting <only> the file once a model has been created.
