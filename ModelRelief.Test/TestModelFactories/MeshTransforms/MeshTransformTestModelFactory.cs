@@ -8,6 +8,7 @@ namespace ModelRelief.Test.TestModels.MeshTransforms
 {
     using System.Collections.Generic;
     using System.Linq;
+    using ModelRelief.Api.V1.Shared.Rest;
 
     /// <summary>
     /// MeshTransform test model.
@@ -45,7 +46,7 @@ namespace ModelRelief.Test.TestModels.MeshTransforms
         /// Constructs a valid model.
         /// </summary>
         /// <returns>Valid model.</returns>
-        public override Dto.MeshTransform ConstructValidModel()
+        public override ITGetModel ConstructValidModel()
         {
             var validModel = base.ConstructValidModel();
 

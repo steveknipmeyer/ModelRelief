@@ -8,6 +8,7 @@ namespace ModelRelief.Test.TestModels.DepthBuffers
 {
     using System.Collections.Generic;
     using System.Linq;
+    using ModelRelief.Api.V1.Shared.Rest;
 
     /// <summary>
     /// DepthBuffer test model.
@@ -45,9 +46,9 @@ namespace ModelRelief.Test.TestModels.DepthBuffers
         /// Constructs a valid model.
         /// </summary>
         /// <returns>Valid model.</returns>
-        public override Dto.DepthBuffer ConstructValidModel()
+        public override ITGetModel ConstructValidModel()
         {
-            var validModel = base.ConstructValidModel();
+            var validModel = base.ConstructValidModel() as Dto.DepthBuffer;
             validModel.Format = Domain.DepthBufferFormat.Raw;
 
             return validModel;

@@ -8,6 +8,7 @@ namespace ModelRelief.Test.TestModels.Meshes
 {
     using System.Collections.Generic;
     using System.Linq;
+    using ModelRelief.Api.V1.Shared.Rest;
 
     /// <summary>
     /// Mesh test model.
@@ -45,9 +46,9 @@ namespace ModelRelief.Test.TestModels.Meshes
         /// Constructs a valid model.
         /// </summary>
         /// <returns>Valid model.</returns>
-        public override Dto.Mesh ConstructValidModel()
+        public override ITGetModel ConstructValidModel()
         {
-            var validModel = base.ConstructValidModel();
+            var validModel = base.ConstructValidModel() as Dto.Mesh;
             validModel.Format = Domain.MeshFormat.OBJ;
 
             return validModel;

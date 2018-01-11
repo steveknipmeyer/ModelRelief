@@ -24,8 +24,8 @@ namespace ModelRelief.Test.TestModels
     /// </summary>
     /// <typeparam name="TEntity">Domain model.</typeparam>
     /// <typeparam name="TGetModel">DTO Get model.</typeparam>
-    public abstract class TestFileModelFactory<TEntity, TGetModel> : TestModelFactory<TEntity, TGetModel>
-        where TEntity : FileDomainModel
+    public abstract class TestFileModelFactory<TEntity, TGetModel> : TestModelFactory<TEntity, TGetModel>, ITestFileModelFactory
+        where TEntity   : FileDomainModel
         where TGetModel : class, ITGetModel, new()
     {
         /// <summary>
@@ -34,7 +34,7 @@ namespace ModelRelief.Test.TestModels
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         /// <param name="modelId">Id of the backing metadata model.</param>
         /// <param name="fileName">Name of the file to POST.</param>
-        public virtual async Task<RequestResponse> PostNewFile(ClassFixture classFixture, int modelId, string fileName)
+        public virtual async Task<ITGetModel> PostNewFile(ClassFixture classFixture, int modelId, string fileName)
         {
             // Arrange
             var byteArray = Utility.ByteArrayFromFile(fileName);
@@ -45,7 +45,8 @@ namespace ModelRelief.Test.TestModels
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
 
-            return requestResponse;
+            var model = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            return model;
         }
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace ModelRelief.Test.TestModels
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         /// <param name="modelId">Id of the backing metadata model.</param>
         /// <param name="fileName">Name of the file to PUT.</param>
-        public virtual async Task<RequestResponse> PutFile(ClassFixture classFixture, int modelId, string fileName)
+        public virtual async Task<ITGetModel> PutFile(ClassFixture classFixture, int modelId, string fileName)
         {
             // Arrange
             var byteArray = Utility.ByteArrayFromFile(fileName);
@@ -65,7 +66,8 @@ namespace ModelRelief.Test.TestModels
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
 
-            return requestResponse;
+            var model = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            return model;
         }
     }
 }

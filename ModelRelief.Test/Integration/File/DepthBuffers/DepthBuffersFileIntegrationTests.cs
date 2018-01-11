@@ -6,12 +6,16 @@
 
 namespace ModelRelief.Test.Integration.DepthBuffers
 {
+    using System.Collections.Generic;
     using System.Net;
     using System.Threading.Tasks;
     using FluentAssertions;
+    using ModelRelief.Domain;
+    using ModelRelief.Test.TestModels;
     using ModelRelief.Test.TestModels.Cameras;
     using ModelRelief.Test.TestModels.DepthBuffers;
     using ModelRelief.Test.TestModels.Models;
+    using Newtonsoft.Json;
     using Xunit;
 
     /// <summary>
@@ -20,6 +24,67 @@ namespace ModelRelief.Test.Integration.DepthBuffers
     /// </summary>
     public class DepthBuffersFileIntegrationTests : FileIntegrationTests<Domain.DepthBuffer, Dto.DepthBuffer>
     {
+        /// <summary>
+        /// Represents a graph of a DepthBuffer and its dependencies.
+        /// </summary>
+        public class DepthBuffersDependencyGraph : DependencyGraph
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="DepthBuffersDependencyGraph"/> class.
+            /// </summary>
+            /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+            /// <param name="factories">List of test model factories.</param>
+            public DepthBuffersDependencyGraph(ClassFixture classFixture, List<ITestModelFactory> factories)
+                : base(classFixture, factories)
+            {
+            }
+
+            /// <summary>
+            /// Constructs the graph of a DepthBuffer and its dependencies.
+            /// </summary>
+            public override async Task ConstructGraph()
+            {
+                // Model
+                var modelNode      = Graph[typeof(Domain.Model3d)];
+                var model3dFactory = modelNode.Factory as ITestFileModelFactory;
+                modelNode.Model    = await model3dFactory.PostNewModel(ClassFixture);
+                modelNode.Model    = await model3dFactory.PostNewFile(ClassFixture, modelNode.Model.Id, "UnitCube.obj");
+
+                // Camera
+                var cameraNode    = Graph[typeof(Domain.Camera)];
+                var cameraFactory = cameraNode.Factory as ITestModelFactory;
+                cameraNode.Model  = await cameraFactory.PostNewModel(ClassFixture);
+
+                // DepthBuffer
+                var depthBufferNode    = Graph[typeof(Domain.DepthBuffer)];
+                var depthBufferFactory = depthBufferNode.Factory as ITestFileModelFactory;
+                depthBufferNode.Model  = depthBufferFactory.ConstructValidModel();
+
+                var depthBuffer       = depthBufferNode.Model as Dto.DepthBuffer;
+                depthBuffer.ModelId   = modelNode.Model.Id;
+                depthBuffer.CameraId  = cameraNode.Model.Id;
+                depthBufferNode.Model = await depthBufferFactory.PostNewModel(ClassFixture, depthBuffer);
+                depthBufferNode.Model = await depthBufferFactory.PostNewFile(ClassFixture, depthBufferNode.Model.Id, "UnitCube.obj");
+            }
+        }
+
+        /// <summary>
+        /// Constructs a DepthBuffer and its dependent models.
+        /// </summary>
+        /// <returns></returns>
+        private async Task<DependencyGraph> InitializeDependencyGraph()
+        {
+            var dependencyGraph = new DepthBuffersDependencyGraph(ClassFixture, new List<ITestModelFactory>
+            {
+                new DepthBufferTestFileModelFactory(),
+                new Model3dTestFileModelFactory(),
+                new CameraTestModelFactory(),
+            });
+            await dependencyGraph.ConstructGraph();
+
+            return dependencyGraph;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DepthBuffersFileIntegrationTests"/> class.
         /// Constructor
@@ -31,27 +96,6 @@ namespace ModelRelief.Test.Integration.DepthBuffers
         }
 
         #region FileOperation
-        private async Task ConstructDepthBufferWithDependencies()
-        {
-            var model3dFactory = new Model3dTestFileModelFactory();
-            var model3d = await model3dFactory.PostNewModel(ClassFixture);
-            await model3dFactory.PostNewFile(ClassFixture, model3d.Id, "UnitCube.obj");
-
-            var cameraFactory = new CameraTestModelFactory();
-            var camera = await cameraFactory.PostNewModel(ClassFixture);
-
-            var depthBufferFactory = new DepthBufferTestFileModelFactory();
-            var depthBuffer = depthBufferFactory.ConstructValidModel();
-            depthBuffer.ModelId  = model3d.Id;
-            depthBuffer.CameraId = camera.Id;
-            await depthBufferFactory.PostNewModel(ClassFixture, depthBuffer);
-            await model3dFactory.PostNewFile(ClassFixture, depthBuffer.Id, "UnitCube.obj");
-
-            // connect dependencies
-
-            await Task.CompletedTask;
-        }
-
         /// <summary>
         /// Tests whether a DepthBuffer generated file is invalidated after a change to the dependent Camera metadata.
         /// </summary>
@@ -60,16 +104,15 @@ namespace ModelRelief.Test.Integration.DepthBuffers
         public virtual async Task FileRequest_DepthBufferIsInvalidatedAfterCameraDependencyPropertyChange()
         {
             // Arrange
+            var dependencyGraph = await InitializeDependencyGraph();
 
             // Act
 
             // Assert
 
             // Rollback
-
-            await Task.CompletedTask;
+            await dependencyGraph.Rollback();
         }
         #endregion
-
     }
 }

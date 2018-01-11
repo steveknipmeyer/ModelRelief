@@ -15,7 +15,6 @@ namespace ModelRelief.Test.TestModels
     using FluentAssertions;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Domain;
-    using ModelRelief.Test.Integration;
     using Newtonsoft.Json;
     using Xunit;
 
@@ -24,7 +23,7 @@ namespace ModelRelief.Test.TestModels
     /// </summary>
     /// <typeparam name="TEntity">Domain model.</typeparam>
     /// <typeparam name="TGetModel">DTO Get model.</typeparam>
-    public abstract class TestModelFactory<TEntity, TGetModel>
+    public abstract class TestModelFactory<TEntity, TGetModel> : ITestModelFactory
         where TEntity : DomainModel
         where TGetModel : class, ITGetModel, new()
     {
@@ -75,7 +74,7 @@ namespace ModelRelief.Test.TestModels
         /// <param name="classFixture">Class fixture.</param>
         /// <param name="modelId">Id of model to retrieve.</param>
         /// <returns>Existing model.</returns>
-        public async Task<TGetModel> FindModel(ClassFixture classFixture, int modelId)
+        public async Task<ITGetModel> FindModel(ClassFixture classFixture, int modelId)
         {
             var requestResponse = await classFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiUrl}/{modelId}");
 
@@ -90,7 +89,7 @@ namespace ModelRelief.Test.TestModels
         /// </summary>
         /// <param name="model">DTO Get model.</param>
         /// <returns>Reference property for testing.</returns>
-        private PropertyInfo GetReferencePropertyPropertyInfo(TGetModel model)
+        private PropertyInfo GetReferencePropertyPropertyInfo(ITGetModel model)
         {
             Type type = model.GetType();
             PropertyInfo[] properties = type.GetProperties();
@@ -104,7 +103,7 @@ namespace ModelRelief.Test.TestModels
         /// </summary>
         /// <param name="model">Model to query.</param>
         /// <returns>Reference property value.</returns>
-        public int?  GetReferenceProperty(TGetModel model)
+        public int?  GetReferenceProperty(ITGetModel model)
         {
             var referenceProperty  = GetReferencePropertyPropertyInfo(model);
             var propertyValue = (int?)referenceProperty.GetValue(model, null);
@@ -118,7 +117,7 @@ namespace ModelRelief.Test.TestModels
         /// <param name="model">Model to update.</param>
         /// <param name="value">Property value to set.</param>
         /// <returns>Model with updated reference property.</returns>
-        public TGetModel  SetReferenceProperty(TGetModel model, int? value)
+        public ITGetModel  SetReferenceProperty(ITGetModel model, int? value)
         {
             var referenceProperty  = GetReferencePropertyPropertyInfo(model);
             referenceProperty.SetValue(model, value);
@@ -130,7 +129,7 @@ namespace ModelRelief.Test.TestModels
         /// Constructs a valid model.
         /// </summary>
         /// <returns>Valid model.</returns>
-        public  virtual TGetModel ConstructValidModel()
+        public  virtual ITGetModel ConstructValidModel()
         {
             var validModel = new TGetModel()
             {
@@ -143,7 +142,7 @@ namespace ModelRelief.Test.TestModels
         /// Constructs an invalid model.
         /// </summary>
         /// <returns>Invalid model.</returns>
-        public TGetModel ConstructInvalidModel()
+        public ITGetModel ConstructInvalidModel()
         {
             // Required properties are missing.
             //  Name
@@ -160,7 +159,7 @@ namespace ModelRelief.Test.TestModels
         /// </summary>
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         /// <param name="model">New model to POST.</param>
-        public virtual async Task<TGetModel> PostNewModel(ClassFixture classFixture, TGetModel model)
+        public virtual async Task<ITGetModel> PostNewModel(ClassFixture classFixture, ITGetModel model)
         {
             // Arrange
 
@@ -180,7 +179,7 @@ namespace ModelRelief.Test.TestModels
         /// Creates a new resource.
         /// </summary>
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
-        public virtual async Task<TGetModel> PostNewModel(ClassFixture classFixture)
+        public virtual async Task<ITGetModel> PostNewModel(ClassFixture classFixture)
         {
             return await PostNewModel(classFixture, ConstructValidModel());
         }
@@ -190,7 +189,7 @@ namespace ModelRelief.Test.TestModels
         /// </summary>
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         /// <param name="existingModel">Model to delete.</param>
-        public virtual async Task DeleteModel(ClassFixture classFixture, TGetModel existingModel)
+        public virtual async Task DeleteModel(ClassFixture classFixture, ITGetModel existingModel)
         {
             // Arrange
 

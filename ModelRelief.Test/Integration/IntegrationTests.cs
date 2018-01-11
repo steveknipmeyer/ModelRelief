@@ -108,7 +108,7 @@ namespace ModelRelief.Test.Integration
         /// <summary>
         /// Creates a new resource.
         /// </summary>
-        public virtual async Task<TGetModel> PostNewModel()
+        public virtual async Task<ITGetModel> PostNewModel()
         {
             return await TestModelFactory.PostNewModel(ClassFixture);
         }
@@ -117,7 +117,7 @@ namespace ModelRelief.Test.Integration
         /// Delete an existing model.
         /// </summary>
         /// <param name="existingModel">Model to delete.</param>
-        public virtual async Task DeleteModel(TGetModel existingModel)
+        public virtual async Task DeleteModel(ITGetModel existingModel)
         {
             await TestModelFactory.DeleteModel(ClassFixture, existingModel);
         }

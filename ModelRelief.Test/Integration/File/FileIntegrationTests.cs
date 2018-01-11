@@ -46,7 +46,7 @@ namespace ModelRelief.Test.Integration
         /// </summary>
         /// <param name="modelId">Id of the backing metadata model.</param>
         /// <param name="fileName">Name of the file to POST.</param>
-        public virtual async Task<RequestResponse> PostNewFile(int modelId,  string fileName)
+        public virtual async Task<ITGetModel> PostNewFile(int modelId,  string fileName)
         {
             return await TestFileModelFactory.PostNewFile(ClassFixture, modelId, fileName);
         }
@@ -56,7 +56,7 @@ namespace ModelRelief.Test.Integration
         /// </summary>
         /// <param name="modelId">Id of the backing metadata model.</param>
         /// <param name="fileName">Name of the file to PUT.</param>
-        public virtual async Task<RequestResponse> PutFile(int modelId, string fileName)
+        public virtual async Task<ITGetModel> PutFile(int modelId, string fileName)
         {
             return await TestFileModelFactory.PutFile(ClassFixture, modelId, fileName);
         }
@@ -108,11 +108,11 @@ namespace ModelRelief.Test.Integration
             // Arrange
             var newModel = await PostNewModel();
             var fileName = "ModelRelief.txt";
-            var requestResponse = await PostNewFile(newModel.Id, fileName);
+            newModel = await PostNewFile(newModel.Id, fileName);
             var writtenByteArray = Utility.ByteArrayFromFile(fileName);
 
             // Act
-            requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{newModel.Id}/file");
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{newModel.Id}/file");
             var fileContentResult = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(requestResponse.ContentString);
             var encodedString = fileContentResult.GetValue("fileContents");
             var readByteArray = Convert.FromBase64String(encodedString.ToString());
@@ -138,10 +138,9 @@ namespace ModelRelief.Test.Integration
             var newModel = await PostNewModel();
 
             // Act
-            var requestResponse = await PostNewFile(newModel.Id, "UnitCube.obj");
+            newModel = await PostNewFile(newModel.Id, "UnitCube.obj");
 
             // Assert
-            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
 
             // Rollback
             await DeleteModel(newModel);
@@ -159,16 +158,13 @@ namespace ModelRelief.Test.Integration
             var newGeneratedFileModel = newModel as IGeneratedFile;
 
             // Act
-            var requestResponse = await PostNewFile(newModel.Id, "UnitCube.obj");
+            var updatedModel = await PostNewFile(newModel.Id, "UnitCube.obj");
 
             // Assert
-            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
-
             // before PostFile
             newGeneratedFileModel.FileIsSynchronized.Should().Be(false);
 
             // after PostFile
-            var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
             var updatedGeneratedFileModel = updatedModel as IGeneratedFile;
             updatedGeneratedFileModel.FileIsSynchronized.Should().Be(true);
 
@@ -190,10 +186,9 @@ namespace ModelRelief.Test.Integration
             var newModel = await PostNewModel();
 
             // Act
-            var requestResponse = await PutFile(newModel.Id, "UnitCube.obj");
+            newModel = await PutFile(newModel.Id, "UnitCube.obj");
 
             // Assert
-            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
 
             // Rollback
             await DeleteModel(newModel);
@@ -210,14 +205,14 @@ namespace ModelRelief.Test.Integration
             // Arrange
             var newModel = await PostNewModel();
             // initial create
-            var requestResponse = await PostNewFile(newModel.Id, "UnitCube.obj");
+            newModel = await PostNewFile(newModel.Id, "UnitCube.obj");
             // update
             var fileName = "ModelRelief.txt";
-            requestResponse = await PutFile(newModel.Id, fileName);
+            newModel = await PutFile(newModel.Id, fileName);
             var writtenByteArray = Utility.ByteArrayFromFile(fileName);
 
             // Act
-            requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{newModel.Id}/file");
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{newModel.Id}/file");
             var fileContentResult = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(requestResponse.ContentString);
             var encodedString = fileContentResult.GetValue("fileContents");
             var readByteArray = Convert.FromBase64String(encodedString.ToString());
@@ -241,12 +236,11 @@ namespace ModelRelief.Test.Integration
         {
             // Arrange
             var newModel = await PostNewModel();
-            var requestResponse = await PostNewFile(newModel.Id, "UnitCube.obj");
-            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
+            newModel = await PostNewFile(newModel.Id, "UnitCube.obj");
 
             // rename model (and file)
             newModel.Name = "New Name";
-            requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModelFactory.ApiUrl}/{newModel.Id}", newModel);
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModelFactory.ApiUrl}/{newModel.Id}", newModel);
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
             // Act

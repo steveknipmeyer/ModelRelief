@@ -7,21 +7,92 @@
 namespace ModelRelief.Test.Integration
 {
     using System;
-    using System.IO;
+    using System.Collections.Generic;
     using System.Linq;
-    using System.Net;
     using System.Threading.Tasks;
-    using FluentAssertions;
     using ModelRelief.Api.V1.Shared.Rest;
-    using ModelRelief.Domain;
     using ModelRelief.Test.TestModels;
-    using Newtonsoft.Json;
-    using Xunit;
 
+    /// <summary>
+    /// Represents a graph of dependent models for integration testing.
+    /// </summary>
     public class DependencyGraph
     {
-        public DependencyGraph()
+        /// <summary>
+        /// Represents a node in the dependency graph.
+        /// A node is a model with a supporting factory for model operations.
+        /// </summary>
+        public class Node
         {
+            public ITestModelFactory Factory { get; set; }
+            public ITGetModel Model { get; set; }
+        }
+
+        /// <summary>
+        /// Represents a collection of Nodes.
+        /// </summary>
+        public class NodeCollection
+        {
+            public List<Node> Nodes { get; }
+            public Node this[Type type]
+            {
+                get => Nodes.Where(n => (n.Factory.Type == type)).SingleOrDefault();
+            }
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="NodeCollection"/> class.
+            /// </summary>
+            /// <param name="factories">List of test model factories.</param>
+            public NodeCollection(List<ITestModelFactory> factories)
+            {
+                Nodes = new List<Node>();
+                foreach (var factory in factories)
+                {
+                    Nodes.Add(new Node()
+                    {
+                        Factory = factory,
+                        Model   = factory.ConstructValidModel(),
+                    });
+                }
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DependencyGraph"/> class.
+        /// </summary>
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        /// <param name="factories">List of test model factories.</param>
+        public DependencyGraph(ClassFixture classFixture, List<ITestModelFactory> factories)
+        {
+            ClassFixture = classFixture;
+            Factories = factories;
+
+            Graph = new NodeCollection(factories);
+        }
+
+        public NodeCollection Graph { get; set; }
+        public ClassFixture ClassFixture { get; }
+        public List<ITestModelFactory> Factories { get; }
+
+        /// <summary>
+        /// Constructs a graph of the dependencies.
+        /// </summary>
+        public virtual async Task ConstructGraph()
+        {
+            await Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Rolls back the models created during use.
+        /// </summary>
+        public async virtual Task Rollback()
+        {
+            foreach (var node in Graph.Nodes)
+            {
+                // model persisted?
+                if (node.Model.Id != default)
+                    await node.Factory.DeleteModel(ClassFixture, node.Model);
+            }
         }
     }
 }

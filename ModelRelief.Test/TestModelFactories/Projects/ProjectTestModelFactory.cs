@@ -8,6 +8,7 @@ namespace ModelRelief.Test.TestModels.Projects
 {
     using System.Collections.Generic;
     using System.Linq;
+    using ModelRelief.Api.V1.Shared.Rest;
 
     /// <summary>
     /// Project test model.
@@ -45,7 +46,7 @@ namespace ModelRelief.Test.TestModels.Projects
         /// Constructs a valid model.
         /// </summary>
         /// <returns>Valid model.</returns>
-        public override Dto.Project ConstructValidModel()
+        public override ITGetModel ConstructValidModel()
         {
             var validModel = base.ConstructValidModel();
 

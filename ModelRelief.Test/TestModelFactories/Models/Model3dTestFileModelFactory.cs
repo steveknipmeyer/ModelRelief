@@ -8,6 +8,7 @@ namespace ModelRelief.Test.TestModels.Models
 {
     using System.Collections.Generic;
     using System.Linq;
+    using ModelRelief.Api.V1.Shared.Rest;
 
     /// <summary>
     /// Model3d test model.
@@ -45,9 +46,9 @@ namespace ModelRelief.Test.TestModels.Models
         /// Constructs a valid model.
         /// </summary>
         /// <returns>Valid model.</returns>
-        public override Dto.Model3d ConstructValidModel()
+        public override ITGetModel ConstructValidModel()
         {
-            var validModel = base.ConstructValidModel();
+            var validModel = base.ConstructValidModel() as Dto.Model3d;
             validModel.Format = Domain.Model3dFormat.OBJ;
 
             return validModel;
