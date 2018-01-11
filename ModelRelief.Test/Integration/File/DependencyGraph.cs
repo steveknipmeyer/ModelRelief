@@ -31,7 +31,7 @@ namespace ModelRelief.Test.Integration
         /// <summary>
         /// Represents a collection of Nodes.
         /// </summary>
-        public class NodeCollection
+        public class GraphNodes
         {
             public List<Node> Nodes { get; }
             public Node this[Type type]
@@ -40,10 +40,10 @@ namespace ModelRelief.Test.Integration
             }
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="NodeCollection"/> class.
+            /// Initializes a new instance of the <see cref="GraphNodes"/> class.
             /// </summary>
             /// <param name="factories">List of test model factories.</param>
-            public NodeCollection(List<ITestModelFactory> factories)
+            public GraphNodes(List<ITestModelFactory> factories)
             {
                 Nodes = new List<Node>();
                 foreach (var factory in factories)
@@ -67,10 +67,10 @@ namespace ModelRelief.Test.Integration
             ClassFixture = classFixture;
             Factories = factories;
 
-            Graph = new NodeCollection(factories);
+            NodeCollection = new GraphNodes(factories);
         }
 
-        public NodeCollection Graph { get; set; }
+        public GraphNodes NodeCollection { get; set; }
         public ClassFixture ClassFixture { get; }
         public List<ITestModelFactory> Factories { get; }
 
@@ -87,7 +87,7 @@ namespace ModelRelief.Test.Integration
         /// </summary>
         public async virtual Task Rollback()
         {
-            foreach (var node in Graph.Nodes)
+            foreach (var node in NodeCollection.Nodes)
             {
                 // model persisted?
                 if (node.Model.Id != default)

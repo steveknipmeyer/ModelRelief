@@ -17,8 +17,10 @@ namespace ModelRelief.Test.TestModels
         Task<ITGetModel> FindModel(ClassFixture classFixture, int modelId);
 
         ITGetModel ConstructValidModel();
-        Task DeleteModel(ClassFixture classFixture, ITGetModel existingModel);
+
         Task<ITGetModel> PostNewModel(ClassFixture classFixture);
         Task<ITGetModel> PostNewModel(ClassFixture classFixture, ITGetModel model);
+        Task<ITGetModel> PutModel(ClassFixture classFixture, ITGetModel model);
+        Task DeleteModel(ClassFixture classFixture, ITGetModel existingModel);
     }
 }

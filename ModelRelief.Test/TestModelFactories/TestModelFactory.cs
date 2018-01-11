@@ -185,6 +185,27 @@ namespace ModelRelief.Test.TestModels
         }
 
         /// <summary>
+        /// Updates a resource.
+        /// </summary>
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        /// <param name="model">Updated model to PUT.</param>
+        public virtual async Task<ITGetModel> PutModel(ClassFixture classFixture, ITGetModel model)
+        {
+            // Arrange
+
+            // Act
+            var requestResponse = await classFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{model.Id}", model);
+
+            // Assert
+            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            updatedModel.Name.Should().Be(model.Name);
+
+            return updatedModel;
+        }
+
+        /// <summary>
         /// Delete an existing model.
         /// </summary>
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>

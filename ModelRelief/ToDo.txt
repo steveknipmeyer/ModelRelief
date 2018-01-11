@@ -15,9 +15,6 @@
         Scale with a Python processor.
 
 <-- Short Term
-    Why does PostNewFile return RequestResponse instead of ITGetModel?
-    Rollback DependencyGraph.
-
     FileRequest IntegrationTests
         FileOperationGenerate
             Test property changes.
