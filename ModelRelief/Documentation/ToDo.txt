@@ -18,15 +18,6 @@
     Rollback
         Finally?
 
-    Model, ModelId -> Model3d, Model3dId
-
-    FileRequest IntegrationTests
-        FileOperationGenerate
-            Test property changes.
-                Construct a new dependency chain.
-                Modify a property of a class with a DependentFile.
-                Confirm that the DependentFile was invalidated.
-
     FileOperationGenerate
         Validate the required properties are present.
         Reset FileIsSynchronized. This will be finally set after a successful generation.
