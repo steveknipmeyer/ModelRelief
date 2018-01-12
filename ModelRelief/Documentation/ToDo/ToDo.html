@@ -12,48 +12,52 @@
 <li>Manning Dependency Injection book.</li>
 </ul>
 <p>Some Markdown text with <span style="color:blue">some <em>blue</em> text</span>.<br/></p>
-<h5 id="lambda">Lambda</h5>
-<ul class="contains-task-list">
-<li class="task-list-item"><input disabled="disabled" type="checkbox" />     Python programs must be invoked by py <program>. This is not necessary on Vector.</li>
-<li class="task-list-item"><input disabled="disabled" type="checkbox" />     SQLite</li>
-<li class="task-list-item"><input disabled="disabled" type="checkbox" />     Postman</li>
-<li class="task-list-item"><input disabled="disabled" type="checkbox" />     Changes are shown in the wwwroot folder.</li>
-</ul>
+<pre><code>Lambda
+    Python programs must be invoked by py &lt;program&gt;. This is not necessary on Vector.
+    SQLite
+    Postman
+    Changes are shown in the wwwroot folder.
+</code></pre>
 <h3 id="tasks">Tasks</h3>
-<p><strong>Goal</strong> : Roundtrip a scaled mesh.</p>
-<ul>
-<li>Scale with a Python processor.</li>
-</ul>
 <h4 id="short-term">Short Term</h4>
-<h6 id="improve-rollback-handling-in-integration-tests">Improve rollback handling in integration tests.</h6>
-<p>try/catch/finally?</p>
-<p>FileOperationGenerate<br/>
-Validate the required properties are present.<br/>
-Reset FileIsSynchronized. This will be finally set after a successful generation.</p>
-<p>CodeAnalysis
-NET Core?</p>
-<p>Refactoring Suggestion Font Size</p>
-<p>Replace Console output with Logger operations.
-Add color support for logging.</p>
-<p>Should FileTimeStamp be exposed?
-Should the assignment of FileSynchronized be deferred until the request has completed.
-FileStamp could potentially serve as the &quot;complete&quot; flag for a long-running request.</p>
-<p>Dependency Manager
-FileRequest
-Long-running Requests
+<pre><code>Improve rollback handling in integration tests.
+    try/catch/finally?
+</code></pre>
+<h6 id="fileoperationgenerate">FileOperationGenerate</h6>
+<pre><code>Validate the required properties are present.
+Reset FileIsSynchronized. This will be finally set after a successful generation.
+</code></pre>
+<h6 id="codeanalysis">CodeAnalysis</h6>
+<pre><code>NET Core?
+</code></pre>
+<h6 id="refactoring-suggestion-font-size">Refactoring Suggestion Font Size</h6>
+<h6 id="replace-console-output-with-logger-operations">Replace Console output with Logger operations.</h6>
+<pre><code>Add color support for logging.
+</code></pre>
+<h6 id="should-filetimestamp-be-exposed">Should FileTimeStamp be exposed?</h6>
+<pre><code>Should the assignment of FileSynchronized be deferred until the request has completed?
+FileStamp could potentially serve as the &quot;complete&quot; flag for a long-running request. 
+</code></pre>
+<h3 id="dependency-manager">Dependency Manager</h3>
+<h6 id="filerequest">FileRequest</h6>
+<p>Long-running Requests:
 <a href="https://stackoverflow.com/questions/33009721/long-running-rest-api-with-queues">https://stackoverflow.com/questions/33009721/long-running-rest-api-with-queues</a></p>
-<pre><code>Dependency Handling                    
-    Modified           
-    *   For GeneratedFileDomainModel root models, if FileIsSynchronized &lt;changed&gt; to true, schedule a FileOperation.Generation.
-    *   For FileDomainModel root models, if Name &lt;changed&gt;, schedule a FileOperation.Rename.
-    *   For all GeneratedFileDomainModel dependents, set FileIsSynchronized = false.
-
-    Deleted
-    *   For all GeneratedFileDomainModel dependents, set FileIsSynchronized = false.
-    Added
-    *   For all GeneratedFileDomainModel root models, if FileIsSynchronized = true, schedule a file generation if the dependents are resolved.
-
-GeneratedFileDomainModel Dependencies
+<h4 id="dependency-handling">Dependency Handling</h4>
+<p><strong>Modified</strong></p>
+<ul class="contains-task-list">
+<li class="task-list-item"><input disabled="disabled" type="checkbox" checked="checked" /> For GeneratedFileDomainModel root models, if FileIsSynchronized <changed> to true, schedule a FileOperation.Generation.</li>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" checked="checked" /> For FileDomainModel root models, if Name <changed>, schedule a FileOperation.Rename.</li>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" checked="checked" /> For all GeneratedFileDomainModel dependents, set FileIsSynchronized = false.</li>
+</ul>
+<p><strong>Deleted</strong></p>
+<ul class="contains-task-list">
+<li class="task-list-item"><input disabled="disabled" type="checkbox" checked="checked" /> For all GeneratedFileDomainModel dependents, set FileIsSynchronized = false.</li>
+</ul>
+<p><strong>Added</strong></p>
+<ul class="contains-task-list">
+<li class="task-list-item"><input disabled="disabled" type="checkbox" checked="checked" /> For all GeneratedFileDomainModel root models, if FileIsSynchronized = true, schedule a file generation if the dependents are resolved.</li>
+</ul>
+<pre><code>GeneratedFileDomainModel Dependencies
                                         Metadata    FileTimeStamp
     DepthBuffer
         Model                                       X
@@ -62,28 +66,29 @@ GeneratedFileDomainModel Dependencies
         DepthBuffer                                 X
         MeshTransform                   X
 
-DepthBuffers should have an optional dependency on a Model3d.
-    If the Model3d relationship is present, the dependency exists.
-    Otherwise, the DepthBuffer exists independently, probably due to an explicit upload of a file created in another application.
-    The DependencyManager invalidates DependentFiles only if a dependency changed. So, an existing DepthBuffer with (FileSynchronized = true) would not be impacted.
-
-Property Change Handlers
-    https://msdn.microsoft.com/magazine/mt694083
-    https://msdn.microsoft.com/en-us/magazine/mt767693.aspx
 </code></pre>
-<p>How can properties be excluded (e.g. Attribute) from entity processing?</p>
-<p>Files
-The name property for FileDomainModels is expected to include the extension.<br />
-API  and Ux validation is needed to ensure that the extension is always present.
-Can it be inferred from the Format?
+<h6 id="depthbuffers-should-have-an-optional-dependency-on-a-model3d">DepthBuffers should have an optional dependency on a Model3d.</h6>
+<pre><code>If the Model3d relationship is present, the dependency exists.  
+Otherwise, the DepthBuffer exists independently, probably due to an explicit upload of a file created in another application.  
+The DependencyManager invalidates DependentFiles only if a dependency changed. So, an existing DepthBuffer with (FileSynchronized = true) would not be impacted.
+</code></pre>
+<h6 id="property-change-handlers">Property Change Handlers</h6>
+<p><a href="https://msdn.microsoft.com/magazine/mt694083">https://msdn.microsoft.com/magazine/mt694083</a><br />
+<a href="https://msdn.microsoft.com/en-us/magazine/mt767693.aspx">https://msdn.microsoft.com/en-us/magazine/mt767693.aspx</a></p>
+<h6 id="how-can-properties-be-excluded-e.g.attribute-from-entity-processing">How can properties be excluded (e.g. Attribute) from entity processing?</h6>
+<h6 id="files">Files</h6>
+<pre><code>The name property for FileDomainModels is expected to include the extension.    
+    API  and Ux validation is needed to ensure that the extension is always present.
+        Can it be inferred from the Format?
 How will the Format property be used for Models, DepthBuffers and Meshes?
-Is it necessary if the file type can be found through reflection?
+    Is it necessary if the file type can be found through reflection?
 How should the model name be held in the ModelViewer?
-The model.Name property is now 'Root' (Three).</p>
-<p>Remove .gitignore filters on Test\Data folder?
-What is the practical limit for git binary files? Are the GitHub restrictions?</p>
-<p>Limit the size of the log file.</p>
-<p>Review and organize the Postman tests.</p>
+    The model.Name property is now 'Root' (Three).
+</code></pre>
+<h6 id="remove.gitignore-filters-on-testdata-folder">Remove .gitignore filters on Test\Data folder?</h6>
+<pre><code>What is the practical limit for git binary files? Are the GitHub restrictions?
+</code></pre>
+<h6 id="review-and-organize-the-postman-tests">Review and organize the Postman tests.</h6>
 <h4 id="api-design">API Design</h4>
 <pre><code>UX Requests
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -116,22 +121,20 @@ binary          create                  Mesh disallowed POST           /api/v1/r
 binary          update (full)                           PUT            /api/v1/resource/id/file                 PutFile                 OK
 binary          update (partial)        no endpoint   
 binary          delete                                  DELETE         /api/v1/resource/id/File                 DeleteFile              OK
-
-Add authentication support!
-
-The Project is populating the object graph too deeply.
-
-Enhancements
-    Express relationships as &quot;href&quot; properties to absolute URLs.
-    Provide &quot;reference expansion&quot; to allow references to be expanded into the principal object.
-
-Stormpath Pattern
-    Rich error message:
-        Status Code         HttpStatusCode                   
-        Code                ApiErrorCode
-        Message             Errors[]
-        DeveloperMessage    DeveloperMessage   
-        API Reference       ApiReference
+</code></pre>
+<p>Add authentication support!</p>
+<p>The Project is populating the object graph too deeply.</p>
+<h6 id="enhancements">Enhancements</h6>
+<pre><code>Express relationships as &quot;href&quot; properties to absolute URLs.
+Provide &quot;reference expansion&quot; to allow references to be expanded into the principal object.
+</code></pre>
+<h6 id="stormpath-pattern">Stormpath Pattern</h6>
+<pre><code>Rich error message:
+    Status Code         HttpStatusCode                   
+    Code                ApiErrorCode
+    Message             Errors[]
+    DeveloperMessage    DeveloperMessage   
+    API Reference       ApiReference
 </code></pre>
 <h4 id="front-end">Front End</h4>
 <pre><code>Create a ModelRelief JavaScript API library.
@@ -155,7 +158,9 @@ Some Views are identical. Should they use a shared ViewComponent?
     Details, Delete
 </code></pre>
 <h4 id="logging">Logging</h4>
-<pre><code>Log ApiErrorResult?
+<pre><code>Limit the size of the log file.
+
+Log ApiErrorResult?
 
 XUnit TestRunner Output
 https://github.com/marhoily/serilog-sinks-xunittestoutput
@@ -379,9 +384,6 @@ Memory management!
     https://blog.sessionstack.com/how-javascript-works-memory-management-how-to-handle-4-common-memory-leaks-3f28b94cfbec
 </code></pre>
 <h4 id="aspnet-core">ASPNET Core</h4>
-<pre><code>What is the cause of these NET Warnings? They seem to be related to the Entity Framework.
-    1701;1702;1705
-</code></pre>
 <h4 id="vscode-debugging-workflows">VSCode Debugging Workflows</h4>
 <pre><code>Command Line
     FE: Chrome   BE: VSCode  TypeScript: automatic  Reload: automatic
@@ -591,66 +593,66 @@ https://stackoverflow.com/questions/42916299/access-visual-studio-2017s-private-
 </code></pre>
 <h4 id="asp.net-core-model-validation">ASP.NET Core Model Validation</h4>
 <pre><code>https://github.com/JeremySkinner/FluentValidation/wiki/i.-ASP.NET-Core-integration
+</code></pre>
+<h5 id="best-practices">Best Practices</h5>
+<pre><code>DataAnnotation rules also should be used for DTO.
+    They &lt;complement&gt; FV. They (and any other registered validators) run after FV.
+    They provide display formatting and other UX support.
+The Domain models should also use DataAnnotation attributes. 
+    Validation will be done when a model (created OUTSIDE) the UX is transacted with the database.
+    This happens as a part of model-binding.
+The DTO should expose only those properies which are editable!
+    Missing properties in the View will override the target during mapping because they will have a default value.
+</code></pre>
+<hr />
+<h6 id="client-side-validation">Client-side Validation</h6>
+<pre><code>The View model (e.g. Dto.Mesh) determines the client-side validation rules.
+    Any associated validators for this specific type will run.
 
-Best Practices
-    DataAnnotation rules also should be used for DTO.
-        They &lt;complement&gt; FV. They (and any other registered validators) run after FV.
-        They provide display formatting and other UX support.
-    The Domain models should also use DataAnnotation attributes. 
-        Validation will be done when a model (created OUTSIDE) the UX is transacted with the database.
-        This happens as a part of model-binding.
-    The DTO should expose only those properies which are editable!
-        Missing properties in the View will override the target during mapping because they will have a default value.
+DataAnnotation Attributes
+    Property ON form: A client-side error will be displayed and the controller action will not be called.
+    Property not present on form: Validation will be done in the server IF the model-bound action parameter contains a validation rule. 
+        ModelState will contain errors when the controller action is called.
 
-&lt;----------------------------------------------------------------------------------------------------------------------------------------------------&gt;
-Client-side Validation
-    The View model (e.g. Dto.Mesh) determines the client-side validation rules.
-        Any associated validators for this specific type will run.
+    N.B. ContosoUniversityCore uses server-side validation (in conjunction with site.js and HtmlHelperExtensions error handling). 
+        Any DataAnnotation attributes on the DTO are ignored. No data-val attributes are added to the View.
+            Is this because the jquery-validation-unobtrusive scripts are not include in the View page?
+        If a DataAnnotation rule was violated (e.g. [Required]) and there was no FluentValidation (AbstractValidator rule), the property was not marked as invalid.
+        * This seems odd because although the form did not contain the client-side validation attributes, why did MVC not validate the object on the incoming model-bound object?
+            Is this due to the custom model-binding?
+        However, if the Domain model contains DataAnnotation attributes these are processed when the model is transacted to the database.
 
-    DataAnnotation Attributes
-        Property ON form: A client-side error will be displayed and the controller action will not be called.
-        Property not present on form: Validation will be done in the server IF the model-bound action parameter contains a validation rule. 
-            ModelState will contain errors when the controller action is called.
+    [StringLength(50, MinimumLength = 3)]
+    public string Name { get; set; }
 
-        N.B. ContosoUniversityCore uses server-side validation (in conjunction with site.js and HtmlHelperExtensions error handling). 
-            Any DataAnnotation attributes on the DTO are ignored. No data-val attributes are added to the View.
-                Is this because the jquery-validation-unobtrusive scripts are not include in the View page?
-            If a DataAnnotation rule was violated (e.g. [Required]) and there was no FluentValidation (AbstractValidator rule), the property was not marked as invalid.
-            * This seems odd because although the form did not contain the client-side validation attributes, why did MVC not validate the object on the incoming model-bound object?
-                Is this due to the custom model-binding?
-            However, if the Domain model contains DataAnnotation attributes these are processed when the model is transacted to the database.
+Aggregating Validation Rules
+    If View model implements any of these interfaces then additional validation checks will be added the complete list of checks, adding additional results to ModelState.
+        FluentValidation.AbstractValidator&lt;T&gt; : (runs first by default)
+        DataAnnotation
+        IValidatableObject 
+    N.B. These are all used by a View if present! Each of these validations contribute rules (in the form of data-val attributes) that are used in the client-side processing.
+</code></pre>
+<h6 id="server-side-validation">Server-Side Validation</h6>
+<pre><code>The controller action parameters (e.g. Create.Command) control the server-side validation rules.
+    Any associated validators for this specific type will run.
+    This happens during model-binding.
 
-        [StringLength(50, MinimumLength = 3)]
-        public string Name { get; set; }
+Model-binding maps the Request.Body, route data and query strings to the parameters of the controller action. 
+    By default, MVC supports a limited number of formatters.
 
-    Aggregating Validation Rules
-        If View model implements any of these interfaces then additional validation checks will be added the complete list of checks, adding additional results to ModelState.
-            FluentValidation.AbstractValidator&lt;T&gt; : (runs first by default)
-            DataAnnotation
-            IValidatableObject 
-        N.B. These are all used by a View if present! Each of these validations contribute rules (in the form of data-val attributes) that are used in the client-side processing.
-
-Server-Side Validation
-    The controller action parameters (e.g. Create.Command) control the server-side validation rules.
-        Any associated validators for this specific type will run.
-        This happens during model-binding.
-
-    Model-binding maps the Request.Body, route data and query strings to the parameters of the controller action. 
-        By default, MVC supports a limited number of formatters.
-
-    All validation providers can contribute rules to the validation.
-        DataAnnotation Attribute
-        IValidatable
-        FluentValidation
+All validation providers can contribute rules to the validation.
+    DataAnnotation Attribute
+    IValidatable
+    FluentValidation
 
 ValidationActionFilter
     If an ActionFilter is registered, control passes there.
         The ActionFilter can check ModelState.Valid and then set the ActionExecutingContext.Result so the controller action is never called.
 
 Finally, the controller action is invoked.
-&lt;----------------------------------------------------------------------------------------------------------------------------------------------------&gt;
-
-Can the request handlers share common validation code?
+</code></pre>
+<hr />
+<pre><code>Can the request handlers share common validation code?
                             Entity Exists   StorageFolder   File Exists     Formatting
     GetSingle               X                                               X
     GetList                                                                 X
@@ -665,25 +667,26 @@ Can the request handlers share common validation code?
     PostFile                                X                               X
 </code></pre>
 <h4 id="variance">Variance</h4>
-<pre><code>Invariance
-    The types must match exactly.
+<h6 id="invariance">Invariance</h6>
+<pre><code>The types must match exactly.
+</code></pre>
+<h6 id="covariance-out-parameters-more-derived">Covariance (out parameters) : More Derived</h6>
+<pre><code>public interface IEnumerable (out T)
 
-Covariance (out parameters) : More Derived
-    public interface IEnumerable (out T)
+A more derived type can be substituted.
+The parameter can be returned because it satisfies the type because it is of type Base.
+</code></pre>
+<h6 id="contravariance-in-parameters-less-derived">Contravariance (in parameters) : Less Derived</h6>
+<pre><code>public interface IComparer&lt;in T&gt;
 
-    A more derived type can be substituted.
-    The parameter can be returned because it satisfies the type because it is of type Base.
-
-Contravariance (in parameters) : Less Derived
-    public interface IComparer&lt;in T&gt;
-
-    A less derived type can be substituted.
-    When the method is called, the &lt;actual&gt; parameter passed to the method will be &lt;more derived&gt; so it will satisfy the type of the actual method that is invoked.
+A less derived type can be substituted.
+When the method is called, the &lt;actual&gt; parameter passed to the method will be &lt;more derived&gt; so it will satisfy the type of the actual method that is invoked.
 </code></pre>
 <h4 id="tasks-1">Tasks</h4>
 <pre><code>    // prevent async (no await) warning
     //https://stackoverflow.com/questions/44096253/await-task-completedtask-for-what
-    await Task.CompletedTask;
+</code></pre>
+<pre><code class="language-c#">        await Task.CompletedTask;
 </code></pre>
 <h4 id="contosouniversity-core">ContosoUniversity Core</h4>
 <pre><code>Why is the project named &quot;Core&quot; when it has these dependencies? 
