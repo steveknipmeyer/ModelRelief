@@ -31,11 +31,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Documentation\README\Images\Lucy.png" />
     <None Remove="npm-debug.log" />
   </ItemGroup>
 
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Documentation\README\Images\Lucy.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
