@@ -297,6 +297,9 @@ namespace ModelRelief.Services.Relationships
                 var propertyModification = new PropertyModification(transactionEntity.ChangeTrackerEntity, property);
                 if (propertyModification.Changed)
                 {
+                    if (string.Equals(propertyModification.Property.Name, PropertyNames.FileTimeStamp))
+                        Logger.LogInformation($"FileTimeStamp Change: {property.Name}, Original = {propertyModification.OriginalValue?.ToString()}, New = {propertyModification.ModifiedValue?.ToString()}");
+
                     Logger.LogInformation($"Property Change: {property.Name}, Original = {propertyModification.OriginalValue?.ToString()}, New = {propertyModification.ModifiedValue?.ToString()}");
                     if (isFileDomainModel)
                     {

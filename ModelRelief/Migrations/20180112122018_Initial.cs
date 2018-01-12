@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="20171117181906_Initial.cs" company="ModelRelief">
+// <copyright file="20180112122018_Initial.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -7,10 +7,12 @@
 namespace ModelRelief.Migrations
 {
     using System;
+    using System.Collections.Generic;
+    using Microsoft.EntityFrameworkCore.Metadata;
     using Microsoft.EntityFrameworkCore.Migrations;
 
     /// <summary>
-    /// Represents a partial class for a database migration.
+    /// Auto-generated.
     /// </summary>
     public partial class Initial : Migration
     {
@@ -20,10 +22,10 @@ namespace ModelRelief.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "TEXT", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    Id = table.Column<string>(nullable: false),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
                 },
                 constraints: table =>
                 {
@@ -34,21 +36,21 @@ namespace ModelRelief.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "TEXT", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "INTEGER", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
-                    LockoutEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "TEXT", nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    PasswordHash = table.Column<string>(type: "TEXT", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
-                    SecurityStamp = table.Column<string>(type: "TEXT", nullable: true),
-                    TwoFactorEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
-                    UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    Id = table.Column<string>(nullable: false),
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
+                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
+                    PasswordHash = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    SecurityStamp = table.Column<string>(nullable: true),
+                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    UserName = table.Column<string>(maxLength: 256, nullable: true),
                 },
                 constraints: table =>
                 {
@@ -59,11 +61,11 @@ namespace ModelRelief.Migrations
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ClaimType = table.Column<string>(type: "TEXT", nullable: true),
-                    ClaimValue = table.Column<string>(type: "TEXT", nullable: true),
-                    RoleId = table.Column<string>(type: "TEXT", nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ClaimType = table.Column<string>(nullable: true),
+                    ClaimValue = table.Column<string>(nullable: true),
+                    RoleId = table.Column<string>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -80,11 +82,11 @@ namespace ModelRelief.Migrations
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ClaimType = table.Column<string>(type: "TEXT", nullable: true),
-                    ClaimValue = table.Column<string>(type: "TEXT", nullable: true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ClaimType = table.Column<string>(nullable: true),
+                    ClaimValue = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -101,10 +103,10 @@ namespace ModelRelief.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "TEXT", nullable: false),
-                    ProviderKey = table.Column<string>(type: "TEXT", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "TEXT", nullable: true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    ProviderKey = table.Column<string>(nullable: false),
+                    ProviderDisplayName = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -121,8 +123,8 @@ namespace ModelRelief.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "TEXT", nullable: false),
-                    RoleId = table.Column<string>(type: "TEXT", nullable: false),
+                    UserId = table.Column<string>(nullable: false),
+                    RoleId = table.Column<string>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -145,10 +147,10 @@ namespace ModelRelief.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "TEXT", nullable: false),
-                    LoginProvider = table.Column<string>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Value = table.Column<string>(type: "TEXT", nullable: true),
+                    UserId = table.Column<string>(nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Value = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -165,11 +167,11 @@ namespace ModelRelief.Migrations
                 name: "Projects",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    UserId = table.Column<string>(type: "TEXT", nullable: true),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Description = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -179,30 +181,30 @@ namespace ModelRelief.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Cameras",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    BoundClippingPlanes = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    Far = table.Column<double>(type: "REAL", nullable: false),
-                    FieldOfView = table.Column<double>(type: "REAL", nullable: false),
-                    LookAtX = table.Column<double>(type: "REAL", nullable: false),
-                    LookAtY = table.Column<double>(type: "REAL", nullable: false),
-                    LookAtZ = table.Column<double>(type: "REAL", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Near = table.Column<double>(type: "REAL", nullable: false),
-                    PositionX = table.Column<double>(type: "REAL", nullable: false),
-                    PositionY = table.Column<double>(type: "REAL", nullable: false),
-                    PositionZ = table.Column<double>(type: "REAL", nullable: false),
-                    ProjectId = table.Column<int>(type: "INTEGER", nullable: true),
-                    StandardView = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<string>(type: "TEXT", nullable: true),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    BoundClippingPlanes = table.Column<bool>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    Far = table.Column<double>(nullable: false),
+                    FieldOfView = table.Column<double>(nullable: false),
+                    LookAtX = table.Column<double>(nullable: false),
+                    LookAtY = table.Column<double>(nullable: false),
+                    LookAtZ = table.Column<double>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Near = table.Column<double>(nullable: false),
+                    PositionX = table.Column<double>(nullable: false),
+                    PositionY = table.Column<double>(nullable: false),
+                    PositionZ = table.Column<double>(nullable: false),
+                    ProjectId = table.Column<int>(nullable: true),
+                    StandardView = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -212,31 +214,31 @@ namespace ModelRelief.Migrations
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Cameras_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
                 name: "MeshTransforms",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Depth = table.Column<double>(type: "REAL", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    LambdaLinearScaling = table.Column<double>(type: "REAL", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    ProjectId = table.Column<int>(type: "INTEGER", nullable: true),
-                    SigmaGaussianBlur = table.Column<double>(type: "REAL", nullable: false),
-                    SigmaGaussianSmooth = table.Column<double>(type: "REAL", nullable: false),
-                    Tau = table.Column<double>(type: "REAL", nullable: false),
-                    UserId = table.Column<string>(type: "TEXT", nullable: true),
-                    Width = table.Column<double>(type: "REAL", nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Depth = table.Column<double>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    LambdaLinearScaling = table.Column<double>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    ProjectId = table.Column<int>(nullable: true),
+                    SigmaGaussianBlur = table.Column<double>(nullable: false),
+                    SigmaGaussianSmooth = table.Column<double>(nullable: false),
+                    Tau = table.Column<double>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
+                    Width = table.Column<double>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -246,28 +248,29 @@ namespace ModelRelief.Migrations
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_MeshTransforms_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Models",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    CameraId = table.Column<int>(type: "INTEGER", nullable: true),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    Format = table.Column<int>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Path = table.Column<string>(type: "TEXT", nullable: true),
-                    ProjectId = table.Column<int>(type: "INTEGER", nullable: true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: true),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CameraId = table.Column<int>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    FileTimeStamp = table.Column<DateTime>(nullable: true),
+                    Format = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Path = table.Column<string>(nullable: true),
+                    ProjectId = table.Column<int>(nullable: true),
+                    UserId = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -277,35 +280,37 @@ namespace ModelRelief.Migrations
                         column: x => x.CameraId,
                         principalTable: "Cameras",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Models_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Models_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
                 name: "DepthBuffers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    CameraId = table.Column<int>(type: "INTEGER", nullable: true),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    Format = table.Column<int>(type: "INTEGER", nullable: false),
-                    ModelId = table.Column<int>(type: "INTEGER", nullable: true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Path = table.Column<string>(type: "TEXT", nullable: true),
-                    ProjectId = table.Column<int>(type: "INTEGER", nullable: true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: true),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CameraId = table.Column<int>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    FileIsSynchronized = table.Column<bool>(nullable: false),
+                    FileTimeStamp = table.Column<DateTime>(nullable: true),
+                    Format = table.Column<int>(nullable: false),
+                    Model3dId = table.Column<int>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    Path = table.Column<string>(nullable: true),
+                    ProjectId = table.Column<int>(nullable: true),
+                    UserId = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -315,42 +320,44 @@ namespace ModelRelief.Migrations
                         column: x => x.CameraId,
                         principalTable: "Cameras",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK_DepthBuffers_Models_ModelId",
-                        column: x => x.ModelId,
+                        name: "FK_DepthBuffers_Models_Model3dId",
+                        column: x => x.Model3dId,
                         principalTable: "Models",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_DepthBuffers_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_DepthBuffers_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Meshes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    CameraId = table.Column<int>(type: "INTEGER", nullable: true),
-                    DepthBufferId = table.Column<int>(type: "INTEGER", nullable: true),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    Format = table.Column<int>(type: "INTEGER", nullable: false),
-                    MeshTransformId = table.Column<int>(type: "INTEGER", nullable: true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Path = table.Column<string>(type: "TEXT", nullable: true),
-                    ProjectId = table.Column<int>(type: "INTEGER", nullable: true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: true),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CameraId = table.Column<int>(nullable: true),
+                    DepthBufferId = table.Column<int>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    FileIsSynchronized = table.Column<bool>(nullable: false),
+                    FileTimeStamp = table.Column<DateTime>(nullable: true),
+                    Format = table.Column<int>(nullable: false),
+                    MeshTransformId = table.Column<int>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    Path = table.Column<string>(nullable: true),
+                    ProjectId = table.Column<int>(nullable: true),
+                    UserId = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -360,31 +367,31 @@ namespace ModelRelief.Migrations
                         column: x => x.CameraId,
                         principalTable: "Cameras",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Meshes_DepthBuffers_DepthBufferId",
                         column: x => x.DepthBufferId,
                         principalTable: "DepthBuffers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Meshes_MeshTransforms_MeshTransformId",
                         column: x => x.MeshTransformId,
                         principalTable: "MeshTransforms",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Meshes_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Meshes_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateIndex(
@@ -396,7 +403,8 @@ namespace ModelRelief.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -422,7 +430,8 @@ namespace ModelRelief.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cameras_ProjectId",
@@ -440,9 +449,9 @@ namespace ModelRelief.Migrations
                 column: "CameraId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DepthBuffers_ModelId",
+                name: "IX_DepthBuffers_Model3dId",
                 table: "DepthBuffers",
-                column: "ModelId");
+                column: "Model3dId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DepthBuffers_ProjectId",

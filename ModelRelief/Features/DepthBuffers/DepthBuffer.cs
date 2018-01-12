@@ -30,8 +30,8 @@ namespace ModelRelief.Dto
         public int? ProjectId { get; set; }
         public Dto.Project Project { get; set; }
 
-        public int? ModelId { get; set; }
-        public Dto.Model3d Model { get; set; }
+        public int? Model3dId { get; set; }
+        public Dto.Model3d Model3d { get; set; }
 
         public int? CameraId { get; set; }
         public Dto.Camera Camera { get; set; }

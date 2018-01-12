@@ -27,8 +27,8 @@ namespace ModelRelief.Domain
 
         [DependentFileProperty]
         [GeneratedFileProperty]
-        public int? ModelId { get; set; }
-        public Model3d Model { get; set; }
+        public int? Model3dId { get; set; }
+        public Model3d Model3d { get; set; }
 
         [DependentFileProperty]
         [GeneratedFileProperty]

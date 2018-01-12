@@ -9,6 +9,7 @@ namespace ModelRelief.Test.Integration.Meshes
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Threading;
     using System.Threading.Tasks;
     using FluentAssertions;
     using ModelRelief.Test.TestModels;
@@ -113,6 +114,9 @@ namespace ModelRelief.Test.Integration.Meshes
                 meshModel.FileIsSynchronized.Should().Be(true);
 
                 // Act
+
+                // N.B. DateTime.Now yields 1 second accuracy so the resulting timestamps betweeen the initial and modified file events may be identical!
+                Thread.Sleep(1000);
                 var depthBufferNode    = dependencyGraph.NodeCollection[typeof(Domain.DepthBuffer)];
                 var depthBufferModel   = depthBufferNode.Model as Dto.DepthBuffer;
                 var depthBufferFactory = depthBufferNode.Factory as ITestFileModelFactory;

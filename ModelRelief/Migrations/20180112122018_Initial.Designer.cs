@@ -12,14 +12,15 @@ using System;
 namespace ModelRelief.Migrations
 {
     [DbContext(typeof(ModelReliefDbContext))]
-    [Migration("20171117181906_Initial")]
+    [Migration("20180112122018_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452");
+                .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -39,7 +40,8 @@ namespace ModelRelief.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex");
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -173,7 +175,8 @@ namespace ModelRelief.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex");
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -232,9 +235,13 @@ namespace ModelRelief.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<bool>("FileIsSynchronized");
+
+                    b.Property<DateTime?>("FileTimeStamp");
+
                     b.Property<int>("Format");
 
-                    b.Property<int?>("ModelId");
+                    b.Property<int?>("Model3dId");
 
                     b.Property<string>("Name")
                         .IsRequired();
@@ -249,7 +256,7 @@ namespace ModelRelief.Migrations
 
                     b.HasIndex("CameraId");
 
-                    b.HasIndex("ModelId");
+                    b.HasIndex("Model3dId");
 
                     b.HasIndex("ProjectId");
 
@@ -268,6 +275,10 @@ namespace ModelRelief.Migrations
                     b.Property<int?>("DepthBufferId");
 
                     b.Property<string>("Description");
+
+                    b.Property<bool>("FileIsSynchronized");
+
+                    b.Property<DateTime?>("FileTimeStamp");
 
                     b.Property<int>("Format");
 
@@ -340,6 +351,8 @@ namespace ModelRelief.Migrations
                     b.Property<int?>("CameraId");
 
                     b.Property<string>("Description");
+
+                    b.Property<DateTime?>("FileTimeStamp");
 
                     b.Property<int>("Format");
 
@@ -431,86 +444,103 @@ namespace ModelRelief.Migrations
                 {
                     b.HasOne("ModelRelief.Domain.Project", "Project")
                         .WithMany()
-                        .HasForeignKey("ProjectId");
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ModelRelief.Domain.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("ModelRelief.Domain.DepthBuffer", b =>
                 {
                     b.HasOne("ModelRelief.Domain.Camera", "Camera")
                         .WithMany()
-                        .HasForeignKey("CameraId");
+                        .HasForeignKey("CameraId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("ModelRelief.Domain.Model3d", "Model")
+                    b.HasOne("ModelRelief.Domain.Model3d", "Model3d")
                         .WithMany()
-                        .HasForeignKey("ModelId");
+                        .HasForeignKey("Model3dId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ModelRelief.Domain.Project", "Project")
                         .WithMany()
-                        .HasForeignKey("ProjectId");
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ModelRelief.Domain.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("ModelRelief.Domain.Mesh", b =>
                 {
                     b.HasOne("ModelRelief.Domain.Camera", "Camera")
                         .WithMany()
-                        .HasForeignKey("CameraId");
+                        .HasForeignKey("CameraId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ModelRelief.Domain.DepthBuffer", "DepthBuffer")
                         .WithMany()
-                        .HasForeignKey("DepthBufferId");
+                        .HasForeignKey("DepthBufferId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ModelRelief.Domain.MeshTransform", "MeshTransform")
                         .WithMany()
-                        .HasForeignKey("MeshTransformId");
+                        .HasForeignKey("MeshTransformId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ModelRelief.Domain.Project", "Project")
                         .WithMany()
-                        .HasForeignKey("ProjectId");
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ModelRelief.Domain.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("ModelRelief.Domain.MeshTransform", b =>
                 {
                     b.HasOne("ModelRelief.Domain.Project", "Project")
                         .WithMany()
-                        .HasForeignKey("ProjectId");
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ModelRelief.Domain.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("ModelRelief.Domain.Model3d", b =>
                 {
                     b.HasOne("ModelRelief.Domain.Camera", "Camera")
                         .WithMany()
-                        .HasForeignKey("CameraId");
+                        .HasForeignKey("CameraId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ModelRelief.Domain.Project", "Project")
                         .WithMany()
-                        .HasForeignKey("ProjectId");
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ModelRelief.Domain.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("ModelRelief.Domain.Project", b =>
                 {
                     b.HasOne("ModelRelief.Domain.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 #pragma warning restore 612, 618
         }

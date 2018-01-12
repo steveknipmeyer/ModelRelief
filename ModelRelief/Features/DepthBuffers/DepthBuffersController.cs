@@ -48,7 +48,7 @@ namespace ModelRelief.Features.DepthBuffers
             ViewBag.DepthBufferFormats  = ViewHelpers.PopulateEnumDropDownList<DepthBufferFormat>("Select depth buffer format");
 
             ViewBag.ProjectId = ViewHelpers.PopulateModelDropDownList<Project>(DbContext, userId, "Select a project", depthBuffer?.ProjectId);
-            ViewBag.ModelId   = ViewHelpers.PopulateModelDropDownList<Model3d>(DbContext, userId, "Select a model", depthBuffer?.ModelId);
+            ViewBag.Model3dId = ViewHelpers.PopulateModelDropDownList<Model3d>(DbContext, userId, "Select a model", depthBuffer?.Model3dId);
             ViewBag.CameraId  = ViewHelpers.PopulateModelDropDownList<Camera>(DbContext, userId, "Select a camera", depthBuffer?.CameraId);
         }
     }

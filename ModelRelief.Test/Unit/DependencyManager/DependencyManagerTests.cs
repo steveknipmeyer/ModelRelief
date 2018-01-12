@@ -155,11 +155,12 @@ namespace ModelRelief.Test.Unit.DependencyManager
         }
 
         /// <summary>
-        /// Finds no dependents on the Lucy Model3d.
+        /// Finds two dependents on the Lucy Model3d.
+        /// Mesh(DepthBuffer(Model)
         /// </summary>
         [Fact]
         [Trait("Category", "DependencyManager")]
-        public async Task LucyModel3dHasNoDependents()
+        public async Task LucyModel3dHasTwoDependents()
         {
             // Arrange
             var lucyPrimaryKey = 1;
@@ -168,7 +169,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
             var dependentModels = await FindDependentModels(typeof(Model3d), lucyPrimaryKey);
 
             // Assert
-            dependentModels.Count.Should().Be(0);
+            dependentModels.Count.Should().Be(2);
         }
 
         /// <summary>

@@ -18,5 +18,6 @@ namespace ModelRelief.Domain
     {
         public const string Name               = "Name";                    // model name
         public const string FileIsSynchronized = "FileIsSynchronized";      // backing file for a model is synchronized with all dependencies
+        public const string FileTimeStamp      = "FileTimeStamp";           // backing file time stamp
     }
 }

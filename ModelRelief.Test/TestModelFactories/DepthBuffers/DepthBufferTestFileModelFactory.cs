@@ -35,7 +35,7 @@ namespace ModelRelief.Test.TestModels.DepthBuffers
             IdRange = Enumerable.Range(1, 3);
             FirstModelName = "lucy.raw";
 
-            ReferencePropertyNames = new List<string> { "ProjectId", "ModelId", "CameraId" };
+            ReferencePropertyNames = new List<string> { "ProjectId", "Model3dId", "CameraId" };
             InvalidReferenceProperty = 0;
             ValidReferenceProperty   = 1;
 

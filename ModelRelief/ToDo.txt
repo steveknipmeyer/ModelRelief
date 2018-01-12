@@ -1,6 +1,4 @@
 ﻿<--- Commit
-Reset FileDomainModel.FileTimeStamp in DeleteRequest handling.
-Define GeneratedFileDomainModel.FileIsSynchronized as a DependentFileProperty.
 
 <-- Technical Education
         Manning AspNet Core book.
@@ -19,6 +17,8 @@ Define GeneratedFileDomainModel.FileIsSynchronized as a DependentFileProperty.
 <-- Short Term
     Rollback
         Finally?
+
+    Model, ModelId -> Model3d, Model3dId
 
     FileRequest IntegrationTests
         FileOperationGenerate
@@ -173,6 +173,9 @@ Define GeneratedFileDomainModel.FileIsSynchronized as a DependentFileProperty.
 
 <-- Logging
     Log ApiErrorResult?
+
+    XUnit TestRunner Output
+    https://github.com/marhoily/serilog-sinks-xunittestoutput
 
     Review the ILogger interface. How should this work with a Controller?
         namespace Microsoft.Extensions.Logging
