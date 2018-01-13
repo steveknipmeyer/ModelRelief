@@ -26,8 +26,6 @@ Replace DateTime with a type that has more resolution.
     try/catch/finally?
 
 ###### FileOperationGenerate
-    PostFile should not trigger a FileRequestGenerate!
-
     Validate the required properties are present.
         Implement a FluentValidation validator.
         Throw a validation exception if the required properties are not set.
@@ -61,6 +59,9 @@ A worker process removes the request from the queue.
 
 https://stackoverflow.com/questions/11779143/how-do-i-run-a-python-script-from-c  
 https://medium.com/@dpursanov/running-python-script-from-c-and-working-with-the-results-843e68d230e5
+
+https://stackoverflow.com/questions/10788982/is-there-any-async-equivalent-of-process-start
+https://github.com/jamesmanning/RunProcessAsTask
 
 Long-running Requests:   
 https://stackoverflow.com/questions/33009721/long-running-rest-api-with-queues

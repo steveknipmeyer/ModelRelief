@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>4d128880-4790-41df-8a6b-0d34f9b65e4f</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Solver.py</StartupFile>
+    <StartupFile>Multiplier.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,7 +22,8 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Solver.py" />
+    <Compile Include="Solver - Copy.py" />
+    <Compile Include="Multiplier.py" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda36-64" />
