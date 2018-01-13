@@ -20,12 +20,15 @@
 </code></pre>
 <h3 id="tasks">Tasks</h3>
 <h4 id="short-term">Short Term</h4>
-<pre><code>Improve rollback handling in integration tests.
-    try/catch/finally?
+<h6 id="improve-rollback-handling-in-integration-tests">Improve rollback handling in integration tests.</h6>
+<pre><code>try/catch/finally?
 </code></pre>
 <h6 id="fileoperationgenerate">FileOperationGenerate</h6>
-<pre><code>Validate the required properties are present.
-Reset FileIsSynchronized. This will be finally set after a successful generation.
+<pre><code>PostFile should not trigger a FileRequestGenerate!
+
+Validate the required properties are present.
+    Implement a FluentValidation validator.
+    Throw a validation exception if the required properties are not set.
 </code></pre>
 <h6 id="codeanalysis">CodeAnalysis</h6>
 <pre><code>NET Core?
@@ -38,10 +41,24 @@ Reset FileIsSynchronized. This will be finally set after a successful generation
 <pre><code>Should the assignment of FileSynchronized be deferred until the request has completed?
 FileStamp could potentially serve as the &quot;complete&quot; flag for a long-running request. 
 </code></pre>
-<h3 id="dependency-manager">Dependency Manager</h3>
-<h6 id="filerequest">FileRequest</h6>
-<p>Long-running Requests:
+<h3 id="python-tasks">Python Tasks</h3>
+<pre><code class="language-&lt;language&gt;">FileRequest places a message in a work queue.  
+    FileIsSynchronized is reset to false.  
+    A status code of 202 is returned to the client who can poll the value of FileIsSynchronized.
+        Consider returning an endpoint that can be used for querying the result of the task.
+        meshes/id/file/task
+A worker process removes the request from the queue.
+    An external job is dispatched which returns some kind of notification when complete.  
+    When the external job completes, the worker process sets FileIsSynchronized = true.
+    Question: How does a worker process access the database?
+    
+
+</code></pre>
+<p><a href="https://stackoverflow.com/questions/11779143/how-do-i-run-a-python-script-from-c">https://stackoverflow.com/questions/11779143/how-do-i-run-a-python-script-from-c</a><br />
+<a href="https://medium.com/@dpursanov/running-python-script-from-c-and-working-with-the-results-843e68d230e5">https://medium.com/@dpursanov/running-python-script-from-c-and-working-with-the-results-843e68d230e5</a></p>
+<p>Long-running Requests:<br />
 <a href="https://stackoverflow.com/questions/33009721/long-running-rest-api-with-queues">https://stackoverflow.com/questions/33009721/long-running-rest-api-with-queues</a></p>
+<h3 id="dependency-manager">Dependency Manager</h3>
 <h4 id="dependency-handling">Dependency Handling</h4>
 <p><strong>Modified</strong></p>
 <ul class="contains-task-list">

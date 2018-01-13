@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-// <copyright file="Convert.cs" company="ModelRelief">
+// <copyright file="DataConversion.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -9,7 +9,7 @@ namespace ModelRelief.Utility
     using System;
     using System.IO;
 
-    public class Convert
+    public class DataConversion
     {
         /// <summary>
         /// Returns a byte array from a stream.

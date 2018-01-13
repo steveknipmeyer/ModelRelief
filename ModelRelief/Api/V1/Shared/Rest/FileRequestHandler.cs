@@ -64,10 +64,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// Gnerates a file-backed resource when its dependencies have changed.
         /// </summary>
         /// <param name="fileRequest">FileRequest created during dependency processing.</param>
-        /// <param name="fileDomainModel">Domain model.</param>
+        /// <param name="generatedFileDomainModel">Domain model.</param>
         /// <param name="fileName">Filename to generate.</param>
+        /// <param name="cancellationToken">Token to allows operation to be cancelled</param>
         /// <returns>True if succesful.</returns>
-        public virtual async Task<bool> ProcessGenerate(FileRequest<TEntity> fileRequest, FileDomainModel fileDomainModel, string fileName)
+        public virtual async Task<bool> ProcessGenerate(FileRequest<TEntity> fileRequest, GeneratedFileDomainModel generatedFileDomainModel, string fileName, CancellationToken cancellationToken)
         {
             Logger.LogError($"FileRequestHandler: Generate is not implemented: Type = {typeof(TEntity).Name}, Model Id = {fileRequest.TransactionEntity.PrimaryKey}, UserId = {fileRequest.TransactionEntity.UserId}");
             await Task.CompletedTask;
@@ -114,17 +115,21 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 throw new ModelNotBackedByFileException(typeof(TEntity));
 
             var domainModel = await FindModelAsync<TEntity>(message.TransactionEntity.UserId, message.TransactionEntity.PrimaryKey, throwIfNotFound: true);
-            var fileDomainModel = domainModel as FileDomainModel;
-
             var fileName = Path.Combine(StorageManager.DefaultModelStorageFolder(domainModel), domainModel.Name);
 
             switch (message.Operation)
             {
                 case FileOperation.Rename:
-                    return await ProcessRename(message, fileDomainModel, fileName);
+                    {
+                        var fileDomainModel = domainModel as FileDomainModel;
+                        return await ProcessRename(message, fileDomainModel, fileName);
+                    }
 
                 case FileOperation.Generate:
-                    return await ProcessGenerate(message, fileDomainModel, fileName);
+                    {
+                        var generatedFileDomainModel = domainModel as GeneratedFileDomainModel;
+                        return await ProcessGenerate(message, generatedFileDomainModel, fileName, cancellationToken);
+                    }
 
                 default:
                     Logger.LogError($"FileRequestHandler: Invalid operation {message.Operation}, UserId = {message.TransactionEntity.UserId}, Model Id = {message.TransactionEntity.PrimaryKey}");

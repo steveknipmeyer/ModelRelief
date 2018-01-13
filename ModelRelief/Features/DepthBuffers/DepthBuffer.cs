@@ -6,6 +6,7 @@
 
 namespace ModelRelief.Dto
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
     using AutoMapper;
     using FluentValidation;
@@ -37,6 +38,7 @@ namespace ModelRelief.Dto
         public Dto.Camera Camera { get; set; }
 
         // not exposed in UX; API only
+        public DateTime? FileTimeStamp { get; set; }
         public bool FileIsSynchronized { get; set; }
     }
 

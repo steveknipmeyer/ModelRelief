@@ -7,6 +7,7 @@
 namespace ModelRelief.Test
 {
     using System.IO;
+    using System.Threading;
 
     /// <summary>
     /// Helper methods for automated testing.

@@ -6,6 +6,8 @@
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
+    using System;
+
     /// <summary>
     /// Common interface for all TGetModel types.
     /// </summary>
@@ -20,10 +22,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
     /// <summary>
     /// Common interface for all generated files (e.g. Nesh, DepthBuffer).
-    /// This interface is used only for integration testing. Domain models inherit from GeneratedFileDomainModel.
+    /// This interface is used only for integration testing. File-backed domain models inherit from GeneratedFileDomainModel.
     /// </summary>
     public interface IGeneratedFile
     {
-        bool FileIsSynchronized { get; set; }       // associated file is synchronized with the model (AND all of the the model's dependencies)
+        DateTime? FileTimeStamp { get; set; }        // time stamp of backing file
+        bool FileIsSynchronized { get; set; }        // associated file is synchronized with the model (AND all of the the model's dependencies)
     }
 }

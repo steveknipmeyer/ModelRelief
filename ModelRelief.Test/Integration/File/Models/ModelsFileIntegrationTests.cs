@@ -26,12 +26,13 @@ namespace ModelRelief.Test.Integration.Models
         {
         }
 
+        #region PostFile
         /// <summary>
-        /// Tests whether the file metadata is updated correctly after a file POST.
+        /// Tests whether the FileIsSynchronized property is updated correctly after a file POST.
         /// </summary>
         [Fact]
         [Trait("Category", "Api PostFile")]
-        public override  async Task PostFile_MetadataIsUpdatedAfterFileIsPosted()
+        public override  async Task PostFile_FileIsSynchronizedIsUpdatedAfterFileIsPosted()
         {
             // N.B. A Model is not a generated file so it does not support IGeneratedFile.
             // Assert
@@ -39,5 +40,20 @@ namespace ModelRelief.Test.Integration.Models
 
             await Task.CompletedTask;
         }
+
+        /// <summary>
+        /// Tests whether the FileTimeStamp property is updated correctly after a file POST.
+        /// </summary>
+        [Fact]
+        [Trait("Category", "Api PostFile")]
+        public override async Task PostFile_FileTimeStampIsUpdatedAfterFileIsPosted()
+        {
+            // N.B. A Model is not a generated file so it does not support IGeneratedFile.
+            // Assert
+            Assert.True(true);
+
+            await Task.CompletedTask;
+        }
+        #endregion
     }
 }

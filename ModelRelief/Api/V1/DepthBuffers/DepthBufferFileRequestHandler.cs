@@ -17,6 +17,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using ModelRelief.Database;
     using ModelRelief.Domain;
     using ModelRelief.Services;
+    using ModelRelief.Services.Jobs;
     using ModelRelief.Services.Relationships;
 
     /// <summary>
@@ -24,6 +25,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// </summary>
     public class DepthBufferFileRequestHandler : FileRequestHandler<Domain.DepthBuffer>
     {
+        public IDispatcher Dispatcher { get; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DepthBufferFileRequestHandler"/> class.
         /// Constructor
@@ -37,6 +40,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="validators">List of validators</param>
         /// <param name="storageManager">Services for file system storage.</param>
+        /// <param name="dispatcher">Dispatcher for long-runnning processes.</param>
         public DepthBufferFileRequestHandler(
             ModelReliefDbContext dbContext,
             UserManager<ApplicationUser> userManager,
@@ -46,24 +50,26 @@ namespace ModelRelief.Api.V1.Shared.Rest
             Services.IConfigurationProvider configurationProvider,
             IDependencyManager dependencyManager,
             IEnumerable<IValidator<FileRequest<Domain.DepthBuffer>>> validators,
-            IStorageManager storageManager)
+            IStorageManager storageManager,
+            IDispatcher dispatcher)
             : base(dbContext, userManager, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators, storageManager)
         {
+            Dispatcher = dispatcher ?? throw new System.ArgumentNullException(nameof(dispatcher));
         }
 
         /// <summary>
         /// Gnerates a file-backed resource when its dependencies have changed.
         /// </summary>
         /// <param name="fileRequest">FileRequest created during dependency processing.</param>
-        /// <param name="fileDomainModel">Domain model.</param>
+        /// <param name="generatedFileDomainModel">Domain model.</param>
         /// <param name="fileName">Filename to generate.</param>
+        /// <param name="cancellationToken">Token to allows operation to be cancelled</param>
         /// <returns>True if succesful.</returns>
-        public override async Task<bool> ProcessGenerate(FileRequest<Domain.DepthBuffer> fileRequest, FileDomainModel fileDomainModel, string fileName)
+        public override async Task<bool> ProcessGenerate(FileRequest<Domain.DepthBuffer> fileRequest, GeneratedFileDomainModel generatedFileDomainModel, string fileName, CancellationToken cancellationToken)
         {
+            var depthBuffer = generatedFileDomainModel as Domain.DepthBuffer;
             Logger.LogInformation($"DepthBuffer [Model Id = {fileRequest.TransactionEntity.PrimaryKey}, UserId = {fileRequest.TransactionEntity.UserId}, file = {fileName}] has been queued for file generation.");
-
-            await Task.CompletedTask;
-            return true;
+            return await Dispatcher.GenerateDepthBufferAsync(depthBuffer, fileName, cancellationToken);
         }
 
         /// <summary>

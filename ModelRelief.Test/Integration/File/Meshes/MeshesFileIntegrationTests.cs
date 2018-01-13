@@ -12,10 +12,12 @@ namespace ModelRelief.Test.Integration.Meshes
     using System.Threading;
     using System.Threading.Tasks;
     using FluentAssertions;
+    using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Test.TestModels;
     using ModelRelief.Test.TestModels.DepthBuffers;
     using ModelRelief.Test.TestModels.Meshes;
     using ModelRelief.Test.TestModels.MeshTransforms;
+    using ModelRelief.Utility;
     using Xunit;
 
     /// <summary>
@@ -101,7 +103,7 @@ namespace ModelRelief.Test.Integration.Meshes
         /// </summary>
         [Fact]
         [Trait("Category", "Api FileRequest")]
-        public virtual async Task FileRequest_MeshIsInvalidatedAfterDepthBufferFileBecomesUnsynchronized()
+        public async Task FileRequest_MeshIsInvalidatedAfterDepthBufferFileBecomesUnsynchronized()
         {
             // Arrange
             var dependencyGraph = await InitializeDependencyGraph();
@@ -115,8 +117,8 @@ namespace ModelRelief.Test.Integration.Meshes
 
                 // Act
 
-                // N.B. DateTime.Now yields 1 second accuracy so the resulting timestamps betweeen the initial and modified file events may be identical!
-                Thread.Sleep(1000);
+                Files.SleepForTimeStamp();
+
                 var depthBufferNode    = dependencyGraph.NodeCollection[typeof(Domain.DepthBuffer)];
                 var depthBufferModel   = depthBufferNode.Model as Dto.DepthBuffer;
                 var depthBufferFactory = depthBufferNode.Factory as ITestFileModelFactory;
@@ -131,6 +133,34 @@ namespace ModelRelief.Test.Integration.Meshes
                 // Rollback
                 await dependencyGraph.Rollback();
             }
+        }
+
+        /// <summary>
+        /// Verifies that a FileRequestGenerate updates sets FileIsSynchronized.
+        /// </summary>
+        [Fact]
+        [Trait("Category", "Api FileRequest")]
+        public async Task FileRequest_GenerateSetsFileIsSynchronized()
+        {
+            // Arrange
+            var newModel = await PostNewModel();
+            var modelAfterPost = await PostNewFile(newModel.Id, "UnitCube.obj");
+
+            // reset FileIsSynchronized so FileRequestGenerate will fire on next FileIsSynchronized property changes
+            (modelAfterPost as IGeneratedFile).FileIsSynchronized = false;
+            modelAfterPost = await TestModelFactory.PutModel(ClassFixture, modelAfterPost);
+
+            Files.SleepForTimeStamp();
+
+            // Act
+            (modelAfterPost as IGeneratedFile).FileIsSynchronized = true;
+            modelAfterPost = await TestModelFactory.PutModel(ClassFixture, modelAfterPost);
+
+            // Assert
+            (modelAfterPost as IGeneratedFile).FileIsSynchronized.Should().BeTrue();
+
+            // Rollback
+            await DeleteModel(newModel);
         }
         #endregion
     }

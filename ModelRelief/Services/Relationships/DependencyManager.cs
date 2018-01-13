@@ -287,7 +287,7 @@ namespace ModelRelief.Services.Relationships
         /// <returns>List of FileRequests.</returns>
         private async Task<List<IFileRequest>> ProcessModifiedEntity(TransactionEntity transactionEntity)
         {
-            var fileRequests = new List<IFileRequest>();
+            var fileRequests               = new List<IFileRequest>();
             var isFileDomainModel          = transactionEntity.IsFileDomainModel();
             var isGeneratedFileDomainModel = transactionEntity.IsGeneratedFileDomainModel();
 
@@ -297,10 +297,9 @@ namespace ModelRelief.Services.Relationships
                 var propertyModification = new PropertyModification(transactionEntity.ChangeTrackerEntity, property);
                 if (propertyModification.Changed)
                 {
-                    if (string.Equals(propertyModification.Property.Name, PropertyNames.FileTimeStamp))
-                        Logger.LogInformation($"FileTimeStamp Change: {property.Name}, Original = {propertyModification.OriginalValue?.ToString()}, New = {propertyModification.ModifiedValue?.ToString()}");
-
                     Logger.LogInformation($"Property Change: {property.Name}, Original = {propertyModification.OriginalValue?.ToString()}, New = {propertyModification.ModifiedValue?.ToString()}");
+
+                    // construct any necessary FileRequests
                     if (isFileDomainModel)
                     {
                         if (string.Equals(property.Name, PropertyNames.Name))
@@ -309,7 +308,7 @@ namespace ModelRelief.Services.Relationships
                         if (isGeneratedFileDomainModel)
                         {
                             if (string.Equals(property.Name, PropertyNames.FileIsSynchronized) && ((bool)propertyModification.ModifiedValue))
-                                fileRequests.Add(ConstructGenerateFileRequest(transactionEntity, stage: ProcessingStage.PreProcess));
+                                fileRequests.Add(ConstructGenerateFileRequest(transactionEntity, stage: ProcessingStage.PostProcess));
                         }
                     }
 

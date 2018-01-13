@@ -101,7 +101,7 @@ namespace ModelRelief.Test.Integration.DepthBuffers
         /// </summary>
         [Fact]
         [Trait("Category", "Api FileRequest")]
-        public virtual async Task FileRequest_DepthBufferIsInvalidatedAfterCameraDependencyPropertyChange()
+        public async Task FileRequest_DepthBufferIsInvalidatedAfterCameraDependencyPropertyChange()
         {
             // Arrange
             var dependencyGraph = await InitializeDependencyGraph();

@@ -27,6 +27,7 @@ namespace ModelRelief
     using ModelRelief.Infrastructure;
     using ModelRelief.Middleware;
     using ModelRelief.Services;
+    using ModelRelief.Services.Jobs;
     using ModelRelief.Services.Relationships;
     using ModelRelief.Workbench;
 
@@ -137,6 +138,7 @@ namespace ModelRelief
             services.AddSingleton<Services.IConfigurationProvider, Services.ConfigurationProvider>();
             services.AddSingleton<IStorageManager, StorageManager>();
             services.AddSingleton<IDependencyManager, DependencyManager>();
+            services.AddSingleton<IDispatcher, Dispatcher>();
             services.AddDatabaseServices();
 
             services.AddAutoMapper(typeof(Startup));

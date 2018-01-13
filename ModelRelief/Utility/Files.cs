@@ -9,6 +9,7 @@ namespace ModelRelief.Utility
     using System;
     using System.IO;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
 
     public class Files
@@ -132,6 +133,14 @@ namespace ModelRelief.Utility
         public static bool IsFolderEmpty(string path)
         {
             return !Directory.EnumerateFileSystemEntries(path).Any();
+        }
+
+        /// <summary>
+        /// N.B. DateTime.Now yields 1 second accuracy so the resulting timestamps betweeen the initial and modified file events may be identical!
+        /// </summary>
+        public static void SleepForTimeStamp()
+        {
+            Thread.Sleep(1000);
         }
     }
 }

@@ -10,11 +10,13 @@ namespace ModelRelief.Test.Integration
     using System.IO;
     using System.Linq;
     using System.Net;
+    using System.Threading;
     using System.Threading.Tasks;
     using FluentAssertions;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Domain;
     using ModelRelief.Test.TestModels;
+    using ModelRelief.Utility;
     using Newtonsoft.Json;
     using Xunit;
 
@@ -147,11 +149,11 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
-        /// Tests whether the file metadata is updated correctly after a file POST.
+        /// Tests whether the FileIsSynchronized property is updated correctly after a file POST.
         /// </summary>
         [Fact]
         [Trait("Category", "Api PostFile")]
-        public virtual async Task PostFile_MetadataIsUpdatedAfterFileIsPosted()
+        public virtual async Task PostFile_FileIsSynchronizedIsUpdatedAfterFileIsPosted()
         {
             // Arrange
             var newModel = await PostNewModel();
@@ -167,6 +169,33 @@ namespace ModelRelief.Test.Integration
             // after PostFile
             var updatedGeneratedFileModel = updatedModel as IGeneratedFile;
             updatedGeneratedFileModel.FileIsSynchronized.Should().Be(true);
+
+            // Rollback
+            await DeleteModel(newModel);
+        }
+
+        /// <summary>
+        /// Tests whether the FileTimeStamp property is updated correctly after a file POST.
+        /// </summary>
+        [Fact]
+        [Trait("Category", "Api PostFile")]
+        public virtual async Task PostFile_FileTimeStampIsUpdatedAfterFileIsPosted()
+        {
+            // Arrange
+            var newModel = await PostNewModel();
+
+            // Act
+            var modelAfterFirstPost   = await PostNewFile(newModel.Id, "UnitCube.obj");
+            Files.SleepForTimeStamp();
+            var modelAfterSecondPost = await PostNewFile(newModel.Id, "ModelRelief.txt");
+
+            // Assert
+            var originalModel = modelAfterFirstPost as IGeneratedFile;
+            var updatedModel  = modelAfterSecondPost as IGeneratedFile;
+
+            originalModel.FileTimeStamp.Should().NotBeNull();
+            updatedModel.FileTimeStamp.Should().NotBeNull();
+            updatedModel.FileTimeStamp.Should().BeAfter(originalModel.FileTimeStamp.Value);
 
             // Rollback
             await DeleteModel(newModel);

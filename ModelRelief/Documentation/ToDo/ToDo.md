@@ -15,12 +15,15 @@ Some Markdown text with <span style="color:blue">some *blue* text</span>.<br/>
 ### Tasks
 
 #### Short Term
-    Improve rollback handling in integration tests.
-        try/catch/finally?
+###### Improve rollback handling in integration tests.
+    try/catch/finally?
 
 ###### FileOperationGenerate
+    PostFile should not trigger a FileRequestGenerate!
+
     Validate the required properties are present.
-    Reset FileIsSynchronized. This will be finally set after a successful generation.
+        Implement a FluentValidation validator.
+        Throw a validation exception if the required properties are not set.
 
 ###### CodeAnalysis
     NET Core?
@@ -34,10 +37,28 @@ Some Markdown text with <span style="color:blue">some *blue* text</span>.<br/>
     Should the assignment of FileSynchronized be deferred until the request has completed?
     FileStamp could potentially serve as the "complete" flag for a long-running request. 
 
-### Dependency Manager
-###### FileRequest
-Long-running Requests: 
+### Python Tasks
+```<language>
+FileRequest places a message in a work queue.  
+    FileIsSynchronized is reset to false.  
+    A status code of 202 is returned to the client who can poll the value of FileIsSynchronized.
+        Consider returning an endpoint that can be used for querying the result of the task.
+        meshes/id/file/task
+A worker process removes the request from the queue.
+    An external job is dispatched which returns some kind of notification when complete.  
+    When the external job completes, the worker process sets FileIsSynchronized = true.
+    Question: How does a worker process access the database?
+    
+
+```
+
+https://stackoverflow.com/questions/11779143/how-do-i-run-a-python-script-from-c  
+https://medium.com/@dpursanov/running-python-script-from-c-and-working-with-the-results-843e68d230e5
+
+Long-running Requests:   
 https://stackoverflow.com/questions/33009721/long-running-rest-api-with-queues
+
+### Dependency Manager
 
 #### Dependency Handling                    
 **Modified**           
