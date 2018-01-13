@@ -4,7 +4,7 @@
 - Manning AspNet Core book.
 - Manning Dependency Injection book.
 
-Some Markdown text with <span style="color:blue">some *blue* text</span>.<br/>
+Some Markdown text with <span style="color:blue">some *blue* text
 
     Lambda
         Python programs must be invoked by py <program>. This is not necessary on Vector.
@@ -15,6 +15,13 @@ Some Markdown text with <span style="color:blue">some *blue* text</span>.<br/>
 ### Tasks
 
 #### Short Term
+
+
+##### Critical Issues
+<span style="color:red">
+Replace DateTime with a type that has more resolution.
+</span><br></br>
+
 ###### Improve rollback handling in integration tests.
     try/catch/finally?
 

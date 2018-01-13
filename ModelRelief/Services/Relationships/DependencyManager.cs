@@ -291,7 +291,11 @@ namespace ModelRelief.Services.Relationships
             var isFileDomainModel          = transactionEntity.IsFileDomainModel();
             var isGeneratedFileDomainModel = transactionEntity.IsGeneratedFileDomainModel();
 
-            bool dependentFIlePropertyChanged = false;
+            bool dependentFilePropertyChanged      = false;
+            bool namePropertyChanged               = false;
+            bool fileIsSynchronizedPropertyEnabled = false;
+            bool fileTimeStampPropertyChanged      = false;
+
             foreach (var property in transactionEntity.ChangeTrackerEntity.OriginalValues.Properties)
             {
                 var propertyModification = new PropertyModification(transactionEntity.ChangeTrackerEntity, property);
@@ -299,29 +303,42 @@ namespace ModelRelief.Services.Relationships
                 {
                     Logger.LogInformation($"Property Change: {property.Name}, Original = {propertyModification.OriginalValue?.ToString()}, New = {propertyModification.ModifiedValue?.ToString()}");
 
-                    // construct any necessary FileRequests
-                    if (isFileDomainModel)
-                    {
-                        if (string.Equals(property.Name, PropertyNames.Name))
-                            fileRequests.Add(ConstructRenameFileRequest(transactionEntity));
-
-                        if (isGeneratedFileDomainModel)
-                        {
-                            if (string.Equals(property.Name, PropertyNames.FileIsSynchronized) && ((bool)propertyModification.ModifiedValue))
-                                fileRequests.Add(ConstructGenerateFileRequest(transactionEntity, stage: ProcessingStage.PostProcess));
-                        }
-                    }
-
                     // independent variables invalidate the backing file of their dependent models
                     if (PropertyHasAttribute(out Attribute dependentFileProperty, transactionEntity.EntityType, property.Name, typeof(DependentFileProperty)))
-                        dependentFIlePropertyChanged = true;
+                        dependentFilePropertyChanged = true;
+
+                    // track changed properties to construct FileRequests later
+                    if (string.Equals(PropertyNames.Name, property.Name))
+                        namePropertyChanged = true;
+
+                    if (string.Equals(PropertyNames.FileIsSynchronized, property.Name) && ((bool)propertyModification.ModifiedValue))
+                        fileIsSynchronizedPropertyEnabled = true;
+
+                    if (string.Equals(PropertyNames.FileTimeStamp, property.Name))
+                        fileTimeStampPropertyChanged = true;
                 }
             }
 
-            if (dependentFIlePropertyChanged)
+            if (dependentFilePropertyChanged)
             {
                 var dependentModels = await FindDependentModels(transactionEntity);
                 InvalidateDependentModels(dependentModels);
+            }
+
+            // construct any necessary FileRequests
+            if (isFileDomainModel)
+            {
+                if (namePropertyChanged)
+                    fileRequests.Add(ConstructRenameFileRequest(transactionEntity));
+
+                if (isGeneratedFileDomainModel)
+                {
+                    // valid only if FileIsSynchronized became true <and> the FileTimeStamp did not change because the file was not updated through a POST.
+                    if (fileIsSynchronizedPropertyEnabled && !fileTimeStampPropertyChanged)
+                    {
+                        fileRequests.Add(ConstructGenerateFileRequest(transactionEntity, stage: ProcessingStage.PostProcess));
+                    }
+                }
             }
 
             return fileRequests;
