@@ -22,7 +22,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Solver - Copy.py" />
+    <Compile Include="Solver.py" />
     <Compile Include="Multiplier.py" />
   </ItemGroup>
   <ItemGroup>
