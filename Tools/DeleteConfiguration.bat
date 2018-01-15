@@ -1,3 +1,4 @@
+
 :: Delete a database and its store/users folders.
 :: DeleteConfiguration All | Development | Production | Test
 

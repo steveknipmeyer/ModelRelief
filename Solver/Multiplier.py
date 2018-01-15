@@ -1,39 +1,48 @@
 #!/usr/bin/env python
 #
 #   Copyright (c) 2017
-#   All Rights Reserved. 
+#   All Rights Reserved.
 #
 
 """
 
 .. module:: Multiplier
-   :synopsis: Multiplies the command line arguments.
+   :synopsis: Multiplies two numbers.
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 
 """
 
-import os
-import sys
-import math
 import time
 
 class Multiplier:
+    """
+        Multiples two numbers.
+    """
 
-    def __init__(self): 
-        return
+    def __init__(self):
+        """
+            Perform initialization.
+        """
+        pass
 
-    def multiply (self, firstTerm, secondTerm):
+    def multiply_terms (self, first_term, second_term):
         """
             Multiples the method arguments.
         """
-        return firstTerm * secondTerm
-    
-if __name__ == "__main__":
-    
-    firstTerm = 2
-    secondTerm = 4
+        return first_term * second_term
+
+def main():
+    """
+        Main entry point.
+    """
+    first_term = 2
+    second_term = 4
     multiplier = Multiplier()
-    result = multiplier.multiply(firstTerm, secondTerm)
+    result = multiplier.multiply_terms(first_term, second_term)
     time.sleep(5)
-    print ("%s = %s x %s" % (result, firstTerm, secondTerm))
+    print ("%s = %s x %s" % (result, first_term, second_term))
+
+if __name__ == "__main__":
+
+    main()

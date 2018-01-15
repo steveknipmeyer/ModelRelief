@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 #   Copyright (c) 2017
-#   All Rights Reserved. 
+#   All Rights Reserved.
 #
 
 """
@@ -14,8 +14,6 @@
 """
 
 import os
-import sys
-import shutil
 
 class Environment:
     """
@@ -29,6 +27,5 @@ class Environment:
     sqliteFolder    = os.path.join(modelReliefRoot, "Database")
     sqlserverFolder = os.environ["USERPROFILE"]
 
-    def __init__(self): 
-        
-        return
+    def __init__(self):
+        pass

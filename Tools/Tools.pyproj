@@ -32,6 +32,7 @@
   <ItemGroup>
     <Content Include="DeleteConfiguration.bat" />
     <Content Include="ModelReliefShell.bat" />
+    <Content Include="SetAnacondaPath.bat" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

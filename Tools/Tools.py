@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 #   Copyright (c) 2017
-#   All Rights Reserved. 
+#   All Rights Reserved.
 #
 
 """
@@ -33,17 +33,17 @@ class Colors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-    def print_format_table():
+    def print_format_table(self):
         """
         prints table of formatted text format options
         """
-        for style in range(8):
-            for fg in range(30,38):
-                s1 = ''
-                for bg in range(40,48):
-                    format = ';'.join([str(style), str(fg), str(bg)])
-                    s1 += '\x1b[%sm %s \x1b[0m' % (format, format)
-                print(s1)
+        for style_group in range(8):
+            for foreground in range(30,38):
+                style = ''
+                for background in range(40,48):
+                    style_format = ';'.join([str(style_group), str(foreground), str(background)])
+                    style += '\x1b[%sm %s \x1b[0m' % (style_format, style_format)
+                print(style)
             print('\n')
 
     # http://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html
@@ -67,7 +67,10 @@ class Colors:
     BrightWhite =   '\u001b[37;1m'
     Reset =         '\u001b[0m'
 
-    def printAnsi16Colors():
+    def print_ansi16_colors(self):
+        """
+            Print the color styles based on Ansi 16 color mode.
+        """
         print (Colors.Black, 'Black', Colors.Reset)
         print (Colors.Red, 'Red', Colors.Reset)
         print (Colors.Green, 'Green', Colors.Reset)
@@ -85,7 +88,10 @@ class Colors:
         print (Colors.BrightCyan, 'BrightCyan', Colors.Reset)
         print (Colors.BrightWhite, 'BrightWhite', Colors.Reset)
 
-    def printAnsi256Colors():
+    def print_ansi256_colors(self):
+        """
+            Print the color styles based on Ansi 256 color mode.
+        """
         for i in range(0, 16):
             for j in range(0, 16):
                 code = str(i * 16 + j)
@@ -93,33 +99,40 @@ class Colors:
             print (u"\u001b[0m")
 
 class Tools:
-    def __init__(self): 
-        
-        return
+    """
+        General support for Python tools.
+    """
 
-    def copyFile (sourceFile, destinationFile):
+    def __init__(self):
+        """
+            Perform class initialization.
+        """
+        pass
+
+    @staticmethod
+    def copy_file (source_file, destination_file):
         """
             Copy a single file. The destination is overwritten if it exists.
-        """ 
+        """
 
         # copyfile does not overwrite...
-        if os.path.isfile(destinationFile):
-            os.remove(destinationFile)    
+        if os.path.isfile(destination_file):
+            os.remove(destination_file)
 
-        print ("%s -> %s" % (sourceFile, destinationFile))
-        copyfile(sourceFile, destinationFile)
+        print ("%s -> %s" % (source_file, destination_file))
+        copyfile(source_file, destination_file)
 
-    def recurseFolder(folder):
+    def recurse_folder(self, folder):
         """
             Recurse a folder and process each file.
         """
         rootdir = folder
-        for root, subfolders, files in os.walk(rootdir):
-            currentFolder = os.path.basename(root)
+        for root, files in os.walk(rootdir):
+            # current_folder = os.path.basename(root)
 
             for file in files:
-                fileName, fileExtension = os.path.splitext(file)
+                root, file_extension = os.path.splitext(file)
 
-                if (fileExtension.lower() == ".obj"):
-                    modelPath = os.path.join(root, file)
-                    print (modelPath)
+                if file_extension.lower() == ".obj":
+                    model_path = os.path.join(root, file)
+                    print (model_path)
