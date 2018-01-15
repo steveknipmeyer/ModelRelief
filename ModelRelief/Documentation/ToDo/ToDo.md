@@ -14,6 +14,26 @@ Some Markdown text with <span style="color:blue">some *blue* text
 
 #### Short Term
 
+##### Mesh Generation Prototype
+    Current
+        Client
+            Create DepthBuffer
+            DepthBufferFactory -> Create Mesh
+            Post DepthBuffer
+     Experiment
+
+| Client | Server|
+|-------|--------|
+|Create DepthBuffer in-memory | |
+|Post DepthBuffer | |
+|Post DepthBuffer/id/file | |
+|Post MeshTransform  | |
+|Post Mesh = Mesh (DepthBuffer, MeshTransform) <br>FileIsSynchronized = true  | |
+|| Solver <Mesh.json> filename |
+|| Post Mesh/id/file (raw file)|
+| Get Mesh/id/file||
+| Construct Mesh from raw file||
+
 
 ##### Critical Issues
 <span style="color:red">

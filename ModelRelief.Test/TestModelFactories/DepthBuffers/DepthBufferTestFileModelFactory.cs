@@ -49,7 +49,7 @@ namespace ModelRelief.Test.TestModels.DepthBuffers
         public override ITGetModel ConstructValidModel()
         {
             var validModel = base.ConstructValidModel() as Dto.DepthBuffer;
-            validModel.Format = Domain.DepthBufferFormat.Raw;
+            validModel.Format = Domain.DepthBufferFormat.RAW;
 
             return validModel;
         }

@@ -11,8 +11,9 @@ namespace ModelRelief.Domain
     public enum MeshFormat
     {
         None,           // unknown
+        RAW,            // floating point array
         OBJ,            // Wavefront OBJ
-        STL,             // Stereolithography
+        STL,            // Stereolithography
     }
 
     public class Mesh : GeneratedFileDomainModel

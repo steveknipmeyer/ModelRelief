@@ -402,17 +402,17 @@ namespace ModelRelief.Database
             {
                 new DepthBuffer
                 {
-                    Name = "lucy.raw", Description = "Generated in Maya", Format = DepthBufferFormat.Raw, Camera = FindByName<Camera>("Top Camera"), Model3d = FindByName<Model3d>("lucy.obj"),
+                    Name = "lucy.raw", Description = "Generated in Maya", Format = DepthBufferFormat.RAW, Camera = FindByName<Camera>("Top Camera"), Model3d = FindByName<Model3d>("lucy.obj"),
                     User = _user, Project = FindByName<Project>("ModelRelief"),
                 },
                 new DepthBuffer
                 {
-                    Name = "bunny.raw", Description = "Generated in VRay", Format = DepthBufferFormat.Raw, Camera = FindByName<Camera>("Isometric Camera"), Model3d = FindByName<Model3d>("bunny.obj"),
+                    Name = "bunny.raw", Description = "Generated in VRay", Format = DepthBufferFormat.RAW, Camera = FindByName<Camera>("Isometric Camera"), Model3d = FindByName<Model3d>("bunny.obj"),
                     User = _user, Project = FindByName<Project>("Architecture"),
                 },
                 new DepthBuffer
                 {
-                    Name = "armadillo.raw", Description = "Generated in Rhino", Format = DepthBufferFormat.Raw, Camera = FindByName<Camera>("Isometric Camera"), Model3d = FindByName<Model3d>("armadillo.obj"),
+                    Name = "armadillo.raw", Description = "Generated in Rhino", Format = DepthBufferFormat.RAW, Camera = FindByName<Camera>("Isometric Camera"), Model3d = FindByName<Model3d>("armadillo.obj"),
                     User = _user, Project = FindByName<Project>("Jewelry"),
                 },
             };

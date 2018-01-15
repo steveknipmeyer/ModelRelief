@@ -11,7 +11,7 @@ namespace ModelRelief.Domain
     public enum DepthBufferFormat
     {
         None,       // unknown
-        Raw,        // floating point array
+        RAW,        // floating point array
         PNG,        // PNG format
         JPG,        // JPG format
     }

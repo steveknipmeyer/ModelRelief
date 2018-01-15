@@ -18,6 +18,60 @@
 </code></pre>
 <h3 id="tasks">Tasks</h3>
 <h4 id="short-term">Short Term</h4>
+<h5 id="mesh-generation-prototype">Mesh Generation Prototype</h5>
+<pre><code>Current
+    Client
+        Create DepthBuffer
+        DepthBufferFactory -&gt; Create Mesh
+        Post DepthBuffer
+ Experiment
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Client</th>
+<th>Server</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Create DepthBuffer in-memory</td>
+<td></td>
+</tr>
+<tr>
+<td>Post DepthBuffer</td>
+<td></td>
+</tr>
+<tr>
+<td>Post DepthBuffer/id/file</td>
+<td></td>
+</tr>
+<tr>
+<td>Post MeshTransform</td>
+<td></td>
+</tr>
+<tr>
+<td>Post Mesh = Mesh (DepthBuffer, MeshTransform) <br>FileIsSynchronized = true</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Solver &lt;Mesh.json&gt; filename</td>
+</tr>
+<tr>
+<td></td>
+<td>Post Mesh/id/file (raw file)</td>
+</tr>
+<tr>
+<td>Get Mesh/id/file</td>
+<td></td>
+</tr>
+<tr>
+<td>Construct Mesh from raw file</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <h5 id="critical-issues">Critical Issues</h5>
 <span style="color:red">
 Replace DateTime with a type that has more resolution.
