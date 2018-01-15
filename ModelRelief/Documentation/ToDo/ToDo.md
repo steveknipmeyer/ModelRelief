@@ -8,9 +8,7 @@ Some Markdown text with <span style="color:blue">some *blue* text
 
     Lambda
         Python programs must be invoked by py <program>. This is not necessary on Vector.
-        SQLite
-        Postman
-        Changes are shown in the wwwroot folder.
+
 
 ### Tasks
 
