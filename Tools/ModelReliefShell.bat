@@ -18,7 +18,7 @@ echo InitializeDatabase=%InitializeDatabase%
 echo InitializeUserStore=%InitializeUserStore%
 echo
 
-path=%path%;"D:\Users\Steve Knipmeyer\Documents\Bin"
+path=%path%;D:\Users\Steve Knipmeyer\Documents\Bin
 path=%path%;%MRSolution%Tools
 path=%path%;C:\Program Files (x86)\WinMerge
 path=%path%;C:\Program Files\KDiff3

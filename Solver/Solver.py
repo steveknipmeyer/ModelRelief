@@ -25,8 +25,8 @@ def plot_image(image, height=8, **kwargs):
     x_length = image.shape[1]
     aspect_ratio = y_length/x_length
     width = aspect_ratio * height
-    print ('Aspect ratio = {}'.format(aspect_ratio))
-    print ("w = {}, h = {}".format (width, height))
+    print('Aspect ratio = {}'.format(aspect_ratio))
+    print("w = {}, h = {}".format(width, height))
 
     plt.figure(figsize=(width, height))
     plt.imshow(image, interpolation="none", **kwargs)
@@ -46,7 +46,7 @@ def main():
 
     plot_image(image, 5)
 
-    plt.plot([1,2,3,4])
+    plt.plot([1, 2, 3, 4])
     plt.ylabel('some numbers')
     plt.show()
 

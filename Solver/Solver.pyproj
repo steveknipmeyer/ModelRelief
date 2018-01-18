@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>4d128880-4790-41df-8a6b-0d34f9b65e4f</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Multiplier.py</StartupFile>
+    <StartupFile>Scalar.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,11 +22,22 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Scalar.py" />
     <Compile Include="Solver.py" />
-    <Compile Include="Multiplier.py" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda36-64" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Notebooks\" />
+    <Folder Include="Notebooks\.ipynb_checkpoints\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Notebooks\.ipynb_checkpoints\Solver-checkpoint.ipynb" />
+    <Content Include="Notebooks\Lucy.float" />
+    <Content Include="Notebooks\Lucy.png" />
+    <Content Include="Notebooks\Lucy.raw" />
+    <Content Include="Notebooks\Solver.ipynb" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
