@@ -69,7 +69,7 @@ namespace ModelRelief.Services.Jobs
         /// Dispatches a process to create a Mesh from its dependencies (e.g. DepthBuffer, MeshTransform).
         /// </summary>
         /// <param name="mesh">Mesh.</param>
-        /// <param name="fileName">FIle name of DepthBuffer.</param>
+        /// <param name="fileName">File name of DepthBuffer.</param>
         /// <param name="cancellationToken">Token to allows operation to be cancelled</param>
         /// /// <returns>True if successful.</returns>
         public async Task<bool> GenerateMeshAsync(Domain.Mesh mesh, string fileName, CancellationToken cancellationToken = default)
@@ -81,7 +81,7 @@ namespace ModelRelief.Services.Jobs
             await DbContext.SaveChangesAsync();
 
             // WIP: mesh generation process
-            var result = RunPythonTask(@"D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\Solver\Multiplier.py", string.Empty);
+            var result = RunPythonTask(@"D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\Solver\Solver.py", string.Empty);
 
             // The job is complete and the file is syncrhonized.
             mesh.FileIsSynchronized = true;

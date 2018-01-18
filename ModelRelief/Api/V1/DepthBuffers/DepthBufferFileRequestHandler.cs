@@ -62,14 +62,13 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// </summary>
         /// <param name="fileRequest">FileRequest created during dependency processing.</param>
         /// <param name="generatedFileDomainModel">Domain model.</param>
-        /// <param name="fileName">Filename to generate.</param>
         /// <param name="cancellationToken">Token to allows operation to be cancelled</param>
         /// <returns>True if succesful.</returns>
-        public override async Task<bool> ProcessGenerate(FileRequest<Domain.DepthBuffer> fileRequest, GeneratedFileDomainModel generatedFileDomainModel, string fileName, CancellationToken cancellationToken)
+        public override async Task<bool> ProcessGenerate(FileRequest<Domain.DepthBuffer> fileRequest, GeneratedFileDomainModel generatedFileDomainModel, CancellationToken cancellationToken)
         {
             var depthBuffer = generatedFileDomainModel as Domain.DepthBuffer;
-            Logger.LogInformation($"DepthBuffer [Model Id = {fileRequest.TransactionEntity.PrimaryKey}, UserId = {fileRequest.TransactionEntity.UserId}, file = {fileName}] has been queued for file generation.");
-            return await Dispatcher.GenerateDepthBufferAsync(depthBuffer, fileName, cancellationToken);
+            Logger.LogInformation($"DepthBuffer [Model Id = {fileRequest.TransactionEntity.PrimaryKey}, UserId = {fileRequest.TransactionEntity.UserId}, file = {generatedFileDomainModel.FileName}] has been queued for file generation.");
+            return await Dispatcher.GenerateDepthBufferAsync(depthBuffer, generatedFileDomainModel.FileName, cancellationToken);
         }
 
         /// <summary>

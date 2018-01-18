@@ -65,10 +65,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// </summary>
         /// <param name="fileRequest">FileRequest created during dependency processing.</param>
         /// <param name="generatedFileDomainModel">Domain model.</param>
-        /// <param name="fileName">Filename to generate.</param>
         /// <param name="cancellationToken">Token to allows operation to be cancelled</param>
         /// <returns>True if succesful.</returns>
-        public virtual async Task<bool> ProcessGenerate(FileRequest<TEntity> fileRequest, GeneratedFileDomainModel generatedFileDomainModel, string fileName, CancellationToken cancellationToken)
+        public virtual async Task<bool> ProcessGenerate(FileRequest<TEntity> fileRequest, GeneratedFileDomainModel generatedFileDomainModel, CancellationToken cancellationToken)
         {
             Logger.LogError($"FileRequestHandler: Generate is not implemented: Type = {typeof(TEntity).Name}, Model Id = {fileRequest.TransactionEntity.PrimaryKey}, UserId = {fileRequest.TransactionEntity.UserId}");
             await Task.CompletedTask;
@@ -80,14 +79,13 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// </summary>
         /// <param name="fileRequest">FileRequest created during dependency processing.</param>
         /// <param name="fileDomainModel">Domain model.</param>
-        /// <param name="fileName">Filename to generate.</param>
         /// <returns>True if succesful.</returns>
-        public virtual async Task<bool> ProcessRename(FileRequest<TEntity> fileRequest, FileDomainModel fileDomainModel, string fileName)
+        public virtual async Task<bool> ProcessRename(FileRequest<TEntity> fileRequest, FileDomainModel fileDomainModel)
         {
             // find original Name property
             var originalName = fileRequest.TransactionEntity.ChangeTrackerEntity.GetDatabaseValues()[PropertyNames.Name] as string;
 
-            var filePath = Path.GetDirectoryName(fileName);
+            var filePath = Path.GetDirectoryName(fileDomainModel.FileName);
             var originalFile = Path.Combine(filePath, $"{originalName}");
 
             if (!File.Exists(originalFile))
@@ -95,8 +93,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 Logger.LogError($"FileRequestHandler: {originalFile} does not exist.");
                 throw new ModelFileNotFoundException(typeof(TEntity), originalName);
             }
-            Logger.LogInformation($"FileRequestHandler: {originalFile} will be renamed to {fileName}.");
-            File.Move(originalFile, fileName);
+            Logger.LogInformation($"FileRequestHandler: {originalFile} will be renamed to {fileDomainModel.FileName}.");
+            File.Move(originalFile, fileDomainModel.FileName);
 
             await Task.CompletedTask;
             return true;
@@ -114,21 +112,19 @@ namespace ModelRelief.Api.V1.Shared.Rest
             if (!typeof(FileDomainModel).IsAssignableFrom(typeof(TEntity)))
                 throw new ModelNotBackedByFileException(typeof(TEntity));
 
-            var domainModel = await FindModelAsync<TEntity>(message.TransactionEntity.UserId, message.TransactionEntity.PrimaryKey, throwIfNotFound: true);
-            var fileName = Path.Combine(StorageManager.DefaultModelStorageFolder(domainModel), domainModel.Name);
+            var fileDomainModel = await FindModelAsync<TEntity>(message.TransactionEntity.UserId, message.TransactionEntity.PrimaryKey, throwIfNotFound: true) as FileDomainModel;
 
             switch (message.Operation)
             {
                 case FileOperation.Rename:
                     {
-                        var fileDomainModel = domainModel as FileDomainModel;
-                        return await ProcessRename(message, fileDomainModel, fileName);
+                        return await ProcessRename(message, fileDomainModel);
                     }
 
                 case FileOperation.Generate:
                     {
-                        var generatedFileDomainModel = domainModel as GeneratedFileDomainModel;
-                        return await ProcessGenerate(message, generatedFileDomainModel, fileName, cancellationToken);
+                        var generatedFileDomainModel = fileDomainModel as GeneratedFileDomainModel;
+                        return await ProcessGenerate(message, generatedFileDomainModel, cancellationToken);
                     }
 
                 default:

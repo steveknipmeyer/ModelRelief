@@ -1,5 +1,6 @@
 ﻿##### Commit Notes
-"C:\Program Files (x86)\Microsoft Visual Studio\Shared\Anaconda3_64\pythonw.exe" "C:\Program Files (x86)\Microsoft Visual Studio\Shared\Anaconda3_64\cwp.py" "C:\Program Files (x86)\Microsoft Visual Studio\Shared\Anaconda3_64" %windir%\system32\cmd.exe "/K"
+Remove fileName parameter from FileRequest methods. It is available through FileDomainModel.FileName.
+
 ##### Technical Education
 - Manning AspNet Core book.
 - Manning Dependency Injection book.
@@ -28,7 +29,8 @@ Some Markdown text with <span style="color:blue">some *blue* text
 |Post DepthBuffer | |
 |Post DepthBuffer/id/file | |
 |Post MeshTransform  | |
-|Post Mesh = Mesh (DepthBuffer, MeshTransform) <br>FileIsSynchronized = true  | |
+|Post Mesh = Mesh (DepthBuffer, MeshTransform)| |
+|Patch Mesh.FileIsSynchronized = true  | |
 || Solver <Mesh.json> filename |
 || Post Mesh/id/file (raw file)|
 | Get Mesh/id/file||

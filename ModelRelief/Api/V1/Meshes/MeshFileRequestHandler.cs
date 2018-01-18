@@ -7,6 +7,7 @@
 namespace ModelRelief.Api.V1.Shared.Rest
 {
     using System.Collections.Generic;
+    using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;
@@ -62,14 +63,13 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// </summary>
         /// <param name="fileRequest">FileRequest created during dependency processing.</param>
         /// <param name="generatedFileDomainModel">Domain model.</param>
-        /// <param name="fileName">Filename to generate.</param>
         /// <param name="cancellationToken">Token to allows operation to be cancelled</param>
-        public override async Task<bool> ProcessGenerate(FileRequest<Domain.Mesh> fileRequest, GeneratedFileDomainModel generatedFileDomainModel, string fileName, CancellationToken cancellationToken)
+        public override async Task<bool> ProcessGenerate(FileRequest<Domain.Mesh> fileRequest, GeneratedFileDomainModel generatedFileDomainModel, CancellationToken cancellationToken)
         {
             var mesh = generatedFileDomainModel as Domain.Mesh;
 
-            Logger.LogInformation($"Mesh [Model Id = {fileRequest.TransactionEntity.PrimaryKey}, UserId = {fileRequest.TransactionEntity.UserId}, file = {fileName}] has been queued for file generation.");
-            return await Dispatcher.GenerateMeshAsync(mesh, fileName, cancellationToken);
+            Logger.LogInformation($"Mesh [Model Id = {fileRequest.TransactionEntity.PrimaryKey}, UserId = {fileRequest.TransactionEntity.UserId}, file = {generatedFileDomainModel.FileName}] has been queued for file generation.");
+            return await Dispatcher.GenerateMeshAsync(mesh, generatedFileDomainModel.FileName, cancellationToken);
         }
 
         /// <summary>
