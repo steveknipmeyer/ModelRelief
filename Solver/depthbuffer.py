@@ -12,15 +12,17 @@
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 
 """
+import os
 
 class DepthBuffer:
     """
     A rendering DepthBuffer created from a Model3d and a Camera.
     """
 
-    def __init__(self, path):
+    def __init__(self, settings):
         """
-            Iniitalize an instancee of a MeshTransform.
+            Iniitalize an instancee of a DepthBuffer.
         """
-        self.path = path
-
+        self.settings = settings
+        self.path = os.path.abspath(settings['FileName'])
+        self.format = settings['Format']

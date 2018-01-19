@@ -106,7 +106,7 @@ namespace ModelRelief.Services.Jobs
             await DbContext.SaveChangesAsync();
 
             string jsonFile = SerializeModelToWorkingStorage(mesh);
-            string arguments = $"-s {jsonFile}";
+            string arguments = $"-s \"{jsonFile}\"";
             string pythonPath = @"D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\Solver\Solver.py";
             var result = RunPythonTask(pythonPath, arguments);
 

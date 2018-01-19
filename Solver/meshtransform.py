@@ -21,8 +21,9 @@ class MeshTransform:
     Settings used to contral a transform of a DepthBuffer to create a new (relief) DepthBuffer.
     """
 
-    def __init__(self, scale):
+    def __init__(self, settings):
         """
         Iniitalize an instance of a MeshTransform.
         """
-        self.scale = scale
+        self.settings = settings
+        self.scale = settings['LambdaLinearScaling']

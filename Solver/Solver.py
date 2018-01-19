@@ -14,11 +14,13 @@
 """
 
 import argparse
+import json
 import os
 import struct
+import sys
 
-from depth import DepthBuffer
-from transform import MeshTransform
+from depthbuffer import DepthBuffer
+from meshtransform import MeshTransform
 
 class Solver:
     """
@@ -27,16 +29,23 @@ class Solver:
 
     SINGLE_PRECISION = 4
 
-    def __init__(self, settings):
+    def __init__(self, settings, working):
         """
             Iniitalize an instane of the Solver.
             settings : path to JSON settings
         """
-        self.settings = settings
+        with open(settings) as json_file:
+            self.settings = json.load(json_file)
 
-        if mesh_transform is None:
-            mesh_transform = MeshTransform(2.0)
-        self.mesh_transform = mesh_transform
+        self.initialize_settings()
+        self.working_folder = os.path.abspath(working)
+
+    def initialize_settings(self):
+        """
+            Unpack the JSON settings file and initialie Solver properties.
+        """
+        self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'])
+        self.mesh_transform = MeshTransform(self.settings['MeshTransform'])
 
     def read__binary(self, path):
         """
@@ -78,7 +87,7 @@ class Solver:
             Writes a depth buffer from a list of floats.
         """
 
-        file_path = '%s.%f' % (self.depth_buffer, scale)
+        file_path = '%s.%f' % (self.depth_buffer.path, scale)
 
         with open(file=file_path, mode='w') as file:
             for depth_tuple in float_list:
@@ -90,7 +99,7 @@ class Solver:
             Transforms a DepthBuffer by a MeshTransform
         """
 
-        byte_depths = self.read__binary(self.depth_buffer)
+        byte_depths = self.read__binary(self.depth_buffer.path)
         float_list = self.unpack_floats(byte_depths)
 
         self.write_buffer(float_list, 1.0)
@@ -101,10 +110,11 @@ def main():
         Main entry point.
     """
     options_parser = argparse.ArgumentParser()
-    options_parser.add_argument('--settings', '-s', required=True)
+    options_parser.add_argument('--settings', '-s', description='Mesh JSON settings file that defines the associated DepthBuffer and MeshTransform.', required=True)
+    options_parser.add_argument('--working', '-w', description='Temporary working folder.', required=True)
     arguments = options_parser.parse_args()
 
-    solver = Solver(arguments.settings)
+    solver = Solver(arguments.settings, arguments.working)
     solver.transform_buffer()
 
 if __name__ == '__main__':

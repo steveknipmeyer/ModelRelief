@@ -1,7 +1,4 @@
 ﻿##### Commit Notes
-Exclude User property from JSON serialization.
-Move test model Name assignment to concrete classes so the names can reflect the type (not generic "Test Model") and include an extension.
-Normalize Path in PostFileRequestHandler.
 
 Some Markdown text with <span style="color:blue">some *blue* text
 
