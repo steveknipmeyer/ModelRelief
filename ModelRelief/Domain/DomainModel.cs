@@ -10,6 +10,7 @@ namespace ModelRelief.Domain
     using System.ComponentModel.DataAnnotations;
     using System.IO;
     using ModelRelief.Services.Relationships;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Represents the base class for a model that is not file-backed.
@@ -27,6 +28,7 @@ namespace ModelRelief.Domain
 
         // Navigation Properties
         public string UserId { get; set; }
+        [JsonIgnore]
         public ApplicationUser User { get; set; }
     }
 

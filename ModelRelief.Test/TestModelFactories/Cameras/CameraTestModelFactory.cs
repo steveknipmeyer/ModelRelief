@@ -49,7 +49,7 @@ namespace ModelRelief.Test.TestModels.Cameras
         public override ITGetModel ConstructValidModel()
         {
             var validModel = base.ConstructValidModel() as ITGetModel;
-
+            validModel.Name = "TestCamera";
             return validModel;
         }
     }

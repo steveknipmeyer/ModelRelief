@@ -49,6 +49,7 @@ namespace ModelRelief.Test.TestModels.Meshes
         public override ITGetModel ConstructValidModel()
         {
             var validModel = base.ConstructValidModel() as Dto.Mesh;
+            validModel.Name = "TestMesh.obj";
             validModel.Format = Domain.MeshFormat.OBJ;
 
             return validModel;

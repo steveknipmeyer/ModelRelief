@@ -49,6 +49,7 @@ namespace ModelRelief.Test.TestModels.Projects
         public override ITGetModel ConstructValidModel()
         {
             var validModel = base.ConstructValidModel();
+            validModel.Name = "TestProject";
 
             return validModel;
         }

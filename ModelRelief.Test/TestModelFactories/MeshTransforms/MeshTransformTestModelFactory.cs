@@ -49,6 +49,7 @@ namespace ModelRelief.Test.TestModels.MeshTransforms
         public override ITGetModel ConstructValidModel()
         {
             var validModel = base.ConstructValidModel();
+            validModel.Name = "TestMeshTransform";
 
             return validModel;
         }

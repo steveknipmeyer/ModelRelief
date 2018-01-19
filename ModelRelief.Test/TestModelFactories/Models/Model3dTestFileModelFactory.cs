@@ -49,6 +49,7 @@ namespace ModelRelief.Test.TestModels.Models
         public override ITGetModel ConstructValidModel()
         {
             var validModel = base.ConstructValidModel() as Dto.Model3d;
+            validModel.Name = "TestModel3d.obj";
             validModel.Format = Domain.Model3dFormat.OBJ;
 
             return validModel;
