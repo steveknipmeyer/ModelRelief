@@ -87,7 +87,7 @@ class Solver:
             Writes a depth buffer from a list of floats.
         """
 
-        file_path = '%s.%f' % (self.depth_buffer.path, scale)
+        file_path = '%s/%s.%f' % (self.working_folder, self.depth_buffer.name, scale)
 
         with open(file=file_path, mode='w') as file:
             for depth_tuple in float_list:
@@ -110,8 +110,9 @@ def main():
         Main entry point.
     """
     options_parser = argparse.ArgumentParser()
-    options_parser.add_argument('--settings', '-s', description='Mesh JSON settings file that defines the associated DepthBuffer and MeshTransform.', required=True)
-    options_parser.add_argument('--working', '-w', description='Temporary working folder.', required=True)
+    options_parser.add_argument('--settings', '-s', help='Mesh JSON settings file that defines the associated DepthBuffer and MeshTransform.', required=True)
+    options_parser.add_argument('--working', '-w', help='Temporary working folder.', required=True)
+    print (sys.argv)
     arguments = options_parser.parse_args()
 
     solver = Solver(arguments.settings, arguments.working)

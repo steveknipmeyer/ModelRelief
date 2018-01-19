@@ -26,3 +26,7 @@ class DepthBuffer:
         self.settings = settings
         self.path = os.path.abspath(settings['FileName'])
         self.format = settings['Format']
+
+    @property
+    def name(self):
+        return os.path.basename(self.path)
