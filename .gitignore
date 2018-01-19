@@ -158,7 +158,7 @@ HTML5Assist_Browser_Cache/*
 #################
 ## SLK
 #################
-*.raw
+*/Test/Data/**/*.raw
 *.rhl
 *.bak
 hidden/
@@ -181,4 +181,3 @@ node_modules/
 */wwwroot/store/development/users/
 */wwwroot/store/production/users/
 */wwwroot/store/test/users/
-

@@ -15,6 +15,7 @@ namespace ModelRelief.Services.Jobs
     using ModelRelief.Database;
     using ModelRelief.Domain;
     using ModelRelief.Utility;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Dispatch manager.
@@ -66,6 +67,30 @@ namespace ModelRelief.Services.Jobs
         }
 
         /// <summary>
+        /// Writes a JSON file to working storage from the given model.
+        /// </summary>
+        /// <param name="model">Domain model to serialize.</param>
+        /// <returns>Path of JSON file.</returns>
+        private string SerializeModelToWorkingStorage(DomainModel model)
+        {
+            string workingStorageFolder = StorageManager.WorkingStorageFolder(model.UserId);
+            string fileName = $"{workingStorageFolder}{model.GetType().Name}{model.Id.ToString()}.json";
+            Files.EnsureDirectoryExists(fileName);
+
+            using (StreamWriter file = File.CreateText(fileName))
+            {
+                JsonSerializer serializer = new JsonSerializer()
+                {
+                    Formatting = Formatting.Indented,
+                };
+
+                //serialize object directly into file stream
+                serializer.Serialize(file, model);
+            }
+            return fileName;
+        }
+
+        /// <summary>
         /// Dispatches a process to create a Mesh from its dependencies (e.g. DepthBuffer, MeshTransform).
         /// </summary>
         /// <param name="mesh">Mesh.</param>
@@ -80,10 +105,12 @@ namespace ModelRelief.Services.Jobs
             mesh.FileIsSynchronized = false;
             await DbContext.SaveChangesAsync();
 
-            // WIP: mesh generation process
-            var result = RunPythonTask(@"D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\Solver\Solver.py", string.Empty);
+            string jsonFile = SerializeModelToWorkingStorage(mesh);
+            string arguments = $"-s {jsonFile}";
+            string pythonPath = @"D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\Solver\Solver.py";
+            var result = RunPythonTask(pythonPath, arguments);
 
-            // The job is complete and the file is syncrhonized.
+            // The job is complete and the file is synchronized.
             mesh.FileIsSynchronized = true;
             await DbContext.SaveChangesAsync();
 

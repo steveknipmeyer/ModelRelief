@@ -20,5 +20,7 @@ namespace ModelRelief.Services
 
         string DefaultModelStorageFolder<TEntity>(TEntity model)
             where TEntity : DomainModel;
+
+        string WorkingStorageFolder(string userId);
     }
 }

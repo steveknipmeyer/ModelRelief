@@ -27,13 +27,12 @@ class Solver:
 
     SINGLE_PRECISION = 4
 
-    def __init__(self, depth_buffer, mesh_transform=None):
+    def __init__(self, settings):
         """
             Iniitalize an instane of the Solver.
-            depth_buffer : path to raw DepthBuffer file
-            mesh_transform : path to JSON MeshTransform
+            settings : path to JSON settings
         """
-        self.depth_buffer = depth_buffer
+        self.settings = settings
 
         if mesh_transform is None:
             mesh_transform = MeshTransform(2.0)
@@ -102,12 +101,10 @@ def main():
         Main entry point.
     """
     options_parser = argparse.ArgumentParser()
-    options_parser.add_argument('--depth-buffer', '-d', required=True)
-    options_parser.add_argument('--transform', '-t')
-
+    options_parser.add_argument('--settings', '-s', required=True)
     arguments = options_parser.parse_args()
 
-    solver = Solver(arguments.depth_buffer, MeshTransform(4.0))
+    solver = Solver(arguments.settings)
     solver.transform_buffer()
 
 if __name__ == '__main__':

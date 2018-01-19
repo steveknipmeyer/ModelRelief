@@ -136,6 +136,18 @@ namespace ModelRelief.Utility
         }
 
         /// <summary>
+        /// Ensures the directory of the given file exists.
+        /// The directory is created if necessary;
+        /// </summary>
+        /// <param name="fileName">Complete path of file.</param>
+        public static void EnsureDirectoryExists(string fileName)
+        {
+            string directoryName = Path.GetDirectoryName(fileName);
+            if (!Directory.Exists(directoryName))
+                Directory.CreateDirectory(directoryName);
+        }
+
+        /// <summary>
         /// N.B. DateTime.Now yields 1 second accuracy so the resulting timestamps betweeen the initial and modified file events may be identical!
         /// </summary>
         public static void SleepForTimeStamp()

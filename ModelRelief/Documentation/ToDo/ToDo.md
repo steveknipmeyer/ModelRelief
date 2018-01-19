@@ -1,35 +1,27 @@
 ﻿##### Commit Notes
-Rename appsettings ResourcePaths to Paths. Add Paths.Working to define the location of task working files.
+
+Some Markdown text with <span style="color:blue">some *blue* text
 
 ##### Technical Education
 - Manning AspNet Core book.
 - Manning Dependency Injection book.
 
-Some Markdown text with <span style="color:blue">some *blue* text
 
-    Lambda
-        Python programs must be invoked by py <program>. This is not necessary on Vector.
+#####  Lambda
+    Python programs must be invoked by py <program>. This is not necessary on Vector.
 
 
 ### Tasks
 
 #### Short Term
 
+
 ##### Mesh Generation Prototype
-    Review casts in FileIntegrationTests.
-
-    FileRequest_MeshIsInvalidatedAfterDepthBufferFileBecomesUnsynchronized()    
-        iS Files.SleepForTimeStamp necessary?
-
-    Pass a JSON representation of the expanded Mesh to the Solver.
     
     UnitTest
        Scale the DepthBuffer and create a raw Mesh.
         Verify the depth values of the Mesh have been scaled from the original DepthBuffer.
         
-    Configure a working directory (below wwwroot) for temporary files.
-        JSON files for FileRequest operations
-        temporary files
 
     Current
         Client
@@ -76,7 +68,12 @@ Replace DateTime with a type that has more resolution.
     Should the assignment of FileSynchronized be deferred until the request has completed?
     FileStamp could potentially serve as the "complete" flag for a long-running request. 
 
-### Python Tasks
+#### Python Tasks
+###### Virtual Evironment
+    Create a virtual environment that is published with the web application.
+    This will allow the Python path and runtime environment to be precisely defined.
+
+###### Queues
 ```<language>
 FileRequest places a message in a work queue.  
     FileIsSynchronized is reset to false.  
@@ -100,9 +97,9 @@ https://github.com/jamesmanning/RunProcessAsTask
 Long-running Requests:   
 https://stackoverflow.com/questions/33009721/long-running-rest-api-with-queues
 
-### Dependency Manager
+#### Dependency Manager
 
-#### Dependency Handling                    
+##### Dependency Handling                    
 **Modified**           
 - [x] For GeneratedFileDomainModel root models, if FileIsSynchronized <changed> to true, schedule a FileOperation.Generation.
 - [x] For FileDomainModel root models, if Name <changed>, schedule a FileOperation.Rename.

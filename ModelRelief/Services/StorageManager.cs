@@ -34,13 +34,28 @@ namespace ModelRelief.Services
         public string DefaultModelStorageFolder<TEntity>(TEntity model)
             where TEntity : DomainModel
         {
-            var storeUsers  = ConfigurationProvider.GetSetting(Paths.StoreUsers);
+            var storeUsersFolder  = ConfigurationProvider.GetSetting(Paths.StoreUsers);
             var modelRootFolder = ConfigurationProvider.GetSetting($"Paths:ResourceFolders:{typeof(TEntity).Name}");
 
-            string modelStorageFolder = $"{HostingEnvironment.WebRootPath}{storeUsers}{model.User.Id}/{modelRootFolder}/{model.Id}/";
+            string modelStorageFolder = $"{HostingEnvironment.WebRootPath}{storeUsersFolder}{model.User.Id}/{modelRootFolder}/{model.Id}/";
 
             // normalize
             return Path.GetFullPath(modelStorageFolder);
+        }
+
+        /// <summary>
+        /// Returns the working storage folder for a given user.
+        /// </summary>
+        /// <param name="userId">User ID. </param>
+        public string WorkingStorageFolder(string userId)
+        {
+            var storeUsersFolder = ConfigurationProvider.GetSetting(Paths.StoreUsers);
+            var workingFolder = ConfigurationProvider.GetSetting(Paths.Working);
+
+            string workingStorageFolder = $"{HostingEnvironment.WebRootPath}{storeUsersFolder}{userId}/{workingFolder}/";
+
+            // normalize
+            return Path.GetFullPath(workingStorageFolder);
         }
     }
 }

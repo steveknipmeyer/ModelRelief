@@ -6,33 +6,22 @@
 <body>
 
     <h5 id="commit-notes">Commit Notes</h5>
-<p>Rename appsettings ResourcePaths to Paths. Add Paths.Working to define the location of task working files.</p>
+<p>Some Markdown text with <span style="color:blue">some <em>blue</em> text</p>
 <h5 id="technical-education">Technical Education</h5>
 <ul>
 <li>Manning AspNet Core book.</li>
 <li>Manning Dependency Injection book.</li>
 </ul>
-<p>Some Markdown text with <span style="color:blue">some <em>blue</em> text</p>
-<pre><code>Lambda
-    Python programs must be invoked by py &lt;program&gt;. This is not necessary on Vector.
+<h5 id="lambda">Lambda</h5>
+<pre><code>Python programs must be invoked by py &lt;program&gt;. This is not necessary on Vector.
 </code></pre>
 <h3 id="tasks">Tasks</h3>
 <h4 id="short-term">Short Term</h4>
 <h5 id="mesh-generation-prototype">Mesh Generation Prototype</h5>
-<pre><code>Review casts in FileIntegrationTests.
-
-FileRequest_MeshIsInvalidatedAfterDepthBufferFileBecomesUnsynchronized()    
-    iS Files.SleepForTimeStamp necessary?
-
-Pass a JSON representation of the expanded Mesh to the Solver.
-
-UnitTest
+<pre><code>UnitTest
    Scale the DepthBuffer and create a raw Mesh.
     Verify the depth values of the Mesh have been scaled from the original DepthBuffer.
     
-Configure a working directory (below wwwroot) for temporary files.
-    JSON files for FileRequest operations
-    temporary files
 
 Current
     Client
@@ -113,7 +102,12 @@ Replace DateTime with a type that has more resolution.
 <pre><code>Should the assignment of FileSynchronized be deferred until the request has completed?
 FileStamp could potentially serve as the &quot;complete&quot; flag for a long-running request. 
 </code></pre>
-<h3 id="python-tasks">Python Tasks</h3>
+<h4 id="python-tasks">Python Tasks</h4>
+<h6 id="virtual-evironment">Virtual Evironment</h6>
+<pre><code>Create a virtual environment that is published with the web application.
+This will allow the Python path and runtime environment to be precisely defined.
+</code></pre>
+<h6 id="queues">Queues</h6>
 <pre><code class="language-&lt;language&gt;">FileRequest places a message in a work queue.  
     FileIsSynchronized is reset to false.  
     A status code of 202 is returned to the client who can poll the value of FileIsSynchronized.
@@ -132,8 +126,8 @@ A worker process removes the request from the queue.
 <a href="https://github.com/jamesmanning/RunProcessAsTask">https://github.com/jamesmanning/RunProcessAsTask</a></p>
 <p>Long-running Requests:<br />
 <a href="https://stackoverflow.com/questions/33009721/long-running-rest-api-with-queues">https://stackoverflow.com/questions/33009721/long-running-rest-api-with-queues</a></p>
-<h3 id="dependency-manager">Dependency Manager</h3>
-<h4 id="dependency-handling">Dependency Handling</h4>
+<h4 id="dependency-manager">Dependency Manager</h4>
+<h5 id="dependency-handling">Dependency Handling</h5>
 <p><strong>Modified</strong></p>
 <ul class="contains-task-list">
 <li class="task-list-item"><input disabled="disabled" type="checkbox" checked="checked" /> For GeneratedFileDomainModel root models, if FileIsSynchronized <changed> to true, schedule a FileOperation.Generation.</li>
