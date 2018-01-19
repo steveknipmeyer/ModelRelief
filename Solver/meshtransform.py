@@ -7,14 +7,12 @@
 """
 
 .. module:: MeshTransform
-   :synopsis: A collection of settings that control how a DepthBuffer is transformed to create a relief DepthBuffer.
+   :synopsis: A collection of settings that control how a DepthBuffer is transformed
+              to create a relief DepthBuffer.
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 
 """
-
-import argparse
-import struct
 
 class MeshTransform:
     """

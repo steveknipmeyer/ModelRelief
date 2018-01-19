@@ -107,7 +107,7 @@ namespace ModelRelief.Services.Jobs
 
             string jsonFile = SerializeModelToWorkingStorage(mesh);
             string arguments = $"-s \"{jsonFile}\"";
-            string pythonPath = @"D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\Solver\Solver.py";
+            string pythonPath = @"D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\Solver\solver.py";
             var result = RunPythonTask(pythonPath, arguments);
 
             // The job is complete and the file is synchronized.

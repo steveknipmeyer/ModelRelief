@@ -30,7 +30,7 @@
     "Tau": 0.0,
     "SigmaGaussianBlur": 0.0,
     "SigmaGaussianSmooth": 0.0,
-    "LambdaLinearScaling": 5.0,
+    "LambdaLinearScaling": 3.0,
     "ProjectId": null,
     "Project": null,
     "Id": 14,
