@@ -47,26 +47,26 @@ namespace ModelRelief.Test.Integration.Meshes
             public override async Task ConstructGraph()
             {
                 // DepthBuffer
-                var depthBufferNode    = NodeCollection[typeof(Domain.DepthBuffer)];
+                var depthBufferNode = NodeCollection[typeof(Domain.DepthBuffer)];
                 var depthBufferFactory = depthBufferNode.Factory as ITestFileModelFactory;
-                depthBufferNode.Model  = await depthBufferFactory.PostNewModel(ClassFixture);
-                depthBufferNode.Model  = await depthBufferFactory.PostNewFile(ClassFixture, depthBufferNode.Model.Id, "UnitCube.obj");
+                depthBufferNode.Model = await depthBufferFactory.PostNewModel(ClassFixture);
+                depthBufferNode.Model = await depthBufferFactory.PostNewFile(ClassFixture, depthBufferNode.Model.Id, "DepthBuffer.raw");
 
                 // MeshTransform
-                var meshTransformNode    = NodeCollection[typeof(Domain.MeshTransform)];
+                var meshTransformNode = NodeCollection[typeof(Domain.MeshTransform)];
                 var meshTransformFactory = meshTransformNode.Factory as ITestModelFactory;
-                meshTransformNode.Model  = await meshTransformFactory.PostNewModel(ClassFixture);
+                meshTransformNode.Model = await meshTransformFactory.PostNewModel(ClassFixture);
 
                 // Mesh
-                var meshNode    = NodeCollection[typeof(Domain.Mesh)];
+                var meshNode = NodeCollection[typeof(Domain.Mesh)];
                 var meshFactory = meshNode.Factory as ITestFileModelFactory;
-                meshNode.Model  = meshFactory.ConstructValidModel();
+                meshNode.Model = meshFactory.ConstructValidModel();
 
-                var mesh             = meshNode.Model as Dto.Mesh;
-                mesh.DepthBufferId   = depthBufferNode.Model.Id;
+                var mesh = meshNode.Model as Dto.Mesh;
+                mesh.DepthBufferId = depthBufferNode.Model.Id;
                 mesh.MeshTransformId = meshTransformNode.Model.Id;
-                meshNode.Model       = await meshFactory.PostNewModel(ClassFixture, mesh);
-                meshNode.Model       = await meshFactory.PostNewFile(ClassFixture, meshNode.Model.Id, "UnitCube.obj");
+                meshNode.Model = await meshFactory.PostNewModel(ClassFixture, mesh);
+                meshNode.Model = await meshFactory.PostNewFile(ClassFixture, meshNode.Model.Id, "UnitCube.obj");
             }
         }
 
@@ -119,9 +119,9 @@ namespace ModelRelief.Test.Integration.Meshes
 
                 Files.SleepForTimeStamp();
 
-                var depthBufferNode    = dependencyGraph.NodeCollection[typeof(Domain.DepthBuffer)];
-                var depthBufferModel   = depthBufferNode.Model as Dto.DepthBuffer;
-                var depthBufferFactory = depthBufferNode.Factory as ITestFileModelFactory;
+                var depthBufferNode     = dependencyGraph.NodeCollection[typeof(Domain.DepthBuffer)];
+                var depthBufferModel    = depthBufferNode.Model as Dto.DepthBuffer;
+                var depthBufferFactory  = depthBufferNode.Factory as ITestFileModelFactory;
                 await depthBufferFactory.PostNewFile(ClassFixture, depthBufferModel.Id, "ModelRelief.txt");
 
                 // Assert
@@ -136,31 +136,43 @@ namespace ModelRelief.Test.Integration.Meshes
         }
 
         /// <summary>
-        /// Verifies that a FileRequestGenerate updates sets FileIsSynchronized.
+        /// Verifies that a FileRequestGenerate sets FileIsSynchronized.
         /// </summary>
         [Fact]
         [Trait("Category", "Api FileRequest")]
         public async Task FileRequest_GenerateSetsFileIsSynchronized()
         {
             // Arrange
-            var newModel = await PostNewModel();
-            var modelAfterPost = await PostNewFile(newModel.Id, "UnitCube.obj");
+            var dependencyGraph = await InitializeDependencyGraph();
+            try
+            {
+                // Arrange
+                var meshNode    = dependencyGraph.NodeCollection[typeof(Domain.Mesh)];
+                var meshModel   = meshNode.Model as Dto.Mesh;
+                var meshFactory = meshNode.Factory;
+                meshModel       = await meshFactory.FindModel(ClassFixture, meshModel.Id) as Dto.Mesh;
+                meshModel.FileIsSynchronized.Should().Be(true);
 
-            // reset FileIsSynchronized so FileRequestGenerate will fire on next FileIsSynchronized property changes
-            (modelAfterPost as IGeneratedFile).FileIsSynchronized = false;
-            modelAfterPost = await TestModelFactory.PutModel(ClassFixture, modelAfterPost);
+                // reset FileIsSynchronized so FileRequestGenerate will fire on next FileIsSynchronized property changes
+                meshModel.FileIsSynchronized = false;
+                meshModel = await TestModelFactory.PutModel(ClassFixture, meshModel) as Dto.Mesh;
 
-            Files.SleepForTimeStamp();
+                Files.SleepForTimeStamp();
 
-            // Act
-            (modelAfterPost as IGeneratedFile).FileIsSynchronized = true;
-            modelAfterPost = await TestModelFactory.PutModel(ClassFixture, modelAfterPost);
+                // Act
 
-            // Assert
-            (modelAfterPost as IGeneratedFile).FileIsSynchronized.Should().BeTrue();
+                // FileGenerated is trigeered by the state change of FileIsSynchronized.
+                meshModel.FileIsSynchronized = true;
+                meshModel = await TestModelFactory.PutModel(ClassFixture, meshModel) as Dto.Mesh;
 
-            // Rollback
-            await DeleteModel(newModel);
+                // Assert
+                meshModel.FileIsSynchronized.Should().BeTrue();
+            }
+            finally
+            {
+                // Rollback
+                await dependencyGraph.Rollback();
+            }
         }
         #endregion
     }

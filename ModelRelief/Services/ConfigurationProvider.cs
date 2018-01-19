@@ -75,11 +75,12 @@ namespace ModelRelief.Services
     /// <summary>
     /// Configuration resource paths.
     /// </summary>
-    public class ResourcePaths
+    public class Paths
     {
-        public const string TestDataUsers = "ResourcePaths:TestDataUsers";
-        public const string TestDataFiles = "ResourcePaths:TestDataFiles";
-        public const string StoreUsers    = "ResourcePaths:StoreUsers";
+        public const string TestDataUsers = "Paths:TestDataUsers";
+        public const string TestDataFiles = "Paths:TestDataFiles";
+        public const string StoreUsers    = "Paths:StoreUsers";
+        public const string Working       = "Paths:Working";
     }
 
     /// <summary>

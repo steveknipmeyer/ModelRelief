@@ -61,7 +61,7 @@ namespace ModelRelief.Database
             if (StorageManager == null)
                 throw new ArgumentNullException(nameof(StorageManager));
 
-            _storeUsers = ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
+            _storeUsers = ConfigurationProvider.GetSetting(Paths.StoreUsers);
 
             Initialize();
         }
@@ -211,7 +211,7 @@ namespace ModelRelief.Database
         /// </summary>
         private void DeleteUserStore()
         {
-            var storeUsersPartialPath = ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
+            var storeUsersPartialPath = ConfigurationProvider.GetSetting(Paths.StoreUsers);
             var storeUsersPath   = $"{HostingEnvironment.WebRootPath}{storeUsersPartialPath}";
 
             Console.ForegroundColor = ConsoleColor.Red;
@@ -231,9 +231,9 @@ namespace ModelRelief.Database
         /// </summary>
         private void CreateUserStore()
         {
-            CopyTestFiles<Domain.Model3d>("ResourcePaths:Folders:Model3d");
-            CopyTestFiles<Domain.DepthBuffer>("ResourcePaths:Folders:DepthBuffer");
-            CopyTestFiles<Domain.Mesh>("ResourcePaths:Folders:Mesh");
+            CopyTestFiles<Domain.Model3d>("Paths:ResourceFolders:Model3d");
+            CopyTestFiles<Domain.DepthBuffer>("Paths:ResourceFolders:DepthBuffer");
+            CopyTestFiles<Domain.Mesh>("Paths:ResourceFolders:Mesh");
         }
 
         /// <summary>
@@ -469,10 +469,10 @@ namespace ModelRelief.Database
         private void CopyTestFiles<TEntity>(string folderType)
             where TEntity : DomainModel
         {
-            var sourceFolderPartialPath = $"{ConfigurationProvider.GetSetting(ResourcePaths.TestDataUsers)}/{ConfigurationProvider.GetSetting(folderType)}";
+            var sourceFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUsers)}/{ConfigurationProvider.GetSetting(folderType)}";
             var sourceFolderPath        = $"{HostingEnvironment.ContentRootPath}{sourceFolderPartialPath}";
 
-            var storeUsersPartialPath = ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
+            var storeUsersPartialPath = ConfigurationProvider.GetSetting(Paths.StoreUsers);
             var destinationFolderPath   = $"{HostingEnvironment.WebRootPath}{storeUsersPartialPath}{_user.Id}/{ConfigurationProvider.GetSetting(folderType)}";
             Directory.CreateDirectory(destinationFolderPath);
 

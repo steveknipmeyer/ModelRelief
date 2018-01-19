@@ -34,8 +34,8 @@ namespace ModelRelief.Services
         public string DefaultModelStorageFolder<TEntity>(TEntity model)
             where TEntity : DomainModel
         {
-            var storeUsers  = ConfigurationProvider.GetSetting(ResourcePaths.StoreUsers);
-            var modelRootFolder = ConfigurationProvider.GetSetting($"ResourcePaths:Folders:{typeof(TEntity).Name}");
+            var storeUsers  = ConfigurationProvider.GetSetting(Paths.StoreUsers);
+            var modelRootFolder = ConfigurationProvider.GetSetting($"Paths:ResourceFolders:{typeof(TEntity).Name}");
 
             string modelStorageFolder = $"{HostingEnvironment.WebRootPath}{storeUsers}{model.User.Id}/{modelRootFolder}/{model.Id}/";
 

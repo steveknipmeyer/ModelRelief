@@ -61,10 +61,10 @@ namespace ModelRelief.Test.Integration.DepthBuffers
                 depthBufferNode.Model  = depthBufferFactory.ConstructValidModel();
 
                 var depthBuffer       = depthBufferNode.Model as Dto.DepthBuffer;
-                depthBuffer.Model3dId   = modelNode.Model.Id;
+                depthBuffer.Model3dId = modelNode.Model.Id;
                 depthBuffer.CameraId  = cameraNode.Model.Id;
                 depthBufferNode.Model = await depthBufferFactory.PostNewModel(ClassFixture, depthBuffer);
-                depthBufferNode.Model = await depthBufferFactory.PostNewFile(ClassFixture, depthBufferNode.Model.Id, "UnitCube.obj");
+                depthBufferNode.Model = await depthBufferFactory.PostNewFile(ClassFixture, depthBufferNode.Model.Id, "DepthBuffer.raw");
             }
         }
 
@@ -114,7 +114,6 @@ namespace ModelRelief.Test.Integration.DepthBuffers
                 depthBufferModel.FileIsSynchronized.Should().Be(true);
 
                 // Act
-
                 var cameraNode    = dependencyGraph.NodeCollection[typeof(Domain.Camera)];
                 var cameraModel   = cameraNode.Model as Dto.Camera;
                 var cameraFactory = cameraNode.Factory;

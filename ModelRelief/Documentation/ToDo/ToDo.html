@@ -6,7 +6,7 @@
 <body>
 
     <h5 id="commit-notes">Commit Notes</h5>
-<p>Remove fileName parameter from FileRequest methods. It is available through FileDomainModel.FileName.</p>
+<p>Rename appsettings ResourcePaths to Paths. Add Paths.Working to define the location of task working files.</p>
 <h5 id="technical-education">Technical Education</h5>
 <ul>
 <li>Manning AspNet Core book.</li>
@@ -19,12 +19,26 @@
 <h3 id="tasks">Tasks</h3>
 <h4 id="short-term">Short Term</h4>
 <h5 id="mesh-generation-prototype">Mesh Generation Prototype</h5>
-<pre><code>Current
+<pre><code>Review casts in FileIntegrationTests.
+
+FileRequest_MeshIsInvalidatedAfterDepthBufferFileBecomesUnsynchronized()    
+    iS Files.SleepForTimeStamp necessary?
+
+Pass a JSON representation of the expanded Mesh to the Solver.
+
+UnitTest
+   Scale the DepthBuffer and create a raw Mesh.
+    Verify the depth values of the Mesh have been scaled from the original DepthBuffer.
+    
+Configure a working directory (below wwwroot) for temporary files.
+    JSON files for FileRequest operations
+    temporary files
+
+Current
     Client
         Create DepthBuffer
         DepthBufferFactory -&gt; Create Mesh
         Post DepthBuffer
- Experiment
 </code></pre>
 <table>
 <thead>

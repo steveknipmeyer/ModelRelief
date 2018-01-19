@@ -36,6 +36,7 @@
     <Folder Include="D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\Solver\TestData\" />
     <Folder Include="Notebooks\" />
     <Folder Include="Notebooks\.ipynb_checkpoints\" />
+    <Folder Include="TestData\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Notebooks\.ipynb_checkpoints\Solver-checkpoint.ipynb" />

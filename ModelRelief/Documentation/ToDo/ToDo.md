@@ -1,5 +1,5 @@
 ﻿##### Commit Notes
-Remove fileName parameter from FileRequest methods. It is available through FileDomainModel.FileName.
+Rename appsettings ResourcePaths to Paths. Add Paths.Working to define the location of task working files.
 
 ##### Technical Education
 - Manning AspNet Core book.
@@ -16,12 +16,26 @@ Some Markdown text with <span style="color:blue">some *blue* text
 #### Short Term
 
 ##### Mesh Generation Prototype
+    Review casts in FileIntegrationTests.
+
+    FileRequest_MeshIsInvalidatedAfterDepthBufferFileBecomesUnsynchronized()    
+        iS Files.SleepForTimeStamp necessary?
+
+    Pass a JSON representation of the expanded Mesh to the Solver.
+    
+    UnitTest
+       Scale the DepthBuffer and create a raw Mesh.
+        Verify the depth values of the Mesh have been scaled from the original DepthBuffer.
+        
+    Configure a working directory (below wwwroot) for temporary files.
+        JSON files for FileRequest operations
+        temporary files
+
     Current
         Client
             Create DepthBuffer
             DepthBufferFactory -> Create Mesh
             Post DepthBuffer
-     Experiment
 
 | Client | Server|
 |-------|--------|
