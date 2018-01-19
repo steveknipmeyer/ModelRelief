@@ -17,6 +17,8 @@ Some Markdown text with <span style="color:blue">some *blue* text
 
 
 ##### Mesh Generation Prototype
+    Review the use of tuples for packing and unpacking floats.
+    Investigate the Python * operator.
     
     UnitTest
        Scale the DepthBuffer and create a raw Mesh.

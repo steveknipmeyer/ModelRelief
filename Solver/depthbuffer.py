@@ -39,12 +39,20 @@ class DepthBuffer:
     def read__binary(self, path):
         """
             Reads a raw depth buffer.
-            A raw depth buffer is a binary stream of single precision byte floats.
+            A raw depth buffer is a binary stream of single precision four byte floats.
             This method returns a list of bytes.
         """
         with open(file=path, mode='rb') as file:
             byte_list = bytearray(file.read())
             return byte_list
+
+    def write_binary(self, path, byte_values):
+        """
+            Writes a raw depth buffer.
+            A raw depth buffer is a binary stream of single precision four byte floats.
+        """
+        with open(file=path, mode='wb') as file:
+            file.write(byte_values)
 
     def unpack_floats(self, byte_depths, floats_per_unpack=None):
         """
@@ -70,6 +78,17 @@ class DepthBuffer:
             float_list.append(depth)
 
         return float_list
+
+    def pack_floats(self, floats):
+        """
+            Packs a list of single precision (32 bit) floats into a byte sequence.
+        """
+        float_count = len(floats)
+
+        pack_format = '%df' % float_count
+        byte_values = struct.pack(pack_format, *floats)
+
+        return byte_values
 
     def write_floats(self, path, floats):
         """

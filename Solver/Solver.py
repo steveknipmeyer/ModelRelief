@@ -61,13 +61,16 @@ class Solver:
         file_path = '%s/%s.%f' % (self.working_folder, self.depth_buffer.name, scale)
         self.depth_buffer.write_floats(file_path, scaled_floats)
 
+        file_path = '%s/%s.prime' % (self.working_folder, self.depth_buffer.name)
+        self.depth_buffer.write_binary(file_path, self.depth_buffer.pack_floats(scaled_floats[0]))
+
 def main():
     """
         Main entry point.
     """
     os.chdir(os.path.dirname(__file__))
     
-    options_parser = argpdisparse.ArgumentParser()
+    options_parser = argparse.ArgumentParser()
     options_parser.add_argument('--settings', '-s',
                                 help='Mesh JSON settings file that defines the associated DepthBuffer and MeshTransform.', required=True)
     options_parser.add_argument('--working', '-w',
