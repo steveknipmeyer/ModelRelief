@@ -28,7 +28,6 @@ x64/
 *_p.c
 *.ilk
 *.meta
-*.obj
 *.pch
 *.pdb
 *.pgc
@@ -158,7 +157,6 @@ HTML5Assist_Browser_Cache/*
 #################
 ## SLK
 #################
-*/Test/Data/**/*.raw
 *.rhl
 *.bak
 hidden/
