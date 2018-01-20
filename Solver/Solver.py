@@ -61,23 +61,20 @@ class Solver:
         file_path = '%s/%s.%f' % (self.working_folder, self.depth_buffer.name, 1.0)
         self.depth_buffer.write_floats(file_path, floats)
 
-        scaled_floats = [[depth * self.mesh_transform.scale for depth in depth_tuple] for depth_tuple in floats ]
+        scaled_floats = [depth * self.mesh_transform.scale for depth in floats]
 
         scale = self.mesh_transform.scale
         file_path = '%s/%s.%f' % (self.working_folder, self.depth_buffer.name, scale)
         self.depth_buffer.write_floats(file_path, scaled_floats)
 
         file_path = '%s/%s' % (self.working_folder, self.mesh.name)
-        self.depth_buffer.write_binary(file_path, self.depth_buffer.pack_floats(scaled_floats[0]))
+        self.depth_buffer.write_binary(file_path, self.depth_buffer.pack_floats(scaled_floats))
 
 def main():
     """
         Main entry point.
     """
     os.chdir(os.path.dirname(__file__))
-    print ("debug")
-    print (sys.argv)    
-    print ("debug")
 
     options_parser = argparse.ArgumentParser()
     options_parser.add_argument('--settings', '-s',

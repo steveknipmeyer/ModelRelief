@@ -68,16 +68,22 @@ class DepthBuffer:
         float_count = len(byte_depths) / DepthBuffer.SINGLE_PRECISION
         unpack_steps = int(float_count / floats_per_unpack)
 
-        float_list = []
+        float_tuples= []
         span = DepthBuffer.SINGLE_PRECISION * floats_per_unpack
         for value in range(unpack_steps):
             lower = value * span
             upper = lower + span
             unpack_format = '%df' % floats_per_unpack
-            depth = struct.unpack(unpack_format, byte_depths[lower:upper])
-            float_list.append(depth)
+            depth_tuple = struct.unpack(unpack_format, byte_depths[lower:upper])
+            float_tuples.append(depth_tuple)
 
-        return float_list
+        # unpack list of tuples into a list of single float values
+        floats = []
+        for depth_tuple in float_tuples:
+            for depth in depth_tuple:
+                floats.append(depth)
+
+        return floats
 
     def pack_floats(self, floats):
         """
@@ -95,6 +101,5 @@ class DepthBuffer:
             Writes a depth buffer from a list of floats.
         """
         with open(file=path, mode='w') as file:
-            for depth_tuple in floats:
-                for depth in depth_tuple:
-                    file.write(str(depth) + '\n')
+            for depth in floats:
+                file.write(str(depth) + '\n')
