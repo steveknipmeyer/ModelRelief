@@ -82,7 +82,7 @@
             "env": {
                 "name": "value"
             },
-            "args":["-s", "Test/Mesh10.json", "-w", "Test/Working"]
+            "args":["-s", "Test/Mesh10.json", "-w", "Test/Working/"]
         }        
     ]
 }

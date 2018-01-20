@@ -1,4 +1,7 @@
 ﻿##### Commit Notes
+Add Mesh class.  
+Solver names output mesh based on JSON Mesh.Name.        
+Solve create working folder if it does not exist.
 
 Some Markdown text with <span style="color:blue">some *blue* text
 
@@ -18,14 +21,11 @@ Some Markdown text with <span style="color:blue">some *blue* text
 
 ##### Mesh Generation Prototype
     Review the use of tuples for packing and unpacking floats.
-    Investigate the Python * operator.
-    Solver must create the Working directory.
     
     UnitTest
        Scale the DepthBuffer and create a raw Mesh.
         Verify the depth values of the Mesh have been scaled from the original DepthBuffer.
         
-
     Current
         Client
             Create DepthBuffer

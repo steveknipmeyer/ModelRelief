@@ -19,6 +19,7 @@ import os
 import sys
 
 from depthbuffer import DepthBuffer
+from mesh import Mesh
 from meshtransform import MeshTransform
 
 class Solver:
@@ -35,12 +36,17 @@ class Solver:
             self.settings = json.load(json_file)
 
         self.initialize_settings()
-        self.working_folder = os.path.abspath(working)
+
+        working_folder = os.path.abspath(working)
+        self.working_folder = working_folder
+        if not os.path.exists(working_folder):
+            os.makedirs(working_folder)
 
     def initialize_settings(self):
         """
             Unpack the JSON settings file and initialie Solver properties.
         """
+        self.mesh = Mesh(self.settings)
         self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'])
         self.mesh_transform = MeshTransform(self.settings['MeshTransform'])
 
@@ -61,7 +67,7 @@ class Solver:
         file_path = '%s/%s.%f' % (self.working_folder, self.depth_buffer.name, scale)
         self.depth_buffer.write_floats(file_path, scaled_floats)
 
-        file_path = '%s/%s.prime' % (self.working_folder, self.depth_buffer.name)
+        file_path = '%s/%s' % (self.working_folder, self.mesh.name)
         self.depth_buffer.write_binary(file_path, self.depth_buffer.pack_floats(scaled_floats[0]))
 
 def main():
@@ -69,7 +75,10 @@ def main():
         Main entry point.
     """
     os.chdir(os.path.dirname(__file__))
-    
+    print ("debug")
+    print (sys.argv)    
+    print ("debug")
+
     options_parser = argparse.ArgumentParser()
     options_parser.add_argument('--settings', '-s',
                                 help='Mesh JSON settings file that defines the associated DepthBuffer and MeshTransform.', required=True)

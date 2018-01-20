@@ -16,7 +16,7 @@
 
 class MeshTransform:
     """
-    Settings used to contral a transform of a DepthBuffer to create a new (relief) DepthBuffer.
+    Settings used to control a transform of a DepthBuffer to create a new (relief) DepthBuffer.
     """
 
     def __init__(self, settings):
