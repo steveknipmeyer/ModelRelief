@@ -118,7 +118,11 @@ namespace ModelRelief.Services.Jobs
             var result = RunPythonTask(pythonPath, arguments);
 
             // The job is complete and the file is synchronized.
+            var generatedFile = Path.Combine($"{workingFolder}{mesh.Name}");
+            File.Copy(generatedFile, mesh.FileName, overwrite: true);
+            mesh.Format = MeshFormat.RAW;
             mesh.FileIsSynchronized = true;
+
             await DbContext.SaveChangesAsync();
 
             return true;
