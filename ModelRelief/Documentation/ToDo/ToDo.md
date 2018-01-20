@@ -18,7 +18,10 @@ Some Markdown text with <span style="color:blue">some *blue* text
 ##### Mesh Generation Prototype
     How can the return status of RunPythonTask be tested?
     How will a GenerateFileRequest return the status though the API?
-   
+    How is the MeshFormat property set?
+        Should it be set during InitializeDependency?
+    How should byte-ordering (BigEndian, LittleEndian) be handled?
+
     UnitTest
         Verify the depth values of the Mesh have been scaled from the original DepthBuffer.
         

@@ -333,7 +333,8 @@ namespace ModelRelief.Services.Relationships
 
                 if (isGeneratedFileDomainModel)
                 {
-                    // valid only if FileIsSynchronized became true <and> the FileTimeStamp did not change because the file was not updated through a POST(File).
+                    // GenerateFile <only> if FileIsSynchronized became true <and> the FileTimeStamp did not change.
+                    // This avoids a meaningless GenerateFile when a file has been updated through a POST(File).
                     if (fileIsSynchronizedPropertyEnabled && !fileTimeStampPropertyChanged)
                     {
                         fileRequests.Add(ConstructGenerateFileRequest(transactionEntity, stage: ProcessingStage.PostProcess));

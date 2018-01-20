@@ -149,6 +149,15 @@ namespace ModelRelief.Utility
 
         /// <summary>
         /// N.B. DateTime.Now yields 1 second accuracy so the resulting timestamps betweeen the initial and modified file events may be identical!
+        /// A) This is needed during integration testing to ensure that a file that has been (POST) updated will trigger the DependencyManager to invalidate its dependents.
+        ///    The FileTimeStamp property must change to trigger the processing. The delay ensures that it will be different than the previous value.
+        ///
+        /// B) This is also needed during integration testing to avoid an unnecessary GenerateFile when a file has been (POST) updated.
+        ///     FileIsSynchronized = false  // initial consition
+        ///     SleepForTimeStamp           // force next FileTimeStamp to be different
+        ///     PostFile                    // updated file
+        ///  As the FileTimeStamp is different in the second PostFile, an (unnecessary) GenerateFile will NOT be triggered.
+        ///  The PostFile will set FileIsSynchronized, however the time stamp HAS changed so NO GenerateFileRequest will be created.
         /// </summary>
         public static void SleepForTimeStamp()
         {

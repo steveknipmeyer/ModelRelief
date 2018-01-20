@@ -18,6 +18,7 @@ namespace ModelRelief.Test.Integration.Meshes
     using ModelRelief.Test.TestModels.Meshes;
     using ModelRelief.Test.TestModels.MeshTransforms;
     using ModelRelief.Utility;
+    using Newtonsoft.Json;
     using Xunit;
 
     /// <summary>
@@ -66,7 +67,7 @@ namespace ModelRelief.Test.Integration.Meshes
                 mesh.DepthBufferId = depthBufferNode.Model.Id;
                 mesh.MeshTransformId = meshTransformNode.Model.Id;
                 meshNode.Model = await meshFactory.PostNewModel(ClassFixture, mesh);
-                meshNode.Model = await meshFactory.PostNewFile(ClassFixture, meshNode.Model.Id, "UnitCube.obj");
+                meshNode.Model = await meshFactory.PostNewFile(ClassFixture, meshNode.Model.Id, "DepthBuffer.raw");
             }
         }
 
@@ -97,6 +98,29 @@ namespace ModelRelief.Test.Integration.Meshes
             return dependencyGraph;
         }
 
+        /// <summary>
+        /// Initializes the Mesh to the baseline FileIsSynchronized state.
+        /// </summary>
+        /// <param name="dependencyGraph">DependencyGraph</param>
+        /// <param name="fileIsSynchronized">Initial state of FileIsSynchronized property.</param>
+        /// <returns>Initialized Mesh.</returns>
+        private async Task<Dto.Mesh> InitializeMesh(DependencyGraph dependencyGraph, bool fileIsSynchronized)
+        {
+            var meshNode = dependencyGraph.NodeCollection[typeof(Domain.Mesh)];
+            var meshModel = meshNode.Model as Dto.Mesh;
+            var meshFactory = meshNode.Factory;
+            meshModel = await meshFactory.FindModel(ClassFixture, meshModel.Id) as Dto.Mesh;
+            meshModel.FileIsSynchronized.Should().Be(true);
+
+            // reset FileIsSynchronized so GenerateFileRequest will fire on next FileIsSynchronized property changes
+            if (!fileIsSynchronized)
+            {
+                meshModel.FileIsSynchronized = false;
+                meshModel = await TestModelFactory.PutModel(ClassFixture, meshModel) as Dto.Mesh;
+            }
+            return meshModel;
+        }
+
         #region FileOperation
         /// <summary>
         /// Tests whether a DepthBuffer generated file is invalidated after a change to the dependent Camera metadata.
@@ -105,18 +129,14 @@ namespace ModelRelief.Test.Integration.Meshes
         [Trait("Category", "Api FileRequest")]
         public async Task FileRequest_MeshIsInvalidatedAfterDepthBufferFileBecomesUnsynchronized()
         {
-            // Arrange
             var dependencyGraph = await InitializeDependencyGraph();
             try
             {
-                var meshNode    = dependencyGraph.NodeCollection[typeof(Domain.Mesh)];
-                var meshModel   = meshNode.Model as Dto.Mesh;
-                var meshFactory = meshNode.Factory;
-                meshModel       = await meshFactory.FindModel(ClassFixture, meshModel.Id) as Dto.Mesh;
-                meshModel.FileIsSynchronized.Should().Be(true);
+                // Arrange
+                Dto.Mesh meshModel = await InitializeMesh(dependencyGraph, fileIsSynchronized: true);
 
                 // Act
-
+                // This ensures that the FileTimeStamp will change on the DepthBuffer and therefore trigger the DependencyManager to invalidate the Mesh.
                 Files.SleepForTimeStamp();
 
                 var depthBufferNode     = dependencyGraph.NodeCollection[typeof(Domain.DepthBuffer)];
@@ -125,7 +145,7 @@ namespace ModelRelief.Test.Integration.Meshes
                 await depthBufferFactory.PostNewFile(ClassFixture, depthBufferModel.Id, "ModelRelief.txt");
 
                 // Assert
-                meshModel = await meshFactory.FindModel(ClassFixture, meshModel.Id) as Dto.Mesh;
+                meshModel = await TestModelFactory.FindModel(ClassFixture, meshModel.Id) as Dto.Mesh;
                 meshModel.FileIsSynchronized.Should().Be(false);
             }
             finally
@@ -136,37 +156,75 @@ namespace ModelRelief.Test.Integration.Meshes
         }
 
         /// <summary>
-        /// Verifies that a FileRequestGenerate sets FileIsSynchronized.
+        /// Verifies that a GenerateFileRequest sets FileIsSynchronized.
         /// </summary>
         [Fact]
         [Trait("Category", "Api FileRequest")]
-        public async Task FileRequest_GenerateSetsFileIsSynchronized()
+        public async Task FileRequest_MeshGenerateSetsFileIsSynchronized()
         {
-            // Arrange
             var dependencyGraph = await InitializeDependencyGraph();
             try
             {
                 // Arrange
-                var meshNode    = dependencyGraph.NodeCollection[typeof(Domain.Mesh)];
-                var meshModel   = meshNode.Model as Dto.Mesh;
-                var meshFactory = meshNode.Factory;
-                meshModel       = await meshFactory.FindModel(ClassFixture, meshModel.Id) as Dto.Mesh;
-                meshModel.FileIsSynchronized.Should().Be(true);
-
-                // reset FileIsSynchronized so FileRequestGenerate will fire on next FileIsSynchronized property changes
-                meshModel.FileIsSynchronized = false;
-                meshModel = await TestModelFactory.PutModel(ClassFixture, meshModel) as Dto.Mesh;
-
-                Files.SleepForTimeStamp();
+                Dto.Mesh meshModel = await InitializeMesh(dependencyGraph, fileIsSynchronized: false);
 
                 // Act
-
-                // FileGenerated is trigeered by the state change of FileIsSynchronized.
+                // GenerateFile is triggered by the state change of FileIsSynchronized.
                 meshModel.FileIsSynchronized = true;
                 meshModel = await TestModelFactory.PutModel(ClassFixture, meshModel) as Dto.Mesh;
 
                 // Assert
                 meshModel.FileIsSynchronized.Should().BeTrue();
+            }
+            finally
+            {
+                // Rollback
+                await dependencyGraph.Rollback();
+            }
+        }
+
+        /// <summary>
+        /// Verifies that a GenerateFileRequest sets FileIsSynchronized.
+        /// </summary>
+        [Fact]
+        [Trait("Category", "Api FileRequest")]
+        public async Task FileRequest_MeshGenerateScalesDepthBufferByLambdaLinearScaling()
+        {
+            var dependencyGraph = await InitializeDependencyGraph();
+            try
+            {
+                // Arrange
+                Dto.Mesh meshModel = await InitializeMesh(dependencyGraph, fileIsSynchronized: false);
+
+                // set MeshTransform scale factor
+                var meshTransformNode = dependencyGraph.NodeCollection[typeof(Domain.MeshTransform)];
+                var meshTransformModel = meshTransformNode.Model as Dto.MeshTransform;
+                var meshTransformFactory = meshTransformNode.Factory as ITestModelFactory;
+
+                var scaleFactor = 5.0;
+                meshTransformModel.LambdaLinearScaling = scaleFactor;
+                meshTransformModel = await meshTransformFactory.PutModel(ClassFixture, meshTransformModel) as Dto.MeshTransform;
+
+                var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{meshModel.Id}/file");
+                var fileContentResult = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(requestResponse.ContentString);
+                var encodedString = fileContentResult.GetValue("fileContents");
+                var initialByteArray = Convert.FromBase64String(encodedString.ToString());
+
+                // Act
+                // GenerateFile is triggered by the state change of FileIsSynchronized.
+                meshModel.FileIsSynchronized = true;
+                meshModel = await TestModelFactory.PutModel(ClassFixture, meshModel) as Dto.Mesh;
+
+                // Assert
+                requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{meshModel.Id}/file");
+                fileContentResult = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(requestResponse.ContentString);
+                encodedString = fileContentResult.GetValue("fileContents");
+                var scaledByteArray = Convert.FromBase64String(encodedString.ToString());
+
+                int decimalPlaces = 5;
+                var initialFloat = BitConverter.ToSingle(initialByteArray, 0);
+                var scaledFloat  = BitConverter.ToSingle(scaledByteArray, 0);
+                Assert.Equal(initialFloat * scaleFactor, scaledFloat, decimalPlaces);
             }
             finally
             {
