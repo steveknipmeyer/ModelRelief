@@ -1,29 +1,20 @@
 ﻿##### Commit Notes
 
+
 Some Markdown text with <span style="color:blue">some *blue* text
 
 ##### Technical Education
 - Manning AspNet Core book.
 - Manning Dependency Injection book.
 
-
 #####  Lambda
     Python programs must be invoked by py <program>. This is not necessary on Vector.
-
 
 ### Tasks
 
 #### Short Term
 
 ##### Mesh Generation Prototype
-    How can the return status of RunPythonTask be tested?
-    How will a GenerateFileRequest return the status though the API?
-    How is the MeshFormat property set?
-        Should it be set during InitializeDependency?
-    How should byte-ordering (BigEndian, LittleEndian) be handled?
-
-    UnitTest
-        Verify the depth values of the Mesh have been scaled from the original DepthBuffer.
         
     Current
         Client
@@ -44,6 +35,27 @@ Some Markdown text with <span style="color:blue">some *blue* text
 | Get Mesh/id/file||
 | Construct Mesh from raw file||
 
+#### Front End
+
+    Create a ModelRelief JavaScript API library.
+        Publish POCO models to JavaScript?
+        Create a utility URL composer.
+
+    File Transfer
+        Use jQuery!
+        Wait for file POST to complete before initiating the second metadata POST.
+
+    async/await
+        Refactor Export OBJ.
+
+    Accessing Model From JavaScript
+        https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
+
+    Webpack
+
+    Some Views are identical. Should they use a shared ViewComponent?
+        Create, Edit
+        Details, Delete
 
 ##### Critical Issues
 <span style="color:red">
@@ -99,6 +111,18 @@ https://github.com/jamesmanning/RunProcessAsTask
 Long-running Requests:   
 https://stackoverflow.com/questions/33009721/long-running-rest-api-with-queues
 
+###### Files
+    The name property for FileDomainModels is expected to include the extension.    
+        API  and Ux validation is needed to ensure that the extension is always present.
+            Can it be inferred from the Format?
+    How will the Format property be used for Models, DepthBuffers and Meshes?
+        Is it necessary if the file type can be found through reflection?
+    How should the model name be held in the ModelViewer?
+        The model.Name property is now 'Root' (THREE).
+
+###### Review and organize the Postman tests.
+
+---
 #### Dependency Manager
 
 ##### Dependency Handling                    
@@ -135,20 +159,11 @@ https://msdn.microsoft.com/en-us/magazine/mt767693.aspx
 
 ###### How can properties be excluded (e.g. Attribute) from entity processing?
 
-###### Files
-    The name property for FileDomainModels is expected to include the extension.    
-        API  and Ux validation is needed to ensure that the extension is always present.
-            Can it be inferred from the Format?
-    How will the Format property be used for Models, DepthBuffers and Meshes?
-        Is it necessary if the file type can be found through reflection?
-    How should the model name be held in the ModelViewer?
-        The model.Name property is now 'Root' (Three).
 
-###### Remove .gitignore filters on Test\Data folder?
-    What is the practical limit for git binary files? Are the GitHub restrictions?
+#### Architecture
+    How should byte-ordering (BigEndian, LittleEndian) be handled?
+        Are some devices (e.g. phones) BigEndian?
 
-
-###### Review and organize the Postman tests.
 
 #### API Design
 
@@ -200,28 +215,6 @@ The Project is populating the object graph too deeply.
         DeveloperMessage    DeveloperMessage   
         API Reference       ApiReference
 
-#### Front End
-
-    Create a ModelRelief JavaScript API library.
-        Publish POCO models to JavaScript?
-        Create a utility URL composer.
-
-    File Transfer
-        Use jQuery!
-        Wait for file POST to complete before initiating the second metadata POST.
-
-    async/await
-        Refactor Export OBJ.
-
-    Accessing Model From JavaScript
-        https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
-
-    Webpack
-
-    Some Views are identical. Should they use a shared ViewComponent?
-        Create, Edit
-        Details, Delete
-
 #### Logging
     Limit the size of the log file.
 
@@ -253,8 +246,6 @@ The Project is populating the object graph too deeply.
 An ApplicationUser could have a storage folder property that is used by the StorageManager to define the default location.
 
 #### DomainModel
-    Format : Generalize the file format types.
-        This complicates the UI presentation since incompatible file formats (e.g. OBJ for DepthBuffer) are bundled.
 
 #### FileDomainModel 
     Casting from DomainModel to FileDomainModel can only be done when access to the specific type is not needed.

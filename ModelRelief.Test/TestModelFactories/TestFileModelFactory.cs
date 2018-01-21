@@ -6,18 +6,12 @@
 
 namespace ModelRelief.Test.TestModels
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Net;
-    using System.Reflection;
     using System.Threading.Tasks;
     using FluentAssertions;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Domain;
-    using ModelRelief.Test.Integration;
     using Newtonsoft.Json;
-    using Xunit;
 
     /// <summary>
     /// Represents a factory that creates test models for integration testing.

@@ -26,7 +26,6 @@ class Solver:
     """
     Transforms a DepthBuffer to create a new DepthBuffer based on a MeshTransform.
     """
-
     def __init__(self, settings, working):
         """
             Iniitalize an instane of the Solver.
@@ -81,7 +80,6 @@ def main():
                                 help='Mesh JSON settings file that defines the associated DepthBuffer and MeshTransform.', required=True)
     options_parser.add_argument('--working', '-w',
                                 help='Temporary working folder.', required=True)
-    print(sys.argv)
     arguments = options_parser.parse_args()
 
     solver = Solver(arguments.settings, arguments.working)

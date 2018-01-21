@@ -18,16 +18,7 @@
 <h3 id="tasks">Tasks</h3>
 <h4 id="short-term">Short Term</h4>
 <h5 id="mesh-generation-prototype">Mesh Generation Prototype</h5>
-<pre><code>How can the return status of RunPythonTask be tested?
-How will a GenerateFileRequest return the status though the API?
-How is the MeshFormat property set?
-    Should it be set during InitializeDependency?
-How should byte-ordering (BigEndian, LittleEndian) be handled?
-
-UnitTest
-    Verify the depth values of the Mesh have been scaled from the original DepthBuffer.
-    
-Current
+<pre><code>Current
     Client
         Create DepthBuffer
         DepthBufferFactory -&gt; Create Mesh
@@ -83,6 +74,27 @@ Current
 </tr>
 </tbody>
 </table>
+<h4 id="front-end">Front End</h4>
+<pre><code>Create a ModelRelief JavaScript API library.
+    Publish POCO models to JavaScript?
+    Create a utility URL composer.
+
+File Transfer
+    Use jQuery!
+    Wait for file POST to complete before initiating the second metadata POST.
+
+async/await
+    Refactor Export OBJ.
+
+Accessing Model From JavaScript
+    https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
+
+Webpack
+
+Some Views are identical. Should they use a shared ViewComponent?
+    Create, Edit
+    Details, Delete
+</code></pre>
 <h5 id="critical-issues">Critical Issues</h5>
 <span style="color:red">
 Replace DateTime with a type that has more resolution.
@@ -130,6 +142,17 @@ A worker process removes the request from the queue.
 <a href="https://github.com/jamesmanning/RunProcessAsTask">https://github.com/jamesmanning/RunProcessAsTask</a></p>
 <p>Long-running Requests:<br />
 <a href="https://stackoverflow.com/questions/33009721/long-running-rest-api-with-queues">https://stackoverflow.com/questions/33009721/long-running-rest-api-with-queues</a></p>
+<h6 id="files">Files</h6>
+<pre><code>The name property for FileDomainModels is expected to include the extension.    
+    API  and Ux validation is needed to ensure that the extension is always present.
+        Can it be inferred from the Format?
+How will the Format property be used for Models, DepthBuffers and Meshes?
+    Is it necessary if the file type can be found through reflection?
+How should the model name be held in the ModelViewer?
+    The model.Name property is now 'Root' (THREE).
+</code></pre>
+<h6 id="review-and-organize-the-postman-tests">Review and organize the Postman tests.</h6>
+<hr />
 <h4 id="dependency-manager">Dependency Manager</h4>
 <h5 id="dependency-handling">Dependency Handling</h5>
 <p><strong>Modified</strong></p>
@@ -165,19 +188,10 @@ The DependencyManager invalidates DependentFiles only if a dependency changed. S
 <p><a href="https://msdn.microsoft.com/magazine/mt694083">https://msdn.microsoft.com/magazine/mt694083</a><br />
 <a href="https://msdn.microsoft.com/en-us/magazine/mt767693.aspx">https://msdn.microsoft.com/en-us/magazine/mt767693.aspx</a></p>
 <h6 id="how-can-properties-be-excluded-e.g.attribute-from-entity-processing">How can properties be excluded (e.g. Attribute) from entity processing?</h6>
-<h6 id="files">Files</h6>
-<pre><code>The name property for FileDomainModels is expected to include the extension.    
-    API  and Ux validation is needed to ensure that the extension is always present.
-        Can it be inferred from the Format?
-How will the Format property be used for Models, DepthBuffers and Meshes?
-    Is it necessary if the file type can be found through reflection?
-How should the model name be held in the ModelViewer?
-    The model.Name property is now 'Root' (Three).
+<h4 id="architecture">Architecture</h4>
+<pre><code>How should byte-ordering (BigEndian, LittleEndian) be handled?
+    Are some devices (e.g. phones) BigEndian?
 </code></pre>
-<h6 id="remove.gitignore-filters-on-testdata-folder">Remove .gitignore filters on Test\Data folder?</h6>
-<pre><code>What is the practical limit for git binary files? Are the GitHub restrictions?
-</code></pre>
-<h6 id="review-and-organize-the-postman-tests">Review and organize the Postman tests.</h6>
 <h4 id="api-design">API Design</h4>
 <pre><code>UX Requests
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -225,27 +239,6 @@ Provide &quot;reference expansion&quot; to allow references to be expanded into 
     DeveloperMessage    DeveloperMessage   
     API Reference       ApiReference
 </code></pre>
-<h4 id="front-end">Front End</h4>
-<pre><code>Create a ModelRelief JavaScript API library.
-    Publish POCO models to JavaScript?
-    Create a utility URL composer.
-
-File Transfer
-    Use jQuery!
-    Wait for file POST to complete before initiating the second metadata POST.
-
-async/await
-    Refactor Export OBJ.
-
-Accessing Model From JavaScript
-    https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
-
-Webpack
-
-Some Views are identical. Should they use a shared ViewComponent?
-    Create, Edit
-    Details, Delete
-</code></pre>
 <h4 id="logging">Logging</h4>
 <pre><code>Limit the size of the log file.
 
@@ -276,9 +269,6 @@ Review the ILogger interface. How should this work with a Controller?
 <h4 id="storagemanager">StorageManager</h4>
 <p>An ApplicationUser could have a storage folder property that is used by the StorageManager to define the default location.</p>
 <h4 id="domainmodel">DomainModel</h4>
-<pre><code>Format : Generalize the file format types.
-    This complicates the UI presentation since incompatible file formats (e.g. OBJ for DepthBuffer) are bundled.
-</code></pre>
 <h4 id="filedomainmodel">FileDomainModel</h4>
 <pre><code>Casting from DomainModel to FileDomainModel can only be done when access to the specific type is not needed.
 PostFile

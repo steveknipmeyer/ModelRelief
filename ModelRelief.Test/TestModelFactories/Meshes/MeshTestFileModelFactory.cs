@@ -50,7 +50,7 @@ namespace ModelRelief.Test.TestModels.Meshes
         {
             var validModel = base.ConstructValidModel() as Dto.Mesh;
             validModel.Name = "TestMesh.obj";
-            validModel.Format = Domain.MeshFormat.OBJ;
+            validModel.Format = Domain.MeshFormat.RAW;
 
             return validModel;
         }
