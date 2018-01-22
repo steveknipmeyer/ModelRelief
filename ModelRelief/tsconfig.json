@@ -20,6 +20,9 @@
       "*": [
         "*",
         "Scripts/*",
+        "Scripts/Api/V1/*",
+        "Scripts/Api/V1/Interfaces/*",
+        "Scripts/Api/V1/Models/*",
         "Scripts/Controllers/*",
         "Scripts/DataTransferObjects/*",
         "Scripts/DepthBuffer/*",

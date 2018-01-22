@@ -15,13 +15,12 @@ namespace ModelRelief.Api.V1.Shared.Rest
     {
         int Id { get; set; }
 
-        // These properties support integration testing across models.
         string Name { get; set; }
         string Description { get; set; }
     }
 
     /// <summary>
-    /// Common interface for all generated files (e.g. Nesh, DepthBuffer).
+    /// Common interface for all generated files (e.g. Mesh, DepthBuffer).
     /// This interface is used only for integration testing. File-backed domain models inherit from GeneratedFileDomainModel.
     /// </summary>
     public interface IGeneratedFile

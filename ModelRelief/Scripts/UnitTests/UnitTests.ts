@@ -101,6 +101,5 @@ export class UnitTests {
         index = depthBuffer.getModelVertexIndex(center, boundingBox);
         assert.equal(index, centerIndex);
     }
-
-    } 
+} 
 

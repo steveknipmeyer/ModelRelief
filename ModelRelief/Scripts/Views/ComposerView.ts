@@ -81,7 +81,7 @@ export class ComposerView {
 
 //#region Initialization
     /**
-     * Initialziation.
+     * Initialization.
      */
     initialize() {
 

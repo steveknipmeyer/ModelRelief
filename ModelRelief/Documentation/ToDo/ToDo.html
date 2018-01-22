@@ -17,6 +17,60 @@
 </code></pre>
 <h3 id="tasks">Tasks</h3>
 <h4 id="short-term">Short Term</h4>
+<h4 id="front-end">Front End</h4>
+<pre><code>Is the interface IGenerateFile needed?
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Original Type</th>
+<th>NewType</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ReliefSettings</td>
+<td>MeshTransform</td>
+<td></td>
+</tr>
+<tr>
+<td>DepthBuffer</td>
+<td>RawDepthBuffer</td>
+<td>DtoDepthBuffer implemented</td>
+</tr>
+<tr>
+<td>Camera</td>
+<td></td>
+<td>DtoCamera implemented</td>
+</tr>
+<tr>
+<td>Relief</td>
+<td></td>
+<td>?</td>
+</tr>
+</tbody>
+</table>
+<pre><code>Create a ModelRelief JavaScript API library.
+    Publish POCO models to JavaScript?
+    Create a utility URL composer.
+
+File Transfer
+    Use jQuery!
+    Wait for file POST to complete before initiating the second metadata POST.
+
+async/await
+    Refactor Export OBJ.
+
+Accessing Model From JavaScript
+    https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
+
+Webpack
+
+Some Views are identical. Should they use a shared ViewComponent?
+    Create, Edit
+    Details, Delete
+</code></pre>
 <h5 id="mesh-generation-prototype">Mesh Generation Prototype</h5>
 <pre><code>Current
     Client
@@ -74,27 +128,6 @@
 </tr>
 </tbody>
 </table>
-<h4 id="front-end">Front End</h4>
-<pre><code>Create a ModelRelief JavaScript API library.
-    Publish POCO models to JavaScript?
-    Create a utility URL composer.
-
-File Transfer
-    Use jQuery!
-    Wait for file POST to complete before initiating the second metadata POST.
-
-async/await
-    Refactor Export OBJ.
-
-Accessing Model From JavaScript
-    https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
-
-Webpack
-
-Some Views are identical. Should they use a shared ViewComponent?
-    Create, Edit
-    Details, Delete
-</code></pre>
 <h5 id="critical-issues">Critical Issues</h5>
 <span style="color:red">
 Replace DateTime with a type that has more resolution.

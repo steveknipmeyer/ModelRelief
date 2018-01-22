@@ -5,9 +5,11 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import {assert}             from 'chai'
-import {Services}           from 'Services'
+import { assert }           from 'chai'
+import { ITGetModel }       from 'ITGetModel'
 
-export interface IResourceFile {
+export interface IProject extends ITGetModel {
         
 }
+
+

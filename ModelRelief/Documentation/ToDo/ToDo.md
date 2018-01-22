@@ -14,6 +14,37 @@ Some Markdown text with <span style="color:blue">some *blue* text
 
 #### Short Term
 
+#### Front End
+
+    Is the interface IGenerateFile needed?
+
+|Original Type|NewType|Notes|
+|-------|--------|--------|
+|ReliefSettings|MeshTransform|
+|DepthBuffer|RawDepthBuffer|DtoDepthBuffer implemented|
+|Camera||DtoCamera implemented|
+|Relief||?|
+
+    Create a ModelRelief JavaScript API library.
+        Publish POCO models to JavaScript?
+        Create a utility URL composer.
+
+    File Transfer
+        Use jQuery!
+        Wait for file POST to complete before initiating the second metadata POST.
+
+    async/await
+        Refactor Export OBJ.
+
+    Accessing Model From JavaScript
+        https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
+
+    Webpack
+
+    Some Views are identical. Should they use a shared ViewComponent?
+        Create, Edit
+        Details, Delete
+
 ##### Mesh Generation Prototype
         
     Current
@@ -35,27 +66,6 @@ Some Markdown text with <span style="color:blue">some *blue* text
 | Get Mesh/id/file||
 | Construct Mesh from raw file||
 
-#### Front End
-
-    Create a ModelRelief JavaScript API library.
-        Publish POCO models to JavaScript?
-        Create a utility URL composer.
-
-    File Transfer
-        Use jQuery!
-        Wait for file POST to complete before initiating the second metadata POST.
-
-    async/await
-        Refactor Export OBJ.
-
-    Accessing Model From JavaScript
-        https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
-
-    Webpack
-
-    Some Views are identical. Should they use a shared ViewComponent?
-        Create, Edit
-        Details, Delete
 
 ##### Critical Issues
 <span style="color:red">

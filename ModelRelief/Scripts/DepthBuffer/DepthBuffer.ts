@@ -37,7 +37,7 @@ interface FacePair {
 
 /**
  *  Mesh cache to optimize mesh creation.
- * If a mesh exists in the cache of the required dimensions, it is used as a template.
+ *  If a mesh exists in the cache of the required dimensions, it is used as a template.
  *  @class
  */
 class MeshCache {

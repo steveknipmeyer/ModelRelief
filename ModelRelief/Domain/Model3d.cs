@@ -12,7 +12,7 @@ namespace ModelRelief.Domain
     {
         None,           // unknown
         OBJ,            // Wavefront OBJ
-        STL,             // Stereolithography
+        STL,            // Stereolithography
     }
 
     [DependentFiles(typeof(DepthBuffer))]

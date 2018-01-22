@@ -6,7 +6,6 @@
 "use strict";
 
 import {DepthBufferFormat}                  from 'DepthBuffer'
-import {IResourceFile}                      from 'IFilePath'
 import {Services}                           from 'Services'
 import {ReliefSettings}                     from 'Relief'
 
@@ -22,8 +21,11 @@ enum ContentType {
  * HTTP Method
  */
 enum MethodType {
+    Get = 'GET',
+    Delete = 'DELETE',
+    Patch = 'PUT',
     Post  = 'POST',
-    Put   = 'PUT'
+    Put = 'PUT',
 }
 
 /**
@@ -53,7 +55,7 @@ export class HttpLibrary {
      * @param fileData File data, may be binary.
      * @param fileMetadata JSON metadata.
      */
-    static postFile (postUrl : string, fileData : any, fileMetadata : IResourceFile) : boolean {
+    static postFile (postUrl : string, fileData : any, fileMetadata : any) : boolean {
 
        let onComplete = function(request: XMLHttpRequest) {
 

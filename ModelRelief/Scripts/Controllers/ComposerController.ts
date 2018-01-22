@@ -7,6 +7,7 @@
 
 import * as THREE  from 'three' 
 import * as dat    from 'dat-gui'
+import * as Dto    from "DtoModels";
 
 import {StandardView}                       from "Camera"
 import {ComposerView}                       from "ComposerView"

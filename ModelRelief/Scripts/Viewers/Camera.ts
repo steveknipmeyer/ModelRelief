@@ -8,9 +8,9 @@
 import * as THREE        from 'three'
 
 import { DepthBufferFactory } from 'DepthBufferFactory'
-import {Graphics}             from 'Graphics'
-import {Services}             from 'Services'
-import {StopWatch}            from 'StopWatch'
+import { Graphics }           from 'Graphics'
+import { Services }           from 'Services'
+import { StopWatch }          from 'StopWatch'
 
 /**
  * @description Caamera settings.

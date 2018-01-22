@@ -49,6 +49,186 @@ define("System/Html", ["require", "exports"], function (require, exports) {
     }());
     exports.HtmlLibrary = HtmlLibrary;
 });
+define("Api/V1/Interfaces/ITGetModel", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("Api/V1/Interfaces/IProject", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("Api/V1/Interfaces/ICamera", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+    *  Standard camera views.
+    *  @enum {number}
+    */
+    var StandardView;
+    (function (StandardView) {
+        StandardView[StandardView["None"] = 0] = "None";
+        StandardView[StandardView["Front"] = 1] = "Front";
+        StandardView[StandardView["Back"] = 2] = "Back";
+        StandardView[StandardView["Top"] = 3] = "Top";
+        StandardView[StandardView["Bottom"] = 4] = "Bottom";
+        StandardView[StandardView["Left"] = 5] = "Left";
+        StandardView[StandardView["Right"] = 6] = "Right";
+        StandardView[StandardView["Isometric"] = 7] = "Isometric";
+    })(StandardView = exports.StandardView || (exports.StandardView = {}));
+});
+define("Api/V1/Interfaces/IModel3d", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+    *  3D model file formats.
+    *  @enum {number}
+    */
+    var Model3dFormat;
+    (function (Model3dFormat) {
+        Model3dFormat[Model3dFormat["None"] = 0] = "None";
+        Model3dFormat[Model3dFormat["OBJ"] = 1] = "OBJ";
+        Model3dFormat[Model3dFormat["STL"] = 2] = "STL";
+    })(Model3dFormat = exports.Model3dFormat || (exports.Model3dFormat = {}));
+});
+define("Api/V1/Interfaces/IDepthBuffer", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+    *  Depth buffer file formats.
+    *  @enum {number}
+    */
+    var DepthBufferFormat;
+    (function (DepthBufferFormat) {
+        DepthBufferFormat[DepthBufferFormat["None"] = 0] = "None";
+        DepthBufferFormat[DepthBufferFormat["RAW"] = 1] = "RAW";
+        DepthBufferFormat[DepthBufferFormat["PNG"] = 2] = "PNG";
+        DepthBufferFormat[DepthBufferFormat["JPG"] = 3] = "JPG";
+    })(DepthBufferFormat = exports.DepthBufferFormat || (exports.DepthBufferFormat = {}));
+});
+define("Api/V1/Interfaces/IMeshTransform", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("Api/V1/Interfaces/IMesh", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+    *  Mesh file formats.
+    *  @enum {number}
+    */
+    var MeshFormat;
+    (function (MeshFormat) {
+        MeshFormat[MeshFormat["None"] = 0] = "None";
+        MeshFormat[MeshFormat["RAW"] = 1] = "RAW";
+        MeshFormat[MeshFormat["OBJ"] = 2] = "OBJ";
+        MeshFormat[MeshFormat["STL"] = 3] = "STL";
+    })(MeshFormat = exports.MeshFormat || (exports.MeshFormat = {}));
+});
+define("Api/V1/Models/DtoModels", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * Concrete implementation of ICamera.
+     * @class
+     */
+    var Camera = (function () {
+        function Camera() {
+        }
+        return Camera;
+    }());
+    exports.Camera = Camera;
+    /**
+    *  Concrete implementation of IDepthBuffer.
+    *  @interface
+    */
+    var DepthBuffer = (function () {
+        function DepthBuffer() {
+        }
+        return DepthBuffer;
+    }());
+    exports.DepthBuffer = DepthBuffer;
+    /**
+    *  Concrete implementation of IMesh.
+    *  @interface
+    */
+    var Mesh = (function () {
+        function Mesh() {
+        }
+        return Mesh;
+    }());
+    exports.Mesh = Mesh;
+    /**
+    *  Concrete implementation of IMeshTransform.
+    *  @interface
+    */
+    var MeshTransform = (function () {
+        function MeshTransform() {
+        }
+        return MeshTransform;
+    }());
+    exports.MeshTransform = MeshTransform;
+    ;
+    /**
+    *  Concrete implementation of IModel3d.
+    *  @interface
+    */
+    var Model3d = (function () {
+        function Model3d() {
+        }
+        return Model3d;
+    }());
+    exports.Model3d = Model3d;
+    /**
+     * Concrete implementation of IProject.
+     * @class
+     */
+    var Project = (function () {
+        function Project() {
+        }
+        return Project;
+    }());
+    exports.Project = Project;
+});
 define("System/Logger", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
@@ -947,7 +1127,7 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Viewe
     })(DepthBufferFormat = exports.DepthBufferFormat || (exports.DepthBufferFormat = {}));
     /**
      *  Mesh cache to optimize mesh creation.
-     * If a mesh exists in the cache of the required dimensions, it is used as a template.
+     *  If a mesh exists in the cache of the required dimensions, it is used as a template.
      *  @class
      */
     var MeshCache = (function () {
@@ -2038,15 +2218,6 @@ define("System/EventManager", ["require", "exports"], function (require, exports
     }());
     exports.EventManager = EventManager;
 });
-define("DataTransferObjects/IFilePath", ["require", "exports"], function (require, exports) {
-    // ------------------------------------------------------------------------// 
-    // ModelRelief                                                             //
-    //                                                                         //                                                                          
-    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
-    // ------------------------------------------------------------------------//
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
 define("Relief/Relief", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
@@ -2090,6 +2261,9 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
      */
     var MethodType;
     (function (MethodType) {
+        MethodType["Get"] = "GET";
+        MethodType["Delete"] = "DELETE";
+        MethodType["Patch"] = "PUT";
         MethodType["Post"] = "POST";
         MethodType["Put"] = "PUT";
     })(MethodType || (MethodType = {}));
@@ -4539,7 +4713,7 @@ define("Views/ComposerView", ["require", "exports", "Controllers/ComposerControl
         //#endregion
         //#region Initialization
         /**
-         * Initialziation.
+         * Initialization.
          */
         ComposerView.prototype.initialize = function () {
             Services_10.Services.consoleLogger.addInfoMessage('ModelRelief started');
