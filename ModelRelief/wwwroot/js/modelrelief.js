@@ -2253,6 +2253,410 @@ define("System/EventManager", ["require", "exports"], function (require, exports
     }());
     exports.EventManager = EventManager;
 });
+/**
+ * Constants enumerating the HTTP status codes.
+ *
+ * All status codes defined in RFC1945 (HTTP/1.0, RFC2616 (HTTP/1.1),
+ * RFC2518 (WebDAV), RFC6585 (Additional HTTP Status Codes), and
+ * RFC7538 (Permanent Redirect) are supported.
+ *
+ * Based on the org.apache.commons.httpclient.HttpStatus Java API.
+ *  https://www.npmjs.com/package/http-status-codes
+ *
+ * Ported by Bryce Neal.
+ */
+/**
+ * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.3.3
+ *
+ * The request has been received but not yet acted upon. It is non-committal, meaning that there is no way in HTTP to later send an asynchronous response indicating the outcome of processing the request. It is intended for cases where another process or server handles the request, or for batch processing.
+ */
+define("System/HttpStatus", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var HttpStatusCode;
+    (function (HttpStatusCode) {
+        HttpStatusCode[HttpStatusCode["ACCEPTED"] = 202] = "ACCEPTED";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.6.3
+         *
+         * This error response means that the server, while working as a gateway to get a response needed to handle the request, got an invalid response.
+         */
+        HttpStatusCode[HttpStatusCode["BAD_GATEWAY"] = 502] = "BAD_GATEWAY";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.5.1
+         *
+         * This response means that server could not understand the request due to invalid syntax.
+         */
+        HttpStatusCode[HttpStatusCode["BAD_REQUEST"] = 400] = "BAD_REQUEST";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.5.8
+         *
+         * This response is sent when a request conflicts with the current state of the server.
+         */
+        HttpStatusCode[HttpStatusCode["CONFLICT"] = 409] = "CONFLICT";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.2.1
+         *
+         * This interim response indicates that everything so far is OK and that the client should continue with the request or ignore it if it is already finished.
+         */
+        HttpStatusCode[HttpStatusCode["CONTINUE"] = 100] = "CONTINUE";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.3.2
+         *
+         * The request has succeeded and a new resource has been created as a result of it. This is typically the response sent after a PUT request.
+         */
+        HttpStatusCode[HttpStatusCode["CREATED"] = 201] = "CREATED";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.5.14
+         *
+         * This response code means the expectation indicated by the Expect request header field can't be met by the server.
+         */
+        HttpStatusCode[HttpStatusCode["EXPECTATION_FAILED"] = 417] = "EXPECTATION_FAILED";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc2518#section-10.5
+         *
+         * The request failed due to failure of a previous request.
+         */
+        HttpStatusCode[HttpStatusCode["FAILED_DEPENDENCY"] = 424] = "FAILED_DEPENDENCY";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.5.3
+         *
+         * The client does not have access rights to the content, i.e. they are unauthorized, so server is rejecting to give proper response. Unlike 401, the client's identity is known to the server.
+         */
+        HttpStatusCode[HttpStatusCode["FORBIDDEN"] = 403] = "FORBIDDEN";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.6.5
+         *
+         * This error response is given when the server is acting as a gateway and cannot get a response in time.
+         */
+        HttpStatusCode[HttpStatusCode["GATEWAY_TIMEOUT"] = 504] = "GATEWAY_TIMEOUT";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.5.9
+         *
+         * This response would be sent when the requested content has been permenantly deleted from server, with no forwarding address. Clients are expected to remove their caches and links to the resource. The HTTP specification intends this status code to be used for "limited-time, promotional services". APIs should not feel compelled to indicate resources that have been deleted with this status code.
+         */
+        HttpStatusCode[HttpStatusCode["GONE"] = 410] = "GONE";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.6.6
+         *
+         * The HTTP version used in the request is not supported by the server.
+         */
+        HttpStatusCode[HttpStatusCode["HTTP_VERSION_NOT_SUPPORTED"] = 505] = "HTTP_VERSION_NOT_SUPPORTED";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc2324#section-2.3.2
+         *
+         * Any attempt to brew coffee with a teapot should result in the error code "418 I'm a teapot". The resulting entity body MAY be short and stout.
+         */
+        HttpStatusCode[HttpStatusCode["IM_A_TEAPOT"] = 418] = "IM_A_TEAPOT";
+        /**
+         * UNOFFICIAL w/ NO DOCS
+         */
+        HttpStatusCode[HttpStatusCode["INSUFFICIENT_SPACE_ON_RESOURCE"] = 419] = "INSUFFICIENT_SPACE_ON_RESOURCE";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc2518#section-10.6
+         *
+         * The server has an internal configuration error: the chosen variant resource is configured to engage in transparent content negotiation itself, and is therefore not a proper end point in the negotiation process.
+         */
+        HttpStatusCode[HttpStatusCode["INSUFFICIENT_STORAGE"] = 507] = "INSUFFICIENT_STORAGE";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.6.1
+         *
+         * The server has encountered a situation it doesn't know how to handle.
+         */
+        HttpStatusCode[HttpStatusCode["INTERNAL_SERVER_ERROR"] = 500] = "INTERNAL_SERVER_ERROR";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.5.10
+         *
+         * Server rejected the request because the Content-Length header field is not defined and the server requires it.
+         */
+        HttpStatusCode[HttpStatusCode["LENGTH_REQUIRED"] = 411] = "LENGTH_REQUIRED";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc2518#section-10.4
+         *
+         * The resource that is being accessed is locked.
+         */
+        HttpStatusCode[HttpStatusCode["LOCKED"] = 423] = "LOCKED";
+        /**
+         * @deprecated
+         * A deprecated response used by the Spring Framework when a method has failed.
+         */
+        HttpStatusCode[HttpStatusCode["METHOD_FAILURE"] = 420] = "METHOD_FAILURE";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.5.5
+         *
+         * The request method is known by the server but has been disabled and cannot be used. For example, an API may forbid DELETE-ing a resource. The two mandatory methods, GET and HEAD, must never be disabled and should not return this error code.
+         */
+        HttpStatusCode[HttpStatusCode["METHOD_NOT_ALLOWED"] = 405] = "METHOD_NOT_ALLOWED";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.4.2
+         *
+         * This response code means that URI of requested resource has been changed. Probably, new URI would be given in the response.
+         */
+        HttpStatusCode[HttpStatusCode["MOVED_PERMANENTLY"] = 301] = "MOVED_PERMANENTLY";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.4.3
+         *
+         * This response code means that URI of requested resource has been changed temporarily. New changes in the URI might be made in the future. Therefore, this same URI should be used by the client in future requests.
+         */
+        HttpStatusCode[HttpStatusCode["MOVED_TEMPORARILY"] = 302] = "MOVED_TEMPORARILY";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc2518#section-10.2
+         *
+         * A Multi-Status response conveys information about multiple resources in situations where multiple status codes might be appropriate.
+         */
+        HttpStatusCode[HttpStatusCode["MULTI_STATUS"] = 207] = "MULTI_STATUS";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.4.1
+         *
+         * The request has more than one possible responses. User-agent or user should choose one of them. There is no standardized way to choose one of the responses.
+         */
+        HttpStatusCode[HttpStatusCode["MULTIPLE_CHOICES"] = 300] = "MULTIPLE_CHOICES";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc6585#section-6
+         *
+         * The 511 status code indicates that the client needs to authenticate to gain network access.
+         */
+        HttpStatusCode[HttpStatusCode["NETWORK_AUTHENTICATION_REQUIRED"] = 511] = "NETWORK_AUTHENTICATION_REQUIRED";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.3.5
+         *
+         * There is no content to send for this request, but the headers may be useful. The user-agent may update its cached headers for this resource with the new ones.
+         */
+        HttpStatusCode[HttpStatusCode["NO_CONTENT"] = 204] = "NO_CONTENT";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.3.4
+         * This response code means returned meta-information set is not exact set as available from the origin server, but collected from a local or a third party copy. Except this condition, 200 OK response should be preferred instead of this response.
+         */
+        HttpStatusCode[HttpStatusCode["NON_AUTHORITATIVE_INFORMATION"] = 203] = "NON_AUTHORITATIVE_INFORMATION";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.5.6
+         *
+         * This response is sent when the web server, after performing server-driven content negotiation, doesn't find any content following the criteria given by the user agent.
+         */
+        HttpStatusCode[HttpStatusCode["NOT_ACCEPTABLE"] = 406] = "NOT_ACCEPTABLE";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.5.4
+         *
+         * The server can not find requested resource. In the browser, this means the URL is not recognized. In an API, this can also mean that the endpoint is valid but the resource itself does not exist. Servers may also send this response instead of 403 to hide the existence of a resource from an unauthorized client. This response code is probably the most famous one due to its frequent occurence on the web.
+         */
+        HttpStatusCode[HttpStatusCode["NOT_FOUND"] = 404] = "NOT_FOUND";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.6.2
+         *
+         * The request method is not supported by the server and cannot be handled. The only methods that servers are required to support (and therefore that must not return this code) are GET and HEAD.
+         */
+        HttpStatusCode[HttpStatusCode["NOT_IMPLEMENTED"] = 501] = "NOT_IMPLEMENTED";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7232#section-4.1
+         *
+         * This is used for caching purposes. It is telling to client that response has not been modified. So, client can continue to use same cached version of response.
+         */
+        HttpStatusCode[HttpStatusCode["NOT_MODIFIED"] = 304] = "NOT_MODIFIED";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.3.1
+         *
+         * The request has succeeded. The meaning of a success varies depending on the HTTP method:
+         * GET: The resource has been fetched and is transmitted in the message body.
+         * HEAD: The entity headers are in the message body.
+         * POST: The resource describing the result of the action is transmitted in the message body.
+         * TRACE: The message body contains the request message as received by the server
+         */
+        HttpStatusCode[HttpStatusCode["OK"] = 200] = "OK";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7233#section-4.1
+         *
+         * This response code is used because of range header sent by the client to separate download into multiple streams.
+         */
+        HttpStatusCode[HttpStatusCode["PARTIAL_CONTENT"] = 206] = "PARTIAL_CONTENT";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.5.2
+         *
+         * This response code is reserved for future use. Initial aim for creating this code was using it for digital payment systems however this is not used currently.
+         */
+        HttpStatusCode[HttpStatusCode["PAYMENT_REQUIRED"] = 402] = "PAYMENT_REQUIRED";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7538#section-3
+         *
+         * This means that the resource is now permanently located at another URI, specified by the Location: HTTP Response header. This has the same semantics as the 301 Moved Permanently HTTP response code, with the exception that the user agent must not change the HTTP method used: if a POST was used in the first request, a POST must be used in the second request.
+         */
+        HttpStatusCode[HttpStatusCode["PERMANENT_REDIRECT"] = 308] = "PERMANENT_REDIRECT";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7232#section-4.2
+         *
+         * The client has indicated preconditions in its headers which the server does not meet.
+         */
+        HttpStatusCode[HttpStatusCode["PRECONDITION_FAILED"] = 412] = "PRECONDITION_FAILED";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc6585#section-3
+         *
+         * The origin server requires the request to be conditional. Intended to prevent the 'lost update' problem, where a client GETs a resource's state, modifies it, and PUTs it back to the server, when meanwhile a third party has modified the state on the server, leading to a conflict.
+         */
+        HttpStatusCode[HttpStatusCode["PRECONDITION_REQUIRED"] = 428] = "PRECONDITION_REQUIRED";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc2518#section-10.1
+         *
+         * This code indicates that the server has received and is processing the request, but no response is available yet.
+         */
+        HttpStatusCode[HttpStatusCode["PROCESSING"] = 102] = "PROCESSING";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7235#section-3.2
+         *
+         * This is similar to 401 but authentication is needed to be done by a proxy.
+         */
+        HttpStatusCode[HttpStatusCode["PROXY_AUTHENTICATION_REQUIRED"] = 407] = "PROXY_AUTHENTICATION_REQUIRED";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc6585#section-5
+         *
+         * The server is unwilling to process the request because its header fields are too large. The request MAY be resubmitted after reducing the size of the request header fields.
+         */
+        HttpStatusCode[HttpStatusCode["REQUEST_HEADER_FIELDS_TOO_LARGE"] = 431] = "REQUEST_HEADER_FIELDS_TOO_LARGE";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.5.7
+         *
+         * This response is sent on an idle connection by some servers, even without any previous request by the client. It means that the server would like to shut down this unused connection. This response is used much more since some browsers, like Chrome, Firefox 27+, or IE9, use HTTP pre-connection mechanisms to speed up surfing. Also note that some servers merely shut down the connection without sending this message.
+         */
+        HttpStatusCode[HttpStatusCode["REQUEST_TIMEOUT"] = 408] = "REQUEST_TIMEOUT";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.5.11
+         *
+         * Request entity is larger than limits defined by server, the server might close the connection or return an Retry-After header field.
+         */
+        HttpStatusCode[HttpStatusCode["REQUEST_TOO_LONG"] = 413] = "REQUEST_TOO_LONG";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.5.12
+         *
+         * The URI requested by the client is longer than the server is willing to interpret.
+         */
+        HttpStatusCode[HttpStatusCode["REQUEST_URI_TOO_LONG"] = 414] = "REQUEST_URI_TOO_LONG";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7233#section-4.4
+         *
+         * The range specified by the Range header field in the request can't be fulfilled, it's possible that the range is outside the size of the target URI's data.
+         */
+        HttpStatusCode[HttpStatusCode["REQUESTED_RANGE_NOT_SATISFIABLE"] = 416] = "REQUESTED_RANGE_NOT_SATISFIABLE";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.3.6
+         *
+         * This response code is sent after accomplishing request to tell user agent reset document view which sent this request.
+         */
+        HttpStatusCode[HttpStatusCode["RESET_CONTENT"] = 205] = "RESET_CONTENT";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.4.4
+         *
+         * Server sent this response to directing client to get requested resource to another URI with an GET request.
+         */
+        HttpStatusCode[HttpStatusCode["SEE_OTHER"] = 303] = "SEE_OTHER";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.6.4
+         *
+         * The server is not ready to handle the request. Common causes are a server that is down for maintenance or that is overloaded. Note that together with this response, a user-friendly page explaining the problem should be sent. This responses should be used for temporary conditions and the Retry-After: HTTP header should, if possible, contain the estimated time before the recovery of the service. The webmaster must also take care about the caching-related headers that are sent along with this response, as these temporary condition responses should usually not be cached.
+         */
+        HttpStatusCode[HttpStatusCode["SERVICE_UNAVAILABLE"] = 503] = "SERVICE_UNAVAILABLE";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.2.2
+         *
+         * This code is sent in response to an Upgrade request header by the client, and indicates the protocol the server is switching too.
+         */
+        HttpStatusCode[HttpStatusCode["SWITCHING_PROTOCOLS"] = 101] = "SWITCHING_PROTOCOLS";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.4.7
+         *
+         * Server sent this response to directing client to get requested resource to another URI with same method that used prior request. This has the same semantic than the 302 Found HTTP response code, with the exception that the user agent must not change the HTTP method used: if a POST was used in the first request, a POST must be used in the second request.
+         */
+        HttpStatusCode[HttpStatusCode["TEMPORARY_REDIRECT"] = 307] = "TEMPORARY_REDIRECT";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc6585#section-4
+         *
+         * The user has sent too many requests in a given amount of time ("rate limiting").
+         */
+        HttpStatusCode[HttpStatusCode["TOO_MANY_REQUESTS"] = 429] = "TOO_MANY_REQUESTS";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7235#section-3.1
+         *
+         * Although the HTTP standard specifies "unauthorized", semantically this response means "unauthenticated". That is, the client must authenticate itself to get the requested response.
+         */
+        HttpStatusCode[HttpStatusCode["UNAUTHORIZED"] = 401] = "UNAUTHORIZED";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc2518#section-10.3
+         *
+         * The request was well-formed but was unable to be followed due to semantic errors.
+         */
+        HttpStatusCode[HttpStatusCode["UNPROCESSABLE_ENTITY"] = 422] = "UNPROCESSABLE_ENTITY";
+        /**
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.5.13
+         *
+         * The media format of the requested data is not supported by the server, so the server is rejecting the request.
+         */
+        HttpStatusCode[HttpStatusCode["UNSUPPORTED_MEDIA_TYPE"] = 415] = "UNSUPPORTED_MEDIA_TYPE";
+        /**
+         * @deprecated
+         * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.4.6
+         *
+         * Was defined in a previous version of the HTTP specification to indicate that a requested response must be accessed by a proxy. It has been deprecated due to security concerns regarding in-band configuration of a proxy.
+         */
+        HttpStatusCode[HttpStatusCode["USE_PROXY"] = 305] = "USE_PROXY";
+        /**
+         * Convert the numeric status code to its appropriate title.
+         * @param statusCode One of the available status codes in this package
+         * @returns {String} The associated title of the passed status code
+         */
+    })(HttpStatusCode = exports.HttpStatusCode || (exports.HttpStatusCode = {}));
+    exports.HttpStatusMessage = {};
+    exports.HttpStatusMessage[HttpStatusCode.ACCEPTED] = "Accepted";
+    exports.HttpStatusMessage[HttpStatusCode.BAD_GATEWAY] = "Bad Gateway";
+    exports.HttpStatusMessage[HttpStatusCode.BAD_REQUEST] = "Bad Request";
+    exports.HttpStatusMessage[HttpStatusCode.CONFLICT] = "Conflict";
+    exports.HttpStatusMessage[HttpStatusCode.CONTINUE] = "Continue";
+    exports.HttpStatusMessage[HttpStatusCode.CREATED] = "Created";
+    exports.HttpStatusMessage[HttpStatusCode.EXPECTATION_FAILED] = "Expectation Failed";
+    exports.HttpStatusMessage[HttpStatusCode.FAILED_DEPENDENCY] = "Failed Dependency";
+    exports.HttpStatusMessage[HttpStatusCode.FORBIDDEN] = "Forbidden";
+    exports.HttpStatusMessage[HttpStatusCode.GATEWAY_TIMEOUT] = "Gateway Timeout";
+    exports.HttpStatusMessage[HttpStatusCode.GONE] = "Gone";
+    exports.HttpStatusMessage[HttpStatusCode.HTTP_VERSION_NOT_SUPPORTED] = "HTTP Version Not Supported";
+    exports.HttpStatusMessage[HttpStatusCode.IM_A_TEAPOT] = "I'm a teapot";
+    exports.HttpStatusMessage[HttpStatusCode.INSUFFICIENT_SPACE_ON_RESOURCE] = "Insufficient Space on Resource";
+    exports.HttpStatusMessage[HttpStatusCode.INSUFFICIENT_STORAGE] = "Insufficient Storage";
+    exports.HttpStatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR] = "Server Error";
+    exports.HttpStatusMessage[HttpStatusCode.LENGTH_REQUIRED] = "Length Required";
+    exports.HttpStatusMessage[HttpStatusCode.LOCKED] = "Locked";
+    exports.HttpStatusMessage[HttpStatusCode.METHOD_FAILURE] = "Method Failure";
+    exports.HttpStatusMessage[HttpStatusCode.METHOD_NOT_ALLOWED] = "Method Not Allowed";
+    exports.HttpStatusMessage[HttpStatusCode.MOVED_PERMANENTLY] = "Moved Permanently";
+    exports.HttpStatusMessage[HttpStatusCode.MOVED_TEMPORARILY] = "Moved Temporarily";
+    exports.HttpStatusMessage[HttpStatusCode.MULTI_STATUS] = "Multi-Status";
+    exports.HttpStatusMessage[HttpStatusCode.MULTIPLE_CHOICES] = "Multiple Choices";
+    exports.HttpStatusMessage[HttpStatusCode.NETWORK_AUTHENTICATION_REQUIRED] = "Network Authentication Required";
+    exports.HttpStatusMessage[HttpStatusCode.NO_CONTENT] = "No Content";
+    exports.HttpStatusMessage[HttpStatusCode.NON_AUTHORITATIVE_INFORMATION] = "Non Authoritative Information";
+    exports.HttpStatusMessage[HttpStatusCode.NOT_ACCEPTABLE] = "Not Acceptable";
+    exports.HttpStatusMessage[HttpStatusCode.NOT_FOUND] = "Not Found";
+    exports.HttpStatusMessage[HttpStatusCode.NOT_IMPLEMENTED] = "Not Implemented";
+    exports.HttpStatusMessage[HttpStatusCode.NOT_MODIFIED] = "Not Modified";
+    exports.HttpStatusMessage[HttpStatusCode.OK] = "OK";
+    exports.HttpStatusMessage[HttpStatusCode.PARTIAL_CONTENT] = "Partial Content";
+    exports.HttpStatusMessage[HttpStatusCode.PAYMENT_REQUIRED] = "Payment Required";
+    exports.HttpStatusMessage[HttpStatusCode.PERMANENT_REDIRECT] = "Permanent Redirect";
+    exports.HttpStatusMessage[HttpStatusCode.PRECONDITION_FAILED] = "Precondition Failed";
+    exports.HttpStatusMessage[HttpStatusCode.PRECONDITION_REQUIRED] = "Precondition Required";
+    exports.HttpStatusMessage[HttpStatusCode.PROCESSING] = "Processing";
+    exports.HttpStatusMessage[HttpStatusCode.PROXY_AUTHENTICATION_REQUIRED] = "Proxy Authentication Required";
+    exports.HttpStatusMessage[HttpStatusCode.REQUEST_HEADER_FIELDS_TOO_LARGE] = "Request Header Fields Too Large";
+    exports.HttpStatusMessage[HttpStatusCode.REQUEST_TIMEOUT] = "Request Timeout";
+    exports.HttpStatusMessage[HttpStatusCode.REQUEST_TOO_LONG] = "Request Entity Too Large";
+    exports.HttpStatusMessage[HttpStatusCode.REQUEST_URI_TOO_LONG] = "Request-URI Too Long";
+    exports.HttpStatusMessage[HttpStatusCode.REQUESTED_RANGE_NOT_SATISFIABLE] = "Requested Range Not Satisfiable";
+    exports.HttpStatusMessage[HttpStatusCode.RESET_CONTENT] = "Reset Content";
+    exports.HttpStatusMessage[HttpStatusCode.SEE_OTHER] = "See Other";
+    exports.HttpStatusMessage[HttpStatusCode.SERVICE_UNAVAILABLE] = "Service Unavailable";
+    exports.HttpStatusMessage[HttpStatusCode.SWITCHING_PROTOCOLS] = "Switching Protocols";
+    exports.HttpStatusMessage[HttpStatusCode.TEMPORARY_REDIRECT] = "Temporary Redirect";
+    exports.HttpStatusMessage[HttpStatusCode.TOO_MANY_REQUESTS] = "Too Many Requests";
+    exports.HttpStatusMessage[HttpStatusCode.UNAUTHORIZED] = "Unauthorized";
+    exports.HttpStatusMessage[HttpStatusCode.UNPROCESSABLE_ENTITY] = "Unprocessable Entity";
+    exports.HttpStatusMessage[HttpStatusCode.UNSUPPORTED_MEDIA_TYPE] = "Unsupported Media Type";
+    exports.HttpStatusMessage[HttpStatusCode.USE_PROXY] = "Use Proxy";
+});
 define("Relief/Relief", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
@@ -2275,7 +2679,7 @@ define("Relief/Relief", ["require", "exports"], function (require, exports) {
     }());
     exports.Relief = Relief;
 });
-define("System/Http", ["require", "exports", "System/Services"], function (require, exports, Services_5) {
+define("System/Http", ["require", "exports", "System/HttpStatus", "System/Services"], function (require, exports, HttpStatus_1, Services_5) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -2417,8 +2821,8 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
                 if (request.readyState === request.DONE) {
                     switch (request.status) {
                         // WIP: Are other HTTP status required?
-                        case 200:
-                        case 201:
+                        case HttpStatus_1.HttpStatusCode.OK:
+                        case HttpStatus_1.HttpStatusCode.CREATED:
                             Services_5.Services.consoleLogger.addInfoMessage(methodType + ": onLoad");
                             if (onComplete)
                                 onComplete(request);
@@ -2468,7 +2872,7 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
          */
         HttpLibrary.postFileAsync = function (postUrl, fileData, fileMetadata) {
             return __awaiter(this, void 0, void 0, function () {
-                var json, requestResponse, requestResponseModelId, headers, filePath, modelId, blob;
+                var json, requestResponse, headers, filePath, blob;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -2476,22 +2880,14 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
                             return [4 /*yield*/, HttpLibrary.submitHttpRequest(postUrl, MethodType.Post, ContentType.Json, json)];
                         case 1:
                             requestResponse = _a.sent();
-                            if (requestResponse.response.status != 201) {
+                            if (requestResponse.response.status != HttpStatus_1.HttpStatusCode.CREATED) {
                                 throw new Error("postFileAsync : Url = " + postUrl + ", status = " + requestResponse.response.status);
                             }
-                            requestResponseModelId = requestResponse.model.id;
-                            Services_5.Services.consoleLogger.addInfoMessage('Metadata saved');
                             headers = requestResponse.response.headers;
                             filePath = headers.get('Location');
-                            return [4 /*yield*/, HttpLibrary.submitHttpRequest(filePath, MethodType.Get, ContentType.Json, null)];
-                        case 2:
-                            // verify
-                            requestResponse = _a.sent();
-                            modelId = requestResponse.model.id;
-                            Services_5.Services.consoleLogger.addInfoMessage("Model ID = " + modelId);
                             blob = new Blob([fileData], { type: ContentType.OctetStream });
                             return [4 /*yield*/, HttpLibrary.submitHttpRequest(filePath + "/file", MethodType.Post, ContentType.OctetStream, blob)];
-                        case 3:
+                        case 2:
                             requestResponse = _a.sent();
                             return [2 /*return*/, requestResponse.response.ok];
                     }
@@ -2507,10 +2903,11 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
          */
         HttpLibrary.submitHttpRequest = function (endpoint, methodType, contentType, requestData) {
             return __awaiter(this, void 0, void 0, function () {
-                var headers, requestMode, cacheMode, init, response, contentString, requestResponse;
+                var message, headers, requestMode, cacheMode, init, response, contentString, requestResponse;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
+                            message = HttpStatus_1.HttpStatusMessage[HttpStatus_1.HttpStatusCode.OK];
                             headers = new Headers({
                                 'Content-Type': contentType
                             });

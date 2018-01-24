@@ -16,6 +16,7 @@ Documents\bin\DebugGulp.bat
 var gulp         = require('gulp');
 var gutil        = require('gulp-util');
 var exec         = require('child_process').exec;
+var rename       = require('gulp-rename');
 var sourcemaps   = require('gulp-sourcemaps');
 var ts           = require('gulp-typescript');
 

@@ -1,6 +1,4 @@
 ﻿##### Commit Notes
-
-
 Some Markdown text with <span style="color:blue">some *blue* text
 
 ##### Technical Education
@@ -15,9 +13,6 @@ Some Markdown text with <span style="color:blue">some *blue* text
 #### Short Term
 
 #### Front End
-    Is it valid to not use await with a function declared as async?
-    Install the HTTP status codes.
-        https://www.npmjs.com/package/http-status-codes  
     Investigate Chai unit tests for front-end JavaScript.
     Investigate node JavaScript evaluation.
 
@@ -665,11 +660,12 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
         Similarly, for binary documents without specific or known subtype, application/octet-stream should be used.
 
 #### Licenses
-    THREE.js        MIT
-    Serilog         Apache https://www.apache.org/licenses/LICENSE-2.0
-    Autofac         MIT
-    MediatR         Apache https://github.com/jbogard/MediatR/blob/master/LICENSE
-    FeatureFolders  MIT https://raw.githubusercontent.com/OdeToCode/AddFeatureFolders/master/LICENSE
+    THREE.js            MIT
+    Serilog             Apache https://www.apache.org/licenses/LICENSE-2.0
+    Autofac             MIT
+    MediatR             Apache https://github.com/jbogard/MediatR/blob/master/LICENSE
+    FeatureFolders      MIT https://raw.githubusercontent.com/OdeToCode/AddFeatureFolders/master/LICENSE
+    http-status-codes   MIT https://www.npmjs.com/package/http-status-codes
 
     OpinionatedApiController : Spencer Schneidenbach
     ContosoCore              : Jimmy Bogard

@@ -5,12 +5,13 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto from 'DtoModels'
+import * as Dto                             from 'DtoModels'
 
-import { DepthBufferFormat }    from 'DepthBuffer'
-import { ITGetModel }           from 'ITGetModel'
-import { Services }             from 'Services'
-import { ReliefSettings }       from 'Relief'
+import { DepthBufferFormat }                from 'DepthBuffer'
+import { HttpStatusCode, HttpStatusMessage }from 'HttpStatus'
+import { ITGetModel }                       from 'ITGetModel'
+import { Services }                         from 'Services'
+import { ReliefSettings }                   from 'Relief'
 
 /**
  * HTTP Content-type
@@ -149,7 +150,6 @@ export class HttpLibrary {
 
         // Timeout
         let onTimeout = function (this: XMLHttpRequestEventTarget, ev: ProgressEvent) : any {
-
             Services.consoleLogger.addErrorMessage(`${methodType}: onTimeout`);
         };
 
@@ -159,8 +159,8 @@ export class HttpLibrary {
             if (request.readyState === request.DONE) {
                 switch (request.status) {
                     // WIP: Are other HTTP status required?
-                    case 200:
-                    case 201:
+                    case HttpStatusCode.OK:
+                    case HttpStatusCode.CREATED:
                         Services.consoleLogger.addInfoMessage(`${methodType}: onLoad`);
                         if (onComplete)
                             onComplete(request);
@@ -217,19 +217,12 @@ export class HttpLibrary {
         // send JSON metadata first to create the resource and obtain the Id
         let json = JSON.stringify(fileMetadata);
         let requestResponse = await HttpLibrary.submitHttpRequest(postUrl, MethodType.Post, ContentType.Json, json);
-        if (requestResponse.response.status != 201) {
+        if (requestResponse.response.status != HttpStatusCode.CREATED) {
             throw new Error(`postFileAsync : Url = ${postUrl}, status = ${requestResponse.response.status}`);
         }
-        let requestResponseModelId = requestResponse.model.id;
 
-        Services.consoleLogger.addInfoMessage('Metadata saved');
         let headers = requestResponse.response.headers;
         let filePath = headers.get('Location');
-
-        // verify
-        requestResponse = await HttpLibrary.submitHttpRequest(filePath, MethodType.Get, ContentType.Json, null);
-        let modelId = requestResponse.model.id;
-        Services.consoleLogger.addInfoMessage(`Model ID = ${modelId}`);
 
         let blob = new Blob([fileData], { type: ContentType.OctetStream });
         requestResponse = await HttpLibrary.submitHttpRequest(`${filePath}/file`, MethodType.Post, ContentType.OctetStream, blob);
@@ -245,6 +238,7 @@ export class HttpLibrary {
      * @param {any} requestData Data to send in the request.
      */
     static async submitHttpRequest(endpoint: string, methodType: MethodType, contentType: ContentType, requestData: any) : Promise<RequestResponse>{
+        var message = HttpStatusMessage[HttpStatusCode.OK];
 
         let headers = new Headers({
             'Content-Type': contentType
