@@ -14,8 +14,7 @@ Some Markdown text with <span style="color:blue">some *blue* text
 
 #### Front End
     
-    Add a Mesh class.
-        Refactor DepthBuffer to move mesh creation to Mesh class.
+    Refactor DepthBuffer to move mesh creation to Mesh class.
 
     Investigate Chai unit tests for front-end JavaScript.
 
