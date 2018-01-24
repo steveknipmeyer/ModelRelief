@@ -11,12 +11,13 @@ import * as Dto    from "DtoModels";
 
 import {StandardView}                       from "Camera"
 import {ComposerView}                       from "ComposerView"
-import {DepthBufferFactory, Relief}         from "DepthBufferFactory"
+import {DepthBufferFactory}                 from "DepthBufferFactory"
 import {EventManager, EventType, MREvent}   from 'EventManager'
 import {ElementAttributes, ElementIds}      from "Html"
 import {HttpLibrary, ServerEndPoints}       from "Http"
 import {Logger, ConsoleLogger}              from 'Logger'
 import {Graphics}                           from "Graphics"
+import {Mesh, Relief}                       from "Mesh"
 import {ModelViewer}                        from "ModelViewer"
 import {OBJExporter}                        from "OBJExporter"
 import {ReliefSettings}                     from 'Relief'
@@ -95,14 +96,13 @@ export class ComposerController {
         let height = width / this._composerView.modelView.modelViewer.aspectRatio;
         let factory = new DepthBufferFactory({ width: width, height: height, model: this._composerView.modelView.modelViewer.model, camera: this._composerView.modelView.modelViewer.camera, addCanvasToDOM: false });
 
-        this._relief = factory.generateRelief({});
 
-        {
-            this.postDepthBuffer();
+        let depthBuffer = factory.createDepthBuffer();
+        let mesh = new Mesh({ width: width, height: height, depthBuffer: depthBuffer});
+        this._relief = mesh.generateRelief({});
 
-            let mesh = this._relief.depthBuffer.mesh();
-            this._relief.mesh = mesh;
-        }
+        this.postDepthBuffer();
+
 
         this._composerView._meshView.meshViewer.setModel(this._relief.mesh);
         if (this._initialMeshGeneration) {

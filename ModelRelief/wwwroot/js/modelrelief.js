@@ -1819,23 +1819,7 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "Viewer
             this.initializePostCamera();
         };
         //#endregion
-        //#region Generation
-        /**
-         * Verifies the pre-requisite settings are defined to create a mesh.
-         */
-        DepthBufferFactory.prototype.verifyMeshSettings = function () {
-            var minimumSettings = true;
-            var errorPrefix = 'DepthBufferFactory: ';
-            if (!this._model) {
-                this._logger.addErrorMessage(errorPrefix + "The model is not defined.");
-                minimumSettings = false;
-            }
-            if (!this._camera) {
-                this._logger.addErrorMessage(errorPrefix + "The camera is not defined.");
-                minimumSettings = false;
-            }
-            return minimumSettings;
-        };
+        //#region Analysis
         /**
          * Constructs an RGBA string with the byte values of a pixel.
          * @param buffer Unsigned byte raw buffer.
@@ -1866,25 +1850,7 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "Viewer
             //      this.analyzeRenderBuffer();
             //      this._depthBuffer.analyze();
         };
-        /**
-         * Create a depth buffer.
-         */
-        DepthBufferFactory.prototype.createDepthBuffer = function () {
-            var timerTag = Services_3.Services.timer.mark('DepthBufferFactory.createDepthBuffer');
-            this._renderer.render(this._scene, this._camera, this._target);
-            // (optional) preview encoded RGBA texture; drawn by shader but not persisted
-            this._renderer.render(this._postScene, this._postCamera);
-            // Persist encoded RGBA texture; calculated from depth buffer
-            // encodedTarget.texture      : encoded RGBA texture
-            // encodedTarget.depthTexture : null
-            this._renderer.render(this._postScene, this._postCamera, this._encodedTarget);
-            // decode RGBA texture into depth floats
-            var depthBufferRGBA = new Uint8Array(this._width * this._height * 4).fill(0);
-            this._renderer.readRenderTargetPixels(this._encodedTarget, 0, 0, this._width, this._height, depthBufferRGBA);
-            this._depthBuffer = new DepthBuffer_1.DepthBuffer(depthBufferRGBA, this._width, this._height, this._camera);
-            this.analyzeTargets();
-            Services_3.Services.timer.logElapsedTime(timerTag);
-        };
+        //#endregion
         /**
          * Sets the camera clipping planes for mesh generation.
          */
@@ -1899,23 +1865,27 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "Viewer
             this._camera.updateProjectionMatrix();
         };
         /**
-         * Generates a mesh from the active model and camera
-         * @param parameters Generation parameters (MeshGenerateParameters)
+         * Create a depth buffer.
          */
-        DepthBufferFactory.prototype.generateRelief = function (parameters) {
-            if (!this.verifyMeshSettings())
-                return null;
+        DepthBufferFactory.prototype.createDepthBuffer = function () {
+            var timerTag = Services_3.Services.timer.mark('DepthBufferFactory.createDepthBuffer');
             if (this._boundedClipping ||
                 ((this._camera.near === Camera_2.Camera.DefaultNearClippingPlane) && (this._camera.far === Camera_2.Camera.DefaultFarClippingPlane)))
                 this.setCameraClippingPlanes();
-            this.createDepthBuffer();
-            var relief = {
-                width: this._width,
-                height: this._height,
-                mesh: null,
-                depthBuffer: this._depthBuffer
-            };
-            return relief;
+            this._renderer.render(this._scene, this._camera, this._target);
+            // (optional) preview encoded RGBA texture; drawn by shader but not persisted
+            this._renderer.render(this._postScene, this._postCamera);
+            // Persist encoded RGBA texture; calculated from depth buffer
+            // encodedTarget.texture      : encoded RGBA texture
+            // encodedTarget.depthTexture : null
+            this._renderer.render(this._postScene, this._postCamera, this._encodedTarget);
+            // decode RGBA texture into depth floats
+            var depthBufferRGBA = new Uint8Array(this._width * this._height * 4).fill(0);
+            this._renderer.readRenderTargetPixels(this._encodedTarget, 0, 0, this._width, this._height, depthBufferRGBA);
+            this._depthBuffer = new DepthBuffer_1.DepthBuffer(depthBufferRGBA, this._width, this._height, this._camera);
+            this.analyzeTargets();
+            Services_3.Services.timer.logElapsedTime(timerTag);
+            return this._depthBuffer;
         };
         DepthBufferFactory.DefaultResolution = 1024; // default DB resolution
         DepthBufferFactory.NearPlaneEpsilon = .001; // adjustment to avoid clipping geometry on the near plane
@@ -2946,6 +2916,81 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
     }());
     exports.HttpLibrary = HttpLibrary;
 });
+// ------------------------------------------------------------------------// 
+// ModelRelief                                                             //
+//                                                                         //                                                                          
+// Copyright (c) <2017-2018> Steve Knipmeyer                               //
+// ------------------------------------------------------------------------//
+define("Mesh/Mesh", ["require", "exports", "System/Services"], function (require, exports, Services_6) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * @class
+     * Mesh
+     */
+    var Mesh = (function () {
+        /**
+         * @constructor
+         * @param parameters Initialization parameters (MeshParameters)
+         */
+        function Mesh(parameters) {
+            this._logger = null; // logger
+            // required
+            this._width = parameters.width;
+            this._height = parameters.height;
+            this._depthBuffer = parameters.depthBuffer;
+            this.initialize();
+        }
+        Object.defineProperty(Mesh.prototype, "depthBuffer", {
+            //#region Properties
+            /**
+             * Returns the associated DepthBuffer.
+             * @returns DepthBuffer
+             */
+            get: function () {
+                return this._depthBuffer;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        //#endregion
+        //#region Initialization    
+        /**
+         * Perform setup and initialization.
+         */
+        Mesh.prototype.initialize = function () {
+            this._logger = Services_6.Services.consoleLogger;
+        };
+        //#endregion
+        //#region Generation
+        /**
+         * Verifies the pre-requisite settings are defined to create a mesh.
+         */
+        Mesh.prototype.verifyMeshSettings = function () {
+            var minimumSettingsDefined = true;
+            var errorPrefix = 'Mesh: ';
+            return minimumSettingsDefined;
+        };
+        /**
+         * Generates a mesh from the active model and camera.
+         * @param parameters Generation parameters (MeshGenerateParameters)
+         */
+        Mesh.prototype.generateRelief = function (parameters) {
+            if (!this.verifyMeshSettings())
+                return null;
+            var mesh = this._depthBuffer.mesh();
+            var relief = {
+                width: this._width,
+                height: this._height,
+                mesh: mesh,
+                depthBuffer: this._depthBuffer
+            };
+            return relief;
+        };
+        return Mesh;
+    }());
+    exports.Mesh = Mesh;
+});
 define("Graphics/Materials", ["require", "exports", "three"], function (require, exports, THREE) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
@@ -3617,7 +3662,7 @@ define("Viewers/CameraControls", ["require", "exports", "three", "dat-gui", "Vie
     }());
     exports.CameraControls = CameraControls;
 });
-define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "Viewers/CameraControls", "System/EventManager", "Graphics/Graphics", "System/Services", "Viewers/TrackballControls"], function (require, exports, THREE, Camera_4, CameraControls_1, EventManager_1, Graphics_5, Services_6, TrackballControls_1) {
+define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "Viewers/CameraControls", "System/EventManager", "Graphics/Graphics", "System/Services", "Viewers/TrackballControls"], function (require, exports, THREE, Camera_4, CameraControls_1, EventManager_1, Graphics_5, Services_7, TrackballControls_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -3651,7 +3696,7 @@ define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "View
             this._cameraControls = null;
             this._name = name;
             this._eventManager = new EventManager_1.EventManager();
-            this._logger = Services_6.Services.consoleLogger;
+            this._logger = Services_7.Services.consoleLogger;
             this._canvas = Graphics_5.Graphics.initializeCanvas(modelCanvasId);
             this._width = this._canvas.offsetWidth;
             this._height = this._canvas.offsetHeight;
@@ -4168,7 +4213,7 @@ define("ModelExporters/OBJExporter", ["require", "exports", "three"], function (
     }());
     exports.OBJExporter = OBJExporter;
 });
-define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Viewers/Camera", "DepthBuffer/DepthBufferFactory", "System/EventManager", "System/Html", "System/Http", "System/Services"], function (require, exports, dat, Camera_5, DepthBufferFactory_2, EventManager_3, Html_3, Http_1, Services_7) {
+define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Viewers/Camera", "DepthBuffer/DepthBufferFactory", "System/EventManager", "System/Html", "System/Http", "Mesh/Mesh", "System/Services"], function (require, exports, dat, Camera_5, DepthBufferFactory_2, EventManager_3, Html_3, Http_1, Mesh_1, Services_8) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -4227,12 +4272,10 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
             var width = 512;
             var height = width / this._composerView.modelView.modelViewer.aspectRatio;
             var factory = new DepthBufferFactory_2.DepthBufferFactory({ width: width, height: height, model: this._composerView.modelView.modelViewer.model, camera: this._composerView.modelView.modelViewer.camera, addCanvasToDOM: false });
-            this._relief = factory.generateRelief({});
-            {
-                this.postDepthBuffer();
-                var mesh = this._relief.depthBuffer.mesh();
-                this._relief.mesh = mesh;
-            }
+            var depthBuffer = factory.createDepthBuffer();
+            var mesh = new Mesh_1.Mesh({ width: width, height: height, depthBuffer: depthBuffer });
+            this._relief = mesh.generateRelief({});
+            this.postDepthBuffer();
             this._composerView._meshView.meshViewer.setModel(this._relief.mesh);
             if (this._initialMeshGeneration) {
                 this._composerView._meshView.meshViewer.fitView();
@@ -4250,7 +4293,7 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
                     switch (_a.label) {
                         case 0:
                             fileName = this._composerView.modelView.modelViewer.model.name + ".raw";
-                            exportTag = Services_7.Services.timer.mark('Export DepthBuffer');
+                            exportTag = Services_8.Services.timer.mark('Export DepthBuffer');
                             postUrl = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiDepthBuffers;
                             fileMetadata = {
                                 name: fileName,
@@ -4260,16 +4303,18 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
                             return [4 /*yield*/, Http_1.HttpLibrary.postFileAsync(postUrl, this._relief.depthBuffer.depths, fileMetadata)];
                         case 1:
                             _a.sent();
-                            Services_7.Services.timer.logElapsedTime(exportTag);
+                            Services_8.Services.timer.logElapsedTime(exportTag);
                             return [2 /*return*/];
                     }
                 });
             });
         };
         /**
-         * Saves the relief to a disk file.
+         * Saves the relief.
          */
         ComposerController.prototype.saveRelief = function () {
+            // WIP: Save the Mesh as an OBJ format file?
+            // It may be more efficient to maintain Meshes in raw format since the size is substantially smaller.
         };
         //#endregion
         /**
@@ -4335,7 +4380,7 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
 // https://github.com/sohamkamani/three-object-loader/blob/master/source/index.js       //
 //                                                                                      // 
 // -------------------------------------------------------------------------------------//
-define("ModelLoaders/OBJLoader", ["require", "exports", "three", "System/Services"], function (require, exports, THREE, Services_8) {
+define("ModelLoaders/OBJLoader", ["require", "exports", "three", "System/Services"], function (require, exports, THREE, Services_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     function OBJLoader(manager) {
@@ -4619,7 +4664,7 @@ define("ModelLoaders/OBJLoader", ["require", "exports", "three", "System/Service
             return state;
         },
         parse: function (text) {
-            var timerTag = Services_8.Services.timer.mark('OBJLoader.parse');
+            var timerTag = Services_9.Services.timer.mark('OBJLoader.parse');
             var state = this._createParserState();
             if (text.indexOf('\r\n') !== -1) {
                 // This is faster than String.split with regex that splits on both
@@ -4831,7 +4876,7 @@ define("ModelLoaders/OBJLoader", ["require", "exports", "three", "System/Service
                 mesh.name = object.name;
                 container.add(mesh);
             }
-            Services_8.Services.timer.logElapsedTime(timerTag);
+            Services_9.Services.timer.logElapsedTime(timerTag);
             return container;
         }
     };
@@ -5087,7 +5132,7 @@ define("Viewers/MeshViewerControls", ["require", "exports", "dat-gui", "System/H
     }());
     exports.MeshViewerControls = MeshViewerControls;
 });
-define("Viewers/MeshViewer", ["require", "exports", "three", "DepthBuffer/DepthBuffer", "Graphics/Graphics", "Viewers/MeshViewerControls", "System/Services", "Viewers/Viewer"], function (require, exports, THREE, DepthBuffer_2, Graphics_7, MeshViewerControls_1, Services_9, Viewer_2) {
+define("Viewers/MeshViewer", ["require", "exports", "three", "DepthBuffer/DepthBuffer", "Graphics/Graphics", "Viewers/MeshViewerControls", "System/Services", "Viewers/Viewer"], function (require, exports, THREE, DepthBuffer_2, Graphics_7, MeshViewerControls_1, Services_10, Viewer_2) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -5111,7 +5156,7 @@ define("Viewers/MeshViewer", ["require", "exports", "three", "DepthBuffer/DepthB
         function MeshViewer(name, previewCanvasId) {
             var _this = _super.call(this, name, previewCanvasId) || this;
             //override
-            _this._logger = Services_9.Services.htmlLogger;
+            _this._logger = Services_10.Services.htmlLogger;
             return _this;
         }
         //#region Properties
@@ -5254,7 +5299,7 @@ define("Views/ModelView", ["require", "exports", "Viewers/ModelViewer"], functio
     }());
     exports.ModelView = ModelView;
 });
-define("Views/ComposerView", ["require", "exports", "Controllers/ComposerController", "System/Html", "ModelLoaders/Loader", "Views/MeshView", "Views/ModelView", "System/Services"], function (require, exports, ComposerController_1, Html_5, Loader_1, MeshView_1, ModelView_1, Services_10) {
+define("Views/ComposerView", ["require", "exports", "Controllers/ComposerController", "System/Html", "ModelLoaders/Loader", "Views/MeshView", "Views/ModelView", "System/Services"], function (require, exports, ComposerController_1, Html_5, Loader_1, MeshView_1, ModelView_1, Services_11) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -5320,7 +5365,7 @@ define("Views/ComposerView", ["require", "exports", "Controllers/ComposerControl
          * Initialization.
          */
         ComposerView.prototype.initialize = function () {
-            Services_10.Services.consoleLogger.addInfoMessage('ModelRelief started');
+            Services_11.Services.consoleLogger.addInfoMessage('ModelRelief started');
             // Mesh View
             this._meshView = new MeshView_1.MeshView(Html_5.ElementIds.MeshCanvas);
             // Model View
@@ -5430,7 +5475,7 @@ define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function 
     }());
     exports.UnitTests = UnitTests;
 });
-define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Graphics/Graphics", "System/Html", "System/Services", "Viewers/Viewer"], function (require, exports, THREE, dat, Graphics_8, Html_7, Services_11, Viewer_3) {
+define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Graphics/Graphics", "System/Html", "System/Services", "Viewers/Viewer"], function (require, exports, THREE, dat, Graphics_8, Html_7, Services_12, Viewer_3) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -5558,7 +5603,7 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Graph
          * Main
          */
         App.prototype.run = function () {
-            this._logger = Services_11.Services.consoleLogger;
+            this._logger = Services_12.Services.consoleLogger;
             // Viewer    
             this._viewer = new CameraViewer('CameraViewer', 'viewerCanvas');
             // UI Controls

@@ -44,30 +44,6 @@ export interface DepthBufferFactoryParameters {
 }
 
 /**
- * @description Mesh generation parameters.
- * @export
- * @interface MeshGenerateParameters
- */
-export interface MeshGenerateParameters { 
-
-    camera?     : THREE.PerspectiveCamera;      // override not yet implemented 
-    material?   : THREE.Material;
-}
-
-/**
- * @description Relief.
- * @export
- * @interface Relief
- */
-export interface Relief {
-
-    width       : number;                   // width of relief             
-    height      : number;                   // height of relief
-    mesh        : THREE.Mesh;               // mesh
-    depthBuffer : DepthBuffer;              // depth buffer
-}
-
-/**
  * @class
  * DepthBufferFactory
  */
@@ -336,28 +312,7 @@ export class DepthBufferFactory {
     }
 //#endregion
 
-//#region Generation
-    /**
-     * Verifies the pre-requisite settings are defined to create a mesh.
-     */
-    verifyMeshSettings(): boolean {
-
-        let minimumSettings : boolean = true
-        let errorPrefix     : string = 'DepthBufferFactory: ';
-
-        if (!this._model) {
-            this._logger.addErrorMessage(`${errorPrefix}The model is not defined.`);
-            minimumSettings = false;
-        }
-
-        if (!this._camera) {
-            this._logger.addErrorMessage(`${errorPrefix}The camera is not defined.`);
-            minimumSettings = false;
-        }
-
-        return minimumSettings;
-    }
-
+//#region Analysis
     /**
      * Constructs an RGBA string with the byte values of a pixel.
      * @param buffer Unsigned byte raw buffer.
@@ -395,13 +350,35 @@ export class DepthBufferFactory {
 //      this.analyzeRenderBuffer();
 //      this._depthBuffer.analyze();
     }
+//#endregion
+
+    /**
+     * Sets the camera clipping planes for mesh generation.
+     */
+    setCameraClippingPlanes() {
+
+        // copy camera; shared with ModelViewer
+        let camera = new THREE.PerspectiveCamera();
+        camera.copy(this._camera);
+        this._camera = camera;
+
+        let clippingPlanes: ClippingPlanes = Camera.getBoundingClippingPlanes(this._camera, this._model);
+        this._camera.near = clippingPlanes.near;
+        this._camera.far = clippingPlanes.far;
+
+        this._camera.updateProjectionMatrix();
+    }
 
     /**
      * Create a depth buffer.
      */
-    createDepthBuffer() {
+    createDepthBuffer() : DepthBuffer {
 
         let timerTag = Services.timer.mark('DepthBufferFactory.createDepthBuffer');        
+
+        if (this._boundedClipping ||
+            ((this._camera.near === Camera.DefaultNearClippingPlane) && (this._camera.far === Camera.DefaultFarClippingPlane)))
+            this.setCameraClippingPlanes();
 
         this._renderer.render(this._scene, this._camera, this._target);    
     
@@ -422,50 +399,7 @@ export class DepthBufferFactory {
         this.analyzeTargets();
 
         Services.timer.logElapsedTime(timerTag);
+        return this._depthBuffer;
     }
-    
-    /**
-     * Sets the camera clipping planes for mesh generation.
-     */
-    setCameraClippingPlanes () {
-
-        // copy camera; shared with ModelViewer
-        let camera = new THREE.PerspectiveCamera();
-        camera.copy (this._camera);
-        this._camera = camera;
-
-        let clippingPlanes : ClippingPlanes = Camera.getBoundingClippingPlanes(this._camera, this._model);
-        this._camera.near = clippingPlanes.near;
-        this._camera.far  = clippingPlanes.far;
-        
-        this._camera.updateProjectionMatrix();
-   }
-
-    /**
-     * Generates a mesh from the active model and camera
-     * @param parameters Generation parameters (MeshGenerateParameters)
-     */
-    generateRelief (parameters : MeshGenerateParameters) : Relief {
-        
-        if (!this.verifyMeshSettings()) 
-            return null;
-        
-        if (this._boundedClipping || 
-            ((this._camera.near === Camera.DefaultNearClippingPlane) && (this._camera.far === Camera.DefaultFarClippingPlane)))
-            this.setCameraClippingPlanes();
-
-        this.createDepthBuffer();
-        
-        let relief : Relief = {
-
-            width       : this._width,
-            height      : this._height,
-            mesh        : null,
-            depthBuffer : this._depthBuffer
-        };
-
-        return relief;
-    }
-//#endregion
 }
 

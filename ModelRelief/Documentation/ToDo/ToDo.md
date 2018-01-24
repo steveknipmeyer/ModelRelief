@@ -13,8 +13,9 @@ Some Markdown text with <span style="color:blue">some *blue* text
 #### Short Term
 
 #### Front End
+    
     Add a Mesh class.
-        verifyMeshSettings
+        Refactor DepthBuffer to move mesh creation to Mesh class.
 
     Investigate Chai unit tests for front-end JavaScript.
 

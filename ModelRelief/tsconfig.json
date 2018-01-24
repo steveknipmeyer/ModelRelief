@@ -26,6 +26,7 @@
         "Scripts/Controllers/*",
         "Scripts/DataTransferObjects/*",
         "Scripts/DepthBuffer/*",
+        "Scripts/Mesh/*",
         "Scripts/Graphics/*",
         "Scripts/ModelExporters/*",
         "Scripts/ModelLoaders/*",
