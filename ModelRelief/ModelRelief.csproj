@@ -33,6 +33,7 @@
   <ItemGroup>
     <None Remove="Documentation\README\Images\Lucy.png" />
     <None Remove="npm-debug.log" />
+    <None Remove="Scripts\Workbench\QuokkaWorkbench.ts" />
   </ItemGroup>
 
   <ItemGroup>

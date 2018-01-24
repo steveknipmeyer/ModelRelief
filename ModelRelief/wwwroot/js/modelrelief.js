@@ -1653,7 +1653,18 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "Viewer
             this._canvas = this.initializeCanvas();
             this.initialize();
         }
-        //#region Properties
+        Object.defineProperty(DepthBufferFactory.prototype, "depthBuffer", {
+            //#region Properties
+            /**
+             * Returns the active (last-generated) DepthBuffer constructed by the factory.
+             * @returns DepthBuffer
+             */
+            get: function () {
+                return this._depthBuffer;
+            },
+            enumerable: true,
+            configurable: true
+        });
         //#endregion
         //#region Initialization    
         /**
@@ -1898,12 +1909,11 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "Viewer
                 ((this._camera.near === Camera_2.Camera.DefaultNearClippingPlane) && (this._camera.far === Camera_2.Camera.DefaultFarClippingPlane)))
                 this.setCameraClippingPlanes();
             this.createDepthBuffer();
-            var mesh = this._depthBuffer.mesh(parameters.material);
             var relief = {
                 width: this._width,
                 height: this._height,
-                mesh: mesh,
-                depthBuffer: this._depthBuffer.depths
+                mesh: null,
+                depthBuffer: this._depthBuffer
             };
             return relief;
         };
@@ -4218,6 +4228,11 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
             var height = width / this._composerView.modelView.modelViewer.aspectRatio;
             var factory = new DepthBufferFactory_2.DepthBufferFactory({ width: width, height: height, model: this._composerView.modelView.modelViewer.model, camera: this._composerView.modelView.modelViewer.camera, addCanvasToDOM: false });
             this._relief = factory.generateRelief({});
+            {
+                this.postDepthBuffer();
+                var mesh = this._relief.depthBuffer.mesh();
+                this._relief.mesh = mesh;
+            }
             this._composerView._meshView.meshViewer.setModel(this._relief.mesh);
             if (this._initialMeshGeneration) {
                 this._composerView._meshView.meshViewer.fitView();
@@ -4228,12 +4243,13 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
         /**
          * Saves the depth buffer to a disk file.
          */
-        ComposerController.prototype.postDepthBuffer = function (fileName) {
+        ComposerController.prototype.postDepthBuffer = function () {
             return __awaiter(this, void 0, void 0, function () {
-                var exportTag, postUrl, fileMetadata;
+                var fileName, exportTag, postUrl, fileMetadata;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
+                            fileName = this._composerView.modelView.modelViewer.model.name + ".raw";
                             exportTag = Services_7.Services.timer.mark('Export DepthBuffer');
                             postUrl = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiDepthBuffers;
                             fileMetadata = {
@@ -4241,7 +4257,7 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
                                 description: 'DepthBuffer Description',
                                 format: 1,
                             };
-                            return [4 /*yield*/, Http_1.HttpLibrary.postFileAsync(postUrl, this._relief.depthBuffer, fileMetadata)];
+                            return [4 /*yield*/, Http_1.HttpLibrary.postFileAsync(postUrl, this._relief.depthBuffer.depths, fileMetadata)];
                         case 1:
                             _a.sent();
                             Services_7.Services.timer.logElapsedTime(exportTag);
@@ -4254,8 +4270,6 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
          * Saves the relief to a disk file.
          */
         ComposerController.prototype.saveRelief = function () {
-            var fileName = this._composerView.modelView.modelViewer.model.name + ".raw";
-            this.postDepthBuffer(fileName);
         };
         //#endregion
         /**
@@ -5684,6 +5698,117 @@ define("Workbench/InheritanceTest", ["require", "exports", "System/Logger"], fun
     exports.InheritanceTest = InheritanceTest;
     var inheritance = new InheritanceTest;
     inheritance.main();
+});
+define("Workbench/QuokkaWorkbench", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var fetch = require('node-fetch');
+    /**
+    *  Common interface for all DTO TGetModel types.
+    *  @interface
+    */
+    /**
+    * Server Endpoints
+    */
+    var ServerEndPoints;
+    (function (ServerEndPoints) {
+        ServerEndPoints["ApiMeshes"] = "api/v1/meshes";
+        ServerEndPoints["ApiDepthBuffers"] = "api/v1/depth-buffers";
+    })(ServerEndPoints = exports.ServerEndPoints || (exports.ServerEndPoints = {}));
+    /**
+     * HTTP Content-type
+     */
+    var ContentType;
+    (function (ContentType) {
+        ContentType["Json"] = "application/json";
+        ContentType["OctetStream"] = "application/octet-stream";
+    })(ContentType || (ContentType = {}));
+    /**
+     * HTTP Method
+     */
+    var MethodType;
+    (function (MethodType) {
+        MethodType["Get"] = "GET";
+        MethodType["Delete"] = "DELETE";
+        MethodType["Patch"] = "PUT";
+        MethodType["Post"] = "POST";
+        MethodType["Put"] = "PUT";
+    })(MethodType || (MethodType = {}));
+    /**
+     * Represents the result of a client request.
+     */
+    var RequestResponse = (function () {
+        /**
+         * Constructs an instance of a RequestResponse.
+         * @param {Response} response Raw response from the request.
+         * @param {string} contentString Response body content;
+         */
+        function RequestResponse(response, contentString) {
+            this.response = response;
+            this.contentString = contentString;
+        }
+        Object.defineProperty(RequestResponse.prototype, "model", {
+            /**
+             * Gets the JSON representation of the response.
+             */
+            get: function () {
+                return JSON.parse(this.contentString);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(RequestResponse.prototype, "byteArray", {
+            /**
+             * Gets the raw Uint8Array representation of the response.
+             */
+            get: function () {
+                // https://jsperf.com/string-to-uint8array
+                var stringLength = this.contentString.length;
+                var array = new Uint8Array(stringLength);
+                for (var iByte = 0; iByte < stringLength; ++iByte) {
+                    array[iByte] = this.contentString.charCodeAt(iByte);
+                }
+                return array;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return RequestResponse;
+    }());
+    exports.RequestResponse = RequestResponse;
+    function submitHttpRequest(endpoint, methodType, contentType, requestData) {
+        return __awaiter(this, void 0, void 0, function () {
+            var headers, requestMode, cacheMode, init, response, contentString, requestResponse;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        headers = {
+                            'Content-Type': contentType
+                        };
+                        requestMode = 'cors';
+                        cacheMode = 'default';
+                        init = {
+                            method: methodType,
+                            body: requestData,
+                            headers: headers,
+                            mode: requestMode,
+                            cache: cacheMode,
+                        };
+                        return [4 /*yield*/, fetch(endpoint, init)];
+                    case 1:
+                        response = _a.sent();
+                        return [4 /*yield*/, response.text()];
+                    case 2:
+                        contentString = _a.sent();
+                        requestResponse = new RequestResponse(response, contentString);
+                        return [2 /*return*/, requestResponse];
+                }
+            });
+        });
+    }
+    var endpoint = "http://localhost:60655/api/v1/projects/1";
+    var requestResponse = submitHttpRequest(endpoint, MethodType.Get, ContentType.Json, null);
+    requestResponse;
 });
 define("System/Image.", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 

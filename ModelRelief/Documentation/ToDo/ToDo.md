@@ -13,8 +13,10 @@ Some Markdown text with <span style="color:blue">some *blue* text
 #### Short Term
 
 #### Front End
+    Add a Mesh class.
+        verifyMeshSettings
+
     Investigate Chai unit tests for front-end JavaScript.
-    Investigate node JavaScript evaluation.
 
     Should any DTO fields should be declared as optional?
         By default, all TypeScript fields are nullable. Will HTTP requests ever omit JSON fields?
@@ -31,13 +33,8 @@ https://developers.google.com/web/fundamentals/primers/async-functions
 |Camera||DtoCamera implemented|
 |Relief||?|
 
-    Create a ModelRelief JavaScript API library.
-        Publish POCO models to JavaScript?
-        Create a utility URL composer.
 
-    File Transfer
-        Use jQuery!
-        Wait for file POST to complete before initiating the second metadata POST.
+    Create a utility URL composer.
 
     async/await
         Refactor Export OBJ.
@@ -61,14 +58,14 @@ https://developers.google.com/web/fundamentals/primers/async-functions
 
 | Client | Server|
 |-------|--------|
-|Create DepthBuffer in-memory | |
-|Post DepthBuffer | |
-|Post DepthBuffer/id/file | |
+|**Create DepthBuffer in-memory** | |
+|**Post DepthBuffer** | |
+|**Post DepthBuffer/id/file** | |
 |Post MeshTransform  | |
 |Post Mesh = Mesh (DepthBuffer, MeshTransform)| |
 |Patch Mesh.FileIsSynchronized = true  | |
-|| Solver <Mesh.json> filename |
-|| Post Mesh/id/file (raw file)|
+|| **Solver <Mesh.json> filename** |
+|| **Post Mesh/id/file (raw file)**|
 | Get Mesh/id/file||
 | Construct Mesh from raw file||
 

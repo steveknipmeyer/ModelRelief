@@ -97,19 +97,27 @@ export class ComposerController {
 
         this._relief = factory.generateRelief({});
 
+        {
+            this.postDepthBuffer();
+
+            let mesh = this._relief.depthBuffer.mesh();
+            this._relief.mesh = mesh;
+        }
+
         this._composerView._meshView.meshViewer.setModel(this._relief.mesh);
         if (this._initialMeshGeneration) {
             this._composerView._meshView.meshViewer.fitView();
             this._initialMeshGeneration = false;
         }
-       
         // Services.consoleLogger.addInfoMessage('Relief generated');
     }
 
     /**
      * Saves the depth buffer to a disk file.
      */
-    async postDepthBuffer(fileName : string): Promise<void> {
+    async postDepthBuffer(): Promise<void> {
+
+        let fileName = `${this._composerView.modelView.modelViewer.model.name}.raw`;
 
         // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
         let exportTag = Services.timer.mark('Export DepthBuffer');
@@ -121,19 +129,19 @@ export class ComposerController {
             description : 'DepthBuffer Description',
             format : 1,
         };
-        await HttpLibrary.postFileAsync (postUrl, this._relief.depthBuffer, fileMetadata);
+        await HttpLibrary.postFileAsync (postUrl, this._relief.depthBuffer.depths, fileMetadata);
         Services.timer.logElapsedTime(exportTag);
     }        
         
     /**
-     * Saves the relief to a disk file.
+     * Saves the relief.
      */
     saveRelief(): void {
 
-        let fileName = `${this._composerView.modelView.modelViewer.model.name}.raw`;
-
-        this.postDepthBuffer(fileName);
+        // WIP: Save the Mesh as an OBJ format file?
+        // It may be more efficient to maintain Meshes in raw format since the size is substantially smaller.
     }
+
     //#endregion
 
     /**

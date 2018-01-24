@@ -64,7 +64,7 @@ export interface Relief {
     width       : number;                   // width of relief             
     height      : number;                   // height of relief
     mesh        : THREE.Mesh;               // mesh
-    depthBuffer : Float32Array;             // depth buffer
+    depthBuffer : DepthBuffer;              // depth buffer
 }
 
 /**
@@ -128,6 +128,13 @@ export class DepthBufferFactory {
 
 
 //#region Properties
+    /**
+     * Returns the active (last-generated) DepthBuffer constructed by the factory.
+     * @returns DepthBuffer
+     */
+    get depthBuffer() : DepthBuffer {
+        return this._depthBuffer;
+    }
 //#endregion
 
 //#region Initialization    
@@ -448,14 +455,13 @@ export class DepthBufferFactory {
             this.setCameraClippingPlanes();
 
         this.createDepthBuffer();
-        let mesh = this._depthBuffer.mesh(parameters.material);
         
         let relief : Relief = {
 
             width       : this._width,
             height      : this._height,
-            mesh        : mesh,
-            depthBuffer : this._depthBuffer.depths
+            mesh        : null,
+            depthBuffer : this._depthBuffer
         };
 
         return relief;
