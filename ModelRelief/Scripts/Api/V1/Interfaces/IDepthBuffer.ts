@@ -27,26 +27,26 @@ export enum DepthBufferFormat {
  */
 export interface IDepthBuffer extends ITGetModel {
 
-    Id: number;
+    id: number;
 
-    Name: string;
-    Description: string;
+    name: string;
+    description: string;
 
     Format: DepthBufferFormat;
 
     // Navigation Properties
-    ProjectId: number;
-    Project: IProject;
+    projectId: number;
+    project: IProject;
 
-    Model3dId: number;
-    Model3d: IModel3d;
+    model3dId: number;
+    model3d: IModel3d;
 
-    CameraId: number;
-    Camera: ICamera;
+    cameraId: number;
+    camera: ICamera;
 
     // not exposed in UX; API only
-    FileTimeStamp: Date;
-    FileIsSynchronized: boolean;
+    fileTimeStamp: Date;
+    fileIsSynchronized: boolean;
 }
 
 

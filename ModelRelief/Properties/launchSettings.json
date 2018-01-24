@@ -37,8 +37,8 @@
       "environmentVariables": {
         "ModelReliefDatabase": "SQLServer",
         "ASPNETCORE_ENVIRONMENT": "Test",
-        "InitializeUserStore": "True",
-        "InitializeDatabase": "True"
+        "InitializeUserStore": "False",
+        "InitializeDatabase": "False"
       },
       "applicationUrl": "http://localhost:60655"
     }

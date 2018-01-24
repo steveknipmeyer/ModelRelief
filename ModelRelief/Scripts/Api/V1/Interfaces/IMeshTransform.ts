@@ -14,22 +14,22 @@ import { ITGetModel }       from 'ITGetModel'
  */
 export interface IMeshTransform extends ITGetModel {
 
-    Id: number;
+    id: number;
 
-    Name: string;
-    Description: string;
+    name: string;
+    description: string;
 
-    Depth: number;
-    Width: number;
+    depth: number;
+    width: number;
 
-    Tau: number;
-    SigmaGaussianBlur: number;
-    SigmaGaussianSmooth: number;
-    LambdaLinearScaling: number;
+    tau: number;
+    sigmaGaussianBlur: number;
+    sigmaGaussianSmooth: number;
+    lambdaLinearScaling: number;
            
     // Navigation Properties
-    ProjectId: number;
-    Project: IProject;
+    projectId: number;
+    project: IProject;
 }
 
 

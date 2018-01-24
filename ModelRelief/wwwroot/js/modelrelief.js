@@ -1,3 +1,38 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [0, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -2276,6 +2311,48 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
         ServerEndPoints["ApiDepthBuffers"] = "api/v1/depth-buffers";
     })(ServerEndPoints = exports.ServerEndPoints || (exports.ServerEndPoints = {}));
     /**
+     * Represents the result of a client request.
+     */
+    var RequestResponse = (function () {
+        /**
+         * Constructs an instance of a RequestResponse.
+         * @param {Response} response Raw response from the request.
+         * @param {string} contentString Response body content;
+         */
+        function RequestResponse(response, contentString) {
+            this.response = response;
+            this.contentString = contentString;
+        }
+        Object.defineProperty(RequestResponse.prototype, "model", {
+            /**
+             * Gets the JSON representation of the response.
+             */
+            get: function () {
+                return JSON.parse(this.contentString);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(RequestResponse.prototype, "byteArray", {
+            /**
+             * Gets the raw Uint8Array representation of the response.
+             */
+            get: function () {
+                // https://jsperf.com/string-to-uint8array
+                var stringLength = this.contentString.length;
+                var array = new Uint8Array(stringLength);
+                for (var iByte = 0; iByte < stringLength; ++iByte) {
+                    array[iByte] = this.contentString.charCodeAt(iByte);
+                }
+                return array;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return RequestResponse;
+    }());
+    exports.RequestResponse = RequestResponse;
+    /**
      * HTTP Library
      * General HTML and DOM routines
      * @class
@@ -2294,10 +2371,16 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
          */
         HttpLibrary.postFile = function (postUrl, fileData, fileMetadata) {
             var onComplete = function (request) {
-                Services_5.Services.consoleLogger.addInfoMessage('Metadata saved');
-                var filePath = request.getResponseHeader('Location');
-                var blob = new Blob([fileData], { type: ContentType.OctetStream });
-                HttpLibrary.sendXMLHttpRequest(filePath + "/file", MethodType.Post, ContentType.OctetStream, blob, null);
+                return __awaiter(this, void 0, void 0, function () {
+                    var filePath, blob;
+                    return __generator(this, function (_a) {
+                        Services_5.Services.consoleLogger.addInfoMessage('Metadata saved');
+                        filePath = request.getResponseHeader('Location');
+                        blob = new Blob([fileData], { type: ContentType.OctetStream });
+                        HttpLibrary.sendXMLHttpRequest(filePath + "/file", MethodType.Post, ContentType.OctetStream, blob, null);
+                        return [2 /*return*/];
+                    });
+                });
             };
             // send JSON metadata first to create the resource and obtain the Id
             HttpLibrary.sendXMLHttpRequest(postUrl, MethodType.Post, ContentType.Json, JSON.stringify(fileMetadata), onComplete);
@@ -2310,7 +2393,7 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
          * @param onComplete  Callback for request completion.
          */
         HttpLibrary.sendXMLHttpRequest = function (endpoint, methodType, contentType, requestData, onComplete) {
-            var exportTag = Services_5.Services.timer.mark(methodType + " Request: " + endpoint);
+            var requestTag = Services_5.Services.timer.mark(methodType + " Request: " + endpoint);
             var request = new XMLHttpRequest();
             // Abort 
             var onAbort = function (ev) {
@@ -2333,11 +2416,15 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
             var onLoad = function (ev) {
                 if (request.readyState === request.DONE) {
                     switch (request.status) {
+                        // WIP: Are other HTTP status required?
                         case 200:
                         case 201:
                             Services_5.Services.consoleLogger.addInfoMessage(methodType + ": onLoad");
                             if (onComplete)
                                 onComplete(request);
+                            break;
+                        default:
+                            // WIP: This is an unexpected condition. Should this method return a value such as false?
                             break;
                     }
                 }
@@ -2350,7 +2437,103 @@ define("System/Http", ["require", "exports", "System/Services"], function (requi
             request.open(methodType, endpoint, true);
             request.setRequestHeader("Content-type", contentType);
             request.send(requestData);
-            Services_5.Services.timer.logElapsedTime(exportTag);
+            Services_5.Services.timer.logElapsedTime(requestTag);
+        };
+        /**
+         * Converts an array buffer to a string
+         * https://ourcodeworld.com/articles/read/164/how-to-convert-an-uint8array-to-string-in-javascript
+         * N.B. Firefox (57) does not support Request.body.getReader which returns an array of Uint8 bytes,
+         * @param {Uint8} buffer The buffer to convert.
+         * @param {Function} callback The function to call when conversion is complete.
+         */
+        HttpLibrary.largeBufferToString = function (buffer) {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    return [2 /*return*/, new Promise(function (resolve, reject) {
+                            var bufferBlob = new Blob([buffer]);
+                            var fileReader = new FileReader();
+                            fileReader.onload = function (e) {
+                                resolve(e.target.result);
+                            };
+                            fileReader.readAsText(bufferBlob);
+                        })];
+                });
+            });
+        };
+        /**
+         * Posts a file and the supporting metadata to the specified URL.
+         * @param postUrl Url to post.
+         * @param fileData File data, may be binary.
+         * @param fileMetadata JSON metadata.
+         */
+        HttpLibrary.postFileAsync = function (postUrl, fileData, fileMetadata) {
+            return __awaiter(this, void 0, void 0, function () {
+                var json, requestResponse, requestResponseModelId, headers, filePath, modelId, blob;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            json = JSON.stringify(fileMetadata);
+                            return [4 /*yield*/, HttpLibrary.submitHttpRequest(postUrl, MethodType.Post, ContentType.Json, json)];
+                        case 1:
+                            requestResponse = _a.sent();
+                            if (requestResponse.response.status != 201) {
+                                throw new Error("postFileAsync : Url = " + postUrl + ", status = " + requestResponse.response.status);
+                            }
+                            requestResponseModelId = requestResponse.model.id;
+                            Services_5.Services.consoleLogger.addInfoMessage('Metadata saved');
+                            headers = requestResponse.response.headers;
+                            filePath = headers.get('Location');
+                            return [4 /*yield*/, HttpLibrary.submitHttpRequest(filePath, MethodType.Get, ContentType.Json, null)];
+                        case 2:
+                            // verify
+                            requestResponse = _a.sent();
+                            modelId = requestResponse.model.id;
+                            Services_5.Services.consoleLogger.addInfoMessage("Model ID = " + modelId);
+                            blob = new Blob([fileData], { type: ContentType.OctetStream });
+                            return [4 /*yield*/, HttpLibrary.submitHttpRequest(filePath + "/file", MethodType.Post, ContentType.OctetStream, blob)];
+                        case 3:
+                            requestResponse = _a.sent();
+                            return [2 /*return*/, requestResponse.response.ok];
+                    }
+                });
+            });
+        };
+        /**
+         * Submit an HTTP request.
+         * @param {string} endpoint Url endpoint.
+         * @param {MethodType} methodType HTTP method.
+         * @param {ContentType} contentType HTTP content type.
+         * @param {any} requestData Data to send in the request.
+         */
+        HttpLibrary.submitHttpRequest = function (endpoint, methodType, contentType, requestData) {
+            return __awaiter(this, void 0, void 0, function () {
+                var headers, requestMode, cacheMode, init, response, contentString, requestResponse;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            headers = new Headers({
+                                'Content-Type': contentType
+                            });
+                            requestMode = 'cors';
+                            cacheMode = 'default';
+                            init = {
+                                method: methodType,
+                                body: requestData,
+                                headers: headers,
+                                mode: requestMode,
+                                cache: cacheMode,
+                            };
+                            return [4 /*yield*/, fetch(endpoint, init)];
+                        case 1:
+                            response = _a.sent();
+                            return [4 /*yield*/, response.text()];
+                        case 2:
+                            contentString = _a.sent();
+                            requestResponse = new RequestResponse(response, contentString);
+                            return [2 /*return*/, requestResponse];
+                    }
+                });
+            });
         };
         return HttpLibrary;
     }());
@@ -3649,16 +3832,26 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
          * Saves the depth buffer to a disk file.
          */
         ComposerController.prototype.postDepthBuffer = function (fileName) {
-            // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
-            var exportTag = Services_7.Services.timer.mark('Export DepthBuffer');
-            var postUrl = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiDepthBuffers;
-            var fileMetadata = {
-                name: fileName,
-                description: 'DepthBuffer Description',
-                format: 1,
-            };
-            Http_1.HttpLibrary.postFile(postUrl, this._relief.depthBuffer, fileMetadata);
-            Services_7.Services.timer.logElapsedTime(exportTag);
+            return __awaiter(this, void 0, void 0, function () {
+                var exportTag, postUrl, fileMetadata;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            exportTag = Services_7.Services.timer.mark('Export DepthBuffer');
+                            postUrl = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiDepthBuffers;
+                            fileMetadata = {
+                                name: fileName,
+                                description: 'DepthBuffer Description',
+                                format: 1,
+                            };
+                            return [4 /*yield*/, Http_1.HttpLibrary.postFileAsync(postUrl, this._relief.depthBuffer, fileMetadata)];
+                        case 1:
+                            _a.sent();
+                            Services_7.Services.timer.logElapsedTime(exportTag);
+                            return [2 /*return*/];
+                    }
+                });
+            });
         };
         /**
          * Saves the relief to a disk file.

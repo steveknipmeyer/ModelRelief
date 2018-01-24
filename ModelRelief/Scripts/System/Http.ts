@@ -5,9 +5,12 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import {DepthBufferFormat}                  from 'DepthBuffer'
-import {Services}                           from 'Services'
-import {ReliefSettings}                     from 'Relief'
+import * as Dto from 'DtoModels'
+
+import { DepthBufferFormat }    from 'DepthBuffer'
+import { ITGetModel }           from 'ITGetModel'
+import { Services }             from 'Services'
+import { ReliefSettings }       from 'Relief'
 
 /**
  * HTTP Content-type
@@ -32,8 +35,50 @@ enum MethodType {
  * Server Endpoints
  */
 export enum ServerEndPoints {
-        ApiMeshes        = 'api/v1/meshes',
-        ApiDepthBuffers  = 'api/v1/depth-buffers'
+    ApiMeshes        = 'api/v1/meshes',
+    ApiDepthBuffers  = 'api/v1/depth-buffers'
+}
+
+/**
+ * Represents the result of a client request.
+ */
+export class RequestResponse {
+
+    response: Response;
+    contentString: string;
+
+    /**
+     * Constructs an instance of a RequestResponse.
+     * @param {Response} response Raw response from the request.
+     * @param {string} contentString Response body content;
+     */
+    constructor(response: Response, contentString : string) {
+
+        this.response = response;
+        this.contentString = contentString;
+    }
+
+    /**
+     * Gets the JSON representation of the response.
+     */
+    get model(): ITGetModel {
+
+        return JSON.parse(this.contentString) as ITGetModel;
+    }
+
+    /**
+     * Gets the raw Uint8Array representation of the response.
+     */
+    get byteArray(): Uint8Array {
+
+        // https://jsperf.com/string-to-uint8array
+        let stringLength = this.contentString.length;
+        let array = new Uint8Array(stringLength);
+        for (var iByte = 0; iByte < stringLength; ++iByte) {
+            array[iByte] = this.contentString.charCodeAt(iByte);
+        }
+        return array;
+    }
 }
 
 /**
@@ -56,9 +101,9 @@ export class HttpLibrary {
      * @param fileMetadata JSON metadata.
      */
     static postFile (postUrl : string, fileData : any, fileMetadata : any) : boolean {
-
-       let onComplete = function(request: XMLHttpRequest) {
-
+        
+        let onComplete = async function(request: XMLHttpRequest) {
+                            
             Services.consoleLogger.addInfoMessage('Metadata saved');
             let filePath = request.getResponseHeader('Location');
 
@@ -68,7 +113,7 @@ export class HttpLibrary {
 
         // send JSON metadata first to create the resource and obtain the Id
         HttpLibrary.sendXMLHttpRequest(postUrl, MethodType.Post, ContentType.Json, JSON.stringify(fileMetadata), onComplete);
-
+        
         return true;
     }
 
@@ -80,11 +125,10 @@ export class HttpLibrary {
      */
     static sendXMLHttpRequest(endpoint : string, methodType : MethodType, contentType : ContentType, requestData : any, onComplete : (request: XMLHttpRequest) => any): void {
 
-        let exportTag = Services.timer.mark(`${methodType} Request: ${endpoint}`);
+        let requestTag = Services.timer.mark(`${methodType} Request: ${endpoint}`);
         let request = new XMLHttpRequest(); 
 
         // Abort 
-
         let onAbort = function (this: XMLHttpRequestEventTarget, ev: Event) : any {
 
             Services.consoleLogger.addErrorMessage(`${methodType}: onAbort`);
@@ -114,11 +158,16 @@ export class HttpLibrary {
 
             if (request.readyState === request.DONE) {
                 switch (request.status) {
+                    // WIP: Are other HTTP status required?
                     case 200:
                     case 201:
                         Services.consoleLogger.addInfoMessage(`${methodType}: onLoad`);
                         if (onComplete)
                             onComplete(request);
+                        break;
+
+                    default:
+                        // WIP: This is an unexpected condition. Should this method return a value such as false?
                         break;
                 }
             }
@@ -134,6 +183,89 @@ export class HttpLibrary {
         request.setRequestHeader("Content-type", contentType);
         request.send(requestData);
 
-        Services.timer.logElapsedTime(exportTag);
-    }        
+        Services.timer.logElapsedTime(requestTag);
+    }  
+
+    /**
+     * Converts an array buffer to a string
+     * https://ourcodeworld.com/articles/read/164/how-to-convert-an-uint8array-to-string-in-javascript
+     * N.B. Firefox (57) does not support Request.body.getReader which returns an array of Uint8 bytes,
+     * @param {Uint8} buffer The buffer to convert.
+     * @param {Function} callback The function to call when conversion is complete.
+     */
+    static async largeBufferToString(buffer) : Promise<string>{
+
+        return new Promise<string>((resolve, reject) => {
+            var bufferBlob = new Blob([buffer]);
+            var fileReader = new FileReader();
+
+            fileReader.onload = function(e) {
+                resolve((<any>e.target).result);
+            };
+            fileReader.readAsText(bufferBlob);
+        });
+    }
+
+    /**
+     * Posts a file and the supporting metadata to the specified URL.
+     * @param postUrl Url to post.
+     * @param fileData File data, may be binary.
+     * @param fileMetadata JSON metadata.
+     */
+    static async postFileAsync(postUrl: string, fileData: any, fileMetadata: any): Promise<boolean> {
+
+        // send JSON metadata first to create the resource and obtain the Id
+        let json = JSON.stringify(fileMetadata);
+        let requestResponse = await HttpLibrary.submitHttpRequest(postUrl, MethodType.Post, ContentType.Json, json);
+        if (requestResponse.response.status != 201) {
+            throw new Error(`postFileAsync : Url = ${postUrl}, status = ${requestResponse.response.status}`);
+        }
+        let requestResponseModelId = requestResponse.model.id;
+
+        Services.consoleLogger.addInfoMessage('Metadata saved');
+        let headers = requestResponse.response.headers;
+        let filePath = headers.get('Location');
+
+        // verify
+        requestResponse = await HttpLibrary.submitHttpRequest(filePath, MethodType.Get, ContentType.Json, null);
+        let modelId = requestResponse.model.id;
+        Services.consoleLogger.addInfoMessage(`Model ID = ${modelId}`);
+
+        let blob = new Blob([fileData], { type: ContentType.OctetStream });
+        requestResponse = await HttpLibrary.submitHttpRequest(`${filePath}/file`, MethodType.Post, ContentType.OctetStream, blob);
+
+        return requestResponse.response.ok;
+    }
+
+    /**
+     * Submit an HTTP request.
+     * @param {string} endpoint Url endpoint.
+     * @param {MethodType} methodType HTTP method.
+     * @param {ContentType} contentType HTTP content type.
+     * @param {any} requestData Data to send in the request.
+     */
+    static async submitHttpRequest(endpoint: string, methodType: MethodType, contentType: ContentType, requestData: any) : Promise<RequestResponse>{
+
+        let headers = new Headers({
+            'Content-Type': contentType
+        });
+        
+        let requestMode: RequestMode = 'cors';
+        let cacheMode: RequestCache = 'default';
+
+        let init = {
+            method: methodType,
+            body: requestData,
+            headers: headers,
+            mode: requestMode,
+            cache: cacheMode,
+        };
+
+        let response = await fetch(endpoint, init);
+        let contentString = await response.text();
+
+        let requestResponse = new RequestResponse(response, contentString);
+        return requestResponse;
+    }
 }
+

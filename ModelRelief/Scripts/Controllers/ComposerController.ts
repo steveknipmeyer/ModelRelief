@@ -109,7 +109,7 @@ export class ComposerController {
     /**
      * Saves the depth buffer to a disk file.
      */
-    postDepthBuffer(fileName : string): void {
+    async postDepthBuffer(fileName : string): Promise<void> {
 
         // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
         let exportTag = Services.timer.mark('Export DepthBuffer');
@@ -121,7 +121,7 @@ export class ComposerController {
             description : 'DepthBuffer Description',
             format : 1,
         };
-        HttpLibrary.postFile (postUrl, this._relief.depthBuffer, fileMetadata);
+        await HttpLibrary.postFileAsync (postUrl, this._relief.depthBuffer, fileMetadata);
         Services.timer.logElapsedTime(exportTag);
     }        
         

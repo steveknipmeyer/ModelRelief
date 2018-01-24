@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { IProject }   from 'IProject'
+import { IProject }    from 'IProject'
 import { ITGetModel } from 'ITGetModel'
 
  /**
@@ -29,30 +29,30 @@ export enum StandardView {
  */
 export interface ICamera extends ITGetModel {
 
-    Id: number;
+    id: number;
 
-    Name: string;
-    Description: string;
+    name: string;
+    description: string;
 
     StandardView: StandardView; 
     FieldOfView: number;
 
-    Near: number;
-    Far: number;
+    near: number;
+    far: number;
 
     BoundClippingPlanes: boolean;
 
-    PositionX: number;
-    PositionY: number;
-    PositionZ: number;
+    positionX: number;
+    positionY: number;
+    positionZ: number;
 
-    LookAtX: number;
-    LookAtY: number;
-    LookAtZ: number;
+    lookAtX: number;
+    lookAtY: number;
+    lookAtZ: number;
            
     // Navigation Properties
-    ProjectId: number;
-    Project: IProject;
+    projectId: number;
+    project: IProject;
 }
 
 

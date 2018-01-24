@@ -18,30 +18,30 @@ import { IProject }                         from 'IProject'
  */
 export class Camera implements ICamera {
 
-    Id: number;
+    id: number;
 
-    Name: string;
-    Description: string;
+    name: string;
+    description: string;
 
     StandardView: StandardView;
     FieldOfView: number;
 
-    Near: number;
-    Far: number;
+    near: number;
+    far: number;
 
     BoundClippingPlanes: boolean;
 
-    PositionX: number;
-    PositionY: number;
-    PositionZ: number;
+    positionX: number;
+    positionY: number;
+    positionZ: number;
 
-    LookAtX: number;
-    LookAtY: number;
-    LookAtZ: number;
+    lookAtX: number;
+    lookAtY: number;
+    lookAtZ: number;
 
     // Navigation Properties
-    ProjectId: number;
-    Project: Project;
+    projectId: number;
+    project: IProject;
 }
 
 /**
@@ -50,26 +50,26 @@ export class Camera implements ICamera {
 */
 export class DepthBuffer implements IDepthBuffer {
 
-    Id: number;
+    id: number;
 
-    Name: string;
-    Description: string;
+    name: string;
+    description: string;
 
     Format: DepthBufferFormat;
 
     // Navigation Properties
-    ProjectId: number;
-    Project: Project;
+    projectId: number;
+    project: IProject;
 
-    Model3dId: number;
-    Model3d: Model3d;
+    model3dId: number;
+    model3d: IModel3d;
 
-    CameraId: number;
-    Camera: Camera;
+    cameraId: number;
+    camera: ICamera;
 
     // not exposed in UX; API only
-    FileTimeStamp: Date;
-    FileIsSynchronized: boolean;
+    fileTimeStamp: Date;
+    fileIsSynchronized: boolean;
 }
 
 /**
@@ -78,29 +78,29 @@ export class DepthBuffer implements IDepthBuffer {
 */
 export class Mesh implements IMesh {
 
-    Id: number;
+    id: number;
 
-    Name: string;
-    Description: string;
+    name: string;
+    description: string;
 
     Format: MeshFormat;
 
     // Navigation Properties
     ProjectId: number;
-    Project: Project;
+    pProject: IProject;
 
-    CameraId: number;
-    Camera: Camera;
+    cameraId: number;
+    camera: ICamera;
 
-    DepthBufferId: number;
-    DepthBuffer: DepthBuffer;
+    depthBufferId: number;
+    depthBuffer: IDepthBuffer;
 
-    MeshTransformId: number;
-    MeshTransform: MeshTransform;
+    meshTransformId: number;
+    meshTransform: IMeshTransform;
 
     // not exposed in UX; API only
-    FileTimeStamp: Date;
-    FileIsSynchronized: boolean;
+    fileTimeStamp: Date;
+    fileIsSynchronized: boolean;
 }
 
 /**
@@ -109,22 +109,22 @@ export class Mesh implements IMesh {
 */
 export class MeshTransform implements IMeshTransform {
 
-    Id: number;
+    id: number;
 
-    Name: string;
-    Description: string;
+    name: string;
+    description: string;
 
-    Depth: number;
-    Width: number;
+    depth: number;
+    width: number;
 
-    Tau: number;
-    SigmaGaussianBlur: number;
-    SigmaGaussianSmooth: number;
-    LambdaLinearScaling: number;
+    tau: number;
+    sigmaGaussianBlur: number;
+    sigmaGaussianSmooth: number;
+    lambdaLinearScaling: number;
 
     // Navigation Properties
-    ProjectId: number;
-    Project: Project;
+    projectId: number;
+    project: IProject;
 };
 
 /**
@@ -133,19 +133,19 @@ export class MeshTransform implements IMeshTransform {
 */
 export class Model3d implements IModel3d {
 
-    Id: number;
+    id: number;
 
-    Name: string;
-    Description: string;
+    name: string;
+    description: string;
 
-    Format: Model3dFormat;
+    format: Model3dFormat;
 
     // Navigation Properties
-    ProjectId: number;
-    Project: Project;
+    projectId: number;
+    project: IProject;
 
-    CameraId: number;
-    Camera: Camera;
+    cameraId: number;
+    camera: ICamera;
 }
 
 /**
@@ -154,8 +154,8 @@ export class Model3d implements IModel3d {
  */
 export class Project implements IProject {
 
-    Id: number;
+    id: number;
 
-    Name: string;
-    Description: string;
+    name: string;
+    description: string;
 }

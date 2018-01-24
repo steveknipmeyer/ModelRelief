@@ -25,19 +25,19 @@ export enum Model3dFormat {
  */
 export interface IModel3d extends ITGetModel {
 
-    Id: number;
+    id: number;
 
-    Name: string;
-    Description: string;
+    name: string;
+    description: string;
 
-    Format: Model3dFormat;
+    format: Model3dFormat;
 
     // Navigation Properties
-    ProjectId: number;
-    Project: IProject;
+    projectId: number;
+    project: IProject;
 
-    CameraId: number;
-    Camera: ICamera;
+    cameraId: number;
+    camera: ICamera;
 }
 
 

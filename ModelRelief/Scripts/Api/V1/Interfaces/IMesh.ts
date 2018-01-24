@@ -28,29 +28,29 @@ export enum MeshFormat {
  */
 export interface IMesh extends ITGetModel {
 
-    Id: number;
+    id: number;
 
-    Name: string;
-    Description: string;
+    name: string;
+    description: string;
 
     Format: MeshFormat;
 
     // Navigation Properties
     ProjectId: number;
-    Project: IProject;
+    pProject: IProject;
 
-    CameraId: number;
-    Camera: ICamera;
+    cameraId: number;
+    camera: ICamera;
 
-    DepthBufferId: number;
-    DepthBuffer: IDepthBuffer;
+    depthBufferId: number;
+    depthBuffer: IDepthBuffer;
 
-    MeshTransformId: number;
-    MeshTransform: IMeshTransform;
+    meshTransformId: number;
+    meshTransform: IMeshTransform;
 
     // not exposed in UX; API only
-    FileTimeStamp: Date;
-    FileIsSynchronized: boolean;
+    fileTimeStamp: Date;
+    fileIsSynchronized: boolean;
 }
 
 
