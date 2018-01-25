@@ -29,11 +29,12 @@
             "request": "launch",
             "preLaunchTask": "ASPNET .Core Build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceRoot}/ModelRelief/bin/Debug/netcoreapp1.1/ModelRelief.dll",
+            "program": "${workspaceRoot}/ModelRelief/bin/Debug/netcoreapp2.0/ModelRelief.dll",
             "args": [],
             "cwd": "${workspaceRoot}/ModelRelief",
             "stopAtEntry": false,
             "enableStepFiltering": false,
+            "console": "externalTerminal",
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {
                 // N.B. Set to true when using independently of the compound profiles.
@@ -41,8 +42,8 @@
                 "args": "${auto-detect-url}",
                 "windows": {
                     "command": "cmd.exe",
-                    // "args": "/C start ${auto-detect-url}"
-                    "args": "/C start http://localhost:60655/models/viewer/5"                   
+                    "args": "/C start ${auto-detect-url}"
+                    // "args": "/C start http://localhost:60655/models/viewer/5"                   
                 },
                 "osx": {
                     "command": "open"
@@ -52,11 +53,14 @@
                 }
             },
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
+                "ASPNETCORE_ENVIRONMENT": "Test",
+                "InitializeDatabase":"True",
+                "InitializeUserStore":"True",
             },
             "sourceFileMap": {
                 "/Views": "${workspaceRoot}/Views"
-            }
+            },
+            "requireExactSource": false
         },
         {
             "name": ".NET Core Attach",

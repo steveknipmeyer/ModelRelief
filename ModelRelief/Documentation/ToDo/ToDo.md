@@ -1,4 +1,5 @@
 ﻿##### Commit Notes
+
 Some Markdown text with <span style="color:blue">some *blue* text
 
 ##### Technical Education
@@ -13,8 +14,8 @@ Some Markdown text with <span style="color:blue">some *blue* text
 #### Short Term
 
 #### Front End
-    
-    Refactor DepthBuffer to move mesh creation to Mesh class.
+     How are credentials passed with a fetch request?
+        Only Test works because there is special middleware handling which provides authorization.   
     Add MeshTransform class.
 
     Investigate Chai unit tests for front-end JavaScript.

@@ -15,19 +15,23 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "ModelRelief Development": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "http://localhost:60655"
-    },
     "ModelRelief Production": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Production",
+        "InitializeUserStore": "False",
+        "InitializeDatabase": "False"
+      },
+      "applicationUrl": "http://localhost:60655"
+    },
+    "ModelRelief Development": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "InitializeUserStore": "True",
+        "InitializeDatabase": "True"
       },
       "applicationUrl": "http://localhost:60655"
     },
@@ -36,7 +40,7 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ModelReliefDatabase": "SQLServer",
-        "ASPNETCORE_ENVIRONMENT": "Test",
+        "ASPNETCORE_ENVIRONMENT": "Development",
         "InitializeUserStore": "True",
         "InitializeDatabase": "True"
       },

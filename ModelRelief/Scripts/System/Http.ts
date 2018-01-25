@@ -247,6 +247,8 @@ export class HttpLibrary {
         let requestMode: RequestMode = 'cors';
         let cacheMode: RequestCache = 'default';
 
+        // WIP: Credentials must be supplied to use the API. 
+        //      The browser provides the credentials for Ux Views.
         let init = {
             method: methodType,
             body: requestData,

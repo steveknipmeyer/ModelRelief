@@ -8,15 +8,12 @@ set MR=%MRSolution%ModelRelief\
 echo MRsolution=%MRSolution%
 
 :: ModelRelief runtime settings
+:: N.B. These settings are used for command line invocation (e.g. 'dotnet run')
+:: The Visual Studio launchSettings.json or VisualCode launch.json will always <override> these settings.
+set ASPNETCORE_ENVIRONMENT=Test
 set ModelReliefDatabase=SQLServer
-set InitializeDatabase=False
-set InitializeUserStore=False
-
-echo MR=%MR%
-echo ModelReliefDatabase=%ModelReliefDatabase%
-echo InitializeDatabase=%InitializeDatabase%
-echo InitializeUserStore=%InitializeUserStore%
-echo
+set InitializeDatabase=True
+set InitializeUserStore=True
 
 path=%path%;D:\Users\Steve Knipmeyer\Documents\Bin
 path=%path%;%MRSolution%Tools
@@ -44,7 +41,20 @@ path=%path%;C:\Program Files (x86)\Microsoft SDKs\TypeScript\2.4
 ::  Command line (dotnet run) : ASPNETCORE_URLS environment variable    
 ::  Visual Studio             : launchSettings.json
 ::  VSCode                    : launch.json
-set ASPNETCORE_URLS=https://*:60655
+:: https://stackoverflow.com/questions/46336341/configure-asp-net-core-2-0-kestrel-for-https
+:: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel?tabs=aspnetcore2x#useurls-limitations
+:: set ASPNETCORE_URLS=https://*:60655
+set ASPNETCORE_URLS=http://localhost:60655/
+
+echo --- Environment ---
+echo MR=%MR%
+echo ASPNETCORE_URLS=%ASPNETCORE_URLS%
+echo(
+echo ASPNETCORE_ENVIRONMENT=%ASPNETCORE_ENVIRONMENT%
+echo ModelReliefDatabase=%ModelReliefDatabase%
+echo InitializeDatabase=%InitializeDatabase%
+echo InitializeUserStore=%InitializeUserStore%
+echo(
 
 cd /D %MR%
 :end

@@ -5,7 +5,7 @@
     "tasks": [
         {
             "label": "ASPNET .Core Build", 
-            "command": "dotnet build",
+            "command": "dotnet build --no-incremental",
             "type": "shell",
             "group": "build",
             "presentation": {
