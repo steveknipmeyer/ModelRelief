@@ -11,7 +11,7 @@ import { DepthBufferFormat }                from 'DepthBuffer'
 import { HttpStatusCode, HttpStatusMessage }from 'HttpStatus'
 import { ITGetModel }                       from 'ITGetModel'
 import { Services }                         from 'Services'
-import { ReliefSettings }                   from 'Relief'
+import { MeshTransform }                    from 'MeshTransform'
 
 /**
  * HTTP Content-type

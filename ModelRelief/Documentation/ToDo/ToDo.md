@@ -16,7 +16,7 @@ Some Markdown text with <span style="color:blue">some *blue* text
 #### Front End
      How are credentials passed with a fetch request?
         Only Test works because there is special middleware handling which provides authorization.   
-    Add MeshTransform class.
+    
 
     Investigate Chai unit tests for front-end JavaScript.
 

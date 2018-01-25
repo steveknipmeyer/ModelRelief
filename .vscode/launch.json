@@ -17,7 +17,7 @@
            "type": "chrome",
            "request": "launch",
            "name": "Launch Chrome",
-           "url": "http://localhost:60655/Models/Viewer/5",
+           "url": "http://localhost:60655/",
            "webRoot": "${workspaceRoot}/ModelRelief/wwwroot",
            "sourceMaps": true
            // N.B. outFiles, outDir are not recognized by Intellisense.
@@ -54,8 +54,8 @@
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Test",
-                "InitializeDatabase":"True",
-                "InitializeUserStore":"True",
+                "InitializeDatabase":"False",
+                "InitializeUserStore":"False",
             },
             "sourceFileMap": {
                 "/Views": "${workspaceRoot}/Views"
@@ -80,8 +80,7 @@
             "program": "${file}",
             "cwd": "${workspaceRoot}",
             "debugOptions": [
-                "WaitOnAbnormalExit",
-                "WaitOnNormalExit",
+                "DebugStdLib",
                 "RedirectOutput"
             ],
             "env": {

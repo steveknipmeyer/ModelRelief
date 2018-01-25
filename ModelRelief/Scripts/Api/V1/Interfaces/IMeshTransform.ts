@@ -10,6 +10,7 @@ import { ITGetModel }       from 'ITGetModel'
 
  /**
  *  Represents a DTO for a MeshTransform.
+ *  @description Settings that transform a DepthBuffer to a Mesh.
  *  @interface
  */
 export interface IMeshTransform extends ITGetModel {
@@ -22,10 +23,10 @@ export interface IMeshTransform extends ITGetModel {
     depth: number;
     width: number;
 
-    tau: number;
-    sigmaGaussianBlur: number;
-    sigmaGaussianSmooth: number;
-    lambdaLinearScaling: number;
+    tau: number;                        // attenutation
+    sigmaGaussianBlur: number;          // Gaussian blur
+    sigmaGaussianSmooth: number;        // Gaussian smoothing
+    lambdaLinearScaling: number;        // scaling
            
     // Navigation Properties
     projectId: number;

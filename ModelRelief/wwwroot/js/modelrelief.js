@@ -2637,7 +2637,7 @@ define("System/HttpStatus", ["require", "exports"], function (require, exports) 
     exports.HttpStatusMessage[HttpStatusCode.UNSUPPORTED_MEDIA_TYPE] = "Unsupported Media Type";
     exports.HttpStatusMessage[HttpStatusCode.USE_PROXY] = "Use Proxy";
 });
-define("Relief/Relief", ["require", "exports"], function (require, exports) {
+define("MeshTransform/MeshTransform", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -2646,18 +2646,18 @@ define("Relief/Relief", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
-     * Relief
-     * @class Relief
+     * MeshTransform
+     * @class MeshTransform
      */
-    var Relief = (function () {
+    var MeshTransform = (function () {
         /**
          * @constructor
          */
-        function Relief() {
+        function MeshTransform() {
         }
-        return Relief;
+        return MeshTransform;
     }());
-    exports.Relief = Relief;
+    exports.MeshTransform = MeshTransform;
 });
 define("System/Http", ["require", "exports", "System/HttpStatus", "System/Services"], function (require, exports, HttpStatus_1, Services_5) {
     // ------------------------------------------------------------------------// 
@@ -4417,11 +4417,11 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
      */
     var ComposerViewSettings = (function () {
         function ComposerViewSettings(generateRelief, saveRelief) {
-            this.meshSettings = {
+            this.meshTransform = {
                 width: 100.0,
                 height: 100.0,
                 depth: 5.0,
-                tauThreshold: 1.0,
+                tau: 1.0,
                 sigmaGaussianBlur: 1.0,
                 sigmaGaussianSmooth: 1.0,
                 lambdaLinearScaling: 1.0
@@ -4540,18 +4540,18 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
             maximum = 1000.0;
             stepSize = 1.0;
             // Mesh Dimensions
-            var controlMeshWidth = dimensionsOptions.add(this._composerViewSettings.meshSettings, 'width').name('Width').min(minimum).max(maximum).step(stepSize).listen();
-            var controlMeshHeight = dimensionsOptions.add(this._composerViewSettings.meshSettings, 'height').name('Height').min(minimum).max(maximum).step(stepSize).listen();
-            var controlMeshDepth = dimensionsOptions.add(this._composerViewSettings.meshSettings, 'depth').name('Depth').min(minimum).max(maximum).step(stepSize).listen();
+            var controlMeshWidth = dimensionsOptions.add(this._composerViewSettings.meshTransform, 'width').name('Width').min(minimum).max(maximum).step(stepSize).listen();
+            var controlMeshHeight = dimensionsOptions.add(this._composerViewSettings.meshTransform, 'height').name('Height').min(minimum).max(maximum).step(stepSize).listen();
+            var controlMeshDepth = dimensionsOptions.add(this._composerViewSettings.meshTransform, 'depth').name('Depth').min(minimum).max(maximum).step(stepSize).listen();
             var reliefProcessingOptions = composerViewOptions.addFolder('Relief Processing');
             minimum = 0.0;
             maximum = 1.0;
             stepSize = 0.1;
             // Relief Processing Parameters
-            var controlTauThreshold = reliefProcessingOptions.add(this._composerViewSettings.meshSettings, 'tauThreshold').name('Tau Threshold').min(minimum).max(maximum).step(stepSize).listen();
-            var controlSigmaGaussianBlur = reliefProcessingOptions.add(this._composerViewSettings.meshSettings, 'sigmaGaussianBlur').name('Sigma Gaussian Blur').min(minimum).max(maximum).step(stepSize).listen();
-            var controlSigmaGaussianSmooth = reliefProcessingOptions.add(this._composerViewSettings.meshSettings, 'sigmaGaussianSmooth').name('Sigma Gaussian Smooth').min(minimum).max(maximum).step(stepSize).listen();
-            var controlLamdaLinearScaling = reliefProcessingOptions.add(this._composerViewSettings.meshSettings, 'lambdaLinearScaling').name('Lambda Linear Scaling').min(minimum).max(maximum).step(stepSize).listen();
+            var controlTau = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'tau').name('Tau Threshold').min(minimum).max(maximum).step(stepSize).listen();
+            var controlSigmaGaussianBlur = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'sigmaGaussianBlur').name('Sigma Gaussian Blur').min(minimum).max(maximum).step(stepSize).listen();
+            var controlSigmaGaussianSmooth = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'sigmaGaussianSmooth').name('Sigma Gaussian Smooth').min(minimum).max(maximum).step(stepSize).listen();
+            var controlLamdaLinearScaling = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'lambdaLinearScaling').name('Lambda Linear Scaling').min(minimum).max(maximum).step(stepSize).listen();
             // Generate Relief
             var controlGenerateRelief = reliefProcessingOptions.add(this._composerViewSettings, 'generateRelief').name('Generate Relief');
             // Save Relief
