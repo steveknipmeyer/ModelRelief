@@ -12,11 +12,12 @@ import {DepthBuffer}                from 'DepthBuffer'
 import {Graphics}                   from 'Graphics'
 import {Logger, HTMLLogger}         from 'Logger'
 import {MathLibrary}                from 'Math'
+import {Mesh}                       from 'Mesh'
 import {MeshViewerControls}         from 'MeshViewerControls'
 import {Services}                   from 'Services'
 import {TrackballControls}          from 'TrackballControls'
 import {Viewer}                     from 'Viewer'
-
+  
 /**
  * @class
  * MeshViewer
@@ -51,7 +52,7 @@ export class MeshViewer extends Viewer {
 
         let height = 1;
         let width  = 1;
-        let mesh = Graphics.createPlaneMesh(new THREE.Vector3(), height, width, new THREE.MeshPhongMaterial(DepthBuffer.DefaultMeshPhongMaterialParameters));
+        let mesh = Graphics.createPlaneMesh(new THREE.Vector3(), height, width, new THREE.MeshPhongMaterial(Mesh.DefaultMeshPhongMaterialParameters));
         mesh.rotateX(-Math.PI / 2);
 
         this._root.add(mesh);

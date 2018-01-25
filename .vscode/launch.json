@@ -12,6 +12,7 @@
         ]
     }],
    "configurations": [
+   
        {
            "type": "chrome",
            "request": "launch",

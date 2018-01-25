@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "ASPNET .Core Build", 
+            "label": "ASPNET .Core Build", 
             "command": "dotnet build",
             "type": "shell",
             "group": "build",
@@ -15,7 +15,7 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "taskName": "Compile TypeScript",
+            "label": "Compile TypeScript",
             "type": "shell",
             "command": "tsc -p ModelRelief",
             "windows": {

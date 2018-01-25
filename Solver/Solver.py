@@ -16,7 +16,6 @@
 import argparse
 import json
 import os
-import sys
 
 from depthbuffer import DepthBuffer
 from mesh import Mesh

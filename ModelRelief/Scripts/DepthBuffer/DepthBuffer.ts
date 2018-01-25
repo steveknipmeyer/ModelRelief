@@ -29,12 +29,6 @@ interface FacePair {
     faces    : THREE.Face3[];
 }
 
-interface FacePair {
-
-    vertices: THREE.Vector3[];
-    faces: THREE.Face3[];
-}
-
 /**
  *  Mesh cache to optimize mesh creation.
  *  If a mesh exists in the cache of the required dimensions, it is used as a template.
