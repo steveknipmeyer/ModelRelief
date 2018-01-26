@@ -75,16 +75,7 @@ namespace ModelRelief.Services.Jobs
         /// </summary>
         private string GetSolverPath()
         {
-            var machineName = System.Environment.MachineName;
-            switch (machineName)
-            {
-                case "Lambda":
-                    return @"D:\GitHub\ModelRelief\Solver\solver.py";
-
-                default:
-                case "Vector":
-                    return @"D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\Solver\solver.py";
-            }
+            return @"..\Solver\solver.py";
         }
 
         /// <summary>
