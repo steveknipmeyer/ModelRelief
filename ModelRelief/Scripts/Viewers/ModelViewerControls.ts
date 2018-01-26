@@ -10,7 +10,7 @@ import * as dat    from 'dat-gui'
 
 import {DepthBufferFactory}         from "DepthBufferFactory"
 import {ElementAttributes, ElementIds} from "Html"
-import {Logger, ConsoleLogger}      from 'Logger'
+import {ILogger, ConsoleLogger}      from 'Logger'
 import {Graphics}                   from "Graphics"
 import {ModelViewer}                from "ModelViewer"
 import {Services}                   from 'Services'

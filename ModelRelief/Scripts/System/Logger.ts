@@ -10,7 +10,7 @@
  * @export
  * @interface Logger
  */
-export interface Logger {
+export interface ILogger {
     addErrorMessage (errorMessage : string);
     addWarningMessage (warningMessage : string);
     addInfoMessage (infoMessage : string);
@@ -36,7 +36,7 @@ enum MessageClass {
  * Console logging
  * @class
  */
-export class ConsoleLogger implements Logger{
+export class ConsoleLogger implements ILogger{
 
     /**
      * @constructor
@@ -133,7 +133,7 @@ export class ConsoleLogger implements Logger{
  * HTML logging
  * @class
  */
-export class HTMLLogger implements Logger{
+export class HTMLLogger implements ILogger{
 
     rootId           : string;
     rootElementTag   : string;

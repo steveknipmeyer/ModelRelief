@@ -12,7 +12,7 @@ import {ComposerController}                 from "ComposerController"
 import {EventType, MREvent, EventManager}   from 'EventManager'
 import {HtmlLibrary, ElementIds}            from "Html"
 import {Loader}                             from 'Loader'
-import {Logger, ConsoleLogger}              from 'Logger'
+import {ILogger, ConsoleLogger}              from 'Logger'
 import {MeshView}                           from "MeshView"
 import {MeshViewer}                         from "MeshViewer"
 import {ModelView}                          from "ModelView"
@@ -85,7 +85,7 @@ export class ComposerView {
      */
     initialize() {
 
-        Services.consoleLogger.addInfoMessage('ModelRelief started');
+        Services.defaultLogger.addInfoMessage('ModelRelief started');
 
         // Mesh View
         this._meshView = new MeshView(ElementIds.MeshCanvas);

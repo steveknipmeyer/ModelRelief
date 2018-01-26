@@ -4,24 +4,25 @@
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
-import {ILogger, ConsoleLogger, HTMLLogger}  from 'Logger'
-import {StopWatch}                          from 'StopWatch'
-/**
- * Services
- * General runtime support
- * @class
- */
-export class Services {
 
-    static consoleLogger : ConsoleLogger = new ConsoleLogger();
-    static htmlLogger    : HTMLLogger    = new HTMLLogger();
-    static defaultLogger: ILogger        = Services.consoleLogger;
+import { Services }  from 'Services'
 
-    static timer: StopWatch = new StopWatch('Master', Services.defaultLogger);
-    
+export class Exception {
+
     /**
      * @constructor
      */
     constructor() {
+    }
+
+    /**
+     * @description Logs an exception and throws an error.
+     * @static
+     * @param {string} exceptionMessage Exception message.
+     */
+    static throwError (exceptionMessage : string) {
+
+        Services.defaultLogger.addErrorMessage(exceptionMessage);
+        throw new Error(exceptionMessage);
     }
 }

@@ -13,7 +13,7 @@ import {DepthBufferFactory}             from 'DepthBufferFactory'
 import {Graphics, ObjectNames}          from 'Graphics'
 import {ElementAttributes, ElementIds}  from "Html"
 import {Loader}                         from 'Loader'
-import {Logger, ConsoleLogger}          from 'Logger'
+import {ILogger, ConsoleLogger}          from 'Logger'
 import {MathLibrary}                    from 'Math'
 import {MeshViewer}                     from "MeshViewer"
 import {Services}                       from 'Services'
@@ -65,7 +65,7 @@ class ViewerControls {
  */
 export class App {
     
-    _logger         : ConsoleLogger;
+    _logger         : ILogger;
     _loader         : Loader;
     _viewer         : CameraViewer;
     _viewerControls : ViewerControls;
@@ -178,7 +178,7 @@ export class App {
      * Main
      */
     run () {
-        this._logger = Services.consoleLogger;
+        this._logger = Services.defaultLogger;
         
         // Viewer    
         this._viewer = new CameraViewer('CameraViewer', 'viewerCanvas');

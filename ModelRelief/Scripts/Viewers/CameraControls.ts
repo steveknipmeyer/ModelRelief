@@ -10,7 +10,7 @@ import * as dat    from 'dat-gui'
 
 import {Camera, CameraSettings, StandardView}   from 'Camera'
 import {ElementAttributes, ElementIds}          from "Html"
-import {Logger, ConsoleLogger}                  from 'Logger'
+import {ILogger, ConsoleLogger}                  from 'Logger'
 import {Graphics, ObjectNames}                  from "Graphics"
 import {Services}                               from 'Services'
 import {Viewer}                                 from "Viewer"

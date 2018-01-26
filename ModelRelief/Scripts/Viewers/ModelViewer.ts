@@ -13,7 +13,7 @@ import {EventManager, EventType}        from 'EventManager'
 import {Graphics}                       from 'Graphics'
 import {Materials}                      from 'Materials'
 import {ModelViewerControls}            from "ModelViewerControls"
-import {Logger}                         from 'Logger'
+import {ILogger}                         from 'Logger'
 import {TrackballControls}              from 'TrackballControls'
 import {Services}                       from 'Services'
 import {Viewer}                         from 'Viewer'

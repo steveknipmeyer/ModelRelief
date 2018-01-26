@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import {Logger}                 from 'Logger'
+import {ILogger}                 from 'Logger'
 import {Services}               from 'Services'
 
 /**
@@ -27,7 +27,7 @@ export class StopWatch {
     
     static precision : number = 3;
 
-    _logger            : Logger;
+    _logger            : ILogger;
     _name              : string;
 
     _events            : any;
@@ -36,10 +36,10 @@ export class StopWatch {
     /**
      * @constructor
      * @param {string} timerName Timer identifier
-     * @param {Logger} logger Logger
+     * @param {ILogger} logger Logger
      * N.B. Logger is passed as a constructor parameter because StopWatch and Service.consoleLogger are static Service properties.
      */
-    constructor(timerName : string, logger : Logger) {
+    constructor(timerName : string, logger : ILogger) {
 
         this._logger = logger;
         this._name   = timerName;

@@ -8,7 +8,7 @@
 import * as THREE  from 'three' 
 
 import {StandardView}               from 'Camera'
-import {Logger, ConsoleLogger}      from 'Logger'
+import {ILogger, ConsoleLogger}      from 'Logger'
 import {Graphics}                   from "Graphics"
 import {OBJLoader}                  from "OBJLoader"
 import {Services}                   from 'Services'

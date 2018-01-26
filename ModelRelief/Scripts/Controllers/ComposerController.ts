@@ -17,7 +17,7 @@ import {ElementAttributes, ElementIds}      from "Html"
 import {ContentType, HttpLibrary, 
         MethodType, ServerEndPoints}        from "Http"
 import {DepthBufferFormat}                  from 'IDepthBuffer'
-import {Logger, ConsoleLogger}              from 'Logger'
+import {ILogger, ConsoleLogger}              from 'Logger'
 import {Graphics}                           from "Graphics"
 import {Mesh, Relief}                       from "Mesh"
 import {ModelViewer}                        from "ModelViewer"
@@ -112,7 +112,6 @@ export class ComposerController {
             this._composerView._meshView.meshViewer.fitView();
             this._initialMeshGeneration = false;
         }
-        // Services.consoleLogger.addInfoMessage('Relief generated');
     }
 
     /**
@@ -152,7 +151,7 @@ export class ComposerController {
         depthBuffer.format = DepthBufferFormat.RAW;
         depthBuffer.cameraId = cameraId;
 
-        await HttpLibrary.postFileAsync (postUrl, this._relief.depthBuffer.depths, depthBuffer);
+        let newModel = await HttpLibrary.postFileAsync (postUrl, this._relief.depthBuffer.depths, depthBuffer);
         Services.timer.logElapsedTime(exportTag);       
     }        
         

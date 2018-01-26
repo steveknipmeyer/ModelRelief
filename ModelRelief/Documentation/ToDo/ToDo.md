@@ -17,6 +17,8 @@
 <article class="markdown-body">
 
 ##### Commit Notes
+PostFileAsync now returns ITGetModel.
+Add Exception class.
 
 Some Markdown text with <span style="color:blue">some *blue* text
 
@@ -37,12 +39,7 @@ Some Markdown text with <span style="color:blue">some *blue* text
     What is a Relief?
     What are the relationships between FE classes and their DTO counterparts?
 
-    Check all async method calls!
-
     Introduce Parameter initialize objects and constructors for the DTO objects.
-    What should the return type of PostFileAsync be?
-        It should return the new DTO.
-            Should an overall status be returned or should the method throw on error?
 
 |FE Class|DTO|Notes|
 |-------|--------|--------|
@@ -60,8 +57,6 @@ How are credentials passed with a fetch request?   <br>
 Only Test works because there is special middleware handling which provides authorization.   
 </span><br></br>
 
-    
-
     Investigate Chai unit tests for front-end JavaScript.
 
     Should any DTO fields should be declared as optional?
@@ -70,9 +65,6 @@ Only Test works because there is special middleware handling which provides auth
     Is the interface IGenerateFile needed?
 
     Create a utility URL composer.
-
-    async/await
-        Refactor Export OBJ.
 
     Accessing Model From JavaScript
         https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript

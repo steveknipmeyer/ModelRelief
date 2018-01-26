@@ -12,7 +12,7 @@ import {assert}                     from 'chai'
 import {Camera}                     from 'Camera'
 import { DepthBuffer }              from 'DepthBuffer'
 import { Graphics }                 from 'Graphics'
-import { Logger, ConsoleLogger }    from 'Logger'
+import { ILogger, ConsoleLogger }    from 'Logger'
 import { MathLibrary }              from 'Math'
 import { Services }                 from 'Services'
 import { StopWatch }                from 'StopWatch'
@@ -142,7 +142,7 @@ export class Mesh {
     _height          : number;          // height resolution of the DB
     _depthBuffer     : DepthBuffer;     // depth buffer
 
-    _logger          : Logger;          // logger
+    _logger          : ILogger;          // logger
 
     /**
      * @constructor
@@ -190,7 +190,7 @@ export class Mesh {
      */
     initialize(): void {
 
-        this._logger = Services.consoleLogger;
+        this._logger = Services.defaultLogger;
     }
     //#endregion
 
@@ -357,10 +357,6 @@ export class Mesh {
 
         if (!this.verifyMeshSettings())
             return null;
-    
-        this._logger.addInfoMessage('sleep begin');
-        await Tools.sleep(10000);
-        this._logger.addInfoMessage('sleep complete');
     
         let mesh = this.mesh();
 

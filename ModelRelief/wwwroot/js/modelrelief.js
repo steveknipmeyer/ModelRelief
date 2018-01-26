@@ -462,7 +462,7 @@ define("System/StopWatch", ["require", "exports"], function (require, exports) {
         /**
          * @constructor
          * @param {string} timerName Timer identifier
-         * @param {Logger} logger Logger
+         * @param {ILogger} logger Logger
          * N.B. Logger is passed as a constructor parameter because StopWatch and Service.consoleLogger are static Service properties.
          */
         function StopWatch(timerName, logger) {
@@ -547,7 +547,8 @@ define("System/Services", ["require", "exports", "System/Logger", "System/StopWa
         }
         Services.consoleLogger = new Logger_1.ConsoleLogger();
         Services.htmlLogger = new Logger_1.HTMLLogger();
-        Services.timer = new StopWatch_1.StopWatch('Master', Services.consoleLogger);
+        Services.defaultLogger = Services.consoleLogger;
+        Services.timer = new StopWatch_1.StopWatch('Master', Services.defaultLogger);
         return Services;
     }());
     exports.Services = Services;
@@ -620,7 +621,7 @@ define("Graphics/Graphics", ["require", "exports", "three", "System/Services"], 
         Graphics.removeObjectChildren = function (rootObject, removeRoot) {
             if (!rootObject)
                 return;
-            var logger = Services_1.Services.consoleLogger;
+            var logger = Services_1.Services.defaultLogger;
             var remover = function (object3d) {
                 if (object3d === rootObject) {
                     return;
@@ -1094,7 +1095,7 @@ define("Graphics/Graphics", ["require", "exports", "three", "System/Services"], 
         Graphics.initializeCanvas = function (id, width, height) {
             var canvas = document.querySelector("#" + id);
             if (!canvas) {
-                Services_1.Services.consoleLogger.addErrorMessage("Canvas element id = " + id + " not found");
+                Services_1.Services.defaultLogger.addErrorMessage("Canvas element id = " + id + " not found");
                 return null;
             }
             // CSS controls the size
@@ -1267,7 +1268,7 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Syste
          * Initialize
          */
         DepthBuffer.prototype.initialize = function () {
-            this._logger = Services_2.Services.consoleLogger;
+            this._logger = Services_2.Services.defaultLogger;
             this._nearClipPlane = this.camera.near;
             this._farClipPlane = this.camera.far;
             this._cameraClipRange = this._farClipPlane - this._nearClipPlane;
@@ -1595,7 +1596,7 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "Viewer
          * Perform setup and initialization.
          */
         DepthBufferFactory.prototype.initialize = function () {
-            this._logger = Services_3.Services.consoleLogger;
+            this._logger = Services_3.Services.defaultLogger;
             this.initializePrimary();
             this.initializePost();
         };
@@ -2074,6 +2075,33 @@ define("System/EventManager", ["require", "exports"], function (require, exports
     }());
     exports.EventManager = EventManager;
 });
+define("System/Exception", ["require", "exports", "System/Services"], function (require, exports, Services_5) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var Exception = /** @class */ (function () {
+        /**
+         * @constructor
+         */
+        function Exception() {
+        }
+        /**
+         * @description Logs an exception and throws an error.
+         * @static
+         * @param {string} exceptionMessage Exception message.
+         */
+        Exception.throwError = function (exceptionMessage) {
+            Services_5.Services.defaultLogger.addErrorMessage(exceptionMessage);
+            throw new Error(exceptionMessage);
+        };
+        return Exception;
+    }());
+    exports.Exception = Exception;
+});
 /**
  * Constants enumerating the HTTP status codes.
  *
@@ -2500,7 +2528,7 @@ define("MeshTransform/MeshTransform", ["require", "exports"], function (require,
     }());
     exports.MeshTransform = MeshTransform;
 });
-define("System/Http", ["require", "exports", "System/HttpStatus", "System/Services"], function (require, exports, HttpStatus_1, Services_5) {
+define("System/Http", ["require", "exports", "System/Exception", "System/HttpStatus", "System/Services"], function (require, exports, Exception_1, HttpStatus_1, Services_6) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -2600,7 +2628,7 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
          */
         HttpLibrary.postFile = function (postUrl, fileData, fileMetadata) {
             var onComplete = function (request) {
-                Services_5.Services.consoleLogger.addInfoMessage('Metadata saved');
+                Services_6.Services.defaultLogger.addInfoMessage('Metadata saved');
                 var filePath = request.getResponseHeader('Location');
                 var blob = new Blob([fileData], { type: ContentType.OctetStream });
                 HttpLibrary.sendXMLHttpRequest(filePath + "/file", MethodType.Post, ContentType.OctetStream, blob, null);
@@ -2616,24 +2644,24 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
          * @param onComplete  Callback for request completion.
          */
         HttpLibrary.sendXMLHttpRequest = function (endpoint, methodType, contentType, requestData, onComplete) {
-            var requestTag = Services_5.Services.timer.mark(methodType + " Request: " + endpoint);
+            var requestTag = Services_6.Services.timer.mark(methodType + " Request: " + endpoint);
             var request = new XMLHttpRequest();
             // Abort 
             var onAbort = function (ev) {
-                Services_5.Services.consoleLogger.addErrorMessage(methodType + ": onAbort");
+                Services_6.Services.defaultLogger.addErrorMessage(methodType + ": onAbort");
             };
             // Error
             var onError = function (ev) {
-                Services_5.Services.consoleLogger.addErrorMessage(methodType + ": onError");
+                Services_6.Services.defaultLogger.addErrorMessage(methodType + ": onError");
             };
             // Progress
             var onProgress = function (ev) {
                 var percentComplete = ((ev.loaded / ev.total) * 100).toFixed(0);
-                Services_5.Services.consoleLogger.addInfoMessage(methodType + ": onProgress = " + percentComplete + "%");
+                Services_6.Services.defaultLogger.addInfoMessage(methodType + ": onProgress = " + percentComplete + "%");
             };
             // Timeout
             var onTimeout = function (ev) {
-                Services_5.Services.consoleLogger.addErrorMessage(methodType + ": onTimeout");
+                Services_6.Services.defaultLogger.addErrorMessage(methodType + ": onTimeout");
             };
             // Load
             var onLoad = function (ev) {
@@ -2642,7 +2670,7 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
                         // WIP: Are other HTTP status required?
                         case HttpStatus_1.HttpStatusCode.OK:
                         case HttpStatus_1.HttpStatusCode.CREATED:
-                            Services_5.Services.consoleLogger.addInfoMessage(methodType + ": onLoad");
+                            Services_6.Services.defaultLogger.addInfoMessage(methodType + ": onLoad");
                             if (onComplete)
                                 onComplete(request);
                             break;
@@ -2660,7 +2688,7 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
             request.open(methodType, endpoint, true);
             request.setRequestHeader("Content-type", contentType);
             request.send(requestData);
-            Services_5.Services.timer.logElapsedTime(requestTag);
+            Services_6.Services.timer.logElapsedTime(requestTag);
         };
         /**
          * Converts an array buffer to a string
@@ -2691,7 +2719,7 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
          */
         HttpLibrary.postFileAsync = function (postUrl, fileData, fileMetadata) {
             return __awaiter(this, void 0, void 0, function () {
-                var json, result, headers, filePath, blob;
+                var json, result, newModel, headers, filePath, blob;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -2699,16 +2727,18 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
                             return [4 /*yield*/, HttpLibrary.submitHttpRequestAsync(postUrl, MethodType.Post, ContentType.Json, json)];
                         case 1:
                             result = _a.sent();
-                            if (result.response.status != HttpStatus_1.HttpStatusCode.CREATED) {
-                                throw new Error("postFileAsync : Url = " + postUrl + ", status = " + result.response.status);
-                            }
+                            newModel = result.model;
+                            if (result.response.status != HttpStatus_1.HttpStatusCode.CREATED)
+                                Exception_1.Exception.throwError("postFileAsync model: Url = " + postUrl + ", status = " + result.response.status);
                             headers = result.response.headers;
                             filePath = headers.get('Location');
                             blob = new Blob([fileData], { type: ContentType.OctetStream });
                             return [4 /*yield*/, HttpLibrary.submitHttpRequestAsync(filePath + "/file", MethodType.Post, ContentType.OctetStream, blob)];
                         case 2:
                             result = _a.sent();
-                            return [2 /*return*/, result.response.ok];
+                            if (!result.response.ok)
+                                Exception_1.Exception.throwError("postFileAsync file: Url = " + postUrl + ", status = " + result.response.status);
+                            return [2 /*return*/, newModel];
                     }
                 });
             });
@@ -2745,6 +2775,8 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
                         case 2:
                             contentString = _a.sent();
                             result = new RequestResponse(response, contentString);
+                            if (!result.response.ok)
+                                Exception_1.Exception.throwError("submitHttpRequestAsync: Url = " + endpoint + ", status = " + result.response.status);
                             return [2 /*return*/, result];
                     }
                 });
@@ -2759,7 +2791,7 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
 //                                                                         //                                                                          
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
-define("Mesh/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", "Graphics/Graphics", "System/Services", "System/Tools"], function (require, exports, THREE, chai_2, Camera_2, Graphics_3, Services_6, Tools_2) {
+define("Mesh/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", "Graphics/Graphics", "System/Services"], function (require, exports, THREE, chai_2, Camera_2, Graphics_3, Services_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
@@ -2866,7 +2898,7 @@ define("Mesh/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", "G
          * Perform setup and initialization.
          */
         Mesh.prototype.initialize = function () {
-            this._logger = Services_6.Services.consoleLogger;
+            this._logger = Services_7.Services.defaultLogger;
         };
         //#endregion
         //#region Generation
@@ -2964,7 +2996,7 @@ define("Mesh/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", "G
          * @param material Material to assign to mesh.
          */
         Mesh.prototype.mesh = function (material) {
-            var timerTag = Services_6.Services.timer.mark('DepthBuffer.mesh');
+            var timerTag = Services_7.Services.timer.mark('DepthBuffer.mesh');
             // The mesh size is in real world units to match the depth buffer offsets which are also in real world units.
             // Find the size of the near plane to size the mesh to the model units.
             var meshXYExtents = Camera_2.Camera.getNearPlaneExtents(this.depthBuffer.camera);
@@ -2977,15 +3009,15 @@ define("Mesh/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", "G
             meshGeometry.verticesNeedUpdate = true;
             meshGeometry.normalsNeedUpdate = true;
             meshGeometry.elementsNeedUpdate = true;
-            var faceNormalsTag = Services_6.Services.timer.mark('meshGeometry.computeFaceNormals');
+            var faceNormalsTag = Services_7.Services.timer.mark('meshGeometry.computeFaceNormals');
             meshGeometry.computeVertexNormals();
             meshGeometry.computeFaceNormals();
-            Services_6.Services.timer.logElapsedTime(faceNormalsTag);
+            Services_7.Services.timer.logElapsedTime(faceNormalsTag);
             // Mesh was constructed with Z = depth buffer(X,Y).
             // Now rotate mesh to align with viewer XY plane so Top view is looking down on the mesh.
             mesh.rotateX(-Math.PI / 2);
             Mesh.Cache.addMesh(meshXYExtents, new THREE.Vector2(this.width, this.height), mesh);
-            Services_6.Services.timer.logElapsedTime(timerTag);
+            Services_7.Services.timer.logElapsedTime(timerTag);
             return mesh;
         };
         /**
@@ -2996,24 +3028,16 @@ define("Mesh/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", "G
             return __awaiter(this, void 0, void 0, function () {
                 var mesh, relief;
                 return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            if (!this.verifyMeshSettings())
-                                return [2 /*return*/, null];
-                            this._logger.addInfoMessage('sleep begin');
-                            return [4 /*yield*/, Tools_2.Tools.sleep(10000)];
-                        case 1:
-                            _a.sent();
-                            this._logger.addInfoMessage('sleep complete');
-                            mesh = this.mesh();
-                            relief = {
-                                width: this._width,
-                                height: this._height,
-                                mesh: mesh,
-                                depthBuffer: this._depthBuffer
-                            };
-                            return [2 /*return*/, relief];
-                    }
+                    if (!this.verifyMeshSettings())
+                        return [2 /*return*/, null];
+                    mesh = this.mesh();
+                    relief = {
+                        width: this._width,
+                        height: this._height,
+                        mesh: mesh,
+                        depthBuffer: this._depthBuffer
+                    };
+                    return [2 /*return*/, relief];
                 });
             });
         };
@@ -3702,7 +3726,7 @@ define("Viewers/CameraControls", ["require", "exports", "three", "dat-gui", "Vie
     }());
     exports.CameraControls = CameraControls;
 });
-define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "Viewers/CameraControls", "System/EventManager", "Graphics/Graphics", "System/Services", "Viewers/TrackballControls"], function (require, exports, THREE, Camera_4, CameraControls_1, EventManager_1, Graphics_5, Services_7, TrackballControls_1) {
+define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "Viewers/CameraControls", "System/EventManager", "Graphics/Graphics", "System/Services", "Viewers/TrackballControls"], function (require, exports, THREE, Camera_4, CameraControls_1, EventManager_1, Graphics_5, Services_8, TrackballControls_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -3736,7 +3760,7 @@ define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "View
             this._cameraControls = null;
             this._name = name;
             this._eventManager = new EventManager_1.EventManager();
-            this._logger = Services_7.Services.consoleLogger;
+            this._logger = Services_8.Services.defaultLogger;
             this._canvas = Graphics_5.Graphics.initializeCanvas(modelCanvasId);
             this._width = this._canvas.offsetWidth;
             this._height = this._canvas.offsetHeight;
@@ -4253,7 +4277,7 @@ define("ModelExporters/OBJExporter", ["require", "exports", "three"], function (
     }());
     exports.OBJExporter = OBJExporter;
 });
-define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/V1/Models/DtoModels", "Viewers/Camera", "DepthBuffer/DepthBufferFactory", "System/EventManager", "System/Html", "System/Http", "Api/V1/Interfaces/IDepthBuffer", "Mesh/Mesh", "System/Services"], function (require, exports, dat, Dto, Camera_5, DepthBufferFactory_2, EventManager_3, Html_3, Http_1, IDepthBuffer_1, Mesh_1, Services_8) {
+define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/V1/Models/DtoModels", "Viewers/Camera", "DepthBuffer/DepthBufferFactory", "System/EventManager", "System/Html", "System/Http", "Api/V1/Interfaces/IDepthBuffer", "Mesh/Mesh", "System/Services"], function (require, exports, dat, Dto, Camera_5, DepthBufferFactory_2, EventManager_3, Html_3, Http_1, IDepthBuffer_1, Mesh_1, Services_9) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -4347,7 +4371,7 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            exportTag = Services_8.Services.timer.mark('POST Camera');
+                            exportTag = Services_9.Services.timer.mark('POST Camera');
                             postUrl = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiCameras;
                             camera = new Dto.Camera();
                             camera.name = 'Camera';
@@ -4355,7 +4379,7 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/
                             return [4 /*yield*/, Http_1.HttpLibrary.submitHttpRequestAsync(postUrl, Http_1.MethodType.Post, Http_1.ContentType.Json, JSON.stringify(camera))];
                         case 1:
                             result = _a.sent();
-                            Services_8.Services.timer.logElapsedTime(exportTag);
+                            Services_9.Services.timer.logElapsedTime(exportTag);
                             return [2 /*return*/, result.model];
                     }
                 });
@@ -4366,12 +4390,12 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/
          */
         ComposerController.prototype.postDepthBufferAsync = function (cameraId) {
             return __awaiter(this, void 0, void 0, function () {
-                var fileName, exportTag, postUrl, depthBuffer;
+                var fileName, exportTag, postUrl, depthBuffer, newModel;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
                             fileName = this._composerView.modelView.modelViewer.model.name + ".raw";
-                            exportTag = Services_8.Services.timer.mark('POST DepthBuffer');
+                            exportTag = Services_9.Services.timer.mark('POST DepthBuffer');
                             postUrl = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiDepthBuffers;
                             depthBuffer = new Dto.DepthBuffer();
                             depthBuffer.name = fileName;
@@ -4380,8 +4404,8 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/
                             depthBuffer.cameraId = cameraId;
                             return [4 /*yield*/, Http_1.HttpLibrary.postFileAsync(postUrl, this._relief.depthBuffer.depths, depthBuffer)];
                         case 1:
-                            _a.sent();
-                            Services_8.Services.timer.logElapsedTime(exportTag);
+                            newModel = _a.sent();
+                            Services_9.Services.timer.logElapsedTime(exportTag);
                             return [2 /*return*/];
                     }
                 });
@@ -4458,7 +4482,7 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/
 // https://github.com/sohamkamani/three-object-loader/blob/master/source/index.js       //
 //                                                                                      // 
 // -------------------------------------------------------------------------------------//
-define("ModelLoaders/OBJLoader", ["require", "exports", "three", "System/Services"], function (require, exports, THREE, Services_9) {
+define("ModelLoaders/OBJLoader", ["require", "exports", "three", "System/Services"], function (require, exports, THREE, Services_10) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     function OBJLoader(manager) {
@@ -4742,7 +4766,7 @@ define("ModelLoaders/OBJLoader", ["require", "exports", "three", "System/Service
             return state;
         },
         parse: function (text) {
-            var timerTag = Services_9.Services.timer.mark('OBJLoader.parse');
+            var timerTag = Services_10.Services.timer.mark('OBJLoader.parse');
             var state = this._createParserState();
             if (text.indexOf('\r\n') !== -1) {
                 // This is faster than String.split with regex that splits on both
@@ -4954,7 +4978,7 @@ define("ModelLoaders/OBJLoader", ["require", "exports", "three", "System/Service
                 mesh.name = object.name;
                 container.add(mesh);
             }
-            Services_9.Services.timer.logElapsedTime(timerTag);
+            Services_10.Services.timer.logElapsedTime(timerTag);
             return container;
         }
     };
@@ -5210,7 +5234,7 @@ define("Viewers/MeshViewerControls", ["require", "exports", "dat-gui", "System/H
     }());
     exports.MeshViewerControls = MeshViewerControls;
 });
-define("Viewers/MeshViewer", ["require", "exports", "three", "Graphics/Graphics", "Mesh/Mesh", "Viewers/MeshViewerControls", "System/Services", "Viewers/Viewer"], function (require, exports, THREE, Graphics_7, Mesh_2, MeshViewerControls_1, Services_10, Viewer_2) {
+define("Viewers/MeshViewer", ["require", "exports", "three", "Graphics/Graphics", "Mesh/Mesh", "Viewers/MeshViewerControls", "System/Services", "Viewers/Viewer"], function (require, exports, THREE, Graphics_7, Mesh_2, MeshViewerControls_1, Services_11, Viewer_2) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -5234,7 +5258,7 @@ define("Viewers/MeshViewer", ["require", "exports", "three", "Graphics/Graphics"
         function MeshViewer(name, previewCanvasId) {
             var _this = _super.call(this, name, previewCanvasId) || this;
             //override
-            _this._logger = Services_10.Services.htmlLogger;
+            _this._logger = Services_11.Services.htmlLogger;
             return _this;
         }
         //#region Properties
@@ -5377,7 +5401,7 @@ define("Views/ModelView", ["require", "exports", "Viewers/ModelViewer"], functio
     }());
     exports.ModelView = ModelView;
 });
-define("Views/ComposerView", ["require", "exports", "Controllers/ComposerController", "System/Html", "ModelLoaders/Loader", "Views/MeshView", "Views/ModelView", "System/Services"], function (require, exports, ComposerController_1, Html_5, Loader_1, MeshView_1, ModelView_1, Services_11) {
+define("Views/ComposerView", ["require", "exports", "Controllers/ComposerController", "System/Html", "ModelLoaders/Loader", "Views/MeshView", "Views/ModelView", "System/Services"], function (require, exports, ComposerController_1, Html_5, Loader_1, MeshView_1, ModelView_1, Services_12) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -5443,7 +5467,7 @@ define("Views/ComposerView", ["require", "exports", "Controllers/ComposerControl
          * Initialization.
          */
         ComposerView.prototype.initialize = function () {
-            Services_11.Services.consoleLogger.addInfoMessage('ModelRelief started');
+            Services_12.Services.defaultLogger.addInfoMessage('ModelRelief started');
             // Mesh View
             this._meshView = new MeshView_1.MeshView(Html_5.ElementIds.MeshCanvas);
             // Model View
@@ -5553,7 +5577,7 @@ define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function 
     }());
     exports.UnitTests = UnitTests;
 });
-define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Graphics/Graphics", "System/Html", "System/Services", "Viewers/Viewer"], function (require, exports, THREE, dat, Graphics_8, Html_7, Services_12, Viewer_3) {
+define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Graphics/Graphics", "System/Html", "System/Services", "Viewers/Viewer"], function (require, exports, THREE, dat, Graphics_8, Html_7, Services_13, Viewer_3) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -5681,7 +5705,7 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Graph
          * Main
          */
         App.prototype.run = function () {
-            this._logger = Services_12.Services.consoleLogger;
+            this._logger = Services_13.Services.defaultLogger;
             // Viewer    
             this._viewer = new CameraViewer('CameraViewer', 'viewerCanvas');
             // UI Controls

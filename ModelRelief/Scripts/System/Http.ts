@@ -8,6 +8,7 @@
 import * as Dto                             from 'DtoModels'
 
 import { DepthBufferFormat }                from 'DepthBuffer'
+import { Exception }                        from 'Exception'
 import { HttpStatusCode, HttpStatusMessage }from 'HttpStatus'
 import { ITGetModel }                       from 'ITGetModel'
 import { Services }                         from 'Services'
@@ -109,7 +110,7 @@ export class HttpLibrary {
         
         let onComplete = function(request: XMLHttpRequest) {
                             
-            Services.consoleLogger.addInfoMessage('Metadata saved');
+            Services.defaultLogger.addInfoMessage('Metadata saved');
             let filePath = request.getResponseHeader('Location');
 
             let blob = new Blob([fileData], { type: ContentType.OctetStream }); 
@@ -136,25 +137,25 @@ export class HttpLibrary {
         // Abort 
         let onAbort = function (this: XMLHttpRequestEventTarget, ev: Event) : any {
 
-            Services.consoleLogger.addErrorMessage(`${methodType}: onAbort`);
+            Services.defaultLogger.addErrorMessage(`${methodType}: onAbort`);
         };
 
         // Error
         let onError = function (this: XMLHttpRequestEventTarget, ev: ErrorEvent) : any { 
 
-            Services.consoleLogger.addErrorMessage(`${methodType}: onError`);
+            Services.defaultLogger.addErrorMessage(`${methodType}: onError`);
         };
 
         // Progress
         let onProgress = function (this: XMLHttpRequestEventTarget, ev: ProgressEvent) : any { 
 
             let percentComplete = ((ev.loaded / ev.total) * 100).toFixed(0);
-            Services.consoleLogger.addInfoMessage(`${methodType}: onProgress = ${percentComplete}%`);
+            Services.defaultLogger.addInfoMessage(`${methodType}: onProgress = ${percentComplete}%`);
         };
 
         // Timeout
         let onTimeout = function (this: XMLHttpRequestEventTarget, ev: ProgressEvent) : any {
-            Services.consoleLogger.addErrorMessage(`${methodType}: onTimeout`);
+            Services.defaultLogger.addErrorMessage(`${methodType}: onTimeout`);
         };
 
         // Load
@@ -165,7 +166,7 @@ export class HttpLibrary {
                     // WIP: Are other HTTP status required?
                     case HttpStatusCode.OK:
                     case HttpStatusCode.CREATED:
-                        Services.consoleLogger.addInfoMessage(`${methodType}: onLoad`);
+                        Services.defaultLogger.addInfoMessage(`${methodType}: onLoad`);
                         if (onComplete)
                             onComplete(request);
                         break;
@@ -216,22 +217,24 @@ export class HttpLibrary {
      * @param fileData File data, may be binary.
      * @param fileMetadata JSON metadata.
      */
-    static async postFileAsync(postUrl: string, fileData: any, fileMetadata: any): Promise<boolean> {
+    static async postFileAsync(postUrl: string, fileData: any, fileMetadata: any): Promise<ITGetModel> {
 
         // send JSON metadata first to create the resource and obtain the Id
         let json = JSON.stringify(fileMetadata);
         let result = await HttpLibrary.submitHttpRequestAsync(postUrl, MethodType.Post, ContentType.Json, json);
-        if (result.response.status != HttpStatusCode.CREATED) {
-            throw new Error(`postFileAsync : Url = ${postUrl}, status = ${result.response.status}`);
-        }
+        let newModel = result.model;
+        if (result.response.status != HttpStatusCode.CREATED)
+            Exception.throwError(`postFileAsync model: Url = ${postUrl}, status = ${result.response.status}`);
 
         let headers = result.response.headers;
         let filePath = headers.get('Location');
 
         let blob = new Blob([fileData], { type: ContentType.OctetStream });
         result = await HttpLibrary.submitHttpRequestAsync(`${filePath}/file`, MethodType.Post, ContentType.OctetStream, blob);
+        if (!result.response.ok)
+            Exception.throwError(`postFileAsync file: Url = ${postUrl}, status = ${result.response.status}`);
 
-        return result.response.ok;
+        return newModel;
     }
 
     /**
@@ -264,6 +267,9 @@ export class HttpLibrary {
         let contentString = await response.text();
 
         let result = new RequestResponse(response, contentString);
+        if (!result.response.ok)
+            Exception.throwError(`submitHttpRequestAsync: Url = ${endpoint}, status = ${result.response.status}`);
+
         return result;
     }
 }

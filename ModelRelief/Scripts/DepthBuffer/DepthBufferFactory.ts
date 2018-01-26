@@ -18,7 +18,7 @@ import * as THREE               from 'three'
 import {Camera, ClippingPlanes} from 'Camera'
 import {DepthBuffer}            from 'DepthBuffer'
 import {Graphics}               from 'Graphics'
-import {Logger, ConsoleLogger}  from 'Logger'
+import {ILogger, ConsoleLogger}  from 'Logger'
 import {MathLibrary}            from 'Math'
 import {Services}               from 'Services'
 import {StopWatch}              from 'StopWatch'
@@ -78,7 +78,7 @@ export class DepthBufferFactory {
     _postMaterial    : THREE.ShaderMaterial     = null;     // shader material that encodes the WebGL depth buffer into a floating point RGBA format
 
     _minimumWebGL    : boolean                  = true;     // true if minimum WeGL requirements are present
-    _logger          : Logger                   = null;     // logger
+    _logger          : ILogger                   = null;     // logger
     _addCanvasToDOM  : boolean                  = false;    // visible canvas; add to HTML page
 
     /**
@@ -228,7 +228,7 @@ export class DepthBufferFactory {
      */
     initialize () : void {
 
-        this._logger = Services.consoleLogger;
+        this._logger = Services.defaultLogger;
         
         this.initializePrimary();
         this.initializePost();

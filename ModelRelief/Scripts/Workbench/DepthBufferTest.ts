@@ -9,7 +9,7 @@ import * as THREE               from 'three'
 
 import {DepthBufferFactory}     from 'DepthBufferFactory'
 import {Graphics}               from 'Graphics'
-import {Logger, HTMLLogger}     from 'Logger'
+import {ILogger, HTMLLogger}     from 'Logger'
 import {MathLibrary}            from 'Math'
 import {ModelViewer}            from "ModelViewer"
 import {Services}               from 'Services'

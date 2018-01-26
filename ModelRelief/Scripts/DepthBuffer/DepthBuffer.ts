@@ -10,7 +10,7 @@ import * as THREE           from 'three'
 
 import {Camera}             from 'Camera'
 import {Graphics}           from 'Graphics'
-import {Logger, HTMLLogger} from 'Logger'
+import {ILogger, HTMLLogger} from 'Logger'
 import {MathLibrary}        from 'Math'
 import {Services}           from 'Services'
 import {StopWatch}          from 'StopWatch'
@@ -31,7 +31,7 @@ export class DepthBuffer {
 
     static readonly NormalizedTolerance   : number = .001;    
     
-    _logger : Logger;
+    _logger : ILogger;
 
     _rgbaArray : Uint8Array;
     depths     : Float32Array;
@@ -145,7 +145,7 @@ export class DepthBuffer {
      */       
     initialize () {
         
-        this._logger = Services.consoleLogger;       
+        this._logger = Services.defaultLogger;       
 
         this._nearClipPlane   = this.camera.near;
         this._farClipPlane    = this.camera.far;

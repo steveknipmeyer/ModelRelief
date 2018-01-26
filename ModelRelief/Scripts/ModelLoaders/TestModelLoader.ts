@@ -7,7 +7,7 @@
 
 import * as THREE  from 'three' 
 
-import {Logger, ConsoleLogger}  from 'Logger'
+import {ILogger, ConsoleLogger}  from 'Logger'
 import {Graphics}               from "Graphics"
 import {Services}               from 'Services'
 import {Viewer}                 from 'Viewer'

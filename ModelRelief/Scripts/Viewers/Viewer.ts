@@ -10,7 +10,7 @@ import {Camera, StandardView}   from 'Camera'
 import {CameraControls}         from 'CameraControls'
 import {EventManager}           from 'EventManager'
 import {Graphics, ObjectNames}  from 'Graphics'
-import {Logger}                 from 'Logger'
+import {ILogger}                 from 'Logger'
 import {Materials}              from 'Materials'
 import {Services}               from 'Services'
 import {TrackballControls}      from 'TrackballControls'
@@ -22,7 +22,7 @@ export class Viewer {
 
     _name                   : string                    = '';
     _eventManager          : EventManager              = null;
-    _logger                 : Logger                    = null;
+    _logger                 : ILogger                    = null;
     
     _scene                  : THREE.Scene               = null;
     _root                   : THREE.Object3D            = null;      
@@ -48,7 +48,7 @@ export class Viewer {
 
         this._name         = name;                    
         this._eventManager  = new EventManager();
-        this._logger       = Services.consoleLogger;
+        this._logger       = Services.defaultLogger;
 
         this._canvas = Graphics.initializeCanvas(modelCanvasId);
         this._width  = this._canvas.offsetWidth;

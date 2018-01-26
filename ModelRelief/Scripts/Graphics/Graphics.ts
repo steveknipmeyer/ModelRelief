@@ -7,7 +7,7 @@
 
 import * as THREE               from 'three'
 
-import {Logger, ConsoleLogger}  from 'Logger'
+import {ILogger, ConsoleLogger}  from 'Logger'
 import {Services}               from 'Services'
 
 export enum ObjectNames {
@@ -83,7 +83,7 @@ export class Graphics {
         if (!rootObject)
             return;
 
-        let logger  = Services.consoleLogger;
+        let logger  = Services.defaultLogger;
         let remover = function (object3d) {
             
             if (object3d === rootObject) {
@@ -732,7 +732,7 @@ export class Graphics {
         let canvas : HTMLCanvasElement = <HTMLCanvasElement> document.querySelector(`#${id}`);
         if (!canvas)
             {
-            Services.consoleLogger.addErrorMessage(`Canvas element id = ${id} not found`);
+            Services.defaultLogger.addErrorMessage(`Canvas element id = ${id} not found`);
             return null;
             }
         
