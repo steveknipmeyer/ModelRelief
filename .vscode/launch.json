@@ -87,6 +87,15 @@
                 "name": "value"
             },
             "args":["-s", "Test/Mesh10.json", "-w", "Test/Working/"]
-        }        
+        },
+        {
+            "name": "Node Workbench",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/NodeWorkbench/workbench.js",
+            "outFiles": [
+                "${workspaceFolder}/NodeWorkbench/**/*.js"
+            ]
+        }
     ]
 }

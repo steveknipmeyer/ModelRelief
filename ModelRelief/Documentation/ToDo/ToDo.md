@@ -1,4 +1,22 @@
-﻿##### Commit Notes
+﻿<style>
+	.markdown-body {
+		box-sizing: border-box;
+		min-width: 200px;
+		max-width: 980px;
+		margin: 0 auto;
+		padding: 45px;
+	}
+
+	@media (max-width: 767px) {
+		.markdown-body {
+			padding: 15px;
+		}
+	}
+</style>
+
+<article class="markdown-body">
+
+##### Commit Notes
 
 Some Markdown text with <span style="color:blue">some *blue* text
 
@@ -7,8 +25,6 @@ Some Markdown text with <span style="color:blue">some *blue* text
 - Manning Dependency Injection book.
 
 #####  Lambda
-    Upgrade Visual Studio.
-    Upgrade Visual Code.
     Upgrade Node.
     Python programs must be invoked by py <program>. This is not necessary on Vector.
 
@@ -17,11 +33,11 @@ Some Markdown text with <span style="color:blue">some *blue* text
 #### Short Term
 
 #### Front End
+
     What is a Relief?
     What are the relationships between FE classes and their DTO counterparts?
 
     Check all async method calls!
-        Quokka!
 
     Introduce Parameter initialize objects and constructors for the DTO objects.
     What should the return type of PostFileAsync be?
@@ -840,3 +856,4 @@ However, InitializeUserStore may be set if the application is started through 'd
         var method = typeof(ValidatedHandler<TRequest, TResponse>).GetMethod(nameof(ModelExistsAsync)).MakeGenericMethod(referenceType);
         var modelExists = await (Task<bool>)method.Invoke(this, new object[] {claimsPrincipal, (int) propertyValue});
 
+</article>

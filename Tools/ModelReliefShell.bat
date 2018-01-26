@@ -57,5 +57,5 @@ echo InitializeDatabase=%InitializeDatabase%
 echo InitializeUserStore=%InitializeUserStore%
 echo(
 
-cd /D %MR%
+cd /D %MRSolution%
 :end

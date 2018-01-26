@@ -82,7 +82,7 @@ export class RequestResponse {
     }
 }
 
-async function submitHttpRequest(endpoint: string, methodType: MethodType, contentType: ContentType, requestData: any) {
+async function submitHttpRequest(endpoint: string, methodType: MethodType, contentType: ContentType, requestData: any) : Promise<RequestResponse>{
 
     let headers = {
         'Content-Type': contentType
