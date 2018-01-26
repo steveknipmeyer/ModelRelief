@@ -74,7 +74,7 @@ define("System/Html", ["require", "exports"], function (require, exports) {
      * General HTML and DOM routines
      * @class
      */
-    var HtmlLibrary = (function () {
+    var HtmlLibrary = /** @class */ (function () {
         /**
          * @constructor
          */
@@ -206,7 +206,7 @@ define("Api/V1/Models/DtoModels", ["require", "exports"], function (require, exp
      * Concrete implementation of ICamera.
      * @class
      */
-    var Camera = (function () {
+    var Camera = /** @class */ (function () {
         function Camera() {
         }
         return Camera;
@@ -216,7 +216,7 @@ define("Api/V1/Models/DtoModels", ["require", "exports"], function (require, exp
     *  Concrete implementation of IDepthBuffer.
     *  @interface
     */
-    var DepthBuffer = (function () {
+    var DepthBuffer = /** @class */ (function () {
         function DepthBuffer() {
         }
         return DepthBuffer;
@@ -226,7 +226,7 @@ define("Api/V1/Models/DtoModels", ["require", "exports"], function (require, exp
     *  Concrete implementation of IMesh.
     *  @interface
     */
-    var Mesh = (function () {
+    var Mesh = /** @class */ (function () {
         function Mesh() {
         }
         return Mesh;
@@ -236,7 +236,7 @@ define("Api/V1/Models/DtoModels", ["require", "exports"], function (require, exp
     *  Concrete implementation of IMeshTransform.
     *  @interface
     */
-    var MeshTransform = (function () {
+    var MeshTransform = /** @class */ (function () {
         function MeshTransform() {
         }
         return MeshTransform;
@@ -247,7 +247,7 @@ define("Api/V1/Models/DtoModels", ["require", "exports"], function (require, exp
     *  Concrete implementation of IModel3d.
     *  @interface
     */
-    var Model3d = (function () {
+    var Model3d = /** @class */ (function () {
         function Model3d() {
         }
         return Model3d;
@@ -257,7 +257,7 @@ define("Api/V1/Models/DtoModels", ["require", "exports"], function (require, exp
      * Concrete implementation of IProject.
      * @class
      */
-    var Project = (function () {
+    var Project = /** @class */ (function () {
         function Project() {
         }
         return Project;
@@ -287,7 +287,7 @@ define("System/Logger", ["require", "exports"], function (require, exports) {
      * Console logging
      * @class
      */
-    var ConsoleLogger = (function () {
+    var ConsoleLogger = /** @class */ (function () {
         /**
          * @constructor
          */
@@ -364,7 +364,7 @@ define("System/Logger", ["require", "exports"], function (require, exports) {
      * HTML logging
      * @class
      */
-    var HTMLLogger = (function () {
+    var HTMLLogger = /** @class */ (function () {
         /**
          * @constructor
          */
@@ -458,7 +458,7 @@ define("System/StopWatch", ["require", "exports"], function (require, exports) {
      * General debugger timer.
      * @class
      */
-    var StopWatch = (function () {
+    var StopWatch = /** @class */ (function () {
         /**
          * @constructor
          * @param {string} timerName Timer identifier
@@ -539,7 +539,7 @@ define("System/Services", ["require", "exports", "System/Logger", "System/StopWa
      * General runtime support
      * @class
      */
-    var Services = (function () {
+    var Services = /** @class */ (function () {
         /**
          * @constructor
          */
@@ -576,7 +576,7 @@ define("Graphics/Graphics", ["require", "exports", "three", "System/Services"], 
      *  Graphics Library
      *  @class
      */
-    var Graphics = (function () {
+    var Graphics = /** @class */ (function () {
         /**
          * @constructor
          */
@@ -1125,7 +1125,7 @@ define("System/Math", ["require", "exports"], function (require, exports) {
      * General mathematics routines
      * @class
      */
-    var MathLibrary = (function () {
+    var MathLibrary = /** @class */ (function () {
         /**
          * @constructor
          */
@@ -1145,7 +1145,7 @@ define("System/Math", ["require", "exports"], function (require, exports) {
     }());
     exports.MathLibrary = MathLibrary;
 });
-define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Viewers/Camera", "Graphics/Graphics", "System/Services"], function (require, exports, chai_1, THREE, Camera_1, Graphics_1, Services_2) {
+define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "System/Services"], function (require, exports, chai_1, THREE, Services_2) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -1161,58 +1161,10 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Viewe
         DepthBufferFormat[DepthBufferFormat["JPG"] = 3] = "JPG"; // JPG format
     })(DepthBufferFormat = exports.DepthBufferFormat || (exports.DepthBufferFormat = {}));
     /**
-     *  Mesh cache to optimize mesh creation.
-     *  If a mesh exists in the cache of the required dimensions, it is used as a template.
-     *  @class
-     */
-    var MeshCache = (function () {
-        /**
-         * Constructor
-         */
-        function MeshCache() {
-            this._cache = new Map();
-        }
-        /**
-         * @description Generates the map key for a mesh.
-         * @param {THREE.Vector2} modelExtents Extents of the camera near plane; model units.
-         * @param {THREE.Vector2} pixelExtents Extents of the pixel array used to subdivide the mesh.
-         * @returns {string}
-         */
-        MeshCache.prototype.generateKey = function (modelExtents, pixelExtents) {
-            var aspectRatio = (modelExtents.x / modelExtents.y).toFixed(2).toString();
-            return "Aspect = " + aspectRatio + " : Pixels = (" + Math.round(pixelExtents.x).toString() + ", " + Math.round(pixelExtents.y).toString() + ")";
-        };
-        /**
-         * @description Returns a mesh from the cache as a template (or null);
-         * @param {THREE.Vector2} modelExtents Extents of the camera near plane; model units.
-         * @param {THREE.Vector2} pixelExtents Extents of the pixel array used to subdivide the mesh.
-         * @returns {THREE.Mesh}
-         */
-        MeshCache.prototype.getMesh = function (modelExtents, pixelExtents) {
-            var key = this.generateKey(modelExtents, pixelExtents);
-            return this._cache[key];
-        };
-        /**
-         * @description Adds a mesh instance to the cache.
-         * @param {THREE.Vector2} modelExtents Extents of the camera near plane; model units.
-         * @param {THREE.Vector2} pixelExtents Extents of the pixel array used to subdivide the mesh.
-         * @param {THREE.Mesh} Mesh instance to add.
-         * @returns {void}
-         */
-        MeshCache.prototype.addMesh = function (modelExtents, pixelExtents, mesh) {
-            var key = this.generateKey(modelExtents, pixelExtents);
-            if (this._cache[key])
-                return;
-            var meshClone = Graphics_1.Graphics.cloneAndTransformObject(mesh);
-            this._cache[key] = meshClone;
-        };
-        return MeshCache;
-    }());
-    /**
      *  DepthBuffer
      *  @class
      */
-    var DepthBuffer = (function () {
+    var DepthBuffer = /** @class */ (function () {
         /**
          * @constructor
          * @param rgbaArray Raw aray of RGBA bytes packed with floats.
@@ -1411,116 +1363,6 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Viewe
             return index;
         };
         /**
-         * Constructs a pair of triangular faces at the given offset in the DepthBuffer.
-         * @param row Row offset (Lower Left).
-         * @param column Column offset (Lower Left).
-         * @param faceSize Size of a face edge (not hypotenuse).
-         * @param baseVertexIndex Beginning offset in mesh geometry vertex array.
-         */
-        DepthBuffer.prototype.constructTriFacesAtOffset = function (row, column, meshLowerLeft, faceSize, baseVertexIndex) {
-            var facePair = {
-                vertices: [],
-                faces: []
-            };
-            //  Vertices
-            //   2    3       
-            //   0    1
-            // complete mesh center will be at the world origin
-            var originX = meshLowerLeft.x + (column * faceSize);
-            var originY = meshLowerLeft.y + (row * faceSize);
-            var lowerLeft = new THREE.Vector3(originX + 0, originY + 0, this.depth(row + 0, column + 0)); // baseVertexIndex + 0
-            var lowerRight = new THREE.Vector3(originX + faceSize, originY + 0, this.depth(row + 0, column + 1)); // baseVertexIndex + 1
-            var upperLeft = new THREE.Vector3(originX + 0, originY + faceSize, this.depth(row + 1, column + 0)); // baseVertexIndex + 2
-            var upperRight = new THREE.Vector3(originX + faceSize, originY + faceSize, this.depth(row + 1, column + 1)); // baseVertexIndex + 3
-            facePair.vertices.push(lowerLeft, // baseVertexIndex + 0
-            lowerRight, // baseVertexIndex + 1
-            upperLeft, // baseVertexIndex + 2
-            upperRight // baseVertexIndex + 3
-            );
-            // right hand rule for polygon winding
-            facePair.faces.push(new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 1, baseVertexIndex + 3), new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 3, baseVertexIndex + 2));
-            return facePair;
-        };
-        /**
-         * @description Constructs a new mesh from an existing mesh of the same dimensions.
-         * @param {THREE.Mesh} mesh Template mesh identical in model <and> pixel extents.
-         * @param {THREE.Vector2} meshExtents Final mesh extents.
-         * @param {THREE.Material} material Material to assign to the mesh.
-         * @returns {THREE.Mesh}
-         */
-        DepthBuffer.prototype.constructMeshFromTemplate = function (mesh, meshExtents, material) {
-            // The mesh template matches the aspect ratio of the template.
-            // Now, scale the mesh to the final target dimensions.
-            var boundingBox = Graphics_1.Graphics.getBoundingBoxFromObject(mesh);
-            var scale = meshExtents.x / boundingBox.getSize().x;
-            mesh.scale.x = scale;
-            mesh.scale.y = scale;
-            var meshVertices = mesh.geometry.vertices;
-            var depthCount = this.depths.length;
-            chai_1.assert(meshVertices.length === depthCount);
-            for (var iDepth = 0; iDepth < depthCount; iDepth++) {
-                var modelDepth = this.normalizedToModelDepth(this.depths[iDepth]);
-                meshVertices[iDepth].set(meshVertices[iDepth].x, meshVertices[iDepth].y, modelDepth);
-            }
-            var meshGeometry = mesh.geometry;
-            mesh = new THREE.Mesh(meshGeometry, material);
-            return mesh;
-        };
-        /**
-         * @description Constructs a new mesh from a collection of triangles.
-         * @param {THREE.Vector2} meshXYExtents Extents of the mesh.
-         * @param {THREE.Material} material Material to assign to the mesh.
-         * @returns {THREE.Mesh}
-         */
-        DepthBuffer.prototype.constructMesh = function (meshXYExtents, material) {
-            var meshGeometry = new THREE.Geometry();
-            var faceSize = meshXYExtents.x / (this.width - 1);
-            var baseVertexIndex = 0;
-            var meshLowerLeft = new THREE.Vector2(-(meshXYExtents.x / 2), -(meshXYExtents.y / 2));
-            for (var iRow = 0; iRow < (this.height - 1); iRow++) {
-                for (var iColumn = 0; iColumn < (this.width - 1); iColumn++) {
-                    var facePair = this.constructTriFacesAtOffset(iRow, iColumn, meshLowerLeft, faceSize, baseVertexIndex);
-                    (_a = meshGeometry.vertices).push.apply(_a, facePair.vertices);
-                    (_b = meshGeometry.faces).push.apply(_b, facePair.faces);
-                    baseVertexIndex += 4;
-                }
-            }
-            meshGeometry.mergeVertices();
-            var mesh = new THREE.Mesh(meshGeometry, material);
-            return mesh;
-            var _a, _b;
-        };
-        /**
-         * Constructs a mesh of the given base dimension.
-         * @param meshXYExtents Base dimensions (model units). Height is controlled by DB aspect ratio.
-         * @param material Material to assign to mesh.
-         */
-        DepthBuffer.prototype.mesh = function (material) {
-            var timerTag = Services_2.Services.timer.mark('DepthBuffer.mesh');
-            // The mesh size is in real world units to match the depth buffer offsets which are also in real world units.
-            // Find the size of the near plane to size the mesh to the model units.
-            var meshXYExtents = Camera_1.Camera.getNearPlaneExtents(this.camera);
-            if (!material)
-                material = new THREE.MeshPhongMaterial(DepthBuffer.DefaultMeshPhongMaterialParameters);
-            var meshCache = DepthBuffer.Cache.getMesh(meshXYExtents, new THREE.Vector2(this.width, this.height));
-            var mesh = meshCache ? this.constructMeshFromTemplate(meshCache, meshXYExtents, material) : this.constructMesh(meshXYExtents, material);
-            mesh.name = DepthBuffer.MeshModelName;
-            var meshGeometry = mesh.geometry;
-            meshGeometry.verticesNeedUpdate = true;
-            meshGeometry.normalsNeedUpdate = true;
-            meshGeometry.elementsNeedUpdate = true;
-            var faceNormalsTag = Services_2.Services.timer.mark('meshGeometry.computeFaceNormals');
-            meshGeometry.computeVertexNormals();
-            meshGeometry.computeFaceNormals();
-            Services_2.Services.timer.logElapsedTime(faceNormalsTag);
-            // Mesh was constructed with Z = depth buffer(X,Y).
-            // Now rotate mesh to align with viewer XY plane so Top view is looking down on the mesh.
-            mesh.rotateX(-Math.PI / 2);
-            DepthBuffer.Cache.addMesh(meshXYExtents, new THREE.Vector2(this.width, this.height), mesh);
-            Services_2.Services.timer.logElapsedTime(timerTag);
-            return mesh;
-        };
-        /**
          * Analyzes properties of a depth buffer.
          */
         DepthBuffer.prototype.analyze = function () {
@@ -1546,17 +1388,7 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Viewe
             this._logger.addMessage("Minimum = " + this.minimum.toFixed(decimalPlaces), messageStyle);
             this._logger.addMessage("Maximum = " + this.maximum.toFixed(decimalPlaces), messageStyle);
         };
-        DepthBuffer.Cache = new MeshCache();
-        DepthBuffer.MeshModelName = 'ModelMesh';
         DepthBuffer.NormalizedTolerance = .001;
-        DepthBuffer.DefaultMeshPhongMaterialParameters = {
-            side: THREE.DoubleSide,
-            wireframe: false,
-            color: 0x42eef4,
-            specular: 0xffffff,
-            reflectivity: 0.75,
-            shininess: 100
-        };
         return DepthBuffer;
     }());
     exports.DepthBuffer = DepthBuffer;
@@ -1574,7 +1406,7 @@ define("System/Tools", ["require", "exports"], function (require, exports) {
      * General utility routines
      * @class
      */
-    var Tools = (function () {
+    var Tools = /** @class */ (function () {
         /**
          * @constructor
          */
@@ -1594,6 +1426,15 @@ define("System/Tools", ["require", "exports"], function (require, exports) {
             return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
                 s4() + '-' + s4() + s4() + s4();
         };
+        /**
+         * @description Utility method to sleep for a given period of time.
+         * @static
+         * @param {any} milliseconds
+         * @returns Promise<void>
+         */
+        Tools.sleep = function (milliseconds) {
+            return new Promise(function (resolve) { return setTimeout(resolve, milliseconds); });
+        };
         return Tools;
     }());
     exports.Tools = Tools;
@@ -1610,14 +1451,14 @@ define("System/Tools", ["require", "exports"], function (require, exports) {
     JSON compatible constructor parameters
     Fixed resolution; resizing support is not required.
 */
-define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "Viewers/Camera", "DepthBuffer/DepthBuffer", "Graphics/Graphics", "System/Services", "System/Tools"], function (require, exports, THREE, Camera_2, DepthBuffer_1, Graphics_2, Services_3, Tools_1) {
+define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "Viewers/Camera", "DepthBuffer/DepthBuffer", "Graphics/Graphics", "System/Services", "System/Tools"], function (require, exports, THREE, Camera_1, DepthBuffer_1, Graphics_1, Services_3, Tools_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
      * @class
      * DepthBufferFactory
      */
-    var DepthBufferFactory = (function () {
+    var DepthBufferFactory = /** @class */ (function () {
         /**
          * @constructor
          * @param parameters Initialization parameters (DepthBufferFactoryParameters)
@@ -1683,7 +1524,7 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "Viewer
          * Handle a mouse down event on the canvas.
          */
         DepthBufferFactory.prototype.onMouseDown = function (event) {
-            var deviceCoordinates = Graphics_2.Graphics.deviceCoordinatesFromJQEvent(event, $(event.target));
+            var deviceCoordinates = Graphics_1.Graphics.deviceCoordinatesFromJQEvent(event, $(event.target));
             this._logger.addInfoMessage("device = " + deviceCoordinates.x + ", " + deviceCoordinates.y);
             var decimalPlaces = 2;
             var row = (deviceCoordinates.y + 1) / 2 * this._depthBuffer.height;
@@ -1859,7 +1700,7 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "Viewer
             var camera = new THREE.PerspectiveCamera();
             camera.copy(this._camera);
             this._camera = camera;
-            var clippingPlanes = Camera_2.Camera.getBoundingClippingPlanes(this._camera, this._model);
+            var clippingPlanes = Camera_1.Camera.getBoundingClippingPlanes(this._camera, this._model);
             this._camera.near = clippingPlanes.near;
             this._camera.far = clippingPlanes.far;
             this._camera.updateProjectionMatrix();
@@ -1870,7 +1711,7 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "Viewer
         DepthBufferFactory.prototype.createDepthBuffer = function () {
             var timerTag = Services_3.Services.timer.mark('DepthBufferFactory.createDepthBuffer');
             if (this._boundedClipping ||
-                ((this._camera.near === Camera_2.Camera.DefaultNearClippingPlane) && (this._camera.far === Camera_2.Camera.DefaultFarClippingPlane)))
+                ((this._camera.near === Camera_1.Camera.DefaultNearClippingPlane) && (this._camera.far === Camera_1.Camera.DefaultFarClippingPlane)))
                 this.setCameraClippingPlanes();
             this._renderer.render(this._scene, this._camera, this._target);
             // (optional) preview encoded RGBA texture; drawn by shader but not persisted
@@ -1895,7 +1736,7 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "Viewer
     }());
     exports.DepthBufferFactory = DepthBufferFactory;
 });
-define("Viewers/Camera", ["require", "exports", "three", "DepthBuffer/DepthBufferFactory", "Graphics/Graphics", "System/Services"], function (require, exports, THREE, DepthBufferFactory_1, Graphics_3, Services_4) {
+define("Viewers/Camera", ["require", "exports", "three", "DepthBuffer/DepthBufferFactory", "Graphics/Graphics", "System/Services"], function (require, exports, THREE, DepthBufferFactory_1, Graphics_2, Services_4) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -1919,7 +1760,7 @@ define("Viewers/Camera", ["require", "exports", "three", "DepthBuffer/DepthBuffe
      * General camera utility methods.
      * @class
      */
-    var Camera = (function () {
+    var Camera = /** @class */ (function () {
         /**
          * @constructor
          */
@@ -1946,7 +1787,7 @@ define("Viewers/Camera", ["require", "exports", "three", "DepthBuffer/DepthBuffe
          */
         Camera.getBoundingClippingPlanes = function (camera, model) {
             var cameraMatrixWorldInverse = camera.matrixWorldInverse;
-            var boundingBoxView = Graphics_3.Graphics.getTransformedBoundingBox(model, cameraMatrixWorldInverse);
+            var boundingBoxView = Graphics_2.Graphics.getTransformedBoundingBox(model, cameraMatrixWorldInverse);
             // The bounding box is world-axis aligned. 
             // In View coordinates, the camera is at the origin.
             // The bounding near plane is the maximum Z of the bounding box.
@@ -1972,12 +1813,12 @@ define("Viewers/Camera", ["require", "exports", "three", "DepthBuffer/DepthBuffe
         Camera.getDefaultBoundingBox = function (model) {
             var boundingBox = new THREE.Box3();
             if (model)
-                boundingBox = Graphics_3.Graphics.getBoundingBoxFromObject(model);
+                boundingBox = Graphics_2.Graphics.getBoundingBoxFromObject(model);
             if (!boundingBox.isEmpty())
                 return boundingBox;
             // unit sphere proxy
-            var sphereProxy = Graphics_3.Graphics.createSphereMesh(new THREE.Vector3(), 1);
-            boundingBox = Graphics_3.Graphics.getBoundingBoxFromObject(sphereProxy);
+            var sphereProxy = Graphics_2.Graphics.createSphereMesh(new THREE.Vector3(), 1);
+            boundingBox = Graphics_2.Graphics.getBoundingBoxFromObject(sphereProxy);
             return boundingBox;
         };
         /**
@@ -1994,7 +1835,7 @@ define("Viewers/Camera", ["require", "exports", "three", "DepthBuffer/DepthBuffe
             var cameraMatrixWorld = camera.matrixWorld;
             var cameraMatrixWorldInverse = camera.matrixWorldInverse;
             // Find camera position in View coordinates...
-            var boundingBoxView = Graphics_3.Graphics.getTransformedBoundingBox(model, cameraMatrixWorldInverse);
+            var boundingBoxView = Graphics_2.Graphics.getTransformedBoundingBox(model, cameraMatrixWorldInverse);
             var verticalFieldOfViewRadians = (camera.fov / 2) * (Math.PI / 180);
             var horizontalFieldOfViewRadians = Math.atan(camera.aspect * Math.tan(verticalFieldOfViewRadians));
             var cameraZVerticalExtents = (boundingBoxView.getSize().y / 2) / Math.tan(verticalFieldOfViewRadians);
@@ -2023,7 +1864,7 @@ define("Viewers/Camera", ["require", "exports", "three", "DepthBuffer/DepthBuffe
         Camera.getStandardViewCamera = function (view, viewAspect, model) {
             var timerTag = Services_4.Services.timer.mark('Camera.getStandardView');
             var camera = Camera.getDefaultCamera(viewAspect);
-            var boundingBox = Graphics_3.Graphics.getBoundingBoxFromObject(model);
+            var boundingBox = Graphics_2.Graphics.getBoundingBoxFromObject(model);
             var centerX = boundingBox.getCenter().x;
             var centerY = boundingBox.getCenter().y;
             var centerZ = boundingBox.getCenter().z;
@@ -2140,7 +1981,7 @@ define("System/EventManager", ["require", "exports"], function (require, exports
      * General event management and dispatching.
      * @class
      */
-    var EventManager = (function () {
+    var EventManager = /** @class */ (function () {
         /**
         /*
          * Creates EventManager object. It needs to be called with '.call' to add the functionality to an object.
@@ -2649,7 +2490,7 @@ define("MeshTransform/MeshTransform", ["require", "exports"], function (require,
      * MeshTransform
      * @class MeshTransform
      */
-    var MeshTransform = (function () {
+    var MeshTransform = /** @class */ (function () {
         /**
          * @constructor
          */
@@ -2701,7 +2542,7 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
     /**
      * Represents the result of a client request.
      */
-    var RequestResponse = (function () {
+    var RequestResponse = /** @class */ (function () {
         /**
          * Constructs an instance of a RequestResponse.
          * @param {Response} response Raw response from the request.
@@ -2745,7 +2586,7 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
      * General HTML and DOM routines
      * @class
      */
-    var HttpLibrary = (function () {
+    var HttpLibrary = /** @class */ (function () {
         /**
          * @constructor
          */
@@ -2759,16 +2600,10 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
          */
         HttpLibrary.postFile = function (postUrl, fileData, fileMetadata) {
             var onComplete = function (request) {
-                return __awaiter(this, void 0, void 0, function () {
-                    var filePath, blob;
-                    return __generator(this, function (_a) {
-                        Services_5.Services.consoleLogger.addInfoMessage('Metadata saved');
-                        filePath = request.getResponseHeader('Location');
-                        blob = new Blob([fileData], { type: ContentType.OctetStream });
-                        HttpLibrary.sendXMLHttpRequest(filePath + "/file", MethodType.Post, ContentType.OctetStream, blob, null);
-                        return [2 /*return*/];
-                    });
-                });
+                Services_5.Services.consoleLogger.addInfoMessage('Metadata saved');
+                var filePath = request.getResponseHeader('Location');
+                var blob = new Blob([fileData], { type: ContentType.OctetStream });
+                HttpLibrary.sendXMLHttpRequest(filePath + "/file", MethodType.Post, ContentType.OctetStream, blob, null);
             };
             // send JSON metadata first to create the resource and obtain the Id
             HttpLibrary.sendXMLHttpRequest(postUrl, MethodType.Post, ContentType.Json, JSON.stringify(fileMetadata), onComplete);
@@ -2834,7 +2669,7 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
          * @param {Uint8} buffer The buffer to convert.
          * @param {Function} callback The function to call when conversion is complete.
          */
-        HttpLibrary.largeBufferToString = function (buffer) {
+        HttpLibrary.largeBufferToStringAsync = function (buffer) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     return [2 /*return*/, new Promise(function (resolve, reject) {
@@ -2861,7 +2696,7 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
                     switch (_a.label) {
                         case 0:
                             json = JSON.stringify(fileMetadata);
-                            return [4 /*yield*/, HttpLibrary.submitHttpRequest(postUrl, MethodType.Post, ContentType.Json, json)];
+                            return [4 /*yield*/, HttpLibrary.submitHttpRequestAsync(postUrl, MethodType.Post, ContentType.Json, json)];
                         case 1:
                             result = _a.sent();
                             if (result.response.status != HttpStatus_1.HttpStatusCode.CREATED) {
@@ -2870,7 +2705,7 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
                             headers = result.response.headers;
                             filePath = headers.get('Location');
                             blob = new Blob([fileData], { type: ContentType.OctetStream });
-                            return [4 /*yield*/, HttpLibrary.submitHttpRequest(filePath + "/file", MethodType.Post, ContentType.OctetStream, blob)];
+                            return [4 /*yield*/, HttpLibrary.submitHttpRequestAsync(filePath + "/file", MethodType.Post, ContentType.OctetStream, blob)];
                         case 2:
                             result = _a.sent();
                             return [2 /*return*/, result.response.ok];
@@ -2885,7 +2720,7 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
          * @param {ContentType} contentType HTTP content type.
          * @param {any} requestData Data to send in the request.
          */
-        HttpLibrary.submitHttpRequest = function (endpoint, methodType, contentType, requestData) {
+        HttpLibrary.submitHttpRequestAsync = function (endpoint, methodType, contentType, requestData) {
             return __awaiter(this, void 0, void 0, function () {
                 var headers, requestMode, cacheMode, init, response, contentString, result;
                 return __generator(this, function (_a) {
@@ -2924,7 +2759,7 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
 //                                                                         //                                                                          
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
-define("Mesh/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", "Graphics/Graphics", "System/Services"], function (require, exports, THREE, chai_2, Camera_3, Graphics_4, Services_6) {
+define("Mesh/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", "Graphics/Graphics", "System/Services", "System/Tools"], function (require, exports, THREE, chai_2, Camera_2, Graphics_3, Services_6, Tools_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
@@ -2932,7 +2767,7 @@ define("Mesh/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", "G
      *  If a mesh exists in the cache of the required dimensions, it is used as a template.
      *  @class
      */
-    var MeshCache = (function () {
+    var MeshCache = /** @class */ (function () {
         /**
          * Constructor
          */
@@ -2970,7 +2805,7 @@ define("Mesh/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", "G
             var key = this.generateKey(modelExtents, pixelExtents);
             if (this._cache[key])
                 return;
-            var meshClone = Graphics_4.Graphics.cloneAndTransformObject(mesh);
+            var meshClone = Graphics_3.Graphics.cloneAndTransformObject(mesh);
             this._cache[key] = meshClone;
         };
         return MeshCache;
@@ -2979,13 +2814,12 @@ define("Mesh/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", "G
      * @class
      * Mesh
      */
-    var Mesh = (function () {
+    var Mesh = /** @class */ (function () {
         /**
          * @constructor
          * @param parameters Initialization parameters (MeshParameters)
          */
         function Mesh(parameters) {
-            this._logger = null; // logger
             // required
             this._width = parameters.width;
             this._height = parameters.height;
@@ -3085,7 +2919,7 @@ define("Mesh/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", "G
         Mesh.prototype.constructMeshFromTemplate = function (mesh, meshExtents, material) {
             // The mesh template matches the aspect ratio of the template.
             // Now, scale the mesh to the final target dimensions.
-            var boundingBox = Graphics_4.Graphics.getBoundingBoxFromObject(mesh);
+            var boundingBox = Graphics_3.Graphics.getBoundingBoxFromObject(mesh);
             var scale = meshExtents.x / boundingBox.getSize().x;
             mesh.scale.x = scale;
             mesh.scale.y = scale;
@@ -3133,7 +2967,7 @@ define("Mesh/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", "G
             var timerTag = Services_6.Services.timer.mark('DepthBuffer.mesh');
             // The mesh size is in real world units to match the depth buffer offsets which are also in real world units.
             // Find the size of the near plane to size the mesh to the model units.
-            var meshXYExtents = Camera_3.Camera.getNearPlaneExtents(this.depthBuffer.camera);
+            var meshXYExtents = Camera_2.Camera.getNearPlaneExtents(this.depthBuffer.camera);
             if (!material)
                 material = new THREE.MeshPhongMaterial(Mesh.DefaultMeshPhongMaterialParameters);
             var meshCache = Mesh.Cache.getMesh(meshXYExtents, new THREE.Vector2(this.width, this.height));
@@ -3158,17 +2992,30 @@ define("Mesh/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", "G
          * Generates a mesh from the active model and camera.
          * @param parameters Generation parameters (MeshGenerateParameters)
          */
-        Mesh.prototype.generateRelief = function (parameters) {
-            if (!this.verifyMeshSettings())
-                return null;
-            var mesh = this.mesh();
-            var relief = {
-                width: this._width,
-                height: this._height,
-                mesh: mesh,
-                depthBuffer: this._depthBuffer
-            };
-            return relief;
+        Mesh.prototype.generateReliefAsync = function (parameters) {
+            return __awaiter(this, void 0, void 0, function () {
+                var mesh, relief;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (!this.verifyMeshSettings())
+                                return [2 /*return*/, null];
+                            this._logger.addInfoMessage('sleep begin');
+                            return [4 /*yield*/, Tools_2.Tools.sleep(10000)];
+                        case 1:
+                            _a.sent();
+                            this._logger.addInfoMessage('sleep complete');
+                            mesh = this.mesh();
+                            relief = {
+                                width: this._width,
+                                height: this._height,
+                                mesh: mesh,
+                                depthBuffer: this._depthBuffer
+                            };
+                            return [2 /*return*/, relief];
+                    }
+                });
+            });
         };
         Mesh.Cache = new MeshCache();
         Mesh.MeshModelName = 'ModelMesh';
@@ -3197,7 +3044,7 @@ define("Graphics/Materials", ["require", "exports", "three"], function (require,
      * General THREE.js Material classes and helpers
      * @class
      */
-    var Materials = (function () {
+    var Materials = /** @class */ (function () {
         /**
          * @constructor
          */
@@ -3260,7 +3107,7 @@ define("Viewers/ModelViewerControls", ["require", "exports", "dat-gui", "System/
      * @class
      * ModelViewer Settings
      */
-    var ModelViewerSettings = (function () {
+    var ModelViewerSettings = /** @class */ (function () {
         function ModelViewerSettings() {
             this.displayGrid = true;
         }
@@ -3269,7 +3116,7 @@ define("Viewers/ModelViewerControls", ["require", "exports", "dat-gui", "System/
     /**
      * ModelViewer UI Controls.
      */
-    var ModelViewerControls = (function () {
+    var ModelViewerControls = /** @class */ (function () {
         /** Default constructor
          * @class ModelViewerControls
          * @constructor
@@ -3689,7 +3536,7 @@ define("Viewers/TrackballControls", ["require", "exports", "three"], function (r
     TrackballControls.prototype = Object.create(THREE.EventDispatcher.prototype);
     TrackballControls.prototype.constructor = TrackballControls;
 });
-define("Viewers/CameraControls", ["require", "exports", "three", "dat-gui", "Viewers/Camera", "System/Html", "Graphics/Graphics"], function (require, exports, THREE, dat, Camera_4, Html_2, Graphics_5) {
+define("Viewers/CameraControls", ["require", "exports", "three", "dat-gui", "Viewers/Camera", "System/Html", "Graphics/Graphics"], function (require, exports, THREE, dat, Camera_3, Html_2, Graphics_4) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -3701,7 +3548,7 @@ define("Viewers/CameraControls", ["require", "exports", "three", "dat-gui", "Vie
      * @class
      * CameraControls
      */
-    var CameraControlSettings = (function () {
+    var CameraControlSettings = /** @class */ (function () {
         function CameraControlSettings(camera, fitView, addCwmeraHelper, boundClippingPlanes) {
             this.fitView = fitView;
             this.addCameraHelper = addCwmeraHelper;
@@ -3712,7 +3559,7 @@ define("Viewers/CameraControls", ["require", "exports", "three", "dat-gui", "Vie
                 near: camera.near,
                 far: camera.far,
                 fieldOfView: camera.fov,
-                standardView: Camera_4.StandardView.Front
+                standardView: Camera_3.StandardView.Front
             };
         }
         return CameraControlSettings;
@@ -3720,7 +3567,7 @@ define("Viewers/CameraControls", ["require", "exports", "three", "dat-gui", "Vie
     /**
      * camera UI Controls.
      */
-    var CameraControls = (function () {
+    var CameraControls = /** @class */ (function () {
         /** Default constructor
          * @class CameraControls
          * @constructor
@@ -3742,19 +3589,19 @@ define("Viewers/CameraControls", ["require", "exports", "three", "dat-gui", "Vie
          */
         CameraControls.prototype.addCameraHelper = function () {
             // remove existing
-            Graphics_5.Graphics.removeAllByName(this._viewer.scene, Graphics_5.ObjectNames.CameraHelper);
+            Graphics_4.Graphics.removeAllByName(this._viewer.scene, Graphics_4.ObjectNames.CameraHelper);
             // World
-            Graphics_5.Graphics.addCameraHelper(this._viewer.camera, this._viewer.scene, this._viewer.model);
+            Graphics_4.Graphics.addCameraHelper(this._viewer.camera, this._viewer.scene, this._viewer.model);
             // View
-            var modelView = Graphics_5.Graphics.cloneAndTransformObject(this._viewer.model, this._viewer.camera.matrixWorldInverse);
-            var cameraView = Camera_4.Camera.getDefaultCamera(this._viewer.aspectRatio);
-            Graphics_5.Graphics.addCameraHelper(cameraView, this._viewer.scene, modelView);
+            var modelView = Graphics_4.Graphics.cloneAndTransformObject(this._viewer.model, this._viewer.camera.matrixWorldInverse);
+            var cameraView = Camera_3.Camera.getDefaultCamera(this._viewer.aspectRatio);
+            Graphics_4.Graphics.addCameraHelper(cameraView, this._viewer.scene, modelView);
         };
         /**
          * Force the far clipping plane to the model extents.
          */
         CameraControls.prototype.boundClippingPlanes = function () {
-            var clippingPlanes = Camera_4.Camera.getBoundingClippingPlanes(this._viewer.camera, this._viewer.model);
+            var clippingPlanes = Camera_3.Camera.getBoundingClippingPlanes(this._viewer.camera, this._viewer.model);
             // camera
             this._viewer.camera.near = clippingPlanes.near;
             this._viewer.camera.far = clippingPlanes.far;
@@ -3795,13 +3642,13 @@ define("Viewers/CameraControls", ["require", "exports", "three", "dat-gui", "Vie
             var controlCameraHelper = cameraOptions.add(this._cameraControlSettings, 'addCameraHelper').name('Camera Helper');
             // Standard Views
             var viewOptions = {
-                Front: Camera_4.StandardView.Front,
-                Back: Camera_4.StandardView.Back,
-                Top: Camera_4.StandardView.Top,
-                Isometric: Camera_4.StandardView.Isometric,
-                Left: Camera_4.StandardView.Left,
-                Right: Camera_4.StandardView.Right,
-                Bottom: Camera_4.StandardView.Bottom
+                Front: Camera_3.StandardView.Front,
+                Back: Camera_3.StandardView.Back,
+                Top: Camera_3.StandardView.Top,
+                Isometric: Camera_3.StandardView.Isometric,
+                Left: Camera_3.StandardView.Left,
+                Right: Camera_3.StandardView.Right,
+                Bottom: Camera_3.StandardView.Bottom
             };
             var controlStandardViews = cameraOptions.add(this._cameraControlSettings.cameraSettings, 'standardView', viewOptions).name('Standard View').listen();
             controlStandardViews.onChange(function (viewSetting) {
@@ -3855,7 +3702,7 @@ define("Viewers/CameraControls", ["require", "exports", "three", "dat-gui", "Vie
     }());
     exports.CameraControls = CameraControls;
 });
-define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "Viewers/CameraControls", "System/EventManager", "Graphics/Graphics", "System/Services", "Viewers/TrackballControls"], function (require, exports, THREE, Camera_5, CameraControls_1, EventManager_1, Graphics_6, Services_7, TrackballControls_1) {
+define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "Viewers/CameraControls", "System/EventManager", "Graphics/Graphics", "System/Services", "Viewers/TrackballControls"], function (require, exports, THREE, Camera_4, CameraControls_1, EventManager_1, Graphics_5, Services_7, TrackballControls_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -3866,7 +3713,7 @@ define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "View
     /**
      * @exports Viewer/Viewer
      */
-    var Viewer = (function () {
+    var Viewer = /** @class */ (function () {
         /**
          * Default constructor
          * @class Viewer
@@ -3890,7 +3737,7 @@ define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "View
             this._name = name;
             this._eventManager = new EventManager_1.EventManager();
             this._logger = Services_7.Services.consoleLogger;
-            this._canvas = Graphics_6.Graphics.initializeCanvas(modelCanvasId);
+            this._canvas = Graphics_5.Graphics.initializeCanvas(modelCanvasId);
             this._width = this._canvas.offsetWidth;
             this._height = this._canvas.offsetHeight;
             this.initialize();
@@ -3961,7 +3808,7 @@ define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "View
         Viewer.prototype.setModel = function (value) {
             // N.B. This is a method not a property so a sub class can override.
             // https://github.com/Microsoft/TypeScript/issues/4465
-            Graphics_6.Graphics.removeObjectChildren(this._root, false);
+            Graphics_5.Graphics.removeObjectChildren(this._root, false);
             this._root.add(value);
         };
         Object.defineProperty(Viewer.prototype, "aspectRatio", {
@@ -4002,7 +3849,7 @@ define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "View
          * Adds a test sphere to a scene.
          */
         Viewer.prototype.populateScene = function () {
-            var mesh = Graphics_6.Graphics.createSphereMesh(new THREE.Vector3(), 2);
+            var mesh = Graphics_5.Graphics.createSphereMesh(new THREE.Vector3(), 2);
             mesh.visible = false;
             this._root.add(mesh);
         };
@@ -4030,7 +3877,7 @@ define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "View
          * Initialize the viewer camera
          */
         Viewer.prototype.initializeCamera = function () {
-            this.camera = Camera_5.Camera.getStandardViewCamera(Camera_5.StandardView.Front, this.aspectRatio, this.model);
+            this.camera = Camera_4.Camera.getStandardViewCamera(Camera_4.StandardView.Front, this.aspectRatio, this.model);
         };
         /**
          * Adds lighting to the scene
@@ -4052,7 +3899,7 @@ define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "View
             this._controls = new TrackballControls_1.TrackballControls(this.camera, this._renderer.domElement);
             // N.B. https://stackoverflow.com/questions/10325095/threejs-camera-lookat-has-no-effect-is-there-something-im-doing-wrong
             this._controls.position0.copy(this.camera.position);
-            var boundingBox = Graphics_6.Graphics.getBoundingBoxFromObject(this._root);
+            var boundingBox = Graphics_5.Graphics.getBoundingBoxFromObject(this._root);
             this._controls.target.copy(boundingBox.getCenter());
         };
         /**
@@ -4071,7 +3918,7 @@ define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "View
                 var keyCode = event.keyCode;
                 switch (keyCode) {
                     case 70:// F               
-                        _this.camera = Camera_5.Camera.getStandardViewCamera(Camera_5.StandardView.Front, _this.aspectRatio, _this.model);
+                        _this.camera = Camera_4.Camera.getStandardViewCamera(Camera_4.StandardView.Front, _this.aspectRatio, _this.model);
                         break;
                 }
             }, false);
@@ -4096,14 +3943,14 @@ define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "View
          * Removes all scene objects
          */
         Viewer.prototype.clearAllAssests = function () {
-            Graphics_6.Graphics.removeObjectChildren(this._root, false);
+            Graphics_5.Graphics.removeObjectChildren(this._root, false);
         };
         /**
          * Creates the root object in the scene
          */
         Viewer.prototype.createRoot = function () {
             this._root = new THREE.Object3D();
-            this._root.name = Graphics_6.ObjectNames.Root;
+            this._root.name = Graphics_5.ObjectNames.Root;
             this.scene.add(this._root);
         };
         //#endregion
@@ -4113,7 +3960,7 @@ define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "View
          * @param {StandardView} view Camera settings to apply.
          */
         Viewer.prototype.setCameraToStandardView = function (view) {
-            var standardViewCamera = Camera_5.Camera.getStandardViewCamera(view, this.aspectRatio, this.model);
+            var standardViewCamera = Camera_4.Camera.getStandardViewCamera(view, this.aspectRatio, this.model);
             this.camera = standardViewCamera;
             this._cameraControls.synchronizeCameraSettings(view);
         };
@@ -4121,7 +3968,7 @@ define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "View
          * @description Fits the active view.
          */
         Viewer.prototype.fitView = function () {
-            this.camera = Camera_5.Camera.getFitViewCamera(Camera_5.Camera.getSceneCamera(this.camera, this.aspectRatio), this.model);
+            this.camera = Camera_4.Camera.getFitViewCamera(Camera_4.Camera.getSceneCamera(this.camera, this.aspectRatio), this.model);
         };
         //#endregion
         //#region Window Resize
@@ -4182,7 +4029,7 @@ define("Viewers/ModelViewer", ["require", "exports", "three", "System/EventManag
     /**
      * @exports Viewer/ModelViewer
      */
-    var ModelViewer = (function (_super) {
+    var ModelViewer = /** @class */ (function (_super) {
         __extends(ModelViewer, _super);
         /**
          * Default constructor
@@ -4252,7 +4099,7 @@ define("Viewers/ModelViewer", ["require", "exports", "three", "System/EventManag
 define("ModelExporters/OBJExporter", ["require", "exports", "three"], function (require, exports, THREE) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var OBJExporter = (function () {
+    var OBJExporter = /** @class */ (function () {
         function OBJExporter() {
         }
         OBJExporter.prototype.parse = function (object) {
@@ -4406,7 +4253,7 @@ define("ModelExporters/OBJExporter", ["require", "exports", "three"], function (
     }());
     exports.OBJExporter = OBJExporter;
 });
-define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/V1/Models/DtoModels", "Viewers/Camera", "DepthBuffer/DepthBufferFactory", "System/EventManager", "System/Html", "System/Http", "Api/V1/Interfaces/IDepthBuffer", "Mesh/Mesh", "System/Services"], function (require, exports, dat, Dto, Camera_6, DepthBufferFactory_2, EventManager_3, Html_3, Http_1, IDepthBuffer_1, Mesh_1, Services_8) {
+define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/V1/Models/DtoModels", "Viewers/Camera", "DepthBuffer/DepthBufferFactory", "System/EventManager", "System/Html", "System/Http", "Api/V1/Interfaces/IDepthBuffer", "Mesh/Mesh", "System/Services"], function (require, exports, dat, Dto, Camera_5, DepthBufferFactory_2, EventManager_3, Html_3, Http_1, IDepthBuffer_1, Mesh_1, Services_8) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -4418,7 +4265,7 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/
      * @class
      * ComposerViewSettings
      */
-    var ComposerViewSettings = (function () {
+    var ComposerViewSettings = /** @class */ (function () {
         function ComposerViewSettings(generateRelief, saveRelief) {
             this.meshTransform = {
                 width: 100.0,
@@ -4437,7 +4284,7 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/
     /**
      * Composer Controller
      */
-    var ComposerController = (function () {
+    var ComposerController = /** @class */ (function () {
         /** Default constructor
          * @class ComposerViewControls
          * @constructor
@@ -4454,30 +4301,33 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/
          * @param model Newly loaded model.
          */
         ComposerController.prototype.onNewModel = function (event, model) {
-            this._composerView._modelView.modelViewer.setCameraToStandardView(Camera_6.StandardView.Front);
-            this._composerView._meshView.meshViewer.setCameraToStandardView(Camera_6.StandardView.Top);
+            this._composerView._modelView.modelViewer.setCameraToStandardView(Camera_5.StandardView.Front);
+            this._composerView._meshView.meshViewer.setCameraToStandardView(Camera_5.StandardView.Top);
         };
         /**
          * Generates a relief from the current model camera.
          */
-        ComposerController.prototype.generateRelief = function () {
+        ComposerController.prototype.generateReliefAsync = function () {
             return __awaiter(this, void 0, void 0, function () {
-                var width, height, factory, depthBuffer, mesh, camera;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
+                var width, height, factory, depthBuffer, mesh, _a, camera;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
                         case 0:
                             width = 512;
                             height = width / this._composerView.modelView.modelViewer.aspectRatio;
                             factory = new DepthBufferFactory_2.DepthBufferFactory({ width: width, height: height, model: this._composerView.modelView.modelViewer.model, camera: this._composerView.modelView.modelViewer.camera, addCanvasToDOM: false });
                             depthBuffer = factory.createDepthBuffer();
                             mesh = new Mesh_1.Mesh({ width: width, height: height, depthBuffer: depthBuffer });
-                            this._relief = mesh.generateRelief({});
-                            return [4 /*yield*/, this.postCamera()];
+                            _a = this;
+                            return [4 /*yield*/, mesh.generateReliefAsync({})];
                         case 1:
-                            camera = _a.sent();
-                            return [4 /*yield*/, this.postDepthBuffer(camera.id)];
+                            _a._relief = _b.sent();
+                            return [4 /*yield*/, this.postCameraAsync()];
                         case 2:
-                            _a.sent();
+                            camera = _b.sent();
+                            return [4 /*yield*/, this.postDepthBufferAsync(camera.id)];
+                        case 3:
+                            _b.sent();
                             this._composerView._meshView.meshViewer.setModel(this._relief.mesh);
                             if (this._initialMeshGeneration) {
                                 this._composerView._meshView.meshViewer.fitView();
@@ -4491,7 +4341,7 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/
         /**
          * Saves the camera.
          */
-        ComposerController.prototype.postCamera = function () {
+        ComposerController.prototype.postCameraAsync = function () {
             return __awaiter(this, void 0, void 0, function () {
                 var exportTag, postUrl, camera, result;
                 return __generator(this, function (_a) {
@@ -4502,7 +4352,7 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/
                             camera = new Dto.Camera();
                             camera.name = 'Camera';
                             camera.description = 'Camera Description';
-                            return [4 /*yield*/, Http_1.HttpLibrary.submitHttpRequest(postUrl, Http_1.MethodType.Post, Http_1.ContentType.Json, JSON.stringify(camera))];
+                            return [4 /*yield*/, Http_1.HttpLibrary.submitHttpRequestAsync(postUrl, Http_1.MethodType.Post, Http_1.ContentType.Json, JSON.stringify(camera))];
                         case 1:
                             result = _a.sent();
                             Services_8.Services.timer.logElapsedTime(exportTag);
@@ -4514,7 +4364,7 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/
         /**
          * Saves the depth buffer.
          */
-        ComposerController.prototype.postDepthBuffer = function (cameraId) {
+        ComposerController.prototype.postDepthBufferAsync = function (cameraId) {
             return __awaiter(this, void 0, void 0, function () {
                 var fileName, exportTag, postUrl, depthBuffer;
                 return __generator(this, function (_a) {
@@ -4557,7 +4407,7 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/
          */
         ComposerController.prototype.initializeUIControls = function () {
             var scope = this;
-            this._composerViewSettings = new ComposerViewSettings(this.generateRelief.bind(this), this.saveRelief.bind(this));
+            this._composerViewSettings = new ComposerViewSettings(this.generateReliefAsync.bind(this), this.saveRelief.bind(this));
             // Init dat.gui and controls for the UI
             var gui = new dat.GUI({
                 autoPlace: false,
@@ -5109,7 +4959,7 @@ define("ModelLoaders/OBJLoader", ["require", "exports", "three", "System/Service
         }
     };
 });
-define("ModelLoaders/TestModelLoader", ["require", "exports", "three", "Graphics/Graphics"], function (require, exports, THREE, Graphics_7) {
+define("ModelLoaders/TestModelLoader", ["require", "exports", "three", "Graphics/Graphics"], function (require, exports, THREE, Graphics_6) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -5126,7 +4976,7 @@ define("ModelLoaders/TestModelLoader", ["require", "exports", "three", "Graphics
         TestModel[TestModel["Box"] = 3] = "Box";
         TestModel[TestModel["Checkerboard"] = 4] = "Checkerboard";
     })(TestModel = exports.TestModel || (exports.TestModel = {}));
-    var TestModelLoader = (function () {
+    var TestModelLoader = /** @class */ (function () {
         /** Default constructor
          * @class TestModelLoader
          * @constructor
@@ -5186,7 +5036,7 @@ define("ModelLoaders/TestModelLoader", ["require", "exports", "three", "Graphics
          */
         TestModelLoader.prototype.loadSphereModel = function (viewer) {
             var radius = 2;
-            var mesh = Graphics_7.Graphics.createSphereMesh(new THREE.Vector3, radius, new THREE.MeshPhongMaterial({ color: testModelColor }));
+            var mesh = Graphics_6.Graphics.createSphereMesh(new THREE.Vector3, radius, new THREE.MeshPhongMaterial({ color: testModelColor }));
             viewer.setModel(mesh);
         };
         /**
@@ -5197,7 +5047,7 @@ define("ModelLoaders/TestModelLoader", ["require", "exports", "three", "Graphics
             var width = 2;
             var height = 2;
             var depth = 2;
-            var mesh = Graphics_7.Graphics.createBoxMesh(new THREE.Vector3, width, height, depth, new THREE.MeshPhongMaterial({ color: testModelColor }));
+            var mesh = Graphics_6.Graphics.createBoxMesh(new THREE.Vector3, width, height, depth, new THREE.MeshPhongMaterial({ color: testModelColor }));
             viewer.setModel(mesh);
         };
         /**
@@ -5207,7 +5057,7 @@ define("ModelLoaders/TestModelLoader", ["require", "exports", "three", "Graphics
         TestModelLoader.prototype.loadSlopedPlaneModel = function (viewer) {
             var width = 2;
             var height = 2;
-            var mesh = Graphics_7.Graphics.createPlaneMesh(new THREE.Vector3, width, height, new THREE.MeshPhongMaterial({ color: testModelColor }));
+            var mesh = Graphics_6.Graphics.createPlaneMesh(new THREE.Vector3, width, height, new THREE.MeshPhongMaterial({ color: testModelColor }));
             mesh.rotateX(Math.PI / 4);
             mesh.name = 'SlopedPlane';
             viewer.setModel(mesh);
@@ -5235,7 +5085,7 @@ define("ModelLoaders/TestModelLoader", ["require", "exports", "three", "Graphics
             for (var iRow = 0; iRow < gridDivisions; iRow++) {
                 for (var iColumn = 0; iColumn < gridDivisions; iColumn++) {
                     var cellMaterial = new THREE.MeshPhongMaterial({ color: cellColor });
-                    var cell = Graphics_7.Graphics.createBoxMesh(cellOrigin, cellBase, cellBase, cellHeight, cellMaterial);
+                    var cell = Graphics_6.Graphics.createBoxMesh(cellOrigin, cellBase, cellBase, cellHeight, cellMaterial);
                     group.add(cell);
                     cellOrigin.x += cellBase;
                     cellOrigin.z += cellHeight;
@@ -5260,7 +5110,7 @@ define("ModelLoaders/Loader", ["require", "exports", "three", "ModelLoaders/OBJL
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var testModelColor = '#558de8';
-    var Loader = (function () {
+    var Loader = /** @class */ (function () {
         /** Default constructor
          * @class Loader
          * @constructor
@@ -5316,7 +5166,7 @@ define("Viewers/MeshViewerControls", ["require", "exports", "dat-gui", "System/H
      * @class
      * MeshViewer Settings
      */
-    var MeshViewerSettings = (function () {
+    var MeshViewerSettings = /** @class */ (function () {
         function MeshViewerSettings() {
         }
         return MeshViewerSettings;
@@ -5324,7 +5174,7 @@ define("Viewers/MeshViewerControls", ["require", "exports", "dat-gui", "System/H
     /**
      * MeshViewer UI Controls.
      */
-    var MeshViewerControls = (function () {
+    var MeshViewerControls = /** @class */ (function () {
         /** Default constructor
          * @class MeshViewerControls
          * @constructor
@@ -5360,7 +5210,7 @@ define("Viewers/MeshViewerControls", ["require", "exports", "dat-gui", "System/H
     }());
     exports.MeshViewerControls = MeshViewerControls;
 });
-define("Viewers/MeshViewer", ["require", "exports", "three", "Graphics/Graphics", "Mesh/Mesh", "Viewers/MeshViewerControls", "System/Services", "Viewers/Viewer"], function (require, exports, THREE, Graphics_8, Mesh_2, MeshViewerControls_1, Services_10, Viewer_2) {
+define("Viewers/MeshViewer", ["require", "exports", "three", "Graphics/Graphics", "Mesh/Mesh", "Viewers/MeshViewerControls", "System/Services", "Viewers/Viewer"], function (require, exports, THREE, Graphics_7, Mesh_2, MeshViewerControls_1, Services_10, Viewer_2) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -5372,7 +5222,7 @@ define("Viewers/MeshViewer", ["require", "exports", "three", "Graphics/Graphics"
      * @class
      * MeshViewer
      */
-    var MeshViewer = (function (_super) {
+    var MeshViewer = /** @class */ (function (_super) {
         __extends(MeshViewer, _super);
         /**
          * Default constructor
@@ -5396,7 +5246,7 @@ define("Viewers/MeshViewer", ["require", "exports", "three", "Graphics/Graphics"
         MeshViewer.prototype.populateScene = function () {
             var height = 1;
             var width = 1;
-            var mesh = Graphics_8.Graphics.createPlaneMesh(new THREE.Vector3(), height, width, new THREE.MeshPhongMaterial(Mesh_2.Mesh.DefaultMeshPhongMaterialParameters));
+            var mesh = Graphics_7.Graphics.createPlaneMesh(new THREE.Vector3(), height, width, new THREE.MeshPhongMaterial(Mesh_2.Mesh.DefaultMeshPhongMaterialParameters));
             mesh.rotateX(-Math.PI / 2);
             this._root.add(mesh);
         };
@@ -5429,7 +5279,7 @@ define("Views/MeshView", ["require", "exports", "Viewers/MeshViewer"], function 
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var MeshView = (function () {
+    var MeshView = /** @class */ (function () {
         /** Default constructor
          * @class MeshView
          * @constructor
@@ -5482,7 +5332,7 @@ define("Views/ModelView", ["require", "exports", "Viewers/ModelViewer"], functio
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var ModelView = (function () {
+    var ModelView = /** @class */ (function () {
         /** Default constructor
          * @class ModelView
          * @constructor
@@ -5535,7 +5385,7 @@ define("Views/ComposerView", ["require", "exports", "Controllers/ComposerControl
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var ComposerView = (function () {
+    var ComposerView = /** @class */ (function () {
         /** Default constructor
          * @class ComposerView
          * @constructor
@@ -5632,7 +5482,7 @@ define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function 
     /**
      * @exports Viewer/Viewer
      */
-    var UnitTests = (function () {
+    var UnitTests = /** @class */ (function () {
         /**
          * Default constructor
          * @class UnitTests
@@ -5703,7 +5553,7 @@ define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function 
     }());
     exports.UnitTests = UnitTests;
 });
-define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Graphics/Graphics", "System/Html", "System/Services", "Viewers/Viewer"], function (require, exports, THREE, dat, Graphics_9, Html_7, Services_12, Viewer_3) {
+define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Graphics/Graphics", "System/Html", "System/Services", "Viewers/Viewer"], function (require, exports, THREE, dat, Graphics_8, Html_7, Services_12, Viewer_3) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -5715,19 +5565,19 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Graph
      * @class
      * CameraWorkbench
      */
-    var CameraViewer = (function (_super) {
+    var CameraViewer = /** @class */ (function (_super) {
         __extends(CameraViewer, _super);
         function CameraViewer() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         CameraViewer.prototype.populateScene = function () {
-            var triad = Graphics_9.Graphics.createWorldAxesTriad(new THREE.Vector3(), 1, 0.25, 0.25);
+            var triad = Graphics_8.Graphics.createWorldAxesTriad(new THREE.Vector3(), 1, 0.25, 0.25);
             this._scene.add(triad);
-            var box = Graphics_9.Graphics.createBoxMesh(new THREE.Vector3(4, 6, -2), 1, 2, 2, new THREE.MeshPhongMaterial({ color: 0xff0000 }));
+            var box = Graphics_8.Graphics.createBoxMesh(new THREE.Vector3(4, 6, -2), 1, 2, 2, new THREE.MeshPhongMaterial({ color: 0xff0000 }));
             box.rotation.set(Math.random(), Math.random(), Math.random());
             box.updateMatrixWorld(true);
             this.model.add(box);
-            var sphere = Graphics_9.Graphics.createSphereMesh(new THREE.Vector3(-3, 10, -1), 1, new THREE.MeshPhongMaterial({ color: 0x00ff00 }));
+            var sphere = Graphics_8.Graphics.createSphereMesh(new THREE.Vector3(-3, 10, -1), 1, new THREE.MeshPhongMaterial({ color: 0x00ff00 }));
             this.model.add(sphere);
         };
         return CameraViewer;
@@ -5737,7 +5587,7 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Graph
      * @class
      * ViewerControls
      */
-    var ViewerControls = (function () {
+    var ViewerControls = /** @class */ (function () {
         function ViewerControls(camera, showBoundingBoxes, setClippingPlanes) {
             this.showBoundingBoxes = showBoundingBoxes;
             this.setClippingPlanes = setClippingPlanes;
@@ -5748,7 +5598,7 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Graph
      * @class
      * App
      */
-    var App = (function () {
+    var App = /** @class */ (function () {
         /**
          * @constructor
          */
@@ -5761,7 +5611,7 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Graph
             var model = this._viewer.model;
             var cameraMatrixWorldInverse = this._viewer.camera.matrixWorldInverse;
             // clone model (and geometry!)
-            var boundingBoxView = Graphics_9.Graphics.getTransformedBoundingBox(model, cameraMatrixWorldInverse);
+            var boundingBoxView = Graphics_8.Graphics.getTransformedBoundingBox(model, cameraMatrixWorldInverse);
             // The bounding box is world-axis aligned. 
             // INv View coordinates, the camera is at the origin.
             // The bounding near plane is the maximum Z of the bounding box.
@@ -5783,7 +5633,7 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Graph
             var boundingBox = new THREE.Box3();
             boundingBox = boundingBox.setFromObject(object);
             var material = new THREE.MeshPhongMaterial({ color: color, opacity: 1.0, wireframe: true });
-            var boundingBoxMesh = Graphics_9.Graphics.createBoundingBoxMeshFromBoundingBox(boundingBox.getCenter(), boundingBox, material);
+            var boundingBoxMesh = Graphics_8.Graphics.createBoundingBoxMeshFromBoundingBox(boundingBox.getCenter(), boundingBox, material);
             return boundingBoxMesh;
         };
         /**
@@ -5794,16 +5644,16 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Graph
             var cameraMatrixWorld = this._viewer.camera.matrixWorld;
             var cameraMatrixWorldInverse = this._viewer.camera.matrixWorldInverse;
             // remove existing BoundingBoxes and model clone (View coordinates)
-            Graphics_9.Graphics.removeAllByName(this._viewer._scene, Graphics_9.ObjectNames.BoundingBox);
-            Graphics_9.Graphics.removeAllByName(this._viewer._scene, Graphics_9.ObjectNames.ModelClone);
+            Graphics_8.Graphics.removeAllByName(this._viewer._scene, Graphics_8.ObjectNames.BoundingBox);
+            Graphics_8.Graphics.removeAllByName(this._viewer._scene, Graphics_8.ObjectNames.ModelClone);
             // clone model (and geometry!)
-            var modelView = Graphics_9.Graphics.cloneAndTransformObject(model, cameraMatrixWorldInverse);
-            modelView.name = Graphics_9.ObjectNames.ModelClone;
+            var modelView = Graphics_8.Graphics.cloneAndTransformObject(model, cameraMatrixWorldInverse);
+            modelView.name = Graphics_8.ObjectNames.ModelClone;
             model.add(modelView);
             var boundingBoxView = this.createBoundingBox(modelView, 0xff00ff);
             model.add(boundingBoxView);
             // transform bounding box back from View to World
-            var boundingBoxWorld = Graphics_9.Graphics.cloneAndTransformObject(boundingBoxView, cameraMatrixWorld);
+            var boundingBoxWorld = Graphics_8.Graphics.cloneAndTransformObject(boundingBoxView, cameraMatrixWorld);
             model.add(boundingBoxWorld);
         };
         /**
@@ -5855,7 +5705,7 @@ define("Workbench/DepthBufferTest", ["require", "exports"], function (require, e
      * @class
      * DepthBufferTest
      */
-    var DepthBufferTest = (function () {
+    var DepthBufferTest = /** @class */ (function () {
         /**
          * @constructor
          */
@@ -5885,7 +5735,7 @@ define("Workbench/InheritanceTest", ["require", "exports", "System/Logger"], fun
      * @class
      * Widget
      */
-    var Widget = (function () {
+    var Widget = /** @class */ (function () {
         /**
          * @constructor
          */
@@ -5906,7 +5756,7 @@ define("Workbench/InheritanceTest", ["require", "exports", "System/Logger"], fun
      * @class
      * SuperWidget
      */
-    var ColorWidget = (function (_super) {
+    var ColorWidget = /** @class */ (function (_super) {
         __extends(ColorWidget, _super);
         /**
          * @constructor
@@ -5919,14 +5769,14 @@ define("Workbench/InheritanceTest", ["require", "exports", "System/Logger"], fun
         return ColorWidget;
     }(Widget));
     exports.ColorWidget = ColorWidget;
-    var GrandParent = (function () {
+    var GrandParent = /** @class */ (function () {
         function GrandParent(grandparentProperty) {
             this.grandparentProperty = grandparentProperty;
         }
         return GrandParent;
     }());
     exports.GrandParent = GrandParent;
-    var Parent = (function (_super) {
+    var Parent = /** @class */ (function (_super) {
         __extends(Parent, _super);
         function Parent(grandparentProperty, parentProperty) {
             var _this = _super.call(this, grandparentProperty) || this;
@@ -5936,7 +5786,7 @@ define("Workbench/InheritanceTest", ["require", "exports", "System/Logger"], fun
         return Parent;
     }(GrandParent));
     exports.Parent = Parent;
-    var Child = (function (_super) {
+    var Child = /** @class */ (function (_super) {
         __extends(Child, _super);
         function Child(grandparentProperty, parentProperty, childProperty) {
             var _this = _super.call(this, grandparentProperty, parentProperty) || this;
@@ -5950,7 +5800,7 @@ define("Workbench/InheritanceTest", ["require", "exports", "System/Logger"], fun
      * @class
      * Inheritance
      */
-    var InheritanceTest = (function () {
+    var InheritanceTest = /** @class */ (function () {
         /**
          * @constructor
          */
@@ -6010,7 +5860,7 @@ define("Workbench/QuokkaWorkbench", ["require", "exports"], function (require, e
     /**
      * Represents the result of a client request.
      */
-    var RequestResponse = (function () {
+    var RequestResponse = /** @class */ (function () {
         /**
          * Constructs an instance of a RequestResponse.
          * @param {Response} response Raw response from the request.
@@ -6049,7 +5899,7 @@ define("Workbench/QuokkaWorkbench", ["require", "exports"], function (require, e
         return RequestResponse;
     }());
     exports.RequestResponse = RequestResponse;
-    function submitHttpRequest(endpoint, methodType, contentType, requestData) {
+    function submitHttpRequestAsync(endpoint, methodType, contentType, requestData) {
         return __awaiter(this, void 0, void 0, function () {
             var headers, requestMode, cacheMode, init, response, contentString, result;
             return __generator(this, function (_a) {
@@ -6080,8 +5930,10 @@ define("Workbench/QuokkaWorkbench", ["require", "exports"], function (require, e
         });
     }
     var endpoint = "http://localhost:60655/api/v1/projects/1";
-    var result = submitHttpRequest(endpoint, MethodType.Get, ContentType.Json, null);
-    result;
+    var resultPromise = submitHttpRequestAsync(endpoint, MethodType.Get, ContentType.Json, null);
+    resultPromise.then(function (resolution) {
+        resolution;
+    });
 });
 define("System/Image.", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
@@ -6104,7 +5956,7 @@ define("System/Image.", ["require", "exports"], function (require, exports) {
      * General image processing support.
      * @class
      */
-    var ImageLibrary = (function () {
+    var ImageLibrary = /** @class */ (function () {
         /**
          * @constructor
          */

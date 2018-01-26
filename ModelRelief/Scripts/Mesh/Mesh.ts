@@ -142,7 +142,7 @@ export class Mesh {
     _height          : number;          // height resolution of the DB
     _depthBuffer     : DepthBuffer;     // depth buffer
 
-    _logger          : Logger                   = null;     // logger
+    _logger          : Logger;          // logger
 
     /**
      * @constructor
@@ -353,11 +353,15 @@ export class Mesh {
      * Generates a mesh from the active model and camera.
      * @param parameters Generation parameters (MeshGenerateParameters)
      */
-    generateRelief(parameters: MeshGenerateParameters): Relief {
+    async generateReliefAsync(parameters: MeshGenerateParameters): Promise<Relief> {
 
         if (!this.verifyMeshSettings())
             return null;
-
+    
+        this._logger.addInfoMessage('sleep begin');
+        await Tools.sleep(10000);
+        this._logger.addInfoMessage('sleep complete');
+    
         let mesh = this.mesh();
 
         let relief: Relief = {

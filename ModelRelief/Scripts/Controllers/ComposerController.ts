@@ -91,7 +91,7 @@ export class ComposerController {
     /**
      * Generates a relief from the current model camera.
      */
-    async generateRelief() : Promise<void> { 
+    async generateReliefAsync() : Promise<void> { 
 
         // pixels
         let width = 512;
@@ -100,11 +100,12 @@ export class ComposerController {
 
 
         let depthBuffer = factory.createDepthBuffer();
-        let mesh = new Mesh({ width: width, height: height, depthBuffer: depthBuffer});
-        this._relief = mesh.generateRelief({});
 
-        var camera = await this.postCamera();
-        await this.postDepthBuffer(camera.id);
+        let mesh = new Mesh({ width: width, height: height, depthBuffer: depthBuffer});
+        this._relief = await mesh.generateReliefAsync({});
+
+        var camera = await this.postCameraAsync();
+        await this.postDepthBufferAsync(camera.id);
 
         this._composerView._meshView.meshViewer.setModel(this._relief.mesh);
         if (this._initialMeshGeneration) {
@@ -117,7 +118,7 @@ export class ComposerController {
     /**
      * Saves the camera.
      */
-    async postCamera(): Promise<Dto.Camera> {
+    async postCameraAsync(): Promise<Dto.Camera> {
 
         let exportTag = Services.timer.mark('POST Camera');
 
@@ -127,7 +128,7 @@ export class ComposerController {
         camera.name = 'Camera';
         camera.description = 'Camera Description';
 
-        var result = await HttpLibrary.submitHttpRequest(postUrl, MethodType.Post, ContentType.Json, JSON.stringify(camera));
+        var result = await HttpLibrary.submitHttpRequestAsync(postUrl, MethodType.Post, ContentType.Json, JSON.stringify(camera));
         Services.timer.logElapsedTime(exportTag);
 
         return result.model as Dto.Camera;
@@ -136,7 +137,7 @@ export class ComposerController {
     /**
      * Saves the depth buffer.
      */
-    async postDepthBuffer(cameraId : number): Promise<void> {
+    async postDepthBufferAsync(cameraId : number): Promise<void> {
 
         let fileName = `${this._composerView.modelView.modelViewer.model.name}.raw`;
 
@@ -183,7 +184,7 @@ export class ComposerController {
 
         let scope = this;
 
-        this._composerViewSettings = new ComposerViewSettings(this.generateRelief.bind(this), this.saveRelief.bind(this));
+        this._composerViewSettings = new ComposerViewSettings(this.generateReliefAsync.bind(this), this.saveRelief.bind(this));
 
         // Init dat.gui and controls for the UI
         let gui = new dat.GUI({

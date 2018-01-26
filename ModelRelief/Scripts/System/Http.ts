@@ -107,7 +107,7 @@ export class HttpLibrary {
      */
     static postFile (postUrl : string, fileData : any, fileMetadata : any) : boolean {
         
-        let onComplete = async function(request: XMLHttpRequest) {
+        let onComplete = function(request: XMLHttpRequest) {
                             
             Services.consoleLogger.addInfoMessage('Metadata saved');
             let filePath = request.getResponseHeader('Location');
@@ -197,7 +197,7 @@ export class HttpLibrary {
      * @param {Uint8} buffer The buffer to convert.
      * @param {Function} callback The function to call when conversion is complete.
      */
-    static async largeBufferToString(buffer) : Promise<string>{
+    static async largeBufferToStringAsync(buffer) : Promise<string> {
 
         return new Promise<string>((resolve, reject) => {
             var bufferBlob = new Blob([buffer]);
@@ -220,7 +220,7 @@ export class HttpLibrary {
 
         // send JSON metadata first to create the resource and obtain the Id
         let json = JSON.stringify(fileMetadata);
-        let result = await HttpLibrary.submitHttpRequest(postUrl, MethodType.Post, ContentType.Json, json);
+        let result = await HttpLibrary.submitHttpRequestAsync(postUrl, MethodType.Post, ContentType.Json, json);
         if (result.response.status != HttpStatusCode.CREATED) {
             throw new Error(`postFileAsync : Url = ${postUrl}, status = ${result.response.status}`);
         }
@@ -229,7 +229,7 @@ export class HttpLibrary {
         let filePath = headers.get('Location');
 
         let blob = new Blob([fileData], { type: ContentType.OctetStream });
-        result = await HttpLibrary.submitHttpRequest(`${filePath}/file`, MethodType.Post, ContentType.OctetStream, blob);
+        result = await HttpLibrary.submitHttpRequestAsync(`${filePath}/file`, MethodType.Post, ContentType.OctetStream, blob);
 
         return result.response.ok;
     }
@@ -241,7 +241,7 @@ export class HttpLibrary {
      * @param {ContentType} contentType HTTP content type.
      * @param {any} requestData Data to send in the request.
      */
-    static async submitHttpRequest(endpoint: string, methodType: MethodType, contentType: ContentType, requestData: any) : Promise<RequestResponse>{
+    static async submitHttpRequestAsync(endpoint: string, methodType: MethodType, contentType: ContentType, requestData: any) : Promise<RequestResponse>{
 
         let headers = new Headers({
             'Content-Type': contentType

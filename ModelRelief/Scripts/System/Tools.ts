@@ -33,6 +33,17 @@ export class Tools {
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
                 s4() + '-' + s4() + s4() + s4();
     }
+
+    /**
+     * @description Utility method to sleep for a given period of time.
+     * @static
+     * @param {any} milliseconds 
+     * @returns Promise<void>
+     */
+    static sleep(milliseconds: number) : Promise<void> {
+        return new Promise(resolve => setTimeout(resolve, milliseconds));
+    }
+        
 //#endregion
 
 }

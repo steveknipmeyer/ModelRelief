@@ -82,7 +82,7 @@ export class RequestResponse {
     }
 }
 
-async function submitHttpRequest(endpoint: string, methodType: MethodType, contentType: ContentType, requestData: any) : Promise<RequestResponse>{
+async function submitHttpRequestAsync(endpoint: string, methodType: MethodType, contentType: ContentType, requestData: any) : Promise<RequestResponse>{
 
     let headers = {
         'Content-Type': contentType
@@ -107,8 +107,10 @@ async function submitHttpRequest(endpoint: string, methodType: MethodType, conte
 }
 
 let endpoint = "http://localhost:60655/api/v1/projects/1";
-let result = submitHttpRequest(endpoint, MethodType.Get, ContentType.Json, null);
-result
+let resultPromise = submitHttpRequestAsync(endpoint, MethodType.Get, ContentType.Json, null);
+resultPromise.then(resolution => {
+    resolution
+});
 
 
 

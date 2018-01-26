@@ -6,6 +6,7 @@
         {
             "label": "ASPNET .Core Build", 
             "command": "dotnet build",
+            "dependsOn" : "Compile TypeScript",
             "type": "shell",
             "group": "build",
             "presentation": {
