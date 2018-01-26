@@ -7,6 +7,9 @@ Some Markdown text with <span style="color:blue">some *blue* text
 - Manning Dependency Injection book.
 
 #####  Lambda
+    Upgrade Visual Studio.
+    Upgrade Visual Code.
+    Upgrade Node.
     Python programs must be invoked by py <program>. This is not necessary on Vector.
 
 ### Tasks
@@ -14,8 +17,33 @@ Some Markdown text with <span style="color:blue">some *blue* text
 #### Short Term
 
 #### Front End
-     How are credentials passed with a fetch request?
-        Only Test works because there is special middleware handling which provides authorization.   
+    What is a Relief?
+    What are the relationships between FE classes and their DTO counterparts?
+
+    Check all async method calls!
+        Quokka!
+
+    Introduce Parameter initialize objects and constructors for the DTO objects.
+    What should the return type of PostFileAsync be?
+        It should return the new DTO.
+            Should an overall status be returned or should the method throw on error?
+
+|FE Class|DTO|Notes|
+|-------|--------|--------|
+|Camera|Dto.Camera|THREE.Camera|
+|DepthBuffer|Dto.DepthBuffer||
+|Mesh|Dto.Mesh|THREE.Mesh|
+|MeshTransform|Dto.MeshTransform||
+||Dto.Model3d|THREE.Mesh|
+||Dto.Project||
+|Relief|||
+
+
+<span style="color:red">
+How are credentials passed with a fetch request?   <br>
+Only Test works because there is special middleware handling which provides authorization.   
+</span><br></br>
+
     
 
     Investigate Chai unit tests for front-end JavaScript.
@@ -23,18 +51,7 @@ Some Markdown text with <span style="color:blue">some *blue* text
     Should any DTO fields should be declared as optional?
         By default, all TypeScript fields are nullable. Will HTTP requests ever omit JSON fields?
 
-https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch    
-https://developers.google.com/web/fundamentals/primers/async-functions   
-
     Is the interface IGenerateFile needed?
-
-|Original Type|NewType|Notes|
-|-------|--------|--------|
-|ReliefSettings|MeshTransform|
-|DepthBuffer|RawDepthBuffer|DtoDepthBuffer implemented|
-|Camera||DtoCamera implemented|
-|Relief||?|
-
 
     Create a utility URL composer.
 
@@ -51,15 +68,10 @@ https://developers.google.com/web/fundamentals/primers/async-functions
         Details, Delete
 
 ##### Mesh Generation Prototype
-        
-    Current
-        Client
-            Create DepthBuffer
-            DepthBufferFactory -> Create Mesh
-            Post DepthBuffer
 
 | Client | Server|
 |-------|--------|
+|Post Camera | |
 |**Create DepthBuffer in-memory** | |
 |**Post DepthBuffer** | |
 |**Post DepthBuffer/id/file** | |
@@ -795,6 +807,15 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     ModelReliefShell.bat is started through this batch file located in D:\Users\Steve Knipmeyer\Documents\Bin\cmder\config\profile.d:
         StartModelReliefShell.bat
             "D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\Tools\ModelReliefShell.bat"
+
+#### ASPNET Core Environment Variables
+Environment variables set in the Visual Studio launchSettings.json **override** environment variables set in the shell.  
+The Visual Studio Debug project settings for Environment variables **writes through** to launchSettings.json. They are *identical*.
+
+The XUnit tests cannot be run with InitializeUserStore since this prompts for user verification however *the console is not displayed*.  
+ServerFramework (WebHost.CreateDefaultBuilder) sets the environment to "Test" *however the environment variables from launchSettings.json are not used.* 
+Therefore, it is imperative not to set InitializeUserStore in the shell so that XUnit can be run.
+However, InitializeUserStore may be set if the application is started through 'dotnet run'.
 
 #### New Computer Setup
     The Test files are not restored from Git because some (e.g. .obj) are excluded by .gitignore.

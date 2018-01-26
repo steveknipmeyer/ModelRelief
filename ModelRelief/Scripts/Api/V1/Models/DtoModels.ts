@@ -23,13 +23,13 @@ export class Camera implements ICamera {
     name: string;
     description: string;
 
-    StandardView: StandardView;
-    FieldOfView: number;
+    standardView: StandardView;
+    fieldOfView: number;
 
     near: number;
     far: number;
 
-    BoundClippingPlanes: boolean;
+    boundClippingPlanes: boolean;
 
     positionX: number;
     positionY: number;
@@ -55,7 +55,7 @@ export class DepthBuffer implements IDepthBuffer {
     name: string;
     description: string;
 
-    Format: DepthBufferFormat;
+    format: DepthBufferFormat;
 
     // Navigation Properties
     projectId: number;

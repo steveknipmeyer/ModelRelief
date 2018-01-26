@@ -19,9 +19,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production",
-        "InitializeUserStore": "False",
-        "InitializeDatabase": "False"
+        "ASPNETCORE_ENVIRONMENT": "Production"
       },
       "applicationUrl": "http://localhost:60655"
     },
@@ -29,9 +27,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "InitializeUserStore": "True",
-        "InitializeDatabase": "True"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:60655"
     },
@@ -39,8 +35,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ModelReliefDatabase": "SQLServer",
-        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Test",
         "InitializeUserStore": "True",
         "InitializeDatabase": "True"
       },

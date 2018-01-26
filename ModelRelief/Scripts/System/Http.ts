@@ -16,7 +16,7 @@ import { MeshTransform }                    from 'MeshTransform'
 /**
  * HTTP Content-type
  */
-enum ContentType {
+export enum ContentType {
     Json          = 'application/json',
     OctetStream   = 'application/octet-stream'
 }
@@ -24,7 +24,7 @@ enum ContentType {
 /**
  * HTTP Method
  */
-enum MethodType {
+export enum MethodType {
     Get = 'GET',
     Delete = 'DELETE',
     Patch = 'PUT',
@@ -36,8 +36,12 @@ enum MethodType {
  * Server Endpoints
  */
 export enum ServerEndPoints {
-    ApiMeshes        = 'api/v1/meshes',
-    ApiDepthBuffers  = 'api/v1/depth-buffers'
+    ApiCameras          = 'api/v1/cameras',
+    ApiDepthBuffers     = 'api/v1/depth-buffers',
+    ApiMeshes           = 'api/v1/meshes',
+    ApiMeshTransforms   = 'api/v1/meshtransforms',
+    ApiModels           = 'api/v1/models',
+    ApiProjects         = 'api/v1/projects',    
 }
 
 /**
@@ -216,18 +220,18 @@ export class HttpLibrary {
 
         // send JSON metadata first to create the resource and obtain the Id
         let json = JSON.stringify(fileMetadata);
-        let requestResponse = await HttpLibrary.submitHttpRequest(postUrl, MethodType.Post, ContentType.Json, json);
-        if (requestResponse.response.status != HttpStatusCode.CREATED) {
-            throw new Error(`postFileAsync : Url = ${postUrl}, status = ${requestResponse.response.status}`);
+        let result = await HttpLibrary.submitHttpRequest(postUrl, MethodType.Post, ContentType.Json, json);
+        if (result.response.status != HttpStatusCode.CREATED) {
+            throw new Error(`postFileAsync : Url = ${postUrl}, status = ${result.response.status}`);
         }
 
-        let headers = requestResponse.response.headers;
+        let headers = result.response.headers;
         let filePath = headers.get('Location');
 
         let blob = new Blob([fileData], { type: ContentType.OctetStream });
-        requestResponse = await HttpLibrary.submitHttpRequest(`${filePath}/file`, MethodType.Post, ContentType.OctetStream, blob);
+        result = await HttpLibrary.submitHttpRequest(`${filePath}/file`, MethodType.Post, ContentType.OctetStream, blob);
 
-        return requestResponse.response.ok;
+        return result.response.ok;
     }
 
     /**
@@ -238,7 +242,6 @@ export class HttpLibrary {
      * @param {any} requestData Data to send in the request.
      */
     static async submitHttpRequest(endpoint: string, methodType: MethodType, contentType: ContentType, requestData: any) : Promise<RequestResponse>{
-        var message = HttpStatusMessage[HttpStatusCode.OK];
 
         let headers = new Headers({
             'Content-Type': contentType
@@ -260,8 +263,8 @@ export class HttpLibrary {
         let response = await fetch(endpoint, init);
         let contentString = await response.text();
 
-        let requestResponse = new RequestResponse(response, contentString);
-        return requestResponse;
+        let result = new RequestResponse(response, contentString);
+        return result;
     }
 }
 

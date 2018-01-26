@@ -34,13 +34,13 @@ export interface ICamera extends ITGetModel {
     name: string;
     description: string;
 
-    StandardView: StandardView; 
-    FieldOfView: number;
+    standardView: StandardView; 
+    fieldOfView: number;
 
     near: number;
     far: number;
 
-    BoundClippingPlanes: boolean;
+    boundClippingPlanes: boolean;
 
     positionX: number;
     positionY: number;

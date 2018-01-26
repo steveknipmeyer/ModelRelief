@@ -102,13 +102,13 @@ async function submitHttpRequest(endpoint: string, methodType: MethodType, conte
     let response = await fetch(endpoint, init);
     let contentString = await response.text();
 
-    let requestResponse = new RequestResponse(response, contentString);
-    return requestResponse;
+    let result = new RequestResponse(response, contentString);
+    return result;
 }
 
 let endpoint = "http://localhost:60655/api/v1/projects/1";
-let requestResponse = submitHttpRequest(endpoint, MethodType.Get, ContentType.Json, null);
-requestResponse
+let result = submitHttpRequest(endpoint, MethodType.Get, ContentType.Json, null);
+result
 
 
 

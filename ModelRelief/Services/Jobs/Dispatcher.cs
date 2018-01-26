@@ -54,6 +54,40 @@ namespace ModelRelief.Services.Jobs
         public IStorageManager StorageManager { get; }
 
         /// <summary>
+        /// Returns the path of the Python interpreter.
+        /// WIP: Create a virtual environment to host the python tools.
+        /// </summary>
+        private string GetPythonInterpreterPath()
+        {
+            var machineName = System.Environment.MachineName;
+            switch (machineName)
+            {
+                default:
+                case "Lambda":
+                case "Vector":
+                    return @"C:\Program Files (x86)\Microsoft Visual Studio\Shared\Anaconda3_64\python.exe";
+            }
+        }
+
+        /// <summary>
+        /// Returns the path of the Python solver application.
+        /// WIP: Resolve the location of the solver using a relative path.
+        /// </summary>
+        private string GetSolverPath()
+        {
+            var machineName = System.Environment.MachineName;
+            switch (machineName)
+            {
+                case "Lambda":
+                    return @"D:\GitHub\ModelRelief\Solver\solver.py";
+
+                default:
+                case "Vector":
+                    return @"D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\Solver\solver.py";
+            }
+        }
+
+        /// <summary>
         /// Dispatches a process to create a DepthBuffer from its dependencies (e.g. Model3d, Camera).
         /// </summary>
         /// <param name="depthBuffer">DepthBuffer.</param>
@@ -114,7 +148,7 @@ namespace ModelRelief.Services.Jobs
             string workingFolder = $"{StorageManager.WorkingStorageFolder(mesh.UserId)}\\";
             string workingFolderArgument = $"-w \"{workingFolder}\"";
 
-            string solverPath = @"D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\Solver\solver.py";
+            string solverPath = GetSolverPath();
             string arguments = $"{jsonFileArgument} {workingFolderArgument}";
             int solverExitCode = RunPythonTask(solverPath, arguments);
             if (solverExitCode != 0)
@@ -139,7 +173,7 @@ namespace ModelRelief.Services.Jobs
         /// <returns>Process exit code.</returns>
         public int RunPythonTask(string pythonTask, string args)
         {
-            var pythonInterpreter = @"C:\Program Files (x86)\Microsoft Visual Studio\Shared\Anaconda3_64\python.exe";
+            var pythonInterpreter = GetPythonInterpreterPath();
             var arguments = string.Format("\"{0}\" {1}", pythonTask, args);
 
             return RunProcess(pythonInterpreter, arguments);

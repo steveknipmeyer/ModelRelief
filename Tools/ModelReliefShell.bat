@@ -10,10 +10,11 @@ echo MRsolution=%MRSolution%
 :: ModelRelief runtime settings
 :: N.B. These settings are used for command line invocation (e.g. 'dotnet run')
 :: The Visual Studio launchSettings.json or VisualCode launch.json will always <override> these settings.
+:: Do not set InitializeUserStore if XUnit tests are being run from Visual Studio. 
 set ASPNETCORE_ENVIRONMENT=Test
 set ModelReliefDatabase=SQLServer
-set InitializeDatabase=True
-set InitializeUserStore=True
+set InitializeDatabase=False
+set InitializeUserStore=False
 
 path=%path%;D:\Users\Steve Knipmeyer\Documents\Bin
 path=%path%;%MRSolution%Tools

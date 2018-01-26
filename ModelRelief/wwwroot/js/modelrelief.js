@@ -2674,7 +2674,7 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
     (function (ContentType) {
         ContentType["Json"] = "application/json";
         ContentType["OctetStream"] = "application/octet-stream";
-    })(ContentType || (ContentType = {}));
+    })(ContentType = exports.ContentType || (exports.ContentType = {}));
     /**
      * HTTP Method
      */
@@ -2685,14 +2685,18 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
         MethodType["Patch"] = "PUT";
         MethodType["Post"] = "POST";
         MethodType["Put"] = "PUT";
-    })(MethodType || (MethodType = {}));
+    })(MethodType = exports.MethodType || (exports.MethodType = {}));
     /**
      * Server Endpoints
      */
     var ServerEndPoints;
     (function (ServerEndPoints) {
-        ServerEndPoints["ApiMeshes"] = "api/v1/meshes";
+        ServerEndPoints["ApiCameras"] = "api/v1/cameras";
         ServerEndPoints["ApiDepthBuffers"] = "api/v1/depth-buffers";
+        ServerEndPoints["ApiMeshes"] = "api/v1/meshes";
+        ServerEndPoints["ApiMeshTransforms"] = "api/v1/meshtransforms";
+        ServerEndPoints["ApiModels"] = "api/v1/models";
+        ServerEndPoints["ApiProjects"] = "api/v1/projects";
     })(ServerEndPoints = exports.ServerEndPoints || (exports.ServerEndPoints = {}));
     /**
      * Represents the result of a client request.
@@ -2852,24 +2856,24 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
          */
         HttpLibrary.postFileAsync = function (postUrl, fileData, fileMetadata) {
             return __awaiter(this, void 0, void 0, function () {
-                var json, requestResponse, headers, filePath, blob;
+                var json, result, headers, filePath, blob;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
                             json = JSON.stringify(fileMetadata);
                             return [4 /*yield*/, HttpLibrary.submitHttpRequest(postUrl, MethodType.Post, ContentType.Json, json)];
                         case 1:
-                            requestResponse = _a.sent();
-                            if (requestResponse.response.status != HttpStatus_1.HttpStatusCode.CREATED) {
-                                throw new Error("postFileAsync : Url = " + postUrl + ", status = " + requestResponse.response.status);
+                            result = _a.sent();
+                            if (result.response.status != HttpStatus_1.HttpStatusCode.CREATED) {
+                                throw new Error("postFileAsync : Url = " + postUrl + ", status = " + result.response.status);
                             }
-                            headers = requestResponse.response.headers;
+                            headers = result.response.headers;
                             filePath = headers.get('Location');
                             blob = new Blob([fileData], { type: ContentType.OctetStream });
                             return [4 /*yield*/, HttpLibrary.submitHttpRequest(filePath + "/file", MethodType.Post, ContentType.OctetStream, blob)];
                         case 2:
-                            requestResponse = _a.sent();
-                            return [2 /*return*/, requestResponse.response.ok];
+                            result = _a.sent();
+                            return [2 /*return*/, result.response.ok];
                     }
                 });
             });
@@ -2883,11 +2887,10 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
          */
         HttpLibrary.submitHttpRequest = function (endpoint, methodType, contentType, requestData) {
             return __awaiter(this, void 0, void 0, function () {
-                var message, headers, requestMode, cacheMode, init, response, contentString, requestResponse;
+                var headers, requestMode, cacheMode, init, response, contentString, result;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            message = HttpStatus_1.HttpStatusMessage[HttpStatus_1.HttpStatusCode.OK];
                             headers = new Headers({
                                 'Content-Type': contentType
                             });
@@ -2906,8 +2909,8 @@ define("System/Http", ["require", "exports", "System/HttpStatus", "System/Servic
                             return [4 /*yield*/, response.text()];
                         case 2:
                             contentString = _a.sent();
-                            requestResponse = new RequestResponse(response, contentString);
-                            return [2 /*return*/, requestResponse];
+                            result = new RequestResponse(response, contentString);
+                            return [2 /*return*/, result];
                     }
                 });
             });
@@ -4403,7 +4406,7 @@ define("ModelExporters/OBJExporter", ["require", "exports", "three"], function (
     }());
     exports.OBJExporter = OBJExporter;
 });
-define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Viewers/Camera", "DepthBuffer/DepthBufferFactory", "System/EventManager", "System/Html", "System/Http", "Mesh/Mesh", "System/Services"], function (require, exports, dat, Camera_6, DepthBufferFactory_2, EventManager_3, Html_3, Http_1, Mesh_1, Services_8) {
+define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/V1/Models/DtoModels", "Viewers/Camera", "DepthBuffer/DepthBufferFactory", "System/EventManager", "System/Html", "System/Http", "Api/V1/Interfaces/IDepthBuffer", "Mesh/Mesh", "System/Services"], function (require, exports, dat, Dto, Camera_6, DepthBufferFactory_2, EventManager_3, Html_3, Http_1, IDepthBuffer_1, Mesh_1, Services_8) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -4458,39 +4461,74 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "View
          * Generates a relief from the current model camera.
          */
         ComposerController.prototype.generateRelief = function () {
-            // pixels
-            var width = 512;
-            var height = width / this._composerView.modelView.modelViewer.aspectRatio;
-            var factory = new DepthBufferFactory_2.DepthBufferFactory({ width: width, height: height, model: this._composerView.modelView.modelViewer.model, camera: this._composerView.modelView.modelViewer.camera, addCanvasToDOM: false });
-            var depthBuffer = factory.createDepthBuffer();
-            var mesh = new Mesh_1.Mesh({ width: width, height: height, depthBuffer: depthBuffer });
-            this._relief = mesh.generateRelief({});
-            this.postDepthBuffer();
-            this._composerView._meshView.meshViewer.setModel(this._relief.mesh);
-            if (this._initialMeshGeneration) {
-                this._composerView._meshView.meshViewer.fitView();
-                this._initialMeshGeneration = false;
-            }
-            // Services.consoleLogger.addInfoMessage('Relief generated');
+            return __awaiter(this, void 0, void 0, function () {
+                var width, height, factory, depthBuffer, mesh, camera;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            width = 512;
+                            height = width / this._composerView.modelView.modelViewer.aspectRatio;
+                            factory = new DepthBufferFactory_2.DepthBufferFactory({ width: width, height: height, model: this._composerView.modelView.modelViewer.model, camera: this._composerView.modelView.modelViewer.camera, addCanvasToDOM: false });
+                            depthBuffer = factory.createDepthBuffer();
+                            mesh = new Mesh_1.Mesh({ width: width, height: height, depthBuffer: depthBuffer });
+                            this._relief = mesh.generateRelief({});
+                            return [4 /*yield*/, this.postCamera()];
+                        case 1:
+                            camera = _a.sent();
+                            return [4 /*yield*/, this.postDepthBuffer(camera.id)];
+                        case 2:
+                            _a.sent();
+                            this._composerView._meshView.meshViewer.setModel(this._relief.mesh);
+                            if (this._initialMeshGeneration) {
+                                this._composerView._meshView.meshViewer.fitView();
+                                this._initialMeshGeneration = false;
+                            }
+                            return [2 /*return*/];
+                    }
+                });
+            });
         };
         /**
-         * Saves the depth buffer to a disk file.
+         * Saves the camera.
          */
-        ComposerController.prototype.postDepthBuffer = function () {
+        ComposerController.prototype.postCamera = function () {
             return __awaiter(this, void 0, void 0, function () {
-                var fileName, exportTag, postUrl, fileMetadata;
+                var exportTag, postUrl, camera, result;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            exportTag = Services_8.Services.timer.mark('POST Camera');
+                            postUrl = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiCameras;
+                            camera = new Dto.Camera();
+                            camera.name = 'Camera';
+                            camera.description = 'Camera Description';
+                            return [4 /*yield*/, Http_1.HttpLibrary.submitHttpRequest(postUrl, Http_1.MethodType.Post, Http_1.ContentType.Json, JSON.stringify(camera))];
+                        case 1:
+                            result = _a.sent();
+                            Services_8.Services.timer.logElapsedTime(exportTag);
+                            return [2 /*return*/, result.model];
+                    }
+                });
+            });
+        };
+        /**
+         * Saves the depth buffer.
+         */
+        ComposerController.prototype.postDepthBuffer = function (cameraId) {
+            return __awaiter(this, void 0, void 0, function () {
+                var fileName, exportTag, postUrl, depthBuffer;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
                             fileName = this._composerView.modelView.modelViewer.model.name + ".raw";
-                            exportTag = Services_8.Services.timer.mark('Export DepthBuffer');
+                            exportTag = Services_8.Services.timer.mark('POST DepthBuffer');
                             postUrl = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiDepthBuffers;
-                            fileMetadata = {
-                                name: fileName,
-                                description: 'DepthBuffer Description',
-                                format: 1,
-                            };
-                            return [4 /*yield*/, Http_1.HttpLibrary.postFileAsync(postUrl, this._relief.depthBuffer.depths, fileMetadata)];
+                            depthBuffer = new Dto.DepthBuffer();
+                            depthBuffer.name = fileName;
+                            depthBuffer.description = 'DepthBuffer Description';
+                            depthBuffer.format = IDepthBuffer_1.DepthBufferFormat.RAW;
+                            depthBuffer.cameraId = cameraId;
+                            return [4 /*yield*/, Http_1.HttpLibrary.postFileAsync(postUrl, this._relief.depthBuffer.depths, depthBuffer)];
                         case 1:
                             _a.sent();
                             Services_8.Services.timer.logElapsedTime(exportTag);
@@ -6013,7 +6051,7 @@ define("Workbench/QuokkaWorkbench", ["require", "exports"], function (require, e
     exports.RequestResponse = RequestResponse;
     function submitHttpRequest(endpoint, methodType, contentType, requestData) {
         return __awaiter(this, void 0, void 0, function () {
-            var headers, requestMode, cacheMode, init, response, contentString, requestResponse;
+            var headers, requestMode, cacheMode, init, response, contentString, result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -6035,15 +6073,15 @@ define("Workbench/QuokkaWorkbench", ["require", "exports"], function (require, e
                         return [4 /*yield*/, response.text()];
                     case 2:
                         contentString = _a.sent();
-                        requestResponse = new RequestResponse(response, contentString);
-                        return [2 /*return*/, requestResponse];
+                        result = new RequestResponse(response, contentString);
+                        return [2 /*return*/, result];
                 }
             });
         });
     }
     var endpoint = "http://localhost:60655/api/v1/projects/1";
-    var requestResponse = submitHttpRequest(endpoint, MethodType.Get, ContentType.Json, null);
-    requestResponse;
+    var result = submitHttpRequest(endpoint, MethodType.Get, ContentType.Json, null);
+    result;
 });
 define("System/Image.", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 

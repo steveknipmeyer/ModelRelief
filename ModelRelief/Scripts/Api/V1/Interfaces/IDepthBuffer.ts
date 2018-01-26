@@ -32,7 +32,7 @@ export interface IDepthBuffer extends ITGetModel {
     name: string;
     description: string;
 
-    Format: DepthBufferFormat;
+    format: DepthBufferFormat;
 
     // Navigation Properties
     projectId: number;
