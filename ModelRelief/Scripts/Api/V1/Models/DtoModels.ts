@@ -7,21 +7,143 @@
 
 import { ICamera, StandardView }            from 'ICamera'
 import { IDepthBuffer, DepthBufferFormat }  from 'IDepthBuffer'
+import {ContentType, HttpLibrary, 
+        MethodType, ServerEndPoints, 
+        RequestResponse}                    from "Http"
 import { IMesh, MeshFormat }                from 'IMesh'
 import { IMeshTransform }                   from 'IMeshTransform'
 import { IModel3d, Model3dFormat }          from 'IModel3d'
 import { IProject }                         from 'IProject'
+import {Services}                           from 'Services'
+import { ITGetModel, IGeneratedFile }                       from 'ITGetModel'
 
+/**
+ * @description Common base class for all DTO models.
+ * @export
+ * @class Base
+ * @implements {ITGetModel}
+ * @template T 
+ */
+export class BaseModel<T extends ITGetModel> implements ITGetModel{
+
+    id          : number;
+    name        : string;  
+    description : string;
+
+    endPoint    : string;       // API endpoint
+
+    /**
+     * Creates an instance of Base.
+     * @param {ITGetModel} parameters 
+     */
+    constructor (parameters: ITGetModel) {
+
+        this.id            = parameters.id || undefined;
+        this.name          = parameters.name || undefined;
+        this.description   = parameters.description || undefined;
+    }        
+
+    /**
+     * @description Submits an HTTP request to its API endpoint.
+     * @param {string} endPoint API endpoint
+     * @param {MethodType} requestType HTTP method.
+     * @param {ContentType} contentType MIME type (e.g. JSON, octet-stream)
+     * @param {*} requestData Data to send (or null)
+     * @returns {Promise<RequestResponse>} 
+     */
+    async submitRequestAsync(endPoint: string, requestType : MethodType, contentType : ContentType, requestData : any) : Promise<RequestResponse> {
+
+        let exportTag = Services.timer.mark(`${requestType} ${this.constructor.name}`);
+
+        let result = await HttpLibrary.submitHttpRequestAsync(endPoint, requestType, contentType, requestData);
+
+        Services.timer.logElapsedTime(exportTag);
+
+        return result;
+    }
+
+    /**
+     * @description Posts the model to its API endpoint.
+     * @returns {Promise<T>} 
+     */
+    async postAsync() : Promise<T> {
+
+        let newModel = JSON.stringify(this);
+        let result = await this.submitRequestAsync(this.endPoint, MethodType.Post, ContentType.Json, newModel);
+
+        return result.model as T;
+    }
+}
+
+/**
+ * @description Base class for a file-backed DTO model.
+ * @export 
+ * @class FileBaseModel
+ * @extends {BaseModel<T>}
+ * @implements {ITGetModel}
+ * @template T 
+ */
+export class FileBaseModel<T> extends BaseModel<T> {
+
+    // not exposed in UX; API only
+    fileTimeStamp: Date;
+
+    /**
+     * Creates an instance of FileBaseModel.
+     * @param {ITGetModel} parameters 
+     */
+    constructor(parameters: ITGetModel) {
+
+        super (parameters);
+    }
+
+    /**
+     * @description Posts the model and a backing file to its API endpoint.
+     * @returns {Promise<T>} 
+     */
+    async postFileAsync(fileData : any) : Promise<T> {
+
+        let exportTag = Services.timer.mark(`POST File: ${this.constructor.name}`);
+
+        let fileName = `${this.name}`;
+        let newModel = await HttpLibrary.postFileAsync (this.endPoint, fileData, this);
+
+        Services.timer.logElapsedTime(exportTag);       
+
+        return newModel as T;
+    }
+}
+
+/**
+ * @description Base class for a generated file-backed DTO model.
+ * @export
+ * @class GeneratedFileBaseModel
+ * @extends {FileBaseModel<T>}
+ * @implements {IGeneratedFile}
+ * @template T 
+ */
+export class GeneratedFileBaseModel<T> extends FileBaseModel<T> implements IGeneratedFile{
+
+    // not exposed in UX; API only
+    fileIsSynchronized: boolean;
+
+    /**
+     * Creates an instance of GeneratedFileBaseModel.
+     * @param {IGeneratedFile} parameters 
+     */
+    constructor(parameters: IGeneratedFile) {
+
+        super (parameters);
+
+        this.fileIsSynchronized = parameters.fileIsSynchronized || undefined;
+    }
+}
 
 /**
  * Concrete implementation of ICamera.
  * @class
  */
-export class Camera implements ICamera {
-
-    id: number;
-    name: string;  
-    description: string;
+export class Camera extends BaseModel<Camera> implements ICamera {
 
     standardView: StandardView;
     fieldOfView: number;
@@ -49,9 +171,9 @@ export class Camera implements ICamera {
      */
     constructor (parameters: ICamera) {
 
-        this.id                     = parameters.id || undefined;
-        this.name                   = parameters.name || undefined;
-        this.description            = parameters.description || undefined;
+        super(parameters);
+
+        this.endPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiCameras}`;
 
         this.standardView           = parameters.standardView || undefined;
         this.fieldOfView            = parameters.fieldOfView  || undefined;    
@@ -79,7 +201,7 @@ export class Camera implements ICamera {
 *  Concrete implementation of IDepthBuffer.
 *  @interface
 */
-export class DepthBuffer implements IDepthBuffer {
+export class DepthBuffer extends GeneratedFileBaseModel<DepthBuffer> implements IDepthBuffer {
 
     id: number;
     name: string;
@@ -97,19 +219,15 @@ export class DepthBuffer implements IDepthBuffer {
     cameraId: number;
     camera: ICamera;
 
-    // not exposed in UX; API only
-    fileTimeStamp: Date;
-    fileIsSynchronized: boolean;
-
     /**
      * Creates an instance of DepthBuffer.
      * @param {IDepthBuffer} parameters 
      */
     constructor (parameters: IDepthBuffer) {
 
-        this.id                     = parameters.id || undefined;
-        this.name                   = parameters.name || undefined;
-        this.description            = parameters.description || undefined;
+        super(parameters);
+
+        this.endPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiDepthBuffers}`;
     
         this.format                 = parameters.format|| undefined;
     
@@ -122,10 +240,6 @@ export class DepthBuffer implements IDepthBuffer {
     
         this.cameraId               = parameters.cameraId || undefined;
         this.camera                 = parameters.camera || undefined;
-    
-        // not exposed in UX; API only
-        this.fileTimeStamp          = parameters.fileTimeStamp || undefined;
-        this.fileIsSynchronized     = parameters.fileIsSynchronized || undefined;
     }
 }
 
@@ -133,7 +247,7 @@ export class DepthBuffer implements IDepthBuffer {
 *  Concrete implementation of IMesh.
 *  @interface
 */
-export class Mesh implements IMesh {
+export class Mesh extends GeneratedFileBaseModel<Mesh> implements IMesh {
 
     id: number;
     name: string;
@@ -154,19 +268,15 @@ export class Mesh implements IMesh {
     meshTransformId: number;
     meshTransform: IMeshTransform;
 
-    // not exposed in UX; API only
-    fileTimeStamp: Date;
-    fileIsSynchronized: boolean;
-
     /**
      * Creates an instance of a Mesh.
      * @param {Mesh} parameters 
      */
     constructor (parameters: IMesh) {
 
-        this.id                     = parameters.id || undefined;
-        this.name                   = parameters.name || undefined;
-        this.description            = parameters.description || undefined;
+        super(parameters);
+
+        this.endPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiMeshes}`;
 
         this.format                 = parameters.format || undefined;
 
@@ -182,10 +292,6 @@ export class Mesh implements IMesh {
     
         this.meshTransformId        = parameters.meshTransformId || undefined;
         this.meshTransform          = parameters.meshTransform || undefined;
-    
-        // not exposed in UX; API only
-        this.fileTimeStamp          = parameters.fileTimeStamp || undefined;
-        this.fileIsSynchronized     = parameters.fileIsSynchronized || undefined;    
     }
 }
 
@@ -193,7 +299,7 @@ export class Mesh implements IMesh {
 *  Concrete implementation of IMeshTransform.
 *  @interface
 */
-export class MeshTransform implements IMeshTransform {
+export class MeshTransform extends BaseModel<MeshTransform> implements IMeshTransform {
 
     id: number;
     name: string;
@@ -217,9 +323,9 @@ export class MeshTransform implements IMeshTransform {
      */
     constructor (parameters: IMeshTransform) {
 
-        this.id                     = parameters.id || undefined;
-        this.name                   = parameters.name || undefined;
-        this.description            = parameters.description || undefined;
+        super(parameters);
+
+        this.endPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiMeshTransforms}`;
 
         this.depth                  = parameters.depth || undefined;
         this.width                  = parameters.width || undefined;
@@ -240,7 +346,7 @@ export class MeshTransform implements IMeshTransform {
 *  Concrete implementation of IModel3d.
 *  @interface
 */
-export class Model3d implements IModel3d {
+export class Model3d extends FileBaseModel<Model3d> implements IModel3d {
 
     id: number;
     name: string;
@@ -261,9 +367,9 @@ export class Model3d implements IModel3d {
      */
     constructor (parameters: IModel3d) {
 
-        this.id           = parameters.id || undefined;
-        this.name         = parameters.name || undefined;
-        this.description  = parameters.description || undefined;
+        super(parameters);
+
+        this.endPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiModels}`;
 
         this.format       = parameters.format || undefined;
 
@@ -280,7 +386,9 @@ export class Model3d implements IModel3d {
  * Concrete implementation of IProject.
  * @class
  */
-export class Project implements IProject {
+export class Project extends BaseModel<Project> implements IProject {
+
+    static EndPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiProjects}`;
 
     id: number;
     name: string;
@@ -292,8 +400,8 @@ export class Project implements IProject {
      */
     constructor (parameters: IProject) {
 
-        this.id           = parameters.id || undefined;
-        this.name         = parameters.name || undefined;
-        this.description  = parameters.description || undefined;
+        super(parameters);
+
+        this.endPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiProjects}`;
     }
 }

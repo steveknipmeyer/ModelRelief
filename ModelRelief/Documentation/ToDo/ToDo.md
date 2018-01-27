@@ -32,6 +32,7 @@ Some Markdown text with <span style="color:blue">some *blue* text
 #### Short Term
 
 #### Front End
+    The 'dotnet run' workflow runs as 'Production'!
 
     What is a Relief?
     What are the relationships between FE classes and their DTO counterparts?

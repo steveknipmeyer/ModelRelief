@@ -21,7 +21,7 @@ export interface ITGetModel {
  *  Not exposed in UX; API only.
  *  @interface
  */
-export interface IGeneratedFile {
+export interface IGeneratedFile extends ITGetModel {
 
     fileTimeStamp?: Date;                   //  time stamp of file 
     fileIsSynchronized?: boolean;           // associated file is synchronized with the model (AND all of the the model's dependencies)

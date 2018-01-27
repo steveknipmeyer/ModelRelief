@@ -165,200 +165,6 @@ define("Api/V1/Interfaces/IDepthBuffer", ["require", "exports"], function (requi
         DepthBufferFormat[DepthBufferFormat["JPG"] = 3] = "JPG";
     })(DepthBufferFormat = exports.DepthBufferFormat || (exports.DepthBufferFormat = {}));
 });
-define("Api/V1/Interfaces/IMeshTransform", ["require", "exports"], function (require, exports) {
-    // ------------------------------------------------------------------------// 
-    // ModelRelief                                                             //
-    //                                                                         //                                                                          
-    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
-    // ------------------------------------------------------------------------//
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-define("Api/V1/Interfaces/IMesh", ["require", "exports"], function (require, exports) {
-    // ------------------------------------------------------------------------// 
-    // ModelRelief                                                             //
-    //                                                                         //                                                                          
-    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
-    // ------------------------------------------------------------------------//
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-    *  Mesh file formats.
-    *  @enum {number}
-    */
-    var MeshFormat;
-    (function (MeshFormat) {
-        MeshFormat[MeshFormat["None"] = 0] = "None";
-        MeshFormat[MeshFormat["RAW"] = 1] = "RAW";
-        MeshFormat[MeshFormat["OBJ"] = 2] = "OBJ";
-        MeshFormat[MeshFormat["STL"] = 3] = "STL";
-    })(MeshFormat = exports.MeshFormat || (exports.MeshFormat = {}));
-});
-define("Api/V1/Models/DtoModels", ["require", "exports"], function (require, exports) {
-    // ------------------------------------------------------------------------// 
-    // ModelRelief                                                             //
-    //                                                                         //                                                                          
-    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
-    // ------------------------------------------------------------------------//
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * Concrete implementation of ICamera.
-     * @class
-     */
-    var Camera = (function () {
-        /**
-         * Creates an instance of Camera.
-         * @param {ICamera} parameters
-         */
-        function Camera(parameters) {
-            this.id = parameters.id || undefined;
-            this.name = parameters.name || undefined;
-            this.description = parameters.description || undefined;
-            this.standardView = parameters.standardView || undefined;
-            this.fieldOfView = parameters.fieldOfView || undefined;
-            this.near = parameters.near || undefined;
-            this.far = parameters.far || undefined;
-            this.boundClippingPlanes = parameters.boundClippingPlanes || undefined;
-            this.positionX = parameters.position ? parameters.position.x : (parameters.positionX ? parameters.positionX : undefined);
-            this.positionY = parameters.position ? parameters.position.y : (parameters.positionY ? parameters.positionY : undefined);
-            this.positionZ = parameters.position ? parameters.position.z : (parameters.positionZ ? parameters.positionZ : undefined);
-            this.lookAtX = parameters.lookAt ? parameters.lookAt.x : (parameters.lookAtX ? parameters.lookAtX : undefined);
-            this.lookAtY = parameters.lookAt ? parameters.lookAt.y : (parameters.lookAtY ? parameters.lookAtY : undefined);
-            this.lookAtZ = parameters.lookAt ? parameters.lookAt.z : (parameters.lookAtZ ? parameters.lookAtZ : undefined);
-            // Navigation Properties
-            this.projectId = parameters.projectId || undefined;
-            this.project = parameters.project || undefined;
-        }
-        return Camera;
-    }());
-    exports.Camera = Camera;
-    /**
-    *  Concrete implementation of IDepthBuffer.
-    *  @interface
-    */
-    var DepthBuffer = (function () {
-        /**
-         * Creates an instance of DepthBuffer.
-         * @param {IDepthBuffer} parameters
-         */
-        function DepthBuffer(parameters) {
-            this.id = parameters.id || undefined;
-            this.name = parameters.name || undefined;
-            this.description = parameters.description || undefined;
-            this.format = parameters.format || undefined;
-            // Navigation Properties
-            this.projectId = parameters.projectId || undefined;
-            this.project = parameters.project || undefined;
-            this.model3dId = parameters.model3dId || undefined;
-            this.model3d = parameters.model3d || undefined;
-            this.cameraId = parameters.cameraId || undefined;
-            this.camera = parameters.camera || undefined;
-            // not exposed in UX; API only
-            this.fileTimeStamp = parameters.fileTimeStamp || undefined;
-            this.fileIsSynchronized = parameters.fileIsSynchronized || undefined;
-        }
-        return DepthBuffer;
-    }());
-    exports.DepthBuffer = DepthBuffer;
-    /**
-    *  Concrete implementation of IMesh.
-    *  @interface
-    */
-    var Mesh = (function () {
-        /**
-         * Creates an instance of a Mesh.
-         * @param {Mesh} parameters
-         */
-        function Mesh(parameters) {
-            this.id = parameters.id || undefined;
-            this.name = parameters.name || undefined;
-            this.description = parameters.description || undefined;
-            this.format = parameters.format || undefined;
-            // Navigation Properties
-            this.projectId = parameters.projectId || undefined;
-            this.project = parameters.project || undefined;
-            this.cameraId = parameters.cameraId || undefined;
-            this.camera = parameters.camera || undefined;
-            this.depthBufferId = parameters.depthBufferId || undefined;
-            this.depthBuffer = parameters.depthBuffer || undefined;
-            this.meshTransformId = parameters.meshTransformId || undefined;
-            this.meshTransform = parameters.meshTransform || undefined;
-            // not exposed in UX; API only
-            this.fileTimeStamp = parameters.fileTimeStamp || undefined;
-            this.fileIsSynchronized = parameters.fileIsSynchronized || undefined;
-        }
-        return Mesh;
-    }());
-    exports.Mesh = Mesh;
-    /**
-    *  Concrete implementation of IMeshTransform.
-    *  @interface
-    */
-    var MeshTransform = (function () {
-        /**
-         * Creates an instance of a MeshTransform.
-         * @param {IMeshTransform} parameters
-         */
-        function MeshTransform(parameters) {
-            this.id = parameters.id || undefined;
-            this.name = parameters.name || undefined;
-            this.description = parameters.description || undefined;
-            this.depth = parameters.depth || undefined;
-            this.width = parameters.width || undefined;
-            this.tau = parameters.tau || undefined;
-            this.sigmaGaussianBlur = parameters.sigmaGaussianBlur || undefined;
-            this.sigmaGaussianSmooth = parameters.sigmaGaussianSmooth || undefined;
-            this.lambdaLinearScaling = parameters.lambdaLinearScaling || undefined;
-            // Navigation Properties
-            this.projectId = parameters.projectId || undefined;
-            this.project = parameters.project || undefined;
-        }
-        return MeshTransform;
-    }());
-    exports.MeshTransform = MeshTransform;
-    ;
-    /**
-    *  Concrete implementation of IModel3d.
-    *  @interface
-    */
-    var Model3d = (function () {
-        /**
-         * Creates an instance of a Model3d.
-         * @param {IModel3d} parameters
-         */
-        function Model3d(parameters) {
-            this.id = parameters.id || undefined;
-            this.name = parameters.name || undefined;
-            this.description = parameters.description || undefined;
-            this.format = parameters.format || undefined;
-            // Navigation Properties
-            this.projectId = parameters.projectId || undefined;
-            this.project = parameters.project || undefined;
-            this.cameraId = parameters.cameraId || undefined;
-            this.camera = parameters.camera || undefined;
-        }
-        return Model3d;
-    }());
-    exports.Model3d = Model3d;
-    /**
-     * Concrete implementation of IProject.
-     * @class
-     */
-    var Project = (function () {
-        /**
-         * Creates an instance of a Project.
-         * @param {Project} parameters
-         */
-        function Project(parameters) {
-            this.id = parameters.id || undefined;
-            this.name = parameters.name || undefined;
-            this.description = parameters.description || undefined;
-        }
-        return Project;
-    }());
-    exports.Project = Project;
-});
 define("System/Logger", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
@@ -1241,254 +1047,6 @@ define("System/Math", ["require", "exports"], function (require, exports) {
     }());
     exports.MathLibrary = MathLibrary;
 });
-define("Models/DepthBuffer", ["require", "exports", "chai", "three", "System/Services"], function (require, exports, chai_1, THREE, Services_2) {
-    // ------------------------------------------------------------------------// 
-    // ModelRelief                                                             //
-    //                                                                         //                                                                          
-    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
-    // ------------------------------------------------------------------------//
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var DepthBufferFormat;
-    (function (DepthBufferFormat) {
-        DepthBufferFormat[DepthBufferFormat["None"] = 0] = "None";
-        DepthBufferFormat[DepthBufferFormat["Raw"] = 1] = "Raw";
-        DepthBufferFormat[DepthBufferFormat["PNG"] = 2] = "PNG";
-        DepthBufferFormat[DepthBufferFormat["JPG"] = 3] = "JPG"; // JPG format
-    })(DepthBufferFormat = exports.DepthBufferFormat || (exports.DepthBufferFormat = {}));
-    /**
-     *  DepthBuffer
-     *  @class
-     */
-    var DepthBuffer = (function () {
-        /**
-         * @constructor
-         * @param rgbaArray Raw aray of RGBA bytes packed with floats.
-         * @param width Width of map.
-         * @param height Height of map.
-         * @param nearClipPlane Camera near clipping plane.
-         * @param farClipPlane Camera far clipping plane.
-         */
-        function DepthBuffer(rgbaArray, width, height, camera) {
-            this._rgbaArray = rgbaArray;
-            this.width = width;
-            this.height = height;
-            this.camera = camera;
-            this.initialize();
-        }
-        Object.defineProperty(DepthBuffer.prototype, "aspectRatio", {
-            //#region Properties
-            /**
-             * Returns the aspect ration of the depth buffer.
-             */
-            get: function () {
-                return this.width / this.height;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(DepthBuffer.prototype, "minimumNormalized", {
-            /**
-             * Returns the minimum normalized depth value.
-             */
-            get: function () {
-                return this._minimumNormalized;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(DepthBuffer.prototype, "minimum", {
-            /**
-             * Returns the minimum depth value.
-             */
-            get: function () {
-                var minimum = this.normalizedToModelDepth(this._maximumNormalized);
-                return minimum;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(DepthBuffer.prototype, "maximumNormalized", {
-            /**
-             * Returns the maximum normalized depth value.
-             */
-            get: function () {
-                return this._maximumNormalized;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(DepthBuffer.prototype, "maximum", {
-            /**
-             * Returns the maximum depth value.
-             */
-            get: function () {
-                var maximum = this.normalizedToModelDepth(this.minimumNormalized);
-                return maximum;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(DepthBuffer.prototype, "rangeNormalized", {
-            /**
-             * Returns the normalized depth range of the buffer.
-             */
-            get: function () {
-                var depthNormalized = this._maximumNormalized - this._minimumNormalized;
-                return depthNormalized;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(DepthBuffer.prototype, "range", {
-            /**
-             * Returns the normalized depth of the buffer.
-             */
-            get: function () {
-                var depth = this.maximum - this.minimum;
-                return depth;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        //#endregion
-        /**
-         * Calculate the extents of the depth buffer.
-         */
-        DepthBuffer.prototype.calculateExtents = function () {
-            this.setMinimumNormalized();
-            this.setMaximumNormalized();
-        };
-        /**
-         * Initialize
-         */
-        DepthBuffer.prototype.initialize = function () {
-            this._logger = Services_2.Services.defaultLogger;
-            this._nearClipPlane = this.camera.near;
-            this._farClipPlane = this.camera.far;
-            this._cameraClipRange = this._farClipPlane - this._nearClipPlane;
-            // RGBA -> Float32
-            this.depths = new Float32Array(this._rgbaArray.buffer);
-            // calculate extrema of depth buffer values
-            this.calculateExtents();
-        };
-        /**
-         * Convert a normalized depth [0,1] to depth in model units.
-         * @param normalizedDepth Normalized depth [0,1].
-         */
-        DepthBuffer.prototype.normalizedToModelDepth = function (normalizedDepth) {
-            // https://stackoverflow.com/questions/6652253/getting-the-true-z-value-from-the-depth-buffer
-            normalizedDepth = 2.0 * normalizedDepth - 1.0;
-            var zLinear = 2.0 * this.camera.near * this.camera.far / (this.camera.far + this.camera.near - normalizedDepth * (this.camera.far - this.camera.near));
-            // zLinear is the distance from the camera; reverse to yield height from mesh plane
-            zLinear = -(zLinear - this.camera.far);
-            return zLinear;
-        };
-        /**
-         * Returns the normalized depth value at a pixel index
-         * @param row Buffer row.
-         * @param column Buffer column.
-         */
-        DepthBuffer.prototype.depthNormalized = function (row, column) {
-            var index = (Math.round(row) * this.width) + Math.round(column);
-            return this.depths[index];
-        };
-        /**
-         * Returns the depth value at a pixel index.
-         * @param row Map row.
-         * @param pixelColumn Map column.
-         */
-        DepthBuffer.prototype.depth = function (row, column) {
-            var depthNormalized = this.depthNormalized(row, column);
-            var depth = this.normalizedToModelDepth(depthNormalized);
-            return depth;
-        };
-        /**
-         * Calculates the minimum normalized depth value.
-         */
-        DepthBuffer.prototype.setMinimumNormalized = function () {
-            var minimumNormalized = Number.MAX_VALUE;
-            for (var index = 0; index < this.depths.length; index++) {
-                var depthValue = this.depths[index];
-                if (depthValue < minimumNormalized)
-                    minimumNormalized = depthValue;
-            }
-            this._minimumNormalized = minimumNormalized;
-        };
-        /**
-         * Calculates the maximum normalized depth value.
-         */
-        DepthBuffer.prototype.setMaximumNormalized = function () {
-            var maximumNormalized = Number.MIN_VALUE;
-            for (var index = 0; index < this.depths.length; index++) {
-                var depthValue = this.depths[index];
-                if (depthValue > maximumNormalized)
-                    maximumNormalized = depthValue;
-            }
-            this._maximumNormalized = maximumNormalized;
-        };
-        /**
-         * Returns the linear index of a model point in world coordinates.
-         * @param worldVertex Vertex of model.
-         */
-        DepthBuffer.prototype.getModelVertexIndices = function (worldVertex, planeBoundingBox) {
-            var boxSize = planeBoundingBox.getSize();
-            var meshExtents = new THREE.Vector2(boxSize.x, boxSize.y);
-            //  map coordinates to offsets in range [0, 1]
-            var offsetX = (worldVertex.x + (boxSize.x / 2)) / boxSize.x;
-            var offsetY = (worldVertex.y + (boxSize.y / 2)) / boxSize.y;
-            var row = offsetY * (this.height - 1);
-            var column = offsetX * (this.width - 1);
-            row = Math.round(row);
-            column = Math.round(column);
-            chai_1.assert.isTrue((row >= 0) && (row < this.height), ("Vertex (" + worldVertex.x + ", " + worldVertex.y + ", " + worldVertex.z + ") yielded row = " + row));
-            chai_1.assert.isTrue((column >= 0) && (column < this.width), ("Vertex (" + worldVertex.x + ", " + worldVertex.y + ", " + worldVertex.z + ") yielded column = " + column));
-            return new THREE.Vector2(row, column);
-        };
-        /**
-         * Returns the linear index of a model point in world coordinates.
-         * @param worldVertex Vertex of model.
-         */
-        DepthBuffer.prototype.getModelVertexIndex = function (worldVertex, planeBoundingBox) {
-            var indices = this.getModelVertexIndices(worldVertex, planeBoundingBox);
-            var row = indices.x;
-            var column = indices.y;
-            var index = (row * this.width) + column;
-            index = Math.round(index);
-            chai_1.assert.isTrue((index >= 0) && (index < this.depths.length), ("Vertex (" + worldVertex.x + ", " + worldVertex.y + ", " + worldVertex.z + ") yielded index = " + index));
-            return index;
-        };
-        /**
-         * Analyzes properties of a depth buffer.
-         */
-        DepthBuffer.prototype.analyze = function () {
-            this._logger.clearLog();
-            var middle = this.width / 2;
-            var decimalPlaces = 5;
-            var headerStyle = "font-family : monospace; font-weight : bold; color : blue; font-size : 18px";
-            var messageStyle = "font-family : monospace; color : black; font-size : 14px";
-            this._logger.addMessage('Camera Properties', headerStyle);
-            this._logger.addMessage("Near Plane = " + this.camera.near, messageStyle);
-            this._logger.addMessage("Far Plane  = " + this.camera.far, messageStyle);
-            this._logger.addMessage("Clip Range = " + (this.camera.far - this.camera.near), messageStyle);
-            this._logger.addEmptyLine();
-            this._logger.addMessage('Normalized', headerStyle);
-            this._logger.addMessage("Center Depth = " + this.depthNormalized(middle, middle).toFixed(decimalPlaces), messageStyle);
-            this._logger.addMessage("Z Range = " + this.rangeNormalized.toFixed(decimalPlaces), messageStyle);
-            this._logger.addMessage("Minimum = " + this.minimumNormalized.toFixed(decimalPlaces), messageStyle);
-            this._logger.addMessage("Maximum = " + this.maximumNormalized.toFixed(decimalPlaces), messageStyle);
-            this._logger.addEmptyLine();
-            this._logger.addMessage('Model Units', headerStyle);
-            this._logger.addMessage("Center Depth = " + this.depth(middle, middle).toFixed(decimalPlaces), messageStyle);
-            this._logger.addMessage("Z Range = " + this.range.toFixed(decimalPlaces), messageStyle);
-            this._logger.addMessage("Minimum = " + this.minimum.toFixed(decimalPlaces), messageStyle);
-            this._logger.addMessage("Maximum = " + this.maximum.toFixed(decimalPlaces), messageStyle);
-        };
-        DepthBuffer.NormalizedTolerance = .001;
-        return DepthBuffer;
-    }());
-    exports.DepthBuffer = DepthBuffer;
-});
 define("System/Tools", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
@@ -1547,7 +1105,7 @@ define("System/Tools", ["require", "exports"], function (require, exports) {
     JSON compatible constructor parameters
     Fixed resolution; resizing support is not required.
 */
-define("Graphics/DepthBufferFactory", ["require", "exports", "three", "Viewers/Camera", "Models/DepthBuffer", "Graphics/Graphics", "System/Services", "System/Tools"], function (require, exports, THREE, Camera_1, DepthBuffer_1, Graphics_1, Services_3, Tools_1) {
+define("Graphics/DepthBufferFactory", ["require", "exports", "three", "Viewers/Camera", "Models/DepthBuffer", "Graphics/Graphics", "System/Services", "System/Tools"], function (require, exports, THREE, Camera_1, DepthBuffer_1, Graphics_1, Services_2, Tools_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
@@ -1691,7 +1249,7 @@ define("Graphics/DepthBufferFactory", ["require", "exports", "three", "Viewers/C
          * Perform setup and initialization.
          */
         DepthBufferFactory.prototype.initialize = function () {
-            this._logger = Services_3.Services.defaultLogger;
+            this._logger = Services_2.Services.defaultLogger;
             this.initializePrimary();
             this.initializePost();
         };
@@ -1805,7 +1363,7 @@ define("Graphics/DepthBufferFactory", ["require", "exports", "three", "Viewers/C
          * Create a depth buffer.
          */
         DepthBufferFactory.prototype.createDepthBuffer = function () {
-            var timerTag = Services_3.Services.timer.mark('DepthBufferFactory.createDepthBuffer');
+            var timerTag = Services_2.Services.timer.mark('DepthBufferFactory.createDepthBuffer');
             if (this._boundedClipping ||
                 ((this._camera.near === Camera_1.Camera.DefaultNearClippingPlane) && (this._camera.far === Camera_1.Camera.DefaultFarClippingPlane)))
                 this.setCameraClippingPlanes();
@@ -1821,7 +1379,7 @@ define("Graphics/DepthBufferFactory", ["require", "exports", "three", "Viewers/C
             this._renderer.readRenderTargetPixels(this._encodedTarget, 0, 0, this._width, this._height, depthBufferRGBA);
             this._depthBuffer = new DepthBuffer_1.DepthBuffer(depthBufferRGBA, this._width, this._height, this._camera);
             this.analyzeTargets();
-            Services_3.Services.timer.logElapsedTime(timerTag);
+            Services_2.Services.timer.logElapsedTime(timerTag);
             return this._depthBuffer;
         };
         DepthBufferFactory.DefaultResolution = 1024; // default DB resolution
@@ -1832,7 +1390,7 @@ define("Graphics/DepthBufferFactory", ["require", "exports", "three", "Viewers/C
     }());
     exports.DepthBufferFactory = DepthBufferFactory;
 });
-define("Viewers/Camera", ["require", "exports", "three", "Graphics/DepthBufferFactory", "Graphics/Graphics", "System/Services"], function (require, exports, THREE, DepthBufferFactory_1, Graphics_2, Services_4) {
+define("Viewers/Camera", ["require", "exports", "three", "Graphics/DepthBufferFactory", "Graphics/Graphics", "System/Services"], function (require, exports, THREE, DepthBufferFactory_1, Graphics_2, Services_3) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -1925,7 +1483,7 @@ define("Viewers/Camera", ["require", "exports", "three", "Graphics/DepthBufferFa
          * @returns {THREE.PerspectiveCamera}
          */
         Camera.getFitViewCamera = function (cameraTemplate, model) {
-            var timerTag = Services_4.Services.timer.mark('Camera.getFitViewCamera');
+            var timerTag = Services_3.Services.timer.mark('Camera.getFitViewCamera');
             var camera = cameraTemplate.clone(true);
             var boundingBoxWorld = Camera.getDefaultBoundingBox(model);
             var cameraMatrixWorld = camera.matrixWorld;
@@ -1947,7 +1505,7 @@ define("Viewers/Camera", ["require", "exports", "three", "Graphics/DepthBufferFa
             // force camera matrix to update; matrixAutoUpdate happens in render loop
             camera.updateMatrixWorld(true);
             camera.updateProjectionMatrix();
-            Services_4.Services.timer.logElapsedTime(timerTag);
+            Services_3.Services.timer.logElapsedTime(timerTag);
             return camera;
         };
         /**
@@ -1958,7 +1516,7 @@ define("Viewers/Camera", ["require", "exports", "three", "Graphics/DepthBufferFa
          * @returns {THREE.PerspectiveCamera}
          */
         Camera.getStandardViewCamera = function (view, viewAspect, model) {
-            var timerTag = Services_4.Services.timer.mark('Camera.getStandardView');
+            var timerTag = Services_3.Services.timer.mark('Camera.getStandardView');
             var camera = Camera.getDefaultCamera(viewAspect);
             var boundingBox = Graphics_2.Graphics.getBoundingBoxFromObject(model);
             var centerX = boundingBox.getCenter().x;
@@ -2014,7 +1572,7 @@ define("Viewers/Camera", ["require", "exports", "three", "Graphics/DepthBufferFa
             camera.updateMatrixWorld(true);
             camera.updateProjectionMatrix();
             camera = Camera.getFitViewCamera(camera, model);
-            Services_4.Services.timer.logElapsedTime(timerTag);
+            Services_3.Services.timer.logElapsedTime(timerTag);
             return camera;
         };
         /**
@@ -2053,7 +1611,7 @@ define("Viewers/Camera", ["require", "exports", "three", "Graphics/DepthBufferFa
     }());
     exports.Camera = Camera;
 });
-define("System/EventManager", ["require", "exports"], function (require, exports) {
+define("Models/DepthBuffer", ["require", "exports", "chai", "three", "System/Services"], function (require, exports, chai_1, THREE, Services_4) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -2061,114 +1619,245 @@ define("System/EventManager", ["require", "exports"], function (require, exports
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    var DepthBufferFormat;
+    (function (DepthBufferFormat) {
+        DepthBufferFormat[DepthBufferFormat["None"] = 0] = "None";
+        DepthBufferFormat[DepthBufferFormat["Raw"] = 1] = "Raw";
+        DepthBufferFormat[DepthBufferFormat["PNG"] = 2] = "PNG";
+        DepthBufferFormat[DepthBufferFormat["JPG"] = 3] = "JPG"; // JPG format
+    })(DepthBufferFormat = exports.DepthBufferFormat || (exports.DepthBufferFormat = {}));
     /**
-     * @description System event type.
-     * @export
-     * @enum {number}
+     *  DepthBuffer
+     *  @class
      */
-    var EventType;
-    (function (EventType) {
-        EventType[EventType["None"] = 0] = "None";
-        EventType[EventType["NewModel"] = 1] = "NewModel";
-        EventType[EventType["MeshGenerate"] = 2] = "MeshGenerate";
-    })(EventType = exports.EventType || (exports.EventType = {}));
-    /**
-     * Event Manager
-     * General event management and dispatching.
-     * @class
-     */
-    var EventManager = (function () {
+    var DepthBuffer = (function () {
         /**
-        /*
-         * Creates EventManager object. It needs to be called with '.call' to add the functionality to an object.
          * @constructor
+         * @param rgbaArray Raw aray of RGBA bytes packed with floats.
+         * @param width Width of map.
+         * @param height Height of map.
+         * @param nearClipPlane Camera near clipping plane.
+         * @param farClipPlane Camera far clipping plane.
          */
-        function EventManager() {
+        function DepthBuffer(rgbaArray, width, height, camera) {
+            this._rgbaArray = rgbaArray;
+            this.width = width;
+            this.height = height;
+            this.camera = camera;
+            this.initialize();
         }
+        Object.defineProperty(DepthBuffer.prototype, "aspectRatio", {
+            //#region Properties
+            /**
+             * Returns the aspect ration of the depth buffer.
+             */
+            get: function () {
+                return this.width / this.height;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DepthBuffer.prototype, "minimumNormalized", {
+            /**
+             * Returns the minimum normalized depth value.
+             */
+            get: function () {
+                return this._minimumNormalized;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DepthBuffer.prototype, "minimum", {
+            /**
+             * Returns the minimum depth value.
+             */
+            get: function () {
+                var minimum = this.normalizedToModelDepth(this._maximumNormalized);
+                return minimum;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DepthBuffer.prototype, "maximumNormalized", {
+            /**
+             * Returns the maximum normalized depth value.
+             */
+            get: function () {
+                return this._maximumNormalized;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DepthBuffer.prototype, "maximum", {
+            /**
+             * Returns the maximum depth value.
+             */
+            get: function () {
+                var maximum = this.normalizedToModelDepth(this.minimumNormalized);
+                return maximum;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DepthBuffer.prototype, "rangeNormalized", {
+            /**
+             * Returns the normalized depth range of the buffer.
+             */
+            get: function () {
+                var depthNormalized = this._maximumNormalized - this._minimumNormalized;
+                return depthNormalized;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DepthBuffer.prototype, "range", {
+            /**
+             * Returns the normalized depth of the buffer.
+             */
+            get: function () {
+                var depth = this.maximum - this.minimum;
+                return depth;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        //#endregion
         /**
-         * Adds a listener to an event type.
-         * @param type The type of the event that gets added.
-         * @param listener The listener function that gets added.
+         * Calculate the extents of the depth buffer.
          */
-        EventManager.prototype.addEventListener = function (type, listener) {
-            if (this._listeners === undefined) {
-                this._listeners = [];
-                this._listeners[EventType.None] = [];
-            }
-            var listeners = this._listeners;
-            // event does not exist; create
-            if (listeners[type] === undefined) {
-                listeners[type] = [];
-            }
-            // do nothing if listener registered
-            if (listeners[type].indexOf(listener) === -1) {
-                // add new listener to this event
-                listeners[type].push(listener);
-            }
+        DepthBuffer.prototype.calculateExtents = function () {
+            this.setMinimumNormalized();
+            this.setMaximumNormalized();
         };
         /**
-         * Checks whether a listener is registered for an event.
-         * @param type The type of the event to check.
-         * @param listener The listener function to check..
+         * Initialize
          */
-        EventManager.prototype.hasEventListener = function (type, listener) {
-            // no events     
-            if (this._listeners === undefined)
-                return false;
-            var listeners = this._listeners;
-            // event exists and listener registered => true
-            return listeners[type] !== undefined && listeners[type].indexOf(listener) !== -1;
+        DepthBuffer.prototype.initialize = function () {
+            this._logger = Services_4.Services.defaultLogger;
+            this._nearClipPlane = this.camera.near;
+            this._farClipPlane = this.camera.far;
+            this._cameraClipRange = this._farClipPlane - this._nearClipPlane;
+            // RGBA -> Float32
+            this.depths = new Float32Array(this._rgbaArray.buffer);
+            // calculate extrema of depth buffer values
+            this.calculateExtents();
         };
         /**
-         * Removes a listener from an event type.
-         * @param type The type of the event that gets removed.
-         * @param listener The listener function that gets removed.
+         * Convert a normalized depth [0,1] to depth in model units.
+         * @param normalizedDepth Normalized depth [0,1].
          */
-        EventManager.prototype.removeEventListener = function (type, listener) {
-            // no events; do nothing
-            if (this._listeners === undefined)
-                return;
-            var listeners = this._listeners;
-            var listenerArray = listeners[type];
-            if (listenerArray !== undefined) {
-                var index = listenerArray.indexOf(listener);
-                // remove if found
-                if (index !== -1) {
-                    listenerArray.splice(index, 1);
-                }
-            }
+        DepthBuffer.prototype.normalizedToModelDepth = function (normalizedDepth) {
+            // https://stackoverflow.com/questions/6652253/getting-the-true-z-value-from-the-depth-buffer
+            normalizedDepth = 2.0 * normalizedDepth - 1.0;
+            var zLinear = 2.0 * this.camera.near * this.camera.far / (this.camera.far + this.camera.near - normalizedDepth * (this.camera.far - this.camera.near));
+            // zLinear is the distance from the camera; reverse to yield height from mesh plane
+            zLinear = -(zLinear - this.camera.far);
+            return zLinear;
         };
         /**
-         * Fire an event type.
-         * @param target Event target.
-         * @param type The type of event that gets fired.
+         * Returns the normalized depth value at a pixel index
+         * @param row Buffer row.
+         * @param column Buffer column.
          */
-        EventManager.prototype.dispatchEvent = function (target, eventType) {
-            var args = [];
-            for (var _i = 2; _i < arguments.length; _i++) {
-                args[_i - 2] = arguments[_i];
-            }
-            // no events defined; do nothing
-            if (this._listeners === undefined)
-                return;
-            var listeners = this._listeners;
-            var listenerArray = listeners[eventType];
-            if (listenerArray !== undefined) {
-                var theEvent = {
-                    type: eventType,
-                    target: target // set target to instance triggering the event
-                };
-                // duplicate original array of listeners
-                var array = listenerArray.slice(0);
-                var length_1 = array.length;
-                for (var index = 0; index < length_1; index++) {
-                    array[index].apply(array, [theEvent].concat(args));
-                }
-            }
+        DepthBuffer.prototype.depthNormalized = function (row, column) {
+            var index = (Math.round(row) * this.width) + Math.round(column);
+            return this.depths[index];
         };
-        return EventManager;
+        /**
+         * Returns the depth value at a pixel index.
+         * @param row Map row.
+         * @param pixelColumn Map column.
+         */
+        DepthBuffer.prototype.depth = function (row, column) {
+            var depthNormalized = this.depthNormalized(row, column);
+            var depth = this.normalizedToModelDepth(depthNormalized);
+            return depth;
+        };
+        /**
+         * Calculates the minimum normalized depth value.
+         */
+        DepthBuffer.prototype.setMinimumNormalized = function () {
+            var minimumNormalized = Number.MAX_VALUE;
+            for (var index = 0; index < this.depths.length; index++) {
+                var depthValue = this.depths[index];
+                if (depthValue < minimumNormalized)
+                    minimumNormalized = depthValue;
+            }
+            this._minimumNormalized = minimumNormalized;
+        };
+        /**
+         * Calculates the maximum normalized depth value.
+         */
+        DepthBuffer.prototype.setMaximumNormalized = function () {
+            var maximumNormalized = Number.MIN_VALUE;
+            for (var index = 0; index < this.depths.length; index++) {
+                var depthValue = this.depths[index];
+                if (depthValue > maximumNormalized)
+                    maximumNormalized = depthValue;
+            }
+            this._maximumNormalized = maximumNormalized;
+        };
+        /**
+         * Returns the linear index of a model point in world coordinates.
+         * @param worldVertex Vertex of model.
+         */
+        DepthBuffer.prototype.getModelVertexIndices = function (worldVertex, planeBoundingBox) {
+            var boxSize = planeBoundingBox.getSize();
+            var meshExtents = new THREE.Vector2(boxSize.x, boxSize.y);
+            //  map coordinates to offsets in range [0, 1]
+            var offsetX = (worldVertex.x + (boxSize.x / 2)) / boxSize.x;
+            var offsetY = (worldVertex.y + (boxSize.y / 2)) / boxSize.y;
+            var row = offsetY * (this.height - 1);
+            var column = offsetX * (this.width - 1);
+            row = Math.round(row);
+            column = Math.round(column);
+            chai_1.assert.isTrue((row >= 0) && (row < this.height), ("Vertex (" + worldVertex.x + ", " + worldVertex.y + ", " + worldVertex.z + ") yielded row = " + row));
+            chai_1.assert.isTrue((column >= 0) && (column < this.width), ("Vertex (" + worldVertex.x + ", " + worldVertex.y + ", " + worldVertex.z + ") yielded column = " + column));
+            return new THREE.Vector2(row, column);
+        };
+        /**
+         * Returns the linear index of a model point in world coordinates.
+         * @param worldVertex Vertex of model.
+         */
+        DepthBuffer.prototype.getModelVertexIndex = function (worldVertex, planeBoundingBox) {
+            var indices = this.getModelVertexIndices(worldVertex, planeBoundingBox);
+            var row = indices.x;
+            var column = indices.y;
+            var index = (row * this.width) + column;
+            index = Math.round(index);
+            chai_1.assert.isTrue((index >= 0) && (index < this.depths.length), ("Vertex (" + worldVertex.x + ", " + worldVertex.y + ", " + worldVertex.z + ") yielded index = " + index));
+            return index;
+        };
+        /**
+         * Analyzes properties of a depth buffer.
+         */
+        DepthBuffer.prototype.analyze = function () {
+            this._logger.clearLog();
+            var middle = this.width / 2;
+            var decimalPlaces = 5;
+            var headerStyle = "font-family : monospace; font-weight : bold; color : blue; font-size : 18px";
+            var messageStyle = "font-family : monospace; color : black; font-size : 14px";
+            this._logger.addMessage('Camera Properties', headerStyle);
+            this._logger.addMessage("Near Plane = " + this.camera.near, messageStyle);
+            this._logger.addMessage("Far Plane  = " + this.camera.far, messageStyle);
+            this._logger.addMessage("Clip Range = " + (this.camera.far - this.camera.near), messageStyle);
+            this._logger.addEmptyLine();
+            this._logger.addMessage('Normalized', headerStyle);
+            this._logger.addMessage("Center Depth = " + this.depthNormalized(middle, middle).toFixed(decimalPlaces), messageStyle);
+            this._logger.addMessage("Z Range = " + this.rangeNormalized.toFixed(decimalPlaces), messageStyle);
+            this._logger.addMessage("Minimum = " + this.minimumNormalized.toFixed(decimalPlaces), messageStyle);
+            this._logger.addMessage("Maximum = " + this.maximumNormalized.toFixed(decimalPlaces), messageStyle);
+            this._logger.addEmptyLine();
+            this._logger.addMessage('Model Units', headerStyle);
+            this._logger.addMessage("Center Depth = " + this.depth(middle, middle).toFixed(decimalPlaces), messageStyle);
+            this._logger.addMessage("Z Range = " + this.range.toFixed(decimalPlaces), messageStyle);
+            this._logger.addMessage("Minimum = " + this.minimum.toFixed(decimalPlaces), messageStyle);
+            this._logger.addMessage("Maximum = " + this.maximum.toFixed(decimalPlaces), messageStyle);
+        };
+        DepthBuffer.NormalizedTolerance = .001;
+        return DepthBuffer;
     }());
-    exports.EventManager = EventManager;
+    exports.DepthBuffer = DepthBuffer;
 });
 define("System/Exception", ["require", "exports", "System/Services"], function (require, exports, Services_5) {
     // ------------------------------------------------------------------------// 
@@ -2601,6 +2290,15 @@ define("System/HttpStatus", ["require", "exports"], function (require, exports) 
     exports.HttpStatusMessage[HttpStatusCode.UNSUPPORTED_MEDIA_TYPE] = "Unsupported Media Type";
     exports.HttpStatusMessage[HttpStatusCode.USE_PROXY] = "Use Proxy";
 });
+define("Api/V1/Interfaces/IMeshTransform", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
 define("Models/MeshTransform", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
@@ -2881,12 +2579,441 @@ define("System/Http", ["require", "exports", "System/Exception", "System/HttpSta
     }());
     exports.HttpLibrary = HttpLibrary;
 });
+define("Api/V1/Interfaces/IMesh", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+    *  Mesh file formats.
+    *  @enum {number}
+    */
+    var MeshFormat;
+    (function (MeshFormat) {
+        MeshFormat[MeshFormat["None"] = 0] = "None";
+        MeshFormat[MeshFormat["RAW"] = 1] = "RAW";
+        MeshFormat[MeshFormat["OBJ"] = 2] = "OBJ";
+        MeshFormat[MeshFormat["STL"] = 3] = "STL";
+    })(MeshFormat = exports.MeshFormat || (exports.MeshFormat = {}));
+});
+define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/Services"], function (require, exports, Http_1, Services_7) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * @description Common base class for all DTO models.
+     * @export
+     * @class Base
+     * @implements {ITGetModel}
+     * @template T
+     */
+    var BaseModel = (function () {
+        /**
+         * Creates an instance of Base.
+         * @param {ITGetModel} parameters
+         */
+        function BaseModel(parameters) {
+            this.id = parameters.id || undefined;
+            this.name = parameters.name || undefined;
+            this.description = parameters.description || undefined;
+        }
+        /**
+         * @description Submits an HTTP request to its API endpoint.
+         * @param {string} endPoint API endpoint
+         * @param {MethodType} requestType HTTP method.
+         * @param {ContentType} contentType MIME type (e.g. JSON, octet-stream)
+         * @param {*} requestData Data to send (or null)
+         * @returns {Promise<RequestResponse>}
+         */
+        BaseModel.prototype.submitRequestAsync = function (endPoint, requestType, contentType, requestData) {
+            return __awaiter(this, void 0, void 0, function () {
+                var exportTag, result;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            exportTag = Services_7.Services.timer.mark(requestType + " " + this.constructor.name);
+                            return [4 /*yield*/, Http_1.HttpLibrary.submitHttpRequestAsync(endPoint, requestType, contentType, requestData)];
+                        case 1:
+                            result = _a.sent();
+                            Services_7.Services.timer.logElapsedTime(exportTag);
+                            return [2 /*return*/, result];
+                    }
+                });
+            });
+        };
+        /**
+         * @description Posts the model to its API endpoint.
+         * @returns {Promise<T>}
+         */
+        BaseModel.prototype.postAsync = function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var newModel, result;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            newModel = JSON.stringify(this);
+                            return [4 /*yield*/, this.submitRequestAsync(this.endPoint, Http_1.MethodType.Post, Http_1.ContentType.Json, newModel)];
+                        case 1:
+                            result = _a.sent();
+                            return [2 /*return*/, result.model];
+                    }
+                });
+            });
+        };
+        return BaseModel;
+    }());
+    exports.BaseModel = BaseModel;
+    /**
+     * @description Base class for a file-backed DTO model.
+     * @export
+     * @class FileBaseModel
+     * @extends {BaseModel<T>}
+     * @implements {ITGetModel}
+     * @template T
+     */
+    var FileBaseModel = (function (_super) {
+        __extends(FileBaseModel, _super);
+        /**
+         * Creates an instance of FileBaseModel.
+         * @param {ITGetModel} parameters
+         */
+        function FileBaseModel(parameters) {
+            return _super.call(this, parameters) || this;
+        }
+        /**
+         * @description Posts the model and a backing file to its API endpoint.
+         * @returns {Promise<T>}
+         */
+        FileBaseModel.prototype.postFileAsync = function (fileData) {
+            return __awaiter(this, void 0, void 0, function () {
+                var exportTag, fileName, newModel;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            exportTag = Services_7.Services.timer.mark("POST File: " + this.constructor.name);
+                            fileName = "" + this.name;
+                            return [4 /*yield*/, Http_1.HttpLibrary.postFileAsync(this.endPoint, fileData, this)];
+                        case 1:
+                            newModel = _a.sent();
+                            Services_7.Services.timer.logElapsedTime(exportTag);
+                            return [2 /*return*/, newModel];
+                    }
+                });
+            });
+        };
+        return FileBaseModel;
+    }(BaseModel));
+    exports.FileBaseModel = FileBaseModel;
+    /**
+     * @description Base class for a generated file-backed DTO model.
+     * @export
+     * @class GeneratedFileBaseModel
+     * @extends {FileBaseModel<T>}
+     * @implements {IGeneratedFile}
+     * @template T
+     */
+    var GeneratedFileBaseModel = (function (_super) {
+        __extends(GeneratedFileBaseModel, _super);
+        /**
+         * Creates an instance of GeneratedFileBaseModel.
+         * @param {IGeneratedFile} parameters
+         */
+        function GeneratedFileBaseModel(parameters) {
+            var _this = _super.call(this, parameters) || this;
+            _this.fileIsSynchronized = parameters.fileIsSynchronized || undefined;
+            return _this;
+        }
+        return GeneratedFileBaseModel;
+    }(FileBaseModel));
+    exports.GeneratedFileBaseModel = GeneratedFileBaseModel;
+    /**
+     * Concrete implementation of ICamera.
+     * @class
+     */
+    var Camera = (function (_super) {
+        __extends(Camera, _super);
+        /**
+         * Creates an instance of Camera.
+         * @param {ICamera} parameters
+         */
+        function Camera(parameters) {
+            var _this = _super.call(this, parameters) || this;
+            _this.endPoint = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiCameras;
+            _this.standardView = parameters.standardView || undefined;
+            _this.fieldOfView = parameters.fieldOfView || undefined;
+            _this.near = parameters.near || undefined;
+            _this.far = parameters.far || undefined;
+            _this.boundClippingPlanes = parameters.boundClippingPlanes || undefined;
+            _this.positionX = parameters.position ? parameters.position.x : (parameters.positionX ? parameters.positionX : undefined);
+            _this.positionY = parameters.position ? parameters.position.y : (parameters.positionY ? parameters.positionY : undefined);
+            _this.positionZ = parameters.position ? parameters.position.z : (parameters.positionZ ? parameters.positionZ : undefined);
+            _this.lookAtX = parameters.lookAt ? parameters.lookAt.x : (parameters.lookAtX ? parameters.lookAtX : undefined);
+            _this.lookAtY = parameters.lookAt ? parameters.lookAt.y : (parameters.lookAtY ? parameters.lookAtY : undefined);
+            _this.lookAtZ = parameters.lookAt ? parameters.lookAt.z : (parameters.lookAtZ ? parameters.lookAtZ : undefined);
+            // Navigation Properties
+            _this.projectId = parameters.projectId || undefined;
+            _this.project = parameters.project || undefined;
+            return _this;
+        }
+        return Camera;
+    }(BaseModel));
+    exports.Camera = Camera;
+    /**
+    *  Concrete implementation of IDepthBuffer.
+    *  @interface
+    */
+    var DepthBuffer = (function (_super) {
+        __extends(DepthBuffer, _super);
+        /**
+         * Creates an instance of DepthBuffer.
+         * @param {IDepthBuffer} parameters
+         */
+        function DepthBuffer(parameters) {
+            var _this = _super.call(this, parameters) || this;
+            _this.endPoint = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiDepthBuffers;
+            _this.format = parameters.format || undefined;
+            // Navigation Properties
+            _this.projectId = parameters.projectId || undefined;
+            _this.project = parameters.project || undefined;
+            _this.model3dId = parameters.model3dId || undefined;
+            _this.model3d = parameters.model3d || undefined;
+            _this.cameraId = parameters.cameraId || undefined;
+            _this.camera = parameters.camera || undefined;
+            return _this;
+        }
+        return DepthBuffer;
+    }(GeneratedFileBaseModel));
+    exports.DepthBuffer = DepthBuffer;
+    /**
+    *  Concrete implementation of IMesh.
+    *  @interface
+    */
+    var Mesh = (function (_super) {
+        __extends(Mesh, _super);
+        /**
+         * Creates an instance of a Mesh.
+         * @param {Mesh} parameters
+         */
+        function Mesh(parameters) {
+            var _this = _super.call(this, parameters) || this;
+            _this.endPoint = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiMeshes;
+            _this.format = parameters.format || undefined;
+            // Navigation Properties
+            _this.projectId = parameters.projectId || undefined;
+            _this.project = parameters.project || undefined;
+            _this.cameraId = parameters.cameraId || undefined;
+            _this.camera = parameters.camera || undefined;
+            _this.depthBufferId = parameters.depthBufferId || undefined;
+            _this.depthBuffer = parameters.depthBuffer || undefined;
+            _this.meshTransformId = parameters.meshTransformId || undefined;
+            _this.meshTransform = parameters.meshTransform || undefined;
+            return _this;
+        }
+        return Mesh;
+    }(GeneratedFileBaseModel));
+    exports.Mesh = Mesh;
+    /**
+    *  Concrete implementation of IMeshTransform.
+    *  @interface
+    */
+    var MeshTransform = (function (_super) {
+        __extends(MeshTransform, _super);
+        /**
+         * Creates an instance of a MeshTransform.
+         * @param {IMeshTransform} parameters
+         */
+        function MeshTransform(parameters) {
+            var _this = _super.call(this, parameters) || this;
+            _this.endPoint = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiMeshTransforms;
+            _this.depth = parameters.depth || undefined;
+            _this.width = parameters.width || undefined;
+            _this.tau = parameters.tau || undefined;
+            _this.sigmaGaussianBlur = parameters.sigmaGaussianBlur || undefined;
+            _this.sigmaGaussianSmooth = parameters.sigmaGaussianSmooth || undefined;
+            _this.lambdaLinearScaling = parameters.lambdaLinearScaling || undefined;
+            // Navigation Properties
+            _this.projectId = parameters.projectId || undefined;
+            _this.project = parameters.project || undefined;
+            return _this;
+        }
+        return MeshTransform;
+    }(BaseModel));
+    exports.MeshTransform = MeshTransform;
+    ;
+    /**
+    *  Concrete implementation of IModel3d.
+    *  @interface
+    */
+    var Model3d = (function (_super) {
+        __extends(Model3d, _super);
+        /**
+         * Creates an instance of a Model3d.
+         * @param {IModel3d} parameters
+         */
+        function Model3d(parameters) {
+            var _this = _super.call(this, parameters) || this;
+            _this.endPoint = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiModels;
+            _this.format = parameters.format || undefined;
+            // Navigation Properties
+            _this.projectId = parameters.projectId || undefined;
+            _this.project = parameters.project || undefined;
+            _this.cameraId = parameters.cameraId || undefined;
+            _this.camera = parameters.camera || undefined;
+            return _this;
+        }
+        return Model3d;
+    }(FileBaseModel));
+    exports.Model3d = Model3d;
+    /**
+     * Concrete implementation of IProject.
+     * @class
+     */
+    var Project = (function (_super) {
+        __extends(Project, _super);
+        /**
+         * Creates an instance of a Project.
+         * @param {Project} parameters
+         */
+        function Project(parameters) {
+            var _this = _super.call(this, parameters) || this;
+            _this.endPoint = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiProjects;
+            return _this;
+        }
+        Project.EndPoint = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiProjects;
+        return Project;
+    }(BaseModel));
+    exports.Project = Project;
+});
+define("System/EventManager", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * @description System event type.
+     * @export
+     * @enum {number}
+     */
+    var EventType;
+    (function (EventType) {
+        EventType[EventType["None"] = 0] = "None";
+        EventType[EventType["NewModel"] = 1] = "NewModel";
+        EventType[EventType["MeshGenerate"] = 2] = "MeshGenerate";
+    })(EventType = exports.EventType || (exports.EventType = {}));
+    /**
+     * Event Manager
+     * General event management and dispatching.
+     * @class
+     */
+    var EventManager = (function () {
+        /**
+        /*
+         * Creates EventManager object. It needs to be called with '.call' to add the functionality to an object.
+         * @constructor
+         */
+        function EventManager() {
+        }
+        /**
+         * Adds a listener to an event type.
+         * @param type The type of the event that gets added.
+         * @param listener The listener function that gets added.
+         */
+        EventManager.prototype.addEventListener = function (type, listener) {
+            if (this._listeners === undefined) {
+                this._listeners = [];
+                this._listeners[EventType.None] = [];
+            }
+            var listeners = this._listeners;
+            // event does not exist; create
+            if (listeners[type] === undefined) {
+                listeners[type] = [];
+            }
+            // do nothing if listener registered
+            if (listeners[type].indexOf(listener) === -1) {
+                // add new listener to this event
+                listeners[type].push(listener);
+            }
+        };
+        /**
+         * Checks whether a listener is registered for an event.
+         * @param type The type of the event to check.
+         * @param listener The listener function to check..
+         */
+        EventManager.prototype.hasEventListener = function (type, listener) {
+            // no events     
+            if (this._listeners === undefined)
+                return false;
+            var listeners = this._listeners;
+            // event exists and listener registered => true
+            return listeners[type] !== undefined && listeners[type].indexOf(listener) !== -1;
+        };
+        /**
+         * Removes a listener from an event type.
+         * @param type The type of the event that gets removed.
+         * @param listener The listener function that gets removed.
+         */
+        EventManager.prototype.removeEventListener = function (type, listener) {
+            // no events; do nothing
+            if (this._listeners === undefined)
+                return;
+            var listeners = this._listeners;
+            var listenerArray = listeners[type];
+            if (listenerArray !== undefined) {
+                var index = listenerArray.indexOf(listener);
+                // remove if found
+                if (index !== -1) {
+                    listenerArray.splice(index, 1);
+                }
+            }
+        };
+        /**
+         * Fire an event type.
+         * @param target Event target.
+         * @param type The type of event that gets fired.
+         */
+        EventManager.prototype.dispatchEvent = function (target, eventType) {
+            var args = [];
+            for (var _i = 2; _i < arguments.length; _i++) {
+                args[_i - 2] = arguments[_i];
+            }
+            // no events defined; do nothing
+            if (this._listeners === undefined)
+                return;
+            var listeners = this._listeners;
+            var listenerArray = listeners[eventType];
+            if (listenerArray !== undefined) {
+                var theEvent = {
+                    type: eventType,
+                    target: target // set target to instance triggering the event
+                };
+                // duplicate original array of listeners
+                var array = listenerArray.slice(0);
+                var length_1 = array.length;
+                for (var index = 0; index < length_1; index++) {
+                    array[index].apply(array, [theEvent].concat(args));
+                }
+            }
+        };
+        return EventManager;
+    }());
+    exports.EventManager = EventManager;
+});
 // ------------------------------------------------------------------------// 
 // ModelRelief                                                             //
 //                                                                         //                                                                          
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
-define("Models/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", "Graphics/Graphics", "System/Services"], function (require, exports, THREE, chai_2, Camera_2, Graphics_3, Services_7) {
+define("Models/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", "Graphics/Graphics", "System/Services"], function (require, exports, THREE, chai_2, Camera_2, Graphics_3, Services_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
@@ -2993,7 +3120,7 @@ define("Models/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", 
          * Perform setup and initialization.
          */
         Mesh.prototype.initialize = function () {
-            this._logger = Services_7.Services.defaultLogger;
+            this._logger = Services_8.Services.defaultLogger;
         };
         //#endregion
         //#region Generation
@@ -3091,7 +3218,7 @@ define("Models/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", 
          * @param material Material to assign to mesh.
          */
         Mesh.prototype.mesh = function (material) {
-            var timerTag = Services_7.Services.timer.mark('DepthBuffer.mesh');
+            var timerTag = Services_8.Services.timer.mark('DepthBuffer.mesh');
             // The mesh size is in real world units to match the depth buffer offsets which are also in real world units.
             // Find the size of the near plane to size the mesh to the model units.
             var meshXYExtents = Camera_2.Camera.getNearPlaneExtents(this.depthBuffer.camera);
@@ -3104,15 +3231,15 @@ define("Models/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", 
             meshGeometry.verticesNeedUpdate = true;
             meshGeometry.normalsNeedUpdate = true;
             meshGeometry.elementsNeedUpdate = true;
-            var faceNormalsTag = Services_7.Services.timer.mark('meshGeometry.computeFaceNormals');
+            var faceNormalsTag = Services_8.Services.timer.mark('meshGeometry.computeFaceNormals');
             meshGeometry.computeVertexNormals();
             meshGeometry.computeFaceNormals();
-            Services_7.Services.timer.logElapsedTime(faceNormalsTag);
+            Services_8.Services.timer.logElapsedTime(faceNormalsTag);
             // Mesh was constructed with Z = depth buffer(X,Y).
             // Now rotate mesh to align with viewer XY plane so Top view is looking down on the mesh.
             mesh.rotateX(-Math.PI / 2);
             Mesh.Cache.addMesh(meshXYExtents, new THREE.Vector2(this.width, this.height), mesh);
-            Services_7.Services.timer.logElapsedTime(timerTag);
+            Services_8.Services.timer.logElapsedTime(timerTag);
             return mesh;
         };
         /**
@@ -3821,7 +3948,7 @@ define("Viewers/CameraControls", ["require", "exports", "three", "dat-gui", "Vie
     }());
     exports.CameraControls = CameraControls;
 });
-define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "Viewers/CameraControls", "System/EventManager", "Graphics/Graphics", "System/Services", "Viewers/TrackballControls"], function (require, exports, THREE, Camera_4, CameraControls_1, EventManager_1, Graphics_5, Services_8, TrackballControls_1) {
+define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "Viewers/CameraControls", "System/EventManager", "Graphics/Graphics", "System/Services", "Viewers/TrackballControls"], function (require, exports, THREE, Camera_4, CameraControls_1, EventManager_1, Graphics_5, Services_9, TrackballControls_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -3855,7 +3982,7 @@ define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "View
             this._cameraControls = null;
             this._name = name;
             this._eventManager = new EventManager_1.EventManager();
-            this._logger = Services_8.Services.defaultLogger;
+            this._logger = Services_9.Services.defaultLogger;
             this._canvas = Graphics_5.Graphics.initializeCanvas(modelCanvasId);
             this._width = this._canvas.offsetWidth;
             this._height = this._canvas.offsetHeight;
@@ -4372,7 +4499,7 @@ define("ModelExporters/OBJExporter", ["require", "exports", "three"], function (
     }());
     exports.OBJExporter = OBJExporter;
 });
-define("Controllers/ComposerController", ["require", "exports", "three", "dat-gui", "Api/V1/Models/DtoModels", "Viewers/Camera", "Graphics/DepthBufferFactory", "System/EventManager", "System/Html", "System/Http", "Api/V1/Interfaces/IDepthBuffer", "Models/Mesh", "System/Services"], function (require, exports, THREE, dat, Dto, Camera_5, DepthBufferFactory_2, EventManager_3, Html_3, Http_1, IDepthBuffer_1, Mesh_1, Services_9) {
+define("Controllers/ComposerController", ["require", "exports", "three", "dat-gui", "Api/V1/Models/DtoModels", "Viewers/Camera", "Graphics/DepthBufferFactory", "System/EventManager", "System/Html", "Api/V1/Interfaces/IDepthBuffer", "Models/Mesh"], function (require, exports, THREE, dat, Dto, Camera_5, DepthBufferFactory_2, EventManager_3, Html_3, IDepthBuffer_1, Mesh_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -4444,9 +4571,13 @@ define("Controllers/ComposerController", ["require", "exports", "three", "dat-gu
                             return [4 /*yield*/, this.postCameraAsync()];
                         case 2:
                             camera = _b.sent();
-                            return [4 /*yield*/, this.postDepthBufferAsync(camera.id)];
+                            // DepthBufffer
+                            return [4 /*yield*/, this.postDepthBufferAsync(camera)];
                         case 3:
+                            // DepthBufffer
                             _b.sent();
+                            // MeshTransform
+                            // Mesh
                             this._composerView._meshView.meshViewer.setModel(this._relief.mesh);
                             if (this._initialMeshGeneration) {
                                 this._composerView._meshView.meshViewer.fitView();
@@ -4462,23 +4593,19 @@ define("Controllers/ComposerController", ["require", "exports", "three", "dat-gu
          */
         ComposerController.prototype.postCameraAsync = function () {
             return __awaiter(this, void 0, void 0, function () {
-                var exportTag, postUrl, camera, model, result;
+                var camera, newModel;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            exportTag = Services_9.Services.timer.mark('POST Camera');
-                            postUrl = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiCameras;
                             camera = new Dto.Camera({
                                 name: 'Dynamic Camera',
                                 description: 'Dynamic Camera Description',
                                 position: new THREE.Vector3(100, 100, 200)
                             });
-                            model = JSON.stringify(camera);
-                            return [4 /*yield*/, Http_1.HttpLibrary.submitHttpRequestAsync(postUrl, Http_1.MethodType.Post, Http_1.ContentType.Json, model)];
+                            return [4 /*yield*/, camera.postAsync()];
                         case 1:
-                            result = _a.sent();
-                            Services_9.Services.timer.logElapsedTime(exportTag);
-                            return [2 /*return*/, result.model];
+                            newModel = _a.sent();
+                            return [2 /*return*/, newModel];
                     }
                 });
             });
@@ -4486,26 +4613,22 @@ define("Controllers/ComposerController", ["require", "exports", "three", "dat-gu
         /**
          * Saves the depth buffer.
          */
-        ComposerController.prototype.postDepthBufferAsync = function (cameraId) {
+        ComposerController.prototype.postDepthBufferAsync = function (camera) {
             return __awaiter(this, void 0, void 0, function () {
-                var fileName, exportTag, postUrl, depthBuffer, newModel;
+                var depthBuffer, newModel;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            fileName = this._composerView.modelView.modelViewer.model.name + ".raw";
-                            exportTag = Services_9.Services.timer.mark('POST DepthBuffer');
-                            postUrl = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiDepthBuffers;
                             depthBuffer = new Dto.DepthBuffer({
-                                name: fileName,
+                                name: 'DepthBuffer.raw',
                                 description: 'DepthBuffer Description',
                                 format: IDepthBuffer_1.DepthBufferFormat.RAW,
-                                cameraId: cameraId,
+                                cameraId: camera.id,
                             });
-                            return [4 /*yield*/, Http_1.HttpLibrary.postFileAsync(postUrl, this._relief.depthBuffer.depths, depthBuffer)];
+                            return [4 /*yield*/, depthBuffer.postFileAsync(this._relief.depthBuffer.depths)];
                         case 1:
                             newModel = _a.sent();
-                            Services_9.Services.timer.logElapsedTime(exportTag);
-                            return [2 /*return*/];
+                            return [2 /*return*/, newModel];
                     }
                 });
             });

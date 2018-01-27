@@ -100,12 +100,19 @@ export class ComposerController {
 
 
         let depthBuffer = factory.createDepthBuffer();
-
+    
         let mesh = new Mesh({ width: width, height: height, depthBuffer: depthBuffer});
         this._relief = await mesh.generateReliefAsync({});
 
+        // Camera
         var camera = await this.postCameraAsync();
-        await this.postDepthBufferAsync(camera.id);
+        
+        // DepthBufffer
+        await this.postDepthBufferAsync(camera);
+
+        // MeshTransform
+
+        // Mesh
 
         this._composerView._meshView.meshViewer.setModel(this._relief.mesh);
         if (this._initialMeshGeneration) {
@@ -119,45 +126,31 @@ export class ComposerController {
      */
     async postCameraAsync(): Promise<Dto.Camera> {
 
-        let exportTag = Services.timer.mark('POST Camera');
-
-        let postUrl = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiCameras}`;
-
         let camera = new Dto.Camera({
             name: 'Dynamic Camera',
             description: 'Dynamic Camera Description',
             position: new THREE.Vector3(100, 100, 200)
         });
+        var newModel = await camera.postAsync();
 
-        var model = JSON.stringify(camera);
-        var result = await HttpLibrary.submitHttpRequestAsync(postUrl, MethodType.Post, ContentType.Json, model);
-        Services.timer.logElapsedTime(exportTag);
-
-        return result.model as Dto.Camera;
+        return newModel;
     }        
     
     /**
      * Saves the depth buffer.
      */
-    async postDepthBufferAsync(cameraId : number): Promise<void> {
+    async postDepthBufferAsync(camera : Dto.Camera): Promise<Dto.DepthBuffer> {
 
-        let fileName = `${this._composerView.modelView.modelViewer.model.name}.raw`;
-
-        // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
-        let exportTag = Services.timer.mark('POST DepthBuffer');
-
-        let postUrl = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiDepthBuffers}`;
 
         let depthBuffer = new Dto.DepthBuffer({
-            name: fileName,
+            name: 'DepthBuffer.raw',
             description: 'DepthBuffer Description',
             format: DepthBufferFormat.RAW,
-            cameraId: cameraId,
-    
+            cameraId: camera.id,
         });
+        var newModel = await depthBuffer.postFileAsync(this._relief.depthBuffer.depths);
 
-        let newModel = await HttpLibrary.postFileAsync (postUrl, this._relief.depthBuffer.depths, depthBuffer);
-        Services.timer.logElapsedTime(exportTag);       
+        return newModel;
     }        
         
     /**
