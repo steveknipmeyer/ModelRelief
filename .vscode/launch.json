@@ -5,7 +5,7 @@
    "version": "0.2.0",
    "compounds": [
     {
-        "name": ".Net Core With Browser",
+        "name": ".Net Core With FE Debugging in VSCode",
         "configurations": [
             ".NET Core Launch (web)",
             "Launch Chrome"
@@ -17,7 +17,7 @@
            "type": "chrome",
            "request": "launch",
            "name": "Launch Chrome",
-           "url": "http://localhost:60655/",
+           "url": "http://localhost:60655/models/viewer/1",
            "webRoot": "${workspaceRoot}/ModelRelief/wwwroot",
            "sourceMaps": true
            // N.B. outFiles, outDir are not recognized by Intellisense.
@@ -42,8 +42,8 @@
                 "args": "${auto-detect-url}",
                 "windows": {
                     "command": "cmd.exe",
-                    "args": "/C start ${auto-detect-url}"
-                    // "args": "/C start http://localhost:60655/models/viewer/5"                   
+                   "args": "/C start ${auto-detect-url}",
+                // "args": "/C start http://localhost:60655/models/viewer/1"                   
                 },
                 "osx": {
                     "command": "open"
@@ -60,7 +60,7 @@
             "sourceFileMap": {
                 "/Views": "${workspaceRoot}/Views"
             },
-            "requireExactSource": false
+            "requireExactSource": true
         },
         {
             "name": ".NET Core Attach",
@@ -68,7 +68,7 @@
             "request": "attach",
             // https: //github.com/OmniSharp/omnisharp-vscode/issues/897
             // "processId": "${command:pickProcess}",
-            "processId": "8628"
+            "processId": "42920"
         },
         {
             "name": "Python",

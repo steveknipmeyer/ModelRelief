@@ -18,7 +18,10 @@ namespace ModelRelief.Middleware
         public static async Task Test(IHostingEnvironment env, HttpContext context, Func<Task> next)
         {
             bool isAuthenticated = context.User.Identity.IsAuthenticated;
-            if (env.IsEnvironment("Test") && !isAuthenticated)
+            // WIP: Authentication is always overridden.
+            //      'dotnet run', used for 'hot reload' FE development cannot specify the environment 'Test' so API requests fail.
+//          if ((env.IsEnvironment("Test") && !isAuthenticated)
+            if (!isAuthenticated)
             {
                 context.User = new System.Security.Claims.ClaimsPrincipal(new GenericIdentity(Identity.MockUserName));
 #if false

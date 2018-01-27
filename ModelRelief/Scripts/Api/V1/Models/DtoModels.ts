@@ -12,6 +12,7 @@ import { IMeshTransform }                   from 'IMeshTransform'
 import { IModel3d, Model3dFormat }          from 'IModel3d'
 import { IProject }                         from 'IProject'
 
+
 /**
  * Concrete implementation of ICamera.
  * @class
@@ -19,8 +20,7 @@ import { IProject }                         from 'IProject'
 export class Camera implements ICamera {
 
     id: number;
-
-    name: string;
+    name: string;  
     description: string;
 
     standardView: StandardView;
@@ -42,6 +42,37 @@ export class Camera implements ICamera {
     // Navigation Properties
     projectId: number;
     project: IProject;
+
+    /**
+     * Creates an instance of Camera.
+     * @param {ICamera} parameters 
+     */
+    constructor (parameters: ICamera) {
+
+        this.id                     = parameters.id || undefined;
+        this.name                   = parameters.name || undefined;
+        this.description            = parameters.description || undefined;
+
+        this.standardView           = parameters.standardView || undefined;
+        this.fieldOfView            = parameters.fieldOfView  || undefined;    
+    
+        this.near                   = parameters.near || undefined;
+        this.far                    = parameters.far || undefined;
+    
+        this.boundClippingPlanes    = parameters.boundClippingPlanes || undefined;
+    
+        this.positionX              = parameters.position ? parameters.position.x : (parameters.positionX ? parameters.positionX : undefined); 
+        this.positionY              = parameters.position ? parameters.position.y : (parameters.positionY ? parameters.positionY : undefined); 
+        this.positionZ              = parameters.position ? parameters.position.z : (parameters.positionZ ? parameters.positionZ : undefined); 
+    
+        this.lookAtX                = parameters.lookAt ? parameters.lookAt.x : (parameters.lookAtX ? parameters.lookAtX : undefined); 
+        this.lookAtY                = parameters.lookAt ? parameters.lookAt.y : (parameters.lookAtY ? parameters.lookAtY : undefined); 
+        this.lookAtZ                = parameters.lookAt ? parameters.lookAt.z : (parameters.lookAtZ ? parameters.lookAtZ : undefined); 
+    
+        // Navigation Properties
+        this.projectId              = parameters.projectId || undefined;
+        this.project                = parameters.project || undefined;
+        }
 }
 
 /**
@@ -51,7 +82,6 @@ export class Camera implements ICamera {
 export class DepthBuffer implements IDepthBuffer {
 
     id: number;
-
     name: string;
     description: string;
 
@@ -70,6 +100,33 @@ export class DepthBuffer implements IDepthBuffer {
     // not exposed in UX; API only
     fileTimeStamp: Date;
     fileIsSynchronized: boolean;
+
+    /**
+     * Creates an instance of DepthBuffer.
+     * @param {IDepthBuffer} parameters 
+     */
+    constructor (parameters: IDepthBuffer) {
+
+        this.id                     = parameters.id || undefined;
+        this.name                   = parameters.name || undefined;
+        this.description            = parameters.description || undefined;
+    
+        this.format                 = parameters.format|| undefined;
+    
+        // Navigation Properties
+        this.projectId              = parameters.projectId || undefined;
+        this.project                = parameters.project || undefined;
+    
+        this.model3dId              = parameters.model3dId || undefined;
+        this.model3d                = parameters.model3d || undefined;
+    
+        this.cameraId               = parameters.cameraId || undefined;
+        this.camera                 = parameters.camera || undefined;
+    
+        // not exposed in UX; API only
+        this.fileTimeStamp          = parameters.fileTimeStamp || undefined;
+        this.fileIsSynchronized     = parameters.fileIsSynchronized || undefined;
+    }
 }
 
 /**
@@ -79,15 +136,14 @@ export class DepthBuffer implements IDepthBuffer {
 export class Mesh implements IMesh {
 
     id: number;
-
     name: string;
     description: string;
 
-    Format: MeshFormat;
+    format: MeshFormat;
 
     // Navigation Properties
-    ProjectId: number;
-    pProject: IProject;
+    projectId: number;
+    project: IProject;
 
     cameraId: number;
     camera: ICamera;
@@ -101,6 +157,36 @@ export class Mesh implements IMesh {
     // not exposed in UX; API only
     fileTimeStamp: Date;
     fileIsSynchronized: boolean;
+
+    /**
+     * Creates an instance of a Mesh.
+     * @param {Mesh} parameters 
+     */
+    constructor (parameters: IMesh) {
+
+        this.id                     = parameters.id || undefined;
+        this.name                   = parameters.name || undefined;
+        this.description            = parameters.description || undefined;
+
+        this.format                 = parameters.format || undefined;
+
+        // Navigation Properties
+        this.projectId              = parameters.projectId || undefined;
+        this.project                = parameters.project || undefined;
+    
+        this.cameraId               = parameters.cameraId || undefined;
+        this.camera                 = parameters.camera || undefined;
+    
+        this.depthBufferId          = parameters.depthBufferId || undefined;
+        this.depthBuffer            = parameters.depthBuffer || undefined;
+    
+        this.meshTransformId        = parameters.meshTransformId || undefined;
+        this.meshTransform          = parameters.meshTransform || undefined;
+    
+        // not exposed in UX; API only
+        this.fileTimeStamp          = parameters.fileTimeStamp || undefined;
+        this.fileIsSynchronized     = parameters.fileIsSynchronized || undefined;    
+    }
 }
 
 /**
@@ -110,7 +196,6 @@ export class Mesh implements IMesh {
 export class MeshTransform implements IMeshTransform {
 
     id: number;
-
     name: string;
     description: string;
 
@@ -125,6 +210,30 @@ export class MeshTransform implements IMeshTransform {
     // Navigation Properties
     projectId: number;
     project: IProject;
+
+    /**
+     * Creates an instance of a MeshTransform.
+     * @param {IMeshTransform} parameters 
+     */
+    constructor (parameters: IMeshTransform) {
+
+        this.id                     = parameters.id || undefined;
+        this.name                   = parameters.name || undefined;
+        this.description            = parameters.description || undefined;
+
+        this.depth                  = parameters.depth || undefined;
+        this.width                  = parameters.width || undefined;
+    
+        this.tau                    = parameters.tau || undefined;
+        this.sigmaGaussianBlur      = parameters.sigmaGaussianBlur || undefined;
+        this.sigmaGaussianSmooth    = parameters.sigmaGaussianSmooth || undefined;
+        this.lambdaLinearScaling    = parameters.lambdaLinearScaling || undefined;
+    
+        // Navigation Properties
+        this.projectId              = parameters.projectId || undefined;
+        this.project                = parameters.project || undefined;
+        }
+    
 };
 
 /**
@@ -134,7 +243,6 @@ export class MeshTransform implements IMeshTransform {
 export class Model3d implements IModel3d {
 
     id: number;
-
     name: string;
     description: string;
 
@@ -146,6 +254,26 @@ export class Model3d implements IModel3d {
 
     cameraId: number;
     camera: ICamera;
+
+    /**
+     * Creates an instance of a Model3d.
+     * @param {IModel3d} parameters 
+     */
+    constructor (parameters: IModel3d) {
+
+        this.id           = parameters.id || undefined;
+        this.name         = parameters.name || undefined;
+        this.description  = parameters.description || undefined;
+
+        this.format       = parameters.format || undefined;
+
+        // Navigation Properties
+        this.projectId    = parameters.projectId || undefined;
+        this.project      = parameters.project || undefined;
+    
+        this.cameraId     = parameters.cameraId || undefined;
+        this.camera       = parameters.camera || undefined;
+        }
 }
 
 /**
@@ -155,7 +283,17 @@ export class Model3d implements IModel3d {
 export class Project implements IProject {
 
     id: number;
-
     name: string;
     description: string;
+
+    /**
+     * Creates an instance of a Project.
+     * @param {Project} parameters 
+     */
+    constructor (parameters: IProject) {
+
+        this.id           = parameters.id || undefined;
+        this.name         = parameters.name || undefined;
+        this.description  = parameters.description || undefined;
+    }
 }

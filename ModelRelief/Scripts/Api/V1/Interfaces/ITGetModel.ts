@@ -11,10 +11,9 @@
  */
 export interface ITGetModel {
 
-    id: number;
-
-    name: string;
-    description: string;
+    id?: number;
+    name?: string;
+    description?: string;
     }
 
 /**
@@ -24,6 +23,6 @@ export interface ITGetModel {
  */
 export interface IGeneratedFile {
 
-    fileTimeStamp: Date;                   //  time stamp of file 
-    fileIsSynchronized: boolean;           // associated file is synchronized with the model (AND all of the the model's dependencies)
+    fileTimeStamp?: Date;                   //  time stamp of file 
+    fileIsSynchronized?: boolean;           // associated file is synchronized with the model (AND all of the the model's dependencies)
 }

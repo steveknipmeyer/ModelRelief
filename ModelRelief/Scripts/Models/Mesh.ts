@@ -148,7 +148,7 @@ export class Mesh {
      * @constructor
      * @param parameters Initialization parameters (MeshParameters)
      */
-    constructor(parameters:MeshParameters) {
+    constructor(parameters: MeshParameters) {
 
         // required
         this._width       = parameters.width;

@@ -17,8 +17,6 @@
 <article class="markdown-body">
 
 ##### Commit Notes
-PostFileAsync now returns ITGetModel.
-Add Exception class.
 
 Some Markdown text with <span style="color:blue">some *blue* text
 
@@ -27,7 +25,6 @@ Some Markdown text with <span style="color:blue">some *blue* text
 - Manning Dependency Injection book.
 
 #####  Lambda
-    Upgrade Node.
     Python programs must be invoked by py <program>. This is not necessary on Vector.
 
 ### Tasks
@@ -38,8 +35,9 @@ Some Markdown text with <span style="color:blue">some *blue* text
 
     What is a Relief?
     What are the relationships between FE classes and their DTO counterparts?
+        Each FE class should implement the corresponding Interface.
+        Create methods for each class that constructs a corresponding object.
 
-    Introduce Parameter initialize objects and constructors for the DTO objects.
 
 |FE Class|DTO|Notes|
 |-------|--------|--------|
@@ -47,8 +45,8 @@ Some Markdown text with <span style="color:blue">some *blue* text
 |DepthBuffer|Dto.DepthBuffer||
 |Mesh|Dto.Mesh|THREE.Mesh|
 |MeshTransform|Dto.MeshTransform||
-||Dto.Model3d|THREE.Mesh|
-||Dto.Project||
+|**Model3d**|Dto.Model3d|THREE.Mesh|
+|**Project**|Dto.Project||
 |Relief|||
 
 
@@ -58,9 +56,6 @@ Only Test works because there is special middleware handling which provides auth
 </span><br></br>
 
     Investigate Chai unit tests for front-end JavaScript.
-
-    Should any DTO fields should be declared as optional?
-        By default, all TypeScript fields are nullable. Will HTTP requests ever omit JSON fields?
 
     Is the interface IGenerateFile needed?
 
@@ -491,7 +486,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
             VSCode Profile: .NET Core Attach
                 Edit launch.json to set processId!
 
-    VSCode Profile: .Net Core With Browser
+    VSCode Profile: .Net Core With FE Debugging in VSCode
         FE: VSCode   BE: VSCode  TypeScript: DNW  Reload: DNW
 
     VSCode Profile: .Net Core Launch (web)

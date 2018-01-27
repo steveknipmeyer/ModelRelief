@@ -25,34 +25,36 @@ export enum StandardView {
 
  /**
  *  Represents a DTO for a Camera.
+ *  N.B. All properties in the interface are optional so that an initialization object can be used to construct the concrete class.
  *  @interface
  */
 export interface ICamera extends ITGetModel {
 
-    id: number;
+    id?: number;
+    name?: string;   
+    description?: string;
 
-    name: string;
-    description: string;
+    standardView?: StandardView; 
+    fieldOfView?: number;
 
-    standardView: StandardView; 
-    fieldOfView: number;
+    near?: number;
+    far?: number;
 
-    near: number;
-    far: number;
+    boundClippingPlanes?: boolean;
 
-    boundClippingPlanes: boolean;
+    position?: THREE.Vector3;
+    positionX?: number;
+    positionY?: number;
+    positionZ?: number;
 
-    positionX: number;
-    positionY: number;
-    positionZ: number;
-
-    lookAtX: number;
-    lookAtY: number;
-    lookAtZ: number;
+    lookAt?: THREE.Vector3;
+    lookAtX?: number;
+    lookAtY?: number;
+    lookAtZ?: number;
            
     // Navigation Properties
-    projectId: number;
-    project: IProject;
+    projectId?: number;
+    project?: IProject;
 }
 
 

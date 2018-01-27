@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { ICamera }          from 'ICamera'
+import { ICamera }from 'ICamera'
 import { IModel3d }         from 'IModel3d'
 import { IProject }         from 'IProject'
 import { ITGetModel }       from 'ITGetModel'
@@ -23,30 +23,30 @@ export enum DepthBufferFormat {
 
  /**
  *  Represents a DTO for a DepthBuffer.
+ *  N.B. All properties in the interface are optional so that an initialization object can be used to construct the concrete class.
  *  @interface
  */
 export interface IDepthBuffer extends ITGetModel {
 
-    id: number;
+    id?: number;
+    name?: string;
+    description?: string;
 
-    name: string;
-    description: string;
-
-    format: DepthBufferFormat;
+    format?: DepthBufferFormat;
 
     // Navigation Properties
-    projectId: number;
-    project: IProject;
+    projectId?: number;
+    project?: IProject;
 
-    model3dId: number;
-    model3d: IModel3d;
+    model3dId?: number;
+    model3d?: IModel3d;
 
-    cameraId: number;
-    camera: ICamera;
+    cameraId?: number;
+    camera?: ICamera;
 
     // not exposed in UX; API only
-    fileTimeStamp: Date;
-    fileIsSynchronized: boolean;
+    fileTimeStamp?: Date;
+    fileIsSynchronized?: boolean;
 }
 
 

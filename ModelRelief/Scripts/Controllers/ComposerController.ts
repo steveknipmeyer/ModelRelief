@@ -123,11 +123,14 @@ export class ComposerController {
 
         let postUrl = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiCameras}`;
 
-        let camera = new Dto.Camera();
-        camera.name = 'Camera';
-        camera.description = 'Camera Description';
+        let camera = new Dto.Camera({
+            name: 'Dynamic Camera',
+            description: 'Dynamic Camera Description',
+            position: new THREE.Vector3(100, 100, 200)
+        });
 
-        var result = await HttpLibrary.submitHttpRequestAsync(postUrl, MethodType.Post, ContentType.Json, JSON.stringify(camera));
+        var model = JSON.stringify(camera);
+        var result = await HttpLibrary.submitHttpRequestAsync(postUrl, MethodType.Post, ContentType.Json, model);
         Services.timer.logElapsedTime(exportTag);
 
         return result.model as Dto.Camera;
@@ -145,11 +148,13 @@ export class ComposerController {
 
         let postUrl = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiDepthBuffers}`;
 
-        let depthBuffer = new Dto.DepthBuffer();
-        depthBuffer.name = fileName;
-        depthBuffer.description = 'DepthBuffer Description';
-        depthBuffer.format = DepthBufferFormat.RAW;
-        depthBuffer.cameraId = cameraId;
+        let depthBuffer = new Dto.DepthBuffer({
+            name: fileName,
+            description: 'DepthBuffer Description',
+            format: DepthBufferFormat.RAW,
+            cameraId: cameraId,
+    
+        });
 
         let newModel = await HttpLibrary.postFileAsync (postUrl, this._relief.depthBuffer.depths, depthBuffer);
         Services.timer.logElapsedTime(exportTag);       

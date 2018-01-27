@@ -74,7 +74,7 @@ define("System/Html", ["require", "exports"], function (require, exports) {
      * General HTML and DOM routines
      * @class
      */
-    var HtmlLibrary = /** @class */ (function () {
+    var HtmlLibrary = (function () {
         /**
          * @constructor
          */
@@ -206,8 +206,29 @@ define("Api/V1/Models/DtoModels", ["require", "exports"], function (require, exp
      * Concrete implementation of ICamera.
      * @class
      */
-    var Camera = /** @class */ (function () {
-        function Camera() {
+    var Camera = (function () {
+        /**
+         * Creates an instance of Camera.
+         * @param {ICamera} parameters
+         */
+        function Camera(parameters) {
+            this.id = parameters.id || undefined;
+            this.name = parameters.name || undefined;
+            this.description = parameters.description || undefined;
+            this.standardView = parameters.standardView || undefined;
+            this.fieldOfView = parameters.fieldOfView || undefined;
+            this.near = parameters.near || undefined;
+            this.far = parameters.far || undefined;
+            this.boundClippingPlanes = parameters.boundClippingPlanes || undefined;
+            this.positionX = parameters.position ? parameters.position.x : (parameters.positionX ? parameters.positionX : undefined);
+            this.positionY = parameters.position ? parameters.position.y : (parameters.positionY ? parameters.positionY : undefined);
+            this.positionZ = parameters.position ? parameters.position.z : (parameters.positionZ ? parameters.positionZ : undefined);
+            this.lookAtX = parameters.lookAt ? parameters.lookAt.x : (parameters.lookAtX ? parameters.lookAtX : undefined);
+            this.lookAtY = parameters.lookAt ? parameters.lookAt.y : (parameters.lookAtY ? parameters.lookAtY : undefined);
+            this.lookAtZ = parameters.lookAt ? parameters.lookAt.z : (parameters.lookAtZ ? parameters.lookAtZ : undefined);
+            // Navigation Properties
+            this.projectId = parameters.projectId || undefined;
+            this.project = parameters.project || undefined;
         }
         return Camera;
     }());
@@ -216,8 +237,26 @@ define("Api/V1/Models/DtoModels", ["require", "exports"], function (require, exp
     *  Concrete implementation of IDepthBuffer.
     *  @interface
     */
-    var DepthBuffer = /** @class */ (function () {
-        function DepthBuffer() {
+    var DepthBuffer = (function () {
+        /**
+         * Creates an instance of DepthBuffer.
+         * @param {IDepthBuffer} parameters
+         */
+        function DepthBuffer(parameters) {
+            this.id = parameters.id || undefined;
+            this.name = parameters.name || undefined;
+            this.description = parameters.description || undefined;
+            this.format = parameters.format || undefined;
+            // Navigation Properties
+            this.projectId = parameters.projectId || undefined;
+            this.project = parameters.project || undefined;
+            this.model3dId = parameters.model3dId || undefined;
+            this.model3d = parameters.model3d || undefined;
+            this.cameraId = parameters.cameraId || undefined;
+            this.camera = parameters.camera || undefined;
+            // not exposed in UX; API only
+            this.fileTimeStamp = parameters.fileTimeStamp || undefined;
+            this.fileIsSynchronized = parameters.fileIsSynchronized || undefined;
         }
         return DepthBuffer;
     }());
@@ -226,8 +265,28 @@ define("Api/V1/Models/DtoModels", ["require", "exports"], function (require, exp
     *  Concrete implementation of IMesh.
     *  @interface
     */
-    var Mesh = /** @class */ (function () {
-        function Mesh() {
+    var Mesh = (function () {
+        /**
+         * Creates an instance of a Mesh.
+         * @param {Mesh} parameters
+         */
+        function Mesh(parameters) {
+            this.id = parameters.id || undefined;
+            this.name = parameters.name || undefined;
+            this.description = parameters.description || undefined;
+            this.format = parameters.format || undefined;
+            // Navigation Properties
+            this.projectId = parameters.projectId || undefined;
+            this.project = parameters.project || undefined;
+            this.cameraId = parameters.cameraId || undefined;
+            this.camera = parameters.camera || undefined;
+            this.depthBufferId = parameters.depthBufferId || undefined;
+            this.depthBuffer = parameters.depthBuffer || undefined;
+            this.meshTransformId = parameters.meshTransformId || undefined;
+            this.meshTransform = parameters.meshTransform || undefined;
+            // not exposed in UX; API only
+            this.fileTimeStamp = parameters.fileTimeStamp || undefined;
+            this.fileIsSynchronized = parameters.fileIsSynchronized || undefined;
         }
         return Mesh;
     }());
@@ -236,8 +295,24 @@ define("Api/V1/Models/DtoModels", ["require", "exports"], function (require, exp
     *  Concrete implementation of IMeshTransform.
     *  @interface
     */
-    var MeshTransform = /** @class */ (function () {
-        function MeshTransform() {
+    var MeshTransform = (function () {
+        /**
+         * Creates an instance of a MeshTransform.
+         * @param {IMeshTransform} parameters
+         */
+        function MeshTransform(parameters) {
+            this.id = parameters.id || undefined;
+            this.name = parameters.name || undefined;
+            this.description = parameters.description || undefined;
+            this.depth = parameters.depth || undefined;
+            this.width = parameters.width || undefined;
+            this.tau = parameters.tau || undefined;
+            this.sigmaGaussianBlur = parameters.sigmaGaussianBlur || undefined;
+            this.sigmaGaussianSmooth = parameters.sigmaGaussianSmooth || undefined;
+            this.lambdaLinearScaling = parameters.lambdaLinearScaling || undefined;
+            // Navigation Properties
+            this.projectId = parameters.projectId || undefined;
+            this.project = parameters.project || undefined;
         }
         return MeshTransform;
     }());
@@ -247,8 +322,21 @@ define("Api/V1/Models/DtoModels", ["require", "exports"], function (require, exp
     *  Concrete implementation of IModel3d.
     *  @interface
     */
-    var Model3d = /** @class */ (function () {
-        function Model3d() {
+    var Model3d = (function () {
+        /**
+         * Creates an instance of a Model3d.
+         * @param {IModel3d} parameters
+         */
+        function Model3d(parameters) {
+            this.id = parameters.id || undefined;
+            this.name = parameters.name || undefined;
+            this.description = parameters.description || undefined;
+            this.format = parameters.format || undefined;
+            // Navigation Properties
+            this.projectId = parameters.projectId || undefined;
+            this.project = parameters.project || undefined;
+            this.cameraId = parameters.cameraId || undefined;
+            this.camera = parameters.camera || undefined;
         }
         return Model3d;
     }());
@@ -257,8 +345,15 @@ define("Api/V1/Models/DtoModels", ["require", "exports"], function (require, exp
      * Concrete implementation of IProject.
      * @class
      */
-    var Project = /** @class */ (function () {
-        function Project() {
+    var Project = (function () {
+        /**
+         * Creates an instance of a Project.
+         * @param {Project} parameters
+         */
+        function Project(parameters) {
+            this.id = parameters.id || undefined;
+            this.name = parameters.name || undefined;
+            this.description = parameters.description || undefined;
         }
         return Project;
     }());
@@ -287,7 +382,7 @@ define("System/Logger", ["require", "exports"], function (require, exports) {
      * Console logging
      * @class
      */
-    var ConsoleLogger = /** @class */ (function () {
+    var ConsoleLogger = (function () {
         /**
          * @constructor
          */
@@ -364,7 +459,7 @@ define("System/Logger", ["require", "exports"], function (require, exports) {
      * HTML logging
      * @class
      */
-    var HTMLLogger = /** @class */ (function () {
+    var HTMLLogger = (function () {
         /**
          * @constructor
          */
@@ -458,7 +553,7 @@ define("System/StopWatch", ["require", "exports"], function (require, exports) {
      * General debugger timer.
      * @class
      */
-    var StopWatch = /** @class */ (function () {
+    var StopWatch = (function () {
         /**
          * @constructor
          * @param {string} timerName Timer identifier
@@ -539,7 +634,7 @@ define("System/Services", ["require", "exports", "System/Logger", "System/StopWa
      * General runtime support
      * @class
      */
-    var Services = /** @class */ (function () {
+    var Services = (function () {
         /**
          * @constructor
          */
@@ -577,7 +672,7 @@ define("Graphics/Graphics", ["require", "exports", "three", "System/Services"], 
      *  Graphics Library
      *  @class
      */
-    var Graphics = /** @class */ (function () {
+    var Graphics = (function () {
         /**
          * @constructor
          */
@@ -1126,7 +1221,7 @@ define("System/Math", ["require", "exports"], function (require, exports) {
      * General mathematics routines
      * @class
      */
-    var MathLibrary = /** @class */ (function () {
+    var MathLibrary = (function () {
         /**
          * @constructor
          */
@@ -1146,7 +1241,7 @@ define("System/Math", ["require", "exports"], function (require, exports) {
     }());
     exports.MathLibrary = MathLibrary;
 });
-define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "System/Services"], function (require, exports, chai_1, THREE, Services_2) {
+define("Models/DepthBuffer", ["require", "exports", "chai", "three", "System/Services"], function (require, exports, chai_1, THREE, Services_2) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -1165,7 +1260,7 @@ define("DepthBuffer/DepthBuffer", ["require", "exports", "chai", "three", "Syste
      *  DepthBuffer
      *  @class
      */
-    var DepthBuffer = /** @class */ (function () {
+    var DepthBuffer = (function () {
         /**
          * @constructor
          * @param rgbaArray Raw aray of RGBA bytes packed with floats.
@@ -1407,7 +1502,7 @@ define("System/Tools", ["require", "exports"], function (require, exports) {
      * General utility routines
      * @class
      */
-    var Tools = /** @class */ (function () {
+    var Tools = (function () {
         /**
          * @constructor
          */
@@ -1452,14 +1547,14 @@ define("System/Tools", ["require", "exports"], function (require, exports) {
     JSON compatible constructor parameters
     Fixed resolution; resizing support is not required.
 */
-define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "Viewers/Camera", "DepthBuffer/DepthBuffer", "Graphics/Graphics", "System/Services", "System/Tools"], function (require, exports, THREE, Camera_1, DepthBuffer_1, Graphics_1, Services_3, Tools_1) {
+define("Graphics/DepthBufferFactory", ["require", "exports", "three", "Viewers/Camera", "Models/DepthBuffer", "Graphics/Graphics", "System/Services", "System/Tools"], function (require, exports, THREE, Camera_1, DepthBuffer_1, Graphics_1, Services_3, Tools_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
      * @class
      * DepthBufferFactory
      */
-    var DepthBufferFactory = /** @class */ (function () {
+    var DepthBufferFactory = (function () {
         /**
          * @constructor
          * @param parameters Initialization parameters (DepthBufferFactoryParameters)
@@ -1737,7 +1832,7 @@ define("DepthBuffer/DepthBufferFactory", ["require", "exports", "three", "Viewer
     }());
     exports.DepthBufferFactory = DepthBufferFactory;
 });
-define("Viewers/Camera", ["require", "exports", "three", "DepthBuffer/DepthBufferFactory", "Graphics/Graphics", "System/Services"], function (require, exports, THREE, DepthBufferFactory_1, Graphics_2, Services_4) {
+define("Viewers/Camera", ["require", "exports", "three", "Graphics/DepthBufferFactory", "Graphics/Graphics", "System/Services"], function (require, exports, THREE, DepthBufferFactory_1, Graphics_2, Services_4) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -1761,7 +1856,7 @@ define("Viewers/Camera", ["require", "exports", "three", "DepthBuffer/DepthBuffe
      * General camera utility methods.
      * @class
      */
-    var Camera = /** @class */ (function () {
+    var Camera = (function () {
         /**
          * @constructor
          */
@@ -1982,7 +2077,7 @@ define("System/EventManager", ["require", "exports"], function (require, exports
      * General event management and dispatching.
      * @class
      */
-    var EventManager = /** @class */ (function () {
+    var EventManager = (function () {
         /**
         /*
          * Creates EventManager object. It needs to be called with '.call' to add the functionality to an object.
@@ -2083,7 +2178,7 @@ define("System/Exception", ["require", "exports", "System/Services"], function (
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var Exception = /** @class */ (function () {
+    var Exception = (function () {
         /**
          * @constructor
          */
@@ -2506,7 +2601,7 @@ define("System/HttpStatus", ["require", "exports"], function (require, exports) 
     exports.HttpStatusMessage[HttpStatusCode.UNSUPPORTED_MEDIA_TYPE] = "Unsupported Media Type";
     exports.HttpStatusMessage[HttpStatusCode.USE_PROXY] = "Use Proxy";
 });
-define("MeshTransform/MeshTransform", ["require", "exports"], function (require, exports) {
+define("Models/MeshTransform", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -2518,7 +2613,7 @@ define("MeshTransform/MeshTransform", ["require", "exports"], function (require,
      * MeshTransform
      * @class MeshTransform
      */
-    var MeshTransform = /** @class */ (function () {
+    var MeshTransform = (function () {
         /**
          * @constructor
          */
@@ -2570,7 +2665,7 @@ define("System/Http", ["require", "exports", "System/Exception", "System/HttpSta
     /**
      * Represents the result of a client request.
      */
-    var RequestResponse = /** @class */ (function () {
+    var RequestResponse = (function () {
         /**
          * Constructs an instance of a RequestResponse.
          * @param {Response} response Raw response from the request.
@@ -2614,7 +2709,7 @@ define("System/Http", ["require", "exports", "System/Exception", "System/HttpSta
      * General HTML and DOM routines
      * @class
      */
-    var HttpLibrary = /** @class */ (function () {
+    var HttpLibrary = (function () {
         /**
          * @constructor
          */
@@ -2791,7 +2886,7 @@ define("System/Http", ["require", "exports", "System/Exception", "System/HttpSta
 //                                                                         //                                                                          
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
-define("Mesh/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", "Graphics/Graphics", "System/Services"], function (require, exports, THREE, chai_2, Camera_2, Graphics_3, Services_7) {
+define("Models/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", "Graphics/Graphics", "System/Services"], function (require, exports, THREE, chai_2, Camera_2, Graphics_3, Services_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
@@ -2799,7 +2894,7 @@ define("Mesh/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", "G
      *  If a mesh exists in the cache of the required dimensions, it is used as a template.
      *  @class
      */
-    var MeshCache = /** @class */ (function () {
+    var MeshCache = (function () {
         /**
          * Constructor
          */
@@ -2846,7 +2941,7 @@ define("Mesh/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", "G
      * @class
      * Mesh
      */
-    var Mesh = /** @class */ (function () {
+    var Mesh = (function () {
         /**
          * @constructor
          * @param parameters Initialization parameters (MeshParameters)
@@ -3068,7 +3163,7 @@ define("Graphics/Materials", ["require", "exports", "three"], function (require,
      * General THREE.js Material classes and helpers
      * @class
      */
-    var Materials = /** @class */ (function () {
+    var Materials = (function () {
         /**
          * @constructor
          */
@@ -3131,7 +3226,7 @@ define("Viewers/ModelViewerControls", ["require", "exports", "dat-gui", "System/
      * @class
      * ModelViewer Settings
      */
-    var ModelViewerSettings = /** @class */ (function () {
+    var ModelViewerSettings = (function () {
         function ModelViewerSettings() {
             this.displayGrid = true;
         }
@@ -3140,7 +3235,7 @@ define("Viewers/ModelViewerControls", ["require", "exports", "dat-gui", "System/
     /**
      * ModelViewer UI Controls.
      */
-    var ModelViewerControls = /** @class */ (function () {
+    var ModelViewerControls = (function () {
         /** Default constructor
          * @class ModelViewerControls
          * @constructor
@@ -3572,7 +3667,7 @@ define("Viewers/CameraControls", ["require", "exports", "three", "dat-gui", "Vie
      * @class
      * CameraControls
      */
-    var CameraControlSettings = /** @class */ (function () {
+    var CameraControlSettings = (function () {
         function CameraControlSettings(camera, fitView, addCwmeraHelper, boundClippingPlanes) {
             this.fitView = fitView;
             this.addCameraHelper = addCwmeraHelper;
@@ -3591,7 +3686,7 @@ define("Viewers/CameraControls", ["require", "exports", "three", "dat-gui", "Vie
     /**
      * camera UI Controls.
      */
-    var CameraControls = /** @class */ (function () {
+    var CameraControls = (function () {
         /** Default constructor
          * @class CameraControls
          * @constructor
@@ -3737,7 +3832,7 @@ define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "View
     /**
      * @exports Viewer/Viewer
      */
-    var Viewer = /** @class */ (function () {
+    var Viewer = (function () {
         /**
          * Default constructor
          * @class Viewer
@@ -4053,7 +4148,7 @@ define("Viewers/ModelViewer", ["require", "exports", "three", "System/EventManag
     /**
      * @exports Viewer/ModelViewer
      */
-    var ModelViewer = /** @class */ (function (_super) {
+    var ModelViewer = (function (_super) {
         __extends(ModelViewer, _super);
         /**
          * Default constructor
@@ -4123,7 +4218,7 @@ define("Viewers/ModelViewer", ["require", "exports", "three", "System/EventManag
 define("ModelExporters/OBJExporter", ["require", "exports", "three"], function (require, exports, THREE) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var OBJExporter = /** @class */ (function () {
+    var OBJExporter = (function () {
         function OBJExporter() {
         }
         OBJExporter.prototype.parse = function (object) {
@@ -4277,7 +4372,7 @@ define("ModelExporters/OBJExporter", ["require", "exports", "three"], function (
     }());
     exports.OBJExporter = OBJExporter;
 });
-define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/V1/Models/DtoModels", "Viewers/Camera", "DepthBuffer/DepthBufferFactory", "System/EventManager", "System/Html", "System/Http", "Api/V1/Interfaces/IDepthBuffer", "Mesh/Mesh", "System/Services"], function (require, exports, dat, Dto, Camera_5, DepthBufferFactory_2, EventManager_3, Html_3, Http_1, IDepthBuffer_1, Mesh_1, Services_9) {
+define("Controllers/ComposerController", ["require", "exports", "three", "dat-gui", "Api/V1/Models/DtoModels", "Viewers/Camera", "Graphics/DepthBufferFactory", "System/EventManager", "System/Html", "System/Http", "Api/V1/Interfaces/IDepthBuffer", "Models/Mesh", "System/Services"], function (require, exports, THREE, dat, Dto, Camera_5, DepthBufferFactory_2, EventManager_3, Html_3, Http_1, IDepthBuffer_1, Mesh_1, Services_9) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -4289,7 +4384,7 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/
      * @class
      * ComposerViewSettings
      */
-    var ComposerViewSettings = /** @class */ (function () {
+    var ComposerViewSettings = (function () {
         function ComposerViewSettings(generateRelief, saveRelief) {
             this.meshTransform = {
                 width: 100.0,
@@ -4308,7 +4403,7 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/
     /**
      * Composer Controller
      */
-    var ComposerController = /** @class */ (function () {
+    var ComposerController = (function () {
         /** Default constructor
          * @class ComposerViewControls
          * @constructor
@@ -4367,16 +4462,19 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/
          */
         ComposerController.prototype.postCameraAsync = function () {
             return __awaiter(this, void 0, void 0, function () {
-                var exportTag, postUrl, camera, result;
+                var exportTag, postUrl, camera, model, result;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
                             exportTag = Services_9.Services.timer.mark('POST Camera');
                             postUrl = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiCameras;
-                            camera = new Dto.Camera();
-                            camera.name = 'Camera';
-                            camera.description = 'Camera Description';
-                            return [4 /*yield*/, Http_1.HttpLibrary.submitHttpRequestAsync(postUrl, Http_1.MethodType.Post, Http_1.ContentType.Json, JSON.stringify(camera))];
+                            camera = new Dto.Camera({
+                                name: 'Dynamic Camera',
+                                description: 'Dynamic Camera Description',
+                                position: new THREE.Vector3(100, 100, 200)
+                            });
+                            model = JSON.stringify(camera);
+                            return [4 /*yield*/, Http_1.HttpLibrary.submitHttpRequestAsync(postUrl, Http_1.MethodType.Post, Http_1.ContentType.Json, model)];
                         case 1:
                             result = _a.sent();
                             Services_9.Services.timer.logElapsedTime(exportTag);
@@ -4397,11 +4495,12 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/
                             fileName = this._composerView.modelView.modelViewer.model.name + ".raw";
                             exportTag = Services_9.Services.timer.mark('POST DepthBuffer');
                             postUrl = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiDepthBuffers;
-                            depthBuffer = new Dto.DepthBuffer();
-                            depthBuffer.name = fileName;
-                            depthBuffer.description = 'DepthBuffer Description';
-                            depthBuffer.format = IDepthBuffer_1.DepthBufferFormat.RAW;
-                            depthBuffer.cameraId = cameraId;
+                            depthBuffer = new Dto.DepthBuffer({
+                                name: fileName,
+                                description: 'DepthBuffer Description',
+                                format: IDepthBuffer_1.DepthBufferFormat.RAW,
+                                cameraId: cameraId,
+                            });
                             return [4 /*yield*/, Http_1.HttpLibrary.postFileAsync(postUrl, this._relief.depthBuffer.depths, depthBuffer)];
                         case 1:
                             newModel = _a.sent();
@@ -5000,7 +5099,7 @@ define("ModelLoaders/TestModelLoader", ["require", "exports", "three", "Graphics
         TestModel[TestModel["Box"] = 3] = "Box";
         TestModel[TestModel["Checkerboard"] = 4] = "Checkerboard";
     })(TestModel = exports.TestModel || (exports.TestModel = {}));
-    var TestModelLoader = /** @class */ (function () {
+    var TestModelLoader = (function () {
         /** Default constructor
          * @class TestModelLoader
          * @constructor
@@ -5134,7 +5233,7 @@ define("ModelLoaders/Loader", ["require", "exports", "three", "ModelLoaders/OBJL
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var testModelColor = '#558de8';
-    var Loader = /** @class */ (function () {
+    var Loader = (function () {
         /** Default constructor
          * @class Loader
          * @constructor
@@ -5190,7 +5289,7 @@ define("Viewers/MeshViewerControls", ["require", "exports", "dat-gui", "System/H
      * @class
      * MeshViewer Settings
      */
-    var MeshViewerSettings = /** @class */ (function () {
+    var MeshViewerSettings = (function () {
         function MeshViewerSettings() {
         }
         return MeshViewerSettings;
@@ -5198,7 +5297,7 @@ define("Viewers/MeshViewerControls", ["require", "exports", "dat-gui", "System/H
     /**
      * MeshViewer UI Controls.
      */
-    var MeshViewerControls = /** @class */ (function () {
+    var MeshViewerControls = (function () {
         /** Default constructor
          * @class MeshViewerControls
          * @constructor
@@ -5234,7 +5333,7 @@ define("Viewers/MeshViewerControls", ["require", "exports", "dat-gui", "System/H
     }());
     exports.MeshViewerControls = MeshViewerControls;
 });
-define("Viewers/MeshViewer", ["require", "exports", "three", "Graphics/Graphics", "Mesh/Mesh", "Viewers/MeshViewerControls", "System/Services", "Viewers/Viewer"], function (require, exports, THREE, Graphics_7, Mesh_2, MeshViewerControls_1, Services_11, Viewer_2) {
+define("Viewers/MeshViewer", ["require", "exports", "three", "Graphics/Graphics", "Models/Mesh", "Viewers/MeshViewerControls", "System/Services", "Viewers/Viewer"], function (require, exports, THREE, Graphics_7, Mesh_2, MeshViewerControls_1, Services_11, Viewer_2) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -5246,7 +5345,7 @@ define("Viewers/MeshViewer", ["require", "exports", "three", "Graphics/Graphics"
      * @class
      * MeshViewer
      */
-    var MeshViewer = /** @class */ (function (_super) {
+    var MeshViewer = (function (_super) {
         __extends(MeshViewer, _super);
         /**
          * Default constructor
@@ -5303,7 +5402,7 @@ define("Views/MeshView", ["require", "exports", "Viewers/MeshViewer"], function 
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var MeshView = /** @class */ (function () {
+    var MeshView = (function () {
         /** Default constructor
          * @class MeshView
          * @constructor
@@ -5356,7 +5455,7 @@ define("Views/ModelView", ["require", "exports", "Viewers/ModelViewer"], functio
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var ModelView = /** @class */ (function () {
+    var ModelView = (function () {
         /** Default constructor
          * @class ModelView
          * @constructor
@@ -5409,7 +5508,7 @@ define("Views/ComposerView", ["require", "exports", "Controllers/ComposerControl
     // ------------------------------------------------------------------------//
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var ComposerView = /** @class */ (function () {
+    var ComposerView = (function () {
         /** Default constructor
          * @class ComposerView
          * @constructor
@@ -5506,7 +5605,7 @@ define("UnitTests/UnitTests", ["require", "exports", "chai", "three"], function 
     /**
      * @exports Viewer/Viewer
      */
-    var UnitTests = /** @class */ (function () {
+    var UnitTests = (function () {
         /**
          * Default constructor
          * @class UnitTests
@@ -5589,7 +5688,7 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Graph
      * @class
      * CameraWorkbench
      */
-    var CameraViewer = /** @class */ (function (_super) {
+    var CameraViewer = (function (_super) {
         __extends(CameraViewer, _super);
         function CameraViewer() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -5611,7 +5710,7 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Graph
      * @class
      * ViewerControls
      */
-    var ViewerControls = /** @class */ (function () {
+    var ViewerControls = (function () {
         function ViewerControls(camera, showBoundingBoxes, setClippingPlanes) {
             this.showBoundingBoxes = showBoundingBoxes;
             this.setClippingPlanes = setClippingPlanes;
@@ -5622,7 +5721,7 @@ define("Workbench/CameraTest", ["require", "exports", "three", "dat-gui", "Graph
      * @class
      * App
      */
-    var App = /** @class */ (function () {
+    var App = (function () {
         /**
          * @constructor
          */
@@ -5729,7 +5828,7 @@ define("Workbench/DepthBufferTest", ["require", "exports"], function (require, e
      * @class
      * DepthBufferTest
      */
-    var DepthBufferTest = /** @class */ (function () {
+    var DepthBufferTest = (function () {
         /**
          * @constructor
          */
@@ -5759,7 +5858,7 @@ define("Workbench/InheritanceTest", ["require", "exports", "System/Logger"], fun
      * @class
      * Widget
      */
-    var Widget = /** @class */ (function () {
+    var Widget = (function () {
         /**
          * @constructor
          */
@@ -5780,7 +5879,7 @@ define("Workbench/InheritanceTest", ["require", "exports", "System/Logger"], fun
      * @class
      * SuperWidget
      */
-    var ColorWidget = /** @class */ (function (_super) {
+    var ColorWidget = (function (_super) {
         __extends(ColorWidget, _super);
         /**
          * @constructor
@@ -5793,14 +5892,14 @@ define("Workbench/InheritanceTest", ["require", "exports", "System/Logger"], fun
         return ColorWidget;
     }(Widget));
     exports.ColorWidget = ColorWidget;
-    var GrandParent = /** @class */ (function () {
+    var GrandParent = (function () {
         function GrandParent(grandparentProperty) {
             this.grandparentProperty = grandparentProperty;
         }
         return GrandParent;
     }());
     exports.GrandParent = GrandParent;
-    var Parent = /** @class */ (function (_super) {
+    var Parent = (function (_super) {
         __extends(Parent, _super);
         function Parent(grandparentProperty, parentProperty) {
             var _this = _super.call(this, grandparentProperty) || this;
@@ -5810,7 +5909,7 @@ define("Workbench/InheritanceTest", ["require", "exports", "System/Logger"], fun
         return Parent;
     }(GrandParent));
     exports.Parent = Parent;
-    var Child = /** @class */ (function (_super) {
+    var Child = (function (_super) {
         __extends(Child, _super);
         function Child(grandparentProperty, parentProperty, childProperty) {
             var _this = _super.call(this, grandparentProperty, parentProperty) || this;
@@ -5824,7 +5923,7 @@ define("Workbench/InheritanceTest", ["require", "exports", "System/Logger"], fun
      * @class
      * Inheritance
      */
-    var InheritanceTest = /** @class */ (function () {
+    var InheritanceTest = (function () {
         /**
          * @constructor
          */
@@ -5884,7 +5983,7 @@ define("Workbench/QuokkaWorkbench", ["require", "exports"], function (require, e
     /**
      * Represents the result of a client request.
      */
-    var RequestResponse = /** @class */ (function () {
+    var RequestResponse = (function () {
         /**
          * Constructs an instance of a RequestResponse.
          * @param {Response} response Raw response from the request.
@@ -5980,7 +6079,7 @@ define("System/Image.", ["require", "exports"], function (require, exports) {
      * General image processing support.
      * @class
      */
-    var ImageLibrary = /** @class */ (function () {
+    var ImageLibrary = (function () {
         /**
          * @constructor
          */

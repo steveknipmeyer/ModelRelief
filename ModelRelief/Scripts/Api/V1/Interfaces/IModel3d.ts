@@ -21,23 +21,23 @@ export enum Model3dFormat {
 
  /**
  *  Represents a DTO for a Model3d.
+ *  N.B. All properties in the interface are optional so that an initialization object can be used to construct the concrete class.
  *  @interface
  */
 export interface IModel3d extends ITGetModel {
 
-    id: number;
+    id?: number;
+    name?: string;
+    description?: string;
 
-    name: string;
-    description: string;
-
-    format: Model3dFormat;
+    format?: Model3dFormat;
 
     // Navigation Properties
-    projectId: number;
-    project: IProject;
+    projectId?: number;
+    project?: IProject;
 
-    cameraId: number;
-    camera: ICamera;
+    cameraId?: number;
+    camera?: ICamera;
 }
 
 

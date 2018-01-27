@@ -24,32 +24,32 @@ export enum MeshFormat {
 
  /**
  *  Represents a DTO for a Mesh.
+ *  N.B. All properties in the interface are optional so that an initialization object can be used to construct the concrete class.
  *  @interface
  */
 export interface IMesh extends ITGetModel {
 
-    id: number;
+    id?: number;
+    name?: string;
+    description?: string;
 
-    name: string;
-    description: string;
-
-    Format: MeshFormat;
+    format?: MeshFormat;
 
     // Navigation Properties
-    ProjectId: number;
-    pProject: IProject;
+    projectId?: number;
+    project?: IProject;
 
-    cameraId: number;
-    camera: ICamera;
+    cameraId?: number;
+    camera?: ICamera;
 
-    depthBufferId: number;
-    depthBuffer: IDepthBuffer;
+    depthBufferId?: number;
+    depthBuffer?: IDepthBuffer;
 
-    meshTransformId: number;
-    meshTransform: IMeshTransform;
+    meshTransformId?: number;
+    meshTransform?: IMeshTransform;
 
     // not exposed in UX; API only
-    fileTimeStamp: Date;
+    fileTimeStamp?: Date;
     fileIsSynchronized: boolean;
 }
 

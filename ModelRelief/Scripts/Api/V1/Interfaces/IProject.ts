@@ -9,11 +9,10 @@ import { assert }           from 'chai'
 import { ITGetModel }       from 'ITGetModel'
 
 export interface IProject extends ITGetModel {
-    id: number;
 
-    name: string;
-    description: string;
-     
+    id?: number;
+    name?: string;
+    description?: string;
 }
 
 
