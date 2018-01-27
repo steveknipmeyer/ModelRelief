@@ -2649,6 +2649,13 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
             });
         };
         /**
+         * @description Returns the derived instance of BaseModel.
+         * @param {ITGetModel} parameters
+         * @returns {*}
+         */
+        BaseModel.prototype.factory = function (parameters) { };
+        ;
+        /**
          * @description Posts the model to its API endpoint.
          * @returns {Promise<T>}
          */
@@ -2662,7 +2669,27 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
                             return [4 /*yield*/, this.submitRequestAsync(this.endPoint, Http_1.MethodType.Post, Http_1.ContentType.Json, newModel)];
                         case 1:
                             result = _a.sent();
-                            return [2 /*return*/, result.model];
+                            return [2 /*return*/, this.factory(result.model)];
+                    }
+                });
+            });
+        };
+        /**
+         * @description Puts the model to its API endpoint.
+         * @returns {Promise<T>}
+         */
+        BaseModel.prototype.putAsync = function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var updatedModel, endPoint, result;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            updatedModel = JSON.stringify(this);
+                            endPoint = this.endPoint + "/" + this.id;
+                            return [4 /*yield*/, this.submitRequestAsync(endPoint, Http_1.MethodType.Put, Http_1.ContentType.Json, updatedModel)];
+                        case 1:
+                            result = _a.sent();
+                            return [2 /*return*/, this.factory(result.model)];
                     }
                 });
             });
@@ -2762,6 +2789,14 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
             _this.project = parameters.project || undefined;
             return _this;
         }
+        /**
+         * @description Constructs an instance of a Camera.
+         * @param {ITGetModel} parameters : Dto.Camera
+         * @returns {Camera}
+         */
+        Camera.prototype.factory = function (parameters) {
+            return new Camera(parameters);
+        };
         return Camera;
     }(BaseModel));
     exports.Camera = Camera;
@@ -2788,6 +2823,14 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
             _this.camera = parameters.camera || undefined;
             return _this;
         }
+        /**
+         * @description Constructs an instance of a DepthBuffer
+         * @param {ITGetModel} parameters : Dto.DepthBuffer
+         * @returns {DepthBuffer}
+         */
+        DepthBuffer.prototype.factory = function (parameters) {
+            return new DepthBuffer(parameters);
+        };
         return DepthBuffer;
     }(GeneratedFileBaseModel));
     exports.DepthBuffer = DepthBuffer;
@@ -2816,6 +2859,14 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
             _this.meshTransform = parameters.meshTransform || undefined;
             return _this;
         }
+        /**
+         * @description Constructs an instance of a Mesh.
+         * @param {ITGetModel} parameters : Dto.Mesh
+         * @returns {Mesh}
+         */
+        Mesh.prototype.factory = function (parameters) {
+            return new Mesh(parameters);
+        };
         return Mesh;
     }(GeneratedFileBaseModel));
     exports.Mesh = Mesh;
@@ -2843,6 +2894,14 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
             _this.project = parameters.project || undefined;
             return _this;
         }
+        /**
+         * @description Constructs an instance of a MeshTransform.
+         * @param {ITGetModel} parameters : Dto.MeshTransform
+         * @returns {MeshTransform}
+         */
+        MeshTransform.prototype.factory = function (parameters) {
+            return new MeshTransform(parameters);
+        };
         return MeshTransform;
     }(BaseModel));
     exports.MeshTransform = MeshTransform;
@@ -2868,6 +2927,14 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
             _this.camera = parameters.camera || undefined;
             return _this;
         }
+        /**
+         * @description Constructs an instance of a Model3d.
+         * @param {ITGetModel} parameters : Dto.Model3d
+         * @returns {Model3d}
+         */
+        Model3d.prototype.factory = function (parameters) {
+            return new Model3d(parameters);
+        };
         return Model3d;
     }(FileBaseModel));
     exports.Model3d = Model3d;
@@ -2886,7 +2953,14 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
             _this.endPoint = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiProjects;
             return _this;
         }
-        Project.EndPoint = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiProjects;
+        /**
+         * @description Constructs an instance of a Project.
+         * @param {ITGetModel} parameters : Dto.Project
+         * @returns {Project}
+         */
+        Project.prototype.factory = function (parameters) {
+            return new Project(parameters);
+        };
         return Project;
     }(BaseModel));
     exports.Project = Project;
@@ -4499,7 +4573,7 @@ define("ModelExporters/OBJExporter", ["require", "exports", "three"], function (
     }());
     exports.OBJExporter = OBJExporter;
 });
-define("Controllers/ComposerController", ["require", "exports", "three", "dat-gui", "Api/V1/Models/DtoModels", "Viewers/Camera", "Graphics/DepthBufferFactory", "System/EventManager", "System/Html", "Api/V1/Interfaces/IDepthBuffer", "Models/Mesh"], function (require, exports, THREE, dat, Dto, Camera_5, DepthBufferFactory_2, EventManager_3, Html_3, IDepthBuffer_1, Mesh_1) {
+define("Controllers/ComposerController", ["require", "exports", "three", "dat-gui", "Api/V1/Models/DtoModels", "Viewers/Camera", "Graphics/DepthBufferFactory", "System/EventManager", "System/Html", "Api/V1/Interfaces/IDepthBuffer", "Api/V1/Interfaces/IMesh", "Models/Mesh"], function (require, exports, THREE, dat, Dto, Camera_5, DepthBufferFactory_2, EventManager_3, Html_3, IDepthBuffer_1, IMesh_1, Mesh_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -4555,29 +4629,36 @@ define("Controllers/ComposerController", ["require", "exports", "three", "dat-gu
          */
         ComposerController.prototype.generateReliefAsync = function () {
             return __awaiter(this, void 0, void 0, function () {
-                var width, height, factory, depthBuffer, mesh, _a, camera;
+                var widthPixels, heightPixels, factory, depthBuffer, mesh, _a, cameraModel, depthBufferModel, meshTransformModel, meshModel;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
-                            width = 512;
-                            height = width / this._composerView.modelView.modelViewer.aspectRatio;
-                            factory = new DepthBufferFactory_2.DepthBufferFactory({ width: width, height: height, model: this._composerView.modelView.modelViewer.model, camera: this._composerView.modelView.modelViewer.camera, addCanvasToDOM: false });
+                            widthPixels = 512;
+                            heightPixels = widthPixels / this._composerView.modelView.modelViewer.aspectRatio;
+                            factory = new DepthBufferFactory_2.DepthBufferFactory({ width: widthPixels, height: heightPixels, model: this._composerView.modelView.modelViewer.model, camera: this._composerView.modelView.modelViewer.camera, addCanvasToDOM: false });
                             depthBuffer = factory.createDepthBuffer();
-                            mesh = new Mesh_1.Mesh({ width: width, height: height, depthBuffer: depthBuffer });
+                            mesh = new Mesh_1.Mesh({ width: widthPixels, height: heightPixels, depthBuffer: depthBuffer });
                             _a = this;
                             return [4 /*yield*/, mesh.generateReliefAsync({})];
                         case 1:
                             _a._relief = _b.sent();
                             return [4 /*yield*/, this.postCameraAsync()];
                         case 2:
-                            camera = _b.sent();
-                            // DepthBufffer
-                            return [4 /*yield*/, this.postDepthBufferAsync(camera)];
+                            cameraModel = _b.sent();
+                            return [4 /*yield*/, this.postDepthBufferAsync(cameraModel)];
                         case 3:
-                            // DepthBufffer
+                            depthBufferModel = _b.sent();
+                            return [4 /*yield*/, this.postMeshTransformAsync()];
+                        case 4:
+                            meshTransformModel = _b.sent();
+                            return [4 /*yield*/, this.postMeshAsync(depthBufferModel, meshTransformModel)];
+                        case 5:
+                            meshModel = _b.sent();
+                            // Mesh file generation
+                            meshModel.fileIsSynchronized = true;
+                            return [4 /*yield*/, meshModel.putAsync()];
+                        case 6:
                             _b.sent();
-                            // MeshTransform
-                            // Mesh
                             this._composerView._meshView.meshViewer.setModel(this._relief.mesh);
                             if (this._initialMeshGeneration) {
                                 this._composerView._meshView.meshViewer.fitView();
@@ -4589,7 +4670,7 @@ define("Controllers/ComposerController", ["require", "exports", "three", "dat-gu
             });
         };
         /**
-         * Saves the camera.
+         * Saves the Camera.
          */
         ComposerController.prototype.postCameraAsync = function () {
             return __awaiter(this, void 0, void 0, function () {
@@ -4598,7 +4679,7 @@ define("Controllers/ComposerController", ["require", "exports", "three", "dat-gu
                     switch (_a.label) {
                         case 0:
                             camera = new Dto.Camera({
-                                name: 'Dynamic Camera',
+                                name: 'DynamicCamera',
                                 description: 'Dynamic Camera Description',
                                 position: new THREE.Vector3(100, 100, 200)
                             });
@@ -4611,7 +4692,7 @@ define("Controllers/ComposerController", ["require", "exports", "three", "dat-gu
             });
         };
         /**
-         * Saves the depth buffer.
+         * Saves the DepthBuffer.
          */
         ComposerController.prototype.postDepthBufferAsync = function (camera) {
             return __awaiter(this, void 0, void 0, function () {
@@ -4626,6 +4707,49 @@ define("Controllers/ComposerController", ["require", "exports", "three", "dat-gu
                                 cameraId: camera.id,
                             });
                             return [4 /*yield*/, depthBuffer.postFileAsync(this._relief.depthBuffer.depths)];
+                        case 1:
+                            newModel = _a.sent();
+                            return [2 /*return*/, newModel];
+                    }
+                });
+            });
+        };
+        /**
+         * Saves the MeshTransform.
+         */
+        ComposerController.prototype.postMeshTransformAsync = function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var meshTransform, newModel;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            meshTransform = new Dto.MeshTransform(this._composerViewSettings.meshTransform);
+                            meshTransform.name = 'DynamicMeshTransform';
+                            return [4 /*yield*/, meshTransform.postAsync()];
+                        case 1:
+                            newModel = _a.sent();
+                            return [2 /*return*/, newModel];
+                    }
+                });
+            });
+        };
+        /**
+         * Saves the Mesh.
+         */
+        ComposerController.prototype.postMeshAsync = function (depthBuffer, meshTransform) {
+            return __awaiter(this, void 0, void 0, function () {
+                var mesh, newModel;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            mesh = new Dto.Mesh({
+                                name: 'DynamicMesh',
+                                format: IMesh_1.MeshFormat.RAW,
+                                description: 'Mesh Description',
+                                depthBufferId: depthBuffer.id,
+                                meshTransformId: meshTransform.id,
+                            });
+                            return [4 /*yield*/, mesh.postAsync()];
                         case 1:
                             newModel = _a.sent();
                             return [2 /*return*/, newModel];

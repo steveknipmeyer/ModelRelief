@@ -45,9 +45,6 @@ namespace ModelRelief.Dto
         {
             RuleFor(m => m.Name)
                 .NotNull().WithMessage("The Name property is required.");
-
-            RuleFor(m => m.Description)
-                .NotNull().WithMessage("The Description property is required.");
         }
     }
 

@@ -50,7 +50,7 @@ export interface IMesh extends ITGetModel {
 
     // not exposed in UX; API only
     fileTimeStamp?: Date;
-    fileIsSynchronized: boolean;
+    fileIsSynchronized?: boolean;
 }
 
 

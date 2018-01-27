@@ -32,6 +32,9 @@ Some Markdown text with <span style="color:blue">some *blue* text
 #### Short Term
 
 #### Front End
+    Mesh.Path is not defined when a Mesh is created. GenerateMeshAsync fails because  
+    Mesh.Filename returns an incorrect path.
+ 
     The 'dotnet run' workflow runs as 'Production'!
 
     What is a Relief?
@@ -58,10 +61,6 @@ Only Test works because there is special middleware handling which provides auth
 
     Investigate Chai unit tests for front-end JavaScript.
 
-    Is the interface IGenerateFile needed?
-
-    Create a utility URL composer.
-
     Accessing Model From JavaScript
         https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
 
@@ -75,11 +74,11 @@ Only Test works because there is special middleware handling which provides auth
 
 | Client | Server|
 |-------|--------|
-|Post Camera | |
+|**Post Camera**| |
 |**Create DepthBuffer in-memory** | |
 |**Post DepthBuffer** | |
 |**Post DepthBuffer/id/file** | |
-|Post MeshTransform  | |
+|**Post MeshTransform**| |
 |Post Mesh = Mesh (DepthBuffer, MeshTransform)| |
 |Patch Mesh.FileIsSynchronized = true  | |
 || **Solver <Mesh.json> filename** |

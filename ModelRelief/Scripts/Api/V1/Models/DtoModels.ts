@@ -15,7 +15,7 @@ import { IMeshTransform }                   from 'IMeshTransform'
 import { IModel3d, Model3dFormat }          from 'IModel3d'
 import { IProject }                         from 'IProject'
 import {Services}                           from 'Services'
-import { ITGetModel, IGeneratedFile }                       from 'ITGetModel'
+import { ITGetModel, IGeneratedFile }       from 'ITGetModel'
 
 /**
  * @description Common base class for all DTO models.
@@ -61,6 +61,12 @@ export class BaseModel<T extends ITGetModel> implements ITGetModel{
 
         return result;
     }
+    /**
+     * @description Returns the derived instance of BaseModel.
+     * @param {ITGetModel} parameters 
+     * @returns {*} 
+     */
+    factory(parameters : ITGetModel) : any{};
 
     /**
      * @description Posts the model to its API endpoint.
@@ -71,7 +77,20 @@ export class BaseModel<T extends ITGetModel> implements ITGetModel{
         let newModel = JSON.stringify(this);
         let result = await this.submitRequestAsync(this.endPoint, MethodType.Post, ContentType.Json, newModel);
 
-        return result.model as T;
+        return this.factory(result.model) as T;
+    }
+
+    /**
+     * @description Puts the model to its API endpoint.
+     * @returns {Promise<T>} 
+     */
+    async putAsync() : Promise<T> {
+
+        let updatedModel = JSON.stringify(this);
+        let endPoint = `${this.endPoint}/${this.id}`;
+        let result = await this.submitRequestAsync(endPoint, MethodType.Put, ContentType.Json, updatedModel);
+
+        return this.factory(result.model) as T;
     }
 }
 
@@ -83,7 +102,7 @@ export class BaseModel<T extends ITGetModel> implements ITGetModel{
  * @implements {ITGetModel}
  * @template T 
  */
-export class FileBaseModel<T> extends BaseModel<T> {
+export class FileBaseModel<T extends ITGetModel> extends BaseModel<T> {
 
     // not exposed in UX; API only
     fileTimeStamp: Date;
@@ -122,7 +141,7 @@ export class FileBaseModel<T> extends BaseModel<T> {
  * @implements {IGeneratedFile}
  * @template T 
  */
-export class GeneratedFileBaseModel<T> extends FileBaseModel<T> implements IGeneratedFile{
+export class GeneratedFileBaseModel<T extends ITGetModel> extends FileBaseModel<T> implements IGeneratedFile{
 
     // not exposed in UX; API only
     fileIsSynchronized: boolean;
@@ -195,6 +214,15 @@ export class Camera extends BaseModel<Camera> implements ICamera {
         this.projectId              = parameters.projectId || undefined;
         this.project                = parameters.project || undefined;
         }
+
+    /**
+     * @description Constructs an instance of a Camera.
+     * @param {ITGetModel} parameters : Dto.Camera
+     * @returns {Camera} 
+     */
+    factory (parameters: ITGetModel) : Camera {
+        return new Camera(parameters);
+    }
 }
 
 /**
@@ -202,10 +230,6 @@ export class Camera extends BaseModel<Camera> implements ICamera {
 *  @interface
 */
 export class DepthBuffer extends GeneratedFileBaseModel<DepthBuffer> implements IDepthBuffer {
-
-    id: number;
-    name: string;
-    description: string;
 
     format: DepthBufferFormat;
 
@@ -241,6 +265,15 @@ export class DepthBuffer extends GeneratedFileBaseModel<DepthBuffer> implements 
         this.cameraId               = parameters.cameraId || undefined;
         this.camera                 = parameters.camera || undefined;
     }
+
+    /**
+     * @description Constructs an instance of a DepthBuffer
+     * @param {ITGetModel} parameters : Dto.DepthBuffer
+     * @returns {DepthBuffer} 
+     */
+    factory (parameters: ITGetModel) : DepthBuffer {
+        return new DepthBuffer(parameters);
+    }
 }
 
 /**
@@ -248,10 +281,6 @@ export class DepthBuffer extends GeneratedFileBaseModel<DepthBuffer> implements 
 *  @interface
 */
 export class Mesh extends GeneratedFileBaseModel<Mesh> implements IMesh {
-
-    id: number;
-    name: string;
-    description: string;
 
     format: MeshFormat;
 
@@ -293,6 +322,15 @@ export class Mesh extends GeneratedFileBaseModel<Mesh> implements IMesh {
         this.meshTransformId        = parameters.meshTransformId || undefined;
         this.meshTransform          = parameters.meshTransform || undefined;
     }
+    
+    /**
+     * @description Constructs an instance of a Mesh.
+     * @param {ITGetModel} parameters : Dto.Mesh
+     * @returns {Mesh} 
+     */
+    factory (parameters: ITGetModel) : Mesh {
+        return new Mesh(parameters);
+    }
 }
 
 /**
@@ -300,10 +338,6 @@ export class Mesh extends GeneratedFileBaseModel<Mesh> implements IMesh {
 *  @interface
 */
 export class MeshTransform extends BaseModel<MeshTransform> implements IMeshTransform {
-
-    id: number;
-    name: string;
-    description: string;
 
     depth: number;
     width: number;
@@ -340,6 +374,14 @@ export class MeshTransform extends BaseModel<MeshTransform> implements IMeshTran
         this.project                = parameters.project || undefined;
         }
     
+    /**
+     * @description Constructs an instance of a MeshTransform.
+     * @param {ITGetModel} parameters : Dto.MeshTransform
+     * @returns {MeshTransform} 
+     */
+    factory (parameters: ITGetModel) : MeshTransform {
+        return new MeshTransform(parameters);
+    }
 };
 
 /**
@@ -347,10 +389,6 @@ export class MeshTransform extends BaseModel<MeshTransform> implements IMeshTran
 *  @interface
 */
 export class Model3d extends FileBaseModel<Model3d> implements IModel3d {
-
-    id: number;
-    name: string;
-    description: string;
 
     format: Model3dFormat;
 
@@ -379,7 +417,16 @@ export class Model3d extends FileBaseModel<Model3d> implements IModel3d {
     
         this.cameraId     = parameters.cameraId || undefined;
         this.camera       = parameters.camera || undefined;
-        }
+    }
+
+    /**
+     * @description Constructs an instance of a Model3d.
+     * @param {ITGetModel} parameters : Dto.Model3d
+     * @returns {Model3d} 
+     */
+    factory (parameters: ITGetModel) : Model3d {
+        return new Model3d(parameters);
+    }    
 }
 
 /**
@@ -387,12 +434,6 @@ export class Model3d extends FileBaseModel<Model3d> implements IModel3d {
  * @class
  */
 export class Project extends BaseModel<Project> implements IProject {
-
-    static EndPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiProjects}`;
-
-    id: number;
-    name: string;
-    description: string;
 
     /**
      * Creates an instance of a Project.
@@ -403,5 +444,13 @@ export class Project extends BaseModel<Project> implements IProject {
         super(parameters);
 
         this.endPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiProjects}`;
+    }
+    /**
+     * @description Constructs an instance of a Project.
+     * @param {ITGetModel} parameters : Dto.Project
+     * @returns {Project} 
+     */
+    factory (parameters: ITGetModel) : Project {
+        return new Project(parameters);
     }
 }

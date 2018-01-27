@@ -17,7 +17,8 @@ import {ElementAttributes, ElementIds}      from "Html"
 import {ContentType, HttpLibrary, 
         MethodType, ServerEndPoints}        from "Http"
 import {DepthBufferFormat}                  from 'IDepthBuffer'
-import {ILogger, ConsoleLogger}              from 'Logger'
+import {MeshFormat}                         from 'IMesh'
+import {ILogger, ConsoleLogger}             from 'Logger'
 import {Graphics}                           from "Graphics"
 import {Mesh, Relief}                       from "Mesh"
 import {ModelViewer}                        from "ModelViewer"
@@ -93,26 +94,34 @@ export class ComposerController {
      */
     async generateReliefAsync() : Promise<void> { 
 
-        // pixels
-        let width = 512;
-        let height = width / this._composerView.modelView.modelViewer.aspectRatio;
-        let factory = new DepthBufferFactory({ width: width, height: height, model: this._composerView.modelView.modelViewer.model, camera: this._composerView.modelView.modelViewer.camera, addCanvasToDOM: false });
-
-
+        // DepthBuffer (binary)
+        let widthPixels = 512;    
+        let heightPixels = widthPixels / this._composerView.modelView.modelViewer.aspectRatio;
+        let factory = new DepthBufferFactory({ width: widthPixels, height: heightPixels, model: this._composerView.modelView.modelViewer.model, camera: this._composerView.modelView.modelViewer.camera, addCanvasToDOM: false });
         let depthBuffer = factory.createDepthBuffer();
-    
-        let mesh = new Mesh({ width: width, height: height, depthBuffer: depthBuffer});
+
+        // N.B. This step will be last. The mesh (DepthBuffer.Raw) will be acquired by a GET against the Mesh API.    
+        //      The Mesh will be constructed from the GET object.
+        let mesh = new Mesh({ width: widthPixels, height: heightPixels, depthBuffer: depthBuffer});
         this._relief = await mesh.generateReliefAsync({});
 
+        // Model
+
         // Camera
-        var camera = await this.postCameraAsync();
+        let cameraModel: Dto.Camera = await this.postCameraAsync();
         
-        // DepthBufffer
-        await this.postDepthBufferAsync(camera);
+        // DepthBufffer(Model, Camera)
+        let depthBufferModel: Dto.DepthBuffer = await this.postDepthBufferAsync(cameraModel);
 
         // MeshTransform
+        let meshTransformModel: Dto.MeshTransform = await this.postMeshTransformAsync();
 
-        // Mesh
+        // Mesh(DepthBuffer, MeshTransform)
+        let meshModel: Dto.Mesh = await this.postMeshAsync(depthBufferModel, meshTransformModel);
+
+        // Mesh file generation
+        meshModel.fileIsSynchronized = true;
+        await meshModel.putAsync();
 
         this._composerView._meshView.meshViewer.setModel(this._relief.mesh);
         if (this._initialMeshGeneration) {
@@ -122,12 +131,12 @@ export class ComposerController {
     }
 
     /**
-     * Saves the camera.
+     * Saves the Camera.
      */
     async postCameraAsync(): Promise<Dto.Camera> {
 
         let camera = new Dto.Camera({
-            name: 'Dynamic Camera',
+            name: 'DynamicCamera',
             description: 'Dynamic Camera Description',
             position: new THREE.Vector3(100, 100, 200)
         });
@@ -137,7 +146,7 @@ export class ComposerController {
     }        
     
     /**
-     * Saves the depth buffer.
+     * Saves the DepthBuffer.
      */
     async postDepthBufferAsync(camera : Dto.Camera): Promise<Dto.DepthBuffer> {
 
@@ -149,6 +158,35 @@ export class ComposerController {
             cameraId: camera.id,
         });
         var newModel = await depthBuffer.postFileAsync(this._relief.depthBuffer.depths);
+
+        return newModel;
+    }        
+
+    /**
+     * Saves the MeshTransform.
+     */
+    async postMeshTransformAsync(): Promise<Dto.MeshTransform> {
+
+        let meshTransform = new Dto.MeshTransform(this._composerViewSettings.meshTransform);
+        meshTransform.name = 'DynamicMeshTransform';
+        var newModel = await meshTransform.postAsync();
+
+        return newModel;
+    }        
+
+    /**
+     * Saves the Mesh.
+     */
+    async postMeshAsync(depthBuffer : Dto.DepthBuffer, meshTransform : Dto.MeshTransform): Promise<Dto.Mesh> {
+
+        let mesh = new Dto.Mesh({
+            name: 'DynamicMesh',
+            format: MeshFormat.RAW,
+            description: 'Mesh Description',
+            depthBufferId: depthBuffer.id,
+            meshTransformId: meshTransform.id,
+        });
+        var newModel = await mesh.postAsync();
 
         return newModel;
     }        
