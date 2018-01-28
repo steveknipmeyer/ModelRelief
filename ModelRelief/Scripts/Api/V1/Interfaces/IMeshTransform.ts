@@ -6,7 +6,7 @@
 "use strict";
 
 import { IProject }         from 'IProject'
-import { ITGetModel }       from 'ITGetModel'
+import { IModel }           from 'IModel'
 
  /**
  *  Represents a DTO for a MeshTransform.
@@ -14,7 +14,7 @@ import { ITGetModel }       from 'ITGetModel'
  *  @description Settings that transform a DepthBuffer to a Mesh.
  *  @interface
  */
-export interface IMeshTransform extends ITGetModel {
+export interface IMeshTransform extends IModel {
 
     id?: number;
     name?: string;

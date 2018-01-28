@@ -9,7 +9,7 @@ import { ICamera }          from 'ICamera'
 import { IDepthBuffer }     from 'IDepthBuffer'
 import { IMeshTransform }   from 'IMeshTransform'
 import { IProject }         from 'IProject'
-import { ITGetModel }       from 'ITGetModel'
+import { IModel }           from 'IModel'
 
  /**
  *  Mesh file formats.
@@ -27,7 +27,7 @@ export enum MeshFormat {
  *  N.B. All properties in the interface are optional so that an initialization object can be used to construct the concrete class.
  *  @interface
  */
-export interface IMesh extends ITGetModel {
+export interface IMesh extends IModel {
 
     id?: number;
     name?: string;

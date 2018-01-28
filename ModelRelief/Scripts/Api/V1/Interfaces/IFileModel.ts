@@ -5,14 +5,14 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { assert }           from 'chai'
-import { IModel }           from 'IModel'
+import {IModel} from "IModel"
 
-export interface IProject extends IModel {
+/**
+ *  Common interface for all generated file DTOs (e.g. Mesh, DepthBuffer).
+ *  Not exposed in UX; API only.
+ *  @interface
+ */
+export interface IFileModel extends IModel {
 
-    id?: number;
-    name?: string;
-    description?: string;
+    fileTimeStamp?: Date;                   //  time stamp of file 
 }
-
-

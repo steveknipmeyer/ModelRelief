@@ -8,7 +8,7 @@
 import { ICamera }from 'ICamera'
 import { IModel3d }         from 'IModel3d'
 import { IProject }         from 'IProject'
-import { ITGetModel }       from 'ITGetModel'
+import { IModel }           from 'IModel'
 
  /**
  *  Depth buffer file formats.
@@ -26,7 +26,7 @@ export enum DepthBufferFormat {
  *  N.B. All properties in the interface are optional so that an initialization object can be used to construct the concrete class.
  *  @interface
  */
-export interface IDepthBuffer extends ITGetModel {
+export interface IDepthBuffer extends IModel {
 
     id?: number;
     name?: string;

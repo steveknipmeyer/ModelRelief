@@ -84,7 +84,7 @@ define("System/Html", ["require", "exports"], function (require, exports) {
     }());
     exports.HtmlLibrary = HtmlLibrary;
 });
-define("Api/V1/Interfaces/ITGetModel", ["require", "exports"], function (require, exports) {
+define("Api/V1/Interfaces/IModel", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -2579,6 +2579,24 @@ define("System/Http", ["require", "exports", "System/Exception", "System/HttpSta
     }());
     exports.HttpLibrary = HttpLibrary;
 });
+define("Api/V1/Interfaces/IFileModel", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("Api/V1/Interfaces/IGeneratedFileModel", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
 define("Api/V1/Interfaces/IMesh", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
@@ -2611,15 +2629,15 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
      * @description Common base class for all DTO models.
      * @export
      * @class Base
-     * @implements {ITGetModel}
+     * @implements {IModel}
      * @template T
      */
-    var BaseModel = (function () {
+    var Model = (function () {
         /**
          * Creates an instance of Base.
-         * @param {ITGetModel} parameters
+         * @param {IModel} parameters
          */
-        function BaseModel(parameters) {
+        function Model(parameters) {
             this.id = parameters.id || undefined;
             this.name = parameters.name || undefined;
             this.description = parameters.description || undefined;
@@ -2632,7 +2650,7 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
          * @param {*} requestData Data to send (or null)
          * @returns {Promise<RequestResponse>}
          */
-        BaseModel.prototype.submitRequestAsync = function (endPoint, requestType, contentType, requestData) {
+        Model.prototype.submitRequestAsync = function (endPoint, requestType, contentType, requestData) {
             return __awaiter(this, void 0, void 0, function () {
                 var exportTag, result;
                 return __generator(this, function (_a) {
@@ -2650,16 +2668,16 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
         };
         /**
          * @description Returns the derived instance of BaseModel.
-         * @param {ITGetModel} parameters
+         * @param {IModel} parameters
          * @returns {*}
          */
-        BaseModel.prototype.factory = function (parameters) { };
+        Model.prototype.factory = function (parameters) { };
         ;
         /**
          * @description Posts the model to its API endpoint.
          * @returns {Promise<T>}
          */
-        BaseModel.prototype.postAsync = function () {
+        Model.prototype.postAsync = function () {
             return __awaiter(this, void 0, void 0, function () {
                 var newModel, result;
                 return __generator(this, function (_a) {
@@ -2678,7 +2696,7 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
          * @description Puts the model to its API endpoint.
          * @returns {Promise<T>}
          */
-        BaseModel.prototype.putAsync = function () {
+        Model.prototype.putAsync = function () {
             return __awaiter(this, void 0, void 0, function () {
                 var updatedModel, endPoint, result;
                 return __generator(this, function (_a) {
@@ -2694,31 +2712,33 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
                 });
             });
         };
-        return BaseModel;
+        return Model;
     }());
-    exports.BaseModel = BaseModel;
+    exports.Model = Model;
     /**
      * @description Base class for a file-backed DTO model.
      * @export
      * @class FileBaseModel
-     * @extends {BaseModel<T>}
-     * @implements {ITGetModel}
+     * @extends {Model<T>}
+     * @implements {IModel}
      * @template T
      */
-    var FileBaseModel = (function (_super) {
-        __extends(FileBaseModel, _super);
+    var FileModel = (function (_super) {
+        __extends(FileModel, _super);
         /**
          * Creates an instance of FileBaseModel.
-         * @param {ITGetModel} parameters
+         * @param {IModel} parameters
          */
-        function FileBaseModel(parameters) {
-            return _super.call(this, parameters) || this;
+        function FileModel(parameters) {
+            var _this = _super.call(this, parameters) || this;
+            _this.fileTimeStamp = parameters.fileTimeStamp || undefined;
+            return _this;
         }
         /**
          * @description Posts the model and a backing file to its API endpoint.
          * @returns {Promise<T>}
          */
-        FileBaseModel.prototype.postFileAsync = function (fileData) {
+        FileModel.prototype.postFileAsync = function (fileData) {
             return __awaiter(this, void 0, void 0, function () {
                 var exportTag, fileName, newModel;
                 return __generator(this, function (_a) {
@@ -2735,14 +2755,14 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
                 });
             });
         };
-        return FileBaseModel;
-    }(BaseModel));
-    exports.FileBaseModel = FileBaseModel;
+        return FileModel;
+    }(Model));
+    exports.FileModel = FileModel;
     /**
      * @description Base class for a generated file-backed DTO model.
      * @export
      * @class GeneratedFileBaseModel
-     * @extends {FileBaseModel<T>}
+     * @extends {FileModel<T>}
      * @implements {IGeneratedFile}
      * @template T
      */
@@ -2758,7 +2778,7 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
             return _this;
         }
         return GeneratedFileBaseModel;
-    }(FileBaseModel));
+    }(FileModel));
     exports.GeneratedFileBaseModel = GeneratedFileBaseModel;
     /**
      * Concrete implementation of ICamera.
@@ -2791,14 +2811,14 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
         }
         /**
          * @description Constructs an instance of a Camera.
-         * @param {ITGetModel} parameters : Dto.Camera
+         * @param {IModel} parameters : Dto.Camera
          * @returns {Camera}
          */
         Camera.prototype.factory = function (parameters) {
             return new Camera(parameters);
         };
         return Camera;
-    }(BaseModel));
+    }(Model));
     exports.Camera = Camera;
     /**
     *  Concrete implementation of IDepthBuffer.
@@ -2825,7 +2845,7 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
         }
         /**
          * @description Constructs an instance of a DepthBuffer
-         * @param {ITGetModel} parameters : Dto.DepthBuffer
+         * @param {IModel} parameters : Dto.DepthBuffer
          * @returns {DepthBuffer}
          */
         DepthBuffer.prototype.factory = function (parameters) {
@@ -2861,7 +2881,7 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
         }
         /**
          * @description Constructs an instance of a Mesh.
-         * @param {ITGetModel} parameters : Dto.Mesh
+         * @param {IModel} parameters : Dto.Mesh
          * @returns {Mesh}
          */
         Mesh.prototype.factory = function (parameters) {
@@ -2896,14 +2916,14 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
         }
         /**
          * @description Constructs an instance of a MeshTransform.
-         * @param {ITGetModel} parameters : Dto.MeshTransform
+         * @param {IModel} parameters : Dto.MeshTransform
          * @returns {MeshTransform}
          */
         MeshTransform.prototype.factory = function (parameters) {
             return new MeshTransform(parameters);
         };
         return MeshTransform;
-    }(BaseModel));
+    }(Model));
     exports.MeshTransform = MeshTransform;
     ;
     /**
@@ -2929,14 +2949,14 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
         }
         /**
          * @description Constructs an instance of a Model3d.
-         * @param {ITGetModel} parameters : Dto.Model3d
+         * @param {IModel} parameters : Dto.Model3d
          * @returns {Model3d}
          */
         Model3d.prototype.factory = function (parameters) {
             return new Model3d(parameters);
         };
         return Model3d;
-    }(FileBaseModel));
+    }(FileModel));
     exports.Model3d = Model3d;
     /**
      * Concrete implementation of IProject.
@@ -2955,14 +2975,14 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
         }
         /**
          * @description Constructs an instance of a Project.
-         * @param {ITGetModel} parameters : Dto.Project
+         * @param {IModel} parameters : Dto.Project
          * @returns {Project}
          */
         Project.prototype.factory = function (parameters) {
             return new Project(parameters);
         };
         return Project;
-    }(BaseModel));
+    }(Model));
     exports.Project = Project;
 });
 define("System/EventManager", ["require", "exports"], function (require, exports) {

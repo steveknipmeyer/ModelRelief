@@ -10,7 +10,7 @@ import * as Dto                             from 'DtoModels'
 import { DepthBufferFormat }                from 'DepthBuffer'
 import { Exception }                        from 'Exception'
 import { HttpStatusCode, HttpStatusMessage }from 'HttpStatus'
-import { ITGetModel }                       from 'ITGetModel'
+import { IModel }                           from 'IModel'
 import { Services }                         from 'Services'
 import { MeshTransform }                    from 'MeshTransform'
 
@@ -67,9 +67,9 @@ export class RequestResponse {
     /**
      * Gets the JSON representation of the response.
      */
-    get model(): ITGetModel {
+    get model(): IModel {
 
-        return JSON.parse(this.contentString) as ITGetModel;
+        return JSON.parse(this.contentString) as IModel;
     }
 
     /**
@@ -217,7 +217,7 @@ export class HttpLibrary {
      * @param fileData File data, may be binary.
      * @param fileMetadata JSON metadata.
      */
-    static async postFileAsync(postUrl: string, fileData: any, fileMetadata: any): Promise<ITGetModel> {
+    static async postFileAsync(postUrl: string, fileData: any, fileMetadata: any): Promise<IModel> {
 
         // send JSON metadata first to create the resource and obtain the Id
         let json = JSON.stringify(fileMetadata);

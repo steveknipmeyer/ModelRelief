@@ -13,7 +13,7 @@ export enum ServerEndPoints {
     ApiDepthBuffers  = 'api/v1/depth-buffers'
 }
 
-export interface ITGetModel {
+export interface IModel {
 
     id: number;
 
@@ -62,9 +62,9 @@ export class RequestResponse {
     /**
      * Gets the JSON representation of the response.
      */
-    get model(): ITGetModel {
+    get model(): IModel {
 
-        return JSON.parse(this.contentString) as ITGetModel;
+        return JSON.parse(this.contentString) as IModel;
     }
 
     /**

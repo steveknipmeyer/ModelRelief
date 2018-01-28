@@ -10,21 +10,23 @@ import { IDepthBuffer, DepthBufferFormat }  from 'IDepthBuffer'
 import {ContentType, HttpLibrary, 
         MethodType, ServerEndPoints, 
         RequestResponse}                    from "Http"
+import { IGeneratedFileModel }              from 'IGeneratedFileModel'
 import { IMesh, MeshFormat }                from 'IMesh'
 import { IMeshTransform }                   from 'IMeshTransform'
+import { IFileModel }                       from 'IFileModel'
+import { IModel }                           from 'IModel'
 import { IModel3d, Model3dFormat }          from 'IModel3d'
 import { IProject }                         from 'IProject'
 import {Services}                           from 'Services'
-import { ITGetModel, IGeneratedFile }       from 'ITGetModel'
 
 /**
  * @description Common base class for all DTO models.
  * @export
  * @class Base
- * @implements {ITGetModel}
+ * @implements {IModel}
  * @template T 
  */
-export class BaseModel<T extends ITGetModel> implements ITGetModel{
+export class Model<T extends IModel> implements IModel{
 
     id          : number;
     name        : string;  
@@ -34,9 +36,9 @@ export class BaseModel<T extends ITGetModel> implements ITGetModel{
 
     /**
      * Creates an instance of Base.
-     * @param {ITGetModel} parameters 
+     * @param {IModel} parameters 
      */
-    constructor (parameters: ITGetModel) {
+    constructor (parameters: IModel) {
 
         this.id            = parameters.id || undefined;
         this.name          = parameters.name || undefined;
@@ -63,10 +65,10 @@ export class BaseModel<T extends ITGetModel> implements ITGetModel{
     }
     /**
      * @description Returns the derived instance of BaseModel.
-     * @param {ITGetModel} parameters 
+     * @param {IModel} parameters 
      * @returns {*} 
      */
-    factory(parameters : ITGetModel) : any{};
+    factory(parameters : IModel) : any{};
 
     /**
      * @description Posts the model to its API endpoint.
@@ -98,22 +100,24 @@ export class BaseModel<T extends ITGetModel> implements ITGetModel{
  * @description Base class for a file-backed DTO model.
  * @export 
  * @class FileBaseModel
- * @extends {BaseModel<T>}
- * @implements {ITGetModel}
+ * @extends {Model<T>}
+ * @implements {IModel}
  * @template T 
  */
-export class FileBaseModel<T extends ITGetModel> extends BaseModel<T> {
+export class FileModel<T extends IFileModel> extends Model<T> implements IFileModel{
 
     // not exposed in UX; API only
     fileTimeStamp: Date;
 
     /**
      * Creates an instance of FileBaseModel.
-     * @param {ITGetModel} parameters 
+     * @param {IModel} parameters 
      */
-    constructor(parameters: ITGetModel) {
+    constructor(parameters: IFileModel) {
 
         super (parameters);
+
+        this.fileTimeStamp = parameters.fileTimeStamp || undefined;
     }
 
     /**
@@ -137,11 +141,11 @@ export class FileBaseModel<T extends ITGetModel> extends BaseModel<T> {
  * @description Base class for a generated file-backed DTO model.
  * @export
  * @class GeneratedFileBaseModel
- * @extends {FileBaseModel<T>}
+ * @extends {FileModel<T>}
  * @implements {IGeneratedFile}
  * @template T 
  */
-export class GeneratedFileBaseModel<T extends ITGetModel> extends FileBaseModel<T> implements IGeneratedFile{
+export class GeneratedFileBaseModel<T extends IGeneratedFileModel> extends FileModel<T> implements IGeneratedFileModel{
 
     // not exposed in UX; API only
     fileIsSynchronized: boolean;
@@ -150,7 +154,7 @@ export class GeneratedFileBaseModel<T extends ITGetModel> extends FileBaseModel<
      * Creates an instance of GeneratedFileBaseModel.
      * @param {IGeneratedFile} parameters 
      */
-    constructor(parameters: IGeneratedFile) {
+    constructor(parameters: IGeneratedFileModel) {
 
         super (parameters);
 
@@ -162,7 +166,7 @@ export class GeneratedFileBaseModel<T extends ITGetModel> extends FileBaseModel<
  * Concrete implementation of ICamera.
  * @class
  */
-export class Camera extends BaseModel<Camera> implements ICamera {
+export class Camera extends Model<Camera> implements ICamera {
 
     standardView: StandardView;
     fieldOfView: number;
@@ -217,10 +221,10 @@ export class Camera extends BaseModel<Camera> implements ICamera {
 
     /**
      * @description Constructs an instance of a Camera.
-     * @param {ITGetModel} parameters : Dto.Camera
+     * @param {IModel} parameters : Dto.Camera
      * @returns {Camera} 
      */
-    factory (parameters: ITGetModel) : Camera {
+    factory (parameters: IModel) : Camera {
         return new Camera(parameters);
     }
 }
@@ -268,10 +272,10 @@ export class DepthBuffer extends GeneratedFileBaseModel<DepthBuffer> implements 
 
     /**
      * @description Constructs an instance of a DepthBuffer
-     * @param {ITGetModel} parameters : Dto.DepthBuffer
+     * @param {IModel} parameters : Dto.DepthBuffer
      * @returns {DepthBuffer} 
      */
-    factory (parameters: ITGetModel) : DepthBuffer {
+    factory (parameters: IModel) : DepthBuffer {
         return new DepthBuffer(parameters);
     }
 }
@@ -325,10 +329,10 @@ export class Mesh extends GeneratedFileBaseModel<Mesh> implements IMesh {
     
     /**
      * @description Constructs an instance of a Mesh.
-     * @param {ITGetModel} parameters : Dto.Mesh
+     * @param {IModel} parameters : Dto.Mesh
      * @returns {Mesh} 
      */
-    factory (parameters: ITGetModel) : Mesh {
+    factory (parameters: IModel) : Mesh {
         return new Mesh(parameters);
     }
 }
@@ -337,7 +341,7 @@ export class Mesh extends GeneratedFileBaseModel<Mesh> implements IMesh {
 *  Concrete implementation of IMeshTransform.
 *  @interface
 */
-export class MeshTransform extends BaseModel<MeshTransform> implements IMeshTransform {
+export class MeshTransform extends Model<MeshTransform> implements IMeshTransform {
 
     depth: number;
     width: number;
@@ -376,10 +380,10 @@ export class MeshTransform extends BaseModel<MeshTransform> implements IMeshTran
     
     /**
      * @description Constructs an instance of a MeshTransform.
-     * @param {ITGetModel} parameters : Dto.MeshTransform
+     * @param {IModel} parameters : Dto.MeshTransform
      * @returns {MeshTransform} 
      */
-    factory (parameters: ITGetModel) : MeshTransform {
+    factory (parameters: IModel) : MeshTransform {
         return new MeshTransform(parameters);
     }
 };
@@ -388,7 +392,7 @@ export class MeshTransform extends BaseModel<MeshTransform> implements IMeshTran
 *  Concrete implementation of IModel3d.
 *  @interface
 */
-export class Model3d extends FileBaseModel<Model3d> implements IModel3d {
+export class Model3d extends FileModel<Model3d> implements IModel3d {
 
     format: Model3dFormat;
 
@@ -421,10 +425,10 @@ export class Model3d extends FileBaseModel<Model3d> implements IModel3d {
 
     /**
      * @description Constructs an instance of a Model3d.
-     * @param {ITGetModel} parameters : Dto.Model3d
+     * @param {IModel} parameters : Dto.Model3d
      * @returns {Model3d} 
      */
-    factory (parameters: ITGetModel) : Model3d {
+    factory (parameters: IModel) : Model3d {
         return new Model3d(parameters);
     }    
 }
@@ -433,7 +437,7 @@ export class Model3d extends FileBaseModel<Model3d> implements IModel3d {
  * Concrete implementation of IProject.
  * @class
  */
-export class Project extends BaseModel<Project> implements IProject {
+export class Project extends Model<Project> implements IProject {
 
     /**
      * Creates an instance of a Project.
@@ -447,10 +451,10 @@ export class Project extends BaseModel<Project> implements IProject {
     }
     /**
      * @description Constructs an instance of a Project.
-     * @param {ITGetModel} parameters : Dto.Project
+     * @param {IModel} parameters : Dto.Project
      * @returns {Project} 
      */
-    factory (parameters: ITGetModel) : Project {
+    factory (parameters: IModel) : Project {
         return new Project(parameters);
     }
 }

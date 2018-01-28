@@ -7,7 +7,7 @@
 
 import { ICamera }          from 'ICamera'
 import { IProject }         from 'IProject'
-import { ITGetModel }       from 'ITGetModel'
+import { IModel }           from 'IModel'
 
  /**
  *  3D model file formats.
@@ -24,7 +24,7 @@ export enum Model3dFormat {
  *  N.B. All properties in the interface are optional so that an initialization object can be used to construct the concrete class.
  *  @interface
  */
-export interface IModel3d extends ITGetModel {
+export interface IModel3d extends IModel {
 
     id?: number;
     name?: string;

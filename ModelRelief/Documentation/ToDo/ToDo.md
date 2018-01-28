@@ -47,11 +47,14 @@ Some Markdown text with <span style="color:blue">some *blue* text
 ___
 #### Front End
 
-|Interface|Refactored||Application|Refactored||DTO|Refactored|
+DTO models are in an inheritance chain so they can share common functionality such as API HTTP requests.
+
+|Interface||Application||DTO|
 |--|
-|ITGetModel|**IModel**||namespaceModel|N/A||Dto.BaseModel|**Dto.Model**|
-||**IFileModel**||namespace.FileModel|N/A||Dto.FileBaseModel|**Dto.FileModel**|
-|IGeneratedFile|**IGeneratedFileModel**||namespace.GeneratedFileModel|N/A||Dto.GeneratedFileBaseModel|**Dto.GeneratedFileModel**|
+|IModel||namespaceModel||Dto.Model|
+|IFileModel||namespace.FileModel||Dto.FileModel|
+|IGeneratedFileModel||namespace.GeneratedFileModel||Dto.GeneratedFileModel|
+
 
 |Application Model |Implementation||DTO|Implementation||Notes|
 |-------|--------|--------|
@@ -65,15 +68,16 @@ ___
 
 ___
 #### Back End 
+Domain models are in an inheritance chain so they can share common functionality such as file operations.
 <span style="color:red">
-Implementing a hierarchy of DTO models creates potential issues with DataAnnotation attributes sucn as DisplayName.
+Implementing a hierarchy of DTO models creates potential issues with DataAnnotation attributes sucn as Display(Name).
 </span>
 
-|Interface|Refactored||Domain|Refactored||DTO|Refactored|
+|Interface||Domain||DTO|
 |--|
-|ITGetModel|IModel||DomainModel|||**Model**|
-||IFileModel||FileDomainModel|||**FileModel**||
-|IGeneratedFile|IGeneratedFileModel||GeneratedFileDomainModel|||**GeneratedFileModel**|
+|IModel||DomainModel||**Model**|
+|IFileModel||FileDomainModel||**FileModel**|
+|IGeneratedFileModel||GeneratedFileDomainModel||**GeneratedFileModel**|
 
 
 |Domain Models |Implementation||DTO|Implementation||Notes|

@@ -6,7 +6,7 @@
 "use strict";
 
 import { IProject }    from 'IProject'
-import { ITGetModel } from 'ITGetModel'
+import { IModel } from 'IModel'
 
  /**
  *  Standard camera views.
@@ -28,7 +28,7 @@ export enum StandardView {
  *  N.B. All properties in the interface are optional so that an initialization object can be used to construct the concrete class.
  *  @interface
  */
-export interface ICamera extends ITGetModel {
+export interface ICamera extends IModel {
 
     id?: number;
     name?: string;   

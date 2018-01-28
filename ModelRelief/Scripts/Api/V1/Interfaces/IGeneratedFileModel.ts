@@ -5,14 +5,15 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { assert }           from 'chai'
-import { IModel }           from 'IModel'
+import {IFileModel }    from "IFileModel"
+import {IModel}         from "IModel"
 
-export interface IProject extends IModel {
+/**
+ *  Common interface for all generated file DTOs (e.g. Mesh, DepthBuffer).
+ *  Not exposed in UX; API only.
+ *  @interface
+ */
+export interface IGeneratedFileModel extends IFileModel {
 
-    id?: number;
-    name?: string;
-    description?: string;
+    fileIsSynchronized?: boolean;           // associated file is synchronized with the model (AND all of the the model's dependencies)
 }
-
-
