@@ -13,6 +13,7 @@ namespace ModelRelief.Test.Integration
     using FluentAssertions;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Domain;
+    using ModelRelief.Dto;
     using ModelRelief.Test.TestModels;
     using Newtonsoft.Json;
     using Xunit;
@@ -26,7 +27,7 @@ namespace ModelRelief.Test.Integration
     [Collection("Database")]
     public abstract class IntegrationTests<TEntity, TGetModel> : IClassFixture<ClassFixture>, IAsyncLifetime
         where TEntity   : DomainModel
-        where TGetModel : class, ITGetModel, new()
+        where TGetModel : class, IModel, new()
     {
         public ClassFixture ClassFixture { get; set; }
         public TestModelFactory<TEntity, TGetModel> TestModelFactory { get; set; }
@@ -108,7 +109,7 @@ namespace ModelRelief.Test.Integration
         /// <summary>
         /// Creates a new resource.
         /// </summary>
-        public virtual async Task<ITGetModel> PostNewModel()
+        public virtual async Task<IModel> PostNewModel()
         {
             return await TestModelFactory.PostNewModel(ClassFixture);
         }
@@ -117,7 +118,7 @@ namespace ModelRelief.Test.Integration
         /// Delete an existing model.
         /// </summary>
         /// <param name="existingModel">Model to delete.</param>
-        public virtual async Task DeleteModel(ITGetModel existingModel)
+        public virtual async Task DeleteModel(IModel existingModel)
         {
             await TestModelFactory.DeleteModel(ClassFixture, existingModel);
         }

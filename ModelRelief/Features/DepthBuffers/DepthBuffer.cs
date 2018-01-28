@@ -16,7 +16,7 @@ namespace ModelRelief.Dto
     /// <summary>
     /// Represents a DataTransferObject (DTO) for a DepthBuffer.
     /// </summary>
-    public class DepthBuffer : ITGetModel, IGeneratedFile
+    public class DepthBuffer : IGeneratedFileModel
     {
         public int Id { get; set; }
 

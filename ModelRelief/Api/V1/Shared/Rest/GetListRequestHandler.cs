@@ -18,6 +18,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using ModelRelief.Api.V1.Extensions;
     using ModelRelief.Database;
     using ModelRelief.Domain;
+    using ModelRelief.Dto;
     using ModelRelief.Infrastructure;
     using ModelRelief.Services.Relationships;
     using ModelRelief.Utility;
@@ -29,7 +30,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TGetModel">DTO model.</typeparam>
     public class GetListRequestHandler<TEntity, TGetModel> : ValidatedHandler<GetListRequest<TEntity, TGetModel>, object>
         where TEntity   : DomainModel
-        where TGetModel : ITGetModel
+        where TGetModel : IModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="GetListRequestHandler{TEntity, TGetModel}"/> class.

@@ -15,6 +15,7 @@ namespace ModelRelief.Test.Integration
     using FluentAssertions;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Domain;
+    using ModelRelief.Dto;
     using ModelRelief.Test.TestModels;
     using ModelRelief.Utility;
     using Newtonsoft.Json;
@@ -28,7 +29,7 @@ namespace ModelRelief.Test.Integration
     /// <typeparam name="TGetModel">DTO Get model.</typeparam>
     public abstract class FileIntegrationTests<TEntity, TGetModel> : IntegrationTests<TEntity, TGetModel>
         where TEntity   : FileDomainModel
-        where TGetModel : class, ITGetModel, new()
+        where TGetModel : class, IModel, new()
     {
         public TestFileModelFactory<TEntity, TGetModel> TestFileModelFactory => TestModelFactory as TestFileModelFactory<TEntity, TGetModel>;
 
@@ -48,7 +49,7 @@ namespace ModelRelief.Test.Integration
         /// </summary>
         /// <param name="modelId">Id of the backing metadata model.</param>
         /// <param name="fileName">Name of the file to POST.</param>
-        public virtual async Task<ITGetModel> PostNewFile(int modelId,  string fileName)
+        public virtual async Task<IModel> PostNewFile(int modelId,  string fileName)
         {
             return await TestFileModelFactory.PostNewFile(ClassFixture, modelId, fileName);
         }
@@ -58,7 +59,7 @@ namespace ModelRelief.Test.Integration
         /// </summary>
         /// <param name="modelId">Id of the backing metadata model.</param>
         /// <param name="fileName">Name of the file to PUT.</param>
-        public virtual async Task<ITGetModel> PutFile(int modelId, string fileName)
+        public virtual async Task<IModel> PutFile(int modelId, string fileName)
         {
             return await TestFileModelFactory.PutFile(ClassFixture, modelId, fileName);
         }
@@ -157,7 +158,7 @@ namespace ModelRelief.Test.Integration
         {
             // Arrange
             var newModel = await PostNewModel();
-            var newGeneratedFileModel = newModel as IGeneratedFile;
+            var newGeneratedFileModel = newModel as IGeneratedFileModel;
 
             // Act
             var updatedModel = await PostNewFile(newModel.Id, "UnitCube.obj");
@@ -167,7 +168,7 @@ namespace ModelRelief.Test.Integration
             newGeneratedFileModel.FileIsSynchronized.Should().Be(false);
 
             // after PostFile
-            var updatedGeneratedFileModel = updatedModel as IGeneratedFile;
+            var updatedGeneratedFileModel = updatedModel as IGeneratedFileModel;
             updatedGeneratedFileModel.FileIsSynchronized.Should().Be(true);
 
             // Rollback
@@ -190,8 +191,8 @@ namespace ModelRelief.Test.Integration
             var modelAfterSecondPost = await PostNewFile(newModel.Id, "ModelRelief.txt");
 
             // Assert
-            var originalModel = modelAfterFirstPost as IGeneratedFile;
-            var updatedModel  = modelAfterSecondPost as IGeneratedFile;
+            var originalModel = modelAfterFirstPost as IGeneratedFileModel;
+            var updatedModel  = modelAfterSecondPost as IGeneratedFileModel;
 
             originalModel.FileTimeStamp.Should().NotBeNull();
             updatedModel.FileTimeStamp.Should().NotBeNull();

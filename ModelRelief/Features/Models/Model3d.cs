@@ -6,6 +6,7 @@
 
 namespace ModelRelief.Dto
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
     using AutoMapper;
     using FluentValidation;
@@ -15,7 +16,7 @@ namespace ModelRelief.Dto
     /// <summary>
     /// Represents a DataTransferObject (DTO) for a Model3d.
     /// </summary>
-    public class Model3d : ITGetModel
+    public class Model3d : IFileModel
     {
         public int Id { get; set; }
 
@@ -31,6 +32,9 @@ namespace ModelRelief.Dto
 
         public int? CameraId { get; set; }
         public Dto.Camera Camera { get; set; }
+
+        // not exposed in UX; API only
+        public DateTime? FileTimeStamp { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Model3d"/> class.

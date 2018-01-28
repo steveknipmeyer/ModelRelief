@@ -11,6 +11,7 @@ namespace ModelRelief.Test.TestModels
     using FluentAssertions;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Domain;
+    using ModelRelief.Dto;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -20,7 +21,7 @@ namespace ModelRelief.Test.TestModels
     /// <typeparam name="TGetModel">DTO Get model.</typeparam>
     public abstract class TestFileModelFactory<TEntity, TGetModel> : TestModelFactory<TEntity, TGetModel>, ITestFileModelFactory
         where TEntity   : FileDomainModel
-        where TGetModel : class, ITGetModel, new()
+        where TGetModel : class, IModel, new()
     {
         /// <summary>
         /// Posts a new file.
@@ -28,7 +29,7 @@ namespace ModelRelief.Test.TestModels
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         /// <param name="modelId">Id of the backing metadata model.</param>
         /// <param name="fileName">Name of the file to POST.</param>
-        public virtual async Task<ITGetModel> PostNewFile(ClassFixture classFixture, int modelId, string fileName)
+        public virtual async Task<IModel> PostNewFile(ClassFixture classFixture, int modelId, string fileName)
         {
             // Arrange
             var byteArray = Utility.ByteArrayFromFile(fileName);
@@ -49,7 +50,7 @@ namespace ModelRelief.Test.TestModels
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         /// <param name="modelId">Id of the backing metadata model.</param>
         /// <param name="fileName">Name of the file to PUT.</param>
-        public virtual async Task<ITGetModel> PutFile(ClassFixture classFixture, int modelId, string fileName)
+        public virtual async Task<IModel> PutFile(ClassFixture classFixture, int modelId, string fileName)
         {
             // Arrange
             var byteArray = Utility.ByteArrayFromFile(fileName);

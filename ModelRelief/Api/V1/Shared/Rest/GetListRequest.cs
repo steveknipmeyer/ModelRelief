@@ -9,6 +9,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using System.Security.Claims;
     using MediatR;
     using ModelRelief.Domain;
+    using ModelRelief.Dto;
 
     /// <summary>
     ///  Represents a GET request for a collection of models.
@@ -18,7 +19,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <remarks>Returned request object is a PagedResult which contains a collection of TGetModel.</remarks>
     public class GetListRequest<TEntity, TGetModel> : IRequest<object>
         where TEntity   : DomainModel
-        where TGetModel : ITGetModel
+        where TGetModel : IModel
     {
         /// <summary>
         /// Gets or sets the User posting the GetList request.

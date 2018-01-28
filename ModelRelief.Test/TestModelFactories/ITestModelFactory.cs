@@ -10,17 +10,18 @@ namespace ModelRelief.Test.TestModels
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using ModelRelief.Api.V1.Shared.Rest;
+    using ModelRelief.Dto;
 
     public interface ITestModelFactory
     {
         Type Type { get; }
-        Task<ITGetModel> FindModel(ClassFixture classFixture, int modelId);
+        Task<IModel> FindModel(ClassFixture classFixture, int modelId);
 
-        ITGetModel ConstructValidModel();
+        IModel ConstructValidModel();
 
-        Task<ITGetModel> PostNewModel(ClassFixture classFixture);
-        Task<ITGetModel> PostNewModel(ClassFixture classFixture, ITGetModel model);
-        Task<ITGetModel> PutModel(ClassFixture classFixture, ITGetModel model);
-        Task DeleteModel(ClassFixture classFixture, ITGetModel existingModel);
+        Task<IModel> PostNewModel(ClassFixture classFixture);
+        Task<IModel> PostNewModel(ClassFixture classFixture, IModel model);
+        Task<IModel> PutModel(ClassFixture classFixture, IModel model);
+        Task DeleteModel(ClassFixture classFixture, IModel existingModel);
     }
 }

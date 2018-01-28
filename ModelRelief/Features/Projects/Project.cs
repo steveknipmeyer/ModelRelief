@@ -14,7 +14,7 @@ namespace ModelRelief.Dto
     /// <summary>
     /// Represents a DataTransferObject (DTO) for a Project.
     /// </summary>
-    public class Project : ITGetModel
+    public class Project : IModel
     {
         public int Id { get; set; }
 

@@ -9,6 +9,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using System.Security.Claims;
     using MediatR;
     using ModelRelief.Domain;
+    using ModelRelief.Dto;
 
     /// <summary>
     ///  Represents a POST request to create a model.
@@ -19,7 +20,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <remarks>This request is used to create a new model.</remarks>
     public class PostRequest<TEntity, TRequestModel, TGetModel> : IRequest<TGetModel>
         where TEntity    : DomainModel
-        where TGetModel  : ITGetModel
+        where TGetModel  : IModel
     {
         /// <summary>
         /// Gets or sets the User posting the PostRequest.

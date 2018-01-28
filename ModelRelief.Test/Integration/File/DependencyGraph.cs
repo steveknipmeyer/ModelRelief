@@ -12,6 +12,7 @@ namespace ModelRelief.Test.Integration
     using System.Linq;
     using System.Threading.Tasks;
     using ModelRelief.Api.V1.Shared.Rest;
+    using ModelRelief.Dto;
     using ModelRelief.Test.TestModels;
 
     /// <summary>
@@ -26,7 +27,7 @@ namespace ModelRelief.Test.Integration
         public class Node
         {
             public ITestModelFactory Factory { get; set; }
-            public ITGetModel Model { get; set; }
+            public IModel Model { get; set; }
         }
 
         /// <summary>

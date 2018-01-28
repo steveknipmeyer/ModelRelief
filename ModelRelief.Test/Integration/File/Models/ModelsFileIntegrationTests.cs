@@ -34,7 +34,7 @@ namespace ModelRelief.Test.Integration.Models
         [Trait("Category", "Api PostFile")]
         public override  async Task PostFile_FileIsSynchronizedIsUpdatedAfterFileIsPosted()
         {
-            // N.B. A Model is not a generated file so it does not support IGeneratedFile.
+            // N.B. A Model is not a generated file so it does not support IGeneratedFileModel.
             // Assert
             Assert.True(true);
 
@@ -48,7 +48,7 @@ namespace ModelRelief.Test.Integration.Models
         [Trait("Category", "Api PostFile")]
         public override async Task PostFile_FileTimeStampIsUpdatedAfterFileIsPosted()
         {
-            // N.B. A Model is not a generated file so it does not support IGeneratedFile.
+            // N.B. A Model is not a generated file so it does not support IGeneratedFileModel.
             // Assert
             Assert.True(true);
 

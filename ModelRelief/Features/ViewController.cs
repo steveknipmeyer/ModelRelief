@@ -15,11 +15,12 @@ namespace ModelRelief.Features
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
     using ModelRelief.Domain;
+    using ModelRelief.Dto;
 
     public abstract class ViewController<TEntity, TGetModel, TSingleGetModel, TRequestModel> : UxController
         where TEntity         : DomainModel
-        where TGetModel       : class, ITGetModel, new()            // class to allow default null parameter in InitializeViewControls
-        where TSingleGetModel : ITGetModel
+        where TGetModel       : class, IModel, new()            // class to allow default null parameter in InitializeViewControls
+        where TSingleGetModel : IModel
     {
         public ViewControllerOptions ViewControllerOptions { get; }
         public new ILogger           Logger { get; }                // base class Logger category is UxController

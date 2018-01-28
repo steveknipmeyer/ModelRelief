@@ -16,6 +16,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using Microsoft.Extensions.Logging;
     using ModelRelief.Database;
     using ModelRelief.Domain;
+    using ModelRelief.Dto;
     using ModelRelief.Services.Relationships;
 
     /// <summary>
@@ -25,7 +26,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TGetModel">DTO Get model.</typeparam>
     public class GetSingleRequestHandler<TEntity, TGetModel>  : ValidatedHandler<GetSingleRequest<TEntity, TGetModel>, TGetModel>
         where TEntity   : DomainModel
-        where TGetModel : ITGetModel
+        where TGetModel : IModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="GetSingleRequestHandler{TEntity, TGetModel}"/> class.

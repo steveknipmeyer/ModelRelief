@@ -9,6 +9,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using System.Security.Claims;
     using MediatR;
     using ModelRelief.Domain;
+    using ModelRelief.Dto;
 
     /// <summary>
     ///  Represents a GET request for a single model.
@@ -17,7 +18,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TGetModel">The DTO GET model.</typeparam>
     public class GetSingleRequest<TEntity, TGetModel> : IRequest<TGetModel>
         where TEntity   : DomainModel
-        where TGetModel : ITGetModel
+        where TGetModel : IModel
     {
         /// <summary>
         /// Gets or sets the User posting the GetSingle request.

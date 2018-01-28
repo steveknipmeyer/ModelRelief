@@ -9,7 +9,7 @@
 	.markdown-body {
 		box-sizing: border-box;
 		min-width: 200px;
-		max-width: 980px;
+		max-width: 1200px;
 		margin: 0 auto;
 		padding: 45px;
 	}
@@ -34,10 +34,7 @@
 <h3 id="tasks">Tasks</h3>
 <h4 id="short-term">Short Term</h4>
 <h4 id="front-end">Front End</h4>
-<pre><code>Mesh.Path is not defined when a Mesh is created. GenerateMeshAsync fails because  
-Mesh.Filename returns an incorrect path.
-
-Files are sent as byte streams but read as Bas64-encoded strings.
+<pre><code>Files are sent as byte streams but read as Bas64-encoded strings.
 
 The 'dotnet run' workflow runs as 'Production'!
 
@@ -46,21 +43,64 @@ What are the relationships between FE classes and their DTO counterparts?
     Each FE class should implement the corresponding Interface.
     Create methods for each class that constructs a corresponding object.
 </code></pre>
-<div style="font-size:small">
-<p>ITGetModel -&gt; IModel<br />
-Introduce IFileModel.<br />
-Rename IGeneratedFile -&gt; IGeneratedFileModel</p>
-<pre><code>ITGetModel              BaseModel
-                        FileBaseModel
-IGeneratedFile          GeneratedFileBaseModel
-</code></pre>
+<div style="font-size:9pt">
+<hr />
+<h4 id="front-end-1">Front End</h4>
 <table>
 <thead>
 <tr>
-<th>Front End</th>
+<th>Interface</th>
+<th>Refactored</th>
+<th></th>
+<th>Application</th>
+<th>Refactored</th>
+<th></th>
+<th>DTO</th>
+<th>Refactored</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ITGetModel</td>
+<td><strong>IModel</strong></td>
+<td></td>
+<td>namespaceModel</td>
+<td>N/A</td>
+<td></td>
+<td>Dto.BaseModel</td>
+<td><strong>Dto.Model</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><strong>IFileModel</strong></td>
+<td></td>
+<td>namespace.FileModel</td>
+<td>N/A</td>
+<td></td>
+<td>Dto.FileBaseModel</td>
+<td><strong>Dto.FileModel</strong></td>
+</tr>
+<tr>
+<td>IGeneratedFile</td>
+<td><strong>IGeneratedFileModel</strong></td>
+<td></td>
+<td>namespace.GeneratedFileModel</td>
+<td>N/A</td>
+<td></td>
+<td>Dto.GeneratedFileBaseModel</td>
+<td><strong>Dto.GeneratedFileModel</strong></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Application Model</th>
 <th>Implementation</th>
+<th></th>
 <th>DTO</th>
 <th>Implementation</th>
+<th></th>
 <th>Notes</th>
 </tr>
 </thead>
@@ -68,43 +108,55 @@ IGeneratedFile          GeneratedFileBaseModel
 <tr>
 <td>Camera</td>
 <td></td>
+<td></td>
 <td>Dto.Camera</td>
-<td>ITGetModel, ICamera<br>BaseModel</td>
+<td>IModel, ICamera<br>Dto.Model</td>
+<td></td>
 <td>THREE.Camera</td>
 </tr>
 <tr>
 <td>DepthBuffer</td>
 <td></td>
+<td></td>
 <td>Dto.DepthBuffer</td>
-<td>IGeneratedFile, IDepthBuffer<br>GeneratedFileBaseModel</td>
+<td>IGeneratedFileModel, IDepthBuffer<br>Dto.GeneratedFileModel</td>
+<td></td>
 <td></td>
 </tr>
 <tr>
 <td>Mesh</td>
 <td></td>
+<td></td>
 <td>Dto.Mesh</td>
-<td>IGeneratedFile, IMesh<br>GeneratedFileBaseModel</td>
+<td>IGeneratedFileModel, IMesh<br>Dto.GeneratedFileModel</td>
+<td></td>
 <td>THREE.Mesh</td>
 </tr>
 <tr>
 <td>MeshTransform</td>
 <td></td>
+<td></td>
 <td>Dto.MeshTransform</td>
-<td>ITGetModel,IMeshTransform<br>BaseModel</td>
+<td>IModel,IMeshTransform<br>Dto.Model</td>
+<td></td>
 <td></td>
 </tr>
 <tr>
 <td><strong>Model3d</strong></td>
 <td></td>
+<td></td>
 <td>Dto.Model3d</td>
-<td><strong>ITGetModel</strong>,<strong>IModel3d</strong><br>FileBaseModel</td>
+<td>IFileModel,IModel3d<br>Dto.FileModel</td>
+<td></td>
 <td>THREE.Mesh</td>
 </tr>
 <tr>
 <td><strong>Project</strong></td>
 <td></td>
+<td></td>
 <td>Dto.Project</td>
-<td>ITGetModel, IProject<br>BaseModel</td>
+<td>IModel, IProject<br>Dto.Model</td>
+<td></td>
 <td></td>
 </tr>
 <tr>
@@ -113,63 +165,132 @@ IGeneratedFile          GeneratedFileBaseModel
 <td></td>
 <td></td>
 <td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="back-end">Back End</h4>
+<span style="color:red">
+Implementing a hierarchy of DTO models creates potential issues with DataAnnotation attributes sucn as DisplayName.
+</span>
+<table>
+<thead>
+<tr>
+<th>Interface</th>
+<th>Refactored</th>
+<th></th>
+<th>Domain</th>
+<th>Refactored</th>
+<th></th>
+<th>DTO</th>
+<th>Refactored</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ITGetModel</td>
+<td>IModel</td>
+<td></td>
+<td>DomainModel</td>
+<td></td>
+<td></td>
+<td><strong>Model</strong></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>IFileModel</td>
+<td></td>
+<td>FileDomainModel</td>
+<td></td>
+<td></td>
+<td><strong>FileModel</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>IGeneratedFile</td>
+<td>IGeneratedFileModel</td>
+<td></td>
+<td>GeneratedFileDomainModel</td>
+<td></td>
+<td></td>
+<td><strong>GeneratedFileModel</strong></td>
+<td></td>
 </tr>
 </tbody>
 </table>
 <table>
 <thead>
 <tr>
-<th>Back End<br>Domain Models</th>
+<th>Domain Models</th>
 <th>Implementation</th>
+<th></th>
 <th>DTO</th>
 <th>Implementation</th>
+<th></th>
 <th>Notes</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Domain.Camera</td>
-<td>I<strong>TBD</strong><br>DomainModel</td>
+<td>DomainModel</td>
+<td></td>
 <td>Dto.Camera</td>
-<td>ITGetModel<br><strong>TBD</strong></td>
+<td>IModel<br><strong>Model</strong></td>
+<td></td>
 <td></td>
 </tr>
 <tr>
 <td>Domain.DepthBuffer</td>
-<td>I<strong>TBD</strong><br>GeneratedFileDomainModel</td>
+<td>GeneratedFileDomainModel</td>
+<td></td>
 <td>Dto.DepthBuffer</td>
-<td>ITGetModel,IGeneratedFile<br><strong>TBD</strong></td>
+<td>IGeneratedFileModel<br><strong>GeneratedFileModel</strong></td>
+<td></td>
 <td></td>
 </tr>
 <tr>
 <td>Domain.Mesh</td>
-<td>I<strong>TBD</strong><br>GeneratedFileDomainModel</td>
+<td>GeneratedFileDomainModel</td>
+<td></td>
 <td>Dto.Mesh</td>
+<td>IGeneratedFileModel<br><strong>GeneratedFileModel</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td>Domain.MeshTransform</td>
-<td>I<strong>TBD</strong><br>DomainModel</td>
+<td>DomainModel</td>
+<td></td>
 <td>Dto.MeshTransform</td>
+<td>IModel<br><strong>Model</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td>Domain.Model3d</td>
-<td>I<strong>TBD</strong><br>FileDomainModel</td>
+<td>FileDomainModel</td>
+<td></td>
 <td>Dto.Model3d</td>
+<td>IFileModel<br><strong>FileModel</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td>Domain.Project</td>
-<td>I<strong>TBD</strong><br>DomainModel</td>
+<td>DomainModel</td>
+<td></td>
 <td>Dto.Project</td>
+<td>IModel<br><strong>Model</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -178,6 +299,7 @@ IGeneratedFile          GeneratedFileBaseModel
 </tr>
 </tbody>
 </table>
+<hr />
 </div>
 <span style="color:red">
 How are credentials passed with a fetch request?   <br>

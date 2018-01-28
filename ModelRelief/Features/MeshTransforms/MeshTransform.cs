@@ -14,7 +14,7 @@ namespace ModelRelief.Dto
     /// <summary>
     /// Represents a DataTransferObject (DTO) for a MeshTransform.
     /// </summary>
-    public class MeshTransform : ITGetModel
+    public class MeshTransform : IModel
     {
         public int Id { get; set; }
 

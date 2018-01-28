@@ -23,6 +23,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using ModelRelief.Api.V1.Shared.Errors;
     using ModelRelief.Database;
     using ModelRelief.Domain;
+    using ModelRelief.Dto;
     using ModelRelief.Services.Relationships;
 
     /// <summary>
@@ -32,7 +33,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TGetModel">DTO PATCH model.</typeparam>
     public class PatchRequestHandler<TEntity, TGetModel> : ValidatedHandler<PatchRequest<TEntity, TGetModel>, TGetModel>
         where TEntity    : DomainModel
-        where TGetModel  : ITGetModel
+        where TGetModel  : IModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PatchRequestHandler{TEntity, TGetModel}"/> class.

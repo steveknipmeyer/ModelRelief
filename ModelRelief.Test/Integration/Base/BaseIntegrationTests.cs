@@ -14,6 +14,7 @@ namespace ModelRelief.Test.Integration
     using FluentAssertions;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Domain;
+    using ModelRelief.Dto;
     using ModelRelief.Test.TestModels;
     using Newtonsoft.Json;
     using Xunit;
@@ -26,7 +27,7 @@ namespace ModelRelief.Test.Integration
     /// <typeparam name="TGetModel">DTO Get model.</typeparam>
     public abstract class BaseIntegrationTests<TEntity, TGetModel> : IntegrationTests<TEntity, TGetModel>
         where TEntity   : DomainModel
-        where TGetModel : class, ITGetModel, new()
+        where TGetModel : class, IModel, new()
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseIntegrationTests{TEntity, TGetModel}"/> class.

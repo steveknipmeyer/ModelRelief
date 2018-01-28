@@ -2,7 +2,7 @@
 	.markdown-body {
 		box-sizing: border-box;
 		min-width: 200px;
-		max-width: 980px;
+		max-width: 1200px;
 		margin: 0 auto;
 		padding: 45px;
 	}
@@ -32,9 +32,6 @@ Some Markdown text with <span style="color:blue">some *blue* text
 #### Short Term
 
 #### Front End
-    Mesh.Path is not defined when a Mesh is created. GenerateMeshAsync fails because  
-    Mesh.Filename returns an incorrect path.
-
     Files are sent as byte streams but read as Bas64-encoded strings.
 
     The 'dotnet run' workflow runs as 'Production'!
@@ -44,36 +41,51 @@ Some Markdown text with <span style="color:blue">some *blue* text
         Each FE class should implement the corresponding Interface.
         Create methods for each class that constructs a corresponding object.
 
-<div style="font-size:small">
+<div style="font-size:9pt">
 
-ITGetModel -> IModel  
-Introduce IFileModel.  
-Rename IGeneratedFile -> IGeneratedFileModel
 
-    ITGetModel              BaseModel
-                            FileBaseModel
-    IGeneratedFile          GeneratedFileBaseModel
+___
+#### Front End
 
-|Front End |Implementation|DTO|Implementation|Notes|
+|Interface|Refactored||Application|Refactored||DTO|Refactored|
+|--|
+|ITGetModel|**IModel**||namespaceModel|N/A||Dto.BaseModel|**Dto.Model**|
+||**IFileModel**||namespace.FileModel|N/A||Dto.FileBaseModel|**Dto.FileModel**|
+|IGeneratedFile|**IGeneratedFileModel**||namespace.GeneratedFileModel|N/A||Dto.GeneratedFileBaseModel|**Dto.GeneratedFileModel**|
+
+|Application Model |Implementation||DTO|Implementation||Notes|
 |-------|--------|--------|
-|Camera||Dto.Camera|ITGetModel, ICamera<br>BaseModel|THREE.Camera|
-|DepthBuffer||Dto.DepthBuffer|IGeneratedFile, IDepthBuffer<br>GeneratedFileBaseModel|
-|Mesh||Dto.Mesh|IGeneratedFile, IMesh<br>GeneratedFileBaseModel|THREE.Mesh|
-|MeshTransform||Dto.MeshTransform|ITGetModel,IMeshTransform<br>BaseModel||
-|**Model3d**||Dto.Model3d|**ITGetModel**,**IModel3d**<br>FileBaseModel|THREE.Mesh|
-|**Project**||Dto.Project|ITGetModel, IProject<br>BaseModel||
-|Relief||||
+|Camera|||Dto.Camera|IModel, ICamera<br>Dto.Model||THREE.Camera|
+|DepthBuffer|||Dto.DepthBuffer|IGeneratedFileModel, IDepthBuffer<br>Dto.GeneratedFileModel||
+|Mesh|||Dto.Mesh|IGeneratedFileModel, IMesh<br>Dto.GeneratedFileModel||THREE.Mesh|
+|MeshTransform|||Dto.MeshTransform|IModel,IMeshTransform<br>Dto.Model|||
+|**Model3d**|||Dto.Model3d|IFileModel,IModel3d<br>Dto.FileModel||THREE.Mesh|
+|**Project**|||Dto.Project|IModel, IProject<br>Dto.Model||
+|Relief|||||
 
-|Back End<br>Domain Models |Implementation|DTO|Implementation|Notes|
+___
+#### Back End 
+<span style="color:red">
+Implementing a hierarchy of DTO models creates potential issues with DataAnnotation attributes sucn as DisplayName.
+</span>
+
+|Interface|Refactored||Domain|Refactored||DTO|Refactored|
+|--|
+|ITGetModel|IModel||DomainModel|||**Model**|
+||IFileModel||FileDomainModel|||**FileModel**||
+|IGeneratedFile|IGeneratedFileModel||GeneratedFileDomainModel|||**GeneratedFileModel**|
+
+
+|Domain Models |Implementation||DTO|Implementation||Notes|
 |-------|--------|--------|
-|Domain.Camera|I**TBD**<br>DomainModel|Dto.Camera|ITGetModel<br>**TBD**||
-|Domain.DepthBuffer|I**TBD**<br>GeneratedFileDomainModel|Dto.DepthBuffer|ITGetModel,IGeneratedFile<br>**TBD**|
-|Domain.Mesh|I**TBD**<br>GeneratedFileDomainModel|Dto.Mesh|||
-|Domain.MeshTransform|I**TBD**<br>DomainModel|Dto.MeshTransform|||
-|Domain.Model3d|I**TBD**<br>FileDomainModel|Dto.Model3d|||
-|Domain.Project|I**TBD**<br>DomainModel|Dto.Project|||
+|Domain.Camera|DomainModel||Dto.Camera|IModel<br>**Model**|||
+|Domain.DepthBuffer|GeneratedFileDomainModel||Dto.DepthBuffer|IGeneratedFileModel<br>**GeneratedFileModel**||
+|Domain.Mesh|GeneratedFileDomainModel||Dto.Mesh|IGeneratedFileModel<br>**GeneratedFileModel**||
+|Domain.MeshTransform|DomainModel||Dto.MeshTransform|IModel<br>**Model**||
+|Domain.Model3d|FileDomainModel||Dto.Model3d|IFileModel<br>**FileModel**||
+|Domain.Project|DomainModel||Dto.Project|IModel<br>**Model**|||
 |||||
-
+___
 </div>
 
 <span style="color:red">
