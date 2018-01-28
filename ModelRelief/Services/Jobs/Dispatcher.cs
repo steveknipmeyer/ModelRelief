@@ -149,8 +149,11 @@ namespace ModelRelief.Services.Jobs
             var generatedFile = Path.Combine($"{workingFolder}{mesh.Name}");
             mesh.Format = MeshFormat.RAW;
 
-            var result = mesh.SynchronizeGeneratedFile(generatedFile, StorageManager.DefaultModelStorageFolder(mesh));
-            return result;
+            var fileSynchronized = mesh.SynchronizeGeneratedFile(generatedFile, StorageManager.DefaultModelStorageFolder(mesh));
+            if (fileSynchronized)
+                await DbContext.SaveChangesAsync();
+
+            return fileSynchronized;
         }
 
         /// <summary>

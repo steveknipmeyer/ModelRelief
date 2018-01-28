@@ -4594,7 +4594,7 @@ define("Controllers/ComposerController", ["require", "exports", "three", "dat-gu
                 tau: 1.0,
                 sigmaGaussianBlur: 1.0,
                 sigmaGaussianSmooth: 1.0,
-                lambdaLinearScaling: 1.0
+                lambdaLinearScaling: 0.5,
             };
             this.generateRelief = generateRelief;
             this.saveRelief = saveRelief;
