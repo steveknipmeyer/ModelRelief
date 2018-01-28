@@ -129,7 +129,7 @@ export class FileBaseModel<T extends ITGetModel> extends BaseModel<T> {
 
         Services.timer.logElapsedTime(exportTag);       
 
-        return newModel as T;
+        return this.factory(newModel) as T;
     }
 }
 

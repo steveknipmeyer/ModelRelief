@@ -10,7 +10,7 @@
 	@media (max-width: 767px) {
 		.markdown-body {
 			padding: 15px;
-		}
+		}****
 	}
 </style>
 
@@ -34,7 +34,9 @@ Some Markdown text with <span style="color:blue">some *blue* text
 #### Front End
     Mesh.Path is not defined when a Mesh is created. GenerateMeshAsync fails because  
     Mesh.Filename returns an incorrect path.
- 
+
+    Files are sent as byte streams but read as Bas64-encoded strings.
+
     The 'dotnet run' workflow runs as 'Production'!
 
     What is a Relief?
@@ -42,17 +44,37 @@ Some Markdown text with <span style="color:blue">some *blue* text
         Each FE class should implement the corresponding Interface.
         Create methods for each class that constructs a corresponding object.
 
+<div style="font-size:small">
 
-|FE Class|DTO|Notes|
+ITGetModel -> IModel  
+Introduce IFileModel.  
+Rename IGeneratedFile -> IGeneratedFileModel
+
+    ITGetModel              BaseModel
+                            FileBaseModel
+    IGeneratedFile          GeneratedFileBaseModel
+
+|Front End |Implementation|DTO|Implementation|Notes|
 |-------|--------|--------|
-|Camera|Dto.Camera|THREE.Camera|
-|DepthBuffer|Dto.DepthBuffer||
-|Mesh|Dto.Mesh|THREE.Mesh|
-|MeshTransform|Dto.MeshTransform||
-|**Model3d**|Dto.Model3d|THREE.Mesh|
-|**Project**|Dto.Project||
-|Relief|||
+|Camera||Dto.Camera|ITGetModel, ICamera<br>BaseModel|THREE.Camera|
+|DepthBuffer||Dto.DepthBuffer|IGeneratedFile, IDepthBuffer<br>GeneratedFileBaseModel|
+|Mesh||Dto.Mesh|IGeneratedFile, IMesh<br>GeneratedFileBaseModel|THREE.Mesh|
+|MeshTransform||Dto.MeshTransform|ITGetModel,IMeshTransform<br>BaseModel||
+|**Model3d**||Dto.Model3d|**ITGetModel**,**IModel3d**<br>FileBaseModel|THREE.Mesh|
+|**Project**||Dto.Project|ITGetModel, IProject<br>BaseModel||
+|Relief||||
 
+|Back End<br>Domain Models |Implementation|DTO|Implementation|Notes|
+|-------|--------|--------|
+|Domain.Camera|I**TBD**<br>DomainModel|Dto.Camera|ITGetModel<br>**TBD**||
+|Domain.DepthBuffer|I**TBD**<br>GeneratedFileDomainModel|Dto.DepthBuffer|ITGetModel,IGeneratedFile<br>**TBD**|
+|Domain.Mesh|I**TBD**<br>GeneratedFileDomainModel|Dto.Mesh|||
+|Domain.MeshTransform|I**TBD**<br>DomainModel|Dto.MeshTransform|||
+|Domain.Model3d|I**TBD**<br>FileDomainModel|Dto.Model3d|||
+|Domain.Project|I**TBD**<br>DomainModel|Dto.Project|||
+|||||
+
+</div>
 
 <span style="color:red">
 How are credentials passed with a fetch request?   <br>
@@ -74,17 +96,17 @@ Only Test works because there is special middleware handling which provides auth
 
 | Client | Server|
 |-------|--------|
-|**Post Camera**| |
-|**Create DepthBuffer in-memory** | |
-|**Post DepthBuffer** | |
-|**Post DepthBuffer/id/file** | |
-|**Post MeshTransform**| |
+|Post Camera| |
+|Create DepthBuffer in-memory | |
+|Post DepthBuffer | |
+|Post DepthBuffer/id/file | |
+|Post MeshTransform| |
 |Post Mesh = Mesh (DepthBuffer, MeshTransform)| |
 |Patch Mesh.FileIsSynchronized = true  | |
-|| **Solver <Mesh.json> filename** |
-|| **Post Mesh/id/file (raw file)**|
-| Get Mesh/id/file||
-| Construct Mesh from raw file||
+|| Solver <Mesh.json> filename |
+|| Post Mesh/id/file (raw file)|
+| **Get Mesh/id/file**||
+| **Construct Mesh from raw file**||
 
 
 ##### Critical Issues

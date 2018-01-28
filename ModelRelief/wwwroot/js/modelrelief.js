@@ -2730,7 +2730,7 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
                         case 1:
                             newModel = _a.sent();
                             Services_7.Services.timer.logElapsedTime(exportTag);
-                            return [2 /*return*/, newModel];
+                            return [2 /*return*/, this.factory(newModel)];
                     }
                 });
             });

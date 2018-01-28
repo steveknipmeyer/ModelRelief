@@ -147,13 +147,10 @@ namespace ModelRelief.Services.Jobs
 
             // The job is complete and the mesh file has been generated.
             var generatedFile = Path.Combine($"{workingFolder}{mesh.Name}");
-            File.Copy(generatedFile, mesh.FileName, overwrite: true);
-
             mesh.Format = MeshFormat.RAW;
-            mesh.FileIsSynchronized = true;
-            await DbContext.SaveChangesAsync();
 
-            return true;
+            var result = mesh.SynchronizeGeneratedFile(generatedFile, StorageManager.DefaultModelStorageFolder(mesh));
+            return result;
         }
 
         /// <summary>
@@ -206,7 +203,7 @@ namespace ModelRelief.Services.Jobs
                 using (StreamReader reader = process.StandardError)
                 {
                     string stderr = reader.ReadToEnd();
-                    Logger.LogError($"stdout = {stderr}");
+                    Logger.LogError($"stderr = {stderr}");
                 }
                 return process.ExitCode;
             }

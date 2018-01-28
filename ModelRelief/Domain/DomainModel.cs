@@ -9,7 +9,10 @@ namespace ModelRelief.Domain
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.IO;
+    using System.Threading.Tasks;
+    using ModelRelief.Services;
     using ModelRelief.Services.Relationships;
+    using ModelRelief.Utility;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -114,6 +117,26 @@ namespace ModelRelief.Domain
         /// </summary>
         public GeneratedFileDomainModel()
         {
+        }
+
+        /// <summary>
+        /// Updates the generated file backing a model.
+        /// </summary>
+        /// <param name="generatedFile">Generated file.</param>
+        /// <param name="defaultStorageFolder">Storage Manager</param>
+        /// <returns>True if successful.</returns>
+        public bool SynchronizeGeneratedFile(string generatedFile, string defaultStorageFolder)
+        {
+            // no file may exist yet; update Path
+            if (string.IsNullOrEmpty(Path))
+                Path = defaultStorageFolder;
+
+            Files.EnsureDirectoryExists(Path);
+            File.Copy(generatedFile, FileName, overwrite: true);
+
+            FileIsSynchronized = true;
+
+            return true;
         }
     }
 }
