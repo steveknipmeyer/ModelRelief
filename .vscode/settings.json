@@ -1,5 +1,13 @@
 {
+    // Enable/Disable ActiveFileInStatusBar
+    "ActiveFileInStatusBar.enable": true,
+    // Show fullpath or relative path in status bar.
+    "ActiveFileInStatusBar.fullpath": false,
+    // Reveal the active file in the file system. 
+    "ActiveFileInStatusBar.revealFile": true,
+
     "python.pythonPath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Anaconda3_64\\python.exe",
     "markdown.styles": [
         "ModelRelief/Documentation/ToDo/Markdown.css"
     ]
+}

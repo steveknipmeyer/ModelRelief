@@ -70,7 +70,17 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 throw new ModelFileNotFoundException(typeof(TEntity), domainModel.Name);
 
             var contents = File.ReadAllBytes(fileName);
+#if true
             var response = new FileContentResult(contents, "application/json");
+#else
+            // WIP: When:
+            //  1) The FileContentResult encoding is set to "application/octet-stream".
+            //  2) The RestController GetFile action method has [Produces("application/octet-stream")].
+            //  3) The client request header specifies "Accept : 'application/octet-stream'".
+            //  The server returns HTTP status 406 "Not Acceptable" as though the requested format could not be matched to the client request.
+            //  Is a CustomFormatter required?
+            var response = new FileContentResult(contents, "application/octet-stream");
+#endif
 
             return response;
         }

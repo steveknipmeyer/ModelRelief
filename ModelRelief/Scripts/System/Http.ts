@@ -7,12 +7,13 @@
 
 import * as Dto                             from 'DtoModels'
 
+import { ConvertBase64 }                    from 'ConvertBase64'
 import { DepthBufferFormat }                from 'DepthBuffer'
 import { Exception }                        from 'Exception'
 import { HttpStatusCode, HttpStatusMessage }from 'HttpStatus'
 import { IModel }                           from 'IModel'
+import { RequestResponse }                  from 'RequestResponse'
 import { Services }                         from 'Services'
-import { MeshTransform }                    from 'MeshTransform'
 
 /**
  * HTTP Content-type
@@ -43,48 +44,6 @@ export enum ServerEndPoints {
     ApiMeshTransforms   = 'api/v1/meshtransforms',
     ApiModels           = 'api/v1/models',
     ApiProjects         = 'api/v1/projects',    
-}
-
-/**
- * Represents the result of a client request.
- */
-export class RequestResponse {
-
-    response: Response;
-    contentString: string;
-
-    /**
-     * Constructs an instance of a RequestResponse.
-     * @param {Response} response Raw response from the request.
-     * @param {string} contentString Response body content;
-     */
-    constructor(response: Response, contentString : string) {
-
-        this.response = response;
-        this.contentString = contentString;
-    }
-
-    /**
-     * Gets the JSON representation of the response.
-     */
-    get model(): IModel {
-
-        return JSON.parse(this.contentString) as IModel;
-    }
-
-    /**
-     * Gets the raw Uint8Array representation of the response.
-     */
-    get byteArray(): Uint8Array {
-
-        // https://jsperf.com/string-to-uint8array
-        let stringLength = this.contentString.length;
-        let array = new Uint8Array(stringLength);
-        for (var iByte = 0; iByte < stringLength; ++iByte) {
-            array[iByte] = this.contentString.charCodeAt(iByte);
-        }
-        return array;
-    }
 }
 
 /**
@@ -247,7 +206,8 @@ export class HttpLibrary {
     static async submitHttpRequestAsync(endpoint: string, methodType: MethodType, contentType: ContentType, requestData: any) : Promise<RequestResponse>{
 
         let headers = new Headers({
-            'Content-Type': contentType
+            'Content-Type': contentType,
+            'Accept': 'application/json, application/octet-stream',
         });
         
         let requestMode: RequestMode = 'cors';

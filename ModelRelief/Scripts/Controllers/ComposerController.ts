@@ -11,6 +11,7 @@ import * as Dto    from "DtoModels";
 
 import {StandardView}                       from "Camera"
 import {ComposerView}                       from "ComposerView"
+import {DepthBuffer}                        from "DepthBuffer"
 import {DepthBufferFactory}                 from "DepthBufferFactory"
 import {EventManager, EventType, MREvent}   from 'EventManager'
 import {ElementAttributes, ElementIds}      from "Html"
@@ -94,24 +95,18 @@ export class ComposerController {
      */
     async generateReliefAsync() : Promise<void> { 
 
-        // DepthBuffer (binary)
-        let widthPixels = 512;    
-        let heightPixels = widthPixels / this._composerView.modelView.modelViewer.aspectRatio;
-        let factory = new DepthBufferFactory({ width: widthPixels, height: heightPixels, model: this._composerView.modelView.modelViewer.model, camera: this._composerView.modelView.modelViewer.camera, addCanvasToDOM: false });
-        let depthBuffer = factory.createDepthBuffer();
-
-        // N.B. This step will be last. The mesh (DepthBuffer.Raw) will be acquired by a GET against the Mesh API.    
-        //      The Mesh will be constructed from the GET object.
-        let mesh = new Mesh({ width: widthPixels, height: heightPixels, depthBuffer: depthBuffer});
-        this._relief = await mesh.generateReliefAsync({});
+        // overall dimensions
+        let reliefWidthPixels = 512;    
+        let reliefHeightPixels = reliefWidthPixels / this._composerView.modelView.modelViewer.aspectRatio;
 
         // Model
-
+        // WIP: Connect the active THREE.Mesh to a Model3d model.
+        
         // Camera
         let cameraModel: Dto.Camera = await this.postCameraAsync();
         
         // DepthBufffer(Model, Camera)
-        let depthBufferModel: Dto.DepthBuffer = await this.postDepthBufferAsync(cameraModel);
+        let depthBufferModel: Dto.DepthBuffer = await this.postDepthBufferAsync(cameraModel, reliefWidthPixels, reliefHeightPixels);
 
         // MeshTransform
         let meshTransformModel: Dto.MeshTransform = await this.postMeshTransformAsync();
@@ -122,6 +117,13 @@ export class ComposerController {
         // Mesh file generation
         meshModel.fileIsSynchronized = true;
         await meshModel.putAsync();
+
+        // now read Mesh backing file
+        let depthBufferBytes: Uint8Array = await meshModel.getFileAsync();
+        let depthBuffer = new DepthBuffer(depthBufferBytes, reliefWidthPixels, reliefHeightPixels, this._composerView.modelView.modelViewer.camera);
+
+        let mesh = new Mesh({ width: reliefWidthPixels, height: reliefHeightPixels, depthBuffer: depthBuffer});
+        this._relief = await mesh.generateReliefAsync({});
 
         this._composerView._meshView.meshViewer.setModel(this._relief.mesh);
         if (this._initialMeshGeneration) {
@@ -148,16 +150,18 @@ export class ComposerController {
     /**
      * Saves the DepthBuffer.
      */
-    async postDepthBufferAsync(camera : Dto.Camera): Promise<Dto.DepthBuffer> {
+    async postDepthBufferAsync(camera : Dto.Camera, widthPixels: number, heightPixels: number): Promise<Dto.DepthBuffer> {
 
+        let factory = new DepthBufferFactory({ width: widthPixels, height: heightPixels, model: this._composerView.modelView.modelViewer.model, camera: this._composerView.modelView.modelViewer.camera, addCanvasToDOM: false });
+        let depthBuffer = factory.createDepthBuffer();
 
-        let depthBuffer = new Dto.DepthBuffer({
+        let depthBufferModel = new Dto.DepthBuffer({
             name: 'DepthBuffer.raw',
             description: 'DepthBuffer Description',
             format: DepthBufferFormat.RAW,
             cameraId: camera.id,
         });
-        var newModel = await depthBuffer.postFileAsync(this._relief.depthBuffer.depths);
+        var newModel = await depthBufferModel.postFileAsync(depthBuffer.depths);
 
         return newModel;
     }        

@@ -97,6 +97,7 @@ namespace ModelRelief.Api.V1.Shared
 
         [HttpGet("{id:int}/file")]
         [DisableRequestSizeLimit]
+      //[Produces("application/octet-stream")]
         public virtual async Task<IActionResult> GetFile(int id)
         {
             return await HandleRequestAsync(new GetFileRequest<TEntity>

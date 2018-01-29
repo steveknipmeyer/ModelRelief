@@ -32,13 +32,11 @@ Some Markdown text with <span style="color:blue">some *blue* text
 #### Short Term
 
 #### Front End
-    Files are sent as byte streams but read as Bas64-encoded strings.
 
     The 'dotnet run' workflow runs as 'Production'!
 
     What is a Relief?
     What are the relationships between FE classes and their DTO counterparts?
-        Each FE class should implement the corresponding Interface.
         Create methods for each class that constructs a corresponding object.
 
 <div style="font-size:9pt">
@@ -47,6 +45,8 @@ Some Markdown text with <span style="color:blue">some *blue* text
 ___
 #### Front End
 
+Why is an error (statusCode = 0) thrown on startup?
+Do NOT use Base64!
 DTO models are in an inheritance chain so they can share common functionality such as API HTTP requests.
 
 |Interface||Application||DTO|
@@ -718,7 +718,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     MediatR             Apache https://github.com/jbogard/MediatR/blob/master/LICENSE
     FeatureFolders      MIT https://raw.githubusercontent.com/OdeToCode/AddFeatureFolders/master/LICENSE
     http-status-codes   MIT https://www.npmjs.com/package/http-status-codes
-
+    base64              MIT https://github.com/beatgammit/base64-js/blob/master/index.js
     OpinionatedApiController : Spencer Schneidenbach
     ContosoCore              : Jimmy Bogard
 

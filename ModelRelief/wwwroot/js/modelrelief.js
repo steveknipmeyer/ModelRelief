@@ -165,6 +165,121 @@ define("Api/V1/Interfaces/IDepthBuffer", ["require", "exports"], function (requi
         DepthBufferFormat[DepthBufferFormat["JPG"] = 3] = "JPG";
     })(DepthBufferFormat = exports.DepthBufferFormat || (exports.DepthBufferFormat = {}));
 });
+define("System/ConvertBase64", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+      * Base 64 conversion support.
+      * https://github.com/beatgammit/base64-js/blob/master/index.js
+      * Referenced by Mozilla: https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
+      * @class
+      */
+    var ConvertBase64 = (function () {
+        /**
+         * @constructor
+         */
+        function ConvertBase64() {
+            this.lookup = [];
+            this.revLookup = [];
+            this.Arr = typeof Uint8Array !== 'undefined' ? Uint8Array : Array;
+            this.code = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+            for (var i = 0, len = this.code.length; i < len; ++i) {
+                this.lookup[i] = this.code[i];
+                this.revLookup[this.code.charCodeAt(i)] = i;
+            }
+            this.revLookup['-'.charCodeAt(0)] = 62;
+            this.revLookup['_'.charCodeAt(0)] = 63;
+        }
+        ConvertBase64.prototype.placeHoldersCount = function (b64) {
+            var len = b64.length;
+            if (len % 4 > 0) {
+                throw new Error('Invalid string. Length must be a multiple of 4');
+            }
+            // the number of equal signs (place holders)
+            // if there are two placeholders, than the two characters before it
+            // represent one byte
+            // if there is only one, then the three characters before it represent 2 bytes
+            // this is just a cheap hack to not do indexOf twice
+            return b64[len - 2] === '=' ? 2 : b64[len - 1] === '=' ? 1 : 0;
+        };
+        ConvertBase64.prototype.byteLength = function (b64) {
+            // base64 is 4/3 + up to two characters of the original data
+            return (b64.length * 3 / 4) - this.placeHoldersCount(b64);
+        };
+        ConvertBase64.prototype.toByteArray = function (b64) {
+            var i, l, tmp, placeHolders, arr;
+            var len = b64.length;
+            placeHolders = this.placeHoldersCount(b64);
+            arr = new this.Arr((len * 3 / 4) - placeHolders);
+            // if there are placeholders, only get up to the last complete 4 chars
+            l = placeHolders > 0 ? len - 4 : len;
+            var L = 0;
+            for (i = 0; i < l; i += 4) {
+                tmp = (this.revLookup[b64.charCodeAt(i)] << 18) | (this.revLookup[b64.charCodeAt(i + 1)] << 12) | (this.revLookup[b64.charCodeAt(i + 2)] << 6) | this.revLookup[b64.charCodeAt(i + 3)];
+                arr[L++] = (tmp >> 16) & 0xFF;
+                arr[L++] = (tmp >> 8) & 0xFF;
+                arr[L++] = tmp & 0xFF;
+            }
+            if (placeHolders === 2) {
+                tmp = (this.revLookup[b64.charCodeAt(i)] << 2) | (this.revLookup[b64.charCodeAt(i + 1)] >> 4);
+                arr[L++] = tmp & 0xFF;
+            }
+            else if (placeHolders === 1) {
+                tmp = (this.revLookup[b64.charCodeAt(i)] << 10) | (this.revLookup[b64.charCodeAt(i + 1)] << 4) | (this.revLookup[b64.charCodeAt(i + 2)] >> 2);
+                arr[L++] = (tmp >> 8) & 0xFF;
+                arr[L++] = tmp & 0xFF;
+            }
+            return arr;
+        };
+        ConvertBase64.prototype.tripletToBase64 = function (num) {
+            return this.lookup[num >> 18 & 0x3F] + this.lookup[num >> 12 & 0x3F] + this.lookup[num >> 6 & 0x3F] + this.lookup[num & 0x3F];
+        };
+        ConvertBase64.prototype.encodeChunk = function (uint8, start, end) {
+            var tmp;
+            var output = [];
+            for (var i = start; i < end; i += 3) {
+                tmp = (uint8[i] << 16) + (uint8[i + 1] << 8) + (uint8[i + 2]);
+                output.push(this.tripletToBase64(tmp));
+            }
+            return output.join('');
+        };
+        ConvertBase64.prototype.fromByteArray = function (uint8) {
+            var tmp;
+            var len = uint8.length;
+            var extraBytes = len % 3; // if we have 1 byte left, pad 2 bytes
+            var output = '';
+            var parts = [];
+            var maxChunkLength = 16383; // must be multiple of 3
+            // go through the array every three bytes, we'll deal with trailing stuff later
+            for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
+                parts.push(this.encodeChunk(uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)));
+            }
+            // pad the end with zeros, but make sure to not forget the extra bytes
+            if (extraBytes === 1) {
+                tmp = uint8[len - 1];
+                output += this.lookup[tmp >> 2];
+                output += this.lookup[(tmp << 4) & 0x3F];
+                output += '==';
+            }
+            else if (extraBytes === 2) {
+                tmp = (uint8[len - 2] << 8) + (uint8[len - 1]);
+                output += this.lookup[tmp >> 10];
+                output += this.lookup[(tmp >> 4) & 0x3F];
+                output += this.lookup[(tmp << 2) & 0x3F];
+                output += '=';
+            }
+            parts.push(output);
+            return parts.join('');
+        };
+        return ConvertBase64;
+    }());
+    exports.ConvertBase64 = ConvertBase64;
+});
 define("System/Logger", ["require", "exports"], function (require, exports) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
@@ -2321,7 +2436,124 @@ define("Models/MeshTransform", ["require", "exports"], function (require, export
     }());
     exports.MeshTransform = MeshTransform;
 });
-define("System/Http", ["require", "exports", "System/Exception", "System/HttpStatus", "System/Services"], function (require, exports, Exception_1, HttpStatus_1, Services_6) {
+define("System/RequestResponse", ["require", "exports", "System/ConvertBase64"], function (require, exports, ConvertBase64_1) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * Represents the result of a client request.
+     */
+    var RequestResponse = (function () {
+        /**
+         * Constructs an instance of a RequestResponse.
+         * @param {Response} response Raw response from the request.
+         * @param {string} contentString Response body content;
+         */
+        function RequestResponse(response, contentString) {
+            this.response = response;
+            this.contentString = contentString;
+        }
+        Object.defineProperty(RequestResponse.prototype, "model", {
+            /**
+             * Gets the JSON representation of the response.
+             */
+            get: function () {
+                return JSON.parse(this.contentString);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(RequestResponse.prototype, "byteArray", {
+            /**
+             * Gets the raw Uint8Array representation of the response.
+             * https://jsperf.com/string-to-uint8array
+             */
+            get: function () {
+                var base64String = this.fileContent;
+                var stringLength = base64String.length;
+                var array = new Uint8Array(stringLength);
+                for (var iByte = 0; iByte < stringLength; ++iByte) {
+                    array[iByte] = base64String.charCodeAt(iByte);
+                }
+                return array;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(RequestResponse.prototype, "byteArrayDecoded", {
+            /**
+             * Gets the decoded Uint8Array representation of the response.
+             * // https://stackoverflow.com/questions/21797299/convert-base64-string-to-arraybuffer
+             */
+            get: function () {
+                var base64String = this.fileContent;
+                var binaryString = window.atob(base64String);
+                var length = binaryString.length;
+                var bytes = new Uint8Array(length);
+                for (var i = 0; i < length; i++) {
+                    bytes[i] = binaryString.charCodeAt(i);
+                }
+                return bytes;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(RequestResponse.prototype, "byteArrayDecodedPrime", {
+            /**
+             * Gets the decoded Uint8Array representation of the response.
+             * https://gist.github.com/borismus/1032746
+             */
+            get: function () {
+                var base64String = this.fileContent;
+                var BASE64_MARKER = ';base64,';
+                var base64Index = base64String.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
+                var base64 = base64String.substring(base64Index);
+                var raw = window.atob(base64);
+                var rawLength = raw.length;
+                var array = new Uint8Array(new ArrayBuffer(rawLength));
+                for (var i = 0; i < rawLength; i++) {
+                    array[i] = raw.charCodeAt(i);
+                }
+                return array;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(RequestResponse.prototype, "byteArrayDecodedDoublePrime", {
+            /**
+             * Gets the decoded Uint8Array representation of the response.
+             */
+            get: function () {
+                var base64String = this.fileContent;
+                var converter = new ConvertBase64_1.ConvertBase64();
+                var byteArray = converter.toByteArray(base64String);
+                return byteArray;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(RequestResponse.prototype, "fileContent", {
+            /**
+             * @description Returns the Base64-encoded contents of a FileContentResult IActionItem.
+             * @returns {string}
+             */
+            get: function () {
+                var resultJson = JSON.parse(this.contentString);
+                var contents = resultJson.fileContents;
+                return contents;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return RequestResponse;
+    }());
+    exports.RequestResponse = RequestResponse;
+});
+define("System/Http", ["require", "exports", "System/Exception", "System/HttpStatus", "System/RequestResponse", "System/Services"], function (require, exports, Exception_1, HttpStatus_1, RequestResponse_1, Services_6) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -2360,48 +2592,6 @@ define("System/Http", ["require", "exports", "System/Exception", "System/HttpSta
         ServerEndPoints["ApiModels"] = "api/v1/models";
         ServerEndPoints["ApiProjects"] = "api/v1/projects";
     })(ServerEndPoints = exports.ServerEndPoints || (exports.ServerEndPoints = {}));
-    /**
-     * Represents the result of a client request.
-     */
-    var RequestResponse = (function () {
-        /**
-         * Constructs an instance of a RequestResponse.
-         * @param {Response} response Raw response from the request.
-         * @param {string} contentString Response body content;
-         */
-        function RequestResponse(response, contentString) {
-            this.response = response;
-            this.contentString = contentString;
-        }
-        Object.defineProperty(RequestResponse.prototype, "model", {
-            /**
-             * Gets the JSON representation of the response.
-             */
-            get: function () {
-                return JSON.parse(this.contentString);
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(RequestResponse.prototype, "byteArray", {
-            /**
-             * Gets the raw Uint8Array representation of the response.
-             */
-            get: function () {
-                // https://jsperf.com/string-to-uint8array
-                var stringLength = this.contentString.length;
-                var array = new Uint8Array(stringLength);
-                for (var iByte = 0; iByte < stringLength; ++iByte) {
-                    array[iByte] = this.contentString.charCodeAt(iByte);
-                }
-                return array;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        return RequestResponse;
-    }());
-    exports.RequestResponse = RequestResponse;
     /**
      * HTTP Library
      * General HTML and DOM routines
@@ -2550,7 +2740,8 @@ define("System/Http", ["require", "exports", "System/Exception", "System/HttpSta
                     switch (_a.label) {
                         case 0:
                             headers = new Headers({
-                                'Content-Type': contentType
+                                'Content-Type': contentType,
+                                'Accept': 'application/json, application/octet-stream',
                             });
                             requestMode = 'cors';
                             cacheMode = 'default';
@@ -2567,7 +2758,7 @@ define("System/Http", ["require", "exports", "System/Exception", "System/HttpSta
                             return [4 /*yield*/, response.text()];
                         case 2:
                             contentString = _a.sent();
-                            result = new RequestResponse(response, contentString);
+                            result = new RequestResponse_1.RequestResponse(response, contentString);
                             if (!result.response.ok)
                                 Exception_1.Exception.throwError("submitHttpRequestAsync: Url = " + endpoint + ", status = " + result.response.status);
                             return [2 /*return*/, result];
@@ -2740,17 +2931,39 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
          */
         FileModel.prototype.postFileAsync = function (fileData) {
             return __awaiter(this, void 0, void 0, function () {
-                var exportTag, fileName, newModel;
+                var exportTag, newModel;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
                             exportTag = Services_7.Services.timer.mark("POST File: " + this.constructor.name);
-                            fileName = "" + this.name;
                             return [4 /*yield*/, Http_1.HttpLibrary.postFileAsync(this.endPoint, fileData, this)];
                         case 1:
                             newModel = _a.sent();
                             Services_7.Services.timer.logElapsedTime(exportTag);
                             return [2 /*return*/, this.factory(newModel)];
+                    }
+                });
+            });
+        };
+        /**
+         * @description Gets the backing file from a model.
+         * @returns {Promise<UInt8Array>}
+         */
+        FileModel.prototype.getFileAsync = function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var exportTag, endPoint, result, byteArray;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            exportTag = Services_7.Services.timer.mark("GET File: " + this.constructor.name);
+                            endPoint = this.endPoint + "/" + this.id + "/file";
+                            return [4 /*yield*/, this.submitRequestAsync(endPoint, Http_1.MethodType.Get, Http_1.ContentType.OctetStream, null)];
+                        case 1:
+                            result = _a.sent();
+                            byteArray = result.byteArrayDecodedDoublePrime;
+                            //      let byteArray = result.byteArrayDecoded;
+                            Services_7.Services.timer.logElapsedTime(exportTag);
+                            return [2 /*return*/, byteArray];
                     }
                 });
             });
@@ -4593,7 +4806,7 @@ define("ModelExporters/OBJExporter", ["require", "exports", "three"], function (
     }());
     exports.OBJExporter = OBJExporter;
 });
-define("Controllers/ComposerController", ["require", "exports", "three", "dat-gui", "Api/V1/Models/DtoModels", "Viewers/Camera", "Graphics/DepthBufferFactory", "System/EventManager", "System/Html", "Api/V1/Interfaces/IDepthBuffer", "Api/V1/Interfaces/IMesh", "Models/Mesh"], function (require, exports, THREE, dat, Dto, Camera_5, DepthBufferFactory_2, EventManager_3, Html_3, IDepthBuffer_1, IMesh_1, Mesh_1) {
+define("Controllers/ComposerController", ["require", "exports", "three", "dat-gui", "Api/V1/Models/DtoModels", "Viewers/Camera", "Models/DepthBuffer", "Graphics/DepthBufferFactory", "System/EventManager", "System/Html", "Api/V1/Interfaces/IDepthBuffer", "Api/V1/Interfaces/IMesh", "Models/Mesh"], function (require, exports, THREE, dat, Dto, Camera_5, DepthBuffer_2, DepthBufferFactory_2, EventManager_3, Html_3, IDepthBuffer_1, IMesh_1, Mesh_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -4649,36 +4862,38 @@ define("Controllers/ComposerController", ["require", "exports", "three", "dat-gu
          */
         ComposerController.prototype.generateReliefAsync = function () {
             return __awaiter(this, void 0, void 0, function () {
-                var widthPixels, heightPixels, factory, depthBuffer, mesh, _a, cameraModel, depthBufferModel, meshTransformModel, meshModel;
+                var reliefWidthPixels, reliefHeightPixels, cameraModel, depthBufferModel, meshTransformModel, meshModel, depthBufferBytes, depthBuffer, mesh, _a;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
-                            widthPixels = 512;
-                            heightPixels = widthPixels / this._composerView.modelView.modelViewer.aspectRatio;
-                            factory = new DepthBufferFactory_2.DepthBufferFactory({ width: widthPixels, height: heightPixels, model: this._composerView.modelView.modelViewer.model, camera: this._composerView.modelView.modelViewer.camera, addCanvasToDOM: false });
-                            depthBuffer = factory.createDepthBuffer();
-                            mesh = new Mesh_1.Mesh({ width: widthPixels, height: heightPixels, depthBuffer: depthBuffer });
-                            _a = this;
-                            return [4 /*yield*/, mesh.generateReliefAsync({})];
-                        case 1:
-                            _a._relief = _b.sent();
+                            reliefWidthPixels = 512;
+                            reliefHeightPixels = reliefWidthPixels / this._composerView.modelView.modelViewer.aspectRatio;
                             return [4 /*yield*/, this.postCameraAsync()];
-                        case 2:
+                        case 1:
                             cameraModel = _b.sent();
-                            return [4 /*yield*/, this.postDepthBufferAsync(cameraModel)];
-                        case 3:
+                            return [4 /*yield*/, this.postDepthBufferAsync(cameraModel, reliefWidthPixels, reliefHeightPixels)];
+                        case 2:
                             depthBufferModel = _b.sent();
                             return [4 /*yield*/, this.postMeshTransformAsync()];
-                        case 4:
+                        case 3:
                             meshTransformModel = _b.sent();
                             return [4 /*yield*/, this.postMeshAsync(depthBufferModel, meshTransformModel)];
-                        case 5:
+                        case 4:
                             meshModel = _b.sent();
                             // Mesh file generation
                             meshModel.fileIsSynchronized = true;
                             return [4 /*yield*/, meshModel.putAsync()];
-                        case 6:
+                        case 5:
                             _b.sent();
+                            return [4 /*yield*/, meshModel.getFileAsync()];
+                        case 6:
+                            depthBufferBytes = _b.sent();
+                            depthBuffer = new DepthBuffer_2.DepthBuffer(depthBufferBytes, reliefWidthPixels, reliefHeightPixels, this._composerView.modelView.modelViewer.camera);
+                            mesh = new Mesh_1.Mesh({ width: reliefWidthPixels, height: reliefHeightPixels, depthBuffer: depthBuffer });
+                            _a = this;
+                            return [4 /*yield*/, mesh.generateReliefAsync({})];
+                        case 7:
+                            _a._relief = _b.sent();
                             this._composerView._meshView.meshViewer.setModel(this._relief.mesh);
                             if (this._initialMeshGeneration) {
                                 this._composerView._meshView.meshViewer.fitView();
@@ -4714,19 +4929,21 @@ define("Controllers/ComposerController", ["require", "exports", "three", "dat-gu
         /**
          * Saves the DepthBuffer.
          */
-        ComposerController.prototype.postDepthBufferAsync = function (camera) {
+        ComposerController.prototype.postDepthBufferAsync = function (camera, widthPixels, heightPixels) {
             return __awaiter(this, void 0, void 0, function () {
-                var depthBuffer, newModel;
+                var factory, depthBuffer, depthBufferModel, newModel;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            depthBuffer = new Dto.DepthBuffer({
+                            factory = new DepthBufferFactory_2.DepthBufferFactory({ width: widthPixels, height: heightPixels, model: this._composerView.modelView.modelViewer.model, camera: this._composerView.modelView.modelViewer.camera, addCanvasToDOM: false });
+                            depthBuffer = factory.createDepthBuffer();
+                            depthBufferModel = new Dto.DepthBuffer({
                                 name: 'DepthBuffer.raw',
                                 description: 'DepthBuffer Description',
                                 format: IDepthBuffer_1.DepthBufferFormat.RAW,
                                 cameraId: camera.id,
                             });
-                            return [4 /*yield*/, depthBuffer.postFileAsync(this._relief.depthBuffer.depths)];
+                            return [4 /*yield*/, depthBufferModel.postFileAsync(depthBuffer.depths)];
                         case 1:
                             newModel = _a.sent();
                             return [2 /*return*/, newModel];

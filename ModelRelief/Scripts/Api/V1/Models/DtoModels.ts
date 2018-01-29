@@ -8,8 +8,7 @@
 import { ICamera, StandardView }            from 'ICamera'
 import { IDepthBuffer, DepthBufferFormat }  from 'IDepthBuffer'
 import {ContentType, HttpLibrary, 
-        MethodType, ServerEndPoints, 
-        RequestResponse}                    from "Http"
+        MethodType, ServerEndPoints}        from 'Http'
 import { IGeneratedFileModel }              from 'IGeneratedFileModel'
 import { IMesh, MeshFormat }                from 'IMesh'
 import { IMeshTransform }                   from 'IMeshTransform'
@@ -17,7 +16,8 @@ import { IFileModel }                       from 'IFileModel'
 import { IModel }                           from 'IModel'
 import { IModel3d, Model3dFormat }          from 'IModel3d'
 import { IProject }                         from 'IProject'
-import {Services}                           from 'Services'
+import { Services }                         from 'Services'
+import { RequestResponse }                  from 'RequestResponse'
 
 /**
  * @description Common base class for all DTO models.
@@ -128,12 +128,29 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
 
         let exportTag = Services.timer.mark(`POST File: ${this.constructor.name}`);
 
-        let fileName = `${this.name}`;
         let newModel = await HttpLibrary.postFileAsync (this.endPoint, fileData, this);
 
         Services.timer.logElapsedTime(exportTag);       
 
         return this.factory(newModel) as T;
+    }
+
+    /**
+     * @description Gets the backing file from a model.
+     * @returns {Promise<UInt8Array>} 
+     */
+    async getFileAsync() : Promise<Uint8Array> {
+
+        let exportTag = Services.timer.mark(`GET File: ${this.constructor.name}`);
+
+        let endPoint = `${this.endPoint}/${this.id}/file`
+        let result = await this.submitRequestAsync(endPoint, MethodType.Get, ContentType.OctetStream, null);       
+        let byteArray = result.byteArrayDecodedDoublePrime;
+//      let byteArray = result.byteArrayDecoded;
+
+        Services.timer.logElapsedTime(exportTag);       
+
+        return byteArray;
     }
 }
 
