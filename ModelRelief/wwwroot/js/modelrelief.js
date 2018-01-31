@@ -1220,7 +1220,7 @@ define("System/Tools", ["require", "exports"], function (require, exports) {
     JSON compatible constructor parameters
     Fixed resolution; resizing support is not required.
 */
-define("Graphics/DepthBufferFactory", ["require", "exports", "three", "Viewers/Camera", "Models/DepthBuffer", "Graphics/Graphics", "System/Services", "System/Tools"], function (require, exports, THREE, Camera_1, DepthBuffer_1, Graphics_1, Services_2, Tools_1) {
+define("Graphics/DepthBufferFactory", ["require", "exports", "three", "Models/Camera", "Models/DepthBuffer", "Graphics/Graphics", "System/Services", "System/Tools"], function (require, exports, THREE, Camera_1, DepthBuffer_1, Graphics_1, Services_2, Tools_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
@@ -1505,7 +1505,7 @@ define("Graphics/DepthBufferFactory", ["require", "exports", "three", "Viewers/C
     }());
     exports.DepthBufferFactory = DepthBufferFactory;
 });
-define("Viewers/Camera", ["require", "exports", "three", "Graphics/DepthBufferFactory", "Graphics/Graphics", "System/Services"], function (require, exports, THREE, DepthBufferFactory_1, Graphics_2, Services_3) {
+define("Models/Camera", ["require", "exports", "three", "Graphics/DepthBufferFactory", "Graphics/Graphics", "System/Services"], function (require, exports, THREE, DepthBufferFactory_1, Graphics_2, Services_3) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -1742,8 +1742,9 @@ define("Models/DepthBuffer", ["require", "exports", "chai", "three", "System/Ser
         DepthBufferFormat[DepthBufferFormat["JPG"] = 3] = "JPG"; // JPG format
     })(DepthBufferFormat = exports.DepthBufferFormat || (exports.DepthBufferFormat = {}));
     /**
-     *  DepthBuffer
-     *  @class
+     * @description Represents a depth buffer.
+     * @export
+     * @class DepthBuffer
      */
     var DepthBuffer = (function () {
         /**
@@ -2423,7 +2424,9 @@ define("Models/MeshTransform", ["require", "exports"], function (require, export
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
-     * MeshTransform
+     * @description Represents a mesh transform.
+     * The settings are applied to a DepthBuffer to create a Mesh.
+     * @export
      * @class MeshTransform
      */
     var MeshTransform = (function () {
@@ -2884,6 +2887,25 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
             });
         };
         /**
+         * @description Gets the model from its API endpoint.
+         * @returns {Promise<T>}
+         */
+        Model.prototype.getAsync = function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var endPoint, result;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            endPoint = this.endPoint + "/" + this.id;
+                            return [4 /*yield*/, this.submitRequestAsync(endPoint, Http_1.MethodType.Get, Http_1.ContentType.Json, null)];
+                        case 1:
+                            result = _a.sent();
+                            return [2 /*return*/, this.factory(result.model)];
+                    }
+                });
+            });
+        };
+        /**
          * @description Puts the model to its API endpoint.
          * @returns {Promise<T>}
          */
@@ -3320,7 +3342,7 @@ define("System/EventManager", ["require", "exports"], function (require, exports
 //                                                                         //                                                                          
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
-define("Models/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", "Graphics/Graphics", "System/Services"], function (require, exports, THREE, chai_2, Camera_2, Graphics_3, Services_8) {
+define("Models/Mesh", ["require", "exports", "three", "chai", "Models/Camera", "Graphics/Graphics", "System/Services"], function (require, exports, THREE, chai_2, Camera_2, Graphics_3, Services_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
@@ -3372,8 +3394,9 @@ define("Models/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", 
         return MeshCache;
     }());
     /**
-     * @class
-     * Mesh
+     * @description Represents a mesh.
+     * @export
+     * @class Mesh
      */
     var Mesh = (function () {
         /**
@@ -3501,7 +3524,7 @@ define("Models/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", 
          * @param {THREE.Material} material Material to assign to the mesh.
          * @returns {THREE.Mesh}
          */
-        Mesh.prototype.constructMesh = function (meshXYExtents, material) {
+        Mesh.prototype.constructMeshByTriangulation = function (meshXYExtents, material) {
             var meshGeometry = new THREE.Geometry();
             var faceSize = meshXYExtents.x / (this.width - 1);
             var baseVertexIndex = 0;
@@ -3524,7 +3547,7 @@ define("Models/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", 
          * @param meshXYExtents Base dimensions (model units). Height is controlled by DB aspect ratio.
          * @param material Material to assign to mesh.
          */
-        Mesh.prototype.mesh = function (material) {
+        Mesh.prototype.constructMesh = function (material) {
             var timerTag = Services_8.Services.timer.mark('DepthBuffer.mesh');
             // The mesh size is in real world units to match the depth buffer offsets which are also in real world units.
             // Find the size of the near plane to size the mesh to the model units.
@@ -3532,7 +3555,7 @@ define("Models/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", 
             if (!material)
                 material = new THREE.MeshPhongMaterial(Mesh.DefaultMeshPhongMaterialParameters);
             var meshCache = Mesh.Cache.getMesh(meshXYExtents, new THREE.Vector2(this.width, this.height));
-            var mesh = meshCache ? this.constructMeshFromTemplate(meshCache, meshXYExtents, material) : this.constructMesh(meshXYExtents, material);
+            var mesh = meshCache ? this.constructMeshFromTemplate(meshCache, meshXYExtents, material) : this.constructMeshByTriangulation(meshXYExtents, material);
             mesh.name = Mesh.MeshModelName;
             var meshGeometry = mesh.geometry;
             meshGeometry.verticesNeedUpdate = true;
@@ -3559,7 +3582,7 @@ define("Models/Mesh", ["require", "exports", "three", "chai", "Viewers/Camera", 
                 return __generator(this, function (_a) {
                     if (!this.verifyMeshSettings())
                         return [2 /*return*/, null];
-                    mesh = this.mesh();
+                    mesh = this.constructMesh();
                     relief = {
                         width: this._width,
                         height: this._height,
@@ -4089,7 +4112,7 @@ define("Viewers/TrackballControls", ["require", "exports", "three"], function (r
     TrackballControls.prototype = Object.create(THREE.EventDispatcher.prototype);
     TrackballControls.prototype.constructor = TrackballControls;
 });
-define("Viewers/CameraControls", ["require", "exports", "three", "dat-gui", "Viewers/Camera", "System/Html", "Graphics/Graphics"], function (require, exports, THREE, dat, Camera_3, Html_2, Graphics_4) {
+define("Viewers/CameraControls", ["require", "exports", "three", "dat-gui", "Models/Camera", "System/Html", "Graphics/Graphics"], function (require, exports, THREE, dat, Camera_3, Html_2, Graphics_4) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -4255,7 +4278,7 @@ define("Viewers/CameraControls", ["require", "exports", "three", "dat-gui", "Vie
     }());
     exports.CameraControls = CameraControls;
 });
-define("Viewers/Viewer", ["require", "exports", "three", "Viewers/Camera", "Viewers/CameraControls", "System/EventManager", "Graphics/Graphics", "System/Services", "Viewers/TrackballControls"], function (require, exports, THREE, Camera_4, CameraControls_1, EventManager_1, Graphics_5, Services_9, TrackballControls_1) {
+define("Viewers/Viewer", ["require", "exports", "three", "Models/Camera", "Viewers/CameraControls", "System/EventManager", "Graphics/Graphics", "System/Services", "Viewers/TrackballControls"], function (require, exports, THREE, Camera_4, CameraControls_1, EventManager_1, Graphics_5, Services_9, TrackballControls_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -4806,7 +4829,7 @@ define("ModelExporters/OBJExporter", ["require", "exports", "three"], function (
     }());
     exports.OBJExporter = OBJExporter;
 });
-define("Controllers/ComposerController", ["require", "exports", "three", "dat-gui", "Api/V1/Models/DtoModels", "Viewers/Camera", "Models/DepthBuffer", "Graphics/DepthBufferFactory", "System/EventManager", "System/Html", "Api/V1/Interfaces/IDepthBuffer", "Api/V1/Interfaces/IMesh", "Models/Mesh"], function (require, exports, THREE, dat, Dto, Camera_5, DepthBuffer_2, DepthBufferFactory_2, EventManager_3, Html_3, IDepthBuffer_1, IMesh_1, Mesh_1) {
+define("Controllers/ComposerController", ["require", "exports", "three", "dat-gui", "Api/V1/Models/DtoModels", "Models/Camera", "Models/DepthBuffer", "Graphics/DepthBufferFactory", "System/EventManager", "System/Html", "Api/V1/Interfaces/IDepthBuffer", "Api/V1/Interfaces/IMesh", "Models/Mesh"], function (require, exports, THREE, dat, Dto, Camera_5, DepthBuffer_2, DepthBufferFactory_2, EventManager_3, Html_3, IDepthBuffer_1, IMesh_1, Mesh_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -5708,7 +5731,7 @@ define("ModelLoaders/TestModelLoader", ["require", "exports", "three", "Graphics
     }());
     exports.TestModelLoader = TestModelLoader;
 });
-define("ModelLoaders/Loader", ["require", "exports", "three", "ModelLoaders/OBJLoader", "ModelLoaders/TestModelLoader"], function (require, exports, THREE, OBJLoader_1, TestModelLoader_1) {
+define("ModelLoaders/Loader", ["require", "exports", "Api/V1/Models/DtoModels", "three", "ModelLoaders/OBJLoader", "ModelLoaders/TestModelLoader"], function (require, exports, Dto, THREE, OBJLoader_1, TestModelLoader_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -5729,6 +5752,13 @@ define("ModelLoaders/Loader", ["require", "exports", "three", "ModelLoaders/OBJL
          * @param viewer Instance of the Viewer to display the model.
          */
         Loader.prototype.loadOBJModel = function (viewer) {
+            {
+                var modelIdElement = window.document.getElementById('modelId');
+                var modelId = parseInt(modelIdElement.textContent);
+                var model = new Dto.Model3d({ id: modelId });
+                var result = model.getAsync().then(function (model) {
+                });
+            }
             var modelNameElement = window.document.getElementById('modelName');
             var modelPathElement = window.document.getElementById('modelPath');
             var modelName = modelNameElement.textContent;
@@ -6434,7 +6464,7 @@ define("Workbench/QuokkaWorkbench", ["require", "exports"], function (require, e
     Object.defineProperty(exports, "__esModule", { value: true });
     var fetch = require('node-fetch');
     /**
-    *  Common interface for all DTO TGetModel types.
+    *  Common interface for all DTO model types.
     *  @interface
     */
     /**
@@ -6572,5 +6602,51 @@ define("System/Image.", ["require", "exports"], function (require, exports) {
         return ImageLibrary;
     }());
     exports.ImageLibrary = ImageLibrary;
+});
+define("Models/Model3d", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * @description Represents a 3D model.
+     * @export
+     * @class Model3d
+     */
+    var Model3d = (function () {
+        /**
+         * @constructor
+         */
+        function Model3d() {
+        }
+        return Model3d;
+    }());
+    exports.Model3d = Model3d;
+});
+define("Models/Project", ["require", "exports"], function (require, exports) {
+    // ------------------------------------------------------------------------// 
+    // ModelRelief                                                             //
+    //                                                                         //                                                                          
+    // Copyright (c) <2017-2018> Steve Knipmeyer                               //
+    // ------------------------------------------------------------------------//
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * @description Represents a user project.
+     * @export
+     * @class Project
+     */
+    var Project = (function () {
+        /**
+         * @constructor
+         */
+        function Project() {
+        }
+        return Project;
+    }());
+    exports.Project = Project;
 });
 //# sourceMappingURL=modelrelief.js.map

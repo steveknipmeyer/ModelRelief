@@ -35,12 +35,23 @@ Some Markdown text with <span style="color:blue">some *blue* text
 
     The 'dotnet run' workflow runs as 'Production'!
 
-    What is a Relief?
-    What are the relationships between FE classes and their DTO counterparts?
-        Create methods for each class that constructs a corresponding object.
+#### FE Model Structure
+    Should the FE DTO models perform a GET in the constructor for a non-null id?
+
+    Camera
+        The methods are all static. 
+            Camera -> CameraHelper
+    DepthBuffer
+        How are the dimensions determined?
+        Are all DepthBuffers square?
+
+    MeshTransform
+        Depth : What is the relationship to LambdaLinearScaling?
+        Width
+        [Height] : calculated from aspect ration of the DepthBuffer?
+            This field is present in the FE DTO but not the BE model.
 
 <div style="font-size:9pt">
-
 
 ___
 #### Front End
@@ -68,7 +79,7 @@ DTO models are in an inheritance chain so they can share common functionality su
 
 ___
 #### Back End 
-Domain models are in an inheritance chain so they can share common functionality such as file operations.
+Domain models are in an inheritance chain so they can share common functionality such as file operations.  
 <span style="color:red">
 Implementing a hierarchy of DTO models creates potential issues with DataAnnotation attributes sucn as Display(Name).
 </span>

@@ -1,7 +1,7 @@
 const fetch = require('node-fetch')
 
  /**
- *  Common interface for all DTO TGetModel types.
+ *  Common interface for all DTO model types.
  *  @interface
  */
 

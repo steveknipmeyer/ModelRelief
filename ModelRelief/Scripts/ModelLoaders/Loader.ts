@@ -4,8 +4,8 @@
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
-
-import * as THREE  from 'three' 
+import * as Dto                     from 'DtoModels' 
+import * as THREE                   from 'three' 
 
 import {StandardView}               from 'Camera'
 import {ILogger, ConsoleLogger}      from 'Logger'
@@ -31,6 +31,15 @@ export class Loader {
      * @param viewer Instance of the Viewer to display the model.
      */    
     loadOBJModel (viewer : Viewer) {
+
+        {
+            let modelIdElement : HTMLElement = window.document.getElementById('modelId');
+            let modelId = parseInt(modelIdElement.textContent);
+            let model = new Dto.Model3d({id: modelId});
+            let result = model.getAsync().then(model => {
+
+            });
+        }
 
         let modelNameElement : HTMLElement = window.document.getElementById('modelName');
         let modelPathElement : HTMLElement = window.document.getElementById('modelPath');

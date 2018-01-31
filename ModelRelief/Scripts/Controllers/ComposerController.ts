@@ -21,7 +21,7 @@ import {DepthBufferFormat}                  from 'IDepthBuffer'
 import {MeshFormat}                         from 'IMesh'
 import {ILogger, ConsoleLogger}             from 'Logger'
 import {Graphics}                           from "Graphics"
-import {Mesh, Relief}                       from "Mesh"
+import {Mesh}                               from "Mesh"
 import {ModelViewer}                        from "ModelViewer"
 import {OBJExporter}                        from "OBJExporter"
 import {MeshTransform}                      from 'MeshTransform'
@@ -65,7 +65,6 @@ export class ComposerController {
     _composerViewSettings : ComposerViewSettings;               // UI settings
 
     _initialMeshGeneration: boolean = true;
-    _relief               : Relief;                             // last relief generation result
     
     /** Default constructor
      * @class ComposerViewControls
@@ -123,9 +122,9 @@ export class ComposerController {
         let depthBuffer = new DepthBuffer(depthBufferBytes, reliefWidthPixels, reliefHeightPixels, this._composerView.modelView.modelViewer.camera);
 
         let mesh = new Mesh({ width: reliefWidthPixels, height: reliefHeightPixels, depthBuffer: depthBuffer});
-        this._relief = await mesh.generateReliefAsync({});
+        let meshGraphics = await mesh.constructGraphicssAsync({});
 
-        this._composerView._meshView.meshViewer.setModel(this._relief.mesh);
+        this._composerView._meshView.meshViewer.setModel(meshGraphics);
         if (this._initialMeshGeneration) {
             this._composerView._meshView.meshViewer.fitView();
             this._initialMeshGeneration = false;

@@ -24,8 +24,9 @@ export enum DepthBufferFormat {
 }
 
 /**
- *  DepthBuffer 
- *  @class
+ * @description Represents a depth buffer.
+ * @export
+ * @class DepthBuffer
  */
 export class DepthBuffer {
 

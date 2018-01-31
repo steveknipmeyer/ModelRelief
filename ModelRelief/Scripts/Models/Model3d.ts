@@ -1,18 +1,22 @@
-﻿// ------------------------------------------------------------------------// 
+// ------------------------------------------------------------------------// 
 // ModelRelief                                                             //
 //                                                                         //                                                                          
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
- /**
- *  Common interface for all DTO model types.
- *  @interface
+import {Services}           from 'Services'
+
+/**
+ * @description Represents a 3D model.
+ * @export
+ * @class Model3d
  */
-export interface IModel {
+export class Model3d {
 
-    id?: number;
-    name?: string;
-    description?: string;
+    /**
+     * @constructor
+     */
+    constructor() {
+    }
 }
-

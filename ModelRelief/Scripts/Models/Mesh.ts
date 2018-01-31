@@ -106,21 +106,9 @@ class MeshCache {
 }   
 
 /**
- * @description Relief.
+ * @description Represents a mesh.
  * @export
- * @interface Relief
- */
-export interface Relief {
-
-    width       : number;                // width of relief             
-    height      : number;                // height of relief
-    mesh        : THREE.Mesh;            // mesh
-    depthBuffer : DepthBuffer;           // depth buffer
-}
-
-/**
- * @class
- * Mesh
+ * @class Mesh
  */
 export class Mesh {
 
@@ -255,7 +243,7 @@ export class Mesh {
      * @param {THREE.Material} material Material to assign to the mesh.
      * @returns {THREE.Mesh} 
      */
-    constructMeshFromTemplate(mesh : THREE.Mesh, meshExtents: THREE.Vector2, material: THREE.Material): THREE.Mesh {
+    constructGraphicsFromTemplate(mesh : THREE.Mesh, meshExtents: THREE.Vector2, material: THREE.Material): THREE.Mesh {
       
        // The mesh template matches the aspect ratio of the template.
        // Now, scale the mesh to the final target dimensions.
@@ -285,7 +273,7 @@ export class Mesh {
      * @param {THREE.Material} material Material to assign to the mesh.
      * @returns {THREE.Mesh} 
      */
-   constructMesh(meshXYExtents : THREE.Vector2, material : THREE.Material) : THREE.Mesh {
+   constructGraphicsByTriangulation(meshXYExtents : THREE.Vector2, material : THREE.Material) : THREE.Mesh {
        let meshGeometry = new THREE.Geometry();
        let faceSize: number = meshXYExtents.x / (this.width - 1);
        let baseVertexIndex: number = 0;
@@ -314,7 +302,7 @@ export class Mesh {
     * @param meshXYExtents Base dimensions (model units). Height is controlled by DB aspect ratio.
     * @param material Material to assign to mesh.
     */
-   mesh(material? : THREE.Material) : THREE.Mesh {
+   construcGraphics(material? : THREE.Material) : THREE.Mesh {
 
        let timerTag = Services.timer.mark('DepthBuffer.mesh');        
        
@@ -326,7 +314,7 @@ export class Mesh {
            material = new THREE.MeshPhongMaterial(Mesh.DefaultMeshPhongMaterialParameters);
 
        let meshCache: THREE.Mesh = Mesh.Cache.getMesh(meshXYExtents, new THREE.Vector2(this.width, this.height));
-       let mesh: THREE.Mesh = meshCache ? this.constructMeshFromTemplate(meshCache, meshXYExtents, material) : this.constructMesh(meshXYExtents, material);   
+       let mesh: THREE.Mesh = meshCache ? this.constructGraphicsFromTemplate(meshCache, meshXYExtents, material) : this.constructGraphicsByTriangulation(meshXYExtents, material);   
        mesh.name = Mesh.MeshModelName;
        
        let meshGeometry = <THREE.Geometry>mesh.geometry;
@@ -353,22 +341,14 @@ export class Mesh {
      * Generates a mesh from the active model and camera.
      * @param parameters Generation parameters (MeshGenerateParameters)
      */
-    async generateReliefAsync(parameters: MeshGenerateParameters): Promise<Relief> {
+    async constructGraphicssAsync(parameters: MeshGenerateParameters): Promise<THREE.Mesh> {
 
         if (!this.verifyMeshSettings())
             return null;
     
-        let mesh = this.mesh();
+        let mesh = this.construcGraphics();
 
-        let relief: Relief = {
-
-            width       :  this._width,
-            height      : this._height,
-            mesh        : mesh,
-            depthBuffer : this._depthBuffer
-        };
-
-        return relief;
+        return mesh;
     }
     //#endregion
 }

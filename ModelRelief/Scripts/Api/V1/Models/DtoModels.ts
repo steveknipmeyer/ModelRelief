@@ -83,6 +83,18 @@ export class Model<T extends IModel> implements IModel{
     }
 
     /**
+     * @description Gets the model from its API endpoint.
+     * @returns {Promise<T>} 
+     */
+    async getAsync() : Promise<T> {
+
+        let endPoint = `${this.endPoint}/${this.id}`;
+        let result = await this.submitRequestAsync(endPoint, MethodType.Get, ContentType.Json, null);
+
+        return this.factory(result.model) as T
+    }
+    
+    /**
      * @description Puts the model to its API endpoint.
      * @returns {Promise<T>} 
      */
