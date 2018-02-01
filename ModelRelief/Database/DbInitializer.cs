@@ -83,10 +83,11 @@ namespace ModelRelief.Database
         /// </summary>
         private void Initialize()
         {
-            if (ParseBooleanEnvironmentVariable("InitializeUserStore"))
+            ConfigurationProvider.LogConfigurationSettings();
+            if (ParseBooleanEnvironmentVariable(ConfigurationSettings.MRInitializeUserStore))
                 DeleteUserStore();
 
-            if (ParseBooleanEnvironmentVariable("InitializeDatabase"))
+            if (ParseBooleanEnvironmentVariable(ConfigurationSettings.MRInitializeDatabase))
                 Populate().Wait();
         }
 

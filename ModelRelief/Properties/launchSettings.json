@@ -12,14 +12,20 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "MRDatabaseProvider": "SQLServer",
+        "MRInitializeDatabase": "True",
+        "MRInitializeUserStore": "True"
       }
     },
     "ModelRelief Production": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Production",
+        "MRDatabaseProvider": "SQLServer",
+        "MRInitializeDatabase": "False",
+        "MRInitializeUserStore": "False"
       },
       "applicationUrl": "http://localhost:60655"
     },
@@ -27,7 +33,10 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "MRDatabaseProvider": "SQLServer",
+        "MRInitializeDatabase": "True",
+        "MRInitializeUserStore": "True"
       },
       "applicationUrl": "http://localhost:60655"
     },
@@ -36,8 +45,9 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Test",
-        "InitializeUserStore": "True",
-        "InitializeDatabase": "True"
+        "MRDatabaseProvider": "SQLite",
+        "MRInitializeDatabase": "True",
+        "MRInitializeUserStore": "True"
       },
       "applicationUrl": "http://localhost:60655"
     }

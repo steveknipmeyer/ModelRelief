@@ -7,6 +7,7 @@
 namespace ModelRelief.Test
 {
     using System.IO;
+    using Microsoft.Extensions.Configuration;
 
     /// <summary>
     /// Unit test settings that describe the host and runtime environment.
@@ -14,6 +15,7 @@ namespace ModelRelief.Test
     /// </summary>
     public class Settings
     {
+        public const string Environment = "Test";
         public const string Scheme = "http";
         public const string Host   = "localhost";
         public const int Port      = 60655;
@@ -47,6 +49,18 @@ namespace ModelRelief.Test
             var testFilesFolder = $"{contentRootPath}/{Settings.TestFilesFolder}";
 
             return testFilesFolder;
+        }
+        /// <summary>
+        /// Constructs a test ConfigurationProvider.
+        /// </summary>
+        /// <param name="configurationBuilder">ConfigurationBuilder instance.</param>
+        /// <returns></returns>
+        public static IConfigurationRoot ConfigurationProvider(IConfigurationBuilder configurationBuilder)
+        {
+            var configurationProvider = configurationBuilder.SetBasePath(Settings.GetContentRootPath())
+                .Build();
+
+            return configurationProvider;
         }
     }
 }

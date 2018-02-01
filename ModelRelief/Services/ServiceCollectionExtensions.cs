@@ -28,12 +28,12 @@ namespace ModelRelief.Services
             switch (configurationProvider.Database)
             {
                 case RelationalDatabaseProvider.SQLite:
-                    services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlite(configurationProvider.Configuration.GetConnectionString("SQLite")));
+                    services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlite(configurationProvider.Configuration.GetConnectionString(ConfigurationSettings.SQLite)));
                     break;
 
                 case RelationalDatabaseProvider.SQLServer:
                 default:
-                    services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlServer(configurationProvider.Configuration.GetConnectionString("SQLServer")));
+                    services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlServer(configurationProvider.Configuration.GetConnectionString(ConfigurationSettings.SQLServer)));
                     break;
             }
             services.AddIdentity<ApplicationUser, IdentityRole>()

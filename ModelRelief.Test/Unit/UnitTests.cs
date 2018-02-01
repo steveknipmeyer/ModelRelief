@@ -45,13 +45,13 @@ namespace ModelRelief.Test.Unit
             {
                 case RelationalDatabaseProvider.SQLite:
                     optionsBuilder = new DbContextOptionsBuilder()
-                                            .UseSqlite(configurationProvider.Configuration.GetConnectionString("SQLite"));
+                                            .UseSqlite(configurationProvider.Configuration.GetConnectionString(ConfigurationSettings.SQLite));
                     break;
 
                 default:
                 case RelationalDatabaseProvider.SQLServer:
                     optionsBuilder = new DbContextOptionsBuilder()
-                                            .UseSqlServer(configurationProvider.Configuration.GetConnectionString("SQLServer"));
+                                            .UseSqlServer(configurationProvider.Configuration.GetConnectionString(ConfigurationSettings.SQLServer));
                     break;
             }
             DbContext = new ModelReliefDbContext(optionsBuilder.Options);

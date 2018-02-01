@@ -14,7 +14,9 @@ namespace ModelRelief.Services
     public interface IConfigurationProvider
     {
         IConfiguration Configuration { get; }
+        RelationalDatabaseProvider Database { get; }
+
         string GetSetting(string settingName, bool throwIfNotFound = true);
-        RelationalDatabaseProvider Database  { get; }
+        void LogConfigurationSettings();
     }
 }

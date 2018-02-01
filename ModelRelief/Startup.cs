@@ -21,6 +21,7 @@ namespace ModelRelief
     using Microsoft.AspNetCore.StaticFiles;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Domain;
     using ModelRelief.Features.Errors;

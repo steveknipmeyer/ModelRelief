@@ -30,14 +30,13 @@ Some Markdown text with <span style="color:blue">some *blue* text
 ### Tasks
 
 #### Short Term
-Move SQLServer and SQLite strings to a settings file.
-Add diagnostic log of environment settings at startup.
-Why is there a startup error?
-Refactor all environment variables to use 'MR' prefix.
+
 Add tasks.
     TestDatabaseBaseline
     gulp server
     dotnet run
+
+Why is there a startup error?  
 
 #### Front End
 <span style="color:red">
@@ -66,7 +65,8 @@ Add tasks.
 - [X] Razor Pages
 - [X] Ad the new properties to the DTO interfaces, eg. IDepthBuffer.
 - [X] Add the new properties to the DTO classes, eg. Dto.DepthBuffer.
-- [ ] 
+- [X] Include the new (required) properties in any POST requests. 
+
 #### Back End
 ##### Domain Models  
 - [x] Add new properties to the class in the DomainModels folder.   
@@ -86,10 +86,9 @@ Add tasks.
 ##### Testing
 - [x] Add the new properties to the ConstructValidModel method of the \<Model>TestModelFactory class.
 ___
-####### Front End
 
-Why is an error (statusCode = 0) thrown on startup?
-Do NOT use Base64!
+### Front End
+
 DTO models are in an inheritance chain so they can share common functionality such as API HTTP requests.
 
 |Interface||Application||DTO|
@@ -893,10 +892,10 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 Environment variables set in the Visual Studio launchSettings.json **override** environment variables set in the shell.  
 The Visual Studio Debug project settings for Environment variables **writes through** to launchSettings.json. They are *identical*.
 
-The XUnit tests cannot be run with InitializeUserStore since this prompts for user verification however *the console is not displayed*.  
+The XUnit tests cannot be run with MRInitializeUserStore since this prompts for user verification however *the console is not displayed*.  
 ServerFramework (WebHost.CreateDefaultBuilder) sets the environment to "Test" *however the environment variables from launchSettings.json are not used.* 
-Therefore, it is imperative not to set InitializeUserStore in the shell so that XUnit can be run.
-However, InitializeUserStore may be set if the application is started through 'dotnet run'.
+Therefore, it is imperative not to set MRInitializeUserStore in the shell so that XUnit can be run.
+However, MRInitializeUserStore may be set if the application is started through 'dotnet run'.
 
 #### New Computer Setup
     The Test files are not restored from Git because some (e.g. .obj) are excluded by .gitignore.

@@ -15,6 +15,7 @@ namespace ModelRelief.Test
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.TestHost;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
     using ModelRelief.Services;
     using Newtonsoft.Json;
 
@@ -27,7 +28,6 @@ namespace ModelRelief.Test
         public TestServer Server { get; set; }
         public HttpClient Client { get; set; }
 
-        public string Environment { get; set; }
         public Services.IConfigurationProvider ConfigurationProvider { get; set; }
 
         public ServerFramework()
@@ -35,9 +35,8 @@ namespace ModelRelief.Test
             var contentRootPath = Settings.GetContentRootPath();
             Directory.SetCurrentDirectory(contentRootPath);
 
-            Environment = "Test";
             Server = new TestServer(WebHost.CreateDefaultBuilder(null)
-                                            .UseEnvironment(Environment)
+                                            .UseEnvironment(Settings.Environment)
                                             .UseContentRoot(contentRootPath)
                                             .ConfigureAppConfiguration((builderContext, config) =>
                                             {
@@ -50,12 +49,11 @@ namespace ModelRelief.Test
                                                     config.AddUserSecrets(appAssembly, optional: true);
                                                 }
 
-                                                var standardConfigurationProvider = config.SetBasePath(contentRootPath)
-                                                .AddJsonFile($"appsettings.json", optional: false, reloadOnChange: false)
-                                                .AddJsonFile($"appsettings.{Environment}.json", optional: false, reloadOnChange: false)
-                                                .Build();
+                                                var configurationProvider = Settings.ConfigurationProvider(config);
 
-                                                this.ConfigurationProvider = new Services.ConfigurationProvider(standardConfigurationProvider);
+                                                var loggerFactory = new LoggerFactory();
+                                                var logger = loggerFactory.CreateLogger<Services.ConfigurationProvider>();
+                                                this.ConfigurationProvider = new Services.ConfigurationProvider(configurationProvider, logger);
                                             })
                                             .UseStartup<Startup>());
 

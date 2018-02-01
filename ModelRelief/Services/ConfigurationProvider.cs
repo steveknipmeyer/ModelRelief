@@ -8,6 +8,7 @@ namespace ModelRelief.Services
 {
     using System;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Provides configuration services.
@@ -16,15 +17,28 @@ namespace ModelRelief.Services
     public class ConfigurationProvider : IConfigurationProvider
     {
         public IConfiguration Configuration { get; private set; }
+        public ILogger<ConfigurationProvider> Logger { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationProvider"/> class.
         /// Constructor.
         /// </summary>
         /// <param name="configuration">Default IConfiguration.</param>
-        public ConfigurationProvider(IConfiguration configuration)
+        /// <param name="logger">ILogger.</param>
+        public ConfigurationProvider(IConfiguration configuration, ILogger<ConfigurationProvider> logger)
         {
             Configuration = configuration;
+            Logger = logger;
+        }
+
+        /// <summary>
+        /// Logs the primary configuration settings.
+        /// </summary>
+        public void LogConfigurationSettings()
+        {
+            Logger.LogInformation($"{ConfigurationSettings.MRDatabaseProvider} = {GetSetting(ConfigurationSettings.MRDatabaseProvider)}");
+            Logger.LogInformation($"{ConfigurationSettings.MRInitializeDatabase} = {GetSetting(ConfigurationSettings.MRInitializeDatabase)}");
+            Logger.LogInformation($"{ConfigurationSettings.MRInitializeUserStore} = {GetSetting(ConfigurationSettings.MRInitializeUserStore)}");
         }
 
         /// <summary>
@@ -50,27 +64,24 @@ namespace ModelRelief.Services
         {
             get
             {
-                var modelReliefDatabase = GetSetting(ConfigurationSettings.ModelReliefDatabase, false);
-                return DatabaseFromSetting(modelReliefDatabase);
+                var provider = GetSetting(ConfigurationSettings.MRDatabaseProvider, false);
+                return DatabaseFromSetting(provider);
             }
         }
 
         /// <summary>
         /// Returns the relational database to be used based on the given setting.
         /// </summary>
-        /// <param name="modelReliefDatabase">Database setting.</param>
+        /// <param name="databaseProvider">Database setting.</param>
         /// <returns></returns>
-        public static RelationalDatabaseProvider DatabaseFromSetting(string modelReliefDatabase)
+        public static RelationalDatabaseProvider DatabaseFromSetting(string databaseProvider)
         {
-            switch ((modelReliefDatabase ?? "SqlServer").ToLower())
-            {
-                case "sqlite":
-                    return RelationalDatabaseProvider.SQLite;
+            var provider = (databaseProvider ?? ConfigurationSettings.SQLServer).ToLower();
 
-                default:
-                case "sqlserver":
-                    return RelationalDatabaseProvider.SQLServer;
-            }
+            if (string.Equals(provider, ConfigurationSettings.SQLite.ToLower()))
+                return RelationalDatabaseProvider.SQLite;
+
+            return RelationalDatabaseProvider.SQLServer;
         }
     }
 
@@ -79,7 +90,14 @@ namespace ModelRelief.Services
     /// </summary>
     public class ConfigurationSettings
     {
-        public const string ModelReliefDatabase = "ModelReliefDatabase";
+        // environment variables
+        public const string MRDatabaseProvider    = "MRDatabaseProvider";
+        public const string MRInitializeDatabase  = "MRInitializeDatabase";
+        public const string MRInitializeUserStore = "MRInitializeUserStore";
+
+        // database providers
+        public const string SQLServer = "SQLServer";
+        public const string SQLite    = "SQLite";
     }
 
     /// <summary>
