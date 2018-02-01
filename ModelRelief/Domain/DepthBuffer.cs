@@ -19,6 +19,8 @@ namespace ModelRelief.Domain
     [DependentFiles(typeof(Mesh))]
     public class DepthBuffer  : GeneratedFileDomainModel
     {
+        public double Width { get; set; }
+        public double Height { get; set; }
         public DepthBufferFormat Format { get; set; }
 
         // Navigation Properties

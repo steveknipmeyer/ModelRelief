@@ -30,31 +30,63 @@ Some Markdown text with <span style="color:blue">some *blue* text
 ### Tasks
 
 #### Short Term
+Move SQLServer and SQLite strings to a settings file.
+Add diagnostic log of environment settings at startup.
+
+WHy is there a startup error?
+Refactor all environment variables to use 'MR' prefix.
+Add tasks.
+    TestDatabaseBaseline
+    gulp server
+    dotnet run
 
 #### Front End
+<span style="color:red">
+    The 'dotnet run' workflow runs as 'Production'!  
+</span><br><br>
 
-    The 'dotnet run' workflow runs as 'Production'!
-
-#### FE Model Structure
+##### FE Model Structure
     Should the FE DTO models perform a GET in the constructor for a non-null id?
 
     Camera
         The methods are all static. 
             Camera -> CameraHelper
+
     DepthBuffer
-        How are the dimensions determined?
-        Are all DepthBuffers square?
+        Width, Height : Should this be a calculated property based on the file format?
 
     MeshTransform
-        Depth : What is the relationship to LambdaLinearScaling?
-        Width
-        [Height] : calculated from aspect ration of the DepthBuffer?
-            This field is present in the FE DTO but not the BE model.
+        Height : Should this be a calculated property?
+            Height = Width * (DepthBuffer aspect ratio)?  
+        Depth : What is the relationship of this property to LambdaLinearScaling?
 
 <div style="font-size:9pt">
 
-___
+### Schema Modifications
 #### Front End
+Razor Pages
+DTO Models
+
+#### Back End
+##### Domain Models  
+- [x] Add new properties to the class in the DomainModels folder.   
+
+##### DTO Models (Features\\\<Models>)
+- [x] Add new properties to the class.
+- [x] Extend the AbstractValidator\\\<Model> to add new validation rules for the properties.
+
+##### DbInitializer
+- [x] Add the properties to the instance initializers of the Add\<Model> methods.
+
+##### Database
+- [x] Delete the auto-generated classes from the Migrations folder.
+- [x] Create the initial migration: **dotnet ef migrations add InitialCreate**
+- [x] Create the Test database baseline: **TestDatabaseBaseline.py**
+
+##### Testing
+- [x] Add the new properties to the ConstructValidModel method of the \<Model>TestModelFactory class.
+___
+####### Front End
 
 Why is an error (statusCode = 0) thrown on startup?
 Do NOT use Base64!

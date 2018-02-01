@@ -49,11 +49,14 @@ namespace ModelRelief.Test.TestModels.DepthBuffers
         /// <returns>Valid model.</returns>
         public override IModel ConstructValidModel()
         {
-            var validModel = base.ConstructValidModel() as Dto.DepthBuffer;
-            validModel.Name = "TestDepthBuffer.raw";
-            validModel.Format = Domain.DepthBufferFormat.RAW;
+            var depthBuffer = base.ConstructValidModel() as Dto.DepthBuffer;
 
-            return validModel;
+            depthBuffer.Name = "TestDepthBuffer.raw";
+            depthBuffer.Width  = 512;
+            depthBuffer.Height = 512;
+            depthBuffer.Format = Domain.DepthBufferFormat.RAW;
+
+            return depthBuffer;
         }
     }
 }

@@ -21,12 +21,6 @@ namespace ModelRelief.Test
         public const string ContentRootFolder = "ModelRelief";
         public const string TestFilesFolder   = "Test/Data/Files";
 
-        private static string _databaseFolderSQLite = $"{GetContentRootPath()}Database";
-        private static string _connectionStringSQLite = $"Data Source={SQLiteDatabaseFolder}\\ModelReliefTest.db";
-
-        public static string SQLiteDatabaseFolder { get => _databaseFolderSQLite; set => _databaseFolderSQLite = value; }
-        public static string SQLiteConnectionString { get => _connectionStringSQLite; set => _connectionStringSQLite = value; }
-
         /// <summary>
         /// Returns the root of the content folder. wwwroot is below this folder.
         /// </summary>

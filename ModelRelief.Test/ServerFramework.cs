@@ -15,6 +15,7 @@ namespace ModelRelief.Test
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.TestHost;
     using Microsoft.Extensions.Configuration;
+    using ModelRelief.Services;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -26,13 +27,17 @@ namespace ModelRelief.Test
         public TestServer Server { get; set; }
         public HttpClient Client { get; set; }
 
+        public string Environment { get; set; }
+        public Services.IConfigurationProvider ConfigurationProvider { get; set; }
+
         public ServerFramework()
         {
             var contentRootPath = Settings.GetContentRootPath();
             Directory.SetCurrentDirectory(contentRootPath);
 
+            Environment = "Test";
             Server = new TestServer(WebHost.CreateDefaultBuilder(null)
-                                            .UseEnvironment("Test")
+                                            .UseEnvironment(Environment)
                                             .UseContentRoot(contentRootPath)
                                             .ConfigureAppConfiguration((builderContext, config) =>
                                             {
@@ -44,6 +49,13 @@ namespace ModelRelief.Test
                                                 {
                                                     config.AddUserSecrets(appAssembly, optional: true);
                                                 }
+
+                                                var standardConfigurationProvider = config.SetBasePath(contentRootPath)
+                                                .AddJsonFile($"appsettings.json", optional: false, reloadOnChange: false)
+                                                .AddJsonFile($"appsettings.{Environment}.json", optional: false, reloadOnChange: false)
+                                                .Build();
+
+                                                this.ConfigurationProvider = new Services.ConfigurationProvider(standardConfigurationProvider);
                                             })
                                             .UseStartup<Startup>());
 

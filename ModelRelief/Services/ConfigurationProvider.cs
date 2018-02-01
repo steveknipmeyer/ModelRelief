@@ -51,15 +51,25 @@ namespace ModelRelief.Services
             get
             {
                 var modelReliefDatabase = GetSetting(ConfigurationSettings.ModelReliefDatabase, false);
-                switch ((modelReliefDatabase ?? "SqlServer").ToLower())
-                {
-                    case "sqlite":
-                        return RelationalDatabaseProvider.SQLite;
+                return DatabaseFromSetting(modelReliefDatabase);
+            }
+        }
 
-                    case "sqlserver":
-                    default:
-                        return RelationalDatabaseProvider.SQLServer;
-                }
+        /// <summary>
+        /// Returns the relational database to be used based on the given setting.
+        /// </summary>
+        /// <param name="modelReliefDatabase">Database setting.</param>
+        /// <returns></returns>
+        public static RelationalDatabaseProvider DatabaseFromSetting(string modelReliefDatabase)
+        {
+            switch ((modelReliefDatabase ?? "SqlServer").ToLower())
+            {
+                case "sqlite":
+                    return RelationalDatabaseProvider.SQLite;
+
+                default:
+                case "sqlserver":
+                    return RelationalDatabaseProvider.SQLServer;
             }
         }
     }

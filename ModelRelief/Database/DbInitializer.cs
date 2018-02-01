@@ -403,6 +403,7 @@ namespace ModelRelief.Database
                 new DepthBuffer
                 {
                     Name = "lucy.raw", Description = "Generated in Maya",
+                    Width = 512, Height = 512,
                     Format = DepthBufferFormat.RAW,
                     Model3d = FindByName<Model3d>("lucy.obj"), Camera = FindByName<Camera>("Top Camera"),
                     User = _user, Project = FindByName<Project>("ModelRelief"),
@@ -410,6 +411,7 @@ namespace ModelRelief.Database
                 new DepthBuffer
                 {
                     Name = "bunny.raw", Description = "Generated in VRay",
+                    Width = 512, Height = 512,
                     Format = DepthBufferFormat.RAW,
                     Model3d = FindByName<Model3d>("bunny.obj"), Camera = FindByName<Camera>("Isometric Camera"),
                     User = _user, Project = FindByName<Project>("Architecture"),
@@ -417,6 +419,7 @@ namespace ModelRelief.Database
                 new DepthBuffer
                 {
                     Name = "armadillo.raw", Description = "Generated in Rhino",
+                    Width = 512, Height = 512,
                     Format = DepthBufferFormat.RAW,
                     Model3d = FindByName<Model3d>("armadillo.obj"), Camera = FindByName<Camera>("Isometric Camera"),
                     User = _user, Project = FindByName<Project>("Jewelry"),

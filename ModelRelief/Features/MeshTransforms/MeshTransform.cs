@@ -48,11 +48,13 @@ namespace ModelRelief.Dto
                 .NotNull().WithMessage("The Name property is required.");
 
             RuleFor(m => m.Width)
-                .GreaterThan(0.0).WithMessage("The Width propery must be greated than zero.");
+                .GreaterThan(0.0).WithMessage("The Width property must be greated than zero.");
+
             RuleFor(m => m.Height)
-                .GreaterThan(0.0).WithMessage("The Height propery must be greated than zero.");
+                .GreaterThan(0.0).WithMessage("The Height property must be greated than zero.");
+
             RuleFor(m => m.Depth)
-                .GreaterThan(0.0).WithMessage("The Depth propery must be greated than zero.");
+                .GreaterThan(0.0).WithMessage("The Depth property must be greated than zero.");
         }
     }
 

@@ -9,8 +9,11 @@ echo MRsolution=%MRSolution%
 
 :: ModelRelief runtime settings
 :: N.B. These settings are used for command line invocation (e.g. 'dotnet run')
-:: The Visual Studio launchSettings.json or VisualCode launch.json will always <override> these settings.
-:: Do not set InitializeUserStore if XUnit tests are being run from Visual Studio. 
+:: These shell settings will always be <overridden> by these configuration provider in order:
+::             appsettings.json
+::             appsettings.<Environment>.json    
+::             Visual Studio launchSettings.json or VisualCode launch.json 
+:: Do not set InitializeUserStore if XUnit tests are being run from Visual Studio. The internal console cannot read the confirming Console.ReadLine.
 set ASPNETCORE_ENVIRONMENT=Test
 set ModelReliefDatabase=SQLServer
 set InitializeDatabase=False

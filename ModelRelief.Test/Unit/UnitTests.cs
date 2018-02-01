@@ -8,7 +8,9 @@ namespace ModelRelief.Test.Unit
 {
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
     using ModelRelief.Database;
+    using ModelRelief.Services;
     using Xunit;
 
     /// <summary>
@@ -35,8 +37,23 @@ namespace ModelRelief.Test.Unit
         {
             ClassFixture = classFixture;
 
-            var optionsBuilder = new DbContextOptionsBuilder()
-                                        .UseSqlite(Settings.SQLiteConnectionString);
+            Services.IConfigurationProvider configurationProvider = classFixture.ServerFramework.ConfigurationProvider;
+            var database = configurationProvider.Database;
+
+            DbContextOptionsBuilder optionsBuilder;
+            switch (database)
+            {
+                case RelationalDatabaseProvider.SQLite:
+                    optionsBuilder = new DbContextOptionsBuilder()
+                                            .UseSqlite(configurationProvider.Configuration.GetConnectionString("SQLite"));
+                    break;
+
+                default:
+                case RelationalDatabaseProvider.SQLServer:
+                    optionsBuilder = new DbContextOptionsBuilder()
+                                            .UseSqlServer(configurationProvider.Configuration.GetConnectionString("SQLServer"));
+                    break;
+            }
             DbContext = new ModelReliefDbContext(optionsBuilder.Options);
         }
 

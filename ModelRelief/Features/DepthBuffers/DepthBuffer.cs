@@ -25,6 +25,8 @@ namespace ModelRelief.Dto
         public string Name { get; set; }
         public string Description { get; set; }
 
+        public double Width { get; set; }
+        public double Height { get; set; }
         public DepthBufferFormat Format { get; set; }
 
         // Navigation Properties
@@ -54,6 +56,12 @@ namespace ModelRelief.Dto
 
             RuleFor(m => m.Description)
                 .NotNull().WithMessage("The Description property is required.");
+
+            RuleFor(m => m.Width)
+                .GreaterThan(0.0).WithMessage("The Width property must be greated than zero.");
+
+            RuleFor(m => m.Height)
+                .GreaterThan(0.0).WithMessage("The Height property must be greated than zero.");
 
             RuleFor(m => m.Format)
                 .NotEmpty().WithMessage("The file format must be provided.");
