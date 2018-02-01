@@ -23,8 +23,9 @@ namespace ModelRelief.Dto
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public double Depth { get; set; }
         public double Width { get; set; }
+        public double Height { get; set; }
+        public double Depth { get; set; }
 
         public double Tau { get; set; }
         public double SigmaGaussianBlur { get; set; }
@@ -45,6 +46,13 @@ namespace ModelRelief.Dto
         {
             RuleFor(m => m.Name)
                 .NotNull().WithMessage("The Name property is required.");
+
+            RuleFor(m => m.Width)
+                .GreaterThan(0.0).WithMessage("The Width propery must be greated than zero.");
+            RuleFor(m => m.Height)
+                .GreaterThan(0.0).WithMessage("The Height propery must be greated than zero.");
+            RuleFor(m => m.Depth)
+                .GreaterThan(0.0).WithMessage("The Depth propery must be greated than zero.");
         }
     }
 

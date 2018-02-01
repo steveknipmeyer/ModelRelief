@@ -7,7 +7,7 @@
     {
         "name": ".Net Core With FE Debugging in VSCode",
         "configurations": [
-            ".NET Core Launch (web)",
+            ".NET Core Launch",
             "Launch Chrome"
         ]
     }],
@@ -24,7 +24,7 @@
            // "outDir": "${workspaceRoot}/ModelRelief/wwwroot/js"
        },
         {
-            "name": ".NET Core Launch (web)",
+            "name": ".NET Core Launch",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "ASPNET .Core Build",
@@ -34,16 +34,23 @@
             "cwd": "${workspaceRoot}/ModelRelief",
             "stopAtEntry": false,
             "enableStepFiltering": false,
-            "console": "externalTerminal",
+
+            // The external console will not launch the browser. It is necessary to manually start the browser.
+//          "console": "externalTerminal",  
+
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {
+
+                // <---------------------------------------------------------------->
                 // N.B. Set to true when using independently of the compound profiles.
                 "enabled": true,
+                // <---------------------------------------------------------------->
+                
                 "args": "${auto-detect-url}",
                 "windows": {
-                    "command": "cmd.exe",
-                   "args": "/C start ${auto-detect-url}",
-                // "args": "/C start http://localhost:60655/models/viewer/1"                   
+                   "command": "cmd.exe",
+                // "args": "/C start ${auto-detect-url}",
+                   "args": "/C start http://localhost:60655/models/viewer/1"                   
                 },
                 "osx": {
                     "command": "open"
@@ -67,8 +74,9 @@
             "type": "coreclr",
             "request": "attach",
             // https: //github.com/OmniSharp/omnisharp-vscode/issues/897
-            // "processId": "${command:pickProcess}",
-            "processId": "43636"
+            // wmic process where "Name='dotnet.exe'" get Name, ProcessId, CommandLine
+//          "processId": "${command:pickProcess}",
+            "processId": "83876"
         },
         {
             "name": "Python",

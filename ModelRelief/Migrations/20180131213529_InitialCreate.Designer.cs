@@ -12,8 +12,8 @@ using System;
 namespace ModelRelief.Migrations
 {
     [DbContext(typeof(ModelReliefDbContext))]
-    [Migration("20180112122018_Initial")]
-    partial class Initial
+    [Migration("20180131213529_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -316,6 +316,8 @@ namespace ModelRelief.Migrations
                     b.Property<double>("Depth");
 
                     b.Property<string>("Description");
+
+                    b.Property<double>("Height");
 
                     b.Property<double>("LambdaLinearScaling");
 

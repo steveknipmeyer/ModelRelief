@@ -16,9 +16,9 @@ import {Services}           from 'Services'
  */
 export class MeshTransform {
 
-    depth               : number;
     width               : number;
     height              : number;
+    depth               : number;
     
     tau                 : number;
     sigmaGaussianBlur   : number;

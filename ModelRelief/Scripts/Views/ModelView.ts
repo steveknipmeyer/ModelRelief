@@ -41,7 +41,7 @@ export class ModelView {
     /**
      * Gets the ModelViewer.
      */
-    get modelViewer(): ModelViewer {
+    get modelViewer(): ModelViewer { 
 
         return this._modelViewer;
     }        

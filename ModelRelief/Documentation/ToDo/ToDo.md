@@ -535,23 +535,20 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
             VSCode Profile: .NET Core Attach
                 Edit launch.json to set processId!
 
+                https://github.com/OmniSharp/omnisharp-vscode/issues/897
+                An error happens running the command below. It should open a UI to pick the process.
+                    D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief>wmic process get Name,ProcessId,CommandLine
+                    Invalid XML content.
+
     VSCode Profile: .Net Core With FE Debugging in VSCode
         FE: VSCode   BE: VSCode  TypeScript: DNW  Reload: DNW
 
-    VSCode Profile: .Net Core Launch (web)
+    VSCode Profile: .Net Core Launch
         FE: Chrome   BE: VSCode  TypeScript: DNW  Reload: DNW
-
-    VSCode Profile: .NET Core Attach
-        Edit launch.json to set processId!
-        https://github.com/OmniSharp/omnisharp-vscode/issues/897
-        An error happens running the command below. It should open a UI to pick the process.
-            D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief>wmic process get Name,ProcessId,CommandLine
-            Invalid XML content.
     
     VSCode Resources
         https://stackoverflow.com/questions/43628397/debug-typescript-in-vscode-with-asp-net-core
         https://code.visualstudio.com/blogs/2016/02/23/introducing-chrome-debugger-for-vs-code
-
 
 #### Depth Buffer Notes
     Experiment with precision setting in THREE.WebGLRenderer.

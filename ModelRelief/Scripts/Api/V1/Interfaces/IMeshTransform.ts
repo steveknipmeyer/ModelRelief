@@ -20,8 +20,9 @@ export interface IMeshTransform extends IModel {
     name?: string;
     description?: string;
 
-    depth?: number;
     width?: number;
+    height?: number;
+    depth?: number;
 
     tau?: number;                        // attenutation
     sigmaGaussianBlur?: number;          // Gaussian blur

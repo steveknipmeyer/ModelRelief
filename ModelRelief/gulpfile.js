@@ -356,11 +356,12 @@ gulp.task('serve', function () {
 
   browserSync({
     notify: true,
+    
     proxy: {
 
         target: "localhost:60655/Models/Viewer/1"
     }
-    // browser: 'google chrome canary'
+//  browser: 'google chrome canary'
 //  Canary    
 //  browser: "C:/Users/Steve Knipmeyer/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
   });

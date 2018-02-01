@@ -51,9 +51,14 @@ namespace ModelRelief.Test.TestModels.MeshTransforms
         {
             var validModel = base.ConstructValidModel();
             validModel.Name = "TestMeshTransform";
-            (validModel as Dto.MeshTransform).LambdaLinearScaling = 1.0;
 
-            return validModel;
+            var meshModel = validModel as Dto.MeshTransform;
+            meshModel.Width = 100;
+            meshModel.Height = 100;
+            meshModel.Depth = 1.0;
+            meshModel.LambdaLinearScaling = 1.0;
+
+            return meshModel;
         }
     }
 }

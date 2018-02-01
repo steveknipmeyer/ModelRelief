@@ -3138,8 +3138,9 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
         function MeshTransform(parameters) {
             var _this = _super.call(this, parameters) || this;
             _this.endPoint = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiMeshTransforms;
-            _this.depth = parameters.depth || undefined;
             _this.width = parameters.width || undefined;
+            _this.height = parameters.height || undefined;
+            _this.depth = parameters.depth || undefined;
             _this.tau = parameters.tau || undefined;
             _this.sigmaGaussianBlur = parameters.sigmaGaussianBlur || undefined;
             _this.sigmaGaussianSmooth = parameters.sigmaGaussianSmooth || undefined;
@@ -3500,7 +3501,7 @@ define("Models/Mesh", ["require", "exports", "three", "chai", "Models/Camera", "
          * @param {THREE.Material} material Material to assign to the mesh.
          * @returns {THREE.Mesh}
          */
-        Mesh.prototype.constructMeshFromTemplate = function (mesh, meshExtents, material) {
+        Mesh.prototype.constructGraphicsFromTemplate = function (mesh, meshExtents, material) {
             // The mesh template matches the aspect ratio of the template.
             // Now, scale the mesh to the final target dimensions.
             var boundingBox = Graphics_3.Graphics.getBoundingBoxFromObject(mesh);
@@ -3524,7 +3525,7 @@ define("Models/Mesh", ["require", "exports", "three", "chai", "Models/Camera", "
          * @param {THREE.Material} material Material to assign to the mesh.
          * @returns {THREE.Mesh}
          */
-        Mesh.prototype.constructMeshByTriangulation = function (meshXYExtents, material) {
+        Mesh.prototype.constructGraphicsByTriangulation = function (meshXYExtents, material) {
             var meshGeometry = new THREE.Geometry();
             var faceSize = meshXYExtents.x / (this.width - 1);
             var baseVertexIndex = 0;
@@ -3547,7 +3548,7 @@ define("Models/Mesh", ["require", "exports", "three", "chai", "Models/Camera", "
          * @param meshXYExtents Base dimensions (model units). Height is controlled by DB aspect ratio.
          * @param material Material to assign to mesh.
          */
-        Mesh.prototype.constructMesh = function (material) {
+        Mesh.prototype.construcGraphics = function (material) {
             var timerTag = Services_8.Services.timer.mark('DepthBuffer.mesh');
             // The mesh size is in real world units to match the depth buffer offsets which are also in real world units.
             // Find the size of the near plane to size the mesh to the model units.
@@ -3555,7 +3556,7 @@ define("Models/Mesh", ["require", "exports", "three", "chai", "Models/Camera", "
             if (!material)
                 material = new THREE.MeshPhongMaterial(Mesh.DefaultMeshPhongMaterialParameters);
             var meshCache = Mesh.Cache.getMesh(meshXYExtents, new THREE.Vector2(this.width, this.height));
-            var mesh = meshCache ? this.constructMeshFromTemplate(meshCache, meshXYExtents, material) : this.constructMeshByTriangulation(meshXYExtents, material);
+            var mesh = meshCache ? this.constructGraphicsFromTemplate(meshCache, meshXYExtents, material) : this.constructGraphicsByTriangulation(meshXYExtents, material);
             mesh.name = Mesh.MeshModelName;
             var meshGeometry = mesh.geometry;
             meshGeometry.verticesNeedUpdate = true;
@@ -3576,20 +3577,14 @@ define("Models/Mesh", ["require", "exports", "three", "chai", "Models/Camera", "
          * Generates a mesh from the active model and camera.
          * @param parameters Generation parameters (MeshGenerateParameters)
          */
-        Mesh.prototype.generateReliefAsync = function (parameters) {
+        Mesh.prototype.constructGraphicssAsync = function (parameters) {
             return __awaiter(this, void 0, void 0, function () {
-                var mesh, relief;
+                var mesh;
                 return __generator(this, function (_a) {
                     if (!this.verifyMeshSettings())
                         return [2 /*return*/, null];
-                    mesh = this.constructMesh();
-                    relief = {
-                        width: this._width,
-                        height: this._height,
-                        mesh: mesh,
-                        depthBuffer: this._depthBuffer
-                    };
-                    return [2 /*return*/, relief];
+                    mesh = this.construcGraphics();
+                    return [2 /*return*/, mesh];
                 });
             });
         };
@@ -4885,39 +4880,38 @@ define("Controllers/ComposerController", ["require", "exports", "three", "dat-gu
          */
         ComposerController.prototype.generateReliefAsync = function () {
             return __awaiter(this, void 0, void 0, function () {
-                var reliefWidthPixels, reliefHeightPixels, cameraModel, depthBufferModel, meshTransformModel, meshModel, depthBufferBytes, depthBuffer, mesh, _a;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
+                var reliefWidthPixels, reliefHeightPixels, cameraModel, depthBufferModel, meshTransformModel, meshModel, depthBufferBytes, depthBuffer, mesh, meshGraphics;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
                         case 0:
                             reliefWidthPixels = 512;
                             reliefHeightPixels = reliefWidthPixels / this._composerView.modelView.modelViewer.aspectRatio;
                             return [4 /*yield*/, this.postCameraAsync()];
                         case 1:
-                            cameraModel = _b.sent();
+                            cameraModel = _a.sent();
                             return [4 /*yield*/, this.postDepthBufferAsync(cameraModel, reliefWidthPixels, reliefHeightPixels)];
                         case 2:
-                            depthBufferModel = _b.sent();
+                            depthBufferModel = _a.sent();
                             return [4 /*yield*/, this.postMeshTransformAsync()];
                         case 3:
-                            meshTransformModel = _b.sent();
+                            meshTransformModel = _a.sent();
                             return [4 /*yield*/, this.postMeshAsync(depthBufferModel, meshTransformModel)];
                         case 4:
-                            meshModel = _b.sent();
+                            meshModel = _a.sent();
                             // Mesh file generation
                             meshModel.fileIsSynchronized = true;
                             return [4 /*yield*/, meshModel.putAsync()];
                         case 5:
-                            _b.sent();
+                            _a.sent();
                             return [4 /*yield*/, meshModel.getFileAsync()];
                         case 6:
-                            depthBufferBytes = _b.sent();
+                            depthBufferBytes = _a.sent();
                             depthBuffer = new DepthBuffer_2.DepthBuffer(depthBufferBytes, reliefWidthPixels, reliefHeightPixels, this._composerView.modelView.modelViewer.camera);
                             mesh = new Mesh_1.Mesh({ width: reliefWidthPixels, height: reliefHeightPixels, depthBuffer: depthBuffer });
-                            _a = this;
-                            return [4 /*yield*/, mesh.generateReliefAsync({})];
+                            return [4 /*yield*/, mesh.constructGraphicssAsync({})];
                         case 7:
-                            _a._relief = _b.sent();
-                            this._composerView._meshView.meshViewer.setModel(this._relief.mesh);
+                            meshGraphics = _a.sent();
+                            this._composerView._meshView.meshViewer.setModel(meshGraphics);
                             if (this._initialMeshGeneration) {
                                 this._composerView._meshView.meshViewer.fitView();
                                 this._initialMeshGeneration = false;

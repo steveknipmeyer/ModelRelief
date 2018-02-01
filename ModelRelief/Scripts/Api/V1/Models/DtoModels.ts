@@ -372,8 +372,9 @@ export class Mesh extends GeneratedFileBaseModel<Mesh> implements IMesh {
 */
 export class MeshTransform extends Model<MeshTransform> implements IMeshTransform {
 
-    depth: number;
     width: number;
+    height: number;
+    depth: number;
 
     tau: number;
     sigmaGaussianBlur: number;
@@ -394,8 +395,9 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
 
         this.endPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiMeshTransforms}`;
 
-        this.depth                  = parameters.depth || undefined;
         this.width                  = parameters.width || undefined;
+        this.height                 = parameters.height || undefined;
+        this.depth                  = parameters.depth || undefined;
     
         this.tau                    = parameters.tau || undefined;
         this.sigmaGaussianBlur      = parameters.sigmaGaussianBlur || undefined;

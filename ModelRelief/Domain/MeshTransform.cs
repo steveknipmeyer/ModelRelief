@@ -12,9 +12,11 @@ namespace ModelRelief.Domain
     public class MeshTransform : DomainModel
     {
         [DependentFileProperty]
-        public double Depth { get; set; }
-        [DependentFileProperty]
         public double Width { get; set; }
+        [DependentFileProperty]
+        public double Height { get; set; }
+        [DependentFileProperty]
+        public double Depth { get; set; }
 
         [DependentFileProperty]
         public double Tau { get; set; }

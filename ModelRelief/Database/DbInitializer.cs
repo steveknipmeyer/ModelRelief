@@ -370,7 +370,7 @@ namespace ModelRelief.Database
                 new MeshTransform
                 {
                     Name = "Identity", Description = "Default transform",
-                    Depth = 1.0, Width = 100.0,
+                    Width = 100.0, Height = 100.0, Depth = 1.0,
                     Tau = 1.0, SigmaGaussianBlur = 1.0, SigmaGaussianSmooth = 1.0, LambdaLinearScaling = 1.0,
                     User = _user, Project = FindByName<Project>("ModelRelief"),
                 },
@@ -378,7 +378,7 @@ namespace ModelRelief.Database
                 new MeshTransform
                 {
                     Name = "Pendant", Description = "Pendant transform",
-                    Depth = 0.5, Width = 10.0,
+                    Width = 100.0, Height = 100.0, Depth = 1.0,
                     Tau = 0.75, SigmaGaussianBlur = 0.5, SigmaGaussianSmooth = 0.25, LambdaLinearScaling = 1.0,
                     User = _user, Project = FindByName<Project>("Architecture"),
                 },
@@ -402,17 +402,23 @@ namespace ModelRelief.Database
             {
                 new DepthBuffer
                 {
-                    Name = "lucy.raw", Description = "Generated in Maya", Format = DepthBufferFormat.RAW, Camera = FindByName<Camera>("Top Camera"), Model3d = FindByName<Model3d>("lucy.obj"),
+                    Name = "lucy.raw", Description = "Generated in Maya",
+                    Format = DepthBufferFormat.RAW,
+                    Model3d = FindByName<Model3d>("lucy.obj"), Camera = FindByName<Camera>("Top Camera"),
                     User = _user, Project = FindByName<Project>("ModelRelief"),
                 },
                 new DepthBuffer
                 {
-                    Name = "bunny.raw", Description = "Generated in VRay", Format = DepthBufferFormat.RAW, Camera = FindByName<Camera>("Isometric Camera"), Model3d = FindByName<Model3d>("bunny.obj"),
+                    Name = "bunny.raw", Description = "Generated in VRay",
+                    Format = DepthBufferFormat.RAW,
+                    Model3d = FindByName<Model3d>("bunny.obj"), Camera = FindByName<Camera>("Isometric Camera"),
                     User = _user, Project = FindByName<Project>("Architecture"),
                 },
                 new DepthBuffer
                 {
-                    Name = "armadillo.raw", Description = "Generated in Rhino", Format = DepthBufferFormat.RAW, Camera = FindByName<Camera>("Isometric Camera"), Model3d = FindByName<Model3d>("armadillo.obj"),
+                    Name = "armadillo.raw", Description = "Generated in Rhino",
+                    Format = DepthBufferFormat.RAW,
+                    Model3d = FindByName<Model3d>("armadillo.obj"), Camera = FindByName<Camera>("Isometric Camera"),
                     User = _user, Project = FindByName<Project>("Jewelry"),
                 },
             };
