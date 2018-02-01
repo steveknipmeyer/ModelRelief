@@ -32,8 +32,7 @@ Some Markdown text with <span style="color:blue">some *blue* text
 #### Short Term
 Move SQLServer and SQLite strings to a settings file.
 Add diagnostic log of environment settings at startup.
-
-WHy is there a startup error?
+Why is there a startup error?
 Refactor all environment variables to use 'MR' prefix.
 Add tasks.
     TestDatabaseBaseline
@@ -64,9 +63,10 @@ Add tasks.
 
 ### Schema Modifications
 #### Front End
-Razor Pages
-DTO Models
-
+- [X] Razor Pages
+- [X] Ad the new properties to the DTO interfaces, eg. IDepthBuffer.
+- [X] Add the new properties to the DTO classes, eg. Dto.DepthBuffer.
+- [ ] 
 #### Back End
 ##### Domain Models  
 - [x] Add new properties to the class in the DomainModels folder.   

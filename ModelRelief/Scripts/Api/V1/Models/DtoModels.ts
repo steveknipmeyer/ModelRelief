@@ -263,7 +263,9 @@ export class Camera extends Model<Camera> implements ICamera {
 *  @interface
 */
 export class DepthBuffer extends GeneratedFileBaseModel<DepthBuffer> implements IDepthBuffer {
-
+    
+    width: number;
+    height: number;
     format: DepthBufferFormat;
 
     // Navigation Properties
@@ -285,7 +287,9 @@ export class DepthBuffer extends GeneratedFileBaseModel<DepthBuffer> implements 
         super(parameters);
 
         this.endPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiDepthBuffers}`;
-    
+
+        this.width                  = parameters.width || undefined;
+        this.height                 = parameters.height || undefined;
         this.format                 = parameters.format|| undefined;
     
         // Navigation Properties
@@ -314,7 +318,7 @@ export class DepthBuffer extends GeneratedFileBaseModel<DepthBuffer> implements 
 *  @interface
 */
 export class Mesh extends GeneratedFileBaseModel<Mesh> implements IMesh {
-
+    
     format: MeshFormat;
 
     // Navigation Properties

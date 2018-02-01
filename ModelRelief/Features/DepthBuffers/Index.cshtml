@@ -22,6 +22,12 @@
                 @Html.DisplayNameFor(model => model.Project)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Width)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Height)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Format)
             </th>
             <th>
@@ -46,6 +52,12 @@
                 @Html.DisplayFor(modelItem => item.Project.Name)
             </td>
 
+            <td>
+                @Html.DisplayFor(modelItem => item.Height)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Height)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Format)
             </td>

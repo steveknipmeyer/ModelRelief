@@ -157,6 +157,8 @@ export class ComposerController {
         let depthBufferModel = new Dto.DepthBuffer({
             name: 'DepthBuffer.raw',
             description: 'DepthBuffer Description',
+            width: 512,
+            height: 512,            
             format: DepthBufferFormat.RAW,
             cameraId: camera.id,
         });

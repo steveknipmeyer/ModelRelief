@@ -3068,6 +3068,8 @@ define("Api/V1/Models/DtoModels", ["require", "exports", "System/Http", "System/
         function DepthBuffer(parameters) {
             var _this = _super.call(this, parameters) || this;
             _this.endPoint = window.location.protocol + "//" + window.location.host + "/" + Http_1.ServerEndPoints.ApiDepthBuffers;
+            _this.width = parameters.width || undefined;
+            _this.height = parameters.height || undefined;
             _this.format = parameters.format || undefined;
             // Navigation Properties
             _this.projectId = parameters.projectId || undefined;
@@ -4957,6 +4959,8 @@ define("Controllers/ComposerController", ["require", "exports", "three", "dat-gu
                             depthBufferModel = new Dto.DepthBuffer({
                                 name: 'DepthBuffer.raw',
                                 description: 'DepthBuffer Description',
+                                width: 512,
+                                height: 512,
                                 format: IDepthBuffer_1.DepthBufferFormat.RAW,
                                 cameraId: camera.id,
                             });

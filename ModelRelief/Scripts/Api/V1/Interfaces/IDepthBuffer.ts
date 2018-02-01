@@ -32,6 +32,8 @@ export interface IDepthBuffer extends IModel {
     name?: string;
     description?: string;
 
+    width?: number;
+    height?: number;
     format?: DepthBufferFormat;
 
     // Navigation Properties
