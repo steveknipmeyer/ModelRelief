@@ -25,12 +25,11 @@
     <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda36-64" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestDatabaseBaseline.py" />
     <Compile Include="Tools.py" />
     <Compile Include="Environment.py" />
-    <Compile Include="Baseline.py" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DeleteConfiguration.bat" />
     <Content Include="ModelReliefShell.bat" />
     <Content Include="SetAnacondaPath.bat" />
   </ItemGroup>

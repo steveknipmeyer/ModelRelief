@@ -45,7 +45,7 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Test",
-        "MRDatabaseProvider": "SQLite",
+        "MRDatabaseProvider": "SQLServer",
         "MRInitializeDatabase": "True",
         "MRInitializeUserStore": "True"
       },

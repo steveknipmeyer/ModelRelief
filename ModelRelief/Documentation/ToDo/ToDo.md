@@ -30,7 +30,9 @@ Some Markdown text with <span style="color:blue">some *blue* text
 ### Tasks
 
 #### Short Term
-
+Lambda
+    Review Python handling.
+    Review VSCode Extensions.
 Add tasks.
     TestDatabaseBaseline
     gulp server

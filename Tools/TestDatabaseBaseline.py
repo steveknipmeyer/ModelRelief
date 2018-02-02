@@ -78,7 +78,7 @@ def main():
     """
         Main entry point.
     """
-    database = os.environ["ModelReliefDatabase"] if (len(sys.argv) <= 1) else sys.argv[1]
+    database = os.environ["MRDatabaseProvider"] if (len(sys.argv) <= 1) else sys.argv[1]
     baseline = BaseLine(database)
 
     baseline.show_folder_locations()

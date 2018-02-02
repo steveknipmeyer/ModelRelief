@@ -36,7 +36,8 @@
             "enableStepFiltering": false,
 
             // The external console will not launch the browser. It is necessary to manually start the browser.
-//          "console": "externalTerminal",  
+            // The internal console does not support Console.ReadLine so MRInitializeDatabase is not supported.
+            "console": "externalTerminal",  
 
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {
@@ -61,8 +62,9 @@
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Test",
-                "InitializeDatabase":"False",
-                "InitializeUserStore":"False",
+                "MRDatabaseProvider": "SQLServer",
+                "MRInitializeDatabase":"True",
+                "MRInitializeUserStore":"True",
             },
             "sourceFileMap": {
                 "/Views": "${workspaceRoot}/Views"
