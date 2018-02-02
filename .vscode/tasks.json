@@ -4,13 +4,13 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "ASPNET .Core Build", 
+            "label": "ASPNET .Core Build",
             "command": "dotnet build",
-            "dependsOn" : "Compile TypeScript",
+            "dependsOn": "Compile TypeScript",
             "type": "shell",
             "group": "build",
             "presentation": {
-                "reveal": "always", 
+                "reveal": "always",
                 "panel": "dedicated"
             },
             "problemMatcher": "$msCompile"
@@ -30,6 +30,48 @@
             "problemMatcher": [
                 "$tsc"
             ]
+        },
+        {
+            "label": "gulp serve",
+            "type": "shell",
+            "command": "gulp serve",
+            "options": {
+                "cwd": "${workspaceFolder}/ModelRelief"
+            },
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "dotnet run",
+            "type": "shell",
+            "command": "dotnet run",
+            "options": {
+                "cwd": "${workspaceFolder}/ModelRelief"
+            },
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "focus": true
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ]
+        },
+        {
+            "label": "dotnet ProcessID",
+            "type": "shell",
+            "command": "powershell -executionPolicy bypass -noexit -file Tools/DotNetPID.ps1",   
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+            },
+            "problemMatcher": []
         }
     ]
 }

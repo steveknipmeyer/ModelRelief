@@ -78,7 +78,7 @@
             // https: //github.com/OmniSharp/omnisharp-vscode/issues/897
             // wmic process where "Name='dotnet.exe'" get Name, ProcessId, CommandLine
 //          "processId": "${command:pickProcess}",
-            "processId": "83876"
+            "processId": "43544"
         },
         {
             "name": "Python",

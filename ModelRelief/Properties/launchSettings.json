@@ -24,8 +24,8 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production",
         "MRDatabaseProvider": "SQLServer",
-        "MRInitializeDatabase": "False",
-        "MRInitializeUserStore": "False"
+        "MRInitializeDatabase": "True",
+        "MRInitializeUserStore": "True"
       },
       "applicationUrl": "http://localhost:60655"
     },

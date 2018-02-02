@@ -25,14 +25,10 @@ Some Markdown text with <span style="color:blue">some *blue* text
 - Manning Dependency Injection book.
 
 #####  Lambda
-    Python programs must be invoked by py <program>. This is not necessary on Vector.
-
+    
 ### Tasks
 
 #### Short Term
-Lambda
-    Review Python handling.
-    Review VSCode Extensions.
 Add tasks.
     TestDatabaseBaseline
     gulp server

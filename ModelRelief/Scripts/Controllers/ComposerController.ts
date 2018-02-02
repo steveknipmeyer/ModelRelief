@@ -143,7 +143,7 @@ export class ComposerController {
         });
         var newModel = await camera.postAsync();
 
-        return newModel;
+        return newModel; 
     }        
     
     /**
