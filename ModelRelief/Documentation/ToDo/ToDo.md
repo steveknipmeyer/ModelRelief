@@ -29,12 +29,6 @@ Some Markdown text with <span style="color:blue">some *blue* text
 ### Tasks
 
 #### Short Term
-Add tasks.
-    TestDatabaseBaseline
-    gulp server
-    dotnet run
-
-Why is there a startup error?  
 
 #### Front End
 <span style="color:red">

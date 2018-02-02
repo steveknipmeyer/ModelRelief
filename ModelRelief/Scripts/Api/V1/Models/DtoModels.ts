@@ -22,7 +22,7 @@ import { RequestResponse }                  from 'RequestResponse'
 /**
  * @description Common base class for all DTO models.
  * @export
- * @class Base
+ * @class Model
  * @implements {IModel}
  * @template T 
  */
@@ -35,7 +35,7 @@ export class Model<T extends IModel> implements IModel{
     endPoint    : string;       // API endpoint
 
     /**
-     * Creates an instance of Base.
+     * Creates an instance of Model.
      * @param {IModel} parameters 
      */
     constructor (parameters: IModel) {
@@ -64,7 +64,7 @@ export class Model<T extends IModel> implements IModel{
         return result;
     }
     /**
-     * @description Returns the derived instance of BaseModel.
+     * @description Returns the derived instance of Model.
      * @param {IModel} parameters 
      * @returns {*} 
      */
@@ -111,9 +111,9 @@ export class Model<T extends IModel> implements IModel{
 /**
  * @description Base class for a file-backed DTO model.
  * @export 
- * @class FileBaseModel
+ * @class FileModel
  * @extends {Model<T>}
- * @implements {IModel}
+ * @implements {IFileModel}
  * @template T 
  */
 export class FileModel<T extends IFileModel> extends Model<T> implements IFileModel{
@@ -122,7 +122,7 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
     fileTimeStamp: Date;
 
     /**
-     * Creates an instance of FileBaseModel.
+     * Creates an instance of FileModel.
      * @param {IModel} parameters 
      */
     constructor(parameters: IFileModel) {
@@ -169,18 +169,18 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
 /**
  * @description Base class for a generated file-backed DTO model.
  * @export
- * @class GeneratedFileBaseModel
+ * @class GeneratedFileModel
  * @extends {FileModel<T>}
- * @implements {IGeneratedFile}
+ * @implements {IGeneratedFileModel}
  * @template T 
  */
-export class GeneratedFileBaseModel<T extends IGeneratedFileModel> extends FileModel<T> implements IGeneratedFileModel{
+export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel<T> implements IGeneratedFileModel{
 
     // not exposed in UX; API only
     fileIsSynchronized: boolean;
 
     /**
-     * Creates an instance of GeneratedFileBaseModel.
+     * Creates an instance of GeneratedFileModel.
      * @param {IGeneratedFile} parameters 
      */
     constructor(parameters: IGeneratedFileModel) {
@@ -262,7 +262,7 @@ export class Camera extends Model<Camera> implements ICamera {
 *  Concrete implementation of IDepthBuffer.
 *  @interface
 */
-export class DepthBuffer extends GeneratedFileBaseModel<DepthBuffer> implements IDepthBuffer {
+export class DepthBuffer extends GeneratedFileModel<DepthBuffer> implements IDepthBuffer {
     
     width: number;
     height: number;
@@ -317,7 +317,7 @@ export class DepthBuffer extends GeneratedFileBaseModel<DepthBuffer> implements 
 *  Concrete implementation of IMesh.
 *  @interface
 */
-export class Mesh extends GeneratedFileBaseModel<Mesh> implements IMesh {
+export class Mesh extends GeneratedFileModel<Mesh> implements IMesh {
     
     format: MeshFormat;
 

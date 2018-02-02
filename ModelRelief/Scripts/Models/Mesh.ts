@@ -12,8 +12,9 @@ import {assert}                     from 'chai'
 import {Camera}                     from 'Camera'
 import { DepthBuffer }              from 'DepthBuffer'
 import { Graphics }                 from 'Graphics'
-import { ILogger, ConsoleLogger }    from 'Logger'
+import { ILogger, ConsoleLogger }   from 'Logger'
 import { MathLibrary }              from 'Math'
+import { Model }                    from 'Model'
 import { Services }                 from 'Services'
 import { StopWatch }                from 'StopWatch'
 import { Tools }                    from 'Tools'
@@ -110,7 +111,7 @@ class MeshCache {
  * @export
  * @class Mesh
  */
-export class Mesh {
+export class Mesh  {
 
     static Cache                              : MeshCache = new MeshCache();
     static readonly MeshModelName             : string = 'ModelMesh';

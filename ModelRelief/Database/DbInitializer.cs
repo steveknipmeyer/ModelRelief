@@ -219,7 +219,7 @@ namespace ModelRelief.Database
             Console.WriteLine($"Delete the user store folder: {storeUsersPath} (Y/N)?");
             Console.ForegroundColor = ConsoleColor.White;
             var response = Console.ReadLine();
-            if (!string.Equals(response, "Y"))
+            if (!string.Equals(response.ToUpper(), "Y"))
                 return;
 
             Files.DeleteFolder(storeUsersPath, true);

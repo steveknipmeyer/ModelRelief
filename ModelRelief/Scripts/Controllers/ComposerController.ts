@@ -48,7 +48,7 @@ class ComposerViewSettings {
             tau                    : 1.0,    
             sigmaGaussianBlur      : 1.0,    
             sigmaGaussianSmooth    : 1.0,    
-            lambdaLinearScaling    : 0.5,    
+            lambdaLinearScaling    : 1.0,
         }
             
         this.generateRelief = generateRelief;
@@ -104,7 +104,7 @@ export class ComposerController {
         // Camera
         let cameraModel: Dto.Camera = await this.postCameraAsync();
         
-        // DepthBufffer(Model, Camera)
+        // DepthBufffer(Model, Camera) 
         let depthBufferModel: Dto.DepthBuffer = await this.postDepthBufferAsync(cameraModel, reliefWidthPixels, reliefHeightPixels);
 
         // MeshTransform
@@ -157,8 +157,8 @@ export class ComposerController {
         let depthBufferModel = new Dto.DepthBuffer({
             name: 'DepthBuffer.raw',
             description: 'DepthBuffer Description',
-            width: 512,
-            height: 512,            
+            width: widthPixels,
+            height: heightPixels,            
             format: DepthBufferFormat.RAW,
             cameraId: camera.id,
         });
