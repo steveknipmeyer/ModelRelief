@@ -14,8 +14,9 @@
 "use strict";
 
 import * as THREE               from 'three'
-
-import {Camera, ClippingPlanes} from 'Camera'
+import {ClippingPlanes}         from 'Camera'
+import {Camera}                 from 'Camera'
+import {CameraHelper}           from 'CameraHelper'
 import {DepthBuffer}            from 'DepthBuffer'
 import {Graphics}               from 'Graphics'
 import {ILogger, ConsoleLogger}  from 'Logger'
@@ -34,11 +35,10 @@ export interface DepthBufferFactoryParameters {
     width            : number,                  // width of DB
     height           : number                   // height of DB        
     model            : THREE.Group,             // model root
-
-    camera?          : THREE.PerspectiveCamera, // camera
+    camera           : THREE.PerspectiveCamera, // camera
     
     logDepthBuffer?  : boolean,                 // use logarithmic depth buffer for higher resolution (better distribution) in scenes with large extents
-    boundedClipping? : boolean,                 // overrrid camera clipping planes to bound model
+    boundedClipping? : boolean,                 // overrride camera clipping planes to bound model
     
     addCanvasToDOM?  : boolean                  // visible canvas; add to HTML
 }
@@ -91,9 +91,9 @@ export class DepthBufferFactory {
         this._width           = parameters.width;
         this._height          = parameters.height;
         this._model           = parameters.model.clone(true);
+        this._camera          = parameters.camera;
 
         // optional
-        this._camera          = parameters.camera          || null;
         this._logDepthBuffer  = parameters.logDepthBuffer  || false;
         this._boundedClipping = parameters.boundedClipping || false;
         this._addCanvasToDOM  = parameters.addCanvasToDOM  || false;
@@ -101,7 +101,6 @@ export class DepthBufferFactory {
         this._canvas = this.initializeCanvas();
         this.initialize();
     }
-
 
 //#region Properties
     /**
@@ -255,7 +254,7 @@ export class DepthBufferFactory {
         renderTarget.depthBuffer              = true;
         renderTarget.depthTexture             = new THREE.DepthTexture(this._width, this._height);
         renderTarget.depthTexture.type        = THREE.UnsignedIntType;
-    
+                
         return renderTarget;
     }
 
@@ -360,13 +359,9 @@ export class DepthBufferFactory {
         // copy camera; shared with ModelViewer
         let camera = new THREE.PerspectiveCamera();
         camera.copy(this._camera);
+        CameraHelper.boundCameraClippingPlanes(camera, this._model);
+
         this._camera = camera;
-
-        let clippingPlanes: ClippingPlanes = Camera.getBoundingClippingPlanes(this._camera, this._model);
-        this._camera.near = clippingPlanes.near;
-        this._camera.far = clippingPlanes.far;
-
-        this._camera.updateProjectionMatrix();
     }
 
     /**

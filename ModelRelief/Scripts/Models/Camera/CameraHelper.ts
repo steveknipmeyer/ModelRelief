@@ -7,53 +7,18 @@
 
 import * as THREE        from 'three'
 
-import { DepthBufferFactory } from 'DepthBufferFactory'
-import { Graphics }           from 'Graphics'
-import { Services }           from 'Services'
-import { StopWatch }          from 'StopWatch'
-
-/**
- * @description Caamera settings.
- * @export
- * @interface CameraSettings
- */
-export interface CameraSettings {
-
-    position        : THREE.Vector3;        // location of camera
-    target          : THREE.Vector3;        // target point
-    near            : number;               // near clipping plane
-    far             : number;               // far clipping plane
-    fieldOfView     : number;               // field of view
-    
-    standardView    : StandardView;   
-}
-
-export enum StandardView {
-    None,
-    Front,
-    Back,
-    Top,
-    Bottom,
-    Left,
-    Right,
-    Isometric
-}
-/**
- * @description Camera clipping planes tuple.
- * @export
- * @interface ClippingPlanes
- */
-export interface ClippingPlanes {
-    near : number;
-    far  : number;
-}
+import { ClippingPlanes, StandardView } from 'Camera'
+import { DepthBufferFactory }           from 'DepthBufferFactory'
+import { Graphics }                     from 'Graphics'
+import { Services }                     from 'Services'
+import { StopWatch }                    from 'StopWatch'
 
 /**
  * Camera
  * General camera utility methods.
  * @class
  */
-export class Camera {
+export class CameraHelper {
 
     static DefaultFieldOfView       : number = 37;       // 35mm vertical : https://www.nikonians.org/reviews/fov-tables       
     static DefaultNearClippingPlane : number = 0.1; 
@@ -110,6 +75,21 @@ export class Camera {
         return clippingPlanes;
     }  
 
+    /**
+     * @description Bounds the camera clipping planes to fit the model.
+     * @static
+     * @param {THREE.PerspectiveCamera} camera Camera to set clipping planes.
+     * @param {THREE.Group} model Target model.
+     */
+    static boundCameraClippingPlanes(camera: THREE.PerspectiveCamera, model : THREE.Group) {
+
+        let clippingPlanes: ClippingPlanes = this.getBoundingClippingPlanes(camera, model);
+        camera.near = clippingPlanes.near;
+        camera.far = clippingPlanes.far;
+
+        camera.updateProjectionMatrix();
+    }
+
 //#endregion
 
 //#region Settings
@@ -148,7 +128,7 @@ export class Camera {
         let timerTag = Services.timer.mark('Camera.getFitViewCamera');              
 
         let camera = cameraTemplate.clone(true);
-        let boundingBoxWorld         : THREE.Box3    = Camera.getDefaultBoundingBox(model);
+        let boundingBoxWorld         : THREE.Box3    = CameraHelper.getDefaultBoundingBox(model);
         let cameraMatrixWorld        : THREE.Matrix4 = camera.matrixWorld;
         let cameraMatrixWorldInverse : THREE.Matrix4 = camera.matrixWorldInverse;
         
@@ -191,7 +171,7 @@ export class Camera {
 
         let timerTag = Services.timer.mark('Camera.getStandardView');              
         
-        let camera = Camera.getDefaultCamera(viewAspect);               
+        let camera = CameraHelper.getDefaultCamera(viewAspect);               
         let boundingBox = Graphics.getBoundingBoxFromObject(model);
         
         let centerX = boundingBox.getCenter().x;
@@ -250,7 +230,7 @@ export class Camera {
         camera.updateMatrixWorld(true);
         camera.updateProjectionMatrix();
 
-        camera = Camera.getFitViewCamera(camera, model);
+        camera = CameraHelper.getFitViewCamera(camera, model);
 
         Services.timer.logElapsedTime(timerTag);
         return camera;
@@ -265,9 +245,9 @@ export class Camera {
         let defaultCamera = new THREE.PerspectiveCamera();
         defaultCamera.position.copy (new THREE.Vector3 (0, 0, 0));
         defaultCamera.lookAt(new THREE.Vector3(0, 0, -1));
-        defaultCamera.near   = Camera.DefaultNearClippingPlane;
-        defaultCamera.far    = Camera.DefaultFarClippingPlane;
-        defaultCamera.fov    = Camera.DefaultFieldOfView;
+        defaultCamera.near   = CameraHelper.DefaultNearClippingPlane;
+        defaultCamera.far    = CameraHelper.DefaultFarClippingPlane;
+        defaultCamera.fov    = CameraHelper.DefaultFieldOfView;
         defaultCamera.aspect = viewAspect;
 
         // force camera matrix to update; matrixAutoUpdate happens in render loop
@@ -288,8 +268,8 @@ export class Camera {
         if (camera)
             return camera;
 
-        let defaultCamera = Camera.getDefaultCamera(viewAspect);
+        let defaultCamera = CameraHelper.getDefaultCamera(viewAspect);
         return defaultCamera;
-    }
+    } 
 //#endregion 
 }

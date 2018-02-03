@@ -8,8 +8,9 @@
 
 import * as THREE from 'three'
 
-import {assert}                     from 'chai'
-import {Camera}                     from 'Camera'
+import { assert }                   from 'chai'
+import { Camera }                   from 'Camera'
+import { CameraHelper }             from 'CameraHelper'
 import { DepthBuffer }              from 'DepthBuffer'
 import { Graphics }                 from 'Graphics'
 import { ILogger, ConsoleLogger }   from 'Logger'
@@ -26,8 +27,8 @@ import { Tools }                    from 'Tools'
  */
 export interface MeshParameters {
 
-    width       : number,                // width of mesh
-    height      : number,                // height of mesh
+    width       : number,                // width of mesh (DB resolution)
+    height      : number,                // height of mesh (DB resolution)
     depthBuffer : DepthBuffer,           // depth buffer
 }
 
@@ -303,13 +304,13 @@ export class Mesh  {
     * @param meshXYExtents Base dimensions (model units). Height is controlled by DB aspect ratio.
     * @param material Material to assign to mesh.
     */
-   construcGraphics(material? : THREE.Material) : THREE.Mesh {
+   constructGraphics(material? : THREE.Material) : THREE.Mesh {
 
        let timerTag = Services.timer.mark('DepthBuffer.mesh');        
        
        // The mesh size is in real world units to match the depth buffer offsets which are also in real world units.
        // Find the size of the near plane to size the mesh to the model units.
-       let meshXYExtents : THREE.Vector2 = Camera.getNearPlaneExtents(this.depthBuffer.camera);       
+       let meshXYExtents : THREE.Vector2 = CameraHelper.getNearPlaneExtents(this.depthBuffer.camera);       
        
        if (!material)
            material = new THREE.MeshPhongMaterial(Mesh.DefaultMeshPhongMaterialParameters);
@@ -347,7 +348,7 @@ export class Mesh  {
         if (!this.verifyMeshSettings())
             return null;
     
-        let mesh = this.construcGraphics();
+        let mesh = this.constructGraphics();
 
         return mesh;
     }

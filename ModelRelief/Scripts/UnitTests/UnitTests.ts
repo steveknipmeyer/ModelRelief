@@ -5,14 +5,21 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import {assert}   from 'chai'
 import * as THREE from 'three'
+import * as Dto from 'DtoModels'
 
+import {assert}   from 'chai'
 import {DepthBuffer} from 'DepthBuffer'
+import {Exception} from 'Exception';
 import {MathLibrary} from 'Math'
-                                
+import {HttpLibrary, ContentType, MethodType} from 'Http'
+import {DepthBufferFormat} from 'Api/V1/Interfaces/IDepthBuffer';
+import {HemisphereLight} from 'three';
+
 /**
- * @exports Viewer/Viewer
+ * @description Unit test harness.
+ * @export
+ * @class UnitTests
  */
 export class UnitTests {
    
@@ -23,7 +30,35 @@ export class UnitTests {
      */
     constructor() {       
     }
-        
+
+    /**
+     * @description Round trip an array of bytes.
+     * @static
+     */
+    static async BinaryRoundTrip() {
+
+        // Arrange
+        let originalByteArray = new Uint8Array(256);
+        for (let iByte = 0; iByte < 256; iByte++) {
+            originalByteArray[iByte] = iByte;
+        }
+
+        let depthBuffer = new Dto.DepthBuffer({
+            name : "DepthBuffer",
+            description: "Unit Test",
+            format: DepthBufferFormat.RAW,
+            width: 16,
+            height: 16
+        });
+        let depthBufferModel = await depthBuffer.postFileAsync(originalByteArray);
+
+        // Act
+        let readByteArray = await depthBufferModel.getFileAsync();
+
+        // Assert
+        assert.deepEqual(originalByteArray, readByteArray, "Byte arrays are different.")        
+    }   
+
     static VertexMapping (depthBuffer : DepthBuffer, mesh : THREE.Mesh) {
 
         let meshGeometry : THREE.Geometry = <THREE.Geometry> mesh.geometry;

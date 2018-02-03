@@ -9,8 +9,9 @@ import * as THREE  from 'three'
 import * as dat    from 'dat-gui'
 
 import {Camera, CameraSettings, StandardView}   from 'Camera'
+import {CameraHelper }                          from 'CameraHelper'
 import {ElementAttributes, ElementIds}          from "Html"
-import {ILogger, ConsoleLogger}                  from 'Logger'
+import {ILogger, ConsoleLogger}                 from 'Logger'
 import {Graphics, ObjectNames}                  from "Graphics"
 import {Services}                               from 'Services'
 import {Viewer}                                 from "Viewer"
@@ -91,7 +92,7 @@ export class CameraControls {
 
         // View
         let modelView = Graphics.cloneAndTransformObject(this._viewer.model, this._viewer.camera.matrixWorldInverse);
-        let cameraView = Camera.getDefaultCamera(this._viewer.aspectRatio);
+        let cameraView = CameraHelper.getDefaultCamera(this._viewer.aspectRatio);
         Graphics.addCameraHelper(cameraView, this._viewer.scene, modelView);
     }
 
@@ -100,7 +101,7 @@ export class CameraControls {
      */
     boundClippingPlanes(): void {
 
-        let clippingPlanes = Camera.getBoundingClippingPlanes(this._viewer.camera, this._viewer.model);
+        let clippingPlanes = CameraHelper.getBoundingClippingPlanes(this._viewer.camera, this._viewer.model);
 
         // camera
         this._viewer.camera.near = clippingPlanes.near;

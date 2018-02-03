@@ -7,6 +7,7 @@
 
 import * as THREE               from 'three'
 import {Camera, StandardView}   from 'Camera'
+import {CameraHelper }          from 'CameraHelper'
 import {CameraControls}         from 'CameraControls'
 import {EventManager}           from 'EventManager'
 import {Graphics, ObjectNames}  from 'Graphics'
@@ -196,7 +197,7 @@ export class Viewer {
      * Initialize the viewer camera
      */
     initializeCamera() {
-        this.camera = Camera.getStandardViewCamera(StandardView.Front, this.aspectRatio, this.model);       
+        this.camera = CameraHelper.getStandardViewCamera(StandardView.Front, this.aspectRatio, this.model);       
     }
 
     /**
@@ -250,7 +251,7 @@ export class Viewer {
             switch (keyCode) {
 
                 case 70:                // F               
-                    this.camera = Camera.getStandardViewCamera(StandardView.Front, this.aspectRatio, this.model);
+                    this.camera = CameraHelper.getStandardViewCamera(StandardView.Front, this.aspectRatio, this.model);
                     break;
             }
             }, false);
@@ -303,7 +304,7 @@ export class Viewer {
      */
     setCameraToStandardView(view : StandardView) {
 
-        let standardViewCamera = Camera.getStandardViewCamera(view, this.aspectRatio, this.model);
+        let standardViewCamera = CameraHelper.getStandardViewCamera(view, this.aspectRatio, this.model);
         this.camera = standardViewCamera;
 
         this._cameraControls.synchronizeCameraSettings(view);
@@ -314,7 +315,7 @@ export class Viewer {
      */
     fitView() {
 
-        this.camera = Camera.getFitViewCamera (Camera.getSceneCamera(this.camera, this.aspectRatio), this.model);
+        this.camera = CameraHelper.getFitViewCamera (CameraHelper.getSceneCamera(this.camera, this.aspectRatio), this.model);
     }
            
 //#endregion

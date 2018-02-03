@@ -9,7 +9,9 @@ import * as THREE  from 'three'
 import * as dat    from 'dat-gui'
 import * as Dto    from "DtoModels";
 
-import {StandardView}                       from "Camera"
+import {assert}                             from 'chai';
+import {Camera, StandardView}               from "Camera"
+import {CameraHelper}                       from "CameraHelper"
 import {ComposerView}                       from "ComposerView"
 import {DepthBuffer}                        from "DepthBuffer"
 import {DepthBufferFactory}                 from "DepthBufferFactory"
@@ -26,6 +28,7 @@ import {ModelViewer}                        from "ModelViewer"
 import {OBJExporter}                        from "OBJExporter"
 import {MeshTransform}                      from 'MeshTransform'
 import {Services}                           from 'Services'
+import {UnitTests}                          from 'UnitTests';
 
 /**
  * @class
@@ -117,10 +120,17 @@ export class ComposerController {
         meshModel.fileIsSynchronized = true;
         await meshModel.putAsync();
 
-        // now read Mesh backing file
+        // Mesh file
         let depthBufferBytes: Uint8Array = await meshModel.getFileAsync();
-        let depthBuffer = new DepthBuffer(depthBufferBytes, reliefWidthPixels, reliefHeightPixels, this._composerView.modelView.modelViewer.camera);
 
+        // construct DepthBufffer from Mesh raw file
+        let depthBufferCamera = this._composerView.modelView.modelViewer.camera.clone(true);
+        depthBufferCamera.fov  = cameraModel.fieldOfView;        
+        depthBufferCamera.near = cameraModel.near;
+        depthBufferCamera.far  = cameraModel.far;
+        let depthBuffer = new DepthBuffer(depthBufferBytes, reliefWidthPixels, reliefHeightPixels, depthBufferCamera);
+        
+        // Mesh graphics
         let mesh = new Mesh({ width: reliefWidthPixels, height: reliefHeightPixels, depthBuffer: depthBuffer});
         let meshGraphics = await mesh.constructGraphicssAsync({});
 
@@ -136,12 +146,13 @@ export class ComposerController {
      */
     async postCameraAsync(): Promise<Dto.Camera> {
 
-        let camera = new Dto.Camera({
-            name: 'DynamicCamera',
-            description: 'Dynamic Camera Description',
-            position: new THREE.Vector3(100, 100, 200)
-        });
-        var newModel = await camera.postAsync();
+        let camera = new Camera(this._composerView.modelView.modelViewer.camera);
+        CameraHelper.boundCameraClippingPlanes(camera.viewCamera, this._composerView.modelView.modelViewer.model);
+
+        let cameraModel = camera.toDtoModel();
+        cameraModel.boundClippingPlanes = true;
+
+        var newModel = await cameraModel.postAsync();
 
         return newModel; 
     }        
@@ -163,7 +174,7 @@ export class ComposerController {
             cameraId: camera.id,
         });
         var newModel = await depthBufferModel.postFileAsync(depthBuffer.depths);
-
+        
         return newModel;
     }        
 
@@ -203,6 +214,7 @@ export class ComposerController {
 
         // WIP: Save the Mesh as an OBJ format file?
         // It may be more efficient to maintain Meshes in raw format since the size is substantially smaller.
+        UnitTests.BinaryRoundTrip();
     }
 
     //#endregion

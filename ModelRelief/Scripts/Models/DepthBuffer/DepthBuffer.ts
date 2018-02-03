@@ -52,8 +52,7 @@ export class DepthBuffer {
      * @param rgbaArray Raw aray of RGBA bytes packed with floats.
      * @param width Width of map.
      * @param height Height of map.
-     * @param nearClipPlane Camera near clipping plane.
-     * @param farClipPlane Camera far clipping plane.
+     * @param camera Perspective camera.
      */
     constructor(rgbaArray : Uint8Array, width : number, height :number, camera : THREE.PerspectiveCamera) {
         
