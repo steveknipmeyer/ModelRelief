@@ -17,10 +17,6 @@
 <article class="markdown-body">
 
 ##### Commit Notes
-ComposerControler.postCameraAsync creates the Dto.Camera based on the (clipped) ModelViewer camera.
-DepthBufferFactoryParameters.camera is not optional.   
-Split Camera into Camera, CameraHelper.
-Move the setCameraClippingPlanes method to the application Camera class.
 
 Some Markdown text with <span style="color:blue">some *blue* text
 
@@ -31,20 +27,23 @@ Some Markdown text with <span style="color:blue">some *blue* text
 #####  Lambda
     Center Editor Window
     Code Outline
-    
+
+#####  Ubuntu
+
+- [ ] Theme 
+- [ ] VSCode
+- [ ] Linux Book
+
 ### Tasks
 
 #### Short Term
 
-    CameraHelper
-        Add a method to construct a PerspectiveCamera from Dto.Camera.        
-
     Camera
-        How can LookAt be handled? What property of the PerspectiveCamera defines the direction defined by Camera.LookAt(point : THREE.Vector3)?  
         The aspect ratio is required by Mesh.constructGraphics.
-            CameraHelper.getNearPlaneExtents
+             let meshXYExtents : THREE.Vector2 = CameraHelper.getNearPlaneExtents(this.depthBuffer.camera);       
+             
     DepthBuffer
-        Refactor DepthBuffer to remove dependency on THREE.Camera. Use only the camere properties such as the clipping planes, etc.
+        Refactor DepthBuffer to remove dependency on THREE.Camera and use Camera.
 
 https://stackoverflow.com/questions/12702548/constructor-overload-in-typescript  
 Refactor constructor initialization.  

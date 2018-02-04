@@ -214,7 +214,7 @@ export class ComposerController {
 
         // WIP: Save the Mesh as an OBJ format file?
         // It may be more efficient to maintain Meshes in raw format since the size is substantially smaller.
-        UnitTests.BinaryRoundTrip();
+        UnitTests.cameraRoundTrip();
     }
 
     //#endregion

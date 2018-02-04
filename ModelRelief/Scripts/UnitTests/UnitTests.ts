@@ -9,6 +9,7 @@ import * as THREE from 'three'
 import * as Dto from 'DtoModels'
 
 import {assert}   from 'chai'
+import {Camera} from 'Camera'
 import {DepthBuffer} from 'DepthBuffer'
 import {Exception} from 'Exception';
 import {MathLibrary} from 'Math'
@@ -23,6 +24,8 @@ import {HemisphereLight} from 'three';
  */
 export class UnitTests {
    
+    static DefaultVectorTolerance : number = 0.001;
+
     /**
      * Default constructor
      * @class UnitTests
@@ -31,11 +34,39 @@ export class UnitTests {
     constructor() {       
     }
 
+    static vectorsEqualWithinTolerance(v1 : THREE.Vector3, v2: THREE.Vector3, tolerance = UnitTests.DefaultVectorTolerance) {
+
+        let formatTag = 'TAG';
+        let errorMessage = `The ${formatTag} values of the vectors are not equal within ${tolerance}`
+        assert.closeTo(v1.x, v2.x, tolerance, errorMessage.replace(formatTag, 'X'));
+        assert.closeTo(v1.y, v2.y, tolerance, errorMessage.replace(formatTag, 'Y'));
+        assert.closeTo(v1.z, v2.z, tolerance, errorMessage.replace(formatTag, 'Z'));
+    }
+
+    /**
+     * @description Tests whether a Perspective camera can be re-constructed from the DTO Camera properties.
+     * @static
+     */
+    static cameraRoundTrip(){
+
+        let camera = new THREE.PerspectiveCamera(Camera.DefaultFieldOfView, 1.0, Camera.DefaultNearClippingPlane, Camera.DefaultFarClippingPlane);
+        // https://stackoverflow.com/questions/15696963/three-js-set-and-read-camera-look-vector/15697227#15697227
+        let worldVector:THREE.Vector3 = camera.getWorldDirection();
+
+        let lookAt = new THREE.Vector3(100, 200, 300);
+        let lookAtNormalized = lookAt.normalize();
+
+        camera.lookAt(lookAt);
+        worldVector = camera.getWorldDirection();
+
+        this.vectorsEqualWithinTolerance(lookAtNormalized, worldVector);
+    }
+
     /**
      * @description Round trip an array of bytes.
      * @static
      */
-    static async BinaryRoundTrip() {
+    static async binaryRoundTrip() {
 
         // Arrange
         let originalByteArray = new Uint8Array(256);
@@ -59,7 +90,7 @@ export class UnitTests {
         assert.deepEqual(originalByteArray, readByteArray, "Byte arrays are different.")        
     }   
 
-    static VertexMapping (depthBuffer : DepthBuffer, mesh : THREE.Mesh) {
+    static vertexMapping (depthBuffer : DepthBuffer, mesh : THREE.Mesh) {
 
         let meshGeometry : THREE.Geometry = <THREE.Geometry> mesh.geometry;
         meshGeometry.computeBoundingBox();

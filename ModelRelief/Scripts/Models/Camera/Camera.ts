@@ -63,6 +63,9 @@ export class Camera extends Model<Camera> {
     
     viewCamera : THREE.PerspectiveCamera;
 
+    boundClippingPlanes : boolean = true; 
+    projectId           : number  = 0;
+
     /**
      * @constructor
      */
@@ -74,6 +77,7 @@ export class Camera extends Model<Camera> {
         });
 
         this.viewCamera = camera.clone(true);            
+        this.viewCamera.getWorldDirection()
     }
 
     /**
@@ -82,17 +86,55 @@ export class Camera extends Model<Camera> {
      */
     toDtoModel() : Dto.Camera {
 
+        let lookAt: THREE.Vector3 = this.viewCamera.getWorldDirection();
+
         let model = new Dto.Camera({
+            id              : this.id,
             name            : this.name,
             description     : this.description,    
 
-            position        : this.viewCamera.position,
             standardView    : StandardView.None,
             fieldOfView     : this.viewCamera.fov,
+
             near            : this.viewCamera.near,
             far             : this.viewCamera.far,
+
+            boundClippingPlanes : this.boundClippingPlanes,
+
+            position        : this.viewCamera.position,
+            lookAt          : lookAt,
+
+            projectId       : this.projectId
         });
 
         return model;
+    }    
+
+    /**
+     * @description Constructs an instance from a DTP model.
+     * @returns {Dto.Camera} 
+     */
+    static fromDtoModel(dtoCamera : Dto.Camera) : Camera {
+
+        let perspectiveCamera = new THREE.PerspectiveCamera();
+        
+        perspectiveCamera.position.set(dtoCamera.positionX, dtoCamera.positionY, dtoCamera.positionZ);
+        perspectiveCamera.fov   = dtoCamera.fieldOfView;
+        perspectiveCamera.near  = dtoCamera.near;
+        perspectiveCamera.far   = dtoCamera.far;
+        
+        let lookAt = new THREE.Vector3(dtoCamera.lookAtX, dtoCamera.lookAtY, dtoCamera.lookAtZ);
+        let lookAtNormalized = lookAt.normalize();
+        perspectiveCamera.lookAt(lookAtNormalized);
+
+        let camera = new Camera (perspectiveCamera);
+        camera.id          = dtoCamera.id;
+        camera.name        = dtoCamera.name;
+        camera.description = dtoCamera.description;
+        
+        camera.boundClippingPlanes = dtoCamera.boundClippingPlanes;
+        camera.projectId           = dtoCamera.projectId;
+
+        return camera;
     }    
 }

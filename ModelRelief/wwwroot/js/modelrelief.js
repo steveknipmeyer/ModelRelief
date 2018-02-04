@@ -1323,9 +1323,9 @@ define("Models/Camera/CameraHelper", ["require", "exports", "three", "Models/Cam
             var defaultCamera = new THREE.PerspectiveCamera();
             defaultCamera.position.copy(new THREE.Vector3(0, 0, 0));
             defaultCamera.lookAt(new THREE.Vector3(0, 0, -1));
-            defaultCamera.near = CameraHelper.DefaultNearClippingPlane;
-            defaultCamera.far = CameraHelper.DefaultFarClippingPlane;
-            defaultCamera.fov = CameraHelper.DefaultFieldOfView;
+            defaultCamera.near = Camera_1.Camera.DefaultNearClippingPlane;
+            defaultCamera.far = Camera_1.Camera.DefaultFarClippingPlane;
+            defaultCamera.fov = Camera_1.Camera.DefaultFieldOfView;
             defaultCamera.aspect = viewAspect;
             // force camera matrix to update; matrixAutoUpdate happens in render loop
             defaultCamera.updateMatrixWorld(true);
@@ -1344,9 +1344,6 @@ define("Models/Camera/CameraHelper", ["require", "exports", "three", "Models/Cam
             var defaultCamera = CameraHelper.getDefaultCamera(viewAspect);
             return defaultCamera;
         };
-        CameraHelper.DefaultFieldOfView = 37; // 35mm vertical : https://www.nikonians.org/reviews/fov-tables       
-        CameraHelper.DefaultNearClippingPlane = 0.1;
-        CameraHelper.DefaultFarClippingPlane = 10000;
         return CameraHelper;
     }());
     exports.CameraHelper = CameraHelper;
@@ -1753,7 +1750,7 @@ define("Models/Model", ["require", "exports"], function (require, exports) {
     }());
     exports.Model = Model;
 });
-define("Models/Camera/Camera", ["require", "exports", "Api/V1/Models/DtoModels", "Models/Model"], function (require, exports, Dto, Model_1) {
+define("Models/Camera/Camera", ["require", "exports", "Api/V1/Models/DtoModels", "three", "Models/Model"], function (require, exports, Dto, THREE, Model_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -1786,7 +1783,10 @@ define("Models/Camera/Camera", ["require", "exports", "Api/V1/Models/DtoModels",
                 name: 'Camera',
                 description: 'Perspective Camera',
             }) || this;
+            _this.boundClippingPlanes = true;
+            _this.projectId = 0;
             _this.viewCamera = camera.clone(true);
+            _this.viewCamera.getWorldDirection();
             return _this;
         }
         /**
@@ -1794,16 +1794,42 @@ define("Models/Camera/Camera", ["require", "exports", "Api/V1/Models/DtoModels",
          * @returns {Dto.Camera}
          */
         Camera.prototype.toDtoModel = function () {
+            var lookAt = this.viewCamera.getWorldDirection();
             var model = new Dto.Camera({
+                id: this.id,
                 name: this.name,
                 description: this.description,
-                position: this.viewCamera.position,
                 standardView: StandardView.None,
                 fieldOfView: this.viewCamera.fov,
                 near: this.viewCamera.near,
                 far: this.viewCamera.far,
+                boundClippingPlanes: this.boundClippingPlanes,
+                position: this.viewCamera.position,
+                lookAt: lookAt,
+                projectId: this.projectId
             });
             return model;
+        };
+        /**
+         * @description Constructs an instance from a DTP model.
+         * @returns {Dto.Camera}
+         */
+        Camera.fromDtoModel = function (dtoCamera) {
+            var perspectiveCamera = new THREE.PerspectiveCamera();
+            perspectiveCamera.position.set(dtoCamera.positionX, dtoCamera.positionY, dtoCamera.positionZ);
+            perspectiveCamera.fov = dtoCamera.fieldOfView;
+            perspectiveCamera.near = dtoCamera.near;
+            perspectiveCamera.far = dtoCamera.far;
+            var lookAt = new THREE.Vector3(dtoCamera.lookAtX, dtoCamera.lookAtY, dtoCamera.lookAtZ);
+            var lookAtNormalized = lookAt.normalize();
+            perspectiveCamera.lookAt(lookAtNormalized);
+            var camera = new Camera(perspectiveCamera);
+            camera.id = dtoCamera.id;
+            camera.name = dtoCamera.name;
+            camera.description = dtoCamera.description;
+            camera.boundClippingPlanes = dtoCamera.boundClippingPlanes;
+            camera.projectId = dtoCamera.projectId;
+            return camera;
         };
         Camera.DefaultFieldOfView = 37; // 35mm vertical : https://www.nikonians.org/reviews/fov-tables       
         Camera.DefaultNearClippingPlane = 0.1;
@@ -4911,7 +4937,7 @@ define("ModelExporters/OBJExporter", ["require", "exports", "three"], function (
     }());
     exports.OBJExporter = OBJExporter;
 });
-define("UnitTests/UnitTests", ["require", "exports", "three", "Api/V1/Models/DtoModels", "chai", "Api/V1/Interfaces/IDepthBuffer"], function (require, exports, THREE, Dto, chai_3, IDepthBuffer_1) {
+define("UnitTests/UnitTests", ["require", "exports", "three", "Api/V1/Models/DtoModels", "chai", "Models/Camera/Camera", "Api/V1/Interfaces/IDepthBuffer"], function (require, exports, THREE, Dto, chai_3, Camera_5, IDepthBuffer_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -4932,11 +4958,33 @@ define("UnitTests/UnitTests", ["require", "exports", "three", "Api/V1/Models/Dto
          */
         function UnitTests() {
         }
+        UnitTests.vectorsEqualWithinTolerance = function (v1, v2, tolerance) {
+            if (tolerance === void 0) { tolerance = UnitTests.DefaultVectorTolerance; }
+            var formatTag = 'TAG';
+            var errorMessage = "The " + formatTag + " values of the vectors are not equal within " + tolerance;
+            chai_3.assert.closeTo(v1.x, v2.x, tolerance, errorMessage.replace(formatTag, 'X'));
+            chai_3.assert.closeTo(v1.y, v2.y, tolerance, errorMessage.replace(formatTag, 'Y'));
+            chai_3.assert.closeTo(v1.z, v2.z, tolerance, errorMessage.replace(formatTag, 'Z'));
+        };
+        /**
+         * @description Tests whether a Perspective camera can be re-constructed from the DTO Camera properties.
+         * @static
+         */
+        UnitTests.cameraRoundTrip = function () {
+            var camera = new THREE.PerspectiveCamera(Camera_5.Camera.DefaultFieldOfView, 1.0, Camera_5.Camera.DefaultNearClippingPlane, Camera_5.Camera.DefaultFarClippingPlane);
+            // https://stackoverflow.com/questions/15696963/three-js-set-and-read-camera-look-vector/15697227#15697227
+            var worldVector = camera.getWorldDirection();
+            var lookAt = new THREE.Vector3(100, 200, 300);
+            var lookAtNormalized = lookAt.normalize();
+            camera.lookAt(lookAt);
+            worldVector = camera.getWorldDirection();
+            this.vectorsEqualWithinTolerance(lookAtNormalized, worldVector);
+        };
         /**
          * @description Round trip an array of bytes.
          * @static
          */
-        UnitTests.BinaryRoundTrip = function () {
+        UnitTests.binaryRoundTrip = function () {
             return __awaiter(this, void 0, void 0, function () {
                 var originalByteArray, iByte, depthBuffer, depthBufferModel, readByteArray;
                 return __generator(this, function (_a) {
@@ -4966,7 +5014,7 @@ define("UnitTests/UnitTests", ["require", "exports", "three", "Api/V1/Models/Dto
                 });
             });
         };
-        UnitTests.VertexMapping = function (depthBuffer, mesh) {
+        UnitTests.vertexMapping = function (depthBuffer, mesh) {
             var meshGeometry = mesh.geometry;
             meshGeometry.computeBoundingBox();
             var boundingBox = meshGeometry.boundingBox;
@@ -5025,11 +5073,12 @@ define("UnitTests/UnitTests", ["require", "exports", "three", "Api/V1/Models/Dto
             index = depthBuffer.getModelVertexIndex(center, boundingBox);
             chai_3.assert.equal(index, centerIndex);
         };
+        UnitTests.DefaultVectorTolerance = 0.001;
         return UnitTests;
     }());
     exports.UnitTests = UnitTests;
 });
-define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/V1/Models/DtoModels", "Models/Camera/Camera", "Models/Camera/CameraHelper", "Models/DepthBuffer/DepthBuffer", "Models/DepthBuffer/DepthBufferFactory", "System/EventManager", "System/Html", "Api/V1/Interfaces/IDepthBuffer", "Api/V1/Interfaces/IMesh", "Models/Mesh/Mesh", "UnitTests/UnitTests"], function (require, exports, dat, Dto, Camera_5, CameraHelper_5, DepthBuffer_2, DepthBufferFactory_2, EventManager_3, Html_3, IDepthBuffer_2, IMesh_1, Mesh_1, UnitTests_1) {
+define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/V1/Models/DtoModels", "Models/Camera/Camera", "Models/Camera/CameraHelper", "Models/DepthBuffer/DepthBuffer", "Models/DepthBuffer/DepthBufferFactory", "System/EventManager", "System/Html", "Api/V1/Interfaces/IDepthBuffer", "Api/V1/Interfaces/IMesh", "Models/Mesh/Mesh", "UnitTests/UnitTests"], function (require, exports, dat, Dto, Camera_6, CameraHelper_5, DepthBuffer_2, DepthBufferFactory_2, EventManager_3, Html_3, IDepthBuffer_2, IMesh_1, Mesh_1, UnitTests_1) {
     // ------------------------------------------------------------------------// 
     // ModelRelief                                                             //
     //                                                                         //                                                                          
@@ -5077,8 +5126,8 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/
          * @param model Newly loaded model.
          */
         ComposerController.prototype.onNewModel = function (event, model) {
-            this._composerView._modelView.modelViewer.setCameraToStandardView(Camera_5.StandardView.Front);
-            this._composerView._meshView.meshViewer.setCameraToStandardView(Camera_5.StandardView.Top);
+            this._composerView._modelView.modelViewer.setCameraToStandardView(Camera_6.StandardView.Front);
+            this._composerView._meshView.meshViewer.setCameraToStandardView(Camera_6.StandardView.Top);
         };
         /**
          * Generates a relief from the current model camera.
@@ -5139,7 +5188,7 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            camera = new Camera_5.Camera(this._composerView.modelView.modelViewer.camera);
+                            camera = new Camera_6.Camera(this._composerView.modelView.modelViewer.camera);
                             CameraHelper_5.CameraHelper.boundCameraClippingPlanes(camera.viewCamera, this._composerView.modelView.modelViewer.model);
                             cameraModel = camera.toDtoModel();
                             cameraModel.boundClippingPlanes = true;
@@ -5227,7 +5276,7 @@ define("Controllers/ComposerController", ["require", "exports", "dat-gui", "Api/
         ComposerController.prototype.saveRelief = function () {
             // WIP: Save the Mesh as an OBJ format file?
             // It may be more efficient to maintain Meshes in raw format since the size is substantially smaller.
-            UnitTests_1.UnitTests.BinaryRoundTrip();
+            UnitTests_1.UnitTests.cameraRoundTrip();
         };
         //#endregion
         /**
