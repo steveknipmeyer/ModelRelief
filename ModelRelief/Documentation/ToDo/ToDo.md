@@ -29,6 +29,11 @@ Some Markdown text with <span style="color:blue">some *blue* text
     Code Outline
 
 #####  Ubuntu
+tsc command line
+SQLite
+The language service could not be started.
+Pyton 3.X
+ModelReliefShell
 
 - [ ] Theme 
 - [ ] VSCode
