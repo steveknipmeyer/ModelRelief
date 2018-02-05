@@ -25,12 +25,18 @@ Some Markdown text with <span style="color:blue">some *blue* text
 - Manning Dependency Injection book.
 
 #####  Lambda
-    Center Editor Window
-    Code Outline
 
 #####  Ubuntu
+Why are addiional JavaScript files showing as additions in wwwroot?
+    Is .gitignore found?
+The shaders were not generated on the first invocation of gulp.
+    MR.ShaderSource is not defined
 tsc command line
+    Does the compiler need to be symbolically linked to a bin folder (e.g. usr/bin)
+How are user secrets handled?
+Why does node_modules se three 0.86 when package.json specifies ^0.86 which should admit 0.89 as the latest version.
 SQLite
+    The version is 2.87 on Ubuntu and 5.0 on Windows.
 The language service could not be started.
 Pyton 3.X
 ModelReliefShell
