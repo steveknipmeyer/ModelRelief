@@ -4,16 +4,18 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "ASPNET .Core Build",
-            "command": "dotnet build",
-            "dependsOn": "Compile TypeScript",
+            "label": "gulp",
             "type": "shell",
+            "command": "gulp default",
+            "options": {
+                "cwd": "${workspaceFolder}/ModelRelief"
+            },
             "group": "build",
             "presentation": {
                 "reveal": "always",
                 "panel": "dedicated"
             },
-            "problemMatcher": "$msCompile"
+            "problemMatcher": []
         },
         {
             "label": "Compile TypeScript",
@@ -34,6 +36,20 @@
                 "$tsc"
             ]
         },
+        {
+            "label": "ASPNET .Core Build",
+            "command": "dotnet build",
+            "dependsOn": "Compile TypeScript",
+            "type": "shell",
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": "$msCompile"
+        },
+
+
         {
             "label": "gulp serve",
             "type": "shell",

@@ -17,9 +17,7 @@
 <article class="markdown-body">
 
 ##### Commit Notes
-Add Gulp Debug launch profile.
-
-Some Markdown text with <span style="color:blue">some *blue* text
+Add a gulp build task.
 
 ##### Technical Education
 - Manning AspNet Core book.
@@ -30,19 +28,15 @@ Replace keyboard.
 
 #####  Ubuntu
 Shift-End does not work in the editor to select from the cursor position to EOL.
-Why are addiional JavaScript files showing as additions in wwwroot?
-    Is .gitignore found?
 The shaders were not generated on the first invocation of gulp.
-The line ending are wrong in Shaders.js.   
 tsc command line
     Does the compiler need to be symbolically linked to a bin folder (e.g. usr/bin)
 How are user secrets handled?
-Why does node_modules se three 0.86 when package.json specifies ^0.86 which should admit 0.89 as the latest version.
 SQLite
     The version is 2.87 on Ubuntu and 5.0 on Windows.
 The (PowerShell?) language service could not be started.
 Pyton 3.X
-ModelReliefShell
+ModelReliefShell.sh
     set ASPNETCORE_URLS=http://localhost:60655/
 
 Linux Book
@@ -50,6 +44,16 @@ Linux Book
 ### Tasks
 
 #### Short Term
+    Why does node_modules use three 0.86 when package.json specifies ^0.86 which should admit 0.89 as the latest version.
+    Extend .gitignore to include the third party source and build-generated files.
+        Remove the existing folders from source control.
+    Chain all the build steps into a single task.
+        gulp
+        TypeScript compilation
+        dotnet build
+    Configure VSCode for git diff.
+    Why does git use Notepad for the editor?
+        Is there a second git config file?
     Add gulp-eol support.
     TypeScript 2.7.*
 
@@ -683,7 +687,16 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
         64 bit support
 
 #### Git
-    TBD
+    Git Configuration: https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup
+    git config --list
+
+|Configuration File|Linux|Note|Windows|Note
+|----|----
+|system|/etc/gitconfig||C:\Program Files\Git\etc\gitconfig|none
+|system|||C:\ProgramData\Git\config
+|user|~/.gitconfig||C:\Users\$USER\\.gitconfig
+|user|~/.config/git/config|
+|project|.git/config||.git\config
 
 #### TypeScript
 
