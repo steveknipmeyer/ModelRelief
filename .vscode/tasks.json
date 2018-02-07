@@ -18,9 +18,12 @@
         {
             "label": "Compile TypeScript",
             "type": "shell",
-            "command": "tsc -p ModelRelief",
+            "command": "tsc -p ./ModelRelief",
             "windows": {
                 "command": "tsc -p ModelRelief "
+            },
+            "linux": {
+                "command": "./ModelRelief/node_modules/typescript/bin/tsc -p ./ModelRelief "
             },
             "group": "build",
             "presentation": {
