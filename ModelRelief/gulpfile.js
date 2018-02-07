@@ -138,15 +138,27 @@ function copyFile(file, sourceFolder, targetFolder, callBack) {
       }
     }
 }
+
 /// <summary>
 /// Appends lines to a file.
 /// </summary>
-function appendFile (fileName, lines, encoding) {
+function appendFile (fileName, lines, encoding, addEol) {
     var iLine;
 
     for (iLine = 0; iLine < lines.length; iLine++) {
-        fs.appendFileSync(fileName, lines[iLine], encoding);
+        var lineEnding = addEol ? EOL : '';
+        fs.appendFileSync(fileName, lines[iLine] + lineEnding, encoding);
     }
+}
+/// <summary>
+/// Performs OS EOL processing on a file.
+/// </summary>
+function processEOL(fileName){
+
+    var folder = path.dirname(fileName);
+    gulp.src(fileName)
+        .pipe(eol())
+        .pipe(gulp.dest(folder));
 }
 
 //-----------------------------------------------------------------------------
@@ -163,20 +175,18 @@ function generateShaders() {
         shaderOutputFolder  = siteConfig.jsRoot,
         shaderFilePath      = shaderOutputFolder + shaderFile,
         glslFiles           = [],
-        allShaderLines      = [];
+        declarationLines    = [],
+        shaderLines      = [];
     
-    allShaderLines = readFile(glslSourceFolder + shaderTemplateFile, true);
+    declarationLines = readFile(glslSourceFolder + shaderTemplateFile, true);
+    shaderLines = [];
 
     glslFiles = fs.readdirSync(glslSourceFolder);
     glslFiles.forEach(appendShader);
 
     deleteFile (shaderFilePath);
-    appendFile(shaderFilePath, allShaderLines, encodingAscii);
-
-    // EOL conversion to native OS
-    gulp.src(shaderFilePath)
-        .pipe(eol())
-        .pipe(gulp.dest(shaderOutputFolder));
+    appendFile(shaderFilePath, declarationLines, encodingAscii, true);    
+    appendFile(shaderFilePath, shaderLines, encodingAscii, false);
 
     /// <summary>
     /// Appends a .glsl source file to the output file.
@@ -199,8 +209,8 @@ function generateShaders() {
             shaderLine += thisShaderLines[iLine] + '\\n';
 
         shaderLine += '";';
-        allShaderLines.push(shaderLine);
-        allShaderLines.push('\n');
+        shaderLines.push(shaderLine);
+        shaderLines.push('\n');
 
 //      console.log(allShaderLines);
     }
