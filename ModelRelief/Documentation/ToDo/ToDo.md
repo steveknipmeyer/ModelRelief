@@ -27,30 +27,37 @@ Add a gulp build task.
 Replace keyboard.
 
 #####  Ubuntu
-Shift-End does not work in the editor to select from the cursor position to EOL.
-The shaders were not generated on the first invocation of gulp.
-tsc command line
-    Does the compiler need to be symbolically linked to a bin folder (e.g. usr/bin)
-How are user secrets handled?
-SQLite
-    The version is 2.87 on Ubuntu and 5.0 on Windows.
-The (PowerShell?) language service could not be started.
-Pyton 3.X
-ModelReliefShell.sh
-    set ASPNETCORE_URLS=http://localhost:60655/
+    %TEMP% is not defined so the log file is created as %TEMP%\Logs\ModelRelief.log.  
+    Shift-End does not work in the editor to select from the cursor position to EOL.  
+    The shaders were not generated on the first invocation of gulp.  
+    tsc command line  
+        Does the compiler need to be symbolically linked to a bin folder (e.g. usr/bin)  
+    How are user secrets handled?  
+    SQLite  
+        The version is 2.87 on Ubuntu and 5.0 on Windows.  
+    The (PowerShell?) language service could not be started.  
+    Pyton 3.X  
+    ModelReliefShell.sh  
+        set ASPNETCORE_URLS=http://localhost:60655/  
+    How should the appsettings.json files define the directory separator. Forward slash does not work with SQLServer.  
+        Does forward slash work with SQLite on Windows?  
 
 Linux Book
 
 ### Tasks
 
 #### Short Term
+    Add gulp-eol support.
+
     Why does node_modules use three 0.86 when package.json specifies ^0.86 which should admit 0.89 as the latest version.
     Chain all the build steps into a single task.
         gulp
         TypeScript compilation
         dotnet build
-    Add gulp-eol support.
-    TypeScript 2.7.*
+    TypeScript Versions
+        VSCode
+        TypeScript SDK
+        node-typescript(?)
 
     Camera
         The aspect ratio is required by Mesh.constructGraphics.

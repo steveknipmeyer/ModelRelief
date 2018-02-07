@@ -49,6 +49,7 @@ var siteConfig = new function() {
  
 var encodingAscii          = {encoding: 'ascii'};
 var encodingUnicode        = {encoding: 'utf8'};
+var EOL                    = require('os').EOL;
 
 var onError = function (err) {
     beep([0]);
@@ -56,6 +57,7 @@ var onError = function (err) {
 };
 
 var tsProject = ts.createProject('tsconfig.json');
+
 //-----------------------------------------------------------------------------
 //  Utilities
 //-----------------------------------------------------------------------------

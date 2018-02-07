@@ -1,7 +1,7 @@
 ﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
 //                                                                         //
-// Copyright (c) <2012-2017> Steve Knipmeyer                               //
+// Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 precision highp float;
 precision highp int;
