@@ -106,6 +106,15 @@
             "outFiles": [
                 "${workspaceFolder}/NodeWorkbench/**/*.js"
             ]
+        },
+        {
+            "name": "gulp Debug",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}/ModelRelief/node_modules/gulp/bin/gulp.js",
+            "args" : ["default"],
+            "cwd": "${workspaceRoot}/ModelRelief",
+//          "stopOnEntry": true
         }
     ]
 }
