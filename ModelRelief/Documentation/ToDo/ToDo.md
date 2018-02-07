@@ -25,6 +25,7 @@ Add a gulp build task.
 
 #####  Lambda
 Replace keyboard.
+Add Python path.
 
 #####  Ubuntu
     %TEMP% is not defined so the log file is created as %TEMP%\Logs\ModelRelief.log.  
@@ -41,14 +42,12 @@ Replace keyboard.
         set ASPNETCORE_URLS=http://localhost:60655/  
     How should the appsettings.json files define the directory separator. Forward slash does not work with SQLServer.  
         Does forward slash work with SQLite on Windows?  
-
+    Install a SQLite administration tool.
 Linux Book
 
 ### Tasks
 
 #### Short Term
-    Add gulp-eol support.
-
     Why does node_modules use three 0.86 when package.json specifies ^0.86 which should admit 0.89 as the latest version.
     Chain all the build steps into a single task.
         gulp

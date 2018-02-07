@@ -134,6 +134,7 @@ namespace ModelRelief.Services.Jobs
             string jsonFile = SerializeModelToWorkingStorage(mesh);
             string jsonFileArgument = $"-s \"{jsonFile}\"";
 
+            // TODO XPlatform: Review the handling of the command line arguments.
             // Add extra trailing \ to avoid ending folder path with \".
             // Otherwise, the workding folder will be parsed as having a trailing " in the solver command line arguments.
             string workingFolder = $"{StorageManager.WorkingStorageFolder(mesh.UserId)}\\";
