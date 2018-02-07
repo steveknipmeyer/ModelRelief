@@ -17,6 +17,7 @@
 <article class="markdown-body">
 
 ##### Commit Notes
+Add Gulp Debug launch profile.
 
 Some Markdown text with <span style="color:blue">some *blue* text
 
@@ -25,29 +26,32 @@ Some Markdown text with <span style="color:blue">some *blue* text
 - Manning Dependency Injection book.
 
 #####  Lambda
+Replace keyboard.
 
 #####  Ubuntu
+Shift-End does not work in the editor to select from the cursor position to EOL.
 Why are addiional JavaScript files showing as additions in wwwroot?
     Is .gitignore found?
 The shaders were not generated on the first invocation of gulp.
-    MR.ShaderSource is not defined
+The line ending are wrong in Shaders.js.   
 tsc command line
     Does the compiler need to be symbolically linked to a bin folder (e.g. usr/bin)
 How are user secrets handled?
 Why does node_modules se three 0.86 when package.json specifies ^0.86 which should admit 0.89 as the latest version.
 SQLite
     The version is 2.87 on Ubuntu and 5.0 on Windows.
-The language service could not be started.
+The (PowerShell?) language service could not be started.
 Pyton 3.X
 ModelReliefShell
+    set ASPNETCORE_URLS=http://localhost:60655/
 
-- [ ] Theme 
-- [ ] VSCode
-- [ ] Linux Book
+Linux Book
 
 ### Tasks
 
 #### Short Term
+    Add gulp-eol support.
+    TypeScript 2.7.*
 
     Camera
         The aspect ratio is required by Mesh.constructGraphics.

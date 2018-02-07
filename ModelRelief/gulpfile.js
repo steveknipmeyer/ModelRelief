@@ -14,6 +14,7 @@ Documents\bin\DebugGulp.bat
 'use strict';
 // Gulp
 var gulp         = require('gulp');
+var eol          = require('gulp-eol');
 var gutil        = require('gulp-util');
 var exec         = require('child_process').exec;
 var rename       = require('gulp-rename');
@@ -170,6 +171,10 @@ function generateShaders() {
     deleteFile (shaderFilePath);
     appendFile(shaderFilePath, allShaderLines, encodingAscii);
 
+    // EOL conversion to native OS
+    gulp.src(shaderFilePath)
+        .pipe(eol())
+        .pipe(gulp.dest(shaderOutputFolder));
 
     /// <summary>
     /// Appends a .glsl source file to the output file.
