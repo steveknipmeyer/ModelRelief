@@ -45,15 +45,10 @@ Linux Book
 
 #### Short Term
     Why does node_modules use three 0.86 when package.json specifies ^0.86 which should admit 0.89 as the latest version.
-    Extend .gitignore to include the third party source and build-generated files.
-        Remove the existing folders from source control.
     Chain all the build steps into a single task.
         gulp
         TypeScript compilation
         dotnet build
-    Configure VSCode for git diff.
-    Why does git use Notepad for the editor?
-        Is there a second git config file?
     Add gulp-eol support.
     TypeScript 2.7.*
 
