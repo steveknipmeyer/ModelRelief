@@ -177,7 +177,7 @@ node_modules/
 #################
 ## ModelRelief
 #################
+ModelRelief/Database/*.db
 */wwwroot/js/
-*/wwwroot/lib/
 */wwwroot/lib/**/*
 */wwwroot/store/
