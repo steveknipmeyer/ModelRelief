@@ -10,7 +10,7 @@
 	@media (max-width: 767px) {
 		.markdown-body {
 			padding: 15px;
-		}****
+		}
 	}
 </style>
 
