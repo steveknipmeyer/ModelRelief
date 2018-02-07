@@ -178,5 +178,6 @@ node_modules/
 ## ModelRelief
 #################
 */wwwroot/js/
+*/wwwroot/lib/
 */wwwroot/lib/**/*
 */wwwroot/store/
