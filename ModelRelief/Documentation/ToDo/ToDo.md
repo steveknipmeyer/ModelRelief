@@ -26,6 +26,9 @@ Add a gulp build task.
 #####  Lambda
 Replace keyboard.
 Add Python path.
+Install Hyper terminal.
+Add ModelRelief\Tools to path.
+npm install -g hpm-cli
 
 #####  Ubuntu
     %TEMP% is not defined so the log file is created as %TEMP%\Logs\ModelRelief.log.  

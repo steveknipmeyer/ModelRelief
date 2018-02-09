@@ -20,17 +20,13 @@ set MRDatabaseProvider=SQLServer
 set MRInitializeDatabase=False
 set MRInitializeUserStore=False
 
+path=%path%;C:\Program Files\Git
 path=%path%;%HOME%\Documents\Bin
 path=%path%;%MRSolution%Tools
 path=%path%;C:\Program Files (x86)\WinMerge
 path=%path%;C:\Program Files\KDiff3
 
 call "C:\Program Files\nodejs\nodevars.bat"
-
-:: Python
-:: Python 2.7 deprecated; Anaconda is now the default installation.
-:: path=%path%;C:\Python27\Tools\
-:: set PythonPath=C:\Python27\Tools\Lib\
 
 :: latest Python 3.X; Windows Python launcher (py.exe)
 set PY_PYTHON=3
