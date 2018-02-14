@@ -5,11 +5,11 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { ICamera }          from 'ICamera'
-import { IDepthBuffer }     from 'IDepthBuffer'
-import { IMeshTransform }   from 'IMeshTransform'
-import { IProject }         from 'IProject'
-import { IModel }           from 'IModel'
+import { ICamera }              from 'ICamera'
+import { IDepthBuffer }         from 'IDepthBuffer'
+import { IMeshTransform }       from 'IMeshTransform'
+import { IProject }             from 'IProject'
+import { IGeneratedFileModel }  from 'IGeneratedFileModel'
 
  /**
  *  Mesh file formats.
@@ -27,7 +27,7 @@ export enum MeshFormat {
  *  N.B. All properties in the interface are optional so that an initialization object can be used to construct the concrete class.
  *  @interface
  */
-export interface IMesh extends IModel {
+export interface IMesh extends IGeneratedFileModel {
 
     id?: number;
     name?: string;

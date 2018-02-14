@@ -7,7 +7,7 @@
 
 import { ICamera }          from 'ICamera'
 import { IProject }         from 'IProject'
-import { IModel }           from 'IModel'
+import { IFileModel }       from 'IFileModel'
 
  /**
  *  3D model file formats.
@@ -24,7 +24,7 @@ export enum Model3dFormat {
  *  N.B. All properties in the interface are optional so that an initialization object can be used to construct the concrete class.
  *  @interface
  */
-export interface IModel3d extends IModel {
+export interface IModel3d extends IFileModel {
 
     id?: number;
     name?: string;
@@ -38,6 +38,9 @@ export interface IModel3d extends IModel {
 
     cameraId?: number;
     camera?: ICamera;
+
+    // not exposed in UX; API only
+    fileTimeStamp?: Date;
 }
 
 

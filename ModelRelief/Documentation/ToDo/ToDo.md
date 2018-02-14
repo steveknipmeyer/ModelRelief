@@ -10,68 +10,62 @@
 	@media (max-width: 767px) {
 		.markdown-body {
 			padding: 15px;
-		}
+		}****
 	}
 </style>
 
 <article class="markdown-body">
 
 ##### Commit Notes
-Add a gulp build task.
 
 ##### Technical Education
 - Manning AspNet Core book.
 - Manning Dependency Injection book.
+- Linux Book
+
+#####  Gamma
 
 #####  Lambda
-Replace keyboard.
-Add Python path.
-Install Hyper terminal.
-Add ModelRelief\Tools to path.
-npm install -g hpm-cli
+- [ ] Replace keyboard.  
+- [ ] Add Python path.  
+- [ ] Install Hyper terminal.  
+- [ ] Add ModelRelief\Tools to path.  
+- [ ] npm install -g hpm-cli
 
 #####  Ubuntu
+    Ignore line endings in git source.
     %TEMP% is not defined so the log file is created as %TEMP%\Logs\ModelRelief.log.  
     Shift-End does not work in the editor to select from the cursor position to EOL.  
-    The shaders were not generated on the first invocation of gulp.  
     tsc command line  
         Does the compiler need to be symbolically linked to a bin folder (e.g. usr/bin)  
-    How are user secrets handled?  
     SQLite  
         The version is 2.87 on Ubuntu and 5.0 on Windows.  
     The (PowerShell?) language service could not be started.  
-    Pyton 3.X  
+    Python 3.X  
     ModelReliefShell.sh  
         set ASPNETCORE_URLS=http://localhost:60655/  
     How should the appsettings.json files define the directory separator. Forward slash does not work with SQLServer.  
         Does forward slash work with SQLite on Windows?  
     Install a SQLite administration tool.
-Linux Book
+
 
 ### Tasks
 
 #### Short Term
-    Why does node_modules use three 0.86 when package.json specifies ^0.86 which should admit 0.89 as the latest version.
-    Chain all the build steps into a single task.
-        gulp
-        TypeScript compilation
-        dotnet build
-    TypeScript Versions
-        VSCode
-        TypeScript SDK
-        node-typescript(?)
-
-    Camera
-        The aspect ratio is required by Mesh.constructGraphics.
-             let meshXYExtents : THREE.Vector2 = CameraHelper.getNearPlaneExtents(this.depthBuffer.camera);       
-             
-    DepthBuffer
-        Refactor DepthBuffer to remove dependency on THREE.Camera and use Camera.
-
 https://stackoverflow.com/questions/12702548/constructor-overload-in-typescript  
 Refactor constructor initialization.  
 - Make the initialization object optional.  
-- Use TypeSctipt destructuring.  
+- Use TypeScript destructuring.  
+
+gulp task must create wwwroot/js.
+
+Why does node_modules use three 0.86 when package.json specifies ^0.86 which should admit 0.89 as the latest version.
+
+  
+###### Camera  
+    Add AspectRatio to DomainModel.  
+        The aspect ratio is required by Mesh.constructGraphics.  
+        let meshXYExtents : THREE.Vector2 = CameraHelper.getNearPlaneExtents(this.depthBuffer.camera);  
 
 #### Front End
 <span style="color:red">
@@ -79,14 +73,12 @@ Refactor constructor initialization.
 </span><br><br>
 
 ##### FE Model Structure
-    Should the FE DTO models perform a GET in the constructor for a non-null id?
 
-    Camera
-        The methods are all static. 
-            Camera -> CameraHelper
+    DTO objects are used for Data TRANSFER to the server, either through web page endpoints or the API.
+        So, a web page is not bound to use a DTO object if the page does not use POST/PUT, etc.
 
     DepthBuffer
-        Width, Height : Should this be a calculated property based on the file format?
+        Width, Height : Should this be a calculated property based on the image/ raw file format?
 
     MeshTransform
         Height : Should this be a calculated property?
@@ -103,7 +95,7 @@ Refactor constructor initialization.
 - [X] Include the new (required) properties in any POST requests. 
 
 #### Back End
-##### Domain Models  
+##### Domain Modelscd misc
 - [x] Add new properties to the class in the DomainModels folder.   
 
 ##### DTO Models (Features\\\<Models>)
@@ -122,20 +114,68 @@ Refactor constructor initialization.
 - [x] Add the new properties to the ConstructValidModel method of the \<Model>TestModelFactory class.
 ___
 
-### Front End
+### Front End (JavaScript)
 
-DTO models are in an inheritance chain so they can share common functionality such as API HTTP requests.
+#### Interfaces
 
-|Interface||Application||DTO|
+The FE DTO interfaces are used to facilitate construction of DTO models from HTTP.
+
+|Graphics||DTO (HTTP)|
+|||--|
+|||IModel||
+|||IFileModel||
+|||IGeneratedFileModel||
+||
+|||ICamera||
+|||IDepthBuffer||
+|||IMesh||
+|||IMeshTransform||
+|||IModel3d||
+|||IProject||
+
+**DTO**
+```javascript
+export interface IModel 
+export interface IFileModel extends IModel
+export interface IGeneratedFileModel extends IFileModel
+
+export interface ICamera extends IModel
+export interface IDepthBuffer extends IGeneratedFileModel 
+export interface IMesh extends extends IGeneratedFileModel 
+export interface IMeshTransform extends IModel
+export interface IModel3d extends IFileModel
+export interface IProject extends IModel
+```
+
+
+#### Base Classes
+DTO models are in an inheritance chain so they can share common functionality such as API HTTP requests.  
+
+|Graphics||DTO (HTTP)|
 |--|
-|IModel||namespaceModel||Dto.Model|
-|IFileModel||namespace.FileModel||Dto.FileModel|
-|IGeneratedFileModel||namespace.GeneratedFileModel||Dto.GeneratedFileModel|
+|Model||Dto.Model|
+|FileModel||Dto.FileModel|
+|GeneratedFileModel||Dto.GeneratedFileModel|
+
+**Graphics**
+```javascript
+export class Model<T extends IModel> implements IModel
+export class FileModel<T extends IFileModel> extends Model<T> implements IFileModel
+export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel<T> implements IGeneratedFileModel
+```
+**DTO**
+```javascript
+export class Model<T extends IModel> implements IModel
+export class FileModel<T extends IFileModel> extends Model<T> implements IFileModel
+export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel<T> implements IGeneratedFileModel
+```
 
 
-|Application Model |Implementation||DTO|Implementation||Notes|
+#### Concrete Classes
+
+|Graphics |Implementation||DTO (HTTP) |Implementation||Notes|
 |-------|--------|--------|
-|Camera|||Dto.Camera|IModel, ICamera<br>Dto.Model||THREE.Camera|
+|Camera|IModel<br>Model||Dto.Camera|IModel, ICamera<br>Dto.Model||THREE.Camera|
 |DepthBuffer|||Dto.DepthBuffer|IGeneratedFileModel, IDepthBuffer<br>Dto.GeneratedFileModel||
 |Mesh|||Dto.Mesh|IGeneratedFileModel, IMesh<br>Dto.GeneratedFileModel||THREE.Mesh|
 |MeshTransform|||Dto.MeshTransform|IModel,IMeshTransform<br>Dto.Model|||
@@ -143,29 +183,92 @@ DTO models are in an inheritance chain so they can share common functionality su
 |**Project**|||Dto.Project|IModel, IProject<br>Dto.Model||
 |Relief|||||
 
+**Graphics**
+```javascript
+export class Camera extends Model<Camera>
+```
+**DTO**
+```javascript
+export class Camera extends Model<Camera> implements ICamera
+export class DepthBuffer extends GeneratedFileModel<DepthBuffer> implements IDepthBuffer
+export class Mesh extends GeneratedFileModel<Mesh> implements IMesh
+export class MeshTransform extends Model<MeshTransform> implements IMeshTransform
+export class Model3d extends FileModel<Model3d> implements IModel3d
+export class Project extends Model<Project> implements IProject
+```
+
 ___
-#### Back End 
+### Back End (NET Core)
+
+#### Interfaces  
+
+|DTO (HTTP)||Domain (DB)|
+|--|
+|Dto.IModel|||
+|Dto.IFileModel|
+|Dto.IGeneratedFileModel|
+
+**DTO**
+```csharp
+public interface IModel
+public interface IFileModel : IModel
+public interface IGeneratedFileModel : IFileModel
+```
+
+
+   
+#### Base Classes  
 Domain models are in an inheritance chain so they can share common functionality such as file operations.  
 <span style="color:red">
 Implementing a hierarchy of DTO models creates potential issues with DataAnnotation attributes sucn as Display(Name).
 </span>
 
-|Interface||Domain||DTO|
+|DTO (HTTP)||Domain (DB)|
 |--|
-|IModel||DomainModel||**Model**|
-|IFileModel||FileDomainModel||**FileModel**|
-|IGeneratedFileModel||GeneratedFileDomainModel||**GeneratedFileModel**|
+|||Domain.DomainModel|
+|||Domain.FileDomainModel|
+|||Domain.GeneratedFileDomainModel|
+
+**Domain**
+```csharp
+public abstract class DomainModel
+public abstract class FileDomainModel : DomainModel
+public abstract class GeneratedFileDomainModel : FileDomainModel
+```
 
 
-|Domain Models |Implementation||DTO|Implementation||Notes|
+#### Concrete Classes
+
+|DTO (HTTP) |Implementation|Notes||Domain Models (DB) |Implementation|
 |-------|--------|--------|
-|Domain.Camera|DomainModel||Dto.Camera|IModel<br>**Model**|||
-|Domain.DepthBuffer|GeneratedFileDomainModel||Dto.DepthBuffer|IGeneratedFileModel<br>**GeneratedFileModel**||
-|Domain.Mesh|GeneratedFileDomainModel||Dto.Mesh|IGeneratedFileModel<br>**GeneratedFileModel**||
-|Domain.MeshTransform|DomainModel||Dto.MeshTransform|IModel<br>**Model**||
-|Domain.Model3d|FileDomainModel||Dto.Model3d|IFileModel<br>**FileModel**||
-|Domain.Project|DomainModel||Dto.Project|IModel<br>**Model**|||
+|Dto.Camera|Dto.IModel|||Domain.Camera|DomainModel|
+|Dto.DepthBuffer|Dto.IGeneratedFileModel|||Domain.DepthBuffer|GeneratedFileDomainModel|
+|Dto.Mesh|Dto.IGeneratedFileModel|||Domain.Mesh|GeneratedFileDomainModel|
+|Dto.MeshTransform|Dto.IModel|||Domain.MeshTransform|DomainModel|
+|Dto.Model3d|Dto.IFileModel|||Domain.Model3d|FileDomainModel|
+|Dto.Project|Dto.IModel|||Domain.Project|DomainModel|
 |||||
+
+**DTO**  
+ModelReliefFeatures
+```javascript
+public class Camera : IModel
+public class DepthBuffer : IGeneratedFileModel
+public class Mesh : IGeneratedFileModel
+public class MeshTransform : IModel
+public class Model3d : IFileModel
+public class Project : IModel
+```
+**Domain**  
+ ModelRelief\Domain
+```csharp
+public class Camera : DomainModel
+public class DepthBuffer  : GeneratedFileDomainModel
+public class Mesh : GeneratedFileDomainModel
+public class MeshTransform : DomainModel
+public class Model3d : FileDomainModel
+public class Project : DomainModel
+```
 ___
 </div>
 
@@ -185,21 +288,6 @@ Only Test works because there is special middleware handling which provides auth
         Create, Edit
         Details, Delete
 
-##### Mesh Generation Prototype
-
-| Client | Server|
-|-------|--------|
-|Post Camera| |
-|Create DepthBuffer in-memory | |
-|Post DepthBuffer | |
-|Post DepthBuffer/id/file | |
-|Post MeshTransform| |
-|Post Mesh = Mesh (DepthBuffer, MeshTransform)| |
-|Patch Mesh.FileIsSynchronized = true  | |
-|| Solver <Mesh.json> filename |
-|| Post Mesh/id/file (raw file)|
-| **Get Mesh/id/file**||
-| **Construct Mesh from raw file**||
 
 
 ##### Critical Issues
@@ -226,6 +314,13 @@ Replace DateTime with a type that has more resolution.
 ###### Should FileTimeStamp be exposed?
     Should the assignment of FileSynchronized be deferred until the request has completed?
     FileStamp could potentially serve as the "complete" flag for a long-running request. 
+
+#### Builds
+Chain all the build steps into a single task.
+- gulp
+- TypeScript compilation
+- dotnet build
+
 
 #### Python Tasks
 ###### Virtual Evironment
@@ -703,6 +798,10 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 |project|.git/config||.git\config
 
 #### TypeScript
+    TypeScript Installations
+        VSCode
+        TypeScript SDK
+        node-typescript(?)
 
     How can a subclass call the property (method) of a super class?
         https://github.com/Microsoft/TypeScript/issues/4465
@@ -926,11 +1025,6 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     How is the ContosoUniversityCore model binding used?
         public class EntityModelBinder : IModelBinder
         It binds a database <model> looked up from the incoming Id.
-
-#### Cmder
-    ModelReliefShell.bat is started through this batch file located in D:\Users\Steve Knipmeyer\Documents\Bin\cmder\config\profile.d:
-        StartModelReliefShell.bat
-            "D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\Tools\ModelReliefShell.bat"
 
 #### ASPNET Core Environment Variables
 Environment variables set in the Visual Studio launchSettings.json **override** environment variables set in the shell.  

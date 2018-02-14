@@ -5,10 +5,10 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { ICamera }from 'ICamera'
-import { IModel3d }         from 'IModel3d'
-import { IProject }         from 'IProject'
-import { IModel }           from 'IModel'
+import { ICamera }              from 'ICamera'
+import { IModel3d }             from 'IModel3d'
+import { IProject }             from 'IProject'
+import { IGeneratedFileModel }  from 'IGeneratedFileModel'
 
  /**
  *  Depth buffer file formats.
@@ -26,7 +26,7 @@ export enum DepthBufferFormat {
  *  N.B. All properties in the interface are optional so that an initialization object can be used to construct the concrete class.
  *  @interface
  */
-export interface IDepthBuffer extends IModel {
+export interface IDepthBuffer extends IGeneratedFileModel {
 
     id?: number;
     name?: string;

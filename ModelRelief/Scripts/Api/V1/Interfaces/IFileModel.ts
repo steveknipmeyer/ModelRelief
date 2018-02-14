@@ -8,7 +8,7 @@
 import {IModel} from "IModel"
 
 /**
- *  Common interface for all generated file DTOs (e.g. Mesh, DepthBuffer).
+ *  Common interface for all file-backed DTOs (e.g. DepthBuffer, Mesh, Model3d).
  *  Not exposed in UX; API only.
  *  @interface
  */

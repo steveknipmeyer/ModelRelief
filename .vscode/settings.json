@@ -74,9 +74,9 @@
     // ---------------------------------
     // The folders to exclude when doing a full text search in the workspace.
     "search.exclude": {
+        "**/*.d.ts": true,
         "**/node_modules": true,
-        "**/Working/**/*": true,
-        "**/working/**/*": true,
+        "**/[Ww]ork*/**/*": true,
         "**/*.obj": true,
         "**/*.js": true,
     },
