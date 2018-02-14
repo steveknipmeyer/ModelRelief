@@ -161,6 +161,15 @@ function processEOL(fileName){
         .pipe(gulp.dest(folder));
 }
 
+/// <summary>
+/// Performs OS EOL processing on a file.
+/// </summary>
+function createDirectory(dir) {
+
+    if (!fs.existsSync(dir))
+        fs.mkdirSync(dir);
+}
+
 //-----------------------------------------------------------------------------
 //  Shader Tasks
 //-----------------------------------------------------------------------------
@@ -184,6 +193,8 @@ function generateShaders() {
     glslFiles = fs.readdirSync(glslSourceFolder);
     glslFiles.forEach(appendShader);
 
+    // ensure output folder exists
+    createDirectory(shaderOutputFolder);
     deleteFile (shaderFilePath);
     appendFile(shaderFilePath, declarationLines, encodingAscii, true);    
     appendFile(shaderFilePath, shaderLines, encodingAscii, false);

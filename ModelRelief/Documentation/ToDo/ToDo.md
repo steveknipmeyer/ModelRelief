@@ -53,10 +53,7 @@
 
 #### Short Term
 
-gulp task must create wwwroot/js.
-
 Why does node_modules use three 0.86 when package.json specifies ^0.86 which should admit 0.89 as the latest version.
-
   
 ###### Camera  
     Add AspectRatio to DomainModel.  
