@@ -4,6 +4,7 @@
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
+import * as THREE       from 'three'
 
 import { ICamera, StandardView }            from 'ICamera'
 import { IDepthBuffer, DepthBufferFormat }  from 'IDepthBuffer'
@@ -38,11 +39,18 @@ export class Model<T extends IModel> implements IModel{
      * Creates an instance of Model.
      * @param {IModel} parameters 
      */
-    constructor (parameters: IModel) {
+    constructor (parameters?: IModel) {
 
-        this.id            = parameters.id || undefined;
-        this.name          = parameters.name || undefined;
-        this.description   = parameters.description || undefined;
+        let {
+            id,
+            name,
+            description,
+    
+        } = parameters;
+
+        this.id            = id;
+        this.name          = name;
+        this.description   = description;
     }        
 
     /**
@@ -125,7 +133,7 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
      * Creates an instance of FileModel.
      * @param {IModel} parameters 
      */
-    constructor(parameters: IFileModel) {
+    constructor(parameters?: IFileModel) {
 
         super (parameters);
 
@@ -183,7 +191,7 @@ export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel
      * Creates an instance of GeneratedFileModel.
      * @param {IGeneratedFile} parameters 
      */
-    constructor(parameters: IGeneratedFileModel) {
+    constructor(parameters?: IGeneratedFileModel) {
 
         super (parameters);
 
@@ -221,31 +229,55 @@ export class Camera extends Model<Camera> implements ICamera {
      * Creates an instance of Camera.
      * @param {ICamera} parameters 
      */
-    constructor (parameters: ICamera) {
+    constructor (parameters?: ICamera) {
 
         super(parameters);
 
         this.endPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiCameras}`;
 
-        this.standardView           = parameters.standardView || undefined;
-        this.fieldOfView            = parameters.fieldOfView  || undefined;    
+        let {
+            standardView,
+            fieldOfView,
+        
+            near,
+            far,
+        
+            boundClippingPlanes,
+
+            position,
+            positionX,
+            positionY,
+            positionZ,
+        
+            lookAt,
+            lookAtX,
+            lookAtY,
+            lookAtZ,
+        
+            // Navigation Properties
+            projectId,
+            project,
+        } = parameters;
+
+        this.standardView           = standardView;
+        this.fieldOfView            = fieldOfView;    
     
-        this.near                   = parameters.near || undefined;
-        this.far                    = parameters.far || undefined;
+        this.near                   = near;
+        this.far                    = far;
     
-        this.boundClippingPlanes    = parameters.boundClippingPlanes || undefined;
+        this.boundClippingPlanes    = boundClippingPlanes;
     
-        this.positionX              = parameters.position ? parameters.position.x : (parameters.positionX ? parameters.positionX : undefined); 
-        this.positionY              = parameters.position ? parameters.position.y : (parameters.positionY ? parameters.positionY : undefined); 
-        this.positionZ              = parameters.position ? parameters.position.z : (parameters.positionZ ? parameters.positionZ : undefined); 
+        this.positionX              = position ? position.x : (positionX ? positionX : undefined); 
+        this.positionY              = position ? position.y : (positionY ? positionY : undefined); 
+        this.positionZ              = position ? position.z : (positionZ ? positionZ : undefined); 
     
-        this.lookAtX                = parameters.lookAt ? parameters.lookAt.x : (parameters.lookAtX ? parameters.lookAtX : undefined); 
-        this.lookAtY                = parameters.lookAt ? parameters.lookAt.y : (parameters.lookAtY ? parameters.lookAtY : undefined); 
-        this.lookAtZ                = parameters.lookAt ? parameters.lookAt.z : (parameters.lookAtZ ? parameters.lookAtZ : undefined); 
+        this.lookAtX                = lookAt ? lookAt.x : (lookAtX ? lookAtX : undefined); 
+        this.lookAtY                = lookAt ? lookAt.y : (lookAtY ? lookAtY : undefined); 
+        this.lookAtZ                = lookAt ? lookAt.z : (lookAtZ ? lookAtZ : undefined); 
     
         // Navigation Properties
-        this.projectId              = parameters.projectId || undefined;
-        this.project                = parameters.project || undefined;
+        this.projectId              = projectId;
+        this.project                = project;
         }
 
     /**
@@ -282,25 +314,41 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> implements IDep
      * Creates an instance of DepthBuffer.
      * @param {IDepthBuffer} parameters 
      */
-    constructor (parameters: IDepthBuffer) {
+    constructor (parameters?: IDepthBuffer) {
 
         super(parameters);
 
         this.endPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiDepthBuffers}`;
 
-        this.width                  = parameters.width || undefined;
-        this.height                 = parameters.height || undefined;
-        this.format                 = parameters.format|| undefined;
-    
+        let {
+            width,
+            height,
+            format,
+        
+            // Navigation Properties
+            projectId,
+            project,
+        
+            model3dId,
+            model3d,
+        
+            cameraId,
+            camera,
+        } = parameters;
+
+        this.width      = width;
+        this.height     = height;
+        this.format     = format;
+
         // Navigation Properties
-        this.projectId              = parameters.projectId || undefined;
-        this.project                = parameters.project || undefined;
+        this.projectId  = projectId;
+        this.project    = project;
     
-        this.model3dId              = parameters.model3dId || undefined;
-        this.model3d                = parameters.model3d || undefined;
+        this.model3dId  = model3dId;
+        this.model3d    = model3d;
     
-        this.cameraId               = parameters.cameraId || undefined;
-        this.camera                 = parameters.camera || undefined;
+        this.cameraId   = cameraId;
+        this.camera     = camera;
     }
 
     /**
@@ -338,26 +386,43 @@ export class Mesh extends GeneratedFileModel<Mesh> implements IMesh {
      * Creates an instance of a Mesh.
      * @param {Mesh} parameters 
      */
-    constructor (parameters: IMesh) {
+    constructor (parameters?: IMesh) {
 
         super(parameters);
 
         this.endPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiMeshes}`;
+ 
+        let {
+            format,
 
-        this.format                 = parameters.format || undefined;
+            // Navigation Properties
+            projectId,
+            project,
+        
+            cameraId,
+            camera,
+        
+            depthBufferId,
+            depthBuffer,
+        
+            meshTransformId,
+            meshTransform,
+        } = parameters;            
+
+        this.format         = format;
 
         // Navigation Properties
-        this.projectId              = parameters.projectId || undefined;
-        this.project                = parameters.project || undefined;
+        this.projectId      = projectId;
+        this.project        = project;
     
-        this.cameraId               = parameters.cameraId || undefined;
-        this.camera                 = parameters.camera || undefined;
+        this.cameraId       = cameraId;
+        this.camera         = camera;
     
-        this.depthBufferId          = parameters.depthBufferId || undefined;
-        this.depthBuffer            = parameters.depthBuffer || undefined;
+        this.depthBufferId  = depthBufferId;
+        this.depthBuffer    = depthBuffer;
     
-        this.meshTransformId        = parameters.meshTransformId || undefined;
-        this.meshTransform          = parameters.meshTransform || undefined;
+        this.meshTransformId  = meshTransformId;
+        this.meshTransform    = meshTransform;
     }
     
     /**
@@ -393,24 +458,39 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
      * Creates an instance of a MeshTransform.
      * @param {IMeshTransform} parameters 
      */
-    constructor (parameters: IMeshTransform) {
+    constructor (parameters?: IMeshTransform) {
 
         super(parameters);
 
         this.endPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiMeshTransforms}`;
 
-        this.width                  = parameters.width || undefined;
-        this.height                 = parameters.height || undefined;
-        this.depth                  = parameters.depth || undefined;
-    
-        this.tau                    = parameters.tau || undefined;
-        this.sigmaGaussianBlur      = parameters.sigmaGaussianBlur || undefined;
-        this.sigmaGaussianSmooth    = parameters.sigmaGaussianSmooth || undefined;
-        this.lambdaLinearScaling    = parameters.lambdaLinearScaling || undefined;
+        let {
+            width,
+            height,
+            depth,
+        
+            tau,
+            sigmaGaussianBlur,
+            sigmaGaussianSmooth,
+            lambdaLinearScaling,
+        
+            // Navigation Properties
+            projectId,
+            project,
+        } = parameters;
+
+        this.width  = width;
+        this.height = height;
+        this.depth  = depth;
+
+        this.tau                    = tau;
+        this.sigmaGaussianBlur      = sigmaGaussianBlur;
+        this.sigmaGaussianSmooth    = sigmaGaussianSmooth;
+        this.lambdaLinearScaling    = lambdaLinearScaling;
     
         // Navigation Properties
-        this.projectId              = parameters.projectId || undefined;
-        this.project                = parameters.project || undefined;
+        this.projectId              = projectId;
+        this.project                = project;
         }
     
     /**
@@ -442,20 +522,31 @@ export class Model3d extends FileModel<Model3d> implements IModel3d {
      * Creates an instance of a Model3d.
      * @param {IModel3d} parameters 
      */
-    constructor (parameters: IModel3d) {
+    constructor (parameters?: IModel3d) {
 
         super(parameters);
 
         this.endPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiModels}`;
 
-        this.format       = parameters.format || undefined;
+        let {
+            format,
+
+            // Navigation Properties
+            projectId,
+            project,
+        
+            cameraId,
+            camera,
+        } = parameters;
+
+        this.format       = format;
 
         // Navigation Properties
-        this.projectId    = parameters.projectId || undefined;
-        this.project      = parameters.project || undefined;
+        this.projectId    = projectId;
+        this.project      = project;
     
-        this.cameraId     = parameters.cameraId || undefined;
-        this.camera       = parameters.camera || undefined;
+        this.cameraId     = cameraId;
+        this.camera       = camera;
     }
 
     /**
@@ -478,7 +569,7 @@ export class Project extends Model<Project> implements IProject {
      * Creates an instance of a Project.
      * @param {Project} parameters 
      */
-    constructor (parameters: IProject) {
+    constructor (parameters?: IProject) {
 
         super(parameters);
 

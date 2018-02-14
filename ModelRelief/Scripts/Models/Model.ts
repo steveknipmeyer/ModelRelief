@@ -29,9 +29,14 @@ export class Model<T extends IModel> implements IModel {
      * @param {IModel} parameters 
      */
     constructor (parameters: IModel) {
+        let {
+            id,
+            name,
+            description,
+        } = parameters;
 
-        this.id            = parameters.id || undefined;
-        this.name          = parameters.name || undefined;
-        this.description   = parameters.description || undefined;
+        this.id            = id;
+        this.name          = name;
+        this.description   = description;
     }        
 }

@@ -85,18 +85,30 @@ export class DepthBufferFactory {
      * @constructor
      * @param parameters Initialization parameters (DepthBufferFactoryParameters)
      */
-    constructor(parameters : DepthBufferFactoryParameters) {
+    constructor(parameters? : DepthBufferFactoryParameters) {
 
-        // required
-        this._width           = parameters.width;
-        this._height          = parameters.height;
-        this._model           = parameters.model.clone(true);
-        this._camera          = parameters.camera;
+        let {
+            // required
+            width,
+            height,
+            model,
+            camera,
+
+            // optional
+            logDepthBuffer  = false,
+            boundedClipping = false,
+            addCanvasToDOM  = false
+        } = parameters;
+
+        this._width           = width;
+        this._height          = height;
+        this._model           = model.clone(true);
+        this._camera          = camera;
 
         // optional
-        this._logDepthBuffer  = parameters.logDepthBuffer  || false;
-        this._boundedClipping = parameters.boundedClipping || false;
-        this._addCanvasToDOM  = parameters.addCanvasToDOM  || false;
+        this._logDepthBuffer  = logDepthBuffer;
+        this._boundedClipping = boundedClipping;
+        this._addCanvasToDOM  = addCanvasToDOM;
 
         this._canvas = this.initializeCanvas();
         this.initialize();

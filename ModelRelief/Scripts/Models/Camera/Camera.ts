@@ -64,7 +64,7 @@ export class Camera extends Model<Camera> {
     viewCamera : THREE.PerspectiveCamera;
 
     boundClippingPlanes : boolean = true; 
-    projectId           : number  = 0;
+    projectId           : number;
 
     /**
      * @constructor
@@ -78,7 +78,7 @@ export class Camera extends Model<Camera> {
 
         this.viewCamera = camera.clone(true);            
     }
-    
+
     /**
      * @description Constructs an instance from a DTP model.
      * @returns {Dto.Camera} 

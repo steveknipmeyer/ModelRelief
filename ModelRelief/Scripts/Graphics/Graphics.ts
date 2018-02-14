@@ -7,7 +7,7 @@
 
 import * as THREE               from 'three'
 
-import {ILogger, ConsoleLogger}  from 'Logger'
+import {ILogger, ConsoleLogger} from 'Logger'
 import {Services}               from 'Services'
 
 export enum ObjectNames {

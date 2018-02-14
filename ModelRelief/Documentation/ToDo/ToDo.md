@@ -52,10 +52,6 @@
 ### Tasks
 
 #### Short Term
-https://stackoverflow.com/questions/12702548/constructor-overload-in-typescript  
-Refactor constructor initialization.  
-- Make the initialization object optional.  
-- Use TypeScript destructuring.  
 
 gulp task must create wwwroot/js.
 

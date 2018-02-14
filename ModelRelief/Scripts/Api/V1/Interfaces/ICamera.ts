@@ -5,8 +5,10 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { IProject }    from 'IProject'
-import { IModel } from 'IModel'
+import * as THREE       from 'three'
+
+import { IProject }     from 'IProject'
+import { IModel }       from 'IModel'
 
  /**
  *  Standard camera views.
@@ -42,11 +44,13 @@ export interface ICamera extends IModel {
 
     boundClippingPlanes?: boolean;
 
+    // vector or explicit coordinates
     position?: THREE.Vector3;
     positionX?: number;
     positionY?: number;
     positionZ?: number;
 
+    // vector or explicit coordinates
     lookAt?: THREE.Vector3;
     lookAtX?: number;
     lookAtY?: number;
