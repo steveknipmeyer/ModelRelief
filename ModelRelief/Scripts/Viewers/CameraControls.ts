@@ -23,28 +23,19 @@ import {Viewer}                                 from "Viewer"
  */
 class CameraControlSettings {
 
-    cameraSettings          : CameraSettings;
+    camera                  : Camera;
 
     fitView                 : () => void;
     addCameraHelper         : () => void;
     boundClippingPlanes     : () => void;
     
-    constructor(camera: THREE.PerspectiveCamera, fitView: () => any, addCwmeraHelper: () => any, boundClippingPlanes: () => any) {
+    constructor(camera: Camera, fitView: () => any, addCameraHelper: () => any, boundClippingPlanes: () => any) {
 
         this.fitView              = fitView;
-        this.addCameraHelper      = addCwmeraHelper;
+        this.addCameraHelper      = addCameraHelper;
         this.boundClippingPlanes  = boundClippingPlanes;
         
-        this.cameraSettings = {
-
-            position        : new THREE.Vector3(),  // not used in UI
-            target          : new THREE.Vector3(),  // not used in UI
-            near            : camera.near,
-            far             : camera.far,
-            fieldOfView     : camera.fov,
-            
-            standardView    : StandardView.Front
-        }
+        this.camera = camera;
     }
 }
 
@@ -56,6 +47,7 @@ export class CameraControls {
     _viewer                   : Viewer;                     // associated viewer
     _cameraControlSettings    : CameraControlSettings;      // UI settings
     
+    // The maximum and minimum values of these controls are modified by the boundClippingPlanes button so they are instance members.
     _controlNearClippingPlane : dat.GUIController;
     _controlFarClippingPlane  : dat.GUIController;
     
@@ -110,11 +102,11 @@ export class CameraControls {
         this._viewer.camera.updateProjectionMatrix();
 
         // UI controls
-        this._cameraControlSettings.cameraSettings.near = clippingPlanes.near;
+        this._viewer.camera.near = clippingPlanes.near;
         this._controlNearClippingPlane.min(clippingPlanes.near);
         this._controlNearClippingPlane.max (clippingPlanes.far);
         
-        this._cameraControlSettings.cameraSettings.far = clippingPlanes.far;
+        this._viewer.camera.far = clippingPlanes.far;
         this._controlFarClippingPlane.min(clippingPlanes.near);
         this._controlFarClippingPlane.max(clippingPlanes.far);
     }
@@ -127,7 +119,8 @@ export class CameraControls {
 
         let scope = this;
 
-        this._cameraControlSettings = new CameraControlSettings(this._viewer.camera, this.fitView.bind(this), this.addCameraHelper.bind(this), this.boundClippingPlanes.bind(this));
+        let camera = new Camera(this._viewer.camera);
+        this._cameraControlSettings = new CameraControlSettings(camera, this.fitView.bind(this), this.addCameraHelper.bind(this), this.boundClippingPlanes.bind(this));
 
         // Init dat.gui and controls for the UI
         let gui = new dat.GUI({
@@ -165,7 +158,7 @@ export class CameraControls {
             Bottom      : StandardView.Bottom
         };
 
-        let controlStandardViews = cameraOptions.add(this._cameraControlSettings.cameraSettings, 'standardView', viewOptions).name('Standard View').listen();
+        let controlStandardViews = cameraOptions.add(this._cameraControlSettings.camera, 'standardView', viewOptions).name('Standard View').listen();
         controlStandardViews.onChange ((viewSetting : string) => {
 
             let view : StandardView = parseInt(viewSetting, 10);
@@ -176,7 +169,7 @@ export class CameraControls {
         minimum = 25;
         maximum = 75;
         stepSize = 1;
-        let controlFieldOfView = cameraOptions.add(this._cameraControlSettings.cameraSettings, 'fieldOfView').name('Field of View').min(minimum).max(maximum).step(stepSize).listen();;
+        let controlFieldOfView = cameraOptions.add(this._viewer.camera, 'fov').name('Field of View').min(minimum).max(maximum).step(stepSize).listen();;
         controlFieldOfView.onChange(function (value) {
 
             scope._viewer.camera.fov = value;
@@ -187,7 +180,7 @@ export class CameraControls {
         minimum  =   0.1;
         maximum  = 100;
         stepSize =   0.1;
-        this._controlNearClippingPlane = cameraOptions.add(this._cameraControlSettings.cameraSettings, 'near').name('Near Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
+        this._controlNearClippingPlane = cameraOptions.add(this._viewer.camera, 'near').name('Near Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
         this._controlNearClippingPlane.onChange (function (value) {
 
             scope._viewer.camera.near = value;
@@ -198,7 +191,7 @@ export class CameraControls {
         minimum  =     1;
         maximum  = 10000;
         stepSize =     0.1;
-        this._controlFarClippingPlane = cameraOptions.add(this._cameraControlSettings.cameraSettings, 'far').name('Far Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
+        this._controlFarClippingPlane = cameraOptions.add(this._viewer.camera, 'far').name('Far Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
         this._controlFarClippingPlane.onChange (function (value) {
 
             scope._viewer.camera.far = value;
@@ -218,10 +211,6 @@ export class CameraControls {
     synchronizeCameraSettings (view? : StandardView) {
 
         if (view)
-            this._cameraControlSettings.cameraSettings.standardView = view;
-        
-        this._cameraControlSettings.cameraSettings.near         = this._viewer.camera.near;
-        this._cameraControlSettings.cameraSettings.far          = this._viewer.camera.far;
-        this._cameraControlSettings.cameraSettings.fieldOfView  = this._viewer.camera.fov;
+            this._cameraControlSettings.camera.standardView = view;
     }
 }

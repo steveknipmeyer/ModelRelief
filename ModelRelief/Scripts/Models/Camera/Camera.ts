@@ -67,7 +67,9 @@ export class Camera extends Model<Camera> {
             description: 'Perspective Camera',
         });
 
-        this.viewCamera = camera.clone(true);            
+        // WIP: Should the camera be cloned?     
+//      this.viewCamera = camera.clone(true);            
+        this.viewCamera = camera;            
 
         this.standardView        = StandardView.None;   
         this.boundClippingPlanes = false; 
