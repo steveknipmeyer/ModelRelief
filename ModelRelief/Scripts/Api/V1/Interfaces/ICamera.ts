@@ -37,11 +37,10 @@ export interface ICamera extends IModel {
     description?: string;
 
     standardView?: StandardView; 
-    fieldOfView?: number;
 
+    fieldOfView?: number;
     near?: number;
     far?: number;
-
     boundClippingPlanes?: boolean;
 
     // vector or explicit coordinates

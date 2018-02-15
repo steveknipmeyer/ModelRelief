@@ -7,8 +7,8 @@
 import * as Dto                     from 'DtoModels' 
 import * as THREE                   from 'three' 
 
-import {StandardView}               from 'Camera'
-import {ILogger, ConsoleLogger}      from 'Logger'
+import {StandardView}               from "ICamera"
+import {ILogger, ConsoleLogger}     from 'Logger'
 import {Graphics}                   from "Graphics"
 import {OBJLoader}                  from "OBJLoader"
 import {Services}                   from 'Services'

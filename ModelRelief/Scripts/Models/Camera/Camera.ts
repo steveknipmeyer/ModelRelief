@@ -8,12 +8,12 @@
 import * as Dto          from 'DtoModels'
 import * as THREE        from 'three'
 
-import { ICamera }            from 'ICamera'
-import { DepthBufferFactory } from 'DepthBufferFactory'
-import { Graphics }           from 'Graphics'
-import { Model }              from 'Model';
-import { Services }           from 'Services'
-import { StopWatch }          from 'StopWatch'
+import { ICamera, StandardView }    from 'ICamera'
+import { DepthBufferFactory }       from 'DepthBufferFactory'
+import { Graphics }                 from 'Graphics'
+import { Model }                    from 'Model';
+import { Services }                 from 'Services'
+import { StopWatch }                from 'StopWatch'
 
 /**
  * @description Caamera settings.
@@ -31,16 +31,6 @@ export interface CameraSettings {
     standardView    : StandardView;   
 }
 
-export enum StandardView {
-    None,
-    Front,
-    Back,
-    Top,
-    Bottom,
-    Left,
-    Right,
-    Isometric
-}
 /**
  * @description Camera clipping planes tuple.
  * @export
@@ -63,7 +53,8 @@ export class Camera extends Model<Camera> {
     
     viewCamera : THREE.PerspectiveCamera;
 
-    boundClippingPlanes : boolean = true; 
+    standardView        : StandardView;   
+    boundClippingPlanes : boolean; 
     projectId           : number;
 
     /**
@@ -77,14 +68,18 @@ export class Camera extends Model<Camera> {
         });
 
         this.viewCamera = camera.clone(true);            
-    }
+
+        this.standardView        = StandardView.None;   
+        this.boundClippingPlanes = false; 
+        }
 
     /**
      * @description Constructs an instance from a DTP model.
      * @returns {Dto.Camera} 
      */
     static fromDtoModel(dtoCamera : Dto.Camera) : Camera {
-
+        
+        // construct PerspectiveCamera from DTO properties
         let perspectiveCamera = new THREE.PerspectiveCamera();
         
         perspectiveCamera.position.set(dtoCamera.positionX, dtoCamera.positionY, dtoCamera.positionZ);
@@ -96,11 +91,13 @@ export class Camera extends Model<Camera> {
         let lookAtNormalized = lookAt.normalize();
         perspectiveCamera.lookAt(lookAtNormalized);
 
+        // constructor
         let camera = new Camera (perspectiveCamera);
         camera.id          = dtoCamera.id;
         camera.name        = dtoCamera.name;
         camera.description = dtoCamera.description;
         
+        camera.standardView        = dtoCamera.standardView;
         camera.boundClippingPlanes = dtoCamera.boundClippingPlanes;
         camera.projectId           = dtoCamera.projectId;
 
@@ -120,12 +117,11 @@ export class Camera extends Model<Camera> {
             name            : this.name,
             description     : this.description,    
 
-            standardView    : StandardView.None,
-            fieldOfView     : this.viewCamera.fov,
+            standardView    : this.standardView,
 
+            fieldOfView     : this.viewCamera.fov,
             near            : this.viewCamera.near,
             far             : this.viewCamera.far,
-
             boundClippingPlanes : this.boundClippingPlanes,
 
             position        : this.viewCamera.position,

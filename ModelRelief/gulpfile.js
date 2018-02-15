@@ -194,8 +194,9 @@ function generateShaders() {
     glslFiles.forEach(appendShader);
 
     // ensure output folder exists
-    createDirectory(shaderOutputFolder);
+    createDirectory(shaderOutputFolder);   
     deleteFile (shaderFilePath);
+    
     appendFile(shaderFilePath, declarationLines, encodingAscii, true);    
     appendFile(shaderFilePath, shaderLines, encodingAscii, false);
 

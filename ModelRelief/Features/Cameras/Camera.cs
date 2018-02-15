@@ -25,8 +25,8 @@ namespace ModelRelief.Dto
         public string Description { get; set; }
 
         public StandardView StandardView { get; set; }
-        public double FieldOfView { get; set; }
 
+        public double FieldOfView { get; set; }
         public double Near { get; set; }
         public double Far { get; set; }
         [Display(Name = "Bounded")]

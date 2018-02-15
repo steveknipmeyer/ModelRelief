@@ -6,12 +6,13 @@
 "use strict";
 
 import * as THREE               from 'three'
-import {Camera, StandardView}   from 'Camera'
+import {Camera}                 from 'Camera'
 import {CameraHelper }          from 'CameraHelper'
 import {CameraControls}         from 'CameraControls'
 import {EventManager}           from 'EventManager'
 import {Graphics, ObjectNames}  from 'Graphics'
-import {ILogger}                 from 'Logger'
+import {StandardView}           from "ICamera"
+import {ILogger}                from 'Logger'
 import {Materials}              from 'Materials'
 import {Services}               from 'Services'
 import {TrackballControls}      from 'TrackballControls'

@@ -7,13 +7,13 @@
 
 import * as THREE                       from 'three'
 
-import {StandardView}                   from 'Camera'
 import {DepthBufferFactory}             from "DepthBufferFactory"
 import {EventManager, EventType}        from 'EventManager'
 import {Graphics}                       from 'Graphics'
+import {StandardView}                   from "ICamera"
 import {Materials}                      from 'Materials'
 import {ModelViewerControls}            from "ModelViewerControls"
-import {ILogger}                         from 'Logger'
+import {ILogger}                        from 'Logger'
 import {TrackballControls}              from 'TrackballControls'
 import {Services}                       from 'Services'
 import {Viewer}                         from 'Viewer'

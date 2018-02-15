@@ -53,9 +53,17 @@
 
 #### Short Term
 
-Why does node_modules use three 0.86 when package.json specifies ^0.86 which should admit 0.89 as the latest version.
   
 ###### Camera  
+    
+    Remove CameraSettings with ICamera. The UI controls should operate directly on the PerspectiveCamera.
+        They are intersecting structures.
+
+    Should StandardView be removed as a property?
+        Setting StandardView from the API would need to set the related properties such as Position and LookAt.
+        The control should exist in the UI.
+            When the view is interactively changed, it should invalidate the StandardView in the UI.
+
     Add AspectRatio to DomainModel.  
         The aspect ratio is required by Mesh.constructGraphics.  
         let meshXYExtents : THREE.Vector2 = CameraHelper.getNearPlaneExtents(this.depthBuffer.camera);  
@@ -1050,5 +1058,11 @@ However, MRInitializeUserStore may be set if the application is started through 
         // https://stackoverflow.com/questions/16153047/net-invoke-async-method-and-await
         var method = typeof(ValidatedHandler<TRequest, TResponse>).GetMethod(nameof(ModelExistsAsync)).MakeGenericMethod(referenceType);
         var modelExists = await (Task<bool>)method.Invoke(this, new object[] {claimsPrincipal, (int) propertyValue});
+
+#### NPM Package Manager
+https://semver.npmjs.com/
+
+Why does node_modules use three 0.86 when package.json specifies ^0.86 which should admit 0.89 as the latest version.
+    It seems that a leading zero for the major version is ignored and only the 2nd and 3rd fields are processed.
 
 </article>

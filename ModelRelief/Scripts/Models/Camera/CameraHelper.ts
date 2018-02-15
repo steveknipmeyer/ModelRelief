@@ -7,11 +7,12 @@
 
 import * as THREE        from 'three'
 
-import { Camera, ClippingPlanes, StandardView } from 'Camera'
-import { DepthBufferFactory }                   from 'DepthBufferFactory'
-import { Graphics }                             from 'Graphics'
-import { Services }                             from 'Services'
-import { StopWatch }                            from 'StopWatch'
+import { Camera, ClippingPlanes} from 'Camera'
+import { DepthBufferFactory }    from 'DepthBufferFactory'
+import {StandardView}            from "ICamera"
+import { Graphics }              from 'Graphics'
+import { Services }              from 'Services'
+import { StopWatch }             from 'StopWatch'
 
 /**
  * Camera

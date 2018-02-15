@@ -7,10 +7,11 @@
 
 import * as THREE                   from 'three'
 
-import {Camera, StandardView}       from 'Camera'
+import {Camera}                     from 'Camera'
 import {DepthBuffer}                from 'DepthBuffer'
 import {Graphics}                   from 'Graphics'
-import {ILogger, HTMLLogger}         from 'Logger'
+import {StandardView}               from "ICamera"
+import {ILogger, HTMLLogger}        from 'Logger'
 import {MathLibrary}                from 'Math'
 import {Mesh}                       from 'Mesh'
 import {MeshViewerControls}         from 'MeshViewerControls'

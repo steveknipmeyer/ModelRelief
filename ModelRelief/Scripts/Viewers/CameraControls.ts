@@ -8,9 +8,10 @@
 import * as THREE  from 'three' 
 import * as dat    from 'dat-gui'
 
-import {Camera, CameraSettings, StandardView}   from 'Camera'
+import {Camera, CameraSettings}                 from 'Camera'
 import {CameraHelper }                          from 'CameraHelper'
 import {ElementAttributes, ElementIds}          from "Html"
+import {StandardView}                           from 'ICamera'
 import {ILogger, ConsoleLogger}                 from 'Logger'
 import {Graphics, ObjectNames}                  from "Graphics"
 import {Services}                               from 'Services'

@@ -206,11 +206,10 @@ export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel
 export class Camera extends Model<Camera> implements ICamera {
 
     standardView: StandardView;
-    fieldOfView: number;
 
+    fieldOfView: number;
     near: number;
     far: number;
-
     boundClippingPlanes: boolean;
 
     positionX: number;

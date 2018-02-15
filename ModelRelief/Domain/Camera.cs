@@ -40,11 +40,11 @@ namespace ModelRelief.Domain
         public double LookAtZ { get; set; }
 
         [DependentFileProperty]
+        public double FieldOfView { get; set; }
+        [DependentFileProperty]
         public double Near { get; set; }
         [DependentFileProperty]
         public double Far { get; set; }
-        [DependentFileProperty]
-        public double FieldOfView { get; set; }
         [DependentFileProperty]
         public bool BoundClippingPlanes { get; set; }
 

@@ -10,7 +10,7 @@ import * as dat    from 'dat-gui'
 import * as Dto    from "DtoModels";
 
 import {assert}                             from 'chai';
-import {Camera, StandardView}               from "Camera"
+import {Camera}                             from "Camera"
 import {CameraHelper}                       from "CameraHelper"
 import {ComposerView}                       from "ComposerView"
 import {DepthBuffer}                        from "DepthBuffer"
@@ -19,6 +19,7 @@ import {EventManager, EventType, MREvent}   from 'EventManager'
 import {ElementAttributes, ElementIds}      from "Html"
 import {ContentType, HttpLibrary, 
         MethodType, ServerEndPoints}        from "Http"
+import {StandardView}                       from "ICamera"
 import {DepthBufferFormat}                  from 'IDepthBuffer'
 import {MeshFormat}                         from 'IMesh'
 import {ILogger, ConsoleLogger}             from 'Logger'
