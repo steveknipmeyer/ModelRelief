@@ -6,16 +6,21 @@
 
 "use strict";
 
+import * as Dto   from 'DtoModels'
 import * as THREE from 'three'
 
 import { assert }                   from 'chai'
 import { Camera }                   from 'Camera'
 import { CameraHelper }             from 'CameraHelper'
 import { DepthBuffer }              from 'DepthBuffer'
+import {GeneratedFileModel}         from 'GeneratedFileModel'
 import { Graphics }                 from 'Graphics'
 import { ILogger, ConsoleLogger }   from 'Logger'
 import { MathLibrary }              from 'Math'
+import { MeshFormat }               from 'IMesh'
+import { MeshTransform }            from 'MeshTransform'
 import { Model }                    from 'Model'
+import { Project }                  from 'Project'
 import { Services }                 from 'Services'
 import { StopWatch }                from 'StopWatch'
 import { Tools }                    from 'Tools'
@@ -112,7 +117,7 @@ class MeshCache {
  * @export
  * @class Mesh
  */
-export class Mesh  {
+export class Mesh extends GeneratedFileModel<Mesh> {
 
     static Cache                              : MeshCache = new MeshCache();
     static readonly MeshModelName             : string = 'ModelMesh';
@@ -128,11 +133,26 @@ export class Mesh  {
         shininess : 100
     };
 
-    _width           : number;          // width resolution of the DB
-    _height          : number;          // height resolution of the DB
-    _depthBuffer     : DepthBuffer;     // depth buffer
+    format: MeshFormat;
 
-    _logger          : ILogger;          // logger
+    // Navigation Properties    
+    projectId : number;
+    project   : Project;
+
+    cameraId : number;
+    camera   : Camera;             
+
+    depthBufferId : number;
+    depthBuffer   : DepthBuffer;
+
+    meshTransformId : number;
+    meshTransform   : MeshTransform;
+
+    // Private
+    _width      : number;          // width resolution of the DB
+    _height     : number;          // height resolution of the DB
+
+    _logger     : ILogger;          // logger
 
     /**
      * @constructor
@@ -140,13 +160,67 @@ export class Mesh  {
      */
     constructor(parameters: MeshParameters) {
 
+        super({
+            name: 'Mesh', 
+            description: 'Mesh',
+        });
+
         // required
         this._width       = parameters.width;
         this._height      = parameters.height;
-        this._depthBuffer = parameters.depthBuffer;
+        this.depthBuffer  = parameters.depthBuffer;
 
         this.initialize();
     }
+
+    /**
+     * @description Constructs an instance from a DTO model.
+     * @returns {Mesh} 
+     */
+    static fromDtoModel(dtoMesh : Dto.Mesh) : Mesh {
+
+        let parameters : MeshParameters= {
+            width       : 0,                    // N.B. != Dto.Mesh
+            height      : 0,                    // N.B. != Dto.Mesh
+            depthBuffer : undefined             // N.B. != Dto.Mesh
+        };
+
+        // constructor
+        let mesh = new Mesh (parameters);
+
+        mesh.id          = dtoMesh.id;
+        mesh.name        = dtoMesh.name;
+        mesh.description = dtoMesh.description;       
+
+        mesh.format         = dtoMesh.format;
+        mesh.projectId      = dtoMesh.projectId;
+        mesh.depthBufferId  = dtoMesh.depthBufferId
+        mesh.meshTransformId= dtoMesh.meshTransformId;
+
+        return mesh;
+    }
+
+    /**
+     * @description Returns a DTO Mesh from the instance.
+     * @returns {Dto.Mesh} 
+     */
+    toDtoModel() : Dto.Mesh {
+
+        let model = new Dto.Mesh({
+            id              : this.id,
+            name            : this.name,
+            description     : this.description,    
+
+            format          : this.format,
+        
+            projectId       : this.projectId,
+            cameraId        : this.cameraId,
+            depthBufferId   : this.depthBufferId,
+            meshTransformId : this.meshTransformId,
+        });
+
+        return model;
+    }        
 
     //#region Properties
     /**
@@ -165,13 +239,6 @@ export class Mesh  {
         return this._height;
     }
 
-    /**
-     * Returns the associated DepthBuffer.
-     * @returns DepthBuffer
-     */
-    get depthBuffer(): DepthBuffer {
-        return this._depthBuffer;
-    }
     //#endregion
 
     //#region Initialization    
@@ -217,10 +284,10 @@ export class Mesh  {
         let originX : number = meshLowerLeft.x + (column * faceSize);
         let originY : number = meshLowerLeft.y + (row    * faceSize);
 
-        let lowerLeft   = new THREE.Vector3(originX + 0,         originY + 0,        this._depthBuffer.depth(row + 0, column+ 0));             // baseVertexIndex + 0
-        let lowerRight  = new THREE.Vector3(originX + faceSize,  originY + 0,        this._depthBuffer.depth(row + 0, column + 1));            // baseVertexIndex + 1
-        let upperLeft   = new THREE.Vector3(originX + 0,         originY + faceSize, this._depthBuffer.depth(row + 1, column + 0));            // baseVertexIndex + 2
-        let upperRight  = new THREE.Vector3(originX + faceSize,  originY + faceSize, this._depthBuffer.depth(row + 1, column + 1));            // baseVertexIndex + 3
+        let lowerLeft   = new THREE.Vector3(originX + 0,         originY + 0,        this.depthBuffer.depth(row + 0, column+ 0));             // baseVertexIndex + 0
+        let lowerRight  = new THREE.Vector3(originX + faceSize,  originY + 0,        this.depthBuffer.depth(row + 0, column + 1));            // baseVertexIndex + 1
+        let upperLeft   = new THREE.Vector3(originX + 0,         originY + faceSize, this.depthBuffer.depth(row + 1, column + 0));            // baseVertexIndex + 2
+        let upperRight  = new THREE.Vector3(originX + faceSize,  originY + faceSize, this.depthBuffer.depth(row + 1, column + 1));            // baseVertexIndex + 3
 
         facePair.vertices.push(
              lowerLeft,             // baseVertexIndex + 0
@@ -255,7 +322,7 @@ export class Mesh  {
        mesh.scale.y = scale;
        
        let meshVertices = (<THREE.Geometry>mesh.geometry).vertices;
-       let depthCount = this._depthBuffer.depths.length;
+       let depthCount = this.depthBuffer.depths.length;
        assert(meshVertices.length === depthCount);
 
        for (let iDepth = 0; iDepth < depthCount; iDepth++) {
@@ -310,7 +377,7 @@ export class Mesh  {
        
        // The mesh size is in real world units to match the depth buffer offsets which are also in real world units.
        // Find the size of the near plane to size the mesh to the model units.
-       let meshXYExtents : THREE.Vector2 = CameraHelper.getNearPlaneExtents(this.depthBuffer.camera);       
+       let meshXYExtents : THREE.Vector2 = CameraHelper.getNearPlaneExtents(this.depthBuffer.camera.viewCamera);       
        
        if (!material)
            material = new THREE.MeshPhongMaterial(Mesh.DefaultMeshPhongMaterialParameters);

@@ -17,12 +17,8 @@
 <article class="markdown-body">
 
 ##### Commit Notes
-Camera: Add Quaternion, Scale, Aspect, Up properties.
-Camera: Remove LookAt, StandardView and BoundClipping properties.
-Resolve several issue with Workbench pages.
-    @section block is required to correctly load scripts.
-Graphics.removeAllByName uses object.parent.remove not scene.remove to prevent infinite loop.
-_Layout loads workbench.css for all environments.
+Subclass FE classes from base classes.
+Change Camera.DefaultFarCippingPlane to 1000.
 
 ##### Technical Education
 - Manning AspNet Core book.
@@ -64,11 +60,10 @@ Update database schema diagram.
 ###### Camera Issues
 
 - [ ] The quaternion and up vector do not roundtrip although the visual camera appears unchanged.  The matrix and projectionMatrix are unchanged!
-- [ ] Cameras do not handle offsets (pan).
+- [ ] Cameras do not handle offsets (pan). Is this a TrackBallControl issue?
 - [ ] Randomly generated cameras do not roundtrip the matrix property.
 
 ###### AspectRatio  
-Review all references to camera and view aspect ratios. CameraControls uses this._viewer.aspect.
 
 The aspect ratio is required by Mesh.constructGraphics.  
 ```
@@ -82,7 +77,28 @@ When the view camera is interactively changed, it should invalidate the Standard
     The 'dotnet run' workflow runs as 'Production'!  
 </span><br><br>
 
+##### Clipping Planes
+
+    Investigate why the clipping plane CameraControls are not editable.
+    Does repeared adjustment of the clipping planes leads to bad mesh results?
+    Should the near clipping plane always be adjusted to the front extent?
+
 ##### FE Model Structure
+    Review all FE claaes.
+    Adopt a consistent form for Import statements.
+    Adopt a consistemt layout for "use strict";
+    Adopt a consistent phrasing for the FE description property.
+
+    Where should Model3d replace Mesh in the FE classes?
+
+    Make all FE constructors in terms of optional initialization parameters.
+        Document all class propeties.
+        Use a consistent layout of DTO, public and private properties.
+        Which properties should be initialized?
+
+    What is the role of <model>.fromDtoModel?   
+        Some initialization cannot be done without involved processing of related members.
+        For example, constructing a DeothBuffer requires the backing file data.
 
     DTO objects are used for Data TRANSFER to the server, either through web page endpoints or the API.
         So, a web page is not bound to use a DTO object if the page does not use POST/PUT, etc.
@@ -192,16 +208,21 @@ export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel
 |Graphics |Implementation||DTO (HTTP) |Implementation||Notes|
 |-------|--------|--------|
 |Camera|IModel<br>Model||Dto.Camera|IModel, ICamera<br>Dto.Model||THREE.Camera|
-|DepthBuffer|||Dto.DepthBuffer|IGeneratedFileModel, IDepthBuffer<br>Dto.GeneratedFileModel||
-|Mesh|||Dto.Mesh|IGeneratedFileModel, IMesh<br>Dto.GeneratedFileModel||THREE.Mesh|
-|MeshTransform|||Dto.MeshTransform|IModel,IMeshTransform<br>Dto.Model|||
-|**Model3d**|||Dto.Model3d|IFileModel,IModel3d<br>Dto.FileModel||THREE.Mesh|
-|**Project**|||Dto.Project|IModel, IProject<br>Dto.Model||
-|Relief|||||
+|DepthBuffer|IGeneratedFileModel<br>GeneratedFileModel||Dto.DepthBuffer|IGeneratedFileModel, IDepthBuffer<br>Dto.GeneratedFileModel||
+|Mesh|IGeneratedFileModel<br>GeneratedFileModel||Dto.Mesh|IGeneratedFileModel, IMesh<br>Dto.GeneratedFileModel||THREE.Mesh|
+|MeshTransform|IModel<br>Model||Dto.MeshTransform|IModel,IMeshTransform<br>Dto.Model|||
+|Model3d|IFileModel<br>FileModel||Dto.Model3d|IFileModel,IModel3d<br>Dto.FileModel||THREE.Mesh|
+|Project|IModel<br>Model||Dto.Project|IModel, IProject<br>Dto.Model||
+|**Relief**|TBD||||
 
 **Graphics**
 ```javascript
 export class Camera extends Model<Camera>
+export class DepthBuffer extends GeneratedFileModel<DepthBuffer>
+export class Mesh extends GeneratedFileModel<Mesh>
+export class MeshTransform extends Model<MeshTransform>
+export class Model3d extends FileModel<Model3d> 
+export class Project extends Model<Project>
 ```
 **DTO**
 ```javascript
@@ -230,8 +251,6 @@ public interface IModel
 public interface IFileModel : IModel
 public interface IGeneratedFileModel : IFileModel
 ```
-
-
    
 #### Base Classes  
 Domain models are in an inheritance chain so they can share common functionality such as file operations.  

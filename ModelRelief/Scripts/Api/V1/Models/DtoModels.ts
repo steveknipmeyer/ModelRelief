@@ -4,6 +4,7 @@
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
+
 import * as THREE       from 'three'
 
 import { ICamera, StandardView }            from 'ICamera'

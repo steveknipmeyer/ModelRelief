@@ -44,17 +44,18 @@ class ComposerViewSettings {
 
     constructor(generateRelief: () => any, saveRelief: () => any) {
 
-        this.meshTransform = {
-            width                  : 100.0,
-            height                 : 100.0,    
-            depth                  :   5.0,    
+        this.meshTransform = new MeshTransform();
 
-            tau                    : 1.0,    
-            sigmaGaussianBlur      : 1.0,    
-            sigmaGaussianSmooth    : 1.0,    
-            lambdaLinearScaling    : 1.0,
-        }
-            
+        this.meshTransform.width  = 100.0;
+        this.meshTransform.height = 100.0;    
+        this.meshTransform.depth  =   5.0;    
+
+        this.meshTransform.tau                 = 1.0;    
+        this.meshTransform.sigmaGaussianBlur   = 1.0;    
+        this.meshTransform.sigmaGaussianSmooth = 1.0;    
+        this.meshTransform.lambdaLinearScaling = 1.0;
+
+        
         this.generateRelief = generateRelief;
         this.saveRelief     = saveRelief;
     }
@@ -126,7 +127,7 @@ export class ComposerController {
 
         // construct DepthBufffer from Mesh raw file
         let camera = Camera.fromDtoModel(cameraModel);
-        let depthBuffer = new DepthBuffer(depthBufferBytes, reliefWidthPixels, reliefHeightPixels, camera.viewCamera);
+        let depthBuffer = new DepthBuffer(depthBufferBytes, reliefWidthPixels, reliefHeightPixels, camera);
         
         // Mesh graphics
         let mesh = new Mesh({ width: reliefWidthPixels, height: reliefHeightPixels, depthBuffer: depthBuffer});

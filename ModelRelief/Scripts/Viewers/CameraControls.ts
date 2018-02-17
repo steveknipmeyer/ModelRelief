@@ -191,9 +191,9 @@ export class CameraControls {
         }.bind(this));
 
         // Far Clipping Plane
-        minimum  =     1;
-        maximum  = 10000;
-        stepSize =     0.1;
+        minimum  =  1;
+        maximum  =  Camera.DefaultFarClippingPlane;
+        stepSize =  0.1;
         this._controlFarClippingPlane = cameraOptions.add(this.settings.camera.viewCamera, 'far').name('Far Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
         this._controlFarClippingPlane.onChange (function (value) {
 

@@ -5,33 +5,50 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import {assert}             from 'chai'
-import * as THREE           from 'three'
+import * as Dto                 from 'DtoModels'
+import * as THREE               from 'three'
 
-import {Camera}             from 'Camera'
-import {Graphics}           from 'Graphics'
-import {ILogger, HTMLLogger} from 'Logger'
-import {MathLibrary}        from 'Math'
-import {Services}           from 'Services'
-import {StopWatch}          from 'StopWatch'
+import {Camera}                 from 'Camera'
+import {assert}                 from 'chai'
+import {GeneratedFileModel}     from 'GeneratedFileModel'
+import {Graphics}               from 'Graphics'
+import {ILogger, HTMLLogger}    from 'Logger'
+import {MathLibrary}            from 'Math'
+import {Model3d}                from 'Model3d'
+import {Project}                from 'Project'
+import {Services}               from 'Services'
+import {StopWatch}              from 'StopWatch'
+import {DepthBufferFormat} from 'Api/V1/Interfaces/IDepthBuffer';
 
 /**
  * @description Represents a depth buffer.
  * @export
  * @class DepthBuffer
  */
-export class DepthBuffer {
+export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
 
     static readonly NormalizedTolerance   : number = .001;    
-    
-    _logger : ILogger;
 
-    _rgbaArray : Uint8Array;
     depths     : Float32Array;
     width      : number;
     height     : number;
+    format     : DepthBufferFormat;
 
-    camera           : THREE.PerspectiveCamera;
+    // Navigation Properties    
+    projectId  : number;
+    project    : Project;
+
+    model3dId  : number;
+    model      : Model3d; 
+
+    cameraId   : number;
+    camera     : Camera;
+
+
+    // Private
+    _logger : ILogger;
+    _rgbaArray : Uint8Array;
+
     _nearClipPlane   : number;
     _farClipPlane    : number;
     _cameraClipRange : number;
@@ -46,20 +63,74 @@ export class DepthBuffer {
      * @param height Height of map.
      * @param camera Perspective camera.
      */
-    constructor(rgbaArray : Uint8Array, width : number, height :number, camera : THREE.PerspectiveCamera) {
+    constructor(rgbaArray : Uint8Array, width : number, height : number, camera : Camera) {
+
+        super({
+            name: 'DepthBuffer', 
+            description: 'DepthBuffer',
+        });
         
         this._rgbaArray = rgbaArray;
 
         this.width  = width;
-        this.height = height;
+        this.height = height;      
         this.camera = camera;
 
         this.initialize();
     }
 
+    /**
+     * @description Constructs an instance from a DTO model.
+     * @returns {DepthBuffer} 
+     */
+    static fromDtoModel(dtoDepthBuffer : Dto.DepthBuffer) : DepthBuffer {
+
+        let rgbArray : Uint8Array = new Uint8Array(0);                                  // N.B. != Dto.DepthBuffer
+        let camera : Camera       = new Camera(new THREE.PerspectiveCamera());          // N.B. != Dto.DepthBuffer
+
+        let width  = dtoDepthBuffer.width;
+        let height = dtoDepthBuffer.height;
+
+        // constructor
+        let depthBuffer = new DepthBuffer (rgbArray, width, height, camera);
+
+        depthBuffer.id          = dtoDepthBuffer.id;
+        depthBuffer.name        = dtoDepthBuffer.name;
+        depthBuffer.description = dtoDepthBuffer.description;       
+
+        depthBuffer.projectId   = dtoDepthBuffer.projectId;
+        depthBuffer.model3dId   = dtoDepthBuffer.model3dId;
+        depthBuffer.cameraId    = dtoDepthBuffer.cameraId;
+
+        return depthBuffer;
+    }
+
+    /**
+     * @description Returns a DTO DepthBuffer from the instance.
+     * @returns {Dto.DepthBuffer} 
+     */
+    toDtoModel() : Dto.DepthBuffer {
+
+        let model = new Dto.DepthBuffer({
+            id              : this.id,
+            name            : this.name,
+            description     : this.description,    
+
+            width           : this.width,
+            height          : this.height,
+            format          : this.format,
+        
+            projectId       : this.projectId,
+            model3dId       : this.model3dId,
+            cameraId        : this.cameraId,
+        });
+
+        return model;
+    }        
+
     //#region Properties
     /**
-     * Returns the aspect ration of the depth buffer.
+     * Returns the aspect ratio of the depth buffer.
      */
     get aspectRatio () : number {
 
@@ -139,8 +210,8 @@ export class DepthBuffer {
         
         this._logger = Services.defaultLogger;       
 
-        this._nearClipPlane   = this.camera.near;
-        this._farClipPlane    = this.camera.far;
+        this._nearClipPlane   = this.camera.viewCamera.near;
+        this._farClipPlane    = this.camera.viewCamera.far;
         this._cameraClipRange = this._farClipPlane - this._nearClipPlane;
 
         // RGBA -> Float32
@@ -158,10 +229,10 @@ export class DepthBuffer {
 
         // https://stackoverflow.com/questions/6652253/getting-the-true-z-value-from-the-depth-buffer
         normalizedDepth = 2.0 * normalizedDepth - 1.0;
-        let zLinear = 2.0 * this.camera.near * this.camera.far / (this.camera.far + this.camera.near - normalizedDepth * (this.camera.far - this.camera.near));
+        let zLinear = 2.0 * this.camera.viewCamera.near * this.camera.viewCamera.far / (this.camera.viewCamera.far + this.camera.viewCamera.near - normalizedDepth * (this.camera.viewCamera.far - this.camera.viewCamera.near));
 
         // zLinear is the distance from the camera; reverse to yield height from mesh plane
-        zLinear = -(zLinear - this.camera.far);
+        zLinear = -(zLinear - this.camera.viewCamera.far);
 
         return zLinear;
     }
@@ -276,9 +347,9 @@ export class DepthBuffer {
         let messageStyle  = "font-family : monospace; color : black; font-size : 14px";
 
         this._logger.addMessage('Camera Properties', headerStyle);
-        this._logger.addMessage(`Near Plane = ${this.camera.near}`, messageStyle);
-        this._logger.addMessage(`Far Plane  = ${this.camera.far}`, messageStyle);
-        this._logger.addMessage(`Clip Range = ${this.camera.far - this.camera.near}`, messageStyle);
+        this._logger.addMessage(`Near Plane = ${this.camera.viewCamera.near}`, messageStyle);
+        this._logger.addMessage(`Far Plane  = ${this.camera.viewCamera.far}`, messageStyle);
+        this._logger.addMessage(`Clip Range = ${this.camera.viewCamera.far - this.camera.viewCamera.near}`, messageStyle);
         this._logger.addEmptyLine();
 
         this._logger.addMessage('Normalized', headerStyle);

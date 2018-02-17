@@ -12,6 +12,7 @@ import { ICamera, StandardView }    from 'ICamera'
 import { DepthBufferFactory }       from 'DepthBufferFactory'
 import { Graphics }                 from 'Graphics'
 import { Model }                    from 'Model';
+import { Project }                  from 'Project'
 import { Services }                 from 'Services'
 import { StopWatch }                from 'StopWatch'
 
@@ -33,11 +34,13 @@ export class Camera extends Model<Camera> {
 
     static DefaultFieldOfView       : number = 37;       // 35mm vertical : https://www.nikonians.org/reviews/fov-tables       
     static DefaultNearClippingPlane : number = 0.1; 
-    static DefaultFarClippingPlane  : number = 10000; 
+    static DefaultFarClippingPlane  : number = 1000; 
     
     viewCamera : THREE.PerspectiveCamera;
-
+    
+    // Navigation Properties
     projectId  : number;
+    project    : Project;
 
     /**
      * @constructor
@@ -53,8 +56,8 @@ export class Camera extends Model<Camera> {
         }
 
     /**
-     * @description Constructs an instance from a DTP model.
-     * @returns {Dto.Camera} 
+     * @description Constructs an instance from a DTO model.
+     * @returns {Camera} 
      */
     static fromDtoModel(dtoCamera : Dto.Camera) : Camera {
 

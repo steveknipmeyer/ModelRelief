@@ -5,7 +5,11 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
+import * as Dto          from 'DtoModels'
+
 import {IMeshTransform}     from 'IMeshTransform';
+import { Model }            from 'Model';
+import { Project }          from 'Project'
 import {Services}           from 'Services'
 
 /**
@@ -14,7 +18,7 @@ import {Services}           from 'Services'
  * @export
  * @class MeshTransform
  */
-export class MeshTransform {
+export class MeshTransform extends Model<MeshTransform> {
 
     width               : number;
     height              : number;
@@ -25,9 +29,70 @@ export class MeshTransform {
     sigmaGaussianSmooth : number;
     lambdaLinearScaling : number;
 
+    // Navigation Properties
+    projectId  : number;
+    project    : Project;
+
     /**
      * @constructor
      */
     constructor() {
+        super({
+            name: 'Mesh', 
+            description: 'Mesh',
+        });
     }
+
+    /**
+     * @description Constructs an instance from a DTO model.
+     * @returns {MeshTransform} 
+     */
+    static fromDtoModel(dtoMeshTransform : Dto.MeshTransform) : MeshTransform {
+
+        // constructor
+        let meshTransform = new MeshTransform ();
+
+        meshTransform.id          = dtoMeshTransform.id;
+        meshTransform.name        = dtoMeshTransform.name;
+        meshTransform.description = dtoMeshTransform.description;       
+
+        meshTransform.width       = dtoMeshTransform.width;              
+        meshTransform.height      = dtoMeshTransform.height;              
+        meshTransform.depth       = dtoMeshTransform.depth;              
+        
+        meshTransform.tau                 = dtoMeshTransform.tau;       
+        meshTransform.sigmaGaussianBlur   = dtoMeshTransform.sigmaGaussianBlur;       
+        meshTransform.sigmaGaussianSmooth = dtoMeshTransform.sigmaGaussianSmooth;       
+        meshTransform.lambdaLinearScaling = dtoMeshTransform.lambdaLinearScaling;       
+
+        meshTransform.projectId = dtoMeshTransform.projectId;       
+
+        return meshTransform;
+    }
+
+    /**
+     * @description Returns a DTO MeshTransform from the instance.
+     * @returns {Dto.MeshTransform} 
+     */
+    toDtoModel() : Dto.MeshTransform {
+
+        let model = new Dto.MeshTransform({
+            id              : this.id,
+            name            : this.name,
+            description     : this.description,    
+
+            width       : this.width,              
+            height      : this.height,
+            depth       : this.depth,              
+            
+            tau                 :  this.tau,       
+            sigmaGaussianBlur   :  this.sigmaGaussianBlur,       
+            sigmaGaussianSmooth :  this.sigmaGaussianSmooth,       
+            lambdaLinearScaling :  this.lambdaLinearScaling,       
+            
+            projectId       : this.projectId,
+        });
+
+        return model;
+    }        
 }

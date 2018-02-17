@@ -380,7 +380,8 @@ export class DepthBufferFactory {
         let depthBufferRGBA =  new Uint8Array(this._width * this._height * 4).fill(0);
         this._renderer.readRenderTargetPixels(this._encodedTarget, 0, 0, this._width, this._height, depthBufferRGBA);
 
-        this._depthBuffer = new DepthBuffer(depthBufferRGBA, this._width, this._height, this._camera);    
+        let camera = new Camera (this._camera);
+        this._depthBuffer = new DepthBuffer(depthBufferRGBA, this._width, this._height, camera);    
 
         this.analyzeTargets();
 

@@ -187,7 +187,7 @@ export class UnitTests {
             let fieldOfView       = this.generateScalar(50);
             let aspect            = this.generateScalar(1.0);
             let nearClippingPlane = this.generateScalar(10);
-            let farClippingPlane  = nearClippingPlane + this.generateScalar(10000);
+            let farClippingPlane  = nearClippingPlane + this.generateScalar(Camera.DefaultFarClippingPlane);
 
             let perspectiveCamera = new THREE.PerspectiveCamera(fieldOfView, aspect, nearClippingPlane, farClippingPlane);
 
