@@ -15,14 +15,6 @@ import {MathLibrary}        from 'Math'
 import {Services}           from 'Services'
 import {StopWatch}          from 'StopWatch'
 
-export enum DepthBufferFormat {
-
-    None,       // unknown   
-    Raw,        // floating point array
-    PNG,        // PNG format
-    JPG         // JPG format
-}
-
 /**
  * @description Represents a depth buffer.
  * @export

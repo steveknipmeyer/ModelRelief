@@ -23,7 +23,18 @@ namespace ModelRelief.Domain
     [DependentFiles(typeof(DepthBuffer))]
     public class Camera : DomainModel
     {
-        public StandardView StandardView { get; set; }
+        public const double DefaultFieldOfView        =    37.0;
+        public const double DefaultNearClippingPlane  =     0.1;
+        public const double DefaultFarClippingPlane   = 10000.0;
+
+        [DependentFileProperty]
+        public double FieldOfView { get; set; }
+        [DependentFileProperty]
+        public double AspectRatio { get; set; }
+        [DependentFileProperty]
+        public double Near { get; set; }
+        [DependentFileProperty]
+        public double Far { get; set; }
 
         [DependentFileProperty]
         public double PositionX { get; set; }
@@ -33,20 +44,27 @@ namespace ModelRelief.Domain
         public double PositionZ { get; set; }
 
         [DependentFileProperty]
-        public double LookAtX { get; set; }
+        public double EulerX { get; set; }
         [DependentFileProperty]
-        public double LookAtY { get; set; }
+        public double EulerY { get; set; }
         [DependentFileProperty]
-        public double LookAtZ { get; set; }
+        public double EulerZ { get; set; }
+        [DependentFileProperty]
+        public double Theta { get; set; }
 
         [DependentFileProperty]
-        public double FieldOfView { get; set; }
+        public double ScaleX { get; set; }
         [DependentFileProperty]
-        public double Near { get; set; }
+        public double ScaleY { get; set; }
         [DependentFileProperty]
-        public double Far { get; set; }
+        public double ScaleZ { get; set; }
+
         [DependentFileProperty]
-        public bool BoundClippingPlanes { get; set; }
+        public double UpX { get; set; }
+        [DependentFileProperty]
+        public double UpY { get; set; }
+        [DependentFileProperty]
+        public double UpZ { get; set; }
 
         // Navigation Properties
         public int? ProjectId { get; set; }
@@ -58,6 +76,13 @@ namespace ModelRelief.Domain
         /// </summary>
         public Camera()
         {
+            ScaleX = 1.0;
+            ScaleY = 1.0;
+            ScaleZ = 1.0;
+
+            UpX = 1.0;
+            UpY = 1.0;
+            UpZ = 1.0;
         }
     }
 }

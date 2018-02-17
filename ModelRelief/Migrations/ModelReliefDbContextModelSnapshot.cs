@@ -185,19 +185,19 @@ namespace ModelRelief.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("BoundClippingPlanes");
+                    b.Property<double>("AspectRatio");
 
                     b.Property<string>("Description");
+
+                    b.Property<double>("EulerX");
+
+                    b.Property<double>("EulerY");
+
+                    b.Property<double>("EulerZ");
 
                     b.Property<double>("Far");
 
                     b.Property<double>("FieldOfView");
-
-                    b.Property<double>("LookAtX");
-
-                    b.Property<double>("LookAtY");
-
-                    b.Property<double>("LookAtZ");
 
                     b.Property<string>("Name")
                         .IsRequired();
@@ -212,7 +212,19 @@ namespace ModelRelief.Migrations
 
                     b.Property<int?>("ProjectId");
 
-                    b.Property<int>("StandardView");
+                    b.Property<double>("ScaleX");
+
+                    b.Property<double>("ScaleY");
+
+                    b.Property<double>("ScaleZ");
+
+                    b.Property<double>("Theta");
+
+                    b.Property<double>("UpX");
+
+                    b.Property<double>("UpY");
+
+                    b.Property<double>("UpZ");
 
                     b.Property<string>("UserId");
 

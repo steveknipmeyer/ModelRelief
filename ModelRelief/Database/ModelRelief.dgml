@@ -1,35 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<DirectedGraph GraphDirection="LeftToRight" ZoomLevel="1.25" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+<DirectedGraph GraphDirection="LeftToRight" ZoomLevel="-1" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
   <Nodes>
-    <Node Id="AspNetRoleClaims" Category="Table" Bounds="-99.2000000000001,532.072873227067,137.026666666667,25" Group="Collapsed" Label="AspNetRoleClaims" />
+    <Node Id="AspNetRoleClaims" Category="Table" Bounds="-241.965516360482,633.740704998183,137.026666666667,25" Group="Collapsed" Label="AspNetRoleClaims" />
     <Node Id="AspNetRoleClaims_ClaimType" Category="Field Optional" Description="text" Label="ClaimType" />
     <Node Id="AspNetRoleClaims_ClaimValue" Category="Field Optional" Description="text" Label="ClaimValue" />
     <Node Id="AspNetRoleClaims_Id" Category="Field Primary" Description="bigint" Label="Id" />
     <Node Id="AspNetRoleClaims_RoleId" Category="Field Foreign" Description="text" Label="RoleId" />
-    <Node Id="AspNetRoles" Category="Table" Bounds="80.6433333333335,587.072873227067,107.34,25" Group="Collapsed" Label="AspNetRoles" />
+    <Node Id="AspNetRoles" Category="Table" Bounds="-62.122183027149,688.740704998183,107.34,25" Group="Collapsed" Label="AspNetRoles" />
     <Node Id="AspNetRoles_ConcurrencyStamp" Category="Field Optional" Description="text" Label="ConcurrencyStamp" />
     <Node Id="AspNetRoles_Id" Category="Field Primary" Description="text" Label="Id" />
     <Node Id="AspNetRoles_Name" Category="Field Optional" Description="text" Label="Name" />
     <Node Id="AspNetRoles_NormalizedName" Category="Field Optional" Description="text" Label="NormalizedName" />
-    <Node Id="AspNetUserClaims" Category="Table" Bounds="574.426666666667,532.072873227067,137.773333333333,25" Group="Collapsed" Label="AspNetUserClaims" />
+    <Node Id="AspNetUserClaims" Category="Table" Bounds="431.661150306184,633.740704998183,137.773333333334,25" Group="Collapsed" Label="AspNetUserClaims" />
     <Node Id="AspNetUserClaims_ClaimType" Category="Field Optional" Description="text" Label="ClaimType" />
     <Node Id="AspNetUserClaims_ClaimValue" Category="Field Optional" Description="text" Label="ClaimValue" />
     <Node Id="AspNetUserClaims_Id" Category="Field Primary" Description="bigint" Label="Id" />
     <Node Id="AspNetUserClaims_UserId" Category="Field Foreign" Description="text" Label="UserId" />
-    <Node Id="AspNetUserLogins" Category="Table" Bounds="294.548333333334,532.072873227067,137.53,25" Group="Collapsed" Label="AspNetUserLogins" />
+    <Node Id="AspNetUserLogins" Category="Table" Bounds="151.782816972851,633.740704998183,137.53,25" Group="Collapsed" Label="AspNetUserLogins" />
     <Node Id="AspNetUserLogins_LoginProvider" Category="Field Primary" Description="text" Label="LoginProvider" />
     <Node Id="AspNetUserLogins_ProviderDisplayName" Category="Field Optional" Description="text" Label="ProviderDisplayName" />
     <Node Id="AspNetUserLogins_ProviderKey" Category="Field Primary" Description="text" Label="ProviderKey" />
     <Node Id="AspNetUserLogins_UserId" Category="Field Foreign" Description="text" Label="UserId" />
-    <Node Id="AspNetUserRoles" Category="Table" Bounds="68.7499999999998,532.072873227067,131.126666666667,25" Group="Collapsed" Label="AspNetUserRoles" />
+    <Node Id="AspNetUserRoles" Category="Table" Bounds="-74.0155163604825,633.740704998183,131.126666666667,25" Group="Collapsed" Label="AspNetUserRoles" />
     <Node Id="AspNetUserRoles_RoleId" Category="Field Primary" Description="text" Label="RoleId" />
     <Node Id="AspNetUserRoles_UserId" Category="Field Primary" Description="text" Label="UserId" />
-    <Node Id="AspNetUserTokens" Category="Table" Bounds="742.681666666668,532.072873227067,139.263333333333,25" Group="Collapsed" Label="AspNetUserTokens" />
+    <Node Id="AspNetUserTokens" Category="Table" Bounds="599.916150306185,633.740704998183,139.263333333333,25" Group="Collapsed" Label="AspNetUserTokens" />
     <Node Id="AspNetUserTokens_LoginProvider" Category="Field Primary" Description="text" Label="LoginProvider" />
     <Node Id="AspNetUserTokens_Name" Category="Field Primary" Description="text" Label="Name" />
     <Node Id="AspNetUserTokens_UserId" Category="Field Primary" Description="text" Label="UserId" />
     <Node Id="AspNetUserTokens_Value" Category="Field Optional" Description="text" Label="Value" />
-    <Node Id="AspNetUsers" Category="Table" Bounds="589.27,587.072873227067,108.086666666667,25" Group="Collapsed" Label="AspNetUsers" />
+    <Node Id="AspNetUsers" Category="Table" Bounds="446.504483639518,688.740704998183,108.086666666667,25" Group="Collapsed" Label="AspNetUsers" />
     <Node Id="AspNetUsers_AccessFailedCount" Category="Field" Description="bigint" Label="AccessFailedCount" />
     <Node Id="AspNetUsers_ConcurrencyStamp" Category="Field Optional" Description="text" Label="ConcurrencyStamp" />
     <Node Id="AspNetUsers_Email" Category="Field Optional" Description="text" Label="Email" />
@@ -45,35 +45,30 @@
     <Node Id="AspNetUsers_SecurityStamp" Category="Field Optional" Description="text" Label="SecurityStamp" />
     <Node Id="AspNetUsers_TwoFactorEnabled" Category="Field" Description="bigint" Label="TwoFactorEnabled" />
     <Node Id="AspNetUsers_UserName" Category="Field Optional" Description="text" Label="UserName" />
-    <Node Id="Cameras" Category="Table" Bounds="860.551666666667,477.072873227067,85.5233333333337,25" Group="Collapsed" Label="Cameras" />
-    <Node Id="Cameras_BoundClippingPlanes" Category="Field" Description="bigint" Label="BoundClippingPlanes" />
-    <Node Id="Cameras_Description" Category="Field Optional" Description="text" Label="Description" />
-    <Node Id="Cameras_Far" Category="Field" Description="real" Label="Far" />
-    <Node Id="Cameras_FieldOfView" Category="Field" Description="real" Label="FieldOfView" />
-    <Node Id="Cameras_Id" Category="Field Primary" Description="bigint" Label="Id" />
-    <Node Id="Cameras_LookAtX" Category="Field" Description="real" Label="LookAtX" />
-    <Node Id="Cameras_LookAtY" Category="Field" Description="real" Label="LookAtY" />
-    <Node Id="Cameras_LookAtZ" Category="Field" Description="real" Label="LookAtZ" />
-    <Node Id="Cameras_Name" Category="Field" Description="text" Label="Name" />
-    <Node Id="Cameras_Near" Category="Field" Description="real" Label="Near" />
-    <Node Id="Cameras_PositionX" Category="Field" Description="real" Label="PositionX" />
-    <Node Id="Cameras_PositionY" Category="Field" Description="real" Label="PositionY" />
-    <Node Id="Cameras_PositionZ" Category="Field" Description="real" Label="PositionZ" />
-    <Node Id="Cameras_ProjectId" Category="Field Foreign" Description="bigint" Label="ProjectId" />
-    <Node Id="Cameras_StandardView" Category="Field" Description="bigint" Label="StandardView" />
-    <Node Id="Cameras_UserId" Category="Field Foreign" Description="text" Label="UserId" />
-    <Node Id="Database" Category="Database" Bounds="-119.2,-73.687260106267,1085.275,705.760415985971" Group="Expanded" Label="ModelRelief.db" UseManualLocation="True" />
-    <Node Id="DepthBuffers" Category="Table" Bounds="-36.0849939643052,-18.6870802535602,328.796627400716,197.880434379266" Group="Expanded" Label="DepthBuffers" UseManualLocation="True" />
-    <Node Id="DepthBuffers_CameraId" Category="Field Foreign" Bounds="-16.0849780273437,133.233149411149,70.6900000000001,25.96" Description="bigint" Label="CameraId" />
-    <Node Id="DepthBuffers_Description" Category="Field Optional" Bounds="192.458275960287,133.233149411149,80.2533333333333,25.96" Description="text" Label="Description" />
-    <Node Id="DepthBuffers_Format" Category="Field" Bounds="67.9616060384116,77.2731655854649,57.5733333333332,25.96" Description="bigint" Label="Format" />
-    <Node Id="DepthBuffers_Id" Category="Field Primary" Bounds="-16.0849792480468,21.3131779450841,50,25.96" Description="bigint" Label="Id" />
-    <Node Id="DepthBuffers_Model3dId" Category="Field Foreign" Bounds="84.6050227864584,133.233187558121,77.8533333333333,25.96" Description="bigint" Label="Model3dId" />
-    <Node Id="DepthBuffers_Name" Category="Field" Bounds="143.91498453776,21.3131779450841,51.6966666666667,25.96" Description="text" Label="Name" />
-    <Node Id="DepthBuffers_Path" Category="Field Optional" Bounds="63.9150207519532,21.3131779450841,50,25.96" Description="text" Label="Path" />
-    <Node Id="DepthBuffers_ProjectId" Category="Field Foreign" Bounds="155.535055338542,77.273165585465,66.9766666666667,25.96" Description="bigint" Label="ProjectId" />
-    <Node Id="DepthBuffers_UserId" Category="Field Foreign" Bounds="-16.0849818929035,77.2731655854649,54.0466666666666,25.96" Description="text" Label="UserId" />
-    <Node Id="MeshTransforms" Category="Table" Bounds="345.946666666666,477.072873227067,126.733333333334,25.0000000000001" Group="Collapsed" Label="MeshTransforms" />
+    <Node Id="Cameras" Category="Table" Bounds="717.786150306184,578.740704998183,85.5233333333333,25" Group="Collapsed" Label="Cameras" />
+    <Node Id="Cameras_Description" Category="Field Optional" Bounds="635.720562190776,458.833307117076,80.2533333333333,25.96" Description="text" Label="Description" UseManualLocation="True" />
+    <Node Id="Cameras_Far" Category="Field" Bounds="437.582834879557,346.909065271373,50,25.96" Description="real" Label="Far" UseManualLocation="True" />
+    <Node Id="Cameras_FieldOfView" Category="Field" Bounds="437.582842407227,514.789851819224,83.1299999999998,25.96" Description="real" Label="FieldOfView" UseManualLocation="True" />
+    <Node Id="Cameras_Id" Category="Field Primary" Bounds="517.582834879557,346.909065271373,50,25.96" Description="bigint" Label="Id" UseManualLocation="True" />
+    <Node Id="Cameras_Name" Category="Field" Bounds="677.582941080729,346.909065271373,51.6966666666667,25.96" Description="text" Label="Name" UseManualLocation="True" />
+    <Node Id="Cameras_Near" Category="Field" Bounds="597.582885742188,346.909065271373,50,25.96" Description="real" Label="Near" UseManualLocation="True" />
+    <Node Id="Cameras_PositionX" Category="Field" Bounds="536.54389552411,458.829265271373,69.1766666666666,25.96" Description="real" Label="PositionX" UseManualLocation="True" />
+    <Node Id="Cameras_PositionY" Category="Field" Bounds="618.606274414063,402.869165271373,68.7333333333333,25.96" Description="real" Label="PositionY" UseManualLocation="True" />
+    <Node Id="Cameras_PositionZ" Category="Field" Bounds="437.600549373393,458.829265271373,68.9433333333333,25.96" Description="real" Label="PositionZ" UseManualLocation="True" />
+    <Node Id="Cameras_ProjectId" Category="Field Foreign" Bounds="521.629525553385,402.869165271373,66.9766666666667,25.96" Description="bigint" Label="ProjectId" UseManualLocation="True" />
+    <Node Id="Cameras_UserId" Category="Field Foreign" Bounds="437.575890763368,402.869165271373,54.0466666666667,25.96" Description="text" Label="UserId" UseManualLocation="True" />
+    <Node Id="Database" Category="Database" Bounds="-261.965516360482,-3.97361761812977,1117.91170207012,737.71459296205" Group="Expanded" Label="ModelRelief.db" UseManualLocation="True" />
+    <Node Id="DepthBuffers" Category="Table" Bounds="507.149483639518,295.860704998183,328.796666666667,197.88" Group="Expanded" Label="DepthBuffers" />
+    <Node Id="DepthBuffers_CameraId" Category="Field Foreign" Bounds="527.149483639518,447.780704998183,70.6900000000001,25.96" Description="bigint" Label="CameraId" />
+    <Node Id="DepthBuffers_Description" Category="Field Optional" Bounds="735.692816972851,447.780704998183,80.2533333333333,25.96" Description="text" Label="Description" />
+    <Node Id="DepthBuffers_Format" Category="Field" Bounds="611.196150306184,391.820704998183,57.5733333333332,25.96" Description="bigint" Label="Format" />
+    <Node Id="DepthBuffers_Id" Category="Field Primary" Bounds="527.149483639518,335.860704998183,50,25.96" Description="bigint" Label="Id" />
+    <Node Id="DepthBuffers_Model3dId" Category="Field Foreign" Bounds="627.839483639518,447.780704998183,77.8533333333334,25.96" Description="bigint" Label="Model3dId" />
+    <Node Id="DepthBuffers_Name" Category="Field" Bounds="687.149483639518,335.860704998183,51.6966666666667,25.96" Description="text" Label="Name" />
+    <Node Id="DepthBuffers_Path" Category="Field Optional" Bounds="607.149483639518,335.860704998183,50,25.96" Description="text" Label="Path" />
+    <Node Id="DepthBuffers_ProjectId" Category="Field Foreign" Bounds="698.769483639518,391.820704998183,66.9766666666667,25.96" Description="bigint" Label="ProjectId" />
+    <Node Id="DepthBuffers_UserId" Category="Field Foreign" Bounds="527.149483639518,391.820704998183,54.0466666666666,25.96" Description="text" Label="UserId" />
+    <Node Id="MeshTransforms" Category="Table" Bounds="203.181150306184,578.740704998183,126.733333333334,25.0000000000002" Group="Collapsed" Label="MeshTransforms" />
     <Node Id="MeshTransforms_Depth" Category="Field" Description="real" Label="Depth" />
     <Node Id="MeshTransforms_Description" Category="Field Optional" Description="text" Label="Description" />
     <Node Id="MeshTransforms_Id" Category="Field Primary" Description="bigint" Label="Id" />
@@ -85,27 +80,27 @@
     <Node Id="MeshTransforms_Tau" Category="Field" Description="real" Label="Tau" />
     <Node Id="MeshTransforms_UserId" Category="Field Foreign" Description="text" Label="UserId" />
     <Node Id="MeshTransforms_Width" Category="Field" Description="real" Label="Width" />
-    <Node Id="Meshes" Category="Table" Bounds="463.16,-33.6871267729335,80.3066666666667,25" Group="Collapsed" Label="Meshes" />
-    <Node Id="Meshes_CameraId" Category="Field Foreign" Description="bigint" Label="CameraId" />
-    <Node Id="Meshes_DepthBufferId" Category="Field Foreign" Description="bigint" Label="DepthBufferId" />
-    <Node Id="Meshes_Description" Category="Field Optional" Description="text" Label="Description" />
-    <Node Id="Meshes_Format" Category="Field" Description="bigint" Label="Format" />
-    <Node Id="Meshes_Id" Category="Field Primary" Description="bigint" Label="Id" />
-    <Node Id="Meshes_MeshTransformId" Category="Field Foreign" Description="bigint" Label="MeshTransformId" />
-    <Node Id="Meshes_Name" Category="Field" Description="text" Label="Name" />
-    <Node Id="Meshes_Path" Category="Field Optional" Description="text" Label="Path" />
-    <Node Id="Meshes_ProjectId" Category="Field Foreign" Description="bigint" Label="ProjectId" />
-    <Node Id="Meshes_UserId" Category="Field Foreign" Description="text" Label="UserId" />
-    <Node Id="Models" Category="Table" Bounds="594.015008951823,249.192612311533,278.596688639323,197.8804" Group="Expanded" Label="Models" />
-    <Node Id="Models_CameraId" Category="Field Foreign" Bounds="614.015028076172,401.112872006363,70.6900000000001,25.96" Description="bigint" Label="CameraId" />
-    <Node Id="Models_Description" Category="Field Optional" Bounds="714.705010579427,401.112872006363,80.2533333333333,25.96" Description="text" Label="Description" />
-    <Node Id="Models_Format" Category="Field" Bounds="698.061673177084,345.152865292496,57.5733333333333,25.96" Description="bigint" Label="Format" />
-    <Node Id="Models_Id" Category="Field Primary" Bounds="614.015026855469,289.192873837418,50,25.96" Description="bigint" Label="Id" />
-    <Node Id="Models_Name" Category="Field" Bounds="774.015021158855,289.192873837418,51.6966666666667,25.96" Description="text" Label="Name" />
-    <Node Id="Models_Path" Category="Field Optional" Bounds="694.015026855469,289.192873837418,50,25.96" Description="text" Label="Path" />
-    <Node Id="Models_ProjectId" Category="Field Foreign" Bounds="785.63503092448,345.152880551285,66.9766666666667,25.96" Description="bigint" Label="ProjectId" />
-    <Node Id="Models_UserId" Category="Field Foreign" Bounds="614.015008951823,345.152865292496,54.0466666666666,25.96" Description="text" Label="UserId" />
-    <Node Id="Projects" Category="Table" Bounds="462.408333333334,532.072873227067,81.8100000000002,25" Group="Collapsed" Label="Projects" />
+    <Node Id="Meshes" Category="Table" Bounds="38.8636605553138,36.0261224737518,335.743333333333,253.84" Group="Expanded" Label="Meshes" UseManualLocation="True" />
+    <Node Id="Meshes_CameraId" Category="Field Foreign" Bounds="243.413646723739,131.986713945692,70.69,25.96" Description="bigint" Label="CameraId" />
+    <Node Id="Meshes_DepthBufferId" Category="Field Foreign" Bounds="169.116975784611,187.946709215468,94.4933333333333,25.96" Description="bigint" Label="DepthBufferId" />
+    <Node Id="Meshes_Description" Category="Field Optional" Bounds="58.8636542514082,187.946709215468,80.2533333333333,25.96" Description="text" Label="Description" />
+    <Node Id="Meshes_Format" Category="Field" Bounds="58.8636579135174,131.986713945692,57.5733333333334,25.96" Description="bigint" Label="Format" />
+    <Node Id="Meshes_Id" Category="Field Primary" Bounds="58.863657710067,76.0267148612198,50,25.96" Description="bigint" Label="Id" />
+    <Node Id="Meshes_MeshTransformId" Category="Field Foreign" Bounds="58.8636546583092,243.90672355873,111.9,25.9600000000001" Description="bigint" Label="MeshTransformId" />
+    <Node Id="Meshes_Name" Category="Field" Bounds="218.863652013452,76.0267148612198,51.6966666666666,25.96" Description="text" Label="Name" />
+    <Node Id="Meshes_Path" Category="Field Optional" Bounds="138.863657710067,76.0267148612198,50,25.96" Description="text" Label="Path" />
+    <Node Id="Meshes_ProjectId" Category="Field Foreign" Bounds="146.436985143335,131.986713945692,66.9766666666667,25.96" Description="bigint" Label="ProjectId" />
+    <Node Id="Meshes_UserId" Category="Field Foreign" Bounds="300.560310338648,76.0267148612198,54.0466666666667,25.96" Description="text" Label="UserId" />
+    <Node Id="Models" Category="Table" Bounds="646.972816972851,523.740704998183,79.1500000000001,25" Group="Collapsed" Label="Models" />
+    <Node Id="Models_CameraId" Category="Field Foreign" Bounds="331.183267428212,475.148961395724,70.6900000000001,25.96" Description="bigint" Label="CameraId" UseManualLocation="True" />
+    <Node Id="Models_Description" Category="Field Optional" Bounds="431.873310966623,475.148961395724,80.2533333333333,25.96" Description="text" Label="Description" UseManualLocation="True" />
+    <Node Id="Models_Format" Category="Field" Bounds="415.229912529123,419.188939423068,57.5733333333333,25.96" Description="bigint" Label="Format" UseManualLocation="True" />
+    <Node Id="Models_Id" Category="Field Primary" Bounds="331.183266207509,363.22894796799,50,25.96" Description="bigint" Label="Id" UseManualLocation="True" />
+    <Node Id="Models_Name" Category="Field" Bounds="491.183260510894,363.22894796799,51.6966666666667,25.96" Description="text" Label="Name" UseManualLocation="True" />
+    <Node Id="Models_Path" Category="Field Optional" Bounds="411.183266207509,363.22894796799,50,25.96" Description="text" Label="Path" UseManualLocation="True" />
+    <Node Id="Models_ProjectId" Category="Field Foreign" Bounds="502.803270276519,419.188954681857,66.9766666666667,25.96" Description="bigint" Label="ProjectId" UseManualLocation="True" />
+    <Node Id="Models_UserId" Category="Field Foreign" Bounds="331.183278821441,419.188939423068,54.0466666666666,25.96" Description="text" Label="UserId" UseManualLocation="True" />
+    <Node Id="Projects" Category="Table" Bounds="319.642816972851,633.740704998183,81.8100000000002,25" Group="Collapsed" Label="Projects" />
     <Node Id="Projects_Description" Category="Field Optional" Description="text" Label="Description" />
     <Node Id="Projects_Id" Category="Field Primary" Description="bigint" Label="Id" />
     <Node Id="Projects_Name" Category="Field" Description="text" Label="Name" />
@@ -155,21 +150,16 @@
     <Link Source="AspNetUsers" Target="AspNetUsers_SecurityStamp" Category="Contains" />
     <Link Source="AspNetUsers" Target="AspNetUsers_TwoFactorEnabled" Category="Contains" />
     <Link Source="AspNetUsers" Target="AspNetUsers_UserName" Category="Contains" />
-    <Link Source="Cameras" Target="Cameras_BoundClippingPlanes" Category="Contains" />
     <Link Source="Cameras" Target="Cameras_Description" Category="Contains" />
     <Link Source="Cameras" Target="Cameras_Far" Category="Contains" />
     <Link Source="Cameras" Target="Cameras_FieldOfView" Category="Contains" />
     <Link Source="Cameras" Target="Cameras_Id" Category="Contains" />
-    <Link Source="Cameras" Target="Cameras_LookAtX" Category="Contains" />
-    <Link Source="Cameras" Target="Cameras_LookAtY" Category="Contains" />
-    <Link Source="Cameras" Target="Cameras_LookAtZ" Category="Contains" />
     <Link Source="Cameras" Target="Cameras_Name" Category="Contains" />
     <Link Source="Cameras" Target="Cameras_Near" Category="Contains" />
     <Link Source="Cameras" Target="Cameras_PositionX" Category="Contains" />
     <Link Source="Cameras" Target="Cameras_PositionY" Category="Contains" />
     <Link Source="Cameras" Target="Cameras_PositionZ" Category="Contains" />
     <Link Source="Cameras" Target="Cameras_ProjectId" Category="Contains" />
-    <Link Source="Cameras" Target="Cameras_StandardView" Category="Contains" />
     <Link Source="Cameras" Target="Cameras_UserId" Category="Contains" />
     <Link Source="Cameras_ProjectId" Target="Projects_Id" Category="Foreign Key" Label="FK_Cameras_1_0" />
     <Link Source="Cameras_UserId" Target="AspNetUsers_Id" Category="Foreign Key" Label="FK_Cameras_0_0" />
@@ -223,7 +213,7 @@
     <Link Source="Meshes" Target="Meshes_ProjectId" Category="Contains" />
     <Link Source="Meshes" Target="Meshes_UserId" Category="Contains" />
     <Link Source="Meshes_CameraId" Target="Cameras_Id" Category="Foreign Key" Label="FK_Meshes_4_0" />
-    <Link Source="Meshes_DepthBufferId" Target="DepthBuffers_Id" Category="Foreign Key" Label="FK_Meshes_3_0" />
+    <Link Source="Meshes_DepthBufferId" Target="DepthBuffers_Id" Category="Foreign Key" Bounds="245.830140521633,213.90678238187,273.24165148386,120.362976088186" Label="FK_Meshes_3_0" />
     <Link Source="Meshes_MeshTransformId" Target="MeshTransforms_Id" Category="Foreign Key" Label="FK_Meshes_2_0" />
     <Link Source="Meshes_ProjectId" Target="Projects_Id" Category="Foreign Key" Label="FK_Meshes_1_0" />
     <Link Source="Meshes_UserId" Target="AspNetUsers_Id" Category="Foreign Key" Label="FK_Meshes_0_0" />

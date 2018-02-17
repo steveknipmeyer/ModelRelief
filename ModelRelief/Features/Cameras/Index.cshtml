@@ -23,20 +23,16 @@
             </th>
 
             <th>
-                @Html.DisplayNameFor(model => model.StandardView)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.FieldOfView)
             </th>
-
+            <th>
+                @Html.DisplayNameFor(model => model.AspectRatio)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Near)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Far)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BoundClippingPlanes)
             </th>
 
             <th>
@@ -48,19 +44,46 @@
             <th>
                 @Html.DisplayNameFor(model => model.PositionZ)
             </th>
+
             <th>
-                @Html.DisplayNameFor(model => model.LookAtX)
+                @Html.DisplayNameFor(model => model.EulerX)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LookAtY)
+                @Html.DisplayNameFor(model => model.EulerY)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LookAtZ)
+                @Html.DisplayNameFor(model => model.EulerZ)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Theta)
+            </th>
+
+
+            <th>
+                @Html.DisplayNameFor(model => model.ScaleX)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScaleY)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScaleZ)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.UpX)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpY)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpZ)
+            </th>
+
             <th></th>
         </tr>
     </thead>
     <tbody>
+
 @foreach (var item in Model) {
         <tr>
             <td>
@@ -74,20 +97,16 @@
             </td>
 
             <td>
-                @Html.DisplayFor(modelItem => item.StandardView)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.FieldOfView)
             </td>
-
+            <td>
+                @Html.DisplayFor(modelItem => item.AspectRatio)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Near)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Far)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BoundClippingPlanes)
             </td>
 
             <td>
@@ -99,15 +118,40 @@
             <td>
                 @Html.DisplayFor(modelItem => item.PositionZ)
             </td>
+
             <td>
-                @Html.DisplayFor(modelItem => item.LookAtX)
+                @Html.DisplayFor(modelItem => item.EulerX)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LookAtY)
+                @Html.DisplayFor(modelItem => item.EulerY)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LookAtZ)
+                @Html.DisplayFor(modelItem => item.EulerZ)
             </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Theta)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.ScaleX)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ScaleY)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ScaleZ)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.UpX)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpY)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpZ)
+            </td>
+
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |

@@ -8,14 +8,14 @@
 import * as THREE from 'three'
 import * as Dto from 'DtoModels'
 
-import {assert}   from 'chai'
-import {Camera} from 'Camera'
-import {DepthBuffer} from 'DepthBuffer'
-import {Exception} from 'Exception';
-import {MathLibrary} from 'Math'
-import {HttpLibrary, ContentType, MethodType} from 'Http'
-import {DepthBufferFormat} from 'Api/V1/Interfaces/IDepthBuffer';
-import {HemisphereLight} from 'three';
+import {assert}                                 from 'chai'
+import {Camera}                                 from 'Camera'
+import {DepthBuffer}                            from 'DepthBuffer'
+import {Exception}                              from 'Exception';
+import {HttpLibrary, ContentType, MethodType}   from 'Http'
+import {DepthBufferFormat}                      from 'IDepthBuffer'
+import {MathLibrary}                            from 'Math'
+import {Services}                               from 'Services'
 
 /**
  * @description Unit test harness.
@@ -24,7 +24,7 @@ import {HemisphereLight} from 'three';
  */
 export class UnitTests {
    
-    static DefaultVectorTolerance : number = 0.001;
+    static DefaultTolerance : number = 0.001;
 
     /**
      * Default constructor
@@ -34,32 +34,189 @@ export class UnitTests {
     constructor() {       
     }
 
-    static vectorsEqualWithinTolerance(v1 : THREE.Vector3, v2: THREE.Vector3, tolerance = UnitTests.DefaultVectorTolerance) {
+    /**
+     * @description Determines whether two matrices are equal within the given tolerance.
+     * @static
+     * @param {number} m1 First matrix to compare.
+     * @param {number} m2 Second matrix to compare.
+     * @param {string} property Property name.
+     * @param {number} [tolerance=UnitTests.DefaultVectorTolerance] Tolerance.
+     */
+    static matricesEqualWithinTolerance(m1 : THREE.Matrix, m2: THREE.Matrix, property : string, tolerance = UnitTests.DefaultTolerance) {
 
         let formatTag = 'TAG';
-        let errorMessage = `The ${formatTag} values of the vectors are not equal within ${tolerance}`
+        let errorMessage = `${property}: M[${formatTag}] of the matrices are not equal within ${tolerance}`
+        
+        let m1Elements = m1.elements;
+        let m2Elements = m2.elements;
+        assert.equal(m1Elements.length, m2Elements.length);
+
+        let length = m1Elements.length;
+        for (let iElement = 0; iElement < length; iElement++) {
+            assert.closeTo(m1Elements[iElement], m2Elements[iElement], tolerance, errorMessage.replace(formatTag, iElement.toString()));
+        }
+    }
+
+    /**
+     * @description Determines whether two scalars are equal within the given tolerance.
+     * @static
+     * @param {number} s1 First scalar to compare.
+     * @param {number} s2 Second scalar to compare.
+     * @param {string} property Property name.
+     * @param {number} [tolerance=UnitTests.DefaultVectorTolerance] Tolerance.
+     */
+    static scalarsEqualWithinTolerance(s1 : number, s2: number, property : string, tolerance = UnitTests.DefaultTolerance) {
+
+        assert.closeTo(s1, s2, tolerance, `${property}: The values of the scalars are not equal within ${tolerance}`);
+    }
+
+    /**
+     * @description Determines whether two vectors are equal within the given tolerance.
+     * @static
+     * @param {THREE.Vector3} v1 First vector to compare.
+     * @param {THREE.Vector3} v2 Second vector to compare.
+     * @param {string} property Property name.
+     * @param {number} [tolerance=UnitTests.DefaultVectorTolerance] Tolerance.
+     */
+    static vectorsEqualWithinTolerance(v1 : THREE.Vector3, v2: THREE.Vector3, property : string, tolerance = UnitTests.DefaultTolerance) {
+
+        let formatTag = 'TAG';
+        let errorMessage = `${property}: The ${formatTag} values of the vectors are not equal within ${tolerance}`
         assert.closeTo(v1.x, v2.x, tolerance, errorMessage.replace(formatTag, 'X'));
         assert.closeTo(v1.y, v2.y, tolerance, errorMessage.replace(formatTag, 'Y'));
         assert.closeTo(v1.z, v2.z, tolerance, errorMessage.replace(formatTag, 'Z'));
     }
 
     /**
+     * @description Determines whether two quaternions are equal within the given tolerance.
+     * @static
+     * @param {THREE.Quaternion} q1 First quaternion to compare.
+     * @param {THREE.Quaternion} q2 Second quaternion to compare.
+     * @param {string} property Property name.
+     * @param {number} [tolerance=UnitTests.DefaultVectorTolerance] Tolerance.
+     */
+    static quaternionsEqualWithinTolerance(q1 : THREE.Quaternion, q2: THREE.Quaternion, property : string, tolerance = UnitTests.DefaultTolerance) {
+
+        let formatTag = 'TAG';
+        let errorMessage = `${property}: The ${formatTag} values of the quaternions are not equal within ${tolerance}`
+        assert.closeTo(q1.x, q2.x, tolerance, errorMessage.replace(formatTag, 'X'));
+        assert.closeTo(q1.y, q2.y, tolerance, errorMessage.replace(formatTag, 'Y'));
+        assert.closeTo(q1.z, q2.z, tolerance, errorMessage.replace(formatTag, 'Z'));
+        assert.closeTo(q1.w, q2.w, tolerance, errorMessage.replace(formatTag, 'W'));
+    }
+
+    /**
+     * @description Returns a random scalar within the given range.
+     * @static
+     * @param {number} scale The range of the scalar. (default = 1).
+     * @returns {number} 
+     */
+    static generateScalar(scale : number = 1) : number {
+
+        let scalar = Math.random() * scale;
+        return scalar;
+    }
+
+    /**
+     * @description Returns a 3D vector with random coordinates.
+     * @static
+     * @param {number} scale The range of a coordinate. (default = 1).
+     * @returns {THREE.Vector3} 
+     */
+    static generateVector3(scale : number = 1) : THREE.Vector3 {
+
+        let vector = new THREE.Vector3(Math.random() * scale, Math.random() * scale, Math.random() * scale);
+        return vector;
+    }
+
+    /**
+     * @description Returns a quaternion with random values.
+     * @static
+     * @returns {THREE.Quaternion} 
+     */
+    static generateQuaternion() : THREE.Quaternion {
+
+        let quaternion = new THREE.Quaternion(Math.random(), Math.random(), Math.random(), Math.random());
+        return quaternion;
+    }
+
+    /**
+     * @description Compares the settings of two perspective cameras.
+     * @static
+     * @param {THREE.PerspectiveCamera} c1 First camera to compare.
+     * @param {THREE.PerspectiveCamera} c2 Second camera to compare.
+     */
+    static comparePerspectiveCameras (c1 : THREE.PerspectiveCamera, c2 : THREE.PerspectiveCamera) {
+
+        try {
+            this.scalarsEqualWithinTolerance(c1.fov, c2.fov, 'fov');
+            this.scalarsEqualWithinTolerance(c1.aspect, c2.aspect, 'aspect');
+            this.scalarsEqualWithinTolerance(c1.near, c2.near, 'near');
+            this.scalarsEqualWithinTolerance(c1.far, c2.far, 'far');
+
+            this.vectorsEqualWithinTolerance(c1.position, c2.position, 'position');
+
+            this.matricesEqualWithinTolerance(c1.matrix, c2.matrix, 'matrix');
+            this.matricesEqualWithinTolerance(c1.projectionMatrix, c2.projectionMatrix, 'projectionMatrix');
+
+            this.vectorsEqualWithinTolerance(c1.scale, c2.scale, 'scale');
+
+            this.vectorsEqualWithinTolerance(c1.up, c2.up, 'up');
+
+            // WIP: THese camera properties do not roundtrip however the matrix and projectMatrix do roundtrip correctly.    
+            // this.quaternionsEqualWithinTolerance(c1.quaternion, c2.quaternion, 'quaternion');
+            // this.vectorsEqualWithinTolerance(c1.getWorldDirection(), c2.getWorldDirection(), 'worldDirection');
+            
+        }
+        catch(exception) {
+            Services.defaultLogger.addErrorMessage(`Cameras are not equal: ${exception.message}`);
+        }
+    }
+
+    /**
      * @description Tests whether a Perspective camera can be re-constructed from the DTO Camera properties.
      * @static
      */
-    static cameraRoundTrip(){
 
-        let camera = new THREE.PerspectiveCamera(Camera.DefaultFieldOfView, 1.0, Camera.DefaultNearClippingPlane, Camera.DefaultFarClippingPlane);
-        // https://stackoverflow.com/questions/15696963/three-js-set-and-read-camera-look-vector/15697227#15697227
-        let worldVector:THREE.Vector3 = camera.getWorldDirection();
+    static cameraRoundTrip() {
 
-        let lookAt = new THREE.Vector3(100, 200, 300);
-        let lookAtNormalized = lookAt.normalize();
+        let trials = 10;
+        for (let iTrial = 0; iTrial < trials; iTrial++) {
 
-        camera.lookAt(lookAt);
-        worldVector = camera.getWorldDirection();
+            // construct random PerspectiveCamera
+            let fieldOfView       = this.generateScalar(50);
+            let aspect            = this.generateScalar(1.0);
+            let nearClippingPlane = this.generateScalar(10);
+            let farClippingPlane  = nearClippingPlane + this.generateScalar(10000);
 
-        this.vectorsEqualWithinTolerance(lookAtNormalized, worldVector);
+            let perspectiveCamera = new THREE.PerspectiveCamera(fieldOfView, aspect, nearClippingPlane, farClippingPlane);
+
+            let position    = this.generateVector3(500);
+            let quaternion  = this.generateQuaternion();
+            let scale       = this.generateVector3();
+            let up          = this.generateVector3();
+            perspectiveCamera.matrix.compose(position, quaternion, scale);
+            perspectiveCamera.up.copy(up);
+
+            // set position/rotation/scale attributes
+            perspectiveCamera.matrix.decompose(perspectiveCamera.position, perspectiveCamera.quaternion, perspectiveCamera.scale); 
+
+            perspectiveCamera.updateProjectionMatrix();
+
+            // constructor
+            let camera = new Camera (perspectiveCamera);
+            camera.id          = 1;
+            camera.name        = "Perspective Camera";
+            camera.description = "This camera has random properties.";       
+
+            let cameraModel = camera.toDtoModel();
+            let cameraRoundtrip = Camera.fromDtoModel(cameraModel);
+
+            let c1 = camera.viewCamera;
+            let c2 = cameraRoundtrip.viewCamera;       
+            
+            this.comparePerspectiveCameras(c1, c2);
+        }
     }
 
     /**

@@ -20,29 +20,30 @@
             </div>
         </form>
     </div>
+    @section scripts {
+        <!------------------------------------------------------------------------------------------------>
+        <!--                                    Libraries                                               -->
+        <!------------------------------------------------------------------------------------------------>
+        <script src="~/lib/requirejs/require.js"></script>
 
-    <!------------------------------------------------------------------------------------------------>
-    <!--                                    Libraries                                               -->
-    <!------------------------------------------------------------------------------------------------>
-    <script src="~/lib/requirejs/require.js"></script>
+        <!------------------------------------------------------------------------------------------------>
+        <!--                                    ModelRelief                                             -->
+        <!------------------------------------------------------------------------------------------------>
+        <script src="~/js/shaders.js"></script>
+        <script>
+            requirejs.config({
+                baseUrl: '.',
+                paths: {
+                    'Workbench/DepthBufferTest'                  : '/js/modelrelief',
 
-    <!------------------------------------------------------------------------------------------------>
-    <!--                                    ModelRelief                                             -->
-    <!------------------------------------------------------------------------------------------------>
-    <script src="~/js/shaders.js"></script>
-    <script>
-        requirejs.config({
-            baseUrl: '.',
-            paths: {
-                'Workbench/DepthBufferTest'                  : '/js/modelrelief',
-
-                 chai                                        : '/lib/chai',
-                'three'                                      : '/lib/threejs/three',
-                'dat-gui'                                    : '/lib/threejs/dat.gui.min'
+                    chai                                    : '/lib/chai/chai',
+                    three                                   : '/lib/threejs/three',
+                   'dat-gui'                                : '/lib/threejs/dat.gui.min',
+                }
+            });
+            window.onload = function () {
+                requirejs(['Workbench/DepthBufferTest']);
             }
-        });
-        window.onload = function () {
-            requirejs(['Workbench/DepthBufferTest']);
-        }
-    </script>
+        </script>
+    }        
 </body>

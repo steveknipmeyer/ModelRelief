@@ -116,7 +116,7 @@ export class Graphics {
         while (object = scene.getObjectByName(objectName)) {
 
             Graphics.disposeResources(object);
-            scene.remove(object);
+            object.parent.remove(object);
         }
     }
 

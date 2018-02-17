@@ -12,10 +12,6 @@
         <environment names="Development">
             <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
             <link rel="stylesheet" href="~/css/site.css" />
-            @if (String.Equals("workbench", this.ViewContext.RouteData.Values["controller"].ToString().ToLower()))
-            {
-            <link rel="stylesheet" href="~css/workbench.css">
-            }
         </environment>
         <environment names="Staging, Production, Test">
             <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -24,6 +20,10 @@
             @*WIP : Add minification to generate site.min.css*@
             <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
         </environment>
+        @if (String.Equals("workbench", this.ViewContext.RouteData.Values["controller"].ToString().ToLower()))
+        {
+        <link rel="stylesheet" href="~/css/workbench.css">
+        }
     </head>
 
     <body>

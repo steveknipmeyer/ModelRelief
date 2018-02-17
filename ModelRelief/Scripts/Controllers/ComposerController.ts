@@ -99,7 +99,7 @@ export class ComposerController {
     async generateReliefAsync() : Promise<void> { 
 
         // overall dimensions
-        let reliefWidthPixels = 512;    
+        let reliefWidthPixels  = 512;    
         let reliefHeightPixels = reliefWidthPixels / this._composerView.modelView.modelViewer.aspectRatio;
 
         // Model
@@ -125,11 +125,8 @@ export class ComposerController {
         let depthBufferBytes: Uint8Array = await meshModel.getFileAsync();
 
         // construct DepthBufffer from Mesh raw file
-        let depthBufferCamera = this._composerView.modelView.modelViewer.camera.clone(true);
-        depthBufferCamera.fov  = cameraModel.fieldOfView;        
-        depthBufferCamera.near = cameraModel.near;
-        depthBufferCamera.far  = cameraModel.far;
-        let depthBuffer = new DepthBuffer(depthBufferBytes, reliefWidthPixels, reliefHeightPixels, depthBufferCamera);
+        let camera = Camera.fromDtoModel(cameraModel);
+        let depthBuffer = new DepthBuffer(depthBufferBytes, reliefWidthPixels, reliefHeightPixels, camera.viewCamera);
         
         // Mesh graphics
         let mesh = new Mesh({ width: reliefWidthPixels, height: reliefHeightPixels, depthBuffer: depthBuffer});
@@ -147,11 +144,12 @@ export class ComposerController {
      */
     async postCameraAsync(): Promise<Dto.Camera> {
 
-        let camera = new Camera(this._composerView.modelView.modelViewer.camera);
-        CameraHelper.boundCameraClippingPlanes(camera.viewCamera, this._composerView.modelView.modelViewer.model);
+        // copy view camera so we can optimize clipping planes
+        let viewCameraClone = this._composerView.modelView.modelViewer.camera.clone(true);
+        CameraHelper.finalizeClippingPlanes(viewCameraClone, this._composerView.modelView.modelViewer.model);
 
+        let camera = new Camera(viewCameraClone);
         let cameraModel = camera.toDtoModel();
-        cameraModel.boundClippingPlanes = true;
 
         var newModel = await cameraModel.postAsync();
 
@@ -163,16 +161,18 @@ export class ComposerController {
      */
     async postDepthBufferAsync(camera : Dto.Camera, widthPixels: number, heightPixels: number): Promise<Dto.DepthBuffer> {
 
-        let factory = new DepthBufferFactory({ width: widthPixels, height: heightPixels, model: this._composerView.modelView.modelViewer.model, camera: this._composerView.modelView.modelViewer.camera, addCanvasToDOM: false });
+        let depthBufferCamera = Camera.fromDtoModel(camera);
+        let factory = new DepthBufferFactory({ width: widthPixels, height: heightPixels, model: this._composerView.modelView.modelViewer.model, camera: depthBufferCamera.viewCamera, addCanvasToDOM: false });
+
         let depthBuffer = factory.createDepthBuffer();
 
         let depthBufferModel = new Dto.DepthBuffer({
-            name: 'DepthBuffer.raw',
-            description: 'DepthBuffer Description',
-            width: widthPixels,
-            height: heightPixels,            
-            format: DepthBufferFormat.RAW,
-            cameraId: camera.id,
+            name:       'DepthBuffer.raw',
+            description:'DepthBuffer Description',
+            width:      widthPixels,
+            height:     heightPixels,            
+            format:     DepthBufferFormat.RAW,
+            cameraId:   camera.id,
         });
         var newModel = await depthBufferModel.postFileAsync(depthBuffer.depths);
         
@@ -197,11 +197,11 @@ export class ComposerController {
     async postMeshAsync(depthBuffer : Dto.DepthBuffer, meshTransform : Dto.MeshTransform): Promise<Dto.Mesh> {
 
         let mesh = new Dto.Mesh({
-            name: 'DynamicMesh',
-            format: MeshFormat.RAW,
-            description: 'Mesh Description',
-            depthBufferId: depthBuffer.id,
-            meshTransformId: meshTransform.id,
+            name:           'DynamicMesh',
+            format:         MeshFormat.RAW,
+            description:    'Mesh Description',
+            depthBufferId:  depthBuffer.id,
+            meshTransformId:meshTransform.id,
         });
         var newModel = await mesh.postAsync();
 
@@ -215,7 +215,16 @@ export class ComposerController {
 
         // WIP: Save the Mesh as an OBJ format file?
         // It may be more efficient to maintain Meshes in raw format since the size is substantially smaller.
-        UnitTests.cameraRoundTrip();
+
+        // WIP: Randomly generated cameras do not rountrip the matrix property. However, cameras created and manipulated through views work fine.
+        // UnitTests.cameraRoundTrip();
+
+        let camera = new Camera(this._composerView.modelView._modelViewer.camera);
+        let cameraModel = camera.toDtoModel();
+        let cameraRoundtrip = Camera.fromDtoModel(cameraModel);
+        UnitTests.comparePerspectiveCameras(camera.viewCamera, cameraRoundtrip.viewCamera);
+
+        this._composerView.modelView._modelViewer.camera = cameraRoundtrip.viewCamera;
     }
 
     //#endregion

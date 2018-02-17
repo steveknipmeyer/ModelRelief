@@ -64,7 +64,7 @@ namespace ModelRelief
             builder.RegisterAssemblyTypes(typeof(Startup).Assembly).AsImplementedInterfaces();
 
 #if !AutofacExperiments
-#if false
+#if true
             // generic types: Are these needed? It seems AF will discover all implmentations of interfaces in a module.
             builder.RegisterGeneric(typeof(F<,>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(F<,>));

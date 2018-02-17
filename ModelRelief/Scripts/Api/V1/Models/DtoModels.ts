@@ -195,7 +195,7 @@ export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel
 
         super (parameters);
 
-        this.fileIsSynchronized = parameters.fileIsSynchronized || undefined;
+        this.fileIsSynchronized = parameters.fileIsSynchronized;
     }
 }
 
@@ -205,20 +205,27 @@ export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel
  */
 export class Camera extends Model<Camera> implements ICamera {
 
-    standardView: StandardView;
-
     fieldOfView: number;
+    aspectRatio: number;    
     near: number;
     far: number;
-    boundClippingPlanes: boolean;
 
     positionX: number;
     positionY: number;
     positionZ: number;
 
-    lookAtX: number;
-    lookAtY: number;
-    lookAtZ: number;
+    eulerX: number;
+    eulerY: number;
+    eulerZ: number;
+    theta: number;
+
+    scaleX: number;
+    scaleY: number;
+    scaleZ: number;
+
+    upX: number;
+    upY: number;
+    upZ: number;
 
     // Navigation Properties
     projectId: number;
@@ -235,44 +242,58 @@ export class Camera extends Model<Camera> implements ICamera {
         this.endPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiCameras}`;
 
         let {
-            standardView,
             fieldOfView,
-        
+            aspectRatio,
             near,
             far,
         
-            boundClippingPlanes,
-
             position,
             positionX,
             positionY,
             positionZ,
         
-            lookAt,
-            lookAtX,
-            lookAtY,
-            lookAtZ,
-        
+            quaternion,
+            eulerX,
+            eulerY,
+            eulerZ,
+            theta,
+
+            scale,
+            scaleX,
+            scaleY,
+            scaleZ,
+
+            up,
+            upX,
+            upY,
+            upZ,
+                
             // Navigation Properties
             projectId,
             project,
         } = parameters;
 
-        this.standardView           = standardView;
         this.fieldOfView            = fieldOfView;    
-    
+        this.aspectRatio            = aspectRatio;
         this.near                   = near;
         this.far                    = far;
     
-        this.boundClippingPlanes    = boundClippingPlanes;
+        this.positionX              = position ? position.x : positionX;
+        this.positionY              = position ? position.y : positionY;
+        this.positionZ              = position ? position.z : positionZ;
     
-        this.positionX              = position ? position.x : (positionX ? positionX : undefined); 
-        this.positionY              = position ? position.y : (positionY ? positionY : undefined); 
-        this.positionZ              = position ? position.z : (positionZ ? positionZ : undefined); 
-    
-        this.lookAtX                = lookAt ? lookAt.x : (lookAtX ? lookAtX : undefined); 
-        this.lookAtY                = lookAt ? lookAt.y : (lookAtY ? lookAtY : undefined); 
-        this.lookAtZ                = lookAt ? lookAt.z : (lookAtZ ? lookAtZ : undefined); 
+        this.eulerX                 = quaternion ? quaternion.x : eulerX;
+        this.eulerY                 = quaternion ? quaternion.y : eulerY;
+        this.eulerZ                 = quaternion ? quaternion.z : eulerZ;
+        this.theta                  = quaternion ? quaternion.w : theta;
+
+        this.scaleX                 = scale ? scale.x : scaleX;
+        this.scaleY                 = scale ? scale.y : scaleY;
+        this.scaleZ                 = scale ? scale.z : scaleZ;
+
+        this.upX                    = up ? up.x : upX;
+        this.upY                    = up ? up.y : upY;
+        this.upZ                    = up ? up.z : upZ;
     
         // Navigation Properties
         this.projectId              = projectId;

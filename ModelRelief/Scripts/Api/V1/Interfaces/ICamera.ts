@@ -36,12 +36,10 @@ export interface ICamera extends IModel {
     name?: string;   
     description?: string;
 
-    standardView?: StandardView; 
-
     fieldOfView?: number;
+    aspectRatio?: number;    
     near?: number;
     far?: number;
-    boundClippingPlanes?: boolean;
 
     // vector or explicit coordinates
     position?: THREE.Vector3;
@@ -50,14 +48,25 @@ export interface ICamera extends IModel {
     positionZ?: number;
 
     // vector or explicit coordinates
-    lookAt?: THREE.Vector3;
-    lookAtX?: number;
-    lookAtY?: number;
-    lookAtZ?: number;
+    quaternion?: THREE.Quaternion;
+    eulerX?: number;
+    eulerY?: number;
+    eulerZ?: number;
+    theta?: number;
+
+    // vector or explicit coordinates
+    scale?: THREE.Vector3;
+    scaleX?: number;
+    scaleY?: number;
+    scaleZ?: number;
+
+    // vector or explicit coordinates
+    up?: THREE.Vector3;
+    upX?: number;
+    upY?: number;
+    upZ?: number;
            
     // Navigation Properties
     projectId?: number;
     project?: IProject;
 }
-
-

@@ -22,9 +22,11 @@ import {TrackballControls}      from 'TrackballControls'
  */
 export class Viewer {
 
+    cameraControls          : CameraControls            = null;
+
     _name                   : string                    = '';
-    _eventManager          : EventManager              = null;
-    _logger                 : ILogger                    = null;
+    _eventManager           : EventManager               = null;
+    _logger                 : ILogger                   = null;
     
     _scene                  : THREE.Scene               = null;
     _root                   : THREE.Object3D            = null;      
@@ -37,7 +39,6 @@ export class Viewer {
     _camera                 : THREE.PerspectiveCamera   = null;
 
     _controls               : TrackballControls         = null;
-    _cameraControls         : CameraControls            = null;
     
     /**
      * Default constructor
@@ -104,8 +105,8 @@ export class Viewer {
         this.camera.name = this.name;
         this.initializeInputControls();
 
-        if (this._cameraControls)
-            this._cameraControls.synchronizeCameraSettings();
+        if (this.cameraControls)
+            this.cameraControls.synchronizeCameraSettings();
         }
         
      /**
@@ -237,7 +238,7 @@ export class Viewer {
      */
     initializeUIControls() {
 
-        this._cameraControls = new CameraControls(this);       
+        this.cameraControls = new CameraControls(this);       
     }
 
     /**
@@ -308,7 +309,7 @@ export class Viewer {
         let standardViewCamera = CameraHelper.getStandardViewCamera(view, this.aspectRatio, this.model);
         this.camera = standardViewCamera;
 
-        this._cameraControls.synchronizeCameraSettings(view);
+        this.cameraControls.synchronizeCameraSettings(view);
     }
 
     /**
@@ -316,7 +317,8 @@ export class Viewer {
      */
     fitView() {
 
-        this.camera = CameraHelper.getFitViewCamera (CameraHelper.getSceneCamera(this.camera, this.aspectRatio), this.model);
+        CameraHelper.setDefaultClippingPlanes(this.camera);
+        this.camera = CameraHelper.getFitViewCamera (this.camera, this.model);
     }
            
 //#endregion

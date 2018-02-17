@@ -78,13 +78,25 @@ export class CameraHelper {
      * @param {THREE.PerspectiveCamera} camera Camera to set clipping planes.
      * @param {THREE.Group} model Target model.
      */
-    static boundCameraClippingPlanes(camera: THREE.PerspectiveCamera, model : THREE.Group) {
+    static boundClippingPlanes(camera: THREE.PerspectiveCamera, model : THREE.Group) {
 
         let clippingPlanes: ClippingPlanes = this.getBoundingClippingPlanes(camera, model);
         camera.near = clippingPlanes.near;
         camera.far = clippingPlanes.far;
 
         camera.updateProjectionMatrix();
+    }
+
+    /**
+     * @description Finalize the camera clipping planes to fit the model if they are at the default values..
+     * @static
+     * @param {THREE.PerspectiveCamera} camera Camera to optimize clipping planes.
+     * @param {THREE.Group} model Target model.
+     */
+    static finalizeClippingPlanes(camera: THREE.PerspectiveCamera, model : THREE.Group) {
+
+        if ((camera.near === Camera.DefaultNearClippingPlane) && (camera.far === Camera.DefaultFarClippingPlane))
+            CameraHelper.boundClippingPlanes(camera, model);
     }
 
 //#endregion
@@ -234,6 +246,15 @@ export class CameraHelper {
     }
 
     /**
+     * @description Resets the clipping planes to the default values.
+     */
+    static setDefaultClippingPlanes(camera : THREE.PerspectiveCamera) {
+
+        camera.near = Camera.DefaultNearClippingPlane;
+        camera.far  = Camera.DefaultFarClippingPlane;
+    }
+
+    /**
      * Creates a default scene camera.
      * @param viewAspect View aspect ratio.
      */
@@ -242,8 +263,8 @@ export class CameraHelper {
         let defaultCamera = new THREE.PerspectiveCamera();
         defaultCamera.position.copy (new THREE.Vector3 (0, 0, 0));
         defaultCamera.lookAt(new THREE.Vector3(0, 0, -1));
-        defaultCamera.near   = Camera.DefaultNearClippingPlane;
-        defaultCamera.far    = Camera.DefaultFarClippingPlane;
+        
+        this.setDefaultClippingPlanes(defaultCamera);
         defaultCamera.fov    = Camera.DefaultFieldOfView;
         defaultCamera.aspect = viewAspect;
 

@@ -13,6 +13,7 @@
         <form asp-action="Edit" asp-route-id="@Model.Id">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -29,16 +30,15 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="StandardView" class="control-label"></label>
-                <select asp-for="StandardView" class="form-control" asp-items="ViewBag.StandardViews"></select>
-                <span asp-validation-for="StandardView" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="FieldOfView" class="control-label"></label>
                 <input asp-for="FieldOfView" class="form-control" />
                 <span asp-validation-for="FieldOfView" class="text-danger"></span>
             </div>
-
+            <div class="form-group">
+                <label asp-for="AspectRatio" class="control-label"></label>
+                <input asp-for="AspectRatio" class="form-control" />
+                <span asp-validation-for="AspectRatio" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="Near" class="control-label"></label>
                 <input asp-for="Near" class="form-control" />
@@ -48,13 +48,6 @@
                 <label asp-for="Far" class="control-label"></label>
                 <input asp-for="Far" class="form-control" />
                 <span asp-validation-for="Far" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label>
-                        <input asp-for="BoundClippingPlanes" /> @Html.DisplayNameFor(model => model.BoundClippingPlanes)
-                    </label>
-                </div>
             </div>
 
             <div class="form-group">
@@ -72,20 +65,58 @@
                 <input asp-for="PositionZ" class="form-control" />
                 <span asp-validation-for="PositionZ" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="LookAtX" class="control-label"></label>
-                <input asp-for="LookAtX" class="form-control" />
-                <span asp-validation-for="LookAtX" class="text-danger"></span>
+                <label asp-for="EulerX" class="control-label"></label>
+                <input asp-for="EulerX" class="form-control" />
+                <span asp-validation-for="EulerX" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LookAtY" class="control-label"></label>
-                <input asp-for="LookAtY" class="form-control" />
-                <span asp-validation-for="LookAtY" class="text-danger"></span>
+                <label asp-for="EulerY" class="control-label"></label>
+                <input asp-for="EulerY" class="form-control" />
+                <span asp-validation-for="EulerY" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LookAtZ" class="control-label"></label>
-                <input asp-for="LookAtZ" class="form-control" />
-                <span asp-validation-for="LookAtZ" class="text-danger"></span>
+                <label asp-for="EulerZ" class="control-label"></label>
+                <input asp-for="EulerZ" class="form-control" />
+                <span asp-validation-for="EulerZ" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Theta" class="control-label"></label>
+                <input asp-for="Theta" class="form-control" />
+                <span asp-validation-for="Theta" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ScaleX" class="control-label"></label>
+                <input asp-for="ScaleX" class="form-control" />
+                <span asp-validation-for="ScaleX" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ScaleY" class="control-label"></label>
+                <input asp-for="ScaleY" class="form-control" />
+                <span asp-validation-for="ScaleY" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ScaleZ" class="control-label"></label>
+                <input asp-for="ScaleZ" class="form-control" />
+                <span asp-validation-for="ScaleZ" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UpX" class="control-label"></label>
+                <input asp-for="UpX" class="form-control" />
+                <span asp-validation-for="UpX" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UpY" class="control-label"></label>
+                <input asp-for="UpY" class="form-control" />
+                <span asp-validation-for="UpY" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UpZ" class="control-label"></label>
+                <input asp-for="UpZ" class="form-control" />
+                <span asp-validation-for="UpZ" class="text-danger"></span>
             </div>
 
             <div class="form-group">

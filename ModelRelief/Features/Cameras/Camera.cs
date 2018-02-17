@@ -24,27 +24,41 @@ namespace ModelRelief.Dto
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public StandardView StandardView { get; set; }
-
         public double FieldOfView { get; set; }
+        [Display(Name = "Aspect Ratio")]
+        public double AspectRatio { get; set; }
         public double Near { get; set; }
         public double Far { get; set; }
-        [Display(Name = "Bounded")]
-        public bool BoundClippingPlanes { get; set; }
 
-        [Display(Name = "P(x)")]
+        [Display(Name = "Px")]
         public double PositionX { get; set; }
-        [Display(Name = "P(y)")]
+        [Display(Name = "Py")]
         public double PositionY { get; set; }
-        [Display(Name = "P(z)")]
+        [Display(Name = "Pz")]
         public double PositionZ { get; set; }
 
-        [Display(Name = "Target(x)")]
-        public double LookAtX { get; set; }
-        [Display(Name = "Target(y)")]
-        public double LookAtY { get; set; }
-        [Display(Name = "Target(z)")]
-        public double LookAtZ { get; set; }
+        [Display(Name = "Ex")]
+        public double EulerX { get; set; }
+        [Display(Name = "Ey")]
+        public double EulerY { get; set; }
+        [Display(Name = "Ez")]
+        public double EulerZ { get; set; }
+        [Display(Name = "Theta")]
+        public double Theta { get; set; }
+
+        [Display(Name = "Sx")]
+        public double ScaleX { get; set; }
+        [Display(Name = "Sy")]
+        public double ScaleY { get; set; }
+        [Display(Name = "Sz")]
+        public double ScaleZ { get; set; }
+
+        [Display(Name = "Ux")]
+        public double UpX { get; set; }
+        [Display(Name = "Uy")]
+        public double UpY { get; set; }
+        [Display(Name = "Uz")]
+        public double UpZ { get; set; }
 
         // Navigation Properties
         public int? ProjectId { get; set; }
@@ -56,6 +70,13 @@ namespace ModelRelief.Dto
         /// </summary>
         public Camera()
         {
+            ScaleX = 1.0;
+            ScaleY = 1.0;
+            ScaleZ = 1.0;
+
+            UpX = 1.0;
+            UpY = 1.0;
+            UpZ = 1.0;
         }
     }
 
@@ -75,6 +96,31 @@ namespace ModelRelief.Dto
 
             RuleFor(m => m.Description)
                 .NotNull().WithMessage("The Description property is required.");
+
+            RuleFor(m => m.FieldOfView)
+                .NotNull().WithMessage("The FieldOfView property is required.");
+            RuleFor(m => m.AspectRatio)
+                .NotNull().WithMessage("The AspectRatio property is required.");
+            RuleFor(m => m.Near)
+                .NotNull().WithMessage("The Near clipping plane property is required.");
+            RuleFor(m => m.Far)
+                .NotNull().WithMessage("The Far clipping plane property is required.");
+
+            RuleFor(m => m.PositionX)
+                .NotNull().WithMessage("The PositionX property is required.");
+            RuleFor(m => m.PositionY)
+                .NotNull().WithMessage("The PositionY property is required.");
+            RuleFor(m => m.PositionX)
+                .NotNull().WithMessage("The PositionZ property is required.");
+
+            RuleFor(m => m.EulerX)
+                .NotNull().WithMessage("The quaternion EulerX property is required.");
+            RuleFor(m => m.EulerY)
+                .NotNull().WithMessage("The quaternion EulerY property is required.");
+            RuleFor(m => m.EulerZ)
+                .NotNull().WithMessage("The quaternion EulerZ property is required.");
+            RuleFor(m => m.Theta)
+                .NotNull().WithMessage("The quaternion Theta property is required.");
         }
     }
 

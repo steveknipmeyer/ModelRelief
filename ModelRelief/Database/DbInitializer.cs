@@ -287,23 +287,31 @@ namespace ModelRelief.Database
             {
                 new Camera
                 {
-                    Name = "Top Camera", Description = "Aligned with negative Z", StandardView = StandardView.Top,
+                    Name = "Top Camera", Description = "Aligned along negative Z",
+                    FieldOfView = Camera.DefaultFieldOfView,
+                    AspectRatio = 1.0,
+                    Near = Camera.DefaultNearClippingPlane, Far = Camera.DefaultFarClippingPlane,
+
                     PositionX = 0.0, PositionY = 0.0, PositionZ = 100.0,
-                    LookAtX   = 0.0, LookAtY = 0.0, LookAtZ = 0.0,
-                    FieldOfView = 35.0,
-                    Near = 0.0, Far = 1000.0,
-                    BoundClippingPlanes = false,
+                    EulerX = 0.0, EulerY = 0.0, EulerZ = -1.0, Theta = 0.0,
+                    ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
+                    UpX = 0.0, UpY = 1.0, UpZ = 0.0,
+
                     User = _user, Project = FindByName<Project>("ModelRelief"),
                 },
 
                 new Camera
                 {
-                    Name = "Isometric Camera", Description = "Isometric", StandardView = StandardView.Isometric,
-                    PositionX = 50.0, PositionY = 50.0, PositionZ = 50.0,
-                    LookAtX   = 0.0, LookAtY = 0.0, LookAtZ = 0.0,
-                    FieldOfView = 35.0,
-                    Near = 0.0, Far = 1000.0,
-                    BoundClippingPlanes = false,
+                    Name = "Isometric Camera", Description = "Isometric",
+                    FieldOfView = Camera.DefaultFieldOfView,
+                    AspectRatio = 1.0,
+                    Near = Camera.DefaultNearClippingPlane, Far = Camera.DefaultFarClippingPlane,
+
+                    PositionX = 10.0, PositionY = 100.0, PositionZ = 100.0,
+                    EulerX = -1.0, EulerY = -1.0, EulerZ = -1.0, Theta = 0.0,
+                    ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
+                    UpX = 0.0, UpY = 1.0, UpZ = 0.0,
+
                     User = _user, Project = FindByName<Project>("Architecture"),
                 },
             };

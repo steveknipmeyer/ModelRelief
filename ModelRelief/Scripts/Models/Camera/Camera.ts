@@ -16,22 +16,6 @@ import { Services }                 from 'Services'
 import { StopWatch }                from 'StopWatch'
 
 /**
- * @description Caamera settings.
- * @export
- * @interface CameraSettings
- */
-export interface CameraSettings {
-
-    position        : THREE.Vector3;        // location of camera
-    target          : THREE.Vector3;        // target point
-    near            : number;               // near clipping plane
-    far             : number;               // far clipping plane
-    fieldOfView     : number;               // field of view
-    
-    standardView    : StandardView;   
-}
-
-/**
  * @description Camera clipping planes tuple.
  * @export
  * @interface ClippingPlanes
@@ -53,9 +37,7 @@ export class Camera extends Model<Camera> {
     
     viewCamera : THREE.PerspectiveCamera;
 
-    standardView        : StandardView;   
-    boundClippingPlanes : boolean; 
-    projectId           : number;
+    projectId  : number;
 
     /**
      * @constructor
@@ -67,12 +49,7 @@ export class Camera extends Model<Camera> {
             description: 'Perspective Camera',
         });
 
-        // WIP: Should the camera be cloned?     
-//      this.viewCamera = camera.clone(true);            
         this.viewCamera = camera;            
-
-        this.standardView        = StandardView.None;   
-        this.boundClippingPlanes = false; 
         }
 
     /**
@@ -80,28 +57,34 @@ export class Camera extends Model<Camera> {
      * @returns {Dto.Camera} 
      */
     static fromDtoModel(dtoCamera : Dto.Camera) : Camera {
-        
+
+        let position    = new THREE.Vector3(dtoCamera.positionX, dtoCamera.positionY, dtoCamera.positionZ);
+        let quaternion  = new THREE.Quaternion(dtoCamera.eulerX, dtoCamera.eulerY, dtoCamera.eulerZ, dtoCamera.theta);
+        let scale       = new THREE.Vector3(dtoCamera.scaleX, dtoCamera.scaleY, dtoCamera.scaleZ);
+        let up          = new THREE.Vector3(dtoCamera.upX, dtoCamera.upY, dtoCamera.upZ);
+
         // construct PerspectiveCamera from DTO properties
         let perspectiveCamera = new THREE.PerspectiveCamera();
-        
-        perspectiveCamera.position.set(dtoCamera.positionX, dtoCamera.positionY, dtoCamera.positionZ);
-        perspectiveCamera.fov   = dtoCamera.fieldOfView;
-        perspectiveCamera.near  = dtoCamera.near;
-        perspectiveCamera.far   = dtoCamera.far;
-        
-        let lookAt = new THREE.Vector3(dtoCamera.lookAtX, dtoCamera.lookAtY, dtoCamera.lookAtZ);
-        let lookAtNormalized = lookAt.normalize();
-        perspectiveCamera.lookAt(lookAtNormalized);
+        perspectiveCamera.matrix.compose(position, quaternion, scale);
+        perspectiveCamera.up.copy(up);
+
+        // set position/rotation/scale attributes
+        perspectiveCamera.matrix.decompose(perspectiveCamera.position, perspectiveCamera.quaternion, perspectiveCamera.scale); 
+
+        perspectiveCamera.fov    = dtoCamera.fieldOfView;
+        perspectiveCamera.aspect = dtoCamera.aspectRatio;
+        perspectiveCamera.near   = dtoCamera.near;
+        perspectiveCamera.far    = dtoCamera.far;
+
+        perspectiveCamera.updateProjectionMatrix();
 
         // constructor
         let camera = new Camera (perspectiveCamera);
         camera.id          = dtoCamera.id;
         camera.name        = dtoCamera.name;
-        camera.description = dtoCamera.description;
-        
-        camera.standardView        = dtoCamera.standardView;
-        camera.boundClippingPlanes = dtoCamera.boundClippingPlanes;
-        camera.projectId           = dtoCamera.projectId;
+        camera.description = dtoCamera.description;       
+
+        camera.projectId   = dtoCamera.projectId;
 
         return camera;
     }    
@@ -112,22 +95,27 @@ export class Camera extends Model<Camera> {
      */
     toDtoModel() : Dto.Camera {
 
-        let lookAt: THREE.Vector3 = this.viewCamera.getWorldDirection();
+        let position    = new THREE.Vector3();
+        let quaternion  = new THREE.Quaternion();
+        let scale       = new THREE.Vector3();
+        let up          = new THREE.Vector3();
+        this.viewCamera.matrix.decompose(position, quaternion, scale);
+        up = this.viewCamera.up;
 
         let model = new Dto.Camera({
             id              : this.id,
             name            : this.name,
             description     : this.description,    
 
-            standardView    : this.standardView,
-
             fieldOfView     : this.viewCamera.fov,
+            aspectRatio     : this.viewCamera.aspect,
             near            : this.viewCamera.near,
             far             : this.viewCamera.far,
-            boundClippingPlanes : this.boundClippingPlanes,
 
-            position        : this.viewCamera.position,
-            lookAt          : lookAt,
+            position        : position,
+            quaternion      : quaternion,
+            scale           : scale,
+            up              : up,
 
             projectId       : this.projectId
         });

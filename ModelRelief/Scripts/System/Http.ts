@@ -8,9 +8,9 @@
 import * as Dto                             from 'DtoModels'
 
 import { ConvertBase64 }                    from 'ConvertBase64'
-import { DepthBufferFormat }                from 'DepthBuffer'
 import { Exception }                        from 'Exception'
 import { HttpStatusCode, HttpStatusMessage }from 'HttpStatus'
+import { DepthBufferFormat }                from 'IDepthBuffer'
 import { IModel }                           from 'IModel'
 import { RequestResponse }                  from 'RequestResponse'
 import { Services }                         from 'Services'

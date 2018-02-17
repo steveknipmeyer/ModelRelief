@@ -38,7 +38,6 @@ export interface DepthBufferFactoryParameters {
     camera           : THREE.PerspectiveCamera, // camera
     
     logDepthBuffer?  : boolean,                 // use logarithmic depth buffer for higher resolution (better distribution) in scenes with large extents
-    boundedClipping? : boolean,                 // overrride camera clipping planes to bound model
     
     addCanvasToDOM?  : boolean                  // visible canvas; add to HTML
 }
@@ -67,7 +66,6 @@ export class DepthBufferFactory {
 
 
     _logDepthBuffer  : boolean                  = false;    // use a logarithmic buffer for more accuracy in large scenes
-    _boundedClipping : boolean                  = false;    // override camera clipping planes; set near and far to bound model for improved accuracy
 
     _depthBuffer     : DepthBuffer              = null;     // depth buffer 
     _target          : THREE.WebGLRenderTarget  = null;     // WebGL render target for creating the WebGL depth buffer when rendering the scene
@@ -96,7 +94,6 @@ export class DepthBufferFactory {
 
             // optional
             logDepthBuffer  = false,
-            boundedClipping = false,
             addCanvasToDOM  = false
         } = parameters;
 
@@ -107,7 +104,6 @@ export class DepthBufferFactory {
 
         // optional
         this._logDepthBuffer  = logDepthBuffer;
-        this._boundedClipping = boundedClipping;
         this._addCanvasToDOM  = addCanvasToDOM;
 
         this._canvas = this.initializeCanvas();
@@ -364,28 +360,11 @@ export class DepthBufferFactory {
 //#endregion
 
     /**
-     * Sets the camera clipping planes for mesh generation.
-     */
-    setCameraClippingPlanes() {
-
-        // copy camera; shared with ModelViewer
-        let camera = new THREE.PerspectiveCamera();
-        camera.copy(this._camera);
-        CameraHelper.boundCameraClippingPlanes(camera, this._model);
-
-        this._camera = camera;
-    }
-
-    /**
      * Create a depth buffer.
      */
     createDepthBuffer() : DepthBuffer {
 
         let timerTag = Services.timer.mark('DepthBufferFactory.createDepthBuffer');        
-
-        if (this._boundedClipping ||
-            ((this._camera.near === Camera.DefaultNearClippingPlane) && (this._camera.far === Camera.DefaultFarClippingPlane)))
-            this.setCameraClippingPlanes();
 
         this._renderer.render(this._scene, this._camera, this._target);    
     

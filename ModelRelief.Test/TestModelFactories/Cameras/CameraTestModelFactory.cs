@@ -9,6 +9,7 @@ namespace ModelRelief.Test.TestModels.Cameras
     using System.Collections.Generic;
     using System.Linq;
     using ModelRelief.Api.V1.Shared.Rest;
+    using ModelRelief.Domain;
     using ModelRelief.Dto;
 
     /// <summary>
@@ -39,8 +40,6 @@ namespace ModelRelief.Test.TestModels.Cameras
             ReferencePropertyNames = new List<string> { "ProjectId" };
             InvalidReferenceProperty = 0;
             ValidReferenceProperty   = 1;
-
-            EnumPropertyName = "StandardView";
         }
 
         /// <summary>
@@ -49,8 +48,23 @@ namespace ModelRelief.Test.TestModels.Cameras
         /// <returns>Valid model.</returns>
         public override IModel ConstructValidModel()
         {
-            var validModel = base.ConstructValidModel() as IModel;
+            var validModel = base.ConstructValidModel() as Dto.Camera;
             validModel.Name = "TestCamera";
+
+            validModel.FieldOfView = Domain.Camera.DefaultFieldOfView;
+            validModel.AspectRatio = 1.0;
+            validModel.Near = Domain.Camera.DefaultNearClippingPlane;
+            validModel.Far =  Domain.Camera.DefaultFarClippingPlane;
+
+            validModel.PositionX = 0.0;
+            validModel.PositionY = 0.0;
+            validModel.PositionZ = 0.0;
+
+            validModel.EulerX =  0.0;
+            validModel.EulerY =  0.0;
+            validModel.EulerZ = -1.0;
+            validModel.Theta = 0.0;
+
             return validModel;
         }
     }

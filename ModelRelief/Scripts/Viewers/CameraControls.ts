@@ -8,7 +8,8 @@
 import * as THREE  from 'three' 
 import * as dat    from 'dat-gui'
 
-import {Camera, CameraSettings}                 from 'Camera'
+import {assert}                                 from 'chai';        
+import {Camera}                                 from 'Camera'
 import {CameraHelper }                          from 'CameraHelper'
 import {ElementAttributes, ElementIds}          from "Html"
 import {StandardView}                           from 'ICamera'
@@ -24,6 +25,7 @@ import {Viewer}                                 from "Viewer"
 class CameraControlSettings {
 
     camera                  : Camera;
+    standardView            : StandardView = StandardView.Front;
 
     fitView                 : () => void;
     addCameraHelper         : () => void;
@@ -44,8 +46,8 @@ class CameraControlSettings {
  */    
 export class CameraControls {
 
-    _viewer                   : Viewer;                     // associated viewer
-    _cameraControlSettings    : CameraControlSettings;      // UI settings
+    viewer      : Viewer;                     // associated viewer
+    settings    : CameraControlSettings;      // UI settings
     
     // The maximum and minimum values of these controls are modified by the boundClippingPlanes button so they are instance members.
     _controlNearClippingPlane : dat.GUIController;
@@ -57,7 +59,7 @@ export class CameraControls {
      */
     constructor(viewer : Viewer) {  
 
-        this._viewer = viewer;
+        this.viewer = viewer;
 
         // UI Controls
         this.initializeControls();
@@ -69,7 +71,7 @@ export class CameraControls {
      */
     fitView() : void { 
         
-        this._viewer.fitView();
+        this.viewer.fitView();
     }
 
     /**
@@ -78,15 +80,17 @@ export class CameraControls {
     addCameraHelper() : void { 
 
         // remove existing
-        Graphics.removeAllByName(this._viewer.scene, ObjectNames.CameraHelper);
-        
+        Graphics.removeAllByName(this.viewer.scene, ObjectNames.CameraHelper);
+
+        assert.deepEqual(this.viewer.camera, this.settings.camera.viewCamera);
+
         // World
-        Graphics.addCameraHelper(this._viewer.camera, this._viewer.scene, this._viewer.model);
+        Graphics.addCameraHelper(this.settings.camera.viewCamera, this.viewer.scene, this.viewer.model);
 
         // View
-        let modelView = Graphics.cloneAndTransformObject(this._viewer.model, this._viewer.camera.matrixWorldInverse);
-        let cameraView = CameraHelper.getDefaultCamera(this._viewer.aspectRatio);
-        Graphics.addCameraHelper(cameraView, this._viewer.scene, modelView);
+        let modelView = Graphics.cloneAndTransformObject(this.viewer.model, this.settings.camera.viewCamera.matrixWorldInverse);
+        let cameraView = CameraHelper.getDefaultCamera(this.viewer.aspectRatio);
+        Graphics.addCameraHelper(cameraView, this.viewer.scene, modelView);
     }
 
     /**
@@ -94,19 +98,17 @@ export class CameraControls {
      */
     boundClippingPlanes(): void {
 
-        let clippingPlanes = CameraHelper.getBoundingClippingPlanes(this._viewer.camera, this._viewer.model);
+        let clippingPlanes = CameraHelper.getBoundingClippingPlanes(this.settings.camera.viewCamera, this.viewer.model);
 
         // camera
-        this._viewer.camera.near = clippingPlanes.near;
-        this._viewer.camera.far  = clippingPlanes.far;
-        this._viewer.camera.updateProjectionMatrix();
+        this.settings.camera.viewCamera.near = clippingPlanes.near;
+        this.settings.camera.viewCamera.far  = clippingPlanes.far;
+        this.settings.camera.viewCamera.updateProjectionMatrix();
 
         // UI controls
-        this._viewer.camera.near = clippingPlanes.near;
         this._controlNearClippingPlane.min(clippingPlanes.near);
         this._controlNearClippingPlane.max (clippingPlanes.far);
         
-        this._viewer.camera.far = clippingPlanes.far;
         this._controlFarClippingPlane.min(clippingPlanes.near);
         this._controlFarClippingPlane.max(clippingPlanes.far);
     }
@@ -119,8 +121,9 @@ export class CameraControls {
 
         let scope = this;
 
-        let camera = new Camera(this._viewer.camera);
-        this._cameraControlSettings = new CameraControlSettings(camera, this.fitView.bind(this), this.addCameraHelper.bind(this), this.boundClippingPlanes.bind(this));
+        let camera = new Camera(this.viewer.camera);
+        this.settings = new CameraControlSettings(camera, this.fitView.bind(this), this.addCameraHelper.bind(this), this.boundClippingPlanes.bind(this));
+        assert.deepEqual(this.viewer.camera, this.settings.camera.viewCamera);
 
         // Init dat.gui and controls for the UI
         let gui = new dat.GUI({
@@ -133,7 +136,7 @@ export class CameraControls {
         let maximum     : number;
         let stepSize    : number;
 
-        let containerDiv = document.getElementById(this._viewer.containerId);
+        let containerDiv = document.getElementById(this.viewer.containerId);
         containerDiv.appendChild(gui.domElement);
 
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
@@ -142,10 +145,10 @@ export class CameraControls {
         let cameraOptions = gui.addFolder('Camera Options');
         
         // Fit View
-        let controlFitView = cameraOptions.add(this._cameraControlSettings, 'fitView').name('Fit View');
+        let controlFitView = cameraOptions.add(this.settings, 'fitView').name('Fit View');
 
         // CameraHelper
-        let controlCameraHelper = cameraOptions.add(this._cameraControlSettings, 'addCameraHelper').name('Camera Helper');
+        let controlCameraHelper = cameraOptions.add(this.settings, 'addCameraHelper').name('Camera Helper');
         
         // Standard Views
         let viewOptions = {
@@ -158,48 +161,48 @@ export class CameraControls {
             Bottom      : StandardView.Bottom
         };
 
-        let controlStandardViews = cameraOptions.add(this._cameraControlSettings.camera, 'standardView', viewOptions).name('Standard View').listen();
+        let controlStandardViews = cameraOptions.add(this.settings, 'standardView', viewOptions).name('Standard View').listen();
         controlStandardViews.onChange ((viewSetting : string) => {
 
             let view : StandardView = parseInt(viewSetting, 10);
-            scope._viewer.setCameraToStandardView(view);
+            scope.viewer.setCameraToStandardView(view);
         });
             
         // Field of View
         minimum = 25;
         maximum = 75;
         stepSize = 1;
-        let controlFieldOfView = cameraOptions.add(this._viewer.camera, 'fov').name('Field of View').min(minimum).max(maximum).step(stepSize).listen();;
+        let controlFieldOfView = cameraOptions.add(this.settings.camera.viewCamera, 'fov').name('Field of View').min(minimum).max(maximum).step(stepSize).listen();;
         controlFieldOfView.onChange(function (value) {
 
-            scope._viewer.camera.fov = value;
-            scope._viewer.camera.updateProjectionMatrix();
+            scope.settings.camera.viewCamera.fov = value;
+            scope.settings.camera.viewCamera.updateProjectionMatrix();
         }.bind(this));
 
         // Near Clipping Plane
         minimum  =   0.1;
         maximum  = 100;
         stepSize =   0.1;
-        this._controlNearClippingPlane = cameraOptions.add(this._viewer.camera, 'near').name('Near Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
+        this._controlNearClippingPlane = cameraOptions.add(this.settings.camera.viewCamera, 'near').name('Near Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
         this._controlNearClippingPlane.onChange (function (value) {
 
-            scope._viewer.camera.near = value;
-            scope._viewer.camera.updateProjectionMatrix();
+            scope.settings.camera.viewCamera.near = value;
+            scope.settings.camera.viewCamera.updateProjectionMatrix();
         }.bind(this));
 
         // Far Clipping Plane
         minimum  =     1;
         maximum  = 10000;
         stepSize =     0.1;
-        this._controlFarClippingPlane = cameraOptions.add(this._viewer.camera, 'far').name('Far Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
+        this._controlFarClippingPlane = cameraOptions.add(this.settings.camera.viewCamera, 'far').name('Far Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
         this._controlFarClippingPlane.onChange (function (value) {
 
-            scope._viewer.camera.far = value;
-            scope._viewer.camera.updateProjectionMatrix();
+            scope.settings.camera.viewCamera.far = value;
+            scope.settings.camera.viewCamera.updateProjectionMatrix();
         }.bind(this));
 
         // Bound Clipping Planes
-        let controlBoundClippingPlanes = cameraOptions.add(this._cameraControlSettings, 'boundClippingPlanes').name('Bound Clipping Planes');
+        let controlBoundClippingPlanes = cameraOptions.add(this.settings, 'boundClippingPlanes').name('Bound Clipping Planes');
         
         cameraOptions.open();       
     }
@@ -210,7 +213,7 @@ export class CameraControls {
      */
     synchronizeCameraSettings (view? : StandardView) {
 
-        if (view)
-            this._cameraControlSettings.camera.standardView = view;
+        // update settings camera from view
+        this.settings.camera.viewCamera = this.viewer.camera;
     }
 }
