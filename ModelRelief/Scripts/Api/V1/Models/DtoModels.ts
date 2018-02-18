@@ -173,8 +173,35 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
 
         return byteArray;
     }
-}
 
+     /**
+     * @description Gets the backing file as a string from a model.
+     * // https://stackoverflow.com/questions/8936984/uint8array-to-string-in-javascript
+     * @returns {Promise<string>} 
+     */
+    async getFileAsStringAsync() : Promise<string> {
+
+        let exportTag = Services.timer.mark(`GET File (string): ${this.constructor.name}`);
+
+        let fileByteArray = await this.getFileAsync();
+        function byteToStringConverter() : Promise<string> {
+            return new Promise<string>((resolve, reject) => {
+                let blobBuffer = new Blob([new Uint8Array(fileByteArray)]);
+
+                let fileReader = new FileReader();
+                fileReader.onload = function(e) {
+                    resolve((<any>e.target).result);
+                };
+    
+                fileReader.readAsText(blobBuffer);
+            })
+        }
+        let fileString = await byteToStringConverter();
+        Services.timer.logElapsedTime(exportTag);       
+
+        return fileString;
+    }
+}
 /**
  * @description Base class for a generated file-backed DTO model.
  * @export

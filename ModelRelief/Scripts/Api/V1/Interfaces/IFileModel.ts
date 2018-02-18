@@ -15,4 +15,7 @@ import {IModel} from "IModel"
 export interface IFileModel extends IModel {
 
     fileTimeStamp?: Date;                   //  time stamp of file 
+    
+    getFileAsync?() : Promise<Uint8Array>;
+    getFileAsStringAsync?() : Promise<string>;
 }

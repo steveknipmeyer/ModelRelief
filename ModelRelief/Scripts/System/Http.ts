@@ -223,6 +223,8 @@ export class HttpLibrary {
             cache: cacheMode,
         };
 
+        // https://stackoverflow.com/questions/35711724/progress-indicators-for-fetch
+        // See Benjamin Gruenbaum's answer at the bottom.
         let response = await fetch(endpoint, init);
         let contentString = await response.text();
 

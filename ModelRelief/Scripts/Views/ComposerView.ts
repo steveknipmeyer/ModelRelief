@@ -7,6 +7,7 @@
 
 import * as THREE  from 'three' 
 import * as dat    from 'dat-gui'
+import * as Dto    from "DtoModels";
 
 import {ComposerController}                 from "ComposerController"
 import {EventType, MREvent, EventManager}   from 'EventManager'
@@ -105,15 +106,17 @@ export class ComposerView {
         // Model View
         this._modelView = new ModelView(ElementIds.ModelCanvas); 
 
-        // Loader
-        this._loader = new Loader();
-
         // Composer Controller 
         this._composerController = new ComposerController(this);
 
-        // model event handlers in place; load model now
-        let group = await this._loader.loadOBJModelAsync()
 
+        // Loader (model event handlers now initialized)
+        let modelIdElement : HTMLElement = window.document.getElementById('modelId');
+        let modelId = parseInt(modelIdElement.textContent);
+        let model = new Dto.Model3d({id: modelId});
+        
+        this._loader = new Loader();
+        let group = await this._loader.loadOBJModelAsync(model);
         this._modelView.modelViewer.setModel(group);
 
         // Test Models

@@ -56,11 +56,8 @@ namespace ModelRelief.Features.Models
                 Id = id,
             });
 
-            // WIP: Publish path of model for THREE loader.
             var domainModel = await DbContext.Set<Domain.Model3d>().FindAsync(new object[] { id });
-            ViewData["ModelId"]   = domainModel.Id;
-            ViewData["ModelName"] = domainModel.Name;
-            ViewData["ModelPath"] = domainModel.GetRelativePath(ConfigurationProvider.GetSetting(Paths.StoreUsers));
+            ViewData["ModelId"] = domainModel.Id;
             return View(model);
         }
 

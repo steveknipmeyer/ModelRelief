@@ -8,21 +8,26 @@
 import * as THREE  from 'three' 
 import * as dat    from 'dat-gui'
 
-import {HtmlLibrary, ElementIds}            from "Html"
-import {ILogger, ConsoleLogger}             from 'Logger'
-import {MeshViewer}                         from "MeshViewer"
-import {Services}                           from 'Services'
-import {Viewer}                             from "Viewer"
-    
+import {HtmlLibrary, ElementIds}            from 'Html';
+import {ILogger, ConsoleLogger}             from 'Logger';
+import {MeshViewer}                         from 'MeshViewer';
+import {Services}                           from 'Services';
+import {Viewer}                             from 'Viewer';
+
+/**
+ * @description UI View of a Mesh.
+ * @export
+ * @class MeshView
+ */
 export class MeshView {
 
     _containerId               : string;
     _meshViewer                : MeshViewer;
     
-    /** Default constructor
-     * @class MeshView
-     * @constructor
-     */ 
+    /**
+     * Creates an instance of MeshView.
+     * @param {string} containerId 
+     */
     constructor(containerId : string) {  
 
         this._containerId = containerId;    
@@ -31,7 +36,9 @@ export class MeshView {
 
 //#region Properties
     /**
-     * Gets the Container Id.
+     * @description Gets the Container Id.
+     * @readonly
+     * @type {string}
      */
     get containerId(): string {
 
@@ -39,7 +46,9 @@ export class MeshView {
     }
 
     /**
-     * Gets the ModelViewer.
+     * @description Gets the ModelViewer.
+     * @readonly
+     * @type {MeshViewer}
      */
     get meshViewer(): MeshViewer {
 
@@ -52,7 +61,7 @@ export class MeshView {
 
 //#region Initialization
     /**
-     * Initialziation.
+     * @description Performs initialization.
      */
     initialize() {
 
