@@ -53,8 +53,8 @@ export class Loader {
             resolve(loader.parse(modelFile));
         });
 
-        let group : THREE.Group = await loader();
-        return group;
+        let modelGroup : THREE.Group = await loader();
+        return modelGroup;
     }
 
     /**

@@ -33,7 +33,7 @@ export interface DepthBufferFactoryParameters {
 
     width            : number,                  // width of DB
     height           : number                   // height of DB        
-    model            : THREE.Group,             // model root
+    modelGroup       : THREE.Group,             // model root
     camera           : THREE.PerspectiveCamera, // camera
     
     logDepthBuffer?  : boolean,                 // use logarithmic depth buffer for higher resolution (better distribution) in scenes with large extents
@@ -54,7 +54,7 @@ export class DepthBufferFactory {
     static RootContainerId   : string           = 'rootContainer';          // root container for viewers
     
     _scene           : THREE.Scene              = null;     // target scene
-    _model           : THREE.Group              = null;     // target model
+    _modelGroup      : THREE.Group              = null;     // target model
 
     _renderer        : THREE.WebGLRenderer      = null;     // scene renderer
     _canvas          : HTMLCanvasElement        = null;     // DOM canvas supporting renderer
@@ -88,7 +88,7 @@ export class DepthBufferFactory {
             // required
             width,
             height,
-            model,
+            modelGroup,
             camera,
 
             // optional
@@ -98,7 +98,7 @@ export class DepthBufferFactory {
 
         this._width           = width;
         this._height          = height;
-        this._model           = model.clone(true);
+        this._modelGroup           = modelGroup.clone(true);
         this._camera          = camera;
 
         // optional
@@ -182,8 +182,8 @@ export class DepthBufferFactory {
     initializeScene () : void {
         
         this._scene = new THREE.Scene();
-        if (this._model)
-            this._scene.add(this._model);
+        if (this._modelGroup)
+            this._scene.add(this._modelGroup);
 
         this.initializeLighting(this._scene);
     }

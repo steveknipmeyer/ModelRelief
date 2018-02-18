@@ -39,10 +39,10 @@ export class CameraViewer extends Viewer {
         let box : THREE.Mesh = Graphics.createBoxMesh(new THREE.Vector3(40, 60, -20), 10, 20, 20, new THREE.MeshPhongMaterial({color : 0xff0000}));
         box.rotation.set(Math.random(), Math.random(), Math.random());
         box.updateMatrixWorld(true);
-        this.model.add(box);
+        this.modelGroup.add(box);
 
         let sphere : THREE.Mesh = Graphics.createSphereMesh(new THREE.Vector3(-30, 100, -10), 10, new THREE.MeshPhongMaterial({color : 0x00ff00}));
-        this.model.add(sphere);
+        this.modelGroup.add(sphere);
     }   
 }
 
@@ -94,11 +94,11 @@ export class App {
      */
     setClippingPlanes() {
 
-        let model                    : THREE.Group   = this._viewer.model;
+        let modelGroup               : THREE.Group   = this._viewer.modelGroup;
         let cameraMatrixWorldInverse : THREE.Matrix4 = this._viewer.camera.matrixWorldInverse;
         
         // clone model (and geometry!)
-        let boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(model, cameraMatrixWorldInverse);        
+        let boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(modelGroup, cameraMatrixWorldInverse);        
 
         // The bounding box is world-axis aligned. 
         // In View coordinates, the camera is at the origin.
@@ -135,7 +135,7 @@ export class App {
      */
     showBoundingBoxes() {
 
-        let model                    : THREE.Group   = this._viewer.model;
+        let modelGroup               : THREE.Group   = this._viewer.modelGroup;
         let cameraMatrixWorld        : THREE.Matrix4 = this._viewer.camera.matrixWorld;
         let cameraMatrixWorldInverse : THREE.Matrix4 = this._viewer.camera.matrixWorldInverse;
 
@@ -144,7 +144,7 @@ export class App {
         Graphics.removeAllByName(this._viewer._scene, ObjectNames.ModelClone);
         
         // clone model (and geometry!)
-        let modelView  =  Graphics.cloneAndTransformObject(model, cameraMatrixWorldInverse);
+        let modelView  =  Graphics.cloneAndTransformObject(modelGroup, cameraMatrixWorldInverse);
         modelView.name = ObjectNames.ModelClone;
         this._viewer.scene.add(modelView);
 

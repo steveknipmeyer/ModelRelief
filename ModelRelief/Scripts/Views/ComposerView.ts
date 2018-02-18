@@ -113,7 +113,6 @@ export class ComposerView {
         let modelIdElement : HTMLElement = window.document.getElementById('modelId');
         let modelId = parseInt(modelIdElement.textContent);
         let model = new Dto.Model3d({id: modelId});
-
         this._modelView.modelViewer.loadModel(model);
 
         // Test Models

@@ -44,17 +44,17 @@ export class ModelViewer extends Viewer {
 
 //#region Properties
     /**
-     * @description Sets the model.
-     * @param {THREE.Group} value 
+     * @description Sets the graphics of the model viewer..
+     * @param {THREE.Group} modelGroup Graphics group to set.
      */
-    setModel(value : THREE.Group) {
+    setModelGroup(modelGroup : THREE.Group) {
 
         // Call base class property via super
         // https://github.com/Microsoft/TypeScript/issues/4465        
-        super.setModel(value);
+        super.setModelGroup(modelGroup);
 
         // dispatch NewModel event
-        this.eventManager.dispatchEvent(this, EventType.NewModel, value);
+        this.eventManager.dispatchEvent(this, EventType.NewModel, modelGroup);
     }
 //#endregion
 

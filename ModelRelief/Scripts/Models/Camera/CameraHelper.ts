@@ -76,11 +76,11 @@ export class CameraHelper {
      * @description Bounds the camera clipping planes to fit the model.
      * @static
      * @param {THREE.PerspectiveCamera} camera Camera to set clipping planes.
-     * @param {THREE.Group} model Target model.
+     * @param {THREE.Group} modelGroup Target model.
      */
-    static boundClippingPlanes(camera: THREE.PerspectiveCamera, model : THREE.Group) {
+    static boundClippingPlanes(camera: THREE.PerspectiveCamera, modelGroup : THREE.Group) {
 
-        let clippingPlanes: ClippingPlanes = this.getBoundingClippingPlanes(camera, model);
+        let clippingPlanes: ClippingPlanes = this.getBoundingClippingPlanes(camera, modelGroup);
         camera.near = clippingPlanes.near;
         camera.far = clippingPlanes.far;
 
@@ -91,12 +91,12 @@ export class CameraHelper {
      * @description Finalize the camera clipping planes to fit the model if they are at the default values..
      * @static
      * @param {THREE.PerspectiveCamera} camera Camera to optimize clipping planes.
-     * @param {THREE.Group} model Target model.
+     * @param {THREE.Group} modelGroup Target model.
      */
-    static finalizeClippingPlanes(camera: THREE.PerspectiveCamera, model : THREE.Group) {
+    static finalizeClippingPlanes(camera: THREE.PerspectiveCamera, modelGroup : THREE.Group) {
 
         if ((camera.near === Camera.DefaultNearClippingPlane) && (camera.far === Camera.DefaultFarClippingPlane))
-            CameraHelper.boundClippingPlanes(camera, model);
+            CameraHelper.boundClippingPlanes(camera, modelGroup);
     }
 
 //#endregion
@@ -129,20 +129,20 @@ export class CameraHelper {
      * @description Updates the camera to fit the model in the current view.
      * @static
      * @param {THREE.PerspectiveCamera} camera Camera to update.
-     * @param {THREE.Group} model Model to fit.
+     * @param {THREE.Group} modelGroup Model to fit.
      * @returns {THREE.PerspectiveCamera} 
      */
-    static getFitViewCamera (cameraTemplate : THREE.PerspectiveCamera, model : THREE.Group) : THREE.PerspectiveCamera { 
+    static getFitViewCamera (cameraTemplate : THREE.PerspectiveCamera, modelGroup : THREE.Group) : THREE.PerspectiveCamera { 
 
         let timerTag = Services.timer.mark('Camera.getFitViewCamera');              
 
         let camera = cameraTemplate.clone(true);
-        let boundingBoxWorld         : THREE.Box3    = CameraHelper.getDefaultBoundingBox(model);
+        let boundingBoxWorld         : THREE.Box3    = CameraHelper.getDefaultBoundingBox(modelGroup);
         let cameraMatrixWorld        : THREE.Matrix4 = camera.matrixWorld;
         let cameraMatrixWorldInverse : THREE.Matrix4 = camera.matrixWorldInverse;
         
         // Find camera position in View coordinates...
-        let boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(model, cameraMatrixWorldInverse);
+        let boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(modelGroup, cameraMatrixWorldInverse);
 
         let verticalFieldOfViewRadians   : number = (camera.fov / 2) * (Math.PI / 180);
         let horizontalFieldOfViewRadians : number = Math.atan(camera.aspect * Math.tan(verticalFieldOfViewRadians));       
@@ -173,15 +173,15 @@ export class CameraHelper {
      * @description Returns the camera settings to fit the model in a standard view.
      * @static
      * @param {Camera.StandardView} view Standard view (Top, Left, etc.)
-     * @param {THREE.Object3D} model Model to fit.
+     * @param {THREE.Object3D} modelGroup Model to fit.
      * @returns {THREE.PerspectiveCamera} 
      */
-    static getStandardViewCamera (view: StandardView, viewAspect : number, model : THREE.Group) : THREE.PerspectiveCamera { 
+    static getStandardViewCamera (view: StandardView, viewAspect : number, modelGroup : THREE.Group) : THREE.PerspectiveCamera { 
 
         let timerTag = Services.timer.mark('Camera.getStandardView');              
         
         let camera = CameraHelper.getDefaultCamera(viewAspect);               
-        let boundingBox = Graphics.getBoundingBoxFromObject(model);
+        let boundingBox = Graphics.getBoundingBoxFromObject(modelGroup);
         
         let centerX = boundingBox.getCenter().x;
         let centerY = boundingBox.getCenter().y;
@@ -239,7 +239,7 @@ export class CameraHelper {
         camera.updateMatrixWorld(true);
         camera.updateProjectionMatrix();
 
-        camera = CameraHelper.getFitViewCamera(camera, model);
+        camera = CameraHelper.getFitViewCamera(camera, modelGroup);
 
         Services.timer.logElapsedTime(timerTag);
         return camera;

@@ -433,10 +433,10 @@ export class Graphics {
      * @static
      * @param {THREE.Camera} camera Camera to construct helper (may be null).
      * @param {THREE.Scene} scene Scene to annotate.
-     * @param {THREE.Group} model Model geoemetry.
+     * @param {THREE.Group} modelGroup Model geoemetry.
      * @returns {void} 
      */
-    static addCameraHelper (camera : THREE.Camera, scene : THREE.Scene, model : THREE.Group) : void {
+    static addCameraHelper (camera : THREE.Camera, scene : THREE.Scene, modelGroup : THREE.Group) : void {
 
         if (!camera)
             return;
@@ -452,7 +452,7 @@ export class Graphics {
 
         // model bounding box (View coordinates)
         let boundingBoxMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000, wireframe: true, transparent: false, opacity: 0.2 })
-        let boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(model, cameraMatrixWorldInverse);        
+        let boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(modelGroup, cameraMatrixWorldInverse);        
         let boundingBoxViewMesh = Graphics.createBoundingBoxMeshFromBoundingBox(boundingBoxView.getCenter(), boundingBoxView, boundingBoxMaterial);
 
         let boundingBoxWorldMesh = Graphics.cloneAndTransformObject(boundingBoxViewMesh, cameraMatrixWorld);

@@ -115,26 +115,26 @@ export class Viewer {
         }
         
     /**
-     * @description Gets the active model.
+     * @description Gets the graphics object of the active model.
      * @readonly
      * @type {THREE.Group}
      */
-    get model() : THREE.Group {
+    get modelGroup() : THREE.Group {
 
         return this._root;
     }
 
     /**
-     * @description Sets the active model.
-     * @param {THREE.Group} value New model to activate.
+     * @description Sets the graphics of the displayed model.
+     * @param {THREE.Group} modelGroup New model to activate.
      */
-    setModel(value : THREE.Group) {
+    setModelGroup(modelGroup : THREE.Group) {
 
         // N.B. This is a method not a property so a sub class can override.
         // https://github.com/Microsoft/TypeScript/issues/4465
 
         Graphics.removeObjectChildren(this._root, false);
-        this._root.add(value);
+        this._root.add(modelGroup);
     }
 
     /**
@@ -145,7 +145,7 @@ export class Viewer {
 
             let loader = new Loader();
             let group = await loader.loadOBJModelAsync(model);
-            this.setModel(group);
+            this.setModelGroup(group);
         }
 
     /**
@@ -222,7 +222,7 @@ export class Viewer {
      * @description Initialize the viewer camera
      */
     initializeCamera() {
-        this.camera = CameraHelper.getStandardViewCamera(StandardView.Front, this.aspectRatio, this.model);       
+        this.camera = CameraHelper.getStandardViewCamera(StandardView.Front, this.aspectRatio, this.modelGroup);       
     }
 
     /**
@@ -276,7 +276,7 @@ export class Viewer {
             switch (keyCode) {
 
                 case 70:                // F               
-                    this.camera = CameraHelper.getStandardViewCamera(StandardView.Front, this.aspectRatio, this.model);
+                    this.camera = CameraHelper.getStandardViewCamera(StandardView.Front, this.aspectRatio, this.modelGroup);
                     break;
             }
             }, false);
@@ -327,7 +327,7 @@ export class Viewer {
      */
     setCameraToStandardView(view : StandardView) {
 
-        let standardViewCamera = CameraHelper.getStandardViewCamera(view, this.aspectRatio, this.model);
+        let standardViewCamera = CameraHelper.getStandardViewCamera(view, this.aspectRatio, this.modelGroup);
         this.camera = standardViewCamera;
 
         this.cameraControls.synchronizeCameraSettings(view);
@@ -339,7 +339,7 @@ export class Viewer {
     fitView() {
 
         CameraHelper.setDefaultClippingPlanes(this.camera);
-        this.camera = CameraHelper.getFitViewCamera (this.camera, this.model);
+        this.camera = CameraHelper.getFitViewCamera (this.camera, this.modelGroup);
     }
 //#endregion
 

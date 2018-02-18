@@ -32,26 +32,25 @@ type Listener = (event: MREvent, ...args : any[]) => void;
 type ListenerArray = Listener[][];  // Listener[][EventType];
 
 /**
- * Event Manager
- * General event management and dispatching.
- * @class
+ * @description General event management and dispatching.
+ * @export
+ * @class EventManager
  */
 export class EventManager {
 
     _listeners : ListenerArray;
     
     /**
-    /*
+     * Creates an instance of EventManager.
      * Creates EventManager object. It needs to be called with '.call' to add the functionality to an object.
-     * @constructor
      */
     constructor() {
     }
 
     /**
-     * Adds a listener to an event type.
-     * @param type The type of the event that gets added.
-     * @param listener The listener function that gets added.
+     * @description Adds a listener to an event type.
+     * @param {EventType} type The type of the event that gets added.
+     * @param {(event: MREvent, ...args : any[]) => void} listener The listener function that gets added.
      */
     addEventListener(type: EventType, listener: (event: MREvent, ...args : any[]) => void ): void {
 
@@ -77,9 +76,10 @@ export class EventManager {
     }
     
     /**
-     * Checks whether a listener is registered for an event.
-     * @param type The type of the event to check.
-     * @param listener The listener function to check..
+     * @description Checks whether a listener is registered for an event.
+     * @param {EventType} type 
+     * @param {(event: MREvent, ...args : any[]) => void} listener 
+     * @returns {boolean} 
      */
     hasEventListener(type: EventType, listener: (event: MREvent, ...args : any[]) => void): boolean {
 
@@ -94,9 +94,10 @@ export class EventManager {
     }
     
     /**
-     * Removes a listener from an event type.
-     * @param type The type of the event that gets removed.
-     * @param listener The listener function that gets removed.
+     * @description Removes a listener from an event type.
+     * @param {EventType} type 
+     * @param {(event: MREvent, ...args : any[]) => void} listener 
+     * @returns {void} 
      */
     removeEventListener(type: EventType, listener: (event: MREvent, ...args : any[]) => void): void {
 
@@ -120,9 +121,11 @@ export class EventManager {
     }
     
     /**
-     * Fire an event type.
-     * @param target Event target.
-     * @param type The type of event that gets fired.
+     * @description Fire an event type.
+     * @param {*} target Event target.
+     * @param {EventType} eventType The type of event that gets fired.
+     * @param {...any[]} args Arguments for event.
+     * @returns {void} 
      */
     dispatchEvent(target : any, eventType : EventType, ...args : any[]): void {
 

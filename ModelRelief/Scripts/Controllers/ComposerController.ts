@@ -32,8 +32,8 @@ import {Services}                           from 'Services'
 import {UnitTests}                          from 'UnitTests';
 
 /**
- * @class
- * ComposerViewSettings
+ * @description ComposerViewSettings
+ * @class ComposerViewSettings
  */
 class ComposerViewSettings {
 
@@ -41,7 +41,11 @@ class ComposerViewSettings {
 
     generateRelief  : () => void;
     saveRelief      : () => void;
-
+    /**
+     * Creates an instance of ComposerViewSettings.
+     * @param {() => any} generateRelief 
+     * @param {() => any} saveRelief 
+     */
     constructor(generateRelief: () => any, saveRelief: () => any) {
 
         this.meshTransform = new MeshTransform();
@@ -62,18 +66,20 @@ class ComposerViewSettings {
 }
 
 /**
- * Composer Controller
- */    
+ * @description Composer Controller
+ * @export
+ * @class ComposerController
+ */
 export class ComposerController {
 
     _composerView         : ComposerView;                       // application view
     _composerViewSettings : ComposerViewSettings;               // UI settings
 
     _initialMeshGeneration: boolean = true;
-    
-    /** Default constructor
-     * @class ComposerViewControls
-     * @constructor
+
+    /**
+     * Creates an instance of ComposerController.
+     * @param {ComposerView} composerView Composer view.
      */
     constructor(composerView : ComposerView) {  
 
@@ -84,18 +90,19 @@ export class ComposerController {
 
 //#region Event Handlers
     /**
-     * Event handler for new model.
-     * @param event NewModel event.
-     * @param model Newly loaded model.
+     * @description Event handler for new model.
+     * @param {MREvent} event NewModel event.
+     * @param {THREE.Group} modelGroup Newly loaded model.
      */
-    onNewModel(event: MREvent, model: THREE.Group) {
+    onNewModel(event: MREvent, modelGroup: THREE.Group) {
 
         this._composerView._modelView.modelViewer.setCameraToStandardView(StandardView.Front);
         this._composerView._meshView.meshViewer.setCameraToStandardView(StandardView.Top);
     }
 
     /**
-     * Generates a relief from the current model camera.
+     * @description Generates a relief from the current model camera.
+     * @returns {Promise<void>} 
      */
     async generateReliefAsync() : Promise<void> { 
 
@@ -133,7 +140,7 @@ export class ComposerController {
         let mesh = new Mesh(reliefWidthPixels, reliefHeightPixels, depthBuffer);
         let meshGraphics = await mesh.constructGraphicssAsync({});
 
-        this._composerView._meshView.meshViewer.setModel(meshGraphics);
+        this._composerView._meshView.meshViewer.setModelGroup(meshGraphics);
         if (this._initialMeshGeneration) {
             this._composerView._meshView.meshViewer.fitView();
             this._initialMeshGeneration = false;
@@ -141,13 +148,14 @@ export class ComposerController {
     }
 
     /**
-     * Saves the Camera.
+     * @description Saves the Camera.
+     * @returns {Promise<Dto.Camera>} 
      */
     async postCameraAsync(): Promise<Dto.Camera> {
 
         // copy view camera so we can optimize clipping planes
         let viewCameraClone = this._composerView.modelView.modelViewer.camera.clone(true);
-        CameraHelper.finalizeClippingPlanes(viewCameraClone, this._composerView.modelView.modelViewer.model);
+        CameraHelper.finalizeClippingPlanes(viewCameraClone, this._composerView.modelView.modelViewer.modelGroup);
 
         let camera = new Camera(viewCameraClone);
         let cameraModel = camera.toDtoModel();
@@ -158,12 +166,16 @@ export class ComposerController {
     }        
     
     /**
-     * Saves the DepthBuffer.
+     * @description Saves the DepthBuffer.
+     * @param {Dto.Camera} camera Perspective camera.
+     * @param {number} widthPixels Width of buffer.
+     * @param {number} heightPixels Hight of buffer.
+     * @returns {Promise<Dto.DepthBuffer>} 
      */
     async postDepthBufferAsync(camera : Dto.Camera, widthPixels: number, heightPixels: number): Promise<Dto.DepthBuffer> {
 
         let depthBufferCamera = Camera.fromDtoModel(camera);
-        let factory = new DepthBufferFactory({ width: widthPixels, height: heightPixels, model: this._composerView.modelView.modelViewer.model, camera: depthBufferCamera.viewCamera, addCanvasToDOM: false });
+        let factory = new DepthBufferFactory({ width: widthPixels, height: heightPixels, modelGroup: this._composerView.modelView.modelViewer.modelGroup, camera: depthBufferCamera.viewCamera, addCanvasToDOM: false });
 
         let depthBuffer = factory.createDepthBuffer();
 
@@ -181,7 +193,8 @@ export class ComposerController {
     }        
 
     /**
-     * Saves the MeshTransform.
+     * @description Saves the MeshTransform.
+     * @returns {Promise<Dto.MeshTransform>} 
      */
     async postMeshTransformAsync(): Promise<Dto.MeshTransform> {
 
@@ -193,7 +206,10 @@ export class ComposerController {
     }        
 
     /**
-     * Saves the Mesh.
+     * @description Saves the Mesh.
+     * @param {Dto.DepthBuffer} depthBuffer DepthBuffer.
+     * @param {Dto.MeshTransform} meshTransform MeshTransform.
+     * @returns {Promise<Dto.Mesh>} 
      */
     async postMeshAsync(depthBuffer : Dto.DepthBuffer, meshTransform : Dto.MeshTransform): Promise<Dto.Mesh> {
 
@@ -210,7 +226,7 @@ export class ComposerController {
     }        
         
     /**
-     * Saves the relief.
+     * @description Saves the relief.
      */
     saveRelief(): void {
 
@@ -231,7 +247,7 @@ export class ComposerController {
     //#endregion
 
     /**
-     * Initialization.
+     * @description Initialization.
      */
     initialize() {
 
@@ -241,7 +257,7 @@ export class ComposerController {
     }
     
     /**
-     * Initialize the view settings that are controllable by the user
+     * @description Initialize the view settings that are controllable by the user
      */
     initializeUIControls() {
 

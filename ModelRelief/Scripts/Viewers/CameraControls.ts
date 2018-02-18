@@ -94,10 +94,10 @@ export class CameraControls {
         assert.deepEqual(this.viewer.camera, this.settings.camera.viewCamera);
 
         // World
-        Graphics.addCameraHelper(this.settings.camera.viewCamera, this.viewer.scene, this.viewer.model);
+        Graphics.addCameraHelper(this.settings.camera.viewCamera, this.viewer.scene, this.viewer.modelGroup);
 
         // View
-        let modelView = Graphics.cloneAndTransformObject(this.viewer.model, this.settings.camera.viewCamera.matrixWorldInverse);
+        let modelView = Graphics.cloneAndTransformObject(this.viewer.modelGroup, this.settings.camera.viewCamera.matrixWorldInverse);
         let cameraView = CameraHelper.getDefaultCamera(this.viewer.aspectRatio);
         Graphics.addCameraHelper(cameraView, this.viewer.scene, modelView);
     }
@@ -107,7 +107,7 @@ export class CameraControls {
      */
     boundClippingPlanes(): void {
 
-        let clippingPlanes = CameraHelper.getBoundingClippingPlanes(this.settings.camera.viewCamera, this.viewer.model);
+        let clippingPlanes = CameraHelper.getBoundingClippingPlanes(this.settings.camera.viewCamera, this.viewer.modelGroup);
 
         // camera
         this.settings.camera.viewCamera.near = clippingPlanes.near;
