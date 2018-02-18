@@ -12,6 +12,8 @@ import {CameraControls}         from 'CameraControls';
 import {EventManager}           from 'EventManager';
 import {Graphics, ObjectNames}  from 'Graphics';
 import {StandardView}           from 'ICamera';
+import {IFileModel}             from 'IFileModel';
+import {Loader}                 from 'Loader';
 import {ILogger}                from 'Logger';
 import {Materials}              from 'Materials';
 import {Services}               from 'Services';
@@ -134,6 +136,17 @@ export class Viewer {
         Graphics.removeObjectChildren(this._root, false);
         this._root.add(value);
     }
+
+    /**
+     * @description Loads a model from disk.
+     * @param {IFileModel} model 
+     */
+    async loadModel(model : IFileModel) {
+
+            let loader = new Loader();
+            let group = await loader.loadOBJModelAsync(model);
+            this.setModel(group);
+        }
 
     /**
      * @description Calculates the aspect ratio of the canvas afer a window resize
