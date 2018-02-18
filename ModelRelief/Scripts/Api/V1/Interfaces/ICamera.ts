@@ -7,8 +7,9 @@
 
 import * as THREE       from 'three'
 
-import { IProject }     from 'IProject'
 import { IModel }       from 'IModel'
+import { IProject }     from 'IProject'
+
 
  /**
  *  Standard camera views.

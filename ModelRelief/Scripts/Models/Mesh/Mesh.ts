@@ -3,7 +3,6 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
-
 "use strict";
 
 import * as Dto   from 'DtoModels'
@@ -13,29 +12,18 @@ import { assert }                   from 'chai'
 import { Camera }                   from 'Camera'
 import { CameraHelper }             from 'CameraHelper'
 import { DepthBuffer }              from 'DepthBuffer'
-import {GeneratedFileModel}         from 'GeneratedFileModel'
+import { GeneratedFileModel }       from 'GeneratedFileModel'
 import { Graphics }                 from 'Graphics'
+import { MeshFormat }               from 'IMesh'
 import { ILogger, ConsoleLogger }   from 'Logger'
 import { MathLibrary }              from 'Math'
-import { MeshFormat }               from 'IMesh'
+import { MeshCache }                from 'MeshCache'
 import { MeshTransform }            from 'MeshTransform'
 import { Model }                    from 'Model'
 import { Project }                  from 'Project'
 import { Services }                 from 'Services'
 import { StopWatch }                from 'StopWatch'
 import { Tools }                    from 'Tools'
-
-/**
- * @description Constructor parameters for Mesh.
- * @export
- * @interface MeshParameters
- */
-export interface MeshParameters {
-
-    width       : number,                // width of mesh (DB resolution)
-    height      : number,                // height of mesh (DB resolution)
-    depthBuffer : DepthBuffer,           // depth buffer
-}
 
 /**
  * @description Mesh generation parameters.
@@ -48,69 +36,15 @@ export interface MeshGenerateParameters {
     material?   : THREE.Material;
 }
 
+/**
+ * @description Represents a subdivided rectangular face consisting of two triagnular faces.
+ * @interface FacePair
+ */
 interface FacePair {
 
     vertices: THREE.Vector3[];
     faces: THREE.Face3[];
 }
-
-/**
- *  Mesh cache to optimize mesh creation.
- *  If a mesh exists in the cache of the required dimensions, it is used as a template.
- *  @class
- */
-class MeshCache {
-    _cache : Map<string, THREE.Mesh>;
-
-    /**
-     * Constructor
-     */
-    constructor() {       
-        this._cache = new Map();
-    }
-
-    /**
-     * @description Generates the map key for a mesh.
-     * @param {THREE.Vector2} modelExtents Extents of the camera near plane; model units.
-     * @param {THREE.Vector2} pixelExtents Extents of the pixel array used to subdivide the mesh.
-     * @returns {string}
-     */
-    generateKey(modelExtents : THREE.Vector2, pixelExtents : THREE.Vector2) : string{
-        
-        let aspectRatio = (modelExtents.x / modelExtents.y ).toFixed(2).toString();
-
-        return `Aspect = ${aspectRatio} : Pixels = (${Math.round(pixelExtents.x).toString()}, ${Math.round(pixelExtents.y).toString()})`;
-    }
-
-    /**
-     * @description Returns a mesh from the cache as a template (or null);
-     * @param {THREE.Vector2} modelExtents Extents of the camera near plane; model units.
-     * @param {THREE.Vector2} pixelExtents Extents of the pixel array used to subdivide the mesh.
-     * @returns {THREE.Mesh}
-     */
-    getMesh(modelExtents: THREE.Vector2, pixelExtents: THREE.Vector2) : THREE.Mesh{
-        
-        let key: string = this.generateKey(modelExtents, pixelExtents);
-        return this._cache[key];
-    }
-
-    /**
-     * @description Adds a mesh instance to the cache.
-     * @param {THREE.Vector2} modelExtents Extents of the camera near plane; model units.
-     * @param {THREE.Vector2} pixelExtents Extents of the pixel array used to subdivide the mesh.
-     * @param {THREE.Mesh} Mesh instance to add.
-     * @returns {void} 
-     */
-    addMesh(modelExtents: THREE.Vector2, pixelExtents: THREE.Vector2, mesh : THREE.Mesh) : void {
-
-        let key: string = this.generateKey(modelExtents, pixelExtents);
-        if (this._cache[key])
-            return;
-
-        let meshClone = Graphics.cloneAndTransformObject(mesh);
-        this._cache[key] = meshClone;
-    }
-}   
 
 /**
  * @description Represents a mesh.
@@ -136,39 +70,40 @@ export class Mesh extends GeneratedFileModel<Mesh> {
     format: MeshFormat;
 
     // Navigation Properties    
-    projectId : number;
-    project   : Project;
+    projectId       : number;
+    project         : Project;
 
-    cameraId : number;
-    camera   : Camera;             
+    cameraId        : number;
+    camera          : Camera;             
 
-    depthBufferId : number;
-    depthBuffer   : DepthBuffer;
+    depthBufferId   : number;
+    depthBuffer     : DepthBuffer;
 
     meshTransformId : number;
     meshTransform   : MeshTransform;
 
     // Private
-    _width      : number;          // width resolution of the DB
-    _height     : number;          // height resolution of the DB
+    _width      : number;          // width resolution of the DepthBuffer
+    _height     : number;          // height resolution of the DepthBuffer
 
     _logger     : ILogger;          // logger
-
+    
     /**
-     * @constructor
-     * @param parameters Initialization parameters (MeshParameters)
+     * Creates an instance of Mesh.
+     * @param {number} width Width of mesh (DB resolution).
+     * @param {number} height Height of mesh (DB resolution).
+     * @param {DepthBuffer} depthBuffer Depth buffer.
      */
-    constructor(parameters: MeshParameters) {
+    constructor(width : number, height: number, depthBuffer : DepthBuffer) {
 
         super({
             name: 'Mesh', 
             description: 'Mesh',
         });
 
-        // required
-        this._width       = parameters.width;
-        this._height      = parameters.height;
-        this.depthBuffer  = parameters.depthBuffer;
+        this._width       = width;
+        this._height      = height;
+        this.depthBuffer  = depthBuffer;
 
         this.initialize();
     }
@@ -179,14 +114,12 @@ export class Mesh extends GeneratedFileModel<Mesh> {
      */
     static fromDtoModel(dtoMesh : Dto.Mesh) : Mesh {
 
-        let parameters : MeshParameters= {
-            width       : 0,                    // N.B. != Dto.Mesh
-            height      : 0,                    // N.B. != Dto.Mesh
-            depthBuffer : undefined             // N.B. != Dto.Mesh
-        };
+        let width       : number = 0;                    // N.B. != Dto.Mesh
+        let height      : number = 0;                    // N.B. != Dto.Mesh
+        let depthBuffer : DepthBuffer = undefined;       // N.B. != Dto.Mesh
 
         // constructor
-        let mesh = new Mesh (parameters);
+        let mesh = new Mesh (width, height, depthBuffer);
 
         mesh.id          = dtoMesh.id;
         mesh.name        = dtoMesh.name;
@@ -206,7 +139,7 @@ export class Mesh extends GeneratedFileModel<Mesh> {
      */
     toDtoModel() : Dto.Mesh {
 
-        let model = new Dto.Mesh({
+        let mesh = new Dto.Mesh({
             id              : this.id,
             name            : this.name,
             description     : this.description,    
@@ -219,31 +152,32 @@ export class Mesh extends GeneratedFileModel<Mesh> {
             meshTransformId : this.meshTransformId,
         });
 
-        return model;
+        return mesh;
     }        
 
     //#region Properties
     /**
-     * Returns the width.
-     * @returns {number}
+     * @description Returns the width.
+     * @readonly
+     * @type {number}
      */
     get width(): number {
         return this._width;
     }
 
     /**
-     * Returns the height.
-     * @returns {number}
+     * @description Returns the height.
+     * @readonly
+     * @type {number}
      */
     get height(): number {
         return this._height;
     }
-
     //#endregion
 
     //#region Initialization    
     /**
-     * Perform setup and initialization.
+     * @description Perform setup and initialization.
      */
     initialize(): void {
 
@@ -253,7 +187,8 @@ export class Mesh extends GeneratedFileModel<Mesh> {
 
     //#region Generation
     /**
-     * Verifies the pre-requisite settings are defined to create a mesh.
+     * @description Verifies the pre-requisite settings are defined to create a mesh.
+     * @returns {boolean} 
      */
     verifyMeshSettings(): boolean {
 
@@ -262,14 +197,17 @@ export class Mesh extends GeneratedFileModel<Mesh> {
 
         return minimumSettingsDefined;
     }
-     /**
-      * Constructs a pair of triangular faces at the given offset in the DepthBuffer.
-      * @param row Row offset (Lower Left).
-      * @param column Column offset (Lower Left).
-      * @param faceSize Size of a face edge (not hypotenuse).
-      * @param baseVertexIndex Beginning offset in mesh geometry vertex array.
-      */
-      constructTriFacesAtOffset (row : number, column : number, meshLowerLeft : THREE.Vector2, faceSize : number, baseVertexIndex : number) : FacePair {
+
+    /**
+     * @description Constructs a pair of triangular faces at the given offset in the DepthBuffer.
+     * @param {number} row Row offset (Lower Left).
+     * @param {number} column Column offset (Lower Left).
+     * @param {THREE.Vector2} meshLowerLeft World coordinated of lower left.
+     * @param {number} faceSize Size of a face edge (not hypotenuse).
+     * @param {number} baseVertexIndex Beginning offset in mesh geometry vertex array.
+     * @returns {FacePair} 
+     */
+    constructTriFacesAtOffset (row : number, column : number, meshLowerLeft : THREE.Vector2, faceSize : number, baseVertexIndex : number) : FacePair {
          
         let facePair : FacePair = {
             vertices : [],
@@ -367,9 +305,9 @@ export class Mesh extends GeneratedFileModel<Mesh> {
    }
 
    /**
-    * Constructs a mesh of the given base dimension.
-    * @param meshXYExtents Base dimensions (model units). Height is controlled by DB aspect ratio.
-    * @param material Material to assign to mesh.
+    * @description Constructs a mesh of the given base dimension.
+    * @param {THREE.Material} [material] Material to assign to mesh.
+    * @returns {THREE.Mesh} 
     */
    constructGraphics(material? : THREE.Material) : THREE.Mesh {
 
@@ -407,8 +345,9 @@ export class Mesh extends GeneratedFileModel<Mesh> {
    } 
 
     /**
-     * Generates a mesh from the active model and camera.
-     * @param parameters Generation parameters (MeshGenerateParameters)
+     * @description Generates a mesh from the active model and camera.
+     * @param {MeshGenerateParameters} parameters 
+     * @returns {Promise<THREE.Mesh>} Generation parameters (MeshGenerateParameters)
      */
     async constructGraphicssAsync(parameters: MeshGenerateParameters): Promise<THREE.Mesh> {
 
@@ -421,4 +360,3 @@ export class Mesh extends GeneratedFileModel<Mesh> {
     }
     //#endregion
 }
-

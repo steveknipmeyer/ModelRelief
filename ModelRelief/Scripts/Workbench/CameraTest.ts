@@ -24,8 +24,10 @@ import {Viewer}                         from 'Viewer'
 import {Quaternion} from 'three';
 
 /**
- * @class
- * CameraWorkbench
+ * @description CameraWorkbench
+ * @export
+ * @class CameraViewer
+ * @extends {Viewer}
  */
 export class CameraViewer extends Viewer {
 
@@ -45,8 +47,8 @@ export class CameraViewer extends Viewer {
 }
 
 /**
- * @class
- * ViewerControls
+ * @description ViewerControls
+ * @class ViewerControls
  */
 class ViewerControls {
 
@@ -54,17 +56,25 @@ class ViewerControls {
     setClippingPlanes : () => void;
     roundtripCamera  : () => void;
 
+    /**
+     * Creates an instance of ViewerControls.
+     * @param {THREE.PerspectiveCamera} camera Perspective camera.
+     * @param {() => any} showBoundingBoxes Function to create and show the bounding boxes.
+     * @param {() => any} setClippingPlanes Function to set the clipping planes to the extents of the model.
+     * @param {() => any} roundtripCamera Function to test roundtripping a camera through a
+     */
     constructor(camera: THREE.PerspectiveCamera, showBoundingBoxes : () => any, setClippingPlanes : () => any, roundtripCamera : () => any) {
 
-        this.showBoundingBoxes = showBoundingBoxes;
-        this.setClippingPlanes  = setClippingPlanes;
-        this.roundtripCamera    = roundtripCamera;
-    }
+            this.showBoundingBoxes = showBoundingBoxes;
+            this.setClippingPlanes  = setClippingPlanes;
+            this.roundtripCamera    = roundtripCamera;
+        }
 }
 
 /**
- * @class
- * App
+ * @description Test application.
+ * @export
+ * @class App
  */
 export class App {
     
@@ -74,13 +84,13 @@ export class App {
     _viewerControls : ViewerControls;
 
     /**
-     * @constructor
+     * Creates an instance of App.
      */
     constructor() {
     }
 
     /**
-     * Set the camera clipping planes to the model extents in View coordinates.
+     * @description Set the camera clipping planes to the model extents in View coordinates.
      */
     setClippingPlanes() {
 
@@ -104,9 +114,10 @@ export class App {
     }
 
     /**
-     * Create a bounding box mesh.
-     * @param object Target object.
-     * @param color Color of bounding box mesh.
+     * @description Create a bounding box mesh.
+     * @param {THREE.Object3D} object Target object.
+     * @param {number} color Color of bounding box mesh.
+     * @returns {THREE.Mesh} 
      */
     createBoundingBox (object : THREE.Object3D, color : number) : THREE.Mesh {
         
@@ -120,7 +131,7 @@ export class App {
         }
     
     /**
-     * Show the clipping planes of the model in View and World coordinates.
+     * @description Show the clipping planes of the model in View and World coordinates.
      */
     showBoundingBoxes() {
 
@@ -146,7 +157,7 @@ export class App {
     }
 
     /**
-     * Roundtrip a PerspectiveCamera through the DTO model.
+     * @description Roundtrip a PerspectiveCamera through the DTO model.
      */
     roundtripCameraX ()  {
 
@@ -172,7 +183,7 @@ export class App {
     }
 
     /**
-     * Roundtrip a PerspectiveCamera through the DTO model.
+     * @description Roundtrip a PerspectiveCamera through the DTO model.
      */
     roundtripCameraY ()  {
 
@@ -204,7 +215,7 @@ export class App {
     }
 
     /**
-     * Roundtrip a PerspectiveCamera through the DTO model.
+     * @description Roundtrip a PerspectiveCamera through the DTO model.
      */
     roundtripCameraZ ()  {
 
@@ -226,7 +237,7 @@ export class App {
     }
 
     /**
-     * Initialize the view settings that are controllable by the user
+     * @description Initialize the view settings that are controllable by the user
      */
     initializeViewerControls() {
 
@@ -258,7 +269,7 @@ export class App {
     }
 
     /**
-     * Main
+     * @description Main.
      */
     run () {
         this._logger = Services.defaultLogger;

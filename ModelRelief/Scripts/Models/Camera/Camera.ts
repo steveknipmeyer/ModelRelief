@@ -27,13 +27,19 @@ export interface ClippingPlanes {
 }
 
 /**
+ * @description Camera Constructor parameters.
+ * @export
+ * @interface CameraParameters
+ */
+
+/**
  * Camera
  * @class
  */
 export class Camera extends Model<Camera> {
 
-    static DefaultFieldOfView       : number = 37;       // 35mm vertical : https://www.nikonians.org/reviews/fov-tables       
-    static DefaultNearClippingPlane : number = 0.1; 
+    static DefaultFieldOfView       : number =   37;       // 35mm vertical : https://www.nikonians.org/reviews/fov-tables       
+    static DefaultNearClippingPlane : number =    0.1; 
     static DefaultFarClippingPlane  : number = 1000; 
     
     viewCamera : THREE.PerspectiveCamera;
@@ -105,7 +111,7 @@ export class Camera extends Model<Camera> {
         this.viewCamera.matrix.decompose(position, quaternion, scale);
         up = this.viewCamera.up;
 
-        let model = new Dto.Camera({
+        let camera = new Dto.Camera({
             id              : this.id,
             name            : this.name,
             description     : this.description,    
@@ -123,6 +129,6 @@ export class Camera extends Model<Camera> {
             projectId       : this.projectId
         });
 
-        return model;
+        return camera;
     }    
 }

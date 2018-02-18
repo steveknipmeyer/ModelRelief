@@ -5,26 +5,27 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE from 'three'
+import * as THREE from 'three';
           
 /**
- * Materials
- * General THREE.js Material classes and helpers
- * @class
+ * @description General THREE.js Material classes and helpers
+ * @export
+ * @class Materials
  */
 export class Materials {
 
     /**
-     * @constructor
+     * Creates an instance of Materials.
      */
     constructor() {
     }
 
 //#region Materials
     /**
-     * Create a texture material from an image URL.
-     * @param image Image to use in texture.
-     * @returns Texture material.
+     * @description Create a texture material from an image URL.
+     * @static
+     * @param {HTMLImageElement} image Image to use in texture.
+     * @returns {THREE.MeshBasicMaterial} Texture material.
      */
     static createTextureMaterial (image : HTMLImageElement) : THREE.MeshBasicMaterial {
             
@@ -47,9 +48,10 @@ export class Materials {
     }
 
     /**
-     *  Create a bump map Phong material from a texture map.
-     * @param designTexture Bump map texture.
-     * @returns Phong bump mapped material.
+     * @description Create a bump map Phong material from a texture map.
+     * @static
+     * @param {THREE.Texture} designTexture Bump map texture.
+     * @returns {THREE.MeshPhongMaterial} Phong bump mapped material.
      */
     static createMeshPhongMaterial(designTexture : THREE.Texture)  : THREE.MeshPhongMaterial {
 
@@ -68,8 +70,9 @@ export class Materials {
     }
 
     /**
-     * Create a transparent material.
-     * @returns Transparent material.
+     * @description Create a transparent material.
+     * @static
+     * @returns {THREE.Material} 
      */
     static createTransparentMaterial()  : THREE.Material {
 

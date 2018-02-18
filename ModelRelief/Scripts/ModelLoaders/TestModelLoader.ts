@@ -8,9 +8,9 @@
 import * as THREE  from 'three' 
 
 import {ILogger, ConsoleLogger}  from 'Logger'
-import {Graphics}               from "Graphics"
-import {Services}               from 'Services'
-import {Viewer}                 from 'Viewer'
+import {Graphics}                from "Graphics"
+import {Services}                from 'Services'
+import {Viewer}                  from 'Viewer'
 
 const testModelColor = '#558de8';
 

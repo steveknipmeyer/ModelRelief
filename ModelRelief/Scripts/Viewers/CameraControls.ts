@@ -9,18 +9,18 @@ import * as THREE  from 'three'
 import * as dat    from 'dat-gui'
 
 import {assert}                                 from 'chai';        
-import {Camera}                                 from 'Camera'
-import {CameraHelper }                          from 'CameraHelper'
-import {ElementAttributes, ElementIds}          from "Html"
-import {StandardView}                           from 'ICamera'
-import {ILogger, ConsoleLogger}                 from 'Logger'
-import {Graphics, ObjectNames}                  from "Graphics"
-import {Services}                               from 'Services'
-import {Viewer}                                 from "Viewer"
+import {Camera}                                 from 'Camera';
+import {CameraHelper }                          from 'CameraHelper';
+import {ElementAttributes, ElementIds}          from 'Html';
+import {StandardView}                           from 'ICamera';
+import {ILogger, ConsoleLogger}                 from 'Logger';
+import {Graphics, ObjectNames}                  from 'Graphics';
+import {Services}                               from 'Services';
+import {Viewer}                                 from "Viewer";
 
 /**
- * @class
- * CameraControls
+ * @description CameraControls
+ * @class CameraControlSettings
  */
 class CameraControlSettings {
 
@@ -30,7 +30,14 @@ class CameraControlSettings {
     fitView                 : () => void;
     addCameraHelper         : () => void;
     boundClippingPlanes     : () => void;
-    
+
+    /**
+     * Creates an instance of CameraControlSettings.
+     * @param {Camera} camera Perspective camera.
+     * @param {() => any} fitView Function to perform Fit View.
+     * @param {() => any} addCameraHelper Function to add CameraHelper to scene.
+     * @param {() => any} boundClippingPlanes Function to set clipping planes to extents of model.
+     */
     constructor(camera: Camera, fitView: () => any, addCameraHelper: () => any, boundClippingPlanes: () => any) {
 
         this.fitView              = fitView;
@@ -42,8 +49,10 @@ class CameraControlSettings {
 }
 
 /**
- * camera UI Controls.
- */    
+ * @description Camera UI controls.
+ * @export
+ * @class CameraControls
+ */
 export class CameraControls {
 
     viewer      : Viewer;                     // associated viewer
@@ -53,9 +62,9 @@ export class CameraControls {
     _controlNearClippingPlane : dat.GUIController;
     _controlFarClippingPlane  : dat.GUIController;
     
-    /** Default constructor
-     * @class CameraControls
-     * @constructor
+    /**
+     * Creates an instance of CameraControls.
+     * @param {Viewer} viewer 
      */
     constructor(viewer : Viewer) {  
 
@@ -67,7 +76,7 @@ export class CameraControls {
 
 //#region Event Handlers
     /**
-     * Fits the active view.
+     * @description Fits the active view.
      */
     fitView() : void { 
         
@@ -75,7 +84,7 @@ export class CameraControls {
     }
 
     /**
-     * Adds a camera visualization graphic to the scene.
+     * @description Adds a camera visualization graphic to the scene.
      */
     addCameraHelper() : void { 
 
@@ -94,7 +103,7 @@ export class CameraControls {
     }
 
     /**
-     * Force the far clipping plane to the model extents.
+     * @description Force the far clipping plane to the model extents.
      */
     boundClippingPlanes(): void {
 
@@ -115,7 +124,7 @@ export class CameraControls {
     //#endregion
 
     /**
-     * Initialize the view settings that are controllable by the user
+     * @description Initialize the view settings that are controllable by the user
      */
     initializeControls() {
 
@@ -208,8 +217,8 @@ export class CameraControls {
     }
 
     /**
-     * Synchronize the UI camera settings with the target camera.
-     * @param camera 
+     * @description Synchronize the UI camera settings with the target camera.
+     * @param {StandardView} [view] Standard view to set.
      */
     synchronizeCameraSettings (view? : StandardView) {
 

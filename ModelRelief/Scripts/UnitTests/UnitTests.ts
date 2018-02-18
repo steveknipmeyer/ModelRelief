@@ -177,7 +177,6 @@ export class UnitTests {
      * @description Tests whether a Perspective camera can be re-constructed from the DTO Camera properties.
      * @static
      */
-
     static cameraRoundTrip() {
 
         let trials = 10;

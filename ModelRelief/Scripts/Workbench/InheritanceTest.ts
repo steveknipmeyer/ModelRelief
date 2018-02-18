@@ -18,8 +18,9 @@ import {UnitTests}              from 'UnitTests'
 let logger = new HTMLLogger();
 
 /**
- * @class
- * Widget
+ * @description Widget
+ * @export
+ * @class Widget
  */
 export class Widget {
     
@@ -27,7 +28,9 @@ export class Widget {
     price : number;
 
     /**
-     * @constructor
+     * Creates an instance of Widget.
+     * @param {string} name Name of widget.
+     * @param {number} price Price of widget.
      */
     constructor(name : string, price : number) {
 
@@ -36,7 +39,7 @@ export class Widget {
     }
 
     /**
-     * Operate
+     * @description Operate
      */
     operate () {
         logger.addInfoMessage(`${this.name} operating....`);        
@@ -44,8 +47,10 @@ export class Widget {
 }
 
 /**
- * @class
- * SuperWidget
+ * @description SuperWidget
+ * @export
+ * @class ColorWidget
+ * @extends {Widget}
  */
 export class ColorWidget extends Widget {
 
@@ -61,28 +66,61 @@ export class ColorWidget extends Widget {
     }
 }
 
+/**
+ * @description Grandparent.
+ * @export
+ * @class GrandParent
+ */
 export class GrandParent {
 
     grandparentProperty  : string;
+
+    /**
+     * Creates an instance of GrandParent.
+     * @param {string} grandparentProperty 
+     */
     constructor(grandparentProperty  : string) {
 
         this.grandparentProperty  = grandparentProperty ;
     }
 }
-
+/**
+ * @description Parent.
+ * @export
+ * @class Parent
+ * @extends {GrandParent}
+ */
 export class Parent extends GrandParent{
     
     parentProperty : string;
+
+    /**
+     * Creates an instance of Parent.
+     * @param {string} grandparentProperty 
+     * @param {string} parentProperty 
+     */
     constructor(grandparentProperty  : string, parentProperty : string) {
 
         super(grandparentProperty);
         this.parentProperty = parentProperty;
     }
 }
-
+/**
+ * @description Child.
+ * @export
+ * @class Child
+ * @extends {Parent}
+ */
 export class Child extends Parent{
     
     childProperty : string;
+
+    /**
+     * Creates an instance of Child.
+     * @param {string} grandparentProperty 
+     * @param {string} parentProperty 
+     * @param {string} childProperty 
+     */
     constructor(grandparentProperty : string, parentProperty : string, childProperty : string) {
 
         super(grandparentProperty, parentProperty);
@@ -91,8 +129,9 @@ export class Child extends Parent{
 }
 
 /**
- * @class
- * Inheritance
+ * @description 
+ * @export Inheritance
+ * @class InheritanceTest
  */
 export class InheritanceTest {
 
@@ -103,7 +142,7 @@ export class InheritanceTest {
     }
 
     /**
-     * Main
+     * @description Main
      */
     main () {
         

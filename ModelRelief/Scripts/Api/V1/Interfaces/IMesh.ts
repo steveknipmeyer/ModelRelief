@@ -7,9 +7,9 @@
 
 import { ICamera }              from 'ICamera'
 import { IDepthBuffer }         from 'IDepthBuffer'
+import { IGeneratedFileModel }  from 'IGeneratedFileModel'
 import { IMeshTransform }       from 'IMeshTransform'
 import { IProject }             from 'IProject'
-import { IGeneratedFileModel }  from 'IGeneratedFileModel'
 
  /**
  *  Mesh file formats.

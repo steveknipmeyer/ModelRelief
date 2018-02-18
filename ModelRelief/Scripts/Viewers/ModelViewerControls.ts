@@ -8,12 +8,12 @@
 import * as THREE  from 'three' 
 import * as dat    from 'dat-gui'
 
-import {DepthBufferFactory}         from "DepthBufferFactory"
-import {ElementAttributes, ElementIds} from "Html"
-import {ILogger, ConsoleLogger}      from 'Logger'
-import {Graphics}                   from "Graphics"
-import {ModelViewer}                from "ModelViewer"
-import {Services}                   from 'Services'
+import {DepthBufferFactory}             from "DepthBufferFactory"
+import {ElementAttributes, ElementIds}  from "Html"
+import {ILogger, ConsoleLogger}         from 'Logger'
+import {Graphics}                       from "Graphics"
+import {ModelViewer}                    from "ModelViewer"
+import {Services}                       from 'Services'
 
 /**
  * @class

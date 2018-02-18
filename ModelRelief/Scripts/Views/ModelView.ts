@@ -5,24 +5,29 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE  from 'three' 
-import * as dat    from 'dat-gui'
+import * as THREE  from 'three'; 
+import * as dat    from 'dat-gui';
 
-import {HtmlLibrary, ElementIds}            from "Html"
-import {ILogger, ConsoleLogger}              from 'Logger'
-import {ModelViewer}                        from "ModelViewer"
-import {Services}                           from 'Services'
-import {Viewer}                             from "Viewer"
-    
+import {HtmlLibrary, ElementIds}            from "Html";
+import {ILogger, ConsoleLogger}             from 'Logger';
+import {ModelViewer}                        from "ModelViewer";
+import {Services}                           from 'Services';
+import {Viewer}                             from "Viewer";
+
+/**
+ * @description Represents a UI view of a 3D model.
+ * @export
+ * @class ModelView
+ */
 export class ModelView {
 
     _containerId                : string;
     _modelViewer                : ModelViewer;
     
-    /** Default constructor
-     * @class ModelView
-     * @constructor
-     */ 
+    /**
+     * Creates an instance of ModelView.
+     * @param {string} containerId DOM container Id of view.
+     */
     constructor(containerId : string) {  
 
         this._containerId = containerId;    
@@ -31,7 +36,9 @@ export class ModelView {
 
 //#region Properties
     /**
-     * Gets the Container Id.
+     * @description Gets the Container Id.
+     * @readonly
+     * @type {string}
      */
     get containerId(): string {
 
@@ -39,7 +46,9 @@ export class ModelView {
     }
 
     /**
-     * Gets the ModelViewer.
+     * @description Gets the ModelViewer.
+     * @readonly
+     * @type {ModelViewer}
      */
     get modelViewer(): ModelViewer { 
 
@@ -52,7 +61,7 @@ export class ModelView {
 
 //#region Initialization
     /**
-     * Initialziation.
+     * @description Performs initialization.
      */
     initialize() {
 

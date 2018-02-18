@@ -4,19 +4,25 @@
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
-import * as Dto                     from 'DtoModels' 
-import * as THREE                   from 'three' 
 
-import {StandardView}               from "ICamera"
-import {ILogger, ConsoleLogger}     from 'Logger'
-import {Graphics}                   from "Graphics"
-import {OBJLoader}                  from "OBJLoader"
-import {Services}                   from 'Services'
-import {TestModelLoader, TestModel} from 'TestModelLoader'
-import {Viewer}                     from 'Viewer'
+import * as Dto                     from 'DtoModels' ;
+import * as THREE                   from 'three';
+
+import {StandardView}               from "ICamera";
+import {Graphics}                   from "Graphics";
+import {ILogger, ConsoleLogger}     from 'Logger';
+import {OBJLoader}                  from 'OBJLoader';
+import {Services}                   from 'Services';
+import {TestModelLoader, TestModel} from 'TestModelLoader';
+import {Viewer}                     from 'Viewer';
 
 const testModelColor = '#558de8';
 
+/**
+ * @description Represents the model loader used to create Mesh objects from files.
+ * @export
+ * @class Loader
+ */
 export class Loader {
 
     /** Default constructor
@@ -27,9 +33,9 @@ export class Loader {
     }
 
     /**
-     * Loads a model based on the model name and path embedded in the HTML page.
-     * @param viewer Instance of the Viewer to display the model.
-     */    
+     * @description Loads a model based on the model name and path embedded in the HTML page.
+     * @param {Viewer} viewer Instance of the Viewer to display the model.
+     */
     loadOBJModel (viewer : Viewer) {
 
         {
@@ -69,7 +75,7 @@ export class Loader {
     }
 
     /**
-     * Loads a parametric test model.
+     * @description Loads a parametric test model.
      * @param viewer Instance of the Viewer to display the model.
      * @param modelType Test model type (Spher, Box, etc.)
      */    

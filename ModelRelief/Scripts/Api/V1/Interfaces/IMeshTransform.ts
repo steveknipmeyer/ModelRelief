@@ -5,8 +5,8 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { IProject }         from 'IProject'
 import { IModel }           from 'IModel'
+import { IProject }         from 'IProject'
 
  /**
  *  Represents a DTO for a MeshTransform.

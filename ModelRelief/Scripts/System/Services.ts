@@ -4,8 +4,10 @@
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
+
 import {ILogger, ConsoleLogger, HTMLLogger}  from 'Logger'
-import {StopWatch}                          from 'StopWatch'
+import {StopWatch}                           from 'StopWatch'
+
 /**
  * Services
  * General runtime support

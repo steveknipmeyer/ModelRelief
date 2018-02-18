@@ -5,20 +5,22 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE               from 'three'
-import {Camera}                 from 'Camera'
-import {CameraHelper }          from 'CameraHelper'
-import {CameraControls}         from 'CameraControls'
-import {EventManager}           from 'EventManager'
-import {Graphics, ObjectNames}  from 'Graphics'
-import {StandardView}           from "ICamera"
-import {ILogger}                from 'Logger'
-import {Materials}              from 'Materials'
-import {Services}               from 'Services'
-import {TrackballControls}      from 'TrackballControls'
+import * as THREE               from 'three';
+import {Camera}                 from 'Camera';
+import {CameraHelper }          from 'CameraHelper';
+import {CameraControls}         from 'CameraControls';
+import {EventManager}           from 'EventManager';
+import {Graphics, ObjectNames}  from 'Graphics';
+import {StandardView}           from 'ICamera';
+import {ILogger}                from 'Logger';
+import {Materials}              from 'Materials';
+import {Services}               from 'Services';
+import {TrackballControls}      from 'TrackballControls';
 
 /**
- * @exports Viewer/Viewer
+ * @description General 3D model viewer base class.
+ * @export
+ * @class Viewer
  */
 export class Viewer {
 
@@ -41,16 +43,14 @@ export class Viewer {
     _controls               : TrackballControls         = null;
     
     /**
-     * Default constructor
-     * @class Viewer
-     * @constructor
-     * @param name Viewer name.
-     * @param elementToBindTo HTML element to host the viewer.
+     * Creates an instance of Viewer.
+     * @param {string} name Viewer name.
+     * @param {string} modelCanvasId HTML element to host the viewer.
      */
     constructor(name : string, modelCanvasId : string) { 
 
         this._name         = name;                    
-        this._eventManager  = new EventManager();
+        this._eventManager = new EventManager();
         this._logger       = Services.defaultLogger;
 
         this._canvas = Graphics.initializeCanvas(modelCanvasId);
@@ -63,9 +63,10 @@ export class Viewer {
     }
 
 //#region Properties
-
     /**
-     * Gets the Viewer name.
+     * @description Gets the Viewer name.
+     * @readonly
+     * @type {string}
      */
     get name() : string {
         
@@ -73,7 +74,8 @@ export class Viewer {
     }
 
     /**
-     * Gets the Viewer scene.
+     * @description Gets the Viewer scene.
+     * @type {THREE.Scene}
      */
     get scene() : THREE.Scene {
 
@@ -81,7 +83,7 @@ export class Viewer {
     }
 
     /**
-     * Sets the Viewer scene.
+     * @description Sets the Viewer scene.
      */
     set scene(value: THREE.Scene) {
 
@@ -89,7 +91,8 @@ export class Viewer {
     }
         
     /**
-     * Gets the camera.
+     * @description Gets the camera.
+     * @type {THREE.PerspectiveCamera}
      */
     get camera() : THREE.PerspectiveCamera{
         
@@ -97,7 +100,7 @@ export class Viewer {
     }
 
     /**
-     * Sets the camera.
+     * @description Sets the camera.
      */
     set camera(camera : THREE.PerspectiveCamera) {
         
@@ -109,8 +112,10 @@ export class Viewer {
             this.cameraControls.synchronizeCameraSettings();
         }
         
-     /**
-     * Gets the active model.
+    /**
+     * @description Gets the active model.
+     * @readonly
+     * @type {THREE.Group}
      */
     get model() : THREE.Group {
 
@@ -118,8 +123,8 @@ export class Viewer {
     }
 
     /**
-     * Sets the active model.
-     * @param value New model to activate.
+     * @description Sets the active model.
+     * @param {THREE.Group} value New model to activate.
      */
     setModel(value : THREE.Group) {
 
@@ -131,7 +136,9 @@ export class Viewer {
     }
 
     /**
-     * Calculates the aspect ratio of the canvas afer a window resize
+     * @description Calculates the aspect ratio of the canvas afer a window resize
+     * @readonly
+     * @type {number}
      */
     get aspectRatio() : number {
 
@@ -140,7 +147,9 @@ export class Viewer {
     } 
 
     /**
-     * Gets the DOM Id of the Viewer parent container.
+     * @description Gets the DOM Id of the Viewer parent container.
+     * @readonly
+     * @type {string}
      */
     get containerId() : string {
         
@@ -149,18 +158,19 @@ export class Viewer {
     } 
 
     /**
-     * Gets the Event Manager.
+     * @description Gets the Event Manager.
+     * @readonly
+     * @type {EventManager}
      */
     get eventManager(): EventManager {
 
         return this._eventManager;
     }
-        
 //#endregion
 
 //#region Initialization    
     /**
-     * Adds a test sphere to a scene.
+     * @description Adds a test sphere to a scene.
      */
     populateScene () {
 
@@ -170,7 +180,7 @@ export class Viewer {
     }
 
     /**
-     * Initialize Scene
+     * @description Initialize Scene
      */
     initializeScene () {
 
@@ -181,7 +191,7 @@ export class Viewer {
     }
 
     /**
-     * Initialize the WebGL renderer.
+     * @description Initialize the WebGL renderer.
      */
     initializeRenderer () {
 
@@ -196,14 +206,14 @@ export class Viewer {
     }
         
     /**
-     * Initialize the viewer camera
+     * @description Initialize the viewer camera
      */
     initializeCamera() {
         this.camera = CameraHelper.getStandardViewCamera(StandardView.Front, this.aspectRatio, this.model);       
     }
 
     /**
-     * Adds lighting to the scene
+     * @description Adds lighting to the scene
      */
     initializeLighting() {
 
@@ -220,7 +230,7 @@ export class Viewer {
     }
 
     /**
-     * Sets up the user input controls (Trackball)
+     * @description Sets up the user input controls (Trackball)
      */
     initializeInputControls() {
 
@@ -234,7 +244,7 @@ export class Viewer {
     }
 
     /**
-     * Sets up the user input controls (Settings)
+     * @description Sets up the user input controls (Settings)
      */
     initializeUIControls() {
 
@@ -242,7 +252,7 @@ export class Viewer {
     }
 
     /**
-     * Sets up the keyboard shortcuts.
+     * @description Sets up the keyboard shortcuts.
      */
     initializeKeyboardShortcuts() {
 
@@ -260,7 +270,7 @@ export class Viewer {
     }
 
     /**
-     * Initialize the scene with the base objects
+     * @description Initialize the scene with the base objects
      */
     initialize () {
 
@@ -279,7 +289,7 @@ export class Viewer {
 
 //#region Scene
     /**
-     * Removes all scene objects
+     * @description Removes all scene objects
      */
     clearAllAssests() {
         
@@ -287,7 +297,7 @@ export class Viewer {
     } 
 
     /**
-     * Creates the root object in the scene
+     * @description Creates the root object in the scene
      */
     createRoot() {
 
@@ -295,11 +305,9 @@ export class Viewer {
         this._root.name = ObjectNames.Root;
         this.scene.add(this._root);
     }
-
 //#endregion
 
-//#region Camera
-    
+//#region Camera  
     /**
      * @description Sets the view camera properties to the given settings.
      * @param {StandardView} view Camera settings to apply.
@@ -320,12 +328,11 @@ export class Viewer {
         CameraHelper.setDefaultClippingPlanes(this.camera);
         this.camera = CameraHelper.getFitViewCamera (this.camera, this.model);
     }
-           
 //#endregion
 
 //#region Window Resize
     /**
-     * Updates the scene camera to match the new window size
+     * @description Updates the scene camera to match the new window size
      */
     updateCameraOnWindowResize() {
 
@@ -334,7 +341,7 @@ export class Viewer {
     }
 
     /**
-     * Handles the WebGL processing for a DOM window 'resize' event
+     * @description Handles the WebGL processing for a DOM window 'resize' event
      */
     resizeDisplayWebGL() {
 
@@ -347,7 +354,7 @@ export class Viewer {
     }
 
     /**
-     * Handles a window resize event
+     * @description Handles a window resize event
      */
     onResizeWindow () {
 
@@ -357,7 +364,7 @@ export class Viewer {
 
 //#region Render Loop
     /**
-     * Performs the WebGL render of the scene
+     * @description Performs the WebGL render of the scene
      */
     renderWebGL() {
 
@@ -366,7 +373,7 @@ export class Viewer {
     }
 
     /**
-     * Main DOM render loop
+     * @description Main DOM render loop.
      */
     animate() {
 

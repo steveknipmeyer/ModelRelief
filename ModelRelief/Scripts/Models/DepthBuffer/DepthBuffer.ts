@@ -12,13 +12,13 @@ import {Camera}                 from 'Camera'
 import {assert}                 from 'chai'
 import {GeneratedFileModel}     from 'GeneratedFileModel'
 import {Graphics}               from 'Graphics'
+import {DepthBufferFormat}      from 'IDepthBuffer';
 import {ILogger, HTMLLogger}    from 'Logger'
 import {MathLibrary}            from 'Math'
 import {Model3d}                from 'Model3d'
 import {Project}                from 'Project'
 import {Services}               from 'Services'
 import {StopWatch}              from 'StopWatch'
-import {DepthBufferFormat} from 'Api/V1/Interfaces/IDepthBuffer';
 
 /**
  * @description Represents a depth buffer.
@@ -46,8 +46,8 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
 
 
     // Private
-    _logger : ILogger;
-    _rgbaArray : Uint8Array;
+    _logger          : ILogger;
+    _rgbaArray       : Uint8Array;
 
     _nearClipPlane   : number;
     _farClipPlane    : number;
@@ -129,8 +129,11 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
     }        
 
     //#region Properties
+
     /**
-     * Returns the aspect ratio of the depth buffer.
+     * @description Returns the aspect ratio of the depth buffer.
+     * @readonly
+     * @type {number}
      */
     get aspectRatio () : number {
 
@@ -138,7 +141,9 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
     }
 
     /**
-     * Returns the minimum normalized depth value.
+     * @description Returns the minimum normalized depth value.
+     * @readonly
+     * @type {number}
      */
     get minimumNormalized () : number{
 
@@ -146,7 +151,9 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
     }
 
     /**
-     * Returns the minimum depth value.
+     * @description Returns the minimum depth value.
+     * @readonly
+     * @type {number}
      */
     get minimum() : number{
 
@@ -156,7 +163,9 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
     }
 
     /**
-     * Returns the maximum normalized depth value.
+     * @description Returns the maximum normalized depth value.
+     * @readonly
+     * @type {number}
      */
     get maximumNormalized () : number{
 
@@ -164,7 +173,9 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
     }
 
     /**
-     * Returns the maximum depth value.
+     * @description Returns the maximum depth value.
+     * @readonly
+     * @type {number}
      */
     get maximum() : number{
 
@@ -174,7 +185,9 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
     }
 
     /**
-     * Returns the normalized depth range of the buffer.
+     * @description Returns the normalized depth range of the buffer.
+     * @readonly
+     * @type {number}
      */
     get rangeNormalized() : number{
 
@@ -184,7 +197,9 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
     }
 
     /**
-     * Returns the normalized depth of the buffer.
+     * @description Returns the normalized depth of the buffer.
+     * @readonly
+     * @type {number}
      */
     get range() : number{
 
@@ -195,8 +210,8 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
     //#endregion
 
     /**
-     * Calculate the extents of the depth buffer.
-     */       
+     * @description Calculate the extents of the depth buffer.
+     */
     calculateExtents () {
 
         this.setMinimumNormalized();        
@@ -204,8 +219,8 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
     }
 
     /**
-     * Initialize
-     */       
+     * @description Initialize
+     */
     initialize () {
         
         this._logger = Services.defaultLogger;       
@@ -222,8 +237,9 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
     }
 
     /**
-     * Convert a normalized depth [0,1] to depth in model units.
-     * @param normalizedDepth Normalized depth [0,1].
+     * @description Convert a normalized depth [0,1] to depth in model units.
+     * @param {number} normalizedDepth Normalized depth [0,1].
+     * @returns {number} 
      */
     normalizedToModelDepth(normalizedDepth : number) : number {
 
@@ -238,9 +254,10 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
     }
 
     /**
-     * Returns the normalized depth value at a pixel index
-     * @param row Buffer row.
-     * @param column Buffer column.
+     * @description Returns the normalized depth value at a pixel index
+     * @param {number} row Buffer row.
+     * @param {any} column Buffer column.
+     * @returns {number} 
      */
     depthNormalized (row : number, column) : number {
 
@@ -249,9 +266,10 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
     }
 
     /**
-     * Returns the depth value at a pixel index.
-     * @param row Map row.
-     * @param pixelColumn Map column.
+     * @description Returns the depth value at a pixel index.
+     * @param {number} row Buffer row.
+     * @param {any} column Buffer column. 
+     * @returns {number} 
      */
     depth(row : number, column) : number {
 
@@ -262,7 +280,7 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
     }
 
     /**
-     * Calculates the minimum normalized depth value.
+     * @description Calculates the minimum normalized depth value.
      */
     setMinimumNormalized() {
 
@@ -279,7 +297,7 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
     }
 
     /**
-     * Calculates the maximum normalized depth value.
+     * @description Calculates the maximum normalized depth value.
      */
     setMaximumNormalized() {
 
@@ -295,8 +313,10 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
     }
 
     /**
-     * Returns the linear index of a model point in world coordinates.
-     * @param worldVertex Vertex of model.
+     * @description Returns the buffer indices of a model point in world coordinates.
+     * @param {THREE.Vector3} worldVertex Vertex of model.
+     * @param {THREE.Box3} planeBoundingBox Size of planar bounding box.
+     * @returns {THREE.Vector2} 
      */
     getModelVertexIndices (worldVertex : THREE.Vector3, planeBoundingBox : THREE.Box3) : THREE.Vector2 {
     
@@ -317,9 +337,12 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
 
         return new THREE.Vector2(row, column);
     }
+
     /**
-     * Returns the linear index of a model point in world coordinates.
-     * @param worldVertex Vertex of model.
+     * @description Returns the linear index of a model point in world coordinates.
+     * @param {THREE.Vector3} worldVertex Vertex of model.
+     * @param {THREE.Box3} planeBoundingBox Size of planar bounding box.
+     * @returns {number} 
      */
     getModelVertexIndex (worldVertex : THREE.Vector3, planeBoundingBox : THREE.Box3) : number {
 
@@ -336,7 +359,7 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
     }
 
     /**
-     * Analyzes properties of a depth buffer.
+     * @description Analyzes properties of a depth buffer.
      */
     analyze () {
         this._logger.clearLog();

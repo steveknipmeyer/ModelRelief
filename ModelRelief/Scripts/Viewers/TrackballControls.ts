@@ -5,8 +5,8 @@
  * @author Simone Manini / http://daron1337.github.io
  * @author Luca Antiga 	/ http://lantiga.github.io
  */
-
 'use strict';
+
 import * as THREE from 'three';
 
 export function TrackballControls ( object, domElement ) {

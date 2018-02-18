@@ -17,19 +17,20 @@ import {TrackballControls}      from 'TrackballControls'
 import {UnitTests}              from 'UnitTests'
 
 /**
- * @class
- * DepthBufferTest
+ * @description DepthBufferTest
+ * @export
+ * @class DepthBufferTest
  */
 export class DepthBufferTest {
 
     /**
-     * @constructor
+     * Creates an instance of DepthBufferTest.
      */
     constructor() {
-    }
+        }
 
     /**
-     * Main
+     * @description Main
      */
     main () {
     }

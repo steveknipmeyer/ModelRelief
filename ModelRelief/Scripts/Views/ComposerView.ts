@@ -12,7 +12,7 @@ import {ComposerController}                 from "ComposerController"
 import {EventType, MREvent, EventManager}   from 'EventManager'
 import {HtmlLibrary, ElementIds}            from "Html"
 import {Loader}                             from 'Loader'
-import {ILogger, ConsoleLogger}              from 'Logger'
+import {ILogger, ConsoleLogger}             from 'Logger'
 import {MeshView}                           from "MeshView"
 import {MeshViewer}                         from "MeshViewer"
 import {ModelView}                          from "ModelView"
@@ -21,7 +21,12 @@ import {OBJLoader}                          from "OBJLoader"
 import {Services}                           from 'Services'
 import {TestModel}                          from 'TestModelLoader'
 import {Viewer}                             from "Viewer"
-    
+
+/**
+ * @description Represents the UI view used to compose a relief.
+ * @export
+ * @class ComposerView
+ */
 export class ComposerView {
 
     _containerId                : string;
@@ -43,7 +48,9 @@ export class ComposerView {
 
 //#region Properties
     /**
-     * Gets the Container Id.
+     * @description Gets the Container Id.
+     * @readonly
+     * @type {string}
      */
     get containerId(): string {
 
@@ -51,7 +58,9 @@ export class ComposerView {
     }
 
     /**
-     * Gets the ModelView.
+     * @description Gets the ModelView.
+     * @readonly
+     * @type {string}
      */
     get modelView(): ModelView {
 
@@ -59,7 +68,9 @@ export class ComposerView {
     }
 
     /**
-     * Gets the MeshViewer.
+     * @description Gets the MeshViewer.
+     * @readonly
+     * @type {string}
      */
     get meshView(): MeshView {
 
@@ -67,13 +78,14 @@ export class ComposerView {
     }
             
     /**
-     * Gets the Loader.
+     * @description Gets the Loader.
+     * @readonly
+     * @type {string}
      */
     get loader(): Loader {
 
         return this._loader;
-    }
-            
+    }          
 //#endregion
 
 //#region Event Handlers
@@ -81,7 +93,7 @@ export class ComposerView {
 
 //#region Initialization
     /**
-     * Initialization.
+     * @description Performs initialization.
      */
     initialize() {
 
@@ -108,4 +120,3 @@ export class ComposerView {
     
 //#endregion
 }
-

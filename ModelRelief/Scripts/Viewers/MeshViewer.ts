@@ -5,34 +5,34 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE                   from 'three'
+import * as THREE                   from 'three';
 
-import {Camera}                     from 'Camera'
-import {DepthBuffer}                from 'DepthBuffer'
-import {Graphics}                   from 'Graphics'
-import {StandardView}               from "ICamera"
-import {ILogger, HTMLLogger}        from 'Logger'
-import {MathLibrary}                from 'Math'
-import {Mesh}                       from 'Mesh'
-import {MeshViewerControls}         from 'MeshViewerControls'
-import {Services}                   from 'Services'
-import {TrackballControls}          from 'TrackballControls'
-import {Viewer}                     from 'Viewer'
+import {Camera}                     from 'Camera';
+import {DepthBuffer}                from 'DepthBuffer';
+import {Graphics}                   from 'Graphics';
+import {StandardView}               from 'ICamera';
+import {ILogger, HTMLLogger}        from 'Logger';
+import {MathLibrary}                from 'Math';
+import {Mesh}                       from 'Mesh';
+import {MeshViewerControls}         from 'MeshViewerControls';
+import {Services}                   from 'Services';
+import {TrackballControls}          from 'TrackballControls';
+import {Viewer}                     from 'Viewer';
   
 /**
- * @class
- * MeshViewer
+ * @description Graphics viewer for a Mesh.
+ * @export
+ * @class MeshViewer
+ * @extends {Viewer}
  */
 export class MeshViewer extends Viewer {
     
     _meshViewerControls: MeshViewerControls;             // UI controls
 
     /**
-     * Default constructor
-     * @class MeshViewer
-     * @constructor
-     * @param name Viewer name.
-     * @param previewCanvasId HTML element to host the viewer.
+     * Creates an instance of MeshViewer.
+     * @param {string} name Viewer name.
+     * @param {string} previewCanvasId HTML element to host the viewer.
      */
     constructor(name : string, previewCanvasId : string) {
         
@@ -47,7 +47,7 @@ export class MeshViewer extends Viewer {
 
 //#region Initialization
     /**
-     * Populate scene.
+     * @description Populate scene.
      */
     populateScene () {       
 
@@ -60,7 +60,7 @@ export class MeshViewer extends Viewer {
     }
 
     /**
-     * Adds lighting to the scene.
+     * @description Adds lighting to the scene.
      */
     initializeLighting() {
 
@@ -71,8 +71,9 @@ export class MeshViewer extends Viewer {
         directionalLight1.position.set(4, 4, 4);
         this.scene.add(directionalLight1);
     }
+
     /**
-     * UI controls initialization.
+     * @description UI controls initialization.
      */
     initializeUIControls() {
 

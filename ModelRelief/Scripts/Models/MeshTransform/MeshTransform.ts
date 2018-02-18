@@ -5,12 +5,12 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto          from 'DtoModels'
+import * as Dto             from 'DtoModels';
 
 import {IMeshTransform}     from 'IMeshTransform';
 import { Model }            from 'Model';
-import { Project }          from 'Project'
-import {Services}           from 'Services'
+import { Project }          from 'Project';
+import {Services}           from 'Services';
 
 /**
  * @description Represents a mesh transform. 
@@ -38,8 +38,8 @@ export class MeshTransform extends Model<MeshTransform> {
      */
     constructor() {
         super({
-            name: 'Mesh', 
-            description: 'Mesh',
+            name: 'MeshTransform', 
+            description: 'MeshTransform',
         });
     }
 
@@ -76,7 +76,7 @@ export class MeshTransform extends Model<MeshTransform> {
      */
     toDtoModel() : Dto.MeshTransform {
 
-        let model = new Dto.MeshTransform({
+        let meshTransform = new Dto.MeshTransform({
             id              : this.id,
             name            : this.name,
             description     : this.description,    
@@ -93,6 +93,6 @@ export class MeshTransform extends Model<MeshTransform> {
             projectId       : this.projectId,
         });
 
-        return model;
+        return meshTransform;
     }        
 }

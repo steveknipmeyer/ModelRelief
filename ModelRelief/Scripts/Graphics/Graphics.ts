@@ -5,11 +5,16 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE               from 'three'
+import * as THREE               from 'three';
 
-import {ILogger, ConsoleLogger} from 'Logger'
-import {Services}               from 'Services'
+import {ILogger, ConsoleLogger} from 'Logger';
+import {Services}               from 'Services';
 
+/**
+ * @description Default names of graphics objects.
+ * @export
+ * @enum {number}
+ */
 export enum ObjectNames {
 
     Root          =  'Root',
@@ -24,14 +29,14 @@ export enum ObjectNames {
 }
 
 /**
- *  General THREE.js/WebGL support routines
- *  Graphics Library
- *  @class
+ * @description General THREE.js/WebGL support routines
+ * @export
+ * @class Graphics
  */
 export class Graphics {
 
-    /** 
-     * @constructor
+    /**
+     * Creates an instance of Graphics.
      */
     constructor() {
     }
@@ -74,9 +79,11 @@ export class Graphics {
     }
 
     /**
-     * Removes an object and all children from a scene.
-     * @param scene Scene holding object to be removed.
-     * @param rootObject Parent object (possibly with children).
+     * @description Removes an object and all children from a scene.
+     * @static
+     * @param {THREE.Object3D} rootObject Parent object (possibly with children).
+     * @param {boolean} removeRoot Remove root object itself.
+     * @returns 
      */
     static removeObjectChildren(rootObject : THREE.Object3D, removeRoot : boolean) {
 
@@ -106,9 +113,10 @@ export class Graphics {
     } 
 
     /**
-     * Remove all objects of a given name from the scene.
-     * @param scene Scene to process.
-     * @param objectName Object name to find.
+     * @description Remove all objects of a given name from the scene.
+     * @static
+     * @param {THREE.Scene} scene Scene to process.
+     * @param {string} objectName Object name to find.
      */
     static removeAllByName (scene : THREE.Scene, objectName : string) : void {
 
@@ -121,9 +129,11 @@ export class Graphics {
     }
 
     /**
-     * Clone and transform an object.
-     * @param object Object to clone and transform.
-     * @param matrix Transformation matrix.
+     * @description Clone and transform an object.
+     * @static
+     * @param {THREE.Object3D} object Object to clone and transform.
+     * @param {THREE.Matrix4} [matrix] Transformation matrix.
+     * @returns {THREE.Object3D} 
      */
     static cloneAndTransformObject (object : THREE.Object3D, matrix? : THREE.Matrix4) : THREE.Object3D {
 
@@ -154,9 +164,11 @@ export class Graphics {
     }
         
     /**
-     * Gets the bounding box of a transformed object.
-     * @param object Object to transform.
-     * @param matrix Transformation matrix.
+     * @description Gets the bounding box of a transformed object.
+     * @static
+     * @param {THREE.Object3D} object Object to transform.
+     * @param {THREE.Matrix4} matrix Transformation matrix.
+     * @returns {THREE.Box3} 
      */
     static getTransformedBoundingBox(object: THREE.Object3D, matrix: THREE.Matrix4): THREE.Box3 {
 
@@ -176,10 +188,12 @@ export class Graphics {
     }
 
     /**
-     * @param position Location of bounding box.
-     * @param mesh Mesh from which to create bounding box.
-     * @param material Material of the bounding box.
-     * @ returns Mesh of the bounding box.
+     * @description Create a bounding box from a geometry object.
+     * @static
+     * @param {THREE.Vector3} position Location of bounding box.
+     * @param {THREE.Geometry} geometry Source geometry object.
+     * @param {THREE.Material} material Material of the bounding box.
+     * @returns {THREE.Mesh} 
      */
     static createBoundingBoxMeshFromGeometry(position : THREE.Vector3, geometry : THREE.Geometry, material : THREE.Material) : THREE.Mesh{
 
@@ -198,10 +212,12 @@ export class Graphics {
     }
 
     /**
-     * @param position Location of box.
-     * @param box Geometry Box from which to create box mesh.
-     * @param material Material of the box.
-     * @ returns Mesh of the box.
+     * @description Creates a bounding box mesh from a bounding box object.
+     * @static
+     * @param {THREE.Vector3} position Location of box.
+     * @param {THREE.Box3} boundingBox Geometry Box from which to create box mesh.
+     * @param {THREE.Material} material Material of the box.
+     * @returns {THREE.Mesh} 
      */
     static createBoundingBoxMeshFromBoundingBox(position : THREE.Vector3, boundingBox : THREE.Box3, material : THREE.Material) : THREE.Mesh {
 
@@ -221,7 +237,10 @@ export class Graphics {
     }
 
     /**
-     * Gets the extends of an object optionally including all children.
+     * @description Gets the extents of an object optionally including all children.
+     * @static
+     * @param {THREE.Object3D} rootObject Object to process.
+     * @returns {THREE.Box3} 
      */
     static getBoundingBoxFromObject(rootObject : THREE.Object3D) : THREE.Box3 {
 
@@ -234,14 +253,16 @@ export class Graphics {
         Services.timer.logElapsedTime(timerTag);
         return boundingBox;
         }
-    /**
-     * Creates a box mesh.
-     * @param position Location of the box.
-     * @param width Width.
-     * @param height Height.
-     * @param depth Depth.
-     * @param material Optional material.
-     * @returns Box mesh.
+
+        /**
+     * @description Creates a box mesh.
+     * @static
+     * @param {THREE.Vector3} position Location of the box.
+     * @param {number} width Width.
+     * @param {number} height Height.
+     * @param {number} depth Depth.
+     * @param {THREE.Material} [material] Optional material. 
+     * @returns {THREE.Mesh} 
      */
     static createBoxMesh(position : THREE.Vector3, width : number, height : number, depth : number, material? : THREE.Material) : THREE.Mesh {
 
@@ -263,12 +284,13 @@ export class Graphics {
     }
 
     /**
-     * Creates a plane mesh.
-     * @param position Location of the plane.
-     * @param width Width.
-     * @param height Height.
-     * @param material Optional material.
-     * @returns Plane mesh.
+     * @description Creates a plane mesh.
+     * @static
+     * @param {THREE.Vector3} position Location of the plane.
+     * @param {number} width Width.
+     * @param {number} height Height.
+     * @param {THREE.Material} [material] Optional material. 
+     * @returns {THREE.Mesh} 
      */
     static createPlaneMesh(position : THREE.Vector3, width : number, height : number, material? : THREE.Material) : THREE.Mesh {
         
@@ -288,10 +310,12 @@ export class Graphics {
     }
         
     /**
-     * Creates a sphere mesh.
-     * @param position Origin of the sphere.
-     * @param radius Radius.
-     * @param material Material.
+     * @description Creates a sphere mesh.
+     * @static
+     * @param {THREE.Vector3} position Origin of the sphere.
+     * @param {number} radius Radius.
+     * @param {THREE.Material} [material] Optional material.
+     * @returns {THREE.Mesh} 
      */
     static createSphereMesh(position : THREE.Vector3, radius : number, material? : THREE.Material) : THREE.Mesh {
         var sphereGeometry  : THREE.SphereGeometry,
@@ -311,12 +335,13 @@ export class Graphics {
         return sphere;
     }
 
-        /**
-     * Creates a line object.
-     * @param startPosition Start point.
-     * @param endPosition End point.
-     * @param color Color.
-     * @returns Line element.
+    /**
+     * @description Creates a line object.
+     * @static
+     * @param {THREE.Vector3} startPosition Start point.
+     * @param {THREE.Vector3} endPosition End point.
+     * @param {number} color Color.
+     * @returns {THREE.Line} 
      */
     static createLine(startPosition : THREE.Vector3, endPosition : THREE.Vector3, color : number) : THREE.Line {
 
@@ -334,11 +359,13 @@ export class Graphics {
     }
         
     /**
-     * Creates an axes triad.
-     * @param position Origin of the triad.
-     * @param length Length of the coordinate arrow.
-     * @param headLength Length of the arrow head.
-     * @param headWidth Width of the arrow head.
+     * @description Creates an axes triad.
+     * @static
+     * @param {THREE.Vector3} [position] Origin of the triad.
+     * @param {number} [length] Length of the coordinate arrow.
+     * @param {number} [headLength] Length of the arrow head.
+     * @param {number} [headWidth] Width of the arrow head.
+     * @returns {THREE.Object3D} 
      */
     static createWorldAxesTriad(position? : THREE.Vector3, length? : number, headLength? : number, headWidth? : number) : THREE.Object3D {
             
@@ -356,11 +383,12 @@ export class Graphics {
     }
 
     /**
-     * Creates an axes grid.
-     * @param position  Origin of the axes grid.
-     * @param size Size of the grid.
-     * @param step Grid line intervals.
-     * @returns Grid object.
+     * @description Creates an axes grid.
+     * @static
+     * @param {THREE.Vector3} [position] Origin of the axes grid.
+     * @param {number} [size] Size of the grid.
+     * @param {number} [step] Grid line intervals.
+     * @returns {THREE.Object3D} Grid object.
      */
     static createWorldAxesGrid(position? : THREE.Vector3, size? : number, step? : number) : THREE.Object3D {
             
@@ -400,11 +428,14 @@ export class Graphics {
         return gridGroup;
     }
 
-     /**
-      * Adds a camera helper to a scene to visualize the camera position.
-      * @param scene Scene to annotate.
-      * @param camera Camera to construct helper (may be null).
-      */
+    /**
+     * @description Adds a camera helper to a scene to visualize the camera position.
+     * @static
+     * @param {THREE.Camera} camera Camera to construct helper (may be null).
+     * @param {THREE.Scene} scene Scene to annotate.
+     * @param {THREE.Group} model Model geoemetry.
+     * @returns {void} 
+     */
     static addCameraHelper (camera : THREE.Camera, scene : THREE.Scene, model : THREE.Group) : void {
 
         if (!camera)
@@ -446,10 +477,12 @@ export class Graphics {
         scene.add(cameraHelper);
     }
 
-     /**
-      * Adds a coordinate axis helper to a scene to visualize the world axes.
-      * @param scene Scene to annotate.
-      */
+    /**
+     * @description Adds a coordinate axis helper to a scene to visualize the world axes.
+     * @static
+     * @param {THREE.Scene} scene Scene to annotate.
+     * @param {number} size Size of axes.
+     */
     static addAxisHelper (scene : THREE.Scene, size : number) : void{
 
         let axisHelper = new THREE.AxisHelper(size);
@@ -481,11 +514,12 @@ export class Graphics {
     //			World Coordinates
     // --------------------------------------------------------------------------------------------------------------------------------------//
     /**
-     * Converts a JQuery event to world coordinates.
-     * @param event Event.
-     * @param container DOM container.
-     * @param camera Camera.
-     * @returns World coordinates.
+     * @description Converts a JQuery event to world coordinates.
+     * @static
+     * @param {JQueryEventObject} event Event.
+     * @param {JQuery} container DOM container.
+     * @param {THREE.Camera} camera Camera.
+     * @returns {THREE.Vector3} 
      */
     static worldCoordinatesFromJQEvent (event : JQueryEventObject, container : JQuery, camera : THREE.Camera) : THREE.Vector3 {
 
@@ -508,10 +542,11 @@ export class Graphics {
     //			View Coordinates
     // --------------------------------------------------------------------------------------------------------------------------------------// 
     /**
-     * Converts world coordinates to view coordinates.
-     * @param vector World coordinate vector to convert.
-     * @param camera Camera.
-     * @returns View coordinates.
+     * @description Converts world coordinates to view coordinates.
+     * @static
+     * @param {THREE.Vector3} vector World coordinate vector to convert.
+     * @param {THREE.Camera} camera Camera.
+     * @returns {THREE.Vector3} 
      */
     static viewCoordinatesFromWorldCoordinates (vector : THREE.Vector3, camera : THREE.Camera) : THREE.Vector3 {
 
@@ -527,10 +562,11 @@ export class Graphics {
     //			Device Coordinates
     // --------------------------------------------------------------------------------------------------------------------------------------//
     /**
-     * Converts a JQuery event to normalized device coordinates.
-     * @param event JQuery event.
-     * @param container DOM container.
-     * @returns Normalized device coordinates.
+     * @description Converts a JQuery event to normalized device coordinates.
+     * @static
+     * @param {JQueryEventObject} event JQuery event.
+     * @param {JQuery} container DOM container.
+     * @returns {THREE.Vector2} 
      */
     static deviceCoordinatesFromJQEvent (event : JQueryEventObject, container : JQuery) : THREE.Vector2 {
 
@@ -551,10 +587,11 @@ export class Graphics {
     }
 
     /**
-     * Converts world coordinates to device coordinates [-1, 1].
-     * @param vector  World coordinates vector.
-     * @param camera Camera.
-     * @preturns Device coorindates.
+     * @description Converts world coordinates to device coordinates [-1, 1].
+     * @static
+     * @param {THREE.Vector3} vector World coordinates vector.
+     * @param {THREE.Camera} camera Camera.
+     * @returns {THREE.Vector2} 
      */
     static deviceCoordinatesFromWorldCoordinates (vector : THREE.Vector3, camera : THREE.Camera) : THREE.Vector2 {
             
@@ -573,9 +610,10 @@ export class Graphics {
     //			Screen Coordinates
     // --------------------------------------------------------------------------------------------------------------------------------------//
     /**
-     * Page coordinates from a JQuery event.
-     * @param event JQuery event.
-     * @returns Screen (page) coordinates.
+     * @description Page coordinates from a JQuery event.
+     * @static
+     * @param {JQueryEventObject} event JQuery event.
+     * @returns {THREE.Vector2} Screen (page) coordinates.
      */
     static screenPageCoordinatesFromJQEvent(event : JQueryEventObject) : THREE.Vector2 {
         
@@ -588,12 +626,14 @@ export class Graphics {
     }
     
     /**
+     * @description 
      * Client coordinates from a JQuery event.
      * Client coordinates are relative to the <browser> view port. If the document has been scrolled it will
      * be different than the page coordinates which are always relative to the top left of the <entire> HTML page document.
      * http://www.bennadel.com/blog/1869-jquery-mouse-events-pagex-y-vs-clientx-y.htm
-     * @param event JQuery event.
-     * @returns Screen client coordinates.
+     * @static
+     * @param {JQueryEventObject} event JQuery event.
+     * @returns {THREE.Vector2} Screen client coordinates.
      */
     static screenClientCoordinatesFromJQEvent(event : JQueryEventObject) : THREE.Vector2 {
         
@@ -606,10 +646,11 @@ export class Graphics {
     }
 
     /**
-     * Converts JQuery event coordinates to screen container coordinates.
-     * @param event JQuery event.
-     * @param container DOM container.
-     * @returns Screen container coordinates.
+     * @description Converts JQuery event coordinates to screen container coordinates.
+     * @static
+     * @param {JQueryEventObject} event JQuery event.
+     * @param {JQuery} container DOM container.
+     * @returns {THREE.Vector2} Screen container coordinates.
      */
     static screenContainerCoordinatesFromJQEvent(event : JQueryEventObject, container : JQuery) : THREE.Vector2 {
         
@@ -630,11 +671,12 @@ export class Graphics {
     }
   
     /**
-     * Converts world coordinates to screen container coordinates.
-     * @param vector World vector.
-     * @param container DOM container.
-     * @param camera Camera.
-     * @returns Screen container coordinates.
+     * @description Converts world coordinates to screen container coordinates.
+     * @static
+     * @param {THREE.Vector3} vector World vector.
+     * @param {JQuery} container DOM container.
+     * @param {THREE.Camera} camera Camera.
+     * @returns {THREE.Vector2} Screen container coordinates.
      */
     static screenContainerCoordinatesFromWorldCoordinates (vector : THREE.Vector3, container : JQuery, camera : THREE.Camera) : THREE.Vector2 {
             
@@ -660,10 +702,11 @@ export class Graphics {
     //  Intersections
     // --------------------------------------------------------------------------------------------------------------------------------------*/
     /**
-     * Creates a Raycaster through the mouse world position.
-     * @param mouseWorld World coordinates.
-     * @param camera Camera.
-     * @returns THREE.Raycaster.
+     * @description Creates a Raycaster through the mouse world position.
+     * @static
+     * @param {THREE.Vector3} mouseWorld World coordinates.
+     * @param {THREE.Camera} camera Camera.
+     * @returns {THREE.Raycaster} 
      */
     static raycasterFromMouse (mouseWorld : THREE.Vector3, camera : THREE.Camera) : THREE.Raycaster{
 
@@ -678,13 +721,14 @@ export class Graphics {
         return raycaster;
     }
     /**
-     * Returns the first Intersection located by the cursor.
-     * @param event JQuery event.
-     * @param container DOM container.
-     * @param camera Camera.
-     * @param sceneObjects Array of scene objects.
-     * @param recurse Recurse through objects.
-     * @returns First intersection with screen objects.
+     * @description Returns the first Intersection located by the cursor.
+     * @static
+     * @param {JQueryEventObject} event JQuery event.
+     * @param {JQuery} container DOM container.
+     * @param {THREE.Camera} camera Camera.
+     * @param {THREE.Object3D[]} sceneObjects Array of scene objects.
+     * @param {boolean} recurse Recurse through objects.
+     * @returns {THREE.Intersection} First intersection with screen objects.
      */
     static getFirstIntersection(event : JQueryEventObject, container : JQuery, camera : THREE.Camera, sceneObjects : THREE.Object3D[], recurse : boolean) : THREE.Intersection {
 
@@ -722,10 +766,12 @@ export class Graphics {
     //  Helpers
     // --------------------------------------------------------------------------------------------------------------------------------------*/
     /**
-     * Constructs a WebGL target canvas.
-     * @param id DOM id for canvas.
-     * @param width Width of canvas.
-     * @param height Height of canvas.
+     * @description Constructs a WebGL target canvas.
+     * @static
+     * @param {string} id DOM id for canvas.
+     * @param {number} [width] Width of canvas.
+     * @param {number} [height] Height of canvas.
+     * @returns {HTMLCanvasElement} 
      */
     static initializeCanvas(id : string, width? : number, height? : number) : HTMLCanvasElement {
     

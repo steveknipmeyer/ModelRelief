@@ -63,12 +63,6 @@ Update database schema diagram.
 - [ ] Cameras do not handle offsets (pan). Is this a TrackBallControl issue?
 - [ ] Randomly generated cameras do not roundtrip the matrix property.
 
-###### AspectRatio  
-
-The aspect ratio is required by Mesh.constructGraphics.  
-```
-let meshXYExtents : THREE.Vector2 = CameraHelper.getNearPlaneExtents(this.depthBuffer.camera);  
-```
 ###### StandardView
 When the view camera is interactively changed, it should invalidate the StandardView in the UI.
 
@@ -80,21 +74,16 @@ When the view camera is interactively changed, it should invalidate the Standard
 ##### Clipping Planes
 
     Investigate why the clipping plane CameraControls are not editable.
+        Could the events be intercepted by the TrackBall?
     Does repeared adjustment of the clipping planes leads to bad mesh results?
     Should the near clipping plane always be adjusted to the front extent?
 
 ##### FE Model Structure
-    Review all FE claaes.
-    Adopt a consistent form for Import statements.
-    Adopt a consistemt layout for "use strict";
-    Adopt a consistent phrasing for the FE description property.
 
+    Refactor ModelViewer to hold a Model.
+    Refactor MeshViewer to hold a Mesh.
+    Refactor Loader class to return a Mesh.
     Where should Model3d replace Mesh in the FE classes?
-
-    Make all FE constructors in terms of optional initialization parameters.
-        Document all class propeties.
-        Use a consistent layout of DTO, public and private properties.
-        Which properties should be initialized?
 
     What is the role of <model>.fromDtoModel?   
         Some initialization cannot be done without involved processing of related members.

@@ -5,36 +5,37 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE                       from 'three'
+import * as THREE                       from 'three';
 
-import {DepthBufferFactory}             from "DepthBufferFactory"
-import {EventManager, EventType}        from 'EventManager'
-import {Graphics}                       from 'Graphics'
-import {StandardView}                   from "ICamera"
-import {Materials}                      from 'Materials'
-import {ModelViewerControls}            from "ModelViewerControls"
-import {ILogger}                        from 'Logger'
-import {TrackballControls}              from 'TrackballControls'
-import {Services}                       from 'Services'
-import {Viewer}                         from 'Viewer'
+import {DepthBufferFactory}             from "DepthBufferFactory";
+import {EventManager, EventType}        from 'EventManager';
+import {Graphics}                       from 'Graphics';
+import {StandardView}                   from "ICamera";
+import {ILogger}                        from 'Logger';
+import {Materials}                      from 'Materials';
+import {ModelViewerControls}            from "ModelViewerControls";
+import {TrackballControls}              from 'TrackballControls';
+import {Services}                       from 'Services';
+import {Viewer}                         from 'Viewer';
 
 const ObjectNames = {
     Grid :  'Grid'
 }
 
 /**
- * @exports Viewer/ModelViewer
+ * @description Represents a graphic viewer for a 3D model.
+ * @export
+ * @class ModelViewer
+ * @extends {Viewer}
  */
 export class ModelViewer extends Viewer {
 
     _modelViewerControls : ModelViewerControls;             // UI controls
 
     /**
-     * Default constructor
-     * @class ModelViewer
-     * @constructor
-     * @param name Viewer name.
-     * @param modelCanvasId HTML element to host the viewer.
+     * Creates an instance of ModelViewer.
+     * @param {string} name Viewer name.
+     * @param {string} modelCanvasId HTML element to host the viewer.
      */
     constructor(name : string, modelCanvasId : string) {
         
@@ -43,7 +44,8 @@ export class ModelViewer extends Viewer {
 
 //#region Properties
     /**
-     * Sets the model.
+     * @description Sets the model.
+     * @param {THREE.Group} value 
      */
     setModel(value : THREE.Group) {
 
@@ -54,12 +56,11 @@ export class ModelViewer extends Viewer {
         // dispatch NewModel event
         this.eventManager.dispatchEvent(this, EventType.NewModel, value);
     }
-                
 //#endregion
 
 //#region Initialization    
     /**
-     * Populate scene.
+     * @description Populate scene.
      */
     populateScene () {
 
@@ -71,7 +72,7 @@ export class ModelViewer extends Viewer {
     }
 
     /**
-     * General initialization
+     * @description General initialization.
      */
     initialize() {
         
@@ -79,19 +80,19 @@ export class ModelViewer extends Viewer {
     }
         
     /**
-     * UI controls initialization.
+     * @description UI controls initialization.
      */
     initializeUIControls() {
 
         super.initializeUIControls();        
         this._modelViewerControls = new ModelViewerControls(this);
     }
-
 //#endregion
 
 //#region Scene
     /**
-     * Display the reference grid.
+     * @description Display the reference grid.
+     * @param {boolean} visible 
      */
     displayGrid(visible : boolean) {
 

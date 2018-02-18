@@ -25,9 +25,9 @@ import {MeshFormat}                         from 'IMesh'
 import {ILogger, ConsoleLogger}             from 'Logger'
 import {Graphics}                           from "Graphics"
 import {Mesh}                               from "Mesh"
+import {MeshTransform}                      from 'MeshTransform'
 import {ModelViewer}                        from "ModelViewer"
 import {OBJExporter}                        from "OBJExporter"
-import {MeshTransform}                      from 'MeshTransform'
 import {Services}                           from 'Services'
 import {UnitTests}                          from 'UnitTests';
 
@@ -130,7 +130,7 @@ export class ComposerController {
         let depthBuffer = new DepthBuffer(depthBufferBytes, reliefWidthPixels, reliefHeightPixels, camera);
         
         // Mesh graphics
-        let mesh = new Mesh({ width: reliefWidthPixels, height: reliefHeightPixels, depthBuffer: depthBuffer});
+        let mesh = new Mesh(reliefWidthPixels, reliefHeightPixels, depthBuffer);
         let meshGraphics = await mesh.constructGraphicssAsync({});
 
         this._composerView._meshView.meshViewer.setModel(meshGraphics);

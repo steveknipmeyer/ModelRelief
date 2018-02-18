@@ -9,8 +9,8 @@ import * as THREE        from 'three'
 
 import { Camera, ClippingPlanes} from 'Camera'
 import { DepthBufferFactory }    from 'DepthBufferFactory'
-import {StandardView}            from "ICamera"
 import { Graphics }              from 'Graphics'
+import {StandardView}            from "ICamera"
 import { Services }              from 'Services'
 import { StopWatch }             from 'StopWatch'
 

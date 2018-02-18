@@ -6,8 +6,8 @@
 "use strict";
 
 import { ICamera }          from 'ICamera'
-import { IProject }         from 'IProject'
 import { IFileModel }       from 'IFileModel'
+import { IProject }         from 'IProject'
 
  /**
  *  3D model file formats.

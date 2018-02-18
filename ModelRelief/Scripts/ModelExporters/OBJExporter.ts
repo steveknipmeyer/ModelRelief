@@ -9,7 +9,7 @@
 
 import * as THREE from 'three'
 
-import { Services } from 'Services'
+import { Services }  from 'Services'
 import { StopWatch } from 'StopWatch'
 
 export class OBJExporter {

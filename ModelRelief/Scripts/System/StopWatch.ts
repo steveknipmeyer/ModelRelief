@@ -6,7 +6,7 @@
 "use strict";
 
 import {ILogger}                 from 'Logger'
-import {Services}               from 'Services'
+import {Services}                from 'Services'
 
 /**
  * @description Timer record.

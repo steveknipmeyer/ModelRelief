@@ -3,6 +3,20 @@
 //                                                                         //                                                                          
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
+"use strict";
+
+import * as THREE               from 'three'
+
+import {Camera, ClippingPlanes} from 'Camera'
+import {CameraHelper}           from 'CameraHelper'
+import {DepthBuffer}            from 'DepthBuffer'
+import {Graphics}               from 'Graphics'
+import {ILogger, ConsoleLogger} from 'Logger'
+import {MathLibrary}            from 'Math'
+import {Services}               from 'Services'
+import {StopWatch}              from 'StopWatch'
+import {Tools}                  from 'Tools'
+
 /*
   Requirements
     No persistent DOM element. The canvas is created dynamically.
@@ -10,21 +24,6 @@
     JSON compatible constructor parameters
     Fixed resolution; resizing support is not required.
 */
-
-"use strict";
-
-import * as THREE               from 'three'
-import {ClippingPlanes}         from 'Camera'
-import {Camera}                 from 'Camera'
-import {CameraHelper}           from 'CameraHelper'
-import {DepthBuffer}            from 'DepthBuffer'
-import {Graphics}               from 'Graphics'
-import {ILogger, ConsoleLogger}  from 'Logger'
-import {MathLibrary}            from 'Math'
-import {Services}               from 'Services'
-import {StopWatch}              from 'StopWatch'
-import {Tools}                  from 'Tools'
-
 /**
  * @description Constructor parameters for DepthBufferFactory.
  * @export

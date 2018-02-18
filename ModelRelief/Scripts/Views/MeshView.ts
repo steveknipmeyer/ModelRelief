@@ -9,7 +9,7 @@ import * as THREE  from 'three'
 import * as dat    from 'dat-gui'
 
 import {HtmlLibrary, ElementIds}            from "Html"
-import {ILogger, ConsoleLogger}              from 'Logger'
+import {ILogger, ConsoleLogger}             from 'Logger'
 import {MeshViewer}                         from "MeshViewer"
 import {Services}                           from 'Services'
 import {Viewer}                             from "Viewer"

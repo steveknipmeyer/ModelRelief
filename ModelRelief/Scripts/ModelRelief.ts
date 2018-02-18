@@ -5,8 +5,8 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import {HtmlLibrary, ElementIds}   from "Html"
-import {ComposerView}              from "ComposerView"
+import {HtmlLibrary, ElementIds}   from "Html";
+import {ComposerView}              from "ComposerView";
 
 let composerView = new ComposerView(ElementIds.ComposerView);
 
