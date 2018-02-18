@@ -34,44 +34,50 @@ export class Loader {
 
     /**
      * @description Loads a model based on the model name and path embedded in the HTML page.
-     * @param {Viewer} viewer Instance of the Viewer to display the model.
      */
-    loadOBJModel (viewer : Viewer) {
+    async loadOBJModelAsync () : Promise<THREE.Group> {
 
-        {
-            let modelIdElement : HTMLElement = window.document.getElementById('modelId');
-            let modelId = parseInt(modelIdElement.textContent);
-            let model = new Dto.Model3d({id: modelId});
-            let result = model.getAsync().then(model => {
+        let loader = () => new Promise<THREE.Group>((resolve, reject) => {
 
-            });
-        }
-
-        let modelNameElement : HTMLElement = window.document.getElementById('modelName');
-        let modelPathElement : HTMLElement = window.document.getElementById('modelPath');
-            
-        let modelName    : string = modelNameElement.textContent;
-        let modelPath    : string = modelPathElement.textContent;
-        let fileName     : string = `${modelPath}${modelName}`;       
-
-        let manager = new THREE.LoadingManager();
-        let loader  = new OBJLoader(manager);
-        
-        let onProgress = function (xhr) {
-
-            if (xhr.lengthComputable) {
-                var percentComplete = xhr.loaded / xhr.total * 100;
-                console.log(percentComplete.toFixed(2) + '% downloaded');
+            {
+                let modelIdElement : HTMLElement = window.document.getElementById('modelId');
+                let modelId = parseInt(modelIdElement.textContent);
+                let model = new Dto.Model3d({id: modelId});
+                let result = model.getAsync().then(model => {
+    
+                });
             }
-        };
-
-        let onError = function (xhr) {
-        };        
-
-        loader.load(fileName, function (group : THREE.Group) {
+    
+            let modelNameElement : HTMLElement = window.document.getElementById('modelName');
+            let modelPathElement : HTMLElement = window.document.getElementById('modelPath');
+                
+            let modelName    : string = modelNameElement.textContent;
+            let modelPath    : string = modelPathElement.textContent;
+            let fileName     : string = `${modelPath}${modelName}`;       
+    
+            let manager = new THREE.LoadingManager();
+            let loader  = new OBJLoader(manager);
             
-            viewer.setModel(group);
-        }, onProgress, onError);
+            let onProgress = function (xhr) {
+    
+                if (xhr.lengthComputable) {
+                    var percentComplete = xhr.loaded / xhr.total * 100;
+                    console.log(percentComplete.toFixed(2) + '% downloaded');
+                }
+            };
+    
+            let onError = function (xhr) {
+                reject(xhr);
+            };        
+    
+            loader.load(fileName, 
+                function (group : THREE.Group) {
+                    resolve(group);
+                }, onProgress, onError);
+        })
+
+        let group : THREE.Group = await loader();
+        return group;
     }
 
     /**
