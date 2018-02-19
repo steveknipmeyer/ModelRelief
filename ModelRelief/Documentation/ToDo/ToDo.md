@@ -17,8 +17,7 @@
 <article class="markdown-body">
 
 ##### Commit Notes
-Subclass FE classes from base classes.
-Change Camera.DefaultFarCippingPlane to 1000.
+Refactor Loader class to return a Mesh.
 
 ##### Technical Education
 - Manning AspNet Core book.
@@ -82,7 +81,8 @@ When the view camera is interactively changed, it should invalidate the Standard
 
     Refactor ModelViewer to hold a Model.
     Refactor MeshViewer to hold a Mesh.
-    Refactor Loader class to return a Mesh.
+        Should IFileModel be an application or DTO model?
+    
     Where should Model3d replace Mesh in the FE classes?
 
     What is the role of <model>.fromDtoModel?   

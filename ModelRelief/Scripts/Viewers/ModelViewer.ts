@@ -11,6 +11,7 @@ import {DepthBufferFactory}             from "DepthBufferFactory";
 import {EventManager, EventType}        from 'EventManager';
 import {Graphics}                       from 'Graphics';
 import {StandardView}                   from "ICamera";
+import {IFileModel}                     from 'IFileModel';
 import {ILogger}                        from 'Logger';
 import {Materials}                      from 'Materials';
 import {ModelViewerControls}            from "ModelViewerControls";
@@ -36,10 +37,11 @@ export class ModelViewer extends Viewer {
      * Creates an instance of ModelViewer.
      * @param {string} name Viewer name.
      * @param {string} modelCanvasId HTML element to host the viewer.
+     * @param {IFileModel} model Model to load.
      */
-    constructor(name : string, modelCanvasId : string) {
+    constructor(name : string, modelCanvasId : string, model : IFileModel) {
         
-        super (name, modelCanvasId);       
+        super (name, modelCanvasId, model);       
     }
 
 //#region Properties

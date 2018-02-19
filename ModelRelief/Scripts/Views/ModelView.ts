@@ -7,6 +7,7 @@
 
 import * as THREE  from 'three'; 
 import * as dat    from 'dat-gui';
+import * as Dto    from "DtoModels";
 
 import {HtmlLibrary, ElementIds}            from "Html";
 import {ILogger, ConsoleLogger}             from 'Logger';
@@ -66,7 +67,11 @@ export class ModelView {
     initialize() {
 
         // Model Viewer    
-        this._modelViewer = new ModelViewer('ModelViewer', this.containerId);
+        let modelIdElement : HTMLElement = window.document.getElementById('modelId');
+        let modelId = parseInt(modelIdElement.textContent);
+        let model = new Dto.Model3d({id: modelId});
+        
+        this._modelViewer = new ModelViewer('ModelViewer', this.containerId, model);
     }
     
 //#endregion

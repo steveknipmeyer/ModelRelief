@@ -110,10 +110,7 @@ export class ComposerView {
         this._composerController = new ComposerController(this);
 
         // Loader (model event handlers now initialized)
-        let modelIdElement : HTMLElement = window.document.getElementById('modelId');
-        let modelId = parseInt(modelIdElement.textContent);
-        let model = new Dto.Model3d({id: modelId});
-        this._modelView.modelViewer.loadModel(model);
+        this._modelView.modelViewer.loadModel();
 
         // Test Models
 //      this._loader.loadParametricTestModel(this._modelViewer, TestModel.Checkerboard);

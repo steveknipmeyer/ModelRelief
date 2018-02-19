@@ -26,12 +26,14 @@ import {TrackballControls}      from 'TrackballControls';
  */
 export class Viewer {
 
-    cameraControls          : CameraControls            = null;
+    cameraControls         : CameraControls            = null;
 
+    // Private
     _name                   : string                    = '';
     _eventManager           : EventManager               = null;
     _logger                 : ILogger                   = null;
-    
+
+    _model                  : IFileModel                = null;
     _scene                  : THREE.Scene               = null;
     _root                   : THREE.Object3D            = null;      
                                                         
@@ -49,7 +51,7 @@ export class Viewer {
      * @param {string} name Viewer name.
      * @param {string} modelCanvasId HTML element to host the viewer.
      */
-    constructor(name : string, modelCanvasId : string) { 
+    constructor(name : string, modelCanvasId : string, model? : IFileModel) { 
 
         this._name         = name;                    
         this._eventManager = new EventManager();
@@ -59,6 +61,7 @@ export class Viewer {
         this._width  = this._canvas.offsetWidth;
         this._height = this._canvas.offsetHeight;
 
+        this._model = model;
         this.initialize();
 
         this.animate();
@@ -113,7 +116,25 @@ export class Viewer {
         if (this.cameraControls)
             this.cameraControls.synchronizeCameraSettings();
         }
-        
+
+    /**
+     * @description Returns the active model.
+     * @readonly
+     * @type {IFileModel}
+     */
+    get model() : IFileModel {
+
+        return this._model;
+    }
+
+    /**
+     * @description Sets the active model.
+     */
+    set model (model : IFileModel) {
+
+        this._model = model;
+    }
+
     /**
      * @description Gets the graphics object of the active model.
      * @readonly
@@ -141,12 +162,12 @@ export class Viewer {
      * @description Loads a model from disk.
      * @param {IFileModel} model 
      */
-    async loadModel(model : IFileModel) {
+    async loadModel() {
 
-            let loader = new Loader();
-            let group = await loader.loadOBJModelAsync(model);
-            this.setModelGroup(group);
-        }
+        let loader = new Loader();
+        let group = await loader.loadOBJModelAsync(this.model);
+        this.setModelGroup(group);
+    }
 
     /**
      * @description Calculates the aspect ratio of the canvas afer a window resize

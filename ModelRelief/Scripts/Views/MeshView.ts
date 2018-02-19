@@ -66,7 +66,7 @@ export class MeshView {
     initialize() {
 
         // Mesh Viewer    
-        this._meshViewer = new MeshViewer('ModelViewer', this.containerId);
+        this._meshViewer = new MeshViewer('MeshViewer', this.containerId);
     }
     
 //#endregion

@@ -6,11 +6,13 @@
 "use strict";
 
 import * as THREE                   from 'three';
+import * as Dto                     from "DtoModels";
 
 import {Camera}                     from 'Camera';
 import {DepthBuffer}                from 'DepthBuffer';
 import {Graphics}                   from 'Graphics';
 import {StandardView}               from 'ICamera';
+import {IFileModel}                 from 'IFileModel';
 import {ILogger, HTMLLogger}        from 'Logger';
 import {MathLibrary}                from 'Math';
 import {Mesh}                       from 'Mesh';
@@ -33,10 +35,11 @@ export class MeshViewer extends Viewer {
      * Creates an instance of MeshViewer.
      * @param {string} name Viewer name.
      * @param {string} previewCanvasId HTML element to host the viewer.
+     * @param {IFileModel} model Model to load.
      */
-    constructor(name : string, previewCanvasId : string) {
+    constructor(name : string, previewCanvasId : string, model? : IFileModel) {
         
-        super(name, previewCanvasId);
+        super(name, previewCanvasId, model);
 
         //override
         this._logger = Services.htmlLogger;       
