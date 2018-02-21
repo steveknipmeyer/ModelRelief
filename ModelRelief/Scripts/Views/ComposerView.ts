@@ -23,6 +23,9 @@ import {Services}                           from 'Services'
 import {TestModel}                          from 'TestModelLoader'
 import {Viewer}                             from "Viewer"
 
+// defined in HTML page
+declare var composerMeshModel: Dto.Mesh;
+
 /**
  * @description Represents the UI view used to compose a relief.
  * @export
@@ -31,6 +34,8 @@ import {Viewer}                             from "Viewer"
 export class ComposerView {
 
     _containerId                : string;
+    _mesh                       : Dto.Mesh;
+
     _meshView                   : MeshView;
     _modelView                  : ModelView;
     _loader                     : Loader;
@@ -44,6 +49,7 @@ export class ComposerView {
     constructor(containerId : string) {  
 
         this._containerId = containerId;    
+
         this.initialize();
     } 
 
@@ -94,17 +100,47 @@ export class ComposerView {
 
 //#region Initialization
     /**
+     * @description Initializes the Composer context.
+     *  The JSON DTO objects are hydrated into full instances.
+     *  Defaults are created where necessary.
+     * @private
+     */
+    private initializeMeshModel() {
+        /*
+            Mesh
+                DepthBuffer
+                    Model3d
+                        Camera (= DepthBuffer.Camera)
+                    Camera
+                MeshTransform
+        */    
+            this._mesh = new Dto.Mesh(composerMeshModel);
+
+            this._mesh.depthBuffer = new Dto.DepthBuffer(composerMeshModel.depthBuffer);
+            this._mesh.depthBuffer.model3d = new Dto.Model3d(composerMeshModel.depthBuffer.model3d);
+
+            let camera = composerMeshModel.depthBuffer.camera
+            this._mesh.depthBuffer.camera = new Dto.Camera(camera);
+            this._mesh.depthBuffer.model3d.camera = new Dto.Camera(camera);
+
+            this._mesh.meshTransform = new Dto.Camera(composerMeshModel.meshTransform);
+        }
+
+    /**
      * @description Performs initialization.
      */
     async initialize() {
 
         Services.defaultLogger.addInfoMessage('ModelRelief started');
 
+        // initialize context
+        this.initializeMeshModel();
+
         // Mesh View
         this._meshView = new MeshView(ElementIds.MeshCanvas);
 
         // Model View
-        this._modelView = new ModelView(ElementIds.ModelCanvas); 
+        this._modelView = new ModelView(ElementIds.ModelCanvas, this._mesh.depthBuffer.model3d); 
 
         // Composer Controller 
         this._composerController = new ComposerController(this);

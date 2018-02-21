@@ -1,7 +1,7 @@
-﻿@model ModelRelief.Dto.Model3d
+﻿@model ModelRelief.Dto.Mesh
 
 @{
-    ViewBag.Title = "Model Viewer";
+    ViewBag.Title = "Model Composer";
 }
 
     <div id="rootContainer">
@@ -15,8 +15,6 @@
         </div>
     </div>
 
-    <span id="modelId">@ViewData["ModelId"]</span>
-
     @section scripts {
         <!--******************************************************************************************-->
         <!--                                    Libraries                                             -->
@@ -27,6 +25,9 @@
         <!--******************************************************************************************-->
         <!--                                    ModelRelief                                           -->
         <!--******************************************************************************************-->
+        <script>
+            var composerMeshModel = @DataConversion.SerializeObject(Model)
+        </script>
         <script src="~/js/shaders.js"></script>
         <script>
             requirejs.config({

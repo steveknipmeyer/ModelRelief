@@ -38,9 +38,9 @@ export class Model<T extends IModel> implements IModel{
 
     /**
      * Creates an instance of Model.
-     * @param {IModel} parameters 
+     * @param {IModel} [parameters] Initialization parameters.
      */
-    constructor (parameters?: IModel) {
+    constructor (parameters: IModel = {}) {
 
         let {
             id,
@@ -132,9 +132,9 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
 
     /**
      * Creates an instance of FileModel.
-     * @param {IModel} parameters 
+     * @param {IModel} [parameters] Initialization parameters.
      */
-    constructor(parameters?: IFileModel) {
+    constructor(parameters: IFileModel = {}) {
 
         super (parameters);
 
@@ -217,9 +217,9 @@ export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel
 
     /**
      * Creates an instance of GeneratedFileModel.
-     * @param {IGeneratedFile} parameters 
+     * @param {IGeneratedFile} [parameters] Initialization parameters.
      */
-    constructor(parameters?: IGeneratedFileModel) {
+    constructor(parameters: IGeneratedFileModel = {}) {
 
         super (parameters);
 

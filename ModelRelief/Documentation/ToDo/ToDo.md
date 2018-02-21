@@ -66,18 +66,9 @@ When the view camera is interactively changed, it should invalidate the Standard
 
 ##### FE UI
     
-
     Goal: Load a ComposerView from a given Mesh.
 
-    Select a Mesh (implicitly scoped by Project).
-    Query: Find associated resources.
-        DepthBuffer
-            Model3d
-            Camera
-        MeshTransform
     Set the Mesh camera to StandardView.Top.
-
-    Make the CameraControl configurable so that properties (e.g. clipping planes) can be disabled.
 
     What controls are present in Composer?
         Model: models/?project=id

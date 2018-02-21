@@ -8,6 +8,9 @@ namespace ModelRelief.Utility
 {
     using System;
     using System.IO;
+    using Microsoft.AspNetCore.Html;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Serialization;
 
     public class DataConversion
     {
@@ -45,6 +48,33 @@ namespace ModelRelief.Utility
             floatArray[iFloat] = BitConverter.ToSingle(byteArray, iFloat * 4);
             }
             return floatArray;
+        }
+
+        /// <summary>
+        /// Convert a JavaScript object to an HTML-encoded string.
+        /// https://blog.mariusschulz.com/2014/02/05/passing-net-server-side-data-to-javascript
+        /// </summary>
+        /// <param name="value">Object to serialize to HTML encoded string.</param>
+        public static IHtmlContent SerializeObject(object value)
+        {
+            using (var stringWriter = new StringWriter())
+            using (var jsonWriter = new JsonTextWriter(stringWriter))
+            {
+                var serializer = new JsonSerializer
+                {
+                    // use camelCasing as is common practice in JavaScript
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+
+                    // skip nulls
+                    NullValueHandling = NullValueHandling.Ignore,
+                };
+
+                // no quotes around object names
+                jsonWriter.QuoteName = false;
+                serializer.Serialize(jsonWriter, value);
+
+                return new HtmlString(stringWriter.ToString());
+            }
         }
     }
 }

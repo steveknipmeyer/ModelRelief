@@ -279,7 +279,7 @@ export class Viewer {
 
     /**
      * @description Sets up the user input controls (Settings)
-     * @param {CameraControlsOptions} cameraControlsOptions Options to include/exclude specialized controls.
+     * @param {CameraControlsOptions} [cameraControlsOptions] Options to include/exclude specialized controls.
      */
     initializeUIControls(cameraControlsOptions? : CameraControlsOptions) {
 

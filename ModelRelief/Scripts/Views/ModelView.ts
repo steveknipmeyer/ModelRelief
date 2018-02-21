@@ -10,6 +10,7 @@ import * as dat    from 'dat-gui';
 import * as Dto    from "DtoModels";
 
 import {HtmlLibrary, ElementIds}            from "Html";
+import {IFileModel}                         from 'IFileModel';
 import {ILogger, ConsoleLogger}             from 'Logger';
 import {ModelViewer}                        from "ModelViewer";
 import {Services}                           from 'Services';
@@ -28,11 +29,12 @@ export class ModelView {
     /**
      * Creates an instance of ModelView.
      * @param {string} containerId DOM container Id of view.
+     * @param {IFileModel} model Initial model to load.
      */
-    constructor(containerId : string) {  
+    constructor(containerId : string, model : IFileModel) {  
 
         this._containerId = containerId;    
-        this.initialize();
+        this.initialize(model);
     } 
 
 //#region Properties
@@ -63,14 +65,11 @@ export class ModelView {
 //#region Initialization
     /**
      * @description Performs initialization.
+     * @param {IFileModel} model Initial model to load.
      */
-    initialize() {
+    initialize(model : IFileModel) {
 
         // Model Viewer    
-        let modelIdElement : HTMLElement = window.document.getElementById('modelId');
-        let modelId = parseInt(modelIdElement.textContent);
-        let model = new Dto.Model3d({id: modelId});
-        
         this._modelViewer = new ModelViewer('ModelViewer', this.containerId, model);
     }
     
