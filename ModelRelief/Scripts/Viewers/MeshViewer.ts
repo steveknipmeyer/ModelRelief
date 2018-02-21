@@ -77,10 +77,15 @@ export class MeshViewer extends Viewer {
 
     /**
      * @description UI controls initialization.
-     */
+     */ 
     initializeUIControls() {
 
-        super.initializeUIControls();
+        let cameraControlOptions = {
+            cameraHelper     : false, 
+            fieldOfView      : false, 
+            clippingControls : false,
+        }
+        super.initializeUIControls(cameraControlOptions);
         this._meshViewerControls = new MeshViewerControls(this);
     }   
 //#endregion

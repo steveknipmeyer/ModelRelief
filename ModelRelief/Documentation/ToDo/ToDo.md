@@ -17,7 +17,6 @@
 <article class="markdown-body">
 
 ##### Commit Notes
-Refactor Loader class to return a Mesh.
 
 ##### Technical Education
 - Manning AspNet Core book.
@@ -56,11 +55,6 @@ Refactor Loader class to return a Mesh.
 
 Update database schema diagram.  
   
-###### Camera Issues
-
-- [ ] The quaternion and up vector do not roundtrip although the visual camera appears unchanged.  The matrix and projectionMatrix are unchanged!
-- [ ] Cameras do not handle offsets (pan). Is this a TrackBallControl issue?
-- [ ] Randomly generated cameras do not roundtrip the matrix property.
 
 ###### StandardView
 When the view camera is interactively changed, it should invalidate the StandardView in the UI.
@@ -70,18 +64,32 @@ When the view camera is interactively changed, it should invalidate the Standard
     The 'dotnet run' workflow runs as 'Production'!  
 </span><br><br>
 
-##### Clipping Planes
+##### FE UI
+    
 
-    Investigate why the clipping plane CameraControls are not editable.
-        Could the events be intercepted by the TrackBall?
-    Does repeared adjustment of the clipping planes leads to bad mesh results?
-    Should the near clipping plane always be adjusted to the front extent?
+    Goal: Load a ComposerView from a given Mesh.
+
+    Select a Mesh (implicitly scoped by Project).
+    Query: Find associated resources.
+        DepthBuffer
+            Model3d
+            Camera
+        MeshTransform
+    Set the Mesh camera to StandardView.Top.
+
+    Make the CameraControl configurable so that properties (e.g. clipping planes) can be disabled.
+
+    What controls are present in Composer?
+        Model: models/?project=id
+        Mesh: meshes/?project=Id & model3d = model3dId
 
 ##### FE Model Structure
-
+           
     Refactor ModelViewer to hold a Model.
     Refactor MeshViewer to hold a Mesh.
-        Should IFileModel be an application or DTO model?
+        IFileModel should be an application model not a DTO model.
+    Application Model
+        static fromId()
     
     Where should Model3d replace Mesh in the FE classes?
 
@@ -99,6 +107,20 @@ When the view camera is interactively changed, it should invalidate the Standard
         Height : Should this be a calculated property?
             Height = Width * (DepthBuffer aspect ratio)?  
         Depth : What is the relationship of this property to LambdaLinearScaling?
+
+##### Camera Issues
+
+- [ ] The quaternion and up vector do not roundtrip although the visual camera appears unchanged.  The matrix and projectionMatrix are unchanged!
+- [ ] Cameras do not handle offsets (pan). Is this a TrackBallControl issue?
+- [ ] Randomly generated cameras do not roundtrip the matrix property.
+
+##### Clipping Plane Issues
+
+    Investigate why the clipping plane CameraControls are not editable.
+        Could the events be intercepted by the TrackBall?
+    Does repeared adjustment of the clipping planes leads to bad mesh results?
+    Should the near clipping plane always be adjusted to the front extent?
+
 
 <div style="font-size:9pt">
 

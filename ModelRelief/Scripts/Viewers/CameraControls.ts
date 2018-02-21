@@ -47,6 +47,17 @@ class CameraControlSettings {
         this.camera = camera;
     }
 }
+/**
+ * @description Options to expose camera settings controls.
+ * @export
+ * @interface CameraControlsOptions
+ */
+export interface CameraControlsOptions {
+
+    cameraHelper?     : boolean;
+    fieldOfView?      : boolean;
+    clippingControls? : boolean;
+}
 
 /**
  * @description Camera UI controls.
@@ -64,14 +75,15 @@ export class CameraControls {
     
     /**
      * Creates an instance of CameraControls.
-     * @param {Viewer} viewer 
-     */
-    constructor(viewer : Viewer) {  
-
+     * @param {Viewer} viewer Associated viewer.
+     * @param {CameraControlsOptions} [controlOptions] Options to include/exclude specialized controls.
+   */
+    constructor(viewer : Viewer, controlOptions? : CameraControlsOptions) {  
+        
         this.viewer = viewer;
 
         // UI Controls
-        this.initializeControls();
+        this.initializeControls(controlOptions);
     }
 
 //#region Event Handlers
@@ -125,8 +137,15 @@ export class CameraControls {
 
     /**
      * @description Initialize the view settings that are controllable by the user
+     * @param {CameraControlsOptions} [controlOptions] Options to include/exclude specialized controls.
      */
-    initializeControls() {
+    initializeControls(controlOptions : CameraControlsOptions = {}) {
+
+        let {
+            cameraHelper     : showCameraHelper     = true,
+            fieldOfView      : showFieldOfView      = true,
+            clippingControls : showClippingControls = true,
+        } = controlOptions;
 
         let scope = this;
 
@@ -157,8 +176,10 @@ export class CameraControls {
         let controlFitView = cameraOptions.add(this.settings, 'fitView').name('Fit View');
 
         // CameraHelper
-        let controlCameraHelper = cameraOptions.add(this.settings, 'addCameraHelper').name('Camera Helper');
-        
+        if (showCameraHelper) {
+            let controlCameraHelper = cameraOptions.add(this.settings, 'addCameraHelper').name('Camera Helper');
+        }
+
         // Standard Views
         let viewOptions = {
             Front       : StandardView.Front,
@@ -178,41 +199,46 @@ export class CameraControls {
         });
             
         // Field of View
-        minimum = 25;
-        maximum = 75;
-        stepSize = 1;
-        let controlFieldOfView = cameraOptions.add(this.settings.camera.viewCamera, 'fov').name('Field of View').min(minimum).max(maximum).step(stepSize).listen();;
-        controlFieldOfView.onChange(function (value) {
+        if (showFieldOfView) {
+            minimum = 25;
+            maximum = 75;
+            stepSize = 1;
+            let controlFieldOfView = cameraOptions.add(this.settings.camera.viewCamera, 'fov').name('Field of View').min(minimum).max(maximum).step(stepSize).listen();;
+            controlFieldOfView.onChange(function (value) {
 
-            scope.settings.camera.viewCamera.fov = value;
-            scope.settings.camera.viewCamera.updateProjectionMatrix();
-        }.bind(this));
+                scope.settings.camera.viewCamera.fov = value;
+                scope.settings.camera.viewCamera.updateProjectionMatrix();
+            }.bind(this));
+        }
 
-        // Near Clipping Plane
-        minimum  =   0.1;
-        maximum  = 100;
-        stepSize =   0.1;
-        this._controlNearClippingPlane = cameraOptions.add(this.settings.camera.viewCamera, 'near').name('Near Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
-        this._controlNearClippingPlane.onChange (function (value) {
+        // Clipping
+        if (showClippingControls) {
+            // Near Clipping Plane
+            minimum  =   0.1;
+            maximum  = 100;
+            stepSize =   0.1;
+            this._controlNearClippingPlane = cameraOptions.add(this.settings.camera.viewCamera, 'near').name('Near Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
+            this._controlNearClippingPlane.onChange (function (value) {
 
-            scope.settings.camera.viewCamera.near = value;
-            scope.settings.camera.viewCamera.updateProjectionMatrix();
-        }.bind(this));
+                scope.settings.camera.viewCamera.near = value;
+                scope.settings.camera.viewCamera.updateProjectionMatrix();
+            }.bind(this));
 
-        // Far Clipping Plane
-        minimum  =  1;
-        maximum  =  Camera.DefaultFarClippingPlane;
-        stepSize =  0.1;
-        this._controlFarClippingPlane = cameraOptions.add(this.settings.camera.viewCamera, 'far').name('Far Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
-        this._controlFarClippingPlane.onChange (function (value) {
+            // Far Clipping Plane
+            minimum  =  1;
+            maximum  =  Camera.DefaultFarClippingPlane;
+            stepSize =  0.1;
+            this._controlFarClippingPlane = cameraOptions.add(this.settings.camera.viewCamera, 'far').name('Far Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
+            this._controlFarClippingPlane.onChange (function (value) {
 
-            scope.settings.camera.viewCamera.far = value;
-            scope.settings.camera.viewCamera.updateProjectionMatrix();
-        }.bind(this));
+                scope.settings.camera.viewCamera.far = value;
+                scope.settings.camera.viewCamera.updateProjectionMatrix();
+            }.bind(this));
 
-        // Bound Clipping Planes
-        let controlBoundClippingPlanes = cameraOptions.add(this.settings, 'boundClippingPlanes').name('Bound Clipping Planes');
-        
+            // Bound Clipping Planes
+            let controlBoundClippingPlanes = cameraOptions.add(this.settings, 'boundClippingPlanes').name('Bound Clipping Planes');
+        }
+
         cameraOptions.open();       
     }
 

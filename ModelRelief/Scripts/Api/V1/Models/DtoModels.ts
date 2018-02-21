@@ -263,7 +263,7 @@ export class Camera extends Model<Camera> implements ICamera {
      * Creates an instance of Camera.
      * @param {ICamera} parameters 
      */
-    constructor (parameters?: ICamera) {
+    constructor (parameters: ICamera = {}) {
 
         super(parameters);
 
@@ -362,7 +362,7 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> implements IDep
      * Creates an instance of DepthBuffer.
      * @param {IDepthBuffer} parameters 
      */
-    constructor (parameters?: IDepthBuffer) {
+    constructor (parameters: IDepthBuffer = {}) {
 
         super(parameters);
 
@@ -434,7 +434,7 @@ export class Mesh extends GeneratedFileModel<Mesh> implements IMesh {
      * Creates an instance of a Mesh.
      * @param {Mesh} parameters 
      */
-    constructor (parameters?: IMesh) {
+    constructor (parameters: IMesh = {}) {
 
         super(parameters);
 
@@ -506,7 +506,7 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
      * Creates an instance of a MeshTransform.
      * @param {IMeshTransform} parameters 
      */
-    constructor (parameters?: IMeshTransform) {
+    constructor (parameters: IMeshTransform = {}) {
 
         super(parameters);
 
@@ -570,7 +570,7 @@ export class Model3d extends FileModel<Model3d> implements IModel3d {
      * Creates an instance of a Model3d.
      * @param {IModel3d} parameters 
      */
-    constructor (parameters?: IModel3d) {
+    constructor (parameters: IModel3d = {}) {
 
         super(parameters);
 
@@ -617,7 +617,7 @@ export class Project extends Model<Project> implements IProject {
      * Creates an instance of a Project.
      * @param {Project} parameters 
      */
-    constructor (parameters?: IProject) {
+    constructor (parameters: IProject = {}) {
 
         super(parameters);
 

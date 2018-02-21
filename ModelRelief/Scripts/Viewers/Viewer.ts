@@ -5,19 +5,19 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE               from 'three';
-import {Camera}                 from 'Camera';
-import {CameraHelper }          from 'CameraHelper';
-import {CameraControls}         from 'CameraControls';
-import {EventManager}           from 'EventManager';
-import {Graphics, ObjectNames}  from 'Graphics';
-import {StandardView}           from 'ICamera';
-import {IFileModel}             from 'IFileModel';
-import {Loader}                 from 'Loader';
-import {ILogger}                from 'Logger';
-import {Materials}              from 'Materials';
-import {Services}               from 'Services';
-import {TrackballControls}      from 'TrackballControls';
+import * as THREE                                   from 'three';
+import {Camera}                                     from 'Camera';
+import {CameraHelper }                              from 'CameraHelper';
+import {CameraControls, CameraControlsOptions}      from 'CameraControls';
+import {EventManager}                               from 'EventManager';
+import {Graphics, ObjectNames}                      from 'Graphics';
+import {StandardView}                               from 'ICamera';
+import {IFileModel}                                 from 'IFileModel';
+import {Loader}                                     from 'Loader';
+import {ILogger}                                    from 'Logger';
+import {Materials}                                  from 'Materials';
+import {Services}                                   from 'Services';
+import {TrackballControls}                          from 'TrackballControls';
 
 /**
  * @description General 3D model viewer base class.
@@ -279,10 +279,11 @@ export class Viewer {
 
     /**
      * @description Sets up the user input controls (Settings)
+     * @param {CameraControlsOptions} cameraControlsOptions Options to include/exclude specialized controls.
      */
-    initializeUIControls() {
+    initializeUIControls(cameraControlsOptions? : CameraControlsOptions) {
 
-        this.cameraControls = new CameraControls(this);       
+        this.cameraControls = new CameraControls(this, cameraControlsOptions);       
     }
 
     /**
