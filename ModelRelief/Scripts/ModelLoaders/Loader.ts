@@ -8,13 +8,11 @@
 import * as Dto                     from 'DtoModels' ;
 import * as THREE                   from 'three';
 
-import {FileModel}                  from 'FileModel';
 import {Graphics}                   from 'Graphics';
 import {StandardView}               from 'ICamera';
 import {IFileModel}                 from 'IFileModel';
 import {IModel}                     from 'IModel'
 import {ILogger, ConsoleLogger}     from 'Logger';
-import {Model}                      from 'Model';
 import {OBJLoader}                  from 'OBJLoader';
 import {Services}                   from 'Services';
 import {TestModelLoader, TestModel} from 'TestModelLoader';

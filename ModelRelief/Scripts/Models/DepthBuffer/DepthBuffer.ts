@@ -10,7 +10,6 @@ import * as THREE               from 'three'
 
 import {Camera}                 from 'Camera'
 import {assert}                 from 'chai'
-import {GeneratedFileModel}     from 'GeneratedFileModel'
 import {Graphics}               from 'Graphics'
 import {DepthBufferFormat}      from 'IDepthBuffer';
 import {ILogger, HTMLLogger}    from 'Logger'
@@ -25,7 +24,7 @@ import {StopWatch}              from 'StopWatch'
  * @export
  * @class DepthBuffer
  */
-export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
+export class DepthBuffer extends Dto.GeneratedFileModel<DepthBuffer> {
 
     static readonly NormalizedTolerance   : number = .001;    
 

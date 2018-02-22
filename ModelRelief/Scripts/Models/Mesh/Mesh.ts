@@ -12,14 +12,12 @@ import { assert }                   from 'chai'
 import { Camera }                   from 'Camera'
 import { CameraHelper }             from 'CameraHelper'
 import { DepthBuffer }              from 'DepthBuffer'
-import { GeneratedFileModel }       from 'GeneratedFileModel'
 import { Graphics }                 from 'Graphics'
 import { MeshFormat }               from 'IMesh'
 import { ILogger, ConsoleLogger }   from 'Logger'
 import { MathLibrary }              from 'Math'
 import { MeshCache }                from 'MeshCache'
 import { MeshTransform }            from 'MeshTransform'
-import { Model }                    from 'Model'
 import { Project }                  from 'Project'
 import { Services }                 from 'Services'
 import { StopWatch }                from 'StopWatch'
@@ -51,7 +49,7 @@ interface FacePair {
  * @export
  * @class Mesh
  */
-export class Mesh extends GeneratedFileModel<Mesh> {
+export class Mesh extends Dto.GeneratedFileModel<Mesh> {
 
     static Cache                              : MeshCache = new MeshCache();
     static readonly MeshModelName             : string = 'ModelMesh';

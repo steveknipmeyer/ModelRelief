@@ -8,7 +8,6 @@
 import * as Dto             from 'DtoModels';
 
 import {IMeshTransform}     from 'IMeshTransform';
-import { Model }            from 'Model';
 import { Project }          from 'Project';
 import {Services}           from 'Services';
 
@@ -18,7 +17,7 @@ import {Services}           from 'Services';
  * @export
  * @class MeshTransform
  */
-export class MeshTransform extends Model<MeshTransform> {
+export class MeshTransform extends Dto.Model<MeshTransform> {
 
     width               : number;
     height              : number;

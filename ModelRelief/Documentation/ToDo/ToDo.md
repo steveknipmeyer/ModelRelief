@@ -70,7 +70,7 @@ When the view camera is interactively changed, it should invalidate the Standard
 
     Set the Mesh camera to StandardView.Top.
 
-    What controls are present in Composer?
+    What controls are (ultimately) present in Composer?
         Model: models/?project=id
         Mesh: meshes/?project=Id & model3d = model3dId
 
@@ -78,9 +78,8 @@ When the view camera is interactively changed, it should invalidate the Standard
            
     Refactor ModelViewer to hold a Model.
     Refactor MeshViewer to hold a Mesh.
-        IFileModel should be an application model not a DTO model.
-    Application Model
-        static fromId()
+        IFileModel should be an application model (Model, Mesh which implemnt IFileModel) not a DTO model.
+
     
     Where should Model3d replace Mesh in the FE classes?
 
@@ -187,16 +186,10 @@ DTO models are in an inheritance chain so they can share common functionality su
 
 |Graphics||DTO (HTTP)|
 |--|
-|Model||Dto.Model|
-|FileModel||Dto.FileModel|
-|GeneratedFileModel||Dto.GeneratedFileModel|
+|||Dto.Model|
+|||Dto.FileModel|
+|||Dto.GeneratedFileModel|
 
-**Graphics**
-```javascript
-export class Model<T extends IModel> implements IModel
-export class FileModel<T extends IFileModel> extends Model<T> implements IFileModel
-export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel<T> implements IGeneratedFileModel
-```
 **DTO**
 ```javascript
 export class Model<T extends IModel> implements IModel
@@ -209,22 +202,22 @@ export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel
 
 |Graphics |Implementation||DTO (HTTP) |Implementation||Notes|
 |-------|--------|--------|
-|Camera|IModel<br>Model||Dto.Camera|IModel, ICamera<br>Dto.Model||THREE.Camera|
-|DepthBuffer|IGeneratedFileModel<br>GeneratedFileModel||Dto.DepthBuffer|IGeneratedFileModel, IDepthBuffer<br>Dto.GeneratedFileModel||
-|Mesh|IGeneratedFileModel<br>GeneratedFileModel||Dto.Mesh|IGeneratedFileModel, IMesh<br>Dto.GeneratedFileModel||THREE.Mesh|
-|MeshTransform|IModel<br>Model||Dto.MeshTransform|IModel,IMeshTransform<br>Dto.Model|||
-|Model3d|IFileModel<br>FileModel||Dto.Model3d|IFileModel,IModel3d<br>Dto.FileModel||THREE.Mesh|
-|Project|IModel<br>Model||Dto.Project|IModel, IProject<br>Dto.Model||
+|Camera|IModel<br>Dto.Model||Dto.Camera|IModel, ICamera<br>Dto.Model||THREE.Camera|
+|DepthBuffer|IGeneratedFileModel<br>Dto.GeneratedFileModel||Dto.DepthBuffer|IGeneratedFileModel, IDepthBuffer<br>Dto.GeneratedFileModel||
+|Mesh|IGeneratedFileModel<br>Dto.GeneratedFileModel||Dto.Mesh|IGeneratedFileModel, IMesh<br>Dto.GeneratedFileModel||THREE.Mesh|
+|MeshTransform|IModel<br>Dto.Model||Dto.MeshTransform|IModel,IMeshTransform<br>Dto.Model|||
+|Model3d|IFileModel<br>Dto.FileModel||Dto.Model3d|IFileModel,IModel3d<br>Dto.FileModel||THREE.Mesh|
+|Project|IModel<br>Dto.Model||Dto.Project|IModel, IProject<br>Dto.Model||
 |**Relief**|TBD||||
 
 **Graphics**
 ```javascript
-export class Camera extends Model<Camera>
-export class DepthBuffer extends GeneratedFileModel<DepthBuffer>
-export class Mesh extends GeneratedFileModel<Mesh>
-export class MeshTransform extends Model<MeshTransform>
-export class Model3d extends FileModel<Model3d> 
-export class Project extends Model<Project>
+export class Camera extends Dto.Model<Camera>
+export class DepthBuffer extends Dto.GeneratedFileModel<DepthBuffer>
+export class Mesh extends Dto.GeneratedFileModel<Mesh>
+export class MeshTransform extends Dto.Model<MeshTransform>
+export class Model3d extends Dto.FileModel<Model3d> 
+export class Project extends Dto.Model<Project>
 ```
 **DTO**
 ```javascript

@@ -11,7 +11,6 @@ import * as THREE        from 'three'
 import { ICamera, StandardView }    from 'ICamera'
 import { DepthBufferFactory }       from 'DepthBufferFactory'
 import { Graphics }                 from 'Graphics'
-import { Model }                    from 'Model';
 import { Project }                  from 'Project'
 import { Services }                 from 'Services'
 import { StopWatch }                from 'StopWatch'
@@ -36,7 +35,7 @@ export interface ClippingPlanes {
  * Camera
  * @class
  */
-export class Camera extends Model<Camera> {
+export class Camera extends Dto.Model<Camera> {
 
     static DefaultFieldOfView       : number =   37;       // 35mm vertical : https://www.nikonians.org/reviews/fov-tables       
     static DefaultNearClippingPlane : number =    0.1; 

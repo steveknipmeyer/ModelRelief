@@ -7,7 +7,6 @@
 
 import * as Dto    from 'DtoModels'
 
-import {Model}     from 'Model';
 import {Services}  from 'Services'
 
 /**
@@ -15,7 +14,7 @@ import {Services}  from 'Services'
  * @export
  * @class Project
  */
-export class Project extends Model<Project> {
+export class Project extends Dto.Model<Project> {
 
     /**
      * @constructor
