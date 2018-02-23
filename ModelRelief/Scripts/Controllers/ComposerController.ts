@@ -129,15 +129,13 @@ export class ComposerController {
         meshModel.fileIsSynchronized = true;
         await meshModel.putAsync();
 
-        // Mesh file
-        let depthBufferBytes: Uint8Array = await meshModel.getFileAsync();
-
         // construct DepthBufffer from Mesh raw file
-        let camera = Camera.fromDtoModel(cameraModel);
-        let depthBuffer = new DepthBuffer(depthBufferBytes, reliefWidthPixels, reliefHeightPixels, camera);
+        let depthBuffer =  await DepthBuffer.fromDtoModel(depthBufferModel);
+        let depthBufferRGBA: Uint8Array = await meshModel.getFileAsync();       // Mesh file
+        depthBuffer.rgbArray = depthBufferRGBA;
         
         // Mesh graphics
-        let mesh = new Mesh(reliefWidthPixels, reliefHeightPixels, depthBuffer);
+        let mesh = new Mesh(depthBuffer);
         let meshGraphics = await mesh.constructGraphicssAsync({});
 
         this._composerView._meshView.meshViewer.setModelGroup(meshGraphics);
@@ -175,9 +173,9 @@ export class ComposerController {
     async postDepthBufferAsync(camera : Dto.Camera, widthPixels: number, heightPixels: number): Promise<Dto.DepthBuffer> {
 
         let depthBufferCamera = Camera.fromDtoModel(camera);
-        let factory = new DepthBufferFactory({ width: widthPixels, height: heightPixels, modelGroup: this._composerView.modelView.modelViewer.modelGroup, camera: depthBufferCamera.viewCamera, addCanvasToDOM: false });
+        let factory = new DepthBufferFactory({ width: widthPixels, height: heightPixels, modelGroup: this._composerView.modelView.modelViewer.modelGroup, camera: depthBufferCamera, addCanvasToDOM: false });
 
-        let depthBuffer = factory.createDepthBuffer();
+        let depthBuffer = await factory.createDepthBuffer();
 
         let depthBufferModel = new Dto.DepthBuffer({
             name:       'DepthBuffer.raw',

@@ -5,16 +5,17 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto    from 'DtoModels'
+import * as Dto     from 'DtoModels'
 
-import {Services}  from 'Services'
+import { Model }    from 'Model'
+import { Services } from 'Services'
 
 /**
  * @description Represents a user project.
  * @export
  * @class Project
  */
-export class Project extends Dto.Model<Project> {
+export class Project extends Model<Project> {
 
     /**
      * @constructor

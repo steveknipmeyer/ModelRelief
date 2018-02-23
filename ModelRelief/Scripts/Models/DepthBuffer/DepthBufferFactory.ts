@@ -5,7 +5,8 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE               from 'three'
+import * as THREE  from 'three'
+import * as Dto    from "DtoModels";
 
 import {Camera, ClippingPlanes} from 'Camera'
 import {CameraHelper}           from 'CameraHelper'
@@ -34,7 +35,7 @@ export interface DepthBufferFactoryParameters {
     width            : number,                  // width of DB
     height           : number                   // height of DB        
     modelGroup       : THREE.Group,             // model root
-    camera           : THREE.PerspectiveCamera, // camera
+    camera           : Camera,                  // camera
     
     logDepthBuffer?  : boolean,                 // use logarithmic depth buffer for higher resolution (better distribution) in scenes with large extents
     
@@ -61,7 +62,7 @@ export class DepthBufferFactory {
     _width           : number                   = DepthBufferFactory.DefaultResolution;     // width resolution of the DB
     _height          : number                   = DepthBufferFactory.DefaultResolution;     // height resolution of the DB
 
-    _camera          : THREE.PerspectiveCamera  = null;     // perspective camera to generate the depth buffer
+    _camera          : Camera                   = null;     // perspective camera to generate the depth buffer
 
 
     _logDepthBuffer  : boolean                  = false;    // use a logarithmic buffer for more accuracy in large scenes
@@ -98,7 +99,7 @@ export class DepthBufferFactory {
 
         this._width           = width;
         this._height          = height;
-        this._modelGroup           = modelGroup.clone(true);
+        this._modelGroup      = modelGroup.clone(true);
         this._camera          = camera;
 
         // optional
@@ -276,8 +277,8 @@ export class DepthBufferFactory {
             fragmentShader: MR.shaderSource['DepthBufferFragmentShader'],
 
             uniforms: {
-                cameraNear  :   { value: this._camera.near },
-                cameraFar   :   { value: this._camera.far },
+                cameraNear  :   { value: this._camera.viewCamera.near },
+                cameraFar   :   { value: this._camera.viewCamera.far },
                 tDiffuse    :   { value: this._target.texture },
                 tDepth      :   { value: this._target.depthTexture }
             }
@@ -361,11 +362,11 @@ export class DepthBufferFactory {
     /**
      * Create a depth buffer.
      */
-    createDepthBuffer() : DepthBuffer {
+    async createDepthBuffer() : Promise<DepthBuffer> {
 
         let timerTag = Services.timer.mark('DepthBufferFactory.createDepthBuffer');        
 
-        this._renderer.render(this._scene, this._camera, this._target);    
+        this._renderer.render(this._scene, this._camera.viewCamera, this._target);    
     
         // (optional) preview encoded RGBA texture; drawn by shader but not persisted
         this._renderer.render(this._postScene, this._postCamera);    
@@ -379,8 +380,24 @@ export class DepthBufferFactory {
         let depthBufferRGBA =  new Uint8Array(this._width * this._height * 4).fill(0);
         this._renderer.readRenderTargetPixels(this._encodedTarget, 0, 0, this._width, this._height, depthBufferRGBA);
 
-        let camera = new Camera (this._camera);
-        this._depthBuffer = new DepthBuffer(depthBufferRGBA, this._width, this._height, camera);    
+        let dtoDepthBuffer = new Dto.DepthBuffer({
+
+            id          : 0,
+            name        : 'Unnamed',
+            description : 'Factory-generated',
+            width       : this._width,
+            height      : this._height
+        })
+
+        this._depthBuffer =  await DepthBuffer.fromDtoModel(dtoDepthBuffer);
+        this._depthBuffer.rgbArray = depthBufferRGBA;
+
+        // WIP : Assign Model3d properties.
+        // this._depthBuffer.model3dId =
+        // this._depthBuffer.model3d   =
+        
+        this._depthBuffer.cameraId = this._camera.id;
+        this._depthBuffer.camera   = new Camera (this._camera.viewCamera);
 
         this.analyzeTargets();
 

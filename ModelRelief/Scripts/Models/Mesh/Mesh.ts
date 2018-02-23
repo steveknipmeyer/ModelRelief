@@ -12,6 +12,7 @@ import { assert }                   from 'chai'
 import { Camera }                   from 'Camera'
 import { CameraHelper }             from 'CameraHelper'
 import { DepthBuffer }              from 'DepthBuffer'
+import { GeneratedFileModel }       from 'GeneratedFileModel'
 import { Graphics }                 from 'Graphics'
 import { MeshFormat }               from 'IMesh'
 import { ILogger, ConsoleLogger }   from 'Logger'
@@ -30,7 +31,6 @@ import { Tools }                    from 'Tools'
  */
 export interface MeshGenerateParameters {
 
-    camera?     : THREE.PerspectiveCamera;      // override not yet implemented 
     material?   : THREE.Material;
 }
 
@@ -49,7 +49,7 @@ interface FacePair {
  * @export
  * @class Mesh
  */
-export class Mesh extends Dto.GeneratedFileModel<Mesh> {
+export class Mesh extends GeneratedFileModel<Mesh> {
 
     static Cache                              : MeshCache = new MeshCache();
     static readonly MeshModelName             : string = 'ModelMesh';
@@ -88,19 +88,17 @@ export class Mesh extends Dto.GeneratedFileModel<Mesh> {
     
     /**
      * Creates an instance of Mesh.
-     * @param {number} width Width of mesh (DB resolution).
-     * @param {number} height Height of mesh (DB resolution).
      * @param {DepthBuffer} depthBuffer Depth buffer.
      */
-    constructor(width : number, height: number, depthBuffer : DepthBuffer) {
+    constructor(depthBuffer : DepthBuffer) {
 
         super({
             name: 'Mesh', 
             description: 'Mesh',
         });
 
-        this._width       = width;
-        this._height      = height;
+        this._width       = depthBuffer.width;
+        this._height      = depthBuffer.height;
         this.depthBuffer  = depthBuffer;
 
         this.initialize();
@@ -112,12 +110,10 @@ export class Mesh extends Dto.GeneratedFileModel<Mesh> {
      */
     static fromDtoModel(dtoMesh : Dto.Mesh) : Mesh {
 
-        let width       : number = 0;                    // N.B. != Dto.Mesh
-        let height      : number = 0;                    // N.B. != Dto.Mesh
         let depthBuffer : DepthBuffer = undefined;       // N.B. != Dto.Mesh
 
         // constructor
-        let mesh = new Mesh (width, height, depthBuffer);
+        let mesh = new Mesh (depthBuffer);
 
         mesh.id          = dtoMesh.id;
         mesh.name        = dtoMesh.name;

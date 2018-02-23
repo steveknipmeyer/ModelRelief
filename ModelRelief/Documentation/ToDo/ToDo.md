@@ -17,6 +17,9 @@
 <article class="markdown-body">
 
 ##### Commit Notes
+Generalize FE Model, FileModel, GeneratedFileModel.
+DepthBuffer FE application constructor overrides base class constructors.
+Add static fromId helper method to Camera FE application model.
 
 ##### Technical Education
 - Manning AspNet Core book.
@@ -66,23 +69,25 @@ When the view camera is interactively changed, it should invalidate the Standard
 
 ##### FE UI
     
-    Goal: Load a ComposerView from a given Mesh.
+Goals
+ - Load a ComposerView from a given Mesh.
+ - Construct a graph of *application* models from the target Mesh.
+ - Use *application* models not DTOs!
 
-    Set the Mesh camera to StandardView.Top.
+Application models
+ -  constructor(\{parameters : IModel\})
+ -  fromId (id: number)
+_
+Where should Model3d replace Mesh in the FE classes?
+         
+Set the Mesh camera to StandardView.Top.
 
-    What controls are (ultimately) present in Composer?
-        Model: models/?project=id
-        Mesh: meshes/?project=Id & model3d = model3dId
+What controls are (ultimately) present in Composer?
+ - Model: models/?project=id
+ - Mesh: meshes/?project=Id & model3d = model3dId
 
 ##### FE Model Structure
-           
-    Refactor ModelViewer to hold a Model.
-    Refactor MeshViewer to hold a Mesh.
-        IFileModel should be an application model (Model, Mesh which implemnt IFileModel) not a DTO model.
-
-    
-    Where should Model3d replace Mesh in the FE classes?
-
+     
     What is the role of <model>.fromDtoModel?   
         Some initialization cannot be done without involved processing of related members.
         For example, constructing a DeothBuffer requires the backing file data.
@@ -186,9 +191,9 @@ DTO models are in an inheritance chain so they can share common functionality su
 
 |Graphics||DTO (HTTP)|
 |--|
-|||Dto.Model|
-|||Dto.FileModel|
-|||Dto.GeneratedFileModel|
+|||Model|
+|||FileModel|
+|||GeneratedFileModel|
 
 **DTO**
 ```javascript
@@ -197,27 +202,26 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
 export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel<T> implements IGeneratedFileModel
 ```
 
-
 #### Concrete Classes
 
 |Graphics |Implementation||DTO (HTTP) |Implementation||Notes|
 |-------|--------|--------|
-|Camera|IModel<br>Dto.Model||Dto.Camera|IModel, ICamera<br>Dto.Model||THREE.Camera|
-|DepthBuffer|IGeneratedFileModel<br>Dto.GeneratedFileModel||Dto.DepthBuffer|IGeneratedFileModel, IDepthBuffer<br>Dto.GeneratedFileModel||
-|Mesh|IGeneratedFileModel<br>Dto.GeneratedFileModel||Dto.Mesh|IGeneratedFileModel, IMesh<br>Dto.GeneratedFileModel||THREE.Mesh|
-|MeshTransform|IModel<br>Dto.Model||Dto.MeshTransform|IModel,IMeshTransform<br>Dto.Model|||
-|Model3d|IFileModel<br>Dto.FileModel||Dto.Model3d|IFileModel,IModel3d<br>Dto.FileModel||THREE.Mesh|
-|Project|IModel<br>Dto.Model||Dto.Project|IModel, IProject<br>Dto.Model||
+|Camera|IModel<br>Model||Dto.Camera|IModel, ICamera<br>Model||THREE.Camera|
+|DepthBuffer|IGeneratedFileModel<br>GeneratedFileModel||Dto.DepthBuffer|IGeneratedFileModel, IDepthBuffer<br>GeneratedFileModel||
+|Mesh|IGeneratedFileModel<br>GeneratedFileModel||Dto.Mesh|IGeneratedFileModel, IMesh<br>GeneratedFileModel||THREE.Mesh|
+|MeshTransform|IModel<br>Model||Dto.MeshTransform|IModel,IMeshTransform<br>Model|||
+|Model3d|IFileModel<br>FileModel||Model3d|IFileModel,IModel3d<br>FileModel||THREE.Mesh|
+|Project|IModel<br>Model||Dto.Project|IModel, IProject<br>Model||
 |**Relief**|TBD||||
 
 **Graphics**
 ```javascript
-export class Camera extends Dto.Model<Camera>
-export class DepthBuffer extends Dto.GeneratedFileModel<DepthBuffer>
-export class Mesh extends Dto.GeneratedFileModel<Mesh>
-export class MeshTransform extends Dto.Model<MeshTransform>
-export class Model3d extends Dto.FileModel<Model3d> 
-export class Project extends Dto.Model<Project>
+export class Camera extends Model<Camera>
+export class DepthBuffer extends GeneratedFileModel<DepthBuffer>
+export class Mesh extends GeneratedFileModel<Mesh>
+export class MeshTransform extends Model<MeshTransform>
+export class Model3d extends FileModel<Model3d> 
+export class Project extends Model<Project>
 ```
 **DTO**
 ```javascript

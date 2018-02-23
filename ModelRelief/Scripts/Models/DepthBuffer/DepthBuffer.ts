@@ -10,8 +10,10 @@ import * as THREE               from 'three'
 
 import {Camera}                 from 'Camera'
 import {assert}                 from 'chai'
+import {GeneratedFileModel}     from 'GeneratedFileModel'
 import {Graphics}               from 'Graphics'
 import {DepthBufferFormat}      from 'IDepthBuffer';
+import {IModel}                 from 'IModel'
 import {ILogger, HTMLLogger}    from 'Logger'
 import {MathLibrary}            from 'Math'
 import {Model3d}                from 'Model3d'
@@ -24,11 +26,12 @@ import {StopWatch}              from 'StopWatch'
  * @export
  * @class DepthBuffer
  */
-export class DepthBuffer extends Dto.GeneratedFileModel<DepthBuffer> {
+export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
 
     static readonly NormalizedTolerance   : number = .001;    
 
     depths     : Float32Array;
+
     width      : number;
     height     : number;
     format     : DepthBufferFormat;
@@ -38,10 +41,10 @@ export class DepthBuffer extends Dto.GeneratedFileModel<DepthBuffer> {
     project    : Project;
 
     model3dId  : number;
-    model      : Model3d; 
+    model3d    : Model3d; 
 
     cameraId   : number;
-    camera     : Camera;
+    _camera    : Camera;
 
 
     // Private
@@ -55,25 +58,9 @@ export class DepthBuffer extends Dto.GeneratedFileModel<DepthBuffer> {
     _minimumNormalized : number;
     _maximumNormalized : number;
 
-    /**
-     * @constructor
-     * @param rgbaArray Raw aray of RGBA bytes packed with floats.
-     * @param width Width of map.
-     * @param height Height of map.
-     * @param camera Perspective camera.
-     */
-    constructor(rgbaArray : Uint8Array, width : number, height : number, camera : Camera) {
+    constructor(parameters: IModel = {}) {
 
-        super({
-            name: 'DepthBuffer', 
-            description: 'DepthBuffer',
-        });
-        
-        this._rgbaArray = rgbaArray;
-
-        this.width  = width;
-        this.height = height;      
-        this.camera = camera;
+        super(parameters);
 
         this.initialize();
     }
@@ -82,24 +69,25 @@ export class DepthBuffer extends Dto.GeneratedFileModel<DepthBuffer> {
      * @description Constructs an instance from a DTO model.
      * @returns {DepthBuffer} 
      */
-    static fromDtoModel(dtoDepthBuffer : Dto.DepthBuffer) : DepthBuffer {
-
-        let rgbArray : Uint8Array = new Uint8Array(0);                                  // N.B. != Dto.DepthBuffer
-        let camera : Camera       = new Camera(new THREE.PerspectiveCamera());          // N.B. != Dto.DepthBuffer
-
-        let width  = dtoDepthBuffer.width;
-        let height = dtoDepthBuffer.height;
+    static async fromDtoModel(dtoDepthBuffer : Dto.DepthBuffer) : Promise<DepthBuffer> {
 
         // constructor
-        let depthBuffer = new DepthBuffer (rgbArray, width, height, camera);
+        let depthBuffer = new DepthBuffer({
 
-        depthBuffer.id          = dtoDepthBuffer.id;
-        depthBuffer.name        = dtoDepthBuffer.name;
-        depthBuffer.description = dtoDepthBuffer.description;       
+            id          : dtoDepthBuffer.id,
+            name        : dtoDepthBuffer.name,
+            description : dtoDepthBuffer.description,       
+        });
+
+        depthBuffer.width  = dtoDepthBuffer.width;
+        depthBuffer.height = dtoDepthBuffer.height;
 
         depthBuffer.projectId   = dtoDepthBuffer.projectId;
         depthBuffer.model3dId   = dtoDepthBuffer.model3dId;
-        depthBuffer.cameraId    = dtoDepthBuffer.cameraId;
+
+        depthBuffer.cameraId = dtoDepthBuffer.cameraId;
+        if (depthBuffer.cameraId)
+            depthBuffer.camera  = await Camera.fromId(depthBuffer.cameraId);
 
         return depthBuffer;
     }
@@ -128,6 +116,50 @@ export class DepthBuffer extends Dto.GeneratedFileModel<DepthBuffer> {
     }        
 
     //#region Properties
+    /**
+     * @description Returns the raw RGB array of the buffer.
+     * @type {Uint8Array}
+     */
+    get rgbArray() : Uint8Array {
+
+        return this._rgbaArray;
+    }
+
+    /**
+     * @description Sets the raw RGB array.
+     */
+    set rgbArray (value : Uint8Array) {
+
+        this._rgbaArray = value;
+
+        // RGBA -> Float32
+        this.depths = new Float32Array(this.rgbArray.buffer);
+        
+        // calculate extrema of depth buffer values
+        this.calculateExtents();
+    }
+
+    /**
+     * @description Returns the associated camera.
+     * @readonly
+     * @type {Camera}
+     */
+    get camera() : Camera {
+
+        return this._camera;
+    }
+
+    /**
+     * @description Sets the associated camera.
+     */
+    set camera(value : Camera) {
+
+        this._camera = value;
+
+        this._nearClipPlane   = this.camera.viewCamera.near;
+        this._farClipPlane    = this.camera.viewCamera.far;
+        this._cameraClipRange = this._farClipPlane - this._nearClipPlane;
+    }
 
     /**
      * @description Returns the aspect ratio of the depth buffer.
@@ -223,16 +255,6 @@ export class DepthBuffer extends Dto.GeneratedFileModel<DepthBuffer> {
     initialize () {
         
         this._logger = Services.defaultLogger;       
-
-        this._nearClipPlane   = this.camera.viewCamera.near;
-        this._farClipPlane    = this.camera.viewCamera.far;
-        this._cameraClipRange = this._farClipPlane - this._nearClipPlane;
-
-        // RGBA -> Float32
-        this.depths = new Float32Array(this._rgbaArray.buffer);
-        
-        // calculate extrema of depth buffer values
-        this.calculateExtents();
     }
 
     /**

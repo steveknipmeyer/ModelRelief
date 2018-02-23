@@ -9,6 +9,7 @@ import * as Dto          from 'DtoModels'
 
 import { Camera }        from 'Camera';
 import { Model3dFormat } from 'IModel3d';
+import { FileModel }     from 'FileModel';
 import { Project }       from 'Project'
 import { Services }      from 'Services'
 
@@ -17,7 +18,7 @@ import { Services }      from 'Services'
  * @export
  * @class Model3d
  */
-export class Model3d extends Dto.FileModel<Model3d> {
+export class Model3d extends FileModel<Model3d> {
 
     format: Model3dFormat;
 
