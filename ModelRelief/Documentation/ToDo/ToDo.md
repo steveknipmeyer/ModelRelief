@@ -70,9 +70,6 @@ When the view camera is interactively changed, it should invalidate the Standard
 
 ##### FE UI
 
-Mesh, MeshTransform : Remove id navigation properties.
-Mesh, MeshTransform : Fully populate application models.
-
 Goals
  - Load a ComposerView from a given Mesh.
  - Construct a graph of *application* models from the target Mesh.

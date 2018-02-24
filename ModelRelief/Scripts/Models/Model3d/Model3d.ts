@@ -10,6 +10,7 @@ import * as Dto          from 'DtoModels'
 import { Camera }        from 'Camera';
 import { Model3dFormat } from 'IModel3d';
 import { FileModel }     from 'FileModel';
+import { IFileModel }    from 'IFileModel';
 import { Project }       from 'Project'
 import { Services }      from 'Services'
 
@@ -23,21 +24,19 @@ export class Model3d extends FileModel<Model3d> {
     format: Model3dFormat;
 
     // Navigation Properties
-    projectId : number;
     project   : Project;
-
-    cameraId : number;
     camera   : Camera;
 
     /**
-     * @constructor
+     * Creates an instance of a Model3d.
+     * @param {IFileModel} [parameters={}] FileModel properties.
      */
-    constructor() {
+    constructor(parameters: IFileModel = {}) {
 
-        super({
-            name: 'Model3d', 
-            description: 'Model3d',
-        });
+        parameters.name        = parameters.name        || "Model3d"; 
+        parameters.description = parameters.description || "Model3d";
+
+        super(parameters);
     }
 
     /**
@@ -55,26 +54,26 @@ export class Model3d extends FileModel<Model3d> {
             id : id
         });
         let model3dModel = await model3d.getAsync();
-        return Model3d.fromDtoModel(model3dModel);
+        return Model3d.fromDtoModelAsync(model3dModel);
     }   
 
     /**
      * @description Constructs an instance from a DTO model.
      * @returns {Model3d} 
      */
-    static fromDtoModel(dtoModel3d : Dto.Model3d) : Model3d {
+    static async fromDtoModelAsync(dtoModel3d : Dto.Model3d) : Promise<Model3d> {
 
         // constructor
-        let model3d = new Model3d ();
+        let model3d = new Model3d ({
+            id          : dtoModel3d.id,
+            name        : dtoModel3d.name,
+            description : dtoModel3d.description,       
+        });
 
-        model3d.id          = dtoModel3d.id;
-        model3d.name        = dtoModel3d.name;
-        model3d.description = dtoModel3d.description;       
+        model3d.format  = dtoModel3d.format;              
 
-        model3d.format      = dtoModel3d.format;              
-
-        model3d.projectId   = dtoModel3d.projectId;       
-        model3d.cameraId    = dtoModel3d.cameraId;       
+        model3d.project = await Project.fromIdAsync(dtoModel3d.projectId);       
+        model3d.camera  = await Camera.fromIdAsync(dtoModel3d.cameraId);       
 
         return model3d;
     }
@@ -92,8 +91,8 @@ export class Model3d extends FileModel<Model3d> {
 
             format          : this.format,              
             
-            projectId       : this.projectId,
-            cameraId        : this.cameraId,
+            projectId       : this.project ? this.project.id : undefined,
+            cameraId        : this.camera  ? this.camera.id : undefined,
         });
 
         return model3d;

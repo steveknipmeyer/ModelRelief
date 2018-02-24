@@ -61,21 +61,21 @@ export class MeshTransform extends Model<MeshTransform> {
             id : id
         });
         let meshTransformModel = await meshTransform.getAsync();
-        return MeshTransform.fromDtoModel(meshTransformModel);
+        return MeshTransform.fromDtoModelAsync(meshTransformModel);
     }   
 
     /**
      * @description Constructs an instance from a DTO model.
      * @returns {MeshTransform} 
      */
-    static async fromDtoModel(dtoMeshTransform : Dto.MeshTransform) : Promise<MeshTransform> {
+    static async fromDtoModelAsync(dtoMeshTransform : Dto.MeshTransform) : Promise<MeshTransform> {
 
         // constructor
-        let meshTransform = new MeshTransform ();
-
-        meshTransform.id          = dtoMeshTransform.id;
-        meshTransform.name        = dtoMeshTransform.name;
-        meshTransform.description = dtoMeshTransform.description;       
+        let meshTransform = new MeshTransform ({
+            id          : dtoMeshTransform.id,
+            name        : dtoMeshTransform.name,
+            description : dtoMeshTransform.description,       
+        });
 
         meshTransform.width       = dtoMeshTransform.width;              
         meshTransform.height      = dtoMeshTransform.height;              

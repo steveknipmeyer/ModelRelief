@@ -7,7 +7,8 @@
 
 import * as Dto     from 'DtoModels'
 
-import { Model }    from 'Model'
+import { Model }   from 'Model'
+import { IModel }    from 'IModel'
 import { Services } from 'Services'
 
 /**
@@ -19,13 +20,16 @@ export class Project extends Model<Project> {
 
     /**
      * @constructor
+     * Creates an instance of Camera.
+     * @param {IModel} parameters IModel properties.
      */
-    constructor() {
-        super({
-            name: 'Project', 
-            description: 'Project',
-        });
-    }
+    constructor(parameters: IModel) {
+
+        parameters.name        = parameters.name        || "Project"; 
+        parameters.description = parameters.description || "Project";
+        
+        super(parameters);
+    }        
 
     /**
      * @description Returns a Project instance through an HTTP query of the Id.
@@ -52,11 +56,11 @@ export class Project extends Model<Project> {
     static fromDtoModel(dtoProject : Dto.Project) : Project {
 
         // constructor
-        let project = new Project ();
-
-        project.id          = dtoProject.id;
-        project.name        = dtoProject.name;
-        project.description = dtoProject.description;       
+        let project = new Project ({
+            id          : dtoProject.id,
+            name        : dtoProject.name,
+            description : dtoProject.description,       
+        });
 
         return project;
     }
