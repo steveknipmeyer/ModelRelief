@@ -14,11 +14,14 @@ import { CameraHelper }             from 'CameraHelper'
 import { DepthBuffer }              from 'DepthBuffer'
 import { GeneratedFileModel }       from 'GeneratedFileModel'
 import { Graphics }                 from 'Graphics'
+import { IGeneratedFileModel }      from 'IGeneratedFileModel'
 import { MeshFormat }               from 'IMesh'
+import { IModel }                   from 'IModel'
 import { ILogger, ConsoleLogger }   from 'Logger'
 import { MathLibrary }              from 'Math'
 import { MeshCache }                from 'MeshCache'
 import { MeshTransform }            from 'MeshTransform'
+import { Model3d }                  from 'Model3d'
 import { Project }                  from 'Project'
 import { Services }                 from 'Services'
 import { StopWatch }                from 'StopWatch'
@@ -68,16 +71,9 @@ export class Mesh extends GeneratedFileModel<Mesh> {
     format: MeshFormat;
 
     // Navigation Properties    
-    projectId       : number;
     project         : Project;
-
-    cameraId        : number;
     camera          : Camera;             
-
-    depthBufferId   : number;
     depthBuffer     : DepthBuffer;
-
-    meshTransformId : number;
     meshTransform   : MeshTransform;
 
     // Private
@@ -88,14 +84,16 @@ export class Mesh extends GeneratedFileModel<Mesh> {
     
     /**
      * Creates an instance of Mesh.
-     * @param {DepthBuffer} depthBuffer Depth buffer.
+     * @param {IGeneratedFileModel} [parameters={}] GeneratedFileModel properties.
+     * @param {DepthBuffer} depthBuffer DepthBuffer.
+     * @param {MeshTransform} meshTransform MeshTransform.
      */
-    constructor(depthBuffer : DepthBuffer, meshTransform : MeshTransform) {
+    constructor(parameters : IGeneratedFileModel, depthBuffer : DepthBuffer, meshTransform : MeshTransform) {
 
-        super({
-            name: 'Mesh', 
-            description: 'Mesh',
-        });
+        parameters.name        = parameters.name        || "Mesh"; 
+        parameters.description = parameters.description || "Mesh";
+        
+        super(parameters);
 
         this._width        = depthBuffer.width;
         this._height       = depthBuffer.height;
@@ -120,29 +118,34 @@ export class Mesh extends GeneratedFileModel<Mesh> {
             id : id
         });
         let meshModel = await mesh.getAsync();
-        return Mesh.fromDtoModel(meshModel);
+        return Mesh.fromDtoModelAsync(meshModel);
     }   
 
     /**
      * @description Constructs an instance from a DTO model.
      * @returns {Mesh} 
      */
-    static fromDtoModel(dtoMesh : Dto.Mesh) : Mesh {
+    static async fromDtoModelAsync(dtoMesh : Dto.Mesh) : Promise<Mesh> {
 
         let meshTransform : MeshTransform = new MeshTransform({});;           // N.B. != Dto.Mesh
         let depthBuffer   : DepthBuffer   = undefined;                        // N.B. != Dto.Mesh
 
         // constructor
-        let mesh = new Mesh (depthBuffer, meshTransform);
-
-        mesh.id          = dtoMesh.id;
-        mesh.name        = dtoMesh.name;
-        mesh.description = dtoMesh.description;       
+        let mesh = new Mesh ({
+            id          : dtoMesh.id,
+            name        : dtoMesh.name,
+            description : dtoMesh.description,       
+            }, 
+            depthBuffer, 
+            meshTransform
+        );
 
         mesh.format         = dtoMesh.format;
-        mesh.projectId      = dtoMesh.projectId;
-        mesh.depthBufferId  = dtoMesh.depthBufferId
-        mesh.meshTransformId= dtoMesh.meshTransformId;
+
+        mesh.project        = await Project.fromIdAsync(dtoMesh.projectId);
+        mesh.camera         = await Camera.fromIdAsync(dtoMesh.cameraId);
+        mesh.depthBuffer    = await DepthBuffer.fromIdAsync(dtoMesh.depthBufferId);
+        mesh.meshTransform  = await MeshTransform.fromIdAsync(dtoMesh.meshTransformId);
 
         return mesh;
     }
@@ -160,10 +163,10 @@ export class Mesh extends GeneratedFileModel<Mesh> {
 
             format          : this.format,
         
-            projectId       : this.projectId,
-            cameraId        : this.cameraId,
-            depthBufferId   : this.depthBufferId,
-            meshTransformId : this.meshTransformId,
+            projectId       : this.project ? this.project.id : undefined,
+            cameraId        : this.camera ? this.camera.id : undefined,
+            depthBufferId   : this.depthBuffer ? this.depthBuffer.id : undefined,
+            meshTransformId : this.meshTransform ? this.meshTransform.id : undefined,
         });
 
         return mesh;

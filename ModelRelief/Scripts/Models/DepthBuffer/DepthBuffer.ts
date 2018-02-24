@@ -54,6 +54,10 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
     _minimumNormalized : number;
     _maximumNormalized : number;
 
+    /**
+     * Creates an instance of DepthBuffer.
+     * @param {IGeneratedFileModel} [parameters={}] GeneratedFileModel properties.
+     */
     constructor(parameters: IGeneratedFileModel = {}) {
 
         parameters.name        = parameters.name        || "DepthBuffer"; 
@@ -90,7 +94,6 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
 
         // constructor
         let depthBuffer = new DepthBuffer({
-
             id          : dtoDepthBuffer.id,
             name        : dtoDepthBuffer.name,
             description : dtoDepthBuffer.description,       

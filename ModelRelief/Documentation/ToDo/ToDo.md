@@ -69,8 +69,8 @@ When the view camera is interactively changed, it should invalidate the Standard
 
 ##### FE UI
 
-Camera, DepthBuffer : Remove id navigation properties.
-Camera, DepthBuffer : Fully populate application models.
+Mesh, MeshTransform : Remove id navigation properties.
+Mesh, MeshTransform : Fully populate application models.
 
 Goals
  - Load a ComposerView from a given Mesh.
@@ -81,6 +81,7 @@ Application models
 - [X] constructor(\{parameters : IModel\})
 - [X] fromId (id: number)
 
+Add generate method to IGeneratedFileModel.
 
 What is the best way to create default parameters in the FE constructors?
 

@@ -135,7 +135,7 @@ export class ComposerController {
         depthBuffer.rgbArray = depthBufferRGBA;
         
         // Mesh graphics
-        let mesh = new Mesh(depthBuffer, this._composerViewSettings.meshTransform);
+        let mesh = new Mesh({}, depthBuffer, this._composerViewSettings.meshTransform);
         let meshGraphics = await mesh.constructGraphicssAsync({});
 
         this._composerView._meshView.meshViewer.setModelGroup(meshGraphics);

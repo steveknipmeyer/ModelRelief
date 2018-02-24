@@ -31,11 +31,12 @@ export class MeshTransform extends Model<MeshTransform> {
     lambdaLinearScaling : number;
 
     // Navigation Properties
-    projectId  : number;
     project    : Project;
 
     /**
      * @constructor
+     * Creates an instance of MeshTransform.
+     * @param {IModel} [parameters={}] IModel properties.
      */
     constructor(parameters: IModel = {}) {
 
@@ -67,7 +68,7 @@ export class MeshTransform extends Model<MeshTransform> {
      * @description Constructs an instance from a DTO model.
      * @returns {MeshTransform} 
      */
-    static fromDtoModel(dtoMeshTransform : Dto.MeshTransform) : MeshTransform {
+    static async fromDtoModel(dtoMeshTransform : Dto.MeshTransform) : Promise<MeshTransform> {
 
         // constructor
         let meshTransform = new MeshTransform ();
@@ -85,7 +86,7 @@ export class MeshTransform extends Model<MeshTransform> {
         meshTransform.sigmaGaussianSmooth = dtoMeshTransform.sigmaGaussianSmooth;       
         meshTransform.lambdaLinearScaling = dtoMeshTransform.lambdaLinearScaling;       
 
-        meshTransform.projectId = dtoMeshTransform.projectId;       
+        meshTransform.project = await Project.fromIdAsync(dtoMeshTransform.projectId);       
 
         return meshTransform;
     }
@@ -110,7 +111,7 @@ export class MeshTransform extends Model<MeshTransform> {
             sigmaGaussianSmooth :  this.sigmaGaussianSmooth,       
             lambdaLinearScaling :  this.lambdaLinearScaling,       
             
-            projectId       : this.projectId,
+            projectId           : this.project ? this.project.id : undefined,
         });
 
         return meshTransform;
