@@ -41,6 +41,21 @@ export class Model3d extends FileModel<Model3d> {
     }
 
     /**
+     * @description Returns a Model3d instance through an HTTP query of the Id.
+     * @static
+     * @param {number} id Model3d Id.
+     * @returns {Promise<Model3d>} 
+     */
+    static async fromId(id : number ) : Promise<Model3d> {
+        
+        let model3d = new Dto.Model3d ({
+            id : id
+        });
+        let model3dModel = await model3d.getAsync();
+        return Model3d.fromDtoModel(model3dModel);
+    }   
+
+    /**
      * @description Constructs an instance from a DTO model.
      * @returns {Model3d} 
      */

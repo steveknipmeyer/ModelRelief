@@ -103,6 +103,21 @@ export class Mesh extends GeneratedFileModel<Mesh> {
 
         this.initialize();
     }
+    
+    /**
+     * @description Returns a Mesh instance through an HTTP query of the Id.
+     * @static
+     * @param {number} id Mesh Id.
+     * @returns {Promise<Mesh>} 
+     */
+    static async fromId(id : number ) : Promise<Mesh> {
+        
+        let mesh = new Dto.Mesh ({
+            id : id
+        });
+        let meshModel = await mesh.getAsync();
+        return Mesh.fromDtoModel(meshModel);
+    }   
 
     /**
      * @description Constructs an instance from a DTO model.

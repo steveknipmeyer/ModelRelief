@@ -27,6 +27,10 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
     // not exposed in UX; API only
     fileTimeStamp: Date;
 
+    // Private
+    _fileArray  : Uint8Array;
+    _fileString : string;
+
     /**
      * Creates an instance of FileModel.
      * @param {IModel} [parameters] Initialization parameters.
@@ -61,14 +65,18 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
 
         let exportTag = Services.timer.mark(`GET File: ${this.constructor.name}`);
 
+        // cache
+        if (this._fileArray)
+            return this._fileArray;
+
         let endPoint = `${this.endPoint}/${this.id}/file`
         let result = await this.submitRequestAsync(endPoint, MethodType.Get, ContentType.OctetStream, null);       
-        let byteArray = result.byteArrayDecodedDoublePrime;
-//      let byteArray = result.byteArrayDecoded;
+        this._fileArray = result.byteArrayDecodedDoublePrime;
+//      this._fileArray = result.byteArrayDecoded;
 
         Services.timer.logElapsedTime(exportTag);       
 
-        return byteArray;
+        return this._fileArray;;
     }
 
      /**
@@ -80,7 +88,11 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
 
         let exportTag = Services.timer.mark(`GET File (string): ${this.constructor.name}`);
 
-        let fileByteArray = await this.getFileAsync();
+        // cache
+        if (this._fileString)
+            return this._fileString;
+
+            let fileByteArray = await this.getFileAsync();
         function byteToStringConverter() : Promise<string> {
             return new Promise<string>((resolve, reject) => {
                 let blobBuffer = new Blob([new Uint8Array(fileByteArray)]);
@@ -93,9 +105,9 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
                 fileReader.readAsText(blobBuffer);
             })
         }
-        let fileString = await byteToStringConverter();
+        this._fileString = await byteToStringConverter();
         Services.timer.logElapsedTime(exportTag);       
 
-        return fileString;
+        return this._fileString;
     }
 }

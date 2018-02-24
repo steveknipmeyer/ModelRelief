@@ -149,7 +149,7 @@ export class CameraControls {
 
         let scope = this;
 
-        let camera = new Camera(this.viewer.camera);
+        let camera = new Camera({}, this.viewer.camera);
         this.settings = new CameraControlSettings(camera, this.fitView.bind(this), this.addCameraHelper.bind(this), this.boundClippingPlanes.bind(this));
         assert.deepEqual(this.viewer.camera, this.settings.camera.viewCamera);
 

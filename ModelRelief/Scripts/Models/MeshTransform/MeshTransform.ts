@@ -44,6 +44,21 @@ export class MeshTransform extends Model<MeshTransform> {
     }
 
     /**
+     * @description Returns a MeshTransform instance through an HTTP query of the Id.
+     * @static
+     * @param {number} id MeshTransform Id.
+     * @returns {Promise<MeshTransform>} 
+     */
+    static async fromId(id : number ) : Promise<MeshTransform> {
+        
+        let meshTransform = new Dto.MeshTransform ({
+            id : id
+        });
+        let meshTransformModel = await meshTransform.getAsync();
+        return MeshTransform.fromDtoModel(meshTransformModel);
+    }   
+
+    /**
      * @description Constructs an instance from a DTO model.
      * @returns {MeshTransform} 
      */

@@ -155,7 +155,7 @@ export class ComposerController {
         let viewCameraClone = this._composerView.modelView.modelViewer.camera.clone(true);
         CameraHelper.finalizeClippingPlanes(viewCameraClone, this._composerView.modelView.modelViewer.modelGroup);
 
-        let camera = new Camera(viewCameraClone);
+        let camera = new Camera({}, viewCameraClone);
         let cameraModel = camera.toDtoModel();
 
         var newModel = await cameraModel.postAsync();
@@ -234,7 +234,7 @@ export class ComposerController {
         // WIP: Randomly generated cameras do not rountrip the matrix property. However, cameras created and manipulated through views work fine.
         // UnitTests.cameraRoundTrip();
 
-        let camera = new Camera(this._composerView.modelView._modelViewer.camera);
+        let camera = new Camera({}, this._composerView.modelView._modelViewer.camera);
         let cameraModel = camera.toDtoModel();
         let cameraRoundtrip = Camera.fromDtoModel(cameraModel);
         UnitTests.comparePerspectiveCameras(camera.viewCamera, cameraRoundtrip.viewCamera);

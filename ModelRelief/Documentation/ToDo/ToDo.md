@@ -17,9 +17,9 @@
 <article class="markdown-body">
 
 ##### Commit Notes
-Generalize FE Model, FileModel, GeneratedFileModel.
-DepthBuffer FE application constructor overrides base class constructors.
-Add static fromId helper method to Camera FE application model.
+Camera FE application constructor overrides Model constructor.
+Add static fromId helper method to all FE application models.
+Cache FileModel results in fileArray/fileString.
 
 ##### Technical Education
 - Manning AspNet Core book.
@@ -77,7 +77,16 @@ Goals
 Application models
  -  constructor(\{parameters : IModel\})
  -  fromId (id: number)
-_
+
+What is the best way to create default parameters in the FE constructors?
+
+Add a file property to FileModel, GeneratedFileModel to allow in-memory operations.
+Mesh.constructGraphics should use the Mesh backing file - not the DepthBuffer.
+    this.depthBuffer -> this.file
+
+Use Model, Mesh in ModelViewer, MeshViewer respectively.
+Use Camera in Viewer.
+
 Where should Model3d replace Mesh in the FE classes?
          
 Set the Mesh camera to StandardView.Top.

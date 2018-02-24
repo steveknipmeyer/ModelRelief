@@ -24,40 +24,57 @@ namespace ModelRelief.Dto
         public string Name { get; set; }
         public string Description { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double FieldOfView { get; set; }
         [Display(Name = "Aspect Ratio")]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double AspectRatio { get; set; }
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double Near { get; set; }
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double Far { get; set; }
 
         [Display(Name = "Px")]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double PositionX { get; set; }
         [Display(Name = "Py")]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double PositionY { get; set; }
         [Display(Name = "Pz")]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double PositionZ { get; set; }
 
         [Display(Name = "Ex")]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double EulerX { get; set; }
         [Display(Name = "Ey")]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double EulerY { get; set; }
         [Display(Name = "Ez")]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double EulerZ { get; set; }
         [Display(Name = "Theta")]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double Theta { get; set; }
 
         [Display(Name = "Sx")]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double ScaleX { get; set; }
         [Display(Name = "Sy")]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double ScaleY { get; set; }
         [Display(Name = "Sz")]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double ScaleZ { get; set; }
 
         [Display(Name = "Ux")]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double UpX { get; set; }
         [Display(Name = "Uy")]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double UpY { get; set; }
         [Display(Name = "Uz")]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double UpZ { get; set; }
 
         // Navigation Properties

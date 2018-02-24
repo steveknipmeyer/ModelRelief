@@ -203,10 +203,12 @@ export class UnitTests {
             perspectiveCamera.updateProjectionMatrix();
 
             // constructor
-            let camera = new Camera (perspectiveCamera);
-            camera.id          = 1;
-            camera.name        = "Perspective Camera";
-            camera.description = "This camera has random properties.";       
+            let camera = new Camera ({
+                id          : 1,
+                name        : "Perspective Camera",
+                description : "This camera has random properties.",       
+                }, 
+                perspectiveCamera);
 
             let cameraModel = camera.toDtoModel();
             let cameraRoundtrip = Camera.fromDtoModel(cameraModel);

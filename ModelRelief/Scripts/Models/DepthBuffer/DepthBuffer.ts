@@ -13,6 +13,7 @@ import {assert}                 from 'chai'
 import {GeneratedFileModel}     from 'GeneratedFileModel'
 import {Graphics}               from 'Graphics'
 import {DepthBufferFormat}      from 'IDepthBuffer';
+import {IGeneratedFileModel}    from 'IGeneratedFileModel';
 import {IModel}                 from 'IModel'
 import {ILogger, HTMLLogger}    from 'Logger'
 import {MathLibrary}            from 'Math'
@@ -58,12 +59,30 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
     _minimumNormalized : number;
     _maximumNormalized : number;
 
-    constructor(parameters: IModel = {}) {
+    constructor(parameters: IGeneratedFileModel = {}) {
+
+        parameters.name        = parameters.name        || "DepthBuffer"; 
+        parameters.description = parameters.description || "DepthBuffer";
 
         super(parameters);
 
         this.initialize();
     }
+
+    /**
+     * @description Returns a DepthBuffer instance through an HTTP query of the Id.
+     * @static
+     * @param {number} id DepthBuffer Id.
+     * @returns {Promise<DepthBuffer>} 
+     */
+    static async fromId(id : number ) : Promise<DepthBuffer> {
+        
+        let depthBuffer = new Dto.DepthBuffer ({
+            id : id
+        });
+        let depthBufferModel = await depthBuffer.getAsync();
+        return DepthBuffer.fromDtoModel(depthBufferModel);
+    }   
 
     /**
      * @description Constructs an instance from a DTO model.

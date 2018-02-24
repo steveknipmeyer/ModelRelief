@@ -11,6 +11,7 @@ import * as THREE        from 'three'
 import { ICamera, StandardView }    from 'ICamera'
 import { DepthBufferFactory }       from 'DepthBufferFactory'
 import { Graphics }                 from 'Graphics'
+import {IModel}                     from 'IModel'
 import { Model }                    from 'Model'
 import { Project }                  from 'Project'
 import { Services }                 from 'Services'
@@ -50,16 +51,19 @@ export class Camera extends Model<Camera> {
 
     /**
      * @constructor
+     * Creates an instance of Camera.
+     * @param {IModel} parameters IModel properties.
+     * @param {THREE.PerspectiveCamera} camera PerspectiveCamera.
      */
-    constructor(camera : THREE.PerspectiveCamera) {
+    constructor(parameters: IModel = {}, camera : THREE.PerspectiveCamera) {
 
-        super({
-            name: 'Camera', 
-            description: 'Perspective Camera',
-        });
+        parameters.name        = parameters.name        || "Camera"; 
+        parameters.description = parameters.description || "Perspective Camera";
+        
+        super(parameters);
 
-        this.viewCamera = camera;            
-        }
+        this.viewCamera = camera;
+    }
 
     /**
      * @description Returns a Camera instance through an HTTP query of the Id.
@@ -103,10 +107,12 @@ export class Camera extends Model<Camera> {
         perspectiveCamera.updateProjectionMatrix();
 
         // constructor
-        let camera = new Camera (perspectiveCamera);
-        camera.id          = dtoCamera.id;
-        camera.name        = dtoCamera.name;
-        camera.description = dtoCamera.description;       
+        let camera = new Camera ({
+            id          : dtoCamera.id,
+            name        : dtoCamera.name,
+            description : dtoCamera.description,       
+            },
+            perspectiveCamera);
 
         camera.projectId   = dtoCamera.projectId;
 

@@ -28,6 +28,21 @@ export class Project extends Model<Project> {
     }
 
     /**
+     * @description Returns a Project instance through an HTTP query of the Id.
+     * @static
+     * @param {number} id Project Id.
+     * @returns {Promise<Project>} 
+     */
+    static async fromId(id : number ) : Promise<Project> {
+        
+        let project = new Dto.Project ({
+            id : id
+        });
+        let projectModel = await project.getAsync();
+        return Project.fromDtoModel(projectModel);
+    }   
+
+    /**
      * @description Constructs an instance from a DTO model.
      * @returns {Project} 
      */

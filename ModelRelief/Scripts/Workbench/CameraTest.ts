@@ -220,7 +220,7 @@ export class App {
     roundtripCameraZ ()  {
 
         // https://stackoverflow.com/questions/29221795/serializing-camera-state-in-threejs
-        let camera = new Camera(this._viewer.camera);
+        let camera = new Camera({}, this._viewer.camera);
         let cameraModel = camera.toDtoModel();
         let cameraRoundtrip = Camera.fromDtoModel(cameraModel);
 

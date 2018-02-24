@@ -397,7 +397,7 @@ export class DepthBufferFactory {
         // this._depthBuffer.model3d   =
         
         this._depthBuffer.cameraId = this._camera.id;
-        this._depthBuffer.camera   = new Camera (this._camera.viewCamera);
+        this._depthBuffer.camera   = new Camera ({}, this._camera.viewCamera);
 
         this.analyzeTargets();
 
