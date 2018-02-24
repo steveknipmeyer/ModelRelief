@@ -17,6 +17,8 @@
 <article class="markdown-body">
 
 ##### Commit Notes
+Upgrade git.
+
 Camera FE application constructor overrides Model constructor.
 Add static fromId helper method to all FE application models.
 Cache FileModel results in fileArray/fileString.
@@ -58,7 +60,6 @@ Cache FileModel results in fileArray/fileString.
 
 Update database schema diagram.  
   
-
 ###### StandardView
 When the view camera is interactively changed, it should invalidate the StandardView in the UI.
 
@@ -81,16 +82,12 @@ Application models
 - [X] constructor(\{parameters : IModel\})
 - [X] fromId (id: number)
 
-Add generate method to IGeneratedFileModel.
-
-What is the best way to create default parameters in the FE constructors?
-
 Mesh.constructGraphics should use the Mesh backing file - not the DepthBuffer.
     this.depthBuffer -> this.file
+Add generate method to IGeneratedFileModel.
 
 Use Model, Mesh in ModelViewer, MeshViewer respectively.
 Use Camera in Viewer.
-
 Where should Model3d replace Mesh in the FE classes?
          
 Set the Mesh camera to StandardView.Top.
