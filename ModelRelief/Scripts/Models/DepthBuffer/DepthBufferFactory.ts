@@ -362,7 +362,7 @@ export class DepthBufferFactory {
     /**
      * Create a depth buffer.
      */
-    async createDepthBuffer() : Promise<DepthBuffer> {
+    async createDepthBufferAsync() : Promise<DepthBuffer> {
 
         let timerTag = Services.timer.mark('DepthBufferFactory.createDepthBuffer');        
 
@@ -389,15 +389,15 @@ export class DepthBufferFactory {
             height      : this._height
         })
 
-        this._depthBuffer =  await DepthBuffer.fromDtoModel(dtoDepthBuffer);
+        this._depthBuffer =  await DepthBuffer.fromDtoModelAsync(dtoDepthBuffer);
         this._depthBuffer.rgbArray = depthBufferRGBA;
 
-        // WIP : Assign Model3d properties.
-        // this._depthBuffer.model3dId =
+        // WIP : Assign Model3d.
         // this._depthBuffer.model3d   =
         
-        this._depthBuffer.cameraId = this._camera.id;
-        this._depthBuffer.camera   = new Camera ({}, this._camera.viewCamera);
+        this._depthBuffer.camera = new Camera ({
+            id : this._camera.id,
+        }, this._camera.viewCamera);
 
         this.analyzeTargets();
 

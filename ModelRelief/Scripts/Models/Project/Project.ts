@@ -33,8 +33,11 @@ export class Project extends Model<Project> {
      * @param {number} id Project Id.
      * @returns {Promise<Project>} 
      */
-    static async fromId(id : number ) : Promise<Project> {
+    static async fromIdAsync(id : number ) : Promise<Project> {
         
+        if (!id)
+            return undefined;
+
         let project = new Dto.Project ({
             id : id
         });

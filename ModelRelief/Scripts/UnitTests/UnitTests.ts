@@ -211,12 +211,12 @@ export class UnitTests {
                 perspectiveCamera);
 
             let cameraModel = camera.toDtoModel();
-            let cameraRoundtrip = Camera.fromDtoModel(cameraModel);
-
-            let c1 = camera.viewCamera;
-            let c2 = cameraRoundtrip.viewCamera;       
-            
-            this.comparePerspectiveCameras(c1, c2);
+            Camera.fromDtoModelAsync(cameraModel).then(cameraRoundtrip => {
+                let c1 = camera.viewCamera;
+                let c2 = cameraRoundtrip.viewCamera;       
+                
+                this.comparePerspectiveCameras(c1, c2);
+            })
         }
     }
 
@@ -224,7 +224,7 @@ export class UnitTests {
      * @description Round trip an array of bytes.
      * @static
      */
-    static async binaryRoundTrip() {
+    static async binaryRoundtripAsync() : Promise<void> {
 
         // Arrange
         let originalByteArray = new Uint8Array(256);
@@ -245,7 +245,7 @@ export class UnitTests {
         let readByteArray = await depthBufferModel.getFileAsync();
 
         // Assert
-        assert.deepEqual(originalByteArray, readByteArray, "Byte arrays are different.")        
+        assert.deepEqual(originalByteArray, readByteArray, "Byte arrays are different.")  
     }   
 
     static vertexMapping (depthBuffer : DepthBuffer, mesh : THREE.Mesh) {

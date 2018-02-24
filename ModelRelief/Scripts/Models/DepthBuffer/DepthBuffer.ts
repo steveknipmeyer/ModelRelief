@@ -38,13 +38,8 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
     format     : DepthBufferFormat;
 
     // Navigation Properties    
-    projectId  : number;
     project    : Project;
-
-    model3dId  : number;
     model3d    : Model3d; 
-
-    cameraId   : number;
     _camera    : Camera;
 
 
@@ -75,20 +70,23 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
      * @param {number} id DepthBuffer Id.
      * @returns {Promise<DepthBuffer>} 
      */
-    static async fromId(id : number ) : Promise<DepthBuffer> {
+    static async fromIdAsync(id : number ) : Promise<DepthBuffer> {
         
-        let depthBuffer = new Dto.DepthBuffer ({
+        if (!id)
+            return undefined;
+
+       let depthBuffer = new Dto.DepthBuffer ({
             id : id
         });
         let depthBufferModel = await depthBuffer.getAsync();
-        return DepthBuffer.fromDtoModel(depthBufferModel);
+        return DepthBuffer.fromDtoModelAsync(depthBufferModel);
     }   
 
     /**
      * @description Constructs an instance from a DTO model.
      * @returns {DepthBuffer} 
      */
-    static async fromDtoModel(dtoDepthBuffer : Dto.DepthBuffer) : Promise<DepthBuffer> {
+    static async fromDtoModelAsync(dtoDepthBuffer : Dto.DepthBuffer) : Promise<DepthBuffer> {
 
         // constructor
         let depthBuffer = new DepthBuffer({
@@ -101,12 +99,9 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
         depthBuffer.width  = dtoDepthBuffer.width;
         depthBuffer.height = dtoDepthBuffer.height;
 
-        depthBuffer.projectId   = dtoDepthBuffer.projectId;
-        depthBuffer.model3dId   = dtoDepthBuffer.model3dId;
-
-        depthBuffer.cameraId = dtoDepthBuffer.cameraId;
-        if (depthBuffer.cameraId)
-            depthBuffer.camera  = await Camera.fromId(depthBuffer.cameraId);
+        depthBuffer.project = await Project.fromIdAsync(dtoDepthBuffer.projectId);
+        depthBuffer.model3d = await Model3d.fromIdAsync(dtoDepthBuffer.model3dId);
+        depthBuffer.camera  = await Camera.fromIdAsync(dtoDepthBuffer.cameraId);
 
         return depthBuffer;
     }
@@ -126,9 +121,9 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
             height          : this.height,
             format          : this.format,
         
-            projectId       : this.projectId,
-            model3dId       : this.model3dId,
-            cameraId        : this.cameraId,
+            projectId       : this.project ? this.project.id : undefined,
+            model3dId       : this.model3d ? this.model3d.id : undefined,
+            cameraId        : this.camera  ? this.camera.id : undefined,
         });
 
         return model;
@@ -174,10 +169,11 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
     set camera(value : Camera) {
 
         this._camera = value;
-
-        this._nearClipPlane   = this.camera.viewCamera.near;
-        this._farClipPlane    = this.camera.viewCamera.far;
-        this._cameraClipRange = this._farClipPlane - this._nearClipPlane;
+        if (this._camera) {
+            this._nearClipPlane   = this.camera.viewCamera.near;
+            this._farClipPlane    = this.camera.viewCamera.far;
+            this._cameraClipRange = this._farClipPlane - this._nearClipPlane;
+        }
     }
 
     /**

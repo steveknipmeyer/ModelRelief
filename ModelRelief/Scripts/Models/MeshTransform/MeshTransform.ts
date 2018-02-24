@@ -8,6 +8,7 @@
 import * as Dto             from 'DtoModels';
 
 import { IMeshTransform }   from 'IMeshTransform';
+import { IModel }           from 'IModel';
 import { Model }            from 'Model';
 import { Project }          from 'Project';
 import { Services }         from 'Services';
@@ -36,11 +37,12 @@ export class MeshTransform extends Model<MeshTransform> {
     /**
      * @constructor
      */
-    constructor() {
-        super({
-            name: 'MeshTransform', 
-            description: 'MeshTransform',
-        });
+    constructor(parameters: IModel = {}) {
+
+        parameters.name        = parameters.name        || "MeshTransform"; 
+        parameters.description = parameters.description || "MeshTransform";
+        
+        super(parameters);
     }
 
     /**
@@ -49,8 +51,11 @@ export class MeshTransform extends Model<MeshTransform> {
      * @param {number} id MeshTransform Id.
      * @returns {Promise<MeshTransform>} 
      */
-    static async fromId(id : number ) : Promise<MeshTransform> {
+    static async fromIdAsync(id : number ) : Promise<MeshTransform> {
         
+        if (!id)
+            return undefined;
+
         let meshTransform = new Dto.MeshTransform ({
             id : id
         });

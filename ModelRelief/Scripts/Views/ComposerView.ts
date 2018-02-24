@@ -129,7 +129,7 @@ export class ComposerView {
     /**
      * @description Performs initialization.
      */
-    async initialize() {
+    initialize() {
 
         Services.defaultLogger.addInfoMessage('ModelRelief started');
 
@@ -146,7 +146,7 @@ export class ComposerView {
         this._composerController = new ComposerController(this);
 
         // Loader (model event handlers now initialized)
-        this._modelView.modelViewer.loadModel();
+        this._modelView.modelViewer.loadModelAsync().then(() => {});
 
         // Test Models
 //      this._loader.loadParametricTestModel(this._modelViewer, TestModel.Checkerboard);

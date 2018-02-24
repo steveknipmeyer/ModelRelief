@@ -68,19 +68,22 @@ When the view camera is interactively changed, it should invalidate the Standard
 </span><br><br>
 
 ##### FE UI
-    
+
+Camera, DepthBuffer : Remove id navigation properties.
+Camera, DepthBuffer : Fully populate application models.
+
 Goals
  - Load a ComposerView from a given Mesh.
  - Construct a graph of *application* models from the target Mesh.
  - Use *application* models not DTOs!
 
-Application models
- -  constructor(\{parameters : IModel\})
- -  fromId (id: number)
+Application models  
+- [X] constructor(\{parameters : IModel\})
+- [X] fromId (id: number)
+
 
 What is the best way to create default parameters in the FE constructors?
 
-Add a file property to FileModel, GeneratedFileModel to allow in-memory operations.
 Mesh.constructGraphics should use the Mesh backing file - not the DepthBuffer.
     this.depthBuffer -> this.file
 

@@ -90,28 +90,32 @@ export class Mesh extends GeneratedFileModel<Mesh> {
      * Creates an instance of Mesh.
      * @param {DepthBuffer} depthBuffer Depth buffer.
      */
-    constructor(depthBuffer : DepthBuffer) {
+    constructor(depthBuffer : DepthBuffer, meshTransform : MeshTransform) {
 
         super({
             name: 'Mesh', 
             description: 'Mesh',
         });
 
-        this._width       = depthBuffer.width;
-        this._height      = depthBuffer.height;
-        this.depthBuffer  = depthBuffer;
+        this._width        = depthBuffer.width;
+        this._height       = depthBuffer.height;
+        this.depthBuffer   = depthBuffer;
+        this.meshTransform = meshTransform;
 
         this.initialize();
     }
-    
+
     /**
      * @description Returns a Mesh instance through an HTTP query of the Id.
      * @static
      * @param {number} id Mesh Id.
      * @returns {Promise<Mesh>} 
      */
-    static async fromId(id : number ) : Promise<Mesh> {
+    static async fromIdAsync(id : number ) : Promise<Mesh> {
         
+        if (!id)
+            return undefined;
+
         let mesh = new Dto.Mesh ({
             id : id
         });
@@ -125,10 +129,11 @@ export class Mesh extends GeneratedFileModel<Mesh> {
      */
     static fromDtoModel(dtoMesh : Dto.Mesh) : Mesh {
 
-        let depthBuffer : DepthBuffer = undefined;       // N.B. != Dto.Mesh
+        let meshTransform : MeshTransform = new MeshTransform({});;           // N.B. != Dto.Mesh
+        let depthBuffer   : DepthBuffer   = undefined;                        // N.B. != Dto.Mesh
 
         // constructor
-        let mesh = new Mesh (depthBuffer);
+        let mesh = new Mesh (depthBuffer, meshTransform);
 
         mesh.id          = dtoMesh.id;
         mesh.name        = dtoMesh.name;

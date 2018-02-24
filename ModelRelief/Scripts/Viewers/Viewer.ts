@@ -162,7 +162,7 @@ export class Viewer {
      * @description Loads a model from disk.
      * @param {IFileModel} model 
      */
-    async loadModel() {
+    async loadModelAsync() {
 
         let loader = new Loader();
         let group = await loader.loadOBJModelAsync(this.model);

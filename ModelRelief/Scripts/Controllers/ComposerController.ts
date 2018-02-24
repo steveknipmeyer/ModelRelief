@@ -127,15 +127,15 @@ export class ComposerController {
 
         // Mesh file generation
         meshModel.fileIsSynchronized = true;
-        await meshModel.putAsync();
+        meshModel = await meshModel.putAsync();
 
         // construct DepthBufffer from Mesh raw file
-        let depthBuffer =  await DepthBuffer.fromDtoModel(depthBufferModel);
+        let depthBuffer =  await DepthBuffer.fromDtoModelAsync(depthBufferModel);
         let depthBufferRGBA: Uint8Array = await meshModel.getFileAsync();       // Mesh file
         depthBuffer.rgbArray = depthBufferRGBA;
         
         // Mesh graphics
-        let mesh = new Mesh(depthBuffer);
+        let mesh = new Mesh(depthBuffer, this._composerViewSettings.meshTransform);
         let meshGraphics = await mesh.constructGraphicssAsync({});
 
         this._composerView._meshView.meshViewer.setModelGroup(meshGraphics);
@@ -172,10 +172,10 @@ export class ComposerController {
      */
     async postDepthBufferAsync(camera : Dto.Camera, widthPixels: number, heightPixels: number): Promise<Dto.DepthBuffer> {
 
-        let depthBufferCamera = Camera.fromDtoModel(camera);
+        let depthBufferCamera = await Camera.fromDtoModelAsync(camera);
         let factory = new DepthBufferFactory({ width: widthPixels, height: heightPixels, modelGroup: this._composerView.modelView.modelViewer.modelGroup, camera: depthBufferCamera, addCanvasToDOM: false });
 
-        let depthBuffer = await factory.createDepthBuffer();
+        let depthBuffer = await factory.createDepthBufferAsync();
 
         let depthBufferModel = new Dto.DepthBuffer({
             name:       'DepthBuffer.raw',
@@ -226,7 +226,7 @@ export class ComposerController {
     /**
      * @description Saves the relief.
      */
-    saveRelief(): void {
+    saveRelief() {
 
         // WIP: Save the Mesh as an OBJ format file?
         // It may be more efficient to maintain Meshes in raw format since the size is substantially smaller.
@@ -236,10 +236,12 @@ export class ComposerController {
 
         let camera = new Camera({}, this._composerView.modelView._modelViewer.camera);
         let cameraModel = camera.toDtoModel();
-        let cameraRoundtrip = Camera.fromDtoModel(cameraModel);
-        UnitTests.comparePerspectiveCameras(camera.viewCamera, cameraRoundtrip.viewCamera);
+        Camera.fromDtoModelAsync(cameraModel).then((cameraRoundtrip) => {
 
-        this._composerView.modelView._modelViewer.camera = cameraRoundtrip.viewCamera;
+            UnitTests.comparePerspectiveCameras(camera.viewCamera, cameraRoundtrip.viewCamera);
+
+            this._composerView.modelView._modelViewer.camera = cameraRoundtrip.viewCamera;
+        });
     }
 
     //#endregion

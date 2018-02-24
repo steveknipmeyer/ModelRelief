@@ -46,8 +46,11 @@ export class Model3d extends FileModel<Model3d> {
      * @param {number} id Model3d Id.
      * @returns {Promise<Model3d>} 
      */
-    static async fromId(id : number ) : Promise<Model3d> {
+    static async fromIdAsync(id : number ) : Promise<Model3d> {
         
+        if (!id)
+            return undefined;
+
         let model3d = new Dto.Model3d ({
             id : id
         });

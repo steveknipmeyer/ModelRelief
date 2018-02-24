@@ -222,18 +222,19 @@ export class App {
         // https://stackoverflow.com/questions/29221795/serializing-camera-state-in-threejs
         let camera = new Camera({}, this._viewer.camera);
         let cameraModel = camera.toDtoModel();
-        let cameraRoundtrip = Camera.fromDtoModel(cameraModel);
+        Camera.fromDtoModelAsync(cameraModel).then(cameraRoundtrip => {
 
-        let distortCamera = false;
-        if (distortCamera) {
-            let deltaPosition : THREE.Vector3 = new THREE.Vector3();
-            deltaPosition.copy(cameraRoundtrip.viewCamera.position);
-            let delta = 0.5;
-            cameraRoundtrip.viewCamera.position.set(deltaPosition.x + delta, deltaPosition.y, deltaPosition.z);
-        }
-        this._viewer.camera = cameraRoundtrip.viewCamera;
-
-        UnitTests.comparePerspectiveCameras(camera.viewCamera, cameraRoundtrip.viewCamera);
+            let distortCamera = false;
+            if (distortCamera) {
+                let deltaPosition : THREE.Vector3 = new THREE.Vector3();
+                deltaPosition.copy(cameraRoundtrip.viewCamera.position);
+                let delta = 0.5;
+                cameraRoundtrip.viewCamera.position.set(deltaPosition.x + delta, deltaPosition.y, deltaPosition.z);
+            }
+            this._viewer.camera = cameraRoundtrip.viewCamera;
+    
+            UnitTests.comparePerspectiveCameras(camera.viewCamera, cameraRoundtrip.viewCamera);
+        })
     }
 
     /**

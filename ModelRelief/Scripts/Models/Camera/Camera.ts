@@ -46,7 +46,6 @@ export class Camera extends Model<Camera> {
     viewCamera : THREE.PerspectiveCamera;
     
     // Navigation Properties
-    projectId  : number;
     project    : Project;
 
     /**
@@ -55,7 +54,7 @@ export class Camera extends Model<Camera> {
      * @param {IModel} parameters IModel properties.
      * @param {THREE.PerspectiveCamera} camera PerspectiveCamera.
      */
-    constructor(parameters: IModel = {}, camera : THREE.PerspectiveCamera) {
+    constructor(parameters: IModel, camera : THREE.PerspectiveCamera) {
 
         parameters.name        = parameters.name        || "Camera"; 
         parameters.description = parameters.description || "Perspective Camera";
@@ -71,20 +70,23 @@ export class Camera extends Model<Camera> {
      * @param {number} id Camera Id.
      * @returns {Promise<Camera>} 
      */
-    static async fromId(id : number ) : Promise<Camera> {
-        
+    static async fromIdAsync(id : number ) : Promise<Camera> {
+
+        if (!id)
+            return undefined;
+
         let camera = new Dto.Camera ({
             id : id
         });
         let cameraModel = await camera.getAsync();
-        return Camera.fromDtoModel(cameraModel);
+        return Camera.fromDtoModelAsync(cameraModel);
     }   
 
     /**
      * @description Constructs an instance from a DTO model.
      * @returns {Camera} 
      */
-    static fromDtoModel(dtoCamera : Dto.Camera) : Camera {
+    static async fromDtoModelAsync(dtoCamera : Dto.Camera) : Promise<Camera> {
 
         let position    = new THREE.Vector3(dtoCamera.positionX, dtoCamera.positionY, dtoCamera.positionZ);
         let quaternion  = new THREE.Quaternion(dtoCamera.eulerX, dtoCamera.eulerY, dtoCamera.eulerZ, dtoCamera.theta);
@@ -112,9 +114,10 @@ export class Camera extends Model<Camera> {
             name        : dtoCamera.name,
             description : dtoCamera.description,       
             },
-            perspectiveCamera);
+            perspectiveCamera
+        );
 
-        camera.projectId   = dtoCamera.projectId;
+        camera.project  = await Project.fromIdAsync(dtoCamera.projectId);
 
         return camera;
     }    
@@ -147,7 +150,7 @@ export class Camera extends Model<Camera> {
             scale           : scale,
             up              : up,
 
-            projectId       : this.projectId
+            projectId       : this.project ? this.project.id : undefined,
         });
 
         return camera;
