@@ -448,6 +448,15 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
         this._logger.addMessage(`Maximum = ${this.maximum.toFixed(decimalPlaces)}`, messageStyle);
     }
 
+    /**
+     * @description Constructs a graphics mesh.
+     * @returns {Promise<THREE.Group>} 
+     */
+    async getModelGroupAsync() : Promise<THREE.Group> {
+
+        return this.constructGraphicssAsync();
+    }
+
     //#region Generation
     /**
      * @description Verifies the pre-requisite settings are defined to create a mesh.

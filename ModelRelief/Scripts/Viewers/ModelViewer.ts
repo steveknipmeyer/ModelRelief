@@ -12,7 +12,6 @@ import { EventManager, EventType }        from 'EventManager';
 import { Graphics }                       from 'Graphics';
 import { StandardView }                   from "ICamera";
 import { IFileModel }                     from 'IFileModel';
-import {Loader}                           from 'Loader';
 import { ILogger }                        from 'Logger';
 import { Materials }                      from 'Materials';
 import { Model3d }                        from "Model3d";
@@ -65,16 +64,6 @@ export class ModelViewer extends Viewer {
         // dispatch NewModel event
         this.eventManager.dispatchEvent(this, EventType.NewModel, modelGroup);
     }
-
-    /**
-     * @description Loads the active model from disk.
-     */
-    async loadModelAsync() {
-
-        let loader = new Loader();
-        let group = await loader.loadOBJModelAsync(this.model);
-        this.setModelGroup(group);
-    }
     
 //#endregion
 
@@ -122,4 +111,3 @@ export class ModelViewer extends Viewer {
     } 
 //#endregion
 } 
-

@@ -164,6 +164,15 @@ export class Mesh extends GeneratedFileModel<Mesh> {
         return this.depthBuffer.height;
     }
     //#endregion
+    
+    /**
+     * @description Constructs a graphics mesh.
+     * @returns {Promise<THREE.Group>} 
+     */
+    async getModelGroupAsync() : Promise<THREE.Group> {
+
+        return this.constructGraphicssAsync();
+    }
 
     //#region Generation
     /**

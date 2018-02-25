@@ -8,10 +8,11 @@
 import * as Dto          from 'DtoModels'
 
 import { Camera }                       from 'Camera';
+import { FileModel }                    from 'FileModel';
 import { HttpLibrary, ServerEndPoints } from 'Http'
 import { Model3dFormat }                from 'IModel3d';
-import { FileModel }                    from 'FileModel';
 import { IFileModel }                   from 'IFileModel';
+import { Loader }                       from 'Loader';
 import { Project }                      from 'Project'
 import { Services }                     from 'Services'
 
@@ -108,4 +109,16 @@ export class Model3d extends FileModel<Model3d> {
 
         return model3d;
     }        
+
+    /**
+     * @description Constructs a graphics mesh.
+     * @returns {Promise<THREE.Group>} 
+     */
+    async getModelGroupAsync() : Promise<THREE.Group> {
+
+        let loader = new Loader();
+        let modelGroup = await loader.loadOBJModelAsync(this);
+
+        return modelGroup;
+    }
 }

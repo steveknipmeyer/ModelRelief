@@ -17,9 +17,7 @@
 <article class="markdown-body">
 
 ##### Commit Notes
-Use FE application mdoels in ComposerView.
-Use Model, Mesh in ModelViewer, MeshViewer.
-Add mesh property to IFileModel and implementations in DepthBuffer, Mesh and Model3d.
+Add getModelGroupAsync to IFileModel and implementations in DepthBuffer, Mesh and Model3d.
 
 ##### Technical Education
 - Manning AspNet Core book.
@@ -69,8 +67,8 @@ When the view camera is interactively changed, it should invalidate the Standard
 ##### FE UI
 
 Goals
- - Load a ComposerView from a given Mesh.
- - Construct a graph of *application* models from the target Mesh.
+ - [x] Load a ComposerView from a given Mesh.
+ - [x] Construct a graph of *application* models from the target Mesh.
  - Use *application* models not DTOs!
 
 Application models  
@@ -78,11 +76,8 @@ Application models
 - [X] fromId (id: number)
 
 fileTimeStamp and fileIsSyncrhonized are not initialzied in the FileModel and GeneratedFileModel constructors.
-
-
 Add generate method to IGeneratedFileModel.
-Use Camera in Viewer.
-         
+Use Camera in Viewer.       
 Set the Mesh camera to StandardView.Top.
 
 What controls are (ultimately) present in Composer?

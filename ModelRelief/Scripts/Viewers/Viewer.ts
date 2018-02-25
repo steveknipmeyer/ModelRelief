@@ -161,6 +161,9 @@ export class Viewer {
      * @description Loads the active model from disk.
      */
     async loadModelAsync() {
+
+        let modelGroup = await this.model.getModelGroupAsync();
+        this.setModelGroup(modelGroup);            
     }
 
     /**
