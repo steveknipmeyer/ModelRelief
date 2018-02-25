@@ -9,19 +9,20 @@ import * as THREE  from 'three'
 import * as dat    from 'dat-gui'
 import * as Dto    from "DtoModels";
 
-import {ComposerController}                 from "ComposerController"
-import {EventType, MREvent, EventManager}   from 'EventManager'
-import {HtmlLibrary, ElementIds}            from "Html"
-import {Loader}                             from 'Loader'
-import {ILogger, ConsoleLogger}             from 'Logger'
-import {MeshView}                           from "MeshView"
-import {MeshViewer}                         from "MeshViewer"
-import {ModelView}                          from "ModelView"
-import {ModelViewer}                        from "ModelViewer"
-import {OBJLoader}                          from "OBJLoader"
-import {Services}                           from 'Services'
-import {TestModel}                          from 'TestModelLoader'
-import {Viewer}                             from "Viewer"
+import { ComposerController }                 from "ComposerController"
+import { EventType, MREvent, EventManager }   from 'EventManager'
+import { HtmlLibrary, ElementIds }            from "Html"
+import { Loader }                             from 'Loader'
+import { ILogger, ConsoleLogger }             from 'Logger'
+import { Mesh }                               from "Mesh"
+import { MeshView }                           from "MeshView"
+import { MeshViewer }                         from "MeshViewer"
+import { ModelView }                          from "ModelView"
+import { ModelViewer }                        from "ModelViewer"
+import { OBJLoader }                          from "OBJLoader"
+import { Services }                           from 'Services'
+import { TestModel }                          from 'TestModelLoader'
+import { Viewer }                             from "Viewer"
 
 // defined in HTML page
 declare var composerMeshModel: Dto.Mesh;
@@ -34,7 +35,7 @@ declare var composerMeshModel: Dto.Mesh;
 export class ComposerView {
 
     _containerId                : string;
-    _mesh                       : Dto.Mesh;
+    _mesh                       : Mesh;
 
     _meshView                   : MeshView;
     _modelView                  : ModelView;
@@ -105,7 +106,7 @@ export class ComposerView {
      *  Defaults are created where necessary.
      * @private
      */
-    private initializeMeshModel() {
+    private initializeMeshModel() : Promise<Mesh>{
         /*
             Mesh
                 DepthBuffer
@@ -114,16 +115,7 @@ export class ComposerView {
                     Camera
                 MeshTransform
         */    
-            this._mesh = new Dto.Mesh(composerMeshModel);
-
-            this._mesh.depthBuffer = new Dto.DepthBuffer(composerMeshModel.depthBuffer);
-            this._mesh.depthBuffer.model3d = new Dto.Model3d(composerMeshModel.depthBuffer.model3d);
-
-            let camera = composerMeshModel.depthBuffer.camera
-            this._mesh.depthBuffer.camera = new Dto.Camera(camera);
-            this._mesh.depthBuffer.model3d.camera = new Dto.Camera(camera);
-
-            this._mesh.meshTransform = new Dto.Camera(composerMeshModel.meshTransform);
+        return Mesh.fromDtoModelAsync(composerMeshModel);
         }
 
     /**
@@ -134,22 +126,25 @@ export class ComposerView {
         Services.defaultLogger.addInfoMessage('ModelRelief started');
 
         // initialize context
-        this.initializeMeshModel();
+        this.initializeMeshModel().then((mesh) => {
 
-        // Mesh View
-        this._meshView = new MeshView(ElementIds.MeshCanvas);
+            this._mesh = mesh;
 
-        // Model View
-        this._modelView = new ModelView(ElementIds.ModelCanvas, this._mesh.depthBuffer.model3d); 
+            // Mesh View
+            this._meshView = new MeshView(ElementIds.MeshCanvas, this._mesh);
 
-        // Composer Controller 
-        this._composerController = new ComposerController(this);
+            // Model View
+            this._modelView = new ModelView(ElementIds.ModelCanvas, this._mesh.depthBuffer.model3d); 
 
-        // Loader (model event handlers now initialized)
-        this._modelView.modelViewer.loadModelAsync().then(() => {});
+            // Composer Controller 
+            this._composerController = new ComposerController(this);
 
-        // Test Models
-//      this._loader.loadParametricTestModel(this._modelViewer, TestModel.Checkerboard);
+            // Loader (model event handlers now initialized)
+            this._modelView.modelViewer.loadModelAsync().then(() => {});
+
+            // Test Models
+            // this._loader.loadParametricTestModel(this._modelViewer, TestModel.Checkerboard);
+        });
     }
     
 //#endregion

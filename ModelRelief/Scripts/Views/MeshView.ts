@@ -9,6 +9,7 @@ import * as THREE  from 'three'
 import * as dat    from 'dat-gui'
 
 import {HtmlLibrary, ElementIds}            from 'Html';
+import {IFileModel}                         from 'IFileModel';
 import {ILogger, ConsoleLogger}             from 'Logger';
 import {MeshViewer}                         from 'MeshViewer';
 import {Services}                           from 'Services';
@@ -27,11 +28,12 @@ export class MeshView {
     /**
      * Creates an instance of MeshView.
      * @param {string} containerId 
+     * @param {IFileModel} model Initial model to load.
      */
-    constructor(containerId : string) {  
+    constructor(containerId : string, model : IFileModel) {  
 
         this._containerId = containerId;    
-        this.initialize();
+        this.initialize(model);
     } 
 
 //#region Properties
@@ -62,11 +64,12 @@ export class MeshView {
 //#region Initialization
     /**
      * @description Performs initialization.
+     * @param {IFileModel} model Initial model to load.
      */
-    initialize() {
+    initialize(model : IFileModel) {
 
         // Mesh Viewer    
-        this._meshViewer = new MeshViewer('MeshViewer', this.containerId);
+        this._meshViewer = new MeshViewer('MeshViewer', this.containerId, model);
     }
     
 //#endregion

@@ -29,7 +29,10 @@ import {Viewer}                     from 'Viewer';
  */
 export class MeshViewer extends Viewer {
     
-    _meshViewerControls: MeshViewerControls;             // UI controls
+    mesh : Mesh;                                        // active Mesh
+
+    // Private
+    _meshViewerControls: MeshViewerControls;            // UI controls
 
     /**
      * Creates an instance of MeshViewer.
@@ -41,8 +44,7 @@ export class MeshViewer extends Viewer {
         
         super(name, previewCanvasId, model);
 
-        //override
-        this._logger = Services.htmlLogger;       
+        this.mesh = model as Mesh;
     }
 
 //#region Properties

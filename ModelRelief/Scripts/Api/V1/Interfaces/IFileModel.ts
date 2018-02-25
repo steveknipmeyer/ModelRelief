@@ -16,6 +16,7 @@ export interface IFileModel extends IModel {
 
     fileTimeStamp?: Date;                   //  time stamp of file 
     
+    mesh?() : THREE.Mesh;
     getFileAsync?() : Promise<Uint8Array>;
     getFileAsStringAsync?() : Promise<string>;
 }

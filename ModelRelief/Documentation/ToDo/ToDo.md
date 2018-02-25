@@ -17,9 +17,9 @@
 <article class="markdown-body">
 
 ##### Commit Notes
-Initialize endPoint in FE application models.
-Add logger to Model base class.
-Add initialization method for all FE application models.
+Use FE application mdoels in ComposerView.
+Use Model, Mesh in ModelViewer, MeshViewer.
+Add mesh property to IFileModel and implementations in DepthBuffer, Mesh and Model3d.
 
 ##### Technical Education
 - Manning AspNet Core book.
@@ -77,13 +77,11 @@ Application models
 - [X] constructor(\{parameters : IModel\})
 - [X] fromId (id: number)
 
-TODO versus WIP?
+fileTimeStamp and fileIsSyncrhonized are not initialzied in the FileModel and GeneratedFileModel constructors.
 
-Add mesh property to IFileModel.
+
 Add generate method to IGeneratedFileModel.
-Use Model, Mesh in ModelViewer, MeshViewer respectively.
 Use Camera in Viewer.
-Where should Model3d replace Mesh in the FE classes?
          
 Set the Mesh camera to StandardView.Top.
 

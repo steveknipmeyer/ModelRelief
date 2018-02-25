@@ -119,8 +119,6 @@ export class Mesh extends GeneratedFileModel<Mesh> {
 
         mesh.project        = await Project.fromIdAsync(dtoMesh.projectId);
         mesh.camera         = await Camera.fromIdAsync(dtoMesh.cameraId);
-        mesh.depthBuffer    = depthBuffer;
-        mesh.meshTransform  = meshTransform;
 
         return mesh;
     }

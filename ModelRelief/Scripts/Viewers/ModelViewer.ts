@@ -7,17 +7,19 @@
 
 import * as THREE                       from 'three';
 
-import {DepthBufferFactory}             from "DepthBufferFactory";
-import {EventManager, EventType}        from 'EventManager';
-import {Graphics}                       from 'Graphics';
-import {StandardView}                   from "ICamera";
-import {IFileModel}                     from 'IFileModel';
-import {ILogger}                        from 'Logger';
-import {Materials}                      from 'Materials';
-import {ModelViewerControls}            from "ModelViewerControls";
-import {TrackballControls}              from 'TrackballControls';
-import {Services}                       from 'Services';
-import {Viewer}                         from 'Viewer';
+import { DepthBufferFactory }             from "DepthBufferFactory";
+import { EventManager, EventType }        from 'EventManager';
+import { Graphics }                       from 'Graphics';
+import { StandardView }                   from "ICamera";
+import { IFileModel }                     from 'IFileModel';
+import {Loader}                           from 'Loader';
+import { ILogger }                        from 'Logger';
+import { Materials }                      from 'Materials';
+import { Model3d }                        from "Model3d";
+import { ModelViewerControls }            from "ModelViewerControls";
+import { TrackballControls }              from 'TrackballControls';
+import { Services }                       from 'Services';
+import { Viewer }                         from 'Viewer';
 
 const ObjectNames = {
     Grid :  'Grid'
@@ -31,6 +33,9 @@ const ObjectNames = {
  */
 export class ModelViewer extends Viewer {
 
+    model3d : Model3d;                                      // active Model3d
+
+    // Private
     _modelViewerControls : ModelViewerControls;             // UI controls
 
     /**
@@ -42,6 +47,8 @@ export class ModelViewer extends Viewer {
     constructor(name : string, modelCanvasId : string, model : IFileModel) {
         
         super (name, modelCanvasId, model);       
+
+        this.model3d = model as Model3d;
     }
 
 //#region Properties
@@ -58,6 +65,17 @@ export class ModelViewer extends Viewer {
         // dispatch NewModel event
         this.eventManager.dispatchEvent(this, EventType.NewModel, modelGroup);
     }
+
+    /**
+     * @description Loads the active model from disk.
+     */
+    async loadModelAsync() {
+
+        let loader = new Loader();
+        let group = await loader.loadOBJModelAsync(this.model);
+        this.setModelGroup(group);
+    }
+    
 //#endregion
 
 //#region Initialization    

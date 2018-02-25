@@ -13,7 +13,6 @@ import {EventManager}                               from 'EventManager';
 import {Graphics, ObjectNames}                      from 'Graphics';
 import {StandardView}                               from 'ICamera';
 import {IFileModel}                                 from 'IFileModel';
-import {Loader}                                     from 'Loader';
 import {ILogger}                                    from 'Logger';
 import {Materials}                                  from 'Materials';
 import {Services}                                   from 'Services';
@@ -159,14 +158,9 @@ export class Viewer {
     }
 
     /**
-     * @description Loads a model from disk.
-     * @param {IFileModel} model 
+     * @description Loads the active model from disk.
      */
     async loadModelAsync() {
-
-        let loader = new Loader();
-        let group = await loader.loadOBJModelAsync(this.model);
-        this.setModelGroup(group);
     }
 
     /**
