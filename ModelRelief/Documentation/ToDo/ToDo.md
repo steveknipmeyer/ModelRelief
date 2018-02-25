@@ -75,9 +75,9 @@ Application models
 - [X] fromId (id: number)
 
 The Camera is wrong in the MehsViewer therefore the generated Mesh is malformed.
-fileTimeStamp and fileIsSyncrhonized are not initialzied in the FileModel and GeneratedFileModel constructors.
+    Use Camera in Viewer.       
+
 Add generate method to IGeneratedFileModel.
-Use Camera in Viewer.       
 Refactor ComposerController.
 
 Can Hyper support ANSI sequences?

@@ -115,6 +115,9 @@ export class Mesh extends GeneratedFileModel<Mesh> {
             meshTransform
         );
 
+        mesh.fileTimeStamp      = dtoMesh.fileTimeStamp;
+        mesh.fileIsSynchronized = dtoMesh.fileIsSynchronized;
+
         mesh.format         = dtoMesh.format;
 
         mesh.project        = await Project.fromIdAsync(dtoMesh.projectId);

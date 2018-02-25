@@ -81,6 +81,8 @@ export class Model3d extends FileModel<Model3d> {
             name        : dtoModel3d.name,
             description : dtoModel3d.description,       
         });
+        
+        model3d.fileTimeStamp = dtoModel3d.fileTimeStamp;
 
         model3d.format  = dtoModel3d.format;              
 

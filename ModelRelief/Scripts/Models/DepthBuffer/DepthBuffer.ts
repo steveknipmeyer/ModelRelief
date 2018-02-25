@@ -126,6 +126,9 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
             name        : dtoDepthBuffer.name,
             description : dtoDepthBuffer.description,       
         });
+        
+        depthBuffer.fileTimeStamp      = dtoDepthBuffer.fileTimeStamp;
+        depthBuffer.fileIsSynchronized = dtoDepthBuffer.fileIsSynchronized;
 
         depthBuffer.width  = dtoDepthBuffer.width;
         depthBuffer.height = dtoDepthBuffer.height;
