@@ -17,7 +17,6 @@
 <article class="markdown-body">
 
 ##### Commit Notes
-Add getModelGroupAsync to IFileModel and implementations in DepthBuffer, Mesh and Model3d.
 
 ##### Technical Education
 - Manning AspNet Core book.
@@ -75,10 +74,13 @@ Application models
 - [X] constructor(\{parameters : IModel\})
 - [X] fromId (id: number)
 
+The Camera is wrong in the MehsViewer therefore the generated Mesh is malformed.
 fileTimeStamp and fileIsSyncrhonized are not initialzied in the FileModel and GeneratedFileModel constructors.
 Add generate method to IGeneratedFileModel.
 Use Camera in Viewer.       
-Set the Mesh camera to StandardView.Top.
+Refactor ComposerController.
+
+Can Hyper support ANSI sequences?
 
 What controls are (ultimately) present in Composer?
  - Model: models/?project=id

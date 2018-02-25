@@ -106,7 +106,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
 
             // TopCamera <= DepthBuffer("lucy.raw") <= Mesh("lucy.obj")
             AssertModelExists(dependentModels, typeof(Domain.DepthBuffer), "lucy.raw");
-            AssertModelExists(dependentModels, typeof(Domain.Mesh), "lucy.obj");
+            AssertModelExists(dependentModels, typeof(Domain.Mesh), "lucy.raw");
         }
 
         /// <summary>
@@ -127,11 +127,11 @@ namespace ModelRelief.Test.Unit.DependencyManager
 
             // IsometricCamera <= DepthBuffer("bunny.raw") <= Mesh("bunny.ob")
             AssertModelExists(dependentModels, typeof(Domain.DepthBuffer), "bunny.raw");
-            AssertModelExists(dependentModels, typeof(Domain.Mesh), "bunny.obj");
+            AssertModelExists(dependentModels, typeof(Domain.Mesh), "bunny.raw");
 
             // IsometricCamera <= DepthBuffer("armadillo.raw") <= Mesh("armadillo.obj")
             AssertModelExists(dependentModels, typeof(Domain.DepthBuffer), "armadillo.raw");
-            AssertModelExists(dependentModels, typeof(Domain.Mesh), "armadillo.obj");
+            AssertModelExists(dependentModels, typeof(Domain.Mesh), "armadillo.raw");
         }
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
             dependentModels.Count.Should().Be(1);
 
             // DepthBuffer("lucy.raw") <= Mesh("lucy.ob")
-            AssertModelExists(dependentModels, typeof(Domain.Mesh), "lucy.obj");
+            AssertModelExists(dependentModels, typeof(Domain.Mesh), "lucy.raw");
         }
 
         /// <summary>
