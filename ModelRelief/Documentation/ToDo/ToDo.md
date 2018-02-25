@@ -17,11 +17,7 @@
 <article class="markdown-body">
 
 ##### Commit Notes
-Upgrade git.
 
-Camera FE application constructor overrides Model constructor.
-Add static fromId helper method to all FE application models.
-Cache FileModel results in fileArray/fileString.
 
 ##### Technical Education
 - Manning AspNet Core book.
@@ -79,9 +75,20 @@ Application models
 - [X] constructor(\{parameters : IModel\})
 - [X] fromId (id: number)
 
-Mesh.constructGraphics should use the Mesh backing file - not the DepthBuffer.
-    this.depthBuffer -> this.file
+TODO versus WIP?
+
+How can the endPoint be intiailized for Model, FileModel, GeneratedFileModel?
+    let dtoMesh = this.toDtoModel();
+    this.depthBuffer.rgbArray = await dtoMesh.getFileAsync();
+
+Mesh.constructGraphics
+    switch(this.format)
+        case MeshFormat.Raw:
+            Construct a DepthBuffer from this.fileArray.
+            depthBuffer.constructGraphics
+
 Add generate method to IGeneratedFileModel.
+
 
 Use Model, Mesh in ModelViewer, MeshViewer respectively.
 Use Camera in Viewer.

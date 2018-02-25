@@ -28,8 +28,8 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
     fileTimeStamp: Date;
 
     // Private
-    _fileArray  : Uint8Array;
-    _fileString : string;
+    fileArray  : Uint8Array;
+    fileString : string;
 
     /**
      * Creates an instance of FileModel.
@@ -66,17 +66,17 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
         let exportTag = Services.timer.mark(`GET File: ${this.constructor.name}`);
 
         // cache
-        if (this._fileArray)
-            return this._fileArray;
+        if (this.fileArray)
+            return this.fileArray;
 
         let endPoint = `${this.endPoint}/${this.id}/file`
         let result = await this.submitRequestAsync(endPoint, MethodType.Get, ContentType.OctetStream, null);       
-        this._fileArray = result.byteArrayDecodedDoublePrime;
+        this.fileArray = result.byteArrayDecodedDoublePrime;
 //      this._fileArray = result.byteArrayDecoded;
 
         Services.timer.logElapsedTime(exportTag);       
 
-        return this._fileArray;;
+        return this.fileArray;;
     }
 
      /**
@@ -89,8 +89,8 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
         let exportTag = Services.timer.mark(`GET File (string): ${this.constructor.name}`);
 
         // cache
-        if (this._fileString)
-            return this._fileString;
+        if (this.fileString)
+            return this.fileString;
 
             let fileByteArray = await this.getFileAsync();
         function byteToStringConverter() : Promise<string> {
@@ -105,9 +105,9 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
                 fileReader.readAsText(blobBuffer);
             })
         }
-        this._fileString = await byteToStringConverter();
+        this.fileString = await byteToStringConverter();
         Services.timer.logElapsedTime(exportTag);       
 
-        return this._fileString;
+        return this.fileString;
     }
 }

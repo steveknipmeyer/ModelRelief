@@ -129,14 +129,10 @@ export class ComposerController {
         meshModel.fileIsSynchronized = true;
         meshModel = await meshModel.putAsync();
 
-        // construct DepthBufffer from Mesh raw file
-        let depthBuffer =  await DepthBuffer.fromDtoModelAsync(depthBufferModel);
-        let depthBufferRGBA: Uint8Array = await meshModel.getFileAsync();       // Mesh file
-        depthBuffer.rgbArray = depthBufferRGBA;
-        
         // Mesh graphics
-        let mesh = new Mesh({}, depthBuffer, this._composerViewSettings.meshTransform);
-        let meshGraphics = await mesh.constructGraphicssAsync({});
+        let mesh = await Mesh.fromDtoModelAsync(meshModel);
+        let meshGraphics = await mesh.constructGraphicssAsync();
+        
 
         this._composerView._meshView.meshViewer.setModelGroup(meshGraphics);
         if (this._initialMeshGeneration) {
