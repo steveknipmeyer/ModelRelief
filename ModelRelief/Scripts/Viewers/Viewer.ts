@@ -240,7 +240,7 @@ export class Viewer {
      * @description Initialize the viewer camera
      */
     initializeCamera() {
-        this.camera = CameraHelper.getStandardViewCamera(StandardView.Front, this.aspectRatio, this.modelGroup);       
+        this.camera = CameraHelper.getStandardViewCamera(StandardView.Top, this.aspectRatio, this.modelGroup);       
     }
 
     /**

@@ -76,7 +76,7 @@ Application models
 
 Use Camera in Viewer.       
 
-Add generate method to IGeneratedFileModel.dbi
+Add generate method to IGeneratedFileModel.  
 Refactor ComposerController.
 
 Can Hyper support ANSI sequences?
