@@ -74,10 +74,9 @@ Application models
 - [X] constructor(\{parameters : IModel\})
 - [X] fromId (id: number)
 
-The Camera is wrong in the MehsViewer therefore the generated Mesh is malformed.
-    Use Camera in Viewer.       
+Use Camera in Viewer.       
 
-Add generate method to IGeneratedFileModel.
+Add generate method to IGeneratedFileModel.dbi
 Refactor ComposerController.
 
 Can Hyper support ANSI sequences?

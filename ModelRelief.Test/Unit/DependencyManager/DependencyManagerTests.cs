@@ -93,45 +93,20 @@ namespace ModelRelief.Test.Unit.DependencyManager
         /// </summary>
         [Fact]
         [Trait("Category", "DependencyManager")]
-        public async Task TopCameraFindsAllDependents()
+        public async Task LucyTopCameraFindsAllDependents()
         {
             // Arrange
-            var topCameraPrimaryKey = 1;
+            var lucyTopCameraPrimaryKey = 3;
 
             // Act
-            var dependentModels = await FindDependentModels(typeof(Camera), topCameraPrimaryKey);
+            var dependentModels = await FindDependentModels(typeof(Camera), lucyTopCameraPrimaryKey);
 
             // Assert
             dependentModels.Count.Should().Be(2);
 
-            // TopCamera <= DepthBuffer("lucy.raw") <= Mesh("lucy.obj")
+            // TopCamera <= DepthBuffer("lucy.raw") <= Mesh("lucy.raw")
             AssertModelExists(dependentModels, typeof(Domain.DepthBuffer), "lucy.raw");
             AssertModelExists(dependentModels, typeof(Domain.Mesh), "lucy.raw");
-        }
-
-        /// <summary>
-        /// Finds all dependents of the IsometricCamera.
-        /// </summary>
-        [Fact]
-        [Trait("Category", "DependencyManager")]
-        public async Task IsometricCameraFindsAllDependents()
-        {
-            // Arrange
-            var isometricCameraPrimaryKey = 2;
-
-            // Act
-            var dependentModels = await FindDependentModels(typeof(Camera), isometricCameraPrimaryKey);
-
-            // Assert
-            dependentModels.Count.Should().Be(4);
-
-            // IsometricCamera <= DepthBuffer("bunny.raw") <= Mesh("bunny.ob")
-            AssertModelExists(dependentModels, typeof(Domain.DepthBuffer), "bunny.raw");
-            AssertModelExists(dependentModels, typeof(Domain.Mesh), "bunny.raw");
-
-            // IsometricCamera <= DepthBuffer("armadillo.raw") <= Mesh("armadillo.obj")
-            AssertModelExists(dependentModels, typeof(Domain.DepthBuffer), "armadillo.raw");
-            AssertModelExists(dependentModels, typeof(Domain.Mesh), "armadillo.raw");
         }
 
         /// <summary>

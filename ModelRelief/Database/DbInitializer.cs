@@ -314,6 +314,51 @@ namespace ModelRelief.Database
 
                     User = _user, Project = FindByName<Project>("Architecture"),
                 },
+
+                new Camera
+                {
+                    Name = "LucyTop", Description = "Aligned along negative Z",
+                    FieldOfView = Camera.DefaultFieldOfView,
+                    AspectRatio = 1.0,
+                    Near = 238.39, Far = 292.00,
+
+                    PositionX = -3.16, PositionY = 79.32, PositionZ = 265.07,
+                    EulerX = 0.0, EulerY = 0.0, EulerZ = -1.0, Theta = 1.0,
+                    ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
+                    UpX = 0.0, UpY = 1.0, UpZ = 0.0,
+
+                    User = _user, Project = FindByName<Project>("ModelRelief"),
+                },
+
+                new Camera
+                {
+                    Name = "BunnyTop", Description = "Aligned along negative Z",
+                    FieldOfView = Camera.DefaultFieldOfView,
+                    AspectRatio = 1.0,
+                    Near = 132.85, Far = 201.95,
+
+                    PositionX = -0.34, PositionY = 43.17, PositionZ = 167.44,
+                    EulerX = 0.0, EulerY = 0.0, EulerZ = 0.0, Theta = 1.0,
+                    ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
+                    UpX = 0.0, UpY = 1.0, UpZ = 0.0,
+
+                    User = _user, Project = FindByName<Project>("ModelRelief"),
+                },
+
+                new Camera
+                {
+                    Name = "ArmadilloTop", Description = "Aligned along negative Z",
+                    FieldOfView = Camera.DefaultFieldOfView,
+                    AspectRatio = 1.0,
+                    Near = 164.49, Far = 229.59,
+
+                    PositionX = -1.40, PositionY = 54.20, PositionZ = 197.02,
+                    EulerX = 0.0, EulerY = 0.0, EulerZ = 0.0, Theta = 1.0,
+                    ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
+                    UpX = 0.0, UpY = 1.0, UpZ = 0.0,
+
+                    User = _user, Project = FindByName<Project>("ModelRelief"),
+                },
             };
 
             foreach (Camera camera in cameras)
@@ -414,7 +459,7 @@ namespace ModelRelief.Database
                     Name = "lucy.raw", Description = "Generated in Maya",
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.RAW,
-                    Model3d = FindByName<Model3d>("lucy.obj"), Camera = FindByName<Camera>("Top Camera"),
+                    Model3d = FindByName<Model3d>("lucy.obj"), Camera = FindByName<Camera>("LucyTop"),
                     User = _user, Project = FindByName<Project>("ModelRelief"),
                 },
                 new DepthBuffer
@@ -422,7 +467,7 @@ namespace ModelRelief.Database
                     Name = "bunny.raw", Description = "Generated in VRay",
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.RAW,
-                    Model3d = FindByName<Model3d>("bunny.obj"), Camera = FindByName<Camera>("Isometric Camera"),
+                    Model3d = FindByName<Model3d>("bunny.obj"), Camera = FindByName<Camera>("BunnyTop"),
                     User = _user, Project = FindByName<Project>("Architecture"),
                 },
                 new DepthBuffer
@@ -430,7 +475,7 @@ namespace ModelRelief.Database
                     Name = "armadillo.raw", Description = "Generated in Rhino",
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.RAW,
-                    Model3d = FindByName<Model3d>("armadillo.obj"), Camera = FindByName<Camera>("Isometric Camera"),
+                    Model3d = FindByName<Model3d>("armadillo.obj"), Camera = FindByName<Camera>("ArmadilloTop"),
                     User = _user, Project = FindByName<Project>("Jewelry"),
                 },
             };
