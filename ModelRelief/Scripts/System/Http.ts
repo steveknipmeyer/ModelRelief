@@ -53,6 +53,8 @@ export enum ServerEndPoints {
  */
 export class HttpLibrary {
 
+    static HostRoot : string = `${window.location.protocol}//${window.location.host}/`;
+
     /**
      * @constructor
      */

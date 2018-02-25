@@ -7,12 +7,13 @@
 
 import * as Dto          from 'DtoModels'
 
-import { Camera }        from 'Camera';
-import { Model3dFormat } from 'IModel3d';
-import { FileModel }     from 'FileModel';
-import { IFileModel }    from 'IFileModel';
-import { Project }       from 'Project'
-import { Services }      from 'Services'
+import { Camera }                       from 'Camera';
+import { HttpLibrary, ServerEndPoints } from 'Http'
+import { Model3dFormat }                from 'IModel3d';
+import { FileModel }                    from 'FileModel';
+import { IFileModel }                   from 'IFileModel';
+import { Project }                      from 'Project'
+import { Services }                     from 'Services'
 
 /**
  * @description Represents a 3D model.
@@ -37,6 +38,16 @@ export class Model3d extends FileModel<Model3d> {
         parameters.description = parameters.description || "Model3d";
 
         super(parameters);
+
+        this.initialize();        
+    }
+
+    /**
+     * @description Perform setup and initialization.
+     */
+    initialize(): void {
+
+        this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiModels}`;
     }
 
     /**

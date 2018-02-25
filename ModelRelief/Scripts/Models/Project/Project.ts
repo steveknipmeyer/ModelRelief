@@ -7,9 +7,10 @@
 
 import * as Dto     from 'DtoModels'
 
-import { Model }   from 'Model'
-import { IModel }    from 'IModel'
-import { Services } from 'Services'
+import { HttpLibrary, ServerEndPoints } from 'Http'
+import { Model }                        from 'Model'
+import { IModel }                       from 'IModel'
+import { Services }                     from 'Services'
 
 /**
  * @description Represents a user project.
@@ -29,7 +30,17 @@ export class Project extends Model<Project> {
         parameters.description = parameters.description || "Project";
         
         super(parameters);
+
+        this.initialize();                
     }        
+
+    /**
+     * @description Perform setup and initialization.
+     */
+    initialize(): void {
+
+        this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiProjects}`;
+    }
 
     /**
      * @description Returns a Project instance through an HTTP query of the Id.

@@ -8,16 +8,17 @@
 import * as Dto   from 'DtoModels'
 import * as THREE from 'three'
 
-import { Camera }                   from 'Camera'
-import { DepthBuffer }              from 'DepthBuffer'
-import { GeneratedFileModel }       from 'GeneratedFileModel'
-import { IGeneratedFileModel }      from 'IGeneratedFileModel'
-import { MeshFormat }               from 'IMesh'
-import { ILogger, ConsoleLogger }   from 'Logger'
-import { MeshCache }                from 'MeshCache'
-import { MeshTransform }            from 'MeshTransform'
-import { Project }                  from 'Project'
-import { Services }                 from 'Services'
+import { Camera }                       from 'Camera'
+import { DepthBuffer }                  from 'DepthBuffer'
+import { GeneratedFileModel }           from 'GeneratedFileModel'
+import { HttpLibrary, ServerEndPoints } from 'Http'
+import { IGeneratedFileModel }          from 'IGeneratedFileModel'
+import { MeshFormat }                   from 'IMesh'
+import { ILogger, ConsoleLogger }       from 'Logger'
+import { MeshCache }                    from 'MeshCache'
+import { MeshTransform }                from 'MeshTransform'
+import { Project }                      from 'Project'
+import { Services }                     from 'Services'
 
 /**
  * @description Represents a mesh.
@@ -47,9 +48,6 @@ export class Mesh extends GeneratedFileModel<Mesh> {
     camera          : Camera;             
     depthBuffer     : DepthBuffer;
     meshTransform   : MeshTransform;
-
-    // Private
-    _logger     : ILogger;          // logger
     
     /**
      * Creates an instance of Mesh.
@@ -64,10 +62,20 @@ export class Mesh extends GeneratedFileModel<Mesh> {
         
         super(parameters);
 
+        this.initialize(depthBuffer, meshTransform);
+    }
+
+    /**
+     * @description Perform setup and initialization.
+     * @param {DepthBuffer} depthBuffer DepthBuffer.
+     * @param {MeshTransform} meshTransform MeshTransform.
+     */
+    initialize(depthBuffer : DepthBuffer, meshTransform : MeshTransform): void {
+
+        this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiMeshes}`;
+
         this.depthBuffer   = depthBuffer;
         this.meshTransform = meshTransform;
-
-        this.initialize();
     }
 
     /**
@@ -159,16 +167,6 @@ export class Mesh extends GeneratedFileModel<Mesh> {
     }
     //#endregion
 
-    //#region Initialization    
-    /**
-     * @description Perform setup and initialization.
-     */
-    initialize(): void {
-
-        this._logger = Services.defaultLogger;
-    }
-    //#endregion
-
     //#region Generation
     /**
      * @description Generates a mesh from the active model and camera.
@@ -180,8 +178,7 @@ export class Mesh extends GeneratedFileModel<Mesh> {
         switch (this.format) {
 
             case MeshFormat.RAW:
-                let dtoMesh = this.toDtoModel();
-                this.depthBuffer.rgbArray = await dtoMesh.getFileAsync();
+                this.depthBuffer.rgbArray = await this.getFileAsync();
                 mesh = await this.depthBuffer.constructGraphicssAsync();
                 break;
 

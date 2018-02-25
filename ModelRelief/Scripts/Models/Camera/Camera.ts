@@ -8,14 +8,15 @@
 import * as Dto          from 'DtoModels'
 import * as THREE        from 'three'
 
-import { ICamera, StandardView }    from 'ICamera'
-import { DepthBufferFactory }       from 'DepthBufferFactory'
-import { Graphics }                 from 'Graphics'
-import {IModel}                     from 'IModel'
-import { Model }                    from 'Model'
-import { Project }                  from 'Project'
-import { Services }                 from 'Services'
-import { StopWatch }                from 'StopWatch'
+import { ICamera, StandardView }        from 'ICamera'
+import { DepthBufferFactory }           from 'DepthBufferFactory'
+import { Graphics }                     from 'Graphics'
+import { HttpLibrary, ServerEndPoints}  from 'Http'
+import { IModel }                       from 'IModel'
+import { Model }                        from 'Model'
+import { Project }                      from 'Project'
+import { Services }                     from 'Services'
+import { StopWatch }                    from 'StopWatch'
 
 /**
  * @description Camera clipping planes tuple.
@@ -60,6 +61,17 @@ export class Camera extends Model<Camera> {
         parameters.description = parameters.description || "Perspective Camera";
         
         super(parameters);
+
+        this.initialize(camera);
+    }
+
+    /**
+     * @description Perform setup and initialization.
+     * @param {THREE.PerspectiveCamera} camera PerspectiveCamera.
+     */
+    initialize (camera : THREE.PerspectiveCamera) : void {
+
+        this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiCameras}`;
 
         this.viewCamera = camera;
     }

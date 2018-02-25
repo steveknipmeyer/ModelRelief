@@ -8,21 +8,21 @@
 import * as Dto                 from 'DtoModels'
 import * as THREE               from 'three'
 
-import {Camera}                 from 'Camera'
-import { CameraHelper }         from 'CameraHelper'
-import {assert}                 from 'chai'
-import {GeneratedFileModel}     from 'GeneratedFileModel'
-import {Graphics}               from 'Graphics'
-import {DepthBufferFormat}      from 'IDepthBuffer';
-import {IGeneratedFileModel}    from 'IGeneratedFileModel';
-import {IModel}                 from 'IModel'
-import {ILogger, HTMLLogger}    from 'Logger'
-import {MathLibrary}            from 'Math'
-import {Mesh}                   from 'Mesh'
-import {Model3d}                from 'Model3d'
-import {Project}                from 'Project'
-import {Services}               from 'Services'
-import {StopWatch}              from 'StopWatch'
+import { Camera }                       from 'Camera'
+import { CameraHelper }                 from 'CameraHelper'
+import { assert }                       from 'chai'
+import { HttpLibrary, ServerEndPoints } from 'Http'
+import { GeneratedFileModel }           from 'GeneratedFileModel'
+import { Graphics }                     from 'Graphics'
+import { DepthBufferFormat }            from 'IDepthBuffer';
+import { IGeneratedFileModel }          from 'IGeneratedFileModel';
+import { IModel }                       from 'IModel'
+import { MathLibrary }                  from 'Math'
+import { Mesh }                         from 'Mesh'
+import { Model3d }                      from 'Model3d'
+import { Project }                      from 'Project'
+import { Services }                     from 'Services'
+import { StopWatch }                    from 'StopWatch'
 
 /**
  * @description Mesh generation parameters.
@@ -65,7 +65,6 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
     _camera    : Camera;
 
     // Private
-    _logger          : ILogger;
     _rgbaArray       : Uint8Array;
 
     _nearClipPlane   : number;
@@ -87,6 +86,14 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
         super(parameters);
 
         this.initialize();
+    }
+
+    /**
+     * @description Perform setup and initialization.
+     */
+    initialize () : void {
+
+        this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiDepthBuffers}`;
     }
 
     /**
@@ -286,14 +293,6 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
 
         this.setMinimumNormalized();        
         this.setMaximumNormalized();        
-    }
-
-    /**
-     * @description Initialize
-     */
-    initialize () {
-        
-        this._logger = Services.defaultLogger;       
     }
 
     /**

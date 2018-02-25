@@ -9,6 +9,7 @@ import * as THREE from 'three'
 
 import {ContentType, HttpLibrary, 
         MethodType, ServerEndPoints}        from 'Http'
+import { ILogger, HTMLLogger }              from 'Logger'
 import { IModel }                           from 'IModel'
 import { Services }                         from 'Services'
 import { RequestResponse }                  from 'RequestResponse'
@@ -28,12 +29,15 @@ export class Model<T extends IModel> implements IModel{
 
     endPoint    : string;       // API endpoint
 
+    // Private
+    _logger     : ILogger;
+
     /**
      * Creates an instance of Model.
      * @param {IModel} [parameters] Initialization parameters.
      */
     constructor (parameters: IModel = {}) {
-
+        
         let {
             id,
             name,
@@ -44,6 +48,8 @@ export class Model<T extends IModel> implements IModel{
         this.id            = id;
         this.name          = name;
         this.description   = description;
+
+        this._logger = Services.defaultLogger;       
     }     
 
     /**
@@ -89,10 +95,29 @@ export class Model<T extends IModel> implements IModel{
      */
     async getAsync() : Promise<T> {
 
-        let endPoint = `${this.endPoint}/${this.id}`;
+        if (!this.id)
+            return undefined;
+
+            let endPoint = `${this.endPoint}/${this.id}`;
         let result = await this.submitRequestAsync(endPoint, MethodType.Get, ContentType.Json, null);
 
         return this.factory(result.model) as T
+    }
+
+    /**
+     * @description Gets the model from its API endpoint and an explicit Id.
+     * @param {number} id Model Id.
+     * @returns {Promise<T>} 
+     */
+    static async getFromIdAsync(id : number, modelEndPoint : string) : Promise<IModel> {
+
+        if (!id)
+            return undefined;
+
+        let endPoint = `${modelEndPoint}/${id}`;
+        let result = await HttpLibrary.submitHttpRequestAsync(endPoint, MethodType.Get, ContentType.Json, null);
+
+        return result.model as IModel;
     }
     
     /**

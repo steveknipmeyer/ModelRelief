@@ -9,8 +9,8 @@ import * as THREE       from 'three'
 
 import { FileModel }                        from 'FileModel'
 import { GeneratedFileModel }               from 'GeneratedFileModel'
-import {ContentType, HttpLibrary, 
-        MethodType, ServerEndPoints}        from 'Http'
+import { ContentType, HttpLibrary, 
+         MethodType, ServerEndPoints }      from 'Http'
 import { ICamera, StandardView }            from 'ICamera'
 import { IDepthBuffer, DepthBufferFormat }  from 'IDepthBuffer'
 import { IMesh, MeshFormat }                from 'IMesh'
@@ -60,7 +60,7 @@ export class Camera extends Model<Camera> implements ICamera {
 
         super(parameters);
 
-        this.endPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiCameras}`;
+        this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiCameras}`;
 
         let {
             fieldOfView,
@@ -159,7 +159,7 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> implements IDep
 
         super(parameters);
 
-        this.endPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiDepthBuffers}`;
+        this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiDepthBuffers}`;
 
         let {
             width,
@@ -231,8 +231,8 @@ export class Mesh extends GeneratedFileModel<Mesh> implements IMesh {
 
         super(parameters);
 
-        this.endPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiMeshes}`;
- 
+        this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiMeshes}`;
+
         let {
             format,
 
@@ -303,7 +303,7 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
 
         super(parameters);
 
-        this.endPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiMeshTransforms}`;
+        this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiMeshTransforms}`;
 
         let {
             width,
@@ -367,7 +367,7 @@ export class Model3d extends FileModel<Model3d> implements IModel3d {
 
         super(parameters);
 
-        this.endPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiModels}`;
+        this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiModels}`;
 
         let {
             format,
@@ -414,8 +414,9 @@ export class Project extends Model<Project> implements IProject {
 
         super(parameters);
 
-        this.endPoint = `${window.location.protocol}//${window.location.host}/${ServerEndPoints.ApiProjects}`;
+        this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiProjects}`;
     }
+
     /**
      * @description Constructs an instance of a Project.
      * @param {IModel} parameters : Dto.Project

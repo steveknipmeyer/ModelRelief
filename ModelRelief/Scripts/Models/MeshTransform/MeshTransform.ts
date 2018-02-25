@@ -7,11 +7,12 @@
 
 import * as Dto             from 'DtoModels';
 
-import { IMeshTransform }   from 'IMeshTransform';
-import { IModel }           from 'IModel';
-import { Model }            from 'Model';
-import { Project }          from 'Project';
-import { Services }         from 'Services';
+import { HttpLibrary, ServerEndPoints } from 'Http'
+import { IMeshTransform }               from 'IMeshTransform';
+import { IModel }                       from 'IModel';
+import { Model }                        from 'Model';
+import { Project }                      from 'Project';
+import { Services }                     from 'Services';
 
 /**
  * @description Represents a mesh transform. 
@@ -44,6 +45,16 @@ export class MeshTransform extends Model<MeshTransform> {
         parameters.description = parameters.description || "MeshTransform";
         
         super(parameters);
+
+        this.initialize();
+    }
+
+    /**
+     * @description Perform setup and initialization.
+     */
+    initialize(): void {
+
+        this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiMeshTransforms}`;
     }
 
     /**

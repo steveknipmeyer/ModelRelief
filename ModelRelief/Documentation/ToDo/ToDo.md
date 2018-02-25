@@ -17,7 +17,9 @@
 <article class="markdown-body">
 
 ##### Commit Notes
-
+Initialize endPoint in FE application models.
+Add logger to Model base class.
+Add initialization method for all FE application models.
 
 ##### Technical Education
 - Manning AspNet Core book.
@@ -77,19 +79,8 @@ Application models
 
 TODO versus WIP?
 
-How can the endPoint be intiailized for Model, FileModel, GeneratedFileModel?
-    let dtoMesh = this.toDtoModel();
-    this.depthBuffer.rgbArray = await dtoMesh.getFileAsync();
-
-Mesh.constructGraphics
-    switch(this.format)
-        case MeshFormat.Raw:
-            Construct a DepthBuffer from this.fileArray.
-            depthBuffer.constructGraphics
-
+Add mesh property to IFileModel.
 Add generate method to IGeneratedFileModel.
-
-
 Use Model, Mesh in ModelViewer, MeshViewer respectively.
 Use Camera in Viewer.
 Where should Model3d replace Mesh in the FE classes?
