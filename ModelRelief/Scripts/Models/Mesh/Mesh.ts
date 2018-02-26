@@ -188,7 +188,7 @@ export class Mesh extends GeneratedFileModel<Mesh> {
         switch (this.format) {
 
             case MeshFormat.RAW:
-                this.depthBuffer.rgbArray = await this.getFileAsync();
+                this.depthBuffer.rgbArray = await this.toDtoModel().getFileAsync();
                 mesh = await this.depthBuffer.constructGraphicssAsync();
                 break;
 

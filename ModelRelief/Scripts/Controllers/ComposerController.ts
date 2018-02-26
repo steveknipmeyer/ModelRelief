@@ -114,7 +114,7 @@ export class ComposerController {
         // WIP: Connect the active THREE.Mesh to a Model3d model.
         
         // Camera
-        let cameraModel: Dto.Camera = await this.postCameraAsync();
+        let cameraModel: Dto.Camera = await this.updateCameraAsync();
         
         // DepthBufffer(Model, Camera) 
         let depthBufferModel: Dto.DepthBuffer = await this.postDepthBufferAsync(cameraModel, reliefWidthPixels, reliefHeightPixels);
@@ -142,21 +142,22 @@ export class ComposerController {
     }
 
     /**
-     * @description Saves the Camera.
+     * @description Updates the Camera.
      * @returns {Promise<Dto.Camera>} 
      */
-    async postCameraAsync(): Promise<Dto.Camera> {
+    async updateCameraAsync(): Promise<Dto.Camera> {
+
+        let depthBufferCamera : Camera = this._composerView._mesh.depthBuffer.camera;
 
         // copy view camera so we can optimize clipping planes
-        let viewCameraClone = this._composerView.modelView.modelViewer.camera.clone(true);
-        CameraHelper.finalizeClippingPlanes(viewCameraClone, this._composerView.modelView.modelViewer.modelGroup);
+        let modelViewCameraClone = this._composerView.modelView.modelViewer.camera.clone(true);
+        CameraHelper.finalizeClippingPlanes(modelViewCameraClone, this._composerView.modelView.modelViewer.modelGroup);
 
-        let camera = new Camera({}, viewCameraClone);
-        let cameraModel = camera.toDtoModel();
+        // update from THREE.PerspectiveCamera
+        depthBufferCamera.viewCamera = modelViewCameraClone;
+        let depthBufferCameraModel : Dto.Camera = await depthBufferCamera.toDtoModel().putAsync();
 
-        var newModel = await cameraModel.postAsync();
-
-        return newModel; 
+        return depthBufferCameraModel; 
     }        
     
     /**

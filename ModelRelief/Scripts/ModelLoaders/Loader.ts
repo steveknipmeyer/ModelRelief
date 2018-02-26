@@ -41,7 +41,7 @@ export class Loader {
      */
     async loadOBJModelAsync (fileModel : IFileModel) : Promise<THREE.Group> {
 
-        let modelFile = await fileModel.getFileAsStringAsync();
+        let modelFile = await fileModel.toDtoModel().getFileAsStringAsync();
 
         let loader = () => new Promise<THREE.Group>((resolve, reject) => {
 

@@ -19,8 +19,11 @@ export interface IModel {
     name?: string;
     description?: string;
 
-    submitRequestAsync?(endPoint: string, requestType : MethodType, contentType : ContentType, requestData : any) : Promise<RequestResponse>;
+    toDtoModel?() : any;
+
+    // DTO    
     factory?(parameters : IModel) : any;
+    submitRequestAsync?(endPoint: string, requestType : MethodType, contentType : ContentType, requestData : any) : Promise<RequestResponse>;
     postAsync?() : Promise<any>;
     getAsync?()  : Promise<any>;
     putAsync?()  : Promise<any>;

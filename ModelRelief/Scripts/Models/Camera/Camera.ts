@@ -93,7 +93,7 @@ export class Camera extends Model<Camera> {
         let cameraModel = await camera.getAsync();
         return Camera.fromDtoModelAsync(cameraModel);
     }   
-
+    
     /**
      * @description Constructs an instance from a DTO model.
      * @returns {Camera} 

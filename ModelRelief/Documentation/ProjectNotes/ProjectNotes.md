@@ -75,11 +75,12 @@ Application models
 - [X] fromId (id: number)
 
 Use Camera in Viewer.       
-
 Add generate method to IGeneratedFileModel.  
 Refactor ComposerController.
 
 Can Hyper support ANSI sequences?
+
+How does AutoMapper handle an object graph during a PATCH ?
 
 What controls are (ultimately) present in Composer?
  - Model: models/?project=id
@@ -91,7 +92,7 @@ What controls are (ultimately) present in Composer?
         Some initialization cannot be done without involved processing of related members.
         For example, constructing a DeothBuffer requires the backing file data.
 
-    DTO objects are used for Data TRANSFER to the server, either through web page endpoints or the API.
+    DTO objects are used for DATA TRANSFER to the server, either through web page endpoints or the API.
         So, a web page is not bound to use a DTO object if the page does not use POST/PUT, etc.
 
     DepthBuffer
@@ -190,10 +191,16 @@ DTO models are in an inheritance chain so they can share common functionality su
 
 |Graphics||DTO (HTTP)|
 |--|
-|||Model|
-|||FileModel|
-|||GeneratedFileModel|
+|Model||Dto.Model|
+|FileModel||Dto.FileModel|
+|GeneratedFileModel||Dto.GeneratedFileModel|
 
+**Graphics**
+```javascript
+export class Model<T extends IModel> implements IModel
+export class FileModel<T extends IFileModel> extends Model<T> implements IFileModel
+export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel<T> implements IGeneratedFileModel
+```
 **DTO**
 ```javascript
 export class Model<T extends IModel> implements IModel
@@ -205,13 +212,13 @@ export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel
 
 |Graphics |Implementation||DTO (HTTP) |Implementation||Notes|
 |-------|--------|--------|
-|Camera|IModel<br>Model||Dto.Camera|IModel, ICamera<br>Model||THREE.Camera|
-|DepthBuffer|IGeneratedFileModel<br>GeneratedFileModel||Dto.DepthBuffer|IGeneratedFileModel, IDepthBuffer<br>GeneratedFileModel||
-|Mesh|IGeneratedFileModel<br>GeneratedFileModel||Dto.Mesh|IGeneratedFileModel, IMesh<br>GeneratedFileModel||THREE.Mesh|
-|MeshTransform|IModel<br>Model||Dto.MeshTransform|IModel,IMeshTransform<br>Model|||
-|Model3d|IFileModel<br>FileModel||Model3d|IFileModel,IModel3d<br>FileModel||THREE.Mesh|
-|Project|IModel<br>Model||Dto.Project|IModel, IProject<br>Model||
-|**Relief**|TBD||||
+|Camera|IModel<br>Model||Dto.Camera|IModel, ICamera<br>Dto.Model||THREE.Camera|
+|DepthBuffer|IGeneratedFileModel<br>GeneratedFileModel||Dto.DepthBuffer|IGeneratedFileModel, IDepthBuffer<br>Dto.GeneratedFileModel||
+|Mesh|IGeneratedFileModel<br>GeneratedFileModel||Dto.Mesh|IGeneratedFileModel, IMesh<br>Dto.GeneratedFileModel||THREE.Mesh|
+|MeshTransform|IModel<br>Model||Dto.MeshTransform|IModel,IMeshTransform<br>Dto.Model|||
+|Model3d|IFileModel<br>FileModel||Model3d|IFileModel,IModel3d<br>Dto.FileModel||THREE.Mesh|
+|Project|IModel<br>Model||Dto.Project|IModel, IProject<br>Dto.Model||
+
 
 **Graphics**
 ```javascript
