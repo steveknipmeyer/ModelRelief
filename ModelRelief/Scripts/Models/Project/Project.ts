@@ -40,7 +40,6 @@ export class Project extends Model {
      */
     initialize(): void {
 
-        this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiProjects}`;
     }
 
     /**

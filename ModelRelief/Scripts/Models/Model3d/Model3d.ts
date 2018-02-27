@@ -49,7 +49,6 @@ export class Model3d extends FileModel {
      */
     initialize(): void {
 
-        this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiModels}`;
     }
 
     /**

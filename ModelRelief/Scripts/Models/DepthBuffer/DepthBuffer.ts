@@ -94,7 +94,6 @@ export class DepthBuffer extends GeneratedFileModel {
      */
     initialize () : void {
 
-        this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiDepthBuffers}`;
     }
 
     /**

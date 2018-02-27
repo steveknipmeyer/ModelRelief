@@ -54,7 +54,6 @@ export class MeshTransform extends Model {
      */
     initialize(): void {
 
-        this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiMeshTransforms}`;
     }
 
     /**

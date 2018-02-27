@@ -73,8 +73,6 @@ export class Camera extends Model {
      */
     initialize (camera : THREE.PerspectiveCamera) : void {
 
-        this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiCameras}`;
-
         this.viewCamera = camera;
     }
 

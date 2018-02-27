@@ -73,8 +73,6 @@ export class Mesh extends GeneratedFileModel {
      */
     initialize(depthBuffer : DepthBuffer, meshTransform : MeshTransform): void {
 
-        this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiMeshes}`;
-
         this.depthBuffer   = depthBuffer;
         this.meshTransform = meshTransform;
     }

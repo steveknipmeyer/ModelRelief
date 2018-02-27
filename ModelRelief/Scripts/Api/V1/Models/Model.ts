@@ -28,8 +28,6 @@ export class Model implements IModel{
     name        : string;  
     description : string;
 
-    endPoint    : string;       // API endpoint
-
     // Private
     _logger     : ILogger;
 
