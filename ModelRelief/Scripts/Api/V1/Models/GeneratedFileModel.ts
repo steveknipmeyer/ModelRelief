@@ -7,22 +7,21 @@
 
 import * as THREE       from 'three'
 
-import {ContentType, HttpLibrary, 
-    MethodType, ServerEndPoints}        from 'Http'
+import { ContentType, HttpLibrary, 
+         MethodType, ServerEndPoints }  from 'Http'
 import { IGeneratedFileModel }          from 'IGeneratedFileModel'
 import { FileModel }                    from 'FileModel'
-import { Services }                     from 'Services'
 import { RequestResponse }              from 'RequestResponse'
+import { Services }                     from 'Services'
 
 /**
  * @description Base class for a generated file-backed DTO model.
  * @export
  * @class GeneratedFileModel
- * @extends {FileModel<T>}
+ * @extends {FileModel}
  * @implements {IGeneratedFileModel}
- * @template T 
  */
-export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel<T> implements IGeneratedFileModel{
+export class GeneratedFileModel extends FileModel implements IGeneratedFileModel{
 
     // not exposed in UX; API only
     fileIsSynchronized: boolean;

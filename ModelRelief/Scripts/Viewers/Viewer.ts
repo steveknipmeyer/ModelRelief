@@ -10,9 +10,9 @@ import {Camera}                                     from 'Camera';
 import {CameraHelper }                              from 'CameraHelper';
 import {CameraControls, CameraControlsOptions}      from 'CameraControls';
 import {EventManager}                               from 'EventManager';
+import {FileModel}                                  from 'FileModel';
 import {Graphics, ObjectNames}                      from 'Graphics';
 import {StandardView}                               from 'ICamera';
-import {IFileModel}                                 from 'IFileModel';
 import {ILogger}                                    from 'Logger';
 import {Materials}                                  from 'Materials';
 import {Services}                                   from 'Services';
@@ -32,7 +32,7 @@ export class Viewer {
     _eventManager           : EventManager               = null;
     _logger                 : ILogger                   = null;
 
-    _model                  : IFileModel                = null;
+    _model                  : FileModel                 = null;
     _scene                  : THREE.Scene               = null;
     _root                   : THREE.Object3D            = null;      
                                                         
@@ -50,7 +50,7 @@ export class Viewer {
      * @param {string} name Viewer name.
      * @param {string} modelCanvasId HTML element to host the viewer.
      */
-    constructor(name : string, modelCanvasId : string, model? : IFileModel) { 
+    constructor(name : string, modelCanvasId : string, model? : FileModel) { 
 
         this._name         = name;                    
         this._eventManager = new EventManager();
@@ -119,9 +119,9 @@ export class Viewer {
     /**
      * @description Returns the active model.
      * @readonly
-     * @type {IFileModel}
+     * @type {FileModel}
      */
-    get model() : IFileModel {
+    get model() : FileModel {
 
         return this._model;
     }
@@ -129,7 +129,7 @@ export class Viewer {
     /**
      * @description Sets the active model.
      */
-    set model (model : IFileModel) {
+    set model (model : FileModel) {
 
         this._model = model;
     }

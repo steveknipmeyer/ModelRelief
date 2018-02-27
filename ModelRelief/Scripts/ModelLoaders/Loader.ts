@@ -10,8 +10,7 @@ import * as THREE                   from 'three';
 
 import {Graphics}                   from 'Graphics';
 import {StandardView}               from 'ICamera';
-import {IFileModel}                 from 'IFileModel';
-import {IModel}                     from 'IModel'
+import {FileModel}                  from 'FileModel'
 import {ILogger, ConsoleLogger}     from 'Logger';
 import {OBJLoader}                  from 'OBJLoader';
 import {Services}                   from 'Services';
@@ -36,10 +35,10 @@ export class Loader {
 
     /**
      * @description Loads a model based on the model name and path embedded in the HTML page.
-     * @param {IFileModel} fileModel Model to load.
+     * @param {FileModel} fileModel Model to load.
      * @returns {Promise<THREE.Group>} 
      */
-    async loadOBJModelAsync (fileModel : IFileModel) : Promise<THREE.Group> {
+    async loadOBJModelAsync (fileModel : FileModel) : Promise<THREE.Group> {
 
         let modelFile = await fileModel.toDtoModel().getFileAsStringAsync();
 

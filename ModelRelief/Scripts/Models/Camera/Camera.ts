@@ -35,10 +35,12 @@ export interface ClippingPlanes {
  */
 
 /**
- * Camera
- * @class
+ * @description Camera
+ * @export
+ * @class Camera
+ * @extends {Model}
  */
-export class Camera extends Model<Camera> {
+export class Camera extends Model {
 
     static DefaultFieldOfView       : number =   37;       // 35mm vertical : https://www.nikonians.org/reviews/fov-tables       
     static DefaultNearClippingPlane : number =    0.1; 

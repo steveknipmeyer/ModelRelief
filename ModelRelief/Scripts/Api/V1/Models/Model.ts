@@ -17,13 +17,12 @@ import { Services }                         from 'Services'
 import { RequestResponse }                  from 'RequestResponse'
 
 /**
- * @description Common base class for all DTO models.
+ * @description Common base class for all FE models.
  * @export
  * @class Model
  * @implements {IModel}
- * @template T 
  */
-export class Model<T extends IModel> implements IModel{
+export class Model implements IModel{
 
     id          : number;
     name        : string;  

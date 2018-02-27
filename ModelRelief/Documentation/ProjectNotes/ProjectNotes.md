@@ -74,13 +74,17 @@ Application models
 - [X] constructor(\{parameters : IModel\})
 - [X] fromId (id: number)
 
-Use Camera in Viewer.       
+Interfaces and Base Classes
+- IModel, IFileModel, IGeneratedFileModel : remove optional methods
+- data transfer is done only in DTO classes
+- separate DTO and application as necessary
+
 Add generate method to IGeneratedFileModel.  
 Refactor ComposerController.
 
 Can Hyper support ANSI sequences?
 
-How does AutoMapper handle an object graph during a PATCH ?
+How does EF and AutoMapper handle object graphs (with populated navigation properties) during updates?
 
 What controls are (ultimately) present in Composer?
  - Model: models/?project=id

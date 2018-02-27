@@ -5,7 +5,8 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE       from 'three'
+import * as THREE                   from 'three'
+import * as Dto                     from 'DtoModels' ;
 
 import { Exception }                        from 'Exception';
 import {ContentType, HttpLibrary, 
@@ -16,14 +17,13 @@ import { Services }                         from 'Services'
 import { RequestResponse }                  from 'RequestResponse'
 
 /**
- * @description Base class for a file-backed DTO model.
- * @export 
+ * @description Base class for a file-backed FE models.
+ * @export
  * @class FileModel
- * @extends {Model<T>}
+ * @extends {Model}
  * @implements {IFileModel}
- * @template T 
  */
-export class FileModel<T extends IFileModel> extends Model<T> implements IFileModel{
+export class FileModel extends Model implements IFileModel{
 
     // not exposed in UX; API only
     fileTimeStamp: Date;
@@ -41,5 +41,22 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
         super (parameters);
 
         this.fileTimeStamp = parameters.fileTimeStamp || undefined;
+    }
+
+    /**
+     * @description Returns a DTO model from the instance.
+     * WIP: Can the return value be strongly typed?
+     * @returns {Dto.FileModel} 
+     */
+    toDtoModel() : Dto.FileModel<any> {
+        return undefined;
+    }
+
+    /**
+     * @description Returns a graphics represention of the model.
+     * @returns {Promise<THREE.Group>} 
+     */
+    getModelGroupAsync?() : Promise<THREE.Group> {
+        return undefined;
     }
 }

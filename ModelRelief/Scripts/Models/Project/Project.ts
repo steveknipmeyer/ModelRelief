@@ -16,8 +16,9 @@ import { Services }                     from 'Services'
  * @description Represents a user project.
  * @export
  * @class Project
+ * @extends {Model}
  */
-export class Project extends Model<Project> {
+export class Project extends Model {
 
     /**
      * @constructor

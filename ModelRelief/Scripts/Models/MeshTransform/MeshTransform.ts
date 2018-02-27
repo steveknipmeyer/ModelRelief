@@ -16,11 +16,11 @@ import { Services }                     from 'Services';
 
 /**
  * @description Represents a mesh transform. 
- * The settings are applied to a DepthBuffer to create a Mesh.
  * @export
  * @class MeshTransform
+ * @extends {Model}
  */
-export class MeshTransform extends Model<MeshTransform> {
+export class MeshTransform extends Model {
 
     width               : number;
     height              : number;

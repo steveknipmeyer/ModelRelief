@@ -9,9 +9,9 @@ import * as THREE                       from 'three';
 
 import { DepthBufferFactory }             from "DepthBufferFactory";
 import { EventManager, EventType }        from 'EventManager';
+import { FileModel }                      from 'FileModel';
 import { Graphics }                       from 'Graphics';
 import { StandardView }                   from "ICamera";
-import { IFileModel }                     from 'IFileModel';
 import { ILogger }                        from 'Logger';
 import { Materials }                      from 'Materials';
 import { Model3d }                        from "Model3d";
@@ -41,9 +41,9 @@ export class ModelViewer extends Viewer {
      * Creates an instance of ModelViewer.
      * @param {string} name Viewer name.
      * @param {string} modelCanvasId HTML element to host the viewer.
-     * @param {IFileModel} model Model to load.
+     * @param {FileModel} model Model to load.
      */
-    constructor(name : string, modelCanvasId : string, model : IFileModel) {
+    constructor(name : string, modelCanvasId : string, model : FileModel) {
         
         super (name, modelCanvasId, model);       
 

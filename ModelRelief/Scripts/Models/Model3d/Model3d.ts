@@ -20,8 +20,9 @@ import { Services }                     from 'Services'
  * @description Represents a 3D model.
  * @export
  * @class Model3d
+ * @extends {FileModel}
  */
-export class Model3d extends FileModel<Model3d> {
+export class Model3d extends FileModel {
 
     format: Model3dFormat;
 
@@ -81,7 +82,7 @@ export class Model3d extends FileModel<Model3d> {
             name        : dtoModel3d.name,
             description : dtoModel3d.description,       
         });
-        
+
         model3d.fileTimeStamp = dtoModel3d.fileTimeStamp;
 
         model3d.format  = dtoModel3d.format;              

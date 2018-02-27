@@ -48,8 +48,9 @@ interface FacePair {
  * @description Represents a depth buffer.
  * @export
  * @class DepthBuffer
+ * @extends {GeneratedFileModel}
  */
-export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
+export class DepthBuffer extends GeneratedFileModel {
 
     static readonly NormalizedTolerance   : number = .001;    
 
@@ -126,7 +127,7 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> {
             name        : dtoDepthBuffer.name,
             description : dtoDepthBuffer.description,       
         });
-        
+
         depthBuffer.fileTimeStamp      = dtoDepthBuffer.fileTimeStamp;
         depthBuffer.fileIsSynchronized = dtoDepthBuffer.fileIsSynchronized;
 

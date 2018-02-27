@@ -24,8 +24,9 @@ import { Services }                     from 'Services'
  * @description Represents a mesh.
  * @export
  * @class Mesh
+ * @extends {GeneratedFileModel}
  */
-export class Mesh extends GeneratedFileModel<Mesh> {
+export class Mesh extends GeneratedFileModel {
 
     static Cache                              : MeshCache = new MeshCache();
     static readonly MeshModelName             : string = 'ModelMesh';

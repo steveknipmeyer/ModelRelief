@@ -10,9 +10,9 @@ import * as Dto                     from "DtoModels";
 
 import {Camera}                     from 'Camera';
 import {DepthBuffer}                from 'DepthBuffer';
+import {FileModel}                  from 'FileModel';
 import {Graphics}                   from 'Graphics';
 import {StandardView}               from 'ICamera';
-import {IFileModel}                 from 'IFileModel';
 import {ILogger, HTMLLogger}        from 'Logger';
 import {MathLibrary}                from 'Math';
 import {Mesh}                       from 'Mesh';
@@ -38,9 +38,9 @@ export class MeshViewer extends Viewer {
      * Creates an instance of MeshViewer.
      * @param {string} name Viewer name.
      * @param {string} previewCanvasId HTML element to host the viewer.
-     * @param {IFileModel} model Model to load.
+     * @param {FileModel} model Model to load.
      */
-    constructor(name : string, previewCanvasId : string, model? : IFileModel) {
+    constructor(name : string, previewCanvasId : string, model? : FileModel) {
         
         super(name, previewCanvasId, model);
 
