@@ -89,17 +89,17 @@ namespace ModelRelief.Test.Unit.DependencyManager
         }
 
         /// <summary>
-        /// Finds all dependents of the TopCamera.
+        /// Finds all dependents of the Lucy Camera.
         /// </summary>
         [Fact]
         [Trait("Category", "DependencyManager")]
-        public async Task LucyTopCameraFindsAllDependents()
+        public async Task LucyCameraFindsAllDependents()
         {
             // Arrange
-            var lucyTopCameraPrimaryKey = 3;
+            var lucyCameraPrimaryKey = 3;
 
             // Act
-            var dependentModels = await FindDependentModels(typeof(Camera), lucyTopCameraPrimaryKey);
+            var dependentModels = await FindDependentModels(typeof(Camera), lucyCameraPrimaryKey);
 
             // Assert
             dependentModels.Count.Should().Be(2);

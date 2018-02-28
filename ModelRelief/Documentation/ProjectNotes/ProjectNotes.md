@@ -65,9 +65,6 @@ When the view camera is interactively changed, it should invalidate the Standard
 
 ##### FE UI
 
-Why is the DepthBuffer fileTimeStamp null in the Put return result?
-Remove Http.postFile.
-
 
 Add generate method to GeneratedFileModel.  
 

@@ -86,7 +86,12 @@ export class ComposerController {
      */
     onNewModel(event: MREvent, modelGroup: THREE.Group) {
 
-        this._composerView._modelView.modelViewer.setCameraToStandardView(StandardView.Front);
+        // model camera = depth buffer camera (default clipping planes)
+        let modelViewCamera = this._composerView._mesh.depthBuffer.camera.viewCamera.clone();
+        modelViewCamera.near = Camera.DefaultNearClippingPlane;
+        modelViewCamera.far  = Camera.DefaultFarClippingPlane;
+        this._composerView._modelView.modelViewer.camera = modelViewCamera;
+
         this._composerView._meshView.meshViewer.setCameraToStandardView(StandardView.Top);
     }
 

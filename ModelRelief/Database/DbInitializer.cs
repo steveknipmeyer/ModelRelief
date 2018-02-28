@@ -317,7 +317,7 @@ namespace ModelRelief.Database
 
                 new Camera
                 {
-                    Name = "LucyTop", Description = "Aligned along negative Z",
+                    Name = "Lucy", Description = "Lucy Model",
                     FieldOfView = Camera.DefaultFieldOfView,
                     AspectRatio = 1.0,
                     Near = 238.39, Far = 292.00,
@@ -332,7 +332,7 @@ namespace ModelRelief.Database
 
                 new Camera
                 {
-                    Name = "BunnyTop", Description = "Aligned along negative Z",
+                    Name = "Bunny", Description = "Bunny Model",
                     FieldOfView = Camera.DefaultFieldOfView,
                     AspectRatio = 1.0,
                     Near = 132.85, Far = 201.95,
@@ -347,7 +347,7 @@ namespace ModelRelief.Database
 
                 new Camera
                 {
-                    Name = "ArmadilloTop", Description = "Aligned along negative Z",
+                    Name = "Armadillo", Description = "Armadillo Model",
                     FieldOfView = Camera.DefaultFieldOfView,
                     AspectRatio = 1.0,
                     Near = 164.49, Far = 229.59,
@@ -459,7 +459,7 @@ namespace ModelRelief.Database
                     Name = "lucy.raw", Description = "Generated in Maya",
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.RAW,
-                    Model3d = FindByName<Model3d>("lucy.obj"), Camera = FindByName<Camera>("LucyTop"),
+                    Model3d = FindByName<Model3d>("lucy.obj"), Camera = FindByName<Camera>("Lucy"),
                     User = _user, Project = FindByName<Project>("ModelRelief"),
                 },
                 new DepthBuffer
@@ -467,7 +467,7 @@ namespace ModelRelief.Database
                     Name = "bunny.raw", Description = "Generated in VRay",
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.RAW,
-                    Model3d = FindByName<Model3d>("bunny.obj"), Camera = FindByName<Camera>("BunnyTop"),
+                    Model3d = FindByName<Model3d>("bunny.obj"), Camera = FindByName<Camera>("Bunny"),
                     User = _user, Project = FindByName<Project>("Architecture"),
                 },
                 new DepthBuffer
@@ -475,7 +475,7 @@ namespace ModelRelief.Database
                     Name = "armadillo.raw", Description = "Generated in Rhino",
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.RAW,
-                    Model3d = FindByName<Model3d>("armadillo.obj"), Camera = FindByName<Camera>("ArmadilloTop"),
+                    Model3d = FindByName<Model3d>("armadillo.obj"), Camera = FindByName<Camera>("Armadillo"),
                     User = _user, Project = FindByName<Project>("Jewelry"),
                 },
             };
