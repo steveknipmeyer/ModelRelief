@@ -142,6 +142,7 @@ export class ComposerView {
             // load models; model event handlers now initialized
             this._modelView.modelViewer.loadModelAsync().then(() => {});
             this._meshView.meshViewer.loadModelAsync().then(() => {});
+
             // Test Models
             // this._loader.loadParametricTestModel(this._modelViewer, TestModel.Checkerboard);
         });

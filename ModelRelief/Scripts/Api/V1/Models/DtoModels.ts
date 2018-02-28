@@ -7,8 +7,10 @@
 
 import * as THREE       from 'three'
 
+import { Exception }                        from 'Exception'
 import { ContentType, HttpLibrary, 
          MethodType, ServerEndPoints }      from 'Http'
+import { HttpStatusCode, HttpStatusMessage }from 'HttpStatus'
 import { ICamera, StandardView }            from 'ICamera'
 import { IDepthBuffer, DepthBufferFormat }  from 'IDepthBuffer'
 import { IFileModel }                       from 'IFileModel'
@@ -96,6 +98,8 @@ export class Model<T extends IModel> implements IModel{
 
         let newModel = JSON.stringify(this);
         let result = await this.submitRequestAsync(this.endPoint, MethodType.Post, ContentType.Json, newModel);
+        if (result.response.status != HttpStatusCode.CREATED)
+            Exception.throwError(`postFileAsync model: Url = ${this.endPoint}, status = ${result.response.status}`);
 
         return this.factory(result.model) as T;
     }
@@ -158,6 +162,15 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
     }
 
     /**
+     * @description Returns the HTTP endpoint for a file request.
+     * @readonly
+     * @type {string}
+     */
+    get fileEndPoint() : string {
+        return `${this.endPoint}/${this.id}/file`;
+    }
+
+    /**
      * @description Posts the model and a backing file to its API endpoint.
      * @returns {Promise<T>} 
      */
@@ -165,7 +178,7 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
 
         let exportTag = Services.timer.mark(`POST File: ${this.constructor.name}`);
 
-        let newModel = await HttpLibrary.postFileAsync (this.endPoint, fileData, this);
+        let newModel = await HttpLibrary.postFileAsync (this.fileEndPoint, fileData);
 
         Services.timer.logElapsedTime(exportTag);       
 
@@ -184,8 +197,7 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
         if (this.fileArray)
             return this.fileArray;
 
-        let endPoint = `${this.endPoint}/${this.id}/file`
-        let result = await this.submitRequestAsync(endPoint, MethodType.Get, ContentType.OctetStream, null);       
+        let result = await this.submitRequestAsync(this.fileEndPoint, MethodType.Get, ContentType.OctetStream, null);       
         this.fileArray = result.byteArrayDecodedDoublePrime;
 //      this._fileArray = result.byteArrayDecoded;
 

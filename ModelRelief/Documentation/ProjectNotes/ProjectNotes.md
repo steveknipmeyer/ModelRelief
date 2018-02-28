@@ -65,22 +65,11 @@ When the view camera is interactively changed, it should invalidate the Standard
 
 ##### FE UI
 
-Goals
- - [x] Load a ComposerView from a given Mesh.
- - [x] Construct a graph of *application* models from the target Mesh.
- - Use *application* models not DTOs!
+Why is the DepthBuffer fileTimeStamp null in the Put return result?
+Remove Http.postFile.
 
-Application models  
-- [X] constructor(\{parameters : IModel\})
-- [X] fromId (id: number)
 
-Interfaces and Base Classes
-- IModel, IFileModel, IGeneratedFileModel : remove optional methods
-- data transfer is done only in DTO classes
-- separate DTO and application as necessary
-
-Add generate method to IGeneratedFileModel.  
-Refactor ComposerController.
+Add generate method to GeneratedFileModel.  
 
 Can Hyper support ANSI sequences?
 
@@ -201,9 +190,9 @@ DTO models are in an inheritance chain so they can share common functionality su
 
 **Graphics**
 ```javascript
-export class Model<T extends IModel> implements IModel
-export class FileModel<T extends IFileModel> extends Model<T> implements IFileModel
-export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel<T> implements IGeneratedFileModel
+export class Model implements IModel
+export class FileModel extends Model<T> implements IFileModel
+export class GeneratedFileModel extends FileModel<T> implements IGeneratedFileModel
 ```
 **DTO**
 ```javascript
@@ -226,12 +215,12 @@ export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel
 
 **Graphics**
 ```javascript
-export class Camera extends Model<Camera>
-export class DepthBuffer extends GeneratedFileModel<DepthBuffer>
-export class Mesh extends GeneratedFileModel<Mesh>
-export class MeshTransform extends Model<MeshTransform>
-export class Model3d extends FileModel<Model3d> 
-export class Project extends Model<Project>
+export class Camera extends Model
+export class DepthBuffer extends GeneratedFileModel
+export class Mesh extends GeneratedFileModel
+export class MeshTransform extends Model
+export class Model3d extends FileModel
+export class Project extends Model
 ```
 **DTO**
 ```javascript
@@ -486,6 +475,8 @@ https://msdn.microsoft.com/en-us/magazine/mt767693.aspx
 Add authentication support!
 
 The Project is populating the object graph too deeply.
+
+A Put (File) request returns Created instead of OK. The file is correctly replaced but the status should be OK.
 
 ###### Enhancements
     Express relationships as "href" properties to absolute URLs.

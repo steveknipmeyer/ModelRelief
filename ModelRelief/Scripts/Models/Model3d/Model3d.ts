@@ -107,6 +107,8 @@ export class Model3d extends FileModel {
             
             projectId       : this.project ? this.project.id : undefined,
             cameraId        : this.camera  ? this.camera.id : undefined,
+
+            fileTimeStamp   : this.fileTimeStamp,
         });
 
         return model3d;

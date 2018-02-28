@@ -142,6 +142,9 @@ export class Mesh extends GeneratedFileModel {
             cameraId        : this.camera ? this.camera.id : undefined,
             depthBufferId   : this.depthBuffer ? this.depthBuffer.id : undefined,
             meshTransformId : this.meshTransform ? this.meshTransform.id : undefined,
+
+            fileTimeStamp      : this.fileTimeStamp,
+            fileIsSynchronized : this.fileIsSynchronized,
         });
 
         return mesh;

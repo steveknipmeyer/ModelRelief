@@ -62,29 +62,6 @@ export class HttpLibrary {
     }
 
     /**
-     * Posts a file and the supporting metadata to the specified URL.
-     * @param postUrl Url to post.
-     * @param fileData File data, may be binary.
-     * @param fileMetadata JSON metadata.
-     */
-    static postFile (postUrl : string, fileData : any, fileMetadata : any) : boolean {
-        
-        let onComplete = function(request: XMLHttpRequest) {
-                            
-            Services.defaultLogger.addInfoMessage('Metadata saved');
-            let filePath = request.getResponseHeader('Location');
-
-            let blob = new Blob([fileData], { type: ContentType.OctetStream }); 
-            HttpLibrary.sendXMLHttpRequest(`${filePath}/file`, MethodType.Post, ContentType.OctetStream, blob, null);
-        };
-
-        // send JSON metadata first to create the resource and obtain the Id
-        HttpLibrary.sendXMLHttpRequest(postUrl, MethodType.Post, ContentType.Json, JSON.stringify(fileMetadata), onComplete);
-        
-        return true;
-    }
-
-    /**
      * Post an XMLHttpRequest.
      * @param endpoint Url endpoint.
      * @param requestData Data for request.
@@ -173,29 +150,18 @@ export class HttpLibrary {
     }
 
     /**
-     * Posts a file and the supporting metadata to the specified URL.
+     * Posts a file to the specified URL.
      * @param postUrl Url to post.
      * @param fileData File data, may be binary.
-     * @param fileMetadata JSON metadata.
      */
-    static async postFileAsync(postUrl: string, fileData: any, fileMetadata: any): Promise<IModel> {
-
-        // send JSON metadata first to create the resource and obtain the Id
-        let json = JSON.stringify(fileMetadata);
-        let result = await HttpLibrary.submitHttpRequestAsync(postUrl, MethodType.Post, ContentType.Json, json);
-        let newModel = result.model;
-        if (result.response.status != HttpStatusCode.CREATED)
-            Exception.throwError(`postFileAsync model: Url = ${postUrl}, status = ${result.response.status}`);
-
-        let headers = result.response.headers;
-        let filePath = headers.get('Location');
+    static async postFileAsync(postUrl: string, fileData: any): Promise<IModel> {
 
         let blob = new Blob([fileData], { type: ContentType.OctetStream });
-        result = await HttpLibrary.submitHttpRequestAsync(`${filePath}/file`, MethodType.Post, ContentType.OctetStream, blob);
+        let result = await HttpLibrary.submitHttpRequestAsync(postUrl, MethodType.Post, ContentType.OctetStream, blob);
         if (!result.response.ok)
             Exception.throwError(`postFileAsync file: Url = ${postUrl}, status = ${result.response.status}`);
 
-        return newModel;
+        return result.model;
     }
 
     /**

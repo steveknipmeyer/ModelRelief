@@ -64,8 +64,8 @@
                 "ASPNETCORE_ENVIRONMENT": "Test",
                 "MRDatabaseProvider": "SQLServer",
 //              "MRDatabaseProvider": "SQLite",
-                "MRInitializeDatabase":"True",
-                "MRInitializeUserStore":"True",
+                "MRInitializeDatabase":"False",
+                "MRInitializeUserStore":"False",
             },
             "sourceFileMap": {
                 "/Views": "${workspaceRoot}/Views"

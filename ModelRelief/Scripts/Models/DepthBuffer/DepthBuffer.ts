@@ -132,6 +132,7 @@ export class DepthBuffer extends GeneratedFileModel {
 
         depthBuffer.width  = dtoDepthBuffer.width;
         depthBuffer.height = dtoDepthBuffer.height;
+        depthBuffer.format = dtoDepthBuffer.format;
 
         depthBuffer.project = await Project.fromIdAsync(dtoDepthBuffer.projectId);
         depthBuffer.model3d = await Model3d.fromIdAsync(dtoDepthBuffer.model3dId);
@@ -158,6 +159,9 @@ export class DepthBuffer extends GeneratedFileModel {
             projectId       : this.project ? this.project.id : undefined,
             model3dId       : this.model3d ? this.model3d.id : undefined,
             cameraId        : this.camera  ? this.camera.id : undefined,
+
+            fileTimeStamp      : this.fileTimeStamp,
+            fileIsSynchronized : this.fileIsSynchronized,
         });
 
         return model;
