@@ -82,7 +82,7 @@ export class CameraHelper {
 
         let clippingPlanes: ClippingPlanes = this.getBoundingClippingPlanes(camera, modelGroup);
         camera.near = clippingPlanes.near;
-        camera.far = clippingPlanes.far;
+        camera.far  = clippingPlanes.far;
 
         camera.updateProjectionMatrix();
     }

@@ -322,8 +322,8 @@ namespace ModelRelief.Database
                     AspectRatio = 1.0,
                     Near = 238.39, Far = 292.00,
 
-                    PositionX = -3.16, PositionY = 79.32, PositionZ = 133.15,
-                    EulerX = 0.0, EulerY = 0.0, EulerZ = -1.0, Theta = 1.0,
+                    PositionX = -3.16, PositionY = 79.32, PositionZ = 265.07,
+                    EulerX = 0.0, EulerY = 0.0, EulerZ = 0.0, Theta = 1.0,
                     ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
                     UpX = 0.0, UpY = 1.0, UpZ = 0.0,
 

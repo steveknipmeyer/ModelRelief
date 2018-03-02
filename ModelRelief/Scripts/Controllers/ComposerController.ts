@@ -225,7 +225,8 @@ export class ComposerController {
         let depthBufferModel : Dto.DepthBuffer = await this.activeDepthBuffer.toDtoModel().putAsync();
 
         // file
-        depthBufferModel = await depthBufferModel.postFileAsync(factoryDepthBuffer.depths);
+        this.activeDepthBuffer.depths = factoryDepthBuffer.depths;
+        depthBufferModel = await depthBufferModel.postFileAsync(this.activeDepthBuffer.depths);
         
         return depthBufferModel;
     }        
