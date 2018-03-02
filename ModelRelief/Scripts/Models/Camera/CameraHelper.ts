@@ -75,14 +75,18 @@ export class CameraHelper {
     /**
      * @description Bounds the camera clipping planes to fit the model.
      * @static
-     * @param {THREE.PerspectiveCamera} camera Camera to set clipping planes.
-     * @param {THREE.Group} modelGroup Target model.
+     * @param {THREE.PerspectiveCamera} camera 
+     * @param {THREE.Group} modelGroup 
+     * @param {boolean} setNear Set the near plane to the model extents.
+     * @param {boolean} setFar Set the far plane to the model extents.
      */
-    static boundClippingPlanes(camera: THREE.PerspectiveCamera, modelGroup : THREE.Group) {
+    static boundClippingPlanes(camera: THREE.PerspectiveCamera, modelGroup : THREE.Group, setNear : boolean, setFar : boolean) {
 
         let clippingPlanes: ClippingPlanes = this.getBoundingClippingPlanes(camera, modelGroup);
-        camera.near = clippingPlanes.near;
-        camera.far  = clippingPlanes.far;
+        if (setNear)
+            camera.near = clippingPlanes.near;
+        if (setFar)            
+            camera.far  = clippingPlanes.far;
 
         camera.updateProjectionMatrix();
     }
@@ -95,8 +99,10 @@ export class CameraHelper {
      */
     static finalizeClippingPlanes(camera: THREE.PerspectiveCamera, modelGroup : THREE.Group) {
 
-        if ((camera.near === Camera.DefaultNearClippingPlane) && (camera.far === Camera.DefaultFarClippingPlane))
-            CameraHelper.boundClippingPlanes(camera, modelGroup);
+        let setNear = (camera.near === Camera.DefaultNearClippingPlane);
+        let setFar  = (camera.far === Camera.DefaultFarClippingPlane);
+
+        CameraHelper.boundClippingPlanes(camera, modelGroup, setNear, setFar);
     }
 
 //#endregion
