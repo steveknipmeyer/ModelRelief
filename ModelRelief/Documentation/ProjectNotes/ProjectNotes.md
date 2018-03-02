@@ -65,7 +65,6 @@ When the view camera is interactively changed, it should invalidate the Standard
 
 ##### FE UI
 
-
 Add generate method to GeneratedFileModel.  
 
 Can Hyper support ANSI sequences?
@@ -74,7 +73,7 @@ How does EF and AutoMapper handle object graphs (with populated navigation prope
 
 What controls are (ultimately) present in Composer?
  - Model: models/?project=id
- - Mesh: meshes/?project=Id & model3d = model3dId
+ - Mesh: meshes/?projectId=activeProjectId & model3dId=activeModel3dId
 
 ##### FE Model Structure
      

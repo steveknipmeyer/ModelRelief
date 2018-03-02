@@ -9,27 +9,30 @@ import * as THREE  from 'three'
 import * as dat    from 'dat-gui'
 import * as Dto    from "DtoModels";
 
-import {assert}                             from 'chai';
-import {Camera}                             from "Camera"
-import {CameraHelper}                       from "CameraHelper"
-import {ComposerView}                       from "ComposerView"
-import {DepthBuffer}                        from "DepthBuffer"
-import {DepthBufferFactory}                 from "DepthBufferFactory"
-import {EventManager, EventType, MREvent}   from 'EventManager'
-import {ElementAttributes, ElementIds}      from "Html"
-import {ContentType, HttpLibrary, 
-        MethodType, ServerEndPoints}        from "Http"
-import {StandardView}                       from "ICamera"
-import {DepthBufferFormat}                  from 'IDepthBuffer'
-import {MeshFormat}                         from 'IMesh'
-import {ILogger, ConsoleLogger}             from 'Logger'
-import {Graphics}                           from "Graphics"
-import {Mesh}                               from "Mesh"
-import {MeshTransform}                      from 'MeshTransform'
-import {ModelViewer}                        from "ModelViewer"
-import {OBJExporter}                        from "OBJExporter"
-import {Services}                           from 'Services'
-import {UnitTests}                          from 'UnitTests';
+import { assert }                             from 'chai';
+import { Camera }                             from "Camera"
+import { CameraHelper }                       from "CameraHelper"
+import { ComposerView }                       from "ComposerView"
+import { DepthBuffer }                        from "DepthBuffer"
+import { DepthBufferFactory }                 from "DepthBufferFactory"
+import { EventManager, EventType, MREvent }   from 'EventManager'
+import { ElementAttributes, ElementIds }      from "Html"
+import { ContentType, HttpLibrary, 
+         MethodType, ServerEndPoints }        from "Http"
+import { StandardView }                       from "ICamera"
+import { DepthBufferFormat }                  from 'IDepthBuffer'
+import { MeshFormat }                         from 'IMesh'
+import { ILogger, ConsoleLogger }             from 'Logger'
+import { Graphics }                           from "Graphics"
+import { Mesh }                               from "Mesh"
+import { MeshTransform }                      from 'MeshTransform'
+import { MeshViewer }                         from "MeshViewer"
+import { Model3d }                            from "Model3d"
+import { ModelViewer }                        from "ModelViewer"
+import { OBJExporter }                        from "OBJExporter"
+import { Services }                           from 'Services'
+import { UnitTests }                          from 'UnitTests';
+import {ModelView} from 'Views/ModelView';
 
 /**
  * @description ComposerViewSettings
@@ -62,8 +65,13 @@ class ComposerViewSettings {
  */
 export class ComposerController {
 
+    static DefaultReliefDimensions : number  = 512;             // relief dimensions
+
     _composerView         : ComposerView;                       // application view
     _composerViewSettings : ComposerViewSettings;               // UI settings
+
+    _reliefWidthPixels  : number;                               // relief width
+    _reliefHeightPixels : number;                               // relief height 
 
     _initialMeshGeneration: boolean = true;
 
@@ -78,6 +86,73 @@ export class ComposerController {
         this.initialize();
     }
 
+//#region Properties
+
+    /**
+     * @description Active ModelViewer.
+     * @readonly
+     * @type {ModelViewer}
+     */
+    get modelViewer() : ModelViewer {
+        return this._composerView._modelView.modelViewer;
+    }
+
+    /**
+     * @description Active MeshViewer.
+     * @readonly
+     * @type {MeshViewer}
+     */
+    get meshViewer() : MeshViewer {
+        return this._composerView._meshView.meshViewer;
+    }
+
+    /**
+     * @description Active Model3d.
+     * @readonly
+     * @type {Model3d}
+     */
+    get activeModel3d() : Model3d {
+        return this._composerView.mesh.depthBuffer.model3d;
+    }
+
+    /**
+     * @description Active Mesh.
+     * @readonly
+     * @type {Mesh}
+     */
+    get activeMesh() : Mesh {
+        return this._composerView.mesh;
+    }
+
+    /**
+     * @description Active MeshTransform.
+     * @readonly
+     * @type {MeshTransform}
+     */
+    get activeMeshTransform() :MeshTransform {
+        return this._composerView.mesh.meshTransform;
+    }
+
+    /**
+     * @description Active DepthBuffer.
+     * @readonly
+     * @type {DepthBuffer}
+     */
+    get activeDepthBuffer() :DepthBuffer {
+        return this._composerView.mesh.depthBuffer;
+    }
+
+    /**
+     * @description Active Camera.
+     * @readonly
+     * @type {Camera}
+     */
+    get activeDepthBufferCamera() : Camera {
+        return this._composerView.mesh.depthBuffer.camera;
+    }
+
+//#endregion
+
 //#region Event Handlers
     /**
      * @description Event handler for new model.
@@ -87,12 +162,12 @@ export class ComposerController {
     onNewModel(event: MREvent, modelGroup: THREE.Group) {
 
         // model camera = depth buffer camera (default clipping planes)
-        let modelViewCamera = this._composerView._mesh.depthBuffer.camera.viewCamera.clone();
+        let modelViewCamera = this.activeDepthBufferCamera.viewCamera.clone();
         modelViewCamera.near = Camera.DefaultNearClippingPlane;
         modelViewCamera.far  = Camera.DefaultFarClippingPlane;
-        this._composerView._modelView.modelViewer.camera = modelViewCamera;
+        this.modelViewer.camera = modelViewCamera;
 
-        this._composerView._meshView.meshViewer.setCameraToStandardView(StandardView.Top);
+        this.meshViewer.setCameraToStandardView(StandardView.Top);
     }
 
     /**
@@ -101,15 +176,11 @@ export class ComposerController {
      */
     async generateReliefAsync() : Promise<void> { 
 
-        // overall dimensions
-        let reliefWidthPixels  = 512;    
-        let reliefHeightPixels = reliefWidthPixels / this._composerView.modelView.modelViewer.aspectRatio;
-       
         // Camera
         let cameraModel: Dto.Camera = await this.updateCameraAsync();
         
         // DepthBufffer
-        let depthBufferModel: Dto.DepthBuffer = await this.updateDepthBufferAsync(cameraModel, reliefWidthPixels, reliefHeightPixels);
+        let depthBufferModel: Dto.DepthBuffer = await this.updateDepthBufferAsync();
 
         // MeshTransform
         let meshTransformModel: Dto.MeshTransform = await this.updateMeshTransformAsync();
@@ -121,9 +192,9 @@ export class ComposerController {
         let mesh = await Mesh.fromDtoModelAsync(meshModel);
         let meshGraphics = await mesh.constructGraphicssAsync();
 
-        this._composerView._meshView.meshViewer.setModelGroup(meshGraphics);
+        this.meshViewer.setModelGroup(meshGraphics);
         if (this._initialMeshGeneration) {
-            this._composerView._meshView.meshViewer.fitView();
+            this.meshViewer.fitView();
             this._initialMeshGeneration = false;
         }
     }
@@ -134,39 +205,33 @@ export class ComposerController {
      */
     async updateCameraAsync(): Promise<Dto.Camera> {
 
-        let depthBufferCamera : Camera = this._composerView._mesh.depthBuffer.camera;
-
         // copy view camera so we can optimize clipping planes
-        let modelViewCameraClone = this._composerView.modelView.modelViewer.camera.clone(true);
-        CameraHelper.finalizeClippingPlanes(modelViewCameraClone, this._composerView.modelView.modelViewer.modelGroup);
-        depthBufferCamera.viewCamera = modelViewCameraClone;
+        let modelViewCameraClone = this.modelViewer.camera.clone(true);
+        CameraHelper.finalizeClippingPlanes(modelViewCameraClone, this.modelViewer.modelGroup);
+
+        this.activeDepthBufferCamera.viewCamera = modelViewCameraClone;
 
         // update
-        let depthBufferCameraModel : Dto.Camera = await depthBufferCamera.toDtoModel().putAsync();
+        let depthBufferCameraModel : Dto.Camera = await this.activeDepthBufferCamera.toDtoModel().putAsync();
 
         return depthBufferCameraModel; 
     }        
     
     /**
      * @description Updates the DepthBuffer.
-     * @param {Dto.Camera} camera Perspective camera.
-     * @param {number} widthPixels Width of buffer.
-     * @param {number} heightPixels Hight of buffer.
      * @returns {Promise<Dto.DepthBuffer>} 
      */
-    async updateDepthBufferAsync(camera : Dto.Camera, widthPixels: number, heightPixels: number): Promise<Dto.DepthBuffer> {
+    async updateDepthBufferAsync(): Promise<Dto.DepthBuffer> {
 
         // generate new DB 
-        let depthBufferCamera = await Camera.fromDtoModelAsync(camera);
-        let factory = new DepthBufferFactory({ width: widthPixels, height: heightPixels, modelGroup: this._composerView.modelView.modelViewer.modelGroup, camera: depthBufferCamera, addCanvasToDOM: false });
+        let factory = new DepthBufferFactory({ width: this._reliefWidthPixels, height: this._reliefHeightPixels, modelGroup: this.modelViewer.modelGroup, camera: this.activeDepthBufferCamera, addCanvasToDOM: false });
         let factoryDepthBuffer = await factory.createDepthBufferAsync();
 
         // metadata: no change to Camera or Model Ids
-        let depthBuffer = this._composerView._mesh.depthBuffer;
-        depthBuffer.width  = widthPixels;
-        depthBuffer.height = heightPixels;
-        let depthBufferModel : Dto.DepthBuffer = await depthBuffer.toDtoModel();
-        depthBufferModel = await depthBufferModel.putAsync();
+        this.activeDepthBuffer.width  = this._reliefWidthPixels;
+        this.activeDepthBuffer.height = this._reliefHeightPixels;
+
+        let depthBufferModel : Dto.DepthBuffer = await this.activeDepthBuffer.toDtoModel().putAsync();
 
         // file
         depthBufferModel = await depthBufferModel.postFileAsync(factoryDepthBuffer.depths);
@@ -181,9 +246,9 @@ export class ComposerController {
     async updateMeshTransformAsync(): Promise<Dto.MeshTransform> {
 
         let meshTransform = this._composerViewSettings.meshTransform;
-        var updatedModel = await meshTransform.toDtoModel().putAsync();
+        var updatedMesHTransform = await meshTransform.toDtoModel().putAsync();
 
-        return updatedModel;
+        return updatedMesHTransform;
     }        
 
     /**
@@ -192,10 +257,10 @@ export class ComposerController {
      */
     async updateMeshAsync(): Promise<Dto.Mesh> {
 
-        let mesh = this._composerView._mesh;
+        let mesh = this._composerView.mesh;
         mesh.fileIsSynchronized = true;
 
-        let meshModel = this._composerView._mesh.toDtoModel();
+        let meshModel = this._composerView.mesh.toDtoModel();
         let updatedMesh = await meshModel.putAsync();
 
         return updatedMesh;
@@ -231,6 +296,10 @@ export class ComposerController {
 
         this._composerView._modelView.modelViewer.eventManager.addEventListener(EventType.NewModel, this.onNewModel.bind(this));
 
+        // overall dimensions
+        this._reliefWidthPixels  = ComposerController.DefaultReliefDimensions;    
+        this._reliefHeightPixels = this._reliefWidthPixels / this._composerView.modelView.modelViewer.aspectRatio;
+
         this.initializeUIControls();
     }
     
@@ -241,7 +310,7 @@ export class ComposerController {
 
         let scope = this;
 
-        let meshTransform = this._composerView._mesh.meshTransform;
+        let meshTransform = this._composerView.mesh.meshTransform;
         this._composerViewSettings = new ComposerViewSettings(meshTransform, this.generateReliefAsync.bind(this), this.saveRelief.bind(this));
 
         // Init dat.gui and controls for the UI

@@ -34,8 +34,9 @@ declare var composerMeshModel: Dto.Mesh;
  */
 export class ComposerView {
 
+    mesh                        : Mesh;
+    
     _containerId                : string;
-    _mesh                       : Mesh;
 
     _meshView                   : MeshView;
     _modelView                  : ModelView;
@@ -128,13 +129,13 @@ export class ComposerView {
         // initialize context
         this.initializeMeshModel().then((mesh) => {
 
-            this._mesh = mesh;
+            this.mesh = mesh;
 
             // Mesh View
-            this._meshView = new MeshView(ElementIds.MeshCanvas, this._mesh);
+            this._meshView = new MeshView(ElementIds.MeshCanvas, this.mesh);
 
             // Model View
-            this._modelView = new ModelView(ElementIds.ModelCanvas, this._mesh.depthBuffer.model3d); 
+            this._modelView = new ModelView(ElementIds.ModelCanvas, this.mesh.depthBuffer.model3d); 
 
             // Composer Controller 
             this._composerController = new ComposerController(this);
