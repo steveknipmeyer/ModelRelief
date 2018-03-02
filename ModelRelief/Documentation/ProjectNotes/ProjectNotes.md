@@ -65,7 +65,7 @@ When the view camera is interactively changed, it should invalidate the Standard
 
 ##### FE UI
 
-Add generate method to GeneratedFileModel.  
+A default relief sizze of 1024 leads to a Chrome exception.
 
 Can Hyper support ANSI sequences?
 

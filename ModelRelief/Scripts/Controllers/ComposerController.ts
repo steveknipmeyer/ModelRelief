@@ -20,19 +20,12 @@ import { ElementAttributes, ElementIds }      from "Html"
 import { ContentType, HttpLibrary, 
          MethodType, ServerEndPoints }        from "Http"
 import { StandardView }                       from "ICamera"
-import { DepthBufferFormat }                  from 'IDepthBuffer'
-import { MeshFormat }                         from 'IMesh'
-import { ILogger, ConsoleLogger }             from 'Logger'
-import { Graphics }                           from "Graphics"
 import { Mesh }                               from "Mesh"
 import { MeshTransform }                      from 'MeshTransform'
 import { MeshViewer }                         from "MeshViewer"
 import { Model3d }                            from "Model3d"
 import { ModelViewer }                        from "ModelViewer"
-import { OBJExporter }                        from "OBJExporter"
-import { Services }                           from 'Services'
 import { UnitTests }                          from 'UnitTests';
-import {ModelView} from 'Views/ModelView';
 
 /**
  * @description ComposerViewSettings
@@ -165,6 +158,7 @@ export class ComposerController {
         let modelViewCamera = this.activeDepthBufferCamera.viewCamera.clone();
         modelViewCamera.near = Camera.DefaultNearClippingPlane;
         modelViewCamera.far  = Camera.DefaultFarClippingPlane;
+        modelViewCamera.updateProjectionMatrix();
         this.modelViewer.camera = modelViewCamera;
 
         this.meshViewer.setCameraToStandardView(StandardView.Top);
@@ -189,8 +183,7 @@ export class ComposerController {
         let meshModel: Dto.Mesh = await this.updateMeshAsync();
 
         // Mesh graphics
-        let mesh = await Mesh.fromDtoModelAsync(meshModel);
-        let meshGraphics = await mesh.constructGraphicssAsync();
+        let meshGraphics = await this.activeMesh.constructGraphicssAsync();
 
         this.meshViewer.setModelGroup(meshGraphics);
         if (this._initialMeshGeneration) {
@@ -208,7 +201,6 @@ export class ComposerController {
         // copy view camera so we can optimize clipping planes
         let modelViewCameraClone = this.modelViewer.camera.clone(true);
         CameraHelper.finalizeClippingPlanes(modelViewCameraClone, this.modelViewer.modelGroup);
-
         this.activeDepthBufferCamera.viewCamera = modelViewCameraClone;
 
         // update
@@ -223,14 +215,13 @@ export class ComposerController {
      */
     async updateDepthBufferAsync(): Promise<Dto.DepthBuffer> {
 
-        // generate new DB 
+        // generate new DepthBuffer from active Camera
         let factory = new DepthBufferFactory({ width: this._reliefWidthPixels, height: this._reliefHeightPixels, modelGroup: this.modelViewer.modelGroup, camera: this.activeDepthBufferCamera, addCanvasToDOM: false });
         let factoryDepthBuffer = await factory.createDepthBufferAsync();
 
-        // metadata: no change to Camera or Model Ids
+        // metadata
         this.activeDepthBuffer.width  = this._reliefWidthPixels;
         this.activeDepthBuffer.height = this._reliefHeightPixels;
-
         let depthBufferModel : Dto.DepthBuffer = await this.activeDepthBuffer.toDtoModel().putAsync();
 
         // file
@@ -245,10 +236,9 @@ export class ComposerController {
      */
     async updateMeshTransformAsync(): Promise<Dto.MeshTransform> {
 
-        let meshTransform = this._composerViewSettings.meshTransform;
-        var updatedMesHTransform = await meshTransform.toDtoModel().putAsync();
+        let updatedMeshTransform = await this.activeMeshTransform.toDtoModel().putAsync();
 
-        return updatedMesHTransform;
+        return updatedMeshTransform;
     }        
 
     /**
@@ -257,13 +247,11 @@ export class ComposerController {
      */
     async updateMeshAsync(): Promise<Dto.Mesh> {
 
-        let mesh = this._composerView.mesh;
-        mesh.fileIsSynchronized = true;
+        this.activeMesh.fileIsSynchronized = true;
 
-        let meshModel = this._composerView.mesh.toDtoModel();
-        let updatedMesh = await meshModel.putAsync();
+        let updateMeshModel = this.activeMesh.toDtoModel().putAsync();
 
-        return updatedMesh;
+        return updateMeshModel;
     }        
         
     /**
@@ -277,13 +265,13 @@ export class ComposerController {
         // WIP: Randomly generated cameras do not rountrip the matrix property. However, cameras created and manipulated through views work fine.
         // UnitTests.cameraRoundTrip();
 
-        let camera = new Camera({}, this._composerView.modelView._modelViewer.camera);
+        let camera = new Camera({}, this.modelViewer.camera);
         let cameraModel = camera.toDtoModel();
         Camera.fromDtoModelAsync(cameraModel).then((cameraRoundtrip) => {
 
             UnitTests.comparePerspectiveCameras(camera.viewCamera, cameraRoundtrip.viewCamera);
 
-            this._composerView.modelView._modelViewer.camera = cameraRoundtrip.viewCamera;
+            this.modelViewer.camera = cameraRoundtrip.viewCamera;
         });
     }
 
@@ -294,11 +282,11 @@ export class ComposerController {
      */
     initialize() {
 
-        this._composerView._modelView.modelViewer.eventManager.addEventListener(EventType.NewModel, this.onNewModel.bind(this));
+        this.modelViewer.eventManager.addEventListener(EventType.NewModel, this.onNewModel.bind(this));
 
         // overall dimensions
         this._reliefWidthPixels  = ComposerController.DefaultReliefDimensions;    
-        this._reliefHeightPixels = this._reliefWidthPixels / this._composerView.modelView.modelViewer.aspectRatio;
+        this._reliefHeightPixels = this._reliefWidthPixels / this.modelViewer.aspectRatio;
 
         this.initializeUIControls();
     }
@@ -310,8 +298,7 @@ export class ComposerController {
 
         let scope = this;
 
-        let meshTransform = this._composerView.mesh.meshTransform;
-        this._composerViewSettings = new ComposerViewSettings(meshTransform, this.generateReliefAsync.bind(this), this.saveRelief.bind(this));
+        this._composerViewSettings = new ComposerViewSettings(this.activeMeshTransform, this.generateReliefAsync.bind(this), this.saveRelief.bind(this));
 
         // Init dat.gui and controls for the UI
         let gui = new dat.GUI({
