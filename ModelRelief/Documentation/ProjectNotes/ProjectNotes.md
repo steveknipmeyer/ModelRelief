@@ -26,7 +26,6 @@
 #####  Gamma
 
 #####  Lambda
-- [ ] Replace keyboard.  
 - [ ] Add Python path.  
 - [ ] Install Hyper terminal.  
 - [ ] Add ModelRelief\Tools to path.  
@@ -66,8 +65,6 @@ When the view camera is interactively changed, it should invalidate the Standard
 ##### FE UI
 
 A default relief sizze of 1024 leads to a Chrome exception.
-
-Can Hyper support ANSI sequences?
 
 How does EF and AutoMapper handle object graphs (with populated navigation properties) during updates?
 

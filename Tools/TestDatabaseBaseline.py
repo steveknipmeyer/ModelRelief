@@ -12,7 +12,7 @@
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 
 """
-
+import colorama
 import os
 import sys
 
@@ -78,6 +78,8 @@ def main():
     """
         Main entry point.
     """
+    colorama.init()
+    
     database = os.environ["MRDatabaseProvider"] if (len(sys.argv) <= 1) else sys.argv[1]
     baseline = BaseLine(database)
 
@@ -85,6 +87,5 @@ def main():
     baseline.create_baseline_database()
 
 if __name__ == "__main__":
-
     print (sys.version)
     main()

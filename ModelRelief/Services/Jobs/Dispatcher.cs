@@ -9,9 +9,11 @@ namespace ModelRelief.Services.Jobs
     using System;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Database;
     using ModelRelief.Domain;
@@ -108,6 +110,7 @@ namespace ModelRelief.Services.Jobs
                 JsonSerializer serializer = new JsonSerializer()
                 {
                     Formatting = Formatting.Indented,
+                    MaxDepth = 2,
                 };
 
                 //serialize object directly into file stream
@@ -131,7 +134,15 @@ namespace ModelRelief.Services.Jobs
             mesh.FileIsSynchronized = false;
             await DbContext.SaveChangesAsync();
 
-            string jsonFile = SerializeModelToWorkingStorage(mesh);
+            // expand mesh to include Camera
+            var expandedMesh = await DbContext.Set<Mesh>()
+                                .Where(m => (m.Id == mesh.Id) &&
+                                            (m.UserId == mesh.UserId))
+                                .Include(m => m.DepthBuffer)
+                                    .ThenInclude(d => d.Camera)
+                                .SingleOrDefaultAsync();
+
+            string jsonFile = SerializeModelToWorkingStorage(expandedMesh);
             string jsonFileArgument = $"-s \"{jsonFile}\"";
 
             // WIP:  XPlatform: Review the handling of the command line arguments.
