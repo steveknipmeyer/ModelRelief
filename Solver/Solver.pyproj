@@ -13,7 +13,7 @@
     <RootNamespace>Solver</RootNamespace>
     <InterpreterId>Global|ContinuumAnalytics|Anaconda36-64</InterpreterId>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>-s "Test/Mesh10.json" -w "Test/Working/"</CommandLineArguments>
+    <CommandLineArguments>-s "Test/Mesh1.json" -w "Test/Working/"</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

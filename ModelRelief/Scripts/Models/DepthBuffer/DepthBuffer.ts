@@ -313,8 +313,8 @@ export class DepthBuffer extends GeneratedFileModel {
         normalizedDepth = 2.0 * normalizedDepth - 1.0;
         let zLinear = 2.0 * this.camera.viewCamera.near * this.camera.viewCamera.far / (this.camera.viewCamera.far + this.camera.viewCamera.near - normalizedDepth * (this.camera.viewCamera.far - this.camera.viewCamera.near));
 
-        // zLinear is the distance from the camera; reverse to yield height from mesh plane
-        zLinear = -(zLinear - this.camera.viewCamera.far);
+        // zLinear is the distance from the camera; adjust to yield height from mesh plane
+        zLinear = this.camera.viewCamera.far -zLinear;
 
         return zLinear;
     }

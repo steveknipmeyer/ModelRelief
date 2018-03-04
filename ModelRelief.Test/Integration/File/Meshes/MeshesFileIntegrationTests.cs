@@ -11,6 +11,7 @@ namespace ModelRelief.Test.Integration.Meshes
     using System.Threading.Tasks;
     using FluentAssertions;
     using ModelRelief.Test.TestModels;
+    using ModelRelief.Test.TestModels.Cameras;
     using ModelRelief.Test.TestModels.DepthBuffers;
     using ModelRelief.Test.TestModels.Meshes;
     using ModelRelief.Test.TestModels.MeshTransforms;
@@ -44,10 +45,19 @@ namespace ModelRelief.Test.Integration.Meshes
             /// </summary>
             public override async Task ConstructGraph()
             {
+                // Camera
+                var cameraNode = NodeCollection[typeof(Domain.Camera)];
+                var cameraFactory = cameraNode.Factory as ITestModelFactory;
+                cameraNode.Model = await cameraFactory.PostNewModel(ClassFixture);
+
                 // DepthBuffer
                 var depthBufferNode = NodeCollection[typeof(Domain.DepthBuffer)];
                 var depthBufferFactory = depthBufferNode.Factory as ITestFileModelFactory;
-                depthBufferNode.Model = await depthBufferFactory.PostNewModel(ClassFixture);
+
+                depthBufferNode.Model = depthBufferFactory.ConstructValidModel();
+                var depthBuffer = depthBufferNode.Model as Dto.DepthBuffer;
+                depthBuffer.CameraId = cameraNode.Model.Id;
+                depthBufferNode.Model = await depthBufferFactory.PostNewModel(ClassFixture, depthBuffer);
                 depthBufferNode.Model = await depthBufferFactory.PostNewFile(ClassFixture, depthBufferNode.Model.Id, "DepthBuffer.raw");
 
                 // MeshTransform
@@ -89,6 +99,7 @@ namespace ModelRelief.Test.Integration.Meshes
                 new MeshTestFileModelFactory(),
                 new DepthBufferTestFileModelFactory(),
                 new MeshTransformTestModelFactory(),
+                new CameraTestModelFactory(),
             });
             await dependencyGraph.ConstructGraph();
 
@@ -179,7 +190,7 @@ namespace ModelRelief.Test.Integration.Meshes
                 await dependencyGraph.Rollback();
             }
         }
-
+        #if false
         /// <summary>
         /// Verifies that a GenerateFileRequest sets FileIsSynchronized.
         /// </summary>
@@ -229,6 +240,7 @@ namespace ModelRelief.Test.Integration.Meshes
                 await dependencyGraph.Rollback();
             }
         }
+        #endif
         #endregion
     }
 }

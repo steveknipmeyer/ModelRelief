@@ -28,6 +28,7 @@ class DepthBuffer:
         self.settings = settings
         self.path = os.path.abspath(settings['FileName'])
         self.format = settings['Format']
+        self.camera = settings['Camera']
 
     @property
     def name(self):
@@ -35,6 +36,52 @@ class DepthBuffer:
             Returns the base name of the DepthBuffer.
         """
         return os.path.basename(self.path)
+
+    @property
+    def near(self):
+        """
+            Returns the near plane of the camera.
+        """
+        return self.camera['Near']
+    
+    @property
+    def far(self):
+        """
+            Returns the far plane of the camera.
+        """
+        return self.camera['Far']
+
+    def normalized_to_model_depth(self, normalized):
+        """
+            Convert a normalized depth [0,1] to depth in model units.
+            https://stackoverflow.com/questions/6652253/getting-the-true-z-value-from-the-depth-buffer
+        """
+        normalized = 2.0 * normalized - 1.0
+        
+        z_linear = (2.0 * self.near * self.far) / (self.far + self.near - (normalized * (self.far - self.near)))
+
+        # z_linear is the distance from the camera; adjust to yield height from mesh plane
+        z_linear = self.far - z_linear
+        
+        return z_linear;
+
+    def scale_model_depth(self, normalized, scale):
+        """
+            Scales the model depth of a normalized depth value.
+            https://stackoverflow.com/questions/6652253/getting-the-true-z-value-from-the-depth-buffer
+        """
+        # distance from mesh plane
+        z = self.normalized_to_model_depth(normalized)
+        # scaled distance from mesh plane
+        z = scale * z
+
+        # distance from camera
+        z = self.far - z
+
+        scaled_normalized = (self.far + self.near - 2.0 * self.near * self.far / z) / (self.far - self.near)
+        scaled_normalized = (scaled_normalized + 1.0) / 2.0;
+
+        return scaled_normalized
 
     def read__binary(self, path):
         """
@@ -96,10 +143,18 @@ class DepthBuffer:
 
         return byte_values
 
+    def read_floats(self, path):
+        """
+            Reads a file into a list of floats.
+        """
+        with open(file=path, mode='r') as file:
+            float_list = list(map(float, file))
+            return float_list
+
     def write_floats(self, path, floats):
         """
-            Writes a depth buffer from a list of floats.
+            Writes a file from a list of floats.
         """
         with open(file=path, mode='w') as file:
-            for depth in floats:
-                file.write(str(depth) + '\n')
+            for value in floats:
+                file.write(str(value) + '\n')

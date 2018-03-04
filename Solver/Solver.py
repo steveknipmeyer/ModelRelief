@@ -15,7 +15,9 @@
 
 import argparse
 import json
+import math
 import os
+from typing import Tuple
 
 from depthbuffer import DepthBuffer
 from mesh import Mesh
@@ -53,20 +55,58 @@ class Solver:
             Transforms a DepthBuffer by a MeshTransform
         """
 
+        # read raw bytes
         byte_depths = self.depth_buffer.read__binary(self.depth_buffer.path)
         floats = self.depth_buffer.unpack_floats(byte_depths)
-
-        file_path = '%s/%s.%f' % (self.working_folder, self.depth_buffer.name, 1.0)
-        self.depth_buffer.write_floats(file_path, floats)
-
-        scaled_floats = [depth * self.mesh_transform.scale for depth in floats]
-
+        
+        # convert to floats; write temporary file of original floats
+        unscaled_path = '%s/%s.floats.%f' % (self.working_folder, self.depth_buffer.name, 1.0)
+        self.depth_buffer.write_floats(unscaled_path, floats)
+        
+        # transform 
         scale = self.mesh_transform.scale
-        file_path = '%s/%s.%f' % (self.working_folder, self.depth_buffer.name, scale)
-        self.depth_buffer.write_floats(file_path, scaled_floats)
-
+        # scaled_floats = [depth * scale for depth in floats]
+        scaled_floats = [self.depth_buffer.scale_model_depth(depth, scale) for depth in floats]
+        
+        # write transformed floats
+        scaled_path = '%s/%s.floatsPrime.%f' % (self.working_folder, self.depth_buffer.name, scale)
+        self.depth_buffer.write_floats(scaled_path, scaled_floats)
+        
+        # write final raw bytes
         file_path = '%s/%s' % (self.working_folder, self.mesh.name)
         self.depth_buffer.write_binary(file_path, self.depth_buffer.pack_floats(scaled_floats))
+
+        return (unscaled_path, scaled_path)
+
+    def verify_transform(self, files : Tuple[str, str], scale : float) -> None:
+        """
+            Compares the baseline float file with the scaled float file.
+            
+            Parameters:
+            ----------
+            files : tuple
+                A tuple of the original, unscaled float file and the scaled float file.
+            scale : float
+                The scale factor applied to the depths.
+        """
+
+        unscaled_path, scaled_path = files
+        print ("Unscaled : %s" % unscaled_path)
+        print ("Scaled : %s" % scaled_path)
+
+        unscaled = self.depth_buffer.read_floats(unscaled_path)
+        scaled   = self.depth_buffer.read_floats(scaled_path)
+         
+        tolerance = abs_tol=1e-6
+        for index in range(0, len(unscaled)):
+
+            unscaled_value = self.depth_buffer.normalized_to_model_depth(unscaled[index])
+            scaled_value   = self.depth_buffer.normalized_to_model_depth(scaled[index])
+            equal = math.isclose(unscaled_value * scale, scaled_value, abs_tol=tolerance)
+            if not equal:
+                print ("Values differ: %f != %f at index %d" % (unscaled_value, scaled_value, index))
+
+        noop = 0
 
 def main():
     """
@@ -82,7 +122,8 @@ def main():
     arguments = options_parser.parse_args()
 
     solver = Solver(arguments.settings, arguments.working)
-    solver.transform_buffer()
+    float_files = solver.transform_buffer()
+    solver.verify_transform(float_files, solver.mesh_transform.scale)
 
 if __name__ == '__main__':
     main()

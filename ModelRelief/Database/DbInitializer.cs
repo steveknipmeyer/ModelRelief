@@ -342,7 +342,7 @@ namespace ModelRelief.Database
                     ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
                     UpX = 0.0, UpY = 1.0, UpZ = 0.0,
 
-                    User = _user, Project = FindByName<Project>("ModelRelief"),
+                    User = _user, Project = FindByName<Project>("Architecture"),
                 },
 
                 new Camera
@@ -357,7 +357,7 @@ namespace ModelRelief.Database
                     ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
                     UpX = 0.0, UpY = 1.0, UpZ = 0.0,
 
-                    User = _user, Project = FindByName<Project>("ModelRelief"),
+                    User = _user, Project = FindByName<Project>("Jewelry"),
                 },
             };
 
@@ -385,7 +385,7 @@ namespace ModelRelief.Database
                 new Model3d
                 {
                     Name = "armadillo.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ,
-                    User = _user, Project = FindByName<Project>("ModelRelief"), Camera = FindByName<Camera>("Isometric Camera"),
+                    User = _user, Project = FindByName<Project>("Jewelry"), Camera = FindByName<Camera>("Isometric Camera"),
                 },
                 new Model3d
                 {
@@ -435,6 +435,30 @@ namespace ModelRelief.Database
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     Tau = 0.75, SigmaGaussianBlur = 0.5, SigmaGaussianSmooth = 0.25, LambdaLinearScaling = 1.0,
                     User = _user, Project = FindByName<Project>("Architecture"),
+                },
+
+                new MeshTransform
+                {
+                    Name = "Lucy", Description = "Lucy transform",
+                    Width = 100.0, Height = 100.0, Depth = 1.0,
+                    Tau = 1.0, SigmaGaussianBlur = 1.0, SigmaGaussianSmooth = 1.0, LambdaLinearScaling = 1.0,
+                    User = _user, Project = FindByName<Project>("ModelRelief"),
+                },
+
+                new MeshTransform
+                {
+                    Name = "Bunny", Description = "Bunny transform",
+                    Width = 100.0, Height = 100.0, Depth = 1.0,
+                    Tau = 1.0, SigmaGaussianBlur = 1.0, SigmaGaussianSmooth = 1.0, LambdaLinearScaling = 1.0,
+                    User = _user, Project = FindByName<Project>("Architecture"),
+                },
+
+                new MeshTransform
+                {
+                    Name = "Armadillo", Description = "Armadillo transform",
+                    Width = 100.0, Height = 100.0, Depth = 1.0,
+                    Tau = 1.0, SigmaGaussianBlur = 1.0, SigmaGaussianSmooth = 1.0, LambdaLinearScaling = 1.0,
+                    User = _user, Project = FindByName<Project>("Jewelry"),
                 },
             };
 
@@ -499,18 +523,18 @@ namespace ModelRelief.Database
             {
                 new Mesh
                 {
-                    Name = "lucy.raw", Description = "Isometric", Format = MeshFormat.RAW, Camera = FindByName<Camera>("Isometric Camera"), DepthBuffer = FindByName<DepthBuffer>("lucy.raw"), MeshTransform =  FindByName<MeshTransform>("Identity"),
+                    Name = "lucy.raw", Description = "Isometric", Format = MeshFormat.RAW, Camera = FindByName<Camera>("Isometric Camera"), DepthBuffer = FindByName<DepthBuffer>("lucy.raw"), MeshTransform =  FindByName<MeshTransform>("Lucy"),
                     User = _user, Project = FindByName<Project>("ModelRelief"),
                 },
                 new Mesh
                 {
-                    Name = "bunny.raw", Description = "Top", Format = MeshFormat.RAW, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("bunny.raw"), MeshTransform =  FindByName<MeshTransform>("Identity"),
+                    Name = "bunny.raw", Description = "Top", Format = MeshFormat.RAW, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("bunny.raw"), MeshTransform =  FindByName<MeshTransform>("Bunny"),
                     User = _user, Project = FindByName<Project>("Architecture"),
                 },
                 new Mesh
                 {
-                    Name = "armadillo.raw", Description = "Top", Format = MeshFormat.RAW, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("armadillo.raw"), MeshTransform = FindByName<MeshTransform>("Pendant"),
-                    User = _user, Project = FindByName<Project>("Architecture"),
+                    Name = "armadillo.raw", Description = "Top", Format = MeshFormat.RAW, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("armadillo.raw"), MeshTransform = FindByName<MeshTransform>("Armadillo"),
+                    User = _user, Project = FindByName<Project>("Jewelry"),
                 },
             };
 
