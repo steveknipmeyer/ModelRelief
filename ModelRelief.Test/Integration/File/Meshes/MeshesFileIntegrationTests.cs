@@ -48,13 +48,20 @@ namespace ModelRelief.Test.Integration.Meshes
                 // Camera
                 var cameraNode = NodeCollection[typeof(Domain.Camera)];
                 var cameraFactory = cameraNode.Factory as ITestModelFactory;
-                cameraNode.Model = await cameraFactory.PostNewModel(ClassFixture);
+                cameraNode.Model = cameraFactory.ConstructValidModel();
+
+                // N.B. Camera properties must match the Lucy camera properties set in DbInitializer.
+                //      The reference scaled mesh compared in FileRequest_MeshGenerateScalesDepthBufferByLambdaLinearScaling() is based on those properties.
+                var camera = cameraNode.Model as Dto.Camera;
+                camera.Near = 238.39;
+                camera.Far  = 292.00;
+                cameraNode.Model = await cameraFactory.PostNewModel(ClassFixture, camera);
 
                 // DepthBuffer
                 var depthBufferNode = NodeCollection[typeof(Domain.DepthBuffer)];
                 var depthBufferFactory = depthBufferNode.Factory as ITestFileModelFactory;
-
                 depthBufferNode.Model = depthBufferFactory.ConstructValidModel();
+
                 var depthBuffer = depthBufferNode.Model as Dto.DepthBuffer;
                 depthBuffer.CameraId = cameraNode.Model.Id;
                 depthBufferNode.Model = await depthBufferFactory.PostNewModel(ClassFixture, depthBuffer);
@@ -190,7 +197,7 @@ namespace ModelRelief.Test.Integration.Meshes
                 await dependencyGraph.Rollback();
             }
         }
-        #if false
+        #if true
         /// <summary>
         /// Verifies that a GenerateFileRequest sets FileIsSynchronized.
         /// </summary>
@@ -205,18 +212,13 @@ namespace ModelRelief.Test.Integration.Meshes
                 Dto.Mesh meshModel = await InitializeMesh(dependencyGraph, fileIsSynchronized: false);
 
                 // set MeshTransform scale factor
-                var meshTransformNode = dependencyGraph.NodeCollection[typeof(Domain.MeshTransform)];
-                var meshTransformModel = meshTransformNode.Model as Dto.MeshTransform;
+                var meshTransformNode    = dependencyGraph.NodeCollection[typeof(Domain.MeshTransform)];
+                var meshTransformModel   = meshTransformNode.Model as Dto.MeshTransform;
                 var meshTransformFactory = meshTransformNode.Factory as ITestModelFactory;
 
-                var scaleFactor = 5.0;
+                var scaleFactor = 0.5;
                 meshTransformModel.LambdaLinearScaling = scaleFactor;
                 meshTransformModel = await meshTransformFactory.PutModel(ClassFixture, meshTransformModel) as Dto.MeshTransform;
-
-                var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{meshModel.Id}/file");
-                var fileContentResult = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(requestResponse.ContentString);
-                var encodedString = fileContentResult.GetValue("fileContents");
-                var initialByteArray = Convert.FromBase64String(encodedString.ToString());
 
                 // Act
                 // GenerateFile is triggered by the state change of FileIsSynchronized.
@@ -224,15 +226,27 @@ namespace ModelRelief.Test.Integration.Meshes
                 meshModel = await TestModelFactory.PutModel(ClassFixture, meshModel) as Dto.Mesh;
 
                 // Assert
-                requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{meshModel.Id}/file");
-                fileContentResult = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(requestResponse.ContentString);
-                encodedString = fileContentResult.GetValue("fileContents");
+                var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{meshModel.Id}/file");
+                var fileContentResult = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(requestResponse.ContentString);
+                var encodedString = fileContentResult.GetValue("fileContents");
                 var scaledByteArray = Convert.FromBase64String(encodedString.ToString());
 
-                int decimalPlaces = 5;
-                var initialFloat = BitConverter.ToSingle(initialByteArray, 0);
-                var scaledFloat  = BitConverter.ToSingle(scaledByteArray, 0);
-                Assert.Equal(initialFloat * scaleFactor, scaledFloat, decimalPlaces);
+                // compare to reference
+                var referenceScaledByeArray = Utility.ByteArrayFromFile("DepthBuffer.raw.Scale05");
+//              Assert.True(Utility.EqualByteArrays(scaledByteArray, referenceScaledByeArray));
+
+                int numberFloats = referenceScaledByeArray.Length / 4;
+                for (int iFloat = 0; iFloat < numberFloats; iFloat++)
+                {
+                    int floatIndex = iFloat * 4;
+                    var scaledFloat          = BitConverter.ToSingle(scaledByteArray, floatIndex);
+                    var referenceScaledFloat = BitConverter.ToSingle(referenceScaledByeArray, floatIndex);
+
+                    double tolerance = 1.0E-5;
+                    bool equalValues = Math.Abs(scaledFloat - referenceScaledFloat) <= tolerance;
+                    if (!equalValues)
+                        Assert.True(false);
+                }
             }
             finally
             {

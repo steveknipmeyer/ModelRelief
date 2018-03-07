@@ -64,9 +64,6 @@ When the view camera is interactively changed, it should invalidate the Standard
 
 ##### FE UI
 
-FileRequest_MeshGenerateScalesDepthBufferByLambdaLinearScaling
-    The test incorrectly checks for a linear scale of the raw depth buffer value.
-
 A default relief size of 1024 leads to a Chrome exception.
 
 How does EF and AutoMapper handle object graphs (with populated navigation properties) during updates?

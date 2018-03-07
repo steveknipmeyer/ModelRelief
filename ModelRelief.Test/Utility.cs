@@ -31,7 +31,7 @@ namespace ModelRelief.Test
         }
 
         /// <summary>
-        /// Compare two byte arrays for equslity.
+        /// Compare two byte arrays for equality.
         /// http://www.techmikael.com/2009/01/fast-byte-array-comparison-in-c.html
         /// </summary>
         /// <param name="first">First array to compare.</param>
