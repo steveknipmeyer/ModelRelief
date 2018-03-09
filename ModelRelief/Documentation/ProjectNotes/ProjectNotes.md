@@ -66,6 +66,8 @@ When the view camera is interactively changed, it should invalidate the Standard
 
 The DepthBufferFactory canvas should be added to the DepthBufferView in the ComposerController (generateRelief);
     This will allow the DepthBufferFactory to never deal with a persistent DOM element.
+    How should the event handlers be managed?
+    Is it possible to clone the DepthBufferFactory element?
 
 A default relief size of 1024 leads to a Chrome exception.
 

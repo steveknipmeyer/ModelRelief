@@ -216,7 +216,8 @@ export class ComposerController {
     async updateDepthBufferAsync(): Promise<Dto.DepthBuffer> {
 
         // generate new DepthBuffer from active Camera
-        let factory = new DepthBufferFactory({ width: this._reliefWidthPixels, height: this._reliefHeightPixels, modelGroup: this.modelViewer.modelGroup, camera: this.activeDepthBufferCamera});
+        let canvasElement = this._composerView.depthBufferView.depthBufferViewer.canvas;
+        let factory = new DepthBufferFactory({ canvas : canvasElement, width: this._reliefWidthPixels, height: this._reliefHeightPixels, modelGroup: this.modelViewer.modelGroup, camera: this.activeDepthBufferCamera});
         let factoryDepthBuffer = await factory.createDepthBufferAsync();
 
         // metadata

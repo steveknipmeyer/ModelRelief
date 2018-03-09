@@ -32,6 +32,7 @@ import { Tools}                  from 'Tools'
  */
 export interface DepthBufferFactoryParameters {
 
+    canvas           : HTMLCanvasElement,       // Canvas element (any size)
     width            : number,                  // width of DB
     height           : number                   // height of DB        
     modelGroup       : THREE.Group,             // model root
@@ -84,6 +85,7 @@ export class DepthBufferFactory {
 
         let {
             // required
+            canvas,
             width,
             height,
             modelGroup,
@@ -93,6 +95,7 @@ export class DepthBufferFactory {
             logDepthBuffer  = false,
         } = parameters;
 
+        this._canvas          = canvas;
         this._width           = width;
         this._height          = height;
         this._modelGroup      = modelGroup.clone(true);
@@ -144,7 +147,6 @@ export class DepthBufferFactory {
      */
     initializeCanvas() : HTMLCanvasElement {
     
-        this._canvas = <HTMLCanvasElement> document.querySelector(`#${ElementIds.DepthBufferCanvas}`);
         this._canvas.setAttribute('name', Tools.generatePseudoGUID());
         this._canvas.setAttribute('class', DepthBufferFactory.CssClassName);
 
