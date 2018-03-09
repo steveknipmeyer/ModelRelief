@@ -29,7 +29,7 @@ class Solver:
     """
     def __init__(self, settings, working):
         """
-            Iniitalize an instane of the Solver.
+            Iniitalize an instance of the Solver.
             settings : path to JSON settings
         """
         with open(settings) as json_file:
@@ -57,9 +57,10 @@ class Solver:
 
         # read raw bytes
         byte_depths = self.depth_buffer.read__binary(self.depth_buffer.path)
+        # convert to floats
         floats = self.depth_buffer.unpack_floats(byte_depths)
         
-        # convert to floats; write temporary file of original floats
+        # write temporary file of original floats
         unscaled_path = '%s/%s.floats.%f' % (self.working_folder, self.depth_buffer.name, 1.0)
         self.depth_buffer.write_floats(unscaled_path, floats)
         
@@ -102,8 +103,6 @@ class Solver:
 
             unscaled_value = self.depth_buffer.normalized_to_model_depth(unscaled[index])
             scaled_value   = self.depth_buffer.normalized_to_model_depth(scaled[index])
-            if (index % 10000) == 0:
-                print (index) 
 
             equal = math.isclose(unscaled_value * scale, scaled_value, abs_tol=tolerance)
             if not equal:

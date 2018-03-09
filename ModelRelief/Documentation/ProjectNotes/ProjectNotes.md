@@ -64,6 +64,8 @@ When the view camera is interactively changed, it should invalidate the Standard
 
 ##### FE UI
 
+Display a depth_buffer (or float array) as an image using numpy and matplotlib.
+
 A default relief size of 1024 leads to a Chrome exception.
 
 How does EF and AutoMapper handle object graphs (with populated navigation properties) during updates?

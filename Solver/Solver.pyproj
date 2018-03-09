@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>4d128880-4790-41df-8a6b-0d34f9b65e4f</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>solver.py</StartupFile>
+    <StartupFile>viewer.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -14,7 +14,7 @@
     <InterpreterId>Global|ContinuumAnalytics|Anaconda36-64</InterpreterId>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
     <CommandLineArguments>-s "Test/Mesh1.json" -w "Test/Working/"</CommandLineArguments>
-    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
+    <EnableNativeCodeDebugging>True</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -28,6 +28,7 @@
     <Compile Include="mesh.py" />
     <Compile Include="meshtransform.py" />
     <Compile Include="depthbuffer.py" />
+    <Compile Include="viewer.py" />
     <Compile Include="solver.py" />
   </ItemGroup>
   <ItemGroup>
