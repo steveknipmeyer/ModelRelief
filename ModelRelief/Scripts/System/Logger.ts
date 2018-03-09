@@ -48,8 +48,9 @@ export class ConsoleLogger implements ILogger{
      * Construct a general message and add to the log.
      * @param message Message text.
      * @param messageClass Message class.
+     * @param style Optional style.
      */
-    addMessageEntry (message : string, messageClass : MessageClass) : void {
+    addMessageEntry (message : string, messageClass : MessageClass, style? : string) : void {
 
         const prefix = 'MR: ';
         let logMessage = `${prefix}${message}`;
@@ -69,7 +70,8 @@ export class ConsoleLogger implements ILogger{
                 break;
 
             case MessageClass.None:
-                console.log(logMessage);
+                style = style || 'color: #ffffff';
+                console.log('%c ' + logMessage, style);
                 break;
         }
     }
@@ -108,7 +110,7 @@ export class ConsoleLogger implements ILogger{
      */
     addMessage (message : string, style? : string) {
 
-        this.addMessageEntry(message, MessageClass.None);
+        this.addMessageEntry(message, MessageClass.None, style);
     }
 
     /**

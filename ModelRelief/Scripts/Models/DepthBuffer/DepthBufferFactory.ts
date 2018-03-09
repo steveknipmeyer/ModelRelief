@@ -14,9 +14,11 @@ import {DepthBuffer}            from 'DepthBuffer'
 import {Graphics}               from 'Graphics'
 import {ILogger, ConsoleLogger} from 'Logger'
 import {MathLibrary}            from 'Math'
+import {MeshView}               from 'MeshView'
 import {Services}               from 'Services'
 import {StopWatch}              from 'StopWatch'
 import {Tools}                  from 'Tools'
+import {MeshViewer} from 'Viewers/MeshViewer';
 
 /*
   Requirements
@@ -140,15 +142,18 @@ export class DepthBufferFactory {
      * Handle a mouse down event on the canvas.
      */
     onMouseDown(event : JQueryEventObject) : void {
+        // https://www.w3schools.com/colors/colors_names.asp
+        let messageStyle = 'color:fuchsia'
 
         let deviceCoordinates : THREE.Vector2 = Graphics.deviceCoordinatesFromJQEvent(event, $(event.target));
-        this._logger.addInfoMessage(`device = ${deviceCoordinates.x}, ${deviceCoordinates.y}`);
-
+        this._logger.addMessage(`Device = ${deviceCoordinates.x}, ${deviceCoordinates.y}`, messageStyle);
+        
         let decimalPlaces   : number = 2;
         let row             : number = (deviceCoordinates.y + 1) / 2 * this._depthBuffer.height;
         let column          : number = (deviceCoordinates.x + 1) / 2 * this._depthBuffer.width;
-        this._logger.addInfoMessage(`Offset = [${row}, ${column}]`);       
-        this._logger.addInfoMessage(`Depth = ${this._depthBuffer.depth(row, column).toFixed(decimalPlaces)}`);       
+        this._logger.addMessage(`Offset = [${row}, ${column}]`, messageStyle);       
+        this._logger.addMessage(`Depth = ${this._depthBuffer.depth(row, column).toFixed(decimalPlaces)}`, messageStyle);       
+        this._logger.addEmptyLine();
     }
         
     /**
@@ -170,7 +175,7 @@ export class DepthBufferFactory {
 
         // add to DOM?
         if (this._addCanvasToDOM)
-            document.querySelector(`#${DepthBufferFactory.RootContainerId}`).appendChild(this._canvas);
+            document.querySelector(`#${MeshView.RootContainerId}`).appendChild(this._canvas);
 
             let $canvas = $(this._canvas).on('mousedown', this.onMouseDown.bind(this));
         
@@ -354,8 +359,8 @@ export class DepthBufferFactory {
      */
     analyzeTargets ()  {
 
-//      this.analyzeRenderBuffer();
-//      this._depthBuffer.analyze();
+        this.analyzeRenderBuffer();
+        this._depthBuffer.analyze();
     }
 //#endregion
 

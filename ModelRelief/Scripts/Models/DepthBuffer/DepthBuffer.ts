@@ -428,12 +428,12 @@ export class DepthBuffer extends GeneratedFileModel {
      * @description Analyzes properties of a depth buffer.
      */
     analyze () {
-        this._logger.clearLog();
+        // this._logger.clearLog();
 
         let middle = this.width / 2;
         let decimalPlaces = 5;
-        let headerStyle   = "font-family : monospace; font-weight : bold; color : blue; font-size : 18px";
-        let messageStyle  = "font-family : monospace; color : black; font-size : 14px";
+        let headerStyle   = "font-family : monospace; font-weight : bold; color : yellow; font-size : 18px";
+        let messageStyle  = "font-family : monospace; color : white; font-size : 14px";
 
         this._logger.addMessage('Camera Properties', headerStyle);
         this._logger.addMessage(`Near Plane = ${this.camera.viewCamera.near}`, messageStyle);
@@ -453,6 +453,7 @@ export class DepthBuffer extends GeneratedFileModel {
         this._logger.addMessage(`Z Range = ${this.range.toFixed(decimalPlaces)}`, messageStyle);
         this._logger.addMessage(`Minimum = ${this.minimum.toFixed(decimalPlaces)}`, messageStyle);
         this._logger.addMessage(`Maximum = ${this.maximum.toFixed(decimalPlaces)}`, messageStyle);
+        this._logger.addEmptyLine();        
     }
 
     /**

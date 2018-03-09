@@ -98,7 +98,7 @@ class Solver:
         unscaled = self.depth_buffer.read_floats(unscaled_path)
         scaled   = self.depth_buffer.read_floats(scaled_path)
          
-        tolerance = abs_tol=1e-6
+        tolerance = 1e-6
         for index in range(0, len(unscaled)):
 
             unscaled_value = self.depth_buffer.normalized_to_model_depth(unscaled[index])
@@ -107,9 +107,8 @@ class Solver:
             equal = math.isclose(unscaled_value * scale, scaled_value, abs_tol=tolerance)
             if not equal:
                 print ("Values differ: %f != %f at index %d" % (unscaled_value, scaled_value, index))
-
-        noop = 0
-
+        pass
+        
 def main():
     """
         Main entry point.

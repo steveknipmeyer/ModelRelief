@@ -22,6 +22,8 @@ import { Viewer }                             from 'Viewer';
  */
 export class MeshView {
 
+    static RootContainerId     : string = 'meshView';          // root container for viewer and controls
+
     _containerId               : string;
     _meshViewer                : MeshViewer;
     

@@ -96,7 +96,7 @@ export class StopWatch {
         let elapsedTimeMessage : string = eventElapsedTime.toFixed(StopWatch.precision);
         let indentPrefix       : string = this._events[event].indent;
 
-        this._logger.addInfoMessage(`${indentPrefix}${event} : ${elapsedTimeMessage} sec`);
+        this._logger.addMessage(`${indentPrefix}${event} : ${elapsedTimeMessage} sec`);
 
         // remove event from log
         delete this._events[event];

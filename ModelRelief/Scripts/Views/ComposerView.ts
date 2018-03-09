@@ -40,7 +40,6 @@ export class ComposerView {
 
     _meshView                   : MeshView;
     _modelView                  : ModelView;
-    _loader                     : Loader;
 
     _composerController         : ComposerController;
     
@@ -86,15 +85,6 @@ export class ComposerView {
         return this._meshView;
     }
             
-    /**
-     * @description Gets the Loader.
-     * @readonly
-     * @type {string}
-     */
-    get loader(): Loader {
-
-        return this._loader;
-    }          
 //#endregion
 
 //#region Event Handlers
@@ -145,7 +135,8 @@ export class ComposerView {
             this._meshView.meshViewer.loadModelAsync().then(() => {});
 
             // Test Models
-            // this._loader.loadParametricTestModel(this._modelViewer, TestModel.Checkerboard);
+            let loader = new Loader();
+            // loader.loadParametricTestModel(this._modelView.modelViewer, TestModel.Checkerboard);
         });
     }
     
