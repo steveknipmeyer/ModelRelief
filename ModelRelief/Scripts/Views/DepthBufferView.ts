@@ -7,36 +7,30 @@
 
 import * as THREE  from 'three'; 
 import * as dat    from 'dat-gui';
-import * as Dto    from "DtoModels";
 
 import { HtmlLibrary, ElementIds }            from "Html";
-import { FileModel }                          from 'FileModel';
 import { ILogger, ConsoleLogger }             from 'Logger';
-import { ModelViewer }                        from "ModelViewer";
 import { Services }                           from 'Services';
-import { Viewer }                             from "Viewer";
 
 /**
- * @description Represents a UI view of a 3D model.
+ * @description Represents a UI view of a DepthBuffer.
  * @export
- * @class ModelView
+ * @class DepthBufferView
  */
-export class ModelView {
+export class DepthBufferView {
 
-    static RootContainerId      : string = 'modelView';          // root container for viewer and controls
+    static RootContainerId     : string = 'depthBufferView';          // root container for viewer and controls
 
     _containerId                : string;
-    _modelViewer                : ModelViewer;
     
     /**
-     * Creates an instance of ModelView.
+     * Creates an instance of DepthBufferView.
      * @param {string} containerId DOM container Id of view.
-     * @param {FileModel} model Initial model to load.
      */
-    constructor(containerId : string, model : FileModel) {  
+    constructor(containerId : string) {  
 
         this._containerId = containerId;    
-        this.initialize(model);
+        this.initialize();
     } 
 
 //#region Properties
@@ -49,16 +43,6 @@ export class ModelView {
 
         return this._containerId;
     }
-
-    /**
-     * @description Gets the ModelViewer.
-     * @readonly
-     * @type {ModelViewer}
-     */
-    get modelViewer(): ModelViewer { 
-
-        return this._modelViewer;
-    }        
 //#endregion
 
 //#region Event Handlers
@@ -67,14 +51,9 @@ export class ModelView {
 //#region Initialization
     /**
      * @description Performs initialization.
-     * @param {FileModel} model Initial model to load.
      */
-    initialize(model : FileModel) {
-
-        // Model Viewer    
-        this._modelViewer = new ModelViewer('ModelViewer', this.containerId, model);
+    initialize() {
     }
     
 //#endregion
 }
-
