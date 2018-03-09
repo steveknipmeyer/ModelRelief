@@ -10,6 +10,7 @@ import * as dat    from 'dat-gui'
 import * as Dto    from "DtoModels";
 
 import { ComposerController }                 from "ComposerController"
+import { DepthBufferView }                    from "DepthBufferView"
 import { EventType, MREvent, EventManager }   from 'EventManager'
 import { HtmlLibrary, ElementIds }            from "Html"
 import { Loader }                             from 'Loader'
@@ -40,6 +41,7 @@ export class ComposerView {
 
     _meshView                   : MeshView;
     _modelView                  : ModelView;
+    _depthBufferView            : DepthBufferView;
 
     _composerController         : ComposerController;
     
@@ -76,13 +78,23 @@ export class ComposerView {
     }
 
     /**
-     * @description Gets the MeshViewer.
+     * @description Gets the MeshView.
      * @readonly
      * @type {string}
      */
     get meshView(): MeshView {
 
         return this._meshView;
+    }
+
+    /**
+     * @description Gets the DebpthBufferView.
+     * @readonly
+     * @type {string}
+     */
+    get depthBufferView(): DepthBufferView {
+
+        return this._depthBufferView;
     }
             
 //#endregion
@@ -122,10 +134,13 @@ export class ComposerView {
             this.mesh = mesh;
 
             // Mesh View
-            this._meshView = new MeshView(ElementIds.MeshCanvas, this.mesh);
+            this._meshView = new MeshView(ElementIds.MeshView, this.mesh);
 
             // Model View
-            this._modelView = new ModelView(ElementIds.ModelCanvas, this.mesh.depthBuffer.model3d); 
+            this._modelView = new ModelView(ElementIds.ModelView, this.mesh.depthBuffer.model3d); 
+
+            // DepthBuffer View
+            this._depthBufferView = new DepthBufferView(ElementIds.DepthBufferView, this.mesh.depthBuffer); 
 
             // Composer Controller 
             this._composerController = new ComposerController(this);

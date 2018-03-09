@@ -5,12 +5,11 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE  from 'three'; 
 import * as dat    from 'dat-gui';
 
-import { HtmlLibrary, ElementIds }            from "Html";
-import { ILogger, ConsoleLogger }             from 'Logger';
-import { Services }                           from 'Services';
+import { DepthBuffer }                from "DepthBuffer";
+import { DepthBufferViewer }          from "DepthBufferViewer";
+import { HtmlLibrary, ElementIds }    from "Html";
 
 /**
  * @description Represents a UI view of a DepthBuffer.
@@ -19,18 +18,19 @@ import { Services }                           from 'Services';
  */
 export class DepthBufferView {
 
-    static RootContainerId     : string = 'depthBufferView';          // root container for viewer and controls
-
     _containerId                : string;
+    _depthBufferViewer          : DepthBufferViewer;
     
     /**
      * Creates an instance of DepthBufferView.
      * @param {string} containerId DOM container Id of view.
+     * @param {DepthBuffer} depthBuffer The DepthBuffer bound to this view.
      */
-    constructor(containerId : string) {  
+    constructor(containerId : string, depthBuffer : DepthBuffer) {  
 
         this._containerId = containerId;    
-        this.initialize();
+
+        this.initialize(depthBuffer);
     } 
 
 //#region Properties
@@ -43,6 +43,16 @@ export class DepthBufferView {
 
         return this._containerId;
     }
+
+    /**
+     * @description Gets the DepthBufferViewer.
+     * @readonly
+     * @type {DepthBufferViewer}
+     */
+    get depthBufferViewer(): DepthBufferViewer { 
+
+        return this._depthBufferViewer;
+    }        
 //#endregion
 
 //#region Event Handlers
@@ -51,8 +61,12 @@ export class DepthBufferView {
 //#region Initialization
     /**
      * @description Performs initialization.
+     * @param {DepthBuffer} depthBuffer The DepthBuffer bound to this view.
      */
-    initialize() {
+    initialize(depthBuffer : DepthBuffer) {
+
+        // DepthBuffer Viewer    
+        this._depthBufferViewer = new DepthBufferViewer('DepthBufferViewer', ElementIds.DepthBufferCanvas, depthBuffer);
     }
     
 //#endregion

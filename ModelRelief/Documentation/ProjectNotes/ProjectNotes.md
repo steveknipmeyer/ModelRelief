@@ -64,7 +64,8 @@ When the view camera is interactively changed, it should invalidate the Standard
 
 ##### FE UI
 
-Bunny and Armadillo have reveresd Mesh IDs.
+The DepthBufferFactory canvas should be added to the DepthBufferView in the ComposerController (generateRelief);
+    This will allow the DepthBufferFactory to never deal with a persistent DOM element.
 
 A default relief size of 1024 leads to a Chrome exception.
 
@@ -75,10 +76,6 @@ What controls are (ultimately) present in Composer?
  - Mesh: meshes/?projectId=activeProjectId & model3dId=activeModel3dId
 
 ##### FE Model Structure
-     
-    What is the role of <model>.fromDtoModel?   
-        Some initialization cannot be done without involved processing of related members.
-        For example, constructing a DeothBuffer requires the backing file data.
 
     DTO objects are used for DATA TRANSFER to the server, either through web page endpoints or the API.
         So, a web page is not bound to use a DTO object if the page does not use POST/PUT, etc.

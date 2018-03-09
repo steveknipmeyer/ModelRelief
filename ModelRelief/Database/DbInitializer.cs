@@ -447,18 +447,18 @@ namespace ModelRelief.Database
 
                 new MeshTransform
                 {
-                    Name = "Bunny", Description = "Bunny transform",
-                    Width = 100.0, Height = 100.0, Depth = 1.0,
-                    Tau = 1.0, SigmaGaussianBlur = 1.0, SigmaGaussianSmooth = 1.0, LambdaLinearScaling = 1.0,
-                    User = _user, Project = FindByName<Project>("Architecture"),
-                },
-
-                new MeshTransform
-                {
                     Name = "Armadillo", Description = "Armadillo transform",
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     Tau = 1.0, SigmaGaussianBlur = 1.0, SigmaGaussianSmooth = 1.0, LambdaLinearScaling = 1.0,
                     User = _user, Project = FindByName<Project>("Jewelry"),
+                },
+
+                new MeshTransform
+                {
+                    Name = "Bunny", Description = "Bunny transform",
+                    Width = 100.0, Height = 100.0, Depth = 1.0,
+                    Tau = 1.0, SigmaGaussianBlur = 1.0, SigmaGaussianSmooth = 1.0, LambdaLinearScaling = 1.0,
+                    User = _user, Project = FindByName<Project>("Architecture"),
                 },
             };
 
@@ -488,19 +488,19 @@ namespace ModelRelief.Database
                 },
                 new DepthBuffer
                 {
-                    Name = "bunny.raw", Description = "Generated in VRay",
-                    Width = 512, Height = 512,
-                    Format = DepthBufferFormat.RAW,
-                    Model3d = FindByName<Model3d>("bunny.obj"), Camera = FindByName<Camera>("Bunny"),
-                    User = _user, Project = FindByName<Project>("Architecture"),
-                },
-                new DepthBuffer
-                {
                     Name = "armadillo.raw", Description = "Generated in Rhino",
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.RAW,
                     Model3d = FindByName<Model3d>("armadillo.obj"), Camera = FindByName<Camera>("Armadillo"),
                     User = _user, Project = FindByName<Project>("Jewelry"),
+                },
+                new DepthBuffer
+                {
+                    Name = "bunny.raw", Description = "Generated in VRay",
+                    Width = 512, Height = 512,
+                    Format = DepthBufferFormat.RAW,
+                    Model3d = FindByName<Model3d>("bunny.obj"), Camera = FindByName<Camera>("Bunny"),
+                    User = _user, Project = FindByName<Project>("Architecture"),
                 },
             };
 
@@ -528,13 +528,13 @@ namespace ModelRelief.Database
                 },
                 new Mesh
                 {
-                    Name = "bunny.raw", Description = "Top", Format = MeshFormat.RAW, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("bunny.raw"), MeshTransform =  FindByName<MeshTransform>("Bunny"),
-                    User = _user, Project = FindByName<Project>("Architecture"),
+                    Name = "armadillo.raw", Description = "Top", Format = MeshFormat.RAW, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("armadillo.raw"), MeshTransform = FindByName<MeshTransform>("Armadillo"),
+                    User = _user, Project = FindByName<Project>("Jewelry"),
                 },
                 new Mesh
                 {
-                    Name = "armadillo.raw", Description = "Top", Format = MeshFormat.RAW, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("armadillo.raw"), MeshTransform = FindByName<MeshTransform>("Armadillo"),
-                    User = _user, Project = FindByName<Project>("Jewelry"),
+                    Name = "bunny.raw", Description = "Top", Format = MeshFormat.RAW, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("bunny.raw"), MeshTransform =  FindByName<MeshTransform>("Bunny"),
+                    User = _user, Project = FindByName<Project>("Architecture"),
                 },
             };
 

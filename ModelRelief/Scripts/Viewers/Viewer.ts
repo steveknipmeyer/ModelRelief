@@ -5,18 +5,18 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE                                   from 'three';
-import {Camera}                                     from 'Camera';
-import {CameraHelper }                              from 'CameraHelper';
-import {CameraControls, CameraControlsOptions}      from 'CameraControls';
-import {EventManager}                               from 'EventManager';
-import {FileModel}                                  from 'FileModel';
-import {Graphics, ObjectNames}                      from 'Graphics';
-import {StandardView}                               from 'ICamera';
-import {ILogger}                                    from 'Logger';
-import {Materials}                                  from 'Materials';
-import {Services}                                   from 'Services';
-import {TrackballControls}                          from 'TrackballControls';
+import * as THREE                                     from 'three';
+import { Camera }                                     from 'Camera';
+import { CameraHelper }                               from 'CameraHelper';
+import { CameraControls, CameraControlsOptions }      from 'CameraControls';
+import { EventManager }                               from 'EventManager';
+import { FileModel }                                  from 'FileModel';
+import { Graphics, ObjectNames }                      from 'Graphics';
+import { StandardView }                               from 'ICamera';
+import { ILogger }                                    from 'Logger';
+import { Materials}                                   from 'Materials';
+import { Services }                                   from 'Services';
+import { TrackballControls }                          from 'TrackballControls';
 
 /**
  * @description General 3D model viewer base class.

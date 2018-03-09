@@ -28,7 +28,7 @@ import {Viewer}                     from 'Viewer';
  * @extends {Viewer}
  */
 export class MeshViewer extends Viewer {
-    
+
     mesh : Mesh;                                        // active Mesh
 
     // Private

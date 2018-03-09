@@ -13,11 +13,14 @@ export enum ElementIds {
     ModelCanvas         = 'modelCanvas',
     MeshView            = 'meshView',
     MeshCanvas          = 'meshCanvas',
+    DepthBufferView     = 'depthBufferView',
+    DepthBufferCanvas   = 'depthBufferCanvas',
 
-    CameraControls      = 'cameraControls',
-    ModelViewerControls = 'modelViewerControls',
-    MeshViewerControls  = 'meshViewerControls',
-    ComposerControls    = 'composerControls',
+    CameraControls              = 'cameraControls',
+    ModelViewerControls         = 'modelViewerControls',
+    MeshViewerControls          = 'meshViewerControls',
+    DepthBufferViewerControls   = 'depthBufferViewerControls',
+    ComposerControls            = 'composerControls',
 
     // Workbench
     CameraTestControls  = 'cameraTestControls'

@@ -8,23 +8,21 @@
 import * as THREE  from 'three'
 import * as Dto    from "DtoModels";
 
-import {Camera, ClippingPlanes} from 'Camera'
-import {CameraHelper}           from 'CameraHelper'
-import {DepthBuffer}            from 'DepthBuffer'
-import {Graphics}               from 'Graphics'
-import {ILogger, ConsoleLogger} from 'Logger'
-import {MathLibrary}            from 'Math'
-import {MeshView}               from 'MeshView'
-import {Services}               from 'Services'
-import {StopWatch}              from 'StopWatch'
-import {Tools}                  from 'Tools'
-import {MeshViewer} from 'Viewers/MeshViewer';
+import { Camera, ClippingPlanes} from 'Camera'
+import { CameraHelper}           from 'CameraHelper'
+import { DepthBuffer}            from 'DepthBuffer'
+import { ElementIds }            from 'Html';
+import { Graphics}               from 'Graphics'
+import { ILogger, ConsoleLogger} from 'Logger'
+import { MathLibrary}            from 'Math'
+import { MeshView}               from 'MeshView'
+import { MeshViewer }            from 'MeshViewer';
+import { Services}               from 'Services'
+import { StopWatch}              from 'StopWatch'
+import { Tools}                  from 'Tools'
 
 /*
   Requirements
-    No persistent DOM element. The canvas is created dynamically.
-        Option for persisting the Factory in the constructor
-    JSON compatible constructor parameters
     Fixed resolution; resizing support is not required.
 */
 /**
@@ -40,8 +38,6 @@ export interface DepthBufferFactoryParameters {
     camera           : Camera,                  // camera
     
     logDepthBuffer?  : boolean,                 // use logarithmic depth buffer for higher resolution (better distribution) in scenes with large extents
-    
-    addCanvasToDOM?  : boolean                  // visible canvas; add to HTML
 }
 
 /**
@@ -79,7 +75,6 @@ export class DepthBufferFactory {
 
     _minimumWebGL    : boolean                  = true;     // true if minimum WeGL requirements are present
     _logger          : ILogger                   = null;     // logger
-    _addCanvasToDOM  : boolean                  = false;    // visible canvas; add to HTML page
 
     /**
      * @constructor
@@ -96,7 +91,6 @@ export class DepthBufferFactory {
 
             // optional
             logDepthBuffer  = false,
-            addCanvasToDOM  = false
         } = parameters;
 
         this._width           = width;
@@ -106,13 +100,20 @@ export class DepthBufferFactory {
 
         // optional
         this._logDepthBuffer  = logDepthBuffer;
-        this._addCanvasToDOM  = addCanvasToDOM;
 
         this._canvas = this.initializeCanvas();
         this.initialize();
     }
 
 //#region Properties
+    /**
+     * Returns the active canvasof the factory.
+     * @returns HTMLElement
+     */
+    get canvas() : HTMLElement {
+        return this._canvas;
+    }
+
     /**
      * Returns the active (last-generated) DepthBuffer constructed by the factory.
      * @returns DepthBuffer
@@ -137,31 +138,13 @@ export class DepthBufferFactory {
 
         return true;
     }
-
-    /**
-     * Handle a mouse down event on the canvas.
-     */
-    onMouseDown(event : JQueryEventObject) : void {
-        // https://www.w3schools.com/colors/colors_names.asp
-        let messageStyle = 'color:fuchsia'
-
-        let deviceCoordinates : THREE.Vector2 = Graphics.deviceCoordinatesFromJQEvent(event, $(event.target));
-        this._logger.addMessage(`Device = ${deviceCoordinates.x}, ${deviceCoordinates.y}`, messageStyle);
-        
-        let decimalPlaces   : number = 2;
-        let row             : number = (deviceCoordinates.y + 1) / 2 * this._depthBuffer.height;
-        let column          : number = (deviceCoordinates.x + 1) / 2 * this._depthBuffer.width;
-        this._logger.addMessage(`Offset = [${row}, ${column}]`, messageStyle);       
-        this._logger.addMessage(`Depth = ${this._depthBuffer.depth(row, column).toFixed(decimalPlaces)}`, messageStyle);       
-        this._logger.addEmptyLine();
-    }
         
     /**
      * Constructs a WebGL target canvas.
      */
     initializeCanvas() : HTMLCanvasElement {
     
-        this._canvas = document.createElement('canvas');
+        this._canvas = <HTMLCanvasElement> document.querySelector(`#${ElementIds.DepthBufferCanvas}`);
         this._canvas.setAttribute('name', Tools.generatePseudoGUID());
         this._canvas.setAttribute('class', DepthBufferFactory.CssClassName);
 
@@ -173,13 +156,7 @@ export class DepthBufferFactory {
         this._canvas.style.width  = `${this._width}px`;
         this._canvas.style.height = `${this._height}px`;
 
-        // add to DOM?
-        if (this._addCanvasToDOM)
-            document.querySelector(`#${MeshView.RootContainerId}`).appendChild(this._canvas);
-
-            let $canvas = $(this._canvas).on('mousedown', this.onMouseDown.bind(this));
-        
-            return this._canvas;
+        return this._canvas;
     }
 
     /**

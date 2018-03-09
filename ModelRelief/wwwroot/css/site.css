@@ -67,7 +67,7 @@ input {
 
 #depthBufferCanvas{
     width:  512px;
-    height: 512px;
+    height: 1px;
     background-color: #000000;
 }
 

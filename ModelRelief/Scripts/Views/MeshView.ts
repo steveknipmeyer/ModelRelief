@@ -22,8 +22,6 @@ import { Viewer }                             from 'Viewer';
  */
 export class MeshView {
 
-    static RootContainerId     : string = 'meshView';          // root container for viewer and controls
-
     _containerId               : string;
     _meshViewer                : MeshViewer;
     
@@ -71,7 +69,7 @@ export class MeshView {
     initialize(model : FileModel) {
 
         // Mesh Viewer    
-        this._meshViewer = new MeshViewer('MeshViewer', this.containerId, model);
+        this._meshViewer = new MeshViewer('MeshViewer', ElementIds.MeshCanvas, model);
     }
     
 //#endregion

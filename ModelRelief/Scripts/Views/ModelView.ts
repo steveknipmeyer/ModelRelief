@@ -23,8 +23,6 @@ import { Viewer }                             from "Viewer";
  */
 export class ModelView {
 
-    static RootContainerId      : string = 'modelView';          // root container for viewer and controls
-
     _containerId                : string;
     _modelViewer                : ModelViewer;
     
@@ -72,7 +70,7 @@ export class ModelView {
     initialize(model : FileModel) {
 
         // Model Viewer    
-        this._modelViewer = new ModelViewer('ModelViewer', this.containerId, model);
+        this._modelViewer = new ModelViewer('ModelViewer', ElementIds.ModelCanvas, model);
     }
     
 //#endregion
