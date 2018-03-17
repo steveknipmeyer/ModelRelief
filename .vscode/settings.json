@@ -53,6 +53,13 @@
         "editor.renderWhitespace": "all",
 
     // ---------------------------------
+    // Markdown
+    // ---------------------------------
+    "markdown.styles": [
+        "ModelRelief/Documentation/ToDo/Markdown.css"
+    ],
+
+    // ---------------------------------
     // MultiClip
     // ---------------------------------
         // Specify if text should be formatted after pasting
@@ -64,10 +71,8 @@
     // Python
     // ---------------------------------
         // Path to Python, you can use a custom version of Python by modifying this setting to include the full path.
-        "python.pythonPath": "C:/Program Files (x86)/Microsoft Visual Studio/Shared/Anaconda3_64/python.exe",
-        "markdown.styles": [
-            "ModelRelief/Documentation/ToDo/Markdown.css"
-        ],
+        "python.pythonPath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Anaconda3_64\\python.exe",
+        "python.linting.enabled": false, 
 
     // ---------------------------------
     // Search

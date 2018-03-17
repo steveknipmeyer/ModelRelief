@@ -28,6 +28,8 @@
     <Compile Include="mesh.py" />
     <Compile Include="meshtransform.py" />
     <Compile Include="depthbuffer.py" />
+    <Compile Include="image.py" />
+    <Compile Include="workbench.py" />
     <Compile Include="viewer.py" />
     <Compile Include="solver.py" />
   </ItemGroup>

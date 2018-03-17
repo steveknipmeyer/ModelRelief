@@ -86,13 +86,13 @@
             "type": "python",
             "pythonPath": "${config:python.pythonPath}",
             "request": "launch",
-            "stopOnEntry": true,
-            "console": "none",
+            "stopOnEntry": false,
+            "console": "integratedTerminal",
             "program": "${file}",
             "cwd": "${workspaceRoot}",
             "debugOptions": [
                 "DebugStdLib",
-                "RedirectOutput"
+                "RedirectOutput",
             ],
             "env": {
                 "name": "value"

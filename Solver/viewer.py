@@ -66,7 +66,7 @@ class Viewer:
         # display
         plt.figure(figsize=(10, 10))
         plt.imshow(a, cmap="gray")
-        plt.title("DepthBuffer")
+        plt.title("Model Relief DepthBuffer")
         plt.show()
 
         pass

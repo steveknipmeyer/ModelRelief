@@ -59,20 +59,20 @@ class Solver:
         byte_depths = self.depth_buffer.read__binary(self.depth_buffer.path)
         # convert to floats
         floats = self.depth_buffer.unpack_floats(byte_depths)
-        
+
         # write temporary file of original floats
         unscaled_path = '%s/%s.floats.%f' % (self.working_folder, self.depth_buffer.name, 1.0)
         self.depth_buffer.write_floats(unscaled_path, floats)
-        
-        # transform 
+
+        # transform
         scale = self.mesh_transform.scale
         # scaled_floats = [depth * scale for depth in floats]
         scaled_floats = [self.depth_buffer.scale_model_depth(depth, scale) for depth in floats]
-        
+
         # write transformed floats
         scaled_path = '%s/%s.floatsPrime.%f' % (self.working_folder, self.depth_buffer.name, scale)
         self.depth_buffer.write_floats(scaled_path, scaled_floats)
-        
+
         # write final raw bytes
         file_path = '%s/%s' % (self.working_folder, self.mesh.name)
         self.depth_buffer.write_binary(file_path, self.depth_buffer.pack_floats(scaled_floats))
@@ -82,7 +82,7 @@ class Solver:
     def verify_transform(self, files : Tuple[str, str], scale : float) -> None:
         """
             Compares the baseline float file with the scaled float file.
-            
+
             Parameters:
             ----------
             files : tuple
@@ -97,7 +97,7 @@ class Solver:
 
         unscaled = self.depth_buffer.read_floats(unscaled_path)
         scaled   = self.depth_buffer.read_floats(scaled_path)
-         
+
         tolerance = 1e-6
         for index in range(0, len(unscaled)):
 
@@ -108,7 +108,7 @@ class Solver:
             if not equal:
                 print ("Values differ: %f != %f at index %d" % (unscaled_value, scaled_value, index))
         pass
-        
+
 def main():
     """
         Main entry point.
