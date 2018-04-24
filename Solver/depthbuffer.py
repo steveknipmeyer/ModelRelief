@@ -27,6 +27,8 @@ class DepthBuffer:
         """
         self.settings = settings
         self.path = os.path.abspath(settings['FileName'])
+        self.width = int(settings['Width'])
+        self.height = int(settings['Height'])
         self.format = settings['Format']
         self.camera = settings['Camera']
 
@@ -63,7 +65,7 @@ class DepthBuffer:
         # z_linear is the distance from the camera; adjust to yield height from mesh plane
         z_linear = self.far - z_linear
         
-        return z_linear;
+        return z_linear
 
     def scale_model_depth(self, normalized, scale):
         """
@@ -79,7 +81,7 @@ class DepthBuffer:
         z = self.far - z
 
         scaled_normalized = (self.far + self.near - 2.0 * self.near * self.far / z) / (self.far - self.near)
-        scaled_normalized = (scaled_normalized + 1.0) / 2.0;
+        scaled_normalized = (scaled_normalized + 1.0) / 2.0
 
         return scaled_normalized
 

@@ -17,6 +17,8 @@ import argparse
 import json
 import math
 import os
+import time
+import numpy as np
 from typing import Tuple
 
 from depthbuffer import DepthBuffer
@@ -50,11 +52,30 @@ class Solver:
         self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'])
         self.mesh_transform = MeshTransform(self.settings['MeshTransform'])
 
+    def transform_floats(self, floats, scale):
+        """
+        Transforms a list of floats by a scale factor 
+        Uses a list comprehension.
+        """
+        scaled_floats = [self.depth_buffer.scale_model_depth(depth, scale) for depth in floats]
+        return scaled_floats
+
+    def transform_floats_np(self, floats, width, height, scale):
+        """
+        Transforms a list of floats by a scale factor using numpy.
+        """
+        a = np.array(floats)
+        
+        # scale
+        scaler = lambda v: self.depth_buffer.scale_model_depth(v, scale)        
+        a = scaler(a)
+        
+        return a.tolist()
+
     def transform_buffer(self):
         """
             Transforms a DepthBuffer by a MeshTransform
         """
-
         # read raw bytes
         byte_depths = self.depth_buffer.read__binary(self.depth_buffer.path)
         # convert to floats
@@ -64,10 +85,18 @@ class Solver:
         unscaled_path = '%s/%s.floats.%f' % (self.working_folder, self.depth_buffer.name, 1.0)
         self.depth_buffer.write_floats(unscaled_path, floats)
 
-        # transform
         scale = self.mesh_transform.scale
-        # scaled_floats = [depth * scale for depth in floats]
-        scaled_floats = [self.depth_buffer.scale_model_depth(depth, scale) for depth in floats]
+        """
+        # list comprehension
+        start_time = time.time()
+        scaled_floats = self.transform_floats (floats, scale)
+        print ("transform_floats = %s" % (time.time() - start_time))
+        """
+        
+        # numpy (40X faster)
+        start_time = time.time()
+        scaled_floats = self.transform_floats_np (floats, self.depth_buffer.width, self.depth_buffer.height, scale)
+        print ("transform_floats_np = %s" % (time.time() - start_time))
 
         # write transformed floats
         scaled_path = '%s/%s.floatsPrime.%f' % (self.working_folder, self.depth_buffer.name, scale)
@@ -100,14 +129,17 @@ class Solver:
 
         tolerance = 1e-6
         for index in range(0, len(unscaled)):
+            try:    
+                unscaled_value = self.depth_buffer.normalized_to_model_depth(unscaled[index])
+                scaled_value   = self.depth_buffer.normalized_to_model_depth(scaled[index])
 
-            unscaled_value = self.depth_buffer.normalized_to_model_depth(unscaled[index])
-            scaled_value   = self.depth_buffer.normalized_to_model_depth(scaled[index])
-
-            equal = math.isclose(unscaled_value * scale, scaled_value, abs_tol=tolerance)
-            if not equal:
-                print ("Values differ: %f != %f at index %d" % (unscaled_value, scaled_value, index))
-        pass
+                equal = math.isclose(unscaled_value * scale, scaled_value, abs_tol=tolerance)
+                if not equal:
+                    print ("Values differ: %f != %f at index %d" % (unscaled_value, scaled_value, index))
+                    break
+            except:
+                print ("An exception occurred validating the scaled DepthBuffer.")     
+                break
 
 def main():
     """

@@ -55,6 +55,7 @@ class Viewer:
         
         # scale
         print ("scale = %f" % self.scale)
+        a *= self.scale
 
         # flip; first DB row is at minimum Y
         a = np.flipud(a)
