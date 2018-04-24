@@ -68,7 +68,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         {
             var depthBuffer = generatedFileDomainModel as Domain.DepthBuffer;
             Logger.LogInformation($"DepthBuffer [Model Id = {fileRequest.TransactionEntity.PrimaryKey}, UserId = {fileRequest.TransactionEntity.UserId}, file = {generatedFileDomainModel.FileName}] has been queued for file generation.");
-            return await Dispatcher.GenerateDepthBufferAsync(depthBuffer, generatedFileDomainModel.FileName, cancellationToken);
+            return await Dispatcher.GenerateDepthBufferAsync(depthBuffer, cancellationToken);
         }
 
         /// <summary>

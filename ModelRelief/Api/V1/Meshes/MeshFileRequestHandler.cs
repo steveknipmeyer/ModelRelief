@@ -69,7 +69,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             var mesh = generatedFileDomainModel as Domain.Mesh;
 
             Logger.LogInformation($"Mesh [Model Id = {fileRequest.TransactionEntity.PrimaryKey}, UserId = {fileRequest.TransactionEntity.UserId}, file = {generatedFileDomainModel.FileName}] has been queued for file generation.");
-            return await Dispatcher.GenerateMeshAsync(mesh, generatedFileDomainModel.FileName, cancellationToken);
+            return await Dispatcher.GenerateMeshAsync(mesh, cancellationToken);
         }
 
         /// <summary>

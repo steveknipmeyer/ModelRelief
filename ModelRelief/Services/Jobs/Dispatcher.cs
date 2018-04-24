@@ -84,10 +84,9 @@ namespace ModelRelief.Services.Jobs
         /// Dispatches a process to create a DepthBuffer from its dependencies (e.g. Model3d, Camera).
         /// </summary>
         /// <param name="depthBuffer">DepthBuffer.</param>
-        /// <param name="fileName">FIle name of DepthBuffer.</param>
         /// <param name="cancellationToken">Token to allows operation to be cancelled</param>
         /// /// <returns>True if successful.</returns>
-        public async Task<bool> GenerateDepthBufferAsync(Domain.DepthBuffer depthBuffer, string fileName, CancellationToken cancellationToken = default)
+        public async Task<bool> GenerateDepthBufferAsync(Domain.DepthBuffer depthBuffer, CancellationToken cancellationToken = default)
         {
             Logger.LogError($"{nameof(GenerateDepthBufferAsync)} is not implemented.");
             await Task.CompletedTask;
@@ -123,10 +122,9 @@ namespace ModelRelief.Services.Jobs
         /// Dispatches a process to create a Mesh from its dependencies (e.g. DepthBuffer, MeshTransform).
         /// </summary>
         /// <param name="mesh">Mesh.</param>
-        /// <param name="fileName">File name of DepthBuffer.</param>
         /// <param name="cancellationToken">Token to allows operation to be cancelled</param>
         /// /// <returns>True if successful.</returns>
-        public async Task<bool> GenerateMeshAsync(Domain.Mesh mesh, string fileName, CancellationToken cancellationToken = default)
+        public async Task<bool> GenerateMeshAsync(Domain.Mesh mesh, CancellationToken cancellationToken = default)
         {
             Logger.LogInformation($"{nameof(GenerateMeshAsync)} process queued.");
 

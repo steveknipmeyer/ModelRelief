@@ -18,7 +18,7 @@ namespace ModelRelief.Services.Jobs
     public interface IDispatcher
     {
         // Worker Process
-        Task<bool> GenerateDepthBufferAsync(Domain.DepthBuffer depthBuffer, string fileName, CancellationToken cancellationToken = default);
-        Task<bool> GenerateMeshAsync(Domain.Mesh mesh, string fileName, CancellationToken cancellationToken = default);
+        Task<bool> GenerateDepthBufferAsync(Domain.DepthBuffer depthBuffer, CancellationToken cancellationToken = default);
+        Task<bool> GenerateMeshAsync(Domain.Mesh mesh, CancellationToken cancellationToken = default);
     }
 }
