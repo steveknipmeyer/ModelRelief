@@ -28,7 +28,6 @@ class BaseLine:
         """
         Performs initialization.
         """
-        _potato = 'SLK'
         self._database = database
         return
 

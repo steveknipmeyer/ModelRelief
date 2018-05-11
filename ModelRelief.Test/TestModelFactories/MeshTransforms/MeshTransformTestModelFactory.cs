@@ -33,7 +33,7 @@ namespace ModelRelief.Test.TestModels.MeshTransforms
             ApiUrl = "/api/v1/meshtransforms";
             UxUrl  = "/meshtransforms";
 
-            IdRange = Enumerable.Range(1, 5);
+            IdRange = Enumerable.Range(1, 6);
             FirstModelName = "Identity";
 
             ReferencePropertyNames = new List<string> { "ProjectId" };

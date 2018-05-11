@@ -1090,3 +1090,6 @@ https://semver.npmjs.com/
         In ModelRelief, open the new model and generate a relief.
         Replace the DepthBuffer and Mesh with the newly-generated files.
         Update the Camera settings in DbInitializer with the updated Camera properties as shown in the Camera page.
+    Update ModelRelief.Test
+        Update the ID range of the objects in the test database.
+             IdRange = Enumerable.Range(1, 6);          
