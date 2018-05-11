@@ -1,19 +1,20 @@
 #!/usr/bin/env python
 #
-#   Copyright (c) 2017
+#   Copyright (c) 2018
 #   All Rights Reserved.
 #
 
 """
-
 .. module:: DepthBuffer
    :synopsis: A rendering DepthBuffer created from a Model3d and a Camera.
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
-
 """
+
 import os
 import struct
+import numpy as np
+from typing import List, Tuple
 
 class DepthBuffer:
     """
@@ -40,6 +41,34 @@ class DepthBuffer:
         return os.path.basename(self.path)
 
     @property
+    def width(self):
+        """
+            Returns the width of the DB.
+        """
+        return self._width
+
+    @width.setter
+    def width(self, value):
+        """
+            Sets the width of the DB.
+        """
+        self._width = value
+
+    @property
+    def height(self):
+        """
+            Returns the height of the DB.
+        """
+        return self._height
+
+    @height.setter
+    def height(self, value):
+        """
+            Sets the height of the DB.
+        """
+        self._height = value
+
+    @property
     def near(self):
         """
             Returns the near plane of the camera.
@@ -52,6 +81,35 @@ class DepthBuffer:
             Returns the far plane of the camera.
         """
         return self.camera['Far']
+
+    @property
+    def byte_depths(self) -> List[bytes]:
+        """
+            Constructs a list of floats from the DepthBuffer.
+        """
+        # read raw bytes
+        return self.read__binary(self.path)
+
+    @property
+    def floats(self) -> List[float]:
+        """
+            Constructs a list of floats from the DepthBuffer.
+        """   
+        # convert to floats
+        floats = self.unpack_floats(self.byte_depths)
+        return floats
+
+    @property
+    def np_array(self):
+        """
+            Returns an np array.
+        """
+        # transform 1D -> 2D        
+        a = np.array(self.floats)
+        a = np.reshape(a, (self.height, self.width))
+        shape = a.shape
+        
+        return a
 
     def normalized_to_model_depth(self, normalized):
         """
@@ -160,3 +218,4 @@ class DepthBuffer:
         with open(file=path, mode='w') as file:
             for value in floats:
                 file.write(str(value) + '\n')
+

@@ -54,7 +54,7 @@ class Solver:
 
     def transform_floats(self, floats, scale):
         """
-        Transforms a list of floats by a scale factor 
+        Transforms a list of floats by a scale factor.
         Uses a list comprehension.
         """
         scaled_floats = [self.depth_buffer.scale_model_depth(depth, scale) for depth in floats]
@@ -76,10 +76,7 @@ class Solver:
         """
             Transforms a DepthBuffer by a MeshTransform
         """
-        # read raw bytes
-        byte_depths = self.depth_buffer.read__binary(self.depth_buffer.path)
-        # convert to floats
-        floats = self.depth_buffer.unpack_floats(byte_depths)
+        floats = self.depth_buffer.floats
 
         # write temporary file of original floats
         unscaled_path = '%s/%s.floats.%f' % (self.working_folder, self.depth_buffer.name, 1.0)
