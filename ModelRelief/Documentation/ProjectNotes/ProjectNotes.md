@@ -1,22 +1,4 @@
-﻿<style>
-	.markdown-body {
-		box-sizing: border-box;
-		min-width: 200px;
-		max-width: 1200px;
-		margin: 0 auto;
-		padding: 45px;
-	}
-
-	@media (max-width: 767px) {
-		.markdown-body {
-			padding: 15px;
-		}****
-	}
-</style>
-
-<article class="markdown-body">
-
-##### Commit Notes
+﻿##### Commit Notes
 
 ##### Technical Education
 - Manning AspNet Core book.
@@ -141,6 +123,7 @@ ___
 The FE DTO interfaces are used to facilitate construction of DTO models from HTTP.
 
 |Graphics||DTO (HTTP)|
+|--|---|---|
 |||--|
 |||IModel||
 |||IFileModel||
@@ -172,7 +155,7 @@ export interface IProject extends IModel
 DTO models are in an inheritance chain so they can share common functionality such as API HTTP requests.  
 
 |Graphics||DTO (HTTP)|
-|--|
+|--|---|---|
 |Model||Dto.Model|
 |FileModel||Dto.FileModel|
 |GeneratedFileModel||Dto.GeneratedFileModel|
@@ -193,7 +176,7 @@ export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel
 #### Concrete Classes
 
 |Graphics |Implementation||DTO (HTTP) |Implementation||Notes|
-|-------|--------|--------|
+|---|---|---|---|---|---|---|
 |Camera|IModel<br>Model||Dto.Camera|IModel, ICamera<br>Dto.Model||THREE.Camera|
 |DepthBuffer|IGeneratedFileModel<br>GeneratedFileModel||Dto.DepthBuffer|IGeneratedFileModel, IDepthBuffer<br>Dto.GeneratedFileModel||
 |Mesh|IGeneratedFileModel<br>GeneratedFileModel||Dto.Mesh|IGeneratedFileModel, IMesh<br>Dto.GeneratedFileModel||THREE.Mesh|
@@ -227,7 +210,7 @@ ___
 #### Interfaces  
 
 |DTO (HTTP)||Domain (DB)|
-|--|
+|---|---|---|---|---|---|---|
 |Dto.IModel|||
 |Dto.IFileModel|
 |Dto.IGeneratedFileModel|
@@ -262,7 +245,7 @@ public abstract class GeneratedFileDomainModel : FileDomainModel
 #### Concrete Classes
 
 |DTO (HTTP) |Implementation|Notes||Domain Models (DB) |Implementation|
-|-------|--------|--------|
+|---|---|---|---|---|---|---|
 |Dto.Camera|Dto.IModel|||Domain.Camera|DomainModel|
 |Dto.DepthBuffer|Dto.IGeneratedFileModel|||Domain.DepthBuffer|GeneratedFileDomainModel|
 |Dto.Mesh|Dto.IGeneratedFileModel|||Domain.Mesh|GeneratedFileDomainModel|
@@ -1095,12 +1078,15 @@ https://semver.npmjs.com/
         D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\Test\Data\Users\models
     Add the .OBJ and the material file .mtl.
 
-    Add the new model
-        AddModels
-        AddMeshTransform
-        AddDepthBuffers
-        AddCameras
-        AddMeshes
+    Update DbInitializer:
+        [X] AddModels
+        [X] AddMeshTransform
+        [X] AddDepthBuffers
+        [X] AddCameras
+        [X] AddMeshes
 
+        Copy a proxy DepthBuffer and Mesh from another model. This will be replaced later after the final DepthBuffer and Mesh have been generated using Generate Relief.
 
-</article>
+        In ModelRelief, open the new model and generate a relief.
+        Replace the DepthBuffer and Mesh with the newly-generated files.
+        Update the Camera settings in DbInitializer with the updated Camera properties as shown in the Camera page.

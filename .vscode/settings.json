@@ -56,7 +56,7 @@
     // Markdown
     // ---------------------------------
     "markdown.styles": [
-        "ModelRelief/Documentation/ProjectNotes/Markdown.css"
+      //  "ModelRelief/Documentation/ProjectNotes/Markdown.css"
     ],
 
     // ---------------------------------
