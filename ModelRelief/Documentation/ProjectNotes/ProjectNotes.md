@@ -91,7 +91,6 @@ What controls are (ultimately) present in Composer?
 - [ ] The quaternion and up vector do not roundtrip although the visual camera appears unchanged.  The matrix and projectionMatrix are unchanged!
 - [ ] Cameras do not handle offsets (pan). Is this a TrackBallControl issue?
 - [ ] Randomly generated cameras do not roundtrip the matrix property.
-
 ##### Clipping Plane Issues
 
     Investigate why the clipping plane CameraControls are not editable.
@@ -1086,7 +1085,22 @@ However, MRInitializeUserStore may be set if the application is started through 
 #### NPM Package Manager
 https://semver.npmjs.com/
 
-Why does node_modules use three 0.86 when package.json specifies ^0.86 which should admit 0.89 as the latest version.
+    Why does node_modules use three 0.86 when package.json specifies ^0.86 which should admit 0.89 as the latest version.
     It seems that a leading zero for the major version is ignored and only the 2nd and 3rd fields are processed.
+
+#### Adding a New Test Model
+    Add the 3D model to D:\Users\Steve Knipmeyer\Documents\Development\ModelRelief\Models.
+    
+    Create a new folder in the source location for test models.
+        D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\Test\Data\Users\models
+    Add the .OBJ and the material file .mtl.
+
+    Add the new model
+        AddModels
+        AddMeshTransform
+        AddDepthBuffers
+        AddCameras
+        AddMeshes
+
 
 </article>

@@ -2,7 +2,8 @@ echo off
 title ModelRelief Shell
 
 :: move up from Tools folder to solution root
-cd %~dp0\..
+echo %~dp0
+cd/D %~dp0\..
 set MRSolution=%cd%\
 set MR=%MRSolution%ModelRelief\
 echo MRsolution=%MRSolution%
@@ -22,8 +23,7 @@ set MRInitializeUserStore=False
 
 path=%path%;C:\Program Files\Git
 path=%path%;%HOME%\Documents\Bin
-path=%path%;%MRSolution%Tools
-path=%path%;C:\Program Files (x86)\WinMerge
+path=%path%;%MRSolution%Toolspath=%path%;C:\Program Files (x86)\WinMerge
 path=%path%;C:\Program Files\KDiff3
 
 call "C:\Program Files\nodejs\nodevars.bat"
@@ -35,8 +35,9 @@ set PY_PYTHON=3
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\VsDevCmd.bat"
 
 :: TypeScript
+:: Target version must precede the path set by VsCevCmd. VSCode uses the command line to build TypeScript so the path is important.
 echo TypeScript Version = 2.4
-path=%path%;C:\Program Files (x86)\Microsoft SDKs\TypeScript\2.4
+path=C:\Program Files (x86)\Microsoft SDKs\TypeScript\2.4;%path%
 
 :: Ports Configuration
 ::  Command line (dotnet run) : ASPNETCORE_URLS environment variable    

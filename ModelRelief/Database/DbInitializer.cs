@@ -359,6 +359,20 @@ namespace ModelRelief.Database
 
                     User = _user, Project = FindByName<Project>("Jewelry"),
                 },
+                new Camera
+                {
+                    Name = "Test", Description = "Test Model",
+                    FieldOfView = Camera.DefaultFieldOfView,
+                    AspectRatio = 1.0,
+                    Near = 149.91, Far = 201.06,
+
+                    PositionX = 25.00, PositionY = 201.06, PositionZ = -46.50,
+                    EulerX = -0.71, EulerY = 0.0, EulerZ = 0.0, Theta = 0.71,
+                    ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
+                    UpX = 0.0, UpY = 0.0, UpZ = -1.0,
+
+                    User = _user, Project = FindByName<Project>("ModelRelief"),
+                },
             };
 
             foreach (Camera camera in cameras)
@@ -401,6 +415,11 @@ namespace ModelRelief.Database
                 {
                     Name = "tyrannosaurus.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ,
                     User = _user, Project = FindByName<Project>("Jewelry"), Camera = FindByName<Camera>("Isometric Camera"),
+                },
+                new Model3d
+                {
+                    Name = "test.obj", Description = "Reference test model", Format = Model3dFormat.OBJ,
+                    User = _user, Project = FindByName<Project>("ModelRelief"), Camera = FindByName<Camera>("Top Camera"),
                 },
             };
 
@@ -460,6 +479,13 @@ namespace ModelRelief.Database
                     Tau = 1.0, SigmaGaussianBlur = 1.0, SigmaGaussianSmooth = 1.0, LambdaLinearScaling = 1.0,
                     User = _user, Project = FindByName<Project>("Architecture"),
                 },
+                new MeshTransform
+                {
+                    Name = "Test", Description = "Test transform",
+                    Width = 100.0, Height = 100.0, Depth = 1.0,
+                    Tau = 1.0, SigmaGaussianBlur = 1.0, SigmaGaussianSmooth = 1.0, LambdaLinearScaling = 1.0,
+                    User = _user, Project = FindByName<Project>("ModelRelief"),
+                },
             };
 
             foreach (MeshTransform meshTransform in meshTransforms)
@@ -502,6 +528,14 @@ namespace ModelRelief.Database
                     Model3d = FindByName<Model3d>("bunny.obj"), Camera = FindByName<Camera>("Bunny"),
                     User = _user, Project = FindByName<Project>("Architecture"),
                 },
+                new DepthBuffer
+                {
+                    Name = "test.raw", Description = "Generated in ModelRelief",
+                    Width = 512, Height = 512,
+                    Format = DepthBufferFormat.RAW,
+                    Model3d = FindByName<Model3d>("test.obj"), Camera = FindByName<Camera>("Test"),
+                    User = _user, Project = FindByName<Project>("ModelRelief"),
+                },
             };
 
             foreach (DepthBuffer depthBuffer in depthBuffers)
@@ -535,6 +569,11 @@ namespace ModelRelief.Database
                 {
                     Name = "bunny.raw", Description = "Top", Format = MeshFormat.RAW, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("bunny.raw"), MeshTransform =  FindByName<MeshTransform>("Bunny"),
                     User = _user, Project = FindByName<Project>("Architecture"),
+                },
+                new Mesh
+                {
+                    Name = "test.raw", Description = "Top", Format = MeshFormat.RAW, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("test.raw"), MeshTransform =  FindByName<MeshTransform>("Test"),
+                    User = _user, Project = FindByName<Project>("ModelRelief"),
                 },
             };
 
