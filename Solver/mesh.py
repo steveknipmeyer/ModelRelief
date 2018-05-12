@@ -3,9 +3,9 @@
 #   Copyright (c) 2017
 #   All Rights Reserved.
 #
+import os
 
 """
-
 .. module:: Mesh
    :synopsis: A low relief mesh created by applying a MeshTransform to a DepthBuffer.
 
@@ -24,3 +24,5 @@ class Mesh:
         """
         self.settings = settings
         self.name = settings['Name']
+        self.path = os.path.abspath(settings['FileName'])
+        

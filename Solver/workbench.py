@@ -17,9 +17,11 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+import time
 from typing import Tuple
 
 from depthbuffer import DepthBuffer
+from mesh import Mesh
 from viewer import Viewer
 
 class Workbench:
@@ -34,8 +36,38 @@ class Workbench:
             self.settings = json.load(json_file)
 
         self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'])
+        self.mesh = Mesh(self.settings)
 
         self.scale = float(scale) if scale is not None else 1.0
+
+    def show_depth_buffer(self, a, title):
+        """
+        Displays a depth buffer array.
+        Inverts the image.
+        """
+        viewer = Viewer()
+
+        # invert DB depths; brighter values are higher offsets from mesh plane
+        inverter = lambda v: abs(1 - v)
+        a = inverter(a)       
+        
+        viewer.show_image(a, "gray", title)
+
+    def show_gradient(self, gradient_list, title):
+        """
+        Displays a list of gradients as an inage.
+        Preforms thresholding to eliminate extreme values.
+        """
+        viewer = Viewer()
+    
+        grad = np.array(gradient_list)
+        grad = np.reshape(grad, (self.depth_buffer.height, self.depth_buffer.height))
+
+        # apply thresholding
+        threshold = 3
+        grad[np.abs(grad) > threshold] = 0
+    
+        viewer.show_image(grad, "Blues_r", title)
 
     def run(self):
         """
@@ -46,17 +78,14 @@ class Workbench:
         # scale
         print ("scale = %f" % self.scale)
         a *= self.scale
-        
-        viewer = Viewer()
 
-        # invert DB depths; brighter values are higher offsets from mesh plane
-        inverter = lambda v: abs(1 - v)
-        a = inverter(a)       
-        viewer.show_image(a, "summer", "DepthBuffer")
+        self.show_depth_buffer(a, "DepthBuffer")
 
-        grad_x = np.array(self.depth_buffer.gradient_x)
-        grad_x = np.reshape(grad_x, (self.depth_buffer.height, self.depth_buffer.width))
-        viewer.show_image(grad_x, "summer", "X Gradient")
+        gradient_list = self.depth_buffer.gradient_x
+        self.show_gradient(gradient_list, "dI(x,y)/dx")
+
+        gradient_list = self.depth_buffer.gradient_y
+        self.show_gradient(gradient_list, "dI(x,y)/dy")
 
 def main():
     """
