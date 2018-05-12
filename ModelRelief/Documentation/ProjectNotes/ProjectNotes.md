@@ -34,10 +34,11 @@
 
 #### Short Term
 
-Redo test database.
+Adopt a standard for representing Python vectors.
 
-Refactor the gradient method.
-Investigte numpy optimizations for the gradient.
+Numpy gradients are 10,000X faster!
+    Numpy gradients = 0.005502462387084961
+    Python gradients = 47.75585699081421
 
 Update database schema diagram.  
   

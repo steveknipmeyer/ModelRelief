@@ -15,6 +15,7 @@ import argparse
 import json
 import numpy as np
 import os
+import time
 
 from depthbuffer import DepthBuffer
 from mesh import Mesh
@@ -49,7 +50,7 @@ class Workbench:
 
         viewer.show_image(a, "gray", title)
 
-    def show_gradient(self, gradient_list, title):
+    def show_gradient_prime(self, gradient_list, title):
         """
         Displays a list of gradients as an inage.
         Preforms thresholding to eliminate extreme values.
@@ -65,6 +66,19 @@ class Workbench:
     
         viewer.show_image(grad, "Blues_r", title)
 
+    def show_gradient(self, gradient, title):
+        """
+        Displays an array of gradients.
+        Preforms thresholding to eliminate extreme values.
+        """
+        viewer = Viewer()
+    
+        # apply thresholding
+        threshold = 3
+        gradient[np.abs(gradient) > threshold] = 0
+    
+        viewer.show_image(gradient, "Blues_r", title)
+
     def run(self):
         """
             Perform processing.
@@ -77,11 +91,20 @@ class Workbench:
 
         self.show_depth_buffer(a, "DepthBuffer")
 
-        gradient_list = self.depth_buffer.gradient_x
-        self.show_gradient(gradient_list, "dI(x,y)/dx")
+        results = self.depth_buffer.gradients
 
-        gradient_list = self.depth_buffer.gradient_y
-        self.show_gradient(gradient_list, "dI(x,y)/dy")
+        start_time = time.time()        
+        gradient_x = self.depth_buffer.gradient_x
+        gradient_y = self.depth_buffer.gradient_y
+        print ("Python gradients = %s" % (time.time() - start_time))
+        
+        #gradient_list = self.depth_buffer.gradient_x
+        self.show_gradient_prime(gradient_x, "dI(x,y)/dx MR")
+        self.show_gradient(results[1], "dI(x,y)/dx")
+
+        #gradient_list = self.depth_buffer.gradient_y
+        self.show_gradient_prime(gradient_y, "dI(x,y)/dy MR")
+        self.show_gradient(results[0], "dI(x,y)/dy")
 
 def main():
     """

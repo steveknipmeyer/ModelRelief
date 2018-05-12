@@ -14,6 +14,7 @@
 import os
 import struct
 import numpy as np
+import time
 from typing import List
 
 from camera import Camera
@@ -105,6 +106,19 @@ class DepthBuffer:
         a = np.reshape(a, (self.height, self.width))
         
         return a
+
+    @property
+    def gradients(self):
+        """
+        Returns the XY gradients of the DB.
+        """
+
+        floats_array = self.np_array
+        start_time = time.time()        
+        result = np.gradient(floats_array)
+        print ("Numpy gradients = %s" % (time.time() - start_time))
+
+        return result
     
     @property
     def gradient_x(self):

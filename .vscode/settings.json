@@ -3,7 +3,7 @@
     // ---------------------------------
     // Window
     // ---------------------------------
-    "window.zoomLevel": -0.35,
+        "window.zoomLevel": -0.20,
 
     // ---------------------------------
     // ActiveFile
@@ -72,7 +72,7 @@
     // ---------------------------------
         // Path to Python, you can use a custom version of Python by modifying this setting to include the full path.
         "python.pythonPath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Anaconda3_64\\python.exe",
-        "python.linting.enabled": false, 
+        "python.linting.enabled": true, 
 
     // ---------------------------------
     // Search
@@ -128,7 +128,9 @@
             "editorLineNumber.foreground": "#8fdddd",
             "editorIndentGuide.background": "#32393f",
             "editorWhitespace.foreground": "#4a5461",
-            "peekViewEditor.background": "#383535",
+            "peekViewEditor.background": "#222222",
+            "peekViewResult.selectionBackground": "#7997cb",
+            "peekViewEditor.matchHighlightBackground": "#7997cb",
             "sideBar.background": "#19191a",
     },
 }
