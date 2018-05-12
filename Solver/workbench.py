@@ -46,9 +46,17 @@ class Workbench:
         # scale
         print ("scale = %f" % self.scale)
         a *= self.scale
-
+        
         viewer = Viewer()
-        viewer.show_image(a, "summer")
+
+        # invert DB depths; brighter values are higher offsets from mesh plane
+        inverter = lambda v: abs(1 - v)
+        a = inverter(a)       
+        viewer.show_image(a, "summer", "DepthBuffer")
+
+        grad_x = np.array(self.depth_buffer.gradient_x)
+        grad_x = np.reshape(grad_x, (self.depth_buffer.height, self.depth_buffer.width))
+        viewer.show_image(grad_x, "summer", "X Gradient")
 
 def main():
     """

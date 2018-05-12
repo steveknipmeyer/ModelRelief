@@ -13,7 +13,7 @@
     <RootNamespace>Solver</RootNamespace>
     <InterpreterId>Global|ContinuumAnalytics|Anaconda36-64</InterpreterId>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>-s "Test/Mesh1.json" -w "Test/Working/"</CommandLineArguments>
+    <CommandLineArguments>-s "Test/Test.json" -w "Test/Working/"</CommandLineArguments>
     <EnableNativeCodeDebugging>True</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -46,8 +46,7 @@
     <Content Include="Notebooks\.ipynb_checkpoints\Solver-checkpoint.ipynb" />
     <Content Include="Notebooks\Lucy.png" />
     <Content Include="Notebooks\Solver.ipynb" />
-    <Content Include="Test\DepthBuffer.raw" />
-    <Content Include="Test\Mesh10.json" />
+        <Content Include="Test\Test.json" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

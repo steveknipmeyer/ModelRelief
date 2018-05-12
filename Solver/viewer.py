@@ -28,8 +28,7 @@ class Viewer:
         """
             Initialize an instance of the Viewer.
         """
-
-    def show_image(self, a, color_map: str):
+    def show_image(self, a, color_map: str, title: str):
         """
         Display a buffer of floats as an image.
         """
@@ -37,12 +36,8 @@ class Viewer:
         # flip; first DB row is at minimum Y
         a = np.flipud(a)
         
-        # invert depths; brighter values are higher offsets from mesh plane
-        inverter = lambda v: abs(1 - v)
-        a = inverter(a)
-
         # display
         plt.figure(figsize=(10, 10))
         plt.imshow(a, cmap=color_map)
-        plt.title("Model Relief")
+        plt.title(title)
         plt.show()

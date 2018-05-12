@@ -62,8 +62,8 @@
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Test",
-                "MRDatabaseProvider": "SQLServer",
-//              "MRDatabaseProvider": "SQLite",
+//              "MRDatabaseProvider": "SQLServer",
+                "MRDatabaseProvider": "SQLite",
                 "MRInitializeDatabase":"True",
                 "MRInitializeUserStore":"True",
             },
@@ -88,7 +88,8 @@
             "request": "launch",
             "stopOnEntry": false,
             "console": "integratedTerminal",
-            "program": "${file}",
+        //  "program": "${file}",
+            "program": "${workspaceRoot}/Solver/workbench.py",
             "cwd": "${workspaceRoot}",
             "debugOptions": [
                 "DebugStdLib",
@@ -97,7 +98,7 @@
             "env": {
                 "name": "value"
             },
-            "args":["--s", "Test/Mesh1.json", "--m", "1"]
+            "args":["--s", "Test/Test.json", "--m", "1"]
         },
         {
             "name": "Node Workbench",

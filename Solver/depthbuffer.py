@@ -110,6 +110,31 @@ class DepthBuffer:
         shape = a.shape
         
         return a
+    
+    @property
+    def gradient_x(self):
+        """
+            Returns the X gradient of the DB.
+        """
+
+        floats = self.floats
+
+        grad_x = [self.gradient(floats, index, value) for index, value in enumerate(floats)]
+        return grad_x
+
+    def gradient (self, floats, index, value):
+        """
+            Calculates the finite difference between two function values.
+        """
+        # skip first column
+        if index % self.width == 0 :
+            return 0.0
+
+        # convert to model space
+        v          = self.normalized_to_model_depth(value)
+        v_previous = self.normalized_to_model_depth(floats[index - 1])
+
+        return value - v_previous
 
     def normalized_to_model_depth(self, normalized):
         """

@@ -34,6 +34,11 @@
 
 #### Short Term
 
+Redo test database.
+
+Refactor the gradient method.
+Investigte numpy optimizations for the gradient.
+
 Update database schema diagram.  
   
 ###### StandardView

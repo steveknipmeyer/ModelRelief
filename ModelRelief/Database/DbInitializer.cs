@@ -364,7 +364,7 @@ namespace ModelRelief.Database
                     Name = "Test", Description = "Test Model",
                     FieldOfView = Camera.DefaultFieldOfView,
                     AspectRatio = 1.0,
-                    Near = 149.91, Far = 201.06,
+                    Near = 148.69, Far = 199.42,
 
                     PositionX = 25.00, PositionY = 201.06, PositionZ = -46.50,
                     EulerX = -0.71, EulerY = 0.0, EulerZ = 0.0, Theta = 0.71,
