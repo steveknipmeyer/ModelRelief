@@ -13,12 +13,8 @@
 
 import argparse
 import json
-import math
-import matplotlib.pyplot as plt
 import numpy as np
 import os
-import time
-from typing import Tuple
 
 from depthbuffer import DepthBuffer
 from mesh import Mesh
@@ -50,7 +46,7 @@ class Workbench:
         # invert DB depths; brighter values are higher offsets from mesh plane
         inverter = lambda v: abs(1 - v)
         a = inverter(a)       
-        
+
         viewer.show_image(a, "gray", title)
 
     def show_gradient(self, gradient_list, title):

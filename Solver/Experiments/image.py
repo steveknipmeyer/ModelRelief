@@ -3,7 +3,6 @@
 #   Copyright (c) 2018
 #   All Rights Reserved.
 #
-import numpy as np
 
 import skimage
 import skimage.filters as skif

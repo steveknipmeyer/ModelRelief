@@ -60,7 +60,7 @@ class Solver:
         scaled_floats = [self.depth_buffer.scale_model_depth(depth, scale) for depth in floats]
         return scaled_floats
 
-    def transform_floats_np(self, floats, width, height, scale):
+    def transform_floats_np(self, floats, scale):
         """
         Transforms a list of floats by a scale factor using numpy.
         """
@@ -92,7 +92,7 @@ class Solver:
         
         # numpy (40X faster)
         start_time = time.time()
-        scaled_floats = self.transform_floats_np (floats, self.depth_buffer.width, self.depth_buffer.height, scale)
+        scaled_floats = self.transform_floats_np (floats, scale)
         print ("transform_floats_np = %s" % (time.time() - start_time))
 
         # write transformed floats

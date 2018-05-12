@@ -4,7 +4,6 @@
 #   All Rights Reserved.
 #
 import math
-import os
 
 """
 .. module:: Camera
@@ -41,4 +40,4 @@ class Camera:
         near_width  = self.aspect * near_height
         extents = [near_width, near_height]
         
-        return extents;       
+        return extents     

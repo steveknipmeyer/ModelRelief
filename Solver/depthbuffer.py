@@ -14,8 +14,7 @@
 import os
 import struct
 import numpy as np
-import time
-from typing import List, Tuple
+from typing import List
 
 from camera import Camera
 
@@ -31,8 +30,8 @@ class DepthBuffer:
         """
         self.settings = settings
         self.path = os.path.abspath(settings['FileName'])
-        self.width = int(settings['Width'])
-        self.height = int(settings['Height'])
+        self._width = int(settings['Width'])
+        self._height = int(settings['Height'])
         self.format = settings['Format']
 
         self.camera = Camera(settings['Camera'])
@@ -104,7 +103,6 @@ class DepthBuffer:
         # transform 1D -> 2D        
         a = np.array(floats)
         a = np.reshape(a, (self.height, self.width))
-        shape = a.shape
         
         return a
     
@@ -170,8 +168,9 @@ class DepthBuffer:
         
         valueX = value_model_depth * self.width / extents[0]
         valueY = value_model_depth * self.height / extents[1]
+        assert (valueX == valueY), "Asymmetric scaling in mesh"
 
-        return value_model_depth
+        return valueX
 
     def normalized_to_model_depth(self, normalized):
         """
