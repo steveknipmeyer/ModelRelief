@@ -39,6 +39,8 @@ Adopt a standard for representing Python vectors.
 Numpy gradients are 10,000X faster!
     Numpy gradients = 0.005502462387084961
     Python gradients = 47.75585699081421
+Can DepthBuffer.np_array be optimized?
+    scale floats = 6
 
 Update database schema diagram.  
   

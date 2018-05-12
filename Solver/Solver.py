@@ -134,7 +134,7 @@ class Solver:
                 if not equal:
                     print ("Values differ: %f != %f at index %d" % (unscaled_value, scaled_value, index))
                     break
-            except:
+            except Exception:
                 print ("An exception occurred validating the scaled DepthBuffer.")     
                 break
 

@@ -98,7 +98,7 @@
             "env": {
                 "name": "value"
             },
-            "args":["--s", "Test/Test.json", "--m", "1"]
+            "args":["--s", "Test/Lucy.json", "--m", "1"]
         },
         {
             "name": "Node Workbench",

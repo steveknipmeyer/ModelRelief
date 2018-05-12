@@ -10,9 +10,10 @@
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
-
+import math
 import os
 import struct
+import sys
 import numpy as np
 import time
 from typing import List
@@ -84,27 +85,34 @@ class DepthBuffer:
     def floats(self) -> List[float]:
         """
         Constructs a list of floats from the DepthBuffer.
-        """   
+        """
         # convert to floats
         floats = self.unpack_floats(self.byte_depths)
 
-        # scale to a regular array with unit steps
-        floats = [self.normalized_to_model_depth_unit_differential(value) for value in floats]
-        
+        # now scale to map to a 2D array with unit steps between rows and columns
+        extents = self.camera.near_plane_extents()
+        xScale = self.width / extents[0]
+        yScale = self.width / extents[1]
+        assert math.fabs(xScale - yScale) < sys.float_info.epsilon, "Asymmetric scaling in mesh"
+
+        start_time = time.time()
+        floats = [self.normalized_to_model_depth_unit_differential(value, xScale) for value in floats]
+        print ("scale floats = %s" % (time.time() - start_time))
+
         return floats
 
     @property
     def np_array(self):
         """
         Returns a np array.
-        The 
+        The
         """
         floats = np.array(self.floats)
 
-        # transform 1D -> 2D        
+        # transform 1D -> 2D
         a = np.array(floats)
         a = np.reshape(a, (self.height, self.width))
-        
+
         return a
 
     @property
@@ -112,79 +120,21 @@ class DepthBuffer:
         """
         Returns the XY gradients of the DB.
         """
-
         floats_array = self.np_array
-        start_time = time.time()        
         result = np.gradient(floats_array)
-        print ("Numpy gradients = %s" % (time.time() - start_time))
 
         return result
-    
-    @property
-    def gradient_x(self):
-        """
-        Returns the X gradient of the DB.
-        """
 
-        floats = self.floats
-
-        def exclude (index):
-            """ Exclusion filter. """
-            # skip first column
-            if index % self.width == 0:
-                return True
-
-        previous_offset = 1
-        grad_x = [self.gradient(floats, index, value, exclude, previous_offset) for index, value in enumerate(floats)]
-        return grad_x
-
-    @property
-    def gradient_y(self):
-        """
-        Returns the Y gradient of the DB.
-        """
-
-        floats = self.floats
-
-        def exclude (index):
-            """ Exclusion filter. """
-            # skip first row
-            if index < self.width:
-                return True
-
-        previous_offset = self.width
-        grad_y = [self.gradient(floats, index, value, exclude, previous_offset) for index, value in enumerate(floats)]
-        return grad_y
-
-    def gradient (self, floats, index, value, exclude, previous_offset):
-        """
-        Calculates the finite difference between two function values.
-        """
-        if exclude(index):
-            return 0.0
-
-        # convert to model space
-        v          = value
-        v_previous = floats[index - previous_offset]
-
-        return v - v_previous
-
-    def normalized_to_model_depth_unit_differential (self, value):
+    def normalized_to_model_depth_unit_differential (self, value, scale):
         """
         Scales a normalized depth buffer value to scaled model units such that the differential step size (dx or dy) = 1.
-        This scales the value such that gradient computation can ignore dx or dy.       
+        This scales the value such that gradient computation can ignore dx or dy.
         """
         # first scale to original model depth
         value_model_depth = self.normalized_to_model_depth(value)
 
-        # now scale to map to a 2D array with unit steps between rows and columns
-        extents = self.camera.near_plane_extents()
-        
-        valueX = value_model_depth * self.width / extents[0]
-        valueY = value_model_depth * self.height / extents[1]
-        assert (valueX == valueY), "Asymmetric scaling in mesh"
-
-        return valueX
+        value = value_model_depth * scale
+        return value
 
     def normalized_to_model_depth(self, normalized):
         """
@@ -192,12 +142,12 @@ class DepthBuffer:
         https://stackoverflow.com/questions/6652253/getting-the-true-z-value-from-the-depth-buffer
         """
         normalized = 2.0 * normalized - 1.0
-        
+
         z_linear = (2.0 * self.camera.near * self.camera.far) / (self.camera.far + self.camera.near - (normalized * (self.camera.far - self.camera.near)))
 
         # z_linear is the distance from the camera; adjust to yield height from mesh plane
         z_linear = self.camera.far - z_linear
-        
+
         return z_linear
 
     def scale_model_depth(self, normalized, scale):
