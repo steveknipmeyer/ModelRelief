@@ -84,6 +84,7 @@ class Viewer:
 
         image_dimension = 10
         fig.set_size_inches(n_images * image_dimension , image_dimension)       
+        fig.tight_layout()
         window = ScrollableWindow(fig)        
         #plt.show()
 
@@ -94,6 +95,7 @@ class ScrollableWindow(QtWidgets.QMainWindow):
         self.qapp = QtWidgets.QApplication([])
 
         QtWidgets.QMainWindow.__init__(self)
+        self.setFixedSize(1024, 1024)
         self.widget = QtWidgets.QWidget()
         self.setCentralWidget(self.widget)
         self.widget.setLayout(QtWidgets.QVBoxLayout())
