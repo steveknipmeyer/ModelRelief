@@ -23,6 +23,8 @@ from depthbuffer import DepthBuffer
 from mesh import Mesh
 from meshtransform import MeshTransform
 
+DEBUG = False
+
 class Solver:
     """
     Transforms a DepthBuffer to create a Mesh (raw float format) based on a MeshTransform.
@@ -56,7 +58,7 @@ class Solver:
         self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'])
         self.mesh_transform = MeshTransform(self.settings['MeshTransform'])
 
-    def transform_floats(self, floats, scale):
+    def transform_floats(self, floats : List[float], scale):
         """
         Transforms a list of floats by a scale factor using numpy.
         """
@@ -74,26 +76,27 @@ class Solver:
         """
         floats = self.depth_buffer.floats_raw
 
-        # write temporary file of original floats
-        unscaled_path = '%s/%s.floats.%f' % (self.working_folder, self.depth_buffer.name, 1.0)
-        self.depth_buffer.write_floats(unscaled_path, floats)
-        
         # numpy (40X faster)
         start_time = time.time()
         scale = self.mesh_transform.scale
         scaled_floats = self.transform_floats (floats, scale)
         print ("transform_floats_np = %s" % (time.time() - start_time))
 
-        # write transformed floats
-        scaled_path = '%s/%s.floatsPrime.%f' % (self.working_folder, self.depth_buffer.name, scale)
-        self.depth_buffer.write_floats(scaled_path, scaled_floats)
-
         # write final raw bytes
         file_path = '%s/%s' % (self.working_folder, self.mesh.name)
         self.depth_buffer.write_binary(file_path, self.depth_buffer.pack_floats(scaled_floats))
 
-        return (unscaled_path, scaled_path)
+        if DEBUG:
+            # write original floats
+            unscaled_path = '%s/%s.floats.%f' % (self.working_folder, self.depth_buffer.name, 1.0)
+            self.depth_buffer.write_floats(unscaled_path, floats)
 
+            # write transformed floats
+            scaled_path = '%s/%s.floatsPrime.%f' % (self.working_folder, self.depth_buffer.name, scale)
+            self.depth_buffer.write_floats(scaled_path, scaled_floats)
+
+            self.verify_transform((unscaled_path, scaled_path), self.mesh_transform.scale)
+    
     def verify_transform(self, files : Tuple[str, str], scale : float) -> None:
         """
         Compares the baseline float file with the scaled float file.
@@ -141,8 +144,7 @@ def main():
     arguments = options_parser.parse_args()
 
     solver = Solver(arguments.settings, arguments.working)
-    float_files = solver.transform_buffer()
-    solver.verify_transform(float_files, solver.mesh_transform.scale)
+    solver.transform_buffer()
 
 if __name__ == '__main__':
     main()
