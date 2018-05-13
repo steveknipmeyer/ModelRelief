@@ -89,8 +89,8 @@
             "stopOnEntry": false,
             "console": "integratedTerminal",
         //  "program": "${file}",
-        //  "program": "${workspaceRoot}/Solver/workbench.py",
-            "program": "${workspaceRoot}/Solver/solver.py",
+            "program": "${workspaceRoot}/Solver/workbench.py",
+        //  "program": "${workspaceRoot}/Solver/solver.py",
             "cwd": "${workspaceRoot}",
             "debugOptions": [
                 "DebugStdLib",
@@ -99,7 +99,6 @@
             "env": {
                 "name": "value"
             },
-         // "args":["--s", "Test/Lucy.json", "--m", "1"]
             "args":["--s", "Test/Lucy.json", "--w", "Test/Working"]
         },
         {

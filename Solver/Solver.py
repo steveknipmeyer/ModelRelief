@@ -70,7 +70,7 @@ class Solver:
         
         return float_array.tolist()
 
-    def transform_buffer(self):
+    def transform(self):
         """
         Transforms a DepthBuffer by a MeshTransform
         """
@@ -144,7 +144,7 @@ def main():
     arguments = options_parser.parse_args()
 
     solver = Solver(arguments.settings, arguments.working)
-    solver.transform_buffer()
+    solver.transform()
 
 if __name__ == '__main__':
     main()

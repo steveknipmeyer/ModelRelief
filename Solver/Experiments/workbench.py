@@ -25,7 +25,6 @@ def main():
     matplotlib.use('qt5agg')
     plt.imshow(np.random.rand(10, 10), interpolation='none')
     plt.show()
-    pass
 
 if __name__ == '__main__':
     main()

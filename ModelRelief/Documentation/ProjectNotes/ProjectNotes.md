@@ -2,23 +2,11 @@
 #### Commit Notes
     
 #### Short Term
-    Python refactoring
-        Add comments.
-        Add type hints.
-        Review naming conventions.
-        Consistently use np arrays instead of combining with Lists.
-
-    Refactor workbench to become a driver for the Solver module.
-        All relief processing should be done in Solver.
-        Workbench is a lightweight means to explore Solver solutions.
-
-    Refactor the attenuation logic to use Tau from the MeshTransform.
     Implement Gaussian smoothing for the base (low frequency) mesh using Sigma1 (SigmaLow?).
-
-    Adopt a standard for representing Python vectors.
     Modify the Solver to return a mesh based on the gradient field for visualization.
+    Adopt a standard for representing Python vectors.
 
-Update database schema diagram.  
+Update database schema diagram.  ****
   
 ###### StandardView
 When the view camera is interactively changed, it should invalidate the StandardView in the UI.
