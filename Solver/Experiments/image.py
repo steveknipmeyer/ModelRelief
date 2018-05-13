@@ -13,7 +13,7 @@ from skimage.color import rgb2gray
 
 """
 from IPython.html.widgets import interact
-C:\Program Files (x86)\Microsoft Visual Studio\Shared\Anaconda3_64\lib\site-packages\IPython\html.py:14: ShimWarning: The `IPython.html` package has been deprecated since IPython 4.0. You should import from `notebook` instead. `IPython.html.widgets` has moved to `ipywidgets`.
+C:/Program Files (x86)/Microsoft Visual Studio/Shared/Anaconda3_64/lib/site-packages/IPython/html.py:14: ShimWarning: The `IPython.html` package has been deprecated since IPython 4.0. You should import from `notebook` instead. `IPython.html.widgets` has moved to `ipywidgets`.
   "`IPython.html.widgets` has moved to `ipywidgets`.", ShimWarning)
 """
 

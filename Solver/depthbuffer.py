@@ -31,12 +31,16 @@ class DepthBuffer:
         Iniitalize an instancee of a DepthBuffer.
         """
         self.settings = settings
+
         self.path = os.path.abspath(settings['FileName'])
         self._width = int(settings['Width'])
         self._height = int(settings['Height'])
         self.format = settings['Format']
 
         self.camera = Camera(settings['Camera'])
+
+        self._floats   = None
+        self._np_array = None
 
     @property
     def name(self):
@@ -82,12 +86,31 @@ class DepthBuffer:
         return self.read__binary(self.path)
 
     @property
+    def floats_raw(self) -> List[float]:
+        """
+        Constructs a list of floats that are in raw normalized DB format [0,1] from the DepthBuffer.
+        """
+
+        # convert to floats
+        start_time = time.time()
+        floats = self.unpack_floats(self.byte_depths)
+        print ("unpack floats normalized= %s" % (time.time() - start_time))
+
+        return floats
+
+    @property
     def floats(self) -> List[float]:
         """
         Constructs a list of floats from the DepthBuffer.
         """
+        # cached?
+        if (self._floats is not None):
+            return self._floats
+
         # convert to floats
+        start_time = time.time()
         floats = self.unpack_floats(self.byte_depths)
+        print ("unpack floats = %s" % (time.time() - start_time))
 
         # now scale to map to a 2D array with unit steps between rows and columns
         extents = self.camera.near_plane_extents()
@@ -96,9 +119,14 @@ class DepthBuffer:
         assert math.fabs(xScale - yScale) < sys.float_info.epsilon, "Asymmetric scaling in mesh"
 
         start_time = time.time()
-        floats = [self.normalized_to_model_depth_unit_differential(value, xScale) for value in floats]
+
+        floats_array = np.array(floats)
+        scaler = lambda v: self.normalized_to_model_depth_unit_differential(v, xScale)
+        floats_array = scaler(floats_array)
+        floats = floats_array.tolist()       
         print ("scale floats = %s" % (time.time() - start_time))
 
+        self._floats = floats
         return floats
 
     @property
@@ -107,12 +135,17 @@ class DepthBuffer:
         Returns a np array.
         The
         """
+        # cached?
+        if (self._np_array is not None):
+            return self._np_array
+
         floats = np.array(self.floats)
 
         # transform 1D -> 2D
         a = np.array(floats)
         a = np.reshape(a, (self.height, self.width))
 
+        self._np_array = a
         return a
 
     @property

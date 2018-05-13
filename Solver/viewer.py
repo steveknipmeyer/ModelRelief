@@ -5,7 +5,6 @@
 #
 
 """
-
 .. module:: viewer
    :synopsis: Experiments in image display of depth buffers.
 
@@ -21,8 +20,9 @@ class Viewer:
     """
     def __init__(self):
         """
-            Initialize an instance of the Viewer.
+        Initialize an instance of the Viewer.
         """
+        
     def show_image(self, a, color_map: str, title: str):
         """
         Display a buffer of floats as an image.

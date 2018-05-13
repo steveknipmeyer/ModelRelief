@@ -4,6 +4,7 @@
 #   All Rights Reserved.
 #
 import math
+from typing import List
 
 """
 .. module:: Camera
@@ -20,19 +21,19 @@ class Camera:
 
     def __init__(self, settings):
         """
-            Iniitalize an instance of a Camera.
+        Initialize an instance of a Camera.
         """
         self.settings = settings
 
-        self.name = settings['Name']
+        self.name   = settings['Name']
         self.aspect = settings['AspectRatio']        
         self.fov    = settings['FieldOfView']        
         self.near   = settings['Near']        
         self.far    = settings['Far']        
 
-    def near_plane_extents (self):
+    def near_plane_extents (self)-> List[float]: 
         """
-            Returns the extents (model units) of the near clipping plane.
+        Returns the extents (model units) of the near clipping plane.
         """
         fov_radians = self.fov * (math.pi / 180)
     

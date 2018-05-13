@@ -96,7 +96,7 @@
     "Tau": 1.0,
     "SigmaGaussianBlur": 1.0,
     "SigmaGaussianSmooth": 1.0,
-    "LambdaLinearScaling": 1.0,
+    "LambdaLinearScaling": 0.5,
     "ProjectId": 1,
     "Project": {
       "Id": 1,

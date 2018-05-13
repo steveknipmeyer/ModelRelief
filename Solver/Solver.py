@@ -5,12 +5,10 @@
 #
 
 """
-
 .. module:: Solver
    :synopsis: Generates a mesh from a DepthBuffer and a MeshTransform.
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
-
 """
 
 import argparse
@@ -19,7 +17,7 @@ import math
 import os
 import time
 import numpy as np
-from typing import Tuple
+from typing import List, Tuple
 
 from depthbuffer import DepthBuffer
 from mesh import Mesh
@@ -27,12 +25,18 @@ from meshtransform import MeshTransform
 
 class Solver:
     """
-    Transforms a DepthBuffer to create a new DepthBuffer based on a MeshTransform.
+    Transforms a DepthBuffer to create a Mesh (raw float format) based on a MeshTransform.
     """
-    def __init__(self, settings, working):
+    def __init__(self, settings: str, working: str):
         """
-            Iniitalize an instance of the Solver.
-            settings : path to JSON settings
+        Initialize an instance of the Solver.
+
+        Parameters
+        ----------
+        settings : str
+            Path to JSON Mesh settings file.
+        working
+            Working folder path for intermediate files.
         """
         with open(settings) as json_file:
             self.settings = json.load(json_file)
@@ -46,7 +50,7 @@ class Solver:
 
     def initialize_settings(self):
         """
-            Unpack the JSON settings file and initialie Solver properties.
+        Unpack the JSON settings file and initialie Solver properties.
         """
         self.mesh = Mesh(self.settings)
         self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'])
@@ -54,45 +58,30 @@ class Solver:
 
     def transform_floats(self, floats, scale):
         """
-        Transforms a list of floats by a scale factor.
-        Uses a list comprehension.
-        """
-        scaled_floats = [self.depth_buffer.scale_model_depth(depth, scale) for depth in floats]
-        return scaled_floats
-
-    def transform_floats_np(self, floats, scale):
-        """
         Transforms a list of floats by a scale factor using numpy.
         """
-        a = np.array(floats)
+        float_array = np.array(floats)
         
         # scale
         scaler = lambda v: self.depth_buffer.scale_model_depth(v, scale)        
-        a = scaler(a)
+        float_array = scaler(float_array)
         
-        return a.tolist()
+        return float_array.tolist()
 
     def transform_buffer(self):
         """
-            Transforms a DepthBuffer by a MeshTransform
+        Transforms a DepthBuffer by a MeshTransform
         """
-        floats = self.depth_buffer.floats
+        floats = self.depth_buffer.floats_raw
 
         # write temporary file of original floats
         unscaled_path = '%s/%s.floats.%f' % (self.working_folder, self.depth_buffer.name, 1.0)
         self.depth_buffer.write_floats(unscaled_path, floats)
-
-        scale = self.mesh_transform.scale
-        """
-        # list comprehension
-        start_time = time.time()
-        scaled_floats = self.transform_floats (floats, scale)
-        print ("transform_floats = %s" % (time.time() - start_time))
-        """
         
         # numpy (40X faster)
         start_time = time.time()
-        scaled_floats = self.transform_floats_np (floats, scale)
+        scale = self.mesh_transform.scale
+        scaled_floats = self.transform_floats (floats, scale)
         print ("transform_floats_np = %s" % (time.time() - start_time))
 
         # write transformed floats
@@ -107,14 +96,14 @@ class Solver:
 
     def verify_transform(self, files : Tuple[str, str], scale : float) -> None:
         """
-            Compares the baseline float file with the scaled float file.
+        Compares the baseline float file with the scaled float file.
 
-            Parameters:
-            ----------
-            files : tuple
-                A tuple of the original, unscaled float file and the scaled float file.
-            scale : float
-                The scale factor applied to the depths.
+        Parameters:
+        ----------
+        files : tuple
+            A tuple of the original, unscaled float file and the scaled float file.
+        scale : float
+            The scale factor applied to the depths.
         """
 
         unscaled_path, scaled_path = files
@@ -140,7 +129,7 @@ class Solver:
 
 def main():
     """
-        Main entry point.
+    Main entry point.
     """
     os.chdir(os.path.dirname(__file__))
 

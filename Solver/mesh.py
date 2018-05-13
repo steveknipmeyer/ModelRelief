@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-#   Copyright (c) 2017
+#   Copyright (c) 2018
 #   All Rights Reserved.
 #
 import os
@@ -10,7 +10,6 @@ import os
    :synopsis: A low relief mesh created by applying a MeshTransform to a DepthBuffer.
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
-
 """
 
 class Mesh:
@@ -20,9 +19,10 @@ class Mesh:
 
     def __init__(self, settings):
         """
-        Iniitalize an instance of a Mesh.
+        Initialize an instance of a Mesh.
         """
         self.settings = settings
+        
         self.name = settings['Name']
         self.path = os.path.abspath(settings['FileName'])
         

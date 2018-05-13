@@ -21,9 +21,10 @@ set MRDatabaseProvider=SQLServer
 set MRInitializeDatabase=False
 set MRInitializeUserStore=False
 
+path=%path%;"D:\Users\Steve Knipmeyer\Documents\Bin"
+path=%path%;%MRSolution%Tools
 path=%path%;C:\Program Files\Git
-path=%path%;%HOME%\Documents\Bin
-path=%path%;%MRSolution%Toolspath=%path%;C:\Program Files (x86)\WinMerge
+path=%path%;C:\Program Files (x86)\WinMerge
 path=%path%;C:\Program Files\KDiff3
 
 call "C:\Program Files\nodejs\nodevars.bat"
