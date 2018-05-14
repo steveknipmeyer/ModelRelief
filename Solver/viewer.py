@@ -85,13 +85,16 @@ class Viewer:
         image_dimension = 10
         fig.set_size_inches(n_images * image_dimension , image_dimension)       
         fig.tight_layout()
+
         window = ScrollableWindow(fig)        
+        window.show_window()
         #plt.show()
 
 class ScrollableWindow(QtWidgets.QMainWindow):
     """ https://stackoverflow.com/questions/42622146/scrollbar-on-matplotlib-showing-page """
 
     def __init__(self, fig):
+        """Perform class initialization."""
         self.qapp = QtWidgets.QApplication([])
 
         QtWidgets.QMainWindow.__init__(self)
@@ -112,5 +115,7 @@ class ScrollableWindow(QtWidgets.QMainWindow):
         self.widget.layout().addWidget(self.nav)
         self.widget.layout().addWidget(self.scroll)
 
+    def show_window(self):
+        """Show the window."""        
         self.show()
         exit(self.qapp.exec_()) 

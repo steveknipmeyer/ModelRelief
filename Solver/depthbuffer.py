@@ -90,11 +90,8 @@ class DepthBuffer:
         """
         Constructs a list of floats that are in raw normalized DB format [0,1] from the DepthBuffer.
         """
-
         # convert to floats
-        start_time = time.time()
         floats = self.unpack_floats(self.byte_depths)
-        print ("unpack floats normalized= %s" % (time.time() - start_time))
 
         return floats
 
@@ -118,13 +115,10 @@ class DepthBuffer:
         yScale = self.width / extents[1]
         assert math.fabs(xScale - yScale) < sys.float_info.epsilon, "Asymmetric scaling in mesh"
 
-        start_time = time.time()
-
         floats_array = np.array(floats)
         scaler = lambda v: self.normalized_to_model_depth_unit_differential(v, xScale)
         floats_array = scaler(floats_array)
         floats = floats_array.tolist()       
-        print ("scale floats = %s" % (time.time() - start_time))
 
         self._floats = floats
         return floats
@@ -200,6 +194,19 @@ class DepthBuffer:
         scaled_normalized = (scaled_normalized + 1.0) / 2.0
 
         return scaled_normalized
+
+    def scale_floats(self, scale) -> List[float]:
+        """
+        Transforms the depth buffer (model units) by a scale factor.
+        Returns a List of floats.
+        """
+        float_array = np.array(self.floats_raw)
+        
+        # scale
+        scaler = lambda v: self.scale_model_depth(v, scale)        
+        float_array = scaler(float_array)
+        
+        return float_array.tolist()
 
     def read__binary(self, path):
         """

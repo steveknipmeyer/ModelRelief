@@ -23,6 +23,6 @@ class MeshTransform:
         Initialize an instance of a MeshTransform.
         """
         self.settings = settings
-        
+
         self.tau          = settings['Tau']
         self.lambda_scale = settings['LambdaLinearScaling']

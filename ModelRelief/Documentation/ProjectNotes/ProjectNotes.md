@@ -2,6 +2,8 @@
 #### Commit Notes
     
 #### Short Term
+    Introduce a float mesh format (.flt)?
+
     Implement Gaussian smoothing for the base (low frequency) mesh using Sigma1 (SigmaLow?).
     Modify the Solver to return a mesh based on the gradient field for visualization.
     Adopt a standard for representing Python vectors.
