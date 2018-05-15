@@ -15,6 +15,8 @@ import argparse
 import json
 import os
 
+from filemanager import FileManager
+
 from depthbuffer import DepthBuffer
 from mesh import Mesh
 from meshtransform import MeshTransform
@@ -56,7 +58,7 @@ class Solver:
         Unpack the JSON settings file and initialie Solver properties.
         """
         self.mesh = Mesh(self.settings)
-        self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'])
+        self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'], self.working_folder)
         self.mesh_transform = MeshTransform(self.settings['MeshTransform'])
 
         # solver classes
@@ -72,11 +74,11 @@ class Solver:
         Transforms a DepthBuffer by a MeshTransform
         """
         buffer = self.depth_buffer
-        scaled_floats = self.meshscale.scale_buffer(buffer, self.mesh_transform.lambda_scale)
+        scaled_floats = buffer.scale_floats(self.mesh_transform.lambda_scale)
 
         # write final raw bytes
         file_path = '%s/%s' % (self.working_folder, self.mesh.name)
-        buffer.write_binary(file_path, buffer.pack_floats(scaled_floats))
+        FileManager().write_binary(file_path, FileManager().pack_floats(scaled_floats))
 
 def main():
     """

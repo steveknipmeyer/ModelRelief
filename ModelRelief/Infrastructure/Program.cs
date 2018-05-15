@@ -15,6 +15,7 @@ namespace ModelRelief.Infrastructure
     using Microsoft.Extensions.DependencyInjection;
     using ModelRelief.Database;
     using Serilog;
+    using Serilog.Events;
 
     public class Program
     {
@@ -48,6 +49,9 @@ namespace ModelRelief.Infrastructure
 
             Log.Logger = new LoggerConfiguration()
                         .ReadFrom.Configuration(configuration)
+                        // suppress all Microsoft messages unless they are >- Error
+                        // https://github.com/serilog/serilog-extensions-logging/issues/78
+                        .MinimumLevel.Override("Microsoft", LogEventLevel.Error)
                         .CreateLogger();
         }
 

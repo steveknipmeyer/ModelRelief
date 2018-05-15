@@ -12,13 +12,13 @@
 """
 import math
 import os
-import struct
 import sys
 import numpy as np
 import time
-from typing import List
+from typing import List, Tuple
 
 from camera import Camera
+from filemanager import FileManager
 
 class DepthBuffer:
     """
@@ -26,11 +26,19 @@ class DepthBuffer:
     """
     SINGLE_PRECISION = 4
 
-    def __init__(self, settings):
+    def __init__(self, settings: str, working_folder: str):
         """
-        Iniitalize an instancee of a DepthBuffer.
+        Initialize an instancee of a DepthBuffer.
+        Parameters:
+        ----------
+        setting
+            The path of the DepthBuffer JSON file.
+        working_folder
+            The temp folder used for intermediate results.
         """
+        self.debug = True
         self.settings = settings
+        self.working_folder = working_folder
 
         self.path = os.path.abspath(settings['FileName'])
         self._width = int(settings['Width'])
@@ -78,12 +86,12 @@ class DepthBuffer:
         self._height = value
 
     @property
-    def byte_depths(self) -> List[bytes]:
+    def bytes_raw(self) -> List[bytes]:
         """
-        Constructs a list of floats from the DepthBuffer.
+        Constructs a list of bytes from the DepthBuffer.
         """
         # read raw bytes
-        return self.read__binary(self.path)
+        return FileManager().read__binary(self.path)
 
     @property
     def floats_raw(self) -> List[float]:
@@ -91,7 +99,7 @@ class DepthBuffer:
         Constructs a list of floats that are in raw normalized DB format [0,1] from the DepthBuffer.
         """
         # convert to floats
-        floats = self.unpack_floats(self.byte_depths)
+        floats = FileManager().unpack_floats(self.bytes_raw)
 
         return floats
 
@@ -106,7 +114,7 @@ class DepthBuffer:
 
         # convert to floats
         start_time = time.time()
-        floats = self.unpack_floats(self.byte_depths)
+        floats = FileManager().unpack_floats(self.bytes_raw)
         print ("unpack floats = %s" % (time.time() - start_time))
 
         # now scale to map to a 2D array with unit steps between rows and columns
@@ -195,92 +203,66 @@ class DepthBuffer:
 
         return scaled_normalized
 
-    def scale_floats(self, scale) -> List[float]:
+    def scale_floats(self, scale: float) -> List[float]:
         """
         Transforms the depth buffer (model units) by a scale factor.
         Returns a List of floats.
         """
+        start_time = time.time()
+
         float_array = np.array(self.floats_raw)
         
         # scale
         scaler = lambda v: self.scale_model_depth(v, scale)        
         float_array = scaler(float_array)
+        float_list = float_array.tolist()
+
+        if self.debug:
+            # write original floats
+            unscaled_path = '%s/%s.floats.%f' % (self.working_folder, self.name, 1.0)
+            FileManager().write_floats(unscaled_path, self.floats_raw)
+
+            # write transformed floats
+            scaled_path = '%s/%s.floatsPrime.%f' % (self.working_folder, self.name, scale)
+            FileManager().write_floats(scaled_path, float_list)
+
+            self.verify_scale_buffer((unscaled_path, scaled_path), scale)
         
-        return float_array.tolist()
+        print ("%s = %s seconds" % (__name__, time.time() - start_time))
+        return float_list
 
-    def read__binary(self, path):
+    def verify_scale_buffer(self, files : Tuple[str, str], scale : float) -> bool:
         """
-        Reads a raw depth buffer.
-        A raw depth buffer is a binary stream of single precision four byte floats.
-        This method returns a list of bytes.
+        Compares the baseline floats with the scaled floats.
+
+        Parameters:
+        ----------
+        files : tuple
+            A tuple of the original, unscaled float file and the scaled float file.
+        scale : float
+            The scale factor applied to the depths.
         """
-        with open(file=path, mode='rb') as file:
-            byte_list = bytearray(file.read())
-            return byte_list
+        unscaled_path, scaled_path = files
+        print ("Unscaled : %s" % unscaled_path)
+        print ("Scaled : %s" % scaled_path)
 
-    def write_binary(self, path, byte_values):
-        """
-        Writes a raw depth buffer.
-        A raw depth buffer is a binary stream of single precision four byte floats.
-        """
-        with open(file=path, mode='wb') as file:
-            file.write(byte_values)
+        unscaled = FileManager().read_floats(unscaled_path)
+        scaled   = FileManager().read_floats(scaled_path)
 
-    def unpack_floats(self, byte_depths, floats_per_unpack=None):
-        """
-        Returns a list of float tuples from a byte sequence.
-        The length of the tuple is controlled by the floats_per_unpack parameter.
+        tolerance = 1e-6
+        for index in range(0, len(unscaled)):
+            try:    
+                unscaled_value = self.normalized_to_model_depth(unscaled[index])
+                scaled_value   = self.normalized_to_model_depth(scaled[index])
 
-        The default is to return a single tuple containing all floats as performance testing
-        shows that this is the most efficient.
-        """
-        if floats_per_unpack is None:
-            floats_per_unpack = int(len(byte_depths) / DepthBuffer.SINGLE_PRECISION)
+                equal = math.isclose(unscaled_value * scale, scaled_value, abs_tol=tolerance)
+                if not equal:
+                    print ("Values differ: %f != %f at index %d" % (unscaled_value, scaled_value, index))
+                    return False
 
-        float_count = len(byte_depths) / DepthBuffer.SINGLE_PRECISION
-        unpack_steps = int(float_count / floats_per_unpack)
+            except Exception:
+                print ("An exception occurred validating the scaled DepthBuffer.")     
+                return False
 
-        float_tuples= []
-        span = DepthBuffer.SINGLE_PRECISION * floats_per_unpack
-        for value in range(unpack_steps):
-            lower = value * span
-            upper = lower + span
-            unpack_format = '%df' % floats_per_unpack
-            depth_tuple = struct.unpack(unpack_format, byte_depths[lower:upper])
-            float_tuples.append(depth_tuple)
-
-        # unpack list of tuples into a list of single float values
-        floats = []
-        for depth_tuple in float_tuples:
-            for depth in depth_tuple:
-                floats.append(depth)
-
-        return floats
-
-    def pack_floats(self, floats):
-        """
-        Packs a list of single precision (32 bit) floats into a byte sequence.
-        """
-        float_count = len(floats)
-
-        pack_format = '%df' % float_count
-        byte_values = struct.pack(pack_format, *floats)
-
-        return byte_values
-
-    def read_floats(self, path):
-        """
-        Reads a file into a list of floats.
-        """
-        with open(file=path, mode='r') as file:
-            float_list = list(map(float, file))
-            return float_list
-
-    def write_floats(self, path, floats):
-        """
-        Writes a file from a list of floats.
-        """
-        with open(file=path, mode='w') as file:
-            for value in floats:
-                file.write(str(value) + '\n')
-
+        print ("Scale verified.")
+        return True

@@ -1,8 +1,31 @@
 ﻿### Tasks
 #### Commit Notes
+
+Move meshscale.scale_buffer to depthbuffer
+Introduce a file conversion class FileManager.
+Add logging suppression for categogy 'Microsoft'
     
 #### Short Term
-    Introduce a float mesh format (.flt)?
+    GenerateDepthBufferAsync is not implemented.
+        Why is this generated the first time (requires a Camera change)? 
+
+    Add a Python Utility module.
+        Timer class.
+
+    Review typing module and Python types.
+        What is the difference between bytes and "List[byte]"?
+    Should classes hold an instance of FileManager?
+    How can ModelRelief messages be associated with a category (e.g. 'Microsoft')?
+
+    Files
+        Move DepthBuffer mesh construction to Mesh class.        
+
+        File Formats
+            raw -> db
+                -> flt (spf, dpf)?
+
+    Convert test data.
+    Rebuild test databases.
 
     Implement Gaussian smoothing for the base (low frequency) mesh using Sigma1 (SigmaLow?).
     Modify the Solver to return a mesh based on the gradient field for visualization.

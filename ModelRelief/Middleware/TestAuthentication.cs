@@ -34,7 +34,7 @@ namespace ModelRelief.Middleware
                 context.User = new System.Security.Claims.ClaimsPrincipal(claimsPrincipal);
 #endif
                 isAuthenticated = context.User.Identity.IsAuthenticated;
-                Console.WriteLine($"{Identity.MockUserName} authenticated: {isAuthenticated}");
+                // Console.WriteLine($"{Identity.MockUserName} authenticated: {isAuthenticated}");
             }
 
             await next();

@@ -184,7 +184,7 @@ namespace ModelRelief.Api.V1.Shared
                 if (referenceType == null)
                     continue;
 
-                Console.WriteLine("Verifying reference property: " + propertyName + ", Value: " + propertyValue, null);
+                // Console.WriteLine("Verifying reference property: " + propertyName + ", Value: " + propertyValue, null);
                 switch (referenceType.Name)
                 {
                     case nameof(ApplicationUser):
