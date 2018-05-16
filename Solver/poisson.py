@@ -10,13 +10,22 @@
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
+from services import Services
 
 class Poisson:
     """
     A class for solving Poisson's equation for images.
     """
 
-    def __init__(self):
+    def __init__(self, services : Services):
         """
         Initialize an instance of a Poisson.
+        Parameters
+        ----------
+        services
+            Service provider (loggins, timers, etc.)
         """
+        self.debug = True
+        self.services = services
+
+

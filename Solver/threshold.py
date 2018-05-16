@@ -10,14 +10,22 @@
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
+from services  import Services
 
 class Threshold:
     """
     A class for Support for applying thresholds to image components.
     """
 
-    def __init__(self):
+    def __init__(self, services : Services):
         """
         Initialize an instance of a Threshold.
+        Parameters
+        ----------
+        services
+            Service provider (loggins, timers, etc.)
         """
+        self.debug = True
+        self.services = services
+
 

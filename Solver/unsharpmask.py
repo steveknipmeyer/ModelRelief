@@ -10,14 +10,21 @@
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
+from services import Services
 
 class UnsharpMask:
     """
     A class for calculating unsharp masks of images.
     """
 
-    def __init__(self):
+    def __init__(self, services : Services):
         """
         Initialize an instance of an UnsharpMask.
+        Parameters
+        ----------
+        services
+            Service provider (loggins, timers, etc.)
         """
+        self.debug = True
+        self.services = services
 

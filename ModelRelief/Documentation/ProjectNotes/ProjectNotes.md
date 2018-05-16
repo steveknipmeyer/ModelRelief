@@ -1,21 +1,10 @@
 ﻿### Tasks
 #### Commit Notes
-
-Move meshscale.scale_buffer to depthbuffer
-Introduce a file conversion class FileManager.
-Add logging suppression for categogy 'Microsoft'
     
 #### Short Term
-    GenerateDepthBufferAsync is not implemented.
-        Why is this generated the first time (requires a Camera change)? 
-
-    Add a Python Utility module.
-        Timer class.
-
     Review typing module and Python types.
         What is the difference between bytes and "List[byte]"?
     Should classes hold an instance of FileManager?
-    How can ModelRelief messages be associated with a category (e.g. 'Microsoft')?
 
     Files
         Move DepthBuffer mesh construction to Mesh class.        
@@ -26,6 +15,12 @@ Add logging suppression for categogy 'Microsoft'
 
     Convert test data.
     Rebuild test databases.
+
+    GenerateDepthBufferAsync is not implemented.
+        Why is this generated the first time (requires a Camera change)? 
+
+    3D Surface Visualization        
+        https://jakevdp.github.io/PythonDataScienceHandbook/04.12-three-dimensional-plotting.html
 
     Implement Gaussian smoothing for the base (low frequency) mesh using Sigma1 (SigmaLow?).
     Modify the Solver to return a mesh based on the gradient field for visualization.
@@ -491,6 +486,8 @@ A Put (File) request returns Created instead of OK. The file is correctly replac
         API Reference       ApiReference
 
 #### Logging
+    How can ModelRelief messages be associated with a category (e.g. 'Microsoft')?
+
     Limit the size of the log file.
 
     Log ApiErrorResult?
@@ -1130,3 +1127,9 @@ https://semver.npmjs.com/
     Numpy array operations are 2,250X faster!    
         Python scale floats = 4.5  
         Numpy scale floars = .02
+
+#### WSL
+    The Ubuntu (Windows App Store installation) is located here:
+        C:\Users\Steve Knipmeyer\AppData\Local\Packages\CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc\LocalState\rootfs
+    Caveats:
+        https://blogs.msdn.microsoft.com/commandline/2016/11/17/do-not-change-linux-files-using-windows-apps-and-tools/

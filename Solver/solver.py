@@ -16,6 +16,7 @@ import json
 import os
 
 from filemanager import FileManager
+from services import Services
 
 from depthbuffer import DepthBuffer
 from mesh import Mesh
@@ -38,19 +39,28 @@ class Solver:
 
         Parameters
         ----------
-        settings : str
+        settings
             Path to JSON Mesh settings file.
         working
             Working folder path for intermediate files.
         """
-        with open(settings) as json_file:
-            self.settings = json.load(json_file)
-
         working_folder = os.path.abspath(working)
         self.working_folder = working_folder
         if not os.path.exists(working_folder):
             os.makedirs(working_folder)
 
+        self.services = Services(self.working_folder, print)
+
+        # solver classes
+        self.attenuation = Attenuation(self.services)
+        self.gradient = Gradient(self.services)
+        self.meshscale = MeshScale(self.services)
+        self.poisson = Poisson(self.services)
+        self.threshold = Threshold(self.services)
+        self.unsharpmask = UnsharpMask(self.services)
+
+        with open(settings) as json_file:
+            self.settings = json.load(json_file)
         self.initialize_settings()
 
     def initialize_settings(self):
@@ -58,16 +68,8 @@ class Solver:
         Unpack the JSON settings file and initialie Solver properties.
         """
         self.mesh = Mesh(self.settings)
-        self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'], self.working_folder)
+        self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'], self.working_folder, self.services)
         self.mesh_transform = MeshTransform(self.settings['MeshTransform'])
-
-        # solver classes
-        self.attenuation = Attenuation()
-        self.gradient = Gradient()
-        self.meshscale = MeshScale(self.working_folder)
-        self.poisson = Poisson()
-        self.threshold = Threshold()
-        self.unsharpmask = UnsharpMask()
 
     def transform(self):
         """

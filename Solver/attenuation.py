@@ -10,14 +10,21 @@
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
+from services import Services
 
 class Attenuation:
     """
     A class for attenuating image components.
     """
 
-    def __init__(self):
+    def __init__(self, services : Services):
         """
         Initialize an instance of a Attenuation.
+        Parameters
+        ----------
+        services
+            Service provider (loggins, timers, etc.)
         """
+        self.debug = True
+        self.services = services
 

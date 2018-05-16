@@ -10,16 +10,20 @@
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
+from services import Services 
 
 class MeshScale: 
     """
     A class for scaling meshes.
     """
 
-    def __init__(self, working_folder):
+    def __init__(self, services : Services):
         """
         Initialize an instance of a MeshScale.
+        Parameters
+        ----------
+        services
+            Service provider (loggins, timers, etc.)
         """
         self.debug = True
-        self.working_folder = working_folder
-
+        self.services = services

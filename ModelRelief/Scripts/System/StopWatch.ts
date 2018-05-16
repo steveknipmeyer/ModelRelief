@@ -72,7 +72,7 @@ export class StopWatch {
 //#endregion
 
     /**
-     * @description Resets the timer.
+     * @description Adds an entry to the timer stack.
      */
     mark(event : string) : string {
 

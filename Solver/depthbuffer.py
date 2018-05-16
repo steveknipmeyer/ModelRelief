@@ -14,11 +14,12 @@ import math
 import os
 import sys
 import numpy as np
-import time
+
 from typing import List, Tuple
 
 from camera import Camera
 from filemanager import FileManager
+from services import Services
 
 class DepthBuffer:
     """
@@ -26,7 +27,7 @@ class DepthBuffer:
     """
     SINGLE_PRECISION = 4
 
-    def __init__(self, settings: str, working_folder: str):
+    def __init__(self, settings: str, working_folder: str, services : Services):
         """
         Initialize an instancee of a DepthBuffer.
         Parameters:
@@ -35,10 +36,13 @@ class DepthBuffer:
             The path of the DepthBuffer JSON file.
         working_folder
             The temp folder used for intermediate results.
+        services
+            Service support for logging, timers, etc.
         """
         self.debug = True
         self.settings = settings
         self.working_folder = working_folder
+        self.services = services
 
         self.path = os.path.abspath(settings['FileName'])
         self._width = int(settings['Width'])
@@ -112,10 +116,12 @@ class DepthBuffer:
         if (self._floats is not None):
             return self._floats
 
+        floats_step = self.services.stopwatch.mark("floats")
+
         # convert to floats
-        start_time = time.time()
+        unpack_step = self.services.stopwatch.mark("unpack floats")
         floats = FileManager().unpack_floats(self.bytes_raw)
-        print ("unpack floats = %s" % (time.time() - start_time))
+        self.services.stopwatch.log_time(unpack_step)
 
         # now scale to map to a 2D array with unit steps between rows and columns
         extents = self.camera.near_plane_extents()
@@ -123,12 +129,16 @@ class DepthBuffer:
         yScale = self.width / extents[1]
         assert math.fabs(xScale - yScale) < sys.float_info.epsilon, "Asymmetric scaling in mesh"
 
+        scale_step = self.services.stopwatch.mark("scale floats")
         floats_array = np.array(floats)
         scaler = lambda v: self.normalized_to_model_depth_unit_differential(v, xScale)
         floats_array = scaler(floats_array)
         floats = floats_array.tolist()       
+        self.services.stopwatch.log_time(scale_step)
 
         self._floats = floats
+        
+        self.services.stopwatch.log_time(floats_step)
         return floats
 
     @property
@@ -208,7 +218,7 @@ class DepthBuffer:
         Transforms the depth buffer (model units) by a scale factor.
         Returns a List of floats.
         """
-        start_time = time.time()
+        event = self.services.stopwatch.mark("scale floats")
 
         float_array = np.array(self.floats_raw)
         
@@ -228,7 +238,7 @@ class DepthBuffer:
 
             self.verify_scale_buffer((unscaled_path, scaled_path), scale)
         
-        print ("%s = %s seconds" % (__name__, time.time() - start_time))
+        self.services.stopwatch.log_time(event)
         return float_list
 
     def verify_scale_buffer(self, files : Tuple[str, str], scale : float) -> bool:
