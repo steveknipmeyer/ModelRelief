@@ -13,8 +13,6 @@
 import time
 from decimal import Decimal
 
-from tools import Colors
-
 class TimerEntry:
     """
     A class representing an event entry in the timer stack.
@@ -67,9 +65,7 @@ class StopWatch:
         timer_entry = TimerEntry(start_time, indent)
         self.events[event] = timer_entry
 
-        print (Colors.Cyan)
-        self.logger("%s%s" % (indent, event))
-        print (Colors.Reset)
+        self.logger.logTimer("%s%s" % (indent, event))
 
         return event
 
@@ -82,9 +78,7 @@ class StopWatch:
         event_time_rounded =  Decimal(event_time).quantize(Decimal(self.PRECISION))
         indent_prefix = self.events[event].indent
 
-        print (Colors.Cyan)
-        self.logger("%s%s : %s sec" % (indent_prefix, event, event_time_rounded))
-        print (Colors.Reset)
+        self.logger.logTimer("%s%s : %s sec" % (indent_prefix, event, event_time_rounded))
 
         # remove dictionary key
         self.events.pop(event)

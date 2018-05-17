@@ -39,7 +39,7 @@ class DepthBuffer:
         services
             Service support for logging, timers, etc.
         """
-        self.debug = True
+        self.debug = False
         self.settings = settings
         self.working_folder = working_folder
         self.services = services

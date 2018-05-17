@@ -17,8 +17,8 @@ import json
 import os
 
 from filemanager import FileManager
+from logger import Logger
 from services import Services
-from tools import Colors
 
 from depthbuffer import DepthBuffer
 from mesh import Mesh
@@ -54,7 +54,7 @@ class Solver:
         if not os.path.exists(working_folder):
             os.makedirs(working_folder)
 
-        self.services = Services(self.working_folder, print)
+        self.services = Services(self.working_folder, Logger())
 
         # solver classes
         self.attenuation = Attenuation(self.services)
@@ -80,12 +80,16 @@ class Solver:
         """
         Transforms a DepthBuffer by a MeshTransform
         """
+        self.services.logger.logDebug("Solver transform begin")
+
         buffer = self.depth_buffer
         scaled_floats = buffer.scale_floats(self.mesh_transform.lambda_scale)
 
         # write final raw bytes
         file_path = '%s/%s' % (self.working_folder, self.mesh.name)
         FileManager().write_binary(file_path, FileManager().pack_floats(scaled_floats))
+
+        self.services.logger.logDebug("Solver transform end")
 
 def main():
     """

@@ -131,17 +131,20 @@ export class ComposerView {
 
         // initialize context
         this.initializeMeshModel().then((mesh) => {
-
+            
             this.mesh = mesh;
+            let model3d = this.mesh.depthBuffer.model3d;
+            let depthBuffer = this.mesh.depthBuffer;
+
 
             // Mesh View
             this._meshView = new MeshView(ElementIds.MeshView, this.mesh);
 
             // Model View
-            this._modelView = new ModelView(ElementIds.ModelView, this.mesh.depthBuffer.model3d); 
+            this._modelView = new ModelView(ElementIds.ModelView, model3d); 
 
             // DepthBuffer View
-            this._depthBufferView = new DepthBufferView(ElementIds.DepthBufferView, this.mesh.depthBuffer); 
+            this._depthBufferView = new DepthBufferView(ElementIds.DepthBufferView, depthBuffer); 
 
             // Composer Controller 
             this._composerController = new ComposerController(this);
@@ -153,12 +156,15 @@ export class ComposerView {
                 let loader = new Loader();
                 loader.loadParametricTestModel(TestModel.Checkerboard).then((modelGroup : THREE.Group) => {
                     this._modelView.modelViewer.setModelGroup(modelGroup);
-                });
+                });                    
             } else {
-                this._modelView.modelViewer.loadModelAsync().then(() => {});
-            }
-            this._meshView.meshViewer.loadModelAsync().then(() => {
-                this._meshView.meshViewer.setCameraToStandardView(StandardView.Top);
+                model3d.getModelGroupAsync().then((model) => {
+                    this._modelView.modelViewer.setModelGroup (model);
+                });                    
+            };
+            this.mesh.getModelGroupAsync().then((mesh) => {
+                this._meshView.meshViewer.setModelGroup (mesh);
+                this._meshView.meshViewer.setCameraToStandardView(StandardView.Top);                
             });
         });
     }

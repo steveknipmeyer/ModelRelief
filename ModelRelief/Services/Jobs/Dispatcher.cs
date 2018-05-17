@@ -211,11 +211,7 @@ namespace ModelRelief.Services.Jobs
                 using (StreamReader reader = process.StandardOutput)
                 {
                     string stdout = reader.ReadToEnd();
-                    Logger.LogInformation($"stdout = {stdout}");
-
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine(stdout);
-                    Console.ForegroundColor = ConsoleColor.White;
+                    Logger.LogInformation($"stdout = {Environment.NewLine}{stdout}");
                 }
                 using (StreamReader reader = process.StandardError)
                 {

@@ -158,15 +158,6 @@ export class Viewer {
     }
 
     /**
-     * @description Loads the active model from disk.
-     */
-    async loadModelAsync() {
-
-        let modelGroup = await this.model.getModelGroupAsync();
-        this.setModelGroup(modelGroup);            
-    }
-
-    /**
      * @description Calculates the aspect ratio of the canvas afer a window resize
      * @readonly
      * @type {number}

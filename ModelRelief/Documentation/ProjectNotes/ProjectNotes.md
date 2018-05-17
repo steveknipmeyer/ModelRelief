@@ -2,10 +2,6 @@
 #### Commit Notes
 
 #### Short Term  
-    Create a Logger class.
-        Add color support.
-        Add support for message severity.
-
     Files
         Refactor DepthBuffer mesh construction as a Loader.
 
