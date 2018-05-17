@@ -1,21 +1,39 @@
 ﻿### Tasks
 #### Commit Notes
-    
+    Added Loaders for depth buffer and float files.
+    Added SinglePrecisionDepthBufferLoader
+    Added SinglePrecisionFloatLoader
+    Refactor TestModelLoader to be async.
+    DepthBuffer: Remove overlapping camera (near, far, clipping range) properties.
+    Resolve issue with MeshCache. Key must be based on model extents not aspect ratio.
+        
 #### Short Term
-    Review typing module and Python types.
-        What is the difference between bytes and "List[byte]"?
-    Should classes hold an instance of FileManager?
+    calculateExtents
+    rgbArray
+
+    The MeshView is not initially Fit correctly unless the Model (ModelView) takes a "long" time to load.
+        Review the event handler logic about how the initial views are set up.
+        The Fit View is issued before the Mesh has been loaded!
+
+            
+    If a model is too large, everything breaks down.
+        Review the clipping planes. Should the Far plane be set based on the dimensions of the Model?
+
+    Add color support to the StopWatch.
 
     Files
-        Move DepthBuffer mesh construction to Mesh class.        
+        Refactor DepthBuffer mesh construction as a Loader.
 
         File Formats
-            raw -> db
-                -> flt (spf, dpf)?
+            sdb     Single Precision Depth Buffer
+            ddb     Double Precision Depth Buffer
+            sfp     Single Precision Floating Point
+            dfp     Double Prevision Floating Point
 
     Convert test data.
     Rebuild test databases.
 
+    Review typing module and Python types.
     GenerateDepthBufferAsync is not implemented.
         Why is this generated the first time (requires a Camera change)? 
 
@@ -1035,8 +1053,18 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     public interface IComparer<in T>
 
     A less derived type can be substituted.
-    When the method is called, the <actual> parameter passed to the method will be <more derived> so it will satisfy the type of the actual method that is invoked.
-
+    When the contravariant method/delegate parameter is called, the <actual> parameter passed to it will be <MORE derived> so it will satisfy the expected type.
+    https://stackoverflow.com/questions/4669858/simple-examples-of-co-and-contravariance
+```c#
+        void DoSomethingToAFrog(Action<Frog> action, Frog frog)
+        {
+            action(frog);
+        }
+        ...
+        Action<Animal> feed = animal=>{animal.Feed();}
+        DoSomethingToAFrog(feed, new Frog());
+        // Here Frog is an Animal so Animal.Feed can accept a Frog.
+```
 #### Tasks
 
         // prevent async (no await) warning

@@ -122,7 +122,7 @@ export class ComposerController {
      * @readonly
      * @type {MeshTransform}
      */
-    get activeMeshTransform() :MeshTransform {
+    get activeMeshTransform() : MeshTransform {
         return this._composerView.mesh.meshTransform;
     }
 
@@ -131,7 +131,7 @@ export class ComposerController {
      * @readonly
      * @type {DepthBuffer}
      */
-    get activeDepthBuffer() :DepthBuffer {
+    get activeDepthBuffer() : DepthBuffer {
         return this._composerView.mesh.depthBuffer;
     }
 
@@ -221,6 +221,7 @@ export class ComposerController {
         let factoryDepthBuffer = await factory.createDepthBufferAsync();
 
         // metadata
+        this.activeDepthBuffer.camera = this.activeDepthBufferCamera;
         this.activeDepthBuffer.width  = this._reliefWidthPixels;
         this.activeDepthBuffer.height = this._reliefHeightPixels;
         let depthBufferModel : Dto.DepthBuffer = await this.activeDepthBuffer.toDtoModel().putAsync();
@@ -264,7 +265,7 @@ export class ComposerController {
         // WIP: Save the Mesh as an OBJ format file?
         // It may be more efficient to maintain Meshes in raw format since the size is substantially smaller.
 
-        // WIP: Randomly generated cameras do not rountrip the matrix property. However, cameras created and manipulated through views work fine.
+        // WIP: Randomly generated cameras do not roundtrip the matrix property. However, cameras created and manipulated through views work fine.
         // UnitTests.cameraRoundTrip();
 
         let camera = new Camera({}, this.modelViewer.camera);

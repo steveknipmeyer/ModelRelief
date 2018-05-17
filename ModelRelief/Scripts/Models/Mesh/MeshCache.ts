@@ -30,9 +30,9 @@ export class MeshCache {
      */
     generateKey(modelExtents : THREE.Vector2, pixelExtents : THREE.Vector2) : string{
         
-        let aspectRatio = (modelExtents.x / modelExtents.y ).toFixed(2).toString();
-
-        return `Aspect = ${aspectRatio} : Pixels = (${Math.round(pixelExtents.x).toString()}, ${Math.round(pixelExtents.y).toString()})`;
+        let xExtents = modelExtents.x.toFixed(2).toString();
+        let yExtents = modelExtents.y.toFixed(2).toString();
+        return `Model Extents = (${xExtents}, ${yExtents}) : Pixels = (${Math.round(pixelExtents.x).toString()}, ${Math.round(pixelExtents.y).toString()})`;
     }
 
     /**

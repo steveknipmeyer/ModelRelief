@@ -5,17 +5,20 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto                     from 'DtoModels' ;
-import * as THREE                   from 'three';
+import * as Dto                             from 'DtoModels' ;
+import * as THREE                           from 'three';
 
-import {Graphics}                   from 'Graphics';
-import {StandardView}               from 'ICamera';
-import {FileModel}                  from 'FileModel'
-import {ILogger, ConsoleLogger}     from 'Logger';
-import {OBJLoader}                  from 'OBJLoader';
-import {Services}                   from 'Services';
-import {TestModelLoader, TestModel} from 'TestModelLoader';
-import {Viewer}                     from 'Viewer';
+import {DepthBuffer}                        from 'DepthBuffer'
+import {Graphics}                           from 'Graphics';
+import {StandardView}                       from 'ICamera';
+import {FileModel}                          from 'FileModel'
+import {ILogger, ConsoleLogger}             from 'Logger';
+import {OBJLoader}                          from 'OBJLoader';
+import {Services}                           from 'Services';
+import {SinglePrecisionLoader}              from 'SinglePrecisionLoader';
+import {SinglePrecisionDepthBufferLoader}   from 'SinglePrecisionDepthBufferLoader';
+import {TestModelLoader, TestModel}         from 'TestModelLoader';
+import {Viewer}                             from 'Viewer';
 
 const testModelColor = '#558de8';
 
@@ -55,13 +58,34 @@ export class Loader {
     }
 
     /**
-     * @description Loads a parametric test model.
-     * @param viewer Instance of the Viewer to display the model.
-     * @param modelType Test model type (Spher, Box, etc.)
-     */    
-    loadParametricTestModel (viewer : Viewer, modelType : TestModel) {
+     * @description Loads a single precision floating point depth buffer model.
+     * @param {DepthBuffer} depthBuffer 
+     * @returns {Promise<THREE.Group>} 
+     */
+    async loadSDBModel (depthBuffer : DepthBuffer) : Promise<THREE.Group> {
 
-        let testLoader = new TestModelLoader();
-        testLoader.loadTestModel(viewer, modelType);
+        let loader = new SinglePrecisionDepthBufferLoader(depthBuffer);
+        let modelGroup = await loader.loadModelAsync();
+        return modelGroup;
+    }
+
+    /**
+     * @description Loads a single precision float point model.
+     */    
+    async loadSPFModel () : Promise<THREE.Group> {
+
+        let loader = new SinglePrecisionLoader();
+        return await loader.loadModelAsync()
+    }
+
+    /**
+     * @description Loads a parametric test model.
+     * @param modelType Test model type (Sphere, Box, etc.)
+     * @returns {Promise<THREE.Group>} 
+     */    
+    async loadParametricTestModel (modelType : TestModel) : Promise<THREE.Group>{
+
+        let loader = new TestModelLoader();
+        return loader.loadModelAsync(modelType);
     }
 }

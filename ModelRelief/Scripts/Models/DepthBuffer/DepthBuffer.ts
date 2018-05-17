@@ -67,10 +67,6 @@ export class DepthBuffer extends GeneratedFileModel {
 
     // Private
     _rgbaArray       : Uint8Array;
-
-    _nearClipPlane   : number;
-    _farClipPlane    : number;
-    _cameraClipRange : number;
     
     _minimumNormalized : number;
     _maximumNormalized : number;
@@ -207,11 +203,6 @@ export class DepthBuffer extends GeneratedFileModel {
     set camera(value : Camera) {
 
         this._camera = value;
-        if (this._camera) {
-            this._nearClipPlane   = this.camera.viewCamera.near;
-            this._farClipPlane    = this.camera.viewCamera.far;
-            this._cameraClipRange = this._farClipPlane - this._nearClipPlane;
-        }
     }
 
     /**

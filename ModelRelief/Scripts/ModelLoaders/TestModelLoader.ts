@@ -10,6 +10,7 @@ import * as THREE  from 'three'
 import {ILogger, ConsoleLogger}  from 'Logger'
 import {Graphics}                from "Graphics"
 import {Services}                from 'Services'
+import {Tools}                   from 'Tools'
 import {Viewer}                  from 'Viewer'
 
 const testModelColor = '#558de8';
@@ -32,43 +33,55 @@ export class TestModelLoader {
     }
 
     /**
-     * @description Loads a parametric test model.
-     * @param {Viewer} viewer Viewer instance to receive model.
+     * @description Loads a model.
      * @param {TestModel} modelType Model type (Box, Sphere, etc.)
+     * @returns {Promise<THREE.Group>} 
      */
-    loadTestModel (viewer : Viewer, modelType : TestModel) {
+    async loadModelAsync (modelType : TestModel) : Promise<THREE.Group> {
 
-        switch (modelType){
-
-            case TestModel.Torus:
-                this.loadTorusModel(viewer);
-                break;
-
-            case TestModel.Sphere:
-                this.loadSphereModel(viewer);
-                break;
-
-            case TestModel.SlopedPlane: 
-                this.loadSlopedPlaneModel(viewer);
-                break;
-
-            case TestModel.Box:
-                this.loadBoxModel(viewer);
-                break;
-
-            case TestModel.Checkerboard:
-                this.loadCheckerboardModel(viewer);          
-                break;
-        }
+        let modelGroup = this.loadTestModel (modelType);
+        await Tools.sleep(5000);
+        return modelGroup;
     }
 
     /**
-     * Adds a torus to a scene.
-     * @param viewer Instance of the Viewer to display the model
+     * @description Loads a parametric test model.
+     * @param {TestModel} modelType Model type (Box, Sphere, etc.)
      */
-    private loadTorusModel(viewer : Viewer) {
+    loadTestModel (modelType : TestModel) : THREE.Group {
+
+        let modelGroup : THREE.Group;
+        switch (modelType){
+
+            case TestModel.Torus:
+                modelGroup = this.loadTorusModel();
+                break;
+
+            case TestModel.Sphere:
+            modelGroup = this.loadSphereModel();
+                break;
+
+            case TestModel.SlopedPlane: 
+            modelGroup = this.loadSlopedPlaneModel();
+                break;
+
+            case TestModel.Box:
+            modelGroup = this.loadBoxModel();
+                break;
+
+            case TestModel.Checkerboard:
+            modelGroup = this.loadCheckerboardModel();          
+                break;
+        }
+        return modelGroup;
+    }
+
+    /**
+     * Constructs a torus.
+     */
+    private loadTorusModel() : THREE.Group {
         
-        let torusScene = new THREE.Group();
+        let modelGroup = new THREE.Group();
 
         // Setup some geometries
         let geometry = new THREE.TorusKnotGeometry(1, 0.3, 128, 64);
@@ -92,41 +105,45 @@ export class TestModelLoader {
             mesh.rotation.set(Math.random(), Math.random(), Math.random());
 
             mesh.name = 'Torus Component';
-            torusScene.add(mesh);
+            modelGroup.add(mesh);
         }
-        viewer.setModelGroup (torusScene);
+        return modelGroup;
     }
 
     /**
-     * Adds a test sphere to a scene.
-     * @param viewer Instance of the Viewer to display the model.
+     * Constructs a test sphere.
      */
-    private loadSphereModel (viewer : Viewer) {
+    private loadSphereModel () : THREE.Group {
 
         let radius = 2;    
         let mesh = Graphics.createSphereMesh(new THREE.Vector3, radius, new THREE.MeshPhongMaterial({ color: testModelColor }))
-        viewer.setModelGroup(mesh);
+
+        let modelGroup = new THREE.Group();
+        modelGroup.add(mesh);
+
+        return modelGroup;
     }
 
     /**
-     * Add a test box to a scene.
-     * @param viewer Instance of the Viewer to display the model.
+     * Constructs a test box.
      */
-    private loadBoxModel (viewer : Viewer) {
+    private loadBoxModel () : THREE.Group {
 
         let width  = 2;    
         let height = 2;    
         let depth  = 2;    
         let mesh = Graphics.createBoxMesh(new THREE.Vector3, width, height, depth, new THREE.MeshPhongMaterial({ color: testModelColor }))
 
-        viewer.setModelGroup(mesh);
+        let modelGroup = new THREE.Group();
+        modelGroup.add(mesh);
+
+        return modelGroup;
     }
 
     /**
      * Add a sloped plane to a scene.
-     * @param viewer Instance of the Viewer to display the model.
      */
-    private loadSlopedPlaneModel (viewer : Viewer) {
+    private loadSlopedPlaneModel () : THREE.Group {
 
         let width  = 2;    
         let height = 2;    
@@ -134,17 +151,20 @@ export class TestModelLoader {
         mesh.rotateX(Math.PI / 4);
         
         mesh.name = 'SlopedPlane';
-        viewer.setModelGroup(mesh);
+
+        let modelGroup = new THREE.Group();
+        modelGroup.add(mesh);
+
+        return modelGroup;
     }
 
     /**
      * Add a test model consisting of a tiered checkerboard
-     * @param viewer Instance of the Viewer to display the model.
      */
-    private loadCheckerboardModel (viewer : Viewer) {
+    private loadCheckerboardModel ()  : THREE.Group {
         
-        let gridLength     : number = 2;
-        let totalHeight    : number = 1.0;        
+        let gridLength     : number = 1.0;
+        let totalHeight    : number = 0.5;
         let gridDivisions  : number = 2;
         let totalCells     : number = Math.pow(gridDivisions, 2);
 
@@ -159,7 +179,7 @@ export class TestModelLoader {
         let baseColor      : number = 0x007070;
         let colorDelta     : number = (256 / totalCells) * Math.pow(256, 2);
 
-        let group      : THREE.Group = new THREE.Group();
+        let modelGroup : THREE.Group = new THREE.Group();
         let cellOrigin : THREE.Vector3 = origin.clone();
         let cellColor  : number = baseColor;
         for (let iRow : number = 0; iRow < gridDivisions; iRow++) {
@@ -167,7 +187,7 @@ export class TestModelLoader {
                                
                 let cellMaterial = new THREE.MeshPhongMaterial({color : cellColor});
                 let cell : THREE.Mesh = Graphics.createBoxMesh(cellOrigin, cellBase, cellBase, cellHeight, cellMaterial);
-                group.add (cell);
+                modelGroup.add (cell);
 
                 cellOrigin.x += cellBase;
                 cellOrigin.z += cellHeight;
@@ -177,7 +197,7 @@ export class TestModelLoader {
         cellOrigin.y += cellBase;
         }       
 
-        group.name = 'Checkerboard';
-        viewer.setModelGroup(group);
+        modelGroup.name = 'Checkerboard';
+        return modelGroup;
     }
 }
