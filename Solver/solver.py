@@ -12,11 +12,13 @@
 """
 
 import argparse
+import colorama
 import json
 import os
 
 from filemanager import FileManager
 from services import Services
+from tools import Colors
 
 from depthbuffer import DepthBuffer
 from mesh import Mesh
@@ -44,6 +46,9 @@ class Solver:
         working
             Working folder path for intermediate files.
         """
+        # Windows only
+        colorama.init()
+
         working_folder = os.path.abspath(working)
         self.working_folder = working_folder
         if not os.path.exists(working_folder):

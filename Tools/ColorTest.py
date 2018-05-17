@@ -1,6 +1,6 @@
 import colorama
 import sys
-from Tools import Colors
+from tools import Colors
 
 
 def main():

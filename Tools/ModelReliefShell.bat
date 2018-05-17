@@ -29,8 +29,11 @@ path=%path%;C:\Program Files\KDiff3
 
 call "C:\Program Files\nodejs\nodevars.bat"
 
+:: PYTHON
 :: latest Python 3.X; Windows Python launcher (py.exe)
 set PY_PYTHON=3
+:: include Tools folder for general utility support
+set PYTHONPATH=%PYTHONPATH%;%MRSolution%\Tools\
 
 :: Visual Studio 2017
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\VsDevCmd.bat"
