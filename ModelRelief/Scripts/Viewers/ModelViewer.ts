@@ -52,7 +52,7 @@ export class ModelViewer extends Viewer {
 
 //#region Properties
     /**
-     * @description Sets the graphics of the model viewer..
+     * @description Sets the graphics of the model viewer.
      * @param {THREE.Group} modelGroup Graphics group to set.
      */
     setModelGroup(modelGroup : THREE.Group) {

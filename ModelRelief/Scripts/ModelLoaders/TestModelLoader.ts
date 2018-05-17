@@ -40,7 +40,6 @@ export class TestModelLoader {
     async loadModelAsync (modelType : TestModel) : Promise<THREE.Group> {
 
         let modelGroup = this.loadTestModel (modelType);
-        await Tools.sleep(5000);
         return modelGroup;
     }
 

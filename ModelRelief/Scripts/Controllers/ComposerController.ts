@@ -160,8 +160,6 @@ export class ComposerController {
         modelViewCamera.far  = Camera.DefaultFarClippingPlane;
         modelViewCamera.updateProjectionMatrix();
         this.modelViewer.camera = modelViewCamera;
-
-        this.meshViewer.setCameraToStandardView(StandardView.Top);
     }
 
     /**

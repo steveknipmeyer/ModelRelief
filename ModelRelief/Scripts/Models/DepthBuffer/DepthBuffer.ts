@@ -54,8 +54,6 @@ export class DepthBuffer extends GeneratedFileModel {
 
     static readonly NormalizedTolerance   : number = .001;    
 
-    depths     : Float32Array;
-
     width      : number;
     height     : number;
     format     : DepthBufferFormat;
@@ -66,10 +64,8 @@ export class DepthBuffer extends GeneratedFileModel {
     _camera    : Camera;
 
     // Private
-    _rgbaArray       : Uint8Array;
-    
-    _minimumNormalized : number;
-    _maximumNormalized : number;
+    _rgbaArray  : Uint8Array;
+    _depths     : Float32Array;
 
     /**
      * Creates an instance of DepthBuffer.
@@ -162,8 +158,7 @@ export class DepthBuffer extends GeneratedFileModel {
 
         return model;
     }        
-
-    //#region Properties
+    
     /**
      * @description Returns the raw RGB array of the buffer.
      * @type {Uint8Array}
@@ -182,9 +177,24 @@ export class DepthBuffer extends GeneratedFileModel {
 
         // RGBA -> Float32
         this.depths = new Float32Array(this.rgbArray.buffer);
-        
-        // calculate extrema of depth buffer values
-        this.calculateExtents();
+    }
+
+    //#region Properties
+    /**
+     * @description Returns the raw floats of the depth buffer.
+     * @type {Float32Array}
+     */
+    get depths() : Float32Array {
+
+        return this._depths;
+    }
+
+    /**
+     * @description Sets the raw floats of the depth buffer.
+     */
+    set depths (value : Float32Array) {
+
+        this._depths = value;
     }
 
     /**
@@ -222,7 +232,16 @@ export class DepthBuffer extends GeneratedFileModel {
      */
     get minimumNormalized () : number{
 
-        return this._minimumNormalized;
+        let minimumNormalized : number = Number.MAX_VALUE;
+        for (let index: number = 0; index < this.depths.length; index++)
+            {
+            let depthValue : number = this.depths[index];
+
+            if (depthValue < minimumNormalized)
+                minimumNormalized = depthValue;
+            }
+
+        return minimumNormalized;
     }
 
     /**
@@ -232,7 +251,7 @@ export class DepthBuffer extends GeneratedFileModel {
      */
     get minimum() : number{
 
-        let minimum = this.normalizedToModelDepth(this._maximumNormalized);
+        let minimum = this.normalizedToModelDepth(this.maximumNormalized);
 
         return minimum;
     }
@@ -244,7 +263,14 @@ export class DepthBuffer extends GeneratedFileModel {
      */
     get maximumNormalized () : number{
 
-        return this._maximumNormalized;
+        let maximumNormalized : number = Number.MIN_VALUE;
+        for (let index: number = 0; index < this.depths.length; index++)
+            {
+            let depthValue : number = this.depths[index];
+            if (depthValue > maximumNormalized)
+                maximumNormalized = depthValue;
+            }
+        return maximumNormalized;            
     }
 
     /**
@@ -266,7 +292,7 @@ export class DepthBuffer extends GeneratedFileModel {
      */
     get rangeNormalized() : number{
 
-        let depthNormalized : number = this._maximumNormalized - this._minimumNormalized;
+        let depthNormalized : number = this.maximumNormalized - this.minimumNormalized;
 
         return depthNormalized;
     }
@@ -283,15 +309,6 @@ export class DepthBuffer extends GeneratedFileModel {
         return depth;
     }
     //#endregion
-
-    /**
-     * @description Calculate the extents of the depth buffer.
-     */
-    calculateExtents () {
-
-        this.setMinimumNormalized();        
-        this.setMaximumNormalized();        
-    }
 
     /**
      * @description Convert a normalized depth [0,1] to depth in model units.
@@ -334,39 +351,6 @@ export class DepthBuffer extends GeneratedFileModel {
         let depth = this.normalizedToModelDepth(depthNormalized);
         
         return depth;
-    }
-
-    /**
-     * @description Calculates the minimum normalized depth value.
-     */
-    setMinimumNormalized() {
-
-        let minimumNormalized : number = Number.MAX_VALUE;
-        for (let index: number = 0; index < this.depths.length; index++)
-            {
-            let depthValue : number = this.depths[index];
-
-            if (depthValue < minimumNormalized)
-                minimumNormalized = depthValue;
-            }
-
-        this._minimumNormalized = minimumNormalized;
-    }
-
-    /**
-     * @description Calculates the maximum normalized depth value.
-     */
-    setMaximumNormalized() {
-
-        let maximumNormalized : number = Number.MIN_VALUE;
-        for (let index: number = 0; index < this.depths.length; index++)
-            {
-            let depthValue : number = this.depths[index];
-            if (depthValue > maximumNormalized)
-                maximumNormalized = depthValue;
-            }
-
-        this._maximumNormalized = maximumNormalized;
     }
 
     /**

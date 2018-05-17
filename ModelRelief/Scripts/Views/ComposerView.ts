@@ -13,6 +13,7 @@ import { ComposerController }                 from "ComposerController"
 import { DepthBufferView }                    from "DepthBufferView"
 import { EventType, MREvent, EventManager }   from 'EventManager'
 import { HtmlLibrary, ElementIds }            from "Html"
+import { StandardView }                       from "ICamera"
 import { Loader }                             from 'Loader'
 import { ILogger, ConsoleLogger }             from 'Logger'
 import { Mesh }                               from "Mesh"
@@ -152,8 +153,10 @@ export class ComposerView {
             });
 
             // load models; model event handlers now initialized
-//            this._modelView.modelViewer.loadModelAsync().then(() => {});
-            this._meshView.meshViewer.loadModelAsync().then(() => {});
+//          this._modelView.modelViewer.loadModelAsync().then(() => {});
+            this._meshView.meshViewer.loadModelAsync().then(() => {
+                this._meshView.meshViewer.setCameraToStandardView(StandardView.Top);
+            });
         });
     }
     

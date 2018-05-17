@@ -1,20 +1,10 @@
 ﻿### Tasks
 #### Commit Notes
-    Added Loaders for depth buffer and float files.
-    Added SinglePrecisionDepthBufferLoader
-    Added SinglePrecisionFloatLoader
-    Refactor TestModelLoader to be async.
-    DepthBuffer: Remove overlapping camera (near, far, clipping range) properties.
-    Resolve issue with MeshCache. Key must be based on model extents not aspect ratio.
-        
+    DepthBuffer: Replace cached extrema with calculated properties.
+    DepthBuffer.rgbArray is invalidated when setting depths property.
+    Fit initial Mesh view in ComposerView after loadModelAsync rather than through EventType.NewModel.
+
 #### Short Term
-    calculateExtents
-    rgbArray
-
-    The MeshView is not initially Fit correctly unless the Model (ModelView) takes a "long" time to load.
-        Review the event handler logic about how the initial views are set up.
-        The Fit View is issued before the Mesh has been loaded!
-
             
     If a model is too large, everything breaks down.
         Review the clipping planes. Should the Far plane be set based on the dimensions of the Model?
