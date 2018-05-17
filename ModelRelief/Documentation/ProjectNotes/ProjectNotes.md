@@ -1,13 +1,7 @@
 ﻿### Tasks
 #### Commit Notes
-    DepthBuffer: Replace cached extrema with calculated properties.
-    DepthBuffer.rgbArray is invalidated when setting depths property.
-    Fit initial Mesh view in ComposerView after loadModelAsync rather than through EventType.NewModel.
 
 #### Short Term
-            
-    If a model is too large, everything breaks down.
-        Review the clipping planes. Should the Far plane be set based on the dimensions of the Model?
 
     Add color support to the StopWatch.
 
@@ -703,6 +697,15 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
             (MeshController)
 
 #### Viewer
+    Large Models
+        Design: Should all models be scaled to fit within the default view frustrum?
+            Are Meshes unitless? How will a (pixel-based) mesh be scaled to real world units?
+        If a model is too large (on the order of the default far clipping plane), the views are malformed.
+            Fit View may not work because it calculates only the clip planes.
+                <It also needs to calculate the camera position.>
+            The UI CameraControls need to be set based on the dimensions of the model.
+        Camera position now is always based on the loaded Camera DTO.
+            Support needs to be added to set a camera position for a brand new model (for which no Camera DTO exists).
 
     Progress Indicator
     OrbitControls versus Trackball

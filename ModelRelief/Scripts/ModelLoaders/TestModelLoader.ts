@@ -162,8 +162,8 @@ export class TestModelLoader {
      */
     private loadCheckerboardModel ()  : THREE.Group {
         
-        let gridLength     : number = 1.0;
-        let totalHeight    : number = 0.5;
+        let gridLength     : number = 100.0;
+        let totalHeight    : number =  50.0;
         let gridDivisions  : number = 2;
         let totalCells     : number = Math.pow(gridDivisions, 2);
 

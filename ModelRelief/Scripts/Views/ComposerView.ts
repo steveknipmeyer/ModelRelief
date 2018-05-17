@@ -146,14 +146,17 @@ export class ComposerView {
             // Composer Controller 
             this._composerController = new ComposerController(this);
 
-            // Test Models
-            let loader = new Loader();
-            loader.loadParametricTestModel(TestModel.Checkerboard).then((modelGroup : THREE.Group) => {
-                this._modelView.modelViewer.setModelGroup(modelGroup);
-            });
-
             // load models; model event handlers now initialized
-//          this._modelView.modelViewer.loadModelAsync().then(() => {});
+            let useTestModels = false;
+            if (useTestModels) {
+                // Test Models
+                let loader = new Loader();
+                loader.loadParametricTestModel(TestModel.Checkerboard).then((modelGroup : THREE.Group) => {
+                    this._modelView.modelViewer.setModelGroup(modelGroup);
+                });
+            } else {
+                this._modelView.modelViewer.loadModelAsync().then(() => {});
+            }
             this._meshView.meshViewer.loadModelAsync().then(() => {
                 this._meshView.meshViewer.setCameraToStandardView(StandardView.Top);
             });

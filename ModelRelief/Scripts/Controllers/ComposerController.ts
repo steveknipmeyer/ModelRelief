@@ -156,8 +156,13 @@ export class ComposerController {
 
         // model camera = depth buffer camera (default clipping planes)
         let modelViewCamera = this.activeDepthBufferCamera.viewCamera.clone();
+
+        // WIP: Set far plane based on model extents to avoid clipping
+        let boundingPlanes = CameraHelper.getBoundingClippingPlanes(modelViewCamera, this.modelViewer.modelGroup);
+
         modelViewCamera.near = Camera.DefaultNearClippingPlane;
         modelViewCamera.far  = Camera.DefaultFarClippingPlane;
+
         modelViewCamera.updateProjectionMatrix();
         this.modelViewer.camera = modelViewCamera;
     }
