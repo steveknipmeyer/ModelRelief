@@ -34,7 +34,7 @@ namespace ModelRelief.Test.TestModels.Meshes
             UxUrl  = "/meshes";
 
             IdRange = Enumerable.Range(1, 4);
-            FirstModelName = "lucy.sdb";
+            FirstModelName = "lucy.sfp";
 
             ReferencePropertyNames = new List<string> { "ProjectId", "CameraId", "DepthBufferId", "MeshTransformId" };
             InvalidReferenceProperty = 0;

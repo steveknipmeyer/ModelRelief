@@ -85,6 +85,16 @@ class Solver:
         buffer = self.depth_buffer
         scaled_floats = buffer.scale_floats(self.mesh_transform.lambda_scale)
 
+        """
+        gradients = buffer.gradients       
+        gradient_x = gradients[1]
+
+        gradient_x = np.reshape(gradient_x, (buffer.height * buffer.width))
+        # convert to single precision
+        gradient_x = gradient_x.astype('float32')
+        scaled_floats = gradient_x.tolist()
+        """
+
         # write final raw bytes
         file_path = '%s/%s' % (self.working_folder, self.mesh.name)
         FileManager().write_binary(file_path, FileManager().pack_floats(scaled_floats))

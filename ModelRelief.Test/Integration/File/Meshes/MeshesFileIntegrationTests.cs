@@ -232,15 +232,14 @@ namespace ModelRelief.Test.Integration.Meshes
                 var scaledByteArray = Convert.FromBase64String(encodedString.ToString());
 
                 // compare to reference
-                var referenceScaledByeArray = Utility.ByteArrayFromFile("DepthBuffer.sdb.Scale05");
-//              Assert.True(Utility.EqualByteArrays(scaledByteArray, referenceScaledByeArray));
+                var referenceScaledFloats = Utility.FloatListFromFile("DepthBuffer.sdb.Scale05");
 
-                int numberFloats = referenceScaledByeArray.Length / 4;
+                int numberFloats = referenceScaledFloats.Count;
                 for (int iFloat = 0; iFloat < numberFloats; iFloat++)
                 {
                     int floatIndex = iFloat * 4;
-                    var scaledFloat          = BitConverter.ToSingle(scaledByteArray, floatIndex);
-                    var referenceScaledFloat = BitConverter.ToSingle(referenceScaledByeArray, floatIndex);
+                    var scaledFloat          = BitConverter.ToDouble(scaledByteArray, floatIndex);
+                    var referenceScaledFloat = referenceScaledFloats[floatIndex];
 
                     double tolerance = 1.0E-5;
                     bool equalValues = Math.Abs(scaledFloat - referenceScaledFloat) <= tolerance;

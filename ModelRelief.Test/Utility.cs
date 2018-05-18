@@ -6,6 +6,7 @@
 
 namespace ModelRelief.Test
 {
+    using System.Collections.Generic;
     using System.IO;
     using System.Threading;
 
@@ -28,6 +29,26 @@ namespace ModelRelief.Test
             var byteArray = File.ReadAllBytes(fileNamePath);
 
             return byteArray;
+        }
+
+        /// <summary>
+        /// Returns a float list from a file. The file must exist in Test\Data\Files.
+        /// </summary>
+        /// <param name="fileName">File to read.</param>
+        public static List<float> FloatListFromFile(string fileName)
+        {
+            var fileNamePath = $"{Settings.GetTestFilesPath()}/{fileName}";
+            if (!File.Exists(fileNamePath))
+                return null;
+
+            var floatList = new List<float>();
+            using (TextReader reader = File.OpenText(fileNamePath))
+            {
+                float value = float.Parse(reader.ReadLine());
+                floatList.Add(value);
+            }
+
+            return floatList;
         }
 
         /// <summary>

@@ -39,7 +39,7 @@ class DepthBuffer:
         services
             Service support for logging, timers, etc.
         """
-        self.debug = False
+        self.debug = True
         self.settings = settings
         self.working_folder = working_folder
         self.services = services
@@ -108,7 +108,19 @@ class DepthBuffer:
         return floats
 
     @property
-    def floats(self) -> List[float]:
+    def floats_model(self) -> List[float]:
+        """
+        Constructs a list of floats that are in model units.
+        """
+        floats_array = np.array(self.floats_raw)
+        scaler = lambda v: self.normalized_to_model_depth(v)
+        floats_array = scaler(floats_array)
+        floats = floats_array.tolist()       
+
+        return floats
+
+    @property
+    def floats_unit_differential(self) -> List[float]:
         """
         Constructs a list of floats from the DepthBuffer.
         """
@@ -118,11 +130,6 @@ class DepthBuffer:
 
         floats_step = self.services.stopwatch.mark("floats")
 
-        # convert to floats
-        unpack_step = self.services.stopwatch.mark("unpack floats")
-        floats = FileManager().unpack_floats(self.bytes_raw)
-        self.services.stopwatch.log_time(unpack_step)
-
         # now scale to map to a 2D array with unit steps between rows and columns
         extents = self.camera.near_plane_extents()
         xScale = self.width / extents[0]
@@ -130,10 +137,13 @@ class DepthBuffer:
         assert math.fabs(xScale - yScale) < sys.float_info.epsilon, "Asymmetric scaling in mesh"
 
         scale_step = self.services.stopwatch.mark("scale floats")
-        floats_array = np.array(floats)
+        floats_raw = self.floats_raw
+
+        floats_array = np.array(floats_raw)
         scaler = lambda v: self.normalized_to_model_depth_unit_differential(v, xScale)
         floats_array = scaler(floats_array)
         floats = floats_array.tolist()       
+
         self.services.stopwatch.log_time(scale_step)
 
         self._floats = floats
@@ -151,7 +161,7 @@ class DepthBuffer:
         if (self._np_array is not None):
             return self._np_array
 
-        floats = np.array(self.floats)
+        floats = np.array(self.floats_unit_differential)
 
         # transform 1D -> 2D
         a = np.array(floats)
@@ -195,28 +205,76 @@ class DepthBuffer:
 
         return z_linear
 
-    def scale_model_depth(self, normalized, scale):
+    def model_depth_to_normalized (self, z : float):
         """
-        Scales the model depth of a normalized depth value.
-        https://stackoverflow.com/questions/6652253/getting-the-true-z-value-from-the-depth-buffer
+        Returns the normalized depth buffer value of a model depth.
         """
-        # distance from mesh plane
-        z = self.normalized_to_model_depth(normalized)
-        # scaled distance from mesh plane
-        z = scale * z
 
         # distance from camera
         z = self.camera.far - z
 
-        scaled_normalized = (self.camera.far + self.camera.near - 2.0 * self.camera.near * self.camera.far / z) / (self.camera.far - self.camera.near)
-        scaled_normalized = (scaled_normalized + 1.0) / 2.0
+        normalized = (self.camera.far + self.camera.near - 2.0 * self.camera.near * self.camera.far / z) / (self.camera.far - self.camera.near)
+        normalized = (normalized + 1.0) / 2.0
+
+        return normalized
+
+    def scale_model_depth_normalized (self, normalized : float, scale : float):
+        """
+        Scales the model depth of a normalized depth value and returns the normalized value.
+
+        Parameters
+        ----------
+        normalized
+            A normalized depth buffer value.
+        scale
+            Scale factor to apply.
+        
+        Returns
+        ----------
+            Normalized scaled value.
+        """
+        scaled = self.scale_model_depth(normalized, scale)
+        scaled_normalized = self.model_depth_to_normalized(scaled)
 
         return scaled_normalized
 
+    def scale_model_depth (self, normalized : float, scale : float):
+        """
+        Scales the model depth of a normalized depth value.
+        https://stackoverflow.com/questions/6652253/getting-the-true-z-value-from-the-depth-buffer
+
+        Parameters
+        ----------
+        normalized
+            A normalized depth buffer value.
+        scale
+            Scale factor to apply.
+        
+        Returns
+        ----------
+            Scaled value in <model units>.
+
+        """
+        # distance from mesh plane
+        z = self.normalized_to_model_depth(normalized)
+
+        # scaled distance from mesh plane
+        z = scale * z
+
+        return z
+
     def scale_floats(self, scale: float) -> List[float]:
         """
-        Transforms the depth buffer (model units) by a scale factor.
-        Returns a List of floats.
+        Transforms the depth buffer values (model units) by a scale factor.
+
+        Parameters
+        ----------
+        scale
+            Scale factor to be applied.
+
+        Returns
+        -------
+            A List of floats in <model units>.
         """
         event = self.services.stopwatch.mark("scale floats")
 
@@ -230,7 +288,7 @@ class DepthBuffer:
         if self.debug:
             # write original floats
             unscaled_path = '%s/%s.floats.%f' % (self.working_folder, self.name, 1.0)
-            FileManager().write_floats(unscaled_path, self.floats_raw)
+            FileManager().write_floats(unscaled_path, self.floats_model)
 
             # write transformed floats
             scaled_path = '%s/%s.floatsPrime.%f' % (self.working_folder, self.name, scale)
@@ -262,8 +320,8 @@ class DepthBuffer:
         tolerance = 1e-6
         for index in range(0, len(unscaled)):
             try:    
-                unscaled_value = self.normalized_to_model_depth(unscaled[index])
-                scaled_value   = self.normalized_to_model_depth(scaled[index])
+                unscaled_value = unscaled[index]
+                scaled_value   = scaled[index]
 
                 equal = math.isclose(unscaled_value * scale, scaled_value, abs_tol=tolerance)
                 if not equal:

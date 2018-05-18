@@ -558,22 +558,22 @@ namespace ModelRelief.Database
             {
                 new Mesh
                 {
-                    Name = "lucy.sdb", Description = "Isometric", Format = MeshFormat.SDB, Camera = FindByName<Camera>("Isometric Camera"), DepthBuffer = FindByName<DepthBuffer>("lucy.sdb"), MeshTransform =  FindByName<MeshTransform>("Lucy"),
+                    Name = "lucy.sfp", Description = "Isometric", Format = MeshFormat.SFP, Camera = FindByName<Camera>("Isometric Camera"), DepthBuffer = FindByName<DepthBuffer>("lucy.sdb"), MeshTransform =  FindByName<MeshTransform>("Lucy"),
                     User = _user, Project = FindByName<Project>("ModelRelief"),
                 },
                 new Mesh
                 {
-                    Name = "armadillo.sdb", Description = "Top", Format = MeshFormat.SDB, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("armadillo.sdb"), MeshTransform = FindByName<MeshTransform>("Armadillo"),
+                    Name = "armadillo.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("armadillo.sdb"), MeshTransform = FindByName<MeshTransform>("Armadillo"),
                     User = _user, Project = FindByName<Project>("Jewelry"),
                 },
                 new Mesh
                 {
-                    Name = "bunny.sdb", Description = "Top", Format = MeshFormat.SDB, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("bunny.sdb"), MeshTransform =  FindByName<MeshTransform>("Bunny"),
+                    Name = "bunny.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("bunny.sdb"), MeshTransform =  FindByName<MeshTransform>("Bunny"),
                     User = _user, Project = FindByName<Project>("Architecture"),
                 },
                 new Mesh
                 {
-                    Name = "test.sdb", Description = "Top", Format = MeshFormat.SDB, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("test.sdb"), MeshTransform =  FindByName<MeshTransform>("Test"),
+                    Name = "test.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("test.sdb"), MeshTransform =  FindByName<MeshTransform>("Test"),
                     User = _user, Project = FindByName<Project>("ModelRelief"),
                 },
             };

@@ -84,7 +84,7 @@
       "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2018-05-18T09:53:00.7483911",
+    "FileTimeStamp": "2018-05-18T12:36:45.8469852",
     "Path": "D:\\Users\\Steve Knipmeyer\\Documents\\GitHub\\ModelRelief\\ModelRelief\\wwwroot\\store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\depthbuffers\\4\\",
     "StorageFolder": "D:\\Users\\Steve Knipmeyer\\Documents\\GitHub\\ModelRelief\\ModelRelief\\wwwroot\\store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\depthbuffers\\4\\",
     "FileName": "D:\\Users\\Steve Knipmeyer\\Documents\\GitHub\\ModelRelief\\ModelRelief\\wwwroot\\store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\depthbuffers\\4\\test.sdb",
@@ -115,12 +115,12 @@
     "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
   },
   "FileIsSynchronized": false,
-  "FileTimeStamp": "2018-05-18T09:52:34.9283046",
+  "FileTimeStamp": "2018-05-18T12:35:03.6170981",
   "Path": "D:\\Users\\Steve Knipmeyer\\Documents\\GitHub\\ModelRelief\\ModelRelief\\wwwroot\\store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\meshes\\4\\",
   "StorageFolder": "D:\\Users\\Steve Knipmeyer\\Documents\\GitHub\\ModelRelief\\ModelRelief\\wwwroot\\store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\meshes\\4\\",
-  "FileName": "D:\\Users\\Steve Knipmeyer\\Documents\\GitHub\\ModelRelief\\ModelRelief\\wwwroot\\store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\meshes\\4\\test.sdb",
+  "FileName": "D:\\Users\\Steve Knipmeyer\\Documents\\GitHub\\ModelRelief\\ModelRelief\\wwwroot\\store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\meshes\\4\\test.sfp",
   "Id": 4,
-  "Name": "test.sdb",
+  "Name": "test.sfp",
   "Description": "Top (test@modelrelief.com)",
   "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
 }
