@@ -79,12 +79,12 @@
       "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2018-05-12T05:03:07.0588239",
+    "FileTimeStamp": "2018-05-18T09:53:32.8998377",
     "Path": "D:\\Users\\Steve Knipmeyer\\Documents\\GitHub\\ModelRelief\\ModelRelief\\wwwroot\\store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\depthbuffers\\1\\",
     "StorageFolder": "D:\\Users\\Steve Knipmeyer\\Documents\\GitHub\\ModelRelief\\ModelRelief\\wwwroot\\store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\depthbuffers\\1\\",
-    "FileName": "D:\\Users\\Steve Knipmeyer\\Documents\\GitHub\\ModelRelief\\ModelRelief\\wwwroot\\store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\depthbuffers\\1\\lucy.raw",
+    "FileName": "D:\\Users\\Steve Knipmeyer\\Documents\\GitHub\\ModelRelief\\ModelRelief\\wwwroot\\store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\depthbuffers\\1\\lucy.sdb",
     "Id": 1,
-    "Name": "lucy.raw",
+    "Name": "lucy.sdb",
     "Description": "Generated in Maya (test@modelrelief.com)",
     "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
   },
@@ -93,10 +93,10 @@
     "Width": 100.0,
     "Height": 100.0,
     "Depth": 1.0,
-    "Tau": 3.0,
+    "Tau": 1.0,
     "SigmaGaussianBlur": 1.0,
     "SigmaGaussianSmooth": 1.0,
-    "LambdaLinearScaling": 0.5,
+    "LambdaLinearScaling": 1.0,
     "ProjectId": 1,
     "Project": {
       "Id": 1,
@@ -110,12 +110,12 @@
     "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
   },
   "FileIsSynchronized": false,
-  "FileTimeStamp": "2018-05-12T05:01:42.0904727",
+  "FileTimeStamp": "2018-05-18T09:52:34.9281803",
   "Path": "D:\\Users\\Steve Knipmeyer\\Documents\\GitHub\\ModelRelief\\ModelRelief\\wwwroot\\store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\meshes\\1\\",
   "StorageFolder": "D:\\Users\\Steve Knipmeyer\\Documents\\GitHub\\ModelRelief\\ModelRelief\\wwwroot\\store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\meshes\\1\\",
-  "FileName": "D:\\Users\\Steve Knipmeyer\\Documents\\GitHub\\ModelRelief\\ModelRelief\\wwwroot\\store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\meshes\\1\\lucy.raw",
+  "FileName": "D:\\Users\\Steve Knipmeyer\\Documents\\GitHub\\ModelRelief\\ModelRelief\\wwwroot\\store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\meshes\\1\\lucy.sdb",
   "Id": 1,
-  "Name": "lucy.raw",
+  "Name": "lucy.sdb",
   "Description": "Isometric (test@modelrelief.com)",
   "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
 }

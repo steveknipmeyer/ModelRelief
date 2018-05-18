@@ -40,6 +40,7 @@ class Workbench:
         gradient_y = gradients[0]
 
         threshold = self.solver.mesh_transform.tau
+        threshold = 3
         gradient_x[np.abs(gradient_x) > threshold] = 0
         gradient_y[np.abs(gradient_y) > threshold] = 0
 

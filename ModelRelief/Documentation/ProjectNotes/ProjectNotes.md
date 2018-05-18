@@ -2,7 +2,8 @@
 #### Commit Notes
 Introduce Mesh3d class to support THREE Mesh creation.
 #### Short Term  
-
+    Modify the default threshold; Tau = 3.
+     
     Modify the Solver to return a mesh based on the gradient field for visualization.
 
     Implement Gaussian smoothing for the base (low frequency) mesh using Sigma1 (SigmaLow?).
