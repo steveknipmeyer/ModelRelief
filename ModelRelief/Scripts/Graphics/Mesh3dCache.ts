@@ -5,14 +5,14 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { Graphics }                 from 'Graphics';
+import { Graphics } from 'Graphics';
 
 /**
  *  Mesh cache to optimize mesh creation.
  *  If a mesh exists in the cache of the required dimensions, it is used as a template.
  *  @class
  */
-export class MeshCache {
+export class Mesh3dCache {
     _cache : Map<string, THREE.Mesh>;
 
     /**

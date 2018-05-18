@@ -1,9 +1,10 @@
 ﻿### Tasks
 #### Commit Notes
-
+Introduce Mesh3d class to support THREE Mesh creation.
 #### Short Term  
     Files
-        Refactor DepthBuffer mesh construction as a Loader.
+        Do not use depthBuffer in Mesh.constructGraphicsAsync.
+        Is there value in the Loader.<Type> methods or should loading be done directly to the underlying loader (e.g. SinglePrecisionDepthBufferLoader)?
 
         File Formats
             sdb     Single Precision Depth Buffer

@@ -16,6 +16,7 @@ import {StandardView}               from 'ICamera';
 import {ILogger, HTMLLogger}        from 'Logger';
 import {MathLibrary}                from 'Math';
 import {Mesh}                       from 'Mesh';
+import {Mesh3d}                     from 'Mesh3d';
 import {MeshViewerControls}         from 'MeshViewerControls';
 import {Services}                   from 'Services';
 import {TrackballControls}          from 'TrackballControls';
@@ -58,7 +59,7 @@ export class MeshViewer extends Viewer {
 
         let height = 1;
         let width  = 1;
-        let mesh = Graphics.createPlaneMesh(new THREE.Vector3(), height, width, new THREE.MeshPhongMaterial(Mesh.DefaultMeshPhongMaterialParameters));
+        let mesh = Graphics.createPlaneMesh(new THREE.Vector3(), height, width, new THREE.MeshPhongMaterial(Mesh3d.DefaultMeshPhongMaterialParameters));
         mesh.rotateX(-Math.PI / 2);
 
         this._root.add(mesh);

@@ -15,10 +15,11 @@ import { HttpLibrary, ServerEndPoints } from 'Http'
 import { IGeneratedFileModel }          from 'IGeneratedFileModel'
 import { MeshFormat }                   from 'IMesh'
 import { ILogger, ConsoleLogger }       from 'Logger'
-import { MeshCache }                    from 'MeshCache'
+import { Mesh3dCache }                  from 'Mesh3dCache'
 import { MeshTransform }                from 'MeshTransform'
 import { Project }                      from 'Project'
 import { Services }                     from 'Services'
+import {Loader} from 'ModelLoaders/Loader';
 
 /**
  * @description Represents a mesh.
@@ -27,20 +28,6 @@ import { Services }                     from 'Services'
  * @extends {GeneratedFileModel}
  */
 export class Mesh extends GeneratedFileModel {
-
-    static Cache                              : MeshCache = new MeshCache();
-    static readonly MeshModelName             : string = 'ModelMesh';
-    static DefaultMeshPhongMaterialParameters : THREE.MeshPhongMaterialParameters = {
-    
-        side: THREE.DoubleSide, 
-        wireframe : false, 
-
-        color: 0x42eef4, 
-        specular: 0xffffff, 
-
-        reflectivity : 0.75, 
-        shininess : 100
-    };
 
     format: MeshFormat;
 
@@ -181,24 +168,27 @@ export class Mesh extends GeneratedFileModel {
 
     //#region Generation
     /**
-     * @description Generates a mesh from the active model and camera.
-     * @returns {Promise<THREE.Mesh>} Generation parameters (MeshGenerateParameters)
+     * @description Generates a mesh.
+     * @returns {Promise<THREE.Group>} Group holding the mesh.
      */
-    async constructGraphicssAsync(): Promise<THREE.Mesh> {
+    async constructGraphicssAsync(): Promise<THREE.Group> {
 
-        let mesh : THREE.Mesh;
+        let modelGroup : THREE.Group;
         switch (this.format) {
 
             case MeshFormat.RAW:
                 this.depthBuffer.rgbArray = await this.toDtoModel().getFileAsync();
-                mesh = await this.depthBuffer.constructGraphicssAsync();
+                // mesh = await this.depthBuffer.constructGraphicssAsync();
+
+                let loader = new Loader();
+                modelGroup = await loader.loadSDBModel (this.depthBuffer);
                 break;
 
             default:
                 break;            
         }
 
-        return mesh;
+        return modelGroup;
     }
     //#endregion
 }
