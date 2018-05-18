@@ -11,7 +11,10 @@ namespace ModelRelief.Domain
     public enum MeshFormat
     {
         None,           // unknown
-        RAW,            // floating point array
+        SDB,            // single precision depth buffer
+        DDB,            // double precision depth buffer
+        SFP,            // single precision float (model units)
+        DFP,            // double precision float (model units)
         OBJ,            // Wavefront OBJ
         STL,            // Stereolithography
     }

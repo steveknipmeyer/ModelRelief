@@ -16,7 +16,7 @@ import colorama
 import os
 import sys
 
-from Environment import Environment
+from environment import Environment
 from tools import Colors, Tools
 
 class BaseLine:

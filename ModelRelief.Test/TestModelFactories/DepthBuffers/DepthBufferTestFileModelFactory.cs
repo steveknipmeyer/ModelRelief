@@ -34,7 +34,7 @@ namespace ModelRelief.Test.TestModels.DepthBuffers
             UxUrl  = "/depthbuffers";
 
             IdRange = Enumerable.Range(1, 4);
-            FirstModelName = "lucy.raw";
+            FirstModelName = "lucy.sdb";
 
             ReferencePropertyNames = new List<string> { "ProjectId", "Model3dId", "CameraId" };
             InvalidReferenceProperty = 0;
@@ -51,10 +51,10 @@ namespace ModelRelief.Test.TestModels.DepthBuffers
         {
             var depthBuffer = base.ConstructValidModel() as Dto.DepthBuffer;
 
-            depthBuffer.Name = "TestDepthBuffer.raw";
+            depthBuffer.Name = "TestDepthBuffer.sdb";
             depthBuffer.Width  = 512;
             depthBuffer.Height = 512;
-            depthBuffer.Format = Domain.DepthBufferFormat.RAW;
+            depthBuffer.Format = Domain.DepthBufferFormat.SDB;
 
             return depthBuffer;
         }

@@ -34,7 +34,7 @@ namespace ModelRelief.Test.TestModels.Meshes
             UxUrl  = "/meshes";
 
             IdRange = Enumerable.Range(1, 4);
-            FirstModelName = "lucy.raw";
+            FirstModelName = "lucy.sdb";
 
             ReferencePropertyNames = new List<string> { "ProjectId", "CameraId", "DepthBufferId", "MeshTransformId" };
             InvalidReferenceProperty = 0;
@@ -51,7 +51,7 @@ namespace ModelRelief.Test.TestModels.Meshes
         {
             var validModel = base.ConstructValidModel() as Dto.Mesh;
             validModel.Name = "TestMesh.obj";
-            validModel.Format = Domain.MeshFormat.RAW;
+            validModel.Format = Domain.MeshFormat.SFP;
 
             return validModel;
         }

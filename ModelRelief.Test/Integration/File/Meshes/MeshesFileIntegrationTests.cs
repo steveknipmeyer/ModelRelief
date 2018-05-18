@@ -65,7 +65,7 @@ namespace ModelRelief.Test.Integration.Meshes
                 var depthBuffer = depthBufferNode.Model as Dto.DepthBuffer;
                 depthBuffer.CameraId = cameraNode.Model.Id;
                 depthBufferNode.Model = await depthBufferFactory.PostNewModel(ClassFixture, depthBuffer);
-                depthBufferNode.Model = await depthBufferFactory.PostNewFile(ClassFixture, depthBufferNode.Model.Id, "DepthBuffer.raw");
+                depthBufferNode.Model = await depthBufferFactory.PostNewFile(ClassFixture, depthBufferNode.Model.Id, "DepthBuffer.sdb");
 
                 // MeshTransform
                 var meshTransformNode = NodeCollection[typeof(Domain.MeshTransform)];
@@ -81,7 +81,7 @@ namespace ModelRelief.Test.Integration.Meshes
                 mesh.DepthBufferId = depthBufferNode.Model.Id;
                 mesh.MeshTransformId = meshTransformNode.Model.Id;
                 meshNode.Model = await meshFactory.PostNewModel(ClassFixture, mesh);
-                meshNode.Model = await meshFactory.PostNewFile(ClassFixture, meshNode.Model.Id, "DepthBuffer.raw");
+                meshNode.Model = await meshFactory.PostNewFile(ClassFixture, meshNode.Model.Id, "DepthBuffer.sdb");
             }
         }
 
@@ -232,7 +232,7 @@ namespace ModelRelief.Test.Integration.Meshes
                 var scaledByteArray = Convert.FromBase64String(encodedString.ToString());
 
                 // compare to reference
-                var referenceScaledByeArray = Utility.ByteArrayFromFile("DepthBuffer.raw.Scale05");
+                var referenceScaledByeArray = Utility.ByteArrayFromFile("DepthBuffer.sdb.Scale05");
 //              Assert.True(Utility.EqualByteArrays(scaledByteArray, referenceScaledByeArray));
 
                 int numberFloats = referenceScaledByeArray.Length / 4;

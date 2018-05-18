@@ -16,7 +16,6 @@ import { IGeneratedFileModel }  from 'IGeneratedFileModel'
  */
 export enum DepthBufferFormat {
     None,       // unknown
-    RAW,        // single precision depth buffer
     SDB,        // single precision depth buffer
     DDB,        // double precision depth buffer
     SFP,        // single precision float (model units)

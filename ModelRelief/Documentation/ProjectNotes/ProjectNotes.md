@@ -2,20 +2,17 @@
 #### Commit Notes
 Introduce Mesh3d class to support THREE Mesh creation.
 #### Short Term  
-    Convert test data.
-    Rebuild test databases.
-    Remove RAW references.
-    
-    Review typing module and Python types.
-    GenerateDepthBufferAsync is not implemented.
-        Why is this generated the first time (requires a Camera change)? 
 
+    Modify the Solver to return a mesh based on the gradient field for visualization.
+
+    Implement Gaussian smoothing for the base (low frequency) mesh using Sigma1 (SigmaLow?).
     3D Surface Visualization        
         https://jakevdp.github.io/PythonDataScienceHandbook/04.12-three-dimensional-plotting.html
 
-    Implement Gaussian smoothing for the base (low frequency) mesh using Sigma1 (SigmaLow?).
-    Modify the Solver to return a mesh based on the gradient field for visualization.
+    Review typing module and Python types.
     Adopt a standard for representing Python vectors.
+    GenerateDepthBufferAsync is not implemented.
+        Why is this generated the first time (requires a Camera change)? 
 
 Update database schema diagram.  ****
   

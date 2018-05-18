@@ -64,7 +64,7 @@ namespace ModelRelief.Test.Integration.DepthBuffers
                 depthBuffer.Model3dId = modelNode.Model.Id;
                 depthBuffer.CameraId  = cameraNode.Model.Id;
                 depthBufferNode.Model = await depthBufferFactory.PostNewModel(ClassFixture, depthBuffer);
-                depthBufferNode.Model = await depthBufferFactory.PostNewFile(ClassFixture, depthBufferNode.Model.Id, "DepthBuffer.raw");
+                depthBufferNode.Model = await depthBufferFactory.PostNewFile(ClassFixture, depthBufferNode.Model.Id, "DepthBuffer.sdb");
             }
         }
 

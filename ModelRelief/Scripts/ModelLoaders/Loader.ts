@@ -108,7 +108,6 @@ export class Loader {
 
         switch (mesh.format) {
 
-            case MeshFormat.RAW:
             case MeshFormat.SDB:
                 // override transformer
                 transformer = depthBuffer.normalizedToModelDepth.bind(depthBuffer);

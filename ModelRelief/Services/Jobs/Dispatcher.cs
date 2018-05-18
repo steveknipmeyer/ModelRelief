@@ -157,7 +157,7 @@ namespace ModelRelief.Services.Jobs
 
             // The job is complete and the mesh file has been generated.
             var generatedFile = Path.Combine($"{workingFolder}{mesh.Name}");
-            mesh.Format = MeshFormat.RAW;
+            mesh.Format = MeshFormat.SDB;
 
             var fileSynchronized = mesh.SynchronizeGeneratedFile(generatedFile, StorageManager.DefaultModelStorageFolder(mesh));
             if (fileSynchronized)

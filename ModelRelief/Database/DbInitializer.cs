@@ -197,6 +197,7 @@ namespace ModelRelief.Database
                 {
                     case RelationalDatabaseProvider.SQLServer:
                         // WIP: The Test database cannot be copied to create the baseline due to a locking error.
+                        // N.B. Use testdatabasebaseline.py to create the SQLServer test database.
                         break;
 
                     default:
@@ -506,33 +507,33 @@ namespace ModelRelief.Database
             {
                 new DepthBuffer
                 {
-                    Name = "lucy.raw", Description = "Generated in Maya",
+                    Name = "lucy.sdb", Description = "Generated in Maya",
                     Width = 512, Height = 512,
-                    Format = DepthBufferFormat.RAW,
+                    Format = DepthBufferFormat.SDB,
                     Model3d = FindByName<Model3d>("lucy.obj"), Camera = FindByName<Camera>("Lucy"),
                     User = _user, Project = FindByName<Project>("ModelRelief"),
                 },
                 new DepthBuffer
                 {
-                    Name = "armadillo.raw", Description = "Generated in Rhino",
+                    Name = "armadillo.sdb", Description = "Generated in Rhino",
                     Width = 512, Height = 512,
-                    Format = DepthBufferFormat.RAW,
+                    Format = DepthBufferFormat.SDB,
                     Model3d = FindByName<Model3d>("armadillo.obj"), Camera = FindByName<Camera>("Armadillo"),
                     User = _user, Project = FindByName<Project>("Jewelry"),
                 },
                 new DepthBuffer
                 {
-                    Name = "bunny.raw", Description = "Generated in VRay",
+                    Name = "bunny.sdb", Description = "Generated in VRay",
                     Width = 512, Height = 512,
-                    Format = DepthBufferFormat.RAW,
+                    Format = DepthBufferFormat.SDB,
                     Model3d = FindByName<Model3d>("bunny.obj"), Camera = FindByName<Camera>("Bunny"),
                     User = _user, Project = FindByName<Project>("Architecture"),
                 },
                 new DepthBuffer
                 {
-                    Name = "test.raw", Description = "Generated in ModelRelief",
+                    Name = "test.sdb", Description = "Generated in ModelRelief",
                     Width = 512, Height = 512,
-                    Format = DepthBufferFormat.RAW,
+                    Format = DepthBufferFormat.SDB,
                     Model3d = FindByName<Model3d>("test.obj"), Camera = FindByName<Camera>("Test"),
                     User = _user, Project = FindByName<Project>("ModelRelief"),
                 },
@@ -557,22 +558,22 @@ namespace ModelRelief.Database
             {
                 new Mesh
                 {
-                    Name = "lucy.raw", Description = "Isometric", Format = MeshFormat.RAW, Camera = FindByName<Camera>("Isometric Camera"), DepthBuffer = FindByName<DepthBuffer>("lucy.raw"), MeshTransform =  FindByName<MeshTransform>("Lucy"),
+                    Name = "lucy.sdb", Description = "Isometric", Format = MeshFormat.SDB, Camera = FindByName<Camera>("Isometric Camera"), DepthBuffer = FindByName<DepthBuffer>("lucy.sdb"), MeshTransform =  FindByName<MeshTransform>("Lucy"),
                     User = _user, Project = FindByName<Project>("ModelRelief"),
                 },
                 new Mesh
                 {
-                    Name = "armadillo.raw", Description = "Top", Format = MeshFormat.RAW, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("armadillo.raw"), MeshTransform = FindByName<MeshTransform>("Armadillo"),
+                    Name = "armadillo.sdb", Description = "Top", Format = MeshFormat.SDB, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("armadillo.sdb"), MeshTransform = FindByName<MeshTransform>("Armadillo"),
                     User = _user, Project = FindByName<Project>("Jewelry"),
                 },
                 new Mesh
                 {
-                    Name = "bunny.raw", Description = "Top", Format = MeshFormat.RAW, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("bunny.raw"), MeshTransform =  FindByName<MeshTransform>("Bunny"),
+                    Name = "bunny.sdb", Description = "Top", Format = MeshFormat.SDB, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("bunny.sdb"), MeshTransform =  FindByName<MeshTransform>("Bunny"),
                     User = _user, Project = FindByName<Project>("Architecture"),
                 },
                 new Mesh
                 {
-                    Name = "test.raw", Description = "Top", Format = MeshFormat.RAW, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("test.raw"), MeshTransform =  FindByName<MeshTransform>("Test"),
+                    Name = "test.sdb", Description = "Top", Format = MeshFormat.SDB, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("test.sdb"), MeshTransform =  FindByName<MeshTransform>("Test"),
                     User = _user, Project = FindByName<Project>("ModelRelief"),
                 },
             };
