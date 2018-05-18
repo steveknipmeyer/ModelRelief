@@ -12,16 +12,18 @@ import {CameraHelper}                       from 'CameraHelper'
 import {DepthBuffer}                        from 'DepthBuffer'
 import {Graphics}                           from 'Graphics';
 import {StandardView}                       from 'ICamera';
+import {Model3dFormat}                      from 'IModel3d';
 import {FileModel}                          from 'FileModel'
 import {ILogger, ConsoleLogger}             from 'Logger';
+import {Mesh}                               from 'Mesh';
 import {MeshGenerateParameters}             from 'Mesh3d';
 import {OBJLoader}                          from 'OBJLoader';
 import {Services}                           from 'Services';
 import {SinglePrecisionLoader}              from 'SinglePrecisionLoader';
-import {SinglePrecisionDepthBufferLoader}   from 'SinglePrecisionDepthBufferLoader';
 import {TestModelLoader, TestModel}         from 'TestModelLoader';
 import {Viewer}                             from 'Viewer';
 import {MeshFormat} from 'Api/V1/Interfaces/IMesh';
+import {Model3d} from 'Models/Model3d/Model3d';
 
 const testModelColor = '#558de8';
 
@@ -32,13 +34,102 @@ const testModelColor = '#558de8';
  */
 export class Loader {
 
+    // Private
+    _logger         : ILogger;
+
     /** Default constructor
      * @class Loader
      * @constructor
      */
     constructor() {  
+        this._logger = Services.defaultLogger;
     }
 
+    /**
+     * @description Loads a mesh based on the model type.
+     * @param {FileModel} fileModel Model to load.
+     * @returns {Promise<THREE.Group>} 
+     */
+    async loadModelAsync (fileModel : FileModel) : Promise<THREE.Group> {
+       
+        // Model3d
+        if (fileModel instanceof Model3d)
+            return await this.loadModel3dAsync(fileModel);
+
+        // Mesh
+        if (fileModel instanceof Mesh)            
+            return await this.loadMeshAsync(fileModel);
+
+        this._logger.addErrorMessage(`Logger: invalid FileModel type = ${typeof(fileModel)}`);
+   }
+
+    /**
+     * @description Loads a mesh from a Model3d.
+     * @param {Model3d} model Model to load.
+     * @returns {Promise<THREE.Group>} 
+     */
+    async loadModel3dAsync (model : Model3d) : Promise<THREE.Group> {
+
+        let modelGroup : THREE.Group = new THREE.Group();
+        switch (model.format) {
+
+            case Model3dFormat.OBJ:
+                modelGroup = await this.loadOBJModelAsync(model);
+                break;
+
+            default:
+                this._logger.addErrorMessage(`Logger: invalid Model3d type = ${model.format}`);
+                break;
+        }       
+        return modelGroup;
+    }
+
+    /**
+     * @description Loads a mesh from a Mesh.
+     * @param {Mesh} mesh Mesh to load.
+     * @returns {Promise<THREE.Group>} 
+     */
+    async loadMeshAsync (mesh : Mesh) : Promise<THREE.Group> {
+
+        let modelGroup : THREE.Group = new THREE.Group();
+
+        let byteArray : Uint8Array = await mesh.toDtoModel().getFileAsync();
+        let floatArray = new Float32Array(byteArray.buffer);
+
+        let depthBuffer = mesh.depthBuffer;
+        let meshParameters : MeshGenerateParameters = {
+            name : depthBuffer.name
+        }    
+        let bufferExtents = new THREE.Vector2(depthBuffer.width, depthBuffer.height);
+        let meshExtents : THREE.Vector2 = CameraHelper.getNearPlaneExtents(depthBuffer.camera.viewCamera);
+        
+        // NOOP default transform
+        let transformer = (value : number) => {return value;};
+
+        switch (mesh.format) {
+
+            case MeshFormat.RAW:
+            case MeshFormat.SDB:
+                // override transformer
+                transformer = depthBuffer.normalizedToModelDepth.bind(depthBuffer);
+                // Fall Through
+
+            case MeshFormat.SFP:
+
+                let loader = new SinglePrecisionLoader(meshParameters, floatArray, transformer, bufferExtents, meshExtents);
+                modelGroup = await loader.loadModelAsync();
+                break;
+
+            case MeshFormat.DDB:
+            case MeshFormat.DFP:
+            default:
+                this._logger.addErrorMessage(`Logger: invalid Mesh type = ${mesh.format}`);
+                break;
+        }
+        return modelGroup;
+    }
+
+    //region Model3d
     /**
      * @description Loads a model based on the model name and path embedded in the HTML page.
      * @param {FileModel} fileModel Model to load.
@@ -48,7 +139,7 @@ export class Loader {
 
         let modelFile = await fileModel.toDtoModel().getFileAsStringAsync();
 
-        let loader = () => new Promise<THREE.Group>((resolve, reject) => {
+        let objLoader = () => new Promise<THREE.Group>((resolve, reject) => {
 
             let manager = new THREE.LoadingManager();
             let loader  = new OBJLoader(manager);
@@ -56,33 +147,7 @@ export class Loader {
             resolve(loader.parse(modelFile));
         });
 
-        let modelGroup : THREE.Group = await loader();
-        return modelGroup;
-    }
-
-    /**
-     * @description Loads a single precision floating point depth buffer model.
-     * @param {DepthBuffer} depthBuffer DepthBuffer to load.
-     * @returns {Promise<THREE.Group>} 
-     */
-    async loadSDBModel (depthBuffer : DepthBuffer) : Promise<THREE.Group> {
-        
-        let loader = new SinglePrecisionDepthBufferLoader(depthBuffer);
-
-        let modelGroup = await loader.loadModelAsync();
-        return modelGroup;
-    }
-
-    /**
-     * @description Loads a single precision float point model.
-     * @param {FileModel} fileModel Model to load.
-     */    
-    async loadSPFModel (fileModel : FileModel) : Promise<THREE.Group> {
-
-        // let loader = new SinglePrecisionLoader();
-        // return await loader.loadModelAsync();
-
-        let modelGroup = new THREE.Group();
+        let modelGroup : THREE.Group = await objLoader();
         return modelGroup;
     }
 
@@ -96,4 +161,5 @@ export class Loader {
         let loader = new TestModelLoader();
         return loader.loadModelAsync(modelType);
     }
+    //endregion
 }

@@ -29,8 +29,6 @@ export class SinglePrecisionLoader {
     bufferExtents : THREE.Vector2;
     meshExtents   : THREE.Vector2;
 
-    // Private
-
     /**
      * Creates an instance of SinglePrecisionLoader.
      * @param {MeshGenerateParameters} parameters Mesh generation parameters.
@@ -50,6 +48,20 @@ export class SinglePrecisionLoader {
     }
 
     /**
+     * @description Loads a model.
+     * @returns {Promise<THREE.Group>} 
+     */
+    async loadModelAsync () : Promise<THREE.Group> {
+
+        if (!this.verifyMeshSettings())
+            return null;
+    
+        let mesh = this.constructGraphics();
+
+        return mesh;
+    }
+
+    /**
      * @description Returns the buffer value at a pixel index.
      * @param {number} row Buffer row.
      * @param {any} column Buffer column. 
@@ -64,21 +76,7 @@ export class SinglePrecisionLoader {
         
         return value;
     }
-
-    /**
-     * @description Loads a model.
-     * @returns {Promise<THREE.Group>} 
-     */
-    async loadModelAsync () : Promise<THREE.Group> {
-
-        if (!this.verifyMeshSettings())
-            return null;
     
-        let mesh = this.constructGraphics();
-
-        return mesh;
-    }
-
     //#region Generation
     /**
      * @description Verifies the pre-requisite settings are defined to create a mesh.

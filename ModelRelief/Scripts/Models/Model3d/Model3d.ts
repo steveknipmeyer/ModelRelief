@@ -121,7 +121,7 @@ export class Model3d extends FileModel {
     async getModelGroupAsync() : Promise<THREE.Group> {
 
         let loader = new Loader();
-        let modelGroup = await loader.loadOBJModelAsync(this);
+        let modelGroup = await loader.loadModelAsync(this);
 
         return modelGroup;
     }

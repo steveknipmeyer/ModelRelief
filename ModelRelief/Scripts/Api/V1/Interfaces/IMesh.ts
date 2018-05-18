@@ -17,9 +17,13 @@ import { IProject }             from 'IProject'
  */
 export enum MeshFormat {
     None,           // unknown
-    RAW,            // floating point array
-    OBJ,            // Wavefront OBJ
-    STL,            // Stereolithography
+    RAW,        // single precision depth buffer
+    SDB,        // single precision depth buffer
+    DDB,        // double precision depth buffer
+    SFP,        // single precision float (model units)
+    DFP,        // double precision float (model units)
+    OBJ,        // Wavefront OBJ
+    STL,        // Stereolithography
 }
 
  /**

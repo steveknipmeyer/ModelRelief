@@ -235,7 +235,7 @@ export class UnitTests {
         let depthBuffer = new Dto.DepthBuffer({
             name : "DepthBuffer",
             description: "Unit Test",
-            format: DepthBufferFormat.RAW,
+            format: DepthBufferFormat.SDB,
             width: 16,
             height: 16
         });
@@ -245,7 +245,7 @@ export class UnitTests {
         let readByteArray = await depthBufferModel.getFileAsync();
 
         // Assert
-        assert.deepEqual(originalByteArray, readByteArray, "Byte arrays are different.")  
+        assert.deepEqual(originalByteArray, readByteArray, "Byte arrays are equal.")  
     }   
 
     static vertexMapping (depthBuffer : DepthBuffer, mesh : THREE.Mesh) {

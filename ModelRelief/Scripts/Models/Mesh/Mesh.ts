@@ -173,21 +173,9 @@ export class Mesh extends GeneratedFileModel {
      */
     async constructGraphicssAsync(): Promise<THREE.Group> {
 
-        let modelGroup : THREE.Group;
-        switch (this.format) {
-
-            case MeshFormat.RAW:
-                this.depthBuffer.rgbArray = await this.toDtoModel().getFileAsync();
-                // mesh = await this.depthBuffer.constructGraphicssAsync();
-
-                let loader = new Loader();
-                modelGroup = await loader.loadSDBModel (this.depthBuffer);
-                break;
-
-            default:
-                break;            
-        }
-
+        let loader = new Loader();
+        let modelGroup = loader.loadModelAsync(this);
+        
         return modelGroup;
     }
     //#endregion

@@ -2,19 +2,10 @@
 #### Commit Notes
 Introduce Mesh3d class to support THREE Mesh creation.
 #### Short Term  
-    Files
-        Do not use depthBuffer in Mesh.constructGraphicsAsync.
-        Is there value in the Loader.<Type> methods or should loading be done directly to the underlying loader (e.g. SinglePrecisionDepthBufferLoader)?
-
-        File Formats
-            sdb     Single Precision Depth Buffer
-            ddb     Double Precision Depth Buffer
-            sfp     Single Precision Floating Point
-            dfp     Double Prevision Floating Point
-
     Convert test data.
     Rebuild test databases.
-
+    Remove RAW references.
+    
     Review typing module and Python types.
     GenerateDepthBufferAsync is not implemented.
         Why is this generated the first time (requires a Camera change)? 
@@ -380,6 +371,14 @@ Long-running Requests:
 https://stackoverflow.com/questions/33009721/long-running-rest-api-with-queues
 
 ###### Files
+File Formats
+|Extension|Description|
+|--|---|
+|sdb|Single Precision Depth Buffer|
+|ddb|Double Precision Depth Buffer|
+|sfp|Single Precision Floating Point|
+|dfp|Double Prevision Floating Point|
+
     The name property for FileDomainModels is expected to include the extension.    
         API  and Ux validation is needed to ensure that the extension is always present.
             Can it be inferred from the Format?
