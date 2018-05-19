@@ -400,7 +400,7 @@ export function TrackballControls ( object, domElement ) {
 
 		// ModelRelief
 		// Set the focus to allow keyboard accelerators in the Viewer class.
-		this.domElement.focus();
+		this.focus();
 
 		event.preventDefault();
 		event.stopPropagation();

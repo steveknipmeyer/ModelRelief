@@ -43,9 +43,11 @@
             "numbers": "#ffffff",
             "strings": "#00ff95"        
         },
+        // Controls the font family.
+        "editor.fontFamily": "Consolas",
 
         // Controls the font size in pixels.
-        "editor.fontSize": 13.3,
+        "editor.fontSize": 13,
 
         // Controls if the editor should automatically format the pasted content. A formatter must be available and the formatter should be able to format a range in a document.
         "editor.formatOnPaste": false,
@@ -129,6 +131,7 @@
             "editorLineNumber.foreground": "#8fdddd",
             "editorIndentGuide.background": "#32393f",
             "editorWhitespace.foreground": "#4a5461",
+            "editor.findMatchHighlightBackground" : "#168292",
             "peekViewEditor.background": "#222222",
             "peekViewResult.selectionBackground": "#7997cb",
             "peekViewEditor.matchHighlightBackground": "#7997cb",

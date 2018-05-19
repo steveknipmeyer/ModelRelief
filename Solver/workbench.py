@@ -45,7 +45,7 @@ class Workbench:
 
         images = [depth_buffer, gradient_x, gradient_y]
         titles = ["DepthBuffer", "dI(x,y)/dx", "dI(x,y)/dy"]        
-        cmaps  = ["gray", "Blues_r", "Blues_r"]
+        cmaps  = ["gray", "summer", "Blues_r"]
         rows = 1
         self.viewer.show_images(images, rows, titles, cmaps)
 

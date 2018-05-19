@@ -1,19 +1,12 @@
 ﻿### Tasks
 #### Commit Notes
-    Add keyboard accelerators to Viewer for standard views.
-    Increase range of Tau in UI.
-    Modify the default threshold; Tau = 5.
-    Disable the keyboard handlers in TrackBall.
-    On mousedown set the focus to the canvas in TrackBall.
+Add Armadillo test JSON file.
 
 #### Short Term  
-    Why is there an intermittent Error? It may happend the first time Meshes is opened.
-    Why are there two keystroke events in Viewer.initializeKeyboardShortcuts?
 
-    Rebuild databases!
-
-    Add Armadillo test JSON for comparison with Kerber.
-    Change cmap to Summer in workbench.
+    Automate:
+        Creation of the test databases
+        Execution of unit tests
 
     Add support for creating masks.
         B: Background
@@ -29,7 +22,7 @@
     Review typing module and Python types.
     Adopt a standard for representing Python vectors.
 
-    GenerateDepthBufferAsync is not implemented.
+    GenerateDepthBufferAsync is not implemented.tb
         Why is this generated the first time (requires a Camera change)? 
 
 Update database schema diagram.  ****
@@ -102,6 +95,7 @@ What controls are (ultimately) present in Composer?
 - [ ] The quaternion and up vector do not roundtrip although the visual camera appears unchanged.  The matrix and projectionMatrix are unchanged!
 - [ ] Cameras do not handle offsets (pan). Is this a TrackBallControl issue?
 - [ ] Randomly generated cameras do not roundtrip the matrix property.
+
 ##### Clipping Plane Issues
 
     Investigate why the clipping plane CameraControls are not editable.
@@ -121,6 +115,7 @@ What controls are (ultimately) present in Composer?
 - [X] Modify the graphics class methods fromDto and toDto.
 
 #### Back End
+
 ##### Domain Models
 - [x] Add new properties to the class in the DomainModels folder.   
 
@@ -498,6 +493,11 @@ A Put (File) request returns Created instead of OK. The file is correctly replac
         Message             Errors[]
         DeveloperMessage    DeveloperMessage   
         API Reference       ApiReference
+
+#### Error Handling
+    // https://stackoverflow.com/questions/35031279/confused-with-error-handling-in-asp-net-5-mvc-6
+    Why is there an intermittent Error? It can happen the first time Meshes or Composer is opened.
+        Experiment: Disable the Errors controller.
 
 #### Logging
     How can ModelRelief messages be associated with a category (e.g. 'Microsoft')?

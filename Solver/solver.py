@@ -87,17 +87,19 @@ class Solver:
         scaled_floats = buffer.scale_floats(self.mesh_transform.lambda_scale)
 
         # Begin Experimental
-        gradients = buffer.gradients       
-        gradient_x = gradients[1]
+        experimentalFeatures = False
+        if experimentalFeatures:
+            gradients = buffer.gradients       
+            gradient_x = gradients[1]
 
-        gradient_x = np.reshape(gradient_x, (buffer.height * buffer.width))
+            gradient_x = np.reshape(gradient_x, (buffer.height * buffer.width))
 
-        # threshold
-        gradient_x = self.threshold.apply(gradient_x, self.mesh_transform.tau)
+            # threshold
+            gradient_x = self.threshold.apply(gradient_x, self.mesh_transform.tau)
 
-        # convert to single precision
-        gradient_x = gradient_x.astype('float32')
-        scaled_floats = gradient_x.tolist()
+            # convert to single precision
+            gradient_x = gradient_x.astype('float32')
+            scaled_floats = gradient_x.tolist()
         # End Experimental
 
         # write final raw bytes

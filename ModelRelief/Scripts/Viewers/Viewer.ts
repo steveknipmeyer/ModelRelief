@@ -280,6 +280,7 @@ export class Viewer {
     initializeKeyboardShortcuts() {
 
         this._canvas.addEventListener('keyup', (event : KeyboardEvent) => {
+
             let standardView = StandardView.None;
 
             // https://css-tricks.com/snippets/javascript/javascript-keycodes/
