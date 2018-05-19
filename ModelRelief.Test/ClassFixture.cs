@@ -15,17 +15,20 @@ namespace ModelRelief.Test
     public class ClassFixture : IDisposable
     {
         public ServerFramework ServerFramework { get; }
+        public DatabaseCollectionFixture CollectionFixture { get; set; }
         public IServiceProvider ServiceProvider { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClassFixture"/> class.
-        /// Constructor.
         /// </summary>
-        public ClassFixture()
+        /// <param name="collectionFixture">Database collection fixture instantiated before any test methods are executed.</param>
+        public ClassFixture(DatabaseCollectionFixture collectionFixture)
         {
+            CollectionFixture = collectionFixture;
+
             // WIP: Only the integration tests directly require the TestServer. However, all tests (integration, unit) require IServiceProvider.
             // The TestServer provides access to IServiceProvider through Server.Host so the ServerFramework is present in all tests.
-            ServerFramework = new ServerFramework();
+            ServerFramework = collectionFixture.ServerFramework;
 
             ServiceProvider = ServerFramework.Server.Host.Services;
         }

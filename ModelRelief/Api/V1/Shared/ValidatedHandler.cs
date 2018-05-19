@@ -32,7 +32,7 @@ namespace ModelRelief.Api.V1.Shared
     /// </summary>
     /// <typeparam name="TRequest">Request object.</typeparam>
     /// <typeparam name="TResponse">Response object.</typeparam>
-    public abstract class ValidatedHandler<TRequest, TResponse> : ICancellableAsyncRequestHandler<TRequest, TResponse>
+    public abstract class ValidatedHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
         public ModelReliefDbContext             DbContext { get; }

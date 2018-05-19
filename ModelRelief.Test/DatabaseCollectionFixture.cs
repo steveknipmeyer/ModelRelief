@@ -16,14 +16,16 @@ namespace ModelRelief.Test
     /// </summary>
     public class DatabaseCollectionFixture : IDisposable
     {
+        public ServerFramework ServerFramework { get; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DatabaseCollectionFixture"/> class.
         /// Constructor.
         /// </summary>
         public DatabaseCollectionFixture()
         {
-            var serverFramework = new ServerFramework();
-            var serviceProvider = serverFramework.Server.Host.Services;
+            ServerFramework = new ServerFramework();
+            var serviceProvider = ServerFramework.Server.Host.Services;
 
             var dbInitializer = new DbInitializer(serviceProvider);
             dbInitializer.SynchronizeTestDatabase(restore: true);

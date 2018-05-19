@@ -25,6 +25,8 @@ namespace ModelRelief.Infrastructure
         /// <param name="args">Arguments</param>
         public static void Main(string[] args)
         {
+            ProcessCommandLine(args);
+
             ConfigureLogging();
 
             var host = BuildWebHost(args);
@@ -35,6 +37,14 @@ namespace ModelRelief.Infrastructure
             }
 
             host.Run();
+        }
+
+        /// <summary>
+        /// Process the command line arguments.
+        /// </summary>
+        /// <param name="args">Arguments from command line.</param>
+        private static void ProcessCommandLine(string[] args)
+        {
         }
 
         /// <summary>

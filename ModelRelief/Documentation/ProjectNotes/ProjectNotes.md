@@ -5,9 +5,12 @@ Add Armadillo test JSON file.
 #### Short Term  
 
     Automate:
-        Creation of the test databases
-        Execution of unit tests
-
+        testdatabasebaseline
+            Creation of the test databases.
+                Modify Program to accept command line options to control the creation of the databases.
+            Execution of unit tests
+                dotnet test -v ModelRelief.test
+                
     Add support for creating masks.
         B: Background
         T: Threshold
