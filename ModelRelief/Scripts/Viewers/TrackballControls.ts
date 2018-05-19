@@ -398,6 +398,10 @@ export function TrackballControls ( object, domElement ) {
 
 		if ( _this.enabled === false ) return;
 
+		// ModelRelief
+		// Set the focus to allow keyboard accelerators in the Viewer class.
+		this.domElement.focus();
+
 		event.preventDefault();
 		event.stopPropagation();
 
@@ -615,8 +619,9 @@ export function TrackballControls ( object, domElement ) {
 	this.domElement.addEventListener( 'touchend', touchend, false );
 	this.domElement.addEventListener( 'touchmove', touchmove, false );
 
-	window.addEventListener( 'keydown', keydown, false );
-	window.addEventListener( 'keyup', keyup, false );
+	// ModelRelief
+	// window.addEventListener( 'keydown', keydown, false );
+	// window.addEventListener( 'keyup', keyup, false );
 
 	this.handleResize();
 

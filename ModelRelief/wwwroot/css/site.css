@@ -14,10 +14,6 @@ button {
     color: #0F0F0F !important;
 }
 
-input {
-    color: #0F0F0F !important;
-}
-
 /* ----------------------    
     General
 ------------------------*/
@@ -74,11 +70,23 @@ input {
 /* ----------------------    
       UI Controls
 ------------------------*/
-.dg.main {
-    user-select: none;
-    z-Index: 200;
-    margin-bottom: 25px;
-}
+
+    /* dat.ui */
+    .dg.main {
+        user-select: none;
+        z-Index: 200;
+        margin-bottom: 25px;
+    }
+
+     .dg input[type=text] {        
+        color: white !important;;
+        font-size: 12pt;
+    }
+
+    /* 'Standard View' select element */
+    div.c > select {
+        color: #000000;
+    }
 
 #cameraControls {
     float: right
@@ -87,18 +95,13 @@ input {
     float: left
 }
 
-/* 'Standard View' select element */
-div.c > select {
-    color: #000000;
-}
-
 .DepthBufferFactory {
     background-color: #000000;
 }
 
-/*
+/* ----------------------    
     HTML Logger
-*/
+------------------------*/
 
 #loggerRoot {
     list-style-type: none;

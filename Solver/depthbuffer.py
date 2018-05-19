@@ -113,8 +113,7 @@ class DepthBuffer:
         Constructs a list of floats that are in model units.
         """
         floats_array = np.array(self.floats_raw)
-        scaler = lambda v: self.normalized_to_model_depth(v)
-        floats_array = scaler(floats_array)
+        floats_array = self.normalized_to_model_depth(floats_array)
         floats = floats_array.tolist()       
 
         return floats
@@ -152,7 +151,7 @@ class DepthBuffer:
         return floats
 
     @property
-    def np_array(self):
+    def np_array(self) -> np.ndarray:
         """
         Returns a np array.
         The

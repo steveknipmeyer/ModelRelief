@@ -203,7 +203,7 @@ export class CameraControls {
             minimum = 25;
             maximum = 75;
             stepSize = 1;
-            let controlFieldOfView = cameraOptions.add(this.settings.camera.viewCamera, 'fov').name('Field of View').min(minimum).max(maximum).step(stepSize).listen();;
+            let controlFieldOfView = cameraOptions.add(this.settings.camera.viewCamera, 'fov').name('Field of View').min(minimum).max(maximum).step(stepSize).listen();
             controlFieldOfView.onChange(function (value) {
 
                 scope.settings.camera.viewCamera.fov = value;

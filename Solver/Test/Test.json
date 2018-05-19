@@ -98,7 +98,7 @@
     "Width": 100.0,
     "Height": 100.0,
     "Depth": 1.0,
-    "Tau": 1.0,
+    "Tau": 3.0,
     "SigmaGaussianBlur": 1.0,
     "SigmaGaussianSmooth": 1.0,
     "LambdaLinearScaling": 1.0,

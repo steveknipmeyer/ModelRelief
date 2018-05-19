@@ -52,6 +52,29 @@ class ComposerViewSettings {
 }
 
 /**
+ * @description Range of a UI control.
+ * @class ControlSettings
+ */
+class ControlSettings {
+
+    minimum : number;       
+    maximum : number; 
+    stepSize : number;
+
+    /**
+     * Creates an instance of ControlSettings.
+     * @param {number} minimum Minimim value of control.
+     * @param {number} maximum Maximim value of control.
+     * @param {number} stepSize Step size of control.
+     */
+    constructor (minimum : number, maximum : number, stepSize : number) {
+        this.minimum = minimum;
+        this.maximum = maximum;
+        this.stepSize = stepSize;
+    }
+}
+
+/**
  * @description Composer Controller
  * @export
  * @class ComposerController
@@ -315,35 +338,33 @@ export class ComposerController {
 
         let containerDiv = document.getElementById(this._composerView.containerId);
         containerDiv.appendChild(gui.domElement);
-        let minimum     : number;
-        let maximum     : number;
-        let stepSize    : number;
-
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         //                                                                   ModelRelief                                                                //      
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         let composerViewOptions = gui.addFolder('Composer Options');
 
         let dimensionsOptions = composerViewOptions.addFolder('Mesh Dimensions');
-        minimum  =    1.0;
-        maximum  = 1000.0;
-        stepSize =    1.0;
+        let controlSettings = new ControlSettings(1.0, 1000.0, 1.0);
 
         // Mesh Dimensions
-        let controlMeshWidth  = dimensionsOptions.add(this._composerViewSettings.meshTransform, 'width').name('Width').min(minimum).max(maximum).step(stepSize).listen();
-        let controlMeshHeight = dimensionsOptions.add(this._composerViewSettings.meshTransform, 'height').name('Height').min(minimum).max(maximum).step(stepSize).listen();
-        let controlMeshDepth  = dimensionsOptions.add(this._composerViewSettings.meshTransform, 'depth').name('Depth').min(minimum).max(maximum).step(stepSize).listen();
+        let controlMeshWidth  = dimensionsOptions.add(this._composerViewSettings.meshTransform, 'width').name('Width').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+        let controlMeshHeight = dimensionsOptions.add(this._composerViewSettings.meshTransform, 'height').name('Height').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+        let controlMeshDepth  = dimensionsOptions.add(this._composerViewSettings.meshTransform, 'depth').name('Depth').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
         
         let reliefProcessingOptions = composerViewOptions.addFolder('Relief Processing');
-        minimum  =    0.0;
-        maximum  =    1.0;
-        stepSize =    0.1;
 
         // Relief Processing Parameters
-        let controlTau                 = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'tau').name('Tau Threshold').min(minimum).max(maximum).step(stepSize).listen();
-        let controlSigmaGaussianBlur   = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'sigmaGaussianBlur').name('Sigma Gaussian Blur').min(minimum).max(maximum).step(stepSize).listen();
-        let controlSigmaGaussianSmooth = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'sigmaGaussianSmooth').name('Sigma Gaussian Smooth').min(minimum).max(maximum).step(stepSize).listen();
-        let controlLamdaLinearScaling  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'lambdaLinearScaling').name('Lambda Linear Scaling').min(minimum).max(maximum).step(stepSize).listen();
+        controlSettings = new ControlSettings(0.0, 10.0, 0.1);
+        let controlTau = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'tau').name('Tau Threshold').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+
+        controlSettings = new ControlSettings(0.0, 10.0, 0.1);
+        let controlSigmaGaussianBlur = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'sigmaGaussianBlur').name('Sigma Gaussian Blur').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+
+        controlSettings = new ControlSettings(0.0, 10.0, 0.1);
+        let controlSigmaGaussianSmooth = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'sigmaGaussianSmooth').name('Sigma Gaussian Smooth').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+
+        controlSettings = new ControlSettings(0.0, 1.0, 0.1);
+        let controlLamdaLinearScaling  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'lambdaLinearScaling').name('Lambda Linear Scaling').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
         
         // Generate Relief
         let controlGenerateRelief = reliefProcessingOptions.add(this._composerViewSettings, 'generateRelief').name('Generate Relief');

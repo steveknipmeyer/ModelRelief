@@ -10,15 +10,15 @@ namespace ModelRelief.Features.Home
 
     public class AboutController : Controller
         {
-        public IActionResult Phone()
-            {
-            return Content("571 730 7138");
-            }
-
-        [Route("special/{id?}")]
         public IActionResult Company()
             {
             return Content("ModelRelief, LLC");
+            }
+
+        [Route("special/{id?}")]
+        public IActionResult Phone()
+            {
+            return Content("571 730 7138");
             }
         }
     }

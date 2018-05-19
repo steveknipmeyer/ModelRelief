@@ -1,8 +1,25 @@
 ﻿### Tasks
 #### Commit Notes
-Introduce Mesh3d class to support THREE Mesh creation.
+    Add keyboard accelerators to Viewer for standard views.
+    Increase range of Tau in UI.
+    Modify the default threshold; Tau = 5.
+    Disable the keyboard handlers in TrackBall.
+    On mousedown set the focus to the canvas in TrackBall.
+
 #### Short Term  
-    Modify the default threshold; Tau = 3.
+    Why is there an intermittent Error? It may happend the first time Meshes is opened.
+    Why are there two keystroke events in Viewer.initializeKeyboardShortcuts?
+
+    Rebuild databases!
+
+    Add Armadillo test JSON for comparison with Kerber.
+    Change cmap to Summer in workbench.
+
+    Add support for creating masks.
+        B: Background
+        T: Threshold
+        C : B * Tx * Ty
+
     Modify the Solver to return a mesh based on the gradient field for visualization.
 
     Implement Gaussian smoothing for the base (low frequency) mesh using Sigma1 (SigmaLow?).
@@ -11,6 +28,7 @@ Introduce Mesh3d class to support THREE Mesh creation.
 
     Review typing module and Python types.
     Adopt a standard for representing Python vectors.
+
     GenerateDepthBufferAsync is not implemented.
         Why is this generated the first time (requires a Camera change)? 
 
@@ -704,6 +722,10 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     Progress Indicator
     OrbitControls versus Trackball
     Add MaterialLoader.
+
+    Provide keyboard support in UI settings.
+        https://github.com/dataarts/dat.gui/issues/179
+        The dat-gui listen() method blocks keyboard input in the text field.
 
     Create a set of sample materials such as wood, glass, plaster, etc.
 

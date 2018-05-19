@@ -279,17 +279,48 @@ export class Viewer {
      */
     initializeKeyboardShortcuts() {
 
-        document.addEventListener('keyup', (event : KeyboardEvent) => {
+        this._canvas.addEventListener('keyup', (event : KeyboardEvent) => {
+            let standardView = StandardView.None;
 
             // https://css-tricks.com/snippets/javascript/javascript-keycodes/
             let keyCode : number = event.keyCode;
             switch (keyCode) {
 
-                case 70:                // F               
-                    this.camera = CameraHelper.getStandardViewCamera(StandardView.Front, this.aspectRatio, this.modelGroup);
+                case "B".charCodeAt(0):
+                case "B".charCodeAt(0):  
+                    standardView = StandardView.Bottom;    
                     break;
+                case "F".charCodeAt(0):
+                case "f".charCodeAt(0):  
+                    standardView = StandardView.Front;    
+                    break;
+                case "I".charCodeAt(0):
+                case "i".charCodeAt(0):  
+                    standardView = StandardView.Isometric;    
+                    break;
+                case "L".charCodeAt(0):
+                case "l".charCodeAt(0):  
+                    standardView = StandardView.Left;    
+                    break;
+                case "R".charCodeAt(0):
+                case "r".charCodeAt(0):  
+                    standardView = StandardView.Right;    
+                    break;
+                case "T".charCodeAt(0):
+                case "t".charCodeAt(0):  
+                    standardView = StandardView.Top;    
+                    break;
+                case "X".charCodeAt(0):
+                case "x".charCodeAt(0):  
+                    standardView = StandardView.Back;    
+                    break;
+
+                default:
+                    return;                    
             }
-            }, false);
+            this.camera = CameraHelper.getStandardViewCamera(standardView, this.aspectRatio, this.modelGroup);
+            this.cameraControls.settings.standardView = standardView;
+    }, false);
     }
 
     /**
