@@ -37,6 +37,7 @@ namespace ModelRelief.Services
         public void LogConfigurationSettings()
         {
             Logger.LogInformation($"{ConfigurationSettings.MRDatabaseProvider} = {GetSetting(ConfigurationSettings.MRDatabaseProvider)}");
+            Logger.LogInformation($"{ConfigurationSettings.MRForceInitializeAll} = {GetSetting(ConfigurationSettings.MRForceInitializeAll)}");
             Logger.LogInformation($"{ConfigurationSettings.MRInitializeDatabase} = {GetSetting(ConfigurationSettings.MRInitializeDatabase)}");
             Logger.LogInformation($"{ConfigurationSettings.MRInitializeUserStore} = {GetSetting(ConfigurationSettings.MRInitializeUserStore)}");
         }
@@ -55,6 +56,18 @@ namespace ModelRelief.Services
                 throw new Exception($"Configuration setting {settingName} not found");
 
             return setting;
+        }
+
+        /// <summary>
+        /// Parses a boolean configuration variable.
+        /// </summary>
+        /// <param name="variableName">Name of configuration variable.</param>
+        /// <returns></returns>
+        public bool ParseBooleanSetting(string variableName)
+        {
+            var variableValue = GetSetting(variableName, throwIfNotFound: false);
+            bool.TryParse(variableValue, out bool result);
+            return result;
         }
 
         /// <summary>
@@ -90,7 +103,8 @@ namespace ModelRelief.Services
     /// </summary>
     public class ConfigurationSettings
     {
-        // environment variables
+        // configuration settings
+        public const string MRForceInitializeAll  = "MRForceInitializeAll";
         public const string MRDatabaseProvider    = "MRDatabaseProvider";
         public const string MRInitializeDatabase  = "MRInitializeDatabase";
         public const string MRInitializeUserStore = "MRInitializeUserStore";

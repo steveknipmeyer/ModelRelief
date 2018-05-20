@@ -17,6 +17,7 @@ namespace ModelRelief.Services
         RelationalDatabaseProvider Database { get; }
 
         string GetSetting(string settingName, bool throwIfNotFound = true);
+        bool ParseBooleanSetting(string settingName);
         void LogConfigurationSettings();
     }
 }

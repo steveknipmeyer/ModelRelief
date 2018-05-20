@@ -22,7 +22,7 @@ namespace ModelRelief.Database
 
     public class DbInitializer
     {
-        private bool                            ForceInitialize  { get; set; }
+        private bool                            ForceInitializeAll  { get; set; }
         private IServiceProvider                Services { get; set; }
         private IHostingEnvironment             HostingEnvironment  { get; set; }
         private Services.IConfigurationProvider ConfigurationProvider  { get; set; }
@@ -39,8 +39,8 @@ namespace ModelRelief.Database
         /// Constructor
         /// </summary>
         /// <param name="services">Service provider.</param>
-        /// <param name="forceInitialize">Automatically initialize database. Overrides all environment settings.</param>
-        public DbInitializer(IServiceProvider services, bool forceInitialize)
+        /// <param name="forceInitializeAll">Automatically initialize database and user store. Overrides all configuration settings.</param>
+        public DbInitializer(IServiceProvider services, bool forceInitializeAll)
         {
             Services = services ?? throw new ArgumentNullException(nameof(services));
 
@@ -70,21 +70,9 @@ namespace ModelRelief.Database
 
             _storeUsers = ConfigurationProvider.GetSetting(Paths.StoreUsers);
 
-            ForceInitialize = forceInitialize;
+            ForceInitializeAll = forceInitializeAll;
 
             Initialize();
-        }
-
-        /// <summary>
-        /// Parses a boolean environment variable.
-        /// </summary>
-        /// <param name="variableName">Name of environment variable.</param>
-        /// <returns></returns>
-        private bool ParseBooleanEnvironmentVariable(string variableName)
-        {
-            var variableValue = ConfigurationProvider.GetSetting(variableName, throwIfNotFound: false);
-            bool.TryParse(variableValue, out bool result);
-            return result;
         }
 
         /// <summary>
@@ -92,11 +80,10 @@ namespace ModelRelief.Database
         /// </summary>
         private void Initialize()
         {
-            ConfigurationProvider.LogConfigurationSettings();
-            if (ForceInitialize || ParseBooleanEnvironmentVariable(ConfigurationSettings.MRInitializeUserStore))
+            if (ForceInitializeAll || ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRInitializeUserStore))
                 DeleteUserStore();
 
-            if (ForceInitialize || ParseBooleanEnvironmentVariable(ConfigurationSettings.MRInitializeDatabase))
+            if (ForceInitializeAll || ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRInitializeDatabase))
                 Populate().Wait();
         }
 
@@ -198,6 +185,14 @@ namespace ModelRelief.Database
                 CreateUserStore();
             }
 
+        //  CreateTestDatabase();
+        }
+
+        /// <summary>
+        /// Copies the newlt-created database to create the test database.
+        /// </summary>
+        private void CreateTestDatabase()
+        {
             if (string.Equals(HostingEnvironment.EnvironmentName, "Test", StringComparison.CurrentCultureIgnoreCase))
             {
                 // create the baseline copy of the test
@@ -225,7 +220,7 @@ namespace ModelRelief.Database
             var storeUsersPartialPath = ConfigurationProvider.GetSetting(Paths.StoreUsers);
             var storeUsersPath   = $"{HostingEnvironment.WebRootPath}{storeUsersPartialPath}";
 
-            if (!ForceInitialize)
+            if (!ForceInitializeAll)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Delete the user store folder: {storeUsersPath} (Y/N)?");

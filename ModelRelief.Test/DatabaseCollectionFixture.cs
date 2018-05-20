@@ -27,7 +27,7 @@ namespace ModelRelief.Test
             ServerFramework = new ServerFramework();
             var serviceProvider = ServerFramework.Server.Host.Services;
 
-            var dbInitializer = new DbInitializer(serviceProvider, forceInitialize:false);
+            var dbInitializer = new DbInitializer(serviceProvider, forceInitializeAll: false);
             dbInitializer.SynchronizeTestDatabase(restore: true);
         }
 

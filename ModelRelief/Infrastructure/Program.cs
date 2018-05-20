@@ -15,19 +15,13 @@ namespace ModelRelief.Infrastructure
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using ModelRelief.Database;
+    using ModelRelief.Services;
     using Serilog;
     using Serilog.Events;
 
     public class Program
     {
-        /// <summary>
-        /// Command line options.
-        /// </summary>
-        private class CommandLineOptions
-        {
-            [Option('i', "initialize", Default = false, HelpText = "Initialize the database (only) and then exit.")]
-            public bool InitializeDatabase { get; set; }
-        }
+        private static bool ForceInitializeAll { get; set; }
 
         /// <summary>
         /// Main entry point.
@@ -35,32 +29,30 @@ namespace ModelRelief.Infrastructure
         /// <param name="args">Arguments</param>
         public static void Main(string[] args)
         {
-            // process command line
-            var options = new CommandLineOptions();
-            var parserResult = CommandLine.Parser.Default.ParseArguments<CommandLineOptions>(args) as CommandLine.Parsed<CommandLineOptions>;
-            if (parserResult != null)
-                options = parserResult.Value as CommandLineOptions;
-
             ConfigureLogging();
 
             var host = BuildWebHost(args);
+            ProcessConfiguration(host);
+
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-                var initializer = new DbInitializer(services, options.InitializeDatabase);
+                var initializer = new DbInitializer(services, ForceInitializeAll);
             }
-            if (options.InitializeDatabase)
+            if (ForceInitializeAll)
                 return;
 
             host.Run();
         }
 
         /// <summary>
-        /// Process the command line arguments.
+        /// Process key configuration settings.
         /// </summary>
-        /// <param name="args">Arguments from command line.</param>
-        private static void ProcessCommandLine(string[] args)
+        private static void ProcessConfiguration(IWebHost host)
         {
+            Services.IConfigurationProvider configurationProvider = host.Services.GetRequiredService<Services.IConfigurationProvider>();
+            configurationProvider.LogConfigurationSettings();
+            ForceInitializeAll = configurationProvider.ParseBooleanSetting(ConfigurationSettings.MRForceInitializeAll);
         }
 
         /// <summary>

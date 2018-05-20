@@ -2,6 +2,12 @@
 #### Commit Notes
 
 #### Short Term  
+    Database Initialization
+        dotnet run --no-launch-profile -p ModelRelief --MRForceInitializeAll=True --MRDatabaseProvider=SQLite
+    Test Execution
+        <set environment>
+        dotnet test ModelRelief.test
+        
     Automate:
         testdatabasebaseline
             Creation of the test databases.

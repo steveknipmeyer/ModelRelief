@@ -24,6 +24,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production",
         "MRDatabaseProvider": "SQLServer",
+        "MRForceInitializeAll": "False",
         "MRInitializeDatabase": "True",
         "MRInitializeUserStore": "True"
       },
@@ -35,6 +36,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "MRDatabaseProvider": "SQLServer",
+        "MRForceInitializeAll": "False",
         "MRInitializeDatabase": "True",
         "MRInitializeUserStore": "True"
       },
@@ -46,6 +48,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Test",
         "MRDatabaseProvider": "SQLServer",
+        "MRForceInitializeAll": "False",
         "MRInitializeDatabase": "True",
         "MRInitializeUserStore": "True"
       },
