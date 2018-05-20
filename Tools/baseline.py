@@ -12,11 +12,11 @@
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 
 """
-import colorama
 import os
-import sys
+import time
 
 from environment import Environment
+from logger import Logger
 from tools import Colors, Tools
 
 class BaseLine:
@@ -24,10 +24,17 @@ class BaseLine:
     Copies the test database to create the baseline database used for integration testing.
     """
 
-    def __init__(self, database):
+    def __init__(self, logger: Logger, database: str):
         """
         Performs initialization.
+        Parameters
+        ----------
+        logger
+            Logger instance.
+        database
+            Database provider.
         """
+        self.logger = logger
         self._database = database
         return
 
@@ -47,7 +54,7 @@ class BaseLine:
         print("sqlserverFolder = %s" % Environment.sqlserverFolder)
         print (Colors.Reset)
 
-    def create_baseline_database (self):
+    def create_baseline_database (self): 
         """
             Creates the baseline test database by copying the primary test database.
         """
@@ -63,28 +70,17 @@ class BaseLine:
                 ("ModelReliefTest.mdf",     "ModelReliefBaseline.mdf"),
                 ("ModelReliefTest_log.ldf", "ModelReliefBaseline_log.ldf")
             ]
+            time.sleep(5)
         else:
-            print(Colors.Red, "invalid database: %s" % self.database)
+            self.logger.logError("invalid database: %s" % self.database)
             return
 
-        print (Colors.Red, "Creating baseline for %s." % self.database, Colors.Reset)
+        self.logger.logInformation ("Creating baseline for %s." % self.database, Colors.Red)
+
         for file_pair in file_list:
             source_file = os.path.join(database_folder, file_pair[0])
             destination_file = os.path.join(database_folder, file_pair[1])
-            Tools.copy_file(source_file, destination_file)
-
-def main():
-    """
-        Main entry point.
-    """
-    colorama.init()
-    
-    database = os.environ["MRDatabaseProvider"] if (len(sys.argv) <= 1) else sys.argv[1]
-    baseline = BaseLine(database)
-
-    baseline.show_folder_locations()
-    baseline.create_baseline_database()
-
-if __name__ == "__main__":
-    print (sys.version)
-    main()
+            try:
+                Tools.copy_file(source_file, destination_file)
+            except IOError as ex:
+                self.logger.logError("Error copying {} to {}: {}".format(source_file, destination_file, ex))

@@ -8,19 +8,20 @@ set MRSolution=%cd%\
 set MR=%MRSolution%ModelRelief\
 echo MRSolution=%MRSolution%
 
-:: ModelRelief runtime settings
-:: N.B. These settings are used for XUnit and command line invocation (e.g. 'dotnet run')
+:: ModelRelief Settings
 :: Settings are <overridden> by these configuration providers in order:
 ::             Source                                                           Note
 ::             ------                                                           ----
 ::             environment variables                                            shell definitions
 ::             appsettings.json                                                 no MR settings
 ::             appsettings.<Environment>.json                                   no MR settings
-::             Visual Studio Project launchSettings.json                        disable with --no-launch-profile, never used by XUnit, VSCode launch.json is <only> used when launching from VSCode
+::             Visual Studio Project launchSettings.json                        disable with --no-launch-profile, VSCode launch.json is <only> used when launching from VSCode
 ::             command line parameters                                          dotnet run -p ModelRelief --Variable=Value
 :: https://blogs.msdn.microsoft.com/premier_developer/2018/04/15/order-of-precedence-when-configuring-asp-net-core/
 :: The last key loaded wins.
-set ASPNETCORE_ENVIRONMENT=Test
+
+:: N.B. These environment settings are the <only> settings used by XUnit (Visual Studio or 'dotnet test') 
+::       because ModelRelief.Test does <not> have an appsettings.json or Properties/launchSettings.json.
 set MRDatabaseProvider=SQLServer
 set MRForceInitializeAll=False
 set MRInitializeDatabase=False
