@@ -6,7 +6,7 @@ echo %~dp0
 cd/D %~dp0\..
 set MRSolution=%cd%\
 set MR=%MRSolution%ModelRelief\
-echo MRsolution=%MRSolution%
+echo MRSolution=%MRSolution%
 
 :: ModelRelief runtime settings
 :: N.B. These settings are used for XUnit and command line invocation (e.g. 'dotnet run')
@@ -16,6 +16,7 @@ echo MRsolution=%MRSolution%
 ::             appsettings.<Environment>.json                                   no MR settings
 ::             Visual Studio launchSettings.json or VisualCode launch.json      not used by XUnit
 :: Do not set MRInitializeUserStore if XUnit tests are being run from Visual Studio. The internal console cannot read the confirming Console.ReadLine.
+:: https://blogs.msdn.microsoft.com/premier_developer/2018/04/15/order-of-precedence-when-configuring-asp-net-core/
 set ASPNETCORE_ENVIRONMENT=Test
 set MRDatabaseProvider=SQLServer
 set MRInitializeDatabase=False

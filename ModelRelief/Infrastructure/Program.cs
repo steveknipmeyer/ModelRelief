@@ -9,6 +9,7 @@ namespace ModelRelief.Infrastructure
     using System;
     using System.IO;
     using System.Reflection;
+    using CommandLine;
     using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -20,12 +21,25 @@ namespace ModelRelief.Infrastructure
     public class Program
     {
         /// <summary>
+        /// Command line options.
+        /// </summary>
+        private class CommandLineOptions
+        {
+            [Option('i', "initialize", Default = false, HelpText = "Initialize the database (only) and then exit.")]
+            public bool InitializeDatabase { get; set; }
+        }
+
+        /// <summary>
         /// Main entry point.
         /// </summary>
         /// <param name="args">Arguments</param>
         public static void Main(string[] args)
         {
-            ProcessCommandLine(args);
+            // process command line
+            var options = new CommandLineOptions();
+            var parserResult = CommandLine.Parser.Default.ParseArguments<CommandLineOptions>(args) as CommandLine.Parsed<CommandLineOptions>;
+            if (parserResult != null)
+                options = parserResult.Value as CommandLineOptions;
 
             ConfigureLogging();
 
@@ -33,8 +47,10 @@ namespace ModelRelief.Infrastructure
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-                var initializer = new DbInitializer(services);
+                var initializer = new DbInitializer(services, options.InitializeDatabase);
             }
+            if (options.InitializeDatabase)
+                return;
 
             host.Run();
         }

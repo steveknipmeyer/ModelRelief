@@ -22,6 +22,7 @@ namespace ModelRelief.Database
 
     public class DbInitializer
     {
+        private bool                            ForceInitialize  { get; set; }
         private IServiceProvider                Services { get; set; }
         private IHostingEnvironment             HostingEnvironment  { get; set; }
         private Services.IConfigurationProvider ConfigurationProvider  { get; set; }
@@ -33,7 +34,13 @@ namespace ModelRelief.Database
         private ApplicationUser                 _user;
         private string                          _storeUsers { get; set; }
 
-        public DbInitializer(IServiceProvider services)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DbInitializer"/> class.
+        /// Constructor
+        /// </summary>
+        /// <param name="services">Service provider.</param>
+        /// <param name="forceInitialize">Automatically initialize database. Overrides all environment settings.</param>
+        public DbInitializer(IServiceProvider services, bool forceInitialize)
         {
             Services = services ?? throw new ArgumentNullException(nameof(services));
 
@@ -63,6 +70,8 @@ namespace ModelRelief.Database
 
             _storeUsers = ConfigurationProvider.GetSetting(Paths.StoreUsers);
 
+            ForceInitialize = forceInitialize;
+
             Initialize();
         }
 
@@ -84,10 +93,10 @@ namespace ModelRelief.Database
         private void Initialize()
         {
             ConfigurationProvider.LogConfigurationSettings();
-            if (ParseBooleanEnvironmentVariable(ConfigurationSettings.MRInitializeUserStore))
+            if (ForceInitialize || ParseBooleanEnvironmentVariable(ConfigurationSettings.MRInitializeUserStore))
                 DeleteUserStore();
 
-            if (ParseBooleanEnvironmentVariable(ConfigurationSettings.MRInitializeDatabase))
+            if (ForceInitialize || ParseBooleanEnvironmentVariable(ConfigurationSettings.MRInitializeDatabase))
                 Populate().Wait();
         }
 
@@ -216,12 +225,15 @@ namespace ModelRelief.Database
             var storeUsersPartialPath = ConfigurationProvider.GetSetting(Paths.StoreUsers);
             var storeUsersPath   = $"{HostingEnvironment.WebRootPath}{storeUsersPartialPath}";
 
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Delete the user store folder: {storeUsersPath} (Y/N)?");
-            Console.ForegroundColor = ConsoleColor.White;
-            var response = Console.ReadLine();
-            if (!string.Equals(response.ToUpper(), "Y"))
-                return;
+            if (!ForceInitialize)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Delete the user store folder: {storeUsersPath} (Y/N)?");
+                Console.ForegroundColor = ConsoleColor.White;
+                var response = Console.ReadLine();
+                if (!string.Equals(response.ToUpper(), "Y"))
+                    return;
+            }
 
             Files.DeleteFolder(storeUsersPath, true);
             Logger.LogWarning($"User store ({storeUsersPath}) deleted.");

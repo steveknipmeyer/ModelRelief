@@ -1,9 +1,7 @@
 ﻿### Tasks
 #### Commit Notes
-Add Armadillo test JSON file.
 
 #### Short Term  
-
     Automate:
         testdatabasebaseline
             Creation of the test databases.
@@ -748,6 +746,10 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
         https://blog.sessionstack.com/how-javascript-works-memory-management-how-to-handle-4-common-memory-leaks-3f28b94cfbec
 
 #### ASPNET Core
+
+#### VSCode Issues
+    How can the C# style checker be manually run in VSCode?
+        https://github.com/OmniSharp/omnisharp-vscode/issues/43            
 
 #### VSCode Debugging Workflows
 

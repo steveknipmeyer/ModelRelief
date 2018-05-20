@@ -37,7 +37,7 @@
         "editor.tokenColorCustomizations": {
             "functions" : "#da82e6",
             "variables" : "#ffffff",
-            "comments": "#15f3f3",
+            "comments": "#77f3f3",
             "types": "#ff00ff",
             "keywords": "#FFFF00",
             "numbers": "#ffffff",
@@ -93,7 +93,7 @@
     // Terminal
     // ---------------------------------
         // Controls the font size in pixels of the terminal.
-        "terminal.integrated.fontSize": 14,
+        "terminal.integrated.fontSize": 13,
 
     // ---------------------------------
     // TypeScript
