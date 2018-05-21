@@ -62,7 +62,7 @@ class TestRunner:
         database
             The database provider (SQLServer | SQLite)
         """            
-        self.logger.logInformation("Begin initialize database for {}".format(database), Colors.BrightYellow)
+        self.logger.logInformation("\nBegin initialize database for {}".format(database), Colors.BrightYellow)
 
         subprocess.run ("dotnet run --no-launch-profile -p ModelRelief --MRForceInitializeAll=True --MRDatabaseProvider={}".format(database))
 
@@ -78,7 +78,6 @@ class TestRunner:
             The database provider (SQLServer | SQLite)
         """            
         baseline = BaseLine(self.logger, database)
-        baseline.show_folder_locations()
         baseline.create_baseline_database()
 
     def execute_tests(self, database: str):
@@ -90,7 +89,7 @@ class TestRunner:
         database
             The database provider (SQLServer | SQLite)
         """            
-        self.logger.logInformation("Begin test execution for {}".format(database), Colors.BrightGreen)
+        self.logger.logInformation("\nBegin test execution for {}".format(database), Colors.BrightGreen)
 
         os.environ[EnvironmentSettings.MRDATABASEPROVIDER.value] = database
         subprocess.run ("dotnet test ModelRelief.test")
@@ -104,7 +103,7 @@ class TestRunner:
             2) Create clean unit test database.
             3) Execute unit tests.
         """
-        self.logger.logInformation("TestRunner start", Colors.BrightCyan)
+        self.logger.logInformation("\nTestRunner start", Colors.BrightCyan)
 
         # save environment
         self.save_environment()
@@ -114,9 +113,6 @@ class TestRunner:
             
             # initialize database and user store
             self.initialize_database(database)
-
-            # create unit test database
-            self.create_baseline(database)
             
             # execute unit tests
             self.execute_tests(database)
@@ -124,7 +120,7 @@ class TestRunner:
         # restore environment
         self.restore_environment()
 
-        self.logger.logInformation("TestRunner end", Colors.BrightCyan)
+        self.logger.logInformation("\nTestRunner end", Colors.BrightCyan)
 
 def main():
     """

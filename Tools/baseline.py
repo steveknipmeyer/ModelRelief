@@ -58,6 +58,9 @@ class BaseLine:
         """
             Creates the baseline test database by copying the primary test database.
         """
+        self.logger.logInformation ("\nCreating baseline for %s." % self.database, Colors.BrightBlue)
+
+        self.show_folder_locations()
 
         if self.database == "SQLite":
             database_folder = Environment.sqliteFolder
@@ -75,8 +78,6 @@ class BaseLine:
             self.logger.logError("invalid database: %s" % self.database)
             return
 
-        self.logger.logInformation ("Creating baseline for %s." % self.database, Colors.Red)
-
         for file_pair in file_list:
             source_file = os.path.join(database_folder, file_pair[0])
             destination_file = os.path.join(database_folder, file_pair[1])
@@ -84,3 +85,5 @@ class BaseLine:
                 Tools.copy_file(source_file, destination_file)
             except IOError as ex:
                 self.logger.logError("Error copying {} to {}: {}".format(source_file, destination_file, ex))
+        
+        self.logger.logInformation ("Baseline created for %s." % self.database, Colors.BrightBlue)

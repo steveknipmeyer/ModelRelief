@@ -11,9 +11,11 @@ namespace ModelRelief.Database
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Domain;
@@ -92,7 +94,7 @@ namespace ModelRelief.Database
         /// </summary>
         public async Task Populate()
         {
-            Logger.LogInformation("Preparing to initialize database.");
+            Logger.LogInformation($"Preparing to initialize database.");
             try
             {
                 await DbContext.Database.EnsureDeletedAsync();
@@ -112,6 +114,19 @@ namespace ModelRelief.Database
         }
 
         /// <summary>
+        /// Shuts down SQL Server
+        /// </summary>
+        /// <returns>True if successful.</returns>
+        private bool StopSQLServer()
+        {
+            Logger.LogWarning("Shutting down SQLServer to copy database to ModelReliefBaseline...");
+            var result = DbContext.Database.ExecuteSqlCommand("SHUTDOWN");
+            Logger.LogWarning($"SQLServer shutdown complete.");
+
+            return true;
+        }
+
+        /// <summary>
         /// Synchronizes the test database with the baseline copy.
         /// </summary>
         /// <param name="restore">Restore from baseline (versus create baseline).</param>
@@ -120,6 +135,7 @@ namespace ModelRelief.Database
             string databaseFolder;
             Dictionary<string, string> fileList;
 
+            Logger.LogInformation($"SynchronizeDatabase {ConfigurationProvider.Database} : restore = {restore}");
             switch (ConfigurationProvider.Database)
             {
                 case RelationalDatabaseProvider.SQLite:
@@ -145,9 +161,27 @@ namespace ModelRelief.Database
             {
                 foreach (KeyValuePair<string, string> entry in fileList)
                 {
-                    var sourcePath = Path.Combine(databaseFolder, restore ? entry.Key : entry.Value);
-                    var targetPath = Path.Combine(databaseFolder, restore ? entry.Value : entry.Key);
-                    File.Copy(sourcePath, targetPath, overwrite: true);
+                    bool fileCopied = false;
+                    int copyAttemptsRemaining = 5;
+                    while (!fileCopied && (copyAttemptsRemaining > 0))
+                    {
+                        string sourcePath = string.Empty;
+                        string targetPath = string.Empty;
+                        try
+                        {
+                        sourcePath = Path.Combine(databaseFolder, restore ? entry.Key : entry.Value);
+                        targetPath = Path.Combine(databaseFolder, restore ? entry.Value : entry.Key);
+                        Logger.LogInformation($"Database file copy : ({sourcePath} -> {targetPath})");
+                        File.Copy(sourcePath, targetPath, overwrite: true);
+                        fileCopied = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.LogError($"Retrying file copy after exception {ex.Message}");
+                            Thread.Sleep(1000);
+                            copyAttemptsRemaining--;
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -185,7 +219,8 @@ namespace ModelRelief.Database
                 CreateUserStore();
             }
 
-        //  CreateTestDatabase();
+            // N.B. Creation of the test database is now done by testrunner.py.
+            CreateTestDatabase();
         }
 
         /// <summary>
@@ -200,15 +235,15 @@ namespace ModelRelief.Database
                 switch (ConfigurationProvider.Database)
                 {
                     case RelationalDatabaseProvider.SQLServer:
-                        // WIP: The Test database cannot be copied to create the baseline due to a locking error.
-                        // N.B. Use testdatabasebaseline.py to create the SQLServer test database.
+                        // N.B. SQLServer holds a lock on the files. Shut it down to allow coping the physical files.
+                        StopSQLServer();
                         break;
 
                     default:
                     case RelationalDatabaseProvider.SQLite:
-                        SynchronizeTestDatabase(restore: false);
                         break;
                 }
+                SynchronizeTestDatabase(restore: false);
             }
         }
 

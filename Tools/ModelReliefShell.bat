@@ -49,6 +49,8 @@ call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tool
 echo TypeScript Version = 2.4
 path=C:\Program Files (x86)\Microsoft SDKs\TypeScript\2.4;%path%
 
+:: ASPNET CORE Configuration
+set ASPNETCORE_ENVIRONMENT=Test
 :: Ports Configuration
 ::  Command line (dotnet run) : ASPNETCORE_URLS environment variable    
 ::  Visual Studio             : launchSettings.json

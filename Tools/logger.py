@@ -10,7 +10,7 @@
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
-import colorama
+import colorama 
 from enum import Enum
 
 from tools import Colors

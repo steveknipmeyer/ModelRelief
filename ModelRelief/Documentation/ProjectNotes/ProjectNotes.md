@@ -2,19 +2,11 @@
 #### Commit Notes
 
 #### Short Term  
-    Database Initialization
-        dotnet run --no-launch-profile -p ModelRelief --MRForceInitializeAll=True --MRDatabaseProvider=SQLite
-    Test Execution
-        <set environment>
-        dotnet test ModelRelief.test
-        
-    Automate:
-        testdatabasebaseline
-            Creation of the test databases.
-                Modify Program to accept command line options to control the creation of the databases.
-            Execution of unit tests
-                dotnet test -v ModelRelief.test
-                
+    Move TestRunner to Test folder.
+    Create log file.
+
+    Experiment with MyPy linting.
+
     Add support for creating masks.
         B: Background
         T: Threshold
