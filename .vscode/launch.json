@@ -90,9 +90,9 @@
             "stopOnEntry": false,
             "console": "integratedTerminal",
         //  "program": "${file}",
-        //  "program": "${workspaceRoot}/Solver/workbench.py",
+            "program": "${workspaceRoot}/Solver/workbench.py",
         //  "program": "${workspaceRoot}/Solver/solver.py",
-            "program": "${workspaceRoot}/Tools/testrunner.py",
+        //  "program": "${workspaceRoot}/Tools/testrunner.py",
             "cwd": "${workspaceRoot}",
             "debugOptions": [
                 "DebugStdLib",
@@ -101,8 +101,8 @@
             "env": {
                 "name": "value"
             },
-        //  "args":["--s", "Test/Lucy.json", "--w", "Test/Working"]
-            "args":[]
+            "args":["--s", "Test/Armadillo.json", "--w", "Test/Working"]
+        //  "args":[]
         },
         {
             "name": "Node Workbench",

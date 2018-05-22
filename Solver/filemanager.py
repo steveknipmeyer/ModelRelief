@@ -19,13 +19,13 @@ class FileManager:
     """
     SINGLE_PRECISION = 4
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initialize an instancee of a FileManager.
         """
         self.debug = True
 
-    def read__binary(self, path: str) -> List[bytes]:
+    def read__binary(self, path: str) -> bytearray:
         """
         Reads a raw stream of bytes.
         Note: A raw depth buffer is a binary stream of single precision four byte floats.
@@ -65,7 +65,7 @@ class FileManager:
             float_tuples.append(float_tuple)
 
         # unpack list of tuples into a list of single float values
-        floats = []
+        floats:List[float] = []
         for float_tuple in float_tuples:
             for value in float_tuple:
                 floats.append(value)

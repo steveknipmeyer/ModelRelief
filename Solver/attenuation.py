@@ -17,7 +17,7 @@ class Attenuation:
     A class for attenuating image components.
     """
 
-    def __init__(self, services : Services):
+    def __init__(self, services : Services) -> None:
         """
         Initialize an instance of a Attenuation.
         Parameters

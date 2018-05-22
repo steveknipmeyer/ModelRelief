@@ -17,7 +17,7 @@ class Gradient:
     A class for calculating image gradients.
     """
 
-    def __init__(self, services : Services):
+    def __init__(self, services : Services) -> None:
         """
         Initialize an instance of a Gradient.
         Parameters

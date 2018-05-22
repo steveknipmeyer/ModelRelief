@@ -24,7 +24,7 @@ class BaseLine:
     Copies the test database to create the baseline database used for integration testing.
     """
 
-    def __init__(self, logger: Logger, database: str):
+    def __init__(self, logger: Logger, database: str) ->None :
         """
         Performs initialization.
         Parameters

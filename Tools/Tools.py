@@ -73,7 +73,7 @@ class Colors:
         """
         print (Colors.Black, 'Black', Colors.Reset)
         print (Colors.Red, 'Red', Colors.Reset)
-        print (Colors.Green, 'Green', Colors.Reset)
+        print (Colors.Green, 'Green', Colors.Reset) 
         print (Colors.Yellow, 'Yellow', Colors.Reset)
         print (Colors.Blue, 'Blue', Colors.Reset)
         print (Colors.Magenta, 'Magenta', Colors.Reset)
@@ -103,7 +103,7 @@ class Tools:
         General support for Python tools.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
             Perform class initialization.
         """

@@ -40,6 +40,8 @@ call "C:\Program Files\nodejs\nodevars.bat"
 set PY_PYTHON=3
 :: include Tools folder for general utility support
 set PYTHONPATH=%PYTHONPATH%;%MRSolution%\Tools\
+:: MyPy Linter
+set MYPYPATH=%MRSolution%\Tools\
 
 :: Visual Studio 2017
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\VsDevCmd.bat"

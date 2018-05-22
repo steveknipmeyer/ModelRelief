@@ -17,7 +17,7 @@ class Services:
     A class for supporting runtime services such as loggers and timers.
     """
 
-    def __init__(self, working_folder : str, logger):
+    def __init__(self, working_folder : str, logger) -> None:
         """
         Initialize an instance of Services.
         Parameters

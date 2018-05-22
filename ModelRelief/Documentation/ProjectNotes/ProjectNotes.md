@@ -2,8 +2,6 @@
 #### Commit Notes
 
 #### Short Term  
-    Create log file.
-
     Experiment with MyPy linting.
     Lambda
         Update

@@ -19,7 +19,7 @@ class Threshold:
     A class for Support for applying thresholds to image components.
     """
 
-    def __init__(self, services : Services):
+    def __init__(self, services : Services) -> None:
         """
         Initialize an instance of a Threshold.
         Parameters

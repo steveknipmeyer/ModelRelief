@@ -17,9 +17,9 @@ import json
 import os
 import numpy as np
 
-from filemanager import FileManager
-from logger import Logger
-from services import Services
+from filemanager import FileManager 
+from logger import Logger 
+from services import Services 
 
 from depthbuffer import DepthBuffer
 from mesh import Mesh
@@ -36,7 +36,7 @@ class Solver:
     """
     Transforms a DepthBuffer to create a Mesh (raw float format) based on a MeshTransform.
     """
-    def __init__(self, settings: str, working: str):
+    def __init__(self, settings: str, working: str) -> None:
         """
         Initialize an instance of the Solver.
 

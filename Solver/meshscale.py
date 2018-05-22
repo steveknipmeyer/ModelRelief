@@ -17,7 +17,7 @@ class MeshScale:
     A class for scaling meshes.
     """
 
-    def __init__(self, services : Services):
+    def __init__(self, services : Services) -> None:
         """
         Initialize an instance of a MeshScale.
         Parameters

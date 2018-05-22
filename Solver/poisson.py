@@ -17,7 +17,7 @@ class Poisson:
     A class for solving Poisson's equation for images.
     """
 
-    def __init__(self, services : Services):
+    def __init__(self, services : Services) -> None:
         """
         Initialize an instance of a Poisson.
         Parameters

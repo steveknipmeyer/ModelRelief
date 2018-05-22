@@ -27,7 +27,7 @@ class DepthBuffer:
     """
     SINGLE_PRECISION = 4
 
-    def __init__(self, settings: str, working_folder: str, services : Services):
+    def __init__(self, settings: dict, working_folder: str, services : Services) -> None:
         """
         Initialize an instancee of a DepthBuffer.
         Parameters:
@@ -90,7 +90,7 @@ class DepthBuffer:
         self._height = value
 
     @property
-    def bytes_raw(self) -> List[bytes]:
+    def bytes_raw(self) -> bytes:
         """
         Constructs a list of bytes from the DepthBuffer.
         """
@@ -100,7 +100,7 @@ class DepthBuffer:
     @property
     def floats_raw(self) -> List[float]:
         """
-        Constructs a list of floats that are in raw normalized DB format [0,1] from the DepthBuffer.
+    e    Constructs a list of floats that are in raw normalized DB format [0,1] from the DepthBuffer.
         """
         # convert to floats
         floats = FileManager().unpack_floats(self.bytes_raw)

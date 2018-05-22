@@ -28,4 +28,4 @@ class Environment:
     sqlserverFolder = os.environ["USERPROFILE"]
 
     def __init__(self):
-        pass
+        return

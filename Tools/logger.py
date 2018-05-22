@@ -10,7 +10,7 @@
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
-import colorama 
+import colorama
 from enum import Enum
 
 from tools import Colors
@@ -30,8 +30,8 @@ class Logger:
     A class for supporting runtime logging.
     """
 
-    def __init__(self):
-        """
+    def __init__(self) -> None:
+        """ 
         Initialize an instance of the Logger.
         """
         colorama.init()

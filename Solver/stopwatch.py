@@ -18,7 +18,7 @@ class TimerEntry:
     A class representing an event entry in the timer stack.
     """
 
-    def __init__(self, start_time : float, indent : str):
+    def __init__(self, start_time : float, indent : str) -> None:
         """
         Initialize an instance of a TimerEntry.
         Parameters

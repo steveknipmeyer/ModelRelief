@@ -17,7 +17,7 @@ class UnsharpMask:
     A class for calculating unsharp masks of images.
     """
 
-    def __init__(self, services : Services):
+    def __init__(self, services : Services) -> None: 
         """
         Initialize an instance of an UnsharpMask.
         Parameters
