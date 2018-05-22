@@ -181,3 +181,4 @@ ModelRelief/Database/*.db
 */wwwroot/js/
 */wwwroot/lib/**/*
 */wwwroot/store/
+.mypy_cache

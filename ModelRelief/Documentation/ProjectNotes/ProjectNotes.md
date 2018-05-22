@@ -2,11 +2,14 @@
 #### Commit Notes
 
 #### Short Term  
-    Move TestRunner to Test folder.
     Create log file.
 
     Experiment with MyPy linting.
-
+    Lambda
+        Update
+            MyPy
+        Synchronize.
+        
     Add support for creating masks.
         B: Background
         T: Threshold

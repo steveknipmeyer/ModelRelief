@@ -191,7 +191,7 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Post, TestModelFactory.ApiUrl, invalidModel);
 
             // Assert
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
             AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
         #endregion

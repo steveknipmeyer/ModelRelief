@@ -92,7 +92,7 @@ class TestRunner:
         self.logger.logInformation("\nBegin test execution for {}".format(database), Colors.BrightGreen)
 
         os.environ[EnvironmentSettings.MRDATABASEPROVIDER.value] = database
-        subprocess.run ("dotnet test ModelRelief.test")
+        subprocess.run ("dotnet test --results-directory Results --logger trx;LogFileName={}TestResults.trx ModelRelief.test".format(database))
 
         self.logger.logInformation("End test execution for {}".format(database), Colors.BrightGreen)
 
@@ -115,7 +115,7 @@ class TestRunner:
             self.initialize_database(database)
             
             # execute unit tests
-            self.execute_tests(database)
+            self.execute_tests(database)  
 
         # restore environment
         self.restore_environment()
