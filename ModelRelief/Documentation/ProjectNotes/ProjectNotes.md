@@ -2,25 +2,22 @@
 #### Commit Notes
 
 #### Short Term  
-    Experiment with MyPy linting.
-    Lambda
-        Update
-            MyPy
-        Synchronize.
-        
+
     Add support for creating masks.
         B: Background
         T: Threshold
         C : B * Tx * Ty
+    
+    Lambda
+        Update
+            MyPy
+        Synchronize.
 
     Modify the Solver to return a mesh based on the gradient field for visualization.
 
     Implement Gaussian smoothing for the base (low frequency) mesh using Sigma1 (SigmaLow?).
     3D Surface Visualization        
         https://jakevdp.github.io/PythonDataScienceHandbook/04.12-three-dimensional-plotting.html
-
-    Review typing module and Python types.
-    Adopt a standard for representing Python vectors.
 
     GenerateDepthBufferAsync is not implemented.tb
         Why is this generated the first time (requires a Camera change)? 

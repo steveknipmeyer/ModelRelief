@@ -51,7 +51,7 @@ class DepthBuffer:
 
         self.camera = Camera(settings['Camera'])
 
-        self._floats   = None
+        self._floats_unit_differential = None
         self._np_array = None
 
     @property
@@ -124,8 +124,8 @@ class DepthBuffer:
         Constructs a list of floats from the DepthBuffer.
         """
         # cached?
-        if (self._floats is not None):
-            return self._floats
+        if (self._floats_unit_differential is not None):
+            return self._floats_unit_differential
 
         floats_step = self.services.stopwatch.mark("floats")
 
@@ -145,7 +145,7 @@ class DepthBuffer:
 
         self.services.stopwatch.log_time(scale_step)
 
-        self._floats = floats
+        self._floats_unit_differential = floats
         
         self.services.stopwatch.log_time(floats_step)
         return floats

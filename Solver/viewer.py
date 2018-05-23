@@ -13,7 +13,7 @@
 import matplotlib
 matplotlib.use('Qt5Agg')
 import matplotlib.pyplot as plt
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 
@@ -95,10 +95,14 @@ class ScrollableWindow(QtWidgets.QMainWindow):
 
     def __init__(self, fig):
         """Perform class initialization."""
+        QtWidgets.QMainWindow.__init__(self)
+
         self.qapp = QtWidgets.QApplication([])
 
-        QtWidgets.QMainWindow.__init__(self)
-        self.setFixedSize(1024, 1024)
+        # https://www.blog.pythonlibrary.org/2015/08/18/getting-your-screen-resolution-with-python/
+        screen_width = self.qapp.desktop().screenGeometry().width()               
+        self.setFixedSize(screen_width, 1024)
+
         self.widget = QtWidgets.QWidget()
         self.setCentralWidget(self.widget)
         self.widget.setLayout(QtWidgets.QVBoxLayout())

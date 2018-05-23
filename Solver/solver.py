@@ -27,6 +27,7 @@ from meshtransform import MeshTransform
 
 from attenuation import Attenuation
 from gradient import Gradient
+from mask import Mask
 from meshscale import MeshScale
 from poisson import Poisson
 from threshold import Threshold
@@ -60,8 +61,9 @@ class Solver:
         # solver classes
         self.attenuation = Attenuation(self.services)
         self.gradient = Gradient(self.services)
+        self.mask = Mask(self.services) 
         self.meshscale = MeshScale(self.services)
-        self.poisson = Poisson(self.services)
+        self.poisson = Poisson(self.services) 
         self.threshold = Threshold(self.services)
         self.unsharpmask = UnsharpMask(self.services)
 

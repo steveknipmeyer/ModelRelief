@@ -12,8 +12,8 @@
 """
 
 import argparse
-import numpy as np
 import os
+import numpy as np
 
 from solver import Solver
 from viewer import Viewer
@@ -34,18 +34,23 @@ class Workbench:
         Perform processing.
         """
         depth_buffer = self.solver.depth_buffer.np_array
-
-        gradients = self.solver.depth_buffer.gradients       
+        depth_buffer_mask = self.solver.mask.background_from_depth_buffer(depth_buffer)
+  
+        gradients = self.solver.depth_buffer.gradients
         gradient_x = gradients[1]
         gradient_y = gradients[0]
-
+        
         threshold = self.solver.mesh_transform.tau
-        gradient_x[np.abs(gradient_x) > threshold] = 0
-        gradient_y[np.abs(gradient_y) > threshold] = 0
+        gradient_x_threshold = self.solver.threshold.apply(gradient_x, threshold)
+        gradient_y_threshold = self.solver.threshold.apply(gradient_y, threshold)
 
-        images = [depth_buffer, gradient_x, gradient_y]
-        titles = ["DepthBuffer", "dI(x,y)/dx", "dI(x,y)/dy"]        
-        cmaps  = ["gray", "Blues_r", "Blues_r"]
+        gradient_x_mask = self.solver.mask.mask_nonzeo(gradient_x_threshold)
+        gradient_y_mask = self.solver.mask.mask_nonzeo(gradient_y_threshold)
+
+        combined_mask = depth_buffer_mask * gradient_x_mask * gradient_y_mask
+        images = [depth_buffer, depth_buffer_mask, gradient_x_threshold, gradient_x_mask, gradient_y_threshold, gradient_y_mask, combined_mask]
+        titles = ["DepthBuffer", "Background Mask", "Gradient X: dI(x,y)/dx", "Gradient X Mask", "Gradient Y: dI(x,y)/dy", "Gradient Y Mask", "Composite Mask"]
+        cmaps  = ["gray", "gray", "Blues_r", "gray", "Blues_r", "gray", "gray"]
         rows = 1
         self.viewer.show_images(images, rows, titles, cmaps)
 

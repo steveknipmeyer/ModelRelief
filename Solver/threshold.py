@@ -30,18 +30,20 @@ class Threshold:
         self.debug = True
         self.services = services
 
-    def apply (self, array, limit : float):
+    def apply (self, original: np.ndarray, limit : float) -> np.ndarray:
         """
         Applies a threshold to all elements in an ndarray.
-        All values above the threshold are set to 0.
+        All absolute values above the threshold are set to 0.
 
         Parameters
         ----------
-        array
+        original
             The array to apply the threshold against.
         limit
             The highest value above which an element will be filtered.
         """
-        array[np.abs(array) > limit] = 0
+        # copy
+        threshold_array = np.array(original)
+        threshold_array[np.abs(threshold_array) > limit] = 0
 
-        return array
+        return threshold_array
