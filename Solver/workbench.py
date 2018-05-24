@@ -33,14 +33,12 @@ class Workbench:
         Perform processing.
         """ 
         depth_buffer = self.solver.depth_buffer.floats
-        depth_buffer_mask = self.solver.mask.background_from_depth_buffer(depth_buffer)
+        depth_buffer_mask = self.solver.depth_buffer.background_mask
   
-        gradients = self.solver.depth_buffer.gradients
-        gradient_x = gradients[1]
-        gradient_y = gradients[0]
+        gradient_x = self.solver.depth_buffer.gradient_x
+        gradient_y = self.solver.depth_buffer.gradient_y
         
         threshold = self.solver.mesh_transform.tau
-
         gradient_x_mask = self.solver.mask.mask_threshold(gradient_x, threshold)
         gradient_y_mask = self.solver.mask.mask_threshold(gradient_y, threshold)
 

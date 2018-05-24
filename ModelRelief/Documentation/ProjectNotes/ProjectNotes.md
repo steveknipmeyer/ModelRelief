@@ -15,8 +15,6 @@
     PyQT
         https://github.com/ColinDuquesnoy/QDarkStyleSheet
 
-    How can interactive controls be added to the Viewer module?
-
     Attenuation
     Implement Gaussian smoothing for the base (low frequency) mesh using Sigma1 (SigmaLow?).
     3D Surface Visualization        

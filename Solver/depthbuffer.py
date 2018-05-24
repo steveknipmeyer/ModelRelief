@@ -20,6 +20,7 @@ from typing import List, Tuple
 from camera import Camera
 from filemanager import FileManager
 from gradient import Gradient 
+from mask import Mask
 from services import Services
 
 class DepthBuffer:
@@ -53,7 +54,8 @@ class DepthBuffer:
         self.camera = Camera(settings['Camera'])
 
         self._floats_unit_differential : List[float] = []
-        self._np_array : np.ndarray = [] 
+        self._floats : np.ndarray = [] 
+        self._gradients : List[np.ndarray] = [] 
 
     @property
     def name(self):
@@ -154,12 +156,12 @@ class DepthBuffer:
     @property
     def floats(self) -> np.ndarray:
         """
-        Returns a np array.
-        The
+        Returns an np 2D array that holds the depths (model units).
+        N.B. The model depths are scaled to match a unit differential grid.
         """
         # cached?
-        if (len(self._np_array) > 0):
-            return self._np_array
+        if (len(self._floats) > 0):
+            return self._floats
 
         floats = np.array(self.floats_unit_differential)
 
@@ -167,19 +169,48 @@ class DepthBuffer:
         a = np.array(floats)
         a = np.reshape(a, (self.height, self.width))
 
-        self._np_array = a
-        return a
+        self._floats = a       
+
+        return self._floats
 
     @property
-    def gradients(self):
+    def gradients(self) -> List[np.ndarray]:
         """
         Returns the XY gradients of the DB.
         """
+        # cached?
+        if (len(self._gradients) > 0):
+            return self._gradients
+
         floats_array = self.floats
         gradient = Gradient(self.services)
-        result = gradient.calculate(floats_array)
+        self._gradients = gradient.calculate(floats_array)
 
-        return result
+        return self._gradients
+
+    @property
+    def gradient_x(self):
+        """
+        Returns the X gradient of the DB.
+        """
+        return self.gradients[1]
+
+    @property
+    def gradient_y(self):
+        """
+        Returns the Y gradient of the DB.
+        """
+        return self.gradients[0]
+
+    @property
+    def background_mask(self) -> np.ndarray:
+        """
+        Returns the background mask of the DepthBuffer.
+        """
+        mask = Mask(self.services)
+        b_mask = mask.background_from_depth_buffer(self.floats)
+
+        return b_mask
 
     def normalized_to_model_depth_unit_differential (self, value, scale):
         """
