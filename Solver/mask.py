@@ -50,19 +50,25 @@ class Mask:
         mask[mask > Mask.EPSILON] = 1
         return mask
 
-    def mask_nonzeo(self, original: np.ndarray) -> np.ndarray:
+    def mask_threshold (self, original: np.ndarray, threshold: float) -> np.ndarray:
         """
-        Masks an image array by setting the non-zero values to 1.
-        N.B. This produces a different result than self.background which expects to operate on only <positive> image values such as from a depth_buffer.
+        Masks an image array by setting array elements with an absolute value below the threshold to 1.
+        N.B. This produces a different result than self.background_from_depth+buffer which expects to operate on only <positive> image values such as from a depth_buffer.
         Parameters 
         ----------
         original
             The ndarray from which to create a mask.
             The array may contain positive or negative values such as from a gradient array.
+        threshold
+            Absolute values below the the threshold are set to 1.
+            Absolute values above the the threshold are set to 0.
         Returns
         -------
-            A mask where all non-zero values have been set to 1.
+            A mask where all 1 elements had an absolute value below the threshold in the source array..
         """            
-        mask = np.array(original)
-        mask[mask != 0.0] = 1
-        return mask
+        
+        def f(x):
+            return 1 if (abs(x) < threshold) else 0
+
+        f_vectorized = np.vectorize(f)
+        return f_vectorized(original)

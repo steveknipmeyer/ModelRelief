@@ -134,6 +134,7 @@
         "workbench.colorCustomizations": {
             "editor.background": "#000000",
             "editor.foreground": "#ffffff",
+            "editor.lineHighlightBorder": "#ff00ff33",
             "editorLineNumber.foreground": "#8fdddd",
             "editorIndentGuide.background": "#32393f",
             "editorWhitespace.foreground": "#4a5461",
@@ -141,6 +142,6 @@
             "peekViewEditor.background": "#222222",
             "peekViewResult.selectionBackground": "#7997cb",
             "peekViewEditor.matchHighlightBackground": "#7997cb",
-            "sideBar.background": "#19191a",
-    },
+            "sideBar.background": "#131313",
+        },
 }

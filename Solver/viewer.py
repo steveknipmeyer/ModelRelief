@@ -79,8 +79,12 @@ class Viewer:
             # flip; first row is at minimum Y
             image = np.flipud(image)
 
-            plt.imshow(image, cmap)
+            plot = plt.imshow(image, cmap)
             sub_plot.set_title(title)
+
+            # colobar legend
+            # https://matplotlib.org/examples/images_contours_and_fields/pcolormesh_levels.html
+            fig.colorbar(plot, ax=sub_plot)
 
         image_dimension = 10
         fig.set_size_inches(n_images * image_dimension , image_dimension)       
@@ -101,7 +105,9 @@ class ScrollableWindow(QtWidgets.QMainWindow):
 
         # https://www.blog.pythonlibrary.org/2015/08/18/getting-your-screen-resolution-with-python/
         screen_width = self.qapp.desktop().screenGeometry().width()               
-        self.setFixedSize(screen_width, 1024)
+        screen_height = self.qapp.desktop().screenGeometry().height()               
+        factor = 0.9
+        self.setFixedSize(factor * screen_width, factor * screen_height)
 
         self.widget = QtWidgets.QWidget()
         self.setCentralWidget(self.widget)

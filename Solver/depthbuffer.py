@@ -19,6 +19,7 @@ from typing import List, Tuple
 
 from camera import Camera
 from filemanager import FileManager
+from gradient import Gradient 
 from services import Services
 
 class DepthBuffer:
@@ -51,8 +52,8 @@ class DepthBuffer:
 
         self.camera = Camera(settings['Camera'])
 
-        self._floats_unit_differential = None
-        self._np_array = None
+        self._floats_unit_differential : List[float] = []
+        self._np_array : np.ndarray = [] 
 
     @property
     def name(self):
@@ -124,7 +125,7 @@ class DepthBuffer:
         Constructs a list of floats from the DepthBuffer.
         """
         # cached?
-        if (self._floats_unit_differential is not None):
+        if (len(self._floats_unit_differential) > 0):
             return self._floats_unit_differential
 
         floats_step = self.services.stopwatch.mark("floats")
@@ -148,16 +149,16 @@ class DepthBuffer:
         self._floats_unit_differential = floats
         
         self.services.stopwatch.log_time(floats_step)
-        return floats
+        return self._floats_unit_differential
 
     @property
-    def np_array(self) -> np.ndarray:
+    def floats(self) -> np.ndarray:
         """
         Returns a np array.
         The
         """
         # cached?
-        if (self._np_array is not None):
+        if (len(self._np_array) > 0):
             return self._np_array
 
         floats = np.array(self.floats_unit_differential)
@@ -174,8 +175,9 @@ class DepthBuffer:
         """
         Returns the XY gradients of the DB.
         """
-        floats_array = self.np_array
-        result = np.gradient(floats_array)
+        floats_array = self.floats
+        gradient = Gradient(self.services)
+        result = gradient.calculate(floats_array)
 
         return result
 

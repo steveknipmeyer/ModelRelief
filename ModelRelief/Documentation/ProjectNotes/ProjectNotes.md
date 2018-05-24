@@ -3,11 +3,20 @@
 
 #### Short Term  
 
-    Add support for creating masks.
-        B: Background
-        T: Threshold
-        C : B * Tx * Ty
-    
+    Add mask properties to DepthBuffer.
+        background
+        gradient
+
+    Create a Jupyter notebook for exploration of image processing using simplified test image arrays.        
+        It is imperative to be able to inspect the results manually.
+    Explore Python unit tests.
+    How can interactive controls be added to the Viewer module?
+
+    Attenuation
+    Implement Gaussian smoothing for the base (low frequency) mesh using Sigma1 (SigmaLow?).
+    3D Surface Visualization        
+        https://jakevdp.github.io/PythonDataScienceHandbook/04.12-three-dimensional-plotting.html
+        
     Lambda
         Update
             MyPy
@@ -15,11 +24,8 @@
 
     Modify the Solver to return a mesh based on the gradient field for visualization.
 
-    Implement Gaussian smoothing for the base (low frequency) mesh using Sigma1 (SigmaLow?).
-    3D Surface Visualization        
-        https://jakevdp.github.io/PythonDataScienceHandbook/04.12-three-dimensional-plotting.html
 
-    GenerateDepthBufferAsync is not implemented.tb
+    GenerateDepthBufferAsync is not implemented.
         Why is this generated the first time (requires a Camera change)? 
 
 Update database schema diagram.  ****
