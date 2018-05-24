@@ -13,6 +13,7 @@
 import matplotlib
 matplotlib.use('Qt5Agg')
 import matplotlib.pyplot as plt
+
 from PyQt5 import QtWidgets 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
@@ -82,7 +83,7 @@ class Viewer:
             plot = plt.imshow(image, cmap)
             sub_plot.set_title(title)
 
-            # colobar legend
+            # colorbar legend
             # https://matplotlib.org/examples/images_contours_and_fields/pcolormesh_levels.html
             fig.colorbar(plot, ax=sub_plot)
 

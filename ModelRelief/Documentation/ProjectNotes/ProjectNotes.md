@@ -9,7 +9,12 @@
 
     Create a Jupyter notebook for exploration of image processing using simplified test image arrays.        
         It is imperative to be able to inspect the results manually.
+
     Explore Python unit tests.
+
+    PyQT
+        https://github.com/ColinDuquesnoy/QDarkStyleSheet
+
     How can interactive controls be added to the Viewer module?
 
     Attenuation
