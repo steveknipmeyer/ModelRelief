@@ -3,10 +3,6 @@
 
 #### Short Term  
 
-    Add mask properties to DepthBuffer.
-        background
-        gradient
-
     Create a Jupyter notebook for exploration of image processing using simplified test image arrays.        
         It is imperative to be able to inspect the results manually.
 
@@ -20,11 +16,6 @@
     3D Surface Visualization        
         https://jakevdp.github.io/PythonDataScienceHandbook/04.12-three-dimensional-plotting.html
         
-    Lambda
-        Update
-            MyPy
-        Synchronize.
-
     Modify the Solver to return a mesh based on the gradient field for visualization.
 
 
