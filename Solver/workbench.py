@@ -10,12 +10,16 @@
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
-
 import argparse
 import os
 
+import matplotlib
+matplotlib.use('Qt5Agg')
+import matplotlib.pyplot as plt
+from PyQt5 import QtWidgets 
+
 from solver import Solver
-from viewer import Viewer
+from explorer import Explorer
 
 class Workbench:
     """
@@ -26,11 +30,11 @@ class Workbench:
         Iniitalize an instance of the Workbench.
         """
         self.solver = Solver(settings, working)
-        self.viewer = Viewer()
+        self.qapp = QtWidgets.QApplication([])       
 
-    def run(self):
+    def construct_figure(self) -> plt.Figure:
         """
-        Perform processing.
+        Construct a Figure consisting of the image set and legends.
         """ 
         depth_buffer = self.solver.depth_buffer.floats
         depth_buffer_mask = self.solver.depth_buffer.background_mask
@@ -51,7 +55,19 @@ class Workbench:
         titles = ["DepthBuffer", "Background Mask", "Gradient X: dI(x,y)/dx", "Gradient X Mask", "Gradient Y: dI(x,y)/dy", "Gradient Y Mask", "Composite Mask"]
         cmaps  = ["gray", "gray", "Blues_r", "gray", "Blues_r", "gray", "gray"]
         rows = 1
-        self.viewer.show_images(images, rows, titles, cmaps)
+
+        return Explorer.construct_figure(images, rows, titles, cmaps)
+
+    def run(self):
+        """
+        Open the application.
+        """ 
+        figure = self.construct_figure()
+        
+        explorer = Explorer(figure)
+        explorer.show_window()
+
+        exit(self.qapp.exec_()) 
 
 def main():
     """

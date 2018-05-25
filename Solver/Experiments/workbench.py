@@ -13,7 +13,7 @@
 """
 # https://nikolak.com/pyqt-qt-designer-getting-started/
 
-from PyQt5 import QtCore, QtGui, QtWidgets      # Import the PyQt4 module we'll need
+from PyQt5 import QtWidgets                     # Import the PyQt4 module we'll need
 import os
 import sys                                      # We need sys so that we can pass argv to QApplication
 
