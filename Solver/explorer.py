@@ -24,15 +24,17 @@ class Explorer(QtWidgets.QMainWindow):
     """ https://stackoverflow.com/questions/42622146/scrollbar-on-matplotlib-showing-page """
     IMAGE_DIMENSIONS = 10
 
-    def __init__(self, fig):
+    def __init__(self, qapp : QtWidgets.QApplication) -> None:
         """Perform class initialization."""
         QtWidgets.QMainWindow.__init__(self)
 
+        self.qapp = qapp
+
         # https://www.blog.pythonlibrary.org/2015/08/18/getting-your-screen-resolution-with-python/
-        # screen_width = self.qapp.desktop().screenGeometry().width()               
-        # screen_height = self.qapp.desktop().screenGeometry().height()               
-        # factor = 0.9
-        # self.setFixedSize(factor * screen_width, factor * screen_height)
+        screen_width = self.qapp.desktop().screenGeometry().width()               
+        screen_height = self.qapp.desktop().screenGeometry().height()               
+        factor = 0.9
+        self.setFixedSize(factor * screen_width, factor * screen_height)
 
         self.widget = QtWidgets.QWidget()
         self.setCentralWidget(self.widget)
@@ -40,17 +42,31 @@ class Explorer(QtWidgets.QMainWindow):
         self.widget.layout().setContentsMargins(0,0,0,0)
         self.widget.layout().setSpacing(0)
 
-        self.fig = fig
+        # empty Figure
+        self.fig = plt.figure()
         self.canvas = FigureCanvas(self.fig)
         self.canvas.draw()
 
         self.scroll = QtWidgets.QScrollArea(self.widget)
+        self.nav = NavigationToolbar(self.canvas, self.widget)
+
+        self.widget.layout().addWidget(self.scroll)
+        self.widget.layout().addWidget(self.nav)
+
+    def set_figure (self, figure: plt.Figure) -> None:
+        """
+        Set the given figure as the currently displayed Figure in the Explorer.
+        Parameters
+        ----------
+        figure
+            The Figure to make active.
+        """
+
+        self.fig = figure
+        self.canvas = FigureCanvas(figure)
+        self.canvas.draw()
         self.scroll.setWidget(self.canvas)
 
-        self.nav = NavigationToolbar(self.canvas, self.widget)
-        self.widget.layout().addWidget(self.nav)
-        self.widget.layout().addWidget(self.scroll)
-        
     @staticmethod
     def construct_figure(images, rows = 1, titles = None, cmaps = None) -> plt.Figure:
         """Display a list of images in a single figure with matplotlib.

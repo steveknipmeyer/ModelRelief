@@ -62,9 +62,10 @@ class Workbench:
         """
         Open the application.
         """ 
+        explorer = Explorer(self.qapp)
+
         figure = self.construct_figure()
-        
-        explorer = Explorer(figure)
+        explorer.set_figure(figure)
         explorer.show_window()
 
         exit(self.qapp.exec_()) 
