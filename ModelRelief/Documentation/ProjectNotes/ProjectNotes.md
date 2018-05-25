@@ -3,10 +3,10 @@
 
 #### Short Term  
     PyQT
-        Use the qdarkstyle as a template for Widgets.
-        https://github.com/ColinDuquesnoy/QDarkStyleSheet
         Tau, Attenuation, SigmaGaussianBlur, SigmaGaussianSmooth controls
-
+        3D visualization of arrays?
+        Add gulp build task for Explorer?
+        
     Create a Jupyter notebook for exploration of image processing using simplified test image arrays.        
         It is imperative to be able to inspect the results manually.
 
@@ -20,9 +20,6 @@
     3D Surface Visualization        
         https://jakevdp.github.io/PythonDataScienceHandbook/04.12-three-dimensional-plotting.html
         
-    Modify the Solver to return a mesh based on the gradient field for visualization.
-
-
     GenerateDepthBufferAsync is not implemented.
         Why is this generated the first time (requires a Camera change)? 
 
