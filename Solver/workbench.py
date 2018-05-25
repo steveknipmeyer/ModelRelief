@@ -34,6 +34,9 @@ class Workbench:
         self.qapp = QtWidgets.QApplication([])       
         self.qapp.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
 
+        self.explorer = Explorer(self.qapp)
+        self.explorer.button_process.clicked.connect(self.handle_process)
+
     def construct_figure(self) -> plt.Figure:
         """
         Construct a Figure consisting of the image set and legends.
@@ -60,15 +63,24 @@ class Workbench:
 
         return Explorer.construct_figure(images, rows, titles, cmaps)
 
+    def update_figure(self):
+        """ Update the image set figure. """
+        figure = self.construct_figure()
+        self.explorer.set_figure(figure)
+        self.explorer.show_window()
+
+    def handle_process(self):
+        """
+        Recalculates the image set.
+        """ 
+        self.solver.mesh_transform.tau = float(self.explorer.tau.text())
+        self.update_figure()
+
     def run(self):
         """
         Open the application.
         """ 
-        explorer = Explorer(self.qapp)
-
-        figure = self.construct_figure()
-        explorer.set_figure(figure)
-        explorer.show_window()
+        self.update_figure()
 
         exit(self.qapp.exec_()) 
 

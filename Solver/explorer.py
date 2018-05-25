@@ -51,20 +51,27 @@ class Explorer(QtWidgets.QMainWindow):
         self.nav = NavigationToolbar(self.canvas, self.widget)
         self.widget.layout().addWidget(self.nav)
 
-        self.buttonTest = QtWidgets.QPushButton(self.widget)
-        self.buttonTest.setObjectName("buttonTest")
-        self.widget.layout().addWidget(self.buttonTest)
+        # Tau
+        self.tau = QtWidgets.QLineEdit(self.widget)
+        self.tau.setObjectName("tau")
+        self.widget.layout().addWidget(self.tau)
+
+        # Process Button
+        self.button_process = QtWidgets.QPushButton(self.widget)
+        self.button_process.setObjectName("button_process")
+        self.widget.layout().addWidget(self.button_process)
 
         self.scroll = QtWidgets.QScrollArea(self.canvas)
         self.widget.layout().addWidget(self.scroll)
 
         self.retranslateUi(self)
+        QtCore.QMetaObject.connectSlotsByName(self)
 
     def retranslateUi(self, window: QtWidgets.QMainWindow) -> None:
         """ Initialize the translatable test in the UI """
         _translate = QtCore.QCoreApplication.translate
         window.setWindowTitle(_translate("ExplorerMainWindow", "Explorer Window"))
-        self.buttonTest.setText(_translate("ExplorerMainWindow", "Test Button"))
+        self.button_process.setText(_translate("ExplorerMainWindow", "Process"))
 
     def set_figure (self, figure: plt.Figure) -> None:
         """

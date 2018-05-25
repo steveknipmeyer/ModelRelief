@@ -3,6 +3,7 @@
 
 #### Short Term  
     PyQT
+        Use the qdarkstyle as a template for Widgets.
         https://github.com/ColinDuquesnoy/QDarkStyleSheet
         Tau, Attenuation, SigmaGaussianBlur, SigmaGaussianSmooth controls
 
@@ -11,7 +12,9 @@
 
     Explore Python unit tests.
 
-
+    Lambda
+        qdarkstyle
+        
     Attenuation
     Implement Gaussian smoothing for the base (low frequency) mesh using Sigma1 (SigmaLow?).
     3D Surface Visualization        
