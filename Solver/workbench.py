@@ -11,6 +11,7 @@
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
 import argparse
+import qdarkstyle
 import os
 
 import matplotlib
@@ -31,6 +32,7 @@ class Workbench:
         """
         self.solver = Solver(settings, working)
         self.qapp = QtWidgets.QApplication([])       
+        self.qapp.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
 
     def construct_figure(self) -> plt.Figure:
         """

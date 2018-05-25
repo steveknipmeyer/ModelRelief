@@ -2,14 +2,15 @@
 #### Commit Notes
 
 #### Short Term  
+    PyQT
+        https://github.com/ColinDuquesnoy/QDarkStyleSheet
+        Tau, Attenuation, SigmaGaussianBlur, SigmaGaussianSmooth controls
 
     Create a Jupyter notebook for exploration of image processing using simplified test image arrays.        
         It is imperative to be able to inspect the results manually.
 
     Explore Python unit tests.
 
-    PyQT
-        https://github.com/ColinDuquesnoy/QDarkStyleSheet
 
     Attenuation
     Implement Gaussian smoothing for the base (low frequency) mesh using Sigma1 (SigmaLow?).

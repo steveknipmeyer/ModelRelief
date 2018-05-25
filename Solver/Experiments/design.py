@@ -16,12 +16,15 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName("verticalLayout")
+
         self.listWidget = QtWidgets.QListWidget(self.centralwidget)
         self.listWidget.setObjectName("listWidget")
         self.verticalLayout.addWidget(self.listWidget)
+
         self.btnBrowse = QtWidgets.QPushButton(self.centralwidget)
         self.btnBrowse.setObjectName("btnBrowse")
         self.verticalLayout.addWidget(self.btnBrowse)
+        
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
