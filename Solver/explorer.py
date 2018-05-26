@@ -18,13 +18,13 @@ from PyQt5 import QtWidgets
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 
-import numpy as np      
+import numpy as np
 
 from solver import Solver
 import explorer_ui
 
 class Explorer():
-    
+
     IMAGE_DIMENSIONS = 8
     SCREEN_AREA = 0.75
 
@@ -53,42 +53,42 @@ class Explorer():
         self.window = QtWidgets.QMainWindow()
         self.ui = explorer_ui.Ui_MainWindow()
         self.ui.setupUi(self.window)
-        
-        self.ui.centralwidget.layout().setContentsMargins(0,0,0,0)
-        self.ui.centralwidget.layout().setSpacing(0)
 
         # empty Figure
         self.figure = plt.figure(facecolor='black')
         self.canvas = FigureCanvas(self.figure)
         self.canvas.draw()
 
-        self.nav = NavigationToolbar(self.canvas, self.ui.centralwidget)
-        self.ui.centralwidget.layout().addWidget(self.nav)
+        self.nav = NavigationToolbar(self.canvas, self.ui.depthBufferTab)
+        self.ui.depthBufferTab.layout().addWidget(self.nav)
 
         # https://stackoverflow.com/questions/42622146/scrollbar-on-matplotlib-showing-page
         self.scroll = QtWidgets.QScrollArea(self.canvas)
-        self.ui.centralwidget.layout().addWidget(self.scroll)
+        self.ui.depthBufferTab.layout().addWidget(self.scroll)
 
         # https://www.blog.pythonlibrary.org/2015/08/18/getting-your-screen-resolution-with-python/
-        screen_width = self.qapp.desktop().screenGeometry().width()               
-        screen_height = self.qapp.desktop().screenGeometry().height()               
+        screen_width = self.qapp.desktop().screenGeometry().width()
+        screen_height = self.qapp.desktop().screenGeometry().height()
         self.window.resize(Explorer.SCREEN_AREA * screen_width, Explorer.SCREEN_AREA * screen_height)
 
         #intialize settings
         self.initialize_settings()
-    
+
     def initialize_settings(self) ->None:
-        self.ui.text_tau.setText(str(self.solver.mesh_transform.tau))
+        self.ui.tauLineEdit.setText(str(self.solver.mesh_transform.tau))
+        self.ui.gaussianBlurLineEdit.setText(str(self.solver.mesh_transform.gaussian_blur))
+        self.ui.gaussianSmoothLineEdit.setText(str(self.solver.mesh_transform.gaussian_smooth))
+        self.ui.lambdaLineEdit.setText(str(self.solver.mesh_transform.lambda_scale))
 
     def initialize_handlers(self)-> None:
         """ Initialize event handlers """
-        self.ui.button_process.clicked.connect(self.handle_process)
+        self.ui.processButton.clicked.connect(self.handle_process)
 
     def handle_process(self):
         """
         Recalculates the image set.
-        """ 
-        self.solver.mesh_transform.tau = float(self.ui.text_tau.text())
+        """
+        self.solver.mesh_transform.tau = float(self.ui.tauLineEdit.text())
         self.update_figure()
 
     def show(self):
@@ -120,9 +120,9 @@ class Explorer():
         Parameters
         ---------
         images: List of np.arrays compatible with plt.imshow.
-        
+
         rows (Default = 1): Number of rows in figure (number of columns is set to np.ceil(n_images/float(rows))).
-        
+
         titles: List of titles corresponding to each image. Must have the same length as images.
 
         cmaps: List of color maps corresponding to each image. Must have the same length as images.
@@ -156,12 +156,12 @@ class Explorer():
             # colorbar
             # https://matplotlib.org/examples/images_contours_and_fields/pcolormesh_levels.html
             colorbar = figure.colorbar(plot, ax=sub_plot, drawedges=True)
-            plt.setp(plt.getp(colorbar.ax.axes, 'yticklabels'), color='w')  # set colorbar  
-                                                                            # yticklabels color            
+            plt.setp(plt.getp(colorbar.ax.axes, 'yticklabels'), color='w')  # set colorbar
+                                                                            # yticklabels color
             colorbar.outline.set_edgecolor('w')                             # set colorbar box color
-            colorbar.outline.set_linewidth(2)            
-            colorbar.ax.yaxis.set_tick_params(color='w')                    # set colorbar ticks color 
-            colorbar.dividers.set_linewidth(0)            
+            colorbar.outline.set_linewidth(2)
+            colorbar.ax.yaxis.set_tick_params(color='w')                    # set colorbar ticks color
+            colorbar.dividers.set_linewidth(0)
 
         figure.set_size_inches(n_images * Explorer.IMAGE_DIMENSIONS, Explorer.IMAGE_DIMENSIONS)
         figure.tight_layout()
@@ -171,13 +171,13 @@ class Explorer():
     def calculate_figure(self) -> plt.Figure:
         """
         Updates the Figure consisting of the image set and legends.
-        """ 
+        """
         depth_buffer = self.solver.depth_buffer.floats
         depth_buffer_mask = self.solver.depth_buffer.background_mask
-  
+
         gradient_x = self.solver.depth_buffer.gradient_x
         gradient_y = self.solver.depth_buffer.gradient_y
-        
+
         threshold = self.solver.mesh_transform.tau
         gradient_x_mask = self.solver.mask.mask_threshold(gradient_x, threshold)
         gradient_y_mask = self.solver.mask.mask_threshold(gradient_y, threshold)

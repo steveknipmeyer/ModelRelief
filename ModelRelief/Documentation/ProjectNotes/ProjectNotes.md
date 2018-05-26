@@ -2,11 +2,12 @@
 #### Commit Notes
 
 #### Short Term  
-    PyQT
+    PyQT      
         Tau, Attenuation, SigmaGaussianBlur, SigmaGaussianSmooth controls
         3D visualization of arrays?
         Add gulp build task for Explorer?
-        
+
+    Create small image depth buffers that support inspection of array elements.        
     Create a Jupyter notebook for exploration of image processing using simplified test image arrays.        
         It is imperative to be able to inspect the results manually.
 
