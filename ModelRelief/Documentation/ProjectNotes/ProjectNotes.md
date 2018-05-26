@@ -2,8 +2,9 @@
 #### Commit Notes
 
 #### Short Term  
-    PyQT      
-        Tau, Attenuation, SigmaGaussianBlur, SigmaGaussianSmooth controls
+    PyQt
+        Set the tab order for settings.
+
         3D visualization of arrays?
         Add gulp build task for Explorer?
 

@@ -41,7 +41,6 @@ class Workbench:
         """
         Run the application.
         """ 
-        self.explorer.update_figure()
         self.explorer.show()
 
         exit(self.qapp.exec_()) 

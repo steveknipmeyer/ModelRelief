@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 #
 #   Copyright (c) 2018
@@ -17,102 +16,143 @@ import matplotlib.pyplot as plt
 from PyQt5 import QtWidgets
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.figure import Figure
 
 import numpy as np
+from enum import Enum
+from typing import Dict
 
 from solver import Solver
 import explorer_ui
 
-class Explorer():
+class ImageType(Enum):
+    """
+    A class representing the various image tabs.
+    """
+    DepthBuffer = 1,
+    BackgroundMask = 2,
+    GradientX = 3,
+    GradientXMask = 4,
+    GradientY = 5,
+    GradientYMask = 6,
+    CompositeMask = 7
 
-    IMAGE_DIMENSIONS = 8
-    SCREEN_AREA = 0.75
+class ImageTab():
+    """ A UI tab of an image"""
 
-    def __init__(self, settings: str, working: str, qapp : QtWidgets.QApplication) -> None:
-        """Perform class initialization.
+    def __init__(self, widget: QtWidgets.QWidget, image_type: ImageType, title:str, cmap: str, image: np.ndarray) -> None:
+        """ A UI image tab in the Explorer. 
         Parameters
         ----------
-        settings
-            The JSON settings file for a Mesh.
-        working
-            The working folder to be used for intermediate results.
+        widget
+            QWidget of the tab.
+        image_type
+            The type of the image.
+        title
+            The title of the image.
+        cmap
+            The matplotlib colormap.            
+        image
+            The Numpy array holding the image. 
         """
+        # QWidget
+        self.widget = widget
 
-        self.solver = Solver(settings, working)
-        self.qapp = qapp
+        self.image_type = image_type 
+        self.title = title
+        self.cmap = cmap
 
-        # initialize UI
-        self.initialize_ui()
-        self.figure = plt.figure(facecolor='black')
-        self.canvas = FigureCanvas(self.figure)
+        self.figure: Figure = None
+        self.canvas: FigureCanvas = None
+        self.scroll: QtWidgets.QScrollArea = None
+        self.nav: NavigationToolbar = None
 
-        # event handlers
-        self.initialize_handlers()
+        self._image = None
+        self.image = image
 
-    def initialize_ui(self)-> None:
-        self.window = QtWidgets.QMainWindow()
-        self.ui = explorer_ui.Ui_MainWindow()
-        self.ui.setupUi(self.window)
+    @property
+    def image(self):
+        """ Returns the Numpy image array. """
+        return self._image
 
-        # empty Figure
-        self.figure = plt.figure(facecolor='black')
+    @image.setter
+    def image (self, value): 
+        """ Sets the NumPy image array.
+            Regenerates the matplotlib Figure.
+        """
+        self._image = value
+
+        if (self.figure != None):
+            plt.close(self.figure)
+        # self.figure = self.construct_figure(self._image, self.title, self.cmap)
+        self.figure = self.construct_subplot_figures ([self._image], 1, [self.title], [self.cmap])
+
         self.canvas = FigureCanvas(self.figure)
         self.canvas.draw()
 
-        self.nav = NavigationToolbar(self.canvas, self.ui.depthBufferTab)
-        self.ui.depthBufferTab.layout().addWidget(self.nav)
+        # navigation toolbar
+        if (self.nav == None):
+            self.nav = NavigationToolbar(self.canvas, self.widget)
+            self.widget.layout().addWidget(self.nav)
 
-        # https://stackoverflow.com/questions/42622146/scrollbar-on-matplotlib-showing-page
-        self.scroll = QtWidgets.QScrollArea(self.canvas)
-        self.ui.depthBufferTab.layout().addWidget(self.scroll)
-
-        # https://www.blog.pythonlibrary.org/2015/08/18/getting-your-screen-resolution-with-python/
-        screen_width = self.qapp.desktop().screenGeometry().width()
-        screen_height = self.qapp.desktop().screenGeometry().height()
-        self.window.resize(Explorer.SCREEN_AREA * screen_width, Explorer.SCREEN_AREA * screen_height)
-
-        #intialize settings
-        self.initialize_settings()
-
-    def initialize_settings(self) ->None:
-        self.ui.tauLineEdit.setText(str(self.solver.mesh_transform.tau))
-        self.ui.gaussianBlurLineEdit.setText(str(self.solver.mesh_transform.gaussian_blur))
-        self.ui.gaussianSmoothLineEdit.setText(str(self.solver.mesh_transform.gaussian_smooth))
-        self.ui.lambdaLineEdit.setText(str(self.solver.mesh_transform.lambda_scale))
-
-    def initialize_handlers(self)-> None:
-        """ Initialize event handlers """
-        self.ui.processButton.clicked.connect(self.handle_process)
-
-    def handle_process(self):
-        """
-        Recalculates the image set.
-        """
-        self.solver.mesh_transform.tau = float(self.ui.tauLineEdit.text())
-        self.update_figure()
-
-    def show(self):
-        """ Show the MainWindow. """
-        self.window.show()
-
-    def set_figure (self, figure: plt.Figure) -> None:
-        """
-        Set the given figure as the currently displayed Figure in the Explorer.
-        Parameters
-        ----------
-        figure
-            The Figure to make active.
-        """
-        #re-create canvas with new figure
-        self.figure = figure
-        self.canvas = FigureCanvas(figure)
-        self.canvas.draw()
+        # scroll area
+        if (self.scroll == None):
+            self.scroll = QtWidgets.QScrollArea(self.canvas)
+            self.widget.layout().addWidget(self.scroll)
 
         # update associated controls
         self.scroll.setWidget(self.canvas)
         self.nav.canvas = self.canvas
 
-    def construct_figure(self, images, rows = 1, titles = None, cmaps = None) -> plt.Figure:
+    def construct_figure(self, image: np.ndarray, title: str, cmap: str) -> plt.Figure:
+        """ Contruct a matplotlib Figure from a NumPy image array.
+
+        Parameters
+        ---------
+        image
+            The image array.
+
+        title 
+            The title of the image Figure.
+
+        cmap
+            The colormap to be used.
+
+        Returns
+        -------
+        A Figure.
+        """
+        figure = plt.figure(facecolor='black')
+
+        # flip; first row is at minimum Y
+        image = np.flipud(image)
+        plot = plt.imshow(image, cmap)
+
+        # title
+        title_obj = plt.title(title)
+        plt.setp(title_obj, color='w')                         # set the color of title to white
+
+        # axes
+        axes_obj = plt.getp(plot,'axes')                       # get the axes' property handler
+        plt.setp(plt.getp(axes_obj, 'yticklabels'), color='w') # set yticklabels color
+        plt.setp(plt.getp(axes_obj, 'xticklabels'), color='w') # set xticklabels color
+
+        # colorbar
+        # https://matplotlib.org/examples/images_contours_and_fields/pcolormesh_levels.html
+        colorbar = figure.colorbar(plot, drawedges=True)
+        plt.setp(plt.getp(colorbar.ax.axes, 'yticklabels'), color='w')  # set colorbar
+                                                                        # yticklabels color
+        colorbar.outline.set_edgecolor('w')                             # set colorbar box color
+        colorbar.outline.set_linewidth(2)
+        colorbar.ax.yaxis.set_tick_params(color='w')                    # set colorbar ticks color
+        colorbar.dividers.set_linewidth(0)
+
+        figure.set_size_inches(Explorer.IMAGE_DIMENSIONS, Explorer.IMAGE_DIMENSIONS)
+        figure.tight_layout()
+
+        return figure
+
+    def construct_subplot_figures(self, images, rows, titles = None, cmaps = None) -> plt.Figure:
         """Display a list of images in a single figure with matplotlib.
         https://gist.github.com/soply/f3eec2e79c165e39c9d540e916142ae1
         https://stackoverflow.com/questions/9662995/matplotlib-change-title-and-colorbar-text-and-tick-colors
@@ -168,9 +208,78 @@ class Explorer():
 
         return figure
 
-    def calculate_figure(self) -> plt.Figure:
+class Explorer():
+
+    IMAGE_DIMENSIONS = 8
+    WINDOW_WIDTH = 1086
+    WINDOW_HEIGHT = 960
+
+    def __init__(self, settings: str, working: str, qapp : QtWidgets.QApplication) -> None:
+        """Perform class initialization.
+        Parameters
+        ----------
+        settings
+            The JSON settings file for a Mesh.
+        working
+            The working folder to be used for intermediate results.
         """
-        Updates the Figure consisting of the image set and legends.
+
+        self.solver = Solver(settings, working)
+
+        self.qapp = qapp
+
+        # initialize UI
+        self.image_tabs: Dict[ImageType, ImageTab] = {}
+        self.initialize_ui()
+     
+        # event handlers
+        self.initialize_handlers()
+
+    def initialize_ui(self)-> None:
+        self.window = QtWidgets.QMainWindow()
+        self.ui = explorer_ui.Ui_MainWindow() 
+        self.ui.setupUi(self.window)
+
+        default_image = np.zeros(shape=(2,2))
+        self.image_tabs[ImageType.DepthBuffer]    = ImageTab(self.ui.depthBufferTab, ImageType.DepthBuffer, "DepthBuffer", "gray", default_image)
+        self.image_tabs[ImageType.BackgroundMask] = ImageTab(self.ui.backgroundMaskTab, ImageType.BackgroundMask, "Background Mask", "gray", default_image)
+        self.image_tabs[ImageType.GradientX]      = ImageTab(self.ui.gradientXTab, ImageType.GradientX, "Gradient X: dI(x,y)/dx", "Blues_r", default_image)
+        self.image_tabs[ImageType.GradientXMask]  = ImageTab(self.ui.gradientXMaskTab, ImageType.GradientXMask, "Gradient X Mask", "gray", default_image)
+        self.image_tabs[ImageType.GradientY]      = ImageTab(self.ui.gradientYTab, ImageType.GradientY, "Gradient Y: dI(x,y)/dy", "Blues_r", default_image)
+        self.image_tabs[ImageType.GradientYMask]  = ImageTab(self.ui.gradientYMaskTab, ImageType.GradientYMask, "Gradient Y Mask", "gray", default_image)
+        self.image_tabs[ImageType.CompositeMask]  = ImageTab(self.ui.compositeMaskTab, ImageType.CompositeMask, "Composite Mask", "gray", default_image)
+
+        # https://www.blog.pythonlibrary.org/2015/08/18/getting-your-screen-resolution-with-python/
+        self.window.resize(Explorer.WINDOW_WIDTH, Explorer.WINDOW_HEIGHT)
+
+        #intialize settings
+        self.initialize_settings()
+
+    def initialize_settings(self) ->None:
+        self.ui.tauLineEdit.setText(str(self.solver.mesh_transform.tau))
+        self.ui.gaussianBlurLineEdit.setText(str(self.solver.mesh_transform.gaussian_blur))
+        self.ui.gaussianSmoothLineEdit.setText(str(self.solver.mesh_transform.gaussian_smooth))
+        self.ui.lambdaLineEdit.setText(str(self.solver.mesh_transform.lambda_scale))
+
+    def initialize_handlers(self)-> None:
+        """ Initialize event handlers """
+        self.ui.processButton.clicked.connect(self.handle_process)
+
+    def handle_process(self):
+        """
+        Recalculates the image set.
+        """
+        self.solver.mesh_transform.tau = float(self.ui.tauLineEdit.text())
+        self.calculate_images()
+        self.show()
+
+    def show(self):
+        """ Show the MainWindow. """
+        self.window.show()
+
+    def calculate_images(self) -> None:
+        """
+        Updates the image arrays : DepthBuffer and the supporting gradients and masks.
         """
         depth_buffer = self.solver.depth_buffer.floats
         depth_buffer_mask = self.solver.depth_buffer.background_mask
@@ -187,17 +296,11 @@ class Explorer():
 
         combined_mask = depth_buffer_mask * gradient_x_mask * gradient_y_mask
 
-        images = [depth_buffer, depth_buffer_mask, gradient_x, gradient_x_mask, gradient_y, gradient_y_mask, combined_mask]
-        titles = ["DepthBuffer", "Background Mask", "Gradient X: dI(x,y)/dx", "Gradient X Mask", "Gradient Y: dI(x,y)/dy", "Gradient Y Mask", "Composite Mask"]
-        cmaps  = ["gray", "gray", "Blues_r", "gray", "Blues_r", "gray", "gray"]
-        rows = 1
-
-        return self.construct_figure(images, rows, titles, cmaps)
-
-    def update_figure(self):
-        """ Update the image set figure. """
-        figure = self.calculate_figure()
-        self.set_figure(figure)
-        self.show()
-
+        self.image_tabs[ImageType.DepthBuffer].image    = depth_buffer
+        self.image_tabs[ImageType.BackgroundMask].image = depth_buffer_mask
+        self.image_tabs[ImageType.GradientX].image      = gradient_x
+        self.image_tabs[ImageType.GradientXMask].image  = gradient_x_mask
+        self.image_tabs[ImageType.GradientY].image      = gradient_y
+        self.image_tabs[ImageType.GradientYMask].image  = gradient_y_mask
+        self.image_tabs[ImageType.CompositeMask].image  = combined_mask
 
