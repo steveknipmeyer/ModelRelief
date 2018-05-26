@@ -13,7 +13,7 @@ import matplotlib
 matplotlib.use('Qt5Agg')
 import matplotlib.pyplot as plt
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
@@ -223,7 +223,8 @@ class Explorer():
         working
             The working folder to be used for intermediate results.
         """
-
+        self.settings = settings
+        self.working = working
         self.solver = Solver(settings, working)
 
         self.qapp = qapp
@@ -264,6 +265,7 @@ class Explorer():
     def initialize_handlers(self)-> None:
         """ Initialize event handlers """
         self.ui.processButton.clicked.connect(self.handle_process)
+        self.ui.actionOpen.triggered.connect(self.handle_open_settings)
 
     def handle_process(self):
         """
@@ -272,6 +274,19 @@ class Explorer():
         self.solver.mesh_transform.tau = float(self.ui.tauLineEdit.text())
         self.calculate_images()
         self.show()
+
+    def handle_open_settings(self):
+        """
+        Opens a new settings file.
+        """
+        dialog = QtWidgets.QFileDialog()
+        dialog.setFileMode(QtWidgets.QFileDialog.AnyFile)
+        dialog.setNameFilter("All JSON files (*.JSON)")
+
+        if dialog.exec_():
+            filenames = dialog.selectedFiles()
+            self.solver = Solver(filenames[0], self.working)
+            self.calculate_images()
 
     def show(self):
         """ Show the MainWindow. """

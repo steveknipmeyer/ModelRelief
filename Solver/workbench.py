@@ -41,6 +41,7 @@ class Workbench:
         """
         Run the application.
         """ 
+        self.explorer.calculate_images()
         self.explorer.show()
 
         exit(self.qapp.exec_()) 

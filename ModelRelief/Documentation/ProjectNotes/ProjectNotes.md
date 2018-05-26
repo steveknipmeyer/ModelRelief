@@ -3,6 +3,7 @@
 
 #### Short Term  
     PyQt
+        Review and polish Explorer.
         Set the tab order for settings.
 
         3D visualization of arrays?
