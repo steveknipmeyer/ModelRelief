@@ -21,17 +21,17 @@
     <item row="0" column="1">
      <widget class="QTabWidget" name="overalTabsContainer">
       <property name="focusPolicy">
-       <enum>Qt::ClickFocus</enum>
+       <enum>Qt::NoFocus</enum>
       </property>
       <property name="tabPosition">
        <enum>QTabWidget::East</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="imageTabsContainer">
        <property name="focusPolicy">
-        <enum>Qt::StrongFocus</enum>
+        <enum>Qt::TabFocus</enum>
        </property>
        <attribute name="title">
         <string>Images</string>
@@ -43,7 +43,7 @@
            <enum>Qt::StrongFocus</enum>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>6</number>
           </property>
           <widget class="QWidget" name="depthBufferTab">
            <property name="focusPolicy">
@@ -53,7 +53,6 @@
             <string>DepthBuffer</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_2"/>
-           <zorder></zorder>
           </widget>
           <widget class="QWidget" name="backgroundMaskTab">
            <property name="focusPolicy">
@@ -63,9 +62,6 @@
             <string>Background Mask</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_3"/>
-           <zorder></zorder>
-           <zorder></zorder>
-           <zorder>settingsContainer</zorder>
           </widget>
           <widget class="QWidget" name="gradientXTab">
            <property name="focusPolicy">
@@ -117,6 +113,9 @@
        </layout>
       </widget>
       <widget class="QWidget" name="modelTabsContainer">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
        <attribute name="title">
         <string>3D Mesh</string>
        </attribute>
@@ -124,18 +123,24 @@
         <item row="0" column="0">
          <widget class="QTabWidget" name="modelTabs">
           <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
+           <enum>Qt::StrongFocus</enum>
           </property>
           <property name="currentIndex">
            <number>0</number>
           </property>
           <widget class="QWidget" name="isometricViewTab">
+           <property name="focusPolicy">
+            <enum>Qt::TabFocus</enum>
+           </property>
            <attribute name="title">
             <string>Isometric</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_10"/>
           </widget>
           <widget class="QWidget" name="topViewTab">
+           <property name="focusPolicy">
+            <enum>Qt::TabFocus</enum>
+           </property>
            <attribute name="title">
             <string>Top</string>
            </attribute>
@@ -156,7 +161,7 @@
        </sizepolicy>
       </property>
       <property name="focusPolicy">
-       <enum>Qt::ClickFocus</enum>
+       <enum>Qt::NoFocus</enum>
       </property>
       <layout class="QFormLayout" name="formLayout">
        <property name="sizeConstraint">

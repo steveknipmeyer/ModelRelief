@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'explorer.ui'
+# Form implementation generated from reading ui file 'Solver/explorer.ui'
 #
 # Created by: PyQt5 UI code generator 5.6
 #
@@ -18,11 +18,11 @@ class Ui_MainWindow(object):
         self.gridLayout = QtWidgets.QGridLayout(self.centralWidget)
         self.gridLayout.setObjectName("gridLayout")
         self.overalTabsContainer = QtWidgets.QTabWidget(self.centralWidget)
-        self.overalTabsContainer.setFocusPolicy(QtCore.Qt.ClickFocus)
+        self.overalTabsContainer.setFocusPolicy(QtCore.Qt.NoFocus)
         self.overalTabsContainer.setTabPosition(QtWidgets.QTabWidget.East)
         self.overalTabsContainer.setObjectName("overalTabsContainer")
         self.imageTabsContainer = QtWidgets.QWidget()
-        self.imageTabsContainer.setFocusPolicy(QtCore.Qt.StrongFocus)
+        self.imageTabsContainer.setFocusPolicy(QtCore.Qt.TabFocus)
         self.imageTabsContainer.setObjectName("imageTabsContainer")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.imageTabsContainer)
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -82,20 +82,23 @@ class Ui_MainWindow(object):
         self.gridLayout_2.addWidget(self.imageTabs, 0, 0, 1, 1)
         self.overalTabsContainer.addTab(self.imageTabsContainer, "")
         self.modelTabsContainer = QtWidgets.QWidget()
+        self.modelTabsContainer.setFocusPolicy(QtCore.Qt.TabFocus)
         self.modelTabsContainer.setObjectName("modelTabsContainer")
         self.gridLayout_3 = QtWidgets.QGridLayout(self.modelTabsContainer)
         self.gridLayout_3.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_3.setObjectName("gridLayout_3")
         self.modelTabs = QtWidgets.QTabWidget(self.modelTabsContainer)
-        self.modelTabs.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.modelTabs.setFocusPolicy(QtCore.Qt.StrongFocus)
         self.modelTabs.setObjectName("modelTabs")
         self.isometricViewTab = QtWidgets.QWidget()
+        self.isometricViewTab.setFocusPolicy(QtCore.Qt.TabFocus)
         self.isometricViewTab.setObjectName("isometricViewTab")
         self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.isometricViewTab)
         self.verticalLayout_10.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_10.setObjectName("verticalLayout_10")
         self.modelTabs.addTab(self.isometricViewTab, "")
         self.topViewTab = QtWidgets.QWidget()
+        self.topViewTab.setFocusPolicy(QtCore.Qt.TabFocus)
         self.topViewTab.setObjectName("topViewTab")
         self.verticalLayout_9 = QtWidgets.QVBoxLayout(self.topViewTab)
         self.verticalLayout_9.setContentsMargins(0, 0, 0, 0)
@@ -110,7 +113,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.settingsContainer.sizePolicy().hasHeightForWidth())
         self.settingsContainer.setSizePolicy(sizePolicy)
-        self.settingsContainer.setFocusPolicy(QtCore.Qt.ClickFocus)
+        self.settingsContainer.setFocusPolicy(QtCore.Qt.NoFocus)
         self.settingsContainer.setObjectName("settingsContainer")
         self.formLayout = QtWidgets.QFormLayout(self.settingsContainer)
         self.formLayout.setSizeConstraint(QtWidgets.QLayout.SetMinAndMaxSize)
@@ -160,8 +163,8 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuFile.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.overalTabsContainer.setCurrentIndex(0)
-        self.imageTabs.setCurrentIndex(0)
+        self.overalTabsContainer.setCurrentIndex(1)
+        self.imageTabs.setCurrentIndex(6)
         self.modelTabs.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         MainWindow.setTabOrder(self.tauLineEdit, self.gaussianBlurLineEdit)
