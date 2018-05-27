@@ -236,7 +236,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         self.overalTabsContainer.setCurrentIndex(0)
-        self.imageTabs.setCurrentIndex(6)
+        self.imageTabs.setCurrentIndex(0)
         self.modelTabs.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         MainWindow.setTabOrder(self.tauCheckBox, self.tauLineEdit)
