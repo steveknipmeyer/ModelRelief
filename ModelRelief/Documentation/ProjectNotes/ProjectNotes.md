@@ -3,8 +3,6 @@
 
 #### Short Term  
     PyQt
-        Set the tab order for settings.
-
         3D visualization of arrays?
         Add gulp build task for Explorer?
 
@@ -25,7 +23,7 @@
     GenerateDepthBufferAsync is not implemented.
         Why is this generated the first time (requires a Camera change)? 
 
-Update database schema diagram.  ****
+Update database schema diagram.
   
 ###### StandardView
 When the view camera is interactively changed, it should invalidate the StandardView in the UI.

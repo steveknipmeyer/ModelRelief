@@ -249,6 +249,12 @@ class Explorer():
         self.image_tabs[ImageType.GradientYMask]  = ImageTab(self.ui.gradientYMaskTab, ImageType.GradientYMask, "Gradient Y Mask", "gray", default_image)
         self.image_tabs[ImageType.CompositeMask]  = ImageTab(self.ui.compositeMaskTab, ImageType.CompositeMask, "Composite Mask", "gray", default_image)
 
+        self.ui.tauCheckBox.setChecked(True)
+        self.ui.attenuationCheckBox.setChecked(True)
+        self.ui.gaussianSmoothCheckBox.setChecked(True)
+        self.ui.gaussianBlurCheckBox.setChecked(True)
+        self.ui.lambdaCheckBox.setChecked(True)
+        
         # https://www.blog.pythonlibrary.org/2015/08/18/getting-your-screen-resolution-with-python/
         self.window.resize(Explorer.WINDOW_WIDTH, Explorer.WINDOW_HEIGHT)
 
@@ -279,7 +285,7 @@ class Explorer():
         """
         dialog = QtWidgets.QFileDialog()
         dialog.setFileMode(QtWidgets.QFileDialog.AnyFile)
-        dialog.setNameFilter("All JSON files (*.JSON)")
+        dialog.setNameFilter("All JSON files (*.json)")
 
         if dialog.exec_():
             filenames = dialog.selectedFiles()
@@ -300,7 +306,7 @@ class Explorer():
         gradient_x = self.solver.depth_buffer.gradient_x
         gradient_y = self.solver.depth_buffer.gradient_y
 
-        threshold = self.solver.mesh_transform.tau
+        threshold = self.solver.mesh_transform.tau if self.ui.tauCheckBox.isChecked() else float("inf")
         gradient_x_mask = self.solver.mask.mask_threshold(gradient_x, threshold)
         gradient_y_mask = self.solver.mask.mask_threshold(gradient_y, threshold)
 
