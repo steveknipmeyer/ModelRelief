@@ -91,8 +91,7 @@ class ViewTab():
 
         if (self.figure != None):
             plt.close(self.figure)
-        self.figure = self.construct_figure(self._data, self.title, self.cmap)
-        # self.figure = self.construct_subplot_figures ([self._data], 1, [self.title], [self.cmap])
+        self.figure = self.construct_subplot_figures ([self._data], 1, [self.title], [self.cmap])
 
         self.canvas = FigureCanvas(self.figure)
         self.canvas.draw()
@@ -177,12 +176,17 @@ class ViewTab():
         """
         ax = figure.gca(projection='3d')
 
-        # Make data.
-        X = np.arange(-5, 5, 0.25)
-        Y = np.arange(-5, 5, 0.25)
+        # create data arrays
+        shape = data.shape
+        width = shape[1]
+        height = shape[0]
+        X = np.arange(0, width, 1.0)
+        Y = np.arange(0, height, 1.0)
         X, Y = np.meshgrid(X, Y)
-        R = np.sqrt(X**2 + Y**2)
-        Z = np.sin(R)
+
+        Z = data
+        #R = np.sqrt(X**2 + Y**2)
+        #Z = np.sin(R)
 
         colors = np.empty(X.shape, dtype=str)
         colors.fill('b')
@@ -191,36 +195,8 @@ class ViewTab():
         ax.plot_surface(X, Y, Z, facecolors=colors, linewidth=0)
 
         # Customize the z axis.
-        ax.set_zlim(-1, 1)
-        ax.w_zaxis.set_major_locator(LinearLocator(6))
-
-        return figure
-
-    def construct_figure(self, data: np.ndarray, title: str, cmap: str) -> plt.Figure:
-        """ Contruct a matplotlib Figure from a NumPy data array.
-        Parameters
-        ---------
-        data
-            The data array.
-        title 
-            The title of the Figure.
-        cmap
-            The colormap to be used.
-        Returns
-        -------
-        A Figure.
-        """
-        figure = plt.figure(facecolor='black')
-
-        plot = plt.imshow(data, cmap)       
-        subplot = plot.axes 
-
-        figure = self.content_ctor(figure, subplot, data, title, cmap)
-        # figure = self.add_image(figure, subplot, data, title, cmap)
-        # figure = self.add_mesh(figure, subplot, data, title, cmap)
-
-        figure.set_size_inches(Explorer.CONTENT_DIMENSIONS, Explorer.CONTENT_DIMENSIONS)
-        figure.tight_layout()
+        # ax.set_zlim(-1, 1)
+        # ax.w_zaxis.set_major_locator(LinearLocator(6))
 
         return figure
 
@@ -254,7 +230,8 @@ class ViewTab():
             # make a subplot active
             subplot = figure.add_subplot(rows, columns, n + 1)
 
-            figure = self.add_image(figure, subplot, data_array, title, cmap)
+            # figure = self.add_image(figure, subplot, data_array, title, cmap)
+            figure = self.content_ctor(figure, subplot, data_array, title, cmap)
 
         figure.set_size_inches(n_subplots * Explorer.CONTENT_DIMENSIONS, Explorer.CONTENT_DIMENSIONS)
         figure.tight_layout()
@@ -294,7 +271,7 @@ class Explorer():
         self.ui = explorer_ui.Ui_MainWindow() 
         self.ui.setupUi(self.window)
 
-        # images
+        # image views
         default_image = np.zeros(shape=(2,2))
         self.view_tabs[ViewType.DepthBuffer]    = ViewTab(self.ui.depthBufferTab, ViewType.DepthBuffer, "DepthBuffer", "gray", ViewTab.add_image, default_image)
         self.view_tabs[ViewType.BackgroundMask] = ViewTab(self.ui.backgroundMaskTab, ViewType.BackgroundMask, "Background Mask", "gray", ViewTab.add_image, default_image)
@@ -350,6 +327,7 @@ class Explorer():
         if dialog.exec_():
             filenames = dialog.selectedFiles()
             self.solver = Solver(filenames[0], self.working)
+            self.initialize_settings()
             self.calculate()
 
     def show(self) ->None:
@@ -387,6 +365,8 @@ class Explorer():
         """
         Updates the meshes.
         """
+        self.view_tabs[ViewType.IsometricView].data = self.view_tabs[ViewType.GradientX].data
+        self.view_tabs[ViewType.TopView].data = self.view_tabs[ViewType.GradientY].data
 
     def calculate(self) -> None:
         """ Update the UI with the representations of the DepthBuffer and Mesh."""

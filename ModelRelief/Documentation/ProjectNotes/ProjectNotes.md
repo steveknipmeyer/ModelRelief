@@ -2,8 +2,8 @@
 #### Commit Notes
 
 #### Short Term  
-    PyQt
-        3D visualization of arrays?
+    Explorer
+        Skip the NavigationToolbar for 3D?
         Add gulp build task for Explorer?
 
     Create small image depth buffers that support inspection of array elements.        
