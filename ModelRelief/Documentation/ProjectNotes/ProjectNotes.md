@@ -3,7 +3,6 @@
 
 #### Short Term  
     PyQt
-        kwargs
         Set the tab order for settings.
 
         3D visualization of arrays?
