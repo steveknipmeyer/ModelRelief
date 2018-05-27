@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 #
 #   Copyright (c) 2018
 #   All Rights Reserved.
@@ -13,7 +13,7 @@ import matplotlib
 matplotlib.use('Qt5Agg')
 import matplotlib.pyplot as plt
 
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
@@ -27,7 +27,7 @@ import explorer_ui
 
 class ImageType(Enum):
     """
-    A class representing the various image tabs.
+    A class representing the various image types.
     """
     DepthBuffer = 1,
     BackgroundMask = 2,
@@ -57,7 +57,6 @@ class ImageTab():
         """
         # QWidget
         self.widget = widget
-
         self.image_type = image_type 
         self.title = title
         self.cmap = cmap
@@ -71,12 +70,12 @@ class ImageTab():
         self.image = image
 
     @property
-    def image(self):
+    def image(self) -> np.ndarray:
         """ Returns the Numpy image array. """
         return self._image
 
     @image.setter
-    def image (self, value): 
+    def image (self, value: np.ndarray): 
         """ Sets the NumPy image array.
             Regenerates the matplotlib Figure.
         """
@@ -91,12 +90,12 @@ class ImageTab():
         self.canvas.draw()
 
         # navigation toolbar
-        if (self.nav == None):
+        if (self.nav is None):
             self.nav = NavigationToolbar(self.canvas, self.widget)
             self.widget.layout().addWidget(self.nav)
 
         # scroll area
-        if (self.scroll == None):
+        if (self.scroll is None):
             self.scroll = QtWidgets.QScrollArea(self.canvas)
             self.widget.layout().addWidget(self.scroll)
 
@@ -104,48 +103,67 @@ class ImageTab():
         self.scroll.setWidget(self.canvas)
         self.nav.canvas = self.canvas
 
+    def add_image(self, figure: Figure, subplot: plt.Axes, image: np.ndarray, title: str, cmap: str) -> plt.Figure:
+        """ Adds an image to the given Figure.
+        Parameters
+        ---------
+        figure
+            The Figure to add the image.
+        subplot
+            The subplot Axes of the Figure.
+        image
+            The image array.
+        title 
+            The title of the image Figure.
+        cmap
+            The colormap to be used.
+        Returns
+        -------
+        A Figure.
+        """
+        # flip; first row is at minimum Y
+        image = np.flipud(image)
+
+        plot = plt.imshow(image, cmap)
+        subplot = plot.axes 
+
+        # title
+        title_obj = subplot.set_title(title)
+        plt.setp(title_obj, color='w')                         # set the color of title to white
+
+        # axes
+        plt.setp(plt.getp(subplot, 'yticklabels'), color='w') # set yticklabels color
+        plt.setp(plt.getp(subplot, 'xticklabels'), color='w') # set xticklabels color
+
+        # colorbar
+        # https://matplotlib.org/examples/images_contours_and_fields/pcolormesh_levels.html
+        colorbar = figure.colorbar(plot, ax=subplot, drawedges=True)        
+        plt.setp(plt.getp(colorbar.ax.axes, 'yticklabels'), color='w')  # set colorbar to match Y labels
+                                                                        # yticklabels color
+        colorbar.outline.set_edgecolor('w')                             # set colorbar box color
+        colorbar.outline.set_linewidth(2)
+        colorbar.ax.yaxis.set_tick_params(color='w')                    # set colorbar ticks color
+        colorbar.dividers.set_linewidth(0)
+    
     def construct_figure(self, image: np.ndarray, title: str, cmap: str) -> plt.Figure:
         """ Contruct a matplotlib Figure from a NumPy image array.
-
         Parameters
         ---------
         image
             The image array.
-
         title 
             The title of the image Figure.
-
         cmap
             The colormap to be used.
-
         Returns
         -------
         A Figure.
         """
         figure = plt.figure(facecolor='black')
 
-        # flip; first row is at minimum Y
-        image = np.flipud(image)
         plot = plt.imshow(image, cmap)
-
-        # title
-        title_obj = plt.title(title)
-        plt.setp(title_obj, color='w')                         # set the color of title to white
-
-        # axes
-        axes_obj = plt.getp(plot,'axes')                       # get the axes' property handler
-        plt.setp(plt.getp(axes_obj, 'yticklabels'), color='w') # set yticklabels color
-        plt.setp(plt.getp(axes_obj, 'xticklabels'), color='w') # set xticklabels color
-
-        # colorbar
-        # https://matplotlib.org/examples/images_contours_and_fields/pcolormesh_levels.html
-        colorbar = figure.colorbar(plot, drawedges=True)
-        plt.setp(plt.getp(colorbar.ax.axes, 'yticklabels'), color='w')  # set colorbar
-                                                                        # yticklabels color
-        colorbar.outline.set_edgecolor('w')                             # set colorbar box color
-        colorbar.outline.set_linewidth(2)
-        colorbar.ax.yaxis.set_tick_params(color='w')                    # set colorbar ticks color
-        colorbar.dividers.set_linewidth(0)
+        subplot = plot.axes 
+        self.add_image(figure, subplot, image, title, cmap)
 
         figure.set_size_inches(Explorer.IMAGE_DIMENSIONS, Explorer.IMAGE_DIMENSIONS)
         figure.tight_layout()
@@ -159,14 +177,14 @@ class ImageTab():
 
         Parameters
         ---------
-        images: List of np.arrays compatible with plt.imshow.
-
-        rows (Default = 1): Number of rows in figure (number of columns is set to np.ceil(n_images/float(rows))).
-
-        titles: List of titles corresponding to each image. Must have the same length as images.
-
-        cmaps: List of color maps corresponding to each image. Must have the same length as images.
-
+        images 
+            List of np.arrays compatible with plt.imshow.
+        rows (Default = 1)
+            Number of rows in figure (number of columns is set to np.ceil(n_images/float(rows))).
+        titles
+            List of titles corresponding to each image. Must have the same length as images.
+        cmaps
+            List of color maps corresponding to each image. Must have the same length as images.
         Returns
         -------
         A Figure.
@@ -176,32 +194,13 @@ class ImageTab():
         if titles is None: titles = ['Image (%d)' % i for i in range(1, n_images + 1)]
 
         figure = plt.figure(facecolor='black')
+
         columns = np.ceil(n_images/float(rows))
         for n, (image, title, cmap) in enumerate(zip(images, titles, cmaps)):
-            sub_plot = figure.add_subplot(rows, columns, n + 1)
+            # make a subplot active
+            subplot = figure.add_subplot(rows, columns, n + 1)
 
-            # flip; first row is at minimum Y
-            image = np.flipud(image)
-            plot = plt.imshow(image, cmap)
-
-            # title
-            title_obj = sub_plot.set_title(title)
-            plt.setp(title_obj, color='w')                         # set the color of title to white
-
-            # axes
-            axes_obj = plt.getp(sub_plot,'axes')                   # get the axes' property handler
-            plt.setp(plt.getp(axes_obj, 'yticklabels'), color='w') # set yticklabels color
-            plt.setp(plt.getp(axes_obj, 'xticklabels'), color='w') # set xticklabels color
-
-            # colorbar
-            # https://matplotlib.org/examples/images_contours_and_fields/pcolormesh_levels.html
-            colorbar = figure.colorbar(plot, ax=sub_plot, drawedges=True)
-            plt.setp(plt.getp(colorbar.ax.axes, 'yticklabels'), color='w')  # set colorbar
-                                                                            # yticklabels color
-            colorbar.outline.set_edgecolor('w')                             # set colorbar box color
-            colorbar.outline.set_linewidth(2)
-            colorbar.ax.yaxis.set_tick_params(color='w')                    # set colorbar ticks color
-            colorbar.dividers.set_linewidth(0)
+            self.add_image(figure, subplot, image, title, cmap)
 
         figure.set_size_inches(n_images * Explorer.IMAGE_DIMENSIONS, Explorer.IMAGE_DIMENSIONS)
         figure.tight_layout()
@@ -267,15 +266,14 @@ class Explorer():
         self.ui.processButton.clicked.connect(self.handle_process)
         self.ui.actionOpen.triggered.connect(self.handle_open_settings)
 
-    def handle_process(self):
+    def handle_process(self) ->None:
         """
         Recalculates the image set.
         """
         self.solver.mesh_transform.tau = float(self.ui.tauLineEdit.text())
         self.calculate_images()
-        self.show()
 
-    def handle_open_settings(self):
+    def handle_open_settings(self) ->None:
         """
         Opens a new settings file.
         """
@@ -288,7 +286,7 @@ class Explorer():
             self.solver = Solver(filenames[0], self.working)
             self.calculate_images()
 
-    def show(self):
+    def show(self) ->None:
         """ Show the MainWindow. """
         self.window.show()
 
@@ -318,4 +316,3 @@ class Explorer():
         self.image_tabs[ImageType.GradientY].image      = gradient_y
         self.image_tabs[ImageType.GradientYMask].image  = gradient_y_mask
         self.image_tabs[ImageType.CompositeMask].image  = combined_mask
-
