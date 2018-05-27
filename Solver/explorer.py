@@ -17,7 +17,6 @@ from PyQt5 import QtWidgets
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
-from matplotlib.ticker import LinearLocator
 from mpl_toolkits.mplot3d import Axes3D
 
 import numpy as np
@@ -133,7 +132,6 @@ class ViewTab():
         image = np.flipud(image)
 
         plot = plt.imshow(image, cmap)
-        subplot = plot.axes 
 
         # title
         title_obj = subplot.set_title(title)
@@ -194,9 +192,11 @@ class ViewTab():
         # Plot the surface with face colors taken from the array we made.
         ax.plot_surface(X, Y, Z, facecolors=colors, linewidth=0)
 
-        # Customize the z axis.
-        # ax.set_zlim(-1, 1)
-        # ax.w_zaxis.set_major_locator(LinearLocator(6))
+        # title
+        # Placement 0, 0 = Bottom Left
+        #           1, 1 = Top Right
+        # https://matplotlib.org/examples/mplot3d/text3d_demo.html
+        ax.text2D(0.05, 0.95, title, transform=ax.transAxes)        
 
         return figure
 

@@ -4,6 +4,7 @@
 #### Short Term  
     Explorer
         Skip the NavigationToolbar for 3D?
+        How can the content_ctor parameter lists be handled such that different implementors can use different signatures?
         Add gulp build task for Explorer?
 
     Create small image depth buffers that support inspection of array elements.        
