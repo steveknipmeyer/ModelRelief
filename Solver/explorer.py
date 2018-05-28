@@ -230,17 +230,25 @@ class MeshTab():
         self.title = title
         self.cmap = cmap
 
-        self.mesh_widget = MeshContainer(data)        
+        self.mesh_widget = MeshContainer(data, self.mesh_type)        
         self.widget.layout().addWidget(self.mesh_widget)
 
 class MeshContent(HasTraits):
     """ Holds an instance of a 3D Mesh """
 
-    def __init__ (self, data: np.ndarray) -> None:
-        """ Initialization. """
+    def __init__ (self, data: np.ndarray, mesh_type: MeshType) -> None:
+        """ Initialization. 
+        Parameters
+        ----------
+        data
+            The Numpy array holding the data.
+        mesh_type
+            The type of the mesh.
+        """
         super().__init__()
 
         self._data = data
+        self.mesh_type = mesh_type
 
     @property
     def data(self) -> np.ndarray:
@@ -285,15 +293,16 @@ class MeshContent(HasTraits):
 class MeshContainer(QtWidgets.QWidget):
     """ The QWidget containing the visualization, this is pure PyQt5 code. """
 
-    def __init__(self, data: np.ndarray, parent=None) -> None:
+    def __init__(self, data: np.ndarray, mesh_type: MeshType, parent=None) -> None:
         """ Initialization. """
         super().__init__(parent)
+        self.mesh_type = mesh_type
 
         layout = QtWidgets.QVBoxLayout(self)
         layout.setContentsMargins(0,0,0,0)
         layout.setSpacing(0)
 
-        self.mesh_content = MeshContent(data)
+        self.mesh_content = MeshContent(data, self.mesh_type)
 
         # If you want to debug, beware that you need to remove the Qt input hook.
         #QtCore.pyqtRemoveInputHook()
@@ -351,13 +360,21 @@ class Explorer():
 
         # mesh views
         default_mesh = np.zeros(shape=(2,2))
-        simple_mesh = np.array([[0.0, 0.0, 0.0, 0.0],
-                                [0.0, 3.0, 4.0, 0.0],
-                                [0.0, 3.0, 4.0, 0.0],
-                                [0.0, 0.0, 0.0, 0.0]])
+        ridge_mesh = np.array([[0.0, 0.0, 0.0, 0.0, 0.0],
+                               [0.0, 0.0, 3.0, 0.0, 0.0],
+                               [0.0, 0.0, 3.0, 0.0, 0.0],
+                               [0.0, 0.0, 3.0, 0.0, 0.0],
+                               [0.0, 0.0, 0.0, 0.0, 0.0]])
 
-        self.mesh_tabs[MeshType.GradientX] = MeshTab(self.ui.gradientXMeshTab, MeshType.GradientX, "Gradient X Mesh", "Blues_r", simple_mesh)
-        self.mesh_tabs[MeshType.GradientY] = MeshTab(self.ui.gradientYMeshTab, MeshType.GradientY, "Gradient Y Mesh", "Blues_r", simple_mesh)
+        corner_mesh = np.array([[1.0, 0.0, 0.0, 0.0, 1.0],
+                                [0.0, 0.0, 0.0, 0.0, 0.0],
+                                [0.0, 0.0, 0.0, 0.0, 0.0],
+                                [0.0, 0.0, 0.0, 0.0, 0.0],
+                                [1.0, 0.0, 0.0, 0.0, 1.0]])
+
+
+        self.mesh_tabs[MeshType.GradientX] = MeshTab(self.ui.gradientXMeshTab, MeshType.GradientX, "Gradient X Mesh", "Blues_r", ridge_mesh)
+        self.mesh_tabs[MeshType.GradientY] = MeshTab(self.ui.gradientYMeshTab, MeshType.GradientY, "Gradient Y Mesh", "Blues_r", corner_mesh)
        
         # https://www.blog.pythonlibrary.org/2015/08/18/getting-your-screen-resolution-with-python/
         self.window.resize(Explorer.WINDOW_WIDTH, Explorer.WINDOW_HEIGHT)

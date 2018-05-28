@@ -4,9 +4,9 @@
 #### Short Term  
     Explorer
         Why does only GradientYMesh get updated?
+            scene, View are class variables not instance variables.
+            http://docs.enthought.com/mayavi/mayavi/auto/example_multiple_mlab_scene_models.html
         How can the mayavi log be viewed?
-        Deprecate add_mesh.
-        Refactor the Mesh widget.
 
         Add gulp build task for Explorer?
 
@@ -23,7 +23,7 @@
         
     Attenuation
     Implement Gaussian smoothing for the base (low frequency) mesh using Sigma1 (SigmaLow?).
-    3D Surface Visualization        
+    3D Surface Visualization
         https://jakevdp.github.io/PythonDataScienceHandbook/04.12-three-dimensional-plotting.html
         
     GenerateDepthBufferAsync is not implemented.
