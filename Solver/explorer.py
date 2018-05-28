@@ -30,6 +30,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from traits.api import HasTraits, Instance, on_trait_change
 from traitsui.api import View, Item
 from mayavi.core.ui.api import MayaviScene, MlabSceneModel, SceneEditor
+from mayavi import mlab
 
 import numpy as np
 from numpy import pi, sin, cos, mgrid
@@ -259,12 +260,8 @@ class MeshContent(HasTraits):
     def data (self, value: np.ndarray): 
         """ Sets the NumPy data array."""
         self._data = value
-        self.update()
 
-    scene = Instance(MlabSceneModel, ())
-
-    @on_trait_change('scene.activated')
-    def update(self):
+    def update(self, scene):
         # This function is called when the view is opened. We don'tpopulate the scene 
         # when the view is not yet open, as some VTK features require a GLContext.
 
@@ -280,15 +277,38 @@ class MeshContent(HasTraits):
         colors = np.empty(X.shape, dtype=str)
         colors.fill('b')
 
-        # Plot the surface with face colors taken from the array we made.
-        #self.scene.mlab.plot_surface(X, Y, Z, facecolors=colors, linewidth=0)
-        self.scene.mlab.mesh(X, Y, Z)
+        # clear figure
+        mlab.clf(figure=scene.mayavi_scene)
+        current_figure = mlab.gcf()
+        mlab.figure(figure=current_figure, bgcolor=(0, 0, 0))
+        # create new figure
+        mlab.mesh(X, Y, Z, figure=scene.mayavi_scene)
 
-    # ToDo: Why is this line at the class top level?
-    # the layout of the dialog screated
+class GradientXMeshContent(MeshContent, HasTraits):
+    """ Holds an instance of a Gradient X Mesh """
+
+    # N.B. These must be class variables to maintain scene independence.
+    scene = Instance(MlabSceneModel, ())   
     view = View(Item('scene', editor=SceneEditor(scene_class=MayaviScene), height=250, width=300, show_label=False),
                      resizable=True # We need this to resize with the parent widget
                      )
+
+    @on_trait_change('scene.activated')
+    def update_content(self):
+        super().update(self.scene)
+
+class GradientYMeshContent(MeshContent, HasTraits):
+    """ Holds an instance of a Gradient Y Mesh """
+
+    # N.B. These must be class variables to maintain scene independence.
+    scene = Instance(MlabSceneModel, ())
+    view = View(Item('scene', editor=SceneEditor(scene_class=MayaviScene), height=250, width=300, show_label=False),
+                     resizable=True # We need this to resize with the parent widget
+                     )
+
+    @on_trait_change('scene.activated')
+    def update_content(self):
+        super().update(self.scene)
 
 class MeshContainer(QtWidgets.QWidget):
     """ The QWidget containing the visualization, this is pure PyQt5 code. """
@@ -302,7 +322,10 @@ class MeshContainer(QtWidgets.QWidget):
         layout.setContentsMargins(0,0,0,0)
         layout.setSpacing(0)
 
-        self.mesh_content = MeshContent(data, self.mesh_type)
+        if self.mesh_type == MeshType.GradientX:
+            self.mesh_content = GradientXMeshContent(data, self.mesh_type)
+        if self.mesh_type == MeshType.GradientY:
+            self.mesh_content = GradientYMeshContent(data, self.mesh_type)
 
         # If you want to debug, beware that you need to remove the Qt input hook.
         #QtCore.pyqtRemoveInputHook()
@@ -457,7 +480,10 @@ class Explorer():
         Updates the meshes.
         """
         self.mesh_tabs[MeshType.GradientX].mesh_widget.mesh_content.data = self.image_tabs[ImageType.GradientX].data
+        self.mesh_tabs[MeshType.GradientX].mesh_widget.mesh_content.update_content()
+
         self.mesh_tabs[MeshType.GradientY].mesh_widget.mesh_content.data = self.image_tabs[ImageType.GradientY].data
+        self.mesh_tabs[MeshType.GradientY].mesh_widget.mesh_content.update_content()
 
     def calculate(self) -> None:
         """ Update the UI with the representations of the DepthBuffer and Mesh."""

@@ -3,9 +3,6 @@
 
 #### Short Term  
     Explorer
-        Why does only GradientYMesh get updated?
-            scene, View are class variables not instance variables.
-            http://docs.enthought.com/mayavi/mayavi/auto/example_multiple_mlab_scene_models.html
         How can the mayavi log be viewed?
 
         Add gulp build task for Explorer?
