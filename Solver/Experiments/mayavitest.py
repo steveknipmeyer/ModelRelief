@@ -8,6 +8,8 @@ os.environ['ETS_TOOLKIT'] = 'qt4'
 # to be used, you need to set the QT_API environment variable to 'pyqt'
 os.environ['QT_API'] = 'pyqt5'
 
+from numpy import pi, sin, cos, mgrid
+
 # To be able to use PySide or PyQt4 and not run in conflicts with traits,
 # we need to import QtGui and QtCore from pyface.qt
 from PyQt5 import QtGui, QtCore, QtWidgets
@@ -32,7 +34,17 @@ class Visualization(HasTraits):
         # VTK features require a GLContext.
 
         # We can do normal mlab calls on the embedded scene.
-        self.scene.mlab.test_points3d()
+        # self.scene.mlab.test_points3d()
+
+        dphi, dtheta = pi/250.0, pi/250.0
+        [phi,theta] = mgrid[0:pi+dphi*1.5:dphi,0:2*pi+dtheta*1.5:dtheta]
+        m0 = 4; m1 = 3; m2 = 2; m3 = 3; m4 = 6; m5 = 2; m6 = 6; m7 = 4
+        r = sin(m0*phi)**m1 + cos(m2*phi)**m3 + sin(m4*theta)**m5 + cos(m6*theta)**m7
+        x = r*sin(phi)*cos(theta)
+        y = r*cos(phi)
+        z = r*sin(phi)*sin(theta)
+
+        s = self.scene.mlab.mesh(x, y, z)
 
     # the layout of the dialog screated
     view = View(Item('scene', editor=SceneEditor(scene_class=MayaviScene),
@@ -68,7 +80,10 @@ if __name__ == "__main__":
     # Don't create a new QApplication, it would unhook the Events
     # set by Traits on the existing QApplication. Simply use the
     # '.instance()' method to retrieve the existing one.
-    app = QtWidgets.QApplication.instance()
+
+    # app = QtWidgets.QApplication.instance()
+    app = QtWidgets.QApplication([])       
+
     container = QtWidgets.QWidget()
     container.setWindowTitle("Embedding Mayavi in a PyQt4 Application")
     # define a "complex" layout to test the behaviour

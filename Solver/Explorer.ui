@@ -155,7 +155,7 @@
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="QLineEdit" name="lineEdit"/>
+        <widget class="QLineEdit" name="attenuationLineEdit"/>
        </item>
        <item row="4" column="0">
         <widget class="QCheckBox" name="attenuationCheckBox">
@@ -356,21 +356,21 @@
           <property name="currentIndex">
            <number>0</number>
           </property>
-          <widget class="QWidget" name="isometricViewTab">
+          <widget class="QWidget" name="gradientXMeshTab">
            <property name="focusPolicy">
             <enum>Qt::TabFocus</enum>
            </property>
            <attribute name="title">
-            <string>Isometric</string>
+            <string>Gradient X Mesh</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_10"/>
           </widget>
-          <widget class="QWidget" name="topViewTab">
+          <widget class="QWidget" name="gradientYMeshTab">
            <property name="focusPolicy">
             <enum>Qt::TabFocus</enum>
            </property>
            <attribute name="title">
-            <string>Top</string>
+            <string>Gradient Y Mesh</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_9"/>
           </widget>
@@ -415,7 +415,7 @@
   <tabstop>tauCheckBox</tabstop>
   <tabstop>tauLineEdit</tabstop>
   <tabstop>attenuationCheckBox</tabstop>
-  <tabstop>lineEdit</tabstop>
+  <tabstop>attenuationLineEdit</tabstop>
   <tabstop>gaussianSmoothCheckBox</tabstop>
   <tabstop>gaussianBlurLineEdit</tabstop>
   <tabstop>gaussianBlurCheckBox</tabstop>

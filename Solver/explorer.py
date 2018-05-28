@@ -9,26 +9,39 @@
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
+import os
+# First, and before importing any Enthought packages, set the ETS_TOOLKIT environment variable to qt4 to tell Traits that we will use Qt.
+os.environ['ETS_TOOLKIT'] = 'qt4'
+# By default, mayavi uses the PySide bindings. For the PyQt bindings, set the QT_API environment variable to 'pyqt5'
+os.environ['QT_API'] = 'pyqt5'
+
+# To be able to use PySide or PyQt4 and not run in conflicts with traits, we need to import QtGui and QtCore from pyface.qt
+from PyQt5 import QtGui, QtCore, QtWidgets
+
 import matplotlib
 matplotlib.use('Qt5Agg')
 import matplotlib.pyplot as plt
 
-from PyQt5 import QtWidgets
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d import Axes3D
 
+from traits.api import HasTraits, Instance, on_trait_change
+from traitsui.api import View, Item
+from mayavi.core.ui.api import MayaviScene, MlabSceneModel, SceneEditor
+
 import numpy as np
+from numpy import pi, sin, cos, mgrid
 from enum import Enum
 from typing import Callable, Dict
 
 from solver import Solver
 import explorer_ui
 
-class ViewType(Enum):
+class ImageType(Enum):
     """
-    A class representing the various UI view types.
+    A class representing the various UI image view types.
     """
     DepthBuffer = 1,
     BackgroundMask = 2,
@@ -38,32 +51,36 @@ class ViewType(Enum):
     GradientYMask = 6,
     CompositeMask = 7
 
-    IsometricView = 8,
-    TopView = 9
+class MeshType(Enum):
+    """
+    A class representing the various UI mesh view types.
+    """
+    GradientX = 1,
+    GradientY = 2,
+    Model = 3
 
-class ViewTab():
-    """ A UI tab of a mesh view. """
+class ImageTab():
+    """ A UI tab of an image view. """
 
-    def __init__(self, widget: QtWidgets.QWidget, view_type: ViewType, title:str, cmap: str, content_ctor: Callable[[Figure, plt.Axes, np.ndarray, str, str], Figure], data: np.ndarray,  ) -> None:
-        """ A UI view tab in the Explorer. 
+    def __init__(self, widget: QtWidgets.QWidget, image_type: ImageType, title: str, cmap: str, content_ctor: Callable[[Figure, plt.Axes, np.ndarray, str, str], Figure], data: np.ndarray,  ) -> None:
+        """ A UI image tab in the Explorer. 
         Parameters
         ----------
         widget
             QWidget of the tab.
-        view_type
-            The type of the view.
+        image_type
+            The type of the image.
         title
             The title of the view.
         cmap
-            The matplotlib colormap.            
+            The matplotlib colormap.
         content_ctor
             The content constructor function that populates the given figure.
         data
-            The Numpy array holding the view data. 
+            The Numpy array holding the image data. 
         """
-        # QWidget
         self.widget = widget
-        self.view_type = view_type 
+        self.image_type = image_type 
         self.title = title
         self.cmap = cmap
 
@@ -153,53 +170,6 @@ class ViewTab():
 
         return figure
 
-    @staticmethod        
-    def add_mesh(figure: Figure, subplot: plt.Axes, data: np.ndarray, title: str, cmap: str) -> plt.Figure:
-        """ Adds a 3D mesh to the given Figure.
-        Parameters
-        ---------
-        figure
-            The Figure to which the mesh will be added.
-        subplot
-            The subplot Axes of the Figure.
-        data
-            The data array.
-        title 
-            The title of the mesh Figure.
-        cmap
-            The colormap to be used.
-        Returns
-        -------
-        A Figure.
-        """
-        ax = figure.gca(projection='3d')
-
-        # create data arrays
-        shape = data.shape
-        width = shape[1]
-        height = shape[0]
-        X = np.arange(0, width, 1.0)
-        Y = np.arange(0, height, 1.0)
-        X, Y = np.meshgrid(X, Y)
-
-        Z = data
-        #R = np.sqrt(X**2 + Y**2)
-        #Z = np.sin(R)
-
-        colors = np.empty(X.shape, dtype=str)
-        colors.fill('b')
-
-        # Plot the surface with face colors taken from the array we made.
-        ax.plot_surface(X, Y, Z, facecolors=colors, linewidth=0)
-
-        # title
-        # Placement 0, 0 = Bottom Left
-        #           1, 1 = Top Right
-        # https://matplotlib.org/examples/mplot3d/text3d_demo.html
-        ax.text2D(0.05, 0.95, title, transform=ax.transAxes)        
-
-        return figure
-
     def construct_subplot_figures(self, data, rows, titles = None, cmaps = None) -> plt.Figure:
         """Display a list of subplots in a single figure with matplotlib.
         https://gist.github.com/soply/f3eec2e79c165e39c9d540e916142ae1
@@ -237,6 +207,104 @@ class ViewTab():
 
         return figure
 
+class MeshTab():
+    """ A UI tab of a mesh view. """
+
+    def __init__(self, widget: QtWidgets.QWidget, mesh_type: MeshType, title: str, cmap: str, data: np.ndarray,  ) -> None:
+        """ A UI mesh tab in the Explorer. 
+        Parameters
+        ----------
+        widget
+            QWidget of the tab.
+        mesh_type
+            The type of the mesh.
+        title
+            The title of the view.
+        cmap
+            The matplotlib colormap.
+        data
+            The Numpy array holding the mesh data. 
+        """
+        self.widget = widget
+        self.mesh_type = mesh_type 
+        self.title = title
+        self.cmap = cmap
+
+        self.mesh_widget = MeshContainer(data)        
+        self.widget.layout().addWidget(self.mesh_widget)
+
+class MeshContent(HasTraits):
+    """ Holds an instance of a 3D Mesh """
+
+    def __init__ (self, data: np.ndarray) -> None:
+        """ Initialization. """
+        super().__init__()
+
+        self._data = data
+
+    @property
+    def data(self) -> np.ndarray:
+        """ Returns the backing Numpy ndarray. """
+        return self._data
+
+    @data.setter
+    def data (self, value: np.ndarray): 
+        """ Sets the NumPy data array."""
+        self._data = value
+        self.update()
+
+    scene = Instance(MlabSceneModel, ())
+
+    @on_trait_change('scene.activated')
+    def update(self):
+        # This function is called when the view is opened. We don'tpopulate the scene 
+        # when the view is not yet open, as some VTK features require a GLContext.
+
+        shape = self.data.shape
+        width = shape[1]
+        height = shape[0]
+        X = np.arange(0, width, 1.0)
+        Y = np.arange(0, height, 1.0)
+
+        X, Y = np.meshgrid(X, Y)
+        Z = self.data
+
+        colors = np.empty(X.shape, dtype=str)
+        colors.fill('b')
+
+        # Plot the surface with face colors taken from the array we made.
+        #self.scene.mlab.plot_surface(X, Y, Z, facecolors=colors, linewidth=0)
+        self.scene.mlab.mesh(X, Y, Z)
+
+    # ToDo: Why is this line at the class top level?
+    # the layout of the dialog screated
+    view = View(Item('scene', editor=SceneEditor(scene_class=MayaviScene), height=250, width=300, show_label=False),
+                     resizable=True # We need this to resize with the parent widget
+                     )
+
+class MeshContainer(QtWidgets.QWidget):
+    """ The QWidget containing the visualization, this is pure PyQt5 code. """
+
+    def __init__(self, data: np.ndarray, parent=None) -> None:
+        """ Initialization. """
+        super().__init__(parent)
+
+        layout = QtWidgets.QVBoxLayout(self)
+        layout.setContentsMargins(0,0,0,0)
+        layout.setSpacing(0)
+
+        self.mesh_content = MeshContent(data)
+
+        # If you want to debug, beware that you need to remove the Qt input hook.
+        #QtCore.pyqtRemoveInputHook()
+        #import pdb ; pdb.set_trace()
+        #QtCore.pyqtRestoreInputHook()
+
+        # The edit_traits call will generate the widget to embed.
+        self.ui = self.mesh_content.edit_traits(parent=self, kind='subpanel').control
+        layout.addWidget(self.ui)
+        self.ui.setParent(self)
+
 class Explorer():
 
     CONTENT_DIMENSIONS = 8
@@ -259,7 +327,8 @@ class Explorer():
         self.qapp = qapp
 
         # initialize UI
-        self.view_tabs: Dict[ViewType, ViewTab] = {}
+        self.image_tabs: Dict[ImageType, ImageTab] = {}
+        self.mesh_tabs: Dict[MeshType, MeshTab] = {}
         self.initialize_ui()
      
         # event handlers
@@ -272,25 +341,24 @@ class Explorer():
 
         # image views
         default_image = np.zeros(shape=(2,2))
-        self.view_tabs[ViewType.DepthBuffer]    = ViewTab(self.ui.depthBufferTab, ViewType.DepthBuffer, "DepthBuffer", "gray", ViewTab.add_image, default_image)
-        self.view_tabs[ViewType.BackgroundMask] = ViewTab(self.ui.backgroundMaskTab, ViewType.BackgroundMask, "Background Mask", "gray", ViewTab.add_image, default_image)
-        self.view_tabs[ViewType.GradientX]      = ViewTab(self.ui.gradientXTab, ViewType.GradientX, "Gradient X: dI(x,y)/dx", "Blues_r", ViewTab.add_image, default_image)
-        self.view_tabs[ViewType.GradientXMask]  = ViewTab(self.ui.gradientXMaskTab, ViewType.GradientXMask, "Gradient X Mask", "gray", ViewTab.add_image, default_image)
-        self.view_tabs[ViewType.GradientY]      = ViewTab(self.ui.gradientYTab, ViewType.GradientY, "Gradient Y: dI(x,y)/dy", "Blues_r", ViewTab.add_image, default_image)
-        self.view_tabs[ViewType.GradientYMask]  = ViewTab(self.ui.gradientYMaskTab, ViewType.GradientYMask, "Gradient Y Mask", "gray", ViewTab.add_image, default_image)
-        self.view_tabs[ViewType.CompositeMask]  = ViewTab(self.ui.compositeMaskTab, ViewType.CompositeMask, "Composite Mask", "gray", ViewTab.add_image, default_image)
+        self.image_tabs[ImageType.DepthBuffer]    = ImageTab(self.ui.depthBufferTab, ImageType.DepthBuffer, "DepthBuffer", "gray", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.BackgroundMask] = ImageTab(self.ui.backgroundMaskTab, ImageType.BackgroundMask, "Background Mask", "gray", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.GradientX]      = ImageTab(self.ui.gradientXTab, ImageType.GradientX, "Gradient X: dI(x,y)/dx", "Blues_r", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.GradientXMask]  = ImageTab(self.ui.gradientXMaskTab, ImageType.GradientXMask, "Gradient X Mask", "gray", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.GradientY]      = ImageTab(self.ui.gradientYTab, ImageType.GradientY, "Gradient Y: dI(x,y)/dy", "Blues_r", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.GradientYMask]  = ImageTab(self.ui.gradientYMaskTab, ImageType.GradientYMask, "Gradient Y Mask", "gray", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.CompositeMask]  = ImageTab(self.ui.compositeMaskTab, ImageType.CompositeMask, "Composite Mask", "gray", ImageTab.add_image, default_image)
 
         # mesh views
         default_mesh = np.zeros(shape=(2,2))
-        self.view_tabs[ViewType.IsometricView] = ViewTab(self.ui.isometricViewTab, ViewType.IsometricView, "Isometric", "gray", ViewTab.add_mesh, default_mesh)
-        self.view_tabs[ViewType.TopView]       = ViewTab(self.ui.topViewTab, ViewType.TopView, "Top", "gray", ViewTab.add_mesh, default_mesh)
+        simple_mesh = np.array([[0.0, 0.0, 0.0, 0.0],
+                                [0.0, 3.0, 4.0, 0.0],
+                                [0.0, 3.0, 4.0, 0.0],
+                                [0.0, 0.0, 0.0, 0.0]])
 
-        self.ui.tauCheckBox.setChecked(True)
-        self.ui.attenuationCheckBox.setChecked(True)
-        self.ui.gaussianSmoothCheckBox.setChecked(True)
-        self.ui.gaussianBlurCheckBox.setChecked(True)
-        self.ui.lambdaCheckBox.setChecked(True)
-        
+        self.mesh_tabs[MeshType.GradientX] = MeshTab(self.ui.gradientXMeshTab, MeshType.GradientX, "Gradient X Mesh", "Blues_r", simple_mesh)
+        self.mesh_tabs[MeshType.GradientY] = MeshTab(self.ui.gradientYMeshTab, MeshType.GradientY, "Gradient Y Mesh", "Blues_r", simple_mesh)
+       
         # https://www.blog.pythonlibrary.org/2015/08/18/getting-your-screen-resolution-with-python/
         self.window.resize(Explorer.WINDOW_WIDTH, Explorer.WINDOW_HEIGHT)
 
@@ -299,9 +367,16 @@ class Explorer():
 
     def initialize_settings(self) ->None:
         self.ui.tauLineEdit.setText(str(self.solver.mesh_transform.tau))
+        self.ui.attenuationLineEdit.setText(str("10.0"))
         self.ui.gaussianBlurLineEdit.setText(str(self.solver.mesh_transform.gaussian_blur))
         self.ui.gaussianSmoothLineEdit.setText(str(self.solver.mesh_transform.gaussian_smooth))
         self.ui.lambdaLineEdit.setText(str(self.solver.mesh_transform.lambda_scale))
+
+        self.ui.tauCheckBox.setChecked(True)
+        self.ui.attenuationCheckBox.setChecked(True)
+        self.ui.gaussianSmoothCheckBox.setChecked(True)
+        self.ui.gaussianBlurCheckBox.setChecked(True)
+        self.ui.lambdaCheckBox.setChecked(True)
 
     def initialize_handlers(self)-> None:
         """ Initialize event handlers """
@@ -352,20 +427,20 @@ class Explorer():
 
         combined_mask = depth_buffer_mask * gradient_x_mask * gradient_y_mask
 
-        self.view_tabs[ViewType.DepthBuffer].data    = depth_buffer
-        self.view_tabs[ViewType.BackgroundMask].data = depth_buffer_mask
-        self.view_tabs[ViewType.GradientX].data      = gradient_x
-        self.view_tabs[ViewType.GradientXMask].data  = gradient_x_mask
-        self.view_tabs[ViewType.GradientY].data      = gradient_y
-        self.view_tabs[ViewType.GradientYMask].data  = gradient_y_mask
-        self.view_tabs[ViewType.CompositeMask].data  = combined_mask
+        self.image_tabs[ImageType.DepthBuffer].data    = depth_buffer
+        self.image_tabs[ImageType.BackgroundMask].data = depth_buffer_mask
+        self.image_tabs[ImageType.GradientX].data      = gradient_x
+        self.image_tabs[ImageType.GradientXMask].data  = gradient_x_mask
+        self.image_tabs[ImageType.GradientY].data      = gradient_y
+        self.image_tabs[ImageType.GradientYMask].data  = gradient_y_mask
+        self.image_tabs[ImageType.CompositeMask].data  = combined_mask
 
     def calculate_meshes(self) -> None:
         """
         Updates the meshes.
         """
-        self.view_tabs[ViewType.IsometricView].data = self.view_tabs[ViewType.GradientX].data
-        self.view_tabs[ViewType.TopView].data = self.view_tabs[ViewType.GradientY].data
+        self.mesh_tabs[MeshType.GradientX].mesh_widget.mesh_content.data = self.image_tabs[ImageType.GradientX].data
+        self.mesh_tabs[MeshType.GradientY].mesh_widget.mesh_content.data = self.image_tabs[ImageType.GradientY].data
 
     def calculate(self) -> None:
         """ Update the UI with the representations of the DepthBuffer and Mesh."""
