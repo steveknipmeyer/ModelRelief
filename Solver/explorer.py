@@ -230,7 +230,6 @@ class ViewTab():
             # make a subplot active
             subplot = figure.add_subplot(rows, columns, n + 1)
 
-            # figure = self.add_image(figure, subplot, data_array, title, cmap)
             figure = self.content_ctor(figure, subplot, data_array, title, cmap)
 
         figure.set_size_inches(n_subplots * Explorer.CONTENT_DIMENSIONS, Explorer.CONTENT_DIMENSIONS)

@@ -15,6 +15,8 @@
 
     Lambda
         qdarkstyle
+        pip install mayavi
+        pip install --upgrade --force-reinstall mayavi
         
     Attenuation
     Implement Gaussian smoothing for the base (low frequency) mesh using Sigma1 (SigmaLow?).
