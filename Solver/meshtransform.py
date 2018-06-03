@@ -12,6 +12,7 @@
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 
 """
+from attenuation import AttenuationParameters
 
 class MeshTransform:
     """
@@ -28,3 +29,6 @@ class MeshTransform:
         self.gaussian_blur   = settings['SigmaGaussianBlur']
         self.gaussian_smooth = settings['SigmaGaussianSmooth']
         self.lambda_scale    = settings['LambdaLinearScaling']
+
+        # not (yet) persisted
+        self.attenuation_parameters = AttenuationParameters(AttenuationParameters.DEFAULT_A, AttenuationParameters.DEFAULT_B)

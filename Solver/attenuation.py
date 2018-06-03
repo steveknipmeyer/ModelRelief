@@ -10,8 +10,34 @@
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
+import numpy as np
+
 from services import Services
 
+class AttenuationParameters:
+
+    DEFAULT_A = 10.0
+    DEFAULT_B =  0.9
+
+    """
+    A class for holding the parameters of an attenuation function.
+    """
+    def __init__(self, a: float, b: float) -> None:
+        """
+        Initialize an instance of AttenuationParameters.
+        Parameters
+        ----------
+        a
+            Determines the point where amplification becomes reduction.
+                v < a, v is amplified.
+                v = a, v is unchanged.
+                v > a, v is reduced.
+        b       
+            Controls the rate at which the attenuation curve decays.     
+        """
+        self.a = a
+        self.b = b
+    
 class Attenuation:
     """
     A class for attenuating image components.
@@ -19,7 +45,7 @@ class Attenuation:
 
     def __init__(self, services : Services) -> None:
         """
-        Initialize an instance of a Attenuation.
+        Initialize an instance of Attenuation.
         Parameters
         ----------
         services
@@ -28,3 +54,31 @@ class Attenuation:
         self.debug = True
         self.services = services
 
+    def apply (self, original: np.ndarray, parameters: AttenuationParameters) -> np.ndarray:
+        """
+        Applies the attenuation function to all elements in an ndarray.
+
+        Parameters
+        ----------
+        original
+            The array to apply the attenuation function against.
+        parameters
+            The AttenuationParameters (a, b):
+            a = boundary between amplication and reduction
+            b = rate of decay of attenuation curve
+        """
+        # copy
+        attenuated_array = np.array(original)
+
+        a = parameters.a
+        b = parameters.b
+
+        def attenuator (v, a, b):
+            weight = 0 if v == 0 else (a / abs(v)) * (abs(v) / a)**b
+            value = weight * v
+            return value
+
+        vattenuator = np.vectorize(attenuator)
+        attenuated_array = vattenuator(attenuated_array, a, b)
+
+        return attenuated_array

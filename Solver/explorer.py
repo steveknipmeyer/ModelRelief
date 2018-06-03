@@ -37,6 +37,7 @@ from numpy import pi, sin, cos, mgrid
 from enum import Enum
 from typing import Callable, Dict
 
+from attenuation import AttenuationParameters
 from solver import Solver
 import explorer_ui
 
@@ -262,7 +263,7 @@ class MeshContent(HasTraits):
         self._data = value
 
     def update(self, scene):
-        # This function is called when the view is opened. We don'tpopulate the scene 
+        # This function is called when the view is opened. We don't populate the scene 
         # when the view is not yet open, as some VTK features require a GLContext.
 
         shape = self.data.shape
@@ -277,12 +278,19 @@ class MeshContent(HasTraits):
         colors = np.empty(X.shape, dtype=str)
         colors.fill('b')
 
+        # get active view
+        azimuth, elevation, distance, focalpoint = mlab.view()
+
         # clear figure
         mlab.clf(figure=scene.mayavi_scene)
         current_figure = mlab.gcf()
         mlab.figure(figure=current_figure, bgcolor=(0, 0, 0))
+
         # create new figure
         mlab.mesh(X, Y, Z, figure=scene.mayavi_scene)
+
+        # restore active view
+        # mlab.view(azimuth=azimuth, elevation=elevation, distance=distance, focalpoint=focalpoint)
 
 class GradientXMeshContent(MeshContent, HasTraits):
     """ Holds an instance of a Gradient X Mesh """
@@ -407,13 +415,14 @@ class Explorer():
 
     def initialize_settings(self) ->None:
         self.ui.tauLineEdit.setText(str(self.solver.mesh_transform.tau))
-        self.ui.attenuationLineEdit.setText(str("10.0"))
+        self.ui.attenuationALineEdit.setText(str(self.solver.mesh_transform.attenuation_parameters.a))
+        self.ui.attenuationBLineEdit.setText(str(self.solver.mesh_transform.attenuation_parameters.b))
         self.ui.gaussianBlurLineEdit.setText(str(self.solver.mesh_transform.gaussian_blur))
         self.ui.gaussianSmoothLineEdit.setText(str(self.solver.mesh_transform.gaussian_smooth))
         self.ui.lambdaLineEdit.setText(str(self.solver.mesh_transform.lambda_scale))
 
         self.ui.tauCheckBox.setChecked(True)
-        self.ui.attenuationCheckBox.setChecked(True)
+        self.ui.attenuationCheckBox.setChecked(False)
         self.ui.gaussianSmoothCheckBox.setChecked(True)
         self.ui.gaussianBlurCheckBox.setChecked(True)
         self.ui.lambdaCheckBox.setChecked(True)
@@ -427,7 +436,13 @@ class Explorer():
         """
         Recalculates the views.
         """
+        # threshold
         self.solver.mesh_transform.tau = float(self.ui.tauLineEdit.text())
+
+        # attenuation
+        self.solver.mesh_transform.attenuation_parameters.a = float(self.ui.attenuationALineEdit.text())
+        self.solver.mesh_transform.attenuation_parameters.b = float(self.ui.attenuationBLineEdit.text())
+
         self.calculate()
 
     def handle_open_settings(self) ->None:
@@ -452,20 +467,35 @@ class Explorer():
         """
         Updates the image view data : DepthBuffer and the supporting gradients and masks.
         """
+        # background mask
         depth_buffer = self.solver.depth_buffer.floats
         depth_buffer_mask = self.solver.depth_buffer.background_mask
 
         gradient_x = self.solver.depth_buffer.gradient_x
         gradient_y = self.solver.depth_buffer.gradient_y
 
+        # Apply threshold to <entire> calculated gradient to find gradient masks.
         threshold = self.solver.mesh_transform.tau if self.ui.tauCheckBox.isChecked() else float("inf")
         gradient_x_mask = self.solver.mask.mask_threshold(gradient_x, threshold)
         gradient_y_mask = self.solver.mask.mask_threshold(gradient_y, threshold)
 
+        # Modify gradient by applying threshold.
         gradient_x = self.solver.threshold.apply(gradient_x, threshold)
         gradient_y = self.solver.threshold.apply(gradient_y, threshold)
 
+        # Composite mask: Values are processed only if they pass all three masks.
+        #    A value must have a 1 in the background mask.
+        #    A value must have both dI/dx <and> dI/dy that are 1 in the respective gradient masks.
         combined_mask = depth_buffer_mask * gradient_x_mask * gradient_y_mask
+
+        # Mask the thresholded gradients.
+        gradient_x = gradient_x * combined_mask
+        gradient_y = gradient_y * combined_mask
+
+        # Attenuate the gradient to reduce high values and boost small values (acceuntuating some detail.)
+        if self.ui.attenuationCheckBox.isChecked():
+            gradient_x = self.solver.attenuation.apply(gradient_x, self.solver.mesh_transform.attenuation_parameters)
+            gradient_y = self.solver.attenuation.apply(gradient_y, self.solver.mesh_transform.attenuation_parameters)
 
         self.image_tabs[ImageType.DepthBuffer].data    = depth_buffer
         self.image_tabs[ImageType.BackgroundMask].data = depth_buffer_mask

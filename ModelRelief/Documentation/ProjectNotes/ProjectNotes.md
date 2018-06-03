@@ -2,7 +2,12 @@
 #### Commit Notes
 
 #### Short Term  
+    Image Processing
+        
     Explorer
+        Preserve view when updating views.
+            https://www.vtk.org/pipermail/vtkusers/2004-March/022742.html   
+        
         How can the mayavi log be viewed?
 
         Add gulp build task for Explorer?
