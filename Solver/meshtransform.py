@@ -26,8 +26,8 @@ class MeshTransform:
         self.settings = settings
 
         self.tau             = settings['Tau']
-        self.gaussian_blur   = settings['SigmaGaussianBlur']
-        self.gaussian_smooth = settings['SigmaGaussianSmooth']
+        self.gaussian_low    = settings['SigmaGaussianBlur']
+        self.gaussian_high   = settings['SigmaGaussianSmooth']
         self.lambda_scale    = settings['LambdaLinearScaling']
 
         # not (yet) persisted

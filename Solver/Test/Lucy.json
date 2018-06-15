@@ -94,9 +94,9 @@
     "Height": 100.0,
     "Depth": 1.0,
     "Tau": 3.0,
-    "SigmaGaussianBlur": 1.0,
+    "SigmaGaussianBlur": 4.0,
     "SigmaGaussianSmooth": 1.0,
-    "LambdaLinearScaling": 0.5,
+    "LambdaLinearScaling": 3.0,
     "ProjectId": 1,
     "Project": {
       "Id": 1,

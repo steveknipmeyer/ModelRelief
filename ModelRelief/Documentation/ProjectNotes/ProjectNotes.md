@@ -2,7 +2,10 @@
 #### Commit Notes
 
 #### Short Term  
-    Image Processing
+    Change default values in web UI.
+        Gaussian Low  = 4.0
+        Gaussian High = 1.0
+        Lambda        = 3.0
         
     Explorer
         Preserve view when updating views.
@@ -19,9 +22,6 @@
     Explore Python unit tests.
 
     Lambda
-        qdarkstyle
-        pip install mayavi
-        pip install --upgrade --force-reinstall mayavi
         
     Attenuation
     Implement Gaussian smoothing for the base (low frequency) mesh using Sigma1 (SigmaLow?).
@@ -1180,3 +1180,7 @@ https://semver.npmjs.com/
         C:\Users\Steve Knipmeyer\AppData\Local\Packages\CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc\LocalState\rootfs
     Caveats:
         https://blogs.msdn.microsoft.com/commandline/2016/11/17/do-not-change-linux-files-using-windows-apps-and-tools/
+
+#### Mayavi
+        pip install mayavi
+        pip install --upgrade --force-reinstall mayavi

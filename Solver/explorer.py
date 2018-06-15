@@ -51,7 +51,9 @@ class ImageType(Enum):
     GradientXMask = 4,
     GradientY = 5,
     GradientYMask = 6,
-    CompositeMask = 7
+    CompositeMask = 7,
+    GradientXUnsharp = 8,
+    GradientYUnsharp = 9, 
 
 class MeshType(Enum):
     """
@@ -381,13 +383,15 @@ class Explorer():
 
         # image views
         default_image = np.zeros(shape=(2,2))
-        self.image_tabs[ImageType.DepthBuffer]    = ImageTab(self.ui.depthBufferTab, ImageType.DepthBuffer, "DepthBuffer", "gray", ImageTab.add_image, default_image)
-        self.image_tabs[ImageType.BackgroundMask] = ImageTab(self.ui.backgroundMaskTab, ImageType.BackgroundMask, "Background Mask", "gray", ImageTab.add_image, default_image)
-        self.image_tabs[ImageType.GradientX]      = ImageTab(self.ui.gradientXTab, ImageType.GradientX, "Gradient X: dI(x,y)/dx", "Blues_r", ImageTab.add_image, default_image)
-        self.image_tabs[ImageType.GradientXMask]  = ImageTab(self.ui.gradientXMaskTab, ImageType.GradientXMask, "Gradient X Mask", "gray", ImageTab.add_image, default_image)
-        self.image_tabs[ImageType.GradientY]      = ImageTab(self.ui.gradientYTab, ImageType.GradientY, "Gradient Y: dI(x,y)/dy", "Blues_r", ImageTab.add_image, default_image)
-        self.image_tabs[ImageType.GradientYMask]  = ImageTab(self.ui.gradientYMaskTab, ImageType.GradientYMask, "Gradient Y Mask", "gray", ImageTab.add_image, default_image)
-        self.image_tabs[ImageType.CompositeMask]  = ImageTab(self.ui.compositeMaskTab, ImageType.CompositeMask, "Composite Mask", "gray", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.DepthBuffer]      = ImageTab(self.ui.depthBufferTab, ImageType.DepthBuffer, "DepthBuffer", "gray", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.BackgroundMask]   = ImageTab(self.ui.backgroundMaskTab, ImageType.BackgroundMask, "Background Mask", "gray", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.GradientX]        = ImageTab(self.ui.gradientXTab, ImageType.GradientX, "Gradient X: dI(x,y)/dx", "Blues_r", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.GradientXMask]    = ImageTab(self.ui.gradientXMaskTab, ImageType.GradientXMask, "Gradient X Mask", "gray", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.GradientY]        = ImageTab(self.ui.gradientYTab, ImageType.GradientY, "Gradient Y: dI(x,y)/dy", "Blues_r", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.GradientYMask]    = ImageTab(self.ui.gradientYMaskTab, ImageType.GradientYMask, "Gradient Y Mask", "gray", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.CompositeMask]    = ImageTab(self.ui.compositeMaskTab, ImageType.CompositeMask, "Composite Mask", "gray", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.GradientXUnsharp] = ImageTab(self.ui.gradientXUnsharp, ImageType.GradientXUnsharp, "Gradient X Unsharp", "Blues_r", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.GradientYUnsharp] = ImageTab(self.ui.gradientYUnsharp, ImageType.GradientYUnsharp, "Gradient Y Unsharp", "Blues_r", ImageTab.add_image, default_image)
 
         # mesh views
         default_mesh = np.zeros(shape=(2,2))
@@ -417,15 +421,16 @@ class Explorer():
         self.ui.tauLineEdit.setText(str(self.solver.mesh_transform.tau))
         self.ui.attenuationALineEdit.setText(str(self.solver.mesh_transform.attenuation_parameters.a))
         self.ui.attenuationBLineEdit.setText(str(self.solver.mesh_transform.attenuation_parameters.b))
-        self.ui.gaussianBlurLineEdit.setText(str(self.solver.mesh_transform.gaussian_blur))
-        self.ui.gaussianSmoothLineEdit.setText(str(self.solver.mesh_transform.gaussian_smooth))
+        self.ui.gaussianLowLineEdit.setText(str(self.solver.mesh_transform.gaussian_low))
+        self.ui.gaussianHighLineEdit.setText(str(self.solver.mesh_transform.gaussian_high))
         self.ui.lambdaLineEdit.setText(str(self.solver.mesh_transform.lambda_scale))
 
         self.ui.tauCheckBox.setChecked(True)
-        self.ui.attenuationCheckBox.setChecked(False)
-        self.ui.gaussianSmoothCheckBox.setChecked(True)
-        self.ui.gaussianBlurCheckBox.setChecked(True)
+        self.ui.attenuationCheckBox.setChecked(True)
+        self.ui.gaussianLowCheckBox.setChecked(True)
+        self.ui.gaussianHighCheckBox.setChecked(True)
         self.ui.lambdaCheckBox.setChecked(True)
+
 
     def initialize_handlers(self)-> None:
         """ Initialize event handlers """
@@ -442,6 +447,11 @@ class Explorer():
         # attenuation
         self.solver.mesh_transform.attenuation_parameters.a = float(self.ui.attenuationALineEdit.text())
         self.solver.mesh_transform.attenuation_parameters.b = float(self.ui.attenuationBLineEdit.text())
+
+        # unsharp masking
+        self.solver.mesh_transform.gaussian_low = float(self.ui.gaussianLowLineEdit.text())
+        self.solver.mesh_transform.gaussian_high = float(self.ui.gaussianHighLineEdit.text())
+        self.solver.mesh_transform.lambda_scale = float(self.ui.lambdaLineEdit.text())
 
         self.calculate()
 
@@ -479,7 +489,7 @@ class Explorer():
         gradient_x_mask = self.solver.mask.mask_threshold(gradient_x, threshold)
         gradient_y_mask = self.solver.mask.mask_threshold(gradient_y, threshold)
 
-        # Modify gradient by applying threshold.
+        # Modify gradient by applying threshold, setting values above threshold to zero.
         gradient_x = self.solver.threshold.apply(gradient_x, threshold)
         gradient_y = self.solver.threshold.apply(gradient_y, threshold)
 
@@ -497,6 +507,14 @@ class Explorer():
             gradient_x = self.solver.attenuation.apply(gradient_x, self.solver.mesh_transform.attenuation_parameters)
             gradient_y = self.solver.attenuation.apply(gradient_y, self.solver.mesh_transform.attenuation_parameters)
 
+        # unsharp masking
+        gaussian_low = self.solver.mesh_transform.gaussian_low if self.ui.gaussianLowCheckBox.isChecked() else 0.0
+        gaussian_high = self.solver.mesh_transform.gaussian_high if self.ui.gaussianHighCheckBox.isChecked() else 0.0
+        lambda_scale = self.solver.mesh_transform.lambda_scale if self.ui.lambdaCheckBox.isChecked() else 1.0
+       
+        gradient_x_unsharp = self.solver.unsharpmask.apply(gradient_x, combined_mask, gaussian_low, gaussian_high, lambda_scale)
+        gradient_y_unsharp = self.solver.unsharpmask.apply(gradient_y, combined_mask, gaussian_low, gaussian_high, lambda_scale)
+
         self.image_tabs[ImageType.DepthBuffer].data    = depth_buffer
         self.image_tabs[ImageType.BackgroundMask].data = depth_buffer_mask
         self.image_tabs[ImageType.GradientX].data      = gradient_x
@@ -504,15 +522,17 @@ class Explorer():
         self.image_tabs[ImageType.GradientY].data      = gradient_y
         self.image_tabs[ImageType.GradientYMask].data  = gradient_y_mask
         self.image_tabs[ImageType.CompositeMask].data  = combined_mask
+        self.image_tabs[ImageType.GradientXUnsharp].data  = gradient_x_unsharp
+        self.image_tabs[ImageType.GradientYUnsharp].data  = gradient_y_unsharp
 
     def calculate_meshes(self) -> None:
         """
         Updates the meshes.
         """
-        self.mesh_tabs[MeshType.GradientX].mesh_widget.mesh_content.data = self.image_tabs[ImageType.GradientX].data
+        self.mesh_tabs[MeshType.GradientX].mesh_widget.mesh_content.data = self.image_tabs[ImageType.GradientXUnsharp].data
         self.mesh_tabs[MeshType.GradientX].mesh_widget.mesh_content.update_content()
 
-        self.mesh_tabs[MeshType.GradientY].mesh_widget.mesh_content.data = self.image_tabs[ImageType.GradientY].data
+        self.mesh_tabs[MeshType.GradientY].mesh_widget.mesh_content.data = self.image_tabs[ImageType.GradientYUnsharp].data
         self.mesh_tabs[MeshType.GradientY].mesh_widget.mesh_content.update_content()
 
     def calculate(self) -> None:
