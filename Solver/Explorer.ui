@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>Explorer</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="explorer.qrc">
+    <normaloff>:/Explorer/gradient.png</normaloff>:/Explorer/gradient.png</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -444,6 +448,8 @@
   <tabstop>processButton</tabstop>
   <tabstop>modelTabs</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="explorer.qrc"/>
+ </resources>
  <connections/>
 </ui>
