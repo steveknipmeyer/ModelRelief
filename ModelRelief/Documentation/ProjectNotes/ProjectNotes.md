@@ -22,9 +22,7 @@
     Explore Python unit tests.
 
     Lambda
-        
-    Attenuation
-    Implement Gaussian smoothing for the base (low frequency) mesh using Sigma1 (SigmaLow?).
+
     3D Surface Visualization
         https://jakevdp.github.io/PythonDataScienceHandbook/04.12-three-dimensional-plotting.html
         

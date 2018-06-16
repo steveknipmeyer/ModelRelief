@@ -63,5 +63,4 @@ class UnsharpMask:
         # add back the scaled high frequency components to generate the final results
         final = original_prime + (lambda_scale * high)
 
-        return low
-
+        return final

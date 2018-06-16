@@ -61,7 +61,8 @@ class MeshType(Enum):
     """
     GradientX = 1,
     GradientY = 2,
-    Model = 3
+    Model = 3,
+    Relief = 4
 
 class ImageTab():
     """ A UI tab of an image view. """
@@ -320,6 +321,19 @@ class GradientYMeshContent(MeshContent, HasTraits):
     def update_content(self):
         super().update(self.scene)
 
+class ReliefMeshContent(MeshContent, HasTraits):
+    """ Holds an instance of a Relief Mesh """
+
+    # N.B. These must be class variables to maintain scene independence.
+    scene = Instance(MlabSceneModel, ())
+    view = View(Item('scene', editor=SceneEditor(scene_class=MayaviScene), height=250, width=300, show_label=False),
+                     resizable=True # We need this to resize with the parent widget
+                     )
+
+    @on_trait_change('scene.activated')
+    def update_content(self):
+        super().update(self.scene)
+
 class MeshContainer(QtWidgets.QWidget):
     """ The QWidget containing the visualization, this is pure PyQt5 code. """
 
@@ -336,6 +350,8 @@ class MeshContainer(QtWidgets.QWidget):
             self.mesh_content = GradientXMeshContent(data, self.mesh_type)
         if self.mesh_type == MeshType.GradientY:
             self.mesh_content = GradientYMeshContent(data, self.mesh_type)
+        if self.mesh_type == MeshType.Relief:
+            self.mesh_content = ReliefMeshContent(data, self.mesh_type)
 
         # If you want to debug, beware that you need to remove the Qt input hook.
         #QtCore.pyqtRemoveInputHook()
@@ -390,8 +406,8 @@ class Explorer():
         self.image_tabs[ImageType.GradientY]        = ImageTab(self.ui.gradientYTab, ImageType.GradientY, "Gradient Y: dI(x,y)/dy", "Blues_r", ImageTab.add_image, default_image)
         self.image_tabs[ImageType.GradientYMask]    = ImageTab(self.ui.gradientYMaskTab, ImageType.GradientYMask, "Gradient Y Mask", "gray", ImageTab.add_image, default_image)
         self.image_tabs[ImageType.CompositeMask]    = ImageTab(self.ui.compositeMaskTab, ImageType.CompositeMask, "Composite Mask", "gray", ImageTab.add_image, default_image)
-        self.image_tabs[ImageType.GradientXUnsharp] = ImageTab(self.ui.gradientXUnsharp, ImageType.GradientXUnsharp, "Gradient X Unsharp", "Blues_r", ImageTab.add_image, default_image)
-        self.image_tabs[ImageType.GradientYUnsharp] = ImageTab(self.ui.gradientYUnsharp, ImageType.GradientYUnsharp, "Gradient Y Unsharp", "Blues_r", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.GradientXUnsharp] = ImageTab(self.ui.gradientXUnsharpTab, ImageType.GradientXUnsharp, "Gradient X Unsharp", "Blues_r", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.GradientYUnsharp] = ImageTab(self.ui.gradientYUnsharpTab, ImageType.GradientYUnsharp, "Gradient Y Unsharp", "Blues_r", ImageTab.add_image, default_image)
 
         # mesh views
         default_mesh = np.zeros(shape=(2,2))
@@ -410,6 +426,7 @@ class Explorer():
 
         self.mesh_tabs[MeshType.GradientX] = MeshTab(self.ui.gradientXMeshTab, MeshType.GradientX, "Gradient X Mesh", "Blues_r", ridge_mesh)
         self.mesh_tabs[MeshType.GradientY] = MeshTab(self.ui.gradientYMeshTab, MeshType.GradientY, "Gradient Y Mesh", "Blues_r", corner_mesh)
+        self.mesh_tabs[MeshType.Relief]    = MeshTab(self.ui.reliefMeshTab,    MeshType.Relief,    "Relief", "Blues_r", default_mesh)
        
         # https://www.blog.pythonlibrary.org/2015/08/18/getting-your-screen-resolution-with-python/
         self.window.resize(Explorer.WINDOW_WIDTH, Explorer.WINDOW_HEIGHT)
@@ -430,7 +447,6 @@ class Explorer():
         self.ui.gaussianLowCheckBox.setChecked(True)
         self.ui.gaussianHighCheckBox.setChecked(True)
         self.ui.lambdaCheckBox.setChecked(True)
-
 
     def initialize_handlers(self)-> None:
         """ Initialize event handlers """
@@ -525,15 +541,49 @@ class Explorer():
         self.image_tabs[ImageType.GradientXUnsharp].data  = gradient_x_unsharp
         self.image_tabs[ImageType.GradientYUnsharp].data  = gradient_y_unsharp
 
+    def mesh_from_gradients(self, gradient_x : np.ndarray, gradient_y : np.ndarray, scale: float = 1.0) -> np.ndarray:
+        """
+        Generates a mesh from the X and Y gradients.
+        Parameters
+        ----------
+        gradient_x
+            The array of x gradients: dI/dx
+        gradient_y
+            The array of y gradients: dI/dy
+        scale
+            Scale factor to be applied.
+        """
+        (rows, columns) = gradient_x.shape
+
+        mesh_x = np.zeros((rows, columns))
+        for r in range (rows):
+            for c in range (1, columns):
+                mesh_x[r, c] = mesh_x[r, c - 1] + gradient_x[r, c]
+
+        mesh_y = np.zeros((rows, columns))
+        for c in range (columns):
+            for r in range (rows - 2, -1, -1):
+                mesh_y[r, c] = mesh_y[r + 1, c] + gradient_y[r, c]
+
+        mesh = mesh_x + mesh_y
+        return (mesh_x, mesh_y, mesh)
+
     def calculate_meshes(self) -> None:
         """
         Updates the meshes.
         """
-        self.mesh_tabs[MeshType.GradientX].mesh_widget.mesh_content.data = self.image_tabs[ImageType.GradientXUnsharp].data
+        gradient_x_unsharp = self.image_tabs[ImageType.GradientXUnsharp].data
+        gradient_y_unsharp = self.image_tabs[ImageType.GradientYUnsharp].data
+        (mesh_x, mesh_y, mesh) = self.mesh_from_gradients(gradient_x_unsharp, gradient_y_unsharp)
+
+        self.mesh_tabs[MeshType.GradientX].mesh_widget.mesh_content.data = mesh_x
         self.mesh_tabs[MeshType.GradientX].mesh_widget.mesh_content.update_content()
 
-        self.mesh_tabs[MeshType.GradientY].mesh_widget.mesh_content.data = self.image_tabs[ImageType.GradientYUnsharp].data
+        self.mesh_tabs[MeshType.GradientY].mesh_widget.mesh_content.data = mesh_y
         self.mesh_tabs[MeshType.GradientY].mesh_widget.mesh_content.update_content()
+
+        self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.data = mesh
+        self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.update_content()
 
     def calculate(self) -> None:
         """ Update the UI with the representations of the DepthBuffer and Mesh."""

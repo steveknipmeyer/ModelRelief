@@ -349,7 +349,7 @@
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_8"/>
           </widget>
-          <widget class="QWidget" name="gradientXUnsharp">
+          <widget class="QWidget" name="gradientXUnsharpTab">
            <property name="focusPolicy">
             <enum>Qt::TabFocus</enum>
            </property>
@@ -358,7 +358,7 @@
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout"/>
           </widget>
-          <widget class="QWidget" name="gradientYUnsharp">
+          <widget class="QWidget" name="gradientYUnsharpTab">
            <property name="focusPolicy">
             <enum>Qt::TabFocus</enum>
            </property>
@@ -396,7 +396,7 @@
            <enum>Qt::StrongFocus</enum>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>2</number>
           </property>
           <widget class="QWidget" name="gradientXMeshTab">
            <property name="focusPolicy">
@@ -415,6 +415,12 @@
             <string>Gradient Y Mesh</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_9"/>
+          </widget>
+          <widget class="QWidget" name="reliefMeshTab">
+           <attribute name="title">
+            <string>Relief</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_12"/>
           </widget>
          </widget>
         </item>
