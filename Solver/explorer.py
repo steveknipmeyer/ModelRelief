@@ -557,13 +557,15 @@ class Explorer():
 
         mesh_x = np.zeros((rows, columns))
         for r in range (rows):
-            for c in range (1, columns):
-                mesh_x[r, c] = mesh_x[r, c - 1] + gradient_x[r, c]
+            for c in range (columns):
+                z_previous = 0.0 if c == 0 else mesh_x[r, c - 1]
+                mesh_x[r, c] = z_previous + gradient_x[r, c]
 
         mesh_y = np.zeros((rows, columns))
         for c in range (columns):
-            for r in range (rows - 2, -1, -1):
-                mesh_y[r, c] = mesh_y[r + 1, c] + gradient_y[r, c]
+            for r in range (rows):
+                z_previous = 0.0 if r == 0 else mesh_y[r - 1, c]
+                mesh_y[r, c] = z_previous + gradient_y[r, c]
 
         mesh = mesh_x + mesh_y
         return (mesh_x, mesh_y, mesh)
