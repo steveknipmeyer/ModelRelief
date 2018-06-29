@@ -403,7 +403,7 @@
             <enum>Qt::TabFocus</enum>
            </property>
            <attribute name="title">
-            <string>Gradient X Mesh</string>
+            <string>Gradient &amp;X Mesh</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_10"/>
           </widget>
@@ -412,13 +412,13 @@
             <enum>Qt::TabFocus</enum>
            </property>
            <attribute name="title">
-            <string>Gradient Y Mesh</string>
+            <string>Gradient &amp;Y Mesh</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_9"/>
           </widget>
           <widget class="QWidget" name="reliefMeshTab">
            <attribute name="title">
-            <string>Relief</string>
+            <string>&amp;Relief</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_12"/>
           </widget>
@@ -463,6 +463,8 @@
   <tabstop>tauCheckBox</tabstop>
   <tabstop>tauLineEdit</tabstop>
   <tabstop>attenuationCheckBox</tabstop>
+  <tabstop>attenuationALineEdit</tabstop>
+  <tabstop>attenuationBLineEdit</tabstop>
   <tabstop>gaussianLowCheckBox</tabstop>
   <tabstop>gaussianLowLineEdit</tabstop>
   <tabstop>gaussianHighCheckBox</tabstop>
@@ -470,6 +472,7 @@
   <tabstop>lambdaCheckBox</tabstop>
   <tabstop>lambdaLineEdit</tabstop>
   <tabstop>processButton</tabstop>
+  <tabstop>imageTabs</tabstop>
   <tabstop>modelTabs</tabstop>
  </tabstops>
  <resources>
