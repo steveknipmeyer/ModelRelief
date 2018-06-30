@@ -68,7 +68,7 @@
        </font>
       </property>
       <property name="focusPolicy">
-       <enum>Qt::NoFocus</enum>
+       <enum>Qt::ClickFocus</enum>
       </property>
       <layout class="QFormLayout" name="formLayout">
        <item row="3" column="0">
@@ -261,7 +261,7 @@
         </sizepolicy>
        </property>
        <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
+        <enum>Qt::NoFocus</enum>
        </property>
        <attribute name="title">
         <string>Images</string>
@@ -384,7 +384,7 @@
         </font>
        </property>
        <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
+        <enum>Qt::NoFocus</enum>
        </property>
        <attribute name="title">
         <string>3D Mesh</string>
@@ -393,7 +393,7 @@
         <item row="0" column="0">
          <widget class="QTabWidget" name="modelTabs">
           <property name="focusPolicy">
-           <enum>Qt::StrongFocus</enum>
+           <enum>Qt::NoFocus</enum>
           </property>
           <property name="currentIndex">
            <number>2</number>
@@ -417,6 +417,9 @@
            <layout class="QVBoxLayout" name="verticalLayout_9"/>
           </widget>
           <widget class="QWidget" name="reliefMeshTab">
+           <property name="focusPolicy">
+            <enum>Qt::TabFocus</enum>
+           </property>
            <attribute name="title">
             <string>&amp;Relief</string>
            </attribute>

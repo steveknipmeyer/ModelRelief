@@ -7,10 +7,7 @@
         Gaussian High = 1.0
         Lambda        = 3.0
         
-    Explorer
-        Preserve view when updating views.
-            https://www.vtk.org/pipermail/vtkusers/2004-March/022742.html   
-        
+    Explorer       
         How can the mayavi log be viewed?
 
         Add gulp build task for Explorer?

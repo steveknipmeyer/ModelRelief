@@ -107,6 +107,24 @@
         //  "args":[]
         },
         {
+            "name": "Python (Active File)",
+            "type": "python",
+            "pythonPath": "${config:python.pythonPath}",
+            "request": "launch",
+            "stopOnEntry": false,
+            "console": "integratedTerminal",
+            "program": "${file}",
+            "cwd": "${workspaceRoot}",
+            "debugOptions": [
+                "DebugStdLib",
+                "RedirectOutput",
+            ],
+            "env": {
+                "name": "value"
+            },
+            "args":[]
+        },
+        {
             "name": "Node Workbench",
             "type": "node",
             "request": "launch",

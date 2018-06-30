@@ -55,6 +55,26 @@ class ImageType(Enum):
     GradientXUnsharp = 8,
     GradientYUnsharp = 9, 
 
+class Camera:
+    """
+    A class representing the Mayavi scene camera.
+    """
+    def __init__(self, figure) ->None:
+        """
+        Initialization
+        """
+        self.figure = figure
+
+        self.azimuth, self.elevation, self.distance, self.focalpoint = mlab.view(figure=self.figure)
+        self.roll = mlab.roll(figure=self.figure)
+
+    def apply (self, figure=None) -> None:    
+        """
+        Apply the camera settings to the given figure.
+        """
+        figure = self.figure if figure is None else figure
+        mlab.view(azimuth=self.azimuth, elevation=self.elevation, distance=self.distance, focalpoint=self.focalpoint, roll=self.roll, figure=figure)
+
 class MeshType(Enum):
     """
     A class representing the various UI mesh view types.
@@ -254,6 +274,7 @@ class MeshContent(HasTraits):
 
         self._data = data
         self.mesh_type = mesh_type
+        self.camera = None
 
     @property
     def data(self) -> np.ndarray:
@@ -264,6 +285,14 @@ class MeshContent(HasTraits):
     def data (self, value: np.ndarray): 
         """ Sets the NumPy data array."""
         self._data = value
+
+    def set_mesh(self, mesh: np.ndarray, preserve_camera:bool = True):
+        """ Sets the active mesh."""
+        self.data = mesh
+        self.update_content()
+
+        if preserve_camera:
+            self.camera.apply()
 
     def update(self, scene):
         # This function is called when the view is opened. We don't populate the scene 
@@ -281,29 +310,28 @@ class MeshContent(HasTraits):
         colors = np.empty(X.shape, dtype=str)
         colors.fill('b')
 
-        # get active view
-        azimuth, elevation, distance, focalpoint = mlab.view()
+        # figure for this MeshContent
+        current_figure = scene.mayavi_scene
+
+        # get active camera
+        self.camera = Camera(figure=current_figure)
 
         # clear figure
-        mlab.clf(figure=scene.mayavi_scene)
-        current_figure = mlab.gcf()
+        mlab.clf(figure=current_figure)
         mlab.figure(figure=current_figure, bgcolor=(0, 0, 0))
 
         # create new figure
-        mlab.mesh(X, Y, Z, figure=scene.mayavi_scene)
-
-        # restore active view
-        # mlab.view(azimuth=azimuth, elevation=elevation, distance=distance, focalpoint=focalpoint)
+        mlab.mesh(X, Y, Z, figure=current_figure)
 
 class GradientXMeshContent(MeshContent, HasTraits):
     """ Holds an instance of a Gradient X Mesh """
 
     # N.B. These must be class variables to maintain scene independence.
     scene = Instance(MlabSceneModel, ())   
-    view = View(Item('scene', editor=SceneEditor(scene_class=MayaviScene), height=250, width=300, show_label=False),
+    view = View(Item('scene', editor=SceneEditor(scene_class=MayaviScene), show_label=False),
                      resizable=True # We need this to resize with the parent widget
                      )
-
+    
     @on_trait_change('scene.activated')
     def update_content(self):
         super().update(self.scene)
@@ -313,7 +341,7 @@ class GradientYMeshContent(MeshContent, HasTraits):
 
     # N.B. These must be class variables to maintain scene independence.
     scene = Instance(MlabSceneModel, ())
-    view = View(Item('scene', editor=SceneEditor(scene_class=MayaviScene), height=250, width=300, show_label=False),
+    view = View(Item('scene', editor=SceneEditor(scene_class=MayaviScene), show_label=False),
                      resizable=True # We need this to resize with the parent widget
                      )
 
@@ -326,7 +354,7 @@ class ReliefMeshContent(MeshContent, HasTraits):
 
     # N.B. These must be class variables to maintain scene independence.
     scene = Instance(MlabSceneModel, ())
-    view = View(Item('scene', editor=SceneEditor(scene_class=MayaviScene), height=250, width=300, show_label=False),
+    view = View(Item('scene', editor=SceneEditor(scene_class=MayaviScene), show_label=False),
                      resizable=True # We need this to resize with the parent widget
                      )
 
@@ -397,36 +425,36 @@ class Explorer():
         self.ui = explorer_ui.Ui_MainWindow() 
         self.ui.setupUi(self.window)
 
-        # # image views
-        # default_image = np.zeros(shape=(2,2))
-        # self.image_tabs[ImageType.DepthBuffer]      = ImageTab(self.ui.depthBufferTab, ImageType.DepthBuffer, "DepthBuffer", "gray", ImageTab.add_image, default_image)
-        # self.image_tabs[ImageType.BackgroundMask]   = ImageTab(self.ui.backgroundMaskTab, ImageType.BackgroundMask, "Background Mask", "gray", ImageTab.add_image, default_image)
-        # self.image_tabs[ImageType.GradientX]        = ImageTab(self.ui.gradientXTab, ImageType.GradientX, "Gradient X: dI(x,y)/dx", "Blues_r", ImageTab.add_image, default_image)
-        # self.image_tabs[ImageType.GradientXMask]    = ImageTab(self.ui.gradientXMaskTab, ImageType.GradientXMask, "Gradient X Mask", "gray", ImageTab.add_image, default_image)
-        # self.image_tabs[ImageType.GradientY]        = ImageTab(self.ui.gradientYTab, ImageType.GradientY, "Gradient Y: dI(x,y)/dy", "Blues_r", ImageTab.add_image, default_image)
-        # self.image_tabs[ImageType.GradientYMask]    = ImageTab(self.ui.gradientYMaskTab, ImageType.GradientYMask, "Gradient Y Mask", "gray", ImageTab.add_image, default_image)
-        # self.image_tabs[ImageType.CompositeMask]    = ImageTab(self.ui.compositeMaskTab, ImageType.CompositeMask, "Composite Mask", "gray", ImageTab.add_image, default_image)
-        # self.image_tabs[ImageType.GradientXUnsharp] = ImageTab(self.ui.gradientXUnsharpTab, ImageType.GradientXUnsharp, "Gradient X Unsharp", "Blues_r", ImageTab.add_image, default_image)
-        # self.image_tabs[ImageType.GradientYUnsharp] = ImageTab(self.ui.gradientYUnsharpTab, ImageType.GradientYUnsharp, "Gradient Y Unsharp", "Blues_r", ImageTab.add_image, default_image)
+        # image views
+        default_image = np.zeros(shape=(2,2))
+        self.image_tabs[ImageType.DepthBuffer]      = ImageTab(self.ui.depthBufferTab, ImageType.DepthBuffer, "DepthBuffer", "gray", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.BackgroundMask]   = ImageTab(self.ui.backgroundMaskTab, ImageType.BackgroundMask, "Background Mask", "gray", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.GradientX]        = ImageTab(self.ui.gradientXTab, ImageType.GradientX, "Gradient X: dI(x,y)/dx", "Blues_r", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.GradientXMask]    = ImageTab(self.ui.gradientXMaskTab, ImageType.GradientXMask, "Gradient X Mask", "gray", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.GradientY]        = ImageTab(self.ui.gradientYTab, ImageType.GradientY, "Gradient Y: dI(x,y)/dy", "Blues_r", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.GradientYMask]    = ImageTab(self.ui.gradientYMaskTab, ImageType.GradientYMask, "Gradient Y Mask", "gray", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.CompositeMask]    = ImageTab(self.ui.compositeMaskTab, ImageType.CompositeMask, "Composite Mask", "gray", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.GradientXUnsharp] = ImageTab(self.ui.gradientXUnsharpTab, ImageType.GradientXUnsharp, "Gradient X Unsharp", "Blues_r", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.GradientYUnsharp] = ImageTab(self.ui.gradientYUnsharpTab, ImageType.GradientYUnsharp, "Gradient Y Unsharp", "Blues_r", ImageTab.add_image, default_image)
 
-        # # mesh views
-        # default_mesh = np.zeros(shape=(2,2))
-        # ridge_mesh = np.array([[0.0, 0.0, 0.0, 0.0, 0.0],
-        #                        [0.0, 0.0, 3.0, 0.0, 0.0],
-        #                        [0.0, 0.0, 3.0, 0.0, 0.0],
-        #                        [0.0, 0.0, 3.0, 0.0, 0.0],
-        #                        [0.0, 0.0, 0.0, 0.0, 0.0]])
+        # mesh views
+        default_mesh = np.zeros(shape=(2,2))
+        ridge_mesh = np.array([[0.0, 0.0, 0.0, 0.0, 0.0],
+                               [0.0, 0.0, 3.0, 0.0, 0.0],
+                               [0.0, 0.0, 3.0, 0.0, 0.0],
+                               [0.0, 0.0, 3.0, 0.0, 0.0],
+                               [0.0, 0.0, 0.0, 0.0, 0.0]])
 
-        # corner_mesh = np.array([[1.0, 0.0, 0.0, 0.0, 1.0],
-        #                         [0.0, 0.0, 0.0, 0.0, 0.0],
-        #                         [0.0, 0.0, 0.0, 0.0, 0.0],
-        #                         [0.0, 0.0, 0.0, 0.0, 0.0],
-        #                         [1.0, 0.0, 0.0, 0.0, 1.0]])
+        corner_mesh = np.array([[1.0, 0.0, 0.0, 0.0, 1.0],
+                                [0.0, 0.0, 0.0, 0.0, 0.0],
+                                [0.0, 0.0, 0.0, 0.0, 0.0],
+                                [0.0, 0.0, 0.0, 0.0, 0.0],
+                                [1.0, 0.0, 0.0, 0.0, 1.0]])
 
 
-        # self.mesh_tabs[MeshType.GradientX] = MeshTab(self.ui.gradientXMeshTab, MeshType.GradientX, "Gradient X Mesh", "Blues_r", ridge_mesh)
-        # self.mesh_tabs[MeshType.GradientY] = MeshTab(self.ui.gradientYMeshTab, MeshType.GradientY, "Gradient Y Mesh", "Blues_r", corner_mesh)
-        # self.mesh_tabs[MeshType.Relief]    = MeshTab(self.ui.reliefMeshTab,    MeshType.Relief,    "Relief", "Blues_r", default_mesh)
+        self.mesh_tabs[MeshType.GradientX] = MeshTab(self.ui.gradientXMeshTab, MeshType.GradientX, "Gradient X Mesh", "Blues_r", ridge_mesh)
+        self.mesh_tabs[MeshType.GradientY] = MeshTab(self.ui.gradientYMeshTab, MeshType.GradientY, "Gradient Y Mesh", "Blues_r", corner_mesh)
+        self.mesh_tabs[MeshType.Relief]    = MeshTab(self.ui.reliefMeshTab,    MeshType.Relief,    "Relief", "Blues_r", default_mesh)
        
         # https://www.blog.pythonlibrary.org/2015/08/18/getting-your-screen-resolution-with-python/
         self.window.resize(Explorer.WINDOW_WIDTH, Explorer.WINDOW_HEIGHT)
@@ -570,7 +598,7 @@ class Explorer():
         mesh = mesh_x + mesh_y
         return (mesh_x, mesh_y, mesh)
 
-    def calculate_meshes(self) -> None:
+    def calculate_meshes(self, preserve_camera: bool = True) -> None:
         """
         Updates the meshes.
         """
@@ -578,16 +606,11 @@ class Explorer():
         gradient_y_unsharp = self.image_tabs[ImageType.GradientYUnsharp].data
         (mesh_x, mesh_y, mesh) = self.mesh_from_gradients(gradient_x_unsharp, gradient_y_unsharp)
        
-        self.mesh_tabs[MeshType.GradientX].mesh_widget.mesh_content.data = mesh_x
-        self.mesh_tabs[MeshType.GradientX].mesh_widget.mesh_content.update_content()
+        self.mesh_tabs[MeshType.GradientX].mesh_widget.mesh_content.set_mesh(mesh_x, preserve_camera)
+        self.mesh_tabs[MeshType.GradientY].mesh_widget.mesh_content.set_mesh(mesh_y, preserve_camera)
+        self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.set_mesh(mesh, preserve_camera)
 
-        self.mesh_tabs[MeshType.GradientY].mesh_widget.mesh_content.data = mesh_y
-        self.mesh_tabs[MeshType.GradientY].mesh_widget.mesh_content.update_content()
-
-        self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.data = mesh
-        self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.update_content()
-
-    def calculate(self) -> None:
+    def calculate(self, preserve_camera: bool = True) -> None:
         """ Update the UI with the representations of the DepthBuffer and Mesh."""
-        # self.calculate_images()
-        # self.calculate_meshes()
+        self.calculate_images()
+        self.calculate_meshes(preserve_camera)
