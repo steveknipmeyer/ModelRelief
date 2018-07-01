@@ -410,17 +410,29 @@ class ExplorerWindow(QtWidgets.QMainWindow):
         super().__init__()
 
         self.explorer = explorer
+        self.resize_timer = None
     
     def resizeEvent(self, event: QtGui.QResizeEvent):
         """ Event handler for window resize. 
+            http://www.qtcentre.org/archive/index.php/t-10000.html  
+            https://stackoverflow.com/questions/46656634/pyqt5-qtimer-count-until-specific-seconds      
         Parameters
         ----------
         event
             The PyQt5.QtGui.QResizeEvent
         """
-        # http://www.qtcentre.org/archive/index.php/t-10000.html  
-        # https://stackoverflow.com/questions/46656634/pyqt5-qtimer-count-until-specific-seconds      
-        #self.explorer.resize_ui()
+        def handler():
+            self.explorer.resize_ui()
+            self.resize_timer.stop()
+
+        # kill existing timer
+        if self.resize_timer is not None:
+            self.resize_timer.stop()
+
+        # start new timer            
+        self.resize_timer = QtCore.QTimer()
+        self.resize_timer.timeout.connect(handler)
+        self.resize_timer.start(100)
 
         return super().resizeEvent(event)
 

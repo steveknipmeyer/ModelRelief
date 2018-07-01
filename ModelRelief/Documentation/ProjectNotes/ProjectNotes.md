@@ -8,8 +8,6 @@
         Lambda        = 3.0
         
     Explorer
-        Implement a timer in Explorer.resizeEvent to resize the ImageTabs only when the resize is complete.
-               
         How can the mayavi log be viewed?
 
         Add gulp build task for Explorer?
