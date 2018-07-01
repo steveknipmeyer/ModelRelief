@@ -114,7 +114,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.overallTabsContainer.sizePolicy().hasHeightForWidth())
         self.overallTabsContainer.setSizePolicy(sizePolicy)
-        self.overallTabsContainer.setMinimumSize(QtCore.QSize(0, 900))
+        self.overallTabsContainer.setMinimumSize(QtCore.QSize(0, 0))
         self.overallTabsContainer.setBaseSize(QtCore.QSize(0, 0))
         font = QtGui.QFont()
         font.setPointSize(12)

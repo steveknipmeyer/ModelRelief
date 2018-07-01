@@ -126,9 +126,14 @@ class ImageTab():
     @data.setter
     def data (self, value: np.ndarray): 
         """ Sets the NumPy data array.
-            Regenerates the matplotlib Figure.
         """
         self._data = value
+        self.construct_tab()
+
+    def construct_tab (self): 
+        """ Constructs the UI tab with the image content.
+            Regenerates the matplotlib Figure.
+        """
 
         if (self.figure != None):
             plt.close(self.figure)
@@ -227,7 +232,14 @@ class ImageTab():
 
             figure = self.content_ctor(figure, subplot, data_array, title, cmap)
 
-        figure.set_size_inches(n_subplots * Explorer.CONTENT_DIMENSIONS, Explorer.CONTENT_DIMENSIONS)
+        xdpi = self.widget.logicalDpiX()
+        ydpi = self.widget.logicalDpiY()
+        # ToDo: How can the content area of imageTabs be obtained?
+        width  = self.widget.window().width()
+        height = self.widget.window().height()
+        size = 0.70 * max(width, height) / max(xdpi, ydpi)
+
+        figure.set_size_inches(n_subplots * size, size)
         figure.tight_layout()
 
         return figure
@@ -391,9 +403,29 @@ class MeshContainer(QtWidgets.QWidget):
         layout.addWidget(self.ui)
         self.ui.setParent(self)
 
+class ExplorerWindow(QtWidgets.QMainWindow):
+    """Wrapper around QMainWindow."""
+
+    def __init__(self, explorer: 'Explorer') -> None:
+        super().__init__()
+
+        self.explorer = explorer
+    
+    def resizeEvent(self, event: QtGui.QResizeEvent):
+        """ Event handler for window resize. 
+        Parameters
+        ----------
+        event
+            The PyQt5.QtGui.QResizeEvent
+        """
+        # http://www.qtcentre.org/archive/index.php/t-10000.html  
+        # https://stackoverflow.com/questions/46656634/pyqt5-qtimer-count-until-specific-seconds      
+        #self.explorer.resize_ui()
+
+        return super().resizeEvent(event)
+
 class Explorer():
 
-    CONTENT_DIMENSIONS = 8
     WINDOW_WIDTH = 1086
     WINDOW_HEIGHT = 960
 
@@ -421,7 +453,7 @@ class Explorer():
         self.initialize_handlers()
 
     def initialize_ui(self)-> None:
-        self.window = QtWidgets.QMainWindow()
+        self.window = ExplorerWindow(self)
         self.ui = explorer_ui.Ui_MainWindow() 
         self.ui.setupUi(self.window)
 
@@ -461,6 +493,11 @@ class Explorer():
 
         #intialize settings
         self.initialize_settings()
+
+    def resize_ui(self)-> None:
+        """ Handles a resize event for the main window. """
+        for key, value in self.image_tabs.items():
+            value.construct_tab()
 
     def initialize_settings(self) ->None:
         self.ui.tauLineEdit.setText(str(self.solver.mesh_transform.tau))
