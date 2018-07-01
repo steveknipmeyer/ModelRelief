@@ -403,40 +403,7 @@ class MeshContainer(QtWidgets.QWidget):
         layout.addWidget(self.ui)
         self.ui.setParent(self)
 
-class ExplorerWindow(QtWidgets.QMainWindow):
-    """Wrapper around QMainWindow."""
-
-    def __init__(self, explorer: 'Explorer') -> None:
-        super().__init__()
-
-        self.explorer = explorer
-        self.resize_timer = None
-    
-    def resizeEvent(self, event: QtGui.QResizeEvent):
-        """ Event handler for window resize. 
-            http://www.qtcentre.org/archive/index.php/t-10000.html  
-            https://stackoverflow.com/questions/46656634/pyqt5-qtimer-count-until-specific-seconds      
-        Parameters
-        ----------
-        event
-            The PyQt5.QtGui.QResizeEvent
-        """
-        def handler():
-            self.explorer.resize_ui()
-            self.resize_timer.stop()
-
-        # kill existing timer
-        if self.resize_timer is not None:
-            self.resize_timer.stop()
-
-        # start new timer            
-        self.resize_timer = QtCore.QTimer()
-        self.resize_timer.timeout.connect(handler)
-        self.resize_timer.start(100)
-
-        return super().resizeEvent(event)
-
-class Explorer():
+class Explorer(QtWidgets.QMainWindow):
 
     WINDOW_WIDTH = 1086
     WINDOW_HEIGHT = 960
@@ -450,11 +417,14 @@ class Explorer():
         working
             The working folder to be used for intermediate results.
         """
+        super().__init__()
+
         self.settings = settings
         self.working = working
         self.solver = Solver(settings, working)
 
         self.qapp = qapp
+        self.resize_timer = None
 
         # initialize UI
         self.image_tabs: Dict[ImageType, ImageTab] = {}
@@ -465,9 +435,8 @@ class Explorer():
         self.initialize_handlers()
 
     def initialize_ui(self)-> None:
-        self.window = ExplorerWindow(self)
         self.ui = explorer_ui.Ui_MainWindow() 
-        self.ui.setupUi(self.window)
+        self.ui.setupUi(self)
 
         # image views
         default_image = np.zeros(shape=(2,2))
@@ -501,7 +470,7 @@ class Explorer():
         self.mesh_tabs[MeshType.Relief]    = MeshTab(self.ui.reliefMeshTab,    MeshType.Relief,    "Relief", "Blues_r", default_mesh)
        
         # https://www.blog.pythonlibrary.org/2015/08/18/getting-your-screen-resolution-with-python/
-        self.window.resize(Explorer.WINDOW_WIDTH, Explorer.WINDOW_HEIGHT)
+        self.resize(Explorer.WINDOW_WIDTH, Explorer.WINDOW_HEIGHT)
 
         #intialize settings
         self.initialize_settings()
@@ -510,6 +479,30 @@ class Explorer():
         """ Handles a resize event for the main window. """
         for key, value in self.image_tabs.items():
             value.construct_tab()
+
+    def resizeEvent(self, event: QtGui.QResizeEvent):
+        """ Event handler for window resize. 
+            http://www.qtcentre.org/archive/index.php/t-10000.html  
+            https://stackoverflow.com/questions/46656634/pyqt5-qtimer-count-until-specific-seconds      
+        Parameters
+        ----------
+        event
+            The PyQt5.QtGui.QResizeEvent
+        """
+        def handler():
+            self.resize_ui()
+            self.resize_timer.stop()
+
+        # kill existing timer
+        if self.resize_timer is not None:
+            self.resize_timer.stop()
+
+        # start new timer            
+        self.resize_timer = QtCore.QTimer()
+        self.resize_timer.timeout.connect(handler)
+        self.resize_timer.start(100)
+
+        return super().resizeEvent(event)
 
     def initialize_settings(self) ->None:
         self.ui.tauLineEdit.setText(str(self.solver.mesh_transform.tau))
@@ -561,10 +554,6 @@ class Explorer():
             self.solver = Solver(filenames[0], self.working)
             self.initialize_settings()
             self.calculate()
-
-    def show(self) ->None:
-        """ Show the MainWindow. """
-        self.window.show()
 
     def calculate_images(self) -> None:
         """
