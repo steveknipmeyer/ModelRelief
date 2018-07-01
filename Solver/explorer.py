@@ -234,13 +234,16 @@ class ImageTab():
 
         xdpi = self.widget.logicalDpiX()
         ydpi = self.widget.logicalDpiY()
-        # ToDo: How can the content area of imageTabs be obtained?
-        width  = self.widget.window().width()
-        height = self.widget.window().height()
-        size = 0.70 * max(width, height) / max(xdpi, ydpi)
+
+        width  = self.widget.parent().width()
+        height = self.widget.parent().height()
+        size = min(width, height) / max(xdpi, ydpi)
 
         figure.set_size_inches(n_subplots * size, size)
-        figure.tight_layout()
+        try:
+            figure.tight_layout()
+        except ValueError:
+            pass            
 
         return figure
 
