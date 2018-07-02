@@ -200,6 +200,44 @@ class ImageTab():
 
         return figure
 
+    def size_figure(self, figure: Figure, n_subplots: int) -> None:
+        """
+        Sizes a figure to fit the aspect ratio and dimensions of the parent tab.
+        Parameters
+        ----------
+        figure
+            The Figure to resize.
+        n_subplots
+            Number of subplots.
+        """
+        xdpi = self.widget.logicalDpiX()
+        ydpi = self.widget.logicalDpiY()
+        dpi = max(xdpi, ydpi)
+
+        widget_height = self.widget.parent().height() / dpi
+        widget_width  = self.widget.parent().width() / dpi
+        widget_aspect_ratio = widget_height / widget_width
+        baseline_height, baseline_width = figure.get_size_inches()
+        figure_aspect_ratio = baseline_height / baseline_width
+
+        # widget is "flatter" than figure
+        widget_aspect_ratio_smaller = widget_aspect_ratio < figure_aspect_ratio
+
+        display_height = widget_height if widget_aspect_ratio_smaller else widget_width * figure_aspect_ratio
+        display_width  = display_height / figure_aspect_ratio
+
+        if (self.widget.objectName() == "depthBufferTab"):
+            # print (f"Widget: AR = {widget_aspect_ratio}, height = {widget_height}, width = {widget_width}")
+            # print (f"Figure: AR = {figure_aspect_ratio}, height = {baseline_height}, width = {baseline_width}")
+            # print (f"Display: height = {display_height}, width = {display_width}")
+            # print ()
+        
+        figure.set_size_inches(n_subplots * display_width, display_height)
+        try:
+            figure.tight_layout()
+        except ValueError:
+            pass            
+
     def construct_subplot_figures(self, data, rows, titles = None, cmaps = None) -> plt.Figure:
         """Display a list of subplots in a single figure with matplotlib.
         https://gist.github.com/soply/f3eec2e79c165e39c9d540e916142ae1
@@ -232,18 +270,7 @@ class ImageTab():
 
             figure = self.content_ctor(figure, subplot, data_array, title, cmap)
 
-        xdpi = self.widget.logicalDpiX()
-        ydpi = self.widget.logicalDpiY()
-
-        width  = self.widget.parent().width()
-        height = self.widget.parent().height()
-        size = min(width, height) / max(xdpi, ydpi)
-
-        figure.set_size_inches(n_subplots * size, size)
-        try:
-            figure.tight_layout()
-        except ValueError:
-            pass            
+        self.size_figure(figure, n_subplots)
 
         return figure
 

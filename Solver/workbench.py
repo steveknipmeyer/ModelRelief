@@ -41,8 +41,9 @@ class Workbench:
         """
         Run the application.
         """ 
+        self.explorer.showMinimized()
         self.explorer.calculate(preserve_camera=False)
-        self.explorer.show()
+        self.explorer.showNormal()
 
         exit(self.qapp.exec_()) 
 
