@@ -10,6 +10,9 @@
     Change JSON paths to be relative to storage root so they will be portable.
             
     Explorer
+        Why does PyLint issue Qt warnings (on Lambda?)
+            E1101:Module 'PyQt5.QtWidgets' has no 'QWidget' member
+            
         How can the mayavi log be viewed?
 
         Add gulp build task for Explorer?
