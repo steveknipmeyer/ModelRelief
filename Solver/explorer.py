@@ -35,7 +35,7 @@ from mayavi import mlab
 import numpy as np
 from numpy import pi, sin, cos, mgrid
 from enum import Enum
-from typing import Callable, Dict
+from typing import Callable, Dict, Optional
 
 from attenuation import AttenuationParameters
 from solver import Solver
@@ -322,7 +322,7 @@ class MeshContent(HasTraits):
 
         self._data = data
         self.mesh_type = mesh_type
-        self.camera = None
+        self.camera: Optional[Camera] = None
 
     @property
     def data(self) -> np.ndarray:
@@ -460,7 +460,7 @@ class Explorer(QtWidgets.QMainWindow):
         self.solver = Solver(settings, working)
 
         self.qapp = qapp
-        self.resize_timer = None
+        self.resize_timer: Optional[QtCore.QTimer]= None
 
         # initialize UI
         self.image_tabs: Dict[ImageType, ImageTab] = {}
@@ -513,7 +513,7 @@ class Explorer(QtWidgets.QMainWindow):
 
     def resize_ui(self)-> None:
         """ Handles a resize event for the main window. """
-        for key, value in self.image_tabs.items():
+        for _, value in self.image_tabs.items():
             value.construct_tab()
 
     def resizeEvent(self, event: QtGui.QResizeEvent):
@@ -661,13 +661,13 @@ class Explorer(QtWidgets.QMainWindow):
         for r in range (rows):
             for c in range (columns):
                 z_previous = 0.0 if c == 0 else mesh_x[r, c - 1]
-                mesh_x[r, c] = z_previous + gradient_x[r, c]
+                mesh_x[r, c] = scale * (z_previous + gradient_x[r, c])
 
         mesh_y = np.zeros((rows, columns))
         for c in range (columns):
             for r in range (rows):
                 z_previous = 0.0 if r == 0 else mesh_y[r - 1, c]
-                mesh_y[r, c] = z_previous + gradient_y[r, c]
+                mesh_y[r, c] = scale * (z_previous + gradient_y[r, c])
 
         mesh = mesh_x + mesh_y
         return (mesh_x, mesh_y, mesh)
