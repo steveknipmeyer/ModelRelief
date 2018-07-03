@@ -6,7 +6,9 @@
         Gaussian Low  = 4.0
         Gaussian High = 1.0
         Lambda        = 3.0
-        
+
+    Change JSON paths to be relative to storage root so they will be portable.
+            
     Explorer
         How can the mayavi log be viewed?
 
