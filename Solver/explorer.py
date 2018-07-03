@@ -217,7 +217,13 @@ class ImageTab():
         widget_height = self.widget.parent().height() / dpi
         widget_width  = self.widget.parent().width() / dpi
         widget_aspect_ratio = widget_height / widget_width
+
         baseline_height, baseline_width = figure.get_size_inches()
+        # add height of navigation bar
+        if self.nav is not None:
+            nav_height = self.nav.height() / dpi
+            baseline_height += nav_height
+        
         figure_aspect_ratio = baseline_height / baseline_width
 
         # widget is "flatter" than figure
@@ -226,7 +232,7 @@ class ImageTab():
         display_height = widget_height if widget_aspect_ratio_smaller else widget_width * figure_aspect_ratio
         display_width  = display_height / figure_aspect_ratio
 
-        if (self.widget.objectName() == "depthBufferTab"):
+        # if (self.widget.objectName() == "depthBufferTab"):
             # print (f"Widget: AR = {widget_aspect_ratio}, height = {widget_height}, width = {widget_width}")
             # print (f"Figure: AR = {figure_aspect_ratio}, height = {baseline_height}, width = {baseline_width}")
             # print (f"Display: height = {display_height}, width = {display_width}")

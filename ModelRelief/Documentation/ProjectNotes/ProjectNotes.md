@@ -8,6 +8,9 @@
         Lambda        = 3.0
         
     Explorer
+        Why does PyLint issue Qt warnings (on Lambda?)
+            E1101:Module 'PyQt5.QtWidgets' has no 'QWidget' member
+            
         How can the mayavi log be viewed?
 
         Add gulp build task for Explorer?
