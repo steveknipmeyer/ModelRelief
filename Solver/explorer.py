@@ -339,7 +339,7 @@ class MeshContent(HasTraits):
         self.data = mesh
         self.update_content()
 
-        if preserve_camera:
+        if preserve_camera and self.camera is not None:
             self.camera.apply()
 
     def update(self, scene):
@@ -460,7 +460,7 @@ class Explorer(QtWidgets.QMainWindow):
         self.solver = Solver(settings, working)
 
         self.qapp = qapp
-        self.resize_timer: Optional[QtCore.QTimer]= None
+        self.resize_timer: Optional[QtCore.QTimer] = None
 
         # initialize UI
         self.image_tabs: Dict[ImageType, ImageTab] = {}
