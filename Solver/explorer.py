@@ -38,6 +38,7 @@ from enum import Enum
 from typing import Callable, Dict, Optional
 
 from attenuation import AttenuationParameters
+from poisson import Poisson
 from solver import Solver
 import explorer_ui
 
@@ -458,7 +459,7 @@ class Explorer(QtWidgets.QMainWindow):
         self.settings = settings
         self.working = working
         self.solver = Solver(settings, working)
-
+     
         self.qapp = qapp
         self.resize_timer: Optional[QtCore.QTimer] = None
 
@@ -676,13 +677,22 @@ class Explorer(QtWidgets.QMainWindow):
         """
         Updates the meshes.
         """
+
         gradient_x_unsharp = self.image_tabs[ImageType.GradientXUnsharp].data
         gradient_y_unsharp = self.image_tabs[ImageType.GradientYUnsharp].data
         (mesh_x, mesh_y, mesh) = self.mesh_from_gradients(gradient_x_unsharp, gradient_y_unsharp)
-       
+
+        dGdx = self.solver.gradient.calculate(gradient_x_unsharp)
+        dGdy = self.solver.gradient.calculate(gradient_y_unsharp)
+        divG = dGdx[1] + dGdy[0]
+        divG = dGdx[1]
+        divG = dGdy[0]
+        mesh = self.solver.poisson.solve(divG)
+        
         self.mesh_tabs[MeshType.GradientX].mesh_widget.mesh_content.set_mesh(mesh_x, preserve_camera)
         self.mesh_tabs[MeshType.GradientY].mesh_widget.mesh_content.set_mesh(mesh_y, preserve_camera)
         self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.set_mesh(mesh, preserve_camera)
+
 
     def calculate(self, preserve_camera: bool = True) -> None:
         """ Update the UI with the representations of the DepthBuffer and Mesh."""
