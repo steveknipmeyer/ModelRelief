@@ -402,26 +402,8 @@
            <enum>Qt::NoFocus</enum>
           </property>
           <property name="currentIndex">
-           <number>2</number>
+           <number>0</number>
           </property>
-          <widget class="QWidget" name="gradientXMeshTab">
-           <property name="focusPolicy">
-            <enum>Qt::TabFocus</enum>
-           </property>
-           <attribute name="title">
-            <string>Gradient &amp;X Mesh</string>
-           </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_10"/>
-          </widget>
-          <widget class="QWidget" name="gradientYMeshTab">
-           <property name="focusPolicy">
-            <enum>Qt::TabFocus</enum>
-           </property>
-           <attribute name="title">
-            <string>Gradient &amp;Y Mesh</string>
-           </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_9"/>
-          </widget>
           <widget class="QWidget" name="reliefMeshTab">
            <property name="focusPolicy">
             <enum>Qt::TabFocus</enum>

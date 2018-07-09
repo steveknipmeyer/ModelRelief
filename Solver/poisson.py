@@ -14,6 +14,7 @@ import pyamg
 import numpy as np
 
 from services import Services
+from mathtools import MathTools
 
 class Poisson:
     """
@@ -33,7 +34,7 @@ class Poisson:
 
     def solve(self, divG: np.ndarray) -> np.ndarray:
         """
-        Solves the Poisson equation:
+        Solves the Poisson equation: 
             Laplacian (I) = div (G)
             Ax = b
         where 
@@ -53,5 +54,5 @@ class Poisson:
 
         x = ml.solve(b, tol=1e-10)                                                  # solve Ax=b to a tolerance of 1e-10
         I = x.reshape((n, n))
-
+       
         return I

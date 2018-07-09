@@ -38,6 +38,7 @@ from enum import Enum
 from typing import Callable, Dict, Optional
 
 from attenuation import AttenuationParameters
+from mathtools import MathTools
 from poisson import Poisson
 from solver import Solver
 import explorer_ui
@@ -80,10 +81,8 @@ class MeshType(Enum):
     """
     A class representing the various UI mesh view types.
     """
-    GradientX = 1,
-    GradientY = 2,
-    Model = 3,
-    Relief = 4
+    Model  = 1,
+    Relief = 2
 
 class ImageTab():
     """ A UI tab of an image view. """
@@ -423,10 +422,6 @@ class MeshContainer(QtWidgets.QWidget):
         layout.setContentsMargins(0,0,0,0)
         layout.setSpacing(0)
 
-        if self.mesh_type == MeshType.GradientX:
-            self.mesh_content = GradientXMeshContent(data, self.mesh_type)
-        if self.mesh_type == MeshType.GradientY:
-            self.mesh_content = GradientYMeshContent(data, self.mesh_type)
         if self.mesh_type == MeshType.Relief:
             self.mesh_content = ReliefMeshContent(data, self.mesh_type)
 
@@ -502,8 +497,6 @@ class Explorer(QtWidgets.QMainWindow):
                                 [1.0, 0.0, 0.0, 0.0, 1.0]])
 
 
-        self.mesh_tabs[MeshType.GradientX] = MeshTab(self.ui.gradientXMeshTab, MeshType.GradientX, "Gradient X Mesh", "Blues_r", ridge_mesh)
-        self.mesh_tabs[MeshType.GradientY] = MeshTab(self.ui.gradientYMeshTab, MeshType.GradientY, "Gradient Y Mesh", "Blues_r", corner_mesh)
         self.mesh_tabs[MeshType.Relief]    = MeshTab(self.ui.reliefMeshTab,    MeshType.Relief,    "Relief", "Blues_r", default_mesh)
        
         # https://www.blog.pythonlibrary.org/2015/08/18/getting-your-screen-resolution-with-python/
@@ -677,22 +670,30 @@ class Explorer(QtWidgets.QMainWindow):
         """
         Updates the meshes.
         """
+        gradient_x = self.image_tabs[ImageType.GradientX].data
+        gradient_y = self.image_tabs[ImageType.GradientY].data
 
         gradient_x_unsharp = self.image_tabs[ImageType.GradientXUnsharp].data
         gradient_y_unsharp = self.image_tabs[ImageType.GradientYUnsharp].data
-        (mesh_x, mesh_y, mesh) = self.mesh_from_gradients(gradient_x_unsharp, gradient_y_unsharp)
-
-        dGdx = self.solver.gradient.calculate(gradient_x_unsharp)
-        dGdy = self.solver.gradient.calculate(gradient_y_unsharp)
-        divG = dGdx[1] + dGdy[0]
-        divG = dGdx[1]
-        divG = dGdy[0]
-        mesh = self.solver.poisson.solve(divG)
         
-        self.mesh_tabs[MeshType.GradientX].mesh_widget.mesh_content.set_mesh(mesh_x, preserve_camera)
-        self.mesh_tabs[MeshType.GradientY].mesh_widget.mesh_content.set_mesh(mesh_y, preserve_camera)
-        self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.set_mesh(mesh, preserve_camera)
+        dGxdx = self.solver.gradient.calculate(gradient_x)
+        dGydy = self.solver.gradient.calculate(gradient_y)
 
+        divG = dGxdx[1] + dGydy[0]
+
+        mesh = self.solver.poisson.solve(divG)
+
+        print ("Results")
+        print ("------------------------------------------------------------")
+        MathTools.print_array("I", self.solver.depth_buffer.floats)
+        MathTools.print_array("Gx", gradient_x)
+        MathTools.print_array("Gy", gradient_y)
+        MathTools.print_array("dGxdx", dGxdx[1])
+        MathTools.print_array("dGydy", dGydy[0])
+        MathTools.print_array("divG", divG)
+        MathTools.print_array("Poisson Solution", mesh)
+        
+        self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.set_mesh(mesh, preserve_camera)
 
     def calculate(self, preserve_camera: bool = True) -> None:
         """ Update the UI with the representations of the DepthBuffer and Mesh."""

@@ -23,6 +23,31 @@ from gradient import Gradient
 from mask import Mask
 from services import Services
 
+class TestDepthBuffer:
+    """
+    A simple model that provides easy inspection of intermedite results.
+    Used for testing the solution pipeline.
+    """
+    def __init__(self):
+        """
+        Initialize an instancee of a DepthBuffer.
+        """
+        dimensions = 8
+        self.width  = dimensions
+        self.height = dimensions
+        
+        data = np.array(
+        [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 2.0, 2.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 2.0, 2.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 2.0, 2.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 2.0, 2.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        )
+        self.floats = data.reshape((dimensions, dimensions))
+
 class DepthBuffer:
     """
     A rendering DepthBuffer created from a Model3d and a Camera.
@@ -103,7 +128,7 @@ class DepthBuffer:
     @property
     def floats_raw(self) -> List[float]:
         """
-    e    Constructs a list of floats that are in raw normalized DB format [0,1] from the DepthBuffer.
+        Constructs a list of floats that are in raw normalized DB format [0,1] from the DepthBuffer.
         """
         # convert to floats
         floats = FileManager().unpack_floats(self.bytes_raw)
@@ -159,17 +184,22 @@ class DepthBuffer:
         Returns an np 2D array that holds the depths (model units).
         N.B. The model depths are scaled to match a unit differential grid.
         """
-        # cached?
-        if (len(self._floats) > 0):
-            return self._floats
+        test_depth_buffer = TestDepthBuffer()
+        self._floats = test_depth_buffer.floats
+        self._width = test_depth_buffer.width
+        self._height = test_depth_buffer.height
 
-        floats = np.array(self.floats_unit_differential)
+        # # cached?
+        # if (len(self._floats) > 0):
+        #     return self._floats
 
-        # transform 1D -> 2D
-        a = np.array(floats)
-        a = np.reshape(a, (self.height, self.width))
+        # floats = np.array(self.floats_unit_differential)
 
-        self._floats = a       
+        # # transform 1D -> 2D
+        # a = np.array(floats)
+        # a = np.reshape(a, (self.height, self.width))
+
+        # self._floats = a       
 
         return self._floats
 

@@ -33,6 +33,7 @@ path=%path%;C:\Program Files\Git
 path=%path%;C:\Program Files (x86)\WinMerge
 path=%path%;C:\Program Files\KDiff3
 
+
 call "C:\Program Files\nodejs\nodevars.bat"
 
 :: PYTHON
@@ -42,6 +43,8 @@ set PY_PYTHON=3
 set PYTHONPATH=%PYTHONPATH%;%MRSolution%\Tools\
 :: MyPy Linter
 set MYPYPATH=%MRSolution%\Tools\
+:: Anaconda
+SetAnacondaPath
 
 :: Visual Studio 2017
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\VsDevCmd.bat"

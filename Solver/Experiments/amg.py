@@ -22,11 +22,6 @@ def experiment():
     x = ml.solve(b, tol=1e-10)                          # solve Ax=b to a tolerance of 1e-10
 
     u = np.reshape(x, [4, 4])
-    for row in range(4):
-        for column in range(4):
-            value = '{:.2f}'.format(u[row, column])
-            print ('{:>8s}'.format(value), end="")
-        print('')            
 
     print("residual: ", np.linalg.norm(b-A*x))          # compute norm of residual vector
 
