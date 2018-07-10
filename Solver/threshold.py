@@ -25,7 +25,7 @@ class Threshold:
         Parameters
         ----------
         services
-            Service provider (loggins, timers, etc.)
+            Service provider (logging, timers, etc.)
         """
         self.debug = True
         self.services = services

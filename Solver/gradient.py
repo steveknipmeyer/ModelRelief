@@ -13,6 +13,7 @@
 import numpy as np
 from typing import List
 
+from difference import Difference, FiniteDifference, Axis
 from services import Services
 
 class Gradient:
@@ -26,12 +27,12 @@ class Gradient:
         Parameters
         ----------
         services
-            Service provider (loggins, timers, etc.)
+            Service provider (logging, timers, etc.)e
         """
         self.debug = True
         self.services = services
 
-    def calculate(self, array: np.ndarray) -> List[np.ndarray]: 
+    def calculate(self, array: np.ndarray) -> List[np.ndarray]:
         """
         Calculates the gradients of an ndarray.
         Parameters
@@ -40,10 +41,16 @@ class Gradient:
             The ndarray for which the gradients will be calculated.
         Returns
         -------
-        An ndarray for each dimension. 
+        An ndarray for each dimension.
         The gradients are returned in Numpy axis order (row, column, ...) therefore:
             results[0] = Y gradient
             results[1] = X gradient
         """
-        result = np.gradient(array)
+
+        # result = np.gradient(array)
+
+        difference = Difference(self.services)
+        gradient_x = difference.difference_x(array, FiniteDifference.Forward)
+        gradient_y = difference.difference_y(array, FiniteDifference.Forward)
+        result = [gradient_y, gradient_x]
         return result

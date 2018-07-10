@@ -37,14 +37,14 @@ class TestDepthBuffer:
         self.height = dimensions
         
         data = np.array(
-        [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 1.0, 2.0, 2.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 1.0, 2.0, 2.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 1.0, 2.0, 2.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 1.0, 2.0, 2.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        [  0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+           0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+           0.0,   0.0,   5.0,   6.0,   7.0,   8.0,   0.0,   0.0,
+           0.0,   0.0,   5.0,   6.0,   7.0,   8.0,   0.0,   0.0,
+           0.0,   0.0,   5.0,   6.0,   7.0,   8.0,   0.0,   0.0,
+           0.0,   0.0,   5.0,   6.0,   7.0,   8.0,   0.0,   0.0,
+           0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+           0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0]
         )
         self.floats = data.reshape((dimensions, dimensions))
 
@@ -66,7 +66,7 @@ class DepthBuffer:
         services
             Service support for logging, timers, etc.
         """
-        self.debug = False
+        self.debug = True
 
         self.settings = settings
         self.working_folder = working_folder
@@ -237,7 +237,7 @@ class DepthBuffer:
     @property
     def background_mask(self) -> np.ndarray:
         """
-        Returns the background mask of the DepthBuffer.
+        Retureens the background mask of the DepthBuffer.
         """
         mask = Mask(self.services)
         b_mask = mask.background_from_depth_buffer(self.floats)

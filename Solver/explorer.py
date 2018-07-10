@@ -48,7 +48,7 @@ class ImageType(Enum):
     A class representing the various UI image view types.
     """
     DepthBuffer = 1,
-    Relief = 2, 
+    Relief = 2,
     BackgroundMask = 3,
     GradientX = 4,
     GradientXMask = 5,
@@ -56,7 +56,7 @@ class ImageType(Enum):
     GradientYMask = 7,
     CompositeMask = 8,
     GradientXUnsharp = 9,
-    GradientYUnsharp = 10, 
+    GradientYUnsharp = 10,
 
 class Camera:
     """
@@ -71,7 +71,7 @@ class Camera:
         self.azimuth, self.elevation, self.distance, self.focalpoint = mlab.view(figure=self.figure)
         self.roll = mlab.roll(figure=self.figure)
 
-    def apply (self, figure=None) -> None:    
+    def apply (self, figure=None) -> None:
         """
         Apply the camera settings to the given figure.
         """
@@ -89,7 +89,7 @@ class ImageTab():
     """ A UI tab of an image view. """
 
     def __init__(self, widget: QtWidgets.QWidget, image_type: ImageType, title: str, cmap: str, content_ctor: Callable[[Figure, plt.Axes, np.ndarray, str, str], Figure], data: np.ndarray,  ) -> None:
-        """ A UI image tab in the Explorer. 
+        """ A UI image tab in the Explorer.
         Parameters
         ----------
         widget
@@ -103,10 +103,10 @@ class ImageTab():
         content_ctor
             The content constructor function that populates the given figure.
         data
-            The Numpy array holding the image data. 
+            The Numpy array holding the image data.
         """
         self.widget = widget
-        self.image_type = image_type 
+        self.image_type = image_type
         self.title = title
         self.cmap = cmap
 
@@ -125,13 +125,13 @@ class ImageTab():
         return self._data
 
     @data.setter
-    def data (self, value: np.ndarray): 
+    def data (self, value: np.ndarray):
         """ Sets the NumPy data array.
         """
         self._data = value
         self.construct_tab()
 
-    def construct_tab (self): 
+    def construct_tab (self):
         """ Constructs the UI tab with the image content.
             Regenerates the matplotlib Figure.
         """
@@ -168,7 +168,7 @@ class ImageTab():
             The subplot Axes of the Figure.
         image
             The image array.
-        title 
+        title
             The title of the image Figure.
         cmap
             The colormap to be used.
@@ -191,7 +191,7 @@ class ImageTab():
 
         # colorbar
         # https://matplotlib.org/examples/images_contours_and_fields/pcolormesh_levels.html
-        colorbar = figure.colorbar(plot, ax=subplot, drawedges=True)        
+        colorbar = figure.colorbar(plot, ax=subplot, drawedges=True)
         plt.setp(plt.getp(colorbar.ax.axes, 'yticklabels'), color='w')  # set colorbar to match Y labels
                                                                         # yticklabels color
         colorbar.outline.set_edgecolor('w')                             # set colorbar box color
@@ -224,7 +224,7 @@ class ImageTab():
         if self.nav is not None:
             nav_height = self.nav.height() / dpi
             baseline_height += nav_height
-        
+
         figure_aspect_ratio = baseline_height / baseline_width
 
         # widget is "flatter" than figure
@@ -238,12 +238,12 @@ class ImageTab():
             # print (f"Figure: AR = {figure_aspect_ratio}, height = {baseline_height}, width = {baseline_width}")
             # print (f"Display: height = {display_height}, width = {display_width}")
             # print ()
-        
+
         figure.set_size_inches(n_subplots * display_width, display_height)
         try:
             figure.tight_layout()
         except ValueError:
-            pass            
+            pass
 
     def construct_subplot_figures(self, data, rows, titles = None, cmaps = None) -> plt.Figure:
         """Display a list of subplots in a single figure with matplotlib.
@@ -285,7 +285,7 @@ class MeshTab():
     """ A UI tab of a mesh view. """
 
     def __init__(self, widget: QtWidgets.QWidget, mesh_type: MeshType, title: str, cmap: str, data: np.ndarray,  ) -> None:
-        """ A UI mesh tab in the Explorer. 
+        """ A UI mesh tab in the Explorer.
         Parameters
         ----------
         widget
@@ -297,21 +297,21 @@ class MeshTab():
         cmap
             The matplotlib colormap.
         data
-            The Numpy array holding the mesh data. 
+            The Numpy array holding the mesh data.
         """
         self.widget = widget
-        self.mesh_type = mesh_type 
+        self.mesh_type = mesh_type
         self.title = title
         self.cmap = cmap
 
-        self.mesh_widget = MeshContainer(data, self.mesh_type)        
+        self.mesh_widget = MeshContainer(data, self.mesh_type)
         self.widget.layout().addWidget(self.mesh_widget)
 
 class MeshContent(HasTraits):
     """ Holds an instance of a 3D Mesh """
 
     def __init__ (self, data: np.ndarray, mesh_type: MeshType) -> None:
-        """ Initialization. 
+        """ Initialization.
         Parameters
         ----------
         data
@@ -331,7 +331,7 @@ class MeshContent(HasTraits):
         return self._data
 
     @data.setter
-    def data (self, value: np.ndarray): 
+    def data (self, value: np.ndarray):
         """ Sets the NumPy data array."""
         self._data = value
 
@@ -344,7 +344,7 @@ class MeshContent(HasTraits):
             self.camera.apply()
 
     def update(self, scene):
-        # This function is called when the view is opened. We don't populate the scene 
+        # This function is called when the view is opened. We don't populate the scene
         # when the view is not yet open, as some VTK features require a GLContext.
 
         shape = self.data.shape
@@ -376,11 +376,11 @@ class ModelMeshContent(MeshContent, HasTraits):
     """ Holds an instance of a Model Mesh """
 
     # N.B. These must be class variables to maintain scene independence.
-    scene = Instance(MlabSceneModel, ())   
+    scene = Instance(MlabSceneModel, ())
     view = View(Item('scene', editor=SceneEditor(scene_class=MayaviScene), show_label=False),
                      resizable=True # We need this to resize with the parent widget
                      )
-    
+
     @on_trait_change('scene.activated')
     def update_content(self):
         super().update(self.scene)
@@ -445,7 +445,7 @@ class Explorer(QtWidgets.QMainWindow):
         self.settings = settings
         self.working = working
         self.solver = Solver(settings, working)
-     
+
         self.qapp = qapp
         self.resize_timer: Optional[QtCore.QTimer] = None
 
@@ -453,12 +453,12 @@ class Explorer(QtWidgets.QMainWindow):
         self.image_tabs: Dict[ImageType, ImageTab] = {}
         self.mesh_tabs: Dict[MeshType, MeshTab] = {}
         self.initialize_ui()
-     
+
         # event handlers
         self.initialize_handlers()
 
     def initialize_ui(self)-> None:
-        self.ui = explorer_ui.Ui_MainWindow() 
+        self.ui = explorer_ui.Ui_MainWindow()
         self.ui.setupUi(self)
 
         # image views
@@ -504,9 +504,9 @@ class Explorer(QtWidgets.QMainWindow):
             value.construct_tab()
 
     def resizeEvent(self, event: QtGui.QResizeEvent):
-        """ Event handler for window resize. 
-            http://www.qtcentre.org/archive/index.php/t-10000.html  
-            https://stackoverflow.com/questions/46656634/pyqt5-qtimer-count-until-specific-seconds      
+        """ Event handler for window resize.
+            http://www.qtcentre.org/archive/index.php/t-10000.html
+            https://stackoverflow.com/questions/46656634/pyqt5-qtimer-count-until-specific-seconds
         Parameters
         ----------
         event
@@ -520,7 +520,7 @@ class Explorer(QtWidgets.QMainWindow):
         if self.resize_timer is not None:
             self.resize_timer.stop()
 
-        # start new timer            
+        # start new timer
         self.resize_timer = QtCore.QTimer()
         self.resize_timer.timeout.connect(handler)
         self.resize_timer.start(100)
@@ -616,7 +616,7 @@ class Explorer(QtWidgets.QMainWindow):
         gaussian_low = self.solver.mesh_transform.gaussian_low if self.ui.gaussianLowCheckBox.isChecked() else 0.0
         gaussian_high = self.solver.mesh_transform.gaussian_high if self.ui.gaussianHighCheckBox.isChecked() else 0.0
         lambda_scale = self.solver.mesh_transform.lambda_scale if self.ui.lambdaCheckBox.isChecked() else 1.0
-       
+
         gradient_x_unsharp = self.solver.unsharpmask.apply(gradient_x, combined_mask, gaussian_low, gaussian_high, lambda_scale)
         gradient_y_unsharp = self.solver.unsharpmask.apply(gradient_y, combined_mask, gaussian_low, gaussian_high, lambda_scale)
 
@@ -668,7 +668,7 @@ class Explorer(QtWidgets.QMainWindow):
 
         gradient_x_unsharp = self.image_tabs[ImageType.GradientXUnsharp].data
         gradient_y_unsharp = self.image_tabs[ImageType.GradientYUnsharp].data
-        
+
         dGxdx = self.solver.gradient.calculate(gradient_x)
         dGydy = self.solver.gradient.calculate(gradient_y)
 
@@ -677,15 +677,15 @@ class Explorer(QtWidgets.QMainWindow):
         mesh = self.solver.poisson.solve(divG)
 
         if (self.debug):
-            (rows, columns) = self.solver.depth_buffer.floats.shape
+            (rows, _) = self.solver.depth_buffer.floats.shape
             maximum_rows = 16
             if rows <= maximum_rows:
                 print ("Results")
                 print ("------------------------------------------------------------")
                 MathTools.print_array("I", self.solver.depth_buffer.floats)
                 MathTools.print_array("Gx", gradient_x)
-                MathTools.print_array("Gy", gradient_y)
                 MathTools.print_array("dGxdx", dGxdx[1])
+                MathTools.print_array("Gy", gradient_y)
                 MathTools.print_array("dGydy", dGydy[0])
                 MathTools.print_array("divG", divG)
                 MathTools.print_array("Poisson Solution", mesh)
