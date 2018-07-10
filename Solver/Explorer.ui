@@ -301,6 +301,15 @@
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_2"/>
           </widget>
+          <widget class="QWidget" name="reliefTab">
+           <property name="focusPolicy">
+            <enum>Qt::TabFocus</enum>
+           </property>
+           <attribute name="title">
+            <string>&amp;Relief</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_9"/>
+          </widget>
           <widget class="QWidget" name="backgroundMaskTab">
            <property name="focusPolicy">
             <enum>Qt::TabFocus</enum>
@@ -404,6 +413,15 @@
           <property name="currentIndex">
            <number>0</number>
           </property>
+          <widget class="QWidget" name="modelMeshTab">
+           <property name="focusPolicy">
+            <enum>Qt::TabFocus</enum>
+           </property>
+           <attribute name="title">
+            <string>&amp;Model</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_10"/>
+          </widget>
           <widget class="QWidget" name="reliefMeshTab">
            <property name="focusPolicy">
             <enum>Qt::TabFocus</enum>

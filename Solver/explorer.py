@@ -48,14 +48,15 @@ class ImageType(Enum):
     A class representing the various UI image view types.
     """
     DepthBuffer = 1,
-    BackgroundMask = 2,
-    GradientX = 3,
-    GradientXMask = 4,
-    GradientY = 5,
-    GradientYMask = 6,
-    CompositeMask = 7,
-    GradientXUnsharp = 8,
-    GradientYUnsharp = 9, 
+    Relief = 2, 
+    BackgroundMask = 3,
+    GradientX = 4,
+    GradientXMask = 5,
+    GradientY = 6,
+    GradientYMask = 7,
+    CompositeMask = 8,
+    GradientXUnsharp = 9,
+    GradientYUnsharp = 10, 
 
 class Camera:
     """
@@ -371,8 +372,8 @@ class MeshContent(HasTraits):
         # create new figure
         mlab.mesh(X, Y, Z, figure=current_figure)
 
-class GradientXMeshContent(MeshContent, HasTraits):
-    """ Holds an instance of a Gradient X Mesh """
+class ModelMeshContent(MeshContent, HasTraits):
+    """ Holds an instance of a Model Mesh """
 
     # N.B. These must be class variables to maintain scene independence.
     scene = Instance(MlabSceneModel, ())   
@@ -380,19 +381,6 @@ class GradientXMeshContent(MeshContent, HasTraits):
                      resizable=True # We need this to resize with the parent widget
                      )
     
-    @on_trait_change('scene.activated')
-    def update_content(self):
-        super().update(self.scene)
-
-class GradientYMeshContent(MeshContent, HasTraits):
-    """ Holds an instance of a Gradient Y Mesh """
-
-    # N.B. These must be class variables to maintain scene independence.
-    scene = Instance(MlabSceneModel, ())
-    view = View(Item('scene', editor=SceneEditor(scene_class=MayaviScene), show_label=False),
-                     resizable=True # We need this to resize with the parent widget
-                     )
-
     @on_trait_change('scene.activated')
     def update_content(self):
         super().update(self.scene)
@@ -422,6 +410,8 @@ class MeshContainer(QtWidgets.QWidget):
         layout.setContentsMargins(0,0,0,0)
         layout.setSpacing(0)
 
+        if self.mesh_type == MeshType.Model:
+            self.mesh_content = ModelMeshContent(data, self.mesh_type)
         if self.mesh_type == MeshType.Relief:
             self.mesh_content = ReliefMeshContent(data, self.mesh_type)
 
@@ -451,6 +441,7 @@ class Explorer(QtWidgets.QMainWindow):
         """
         super().__init__()
 
+        self.debug = True
         self.settings = settings
         self.working = working
         self.solver = Solver(settings, working)
@@ -473,6 +464,7 @@ class Explorer(QtWidgets.QMainWindow):
         # image views
         default_image = np.zeros(shape=(2,2))
         self.image_tabs[ImageType.DepthBuffer]      = ImageTab(self.ui.depthBufferTab, ImageType.DepthBuffer, "DepthBuffer", "gray", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.Relief]           = ImageTab(self.ui.reliefTab, ImageType.Relief, "Relief", "gray", ImageTab.add_image, default_image)
         self.image_tabs[ImageType.BackgroundMask]   = ImageTab(self.ui.backgroundMaskTab, ImageType.BackgroundMask, "Background Mask", "gray", ImageTab.add_image, default_image)
         self.image_tabs[ImageType.GradientX]        = ImageTab(self.ui.gradientXTab, ImageType.GradientX, "Gradient X: dI(x,y)/dx", "Blues_r", ImageTab.add_image, default_image)
         self.image_tabs[ImageType.GradientXMask]    = ImageTab(self.ui.gradientXMaskTab, ImageType.GradientXMask, "Gradient X Mask", "gray", ImageTab.add_image, default_image)
@@ -497,8 +489,9 @@ class Explorer(QtWidgets.QMainWindow):
                                 [1.0, 0.0, 0.0, 0.0, 1.0]])
 
 
-        self.mesh_tabs[MeshType.Relief]    = MeshTab(self.ui.reliefMeshTab,    MeshType.Relief,    "Relief", "Blues_r", default_mesh)
-       
+        self.mesh_tabs[MeshType.Model]  = MeshTab(self.ui.modelMeshTab,     MeshType.Model,  "Model", "Blues_r", default_mesh)
+        self.mesh_tabs[MeshType.Relief] = MeshTab(self.ui.reliefMeshTab,    MeshType.Relief, "Relief", "Blues_r", default_mesh)
+
         # https://www.blog.pythonlibrary.org/2015/08/18/getting-your-screen-resolution-with-python/
         self.resize(Explorer.WINDOW_WIDTH, Explorer.WINDOW_HEIGHT)
 
@@ -683,16 +676,28 @@ class Explorer(QtWidgets.QMainWindow):
 
         mesh = self.solver.poisson.solve(divG)
 
-        print ("Results")
-        print ("------------------------------------------------------------")
-        MathTools.print_array("I", self.solver.depth_buffer.floats)
-        MathTools.print_array("Gx", gradient_x)
-        MathTools.print_array("Gy", gradient_y)
-        MathTools.print_array("dGxdx", dGxdx[1])
-        MathTools.print_array("dGydy", dGydy[0])
-        MathTools.print_array("divG", divG)
-        MathTools.print_array("Poisson Solution", mesh)
-        
+        if (self.debug):
+            (rows, columns) = self.solver.depth_buffer.floats.shape
+            maximum_rows = 16
+            if rows <= maximum_rows:
+                print ("Results")
+                print ("------------------------------------------------------------")
+                MathTools.print_array("I", self.solver.depth_buffer.floats)
+                MathTools.print_array("Gx", gradient_x)
+                MathTools.print_array("Gy", gradient_y)
+                MathTools.print_array("dGxdx", dGxdx[1])
+                MathTools.print_array("dGydy", dGydy[0])
+                MathTools.print_array("divG", divG)
+                MathTools.print_array("Poisson Solution", mesh)
+
+        # relief image
+        self.image_tabs[ImageType.Relief].data = mesh
+
+        # source model mesh (from DepthBuffer)
+        depth_buffer = self.image_tabs[ImageType.DepthBuffer].data
+        self.mesh_tabs[MeshType.Model].mesh_widget.mesh_content.set_mesh(depth_buffer, preserve_camera)
+
+        # relief mesh
         self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.set_mesh(mesh, preserve_camera)
 
     def calculate(self, preserve_camera: bool = True) -> None:
