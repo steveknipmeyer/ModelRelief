@@ -26,6 +26,7 @@ from mesh import Mesh
 from meshtransform import MeshTransform
 
 from attenuation import Attenuation
+from difference import Difference, FiniteDifference, Axis
 from gradient import Gradient
 from mask import Mask
 from meshscale import MeshScale
@@ -60,6 +61,7 @@ class Solver:
 
         # solver classes
         self.attenuation = Attenuation(self.services)
+        self.difference = Difference(self.services)
         self.gradient = Gradient(self.services)
         self.mask = Mask(self.services) 
         self.meshscale = MeshScale(self.services)

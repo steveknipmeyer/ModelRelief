@@ -54,5 +54,8 @@ class Poisson:
 
         x = ml.solve(b, tol=1e-10)                                                  # solve Ax=b to a tolerance of 1e-10
         I = x.reshape((n, n))
-       
+
+        # ToDo: reverse; why?
+        I = I * -1
+
         return I

@@ -10,13 +10,13 @@
     Change JSON paths to be relative to storage root so they will be portable.
             
     Explorer
+        Add Difference to Solver?
         Why is the Model mesh of Test correct but TestDepthBuffer is distorted?
-                    
+
         How can the mayavi log be viewed?
 
         Add gulp build task for Explorer?
 
-    Create small image depth buffers that support inspection of array elements.        
     Create a Jupyter notebook for exploration of image processing using simplified test image arrays.        
         It is imperative to be able to inspect the results manually.
 

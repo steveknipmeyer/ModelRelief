@@ -38,6 +38,7 @@ from enum import Enum
 from typing import Callable, Dict, Optional
 
 from attenuation import AttenuationParameters
+from difference import FiniteDifference
 from mathtools import MathTools
 from poisson import Poisson
 from solver import Solver
@@ -446,6 +447,16 @@ class Explorer(QtWidgets.QMainWindow):
         self.working = working
         self.solver = Solver(settings, working)
 
+        self.depth_buffer: np.ndarray = None
+        self.depth_buffer_mask: np.ndarray = None
+        self.gradient_x: np.ndarray = None
+        self.gradient_x_mask: np.ndarray = None
+        self.gradient_y: np.ndarray = None
+        self.gradient_y_mask: np.ndarray = None
+        self.combined_mask: np.ndarray = None
+        self.gradient_x_unsharp: np.ndarray = None
+        self.gradient_y_unsharp: np.ndarray = None
+
         self.qapp = qapp
         self.resize_timer: Optional[QtCore.QTimer] = None
 
@@ -476,21 +487,8 @@ class Explorer(QtWidgets.QMainWindow):
 
         # mesh views
         default_mesh = np.zeros(shape=(2,2))
-        ridge_mesh = np.array([[0.0, 0.0, 0.0, 0.0, 0.0],
-                               [0.0, 0.0, 3.0, 0.0, 0.0],
-                               [0.0, 0.0, 3.0, 0.0, 0.0],
-                               [0.0, 0.0, 3.0, 0.0, 0.0],
-                               [0.0, 0.0, 0.0, 0.0, 0.0]])
-
-        corner_mesh = np.array([[1.0, 0.0, 0.0, 0.0, 1.0],
-                                [0.0, 0.0, 0.0, 0.0, 0.0],
-                                [0.0, 0.0, 0.0, 0.0, 0.0],
-                                [0.0, 0.0, 0.0, 0.0, 0.0],
-                                [1.0, 0.0, 0.0, 0.0, 1.0]])
-
-
-        self.mesh_tabs[MeshType.Model]  = MeshTab(self.ui.modelMeshTab,     MeshType.Model,  "Model", "Blues_r", default_mesh)
-        self.mesh_tabs[MeshType.Relief] = MeshTab(self.ui.reliefMeshTab,    MeshType.Relief, "Relief", "Blues_r", default_mesh)
+        self.mesh_tabs[MeshType.Model]  = MeshTab(self.ui.modelMeshTab,  MeshType.Model,  "Model", "Blues_r", default_mesh)
+        self.mesh_tabs[MeshType.Relief] = MeshTab(self.ui.reliefMeshTab, MeshType.Relief, "Relief", "Blues_r", default_mesh)
 
         # https://www.blog.pythonlibrary.org/2015/08/18/getting-your-screen-resolution-with-python/
         self.resize(Explorer.WINDOW_WIDTH, Explorer.WINDOW_HEIGHT)
@@ -583,52 +581,53 @@ class Explorer(QtWidgets.QMainWindow):
         Updates the image view data : DepthBuffer and the supporting gradients and masks.
         """
         # background mask
-        depth_buffer = self.solver.depth_buffer.floats
-        depth_buffer_mask = self.solver.depth_buffer.background_mask
+        self.depth_buffer = self.solver.depth_buffer.floats
+        self.depth_buffer_mask = self.solver.depth_buffer.background_mask
 
-        gradient_x = self.solver.depth_buffer.gradient_x
-        gradient_y = self.solver.depth_buffer.gradient_y
+        self.gradient_x = self.solver.depth_buffer.gradient_x
+        self.gradient_y = self.solver.depth_buffer.gradient_y
 
         # Apply threshold to <entire> calculated gradient to find gradient masks.
         threshold = self.solver.mesh_transform.tau if self.ui.tauCheckBox.isChecked() else float("inf")
-        gradient_x_mask = self.solver.mask.mask_threshold(gradient_x, threshold)
-        gradient_y_mask = self.solver.mask.mask_threshold(gradient_y, threshold)
+        self.gradient_x_mask = self.solver.mask.mask_threshold(self.gradient_x, threshold)
+        self.gradient_y_mask = self.solver.mask.mask_threshold(self.gradient_y, threshold)
 
         # Modify gradient by applying threshold, setting values above threshold to zero.
-        gradient_x = self.solver.threshold.apply(gradient_x, threshold)
-        gradient_y = self.solver.threshold.apply(gradient_y, threshold)
+        self.gradient_x = self.solver.threshold.apply(self.gradient_x, threshold)
+        self.gradient_y = self.solver.threshold.apply(self.gradient_y, threshold)
 
         # Composite mask: Values are processed only if they pass all three masks.
         #    A value must have a 1 in the background mask.
         #    A value must have both dI/dx <and> dI/dy that are 1 in the respective gradient masks.
-        combined_mask = depth_buffer_mask * gradient_x_mask * gradient_y_mask
+        self.combined_mask = self.gradient_x_mask * self.gradient_y_mask
+        #self.combined_mask = self.combined_mask * self.depth_buffer_mask
 
         # Mask the thresholded gradients.
-        gradient_x = gradient_x * combined_mask
-        gradient_y = gradient_y * combined_mask
+        self.gradient_x = self.gradient_x * self.combined_mask
+        self.gradient_y = self.gradient_y * self.combined_mask
 
         # Attenuate the gradient to reduce high values and boost small values (acceuntuating some detail.)
         if self.ui.attenuationCheckBox.isChecked():
-            gradient_x = self.solver.attenuation.apply(gradient_x, self.solver.mesh_transform.attenuation_parameters)
-            gradient_y = self.solver.attenuation.apply(gradient_y, self.solver.mesh_transform.attenuation_parameters)
+            self.gradient_x = self.solver.attenuation.apply(self.gradient_x, self.solver.mesh_transform.attenuation_parameters)
+            self.gradient_y = self.solver.attenuation.apply(self.gradient_y, self.solver.mesh_transform.attenuation_parameters)
 
         # unsharp masking
         gaussian_low = self.solver.mesh_transform.gaussian_low if self.ui.gaussianLowCheckBox.isChecked() else 0.0
         gaussian_high = self.solver.mesh_transform.gaussian_high if self.ui.gaussianHighCheckBox.isChecked() else 0.0
         lambda_scale = self.solver.mesh_transform.lambda_scale if self.ui.lambdaCheckBox.isChecked() else 1.0
 
-        gradient_x_unsharp = self.solver.unsharpmask.apply(gradient_x, combined_mask, gaussian_low, gaussian_high, lambda_scale)
-        gradient_y_unsharp = self.solver.unsharpmask.apply(gradient_y, combined_mask, gaussian_low, gaussian_high, lambda_scale)
+        self.gradient_x_unsharp = self.solver.unsharpmask.apply(self.gradient_x, self.combined_mask, gaussian_low, gaussian_high, lambda_scale)
+        self.gradient_y_unsharp = self.solver.unsharpmask.apply(self.gradient_y, self.combined_mask, gaussian_low, gaussian_high, lambda_scale)
 
-        self.image_tabs[ImageType.DepthBuffer].data    = depth_buffer
-        self.image_tabs[ImageType.BackgroundMask].data = depth_buffer_mask
-        self.image_tabs[ImageType.GradientX].data      = gradient_x
-        self.image_tabs[ImageType.GradientXMask].data  = gradient_x_mask
-        self.image_tabs[ImageType.GradientY].data      = gradient_y
-        self.image_tabs[ImageType.GradientYMask].data  = gradient_y_mask
-        self.image_tabs[ImageType.CompositeMask].data  = combined_mask
-        self.image_tabs[ImageType.GradientXUnsharp].data  = gradient_x_unsharp
-        self.image_tabs[ImageType.GradientYUnsharp].data  = gradient_y_unsharp
+        self.image_tabs[ImageType.DepthBuffer].data       = self.depth_buffer
+        self.image_tabs[ImageType.BackgroundMask].data    = self.depth_buffer_mask
+        self.image_tabs[ImageType.GradientX].data         = self.gradient_x
+        self.image_tabs[ImageType.GradientXMask].data     = self.gradient_x_mask
+        self.image_tabs[ImageType.GradientY].data         = self.gradient_y
+        self.image_tabs[ImageType.GradientYMask].data     = self.gradient_y_mask
+        self.image_tabs[ImageType.CompositeMask].data     = self.combined_mask
+        self.image_tabs[ImageType.GradientXUnsharp].data  = self.gradient_x_unsharp
+        self.image_tabs[ImageType.GradientYUnsharp].data  = self.gradient_y_unsharp
 
     def mesh_from_gradients(self, gradient_x : np.ndarray, gradient_y : np.ndarray, scale: float = 1.0) -> np.ndarray:
         """
@@ -663,16 +662,10 @@ class Explorer(QtWidgets.QMainWindow):
         """
         Updates the meshes.
         """
-        gradient_x = self.image_tabs[ImageType.GradientX].data
-        gradient_y = self.image_tabs[ImageType.GradientY].data
-
-        gradient_x_unsharp = self.image_tabs[ImageType.GradientXUnsharp].data
-        gradient_y_unsharp = self.image_tabs[ImageType.GradientYUnsharp].data
-
-        dGxdx = self.solver.gradient.calculate(gradient_x)
-        dGydy = self.solver.gradient.calculate(gradient_y)
-
-        divG = dGxdx[1] + dGydy[0]
+        # calculate divergence
+        dGxdx = self.solver.difference.difference_x(self.gradient_x_unsharp, FiniteDifference.Backward)
+        dGydy = self.solver.difference.difference_y(self.gradient_y_unsharp, FiniteDifference.Backward)
+        divG = dGxdx + dGydy
 
         mesh = self.solver.poisson.solve(divG)
 
@@ -683,17 +676,17 @@ class Explorer(QtWidgets.QMainWindow):
                 print ("Results")
                 print ("------------------------------------------------------------")
                 MathTools.print_array("I", self.solver.depth_buffer.floats)
-                MathTools.print_array("Gx", gradient_x)
-                MathTools.print_array("dGxdx", dGxdx[1])
-                MathTools.print_array("Gy", gradient_y)
-                MathTools.print_array("dGydy", dGydy[0])
+                MathTools.print_array("Gx", self.gradient_x)
+                MathTools.print_array("dGxdx", dGxdx)
+                MathTools.print_array("Gy", self.gradient_y)
+                MathTools.print_array("dGydy", dGydy)
                 MathTools.print_array("divG", divG)
                 MathTools.print_array("Poisson Solution", mesh)
 
         # relief image
         self.image_tabs[ImageType.Relief].data = mesh
 
-        # source model mesh (from DepthBuffer)
+        # model mesh (from DepthBuffer)
         depth_buffer = self.image_tabs[ImageType.DepthBuffer].data
         self.mesh_tabs[MeshType.Model].mesh_widget.mesh_content.set_mesh(depth_buffer, preserve_camera)
 
