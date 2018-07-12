@@ -10,15 +10,14 @@
     Change JSON paths to be relative to storage root so they will be portable.
             
     Explorer
-        Add Difference to Solver?
-        Why is the Model mesh of Test correct but TestDepthBuffer is distorted?
+        Optimize the divergence calculation. Vectorize?
+        Remove the test JSON files from Git until the paths can be made machine-independent?
+            Alternatively, the path can be modifed by Explorer to match the local file system.           
+        Is the background mask needed?
 
         How can the mayavi log be viewed?
 
         Add gulp build task for Explorer?
-
-    Create a Jupyter notebook for exploration of image processing using simplified test image arrays.        
-        It is imperative to be able to inspect the results manually.
 
     Explore Python unit tests.
 
