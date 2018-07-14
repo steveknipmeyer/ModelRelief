@@ -45,6 +45,8 @@ class Poisson:
         digG
             Divervence of the gradient field.
         """
+        solver_step = self.services.stopwatch.mark("solver")
+
         dimensions = np.shape(divG)
         n = dimensions[0]
         A = pyamg.gallery.poisson((n, n), format='csr')      # 2D Poisson problem on 4x4 grid
@@ -52,10 +54,12 @@ class Poisson:
 
         b = divG.reshape(A.shape[0])                                                  # vectorize
 
-        x = ml.solve(b, tol=1e-10)                                                  # solve Ax=b to a tolerance of 1e-10
+        x = ml.solve(b, tol=1e-10)                                                   # solve Ax=b to a tolerance of 1e-10
         I = x.reshape((n, n))
 
         # ToDo: reverse; why?
         I = I * -1
+
+        self.services.stopwatch.log_time(solver_step)
 
         return I

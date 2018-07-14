@@ -42,6 +42,7 @@ from difference import FiniteDifference
 from mathtools import MathTools
 from poisson import Poisson
 from solver import Solver
+
 import explorer_ui
 
 class ImageType(Enum):
@@ -533,11 +534,12 @@ class Explorer(QtWidgets.QMainWindow):
         self.ui.gaussianHighLineEdit.setText(str(self.solver.mesh_transform.gaussian_high))
         self.ui.lambdaLineEdit.setText(str(self.solver.mesh_transform.lambda_scale))
 
-        self.ui.tauCheckBox.setChecked(True)
-        self.ui.attenuationCheckBox.setChecked(True)
-        self.ui.gaussianLowCheckBox.setChecked(True)
-        self.ui.gaussianHighCheckBox.setChecked(True)
-        self.ui.lambdaCheckBox.setChecked(True)
+        checkbox_enabled = False
+        self.ui.tauCheckBox.setChecked(checkbox_enabled)
+        self.ui.attenuationCheckBox.setChecked(checkbox_enabled)
+        self.ui.gaussianLowCheckBox.setChecked(checkbox_enabled)
+        self.ui.gaussianHighCheckBox.setChecked(checkbox_enabled)
+        self.ui.lambdaCheckBox.setChecked(checkbox_enabled)
 
     def initialize_handlers(self)-> None:
         """ Initialize event handlers """
@@ -580,6 +582,8 @@ class Explorer(QtWidgets.QMainWindow):
         """
         Updates the image view data : DepthBuffer and the supporting gradients and masks.
         """
+        calculate_images_step = self.solver.services.stopwatch.mark("calculate_images")
+
         # background mask
         self.depth_buffer = self.solver.depth_buffer.floats
         self.depth_buffer_mask = self.solver.depth_buffer.background_mask
@@ -619,6 +623,8 @@ class Explorer(QtWidgets.QMainWindow):
         self.gradient_x_unsharp = self.solver.unsharpmask.apply(self.gradient_x, self.combined_mask, gaussian_low, gaussian_high, lambda_scale)
         self.gradient_y_unsharp = self.solver.unsharpmask.apply(self.gradient_y, self.combined_mask, gaussian_low, gaussian_high, lambda_scale)
 
+        self.solver.services.stopwatch.log_time(calculate_images_step)
+
         self.image_tabs[ImageType.DepthBuffer].data       = self.depth_buffer
         self.image_tabs[ImageType.BackgroundMask].data    = self.depth_buffer_mask
         self.image_tabs[ImageType.GradientX].data         = self.gradient_x
@@ -629,45 +635,20 @@ class Explorer(QtWidgets.QMainWindow):
         self.image_tabs[ImageType.GradientXUnsharp].data  = self.gradient_x_unsharp
         self.image_tabs[ImageType.GradientYUnsharp].data  = self.gradient_y_unsharp
 
-    def mesh_from_gradients(self, gradient_x : np.ndarray, gradient_y : np.ndarray, scale: float = 1.0) -> np.ndarray:
-        """
-        Generates a mesh from the X and Y gradients.
-        Parameters
-        ----------
-        gradient_x
-            The array of x gradients: dI/dx
-        gradient_y
-            The array of y gradients: dI/dy
-        scale
-            Scale factor to be applied.
-        """
-        (rows, columns) = gradient_x.shape
-
-        mesh_x = np.zeros((rows, columns))
-        for r in range (rows):
-            for c in range (columns):
-                z_previous = 0.0 if c == 0 else mesh_x[r, c - 1]
-                mesh_x[r, c] = scale * (z_previous + gradient_x[r, c])
-
-        mesh_y = np.zeros((rows, columns))
-        for c in range (columns):
-            for r in range (rows):
-                z_previous = 0.0 if r == 0 else mesh_y[r - 1, c]
-                mesh_y[r, c] = scale * (z_previous + gradient_y[r, c])
-
-        mesh = mesh_x + mesh_y
-        return (mesh_x, mesh_y, mesh)
-
     def calculate_meshes(self, preserve_camera: bool = True) -> None:
         """
         Updates the meshes.
         """
+        calculate_mesh_step = self.solver.services.stopwatch.mark("calculate_mesh")
+
         # calculate divergence
         dGxdx = self.solver.difference.difference_x(self.gradient_x_unsharp, FiniteDifference.Backward)
         dGydy = self.solver.difference.difference_y(self.gradient_y_unsharp, FiniteDifference.Backward)
         divG = dGxdx + dGydy
 
         mesh = self.solver.poisson.solve(divG)
+
+        self.solver.services.stopwatch.log_time(calculate_mesh_step)
 
         if (self.debug):
             (rows, _) = self.solver.depth_buffer.floats.shape

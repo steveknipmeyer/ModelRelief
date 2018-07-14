@@ -47,10 +47,15 @@ class Gradient:
             results[1] = X gradient
         """
 
-        # result = np.gradient(array)
+        gradients_step = self.services.stopwatch.mark("gradients")
+        result = np.gradient(array)
+        self.services.stopwatch.log_time(gradients_step)
 
+        differences_step = self.services.stopwatch.mark("differences")
         difference = Difference(self.services)
         gradient_x = difference.difference_x(array, FiniteDifference.Forward)
         gradient_y = difference.difference_y(array, FiniteDifference.Forward)
+        self.services.stopwatch.log_time(differences_step)
+
         result = [gradient_y, gradient_x]
         return result

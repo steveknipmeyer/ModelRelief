@@ -92,25 +92,9 @@ class Difference:
         -------
         An ndarray containing the finite differences.
         """
-        (rows, columns) = a.shape
-        difference = np.zeros((rows, columns))
-
-        if direction == FiniteDifference.Forward:
-            first_offset  = +1
-            second_offset =  0
-        if direction == FiniteDifference.Backward:
-            first_offset  =  0
-            second_offset = -1
-
-        for column in range(columns):
-            for row in range (rows):
-                if (direction == FiniteDifference.Backward) and (row == 0):
-                    continue
-                if (direction == FiniteDifference.Forward) and (row == (rows - 1)):
-                    continue
-                difference[row, column] = a[row + first_offset, column] - a[row + second_offset, column]
-        
-        return difference
+        at = a.transpose()
+        at_difference_x = self.difference_x(at, direction)
+        return at_difference_x.transpose()
 
     def calculate(self, a: np.ndarray, direction:FiniteDifference, axis:Axis) -> np.ndarray: 
         """

@@ -11,6 +11,33 @@
             
     Explorer
         Optimize the divergence calculation. Vectorize?
+            Transpose?
+            
+            M11 M12 M13 M13
+            M21 M22 M23 M23
+            M31 M32 M33 M33
+            M41 M42 M43 M43
+
+            M11 M12 M13 M13  M21 M22 M23 M23  M31 M32 M33 M33  M41 M42 M43 M43
+
+            X
+            Y
+
+            calculate_images
+                floats
+                    scale floats
+                    scale floats : 0.04 sec
+                floats : 0.04 sec
+                gradients
+                gradients : 0.00 sec
+                differences
+                differences : 0.45 sec
+            calculate_images : 0.63 sec
+            calculate_mesh
+                solver
+                solver : 1.04 sec
+            calculate_mesh : 1.48 sec
+
         Remove the test JSON files from Git until the paths can be made machine-independent?
             Alternatively, the path can be modifed by Explorer to match the local file system.           
         Is the background mask needed?
