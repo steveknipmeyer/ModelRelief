@@ -1,8 +1,5 @@
 ﻿### Tasks
 #### Commit Notes
-Set Explorer mesh to solid color instead of using colormap.
-Refine Explorer MeshTransform UI layout.
-Attenuation is a percentage of mean absolute value.
 
 #### Short Term  
     Change default values in web UI.

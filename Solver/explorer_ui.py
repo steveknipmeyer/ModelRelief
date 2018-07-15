@@ -232,7 +232,7 @@ class Ui_MainWindow(object):
         self.processButton.setMaximumSize(QtCore.QSize(373, 16777215))
         self.processButton.setObjectName("processButton")
         self.attenuationCheckBox = QtWidgets.QCheckBox(self.settingsContainer)
-        self.attenuationCheckBox.setGeometry(QtCore.QRect(12, 142, 199, 23))
+        self.attenuationCheckBox.setGeometry(QtCore.QRect(12, 142, 210, 23))
         font = QtGui.QFont()
         font.setPointSize(13)
         font.setBold(True)

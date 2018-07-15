@@ -530,7 +530,7 @@ class Explorer(QtWidgets.QMainWindow):
         self.ui.gaussianHighLineEdit.setText(str(self.solver.mesh_transform.gaussian_high))
         self.ui.lambdaLineEdit.setText(str(self.solver.mesh_transform.lambda_scale))
 
-        checkbox_enabled = False
+        checkbox_enabled = True
         self.ui.tauCheckBox.setChecked(checkbox_enabled)
         self.ui.attenuationCheckBox.setChecked(checkbox_enabled)
         self.ui.unsharpMaskingCheckBox.setChecked(checkbox_enabled)
