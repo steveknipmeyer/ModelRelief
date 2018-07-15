@@ -43,7 +43,7 @@ class Workbench:
         """ 
         self.explorer.showMinimized()
         self.explorer.calculate(preserve_camera=False)
-        self.explorer.showNormal()
+        self.explorer.showMaximized()
 
         exit(self.qapp.exec_()) 
 

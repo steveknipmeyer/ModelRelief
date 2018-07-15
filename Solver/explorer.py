@@ -492,9 +492,6 @@ class Explorer(QtWidgets.QMainWindow):
         self.mesh_tabs[MeshType.Model]  = MeshTab(self.ui.modelMeshTab,  MeshType.Model,  "Model", "Blues_r", default_mesh)
         self.mesh_tabs[MeshType.Relief] = MeshTab(self.ui.reliefMeshTab, MeshType.Relief, "Relief", "Blues_r", default_mesh)
 
-        # https://www.blog.pythonlibrary.org/2015/08/18/getting-your-screen-resolution-with-python/
-        self.resize(Explorer.WINDOW_WIDTH, Explorer.WINDOW_HEIGHT)
-
         #intialize settings
         self.initialize_settings()
 
@@ -605,7 +602,7 @@ class Explorer(QtWidgets.QMainWindow):
         #    A value must have a 1 in the background mask.
         #    A value must have both dI/dx <and> dI/dy that are 1 in the respective gradient masks.
         self.combined_mask = self.gradient_x_mask * self.gradient_y_mask
-        # N.B. Including the background result in the mask causes the "leading" derivaties along +X, +Y to be excluded.
+        # N.B. Including the background result in the mask causes the "leading" derivatives along +X, +Y to be excluded.
         #      The derivates are forward differences so they are defined (along +X, +Y) in the XY region <outside> the background mask.
         # self.combined_mask = self.combined_mask * self.depth_buffer_mask
 
@@ -653,7 +650,7 @@ class Explorer(QtWidgets.QMainWindow):
 
         # apply offset
         offset = np.min(mesh)
-        mesh = mesh - offset
+        # mesh = mesh - offset
 
         # apply background mask to reset background to zero
         mesh = mesh * self.depth_buffer_mask

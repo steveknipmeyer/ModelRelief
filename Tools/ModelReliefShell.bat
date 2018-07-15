@@ -44,7 +44,7 @@ set PYTHONPATH=%PYTHONPATH%;%MRSolution%\Tools\
 :: MyPy Linter
 set MYPYPATH=%MRSolution%\Tools\
 :: Anaconda
-SetAnacondaPath
+call SetAnacondaPath
 
 :: Visual Studio 2017
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\VsDevCmd.bat"
