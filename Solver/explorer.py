@@ -372,7 +372,8 @@ class MeshContent(HasTraits):
         mlab.figure(figure=current_figure, bgcolor=(0, 0, 0))
 
         # create new figure
-        mlab.mesh(X, Y, Z, figure=current_figure)
+        cyan = (0.25, 0.95, 0.92)
+        mlab.mesh(X, Y, Z, figure=current_figure, color=cyan)
         #mlab.surf(Z, figure=current_figure, warp_scale="auto")
 
 class ModelMeshContent(MeshContent, HasTraits):
@@ -429,9 +430,6 @@ class MeshContainer(QtWidgets.QWidget):
         self.ui.setParent(self)
 
 class Explorer(QtWidgets.QMainWindow):
-
-    WINDOW_WIDTH = 1086
-    WINDOW_HEIGHT = 960
 
     def __init__(self, settings: str, working: str, qapp : QtWidgets.QApplication) -> None:
         """Perform class initialization.
@@ -535,6 +533,7 @@ class Explorer(QtWidgets.QMainWindow):
         checkbox_enabled = False
         self.ui.tauCheckBox.setChecked(checkbox_enabled)
         self.ui.attenuationCheckBox.setChecked(checkbox_enabled)
+        self.ui.unsharpMaskingCheckBox.setChecked(checkbox_enabled)
         self.ui.gaussianLowCheckBox.setChecked(checkbox_enabled)
         self.ui.gaussianHighCheckBox.setChecked(checkbox_enabled)
         self.ui.lambdaCheckBox.setChecked(checkbox_enabled)
@@ -616,12 +615,15 @@ class Explorer(QtWidgets.QMainWindow):
             self.gradient_y = self.solver.attenuation.apply(self.gradient_y, self.solver.mesh_transform.attenuation_parameters)
 
         # unsharp masking
-        gaussian_low = self.solver.mesh_transform.gaussian_low if self.ui.gaussianLowCheckBox.isChecked() else 0.0
-        gaussian_high = self.solver.mesh_transform.gaussian_high if self.ui.gaussianHighCheckBox.isChecked() else 0.0
-        lambda_scale = self.solver.mesh_transform.lambda_scale if self.ui.lambdaCheckBox.isChecked() else 1.0
+        self.gradient_x_unsharp = self.gradient_x
+        self.gradient_y_unsharp = self.gradient_y
+        if (self.ui.unsharpMaskingCheckBox.isChecked()):
+            gaussian_low = self.solver.mesh_transform.gaussian_low if self.ui.gaussianLowCheckBox.isChecked() else 0.0
+            gaussian_high = self.solver.mesh_transform.gaussian_high if self.ui.gaussianHighCheckBox.isChecked() else 0.0
+            lambda_scale = self.solver.mesh_transform.lambda_scale if self.ui.lambdaCheckBox.isChecked() else 1.0
 
-        self.gradient_x_unsharp = self.solver.unsharpmask.apply(self.gradient_x, self.combined_mask, gaussian_low, gaussian_high, lambda_scale)
-        self.gradient_y_unsharp = self.solver.unsharpmask.apply(self.gradient_y, self.combined_mask, gaussian_low, gaussian_high, lambda_scale)
+            self.gradient_x_unsharp = self.solver.unsharpmask.apply(self.gradient_x, self.combined_mask, gaussian_low, gaussian_high, lambda_scale)
+            self.gradient_y_unsharp = self.solver.unsharpmask.apply(self.gradient_y, self.combined_mask, gaussian_low, gaussian_high, lambda_scale)
 
         self.solver.services.stopwatch.log_time(calculate_images_step)
 
@@ -650,7 +652,7 @@ class Explorer(QtWidgets.QMainWindow):
 
         # apply offset
         offset = np.min(mesh)
-        # mesh = mesh - offset
+        mesh = mesh - offset
 
         # apply background mask to reset background to zero
         mesh = mesh * self.depth_buffer_mask

@@ -1,8 +1,12 @@
 ﻿### Tasks
 #### Commit Notes
+Set Explorer mesh to solid color instead of using colormap.
+Refine Explorer MeshTransform UI layout.
+Attenuation is a percentage of mean absolute value.
 
 #### Short Term  
     Change default values in web UI.
+        Rename Attenuation a to RangeFraction or similar.
         Gaussian Low  = 4.0
         Gaussian High = 1.0
         Lambda        = 3.0
@@ -10,19 +14,11 @@
     Change JSON paths to be relative to storage root so they will be portable.
             
     Explorer
+        Create additional test models.
+            Spheres (Positive, Negative)
+            Cubes
+
         Optimize the divergence calculation. Vectorize?
-            Transpose?
-            
-            M11 M12 M13 M13
-            M21 M22 M23 M23
-            M31 M32 M33 M33
-            M41 M42 M43 M43
-
-            M11 M12 M13 M13  M21 M22 M23 M23  M31 M32 M33 M33  M41 M42 M43 M43
-
-            X
-            Y
-
             calculate_images
                 floats
                     scale floats

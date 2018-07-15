@@ -17,7 +17,7 @@ from services import Services
 class AttenuationParameters:
 
     DEFAULT_A = 10.0
-    DEFAULT_B =  0.9
+    DEFAULT_B =  0.6
 
     """
     A class for holding the parameters of an attenuation function.
@@ -42,7 +42,6 @@ class Attenuation:
     """
     A class for attenuating image components.
     """
-
     def __init__(self, services : Services) -> None:
         """
         Initialize an instance of Attenuation.
@@ -64,14 +63,17 @@ class Attenuation:
             The array to apply the attenuation function against.
         parameters
             The AttenuationParameters (a, b):
-            a = boundary between amplication and reduction
+            a = boundary between amplication and reduction; percent of mean absolute value of gradient
             b = rate of decay of attenuation curve
         """
         # copy
         attenuated_array = np.array(original)
 
-        a = parameters.a
+        absolute_value = np.absolute(original)
+        mean_absolute_value = np.mean(absolute_value)
+        a = (parameters.a / 100.0) * mean_absolute_value
         b = parameters.b
+        print (f"attenuation factor = {a:.2f}")
 
         def attenuator (v, a, b):
             weight = 0 if v == 0 else (a / abs(v)) * (abs(v) / a)**b

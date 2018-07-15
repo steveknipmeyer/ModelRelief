@@ -40,185 +40,6 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <layout class="QGridLayout" name="gridLayout_2">
-    <item row="0" column="0">
-     <widget class="QWidget" name="settingsContainer" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>262</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>262</width>
-        <height>896</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-        <weight>50</weight>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="focusPolicy">
-       <enum>Qt::ClickFocus</enum>
-      </property>
-      <layout class="QFormLayout" name="formLayout">
-       <item row="3" column="0">
-        <widget class="QCheckBox" name="tauCheckBox">
-         <property name="maximumSize">
-          <size>
-           <width>373</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>&amp;Tau Threshold</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLineEdit" name="tauLineEdit">
-         <property name="maximumSize">
-          <size>
-           <width>373</width>
-           <height>16777215</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QCheckBox" name="gaussianLowCheckBox">
-         <property name="text">
-          <string>Gaussian &amp;Low</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="1">
-        <widget class="QLineEdit" name="gaussianLowLineEdit">
-         <property name="maximumSize">
-          <size>
-           <width>373</width>
-           <height>16777215</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0">
-        <widget class="QCheckBox" name="gaussianHighCheckBox">
-         <property name="text">
-          <string>Gaussian &amp;High</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="1">
-        <widget class="QLineEdit" name="gaussianHighLineEdit">
-         <property name="maximumSize">
-          <size>
-           <width>373</width>
-           <height>16777215</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
-        <widget class="QCheckBox" name="lambdaCheckBox">
-         <property name="text">
-          <string>&amp;Lambda Scaling</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="1">
-        <widget class="QLineEdit" name="lambdaLineEdit">
-         <property name="maximumSize">
-          <size>
-           <width>373</width>
-           <height>16777215</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="1">
-        <widget class="QPushButton" name="processButton">
-         <property name="maximumSize">
-          <size>
-           <width>373</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>&amp;Process</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QCheckBox" name="attenuationCheckBox">
-         <property name="text">
-          <string>&amp;Attenuation</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="labelSetings">
-         <property name="font">
-          <font>
-           <pointsize>13</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>MeshTransform</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QLineEdit" name="attenuationBLineEdit"/>
-       </item>
-       <item row="5" column="1">
-        <widget class="QLineEdit" name="attenuationALineEdit"/>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="labelAttenuationA">
-         <property name="text">
-          <string>a: weight(x) = 1</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="labelAttenuationB">
-         <property name="text">
-          <string>b: ~(1 / rate of decay)</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
     <item row="0" column="1">
      <widget class="QTabWidget" name="overallTabsContainer">
       <property name="sizePolicy">
@@ -267,7 +88,7 @@
         <string>Images</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
+        <item row="0" column="2">
          <widget class="QTabWidget" name="imageTabs">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -437,6 +258,296 @@
       </widget>
      </widget>
     </item>
+    <item row="0" column="0">
+     <widget class="QWidget" name="settingsContainer" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>300</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>300</width>
+        <height>896</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::ClickFocus</enum>
+      </property>
+      <widget class="QCheckBox" name="tauCheckBox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>89</y>
+         <width>150</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>373</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>13</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>&amp;Tau Threshold</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="tauLineEdit">
+       <property name="geometry">
+        <rect>
+         <x>201</x>
+         <y>88</y>
+         <width>78</width>
+         <height>29</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>373</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="gaussianLowCheckBox">
+       <property name="geometry">
+        <rect>
+         <x>33</x>
+         <y>277</y>
+         <width>120</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Gaussian &amp;Low</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="gaussianLowLineEdit">
+       <property name="geometry">
+        <rect>
+         <x>202</x>
+         <y>269</y>
+         <width>78</width>
+         <height>28</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>373</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="gaussianHighCheckBox">
+       <property name="geometry">
+        <rect>
+         <x>32</x>
+         <y>302</y>
+         <width>124</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Gaussian &amp;High</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="gaussianHighLineEdit">
+       <property name="geometry">
+        <rect>
+         <x>201</x>
+         <y>300</y>
+         <width>78</width>
+         <height>29</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>373</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="lambdaCheckBox">
+       <property name="geometry">
+        <rect>
+         <x>32</x>
+         <y>332</y>
+         <width>155</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>&amp;Lambda HF Scaling</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="lambdaLineEdit">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>331</y>
+         <width>78</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>373</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="processButton">
+       <property name="geometry">
+        <rect>
+         <x>72</x>
+         <y>380</y>
+         <width>75</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>373</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>&amp;Process</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="attenuationCheckBox">
+       <property name="geometry">
+        <rect>
+         <x>12</x>
+         <y>142</y>
+         <width>199</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>13</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Gradient &amp;Attenuation</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelSetings">
+       <property name="geometry">
+        <rect>
+         <x>-1</x>
+         <y>35</y>
+         <width>181</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>18</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>MeshTransform</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="attenuationBLineEdit">
+       <property name="geometry">
+        <rect>
+         <x>199</x>
+         <y>198</y>
+         <width>78</width>
+         <height>29</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="attenuationALineEdit">
+       <property name="geometry">
+        <rect>
+         <x>199</x>
+         <y>166</y>
+         <width>78</width>
+         <height>28</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelAttenuationA">
+       <property name="geometry">
+        <rect>
+         <x>13</x>
+         <y>170</y>
+         <width>125</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>a = % mean |X|</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelAttenuationB">
+       <property name="geometry">
+        <rect>
+         <x>22</x>
+         <y>198</y>
+         <width>171</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>b: ~(1 / rate of decay)</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="unsharpMaskingCheckBox">
+       <property name="geometry">
+        <rect>
+         <x>14</x>
+         <y>249</y>
+         <width>177</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>13</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>&amp;Unsharp Masking</string>
+       </property>
+      </widget>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -474,6 +585,7 @@
   <tabstop>attenuationCheckBox</tabstop>
   <tabstop>attenuationALineEdit</tabstop>
   <tabstop>attenuationBLineEdit</tabstop>
+  <tabstop>unsharpMaskingCheckBox</tabstop>
   <tabstop>gaussianLowCheckBox</tabstop>
   <tabstop>gaussianLowLineEdit</tabstop>
   <tabstop>gaussianHighCheckBox</tabstop>
@@ -482,7 +594,6 @@
   <tabstop>lambdaLineEdit</tabstop>
   <tabstop>processButton</tabstop>
   <tabstop>imageTabs</tabstop>
-  <tabstop>modelTabs</tabstop>
  </tabstops>
  <resources>
   <include location="explorer.qrc"/>
