@@ -373,6 +373,7 @@ class MeshContent(HasTraits):
 
         # create new figure
         mlab.mesh(X, Y, Z, figure=current_figure)
+        #mlab.surf(Z, figure=current_figure, warp_scale="auto")
 
 class ModelMeshContent(MeshContent, HasTraits):
     """ Holds an instance of a Model Mesh """
@@ -604,7 +605,9 @@ class Explorer(QtWidgets.QMainWindow):
         #    A value must have a 1 in the background mask.
         #    A value must have both dI/dx <and> dI/dy that are 1 in the respective gradient masks.
         self.combined_mask = self.gradient_x_mask * self.gradient_y_mask
-        #self.combined_mask = self.combined_mask * self.depth_buffer_mask
+        # N.B. Including the background result in the mask causes the "leading" derivaties along +X, +Y to be excluded.
+        #      The derivates are forward differences so they are defined (along +X, +Y) in the XY region <outside> the background mask.
+        # self.combined_mask = self.combined_mask * self.depth_buffer_mask
 
         # Mask the thresholded gradients.
         self.gradient_x = self.gradient_x * self.combined_mask
@@ -647,6 +650,13 @@ class Explorer(QtWidgets.QMainWindow):
         divG = dGxdx + dGydy
 
         mesh = self.solver.poisson.solve(divG)
+
+        # apply offset
+        offset = np.min(mesh)
+        mesh = mesh - offset
+
+        # apply background mask to reset background to zero
+        mesh = mesh * self.depth_buffer_mask
 
         self.solver.services.stopwatch.log_time(calculate_mesh_step)
 
