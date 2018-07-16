@@ -356,7 +356,7 @@ class DepthBuffer:
         float_array = scaler(float_array)
         float_list = float_array.tolist()
 
-        if self.debug:
+        if True:
             # write original floats
             unscaled_path = '%s/%s.floats.%f' % (self.working_folder, self.name, 1.0)
             FileManager().write_floats(unscaled_path, self.floats_model)

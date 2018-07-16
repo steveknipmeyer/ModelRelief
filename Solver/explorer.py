@@ -555,9 +555,9 @@ class Explorer(QtWidgets.QMainWindow):
         self.solver.mesh_transform.attenuation_parameters.decay  = float(self.ui.attenuationDecayLineEdit.text())
 
         # unsharp masking
-        self.solver.mesh_transform.unsharp_gaussian_low = float(self.ui.gaussianLowLineEdit.text())
-        self.solver.mesh_transform.unsharp_gaussian_high = float(self.ui.gaussianHighLineEdit.text())
-        self.solver.mesh_transform.hf_scale = float(self.ui.lambdaLineEdit.text())
+        self.solver.mesh_transform.unsharp_gaussian_low = float(self.ui.unsharpGaussianLowLineEdit.text())
+        self.solver.mesh_transform.unsharp_gaussian_high = float(self.ui.unsharpGaussianHighLineEdit.text())
+        self.solver.mesh_transform.hf_scale = float(self.ui.unsharpHFScaleLineEdit.text())
 
         self.calculate()
 
@@ -587,7 +587,7 @@ class Explorer(QtWidgets.QMainWindow):
         self.gradient_y = self.solver.depth_buffer.gradient_y
 
         # Apply threshold to <entire> calculated gradient to find gradient masks.
-        threshold = self.solver.mesh_transform.tau if self.ui.tauCheckBox.isChecked() else float("inf")
+        threshold = self.solver.mesh_transform.gradient_threshold if self.ui.gradientThresholdCheckBox.isChecked() else float("inf")
         self.gradient_x_mask = self.solver.mask.mask_threshold(self.gradient_x, threshold)
         self.gradient_y_mask = self.solver.mask.mask_threshold(self.gradient_y, threshold)
 

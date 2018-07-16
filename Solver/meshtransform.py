@@ -26,7 +26,7 @@ class MeshTransform:
         self.settings = settings
 
         self.gradient_threshold     = settings['GradientThreshold']
-        self.attenuation_parameters = AttenuationParameters(settings['AttenationFactor'], settings['AttenuationDecay'])
+        self.attenuation_parameters = AttenuationParameters(settings['AttenuationFactor'], settings['AttenuationDecay'])
         self.unsharp_gaussian_low   = settings['UnsharpGaussianLow']
         self.unsharp_gaussian_high  = settings['UnsharpGaussianHigh']
         self.unsharp_hf_scale       = settings['UnsharpHighFrequencyScale']

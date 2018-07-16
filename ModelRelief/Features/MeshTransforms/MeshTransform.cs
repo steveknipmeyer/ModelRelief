@@ -30,7 +30,7 @@ namespace ModelRelief.Dto
         public double GradientThreshold { get; set; }
 
         public double AttenuationFactor { get; set; }
-        public double AttenuationFDecay { get; set; }
+        public double AttenuationDecay { get; set; }
 
         public double UnsharpGaussianLow { get; set; }
         public double UnsharpGaussianHigh { get; set; }
