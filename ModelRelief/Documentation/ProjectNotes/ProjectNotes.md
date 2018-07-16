@@ -2,32 +2,35 @@
 #### Commit Notes
 
 #### Short Term  
+    Settings
+        Attenuation
+            RangeFraction (a)
+            Decay
+        P1
+        P
     Change default values in web UI.
-        Rename Attenuation a to RangeFraction or similar.
         Gaussian Low  = 4.0
         Gaussian High = 1.0
         Lambda        = 3.0
 
     Change JSON paths to be relative to storage root so they will be portable.
-            
+
     Explorer
         Create additional test models.
             Spheres (Positive, Negative)
             Cubes
+            Architectural
 
         Optimize the divergence calculation. Vectorize?
-            calculate_images
                 floats
                     scale floats
                     scale floats : 0.04 sec
                 floats : 0.04 sec
                 gradients
                 gradients : 0.00 sec
-                differences
                 differences : 0.45 sec
             calculate_images : 0.63 sec
             calculate_mesh
-                solver
                 solver : 1.04 sec
             calculate_mesh : 1.48 sec
 

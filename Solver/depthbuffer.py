@@ -172,27 +172,20 @@ class DepthBuffer:
         if (len(self._floats_unit_differential) > 0):
             return self._floats_unit_differential
 
-        floats_step = self.services.stopwatch.mark("floats")
-
         # now scale to map to a 2D array with unit steps between rows and columns
         extents = self.camera.near_plane_extents()
         xScale = self.width / extents[0]
         yScale = self.width / extents[1]
         assert math.fabs(xScale - yScale) < sys.float_info.epsilon, "Asymmetric scaling in mesh"
 
-        scale_step = self.services.stopwatch.mark("scale floats")
         floats_raw = self.floats_raw
 
         floats_array = np.array(floats_raw)
         scaler = lambda v: self.normalized_to_model_depth_unit_differential(v, xScale)
         floats_array = scaler(floats_array)
         floats = floats_array.tolist()       
-
-        self.services.stopwatch.log_time(scale_step)
-
         self._floats_unit_differential = floats
-        
-        self.services.stopwatch.log_time(floats_step)
+
         return self._floats_unit_differential
 
     @property
@@ -356,8 +349,6 @@ class DepthBuffer:
         -------
             A List of floats in <model units>.
         """
-        event = self.services.stopwatch.mark("scale floats")
-
         float_array = np.array(self.floats_raw)
         
         # scale
@@ -376,7 +367,6 @@ class DepthBuffer:
 
             self.verify_scale_buffer((unscaled_path, scaled_path), scale)
         
-        self.services.stopwatch.log_time(event)
         return float_list
 
     def verify_scale_buffer(self, files : Tuple[str, str], scale : float) -> bool:

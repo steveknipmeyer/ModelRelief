@@ -579,8 +579,6 @@ class Explorer(QtWidgets.QMainWindow):
         """
         Updates the image view data : DepthBuffer and the supporting gradients and masks.
         """
-        calculate_images_step = self.solver.services.stopwatch.mark("calculate_images")
-
         # background mask
         self.depth_buffer = self.solver.depth_buffer.floats
         self.depth_buffer_mask = self.solver.depth_buffer.background_mask
@@ -625,8 +623,6 @@ class Explorer(QtWidgets.QMainWindow):
             self.gradient_x_unsharp = self.solver.unsharpmask.apply(self.gradient_x, self.combined_mask, gaussian_low, gaussian_high, lambda_scale)
             self.gradient_y_unsharp = self.solver.unsharpmask.apply(self.gradient_y, self.combined_mask, gaussian_low, gaussian_high, lambda_scale)
 
-        self.solver.services.stopwatch.log_time(calculate_images_step)
-
         self.image_tabs[ImageType.DepthBuffer].data       = self.depth_buffer
         self.image_tabs[ImageType.BackgroundMask].data    = self.depth_buffer_mask
         self.image_tabs[ImageType.GradientX].data         = self.gradient_x
@@ -641,8 +637,6 @@ class Explorer(QtWidgets.QMainWindow):
         """
         Updates the meshes.
         """
-        calculate_mesh_step = self.solver.services.stopwatch.mark("calculate_mesh")
-
         # calculate divergence
         dGxdx = self.solver.difference.difference_x(self.gradient_x_unsharp, FiniteDifference.Backward)
         dGydy = self.solver.difference.difference_y(self.gradient_y_unsharp, FiniteDifference.Backward)
@@ -656,8 +650,6 @@ class Explorer(QtWidgets.QMainWindow):
 
         # apply background mask to reset background to zero
         mesh = mesh * self.depth_buffer_mask
-
-        self.solver.services.stopwatch.log_time(calculate_mesh_step)
 
         if (self.debug):
             (rows, _) = self.solver.depth_buffer.floats.shape

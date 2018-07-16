@@ -47,9 +47,7 @@ class Gradient:
             results[1] = X gradient
         """
 
-        gradients_step = self.services.stopwatch.mark("gradients")
-        result = np.gradient(array)
-        self.services.stopwatch.log_time(gradients_step)
+        # result = np.gradient(array)
 
         differences_step = self.services.stopwatch.mark("differences")
         difference = Difference(self.services)
