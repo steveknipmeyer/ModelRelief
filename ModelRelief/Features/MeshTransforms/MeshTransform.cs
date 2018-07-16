@@ -27,10 +27,17 @@ namespace ModelRelief.Dto
         public double Height { get; set; }
         public double Depth { get; set; }
 
-        public double Tau { get; set; }
-        public double SigmaGaussianBlur { get; set; }
-        public double SigmaGaussianSmooth { get; set; }
-        public double LambdaLinearScaling { get; set; }
+        public double GradientThreshold { get; set; }
+
+        public double AttenuationFactor { get; set; }
+        public double AttenuationFDecay { get; set; }
+
+        public double UnsharpGaussianLow { get; set; }
+        public double UnsharpGaussianHigh { get; set; }
+        public double UnsharpHighFrequencyScale { get; set; }
+
+        public double P1 { get; set; }
+        public double P2 { get; set; }
 
         // Navigation Properties
         public int? ProjectId { get; set; }

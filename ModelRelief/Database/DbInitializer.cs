@@ -487,7 +487,8 @@ namespace ModelRelief.Database
                 {
                     Name = "Identity", Description = "Default transform",
                     Width = 100.0, Height = 100.0, Depth = 1.0,
-                    Tau = 5.0, SigmaGaussianBlur = 1.0, SigmaGaussianSmooth = 1.0, LambdaLinearScaling = 1.0,
+                    GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
+                    P1 = 1.0, P2 = 1.0,
                     User = _user, Project = FindByName<Project>("ModelRelief"),
                 },
 
@@ -495,7 +496,8 @@ namespace ModelRelief.Database
                 {
                     Name = "Pendant", Description = "Pendant transform",
                     Width = 100.0, Height = 100.0, Depth = 1.0,
-                    Tau = 5.0, SigmaGaussianBlur = 0.5, SigmaGaussianSmooth = 0.25, LambdaLinearScaling = 1.0,
+                    GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
+                    P1 = 1.0, P2 = 1.0,
                     User = _user, Project = FindByName<Project>("Architecture"),
                 },
 
@@ -503,7 +505,8 @@ namespace ModelRelief.Database
                 {
                     Name = "Lucy", Description = "Lucy transform",
                     Width = 100.0, Height = 100.0, Depth = 1.0,
-                    Tau = 5.0, SigmaGaussianBlur = 1.0, SigmaGaussianSmooth = 1.0, LambdaLinearScaling = 1.0,
+                    GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
+                    P1 = 1.0, P2 = 1.0,
                     User = _user, Project = FindByName<Project>("ModelRelief"),
                 },
 
@@ -511,7 +514,8 @@ namespace ModelRelief.Database
                 {
                     Name = "Armadillo", Description = "Armadillo transform",
                     Width = 100.0, Height = 100.0, Depth = 1.0,
-                    Tau = 5.0, SigmaGaussianBlur = 1.0, SigmaGaussianSmooth = 1.0, LambdaLinearScaling = 1.0,
+                    GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
+                    P1 = 1.0, P2 = 1.0,
                     User = _user, Project = FindByName<Project>("Jewelry"),
                 },
 
@@ -519,14 +523,16 @@ namespace ModelRelief.Database
                 {
                     Name = "Bunny", Description = "Bunny transform",
                     Width = 100.0, Height = 100.0, Depth = 1.0,
-                    Tau = 5.0, SigmaGaussianBlur = 1.0, SigmaGaussianSmooth = 1.0, LambdaLinearScaling = 1.0,
+                    GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
+                    P1 = 1.0, P2 = 1.0,
                     User = _user, Project = FindByName<Project>("Architecture"),
                 },
                 new MeshTransform
                 {
                     Name = "Test", Description = "Test transform",
                     Width = 100.0, Height = 100.0, Depth = 1.0,
-                    Tau = 5.0, SigmaGaussianBlur = 1.0, SigmaGaussianSmooth = 1.0, LambdaLinearScaling = 1.0,
+                    GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
+                    P1 = 1.0, P2 = 1.0,
                     User = _user, Project = FindByName<Project>("ModelRelief"),
                 },
             };

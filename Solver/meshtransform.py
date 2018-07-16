@@ -25,10 +25,10 @@ class MeshTransform:
         """
         self.settings = settings
 
-        self.tau             = settings['Tau']
-        self.gaussian_low    = settings['SigmaGaussianBlur']
-        self.gaussian_high   = settings['SigmaGaussianSmooth']
-        self.lambda_scale    = settings['LambdaLinearScaling']
-
-        # not (yet) persisted
-        self.attenuation_parameters = AttenuationParameters(AttenuationParameters.DEFAULT_A, AttenuationParameters.DEFAULT_B)
+        self.gradient_threshold     = settings['GradientThreshold']
+        self.attenuation_parameters = AttenuationParameters(settings['AttenationFactor'], settings['AttenuationDecay'])
+        self.unsharp_gaussian_low   = settings['UnsharpGaussianLow']
+        self.unsharp_gaussian_high  = settings['UnsharpGaussianHigh']
+        self.unsharp_hf_scale       = settings['UnsharpHighFrequencyScale']
+        self.p1                     = settings['P1']
+        self.p2                     = settings['P2']

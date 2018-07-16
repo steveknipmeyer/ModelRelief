@@ -288,12 +288,12 @@
       <property name="focusPolicy">
        <enum>Qt::ClickFocus</enum>
       </property>
-      <widget class="QCheckBox" name="tauCheckBox">
+      <widget class="QCheckBox" name="gradientThresholdCheckBox">
        <property name="geometry">
         <rect>
          <x>10</x>
          <y>89</y>
-         <width>150</width>
+         <width>181</width>
          <height>23</height>
         </rect>
        </property>
@@ -311,10 +311,10 @@
         </font>
        </property>
        <property name="text">
-        <string>&amp;Tau Threshold</string>
+        <string>&amp;Gradient Threshold</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="tauLineEdit">
+      <widget class="QLineEdit" name="gradientThresholdLineEdit">
        <property name="geometry">
         <rect>
          <x>201</x>
@@ -330,7 +330,7 @@
         </size>
        </property>
       </widget>
-      <widget class="QCheckBox" name="gaussianLowCheckBox">
+      <widget class="QCheckBox" name="unsharpGaussianLowCheckBox">
        <property name="geometry">
         <rect>
          <x>33</x>
@@ -343,7 +343,7 @@
         <string>Gaussian &amp;Low</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="gaussianLowLineEdit">
+      <widget class="QLineEdit" name="unsharpGaussianLowLineEdit">
        <property name="geometry">
         <rect>
          <x>202</x>
@@ -359,7 +359,7 @@
         </size>
        </property>
       </widget>
-      <widget class="QCheckBox" name="gaussianHighCheckBox">
+      <widget class="QCheckBox" name="unsharpGaussianHighCheckBox">
        <property name="geometry">
         <rect>
          <x>32</x>
@@ -372,7 +372,7 @@
         <string>Gaussian &amp;High</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="gaussianHighLineEdit">
+      <widget class="QLineEdit" name="unsharpGaussianHighLineEdit">
        <property name="geometry">
         <rect>
          <x>201</x>
@@ -388,7 +388,7 @@
         </size>
        </property>
       </widget>
-      <widget class="QCheckBox" name="lambdaCheckBox">
+      <widget class="QCheckBox" name="unsharpHFScaleCheckBox">
        <property name="geometry">
         <rect>
          <x>32</x>
@@ -398,10 +398,10 @@
         </rect>
        </property>
        <property name="text">
-        <string>&amp;Lambda HF Scaling</string>
+        <string>&amp;HF Scaling</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="lambdaLineEdit">
+      <widget class="QLineEdit" name="unsharpHFScaleLineEdit">
        <property name="geometry">
         <rect>
          <x>200</x>
@@ -477,7 +477,7 @@
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
-      <widget class="QLineEdit" name="attenuationBLineEdit">
+      <widget class="QLineEdit" name="attenuationDecayLineEdit">
        <property name="geometry">
         <rect>
          <x>199</x>
@@ -487,7 +487,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="attenuationALineEdit">
+      <widget class="QLineEdit" name="attenuationFactorLineEdit">
        <property name="geometry">
         <rect>
          <x>199</x>
@@ -497,23 +497,23 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLabel" name="labelAttenuationA">
+      <widget class="QLabel" name="labelAttenuationFactor">
        <property name="geometry">
         <rect>
          <x>13</x>
          <y>170</y>
-         <width>125</width>
+         <width>151</width>
          <height>20</height>
         </rect>
        </property>
        <property name="text">
-        <string>a = % mean |X|</string>
+        <string>F: a = F * mean |X|</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
-      <widget class="QLabel" name="labelAttenuationB">
+      <widget class="QLabel" name="labelAttenuationDecay">
        <property name="geometry">
         <rect>
          <x>22</x>
@@ -580,18 +580,18 @@
   </action>
  </widget>
  <tabstops>
-  <tabstop>tauCheckBox</tabstop>
-  <tabstop>tauLineEdit</tabstop>
+  <tabstop>gradientThresholdCheckBox</tabstop>
+  <tabstop>gradientThresholdLineEdit</tabstop>
   <tabstop>attenuationCheckBox</tabstop>
-  <tabstop>attenuationALineEdit</tabstop>
-  <tabstop>attenuationBLineEdit</tabstop>
+  <tabstop>attenuationFactorLineEdit</tabstop>
+  <tabstop>attenuationDecayLineEdit</tabstop>
   <tabstop>unsharpMaskingCheckBox</tabstop>
-  <tabstop>gaussianLowCheckBox</tabstop>
-  <tabstop>gaussianLowLineEdit</tabstop>
-  <tabstop>gaussianHighCheckBox</tabstop>
-  <tabstop>gaussianHighLineEdit</tabstop>
-  <tabstop>lambdaCheckBox</tabstop>
-  <tabstop>lambdaLineEdit</tabstop>
+  <tabstop>unsharpGaussianLowCheckBox</tabstop>
+  <tabstop>unsharpGaussianLowLineEdit</tabstop>
+  <tabstop>unsharpGaussianHighCheckBox</tabstop>
+  <tabstop>unsharpGaussianHighLineEdit</tabstop>
+  <tabstop>unsharpHFScaleCheckBox</tabstop>
+  <tabstop>unsharpHFScaleLineEdit</tabstop>
   <tabstop>processButton</tabstop>
   <tabstop>imageTabs</tabstop>
  </tabstops>

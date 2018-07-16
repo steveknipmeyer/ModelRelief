@@ -16,27 +16,26 @@ from services import Services
 
 class AttenuationParameters:
 
-    DEFAULT_A = 10.0
-    DEFAULT_B =  0.6
-
     """
     A class for holding the parameters of an attenuation function.
     """
-    def __init__(self, a: float, b: float) -> None:
+    def __init__(self, factor: float, decay: float) -> None:
         """
         Initialize an instance of AttenuationParameters.
         Parameters
         ----------
-        a
-            Determines the point where amplification becomes reduction.
+        factor
+            This is the percentage of the mean absolute value of the gradient.
+            a = factor * mean(|gradient|)
+            a determines the point where amplification becomes reduction.
                 v < a, v is amplified.
                 v = a, v is unchanged.
                 v > a, v is reduced.
         b       
             Controls the rate at which the attenuation curve decays.     
         """
-        self.a = a
-        self.b = b
+        self.factor = factor
+        self.decay  = decay
     
 class Attenuation:
     """
@@ -62,17 +61,17 @@ class Attenuation:
         original
             The array to apply the attenuation function against.
         parameters
-            The AttenuationParameters (a, b):
-            a = boundary between amplication and reduction; percent of mean absolute value of gradient
-            b = rate of decay of attenuation curve
+            The AttenuationParameters (factor, decay):
+            factor -> boundary between amplication and reduction; percentage of mean absolute value of gradient
+            decay  -> rate of decay of attenuation curve
         """
         # copy
         attenuated_array = np.array(original)
 
         absolute_value = np.absolute(original)
         mean_absolute_value = np.mean(absolute_value)
-        a = (parameters.a / 100.0) * mean_absolute_value
-        b = parameters.b
+        a = (parameters.factor / 100.0) * mean_absolute_value
+        b = parameters.decay
 
         def attenuator (v, a, b):
             weight = 0 if v == 0 else (a / abs(v)) * (abs(v) / a)**b

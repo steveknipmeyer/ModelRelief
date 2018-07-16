@@ -523,20 +523,20 @@ class Explorer(QtWidgets.QMainWindow):
         return super().resizeEvent(event)
 
     def initialize_settings(self) ->None:
-        self.ui.tauLineEdit.setText(str(self.solver.mesh_transform.tau))
-        self.ui.attenuationALineEdit.setText(str(self.solver.mesh_transform.attenuation_parameters.a))
-        self.ui.attenuationBLineEdit.setText(str(self.solver.mesh_transform.attenuation_parameters.b))
-        self.ui.gaussianLowLineEdit.setText(str(self.solver.mesh_transform.gaussian_low))
-        self.ui.gaussianHighLineEdit.setText(str(self.solver.mesh_transform.gaussian_high))
-        self.ui.lambdaLineEdit.setText(str(self.solver.mesh_transform.lambda_scale))
+        self.ui.gradientThresholdLineEdit.setText(str(self.solver.mesh_transform.gradient_threshold))
+        self.ui.attenuationFactorLineEdit.setText(str(self.solver.mesh_transform.attenuation_parameters.factor))
+        self.ui.attenuationDecayLineEdit.setText(str(self.solver.mesh_transform.attenuation_parameters.decay))
+        self.ui.unsharpGaussianLowLineEdit.setText(str(self.solver.mesh_transform.unsharp_gaussian_low))
+        self.ui.unsharpGaussianHighLineEdit.setText(str(self.solver.mesh_transform.unsharp_gaussian_high))
+        self.ui.unsharpHFScaleLineEdit.setText(str(self.solver.mesh_transform.unsharp_hf_scale))
 
         checkbox_enabled = True
-        self.ui.tauCheckBox.setChecked(checkbox_enabled)
+        self.ui.gradientThresholdCheckBox.setChecked(checkbox_enabled)
         self.ui.attenuationCheckBox.setChecked(checkbox_enabled)
         self.ui.unsharpMaskingCheckBox.setChecked(checkbox_enabled)
-        self.ui.gaussianLowCheckBox.setChecked(checkbox_enabled)
-        self.ui.gaussianHighCheckBox.setChecked(checkbox_enabled)
-        self.ui.lambdaCheckBox.setChecked(checkbox_enabled)
+        self.ui.unsharpGaussianLowCheckBox.setChecked(checkbox_enabled)
+        self.ui.unsharpGaussianHighCheckBox.setChecked(checkbox_enabled)
+        self.ui.unsharpHFScaleCheckBox.setChecked(checkbox_enabled)
 
     def initialize_handlers(self)-> None:
         """ Initialize event handlers """
@@ -548,16 +548,16 @@ class Explorer(QtWidgets.QMainWindow):
         Recalculates the views.
         """
         # threshold
-        self.solver.mesh_transform.tau = float(self.ui.tauLineEdit.text())
+        self.solver.mesh_transform.gradient_threshold = float(self.ui.gradientThresholdLineEdit.text())
 
         # attenuation
-        self.solver.mesh_transform.attenuation_parameters.a = float(self.ui.attenuationALineEdit.text())
-        self.solver.mesh_transform.attenuation_parameters.b = float(self.ui.attenuationBLineEdit.text())
+        self.solver.mesh_transform.attenuation_parameters.factor = float(self.ui.attenuationFactorLineEdit.text())
+        self.solver.mesh_transform.attenuation_parameters.decay  = float(self.ui.attenuationDecayLineEdit.text())
 
         # unsharp masking
-        self.solver.mesh_transform.gaussian_low = float(self.ui.gaussianLowLineEdit.text())
-        self.solver.mesh_transform.gaussian_high = float(self.ui.gaussianHighLineEdit.text())
-        self.solver.mesh_transform.lambda_scale = float(self.ui.lambdaLineEdit.text())
+        self.solver.mesh_transform.unsharp_gaussian_low = float(self.ui.gaussianLowLineEdit.text())
+        self.solver.mesh_transform.unsharp_gaussian_high = float(self.ui.gaussianHighLineEdit.text())
+        self.solver.mesh_transform.hf_scale = float(self.ui.lambdaLineEdit.text())
 
         self.calculate()
 
@@ -616,9 +616,9 @@ class Explorer(QtWidgets.QMainWindow):
         self.gradient_x_unsharp = self.gradient_x
         self.gradient_y_unsharp = self.gradient_y
         if (self.ui.unsharpMaskingCheckBox.isChecked()):
-            gaussian_low = self.solver.mesh_transform.gaussian_low if self.ui.gaussianLowCheckBox.isChecked() else 0.0
-            gaussian_high = self.solver.mesh_transform.gaussian_high if self.ui.gaussianHighCheckBox.isChecked() else 0.0
-            lambda_scale = self.solver.mesh_transform.lambda_scale if self.ui.lambdaCheckBox.isChecked() else 1.0
+            gaussian_low = self.solver.mesh_transform.unsharp_gaussian_low if self.ui.unsharpGaussianLowCheckBox.isChecked() else 0.0
+            gaussian_high = self.solver.mesh_transform.unsharp_gaussian_high if self.ui.unsharpGaussianHighCheckBox.isChecked() else 0.0
+            lambda_scale = self.solver.mesh_transform.unsharp_hf_scale if self.ui.unsharpHFScaleCheckBox.isChecked() else 1.0
 
             self.gradient_x_unsharp = self.solver.unsharpmask.apply(self.gradient_x, self.combined_mask, gaussian_low, gaussian_high, lambda_scale)
             self.gradient_y_unsharp = self.solver.unsharpmask.apply(self.gradient_y, self.combined_mask, gaussian_low, gaussian_high, lambda_scale)

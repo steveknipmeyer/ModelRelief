@@ -56,7 +56,7 @@ namespace ModelRelief.Test.TestModels.MeshTransforms
             meshModel.Width = 100;
             meshModel.Height = 100;
             meshModel.Depth = 1.0;
-            meshModel.LambdaLinearScaling = 1.0;
+            meshModel.UnsharpHighFrequencyScale = 1.0;
 
             return meshModel;
         }
