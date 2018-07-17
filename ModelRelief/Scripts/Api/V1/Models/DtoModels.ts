@@ -533,10 +533,14 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
     height: number;
     depth: number;
 
-    tau: number;
-    sigmaGaussianBlur: number;
-    sigmaGaussianSmooth: number;
-    lambdaLinearScaling: number;
+    gradientThreshold?: number;             // gradient threshold
+    attenuationFactor?:number;              // gradient attenuation (~a)
+    attenuationDecay?:number;               // gradient attenuation decay (b)
+    unsharpGaussianLow?: number;            // unsharp masking Gaussian low
+    unsharpGaussianHigh?: number;           // unsharp masking Gaussian high
+    unsharpHighFrequencyScale?: number;     // Unsharp masking high frequency scaling
+    p1?: number;                            // placeholder
+    p2?: number;                            // placeholder
 
     // Navigation Properties
     projectId: number;
@@ -556,11 +560,15 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
             width,
             height,
             depth,
-        
-            tau,
-            sigmaGaussianBlur,
-            sigmaGaussianSmooth,
-            lambdaLinearScaling,
+
+            gradientThreshold,
+            attenuationFactor,
+            attenuationDecay,
+            unsharpGaussianLow,
+            unsharpGaussianHigh,
+            unsharpHighFrequencyScale,
+            p1,
+            p2,
         
             // Navigation Properties
             projectId,
@@ -571,10 +579,14 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
         this.height = height;
         this.depth  = depth;
 
-        this.tau                    = tau;
-        this.sigmaGaussianBlur      = sigmaGaussianBlur;
-        this.sigmaGaussianSmooth    = sigmaGaussianSmooth;
-        this.lambdaLinearScaling    = lambdaLinearScaling;
+        this.gradientThreshold         = gradientThreshold;
+        this.attenuationFactor         = attenuationFactor;
+        this.attenuationDecay          = attenuationDecay;
+        this.unsharpGaussianLow        = unsharpGaussianLow;
+        this.unsharpGaussianHigh       = unsharpGaussianHigh;
+        this.unsharpHighFrequencyScale = unsharpHighFrequencyScale;
+        this.p1                        = p1;
+        this.p2                        = p2;
     
         // Navigation Properties
         this.projectId              = projectId;

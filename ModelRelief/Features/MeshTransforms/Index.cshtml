@@ -33,16 +33,28 @@
             </th>
 
             <th>
-                @Html.DisplayNameFor(model => model.Tau)
+                @Html.DisplayNameFor(model => model.GradientThreshold)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SigmaGaussianBlur)
+                @Html.DisplayNameFor(model => model.AttenuationFactor)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SigmaGaussianSmooth)
+                @Html.DisplayNameFor(model => model.AttenuationDecay)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LambdaLinearScaling)
+                @Html.DisplayNameFor(model => model.UnsharpGaussianLow)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnsharpGaussianHigh)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnsharpHighFrequencyScale)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.P1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.P2)
             </th>
             <th></th>
         </tr>
@@ -70,16 +82,28 @@
                 @Html.DisplayFor(modelItem => item.Depth)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Tau)
+                @Html.DisplayFor(modelItem => item.GradientThreshold)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SigmaGaussianBlur)
+                @Html.DisplayFor(modelItem => item.AttenuationFactor)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SigmaGaussianSmooth)
+                @Html.DisplayFor(modelItem => item.AttenuationDecay)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LambdaLinearScaling)
+                @Html.DisplayFor(modelItem => item.UnsharpGaussianLow)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnsharpGaussianHigh)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnsharpHighFrequencyScale)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.P1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.P2)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

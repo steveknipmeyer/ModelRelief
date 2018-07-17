@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto             from 'DtoModels';
+import * as Dto                         from 'DtoModels';
 
 import { HttpLibrary, ServerEndPoints } from 'Http'
 import { IMeshTransform }               from 'IMeshTransform';
@@ -25,11 +25,15 @@ export class MeshTransform extends Model {
     width               : number;
     height              : number;
     depth               : number;
-    
-    tau                 : number;
-    sigmaGaussianBlur   : number;
-    sigmaGaussianSmooth : number;
-    lambdaLinearScaling : number;
+
+    gradientThreshold         : number;
+    attenuationFactor         : number;
+    attenuationDecay          : number;
+    unsharpGaussianLow        : number;
+    unsharpGaussianHigh       : number;
+    unsharpHighFrequencyScale : number;
+    p1                        : number;
+    p2                        : number;
 
     // Navigation Properties
     project    : Project;
@@ -90,11 +94,15 @@ export class MeshTransform extends Model {
         meshTransform.width       = dtoMeshTransform.width;              
         meshTransform.height      = dtoMeshTransform.height;              
         meshTransform.depth       = dtoMeshTransform.depth;              
-        
-        meshTransform.tau                 = dtoMeshTransform.tau;       
-        meshTransform.sigmaGaussianBlur   = dtoMeshTransform.sigmaGaussianBlur;       
-        meshTransform.sigmaGaussianSmooth = dtoMeshTransform.sigmaGaussianSmooth;       
-        meshTransform.lambdaLinearScaling = dtoMeshTransform.lambdaLinearScaling;       
+
+        meshTransform.gradientThreshold         = dtoMeshTransform.gradientThreshold;
+        meshTransform.attenuationFactor         = dtoMeshTransform.attenuationFactor;
+        meshTransform.attenuationDecay          = dtoMeshTransform.attenuationDecay;
+        meshTransform.unsharpGaussianLow        = dtoMeshTransform.unsharpGaussianLow;
+        meshTransform.unsharpGaussianHigh       = dtoMeshTransform.unsharpGaussianHigh;
+        meshTransform.unsharpHighFrequencyScale = dtoMeshTransform.unsharpHighFrequencyScale;
+        meshTransform.p1                        = dtoMeshTransform.p1;
+        meshTransform.p2                        = dtoMeshTransform.p2;        
 
         meshTransform.project = await Project.fromIdAsync(dtoMeshTransform.projectId);       
 
@@ -114,12 +122,16 @@ export class MeshTransform extends Model {
 
             width       : this.width,              
             height      : this.height,
-            depth       : this.depth,              
-            
-            tau                 :  this.tau,       
-            sigmaGaussianBlur   :  this.sigmaGaussianBlur,       
-            sigmaGaussianSmooth :  this.sigmaGaussianSmooth,       
-            lambdaLinearScaling :  this.lambdaLinearScaling,       
+            depth       : this.depth, 
+
+            gradientThreshold          : this.gradientThreshold,
+            attenuationFactor          : this.attenuationFactor,
+            attenuationDecay           : this.attenuationDecay,
+            unsharpGaussianLow         : this.unsharpGaussianLow,
+            unsharpGaussianHigh        : this.unsharpGaussianHigh,
+            unsharpHighFrequencyScale  : this.unsharpHighFrequencyScale,
+            p1                         : this.p1,
+            p2                         : this.p2,
             
             projectId           : this.project ? this.project.id : undefined,
         });

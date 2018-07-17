@@ -355,17 +355,29 @@ export class ComposerController {
 
         // Relief Processing Parameters
         controlSettings = new ControlSettings(0.0, 10.0, 0.1);
-        let controlTau = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'tau').name('Tau Threshold').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+        let controlGaussianThreshold = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'gradientThreshold').name('Gradient Threshold').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+
+        controlSettings = new ControlSettings(0.0, 100.0, 0.1);
+        let controlAttenuationFactor = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'attenuationFactor').name('Attenuation Factor').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+
+        controlSettings = new ControlSettings(0.0, 100.0, 0.1);
+        let controlAttenuationDecay = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'attenuationDecay').name('Attenuation Decay').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
 
         controlSettings = new ControlSettings(0.0, 10.0, 0.1);
-        let controlSigmaGaussianBlur = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'sigmaGaussianBlur').name('Sigma Gaussian Blur').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+        let controlUnsharpGaussianLow = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'unsharpGaussianLow').name('Gaussian Low').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
 
         controlSettings = new ControlSettings(0.0, 10.0, 0.1);
-        let controlSigmaGaussianSmooth = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'sigmaGaussianSmooth').name('Sigma Gaussian Smooth').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+        let controlUnsharpGaussianHigh = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'unsharpGaussianHigh').name('Gaussian High').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
 
         controlSettings = new ControlSettings(0.0, 1.0, 0.1);
-        let controlLamdaLinearScaling  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'lambdaLinearScaling').name('Lambda Linear Scaling').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+        let controlUnsharpHighFrequencyScale  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'unsharpHighFrequencyScale').name('High Frequency Scale').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+
+        controlSettings = new ControlSettings(0.0, 1.0, 0.1);
+        let controlP1  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'p1').name('P1').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
         
+        controlSettings = new ControlSettings(0.0, 1.0, 0.1);
+        let controlP2  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'p2').name('P2').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+
         // Generate Relief
         let controlGenerateRelief = reliefProcessingOptions.add(this._composerViewSettings, 'generateRelief').name('Generate Relief');
 
