@@ -2,8 +2,6 @@
 #### Commit Notes
 
 #### Short Term  
-    TestMdodels
-        Regenerate test JSON files.
     Solver
         Package UnsharpMasking parameters into a structure similar to AttenuationParameters.
         Integrate Poisson solver!
@@ -12,8 +10,6 @@
         Display Names?
     Unit Tests                            
         FileRequest_MeshGenerateScalesDepthBufferByUnsharpHighFrequencyScale?
-        
-    Change JSON paths to be relative to storage root so they will be portable.
 
     Explorer
         Create additional test models.

@@ -79,7 +79,7 @@
       "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2018-07-17T13:11:42.7900085",
+    "FileTimeStamp": "2018-07-17T13:33:55.2976764",
     "RelativeFileName": "store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\depthbuffers\\1\\lucy.sdb",
     "Id": 1,
     "Name": "lucy.sdb",
@@ -112,7 +112,7 @@
     "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
   },
   "FileIsSynchronized": false,
-  "FileTimeStamp": "2018-07-17T13:10:46.2041891",
+  "FileTimeStamp": "2018-07-17T13:31:25.7077218",
   "RelativeFileName": "store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\meshes\\1\\lucy.sfp",
   "Id": 1,
   "Name": "lucy.sfp",
