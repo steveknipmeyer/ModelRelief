@@ -1,5 +1,5 @@
 {
-  "Format": 1,
+  "Format": 3,
   "ProjectId": 1,
   "Project": {
     "Id": 1,
@@ -79,10 +79,8 @@
       "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2018-05-18T12:35:29.6227879",
-    "Path": "D:\\Users\\Steve Knipmeyer\\Documents\\GitHub\\ModelRelief\\ModelRelief\\wwwroot\\store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\depthbuffers\\1\\",
-    "StorageFolder": "D:\\Users\\Steve Knipmeyer\\Documents\\GitHub\\ModelRelief\\ModelRelief\\wwwroot\\store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\depthbuffers\\1\\",
-    "FileName": "D:\\Users\\Steve Knipmeyer\\Documents\\GitHub\\ModelRelief\\ModelRelief\\wwwroot\\store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\depthbuffers\\1\\lucy.sdb",
+    "FileTimeStamp": "2018-07-17T13:11:42.7900085",
+    "RelativeFileName": "store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\depthbuffers\\1\\lucy.sdb",
     "Id": 1,
     "Name": "lucy.sdb",
     "Description": "Generated in Maya (test@modelrelief.com)",
@@ -114,10 +112,8 @@
     "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
   },
   "FileIsSynchronized": false,
-  "FileTimeStamp": "2018-05-18T12:35:03.61699",
-  "Path": "D:\\Users\\Steve Knipmeyer\\Documents\\GitHub\\ModelRelief\\ModelRelief\\wwwroot\\store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\meshes\\1\\",
-  "StorageFolder": "D:\\Users\\Steve Knipmeyer\\Documents\\Users\\GitHub\\ModelRelief\\ModelRelief\\wwwroot\\store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\meshes\\1\\",
-  "FileName": "D:\\Users\\Steve Knipmeyer\\Documents\\Users\\GitHub\\ModelRelief\\ModelRelief\\wwwroot\\store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\meshes\\1\\lucy.sfp",
+  "FileTimeStamp": "2018-07-17T13:10:46.2041891",
+  "RelativeFileName": "store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\meshes\\1\\lucy.sfp",
   "Id": 1,
   "Name": "lucy.sfp",
   "Description": "Isometric (test@modelrelief.com)",

@@ -57,7 +57,9 @@ class Solver:
         if not os.path.exists(working_folder):
             os.makedirs(working_folder)
 
-        self.services = Services(self.working_folder, Logger())
+        self.root_folder = os.path.abspath('../ModelRelief/wwwroot')
+
+        self.services = Services(self.root_folder, self.working_folder, Logger())
 
         # solver classes
         self.attenuation = Attenuation(self.services)
@@ -77,8 +79,8 @@ class Solver:
         """
         Unpack the JSON settings file and initialie Solver properties.
         """
-        self.mesh = Mesh(self.settings)
-        self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'], self.working_folder, self.services)
+        self.mesh = Mesh(self.settings, self.services)
+        self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'], self.services)
         self.mesh_transform = MeshTransform(self.settings['MeshTransform'])
 
     def transform(self):

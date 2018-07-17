@@ -42,6 +42,7 @@ namespace ModelRelief.Domain
     {
         [DependentFileProperty]
         public DateTime? FileTimeStamp  { get; set; }           // time of last update; used to trigger updates in dependents
+        [JsonIgnore]
         public string Path { get; set; }                        // associated file absolute path
 
         public FileDomainModel()
@@ -49,33 +50,10 @@ namespace ModelRelief.Domain
         }
 
         /// <summary>
-        /// Returns the relative path of the model file.
-        /// </summary>
-        /// <param name="storeRoot">Store users root.</param>
-        /// <returns>Path of model file relative to wwwroot.</returns>
-        public string GetRelativePath(string storeRoot)
-        {
-            if (string.IsNullOrEmpty(Path))
-                return string.Empty;
-
-            // https://stackoverflow.com/questions/7772520/removing-drive-or-network-name-from-path-in-c-sharp
-            // form absolute path; normalizing directory separator characters
-            var normalizedStoreRoot = System.IO.Path.GetFullPath(storeRoot);
-            // strip drive or network share
-            normalizedStoreRoot = normalizedStoreRoot.Substring(System.IO.Path.GetPathRoot(normalizedStoreRoot).Length);
-
-            // include leading directory separator
-            var relativePathIndex = Path.IndexOf(normalizedStoreRoot) - 1;
-            if (relativePathIndex < 0)
-                return string.Empty;
-
-            return Path.Substring(relativePathIndex);
-        }
-
-        /// <summary>
         /// Gets the model storage folder for a given model instance.
         /// </summary>
         /// <returns>Storage folder.</returns>
+        [JsonIgnore]
         public string StorageFolder
         {
             get
@@ -90,9 +68,28 @@ namespace ModelRelief.Domain
         }
 
         /// <summary>
+        /// Gets the relative path of the model file.
+        /// The path is relative to wwwroot.
+        /// </summary>
+        /// <returns>Path of model file relative to wwwroot.</returns>
+        public string RelativeFileName
+        {
+            get
+            {
+                var fileName = FileName;
+
+                // strip to web root
+                var webRootIndex = fileName.IndexOf(Settings.WebRoot);
+                var relativeFileName = fileName.Substring(webRootIndex + Settings.WebRoot.Length + 1);
+                return relativeFileName;
+            }
+        }
+
+        /// <summary>
         /// Gets the associated disk file for a given model instance.
         /// </summary>
         /// <returns>Disk file name.</returns>
+        [JsonIgnore]
         public string FileName
         {
             get

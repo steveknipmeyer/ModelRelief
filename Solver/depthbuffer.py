@@ -70,25 +70,22 @@ class DepthBuffer:
     """
     SINGLE_PRECISION = 4
 
-    def __init__(self, settings: dict, working_folder: str, services : Services) -> None:
+    def __init__(self, settings: dict, services : Services) -> None:
         """
         Initialize an instancee of a DepthBuffer.
         Parameters:
         ----------
         setting
             The path of the DepthBuffer JSON file.
-        working_folder
-            The temp folder used for intermediate results.
         services
             Service support for logging, timers, etc.
         """
         self.debug = False
 
         self.settings = settings
-        self.working_folder = working_folder
         self.services = services
 
-        self.path = os.path.abspath(settings['FileName'])
+        self.path = os.path.abspath(os.path.join(self.services.root_folder,  settings['RelativeFileName']))
         self._width = int(settings['Width'])
         self._height = int(settings['Height'])
         self.format = settings['Format']
@@ -358,11 +355,11 @@ class DepthBuffer:
 
         if True:
             # write original floats
-            unscaled_path = '%s/%s.floats.%f' % (self.working_folder, self.name, 1.0)
+            unscaled_path = '%s/%s.floats.%f' % (self.services.working_folder, self.name, 1.0)
             FileManager().write_floats(unscaled_path, self.floats_model)
 
             # write transformed floats
-            scaled_path = '%s/%s.floatsPrime.%f' % (self.working_folder, self.name, scale)
+            scaled_path = '%s/%s.floatsPrime.%f' % (self.services.working_folder, self.name, scale)
             FileManager().write_floats(scaled_path, float_list)
 
             self.verify_scale_buffer((unscaled_path, scaled_path), scale)
