@@ -42,6 +42,7 @@ from difference import FiniteDifference
 from mathtools import MathTools
 from poisson import Poisson
 from solver import Solver
+from unsharpmask import UnsharpMaskParameters
 
 import explorer_ui
 
@@ -526,9 +527,9 @@ class Explorer(QtWidgets.QMainWindow):
         self.ui.gradientThresholdLineEdit.setText(str(self.solver.mesh_transform.gradient_threshold))
         self.ui.attenuationFactorLineEdit.setText(str(self.solver.mesh_transform.attenuation_parameters.factor))
         self.ui.attenuationDecayLineEdit.setText(str(self.solver.mesh_transform.attenuation_parameters.decay))
-        self.ui.unsharpGaussianLowLineEdit.setText(str(self.solver.mesh_transform.unsharp_gaussian_low))
-        self.ui.unsharpGaussianHighLineEdit.setText(str(self.solver.mesh_transform.unsharp_gaussian_high))
-        self.ui.unsharpHFScaleLineEdit.setText(str(self.solver.mesh_transform.unsharp_hf_scale))
+        self.ui.unsharpGaussianLowLineEdit.setText(str(self.solver.mesh_transform.unsharpmask_parameters.gaussian_low))
+        self.ui.unsharpGaussianHighLineEdit.setText(str(self.solver.mesh_transform.unsharpmask_parameters.gaussian_high))
+        self.ui.unsharpHFScaleLineEdit.setText(str(self.solver.mesh_transform.unsharpmask_parameters.high_frequency_scale))
 
         checkbox_enabled = True
         self.ui.gradientThresholdCheckBox.setChecked(checkbox_enabled)
@@ -555,9 +556,9 @@ class Explorer(QtWidgets.QMainWindow):
         self.solver.mesh_transform.attenuation_parameters.decay  = float(self.ui.attenuationDecayLineEdit.text())
 
         # unsharp masking
-        self.solver.mesh_transform.unsharp_gaussian_low = float(self.ui.unsharpGaussianLowLineEdit.text())
-        self.solver.mesh_transform.unsharp_gaussian_high = float(self.ui.unsharpGaussianHighLineEdit.text())
-        self.solver.mesh_transform.hf_scale = float(self.ui.unsharpHFScaleLineEdit.text())
+        self.solver.mesh_transform.unsharpmask_parameters.gaussian_low = float(self.ui.unsharpGaussianLowLineEdit.text())
+        self.solver.mesh_transform.unsharpmask_parameters.gaussian_high = float(self.ui.unsharpGaussianHighLineEdit.text())
+        self.solver.mesh_transform.unsharpmask_parameters.high_frequency_scale = float(self.ui.unsharpHFScaleLineEdit.text())
 
         self.calculate()
 
@@ -616,12 +617,13 @@ class Explorer(QtWidgets.QMainWindow):
         self.gradient_x_unsharp = self.gradient_x
         self.gradient_y_unsharp = self.gradient_y
         if (self.ui.unsharpMaskingCheckBox.isChecked()):
-            gaussian_low = self.solver.mesh_transform.unsharp_gaussian_low if self.ui.unsharpGaussianLowCheckBox.isChecked() else 0.0
-            gaussian_high = self.solver.mesh_transform.unsharp_gaussian_high if self.ui.unsharpGaussianHighCheckBox.isChecked() else 0.0
-            lambda_scale = self.solver.mesh_transform.unsharp_hf_scale if self.ui.unsharpHFScaleCheckBox.isChecked() else 1.0
+            gaussian_low = self.solver.mesh_transform.unsharpmask_parameters.gaussian_low if self.ui.unsharpGaussianLowCheckBox.isChecked() else 0.0
+            gaussian_high = self.solver.mesh_transform.unsharpmask_parameters.gaussian_high if self.ui.unsharpGaussianHighCheckBox.isChecked() else 0.0
+            high_frequency_scale = self.solver.mesh_transform.unsharpmask_parameters.high_frequency_scale if self.ui.unsharpHFScaleCheckBox.isChecked() else 1.0
+            parameters = UnsharpMaskParameters(gaussian_low, gaussian_high, high_frequency_scale)
 
-            self.gradient_x_unsharp = self.solver.unsharpmask.apply(self.gradient_x, self.combined_mask, gaussian_low, gaussian_high, lambda_scale)
-            self.gradient_y_unsharp = self.solver.unsharpmask.apply(self.gradient_y, self.combined_mask, gaussian_low, gaussian_high, lambda_scale)
+            self.gradient_x_unsharp = self.solver.unsharpmask.apply(self.gradient_x, self.combined_mask, parameters)
+            self.gradient_y_unsharp = self.solver.unsharpmask.apply(self.gradient_y, self.combined_mask, parameters)
 
         self.image_tabs[ImageType.DepthBuffer].data       = self.depth_buffer
         self.image_tabs[ImageType.BackgroundMask].data    = self.depth_buffer_mask

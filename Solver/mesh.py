@@ -3,15 +3,14 @@
 #   Copyright (c) 2018
 #   All Rights Reserved.
 #
-import os
-from services import Services
-
 """
 .. module:: Mesh
    :synopsis: A low relief mesh created by applying a MeshTransform to a DepthBuffer.
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
+import os
+from services import Services
 
 class Mesh:
     """

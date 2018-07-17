@@ -13,6 +13,7 @@
 
 """
 from attenuation import AttenuationParameters
+from unsharpmask import UnsharpMaskParameters
 
 class MeshTransform:
     """
@@ -27,8 +28,6 @@ class MeshTransform:
 
         self.gradient_threshold     = settings['GradientThreshold']
         self.attenuation_parameters = AttenuationParameters(settings['AttenuationFactor'], settings['AttenuationDecay'])
-        self.unsharp_gaussian_low   = settings['UnsharpGaussianLow']
-        self.unsharp_gaussian_high  = settings['UnsharpGaussianHigh']
-        self.unsharp_hf_scale       = settings['UnsharpHighFrequencyScale']
+        self.unsharpmask_parameters = UnsharpMaskParameters(settings['UnsharpGaussianLow'], settings['UnsharpGaussianHigh'], settings['UnsharpHighFrequencyScale'])
         self.p1                     = settings['P1']
         self.p2                     = settings['P2']

@@ -3,7 +3,9 @@
 
 #### Short Term  
     Solver
-        Package UnsharpMasking parameters into a structure similar to AttenuationParameters.
+        Review the settings for the Unsharp Masking Gaussian parameters.
+            Does 0.0 or 1.0 represent no change?
+            Is the setting the variance or the standard deviation?
         Integrate Poisson solver!
         Add Mesh scaling to final dimensions.
     UI
