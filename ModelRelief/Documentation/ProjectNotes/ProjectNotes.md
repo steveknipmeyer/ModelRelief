@@ -3,9 +3,11 @@
 
 #### Short Term  
     TestMdodels
-        Regenerated test JSON files.
+        Regenerate test JSON files.
     Solver
         Package UnsharpMasking parameters into a structure similar to AttenuationParameters.
+        Integrate Poisson solver!
+        Add Mesh scaling to final dimensions.
     UI
         Display Names?
     Unit Tests                            
@@ -22,9 +24,6 @@
 
         Optimize the divergence calculation. Vectorize?
                 differences : 0.45 sec
-
-        Remove the test JSON files from Git until the paths can be made machine-independent?
-            Alternatively, the path can be modifed by Explorer to match the local file system.         
 
         How can the mayavi log be viewed?
 
@@ -122,7 +121,7 @@ What controls are (ultimately) present in Composer?
 - [X] Add the new properties to the DTO classes, eg. Dto.DepthBuffer.
 - [X] Razor Pages
 - [X] Include the new (required) properties in any POST requests. 
-- [ ] Extend the Composer UI to include the new properties.
+- [X] Extend the Composer UI to include the new properties.
 - [X] Modify the graphics class methods fromDto and toDto.
 
 #### Back End
