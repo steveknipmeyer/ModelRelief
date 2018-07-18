@@ -9,6 +9,7 @@
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
+import json
 import os
 # First, and before importing any Enthought packages, set the ETS_TOOLKIT environment variable to qt4 to tell Traits that we will use Qt.
 os.environ['ETS_TOOLKIT'] = 'qt4'
@@ -35,7 +36,7 @@ from mayavi import mlab
 import numpy as np
 from numpy import pi, sin, cos, mgrid
 from enum import Enum
-from typing import Callable, Dict, Optional
+from typing import Any, Callable, Dict, Optional
 
 from attenuation import AttenuationParameters
 from difference import FiniteDifference
@@ -432,31 +433,23 @@ class MeshContainer(QtWidgets.QWidget):
 
 class Explorer(QtWidgets.QMainWindow):
 
-    def __init__(self, settings: str, working: str, qapp : QtWidgets.QApplication) -> None:
+    def __init__(self, settings_file: str, working: str, qapp : QtWidgets.QApplication) -> None:
         """Perform class initialization.
         Parameters
         ----------
-        settings
-            The JSON settings file for a Mesh.
+        settings_file
+            The path to the JSON Mesh settings file.
         working
             The working folder to be used for intermediate results.
         """
         super().__init__()
 
         self.debug = True
-        self.settings = settings
-        self.working = working
-        self.solver = Solver(settings, working)
 
-        self.depth_buffer: np.ndarray = None
-        self.depth_buffer_mask: np.ndarray = None
-        self.gradient_x: np.ndarray = None
-        self.gradient_x_mask: np.ndarray = None
-        self.gradient_y: np.ndarray = None
-        self.gradient_y_mask: np.ndarray = None
-        self.combined_mask: np.ndarray = None
-        self.gradient_x_unsharp: np.ndarray = None
-        self.gradient_y_unsharp: np.ndarray = None
+        self.settings_file = settings_file
+        self.settings = self.load_settings(self.settings_file)
+
+        self.working = working
 
         self.qapp = qapp
         self.resize_timer: Optional[QtCore.QTimer] = None
@@ -468,6 +461,19 @@ class Explorer(QtWidgets.QMainWindow):
 
         # event handlers
         self.initialize_handlers()
+
+    def load_settings(self, settings_file: str)->Dict[str, Any]:
+        """
+        Loads the JSON mesh settings file.
+        Parameters
+        ----------
+        settings_file
+            The absolute path of the settings file.
+        """
+        self.settings_file = settings_file
+        with open(self.settings_file) as json_file:
+            settings = json.load(json_file)
+        return settings            
 
     def initialize_ui(self)-> None:
         self.ui = explorer_ui.Ui_MainWindow()
@@ -524,12 +530,17 @@ class Explorer(QtWidgets.QMainWindow):
         return super().resizeEvent(event)
 
     def initialize_settings(self) ->None:
-        self.ui.gradientThresholdLineEdit.setText(str(self.solver.mesh_transform.gradient_threshold))
-        self.ui.attenuationFactorLineEdit.setText(str(self.solver.mesh_transform.attenuation_parameters.factor))
-        self.ui.attenuationDecayLineEdit.setText(str(self.solver.mesh_transform.attenuation_parameters.decay))
-        self.ui.unsharpGaussianLowLineEdit.setText(str(self.solver.mesh_transform.unsharpmask_parameters.gaussian_low))
-        self.ui.unsharpGaussianHighLineEdit.setText(str(self.solver.mesh_transform.unsharpmask_parameters.gaussian_high))
-        self.ui.unsharpHFScaleLineEdit.setText(str(self.solver.mesh_transform.unsharpmask_parameters.high_frequency_scale))
+        mesh_transform:Dict[str, str] = self.settings['MeshTransform']
+
+        self.ui.gradientThresholdLineEdit.setText(str(mesh_transform['GradientThreshold']))
+        self.ui.attenuationFactorLineEdit.setText(str(mesh_transform['AttenuationFactor']))
+        self.ui.attenuationDecayLineEdit.setText(str(mesh_transform['AttenuationDecay']))
+        self.ui.unsharpGaussianLowLineEdit.setText(str(mesh_transform['UnsharpGaussianLow']))
+        self.ui.unsharpGaussianHighLineEdit.setText(str(mesh_transform['UnsharpGaussianHigh']))
+        self.ui.unsharpHFScaleLineEdit.setText(str(mesh_transform['UnsharpHighFrequencyScale']))
+
+        self.ui.p1LineEdit.setText(str(mesh_transform['P1']))
+        self.ui.p2LineEdit.setText(str(mesh_transform['P2']))
 
         checkbox_enabled = True
         self.ui.gradientThresholdCheckBox.setChecked(checkbox_enabled)
@@ -548,17 +559,26 @@ class Explorer(QtWidgets.QMainWindow):
         """
         Recalculates the views.
         """
+        mesh_transform:Dict[str, str] = self.settings['MeshTransform']
+
         # threshold
-        self.solver.mesh_transform.gradient_threshold = float(self.ui.gradientThresholdLineEdit.text())
+        mesh_transform['GradientThreshold'] = self.ui.gradientThresholdLineEdit.text()
 
         # attenuation
-        self.solver.mesh_transform.attenuation_parameters.factor = float(self.ui.attenuationFactorLineEdit.text())
-        self.solver.mesh_transform.attenuation_parameters.decay  = float(self.ui.attenuationDecayLineEdit.text())
+        mesh_transform['AttenuationFactor'] = self.ui.attenuationFactorLineEdit.text()
+        mesh_transform['AttenuationDecay']  = self.ui.attenuationDecayLineEdit.text()
 
         # unsharp masking
-        self.solver.mesh_transform.unsharpmask_parameters.gaussian_low = float(self.ui.unsharpGaussianLowLineEdit.text())
-        self.solver.mesh_transform.unsharpmask_parameters.gaussian_high = float(self.ui.unsharpGaussianHighLineEdit.text())
-        self.solver.mesh_transform.unsharpmask_parameters.high_frequency_scale = float(self.ui.unsharpHFScaleLineEdit.text())
+        mesh_transform['UnsharpGaussianLow'] = self.ui.unsharpGaussianLowLineEdit.text()
+        mesh_transform['UnsharpGaussianHigh'] = self.ui.unsharpGaussianHighLineEdit.text()
+        mesh_transform['UnsharpHighFrequencyScale'] = self.ui.unsharpHFScaleLineEdit.text()
+
+        mesh_transform['P1'] = self.ui.p1LineEdit.text()
+        mesh_transform['P2'] = self.ui.p2LineEdit.text()
+
+        # write the modified JSON mesh file
+        with open(self.settings_file, 'w') as json_file:
+            json.dump(self.settings, json_file, indent=4)
 
         self.calculate()
 
@@ -572,112 +592,29 @@ class Explorer(QtWidgets.QMainWindow):
 
         if dialog.exec_():
             filenames = dialog.selectedFiles()
-            self.solver = Solver(filenames[0], self.working)
+            self.settings_file = filenames[0]
+            self.settings = self.load_settings(self.settings_file)
+
             self.initialize_settings()
             self.calculate()
 
-    def calculate_images(self) -> None:
-        """
-        Updates the image view data : DepthBuffer and the supporting gradients and masks.
-        """
-        # background mask
-        self.depth_buffer = self.solver.depth_buffer.floats
-        self.depth_buffer_mask = self.solver.depth_buffer.background_mask
-
-        self.gradient_x = self.solver.depth_buffer.gradient_x
-        self.gradient_y = self.solver.depth_buffer.gradient_y
-
-        # Apply threshold to <entire> calculated gradient to find gradient masks.
-        threshold = self.solver.mesh_transform.gradient_threshold if self.ui.gradientThresholdCheckBox.isChecked() else float("inf")
-        self.gradient_x_mask = self.solver.mask.mask_threshold(self.gradient_x, threshold)
-        self.gradient_y_mask = self.solver.mask.mask_threshold(self.gradient_y, threshold)
-
-        # Modify gradient by applying threshold, setting values above threshold to zero.
-        self.gradient_x = self.solver.threshold.apply(self.gradient_x, threshold)
-        self.gradient_y = self.solver.threshold.apply(self.gradient_y, threshold)
-
-        # Composite mask: Values are processed only if they pass all three masks.
-        #    A value must have a 1 in the background mask.
-        #    A value must have both dI/dx <and> dI/dy that are 1 in the respective gradient masks.
-        self.combined_mask = self.gradient_x_mask * self.gradient_y_mask
-        # N.B. Including the background result in the mask causes the "leading" derivatives along +X, +Y to be excluded.
-        #      The derivates are forward differences so they are defined (along +X, +Y) in the XY region <outside> the background mask.
-        # self.combined_mask = self.combined_mask * self.depth_buffer_mask
-
-        # Mask the thresholded gradients.
-        self.gradient_x = self.gradient_x * self.combined_mask
-        self.gradient_y = self.gradient_y * self.combined_mask
-
-        # Attenuate the gradient to reduce high values and boost small values (acceuntuating some detail.)
-        if self.ui.attenuationCheckBox.isChecked():
-            self.gradient_x = self.solver.attenuation.apply(self.gradient_x, self.solver.mesh_transform.attenuation_parameters)
-            self.gradient_y = self.solver.attenuation.apply(self.gradient_y, self.solver.mesh_transform.attenuation_parameters)
-
-        # unsharp masking
-        self.gradient_x_unsharp = self.gradient_x
-        self.gradient_y_unsharp = self.gradient_y
-        if (self.ui.unsharpMaskingCheckBox.isChecked()):
-            gaussian_low = self.solver.mesh_transform.unsharpmask_parameters.gaussian_low if self.ui.unsharpGaussianLowCheckBox.isChecked() else 0.0
-            gaussian_high = self.solver.mesh_transform.unsharpmask_parameters.gaussian_high if self.ui.unsharpGaussianHighCheckBox.isChecked() else 0.0
-            high_frequency_scale = self.solver.mesh_transform.unsharpmask_parameters.high_frequency_scale if self.ui.unsharpHFScaleCheckBox.isChecked() else 1.0
-            parameters = UnsharpMaskParameters(gaussian_low, gaussian_high, high_frequency_scale)
-
-            self.gradient_x_unsharp = self.solver.unsharpmask.apply(self.gradient_x, self.combined_mask, parameters)
-            self.gradient_y_unsharp = self.solver.unsharpmask.apply(self.gradient_y, self.combined_mask, parameters)
-
-        self.image_tabs[ImageType.DepthBuffer].data       = self.depth_buffer
-        self.image_tabs[ImageType.BackgroundMask].data    = self.depth_buffer_mask
-        self.image_tabs[ImageType.GradientX].data         = self.gradient_x
-        self.image_tabs[ImageType.GradientXMask].data     = self.gradient_x_mask
-        self.image_tabs[ImageType.GradientY].data         = self.gradient_y
-        self.image_tabs[ImageType.GradientYMask].data     = self.gradient_y_mask
-        self.image_tabs[ImageType.CompositeMask].data     = self.combined_mask
-        self.image_tabs[ImageType.GradientXUnsharp].data  = self.gradient_x_unsharp
-        self.image_tabs[ImageType.GradientYUnsharp].data  = self.gradient_y_unsharp
-
-    def calculate_meshes(self, preserve_camera: bool = True) -> None:
-        """
-        Updates the meshes.
-        """
-        # calculate divergence
-        dGxdx = self.solver.difference.difference_x(self.gradient_x_unsharp, FiniteDifference.Backward)
-        dGydy = self.solver.difference.difference_y(self.gradient_y_unsharp, FiniteDifference.Backward)
-        divG = dGxdx + dGydy
-
-        mesh = self.solver.poisson.solve(divG)
-
-        # apply offset
-        offset = np.min(mesh)
-        mesh = mesh - offset
-
-        # apply background mask to reset background to zero
-        mesh = mesh * self.depth_buffer_mask
-
-        if (self.debug):
-            (rows, _) = self.solver.depth_buffer.floats.shape
-            maximum_rows = 16
-            if rows <= maximum_rows:
-                print ("Results")
-                print ("------------------------------------------------------------")
-                MathTools.print_array("I", self.solver.depth_buffer.floats)
-                MathTools.print_array("Gx", self.gradient_x)
-                MathTools.print_array("dGxdx", dGxdx)
-                MathTools.print_array("Gy", self.gradient_y)
-                MathTools.print_array("dGydy", dGydy)
-                MathTools.print_array("divG", divG)
-                MathTools.print_array("Poisson Solution", mesh)
-
-        # relief image
-        self.image_tabs[ImageType.Relief].data = mesh
-
-        # model mesh (from DepthBuffer)
-        depth_buffer = self.image_tabs[ImageType.DepthBuffer].data
-        self.mesh_tabs[MeshType.Model].mesh_widget.mesh_content.set_mesh(depth_buffer, preserve_camera)
-
-        # relief mesh
-        self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.set_mesh(mesh, preserve_camera)
-
     def calculate(self, preserve_camera: bool = True) -> None:
-        """ Update the UI with the representations of the DepthBuffer and Mesh."""
-        self.calculate_images()
-        self.calculate_meshes(preserve_camera)
+        
+        solver = Solver(self.settings_file, self.working)
+        solver.transform()
+
+        # Images
+        self.image_tabs[ImageType.DepthBuffer].data       = solver.depth_buffer
+        self.image_tabs[ImageType.Relief].data            = solver.mesh
+        self.image_tabs[ImageType.BackgroundMask].data    = solver.depth_buffer_mask
+        self.image_tabs[ImageType.GradientX].data         = solver.gradient_x
+        self.image_tabs[ImageType.GradientXMask].data     = solver.gradient_x_mask
+        self.image_tabs[ImageType.GradientY].data         = solver.gradient_y
+        self.image_tabs[ImageType.GradientYMask].data     = solver.gradient_y_mask
+        self.image_tabs[ImageType.CompositeMask].data     = solver.combined_mask
+        self.image_tabs[ImageType.GradientXUnsharp].data  = solver.gradient_x_unsharp
+        self.image_tabs[ImageType.GradientYUnsharp].data  = solver.gradient_y_unsharp
+
+        # Meshes
+        self.mesh_tabs[MeshType.Model].mesh_widget.mesh_content.set_mesh(solver.depth_buffer, preserve_camera)
+        self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.set_mesh(solver.mesh, preserve_camera)

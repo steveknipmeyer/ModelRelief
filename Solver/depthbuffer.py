@@ -15,7 +15,7 @@ import os
 import sys
 import numpy as np
 
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 from camera import Camera
 from filemanager import FileManager
