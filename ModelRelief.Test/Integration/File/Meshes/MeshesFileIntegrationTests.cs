@@ -51,7 +51,7 @@ namespace ModelRelief.Test.Integration.Meshes
                 cameraNode.Model = cameraFactory.ConstructValidModel();
 
                 // N.B. Camera properties must match the Lucy camera properties set in DbInitializer.
-                //      The reference scaled mesh compared in FileRequest_MeshGenerateScalesDepthBufferByUnsharpHighFrequencyScale() is based on those properties.
+                //      The reference scaled mesh compared in FileRequest_MeshGenerateScalesDepthBufferByP1() is based on those properties.
                 var camera = cameraNode.Model as Dto.Camera;
                 camera.Near = 238.39;
                 camera.Far  = 292.00;
@@ -203,7 +203,7 @@ namespace ModelRelief.Test.Integration.Meshes
         /// </summary>
         [Fact]
         [Trait("Category", "Api FileRequest")]
-        public async Task FileRequest_MeshGenerateScalesDepthBufferByUnsharpHighFrequencyScale()
+        public async Task FileRequest_MeshGenerateScalesDepthBufferByP1Scale()
         {
             var dependencyGraph = await InitializeDependencyGraph();
             try
@@ -217,7 +217,7 @@ namespace ModelRelief.Test.Integration.Meshes
                 var meshTransformFactory = meshTransformNode.Factory as ITestModelFactory;
 
                 var scaleFactor = 0.5;
-                meshTransformModel.UnsharpHighFrequencyScale = scaleFactor;
+                meshTransformModel.P1 = scaleFactor;
                 meshTransformModel = await meshTransformFactory.PutModel(ClassFixture, meshTransformModel) as Dto.MeshTransform;
 
                 // Act

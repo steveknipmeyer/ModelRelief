@@ -420,8 +420,8 @@
       <widget class="QPushButton" name="processButton">
        <property name="geometry">
         <rect>
-         <x>72</x>
-         <y>380</y>
+         <x>88</x>
+         <y>494</y>
          <width>75</width>
          <height>27</height>
         </rect>
@@ -546,6 +546,83 @@
         <string>&amp;Unsharp Masking</string>
        </property>
       </widget>
+      <widget class="QCheckBox" name="p1CheckBox">
+       <property name="geometry">
+        <rect>
+         <x>16</x>
+         <y>408</y>
+         <width>70</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>P1</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="p2CheckBox">
+       <property name="geometry">
+        <rect>
+         <x>16</x>
+         <y>433</y>
+         <width>70</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>P2</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelExperimental">
+       <property name="geometry">
+        <rect>
+         <x>18</x>
+         <y>380</y>
+         <width>157</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Experimental</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="p1LineEdit">
+       <property name="geometry">
+        <rect>
+         <x>198</x>
+         <y>401</y>
+         <width>78</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>373</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="p2LineEdit">
+       <property name="geometry">
+        <rect>
+         <x>197</x>
+         <y>431</y>
+         <width>78</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>373</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -592,6 +669,10 @@
   <tabstop>unsharpGaussianHighLineEdit</tabstop>
   <tabstop>unsharpHFScaleCheckBox</tabstop>
   <tabstop>unsharpHFScaleLineEdit</tabstop>
+  <tabstop>p1CheckBox</tabstop>
+  <tabstop>p1LineEdit</tabstop>
+  <tabstop>p2CheckBox</tabstop>
+  <tabstop>p2LineEdit</tabstop>
   <tabstop>processButton</tabstop>
   <tabstop>imageTabs</tabstop>
  </tabstops>

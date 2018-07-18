@@ -90,7 +90,7 @@ class Solver:
         self.services.logger.logDebug("Solver transform begin")
 
         buffer = self.depth_buffer
-        scaled_floats = buffer.scale_floats(self.mesh_transform.unsharp_hf_scale)
+        scaled_floats = buffer.scale_floats(self.mesh_transform.p1)
 
         # write final raw bytes
         file_path = '%s/%s' % (self.working_folder, self.mesh.name)
