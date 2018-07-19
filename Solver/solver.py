@@ -125,7 +125,7 @@ class Solver:
         if os.path.isfile(destination_file):
             os.remove(destination_file)
 
-        copyfile(__file__, destination_file)
+#       copyfile(__file__, destination_file)
 
     # def calculate_images(self) -> None:
     #     """
