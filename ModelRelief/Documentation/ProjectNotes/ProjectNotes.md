@@ -2,21 +2,23 @@
 #### Commit Notes
 
 #### Short Term  
+    Change P1 defaults in DbInitialize to 0.0.
+    Add Solver timeout handling.
+    Composer HF control has a limit of 1.
+    Workbench fails at startup. When a mesh is scaled (only), the Solver does not return the collection of arrays. 
+
     UnitTests
-    Determine the exception in the failing unit test.
-        Add logging as needed.
-    Do the model factory use OBJ (not SFP) format files?
+        Does the model factory use OBJ (not SFP) format files?
             // The job is complete and the mesh file has been generated.
             var generatedFile = Path.Combine($"{workingFolder}{mesh.Name}");
             mesh.Format = MeshFormat.SFP;
 
-    FileRequest_MeshGenerateSetsFileIsSynchronized
-        If the Solver does no work (because P1 = 0.0) the problem happens.
-        Visual Studio and 'dotnet test' work. testrunner.py does not.
-        Investigate XUnit stdout?
-
     Solver
-        Integrate Poisson solver!
+        All JSON properties should be represented as floats in their parent data structures.
+        Review the naming conventions for objects versus array results:
+            depth_buffer            depth_buffer_floats
+            mesh                    mesh_result
+        Introduce optional processing steps.
         Add Mesh scaling to final dimensions.
 
     Explorer

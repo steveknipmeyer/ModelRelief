@@ -38,12 +38,7 @@ from numpy import pi, sin, cos, mgrid
 from enum import Enum
 from typing import Any, Callable, Dict, Optional
 
-from attenuation import AttenuationParameters
-from difference import FiniteDifference
-from mathtools import MathTools
-from poisson import Poisson
 from solver import Solver
-from unsharpmask import UnsharpMaskParameters
 
 import explorer_ui
 
@@ -133,7 +128,7 @@ class ImageTab():
         """ Sets the NumPy data array.
         """
         self._data = value
-        self.construct_tab()
+        self.construct_tab() 
 
     def construct_tab (self):
         """ Constructs the UI tab with the image content.
@@ -604,8 +599,8 @@ class Explorer(QtWidgets.QMainWindow):
         solver.transform()
 
         # Images
-        self.image_tabs[ImageType.DepthBuffer].data       = solver.depth_buffer
-        self.image_tabs[ImageType.Relief].data            = solver.mesh
+        self.image_tabs[ImageType.DepthBuffer].data       = solver.depth_buffer_floats
+        self.image_tabs[ImageType.Relief].data            = solver.mesh_result
         self.image_tabs[ImageType.BackgroundMask].data    = solver.depth_buffer_mask
         self.image_tabs[ImageType.GradientX].data         = solver.gradient_x
         self.image_tabs[ImageType.GradientXMask].data     = solver.gradient_x_mask
@@ -616,5 +611,5 @@ class Explorer(QtWidgets.QMainWindow):
         self.image_tabs[ImageType.GradientYUnsharp].data  = solver.gradient_y_unsharp
 
         # Meshes
-        self.mesh_tabs[MeshType.Model].mesh_widget.mesh_content.set_mesh(solver.depth_buffer, preserve_camera)
-        self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.set_mesh(solver.mesh, preserve_camera)
+        self.mesh_tabs[MeshType.Model].mesh_widget.mesh_content.set_mesh(solver.depth_buffer_floats, preserve_camera)
+        self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.set_mesh(solver.mesh_result, preserve_camera)
