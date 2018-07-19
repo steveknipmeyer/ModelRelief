@@ -2,6 +2,22 @@
 #### Commit Notes
 
 #### Short Term  
+    UnitTests
+    Do the model factory use OBJ (not SFP) format files?
+            // The job is complete and the mesh file has been generated.
+            var generatedFile = Path.Combine($"{workingFolder}{mesh.Name}");
+            mesh.Format = MeshFormat.SFP;
+
+    FileRequest_MeshGenerateSetsFileIsSynchronized
+        If the Solver does no work (because P1 = 0.0) the problem happens.
+        Visual Studio and 'dotnet test' work. testrunner.py does not.
+        Investigate XUnit stdout?
+        Skipping the execution of solver.py allows the test to run (but the P1 scaling test fails as expected.)
+        The problem happened in this changeset:
+            commit ef809616d065cc0335527f0dc6ede368fe8cab36 (HEAD -> master, origin/master, origin/HEAD)
+            Author: steveknipmeyer <steve@knipmeyer.org>
+            Date:   Wed Jul 18 16:03:40 2018 -0400
+            Refactor Explorer to move solution logic to Solver.
     Solver
         Integrate Poisson solver!
         Add Mesh scaling to final dimensions.

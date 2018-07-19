@@ -16,6 +16,8 @@ import colorama
 import json
 import os
 import numpy as np
+import time
+from shutil import copyfile
 
 from filemanager import FileManager 
 from logger import Logger 
@@ -118,6 +120,13 @@ class Solver:
         """
         self.services.logger.logDebug("Solver: transform begin")
 
+        destination_file = '%s/%s' % (self.working_folder, self.mesh.name)
+        # copyfile does not overwrite...
+        if os.path.isfile(destination_file):
+            os.remove(destination_file)
+
+        copyfile(__file__, destination_file)
+
     # def calculate_images(self) -> None:
     #     """
     #     Updates the image view data : DepthBuffer and the supporting gradients and masks.
@@ -206,6 +215,9 @@ class Solver:
         """
         if (self.mesh_transform.p1 > 0.0):
             self.scale_mesh()
+            return
+
+        self.transform_mesh()            
 
 def main():
     """
