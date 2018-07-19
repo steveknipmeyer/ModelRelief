@@ -205,6 +205,7 @@ namespace ModelRelief.Services.Jobs
                 if (!process.WaitForExit(timeOut))
                 {
                     process.Kill();
+                    Logger.LogError($"Solver timed out after {timeOut / 1000.0} seconds.");
                     return -1;
                 }
 

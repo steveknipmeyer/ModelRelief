@@ -50,7 +50,7 @@ namespace ModelRelief.Test.TestModels.Meshes
         public override IModel ConstructValidModel()
         {
             var validModel = base.ConstructValidModel() as Dto.Mesh;
-            validModel.Name = "TestMesh.obj";
+            validModel.Name = "TestMesh.sfp";
             validModel.Format = Domain.MeshFormat.SFP;
 
             return validModel;
