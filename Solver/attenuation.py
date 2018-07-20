@@ -70,8 +70,8 @@ class Attenuation:
 
         absolute_value = np.absolute(original)
         mean_absolute_value = np.mean(absolute_value)
-        a = (float(parameters.factor) / 100.0) * mean_absolute_value
-        b = float(parameters.decay)
+        a = (parameters.factor / 100.0) * mean_absolute_value
+        b = parameters.decay
 
         def attenuator (v, a, b):
             weight = 0 if v == 0 else (a / abs(v)) * (abs(v) / a)**b

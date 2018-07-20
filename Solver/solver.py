@@ -138,7 +138,7 @@ class Solver:
         self.gradient_y = self.depth_buffer.gradient_y
 
         # Apply threshold to <entire> calculated gradient to find gradient masks.
-        threshold = float(self.mesh_transform.gradient_threshold) if True else float("inf")
+        threshold = self.mesh_transform.gradient_threshold if True else float("inf")
         self.gradient_x_mask = self.mask.mask_threshold(self.gradient_x, threshold)
         self.gradient_y_mask = self.mask.mask_threshold(self.gradient_y, threshold)
 
@@ -167,9 +167,9 @@ class Solver:
         self.gradient_x_unsharp = self.gradient_x
         self.gradient_y_unsharp = self.gradient_y
         if True:
-            gaussian_low = float(self.mesh_transform.unsharpmask_parameters.gaussian_low) if True else 0.0
-            gaussian_high = float(self.mesh_transform.unsharpmask_parameters.gaussian_high) if True else 0.0
-            high_frequency_scale = float(self.mesh_transform.unsharpmask_parameters.high_frequency_scale) if True else 1.0
+            gaussian_low = self.mesh_transform.unsharpmask_parameters.gaussian_low if True else 0.0
+            gaussian_high = self.mesh_transform.unsharpmask_parameters.gaussian_high if True else 0.0
+            high_frequency_scale = self.mesh_transform.unsharpmask_parameters.high_frequency_scale if True else 1.0
             parameters = UnsharpMaskParameters(gaussian_low, gaussian_high, high_frequency_scale)
 
             self.gradient_x_unsharp = self.unsharpmask.apply(self.gradient_x, self.combined_mask, parameters)
@@ -213,7 +213,7 @@ class Solver:
         """
         Transforms a DepthBuffer by the MeshTransform settings.
         """
-        if (float(self.mesh_transform.p1) > 0.0):
+        if (self.mesh_transform.p1 > 0.0):
             self.scale_mesh()
             return
 

@@ -2,16 +2,17 @@
 #### Commit Notes
 
 #### Short Term  
-    Workbench fails when a mesh is scaled (only). The Solver does not return the collection of arrays. 
-        After support has been added for optional processing, integrate the scale_mesh step with transform_mesh?
 
-    Solver
-        All JSON properties should be represented as floats in their parent data structures.
+    Solver           
+        Introduce optional processing steps.
+            Workbench fails when a mesh is scaled (only). The Solver does not return the collection of arrays. 
+                After support has been added for optional processing, integrate the scale_mesh step with transform_mesh?
+        Refactor the Solver into independent processing steps.                
+        Add Mesh scaling to final dimensions.
+
         Review the naming conventions for objects versus array results:
             depth_buffer            depth_buffer_floats
             mesh                    mesh_result
-        Introduce optional processing steps.
-        Add Mesh scaling to final dimensions.
 
     Explorer
         Create additional test models.

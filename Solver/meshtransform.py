@@ -26,8 +26,8 @@ class MeshTransform:
         """
         self.settings = settings
 
-        self.gradient_threshold     = settings['GradientThreshold']
-        self.attenuation_parameters: AttenuationParameters = AttenuationParameters(settings['AttenuationFactor'], settings['AttenuationDecay'])
-        self.unsharpmask_parameters:UnsharpMaskParameters  = UnsharpMaskParameters(settings['UnsharpGaussianLow'], settings['UnsharpGaussianHigh'], settings['UnsharpHighFrequencyScale'])
-        self.p1                     = settings['P1']
-        self.p2                     = settings['P2']
+        self.gradient_threshold     = float(settings['GradientThreshold'])
+        self.attenuation_parameters: AttenuationParameters = AttenuationParameters(float(settings['AttenuationFactor']), float(settings['AttenuationDecay']))
+        self.unsharpmask_parameters:UnsharpMaskParameters  = UnsharpMaskParameters(float(settings['UnsharpGaussianLow']), float(settings['UnsharpGaussianHigh']), float(settings['UnsharpHighFrequencyScale']))
+        self.p1                     = float(settings['P1'])
+        self.p2                     = float(settings['P2'])
