@@ -76,6 +76,14 @@ class Solver:
         self.threshold = Threshold(self.services)
         self.unsharpmask = UnsharpMask(self.services)
 
+        # processing steps
+        self.enable_gradient_threshold = True
+        self.enable_attenuation = True
+        self.enable_unsharpmask = True
+        self.enable_unsharpmask_gaussian_high = True
+        self.enable_unsharpmask_gaussian_low = True
+        self.enable_unsharpmask_high_frequence_scale = True
+
         # image arrays
         self.depth_buffer_floats: np.ndarray = None
         self.depth_buffer_mask: np.ndarray = None
@@ -138,7 +146,7 @@ class Solver:
         self.gradient_y = self.depth_buffer.gradient_y
 
         # Apply threshold to <entire> calculated gradient to find gradient masks.
-        threshold = self.mesh_transform.gradient_threshold if True else float("inf")
+        threshold = self.mesh_transform.gradient_threshold if self.enable_gradient_threshold else float("inf")
         self.gradient_x_mask = self.mask.mask_threshold(self.gradient_x, threshold)
         self.gradient_y_mask = self.mask.mask_threshold(self.gradient_y, threshold)
 
@@ -159,17 +167,17 @@ class Solver:
         self.gradient_y = self.gradient_y * self.combined_mask
 
         # Attenuate the gradient to reduce high values and boost small values (acceuntuating some detail.)
-        if True:
+        if self.enable_attenuation:
             self.gradient_x = self.attenuation.apply(self.gradient_x, self.mesh_transform.attenuation_parameters)
             self.gradient_y = self.attenuation.apply(self.gradient_y, self.mesh_transform.attenuation_parameters)
 
         # unsharp masking
         self.gradient_x_unsharp = self.gradient_x
         self.gradient_y_unsharp = self.gradient_y
-        if True:
-            gaussian_low = self.mesh_transform.unsharpmask_parameters.gaussian_low if True else 0.0
-            gaussian_high = self.mesh_transform.unsharpmask_parameters.gaussian_high if True else 0.0
-            high_frequency_scale = self.mesh_transform.unsharpmask_parameters.high_frequency_scale if True else 1.0
+        if self.enable_unsharpmask:
+            gaussian_low = self.mesh_transform.unsharpmask_parameters.gaussian_low if self.enable_unsharpmask_gaussian_high else 0.0
+            gaussian_high = self.mesh_transform.unsharpmask_parameters.gaussian_high if self.enable_unsharpmask_gaussian_low else 0.0
+            high_frequency_scale = self.mesh_transform.unsharpmask_parameters.high_frequency_scale if self.enable_unsharpmask_high_frequence_scale else 1.0
             parameters = UnsharpMaskParameters(gaussian_low, gaussian_high, high_frequency_scale)
 
             self.gradient_x_unsharp = self.unsharpmask.apply(self.gradient_x, self.combined_mask, parameters)

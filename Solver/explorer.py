@@ -596,6 +596,16 @@ class Explorer(QtWidgets.QMainWindow):
     def calculate(self, preserve_camera: bool = True) -> None:
         
         solver = Solver(self.settings_file, self.working)
+
+        #enable processing steps
+        solver.enable_gradient_threshold = self.ui.gradientThresholdCheckBox.isChecked()
+        solver.enable_attenuation = self.ui.attenuationCheckBox.isChecked()
+        solver.enable_unsharpmask = self.ui.unsharpMaskingCheckBox.isChecked()
+        solver.enable_unsharpmask_gaussian_high = self.ui.unsharpGaussianLowCheckBox.isChecked()
+        solver.enable_unsharpmask_gaussian_low = self.ui.unsharpGaussianHighCheckBox.isChecked()
+        solver.enable_unsharpmask_high_frequence_scale = self.ui.unsharpHFScaleCheckBox.isChecked()
+
+        # solve
         solver.transform()
 
         # Images
