@@ -333,7 +333,7 @@ class DepthBuffer:
 
         return z
 
-    def scale_floats(self, scale: float) -> List[float]:
+    def scale_floats(self, scale: float) -> np.ndarray:
         """
         Transforms the depth buffer values (model units) by a scale factor.
 
@@ -344,17 +344,17 @@ class DepthBuffer:
 
         Returns
         -------
-            A List of floats in <model units>.
+            An ndarray of floats in <model units>.
         """
         float_array = np.array(self.floats_raw)
         
         # scale
         scaler = lambda v: self.scale_model_depth(v, scale)        
         float_array = scaler(float_array)
-        float_list = float_array.tolist()
 
-        if True:
+        if self.debug:
             # write original floats
+            float_list = float_array.tolist()
             unscaled_path = '%s/%s.floats.%f' % (self.services.working_folder, self.name, 1.0)
             FileManager().write_floats(unscaled_path, self.floats_model)
 
@@ -363,8 +363,9 @@ class DepthBuffer:
             FileManager().write_floats(scaled_path, float_list)
 
             self.verify_scale_buffer((unscaled_path, scaled_path), scale)
+        scaled_floats = float_array.reshape(self.width, self.height)    
         
-        return float_list
+        return scaled_floats
 
     def verify_scale_buffer(self, files : Tuple[str, str], scale : float) -> bool:
         """

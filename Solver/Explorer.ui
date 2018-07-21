@@ -243,6 +243,12 @@
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_10"/>
           </widget>
+          <widget class="QWidget" name="modelMeshScaledTab">
+           <attribute name="title">
+            <string>Model &amp;Scaled</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_13"/>
+          </widget>
           <widget class="QWidget" name="reliefMeshTab">
            <property name="focusPolicy">
             <enum>Qt::TabFocus</enum>
@@ -552,7 +558,7 @@
          <x>16</x>
          <y>408</y>
          <width>70</width>
-         <height>17</height>
+         <height>20</height>
         </rect>
        </property>
        <property name="text">
@@ -565,7 +571,7 @@
          <x>16</x>
          <y>433</y>
          <width>70</width>
-         <height>17</height>
+         <height>19</height>
         </rect>
        </property>
        <property name="text">

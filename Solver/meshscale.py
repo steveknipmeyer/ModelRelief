@@ -10,6 +10,9 @@
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
+import numpy as np
+
+from depthbuffer import DepthBuffer
 from services import Services 
 
 class MeshScale: 
@@ -27,3 +30,22 @@ class MeshScale:
         """
         self.debug = True
         self.services = services
+
+    def scale_linear(self, buffer: DepthBuffer, factor: float) -> np.ndarray:
+        """
+        Performs a DepthBuffer by a linear scale (only) a mesh. There is no relief processing.
+        Parameters
+        ----------
+        mesh
+            The 2D ndarray to scale.
+        factor
+            The scale factor.
+        Returns
+            A 2D ndarray
+        """
+        scale_step = self.services.stopwatch.mark("linear scale")
+
+        scaled_floats = buffer.scale_floats(factor)
+        self.services.stopwatch.log_time(scale_step)
+
+        return scaled_floats

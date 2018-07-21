@@ -82,7 +82,8 @@ class MeshType(Enum):
     A class representing the various UI mesh view types.
     """
     Model  = 1,
-    Relief = 2
+    ModelScaled  = 2,    
+    Relief = 3
 
 class ImageTab():
     """ A UI tab of an image view. """
@@ -386,6 +387,19 @@ class ModelMeshContent(MeshContent, HasTraits):
     def update_content(self):
         super().update(self.scene)
 
+class ModelMeshScaledContent(MeshContent, HasTraits):
+    """ Holds an instance of a Model Mesh that has been only scaled (not transformed)."""
+
+    # N.B. These must be class variables to maintain scene independence.
+    scene = Instance(MlabSceneModel, ())
+    view = View(Item('scene', editor=SceneEditor(scene_class=MayaviScene), show_label=False),
+                     resizable=True # We need this to resize with the parent widget
+                     )
+
+    @on_trait_change('scene.activated')
+    def update_content(self):
+        super().update(self.scene)
+
 class ReliefMeshContent(MeshContent, HasTraits):
     """ Holds an instance of a Relief Mesh """
 
@@ -413,6 +427,8 @@ class MeshContainer(QtWidgets.QWidget):
 
         if self.mesh_type == MeshType.Model:
             self.mesh_content = ModelMeshContent(data, self.mesh_type)
+        if self.mesh_type == MeshType.ModelScaled:
+            self.mesh_content = ModelMeshScaledContent(data, self.mesh_type)
         if self.mesh_type == MeshType.Relief:
             self.mesh_content = ReliefMeshContent(data, self.mesh_type)
 
@@ -490,6 +506,7 @@ class Explorer(QtWidgets.QMainWindow):
         # mesh views
         default_mesh = np.zeros(shape=(2,2))
         self.mesh_tabs[MeshType.Model]  = MeshTab(self.ui.modelMeshTab,  MeshType.Model,  "Model", "Blues_r", default_mesh)
+        self.mesh_tabs[MeshType.ModelScaled]  = MeshTab(self.ui.modelMeshScaledTab,  MeshType.ModelScaled,  "Model Scaled", "Blues_r", default_mesh)
         self.mesh_tabs[MeshType.Relief] = MeshTab(self.ui.reliefMeshTab, MeshType.Relief, "Relief", "Blues_r", default_mesh)
 
         #intialize settings
@@ -609,8 +626,8 @@ class Explorer(QtWidgets.QMainWindow):
         solver.transform()
 
         # Images
-        self.image_tabs[ImageType.DepthBuffer].data       = solver.depth_buffer_floats
-        self.image_tabs[ImageType.Relief].data            = solver.mesh_result
+        self.image_tabs[ImageType.DepthBuffer].data       = solver.depth_buffer_model
+        self.image_tabs[ImageType.Relief].data            = solver.mesh_scaled
         self.image_tabs[ImageType.BackgroundMask].data    = solver.depth_buffer_mask
         self.image_tabs[ImageType.GradientX].data         = solver.gradient_x
         self.image_tabs[ImageType.GradientXMask].data     = solver.gradient_x_mask
@@ -621,5 +638,6 @@ class Explorer(QtWidgets.QMainWindow):
         self.image_tabs[ImageType.GradientYUnsharp].data  = solver.gradient_y_unsharp
 
         # Meshes
-        self.mesh_tabs[MeshType.Model].mesh_widget.mesh_content.set_mesh(solver.depth_buffer_floats, preserve_camera)
-        self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.set_mesh(solver.mesh_result, preserve_camera)
+        self.mesh_tabs[MeshType.Model].mesh_widget.mesh_content.set_mesh(solver.depth_buffer_model, preserve_camera)
+        self.mesh_tabs[MeshType.ModelScaled].mesh_widget.mesh_content.set_mesh(solver.mesh_scaled, preserve_camera)
+        self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.set_mesh(solver.mesh_transformed, preserve_camera)

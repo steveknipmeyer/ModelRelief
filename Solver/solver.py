@@ -85,7 +85,7 @@ class Solver:
         self.enable_unsharpmask_high_frequence_scale = True
 
         # image arrays
-        self.depth_buffer_floats: np.ndarray = None                     # DepthBuffer : Z coordinated in model units
+        self.depth_buffer_model: np.ndarray = None                      # DepthBuffer : Z coordinated in model units
         self.depth_buffer_mask: np.ndarray = None                       # DepthBuffer : background bit mask of complete model
         self.dGxdx = None                                               # dGradientX(x,y) / dx
         self.dGydy = None                                               # dGradientY(x,y) / dy
@@ -99,7 +99,8 @@ class Solver:
         self.gradient_y_unsharp: np.ndarray = None                      # GradientY : (unsharp masked)
 
         # final result
-        self.mesh_result: np.ndarray = None
+        self.mesh_scaled: np.ndarray = None
+        self.mesh_transformed: np.ndarray = None
 
         with open(settings) as json_file:
             self.settings = json.load(json_file)
@@ -113,28 +114,13 @@ class Solver:
         self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'], self.services)
         self.mesh_transform = MeshTransform(self.settings['MeshTransform'])
 
-    def scale_mesh(self):
-        """
-        Scales a DepthBuffer by the scale factor in MeshTransform.P1.
-        """
-        self.services.logger.logDebug("Solver: scale_mesh begin")
-
-        buffer = self.depth_buffer
-        scaled_floats = buffer.scale_floats(self.mesh_transform.p1)
-
-        # write final raw bytes
-        file_path = '%s/%s' % (self.working_folder, self.mesh.name)
-        FileManager().write_binary(file_path, FileManager().pack_floats(scaled_floats))
-
-        self.services.logger.logDebug("Solver: scale_mesh end")
-
     def process_depth_buffer(self):
         """
             Process the depth buffer.
             The depth buffer is converted into model units.
             The background bit mask is calculated.
         """
-        self.depth_buffer_floats = self.depth_buffer.floats
+        self.depth_buffer_model = self.depth_buffer.floats
         self.depth_buffer_mask = self.depth_buffer.background_mask
 
     def process_gradients(self):
@@ -198,25 +184,38 @@ class Solver:
         self.dGydy = self.difference.difference_y(self.gradient_y_unsharp, FiniteDifference.Backward)
         self.divG = self.dGxdx + self.dGydy
 
-        self.mesh_result = self.poisson.solve(self.divG)
+        self.mesh_transformed = self.poisson.solve(self.divG)
 
         # apply offset
-        offset = np.min(self.mesh_result)
-        self.mesh_result = self.mesh_result - offset
+        offset = np.min(self.mesh_transformed)
+        self.mesh_transformed = self.mesh_transformed - offset
 
         # apply background mask to reset background to zero
-        self.mesh_result = self.mesh_result * self.depth_buffer_mask
+        self.mesh_transformed = self.mesh_transformed * self.depth_buffer_mask
+        self.mesh_scaled = self.mesh_transformed
 
     def process_scale(self):
-        pass
+        """
+            Scales the mesh to the final dimensions.
+        """
+
+        # linear scale
+        self.mesh_scaled = self.meshscale.scale_linear(self.depth_buffer, self.mesh_transform.p1)
+
+        if False:
+            float_list = self.mesh_scaled.tolist()
+            file_path = '%s/%s' % (self.working_folder, self.mesh.name)
+            FileManager().write_binary(file_path, FileManager().pack_floats(float_list))
+
+        # relief scale
 
     def write_mesh(self):
         """
             Write the final calculated mesh.
         """
         file_path = '%s/%s' % (self.working_folder, self.mesh.name)
-        (width, height) = self.mesh_result.shape
-        mesh_list = self.mesh_result.reshape(width * height, 1)
+        (width, height) = self.mesh_transformed.shape
+        mesh_list = self.mesh_transformed.reshape(width * height, 1)
         FileManager().write_binary(file_path, FileManager().pack_floats(mesh_list))
 
     def debug_results(self):
@@ -235,17 +234,13 @@ class Solver:
                 MathTools.print_array("Gy", self.gradient_y)
                 MathTools.print_array("dGydy", self.dGydy)
                 MathTools.print_array("divG", self.divG)
-                MathTools.print_array("Poisson Solution", self.mesh_result)
+                MathTools.print_array("Poisson Solution", self.mesh_transformed)
 
     def transform(self):
         """
         Transforms a DepthBuffer by the MeshTransform settings.
         """
-        self.services.logger.logDebug("Solver: transform begin")
-
-        if (self.mesh_transform.p1 > 0.0):
-            self.scale_mesh()
-            return
+        transform_step = self.services.stopwatch.mark("transform")
 
         self.process_depth_buffer()
         self.process_gradients()
@@ -256,7 +251,7 @@ class Solver:
         self.write_mesh()
 
         self.debug_results()
-        self.services.logger.logDebug("Solver: transform end")
+        self.services.stopwatch.log_time(transform_step)
 
 def main():
     """

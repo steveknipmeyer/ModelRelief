@@ -4,16 +4,17 @@
 #### Short Term  
 
     Solver           
-        Introduce optional processing steps.
-            Workbench fails when a mesh is scaled (only). The Solver does not return the collection of arrays. 
-                After support has been added for optional processing, integrate the scale_mesh step with transform_mesh?
-        Refactor the Solver into independent processing steps.                
+        Solver
+            Group images into a data structure.
+            Group helper classes into a data structure.
+            Should self.depth_buffer be self.depthbuffer?
+
         Add Mesh scaling to final dimensions.
 
-        Review the naming conventions for objects versus array results:
-            depth_buffer            depth_buffer_floats
-            mesh                    mesh_result
-
+        Review the naming conventions:
+            depth_buffer            depth_buffer_model
+            mesh                    mesh_transformed
+                                    mesh_scaled
     Explorer
         Create additional test models.
             Spheres (Positive, Negative)
