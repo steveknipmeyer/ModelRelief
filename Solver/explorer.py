@@ -542,17 +542,17 @@ class Explorer(QtWidgets.QMainWindow):
         return super().resizeEvent(event)
 
     def initialize_settings(self) ->None:
-        mesh_transform:Dict[str, str] = self.settings['MeshTransform']
+        mesh_transform:Dict[str, float] = self.settings['MeshTransform']
 
-        self.ui.gradientThresholdLineEdit.setText(mesh_transform['GradientThreshold'])
-        self.ui.attenuationFactorLineEdit.setText(mesh_transform['AttenuationFactor'])
-        self.ui.attenuationDecayLineEdit.setText(mesh_transform['AttenuationDecay'])
-        self.ui.unsharpGaussianLowLineEdit.setText(mesh_transform['UnsharpGaussianLow'])
-        self.ui.unsharpGaussianHighLineEdit.setText(mesh_transform['UnsharpGaussianHigh'])
-        self.ui.unsharpHFScaleLineEdit.setText(mesh_transform['UnsharpHighFrequencyScale'])
+        self.ui.gradientThresholdLineEdit.setText(str(mesh_transform['GradientThreshold']))
+        self.ui.attenuationFactorLineEdit.setText(str(mesh_transform['AttenuationFactor']))
+        self.ui.attenuationDecayLineEdit.setText(str(mesh_transform['AttenuationDecay']))
+        self.ui.unsharpGaussianLowLineEdit.setText(str(mesh_transform['UnsharpGaussianLow']))
+        self.ui.unsharpGaussianHighLineEdit.setText(str(mesh_transform['UnsharpGaussianHigh']))
+        self.ui.unsharpHFScaleLineEdit.setText(str(mesh_transform['UnsharpHighFrequencyScale']))
 
-        self.ui.p1LineEdit.setText(mesh_transform['P1'])
-        self.ui.p2LineEdit.setText(mesh_transform['P2'])
+        self.ui.p1LineEdit.setText(str(mesh_transform['P1']))
+        self.ui.p2LineEdit.setText(str(mesh_transform['P2']))
 
         checkbox_enabled = True
         self.ui.gradientThresholdCheckBox.setChecked(checkbox_enabled)
@@ -571,22 +571,22 @@ class Explorer(QtWidgets.QMainWindow):
         """
         Recalculates the views.
         """
-        mesh_transform:Dict[str, str] = self.settings['MeshTransform']
+        mesh_transform:Dict[str, float] = self.settings['MeshTransform']
 
         # threshold
-        mesh_transform['GradientThreshold'] = self.ui.gradientThresholdLineEdit.text()
+        mesh_transform['GradientThreshold'] = float(self.ui.gradientThresholdLineEdit.text())
 
         # attenuation
-        mesh_transform['AttenuationFactor'] = self.ui.attenuationFactorLineEdit.text()
-        mesh_transform['AttenuationDecay']  = self.ui.attenuationDecayLineEdit.text()
+        mesh_transform['AttenuationFactor'] = float(self.ui.attenuationFactorLineEdit.text())
+        mesh_transform['AttenuationDecay']  = float(self.ui.attenuationDecayLineEdit.text())
 
         # unsharp masking
-        mesh_transform['UnsharpGaussianLow'] = self.ui.unsharpGaussianLowLineEdit.text()
-        mesh_transform['UnsharpGaussianHigh'] = self.ui.unsharpGaussianHighLineEdit.text()
-        mesh_transform['UnsharpHighFrequencyScale'] = self.ui.unsharpHFScaleLineEdit.text()
+        mesh_transform['UnsharpGaussianLow'] = float(self.ui.unsharpGaussianLowLineEdit.text())
+        mesh_transform['UnsharpGaussianHigh'] = float(self.ui.unsharpGaussianHighLineEdit.text())
+        mesh_transform['UnsharpHighFrequencyScale'] = float(self.ui.unsharpHFScaleLineEdit.text())
 
-        mesh_transform['P1'] = self.ui.p1LineEdit.text()
-        mesh_transform['P2'] = self.ui.p2LineEdit.text()
+        mesh_transform['P1'] = float(self.ui.p1LineEdit.text())
+        mesh_transform['P2'] = float(self.ui.p2LineEdit.text())
 
         # write the modified JSON mesh file
         with open(self.settings_file, 'w') as json_file:
