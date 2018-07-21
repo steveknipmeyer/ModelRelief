@@ -4,16 +4,13 @@
 #### Short Term  
 
     Solver           
+        Meshes are not oriented correctly in Mayavi Isometric views.
         Solver
             Group images into a data structure.
             Group helper classes into a data structure.
             Should self.depth_buffer be self.depthbuffer?
 
         Add Mesh scaling to final dimensions.
-
-        Review the naming conventions:
-            depth_buffer            depth_buffer_model
-            mesh                    mesh_transformed
                                     mesh_scaled
     Explorer
         Create additional test models.
@@ -30,7 +27,6 @@
         Add gulp build task for Explorer?
 
     Explore Python unit tests.
-
     Lambda
 
     3D Surface Visualization

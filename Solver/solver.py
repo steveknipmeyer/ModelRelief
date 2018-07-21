@@ -198,9 +198,9 @@ class Solver:
         """
             Scales the mesh to the final dimensions.
         """
-
         # linear scale
-        self.mesh_scaled = self.meshscale.scale_linear(self.depth_buffer, self.mesh_transform.p1)
+        # self.mesh_scaled = self.meshscale.scale_linear(self.depth_buffer, self.mesh_transform.p1)
+        self.mesh_scaled = self.depth_buffer_model * self.mesh_transform.p1
 
         if False:
             float_list = self.mesh_scaled.tolist()
@@ -208,6 +208,10 @@ class Solver:
             FileManager().write_binary(file_path, FileManager().pack_floats(float_list))
 
         # relief scale
+        target_height = np.max(self.mesh_scaled)
+        current_height = np.max(self.mesh_transformed)
+        factor = target_height / current_height
+        self.mesh_transformed = self.mesh_transformed * factor
 
     def write_mesh(self):
         """
