@@ -144,26 +144,27 @@ export class SinglePrecisionLoader {
      */
     constructGraphicsFromTemplate(mesh : THREE.Mesh, meshExtents: THREE.Vector2, material: THREE.Material): THREE.Mesh {
       
-       // The mesh template matches the aspect ratio of the template.
-       // Now, scale the mesh to the final target dimensions.
-       let boundingBox = Graphics.getBoundingBoxFromObject(mesh);
-       let scale = meshExtents.x / boundingBox.getSize().x;
-       mesh.scale.x = scale;
-       mesh.scale.y = scale;
+        // The mesh template matches the aspect ratio of the template.
+        // Now, scale the mesh to the final target dimensions.
+        let boundingBox = Graphics.getBoundingBoxFromObject(mesh);
+        let scale = meshExtents.x / boundingBox.getSize().x;
+        mesh.scale.x = scale;
+        mesh.scale.y = scale;
        
-       let meshVertices = (<THREE.Geometry>mesh.geometry).vertices;
-       let valueCount = this.values.length;
-       assert(meshVertices.length === valueCount);
-
-       for (let iValue = 0; iValue < valueCount; iValue++) {
-
-           let modelValue = this.transformer(this.values[iValue]);
-           meshVertices[iValue].set(meshVertices[iValue].x, meshVertices[iValue].y, modelValue);
-       }
-       let meshGeometry: THREE.Geometry = <THREE.Geometry>mesh.geometry;
-       mesh = new THREE.Mesh(meshGeometry, material);
        
-       return mesh;
+        let meshVertices = (<THREE.Geometry>mesh.geometry).vertices;
+        let valueCount = this.values.length;
+        assert(meshVertices.length === valueCount);
+
+        for (let iValue = 0; iValue < valueCount; iValue++) {
+
+            let modelValue = this.transformer(this.values[iValue]);
+            meshVertices[iValue].set(meshVertices[iValue].x, meshVertices[iValue].y, modelValue);
+        }
+        let meshGeometry: THREE.Geometry = <THREE.Geometry>mesh.geometry;
+        mesh = new THREE.Mesh(meshGeometry, material);
+       
+        return mesh;
     }
 
     /**
@@ -212,6 +213,7 @@ export class SinglePrecisionLoader {
        // Find the size of the near plane to size the mesh to the model units.
 
        let meshCache: THREE.Mesh = Mesh3d.Cache.getMesh(this.meshExtents, new THREE.Vector2(this.bufferExtents.x, this.bufferExtents.y));
+       meshCache = null;
        let mesh: THREE.Mesh = meshCache ? this.constructGraphicsFromTemplate(meshCache, this.meshExtents, material) : this.constructGraphicsByTriangulation(this.meshExtents, material);   
        mesh.name = this.meshParameters.name;
        

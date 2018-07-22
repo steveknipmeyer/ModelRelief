@@ -3,9 +3,14 @@
 Group images into a data structure.
 
 #### Short Term  
+    BoundClipping does not set UI values.    
+    GenerateDepthBufferAsync is not implemented.
+        Why is this generated <only> the 1st time? 
+        Could this be related to FileStamps?
 
     Solver           
         Meshes are not oriented correctly in Mayavi Isometric views.
+        The default model meshes need to be recalculated to match the MeshTransform properties.
 
         Create additional test models.
             Spheres (Positive, Negative)
@@ -26,8 +31,6 @@ Group images into a data structure.
     3D Surface Visualization
         https://jakevdp.github.io/PythonDataScienceHandbook/04.12-three-dimensional-plotting.html
         
-    GenerateDepthBufferAsync is not implemented.
-        Why is this generated the first time (requires a Camera change)? 
 
 Update database schema diagram.
   

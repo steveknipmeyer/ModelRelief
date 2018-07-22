@@ -372,10 +372,10 @@ export class ComposerController {
         controlSettings = new ControlSettings(0.0, 5.0, 0.1);
         let controlUnsharpHighFrequencyScale  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'unsharpHighFrequencyScale').name('High Frequency Scale').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
 
-        controlSettings = new ControlSettings(0.0, 1.0, 0.1);
+        controlSettings = new ControlSettings(0.0, 1.0, 0.01);
         let controlP1  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'p1').name('P1').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
         
-        controlSettings = new ControlSettings(0.0, 1.0, 0.1);
+        controlSettings = new ControlSettings(0.0, 10.0, 0.1);
         let controlP2  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'p2').name('P2').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
 
         // Generate Relief

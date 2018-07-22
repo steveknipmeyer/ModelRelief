@@ -235,11 +235,12 @@ namespace ModelRelief.Services.Relationships
                     generatedFileDomainModel.FileIsSynchronized = false;
 
                     Logger.LogInformation($"The dependent file {generatedFileDomainModel.Name} of type {generatedFileDomainModel.GetType().Name} is no longer synchronized.");
-                    Console.ForegroundColor = ConsoleColor.Magenta;
-                    Console.WriteLine($"The dependent file {generatedFileDomainModel.Name} of type {generatedFileDomainModel.GetType().Name} is no longer synchronized.");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    // Console.ForegroundColor = ConsoleColor.Magenta;
+                    // Console.WriteLine($"The dependent file {generatedFileDomainModel.Name} of type {generatedFileDomainModel.GetType().Name} is no longer synchronized.");
+                    // Console.ForegroundColor = ConsoleColor.White;
                 }
             }
+            Console.WriteLine();
         }
 
         /// <summary>
@@ -301,7 +302,7 @@ namespace ModelRelief.Services.Relationships
                 var propertyModification = new PropertyModification(transactionEntity.ChangeTrackerEntity, property);
                 if (propertyModification.Changed)
                 {
-                    Logger.LogInformation($"Property Change: {property.Name}, Original = {propertyModification.OriginalValue?.ToString()}, New = {propertyModification.ModifiedValue?.ToString()}");
+                    Logger.LogInformation($"Entity: {transactionEntity.EntityType}, Property Change: {property.Name}, Original = {propertyModification.OriginalValue?.ToString()}, New = {propertyModification.ModifiedValue?.ToString()}");
 
                     // independent variables invalidate the backing file of their dependent models
                     if (PropertyHasAttribute(out Attribute dependentFileProperty, transactionEntity.EntityType, property.Name, typeof(DependentFileProperty)))
@@ -410,12 +411,12 @@ namespace ModelRelief.Services.Relationships
             {
                 if (request.Stage == ProcessingStage.PostProcess)
                 {
-                    // Added entities are processed here after the database save so that the primary key is known.
-                    var result = await HandleRequestAsync(request);
-
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.WriteLine($"PostProcess {request.GetType()} Operation = {request.Operation.ToString()}");
                     Console.ForegroundColor = ConsoleColor.White;
+
+                    // Added entities are processed here after the database save so that the primary key is known.
+                    var result = await HandleRequestAsync(request);
                 }
             }
         }

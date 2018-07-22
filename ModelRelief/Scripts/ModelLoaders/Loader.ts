@@ -98,7 +98,7 @@ export class Loader {
 
         let depthBuffer = mesh.depthBuffer;
         let meshParameters : MeshGenerateParameters = {
-            name : depthBuffer.name
+            name : mesh.name
         }    
         let bufferExtents = new THREE.Vector2(depthBuffer.width, depthBuffer.height);
         let meshExtents : THREE.Vector2 = CameraHelper.getNearPlaneExtents(depthBuffer.camera.viewCamera);
@@ -106,25 +106,30 @@ export class Loader {
         // NOOP default transform
         let transformer = (value : number) => {return value;};
 
+        // override transformer
         switch (mesh.format) {
 
             case MeshFormat.SDB:
-                // override transformer
                 transformer = depthBuffer.normalizedToModelDepth.bind(depthBuffer);
-                // Fall Through
+                break;
 
             case MeshFormat.SFP:
-
-                let loader = new SinglePrecisionLoader(meshParameters, floatArray, transformer, bufferExtents, meshExtents);
-                modelGroup = await loader.loadModelAsync();
+                // N.B. Solver returns a grid scaled according to the DepthBuffer dimensions (pixels). Only the Z coordinates are returned so the XY dimensions are implicity the DepthBuffer pixel units.
+                //      However, the Mesh construction logic will build the grid in real world model units so a conversion is required to map the Z values to real world units.
+                let scaleFactor = meshExtents.x / depthBuffer.width;
+                transformer = (value : number) => {return scaleFactor * value;};
                 break;
 
             case MeshFormat.DDB:
             case MeshFormat.DFP:
             default:
                 this._logger.addErrorMessage(`Logger: invalid Mesh type = ${mesh.format}`);
-                break;
+                return modelGroup;
         }
+
+        let loader = new SinglePrecisionLoader(meshParameters, floatArray, transformer, bufferExtents, meshExtents);
+        modelGroup = await loader.loadModelAsync();
+
         return modelGroup;
     }
 

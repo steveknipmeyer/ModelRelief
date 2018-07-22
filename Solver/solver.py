@@ -109,6 +109,7 @@ class Solver:
         self.mesh = Mesh(self.settings, self.services)
         self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'], self.services)
         self.mesh_transform = MeshTransform(self.settings['MeshTransform'])
+        print("%r" % self.mesh_transform)
 
     def process_depth_buffer(self):
         """
@@ -203,7 +204,8 @@ class Solver:
         # linear scale
         self.results.mesh_scaled = self.results.depth_buffer_model * self.mesh_transform.p1
 
-        if False:
+        write_file = False
+        if write_file:
             float_list = self.results.mesh_scaled.tolist()
             file_path = '%s/%s' % (self.working_folder, self.mesh.name)
             FileManager().write_binary(file_path, FileManager().pack_floats(float_list))
@@ -213,7 +215,7 @@ class Solver:
         current_height = np.max(self.results.mesh_transformed)
         factor = target_height / current_height
         self.results.mesh_transformed = self.results.mesh_transformed * factor
-
+        
     def write_mesh(self):
         """
             Write the final calculated mesh.
