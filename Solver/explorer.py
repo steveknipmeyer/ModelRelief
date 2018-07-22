@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python 
 #
 #   Copyright (c) 2018
 #   All Rights Reserved.
@@ -626,18 +626,18 @@ class Explorer(QtWidgets.QMainWindow):
         solver.transform()
 
         # Images
-        self.image_tabs[ImageType.DepthBuffer].data       = solver.depth_buffer_model
-        self.image_tabs[ImageType.Relief].data            = solver.mesh_scaled
-        self.image_tabs[ImageType.BackgroundMask].data    = solver.depth_buffer_mask
-        self.image_tabs[ImageType.GradientX].data         = solver.gradient_x
-        self.image_tabs[ImageType.GradientXMask].data     = solver.gradient_x_mask
-        self.image_tabs[ImageType.GradientY].data         = solver.gradient_y
-        self.image_tabs[ImageType.GradientYMask].data     = solver.gradient_y_mask
-        self.image_tabs[ImageType.CompositeMask].data     = solver.combined_mask
-        self.image_tabs[ImageType.GradientXUnsharp].data  = solver.gradient_x_unsharp
-        self.image_tabs[ImageType.GradientYUnsharp].data  = solver.gradient_y_unsharp
+        self.image_tabs[ImageType.DepthBuffer].data       = solver.results.depth_buffer_model
+        self.image_tabs[ImageType.Relief].data            = solver.results.mesh_scaled
+        self.image_tabs[ImageType.BackgroundMask].data    = solver.results.depth_buffer_mask
+        self.image_tabs[ImageType.GradientX].data         = solver.results.gradient_x
+        self.image_tabs[ImageType.GradientXMask].data     = solver.results.gradient_x_mask
+        self.image_tabs[ImageType.GradientY].data         = solver.results.gradient_y
+        self.image_tabs[ImageType.GradientYMask].data     = solver.results.gradient_y_mask
+        self.image_tabs[ImageType.CompositeMask].data     = solver.results.combined_mask
+        self.image_tabs[ImageType.GradientXUnsharp].data  = solver.results.gradient_x_unsharp
+        self.image_tabs[ImageType.GradientYUnsharp].data  = solver.results.gradient_y_unsharp
 
         # Meshes
-        self.mesh_tabs[MeshType.Model].mesh_widget.mesh_content.set_mesh(solver.depth_buffer_model, preserve_camera)
-        self.mesh_tabs[MeshType.ModelScaled].mesh_widget.mesh_content.set_mesh(solver.mesh_scaled, preserve_camera)
-        self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.set_mesh(solver.mesh_transformed, preserve_camera)
+        self.mesh_tabs[MeshType.Model].mesh_widget.mesh_content.set_mesh(solver.results.depth_buffer_model, preserve_camera)
+        self.mesh_tabs[MeshType.ModelScaled].mesh_widget.mesh_content.set_mesh(solver.results.mesh_scaled, preserve_camera)
+        self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.set_mesh(solver.results.mesh_transformed, preserve_camera)

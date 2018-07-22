@@ -30,12 +30,34 @@ from meshtransform import MeshTransform
 
 from attenuation import Attenuation
 from difference import Difference, FiniteDifference, Axis
-from gradient import Gradient
 from mask import Mask
 from meshscale import MeshScale
 from poisson import Poisson
 from threshold import Threshold
 from unsharpmask import UnsharpMask, UnsharpMaskParameters
+
+class Results:
+    """
+    Holds the results of the Solver solution including the intermediate values.
+    """
+    def __init__(self):
+        # image arrays
+        self.depth_buffer_model: np.ndarray = None                      # DepthBuffer : Z coordinates in model units
+        self.depth_buffer_mask: np.ndarray = None                       # DepthBuffer : background bit mask of complete model
+        self.dGxdx = None                                               # 1st derivative of Gradient wrt X: dGradientX(x,y) / dx
+        self.dGydy = None                                               # 1st derivative of Gradient wrt Y: dGradientY(x,y) / dy
+        self.divG = None                                                # div Gradient(x,y)
+        self.gradient_x: np.ndarray = None                              # GradientX (thresholded)
+        self.gradient_x_mask: np.ndarray = None                         # GradientY (thresholded)
+        self.gradient_y: np.ndarray = None                              # GradientX bit mask (thresholded)
+        self.gradient_y_mask: np.ndarray = None                         # GradientX bit mask (thresholded)
+        self.combined_mask: np.ndarray = None                           # final bit mask : compostite 
+        self.gradient_x_unsharp: np.ndarray = None                      # GradientX : (unsharp masked)
+        self.gradient_y_unsharp: np.ndarray = None                      # GradientY : (unsharp masked)
+
+        # final result
+        self.mesh_scaled: np.ndarray = None                             # Mesh: scaled linearly
+        self.mesh_transformed: np.ndarray = None                        # Mesh: complete solution
 
 class Solver:
     """
@@ -69,7 +91,6 @@ class Solver:
         # solver classes
         self.attenuation = Attenuation(self.services)
         self.difference = Difference(self.services)
-        self.gradient = Gradient(self.services)
         self.mask = Mask(self.services) 
         self.meshscale = MeshScale(self.services)
         self.poisson = Poisson(self.services) 
@@ -84,23 +105,7 @@ class Solver:
         self.enable_unsharpmask_gaussian_low = True
         self.enable_unsharpmask_high_frequence_scale = True
 
-        # image arrays
-        self.depth_buffer_model: np.ndarray = None                      # DepthBuffer : Z coordinated in model units
-        self.depth_buffer_mask: np.ndarray = None                       # DepthBuffer : background bit mask of complete model
-        self.dGxdx = None                                               # dGradientX(x,y) / dx
-        self.dGydy = None                                               # dGradientY(x,y) / dy
-        self.divG = None                                                # div Gradient(x,y)
-        self.gradient_x: np.ndarray = None                              # GradientX (thresholded)
-        self.gradient_x_mask: np.ndarray = None                         # GradientY (thresholded)
-        self.gradient_y: np.ndarray = None                              # GradientX bit mask (thresholded)
-        self.gradient_y_mask: np.ndarray = None                         # GradientX bit mask (thresholded)
-        self.combined_mask: np.ndarray = None                           # final bit mask : compostite 
-        self.gradient_x_unsharp: np.ndarray = None                      # GradientX : (unsharp masked)
-        self.gradient_y_unsharp: np.ndarray = None                      # GradientY : (unsharp masked)
-
-        # final result
-        self.mesh_scaled: np.ndarray = None
-        self.mesh_transformed: np.ndarray = None
+        self.results = Results()
 
         with open(settings) as json_file:
             self.settings = json.load(json_file)
@@ -120,8 +125,8 @@ class Solver:
             The depth buffer is converted into model units.
             The background bit mask is calculated.
         """
-        self.depth_buffer_model = self.depth_buffer.floats
-        self.depth_buffer_mask = self.depth_buffer.background_mask
+        self.results.depth_buffer_model = self.depth_buffer.floats
+        self.results.depth_buffer_mask = self.depth_buffer.background_mask
 
     def process_gradients(self):
         """
@@ -129,43 +134,43 @@ class Solver:
             The gradients are thresholded to remove high values such as at the model edges.
             The gradients are filtered by applying the composite mask.
         """
-        self.gradient_x = self.depth_buffer.gradient_x
-        self.gradient_y = self.depth_buffer.gradient_y
+        self.results.gradient_x = self.depth_buffer.gradient_x
+        self.results.gradient_y = self.depth_buffer.gradient_y
 
         # Modify gradient by applying threshold, setting values above threshold to zero.
         threshold = self.mesh_transform.gradient_threshold if self.enable_gradient_threshold else float("inf")
-        self.gradient_x = self.threshold.apply(self.gradient_x, threshold)
-        self.gradient_y = self.threshold.apply(self.gradient_y, threshold)
+        self.results.gradient_x = self.threshold.apply(self.results.gradient_x, threshold)
+        self.results.gradient_y = self.threshold.apply(self.results.gradient_y, threshold)
 
         # Composite mask: Values are processed only if they pass all three masks.
         #    A value must have a 1 in the background mask.
         #    A value must have both dI/dx <and> dI/dy that are 1 in the respective gradient masks.
-        self.gradient_x_mask = self.mask.mask_threshold(self.gradient_x, threshold)
-        self.gradient_y_mask = self.mask.mask_threshold(self.gradient_y, threshold)
-        self.combined_mask = self.gradient_x_mask * self.gradient_y_mask
+        self.results.gradient_x_mask = self.mask.mask_threshold(self.results.gradient_x, threshold)
+        self.results.gradient_y_mask = self.mask.mask_threshold(self.results.gradient_y, threshold)
+        self.results.combined_mask = self.results.gradient_x_mask * self.results.gradient_y_mask
         # N.B. Including the background result in the mask causes the "leading" derivatives along +X, +Y to be excluded.
         #      The derivates are forward differences so they are defined (along +X, +Y) in the XY region <outside> the background mask.
         # self.combined_mask = self.combined_mask * self.depth_buffer_mask
 
         # Mask the thresholded gradients.
-        self.gradient_x = self.gradient_x * self.combined_mask
-        self.gradient_y = self.gradient_y * self.combined_mask
+        self.results.gradient_x = self.results.gradient_x * self.results.combined_mask
+        self.results.gradient_y = self.results.gradient_y * self.results.combined_mask
 
     def process_attenuation(self):
         """
             Attenuate the gradients to dampen large values.
         """
         if self.enable_attenuation:
-            self.gradient_x = self.attenuation.apply(self.gradient_x, self.mesh_transform.attenuation_parameters)
-            self.gradient_y = self.attenuation.apply(self.gradient_y, self.mesh_transform.attenuation_parameters)
+            self.results.gradient_x = self.attenuation.apply(self.results.gradient_x, self.mesh_transform.attenuation_parameters)
+            self.results.gradient_y = self.attenuation.apply(self.results.gradient_y, self.mesh_transform.attenuation_parameters)
 
     def process_unsharpmask(self):
         """
             Apply unsharp masking to amplify details.
             The high frequency features are obtained from the image, scaled and the added back.
         """
-        self.gradient_x_unsharp = self.gradient_x
-        self.gradient_y_unsharp = self.gradient_y
+        self.results.gradient_x_unsharp = self.results.gradient_x
+        self.results.gradient_y_unsharp = self.results.gradient_y
 
         if self.enable_unsharpmask:
             gaussian_low = self.mesh_transform.unsharpmask_parameters.gaussian_low if self.enable_unsharpmask_gaussian_high else 0.0
@@ -173,26 +178,26 @@ class Solver:
             high_frequency_scale = self.mesh_transform.unsharpmask_parameters.high_frequency_scale if self.enable_unsharpmask_high_frequence_scale else 1.0
             parameters = UnsharpMaskParameters(gaussian_low, gaussian_high, high_frequency_scale)
 
-            self.gradient_x_unsharp = self.unsharpmask.apply(self.gradient_x, self.combined_mask, parameters)
-            self.gradient_y_unsharp = self.unsharpmask.apply(self.gradient_y, self.combined_mask, parameters)
+            self.results.gradient_x_unsharp = self.unsharpmask.apply(self.results.gradient_x, self.results.combined_mask, parameters)
+            self.results.gradient_y_unsharp = self.unsharpmask.apply(self.results.gradient_y, self.results.combined_mask, parameters)
 
     def process_poisson(self):
         """
             Solve the Poisson equation that returns the final reconstructed mesh from the modified gradients.
         """
-        self.dGxdx = self.difference.difference_x(self.gradient_x_unsharp, FiniteDifference.Backward)
-        self.dGydy = self.difference.difference_y(self.gradient_y_unsharp, FiniteDifference.Backward)
-        self.divG = self.dGxdx + self.dGydy
+        self.results.dGxdx = self.difference.difference_x(self.results.gradient_x_unsharp, FiniteDifference.Backward)
+        self.results.dGydy = self.difference.difference_y(self.results.gradient_y_unsharp, FiniteDifference.Backward)
+        self.results.divG = self.results.dGxdx + self.results.dGydy
 
-        self.mesh_transformed = self.poisson.solve(self.divG)
+        self.results.mesh_transformed = self.poisson.solve(self.results.divG)
 
         # apply offset
-        offset = np.min(self.mesh_transformed)
-        self.mesh_transformed = self.mesh_transformed - offset
+        offset = np.min(self.results.mesh_transformed)
+        self.results.mesh_transformed = self.results.mesh_transformed - offset
 
         # apply background mask to reset background to zero
-        self.mesh_transformed = self.mesh_transformed * self.depth_buffer_mask
-        self.mesh_scaled = self.mesh_transformed
+        self.results.mesh_transformed = self.results.mesh_transformed * self.results.depth_buffer_mask
+        self.results.mesh_scaled = self.results.mesh_transformed
 
     def process_scale(self):
         """
@@ -200,26 +205,26 @@ class Solver:
         """
         # linear scale
         # self.mesh_scaled = self.meshscale.scale_linear(self.depth_buffer, self.mesh_transform.p1)
-        self.mesh_scaled = self.depth_buffer_model * self.mesh_transform.p1
+        self.results.mesh_scaled = self.results.depth_buffer_model * self.mesh_transform.p1
 
         if False:
-            float_list = self.mesh_scaled.tolist()
+            float_list = self.results.mesh_scaled.tolist()
             file_path = '%s/%s' % (self.working_folder, self.mesh.name)
             FileManager().write_binary(file_path, FileManager().pack_floats(float_list))
 
         # relief scale
-        target_height = np.max(self.mesh_scaled)
-        current_height = np.max(self.mesh_transformed)
+        target_height = np.max(self.results.mesh_scaled)
+        current_height = np.max(self.results.mesh_transformed)
         factor = target_height / current_height
-        self.mesh_transformed = self.mesh_transformed * factor
+        self.results.mesh_transformed = self.results.mesh_transformed * factor
 
     def write_mesh(self):
         """
             Write the final calculated mesh.
         """
         file_path = '%s/%s' % (self.working_folder, self.mesh.name)
-        (width, height) = self.mesh_transformed.shape
-        mesh_list = self.mesh_transformed.reshape(width * height, 1)
+        (width, height) = self.results.mesh_transformed.shape
+        mesh_list = self.results.mesh_transformed.reshape(width * height, 1)
         FileManager().write_binary(file_path, FileManager().pack_floats(mesh_list))
 
     def debug_results(self):
@@ -233,12 +238,12 @@ class Solver:
                 print ("Results")
                 print ("------------------------------------------------------------")
                 MathTools.print_array("I", self.depth_buffer.floats)
-                MathTools.print_array("Gx", self.gradient_x)
-                MathTools.print_array("dGxdx", self.dGxdx)
-                MathTools.print_array("Gy", self.gradient_y)
-                MathTools.print_array("dGydy", self.dGydy)
-                MathTools.print_array("divG", self.divG)
-                MathTools.print_array("Poisson Solution", self.mesh_transformed)
+                MathTools.print_array("Gx", self.results.gradient_x)
+                MathTools.print_array("dGxdx", self.results.dGxdx)
+                MathTools.print_array("Gy", self.results.gradient_y)
+                MathTools.print_array("dGydy", self.results.dGydy)
+                MathTools.print_array("divG", self.results.divG)
+                MathTools.print_array("Poisson Solution", self.results.mesh_transformed)
 
     def transform(self):
         """
@@ -275,3 +280,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
