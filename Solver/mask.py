@@ -50,7 +50,7 @@ class Mask:
         mask[mask > Mask.EPSILON] = 1
         return mask
 
-    def mask_threshold (self, original: np.ndarray, threshold: float) -> np.ndarray:
+    def threshold (self, original: np.ndarray, threshold: float) -> np.ndarray:
         """
         Masks an image array by setting array elements with an absolute value below the threshold to 1.
         N.B. This produces a different result than self.background_from_depth+buffer which expects to operate on only <positive> image values such as from a depth_buffer.

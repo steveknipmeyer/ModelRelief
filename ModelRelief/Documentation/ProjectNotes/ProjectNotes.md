@@ -6,9 +6,6 @@ Group images into a data structure.
 
     Solver           
         Meshes are not oriented correctly in Mayavi Isometric views.
-        Solver
-            Group helper classes into a data structure.
-            Should self.depth_buffer be self.depthbuffer?
 
         Create additional test models.
             Spheres (Positive, Negative)
