@@ -127,11 +127,8 @@ export class CameraControls {
         this.settings.camera.viewCamera.updateProjectionMatrix();
 
         // UI controls
-        this._controlNearClippingPlane.min(clippingPlanes.near);
-        this._controlNearClippingPlane.max (clippingPlanes.far);
-        
-        this._controlFarClippingPlane.min(clippingPlanes.near);
-        this._controlFarClippingPlane.max(clippingPlanes.far);
+        this._controlNearClippingPlane.setValue(clippingPlanes.near)
+        this._controlFarClippingPlane.setValue(clippingPlanes.far)
     }
     //#endregion
 
@@ -215,7 +212,7 @@ export class CameraControls {
         if (showClippingControls) {
             // Near Clipping Plane
             minimum  =   0.1;
-            maximum  = 100;
+            maximum  = Camera.DefaultFarClippingPlane;
             stepSize =   0.1;
             this._controlNearClippingPlane = cameraOptions.add(this.settings.camera.viewCamera, 'near').name('Near Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
             this._controlNearClippingPlane.onChange (function (value) {
