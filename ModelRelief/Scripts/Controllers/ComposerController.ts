@@ -250,6 +250,10 @@ export class ComposerController {
         this.activeDepthBuffer.camera = this.activeDepthBufferCamera;
         this.activeDepthBuffer.width  = this._reliefWidthPixels;
         this.activeDepthBuffer.height = this._reliefHeightPixels;
+
+        // The DepthBuffer is not synchronized because of changes to its dependent objects (e.g. Camera).
+        // Do not allow the (currently unimplemented) FileGenerateRequest to be queued because POST will update the object.
+        this.activeDepthBuffer.fileIsSynchronized = false;
         let depthBufferModel : Dto.DepthBuffer = await this.activeDepthBuffer.toDtoModel().putAsync();
 
         // file
@@ -276,6 +280,8 @@ export class ComposerController {
      */
     async updateMeshAsync(): Promise<Dto.Mesh> {
 
+        // The Mesh is not synchronized because of changes to its dependent objects (Camera, DepthBuffer).
+        // Force the Mesh to be re-generated now on the back end.
         this.activeMesh.fileIsSynchronized = true;
 
         let updateMeshModel = this.activeMesh.toDtoModel().putAsync();

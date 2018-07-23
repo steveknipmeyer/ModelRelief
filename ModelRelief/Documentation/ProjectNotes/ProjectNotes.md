@@ -1,16 +1,12 @@
 ﻿### Tasks
 #### Commit Notes
-Group images into a data structure.
 
 #### Short Term  
     BoundClipping does not set UI values.    
-    GenerateDepthBufferAsync is not implemented.
-        Why is this generated <only> the 1st time? 
-        Could this be related to FileStamps?
 
     Solver           
         Meshes are not oriented correctly in Mayavi Isometric views.
-        The default model meshes need to be recalculated to match the MeshTransform properties.
+        The default model meshes need to be regenerated to match the MeshTransform properties.
 
         Create additional test models.
             Spheres (Positive, Negative)
@@ -1181,3 +1177,15 @@ https://semver.npmjs.com/
 #### Mayavi
         pip install mayavi
         pip install --upgrade --force-reinstall mayavi
+
+#### FileGenerateReqquest
+    A GenerateFileRequest is queued when:
+        FileIsSynchronized : False -> True
+        No FileTimeStamp change (avoiding a POST false positive)
+
+    DepthBuffer does not implement FileGenerateRequest now because there is no means to generate a new DepthBuffer on the backend.
+        Later, there could be a case for generating DepthBuffers on the server to allow completely API-driven workflows.
+
+    N.B. GeneratedFile models held in memory (e.g. DepthBuffer in ComposerController) do not have the FileIsSynchronized property updated (invalidated) after a dependency (e.g. Camera) has been modified.
+        Therefore, the ComposerView instances of DepthBuffer, Mesh do not accurately reflect the state of FileIsSynchronized in the database.
+        So, ComposerController explicitly sets FileIsSynchronized before a GeneratedFileModel update (PUT) to express the intent.

@@ -88,10 +88,9 @@ namespace ModelRelief.Services.Jobs
         /// /// <returns>True if successful.</returns>
         public async Task<bool> GenerateDepthBufferAsync(Domain.DepthBuffer depthBuffer, CancellationToken cancellationToken = default)
         {
-            // N.B. This case happens when a DepthBuffer file has been posted which causes the FileIsSynchronized property to become true.
-            //      When a GeneratedFileDomainModel has this property change state (false -> true) a GenerateFileRequest is triggered.
-            //      (Now) GenerateFileRequest has no meaning for a DepthBuffer since the file is always posted.
-            //      Later, it may be that a DepthBuffer could be re-generated <automatically> (e.g. Camera change).
+            // N.B. DepthBuffer does not implement FileGenerateRequest now because there is no means to generate a new DepthBuffer on the backend.
+            // Later, there could be a case for generating DepthBuffers on the server to allow completely API-driven workflows.
+
             Logger.LogError($"{nameof(GenerateDepthBufferAsync)} is not implemented.");
             await Task.CompletedTask;
             return false;
