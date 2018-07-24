@@ -2,17 +2,25 @@
 #### Commit Notes
 
 #### Short Term  
-    BoundClipping does not set UI values.    
+    Review the Blender implementation.
+        What were the post-processing steps that were done to prepare the data for the Poisson solver?
+
+    Write OBJ
+        Inspection in other viewers and editors (.e.g Rhino) is necessary.
+        
+    Gradients are calculated from the DepthBuffer which directly reflects the faceting of the model.
+        Could the DepthBuffer use the fragment shader which has interpolated vertex coordinates?
+
+    Create additional test models.
+        Spheres (Positive, Negative)
+        Cubes
+        Architectural
+        Locomotive
 
     Solver           
         Meshes are not oriented correctly in Mayavi Isometric views.
         The default model meshes need to be regenerated to match the MeshTransform properties.
 
-        Create additional test models.
-            Spheres (Positive, Negative)
-            Cubes
-            Architectural
-            Locomotive
 
         Optimize the divergence calculation. Vectorize?
                 differences : 0.45 sec
@@ -22,7 +30,8 @@
         Add gulp build task for Explorer?
 
     Explore Python unit tests.
-    Lambda
+    Explorer Python environments.
+        This will facilitate Docker and then hosting.
 
     3D Surface Visualization
         https://jakevdp.github.io/PythonDataScienceHandbook/04.12-three-dimensional-plotting.html
