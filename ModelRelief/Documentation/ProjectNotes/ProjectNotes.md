@@ -2,12 +2,24 @@
 #### Commit Notes
 
 #### Short Term  
+    New Models
+        Add the new model JSON files to Test.
+        Some Model and Mesh cameras refer to objects in other Projects.
+            Is this valid? Can a resource reference a resource in another project?
+    Camera translations are not handled correctly.
+    
     Review the Blender implementation.
         What were the post-processing steps that were done to prepare the data for the Poisson solver?
+    Review the technical papers.
+    Review ZSurf.
+    Review ArtCAM.
+    Generalize the handling of models so that they are scale independent.
 
+    OBJ Loader
+        The loader does not handle Bones.
     Write OBJ
         Inspection in other viewers and editors (.e.g Rhino) is necessary.
-        
+
     Gradients are calculated from the DepthBuffer which directly reflects the faceting of the model.
         Could the DepthBuffer use the fragment shader which has interpolated vertex coordinates?
 
@@ -18,6 +30,8 @@
         Locomotive
 
     Solver           
+        Resize before generating content?
+
         Meshes are not oriented correctly in Mayavi Isometric views.
         The default model meshes need to be regenerated to match the MeshTransform properties.
 
@@ -975,6 +989,20 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     OpinionatedApiController : Spencer Schneidenbach
     ContosoCore              : Jimmy Bogard
 
+    Model                                       Project         Source      License             Link
+    Armadillo                                   Stanford        Stanford
+    Bunny                                       Stanford        Stanford
+    Lucy                                        Stanford        Stanford
+    Test                                        ModelRelief     Internal
+
+    Buddha                                      Stanford        Stanford
+    Dolphin                                     Jewelry         TurboSquid  RoyaltyFree         https://www.turbosquid.com/FullPreview/Index.cfm/ID/332975
+    Dragon                                      Stanford        Stanford
+    House (San Francisco)                       Architectural   TurboSquid  RoyaltyFree         https://www.turbosquid.com/FullPreview/Index.cfm/ID/832520
+    Roadster (Duesen Bayern Mystar 190 SL)      Jewelry         TurboSquid  Editorial(None)     https://www.turbosquid.com/3d-models/free-duesen-bayern-mystar-190-3d-model/1062796
+    Statue                                      Stanford        Stanford
+    Tyrannosaurus                               Stanford        Stanford
+
 #### Visual Studio 
     Performance
         https://developercommunity.visualstudio.com/content/problem/43364/visual-studio-2017-increadibly-slow-and-laggy.html
@@ -1164,9 +1192,10 @@ https://semver.npmjs.com/
         In ModelRelief, open the new model and generate a relief.
         Replace the DepthBuffer and Mesh with the newly-generated files.
         Update the Camera settings in DbInitializer with the updated Camera properties as shown in the Camera page.
+
     Update ModelRelief.Test
         Update the ID range of the objects in the test database.
-             IdRange = Enumerable.Range(1, 6);          
+             IdRange = Enumerable.Range(1, 11);          
 
 #### Numpy
     Numpy gradients are 10,000X faster!

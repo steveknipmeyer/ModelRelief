@@ -33,8 +33,8 @@ namespace ModelRelief.Test.TestModels.DepthBuffers
             ApiUrl = "/api/v1/depth-buffers";
             UxUrl  = "/depthbuffers";
 
-            IdRange = Enumerable.Range(1, 4);
-            FirstModelName = "lucy.sdb";
+            IdRange = Enumerable.Range(1, 11);
+            FirstModelName = "armadillo.sdb";
 
             ReferencePropertyNames = new List<string> { "ProjectId", "Model3dId", "CameraId" };
             InvalidReferenceProperty = 0;

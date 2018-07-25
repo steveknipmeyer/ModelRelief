@@ -33,8 +33,8 @@ namespace ModelRelief.Test.TestModels.Projects
             ApiUrl = "/api/v1/projects";
             UxUrl  = "/projects";
 
-            IdRange = Enumerable.Range(1, 3);
-            FirstModelName = "ModelRelief";
+            IdRange = Enumerable.Range(1, 4);
+            FirstModelName = "Architecture";
 
             ReferencePropertyNames = new List<string>();
             InvalidReferenceProperty = 0;

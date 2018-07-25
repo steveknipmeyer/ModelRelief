@@ -33,8 +33,8 @@ namespace ModelRelief.Test.TestModels.Meshes
             ApiUrl = "/api/v1/meshes";
             UxUrl  = "/meshes";
 
-            IdRange = Enumerable.Range(1, 4);
-            FirstModelName = "lucy.sfp";
+            IdRange = Enumerable.Range(1, 11);
+            FirstModelName = "armadillo.sfp";
 
             ReferencePropertyNames = new List<string> { "ProjectId", "CameraId", "DepthBufferId", "MeshTransformId" };
             InvalidReferenceProperty = 0;
