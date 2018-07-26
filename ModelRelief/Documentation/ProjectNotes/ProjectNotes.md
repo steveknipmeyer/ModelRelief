@@ -2,70 +2,28 @@
 #### Commit Notes
 
 #### Short Term  
-    Solver.pyproj: viewer.py
-    
-    Unit Tests        
-        Dynamically determine the number of models in a table and the first model.
-            Can the model endpoint be used to query the database?
-                /meshes/
-                /models/
-                IdRange = Enumerable.Range(1, 11); -> DB query
-                FirstModelName = "Identity"; -> DB query
     New Models
         Can the MeshTransform settings be copied from the JSON file?
-        Create a data structure for a model.
-
-    Evaluate OrbitControls.
-    Camera translations are not handled correctly.
-
-    Generalize the handling of models so that they are scale independent.
-        Should the clipping range extents be set dynamically instead of through constants?
-    
-    OBJ Loader
-        The loader does not handle Bones.
-
-    Write OBJ
-        Inspection in other viewers and editors (.e.g Rhino) is necessary.
-
-    Models
-        Some Model and Mesh cameras refer to objects in other Projects.
-            Is it validfor a resource to reference a resource in another project?
-
-    Technical Review
-        Review the Blender implementation.
-            What were the pre-processing steps that were done to prepare the data for the Poisson solver?
-        Review the technical papers.
-        Review ZSurf.
-        Review ArtCAM.
-    
-    Investigate Git large file storage.
-        D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief>git push
-        Counting objects: 82, done.
-        Delta compression using up to 12 threads.
-        Compressing objects: 100% (61/61), done.
-        Writing objects: 100% (82/82), 45.99 MiB | 1.78 MiB/s, done.
-        Total 82 (delta 34), reused 0 (delta 0)
-        remote: Resolving deltas: 100% (34/34), completed with 12 local objects.
-        remote: warning: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.
-        remote: warning: See http://git.io/iEPt8g for more information.
-        remote: warning: File ModelRelief/Test/Data/Users/models/roadster/roadster.obj is 62.69 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
-        remote: warning: File ModelRelief/Test/Data/Users/models/statue/statue.obj is 89.36 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
-        To https://github.com/steveknipmeyer/ModelRelief.git
-        effd8c2..a3274da  master -> master
-
-    Gradients are calculated from the DepthBuffer which directly reflects the faceting of the model.
-        Could the DepthBuffer use the fragment shader which has interpolated vertex coordinates?
 
     Create additional test models.
         Spheres (Positive, Negative)
         Cubes
         Architectural
 
+    Write OBJ
+        Inspection in other viewers and editors (.e.g Rhino) is necessary.
+    
+    Technical Review
+        Review the Blender implementation.
+            What were the pre-processing steps that were done to prepare the data for the Poisson solver?
+        Review the technical papers.
+        Review ZSurf.
+        Review ArtCAM.
+
     Solver           
         Resize before generating content?
 
         Meshes are not oriented correctly in Mayavi Isometric views.
-        The default model meshes need to be regenerated to match the MeshTransform properties.
 
         Optimize the divergence calculation. Vectorize?
                 differences : 0.45 sec
@@ -761,6 +719,10 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
             (ModelController)
             (MeshController)
 
+#### Model Loaders
+    The OBJLoader does not handle Bones.
+        Could this be resolved in a later version of Three.js?
+        
 #### Viewer
     Large Models
         Design: Should all models be scaled to fit within the default view frustrum?
@@ -771,6 +733,9 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
             The UI CameraControls need to be set based on the dimensions of the model.
         Camera position now is always based on the loaded Camera DTO.
             Support needs to be added to set a camera position for a brand new model (for which no Camera DTO exists).
+    
+    Transform Control
+        This would allow the model to be positioned instead of the camera to set up the scene with much more control.
 
     Progress Indicator
     OrbitControls versus Trackball
@@ -782,9 +747,16 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 
     Create a set of sample materials such as wood, glass, plaster, etc.
 
+    Pan
+        Camera translations are not handled correctly.
+
     Camera
         Why does the View change slightly after the 2nd Fit View?
             This happens only if the view has been <panned>.
+
+####Shaders
+    Gradients are calculated from the DepthBuffer which directly reflects the faceting of the model.
+        Could the DepthBuffer use the fragment shader which has interpolated vertex coordinates?
 
 #### Optimization
     Why is MeshValidator called several time during a Put request?
@@ -913,6 +885,21 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 |user|~/.config/git/config|
 |project|.git/config||.git\config
 
+    Investigate Git large file storage.
+        D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief>git push
+        Counting objects: 82, done.
+        Delta compression using up to 12 threads.
+        Compressing objects: 100% (61/61), done.
+        Writing objects: 100% (82/82), 45.99 MiB | 1.78 MiB/s, done.
+        Total 82 (delta 34), reused 0 (delta 0)
+        remote: Resolving deltas: 100% (34/34), completed with 12 local objects.
+        remote: warning: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.
+        remote: warning: See http://git.io/iEPt8g for more information.
+        remote: warning: File ModelRelief/Test/Data/Users/models/roadster/roadster.obj is 62.69 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+        remote: warning: File ModelRelief/Test/Data/Users/models/statue/statue.obj is 89.36 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+        To https://github.com/steveknipmeyer/ModelRelief.git
+        effd8c2..a3274da  master -> master
+
 #### TypeScript
     TypeScript Installations
         VSCode
@@ -1022,16 +1009,15 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 
     Model                                       Project         Source      License             Link
     Armadillo                                   Stanford        Stanford
-    Bunny                                       Stanford        Stanford
-    Lucy                                        Stanford        Stanford
-    Test                                        ModelRelief     Internal
-
     Buddha                                      Stanford        Stanford
+    Bunny                                       Stanford        Stanford
     Dolphin                                     Jewelry         TurboSquid  RoyaltyFree         https://www.turbosquid.com/FullPreview/Index.cfm/ID/332975
     Dragon                                      Stanford        Stanford
     House (San Francisco)                       Architectural   TurboSquid  RoyaltyFree         https://www.turbosquid.com/FullPreview/Index.cfm/ID/832520
+    Lucy                                        Stanford        Stanford
     Roadster (Duesen Bayern Mystar 190 SL)      Jewelry         TurboSquid  Editorial(None)     https://www.turbosquid.com/3d-models/free-duesen-bayern-mystar-190-3d-model/1062796
     Statue                                      Stanford        Stanford
+    Test                                        ModelRelief     Internal
     Tyrannosaurus                               Stanford        Stanford
 
 #### Visual Studio 
@@ -1218,15 +1204,9 @@ https://semver.npmjs.com/
         [X] AddCameras
         [X] AddMeshes
 
-        Copy a proxy DepthBuffer and Mesh from another model. This will be replaced later after the final DepthBuffer and Mesh have been generated using Generate Relief.
-
         In ModelRelief, open the new model and generate a relief.
-        Replace the DepthBuffer and Mesh with the newly-generated files.
+        Add the generated DepthBuffer and Mesh from the store folder to ModelRelief\Test.
         Update the Camera settings in DbInitializer with the updated Camera properties as shown in the Camera page.
-
-    Update ModelRelief.Test
-        Update the ID range of the objects in the test database.
-             IdRange = Enumerable.Range(1, 11);          
 
 #### Numpy
     Numpy gradients are 10,000X faster!

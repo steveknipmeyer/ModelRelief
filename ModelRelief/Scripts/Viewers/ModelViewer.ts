@@ -16,7 +16,6 @@ import { ILogger }                        from 'Logger';
 import { Materials }                      from 'Materials';
 import { Model3d }                        from "Model3d";
 import { ModelViewerControls }            from "ModelViewerControls";
-import { TrackballControls }              from 'TrackballControls';
 import { Services }                       from 'Services';
 import { Viewer }                         from 'Viewer';
 

@@ -19,7 +19,6 @@ import {Mesh}                       from 'Mesh';
 import {Mesh3d}                     from 'Mesh3d';
 import {MeshViewerControls}         from 'MeshViewerControls';
 import {Services}                   from 'Services';
-import {TrackballControls}          from 'TrackballControls';
 import {Viewer}                     from 'Viewer';
   
 /**
