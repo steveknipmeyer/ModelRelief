@@ -2,23 +2,50 @@
 #### Commit Notes
 
 #### Short Term  
-    New Models
-        Add the new model JSON files to Test.
+    Models
         Some Model and Mesh cameras refer to objects in other Projects.
-            Is this valid? Can a resource reference a resource in another project?
+            Is it validfor a resource to reference a resource in another project?
+
     Camera translations are not handled correctly.
-    
-    Review the Blender implementation.
-        What were the post-processing steps that were done to prepare the data for the Poisson solver?
-    Review the technical papers.
-    Review ZSurf.
-    Review ArtCAM.
+
+    Technical Review
+        Review the Blender implementation.
+            What were the pre-processing steps that were done to prepare the data for the Poisson solver?
+        Review the technical papers.
+        Review ZSurf.
+        Review ArtCAM.
+
     Generalize the handling of models so that they are scale independent.
+        Should the clipping range extents be set dynamically instead of through constants?
+
+    Unit Tests        
+        Dynamically determine the number of models in a table and the first model.
+            Can the model endpoint be used to query the database?
+                /meshes/
+                /models/
+                IdRange = Enumerable.Range(1, 11); -> DB query
+                FirstModelName = "Identity"; -> DB query
 
     OBJ Loader
         The loader does not handle Bones.
+
     Write OBJ
         Inspection in other viewers and editors (.e.g Rhino) is necessary.
+    
+    Investigate Git large file storage.
+        D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief>git push
+        Counting objects: 82, done.
+        Delta compression using up to 12 threads.
+        Compressing objects: 100% (61/61), done.
+        Writing objects: 100% (82/82), 45.99 MiB | 1.78 MiB/s, done.
+        Total 82 (delta 34), reused 0 (delta 0)
+        remote: Resolving deltas: 100% (34/34), completed with 12 local objects.
+        remote: warning: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.
+        remote: warning: See http://git.io/iEPt8g for more information.
+        remote: warning: File ModelRelief/Test/Data/Users/models/roadster/roadster.obj is 62.69 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+        remote: warning: File ModelRelief/Test/Data/Users/models/statue/statue.obj is 89.36 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+        To https://github.com/steveknipmeyer/ModelRelief.git
+        effd8c2..a3274da  master -> master
 
     Gradients are calculated from the DepthBuffer which directly reflects the faceting of the model.
         Could the DepthBuffer use the fragment shader which has interpolated vertex coordinates?
@@ -27,7 +54,6 @@
         Spheres (Positive, Negative)
         Cubes
         Architectural
-        Locomotive
 
     Solver           
         Resize before generating content?
