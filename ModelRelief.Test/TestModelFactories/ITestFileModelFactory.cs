@@ -12,7 +12,7 @@ namespace ModelRelief.Test.TestModels
 
     public interface ITestFileModelFactory : ITestModelFactory
     {
-        Task<IModel> PostNewFile(ClassFixture classFixture, int modelId, string fileName);
-        Task<IModel> PutFile(ClassFixture classFixture, int modelId, string fileName);
+        Task<IModel> PostNewFile(int modelId, string fileName);
+        Task<IModel> PutFile(int modelId, string fileName);
     }
 }

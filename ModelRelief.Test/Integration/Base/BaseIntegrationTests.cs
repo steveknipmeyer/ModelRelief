@@ -52,7 +52,7 @@ namespace ModelRelief.Test.Integration
             var modelId = TestModelFactory.IdRange.Min();
 
             // Act
-            var existingModel = await TestModelFactory.FindModel(ClassFixture, modelId);
+            var existingModel = await TestModelFactory.FindModel(modelId);
 
             // Assert
             existingModel.Name.Should().Be(TestModelFactory.FirstModelName);
@@ -230,7 +230,7 @@ namespace ModelRelief.Test.Integration
         {
             // Arrange
             var modelId = TestModelFactory.IdRange.Max();
-            var existingModel = await TestModelFactory.FindModel(ClassFixture, modelId);
+            var existingModel = await TestModelFactory.FindModel(modelId);
 
             // Act
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModelFactory.ApiUrl}/{modelId + 1}", existingModel);
@@ -287,7 +287,7 @@ namespace ModelRelief.Test.Integration
 
             // Arrange
             var modelId = TestModelFactory.IdRange.Max();
-            var existingModel = await TestModelFactory.FindModel(ClassFixture, modelId);
+            var existingModel = await TestModelFactory.FindModel(modelId);
             TestModelFactory.SetReferenceProperty(existingModel, TestModelFactory.InvalidReferenceProperty);
 
             // Act
@@ -421,7 +421,7 @@ namespace ModelRelief.Test.Integration
 
             // Arrange
             var modelId = TestModelFactory.IdRange.Max();
-            var invalidPatchModel = await TestModelFactory.FindModel(ClassFixture, modelId);
+            var invalidPatchModel = await TestModelFactory.FindModel(modelId);
             TestModelFactory.SetReferenceProperty(invalidPatchModel, TestModelFactory.InvalidReferenceProperty);
 
             // Act

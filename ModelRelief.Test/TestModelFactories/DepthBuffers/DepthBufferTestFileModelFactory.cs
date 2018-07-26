@@ -20,8 +20,9 @@ namespace ModelRelief.Test.TestModels.DepthBuffers
         /// Initializes a new instance of the <see cref="DepthBufferTestFileModelFactory"/> class.
         /// Constructor
         /// </summary>
-        public DepthBufferTestFileModelFactory()
-            : base()
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        public DepthBufferTestFileModelFactory(ClassFixture classFixture)
+            : base(classFixture)
         {
         }
 
@@ -32,9 +33,6 @@ namespace ModelRelief.Test.TestModels.DepthBuffers
         {
             ApiUrl = "/api/v1/depth-buffers";
             UxUrl  = "/depthbuffers";
-
-            IdRange = Enumerable.Range(1, 11);
-            FirstModelName = "armadillo.sdb";
 
             ReferencePropertyNames = new List<string> { "ProjectId", "Model3dId", "CameraId" };
             InvalidReferenceProperty = 0;

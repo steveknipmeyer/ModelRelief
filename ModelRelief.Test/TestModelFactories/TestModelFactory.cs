@@ -28,6 +28,8 @@ namespace ModelRelief.Test.TestModels
         where TEntity : DomainModel
         where TGetModel : class, IModel, new()
     {
+        public ClassFixture ClassFixture { get; }
+
         public Type Type => typeof(TEntity);
 
         public IEnumerable<int> IdRange  { get; set; }
@@ -46,9 +48,36 @@ namespace ModelRelief.Test.TestModels
         /// Initializes a new instance of the <see cref="TestModelFactory{TEntity, TGetModel}"/> class.
         /// Constructor.
         /// </summary>
-        public TestModelFactory()
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        public TestModelFactory(ClassFixture classFixture)
         {
+            ClassFixture = classFixture;
+
             Initialize();
+            InitializeByQuery();
+        }
+
+        /// <summary>
+        /// Initialize the table-dependent properties such as model counts, first model, etc.
+        /// </summary>
+        public virtual void InitializeByQuery()
+        {
+            // N.B. This method uses async methods to query the database.
+            //      The helper async methods are called synchronously because this method is called from the constructor.
+            // https://stackoverflow.com/questions/5095183/how-would-i-run-an-async-taskt-method-synchronously
+
+            // first model
+            var requestResponse = ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiUrl}/1").GetAwaiter().GetResult();
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            var firstModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            FirstModelName = firstModel.Name;
+
+            // range of model IDs
+            requestResponse = ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiUrl}").GetAwaiter().GetResult();
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            var queryList = JsonConvert.DeserializeObject<PagedResults<TEntity>>(requestResponse.ContentString);
+            var totalNumberOfRecords = queryList.TotalNumberOfRecords;
+            IdRange = Enumerable.Range(1, totalNumberOfRecords);
         }
 
         /// <summary>
@@ -72,12 +101,11 @@ namespace ModelRelief.Test.TestModels
         /// <summary>
         /// Finds an existing model.
         /// </summary>
-        /// <param name="classFixture">Class fixture.</param>
         /// <param name="modelId">Id of model to retrieve.</param>
         /// <returns>Existing model.</returns>
-        public async Task<IModel> FindModel(ClassFixture classFixture, int modelId)
+        public async Task<IModel> FindModel(int modelId)
         {
-            var requestResponse = await classFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiUrl}/{modelId}");
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiUrl}/{modelId}");
 
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
@@ -158,14 +186,13 @@ namespace ModelRelief.Test.TestModels
         /// <summary>
         /// Creates a new resource.
         /// </summary>
-        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         /// <param name="model">New model to POST.</param>
-        public virtual async Task<IModel> PostNewModel(ClassFixture classFixture, IModel model)
+        public virtual async Task<IModel> PostNewModel(IModel model)
         {
             // Arrange
 
             // Act
-            var requestResponse = await classFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Post, ApiUrl, model);
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Post, ApiUrl, model);
 
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -179,23 +206,21 @@ namespace ModelRelief.Test.TestModels
         /// <summary>
         /// Creates a new resource.
         /// </summary>
-        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
-        public virtual async Task<IModel> PostNewModel(ClassFixture classFixture)
+        public virtual async Task<IModel> PostNewModel()
         {
-            return await PostNewModel(classFixture, ConstructValidModel());
+            return await PostNewModel(ConstructValidModel());
         }
 
         /// <summary>
         /// Updates a resource.
         /// </summary>
-        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         /// <param name="model">Updated model to PUT.</param>
-        public virtual async Task<IModel> PutModel(ClassFixture classFixture, IModel model)
+        public virtual async Task<IModel> PutModel(IModel model)
         {
             // Arrange
 
             // Act
-            var requestResponse = await classFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{model.Id}", model);
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{model.Id}", model);
 
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -209,14 +234,13 @@ namespace ModelRelief.Test.TestModels
         /// <summary>
         /// Delete an existing model.
         /// </summary>
-        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         /// <param name="existingModel">Model to delete.</param>
-        public virtual async Task DeleteModel(ClassFixture classFixture, IModel existingModel)
+        public virtual async Task DeleteModel(IModel existingModel)
         {
             // Arrange
 
             // Act
-            var requestResponse = await classFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Delete, $"{ApiUrl}/{existingModel.Id}");
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Delete, $"{ApiUrl}/{existingModel.Id}");
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);

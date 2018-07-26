@@ -2,22 +2,8 @@
 #### Commit Notes
 
 #### Short Term  
-    Models
-        Some Model and Mesh cameras refer to objects in other Projects.
-            Is it validfor a resource to reference a resource in another project?
-
-    Camera translations are not handled correctly.
-
-    Technical Review
-        Review the Blender implementation.
-            What were the pre-processing steps that were done to prepare the data for the Poisson solver?
-        Review the technical papers.
-        Review ZSurf.
-        Review ArtCAM.
-
-    Generalize the handling of models so that they are scale independent.
-        Should the clipping range extents be set dynamically instead of through constants?
-
+    Solver.pyproj: viewer.py
+    
     Unit Tests        
         Dynamically determine the number of models in a table and the first model.
             Can the model endpoint be used to query the database?
@@ -25,12 +11,32 @@
                 /models/
                 IdRange = Enumerable.Range(1, 11); -> DB query
                 FirstModelName = "Identity"; -> DB query
+    New Models
+        Can the MeshTransform settings be copied from the JSON file?
+        Create a data structure for a model.
 
+    Evaluate OrbitControls.
+    Camera translations are not handled correctly.
+
+    Generalize the handling of models so that they are scale independent.
+        Should the clipping range extents be set dynamically instead of through constants?
+    
     OBJ Loader
         The loader does not handle Bones.
 
     Write OBJ
         Inspection in other viewers and editors (.e.g Rhino) is necessary.
+
+    Models
+        Some Model and Mesh cameras refer to objects in other Projects.
+            Is it validfor a resource to reference a resource in another project?
+
+    Technical Review
+        Review the Blender implementation.
+            What were the pre-processing steps that were done to prepare the data for the Poisson solver?
+        Review the technical papers.
+        Review ZSurf.
+        Review ArtCAM.
     
     Investigate Git large file storage.
         D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief>git push
@@ -60,7 +66,6 @@
 
         Meshes are not oriented correctly in Mayavi Isometric views.
         The default model meshes need to be regenerated to match the MeshTransform properties.
-
 
         Optimize the divergence calculation. Vectorize?
                 differences : 0.45 sec

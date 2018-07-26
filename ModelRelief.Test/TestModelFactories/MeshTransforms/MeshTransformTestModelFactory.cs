@@ -20,8 +20,9 @@ namespace ModelRelief.Test.TestModels.MeshTransforms
         /// Initializes a new instance of the <see cref="MeshTransformTestModelFactory"/> class.
         /// Constructor
         /// </summary>
-        public MeshTransformTestModelFactory()
-            : base()
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        public MeshTransformTestModelFactory(ClassFixture classFixture)
+            : base(classFixture)
         {
         }
 

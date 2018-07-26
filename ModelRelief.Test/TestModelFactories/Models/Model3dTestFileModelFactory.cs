@@ -20,8 +20,9 @@ namespace ModelRelief.Test.TestModels.Models
         /// Initializes a new instance of the <see cref="Model3dTestFileModelFactory"/> class.
         /// Constructor
         /// </summary>
-        public Model3dTestFileModelFactory()
-            : base()
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        public Model3dTestFileModelFactory(ClassFixture classFixture)
+            : base(classFixture)
         {
         }
 

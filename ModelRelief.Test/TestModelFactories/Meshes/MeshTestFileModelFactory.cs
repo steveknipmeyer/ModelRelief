@@ -20,8 +20,9 @@ namespace ModelRelief.Test.TestModels.Meshes
         /// Initializes a new instance of the <see cref="MeshTestFileModelFactory"/> class.
         /// Constructor
         /// </summary>
-        public MeshTestFileModelFactory()
-            : base()
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        public MeshTestFileModelFactory(ClassFixture classFixture)
+            : base(classFixture)
         {
         }
 

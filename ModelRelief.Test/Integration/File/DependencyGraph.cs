@@ -96,7 +96,7 @@ namespace ModelRelief.Test.Integration
                 {
                     try
                     {
-                        await node.Factory.DeleteModel(ClassFixture, node.Model);
+                        await node.Factory.DeleteModel(node.Model);
                     }
                     catch (Exception ex)
                     {

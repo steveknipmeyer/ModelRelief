@@ -24,18 +24,26 @@ namespace ModelRelief.Test.TestModels
         where TGetModel : class, IModel, new()
     {
         /// <summary>
-        /// Posts a new file.
+        /// Initializes a new instance of the <see cref="TestFileModelFactory{TEntity, TGetModel}"/> class.
         /// </summary>
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        public TestFileModelFactory(ClassFixture classFixture)
+            : base(classFixture)
+        {
+        }
+
+        /// <summary>
+        /// Posts a new file.
+        /// </summary>
         /// <param name="modelId">Id of the backing metadata model.</param>
         /// <param name="fileName">Name of the file to POST.</param>
-        public virtual async Task<IModel> PostNewFile(ClassFixture classFixture, int modelId, string fileName)
+        public virtual async Task<IModel> PostNewFile(int modelId, string fileName)
         {
             // Arrange
             var byteArray = Utility.ByteArrayFromFile(fileName);
 
             // Act
-            var requestResponse = await classFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiUrl}/{modelId}/file", byteArray, binaryContent: true);
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiUrl}/{modelId}/file", byteArray, binaryContent: true);
 
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -47,16 +55,15 @@ namespace ModelRelief.Test.TestModels
         /// <summary>
         /// Puts a file.
         /// </summary>
-        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         /// <param name="modelId">Id of the backing metadata model.</param>
         /// <param name="fileName">Name of the file to PUT.</param>
-        public virtual async Task<IModel> PutFile(ClassFixture classFixture, int modelId, string fileName)
+        public virtual async Task<IModel> PutFile(int modelId, string fileName)
         {
             // Arrange
             var byteArray = Utility.ByteArrayFromFile(fileName);
 
             // Act
-            var requestResponse = await classFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}/file", byteArray, binaryContent: true);
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}/file", byteArray, binaryContent: true);
 
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);

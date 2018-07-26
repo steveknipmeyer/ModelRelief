@@ -20,8 +20,9 @@ namespace ModelRelief.Test.TestModels.Projects
         /// Initializes a new instance of the <see cref="ProjectTestModelFactory"/> class.
         /// Constructor
         /// </summary>
-        public ProjectTestModelFactory()
-            : base()
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        public ProjectTestModelFactory(ClassFixture classFixture)
+            : base(classFixture)
         {
         }
 
@@ -32,9 +33,6 @@ namespace ModelRelief.Test.TestModels.Projects
         {
             ApiUrl = "/api/v1/projects";
             UxUrl  = "/projects";
-
-            IdRange = Enumerable.Range(1, 4);
-            FirstModelName = "Architecture";
 
             ReferencePropertyNames = new List<string>();
             InvalidReferenceProperty = 0;

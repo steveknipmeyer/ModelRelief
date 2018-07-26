@@ -15,13 +15,13 @@ namespace ModelRelief.Test.TestModels
     public interface ITestModelFactory
     {
         Type Type { get; }
-        Task<IModel> FindModel(ClassFixture classFixture, int modelId);
+        Task<IModel> FindModel(int modelId);
 
         IModel ConstructValidModel();
 
-        Task<IModel> PostNewModel(ClassFixture classFixture);
-        Task<IModel> PostNewModel(ClassFixture classFixture, IModel model);
-        Task<IModel> PutModel(ClassFixture classFixture, IModel model);
-        Task DeleteModel(ClassFixture classFixture, IModel existingModel);
+        Task<IModel> PostNewModel();
+        Task<IModel> PostNewModel(IModel model);
+        Task<IModel> PutModel(IModel model);
+        Task DeleteModel(IModel existingModel);
     }
 }

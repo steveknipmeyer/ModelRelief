@@ -22,7 +22,7 @@ namespace ModelRelief.Test.Integration.Models
         /// </summary>
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         public ModelsFileIntegrationTests(ClassFixture classFixture)
-            : base(classFixture, new Model3dTestFileModelFactory())
+            : base(classFixture, new Model3dTestFileModelFactory(classFixture))
         {
         }
 

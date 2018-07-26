@@ -21,8 +21,9 @@ namespace ModelRelief.Test.TestModels.Cameras
         /// Initializes a new instance of the <see cref="CameraTestModelFactory"/> class.
         /// Constructor
         /// </summary>
-        public CameraTestModelFactory()
-            : base()
+        /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
+        public CameraTestModelFactory(ClassFixture classFixture)
+            : base(classFixture)
         {
         }
 

@@ -47,13 +47,13 @@ namespace ModelRelief.Test.Integration.DepthBuffers
                 // Model
                 var modelNode      = NodeCollection[typeof(Domain.Model3d)];
                 var model3dFactory = modelNode.Factory as ITestFileModelFactory;
-                modelNode.Model    = await model3dFactory.PostNewModel(ClassFixture);
-                modelNode.Model    = await model3dFactory.PostNewFile(ClassFixture, modelNode.Model.Id, "UnitCube.obj");
+                modelNode.Model    = await model3dFactory.PostNewModel();
+                modelNode.Model    = await model3dFactory.PostNewFile(modelNode.Model.Id, "UnitCube.obj");
 
                 // Camera
                 var cameraNode    = NodeCollection[typeof(Domain.Camera)];
                 var cameraFactory = cameraNode.Factory as ITestModelFactory;
-                cameraNode.Model  = await cameraFactory.PostNewModel(ClassFixture);
+                cameraNode.Model  = await cameraFactory.PostNewModel();
 
                 // DepthBuffer
                 var depthBufferNode    = NodeCollection[typeof(Domain.DepthBuffer)];
@@ -63,8 +63,8 @@ namespace ModelRelief.Test.Integration.DepthBuffers
                 var depthBuffer       = depthBufferNode.Model as Dto.DepthBuffer;
                 depthBuffer.Model3dId = modelNode.Model.Id;
                 depthBuffer.CameraId  = cameraNode.Model.Id;
-                depthBufferNode.Model = await depthBufferFactory.PostNewModel(ClassFixture, depthBuffer);
-                depthBufferNode.Model = await depthBufferFactory.PostNewFile(ClassFixture, depthBufferNode.Model.Id, "DepthBuffer.sdb");
+                depthBufferNode.Model = await depthBufferFactory.PostNewModel(depthBuffer);
+                depthBufferNode.Model = await depthBufferFactory.PostNewFile(depthBufferNode.Model.Id, "DepthBuffer.sdb");
             }
         }
 
@@ -74,7 +74,7 @@ namespace ModelRelief.Test.Integration.DepthBuffers
         /// </summary>
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         public DepthBuffersFileIntegrationTests(ClassFixture classFixture)
-            : base(classFixture, new DepthBufferTestFileModelFactory())
+            : base(classFixture, new DepthBufferTestFileModelFactory(classFixture))
         {
         }
 
@@ -86,9 +86,9 @@ namespace ModelRelief.Test.Integration.DepthBuffers
         {
             var dependencyGraph = new DepthBufferDependencyGraph(ClassFixture, new List<ITestModelFactory>
             {
-                new DepthBufferTestFileModelFactory(),
-                new Model3dTestFileModelFactory(),
-                new CameraTestModelFactory(),
+                new DepthBufferTestFileModelFactory(ClassFixture),
+                new Model3dTestFileModelFactory(ClassFixture),
+                new CameraTestModelFactory(ClassFixture),
             });
             await dependencyGraph.ConstructGraph();
 
@@ -110,19 +110,19 @@ namespace ModelRelief.Test.Integration.DepthBuffers
                 var depthBufferNode    = dependencyGraph.NodeCollection[typeof(Domain.DepthBuffer)];
                 var depthBufferModel   = depthBufferNode.Model as Dto.DepthBuffer;
                 var depthBufferFactory = depthBufferNode.Factory as ITestFileModelFactory;
-                depthBufferModel       = await depthBufferFactory.FindModel(ClassFixture, depthBufferModel.Id) as Dto.DepthBuffer;
+                depthBufferModel       = await depthBufferFactory.FindModel(depthBufferModel.Id) as Dto.DepthBuffer;
                 depthBufferModel.FileIsSynchronized.Should().Be(true);
 
                 // Act
                 var cameraNode    = dependencyGraph.NodeCollection[typeof(Domain.Camera)];
                 var cameraModel   = cameraNode.Model as Dto.Camera;
                 var cameraFactory = cameraNode.Factory;
-                cameraModel       = await cameraFactory.FindModel(ClassFixture, cameraModel.Id) as Dto.Camera;
+                cameraModel       = await cameraFactory.FindModel(cameraModel.Id) as Dto.Camera;
                 cameraModel.PositionX += 1.0;
-                await cameraFactory.PutModel(ClassFixture, cameraModel);
+                await cameraFactory.PutModel(cameraModel);
 
                 // Assert
-                depthBufferModel = await depthBufferFactory.FindModel(ClassFixture, depthBufferModel.Id) as Dto.DepthBuffer;
+                depthBufferModel = await depthBufferFactory.FindModel(depthBufferModel.Id) as Dto.DepthBuffer;
                 depthBufferModel.FileIsSynchronized.Should().Be(false);
             }
             finally

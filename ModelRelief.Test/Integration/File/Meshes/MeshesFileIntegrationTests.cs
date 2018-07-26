@@ -55,7 +55,7 @@ namespace ModelRelief.Test.Integration.Meshes
                 var camera = cameraNode.Model as Dto.Camera;
                 camera.Near = 238.39;
                 camera.Far  = 292.00;
-                cameraNode.Model = await cameraFactory.PostNewModel(ClassFixture, camera);
+                cameraNode.Model = await cameraFactory.PostNewModel(camera);
 
                 // DepthBuffer
                 var depthBufferNode = NodeCollection[typeof(Domain.DepthBuffer)];
@@ -64,13 +64,13 @@ namespace ModelRelief.Test.Integration.Meshes
 
                 var depthBuffer = depthBufferNode.Model as Dto.DepthBuffer;
                 depthBuffer.CameraId = cameraNode.Model.Id;
-                depthBufferNode.Model = await depthBufferFactory.PostNewModel(ClassFixture, depthBuffer);
-                depthBufferNode.Model = await depthBufferFactory.PostNewFile(ClassFixture, depthBufferNode.Model.Id, "DepthBuffer.sdb");
+                depthBufferNode.Model = await depthBufferFactory.PostNewModel(depthBuffer);
+                depthBufferNode.Model = await depthBufferFactory.PostNewFile(depthBufferNode.Model.Id, "DepthBuffer.sdb");
 
                 // MeshTransform
                 var meshTransformNode = NodeCollection[typeof(Domain.MeshTransform)];
                 var meshTransformFactory = meshTransformNode.Factory as ITestModelFactory;
-                meshTransformNode.Model = await meshTransformFactory.PostNewModel(ClassFixture);
+                meshTransformNode.Model = await meshTransformFactory.PostNewModel();
 
                 // Mesh
                 var meshNode = NodeCollection[typeof(Domain.Mesh)];
@@ -80,8 +80,8 @@ namespace ModelRelief.Test.Integration.Meshes
                 var mesh = meshNode.Model as Dto.Mesh;
                 mesh.DepthBufferId = depthBufferNode.Model.Id;
                 mesh.MeshTransformId = meshTransformNode.Model.Id;
-                meshNode.Model = await meshFactory.PostNewModel(ClassFixture, mesh);
-                meshNode.Model = await meshFactory.PostNewFile(ClassFixture, meshNode.Model.Id, "DepthBuffer.sdb");
+                meshNode.Model = await meshFactory.PostNewModel(mesh);
+                meshNode.Model = await meshFactory.PostNewFile(meshNode.Model.Id, "DepthBuffer.sdb");
             }
         }
 
@@ -91,7 +91,7 @@ namespace ModelRelief.Test.Integration.Meshes
         /// </summary>
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
         public MeshesFileIntegrationTests(ClassFixture classFixture)
-            : base(classFixture, new MeshTestFileModelFactory())
+            : base(classFixture, new MeshTestFileModelFactory(classFixture))
         {
         }
 
@@ -103,10 +103,10 @@ namespace ModelRelief.Test.Integration.Meshes
         {
             var dependencyGraph = new MeshDependencyGraph(ClassFixture, new List<ITestModelFactory>
             {
-                new MeshTestFileModelFactory(),
-                new DepthBufferTestFileModelFactory(),
-                new MeshTransformTestModelFactory(),
-                new CameraTestModelFactory(),
+                new MeshTestFileModelFactory(ClassFixture),
+                new DepthBufferTestFileModelFactory(ClassFixture),
+                new MeshTransformTestModelFactory(ClassFixture),
+                new CameraTestModelFactory(ClassFixture),
             });
             await dependencyGraph.ConstructGraph();
 
@@ -124,14 +124,14 @@ namespace ModelRelief.Test.Integration.Meshes
             var meshNode = dependencyGraph.NodeCollection[typeof(Domain.Mesh)];
             var meshModel = meshNode.Model as Dto.Mesh;
             var meshFactory = meshNode.Factory;
-            meshModel = await meshFactory.FindModel(ClassFixture, meshModel.Id) as Dto.Mesh;
+            meshModel = await meshFactory.FindModel(meshModel.Id) as Dto.Mesh;
             meshModel.FileIsSynchronized.Should().Be(true);
 
             // reset FileIsSynchronized so GenerateFileRequest will fire on next FileIsSynchronized property changes
             if (!fileIsSynchronized)
             {
                 meshModel.FileIsSynchronized = false;
-                meshModel = await TestModelFactory.PutModel(ClassFixture, meshModel) as Dto.Mesh;
+                meshModel = await TestModelFactory.PutModel(meshModel) as Dto.Mesh;
             }
             return meshModel;
         }
@@ -157,10 +157,10 @@ namespace ModelRelief.Test.Integration.Meshes
                 var depthBufferNode     = dependencyGraph.NodeCollection[typeof(Domain.DepthBuffer)];
                 var depthBufferModel    = depthBufferNode.Model as Dto.DepthBuffer;
                 var depthBufferFactory  = depthBufferNode.Factory as ITestFileModelFactory;
-                await depthBufferFactory.PostNewFile(ClassFixture, depthBufferModel.Id, "ModelRelief.txt");
+                await depthBufferFactory.PostNewFile(depthBufferModel.Id, "ModelRelief.txt");
 
                 // Assert
-                meshModel = await TestModelFactory.FindModel(ClassFixture, meshModel.Id) as Dto.Mesh;
+                meshModel = await TestModelFactory.FindModel(meshModel.Id) as Dto.Mesh;
                 meshModel.FileIsSynchronized.Should().Be(false);
             }
             finally
@@ -186,7 +186,7 @@ namespace ModelRelief.Test.Integration.Meshes
                 // Act
                 // GenerateFile is triggered by the state change of FileIsSynchronized.
                 meshModel.FileIsSynchronized = true;
-                meshModel = await TestModelFactory.PutModel(ClassFixture, meshModel) as Dto.Mesh;
+                meshModel = await TestModelFactory.PutModel(meshModel) as Dto.Mesh;
 
                 // Assert
                 meshModel.FileIsSynchronized.Should().BeTrue();

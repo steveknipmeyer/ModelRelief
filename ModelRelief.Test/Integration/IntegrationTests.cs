@@ -111,7 +111,7 @@ namespace ModelRelief.Test.Integration
         /// </summary>
         public virtual async Task<IModel> PostNewModel()
         {
-            return await TestModelFactory.PostNewModel(ClassFixture);
+            return await TestModelFactory.PostNewModel();
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace ModelRelief.Test.Integration
         /// <param name="existingModel">Model to delete.</param>
         public virtual async Task DeleteModel(IModel existingModel)
         {
-            await TestModelFactory.DeleteModel(ClassFixture, existingModel);
+            await TestModelFactory.DeleteModel(existingModel);
         }
     }
 }

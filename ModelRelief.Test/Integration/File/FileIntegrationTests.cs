@@ -51,7 +51,7 @@ namespace ModelRelief.Test.Integration
         /// <param name="fileName">Name of the file to POST.</param>
         public virtual async Task<IModel> PostNewFile(int modelId,  string fileName)
         {
-            return await TestFileModelFactory.PostNewFile(ClassFixture, modelId, fileName);
+            return await TestFileModelFactory.PostNewFile(modelId, fileName);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace ModelRelief.Test.Integration
         /// <param name="fileName">Name of the file to PUT.</param>
         public virtual async Task<IModel> PutFile(int modelId, string fileName)
         {
-            return await TestFileModelFactory.PutFile(ClassFixture, modelId, fileName);
+            return await TestFileModelFactory.PutFile(modelId, fileName);
         }
 
         #region GetFile

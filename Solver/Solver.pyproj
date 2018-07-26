@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>4d128880-4790-41df-8a6b-0d34f9b65e4f</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>viewer.py</StartupFile>
+    <StartupFile>solver.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -30,7 +30,6 @@
     <Compile Include="depthbuffer.py" />
     <Compile Include="image.py" />
     <Compile Include="workbench.py" />
-    <Compile Include="viewer.py" />
     <Compile Include="solver.py" />
   </ItemGroup>
   <ItemGroup>
