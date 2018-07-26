@@ -21,8 +21,6 @@
         Review ArtCAM.
 
     Solver           
-        Resize before generating content?
-
         Meshes are not oriented correctly in Mayavi Isometric views.
 
         Optimize the divergence calculation. Vectorize?

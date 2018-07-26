@@ -14,7 +14,7 @@ import argparse
 import qdarkstyle
 import os
 
-from PyQt5 import QtWidgets 
+from PyQt5 import QtWidgets
 
 from explorer import Explorer
 
@@ -32,7 +32,7 @@ class Workbench:
         working
             The working folder to be used for intermediate results.
         """
-        self.qapp = QtWidgets.QApplication([])       
+        self.qapp = QtWidgets.QApplication([])
         self.qapp.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
 
         self.explorer = Explorer(settings, working, self.qapp)
@@ -40,12 +40,13 @@ class Workbench:
     def run(self):
         """
         Run the application.
-        """ 
+        """
         self.explorer.showMinimized()
         self.explorer.calculate(preserve_camera=False)
-        self.explorer.showMaximized()
+        self.explorer.showNormal()        
+        # self.explorer.showMaximized()
 
-        exit(self.qapp.exec_()) 
+        exit(self.qapp.exec_())
 
 def main():
     """
