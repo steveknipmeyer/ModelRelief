@@ -103,7 +103,7 @@
             "env": {
                 "name": "value"
             },
-            "args":["--s", "Test/Lucy.json", "--w", "Test/Working"]
+            "args":["--s", "Test/House.json", "--w", "Test/Working"]
         //  "args":[]
         },
         {

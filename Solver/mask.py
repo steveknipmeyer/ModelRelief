@@ -71,4 +71,6 @@ class Mask:
             return 1 if (abs(x) < threshold) else 0
 
         f_vectorized = np.vectorize(f)
-        return f_vectorized(original)
+        vectorized_result = f_vectorized(original)
+
+        return vectorized_result

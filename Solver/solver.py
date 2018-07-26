@@ -129,16 +129,11 @@ class Solver:
         self.results.gradient_x = self.depth_buffer.gradient_x
         self.results.gradient_y = self.depth_buffer.gradient_y
 
-        # Modify gradient by applying threshold, setting values above threshold to zero.
-        threshold = Threshold(self.services)
-        threshold_value = self.mesh_transform.gradient_threshold if self.enable_gradient_threshold else float("inf")
-        self.results.gradient_x = threshold.apply(self.results.gradient_x, threshold_value)
-        self.results.gradient_y = threshold.apply(self.results.gradient_y, threshold_value)
-
         # Composite mask: Values are processed only if they pass all three masks.
         #    A value must have a 1 in the background mask.
         #    A value must have both dI/dx <and> dI/dy that are 1 in the respective gradient masks.
         mask = Mask(self.services) 
+        threshold_value = self.mesh_transform.gradient_threshold if self.enable_gradient_threshold else float("inf")
         self.results.gradient_x_mask = mask.threshold(self.results.gradient_x, threshold_value)
         self.results.gradient_y_mask = mask.threshold(self.results.gradient_y, threshold_value)
         self.results.combined_mask = self.results.gradient_x_mask * self.results.gradient_y_mask
@@ -146,7 +141,7 @@ class Solver:
         #      The derivates are forward differences so they are defined (along +X, +Y) in the XY region <outside> the background mask.
         # self.combined_mask = self.combined_mask * self.depth_buffer_mask
 
-        # Mask the thresholded gradients.
+        # Modify gradient by applying threshold, setting values above threshold to zero.
         self.results.gradient_x = self.results.gradient_x * self.results.combined_mask
         self.results.gradient_y = self.results.gradient_y * self.results.combined_mask
 
