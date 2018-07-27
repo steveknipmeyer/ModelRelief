@@ -12,6 +12,9 @@
 """
 import time
 from decimal import Decimal
+from typing import Any, Callable
+
+from logger import Logger
 
 class TimerEntry:
     """
@@ -82,3 +85,8 @@ class StopWatch:
 
         # remove dictionary key
         self.events.pop(event)
+
+stopwatch = StopWatch(Logger())
+def benchmark (function: Callable):
+    tag = stopwatch.mark(function.__name__)
+    stopwatch.log_time(tag)

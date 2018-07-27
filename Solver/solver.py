@@ -122,8 +122,12 @@ class Solver:
             The depth buffer is converted into model units.
             The background bit mask is calculated.
         """
+        depth_buffer_step = self.services.stopwatch.mark("depth_buffer")
+
         self.results.depth_buffer_model = self.depth_buffer.floats
         self.results.depth_buffer_mask = self.depth_buffer.background_mask
+
+        self.services.stopwatch.log_time(depth_buffer_step)
 
     def process_gradients(self):
         """
@@ -131,6 +135,8 @@ class Solver:
             The gradients are thresholded to remove high values such as at the model edges.
             The gradients are filtered by applying the composite mask.
         """
+        gradients_step = self.services.stopwatch.mark("gradients")
+
         self.results.gradient_x = self.depth_buffer.gradient_x
         self.results.gradient_y = self.depth_buffer.gradient_y
 
@@ -149,6 +155,8 @@ class Solver:
         # Modify gradient by applying threshold, setting values above threshold to zero.
         self.results.gradient_x = self.results.gradient_x * self.results.combined_mask
         self.results.gradient_y = self.results.gradient_y * self.results.combined_mask
+
+        self.services.stopwatch.log_time(gradients_step)
 
     def process_attenuation(self):
         """

@@ -52,7 +52,7 @@ class Attenuation:
         self.debug = True
         self.services = services
 
-    def apply (self, original: np.ndarray, parameters: AttenuationParameters) -> np.ndarray:
+    def apply (self, array: np.ndarray, parameters: AttenuationParameters) -> np.ndarray:
         """
         Applies the attenuation function to all elements in an ndarray.
 
@@ -65,10 +65,7 @@ class Attenuation:
             factor -> boundary between amplication and reduction; percentage of mean absolute value of gradient
             decay  -> rate of decay of attenuation curve
         """
-        # copy
-        attenuated_array = np.array(original)
-
-        absolute_value = np.absolute(original)
+        absolute_value = np.absolute(array)
         mean_absolute_value = np.mean(absolute_value)
         a = (parameters.factor / 100.0) * mean_absolute_value
         b = parameters.decay
@@ -79,6 +76,6 @@ class Attenuation:
             return value
 
         vattenuator = np.vectorize(attenuator)
-        attenuated_array = vattenuator(attenuated_array, a, b)
+        attenuated_array = vattenuator(array, a, b)
 
         return attenuated_array

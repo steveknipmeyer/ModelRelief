@@ -89,7 +89,6 @@
             "request": "launch",
             "stopOnEntry": false,
             "console": "integratedTerminal",
-        //  "program": "${file}",
             "program": "${workspaceRoot}/Solver/workbench.py",
         //  "program": "${workspaceRoot}/Solver/solver.py",
         //  "program": "${workspaceRoot}/Tools/testrunner.py",

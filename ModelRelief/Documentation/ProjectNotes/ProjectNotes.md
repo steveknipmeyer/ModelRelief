@@ -2,9 +2,14 @@
 #### Commit Notes
 
 #### Short Term  
-    NumPy vectorize is slow! Review the usage.
+    Can decorators be used to wrap a Python function with timing information?
+        Remove StopWatch from Services.
+        How are parameters passed to wrapped function?
     Add additional experimental settings.
     Add UI busy indicators.
+    Optimize the divergence calculation.
+            numpy.pad
+            differences : 0.45 sec
 
     New Models
         Can the MeshTransform settings be copied from the JSON file?
@@ -26,9 +31,6 @@
 
     Solver           
         Meshes are not oriented correctly in Mayavi Isometric views.
-
-        Optimize the divergence calculation. Vectorize?
-                differences : 0.45 sec
 
         How can the mayavi log be viewed?
 
@@ -1211,13 +1213,15 @@ https://semver.npmjs.com/
         Update the Camera settings in DbInitializer with the updated Camera properties as shown in the Camera page.
 
 #### Numpy
-    Numpy gradients are 10,000X faster!
-        Numpy gradients = 0.005502462387084961
-        Python gradients = 47.75585699081421
 
-    Numpy array operations are 2,250X faster!    
-        Python scale floats = 4.5  
-        Numpy scale floars = .02
+**Benchmarks (512x512 Array)**
+|Operation|Numpy Time|Python Time |Ratio|Note|
+|-|-|-|-|-|
+|Gradient|0.00550|47.7558|10,000|
+|Scale Floats|0.02|4.5|2,250|
+|Copy|0.00||
+|Vectorize Function|0.11|||Attenuation|
+
 
 #### WSL
     The Ubuntu (Windows App Store installation) is located here:

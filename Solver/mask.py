@@ -50,13 +50,13 @@ class Mask:
         mask[mask > Mask.EPSILON] = 1
         return mask
 
-    def threshold (self, original: np.ndarray, threshold: float) -> np.ndarray:
+    def threshold (self, array: np.ndarray, threshold: float) -> np.ndarray:
         """
         Masks an image array by setting array elements with an absolute value below the threshold to 1.
         N.B. This produces a different result than self.background_from_depth+buffer which expects to operate on only <positive> image values such as from a depth_buffer.
         Parameters 
         ----------
-        original
+        array
             The ndarray from which to create a mask.
             The array may contain positive or negative values such as from a gradient array.
         threshold
@@ -70,24 +70,24 @@ class Mask:
         def f(x):
             return 1 if (abs(x) < threshold) else 0
 
-        f_vectorized = np.vectorize(f)
-        vectorized_result = f_vectorized(original)
+        vf = np.vectorize(f)
+        result = vf(array)
 
-        return vectorized_result
+        return result
 
-    def invert (self, original: np.ndarray) -> np.ndarray:
+    def invert (self, array: np.ndarray) -> np.ndarray:
         """
         Inverts a mask.
         Parameters 
         ----------
-        original
+        array
             The ndarray mask to invert.
             Values (0, 1) are inverted (1, 0).
         """
         def f(x):
             return 1 if (x == 0) else 0
 
-        f_vectorized = np.vectorize(f)
-        vectorized_result = f_vectorized(original)
+        vf = np.vectorize(f)
+        result = vf(array)
 
-        return vectorized_result
+        return result
