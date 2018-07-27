@@ -33,6 +33,7 @@ from difference import Difference, FiniteDifference, Axis
 from mask import Mask
 from meshscale import MeshScale
 from poisson import Poisson
+from silhouette import Silhouette
 from threshold import Threshold
 from unsharpmask import UnsharpMask, UnsharpMaskParameters
 
@@ -94,6 +95,10 @@ class Solver:
         self.enable_unsharpmask_gaussian_high = True
         self.enable_unsharpmask_gaussian_low = True
         self.enable_unsharpmask_high_frequence_scale = True
+
+        # experimental
+        self.enable_p1 = True
+        self.enable_p2 = True
 
         # results collection
         self.results = Results()
@@ -190,13 +195,20 @@ class Solver:
 
         # apply background mask to reset background to zero
         self.results.mesh_transformed = self.results.mesh_transformed * self.results.depth_buffer_mask
-        self.results.mesh_scaled = self.results.mesh_transformed
+
+    def process_silhouette(self):
+        """
+            Process the silhouettes in the image.
+        """
+        if self.enable_p2:
+            silhouette = Silhouette(self.services)        
+            self.results.mesh_transformed = silhouette.process(self.results.mesh_transformed, self.results.depth_buffer_mask, self.mesh_transform.p2)
 
     def process_scale(self):
         """
             Scales the mesh to the final dimensions.
         """
-        # linear scale
+        # linear scale original mesh
         self.results.mesh_scaled = self.results.depth_buffer_model * self.mesh_transform.p1
 
         write_file = False
@@ -205,7 +217,7 @@ class Solver:
             file_path = '%s/%s' % (self.working_folder, self.mesh.name)
             FileManager().write_binary(file_path, FileManager().pack_floats(float_list))
 
-        # relief scale
+        # scale relief
         target_height = np.max(self.results.mesh_scaled)
         current_height = np.max(self.results.mesh_transformed)
         factor = target_height / current_height
@@ -249,6 +261,7 @@ class Solver:
         self.process_attenuation()
         self.process_unsharpmask()
         self.process_poisson()
+        self.process_silhouette()
         self.process_scale()
         self.write_mesh()
 

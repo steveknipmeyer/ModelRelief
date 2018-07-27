@@ -1,0 +1,58 @@
+#!/usr/bin/env python
+#
+#   Copyright (c) 2018
+#   All Rights Reserved.
+#
+
+"""
+.. module:: Silhouette
+   :synopsis: Support for processing relief silhouettes.
+
+.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+"""
+import numpy as np
+from scipy.ndimage import gaussian_filter
+
+from mask import Mask
+from services import Services
+    
+class Silhouette:
+    """
+    A class for processing image silhouettes.
+    """
+    def __init__(self, services : Services) -> None:
+        """
+        Initialize an instance of Silhouette.
+        Parameters
+        ----------
+        services
+            Service provider (logging, timers, etc.)
+        """
+        self.debug = True
+        self.services = services
+
+    def process (self, image: np.ndarray, background_mask: np.ndarray, sigma: float) -> np.ndarray:
+        """
+        Applies the attenuation function to all elements in an ndarray.
+
+        Parameters
+        ----------
+        image
+            The image array to process the silhouettes.
+        background_mask
+            The image background mask.
+        sigma:
+            The standard deviation used in the Gaussian blur of the image.            
+        """
+        # blur entire image to blend the image edges with the background
+        blurred_all = gaussian_filter(image, sigma, order=0, output=None, mode='reflect', cval=0.0, truncate=4.0)
+        
+        # isolate the blend that extends into the background mask
+        mask = Mask (self.services)
+        mask_inverted = mask.invert(background_mask)
+        blurred_edges = blurred_all * mask_inverted
+
+        # add blurred edges to final image
+        result = image + blurred_edges
+
+        return result

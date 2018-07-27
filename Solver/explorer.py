@@ -67,7 +67,7 @@ class Camera:
         """
         self.figure = figure
 
-        self.azimuth, self.elevation, self.distance, self.focalpoint = mlab.view(figure=self.figure)
+        self.azimuth, self.elevation, self.distance, self.focalpoint = mlab.view(figure=self.figure) 
         self.roll = mlab.roll(figure=self.figure)
 
     def apply (self, figure=None) -> None:
@@ -562,6 +562,9 @@ class Explorer(QtWidgets.QMainWindow):
         self.ui.unsharpGaussianHighCheckBox.setChecked(checkbox_enabled)
         self.ui.unsharpHFScaleCheckBox.setChecked(checkbox_enabled)
 
+        self.ui.p1CheckBox.setChecked(checkbox_enabled)
+        self.ui.p2CheckBox.setChecked(checkbox_enabled)
+
     def initialize_handlers(self)-> None:
         """ Initialize event handlers """
         self.ui.processButton.clicked.connect(self.handle_process)
@@ -585,6 +588,7 @@ class Explorer(QtWidgets.QMainWindow):
         mesh_transform['UnsharpGaussianHigh'] = float(self.ui.unsharpGaussianHighLineEdit.text())
         mesh_transform['UnsharpHighFrequencyScale'] = float(self.ui.unsharpHFScaleLineEdit.text())
 
+        # experimental
         mesh_transform['P1'] = float(self.ui.p1LineEdit.text())
         mesh_transform['P2'] = float(self.ui.p2LineEdit.text())
 
@@ -621,6 +625,9 @@ class Explorer(QtWidgets.QMainWindow):
         solver.enable_unsharpmask_gaussian_high = self.ui.unsharpGaussianLowCheckBox.isChecked()
         solver.enable_unsharpmask_gaussian_low = self.ui.unsharpGaussianHighCheckBox.isChecked()
         solver.enable_unsharpmask_high_frequence_scale = self.ui.unsharpHFScaleCheckBox.isChecked()
+
+        solver.enable_p1 = self.ui.p1CheckBox.isChecked()
+        solver.enable_p2 = self.ui.p2CheckBox.isChecked()
 
         # solve
         solver.transform()

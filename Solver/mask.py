@@ -74,3 +74,20 @@ class Mask:
         vectorized_result = f_vectorized(original)
 
         return vectorized_result
+
+    def invert (self, original: np.ndarray) -> np.ndarray:
+        """
+        Inverts a mask.
+        Parameters 
+        ----------
+        original
+            The ndarray mask to invert.
+            Values (0, 1) are inverted (1, 0).
+        """
+        def f(x):
+            return 1 if (x == 0) else 0
+
+        f_vectorized = np.vectorize(f)
+        vectorized_result = f_vectorized(original)
+
+        return vectorized_result

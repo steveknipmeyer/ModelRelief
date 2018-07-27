@@ -2,6 +2,10 @@
 #### Commit Notes
 
 #### Short Term  
+    NumPy vectorize is slow! Review the usage.
+    Add additional experimental settings.
+    Add UI busy indicators.
+
     New Models
         Can the MeshTransform settings be copied from the JSON file?
 

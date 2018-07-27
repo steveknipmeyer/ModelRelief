@@ -323,7 +323,7 @@
       <widget class="QLineEdit" name="gradientThresholdLineEdit">
        <property name="geometry">
         <rect>
-         <x>201</x>
+         <x>224</x>
          <y>88</y>
          <width>78</width>
          <height>29</height>
@@ -352,7 +352,7 @@
       <widget class="QLineEdit" name="unsharpGaussianLowLineEdit">
        <property name="geometry">
         <rect>
-         <x>202</x>
+         <x>225</x>
          <y>269</y>
          <width>78</width>
          <height>28</height>
@@ -381,7 +381,7 @@
       <widget class="QLineEdit" name="unsharpGaussianHighLineEdit">
        <property name="geometry">
         <rect>
-         <x>201</x>
+         <x>224</x>
          <y>300</y>
          <width>78</width>
          <height>29</height>
@@ -410,8 +410,8 @@
       <widget class="QLineEdit" name="unsharpHFScaleLineEdit">
        <property name="geometry">
         <rect>
-         <x>200</x>
-         <y>331</y>
+         <x>224</x>
+         <y>332</y>
          <width>78</width>
          <height>27</height>
         </rect>
@@ -486,7 +486,7 @@
       <widget class="QLineEdit" name="attenuationDecayLineEdit">
        <property name="geometry">
         <rect>
-         <x>199</x>
+         <x>222</x>
          <y>198</y>
          <width>78</width>
          <height>29</height>
@@ -496,7 +496,7 @@
       <widget class="QLineEdit" name="attenuationFactorLineEdit">
        <property name="geometry">
         <rect>
-         <x>199</x>
+         <x>222</x>
          <y>166</y>
          <width>78</width>
          <height>28</height>
@@ -557,12 +557,12 @@
         <rect>
          <x>16</x>
          <y>408</y>
-         <width>70</width>
+         <width>165</width>
          <height>20</height>
         </rect>
        </property>
        <property name="text">
-        <string>P1</string>
+        <string>P1 (Scale)</string>
        </property>
       </widget>
       <widget class="QCheckBox" name="p2CheckBox">
@@ -570,12 +570,12 @@
         <rect>
          <x>16</x>
          <y>433</y>
-         <width>70</width>
+         <width>158</width>
          <height>19</height>
         </rect>
        </property>
        <property name="text">
-        <string>P2</string>
+        <string>P2 (Silhouette)</string>
        </property>
       </widget>
       <widget class="QLabel" name="labelExperimental">
@@ -600,7 +600,7 @@
       <widget class="QLineEdit" name="p1LineEdit">
        <property name="geometry">
         <rect>
-         <x>198</x>
+         <x>221</x>
          <y>401</y>
          <width>78</width>
          <height>27</height>
@@ -616,7 +616,7 @@
       <widget class="QLineEdit" name="p2LineEdit">
        <property name="geometry">
         <rect>
-         <x>197</x>
+         <x>220</x>
          <y>431</y>
          <width>78</width>
          <height>27</height>
