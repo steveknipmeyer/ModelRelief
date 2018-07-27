@@ -69,7 +69,7 @@ class StopWatch:
         timer_entry = TimerEntry(start_time, indent)
         self.events[event] = timer_entry
 
-        self.logger.logTimer("%s%s" % (indent, event))
+        # self.logger.logTimer("%s%s" % (indent, event))
 
         return event
 

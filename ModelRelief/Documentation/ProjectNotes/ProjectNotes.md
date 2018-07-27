@@ -4,10 +4,6 @@
 #### Short Term  
     Add additional experimental settings.
 
-    Optimize the divergence calculation.
-            numpy.pad
-            differences : 0.45 sec
-
     New Models
         Can the MeshTransform settings be copied from the JSON file?
 
@@ -1218,6 +1214,7 @@ https://semver.npmjs.com/
 |Scale Floats|0.02|4.5|2,250|
 |Copy|0.00||
 |Vectorize Function|0.11|||Attenuation|
+|Finite Difference|.002|0.2315|100|Attenuation|
 
 
 #### WSL

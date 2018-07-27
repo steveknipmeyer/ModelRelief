@@ -208,7 +208,6 @@ class Solver:
             silhouette = Silhouette(self.services)        
             self.results.mesh_transformed = silhouette.process(self.results.mesh_transformed, self.results.depth_buffer_mask, self.mesh_transform.p2)
 
-    @benchmark()
     def process_scale(self):
         """
             Scales the mesh to the final dimensions.

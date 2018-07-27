@@ -47,8 +47,8 @@ class Difference:
         self.debug = True
         self.services = services
 
-    @benchmark()
     def difference_x(self, a: np.ndarray, direction:FiniteDifference) -> np.ndarray:
+    # def difference_x(self, a: np.ndarray, direction:FiniteDifference) -> np.ndarray:
         """
         Calculates the finite dfferences along the X axis.
         Parameters
@@ -61,23 +61,21 @@ class Difference:
         -------
         An ndarray containing the finite differences.
         """
-        (rows, columns) = a.shape
-        difference = np.zeros((rows, columns))
-
+        (_, columns) = a.shape
         if direction == FiniteDifference.Forward:
-            first_offset  = +1
-            second_offset =  0
+            shift = -1
+            duplicated_column = columns - 1
         if direction == FiniteDifference.Backward:
-            first_offset  =  0
-            second_offset = -1
+            shift = +1
+            duplicated_column = 0
 
-        for row in range (rows):
-            for column in range(columns):
-                if (direction == FiniteDifference.Backward) and (column == 0):
-                    continue
-                if (direction == FiniteDifference.Forward) and (column == (columns - 1)):
-                    continue
-                difference[row, column] = a[row, column + first_offset] - a[row, column + second_offset]
+        a_prime = np.roll(a, shift, 1)
+        a_prime[:, duplicated_column] = a[:, duplicated_column]
+
+        f_plus_delta = a_prime if direction == FiniteDifference.Forward else a
+        f = a if direction == FiniteDifference.Forward else a_prime
+        
+        difference = f_plus_delta - f
         return difference
 
     def difference_y(self, a: np.ndarray, direction:FiniteDifference) -> np.ndarray: 
