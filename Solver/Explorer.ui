@@ -629,6 +629,29 @@
         </size>
        </property>
       </widget>
+      <widget class="QLabel" name="labelProcessing">
+       <property name="geometry">
+        <rect>
+         <x>7</x>
+         <y>-2</y>
+         <width>161</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>15</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(255, 0, 0);</string>
+       </property>
+       <property name="text">
+        <string>Processing</string>
+       </property>
+      </widget>
      </widget>
     </item>
    </layout>

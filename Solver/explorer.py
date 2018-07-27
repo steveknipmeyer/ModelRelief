@@ -512,6 +512,8 @@ class Explorer(QtWidgets.QMainWindow):
         #intialize settings
         self.initialize_settings()
 
+        self.set_busy (False)
+
     def resize_ui(self)-> None:
         """ Handles a resize event for the main window. """
         for _, value in self.image_tabs.items():
@@ -570,6 +572,17 @@ class Explorer(QtWidgets.QMainWindow):
         self.ui.processButton.clicked.connect(self.handle_process)
         self.ui.actionOpen.triggered.connect(self.handle_open_settings)
 
+    def set_busy(self, enable: bool)-> None:
+        """
+        Controls the UI busy indicator.
+        Parameters
+        ----------
+        enable
+            On/Off
+        """
+        self.ui.labelProcessing.setVisible(enable)
+        self.ui.labelProcessing.repaint()
+
     def handle_process(self) ->None:
         """
         Recalculates the views.
@@ -615,7 +628,8 @@ class Explorer(QtWidgets.QMainWindow):
             self.calculate()
 
     def calculate(self, preserve_camera: bool = True) -> None:
-        
+        self.set_busy (True)
+
         solver = Solver(self.settings_file, self.working)
 
         #enable processing steps
@@ -648,3 +662,5 @@ class Explorer(QtWidgets.QMainWindow):
         self.mesh_tabs[MeshType.Model].mesh_widget.mesh_content.set_mesh(solver.results.depth_buffer_model, preserve_camera)
         self.mesh_tabs[MeshType.ModelScaled].mesh_widget.mesh_content.set_mesh(solver.results.mesh_scaled, preserve_camera)
         self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.set_mesh(solver.results.mesh_transformed, preserve_camera)
+
+        self.set_busy (False)

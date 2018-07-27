@@ -2,11 +2,8 @@
 #### Commit Notes
 
 #### Short Term  
-    Can decorators be used to wrap a Python function with timing information?
-        Remove StopWatch from Services.
-        How are parameters passed to wrapped function?
     Add additional experimental settings.
-    Add UI busy indicators.
+
     Optimize the divergence calculation.
             numpy.pad
             differences : 0.45 sec
