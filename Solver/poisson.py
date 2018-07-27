@@ -15,6 +15,7 @@ import numpy as np
 
 from services import Services
 from mathtools import MathTools
+from stopwatch import benchmark
 
 class Poisson:
     """
@@ -32,6 +33,7 @@ class Poisson:
         self.debug = True
         self.services = services
 
+    @benchmark()
     def solve(self, divG: np.ndarray) -> np.ndarray:
         """
         Solves the Poisson equation: 
@@ -45,8 +47,6 @@ class Poisson:
         digG
             Divervence of the gradient field.
         """
-        solver_step = self.services.stopwatch.mark("solver")
-
         dimensions = np.shape(divG)
         n = dimensions[0]
         A = pyamg.gallery.poisson((n, n), format='csr')      # 2D Poisson problem on 4x4 grid
@@ -59,7 +59,5 @@ class Poisson:
 
         # WIP: reverse; why?
         I = I * -1
-
-        self.services.stopwatch.log_time(solver_step)
 
         return I

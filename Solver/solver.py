@@ -23,6 +23,7 @@ from filemanager import FileManager
 from logger import Logger 
 from mathtools import MathTools
 from services import Services 
+from stopwatch import benchmark
 
 from depthbuffer import DepthBuffer
 from mesh import Mesh
@@ -116,26 +117,23 @@ class Solver:
         self.mesh_transform = MeshTransform(self.settings['MeshTransform'])
         print("%r" % self.mesh_transform)
 
+    @benchmark()
     def process_depth_buffer(self):
         """
             Process the depth buffer.
             The depth buffer is converted into model units.
             The background bit mask is calculated.
         """
-        depth_buffer_step = self.services.stopwatch.mark("depth_buffer")
-
         self.results.depth_buffer_model = self.depth_buffer.floats
         self.results.depth_buffer_mask = self.depth_buffer.background_mask
 
-        self.services.stopwatch.log_time(depth_buffer_step)
-
+    @benchmark()
     def process_gradients(self):
         """
             Calculate the X and Y gradients.
             The gradients are thresholded to remove high values such as at the model edges.
             The gradients are filtered by applying the composite mask.
         """
-        gradients_step = self.services.stopwatch.mark("gradients")
 
         self.results.gradient_x = self.depth_buffer.gradient_x
         self.results.gradient_y = self.depth_buffer.gradient_y
@@ -155,8 +153,6 @@ class Solver:
         # Modify gradient by applying threshold, setting values above threshold to zero.
         self.results.gradient_x = self.results.gradient_x * self.results.combined_mask
         self.results.gradient_y = self.results.gradient_y * self.results.combined_mask
-
-        self.services.stopwatch.log_time(gradients_step)
 
     def process_attenuation(self):
         """
@@ -212,6 +208,7 @@ class Solver:
             silhouette = Silhouette(self.services)        
             self.results.mesh_transformed = silhouette.process(self.results.mesh_transformed, self.results.depth_buffer_mask, self.mesh_transform.p2)
 
+    @benchmark()
     def process_scale(self):
         """
             Scales the mesh to the final dimensions.
@@ -230,7 +227,7 @@ class Solver:
         current_height = np.max(self.results.mesh_transformed)
         factor = target_height / current_height
         self.results.mesh_transformed = self.results.mesh_transformed * factor
-        
+
     def write_mesh(self):
         """
             Write the final calculated mesh.
@@ -258,12 +255,11 @@ class Solver:
                 MathTools.print_array("divG", self.results.divG)
                 MathTools.print_array("Poisson Solution", self.results.mesh_transformed)
 
+    @benchmark()
     def transform(self):
         """
         Transforms a DepthBuffer by the MeshTransform settings.
         """
-        transform_step = self.services.stopwatch.mark("transform")
-
         self.process_depth_buffer()
         self.process_gradients()
         self.process_attenuation()
@@ -274,8 +270,6 @@ class Solver:
         self.write_mesh()
 
         self.debug_results()
-        self.services.stopwatch.log_time(transform_step)
-
 def main():
     """
     Main entry point.

@@ -12,6 +12,7 @@
 """
 import time
 from decimal import Decimal
+from functools import wraps
 from typing import Any, Callable
 
 from logger import Logger
@@ -87,6 +88,25 @@ class StopWatch:
         self.events.pop(event)
 
 stopwatch = StopWatch(Logger())
-def benchmark (function: Callable):
-    tag = stopwatch.mark(function.__name__)
-    stopwatch.log_time(tag)
+def benchmark(tag_name: str = None):
+    """ A decorator for timing.
+    https://stackoverflow.com/questions/30904486/python-wrapper-function-taking-arguments-inside-decorator       
+    Parameters
+    ----------
+    tag_name
+        Tag to report in the logger.
+    """            
+    def benchmark_outer(fn):
+        @wraps(fn)
+        def benchmark_inner(*args, **kwargs):
+            tag = fn.__name__ if tag_name is None else tag_name
+
+            step = stopwatch.mark(tag)
+            result = fn(*args, **kwargs)
+            stopwatch.log_time(step)
+
+            return result
+        return benchmark_inner
+    return benchmark_outer
+
+    

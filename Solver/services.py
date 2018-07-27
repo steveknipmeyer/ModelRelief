@@ -10,7 +10,6 @@
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
-from stopwatch import StopWatch
 
 class Services:
     """
@@ -34,6 +33,5 @@ class Services:
         self.root_folder = root_folder
         self.working_folder = working_folder
         self.logger = logger
-        self.stopwatch = StopWatch(self.logger)
 
 

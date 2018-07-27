@@ -15,6 +15,7 @@ from enum import Enum
 from typing import List
 
 from services import Services
+from stopwatch import benchmark
 
 class FiniteDifference(Enum):
     """
@@ -46,6 +47,7 @@ class Difference:
         self.debug = True
         self.services = services
 
+    @benchmark()
     def difference_x(self, a: np.ndarray, direction:FiniteDifference) -> np.ndarray:
         """
         Calculates the finite dfferences along the X axis.
@@ -59,8 +61,6 @@ class Difference:
         -------
         An ndarray containing the finite differences.
         """
-        difference_step = self.services.stopwatch.mark("difference")
-
         (rows, columns) = a.shape
         difference = np.zeros((rows, columns))
 
@@ -78,8 +78,6 @@ class Difference:
                 if (direction == FiniteDifference.Forward) and (column == (columns - 1)):
                     continue
                 difference[row, column] = a[row, column + first_offset] - a[row, column + second_offset]
-        self.services.stopwatch.log_time(difference_step)
-
         return difference
 
     def difference_y(self, a: np.ndarray, direction:FiniteDifference) -> np.ndarray: 
