@@ -38,6 +38,12 @@ namespace ModelRelief.Dto
 
         public double P1 { get; set; }
         public double P2 { get; set; }
+        public double P3 { get; set; }
+        public double P4 { get; set; }
+        public double P5 { get; set; }
+        public double P6 { get; set; }
+        public double P7 { get; set; }
+        public double P8 { get; set; }
 
         // Navigation Properties
         public int? ProjectId { get; set; }

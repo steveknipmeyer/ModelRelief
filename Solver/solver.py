@@ -100,6 +100,12 @@ class Solver:
         # experimental
         self.enable_p1 = True
         self.enable_p2 = True
+        self.enable_p3 = True
+        self.enable_p4 = True
+        self.enable_p5 = True
+        self.enable_p6 = True
+        self.enable_p7 = True
+        self.enable_p8 = True
 
         # results collection
         self.results = Results()

@@ -347,6 +347,18 @@ namespace ModelRelief.Migrations
 
                     b.Property<double>("P2");
 
+                    b.Property<double>("P3");
+
+                    b.Property<double>("P4");
+
+                    b.Property<double>("P5");
+
+                    b.Property<double>("P6");
+
+                    b.Property<double>("P7");
+
+                    b.Property<double>("P8");
+
                     b.Property<int?>("ProjectId");
 
                     b.Property<double>("UnsharpGaussianHigh");

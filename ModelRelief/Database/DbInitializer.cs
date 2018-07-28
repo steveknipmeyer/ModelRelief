@@ -624,7 +624,7 @@ namespace ModelRelief.Database
                     Name = "Identity", Description = "Default transform",
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0,
+                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
                     User = _user, Project = FindByName<Project>(ProjectNames.ModelRelief),
                 },
 
@@ -633,7 +633,7 @@ namespace ModelRelief.Database
                     Name = "Pendant", Description = "Pendant transform",
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0,
+                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
                     User = _user, Project = FindByName<Project>(ProjectNames.Architecture),
                 },
 
@@ -643,7 +643,7 @@ namespace ModelRelief.Database
                     Name = "Armadillo", Description = "Armadillo transform",
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0,
+                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
                     User = _user, Project = FindByName<Project>("Stanford"),
                 },
                 new MeshTransform
@@ -651,7 +651,7 @@ namespace ModelRelief.Database
                     Name = "Bunny", Description = "Bunny transform",
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0,
+                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
                     User = _user, Project = FindByName<Project>("Stanford"),
                 },
                 new MeshTransform
@@ -659,7 +659,7 @@ namespace ModelRelief.Database
                     Name = "Buddha", Description = "Buddha transform",
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0,
+                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
                     User = _user, Project = FindByName<Project>("Stanford"),
                 },
                 new MeshTransform
@@ -667,7 +667,7 @@ namespace ModelRelief.Database
                     Name = "Dolphin", Description = "Dolphin transform",
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0,
+                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
                     User = _user, Project = FindByName<Project>(ProjectNames.Jewelry),
                 },
                 new MeshTransform
@@ -675,7 +675,7 @@ namespace ModelRelief.Database
                     Name = "Dragon", Description = "Dragon transform",
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0,
+                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
                     User = _user, Project = FindByName<Project>("Stanford"),
                 },
                 new MeshTransform
@@ -683,7 +683,7 @@ namespace ModelRelief.Database
                     Name = "House", Description = "House transform",
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0,
+                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
                     User = _user, Project = FindByName<Project>(ProjectNames.Architecture),
                 },
                 new MeshTransform
@@ -691,7 +691,7 @@ namespace ModelRelief.Database
                     Name = "Lucy", Description = "Lucy transform",
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0,
+                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
                     User = _user, Project = FindByName<Project>("Stanford"),
                 },
                 new MeshTransform
@@ -699,7 +699,7 @@ namespace ModelRelief.Database
                     Name = "Roadster", Description = "Roadster transform",
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0,
+                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
                     User = _user, Project = FindByName<Project>(ProjectNames.Jewelry),
                 },
                 new MeshTransform
@@ -707,7 +707,7 @@ namespace ModelRelief.Database
                     Name = "Statue", Description = "Statue transform",
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0,
+                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
                     User = _user, Project = FindByName<Project>(ProjectNames.Jewelry),
                 },
                 new MeshTransform
@@ -715,7 +715,7 @@ namespace ModelRelief.Database
                     Name = "Test", Description = "Test transform",
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0,
+                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
                     User = _user, Project = FindByName<Project>(ProjectNames.ModelRelief),
                 },
                 new MeshTransform
@@ -723,7 +723,7 @@ namespace ModelRelief.Database
                     Name = "Tyrannosaurus", Description = "Tyrannosaurus transform",
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0,
+                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
                     User = _user, Project = FindByName<Project>("Stanford"),
                 },
             };

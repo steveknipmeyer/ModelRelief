@@ -32,6 +32,12 @@ export interface IMeshTransform extends IModel {
     unsharpHighFrequencyScale?: number;     // Unsharp masking high frequency scaling
     p1?: number;                            // placeholder
     p2?: number;                            // placeholder
+    p3?: number;                            // placeholder
+    p4?: number;                            // placeholder
+    p5?: number;                            // placeholder
+    p6?: number;                            // placeholder
+    p7?: number;                            // placeholder
+    p8?: number;                            // placeholder
            
     // Navigation Properties
     projectId?: number;

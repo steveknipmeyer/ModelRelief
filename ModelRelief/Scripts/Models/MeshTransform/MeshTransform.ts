@@ -34,6 +34,12 @@ export class MeshTransform extends Model {
     unsharpHighFrequencyScale : number;
     p1                        : number;
     p2                        : number;
+    p3                        : number;
+    p4                        : number;
+    p5                        : number;
+    p6                        : number;
+    p7                        : number;
+    p8                        : number;
 
     // Navigation Properties
     project    : Project;
@@ -103,6 +109,12 @@ export class MeshTransform extends Model {
         meshTransform.unsharpHighFrequencyScale = dtoMeshTransform.unsharpHighFrequencyScale;
         meshTransform.p1                        = dtoMeshTransform.p1;
         meshTransform.p2                        = dtoMeshTransform.p2;        
+        meshTransform.p3                        = dtoMeshTransform.p3;        
+        meshTransform.p4                        = dtoMeshTransform.p4;        
+        meshTransform.p5                        = dtoMeshTransform.p5;        
+        meshTransform.p6                        = dtoMeshTransform.p6;        
+        meshTransform.p7                        = dtoMeshTransform.p7;        
+        meshTransform.p8                        = dtoMeshTransform.p8;        
 
         meshTransform.project = await Project.fromIdAsync(dtoMeshTransform.projectId);       
 
@@ -132,6 +144,12 @@ export class MeshTransform extends Model {
             unsharpHighFrequencyScale  : this.unsharpHighFrequencyScale,
             p1                         : this.p1,
             p2                         : this.p2,
+            p3                         : this.p3,
+            p4                         : this.p4,
+            p5                         : this.p5,
+            p6                         : this.p6,
+            p7                         : this.p7,
+            p8                         : this.p8,
             
             projectId           : this.project ? this.project.id : undefined,
         });

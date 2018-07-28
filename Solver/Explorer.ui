@@ -88,7 +88,7 @@
         <string>Images</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="2">
+        <item row="0" column="1">
          <widget class="QTabWidget" name="imageTabs">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -323,9 +323,9 @@
       <widget class="QLineEdit" name="gradientThresholdLineEdit">
        <property name="geometry">
         <rect>
-         <x>224</x>
+         <x>222</x>
          <y>88</y>
-         <width>78</width>
+         <width>50</width>
          <height>29</height>
         </rect>
        </property>
@@ -352,9 +352,9 @@
       <widget class="QLineEdit" name="unsharpGaussianLowLineEdit">
        <property name="geometry">
         <rect>
-         <x>225</x>
+         <x>222</x>
          <y>269</y>
-         <width>78</width>
+         <width>50</width>
          <height>28</height>
         </rect>
        </property>
@@ -381,9 +381,9 @@
       <widget class="QLineEdit" name="unsharpGaussianHighLineEdit">
        <property name="geometry">
         <rect>
-         <x>224</x>
+         <x>222</x>
          <y>300</y>
-         <width>78</width>
+         <width>50</width>
          <height>29</height>
         </rect>
        </property>
@@ -410,9 +410,9 @@
       <widget class="QLineEdit" name="unsharpHFScaleLineEdit">
        <property name="geometry">
         <rect>
-         <x>224</x>
+         <x>222</x>
          <y>332</y>
-         <width>78</width>
+         <width>50</width>
          <height>27</height>
         </rect>
        </property>
@@ -426,8 +426,8 @@
       <widget class="QPushButton" name="processButton">
        <property name="geometry">
         <rect>
-         <x>88</x>
-         <y>494</y>
+         <x>71</x>
+         <y>679</y>
          <width>75</width>
          <height>27</height>
         </rect>
@@ -488,7 +488,7 @@
         <rect>
          <x>222</x>
          <y>198</y>
-         <width>78</width>
+         <width>50</width>
          <height>29</height>
         </rect>
        </property>
@@ -498,7 +498,7 @@
         <rect>
          <x>222</x>
          <y>166</y>
-         <width>78</width>
+         <width>50</width>
          <height>28</height>
         </rect>
        </property>
@@ -569,7 +569,7 @@
        <property name="geometry">
         <rect>
          <x>16</x>
-         <y>433</y>
+         <y>436</y>
          <width>158</width>
          <height>19</height>
         </rect>
@@ -600,9 +600,9 @@
       <widget class="QLineEdit" name="p1LineEdit">
        <property name="geometry">
         <rect>
-         <x>221</x>
+         <x>222</x>
          <y>401</y>
-         <width>78</width>
+         <width>50</width>
          <height>27</height>
         </rect>
        </property>
@@ -616,9 +616,183 @@
       <widget class="QLineEdit" name="p2LineEdit">
        <property name="geometry">
         <rect>
-         <x>220</x>
+         <x>222</x>
          <y>431</y>
-         <width>78</width>
+         <width>50</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>373</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="p3LineEdit">
+       <property name="geometry">
+        <rect>
+         <x>222</x>
+         <y>460</y>
+         <width>50</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>373</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="p3CheckBox">
+       <property name="geometry">
+        <rect>
+         <x>17</x>
+         <y>465</y>
+         <width>158</width>
+         <height>19</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>P3</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="p4LineEdit">
+       <property name="geometry">
+        <rect>
+         <x>222</x>
+         <y>490</y>
+         <width>50</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>373</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="p4CheckBox">
+       <property name="geometry">
+        <rect>
+         <x>17</x>
+         <y>495</y>
+         <width>158</width>
+         <height>19</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>P4</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="p6LineEdit">
+       <property name="geometry">
+        <rect>
+         <x>222</x>
+         <y>551</y>
+         <width>50</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>373</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="p5CheckBox">
+       <property name="geometry">
+        <rect>
+         <x>16</x>
+         <y>525</y>
+         <width>158</width>
+         <height>19</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>P5</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="p7LineEdit">
+       <property name="geometry">
+        <rect>
+         <x>222</x>
+         <y>582</y>
+         <width>50</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>373</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="p6CheckBox">
+       <property name="geometry">
+        <rect>
+         <x>14</x>
+         <y>555</y>
+         <width>158</width>
+         <height>19</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>P6</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="p8LineEdit">
+       <property name="geometry">
+        <rect>
+         <x>222</x>
+         <y>613</y>
+         <width>50</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>373</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="p7CheckBox">
+       <property name="geometry">
+        <rect>
+         <x>14</x>
+         <y>585</y>
+         <width>158</width>
+         <height>19</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>P7</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="p8CheckBox">
+       <property name="geometry">
+        <rect>
+         <x>14</x>
+         <y>615</y>
+         <width>158</width>
+         <height>19</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>P8</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="p5LineEdit">
+       <property name="geometry">
+        <rect>
+         <x>222</x>
+         <y>521</y>
+         <width>50</width>
          <height>27</height>
         </rect>
        </property>
@@ -632,24 +806,14 @@
       <widget class="QLabel" name="labelProcessing">
        <property name="geometry">
         <rect>
-         <x>7</x>
+         <x>9</x>
          <y>-2</y>
-         <width>161</width>
-         <height>31</height>
+         <width>141</width>
+         <height>32</height>
         </rect>
        </property>
-       <property name="font">
-        <font>
-         <pointsize>15</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(255, 0, 0);</string>
-       </property>
        <property name="text">
-        <string>Processing</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; color:#ff0000;&quot;&gt;Processing&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </widget>
@@ -702,8 +866,19 @@
   <tabstop>p1LineEdit</tabstop>
   <tabstop>p2CheckBox</tabstop>
   <tabstop>p2LineEdit</tabstop>
+  <tabstop>p3CheckBox</tabstop>
+  <tabstop>p3LineEdit</tabstop>
+  <tabstop>p4CheckBox</tabstop>
+  <tabstop>p4LineEdit</tabstop>
+  <tabstop>p5CheckBox</tabstop>
+  <tabstop>p5LineEdit</tabstop>
+  <tabstop>p6CheckBox</tabstop>
+  <tabstop>p6LineEdit</tabstop>
+  <tabstop>p7CheckBox</tabstop>
+  <tabstop>p7LineEdit</tabstop>
+  <tabstop>p8CheckBox</tabstop>
+  <tabstop>p8LineEdit</tabstop>
   <tabstop>processButton</tabstop>
-  <tabstop>imageTabs</tabstop>
  </tabstops>
  <resources>
   <include location="explorer.qrc"/>

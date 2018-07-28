@@ -12,7 +12,7 @@ using System;
 namespace ModelRelief.Migrations
 {
     [DbContext(typeof(ModelReliefDbContext))]
-    [Migration("20180716205137_InitialCreate")]
+    [Migration("20180728092100_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -347,6 +347,18 @@ namespace ModelRelief.Migrations
                     b.Property<double>("P1");
 
                     b.Property<double>("P2");
+
+                    b.Property<double>("P3");
+
+                    b.Property<double>("P4");
+
+                    b.Property<double>("P5");
+
+                    b.Property<double>("P6");
+
+                    b.Property<double>("P7");
+
+                    b.Property<double>("P8");
 
                     b.Property<int?>("ProjectId");
 

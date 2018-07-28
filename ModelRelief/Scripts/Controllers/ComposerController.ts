@@ -384,6 +384,12 @@ export class ComposerController {
         controlSettings = new ControlSettings(0.0, 10.0, 0.1);
         let controlP2  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'p2').name('P2').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
 
+        controlSettings = new ControlSettings(0.0, 1.0, 0.01);
+        let controlP3  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'p3').name('P3').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+
+        controlSettings = new ControlSettings(0.0, 1.0, 0.01);
+        let controlP4  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'p4').name('P4').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+
         // Generate Relief
         let controlGenerateRelief = reliefProcessingOptions.add(this._composerViewSettings, 'generateRelief').name('Generate Relief');
 

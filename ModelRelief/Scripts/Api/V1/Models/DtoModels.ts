@@ -541,6 +541,12 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
     unsharpHighFrequencyScale?: number;     // Unsharp masking high frequency scaling
     p1?: number;                            // placeholder
     p2?: number;                            // placeholder
+    p3?: number;                            // placeholder
+    p4?: number;                            // placeholder
+    p5?: number;                            // placeholder
+    p6?: number;                            // placeholder
+    p7?: number;                            // placeholder
+    p8?: number;                            // placeholder
 
     // Navigation Properties
     projectId: number;
@@ -569,6 +575,12 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
             unsharpHighFrequencyScale,
             p1,
             p2,
+            p3,
+            p4,
+            p5,
+            p6,
+            p7,
+            p8,
         
             // Navigation Properties
             projectId,
@@ -587,6 +599,12 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
         this.unsharpHighFrequencyScale = unsharpHighFrequencyScale;
         this.p1                        = p1;
         this.p2                        = p2;
+        this.p3                        = p3;
+        this.p4                        = p4;
+        this.p5                        = p5;
+        this.p6                        = p6;
+        this.p7                        = p7;
+        this.p8                        = p8;
     
         // Navigation Properties
         this.projectId              = projectId;

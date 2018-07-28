@@ -37,6 +37,18 @@ namespace ModelRelief.Domain
         public double P1 { get; set; }
         [DependentFileProperty]
         public double P2 { get; set; }
+        [DependentFileProperty]
+        public double P3 { get; set; }
+        [DependentFileProperty]
+        public double P4 { get; set; }
+        [DependentFileProperty]
+        public double P5 { get; set; }
+        [DependentFileProperty]
+        public double P6 { get; set; }
+        [DependentFileProperty]
+        public double P7 { get; set; }
+        [DependentFileProperty]
+        public double P8 { get; set; }
 
         // Navigation Properties
         public int? ProjectId { get; set; }

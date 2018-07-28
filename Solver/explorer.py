@@ -555,6 +555,12 @@ class Explorer(QtWidgets.QMainWindow):
 
         self.ui.p1LineEdit.setText(str(mesh_transform['P1']))
         self.ui.p2LineEdit.setText(str(mesh_transform['P2']))
+        self.ui.p3LineEdit.setText(str(mesh_transform['P3']))
+        self.ui.p4LineEdit.setText(str(mesh_transform['P4']))
+        self.ui.p5LineEdit.setText(str(mesh_transform['P5']))
+        self.ui.p6LineEdit.setText(str(mesh_transform['P6']))
+        self.ui.p7LineEdit.setText(str(mesh_transform['P7']))
+        self.ui.p8LineEdit.setText(str(mesh_transform['P8']))
 
         checkbox_enabled = True
         self.ui.gradientThresholdCheckBox.setChecked(checkbox_enabled)
@@ -566,6 +572,12 @@ class Explorer(QtWidgets.QMainWindow):
 
         self.ui.p1CheckBox.setChecked(checkbox_enabled)
         self.ui.p2CheckBox.setChecked(checkbox_enabled)
+        self.ui.p3CheckBox.setChecked(checkbox_enabled)
+        self.ui.p4CheckBox.setChecked(checkbox_enabled)
+        self.ui.p5CheckBox.setChecked(checkbox_enabled)
+        self.ui.p6CheckBox.setChecked(checkbox_enabled)
+        self.ui.p7CheckBox.setChecked(checkbox_enabled)
+        self.ui.p8CheckBox.setChecked(checkbox_enabled)
 
     def initialize_handlers(self)-> None:
         """ Initialize event handlers """
@@ -580,7 +592,7 @@ class Explorer(QtWidgets.QMainWindow):
         enable
             On/Off
         """
-        self.ui.labelProcessing.setVisible(enable)
+        self.ui.labelProcessing.setVisible(enable) 
         self.ui.labelProcessing.repaint()
 
     def handle_process(self) ->None:
@@ -604,6 +616,12 @@ class Explorer(QtWidgets.QMainWindow):
         # experimental
         mesh_transform['P1'] = float(self.ui.p1LineEdit.text())
         mesh_transform['P2'] = float(self.ui.p2LineEdit.text())
+        mesh_transform['P3'] = float(self.ui.p3LineEdit.text())
+        mesh_transform['P4'] = float(self.ui.p4LineEdit.text())
+        mesh_transform['P5'] = float(self.ui.p5LineEdit.text())
+        mesh_transform['P6'] = float(self.ui.p6LineEdit.text())
+        mesh_transform['P7'] = float(self.ui.p7LineEdit.text())
+        mesh_transform['P8'] = float(self.ui.p8LineEdit.text())
 
         # write the modified JSON mesh file
         with open(self.settings_file, 'w') as json_file:
@@ -642,6 +660,12 @@ class Explorer(QtWidgets.QMainWindow):
 
         solver.enable_p1 = self.ui.p1CheckBox.isChecked()
         solver.enable_p2 = self.ui.p2CheckBox.isChecked()
+        solver.enable_p3 = self.ui.p3CheckBox.isChecked()
+        solver.enable_p4 = self.ui.p4CheckBox.isChecked()
+        solver.enable_p5 = self.ui.p5CheckBox.isChecked()
+        solver.enable_p6 = self.ui.p6CheckBox.isChecked()
+        solver.enable_p7 = self.ui.p7CheckBox.isChecked()
+        solver.enable_p8 = self.ui.p8CheckBox.isChecked()
 
         # solve
         solver.transform()
