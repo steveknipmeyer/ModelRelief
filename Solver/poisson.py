@@ -44,7 +44,7 @@ class Poisson:
             G = vector gradient of the image after pre-processing (attenuation, unsharp masking)
         Parameters
         ----------
-        digG
+        divG
             Divervence of the gradient field.
         """
         dimensions = np.shape(divG)

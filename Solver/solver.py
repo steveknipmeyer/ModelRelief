@@ -22,6 +22,7 @@ from shutil import copyfile
 from filemanager import FileManager 
 from logger import Logger 
 from mathtools import MathTools
+from objwriter import OBJWriter
 from services import Services 
 from stopwatch import benchmark
 
@@ -235,12 +236,23 @@ class Solver:
 
     def write_mesh(self):
         """
-            Write the final calculated mesh.
+            Write the final calculated mesh float file.
         """
-        file_path = '%s/%s' % (self.working_folder, self.mesh.name)
+        file_path = os.path.join(self.working_folder, self.mesh.name)
+
         (width, height) = self.results.mesh_transformed.shape
         mesh_list = self.results.mesh_transformed.reshape(width * height, 1)
         FileManager().write_binary(file_path, FileManager().pack_floats(mesh_list))
+
+    def write_obj(self):
+        """
+            Write the final calculated mesh OBJ file.
+        """
+        filename, _ = os.path.splitext(self.mesh.name)        
+        file_path = os.path.join(self.working_folder, filename + ".obj")
+        
+        filewriter = OBJWriter(self.services, self.results.mesh_transformed, file_path)
+        filewriter.write()
 
     def debug_results(self):
         """
@@ -273,6 +285,7 @@ class Solver:
         self.process_silhouette()
         self.process_scale()
         self.write_mesh()
+        self.write_obj()
 
         self.debug_results()
 def main():

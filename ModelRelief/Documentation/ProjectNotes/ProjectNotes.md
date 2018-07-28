@@ -2,6 +2,10 @@
 #### Commit Notes
 
 #### Short Term  
+    Write OBJ
+        Should the OBJWriter be part of FileManager?
+        Or should FileManager be renamed BinaryFile (or similar)?
+
     Technical Review
         Review the Blender implementation.
             What were the pre-processing steps that were done to prepare the data for the Poisson solver?
@@ -16,10 +20,6 @@
         Spheres (Positive, Negative)
         Cubes
         Architectural
-
-    Write OBJ
-        Inspection in other viewers and editors (.e.g Rhino) is necessary.
-    
 
     Solver           
         Meshes are not oriented correctly in Mayavi Isometric views.
