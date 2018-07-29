@@ -15,7 +15,8 @@ from scipy.ndimage import gaussian_filter
 
 from mask import Mask
 from services import Services
-    
+from results import Results
+
 class Silhouette:
     """
     A class for processing image silhouettes.
@@ -54,5 +55,9 @@ class Silhouette:
 
         # add blurred edges to final image
         result = image + blurred_edges
+
+        # workbench
+        self.services.results.i1 = blurred_all
+        self.services.results.i2 = blurred_edges
 
         return result

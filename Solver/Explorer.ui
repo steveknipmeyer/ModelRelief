@@ -262,6 +262,56 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="workbenchTabsContainer">
+       <attribute name="title">
+        <string>Workbench</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="0" column="0">
+         <widget class="QTabWidget" name="workbenchTabs">
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="i1Tab">
+           <attribute name="title">
+            <string>I1</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_14"/>
+          </widget>
+          <widget class="QWidget" name="i2Tab">
+           <attribute name="title">
+            <string>I2</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_15"/>
+          </widget>
+          <widget class="QWidget" name="i3Tab">
+           <attribute name="title">
+            <string>I3</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_16"/>
+          </widget>
+          <widget class="QWidget" name="i4Tab">
+           <attribute name="title">
+            <string>I4</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_17"/>
+          </widget>
+          <widget class="QWidget" name="i5Tab">
+           <attribute name="title">
+            <string>I5</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_18"/>
+          </widget>
+          <widget class="QWidget" name="i6Tab">
+           <attribute name="title">
+            <string>I6</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_19"/>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
     <item row="0" column="0">

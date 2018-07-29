@@ -23,6 +23,7 @@ from filemanager import FileManager
 from logger import Logger 
 from mathtools import MathTools
 from objwriter import OBJWriter
+from results import Results
 from services import Services 
 from stopwatch import benchmark
 
@@ -39,29 +40,6 @@ from silhouette import Silhouette
 from threshold import Threshold
 from unsharpmask import UnsharpMask, UnsharpMaskParameters
 
-class Results:
-    """
-    Holds the results of the Solver solution including the intermediate values.
-    """
-    def __init__(self):
-        # image arrays
-        self.depth_buffer_model: np.ndarray = None                      # DepthBuffer : Z coordinates in model units
-        self.depth_buffer_mask: np.ndarray = None                       # DepthBuffer : background bit mask of complete model
-        self.dGxdx: np.ndarray = None                                   # 1st derivative of Gradient wrt X: dGradientX(x,y) / dx
-        self.dGydy: np.ndarray = None                                   # 1st derivative of Gradient wrt Y: dGradientY(x,y) / dy
-        self.divG: np.ndarray = None                                    # div Gradient(x,y)
-        self.gradient_x: np.ndarray = None                              # GradientX (thresholded)
-        self.gradient_x_mask: np.ndarray = None                         # GradientY (thresholded)
-        self.gradient_y: np.ndarray = None                              # GradientX bit mask (thresholded)
-        self.gradient_y_mask: np.ndarray = None                         # GradientX bit mask (thresholded)
-        self.combined_mask: np.ndarray = None                           # final bit mask : compostite 
-        self.gradient_x_unsharp: np.ndarray = None                      # GradientX : (unsharp masked)
-        self.gradient_y_unsharp: np.ndarray = None                      # GradientY : (unsharp masked)
-
-        # final result
-        self.mesh_scaled: np.ndarray = None                             # Mesh: scaled linearly
-        self.mesh_transformed: np.ndarray = None                        # Mesh: complete solution
-
 class Solver:
     """
     Transforms a DepthBuffer to create a Mesh (raw float format) based on a MeshTransform.
@@ -72,7 +50,7 @@ class Solver:
 
         Parameters
         ----------
-        settings
+        settings 
             Path to JSON Mesh settings file.
         working
             Working folder path for intermediate files.
@@ -82,13 +60,16 @@ class Solver:
         # Windows only
         colorama.init()
 
+        # results collection
+        self.results = Results()
+
         working_folder = os.path.abspath(working)
         self.working_folder = working_folder
         if not os.path.exists(working_folder):
             os.makedirs(working_folder)
 
         self.root_folder = os.path.abspath('../ModelRelief/wwwroot')
-        self.services = Services(self.root_folder, self.working_folder, Logger())
+        self.services = Services(self.root_folder, self.working_folder, Logger(), self.results)
 
         # processing steps
         self.enable_gradient_threshold = True
@@ -107,9 +88,6 @@ class Solver:
         self.enable_p6 = True
         self.enable_p7 = True
         self.enable_p8 = True
-
-        # results collection
-        self.results = Results()
 
         with open(settings) as json_file:
             self.settings = json.load(json_file)

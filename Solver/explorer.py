@@ -57,6 +57,14 @@ class ImageType(Enum):
     GradientXUnsharp = 9,
     GradientYUnsharp = 10,
 
+    # workbench
+    Image1 = 11,
+    Image2 = 12,
+    Image3 = 13,
+    Image4 = 14,
+    Image5 = 15,
+    Image6 = 16,
+
 class Camera:
     """
     A class representing the Mayavi scene camera.
@@ -156,6 +164,8 @@ class ImageTab():
         # update associated controls
         self.scroll.setWidget(self.canvas)
         self.nav.canvas = self.canvas
+
+        self.widget.update()
 
     @staticmethod
     def add_image(figure: Figure, subplot: plt.Axes, image: np.ndarray, title: str, cmap: str) -> plt.Figure:
@@ -491,7 +501,8 @@ class Explorer(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
 
         # image views
-        default_image = np.zeros(shape=(2,2))
+        default_image_dimensions = 512
+        default_image = np.zeros(shape=(default_image_dimensions, default_image_dimensions))
         self.image_tabs[ImageType.DepthBuffer]      = ImageTab(self.ui.depthBufferTab, ImageType.DepthBuffer, "DepthBuffer", "gray", ImageTab.add_image, default_image)
         self.image_tabs[ImageType.Relief]           = ImageTab(self.ui.reliefTab, ImageType.Relief, "Relief", "gray", ImageTab.add_image, default_image)
         self.image_tabs[ImageType.BackgroundMask]   = ImageTab(self.ui.backgroundMaskTab, ImageType.BackgroundMask, "Background Mask", "gray", ImageTab.add_image, default_image)
@@ -504,10 +515,19 @@ class Explorer(QtWidgets.QMainWindow):
         self.image_tabs[ImageType.GradientYUnsharp] = ImageTab(self.ui.gradientYUnsharpTab, ImageType.GradientYUnsharp, "Gradient Y Unsharp", "Blues_r", ImageTab.add_image, default_image)
 
         # mesh views
-        default_mesh = np.zeros(shape=(2,2))
+        default_mesh_dimensions = 512
+        default_mesh = np.zeros(shape=(default_mesh_dimensions, default_mesh_dimensions))
         self.mesh_tabs[MeshType.Model]  = MeshTab(self.ui.modelMeshTab,  MeshType.Model,  "Model", "Blues_r", default_mesh)
         self.mesh_tabs[MeshType.ModelScaled]  = MeshTab(self.ui.modelMeshScaledTab,  MeshType.ModelScaled,  "Model Scaled", "Blues_r", default_mesh)
         self.mesh_tabs[MeshType.Relief] = MeshTab(self.ui.reliefMeshTab, MeshType.Relief, "Relief", "Blues_r", default_mesh)
+
+        # workbench views
+        self.image_tabs[ImageType.Image1] = ImageTab(self.ui.i1Tab, ImageType.Image1, "Image One", "gray", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.Image2] = ImageTab(self.ui.i2Tab, ImageType.Image2, "Image Two", "gray", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.Image3] = ImageTab(self.ui.i3Tab, ImageType.Image3, "Image Three", "gray", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.Image4] = ImageTab(self.ui.i4Tab, ImageType.Image4, "Image Four", "gray", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.Image5] = ImageTab(self.ui.i5Tab, ImageType.Image5, "Image Five", "gray", ImageTab.add_image, default_image)
+        self.image_tabs[ImageType.Image6] = ImageTab(self.ui.i6Tab, ImageType.Image6, "Image Six", "gray", ImageTab.add_image, default_image)
 
         #intialize settings
         self.initialize_settings()
@@ -516,8 +536,10 @@ class Explorer(QtWidgets.QMainWindow):
 
     def resize_ui(self)-> None:
         """ Handles a resize event for the main window. """
+        self.set_busy (True)
         for _, value in self.image_tabs.items():
             value.construct_tab()
+        self.set_busy (False)
 
     def resizeEvent(self, event: QtGui.QResizeEvent):
         """ Event handler for window resize.
@@ -686,5 +708,13 @@ class Explorer(QtWidgets.QMainWindow):
         self.mesh_tabs[MeshType.Model].mesh_widget.mesh_content.set_mesh(solver.results.depth_buffer_model, preserve_camera)
         self.mesh_tabs[MeshType.ModelScaled].mesh_widget.mesh_content.set_mesh(solver.results.mesh_scaled, preserve_camera)
         self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.set_mesh(solver.results.mesh_transformed, preserve_camera)
+
+        # Workbench
+        self.image_tabs[ImageType.Image1].data = solver.results.i1
+        self.image_tabs[ImageType.Image2].data = solver.results.i2
+        self.image_tabs[ImageType.Image3].data = solver.results.i3
+        self.image_tabs[ImageType.Image4].data = solver.results.i4
+        self.image_tabs[ImageType.Image5].data = solver.results.i5
+        self.image_tabs[ImageType.Image6].data = solver.results.i6
 
         self.set_busy (False)

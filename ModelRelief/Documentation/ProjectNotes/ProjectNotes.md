@@ -2,6 +2,12 @@
 #### Commit Notes
 
 #### Short Term  
+    Hidden image tabs do not draw until they are visible and a resize event has fired.
+
+    Lambda
+        Intall 2018a.
+        Uninstall previous versions of MATLAB.
+
     Write OBJ
         Should the OBJWriter be part of FileManager?
         Or should FileManager be renamed BinaryFile (or similar)?
