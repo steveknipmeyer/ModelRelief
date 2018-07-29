@@ -26,6 +26,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
+from matplotlib.transforms import Bbox
 from mpl_toolkits.mplot3d import Axes3D
 
 from traits.api import HasTraits, Instance, on_trait_change
@@ -139,14 +140,47 @@ class ImageTab():
         self._data = value
         self.construct_tab() 
 
+    def get_view_extents(self, figure: Figure)->Bbox:
+        """ Returns the bounding box extents of a figure
+        Parameters
+        ---------
+        figure
+            The Figure to query.
+        """
+        # N.B. get_axes() returns a List; axes[0] = data axes; axes[1] = normalized axes?
+        axes = figure.get_axes()[0]
+        return axes.viewLim
+
+    def set_view_extents(self, figure: Figure, limits: Bbox)->Bbox:
+        """ Sets the bounding box extents of a figure
+        Parameters
+        ---------
+        figure
+            The Figure to update.
+        limits
+            The new bounding box.
+        """
+        axes = figure.get_axes()[0]
+        # points: a 2x2 numpy array of the form [[x0, y0], [x1, y1]]
+        points = limits.get_points()
+        axes.set_xlim(points[0][0], points[1][0])
+        axes.set_ylim(points[0][1], points[1][1])
+
     def construct_tab (self):
         """ Constructs the UI tab with the image content.
             Regenerates the matplotlib Figure.
         """
-
-        if (self.figure != None):
+        figure_exists = self.figure != None
+        if figure_exists:
+            viewLim = self.get_view_extents(self.figure)
             plt.close(self.figure)
+
+        # construct image figure
         self.figure = self.construct_subplot_figures ([self._data], 1, [self.title], [self.cmap])
+
+        # restore extents
+        if figure_exists:
+            self.set_view_extents(self.figure, viewLim)
 
         self.canvas = FigureCanvas(self.figure)
         self.canvas.draw()
@@ -165,7 +199,9 @@ class ImageTab():
         self.scroll.setWidget(self.canvas)
         self.nav.canvas = self.canvas
 
-        self.widget.update()
+        # self.widget.adjustSize()
+        # self.widget.repaint()
+        # self.widget.update()
 
     @staticmethod
     def add_image(figure: Figure, subplot: plt.Axes, image: np.ndarray, title: str, cmap: str) -> plt.Figure:

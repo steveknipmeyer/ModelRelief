@@ -2,7 +2,8 @@
 #### Commit Notes
 
 #### Short Term  
-    Hidden image tabs do not draw until they are visible and a resize event has fired.
+    Solver
+        Hidden image tabs do not draw until they are visible and a resize event or calculate has fired.
 
     Lambda
         Intall 2018a.
