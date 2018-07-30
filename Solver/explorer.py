@@ -535,24 +535,20 @@ class Explorer(QtWidgets.QMainWindow):
         self.ui:Ui_MainWindow = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        #intialize settings
         self.initialize_settings()
 
         # solve
         self.calculate()
 
+        self.construct_tabs()
+
+        # N.B. First update of tabs will be performed following the system-generate resizeEvent.
+
     def resize_ui(self)-> None:
         """ Handles a resize event for the main window. """
 
-        if len(self.image_tabs) <= 0:
-            self.construct_tabs()
-            return
-
         self.set_busy (True)
-
-        for _, tab in self.image_tabs.items():
-            tab.update()
-
+        self.update_tabs()
         self.set_busy (False)
 
     def resizeEvent(self, event: QtGui.QResizeEvent):
@@ -619,16 +615,7 @@ class Explorer(QtWidgets.QMainWindow):
         """
         Event handler for a tab selected event.
         """
-        print (f"WorkbenchTabs visible = {self.ui.workbenchTabs.isVisible()}")
-
-        # update
-        for _, tab in self.image_tabs.items():
-            if not tab.widget.parent().isVisible():
-                continue
-
-            if tab.widget == self.ui.imageTabs.currentWidget() or tab.widget == self.ui.workbenchTabs.currentWidget():
-                print (f"Updating tab {tab.widget.objectName()}")
-                tab.update()
+        self.update_image_tabs()
 
     def initialize_handlers(self)-> None:
         """ Initialize event handlers """
@@ -699,7 +686,7 @@ class Explorer(QtWidgets.QMainWindow):
 
             self.initialize_settings()
             self.calculate()
-            self.update_tabs(preserve_camera=True)
+            self.update_tabs(preserve_camera=False)
 
     def calculate(self) -> None:
         """ 
@@ -736,7 +723,7 @@ class Explorer(QtWidgets.QMainWindow):
         """
         # image views
         self.image_tabs[ImageType.DepthBuffer]      = ImageTab(self.ui.depthBufferTab, ImageType.DepthBuffer, "DepthBuffer", "gray", ImageTab.add_image, self.solver.results, "depth_buffer_model")
-        self.image_tabs[ImageType.Relief]           = ImageTab(self.ui.reliefTab, ImageType.Relief, "Relief", "gray", ImageTab.add_image, self.solver.results, "mesh_scaled")
+        self.image_tabs[ImageType.Relief]           = ImageTab(self.ui.reliefTab, ImageType.Relief, "Relief", "gray", ImageTab.add_image, self.solver.results, "mesh_transformed")
         self.image_tabs[ImageType.BackgroundMask]   = ImageTab(self.ui.backgroundMaskTab, ImageType.BackgroundMask, "Background Mask", "gray", ImageTab.add_image, self.solver.results, "depth_buffer_mask")
         self.image_tabs[ImageType.GradientX]        = ImageTab(self.ui.gradientXTab, ImageType.GradientX, "Gradient X: dI(x,y)/dx", "Blues_r", ImageTab.add_image, self.solver.results, "gradient_x")
         self.image_tabs[ImageType.GradientXMask]    = ImageTab(self.ui.gradientXMaskTab, ImageType.GradientXMask, "Gradient X Mask", "gray", ImageTab.add_image, self.solver.results, "gradient_x_mask")
@@ -759,6 +746,22 @@ class Explorer(QtWidgets.QMainWindow):
         self.image_tabs[ImageType.Image5] = ImageTab(self.ui.i5Tab, ImageType.Image5, "Image Five", "gray", ImageTab.add_image, self.solver.results, "i5")
         self.image_tabs[ImageType.Image6] = ImageTab(self.ui.i6Tab, ImageType.Image6, "Image Six", "gray", ImageTab.add_image, self.solver.results, "i6")
 
+    def update_image_tabs(self)-> None:
+        """
+        Updates the tabs holding pure images.
+        """
+        for _, tab in self.image_tabs.items():
+            if tab.widget == self.ui.imageTabs.currentWidget() or tab.widget == self.ui.workbenchTabs.currentWidget():
+                tab.update()
+
+    def update_mesh_tabs(self, preserve_camera: bool = True)-> None:
+        """
+        Updates the tabs holding 3D meshes.
+        """
+        self.mesh_tabs[MeshType.Model].mesh_widget.mesh_content.update_mesh(self.solver.results.depth_buffer_model, preserve_camera)
+        self.mesh_tabs[MeshType.ModelScaled].mesh_widget.mesh_content.update_mesh(self.solver.results.mesh_scaled, preserve_camera)
+        self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.update_mesh(self.solver.results.mesh_transformed, preserve_camera)
+
     def update_tabs(self, preserve_camera: bool = True) -> None:
         """ Update the result tabs with the images, meshes, etc. from the calculated solution.
         Parameters
@@ -768,12 +771,7 @@ class Explorer(QtWidgets.QMainWindow):
     """
         self.set_busy (True)
 
-        print (f"ImageTabs visible = {self.ui.imageTabs.isVisible()}")
-        print (f"WorkbenchTabs visible = {self.ui.workbenchTabs.isVisible()}")
-
-        # Meshes
-        self.mesh_tabs[MeshType.Model].mesh_widget.mesh_content.update_mesh(self.solver.results.depth_buffer_model, preserve_camera)
-        self.mesh_tabs[MeshType.ModelScaled].mesh_widget.mesh_content.update_mesh(self.solver.results.mesh_scaled, preserve_camera)
-        self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.update_mesh(self.solver.results.mesh_transformed, preserve_camera)
+        self.update_image_tabs()
+        self.update_mesh_tabs(preserve_camera)
 
         self.set_busy (False)
