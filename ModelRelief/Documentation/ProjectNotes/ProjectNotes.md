@@ -3,6 +3,7 @@
 
 #### Short Term  
     Solver
+        Busy indicator is not shown at startup.
         Hidden image tabs do not draw until they are visible and a resize event or calculate has fired.
 
     Lambda
