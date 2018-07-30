@@ -89,10 +89,25 @@ class Solver:
         self.enable_p7 = True
         self.enable_p8 = True
 
+        self.settings = None
+        self._settings_file = ''
+        self.mesh = None
+        self.depth_buffer = None
+        self.mesh_transform = None
+        
+        self.settings_file = settings
+
+    @property
+    def settings_file(self): 
+        return self._settings_file
+
+    @settings_file.setter
+    def settings_file(self, settings): 
         with open(settings) as json_file:
             self.settings = json.load(json_file)
         self.initialize_settings()
-
+        self._settings_file = settings
+    
     def initialize_settings(self):
         """
         Unpack the JSON settings file and initialie Solver properties.

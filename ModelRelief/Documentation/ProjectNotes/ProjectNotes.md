@@ -4,8 +4,20 @@
 #### Short Term  
     Solver
         Busy indicator is not shown at startup.
-        Hidden image tabs do not draw until they are visible and a resize event or calculate has fired.
 
+        ImageTab
+            Add a reference to its data source.
+
+        After a Solver calculate:
+            Invalidate all ImageTabs
+            Update only the visible tab.
+
+        Hidden image tabs do not draw until they are visible and a resize event or calculate has fired.
+        How should Meshes be handled in the UI?
+        Separate the UI classes from Explorer into separate files.
+            Should Explorer be in a separate folder from Solver?
+        Rename property_name?
+        
     Lambda
         Intall 2018a.
         Uninstall previous versions of MATLAB.

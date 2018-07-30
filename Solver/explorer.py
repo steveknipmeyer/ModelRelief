@@ -43,7 +43,7 @@ from results import Results
 from solver import Solver
 from stopwatch import benchmark
 
-import explorer_ui
+from explorer_ui import Ui_MainWindow
 
 class ImageType(Enum):
     """
@@ -99,7 +99,7 @@ class MeshType(Enum):
 class ImageTab():
     """ A UI tab of an image view. """
 
-    def __init__(self, widget: QtWidgets.QWidget, image_type: ImageType, title: str, cmap: str, content_ctor: Callable[[Figure, plt.Axes, np.ndarray, str, str], Figure], data: np.ndarray,  ) -> None:
+    def __init__(self, widget: QtWidgets.QWidget, image_type: ImageType, title: str, cmap: str, content_ctor: Callable[[Figure, plt.Axes, np.ndarray, str, str], Figure], results: Results, results_property: str ) -> None:
         """ A UI image tab in the Explorer.
         Parameters
         ----------
@@ -127,20 +127,9 @@ class ImageTab():
         self.nav: NavigationToolbar = None
 
         self.content_ctor = content_ctor
-        self._data = None
-        self.data = data
 
-    @property
-    def data(self) -> np.ndarray:
-        """ Returns the Numpy data array. """
-        return self._data
-
-    @data.setter
-    def data (self, value: np.ndarray):
-        """ Sets the NumPy data array.
-        """
-        self._data = value
-        self.construct_tab() 
+        self.results = results
+        self.results_property = results_property
 
     def get_view_extents(self, figure: Figure)->Bbox:
         """ Returns the bounding box extents of a figure
@@ -168,12 +157,10 @@ class ImageTab():
         axes.set_xlim(points[0][0], points[1][0])
         axes.set_ylim(points[0][1], points[1][1])
 
-    def construct_tab (self):
+    def update (self):
         """ Constructs the UI tab with the image content.
             Regenerates the matplotlib Figure.
         """
-        if self.widget.objectName() == 'i1Tab':
-            print ("i1Tab construct")
             
         figure_exists = self.figure != None
         if figure_exists:
@@ -181,7 +168,8 @@ class ImageTab():
             plt.close(self.figure)
 
         # construct image figure
-        self.figure = self.construct_subplot_figures ([self._data], 1, [self.title], [self.cmap])
+        data = self.results.__getattribute__(self.results_property)
+        self.figure = self.construct_subplot_figures ([data], 1, [self.title], [self.cmap])
 
         # restore extents
         if figure_exists:
@@ -386,7 +374,7 @@ class MeshContent(HasTraits):
         """ Sets the NumPy data array."""
         self._data = value
 
-    def set_mesh(self, mesh: np.ndarray, preserve_camera:bool = True):
+    def update_mesh(self, mesh: np.ndarray, preserve_camera:bool = True):
         """ Sets the active mesh."""
         self.data = mesh
         self.update_content()
@@ -512,8 +500,8 @@ class Explorer(QtWidgets.QMainWindow):
         self.settings = self.load_settings(self.settings_file)
         self.working = working
 
-        # results
-        self.results: Results = Results()
+        # solver instance
+        self.solver = Solver(self.settings_file, self.working)
 
         self.qapp = qapp
         self.resize_timer: Optional[QtCore.QTimer] = None
@@ -544,7 +532,7 @@ class Explorer(QtWidgets.QMainWindow):
         """ 
         Initialize the UI
         """
-        self.ui = explorer_ui.Ui_MainWindow()
+        self.ui:Ui_MainWindow = Ui_MainWindow()
         self.ui.setupUi(self)
 
         #intialize settings
@@ -562,8 +550,8 @@ class Explorer(QtWidgets.QMainWindow):
 
         self.set_busy (True)
 
-        for _, value in self.image_tabs.items():
-            value.construct_tab()
+        for _, tab in self.image_tabs.items():
+            tab.update()
 
         self.set_busy (False)
 
@@ -627,8 +615,26 @@ class Explorer(QtWidgets.QMainWindow):
         self.ui.p7CheckBox.setChecked(checkbox_enabled)
         self.ui.p8CheckBox.setChecked(checkbox_enabled)
 
+    def tab_selected(self)-> None:
+        """
+        Event handler for a tab selected event.
+        """
+        print (f"WorkbenchTabs visible = {self.ui.workbenchTabs.isVisible()}")
+
+        # update
+        for _, tab in self.image_tabs.items():
+            if not tab.widget.parent().isVisible():
+                continue
+
+            if tab.widget == self.ui.imageTabs.currentWidget() or tab.widget == self.ui.workbenchTabs.currentWidget():
+                print (f"Updating tab {tab.widget.objectName()}")
+                tab.update()
+
     def initialize_handlers(self)-> None:
         """ Initialize event handlers """
+        self.ui.imageTabs.currentChanged.connect(self.tab_selected)
+        self.ui.workbenchTabs.currentChanged.connect(self.tab_selected)
+
         self.ui.processButton.clicked.connect(self.handle_process)
         self.ui.actionOpen.triggered.connect(self.handle_open_settings)
 
@@ -701,28 +707,26 @@ class Explorer(QtWidgets.QMainWindow):
         """
         self.set_busy (True)
 
-        solver = Solver(self.settings_file, self.working)
-
         #enable processing steps
-        solver.enable_gradient_threshold = self.ui.gradientThresholdCheckBox.isChecked()
-        solver.enable_attenuation = self.ui.attenuationCheckBox.isChecked()
-        solver.enable_unsharpmask = self.ui.unsharpMaskingCheckBox.isChecked()
-        solver.enable_unsharpmask_gaussian_high = self.ui.unsharpGaussianLowCheckBox.isChecked()
-        solver.enable_unsharpmask_gaussian_low = self.ui.unsharpGaussianHighCheckBox.isChecked()
-        solver.enable_unsharpmask_high_frequence_scale = self.ui.unsharpHFScaleCheckBox.isChecked()
+        self.solver.enable_gradient_threshold = self.ui.gradientThresholdCheckBox.isChecked()
+        self.solver.enable_attenuation = self.ui.attenuationCheckBox.isChecked()
+        self.solver.enable_unsharpmask = self.ui.unsharpMaskingCheckBox.isChecked()
+        self.solver.enable_unsharpmask_gaussian_high = self.ui.unsharpGaussianLowCheckBox.isChecked()
+        self.solver.enable_unsharpmask_gaussian_low = self.ui.unsharpGaussianHighCheckBox.isChecked()
+        self.solver.enable_unsharpmask_high_frequence_scale = self.ui.unsharpHFScaleCheckBox.isChecked()
 
-        solver.enable_p1 = self.ui.p1CheckBox.isChecked()
-        solver.enable_p2 = self.ui.p2CheckBox.isChecked()
-        solver.enable_p3 = self.ui.p3CheckBox.isChecked()
-        solver.enable_p4 = self.ui.p4CheckBox.isChecked()
-        solver.enable_p5 = self.ui.p5CheckBox.isChecked()
-        solver.enable_p6 = self.ui.p6CheckBox.isChecked()
-        solver.enable_p7 = self.ui.p7CheckBox.isChecked()
-        solver.enable_p8 = self.ui.p8CheckBox.isChecked()
+        self.solver.enable_p1 = self.ui.p1CheckBox.isChecked()
+        self.solver.enable_p2 = self.ui.p2CheckBox.isChecked()
+        self.solver.enable_p3 = self.ui.p3CheckBox.isChecked()
+        self.solver.enable_p4 = self.ui.p4CheckBox.isChecked()
+        self.solver.enable_p5 = self.ui.p5CheckBox.isChecked()
+        self.solver.enable_p6 = self.ui.p6CheckBox.isChecked()
+        self.solver.enable_p7 = self.ui.p7CheckBox.isChecked()
+        self.solver.enable_p8 = self.ui.p8CheckBox.isChecked()
 
         # solve
-        solver.transform()
-        self.results = solver.results
+        self.solver.settings_file = self.settings_file
+        self.solver.transform()
 
         self.set_busy (False)
 
@@ -731,29 +735,29 @@ class Explorer(QtWidgets.QMainWindow):
         Construct the result tabs with the images, meshes, etc. from the calculated solution.
         """
         # image views
-        self.image_tabs[ImageType.DepthBuffer]      = ImageTab(self.ui.depthBufferTab, ImageType.DepthBuffer, "DepthBuffer", "gray", ImageTab.add_image, self.results.depth_buffer_model)
-        self.image_tabs[ImageType.Relief]           = ImageTab(self.ui.reliefTab, ImageType.Relief, "Relief", "gray", ImageTab.add_image, self.results.mesh_scaled)
-        self.image_tabs[ImageType.BackgroundMask]   = ImageTab(self.ui.backgroundMaskTab, ImageType.BackgroundMask, "Background Mask", "gray", ImageTab.add_image, self.results.depth_buffer_mask)
-        self.image_tabs[ImageType.GradientX]        = ImageTab(self.ui.gradientXTab, ImageType.GradientX, "Gradient X: dI(x,y)/dx", "Blues_r", ImageTab.add_image, self.results.gradient_x)
-        self.image_tabs[ImageType.GradientXMask]    = ImageTab(self.ui.gradientXMaskTab, ImageType.GradientXMask, "Gradient X Mask", "gray", ImageTab.add_image, self.results.gradient_x_mask)
-        self.image_tabs[ImageType.GradientY]        = ImageTab(self.ui.gradientYTab, ImageType.GradientY, "Gradient Y: dI(x,y)/dy", "Blues_r", ImageTab.add_image, self.results.gradient_y)
-        self.image_tabs[ImageType.GradientYMask]    = ImageTab(self.ui.gradientYMaskTab, ImageType.GradientYMask, "Gradient Y Mask", "gray", ImageTab.add_image, self.results.gradient_y_mask)
-        self.image_tabs[ImageType.CompositeMask]    = ImageTab(self.ui.compositeMaskTab, ImageType.CompositeMask, "Composite Mask", "gray", ImageTab.add_image, self.results.combined_mask)
-        self.image_tabs[ImageType.GradientXUnsharp] = ImageTab(self.ui.gradientXUnsharpTab, ImageType.GradientXUnsharp, "Gradient X Unsharp", "Blues_r", ImageTab.add_image, self.results.gradient_x_unsharp)
-        self.image_tabs[ImageType.GradientYUnsharp] = ImageTab(self.ui.gradientYUnsharpTab, ImageType.GradientYUnsharp, "Gradient Y Unsharp", "Blues_r", ImageTab.add_image, self.results.gradient_y_unsharp)
+        self.image_tabs[ImageType.DepthBuffer]      = ImageTab(self.ui.depthBufferTab, ImageType.DepthBuffer, "DepthBuffer", "gray", ImageTab.add_image, self.solver.results, "depth_buffer_model")
+        self.image_tabs[ImageType.Relief]           = ImageTab(self.ui.reliefTab, ImageType.Relief, "Relief", "gray", ImageTab.add_image, self.solver.results, "mesh_scaled")
+        self.image_tabs[ImageType.BackgroundMask]   = ImageTab(self.ui.backgroundMaskTab, ImageType.BackgroundMask, "Background Mask", "gray", ImageTab.add_image, self.solver.results, "depth_buffer_mask")
+        self.image_tabs[ImageType.GradientX]        = ImageTab(self.ui.gradientXTab, ImageType.GradientX, "Gradient X: dI(x,y)/dx", "Blues_r", ImageTab.add_image, self.solver.results, "gradient_x")
+        self.image_tabs[ImageType.GradientXMask]    = ImageTab(self.ui.gradientXMaskTab, ImageType.GradientXMask, "Gradient X Mask", "gray", ImageTab.add_image, self.solver.results, "gradient_x_mask")
+        self.image_tabs[ImageType.GradientY]        = ImageTab(self.ui.gradientYTab, ImageType.GradientY, "Gradient Y: dI(x,y)/dy", "Blues_r", ImageTab.add_image, self.solver.results, "gradient_y")
+        self.image_tabs[ImageType.GradientYMask]    = ImageTab(self.ui.gradientYMaskTab, ImageType.GradientYMask, "Gradient Y Mask", "gray", ImageTab.add_image, self.solver.results, "gradient_y_mask")
+        self.image_tabs[ImageType.CompositeMask]    = ImageTab(self.ui.compositeMaskTab, ImageType.CompositeMask, "Composite Mask", "gray", ImageTab.add_image, self.solver.results, "combined_mask")
+        self.image_tabs[ImageType.GradientXUnsharp] = ImageTab(self.ui.gradientXUnsharpTab, ImageType.GradientXUnsharp, "Gradient X Unsharp", "Blues_r", ImageTab.add_image, self.solver.results, "gradient_x_unsharp")
+        self.image_tabs[ImageType.GradientYUnsharp] = ImageTab(self.ui.gradientYUnsharpTab, ImageType.GradientYUnsharp, "Gradient Y Unsharp", "Blues_r", ImageTab.add_image, self.solver.results, "gradient_y_unsharp")
 
         # mesh views
-        self.mesh_tabs[MeshType.Model]  = MeshTab(self.ui.modelMeshTab,  MeshType.Model,  "Model", "Blues_r", self.results.depth_buffer_model)
-        self.mesh_tabs[MeshType.ModelScaled]  = MeshTab(self.ui.modelMeshScaledTab,  MeshType.ModelScaled,  "Model Scaled", "Blues_r", self.results.mesh_scaled)
-        self.mesh_tabs[MeshType.Relief] = MeshTab(self.ui.reliefMeshTab, MeshType.Relief, "Relief", "Blues_r", self.results.mesh_transformed)
+        self.mesh_tabs[MeshType.Model]  = MeshTab(self.ui.modelMeshTab,  MeshType.Model,  "Model", "Blues_r", self.solver.results.depth_buffer_model)
+        self.mesh_tabs[MeshType.ModelScaled]  = MeshTab(self.ui.modelMeshScaledTab,  MeshType.ModelScaled,  "Model Scaled", "Blues_r", self.solver.results.mesh_scaled)
+        self.mesh_tabs[MeshType.Relief] = MeshTab(self.ui.reliefMeshTab, MeshType.Relief, "Relief", "Blues_r", self.solver.results.mesh_transformed)
 
         # workbench views
-        self.image_tabs[ImageType.Image1] = ImageTab(self.ui.i1Tab, ImageType.Image1, "Image One", "gray", ImageTab.add_image, self.results.i1)
-        self.image_tabs[ImageType.Image2] = ImageTab(self.ui.i2Tab, ImageType.Image2, "Image Two", "gray", ImageTab.add_image, self.results.i2)
-        self.image_tabs[ImageType.Image3] = ImageTab(self.ui.i3Tab, ImageType.Image3, "Image Three", "gray", ImageTab.add_image, self.results.i3)
-        self.image_tabs[ImageType.Image4] = ImageTab(self.ui.i4Tab, ImageType.Image4, "Image Four", "gray", ImageTab.add_image, self.results.i4)
-        self.image_tabs[ImageType.Image5] = ImageTab(self.ui.i5Tab, ImageType.Image5, "Image Five", "gray", ImageTab.add_image, self.results.i5)
-        self.image_tabs[ImageType.Image6] = ImageTab(self.ui.i6Tab, ImageType.Image6, "Image Six", "gray", ImageTab.add_image, self.results.i6)
+        self.image_tabs[ImageType.Image1] = ImageTab(self.ui.i1Tab, ImageType.Image1, "Image One", "gray", ImageTab.add_image, self.solver.results, "i1")
+        self.image_tabs[ImageType.Image2] = ImageTab(self.ui.i2Tab, ImageType.Image2, "Image Two", "gray", ImageTab.add_image, self.solver.results, "i2")
+        self.image_tabs[ImageType.Image3] = ImageTab(self.ui.i3Tab, ImageType.Image3, "Image Three", "gray", ImageTab.add_image, self.solver.results, "i3")
+        self.image_tabs[ImageType.Image4] = ImageTab(self.ui.i4Tab, ImageType.Image4, "Image Four", "gray", ImageTab.add_image, self.solver.results, "i4")
+        self.image_tabs[ImageType.Image5] = ImageTab(self.ui.i5Tab, ImageType.Image5, "Image Five", "gray", ImageTab.add_image, self.solver.results, "i5")
+        self.image_tabs[ImageType.Image6] = ImageTab(self.ui.i6Tab, ImageType.Image6, "Image Six", "gray", ImageTab.add_image, self.solver.results, "i6")
 
     def update_tabs(self, preserve_camera: bool = True) -> None:
         """ Update the result tabs with the images, meshes, etc. from the calculated solution.
@@ -764,29 +768,12 @@ class Explorer(QtWidgets.QMainWindow):
     """
         self.set_busy (True)
 
-        # Images
-        self.image_tabs[ImageType.DepthBuffer].data       = self.results.depth_buffer_model
-        self.image_tabs[ImageType.Relief].data            = self.results.mesh_scaled
-        self.image_tabs[ImageType.BackgroundMask].data    = self.results.depth_buffer_mask
-        self.image_tabs[ImageType.GradientX].data         = self.results.gradient_x
-        self.image_tabs[ImageType.GradientXMask].data     = self.results.gradient_x_mask
-        self.image_tabs[ImageType.GradientY].data         = self.results.gradient_y
-        self.image_tabs[ImageType.GradientYMask].data     = self.results.gradient_y_mask
-        self.image_tabs[ImageType.CompositeMask].data     = self.results.combined_mask
-        self.image_tabs[ImageType.GradientXUnsharp].data  = self.results.gradient_x_unsharp
-        self.image_tabs[ImageType.GradientYUnsharp].data  = self.results.gradient_y_unsharp
+        print (f"ImageTabs visible = {self.ui.imageTabs.isVisible()}")
+        print (f"WorkbenchTabs visible = {self.ui.workbenchTabs.isVisible()}")
 
         # Meshes
-        self.mesh_tabs[MeshType.Model].mesh_widget.mesh_content.set_mesh(self.results.depth_buffer_model, preserve_camera)
-        self.mesh_tabs[MeshType.ModelScaled].mesh_widget.mesh_content.set_mesh(self.results.mesh_scaled, preserve_camera)
-        self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.set_mesh(self.results.mesh_transformed, preserve_camera)
-
-        # Workbench
-        self.image_tabs[ImageType.Image1].data = self.results.i1
-        self.image_tabs[ImageType.Image2].data = self.results.i2
-        self.image_tabs[ImageType.Image3].data = self.results.i3
-        self.image_tabs[ImageType.Image4].data = self.results.i4
-        self.image_tabs[ImageType.Image5].data = self.results.i5
-        self.image_tabs[ImageType.Image6].data = self.results.i6
+        self.mesh_tabs[MeshType.Model].mesh_widget.mesh_content.update_mesh(self.solver.results.depth_buffer_model, preserve_camera)
+        self.mesh_tabs[MeshType.ModelScaled].mesh_widget.mesh_content.update_mesh(self.solver.results.mesh_scaled, preserve_camera)
+        self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.update_mesh(self.solver.results.mesh_transformed, preserve_camera)
 
         self.set_busy (False)
