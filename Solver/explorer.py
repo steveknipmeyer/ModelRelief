@@ -45,6 +45,9 @@ from stopwatch import benchmark
 
 from explorer_ui import Ui_MainWindow
 
+# ------------------------------------------#
+#                 Images                    #  
+# ------------------------------------------#
 class ImageType(Enum):
     """
     A class representing the various UI image view types.
@@ -67,34 +70,6 @@ class ImageType(Enum):
     Image4 = 14,
     Image5 = 15,
     Image6 = 16,
-
-class Camera:
-    """
-    A class representing the Mayavi scene camera.
-    """
-    def __init__(self, figure) ->None:
-        """
-        Initialization
-        """
-        self.figure = figure
-
-        self.azimuth, self.elevation, self.distance, self.focalpoint = mlab.view(figure=self.figure) 
-        self.roll = mlab.roll(figure=self.figure)
-
-    def apply (self, figure=None) -> None:
-        """
-        Apply the camera settings to the given figure.
-        """
-        figure = self.figure if figure is None else figure
-        mlab.view(azimuth=self.azimuth, elevation=self.elevation, distance=self.distance, focalpoint=self.focalpoint, roll=self.roll, figure=figure)
-
-class MeshType(Enum):
-    """
-    A class representing the various UI mesh view types.
-    """
-    Model  = 1,
-    ModelScaled  = 2,    
-    Relief = 3
 
 class ImageTab():
     """ A UI tab of an image view. """
@@ -321,109 +296,81 @@ class ImageTab():
 
         return figure
 
-class MeshContainer(QtWidgets.QWidget):
-    """ The QWidget containing the visualization, this is pure PyQt5 code. """
+# ------------------------------------------#
+#                 Meshes                    #  
+# ------------------------------------------#
+class MeshType(Enum):
+    """
+    A class representing the various UI mesh view types.
+    """
+    Model  = 1,
+    ModelScaled  = 2,    
+    Relief = 3
 
-    def __init__(self, data: np.ndarray, mesh_type: MeshType, parent=None) -> None:
-        """ Initialization. """
-        super().__init__(parent)
-        self.mesh_type = mesh_type
-
-        layout = QtWidgets.QVBoxLayout(self)
-        layout.setContentsMargins(0,0,0,0)
-        layout.setSpacing(0)
-
-        if self.mesh_type == MeshType.Model:
-            self.mesh_content = ModelMeshContent(data, self.mesh_type)
-        if self.mesh_type == MeshType.ModelScaled:
-            self.mesh_content = ModelMeshScaledContent(data, self.mesh_type)
-        if self.mesh_type == MeshType.Relief:
-            self.mesh_content = ReliefMeshContent(data, self.mesh_type)
-
-        # If you want to debug, beware that you need to remove the Qt input hook.
-        #QtCore.pyqtRemoveInputHook()
-        #import pdb ; pdb.set_trace()
-        #QtCore.pyqtRestoreInputHook()
-
-        # The edit_traits call will generate the widget to embed.
-        self.ui = self.mesh_content.edit_traits(parent=self, kind='subpanel').control
-        layout.addWidget(self.ui)
-        self.ui.setParent(self)
-
-class MeshTab():
-    """ A UI tab of a mesh view. """
-
-    def __init__(self, widget: QtWidgets.QWidget, mesh_type: MeshType, title: str, cmap: str, data: np.ndarray,  ) -> None:
-        """ A UI mesh tab in the Explorer.
-        Parameters
-        ----------
-        widget
-            QWidget of the tab.
-        mesh_type
-            The type of the mesh.
-        title
-            The title of the view.
-        cmap
-            The matplotlib colormap.
-        data
-            The Numpy array holding the mesh data.
+class Camera:
+    """
+    A class representing the Mayavi scene camera.
+    """
+    def __init__(self, figure) ->None:
         """
-        self.widget = widget
-        self.mesh_type = mesh_type
-        self.title = title
-        self.cmap = cmap
+        Initialization
+        """
+        self.figure = figure
 
-        self.mesh_widget = MeshContainer(data, self.mesh_type)
-        self.widget.layout().addWidget(self.mesh_widget)
+        self.azimuth, self.elevation, self.distance, self.focalpoint = mlab.view(figure=self.figure) 
+        self.roll = mlab.roll(figure=self.figure)
+
+    def apply (self, figure=None) -> None:
+        """
+        Apply the camera settings to the given figure.
+        """
+        figure = self.figure if figure is None else figure
+        mlab.view(azimuth=self.azimuth, elevation=self.elevation, distance=self.distance, focalpoint=self.focalpoint, roll=self.roll, figure=figure)
 
 class MeshContent(HasTraits):
     """ Holds an instance of a 3D Mesh """
 
-    def __init__ (self, data: np.ndarray, mesh_type: MeshType) -> None:
+    def __init__ (self, source: DataSource, mesh_type: MeshType) -> None:
         """ Initialization.
         Parameters
         ----------
-        data
-            The Numpy array holding the data.
+        source
+            The Solver data source for the mesh.
         mesh_type
             The type of the mesh.
         """
         super().__init__()
 
-        self._data = data
+        self.source = source
         self.mesh_type = mesh_type
         self.camera: Optional[Camera] = None
 
-    @property
-    def data(self) -> np.ndarray:
-        """ Returns the backing Numpy ndarray. """
-        return self._data
+    def update(self, preserve_camera:bool = True):
+        """ 
+        Update the mesh if necessary.
+        Parameters
+        ----------
+        preserve_camera
+            Preserve the existing camera settings in the view.
+        """
+        if self.source.dirty:
+            self.construct(self.scene)
+            if preserve_camera and self.camera is not None:
+                self.camera.apply()
+            self.source.dirty = False
 
-    @data.setter
-    def data (self, value: np.ndarray):
-        """ Sets the NumPy data array."""
-        self._data = value
-
-    def update_mesh(self, mesh: np.ndarray, preserve_camera:bool = True):
-        """ Sets the active mesh."""
-        self.data = mesh
-        self.update_content()
-
-        if preserve_camera and self.camera is not None:
-            self.camera.apply()
-
-    def update(self, scene):
+    def construct(self, scene):
         # This function is called when the view is opened. We don't populate the scene
         # when the view is not yet open, as some VTK features require a GLContext.
 
-        shape = self.data.shape
+        shape = self.source.data.shape
         width = shape[1]
         height = shape[0]
         X = np.arange(0, width, 1.0)
         Y = np.arange(0, height, 1.0)
 
         X, Y = np.meshgrid(X, Y)
-        Z = self.data
+        Z = self.source.data
 
         colors = np.empty(X.shape, dtype=str)
         colors.fill('b')
@@ -454,7 +401,7 @@ class ModelMeshContent(MeshContent, HasTraits):
 
     @on_trait_change('scene.activated')
     def update_content(self):
-        super().update(self.scene)
+        super().construct(self.scene)
 
 class ModelMeshScaledContent(MeshContent, HasTraits):
     """ Holds an instance of a Model Mesh that has been only scaled (not transformed)."""
@@ -467,7 +414,7 @@ class ModelMeshScaledContent(MeshContent, HasTraits):
 
     @on_trait_change('scene.activated')
     def update_content(self):
-        super().update(self.scene)
+        super().construct(self.scene)
 
 class ReliefMeshContent(MeshContent, HasTraits):
     """ Holds an instance of a Relief Mesh """
@@ -480,8 +427,75 @@ class ReliefMeshContent(MeshContent, HasTraits):
 
     @on_trait_change('scene.activated')
     def update_content(self):
-        super().update(self.scene)
+        super().construct(self.scene)
 
+class MeshContainer(QtWidgets.QWidget):
+    """ The QWidget containing the visualization, this is pure PyQt5 code. """
+
+    def __init__(self, source: DataSource, mesh_type: MeshType, parent=None) -> None:
+        """ 
+        Initialization. 
+        Parameters
+        ----------
+        source
+            The Solver data source for the mesh.
+        mesh_type
+            The type of the mesh.
+        """
+        super().__init__(parent)
+        self.mesh_type = mesh_type
+
+        layout = QtWidgets.QVBoxLayout(self)
+        layout.setContentsMargins(0,0,0,0)
+        layout.setSpacing(0)
+
+        if self.mesh_type == MeshType.Model:
+            self.mesh_content = ModelMeshContent(source, self.mesh_type)
+        if self.mesh_type == MeshType.ModelScaled:
+            self.mesh_content = ModelMeshScaledContent(source, self.mesh_type)
+        if self.mesh_type == MeshType.Relief:
+            self.mesh_content = ReliefMeshContent(source, self.mesh_type)
+
+        # If you want to debug, beware that you need to remove the Qt input hook.
+        #QtCore.pyqtRemoveInputHook()
+        #import pdb ; pdb.set_trace()
+        #QtCore.pyqtRestoreInputHook()
+
+        # The edit_traits call will generate the widget to embed.
+        self.ui = self.mesh_content.edit_traits(parent=self, kind='subpanel').control
+        layout.addWidget(self.ui)
+        self.ui.setParent(self)
+
+class MeshTab():
+    """ A UI tab of a mesh view. """
+
+    def __init__(self, widget: QtWidgets.QWidget, mesh_type: MeshType, title: str, cmap: str, source: DataSource) -> None:
+        """ A UI mesh tab in the Explorer.
+        Parameters
+        ----------
+        widget
+            QWidget of the tab.
+        mesh_type
+            The type of the mesh.
+        title
+            The title of the view.
+        cmap
+            The matplotlib colormap.
+        source
+            The Solver data source for the mesh.
+        """
+        self.widget = widget
+        self.mesh_type = mesh_type
+        self.title = title
+        self.cmap = cmap
+        self.source = source
+
+        self.mesh_widget = MeshContainer(source, self.mesh_type)
+        self.widget.layout().addWidget(self.mesh_widget)
+
+# ------------------------------------------#
+#                 Meshes                    #  
+# ------------------------------------------#
 class Explorer(QtWidgets.QMainWindow):
 
     def __init__(self, settings_file: str, working: str, qapp : QtWidgets.QApplication) -> None:
@@ -549,9 +563,9 @@ class Explorer(QtWidgets.QMainWindow):
         self.image_tabs[ImageType.GradientYUnsharp] = ImageTab(self.ui.gradientYUnsharpTab, ImageType.GradientYUnsharp, "Gradient Y Unsharp", "Blues_r", ImageTab.add_image, DataSource(self.solver.results, "gradient_y_unsharp"))
 
         # mesh views
-        self.mesh_tabs[MeshType.Model]  = MeshTab(self.ui.modelMeshTab,  MeshType.Model,  "Model", "Blues_r", self.solver.results.depth_buffer_model)
-        self.mesh_tabs[MeshType.ModelScaled]  = MeshTab(self.ui.modelMeshScaledTab,  MeshType.ModelScaled,  "Model Scaled", "Blues_r", self.solver.results.mesh_scaled)
-        self.mesh_tabs[MeshType.Relief] = MeshTab(self.ui.reliefMeshTab, MeshType.Relief, "Relief", "Blues_r", self.solver.results.mesh_transformed)
+        self.mesh_tabs[MeshType.Model]  = MeshTab(self.ui.modelMeshTab,  MeshType.Model,  "Model", "Blues_r", DataSource(self.solver.results, "depth_buffer_model"))
+        self.mesh_tabs[MeshType.ModelScaled]  = MeshTab(self.ui.modelMeshScaledTab,  MeshType.ModelScaled,  "Model Scaled", "Blues_r", DataSource(self.solver.results, "mesh_scaled"))
+        self.mesh_tabs[MeshType.Relief] = MeshTab(self.ui.reliefMeshTab, MeshType.Relief, "Relief", "Blues_r", DataSource(self.solver.results, "mesh_transformed"))
 
         # workbench views
         self.image_tabs[ImageType.Image1] = ImageTab(self.ui.i1Tab, ImageType.Image1, "Image One", "gray", ImageTab.add_image, DataSource(self.solver.results, "i1"))
@@ -655,12 +669,13 @@ class Explorer(QtWidgets.QMainWindow):
         """
         Event handler for a tab selected event.
         """
-        self.update_image_tabs()
+        self.update()
 
     def initialize_handlers(self)-> None:
         """ Initialize event handlers """
         self.ui.imageTabs.currentChanged.connect(self.tab_selected)
         self.ui.workbenchTabs.currentChanged.connect(self.tab_selected)
+        self.ui.modelTabs.currentChanged.connect(self.tab_selected)
         self.ui.overallTabsContainer.currentChanged.connect(self.tab_selected)
 
         self.ui.processButton.clicked.connect(self.handle_process)
@@ -767,8 +782,13 @@ class Explorer(QtWidgets.QMainWindow):
         Invalidates all content.
         This is triggered when the Solver results have changed or a resizeEvent makes it necessary to re-construct a content tab.
         """
-        for _, tab in self.image_tabs.items():
-            tab.source.dirty = True
+        # images
+        for _, image_tab in self.image_tabs.items():
+            image_tab.source.dirty = True
+
+        #meshes
+        for _, mesh_tab in self.mesh_tabs.items():
+            mesh_tab.source.dirty = True
 
     @benchmark()    
     def update_image_tabs(self)-> None:
@@ -784,9 +804,13 @@ class Explorer(QtWidgets.QMainWindow):
         """
         Updates the tabs holding 3D meshes.
         """
-        self.mesh_tabs[MeshType.Model].mesh_widget.mesh_content.update_mesh(self.solver.results.depth_buffer_model, preserve_camera)
-        self.mesh_tabs[MeshType.ModelScaled].mesh_widget.mesh_content.update_mesh(self.solver.results.mesh_scaled, preserve_camera)
-        self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.update_mesh(self.solver.results.mesh_transformed, preserve_camera)
+        for _, tab in self.mesh_tabs.items():
+            if tab.widget.isVisible():
+                tab.mesh_widget.mesh_content.update(preserve_camera)
+
+        # self.mesh_tabs[MeshType.Model].mesh_widget.mesh_content.update(preserve_camera)
+        # self.mesh_tabs[MeshType.ModelScaled].mesh_widget.mesh_content.update(preserve_camera)
+        # self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.update(preserve_camera)
 
     @benchmark()    
     def update(self, preserve_camera: bool = True) -> None:

@@ -3,14 +3,15 @@
 
 #### Short Term  
     Solver
+        Make the OBJ file write optional.
+
         How should Meshes be handled in the UI?
+            Combine MeshContainer and MeshTab into MeshTab.
+                MeshTab -> MeshWidget?
+                ImageTab -> ImageWidget?
 
         Separate the UI classes from Explorer into separate files.
             Should Explorer be in a separate folder from Solver?
-        
-        Combine MeshContainer and MeshTab into MeshTab.
-            MeshTab -> MeshWidget?
-            ImageTab -> ImageWidget?
 
     Lambda
 
