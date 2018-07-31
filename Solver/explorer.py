@@ -39,7 +39,7 @@ from numpy import pi, sin, cos, mgrid
 from enum import Enum
 from typing import Any, Callable, Dict, Optional
 
-from results import Results
+from results import Results, DataSource
 from solver import Solver
 from stopwatch import benchmark
 
@@ -99,7 +99,7 @@ class MeshType(Enum):
 class ImageTab():
     """ A UI tab of an image view. """
 
-    def __init__(self, widget: QtWidgets.QWidget, image_type: ImageType, title: str, cmap: str, content_ctor: Callable[[Figure, plt.Axes, np.ndarray, str, str], Figure], results: Results, results_property: str ) -> None:
+    def __init__(self, widget: QtWidgets.QWidget, image_type: ImageType, title: str, cmap: str, content_ctor: Callable[[Figure, plt.Axes, np.ndarray, str, str], Figure], source: DataSource) -> None:
         """ A UI image tab in the Explorer.
         Parameters
         ----------
@@ -127,9 +127,7 @@ class ImageTab():
         self.nav: NavigationToolbar = None
 
         self.content_ctor = content_ctor
-
-        self.results = results
-        self.results_property = results_property
+        self.source = source
 
     def get_view_extents(self, figure: Figure)->Bbox:
         """ Returns the bounding box extents of a figure
@@ -168,7 +166,7 @@ class ImageTab():
             plt.close(self.figure)
 
         # construct image figure
-        data = self.results.__getattribute__(self.results_property)
+        data = self.source.data
         self.figure = self.construct_subplot_figures ([data], 1, [self.title], [self.cmap])
 
         # restore extents
@@ -195,8 +193,10 @@ class ImageTab():
     def update (self):
         """ Updates the UI tab with the image content.
         """
-        self.construct()
-        
+        if self.source.dirty:
+            self.construct()
+            self.source.dirty = False            
+
     @staticmethod
     def add_image(figure: Figure, subplot: plt.Axes, image: np.ndarray, title: str, cmap: str) -> plt.Figure:
         """ Adds an image to the given Figure.
@@ -537,16 +537,16 @@ class Explorer(QtWidgets.QMainWindow):
         Construct the result tabs with the images, meshes, etc. from the calculated solution.
         """
         # image views
-        self.image_tabs[ImageType.DepthBuffer]      = ImageTab(self.ui.depthBufferTab, ImageType.DepthBuffer, "DepthBuffer", "gray", ImageTab.add_image, self.solver.results, "depth_buffer_model")
-        self.image_tabs[ImageType.Relief]           = ImageTab(self.ui.reliefTab, ImageType.Relief, "Relief", "gray", ImageTab.add_image, self.solver.results, "mesh_transformed")
-        self.image_tabs[ImageType.BackgroundMask]   = ImageTab(self.ui.backgroundMaskTab, ImageType.BackgroundMask, "Background Mask", "gray", ImageTab.add_image, self.solver.results, "depth_buffer_mask")
-        self.image_tabs[ImageType.GradientX]        = ImageTab(self.ui.gradientXTab, ImageType.GradientX, "Gradient X: dI(x,y)/dx", "Blues_r", ImageTab.add_image, self.solver.results, "gradient_x")
-        self.image_tabs[ImageType.GradientXMask]    = ImageTab(self.ui.gradientXMaskTab, ImageType.GradientXMask, "Gradient X Mask", "gray", ImageTab.add_image, self.solver.results, "gradient_x_mask")
-        self.image_tabs[ImageType.GradientY]        = ImageTab(self.ui.gradientYTab, ImageType.GradientY, "Gradient Y: dI(x,y)/dy", "Blues_r", ImageTab.add_image, self.solver.results, "gradient_y")
-        self.image_tabs[ImageType.GradientYMask]    = ImageTab(self.ui.gradientYMaskTab, ImageType.GradientYMask, "Gradient Y Mask", "gray", ImageTab.add_image, self.solver.results, "gradient_y_mask")
-        self.image_tabs[ImageType.CompositeMask]    = ImageTab(self.ui.compositeMaskTab, ImageType.CompositeMask, "Composite Mask", "gray", ImageTab.add_image, self.solver.results, "combined_mask")
-        self.image_tabs[ImageType.GradientXUnsharp] = ImageTab(self.ui.gradientXUnsharpTab, ImageType.GradientXUnsharp, "Gradient X Unsharp", "Blues_r", ImageTab.add_image, self.solver.results, "gradient_x_unsharp")
-        self.image_tabs[ImageType.GradientYUnsharp] = ImageTab(self.ui.gradientYUnsharpTab, ImageType.GradientYUnsharp, "Gradient Y Unsharp", "Blues_r", ImageTab.add_image, self.solver.results, "gradient_y_unsharp")
+        self.image_tabs[ImageType.DepthBuffer]      = ImageTab(self.ui.depthBufferTab, ImageType.DepthBuffer, "DepthBuffer", "gray", ImageTab.add_image, DataSource(self.solver.results, "depth_buffer_model"))
+        self.image_tabs[ImageType.Relief]           = ImageTab(self.ui.reliefTab, ImageType.Relief, "Relief", "gray", ImageTab.add_image, DataSource(self.solver.results, "mesh_transformed"))
+        self.image_tabs[ImageType.BackgroundMask]   = ImageTab(self.ui.backgroundMaskTab, ImageType.BackgroundMask, "Background Mask", "gray", ImageTab.add_image, DataSource(self.solver.results, "depth_buffer_mask"))
+        self.image_tabs[ImageType.GradientX]        = ImageTab(self.ui.gradientXTab, ImageType.GradientX, "Gradient X: dI(x,y)/dx", "Blues_r", ImageTab.add_image, DataSource(self.solver.results, "gradient_x"))
+        self.image_tabs[ImageType.GradientXMask]    = ImageTab(self.ui.gradientXMaskTab, ImageType.GradientXMask, "Gradient X Mask", "gray", ImageTab.add_image, DataSource(self.solver.results, "gradient_x_mask"))
+        self.image_tabs[ImageType.GradientY]        = ImageTab(self.ui.gradientYTab, ImageType.GradientY, "Gradient Y: dI(x,y)/dy", "Blues_r", ImageTab.add_image, DataSource(self.solver.results, "gradient_y"))
+        self.image_tabs[ImageType.GradientYMask]    = ImageTab(self.ui.gradientYMaskTab, ImageType.GradientYMask, "Gradient Y Mask", "gray", ImageTab.add_image, DataSource(self.solver.results, "gradient_y_mask"))
+        self.image_tabs[ImageType.CompositeMask]    = ImageTab(self.ui.compositeMaskTab, ImageType.CompositeMask, "Composite Mask", "gray", ImageTab.add_image, DataSource(self.solver.results, "combined_mask"))
+        self.image_tabs[ImageType.GradientXUnsharp] = ImageTab(self.ui.gradientXUnsharpTab, ImageType.GradientXUnsharp, "Gradient X Unsharp", "Blues_r", ImageTab.add_image, DataSource(self.solver.results, "gradient_x_unsharp"))
+        self.image_tabs[ImageType.GradientYUnsharp] = ImageTab(self.ui.gradientYUnsharpTab, ImageType.GradientYUnsharp, "Gradient Y Unsharp", "Blues_r", ImageTab.add_image, DataSource(self.solver.results, "gradient_y_unsharp"))
 
         # mesh views
         self.mesh_tabs[MeshType.Model]  = MeshTab(self.ui.modelMeshTab,  MeshType.Model,  "Model", "Blues_r", self.solver.results.depth_buffer_model)
@@ -554,12 +554,12 @@ class Explorer(QtWidgets.QMainWindow):
         self.mesh_tabs[MeshType.Relief] = MeshTab(self.ui.reliefMeshTab, MeshType.Relief, "Relief", "Blues_r", self.solver.results.mesh_transformed)
 
         # workbench views
-        self.image_tabs[ImageType.Image1] = ImageTab(self.ui.i1Tab, ImageType.Image1, "Image One", "gray", ImageTab.add_image, self.solver.results, "i1")
-        self.image_tabs[ImageType.Image2] = ImageTab(self.ui.i2Tab, ImageType.Image2, "Image Two", "gray", ImageTab.add_image, self.solver.results, "i2")
-        self.image_tabs[ImageType.Image3] = ImageTab(self.ui.i3Tab, ImageType.Image3, "Image Three", "gray", ImageTab.add_image, self.solver.results, "i3")
-        self.image_tabs[ImageType.Image4] = ImageTab(self.ui.i4Tab, ImageType.Image4, "Image Four", "gray", ImageTab.add_image, self.solver.results, "i4")
-        self.image_tabs[ImageType.Image5] = ImageTab(self.ui.i5Tab, ImageType.Image5, "Image Five", "gray", ImageTab.add_image, self.solver.results, "i5")
-        self.image_tabs[ImageType.Image6] = ImageTab(self.ui.i6Tab, ImageType.Image6, "Image Six", "gray", ImageTab.add_image, self.solver.results, "i6")
+        self.image_tabs[ImageType.Image1] = ImageTab(self.ui.i1Tab, ImageType.Image1, "Image One", "gray", ImageTab.add_image, DataSource(self.solver.results, "i1"))
+        self.image_tabs[ImageType.Image2] = ImageTab(self.ui.i2Tab, ImageType.Image2, "Image Two", "gray", ImageTab.add_image, DataSource(self.solver.results, "i2"))
+        self.image_tabs[ImageType.Image3] = ImageTab(self.ui.i3Tab, ImageType.Image3, "Image Three", "gray", ImageTab.add_image, DataSource(self.solver.results, "i3"))
+        self.image_tabs[ImageType.Image4] = ImageTab(self.ui.i4Tab, ImageType.Image4, "Image Four", "gray", ImageTab.add_image, DataSource(self.solver.results, "i4"))
+        self.image_tabs[ImageType.Image5] = ImageTab(self.ui.i5Tab, ImageType.Image5, "Image Five", "gray", ImageTab.add_image, DataSource(self.solver.results, "i5"))
+        self.image_tabs[ImageType.Image6] = ImageTab(self.ui.i6Tab, ImageType.Image6, "Image Six", "gray", ImageTab.add_image, DataSource(self.solver.results, "i6"))
 
     def initialize_settings(self) ->None:
         mesh_transform:Dict[str, float] = self.settings['MeshTransform']
@@ -616,13 +616,15 @@ class Explorer(QtWidgets.QMainWindow):
     
     # ------------------------------------------#
     #               Event Handlers              #  
-    # ------------------------------------------#
-
+    # ------------------------------------------#   
     def resize_ui(self)-> None:
         """ Handles a resize event for the main window. """
 
         self.set_busy (True)
+
+        self.invalidate()
         self.update()
+
         self.set_busy (False)
 
     def resizeEvent(self, event: QtGui.QResizeEvent):
@@ -753,12 +755,20 @@ class Explorer(QtWidgets.QMainWindow):
         # solve
         self.solver.settings_file = self.settings_file
         self.solver.transform()
+        self.invalidate()
 
         self.set_busy (False)
 
     # ------------------------------------------#
     #                 Update                    #  
     # ------------------------------------------#
+    def invalidate(self)->None:
+        """
+        Invalidates all content.
+        This is triggered when the Solver results have changed or a resizeEvent makes it necessary to re-construct a content tab.
+        """
+        for _, tab in self.image_tabs.items():
+            tab.source.dirty = True
 
     @benchmark()    
     def update_image_tabs(self)-> None:
@@ -766,7 +776,7 @@ class Explorer(QtWidgets.QMainWindow):
         Updates the tabs holding pure images.
         """
         for _, tab in self.image_tabs.items():
-            if tab.widget == self.ui.imageTabs.currentWidget() or tab.widget == self.ui.workbenchTabs.currentWidget():
+            if tab.widget.isVisible():
                 tab.update()
 
     @benchmark()    

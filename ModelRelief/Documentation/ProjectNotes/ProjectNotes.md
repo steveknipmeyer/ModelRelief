@@ -1,12 +1,12 @@
 ﻿### Tasks
 #### Commit Notes
+ImageTab, MeshTab: dirty property
+    Solver has generated new results and the data is invalid.
+    A resizeEvent has occurred and the tab contents must be re-generated.
 
 #### Short Term  
     Solver
-        Optimization
-            ImageTab, MeshTab: dirty property
-                Solver has generated new results and the data is invalid.
-                A resizeEvent has occurred and the tab contents must be re-generated.
+        DataSource: results, property_name, dirty
 
         How should Meshes be handled in the UI?
 

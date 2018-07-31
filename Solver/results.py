@@ -42,3 +42,30 @@ class Results:
         self.i4 = np.zeros((default_workbench_image_dimensions, default_workbench_image_dimensions))
         self.i5 = np.zeros((default_workbench_image_dimensions, default_workbench_image_dimensions))
         self.i6 = np.zeros((default_workbench_image_dimensions, default_workbench_image_dimensions))
+
+class DataSource:
+    """
+    Represents a source of data for an Explorer UI content element.
+    """
+    def __init__(self, results: Results, property_name: str)-> None:
+        """
+        Constructor.
+        Parameters
+        ----------
+        results
+            The Results structure holding the Solver results.
+        property
+            The property name of the source in Results 
+        """
+        self.results = results
+        self.property = property_name            
+        self.dirty = True
+
+    @property
+    def data(self)-> np.ndarray:
+        """
+        Returns the source data from the Results structure.
+        """
+        return self.results.__getattribute__(self.property)
+
+
