@@ -476,8 +476,8 @@
       <widget class="QPushButton" name="processButton">
        <property name="geometry">
         <rect>
-         <x>71</x>
-         <y>679</y>
+         <x>86</x>
+         <y>728</y>
          <width>75</width>
          <height>27</height>
         </rect>
@@ -639,6 +639,7 @@
        </property>
        <property name="font">
         <font>
+         <pointsize>13</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -864,6 +865,39 @@
        </property>
        <property name="text">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; color:#ff0000;&quot;&gt;Processing&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelFileOutput">
+       <property name="geometry">
+        <rect>
+         <x>16</x>
+         <y>660</y>
+         <width>157</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>13</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;File Output&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="fileOBJCheckBox">
+       <property name="geometry">
+        <rect>
+         <x>15</x>
+         <y>685</y>
+         <width>165</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Wavefront OBJ</string>
        </property>
       </widget>
      </widget>

@@ -758,6 +758,7 @@ class Explorer(QtWidgets.QMainWindow):
         self.solver.enable_unsharpmask_gaussian_low = self.ui.unsharpGaussianHighCheckBox.isChecked()
         self.solver.enable_unsharpmask_high_frequence_scale = self.ui.unsharpHFScaleCheckBox.isChecked()
 
+        # experimental
         self.solver.enable_p1 = self.ui.p1CheckBox.isChecked()
         self.solver.enable_p2 = self.ui.p2CheckBox.isChecked()
         self.solver.enable_p3 = self.ui.p3CheckBox.isChecked()
@@ -766,6 +767,9 @@ class Explorer(QtWidgets.QMainWindow):
         self.solver.enable_p6 = self.ui.p6CheckBox.isChecked()
         self.solver.enable_p7 = self.ui.p7CheckBox.isChecked()
         self.solver.enable_p8 = self.ui.p8CheckBox.isChecked()
+
+        # file output
+        self.solver.enable_obj = self.ui.fileOBJCheckBox.isChecked()
 
         # solve
         self.solver.settings_file = self.settings_file
@@ -790,7 +794,6 @@ class Explorer(QtWidgets.QMainWindow):
         for _, mesh_tab in self.mesh_tabs.items():
             mesh_tab.source.dirty = True
 
-    @benchmark()    
     def update_image_tabs(self)-> None:
         """
         Updates the tabs holding pure images.
@@ -799,7 +802,6 @@ class Explorer(QtWidgets.QMainWindow):
             if tab.widget.isVisible():
                 tab.update()
 
-    @benchmark()    
     def update_mesh_tabs(self, preserve_camera: bool = True)-> None:
         """
         Updates the tabs holding 3D meshes.
@@ -812,7 +814,6 @@ class Explorer(QtWidgets.QMainWindow):
         # self.mesh_tabs[MeshType.ModelScaled].mesh_widget.mesh_content.update(preserve_camera)
         # self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.update(preserve_camera)
 
-    @benchmark()    
     def update(self, preserve_camera: bool = True) -> None:
         """ Update the UI with the images, meshes, etc. from the calculated solution.
         Parameters

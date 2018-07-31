@@ -89,6 +89,9 @@ class Solver:
         self.enable_p7 = True
         self.enable_p8 = True
 
+        # file output
+        self.enable_obj = True
+
         self.settings = None
         self._settings_file = ''
         self.mesh = None
@@ -241,11 +244,12 @@ class Solver:
         """
             Write the final calculated mesh OBJ file.
         """
-        filename, _ = os.path.splitext(self.mesh.name)        
-        file_path = os.path.join(self.working_folder, filename + ".obj")
-        
-        filewriter = OBJWriter(self.services, self.results.mesh_transformed, file_path)
-        filewriter.write()
+        if self.enable_obj:
+            filename, _ = os.path.splitext(self.mesh.name)        
+            file_path = os.path.join(self.working_folder, filename + ".obj")
+            
+            filewriter = OBJWriter(self.services, self.results.mesh_transformed, file_path)
+            filewriter.write()
 
     def debug_results(self):
         """
