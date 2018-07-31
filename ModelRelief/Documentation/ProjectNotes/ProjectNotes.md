@@ -16,8 +16,6 @@
             Should Explorer be in a separate folder from Solver?
 
     Lambda
-        Intall 2018a.
-        Uninstall previous versions of MATLAB.
 
     Write OBJ
         Should the OBJWriter be part of FileManager?
