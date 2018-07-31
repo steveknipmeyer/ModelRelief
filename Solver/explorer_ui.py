@@ -404,7 +404,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuFile.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.overallTabsContainer.setCurrentIndex(2)
+        self.overallTabsContainer.setCurrentIndex(0)
         self.imageTabs.setCurrentIndex(0)
         self.modelTabs.setCurrentIndex(0)
         self.workbenchTabs.setCurrentIndex(0)

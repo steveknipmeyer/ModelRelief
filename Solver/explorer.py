@@ -621,6 +621,7 @@ class Explorer(QtWidgets.QMainWindow):
         """ Initialize event handlers """
         self.ui.imageTabs.currentChanged.connect(self.tab_selected)
         self.ui.workbenchTabs.currentChanged.connect(self.tab_selected)
+        self.ui.overallTabsContainer.currentChanged.connect(self.tab_selected)
 
         self.ui.processButton.clicked.connect(self.handle_process)
         self.ui.actionOpen.triggered.connect(self.handle_open_settings)
