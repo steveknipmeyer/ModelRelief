@@ -1,4 +1,4 @@
-#!/usr/bin/env python 
+    #!/usr/bin/env python 
 #
 #   Copyright (c) 2018
 #   All Rights Reserved.
@@ -157,7 +157,7 @@ class ImageTab():
         axes.set_xlim(points[0][0], points[1][0])
         axes.set_ylim(points[0][1], points[1][1])
 
-    def update (self):
+    def construct (self):
         """ Constructs the UI tab with the image content.
             Regenerates the matplotlib Figure.
         """
@@ -192,10 +192,11 @@ class ImageTab():
         self.scroll.setWidget(self.canvas)
         self.nav.canvas = self.canvas
 
-        # self.widget.adjustSize()
-        # self.widget.repaint()
-        # self.widget.update()
-
+    def update (self):
+        """ Updates the UI tab with the image content.
+        """
+        self.construct()
+        
     @staticmethod
     def add_image(figure: Figure, subplot: plt.Axes, image: np.ndarray, title: str, cmap: str) -> plt.Figure:
         """ Adds an image to the given Figure.
@@ -319,6 +320,35 @@ class ImageTab():
         self.size_figure(figure, n_subplots)
 
         return figure
+
+class MeshContainer(QtWidgets.QWidget):
+    """ The QWidget containing the visualization, this is pure PyQt5 code. """
+
+    def __init__(self, data: np.ndarray, mesh_type: MeshType, parent=None) -> None:
+        """ Initialization. """
+        super().__init__(parent)
+        self.mesh_type = mesh_type
+
+        layout = QtWidgets.QVBoxLayout(self)
+        layout.setContentsMargins(0,0,0,0)
+        layout.setSpacing(0)
+
+        if self.mesh_type == MeshType.Model:
+            self.mesh_content = ModelMeshContent(data, self.mesh_type)
+        if self.mesh_type == MeshType.ModelScaled:
+            self.mesh_content = ModelMeshScaledContent(data, self.mesh_type)
+        if self.mesh_type == MeshType.Relief:
+            self.mesh_content = ReliefMeshContent(data, self.mesh_type)
+
+        # If you want to debug, beware that you need to remove the Qt input hook.
+        #QtCore.pyqtRemoveInputHook()
+        #import pdb ; pdb.set_trace()
+        #QtCore.pyqtRestoreInputHook()
+
+        # The edit_traits call will generate the widget to embed.
+        self.ui = self.mesh_content.edit_traits(parent=self, kind='subpanel').control
+        layout.addWidget(self.ui)
+        self.ui.setParent(self)
 
 class MeshTab():
     """ A UI tab of a mesh view. """
@@ -452,35 +482,6 @@ class ReliefMeshContent(MeshContent, HasTraits):
     def update_content(self):
         super().update(self.scene)
 
-class MeshContainer(QtWidgets.QWidget):
-    """ The QWidget containing the visualization, this is pure PyQt5 code. """
-
-    def __init__(self, data: np.ndarray, mesh_type: MeshType, parent=None) -> None:
-        """ Initialization. """
-        super().__init__(parent)
-        self.mesh_type = mesh_type
-
-        layout = QtWidgets.QVBoxLayout(self)
-        layout.setContentsMargins(0,0,0,0)
-        layout.setSpacing(0)
-
-        if self.mesh_type == MeshType.Model:
-            self.mesh_content = ModelMeshContent(data, self.mesh_type)
-        if self.mesh_type == MeshType.ModelScaled:
-            self.mesh_content = ModelMeshScaledContent(data, self.mesh_type)
-        if self.mesh_type == MeshType.Relief:
-            self.mesh_content = ReliefMeshContent(data, self.mesh_type)
-
-        # If you want to debug, beware that you need to remove the Qt input hook.
-        #QtCore.pyqtRemoveInputHook()
-        #import pdb ; pdb.set_trace()
-        #QtCore.pyqtRestoreInputHook()
-
-        # The edit_traits call will generate the widget to embed.
-        self.ui = self.mesh_content.edit_traits(parent=self, kind='subpanel').control
-        layout.addWidget(self.ui)
-        self.ui.setParent(self)
-
 class Explorer(QtWidgets.QMainWindow):
 
     def __init__(self, settings_file: str, working: str, qapp : QtWidgets.QApplication) -> None:
@@ -514,6 +515,10 @@ class Explorer(QtWidgets.QMainWindow):
         # event handlers
         self.initialize_handlers()
 
+    # ------------------------------------------#
+    #             Initialization                #  
+    # ------------------------------------------#
+
     def load_settings(self, settings_file: str)->Dict[str, Any]:
         """
         Loads the JSON mesh settings file.
@@ -527,53 +532,34 @@ class Explorer(QtWidgets.QMainWindow):
             settings = json.load(json_file)
         return settings            
 
-    @benchmark()
-    def initialize_ui(self)-> None:
+    def construct_tabs(self) -> None:
         """ 
-        Initialize the UI
+        Construct the result tabs with the images, meshes, etc. from the calculated solution.
         """
-        self.ui:Ui_MainWindow = Ui_MainWindow()
-        self.ui.setupUi(self)
+        # image views
+        self.image_tabs[ImageType.DepthBuffer]      = ImageTab(self.ui.depthBufferTab, ImageType.DepthBuffer, "DepthBuffer", "gray", ImageTab.add_image, self.solver.results, "depth_buffer_model")
+        self.image_tabs[ImageType.Relief]           = ImageTab(self.ui.reliefTab, ImageType.Relief, "Relief", "gray", ImageTab.add_image, self.solver.results, "mesh_transformed")
+        self.image_tabs[ImageType.BackgroundMask]   = ImageTab(self.ui.backgroundMaskTab, ImageType.BackgroundMask, "Background Mask", "gray", ImageTab.add_image, self.solver.results, "depth_buffer_mask")
+        self.image_tabs[ImageType.GradientX]        = ImageTab(self.ui.gradientXTab, ImageType.GradientX, "Gradient X: dI(x,y)/dx", "Blues_r", ImageTab.add_image, self.solver.results, "gradient_x")
+        self.image_tabs[ImageType.GradientXMask]    = ImageTab(self.ui.gradientXMaskTab, ImageType.GradientXMask, "Gradient X Mask", "gray", ImageTab.add_image, self.solver.results, "gradient_x_mask")
+        self.image_tabs[ImageType.GradientY]        = ImageTab(self.ui.gradientYTab, ImageType.GradientY, "Gradient Y: dI(x,y)/dy", "Blues_r", ImageTab.add_image, self.solver.results, "gradient_y")
+        self.image_tabs[ImageType.GradientYMask]    = ImageTab(self.ui.gradientYMaskTab, ImageType.GradientYMask, "Gradient Y Mask", "gray", ImageTab.add_image, self.solver.results, "gradient_y_mask")
+        self.image_tabs[ImageType.CompositeMask]    = ImageTab(self.ui.compositeMaskTab, ImageType.CompositeMask, "Composite Mask", "gray", ImageTab.add_image, self.solver.results, "combined_mask")
+        self.image_tabs[ImageType.GradientXUnsharp] = ImageTab(self.ui.gradientXUnsharpTab, ImageType.GradientXUnsharp, "Gradient X Unsharp", "Blues_r", ImageTab.add_image, self.solver.results, "gradient_x_unsharp")
+        self.image_tabs[ImageType.GradientYUnsharp] = ImageTab(self.ui.gradientYUnsharpTab, ImageType.GradientYUnsharp, "Gradient Y Unsharp", "Blues_r", ImageTab.add_image, self.solver.results, "gradient_y_unsharp")
 
-        self.initialize_settings()
+        # mesh views
+        self.mesh_tabs[MeshType.Model]  = MeshTab(self.ui.modelMeshTab,  MeshType.Model,  "Model", "Blues_r", self.solver.results.depth_buffer_model)
+        self.mesh_tabs[MeshType.ModelScaled]  = MeshTab(self.ui.modelMeshScaledTab,  MeshType.ModelScaled,  "Model Scaled", "Blues_r", self.solver.results.mesh_scaled)
+        self.mesh_tabs[MeshType.Relief] = MeshTab(self.ui.reliefMeshTab, MeshType.Relief, "Relief", "Blues_r", self.solver.results.mesh_transformed)
 
-        # solve
-        self.calculate()
-
-        self.construct_tabs()
-
-        # N.B. First update of tabs will be performed following the system-generate resizeEvent.
-
-    def resize_ui(self)-> None:
-        """ Handles a resize event for the main window. """
-
-        self.set_busy (True)
-        self.update_tabs()
-        self.set_busy (False)
-
-    def resizeEvent(self, event: QtGui.QResizeEvent):
-        """ Event handler for window resize.
-            http://www.qtcentre.org/archive/index.php/t-10000.html
-            https://stackoverflow.com/questions/46656634/pyqt5-qtimer-count-until-specific-seconds
-        Parameters
-        ----------
-        event
-            The PyQt5.QtGui.QResizeEvent
-        """
-        def handler():
-            self.resize_ui()
-            self.resize_timer.stop()
-
-        # kill existing timer
-        if self.resize_timer is not None:
-            self.resize_timer.stop()
-
-        # start new timer
-        self.resize_timer = QtCore.QTimer()
-        self.resize_timer.timeout.connect(handler)
-        self.resize_timer.start(100)
-
-        return super().resizeEvent(event)
+        # workbench views
+        self.image_tabs[ImageType.Image1] = ImageTab(self.ui.i1Tab, ImageType.Image1, "Image One", "gray", ImageTab.add_image, self.solver.results, "i1")
+        self.image_tabs[ImageType.Image2] = ImageTab(self.ui.i2Tab, ImageType.Image2, "Image Two", "gray", ImageTab.add_image, self.solver.results, "i2")
+        self.image_tabs[ImageType.Image3] = ImageTab(self.ui.i3Tab, ImageType.Image3, "Image Three", "gray", ImageTab.add_image, self.solver.results, "i3")
+        self.image_tabs[ImageType.Image4] = ImageTab(self.ui.i4Tab, ImageType.Image4, "Image Four", "gray", ImageTab.add_image, self.solver.results, "i4")
+        self.image_tabs[ImageType.Image5] = ImageTab(self.ui.i5Tab, ImageType.Image5, "Image Five", "gray", ImageTab.add_image, self.solver.results, "i5")
+        self.image_tabs[ImageType.Image6] = ImageTab(self.ui.i6Tab, ImageType.Image6, "Image Six", "gray", ImageTab.add_image, self.solver.results, "i6")
 
     def initialize_settings(self) ->None:
         mesh_transform:Dict[str, float] = self.settings['MeshTransform']
@@ -610,6 +596,58 @@ class Explorer(QtWidgets.QMainWindow):
         self.ui.p6CheckBox.setChecked(checkbox_enabled)
         self.ui.p7CheckBox.setChecked(checkbox_enabled)
         self.ui.p8CheckBox.setChecked(checkbox_enabled)
+
+    @benchmark()
+    def initialize_ui(self)-> None:
+        """ 
+        Initialize the UI
+        """
+        self.ui:Ui_MainWindow = Ui_MainWindow()
+        self.ui.setupUi(self)
+
+        self.initialize_settings()
+
+        # solve
+        self.calculate()
+
+        self.construct_tabs()
+
+        # N.B. First update of tabs will be performed following the system-generate resizeEvent.
+    
+    # ------------------------------------------#
+    #               Event Handlers              #  
+    # ------------------------------------------#
+
+    def resize_ui(self)-> None:
+        """ Handles a resize event for the main window. """
+
+        self.set_busy (True)
+        self.update()
+        self.set_busy (False)
+
+    def resizeEvent(self, event: QtGui.QResizeEvent):
+        """ Event handler for window resize.
+            http://www.qtcentre.org/archive/index.php/t-10000.html
+            https://stackoverflow.com/questions/46656634/pyqt5-qtimer-count-until-specific-seconds
+        Parameters
+        ----------
+        event
+            The PyQt5.QtGui.QResizeEvent
+        """
+        def handler():
+            self.resize_ui()
+            self.resize_timer.stop()
+
+        # kill existing timer
+        if self.resize_timer is not None:
+            self.resize_timer.stop()
+
+        # start new timer
+        self.resize_timer = QtCore.QTimer()
+        self.resize_timer.timeout.connect(handler)
+        self.resize_timer.start(100)
+
+        return super().resizeEvent(event)
 
     def tab_selected(self)-> None:
         """
@@ -670,7 +708,7 @@ class Explorer(QtWidgets.QMainWindow):
             json.dump(self.settings, json_file, indent=4)
 
         self.calculate()
-        self.update_tabs(preserve_camera=True)
+        self.update(preserve_camera=True)
 
     def handle_open_settings(self) ->None:
         """
@@ -718,35 +756,11 @@ class Explorer(QtWidgets.QMainWindow):
 
         self.set_busy (False)
 
-    def construct_tabs(self) -> None:
-        """ 
-        Construct the result tabs with the images, meshes, etc. from the calculated solution.
-        """
-        # image views
-        self.image_tabs[ImageType.DepthBuffer]      = ImageTab(self.ui.depthBufferTab, ImageType.DepthBuffer, "DepthBuffer", "gray", ImageTab.add_image, self.solver.results, "depth_buffer_model")
-        self.image_tabs[ImageType.Relief]           = ImageTab(self.ui.reliefTab, ImageType.Relief, "Relief", "gray", ImageTab.add_image, self.solver.results, "mesh_transformed")
-        self.image_tabs[ImageType.BackgroundMask]   = ImageTab(self.ui.backgroundMaskTab, ImageType.BackgroundMask, "Background Mask", "gray", ImageTab.add_image, self.solver.results, "depth_buffer_mask")
-        self.image_tabs[ImageType.GradientX]        = ImageTab(self.ui.gradientXTab, ImageType.GradientX, "Gradient X: dI(x,y)/dx", "Blues_r", ImageTab.add_image, self.solver.results, "gradient_x")
-        self.image_tabs[ImageType.GradientXMask]    = ImageTab(self.ui.gradientXMaskTab, ImageType.GradientXMask, "Gradient X Mask", "gray", ImageTab.add_image, self.solver.results, "gradient_x_mask")
-        self.image_tabs[ImageType.GradientY]        = ImageTab(self.ui.gradientYTab, ImageType.GradientY, "Gradient Y: dI(x,y)/dy", "Blues_r", ImageTab.add_image, self.solver.results, "gradient_y")
-        self.image_tabs[ImageType.GradientYMask]    = ImageTab(self.ui.gradientYMaskTab, ImageType.GradientYMask, "Gradient Y Mask", "gray", ImageTab.add_image, self.solver.results, "gradient_y_mask")
-        self.image_tabs[ImageType.CompositeMask]    = ImageTab(self.ui.compositeMaskTab, ImageType.CompositeMask, "Composite Mask", "gray", ImageTab.add_image, self.solver.results, "combined_mask")
-        self.image_tabs[ImageType.GradientXUnsharp] = ImageTab(self.ui.gradientXUnsharpTab, ImageType.GradientXUnsharp, "Gradient X Unsharp", "Blues_r", ImageTab.add_image, self.solver.results, "gradient_x_unsharp")
-        self.image_tabs[ImageType.GradientYUnsharp] = ImageTab(self.ui.gradientYUnsharpTab, ImageType.GradientYUnsharp, "Gradient Y Unsharp", "Blues_r", ImageTab.add_image, self.solver.results, "gradient_y_unsharp")
+    # ------------------------------------------#
+    #                 Update                    #  
+    # ------------------------------------------#
 
-        # mesh views
-        self.mesh_tabs[MeshType.Model]  = MeshTab(self.ui.modelMeshTab,  MeshType.Model,  "Model", "Blues_r", self.solver.results.depth_buffer_model)
-        self.mesh_tabs[MeshType.ModelScaled]  = MeshTab(self.ui.modelMeshScaledTab,  MeshType.ModelScaled,  "Model Scaled", "Blues_r", self.solver.results.mesh_scaled)
-        self.mesh_tabs[MeshType.Relief] = MeshTab(self.ui.reliefMeshTab, MeshType.Relief, "Relief", "Blues_r", self.solver.results.mesh_transformed)
-
-        # workbench views
-        self.image_tabs[ImageType.Image1] = ImageTab(self.ui.i1Tab, ImageType.Image1, "Image One", "gray", ImageTab.add_image, self.solver.results, "i1")
-        self.image_tabs[ImageType.Image2] = ImageTab(self.ui.i2Tab, ImageType.Image2, "Image Two", "gray", ImageTab.add_image, self.solver.results, "i2")
-        self.image_tabs[ImageType.Image3] = ImageTab(self.ui.i3Tab, ImageType.Image3, "Image Three", "gray", ImageTab.add_image, self.solver.results, "i3")
-        self.image_tabs[ImageType.Image4] = ImageTab(self.ui.i4Tab, ImageType.Image4, "Image Four", "gray", ImageTab.add_image, self.solver.results, "i4")
-        self.image_tabs[ImageType.Image5] = ImageTab(self.ui.i5Tab, ImageType.Image5, "Image Five", "gray", ImageTab.add_image, self.solver.results, "i5")
-        self.image_tabs[ImageType.Image6] = ImageTab(self.ui.i6Tab, ImageType.Image6, "Image Six", "gray", ImageTab.add_image, self.solver.results, "i6")
-
+    @benchmark()    
     def update_image_tabs(self)-> None:
         """
         Updates the tabs holding pure images.
@@ -755,6 +769,7 @@ class Explorer(QtWidgets.QMainWindow):
             if tab.widget == self.ui.imageTabs.currentWidget() or tab.widget == self.ui.workbenchTabs.currentWidget():
                 tab.update()
 
+    @benchmark()    
     def update_mesh_tabs(self, preserve_camera: bool = True)-> None:
         """
         Updates the tabs holding 3D meshes.
@@ -763,8 +778,9 @@ class Explorer(QtWidgets.QMainWindow):
         self.mesh_tabs[MeshType.ModelScaled].mesh_widget.mesh_content.update_mesh(self.solver.results.mesh_scaled, preserve_camera)
         self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.update_mesh(self.solver.results.mesh_transformed, preserve_camera)
 
-    def update_tabs(self, preserve_camera: bool = True) -> None:
-        """ Update the result tabs with the images, meshes, etc. from the calculated solution.
+    @benchmark()    
+    def update(self, preserve_camera: bool = True) -> None:
+        """ Update the UI with the images, meshes, etc. from the calculated solution.
         Parameters
         ----------
         preserve_camera

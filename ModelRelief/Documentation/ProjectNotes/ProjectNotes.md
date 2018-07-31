@@ -3,17 +3,19 @@
 
 #### Short Term  
     Solver
-        A hidden tab does not update properly.
-
         Optimization
-            update_image_tabs: Construct a tab only when the results have been invalidated.
-            After a Solver calculate:
-                Invalidate all ImageTabs.
+            ImageTab, MeshTab: dirty property
+                Solver has generated new results and the data is invalid.
+                A resizeEvent has occurred and the tab contents must be re-generated.
 
         How should Meshes be handled in the UI?
 
         Separate the UI classes from Explorer into separate files.
             Should Explorer be in a separate folder from Solver?
+        
+        Combine MeshContainer and MeshTab into MeshTab.
+            MeshTab -> MeshWidget?
+            ImageTab -> ImageWidget?
 
     Lambda
 
