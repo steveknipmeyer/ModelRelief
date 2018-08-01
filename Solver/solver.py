@@ -18,6 +18,7 @@ import os
 import numpy as np
 import time
 from shutil import copyfile
+from typing import Any, Callable, Dict, Optional
 
 from filemanager import FileManager 
 from logger import Logger 
@@ -63,7 +64,7 @@ class Solver:
         # results collection
         self.results = Results()
 
-        working_folder = os.path.abspath(working)
+        working_folder = os.path.abspath(working) 
         self.working_folder = working_folder
         if not os.path.exists(working_folder):
             os.makedirs(working_folder)
@@ -95,8 +96,8 @@ class Solver:
         self.settings = None
         self._settings_file = ''
         self.mesh = None
-        self.depth_buffer = None
-        self.mesh_transform = None
+        self.depth_buffer: Optional[DepthBuffer] = None
+        self.mesh_transform: Optional[MeshTransform] = None
         
         self.settings_file = settings
 
@@ -113,7 +114,7 @@ class Solver:
     
     def initialize_settings(self):
         """
-        Unpack the JSON settings file and initialie Solver properties.
+        Unpack the JSON settings file and initialize Solver properties.
         """
         self.mesh = Mesh(self.settings, self.services)
         self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'], self.services)
@@ -209,7 +210,7 @@ class Solver:
         """
         if self.enable_p2:
             silhouette = Silhouette(self.services)        
-            self.results.mesh_transformed = silhouette.process(self.results.mesh_transformed, self.results.depth_buffer_mask, self.mesh_transform.p2)
+            self.results.mesh_transformed = silhouette.process(self.results.mesh_transformed, self.results.depth_buffer_mask, self.mesh_transform.p2, int(self.mesh_transform.p3))
 
     def process_scale(self):
         """
@@ -274,6 +275,8 @@ class Solver:
         """
         Transforms a DepthBuffer by the MeshTransform settings.
         """
+        self.results.initialize(self.depth_buffer.height, self.depth_buffer.width)
+        
         self.process_depth_buffer()
         self.process_gradients()
         self.process_attenuation()

@@ -32,7 +32,7 @@ class Silhouette:
         self.debug = True
         self.services = services
 
-    def process (self, image: np.ndarray, background_mask: np.ndarray, sigma: float) -> np.ndarray:
+    def process (self, image: np.ndarray, background_mask: np.ndarray, sigma: float, iterations: int) -> np.ndarray:
         """
         Applies the attenuation function to all elements in an ndarray.
 
@@ -44,11 +44,15 @@ class Silhouette:
             The image background mask.
         sigma:
             The standard deviation used in the Gaussian blur of the image.            
+        iterations:
+            The number of time to apply the blur.
         """
         # blur entire image to blend the image edges with the background
-        blurred_all = gaussian_filter(image, sigma, order=0, output=None, mode='reflect', cval=0.0, truncate=4.0)
+        blurred_all = image
+        for _ in range(0, iterations):
+            blurred_all = gaussian_filter(blurred_all, sigma, order=0, output=None, mode='reflect', cval=0.0, truncate=4.0)
         
-        # isolate the blend that extends into the background mask
+        # isolate only the portion of the blend that extends into the background mask
         mask = Mask (self.services)
         mask_inverted = mask.invert(background_mask)
         blurred_edges = blurred_all * mask_inverted

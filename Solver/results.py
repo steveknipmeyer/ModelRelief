@@ -15,33 +15,75 @@ class Results:
     """
     Holds the results of the Solver solution including the intermediate values.
     """
-    def __init__(self):
+    def __init__(self)-> None:
+        """
+        Initialization
+        N.B. PyLint warns on instance members initialized outsize __init__ so properties are initialized twice.
+        """
+        default_shape = (1, 1)
         # component images
-        self.depth_buffer_model: np.ndarray = None                      # DepthBuffer : Z coordinates in model units
-        self.depth_buffer_mask: np.ndarray = None                       # DepthBuffer : background bit mask of complete model
-        self.dGxdx: np.ndarray = None                                   # 1st derivative of Gradient wrt X: dGradientX(x,y) / dx
-        self.dGydy: np.ndarray = None                                   # 1st derivative of Gradient wrt Y: dGradientY(x,y) / dy
-        self.divG: np.ndarray = None                                    # div Gradient(x,y)
-        self.gradient_x: np.ndarray = None                              # GradientX (thresholded)
-        self.gradient_x_mask: np.ndarray = None                         # GradientY (thresholded)
-        self.gradient_y: np.ndarray = None                              # GradientX bit mask (thresholded)
-        self.gradient_y_mask: np.ndarray = None                         # GradientX bit mask (thresholded)
-        self.combined_mask: np.ndarray = None                           # final bit mask : compostite 
-        self.gradient_x_unsharp: np.ndarray = None                      # GradientX : (unsharp masked)
-        self.gradient_y_unsharp: np.ndarray = None                      # GradientY : (unsharp masked)
+        self.depth_buffer_model: np.ndarray = np.zeros(default_shape)                       # DepthBuffer : Z coordinates in model units
+        self.depth_buffer_mask: np.ndarray = np.zeros(default_shape)                        # DepthBuffer : background bit mask of complete model
+        self.dGxdx: np.ndarray = np.zeros(default_shape)                                    # 1st derivative of Gradient wrt X: dGradientX(x,y) / dx
+        self.dGydy: np.ndarray = np.zeros(default_shape)                                    # 1st derivative of Gradient wrt Y: dGradientY(x,y) / dy
+        self.divG: np.ndarray = np.zeros(default_shape)                                     # div Gradient(x,y)
+        self.gradient_x: np.ndarray = np.zeros(default_shape)                               # GradientX (thresholded)
+        self.gradient_x_mask: np.ndarray = np.zeros(default_shape)                          # GradientY (thresholded)
+        self.gradient_y: np.ndarray = np.zeros(default_shape)                               # GradientX bit mask (thresholded)
+        self.gradient_y_mask: np.ndarray = np.zeros(default_shape)                          # GradientX bit mask (thresholded)
+        self.combined_mask: np.ndarray = np.zeros(default_shape)                            # final bit mask : compostite 
+        self.gradient_x_unsharp: np.ndarray = np.zeros(default_shape)                       # GradientX : (unsharp masked)
+        self.gradient_y_unsharp: np.ndarray = np.zeros(default_shape)                       # GradientY : (unsharp masked)
 
         # mesh results
-        self.mesh_scaled: np.ndarray = None                             # Mesh: scaled linearly
-        self.mesh_transformed: np.ndarray = None                        # Mesh: complete solution
+        self.mesh_scaled: np.ndarray = np.zeros(default_shape)                              # Mesh: scaled linearly
+        self.mesh_transformed: np.ndarray = np.zeros(default_shape)                         # Mesh: complete solution
 
         # workbench images
-        default_workbench_image_dimensions = 512
-        self.i1 = np.zeros((default_workbench_image_dimensions, default_workbench_image_dimensions))
-        self.i2 = np.zeros((default_workbench_image_dimensions, default_workbench_image_dimensions))
-        self.i3 = np.zeros((default_workbench_image_dimensions, default_workbench_image_dimensions))
-        self.i4 = np.zeros((default_workbench_image_dimensions, default_workbench_image_dimensions))
-        self.i5 = np.zeros((default_workbench_image_dimensions, default_workbench_image_dimensions))
-        self.i6 = np.zeros((default_workbench_image_dimensions, default_workbench_image_dimensions))
+        self.i1 = np.zeros(default_shape)
+        self.i2 = np.zeros(default_shape)
+        self.i3 = np.zeros(default_shape)
+        self.i4 = np.zeros(default_shape)
+        self.i5 = np.zeros(default_shape)
+        self.i6 = np.zeros(default_shape)
+
+    def initialize(self, rows: int, columns: int)->None :
+        """
+        Initialize all result values.
+        Parameters
+        ----------
+        rows
+            The number of rows (pixels) in the result arrays.
+        columns
+            The number of columns (pixels) in the result arrays.
+        """
+        initialization_shape = (rows, columns)
+
+        # component images
+        self.depth_buffer_model: np.ndarray = np.zeros(initialization_shape)
+        self.depth_buffer_mask: np.ndarray = np.zeros(initialization_shape) 
+        self.dGxdx: np.ndarray = np.zeros(initialization_shape)             
+        self.dGydy: np.ndarray = np.zeros(initialization_shape)             
+        self.divG: np.ndarray = np.zeros(initialization_shape)              
+        self.gradient_x: np.ndarray = np.zeros(initialization_shape)        
+        self.gradient_x_mask: np.ndarray = np.zeros(initialization_shape)   
+        self.gradient_y: np.ndarray = np.zeros(initialization_shape)        
+        self.gradient_y_mask: np.ndarray = np.zeros(initialization_shape)   
+        self.combined_mask: np.ndarray = np.zeros(initialization_shape)     
+        self.gradient_x_unsharp: np.ndarray = np.zeros(initialization_shape)
+        self.gradient_y_unsharp: np.ndarray = np.zeros(initialization_shape)
+
+        # mesh results
+        self.mesh_scaled: np.ndarray = np.zeros(initialization_shape)       
+        self.mesh_transformed: np.ndarray = np.zeros(initialization_shape)  
+
+        # workbench images
+        self.i1 = np.zeros(initialization_shape)
+        self.i2 = np.zeros(initialization_shape)
+        self.i3 = np.zeros(initialization_shape)
+        self.i4 = np.zeros(initialization_shape)
+        self.i5 = np.zeros(initialization_shape)
+        self.i6 = np.zeros(initialization_shape)
 
 class DataSource:
     """
