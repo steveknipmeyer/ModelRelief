@@ -3,8 +3,6 @@
 
 #### Short Term  
     Solver
-        Make the OBJ file write optional.
-
         How should Meshes be handled in the UI?
             Combine MeshContainer and MeshTab into MeshTab.
                 MeshTab -> MeshWidget?
