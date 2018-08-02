@@ -192,7 +192,7 @@ namespace ModelRelief.Services.Jobs
         /// <param name="args">Arguments.</param>
         /// <param name="timeOut">Millisecond timeout. Maximum process execution time.</param>
         /// <returns>Process exit code.</returns>
-        public int RunProcess(string taskName, string args, int timeOut = 10000)
+        public int RunProcess(string taskName, string args, int timeOut = 20000)
         {
             ProcessStartInfo start = new ProcessStartInfo
             {

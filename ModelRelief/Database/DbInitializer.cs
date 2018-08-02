@@ -377,10 +377,9 @@ namespace ModelRelief.Database
                     Name = "Armadillo", Description = "Armadillo Model",
                     FieldOfView = Camera.DefaultFieldOfView,
                     AspectRatio = 1.0,
-                    Near = 164.49, Far = 229.59,
-
-                    PositionX = -1.40, PositionY = 54.20, PositionZ = 197.02,
-                    EulerX = 0.0, EulerY = 0.0, EulerZ = 0.0, Theta = 1.0,
+                    Near = 232.05, Far = 339.50,
+                    PositionX = -1.82, PositionY = 47.98, PositionZ = 262.32,
+                    EulerX = 0.0475, EulerY = 0.0, EulerZ = 0.0, Theta = 1.0,
                     ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
                     UpX = 0.0, UpY = 1.0, UpZ = 0.0,
 
@@ -642,8 +641,8 @@ namespace ModelRelief.Database
                 {
                     Name = "Armadillo", Description = "Armadillo transform",
                     Width = 100.0, Height = 100.0, Depth = 1.0,
-                    GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
+                    GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.9, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 6.0,
+                    P1 = 0.02, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
                     User = _user, Project = FindByName<Project>("Stanford"),
                 },
                 new MeshTransform

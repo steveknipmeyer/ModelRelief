@@ -375,7 +375,7 @@ export class ComposerController {
         controlSettings = new ControlSettings(0.0, 10.0, 0.1);
         let controlUnsharpGaussianHigh = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'unsharpGaussianHigh').name('Gaussian High').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
 
-        controlSettings = new ControlSettings(0.0, 5.0, 0.1);
+        controlSettings = new ControlSettings(0.0, 10.0, 0.1);
         let controlUnsharpHighFrequencyScale  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'unsharpHighFrequencyScale').name('High Frequency Scale').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
 
         controlSettings = new ControlSettings(0.0, 1.0, 0.01);

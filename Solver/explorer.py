@@ -742,7 +742,7 @@ class Explorer(QtWidgets.QMainWindow):
 
             self.initialize_settings()
             self.calculate()
-            self.update_tabs(preserve_camera=False)
+            self.update(preserve_camera=False)
 
     def calculate(self) -> None:
         """ 
