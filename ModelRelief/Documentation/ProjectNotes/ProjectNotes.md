@@ -3,7 +3,7 @@
 
 #### Short Term  
     Increase HF scale range to 10.
-    
+
     Solver
         How should Meshes be handled in the UI?
             Combine MeshContainer and MeshTab into MeshTab.
@@ -1241,7 +1241,7 @@ https://semver.npmjs.com/
     Caveats:
         https://blogs.msdn.microsoft.com/commandline/2016/11/17/do-not-change-linux-files-using-windows-apps-and-tools/
 
-#### Mayavi
+#### Mayavipr
         pip install mayavi
         pip install --upgrade --force-reinstall mayavi
 

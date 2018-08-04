@@ -67,17 +67,23 @@ class UnsharpMask:
         parameters
             The UnsharpMaskParamnter structure (gaussian_low, gaussian_high, high_frequency_scale)
         """
-        # copy
-        original_prime = np.array(original)
-        original_prime= original_prime * combined_mask
+        # .N.B. The Gaussian blur used in Kerber's paper ignores pixels that have been masked. 
+        # The implementation here does include them. It seems a custom kernel (ndimage "generic filter") may be required that takes into consideration the overall mask.
+        # https://dsp.stackexchange.com/questions/10057/gaussian-blur-standard-deviation-radius-and-kernel-size
+        # https://stackoverflow.com/questions/23208232/image-filtering-with-scikit-image
+        # https://docs.scipy.org/doc/scipy/reference/tutorial/ndimage.html
+    
+        original_prime= original * combined_mask
 
         low = gaussian_filter(original_prime, parameters.gaussian_low, order=0, output=None, mode='reflect', cval=0.0, truncate=4.0)
-        
+        low = low * combined_mask
+
         # subtract low frequency from original to yield the high frequency components
         high = original_prime - low
         high = gaussian_filter(high, parameters.gaussian_high, order=0, output=None, mode='reflect', cval=0.0, truncate=4.0)
 
         # add back the scaled high frequency components to generate the final results
         final = original_prime + (parameters.high_frequency_scale * high)
+        final = final * combined_mask
 
         return final
