@@ -2,9 +2,22 @@
 #### Commit Notes
 
 #### Short Term  
-    Increase HF scale range to 10.
+    Investigate workspaces in VSCode.
+        Why is the second workspace unnamed?
+
+    Python Environments
+        How is an environment activated in VSCode?
+        Is the best practice to construct a Python environment in a container or to deliver a pre-built one.
+            A pre-built environment would require setting up the path.
+    Lambda
+        Window 10 Pro 
+        Docker
+        Install Docker VSCode extension.
 
     Solver
+        Where should Solver be deployed?
+            Dispatcher contains logic to find the root folder.
+            
         How should Meshes be handled in the UI?
             Combine MeshContainer and MeshTab into MeshTab.
                 MeshTab -> MeshWidget?
@@ -12,8 +25,6 @@
 
         Separate the UI classes from Explorer into separate files.
             Should Explorer be in a separate folder from Solver?
-
-    Lambda
 
     Write OBJ
         Should the OBJWriter be part of FileManager?
