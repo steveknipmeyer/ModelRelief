@@ -1,7 +1,9 @@
 ﻿### Tasks
 #### Commit Notes
 
-#### Short Term  
+#### Short Term
+    Move ModelRelief to the root to remove spaces from the path.
+
     All (cached) command line tools <must> be updated to include "python.exe " so that the Windows Python launcher (py) does not start the base environment.
     
     Investigate workspaces in VSCode.
@@ -10,33 +12,38 @@
     Should ndimage or scikt-image be used for image processing support?
     
     Python Environments
-        base
+        Production
             colorama
             numpy
             scipy
             pyamg
-        development
-            vtk
-            pyqt=5
-            mayavi
-                https://docs.enthought.com/mayavi/mayavi/installation.html
-                https://conda-forge.org/
 
-                N.B. It is necessary to add the conda-forge channel or the environment solver fails.
-                    conda config --add channels conda-forge
-                    
-                    Solving environment: failed
-                    UnsatisfiableError: The following specifications were found to be in conflict:
-                        - mayavi
-                        - wheel==0.31.1=py36_0
-                    Use "conda info <package>" to see the dependencies for each package.
-                
-                call conda create  --prefix .\devenv
-                activate .\devenv
-                conda install python=3.6
-                conda install numpy=1.13.1
-                python -m pip install mayavi
-                pip install --upgrade --force-reinstall mayavi                
+        Development
+            mayavi
+                Conda
+                    https://docs.enthought.com/mayavi/mayavi/installation.html
+                    https://conda-forge.org/
+
+                    N.B. It is necessary to add the conda-forge channel or the environment solver fails.
+                        conda config --add channels conda-forge
+                        
+                        Solving environment: failed
+                        UnsatisfiableError: The following specifications were found to be in conflict:
+                            - mayavi
+                            - wheel==0.31.1=py36_0
+                        Use "conda info <package>" to see the dependencies for each package.
+
+                PIP                
+                    call conda create  --prefix .\devenv
+                    activate .\devenv
+                    conda install python=3.6
+                    conda install numpy=1.13.1
+                    python -m pip install mayavi
+                    pip install --upgrade --force-reinstall mayavi                
+                    pip install scipy
+                    pip install pyamg
+                    pip install PyQt5
+                    pip install matplotlib
                 
             qdarkstyle
             pylint
