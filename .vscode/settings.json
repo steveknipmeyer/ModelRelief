@@ -92,6 +92,7 @@
             "--show-error-context",
             "--follow-imports=normal"
         ],
+        // "python.autoComplete.extraPaths": ["${workspaceRoot}/Solver"],
 
     // ---------------------------------
     // Search

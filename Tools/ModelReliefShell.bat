@@ -40,7 +40,7 @@ call "C:\Program Files\nodejs\nodevars.bat"
 :: latest Python 3.X; Windows Python launcher (py.exe)
 set PY_PYTHON=3
 :: include Tools folder for general utility support
-set PYTHONPATH=%PYTHONPATH%;%MRSolution%\Tools\
+set PYTHONPATH=%PYTHONPATH%;%MRSolution%\Tools\;%MRSolution%Solver\
 :: MyPy Linter
 set MYPYPATH=%MRSolution%\Tools\
 :: Anaconda

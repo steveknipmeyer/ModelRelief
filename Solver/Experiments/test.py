@@ -14,7 +14,6 @@
 import os
 import sys                                      # We need sys so that we can pass argv to QApplication
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from stopwatch import benchmark
 
 class Widget:

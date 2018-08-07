@@ -5,10 +5,12 @@
     Investigate workspaces in VSCode.
         Why is the second workspace unnamed?
 
+    Should ndimage or scikt-image be used for image processing support?
+    
     Python Environments
         How is an environment activated in VSCode?
         Is the best practice to construct a Python environment in a container or to deliver a pre-built one.
-            A pre-built environment would require setting up the path.
+
     Lambda
         Window 10 Pro 
         Docker
