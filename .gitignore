@@ -177,6 +177,10 @@ node_modules/
 #################
 ## ModelRelief
 #################
+## Python Virtual Environments
+mrenv
+devenv
+
 ModelRelief/Database/*.db
 */wwwroot/js/
 */wwwroot/lib/**/*

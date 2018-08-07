@@ -2,14 +2,28 @@
 #### Commit Notes
 
 #### Short Term  
+    All (cached) command line tools <must> be updated to include "python.exe " so that the Windows Python launcher (py) does not start the base environment.
+    
     Investigate workspaces in VSCode.
         Why is the second workspace unnamed?
 
     Should ndimage or scikt-image be used for image processing support?
     
     Python Environments
-        How is an environment activated in VSCode?
-        Is the best practice to construct a Python environment in a container or to deliver a pre-built one.
+        base
+            colorama
+            numpy
+            scipy
+            pyamg
+        development
+            pylint
+            mypy            
+
+    Development Environment
+        conda install --yes --file requirements.txt
+        
+    Deployment
+        Add a gulp build step to create the Docker container.
 
     Lambda
         Window 10 Pro 

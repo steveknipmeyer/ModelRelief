@@ -83,7 +83,7 @@
     // Python
     // ---------------------------------
         // Path to Python, you can use a custom version of Python by modifying this setting to include the full path.
-        "python.pythonPath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Anaconda3_64\\python.exe",
+        "python.pythonPath": "${workspaceFolder}\\devenv\\python.exe",
         "python.linting.enabled": true, 
         "python.linting.mypyEnabled": true,
           // Arguments passed in. Each argument is a separate item in the array.
