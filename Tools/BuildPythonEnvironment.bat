@@ -33,7 +33,6 @@ call conda create --yes --prefix %EnvironmentName% --file %RequirementsFile%
 echo.
 echo The Anaconda environment '%EnvironmentName%' has been created.
 echo EnvironmentNme = %EnvironmentName%
-echo Python Version = %PythonVersion%
 echo Requirements   = %RequirementsFile%
 goto exit
 

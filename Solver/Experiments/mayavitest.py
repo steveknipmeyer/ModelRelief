@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 
 # First, and before importing any Enthought packages, set the ETS_TOOLKIT

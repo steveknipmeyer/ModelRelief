@@ -91,7 +91,7 @@
         "Width": 100.0,
         "Height": 100.0,
         "Depth": 1.0,
-        "GradientThreshold": 5.0,
+        "GradientThreshold": 3.0,
         "AttenuationFactor": 10.0,
         "AttenuationDecay": 0.6,
         "UnsharpGaussianLow": 4.0,

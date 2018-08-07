@@ -16,8 +16,31 @@
             scipy
             pyamg
         development
+            vtk
+            pyqt=5
+            mayavi
+                https://docs.enthought.com/mayavi/mayavi/installation.html
+                https://conda-forge.org/
+
+                N.B. It is necessary to add the conda-forge channel or the environment solver fails.
+                    conda config --add channels conda-forge
+                    
+                    Solving environment: failed
+                    UnsatisfiableError: The following specifications were found to be in conflict:
+                        - mayavi
+                        - wheel==0.31.1=py36_0
+                    Use "conda info <package>" to see the dependencies for each package.
+                
+                call conda create  --prefix .\devenv
+                activate .\devenv
+                conda install python=3.6
+                conda install numpy=1.13.1
+                python -m pip install mayavi
+                pip install --upgrade --force-reinstall mayavi                
+                
+            qdarkstyle
             pylint
-            mypy            
+            mypy
 
     Development Environment
         conda install --yes --file requirements.txt
@@ -1268,7 +1291,7 @@ https://semver.npmjs.com/
     Caveats:
         https://blogs.msdn.microsoft.com/commandline/2016/11/17/do-not-change-linux-files-using-windows-apps-and-tools/
 
-#### Mayavipr
+#### Mayavi
         pip install mayavi
         pip install --upgrade --force-reinstall mayavi
 

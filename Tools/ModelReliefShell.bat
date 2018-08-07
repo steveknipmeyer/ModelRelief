@@ -46,7 +46,7 @@ set MYPYPATH=%MRSolution%\Tools\
 :: Anaconda
 call SetAnacondaPath
 :: Active the ModelRelied Python environment.
-call activate ./mrenv
+call activate ./devenv
 
 :: Visual Studio 2017
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\VsDevCmd.bat"
