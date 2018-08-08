@@ -1,9 +1,10 @@
 ---------------------------------------------------------------------- Steps ----------------------------------------------------------------------
 conda config --add channels conda-forge
 conda create --prefix .\devenv python=3.6
+conda activate .\devenv
 pip install mayavi
 pip install pyqt5
-conda install colorama
+yconda install colorama
 conda install scipy
 pip install qdarkstyle
 pip install pyamg

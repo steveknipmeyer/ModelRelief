@@ -21,8 +21,6 @@ goto BuildEnvironment
 
 :: ------------------ Build ---------------------------::
 :BuildEnvironment
-:: Restore the base environment.
-call deactivate
 
 :: remove
 ::conda env remove --yes --prefix %EnvironmentName% 
