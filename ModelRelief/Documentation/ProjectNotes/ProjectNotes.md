@@ -34,19 +34,11 @@
                         Use "conda info <package>" to see the dependencies for each package.
 
                 PIP                
-                    call conda create  --prefix .\devenv
-                    activate .\devenv
-                    conda install python=3.6
-                    conda install numpy=1.13.1
-                    python -m pip install mayavi
-                    pip install --upgrade --force-reinstall mayavi                
-                    pip install scipy
-                    pip install pyamg
-                    pip install PyQt5
-                    pip install matplotlib
-                
-            qdarkstyle
-            pylint
+                    py -m pip install --user virtualenv
+                    py -m virtualenv devenv
+                    activate devenv\Scripts\activate.bat
+                    pip install -r requirements.development.pip.txt
+
             mypy
 
     Development Environment

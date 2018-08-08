@@ -10,7 +10,7 @@ goto InvalidArgs
 
 :Development
 set EnvironmentName=devenv
-set RequirementsFile=requirements.development.txt
+set RequirementsFile=requirements.development.conda.txt
 goto BuildEnvironment
 
 :Production
