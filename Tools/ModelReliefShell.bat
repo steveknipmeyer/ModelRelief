@@ -33,7 +33,6 @@ path=%path%;C:\Program Files\Git
 path=%path%;C:\Program Files (x86)\WinMerge
 path=%path%;C:\Program Files\KDeiff3
 
-
 call "C:\Program Files\nodejs\nodevars.bat"
 
 :: PYTHON
@@ -45,8 +44,10 @@ set PYTHONPATH=%PYTHONPATH%;%MRSolution%\Tools\;%MRSolution%Solver\
 set MYPYPATH=%MRSolution%\Tools\
 :: Anaconda
 call SetAnacondaPath
+
 :: Active the ModelRelied Python environment.
 call activate ./devenv
+::call activate ./mrvenv
 
 :: Visual Studio 2017
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\VsDevCmd.bat"

@@ -2,7 +2,10 @@
 #### Commit Notes
 
 #### Short Term
+    conda update -n base conda
+
     Move ModelRelief to the root to remove spaces from the path.
+    Wrap the activte command so a different shell prompt can be substituted.
 
     All (cached) command line tools <must> be updated to include "python.exe " so that the Windows Python launcher (py) does not start the base environment.
     
@@ -12,33 +15,17 @@
     Should ndimage or scikt-image be used for image processing support?
     
     Python Environments
-        Production
-            colorama
-            numpy
-            scipy
-            pyamg
-
         Development
-            mayavi
-                Conda
-                    https://docs.enthought.com/mayavi/mayavi/installation.html
-                    https://conda-forge.org/
+            https://github.com/conda-forge/mayavi-feedstock
 
-                    N.B. It is necessary to add the conda-forge channel or the environment solver fails.
-                        conda config --add channels conda-forge
-                        
-                        Solving environment: failed
-                        UnsatisfiableError: The following specifications were found to be in conflict:
-                            - mayavi
-                            - wheel==0.31.1=py36_0
-                        Use "conda info <package>" to see the dependencies for each package.
+            conda create --prefix .\devenv python=3.6
+            conda config --add channels conda-forge
+            conda install mayavi
 
-                PIP                
-                    py -m pip install --user virtualenv
-                    py -m virtualenv devenv
-                    activate devenv\Scripts\activate.bat
-                    pip install -r requirements.development.pip.txt
-
+            scipy
+            colorama
+            qdarkstyle
+            pylint
             mypy
 
     Development Environment
