@@ -2,46 +2,27 @@
 #### Commit Notes
 
 #### Short Term
-    conda update -n base conda
+    Docker
+        How can PYTHONPATH be configured properly?
+        Write a tool to remove dangling images and containers.
+        How can the file system in a container be inspected?
+        Where is Python installed in the container?
 
-    Move ModelRelief to the root to remove spaces from the path.
     Wrap the activte command so a different shell prompt can be substituted.
-
-    All (cached) command line tools <must> be updated to include "python.exe " so that the Windows Python launcher (py) does not start the base environment.
-    
+   
     Investigate workspaces in VSCode.
         Why is the second workspace unnamed?
 
     Should ndimage or scikt-image be used for image processing support?
-    
-    Python Environments
-        Development
-            https://github.com/conda-forge/mayavi-feedstock
-
-            conda create --prefix .\devenv python=3.6
-            conda config --add channels conda-forge
-            conda install mayavi
-
-            scipy
-            colorama
-            qdarkstyle
-            pylint
-            mypy
-
-    Development Environment
-        conda install --yes --file requirements.txt
         
     Deployment
         Add a gulp build step to create the Docker container.
 
     Lambda
-        Window 10 Pro 
-        Docker
-        Install Docker VSCode extension.
 
     Solver
         Where should Solver be deployed?
-            Dispatcher contains logic to find the root folder.
+            Dispatcher relies on Solver being located in the system PATH.
             
         How should Meshes be handled in the UI?
             Combine MeshContainer and MeshTab into MeshTab.
