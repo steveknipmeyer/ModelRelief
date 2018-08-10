@@ -3,12 +3,16 @@
 
 #### Short Term
     Docker
-        How can PYTHONPATH be configured properly?
-        Write a tool to remove dangling images and containers.
-        How can the file system in a container be inspected?
-        Where is Python installed in the container?
+        docker image prune
+        docker container prune
+        Does the path need to include additional mrenv folders?
+            activate .\mrenv
+        Where should Solver/Tools be deployed?
+            Dispatcher relies on Solver being located in the system PATH.
+        In Production wwwwroot/store should not be copied. 
+            The DbInitializer will seed the store on startup.
 
-    Wrap the activte command so a different shell prompt can be substituted.
+    Wrap the activate command so a different shell prompt can be substituted.
    
     Investigate workspaces in VSCode.
         Why is the second workspace unnamed?
@@ -20,10 +24,7 @@
 
     Lambda
 
-    Solver
-        Where should Solver be deployed?
-            Dispatcher relies on Solver being located in the system PATH.
-            
+    Solver           
         How should Meshes be handled in the UI?
             Combine MeshContainer and MeshTab into MeshTab.
                 MeshTab -> MeshWidget?

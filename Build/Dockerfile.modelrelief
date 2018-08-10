@@ -1,0 +1,22 @@
+# Nano Server and Python base image
+FROM modelreliefbase:latest
+LABEL maintainer "steve@knipmeyer.org"
+
+# Set the working directory in the container to /root
+WORKDIR /root
+
+# Copy the current directory contents in to the container
+COPY ModelRelief/wwwroot ModelRelief/wwwroot
+COPY Solver Solver
+COPY Tools Tools
+
+# Make port 80 available to the world outside this container
+EXPOSE 80
+
+# environment
+RUN setx PATH "%PATH%;C:\root\mrenv"
+RUN setx PYTHONPATH "C:\root\Solver;C:\root\Tools"
+# ENV PYTHONPATH "C:\root\Solver;C:\root\Tools"
+
+# Run solver.py when the container launches
+CMD python Solver/solver.py --s Test/Lucy.json --w Test/Working

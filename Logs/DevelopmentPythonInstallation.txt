@@ -10,6 +10,9 @@ pip install qdarkstyle
 pip install pyamg
 conda install matplotlib
 
+conda install pylint
+conda install mypy
+
 ---------------------------------------------------------------------- Package Lists ----------------------------------------------------------------------
 (d:\Github\ModelRelief\devenv) d:\Github\ModelRelief>pip list
 Package           Version
