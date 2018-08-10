@@ -1,12 +1,12 @@
 
 #https://docs.docker.com/engine/reference/builder/#dockerignore-file
 
-#*/ModelRelief/bin*
-#*/ModelRelief/obj*
-#*/ModelRelief/node_modules*
+ModelRelief/bin*
+ModelRelief/obj*
+ModelRelief/node_modules*
 devenv*
 
-#*/ModelRelief.Test*
+ModelRelief.Test*
 
 npm-debug.log
 README.md
