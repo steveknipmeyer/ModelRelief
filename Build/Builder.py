@@ -100,6 +100,10 @@ class Builder:
         Tools.copy_folder(os.path.join(solution, solver_folder), os.path.join(publish, solver_folder))
         Tools.copy_folder(os.path.join(solution, tools_folder), os.path.join(publish, tools_folder))
 
+        # Docker image
+        self.logger.logInformation("\nDocker image", Colors.BrightMagenta)
+        self.exec("docker build -t modelrelief -f Build\DockerFile.modelrelief  .")        
+
         self.logger.logInformation("\n<ModelRelief>", Colors.BrightCyan)
 
 def main():

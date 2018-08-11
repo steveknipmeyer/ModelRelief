@@ -1,7 +1,0 @@
-# Microsoft Windows Nano Server
-FROM microsoft/nanoserver
-LABEL maintainer "steve@knipmeyer.org"
-
-# Set the working directory to /root
-WORKDIR /root
-

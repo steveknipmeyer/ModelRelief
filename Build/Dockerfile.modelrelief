@@ -1,21 +1,26 @@
-# Nano Server and Python base image
-FROM modelreliefbase:latest
+FROM microsoft/aspnetcore:2.0
 LABEL maintainer "steve@knipmeyer.org"
 
 # Set the working directory in the container to /root
 WORKDIR /root
 
-# Copy the current directory contents in to the container
-COPY ModelRelief/wwwroot ModelRelief/wwwroot
-COPY Solver Solver
-COPY Tools Tools
+# Copy the Publish folder
+COPY ModelRelief/Publish .
 
 # Make port 80 available to the world outside this container
 EXPOSE 80
 
-# environment
+# paths
 RUN setx PATH "%PATH%;C:\root\mrenv"
 RUN setx PYTHONPATH "C:\root\Solver;C:\root\Tools"
 
+# runtime settings
+RUN setx MRDatabaseProvider SQLServer
+RUN setx MRForceInitializeAll False
+RUN setx MRInitializeDatabase False
+RUN setx MRInitializeUserStore False
+
 # Run solver.py when the container launches
-# CMD python Solver/solver.py --s Test/Lucy.json --w Test/Working
+#CMD python Solver/solver.py
+
+ENTRYPOINT ["dotnet", "modelrelief.dll"]
