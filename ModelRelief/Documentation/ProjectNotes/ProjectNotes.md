@@ -1,26 +1,57 @@
 ﻿### Tasks
 #### Commit Notes
 
+#### Builds
+    gulp
+        Move gulfile to the root of the solution
+        Move CSS from wwwroot.
+        Move static content (Images) from wwwroot.
+            It should be possible to build beginning with an empty root.
+
+    Build Steps
+        gulp
+            shaders
+            css
+            javascript
+                minification
+            static content
+
+        TypeScript compilation                    
+        BuildPythonEnvironment Production (Release?)
+            mrenv
+        dotnet publish            
+        DockerBuild
+            deployment image
+                modelrelief
+                sqlserverexpress
+
+    Releease Folder Structure
+        out
+            wwwroot
+            <application binaries from 'dotnet publish'>
+            Solver
+                Dispatcher relies on Solver being located in the system PATH.
+            Tools
+
 #### Short Term
     Docker
         docker image prune
         docker container prune
-        Does the path need to include additional mrenv folders?
-            activate .\mrenv
-        Where should Solver/Tools be deployed?
-            Dispatcher relies on Solver being located in the system PATH.
+
+        Review ModelRelief.csproj.
+
+        Python Environments
+            Does the path need to include additional mrenv folders?
+                activate .\mrenv
+            Wrap the activate command so a different shell prompt can be substituted.
+        
         In Production wwwwroot/store should not be copied. 
             The DbInitializer will seed the store on startup.
-
-    Wrap the activate command so a different shell prompt can be substituted.
    
     Investigate workspaces in VSCode.
         Why is the second workspace unnamed?
 
     Should ndimage or scikt-image be used for image processing support?
-        
-    Deployment
-        Add a gulp build step to create the Docker container.
 
     Lambda
 
@@ -387,13 +418,6 @@ Replace DateTime with a type that has more resolution.
 ###### Should FileTimeStamp be exposed?
     Should the assignment of FileSynchronized be deferred until the request has completed?
     FileStamp could potentially serve as the "complete" flag for a long-running request. 
-
-#### Builds
-Chain all the build steps into a single task.
-- gulp
-- TypeScript compilation
-- dotnet build
-
 
 #### Python Tasks
 ###### Virtual Evironment
@@ -1195,10 +1219,8 @@ Therefore, it is imperative not to set MRInitializeUserStore in the shell so tha
 However, MRInitializeUserStore may be set if the application is started through 'dotnet run'.
 
 #### New Computer Setup
-    The Test files are not restored from Git because some (e.g. .obj) are excluded by .gitignore.
     gulp must be installed globally.
         npm install --global gulp-cli
-    Unit tests require running Baseline.py after running ModelRelief.Test to create the initial Test database.
     node must be installed.
 
 #### Authentication and Authorization            
