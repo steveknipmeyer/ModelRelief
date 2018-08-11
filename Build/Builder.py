@@ -13,12 +13,13 @@
 
 """
 import os
+import shutil
 import subprocess
 import sys
 from enum import Enum
 
 from logger import Logger
-from tools import Colors
+from tools import Colors, Tools
 
 class EnvironmentSettings(Enum):
     """
@@ -26,6 +27,7 @@ class EnvironmentSettings(Enum):
     """
     MR = "MR"
     MRSOLUTION = "MRSolution"
+    MRPUBLISH = "MRPublish"
 
 class Builder:
     """
@@ -38,20 +40,65 @@ class Builder:
         """
         self.logger = Logger()
 
+    def exec (self, command_line:str)-> int:
+        """
+        Execute a shell tool.
+        Parameters
+        ----------
+        command_line
+            The command line to execute.
+        """
+        status:subprocess.CompletedProcess = subprocess.run (command_line, shell=True)
+        return status.returncode
+
     def run (self):
         """
         Sequence the build steps.
         """
         self.logger.logInformation("\n<ModelRelief>", Colors.BrightCyan)
 
+        # folders
+        project = os.environ[EnvironmentSettings.MR.value]
+        publish = os.environ[EnvironmentSettings.MRPUBLISH.value]
+        solution = os.environ[EnvironmentSettings.MRSOLUTION.value]
+        solver_folder = "Solver"
+        tools_folder  = "Tools"
+
+        os.chdir(solution)
+
+        # wwwroot
         self.logger.logInformation("\nBuilding wwwroot", Colors.BrightMagenta)
-        subprocess.run ("gulp.cmd", shell=True)
+        self.exec("gulp.cmd")
 
+        # TypeScript
         self.logger.logInformation("\nTypeScript compilation", Colors.BrightMagenta)
-        subprocess.run ("tsc -p ./ModelRelief", shell=True)
+        self.exec("tsc -p {}".format(project))        
 
+        # remove Publish folder
+        if os.path.exists(publish):
+            self.logger.logInformation("\nDelete output folder", Colors.Red)
+            if Tools.confirm("Delete {}?".format(publish)):
+                shutil.rmtree(publish)
+            else:
+                self.logger.logInformation("Exiting", Colors.Red)
+                sys.exit(1)            
+
+        # ASP.NET Core Publish
+        self.logger.logInformation("\nASP.NET Core Publish", Colors.BrightMagenta)
+        os.chdir(project)
+        self.exec("dotnet publish -c Release -o {}".format(publish))        
+
+        # Python virtual environment
         self.logger.logInformation("\nPython virtual environment", Colors.BrightMagenta)
-        subprocess.run ("BuildPythonEnvironment Production", shell=True)
+        os.chdir(publish)
+        self.exec("BuildPythonEnvironment Production")        
+
+        # Python source
+        self.logger.logInformation("\nPython source", Colors.BrightMagenta)
+        os.chdir(publish)
+
+        Tools.copy_folder(os.path.join(solution, solver_folder), os.path.join(publish, solver_folder))
+        Tools.copy_folder(os.path.join(solution, tools_folder), os.path.join(publish, tools_folder))
 
         self.logger.logInformation("\n<ModelRelief>", Colors.BrightCyan)
 
@@ -59,11 +106,6 @@ def main():
     """
         Main entry point.
     """
-    # run from solution root
-    print (EnvironmentSettings.MRSOLUTION.value)
-    root = os.environ[EnvironmentSettings.MRSOLUTION.value]
-    os.chdir(root)
-
     builder = Builder()
     builder.run()
 

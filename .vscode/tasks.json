@@ -20,7 +20,7 @@
         {
             "label": "Compile TypeScript",
             "type": "shell",
-            "command": "tsc -p ./ModelRelief",
+            "command": "tsc --pretty -p ModelRelief",
             "windows": {
                 "command": "tsc -p ModelRelief "
             },

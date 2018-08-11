@@ -2,22 +2,23 @@
 #### Commit Notes
 
 #### Builds
+    JavaScript must be minified.
+    Python bytescodes should be delivered instead of source.
 
     Builder
-        mrenv
-            Test for existence; prompt for replacement.
-            Should the target be wwwroot instead of the solution root?
-
-        dotnet publish            
+        Add command line switches to provide more control over build scope.
+        How should the user store be created?
+               
         DockerBuild
             deployment image
                 modelrelief
                 sqlserverexpress
 
-    Releease Folder Structure
-        out
+    Publish Structure
+        Publish
             wwwroot
             <application binaries from 'dotnet publish'>
+            mrenv
             Solver
                 Dispatcher relies on Solver being located in the system PATH.
             Tools

@@ -10,13 +10,13 @@ goto InvalidArgs
 
 :Development
 set EnvironmentName=devenv
-set RequirementsFile=requirements.development.conda.txt
+set RequirementsFile=%MRSolution%requirements.development.conda.txt
 echo The development environement must be installed manually. See Logs\DevelopmentPythonInstallation.txt.
 goto exit
 
 :Production
 set EnvironmentName=mrenv
-set RequirementsFile=requirements.production.txt
+set RequirementsFile=%MRSolution%requirements.production.txt
 goto BuildEnvironment
 
 :: ------------------ Build ---------------------------::

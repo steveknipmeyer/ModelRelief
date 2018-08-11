@@ -16,7 +16,7 @@
 import os
 import sys
 
-from shutil import copyfile
+from shutil import copyfile, copytree
 
 class Colors:
     """
@@ -122,6 +122,15 @@ class Tools:
         print ("%s -> %s" % (source_file, destination_file))
         copyfile(source_file, destination_file)
 
+    @staticmethod
+    def copy_folder (source_folder, destination_folder):
+        """
+            Copy a single folder. Not recursive.
+        """
+
+        print ("%s -> %s" % (source_folder, destination_folder))
+        copytree(source_folder, destination_folder)
+
     def recurse_folder(self, folder):
         """
             Recurse a folder and process each file.
@@ -136,3 +145,24 @@ class Tools:
                 if file_extension.lower() == ".obj":
                     model_path = os.path.join(root, file)
                     print (model_path)
+
+    @staticmethod
+    def confirm(answer: str)-> bool:
+        """
+        Prompt the user for confirmation.
+        Parameters
+        ----------
+        answer
+            The question for confirmation.
+        """
+        yes = set(['yes', 'ye', 'y'])
+        no  = set(['no','n', ''])
+        
+        while True:
+            choice = input(answer).lower()
+            if choice in yes:
+                return True
+            elif choice in no:
+                return False
+            else:
+                print ("Please respond with 'yes' or 'no'\n")
