@@ -7,7 +7,27 @@
     "url": "https://github.com/steveknipmeyer/ModelRelief.git"
   },
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "ansi-regex": "^2.1.1",
+    "balanced-match": "^1.0.0",
+    "brace-expansion": "^1.1.11",
+    "code-point-at": "^1.1.0",
+    "concat-map": "0.0.1",
+    "console-control-strings": "^1.1.0",
+    "inherits": "^2.0.3",
+    "is-fullwidth-code-point": "^1.0.0",
+    "minimatch": "^3.0.4",
+    "minimist": "0.0.8",
+    "minipass": "^2.2.4",
+    "mkdirp": "^0.5.1",
+    "number-is-nan": "^1.0.1",
+    "once": "^1.4.0",
+    "safe-buffer": "^5.1.1",
+    "string-width": "^1.0.2",
+    "strip-ansi": "^3.0.1",
+    "wrappy": "^1.0.2",
+    "yallist": "^3.0.2"
+  },
   "devDependencies": {
     "@types/chai": "^4.0.2",
     "@types/dat-gui": "^0.6.3",
