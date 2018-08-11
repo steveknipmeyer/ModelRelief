@@ -2,7 +2,7 @@
 #### Commit Notes
 
 #### Builds
-    The <existence> of the Publish folder causes the ASP.NET Core build top fail.
+    The <existence> of the Publish folder under ModelRelief causes the ASP.NET Core build top fail.
         PublishX\mrenv\tcl\tix8.4.3\pref\SGIGray.cs(30,47): error CS1002: ; expected [D:\ModelRelief\ModelRelief\ModelRelief.csproj]
     The modelrelief Docker image starts the server but does not respond to requests.
 

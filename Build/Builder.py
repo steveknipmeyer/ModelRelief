@@ -68,10 +68,12 @@ class Builder:
 
         # wwwroot
         self.logger.logInformation("\nBuilding wwwroot", Colors.BrightMagenta)
+        os.chdir(solution)
         self.exec("gulp.cmd")
 
         # TypeScript
         self.logger.logInformation("\nTypeScript compilation", Colors.BrightMagenta)
+        os.chdir(solution)
         self.exec("tsc -p {}".format(project))        
 
         # remove Publish folder
@@ -96,12 +98,12 @@ class Builder:
         # Python source
         self.logger.logInformation("\nPython source", Colors.BrightMagenta)
         os.chdir(publish)
-
         Tools.copy_folder(os.path.join(solution, solver_folder), os.path.join(publish, solver_folder))
         Tools.copy_folder(os.path.join(solution, tools_folder), os.path.join(publish, tools_folder))
 
         # Docker image
         self.logger.logInformation("\nDocker image", Colors.BrightMagenta)
+        os.chdir(solution)
         self.exec("docker build -t modelrelief -f Build\DockerFile.modelrelief  .")        
 
         self.logger.logInformation("\n<ModelRelief>", Colors.BrightCyan)

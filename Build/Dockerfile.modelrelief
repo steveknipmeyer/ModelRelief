@@ -5,7 +5,7 @@ LABEL maintainer "steve@knipmeyer.org"
 WORKDIR /root
 
 # Copy the Publish folder
-COPY ModelRelief/Publish .
+COPY Publish .
 
 # Make port 80 available to the world outside this container
 EXPOSE 80

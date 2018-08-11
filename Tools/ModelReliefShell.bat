@@ -6,7 +6,7 @@ echo %~dp0
 cd/D %~dp0\..
 set MRSolution=%cd%\
 set MR=%MRSolution%ModelRelief\
-set MRPublish=%MR%Publish\
+set MRPublish=%MRSolution%Publish\
 echo MRSolution=%MRSolution%
 
 :: ModelRelief Settings
