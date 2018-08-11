@@ -3,7 +3,6 @@
 
 #### Builds
     gulp
-        Move gulfile to the root of the solution
         Move CSS from wwwroot.
         Move static content (Images) from wwwroot.
             It should be possible to build beginning with an empty root.
@@ -34,6 +33,8 @@
             Tools
 
 #### Short Term
+    Update the Test Mesh models.
+
     Docker
         docker image prune
         docker container prune

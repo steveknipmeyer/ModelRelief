@@ -9,7 +9,7 @@ function worker () {
     return new Promise((resolve, reject) => {
         
         resolve(1);
-    })
+    });
 }
 
 async function harness() {
@@ -20,14 +20,14 @@ async function harness() {
         console.log(`result = ${result}`);
     
         resolve(result + 1);
-    })
+    });
 }
 
 // The method harness() cannot be called using await because the context of the calling method is not an async method.
 // So, it is necessary to use Promise.then() to obtain the resolved result of the call.
 let result = harness().then(v => {
     console.log(`harness = ${v}`);
-})
+});
 
 
 function sleep(ms) {
@@ -49,5 +49,5 @@ console.log (`demoResult = ${demoResult}'`);
 // The result of demo() is known after waiting for the Promise to settle.
 demoResult.then(v => {
     console.log(`harness = ${v}`);
-})
+});
 

@@ -182,7 +182,5 @@ mrenv
 devenv
 
 ModelRelief/Database/*.db
-*/wwwroot/js/
-*/wwwroot/lib/**/*
-*/wwwroot/store/
+#wwwroot
 .mypy_cache

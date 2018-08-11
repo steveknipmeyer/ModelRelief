@@ -74,7 +74,7 @@ export class DepthBufferViewer  {
         // https://www.w3schools.com/colors/colors_names.asp
         let messageStyle = 'color:fuchsia'
 
-        let deviceCoordinates : THREE.Vector2 = Graphics.deviceCoordinatesFromJQEvent(event, $(event.target));
+        let deviceCoordinates : THREE.Vector2 = Graphics.deviceCoordinatesFromJQEvent(event, <JQuery>$(event.target));
         this._logger.addMessage(`Device = ${deviceCoordinates.x}, ${deviceCoordinates.y}`, messageStyle);
         
         let decimalPlaces   : number = 2;

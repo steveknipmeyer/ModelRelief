@@ -32,8 +32,10 @@ var runSequence  = require('run-sequence');
 var sourceConfig = new function() {
  
     this.sourceRoot     = './ModelRelief/';                
-    this.scriptsRoot    = this.sourceRoot + 'Scripts/';
-      
+
+    this.cssRoot        = this.sourceRoot + 'CSS/';
+    this.imagesRoot     = this.sourceRoot + 'Delivery/Images/';
+    this.scriptsRoot    = this.sourceRoot + 'Scripts/';    
     this.shaders        = this.scriptsRoot + 'Shaders/';
  }();
 
@@ -43,6 +45,7 @@ var siteConfig = new function() {
     this.nodeModulesRoot = './node_modules/';                      
 
     this.cssRoot         = this.wwwRoot + 'css/';
+    this.imagesRoot      = this.wwwRoot + 'images/';
     this.jsRoot          = this.wwwRoot + 'js/';
     this.libRoot         = this.wwwRoot + 'lib/';
  }();
@@ -231,6 +234,42 @@ function generateShaders() {
 //-----------------------------------------------------------------------------
 //  Build Tasks
 //-----------------------------------------------------------------------------
+/// <summary>
+/// Create the output structure for wwwroot.
+/// </summary>
+gulp.task('createWWWRoot', function () {
+    createDirectory(siteConfig.wwwRoot);   
+});
+
+/// <summary>
+/// Populate wwwroot with CSS content
+/// </summary>
+gulp.task('buildCSS', function () {
+
+    // FOLDERS
+
+    // CSS
+    let sourceFolder      = sourceConfig.cssRoot;
+    let destinationFolder = siteConfig.cssRoot;
+    gulp.src([sourceFolder + '**/*']).pipe(gulp.dest(destinationFolder ));
+
+    // FILES
+});
+
+/// <summary>
+/// Populate wwwroot with static content
+/// </summary>
+gulp.task('buildStaticContent', function () {
+
+    // FOLDERS
+
+    // Images
+    let sourceFolder      = sourceConfig.imagesRoot;
+    let destinationFolder = siteConfig.imagesRoot;
+    gulp.src([sourceFolder + '**/*']).pipe(gulp.dest(destinationFolder ));
+
+    // FILES
+});
 
 /// <summary>
 /// Populate wwwroot with NPM content
@@ -364,7 +403,7 @@ gulp.task('test', function () {
 /// Default build task
 /// </summary> 
 gulp.task('default', function () {
-  runSequence('copyNPM', 'buildShaders');
+  runSequence('createWWWRoot', 'copyNPM', 'buildCSS', 'buildShaders', 'buildStaticContent');
 });
 
 //-----------------------------------------------------------------------------
