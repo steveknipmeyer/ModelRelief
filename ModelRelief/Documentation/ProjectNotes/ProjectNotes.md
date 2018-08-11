@@ -2,22 +2,12 @@
 #### Commit Notes
 
 #### Builds
-    gulp
-        Move CSS from wwwroot.
-        Move static content (Images) from wwwroot.
-            It should be possible to build beginning with an empty root.
 
-    Build Steps
-        gulp
-            shaders
-            css
-            javascript
-                minification
-            static content
+    Builder
+        mrenv
+            Test for existence; prompt for replacement.
+            Should the target be wwwroot instead of the solution root?
 
-        TypeScript compilation                    
-        BuildPythonEnvironment Production (Release?)
-            mrenv
         dotnet publish            
         DockerBuild
             deployment image

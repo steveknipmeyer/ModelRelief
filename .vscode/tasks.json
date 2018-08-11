@@ -8,7 +8,7 @@
             "type": "shell",
             "command": "gulp default",
             "options": {
-                "cwd": "${workspaceFolder}/ModelRelief"
+                "cwd": "${workspaceFolder}"
             },
             "group": "build",
             "presentation": {
@@ -25,7 +25,7 @@
                 "command": "tsc -p ModelRelief "
             },
             "linux": {
-                "command": "./ModelRelief/node_modules/typescript/bin/tsc -p ./ModelRelief "
+                "command": "${workspaceFolder}/node_modules/typescript/bin/tsc -p ./ModelRelief "
             },
             "group": "build",
             "presentation": {
@@ -48,7 +48,6 @@
             },
             "problemMatcher": "$msCompile"
         },
-
 
         {
             "label": "gulp serve",
@@ -80,7 +79,7 @@
             "problemMatcher": [
                 "$msCompile"
             ]
-        },
+        }, 
         {
             "label": "dotnet ProcessID",
             "type": "shell",
