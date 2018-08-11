@@ -165,7 +165,7 @@ temp/
 __pycache__
 
 #################
-## JSDoc
+# ASP.NET Core Publish
 #################
 out/
 

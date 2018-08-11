@@ -16,7 +16,6 @@ EXPOSE 80
 # environment
 RUN setx PATH "%PATH%;C:\root\mrenv"
 RUN setx PYTHONPATH "C:\root\Solver;C:\root\Tools"
-# ENV PYTHONPATH "C:\root\Solver;C:\root\Tools"
 
 # Run solver.py when the container launches
-CMD python Solver/solver.py --s Test/Lucy.json --w Test/Working
+# CMD python Solver/solver.py --s Test/Lucy.json --w Test/Working

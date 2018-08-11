@@ -28,7 +28,7 @@ set MRInitializeDatabase=False
 set MRInitializeUserStore=False
 
 path=%path%;%CD:~0,2%%HOMEPATH%\Documents\Bin
-path=%path%;%MRSolution%Tools
+path=%path%;%MRSolution%Tools;;%MRSolution%Build
 path=%path%;C:\Program Files\Git
 path=%path%;C:\Program Files (x86)\WinMerge
 path=%path%;C:\Program Files\KDeiff3
