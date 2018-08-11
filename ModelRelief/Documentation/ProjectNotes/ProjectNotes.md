@@ -54,7 +54,10 @@
     Should ndimage or scikt-image be used for image processing support?
 
     Lambda
-
+        https://nodejs.org/en/
+        npm install npm@latest -g
+        npm init?
+        
     Solver           
         How should Meshes be handled in the UI?
             Combine MeshContainer and MeshTab into MeshTab.

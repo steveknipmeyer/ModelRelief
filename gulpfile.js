@@ -31,7 +31,7 @@ var runSequence  = require('run-sequence');
 
 var sourceConfig = new function() {
  
-    this.sourceRoot     = './';                
+    this.sourceRoot     = './ModelRelief/';                
     this.scriptsRoot    = this.sourceRoot + 'Scripts/';
       
     this.shaders        = this.scriptsRoot + 'Shaders/';
@@ -39,7 +39,7 @@ var sourceConfig = new function() {
 
 var siteConfig = new function() {
  
-    this.wwwRoot         = './wwwroot/';                      
+    this.wwwRoot         = sourceConfig.sourceRoot + './wwwroot/';                      
     this.nodeModulesRoot = './node_modules/';                      
 
     this.cssRoot         = this.wwwRoot + 'css/';
@@ -56,7 +56,7 @@ var onError = function (err) {
     gutil.log(gutil.colors.red(err));
 };
 
-var tsProject = ts.createProject('tsconfig.json');
+var tsProject = ts.createProject(sourceConfig.sourceRoot + 'tsconfig.json');
 
 //-----------------------------------------------------------------------------
 //  Utilities
