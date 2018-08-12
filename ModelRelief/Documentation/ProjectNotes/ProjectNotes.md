@@ -34,11 +34,8 @@
 
         Python Environments
             Does the path need to include additional mrenv folders?
-                activate .\mrenv
+                activate .\mrenv?
             Wrap the activate command so a different shell prompt can be substituted.
-        
-        In Production wwwwroot/store should not be copied. 
-            The DbInitializer will seed the store on startup.
    
     Investigate workspaces in VSCode.
         Why is the second workspace unnamed?
