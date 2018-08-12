@@ -18,7 +18,6 @@ namespace ModelRelief.Test
         public const string Environment = "Test";
         public const string Scheme = "http";
         public const string Host   = "localhost";
-        public const int Port      = 60655;
 
         public const string ContentRootFolder = "ModelRelief";
         public const string TestFilesFolder   = "Test/Data/Files";

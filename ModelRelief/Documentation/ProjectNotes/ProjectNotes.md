@@ -2,18 +2,18 @@
 #### Commit Notes
 
 #### Builds
-    The <existence> of the Publish folder under ModelRelief causes the ASP.NET Core build top fail.
-        PublishX\mrenv\tcl\tix8.4.3\pref\SGIGray.cs(30,47): error CS1002: ; expected [D:\ModelRelief\ModelRelief\ModelRelief.csproj]
     The modelrelief Docker image starts the server but does not respond to requests.
 
     JavaScript must be minified.
     Python bytescodes should be delivered instead of source.
+        This is probably not necessary since Solver is never exposed to the user. It's stricyly on the backend.
 
     Builder
-        Add command line switches to provide more control over build scope.
         How should the user store be created?
-               
+            ForceInitializeAll will peform initialization and then exit.
+
         DockerBuild
+            Employ a Composer settings file for configuration and orchestration.
             modelrelief
             sqlserverexpress
 

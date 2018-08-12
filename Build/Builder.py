@@ -12,6 +12,7 @@
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 
 """
+import argparse
 import os
 import shutil
 import subprocess
@@ -28,17 +29,19 @@ class EnvironmentSettings(Enum):
     MR = "MR"
     MRSOLUTION = "MRSolution"
     MRPUBLISH = "MRPublish"
+    MRPORT = "MRPort"
 
 class Builder:
     """
     Builds the ModelRelief application.
     """
 
-    def __init__(self):
+    def __init__(self, arguments):
         """
         Performs initialization.
         """
         self.logger = Logger()
+        self.arguments = arguments
 
     def exec (self, command_line:str)-> int:
         """
@@ -51,6 +54,31 @@ class Builder:
         status:subprocess.CompletedProcess = subprocess.run (command_line, shell=True)
         return status.returncode
 
+    def delete_folder (self, folder: str)->None:
+        """
+        Deletes a build folder after prompting for confirmation.
+        """
+        if os.path.exists(folder):
+            self.logger.logInformation(f"\nDelete {folder}", Colors.Red)
+            if Tools.confirm(f"Delete {folder}?"):
+                shutil.rmtree(folder)
+            else:
+                self.logger.logInformation("Exiting", Colors.Red)
+                sys.exit(1)            
+
+    def initialize (self, wwwroot: str, publish: str)->None :
+        """
+        Perform initialization including removing build targets.
+        Parameters
+        ----------
+        wwwroot
+            wwwroot output folder
+        publish
+            publish output folder
+        """
+        self.delete_folder(wwwroot)
+        self.delete_folder(publish)
+
     def run (self):
         """
         Sequence the build steps.
@@ -59,12 +87,15 @@ class Builder:
 
         # folders
         project = os.environ[EnvironmentSettings.MR.value]
-        publish = os.environ[EnvironmentSettings.MRPUBLISH.value]
         solution = os.environ[EnvironmentSettings.MRSOLUTION.value]
+        wwwroot = os.path.join(project, 'wwwroot')
+        publish = os.environ[EnvironmentSettings.MRPUBLISH.value]
         solver_folder = "Solver"
-        tools_folder  = "Tools"
+        tools_folder = "Tools"
+        test_folder = "Test"
 
         os.chdir(solution)
+        self.initialize(wwwroot, publish)
 
         # wwwroot
         self.logger.logInformation("\nBuilding wwwroot", Colors.BrightMagenta)
@@ -76,35 +107,34 @@ class Builder:
         os.chdir(solution)
         self.exec("tsc -p {}".format(project))        
 
-        # remove Publish folder
-        if os.path.exists(publish):
-            self.logger.logInformation("\nDelete output folder", Colors.Red)
-            if Tools.confirm("Delete {}?".format(publish)):
-                shutil.rmtree(publish)
-            else:
-                self.logger.logInformation("Exiting", Colors.Red)
-                sys.exit(1)            
-
         # ASP.NET Core Publish
         self.logger.logInformation("\nASP.NET Core Publish", Colors.BrightMagenta)
         os.chdir(project)
         self.exec("dotnet publish -c Release -o {}".format(publish))        
 
         # Python virtual environment
-        self.logger.logInformation("\nPython virtual environment", Colors.BrightMagenta)
-        os.chdir(publish)
-        self.exec("BuildPythonEnvironment Production")        
+        if self.arguments.python:
+            self.logger.logInformation("\nPython virtual environment", Colors.BrightMagenta)
+            os.chdir(publish)
+            self.exec("BuildPythonEnvironment Production")        
 
         # Python source
         self.logger.logInformation("\nPython source", Colors.BrightMagenta)
-        os.chdir(publish)
+        os.chdir(solution)
         Tools.copy_folder(os.path.join(solution, solver_folder), os.path.join(publish, solver_folder))
         Tools.copy_folder(os.path.join(solution, tools_folder), os.path.join(publish, tools_folder))
 
+        # test models
+        self.logger.logInformation("\nTest models", Colors.BrightMagenta)
+        os.chdir(project)
+        Tools.copy_folder(os.path.join(project, test_folder), os.path.join(publish, test_folder))
+
         # Docker image
-        self.logger.logInformation("\nDocker image", Colors.BrightMagenta)
-        os.chdir(solution)
-        self.exec("docker build -t modelrelief -f Build\DockerFile.modelrelief  .")        
+        if self.arguments.docker:
+            self.logger.logInformation("\nDocker image", Colors.BrightMagenta)
+            os.chdir(solution)
+            port = os.environ[EnvironmentSettings.MRPORT.value]
+            self.exec(f"docker build -t modelrelief --build-arg MRPORT={port} -f Build\\DockerFile.modelrelief  .")        
 
         self.logger.logInformation("\n<ModelRelief>", Colors.BrightCyan)
 
@@ -112,7 +142,14 @@ def main():
     """
         Main entry point.
     """
-    builder = Builder()
+    options_parser = argparse.ArgumentParser()
+    options_parser.add_argument('--docker', '-d',
+                                help='Build the Docker image.', required=False, default=True)
+    options_parser.add_argument('--python', '-p',
+                                help='Build the Python virtual environment.', required=False, default=True)
+    arguments = options_parser.parse_args()
+
+    builder = Builder(arguments)
     builder.run()
 
 if __name__ == "__main__":

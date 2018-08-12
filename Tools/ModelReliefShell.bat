@@ -4,6 +4,8 @@ title ModelRelief Shell
 :: move up from Tools folder to solution root
 echo %~dp0
 cd/D %~dp0\..
+
+:: ModelRelief Folder Locations
 set MRSolution=%cd%\
 set MR=%MRSolution%ModelRelief\
 set MRPublish=%MRSolution%Publish\
@@ -23,6 +25,7 @@ echo MRSolution=%MRSolution%
 
 :: N.B. These environment settings are the <only> settings used by XUnit (Visual Studio or 'dotnet test') 
 ::       because ModelRelief.Test does <not> have an appsettings.json or Properties/launchSettings.json.
+set MRPort=60655
 set MRDatabaseProvider=SQLServer
 set MRForceInitializeAll=False
 set MRInitializeDatabase=False
@@ -46,7 +49,7 @@ set MYPYPATH=%MRSolution%\Tools\
 :: Anaconda
 call SetAnacondaPath
 
-:: Active the ModelRelied Python environment.
+:: Active the ModelRelief Python environment.
 call activate ./devenv
 ::call activate ./mrvenv
 
@@ -66,8 +69,8 @@ set ASPNETCORE_ENVIRONMENT=Test
 ::  VSCode                    : launch.json
 :: https://stackoverflow.com/questions/46336341/configure-asp-net-core-2-0-kestrel-for-https
 :: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel?tabs=aspnetcore2x#useurls-limitations
-:: set ASPNETCORE_URLS=https://*:60655
-set ASPNETCORE_URLS=http://localhost:60655/
+:: set ASPNETCORE_URLS=https://*:%MRPort%
+set ASPNETCORE_URLS=http://localhost:%MRPort%/
 
 echo --- Environment ---
 echo MR=%MR%

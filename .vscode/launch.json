@@ -89,7 +89,8 @@
             "request": "launch",
             "stopOnEntry": false,
             "console": "integratedTerminal",
-            "program": "${workspaceRoot}/Solver/workbench.py",
+            "program": "${workspaceRoot}/Build/builder.py",
+        //  "program": "${workspaceRoot}/Solver/workbench.py",
         //  "program": "${workspaceRoot}/Solver/solver.py",
         //  "program": "${workspaceRoot}/Tools/testrunner.py",
         //  "program": "${workspaceRoot}/Solver/Experiments/workbench.py",
@@ -102,8 +103,9 @@
             "env": {
                 "name": "value"
             },
-            "args":["--s", "Test/House.json", "--w", "Test/Working"]
-        //  "args":[]
+        //  "args":["--python", "True", "--docker", "True"]
+        //  "args":["--s", "Test/House.json", "--w", "Test/Working"]
+            "args":[]
         },
         {
             "name": "Python (Active File)",

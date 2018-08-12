@@ -130,7 +130,7 @@ namespace ModelRelief.Database
         /// <returns>True if successful.</returns>
         private bool StopSQLServer()
         {
-            Logger.LogWarning("Shutting down SQLServer to copy database to ModelReliefBaseline...");
+            Logger.LogWarning("Shutting down SQLServer to copy database ...");
             var result = DbContext.Database.ExecuteSqlCommand("SHUTDOWN");
             Logger.LogWarning($"SQLServer shutdown complete.");
 

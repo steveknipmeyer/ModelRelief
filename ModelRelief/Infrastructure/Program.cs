@@ -69,7 +69,7 @@ namespace ModelRelief.Infrastructure
                         .ReadFrom.Configuration(configuration)
                         // suppress all Microsoft messages unless they are >- Error
                         // https://github.com/serilog/serilog-extensions-logging/issues/78
-                        .MinimumLevel.Override("Microsoft", LogEventLevel.Error)
+                        // .MinimumLevel.Override("Microsoft", LogEventLevel.Error)
                         .CreateLogger();
         }
 
@@ -97,6 +97,7 @@ namespace ModelRelief.Infrastructure
                                      })
                                      .UseStartup<Startup>()
                                      .UseSerilog()
+                                     .UseUrls($"http://+:{Environment.GetEnvironmentVariable(ConfigurationSettings.MRPort)}")
                                      .Build();
 
                 return webHost;

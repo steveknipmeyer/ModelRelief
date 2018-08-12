@@ -104,6 +104,7 @@ namespace ModelRelief.Services
     public class ConfigurationSettings
     {
         // configuration settings
+        public const string MRPort                = "MRPort";
         public const string MRForceInitializeAll  = "MRForceInitializeAll";
         public const string MRDatabaseProvider    = "MRDatabaseProvider";
         public const string MRInitializeDatabase  = "MRInitializeDatabase";
