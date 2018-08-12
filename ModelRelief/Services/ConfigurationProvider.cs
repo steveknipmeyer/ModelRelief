@@ -36,6 +36,7 @@ namespace ModelRelief.Services
         /// </summary>
         public void LogConfigurationSettings()
         {
+            Logger.LogInformation($"{ConfigurationSettings.MRPort} = {GetSetting(ConfigurationSettings.MRPort)}");
             Logger.LogInformation($"{ConfigurationSettings.MRDatabaseProvider} = {GetSetting(ConfigurationSettings.MRDatabaseProvider)}");
             Logger.LogInformation($"{ConfigurationSettings.MRForceInitializeAll} = {GetSetting(ConfigurationSettings.MRForceInitializeAll)}");
             Logger.LogInformation($"{ConfigurationSettings.MRInitializeDatabase} = {GetSetting(ConfigurationSettings.MRInitializeDatabase)}");

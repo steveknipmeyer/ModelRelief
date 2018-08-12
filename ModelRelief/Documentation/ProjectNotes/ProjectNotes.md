@@ -9,9 +9,6 @@
         This is probably not necessary since Solver is never exposed to the user. It's stricyly on the backend.
 
     Builder
-        How should the user store be created?
-            ForceInitializeAll will peform initialization and then exit.
-
         DockerBuild
             Employ a Composer settings file for configuration and orchestration.
             modelrelief
@@ -1294,3 +1291,12 @@ https://semver.npmjs.com/
     N.B. GeneratedFile models held in memory (e.g. DepthBuffer in ComposerController) do not have the FileIsSynchronized property updated (invalidated) after a dependency (e.g. Camera) has been modified.
         Therefore, the ComposerView instances of DepthBuffer, Mesh do not accurately reflect the state of FileIsSynchronized in the database.
         So, ComposerController explicitly sets FileIsSynchronized before a GeneratedFileModel update (PUT) to express the intent.
+
+#### Docker
+    docker image prune
+    docker container prune
+    docker run -d --entrypoint "cmd" -p 8080:60655 modelrelief
+    docker run -it -p 8080:60655 modelrelief
+    docker run -d -p 8080:60655 modelrelief
+    docker run -d -e "ASPNETCORE_ENVIRONMENT=Production" -p 8080:60655 modelrelief
+    docker exec <container> netstat -a

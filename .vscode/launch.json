@@ -64,7 +64,7 @@
                 "ASPNETCORE_ENVIRONMENT": "Test",
                 "MRDatabaseProvider": "SQLServer",
 //              "MRDatabaseProvider": "SQLite",
-                "MRForceInitializeALl":"False",
+                "MRForceInitializeAll":"False",
                 "MRInitializeDatabase":"True",
                 "MRInitializeUserStore":"True",
             },

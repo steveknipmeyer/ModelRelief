@@ -30,6 +30,7 @@ class EnvironmentSettings(Enum):
     MRSOLUTION = "MRSolution"
     MRPUBLISH = "MRPublish"
     MRPORT = "MRPort"
+    ASPNETCORE_ENVIRONMENT = "ASPNETCORE_ENVIRONMENT"
 
 class Builder:
     """
@@ -107,6 +108,17 @@ class Builder:
         os.chdir(solution)
         self.exec("tsc -p {}".format(project))        
 
+        # database initialization and user store
+        if self.arguments.initialize:
+            self.logger.logInformation("\nInitialize database and user store", Colors.BrightMagenta)
+            os.chdir(project)
+            # N.B. ASPNETCORE_ENVIRONMENT cannot be overridden as a 'dotnet run' command line argument.
+            # So, override (and restore) the current settings.
+            environment = os.environ[EnvironmentSettings.ASPNETCORE_ENVIRONMENT.value]
+            os.environ[EnvironmentSettings.ASPNETCORE_ENVIRONMENT.value] = "Production"
+            self.exec("dotnet run --no-launch-profile  --MRForceInitializeAll=True")        
+            os.environ[EnvironmentSettings.ASPNETCORE_ENVIRONMENT.value] = environment
+
         # ASP.NET Core Publish
         self.logger.logInformation("\nASP.NET Core Publish", Colors.BrightMagenta)
         os.chdir(project)
@@ -147,6 +159,8 @@ def main():
                                 help='Build the Docker image.', required=False, default=True)
     options_parser.add_argument('--python', '-p',
                                 help='Build the Python virtual environment.', required=False, default=True)
+    options_parser.add_argument('--initialize', '-i',
+                                help='Initialize the database and the user store.', required=False, default=True)
     arguments = options_parser.parse_args()
 
     builder = Builder(arguments)

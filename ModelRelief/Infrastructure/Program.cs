@@ -69,7 +69,7 @@ namespace ModelRelief.Infrastructure
                         .ReadFrom.Configuration(configuration)
                         // suppress all Microsoft messages unless they are >- Error
                         // https://github.com/serilog/serilog-extensions-logging/issues/78
-                        // .MinimumLevel.Override("Microsoft", LogEventLevel.Error)
+                        .MinimumLevel.Override("Microsoft", LogEventLevel.Error)
                         .CreateLogger();
         }
 
@@ -89,6 +89,7 @@ namespace ModelRelief.Infrastructure
                                          // WIP: Implement secret store for Production environments. Azure?
                                          // https://joonasw.net/view/aspnet-core-2-configuration-changes
                                          var env = builderContext.HostingEnvironment;
+                                         Log.Information($"Runtime environment (ASPNETCORE_ENVIRONMENT) = {env.EnvironmentName}");
                                          var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
                                          if (appAssembly != null)
                                          {
