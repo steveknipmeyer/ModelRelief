@@ -2,17 +2,48 @@
 #### Commit Notes
 
 #### Builds
-    The modelrelief Docker image starts the server but does not respond to requests.
+    Review ModelRelief.csproj.
 
     JavaScript must be minified.
     Python bytescodes should be delivered instead of source.
         This is probably not necessary since Solver is never exposed to the user. It's stricyly on the backend.
 
     Builder
+        Study references.
+            SQLServer Management Studio
+            https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-2017
+            Official Microsoft SQL Server Express Edition images for Windows Containers
+            https://hub.docker.com/r/microsoft/mssql-server-windows-express/
+            SQL Server 2016 Express Edition in Windows containers
+            https://cloudblogs.microsoft.com/sqlserver/2016/10/13/sql-server-2016-express-edition-in-windows-containers/
+
+            https://docs.docker.com/compose/aspnet-mssql-compose/
+            docker/labs GitHub examples
+
+            docker run -d -p 1433:1433 -e sa_password=<> -e ACCEPT_EULA=Y microsoft/mssql-server-windows-express
+            docker inspect
+
+                [05:20:17 ERR] An error occurred using the connection to database 'MR' on server '172.22.13.138'.
+                System.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server) ---> System.ComponentModel.Win32Exception (0x80004005): The network path was not found
+                at System.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, Object providerInfo, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling)
+                at System.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+                at System.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+                at System.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+                at System.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+                at System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+                at System.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()
+                --- End of stack trace from previous location where exception was thrown ---
+                at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+                at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+                at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.<OpenAsync>d__34.MoveNext()
+                ClientConnectionId:00000000-0000-0000-0000-000000000000
+                Error Number:53,State:0,Class:20
+                [05:20:17 ERR] An exception occurred in the database while iterating the results of a query for context type 'ModelRelief.Database.ModelReliefDbContext'.      
+                          
         DockerBuild
             Employ a Composer settings file for configuration and orchestration.
-            modelrelief
-            sqlserverexpress
+                modelrelief
+                sqlserverexpress
 
     Publish Structure
         Publish
@@ -27,11 +58,6 @@
     Update the Test Mesh models.
 
     Docker
-        docker image prune
-        docker container prune
-
-        Review ModelRelief.csproj.
-
         Python Environments
             Does the path need to include additional mrenv folders?
                 activate .\mrenv?
@@ -43,10 +69,9 @@
     Should ndimage or scikt-image be used for image processing support?
 
     Lambda
-        https://nodejs.org/en/
-        npm install npm@latest -g
-        npm init?
-        
+        Upgrade SQL Server Management Studio
+            Enable Dark theme.
+
     Solver           
         How should Meshes be handled in the UI?
             Combine MeshContainer and MeshTab into MeshTab.
