@@ -12,16 +12,21 @@
         Study references.
             SQLServer Management Studio
             https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-2017
+
             Official Microsoft SQL Server Express Edition images for Windows Containers
             https://hub.docker.com/r/microsoft/mssql-server-windows-express/
+
             SQL Server 2016 Express Edition in Windows containers
             https://cloudblogs.microsoft.com/sqlserver/2016/10/13/sql-server-2016-express-edition-in-windows-containers/
 
+            Quickstart: Compose and ASP.NET Core with SQL Server
             https://docs.docker.com/compose/aspnet-mssql-compose/
             docker/labs GitHub examples
 
-            docker run -d -p 1433:1433 -e sa_password=<> -e ACCEPT_EULA=Y microsoft/mssql-server-windows-express
-            docker inspect
+            docker run -d --name mrsql -p 1433:1433 -e sa_password=<> -e ACCEPT_EULA=Y microsoft/mssql-server-windows-express
+            docker inspect mrsql
+
+            docker-compose up
 
                 [05:20:17 ERR] An error occurred using the connection to database 'MR' on server '172.22.13.138'.
                 System.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server) ---> System.ComponentModel.Win32Exception (0x80004005): The network path was not found
@@ -69,8 +74,6 @@
     Should ndimage or scikt-image be used for image processing support?
 
     Lambda
-        Upgrade SQL Server Management Studio
-            Enable Dark theme.
 
     Solver           
         How should Meshes be handled in the UI?

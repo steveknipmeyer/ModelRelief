@@ -19,8 +19,8 @@ RUN setx PYTHONPATH "C:\root\Solver;C:\root\Tools"
 ENV MRPort=$MRPORT
 ENV MRDatabaseProvider=SQLServer
 ENV MRForceInitializeAll=False
-ENV MRInitializeDatabase=False
-ENV MRInitializeUserStore=False
+ENV MRInitializeDatabase=True
+ENV MRInitializeUserStore=True
 
 # ASP.NET Core runtime settings
 ENV ASPNETCORE_URLS=http://localhost:$MRPORT/

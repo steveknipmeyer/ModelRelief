@@ -268,12 +268,12 @@ namespace ModelRelief.Database
 
             if (!ForceInitializeAll)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Delete the user store folder: {storeUsersPath} (Y/N)?");
-                Console.ForegroundColor = ConsoleColor.White;
-                var response = Console.ReadLine();
-                if (!string.Equals(response.ToUpper(), "Y"))
-                    return;
+                // Console.ForegroundColor = ConsoleColor.Red;
+                // Console.WriteLine($"Delete the user store folder: {storeUsersPath} (Y/N)?");
+                // Console.ForegroundColor = ConsoleColor.White;
+                // var response = Console.ReadLine();
+                // if (!string.Equals(response.ToUpper(), "Y"))
+                //     return;
             }
 
             Files.DeleteFolder(storeUsersPath, true);

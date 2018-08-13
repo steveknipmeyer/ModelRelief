@@ -1,0 +1,18 @@
+version: "3"
+services:
+    # web front end
+    mr-service:
+        container_name: mr-service
+        image: modelrelief
+        ports:
+            - "8080:60655"
+        depends_on:
+            - mr-database-service
+
+    # database
+    mr-database-service:    # SQLServer server name            
+        container_name: mr-database-service
+        image: "microsoft/mssql-server-windows-express"
+        environment:
+            SA_PASSWORD: "<>"
+            ACCEPT_EULA: "Y"
