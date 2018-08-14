@@ -30,9 +30,10 @@ echo MRSolution=%MRSolution%
 ::       Disable with 'dotnet run --no-launch-profile'.
 set MRPort=60655
 set MRDatabaseProvider=SQLServer
-set MRForceInitializeAll=False
-set MRInitializeDatabase=False
+set MRExitAfterInitialization=False
 set MRInitializeUserStore=False
+set MRInitializeDatabase=False
+set MRSeedDatabase=False
 
 path=%path%;%CD:~0,2%%HOMEPATH%\Documents\Bin
 path=%path%;%MRSolution%Tools;;%MRSolution%Build
@@ -82,9 +83,10 @@ echo(
 echo ASPNETCORE_ENVIRONMENT=%ASPNETCORE_ENVIRONMENT%
 echo MRDatabaseProvider=%MRDatabaseProvider%
 echo(
-echo MRForceInitializeAll=%MRForceInitializeAll%
-echo MRInitializeDatabase=%MRInitializeDatabase%
+echo MRExitAfterInitialization=%MRExitAfterInitialization%
 echo MRInitializeUserStore=%MRInitializeUserStore%
+echo MRInitializeDatabase=%MRInitializeDatabase%
+echo MRSeedDatabase=%MRSeedDatabase%
 echo(
 
 cd /D %MRSolution%

@@ -1,7 +1,17 @@
 ﻿### Tasks
 #### Commit Notes
+Move the save and restore environment logic to Tools.
+MRExitAfterInitialization
+MRSeedDatabase
+MRSeedUserStore
 
 #### Builds
+    Builder
+        Is the "initialize" command line argument necessary?
+        Is there a need for a "docker" context?
+
+    Test Environment push/pop.
+
     Review ModelRelief.csproj.
 
     JavaScript must be minified.
@@ -10,13 +20,10 @@
 
     The web footer should remove the Login/Register buttons when the active page is Login/Register.
         They are used for navigation not submitting the form.
-
-    +MRSeedDatabase
-    MRInitializeUserStore -> MRSeedUserStore
-    MRForceInitializeAll -> ? MRExitAfterInitialization
-
-    Move the save and restore environment logic to Tools.
+    Change the style of the Login/Register page to match the CSS of the Create/Edit pages.
+    
     How are credentials handled in a ConnectionString in Production?
+
     Docker       
         Investiate data volumes.
             Is the correct way to persist data across container sessions?
@@ -25,9 +32,6 @@
         Should a test database be delivered? This is an alternative to initializing the database on startup. The user credentials would not need to be stored.
         Why is the response time so slow?
             Can additional resources be allocated?
-
-        A delay (sleep) is required in DbInitializer to allow the database service to start.
-            https://stackoverflow.com/questions/2440060/whats-the-best-way-to-test-sql-server-connection-programmatically
 
         Review the mock test user logic. Is this the reason for the identity token failure?
 

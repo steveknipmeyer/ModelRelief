@@ -35,23 +35,17 @@ class BaseLine:
             Database provider.
         """
         self.logger = logger
-        self._database = database
+        self.database = database
+        self.environment = Environment()
         return
-
-    @property
-    def database(self):
-        """
-        Gets the type of the active database.
-        """
-        return self._database
 
     def show_folder_locations (self):
         """
-            Displays the resolved values of key folders.
+        Displays the resolved values of key folders.
         """
         print (Colors.Magenta)
-        print("sqliteFolder = %s" % Environment.sqliteFolder)
-        print("sqlserverFolder = %s" % Environment.sqlserverFolder)
+        print("sqliteFolder = %s" % self.environment.sqlite_folder)
+        print("sqlserverFolder = %s" % self.environment.sqlserver_folder)
         print (Colors.Reset)
 
     def create_baseline_database (self): 
@@ -63,12 +57,12 @@ class BaseLine:
         self.show_folder_locations()
 
         if self.database == "SQLite":
-            database_folder = Environment.sqliteFolder
+            database_folder = self.environment.sqlite_folder
             file_list = [
                 ("ModelReliefTest.db", "ModelReliefBaseline.db")
             ]
         elif self.database == "SQLServer":
-            database_folder = Environment.sqlserverFolder
+            database_folder = self.environment.sqlserver_folder
             file_list = [
                 ("ModelReliefTest.mdf",     "ModelReliefBaseline.mdf"),
                 ("ModelReliefTest_log.ldf", "ModelReliefBaseline_log.ldf")

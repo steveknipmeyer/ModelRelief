@@ -25,7 +25,7 @@ namespace ModelRelief.Database
 
     public class DbInitializer
     {
-        private bool                            ForceInitializeAll  { get; set; }
+        private bool                            ExitAfterInitialization  { get; set; }
         private IServiceProvider                Services { get; set; }
         private IHostingEnvironment             HostingEnvironment  { get; set; }
         private Services.IConfigurationProvider ConfigurationProvider  { get; set; }
@@ -53,8 +53,8 @@ namespace ModelRelief.Database
         /// Constructor
         /// </summary>
         /// <param name="services">Service provider.</param>
-        /// <param name="forceInitializeAll">Automatically initialize database and user store. Overrides all configuration settings.</param>
-        public DbInitializer(IServiceProvider services, bool forceInitializeAll)
+        /// <param name="exitAfterInitialization">Exit after initialization. Do not start web server.</param>
+        public DbInitializer(IServiceProvider services, bool exitAfterInitialization)
         {
             Services = services ?? throw new ArgumentNullException(nameof(services));
 
@@ -84,7 +84,7 @@ namespace ModelRelief.Database
 
             _storeUsers = ConfigurationProvider.GetSetting(Paths.StoreUsers);
 
-            ForceInitializeAll = forceInitializeAll;
+            ExitAfterInitialization = exitAfterInitialization;
 
             Initialize();
         }
@@ -95,11 +95,12 @@ namespace ModelRelief.Database
         /// </summary>
         private bool EnsureServerRunning()
         {
+#if false
             var delaySeconds = 30;
             System.Threading.Thread.Sleep(delaySeconds * 1000);
             return true;
 
-#if false
+#else
             string connectionString;
             switch (ConfigurationProvider.Database)
             {
@@ -151,17 +152,23 @@ namespace ModelRelief.Database
         {
             EnsureServerRunning();
 
-            if (ForceInitializeAll || ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRInitializeUserStore))
-                DeleteUserStore();
+            if (ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRInitializeUserStore))
+                InitializeUserStore();
 
-            if (ForceInitializeAll || ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRInitializeDatabase))
-                Populate().Wait();
+            if (ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRInitializeDatabase))
+            {
+                InitializeDatabase().Wait();
+                if (ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRSeedDatabase))
+                {
+                SeedDatabase().Wait();
+                }
+            }
         }
 
         /// <summary>
-        /// Populate test database with sample data.
+        /// Populate the database schema.
         /// </summary>
-        public async Task Populate()
+        public async Task InitializeDatabase()
         {
             Logger.LogInformation($"Preparing to initialize database.");
             try
@@ -171,17 +178,12 @@ namespace ModelRelief.Database
                 // SQLite Error 1: 'table "AspNetRoles" already exists'.
                 // https://github.com/aspnet/EntityFrameworkCore/issues/4649
                 await DbContext.Database.EnsureCreatedAsync();
-
-#if false
-                await SeedDatabase();
-#endif
             }
             catch (Exception ex)
             {
                 Logger.LogError($"An error occurred while initializing the database: {ex.Message}");
                 return;
             }
-
             Logger.LogInformation("Database initialized.");
         }
 
@@ -288,10 +290,9 @@ namespace ModelRelief.Database
                 AddDepthBuffers();
                 AddMeshes();
 
-                CreateUserStore();
+                SeedUserStore();
             }
 
-            // N.B. Creation of the test database is now done by testrunner.py.
             CreateTestDatabase();
         }
 
@@ -322,13 +323,13 @@ namespace ModelRelief.Database
         /// <summary>
         /// Delete the user store.
         /// </summary>
-        private void DeleteUserStore()
+        private void InitializeUserStore()
         {
             var storeUsersPartialPath = ConfigurationProvider.GetSetting(Paths.StoreUsers);
             var storeUsersPath   = $"{HostingEnvironment.WebRootPath}{storeUsersPartialPath}";
 
-#if false
-            if (!ForceInitializeAll)
+#if true
+            if (!ExitAfterInitialization)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Delete the user store folder: {storeUsersPath} (Y/N)?");
@@ -347,7 +348,7 @@ namespace ModelRelief.Database
         /// Create the user store in the file system.
         /// Copy the test data files into the web user store.
         /// </summary>
-        private void CreateUserStore()
+        private void SeedUserStore()
         {
             CopyTestFiles<Domain.Model3d>("Paths:ResourceFolders:Model3d");
             CopyTestFiles<Domain.DepthBuffer>("Paths:ResourceFolders:DepthBuffer");

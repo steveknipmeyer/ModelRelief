@@ -19,19 +19,9 @@ import subprocess
 import sys
 from enum import Enum
 
+from environment import EnvironmentNames, Environment
 from logger import Logger
 from tools import Colors, Tools
-
-class EnvironmentSettings(Enum):
-    """
-    A class representing the MR environment variables.
-    """
-    MR = "MR"
-    MRSOLUTION = "MRSolution"
-    MRPUBLISH = "MRPublish"
-    MRPORT = "MRPort"
-    MRINITIALIZEDATABASE = "MRInitializeDatabase"
-    ASPNETCORE_ENVIRONMENT = "ASPNETCORE_ENVIRONMENT"
 
 class Builder:
     """
@@ -88,10 +78,10 @@ class Builder:
         self.logger.logInformation("\n<ModelRelief>", Colors.BrightCyan)
 
         # folders
-        project = os.environ[EnvironmentSettings.MR.value]
-        solution = os.environ[EnvironmentSettings.MRSOLUTION.value]
+        project = os.environ[EnvironmentNames.MR]
+        solution = os.environ[EnvironmentNames.MRSolution]
         wwwroot = os.path.join(project, 'wwwroot')
-        publish = os.environ[EnvironmentSettings.MRPUBLISH.value]
+        publish = os.environ[EnvironmentNames.MRPublish]
         solver_folder = "Solver"
         tools_folder = "Tools"
         test_folder = "Test"
@@ -115,13 +105,18 @@ class Builder:
             os.chdir(project)
             # N.B. ASPNETCORE_ENVIRONMENT cannot be overridden as a 'dotnet run' command line argument.
             # So, override (and restore) the current settings.
-            environment = os.environ[EnvironmentSettings.ASPNETCORE_ENVIRONMENT.value]
-            initialize_database = os.environ[EnvironmentSettings.MRINITIALIZEDATABASE.value]
-            os.environ[EnvironmentSettings.ASPNETCORE_ENVIRONMENT.value] = "Production"
-            os.environ[EnvironmentSettings.MRINITIALIZEDATABASE.value] = "False"
-            self.exec("dotnet run --no-launch-profile  --MRForceInitializeAll=True")        
-            os.environ[EnvironmentSettings.ASPNETCORE_ENVIRONMENT.value] = environment
-            os.environ[EnvironmentSettings.MRINITIALIZEDATABASE.value] = initialize_database
+            environment = os.environ[EnvironmentNames.ASPNETCORE_ENVIRONMENT]
+            initialize_user_store = os.environ[EnvironmentNames.MRInitializeUserStore]
+            initialize_database = os.environ[EnvironmentNames.MRInitializeDatabase]
+            os.environ[EnvironmentNames.ASPNETCORE_ENVIRONMENT] = "Production"
+            os.environ[EnvironmentNames.MRInitializeDatabase] = "False"
+            os.environ[EnvironmentNames.MRInitializeUserStore] = "False"
+
+            self.exec("dotnet run --no-launch-profile  --MRExitAfterInitialization=True")        
+
+            os.environ[EnvironmentNames.ASPNETCORE_ENVIRONMENT] = environment
+            os.environ[EnvironmentNames.MRInitializeUserStore] = initialize_user_store
+            os.environ[EnvironmentNames.MRInitializeDatabase] = initialize_database
 
         # ASP.NET Core Publish
         self.logger.logInformation("\nASP.NET Core Publish", Colors.BrightMagenta)
@@ -149,7 +144,7 @@ class Builder:
         if self.arguments.docker:
             self.logger.logInformation("\nDocker image", Colors.BrightMagenta)
             os.chdir(solution)
-            port = os.environ[EnvironmentSettings.MRPORT.value]
+            port = os.environ[EnvironmentNames.MRPort]
             self.exec(f"docker build -t modelrelief --build-arg MRPORT={port} -f Build\\DockerFile.modelrelief  .")        
 
         self.logger.logInformation("\n<ModelRelief>", Colors.BrightCyan)

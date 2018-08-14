@@ -38,8 +38,9 @@ namespace ModelRelief.Services
         {
             Logger.LogInformation($"{ConfigurationSettings.MRPort} = {GetSetting(ConfigurationSettings.MRPort)}");
             Logger.LogInformation($"{ConfigurationSettings.MRDatabaseProvider} = {GetSetting(ConfigurationSettings.MRDatabaseProvider)}");
-            Logger.LogInformation($"{ConfigurationSettings.MRForceInitializeAll} = {GetSetting(ConfigurationSettings.MRForceInitializeAll)}");
+            Logger.LogInformation($"{ConfigurationSettings.MRExitAferInitialization} = {GetSetting(ConfigurationSettings.MRExitAferInitialization)}");
             Logger.LogInformation($"{ConfigurationSettings.MRInitializeDatabase} = {GetSetting(ConfigurationSettings.MRInitializeDatabase)}");
+            Logger.LogInformation($"{ConfigurationSettings.MRSeedDatabase} = {GetSetting(ConfigurationSettings.MRSeedDatabase)}");
             Logger.LogInformation($"{ConfigurationSettings.MRInitializeUserStore} = {GetSetting(ConfigurationSettings.MRInitializeUserStore)}");
         }
 
@@ -105,11 +106,13 @@ namespace ModelRelief.Services
     public class ConfigurationSettings
     {
         // configuration settings
-        public const string MRPort                = "MRPort";
-        public const string MRForceInitializeAll  = "MRForceInitializeAll";
-        public const string MRDatabaseProvider    = "MRDatabaseProvider";
-        public const string MRInitializeDatabase  = "MRInitializeDatabase";
-        public const string MRInitializeUserStore = "MRInitializeUserStore";
+        public const string MRPort                      = "MRPort";
+        public const string MRExitAferInitialization    = "MRExitAfterInitialization";
+        public const string MRDatabaseProvider          = "MRDatabaseProvider";
+        public const string MRInitializeDatabase        = "MRInitializeDatabase";
+        public const string MRSeedDatabase              = "MRSeedDatabase";
+        public const string MRInitializeUserStore       = "MRInitializeUserStore";
+        public const string MRSeedUserStore             = "MRSeedUserStore";
 
         // database providers
         public const string SQLServer = "SQLServer";

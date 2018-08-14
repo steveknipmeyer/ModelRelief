@@ -14,5 +14,5 @@ services:
         container_name: mr-database-service
         image: "microsoft/mssql-server-windows-express"
         environment:
-            SA_PASSWORD: "SecretPassword"
+            SA_PASSWORD: "ModelRelief!"
             ACCEPT_EULA: "Y"

@@ -14,8 +14,9 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Test",
         "MRDatabaseProvider": "SQLServer",
-        "MRForceInitializeAll": "False",
+        "MRExitAfterInitialization": "False",
         "MRInitializeDatabase": "True",
+        "MRSeedDatabase":"True",
         "MRInitializeUserStore": "True"
       }
     },
@@ -25,8 +26,9 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production",
         "MRDatabaseProvider": "SQLServer",
-        "MRForceInitializeAll": "False",
+        "MRExitAfterInitialization": "False",
         "MRInitializeDatabase": "True",
+        "MRSeedDatabase":"True",
         "MRInitializeUserStore": "True"
       },
       "applicationUrl": "http://localhost:60655"
@@ -37,8 +39,9 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "MRDatabaseProvider": "SQLServer",
-        "MRForceInitializeAll": "False",
+        "MRExitAfterInitialization": "False",
         "MRInitializeDatabase": "True",
+        "MRSeedDatabase":"True",
         "MRInitializeUserStore": "True"
       },
       "applicationUrl": "http://localhost:60655"
@@ -49,8 +52,9 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Test",
         "MRDatabaseProvider": "SQLServer",
-        "MRForceInitializeAll": "False",
+        "MRExitAfterInitialization": "False",
         "MRInitializeDatabase": "True",
+        "MRSeedDatabase":"True",
         "MRInitializeUserStore": "True"
       },
       "applicationUrl": "http://localhost:60655"

@@ -21,7 +21,7 @@ namespace ModelRelief.Infrastructure
 
     public class Program
     {
-        private static bool ForceInitializeAll { get; set; }
+        private static bool ExitAfterInitialization { get; set; }
 
         /// <summary>
         /// Main entry point.
@@ -37,9 +37,9 @@ namespace ModelRelief.Infrastructure
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-                var initializer = new DbInitializer(services, ForceInitializeAll);
+                var initializer = new DbInitializer(services, ExitAfterInitialization);
             }
-            if (ForceInitializeAll)
+            if (ExitAfterInitialization)
                 return;
 
             host.Run();
@@ -52,7 +52,7 @@ namespace ModelRelief.Infrastructure
         {
             Services.IConfigurationProvider configurationProvider = host.Services.GetRequiredService<Services.IConfigurationProvider>();
             configurationProvider.LogConfigurationSettings();
-            ForceInitializeAll = configurationProvider.ParseBooleanSetting(ConfigurationSettings.MRForceInitializeAll);
+            ExitAfterInitialization = configurationProvider.ParseBooleanSetting(ConfigurationSettings.MRExitAferInitialization);
         }
 
         /// <summary>

@@ -18,15 +18,9 @@ import sys
 from enum import Enum
 
 from baseline import BaseLine 
+from environment import EnvironmentNames, Environment
 from logger import Logger
 from tools import Colors
-
-class EnvironmentSettings(Enum):
-    """
-    A class representing the MR environment variables.
-    """
-    MRFORCEINITIALIZEALL = "MRForceInitializeAll"
-    MRDATABASEPROVIDER = "MRDatabaseProvider"
 
 class TestRunner:
     """
@@ -38,20 +32,7 @@ class TestRunner:
         Performs initialization.
         """
         self.logger = Logger()
-        self.environment = {
-            EnvironmentSettings.MRFORCEINITIALIZEALL : "",
-            EnvironmentSettings.MRDATABASEPROVIDER : ""
-        }
-
-    def save_environment(self):
-        """ Save the current environment. """
-        for key, _ in self.environment.items():
-            self.environment[key] = os.environ[key.value]
-
-    def restore_environment(self):
-        """ Restore the original environment. """
-        for key, _ in self.environment.items():
-            os.environ[key.value] = self.environment[key]
+        self.environment:Environment = Environment()
 
     def initialize_database(self, database: str):
         """
@@ -64,7 +45,8 @@ class TestRunner:
         """            
         self.logger.logInformation("\nBegin initialize database for {}".format(database), Colors.BrightYellow)
 
-        subprocess.run ("dotnet run --no-launch-profile -p ModelRelief --MRForceInitializeAll=True --MRDatabaseProvider={}".format(database))
+        subprocess.run 
+        ("dotnet run --no-launch-profile -p ModelRelief --MRExitAfterInitialization=True --MRInitializeUserStore=True --MRInitializeDatabase=True --MRSeedDatabase=True --MRDatabaseProvider={}".format(database))
 
         self.logger.logInformation("End initialize database for {}".format(database), Colors.BrightYellow)
 
@@ -91,7 +73,7 @@ class TestRunner:
         """            
         self.logger.logInformation("\nBegin test execution for {}".format(database), Colors.BrightGreen)
 
-        os.environ[EnvironmentSettings.MRDATABASEPROVIDER.value] = database
+        os.environ[EnvironmentNames.MRDatabaseProvider] = database
         subprocess.run ("dotnet test --results-directory Results --logger trx;LogFileName={}TestResults.trx ModelRelief.test".format(database))
 
         self.logger.logInformation("End test execution for {}".format(database), Colors.BrightGreen)
@@ -106,7 +88,7 @@ class TestRunner:
         self.logger.logInformation("\nTestRunner start", Colors.BrightCyan)
 
         # save environment
-        self.save_environment()
+        self.environment.push()
 
         databases = ["SQLite", "SQLServer"]
         for database in databases:
@@ -118,7 +100,7 @@ class TestRunner:
             self.execute_tests(database)  
 
         # restore environment
-        self.restore_environment()
+        self.environment.pop()
 
         self.logger.logInformation("\nTestRunner end", Colors.BrightCyan)
 
@@ -127,7 +109,7 @@ def main():
         Main entry point.
     """
     # run from solution root
-    root = os.environ["MRSolution"]
+    root = os.environ[EnvironmentNames.MRSolution]
     os.chdir(root)
 
     testrunner = TestRunner()
