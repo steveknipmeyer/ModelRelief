@@ -8,48 +8,34 @@
     Python bytescodes should be delivered instead of source.
         This is probably not necessary since Solver is never exposed to the user. It's stricyly on the backend.
 
-    Builder
+    The web footer should remove the Login/Register buttons when the active page is Login/Register.
+        They are used for navigation not submitting the form.
+
+    +MRSeedDatabase
+    MRInitializeUserStore -> MRSeedUserStore
+    MRForceInitializeAll -> ? MRExitAfterInitialization
+
+    Move the save and restore environment logic to Tools.
+    How are credentials handled in a ConnectionString in Production?
+    Docker       
+        Investiate data volumes.
+            Is the correct way to persist data across container sessions?
+
+        User secrets are not available so test accounts cannot be created. How do Docker secrets work?
+        Should a test database be delivered? This is an alternative to initializing the database on startup. The user credentials would not need to be stored.
+        Why is the response time so slow?
+            Can additional resources be allocated?
+
+        A delay (sleep) is required in DbInitializer to allow the database service to start.
+            https://stackoverflow.com/questions/2440060/whats-the-best-way-to-test-sql-server-connection-programmatically
+
+        Review the mock test user logic. Is this the reason for the identity token failure?
+
         Study references.
-            SQLServer Management Studio
-            https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-2017
-
-            Official Microsoft SQL Server Express Edition images for Windows Containers
-            https://hub.docker.com/r/microsoft/mssql-server-windows-express/
-
-            SQL Server 2016 Express Edition in Windows containers
-            https://cloudblogs.microsoft.com/sqlserver/2016/10/13/sql-server-2016-express-edition-in-windows-containers/
-
             Quickstart: Compose and ASP.NET Core with SQL Server
             https://docs.docker.com/compose/aspnet-mssql-compose/
             docker/labs GitHub examples
-
-            docker run -d --name mrsql -p 1433:1433 -e sa_password=<> -e ACCEPT_EULA=Y microsoft/mssql-server-windows-express
-            docker inspect mrsql
-
-            docker-compose up
-
-                [05:20:17 ERR] An error occurred using the connection to database 'MR' on server '172.22.13.138'.
-                System.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server) ---> System.ComponentModel.Win32Exception (0x80004005): The network path was not found
-                at System.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, Object providerInfo, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling)
-                at System.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
-                at System.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
-                at System.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
-                at System.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
-                at System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
-                at System.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()
-                --- End of stack trace from previous location where exception was thrown ---
-                at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
-                at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
-                at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.<OpenAsync>d__34.MoveNext()
-                ClientConnectionId:00000000-0000-0000-0000-000000000000
-                Error Number:53,State:0,Class:20
-                [05:20:17 ERR] An exception occurred in the database while iterating the results of a query for context type 'ModelRelief.Database.ModelReliefDbContext'.      
-                          
-        DockerBuild
-            Employ a Composer settings file for configuration and orchestration.
-                modelrelief
-                sqlserverexpress
-
+    
     Publish Structure
         Publish
             wwwroot
@@ -1320,8 +1306,14 @@ https://semver.npmjs.com/
 #### Docker
     docker image prune
     docker container prune
+
     docker run -d --entrypoint "cmd" -p 8080:60655 modelrelief
-    docker run -it -p 8080:60655 modelrelief
     docker run -d -p 8080:60655 modelrelief
-    docker run -d -e "ASPNETCORE_ENVIRONMENT=Production" -p 8080:60655 modelrelief
+    docker run -it -p 8080:60655 modelrelief
     docker exec <container> netstat -a
+
+    These commands are used for starting the SQLServer Express service as an <independent> container. ModelRelief running normally can access the container.
+        docker run -d --name mrsql -p 1433:1433 -e sa_password=<> -e ACCEPT_EULA=Y microsoft/mssql-server-windows-express
+        docker inspect mrsql
+
+    docker-compose up

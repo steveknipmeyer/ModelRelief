@@ -1,18 +1,18 @@
 version: "3"
 services:
     # web front end
-    mr-service:
+    web:
         container_name: mr-service
         image: modelrelief
         ports:
             - "8080:60655"
         depends_on:
-            - mr-database-service
+            - db
 
     # database
-    mr-database-service:    # SQLServer server name            
+    db:    
         container_name: mr-database-service
         image: "microsoft/mssql-server-windows-express"
         environment:
-            SA_PASSWORD: "<>"
+            SA_PASSWORD: "SecretPassword"
             ACCEPT_EULA: "Y"

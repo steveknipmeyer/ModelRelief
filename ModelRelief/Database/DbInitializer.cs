@@ -16,6 +16,7 @@ namespace ModelRelief.Database
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Domain;
@@ -89,10 +90,67 @@ namespace ModelRelief.Database
         }
 
         /// <summary>
+        /// Ensure the database server is available.
+        /// During (Docker) startup the front-end may attemp to access the database before the service is running.!--
+        /// </summary>
+        private bool EnsureServerRunning()
+        {
+            var delaySeconds = 30;
+            System.Threading.Thread.Sleep(delaySeconds * 1000);
+            return true;
+
+#if false
+            string connectionString;
+            switch (ConfigurationProvider.Database)
+            {
+                case RelationalDatabaseProvider.SQLite:
+                    return true;
+
+                default:
+                case RelationalDatabaseProvider.SQLServer:
+                    connectionString = ConfigurationProvider.Configuration.GetConnectionString(ConfigurationSettings.SQLServer);
+                    break;
+            }
+
+            var stopwatch = new Stopwatch();
+            var maximumElapsedSeconds = 30;
+            var maximumElapsedMilliseconds = maximumElapsedSeconds * 1000.0;
+            var warningSeconds = 1;
+            var maximumWarningMilliseconds = warningSeconds * 1000.0;
+            stopwatch.Start();
+            while (stopwatch.ElapsedMilliseconds < maximumElapsedMilliseconds)
+            {
+                long lastWarningEmitted = 0;
+                try
+                {
+                    using (var connection = new System.Data.SqlClient.SqlConnection(connectionString))
+                    {
+                        connection.Open();
+                        return true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if ((stopwatch.ElapsedMilliseconds - lastWarningEmitted) > 1000.0)
+                    {
+                        Logger.LogWarning($"EnsureServerRunning: server connection failed: {ex.Message}.");
+                        lastWarningEmitted = stopwatch.ElapsedMilliseconds;
+                    }
+                }
+            }
+            // WIP: What handling is needed if the server cannot be reached?
+            Logger.LogError($"The database connection could not be opened after {maximumElapsedSeconds} seconds.");
+            return false;
+#endif
+        }
+
+        /// <summary>
         /// Process the command line arguments and initialize.
         /// </summary>
         private void Initialize()
         {
+            EnsureServerRunning();
+
             if (ForceInitializeAll || ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRInitializeUserStore))
                 DeleteUserStore();
 
@@ -114,11 +172,14 @@ namespace ModelRelief.Database
                 // https://github.com/aspnet/EntityFrameworkCore/issues/4649
                 await DbContext.Database.EnsureCreatedAsync();
 
+#if false
                 await SeedDatabase();
+#endif
             }
             catch (Exception ex)
             {
                 Logger.LogError($"An error occurred while initializing the database: {ex.Message}");
+                return;
             }
 
             Logger.LogInformation("Database initialized.");
@@ -266,15 +327,17 @@ namespace ModelRelief.Database
             var storeUsersPartialPath = ConfigurationProvider.GetSetting(Paths.StoreUsers);
             var storeUsersPath   = $"{HostingEnvironment.WebRootPath}{storeUsersPartialPath}";
 
+#if false
             if (!ForceInitializeAll)
             {
-                // Console.ForegroundColor = ConsoleColor.Red;
-                // Console.WriteLine($"Delete the user store folder: {storeUsersPath} (Y/N)?");
-                // Console.ForegroundColor = ConsoleColor.White;
-                // var response = Console.ReadLine();
-                // if (!string.Equals(response.ToUpper(), "Y"))
-                //     return;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Delete the user store folder: {storeUsersPath} (Y/N)?");
+                Console.ForegroundColor = ConsoleColor.White;
+                var response = Console.ReadLine();
+                if (!string.Equals(response.ToUpper(), "Y"))
+                    return;
             }
+#endif
 
             Files.DeleteFolder(storeUsersPath, true);
             Logger.LogWarning($"User store ({storeUsersPath}) deleted.");

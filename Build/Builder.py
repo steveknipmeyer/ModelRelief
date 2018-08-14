@@ -30,6 +30,7 @@ class EnvironmentSettings(Enum):
     MRSOLUTION = "MRSolution"
     MRPUBLISH = "MRPublish"
     MRPORT = "MRPort"
+    MRINITIALIZEDATABASE = "MRInitializeDatabase"
     ASPNETCORE_ENVIRONMENT = "ASPNETCORE_ENVIRONMENT"
 
 class Builder:
@@ -115,9 +116,12 @@ class Builder:
             # N.B. ASPNETCORE_ENVIRONMENT cannot be overridden as a 'dotnet run' command line argument.
             # So, override (and restore) the current settings.
             environment = os.environ[EnvironmentSettings.ASPNETCORE_ENVIRONMENT.value]
+            initialize_database = os.environ[EnvironmentSettings.MRINITIALIZEDATABASE.value]
             os.environ[EnvironmentSettings.ASPNETCORE_ENVIRONMENT.value] = "Production"
+            os.environ[EnvironmentSettings.MRINITIALIZEDATABASE.value] = "False"
             self.exec("dotnet run --no-launch-profile  --MRForceInitializeAll=True")        
             os.environ[EnvironmentSettings.ASPNETCORE_ENVIRONMENT.value] = environment
+            os.environ[EnvironmentSettings.MRINITIALIZEDATABASE.value] = initialize_database
 
         # ASP.NET Core Publish
         self.logger.logInformation("\nASP.NET Core Publish", Colors.BrightMagenta)
