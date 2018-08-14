@@ -20,8 +20,8 @@ ENV MRPort=$MRPORT
 ENV MRDatabaseProvider=SQLServer
 ENV MRExitAfterInitialization=False
 ENV MRInitializeDatabase=True
-ENV MRSeedDatabase=True
-ENV MRInitializeUserStore=True
+ENV MRSeedDatabase=False
+ENV MRInitializeUserStore=False
 
 # ASP.NET Core runtime settings
 ENV ASPNETCORE_URLS=http://localhost:$MRPORT/

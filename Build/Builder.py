@@ -112,7 +112,7 @@ class Builder:
             os.environ[EnvironmentNames.MRInitializeDatabase] = "False"
             os.environ[EnvironmentNames.MRInitializeUserStore] = "False"
 
-            self.exec("dotnet run --no-launch-profile  --MRExitAfterInitialization=True")        
+            self.exec("dotnet run --no-launch-profile -p ModelRelief --MRExitAfterInitialization=True --MRInitializeUserStore=True --MRInitializeDatabase=True --MRSeedDatabase=True")
 
             os.environ[EnvironmentNames.ASPNETCORE_ENVIRONMENT] = environment
             os.environ[EnvironmentNames.MRInitializeUserStore] = initialize_user_store
@@ -156,10 +156,10 @@ def main():
     options_parser = argparse.ArgumentParser()
     options_parser.add_argument('--docker', '-d',
                                 help='Build the Docker image.', required=False, default=True)
+    options_parser.add_argument('--initialize', '-i',
+                                help='Initialize the database and the user store.', required=False, default=False)
     options_parser.add_argument('--python', '-p',
                                 help='Build the Python virtual environment.', required=False, default=True)
-    options_parser.add_argument('--initialize', '-i',
-                                help='Initialize the database and the user store.', required=False, default=True)
     arguments = options_parser.parse_args()
 
     builder = Builder(arguments)

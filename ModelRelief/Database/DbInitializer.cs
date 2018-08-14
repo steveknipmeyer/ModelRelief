@@ -95,8 +95,8 @@ namespace ModelRelief.Database
         /// </summary>
         private bool EnsureServerRunning()
         {
-#if false
-            var delaySeconds = 30;
+#if true
+            var delaySeconds = 10;
             System.Threading.Thread.Sleep(delaySeconds * 1000);
             return true;
 
@@ -328,7 +328,7 @@ namespace ModelRelief.Database
             var storeUsersPartialPath = ConfigurationProvider.GetSetting(Paths.StoreUsers);
             var storeUsersPath   = $"{HostingEnvironment.WebRootPath}{storeUsersPartialPath}";
 
-#if true
+#if false
             if (!ExitAfterInitialization)
             {
                 Console.ForegroundColor = ConsoleColor.Red;

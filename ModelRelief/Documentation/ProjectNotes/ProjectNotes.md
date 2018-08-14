@@ -7,10 +7,12 @@ MRSeedUserStore
 
 #### Builds
     Builder
-        Is the "initialize" command line argument necessary?
-        Is there a need for a "docker" context?
+        Do file POSTS create the necessary user folder structure?
 
     Test Environment push/pop.
+    
+    Why is the response time so slow?
+        Can additional resources be allocated?
 
     Review ModelRelief.csproj.
 
@@ -30,8 +32,6 @@ MRSeedUserStore
 
         User secrets are not available so test accounts cannot be created. How do Docker secrets work?
         Should a test database be delivered? This is an alternative to initializing the database on startup. The user credentials would not need to be stored.
-        Why is the response time so slow?
-            Can additional resources be allocated?
 
         Review the mock test user logic. Is this the reason for the identity token failure?
 
