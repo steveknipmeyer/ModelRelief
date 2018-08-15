@@ -14,6 +14,11 @@ button {
     color: #0F0F0F !important;
 }
 
+#Username, #Password, #ConfirmPassword, #Register, #Login {
+    background: rgb(255, 255, 255) !important;     
+    color: rgb(0, 0, 0) !important;
+}
+
 /* ----------------------    
     General
 ------------------------*/

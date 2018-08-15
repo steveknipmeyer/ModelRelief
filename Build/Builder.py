@@ -46,17 +46,24 @@ class Builder:
         status:subprocess.CompletedProcess = subprocess.run (command_line, shell=True)
         return status.returncode
 
-    def delete_folder (self, folder: str)->None:
+    def delete_folder (self, folder: str, confirm=False)->None:
         """
         Deletes a build folder after prompting for confirmation.
+        Parameters
+        ----------
+        folder
+            The absolute path to the folder to be deleted.
+        confirm
+            Prompt to confirm the deletion.
         """
         if os.path.exists(folder):
             self.logger.logInformation(f"\nDelete {folder}", Colors.Red)
-            if Tools.confirm(f"Delete {folder}?"):
-                shutil.rmtree(folder)
-            else:
-                self.logger.logInformation("Exiting", Colors.Red)
-                sys.exit(1)            
+            if confirm:
+                if Tools.confirm(f"Delete {folder}?"):
+                    shutil.rmtree(folder)
+                else:
+                    self.logger.logInformation("Exiting", Colors.Red)
+                    sys.exit(1)            
 
     def initialize (self, wwwroot: str, publish: str)->None :
         """

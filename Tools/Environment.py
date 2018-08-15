@@ -14,8 +14,12 @@
 """
 
 import os
+import colorama
+
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional
+
+from tools import Colors, Tools
 
 class EnvironmentNames:
 
@@ -50,9 +54,9 @@ class Environment:
             # intialization
             EnvironmentNames.MRExitAfterInitialization : os.environ[EnvironmentNames.MRExitAfterInitialization],
 
+            EnvironmentNames.MRInitializeUserStore : os.environ[EnvironmentNames.MRInitializeUserStore],
             EnvironmentNames.MRInitializeDatabase : os.environ[EnvironmentNames.MRInitializeDatabase],
             EnvironmentNames.MRSeedDatabase : os.environ[EnvironmentNames.MRSeedDatabase],
-            EnvironmentNames.MRInitializeUserStore : os.environ[EnvironmentNames.MRInitializeUserStore],
 
             # runtime
             EnvironmentNames.MRPort : os.environ[EnvironmentNames.MRPort],
@@ -65,6 +69,15 @@ class Environment:
         self.tools_folder = os.path.join(os.environ[EnvironmentNames.MR], "Tools")
         self.sqlite_folder = os.path.join(os.environ[EnvironmentNames.MR], "Database")
         self.sqlserver_folder = os.environ["USERPROFILE"]
+
+    def show (self, color=Colors.Magenta):
+        """
+        Displays the environment table.
+        """
+        print (color)
+        for key, _ in self.values.items():
+            print (f"{key} = {os.environ[key]}")
+        print (Colors.Reset)
         
     def push(self):
         """
@@ -83,3 +96,25 @@ class Environment:
         state = self.stack.pop()
         for key, value in state.items():
             os.environ[key] = value
+
+    def test_stack(self):
+        """ 
+        Test the push/pop stack of environment states.
+        """
+        self.show(Colors.BrightCyan)
+        self.push()
+
+        for key, _ in self.values.items():
+            os.environ[key] = Tools.id_generator()
+        self.show()
+
+        self.pop()
+        self.show(Colors.BrightCyan)
+
+def main():
+    colorama.init()
+    e = Environment()
+    e.test_stack()
+
+if __name__ == "__main__":
+    main()

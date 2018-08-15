@@ -95,7 +95,7 @@ namespace ModelRelief.Database
         /// </summary>
         private bool EnsureServerRunning()
         {
-#if true
+#if false
             var delaySeconds = 10;
             System.Threading.Thread.Sleep(delaySeconds * 1000);
             return true;
@@ -113,34 +113,30 @@ namespace ModelRelief.Database
                     break;
             }
 
+            var maximumAttempts = 10;
             var stopwatch = new Stopwatch();
-            var maximumElapsedSeconds = 30;
-            var maximumElapsedMilliseconds = maximumElapsedSeconds * 1000.0;
-            var warningSeconds = 1;
-            var maximumWarningMilliseconds = warningSeconds * 1000.0;
             stopwatch.Start();
-            while (stopwatch.ElapsedMilliseconds < maximumElapsedMilliseconds)
+            for (int attempt = 0; attempt < maximumAttempts; attempt++)
             {
-                long lastWarningEmitted = 0;
                 try
                 {
                     using (var connection = new System.Data.SqlClient.SqlConnection(connectionString))
                     {
                         connection.Open();
+                        connection.Close();
                         return true;
                     }
                 }
                 catch (Exception ex)
                 {
-                    if ((stopwatch.ElapsedMilliseconds - lastWarningEmitted) > 1000.0)
                     {
                         Logger.LogWarning($"EnsureServerRunning: server connection failed: {ex.Message}.");
-                        lastWarningEmitted = stopwatch.ElapsedMilliseconds;
                     }
                 }
+                Thread.Sleep(1000);
             }
             // WIP: What handling is needed if the server cannot be reached?
-            Logger.LogError($"The database connection could not be opened after {maximumElapsedSeconds} seconds.");
+            Logger.LogError($"The database connection could not be opened after {maximumAttempts} to reach the server.");
             return false;
 #endif
         }

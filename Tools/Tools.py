@@ -15,6 +15,8 @@
 
 import os
 import sys
+import string
+import random
 
 from shutil import copyfile, copytree
 
@@ -166,3 +168,11 @@ class Tools:
                 return False
             else:
                 print ("Please respond with 'yes' or 'no'\n")
+
+    @staticmethod
+    def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
+        """
+        Generate a random string.
+        https://stackoverflow.com/questions/2257441/random-string-generation-with-upper-case-letters-and-digits-in-python
+        """
+        return ''.join(random.choice(chars) for _ in range(size))                

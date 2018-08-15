@@ -1,16 +1,17 @@
 ﻿### Tasks
 #### Commit Notes
-Move the save and restore environment logic to Tools.
-MRExitAfterInitialization
-MRSeedDatabase
-MRSeedUserStore
+Extend Environment with test_stack to verify push/pop.
+Refactor EnsureServerRunning to use sleep intervals.
+Override Bootstrap styles for Login/Register.
 
 #### Builds
-    Builder
-        Do file POSTS create the necessary user folder structure?
+    Why does the logic in EnsureServerRunning fail?
+        The connection string attempts to open the database that is not available.
+        
+        The connection is opened however a subsquent Register fails. 
+            Is it because the connection string used in the test is 'sa'?
+            Possibly, the anti-forgery token is blocking the subsequent register.
 
-    Test Environment push/pop.
-    
     Why is the response time so slow?
         Can additional resources be allocated?
 
