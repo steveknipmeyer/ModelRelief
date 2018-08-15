@@ -7,6 +7,8 @@ WORKDIR /root
 # copy the Publish folder
 COPY Publish .
 
+COPY Publish\\DatabaseStore\\SQLServer C:\\Users\\ContainerUser
+
 # make port available to the world outside this container
 ARG MRPORT=60655
 EXPOSE $MRPORT
@@ -19,7 +21,7 @@ RUN setx PYTHONPATH "C:\root\Solver;C:\root\Tools"
 ENV MRPort=$MRPORT
 ENV MRDatabaseProvider=SQLServer
 ENV MRExitAfterInitialization=False
-ENV MRInitializeDatabase=True
+ENV MRInitializeDatabase=False
 ENV MRSeedDatabase=False
 ENV MRInitializeUserStore=False
 
