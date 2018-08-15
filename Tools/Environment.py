@@ -67,7 +67,7 @@ class Environment:
         self.stack:List[Dict] = []
 
         self.tools_folder = os.path.join(os.environ[EnvironmentNames.MR], "Tools")
-        self.sqlite_folder = os.path.join(os.environ[EnvironmentNames.MR], "Database")
+        self.sqlite_folder = os.path.join(os.environ[EnvironmentNames.MR], "DatabaseStore/SQLite")
         self.sqlserver_folder = os.environ["USERPROFILE"]
 
     def show (self, color=Colors.Magenta):

@@ -1,8 +1,5 @@
 ﻿### Tasks
 #### Commit Notes
-Extend Environment with test_stack to verify push/pop.
-Refactor EnsureServerRunning to use sleep intervals.
-Override Bootstrap styles for Login/Register.
 
 #### Builds
     Why does the logic in EnsureServerRunning fail?
@@ -23,7 +20,6 @@ Override Bootstrap styles for Login/Register.
 
     The web footer should remove the Login/Register buttons when the active page is Login/Register.
         They are used for navigation not submitting the form.
-    Change the style of the Login/Register page to match the CSS of the Create/Edit pages.
     
     How are credentials handled in a ConnectionString in Production?
 
@@ -33,8 +29,6 @@ Override Bootstrap styles for Login/Register.
 
         User secrets are not available so test accounts cannot be created. How do Docker secrets work?
         Should a test database be delivered? This is an alternative to initializing the database on startup. The user credentials would not need to be stored.
-
-        Review the mock test user logic. Is this the reason for the identity token failure?
 
         Study references.
             Quickstart: Compose and ASP.NET Core with SQL Server
@@ -51,6 +45,23 @@ Override Bootstrap styles for Login/Register.
             Tools
 
 #### Short Term
+    Vector
+    "files.exclude": {
+        "**/.git": true,         // this is a default value
+    
+        "**/node_modules": true, // this excludes all folders 
+                                 // named "node_modules" from 
+                                 // the explore tree
+        "devenv": true,      
+        "mrenv": true,      
+        "Publish": true,      
+
+        // alternative version
+        "node_modules": true    // this excludes the folder 
+                                // only from the root of
+                                // your workspace 
+    },
+
     Update the Test Mesh models.
 
     Docker

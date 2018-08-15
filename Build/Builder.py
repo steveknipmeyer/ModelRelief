@@ -13,6 +13,7 @@
 
 """
 import argparse
+import ast
 import os
 import shutil
 import subprocess
@@ -34,6 +35,7 @@ class Builder:
         """
         self.logger = Logger()
         self.arguments = arguments
+        self.environment:Environment = Environment() 
 
     def exec (self, command_line:str)-> int:
         """
@@ -57,13 +59,12 @@ class Builder:
             Prompt to confirm the deletion.
         """
         if os.path.exists(folder):
-            self.logger.logInformation(f"\nDelete {folder}", Colors.Red)
-            if confirm:
-                if Tools.confirm(f"Delete {folder}?"):
-                    shutil.rmtree(folder)
-                else:
-                    self.logger.logInformation("Exiting", Colors.Red)
-                    sys.exit(1)            
+            self.logger.logInformation(f"\nDeleting {folder}", Colors.Red)
+            if not confirm or Tools.confirm(f"Delete {folder}?"):
+                shutil.rmtree(folder)
+            else:
+                self.logger.logInformation("Exiting", Colors.Red)
+                sys.exit(1)            
 
     def initialize (self, wwwroot: str, publish: str)->None :
         """
@@ -90,8 +91,9 @@ class Builder:
         wwwroot = os.path.join(project, 'wwwroot')
         publish = os.environ[EnvironmentNames.MRPublish]
         solver_folder = "Solver"
-        tools_folder = "Tools"
+        sqlserver_folder = "DatabaseStore/SQLServer"
         test_folder = "Test"
+        tools_folder = "Tools"
 
         os.chdir(solution)
         self.initialize(wwwroot, publish)
@@ -112,18 +114,15 @@ class Builder:
             os.chdir(project)
             # N.B. ASPNETCORE_ENVIRONMENT cannot be overridden as a 'dotnet run' command line argument.
             # So, override (and restore) the current settings.
-            environment = os.environ[EnvironmentNames.ASPNETCORE_ENVIRONMENT]
-            initialize_user_store = os.environ[EnvironmentNames.MRInitializeUserStore]
-            initialize_database = os.environ[EnvironmentNames.MRInitializeDatabase]
-            os.environ[EnvironmentNames.ASPNETCORE_ENVIRONMENT] = "Production"
-            os.environ[EnvironmentNames.MRInitializeDatabase] = "False"
-            os.environ[EnvironmentNames.MRInitializeUserStore] = "False"
+            self.environment.push()
+            os.environ[EnvironmentNames.ASPNETCORE_ENVIRONMENT] = "ProductionBuild"
+            os.environ[EnvironmentNames.MRExitAfterInitialization] = "True"
+            os.environ[EnvironmentNames.MRInitializeUserStore] = "True"
+            os.environ[EnvironmentNames.MRInitializeDatabase] = "True"
+            os.environ[EnvironmentNames.MRSeedDatabase] = "True"
 
-            self.exec("dotnet run --no-launch-profile -p ModelRelief --MRExitAfterInitialization=True --MRInitializeUserStore=True --MRInitializeDatabase=True --MRSeedDatabase=True")
-
-            os.environ[EnvironmentNames.ASPNETCORE_ENVIRONMENT] = environment
-            os.environ[EnvironmentNames.MRInitializeUserStore] = initialize_user_store
-            os.environ[EnvironmentNames.MRInitializeDatabase] = initialize_database
+            self.exec("dotnet run --no-launch-profile")
+            self.environment.pop()
 
         # ASP.NET Core Publish
         self.logger.logInformation("\nASP.NET Core Publish", Colors.BrightMagenta)
@@ -147,6 +146,15 @@ class Builder:
         os.chdir(project)
         Tools.copy_folder(os.path.join(project, test_folder), os.path.join(publish, test_folder))
 
+        # database
+        self.logger.logInformation("SQLServer database", Colors.BrightMagenta)
+        os.chdir(solution)
+        sqlserver_files = ['ModelReliefProduction.mdf', 'ModelReliefProduction_log.ldf']
+        for file in sqlserver_files:
+            source = os.path.join(self.environment.sqlserver_folder, file)
+            destination = os.path.join(publish, sqlserver_folder, file)
+            Tools.copy_file(source, destination)
+
         # Docker image
         if self.arguments.docker:
             self.logger.logInformation("\nDocker image", Colors.BrightMagenta)
@@ -162,11 +170,11 @@ def main():
     """
     options_parser = argparse.ArgumentParser()
     options_parser.add_argument('--docker', '-d',
-                                help='Build the Docker image.', required=False, default=True)
+                                help='Build the Docker image.', type=ast.literal_eval, required=False, default=True)
     options_parser.add_argument('--initialize', '-i',
-                                help='Initialize the database and the user store.', required=False, default=False)
+                                help='Initialize the database and the user store.', type=ast.literal_eval, required=False, default=True)
     options_parser.add_argument('--python', '-p',
-                                help='Build the Python virtual environment.', required=False, default=True)
+                                help='Build the Python virtual environment.', type=ast.literal_eval, required=False, default=True)
     arguments = options_parser.parse_args()
 
     builder = Builder(arguments)

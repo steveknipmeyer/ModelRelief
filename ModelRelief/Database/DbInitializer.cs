@@ -209,7 +209,7 @@ namespace ModelRelief.Database
             switch (ConfigurationProvider.Database)
             {
                 case RelationalDatabaseProvider.SQLite:
-                    databaseFolder = Path.Combine(HostingEnvironment.ContentRootPath, "Database");
+                    databaseFolder = Path.Combine(HostingEnvironment.ContentRootPath, @"DatabaseStore\SQLite");
                     fileList = new Dictionary<string, string>
                     {
                         { "ModelReliefBaseline.db",     "ModelReliefTest.db" },

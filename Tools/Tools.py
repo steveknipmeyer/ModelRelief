@@ -116,6 +116,10 @@ class Tools:
         """
             Copy a single file. The destination is overwritten if it exists.
         """
+        # create destination folder if necessary
+        folder = os.path.dirname(destination_file)
+        if not os.path.exists(folder):
+            os.makedirs(folder)
 
         # copyfile does not overwrite...
         if os.path.isfile(destination_file):

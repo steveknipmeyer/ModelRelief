@@ -104,9 +104,9 @@
             "env": {
                 "name": "value"
             },
-        //  "args":["--python", "True", "--docker", "True"]
+        "args":["--python", "False", "--docker", "False"]
         //  "args":["--s", "Test/House.json", "--w", "Test/Working"]
-            "args":[]
+        // "args":[]
         },
         {
             "name": "Python (Active File)",

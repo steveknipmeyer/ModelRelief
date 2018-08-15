@@ -181,6 +181,6 @@ node_modules/
 mrenv
 devenv
 
-ModelRelief/Database/*.db
+ModelRelief/DatabaseStore
 wwwroot
 .mypy_cache
