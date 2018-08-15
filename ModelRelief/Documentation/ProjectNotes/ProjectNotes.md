@@ -2,12 +2,9 @@
 #### Commit Notes
 
 #### Builds
-    Why does the logic in EnsureServerRunning fail?
-        The connection string attempts to open the database that is not available.
-        
-        The connection is opened however a subsquent Register fails. 
-            Is it because the connection string used in the test is 'sa'?
-            Possibly, the anti-forgery token is blocking the subsequent register.
+    Dockerfile.ModelReliefDatabase
+        COPY Publish\\DatabaseStore\\SQLServer C:\\Users\\ContainerUser
+        C:\Program Files\Microsoft SQL Server\MSSQL14.SQLEXPRESS\MSSQL\DATA>
 
     Why is the response time so slow?
         Can additional resources be allocated?
@@ -46,21 +43,7 @@
 
 #### Short Term
     Vector
-    "files.exclude": {
-        "**/.git": true,         // this is a default value
-    
-        "**/node_modules": true, // this excludes all folders 
-                                 // named "node_modules" from 
-                                 // the explore tree
-        "devenv": true,      
-        "mrenv": true,      
-        "Publish": true,      
-
-        // alternative version
-        "node_modules": true    // this excludes the folder 
-                                // only from the root of
-                                // your workspace 
-    },
+    Lambda
 
     Update the Test Mesh models.
 

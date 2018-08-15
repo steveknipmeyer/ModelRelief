@@ -12,11 +12,9 @@ services:
     # database
     db:    
         container_name: mr-database-service
-        image: "microsoft/mssql-server-windows-express"
+        image: modelreliefdatabase
         environment:
             SA_PASSWORD: "ModelRelief!"
             ACCEPT_EULA: "Y"
             # https://github.com/Microsoft/mssql-docker/issues/173
-            # ATTACH_DBS: "[{'dbName':'ModelReliefProduction','dbFiles':['C:\\\\root\\\\DatabaseStore\\\\SQLServer\\\\ModelReliefProduction.mdf','C:\\\\root\\\\DatabaseStore\\\\SQLServer\\\\ModelReliefProduction_log. ldf']}]"
-            # ATTACH_DBS: "[{'dbName':'ModelReliefProduction','dbFiles':['C:\\\\Users\\\\ContainerUser\\\\ModelReliefProduction.mdf','C:\\\\Users\\\\ContainerUser\\\\ModelReliefProduction_log. ldf']}]"
-            ATTACH_DBS: "[{'dbName':'ModelReliefProduction','dbFiles':['C:\\\\Users\\\\Steve\\\\ModelReliefProduction.mdf','C:\\\\Users\\\\Steve\\\\ModelReliefProduction_log. ldf']}]"
+            ATTACH_DBS: "[{'dbName':'ModelReliefProduction','dbFiles':['C:\\\\Program Files\\\\Microsoft SQL Server\\\\MSSQL14.SQLEXPRESS\\\\MSSQL\\\\DATA\\\\ModelReliefProduction.mdf','C:\\\\Program Files\\\\Microsoft SQL Server\\\\MSSQL14.SQLEXPRESS\\\\MSSQL\\\\DATA\\\\ModelReliefProduction_log.ldf']}]"

@@ -157,10 +157,13 @@ class Builder:
 
         # Docker image
         if self.arguments.docker:
-            self.logger.logInformation("\nDocker image", Colors.BrightMagenta)
+            self.logger.logInformation("\nDocker ModelRelief image", Colors.BrightMagenta)
             os.chdir(solution)
             port = os.environ[EnvironmentNames.MRPort]
             self.exec(f"docker build -t modelrelief --build-arg MRPORT={port} -f Build\\DockerFile.modelrelief  .")        
+
+            self.logger.logInformation("\nDocker ModelRelief Databsae image", Colors.BrightMagenta)
+            self.exec(f"docker build -t modelreliefdatabase -f Build\\DockerFile.modelreliefdatabase  .")        
 
         self.logger.logInformation("\n<ModelRelief>", Colors.BrightCyan)
 

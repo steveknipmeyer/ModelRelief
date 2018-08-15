@@ -7,8 +7,6 @@ WORKDIR /root
 # copy the Publish folder
 COPY Publish .
 
-COPY Publish\\DatabaseStore\\SQLServer C:\\Users\\ContainerUser
-
 # make port available to the world outside this container
 ARG MRPORT=60655
 EXPOSE $MRPORT
