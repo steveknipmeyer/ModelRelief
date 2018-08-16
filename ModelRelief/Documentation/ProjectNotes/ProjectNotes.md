@@ -1,10 +1,11 @@
 ﻿### Tasks
 #### Commit Notes
+EnsureServerRunning now removes the Database setting from the connection string since the database may not yet exist.
+The web footer should remove the Login/Register buttons when the active page is Login/Register.
+    They are used for navigation not submitting the form.
 
 #### Builds
     Dockerfile.ModelReliefDatabase
-        COPY Publish\\DatabaseStore\\SQLServer C:\\Users\\ContainerUser
-        C:\Program Files\Microsoft SQL Server\MSSQL14.SQLEXPRESS\MSSQL\DATA>
 
     Why is the response time so slow?
         Can additional resources be allocated?
@@ -15,8 +16,6 @@
     Python bytescodes should be delivered instead of source.
         This is probably not necessary since Solver is never exposed to the user. It's stricyly on the backend.
 
-    The web footer should remove the Login/Register buttons when the active page is Login/Register.
-        They are used for navigation not submitting the form.
     
     How are credentials handled in a ConnectionString in Production?
 

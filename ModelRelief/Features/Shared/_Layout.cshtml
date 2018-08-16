@@ -62,7 +62,7 @@
 
             <footer>
                 @await Component.InvokeAsync("Footer")
-                @await Component.InvokeAsync("LoginLogout")
+                @await Component.InvokeAsync("LoginLogout", ViewBag.Title)
             </footer>
         </div>
 

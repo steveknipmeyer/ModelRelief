@@ -11,6 +11,7 @@ namespace ModelRelief.Database
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Hosting;
@@ -110,10 +111,14 @@ namespace ModelRelief.Database
                 default:
                 case RelationalDatabaseProvider.SQLServer:
                     connectionString = ConfigurationProvider.Configuration.GetConnectionString(ConfigurationSettings.SQLServer);
+                    // N.B. The database may not have been created yet.
+                    // Here we are only trying to establish the server is running so remove the Database setting.
+                    var regex = new Regex(@";Database=[\w+]*");
+                    connectionString = regex.Replace(connectionString, string.Empty);
                     break;
             }
 
-            var maximumAttempts = 10;
+            var maximumAttempts = 20;
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             for (int attempt = 0; attempt < maximumAttempts; attempt++)
