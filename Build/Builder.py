@@ -37,6 +37,16 @@ class Builder:
         self.arguments = arguments
         self.environment:Environment = Environment() 
 
+        # folders
+        self.project = os.environ[EnvironmentNames.MR]
+        self.solution = os.environ[EnvironmentNames.MRSolution]
+        self.wwwroot = os.path.join(self.project, 'wwwroot')
+        self.publish = os.environ[EnvironmentNames.MRPublish]
+        self.solver_folder = "Solver"
+        self.sqlserver_folder = "DatabaseStore/SQLServer"
+        self.test_folder = "Test"
+        self.tools_folder = "Tools"
+
     def exec (self, command_line:str)-> int:
         """
         Execute a shell tool.
@@ -79,39 +89,34 @@ class Builder:
         self.delete_folder(wwwroot)
         self.delete_folder(publish)
 
-    def run (self):
+    def build (self):
         """
-        Sequence the build steps.
+        Core build.
         """
-        self.logger.logInformation("\n<ModelRelief>", Colors.BrightCyan)
+        self.logger.logInformation("\n<Build>", Colors.BrightYellow)
 
-        # folders
-        project = os.environ[EnvironmentNames.MR]
-        solution = os.environ[EnvironmentNames.MRSolution]
-        wwwroot = os.path.join(project, 'wwwroot')
-        publish = os.environ[EnvironmentNames.MRPublish]
-        solver_folder = "Solver"
-        sqlserver_folder = "DatabaseStore/SQLServer"
-        test_folder = "Test"
-        tools_folder = "Tools"
+        os.chdir(self.solution)
+        self.initialize(self.wwwroot, self.publish)
 
-        os.chdir(solution)
-        self.initialize(wwwroot, publish)
-
-        # wwwroot
+        # gulp
         self.logger.logInformation("\nBuilding wwwroot", Colors.BrightMagenta)
-        os.chdir(solution)
+        os.chdir(self.solution)
         self.exec("gulp.cmd")
 
         # TypeScript
         self.logger.logInformation("\nTypeScript compilation", Colors.BrightMagenta)
-        os.chdir(solution)
-        self.exec("tsc -p {}".format(project))       
+        os.chdir(self.solution)
+        self.exec("tsc -p {}".format(self.project))       
+
+        # ASP.NET Core build
+        self.logger.logInformation("\nASP.NET Core compilation", Colors.BrightMagenta)
+        os.chdir(self.project)
+        self.exec("dotnet build")
 
         # database initialization and user store
         if self.arguments.initialize:
             self.logger.logInformation("\nInitialize database and user store", Colors.BrightMagenta)
-            os.chdir(project)
+            os.chdir(self.project)
             # N.B. ASPNETCORE_ENVIRONMENT cannot be overridden as a 'dotnet run' command line argument.
             # So, override (and restore) the current settings.
             self.environment.push()
@@ -124,54 +129,78 @@ class Builder:
             self.exec("dotnet run --no-launch-profile")
             self.environment.pop()
 
+        self.logger.logInformation("\n</Build>", Colors.BrightYellow)
+
+    def webpublish (self):
+        """
+        Publish web site.
+        """
+        self.logger.logInformation("\n<Publish>", Colors.BrightCyan)
+
+        os.chdir(self.solution)
         # ASP.NET Core Publish
         self.logger.logInformation("\nASP.NET Core Publish", Colors.BrightMagenta)
-        os.chdir(project)
-        self.exec("dotnet publish -c Release -o {}".format(publish))        
+        os.chdir(self.project)
+        self.exec("dotnet publish -c Release -o {}".format(self.publish))        
 
         # Strip TypeScript source map
         self.logger.logInformation("\nRemoving TypeScript source map", Colors.BrightMagenta)
-        source_map = os.path.join(publish, 'wwwroot/js/modelrelief.js.map')
+        source_map = os.path.join(self.publish, 'wwwroot/js/modelrelief.js.map')
         self.logger.logInformation(f"Deleting {source_map}", Colors.BrightWhite)
         os.remove(source_map)
 
         # Python virtual environment
         if self.arguments.python:
             self.logger.logInformation("\nPython virtual environment", Colors.BrightMagenta)
-            os.chdir(publish)
+            os.chdir(self.publish)
             self.exec("BuildPythonEnvironment Production")        
 
         # Python source
         self.logger.logInformation("\nPython source", Colors.BrightMagenta)
-        os.chdir(solution)
-        Tools.copy_folder(os.path.join(solution, solver_folder), os.path.join(publish, solver_folder))
-        Tools.copy_folder(os.path.join(solution, tools_folder), os.path.join(publish, tools_folder))
+        os.chdir(self.solution)
+        Tools.copy_folder(os.path.join(self.solution, self.solver_folder), os.path.join(self.publish, self.solver_folder))
+        Tools.copy_folder(os.path.join(self.solution, self.tools_folder), os.path.join(self.publish, self.tools_folder))
 
         # test models
         self.logger.logInformation("\nTest models", Colors.BrightMagenta)
-        os.chdir(project)
-        Tools.copy_folder(os.path.join(project, test_folder), os.path.join(publish, test_folder))
+        os.chdir(self.project)
+        Tools.copy_folder(os.path.join(self.project, self.test_folder), os.path.join(self.publish, self.test_folder))
 
         # database
         self.logger.logInformation("SQLServer database", Colors.BrightMagenta)
-        os.chdir(solution)
+        os.chdir(self.solution)
         sqlserver_files = ['ModelReliefProduction.mdf', 'ModelReliefProduction_log.ldf']
         for file in sqlserver_files:
             source = os.path.join(self.environment.sqlserver_folder, file)
-            destination = os.path.join(publish, sqlserver_folder, file)
+            destination = os.path.join(self.publish, self.sqlserver_folder, file)
             Tools.copy_file(source, destination)
 
         # Docker image
         if self.arguments.docker:
             self.logger.logInformation("\nDocker ModelRelief image", Colors.BrightMagenta)
-            os.chdir(solution)
+            os.chdir(self.solution)
             port = os.environ[EnvironmentNames.MRPort]
             self.exec(f"docker build -t modelrelief --build-arg MRPORT={port} -f Build\\DockerFile.modelrelief  .")        
 
             self.logger.logInformation("\nDocker ModelRelief Databsae image", Colors.BrightMagenta)
             self.exec(f"docker build -t modelreliefdatabase -f Build\\DockerFile.modelreliefdatabase  .")        
 
+        self.logger.logInformation("\n</Publish>", Colors.BrightYellow)
+
+    def run (self):
+        """
+        Sequence the build steps.
+        """
         self.logger.logInformation("\n<ModelRelief>", Colors.BrightCyan)
+
+        # build
+        self.build()
+
+        # publish
+        if self.arguments.webpublish:
+            self.webpublish()
+
+        self.logger.logInformation("\n</ModelRelief>", Colors.BrightCyan)
 
 def main():
     """
@@ -179,11 +208,13 @@ def main():
     """
     options_parser = argparse.ArgumentParser()
     options_parser.add_argument('--docker', '-d',
-                                help='Build the Docker image.', type=ast.literal_eval, required=False, default=True)
+                                help='Build the Docker image.', type=ast.literal_eval, required=False, default=False)
     options_parser.add_argument('--initialize', '-i',
                                 help='Initialize the database and the user store.', type=ast.literal_eval, required=False, default=True)
     options_parser.add_argument('--python', '-p',
-                                help='Build the Python virtual environment.', type=ast.literal_eval, required=False, default=True)
+                                help='Build the runtime Python virtual environment.', type=ast.literal_eval, required=False, default=True)
+    options_parser.add_argument('--webpublish', '-w',
+                                help='Publish the web site.', type=ast.literal_eval, required=False, default=False)
     arguments = options_parser.parse_args()
 
     builder = Builder(arguments)

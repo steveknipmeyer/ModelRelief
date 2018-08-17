@@ -1,23 +1,14 @@
 ﻿### Tasks
 #### Commit Notes
 
-#### Builds
-    JavaScript must be minified.
-
-    How are credentials handled in a ConnectionString in Production?
-        https://stackoverflow.com/questions/44931613/how-to-correctly-store-connection-strings-in-environment-variables-for-retrieval
-
-   
-    Publish Structure
-        Publish
-            wwwroot
-            <application binaries from 'dotnet publish'>
-            mrenv
-            Solver
-                Dispatcher relies on Solver being located in the system PATH.
-            Tools
-
 #### Short Term
+    Register for web hosting.
+    
+    Explorer
+        Change paths in launch.json.
+        Include Explorer in PYTHONPATH?
+        Add build step in gulfile.
+
     Namimg
         FE uses depthbuffers while API uses depth-buffers.
 
@@ -35,8 +26,6 @@
         Why is the second workspace unnamed?
 
     Should ndimage or scikt-image be used for image processing support?
-
-    Lambda
 
     Solver           
         How should Meshes be handled in the UI?
@@ -74,14 +63,26 @@
         Add gulp build task for Explorer?
 
     Explore Python unit tests.
-    Explorer Python environments.
-        This will facilitate Docker and then hosting.
 
     3D Surface Visualization
         https://jakevdp.github.io/PythonDataScienceHandbook/04.12-three-dimensional-plotting.html
         
+    Update database schema diagram.
+    
+#### Builds
+    JavaScript must be minified.
 
-Update database schema diagram.
+    How are credentials handled in a ConnectionString in Production?
+        https://stackoverflow.com/questions/44931613/how-to-correctly-store-connection-strings-in-environment-variables-for-retrieval
+   
+    Publish Structure
+        Publish
+            wwwroot
+            <application binaries from 'dotnet publish'>
+            mrenv
+            Solver
+                Dispatcher relies on Solver being located in the system PATH.
+            Tools
   
 ###### StandardView
 When the view camera is interactively changed, it should invalidate the StandardView in the UI.
@@ -1281,6 +1282,15 @@ https://semver.npmjs.com/
         So, ComposerController explicitly sets FileIsSynchronized before a GeneratedFileModel update (PUT) to express the intent.
 
 #### Docker
+    Issues
+        Chrome
+            Composer
+                There is a require timeout loading the modelrelief module.
+        Edge
+            Composer
+                The fetch of the DepthBuffer file from wwwroot leads to a redirect back to the Login page.
+                Is the anti-forgery token not recognized in the request?
+
     Remove unused resources.
         docker image prune
         docker container prune

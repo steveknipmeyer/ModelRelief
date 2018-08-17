@@ -50,6 +50,21 @@
         },
 
         {
+            "label": "TMR",
+            "type": "shell",
+            "command": "python Build/builder.py",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        },
+
+        {
             "label": "gulp serve",
             "type": "shell",
             "command": "gulp serve",

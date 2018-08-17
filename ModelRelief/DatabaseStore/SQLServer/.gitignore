@@ -1,5 +1,6 @@
-# This folder is reserved to hold the SQLServer database files at runtime.
-# It is currently not used. The SQLServer default locations for database files are used.
-# THe database files are not kept under source control.
+# This folder is reserved to hold the SQLServer database files.
+# It is currently used only during publishing. The seed database files are copied here for use during the build of the Docker database service.
+# The SQLServer default locations for database files are used at runtime.
+# The database files are not kept under source control.
 *.mdf
 *.ldf
