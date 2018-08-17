@@ -1,19 +1,7 @@
 ﻿### Tasks
 #### Commit Notes
 #### Short Term
-    Explorer
-        How should Meshes be handled in the UI?
-            Combine MeshContainer and MeshTab into MeshTab.
-                MeshTab -> MeshWidget?
-                ImageTab -> ImageWidget?
-
-        Separate the UI classes from Explorer into separate files.
-            Should Explorer be in a separate folder from Solver?
-
     Register for A2 hosting.
-
-    Namimg
-            FE uses depthbuffers while API uses depth-buffers.
 
     Review ModelRelief.csproj.
 
@@ -49,8 +37,6 @@
 
         How can the mayavi log be viewed?
 
-        Add gulp build task for Explorer?
-
     Explore Python unit tests.
 
     3D Surface Visualization
@@ -80,8 +66,6 @@ When the view camera is interactively changed, it should invalidate the Standard
 ##### Technical Education
 
 - Manning Dependency Injection book.
-
-#####  Gamma
 
 #####  Lambda
 
@@ -118,6 +102,9 @@ How does EF and AutoMapper handle object graphs (with populated navigation prope
 What controls are (ultimately) present in Composer?
  - Model: models/?project=id
  - Mesh: meshes/?projectId=activeProjectId & model3dId=activeModel3dId
+ - 
+Namimg
+    FE uses depthbuffers while API uses depth-buffers.
 
 ##### FE Model Structure
 
@@ -221,7 +208,6 @@ export interface IMeshTransform extends IModel
 export interface IModel3d extends IFileModel
 export interface IProject extends IModel
 ```
-
 
 #### Base Classes
 DTO models are in an inheritance chain so they can share common functionality such as API HTTP requests.  
