@@ -118,7 +118,8 @@ namespace ModelRelief.Database
                     break;
             }
 
-            var maximumAttempts = 20;
+            var maximumAttempts = 10;
+            var secondsBetweenAttempts = 2;
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             for (int attempt = 0; attempt < maximumAttempts; attempt++)
@@ -129,6 +130,7 @@ namespace ModelRelief.Database
                     {
                         connection.Open();
                         connection.Close();
+                        Logger.LogInformation($"EnsureServerRunning: The SQLServer is now available.");
                         return true;
                     }
                 }
@@ -138,7 +140,7 @@ namespace ModelRelief.Database
                         Logger.LogWarning($"EnsureServerRunning: server connection failed: {ex.Message}.");
                     }
                 }
-                Thread.Sleep(1000);
+                Thread.Sleep(secondsBetweenAttempts * 1000);
             }
             // WIP: What handling is needed if the server cannot be reached?
             Logger.LogError($"The database connection could not be opened after {maximumAttempts} to reach the server.");

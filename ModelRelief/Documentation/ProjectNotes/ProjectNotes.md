@@ -1,36 +1,13 @@
 ﻿### Tasks
 #### Commit Notes
-EnsureServerRunning now removes the Database setting from the connection string since the database may not yet exist.
-The web footer should remove the Login/Register buttons when the active page is Login/Register.
-    They are used for navigation not submitting the form.
 
 #### Builds
-    Dockerfile.ModelReliefDatabase
-
-    Why is the response time so slow?
-        Can additional resources be allocated?
-
-    Review ModelRelief.csproj.
-
     JavaScript must be minified.
-    Python bytescodes should be delivered instead of source.
-        This is probably not necessary since Solver is never exposed to the user. It's stricyly on the backend.
 
-    
     How are credentials handled in a ConnectionString in Production?
+        https://stackoverflow.com/questions/44931613/how-to-correctly-store-connection-strings-in-environment-variables-for-retrieval
 
-    Docker       
-        Investiate data volumes.
-            Is the correct way to persist data across container sessions?
-
-        User secrets are not available so test accounts cannot be created. How do Docker secrets work?
-        Should a test database be delivered? This is an alternative to initializing the database on startup. The user credentials would not need to be stored.
-
-        Study references.
-            Quickstart: Compose and ASP.NET Core with SQL Server
-            https://docs.docker.com/compose/aspnet-mssql-compose/
-            docker/labs GitHub examples
-    
+   
     Publish Structure
         Publish
             wwwroot
@@ -41,8 +18,10 @@ The web footer should remove the Login/Register buttons when the active page is 
             Tools
 
 #### Short Term
-    Vector
-    Lambda
+    Namimg
+        FE uses depthbuffers while API uses depth-buffers.
+
+    Review ModelRelief.csproj.
 
     Update the Test Mesh models.
 
@@ -1302,16 +1281,23 @@ https://semver.npmjs.com/
         So, ComposerController explicitly sets FileIsSynchronized before a GeneratedFileModel update (PUT) to express the intent.
 
 #### Docker
-    docker image prune
-    docker container prune
+    Remove unused resources.
+        docker image prune
+        docker container prune
 
-    docker run -d --entrypoint "cmd" -p 8080:60655 modelrelief
-    docker run -d -p 8080:60655 modelrelief
-    docker run -it -p 8080:60655 modelrelief
-    docker exec <container> netstat -a
+    Run a Docker container in the background.
+        docker run -d -p 8080:60655 modelrelief
+    Run a Docker container interactively.
+        docker run -it -p 8080:60655 modelrelief
 
-    These commands are used for starting the SQLServer Express service as an <independent> container. ModelRelief running normally can access the container.
+    Run a Docker container but override the default entrypoint with the command shell.
+        docker run -d --entrypoint "cmd" -p 8080:60655 modelrelief
+    Start a command shell in a running container.        
+        docker exec <container> cmd
+
+    These commands can be used to start the SQLServer Express service as an <independent> container. ModelRelief running normally can access the container.
         docker run -d --name mrsql -p 1433:1433 -e sa_password=<> -e ACCEPT_EULA=Y microsoft/mssql-server-windows-express
         docker inspect mrsql
 
-    docker-compose up
+    Start the Docker services defines in docker-composer.yml in the current directory.
+        docker-compose up

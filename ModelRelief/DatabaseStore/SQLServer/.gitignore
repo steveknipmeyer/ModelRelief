@@ -1,0 +1,5 @@
+# This folder is reserved to hold the SQLServer database files at runtime.
+# It is currently not used. The SQLServer default locations for database files are used.
+# THe database files are not kept under source control.
+*.mdf
+*.ldf

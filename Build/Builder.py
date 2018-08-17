@@ -106,7 +106,7 @@ class Builder:
         # TypeScript
         self.logger.logInformation("\nTypeScript compilation", Colors.BrightMagenta)
         os.chdir(solution)
-        self.exec("tsc -p {}".format(project))        
+        self.exec("tsc -p {}".format(project))       
 
         # database initialization and user store
         if self.arguments.initialize:
@@ -128,6 +128,12 @@ class Builder:
         self.logger.logInformation("\nASP.NET Core Publish", Colors.BrightMagenta)
         os.chdir(project)
         self.exec("dotnet publish -c Release -o {}".format(publish))        
+
+        # Strip TypeScript source map
+        self.logger.logInformation("\nRemoving TypeScript source map", Colors.BrightMagenta)
+        source_map = os.path.join(publish, 'wwwroot/js/modelrelief.js.map')
+        self.logger.logInformation(f"Deleting {source_map}", Colors.BrightWhite)
+        os.remove(source_map)
 
         # Python virtual environment
         if self.arguments.python:
