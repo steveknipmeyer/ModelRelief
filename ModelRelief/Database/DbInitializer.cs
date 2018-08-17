@@ -143,7 +143,7 @@ namespace ModelRelief.Database
                 Thread.Sleep(secondsBetweenAttempts * 1000);
             }
             // WIP: What handling is needed if the server cannot be reached?
-            Logger.LogError($"The database connection could not be opened after {maximumAttempts} to reach the server.");
+            Logger.LogError($"The database connection could not be opened after {maximumAttempts} attempts to reach the server.");
             return false;
 #endif
         }

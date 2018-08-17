@@ -1,6 +1,8 @@
 ﻿### Tasks
 #### Commit Notes
 #### Short Term
+    Vector
+        C:\Users\steve\AppData\Roaming\Microsoft\UserSecrets\aac2e9f0-916b-4347-a983-497c15de5050
     Register for A2 hosting.
 
     Review ModelRelief.csproj.
