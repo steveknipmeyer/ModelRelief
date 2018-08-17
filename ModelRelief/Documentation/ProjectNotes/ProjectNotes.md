@@ -2,12 +2,9 @@
 #### Commit Notes
 
 #### Short Term
-    Register for web hosting.
-    
-    Explorer
-        Change paths in launch.json.
-        Include Explorer in PYTHONPATH?
-        Add build step in gulfile.
+    Add a parameter to Builder to control the environment (Test, Production, etc.).
+
+    Register for A2 hosting.
 
     Namimg
         FE uses depthbuffers while API uses depth-buffers.

@@ -108,6 +108,11 @@ class Builder:
         os.chdir(self.solution)
         self.exec("tsc -p {}".format(self.project))       
 
+        # Explorer UI
+        self.logger.logInformation("\nExplorer UI", Colors.BrightMagenta)
+        os.chdir(self.solution)
+        self.exec("Build/BuildExplorerUI")        
+
         # ASP.NET Core build
         self.logger.logInformation("\nASP.NET Core compilation", Colors.BrightMagenta)
         os.chdir(self.project)

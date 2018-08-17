@@ -9,6 +9,7 @@
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
+import argparse
 import json
 import os
 # First, and before importing any Enthought packages, set the ETS_TOOLKIT environment variable to qt4 to tell Traits that we will use Qt.
@@ -37,6 +38,7 @@ from mayavi import mlab
 import numpy as np
 from numpy import pi, sin, cos, mgrid
 from enum import Enum
+import qdarkstyle
 from typing import Any, Callable, Dict, Optional
 
 from results import Results, DataSource
@@ -827,3 +829,33 @@ class Explorer(QtWidgets.QMainWindow):
         self.update_mesh_tabs(preserve_camera)
 
         self.set_busy (False)
+
+
+def main():
+    """
+    Main entry point.
+    """
+    os.chdir(os.path.dirname(__file__))
+
+    options_parser = argparse.ArgumentParser()
+    options_parser.add_argument('--settings', '-s',
+                                help='Mesh JSON settings file that defines the associated DepthBuffer and MeshTransform.', required=True)
+    options_parser.add_argument('--working', '-w',
+                                help='Temporary working folder.', required=True)
+    arguments = options_parser.parse_args()
+
+    qapp = QtWidgets.QApplication([])
+    qapp.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
+
+    explorer = Explorer(arguments.settings, arguments.working, qapp)
+
+    # self.explorer.showMinimized()
+    # self.explorer.showNormal()        
+    # self.explorer.showMaximized()
+
+    explorer.show()        
+
+    exit(qapp.exec_())
+
+if __name__ == '__main__':
+    main()
