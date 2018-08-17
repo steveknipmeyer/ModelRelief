@@ -124,8 +124,9 @@ class Builder:
             os.chdir(self.project)
             # N.B. ASPNETCORE_ENVIRONMENT cannot be overridden as a 'dotnet run' command line argument.
             # So, override (and restore) the current settings.
-            self.environment.push()
-            os.environ[EnvironmentNames.ASPNETCORE_ENVIRONMENT] = "ProductionBuild"
+            self.environment.push()          
+            if self.arguments.webpublish:
+                os.environ[EnvironmentNames.ASPNETCORE_ENVIRONMENT] = "ProductionBuild"
             os.environ[EnvironmentNames.MRExitAfterInitialization] = "True"
             os.environ[EnvironmentNames.MRInitializeUserStore] = "True"
             os.environ[EnvironmentNames.MRInitializeDatabase] = "True"

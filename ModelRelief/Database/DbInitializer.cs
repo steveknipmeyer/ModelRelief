@@ -294,6 +294,8 @@ namespace ModelRelief.Database
                 AddMeshes();
 
                 SeedUserStore();
+
+                Logger.LogInformation($"User {_user} database and sample data sets created.");
             }
 
             CreateTestDatabase();

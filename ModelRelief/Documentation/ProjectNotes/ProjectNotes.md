@@ -1,17 +1,21 @@
 ﻿### Tasks
 #### Commit Notes
-
 #### Short Term
-    Add a parameter to Builder to control the environment (Test, Production, etc.).
+    Explorer
+        How should Meshes be handled in the UI?
+            Combine MeshContainer and MeshTab into MeshTab.
+                MeshTab -> MeshWidget?
+                ImageTab -> ImageWidget?
+
+        Separate the UI classes from Explorer into separate files.
+            Should Explorer be in a separate folder from Solver?
 
     Register for A2 hosting.
 
     Namimg
-        FE uses depthbuffers while API uses depth-buffers.
+            FE uses depthbuffers while API uses depth-buffers.
 
     Review ModelRelief.csproj.
-
-    Update the Test Mesh models.
 
     Docker
         Python Environments
@@ -24,15 +28,6 @@
 
     Should ndimage or scikt-image be used for image processing support?
 
-    Solver           
-        How should Meshes be handled in the UI?
-            Combine MeshContainer and MeshTab into MeshTab.
-                MeshTab -> MeshWidget?
-                ImageTab -> ImageWidget?
-
-        Separate the UI classes from Explorer into separate files.
-            Should Explorer be in a separate folder from Solver?
-
     Write OBJ
         Should the OBJWriter be part of FileManager?
         Or should FileManager be renamed BinaryFile (or similar)?
@@ -43,9 +38,6 @@
         Review the technical papers.
         Review ZSurf.
         Review ArtCAM.
-
-    New Models
-        Can the MeshTransform settings be copied from the JSON file?
 
     Create additional test models.
         Spheres (Positive, Negative)
