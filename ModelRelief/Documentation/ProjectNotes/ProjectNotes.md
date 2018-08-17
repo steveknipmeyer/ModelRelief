@@ -4,12 +4,6 @@
     Register for A2 hosting.
 
     Review ModelRelief.csproj.
-
-    Docker
-        Python Environments
-            Does the path need to include additional mrenv folders?
-                activate .\mrenv?
-            Wrap the activate command so a different shell prompt can be substituted.
    
     Investigate workspaces in VSCode.
         Why is the second workspace unnamed?
@@ -52,12 +46,11 @@
    
     Publish Structure
         Publish
-            wwwroot
             <application binaries from 'dotnet publish'>
             mrenv
             Solver
-                Dispatcher relies on Solver being located in the system PATH.
             Tools
+            wwwroot
   
 ###### StandardView
 When the view camera is interactively changed, it should invalidate the StandardView in the UI.
@@ -65,7 +58,7 @@ When the view camera is interactively changed, it should invalidate the Standard
 
 ##### Technical Education
 
-- Manning Dependency Injection book.
+- ASP.NET Core in Action
 
 #####  Lambda
 

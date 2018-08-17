@@ -55,7 +55,9 @@ call SetAnacondaPath
 
 :: Active the ModelRelief Python environment.
 call activate ./devenv
+set PROMPT=(Development) $P$G
 ::call activate ./mrvenv
+::set PROMPT=(Production) $P$G
 
 :: Visual Studio 2017
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\VsDevCmd.bat"
