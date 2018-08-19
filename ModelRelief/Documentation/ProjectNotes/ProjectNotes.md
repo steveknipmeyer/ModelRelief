@@ -1,21 +1,32 @@
 ﻿### Tasks
 #### Commit Notes
 #### Short Term
-    Publish
-        Modify appsettings.Production.json to use the standard SQLServer connection string (not the form used with Docker.)
-            What authentication should be used? SA?
+
+    Publish Notes
+        Python is not in the sever path.
+        
+        Attach the seed database to the SQLServer instance.
+            The account credentials are not available for the test accounts so seeding the database cannot be done.
+            
+        webconfig
+            Enable logging.
+                <aspNetCore processPath="dotnet" arguments=".\ModelRelief.dll" stdoutLogEnabled="true" stdoutLogFile=".\logs\stdout" />
+
+        appsettings.Production.json
+            Add the SA connection string.
+
+            Add definitions for the runtime settings. IN production, the JSON configuration will probably be better than the use of environment variables.
+                "MRPort" : "60755",
+                "MRDatabaseProvider" : "SQLServer",
+                "MRExitAfterInitialization" : "False",
+                "MRInitializeUserStore" : "False",
+                "MRInitializeDatabase" : "False",
+                "MRSeedDatabase" : "False",
+
         Order a SQLServer book.
         Experiment with SQLite.
-        The appsettings.json must contain definitions for the standard environment variables.
-            "MRPort" : "60755",
-            "MRDatabaseProvider" : "SQLServer",
-            "MRExitAfterInitialization" : "False",
-            "MRInitializeUserStore" : "False",
-            "MRInitializeDatabase" : "False",
-            "MRSeedDatabase" : "False",
-  
-    Vector
-        C:\Users\steve\AppData\Roaming\Microsoft\UserSecrets\aac2e9f0-916b-4347-a983-497c15de5050
+
+    Add additional logging for starting the Solver process.
 
     Register for A2 hosting.
 
@@ -1295,3 +1306,10 @@ https://semver.npmjs.com/
 
     Start the Docker services defines in docker-composer.yml in the current directory.
         docker-compose up
+
+#### SQLServer
+        In a new intallation, perform the following steps:
+        SQLServer Management Studio
+            Connect to the database instance using Windows Authentication.
+                Enable SQL Server and Windows Authentication.
+                Reset the SA password.
