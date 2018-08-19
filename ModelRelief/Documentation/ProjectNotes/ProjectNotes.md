@@ -1,8 +1,22 @@
 ﻿### Tasks
 #### Commit Notes
 #### Short Term
+    Publish
+        Modify appsettings.Production.json to use the standard SQLServer connection string (not the form used with Docker.)
+            What authentication should be used? SA?
+        Order a SQLServer book.
+        Experiment with SQLite.
+        The appsettings.json must contain definitions for the standard environment variables.
+            "MRPort" : "60755",
+            "MRDatabaseProvider" : "SQLServer",
+            "MRExitAfterInitialization" : "False",
+            "MRInitializeUserStore" : "False",
+            "MRInitializeDatabase" : "False",
+            "MRSeedDatabase" : "False",
+  
     Vector
         C:\Users\steve\AppData\Roaming\Microsoft\UserSecrets\aac2e9f0-916b-4347-a983-497c15de5050
+
     Register for A2 hosting.
 
     Review ModelRelief.csproj.
