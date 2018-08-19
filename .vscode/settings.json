@@ -119,6 +119,8 @@
         "**/[Ww]ork*/**/*": true,
         "**/*.obj": true,
         "**/*.js": true,
+        "**/Publish": true,
+        "**/webpublish": true,
     },
 
     // ---------------------------------

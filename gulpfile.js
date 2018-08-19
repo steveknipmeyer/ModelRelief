@@ -299,7 +299,7 @@ gulp.task('copyNPM', function () {
     // FILES
 
     //jquery-validation-unobtrusive
-    subFolder         = 'jquery-validation-unobtrusive/';
+    subFolder         = 'jquery-validation-unobtrusive/dist/';
     sourceFolder      = siteConfig.nodeModulesRoot + subFolder;
     destinationFolder = siteConfig.libRoot + subFolder;
     gulp.src([sourceFolder + 'jquery.validate.unobtrusive.js']).pipe(gulp.dest(destinationFolder ));

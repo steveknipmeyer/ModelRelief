@@ -1,6 +1,9 @@
 ﻿### Tasks
 #### Commit Notes
+jquery-validation-unobtrusive now delivers in dist.
+
 #### Short Term
+    Download "Introduction to Windows Containers" e-book.
 
     Publish Notes
         Python is not in the sever path.
