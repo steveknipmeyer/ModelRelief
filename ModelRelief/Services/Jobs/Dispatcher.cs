@@ -79,7 +79,7 @@ namespace ModelRelief.Services.Jobs
         /// </summary>
         private string GetSolverPath()
         {
-            return @"..\Solver\solver.py";
+            return @"Solver\solver.py";
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace ModelRelief.Services.Jobs
         /// <param name="args">Arguments.</param>
         /// <param name="timeOut">Millisecond timeout. Maximum process execution time.</param>
         /// <returns>Process exit code.</returns>
-        public int RunProcess(string taskName, string args, int timeOut = 20000)
+        public int RunProcess(string taskName, string args, int timeOut = 30000)
         {
             ProcessStartInfo start = new ProcessStartInfo
             {
@@ -233,7 +233,7 @@ namespace ModelRelief.Services.Jobs
             }
             catch (Exception ex)
             {
-                Logger.LogError($"Unable to start process = {ex.Message}");
+                Logger.LogError($"Unable to start process {taskName} {args}: {ex.Message}");
                 return -1;
             }
         }

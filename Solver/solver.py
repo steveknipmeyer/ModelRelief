@@ -69,7 +69,7 @@ class Solver:
         if not os.path.exists(working_folder):
             os.makedirs(working_folder)
 
-        self.root_folder = os.path.abspath('../ModelRelief/wwwroot')
+        self.root_folder = os.path.abspath('../wwwroot') if os.environ['ASPNETCORE_ENVIRONMENT'] == 'Production' else os.path.abspath('../ModelRelief/wwwroot')
         self.services = Services(self.root_folder, self.working_folder, Logger(), self.results)
 
         # processing steps

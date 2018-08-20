@@ -1,36 +1,45 @@
 ﻿### Tasks
 #### Commit Notes
-jquery-validation-unobtrusive now delivers in dist.
+Builder creates logs folder in publish folder for IIS stdoutLog.
+appsettings.ProductionIIS.json
+    Add the SA connection string.
+    Add definitions for the runtime settings that are defined as environment variables in development and test.
+Add task name and argument list to RunProcess exception log message.
+Copy web.config into Publish, replacing the auto-generated version.
+Add publish target {IIS, Docker} to Builder.
+IIS build copies appsettings.ProductionIIS.json to appsettings.Production.json.
+Docker build copies appsettings.ProductionDocker.json to appsettings.Production.json.
+Move the ModelRelief log file to logs.
 
 #### Short Term
-    Download "Introduction to Windows Containers" e-book.
+    Remove PATH, PYTHON path changes to System Environment variables.
 
-    Publish Notes
-        Python is not in the sever path.
-        
+    Solver path differs between Production and other environments.
+        Dispatcher
+        [16:24:17 ERR] stderr = python.exe: can't open file 'Solver\solver.py': [Errno 2] No such file or directory
+    Solver
+        self.root_folder = os.path.abspath('../ModelRelief/wwwroot') if os.environ['ASPNETCORE_ENVIRONMENT'] == 'Production' else os.path.abspath('../wwwroot')
+
+        File "D:\ModelRelief\webpublish\Solver\filemanager.py", line 33, in read__binary
+            with open(file=path, mode='rb') as file:
+        FileNotFoundError: [Errno 2] No such file or directory: 'D:\\ModelRelief\\webpublish\\ModelRelief\\wwwroot\\store\\production\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\depthbuffers\\7\\lucy.sdb'
+
+    How are environemtn variables (PATH, PYTHONPATH) handled on the web server?
+
+    Builder       
+        Should Builder create the Production database and seed the user store during a build?
+            The database and user store can only be created one time. It must always be preserved during subsequent updates.
+
+    Should the user/store be <outside> wwwroot?
+    Add support for copying demonstration models into a new users account.
+
+    Deployment Notes
         Attach the seed database to the SQLServer instance.
             The account credentials are not available for the test accounts so seeding the database cannot be done.
-            
-        webconfig
-            Enable logging.
-                <aspNetCore processPath="dotnet" arguments=".\ModelRelief.dll" stdoutLogEnabled="true" stdoutLogFile=".\logs\stdout" />
+        Configure the user store.
 
-        appsettings.Production.json
-            Add the SA connection string.
-
-            Add definitions for the runtime settings. IN production, the JSON configuration will probably be better than the use of environment variables.
-                "MRPort" : "60755",
-                "MRDatabaseProvider" : "SQLServer",
-                "MRExitAfterInitialization" : "False",
-                "MRInitializeUserStore" : "False",
-                "MRInitializeDatabase" : "False",
-                "MRSeedDatabase" : "False",
-
-        Order a SQLServer book.
-        Experiment with SQLite.
-
-    Add additional logging for starting the Solver process.
-
+    Order a SQLServer book.
+ 
     Register for A2 hosting.
 
     Review ModelRelief.csproj.
