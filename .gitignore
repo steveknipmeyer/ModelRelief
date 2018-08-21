@@ -182,9 +182,6 @@ devenv
 # web runtime
 wwwroot
 
-# staging
-webpublish
-
 # Solver temporrary
 Solver/Test/Working/*
 

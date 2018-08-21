@@ -3,7 +3,6 @@
 
 devenv*
 node_modules*
-webpublish*
 
 ModelRelief/bin*
 ModelRelief/obj*

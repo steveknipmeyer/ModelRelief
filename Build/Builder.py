@@ -53,9 +53,10 @@ class Builder:
         self.publish_wwwroot_folder = os.path.join(self.publish_folder, self.wwwroot)
 
         self.build_folder = "Build"
+        self.iis_deploy_folder = os.path.join("C:/", "modelrelief")
         self.logs_folder = "logs"
         self.solver_folder = "Solver"
-        self.sqlserver_folder = "DatabaseStore/SQLServer"
+        self.sqlserver_folder = os.path.join("DatabaseStore", "SQLServer")
         self.test_folder = "Test"
         self.tools_folder = "Tools"
 
@@ -215,6 +216,11 @@ class Builder:
             self.logger.logInformation(f"\nUpdating {self.settings_production}", Colors.Cyan)
             Tools.copy_file(os.path.join(self.project_folder, self.settings_production_iis), os.path.join(self.publish_folder, self.settings_production))
 
+            if self.arguments.deploy:
+                self.logger.logInformation("\nDeploying to local IIS server", Colors.BrightMagenta)
+                self.delete_folder(self.iis_deploy_folder, confirm=True)
+                Tools.copy_folder(self.publish_folder, self.iis_deploy_folder)
+
         # Docker
         if self.arguments.target == PublishTarget.docker:
             self.logger.logInformation("\nDocker-specific deployment", Colors.BrightMagenta)
@@ -259,6 +265,8 @@ def main():
     #Publish
     options_parser.add_argument('--webpublish', '-w',
                                 help='Publish the web site.', type=ast.literal_eval, required=False, default=False)
+    options_parser.add_argument('--deploy', '-d',
+                                help='Deploy the published content to the local IIS web folder.', type=ast.literal_eval, required=False, default=False)
     options_parser.add_argument('--target', '-t',
                                 help='Deployment target for the published web site.', type=PublishTarget, required=False, default=PublishTarget.iis)
     arguments = options_parser.parse_args()

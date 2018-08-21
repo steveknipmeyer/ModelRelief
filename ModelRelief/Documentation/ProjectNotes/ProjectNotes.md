@@ -5,11 +5,8 @@
     Remove PATH, PYTHON path changes to System Environment variables.
     How are environemnt variables (PATH, PYTHONPATH) handled on the web server?
 
-    Relocate webpublish outside source folder.
-        Add script to push Publish to webpublish.
-
     Production Paths
-        webpublish (ContentRootPath)
+        modelrelief (ContentRootPath)
             <application files>
           * backup
             logs
