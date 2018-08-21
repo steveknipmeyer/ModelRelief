@@ -27,6 +27,7 @@ from objwriter import OBJWriter
 from results import Results
 from services import Services 
 from stopwatch import benchmark
+from tools import Colors, Tools
 
 from depthbuffer import DepthBuffer
 from mesh import Mesh
@@ -69,8 +70,7 @@ class Solver:
         if not os.path.exists(working_folder):
             os.makedirs(working_folder)
 
-        self.root_folder = os.path.abspath('../wwwroot') if os.environ['ASPNETCORE_ENVIRONMENT'] == 'Production' else os.path.abspath('../ModelRelief/wwwroot')
-        self.services = Services(self.root_folder, self.working_folder, Logger(), self.results)
+        self.services = Services(self.content_folder, self.working_folder, Logger(), self.results)
 
         # processing steps
         self.enable_gradient_threshold = True
@@ -102,7 +102,22 @@ class Solver:
         self.settings_file = settings
 
     @property
+    def content_folder(self):
+        """
+        Returns the absolute path of ContentRootPath.
+        In Production, the Solver folder is at the same level as ContentRootPath.
+        In Development, Test environments, the Solver folder is one level above at the Solution root.
+        """
+        if Tools.is_production():
+            return os.path.abspath('../wwwroot')
+
+        return os.path.abspath('../ModelRelief/wwwroot')
+
+    @property
     def settings_file(self): 
+        """
+        Returns the absolute path of the Mesh settings file.
+        """
         return self._settings_file
 
     @settings_file.setter

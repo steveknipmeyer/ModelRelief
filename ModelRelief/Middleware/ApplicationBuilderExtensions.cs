@@ -15,7 +15,7 @@ namespace Microsoft.AspNetCore.Builder
         /// Include the target folders in the list of valid static file folders.
         /// </summary>
         /// <param name="app">IApplicationBuilder.</param>
-        /// <param name="root">Root (parent of wwwwroot) of the file server.</param>
+        /// <param name="root">Content root (parent of wwwwroot) of the file server.</param>
         /// <param name="staticFilePath">Folder path to allow static files to be served.</param>
         /// /// <returns>IApplicationBuilder</returns>
         public static IApplicationBuilder AddStaticFilePath(this IApplicationBuilder app, string root, string staticFilePath)

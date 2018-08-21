@@ -180,7 +180,7 @@ namespace ModelRelief
                 ContentTypeProvider = provider,
             });
 
-            app.AddStaticFilePaths(env.ContentRootPath, new string[] { "node_modules", "Scripts" });
+            app.AddStaticFilePaths(env.ContentRootPath, new string[] { "Scripts" });
             app.UseAuthentication();
 
             // authentication middleware for testing

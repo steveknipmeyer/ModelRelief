@@ -218,6 +218,9 @@ class Builder:
         # Docker
         if self.arguments.target == PublishTarget.docker:
             self.logger.logInformation("\nDocker-specific deployment", Colors.BrightMagenta)
+            self.logger.logInformation(f"\nUpdating {self.settings_production}", Colors.Cyan)
+            Tools.copy_file(os.path.join(self.project_folder, self.settings_production_docker), os.path.join(self.publish_folder, self.settings_production))
+
             self.logger.logInformation("Docker ModelRelief image", Colors.Cyan)
             os.chdir(self.solution_folder)
             port = os.environ[EnvironmentNames.MRPort]
@@ -225,9 +228,6 @@ class Builder:
 
             self.logger.logInformation("\nDocker ModelRelief Database image", Colors.Cyan)
             self.exec(f"docker build -t modelreliefdatabase -f Build\\DockerFile.modelreliefdatabase  .")        
-
-            self.logger.logInformation(f"\nUpdating {self.settings_production}", Colors.Cyan)
-            Tools.copy_file(os.path.join(self.project_folder, self.settings_production_docker), os.path.join(self.publish_folder, self.settings_production))
 
         self.logger.logInformation("\n</Publish>", Colors.BrightYellow)
 

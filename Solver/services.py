@@ -17,13 +17,13 @@ class Services:
     A class for supporting runtime services such as loggers and timers.
     """
 
-    def __init__(self, root_folder : str, working_folder : str, logger, results: Results) -> None:
+    def __init__(self, content_folder : str, working_folder : str, logger, results: Results) -> None:
         """
         Initialize an instance of Services.
         Parameters
         ----------
-        root_folder
-            Absolute path to web root.
+        content_folder
+            Absolute path to ContentRootPath.
         working_folder
             Path to the working folder for intermediate files.
         logger
@@ -33,7 +33,7 @@ class Services:
         
         """
         self.debug = True
-        self.root_folder = root_folder
+        self.content_folder = content_folder
         self.working_folder = working_folder
         self.logger = logger
         self.results = results

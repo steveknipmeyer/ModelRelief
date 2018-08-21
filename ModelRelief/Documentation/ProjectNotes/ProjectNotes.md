@@ -1,31 +1,42 @@
 ﻿### Tasks
 #### Commit Notes
 
-
 #### Short Term
     Remove PATH, PYTHON path changes to System Environment variables.
-    How are environemtn variables (PATH, PYTHONPATH) handled on the web server?
-    Folders
-        user/store
-        backup
-        logs
-        DatabaseStore
-            SQLite
-            SQLServer
-        Test (?)
+    How are environemnt variables (PATH, PYTHONPATH) handled on the web server?
+
+    Relocate webpublish outside source folder.
+        Add script to push Publish to webpublish.
 
     Production Paths
-        Production
-            <content>
+        webpublish (ContentRootPath)
+            <application files>
+          * backup
+            logs
             mrenv
-            wwwroot
+            store/production
             Solver
+            Test
             Tools
+            wwwroot
 
         Development, Test
-                <content>
-                mrenv
+
+            ModelRelief (ContentRootPath)
+                <application files>
+                logs
+              * store/<Environment>
+                    users
+                    database
+                        SQLite
+                        SQLServer
+                Test
+                    Data
+                    Files
+                    Users
+                  * MeshSettings
                 wwwroot
+            devenv
             Solver
             Tools
 
@@ -33,7 +44,6 @@
         Should Builder create the Production database and seed the user store during a build?
             The database and user store can only be created one time. It must always be preserved during subsequent updates.
 
-    Should the user/store be <outside> wwwroot?
     Add support for copying demonstration models into a new users account.
 
     Deployment Notes
@@ -1311,7 +1321,7 @@ https://semver.npmjs.com/
         docker run -it -p 8080:60655 modelrelief
 
     Run a Docker container but override the default entrypoint with the command shell.
-        docker run -d --entrypoint "cmd" -p 8080:60655 modelrelief
+        docker run -it --entrypoint "cmd" -p 8080:60655 modelrelief
     Start a command shell in a running container.        
         docker exec <container> cmd
 

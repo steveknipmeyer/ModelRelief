@@ -100,8 +100,8 @@
             },
 
         //  "program": "${workspaceRoot}/Build/builder.py",
-            "program": "${workspaceRoot}/Explorer/workbench.py",
-        //  "program": "${workspaceRoot}/Solver/solver.py",
+        //  "program": "${workspaceRoot}/Explorer/explorer.py",
+            "program": "${workspaceRoot}/Solver/solver.py",
         //  "program": "${workspaceRoot}/Tools/testrunner.py",
         //  "program": "${workspaceRoot}/Solver/Experiments/workbench.py",
         //  "program": "${workspaceRoot}/Solver/Experiments/mayavitest.py",

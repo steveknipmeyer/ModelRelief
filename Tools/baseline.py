@@ -37,7 +37,6 @@ class BaseLine:
         self.logger = logger
         self.database = database
         self.environment = Environment()
-        return
 
     def show_folder_locations (self):
         """

@@ -16,6 +16,7 @@ RUN setx PATH "%PATH%;C:\root\mrenv"
 RUN setx PYTHONPATH "C:\root\Solver;C:\root\Tools"
 
 # MR runtime settings
+ENV ASPNETCORE_ENVIRONMENT=Production
 ENV MRPort=$MRPORT
 ENV MRDatabaseProvider=SQLServer
 ENV MRExitAfterInitialization=False

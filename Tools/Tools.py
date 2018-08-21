@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 #
-#   Copyright (c) 2017
+#   Copyright (c) 2017-2018
 #   All Rights Reserved.
 #
 
 """
-
 .. module:: Tools
    :synopsis: Utilities and tools for scripting support.
 
@@ -174,9 +173,22 @@ class Tools:
                 print ("Please respond with 'yes' or 'no'\n")
 
     @staticmethod
+    def is_production(): 
+        """
+        Returns whether the current environment is Production.
+        """
+        if not "ASPNETCORE_ENVIRONMENT" in os.environ:
+            return True
+
+        if os.environ['ASPNETCORE_ENVIRONMENT'] == 'Production':
+            return True
+
+        return False
+
+    @staticmethod
     def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
         """
         Generate a random string.
         https://stackoverflow.com/questions/2257441/random-string-generation-with-upper-case-letters-and-digits-in-python
         """
-        return ''.join(random.choice(chars) for _ in range(size))                
+        return ''.join(random.choice(chars) for _ in range(size))

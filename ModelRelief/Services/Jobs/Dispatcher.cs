@@ -79,7 +79,9 @@ namespace ModelRelief.Services.Jobs
         /// </summary>
         private string GetSolverPath()
         {
-            return @"Solver\solver.py";
+            var solverPath = Path.Combine("Solver", "solver.py");
+            // In Production, the Solver folder is at the same level as <ContentRootPath>. Otherwise, it is one level above at the Solution root.
+            return HostingEnvironment.IsProduction() ? solverPath : Path.Combine("..", solverPath);
         }
 
         /// <summary>

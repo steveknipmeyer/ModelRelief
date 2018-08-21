@@ -114,6 +114,7 @@
     // ---------------------------------
     // The folders to exclude when doing a full text search in the workspace.
     "search.exclude": {
+        "**/.mypy_cache": true,
         "**/*.d.ts": true,
         "**/node_modules": true,
         "**/[Ww]ork*/**/*": true,

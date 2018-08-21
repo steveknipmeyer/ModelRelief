@@ -85,7 +85,7 @@ class DepthBuffer:
         self.settings = settings
         self.services = services
 
-        self.path = os.path.abspath(os.path.join(self.services.root_folder,  settings['RelativeFileName']))
+        self.path = os.path.abspath(os.path.join(self.services.content_folder,  settings['RelativeFileName']))
         self._width = int(settings['Width'])
         self._height = int(settings['Height'])
         self.format = settings['Format']
