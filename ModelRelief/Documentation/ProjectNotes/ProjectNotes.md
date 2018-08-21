@@ -1,30 +1,33 @@
 ﻿### Tasks
 #### Commit Notes
-Builder creates logs folder in publish folder for IIS stdoutLog.
-appsettings.ProductionIIS.json
-    Add the SA connection string.
-    Add definitions for the runtime settings that are defined as environment variables in development and test.
-Add task name and argument list to RunProcess exception log message.
-Copy web.config into Publish, replacing the auto-generated version.
-Add publish target {IIS, Docker} to Builder.
-IIS build copies appsettings.ProductionIIS.json to appsettings.Production.json.
-Docker build copies appsettings.ProductionDocker.json to appsettings.Production.json.
-Move the ModelRelief log file to logs.
+
 
 #### Short Term
     Remove PATH, PYTHON path changes to System Environment variables.
-
-    Solver path differs between Production and other environments.
-        Dispatcher
-        [16:24:17 ERR] stderr = python.exe: can't open file 'Solver\solver.py': [Errno 2] No such file or directory
-    Solver
-        self.root_folder = os.path.abspath('../ModelRelief/wwwroot') if os.environ['ASPNETCORE_ENVIRONMENT'] == 'Production' else os.path.abspath('../wwwroot')
-
-        File "D:\ModelRelief\webpublish\Solver\filemanager.py", line 33, in read__binary
-            with open(file=path, mode='rb') as file:
-        FileNotFoundError: [Errno 2] No such file or directory: 'D:\\ModelRelief\\webpublish\\ModelRelief\\wwwroot\\store\\production\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\depthbuffers\\7\\lucy.sdb'
-
     How are environemtn variables (PATH, PYTHONPATH) handled on the web server?
+    Folders
+        user/store
+        backup
+        logs
+        DatabaseStore
+            SQLite
+            SQLServer
+        Test (?)
+
+    Production Paths
+        Production
+            <content>
+            mrenv
+            wwwroot
+            Solver
+            Tools
+
+        Development, Test
+                <content>
+                mrenv
+                wwwroot
+            Solver
+            Tools
 
     Builder       
         Should Builder create the Production database and seed the user store during a build?
