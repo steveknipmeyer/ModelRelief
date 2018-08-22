@@ -1,17 +1,17 @@
 ﻿### Tasks
 #### Commit Notes
 
+
 #### Short Term
     Why are there no warnings about comments in launch.json?
+    Why is the Python refactoring so slow?
+        "Refactoring library rope is not installed. Install?"
 
     Databases are not portable now!
         The file path of models is incorrect in the IIS database.
-            It refers to the development database folder and it references wwwroot!
-                An updated version of ModelReliefProduction must be attached in SSMS.
+        An updated version of ModelReliefProduction must be attached in SSMS.
 
-    Should the database path fields always use relative paths?
-
-    When should store be deleted?
+        Should the database path fields always use relative paths?
 
     Builder
         Builder should read appsettingsProductionBuild.json rather than use constants.
@@ -21,16 +21,13 @@
                 Add an enviroment parameter?
                     This would control the user store structure.
                     Building devenv is currently a manual process.
-
-    store
-        The users folder is used to hold the user file system.
-        When SQLite is configured, the database file is stored in store/<environment>/database.
-        Also, the database folder is used to transfer the SQLServer seed database to the Docker database container during a build.
+        Should Builder create the Production database and seed the user store during a build?
+            The database and user store can only be created one time. It must always be preserved during subsequent updates.
 
     Remove PATH, PYTHON path changes to System Environment variables.
     How are environemnt variables (PATH, PYTHONPATH) handled on the web server?
 
-    Production Paths
+    Server Structure
         modelrelief (ContentRootPath)
             <application files>
             logs
@@ -42,31 +39,27 @@
             wwwroot
 
         Development, Test
-
             ModelRelief (ContentRootPath)
                 <application files>
                 logs
                 store/<Environment>
-                    users
-                    database
-                        SQLite
-                        SQLServer
                 Test
                 wwwroot
             devenv
             Solver
             Tools
 
-    Builder       
-        Should Builder create the Production database and seed the user store during a build?
-            The database and user store can only be created one time. It must always be preserved during subsequent updates.
+        'store' Notes
+            The users folder is used to hold the user file system.
+            When SQLite is configured, the database file is stored in store/<environment>/database.
+            Also, the database folder is used to transfer the SQLServer seed database to the Docker database container during a build.
 
     Add support for copying demonstration models into a new users account.
 
     Deployment Notes
         Attach the seed database to the SQLServer instance.
             The account credentials are not available for the test accounts so seeding the database cannot be done.
-        Configure the user store.
+        Initialize the user store.
 
     Order a SQLServer book.
  

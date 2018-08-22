@@ -44,22 +44,24 @@ class Builder:
         self.arguments = arguments
         self.environment:Environment = Environment() 
 
-        # folders
-        self.wwwroot = "wwwroot"
-        self.modelrelief_folder = os.environ[EnvironmentNames.MR]
-        self.solution_folder = os.environ[EnvironmentNames.MRSolution]
-        self.source_wwwroot_folder = os.path.join(self.modelrelief_folder, self.wwwroot)
-        self.publish_folder = os.environ[EnvironmentNames.MRPublish]
-        self.publish_wwwroot_folder = os.path.join(self.publish_folder, self.wwwroot)
-
+        # folder names
+        self.wwwroot_folder = "wwwroot"
         self.build_folder = "Build"
-        self.iis_deploy_folder = os.path.join("C:/", "modelrelief")
         self.logs_folder = "logs"
         self.solver_folder = "Solver"
-        self.sqlserver_folder = os.path.join("store", "production", "database", "SQLServer")
         self.store_folder = "store"
         self.test_folder = "Test"
         self.tools_folder = "Tools"
+
+        # folder paths
+        self.iis_deploy_path = os.path.join("C:/", "modelrelief")
+        self.modelrelief_path = os.environ[EnvironmentNames.MR]
+        self.publish_path = os.environ[EnvironmentNames.MRPublish]
+        self.publish_wwwroot_path = os.path.join(self.publish_path, self.wwwroot_folder)
+        self.solution_path = os.environ[EnvironmentNames.MRSolution]
+        self.source_wwwroot_path = os.path.join(self.modelrelief_path, self.wwwroot_folder)
+        self.source_store_path = os.path.join(self.modelrelief_path, self.store_folder)
+        self.sqlserver_path = os.path.join("store", "production", "database", "SQLServer")
 
         # files
         self.build_explorer = "BuildExplorerUI.bat"
@@ -98,7 +100,7 @@ class Builder:
                 self.logger.logInformation("Exiting", Colors.Red)
                 sys.exit(1)            
 
-    def initialize (self, wwwroot: str, publish: str)->None :
+    def initialize (self, wwwroot: str, publish: str, store: str)->None :
         """
         Perform initialization including removing build targets.
         Parameters
@@ -107,9 +109,12 @@ class Builder:
             wwwroot output folder
         publish
             publish output folder
+        store
+            web store folder
         """
         self.delete_folder(wwwroot)
         self.delete_folder(publish)
+        self.delete_folder(store)
 
     def build (self):
         """
@@ -117,33 +122,33 @@ class Builder:
         """
         self.logger.logInformation("\n<Build>", Colors.BrightYellow)
 
-        os.chdir(self.solution_folder)
-        self.initialize(self.source_wwwroot_folder, self.publish_folder)
+        os.chdir(self.solution_path)
+        self.initialize(self.source_wwwroot_path, self.publish_path, self.source_store_path)
 
         # gulp (wwwroot)
         self.logger.logInformation("\nBuilding wwwroot", Colors.BrightMagenta)
-        os.chdir(self.solution_folder)
+        os.chdir(self.solution_path)
         self.exec("gulp.cmd")
 
         # TypeScript
         self.logger.logInformation("\nTypeScript compilation", Colors.BrightMagenta)
-        os.chdir(self.solution_folder)
-        self.exec("tsc -p {}".format(self.modelrelief_folder))       
+        os.chdir(self.solution_path)
+        self.exec("tsc -p {}".format(self.modelrelief_path))       
 
         # Explorer UI
         self.logger.logInformation("\nExplorer UI", Colors.BrightMagenta)
-        os.chdir(self.solution_folder)
+        os.chdir(self.solution_path)
         self.exec(os.path.join(self.build_folder, self.build_explorer))
 
         # ASP.NET Core build
         self.logger.logInformation("\nASP.NET Core compilation", Colors.BrightMagenta)
-        os.chdir(self.modelrelief_folder)
+        os.chdir(self.modelrelief_path)
         self.exec("dotnet build")
 
         # database initialization and user store
         if self.arguments.initialize:
             self.logger.logInformation("\nInitialize database and user store", Colors.BrightMagenta)
-            os.chdir(self.modelrelief_folder)
+            os.chdir(self.modelrelief_path)
             # N.B. ASPNETCORE_ENVIRONMENT cannot be overridden as a 'dotnet run' command line argument.
             # So, override (and restore) the current settings.
             self.environment.push()          
@@ -165,76 +170,76 @@ class Builder:
         """
         self.logger.logInformation("\n<Publish>", Colors.BrightCyan)
 
-        os.chdir(self.solution_folder)
+        os.chdir(self.solution_path)
         # ASP.NET Core Publish
         self.logger.logInformation("\nASP.NET Core Publish", Colors.BrightMagenta)
-        os.chdir(self.modelrelief_folder)
-        self.exec("dotnet publish -c Release -o {}".format(self.publish_folder))
+        os.chdir(self.modelrelief_path)
+        self.exec("dotnet publish -c Release -o {}".format(self.publish_path))
         self.logger.logInformation("\nUpdating web.config", Colors.Cyan)
-        Tools.copy_file(os.path.join(self.solution_folder, self.web_config), os.path.join(self.publish_folder, self.web_config))
+        Tools.copy_file(os.path.join(self.solution_path, self.web_config), os.path.join(self.publish_path, self.web_config))
 
         # Strip TypeScript source map
         self.logger.logInformation("\nRemoving TypeScript source map", Colors.BrightMagenta)
-        source_map = os.path.join(self.publish_wwwroot_folder, "js", self.modelrelief_map)
+        source_map = os.path.join(self.publish_wwwroot_path, "js", self.modelrelief_map)
         self.logger.logInformation(f"Deleting {source_map}", Colors.BrightWhite)
         os.remove(source_map)
 
         # Python virtual environment
         if self.arguments.python:
             self.logger.logInformation("\nPython virtual environment", Colors.BrightMagenta)
-            os.chdir(self.publish_folder)
+            os.chdir(self.publish_path)
             self.exec("BuildPythonEnvironment Production")        
 
         # Python source
         self.logger.logInformation("\nPython source", Colors.BrightMagenta)
-        os.chdir(self.solution_folder)
-        Tools.copy_folder(os.path.join(self.solution_folder, self.solver_folder), os.path.join(self.publish_folder, self.solver_folder))
-        Tools.copy_folder(os.path.join(self.solution_folder, self.tools_folder), os.path.join(self.publish_folder, self.tools_folder))
+        os.chdir(self.solution_path)
+        Tools.copy_folder(os.path.join(self.solution_path, self.solver_folder), os.path.join(self.publish_path, self.solver_folder))
+        Tools.copy_folder(os.path.join(self.solution_path, self.tools_folder), os.path.join(self.publish_path, self.tools_folder))
 
         # test models
         self.logger.logInformation("\nTest models", Colors.BrightMagenta)
-        os.chdir(self.modelrelief_folder)
-        Tools.copy_folder(os.path.join(self.modelrelief_folder, self.test_folder), os.path.join(self.publish_folder, self.test_folder))
+        os.chdir(self.modelrelief_path)
+        Tools.copy_folder(os.path.join(self.modelrelief_path, self.test_folder), os.path.join(self.publish_path, self.test_folder))
 
         # create logs folder
         self.logger.logInformation("\nCreating logs folder", Colors.BrightMagenta)
-        logs_folder = os.path.join(self.publish_folder, self.logs_folder)
+        logs_folder = os.path.join(self.publish_path, self.logs_folder)
         self.logger.logInformation(f"{logs_folder} created", Colors.BrightWhite)
         os.makedirs(logs_folder)
 
         # store
         self.logger.logInformation("\nCopying web store", Colors.BrightMagenta)
-        os.chdir(self.modelrelief_folder)
-        Tools.copy_folder(os.path.join(self.modelrelief_folder, self.store_folder), os.path.join(self.publish_folder, self.store_folder))
+        os.chdir(self.modelrelief_path)
+        Tools.copy_folder(os.path.join(self.modelrelief_path, self.store_folder), os.path.join(self.publish_path, self.store_folder))
 
         # SQLServer seed database
         self.logger.logInformation("\nSQLServer database", Colors.BrightMagenta)
-        os.chdir(self.solution_folder)
+        os.chdir(self.solution_path)
         sqlserver_files = ['ModelReliefProduction.mdf', 'ModelReliefProduction_log.ldf']
         for file in sqlserver_files:
             source = os.path.join(self.environment.sqlserver_folder, file)
-            destination = os.path.join(self.publish_folder, self.sqlserver_folder, file)
+            destination = os.path.join(self.publish_path, self.sqlserver_path, file)
             Tools.copy_file(source, destination)
 
         # IIS
         if self.arguments.target == PublishTarget.iis:
             self.logger.logInformation("\nIIS-specific deployment", Colors.BrightMagenta)
             self.logger.logInformation(f"\nUpdating {self.settings_production}", Colors.Cyan)
-            Tools.copy_file(os.path.join(self.modelrelief_folder, self.settings_production_iis), os.path.join(self.publish_folder, self.settings_production))
+            Tools.copy_file(os.path.join(self.modelrelief_path, self.settings_production_iis), os.path.join(self.publish_path, self.settings_production))
 
             if self.arguments.deploy:
                 self.logger.logInformation("\nDeploying to local IIS server", Colors.BrightMagenta)
-                self.delete_folder(self.iis_deploy_folder, confirm=True)
-                Tools.copy_folder(self.publish_folder, self.iis_deploy_folder)
+                self.delete_folder(self.iis_deploy_path, confirm=True)
+                Tools.copy_folder(self.publish_path, self.iis_deploy_path)
 
         # Docker
         if self.arguments.target == PublishTarget.docker:
             self.logger.logInformation("\nDocker-specific deployment", Colors.BrightMagenta)
             self.logger.logInformation(f"\nUpdating {self.settings_production}", Colors.Cyan)
-            Tools.copy_file(os.path.join(self.modelrelief_folder, self.settings_production_docker), os.path.join(self.publish_folder, self.settings_production))
+            Tools.copy_file(os.path.join(self.modelrelief_path, self.settings_production_docker), os.path.join(self.publish_path, self.settings_production))
 
             self.logger.logInformation("Docker ModelRelief image", Colors.Cyan)
-            os.chdir(self.solution_folder)
+            os.chdir(self.solution_path)
             port = os.environ[EnvironmentNames.MRPort]
             self.exec(f"docker build -t modelrelief --build-arg MRPORT={port} -f Build\\DockerFile.modelrelief  .")        
 
