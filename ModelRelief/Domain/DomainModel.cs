@@ -69,18 +69,18 @@ namespace ModelRelief.Domain
 
         /// <summary>
         /// Gets the relative path of the model file.
-        /// The path is relative to wwwroot.
+        /// The path is relative to store root.
         /// </summary>
-        /// <returns>Path of model file relative to wwwroot.</returns>
+        /// <returns>Path of model file relative to store root.</returns>
         public string RelativeFileName
         {
             get
             {
                 var fileName = FileName;
 
-                // strip to web root
-                var webRootIndex = fileName.IndexOf(Settings.WebRoot);
-                var relativeFileName = fileName.Substring(webRootIndex + Settings.WebRoot.Length + 1);
+                // strip to store root
+                var storeRootIndex = fileName.IndexOf(Settings.StoreRoot);
+                var relativeFileName = fileName.Substring(storeRootIndex);
                 return relativeFileName;
             }
         }

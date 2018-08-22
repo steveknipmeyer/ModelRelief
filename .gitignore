@@ -182,6 +182,9 @@ devenv
 # web runtime
 wwwroot
 
+# web file storage
+store
+
 # Solver temporrary
 Solver/Test/Working/*
 

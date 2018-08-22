@@ -34,10 +34,11 @@ namespace ModelRelief.Services
         public string DefaultModelStorageFolder<TEntity>(TEntity model)
             where TEntity : DomainModel
         {
-            var storeUsersFolder  = ConfigurationProvider.GetSetting(Paths.StoreUsers);
-            var modelRootFolder = ConfigurationProvider.GetSetting($"Paths:ResourceFolders:{typeof(TEntity).Name}");
+            var storeUsersFolder = ConfigurationProvider.GetSetting(Paths.StoreUsers);
+            var modelRootFolder  = ConfigurationProvider.GetSetting($"Paths:ResourceFolders:{typeof(TEntity).Name}");
 
-            string modelStorageFolder = $"{HostingEnvironment.WebRootPath}{storeUsersFolder}{model.User.Id}/{modelRootFolder}/{model.Id}/";
+            // N.B. Path.Combine does not handle path fragments that mix forward and backward slashes.
+            string modelStorageFolder = $"{HostingEnvironment.ContentRootPath}{Path.DirectorySeparatorChar}{storeUsersFolder}{model.User.Id}/{modelRootFolder}/{model.Id}/";
 
             // normalize
             return Path.GetFullPath(modelStorageFolder);
@@ -52,7 +53,8 @@ namespace ModelRelief.Services
             var storeUsersFolder = ConfigurationProvider.GetSetting(Paths.StoreUsers);
             var workingFolder = ConfigurationProvider.GetSetting(Paths.Working);
 
-            string workingStorageFolder = $"{HostingEnvironment.WebRootPath}{storeUsersFolder}{userId}/{workingFolder}/";
+            // N.B. Path.Combine does not handle path fragments that mix forward and backward slashes.
+            string workingStorageFolder = $"{HostingEnvironment.ContentRootPath}{Path.DirectorySeparatorChar}{storeUsersFolder}{userId}/{workingFolder}/";
 
             // normalize
             return Path.GetFullPath(workingStorageFolder);

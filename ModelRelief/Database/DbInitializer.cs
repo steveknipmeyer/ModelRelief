@@ -36,7 +36,8 @@ namespace ModelRelief.Database
         private IStorageManager                 StorageManager { get; set; }
 
         private ApplicationUser                 _user;
-        private string                          _storeUsers { get; set; }
+        private string                          StoreUsersPath { get; set; }
+        private string                          SqlitePath { get; set; }
 
         /// <summary>
         /// Test Project Names
@@ -83,7 +84,10 @@ namespace ModelRelief.Database
             if (StorageManager == null)
                 throw new ArgumentNullException(nameof(StorageManager));
 
-            _storeUsers = ConfigurationProvider.GetSetting(Paths.StoreUsers);
+            var storeUsersPartialPath = ConfigurationProvider.GetSetting(Paths.StoreUsers);
+            StoreUsersPath   = $"{HostingEnvironment.ContentRootPath}{Path.DirectorySeparatorChar}{storeUsersPartialPath}";
+
+            SqlitePath = Path.GetFullPath($"{HostingEnvironment.ContentRootPath}{Path.DirectorySeparatorChar}{ConfigurationProvider.GetSetting(Paths.StoreDatabase)}{ConfigurationSettings.SQLite}");
 
             ExitAfterInitialization = exitAfterInitialization;
 
@@ -91,21 +95,16 @@ namespace ModelRelief.Database
         }
 
         /// <summary>
-        /// Ensure the database server is available.
+        /// Ensure the database server is initialized and available.
         /// During (Docker) startup the front-end may attemp to access the database before the service is running.!--
         /// </summary>
-        private bool EnsureServerRunning()
+        private bool EnsureServerInitialized()
         {
-#if false
-            var delaySeconds = 10;
-            System.Threading.Thread.Sleep(delaySeconds * 1000);
-            return true;
-
-#else
             string connectionString;
             switch (ConfigurationProvider.Database)
             {
                 case RelationalDatabaseProvider.SQLite:
+                    Directory.CreateDirectory(SqlitePath);
                     return true;
 
                 default:
@@ -137,7 +136,7 @@ namespace ModelRelief.Database
                 catch (Exception ex)
                 {
                     {
-                        Logger.LogWarning($"EnsureServerRunning: server connection failed: {ex.Message}.");
+                        Logger.LogWarning($"EnsureServerInitialized: server connection failed: {ex.Message}.");
                     }
                 }
                 Thread.Sleep(secondsBetweenAttempts * 1000);
@@ -145,7 +144,6 @@ namespace ModelRelief.Database
             // WIP: What handling is needed if the server cannot be reached?
             Logger.LogError($"The database connection could not be opened after {maximumAttempts} attempts to reach the server.");
             return false;
-#endif
         }
 
         /// <summary>
@@ -153,7 +151,7 @@ namespace ModelRelief.Database
         /// </summary>
         private void Initialize()
         {
-            EnsureServerRunning();
+            EnsureServerInitialized();
 
             if (ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRInitializeUserStore))
                 InitializeUserStore();
@@ -216,7 +214,8 @@ namespace ModelRelief.Database
             switch (ConfigurationProvider.Database)
             {
                 case RelationalDatabaseProvider.SQLite:
-                    databaseFolder = Path.Combine(HostingEnvironment.ContentRootPath, @"DatabaseStore\SQLite");
+                    databaseFolder = SqlitePath;
+                    Directory.CreateDirectory(databaseFolder);
                     fileList = new Dictionary<string, string>
                     {
                         { "ModelReliefBaseline.db",     "ModelReliefTest.db" },
@@ -330,9 +329,6 @@ namespace ModelRelief.Database
         /// </summary>
         private void InitializeUserStore()
         {
-            var storeUsersPartialPath = ConfigurationProvider.GetSetting(Paths.StoreUsers);
-            var storeUsersPath   = $"{HostingEnvironment.WebRootPath}{storeUsersPartialPath}";
-
 #if false
             if (!ExitAfterInitialization)
             {
@@ -345,8 +341,8 @@ namespace ModelRelief.Database
             }
 #endif
 
-            Files.DeleteFolder(storeUsersPath, true);
-            Logger.LogWarning($"User store ({storeUsersPath}) deleted.");
+            Files.DeleteFolder(StoreUsersPath, true);
+            Logger.LogWarning($"User store ({StoreUsersPath}) deleted.");
         }
 
         /// <summary>
@@ -997,8 +993,7 @@ namespace ModelRelief.Database
             var sourceFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUsers)}/{ConfigurationProvider.GetSetting(folderType)}";
             var sourceFolderPath        = $"{HostingEnvironment.ContentRootPath}{sourceFolderPartialPath}";
 
-            var storeUsersPartialPath = ConfigurationProvider.GetSetting(Paths.StoreUsers);
-            var destinationFolderPath   = $"{HostingEnvironment.WebRootPath}{storeUsersPartialPath}{_user.Id}/{ConfigurationProvider.GetSetting(folderType)}";
+            var destinationFolderPath   = $"{StoreUsersPath}{_user.Id}/{ConfigurationProvider.GetSetting(folderType)}";
             Directory.CreateDirectory(destinationFolderPath);
 
             // iterate over all folders

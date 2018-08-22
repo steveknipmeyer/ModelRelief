@@ -109,9 +109,9 @@ class Solver:
         In Development, Test environments, the Solver folder is one level above at the Solution root.
         """
         if Tools.is_production():
-            return os.path.abspath('../wwwroot')
+            return os.path.abspath('..')
 
-        return os.path.abspath('../ModelRelief/wwwroot')
+        return os.path.abspath('../ModelRelief')
 
     @property
     def settings_file(self): 

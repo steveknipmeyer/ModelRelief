@@ -3,4 +3,4 @@ LABEL maintainer "steve@knipmeyer.org"
 
 # https://aspnetmonsters.com/2017/03/2016-03-11-space-in-dockerfile/
 ENV DATAPATH "C:/Program Files/Microsoft SQL Server/MSSQL14.SQLEXPRESS/MSSQL/DATA/"
-COPY Publish\\DatabaseStore\\SQLServer ${DATAPATH}
+COPY Publish\\store\\production\\database\\SQLServer ${DATAPATH}

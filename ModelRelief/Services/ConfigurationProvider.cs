@@ -126,6 +126,7 @@ namespace ModelRelief.Services
     {
         public const string TestDataUsers = "Paths:TestDataUsers";
         public const string TestDataFiles = "Paths:TestDataFiles";
+        public const string StoreDatabase = "Paths:StoreDatabase";
         public const string StoreUsers    = "Paths:StoreUsers";
         public const string Working       = "Paths:Working";
     }

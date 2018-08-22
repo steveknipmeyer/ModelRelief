@@ -1,3 +1,0 @@
-# This folder is used to hold the SQLite database files at runtime.
-# THe database files are not kept under source control.
-*.db 

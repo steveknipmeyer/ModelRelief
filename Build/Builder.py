@@ -46,9 +46,9 @@ class Builder:
 
         # folders
         self.wwwroot = "wwwroot"
-        self.project_folder = os.environ[EnvironmentNames.MR]
+        self.modelrelief_folder = os.environ[EnvironmentNames.MR]
         self.solution_folder = os.environ[EnvironmentNames.MRSolution]
-        self.source_wwwroot_folder = os.path.join(self.project_folder, self.wwwroot)
+        self.source_wwwroot_folder = os.path.join(self.modelrelief_folder, self.wwwroot)
         self.publish_folder = os.environ[EnvironmentNames.MRPublish]
         self.publish_wwwroot_folder = os.path.join(self.publish_folder, self.wwwroot)
 
@@ -56,7 +56,8 @@ class Builder:
         self.iis_deploy_folder = os.path.join("C:/", "modelrelief")
         self.logs_folder = "logs"
         self.solver_folder = "Solver"
-        self.sqlserver_folder = os.path.join("DatabaseStore", "SQLServer")
+        self.sqlserver_folder = os.path.join("store", "production", "database", "SQLServer")
+        self.store_folder = "store"
         self.test_folder = "Test"
         self.tools_folder = "Tools"
 
@@ -127,7 +128,7 @@ class Builder:
         # TypeScript
         self.logger.logInformation("\nTypeScript compilation", Colors.BrightMagenta)
         os.chdir(self.solution_folder)
-        self.exec("tsc -p {}".format(self.project_folder))       
+        self.exec("tsc -p {}".format(self.modelrelief_folder))       
 
         # Explorer UI
         self.logger.logInformation("\nExplorer UI", Colors.BrightMagenta)
@@ -136,13 +137,13 @@ class Builder:
 
         # ASP.NET Core build
         self.logger.logInformation("\nASP.NET Core compilation", Colors.BrightMagenta)
-        os.chdir(self.project_folder)
+        os.chdir(self.modelrelief_folder)
         self.exec("dotnet build")
 
         # database initialization and user store
         if self.arguments.initialize:
             self.logger.logInformation("\nInitialize database and user store", Colors.BrightMagenta)
-            os.chdir(self.project_folder)
+            os.chdir(self.modelrelief_folder)
             # N.B. ASPNETCORE_ENVIRONMENT cannot be overridden as a 'dotnet run' command line argument.
             # So, override (and restore) the current settings.
             self.environment.push()          
@@ -167,7 +168,7 @@ class Builder:
         os.chdir(self.solution_folder)
         # ASP.NET Core Publish
         self.logger.logInformation("\nASP.NET Core Publish", Colors.BrightMagenta)
-        os.chdir(self.project_folder)
+        os.chdir(self.modelrelief_folder)
         self.exec("dotnet publish -c Release -o {}".format(self.publish_folder))
         self.logger.logInformation("\nUpdating web.config", Colors.Cyan)
         Tools.copy_file(os.path.join(self.solution_folder, self.web_config), os.path.join(self.publish_folder, self.web_config))
@@ -192,14 +193,19 @@ class Builder:
 
         # test models
         self.logger.logInformation("\nTest models", Colors.BrightMagenta)
-        os.chdir(self.project_folder)
-        Tools.copy_folder(os.path.join(self.project_folder, self.test_folder), os.path.join(self.publish_folder, self.test_folder))
+        os.chdir(self.modelrelief_folder)
+        Tools.copy_folder(os.path.join(self.modelrelief_folder, self.test_folder), os.path.join(self.publish_folder, self.test_folder))
 
         # create logs folder
         self.logger.logInformation("\nCreating logs folder", Colors.BrightMagenta)
         logs_folder = os.path.join(self.publish_folder, self.logs_folder)
         self.logger.logInformation(f"{logs_folder} created", Colors.BrightWhite)
         os.makedirs(logs_folder)
+
+        # store
+        self.logger.logInformation("\nCopying web store", Colors.BrightMagenta)
+        os.chdir(self.modelrelief_folder)
+        Tools.copy_folder(os.path.join(self.modelrelief_folder, self.store_folder), os.path.join(self.publish_folder, self.store_folder))
 
         # SQLServer seed database
         self.logger.logInformation("\nSQLServer database", Colors.BrightMagenta)
@@ -214,7 +220,7 @@ class Builder:
         if self.arguments.target == PublishTarget.iis:
             self.logger.logInformation("\nIIS-specific deployment", Colors.BrightMagenta)
             self.logger.logInformation(f"\nUpdating {self.settings_production}", Colors.Cyan)
-            Tools.copy_file(os.path.join(self.project_folder, self.settings_production_iis), os.path.join(self.publish_folder, self.settings_production))
+            Tools.copy_file(os.path.join(self.modelrelief_folder, self.settings_production_iis), os.path.join(self.publish_folder, self.settings_production))
 
             if self.arguments.deploy:
                 self.logger.logInformation("\nDeploying to local IIS server", Colors.BrightMagenta)
@@ -225,7 +231,7 @@ class Builder:
         if self.arguments.target == PublishTarget.docker:
             self.logger.logInformation("\nDocker-specific deployment", Colors.BrightMagenta)
             self.logger.logInformation(f"\nUpdating {self.settings_production}", Colors.Cyan)
-            Tools.copy_file(os.path.join(self.project_folder, self.settings_production_docker), os.path.join(self.publish_folder, self.settings_production))
+            Tools.copy_file(os.path.join(self.modelrelief_folder, self.settings_production_docker), os.path.join(self.publish_folder, self.settings_production))
 
             self.logger.logInformation("Docker ModelRelief image", Colors.Cyan)
             os.chdir(self.solution_folder)

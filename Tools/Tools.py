@@ -17,6 +17,9 @@ import sys
 import string
 import random
 
+# N.B. copytree requires the target directory be empty. It always creates the target.
+# copy_tree works with an existing directory.
+from distutils.dir_util import copy_tree
 from shutil import copyfile, copytree
 
 class Colors:
@@ -134,7 +137,7 @@ class Tools:
         """
 
         print ("%s -> %s" % (source_folder, destination_folder))
-        copytree(source_folder, destination_folder)
+        copy_tree(source_folder, destination_folder)
 
     def recurse_folder(self, folder):
         """
