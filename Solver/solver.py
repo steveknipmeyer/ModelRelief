@@ -69,7 +69,7 @@ class Solver:
         self.working_folder = working_folder
         if not os.path.exists(working_folder):
             os.makedirs(working_folder)
-
+        print (f"content_folder = {self.content_folder}")
         self.services = Services(self.content_folder, self.working_folder, Logger(), self.results)
 
         # processing steps

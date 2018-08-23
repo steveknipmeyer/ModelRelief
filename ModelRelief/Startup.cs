@@ -8,6 +8,7 @@ namespace ModelRelief
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
     using Autofac.Features.Variance;
@@ -141,6 +142,11 @@ namespace ModelRelief
             services.AddSingleton<IDependencyManager, DependencyManager>();
             services.AddSingleton<IDispatcher, Dispatcher>();
             services.AddDatabaseServices();
+
+            // cache for use outside controllers (e.g. FileDomainModel)
+            // N.B. ContentRootPath contains a trailing slash when running the integration tests.
+            // The normal runtime mode (web host) does not include a slash. Strip, if present.
+            StorageManager.ContentRootPath = services.BuildServiceProvider().GetService<IHostingEnvironment>().ContentRootPath.TrimEnd(Path.DirectorySeparatorChar);
 
             services.AddAutoMapper(typeof(Startup));
             Mapper.AssertConfigurationIsValid();

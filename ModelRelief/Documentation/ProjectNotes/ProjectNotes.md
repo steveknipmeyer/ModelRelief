@@ -1,22 +1,12 @@
 ﻿### Tasks
 #### Commit Notes
 
-
-#### Short Term
-    Why are there no warnings about comments in launch.json?
-    Why is the Python refactoring so slow?
-        "Refactoring library rope is not installed. Install?"
-
-    Databases are not portable now!
-        The file path of models is incorrect in the IIS database.
-        An updated version of ModelReliefProduction must be attached in SSMS.
-
-        Should the database path fields always use relative paths?
+#### Short Term   
 
     Builder
         Builder should read appsettingsProductionBuild.json rather than use constants.
         How should Builder use <environment>?
-            environment.sqlite_folder references ASPNETCORE_ENVIRONMENT but that is used only by baseline in integration testing.
+            environment.sqlite_folder references ASPNETCORE_ENVIRONMENT but that is used only by baseline.py in integration testing.
             How can Builder be used to build a development tree?
                 Add an enviroment parameter?
                     This would control the user store structure.
@@ -24,8 +14,14 @@
         Should Builder create the Production database and seed the user store during a build?
             The database and user store can only be created one time. It must always be preserved during subsequent updates.
 
+    Add support for copying demonstration models into a new users account.
+
+    Why are there no warnings about comments in launch.json?
+    Why is the Python refactoring so slow?
+        "Refactoring library rope is not installed. Install?"
+
     Remove PATH, PYTHON path changes to System Environment variables.
-    How are environemnt variables (PATH, PYTHONPATH) handled on the web server?
+    How are environment variables (PATH, PYTHONPATH) handled on the web server?
 
     Server Structure
         modelrelief (ContentRootPath)
@@ -53,8 +49,6 @@
             The users folder is used to hold the user file system.
             When SQLite is configured, the database file is stored in store/<environment>/database.
             Also, the database folder is used to transfer the SQLServer seed database to the Docker database container during a build.
-
-    Add support for copying demonstration models into a new users account.
 
     Deployment Notes
         Attach the seed database to the SQLServer instance.

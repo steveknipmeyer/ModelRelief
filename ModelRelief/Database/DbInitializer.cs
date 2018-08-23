@@ -24,6 +24,8 @@ namespace ModelRelief.Database
     using ModelRelief.Services;
     using ModelRelief.Utility;
 
+    using static ModelRelief.Services.StorageManager;
+
     public class DbInitializer
     {
         private bool                            ExitAfterInitialization  { get; set; }
@@ -85,9 +87,9 @@ namespace ModelRelief.Database
                 throw new ArgumentNullException(nameof(StorageManager));
 
             var storeUsersPartialPath = ConfigurationProvider.GetSetting(Paths.StoreUsers);
-            StoreUsersPath   = $"{HostingEnvironment.ContentRootPath}{Path.DirectorySeparatorChar}{storeUsersPartialPath}";
+            StoreUsersPath = GetAbsolutePath(storeUsersPartialPath);
 
-            SqlitePath = Path.GetFullPath($"{HostingEnvironment.ContentRootPath}{Path.DirectorySeparatorChar}{ConfigurationProvider.GetSetting(Paths.StoreDatabase)}{ConfigurationSettings.SQLite}");
+            SqlitePath = Path.GetFullPath($"{GetAbsolutePath(ConfigurationProvider.GetSetting(Paths.StoreDatabase))}{ConfigurationSettings.SQLite}");
 
             ExitAfterInitialization = exitAfterInitialization;
 
@@ -1071,7 +1073,7 @@ namespace ModelRelief.Database
             foreach (TEntity model in models)
                 {
                 model.FileTimeStamp = DateTime.Now;
-                model.Path = StorageManager.DefaultModelStorageFolder(model);
+                model.Path = GetRelativePath(StorageManager.DefaultModelStorageFolder(model));
 
                 if (model is GeneratedFileDomainModel generatedModel)
                     generatedModel.FileIsSynchronized = true;

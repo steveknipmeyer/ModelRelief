@@ -22,6 +22,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using ModelRelief.Services.Relationships;
     using ModelRelief.Utility;
 
+    using static ModelRelief.Services.StorageManager;
+
     /// <summary>
     /// Represents a handler for a POST request to create a new model.
     /// </summary>
@@ -79,7 +81,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             await Files.WriteFileFromByteArray(fileName, message.NewFile.Raw);
 
             // update file metadata; normalize path
-            fileDomainModel.Path = Path.GetFullPath($"{Path.GetDirectoryName(fileName)}/");
+            fileDomainModel.Path = GetRelativePath(Path.GetFullPath($"{Path.GetDirectoryName(fileName)}/"));
             fileDomainModel.FileTimeStamp = DateTime.Now;
 
             if (fileDomainModel is GeneratedFileDomainModel generatedFileDomainModel)

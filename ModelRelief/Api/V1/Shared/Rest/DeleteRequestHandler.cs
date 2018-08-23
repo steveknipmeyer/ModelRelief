@@ -16,6 +16,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using Microsoft.Extensions.Logging;
     using ModelRelief.Database;
     using ModelRelief.Domain;
+    using ModelRelief.Services;
     using ModelRelief.Services.Relationships;
     using ModelRelief.Utility;
 
@@ -64,11 +65,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
             // The Path exists only if an associated file has been posted.
             // There is no mechanism for deleting <only> the file once a model has been created.
-            if (string.IsNullOrEmpty(fileDomainModel.Path))
+            if (string.IsNullOrEmpty(StorageManager.GetAbsolutePath(fileDomainModel.Path)))
                 return;
 
             var modelStorageFolder = fileDomainModel.StorageFolder;
-            var fileFolder = Path.GetFullPath(fileDomainModel.Path);
+            var fileFolder = Path.GetFullPath(StorageManager.GetAbsolutePath(fileDomainModel.Path));
 
             // confirm that parent folder of file matches the storage folder
             if (!string.Equals(modelStorageFolder, fileFolder, StringComparison.InvariantCultureIgnoreCase))

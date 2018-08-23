@@ -16,6 +16,9 @@ namespace ModelRelief.Services
     /// </summary>
     public class StorageManager : IStorageManager
     {
+        // cached for use without DependencyInjection (e.g. FileDomainModel)
+        public static string ContentRootPath { get; set; }
+
         public IHostingEnvironment HostingEnvironment { get; }
         public IConfigurationProvider ConfigurationProvider { get; }
 
@@ -23,6 +26,38 @@ namespace ModelRelief.Services
         {
             HostingEnvironment = hostingEnvironment;
             ConfigurationProvider = configurationProvider;
+        }
+
+        /// <summary>
+        /// Returns a path relative to the web ContentRootPath.
+        /// This is the Path property of a FileDomainModel entity.
+        /// </summary>
+        /// <param name="path">Path to process.</param>
+        /// <returns>Path relative to ContentRootPath. </returns>
+        public static string GetRelativePath(string path)
+        {
+            // verify path contains ContentRootPath
+            if (path.IndexOf(ContentRootPath) != 0)
+                return path;
+
+            // ContentRootPath does not end with directory terminator; skip leading terminator in following relative path
+            var relativePath = path.Substring(ContentRootPath.Length + 1);
+
+            return relativePath;
+        }
+        /// <summary>
+        /// Returns an absolute path including the ContentRootPath root.
+        /// </summary>
+        /// <param name="path">Relative path to combine with ContentRootPath.</param>
+        /// <returns>Absolute path including ContentRootPath</returns>
+        public static string GetAbsolutePath(string path)
+        {
+            var absolutePath = $"{StorageManager.ContentRootPath}{System.IO.Path.DirectorySeparatorChar}{path}";
+
+            // normalize
+            absolutePath = Path.GetFullPath(absolutePath);
+
+            return absolutePath;
         }
 
         /// <summary>
@@ -38,7 +73,7 @@ namespace ModelRelief.Services
             var modelRootFolder  = ConfigurationProvider.GetSetting($"Paths:ResourceFolders:{typeof(TEntity).Name}");
 
             // N.B. Path.Combine does not handle path fragments that mix forward and backward slashes.
-            string modelStorageFolder = $"{HostingEnvironment.ContentRootPath}{Path.DirectorySeparatorChar}{storeUsersFolder}{model.User.Id}/{modelRootFolder}/{model.Id}/";
+            string modelStorageFolder = $"{GetAbsolutePath(storeUsersFolder)}{model.User.Id}/{modelRootFolder}/{model.Id}/";
 
             // normalize
             return Path.GetFullPath(modelStorageFolder);
@@ -54,7 +89,7 @@ namespace ModelRelief.Services
             var workingFolder = ConfigurationProvider.GetSetting(Paths.Working);
 
             // N.B. Path.Combine does not handle path fragments that mix forward and backward slashes.
-            string workingStorageFolder = $"{HostingEnvironment.ContentRootPath}{Path.DirectorySeparatorChar}{storeUsersFolder}{userId}/{workingFolder}/";
+            string workingStorageFolder = $"{GetAbsolutePath(storeUsersFolder)}{userId}/{workingFolder}/";
 
             // normalize
             return Path.GetFullPath(workingStorageFolder);

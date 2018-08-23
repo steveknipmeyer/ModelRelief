@@ -69,19 +69,14 @@ namespace ModelRelief.Domain
 
         /// <summary>
         /// Gets the relative path of the model file.
-        /// The path is relative to store root.
+        /// The path is relative to ContentRootPath.
         /// </summary>
-        /// <returns>Path of model file relative to store root.</returns>
+        /// <returns>Path of model file relative to ContentRootPath.</returns>
         public string RelativeFileName
         {
             get
             {
-                var fileName = FileName;
-
-                // strip to store root
-                var storeRootIndex = fileName.IndexOf(Settings.StoreRoot);
-                var relativeFileName = fileName.Substring(storeRootIndex);
-                return relativeFileName;
+                return StorageManager.GetRelativePath(FileName);
             }
         }
 
@@ -95,7 +90,10 @@ namespace ModelRelief.Domain
             get
             {
                 var path = System.IO.Path.Combine(Path ?? string.Empty, Name);
-                return System.IO.Path.GetFullPath(path);
+
+                // now combime relative path with ContentRootPath to yield the complete absolute path
+                var fullPath = StorageManager.GetAbsolutePath(path);
+                return System.IO.Path.GetFullPath(fullPath);
             }
         }
     }
@@ -124,11 +122,11 @@ namespace ModelRelief.Domain
         /// <returns>True if successful.</returns>
         public bool SynchronizeGeneratedFile(string generatedFile, string defaultStorageFolder)
         {
-            // no file may exist yet; update Path
+            // no file may exist yet; initialize Path
             if (string.IsNullOrEmpty(Path))
-                Path = defaultStorageFolder;
+                Path = StorageManager.GetRelativePath(defaultStorageFolder);
 
-            Files.EnsureDirectoryExists(Path);
+            Files.EnsureDirectoryExists(StorageManager.GetAbsolutePath(Path));
             File.Copy(generatedFile, FileName, overwrite: true);
 
             FileIsSynchronized = true;
