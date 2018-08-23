@@ -153,7 +153,7 @@ class Builder:
             # So, override (and restore) the current settings.
             self.environment.push()          
             if self.arguments.webpublish:
-                os.environ[EnvironmentNames.ASPNETCORE_ENVIRONMENT] = "ProductionBuild"
+                os.environ[EnvironmentNames.ASPNETCORE_ENVIRONMENT] = "Production"
             os.environ[EnvironmentNames.MRExitAfterInitialization] = "True"
             os.environ[EnvironmentNames.MRInitializeUserStore] = "True"
             os.environ[EnvironmentNames.MRInitializeDatabase] = "True"
@@ -186,9 +186,12 @@ class Builder:
 
         # Python virtual environment
         if self.arguments.python:
-            self.logger.logInformation("\nPython virtual environment", Colors.BrightMagenta)
-            os.chdir(self.publish_path)
-            self.exec("BuildPythonEnvironment Production")        
+            if self.arguments.webpublish:
+                self.logger.logInformation("\nPython virtual environment", Colors.BrightMagenta)
+                os.chdir(self.publish_path)
+                self.exec("BuildPythonEnvironment Production")        
+            else:                
+                self.logger.logInformation("\nPlease see Build\DevelopmentPythonInstallation.txt to create the development Python environment.", Colors.Cyan)
 
         # Python source
         self.logger.logInformation("\nPython source", Colors.BrightMagenta)
@@ -223,7 +226,7 @@ class Builder:
 
         # IIS
         if self.arguments.target == PublishTarget.iis:
-            self.logger.logInformation("\nIIS-specific deployment", Colors.BrightMagenta)
+            self.logger.logInformation("\nIIS-specific publishing steps", Colors.BrightMagenta)
             self.logger.logInformation(f"\nUpdating {self.settings_production}", Colors.Cyan)
             Tools.copy_file(os.path.join(self.modelrelief_path, self.settings_production_iis), os.path.join(self.publish_path, self.settings_production))
 
@@ -234,7 +237,7 @@ class Builder:
 
         # Docker
         if self.arguments.target == PublishTarget.docker:
-            self.logger.logInformation("\nDocker-specific deployment", Colors.BrightMagenta)
+            self.logger.logInformation("\nDocker-specific publishing steps", Colors.BrightMagenta)
             self.logger.logInformation(f"\nUpdating {self.settings_production}", Colors.Cyan)
             Tools.copy_file(os.path.join(self.modelrelief_path, self.settings_production_docker), os.path.join(self.publish_path, self.settings_production))
 

@@ -1,22 +1,24 @@
 ﻿### Tasks
 #### Commit Notes
 
-#### Short Term   
-
+#### Short Term      
+    Recover Logs\DevelopmentPythonInstallation and move to Build.
     Builder
         Builder should read appsettingsProductionBuild.json rather than use constants.
+                self.sqlserver_path = os.path.join("store", "production", "database", "SQLServer")
+
         How should Builder use <environment>?
             environment.sqlite_folder references ASPNETCORE_ENVIRONMENT but that is used only by baseline.py in integration testing.
             How can Builder be used to build a development tree?
                 Add an enviroment parameter?
                     This would control the user store structure.
                     Building devenv is currently a manual process.
+
         Should Builder create the Production database and seed the user store during a build?
             The database and user store can only be created one time. It must always be preserved during subsequent updates.
 
     Add support for copying demonstration models into a new users account.
 
-    Why are there no warnings about comments in launch.json?
     Why is the Python refactoring so slow?
         "Refactoring library rope is not installed. Install?"
 
@@ -428,9 +430,6 @@ Replace DateTime with a type that has more resolution.
     FileStamp could potentially serve as the "complete" flag for a long-running request. 
 
 #### Python Tasks
-###### Virtual Evironment
-    Create a virtual environment that is published with the web application.
-    This will allow the Python path and runtime environment to be precisely defined.
 
 ###### Queues
 ```<language>
@@ -1314,6 +1313,9 @@ https://semver.npmjs.com/
             Composer
                 The fetch of the DepthBuffer file from wwwroot leads to a redirect back to the Login page.
                 Is the anti-forgery token not recognized in the request?
+
+        Firefox
+            mr-service | [13:36:30 ERR] A Microsoft.AspNetCore.Server.Kestrel.Core.BadHttpRequestException exception happened in ModelRelief.
 
     Remove unused resources.
         docker image prune
