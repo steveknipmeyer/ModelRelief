@@ -20,11 +20,13 @@ import subprocess
 import sys
 from enum import Enum
 
-from environment import EnvironmentNames, Environment
+from environment import DatabaseProvider, EnvironmentNames, Environment, RuntimeEnvironment
 from logger import Logger
 from tools import Colors, Tools
 
-class PublishTarget(Enum):
+class Target(Enum):
+    """ Target runtime environments. """
+    local = 'local'
     iis = 'IIS'
     docker = 'Docker'
 
@@ -43,6 +45,7 @@ class Builder:
         self.logger = Logger()
         self.arguments = arguments
         self.environment:Environment = Environment() 
+        self.publish = self.arguments.target != Target.local
 
         # folder names
         self.wwwroot_folder = "wwwroot"
@@ -61,7 +64,6 @@ class Builder:
         self.solution_path = os.environ[EnvironmentNames.MRSolution]
         self.source_wwwroot_path = os.path.join(self.modelrelief_path, self.wwwroot_folder)
         self.source_store_path = os.path.join(self.modelrelief_path, self.store_folder)
-        self.sqlserver_path = os.path.join("store", "production", "database", "SQLServer")
 
         # files
         self.build_explorer = "BuildExplorerUI.bat"
@@ -100,30 +102,46 @@ class Builder:
                 self.logger.logInformation("Exiting", Colors.Red)
                 sys.exit(1)            
 
-    def initialize (self, wwwroot: str, publish: str, store: str)->None :
+    def set_environment (self)->None :
+        """
+        ASPNETCORE_ENVIRONMENT cannot be overridden as a 'dotnet run' command line argument.
+        So, the environment settings are overridden and then restored.
+        """
+        if self.publish:
+            os.environ[EnvironmentNames.ASPNETCORE_ENVIRONMENT] = RuntimeEnvironment.production.value
+
+        os.environ[EnvironmentNames.MRExitAfterInitialization] = "True"
+        os.environ[EnvironmentNames.MRInitializeUserStore] = "True"
+        os.environ[EnvironmentNames.MRInitializeDatabase] = "True"
+        os.environ[EnvironmentNames.MRSeedDatabase] = "True"
+
+        self.environment.show(color=Colors.BrightWhite)
+
+    def initialize (self, wwwroot: str, store: str, publish: str)->None :
         """
         Perform initialization including removing build targets.
         Parameters
         ----------
         wwwroot
             wwwroot output folder
-        publish
-            publish output folder
         store
             web store folder
+        publish
+            publish output folder
         """
+        self.set_environment()
+
         self.delete_folder(wwwroot)
-        self.delete_folder(publish)
         self.delete_folder(store)
+        if self.publish:
+            self.delete_folder(publish)
 
     def build (self):
         """
         Core build.
         """
         self.logger.logInformation("\n<Build>", Colors.BrightYellow)
-
         os.chdir(self.solution_path)
-        self.initialize(self.source_wwwroot_path, self.publish_path, self.source_store_path)
 
         # gulp (wwwroot)
         self.logger.logInformation("\nBuilding wwwroot", Colors.BrightMagenta)
@@ -145,32 +163,31 @@ class Builder:
         os.chdir(self.modelrelief_path)
         self.exec("dotnet build")
 
+        # Python virtual environment
+        if self.arguments.python:
+            if self.publish:
+                self.logger.logInformation("\nPython virtual environment", Colors.BrightMagenta)
+                os.makedirs(self.publish_path)                
+                os.chdir(self.publish_path)
+                self.exec("BuildPythonEnvironment Production")        
+            else:                
+                self.logger.logInformation("\nPlease see Build\\DevelopmentPythonInstallation.txt to create the development Python environment.", Colors.Cyan)
+
         # database initialization and user store
         if self.arguments.initialize:
             self.logger.logInformation("\nInitialize database and user store", Colors.BrightMagenta)
             os.chdir(self.modelrelief_path)
-            # N.B. ASPNETCORE_ENVIRONMENT cannot be overridden as a 'dotnet run' command line argument.
-            # So, override (and restore) the current settings.
-            self.environment.push()          
-            if self.arguments.webpublish:
-                os.environ[EnvironmentNames.ASPNETCORE_ENVIRONMENT] = "Production"
-            os.environ[EnvironmentNames.MRExitAfterInitialization] = "True"
-            os.environ[EnvironmentNames.MRInitializeUserStore] = "True"
-            os.environ[EnvironmentNames.MRInitializeDatabase] = "True"
-            os.environ[EnvironmentNames.MRSeedDatabase] = "True"
-
             self.exec("dotnet run --no-launch-profile")
-            self.environment.pop()
 
         self.logger.logInformation("\n</Build>", Colors.BrightYellow)
 
-    def webpublish (self):
+    def publish_site (self):
         """
         Publish web site.
         """
         self.logger.logInformation("\n<Publish>", Colors.BrightCyan)
-
         os.chdir(self.solution_path)
+
         # ASP.NET Core Publish
         self.logger.logInformation("\nASP.NET Core Publish", Colors.BrightMagenta)
         os.chdir(self.modelrelief_path)
@@ -183,15 +200,6 @@ class Builder:
         source_map = os.path.join(self.publish_wwwroot_path, "js", self.modelrelief_map)
         self.logger.logInformation(f"Deleting {source_map}", Colors.BrightWhite)
         os.remove(source_map)
-
-        # Python virtual environment
-        if self.arguments.python:
-            if self.arguments.webpublish:
-                self.logger.logInformation("\nPython virtual environment", Colors.BrightMagenta)
-                os.chdir(self.publish_path)
-                self.exec("BuildPythonEnvironment Production")        
-            else:                
-                self.logger.logInformation("\nPlease see Build\DevelopmentPythonInstallation.txt to create the development Python environment.", Colors.Cyan)
 
         # Python source
         self.logger.logInformation("\nPython source", Colors.BrightMagenta)
@@ -207,7 +215,7 @@ class Builder:
         # create logs folder
         self.logger.logInformation("\nCreating logs folder", Colors.BrightMagenta)
         logs_folder = os.path.join(self.publish_path, self.logs_folder)
-        self.logger.logInformation(f"{logs_folder} created", Colors.BrightWhite)
+        self.logger.logInformation(f"{logs_folder} created", Colors.BrightCyan)
         os.makedirs(logs_folder)
 
         # store
@@ -218,25 +226,26 @@ class Builder:
         # SQLServer seed database
         self.logger.logInformation("\nSQLServer database", Colors.BrightMagenta)
         os.chdir(self.solution_path)
+        sqlserver_publish_path = self.environment.database_relative_path(DatabaseProvider.sqlserver.value)
         sqlserver_files = ['ModelReliefProduction.mdf', 'ModelReliefProduction_log.ldf']
         for file in sqlserver_files:
-            source = os.path.join(self.environment.sqlserver_folder, file)
-            destination = os.path.join(self.publish_path, self.sqlserver_path, file)
+            source = os.path.join(self.environment.sqlserver_path, file)
+            destination = os.path.join(self.publish_path, sqlserver_publish_path, file)
             Tools.copy_file(source, destination)
 
         # IIS
-        if self.arguments.target == PublishTarget.iis:
+        if self.arguments.target == Target.iis:
             self.logger.logInformation("\nIIS-specific publishing steps", Colors.BrightMagenta)
             self.logger.logInformation(f"\nUpdating {self.settings_production}", Colors.Cyan)
             Tools.copy_file(os.path.join(self.modelrelief_path, self.settings_production_iis), os.path.join(self.publish_path, self.settings_production))
 
             if self.arguments.deploy:
                 self.logger.logInformation("\nDeploying to local IIS server", Colors.BrightMagenta)
-                self.delete_folder(self.iis_deploy_path, confirm=True)
+                self.delete_folder(self.iis_deploy_path)
                 Tools.copy_folder(self.publish_path, self.iis_deploy_path)
 
         # Docker
-        if self.arguments.target == PublishTarget.docker:
+        if self.arguments.target == Target.docker:
             self.logger.logInformation("\nDocker-specific publishing steps", Colors.BrightMagenta)
             self.logger.logInformation(f"\nUpdating {self.settings_production}", Colors.Cyan)
             Tools.copy_file(os.path.join(self.modelrelief_path, self.settings_production_docker), os.path.join(self.publish_path, self.settings_production))
@@ -256,14 +265,19 @@ class Builder:
         Sequence the build steps.
         """
         self.logger.logInformation("\n<ModelRelief>", Colors.BrightCyan)
+        os.chdir(self.solution_path)
+        self.environment.push()          
+
+        self.initialize(self.source_wwwroot_path, self.source_store_path, self.publish_path, )
 
         # build
         self.build()
 
         # publish
-        if self.arguments.webpublish:
-            self.webpublish()
+        if self.publish:
+            self.publish_site()
 
+        self.environment.pop()          
         self.logger.logInformation("\n</ModelRelief>", Colors.BrightCyan)
 
 def main():
@@ -271,18 +285,19 @@ def main():
         Main entry point.
     """
     options_parser = argparse.ArgumentParser()
+
+    # Target
+    options_parser.add_argument('--target', '-t',
+                                help='Runtime target for the build.', type=Target, required=False, default=Target.local)
     # Build
     options_parser.add_argument('--initialize', '-i',
                                 help='Initialize the database and the user store.', type=ast.literal_eval, required=False, default=True)
     options_parser.add_argument('--python', '-p',
                                 help='Build the runtime Python virtual environment.', type=ast.literal_eval, required=False, default=True)
-    #Publish
-    options_parser.add_argument('--webpublish', '-w',
-                                help='Publish the web site.', type=ast.literal_eval, required=False, default=False)
+    # Publish
     options_parser.add_argument('--deploy', '-d',
                                 help='Deploy the published content to the local IIS web folder.', type=ast.literal_eval, required=False, default=False)
-    options_parser.add_argument('--target', '-t',
-                                help='Deployment target for the published web site.', type=PublishTarget, required=False, default=PublishTarget.iis)
+    
     arguments = options_parser.parse_args()
 
     builder = Builder(arguments)

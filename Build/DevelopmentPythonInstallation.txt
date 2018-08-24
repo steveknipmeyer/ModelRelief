@@ -1,0 +1,433 @@
+---------------------------------------------------------------------- Steps ----------------------------------------------------------------------
+conda config --add channels conda-forge
+conda create --prefix .\devenv python=3.6
+conda activate .\devenv
+pip install mayavi
+pip install pyqt5
+yconda install colorama
+conda install scipy
+pip install qdarkstyle
+pip install pyamg
+conda install matplotlib
+
+conda install pylint
+conda install mypy
+
+ ---------------------------------------------------------------------- Package Lists ----------------------------------------------------------------------
+(d:\Github\ModelRelief\devenv) d:\Github\ModelRelief>pip list
+Package           Version
+----------------- ---------
+apptools          4.4.0
+astroid           1.6.5
+atomicwrites      1.1.5
+attrs             18.1.0
+certifi           2018.4.16
+colorama          0.3.9
+configobj         5.0.6
+cycler            0.10.0
+envisage          4.6.0
+isort             4.3.4
+kiwisolver        1.0.1
+lazy-object-proxy 1.3.1
+matplotlib        2.2.2
+mayavi            4.6.1
+mccabe            0.6.1
+mkl-fft           1.0.5
+mkl-random        1.0.1
+more-itertools    4.3.0
+mypy              0.620
+numpy             1.15.0
+pip               18.0
+pluggy            0.7.1
+psutil            5.4.6
+py                1.5.4
+pyamg             4.0.0
+pybind11          2.2.3
+pyface            6.0.0
+Pygments          2.2.0
+pylint            1.9.2
+pyparsing         2.2.0
+PyQt5             5.11.2
+PyQt5-sip         4.19.12
+pytest            3.7.1
+python-dateutil   2.7.3
+pytz              2018.5
+QDarkStyle        2.5.4
+scipy             1.1.0
+setuptools        40.0.0
+six               1.11.0
+tornado           5.1
+traits            4.6.0
+traitsui          6.0.0
+typed-ast         1.1.0
+virtualenv        16.0.0
+vtk               8.1.1
+wheel             0.31.1
+wincertstore      0.2
+wrapt             1.10.11
+ (d:\Github\ModelRelief\devenv) d:\Github\ModelRelief>pip freeze
+apptools==4.4.0
+astroid==1.6.5
+atomicwrites==1.1.5
+attrs==18.1.0
+certifi==2018.4.16
+colorama==0.3.9
+configobj==5.0.6
+cycler==0.10.0
+envisage==4.6.0
+isort==4.3.4
+kiwisolver==1.0.1
+lazy-object-proxy==1.3.1
+matplotlib==2.2.2
+mayavi==4.6.1
+mccabe==0.6.1
+mkl-fft==1.0.5
+mkl-random==1.0.1
+more-itertools==4.3.0
+mypy==0.620
+numpy==1.15.0
+pluggy==0.7.1
+psutil==5.4.6
+py==1.5.4
+pyamg==4.0.0
+pybind11==2.2.3
+pyface==6.0.0
+Pygments==2.2.0
+pylint==1.9.2
+pyparsing==2.2.0
+PyQt5==5.11.2
+PyQt5-sip==4.19.12
+pytest==3.7.1
+python-dateutil==2.7.3
+pytz==2018.5
+QDarkStyle==2.5.4
+scipy==1.1.0
+six==1.11.0
+tornado==5.1
+traits==4.6.0
+traitsui==6.0.0
+typed-ast==1.1.0
+virtualenv==16.0.0
+vtk==8.1.1
+wincertstore==0.2
+wrapt==1.10.11
+ (d:\Github\ModelRelief\devenv) d:\Github\ModelRelief>conda list
+# packages in environment at d:\Github\ModelRelief\devenv:
+#
+# Name                    Version                   Build  Channel
+apptools                  4.4.0                     <pip>
+astroid                   1.6.5                    py36_0    conda-forge
+atomicwrites              1.1.5                     <pip>
+attrs                     18.1.0                    <pip>
+ca-certificates           2018.4.16                     0    conda-forge
+certifi                   2018.4.16                py36_0    conda-forge
+colorama                  0.3.9                      py_1    conda-forge
+configobj                 5.0.6                     <pip>
+cycler                    0.10.0                     py_1    conda-forge
+envisage                  4.6.0                     <pip>
+freetype                  2.8.1                ha63716d_1    conda-forge
+icc_rt                    2017.0.4             h97af966_0
+icu                       58.2                 ha66f8fd_1
+intel-openmp              2018.0.3                      0
+isort                     4.3.4                    py36_0    conda-forge
+jpeg                      9c                   hfa6e2cd_0    conda-forge
+kiwisolver                1.0.1                    py36_1    conda-forge
+lazy-object-proxy         1.3.1            py36hfa6e2cd_0    conda-forge
+libpng                    1.6.34               h7602738_1    conda-forge
+matplotlib                2.2.2                    py36_1    conda-forge
+mayavi                    4.6.1                     <pip>
+mccabe                    0.6.1                      py_1    conda-forge
+mkl                       2018.0.3                      1
+mkl_fft                   1.0.5                    py36_0    conda-forge
+mkl_random                1.0.1                    py36_0    conda-forge
+more-itertools            4.3.0                     <pip>
+mypy                      0.620                    py36_0    conda-forge
+numpy                     1.15.0                    <pip>
+numpy                     1.14.3           py36h9fa60d3_2
+numpy-base                1.14.3           py36h5c71026_0
+openssl                   1.0.2o               hfa6e2cd_1    conda-forge
+pip                       18.0                     py36_1    conda-forge
+pluggy                    0.7.1                     <pip>
+psutil                    5.4.6                    py36_0    conda-forge
+py                        1.5.4                     <pip>
+pyamg                     4.0.0                     <pip>
+pybind11                  2.2.3                     <pip>
+pyface                    6.0.0                     <pip>
+Pygments                  2.2.0                     <pip>
+pylint                    1.9.2                    py36_0    conda-forge
+pyparsing                 2.2.0                      py_1    conda-forge
+pyqt                      5.6.0            py36h764d66f_6    conda-forge
+PyQt5                     5.11.2                    <pip>
+PyQt5_sip                 4.19.12                   <pip>
+pytest                    3.7.1                     <pip>
+python                    3.6.6                he025d50_0    conda-forge
+python-dateutil           2.7.3                      py_0    conda-forge
+pytz                      2018.5                     py_0    conda-forge
+QDarkStyle                2.5.4                     <pip>
+qt                        5.6.2                h2639256_8    conda-forge
+scipy                     1.1.0            py36h672f292_0
+setuptools                40.0.0                   py36_1    conda-forge
+sip                       4.18                     py36_1    conda-forge
+six                       1.11.0                   py36_1    conda-forge
+six                       1.11.0                    <pip>
+sqlite                    3.24.0               hb652765_0    conda-forge
+tornado                   5.1              py36hfa6e2cd_1    conda-forge
+traits                    4.6.0                     <pip>
+traitsui                  6.0.0                     <pip>
+typed-ast                 1.1.0                    py36_0    conda-forge
+vc                        14.1                 h0510ff6_3
+vs2015_runtime            15.5.2                        3
+vtk                       8.1.1                     <pip>
+wheel                     0.31.1                   py36_1    conda-forge
+wincertstore              0.2                      py36_2    conda-forge
+wrapt                     1.10.11                  py36_0    conda-forge
+zlib                      1.2.11               h2fa13f4_3    conda-forge
+ (d:\Github\ModelRelief\devenv) d:\Github\ModelRelief>conda list --export
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: win-64
+astroid=1.6.5=py36_0
+ca-certificates=2018.4.16=0
+certifi=2018.4.16=py36_0
+colorama=0.3.9=py_1
+cycler=0.10.0=py_1
+freetype=2.8.1=ha63716d_1
+icc_rt=2017.0.4=h97af966_0
+icu=58.2=ha66f8fd_1
+intel-openmp=2018.0.3=0
+isort=4.3.4=py36_0
+jpeg=9c=hfa6e2cd_0
+kiwisolver=1.0.1=py36_1
+lazy-object-proxy=1.3.1=py36hfa6e2cd_0
+libpng=1.6.34=h7602738_1
+matplotlib=2.2.2=py36_1
+mccabe=0.6.1=py_1
+mkl=2018.0.3=1
+mkl_fft=1.0.5=py36_0
+mkl_random=1.0.1=py36_0
+mypy=0.620=py36_0
+numpy=1.14.3=py36h9fa60d3_2
+numpy-base=1.14.3=py36h5c71026_0
+openssl=1.0.2o=hfa6e2cd_1
+pip=18.0=py36_1
+psutil=5.4.6=py36_0
+pylint=1.9.2=py36_0
+pyparsing=2.2.0=py_1
+pyqt=5.6.0=py36h764d66f_6
+python=3.6.6=he025d50_0
+python-dateutil=2.7.3=py_0
+pytz=2018.5=py_0
+qt=5.6.2=h2639256_8
+scipy=1.1.0=py36h672f292_0
+setuptools=40.0.0=py36_1
+sip=4.18=py36_1
+six=1.11.0=py36_1
+sqlite=3.24.0=hb652765_0
+tornado=5.1=py36hfa6e2cd_1
+typed-ast=1.1.0=py36_0
+vc=14.1=h0510ff6_3
+vs2015_runtime=15.5.2=3
+wheel=0.31.1=py36_1
+wincertstore=0.2=py36_2
+wrapt=1.10.11=py36_0
+zlib=1.2.11=h2fa13f4_3
+---------------------------------------------------------------------- Installation ----------------------------------------------------------------------
+Clink v0.4.9 [git:2fd2c2] Copyright (c) 2012-2016 Martin Ridgers
+http://mridgers.github.io/clink
+ echo off
+d:\Github\ModelRelief\Tools\
+MRSolution=d:\Github\ModelRelief\
+Your environment has been set up for using Node.js 8.9.4 (x64) and npm.
+**********************************************************************
+** Visual Studio 2017 Developer Command Prompt v15.7.6
+** Copyright (c) 2017 Microsoft Corporation
+**********************************************************************
+TypeScript Version = 2.4
+--- Environment ---
+MR=d:\Github\ModelRelief\ModelRelief\
+ASPNETCORE_URLS=http://localhost:60655/
+ ASPNETCORE_ENVIRONMENT=Test
+MRDatabaseProvider=SQLServer
+ MRForceInitializeAll=False
+MRInitializeDatabase=False
+MRInitializeUserStore=False
+ (d:\Github\ModelRelief\devenv) d:\Github\ModelRelief>deactivate
+ (base) d:\Github\ModelRelief>conda info
+      active environment : base
+    active env location : C:\Program Files (x86)\Microsoft Visual Studio\Shared\Anaconda3_64
+            shell level : 1
+       user config file : C:\Users\steve\.condarc
+ populated config files : C:\Users\steve\.condarc
+          conda version : 4.5.9
+    conda-build version : 3.4.1
+         python version : 3.6.4.final.0
+       base environment : C:\Program Files (x86)\Microsoft Visual Studio\Shared\Anaconda3_64  (writable)
+           channel URLs : https://conda.anaconda.org/conda-forge/win-64
+                          https://conda.anaconda.org/conda-forge/noarch
+                          https://repo.anaconda.com/pkgs/main/win-64
+                          https://repo.anaconda.com/pkgs/main/noarch
+                          https://repo.anaconda.com/pkgs/free/win-64
+                          https://repo.anaconda.com/pkgs/free/noarch
+                          https://repo.anaconda.com/pkgs/r/win-64
+                          https://repo.anaconda.com/pkgs/r/noarch
+                          https://repo.anaconda.com/pkgs/pro/win-64
+                          https://repo.anaconda.com/pkgs/pro/noarch
+                          https://repo.anaconda.com/pkgs/msys2/win-64
+                          https://repo.anaconda.com/pkgs/msys2/noarch
+          package cache : C:\Program Files (x86)\Microsoft Visual Studio\Shared\Anaconda3_64\pkgs
+                          C:\Users\steve\AppData\Local\conda\conda\pkgs
+       envs directories : C:\Program Files (x86)\Microsoft Visual Studio\Shared\Anaconda3_64\envs
+                          C:\Users\steve\AppData\Local\conda\conda\envs
+                          C:\Users\steve\.conda\envs
+               platform : win-64
+             user-agent : conda/4.5.9 requests/2.18.4 CPython/3.6.4 Windows/10 Windows/10.0.17134
+          administrator : True
+             netrc file : None
+           offline mode : False
+ (base) d:\Github\ModelRelief>conda create --prefix .\devenv python=3.6
+ CondaValueError: prefix already exists: d:\Github\ModelRelief\devenv
+ (base) d:\Github\ModelRelief>activate .\devenv
+ (d:\Github\ModelRelief\devenv) d:\Github\ModelRelief>where python
+d:\Github\ModelRelief\devenv\python.exe
+C:\Program Files (x86)\Microsoft Visual Studio\Shared\Anaconda3_64\python.exe
+ (d:\Github\ModelRelief\devenv) d:\Github\ModelRelief>pip install mayavi
+Collecting mayavi
+Collecting traitsui>=6.0.0 (from mayavi)
+Collecting apptools (from mayavi)
+Collecting pygments (from mayavi)
+  Using cached https://files.pythonhosted.org/packages/02/ee/b6e02dc6529e82b75bb06823ff7d005b141037cb1416b10c6f00fc419dca/Pygments-2.2.0-py2.py3-none-any.whl
+Collecting vtk (from mayavi)
+  Using cached https://files.pythonhosted.org/packages/1f/78/960ef28651f7e79506478eeb9c968d44ad22004e0604aea59fc7e143089f/vtk-8.1.1-cp36-cp36m-win_amd64.whl
+Collecting traits>=4.6.0 (from mayavi)
+Collecting numpy (from mayavi)
+  Downloading https://files.pythonhosted.org/packages/53/d1/2499797c88de95ea3239ad7f6e6a47895fe51aad1aa2a116f50ec9e0ee74/numpy-1.15.0-cp36-none-win_amd64.whl (13.5MB)
+    100% |████████████████████████████████| 13.5MB 936kB/s
+Collecting pyface>=6.0.0 (from mayavi)
+Collecting envisage (from mayavi)
+Collecting configobj (from apptools->mayavi)
+Collecting six (from configobj->apptools->mayavi)
+  Using cached https://files.pythonhosted.org/packages/67/4b/141a581104b1f6397bfa78ac9d43d8ad29a7ca43ea90a2d863fe3056e86a/six-1.11.0-py2.py3-none-any.whl
+Installing collected packages: traits, pyface, traitsui, six, configobj, apptools, pygments, vtk, numpy, envisage, mayavi
+Successfully installed apptools-4.4.0 configobj-5.0.6 envisage-4.6.0 mayavi-4.6.1 numpy-1.15.0 pyface-6.0.0 pygments-2.2.0 six-1.11.0 traits-4.6.0 traitsui-6.0.0 vtk-8.1.1
+ (d:\Github\ModelRelief\devenv) d:\Github\ModelRelief>mayavi2
+ (d:\Github\ModelRelief\devenv) d:\Github\ModelRelief>pip install pyqt5
+Collecting pyqt5
+  Using cached https://files.pythonhosted.org/packages/5d/85/d174a50e0d6b60aa9113f6a32afb31f25345bec8584992af486235373252/PyQt5-5.11.2-5.11.1-cp35.cp36.cp37.cp38-none-win_amd64.whl
+Collecting PyQt5_sip<4.20,>=4.19.11 (from pyqt5)
+  Using cached https://files.pythonhosted.org/packages/3f/4f/7b820770e6a8f8b83cacea561534e31c78a74eeac0fb2f7618c835fa74c6/PyQt5_sip-4.19.12-cp36-none-win_amd64.whl
+Installing collected packages: PyQt5-sip, pyqt5
+Successfully installed PyQt5-sip-4.19.12 pyqt5-5.11.2
+ (d:\Github\ModelRelief\devenv) d:\Github\ModelRelief>mayavi2
+ (d:\Github\ModelRelief\devenv) d:\Github\ModelRelief>python Solver\solver.py --s Test\Lucy.json --w Test\Working
+Traceback (most recent call last):
+  File "Solver\solver.py", line 15, in <module>
+    import colorama
+ModuleNotFoundError: No module named 'colorama'
+ (d:\Github\ModelRelief\devenv) d:\Github\ModelRelief>conda install colorama
+Solving environment: done
+ ## Package Plan ##
+   environment location: d:\Github\ModelRelief\devenv
+   added / updated specs:
+    - colorama
+ The following NEW packages will be INSTALLED:
+     colorama: 0.3.9-py_1 conda-forge
+ Proceed ([y]/n)? y
+ Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done
+ (d:\Github\ModelRelief\devenv) d:\Github\ModelRelief>conda install scipy
+Solving environment: done
+ ## Package Plan ##
+   environment location: d:\Github\ModelRelief\devenv
+   added / updated specs:
+    - scipy
+ The following NEW packages will be INSTALLED:
+     icc_rt:       2017.0.4-h97af966_0
+    intel-openmp: 2018.0.3-0
+    mkl:          2018.0.3-1
+    mkl_fft:      1.0.5-py36_0          conda-forge
+    mkl_random:   1.0.1-py36_0          conda-forge
+    numpy:        1.14.3-py36h9fa60d3_2
+    numpy-base:   1.14.3-py36h5c71026_0
+    scipy:        1.1.0-py36h672f292_0
+ Proceed ([y]/n)? y
+ Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done
+ (d:\Github\ModelRelief\devenv) d:\Github\ModelRelief>pip install qdarkstyle
+Collecting qdarkstyle
+  Using cached https://files.pythonhosted.org/packages/97/26/4ec7b5c654d69bce00004deb78dff72879d9dc5031b7b4f9f0736070083a/QDarkStyle-2.5.4-py2.py3-none-any.whl
+Installing collected packages: qdarkstyle
+Successfully installed qdarkstyle-2.5.4
+ (d:\Github\ModelRelief\devenv) d:\Github\ModelRelief>py install pyamg
+'py' is not recognized as an internal or external command,
+operable program or batch file.
+ (d:\Github\ModelRelief\devenv) d:\Github\ModelRelief>pip install pyamg
+Collecting pyamg
+  Using cached https://files.pythonhosted.org/packages/f6/9a/0cdb383940ab2aabbbc56f348d4076163bbee9e03d14cb5ab7f35d120799/pyamg-4.0.0-cp36-cp36m-win_amd64.whl
+Collecting pybind11>=2.2 (from pyamg)
+  Using cached https://files.pythonhosted.org/packages/12/90/0f92a575dc60c8fba6d0c91d6b45abdb1058da9ebed40400cbcfad2ac0a7/pybind11-2.2.3-py2.py3-none-any.whl
+Requirement already satisfied: scipy>=0.12.0 in d:\github\modelrelief\devenv\lib\site-packages (from pyamg) (1.1.0)
+Collecting pytest>=2 (from pyamg)
+  Using cached https://files.pythonhosted.org/packages/d2/86/7b9513da923b94e48c2cf013ae4eae8184a36ebeb7fe27d386bc3db4f56f/pytest-3.7.1-py2.py3-none-any.whl
+Requirement already satisfied: numpy>=1.7.0 in d:\github\modelrelief\devenv\lib\site-packages (from pyamg) (1.15.0)
+Collecting pluggy>=0.7 (from pytest>=2->pyamg)
+  Using cached https://files.pythonhosted.org/packages/f5/f1/5a93c118663896d83f7bcbfb7f657ce1d0c0d617e6b4a443a53abcc658ca/pluggy-0.7.1-py2.py3-none-any.whl
+Collecting py>=1.5.0 (from pytest>=2->pyamg)
+  Using cached https://files.pythonhosted.org/packages/f3/bd/83369ff2dee18f22f27d16b78dd651e8939825af5f8b0b83c38729069962/py-1.5.4-py2.py3-none-any.whl
+Collecting more-itertools>=4.0.0 (from pytest>=2->pyamg)
+  Using cached https://files.pythonhosted.org/packages/79/b1/eace304ef66bd7d3d8b2f78cc374b73ca03bc53664d78151e9df3b3996cc/more_itertools-4.3.0-py3-none-any.whl
+Collecting atomicwrites>=1.0 (from pytest>=2->pyamg)
+  Using cached https://files.pythonhosted.org/packages/0a/e8/cd6375e7a59664eeea9e1c77a766eeac0fc3083bb958c2b41ec46b95f29c/atomicwrites-1.1.5-py2.py3-none-any.whl
+Requirement already satisfied: six>=1.10.0 in d:\github\modelrelief\devenv\lib\site-packages (from pytest>=2->pyamg) (1.11.0)
+Collecting attrs>=17.4.0 (from pytest>=2->pyamg)
+  Using cached https://files.pythonhosted.org/packages/41/59/cedf87e91ed541be7957c501a92102f9cc6363c623a7666d69d51c78ac5b/attrs-18.1.0-py2.py3-none-any.whl
+Requirement already satisfied: colorama; sys_platform == "win32" in d:\github\modelrelief\devenv\lib\site-packages (from pytest>=2->pyamg) (0.3.9)
+Requirement already satisfied: setuptools in d:\github\modelrelief\devenv\lib\site-packages (from pytest>=2->pyamg) (40.0.0)
+Installing collected packages: pybind11, pluggy, py, more-itertools, atomicwrites, attrs, pytest, pyamg
+Successfully installed atomicwrites-1.1.5 attrs-18.1.0 more-itertools-4.3.0 pluggy-0.7.1 py-1.5.4 pyamg-4.0.0 pybind11-2.2.3 pytest-3.7.1
+ (d:\Github\ModelRelief\devenv) d:\Github\ModelRelief>conda install matplotlib
+Solving environment: done
+ ## Package Plan ##
+   environment location: d:\Github\ModelRelief\devenv
+   added / updated specs:
+    - matplotlib
+ The following packages will be downloaded:
+     package                    |            build
+    ---------------------------|-----------------
+    libpng-1.6.34              |       h7602738_1         1.3 MB  conda-forge
+ The following NEW packages will be INSTALLED:
+     ca-certificates: 2018.4.16-0          conda-forge
+    cycler:          0.10.0-py_1          conda-forge
+    freetype:        2.8.1-ha63716d_1     conda-forge
+    icu:             58.2-ha66f8fd_1
+    jpeg:            9c-hfa6e2cd_0        conda-forge
+    kiwisolver:      1.0.1-py36_1         conda-forge
+    libpng:          1.6.34-h7602738_1    conda-forge
+    matplotlib:      2.2.2-py36_1         conda-forge
+    openssl:         1.0.2o-hfa6e2cd_1    conda-forge
+    pyparsing:       2.2.0-py_1           conda-forge
+    pyqt:            5.6.0-py36h764d66f_6 conda-forge
+    python-dateutil: 2.7.3-py_0           conda-forge
+    pytz:            2018.5-py_0          conda-forge
+    qt:              5.6.2-h2639256_8     conda-forge
+    sip:             4.18-py36_1          conda-forge
+    six:             1.11.0-py36_1        conda-forge
+    sqlite:          3.24.0-hb652765_0    conda-forge
+    tornado:         5.1-py36hfa6e2cd_1   conda-forge
+    zlib:            1.2.11-h2fa13f4_3    conda-forge
+ Proceed ([y]/n)? y
+ Downloading and Extracting Packages
+libpng-1.6.34        |  1.3 MB | ########################################################################################################################################################################################################################### | 100%
+Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done
+
+ (d:\Github\ModelRelief\devenv) d:\Github\ModelRelief>mayavi2
+
+ (d:\Github\ModelRelief\devenv) d:\Github\ModelRelief>python Solver\workbench.py --s Test\Lucy.json --w Test\Working
+        process_depth_buffer : 0.06 sec
+        process_gradients : 0.20 sec
+        solve : 1.39 sec
+    transform : 2.08 sec
+initialize_ui : 3.70 sec

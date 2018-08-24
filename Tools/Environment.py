@@ -12,7 +12,8 @@
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 
 """
-
+import json
+import io
 import os
 import colorama
 
@@ -40,6 +41,23 @@ class EnvironmentNames:
     MRDatabaseProvider = "MRDatabaseProvider"
     ASPNETCORE_ENVIRONMENT = "ASPNETCORE_ENVIRONMENT"
 
+class RuntimeEnvironment(Enum):
+    """ ASPNETCORE_ENVIRONMENT """
+    development = 'Development'
+    test = 'Test'
+    production = 'Production'
+
+    def __str__(self):
+        return self.value
+
+class DatabaseProvider(Enum):
+    """ Database providers. """
+    sqlserver = 'SQLServer'
+    sqlite = 'SQLite'
+
+    def __str__(self):
+        return self.value
+
 class Environment:
     """
     ModelRelief folder locations and environment settings.
@@ -66,9 +84,8 @@ class Environment:
 
         self.stack:List[Dict] = []
 
-        self.tools_folder = os.path.join(os.environ[EnvironmentNames.MR], "Tools")
-        self.sqlite_folder = os.path.join(os.environ[EnvironmentNames.MR], os.path.join("store", self.values[EnvironmentNames.ASPNETCORE_ENVIRONMENT], "database", "SQLite"))
-        self.sqlserver_folder = os.environ["USERPROFILE"]
+        self.sqlite_path = os.path.join(os.environ[EnvironmentNames.MR], self.database_relative_path(DatabaseProvider.sqlite.value))
+        self.sqlserver_path = os.environ["USERPROFILE"]
 
     def show (self, color=Colors.Magenta):
         """
@@ -96,6 +113,25 @@ class Environment:
         state = self.stack.pop()
         for key, value in state.items():
             os.environ[key] = value
+
+    def database_relative_path(self, provider:str = None):
+        """
+        Returns the relative path (to ContentRootPath) of the database storage folder.
+        Parameters
+        ----------
+        provider
+            The database provider (SQLServer, SQLite)
+        """
+        provider = provider if provider else os.environ[EnvironmentNames.MRDatabaseProvider]
+
+        appsettings_name = f"appsettings.{os.environ[EnvironmentNames.ASPNETCORE_ENVIRONMENT]}.json"
+        appsettings_path = os.path.join(os.environ[EnvironmentNames.MR], appsettings_name)
+        # https://stackoverflow.com/questions/13156395/python-load-json-file-with-utf-8-bom-header
+        settings = json.load(io.open(appsettings_path, 'r', encoding='utf-8-sig'))
+
+        paths = settings['Paths']
+        database_path = os.path.join(paths['StoreDatabase'], provider)
+        return database_path
 
     def test_stack(self):
         """ 

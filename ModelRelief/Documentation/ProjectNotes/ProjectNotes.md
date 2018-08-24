@@ -2,17 +2,10 @@
 #### Commit Notes
 
 #### Short Term      
-    Recover Logs\DevelopmentPythonInstallation and move to Build.
-    Builder
-        Builder should read appsettingsProductionBuild.json rather than use constants.
-                self.sqlserver_path = os.path.join("store", "production", "database", "SQLServer")
+    Exclude test results.
 
-        How should Builder use <environment>?
-            environment.sqlite_folder references ASPNETCORE_ENVIRONMENT but that is used only by baseline.py in integration testing.
-            How can Builder be used to build a development tree?
-                Add an enviroment parameter?
-                    This would control the user store structure.
-                    Building devenv is currently a manual process.
+    Builder
+        Pubish updates the user store but not the database.
 
         Should Builder create the Production database and seed the user store during a build?
             The database and user store can only be created one time. It must always be preserved during subsequent updates.

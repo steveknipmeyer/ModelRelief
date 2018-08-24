@@ -106,7 +106,7 @@
         //  "program": "${workspaceRoot}/Solver/Experiments/workbench.py",
         //  "program": "${workspaceRoot}/Solver/Experiments/mayavitest.py",
             
-            "args":["--webpublish", "False", "--target", "IIS", "--deploy", "True"]
+            "args":["--target", "IIS", "--deploy", "False"]
         //  "args":["--s", "../Solver/Test/House.json", "--w", "../Solver/Test/Working"]
         //  "args":[]
         },

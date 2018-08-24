@@ -43,8 +43,8 @@ class BaseLine:
         Displays the resolved values of key folders.
         """
         print (Colors.Magenta)
-        print("sqliteFolder = %s" % self.environment.sqlite_folder)
-        print("sqlserverFolder = %s" % self.environment.sqlserver_folder)
+        print("SQLite path = %s" % self.environment.sqlite_path)
+        print("SQLServer path = %s" % self.environment.sqlserver_path)
         print (Colors.Reset)
 
     def create_baseline_database (self): 
@@ -56,12 +56,12 @@ class BaseLine:
         self.show_folder_locations()
 
         if self.database == "SQLite":
-            database_folder = self.environment.sqlite_folder
+            database_folder = self.environment.sqlite_path
             file_list = [
                 ("ModelReliefTest.db", "ModelReliefBaseline.db")
             ]
         elif self.database == "SQLServer":
-            database_folder = self.environment.sqlserver_folder
+            database_folder = self.environment.sqlserver_path
             file_list = [
                 ("ModelReliefTest.mdf",     "ModelReliefBaseline.mdf"),
                 ("ModelReliefTest_log.ldf", "ModelReliefBaseline_log.ldf")
