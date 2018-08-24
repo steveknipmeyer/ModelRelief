@@ -1,16 +1,10 @@
 ﻿### Tasks
 #### Commit Notes
-
 #### Short Term      
-    Exclude test results.
+    Builder      
+        Publish updates the user store but not the database.
 
-    Builder
-        Pubish updates the user store but not the database.
-
-        Should Builder create the Production database and seed the user store during a build?
-            The database and user store can only be created one time. It must always be preserved during subsequent updates.
-
-    Add support for copying demonstration models into a new users account.
+        Add a model list to control which models are added.
 
     Why is the Python refactoring so slow?
         "Refactoring library rope is not installed. Install?"

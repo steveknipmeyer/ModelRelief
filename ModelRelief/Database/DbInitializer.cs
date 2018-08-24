@@ -37,7 +37,6 @@ namespace ModelRelief.Database
         private ILogger<DbInitializer>          Logger  { get; set; }
         private IStorageManager                 StorageManager { get; set; }
 
-        private ApplicationUser                 _user;
         private string                          StoreUsersPath { get; set; }
         private string                          SqlitePath { get; set; }
 
@@ -92,8 +91,6 @@ namespace ModelRelief.Database
             SqlitePath = Path.GetFullPath($"{GetAbsolutePath(ConfigurationProvider.GetSetting(Paths.StoreDatabase))}{ConfigurationSettings.SQLite}");
 
             ExitAfterInitialization = exitAfterInitialization;
-
-            Initialize();
         }
 
         /// <summary>
@@ -151,7 +148,7 @@ namespace ModelRelief.Database
         /// <summary>
         /// Process the command line arguments and initialize.
         /// </summary>
-        private void Initialize()
+        public void Initialize()
         {
             EnsureServerInitialized();
 
@@ -163,7 +160,7 @@ namespace ModelRelief.Database
                 InitializeDatabase().Wait();
                 if (ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRSeedDatabase))
                 {
-                SeedDatabase().Wait();
+                    SeedDatabaseForTestUsers().Wait();
                 }
             }
         }
@@ -272,7 +269,7 @@ namespace ModelRelief.Database
         /// Seeds the database with test data.
         /// </summary>
         /// <returns></returns>
-        private async Task SeedDatabase()
+        private async Task SeedDatabaseForTestUsers()
         {
             var userAccounts = new List<string>
             {
@@ -283,23 +280,32 @@ namespace ModelRelief.Database
 
             foreach (var account in userAccounts)
             {
-                _user = await AddUser(account);
-
-                // database
-                AddProjects();
-                AddCameras();
-                AddModels();
-                AddMeshTransforms();
-
-                AddDepthBuffers();
-                AddMeshes();
-
-                SeedUserStore();
-
-                Logger.LogInformation($"User {_user} database and sample data sets created.");
+                var user = await AddUser(account);
+                SeedDatabaseForUser(user);
             }
 
             CreateTestDatabase();
+        }
+
+        /// <summary>
+        /// Populate the database and user store with examples.
+        /// </summary>
+        /// <param name="user">Owning user.</param>
+        public void SeedDatabaseForUser(ApplicationUser user)
+        {
+            // database
+            AddProjects(user);
+            AddCameras(user);
+            AddModels(user);
+            AddMeshTransforms(user);
+
+            AddDepthBuffers(user);
+            AddMeshes(user);
+
+            // user store
+            SeedUserStore(user);
+
+            Logger.LogInformation($"User {user} database and sample data sets created.");
         }
 
         /// <summary>
@@ -351,11 +357,12 @@ namespace ModelRelief.Database
         /// Create the user store in the file system.
         /// Copy the test data files into the web user store.
         /// </summary>
-        private void SeedUserStore()
+        /// <param name="user">Owning user.</param>
+        private void SeedUserStore(ApplicationUser user)
         {
-            CopyTestFiles<Domain.Model3d>("Paths:ResourceFolders:Model3d");
-            CopyTestFiles<Domain.DepthBuffer>("Paths:ResourceFolders:DepthBuffer");
-            CopyTestFiles<Domain.Mesh>("Paths:ResourceFolders:Mesh");
+            CopyTestFiles<Domain.Model3d>(user, "Paths:ResourceFolders:Model3d");
+            CopyTestFiles<Domain.DepthBuffer>(user, "Paths:ResourceFolders:DepthBuffer");
+            CopyTestFiles<Domain.Mesh>(user, "Paths:ResourceFolders:Mesh");
         }
 
         /// <summary>
@@ -382,14 +389,15 @@ namespace ModelRelief.Database
         /// <summary>
         /// Add test projects.
         /// </summary>
-        private void AddProjects()
+        /// <param name="user">Owning user.</param>
+        private void AddProjects(ApplicationUser user)
         {
             var projects = new Project[]
             {
-                new Project { Name = ProjectNames.Architecture, Description = "Architectural structures, woodwork, panels and details", User = _user },
-                new Project { Name = ProjectNames.Jewelry, Description = "Jewelry watch faces, bracelets and pendants", User = _user },
-                new Project { Name = ProjectNames.ModelRelief, Description = "Development and Test", User = _user },
-                new Project { Name = ProjectNames.Stanford, Description = "Stanford model repository", User = _user },
+                new Project { Name = ProjectNames.Architecture, Description = "Architectural structures, woodwork, panels and details", User = user },
+                new Project { Name = ProjectNames.Jewelry, Description = "Jewelry watch faces, bracelets and pendants", User = user },
+                new Project { Name = ProjectNames.ModelRelief, Description = "Development and Test", User = user },
+                new Project { Name = ProjectNames.Stanford, Description = "Stanford model repository", User = user },
             };
             foreach (Project project in projects)
             {
@@ -397,13 +405,14 @@ namespace ModelRelief.Database
             }
             DbContext.SaveChanges();
 
-            QualifyDescription<Project>(_user.UserName);
+            QualifyDescription<Project>(user);
         }
 
         /// <summary>
         /// Add test cameras.
         /// </summary>
-        private void AddCameras()
+        /// <param name="user">Owning user.</param>
+        private void AddCameras(ApplicationUser user)
         {
             var cameras = new Camera[]
             {
@@ -420,7 +429,7 @@ namespace ModelRelief.Database
                     ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
                     UpX = 0.0, UpY = 1.0, UpZ = 0.0,
 
-                    User = _user, Project = FindByName<Project>(ProjectNames.ModelRelief),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
                 },
 
                 new Camera
@@ -435,7 +444,7 @@ namespace ModelRelief.Database
                     ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
                     UpX = 0.0, UpY = 1.0, UpZ = 0.0,
 
-                    User = _user, Project = FindByName<Project>(ProjectNames.ModelRelief),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
                 },
 
                 // Model Specific Cameras
@@ -450,7 +459,7 @@ namespace ModelRelief.Database
                     ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
                     UpX = 0.0, UpY = 1.0, UpZ = 0.0,
 
-                    User = _user, Project = FindByName<Project>("Stanford"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
                 new Camera
                 {
@@ -464,7 +473,7 @@ namespace ModelRelief.Database
                     ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
                     UpX = 0.0, UpY = 1.0, UpZ = 0.0,
 
-                    User = _user, Project = FindByName<Project>("Stanford"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
                 new Camera
                 {
@@ -478,7 +487,7 @@ namespace ModelRelief.Database
                     ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
                     UpX = 0.0, UpY = 1.0, UpZ = 0.0,
 
-                    User = _user, Project = FindByName<Project>("Stanford"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
                 new Camera
                 {
@@ -492,7 +501,7 @@ namespace ModelRelief.Database
                     ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
                     UpX = 0.10, UpY = 0.90, UpZ = 0.43,
 
-                    User = _user, Project = FindByName<Project>(ProjectNames.Jewelry),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Jewelry),
                 },
                 new Camera
                 {
@@ -506,7 +515,7 @@ namespace ModelRelief.Database
                     ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
                     UpX = 0.0, UpY = 1.0, UpZ = 0.0,
 
-                    User = _user, Project = FindByName<Project>("Stanford"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
                 new Camera
                 {
@@ -520,7 +529,7 @@ namespace ModelRelief.Database
                     ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
                     UpX = 0.06, UpY = 1.0, UpZ = 0.07,
 
-                    User = _user, Project = FindByName<Project>(ProjectNames.Architecture),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Architecture),
                 },
                 new Camera
                 {
@@ -534,7 +543,7 @@ namespace ModelRelief.Database
                     ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
                     UpX = 0.0, UpY = 1.0, UpZ = 0.0,
 
-                    User = _user, Project = FindByName<Project>("Stanford"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
                 new Camera
                 {
@@ -548,7 +557,7 @@ namespace ModelRelief.Database
                     ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
                     UpX = 0.05, UpY = 0.99, UpZ = -0.13,
 
-                    User = _user, Project = FindByName<Project>(ProjectNames.Jewelry),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Jewelry),
                 },
                 new Camera
                 {
@@ -562,7 +571,7 @@ namespace ModelRelief.Database
                     ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
                     UpX = 0.0, UpY = 1.0, UpZ = 0.0,
 
-                    User = _user, Project = FindByName<Project>("Stanford"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
                 new Camera
                 {
@@ -576,7 +585,7 @@ namespace ModelRelief.Database
                     ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
                     UpX = 0.0, UpY = 1.00, UpZ = 0.0,
 
-                    User = _user, Project = FindByName<Project>("Stanford"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
                 new Camera
                 {
@@ -590,7 +599,7 @@ namespace ModelRelief.Database
                     ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
                     UpX = 0.0, UpY = 0.0, UpZ = -1.0,
 
-                    User = _user, Project = FindByName<Project>(ProjectNames.ModelRelief),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
                 },
             };
 
@@ -600,70 +609,71 @@ namespace ModelRelief.Database
             }
             DbContext.SaveChanges();
 
-            QualifyDescription<Camera>(_user.UserName);
+            QualifyDescription<Camera>(user);
         }
 
         /// <summary>
         /// Add test models.
         /// </summary>
-        private void AddModels()
+        /// <param name="user">Owning user.</param>
+        private void AddModels(ApplicationUser user)
         {
             var models = new Model3d[]
             {
                 new Model3d
                 {
                     Name = "armadillo.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
-                    User = _user, Project = FindByName<Project>("Stanford"), Camera = FindByName<Camera>("Isometric Camera"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"), Camera = FindByName<Camera>(user, "Isometric Camera"),
                 },
                 new Model3d
                 {
                     Name = "buddha.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
-                    User = _user, Project = FindByName<Project>("Stanford"), Camera = FindByName<Camera>("Top Camera"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
                 new Model3d
                 {
                     Name = "bunny.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
-                    User = _user, Project = FindByName<Project>("Stanford"), Camera = FindByName<Camera>("Top Camera"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
                 new Model3d
                 {
                     Name = "dolphin.obj", Description = "Ocean dolphin", Format = Model3dFormat.OBJ,
-                    User = _user, Project = FindByName<Project>(ProjectNames.Jewelry), Camera = FindByName<Camera>("Top Camera"),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Jewelry), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
                 new Model3d
                 {
                     Name = "dragon.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
-                    User = _user, Project = FindByName<Project>("Stanford"), Camera = FindByName<Camera>("Top Camera"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
                 new Model3d
                 {
                     Name = "house.obj", Description = "San Francisco house", Format = Model3dFormat.OBJ,
-                    User = _user, Project = FindByName<Project>(ProjectNames.Architecture), Camera = FindByName<Camera>("Top Camera"),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Architecture), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
                 new Model3d
                 {
                     Name = "lucy.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
-                    User = _user, Project = FindByName<Project>("Stanford"), Camera = FindByName<Camera>("Top Camera"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
                 new Model3d
                 {
                     Name = "roadster.obj", Description = "Duesen Bayern Mystar 190 SL", Format = Model3dFormat.OBJ,
-                    User = _user, Project = FindByName<Project>(ProjectNames.Jewelry), Camera = FindByName<Camera>("Top Camera"),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Jewelry), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
                 new Model3d
                 {
                     Name = "statue.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
-                    User = _user, Project = FindByName<Project>("Stanford"), Camera = FindByName<Camera>("Top Camera"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
                 new Model3d
                 {
                     Name = "test.obj", Description = "Reference test model", Format = Model3dFormat.OBJ,
-                    User = _user, Project = FindByName<Project>(ProjectNames.ModelRelief), Camera = FindByName<Camera>("Top Camera"),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.ModelRelief), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
                 new Model3d
                 {
                     Name = "tyrannosaurus.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ,
-                    User = _user, Project = FindByName<Project>("Stanford"), Camera = FindByName<Camera>("Isometric Camera"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"), Camera = FindByName<Camera>(user, "Isometric Camera"),
                 },
             };
 
@@ -674,13 +684,14 @@ namespace ModelRelief.Database
             DbContext.SaveChanges();
 
             SetFileProperties(models);
-            QualifyDescription<Model3d>(_user.UserName);
+            QualifyDescription<Model3d>(user);
         }
 
         /// <summary>
         /// Add mesh transforms.
         /// </summary>
-        private void AddMeshTransforms()
+        /// <param name="user">Owning user.</param>
+        private void AddMeshTransforms(ApplicationUser user)
         {
             var meshTransforms = new MeshTransform[]
             {
@@ -691,7 +702,7 @@ namespace ModelRelief.Database
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
                     P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = _user, Project = FindByName<Project>(ProjectNames.ModelRelief),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
                 },
 
                 new MeshTransform
@@ -700,7 +711,7 @@ namespace ModelRelief.Database
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
                     P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = _user, Project = FindByName<Project>(ProjectNames.Architecture),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Architecture),
                 },
 
                 // Model-specific MeshTransforms
@@ -710,7 +721,7 @@ namespace ModelRelief.Database
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.9, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 6.0,
                     P1 = 0.02, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = _user, Project = FindByName<Project>("Stanford"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
                 new MeshTransform
                 {
@@ -718,7 +729,7 @@ namespace ModelRelief.Database
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
                     P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = _user, Project = FindByName<Project>("Stanford"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
                 new MeshTransform
                 {
@@ -726,7 +737,7 @@ namespace ModelRelief.Database
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
                     P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = _user, Project = FindByName<Project>("Stanford"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
                 new MeshTransform
                 {
@@ -734,7 +745,7 @@ namespace ModelRelief.Database
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
                     P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = _user, Project = FindByName<Project>(ProjectNames.Jewelry),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Jewelry),
                 },
                 new MeshTransform
                 {
@@ -742,7 +753,7 @@ namespace ModelRelief.Database
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
                     P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = _user, Project = FindByName<Project>("Stanford"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
                 new MeshTransform
                 {
@@ -750,7 +761,7 @@ namespace ModelRelief.Database
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
                     P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = _user, Project = FindByName<Project>(ProjectNames.Architecture),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Architecture),
                 },
                 new MeshTransform
                 {
@@ -758,7 +769,7 @@ namespace ModelRelief.Database
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
                     P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = _user, Project = FindByName<Project>("Stanford"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
                 new MeshTransform
                 {
@@ -766,7 +777,7 @@ namespace ModelRelief.Database
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
                     P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = _user, Project = FindByName<Project>(ProjectNames.Jewelry),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Jewelry),
                 },
                 new MeshTransform
                 {
@@ -774,7 +785,7 @@ namespace ModelRelief.Database
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
                     P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = _user, Project = FindByName<Project>(ProjectNames.Jewelry),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Jewelry),
                 },
                 new MeshTransform
                 {
@@ -782,7 +793,7 @@ namespace ModelRelief.Database
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
                     P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = _user, Project = FindByName<Project>(ProjectNames.ModelRelief),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
                 },
                 new MeshTransform
                 {
@@ -790,7 +801,7 @@ namespace ModelRelief.Database
                     Width = 100.0, Height = 100.0, Depth = 1.0,
                     GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
                     P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = _user, Project = FindByName<Project>("Stanford"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
             };
 
@@ -800,13 +811,14 @@ namespace ModelRelief.Database
             }
             DbContext.SaveChanges();
 
-            QualifyDescription<MeshTransform>(_user.UserName);
+            QualifyDescription<MeshTransform>(user);
         }
 
         /// <summary>
         /// Add test depth buffers.
         /// </summary>
-        private void AddDepthBuffers()
+        /// <param name="user">Owning user.</param>
+        private void AddDepthBuffers(ApplicationUser user)
         {
             var depthBuffers = new DepthBuffer[]
             {
@@ -815,88 +827,88 @@ namespace ModelRelief.Database
                     Name = "armadillo.sdb", Description = "Generated in Rhino",
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>("armadillo.obj"), Camera = FindByName<Camera>("Armadillo"),
-                    User = _user, Project = FindByName<Project>("Stanford"),
+                    Model3d = FindByName<Model3d>(user, "armadillo.obj"), Camera = FindByName<Camera>(user, "Armadillo"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
                 new DepthBuffer
                 {
                     Name = "buddha.sdb", Description = "Generated in Rhino",
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>("buddha.obj"), Camera = FindByName<Camera>("Buddha"),
-                    User = _user, Project = FindByName<Project>("Stanford"),
+                    Model3d = FindByName<Model3d>(user, "buddha.obj"), Camera = FindByName<Camera>(user, "Buddha"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
                 new DepthBuffer
                 {
                     Name = "bunny.sdb", Description = "Generated in VRay",
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>("bunny.obj"), Camera = FindByName<Camera>("Bunny"),
-                    User = _user, Project = FindByName<Project>("Stanford"),
+                    Model3d = FindByName<Model3d>(user, "bunny.obj"), Camera = FindByName<Camera>(user, "Bunny"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
                 new DepthBuffer
                 {
                     Name = "dolphin.sdb", Description = "Generated in VRay",
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>("dolphin.obj"), Camera = FindByName<Camera>("Dolphin"),
-                    User = _user, Project = FindByName<Project>(ProjectNames.Jewelry),
+                    Model3d = FindByName<Model3d>(user, "dolphin.obj"), Camera = FindByName<Camera>(user, "Dolphin"),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Jewelry),
                 },
                 new DepthBuffer
                 {
                     Name = "dragon.sdb", Description = "Generated in VRay",
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>("dragon.obj"), Camera = FindByName<Camera>("Dragon"),
-                    User = _user, Project = FindByName<Project>("Stanford"),
+                    Model3d = FindByName<Model3d>(user, "dragon.obj"), Camera = FindByName<Camera>(user, "Dragon"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
                 new DepthBuffer
                 {
                     Name = "house.sdb", Description = "Generated in VRay",
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>("house.obj"), Camera = FindByName<Camera>("House"),
-                    User = _user, Project = FindByName<Project>(ProjectNames.Architecture),
+                    Model3d = FindByName<Model3d>(user, "house.obj"), Camera = FindByName<Camera>(user, "House"),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Architecture),
                 },
                 new DepthBuffer
                 {
                     Name = "lucy.sdb", Description = "Generated in Maya",
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>("lucy.obj"), Camera = FindByName<Camera>("Lucy"),
-                    User = _user, Project = FindByName<Project>("Stanford"),
+                    Model3d = FindByName<Model3d>(user, "lucy.obj"), Camera = FindByName<Camera>(user, "Lucy"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
                 new DepthBuffer
                 {
                     Name = "roadster.sdb", Description = "Generated in Maya",
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>("roadster.obj"), Camera = FindByName<Camera>("Roadster"),
-                    User = _user, Project = FindByName<Project>(ProjectNames.Jewelry),
+                    Model3d = FindByName<Model3d>(user, "roadster.obj"), Camera = FindByName<Camera>(user, "Roadster"),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Jewelry),
                 },
                 new DepthBuffer
                 {
                     Name = "statue.sdb", Description = "Generated in Maya",
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>("statue.obj"), Camera = FindByName<Camera>("Statue"),
-                    User = _user, Project = FindByName<Project>("Stanford"),
+                    Model3d = FindByName<Model3d>(user, "statue.obj"), Camera = FindByName<Camera>(user, "Statue"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
                 new DepthBuffer
                 {
                     Name = "test.sdb", Description = "Generated in ModelRelief",
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>("test.obj"), Camera = FindByName<Camera>("Test"),
-                    User = _user, Project = FindByName<Project>(ProjectNames.ModelRelief),
+                    Model3d = FindByName<Model3d>(user, "test.obj"), Camera = FindByName<Camera>(user, "Test"),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
                 },
                 new DepthBuffer
                 {
                     Name = "tyrannosaurus.sdb", Description = "Generated in ModelRelief",
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>("tyrannosaurus.obj"), Camera = FindByName<Camera>("Tyrannosaurus"),
-                    User = _user, Project = FindByName<Project>("Stanford"),
+                    Model3d = FindByName<Model3d>(user, "tyrannosaurus.obj"), Camera = FindByName<Camera>(user, "Tyrannosaurus"),
+                    User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
             };
 
@@ -907,70 +919,71 @@ namespace ModelRelief.Database
             DbContext.SaveChanges();
 
             SetFileProperties(depthBuffers);
-            QualifyDescription<DepthBuffer>(_user.UserName);
+            QualifyDescription<DepthBuffer>(user);
         }
 
         /// <summary>
         /// Add test meshes.
         /// </summary>
-        private void AddMeshes()
+        /// <param name="user">Owning user.</param>
+        private void AddMeshes(ApplicationUser user)
         {
             var meshes = new Mesh[]
             {
                 new Mesh
                 {
-                    Name = "armadillo.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("armadillo.sdb"), MeshTransform = FindByName<MeshTransform>("Armadillo"),
-                    User = _user, Project = FindByName<Project>(ProjectNames.Stanford),
+                    Name = "armadillo.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "armadillo.sdb"), MeshTransform = FindByName<MeshTransform>(user, "Armadillo"),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new Mesh
                 {
-                    Name = "buddha.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("buddha.sdb"), MeshTransform =  FindByName<MeshTransform>("Buddha"),
-                    User = _user, Project = FindByName<Project>(ProjectNames.Stanford),
+                    Name = "buddha.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "buddha.sdb"), MeshTransform =  FindByName<MeshTransform>(user, "Buddha"),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new Mesh
                 {
-                    Name = "bunny.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("bunny.sdb"), MeshTransform =  FindByName<MeshTransform>("Bunny"),
-                    User = _user, Project = FindByName<Project>(ProjectNames.Stanford),
+                    Name = "bunny.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "bunny.sdb"), MeshTransform =  FindByName<MeshTransform>(user, "Bunny"),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new Mesh
                 {
-                    Name = "dolphin.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("dolphin.sdb"), MeshTransform =  FindByName<MeshTransform>("Dolphin"),
-                    User = _user, Project = FindByName<Project>(ProjectNames.Jewelry),
+                    Name = "dolphin.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "dolphin.sdb"), MeshTransform =  FindByName<MeshTransform>(user, "Dolphin"),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Jewelry),
                 },
                 new Mesh
                 {
-                    Name = "dragon.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("dragon.sdb"), MeshTransform =  FindByName<MeshTransform>("Dragon"),
-                    User = _user, Project = FindByName<Project>(ProjectNames.Stanford),
+                    Name = "dragon.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "dragon.sdb"), MeshTransform =  FindByName<MeshTransform>(user, "Dragon"),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new Mesh
                 {
-                    Name = "house.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("house.sdb"), MeshTransform =  FindByName<MeshTransform>("House"),
-                    User = _user, Project = FindByName<Project>(ProjectNames.Architecture),
+                    Name = "house.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "house.sdb"), MeshTransform =  FindByName<MeshTransform>(user, "House"),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Architecture),
                 },
                 new Mesh
                 {
-                    Name = "lucy.sfp", Description = "Isometric", Format = MeshFormat.SFP, Camera = FindByName<Camera>("Isometric Camera"), DepthBuffer = FindByName<DepthBuffer>("lucy.sdb"), MeshTransform =  FindByName<MeshTransform>("Lucy"),
-                    User = _user, Project = FindByName<Project>(ProjectNames.Stanford),
+                    Name = "lucy.sfp", Description = "Isometric", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Isometric Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "lucy.sdb"), MeshTransform =  FindByName<MeshTransform>(user, "Lucy"),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new Mesh
                 {
-                    Name = "roadster.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("roadster.sdb"), MeshTransform =  FindByName<MeshTransform>("Roadster"),
-                    User = _user, Project = FindByName<Project>(ProjectNames.Jewelry),
+                    Name = "roadster.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "roadster.sdb"), MeshTransform =  FindByName<MeshTransform>(user, "Roadster"),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Jewelry),
                 },
                 new Mesh
                 {
-                    Name = "statue.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("statue.sdb"), MeshTransform =  FindByName<MeshTransform>("Statue"),
-                    User = _user, Project = FindByName<Project>(ProjectNames.Stanford),
+                    Name = "statue.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "statue.sdb"), MeshTransform =  FindByName<MeshTransform>(user, "Statue"),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new Mesh
                 {
-                    Name = "test.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("test.sdb"), MeshTransform =  FindByName<MeshTransform>("Test"),
-                    User = _user, Project = FindByName<Project>(ProjectNames.ModelRelief),
+                    Name = "test.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "test.sdb"), MeshTransform =  FindByName<MeshTransform>(user, "Test"),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
                 },
                 new Mesh
                 {
-                    Name = "tyrannosaurus.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>("Top Camera"), DepthBuffer = FindByName<DepthBuffer>("tyrannosaurus.sdb"), MeshTransform =  FindByName<MeshTransform>("Tyrannosaurus"),
-                    User = _user, Project = FindByName<Project>(ProjectNames.ModelRelief),
+                    Name = "tyrannosaurus.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "tyrannosaurus.sdb"), MeshTransform =  FindByName<MeshTransform>(user, "Tyrannosaurus"),
+                    User = user, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
                 },
             };
 
@@ -981,21 +994,22 @@ namespace ModelRelief.Database
             DbContext.SaveChanges();
 
             SetFileProperties(meshes);
-            QualifyDescription<Mesh>(_user.UserName);
+            QualifyDescription<Mesh>(user);
         }
 
         /// <summary>
         /// Create the user store for a particular model type.
         /// </summary>
         /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="user">Owning user.</param>
         /// <param name="folderType">Type of folder</param>
-        private void CopyTestFiles<TEntity>(string folderType)
+        private void CopyTestFiles<TEntity>(ApplicationUser user, string folderType)
             where TEntity : DomainModel
         {
             var sourceFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUsers)}/{ConfigurationProvider.GetSetting(folderType)}";
             var sourceFolderPath        = $"{HostingEnvironment.ContentRootPath}{sourceFolderPartialPath}";
 
-            var destinationFolderPath   = $"{StoreUsersPath}{_user.Id}/{ConfigurationProvider.GetSetting(folderType)}";
+            var destinationFolderPath   = $"{StoreUsersPath}{user.Id}/{ConfigurationProvider.GetSetting(folderType)}";
             Directory.CreateDirectory(destinationFolderPath);
 
             // iterate over all folders
@@ -1006,7 +1020,7 @@ namespace ModelRelief.Database
                 // parent directory name = database resource ID
                 var model = DbContext.Set<TEntity>()
                     .Where(m => m.Name.StartsWith(dirInfo.Name))
-                    .Where(m => (m.UserId == _user.Id))
+                    .Where(m => (m.UserId == user.Id))
                     .FirstOrDefault();
 
                 if (model == null)
@@ -1029,13 +1043,14 @@ namespace ModelRelief.Database
         /// Find a resource by Name that is owned by the active user.
         /// </summary>
         /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="user">Owning user.</param>
         /// <param name="name">Name property to match.</param>
         /// <returns>Matching entity.</returns>
-        private TEntity FindByName<TEntity>(string name)
+        private TEntity FindByName<TEntity>(ApplicationUser user, string name)
             where TEntity : DomainModel
         {
             var resource = DbContext.Set<TEntity>()
-                .Where(r => ((r.Name == name) && (r.UserId == _user.Id))).First();
+                .Where(r => ((r.Name == name) && (r.UserId == user.Id))).First();
 
             if (resource == null)
                 Debug.Assert(false, $"DbInitializer: {typeof(TEntity).Name} = '{name}' not found)");
@@ -1047,12 +1062,13 @@ namespace ModelRelief.Database
         /// Adds a qualifying suffix to the end of the Description property.
         /// </summary>
         /// <typeparam name="TEntity">Domain model.</typeparam>
-        /// <param name="descriptionSuffix">Suffix to end.</param>
-        private void QualifyDescription<TEntity>(string descriptionSuffix)
+        /// <param name="user">Owning user.</param>
+        private void QualifyDescription<TEntity>(ApplicationUser user)
             where TEntity : DomainModel
         {
+            var descriptionSuffix = user.UserName;
             var models = DbContext.Set<TEntity>()
-                            .Where(m => (m.User.Id == _user.Id));
+                            .Where(m => (m.User.Id == user.Id));
 
             foreach (var model in models)
                 {

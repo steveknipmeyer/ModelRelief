@@ -38,6 +38,7 @@ namespace ModelRelief.Infrastructure
             {
                 var services = scope.ServiceProvider;
                 var initializer = new DbInitializer(services, ExitAfterInitialization);
+                initializer.Initialize();
             }
             if (ExitAfterInitialization)
                 return;

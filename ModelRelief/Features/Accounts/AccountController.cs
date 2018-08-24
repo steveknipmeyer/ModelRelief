@@ -6,20 +6,25 @@
 
 namespace ModelRelief.Features.Accounts
 {
+    using System;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.DependencyInjection;
+    using ModelRelief.Database;
     using ModelRelief.Domain;
 
     public class AccountController : Controller
         {
         private UserManager<ApplicationUser>   _userManager;
         private SignInManager<ApplicationUser> _signInManager;
+        private IServiceProvider               _services;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IServiceProvider services)
             {
             _userManager  = userManager;
             _signInManager = signInManager;
+            _services = services;
             }
 
         [HttpGet]
@@ -52,6 +57,11 @@ namespace ModelRelief.Features.Accounts
 
             // success
             await _signInManager.SignInAsync(user, false);
+
+            // examples
+            var initializer = new DbInitializer(_services, false);
+            initializer.SeedDatabaseForUser(user);
+
             return RedirectToAction("Index", "Home");
             }
 
