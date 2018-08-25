@@ -2,8 +2,7 @@
 #### Commit Notes
 #### Short Term      
     Builder      
-        Publish updates the user store but not the database.
-
+        IIS publish updates the user store but not the database which must be attached manually.
         Add a model list to control which models are added.
 
     Why is the Python refactoring so slow?
@@ -11,38 +10,6 @@
 
     Remove PATH, PYTHON path changes to System Environment variables.
     How are environment variables (PATH, PYTHONPATH) handled on the web server?
-
-    Server Structure
-        modelrelief (ContentRootPath)
-            <application files>
-            logs
-            mrenv
-            store/production
-            Solver
-            Test
-            Tools
-            wwwroot
-
-        Development, Test
-            ModelRelief (ContentRootPath)
-                <application files>
-                logs
-                store/<Environment>
-                Test
-                wwwroot
-            devenv
-            Solver
-            Tools
-
-        'store' Notes
-            The users folder is used to hold the user file system.
-            When SQLite is configured, the database file is stored in store/<environment>/database.
-            Also, the database folder is used to transfer the SQLServer seed database to the Docker database container during a build.
-
-    Deployment Notes
-        Attach the seed database to the SQLServer instance.
-            The account credentials are not available for the test accounts so seeding the database cannot be done.
-        Initialize the user store.
 
     Order a SQLServer book.
  
@@ -89,14 +56,6 @@
     How are credentials handled in a ConnectionString in Production?
         https://stackoverflow.com/questions/44931613/how-to-correctly-store-connection-strings-in-environment-variables-for-retrieval
    
-    Publish Structure
-        Publish
-            <application binaries from 'dotnet publish'>
-            mrenv
-            Solver
-            Tools
-            wwwroot
-  
 ###### StandardView
 When the view camera is interactively changed, it should invalidate the StandardView in the UI.
     Mesh view opens with the UI set to StandardCamera.Front but the view is Top.
@@ -1331,3 +1290,32 @@ https://semver.npmjs.com/
             Connect to the database instance using Windows Authentication.
                 Enable SQL Server and Windows Authentication.
                 Reset the SA password.
+
+#### Publish and Deploy
+
+    Server Structure
+        modelrelief (ContentRootPath)
+            <application files>
+            logs
+            mrenv
+            store/production
+            Solver
+            Test
+            Tools
+            wwwroot
+
+        Development, Test
+            ModelRelief (ContentRootPath)
+                <application files>
+                logs
+                store/<Environment>
+                Test
+                wwwroot
+            devenv
+            Solver
+            Tools
+
+        'store' Notes
+            The users folder is used to hold the user file system.
+            When SQLite is configured, the database file is stored in store/<environment>/database.
+            Also, the database folder is used to transfer the SQLServer seed database to the Docker database container during a build.

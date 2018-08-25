@@ -705,15 +705,6 @@ namespace ModelRelief.Database
                     User = user, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
                 },
 
-                new MeshTransform
-                {
-                    Name = "Pendant", Description = "Pendant transform",
-                    Width = 100.0, Height = 100.0, Depth = 1.0,
-                    GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = user, Project = FindByName<Project>(user, ProjectNames.Architecture),
-                },
-
                 // Model-specific MeshTransforms
                 new MeshTransform
                 {
