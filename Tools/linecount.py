@@ -42,7 +42,7 @@ class LineCount:
         root = os.environ[EnvironmentNames.MRSolution]
         os.chdir(root)
 
-        excluded_folders = {"bin", "devenv", ".git", "node_modules", "obj", "Publish", "store", "Test", ".vscode", "wwwroot"}
+        excluded_folders = {"bin", "devenv", ".git", "mrenv", "node_modules", "obj", "Publish", "store", "Test", ".vscode", "wwwroot"}
         source_extensions = {".cs", ".ts", ".py"}
         counts = dict()
         tools = Tools()
