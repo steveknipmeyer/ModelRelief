@@ -3,7 +3,7 @@
 
 #### Short Term      
     Runtime Settings
-    https://medium.freecodecamp.org/environment-settings-in-javascript-apps-c5f9744282b6
+        https://medium.freecodecamp.org/environment-settings-in-javascript-apps-c5f9744282b6
         minifiedExtension
         loggingEnabled
 
@@ -15,8 +15,6 @@
     Does composerMeshModel expose too much in Composer.Edit.cshtml?
         IsSyncrhronized, FileStamp, etc.
 
-    Create a utility to count source code lines.
-
     Performance
         Measure page load times in Production builds.e
         The transfer of models is inefficent because they are Base64 encoded.
@@ -27,8 +25,6 @@
 
     Why is the Python refactoring so slow?
         "Refactoring library rope is not installed. Install?"
-
-    Remove PATH, PYTHONPATH changes to System Environment variables.
 
     Order a SQLServer book.
  

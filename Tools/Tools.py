@@ -17,7 +17,7 @@ import sys
 import string
 import random
 
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Callable, Dict, Optional, Set
 
 # N.B. copytree requires the target directory be empty. It always creates the target.
 # copy_tree works with an existing directory.
@@ -136,36 +136,28 @@ class Tools:
     def copy_folder (source_folder, destination_folder):
         """
         Copy a single folder. Not recursive.
-        """
+        """ 
 
         print ("%s -> %s" % (source_folder, destination_folder))
         copy_tree(source_folder, destination_folder)
 
-    def recurse_folder(self, folder: str, directory_filter: Callable[[str], bool])->None:
+    def recurse_folder(self, folder: str, excluded_folders: Set[str], process_file: Callable[[str], None])->None:
         """
         Recurse a folder and process each file.
         Parameters
         ----------
         folder
             Base directory.
-        directory_filter
-            Callback to pass or exclude directories from the recursion.
+        excluded_folders
+            Set of folders to exclude from processing.
+        process_file
+            Callback to process a file.            
         """
-        rootdir = folder
-        print (f"Processing: {rootdir}")
-        for dirpath, dirnames, filenames in os.walk(rootdir):
-
-            for directory in dirnames:
-                fullpath = os.path.join(dirpath, directory)
-                if directory_filter(fullpath):
-                    self.recurse_folder(fullpath, directory_filter)                                      
+        for dirpath, dirnames, filenames in os.walk(folder, topdown=True):
+            dirnames[:] = [d for d in dirnames if d not in excluded_folders]
 
             for file in filenames:
-                _, file_extension = os.path.splitext(file)
-
-                if file_extension.lower() == ".cs":
-                    print (file)
-                    pass
+                process_file(os.path.join(dirpath, file))
 
     @staticmethod
     def confirm(answer: str)-> bool:

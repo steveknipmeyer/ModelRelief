@@ -34,37 +34,58 @@ class LineCount:
         self.logger = Logger()
         self.environment:Environment = Environment()
 
-
     def run (self):
         """
         """
-        self.logger.logInformation("<LineCount>", Colors.BrightCyan)
+        self.logger.logInformation("<LineCount>\n", Colors.BrightCyan)
 
         root = os.environ[EnvironmentNames.MRSolution]
         os.chdir(root)
 
-        excluded_folders = {"bin", "devenv", ".git", "node_modules", "obj", "store", "Test", "wwwroot"}
-        def directory_filter(directory: str)->bool:
+        excluded_folders = {"bin", "devenv", ".git", "node_modules", "obj", "Publish", "store", "Test", ".vscode", "wwwroot"}
+        source_extensions = {".cs", ".ts", ".py"}
+        counts = dict()
+        tools = Tools()
+
+        def count_lines(file: str)->int:
             """
-            Filters the current directory.
+            Counts the number of lines in a file.
             Parameters
             ----------
-            directory
-                Current directory name to test.
+            file
+                Absolute path of file.
             """
-            basename = os.path.basename(directory)
-            # print(f"Testing {basename} for exclusion")
-            process = False if basename in excluded_folders else True
-            if not process:
-                # self.logger.logInformation(f"Skipping {directory}", Colors.BrightYellow)
-                pass
+            index = 0
+            with open(file) as f:
+                for index, _ in enumerate(f):
+                    pass
+            return index + 1            
 
-            return process
+        def process_file(file: str)->None:
+            """
+            Processes a given file.
+            Parameters
+            ----------
+            file
+                Absolute path of file.
+            """
+            _, file_extension = os.path.splitext(file)
+            if file_extension in source_extensions:
+                lines = count_lines(file)
+                if file_extension in counts:
+                    counts[file_extension] += lines
+                else:
+                    counts[file_extension] = lines    
 
-        tools = Tools()
-        tools.recurse_folder('D:/Github/ModelRelief/Solver', directory_filter)
+        tools.recurse_folder(root, excluded_folders, process_file)
 
-        self.logger.logInformation("</LineCount>", Colors.BrightCyan) 
+        total_lines = 0
+        for key, value in counts.items():
+            self.logger.logInformation(f"{key} = {value}", Colors.BrightMagenta) 
+            total_lines = total_lines + value
+        self.logger.logInformation(f"Total lines = {total_lines}", Colors.BrightYellow) 
+
+        self.logger.logInformation("\n</LineCount>", Colors.BrightCyan) 
 
 def main():
     """
