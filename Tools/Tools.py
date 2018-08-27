@@ -17,6 +17,8 @@ import sys
 import string
 import random
 
+from typing import Any, Callable, Dict, Optional
+
 # N.B. copytree requires the target directory be empty. It always creates the target.
 # copy_tree works with an existing directory.
 from distutils.dir_util import copy_tree
@@ -104,7 +106,7 @@ class Colors:
 
 class Tools:
     """
-        General support for Python tools.
+    General support for Python tools.
     """
 
     def __init__(self) -> None:
@@ -116,7 +118,7 @@ class Tools:
     @staticmethod
     def copy_file (source_file, destination_file):
         """
-            Copy a single file. The destination is overwritten if it exists.
+        Copy a single file. The destination is overwritten if it exists.
         """
         # create destination folder if necessary
         folder = os.path.dirname(destination_file)
@@ -133,26 +135,37 @@ class Tools:
     @staticmethod
     def copy_folder (source_folder, destination_folder):
         """
-            Copy a single folder. Not recursive.
+        Copy a single folder. Not recursive.
         """
 
         print ("%s -> %s" % (source_folder, destination_folder))
         copy_tree(source_folder, destination_folder)
 
-    def recurse_folder(self, folder):
+    def recurse_folder(self, folder: str, directory_filter: Callable[[str], bool])->None:
         """
-            Recurse a folder and process each file.
+        Recurse a folder and process each file.
+        Parameters
+        ----------
+        folder
+            Base directory.
+        directory_filter
+            Callback to pass or exclude directories from the recursion.
         """
         rootdir = folder
-        for root, files in os.walk(rootdir):
-            # current_folder = os.path.basename(root)
+        print (f"Processing: {rootdir}")
+        for dirpath, dirnames, filenames in os.walk(rootdir):
 
-            for file in files:
-                root, file_extension = os.path.splitext(file)
+            for directory in dirnames:
+                fullpath = os.path.join(dirpath, directory)
+                if directory_filter(fullpath):
+                    self.recurse_folder(fullpath, directory_filter)                                      
 
-                if file_extension.lower() == ".obj":
-                    model_path = os.path.join(root, file)
-                    print (model_path)
+            for file in filenames:
+                _, file_extension = os.path.splitext(file)
+
+                if file_extension.lower() == ".cs":
+                    print (file)
+                    pass
 
     @staticmethod
     def confirm(answer: str)-> bool:

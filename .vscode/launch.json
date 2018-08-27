@@ -99,16 +99,17 @@
                 "name": "value"
             },
 
-            "program": "${workspaceRoot}/Build/builder.py",
+            "program": "${workspaceRoot}/Tools/linecount.py",
+        //  "program": "${workspaceRoot}/Build/builder.py",
         //  "program": "${workspaceRoot}/Explorer/explorer.py",
         //  "program": "${workspaceRoot}/Solver/solver.py",
         //  "program": "${workspaceRoot}/Tools/testrunner.py",
         //  "program": "${workspaceRoot}/Solver/Experiments/workbench.py",
         //  "program": "${workspaceRoot}/Solver/Experiments/mayavitest.py",
             
-            "args":["--target", "IIS", "--deploy", "False"]
+        //  "args":["--target", "IIS", "--deploy", "False"]
         //  "args":["--s", "../Solver/Test/House.json", "--w", "../Solver/Test/Working"]
-        //  "args":[]
+            "args":[]
         },
         {
             "name": "Python (Active File)",
