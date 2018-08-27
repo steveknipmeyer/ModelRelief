@@ -5,6 +5,9 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
+// defined in Edit HTML page
+declare var loggingEnabled: boolean;
+
 /**
  * @description Diagnostic logging.
  * @export
@@ -51,6 +54,8 @@ export class ConsoleLogger implements ILogger{
      * @param style Optional style.
      */
     addMessageEntry (message : string, messageClass : MessageClass, style? : string) : void {
+        if (!loggingEnabled)
+            return;
 
         const prefix = 'MR: ';
         let logMessage = `${prefix}${message}`;

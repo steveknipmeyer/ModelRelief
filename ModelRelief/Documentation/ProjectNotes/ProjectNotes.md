@@ -5,11 +5,10 @@
     Runtime Settings
     https://medium.freecodecamp.org/environment-settings-in-javascript-apps-c5f9744282b6
         minifiedExtension
-        production
         loggingEnabled
 
     Production <must> set on the server:
-        ASPNETCORE_ENVIRONMENT          Production
+        (?) ASPNETCORE_ENVIRONMENT      Production
         PATH                            C:\modelrelief\mrenv
         PYTHONPATH                      C:\modelrelief\Tools; C:\modelrelief\Solver; 
     
@@ -19,12 +18,10 @@
     Create a utility to count source code lines.
 
     Performance
+        Measure page load times in Production builds.e
         The transfer of models is inefficent because they are Base64 encoded.
 
     Builder      
-        Measure page load times in Production builds.e
-        Disable performance logging in Production.
-
         IIS publish updates the user store but not the database which must be attached manually.
         Add a model list to control which models are added.
 

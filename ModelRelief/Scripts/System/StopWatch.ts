@@ -8,9 +8,6 @@
 import {ILogger}                 from 'Logger'
 import {Services}                from 'Services'
 
-// defined in Edit HTML page
-declare var timingEnabled: boolean;
-
 /**
  * @description Timer record.
  * @interface TimerEntry
@@ -86,9 +83,6 @@ export class StopWatch {
      * @description Adds an entry to the timer stack.
      */
     mark(event : string) : string {
-        if (!timingEnabled)    
-            return;
-
         let startMilliseconds : number = Date.now();
         let indentPrefix      : string = this.indentPrefix;
         let timerEntry        : TimerEntry = { startTime: startMilliseconds, indent : indentPrefix};
@@ -107,11 +101,7 @@ export class StopWatch {
      * @description Logs the elapsted time.
      */
     logElapsedTime(event : string) {
-
-        if (!timingEnabled)    
-            return;
-
-            let timerElapsedTime   : number = Date.now();
+        let timerElapsedTime   : number = Date.now();
         let eventElapsedTime   : number = (timerElapsedTime - (<number> (this._events[event].startTime))) / 1000;
         let elapsedTimeMessage : string = eventElapsedTime.toFixed(StopWatch.precision);
         let indentPrefix       : string = this._events[event].indent;

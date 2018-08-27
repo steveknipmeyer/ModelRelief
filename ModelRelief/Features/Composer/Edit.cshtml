@@ -36,16 +36,14 @@
             <script src="~/js/shaders.js"></script>
             <script>
                 var minifiedExtension = '';
-                var production = false;
-                var timingEnabled = true;
+                var loggingEnabled = true;
             </script>
         </environment>
         <environment names="Staging, Production">
             <script src="~/js/shaders.min.js"></script>
             <script>
                 var minifiedExtension = '.min';
-                var production = true;
-                var timingEnabled = false;
+                var loggingEnabled = false;
             </script>
         </environment>
 
