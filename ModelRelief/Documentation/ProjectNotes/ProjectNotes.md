@@ -1,7 +1,26 @@
 ﻿### Tasks
 #### Commit Notes
+
 #### Short Term      
+    Production <must> be set on the server to enable conditional loading of minified source.
+    Create a utility to count source code lines.
+    There may not be enough resolution in the Date suffixe. 'startTime' not found is thrown on IIS.
+
+    Lambda
+        npm install uglify-js --save-dev
+        npm install pump --save-dev
+        npm install --save-dev gulp-uglify
+        npm install chai@4.1.2 --save-dev
+
+    Performance
+        The transfer of models is inefficent because they are Base64 encoded.
+
     Builder      
+        Strip unminified source: modelrelief.js, shaders.js.
+        
+        Measure page load times in Production builds.
+        Disable performance logging in Production.
+
         IIS publish updates the user store but not the database which must be attached manually.
         Add a model list to control which models are added.
 

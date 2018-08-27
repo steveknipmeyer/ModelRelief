@@ -20,6 +20,8 @@ var exec         = require('child_process').exec;
 var rename       = require('gulp-rename');
 var sourcemaps   = require('gulp-sourcemaps');
 var ts           = require('gulp-typescript');
+var uglify       = require('gulp-uglify');
+var pump         = require('pump');
 
 // Node.js
 var beep         = require('beepbeep');
@@ -54,16 +56,19 @@ var encodingAscii          = {encoding: 'ascii'};
 var encodingUnicode        = {encoding: 'utf8'};
 var EOL                    = require('os').EOL;
 
-var onError = function (err) {
-    beep([0]);
-    gutil.log(gutil.colors.red(err));
-};
-
 var tsProject = ts.createProject(sourceConfig.sourceRoot + 'tsconfig.json');
 
 //-----------------------------------------------------------------------------
 //  Utilities
 //-----------------------------------------------------------------------------
+/// <summary>
+/// Error handler.
+/// </summary>
+var onError = function (err) {
+    beep([0]);
+    gutil.log(gutil.colors.red(err));
+};
+
 /// <summary>
 /// Returns the lines in an array.
 /// </summary>
@@ -257,6 +262,26 @@ gulp.task('buildCSS', function () {
 });
 
 /// <summary>
+/// Minimize JavaScript files.
+/// https://stackoverflow.com/questions/31579421/gulp-src-not-reading-required-json-files-array-values
+/// </summary>
+gulp.task('compressJS', function (callBack) {
+    pump([
+        gulp.src([
+            `${siteConfig.jsRoot}modelrelief.js`,
+            `${siteConfig.jsRoot}shaders.js`,
+            `${siteConfig.libRoot}chai/chai.js`
+        ],
+        {base: siteConfig.wwwRoot}),
+        uglify(),
+        rename({ suffix: '.min' }),
+        gulp.dest(siteConfig.wwwRoot)
+      ],
+      callBack
+    );
+});
+
+/// <summary>
 /// Populate wwwroot with static content
 /// </summary>
 gulp.task('buildStaticContent', function () {
@@ -309,6 +334,7 @@ gulp.task('copyNPM', function () {
     sourceFolder      = siteConfig.nodeModulesRoot + 'three/build/';
     destinationFolder = siteConfig.libRoot + subFolder;
     gulp.src([sourceFolder + 'three.js']).pipe(gulp.dest(destinationFolder ));
+    gulp.src([sourceFolder + 'three.min.js']).pipe(gulp.dest(destinationFolder ));
 
     // three/examples/js
     subFolder         = 'threejs/';

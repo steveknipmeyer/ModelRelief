@@ -32,15 +32,21 @@
         <script>
             var composerMeshModel = @DataConversion.SerializeObject(Model)
         </script>
-        <script src="~/js/shaders.js"></script>
+        <environment names="Development, Test">
+            <script src="~/js/shaders.js"></script>
+        </environment>
+        <environment names="Staging, Production">
+            <script src="~/js/shaders.min.js"></script>
+        </environment>
+
         <script>
             requirejs.config({
                 baseUrl: '.',
                 paths: {
-                    ModelRelief                             : '/js/modelrelief',
+                    ModelRelief                             : ['/js/modelrelief', '/js/modelrelief.min'],
 
-                    chai                                    : '/lib/chai/chai',
-                    three                                   : '/lib/threejs/three',
+                    chai                                    : ['/lib/chai/chai', '/lib/chai/chai.min'],
+                    three                                   : ['/lib/threejs/three', '/lib/threejs/three.min'],
                    'dat-gui'                                : '/lib/threejs/dat.gui.min',
                 }
             });

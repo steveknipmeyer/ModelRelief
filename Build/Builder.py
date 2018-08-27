@@ -188,6 +188,11 @@ class Builder:
         self.logger.logInformation("\n<Publish>", Colors.BrightCyan)
         os.chdir(self.solution_path)
 
+        # Minification
+        self.logger.logInformation("\nMinifying JavaScript", Colors.BrightMagenta)
+        os.chdir(self.solution_path)
+        self.exec("gulp.cmd compressJS")
+
         # ASP.NET Core Publish
         self.logger.logInformation("\nASP.NET Core Publish", Colors.BrightMagenta)
         os.chdir(self.modelrelief_path)

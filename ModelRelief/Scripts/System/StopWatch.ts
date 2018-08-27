@@ -26,6 +26,7 @@ interface TimerEntry {
 export class StopWatch {
     
     static precision : number = 3;
+    static keySuffixDelimiter: string = '@';
 
     _logger            : ILogger;
     _name              : string;
@@ -70,6 +71,13 @@ export class StopWatch {
     }
             
 //#endregion
+    /**
+     * @description Returns the friendly form of the event key excluding the unique suffix.
+     */
+    friendlyKey (key: string) : string {
+        var friendlyKey = key.split(StopWatch.keySuffixDelimiter)[0];
+        return friendlyKey;
+    }
 
     /**
      * @description Adds an entry to the timer stack.
@@ -79,9 +87,13 @@ export class StopWatch {
         let startMilliseconds : number = Date.now();
         let indentPrefix      : string = this.indentPrefix;
         let timerEntry        : TimerEntry = { startTime: startMilliseconds, indent : indentPrefix};
+
+        // N.B. Ensure uniqueness of key in events dictionary. Minificaiton will collapse class names.
+        var date = new Date();
+        event += ` ${StopWatch.keySuffixDelimiter}${date}`;
         this._events[event] = timerEntry;
 
-        this._logger.addMessage(`${indentPrefix}${event}`);
+        this._logger.addMessage(`${indentPrefix}${this.friendlyKey(event)}`);
 
         return event;
     }
@@ -96,7 +108,7 @@ export class StopWatch {
         let elapsedTimeMessage : string = eventElapsedTime.toFixed(StopWatch.precision);
         let indentPrefix       : string = this._events[event].indent;
 
-        this._logger.addMessage(`${indentPrefix}${event} : ${elapsedTimeMessage} sec`);
+        this._logger.addMessage(`${indentPrefix}${this.friendlyKey(event)} : ${elapsedTimeMessage} sec`);
 
         // remove event from log
         delete this._events[event];
