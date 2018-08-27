@@ -34,19 +34,29 @@
         </script>
         <environment names="Development, Test">
             <script src="~/js/shaders.js"></script>
+            <script>
+                var minifiedExtension = '';
+                var production = false;
+                var timingEnabled = true;
+            </script>
         </environment>
         <environment names="Staging, Production">
             <script src="~/js/shaders.min.js"></script>
+            <script>
+                var minifiedExtension = '.min';
+                var production = true;
+                var timingEnabled = false;
+            </script>
         </environment>
 
         <script>
             requirejs.config({
                 baseUrl: '.',
                 paths: {
-                    ModelRelief                             : ['/js/modelrelief', '/js/modelrelief.min'],
+                    ModelRelief                             : `/js/modelrelief${minifiedExtension}`,
+                    three                                   : `/lib/threejs/three${minifiedExtension}`, 
 
-                    chai                                    : ['/lib/chai/chai', '/lib/chai/chai.min'],
-                    three                                   : ['/lib/threejs/three', '/lib/threejs/three.min'],
+                    chai                                    : '/lib/chai/chai.min',
                    'dat-gui'                                : '/lib/threejs/dat.gui.min',
                 }
             });

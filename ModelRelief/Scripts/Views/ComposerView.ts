@@ -26,7 +26,7 @@ import { Services }                           from 'Services'
 import { TestModel }                          from 'TestModelLoader'
 import { Viewer }                             from "Viewer"
 
-// defined in HTML page
+// defined in Edit HTML page
 declare var composerMeshModel: Dto.Mesh;
 
 /**

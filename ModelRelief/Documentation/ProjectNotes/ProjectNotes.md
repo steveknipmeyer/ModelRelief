@@ -2,23 +2,27 @@
 #### Commit Notes
 
 #### Short Term      
-    Production <must> be set on the server to enable conditional loading of minified source.
-    Create a utility to count source code lines.
-    There may not be enough resolution in the Date suffixe. 'startTime' not found is thrown on IIS.
+    Runtime Settings
+    https://medium.freecodecamp.org/environment-settings-in-javascript-apps-c5f9744282b6
+        minifiedExtension
+        production
+        loggingEnabled
 
-    Lambda
-        npm install uglify-js --save-dev
-        npm install pump --save-dev
-        npm install --save-dev gulp-uglify
-        npm install chai@4.1.2 --save-dev
+    Production <must> set on the server:
+        ASPNETCORE_ENVIRONMENT          Production
+        PATH                            C:\modelrelief\mrenv
+        PYTHONPATH                      C:\modelrelief\Tools; C:\modelrelief\Solver; 
+    
+    Does composerMeshModel expose too much in Composer.Edit.cshtml?
+        IsSyncrhronized, FileStamp, etc.
+
+    Create a utility to count source code lines.
 
     Performance
         The transfer of models is inefficent because they are Base64 encoded.
 
     Builder      
-        Strip unminified source: modelrelief.js, shaders.js.
-        
-        Measure page load times in Production builds.
+        Measure page load times in Production builds.e
         Disable performance logging in Production.
 
         IIS publish updates the user store but not the database which must be attached manually.
@@ -27,8 +31,7 @@
     Why is the Python refactoring so slow?
         "Refactoring library rope is not installed. Install?"
 
-    Remove PATH, PYTHON path changes to System Environment variables.
-    How are environment variables (PATH, PYTHONPATH) handled on the web server?
+    Remove PATH, PYTHONPATH changes to System Environment variables.
 
     Order a SQLServer book.
  

@@ -67,7 +67,7 @@ class Builder:
 
         # files
         self.build_explorer = "BuildExplorerUI.bat"
-        self.modelrelief_map = "modelrelief.js.map"
+        self.file_exclusions = ["js/modelrelief.js", "js/modelrelief.js.map", "js/shaders.js"]
         self.settings_production = "appsettings.Production.json"
         self.settings_production_docker = "appsettings.ProductionDocker.json"
         self.settings_production_iis = "appsettings.ProductionIIS.json"
@@ -153,6 +153,11 @@ class Builder:
         os.chdir(self.solution_path)
         self.exec("tsc -p {}".format(self.modelrelief_path))       
 
+        # minification
+        self.logger.logInformation("\nMinifying JavaScript", Colors.BrightMagenta)
+        os.chdir(self.solution_path)
+        self.exec("gulp.cmd compressJS")
+
         # Explorer UI
         self.logger.logInformation("\nExplorer UI", Colors.BrightMagenta)
         os.chdir(self.solution_path)
@@ -188,11 +193,6 @@ class Builder:
         self.logger.logInformation("\n<Publish>", Colors.BrightCyan)
         os.chdir(self.solution_path)
 
-        # Minification
-        self.logger.logInformation("\nMinifying JavaScript", Colors.BrightMagenta)
-        os.chdir(self.solution_path)
-        self.exec("gulp.cmd compressJS")
-
         # ASP.NET Core Publish
         self.logger.logInformation("\nASP.NET Core Publish", Colors.BrightMagenta)
         os.chdir(self.modelrelief_path)
@@ -200,11 +200,12 @@ class Builder:
         self.logger.logInformation("\nUpdating web.config", Colors.Cyan)
         Tools.copy_file(os.path.join(self.solution_path, self.web_config), os.path.join(self.publish_path, self.web_config))
 
-        # Strip TypeScript source map
-        self.logger.logInformation("\nRemoving TypeScript source map", Colors.BrightMagenta)
-        source_map = os.path.join(self.publish_wwwroot_path, "js", self.modelrelief_map)
-        self.logger.logInformation(f"Deleting {source_map}", Colors.BrightWhite)
-        os.remove(source_map)
+        # file exclusions
+        self.logger.logInformation("\nRemoving source files that have been minified", Colors.BrightMagenta)
+        for file in self.file_exclusions:
+            file_path = os.path.join(self.publish_wwwroot_path, file)
+            self.logger.logInformation(f"Deleting {file_path}", Colors.BrightWhite)
+            os.remove(file_path)
 
         # Python source
         self.logger.logInformation("\nPython source", Colors.BrightMagenta)
