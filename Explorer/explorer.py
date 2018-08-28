@@ -337,17 +337,13 @@ class Explorer(QtWidgets.QMainWindow):
             if tab.widget.isVisible():
                 tab.mesh_widget.mesh_content.update(preserve_camera)
 
-        # self.mesh_tabs[MeshType.Model].mesh_widget.mesh_content.update(preserve_camera)
-        # self.mesh_tabs[MeshType.ModelScaled].mesh_widget.mesh_content.update(preserve_camera)
-        # self.mesh_tabs[MeshType.Relief].mesh_widget.mesh_content.update(preserve_camera)
-
     def update(self, preserve_camera: bool = True) -> None:
         """ Update the UI with the images, meshes, etc. from the calculated solution.
         Parameters
         ----------
         preserve_camera
             Preserve camera settings for a view to maintain continuity across parameter changes.
-    """
+        """
         self.set_busy (True)
 
         self.update_image_tabs()

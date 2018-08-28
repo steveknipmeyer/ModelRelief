@@ -1,8 +1,15 @@
 ﻿### Tasks
 #### Commit Notes
 
-#### Short Term      
-    Runtime Settings
+#### Short Term     
+    Lambda
+        Edit notebook path.
+            C:\Users\Steve Knipmeyer\.jupyter\jupyter_notebook_config.py
+        conda install ipyparallel
+        conda install -c conda-forge jupyter_contrib_nbextensions
+        conda install -c conda-forge jupyter_nbextensions_configurator
+
+y    Runtime Settings   
         https://medium.freecodecamp.org/environment-settings-in-javascript-apps-c5f9744282b6
         minifiedExtension
         loggingEnabled
@@ -12,11 +19,7 @@
         PATH                            C:\modelrelief\mrenv
         PYTHONPATH                      C:\modelrelief\Tools; C:\modelrelief\Solver; 
     
-    Does composerMeshModel expose too much in Composer.Edit.cshtml?
-        IsSyncrhronized, FileStamp, etc.
-
     Performance
-        Measure page load times in Production builds.e
         The transfer of models is inefficent because they are Base64 encoded.
 
     Builder      
@@ -65,12 +68,6 @@
         
     Update database schema diagram.
     
-#### Builds
-    JavaScript must be minified.
-
-    How are credentials handled in a ConnectionString in Production?
-        https://stackoverflow.com/questions/44931613/how-to-correctly-store-connection-strings-in-environment-variables-for-retrieval
-   
 ###### StandardView
 When the view camera is interactively changed, it should invalidate the StandardView in the UI.
     Mesh view opens with the UI set to StandardCamera.Front but the view is Top.
@@ -141,7 +138,7 @@ Namimg
 
     Investigate why the clipping plane CameraControls are not editable.
         Could the events be intercepted by the TrackBall?
-    Does repeared adjustment of the clipping planes leads to bad mesh results?
+    Does repeated adjustment of the clipping planes leads to bad mesh results?
     Should the near clipping plane always be adjusted to the front extent?
 
 <div style="font-size:9pt">
@@ -1307,6 +1304,8 @@ https://semver.npmjs.com/
                 Reset the SA password.
 
 #### Publish and Deploy
+    How are credentials handled in a ConnectionString in Production?
+        https://stackoverflow.com/questions/44931613/how-to-correctly-store-connection-strings-in-environment-variables-for-retrieval
 
     Server Structure
         modelrelief (ContentRootPath)

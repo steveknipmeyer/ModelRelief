@@ -224,7 +224,7 @@ class Solver:
             Process the silhouettes in the image.
         """
         if self.enable_p2:
-            silhouette = Silhouette(self.services)        
+            silhouette = Silhouette(self.services)
             self.results.mesh_transformed = silhouette.process(self.results.mesh_transformed, self.results.depth_buffer_mask, self.mesh_transform.p2, int(self.mesh_transform.p3))
 
     def process_scale(self):

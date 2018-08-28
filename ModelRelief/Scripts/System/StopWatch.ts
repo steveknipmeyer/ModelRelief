@@ -6,7 +6,7 @@
 "use strict";
 
 import {ILogger}                 from 'Logger'
-import {Services}                from 'Services'
+import {Tools}                   from 'Tools'
 
 /**
  * @description Timer record.
@@ -88,8 +88,8 @@ export class StopWatch {
         let timerEntry        : TimerEntry = { startTime: startMilliseconds, indent : indentPrefix};
 
         // N.B. Ensure uniqueness of key in events dictionary. Minificaiton will collapse class names.
-        var date = Date.now();
-        event += ` ${StopWatch.keySuffixDelimiter}${date}`;
+        var suffix = Tools.generatePseudoGUID();
+        event += ` ${StopWatch.keySuffixDelimiter}${suffix}`;
         this._events[event] = timerEntry;
 
         this._logger.addMessage(`${indentPrefix}${this.friendlyKey(event)}`);

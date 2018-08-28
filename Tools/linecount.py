@@ -39,11 +39,10 @@ class LineCount:
         """
         self.logger.logInformation("<LineCount>\n", Colors.BrightCyan)
 
-        root = os.environ[EnvironmentNames.MRSolution]
-        os.chdir(root)
+        root = os.getcwd()
 
-        excluded_folders = {"bin", "devenv", ".git", "mrenv", "node_modules", "obj", "Publish", "store", "Test", ".vscode", "wwwroot"}
-        source_extensions = {".cs", ".ts", ".py"}
+        excluded_folders = {"bin", "devenv", ".git", "mrenv", "node_modules", "obj", "Publish", "store", "Test", "typings", ".vscode", "wwwroot"}
+        source_extensions = {".cs", ".cpp", ".ts", ".py"}
         counts = dict()
         tools = Tools()
 
@@ -71,6 +70,7 @@ class LineCount:
             """
             _, file_extension = os.path.splitext(file)
             if file_extension in source_extensions:
+                print (f"{file}")
                 lines = count_lines(file)
                 if file_extension in counts:
                     counts[file_extension] += lines
