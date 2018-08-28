@@ -19,14 +19,6 @@
         Review ArtCAM.
 
     Lambda
-        Edit notebook path.
-            C:\Users\Steve Knipmeyer\.jupyter\jupyter_notebook_config.py
-        conda install ipyparallel
-        conda install -c conda-forge jupyter_contrib_nbextensions
-        conda install -c conda-forge jupyter_nbextensions_configurator
-        conda install -c conda-forge ipywidgets
-        jupyter nbextension install --py widgetsnbextension --user
-        jupyter nbextension enable --py --user widgetsnbextension
 
      Runtime Settings   
         https://medium.freecodecamp.org/environment-settings-in-javascript-apps-c5f9744282b6
@@ -1343,3 +1335,13 @@ https://semver.npmjs.com/
             The users folder is used to hold the user file system.
             When SQLite is configured, the database file is stored in store/<environment>/database.
             Also, the database folder is used to transfer the SQLServer seed database to the Docker database container during a build.
+
+#### Jupyter
+        Notebook confguration
+            C:\Users\Steve Knipmeyer\.jupyter\jupyter_notebook_config.py
+        conda install ipyparallel
+        conda install -c conda-forge jupyter_contrib_nbextensions
+        conda install -c conda-forge jupyter_nbextensions_configurator
+        conda install -c conda-forge ipywidgets
+        jupyter nbextension install --py widgetsnbextension --user
+        jupyter nbextension enable --py --user widgetsnbextension
