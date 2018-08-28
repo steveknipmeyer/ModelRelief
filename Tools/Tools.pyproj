@@ -11,7 +11,8 @@
     <OutputPath>.</OutputPath>
     <Name>Tools</Name>
     <RootNamespace>Tools</RootNamespace>
-    <InterpreterId>Global|ContinuumAnalytics|Anaconda36-64</InterpreterId>
+    <InterpreterId>
+    </InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,17 +23,21 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda36-64" />
+    <Compile Include="baseline.py" />
+    <Compile Include="colortest.py" />
+    <Compile Include="linecount.py" />
+    <Compile Include="logger.py" />
+    <Compile Include="testrunner.py" />
+    <Compile Include="tools.py" />
+    <Compile Include="environment.py" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestDatabaseBaseline.py" />
-    <Compile Include="Tools.py" />
-    <Compile Include="Environment.py" />
-  </ItemGroup>
-  <ItemGroup>
+    <Content Include="DotNetPID.ps1" />
+    <Content Include="GitBash.bat" />
     <Content Include="ModelReliefShell.bat" />
     <Content Include="SetAnacondaPath.bat" />
     <Content Include="SetMinGWPath.bat" />
+    <Content Include="Temp.bat" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

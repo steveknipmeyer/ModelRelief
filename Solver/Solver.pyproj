@@ -5,13 +5,13 @@
     <ProjectGuid>4d128880-4790-41df-8a6b-0d34f9b65e4f</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <StartupFile>solver.py</StartupFile>
-    <SearchPath>
-    </SearchPath>
+    <SearchPath>..\Tools</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>Solver</Name>
     <RootNamespace>Solver</RootNamespace>
-    <InterpreterId>Global|ContinuumAnalytics|Anaconda36-64</InterpreterId>
+    <InterpreterId>
+    </InterpreterId>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
     <CommandLineArguments>-s "Test/Test.json" -w "Test/Working/"</CommandLineArguments>
     <EnableNativeCodeDebugging>True</EnableNativeCodeDebugging>
@@ -25,27 +25,55 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="attenuation.py" />
+    <Compile Include="camera.py" />
+    <Compile Include="difference.py" />
+    <Compile Include="Experiments\amg.py" />
+    <Compile Include="Experiments\amgdemo.py" />
+    <Compile Include="Experiments\design.py" />
+    <Compile Include="Experiments\image.py" />
+    <Compile Include="Experiments\mayavitest.py" />
+    <Compile Include="Experiments\PythonTest.py" />
+    <Compile Include="Experiments\test.py" />
+    <Compile Include="Experiments\testmodule.py" />
+    <Compile Include="Experiments\workbench.py" />
+    <Compile Include="filemanager.py" />
+    <Compile Include="gradient.py" />
+    <Compile Include="mask.py" />
+    <Compile Include="mathtools.py" />
     <Compile Include="mesh.py" />
+    <Compile Include="meshscale.py" />
     <Compile Include="meshtransform.py" />
     <Compile Include="depthbuffer.py" />
-    <Compile Include="image.py" />
-    <Compile Include="workbench.py" />
+    <Compile Include="objwriter.py" />
+    <Compile Include="poisson.py" />
+    <Compile Include="results.py" />
+    <Compile Include="services.py" />
+    <Compile Include="silhouette.py" />
     <Compile Include="solver.py" />
+    <Compile Include="stopwatch.py" />
+    <Compile Include="threshold.py" />
+    <Compile Include="unsharpmask.py" />
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda36-64" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Notebooks\" />
-    <Folder Include="Notebooks\.ipynb_checkpoints\" />
+    <Folder Include="Experiments\" />
     <Folder Include="Test\" />
     <Folder Include="Test\Working\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Notebooks\.ipynb_checkpoints\Solver-checkpoint.ipynb" />
-    <Content Include="Notebooks\Lucy.png" />
-    <Content Include="Notebooks\Solver.ipynb" />
-        <Content Include="Test\Test.json" />
+    <Content Include="Experiments\design.ui" />
+    <Content Include="gradient.png" />
+    <Content Include="Test\Armadillo.json" />
+    <Content Include="Test\Buddha.json" />
+    <Content Include="Test\Bunny.json" />
+    <Content Include="Test\Dolphin.json" />
+    <Content Include="Test\Dragon.json" />
+    <Content Include="Test\House.json" />
+    <Content Include="Test\Lucy.json" />
+    <Content Include="Test\Roadster.json" />
+    <Content Include="Test\Statue.json" />
+    <Content Include="Test\Test.json" />
+    <Content Include="Test\Tyrannosaurus.json" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

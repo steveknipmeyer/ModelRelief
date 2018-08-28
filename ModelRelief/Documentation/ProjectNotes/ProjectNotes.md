@@ -2,23 +2,37 @@
 #### Commit Notes
 
 #### Short Term     
+    N.B. The Gaussian blur used in Kerber's paper ignores pixels that have been masked. 
+    The implementation here does include them. It seems a custom kernel (ndimage "generic filter") may be required that takes into consideration the overall mask.
+    https://dsp.stackexchange.com/questions/10057/gaussian-blur-standard-deviation-radius-and-kernel-size
+    https://stackoverflow.com/questions/23208232/image-filtering-with-scikit-image
+    https://docs.scipy.org/doc/scipy/reference/tutorial/ndimage.html
+    
+    Should ndimage or scikit-image (skimage) be used for image processing support?
+        https://stackoverflow.com/questions/23208232/image-filtering-with-scikit-image
+
+    Technical Review
+        Review the Blender implementation.
+            What were the pre-processing steps that were done to prepare the data for the Poisson solver?
+        Review the technical papers.
+        Review ZSurf.
+        Review ArtCAM.
+
     Lambda
         Edit notebook path.
             C:\Users\Steve Knipmeyer\.jupyter\jupyter_notebook_config.py
         conda install ipyparallel
         conda install -c conda-forge jupyter_contrib_nbextensions
         conda install -c conda-forge jupyter_nbextensions_configurator
+        conda install -c conda-forge ipywidgets
+        jupyter nbextension install --py widgetsnbextension --user
+        jupyter nbextension enable --py --user widgetsnbextension
 
-y    Runtime Settings   
+     Runtime Settings   
         https://medium.freecodecamp.org/environment-settings-in-javascript-apps-c5f9744282b6
         minifiedExtension
         loggingEnabled
-
-    Production <must> set on the server:
-        (?) ASPNETCORE_ENVIRONMENT      Production
-        PATH                            C:\modelrelief\mrenv
-        PYTHONPATH                      C:\modelrelief\Tools; C:\modelrelief\Solver; 
-    
+   
     Performance
         The transfer of models is inefficent because they are Base64 encoded.
 
@@ -38,18 +52,9 @@ y    Runtime Settings
     Investigate workspaces in VSCode.
         Why is the second workspace unnamed?
 
-    Should ndimage or scikt-image be used for image processing support?
-
     Write OBJ
         Should the OBJWriter be part of FileManager?
         Or should FileManager be renamed BinaryFile (or similar)?
-
-    Technical Review
-        Review the Blender implementation.
-            What were the pre-processing steps that were done to prepare the data for the Poisson solver?
-        Review the technical papers.
-        Review ZSurf.
-        Review ArtCAM.
 
     Create additional test models.
         Spheres (Positive, Negative)
@@ -1304,6 +1309,11 @@ https://semver.npmjs.com/
                 Reset the SA password.
 
 #### Publish and Deploy
+    Production <must> set on the server:
+        (?) ASPNETCORE_ENVIRONMENT      Production
+        PATH                            C:\modelrelief\mrenv
+        PYTHONPATH                      C:\modelrelief\Tools; C:\modelrelief\Solver; 
+
     How are credentials handled in a ConnectionString in Production?
         https://stackoverflow.com/questions/44931613/how-to-correctly-store-connection-strings-in-environment-variables-for-retrieval
 
