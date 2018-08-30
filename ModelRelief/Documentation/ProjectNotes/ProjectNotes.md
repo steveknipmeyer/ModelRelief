@@ -1,10 +1,24 @@
 ﻿### Tasks
 #### Commit Notes
 
+
 #### Short Term     
-    Create a new Python project Relief.
-    Modify setup.py to build ‘relief.dll’.
+        pybind11
+                        Release Debug                   Release Debug               Success
+            amg            X                   relief      X                          yes
+            amg            X                   relief              X                  no
+            amg                   X            relief      X                          yes  
+            amg                   X            relief              X                  no
+
+            VS2017 Compilation Workflow (DEBUG only)
+                cd Relief
+                python setup.py clean --all
+                python setup.py --verbose build --debug
+                python setup.py --verbose install
+
     Extend Builder to build the relief DLL.
+        Development (Debug)
+        Production(Release)
 
     N.B. The Gaussian blur used in Kerber's paper ignores pixels that have been masked. 
     The implementation here does include them. It seems a custom kernel (ndimage "generic filter") may be required that takes into consideration the overall mask.
@@ -12,9 +26,6 @@
     https://stackoverflow.com/questions/23208232/image-filtering-with-scikit-image
     https://docs.scipy.org/doc/scipy/reference/tutorial/ndimage.html
     
-    Should ndimage or scikit-image (skimage) be used for image processing support?
-        https://stackoverflow.com/questions/23208232/image-filtering-with-scikit-image
-
     Technical Review
         Review the Blender implementation.
             What were the pre-processing steps that were done to prepare the data for the Poisson solver?
@@ -23,28 +34,7 @@
         Review ArtCAM.
 
     Lambda
-        Python Build: Is this necessary?
-            https://developer.microsoft.com/en-us/windows/downloads/sdk-archive
-                10.0.15063.0
-            Python-3.6.6 source
-            Change Solution Configuration to Debug x64.
-            Change target architecture to Windows SDK 10.0.15063.0.
-            build -p x64 -e            
-
         pip install pybind11
-        python_example
-            https://github.com/pybind/python_example
-
-        VS2017 Compilation Workflow (DEBUG only)
-            1) active Anaconda <base>
-            2) cd python_example
-            3) python setup.py --verbose build --debug
-            4) python setup.py --verbose install
-                The program is compiled and installed successfully.
-            5) active <devenv>
-            6) python setup.py build --debug install [N.B. Do not include --force as this will trigger an unsuccessful compilation.]
-                The build output (.pyd, .pdb) are copied (or linked?) from the python_example source folder into <devenv> site-packages.
-        Conclusion: The Anaconda environment is required to build an extension. It contains resources that are not present in the <devenv> virtual environment.
 
     Runtime Settings   
         https://medium.freecodecamp.org/environment-settings-in-javascript-apps-c5f9744282b6
@@ -410,7 +400,13 @@ Replace DateTime with a type that has more resolution.
     Should the assignment of FileSynchronized be deferred until the request has completed?
     FileStamp could potentially serve as the "complete" flag for a long-running request. 
 
-#### Python Tasks
+#### Python Build
+    https://developer.microsoft.com/en-us/windows/downloads/sdk-archive
+        10.0.15063.0
+    Python-3.6.6 source
+    Change Solution Configuration to Debug x64.
+    Change target architecture to Windows SDK 10.0.15063.0.
+    build -p x64 -e            
 
 ###### Queues
 ```<language>

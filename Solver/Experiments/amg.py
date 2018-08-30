@@ -1,5 +1,6 @@
 import pyamg
 import numpy as np
+import relief
 
 def tutorial():
     A = pyamg.gallery.poisson((500,500), format='csr')  # 2D Poisson problem on 500x500 grid
@@ -12,7 +13,7 @@ def tutorial():
 def experiment():
     A = pyamg.gallery.poisson((4,4), format='csr')      # 2D Poisson problem on 4x4 grid
     ml = pyamg.ruge_stuben_solver(A)                    # construct the multigrid hierarchy
-    #  print(ml)                                           # print hierarchy information
+    #  print(ml)                                        # print hierarchy information
 
     b = np.random.rand(A.shape[0])                      # pick a random right hand side
     b = np.array([0,    0,    0, 0,
@@ -25,4 +26,7 @@ def experiment():
 
     print("residual: ", np.linalg.norm(b-A*x))          # compute norm of residual vector
 
-experiment() 
+
+tutorial() 
+result = relief.add(1, 1)
+print (result)

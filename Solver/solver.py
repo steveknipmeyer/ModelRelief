@@ -9,7 +9,7 @@
    :synopsis: Generates a mesh from a DepthBuffer and a MeshTransform.
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
-"""
+""" 
 
 import argparse
 import colorama
@@ -69,7 +69,7 @@ class Solver:
         self.working_folder = working_folder
         if not os.path.exists(working_folder):
             os.makedirs(working_folder)
-        print (f"content_folder = {self.content_folder}")
+
         self.services = Services(self.content_folder, self.working_folder, Logger(), self.results)
 
         # processing steps
@@ -291,7 +291,7 @@ class Solver:
         Transforms a DepthBuffer by the MeshTransform settings.
         """
         self.results.initialize(self.depth_buffer.height, self.depth_buffer.width)
-        
+
         self.process_depth_buffer()
         self.process_gradients()
         self.process_attenuation()
@@ -316,7 +316,7 @@ def main():
                                 help='Temporary working folder.', required=True)
     arguments = options_parser.parse_args()
 
-    solver = Solver(arguments.settings, arguments.working)
+    solver = Solver(arguments.settings, arguments.working)    
     solver.transform()
 
 if __name__ == '__main__':
