@@ -2,6 +2,10 @@
 #### Commit Notes
 
 #### Short Term     
+    Create a new Python project Relief.
+    Modify setup.py to build ‘relief.dll’.
+    Extend Builder to build the relief DLL.
+
     N.B. The Gaussian blur used in Kerber's paper ignores pixels that have been masked. 
     The implementation here does include them. It seems a custom kernel (ndimage "generic filter") may be required that takes into consideration the overall mask.
     https://dsp.stackexchange.com/questions/10057/gaussian-blur-standard-deviation-radius-and-kernel-size
@@ -19,8 +23,30 @@
         Review ArtCAM.
 
     Lambda
+        Python Build: Is this necessary?
+            https://developer.microsoft.com/en-us/windows/downloads/sdk-archive
+                10.0.15063.0
+            Python-3.6.6 source
+            Change Solution Configuration to Debug x64.
+            Change target architecture to Windows SDK 10.0.15063.0.
+            build -p x64 -e            
 
-     Runtime Settings   
+        pip install pybind11
+        python_example
+            https://github.com/pybind/python_example
+
+        VS2017 Compilation Workflow (DEBUG only)
+            1) active Anaconda <base>
+            2) cd python_example
+            3) python setup.py --verbose build --debug
+            4) python setup.py --verbose install
+                The program is compiled and installed successfully.
+            5) active <devenv>
+            6) python setup.py build --debug install [N.B. Do not include --force as this will trigger an unsuccessful compilation.]
+                The build output (.pyd, .pdb) are copied (or linked?) from the python_example source folder into <devenv> site-packages.
+        Conclusion: The Anaconda environment is required to build an extension. It contains resources that are not present in the <devenv> virtual environment.
+
+    Runtime Settings   
         https://medium.freecodecamp.org/environment-settings-in-javascript-apps-c5f9744282b6
         minifiedExtension
         loggingEnabled
@@ -1345,3 +1371,203 @@ https://semver.npmjs.com/
         conda install -c conda-forge ipywidgets
         jupyter nbextension install --py widgetsnbextension --user
         jupyter nbextension enable --py --user widgetsnbextension
+
+#### PyBind 11
+    git clone --recursive https://github.com/pybind/cmake_example.git
+    pip install ./cmake_example
+        (Development) D:\GitHub>pip install ./cmake_example
+        Processing d:\github\cmake_example
+        Building wheels for collected packages: cmake-example
+        Running setup.py bdist_wheel for cmake-example ... done
+        Stored in directory: C:\Users\STEVEK~1\AppData\Local\Temp\pip-ephem-wheel-cache-xj9wyqu8\wheels\51\99\80\2c99a5d9e9d792d202f9df63fcd61c8a193add4bd8d3a56ff2
+        Successfully built cmake-example
+        Installing collected packages: cmake-example
+        Successfully installed cmake-example-0.0.1
+
+
+    Solution Build Log (Vector)
+    Failing Projects
+        8>Done building project "test_installed_embed.vcxproj" -- FAILED.
+        5>Done building project "test_subdirectory_embed.vcxproj" -- FAILED.
+
+    1>------ Rebuild All started: Project: ZERO_CHECK, Configuration: Debug x64 ------
+    1>Checking Build System
+    1>CMake does not need to re-run because D:/GitHub/pybind11/build/CMakeFiles/generate.stamp is up-to-date.
+    1>CMake does not need to re-run because D:/GitHub/pybind11/build/tests/CMakeFiles/generate.stamp is up-to-date.
+    1>CMake does not need to re-run because D:/GitHub/pybind11/build/tests/test_embed/CMakeFiles/generate.stamp is up-to-date.
+    1>CMake does not need to re-run because D:/GitHub/pybind11/build/tests/test_cmake_build/CMakeFiles/generate.stamp is up-to-date.
+    2>------ Rebuild All started: Project: mock_install, Configuration: Debug x64 ------
+    3>------ Rebuild All started: Project: pybind11_cross_module_tests, Configuration: Debug x64 ------
+    4>------ Rebuild All started: Project: pybind11_tests, Configuration: Debug x64 ------
+    5>------ Rebuild All started: Project: test_subdirectory_embed, Configuration: Debug x64 ------
+    6>------ Rebuild All started: Project: test_subdirectory_function, Configuration: Debug x64 ------
+    7>------ Rebuild All started: Project: test_subdirectory_target, Configuration: Debug x64 ------
+    2>-- Install configuration: "Release"
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/attr.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/buffer_info.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/cast.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/chrono.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/common.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/complex.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/detail
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/detail/class.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/detail/common.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/detail/descr.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/detail/init.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/detail/internals.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/detail/typeid.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/eigen.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/embed.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/eval.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/functional.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/iostream.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/numpy.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/operators.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/options.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/pybind11.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/pytypes.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/stl.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/include/pybind11/stl_bind.h
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/share/cmake/pybind11/pybind11Config.cmake
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/share/cmake/pybind11/pybind11ConfigVersion.cmake
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/share/cmake/pybind11/FindPythonLibsNew.cmake
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/share/cmake/pybind11/pybind11Tools.cmake
+    2>-- Installing: D:/GitHub/pybind11/build/mock_install/share/cmake/pybind11/pybind11Targets.cmake
+    2>Building Custom Rule D:/GitHub/pybind11/tests/test_cmake_build/CMakeLists.txt
+    2>CMake does not need to re-run because D:/GitHub/pybind11/build/tests/test_cmake_build/CMakeFiles/generate.stamp is up-to-date.
+    8>------ Rebuild All started: Project: test_installed_embed, Configuration: Debug x64 ------
+    9>------ Rebuild All started: Project: test_installed_function, Configuration: Debug x64 ------
+    10>------ Rebuild All started: Project: test_installed_target, Configuration: Debug x64 ------
+    3>Building Custom Rule D:/GitHub/pybind11/tests/CMakeLists.txt
+    3>CMake does not need to re-run because D:/GitHub/pybind11/build/tests/CMakeFiles/generate.stamp is up-to-date.
+    4>Building Custom Rule D:/GitHub/pybind11/tests/CMakeLists.txt
+    4>CMake does not need to re-run because D:/GitHub/pybind11/build/tests/CMakeFiles/generate.stamp is up-to-date.
+    3>pybind11_cross_module_tests.cpp
+    4>pybind11_tests.cpp
+    4>test_buffers.cpp
+    4>test_builtin_casters.cpp
+    4>test_call_policies.cpp
+    4>test_callbacks.cpp
+    4>test_chrono.cpp
+    4>test_class.cpp
+    4>test_constants_and_functions.cpp
+    4>test_copy_move.cpp
+    4>test_docstring_options.cpp
+    4>test_enum.cpp
+    4>test_eval.cpp
+    4>test_exceptions.cpp
+    4>test_factory_constructors.cpp
+    4>test_iostream.cpp
+    4>test_kwargs_and_defaults.cpp
+    4>test_local_bindings.cpp
+    4>test_methods_and_attributes.cpp
+    4>test_modules.cpp
+    4>test_multiple_inheritance.cpp
+    4>test_numpy_array.cpp
+    4>test_numpy_dtypes.cpp
+    4>test_numpy_vectorize.cpp
+    4>test_opaque_types.cpp
+    4>test_operator_overloading.cpp
+    4>test_pickling.cpp
+    4>test_pytypes.cpp
+    4>test_sequences_and_iterators.cpp
+    4>test_smart_ptr.cpp
+    4>test_stl.cpp
+    4>test_stl_binders.cpp
+    4>test_tagbased_polymorphic.cpp
+    4>test_virtual_functions.cpp
+    8>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppCommon.targets(171,5): error MSB6006: "cmd.exe" exited with code 1.
+    8>Done building project "test_installed_embed.vcxproj" -- FAILED.
+    7>Building Custom Rule D:/GitHub/pybind11/tests/test_cmake_build/CMakeLists.txt
+    7>CMake does not need to re-run because D:/GitHub/pybind11/build/tests/test_cmake_build/CMakeFiles/generate.stamp is up-to-date.
+    3>   Creating library D:/GitHub/pybind11/build/tests/Debug/pybind11_cross_module_tests.lib and object D:/GitHub/pybind11/build/tests/Debug/pybind11_cross_module_tests.exp
+    5>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppCommon.targets(171,5): error MSB6006: "cmd.exe" exited with code 1.
+    5>Done building project "test_subdirectory_embed.vcxproj" -- FAILED.
+    3>pybind11_cross_module_tests.vcxproj -> D:\GitHub\pybind11\tests\pybind11_cross_module_tests.cp36-win_amd64.pyd
+    6>Building Custom Rule D:/GitHub/pybind11/tests/test_cmake_build/CMakeLists.txt
+    6>CMake does not need to re-run because D:/GitHub/pybind11/build/tests/test_cmake_build/CMakeFiles/generate.stamp is up-to-date.
+    11>------ Rebuild All started: Project: test_cmake_build, Configuration: Debug x64 ------
+    4>   Creating library D:/GitHub/pybind11/build/tests/Debug/pybind11_tests.lib and object D:/GitHub/pybind11/build/tests/Debug/pybind11_tests.exp
+    4>pybind11_tests.vcxproj -> D:\GitHub\pybind11\tests\pybind11_tests.cp36-win_amd64.pyd
+    4>------ pybind11_tests.cp36-win_amd64.pyd file size: 17175552
+    12>------ Rebuild All started: Project: ALL_BUILD, Configuration: Debug x64 ------
+    13>------ Rebuild All started: Project: pytest, Configuration: Debug x64 ------
+    12>Building Custom Rule D:/GitHub/pybind11/CMakeLists.txt
+    12>CMake does not need to re-run because D:/GitHub/pybind11/build/CMakeFiles/generate.stamp is up-to-date.
+    14>------ Skipped Rebuild All: Project: INSTALL, Configuration: Debug x64 ------
+    14>Project not selected to build for this solution configuration 
+    13>============================= test session starts =============================
+    13>platform win32 -- Python 3.6.6, pytest-3.7.1, py-1.5.4, pluggy-0.7.1
+    13>rootdir: D:\GitHub\pybind11\tests, inifile: pytest.ini
+    13>collected 300 items
+    13>
+    13>test_buffers.py ....                                                     [  1%]
+    13>test_builtin_casters.py ....s..........                                  [  6%]
+    13>test_call_policies.py ........                                           [  9%]
+    13>test_callbacks.py .......                                                [ 11%]
+    13>test_chrono.py .......                                                   [ 13%]
+    13>test_class.py ...............                                            [ 18%]
+    13>test_constants_and_functions.py ....                                     [ 20%]
+    13>test_copy_move.py ....s..                                                [ 22%]
+    13>test_docstring_options.py .                                              [ 22%]
+    13>test_eigen.py sssssssssssssssssssssssss                                  [ 31%]
+    13>test_enum.py .....                                                       [ 32%]
+    13>test_eval.py .                                                           [ 33%]
+    13>test_exceptions.py .......                                               [ 35%]
+    13>test_factory_constructors.py .........                                   [ 38%]
+    13>test_iostream.py ............                                            [ 42%]
+    13>test_kwargs_and_defaults.py .....                                        [ 44%]
+    13>test_local_bindings.py ..........                                        [ 47%]
+    13>test_methods_and_attributes.py ....................                      [ 54%]
+    13>test_modules.py .....                                                    [ 55%]
+    13>test_multiple_inheritance.py ...........                                 [ 59%]
+    13>test_numpy_array.py ..................................                   [ 70%]
+    13>test_numpy_dtypes.py .............                                       [ 75%]
+    13>test_numpy_vectorize.py .......                                          [ 77%]
+    13>test_opaque_types.py ..                                                  [ 78%]
+    13>test_operator_overloading.py ...                                         [ 79%]
+    13>test_pickling.py ....                                                    [ 80%]
+    13>test_pytypes.py ...........                                              [ 84%]
+    13>test_sequences_and_iterators.py ......                                   [ 86%]
+    13>test_smart_ptr.py ...........                                            [ 89%]
+    13>test_stl.py .......sss....                                               [ 94%]
+    13>test_stl_binders.py .........                                            [ 97%]
+    13>test_tagbased_polymorphic.py .                                           [ 97%]
+    13>test_virtual_functions.py .......                                        [100%]
+    13>=========================== short test summary info ===========================
+    13>SKIP [1] test_builtin_casters.py:112: no <string_view>
+    13>SKIP [1] test_copy_move.py:68: no <optional>
+    13>SKIP [1] test_eigen.py:25: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:34: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:43: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:72: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:99: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:122: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:131: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:154: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:195: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:206: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:224: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:352: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:373: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:442: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:489: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:531: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:576: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:590: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:608: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:623: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:644: eigen and/or scipy are not installed
+    13>SKIP [1] test_eigen.py:654: eigen and/or scipy are not installed
+    13>SKIP [1] test_eigen.py:664: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:673: eigen and/or numpy are not installed
+    13>SKIP [1] test_eigen.py:688: eigen and/or numpy are not installed
+    13>SKIP [1] test_stl.py:97: no <optional>
+    13>SKIP [1] test_stl.py:120: no <experimental/optional>
+    13>SKIP [1] test_stl.py:141: no <variant>
+    13>
+    13>=================== 270 passed, 30 skipped in 7.84 seconds ====================
+    15>------ Skipped Rebuild All: Project: check, Configuration: Debug x64 ------
+    15>Project not selected to build for this solution configuration 
+    ========== Rebuild All: 11 succeeded, 2 failed, 2 skipped ==========

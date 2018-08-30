@@ -83,6 +83,7 @@
 //          "processId": "${command:pickProcess}",
             "processId": "23564"
         },
+        
         {
             "name": "Python",
             "type": "python",
@@ -101,17 +102,19 @@
 
         //  "program": "${workspaceRoot}/Tools/linecount.py",
         //  "program": "${workspaceRoot}/Build/builder.py",
-            "program": "${workspaceRoot}/Explorer/explorer.py",
+        //  "program": "${workspaceRoot}/Explorer/explorer.py",
         //  "program": "${workspaceRoot}/Solver/solver.py",
         //  "program": "${workspaceRoot}/Tools/testrunner.py",
 
+            "program": "${workspaceRoot}/Solver/Experiments/pybind11test.py",
         //  "program": "${workspaceRoot}/Solver/Experiments/workbench.py",
         //  "program": "${workspaceRoot}/Solver/Experiments/mayavitest.py",
             
         //  "args":["--target", "IIS", "--deploy", "False"]
-            "args":["--s", "../Solver/Test/House.json", "--w", "../Solver/Test/Working"]
-        //  "args":[]
+        //  "args":["--s", "../Solver/Test/House.json", "--w", "../Solver/Test/Working"]
+            "args":[]
         },
+
         {
             "name": "Python (Active File)",
             "type": "python",
