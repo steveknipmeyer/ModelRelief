@@ -3,19 +3,24 @@
 
 
 #### Short Term     
+
         pybind11
-                        Release Debug                   Release Debug               Success
-            amg            X                   relief      X                          yes
-            amg            X                   relief              X                  no
-            amg                   X            relief      X                          yes  
-            amg                   X            relief              X                  no
+            setup 
+                            Release Debug                   Release Debug               Success
+                amg            X                   relief      X                          yes
+                amg            X                   relief              X                  iterator assert
+                amg                   X            relief      X                          yes  
+                amg                   X            relief              X                  iterator assert
 
-            VS2017 Compilation Workflow (DEBUG only)
-                cd Relief
-                python setup.py clean --all
-                python setup.py --verbose build --debug
-                python setup.py --verbose install
-
+                Setup VS2017 Compilation Workflow 
+                    cd <project>
+                    python setup.py clean --all
+                    python setup.py --verbose build --debug
+                    python setup.py --verbose install
+            cmake
+                http://www.benjack.io/2018/02/02/python-cpp-revisited.html
+                https://github.com/chhenning/pybind11_with_MSVC_2017
+                
     Extend Builder to build the relief DLL.
         Development (Debug)
         Production(Release)
@@ -34,6 +39,7 @@
         Review ArtCAM.
 
     Lambda
+        CMake
         pip install pybind11
 
     Runtime Settings   

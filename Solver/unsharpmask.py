@@ -13,6 +13,7 @@
 import numpy as np
 from scipy.ndimage import gaussian_filter
 
+import example
 from services import Services
 
 class UnsharpMaskParameters:
@@ -72,6 +73,8 @@ class UnsharpMask:
         # https://dsp.stackexchange.com/questions/10057/gaussian-blur-standard-deviation-radius-and-kernel-size
         # https://stackoverflow.com/questions/23208232/image-filtering-with-scikit-image
         # https://docs.scipy.org/doc/scipy/reference/tutorial/ndimage.html
+        result = example.add(25, 25)
+        print (f"unsharp example.add = {result}")
     
         original_prime= original * combined_mask
 

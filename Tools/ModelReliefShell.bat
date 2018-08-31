@@ -40,6 +40,7 @@ path=%path%;%MRSolution%Tools;;%MRSolution%Build
 path=%path%;C:\Program Files\Git
 path=%path%;C:\Program Files (x86)\WinMerge
 path=%path%;C:\Program Files\KDiff3
+path=%path%;C:\Program Files\CMake\bin
 
 call "C:\Program Files\nodejs\nodevars.bat"
 

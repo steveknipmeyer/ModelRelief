@@ -3,15 +3,14 @@
 #   Copyright (c) 2018
 #   All Rights Reserved.
 #
-import pyamg
-import numpy as np
-
 """
 .. module:: relieftest
    :synopsis: C++ extensions for Python image processing.
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
+import pyamg
+import numpy as np
 
 import os
 import sys
