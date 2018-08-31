@@ -3,17 +3,20 @@
 
 
 #### Short Term     
+        Move ProjectNotes so it does not trigger directory expansion.
+        Extend Builder to build the relief DLL.
+            pip install ./Relief
+                Development (Debug)
+                Production(Release)
+                    Add to requirements.production.txt?
 
         pybind11
             cmake
                 http://www.benjack.io/2018/02/02/python-cpp-revisited.html
                 https://github.com/chhenning/pybind11_with_MSVC_2017
 
-                Why does IntelliSense show relief.add as unresolved in amg.py?
                 Generalize the handling of the pybind11 include files.
                     The solution is not to copy pybind11 to the project directory!
-                How are Debug and Release builds handled?
-                    Check the ASPNETCORE_ENVIRONMENT setting.                    
 
             setup 
                             Release Debug                   Release Debug               Success
@@ -27,10 +30,6 @@
                     python setup.py clean --all
                     python setup.py --verbose build --debug
                     python setup.py --verbose install
-                
-    Extend Builder to build the relief DLL.
-        Development (Debug)
-        Production(Release)
 
     N.B. The Gaussian blur used in Kerber's paper ignores pixels that have been masked. 
     The implementation here does include them. It seems a custom kernel (ndimage "generic filter") may be required that takes into consideration the overall mask.
@@ -48,6 +47,7 @@
     Lambda
         CMake
         pip install pybind11
+        git config --global core.excludesfile "%USERPROFILE%\.gitignore"
 
     Runtime Settings   
         https://medium.freecodecamp.org/environment-settings-in-javascript-apps-c5f9744282b6
