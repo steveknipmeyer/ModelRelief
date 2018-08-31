@@ -5,6 +5,16 @@
 #### Short Term     
 
         pybind11
+            cmake
+                http://www.benjack.io/2018/02/02/python-cpp-revisited.html
+                https://github.com/chhenning/pybind11_with_MSVC_2017
+
+                Why does IntelliSense show relief.add as unresolved in amg.py?
+                Generalize the handling of the pybind11 include files.
+                    The solution is not to copy pybind11 to the project directory!
+                How are Debug and Release builds handled?
+                    Check the ASPNETCORE_ENVIRONMENT setting.                    
+
             setup 
                             Release Debug                   Release Debug               Success
                 amg            X                   relief      X                          yes
@@ -17,9 +27,6 @@
                     python setup.py clean --all
                     python setup.py --verbose build --debug
                     python setup.py --verbose install
-            cmake
-                http://www.benjack.io/2018/02/02/python-cpp-revisited.html
-                https://github.com/chhenning/pybind11_with_MSVC_2017
                 
     Extend Builder to build the relief DLL.
         Development (Debug)
@@ -1573,3 +1580,114 @@ https://semver.npmjs.com/
     15>------ Skipped Rebuild All: Project: check, Configuration: Debug x64 ------
     15>Project not selected to build for this solution configuration 
     ========== Rebuild All: 11 succeeded, 2 failed, 2 skipped ==========
+
+#### Relief Initial CMake Build
+(Development) D:\ModelRelief\Relief>python setup.py develop
+running develop
+running egg_info
+creating src\relief.egg-info
+writing src\relief.egg-info\PKG-INFO
+writing dependency_links to src\relief.egg-info\dependency_links.txt
+writing top-level names to src\relief.egg-info\top_level.txt
+writing manifest file 'src\relief.egg-info\SOURCES.txt'
+reading manifest file 'src\relief.egg-info\SOURCES.txt'
+writing manifest file 'src\relief.egg-info\SOURCES.txt'
+running build_ext
+-- Building for: Visual Studio 15 2017
+-- The C compiler identification is MSVC 19.14.26433.0
+-- The CXX compiler identification is MSVC 19.14.26433.0
+-- Check for working C compiler: C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.14.26428/bin/Hostx86/x64/cl.exe
+-- Check for working C compiler: C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.14.26428/bin/Hostx86/x64/cl.exe -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.14.26428/bin/Hostx86/x64/cl.exe
+-- Check for working CXX compiler: C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.14.26428/bin/Hostx86/x64/cl.exe -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found PythonInterp: D:/ModelRelief/devenv/python.exe (found version "3.6.6")
+-- Found PythonLibs: D:/ModelRelief/devenv/libs/Python36.lib
+-- pybind11 v2.3.dev0
+-- Performing Test HAS_MSVC_GL_LTCG
+-- Performing Test HAS_MSVC_GL_LTCG - Success
+-- LTO enabled
+-- Configuring done
+-- Generating done
+-- Build files have been written to: D:/ModelRelief/Relief/build/temp.win-amd64-3.6/Release
+Microsoft (R) Build Engine version 15.7.180.61344 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 8/31/2018 12:09:03 PM.
+     1>Project "D:\ModelRelief\Relief\build\temp.win-amd64-3.6\Release\ALL_BUILD.vcxproj" on node 1 (default targets).
+     1>Project "D:\ModelRelief\Relief\build\temp.win-amd64-3.6\Release\ALL_BUILD.vcxproj" (1) is building "D:\ModelRelief\Relief\build\temp.win-amd64-3.6\Release\ZERO_CHECK.vcxproj" (2) on node 1 (default targets).
+     2>PrepareForBuild:
+         Creating directory "x64\Release\ZERO_CHECK\".
+         Creating directory "x64\Release\ZERO_CHECK\ZERO_CHECK.tlog\".
+       InitializeBuildStatus:
+         Creating "x64\Release\ZERO_CHECK\ZERO_CHECK.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+       CustomBuild:
+         Checking Build System
+         CMake does not need to re-run because D:/ModelRelief/Relief/build/temp.win-amd64-3.6/Release/CMakeFiles/generate.stamp is up-to-date.
+         CMake does not need to re-run because D:/ModelRelief/Relief/build/temp.win-amd64-3.6/Release/lib/pybind11/CMakeFiles/generate.stamp is up-to-date.
+       FinalizeBuildStatus:
+         Deleting file "x64\Release\ZERO_CHECK\ZERO_CHECK.tlog\unsuccessfulbuild".
+         Touching "x64\Release\ZERO_CHECK\ZERO_CHECK.tlog\ZERO_CHECK.lastbuildstate".
+     2>Done Building Project "D:\ModelRelief\Relief\build\temp.win-amd64-3.6\Release\ZERO_CHECK.vcxproj" (default targets).
+     1>Project "D:\ModelRelief\Relief\build\temp.win-amd64-3.6\Release\ALL_BUILD.vcxproj" (1) is building "D:\ModelRelief\Relief\build\temp.win-amd64-3.6\Release\relief.vcxproj" (3) on node 2 (default targets).
+     3>PrepareForBuild:
+         Creating directory "relief.dir\Release\".
+         Creating directory "relief.dir\Release\relief.tlog\".
+       InitializeBuildStatus:
+         Creating "relief.dir\Release\relief.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+       CustomBuild:
+         Building Custom Rule D:/ModelRelief/Relief/CMakeLists.txt
+         CMake does not need to re-run because D:/ModelRelief/Relief/build/temp.win-amd64-3.6/Release/CMakeFiles/generate.stamp is up-to-date.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.14.26428\bin\HostX86\x64\CL.exe /c /ID:\ModelRelief\Relief\src\relief /ID:\ModelRelief\Relief\lib\pybind11\include /ID:\ModelRelief\devenv\include /nologo /W3 /WX- /diagnostics:clas
+         sic /MP /O2 /Ob2 /GL /D "VERSION_INFO=\"0.1\"" /D WIN32 /D _WINDOWS /D NDEBUG /D "CMAKE_INTDIR=\"Release\"" /D relief_EXPORTS /D _WINDLL /D _MBCS /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /std:c++14 /Fo"relief.dir\Release\\" /Fd"re
+         lief.dir\Release\vc141.pdb" /Gd /TP /FC /errorReport:queue  /bigobj D:\ModelRelief\Relief\src\relief\relief.cpp D:\ModelRelief\Relief\src\relief\bindings.cpp
+         relief.cpp
+         bindings.cpp
+       MakeDirsForLink:
+         Creating directory "D:\ModelRelief\Relief\build\temp.win-amd64-3.6\Release\Release\".
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.14.26428\bin\HostX86\x64\link.exe /ERRORREPORT:QUEUE /OUT:"D:\ModelRelief\Relief\src\relief\relief.cp36-win_amd64.pyd" /INCREMENTAL:NO /NOLOGO D:\ModelRelief\devenv\libs\Python36.li
+         b "-LTCG" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:"D:/ModelRelief/Relief/src/relief/relief.pdb" /SUBSY
+         STEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/ModelRelief/Relief/build/temp.win-amd64-3.6/Release/Release/relief.lib" /MACHINE:X64  /machine:x64 /DLL relief.dir\Release\relief.obj
+         relief.dir\Release\bindings.obj
+            Creating library D:/ModelRelief/Relief/build/temp.win-amd64-3.6/Release/Release/relief.lib and object D:/ModelRelief/Relief/build/temp.win-amd64-3.6/Release/Release/relief.exp
+         Generating code
+         Finished generating code
+         relief.vcxproj -> D:\ModelRelief\Relief\src\relief\relief.cp36-win_amd64.pyd
+       FinalizeBuildStatus:
+         Deleting file "relief.dir\Release\relief.tlog\unsuccessfulbuild".
+         Touching "relief.dir\Release\relief.tlog\relief.lastbuildstate".
+     3>Done Building Project "D:\ModelRelief\Relief\build\temp.win-amd64-3.6\Release\relief.vcxproj" (default targets).
+     1>PrepareForBuild:
+         Creating directory "x64\Release\ALL_BUILD\".
+         Creating directory "x64\Release\ALL_BUILD\ALL_BUILD.tlog\".
+       InitializeBuildStatus:
+         Creating "x64\Release\ALL_BUILD\ALL_BUILD.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+       FinalizeBuildStatus:
+         Deleting file "x64\Release\ALL_BUILD\ALL_BUILD.tlog\unsuccessfulbuild".
+         Touching "x64\Release\ALL_BUILD\ALL_BUILD.tlog\ALL_BUILD.lastbuildstate".
+     1>Done Building Project "D:\ModelRelief\Relief\build\temp.win-amd64-3.6\Release\ALL_BUILD.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:05.75
+
+Creating d:\modelrelief\devenv\lib\site-packages\relief.egg-link (link to src)
+Removing relief 0.0.1 from easy-install.pth file
+Adding relief 0.1 to easy-install.pth file
+
+Installed d:\modelrelief\relief\src
+Processing dependencies for relief==0.1
+Finished processing dependencies for relief==0.1
+
+(Development) D:\ModelRelief\Relief>

@@ -1,6 +1,6 @@
 import pyamg
 import numpy as np
-import example
+import relief
 
 def tutorial():
     A = pyamg.gallery.poisson((500,500), format='csr')  # 2D Poisson problem on 500x500 grid
@@ -26,8 +26,9 @@ def experiment():
 
     print("residual: ", np.linalg.norm(b-A*x))          # compute norm of residual vector
 
-result = example.add(10, 20)
-print (f"example.add = {result}")
 
 tutorial() 
 
+result = relief.add(10, 20)
+ 
+print (f"relief.add = {result}\n")
