@@ -3,7 +3,7 @@
     // ---------------------------------
     // Window
     // ---------------------------------
-        "window.zoomLevel": 0,
+        "window.zoomLevel": -0.2 ,
 
     // ---------------------------------
     // ActiveFile
@@ -83,7 +83,7 @@
     },
 
     "markdown.styles": [
-      //  "ModelRelief/Documentation/ProjectNotes/Markdown.css"
+      //  "ProjectNotes/markdown.css"
     ],
 
     // ---------------------------------

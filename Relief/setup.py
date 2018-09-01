@@ -77,7 +77,9 @@ setup(
 
     # add an extension module named 'relief' to the package 
     ext_modules=[CMakeExtension('relief')],
+
     # add custom build_ext command
     cmdclass=dict(build_ext=CMakeBuild),
+
     zip_safe=False,
 )

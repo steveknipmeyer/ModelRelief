@@ -19,7 +19,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		NuGet.config = NuGet.config
 		package-lock.json = package-lock.json
 		package.json = package.json
-		ProjectNotes.md = ProjectNotes.md
 		README.md = README.md
 		requirements.development.txt = requirements.development.txt
 		requirements.production.txt = requirements.production.txt
@@ -31,6 +30,12 @@ EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Explorer", "Explorer\Explorer.pyproj", "{E85E4307-415D-4031-A863-1DF4B615CAF9}"
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Relief", "Relief\Relief.pyproj", "{434BC5C5-44B3-4953-BA03-B1F87E720AF5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectNotes", "ProjectNotes", "{583B0720-98A2-444B-9BD4-CD6DD2E385A7}"
+	ProjectSection(SolutionItems) = preProject
+		ProjectNotes\markdown.css = ProjectNotes\markdown.css
+		ProjectNotes\ProjectNotes.md = ProjectNotes\ProjectNotes.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +62,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{583B0720-98A2-444B-9BD4-CD6DD2E385A7} = {8606C6AB-8976-479A-BE76-9DE123DA22E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C9E654D7-52C7-4D21-8503-FCC19F9E0BAD}
