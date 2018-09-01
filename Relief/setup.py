@@ -1,5 +1,3 @@
-# http://www.benjack.io/2018/02/02/python-cpp-revisited.html
-
 import os
 import re
 import sys
@@ -11,6 +9,7 @@ from distutils.version import LooseVersion
 from setuptools import setup, find_packages, Extension
 from setuptools.command.build_ext import build_ext
 
+# http://www.benjack.io/2018/02/02/python-cpp-revisited.html
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=''):
         Extension.__init__(self, name, sources=[])

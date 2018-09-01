@@ -24,7 +24,7 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Explorer", "Explorer\Explor
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ReliefSetup", "ReliefSetup\ReliefSetup.pyproj", "{F5558A63-2558-4EE8-A80D-809443193179}"
 EndProject
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Relief", "Relief\Relief.pyproj", "{60E99579-4F5C-42D8-B683-27F9B5A0E1F8}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Relief", "Relief\Relief.pyproj", "{434BC5C5-44B3-4953-BA03-B1F87E720AF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,8 +48,8 @@ Global
 		{E85E4307-415D-4031-A863-1DF4B615CAF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5558A63-2558-4EE8-A80D-809443193179}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F5558A63-2558-4EE8-A80D-809443193179}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{60E99579-4F5C-42D8-B683-27F9B5A0E1F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{60E99579-4F5C-42D8-B683-27F9B5A0E1F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{434BC5C5-44B3-4953-BA03-B1F87E720AF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{434BC5C5-44B3-4953-BA03-B1F87E720AF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
