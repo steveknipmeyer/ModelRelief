@@ -1,24 +1,18 @@
 ﻿### Tasks
 #### Commit Notes
-Move ProjectNotes so it does not trigger directory expansion.
 
 #### Short Term                              
-        Extend Builder to build the relief DLL.
-            Development (Debug)
-            Production(Release)
+    Move to .NET Core 2.1
+        C:\Program Files\dotnet\sdk\2.1.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.ObsoleteReferences.targets(33,5): warning NETSDK1059: The tool 'Microsoft.EntityFrameworkCore.Tools.DotNet' is now included in the .NET Core SDK. 
+        Information on resolving this warning is available at (https://aka.ms/dotnetclitools-in-box). [D:\ModelRelief\ModelRelief\ModelRelief.csproj]
 
-        pybind11
-            cmake
-                https://github.com/chhenning/pybind11_with_MSVC_2017
-
-                Generalize the handling of the pybind11 include files.
-                    The solution is not to copy pybind11 to the project directory!
-
-                python setup.py clean --all
-                python setup --verbose build --debug install
-                python setup.py --verbose build --debug
-                python setup.py --verbose install
-
+        Why are there different versions of vc and vs2015_runtime between devenv and mrenv?            
+            devenv
+                vc                        14.1                 h0510ff6_3
+                vs2015_runtime            15.5.2                        3            
+            mrenv                
+                vc                        14                            0    conda-forge
+                vs2015_runtime            14.0.25420                    0    conda-forge
 
     N.B. The Gaussian blur used in Kerber's paper ignores pixels that have been masked. 
     The implementation here does include them. It seems a custom kernel (ndimage "generic filter") may be required that takes into consideration the overall mask.
@@ -35,6 +29,7 @@ Move ProjectNotes so it does not trigger directory expansion.
 
     Lambda
         Uninstall CMake.
+        Remove lib\pbind11 and confirm submodule is populated.
         git config --global core.excludesfile "%USERPROFILE%\.gitignore"
 
     Runtime Settings   
@@ -942,6 +937,21 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
         To https://github.com/steveknipmeyer/ModelRelief.git
         effd8c2..a3274da  master -> master
 
+###### git submodules
+    http://www.vogella.com/tutorials/GitSubmodules/article.html
+    https://git-scm.com/book/en/v2/Git-Tools-Submodules
+
+    (Development) D:\ModelRelief\Relief\lib>git submodule add -b master https://github.com/pybind/pybind11.git
+    Cloning into 'D:/ModelRelief/Relief/lib/pybind11'...
+    remote: Counting objects: 10102, done.
+    remote: Total 10102 (delta 0), reused 0 (delta 0), pack-reused 10102
+    Receiving objects: 100% (10102/10102), 3.67 MiB | 6.00 MiB/s, done.
+    Resolving deltas: 100% (6820/6820), done.
+    warning: LF will be replaced by CRLF in .gitmodules.
+    The file will have its original line endings in your working directory.
+
+    git submodule init
+
 #### TypeScript
     TypeScript Installations
         VSCode
@@ -1359,12 +1369,24 @@ https://semver.npmjs.com/
             When SQLite is configured, the database file is stored in store/<environment>/database.
             Also, the database folder is used to transfer the SQLServer seed database to the Docker database container during a build.
 
+    Updateing the mrenv requirements.production.txt
+        conda list --export > <requirements.production.txt>        
+
 #### Jupyter
-        Notebook confguration
-            C:\Users\Steve Knipmeyer\.jupyter\jupyter_notebook_config.py
-        conda install ipyparallel
-        conda install -c conda-forge jupyter_contrib_nbextensions
-        conda install -c conda-forge jupyter_nbextensions_configurator
-        conda install -c conda-forge ipywidgets
-        jupyter nbextension install --py widgetsnbextension --user
-        jupyter nbextension enable --py --user widgetsnbextension
+    Notebook confguration
+        C:\Users\Steve Knipmeyer\.jupyter\jupyter_notebook_config.py
+    conda install ipyparallel
+    conda install -c conda-forge jupyter_contrib_nbextensions
+    conda install -c conda-forge jupyter_nbextensions_configurator
+    conda install -c conda-forge ipywidgets
+    jupyter nbextension install --py widgetsnbextension --user
+    jupyter nbextension enable --py --user widgetsnbextension
+
+#### pybind11
+    https://github.com/chhenning/pybind11_with_MSVC_2017
+
+
+    python setup.py clean --all
+    python setup --verbose build --debug install
+    python setup.py --verbose build --debug
+    python setup.py --verbose install

@@ -178,6 +178,12 @@ class Builder:
             else:                
                 self.logger.logInformation("\nPlease see Build\\DevelopmentPythonInstallation.txt to create the development Python environment.", Colors.Cyan)
 
+        # Python C++ extensions
+        self.logger.logInformation("\nPython C++ extensions", Colors.BrightMagenta)
+        environment = RuntimeEnvironment.production.value if self.publish else RuntimeEnvironment.development.value
+        os.chdir(self.solution_path)
+        self.exec(f"BuildReliefPythonExtensions {environment}")        
+
         # database initialization and user store
         if self.arguments.initialize:
             self.logger.logInformation("\nInitialize database and user store", Colors.BrightMagenta)

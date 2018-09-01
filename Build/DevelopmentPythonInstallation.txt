@@ -9,6 +9,7 @@ conda install scipy
 pip install qdarkstyle
 pip install pyamg
 conda install matplotlib
+conda install pybind11
 
 conda install pylint
 conda install mypy
