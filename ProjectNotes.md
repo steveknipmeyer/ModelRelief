@@ -1,35 +1,24 @@
 ﻿### Tasks
 #### Commit Notes
+Move ProjectNotes so it does not trigger directory expansion.
 
-
-#### Short Term     
-        Move ProjectNotes so it does not trigger directory expansion.
+#### Short Term                              
         Extend Builder to build the relief DLL.
-            pip install ./Relief
-                Development (Debug)
-                Production(Release)
-                    Add to requirements.production.txt?
+            Development (Debug)
+            Production(Release)
 
         pybind11
             cmake
-                http://www.benjack.io/2018/02/02/python-cpp-revisited.html
                 https://github.com/chhenning/pybind11_with_MSVC_2017
 
                 Generalize the handling of the pybind11 include files.
                     The solution is not to copy pybind11 to the project directory!
 
-            setup 
-                            Release Debug                   Release Debug               Success
-                amg            X                   relief      X                          yes
-                amg            X                   relief              X                  iterator assert
-                amg                   X            relief      X                          yes  
-                amg                   X            relief              X                  iterator assert
+            python setup.py clean --all
+            python setup --verbose build install
+            python setup.py --verbose build --debug
+            python setup.py --verbose install
 
-                Setup VS2017 Compilation Workflow 
-                    cd <project>
-                    python setup.py clean --all
-                    python setup.py --verbose build --debug
-                    python setup.py --verbose install
 
     N.B. The Gaussian blur used in Kerber's paper ignores pixels that have been masked. 
     The implementation here does include them. It seems a custom kernel (ndimage "generic filter") may be required that takes into consideration the overall mask.
@@ -45,8 +34,7 @@
         Review ArtCAM.
 
     Lambda
-        CMake
-        pip install pybind11
+        Uninstall CMake.
         git config --global core.excludesfile "%USERPROFILE%\.gitignore"
 
     Runtime Settings   

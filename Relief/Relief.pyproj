@@ -5,12 +5,16 @@
     <ProjectGuid>434bc5c5-44b3-4953-ba03-b1f87e720af5</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>relieftest.py</StartupFile>
+    <StartupFile>setup.py</StartupFile>
     <SearchPath>..\Solver;..\Tools</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>Relief</Name>
     <RootNamespace>R</RootNamespace>
+    <IsWindowsApplication>False</IsWindowsApplication>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <CommandLineArguments>build install</CommandLineArguments>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -25,10 +29,17 @@
     <Compile Include="setup.py" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include=".gitignore">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="CMakeLists.txt" />
+    <Content Include="src\bindings.cpp" />
+    <Content Include="src\relief.cpp" />
+    <Content Include="src\relief.h" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="lib\" />
+    <Folder Include="src\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

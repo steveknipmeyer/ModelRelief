@@ -11,18 +11,24 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelRelief.Test", "ModelRe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8606C6AB-8976-479A-BE76-9DE123DA22E6}"
 	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		.pylintrc = .pylintrc
+		gulpfile.js = gulpfile.js
 		NuGet.config = NuGet.config
+		package-lock.json = package-lock.json
+		package.json = package.json
+		ProjectNotes.md = ProjectNotes.md
 		README.md = README.md
+		requirements.development.txt = requirements.development.txt
+		requirements.production.txt = requirements.production.txt
+		web.config = web.config
 	EndProjectSection
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Tools", "Tools\Tools.pyproj", "{7CC869EF-74B2-478B-AF71-186EC6DE990E}"
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Explorer", "Explorer\Explorer.pyproj", "{E85E4307-415D-4031-A863-1DF4B615CAF9}"
-EndProject
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ReliefSetup", "ReliefSetup\ReliefSetup.pyproj", "{F5558A63-2558-4EE8-A80D-809443193179}"
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Relief", "Relief\Relief.pyproj", "{434BC5C5-44B3-4953-BA03-B1F87E720AF5}"
 EndProject
@@ -46,8 +52,6 @@ Global
 		{7CC869EF-74B2-478B-AF71-186EC6DE990E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E85E4307-415D-4031-A863-1DF4B615CAF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E85E4307-415D-4031-A863-1DF4B615CAF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F5558A63-2558-4EE8-A80D-809443193179}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F5558A63-2558-4EE8-A80D-809443193179}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{434BC5C5-44B3-4953-BA03-B1F87E720AF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{434BC5C5-44B3-4953-BA03-B1F87E720AF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection

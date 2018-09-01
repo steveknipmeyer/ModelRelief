@@ -7,7 +7,7 @@
 
 int add(int i, int j)
 {
-    return i + j + 100;
+    return i + j + 500;
 }
 
 int subtract(int i, int j)
