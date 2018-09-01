@@ -3,6 +3,7 @@ import re
 import sys
 import sysconfig
 import platform
+import pybind11
 import subprocess
 
 from distutils.version import LooseVersion
@@ -20,6 +21,7 @@ class CMakeBuild(build_ext):
     def run(self):
         try:
             out = subprocess.check_output(['cmake', '--version'])
+    
         except OSError:
             raise RuntimeError(
                 "CMake must be installed to build the following extensions: " +
