@@ -24,9 +24,9 @@ def tutorial():
     x = ml.solve(b, tol=1e-10)                          # solve Ax=b to a tolerance of 1e-10
     print("residual: ", np.linalg.norm(b-A*x))          # compute norm of residual vector
 
+result = relief.add(1, 1)
+print (f"result = {result}")
 
 tutorial() 
 
-result = relief.add(1, 1)
-print (result)
 

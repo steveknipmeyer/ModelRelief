@@ -28,9 +28,6 @@
         Review ArtCAM.
 
     Lambda
-        Uninstall CMake.
-        Remove lib\pbind11 and confirm submodule is populated.
-        git config --global core.excludesfile "%USERPROFILE%\.gitignore"
 
     Runtime Settings   
         https://medium.freecodecamp.org/environment-settings-in-javascript-apps-c5f9744282b6
