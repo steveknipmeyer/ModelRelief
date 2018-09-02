@@ -17,4 +17,7 @@ PYBIND11_MODULE(relief, m)
     
     // subtract : no default values
     m.def("subtract", &subtract, "A function which subtracts two numbers");
+
+    m.def("add_arrays", &add_arrays, "Add two NumPy arrays");
+    m.def("fill", &fill, "Fill a NumPy array with a value");
 }

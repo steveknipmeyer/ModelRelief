@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{6049BDA4-87AB-4520-A4BC-06146096F82D}</ProjectGuid>
+    <Keyword>MakeFileProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakeIncludeSearchPath>$(SolutionDir)devenv\include;$(ProjectDir)lib\pybind11\include</NMakeIncludeSearchPath>
+    <NMakeBuildCommandLine>python setup.py build --debug install</NMakeBuildCommandLine>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <NMakePreprocessorDefinitions>WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="build\temp.win-amd64-3.6\debug\cmakefiles\3.11.18040201-msvc_2\compileridcxx\CMakeCXXCompilerId.cpp" />
+    <ClCompile Include="build\temp.win-amd64-3.6\debug\cmakefiles\3.11.18040201-msvc_2\compileridc\CMakeCCompilerId.c" />
+    <ClCompile Include="build\temp.win-amd64-3.6\debug\cmakefiles\3.12.1\compileridcxx\CMakeCXXCompilerId.cpp" />
+    <ClCompile Include="build\temp.win-amd64-3.6\debug\cmakefiles\3.12.1\compileridc\CMakeCCompilerId.c" />
+    <ClCompile Include="build\temp.win-amd64-3.6\debug\cmakefiles\feature_tests.c" />
+    <ClCompile Include="build\temp.win-amd64-3.6\debug\cmakefiles\feature_tests.cxx" />
+    <ClCompile Include="build\temp.win-amd64-3.6\release\cmakefiles\3.12.1\compileridcxx\CMakeCXXCompilerId.cpp" />
+    <ClCompile Include="build\temp.win-amd64-3.6\release\cmakefiles\3.12.1\compileridc\CMakeCCompilerId.c" />
+    <ClCompile Include="build\temp.win-amd64-3.6\release\cmakefiles\feature_tests.c" />
+    <ClCompile Include="build\temp.win-amd64-3.6\release\cmakefiles\feature_tests.cxx" />
+    <ClCompile Include="lib\pybind11\tests\pybind11_cross_module_tests.cpp" />
+    <ClCompile Include="lib\pybind11\tests\pybind11_tests.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_buffers.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_builtin_casters.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_callbacks.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_call_policies.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_chrono.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_class.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_cmake_build\embed.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_cmake_build\main.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_constants_and_functions.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_copy_move.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_docstring_options.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_eigen.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_embed\catch.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_embed\external_module.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_embed\test_interpreter.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_enum.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_eval.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_exceptions.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_factory_constructors.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_iostream.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_kwargs_and_defaults.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_local_bindings.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_methods_and_attributes.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_modules.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_multiple_inheritance.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_numpy_array.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_numpy_dtypes.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_numpy_vectorize.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_opaque_types.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_operator_overloading.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_pickling.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_pytypes.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_sequences_and_iterators.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_smart_ptr.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_stl.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_stl_binders.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_tagbased_polymorphic.cpp" />
+    <ClCompile Include="lib\pybind11\tests\test_virtual_functions.cpp" />
+    <ClCompile Include="src\bindings.cpp" />
+    <ClCompile Include="src\relief.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="lib\pybind11\include\pybind11\attr.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\buffer_info.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\cast.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\chrono.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\common.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\complex.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\detail\class.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\detail\common.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\detail\descr.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\detail\init.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\detail\internals.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\detail\typeid.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\eigen.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\embed.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\eval.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\functional.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\iostream.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\numpy.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\operators.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\options.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\pybind11.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\pytypes.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\stl.h" />
+    <ClInclude Include="lib\pybind11\include\pybind11\stl_bind.h" />
+    <ClInclude Include="lib\pybind11\tests\constructor_stats.h" />
+    <ClInclude Include="lib\pybind11\tests\local_bindings.h" />
+    <ClInclude Include="lib\pybind11\tests\object.h" />
+    <ClInclude Include="lib\pybind11\tests\pybind11_tests.h" />
+    <ClInclude Include="src\relief.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
+    <None Include="build\temp.win-amd64-3.6\debug\cmakefiles\3.11.18040201-msvc_2\CMakeDetermineCompilerABI_C.bin" />
+    <None Include="build\temp.win-amd64-3.6\debug\cmakefiles\3.11.18040201-msvc_2\CMakeDetermineCompilerABI_CXX.bin" />
+    <None Include="build\temp.win-amd64-3.6\debug\cmakefiles\3.12.1\CMakeDetermineCompilerABI_C.bin" />
+    <None Include="build\temp.win-amd64-3.6\debug\cmakefiles\3.12.1\CMakeDetermineCompilerABI_CXX.bin" />
+    <None Include="build\temp.win-amd64-3.6\debug\cmakefiles\feature_tests.bin" />
+    <None Include="build\temp.win-amd64-3.6\release\cmakefiles\3.12.1\CMakeDetermineCompilerABI_C.bin" />
+    <None Include="build\temp.win-amd64-3.6\release\cmakefiles\3.12.1\CMakeDetermineCompilerABI_CXX.bin" />
+    <None Include="build\temp.win-amd64-3.6\release\cmakefiles\feature_tests.bin" />
+    <None Include="lib\.gitignore" />
+    <None Include="setup.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
