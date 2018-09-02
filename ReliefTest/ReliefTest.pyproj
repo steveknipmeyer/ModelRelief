@@ -2,20 +2,18 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>f5558a63-2558-4ee8-a80d-809443193179</ProjectGuid>
-    <ProjectHome>
-    </ProjectHome>
+    <ProjectGuid>a5a51fcf-107d-4573-adbd-125b3662ec89</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
     <StartupFile>relieftest.py</StartupFile>
-    <SearchPath>
-    </SearchPath>
+    <SearchPath>..\Solver;..\Tools</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>ReliefSetup</Name>
-    <RootNamespace>Relief</RootNamespace>
-    <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <EnableNativeCodeDebugging>True</EnableNativeCodeDebugging>
+    <Name>ReliefTest</Name>
+    <RootNamespace>ReliefTest</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
     <InterpreterId>CondaEnv|CondaEnv|devenv</InterpreterId>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <EnableNativeCodeDebugging>True</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -27,14 +25,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="relieftest.py" />
-    <Compile Include="setup.py" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include=".gitignore" />
-    <Content Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="CondaEnv|CondaEnv|devenv" />

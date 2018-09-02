@@ -42,6 +42,8 @@ from silhouette import Silhouette
 from threshold import Threshold
 from unsharpmask import UnsharpMask, UnsharpMaskParameters
 
+import relief
+
 class Solver:
     """
     Transforms a DepthBuffer to create a Mesh (raw float format) based on a MeshTransform.
@@ -245,6 +247,8 @@ class Solver:
         current_height = np.max(self.results.mesh_transformed)
         factor = target_height / current_height
         self.results.mesh_transformed = self.results.mesh_transformed * factor
+
+        self.results.mesh_transformed = relief.fill(self.results.mesh_transformed, 1.0)
 
     def write_mesh(self):
         """

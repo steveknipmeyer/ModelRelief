@@ -1,7 +1,10 @@
 ﻿### Tasks
 #### Commit Notes
 
-#### Short Term                              
+#### Short Term          
+
+    relief.cp36-win_amd64.pyd	relief.cp36-win_amd64.pyd	D:\ModelRelief\devenv\Lib\site-packages\relief-0.1-py3.6-win-amd64.egg\relief.cp36-win_amd64.pyd	N/A	Yes	Symbols loaded.	D:\ModelRelief\devenv\Lib\site-packages\relief-0.1-py3.6-win-amd64.egg\relief.pdb	110		9/2/2018 8:45 AM	00007FFBD9A40000-00007FFBD9AF9000	[27132] python.exe		
+
     Move to .NET Core 2.1
         C:\Program Files\dotnet\sdk\2.1.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.ObsoleteReferences.targets(33,5): warning NETSDK1059: The tool 'Microsoft.EntityFrameworkCore.Tools.DotNet' is now included in the .NET Core SDK. 
         Information on resolving this warning is available at (https://aka.ms/dotnetclitools-in-box). [D:\ModelRelief\ModelRelief\ModelRelief.csproj]

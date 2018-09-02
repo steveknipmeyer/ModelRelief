@@ -73,8 +73,6 @@ class UnsharpMask:
         # https://dsp.stackexchange.com/questions/10057/gaussian-blur-standard-deviation-radius-and-kernel-size
         # https://stackoverflow.com/questions/23208232/image-filtering-with-scikit-image
         # https://docs.scipy.org/doc/scipy/reference/tutorial/ndimage.html
-        results = relief.add(0, 5)
-        print (f"results = {results}")
 
         original_prime= original * combined_mask
 
