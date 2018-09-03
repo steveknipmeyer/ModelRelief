@@ -2,6 +2,8 @@
 #### Commit Notes
 
 #### Short Term          
+    Gaussian Kernel
+        Simplify.
 
     relief.cp36-win_amd64.pyd	relief.cp36-win_amd64.pyd	D:\ModelRelief\devenv\Lib\site-packages\relief-0.1-py3.6-win-amd64.egg\relief.cp36-win_amd64.pyd	N/A	Yes	Symbols loaded.	D:\ModelRelief\devenv\Lib\site-packages\relief-0.1-py3.6-win-amd64.egg\relief.pdb	110		9/2/2018 8:45 AM	00007FFBD9A40000-00007FFBD9AF9000	[27132] python.exe		
 
@@ -19,9 +21,10 @@
 
     N.B. The Gaussian blur used in Kerber's paper ignores pixels that have been masked. 
     The implementation here does include them. It seems a custom kernel (ndimage "generic filter") may be required that takes into consideration the overall mask.
+    https://www.geeksforgeeks.org/gaussian-filter-generation-c/
     https://dsp.stackexchange.com/questions/10057/gaussian-blur-standard-deviation-radius-and-kernel-size
-    https://stackoverflow.com/questions/23208232/image-filtering-with-scikit-image
-    https://docs.scipy.org/doc/scipy/reference/tutorial/ndimage.html
+    https://www.codewithc.com/gaussian-filter-generation-in-c/
+    https://stackoverflow.com/questions/8204645/implementing-gaussian-blur-how-to-calculate-convolution-matrix-kernel
     
     Technical Review
         Review the Blender implementation.
@@ -31,7 +34,8 @@
         Review ArtCAM.
 
     Lambda
-
+        Install CMake VSCode extensions.
+        
     Runtime Settings   
         https://medium.freecodecamp.org/environment-settings-in-javascript-apps-c5f9744282b6
         minifiedExtension

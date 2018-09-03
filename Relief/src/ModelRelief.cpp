@@ -1,25 +1,50 @@
-// -----------------------------------------------------------------------
-// <copyright file="relief.cpp" company="ModelRelief">
-// Copyright (c) ModelRelief. All rights reserved.
-// </copyright>
-// -----------------------------------------------------------------------
-#include <pybind11/pybind11.h>
+/**
+ * @brief ModelRelief Python C++ extensions.
+ * 
+ * @file ModelRelief.cpp
+ * @author Steve Knipmeyer
+ * @date 2018-09-03
+ */
 #include <pybind11/numpy.h>
 
-#include "relief.h"
+#include "ModelRelief.h"
+#include "GaussianFilter.h"
+#include "GaussianKernel.h"
 
 namespace py = pybind11;
 
+namespace ModelRelief {
+/**
+ * @brief Add two numbers.
+ * 
+ * @param i First term.
+ * @param j Second term.
+ * @return int 
+ */
 int add(int i, int j)
 {
     return i + j + 1000; 
 }
 
+/**
+ * @brief Subtract two numbers.
+ * 
+ * @param i First term.
+ * @param j Second term.
+ * @return int 
+ */
 int subtract(int i, int j)
 {
     return i - j;
 }
 
+/**
+ * @brief Add two NumPy arrays.
+ * 
+ * @param input1 First array.
+ * @param input2 Second array.
+ * @return NPDoubleArray 
+ */
 NPDoubleArray add_arrays(NPDoubleArray input1, NPDoubleArray input2)
 {
    // read input arrays buffer_info
@@ -45,8 +70,16 @@ NPDoubleArray add_arrays(NPDoubleArray input1, NPDoubleArray input2)
    return result;
 }
 
+/**
+ * @brief Fill a NumPy array with a constanct value.
+ * 
+ * @param input Array to populate.
+ * @param value Constant fill value.
+ * @return NPDoubleArray 
+ */
 NPDoubleArray fill(NPDoubleArray& input, double value)
 {
+    
     // obtain buffer
     py::buffer_info buffer = input.request();
 
@@ -61,4 +94,15 @@ NPDoubleArray fill(NPDoubleArray& input, double value)
             p[indexRows*numberColumns + indexColumns] = value;
 
     return input;
+}
+
+/**
+ * @brief Gausian filter tests.
+ * 
+ */
+void kernel()
+{
+    GaussianKernel kernel(1.0);
+    kernel.Display();
+}
 }

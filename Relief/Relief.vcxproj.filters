@@ -168,7 +168,13 @@
     <ClCompile Include="src\bindings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\relief.cpp">
+    <ClCompile Include="src\GaussianFilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GaussianKernel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModelRelief.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -257,7 +263,13 @@
     <ClInclude Include="lib\pybind11\tests\pybind11_tests.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\relief.h">
+    <ClInclude Include="src\GaussianFilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GaussianKernel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModelRelief.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

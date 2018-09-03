@@ -124,7 +124,9 @@
     <ClCompile Include="lib\pybind11\tests\test_tagbased_polymorphic.cpp" />
     <ClCompile Include="lib\pybind11\tests\test_virtual_functions.cpp" />
     <ClCompile Include="src\bindings.cpp" />
-    <ClCompile Include="src\relief.cpp" />
+    <ClCompile Include="src\GaussianFilter.cpp" />
+    <ClCompile Include="src\GaussianKernel.cpp" />
+    <ClCompile Include="src\ModelRelief.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\pybind11\include\pybind11\attr.h" />
@@ -155,7 +157,9 @@
     <ClInclude Include="lib\pybind11\tests\local_bindings.h" />
     <ClInclude Include="lib\pybind11\tests\object.h" />
     <ClInclude Include="lib\pybind11\tests\pybind11_tests.h" />
-    <ClInclude Include="src\relief.h" />
+    <ClInclude Include="src\GaussianFilter.h" />
+    <ClInclude Include="src\GaussianKernel.h" />
+    <ClInclude Include="src\ModelRelief.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

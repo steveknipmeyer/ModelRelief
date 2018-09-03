@@ -47,3 +47,4 @@ v= 3.0
 fill_python(array, v)
 fill_cplusplus(array, v)
 
+relief.kernel()

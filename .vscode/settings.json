@@ -3,7 +3,7 @@
     // ---------------------------------
     // Window
     // ---------------------------------
-        "window.zoomLevel": -0.2 ,
+        "window.zoomLevel": 0,
 
     // ---------------------------------
     // ActiveFile
@@ -16,7 +16,7 @@
         "ActiveFileInStatusBar.revealFile": true,
 
     // ---------------------------------
-    // Document This
+    // Document This (JavaScript and TypeScript)
     // ---------------------------------
         // When enabled, memberOf information is added to comment tags on class members.
         "docthis.includeMemberOfOnClassMembers": false,
@@ -26,6 +26,11 @@
 
         // When enabled, JSDoc comments for functions and methods will include @description.
         "docthis.includeDescriptionTag": true,
+
+    // ---------------------------------
+    // Doxygen (C++)
+    // ---------------------------------
+        "doxdocgen.generic.authorTag": "@author Steve Knipmeyer",
 
     // ---------------------------------
     // Editor
@@ -172,5 +177,14 @@
             "peekViewResult.selectionBackground": "#7997cb",
             "peekViewEditor.matchHighlightBackground": "#7997cb",
             "sideBar.background": "#131313",
+        },
+        "files.associations": {
+            "iostream": "cpp",
+            "functional": "cpp",
+            "optional": "cpp",
+            "system_error": "cpp",
+            "xlocmon": "cpp",
+            "xtr1common": "cpp",
+            "iomanip": "cpp"
         },
 }

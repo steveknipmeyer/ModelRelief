@@ -50,9 +50,39 @@
         },
 
         {
-            "label": "TMR",
+            "label": "Python Extensions",
             "type": "shell",
-            "command": "python Build/builder.py",
+            "command": "python setup.py build --debug install",
+            "options": {
+                "cwd": "${workspaceFolder}/Relief"
+            },
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        },
+
+        {
+            "label": "TMR Local",
+            "type": "shell",
+            "command": "python Build/builder.py --target local",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        },
+
+        {
+            "label": "TMR IIS",
+            "type": "shell",
+            "command": "python Build/builder.py --target IIS --deploy True",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
