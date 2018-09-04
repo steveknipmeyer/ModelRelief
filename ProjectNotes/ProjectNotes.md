@@ -3,7 +3,7 @@
 
 #### Short Term          
     Gaussian Kernel
-        
+        Why does 'python setup.py test' outputs (.pyd, .pdb, .ilk) in base directory?
         Add catch unit tests.
 
     relief.cp36-win_amd64.pyd	relief.cp36-win_amd64.pyd	D:\ModelRelief\devenv\Lib\site-packages\relief-0.1-py3.6-win-amd64.egg\relief.cp36-win_amd64.pyd	N/A	Yes	Symbols loaded.	D:\ModelRelief\devenv\Lib\site-packages\relief-0.1-py3.6-win-amd64.egg\relief.pdb	110		9/2/2018 8:45 AM	00007FFBD9A40000-00007FFBD9AF9000	[27132] python.exe		
