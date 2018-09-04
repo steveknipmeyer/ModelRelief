@@ -16,3 +16,18 @@ set(SOURCES
 # generate Python module
 add_subdirectory(lib/pybind11)
 pybind11_add_module(relief ${SOURCES} "${SOURCE_DIR}/Bindings.cpp")
+
+SET(TEST_DIR "tests/c++")
+SET(TESTS ${SOURCES}
+    "${TEST_DIR}/main.cpp"
+    "${TEST_DIR}/GaussianKernelTests.cpp")
+
+# generate unit test executable
+include_directories(../devenv/include)
+link_directories(../devenv/libs)
+
+include_directories()
+include_directories(lib/pybind11/include)
+include_directories(lib/Catch2/single_include/catch2)
+
+add_executable("${PROJECT_NAME}UnitTests" ${TESTS})

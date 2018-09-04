@@ -248,7 +248,7 @@ class Solver:
         factor = target_height / current_height
         self.results.mesh_transformed = self.results.mesh_transformed * factor
 
-        self.results.mesh_transformed = relief.fill(self.results.mesh_transformed, 1.0)
+        #self.results.mesh_transformed = relief.fill(self.results.mesh_transformed, 1.0)
 
     def write_mesh(self):
         """

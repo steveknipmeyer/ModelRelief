@@ -42,8 +42,13 @@ class CMakeBuild(build_ext):
         cmake_args = ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
                       '-DPYTHON_EXECUTABLE=' + sys.executable]
 
-        cfg = 'Release' if (os.environ.get("ASPNETCORE_ENVIRONMENT") == 'Production') else 'Debug'
+        cfg = 'Debug' if self.debug else 'Release'
+
+        print()
+        print (f"self.build_temp = {self.build_temp}")
         print (f"Building configuration : {cfg}")
+        print()
+
         build_args = ['--config', cfg]
 
         if platform.system() == "Windows":

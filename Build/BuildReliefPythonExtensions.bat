@@ -10,10 +10,12 @@ goto InvalidArgs
 
 :Development
 set EnvironmentName=devenv
+set BuildOptions="--debug"
 goto BuildExtensions
 
 :Production
 set EnvironmentName=mrenv
+set BuildOptions=
 goto BuildExtensions
 
 :: ------------------ Build Extensions ---------------------------::
@@ -25,7 +27,7 @@ cd %MRSolution%
 if %EnvironmentName% == mrenv call activate Publish\mrenv
 
 cd Relief 
-python setup.py build --debug install
+python setup.py build %BuildOptions% install
 
 :: restore Development Python environement
 if %EnvironmentName% == mrenv call activate ..\devenv
@@ -41,4 +43,4 @@ goto exit
 :exit
 cd %MRSolution%
 set EnvironmentName=
-
+set BuildOptions=

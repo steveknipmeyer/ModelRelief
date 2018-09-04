@@ -177,6 +177,12 @@
     <ClCompile Include="src\ModelRelief.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="tests\c++\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\c++\GaussianKernelTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\pybind11\include\pybind11\attr.h">
@@ -303,6 +309,8 @@
     <None Include="lib\.gitignore" />
     <None Include="tests\__init__.py" />
     <None Include="tests\relief_test.py" />
+    <None Include="tests\python\__init__.py" />
+    <None Include="tests\python\relief_test.py" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />

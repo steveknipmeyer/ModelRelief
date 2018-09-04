@@ -64,7 +64,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
-    <NMakeIncludeSearchPath>$(SolutionDir)devenv\include;$(ProjectDir)lib\pybind11\include</NMakeIncludeSearchPath>
+    <NMakeIncludeSearchPath>$(ProjectDir)src;$(SolutionDir)devenv\include;$(ProjectDir)lib\Catch2\include;$(ProjectDir)lib\pybind11\include</NMakeIncludeSearchPath>
     <NMakeBuildCommandLine>python setup.py build --debug install</NMakeBuildCommandLine>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -127,6 +127,8 @@
     <ClCompile Include="src\GaussianFilter.cpp" />
     <ClCompile Include="src\GaussianKernel.cpp" />
     <ClCompile Include="src\ModelRelief.cpp" />
+    <ClCompile Include="tests\c++\GaussianKernelTests.cpp" />
+    <ClCompile Include="tests\c++\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\pybind11\include\pybind11\attr.h" />
@@ -173,6 +175,8 @@
     <None Include="build\temp.win-amd64-3.6\release\cmakefiles\feature_tests.bin" />
     <None Include="lib\.gitignore" />
     <None Include="setup.py" />
+    <None Include="tests\python\relief_test.py" />
+    <None Include="tests\python\__init__.py" />
     <None Include="tests\relief_test.py" />
     <None Include="tests\__init__.py" />
   </ItemGroup>

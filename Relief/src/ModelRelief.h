@@ -22,11 +22,8 @@ using NPDoubleArray = py::array_t<double>;
 //-------------------------------------------------------------------------------------------------//
 //                                      Declarations                                               //
 //-------------------------------------------------------------------------------------------------//
-int add(int i, int j);
-int subtract(int i, int j);
-
 NPDoubleArray add_arrays(NPDoubleArray input1, NPDoubleArray input2);
 NPDoubleArray fill(NPDoubleArray& input, double value);
 
-void kernelTest();
+int kernelTest();
 }

@@ -106,14 +106,16 @@
         //  "program": "${workspaceRoot}/Solver/solver.py",
         //  "program": "${workspaceRoot}/Tools/testrunner.py",
 
-            "program": "${workspaceRoot}/ReliefTest/relieftest.py",
+            "program": "${workspaceRoot}/Relief/setup.py",
+        //  "program": "${workspaceRoot}/ReliefTest/relieftest.py",
         //  "program": "${workspaceRoot}/Solver/Experiments/pybind11test.py",
         //  "program": "${workspaceRoot}/Solver/Experiments/workbench.py",
         //  "program": "${workspaceRoot}/Solver/Experiments/mayavitest.py",
             
         //  "args":["--target", "IIS", "--deploy", "False"]
         //  "args":["--s", "../Solver/Test/House.json", "--w", "../Solver/Test/Working"]
-            "args":[]
+        //  "args":[]
+            "args":["build", "install"]
         },
 
         {

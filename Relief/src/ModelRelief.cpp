@@ -76,9 +76,10 @@ NPDoubleArray fill(NPDoubleArray& input, double value)
  * @brief Gausian filter tests.
  * 
  */
-void kernelTest()
+int kernelTest()
 {
     GaussianKernel kernel(1.0);
     kernel.Display();
+    return 1;
 }
 }
