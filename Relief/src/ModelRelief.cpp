@@ -104,5 +104,8 @@ void kernel()
 {
     GaussianKernel kernel(1.0);
     kernel.Display();
+
+    kernel.Normalize();
+    kernel.Display();
 }
 }

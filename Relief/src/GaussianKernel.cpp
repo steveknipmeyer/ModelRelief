@@ -17,6 +17,9 @@
 using namespace std;
 
 namespace ModelRelief {
+//-------------------------------------------------------------------------------------------------//
+//                                      Public                                                     //
+//-------------------------------------------------------------------------------------------------//
 
 /**
  * @brief Construct a new Gaussian Kernel object
@@ -39,28 +42,29 @@ GaussianKernel::~GaussianKernel()
 }
 
 /**
- * @brief Calculte the default Gaussian kernel.
- * 
+ * @brief Calculate the default Gaussian kernel.
+ *
  */
 void GaussianKernel::CalculateDefault()
 {
-    int rowBound    = (m_rows - 1) / 2;
-    int columnBound = (m_columns - 1) / 2;
-    for (int iRow = 0; iRow < m_rows; iRow++)
-    {
-        int y = rowBound - iRow;
-        for (int iColumn = 0; iColumn < m_columns; iColumn++)
-        {
-            int x = iColumn - columnBound;
-            double exponent = (pow(x, 2.0) + pow(y, 2.0)) / (2 * pow(m_sigma, 2.0));
-            m_kernel[iRow][iColumn] = exp(-exponent);
-        }
-    }
+    Iterate(&GaussianKernel::Gaussian, nullptr);
 }
 
 /**
- * @brief Display the kernel.
- * 
+ * @brief Normalize the kernel.
+ *
+ */
+void GaussianKernel::Normalize()
+{
+    double sum = 0.0;
+    Iterate(&GaussianKernel::Sum, &sum);
+
+    Iterate(&GaussianKernel::NormalizeElement, &sum);
+}
+
+/**
+ * @brief Debug print the kernel.
+ *
  */
 void GaussianKernel::Display()
 {
@@ -69,13 +73,61 @@ void GaussianKernel::Display()
     std::cout << std::setprecision(precision);
     std::cout << endl;
 
-    for (int iRow = 0; iRow < m_rows; iRow++)
+    for (int iRow = 0; iRow < s_rows; iRow++)
     {
-        for (int iColumn = 0; iColumn < m_columns; iColumn++)
+        for (int iColumn = 0; iColumn < s_columns; iColumn++)
         {
             std::cout << setw(width) << m_kernel[iRow][iColumn];
         }
         std::cout << endl;
     }
+}
+
+//-------------------------------------------------------------------------------------------------//
+//                                      Private                                                    //
+//-------------------------------------------------------------------------------------------------//
+
+/**
+ * @brief Iterate the kernel and apply a user callback.
+ *
+ */
+void GaussianKernel::Iterate(KernelCallback callback, void* pArguments)
+{
+    for (int x = -s_xLimit; x <= s_xLimit; x++)
+        for (int y = -s_yLimit; y <= s_yLimit; y++)
+            std::invoke(callback, *this, x, y, pArguments);
+}
+
+/**
+ * @brief Sum the elements of the kernel.
+ *
+ * @param pArguments Accumulator for sum of all kernel element values.
+ */
+void GaussianKernel::Sum(int x, int y, void* pArguments)
+{
+    double* sum = (double*) pArguments;
+    *sum += m_kernel[s_yLimit - y][s_xLimit + x];
+}
+
+/**
+ * @brief Normalize an element of the kernel.
+ *
+ * @param pArguments Sum of all kernel values.
+ */
+void GaussianKernel::NormalizeElement(int x, int y, void* pArguments)
+{
+    double* sum = (double*)pArguments;
+    m_kernel[s_yLimit - y][s_xLimit + x] /= *sum;
+}
+
+/**
+ * @brief Calculate Gaussian.
+ *
+ */
+void GaussianKernel::Gaussian(int x, int y, void* pArguments)
+{
+    double exponent = ((x * x) + (y * y)) / (2 * (m_sigma * m_sigma));
+    double value = exp(-exponent);
+    m_kernel[s_yLimit - y][s_xLimit + x] = value;
 }
 }

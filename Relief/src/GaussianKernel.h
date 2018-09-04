@@ -14,25 +14,42 @@
 
 namespace ModelRelief {
 
+//-------------------------------------------------------------------------------------------------//
+//                                      Forward Declarations                                       //
+//-------------------------------------------------------------------------------------------------//
+class GaussianKernel;
+
+//-------------------------------------------------------------------------------------------------//
+//                                      Types                                                      //
+//-------------------------------------------------------------------------------------------------//
+using KernelCallback = auto (GaussianKernel::*) (int x, int y, void* pArguments) -> void;
+
 /**
  * @brief Class implementing an image processing kernel for Gaussian filters.
  * 
  */
-struct GaussianKernel {
+class GaussianKernel {
     private:
         static const int kernelSize = 5;
-        static const int m_rows     = kernelSize ;              // kernel rows
-        static const int m_columns = kernelSize;                // kernel columns
+        static const int s_rows    = kernelSize ;               // kernel rows
+        static const int s_columns = kernelSize;                // kernel columns
+        static const int s_xLimit  = (s_columns - 1) / 2;       // x bound    
+        static const int s_yLimit  = (s_rows - 1) / 2;          // y bound
 
         double m_sigma;                                         // variance
-        double m_kernel[m_rows][m_columns];                     // default (unmasked) kernel
+        double m_kernel[s_rows][s_columns];                     // default (unmasked) kernel
+
+        void Iterate(KernelCallback callback, void* pArguments);
+        void Gaussian(int x, int y, void* pArguments);
+        void Sum(int x, int y, void* pArguments);
+        void GaussianKernel::NormalizeElement(int x, int y, void* pArguments);
 
     public:
-
         GaussianKernel(double sigma);
         ~GaussianKernel(); 
 
         void CalculateDefault();
+        void Normalize();
         void Display();
 };
 }
