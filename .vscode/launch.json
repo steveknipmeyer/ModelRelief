@@ -91,11 +91,12 @@
             "request": "launch",
             "stopOnEntry": false,
             "console": "integratedTerminal",
-            "cwd": "${workspaceRoot}",
-                "debugOptions": [
-                    "DebugStdLib",
-                    "RedirectOutput",
-                ],
+            "cwd": "${workspaceRoot}/Relief",
+//          "cwd": "${workspaceRoot}",
+            "debugOptions": [
+                "DebugStdLib",
+                "RedirectOutput",
+            ],
             "env": {
                 "name": "value"
             },

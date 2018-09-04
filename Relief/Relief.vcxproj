@@ -64,7 +64,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
-    <NMakeIncludeSearchPath>$(ProjectDir)src;$(SolutionDir)devenv\include;$(ProjectDir)lib\Catch2\include;$(ProjectDir)lib\pybind11\include</NMakeIncludeSearchPath>
+    <NMakeIncludeSearchPath>$(ProjectDir)src;$(SolutionDir)devenv\include;D:\ModelRelief\Relief\lib\Catch2\single_include\catch2;$(ProjectDir)lib\pybind11\include</NMakeIncludeSearchPath>
     <NMakeBuildCommandLine>python setup.py build --debug install</NMakeBuildCommandLine>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

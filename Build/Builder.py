@@ -16,7 +16,6 @@ import argparse
 import ast
 import os
 import shutil
-import subprocess
 import sys
 from enum import Enum
 
@@ -72,17 +71,6 @@ class Builder:
         self.settings_production_docker = "appsettings.ProductionDocker.json"
         self.settings_production_iis = "appsettings.ProductionIIS.json"
         self.web_config = "web.config"
-
-    def exec (self, command_line:str)-> int:
-        """
-        Execute a shell tool.
-        Parameters
-        ----------
-        command_line
-            The command line to execute.
-        """
-        status:subprocess.CompletedProcess = subprocess.run (command_line, shell=True)
-        return status.returncode
 
     def delete_folder (self, folder: str, confirm=False)->None:
         """
@@ -146,27 +134,27 @@ class Builder:
         # gulp (wwwroot)
         self.logger.logInformation("\nBuilding wwwroot", Colors.BrightMagenta)
         os.chdir(self.solution_path)
-        self.exec("gulp.cmd")
+        Tools.exec("gulp.cmd")
 
         # TypeScript
         self.logger.logInformation("\nTypeScript compilation", Colors.BrightMagenta)
         os.chdir(self.solution_path)
-        self.exec("tsc -p {}".format(self.modelrelief_path))       
+        Tools.exec("tsc -p {}".format(self.modelrelief_path))       
 
         # minification
         self.logger.logInformation("\nMinifying JavaScript", Colors.BrightMagenta)
         os.chdir(self.solution_path)
-        self.exec("gulp.cmd compressJS")
+        Tools.exec("gulp.cmd compressJS")
 
         # Explorer UI
         self.logger.logInformation("\nExplorer UI", Colors.BrightMagenta)
         os.chdir(self.solution_path)
-        self.exec(os.path.join(self.build_folder, self.build_explorer))
+        Tools.exec(os.path.join(self.build_folder, self.build_explorer))
 
         # ASP.NET Core build
         self.logger.logInformation("\nASP.NET Core compilation", Colors.BrightMagenta)
         os.chdir(self.modelrelief_path)
-        self.exec("dotnet build")
+        Tools.exec("dotnet build")
 
         # Python virtual environment
         if self.arguments.python:
@@ -174,7 +162,7 @@ class Builder:
                 self.logger.logInformation("\nPython virtual environment", Colors.BrightMagenta)
                 os.makedirs(self.publish_path)                
                 os.chdir(self.publish_path)
-                self.exec("BuildPythonEnvironment Production")        
+                Tools.exec("BuildPythonEnvironment Production")        
             else:                
                 self.logger.logInformation("\nPlease see Build\\DevelopmentPythonInstallation.txt to create the development Python environment.", Colors.Cyan)
 
@@ -182,13 +170,13 @@ class Builder:
         self.logger.logInformation("\nPython C++ extensions", Colors.BrightMagenta)
         environment = RuntimeEnvironment.production.value if self.publish else RuntimeEnvironment.development.value
         os.chdir(self.solution_path)
-        self.exec(f"BuildReliefPythonExtensions {environment}")        
+        Tools.exec(f"BuildReliefPythonExtensions {environment}")        
 
         # database initialization and user store
         if self.arguments.initialize:
             self.logger.logInformation("\nInitialize database and user store", Colors.BrightMagenta)
             os.chdir(self.modelrelief_path)
-            self.exec("dotnet run --no-launch-profile")
+            Tools.exec("dotnet run --no-launch-profile")
 
         self.logger.logInformation("\n</Build>", Colors.BrightYellow)
 
@@ -202,7 +190,7 @@ class Builder:
         # ASP.NET Core Publish
         self.logger.logInformation("\nASP.NET Core Publish", Colors.BrightMagenta)
         os.chdir(self.modelrelief_path)
-        self.exec("dotnet publish -c Release -o {}".format(self.publish_path))
+        Tools.exec("dotnet publish -c Release -o {}".format(self.publish_path))
         self.logger.logInformation("\nUpdating web.config", Colors.Cyan)
         Tools.copy_file(os.path.join(self.solution_path, self.web_config), os.path.join(self.publish_path, self.web_config))
 
@@ -265,10 +253,10 @@ class Builder:
             self.logger.logInformation("Docker ModelRelief image", Colors.Cyan)
             os.chdir(self.solution_path)
             port = os.environ[EnvironmentNames.MRPort]
-            self.exec(f"docker build -t modelrelief --build-arg MRPORT={port} -f Build\\DockerFile.modelrelief  .")        
+            Tools.exec(f"docker build -t modelrelief --build-arg MRPORT={port} -f Build\\DockerFile.modelrelief  .")        
 
             self.logger.logInformation("\nDocker ModelRelief Database image", Colors.Cyan)
-            self.exec(f"docker build -t modelreliefdatabase -f Build\\DockerFile.modelreliefdatabase  .")        
+            Tools.exec(f"docker build -t modelreliefdatabase -f Build\\DockerFile.modelreliefdatabase  .")        
 
         self.logger.logInformation("\n</Publish>", Colors.BrightYellow)
 

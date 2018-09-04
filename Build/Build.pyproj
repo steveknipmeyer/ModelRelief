@@ -6,7 +6,7 @@
     <ProjectGuid>{fc1bffc5-8eee-47db-ad84-5660b439cdac}</ProjectGuid>
     <ProjectHome />
     <StartupFile>Builder.py</StartupFile>
-    <SearchPath />
+    <SearchPath>..\Solver;..\Tools</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>

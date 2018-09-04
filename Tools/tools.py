@@ -13,11 +13,12 @@
 """
 
 import os
+import subprocess
 import sys
 import string
 import random
 
-from typing import Any, Callable, Dict, Optional, Set
+from typing import Any, Callable, Dict, List, Optional, Set
 
 # N.B. copytree requires the target directory be empty. It always creates the target.
 # copy_tree works with an existing directory.
@@ -137,10 +138,17 @@ class Tools:
         """
         Copy a single folder. Not recursive.
         """ 
-
         print ("%s -> %s" % (source_folder, destination_folder))
         copy_tree(source_folder, destination_folder)
-
+    
+    @staticmethod
+    def delete_files(files: List[str])->None:
+        """ Deletes a list of files. Checks for existence.
+        """
+        for file in files:
+            if os.path.isfile(file):
+                os.remove(file)
+    
     def recurse_folder(self, folder: str, excluded_folders: Set[str], process_file: Callable[[str], None])->None:
         """
         Recurse a folder and process each file.
@@ -200,3 +208,15 @@ class Tools:
         https://stackoverflow.com/questions/2257441/random-string-generation-with-upper-case-letters-and-digits-in-python
         """
         return ''.join(random.choice(chars) for _ in range(size))
+
+    @staticmethod
+    def exec (command_line:str)-> int:
+        """
+        Execute a shell tool.
+        Parameters
+        ----------
+        command_line
+            The command line to execute.
+        """
+        status:subprocess.CompletedProcess = subprocess.run (command_line, shell=True)
+        return status.returncode
