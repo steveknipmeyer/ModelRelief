@@ -301,6 +301,8 @@
     <None Include="setup.py" />
     <None Include=".gitignore" />
     <None Include="lib\.gitignore" />
+    <None Include="tests\__init__.py" />
+    <None Include="tests\relief_test.py" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />

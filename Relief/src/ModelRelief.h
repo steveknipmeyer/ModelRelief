@@ -28,5 +28,5 @@ int subtract(int i, int j);
 NPDoubleArray add_arrays(NPDoubleArray input1, NPDoubleArray input2);
 NPDoubleArray fill(NPDoubleArray& input, double value);
 
-void kernel();
+void kernelTest();
 }

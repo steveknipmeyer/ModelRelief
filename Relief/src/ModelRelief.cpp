@@ -14,29 +14,6 @@
 namespace py = pybind11;
 
 namespace ModelRelief {
-/**
- * @brief Add two numbers.
- * 
- * @param i First term.
- * @param j Second term.
- * @return int 
- */
-int add(int i, int j)
-{
-    return i + j + 1000; 
-}
-
-/**
- * @brief Subtract two numbers.
- * 
- * @param i First term.
- * @param j Second term.
- * @return int 
- */
-int subtract(int i, int j)
-{
-    return i - j;
-}
 
 /**
  * @brief Add two NumPy arrays.
@@ -79,7 +56,6 @@ NPDoubleArray add_arrays(NPDoubleArray input1, NPDoubleArray input2)
  */
 NPDoubleArray fill(NPDoubleArray& input, double value)
 {
-    
     // obtain buffer
     py::buffer_info buffer = input.request();
 
@@ -100,12 +76,9 @@ NPDoubleArray fill(NPDoubleArray& input, double value)
  * @brief Gausian filter tests.
  * 
  */
-void kernel()
+void kernelTest()
 {
     GaussianKernel kernel(1.0);
-    kernel.Display();
-
-    kernel.Normalize();
     kernel.Display();
 }
 }

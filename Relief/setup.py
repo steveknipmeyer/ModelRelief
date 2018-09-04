@@ -83,5 +83,7 @@ setup(
     # add custom build_ext command
     cmdclass=dict(build_ext=CMakeBuild),
 
+    test_suite = 'tests',
+
     zip_safe=False,
 )

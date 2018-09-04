@@ -173,6 +173,8 @@
     <None Include="build\temp.win-amd64-3.6\release\cmakefiles\feature_tests.bin" />
     <None Include="lib\.gitignore" />
     <None Include="setup.py" />
+    <None Include="tests\relief_test.py" />
+    <None Include="tests\__init__.py" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />

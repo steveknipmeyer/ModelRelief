@@ -31,6 +31,7 @@ GaussianKernel::GaussianKernel(double sigma)
     m_sigma = sigma;
 
     CalculateDefault();
+    Normalize();
 }
 
 /**
@@ -39,6 +40,17 @@ GaussianKernel::GaussianKernel(double sigma)
  */
 GaussianKernel::~GaussianKernel() 
 {       
+}
+
+/**
+ * @brief Returns a kernel element.
+ *
+ * @param x X (relative to kernel origin).
+ * @param y Y (relative to kernel origin).
+ */
+double& GaussianKernel::Element (int x, int y)
+{
+    return m_kernel[s_yLimit - y][s_xLimit + x];
 }
 
 /**
@@ -86,7 +98,6 @@ void GaussianKernel::Display()
 //-------------------------------------------------------------------------------------------------//
 //                                      Private                                                    //
 //-------------------------------------------------------------------------------------------------//
-
 /**
  * @brief Iterate the kernel and apply a user callback.
  *

@@ -48,6 +48,8 @@ class GaussianKernel {
         GaussianKernel(double sigma);
         ~GaussianKernel(); 
 
+        double& Element(int x, int y);
+
         void CalculateDefault();
         void Normalize();
         void Display();

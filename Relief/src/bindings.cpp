@@ -8,7 +8,9 @@
 #pragma once
 
 #include <pybind11/pybind11.h>
+
 #include "ModelRelief.h"
+#include "GaussianKernel.h"
 
 namespace py = pybind11;
 namespace ModelRelief{
@@ -16,15 +18,16 @@ PYBIND11_MODULE(relief, m)
 {
     m.doc() = "ModelRelief image processing extensions";
 
-    // add: default values
-    m.def("add", &add, "A function which adds two numbers", py::arg("i") = 1, py::arg("j") = 5);
-    
-    // subtract : no default values
-    m.def("subtract", &subtract, "A function which subtracts two numbers");
-
     m.def("add_arrays", &add_arrays, "Add two NumPy arrays");
     m.def("fill", &fill, "Fill a NumPy array with a value");
 
-    m.def("kernel", &kernel, "Gaussian filter tests");
+    m.def("kernelTest", &kernelTest, "Gaussian kernelt tests");
+
+    py::class_<GaussianKernel>(m, "GaussianKernel")
+        .def(py::init<double>())
+        .def("Element", &GaussianKernel::Element)
+        .def("CalculateDefault", &GaussianKernel::CalculateDefault)
+        .def("Normalize", &GaussianKernel::Normalize)
+        .def("Display", &GaussianKernel::Display);
 }
 }
