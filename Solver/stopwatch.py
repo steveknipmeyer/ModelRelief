@@ -92,6 +92,7 @@ def benchmark(tag_name: str = None):
     """ A decorator for timing.
     https://gist.github.com/Zearin/2f40b7b9cfc51132851a
     https://stackoverflow.com/questions/30904486/python-wrapper-function-taking-arguments-inside-decorator       
+    https://stackoverflow.com/questions/308999/what-does-functools-wraps-do    
     Parameters
     ----------
     tag_name

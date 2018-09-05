@@ -22,6 +22,41 @@ from logger import Logger
 from stopwatch import benchmark
 from tools import Colors, Tools
 
+class ReliefTestResult(unittest.TextTestResult):
+    """ 
+    Custom test result to suppress standard error reporting.
+    https://stackoverflow.com/questions/8518043/turn-some-print-off-in-python-unittest
+    """
+    def addSuccess(self, test):
+        unittest.TestResult.addSuccess(self, test)
+
+    def addError(self, test, err):
+        unittest.TestResult.addError(self, test, err)
+
+    def addFailure(self, test, err):
+        unittest.TestResult.addFailure(self, test, err)
+
+    def printErrors(self):
+        if self.dots or self.showAll:
+            self.stream.writeln()
+        self.printErrorList('ERROR', self.errors)
+        self.printErrorList('FAIL', self.failures)
+
+    def printErrorList(self, flavour, errors):
+        if not errors:
+            return
+        self.stream.writeln(self.separator1)
+        for test, _ in errors:
+            self.stream.writeln(f"{Colors.BrightRed}{flavour}: {self.getDescription(test)}{Colors.Reset}\n\n")
+
+class ReliefTestRunner(unittest.TextTestRunner):
+    """ 
+    Custom test runner to suppress standard error reporting.
+    https://stackoverflow.com/questions/8518043/turn-some-print-off-in-python-unittest
+    """
+    def _makeResult(self):
+        return ReliefTestResult(self.stream, self.descriptions, self.verbosity)
+
 def display_tag(tag_name: str = None, color: str = Colors.BrightCyan):
     """ A decorator for displaying the active test name.
     N.B. These arguments are available to the wrapped method through closure.
@@ -114,7 +149,7 @@ class ReliefTest(unittest.TestCase):
         root = os.path.dirname(os.path.realpath(__file__))
         executable = os.path.join(root, '..', 'bin', 'reliefUnitTests.exe')
         status = Tools.exec(executable)
-        self.assertEqual(status, 1)
+        self.assertEqual(status, 0)
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(testRunner=ReliefTestRunner())
