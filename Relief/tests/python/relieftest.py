@@ -133,7 +133,7 @@ class ReliefTest(unittest.TestCase):
         a = np.zeros((512, 512))
         value = 1.0
         filled = relief.fill(a, value)
-        self.assertEqual(filled[256, 256], 0)
+        self.assertEqual(filled[256, 256], 1)
 
     @display_tag('\nGaussianKernel', Colors.BrightMagenta)
     @display_tag()
