@@ -311,6 +311,7 @@
     <None Include="tests\relief_test.py" />
     <None Include="tests\python\__init__.py" />
     <None Include="tests\python\relief_test.py" />
+    <None Include="tests\python\relieftest.py" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />

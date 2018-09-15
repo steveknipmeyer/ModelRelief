@@ -10,6 +10,7 @@
 #include <pybind11/pybind11.h>
 
 #include "ModelRelief.h"
+#include "GaussianFilter.h"
 #include "GaussianKernel.h"
 
 namespace py = pybind11;
@@ -21,7 +22,10 @@ PYBIND11_MODULE(relief, m)
     m.def("add_arrays", &add_arrays, "Add two NumPy arrays");
     m.def("fill", &fill, "Fill a NumPy array with a value");
 
-    m.def("kernelTest", &kernelTest, "Gaussian kernelt tests");
+    m.def("kernelTest", &kernelTest, "Gaussian kernel tests");
+
+    py::class_<GaussianFilter>(m, "GaussianFilter")
+        .def(py::init<NPDoubleArray&, NPDoubleArray&, double>());
 
     py::class_<GaussianKernel>(m, "GaussianKernel")
         .def(py::init<double>())

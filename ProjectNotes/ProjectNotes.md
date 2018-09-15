@@ -1,30 +1,38 @@
 ﻿### Tasks
 #### Commit Notes
 
-#### Short Term          
-   
+#### Short Term
+    Should the Python image masks be integers or booleans (instead of doubles)?
+
+    Gaussian Filter
+        The filter must iterate (by row) each image element and calculate the Gaussian value.
+
     Gaussian Kernel
-        Review type annotations in new code.
+        The standard kernel should be created one time.
+        For each image pixel the kernel must be masked, setting to zero the excluded elements.
+            After masking, the kernel can be normalized.
+
+    Review type annotations in new Python code.
 
     Move to .NET Core 2.1
-        C:\Program Files\dotnet\sdk\2.1.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.ObsoleteReferences.targets(33,5): warning NETSDK1059: The tool 'Microsoft.EntityFrameworkCore.Tools.DotNet' is now included in the .NET Core SDK. 
+        C:\Program Files\dotnet\sdk\2.1.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.ObsoleteReferences.targets(33,5): warning NETSDK1059: The tool 'Microsoft.EntityFrameworkCore.Tools.DotNet' is now included in the .NET Core SDK.
         Information on resolving this warning is available at (https://aka.ms/dotnetclitools-in-box). [D:\ModelRelief\ModelRelief\ModelRelief.csproj]
 
-        Why are there different versions of vc and vs2015_runtime between devenv and mrenv?            
+        Why are there different versions of vc and vs2015_runtime between devenv and mrenv?
             devenv
                 vc                        14.1                 h0510ff6_3
-                vs2015_runtime            15.5.2                        3            
-            mrenv                
+                vs2015_runtime            15.5.2                        3
+            mrenv
                 vc                        14                            0    conda-forge
                 vs2015_runtime            14.0.25420                    0    conda-forge
 
-    N.B. The Gaussian blur used in Kerber's paper ignores pixels that have been masked. 
+    N.B. The Gaussian blur used in Kerber's paper ignores pixels that have been masked.
     The implementation here does include them. It seems a custom kernel (ndimage "generic filter") may be required that takes into consideration the overall mask.
     https://www.geeksforgeeks.org/gaussian-filter-generation-c/
     https://dsp.stackexchange.com/questions/10057/gaussian-blur-standard-deviation-radius-and-kernel-size
     https://www.codewithc.com/gaussian-filter-generation-in-c/
     https://stackoverflow.com/questions/8204645/implementing-gaussian-blur-how-to-calculate-convolution-matrix-kernel
-    
+
     Technical Review
         Review the Blender implementation.
             What were the pre-processing steps that were done to prepare the data for the Poisson solver?
@@ -34,16 +42,16 @@
 
     Lambda
         Install CMake VSCode extensions.
-        
-    Runtime Settings   
+
+    Runtime Settings
         https://medium.freecodecamp.org/environment-settings-in-javascript-apps-c5f9744282b6
         minifiedExtension
         loggingEnabled
-   
+
     Performance
         The transfer of models is inefficent because they are Base64 encoded.
 
-    Builder      
+    Builder
         IIS publish updates the user store but not the database which must be attached manually.
         Add a model list to control which models are added.
 
@@ -51,11 +59,11 @@
         "Refactoring library rope is not installed. Install?"
 
     Order a SQLServer book.
- 
+
     Register for A2 hosting.
 
     Review ModelRelief.csproj.
-   
+
     Investigate workspaces in VSCode.
         Why is the second workspace unnamed?
 
@@ -68,7 +76,7 @@
         Cubes
         Architectural
 
-    Solver           
+    Solver
         Meshes are not oriented correctly in Mayavi Isometric views.
 
         How can the mayavi log be viewed?
@@ -77,9 +85,9 @@
 
     3D Surface Visualization
         https://jakevdp.github.io/PythonDataScienceHandbook/04.12-three-dimensional-plotting.html
-        
+
     Update database schema diagram.
-    
+
 ###### StandardView
 When the view camera is interactively changed, it should invalidate the StandardView in the UI.
     Mesh view opens with the UI set to StandardCamera.Front but the view is Top.
@@ -92,25 +100,25 @@ When the view camera is interactively changed, it should invalidate the Standard
 
 #####  Ubuntu
     Ignore line endings in git source.
-    %TEMP% is not defined so the log file is created as %TEMP%\Logs\ModelRelief.log.  
-    Shift-End does not work in the editor to select from the cursor position to EOL.  
-    tsc command line  
-        Does the compiler need to be symbolically linked to a bin folder (e.g. usr/bin)  
-    SQLite  
-        The version is 2.87 on Ubuntu and 5.0 on Windows.  
-    The (PowerShell?) language service could not be started.  
-    Python 3.X  
-    ModelReliefShell.sh  
-        set ASPNETCORE_URLS=http://localhost:60655/  
-    How should the appsettings.json files define the directory separator. Forward slash does not work with SQLServer.  
-        Does forward slash work with SQLite on Windows?  
+    %TEMP% is not defined so the log file is created as %TEMP%\Logs\ModelRelief.log.
+    Shift-End does not work in the editor to select from the cursor position to EOL.
+    tsc command line
+        Does the compiler need to be symbolically linked to a bin folder (e.g. usr/bin)
+    SQLite
+        The version is 2.87 on Ubuntu and 5.0 on Windows.
+    The (PowerShell?) language service could not be started.
+    Python 3.X
+    ModelReliefShell.sh
+        set ASPNETCORE_URLS=http://localhost:60655/
+    How should the appsettings.json files define the directory separator. Forward slash does not work with SQLServer.
+        Does forward slash work with SQLite on Windows?
     Install a SQLite administration tool.
 
 
 
 #### Front End
 <span style="color:red">
-    The 'dotnet run' workflow runs as 'Production'!  
+    The 'dotnet run' workflow runs as 'Production'!
 </span><br><br>
 
 ##### FE UI
@@ -123,7 +131,7 @@ How does EF and AutoMapper handle object graphs (with populated navigation prope
 What controls are (ultimately) present in Composer?
  - Model: models/?project=id
  - Mesh: meshes/?projectId=activeProjectId & model3dId=activeModel3dId
- - 
+ -
 Namimg
     FE uses depthbuffers while API uses depth-buffers.
 
@@ -137,7 +145,7 @@ Namimg
 
     MeshTransform
         Height : Should this be a calculated property?
-            Height = Width * (DepthBuffer aspect ratio)?  
+            Height = Width * (DepthBuffer aspect ratio)?
         Depth : What is the relationship of this property to LambdaLinearScaling?
 
 ##### Camera Issues
@@ -160,14 +168,14 @@ Namimg
 - [X ] Add the new properties to the DTO interfaces, eg. IDepthBuffer.
 - [X] Add the new properties to the DTO classes, eg. Dto.DepthBuffer.
 - [X] Razor Pages
-- [X] Include the new (required) properties in any POST requests. 
+- [X] Include the new (required) properties in any POST requests.
 - [X] Extend the Composer UI to include the new properties.
 - [X] Modify the graphics class methods fromDto and toDto.
 
 #### Back End
 
 ##### Domain Models
-- [x] Add new properties to the class in the Domain folder.   
+- [x] Add new properties to the class in the Domain folder.
 
 ##### DTO Models (Features\\\<Models>)
 - [x] Add new properties to the class.
@@ -179,7 +187,7 @@ Namimg
 ##### Database
 - [x] Delete the auto-generated classes from the Migrations folder.
 - [x] Create the initial migration: **dotnet ef migrations add InitialCreate**
-- [x] Add // \<auto-generated /\> to auto-generated files as necessary. 
+- [x] Add // \<auto-generated /\> to auto-generated files as necessary.
 
 ##### Explorer (MeshTransform only)
 - [x] Add the new MeshTransform properties to the UI.
@@ -218,20 +226,20 @@ The FE DTO interfaces are used to facilitate construction of DTO models from HTT
 
 **DTO**
 ```javascript
-export interface IModel 
+export interface IModel
 export interface IFileModel extends IModel
 export interface IGeneratedFileModel extends IFileModel
 
 export interface ICamera extends IModel
-export interface IDepthBuffer extends IGeneratedFileModel 
-export interface IMesh extends extends IGeneratedFileModel 
+export interface IDepthBuffer extends IGeneratedFileModel
+export interface IMesh extends extends IGeneratedFileModel
 export interface IMeshTransform extends IModel
 export interface IModel3d extends IFileModel
 export interface IProject extends IModel
 ```
 
 #### Base Classes
-DTO models are in an inheritance chain so they can share common functionality such as API HTTP requests.  
+DTO models are in an inheritance chain so they can share common functionality such as API HTTP requests.
 
 |Graphics||DTO (HTTP)|
 |--|---|---|
@@ -286,7 +294,7 @@ export class Project extends Model<Project> implements IProject
 ___
 ### Back End (NET Core)
 
-#### Interfaces  
+#### Interfaces
 
 |DTO (HTTP)||Domain (DB)|
 |---|---|---|---|---|---|---|
@@ -300,9 +308,9 @@ public interface IModel
 public interface IFileModel : IModel
 public interface IGeneratedFileModel : IFileModel
 ```
-   
-#### Base Classes  
-Domain models are in an inheritance chain so they can share common functionality such as file operations.  
+
+#### Base Classes
+Domain models are in an inheritance chain so they can share common functionality such as file operations.
 <span style="color:red">
 Implementing a hierarchy of DTO models creates potential issues with DataAnnotation attributes sucn as Display(Name).
 </span>
@@ -333,7 +341,7 @@ public abstract class GeneratedFileDomainModel : FileDomainModel
 |Dto.Project|Dto.IModel|||Domain.Project|DomainModel|
 |||||
 
-**DTO**  
+**DTO**
 ModelReliefFeatures
 ```javascript
 public class Camera : IModel
@@ -343,7 +351,7 @@ public class MeshTransform : IModel
 public class Model3d : IFileModel
 public class Project : IModel
 ```
-**Domain**  
+**Domain**
  ModelRelief\Domain
 ```csharp
 public class Camera : DomainModel
@@ -358,7 +366,7 @@ ___
 
 <span style="color:red">
 How are credentials passed with a fetch request?   <br>
-Only Test works because there is special middleware handling which provides authorization.   
+Only Test works because there is special middleware handling which provides authorization.
 </span><br></br>
 
     Investigate Chai unit tests for front-end JavaScript.
@@ -397,7 +405,7 @@ Replace DateTime with a type that has more resolution.
 
 ###### Should FileTimeStamp be exposed?
     Should the assignment of FileSynchronized be deferred until the request has completed?
-    FileStamp could potentially serve as the "complete" flag for a long-running request. 
+    FileStamp could potentially serve as the "complete" flag for a long-running request.
 
 #### Python Build
     https://developer.microsoft.com/en-us/windows/downloads/sdk-archive
@@ -405,30 +413,30 @@ Replace DateTime with a type that has more resolution.
     Python-3.6.6 source
     Change Solution Configuration to Debug x64.
     Change target architecture to Windows SDK 10.0.15063.0.
-    build -p x64 -e            
+    build -p x64 -e
 
 ###### Queues
 ```<language>
-FileRequest places a message in a work queue.  
-    FileIsSynchronized is reset to false.  
+FileRequest places a message in a work queue.
+    FileIsSynchronized is reset to false.
     A status code of 202 is returned to the client who can poll the value of FileIsSynchronized.
         Consider returning an endpoint that can be used for querying the result of the task.
         meshes/id/file/task
 A worker process removes the request from the queue.
-    An external job is dispatched which returns some kind of notification when complete.  
+    An external job is dispatched which returns some kind of notification when complete.
     When the external job completes, the worker process sets FileIsSynchronized = true.
     Question: How does a worker process access the database?
-    
+
 
 ```
 
-https://stackoverflow.com/questions/11779143/how-do-i-run-a-python-script-from-c  
+https://stackoverflow.com/questions/11779143/how-do-i-run-a-python-script-from-c
 https://medium.com/@dpursanov/running-python-script-from-c-and-working-with-the-results-843e68d230e5
 
 https://stackoverflow.com/questions/10788982/is-there-any-async-equivalent-of-process-start
 https://github.com/jamesmanning/RunProcessAsTask
 
-Long-running Requests:   
+Long-running Requests:
 https://stackoverflow.com/questions/33009721/long-running-rest-api-with-queues
 
 ###### Files
@@ -440,7 +448,7 @@ File Formats
 |sfp|Single Precision Floating Point|
 |dfp|Double Prevision Floating Point|
 
-    The name property for FileDomainModels is expected to include the extension.    
+    The name property for FileDomainModels is expected to include the extension.
         API  and Ux validation is needed to ensure that the extension is always present.
             Can it be inferred from the Format?
     How will the Format property be used for Models, DepthBuffers and Meshes?
@@ -453,8 +461,8 @@ File Formats
 ---
 #### Dependency Manager
 
-##### Dependency Handling                    
-**Modified**           
+##### Dependency Handling
+**Modified**
 - [x] For GeneratedFileDomainModel root models, if FileIsSynchronized <changed> to true, schedule a FileOperation.Generation.
 - [x] For FileDomainModel root models, if Name <changed>, schedule a FileOperation.Rename.
 - [x] For all GeneratedFileDomainModel dependents, set FileIsSynchronized = false.
@@ -477,12 +485,12 @@ GeneratedFileDomainModel Dependencies
 
 ```
 ###### DepthBuffers should have an optional dependency on a Model3d.
-    If the Model3d relationship is present, the dependency exists.  
-    Otherwise, the DepthBuffer exists independently, probably due to an explicit upload of a file created in another application.  
+    If the Model3d relationship is present, the dependency exists.
+    Otherwise, the DepthBuffer exists independently, probably due to an explicit upload of a file created in another application.
     The DependencyManager invalidates DependentFiles only if a dependency changed. So, an existing DepthBuffer with (FileSynchronized = true) would not be impacted.
 
 ###### Property Change Handlers
-https://msdn.microsoft.com/magazine/mt694083  
+https://msdn.microsoft.com/magazine/mt694083
 https://msdn.microsoft.com/en-us/magazine/mt767693.aspx
 
 ###### How can properties be excluded (e.g. Attribute) from entity processing?
@@ -498,7 +506,7 @@ https://msdn.microsoft.com/en-us/magazine/mt767693.aspx
     UX Requests
     --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     Browser forms support only GET or POST.
-                                                                                                       
+
     View            Operation               Note            HTTP            Endpoint                                Internal Request        Return
     ---------       ---------               ------------    ------------    ---------------------                   -----------------       -------------------------
     Index           read (collection)                       GET             /api/v1/resource                        GetList                 View; paged collection
@@ -515,16 +523,16 @@ https://msdn.microsoft.com/en-us/magazine/mt767693.aspx
     ---------       ---------               ------------    ------------   ---------------------                    -----------------      -------------------------
     JSON            read (collection)                       GET            /api/v1/resource/id                      GetList                 OK; JSON collection
     JSON            read (single)                           GET            /api/v1/resource/id                      GetSingle               OK; JSON object
-    JSON            create                                  POST           /api/v1/resource                         Post                    Created; new id returned and default metadata       
+    JSON            create                                  POST           /api/v1/resource                         Post                    Created; new id returned and default metadata
     JSON            update (full)                           PUT            /api/v1/resource/id                      Put                     OK; JSON object
     JSON            update (partial)                        PATCH          /api/v1/resource/id                      Patch                   OK; JSON object
     JSON            update (partial)                        PUT            /api/v1/resource/id/patch                Patch                   OK; JSON object
     JSON            delete                                  DELETE         /api/v1/resource/id                      Delete                  OK
 
     binary          read (single)                           GET            /api/v1/resource/id/file                 GetFile                 OK; octet-stream
-    binary          create                  Mesh disallowed POST           /api/v1/resource/id/file                 PostFile                Created; new id returned and default metadata       
+    binary          create                  Mesh disallowed POST           /api/v1/resource/id/file                 PostFile                Created; new id returned and default metadata
     binary          update (full)                           PUT            /api/v1/resource/id/file                 PutFile                 OK
-    binary          update (partial)        no endpoint   
+    binary          update (partial)        no endpoint
     binary          delete                                  DELETE         /api/v1/resource/id/File                 DeleteFile              OK
 
 Add authentication support!
@@ -537,12 +545,12 @@ A Put (File) request returns Created instead of OK. The file is correctly replac
     Express relationships as "href" properties to absolute URLs.
     Provide "reference expansion" to allow references to be expanded into the principal object.
 
-###### Stormpath Pattern 
+###### Stormpath Pattern
     Rich error message:
-        Status Code         HttpStatusCode                   
+        Status Code         HttpStatusCode
         Code                ApiErrorCode
         Message             Errors[]
-        DeveloperMessage    DeveloperMessage   
+        DeveloperMessage    DeveloperMessage
         API Reference       ApiReference
 
 #### Error Handling
@@ -579,12 +587,12 @@ A Put (File) request returns Created instead of OK. The file is correctly replac
     }
 
 ```
-#### StorageManager 
+#### StorageManager
 An ApplicationUser could have a storage folder property that is used by the StorageManager to define the default location.
 
 #### DomainModel
 
-#### FileDomainModel 
+#### FileDomainModel
     Casting from DomainModel to FileDomainModel can only be done when access to the specific type is not needed.
     PostFile
         var fileName = Path.Combine(storageManager.DefaultModelStorageFolder(domainModel), domainModel.Name);
@@ -601,7 +609,7 @@ An ApplicationUser could have a storage folder property that is used by the Stor
         PostFileRequestHandler : DbContext.SaveChanges();
 
     Throwing policy.
-        https://stackoverflow.com/questions/2999298/difference-between-throw-and-throw-new-exception        
+        https://stackoverflow.com/questions/2999298/difference-between-throw-and-throw-new-exception
 
 #### Testing
     xUnit Async
@@ -616,14 +624,14 @@ An ApplicationUser could have a storage folder property that is used by the Stor
         How can XUnit be used to test all properties of a resource?
             Iterate through the property list of a Domain model.
 
-        Ux Endpoints                    
+        Ux Endpoints
             Data must be form-encoded not JSON?
             The [ValidateAntiForgeryToken] attribute leads to an exception.
 
         Split Api and Ux into separate assemblies?
             Can the ServerFixture be in a separate assembly?
 
-    Unit Tests                
+    Unit Tests
         API Testing Mocks
             How can RouteNames.ApiDocumentation be registered as a route?
             Schema
@@ -674,16 +682,16 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
                                         ValidatatedHandler.Handle
                                             RequestHandler.Handle
                     end transaction
-    
+
 #### Autofac
     ASP.NET Core
     https://autofac.readthedocs.io/en/latest/integration/aspnetcore.html
 
     Example
     https://github.com/autofac/Examples/tree/master/src/AspNetCoreExample
-   
+
 #### AutoMapper
-    The AutoMapper.QueryableExtensions ProjectTo will populate an object graph when used with a query. 
+    The AutoMapper.QueryableExtensions ProjectTo will populate an object graph when used with a query.
     Otherwise, navigation properties will be null.
         var result = await DbContext.Set<TEntity>()
                 .ProjectTo<TGetModel>(Mapper.ConfigurationProvider)
@@ -715,7 +723,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
             http://www.eq8.eu/blogs/36-patch-vs-put-and-the-patch-json-syntax-war
 
             PUT : complete
-                The HTTP RFC specifies that PUT must take a full new resource representation as the request entity. 
+                The HTTP RFC specifies that PUT must take a full new resource representation as the request entity.
                 This means that if for example only certain attributes are provided, those should be remove (i.e. set to null).
             PATCH : partial
 
@@ -762,7 +770,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 #### Model Loaders
     The OBJLoader does not handle Bones.
         Could this be resolved in a later version of Three.js?
-        
+
 #### Viewer
     Large Models
         Design: Should all models be scaled to fit within the default view frustrum?
@@ -773,7 +781,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
             The UI CameraControls need to be set based on the dimensions of the model.
         Camera position now is always based on the loaded Camera DTO.
             Support needs to be added to set a camera position for a brand new model (for which no Camera DTO exists).
-    
+
     Transform Control
         This would allow the model to be positioned instead of the camera to set up the scene with much more control.
 
@@ -813,7 +821,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 
 #### VSCode Issues
     How can the C# style checker be manually run in VSCode?
-        https://github.com/OmniSharp/omnisharp-vscode/issues/43            
+        https://github.com/OmniSharp/omnisharp-vscode/issues/43
 
 #### VSCode Debugging Workflows
 
@@ -834,7 +842,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 
     VSCode Profile: .Net Core Launch
         FE: Chrome   BE: VSCode  TypeScript: DNW  Reload: DNW
-    
+
     VSCode Resources
         https://stackoverflow.com/questions/43628397/debug-typescript-in-vscode-with-asp-net-core
         https://code.visualstudio.com/blogs/2016/02/23/introducing-chrome-debugger-for-vs-code
@@ -845,10 +853,10 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     Precision is substantially improved by moving the Near plane as close to the model as possible.
         Pulling in the Far plane does not seem to improve the precision.
 
-    The range of the depth buffer is based on the distance between the Near and Far planes. 
+    The range of the depth buffer is based on the distance between the Near and Far planes.
         If the Near and Far planes bound the model, the range will be [0.1].
 
-#### Database Design   
+#### Database Design
 
     Issues
         Analyze the correct behavior of OnDelete.
@@ -873,7 +881,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     How can the database be backed up?
         Can it be relocated to another location?
 
-    Phase II       
+    Phase II
          Materials
             DomainModel
 
@@ -905,7 +913,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
             Last start time:    9/19/2017 6:57:25 AM
             Instance pipe name: np:\\.\pipe\LOCALDB#9A6B632F\tsql\query
 
-#### Database 
+#### Database
     Use UUID not sequential integer keys in database. This will scale better.
 
     SQLite
@@ -966,7 +974,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
         ModelViewer extends Viewer
             set model (model : THREE.Object) {
                 super.model(model);     // not valid
-            }            
+            }
 
     TypeScript Typings management
         Where is the Visual Studio instance of node.s installed?
@@ -997,7 +1005,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     http://davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd/
 
     What is the recommended way to split a module over multiple files?
-        Using a d.ts file and 'export as namespace' works but it led to issues loading MR in require.js. 
+        Using a d.ts file and 'export as namespace' works but it led to issues loading MR in require.js.
             modelrelief.d.ts
                 export as namespace MR
 
@@ -1008,7 +1016,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
                 When TypeScript creates the AMD output, the module name is the disk file. There is no definition of MR as an aggregate.
                 Is there a require.config that maps a module name to multiple separate modules?
                     MR -> fileA,fileB
-            
+
             Can a module name have a period such as MR.Graphics?
                 import * as MR.Graphics from "Graphics" led to an error.
 
@@ -1036,7 +1044,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     Base64 encoding for HttpRequest.
         https://github.com/beatgammit/base64-js
         https://github.com/hughsk/tab64
-    
+
     How is byte ordering (little/big endian) handled in HTTP requests?
         http://calculist.org/blog/2012/04/25/the-little-endian-web/
 
@@ -1075,7 +1083,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     Test                                        ModelRelief     Internal
     Tyrannosaurus                               Stanford        Stanford
 
-#### Visual Studio 
+#### Visual Studio
     Performance
         https://developercommunity.visualstudio.com/content/problem/43364/visual-studio-2017-increadibly-slow-and-laggy.html
     Private Hive
@@ -1091,7 +1099,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     DataAnnotation rules also should be used for DTO.
         They <complement> FV. They (and any other registered validators) run after FV.
         They provide display formatting and other UX support.
-    The Domain models should also use DataAnnotation attributes. 
+    The Domain models should also use DataAnnotation attributes.
         Validation will be done when a model (created OUTSIDE) the UX is transacted with the database.
         This happens as a part of model-binding.
     The DTO should expose only those properies which are editable!
@@ -1104,10 +1112,10 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 
     DataAnnotation Attributes
         Property ON form: A client-side error will be displayed and the controller action will not be called.
-        Property not present on form: Validation will be done in the server IF the model-bound action parameter contains a validation rule. 
+        Property not present on form: Validation will be done in the server IF the model-bound action parameter contains a validation rule.
             ModelState will contain errors when the controller action is called.
 
-        N.B. ContosoUniversityCore uses server-side validation (in conjunction with site.js and HtmlHelperExtensions error handling). 
+        N.B. ContosoUniversityCore uses server-side validation (in conjunction with site.js and HtmlHelperExtensions error handling).
             Any DataAnnotation attributes on the DTO are ignored. No data-val attributes are added to the View.
                 Is this because the jquery-validation-unobtrusive scripts are not include in the View page?
             If a DataAnnotation rule was violated (e.g. [Required]) and there was no FluentValidation (AbstractValidator rule), the property was not marked as invalid.
@@ -1122,15 +1130,15 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
         If View model implements any of these interfaces then additional validation checks will be added the complete list of checks, adding additional results to ModelState.
             FluentValidation.AbstractValidator<T> : (runs first by default)
             DataAnnotation
-            IValidatableObject 
+            IValidatableObject
         N.B. These are all used by a View if present! Each of these validations contribute rules (in the form of data-val attributes) that are used in the client-side processing.
-    
+
 ###### Server-Side Validation
     The controller action parameters (e.g. Create.Command) control the server-side validation rules.
         Any associated validators for this specific type will run.
         This happens during model-binding.
 
-    Model-binding maps the Request.Body, route data and query strings to the parameters of the controller action. 
+    Model-binding maps the Request.Body, route data and query strings to the parameters of the controller action.
         By default, MVC supports a limited number of formatters.
 
     All validation providers can contribute rules to the validation.
@@ -1141,7 +1149,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     ValidationActionFilter
         If an ActionFilter is registered, control passes there.
             The ActionFilter can check ModelState.Valid and then set the ActionExecutingContext.Result so the controller action is never called.
-    
+
     Finally, the controller action is invoked.
 ---
 
@@ -1150,7 +1158,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
         GetSingle               X                                               X
         GetList                                                                 X
 
-        Delete                  X               
+        Delete                  X
             DeleteStorage                       X               X
         Put                     X                                               X
         Patch                   X                                               X
@@ -1195,7 +1203,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 ```
 
 #### ContosoUniversity Core
-    Why is the project named "Core" when it has these dependencies? 
+    Why is the project named "Core" when it has these dependencies?
         AutoMapper.EF6
             EntityFramework 6.13
 
@@ -1208,11 +1216,11 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
         It binds a database <model> looked up from the incoming Id.
 
 #### ASPNET Core Environment Variables
-Environment variables set in the Visual Studio launchSettings.json **override** environment variables set in the shell.  
+Environment variables set in the Visual Studio launchSettings.json **override** environment variables set in the shell.
 The Visual Studio Debug project settings for Environment variables **writes through** to launchSettings.json. They are *identical*.
 
-The XUnit tests cannot be run with MRInitializeUserStore since this prompts for user verification however *the console is not displayed*.  
-ServerFramework (WebHost.CreateDefaultBuilder) sets the environment to "Test" *however the environment variables from launchSettings.json are not used.* 
+The XUnit tests cannot be run with MRInitializeUserStore since this prompts for user verification however *the console is not displayed*.
+ServerFramework (WebHost.CreateDefaultBuilder) sets the environment to "Test" *however the environment variables from launchSettings.json are not used.*
 Therefore, it is imperative not to set MRInitializeUserStore in the shell so that XUnit can be run.
 However, MRInitializeUserStore may be set if the application is started through 'dotnet run'.
 
@@ -1221,7 +1229,7 @@ However, MRInitializeUserStore may be set if the application is started through 
         npm install --global gulp-cli
     node must be installed.
 
-#### Authentication and Authorization            
+#### Authentication and Authorization
     https://odetocode.com/blogs/scott/archive/2017/02/06/anti-forgery-tokens-and-asp-net-core-apis.aspx
 
     https://stackoverflow.com/questions/40351870/asp-net-core-custom-authentication-tying-request-to-user
@@ -1230,7 +1238,7 @@ However, MRInitializeUserStore may be set if the application is started through 
     Conversion of List of derived class to the base class.
         // https://stackoverflow.com/questions/1817300/convert-listderivedclass-to-listbaseclass
         dependentModels = new List<DomainModel>(candidateDependentModels).ConvertAll(m => (DomainModel)m);
-    
+
     Using reflection to call a generic method:
         // https://stackoverflow.com/questions/4101784/calling-a-generic-method-with-a-dynamic-type
         // https://stackoverflow.com/questions/16153047/net-invoke-async-method-and-await
@@ -1245,7 +1253,7 @@ https://semver.npmjs.com/
 
 #### Adding a New Test Model
     Add the 3D model to D:\Users\Steve Knipmeyer\Documents\Development\ModelRelief\Models.
-    
+
     Create a new folder in the source location for test models.
         D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\Test\Data\Users\models
     Add the .OBJ and the material file .mtl.
@@ -1319,7 +1327,7 @@ https://semver.npmjs.com/
 
     Run a Docker container but override the default entrypoint with the command shell.
         docker run -it --entrypoint "cmd" -p 8080:60655 modelrelief
-    Start a command shell in a running container.        
+    Start a command shell in a running container.
         docker exec <container> cmd
 
     These commands can be used to start the SQLServer Express service as an <independent> container. ModelRelief running normally can access the container.
@@ -1340,7 +1348,7 @@ https://semver.npmjs.com/
     Production <must> set on the server:
         (?) ASPNETCORE_ENVIRONMENT      Production
         PATH                            C:\modelrelief\mrenv
-        PYTHONPATH                      C:\modelrelief\Tools; C:\modelrelief\Solver; 
+        PYTHONPATH                      C:\modelrelief\Tools; C:\modelrelief\Solver;
 
     How are credentials handled in a ConnectionString in Production?
         https://stackoverflow.com/questions/44931613/how-to-correctly-store-connection-strings-in-environment-variables-for-retrieval
@@ -1373,7 +1381,7 @@ https://semver.npmjs.com/
             Also, the database folder is used to transfer the SQLServer seed database to the Docker database container during a build.
 
     Updateing the mrenv requirements.production.txt
-        conda list --export > <requirements.production.txt>        
+        conda list --export > <requirements.production.txt>
 
 #### Jupyter
     Notebook confguration

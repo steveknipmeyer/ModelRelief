@@ -193,8 +193,8 @@ class Solver:
         self.results.gradient_y_unsharp = self.results.gradient_y
 
         if self.enable_unsharpmask:
-            gaussian_low = self.mesh_transform.unsharpmask_parameters.gaussian_low if self.enable_unsharpmask_gaussian_high else 0.0
-            gaussian_high = self.mesh_transform.unsharpmask_parameters.gaussian_high if self.enable_unsharpmask_gaussian_low else 0.0
+            gaussian_low = self.mesh_transform.unsharpmask_parameters.gaussian_low if self.enable_unsharpmask_gaussian_low else 0.0
+            gaussian_high = self.mesh_transform.unsharpmask_parameters.gaussian_high if self.enable_unsharpmask_gaussian_high else 0.0
             high_frequency_scale = self.mesh_transform.unsharpmask_parameters.high_frequency_scale if self.enable_unsharpmask_high_frequence_scale else 1.0
             parameters = UnsharpMaskParameters(gaussian_low, gaussian_high, high_frequency_scale)
 

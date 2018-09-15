@@ -1,4 +1,4 @@
-    
+
 {
     // ---------------------------------
     // Window
@@ -12,7 +12,7 @@
         "ActiveFileInStatusBar.enable": true,
         // Show fullpath or relative path in status bar.
         "ActiveFileInStatusBar.fullpath": false,
-        // Reveal the active file in the file system. 
+        // Reveal the active file in the file system.
         "ActiveFileInStatusBar.revealFile": true,
 
     // ---------------------------------
@@ -46,7 +46,7 @@
             "types": "#ff00ff",
             "keywords": "#FFFF00",
             "numbers": "#ffffff",
-            "strings": "#00ff95"        
+            "strings": "#00ff95"
         },
         // Controls the font family.
         "editor.fontFamily": "Consolas",
@@ -65,18 +65,18 @@
     "files.autoSave": "onWindowChange",
     "files.exclude": {
         "**/.git": true,         // this is a default value
-    
-        "**/node_modules": true, // this excludes all folders 
-                                 // named "node_modules" from 
+
+        "**/node_modules": true, // this excludes all folders
+                                 // named "node_modules" from
                                  // the explore tree
-        "devenv": true,      
-        "mrenv": true,      
-        "Publish": true,      
+        "devenv": true,
+        "mrenv": true,
+        "Publish": true,
 
         // alternative version
-        "node_modules": true    // this excludes the folder 
+        "node_modules": true    // this excludes the folder
                                 // only from the root of
-                                // your workspace 
+                                // your workspace
     },
 
     // ---------------------------------
@@ -104,7 +104,7 @@
     // ---------------------------------
         // Path to Python, you can use a custom version of Python by modifying this setting to include the full path.
         "python.pythonPath": "${workspaceFolder}\\devenv\\python.exe",
-        "python.linting.enabled": true, 
+        "python.linting.enabled": true,
         "python.linting.mypyEnabled": true,
           // Arguments passed in. Each argument is a separate item in the array.
         "python.linting.mypyArgs": [
@@ -171,7 +171,7 @@
             "editor.lineHighlightBorder": "#ff00ff33",
             "editorLineNumber.foreground": "#8fdddd",
             "editorIndentGuide.background": "#32393f",
-            "editorWhitespace.foreground": "#4a5461",
+            "editorWhitespace.foreground": "#013638",
             "editor.findMatchHighlightBackground" : "#168292",
             "peekViewEditor.background": "#222222",
             "peekViewResult.selectionBackground": "#7997cb",
@@ -185,6 +185,9 @@
             "system_error": "cpp",
             "xlocmon": "cpp",
             "xtr1common": "cpp",
-            "iomanip": "cpp"
+            "iomanip": "cpp",
+            "array": "cpp",
+            "ios": "cpp",
+            "xutility": "cpp"
         },
 }

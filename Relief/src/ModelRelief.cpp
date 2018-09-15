@@ -1,6 +1,6 @@
 /**
  * @brief ModelRelief Python C++ extensions.
- * 
+ *
  * @file ModelRelief.cpp
  * @author Steve Knipmeyer
  * @date 2018-09-03
@@ -17,10 +17,10 @@ namespace ModelRelief {
 
 /**
  * @brief Add two NumPy arrays.
- * 
+ *
  * @param input1 First array.
  * @param input2 Second array.
- * @return NPDoubleArray 
+ * @return NPDoubleArray
  */
 NPDoubleArray add_arrays(NPDoubleArray input1, NPDoubleArray input2)
 {
@@ -49,10 +49,10 @@ NPDoubleArray add_arrays(NPDoubleArray input1, NPDoubleArray input2)
 
 /**
  * @brief Fill a NumPy array with a constanct value.
- * 
+ *
  * @param input Array to populate.
  * @param value Constant fill value.
- * @return NPDoubleArray 
+ * @return NPDoubleArray
  */
 NPDoubleArray fill(NPDoubleArray& input, double value)
 {
@@ -74,7 +74,7 @@ NPDoubleArray fill(NPDoubleArray& input, double value)
 
 /**
  * @brief Gausian filter tests.
- * 
+ *
  */
 int kernelTest()
 {
