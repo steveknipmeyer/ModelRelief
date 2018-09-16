@@ -136,7 +136,7 @@ class Explorer(QtWidgets.QMainWindow):
         self.ui.p5CheckBox.setChecked(checkbox_enabled)
         self.ui.p6CheckBox.setChecked(checkbox_enabled)
         self.ui.p7CheckBox.setChecked(checkbox_enabled)
-        self.ui.p8CheckBox.setChecked(checkbox_enabled)
+        self.ui.p8CheckBox.setChecked(False)
 
     @benchmark()
     def initialize_ui(self)-> None:

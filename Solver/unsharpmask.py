@@ -74,8 +74,6 @@ class UnsharpMask:
         # https://stackoverflow.com/questions/23208232/image-filtering-with-scikit-image
         # https://docs.scipy.org/doc/scipy/reference/tutorial/ndimage.html
 
-        filter = relief.GaussianFilter(original, combined_mask, parameters.gaussian_low)
-
         original_prime= original * combined_mask
 
         low = gaussian_filter(original_prime, parameters.gaussian_low, order=0, output=None, mode='reflect', cval=0.0, truncate=4.0)

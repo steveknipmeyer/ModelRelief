@@ -23,6 +23,8 @@ class GaussianKernel;
 //                                      Types                                                      //
 //-------------------------------------------------------------------------------------------------//
 using KernelCallback = auto (GaussianKernel::*) (int x, int y, void* pArguments) -> void;
+using GaussianKernelP = GaussianKernel*;
+using GaussianKernelR = GaussianKernel&;
 
 /**
  * @brief Class implementing an image processing kernel for Gaussian filters.
@@ -30,7 +32,7 @@ using KernelCallback = auto (GaussianKernel::*) (int x, int y, void* pArguments)
  */
 class GaussianKernel {
     private:
-        static const int kernelSize = 5;
+        static const int kernelSize = 25;
         static const int s_rows    = kernelSize ;               // kernel rows
         static const int s_columns = kernelSize;                // kernel columns
         static const int s_xLimit  = (s_columns - 1) / 2;       // x bound    
@@ -47,6 +49,11 @@ class GaussianKernel {
     public:
         GaussianKernel(double sigma);
         ~GaussianKernel(); 
+
+        int Rows() { return s_rows; }
+        int Columns() { return s_columns; }
+        int XLimit() { return s_xLimit; }
+        int YLimit() { return s_yLimit; }
 
         double& Element(int x, int y);
 

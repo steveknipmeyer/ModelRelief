@@ -8,6 +8,7 @@
 #pragma once
 
 #include "ModelRelief.h"
+#include "GaussianKernel.h"
 
 namespace ModelRelief {
 
@@ -27,18 +28,28 @@ class GaussianFilter;
 class GaussianFilter {
 
     private:
-        int m_rows;                 // image rows
-        int m_columns;              // image columns
+        int m_rows;                              // image rows
+        int m_columns;                           // image columns
 
-        double *m_pImage;           // raw pointer to image
-        double *m_pMask;            // raw pointer to mask
-        double m_sigma;             // Gaussian variance for the filter
+        NPDoubleArray& m_image;                     // image array
+        double *m_pImage;                           // raw pointer to image aray
+
+        NPDoubleArray& m_mask;                      // mask array
+        double *m_pMask;                            // raw pointer to mask array
+
+        double m_sigma;                             // standard deviation for the Gaussian filter
+
+        std::unique_ptr<GaussianKernel> m_pDefaultKernel;
+
+    private:
+        void InitializeNative(NPDoubleArray& image, NPDoubleArray& mask);
+        double GetOffsetImageElement(int row, int column, int xOffset, int yOffset);
+        double ApplyKernel(GaussianKernel& kernel, int row, int column);
 
     public:
         GaussianFilter(NPDoubleArray& image, NPDoubleArray& mask, double sigma);
         ~GaussianFilter();
 
-    private:
-        void InitializeNative(NPDoubleArray& image, NPDoubleArray& mask);
+        NPDoubleArray& Calculate();
 };
 }

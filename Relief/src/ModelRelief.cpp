@@ -52,9 +52,9 @@ NPDoubleArray add_arrays(NPDoubleArray input1, NPDoubleArray input2)
  *
  * @param input Array to populate.
  * @param value Constant fill value.
- * @return NPDoubleArray
+ * @return NPDoubleArray&
  */
-NPDoubleArray fill(NPDoubleArray& input, double value)
+NPDoubleArray& fill(NPDoubleArray& input, double value)
 {
     // obtain buffer
     py::buffer_info buffer = input.request();
@@ -73,7 +73,23 @@ NPDoubleArray fill(NPDoubleArray& input, double value)
 }
 
 /**
- * @brief Gausian filter tests.
+ * @brief Perform a Gaussian filter on an image.
+ *
+ * @param image NumPy image.
+ * @param mask NumPy mask. Only unmasked image elements are included in the filter.
+ * @param sigma Standard deviation.
+ * @return NPDoubleArray&
+ */
+NPDoubleArray& gaussian_filter(NPDoubleArray& image, NPDoubleArray& mask, double sigma)
+{
+    GaussianFilter filter(image, mask, sigma);
+    NPDoubleArray& filteredImage = filter.Calculate();
+
+    return filteredImage;
+}
+
+/**
+ * @brief Gaussian kernel test.
  *
  */
 int kernelTest()

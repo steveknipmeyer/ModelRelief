@@ -1,6 +1,6 @@
 /**
  * @brief Class implementing an image processing kernel for Gaussian filters.
- * 
+ *
  * @file GaussianKernel.cpp
  * @author Steve Knipmeyer
  * @date 2018-09-03
@@ -23,23 +23,23 @@ namespace ModelRelief {
 
 /**
  * @brief Construct a new Gaussian Kernel object
- * 
- * @param sigma Variance.
+ *
+ * @param sigma Standard deviation.
  */
 GaussianKernel::GaussianKernel(double sigma)
 {
     m_sigma = sigma;
 
     CalculateDefault();
-    Normalize();
+    Normalize(); 
 }
 
 /**
  * @brief Destroy the Gaussian Kernel object
- * 
+ *
  */
-GaussianKernel::~GaussianKernel() 
-{       
+GaussianKernel::~GaussianKernel()
+{
 }
 
 /**

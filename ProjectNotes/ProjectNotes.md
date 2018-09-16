@@ -2,10 +2,11 @@
 #### Commit Notes
 
 #### Short Term
-    Should the Python image masks be integers or booleans (instead of doubles)?
+    Profile and optimize the GaussianFilter.
+    What is the kernel size of gaussian_filter?_
+        https://stackoverflow.com/questions/25216382/gaussian-filter-in-scipy        _
 
-    Gaussian Filter
-        The filter must iterate (by row) each image element and calculate the Gaussian value.
+    Should the Python image masks be integers or booleans (instead of doubles)?
 
     Gaussian Kernel
         The standard kernel should be created one time.

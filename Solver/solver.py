@@ -17,6 +17,7 @@ import json
 import os
 import numpy as np
 import time
+from scipy.ndimage import gaussian_filter
 from shutil import copyfile
 from typing import Any, Callable, Dict, Optional
 
@@ -141,9 +142,9 @@ class Solver:
     @benchmark()
     def process_depth_buffer(self):
         """
-            Process the depth buffer.
-            The depth buffer is converted into model units.
-            The background bit mask is calculated.
+        Process the depth buffer.
+        The depth buffer is converted into model units.
+        The background bit mask is calculated.
         """
         self.results.depth_buffer_model = self.depth_buffer.floats
         self.results.depth_buffer_mask = self.depth_buffer.background_mask
@@ -151,9 +152,9 @@ class Solver:
     @benchmark()
     def process_gradients(self):
         """
-            Calculate the X and Y gradients.
-            The gradients are thresholded to remove high values such as at the model edges.
-            The gradients are filtered by applying the composite mask.
+        Calculate the X and Y gradients.
+        The gradients are thresholded to remove high values such as at the model edges.
+        The gradients are filtered by applying the composite mask.
         """
 
         self.results.gradient_x = self.depth_buffer.gradient_x
@@ -177,7 +178,7 @@ class Solver:
 
     def process_attenuation(self):
         """
-            Attenuate the gradients to dampen large values.
+        Attenuate the gradients to dampen large values.
         """
         if self.enable_attenuation:
             attenuation = Attenuation(self.services)
@@ -186,8 +187,8 @@ class Solver:
 
     def process_unsharpmask(self):
         """
-            Apply unsharp masking to amplify details.
-            The high frequency features are obtained from the image, scaled and the added back.
+        Apply unsharp masking to amplify details.
+        The high frequency features are obtained from the image, scaled and the added back.
         """
         self.results.gradient_x_unsharp = self.results.gradient_x
         self.results.gradient_y_unsharp = self.results.gradient_y
@@ -204,7 +205,7 @@ class Solver:
 
     def process_poisson(self):
         """
-            Solve the Poisson equation that returns the final reconstructed mesh from the modified gradients.
+        Solve the Poisson equation that returns the final reconstructed mesh from the modified gradients.
         """
         difference = Difference(self.services)        
         self.results.dGxdx = difference.difference_x(self.results.gradient_x_unsharp, FiniteDifference.Backward)
@@ -223,7 +224,7 @@ class Solver:
 
     def process_silhouette(self):
         """
-            Process the silhouettes in the image.
+        Process the silhouettes in the image.
         """
         if self.enable_p2:
             silhouette = Silhouette(self.services)
@@ -231,7 +232,7 @@ class Solver:
 
     def process_scale(self):
         """
-            Scales the mesh to the final dimensions.
+        Scales the mesh to the final dimensions.
         """
         # linear scale original mesh
         self.results.mesh_scaled = self.results.depth_buffer_model * self.mesh_transform.p1
@@ -248,11 +249,9 @@ class Solver:
         factor = target_height / current_height
         self.results.mesh_transformed = self.results.mesh_transformed * factor
 
-        #self.results.mesh_transformed = relief.fill(self.results.mesh_transformed, 1.0)
-
     def write_mesh(self):
         """
-            Write the final calculated mesh float file.
+        Write the final calculated mesh float file.
         """
         file_path = os.path.join(self.working_folder, self.mesh.name)
 
@@ -262,7 +261,7 @@ class Solver:
 
     def write_obj(self):
         """
-            Write the final calculated mesh OBJ file.
+        Write the final calculated mesh OBJ file.
         """
         if self.enable_obj:
             filename, _ = os.path.splitext(self.mesh.name)        
@@ -271,9 +270,25 @@ class Solver:
             filewriter = OBJWriter(self.services, self.results.mesh_transformed, file_path)
             filewriter.write()
 
+    @benchmark()
+    def relief_filter(self):
+        """
+        Experimental test harness.
+        """
+        if self.enable_p8:
+            self.services.results.i3 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low)
+
+    @benchmark()
+    def scipy_filter(self):
+        """
+        Experimental test harness.
+        """
+        if self.enable_p8:
+            self.services.results.i4 = gaussian_filter(self.services.results.depth_buffer_model, self.mesh_transform.unsharpmask_parameters.gaussian_low, order=0, output=None, mode='reflect', cval=0.0, truncate=4.0)
+
     def debug_results(self):
         """
-            Output final results for debugging.
+        Output final results for debugging.
         """
         if (self.debug):
             (rows, _) = self.depth_buffer.floats.shape
@@ -305,6 +320,8 @@ class Solver:
         self.process_scale()
         self.write_mesh()
         self.write_obj()
+        self.relief_filter()
+        self.scipy_filter()
 
         self.debug_results()
 def main():

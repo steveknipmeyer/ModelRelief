@@ -22,10 +22,14 @@ PYBIND11_MODULE(relief, m)
     m.def("add_arrays", &add_arrays, "Add two NumPy arrays");
     m.def("fill", &fill, "Fill a NumPy array with a value");
 
-    m.def("kernelTest", &kernelTest, "Gaussian kernel tests");
+    m.def("gaussian_filter", &gaussian_filter, "Peform a Gaussian filter on an image");
+    m.def("kernelTest", &kernelTest, "Gaussian kernel test");
 
+    // These bindings should be removed as it is problematic to hold a NumPy reference in a C++ instance across Python calls.
+    // The pybind11 references are valid for only the lifetime of the Python call.
     py::class_<GaussianFilter>(m, "GaussianFilter")
-        .def(py::init<NPDoubleArray&, NPDoubleArray&, double>());
+        .def(py::init<NPDoubleArray&, NPDoubleArray&, double>())
+        .def("Calculate", &GaussianFilter::Calculate);
 
     py::class_<GaussianKernel>(m, "GaussianKernel")
         .def(py::init<double>())
