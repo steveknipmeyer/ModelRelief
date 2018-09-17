@@ -30,7 +30,7 @@ GaussianKernel::GaussianKernel(double sigma)
 {
     m_sigma = sigma;
 
-    CalculateDefault();
+    CalculateStandard();
     Normalize(); 
 }
 
@@ -57,7 +57,7 @@ double& GaussianKernel::Element (int x, int y)
  * @brief Calculate the default Gaussian kernel.
  *
  */
-void GaussianKernel::CalculateDefault()
+void GaussianKernel::CalculateStandard()
 {
     Iterate(&GaussianKernel::Gaussian, nullptr);
 }
@@ -100,6 +100,8 @@ void GaussianKernel::Display()
 //-------------------------------------------------------------------------------------------------//
 /**
  * @brief Iterate the kernel and apply a user callback.
+ * @param callback Per element callback.
+ * @param pArguments Callback arguments.
  *
  */
 void GaussianKernel::Iterate(KernelCallback callback, void* pArguments)
@@ -112,6 +114,8 @@ void GaussianKernel::Iterate(KernelCallback callback, void* pArguments)
 /**
  * @brief Sum the elements of the kernel.
  *
+ * @param x X (relative to kernel origin).
+ * @param y Y (relative to kernel origin).
  * @param pArguments Accumulator for sum of all kernel element values.
  */
 void GaussianKernel::Sum(int x, int y, void* pArguments)
@@ -123,6 +127,8 @@ void GaussianKernel::Sum(int x, int y, void* pArguments)
 /**
  * @brief Normalize an element of the kernel.
  *
+ * @param x X (relative to kernel origin).
+ * @param y Y (relative to kernel origin).
  * @param pArguments Sum of all kernel values.
  */
 void GaussianKernel::NormalizeElement(int x, int y, void* pArguments)
@@ -134,6 +140,9 @@ void GaussianKernel::NormalizeElement(int x, int y, void* pArguments)
 /**
  * @brief Calculate Gaussian.
  *
+ * @param x X (relative to kernel origin).
+ * @param y Y (relative to kernel origin).
+ * @param pArguments Unused.
  */
 void GaussianKernel::Gaussian(int x, int y, void* pArguments)
 {

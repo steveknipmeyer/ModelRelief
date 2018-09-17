@@ -34,7 +34,7 @@ PYBIND11_MODULE(relief, m)
     py::class_<GaussianKernel>(m, "GaussianKernel")
         .def(py::init<double>())
         .def("Element", &GaussianKernel::Element)
-        .def("CalculateDefault", &GaussianKernel::CalculateDefault)
+        .def("CalculateDefault", &GaussianKernel::CalculateStandard)
         .def("Normalize", &GaussianKernel::Normalize)
         .def("Display", &GaussianKernel::Display);
 }

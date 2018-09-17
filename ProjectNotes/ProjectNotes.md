@@ -2,7 +2,26 @@
 #### Commit Notes
 
 #### Short Term
-    Profile and optimize the GaussianFilter.
+    Benchmark existing performance.
+        relief_filter : 6.19 sec
+        scipy_filter : 0.01 sec
+    Profile the GaussianFilter.
+
+    Set kernel size dynamically to match sigma.
+        radius = int(truncate * sd + 0.5)
+
+        w = 2*int(truncate*sigma + 0.5) + 1
+            truncate = 4.0
+            sigma = 4.0
+            w = 33
+
+        Experiment with Matlab.
+
+    Optimizations
+        Review C++ source code.
+        How can inline methods be used?
+        Early exit from GetOffsetImageElement in interior.
+
     What is the kernel size of gaussian_filter?_
         https://stackoverflow.com/questions/25216382/gaussian-filter-in-scipy        _
 

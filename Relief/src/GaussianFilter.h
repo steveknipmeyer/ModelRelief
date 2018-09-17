@@ -28,8 +28,8 @@ class GaussianFilter;
 class GaussianFilter {
 
     private:
-        int m_rows;                              // image rows
-        int m_columns;                           // image columns
+        int m_rows;                                 // image rows
+        int m_columns;                              // image columns
 
         NPDoubleArray& m_image;                     // image array
         double *m_pImage;                           // raw pointer to image aray

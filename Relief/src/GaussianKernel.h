@@ -32,13 +32,13 @@ using GaussianKernelR = GaussianKernel&;
  */
 class GaussianKernel {
     private:
-        static const int kernelSize = 25;
+        static const int kernelSize = 33;                       // radius = int(truncate * sigma + 0.5)
         static const int s_rows    = kernelSize ;               // kernel rows
         static const int s_columns = kernelSize;                // kernel columns
         static const int s_xLimit  = (s_columns - 1) / 2;       // x bound    
         static const int s_yLimit  = (s_rows - 1) / 2;          // y bound
 
-        double m_sigma;                                         // variance
+        double m_sigma;                                         // standard deviation
         double m_kernel[s_rows][s_columns];                     // default (unmasked) kernel
 
         void Iterate(KernelCallback callback, void* pArguments);
@@ -57,7 +57,7 @@ class GaussianKernel {
 
         double& Element(int x, int y);
 
-        void CalculateDefault();
+        void CalculateStandard();
         void Normalize();
         void Display();
 };

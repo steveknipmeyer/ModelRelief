@@ -72,16 +72,12 @@ void GaussianFilter::InitializeNative(NPDoubleArray& image, NPDoubleArray& mask)
 {
     // Image
     py::buffer_info buffer = image.request();
-
-    // raw pointer
     m_pImage = (double *)buffer.ptr;
     m_rows = static_cast<int>(buffer.shape[0]);
     m_columns = static_cast<int>(buffer.shape[1]);
 
     // Mask
     buffer = mask.request();
-
-    // raw pointer
     m_pMask = (double *)buffer.ptr;
 }
 
