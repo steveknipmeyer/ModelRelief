@@ -1,4 +1,4 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python
 #
 #   Copyright (c) 2018
 #   All Rights Reserved.
@@ -17,13 +17,13 @@ import subprocess
 import unittest
 from functools import wraps
 
-import relief 
+import relief
 from logger import Logger
 from stopwatch import benchmark
 from tools import Colors, Tools
 
 class ReliefTestResult(unittest.TextTestResult):
-    """ 
+    """
     Custom test result to suppress standard error reporting.
     https://stackoverflow.com/questions/8518043/turn-some-print-off-in-python-unittest
     """
@@ -50,7 +50,7 @@ class ReliefTestResult(unittest.TextTestResult):
             self.stream.writeln(f"{Colors.BrightRed}{flavour}: {self.getDescription(test)}{Colors.Reset}\n\n")
 
 class ReliefTestRunner(unittest.TextTestRunner):
-    """ 
+    """
     Custom test runner to suppress standard error reporting.
     https://stackoverflow.com/questions/8518043/turn-some-print-off-in-python-unittest
     """
@@ -64,9 +64,9 @@ def display_tag(tag_name: str = None, color: str = Colors.BrightCyan):
     ----------
     tag_name
         Tag to display.
-    color   
-        Color for the logger message.        
-    """            
+    color
+        Color for the logger message.
+    """
     def decorator_maker(fn):
         @wraps(fn)
         def wrapped(*args, **kwargs):
@@ -89,14 +89,14 @@ class ReliefTest(unittest.TestCase):
         self.logger = Logger()
 
     def tearDown(self):
-        """ 
+        """
         This method is called by the test runner after the execution of each test.
         The results are inspected and a log message is created if the test was not successful.
         # https://stackoverflow.com/questions/4414234/getting-pythons-unittest-results-in-a-teardown-method
         """
 
         # populate result
-        result = self.defaultTestResult() 
+        result = self.defaultTestResult()
         self._feedErrorsToResult(result, self._outcome.errors)
 
         # errors   = runtime errors (invalid method execution)
@@ -141,7 +141,7 @@ class ReliefTest(unittest.TestCase):
         """ Verifies the origin (center) of the kernel is equal to 1.0."""
         k = relief.GaussianKernel(1.0)
         self.assertAlmostEqual(k.Element(0, 0), 0.16210282163712664, places = 6)
-        
+
     @display_tag('\nC++', Colors.BrightMagenta)
     @display_tag()
     def test_RunCPlusPlusUnitTests(self):

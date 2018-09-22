@@ -130,14 +130,18 @@ double GaussianFilter::ApplyKernel(GaussianKernel& kernel, int row, int column)
     int kernelXLimit = kernel.XLimit();
     int kernelYLimit = kernel.YLimit();
 
-    for (int kernelX = -kernelXLimit; kernelX <= kernelXLimit; kernelX++)
+    // iteration: row major for performance
+    for (int kernelY = kernelYLimit; kernelY >= -kernelYLimit; kernelY--)
     {
-        for (int kernelY = -kernelYLimit; kernelY <= kernelYLimit; kernelY++)
+        for (int kernelX = -kernelXLimit; kernelX <= kernelXLimit; kernelX++)
         {
-            double imageElement = GetOffsetImageElement(row, column, kernelX, kernelY);
+            //double imageElement = GetOffsetImageElement(row, column, kernelX, kernelY);
+
+            double imageElement = 0.0;
             sum += imageElement * kernel.Element(kernelX, kernelY);
+            //sum += imageElement * 0.0;
         }
     }
     return sum;
 }
-}   
+}

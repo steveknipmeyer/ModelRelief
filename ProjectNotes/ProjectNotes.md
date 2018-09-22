@@ -2,12 +2,21 @@
 #### Commit Notes
 
 #### Short Term
-    Benchmark existing performance.
-        relief_filter : 6.19 sec
-        scipy_filter : 0.01 sec
-    Profile the GaussianFilter.
+    Optimizations
+        Refactor GaussianFilter to be row major?
+        Verify the kernel size used in gaussian_filter.
+            Why are the resulting Relief and SciPy Gaussian filter images different?
+
+        Experiment with NumPy pad solutions.
+            https://stackoverflow.com/questions/40690248/copy-numpy-array-into-part-of-another-array
+
+    Performance Conclusions
+        The kernel multiplication (with NO edge handling) yields results 50X slower than SciPy.
 
     Set kernel size dynamically to match sigma.
+        What is the kernel size of gaussian_filter?_
+            https://stackoverflow.com/questions/25216382/gaussian-filter-in-scipy        _
+
         radius = int(truncate * sd + 0.5)
 
         w = 2*int(truncate*sigma + 0.5) + 1
@@ -15,22 +24,7 @@
             sigma = 4.0
             w = 33
 
-        Experiment with Matlab.
-
-    Optimizations
-        Review C++ source code.
-        How can inline methods be used?
-        Early exit from GetOffsetImageElement in interior.
-
-    What is the kernel size of gaussian_filter?_
-        https://stackoverflow.com/questions/25216382/gaussian-filter-in-scipy        _
-
     Should the Python image masks be integers or booleans (instead of doubles)?
-
-    Gaussian Kernel
-        The standard kernel should be created one time.
-        For each image pixel the kernel must be masked, setting to zero the excluded elements.
-            After masking, the kernel can be normalized.
 
     Review type annotations in new Python code.
 
@@ -1421,3 +1415,10 @@ https://semver.npmjs.com/
     python setup --verbose build --debug install
     python setup.py --verbose build --debug
     python setup.py --verbose install
+
+#### Performance
+A Cmake Release build includes the 'O2' optimization flags. It is not necessary to define CXXFLAGS with additional switches.
+
+np_fill, relief_fill
+    The order of np_fill and releif_fill is critical. When np_fill follows relief_fill and the \<array target is the same\>, there is optimization which makes it much faster (8X).
+    If the array targets are different, there is no performance difference.

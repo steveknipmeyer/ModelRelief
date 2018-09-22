@@ -39,7 +39,7 @@ class StopWatch:
     """
     A class for performance timing.
     """
-    PRECISION = '1.00'
+    PRECISION = '1.000'
 
     def __init__(self, logger):
         """

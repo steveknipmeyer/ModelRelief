@@ -6,6 +6,7 @@
  * @date 2018-09-03
  */
 #include <pybind11/numpy.h>
+#include <memory>
 
 #include "ModelRelief.h"
 #include "GaussianFilter.h"
@@ -64,10 +65,33 @@ NPDoubleArray& fill(NPDoubleArray& input, double value)
     size_t numberRows     = buffer.shape[0];
     size_t numberColumns  = buffer.shape[1];
 
-    // fill
+#if true
+    // fill; row major iteration
     for (size_t indexRows = 0; indexRows < numberRows; indexRows++)
         for (size_t indexColumns = 0; indexColumns < numberColumns; indexColumns++)
             p[indexRows*numberColumns + indexColumns] = value;
+#endif
+
+#if false
+    // fill; linear iteration
+    size_t arrayLength = numberRows * numberColumns;
+    double* arrayEnd = p + arrayLength;
+    for (p = (double *)buffer.ptr; p < arrayEnd; p++)
+        *p = value;
+#endif
+
+#if false
+    // std library
+    std::clock_t start;
+    double duration;
+    start = std::clock();
+
+    size_t arraySize = numberRows * numberColumns;
+    std::fill_n(p, arraySize, value);
+
+    duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
+    std::cout << "fill_n: " << duration << '\n';
+#endif
 
     return input;
 }
