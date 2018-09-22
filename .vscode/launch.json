@@ -12,7 +12,7 @@
         ]
     }],
    "configurations": [
-   
+
        {
            "type": "chrome",
            "request": "launch",
@@ -37,7 +37,7 @@
 
             // The external console will not launch the browser. It is necessary to manually start the browser.
             // The internal console does not support Console.ReadLine so MRInitializeDatabase is not supported.
-            "console": "externalTerminal",  
+            "console": "externalTerminal",
 
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {
@@ -46,12 +46,12 @@
                 // N.B. Set to true when using independently of the compound profiles.
                 "enabled": true,
                 // <---------------------------------------------------------------->
-                
+
                 "args": "${auto-detect-url}",
                 "windows": {
                    "command": "cmd.exe",
                 // "args": "/C start ${auto-detect-url}",
-                   "args": "/C start http://localhost:60655/models/viewer/1"                   
+                   "args": "/C start http://localhost:60655/models/viewer/1"
                 },
                 "osx": {
                     "command": "open"
@@ -83,7 +83,7 @@
 //          "processId": "${command:pickProcess}",
             "processId": "23564"
         },
-        
+
         {
             "name": "Python",
             "type": "python",
@@ -91,8 +91,11 @@
             "request": "launch",
             "stopOnEntry": false,
             "console": "integratedTerminal",
-            "cwd": "${workspaceRoot}/Relief",
-//          "cwd": "${workspaceRoot}",
+
+        //  setup.py must be run from the Relief folder as the CMake paths are all relative to Relief.
+        //  "cwd": "${workspaceRoot}/Relief",
+
+            "cwd": "${workspaceRoot}",
             "debugOptions": [
                 "DebugStdLib",
                 "RedirectOutput",
@@ -101,24 +104,35 @@
                 "name": "value"
             },
 
-        //  "program": "${workspaceRoot}/Tools/linecount.py",
-        //  "program": "${workspaceRoot}/Build/builder.py",
-        //  "program": "${workspaceRoot}/Explorer/explorer.py",
-        //  "program": "${workspaceRoot}/Solver/solver.py",
+        //  ----- Tools
         //  "program": "${workspaceRoot}/Tools/testrunner.py",
+        //  "program": "${workspaceRoot}/Tools/linecount.py",
 
+        //  ----- Build
+        //  "program": "${workspaceRoot}/Build/builder.py",
+        //  "args":["--target", "IIS", "--deploy", "False"]
+
+        //  ----- Explorer
+        //  "program": "${workspaceRoot}/Explorer/explorer.py",
+        //  "args":["--s", "../Solver/Test/House.json", "--w", "../Solver/Test/Working"]
+
+        //  ----- Solver
+        //  "program": "${workspaceRoot}/Solver/solver.py",
+        //  "args":["--s", "../Solver/Test/House.json", "--w", "../Solver/Test/Working"],
+
+        //  ----- Relief C++ Extensions
+            "program": "${workspaceRoot}/Relief/tests/python/benchmark.py",
+        //  "program": "${workspaceRoot}/Relief/tests/python/relieftest.py",
         //  "program": "${workspaceRoot}/Relief/setup.py",
-            "program": "${workspaceRoot}/Relief/tests/python/relieftest.py",
+        //  "args":["build", "install"]
+
+        //  ----- Experiments
         //  "program": "${workspaceRoot}/Solver/Experiments/pybind11test.py",
         //  "program": "${workspaceRoot}/Solver/Experiments/workbench.py",
         //  "program": "${workspaceRoot}/Solver/Experiments/mayavitest.py",
-            
-        //  "args":["--target", "IIS", "--deploy", "False"]
-        //  "args":["--s", "../Solver/Test/House.json", "--w", "../Solver/Test/Working"]
-            "args":[]
-        //  "args":["build", "install"]
-        },
 
+            "args":[]
+        },
         {
             "name": "Python (Active File)",
             "type": "python",

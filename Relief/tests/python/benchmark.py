@@ -113,9 +113,9 @@ def main()->None :
     """
     Run benchmark tests.
     """
-    array_fill()
-    #array_filter()
+    #array_fill()
+    array_filter()
 
 if __name__ == '__main__':
-    input("Attach debugger and press <Enter>:") 
+    input("Attach debugger and press <Enter>:")
     main()

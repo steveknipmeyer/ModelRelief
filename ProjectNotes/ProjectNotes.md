@@ -4,14 +4,13 @@
 #### Short Term
     Optimizations
         Refactor GaussianFilter to be row major?
-        Verify the kernel size used in gaussian_filter.
-            Why are the resulting Relief and SciPy Gaussian filter images different?
+        Why are the resulting Relief and SciPy Gaussian filter images different?
 
         Experiment with NumPy pad solutions.
             https://stackoverflow.com/questions/40690248/copy-numpy-array-into-part-of-another-array
 
     Performance Conclusions
-        The kernel multiplication (with NO edge handling) yields results 50X slower than SciPy.
+        The kernel multiplication (with NO edge handling) yields results 50X slower than SciPy.git
 
     Set kernel size dynamically to match sigma.
         What is the kernel size of gaussian_filter?_
@@ -23,6 +22,13 @@
             truncate = 4.0
             sigma = 4.0
             w = 33
+
+    Why does the VSCode Python debugger not find modules in other folders?
+        This happens only in the debugger.
+        Adding .env to the workspace root resolves the issue.
+            PYTHONPATH=Solver;Tools
+                The causes the OS env PYTHONPATH to be added to the search path, including both devenv as well as the production c:\modelrelief\mrenv.
+                The PYTHONPATH does not have any references to c:\modelrelief\mrenv yet the folders Solver and Tools are appended to the that root.
 
     Should the Python image masks be integers or booleans (instead of doubles)?
 
@@ -976,6 +982,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     The file will have its original line endings in your working directory.
 
     git submodule init
+    git submodule update
 
 #### TypeScript
     TypeScript Installations
