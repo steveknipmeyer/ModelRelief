@@ -50,6 +50,7 @@ class GaussianFilter {
         GaussianFilter(NPDoubleArray& image, NPDoubleArray& mask, double sigma);
         ~GaussianFilter();
 
+        void GaussianBlur1(double* pSource, double* pResult, int width, int height, double sigma);
         NPDoubleArray Calculate();
 };
 }

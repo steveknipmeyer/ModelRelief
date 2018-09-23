@@ -5,6 +5,7 @@
  * @afstoputhor Steve Knipmeyer
  * @date 2018-09-03
  */
+#define _USE_MATH_DEFINES
 #include <iostream>
 #include <cmath>
 #include <iomanip>
@@ -44,6 +45,44 @@ GaussianFilter::~GaussianFilter()
 }
 
 /**
+ * @brief GaussianBlur
+ * http://blog.ivank.net/fastest-gaussian-blur.html#results
+ * Algorithm 1
+ *
+ * @param pSource Source image.
+ * @param pResult Result image.
+ * @param width Image width.
+ * @param height Image Height.
+ * @param sigma Standard deviation.
+ * @return NPDoubleArray&
+ *
+ */
+void GaussianFilter::GaussianBlur1 (double* pSource, double* pResult, int width, int height, double sigma)
+{
+    // significant radius
+    int radius = ceil(sigma * 2.57);               
+    std::cout << "radius = " << radius << std::endl;
+
+    for (int i = 0; i < height; i++)
+        for (int j = 0; j < width; j++) 
+        {
+            double value = 0;
+            double weightSum = 0;
+            for (int iy = i - radius; iy < i + radius + 1; iy++)
+                for (int ix = j - radius; ix < j + radius + 1; ix++) 
+                {
+                    int x = min(width - 1, max(0, ix));
+                    int y = min(height - 1, max(0, iy));
+
+                    double distanceSquared = (ix - j)*(ix - j) + (iy - i)*(iy - i);
+                    double weight = exp(-distanceSquared / (2 * sigma*sigma)) / (M_PI * 2 * sigma*sigma);
+                    value += pSource[y*width + x] * weight;  weightSum += weight;
+                }
+            pResult[i*width + j] = round(value / weightSum);
+        }
+}
+
+/**
  * @brief Calculate the filter.
  *
  * @return NPDoubleArray&
@@ -56,6 +95,7 @@ NPDoubleArray GaussianFilter::Calculate()
     py::buffer_info resultBuffer = result.request();
     double *pResult = (double *)resultBuffer.ptr;
 
+#if true
     GaussianKernel kernel(m_sigma);
     for (int row = 0; row < m_rows; row++)
     {
@@ -64,6 +104,9 @@ NPDoubleArray GaussianFilter::Calculate()
             pResult[row*m_columns + column] = ApplyKernel(kernel, row, column);
         }
     }        
+#else
+    GaussianBlur1(m_pImage, pResult, m_columns, m_rows, m_sigma);
+#endif
 
     // reshape result to have same shape as input
     result.resize({ m_columns, m_rows});
