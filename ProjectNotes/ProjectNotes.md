@@ -2,17 +2,7 @@
 #### Commit Notes
 
 #### Short Term
-    Optimizations
-        Refactor GaussianFilter to be row major?
-        Why are the resulting Relief and SciPy Gaussian filter images different?
-
-        Experiment with NumPy pad solutions.
-            https://stackoverflow.com/questions/40690248/copy-numpy-array-into-part-of-another-array
-
-    Performance Conclusions
-        The kernel multiplication (with NO edge handling) yields results 50X slower than SciPy.git
-
-    Set kernel size dynamically to match sigma.
+    Refactor GaussianKernel to dynamically size the kernel. (r * 2.57*)
         What is the kernel size of gaussian_filter?_
             https://stackoverflow.com/questions/25216382/gaussian-filter-in-scipy        _
 
@@ -23,12 +13,20 @@
             sigma = 4.0
             w = 33
 
+    Optimizations
+        Refactor GaussianFilter to be row major?
+
+        Experiment with NumPy pad solutions.
+            https://stackoverflow.com/questions/40690248/copy-numpy-array-into-part-of-another-array
+
+    Performance Conclusions
+        The kernel multiplication (with NO edge handling) yields results 50X slower than SciPy.git
+
     Why does the VSCode Python debugger not find modules in other folders?
         This happens only in the debugger.
         Adding .env to the workspace root resolves the issue.
-            PYTHONPATH=Solver;Tools
-                The causes the OS env PYTHONPATH to be added to the search path, including both devenv as well as the production c:\modelrelief\mrenv.
-                The PYTHONPATH does not have any references to c:\modelrelief\mrenv yet the folders Solver and Tools are appended to the that root.
+            PYTHONPATH=.
+                The causes the entire OS env PYTHONPATH to be added to the search path.
 
     Should the Python image masks be integers or booleans (instead of doubles)?
 

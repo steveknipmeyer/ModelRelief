@@ -32,7 +32,7 @@ using GaussianKernelR = GaussianKernel&;
  */
 class GaussianKernel {
     private:
-        static const int kernelSize = 33;                       // radius = int(truncate * sigma + 0.5)
+        static const int kernelSize = 21;                       // radius = sigma * 2.57
         static const int s_rows    = kernelSize ;               // kernel rows
         static const int s_columns = kernelSize;                // kernel columns
         static const int s_xLimit  = (s_columns - 1) / 2;       // x bound    

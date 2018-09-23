@@ -183,6 +183,9 @@
     <ClCompile Include="tests\c++\GaussianKernelTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\StopWatch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\pybind11\include\pybind11\attr.h">
@@ -276,6 +279,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\ModelRelief.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StopWatch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

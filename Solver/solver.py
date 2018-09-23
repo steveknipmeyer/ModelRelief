@@ -321,7 +321,7 @@ class Solver:
         self.write_mesh()
         self.write_obj()
 
-        #self.relief_filter()
+        self.relief_filter()
         self.scipy_filter()
 
         self.debug_results()

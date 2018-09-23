@@ -127,6 +127,7 @@
     <ClCompile Include="src\GaussianFilter.cpp" />
     <ClCompile Include="src\GaussianKernel.cpp" />
     <ClCompile Include="src\ModelRelief.cpp" />
+    <ClCompile Include="src\StopWatch.cpp" />
     <ClCompile Include="tests\c++\GaussianKernelTests.cpp" />
     <ClCompile Include="tests\c++\main.cpp" />
   </ItemGroup>
@@ -162,6 +163,7 @@
     <ClInclude Include="src\GaussianFilter.h" />
     <ClInclude Include="src\GaussianKernel.h" />
     <ClInclude Include="src\ModelRelief.h" />
+    <ClInclude Include="src\StopWatch.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

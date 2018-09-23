@@ -11,6 +11,7 @@
 #include "ModelRelief.h"
 #include "GaussianFilter.h"
 #include "GaussianKernel.h"
+#include "StopWatch.h"
 
 namespace py = pybind11;
 
@@ -23,7 +24,7 @@ namespace ModelRelief {
  * @param input2 Second array.
  * @return NPDoubleArray
  */
-NPDoubleArray add_arrays(NPDoubleArray input1, NPDoubleArray input2)
+NPDoubleArray add_arrays(NPDoubleArray input1, NPDoubleArray input2) 
 {
    // read input arrays buffer_info
    py::buffer_info buf1 = input1.request(), buf2 = input2.request();
@@ -82,15 +83,12 @@ NPDoubleArray& fill(NPDoubleArray& input, double value)
 
 #if false
     // std library
-    std::clock_t start;
-    double duration;
-    start = std::clock();
+    StopWatch stopWatch("fill_n");
 
     size_t arraySize = numberRows * numberColumns;
     std::fill_n(p, arraySize, value);
 
-    duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
-    std::cout << "fill_n: " << duration << '\n';
+    stopWatch.Stop();
 #endif
 
     return input;
@@ -104,7 +102,7 @@ NPDoubleArray& fill(NPDoubleArray& input, double value)
  * @param sigma Standard deviation.
  * @return NPDoubleArray&
  */
-NPDoubleArray& gaussian_filter(NPDoubleArray& image, NPDoubleArray& mask, double sigma)
+NPDoubleArray gaussian_filter(NPDoubleArray& image, NPDoubleArray& mask, double sigma)
 {
     GaussianFilter filter(image, mask, sigma);
     NPDoubleArray& filteredImage = filter.Calculate();

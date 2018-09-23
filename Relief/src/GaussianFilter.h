@@ -50,6 +50,6 @@ class GaussianFilter {
         GaussianFilter(NPDoubleArray& image, NPDoubleArray& mask, double sigma);
         ~GaussianFilter();
 
-        NPDoubleArray& Calculate();
+        NPDoubleArray Calculate();
 };
 }

@@ -11,6 +11,7 @@ set(SOURCES
     "${SOURCE_DIR}/ModelRelief.cpp" 
     "${SOURCE_DIR}/GaussianFilter.cpp"
     "${SOURCE_DIR}/GaussianKernel.cpp"
+    "${SOURCE_DIR}/StopWatch.cpp"
     )
 
 # generate Python module

@@ -53,17 +53,16 @@ def scipy_filter(a: np.ndarray, sigma: float)->None :
     """
     gaussian_filter(a, sigma, order=0, output=None, mode='reflect', cval=0.0, truncate=4.0)
 
-@benchmark()
 def array_filter()->None :
     """
     Gaussian filters.
     """
     sigma = 4.0
-    a = np.zeros((ARRAY_SIZE, ARRAY_SIZE))
+    a = np.random.rand(ARRAY_SIZE, ARRAY_SIZE)
     mask = np.full((ARRAY_SIZE, ARRAY_SIZE), 1)
 
-    relief_filter(a, mask, sigma)
     scipy_filter(a, sigma)
+    relief_filter(a, mask, sigma)
 
 @benchmark()
 def relief_fill(a: np.ndarray, value: float)-> None :
@@ -102,12 +101,22 @@ def array_fill()->None :
     """
     value = 1.0
 
-
     b = np.zeros((ARRAY_SIZE, ARRAY_SIZE))
     relief_fill(b, value)
 
     a = np.zeros((ARRAY_SIZE, ARRAY_SIZE))
     np_fill(a, value)
+
+@benchmark()
+def pad_array()->None :
+    """
+    Pad an array with a border.
+    """
+    a = np.zeros((ARRAY_SIZE, ARRAY_SIZE))
+
+    border_size = 16
+    b = np.zeros((ARRAY_SIZE + (2 * border_size), ARRAY_SIZE + (2 * border_size)))
+    b[16:(ARRAY_SIZE + border_size), 16:(ARRAY_SIZE + border_size)] = a
 
 def main()->None :
     """
@@ -115,6 +124,7 @@ def main()->None :
     """
     #array_fill()
     array_filter()
+    #pad_array()
 
 if __name__ == '__main__':
     input("Attach debugger and press <Enter>:")

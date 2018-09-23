@@ -2,7 +2,7 @@
  * @brief Support for Gaussian filters in relief processing.
  *
  * @file GaussianFilter.cpp
- * @author Steve Knipmeyer
+ * @afstoputhor Steve Knipmeyer
  * @date 2018-09-03
  */
 #include <iostream>
@@ -12,6 +12,7 @@
 
 #include "ModelRelief.h"
 #include "GaussianFilter.h"
+#include "StopWatch.h"
 
 using namespace std;
 
@@ -48,14 +49,26 @@ GaussianFilter::~GaussianFilter()
  * @return NPDoubleArray&
  *
  */
-NPDoubleArray& GaussianFilter::Calculate()
+NPDoubleArray GaussianFilter::Calculate()
 {
+    // allocate output buffer
+    NPDoubleArray result = NPDoubleArray(m_columns * m_rows);
+    py::buffer_info resultBuffer = result.request();
+    double *pResult = (double *)resultBuffer.ptr;
+
     GaussianKernel kernel(m_sigma);
     for (int row = 0; row < m_rows; row++)
+    {
         for (int column = 0; column < m_columns; column++)
-            m_pImage[row*m_columns + column] = ApplyKernel(kernel, row, column);
+        {
+            pResult[row*m_columns + column] = ApplyKernel(kernel, row, column);
+        }
+    }        
 
-    return m_image;
+    // reshape result to have same shape as input
+    result.resize({ m_columns, m_rows});
+
+    return result;
 }
 
 //-------------------------------------------------------------------------------------------------//
@@ -130,18 +143,16 @@ double GaussianFilter::ApplyKernel(GaussianKernel& kernel, int row, int column)
     int kernelXLimit = kernel.XLimit();
     int kernelYLimit = kernel.YLimit();
 
-    // iteration: row major for performance
+     // iteration: row major for performance
     for (int kernelY = kernelYLimit; kernelY >= -kernelYLimit; kernelY--)
     {
         for (int kernelX = -kernelXLimit; kernelX <= kernelXLimit; kernelX++)
         {
-            //double imageElement = GetOffsetImageElement(row, column, kernelX, kernelY);
-
-            double imageElement = 0.0;
+            double imageElement = GetOffsetImageElement(row, column, kernelX, kernelY);
             sum += imageElement * kernel.Element(kernelX, kernelY);
-            //sum += imageElement * 0.0;
         }
     }
+ 
     return sum;
 }
 }
