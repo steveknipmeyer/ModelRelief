@@ -51,6 +51,7 @@ class GaussianFilter {
         ~GaussianFilter();
 
         void GaussianBlur1(double* pSource, double* pResult, int width, int height, double sigma);
+        void GaussianBlur1A(double* pSource, double* pResult, int width, int height, double sigma);
         NPDoubleArray Calculate();
 };
 }

@@ -6,13 +6,6 @@
         What is the kernel size of gaussian_filter?_
             https://stackoverflow.com/questions/25216382/gaussian-filter-in-scipy        _
 
-        radius = int(truncate * sd + 0.5)
-
-        w = 2*int(truncate*sigma + 0.5) + 1
-            truncate = 4.0
-            sigma = 4.0
-            w = 33
-
     Optimizations
         Refactor GaussianFilter to be row major?
 

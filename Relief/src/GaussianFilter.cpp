@@ -45,7 +45,7 @@ GaussianFilter::~GaussianFilter()
 }
 
 /**
- * @brief GaussianBlur
+ * @brief GaussianBlur1
  * http://blog.ivank.net/fastest-gaussian-blur.html#results
  * Algorithm 1
  *
@@ -60,26 +60,74 @@ GaussianFilter::~GaussianFilter()
 void GaussianFilter::GaussianBlur1 (double* pSource, double* pResult, int width, int height, double sigma)
 {
     // significant radius
-    int radius = ceil(sigma * 2.57);               
-    std::cout << "radius = " << radius << std::endl;
+    int radius = int(ceil(sigma * 2.57));               
 
-    for (int i = 0; i < height; i++)
-        for (int j = 0; j < width; j++) 
+    for (int row = 0; row < height; row++)
+        for (int column = 0; column < width; column++) 
         {
             double value = 0;
-            double weightSum = 0;
-            for (int iy = i - radius; iy < i + radius + 1; iy++)
-                for (int ix = j - radius; ix < j + radius + 1; ix++) 
+            double gaussianSum = 0;
+            for (int iRow = row - radius; iRow < row + radius + 1; iRow++)
+                for (int iColumn = column - radius; iColumn < column + radius + 1; iColumn++) 
                 {
-                    int x = min(width - 1, max(0, ix));
-                    int y = min(height - 1, max(0, iy));
+                    double kernelX = abs(iColumn - column);
+                    double kernelY = abs(iRow - row);
 
-                    double distanceSquared = (ix - j)*(ix - j) + (iy - i)*(iy - i);
-                    double weight = exp(-distanceSquared / (2 * sigma*sigma)) / (M_PI * 2 * sigma*sigma);
-                    value += pSource[y*width + x] * weight;  weightSum += weight;
+                    double distanceSquared = (kernelX * kernelX) + (kernelY * kernelY);
+                    double gaussian = exp(-distanceSquared / (2 * sigma*sigma)) / (M_PI * 2 * sigma*sigma);
+
+                    int x = min(width - 1, max(0, iColumn));
+                    int y = min(height - 1, max(0, iRow));
+                    value += pSource[y*width + x] * gaussian;
+                    gaussianSum += gaussian;
                 }
-            pResult[i*width + j] = round(value / weightSum);
+            pResult[row*width + column] = round(value / gaussianSum);
         }
+}
+
+/**
+ * @brief GaussianBlur1A
+ * http://blog.ivank.net/fastest-gaussian-blur.html#results
+ * Algorithm 1
+ * In this implementation, the gaussian kernel is pre-calculated.
+ *
+ * @param pSource Source image.
+ * @param pResult Result image.
+ * @param width Image width.
+ * @param height Image Height.
+ * @param sigma Standard deviation.
+ * @return NPDoubleArray&
+ *
+ */
+void GaussianFilter::GaussianBlur1A(double* pSource, double* pResult, int width, int height, double sigma)
+{
+    GaussianKernel gaussianKernel(m_sigma);
+
+    // significant radius
+    int radius = int(ceil(sigma * 2.57));
+    std::cout << "radius = " << radius << std::endl;
+
+    for (int row = 0; row < height; row++)
+    {
+        for (int column = 0; column < width; column++)
+        {
+            double value = 0;
+            for (int iRow = row - radius; iRow < row + radius + 1; iRow++)
+            {
+                for (int iColumn = column - radius; iColumn < column + radius + 1; iColumn++)
+                {
+                    int kernelX = iColumn - column;
+                    int kernelY = iRow - row;
+                    double gaussian = gaussianKernel.Element(kernelX, kernelY);
+
+                    int x = min(width - 1, max(0, iColumn));
+                    int y = min(height - 1, max(0, iRow));
+                    value += pSource[y*width + x] * gaussian;
+                }
+            }
+            pResult[row*width + column] = value;
+        }
+    }
 }
 
 /**
@@ -95,7 +143,7 @@ NPDoubleArray GaussianFilter::Calculate()
     py::buffer_info resultBuffer = result.request();
     double *pResult = (double *)resultBuffer.ptr;
 
-#if true
+#if false
     GaussianKernel kernel(m_sigma);
     for (int row = 0; row < m_rows; row++)
     {
@@ -105,7 +153,7 @@ NPDoubleArray GaussianFilter::Calculate()
         }
     }        
 #else
-    GaussianBlur1(m_pImage, pResult, m_columns, m_rows, m_sigma);
+    GaussianBlur1A(m_pImage, pResult, m_columns, m_rows, m_sigma);
 #endif
 
     // reshape result to have same shape as input
