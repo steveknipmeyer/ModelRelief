@@ -143,18 +143,22 @@ NPDoubleArray GaussianFilter::Calculate()
     py::buffer_info resultBuffer = result.request();
     double *pResult = (double *)resultBuffer.ptr;
 
-#if false
-    GaussianKernel kernel(m_sigma);
-    for (int row = 0; row < m_rows; row++)
-    {
-        for (int column = 0; column < m_columns; column++)
-        {
-            pResult[row*m_columns + column] = ApplyKernel(kernel, row, column);
-        }
-    }        
-#else
+    //cout << "GaussianKernel" << endl;
+    //GaussianKernel kernel(m_sigma);
+    //for (int row = 0; row < m_rows; row++)
+    //{
+    //    for (int column = 0; column < m_columns; column++)
+    //    {
+    //        pResult[row*m_columns + column] = ApplyKernel(kernel, row, column);
+    //    }
+    //}        
+
+    //cout << "GaussianBlur1" << endl;
+    //GaussianBlur1(m_pImage, pResult, m_columns, m_rows, m_sigma);
+
+    cout << "GaussianBlur1A" << endl;
     GaussianBlur1A(m_pImage, pResult, m_columns, m_rows, m_sigma);
-#endif
+
 
     // reshape result to have same shape as input
     result.resize({ m_columns, m_rows});
