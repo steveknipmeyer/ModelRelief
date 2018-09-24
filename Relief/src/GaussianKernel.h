@@ -32,14 +32,14 @@ using GaussianKernelR = GaussianKernel&;
  */
 class GaussianKernel {
     private:
-        static const int kernelSize = 23;                       // radius = sigma * 2.57
-        static const int s_rows    = kernelSize ;               // kernel rows
-        static const int s_columns = kernelSize;                // kernel columns
-        static const int s_xLimit  = (s_columns - 1) / 2;       // x bound    
-        static const int s_yLimit  = (s_rows - 1) / 2;          // y bound
+        double  m_sigma;                    // standard deviation
+        int     m_kernelSize;               // dimension of kerlen array
+        int     m_rows;                     // kernel rows
+        int     m_columns;                  // kernel columns
+        int     m_xLimit;                   // x bound    
+        int     m_yLimit;                   // y bound
 
-        double m_sigma;                                         // standard deviation
-        double m_kernel[s_rows][s_columns];                     // default (unmasked) kernel
+        std::unique_ptr<double[]> m_kernel; // default (unmasked) kernel
 
         void Iterate(KernelCallback callback, void* pArguments);
         void Gaussian(int x, int y, void* pArguments);
@@ -50,10 +50,10 @@ class GaussianKernel {
         GaussianKernel(double sigma);
         ~GaussianKernel(); 
 
-        int Rows() { return s_rows; }
-        int Columns() { return s_columns; }
-        int XLimit() { return s_xLimit; }
-        int YLimit() { return s_yLimit; }
+        int Rows() { return m_rows; }
+        int Columns() { return m_columns; }
+        int XLimit() { return m_xLimit; }
+        int YLimit() { return m_yLimit; }
 
         double& Element(int x, int y);
 

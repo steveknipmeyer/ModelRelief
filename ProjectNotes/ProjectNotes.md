@@ -2,18 +2,9 @@
 #### Commit Notes
 
 #### Short Term
-    Refactor GaussianKernel to dynamically size the kernel. (r * 2.57*)
-        What is the kernel size of gaussian_filter?_
-            https://stackoverflow.com/questions/25216382/gaussian-filter-in-scipy        _
-
     Optimizations
-        Refactor GaussianFilter to be row major?
-
         Experiment with NumPy pad solutions.
             https://stackoverflow.com/questions/40690248/copy-numpy-array-into-part-of-another-array
-
-    Performance Conclusions
-        The kernel multiplication (with NO edge handling) yields results 50X slower than SciPy.git
 
     Why does the VSCode Python debugger not find modules in other folders?
         This happens only in the debugger.

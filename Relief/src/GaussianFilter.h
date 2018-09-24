@@ -39,7 +39,7 @@ class GaussianFilter {
 
         double m_sigma;                             // standard deviation for the Gaussian filter
 
-        std::unique_ptr<GaussianKernel> m_pDefaultKernel;
+        std::unique_ptr<GaussianKernel> m_defaultKernel;
 
     private:
         void InitializeNative(NPDoubleArray& image, NPDoubleArray& mask);

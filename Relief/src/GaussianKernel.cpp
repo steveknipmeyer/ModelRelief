@@ -30,6 +30,14 @@ GaussianKernel::GaussianKernel(double sigma)
 {
     m_sigma = sigma;
 
+    m_kernelSize = (int(ceil(m_sigma * 2.57)) * 2) + 1;
+    m_rows       = m_kernelSize;             
+    m_columns    = m_kernelSize;             
+    m_xLimit     = (m_columns - 1) / 2;      
+    m_yLimit     = (m_rows - 1) / 2;         
+
+    m_kernel = unique_ptr<double[]>(new double[m_rows * m_columns]);
+
     CalculateStandard();
     Normalize(); 
 }
@@ -50,7 +58,7 @@ GaussianKernel::~GaussianKernel()
  */
 double& GaussianKernel::Element (int x, int y)
 {
-    return m_kernel[s_yLimit - y][s_xLimit + x];
+    return m_kernel[((m_yLimit - y) * m_columns) + (m_xLimit + x)];
 }
 
 /**
@@ -85,11 +93,11 @@ void GaussianKernel::Display()
     std::cout << std::setprecision(precision);
     std::cout << endl;
 
-    for (int iRow = 0; iRow < s_rows; iRow++)
+    for (int iRow = 0; iRow < m_rows; iRow++)
     {
-        for (int iColumn = 0; iColumn < s_columns; iColumn++)
+        for (int iColumn = 0; iColumn < m_columns; iColumn++)
         {
-            std::cout << setw(width) << m_kernel[iRow][iColumn];
+            std::cout << setw(width) << m_kernel[(iRow ^ m_columns) + iColumn];
         }
         std::cout << endl;
     }
@@ -106,8 +114,8 @@ void GaussianKernel::Display()
  */
 void GaussianKernel::Iterate(KernelCallback callback, void* pArguments)
 {
-    for (int x = -s_xLimit; x <= s_xLimit; x++)
-        for (int y = -s_yLimit; y <= s_yLimit; y++)
+    for (int x = -m_xLimit; x <= m_xLimit; x++)
+        for (int y = -m_yLimit; y <= m_yLimit; y++)
             std::invoke(callback, *this, x, y, pArguments);
 }
 
@@ -121,7 +129,7 @@ void GaussianKernel::Iterate(KernelCallback callback, void* pArguments)
 void GaussianKernel::Sum(int x, int y, void* pArguments)
 {
     double* sum = (double*) pArguments;
-    *sum += m_kernel[s_yLimit - y][s_xLimit + x];
+    *sum += m_kernel[((m_yLimit - y) * m_columns) + (m_xLimit + x)];
 }
 
 /**
@@ -134,7 +142,7 @@ void GaussianKernel::Sum(int x, int y, void* pArguments)
 void GaussianKernel::NormalizeElement(int x, int y, void* pArguments)
 {
     double* sum = (double*)pArguments;
-    m_kernel[s_yLimit - y][s_xLimit + x] /= *sum;
+    m_kernel[((m_yLimit - y) * m_columns) + (m_xLimit + x)] /= *sum;
 }
 
 /**
@@ -148,6 +156,6 @@ void GaussianKernel::Gaussian(int x, int y, void* pArguments)
 {
     double exponent = ((x * x) + (y * y)) / (2 * (m_sigma * m_sigma));
     double value = exp(-exponent);
-    m_kernel[s_yLimit - y][s_xLimit + x] = value;
+    m_kernel[((m_yLimit - y) * m_columns) + (m_xLimit + x)] = value;
 }
 }

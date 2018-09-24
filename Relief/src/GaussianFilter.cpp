@@ -30,7 +30,7 @@ namespace ModelRelief {
  * @param mask NumPy mask. Only unmasked image elements are included in the filter.
  * @param sigma Standard deviation.
  */
-GaussianFilter::GaussianFilter(NPDoubleArray& image, NPDoubleArray& mask, double sigma) : m_image(image), m_mask(mask), m_pDefaultKernel(new GaussianKernel(sigma))
+GaussianFilter::GaussianFilter(NPDoubleArray& image, NPDoubleArray& mask, double sigma) : m_image(image), m_mask(mask), m_defaultKernel(new GaussianKernel(sigma))
 {
     m_sigma = sigma;
     InitializeNative(image, mask);
@@ -105,7 +105,7 @@ void GaussianFilter::GaussianBlur1A(double* pSource, double* pResult, int width,
 
     // significant radius
     int radius = int(ceil(sigma * 2.57));
-    std::cout << "radius = " << radius << std::endl;
+    //std::cout << "GaussianBlur1A radius = " << radius << std::endl;
 
     for (int row = 0; row < height; row++)
     {
@@ -143,22 +143,20 @@ NPDoubleArray GaussianFilter::Calculate()
     py::buffer_info resultBuffer = result.request();
     double *pResult = (double *)resultBuffer.ptr;
 
-    //cout << "GaussianKernel" << endl;
-    //GaussianKernel kernel(m_sigma);
+    //cout << "GaussianFilter" << endl;
     //for (int row = 0; row < m_rows; row++)
     //{
     //    for (int column = 0; column < m_columns; column++)
     //    {
-    //        pResult[row*m_columns + column] = ApplyKernel(kernel, row, column);
+    //        pResult[row*m_columns + column] = ApplyKernel(*m_defaultKernel, row, column);
     //    }
     //}        
 
-    //cout << "GaussianBlur1" << endl;
-    //GaussianBlur1(m_pImage, pResult, m_columns, m_rows, m_sigma);
+    cout << "GaussianBlur1" << endl;
+    GaussianBlur1(m_pImage, pResult, m_columns, m_rows, m_sigma);
 
-    cout << "GaussianBlur1A" << endl;
-    GaussianBlur1A(m_pImage, pResult, m_columns, m_rows, m_sigma);
-
+    //cout << "GaussianBlur1A" << endl;
+    //GaussianBlur1A(m_pImage, pResult, m_columns, m_rows, m_sigma);
 
     // reshape result to have same shape as input
     result.resize({ m_columns, m_rows});
