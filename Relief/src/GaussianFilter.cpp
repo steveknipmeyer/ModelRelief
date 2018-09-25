@@ -146,7 +146,7 @@ void GaussianFilter::GaussianBlur1A(double* pSource, double* pResult, int width,
  */
 void GaussianFilter::GaussianBlur2(double* pSource, double* pResult, int width, int height, double sigma)
 {
-    int passes = 8;
+    int passes = 5;
     std::vector<int> boxSizes = BoxBlurSizes(sigma, passes);
 
     for (int iPass = 0; iPass < passes; iPass++)
@@ -315,7 +315,9 @@ double GaussianFilter::ApplyKernel(GaussianKernel& kernel, int row, int column)
  * @brief Returns a collection of box sizes to support Gaussian filter approximation.
  *        https://www.peterkovesi.com/matlabfns/
  * @param sigma Standard deviation.
- * @param passes Number of passes.
+ * @param passes The number of average filterings to be used to approximate the Gaussian.  This should be a minimum of 3, using 4 is better. 
+ *               If the smoothed image is to be differentiated an additional averaging should be applied for each derivative.  
+ *               if a second derivative is to be taken at least 5 averagings should be applied. 
  * @return std::vector<float> Collection of box sizes.
  */
 std::vector<int> GaussianFilter::BoxBlurSizes(double sigma, int passes)

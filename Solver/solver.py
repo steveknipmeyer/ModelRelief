@@ -284,9 +284,9 @@ class Solver:
         Relief C++ Gaussian filter.
         """
         if self.enable_p8:
-            self.services.results.i4 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 1)
-            self.services.results.i5 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 2)
-            self.services.results.i6 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 3)
+            #self.services.results.i4 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 1)
+            #self.services.results.i5 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 2)
+            #self.services.results.i6 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 3)
             self.services.results.i7 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 4)
 
     def debug_results(self):
