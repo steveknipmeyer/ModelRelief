@@ -275,19 +275,45 @@ class Solver:
         """
         SciPy Gaussian filter.
         """
-        if self.enable_p8:
-            self.services.results.i3 = gaussian_filter(self.services.results.depth_buffer_model, self.mesh_transform.unsharpmask_parameters.gaussian_low, order=0, output=None, mode='reflect', cval=0.0, truncate=4.0)
+        self.services.results.i3 = gaussian_filter(self.services.results.depth_buffer_model, self.mesh_transform.unsharpmask_parameters.gaussian_low, order=0, output=None, mode='reflect', cval=0.0, truncate=4.0)
+
+    @benchmark()
+    def GaussianFilter(self):
+        """
+        Relief C++ Gaussian filter.
+        """
+        self.services.results.i4 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 0)
+
+    @benchmark()
+    def GaussianBlur(self):
+        """
+        Relief C++ Gaussian filter.
+        """
+        self.services.results.i5 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 1)
+
+    @benchmark()
+    def GaussianBlurBox(self):
+        """
+        Relief C++ Gaussian filter.
+        """
+        self.services.results.i6 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 2)
+
+    @benchmark()
+    def GaussianBlurBoxIndependent(self):
+        """
+        Relief C++ Gaussian filter.
+        """
+        self.services.results.i7 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 3)
 
     @benchmark()
     def relief_filter(self):
         """
         Relief C++ Gaussian filter.
         """
-        if self.enable_p8:
-            #self.services.results.i4 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 1)
-            #self.services.results.i5 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 2)
-            #self.services.results.i6 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 3)
-            self.services.results.i7 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 4)
+        self.GaussianFilter()
+        self.GaussianBlur()
+        self.GaussianBlurBox()
+        self.GaussianBlurBoxIndependent()
 
     def debug_results(self):
         """
@@ -324,8 +350,9 @@ class Solver:
         self.write_mesh()
         self.write_obj()
 
-        self.scipy_filter()
-        self.relief_filter()
+        if self.enable_p8:
+            self.scipy_filter()
+            self.relief_filter()
 
         self.debug_results()
 def main():

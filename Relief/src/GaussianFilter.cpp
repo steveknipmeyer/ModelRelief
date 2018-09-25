@@ -45,7 +45,7 @@ GaussianFilter::~GaussianFilter()
 }
 
 /**
- * @brief GaussianBlur1
+ * @brief GaussianBlur
  * http://blog.ivank.net/fastest-gaussian-blur.html#results
  * Algorithm 1
  *
@@ -57,7 +57,7 @@ GaussianFilter::~GaussianFilter()
  * @return NPDoubleArray&
  *
  */
-void GaussianFilter::GaussianBlur1 (double* pSource, double* pResult, int width, int height, double sigma)
+void GaussianFilter::GaussianBlur (double* pSource, double* pResult, int width, int height, double sigma)
 {
     // significant radius
     int radius = int(ceil(sigma * 2.57));
@@ -86,7 +86,7 @@ void GaussianFilter::GaussianBlur1 (double* pSource, double* pResult, int width,
 }
 
 /**
- * @brief GaussianBlur1A
+ * @brief GaussianBlurCachedKernel
  * http://blog.ivank.net/fastest-gaussian-blur.html#results
  * Algorithm 1
  * In this implementation, the gaussian kernel is pre-calculated.
@@ -99,7 +99,7 @@ void GaussianFilter::GaussianBlur1 (double* pSource, double* pResult, int width,
  * @return NPDoubleArray&
  *
  */
-void GaussianFilter::GaussianBlur1A(double* pSource, double* pResult, int width, int height, double sigma)
+void GaussianFilter::GaussianBlurCachedKernel(double* pSource, double* pResult, int width, int height, double sigma)
 {
     GaussianKernel gaussianKernel(m_sigma);
 
@@ -131,7 +131,7 @@ void GaussianFilter::GaussianBlur1A(double* pSource, double* pResult, int width,
 }
 
 /**
- * @brief GaussianBlur2
+ * @brief GaussianBlurBox
  * http://blog.ivank.net/fastest-gaussian-blur.html#results
  * Algorithm 2
  * In this implementation, multiple passes of a box filter are used.
@@ -144,7 +144,54 @@ void GaussianFilter::GaussianBlur1A(double* pSource, double* pResult, int width,
  * @return NPDoubleArray&
  *
  */
-void GaussianFilter::GaussianBlur2(double* pSource, double* pResult, int width, int height, double sigma)
+void GaussianFilter::GaussianBlurBox(double* pSource, double* pResult, int width, int height, double sigma)
+{
+    int passes = 5;
+    std::vector<int> boxSizes = BoxBlurSizes(sigma, passes);
+
+    for (int iPass = 0; iPass < passes; iPass++)
+    {
+        int radius = boxSizes.at(iPass);
+        std::cout << "GaussianBlur2 radius = " << radius << std::endl;
+        for (int row = 0; row < height; row++)
+        {
+            for (int column = 0; column < width; column++)
+            {
+                double value = 0;
+                for (int iRow = row - radius; iRow < row + radius + 1; iRow++)
+                {
+                    for (int iColumn = column - radius; iColumn < column + radius + 1; iColumn++)
+                    {
+                        int kernelX = iColumn - column;
+                        int kernelY = iRow - row;
+
+                        int x = min(width - 1, max(0, iColumn));
+                        int y = min(height - 1, max(0, iRow));
+                        value += pSource[y*width + x];
+                    }
+                }
+                double boxElements = (2 * radius) * (2 * radius);
+                pResult[row*width + column] = value / boxElements;
+            }
+        }
+    }
+}
+
+/**
+ * @brief GaussianBlurBoxIndependent
+ * http://blog.ivank.net/fastest-gaussian-blur.html#results
+ * Algorithm 3
+ * In this implementation, the box filters are performed independently, along rows and columns.
+ *
+ * @param pSource Source image.
+ * @param pResult Result image.
+ * @param width Image width.
+ * @param height Image Height.
+ * @param sigma Standard deviation.
+ * @return NPDoubleArray&
+ *
+ */
+void GaussianFilter::GaussianBlurBoxIndependent(double* pSource, double* pResult, int width, int height, double sigma)
 {
     int passes = 5;
     std::vector<int> boxSizes = BoxBlurSizes(sigma, passes);
@@ -193,7 +240,7 @@ NPDoubleArray GaussianFilter::Calculate(int algorithm)
 
     switch (algorithm)
     {
-        case 1:
+        case 0:
             cout << "GaussianFilter" << endl;
             for (int row = 0; row < m_rows; row++)
             {
@@ -204,19 +251,24 @@ NPDoubleArray GaussianFilter::Calculate(int algorithm)
             }
             break;
 
+        case 1:
+            cout << "GaussianBlur" << endl;
+            GaussianBlur(m_pImage, pResult, m_columns, m_rows, m_sigma);
+            break;
+
+        case 11:
+            cout << "GaussianBlurCachedKernel" << endl;
+            GaussianBlurCachedKernel(m_pImage, pResult, m_columns, m_rows, m_sigma);
+            break;
+
         case 2:
-            cout << "GaussianBlur1" << endl;
-            GaussianBlur1(m_pImage, pResult, m_columns, m_rows, m_sigma);
+            cout << "GaussianBlurBox" << endl;
+            GaussianBlurBox(m_pImage, pResult, m_columns, m_rows, m_sigma);
             break;
 
         case 3:
-            cout << "GaussianBlur1A" << endl;
-            GaussianBlur1A(m_pImage, pResult, m_columns, m_rows, m_sigma);
-            break;
-
-        case 4:
-            cout << "GaussianBlur2" << endl;
-            GaussianBlur2(m_pImage, pResult, m_columns, m_rows, m_sigma);
+            cout << "GaussianBlurBoxIndependent" << endl;
+            GaussianBlurBoxIndependent(m_pImage, pResult, m_columns, m_rows, m_sigma);
             break;
     }
 

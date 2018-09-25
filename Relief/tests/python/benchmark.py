@@ -38,10 +38,10 @@ def relief_filter(a: np.ndarray, mask: np.ndarray, sigma: float)->None :
     sigma
         Standard deviation.
     """
-    #relief.gaussian_filter(a, mask, sigma, 1)
-    #relief.gaussian_filter(a, mask, sigma, 2)
-    #relief.gaussian_filter(a, mask, sigma, 3)
-    relief.gaussian_filter(a, mask, sigma, 4)
+    relief.gaussian_filter(a, mask, sigma, 0)
+    relief.gaussian_filter(a, mask, sigma, 1)
+    relief.gaussian_filter(a, mask, sigma, 2)
+    relief.gaussian_filter(a, mask, sigma, 3)
 
 @benchmark()
 def scipy_filter(a: np.ndarray, sigma: float)->None :

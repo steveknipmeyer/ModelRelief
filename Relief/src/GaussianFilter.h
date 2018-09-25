@@ -52,9 +52,11 @@ class GaussianFilter {
         GaussianFilter(NPDoubleArray& image, NPDoubleArray& mask, double sigma);
         ~GaussianFilter();
 
-        void GaussianBlur1(double* pSource, double* pResult, int width, int height, double sigma);
-        void GaussianBlur1A(double* pSource, double* pResult, int width, int height, double sigma);
-        void GaussianBlur2(double* pSource, double* pResult, int width, int height, double sigma);
+        void GaussianBlur(double* pSource, double* pResult, int width, int height, double sigma);
+        void GaussianBlurCachedKernel(double* pSource, double* pResult, int width, int height, double sigma);
+        void GaussianBlurBox(double* pSource, double* pResult, int width, int height, double sigma);
+        void GaussianBlurBoxIndependent(double* pSource, double* pResult, int width, int height, double sigma);
+
         NPDoubleArray Calculate(int algorithm);
 };
 }
