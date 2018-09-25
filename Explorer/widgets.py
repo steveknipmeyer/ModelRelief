@@ -67,6 +67,8 @@ class ImageType(Enum):
     Image4 = 14,
     Image5 = 15,
     Image6 = 16,
+    Image7 = 17,
+    Image8 = 18,
 
 class ImageTab():
     """ A UI tab of an image view. """

@@ -2,6 +2,9 @@
 #### Commit Notes
 
 #### Short Term
+    Why is 1A slower than 1?
+        Is it the use of the GaussianKernel?
+
     Optimizations
         Experiment with NumPy pad solutions.
             https://stackoverflow.com/questions/40690248/copy-numpy-array-into-part-of-another-array
@@ -1063,13 +1066,13 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
         Similarly, for binary documents without specific or known subtype, application/octet-stream should be used.
 
 #### Licenses
-    THREE.js            MIT
-    Serilog             Apache https://www.apache.org/licenses/LICENSE-2.0
-    Autofac             MIT
-    MediatR             Apache https://github.com/jbogard/MediatR/blob/master/LICENSE
-    FeatureFolders      MIT https://raw.githubusercontent.com/OdeToCode/AddFeatureFolders/master/LICENSE
-    http-status-codes   MIT https://www.npmjs.com/package/http-status-codes
-    base64              MIT https://github.com/beatgammit/base64-js/blob/master/index.js
+    THREE.js                    MIT
+    Serilog                     Apache https://www.apache.org/licenses/LICENSE-2.0
+    Autofac                     MIT
+    MediatR                     Apache https://github.com/jbogard/MediatR/blob/master/LICENSE
+    FeatureFolders              MIT https://raw.githubusercontent.com/OdeToCode/AddFeatureFolders/master/LICENSE
+    http-status-codes           MIT https://www.npmjs.com/package/http-status-codes
+    base64                      MIT https://github.com/beatgammit/base64-js/blob/master/index.js
     OpinionatedApiController : Spencer Schneidenbach
     ContosoCore              : Jimmy Bogard
 
@@ -1085,6 +1088,9 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     Statue                                      Stanford        Stanford
     Test                                        ModelRelief     Internal
     Tyrannosaurus                               Stanford        Stanford
+
+    Gaussian Box Blur           MIT https://www.peterkovesi.com/matlabfns/citesite.html
+       Ivan Kutskir                 http://blog.ivank.net/fastest-gaussian-blur.html
 
 #### Visual Studio
     Performance

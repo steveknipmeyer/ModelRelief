@@ -101,6 +101,8 @@ class Explorer(QtWidgets.QMainWindow):
         self.image_tabs[ImageType.Image4] = ImageTab(self.ui.i4Tab, ImageType.Image4, "Image Four", "gray", ImageTab.add_image, DataSource(self.solver.results, "i4"))
         self.image_tabs[ImageType.Image5] = ImageTab(self.ui.i5Tab, ImageType.Image5, "Image Five", "gray", ImageTab.add_image, DataSource(self.solver.results, "i5"))
         self.image_tabs[ImageType.Image6] = ImageTab(self.ui.i6Tab, ImageType.Image6, "Image Six", "gray", ImageTab.add_image, DataSource(self.solver.results, "i6"))
+        self.image_tabs[ImageType.Image7] = ImageTab(self.ui.i7Tab, ImageType.Image6, "Image Seven", "gray", ImageTab.add_image, DataSource(self.solver.results, "i7"))
+        self.image_tabs[ImageType.Image8] = ImageTab(self.ui.i8Tab, ImageType.Image6, "Image Eight", "gray", ImageTab.add_image, DataSource(self.solver.results, "i8"))
 
     def initialize_settings(self) ->None:
         mesh_transform:Dict[str, float] = self.settings['MeshTransform']

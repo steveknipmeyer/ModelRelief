@@ -46,12 +46,15 @@ class GaussianFilter {
         double GetOffsetImageElement(int row, int column, int xOffset, int yOffset);
         double ApplyKernel(GaussianKernel& kernel, int row, int column);
 
+        std::vector<int> BoxBlurSizes(double sigma, int passes);
+
     public:
         GaussianFilter(NPDoubleArray& image, NPDoubleArray& mask, double sigma);
         ~GaussianFilter();
 
         void GaussianBlur1(double* pSource, double* pResult, int width, int height, double sigma);
         void GaussianBlur1A(double* pSource, double* pResult, int width, int height, double sigma);
-        NPDoubleArray Calculate();
+        void GaussianBlur2(double* pSource, double* pResult, int width, int height, double sigma);
+        NPDoubleArray Calculate(int algorithm);
 };
 }

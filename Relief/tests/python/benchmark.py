@@ -21,6 +21,8 @@ from logger import Logger
 from stopwatch import benchmark
 from tools import Colors, Tools
 
+#ARRAY_SIZE = 512
+#ARRAY_SIZE = 1024
 ARRAY_SIZE = 2048
 
 @benchmark()
@@ -36,7 +38,10 @@ def relief_filter(a: np.ndarray, mask: np.ndarray, sigma: float)->None :
     sigma
         Standard deviation.
     """
-    relief.gaussian_filter(a, mask, sigma)
+    relief.gaussian_filter(a, mask, sigma, 1)
+    relief.gaussian_filter(a, mask, sigma, 2)
+    relief.gaussian_filter(a, mask, sigma, 3)
+    relief.gaussian_filter(a, mask, sigma, 4)
 
 @benchmark()
 def scipy_filter(a: np.ndarray, sigma: float)->None :

@@ -46,6 +46,8 @@ class Results:
         self.i4 = np.zeros(default_shape)
         self.i5 = np.zeros(default_shape)
         self.i6 = np.zeros(default_shape)
+        self.i7 = np.zeros(default_shape)
+        self.i8 = np.zeros(default_shape)
 
     def initialize(self, rows: int, columns: int)->None :
         """
@@ -84,6 +86,8 @@ class Results:
         self.i4 = np.zeros(initialization_shape)
         self.i5 = np.zeros(initialization_shape)
         self.i6 = np.zeros(initialization_shape)
+        self.i7 = np.zeros(initialization_shape)
+        self.i8 = np.zeros(initialization_shape)
 
 class DataSource:
     """

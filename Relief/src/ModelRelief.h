@@ -24,7 +24,7 @@ using NPDoubleArray = py::array_t<double>;
 //-------------------------------------------------------------------------------------------------//
 NPDoubleArray add_arrays(NPDoubleArray input1, NPDoubleArray input2);
 NPDoubleArray& fill(NPDoubleArray& input, double value);
-NPDoubleArray gaussian_filter(NPDoubleArray& image, NPDoubleArray& mask, double sigma);
+NPDoubleArray gaussian_filter(NPDoubleArray& image, NPDoubleArray& mask, double sigma, int algorithm);
 
 int kernelTest();
 }

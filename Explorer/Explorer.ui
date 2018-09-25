@@ -308,6 +308,18 @@
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_19"/>
           </widget>
+          <widget class="QWidget" name="i7Tab">
+           <attribute name="title">
+            <string>I7</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_20"/>
+          </widget>
+          <widget class="QWidget" name="i8Tab">
+           <attribute name="title">
+            <string>I8</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_21"/>
+          </widget>
          </widget>
         </item>
        </layout>
