@@ -76,14 +76,14 @@ class UnsharpMask:
 
         original_prime= original * combined_mask
 
-        low = gaussian_filter(original_prime, parameters.gaussian_low, order=0, output=None, mode='reflect', cval=0.0, truncate=4.0)
+        low = gaussian_filter(original_prime, parameters.gaussian_low, order=0, output=None, mode='nearest', cval=0.0, truncate=4.0)
         #low = relief.gaussian_filter(original_prime, combined_mask, parameters.gaussian_low, 4)
 
         low = low * combined_mask
 
         # subtract low frequency from original to yield the high frequency components
         high = original_prime - low
-        high = gaussian_filter(high, parameters.gaussian_high, order=0, output=None, mode='reflect', cval=0.0, truncate=4.0)
+        high = gaussian_filter(high, parameters.gaussian_high, order=0, output=None, mode='nearest', cval=0.0, truncate=4.0)
         #high = relief.gaussian_filter(high, combined_mask, parameters.gaussian_high, 4)
 
         # add back the scaled high frequency components to generate the final results

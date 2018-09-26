@@ -3,16 +3,11 @@
 
 #### Short Term
 
+    Why is GausianBlurCachedKermel slower than GaussianBlur?
+        Is it the use of the GaussianKernel?
+
     What is the optimal size of the kernel radius?
     How many passes are required for GaussianBoxBlur?
-
-    Why do these methods generate different results?
-        GaussianFilter
-        GaussianBlur
-        GaussianBlurCachedKernel
-
-    Why is GausianBoxCachedKermel slower than GaussianBox?
-        Is it the use of the GaussianKernel?
 
     Add an "Experiment" module to Explorer to isolate test code.            
     How can the Workbench images be labeled?

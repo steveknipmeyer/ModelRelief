@@ -126,7 +126,7 @@ class Benchmark:
             Standard deviation.
         """
         for _ in range(self.trials):
-            result = gaussian_filter(a, sigma, order=0, output=None, mode='reflect', cval=0.0, truncate=4.0)
+            result = gaussian_filter(a, sigma, order=0, output=None, mode='nearest', cval=0.0, truncate=4.0)
         return result
 
     def array_filter(self, )->None :

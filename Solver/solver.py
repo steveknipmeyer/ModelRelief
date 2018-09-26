@@ -275,7 +275,7 @@ class Solver:
         """
         SciPy Gaussian filter.
         """
-        self.services.results.i3 = gaussian_filter(self.services.results.depth_buffer_model, self.mesh_transform.unsharpmask_parameters.gaussian_low, order=0, output=None, mode='reflect', cval=0.0, truncate=4.0)
+        self.services.results.i3 = gaussian_filter(self.services.results.depth_buffer_model, self.mesh_transform.unsharpmask_parameters.gaussian_low, order=0, output=None, mode='nearest', cval=0.0, truncate=4.0)
 
     @benchmark()
     def GaussianFilter(self):

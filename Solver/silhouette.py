@@ -50,7 +50,7 @@ class Silhouette:
         # blur entire image to blend the image edges with the background
         blurred_all = image
         for _ in range(iterations):
-            blurred_all = gaussian_filter(blurred_all, sigma, order=0, output=None, mode='reflect', cval=0.0, truncate=4.0)
+            blurred_all = gaussian_filter(blurred_all, sigma, order=0, output=None, mode='nearest', cval=0.0, truncate=4.0)
         
         # isolate only the portion of the blend that extends into the background mask
         mask = Mask (self.services)

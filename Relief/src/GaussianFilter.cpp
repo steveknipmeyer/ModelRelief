@@ -72,14 +72,15 @@ void GaussianFilter::GaussianBlur (double* pSource, double* pResult, int width, 
                     double kernelY = abs(iRow - row);
 
                     double distanceSquared = (kernelX * kernelX) + (kernelY * kernelY);
-                    double gaussian = exp(-distanceSquared / (2 * sigma*sigma)) / (M_PI * 2 * sigma*sigma);
+                    double gaussian = exp(-distanceSquared / (2 * sigma * sigma)) / (M_PI * 2 * sigma * sigma);
 
                     int x = min(width - 1, max(0, iColumn));
                     int y = min(height - 1, max(0, iRow));
                     value += pSource[y*width + x] * gaussian;
                     gaussianSum += gaussian;
+                    m_counter++;
                 }
-            pResult[row*width + column] = round(value / gaussianSum);
+            pResult[row*width + column] = value / gaussianSum;
         }
 }
 
@@ -236,6 +237,9 @@ void GaussianFilter::GaussianBlurBoxIndependent(double* pSource, double* pResult
  */
 NPDoubleArray GaussianFilter::Calculate(int algorithm)
 {
+    // algorithm step counter
+    m_counter = 0;
+
     // allocate output buffer
     NPDoubleArray result = NPDoubleArray(m_columns * m_rows);
     py::buffer_info resultBuffer = result.request();
@@ -252,11 +256,13 @@ NPDoubleArray GaussianFilter::Calculate(int algorithm)
                     pResult[row*m_columns + column] = ApplyKernel(*m_defaultKernel, row, column);
                 }
             }
+            //cout << "GaussianFilter steps = """ << m_counter << endl;
             break;
 
         case 1:
             //cout << "GaussianBlur" << endl;
             GaussianBlur(m_pImage, pResult, m_columns, m_rows, m_sigma);
+            //cout << "GaussianBlur steps = """ << m_counter << endl;
             break;
 
         case 11:
@@ -317,12 +323,14 @@ void GaussianFilter::InitializeNative(NPDoubleArray& image, NPDoubleArray& mask)
  */
 double GaussianFilter::GetOffsetImageElement(int row, int column, int xOffset, int yOffset)
 {
+    // N.B. Out of bounds elements are mapped to <reflected> elements.
+#if false
     int targetRow    = row + yOffset;
     int targetColumn = column + xOffset;
 
     // column bounds check
     if (targetColumn < 0)
-        targetColumn = abs(long(column + xOffset));
+        targetColumn = abs(column + xOffset);
     if (targetColumn > (m_columns - 1))
         targetColumn = (m_columns - 1) - ((column + xOffset) - (m_columns - 1));
 
@@ -331,6 +339,22 @@ double GaussianFilter::GetOffsetImageElement(int row, int column, int xOffset, i
         targetRow = abs(row + yOffset);
     if (targetRow > (m_rows - 1))
         targetRow = (m_rows - 1) - ((row + yOffset) - (m_rows - 1));
+#else
+    int targetRow = row + yOffset;
+    int targetColumn = column + xOffset;
+
+    // column bounds check
+    if (targetColumn < 0)
+        targetColumn = 0;
+    if (targetColumn > (m_columns - 1))
+        targetColumn = (m_columns - 1);
+
+    // row bounds check
+    if (targetRow < 0)
+        targetRow = 0;
+    if (targetRow > (m_rows - 1))
+        targetRow = (m_rows - 1);
+#endif
 
     assert((targetRow >= 0) && (targetRow < m_rows));
     assert((targetColumn >= 0) && (targetColumn < m_columns));
@@ -360,6 +384,7 @@ double GaussianFilter::ApplyKernel(GaussianKernel& kernel, int row, int column)
         {
             double imageElement = GetOffsetImageElement(row, column, kernelX, kernelY);
             sum += imageElement * kernel.Element(kernelX, kernelY);
+            m_counter++;
         }
     }
 

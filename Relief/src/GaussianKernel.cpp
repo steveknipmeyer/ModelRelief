@@ -6,7 +6,7 @@
  * @date 2018-09-03
  */
 #pragma once
-
+#define _USE_MATH_DEFINES
 #include <iostream>
 #include <cmath>
 #include <iomanip>
@@ -161,7 +161,8 @@ void GaussianKernel::NormalizeElement(int x, int y, void* pArguments)
 void GaussianKernel::Gaussian(int x, int y, void* pArguments)
 {
     double exponent = ((x * x) + (y * y)) / (2 * (m_sigma * m_sigma));
-    double value = exp(-exponent);
+    double value = exp(-exponent) / (M_PI * 2 * m_sigma * m_sigma);
+
     m_kernel[((m_yLimit - y) * m_columns) + (m_xLimit + x)] = value;
 }
 }
