@@ -28,6 +28,9 @@ class GaussianFilter;
 class GaussianFilter {
 
     private:
+        int m_counter;                              // algorithm counter
+
+    private:
         int m_rows;                                 // image rows
         int m_columns;                              // image columns
 

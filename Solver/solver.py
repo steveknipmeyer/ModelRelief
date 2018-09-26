@@ -283,6 +283,7 @@ class Solver:
         Relief C++ Gaussian filter.
         """
         self.services.results.i4 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 0)
+        self.services.logger.logInformation (f"GaussianFilter MSE = {Tools.MSE(self.services.results.i3, self.services.results.i4)}", Colors.Magenta)
 
     @benchmark()
     def GaussianBlur(self):
@@ -290,20 +291,31 @@ class Solver:
         Relief C++ Gaussian filter.
         """
         self.services.results.i5 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 1)
+        self.services.logger.logInformation (f"GaussianBlur MSE = {Tools.MSE(self.services.results.i3, self.services.results.i5)}", Colors.Magenta)
+
+    @benchmark()
+    def GaussianBlurCachedKernel(self):
+        """
+        Relief C++ Gaussian filter.
+        """
+        self.services.results.i6 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 11)
+        self.services.logger.logInformation (f"GaussianBlurCachedKernel MSE = {Tools.MSE(self.services.results.i3, self.services.results.i6)}", Colors.Magenta)
 
     @benchmark()
     def GaussianBlurBox(self):
         """
         Relief C++ Gaussian filter.
         """
-        self.services.results.i6 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 2)
+        self.services.results.i7 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 2)
+        self.services.logger.logInformation (f"GaussianBlurBox MSE = {Tools.MSE(self.services.results.i3, self.services.results.i7)}", Colors.Magenta)
 
     @benchmark()
     def GaussianBlurBoxIndependent(self):
         """
         Relief C++ Gaussian filter.
         """
-        self.services.results.i7 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 3)
+        self.services.results.i8 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 3)
+        self.services.logger.logInformation (f"GaussianBlurBoxIndependent MSE = {Tools.MSE(self.services.results.i3, self.services.results.i8)}", Colors.Magenta)
 
     @benchmark()
     def relief_filter(self):
@@ -312,8 +324,9 @@ class Solver:
         """
         self.GaussianFilter()
         self.GaussianBlur()
+        self.GaussianBlurCachedKernel()
         self.GaussianBlurBox()
-        self.GaussianBlurBoxIndependent()
+        #self.GaussianBlurBoxIndependent()
 
     def debug_results(self):
         """

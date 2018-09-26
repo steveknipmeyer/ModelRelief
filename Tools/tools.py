@@ -17,6 +17,7 @@ import subprocess
 import sys
 import string
 import random
+import numpy as np
 
 from typing import Any, Callable, Dict, List, Optional, Set
 
@@ -220,3 +221,27 @@ class Tools:
         """
         status:subprocess.CompletedProcess = subprocess.run (command_line, shell=True)
         return status.returncode
+
+    @staticmethod
+    def MSE(image1: np.ndarray, image2: np.ndarray)-> float:
+        """
+        Calculates the Mean Squared Error between two NumPy images.
+        Parameters
+        ----------
+        image1
+            First image.
+        image2
+            Second image.
+        Returns
+        -------
+        Mean squared error between the two images.
+        """
+        squared_difference = (image1 - image2) ** 2
+        summed = np.sum(squared_difference)
+        pixels = image1.shape[0] * image1.shape[1]
+        error = summed / pixels
+
+        precision = 4
+        error = round(error, precision)
+
+        return error

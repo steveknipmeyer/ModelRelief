@@ -38,8 +38,7 @@ GaussianFilter::GaussianFilter(NPDoubleArray& image, NPDoubleArray& mask, double
 
 /**
  * @brief Destroy the Gaussian Filter instance.
- *
- */
+  */
 GaussianFilter::~GaussianFilter()
 {
 }
@@ -55,20 +54,19 @@ GaussianFilter::~GaussianFilter()
  * @param height Image Height.
  * @param sigma Standard deviation.
  * @return NPDoubleArray&
- *
  */
 void GaussianFilter::GaussianBlur (double* pSource, double* pResult, int width, int height, double sigma)
 {
     // significant radius
-    int radius = int(ceil(sigma * 2.57));
-
+    int radius = GaussianKernel::Radius(sigma);
+    
     for (int row = 0; row < height; row++)
         for (int column = 0; column < width; column++)
         {
             double value = 0;
             double gaussianSum = 0;
-            for (int iRow = row - radius; iRow < row + radius + 1; iRow++)
-                for (int iColumn = column - radius; iColumn < column + radius + 1; iColumn++)
+            for (int iRow = row - radius; iRow <= row + radius; iRow++)
+                for (int iColumn = column - radius; iColumn <= column + radius; iColumn++)
                 {
                     double kernelX = abs(iColumn - column);
                     double kernelY = abs(iRow - row);
@@ -96,26 +94,25 @@ void GaussianFilter::GaussianBlur (double* pSource, double* pResult, int width, 
  * @param width Image width.
  * @param height Image Height.
  * @param sigma Standard deviation.
- * @return NPDoubleArray&
  *
- */
+ * @return NPDoubleArray&
+  */
 void GaussianFilter::GaussianBlurCachedKernel(double* pSource, double* pResult, int width, int height, double sigma)
 {
     GaussianKernel gaussianKernel(m_sigma);
 
     // significant radius
-    int radius = int(ceil(sigma * 2.57));
-    //std::cout << "GaussianBlur1A radius = " << radius << std::endl;
-
+    int radius = GaussianKernel::Radius(sigma);
     for (int row = 0; row < height; row++)
     {
         for (int column = 0; column < width; column++)
         {
             double value = 0;
-            for (int iRow = row - radius; iRow < row + radius + 1; iRow++)
+            for (int iRow = row - radius; iRow <= row + radius; iRow++)
             {
-                for (int iColumn = column - radius; iColumn < column + radius + 1; iColumn++)
+                for (int iColumn = column - radius; iColumn <= column + radius; iColumn++)
                 {
+                #if true
                     int kernelX = iColumn - column;
                     int kernelY = iRow - row;
                     double gaussian = gaussianKernel.Element(kernelX, kernelY);
@@ -123,6 +120,9 @@ void GaussianFilter::GaussianBlurCachedKernel(double* pSource, double* pResult, 
                     int x = min(width - 1, max(0, iColumn));
                     int y = min(height - 1, max(0, iRow));
                     value += pSource[y*width + x] * gaussian;
+                #else
+
+                #endif
                 }
             }
             pResult[row*width + column] = value;
@@ -141,39 +141,43 @@ void GaussianFilter::GaussianBlurCachedKernel(double* pSource, double* pResult, 
  * @param width Image width.
  * @param height Image Height.
  * @param sigma Standard deviation.
- * @return NPDoubleArray&
  *
+ * @return NPDoubleArray&
  */
 void GaussianFilter::GaussianBlurBox(double* pSource, double* pResult, int width, int height, double sigma)
 {
     int passes = 5;
     std::vector<int> boxSizes = BoxBlurSizes(sigma, passes);
 
+    auto intermediate = unique_ptr<double[]>(new double[m_rows * m_columns]);
+    double* pIntermediate = intermediate.get();
+
+    memcpy (intermediate.get(), pSource, sizeof(double) * width * height);
     for (int iPass = 0; iPass < passes; iPass++)
     {
         int radius = boxSizes.at(iPass);
-        std::cout << "GaussianBlur2 radius = " << radius << std::endl;
+        double boxElements = pow(((2 * radius) + 1), 2);
         for (int row = 0; row < height; row++)
         {
             for (int column = 0; column < width; column++)
             {
                 double value = 0;
-                for (int iRow = row - radius; iRow < row + radius + 1; iRow++)
+                for (int iRow = row - radius; iRow <= row + radius; iRow++)
                 {
-                    for (int iColumn = column - radius; iColumn < column + radius + 1; iColumn++)
+                    for (int iColumn = column - radius; iColumn <= column + radius; iColumn++)
                     {
                         int kernelX = iColumn - column;
                         int kernelY = iRow - row;
 
                         int x = min(width - 1, max(0, iColumn));
                         int y = min(height - 1, max(0, iRow));
-                        value += pSource[y*width + x];
+                        value += pIntermediate[y*width + x];
                     }
                 }
-                double boxElements = (2 * radius) * (2 * radius);
                 pResult[row*width + column] = value / boxElements;
             }
         }
+        memcpy(pIntermediate, pResult, sizeof(double) * width * height);
     }
 }
 
@@ -188,8 +192,8 @@ void GaussianFilter::GaussianBlurBox(double* pSource, double* pResult, int width
  * @param width Image width.
  * @param height Image Height.
  * @param sigma Standard deviation.
- * @return NPDoubleArray&
  *
+ * @return NPDoubleArray&
  */
 void GaussianFilter::GaussianBlurBoxIndependent(double* pSource, double* pResult, int width, int height, double sigma)
 {
@@ -199,15 +203,14 @@ void GaussianFilter::GaussianBlurBoxIndependent(double* pSource, double* pResult
     for (int iPass = 0; iPass < passes; iPass++)
     {
         int radius = boxSizes.at(iPass);
-        std::cout << "GaussianBlur2 radius = " << radius << std::endl;
         for (int row = 0; row < height; row++)
         {
             for (int column = 0; column < width; column++)
             {
                 double value = 0;
-                for (int iRow = row - radius; iRow < row + radius + 1; iRow++)
+                for (int iRow = row - radius; iRow <= row + radius; iRow++)
                 {
-                    for (int iColumn = column - radius; iColumn < column + radius + 1; iColumn++)
+                    for (int iColumn = column - radius; iColumn <= column + radius; iColumn++)
                     {
                         int kernelX = iColumn - column;
                         int kernelY = iRow - row;
@@ -228,8 +231,8 @@ void GaussianFilter::GaussianBlurBoxIndependent(double* pSource, double* pResult
  * @brief Calculate the filter.
  *
  * @param algorithm Filter algorithm to use.
- * @return NPDoubleArray&
  *
+ * @return NPDoubleArray&
  */
 NPDoubleArray GaussianFilter::Calculate(int algorithm)
 {
@@ -241,7 +244,7 @@ NPDoubleArray GaussianFilter::Calculate(int algorithm)
     switch (algorithm)
     {
         case 0:
-            cout << "GaussianFilter" << endl;
+            //cout << "GaussianFilter" << endl;
             for (int row = 0; row < m_rows; row++)
             {
                 for (int column = 0; column < m_columns; column++)
@@ -252,22 +255,22 @@ NPDoubleArray GaussianFilter::Calculate(int algorithm)
             break;
 
         case 1:
-            cout << "GaussianBlur" << endl;
+            //cout << "GaussianBlur" << endl;
             GaussianBlur(m_pImage, pResult, m_columns, m_rows, m_sigma);
             break;
 
         case 11:
-            cout << "GaussianBlurCachedKernel" << endl;
+            //cout << "GaussianBlurCachedKernel" << endl;
             GaussianBlurCachedKernel(m_pImage, pResult, m_columns, m_rows, m_sigma);
             break;
 
         case 2:
-            cout << "GaussianBlurBox" << endl;
+            //cout << "GaussianBlurBox" << endl;
             GaussianBlurBox(m_pImage, pResult, m_columns, m_rows, m_sigma);
             break;
 
         case 3:
-            cout << "GaussianBlurBoxIndependent" << endl;
+            //cout << "GaussianBlurBoxIndependent" << endl;
             GaussianBlurBoxIndependent(m_pImage, pResult, m_columns, m_rows, m_sigma);
             break;
     }
@@ -309,8 +312,8 @@ void GaussianFilter::InitializeNative(NPDoubleArray& image, NPDoubleArray& mask)
  * @param column Image column.
  * @param xOffset X offset (from column).
  * @param yOffset Y offset (from row).
- * @return double Image element corresponding to [row + xOffset, column + yOffset].
  *
+ * @return double Image element corresponding to [row + xOffset, column + yOffset].
  */
 double GaussianFilter::GetOffsetImageElement(int row, int column, int xOffset, int yOffset)
 {
@@ -341,8 +344,8 @@ double GaussianFilter::GetOffsetImageElement(int row, int column, int xOffset, i
  * @param kernel Gaussian kernel to apply.
  * @param row Row of image array.
  * @param column Column of image array.
- * @return double Kernel convolved with element neighborhood.
  *
+ * @return double Kernel convolved with element neighborhood.
  */
 double GaussianFilter::ApplyKernel(GaussianKernel& kernel, int row, int column)
 {
@@ -350,7 +353,7 @@ double GaussianFilter::ApplyKernel(GaussianKernel& kernel, int row, int column)
     int kernelXLimit = kernel.XLimit();
     int kernelYLimit = kernel.YLimit();
 
-     // iteration: row major for performance
+     // row major for performance
     for (int kernelY = kernelYLimit; kernelY >= -kernelYLimit; kernelY--)
     {
         for (int kernelX = -kernelXLimit; kernelX <= kernelXLimit; kernelX++)
@@ -370,6 +373,7 @@ double GaussianFilter::ApplyKernel(GaussianKernel& kernel, int row, int column)
  * @param passes The number of average filterings to be used to approximate the Gaussian.  This should be a minimum of 3, using 4 is better. 
  *               If the smoothed image is to be differentiated an additional averaging should be applied for each derivative.  
  *               if a second derivative is to be taken at least 5 averagings should be applied. 
+ *
  * @return std::vector<float> Collection of box sizes.
  */
 std::vector<int> GaussianFilter::BoxBlurSizes(double sigma, int passes)
@@ -380,7 +384,7 @@ std::vector<int> GaussianFilter::BoxBlurSizes(double sigma, int passes)
     double widthIdeal = sqrt((12 * variance / passes) + 1);
 
     int widthLower = int(floor(widthIdeal));
-    if(widthLower %2 == 0)
+    if(widthLower % 2 == 0)
         widthLower--;
     int widthUpper = widthLower + 2;
 

@@ -33,7 +33,8 @@ using GaussianKernelR = GaussianKernel&;
 class GaussianKernel {
     private:
         double  m_sigma;                    // standard deviation
-        int     m_kernelSize;               // dimension of kerlen array
+        int     m_kernelRadius;             // kernel radius
+        int     m_kernelSize;               // dimension of kernel array
         int     m_rows;                     // kernel rows
         int     m_columns;                  // kernel columns
         int     m_xLimit;                   // x bound    
@@ -60,5 +61,8 @@ class GaussianKernel {
         void CalculateStandard();
         void Normalize();
         void Display();
+
+    public:
+        static int Radius(double sigma);
 };
 }

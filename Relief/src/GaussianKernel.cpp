@@ -30,11 +30,12 @@ GaussianKernel::GaussianKernel(double sigma)
 {
     m_sigma = sigma;
 
-    m_kernelSize = (int(ceil(m_sigma * 2.57)) * 2) + 1;
-    m_rows       = m_kernelSize;             
-    m_columns    = m_kernelSize;             
-    m_xLimit     = (m_columns - 1) / 2;      
-    m_yLimit     = (m_rows - 1) / 2;         
+    m_kernelRadius = GaussianKernel::Radius(m_sigma);
+    m_kernelSize   = (m_kernelRadius * 2) + 1;
+    m_rows         = m_kernelSize;             
+    m_columns      = m_kernelSize;             
+    m_xLimit       = (m_columns - 1) / 2;      
+    m_yLimit       = (m_rows - 1) / 2;         
 
     m_kernel = unique_ptr<double[]>(new double[m_rows * m_columns]);
 
@@ -44,7 +45,6 @@ GaussianKernel::GaussianKernel(double sigma)
 
 /**
  * @brief Destroy the Gaussian Kernel object
- *
  */
 GaussianKernel::~GaussianKernel()
 {
@@ -63,7 +63,6 @@ double& GaussianKernel::Element (int x, int y)
 
 /**
  * @brief Calculate the default Gaussian kernel.
- *
  */
 void GaussianKernel::CalculateStandard()
 {
@@ -72,7 +71,6 @@ void GaussianKernel::CalculateStandard()
 
 /**
  * @brief Normalize the kernel.
- *
  */
 void GaussianKernel::Normalize()
 {
@@ -84,7 +82,6 @@ void GaussianKernel::Normalize()
 
 /**
  * @brief Debug print the kernel.
- *
  */
 void GaussianKernel::Display()
 {
@@ -103,6 +100,16 @@ void GaussianKernel::Display()
     }
 }
 
+/**
+ * @brief Return the radius of the kernel for a given standard deviation.
+ *
+ * parma signma Standard deviation.
+ */
+int GaussianKernel::Radius(double sigma)
+{
+    return int(ceil(sigma * 2.57));
+}
+
 //-------------------------------------------------------------------------------------------------//
 //                                      Private                                                    //
 //-------------------------------------------------------------------------------------------------//
@@ -110,7 +117,6 @@ void GaussianKernel::Display()
  * @brief Iterate the kernel and apply a user callback.
  * @param callback Per element callback.
  * @param pArguments Callback arguments.
- *
  */
 void GaussianKernel::Iterate(KernelCallback callback, void* pArguments)
 {

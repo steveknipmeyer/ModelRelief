@@ -2,8 +2,21 @@
 #### Commit Notes
 
 #### Short Term
-    Why is 1A slower than 1?
+
+    What is the optimal size of the kernel radius?
+    How many passes are required for GaussianBoxBlur?
+
+    Why do these methods generate different results?
+        GaussianFilter
+        GaussianBlur
+        GaussianBlurCachedKernel
+
+    Why is GausianBoxCachedKermel slower than GaussianBox?
         Is it the use of the GaussianKernel?
+
+    Add an "Experiment" module to Explorer to isolate test code.            
+    How can the Workbench images be labeled?
+    Test asymmetric arrays.
 
     Optimizations
         Experiment with NumPy pad solutions.
