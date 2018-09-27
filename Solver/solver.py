@@ -308,7 +308,7 @@ class Solver:
         """
         self.GaussianBlurCachedKernel()
         self.GaussianBlurBox()
-        #self.GaussianBlurBoxIndependent()
+        self.GaussianBlurBoxIndependent()
 
     def debug_results(self):
         """

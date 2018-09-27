@@ -189,11 +189,12 @@ void GaussianFilter::GaussianBlurBox(double* pSource, double* pResult, int width
         memcpy(pIntermediate, pResult, sizeof(double) * width * height);
     }
 }
+
 /**
  * @brief GaussianBlurBoxIndependent
  * http://blog.ivank.net/fastest-gaussian-blur.html#results
  * Algorithm 3
- * In this implementation, the box filters are performed independently, along rows and columns.
+ * Performs a box blur in two passes, horizontally and then vertically.
  *
  * @param pSource Source image.
  * @param pResult Result image.
@@ -208,30 +209,21 @@ void GaussianFilter::GaussianBlurBoxIndependent(double* pSource, double* pResult
     int passes = 5;
     std::vector<int> boxSizes = BoxBlurSizes(sigma, passes);
 
+    auto intermediate1 = unique_ptr<double[]>(new double[width * height]);
+    double* pIntermediate1 = intermediate1.get();
+    auto intermediate2 = unique_ptr<double[]>(new double[width * height]);
+    double* pIntermediate2 = intermediate2.get();
+
+    memcpy(intermediate1.get(), pSource, sizeof(double) * width * height);
     for (int iPass = 0; iPass < passes; iPass++)
     {
-        int radius = boxSizes.at(iPass);
-        for (int row = 0; row < height; row++)
-        {
-            for (int column = 0; column < width; column++)
-            {
-                double value = 0;
-                for (int iRow = row - radius; iRow <= row + radius; iRow++)
-                {
-                    for (int iColumn = column - radius; iColumn <= column + radius; iColumn++)
-                    {
-                        int kernelX = iColumn - column;
-                        int kernelY = iRow - row;
+        int radius = (boxSizes.at(iPass) - 1) / 2;
 
-                        int x = min(width - 1, max(0, iColumn));
-                        int y = min(height - 1, max(0, iRow));
-                        value += pSource[y*width + x];
-                    }
-                }
-                double boxElements = (2 * radius) * (2 * radius);
-                pResult[row*width + column] = value / boxElements;
-            }
-        }
+        GaussianBlurBoxPassH(pIntermediate1, pIntermediate2, width, height, sigma, radius);
+        GaussianBlurBoxPassV(pIntermediate2, pResult,        width, height, sigma, radius);
+
+        if (iPass < (passes - 1))
+            memcpy(intermediate1.get(), pResult, sizeof(double) * width * height);
     }
 }
 
@@ -394,7 +386,6 @@ double GaussianFilter::ApplyKernel(GaussianKernel& kernel, int row, int column)
             m_counter++;
         }
     }
-
     return sum;
 }
 
@@ -429,6 +420,7 @@ std::vector<int> GaussianFilter::BoxBlurSizes(double sigma, int passes)
 
     return sizes;
 }
+
 /**
  * @brief GaussianBlurBoxPass
  * http://blog.ivank.net/fastest-gaussian-blur.html#results
@@ -463,11 +455,84 @@ void GaussianFilter::GaussianBlurBoxPass(double* pSource, double* pResult, int w
                     if (y < 0) y = 0;
                     if (y >= height) y = height - 1;
 
-                    value += pSource[y*width + x];
+                    value += pSource[y * width + x];
                 }
             }
             pResult[row*width + column] = value / boxElements;
         }
     }
 }
+
+/**
+ * @brief GaussianBlurBoxPassH
+ * http://blog.ivank.net/fastest-gaussian-blur.html#results
+ * Algorithm 3
+ * Performs a horizontal box blur.
+ *
+ * @param pSource Source image.
+ * @param pResult Result image.
+ * @param width Image width.
+ * @param height Image Height.
+ * @param sigma Standard deviation.
+ * @param radius Box size.
+ *
+ * @return NPDoubleArray&
+ */
+void GaussianFilter::GaussianBlurBoxPassH(double* pSource, double* pResult, int width, int height, double sigma, int radius)
+{
+    double elementCount = (2 * radius) + 1;
+    for (int row = 0; row < height; row++)
+    {
+        for (int column = 0; column < width; column++)
+        {
+            double value = 0;
+            for (int iColumn = column - radius; iColumn <= column + radius; iColumn++)
+            {
+                int x = iColumn;
+                if (x < 0) x = 0;
+                if (x >= width) x = width - 1;
+
+                value += pSource[row * width + x];
+            }
+        pResult[row*width + column] = value / elementCount;
+        }
+    }
+}
+
+/**
+ * @brief GaussianBlurBoxPassV
+ * http://blog.ivank.net/fastest-gaussian-blur.html#results
+ * Algorithm 3
+ * Performs a vertical box blur.
+ *
+ * @param pSource Source image.
+ * @param pResult Result image.
+ * @param width Image width.
+ * @param height Image Height.
+ * @param sigma Standard deviation.
+ * @param radius Box size.
+ *
+ * @return NPDoubleArray&
+ */
+void GaussianFilter::GaussianBlurBoxPassV(double* pSource, double* pResult, int width, int height, double sigma, int radius)
+{
+    double elementCount = (2 * radius) + 1;
+    for (int row = 0; row < height; row++)
+    {
+        for (int column = 0; column < width; column++)
+        {
+            double value = 0;
+            for (int iRow = row - radius; iRow <= row + radius; iRow++)
+            {
+                int y = iRow;
+                if (y < 0) y = 0;
+                if (y >= height) y = height - 1;
+
+                value += pSource[(y * width) + column];
+            }
+            pResult[row*width + column] = value / elementCount;
+        }
+    }
+}
+
 }

@@ -109,8 +109,8 @@ class Benchmark:
         result = self.GaussianBlurBox(a, mask, sigma)
         self.logger.logInformation (f"GaussianBlurBox MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
-        #result = GaussianBlurBoxIndependent(a, mask, sigma)
-        #self.logger.logInformation (f"GaussianBlurBoxIndependent MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+        result = self.GaussianBlurBoxIndependent(a, mask, sigma)
+        self.logger.logInformation (f"GaussianBlurBoxIndependent MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
     @benchmark()
     def scipy_filter(self, a: np.ndarray, sigma: float)->np.ndarray :
