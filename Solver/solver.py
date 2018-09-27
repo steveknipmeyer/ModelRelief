@@ -302,13 +302,22 @@ class Solver:
         self.services.logger.logInformation (f"GaussianBlurBoxIndependent MSE = {Tools.MSE(self.services.results.i3, self.services.results.i6)}", Colors.Magenta)
 
     @benchmark()
+    def GaussianBlurBoxIndependentOptimized(self):
+        """
+        Relief C++ Gaussian filter.
+        """
+        self.services.results.i7 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 4)
+        self.services.logger.logInformation (f"GaussianBlurBoxIndependentOptimized MSE = {Tools.MSE(self.services.results.i3, self.services.results.i7)}", Colors.Magenta)
+
+    @benchmark()
     def relief_filter(self):
         """
         Relief C++ Gaussian filter.
         """
-        self.GaussianBlurCachedKernel()
-        self.GaussianBlurBox()
+        #self.GaussianBlurCachedKernel()
+        #self.GaussianBlurBox()
         self.GaussianBlurBoxIndependent()
+        self.GaussianBlurBoxIndependentOptimized()
 
     def debug_results(self):
         """

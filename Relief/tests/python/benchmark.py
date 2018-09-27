@@ -83,6 +83,15 @@ class Benchmark:
             result = relief.gaussian_filter(a, mask, sigma, 3)
         return result
 
+    @benchmark()
+    def GaussianBlurBoxIndependentOptimized(self, a: np.ndarray, mask: np.ndarray, sigma: float)->np.ndarray :
+        """
+        Relief C++ Gaussian filter.
+        """
+        for _ in range(self.trials):
+            result = relief.gaussian_filter(a, mask, sigma, 4)
+        return result
+
     def relief_filter(self, a: np.ndarray, mask: np.ndarray, sigma: float)->None :
         """
         Relief C++ Gaussian filter.
@@ -97,20 +106,23 @@ class Benchmark:
         """
         reference = self.scipy_filter(a, sigma)
 
-        result = self.GaussianFilter(a, mask, sigma)
-        self.logger.logInformation (f"GaussianFilter MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+        #result = self.GaussianFilter(a, mask, sigma)
+        #self.logger.logInformation (f"GaussianFilter MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
-        result = self.GaussianBlur(a, mask, sigma)
-        self.logger.logInformation (f"GaussianBlur MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+        #result = self.GaussianBlur(a, mask, sigma)
+        #self.logger.logInformation (f"GaussianBlur MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
-        result = self.GaussianBlurCachedKernel(a, mask, sigma)
-        self.logger.logInformation (f"GaussianBlurCachedKernel MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+        #result = self.GaussianBlurCachedKernel(a, mask, sigma)
+        #self.logger.logInformation (f"GaussianBlurCachedKernel MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
-        result = self.GaussianBlurBox(a, mask, sigma)
-        self.logger.logInformation (f"GaussianBlurBox MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+        #result = self.GaussianBlurBox(a, mask, sigma)
+        #self.logger.logInformation (f"GaussianBlurBox MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
         result = self.GaussianBlurBoxIndependent(a, mask, sigma)
         self.logger.logInformation (f"GaussianBlurBoxIndependent MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+
+        result = self.GaussianBlurBoxIndependentOptimized(a, mask, sigma)
+        self.logger.logInformation (f"GaussianBlurBoxIndependentOptimized MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
     @benchmark()
     def scipy_filter(self, a: np.ndarray, sigma: float)->np.ndarray :
@@ -203,7 +215,7 @@ def main()->None :
     Run benchmark tests.
     """
     input("Attach debugger and press <Enter>:")
-    benchmarkRunner = Benchmark(array_size = 2048, trials = 4)
+    benchmarkRunner = Benchmark(array_size = 400, trials = 4)
 
     #benchmarkRunner.array_fill()
     benchmarkRunner.array_filter()

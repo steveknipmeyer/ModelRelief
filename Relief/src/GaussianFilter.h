@@ -54,6 +54,8 @@ class GaussianFilter {
         void GaussianBlurBoxPass(double* pSource, double* pResult, int width, int height, double sigma, int radius);
         void GaussianBlurBoxPassH(double* pSource, double* pResult, int width, int height, double sigma, int radius);
         void GaussianBlurBoxPassV(double* pSource, double* pResult, int width, int height, double sigma, int radius);
+        void GaussianBlurBoxPassHOptimized(double* pSource, double* pResult, int width, int height, double sigma, int radius);
+        void GaussianBlurBoxPassVOptimized(double* pSource, double* pResult, int width, int height, double sigma, int radius);
 
 public:
         GaussianFilter(NPDoubleArray& image, NPDoubleArray& mask, double sigma);
@@ -63,6 +65,7 @@ public:
         void GaussianBlurCachedKernel(double* pSource, double* pResult, int width, int height, double sigma);
         void GaussianBlurBox(double* pSource, double* pResult, int width, int height, double sigma);
         void GaussianBlurBoxIndependent(double* pSource, double* pResult, int width, int height, double sigma);
+        void GaussianBlurBoxIndependentOptimized(double* pSource, double* pResult, int width, int height, double sigma);
 
         NPDoubleArray Calculate(int algorithm);
 };

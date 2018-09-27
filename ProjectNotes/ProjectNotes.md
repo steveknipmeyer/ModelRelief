@@ -2,6 +2,7 @@
 #### Commit Notes
 
 #### Short Term
+    Exceptions are hidden in Python extensions.
 
     Can the image array be shifted by the "background value" to allow optimization?
         Skip the lookup of the gaussian kernel elemeent and the multiplication.
