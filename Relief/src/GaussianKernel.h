@@ -51,11 +51,13 @@ class GaussianKernel {
         GaussianKernel(double sigma);
         ~GaussianKernel(); 
 
+        int KernelSize() const;
         int Rows() { return m_rows; }
         int Columns() { return m_columns; }
         int XLimit() { return m_xLimit; }
         int YLimit() { return m_yLimit; }
 
+        const double* Elements() const;
         double& Element(int x, int y);
 
         void CalculateStandard();

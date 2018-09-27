@@ -3,12 +3,15 @@
 
 #### Short Term
 
-    Why is GausianBlurCachedKermel slower than GaussianBlur?
-        Is it the use of the GaussianKernel?
+    Can the image array be shifted by the "background value" to allow optimization?
+        Skip the lookup of the gaussian kernel elemeent and the multiplication.
 
     What is the optimal size of the kernel radius?
-    How many passes are required for GaussianBoxBlur?
+        The article uses a radius of 10.
+        GaussianKernel::Radius returns 11.
 
+    How many passes are required for GaussianBoxBlur?
+        
     Add an "Experiment" module to Explorer to isolate test code.            
     How can the Workbench images be labeled?
     Test asymmetric arrays.

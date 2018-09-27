@@ -51,6 +51,22 @@ GaussianKernel::~GaussianKernel()
 }
 
 /**
+ * @brief Returns the dimensions of the kernel.
+ */
+int GaussianKernel::KernelSize() const
+{
+    return m_kernelSize;
+}
+
+/**
+ * @brief Returns a pointer to the kernel elements.
+ */
+const double* GaussianKernel::Elements() const
+{
+    return m_kernel.get();
+}
+
+/**
  * @brief Returns a kernel element.
  *
  * @param x X (relative to kernel origin).

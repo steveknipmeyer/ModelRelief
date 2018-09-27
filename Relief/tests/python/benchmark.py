@@ -106,8 +106,8 @@ class Benchmark:
         result = self.GaussianBlurCachedKernel(a, mask, sigma)
         self.logger.logInformation (f"GaussianBlurCachedKernel MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
-        result = self.GaussianBlurBox(a, mask, sigma)
-        self.logger.logInformation (f"GaussianBlurBox MSE = {Tools.MSE(reference, result)}\n", Colors.Magenta)
+        #result = self.GaussianBlurBox(a, mask, sigma)
+        #self.logger.logInformation (f"GaussianBlurBox MSE = {Tools.MSE(reference, result)}\n", Colors.Magenta)
 
         #result = GaussianBlurBoxIndependent(a, mask, sigma)
         #self.logger.logInformation (f"GaussianBlurBoxIndependent MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)

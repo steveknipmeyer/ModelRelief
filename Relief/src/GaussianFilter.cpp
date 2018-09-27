@@ -101,6 +101,9 @@ void GaussianFilter::GaussianBlur (double* pSource, double* pResult, int width, 
 void GaussianFilter::GaussianBlurCachedKernel(double* pSource, double* pResult, int width, int height, double sigma)
 {
     GaussianKernel gaussianKernel(m_sigma);
+    const double* pKernel = gaussianKernel.Elements();
+    int kernelSize = gaussianKernel.KernelSize();
+    double backgroundValue = *pSource;
 
     // significant radius
     int radius = GaussianKernel::Radius(sigma);
@@ -109,22 +112,32 @@ void GaussianFilter::GaussianBlurCachedKernel(double* pSource, double* pResult, 
         for (int column = 0; column < width; column++)
         {
             double value = 0;
+            int kernelRow = 0;
             for (int iRow = row - radius; iRow <= row + radius; iRow++)
             {
+                int kernelColumn = 0;
                 for (int iColumn = column - radius; iColumn <= column + radius; iColumn++)
                 {
-                #if true
-                    int kernelX = iColumn - column;
-                    int kernelY = iRow - row;
-                    double gaussian = gaussianKernel.Element(kernelX, kernelY);
+                    //int x = min(width - 1, max(0, iColumn));
+                    //int y = min(height - 1, max(0, iRow));
+                    int x = iColumn;
+                    int y = iRow;
+                    if (x < 0)
+                        x = 0;
+                    if (x >= width)
+                        x = width - 1;
+                    if (y < 0)
+                        y = 0;
+                    if (y >= height)
+                        y = height - 1;
+                        
+                    double imageElement = pSource[y*width + x];
+                    double gaussian = *(pKernel + (kernelRow * kernelSize) + kernelColumn);
+                    value += imageElement * gaussian;
 
-                    int x = min(width - 1, max(0, iColumn));
-                    int y = min(height - 1, max(0, iRow));
-                    value += pSource[y*width + x] * gaussian;
-                #else
-
-                #endif
+                    kernelColumn++;
                 }
+                kernelRow++;
             }
             pResult[row*width + column] = value;
         }
@@ -323,8 +336,8 @@ void GaussianFilter::InitializeNative(NPDoubleArray& image, NPDoubleArray& mask)
  */
 double GaussianFilter::GetOffsetImageElement(int row, int column, int xOffset, int yOffset)
 {
+#if REFLECT_EDGES
     // N.B. Out of bounds elements are mapped to <reflected> elements.
-#if false
     int targetRow    = row + yOffset;
     int targetColumn = column + xOffset;
 

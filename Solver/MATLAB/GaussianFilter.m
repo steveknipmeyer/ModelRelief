@@ -4,7 +4,7 @@ clear
 close all
 
 sigma = 4;
-kernelSize = 21;
+kernelSize = 23;
 
 kernelMaximumIndex = (kernelSize - 1) / 2;
 kernelRange = -kernelMaximumIndex:kernelMaximumIndex
