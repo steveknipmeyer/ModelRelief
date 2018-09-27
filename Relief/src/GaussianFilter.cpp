@@ -118,18 +118,12 @@ void GaussianFilter::GaussianBlurCachedKernel(double* pSource, double* pResult, 
                 int kernelColumn = 0;
                 for (int iColumn = column - radius; iColumn <= column + radius; iColumn++)
                 {
-                    //int x = min(width - 1, max(0, iColumn));
-                    //int y = min(height - 1, max(0, iRow));
                     int x = iColumn;
                     int y = iRow;
-                    if (x < 0)
-                        x = 0;
-                    if (x >= width)
-                        x = width - 1;
-                    if (y < 0)
-                        y = 0;
-                    if (y >= height)
-                        y = height - 1;
+                    if (x < 0) x = 0;
+                    if (x >= width) x = width - 1;
+                    if (y < 0) y = 0;
+                    if (y >= height) y = height - 1;
                         
                     double imageElement = pSource[y*width + x];
                     double gaussian = *(pKernel + (kernelRow * kernelSize) + kernelColumn);
@@ -143,7 +137,6 @@ void GaussianFilter::GaussianBlurCachedKernel(double* pSource, double* pResult, 
         }
     }
 }
-
 /**
  * @brief GaussianBlurBox
  * http://blog.ivank.net/fastest-gaussian-blur.html#results
@@ -163,13 +156,13 @@ void GaussianFilter::GaussianBlurBox(double* pSource, double* pResult, int width
     int passes = 5;
     std::vector<int> boxSizes = BoxBlurSizes(sigma, passes);
 
-    auto intermediate = unique_ptr<double[]>(new double[m_rows * m_columns]);
+    auto intermediate = unique_ptr<double[]>(new double[width * height]);
     double* pIntermediate = intermediate.get();
 
     memcpy (intermediate.get(), pSource, sizeof(double) * width * height);
     for (int iPass = 0; iPass < passes; iPass++)
     {
-        int radius = boxSizes.at(iPass);
+        int radius = (boxSizes.at(iPass) - 1)  / 2;
         double boxElements = pow(((2 * radius) + 1), 2);
         for (int row = 0; row < height; row++)
         {
@@ -180,11 +173,13 @@ void GaussianFilter::GaussianBlurBox(double* pSource, double* pResult, int width
                 {
                     for (int iColumn = column - radius; iColumn <= column + radius; iColumn++)
                     {
-                        int kernelX = iColumn - column;
-                        int kernelY = iRow - row;
+                        int x = iColumn;
+                        int y = iRow;
+                        if (x < 0) x = 0;
+                        if (x >= width) x = width - 1;
+                        if (y < 0) y = 0;
+                        if (y >= height) y = height - 1;
 
-                        int x = min(width - 1, max(0, iColumn));
-                        int y = min(height - 1, max(0, iRow));
                         value += pIntermediate[y*width + x];
                     }
                 }
@@ -194,7 +189,6 @@ void GaussianFilter::GaussianBlurBox(double* pSource, double* pResult, int width
         memcpy(pIntermediate, pResult, sizeof(double) * width * height);
     }
 }
-
 /**
  * @brief GaussianBlurBoxIndependent
  * http://blog.ivank.net/fastest-gaussian-blur.html#results
@@ -435,5 +429,45 @@ std::vector<int> GaussianFilter::BoxBlurSizes(double sigma, int passes)
 
     return sizes;
 }
+/**
+ * @brief GaussianBlurBoxPass
+ * http://blog.ivank.net/fastest-gaussian-blur.html#results
+ * Algorithm 2
+ * In this implementation, multiple passes of a box filter are used.
+ *
+ * @param pSource Source image.
+ * @param pResult Result image.
+ * @param width Image width.
+ * @param height Image Height.
+ * @param sigma Standard deviation.
+ * @param radius Box size.
+ *
+ * @return NPDoubleArray&
+ */
+void GaussianFilter::GaussianBlurBoxPass(double* pSource, double* pResult, int width, int height, double sigma, int radius)
+{
+    double boxElements = pow(((2 * radius) + 1), 2);
+    for (int row = 0; row < height; row++)
+    {
+        for (int column = 0; column < width; column++)
+        {
+            double value = 0;
+            for (int iRow = row - radius; iRow <= row + radius; iRow++)
+            {
+                for (int iColumn = column - radius; iColumn <= column + radius; iColumn++)
+                {
+                    int x = iColumn;
+                    int y = iRow;
+                    if (x < 0) x = 0;
+                    if (x >= width) x = width - 1;
+                    if (y < 0) y = 0;
+                    if (y >= height) y = height - 1;
 
+                    value += pSource[y*width + x];
+                }
+            }
+            pResult[row*width + column] = value / boxElements;
+        }
+    }
+}
 }

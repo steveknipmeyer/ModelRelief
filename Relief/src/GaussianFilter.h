@@ -51,7 +51,9 @@ class GaussianFilter {
 
         std::vector<int> BoxBlurSizes(double sigma, int passes);
 
-    public:
+        void GaussianFilter::GaussianBlurBoxPass(double* pSource, double* pResult, int width, int height, double sigma, int radius);
+
+public:
         GaussianFilter(NPDoubleArray& image, NPDoubleArray& mask, double sigma);
         ~GaussianFilter();
 

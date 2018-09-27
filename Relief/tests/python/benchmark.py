@@ -97,17 +97,17 @@ class Benchmark:
         """
         reference = self.scipy_filter(a, sigma)
 
-        result = self.GaussianFilter(a, mask, sigma)
-        self.logger.logInformation (f"GaussianFilter MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+        #result = self.GaussianFilter(a, mask, sigma)
+        #self.logger.logInformation (f"GaussianFilter MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
-        result = self.GaussianBlur(a, mask, sigma)
-        self.logger.logInformation (f"GaussianBlur MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+        #result = self.GaussianBlur(a, mask, sigma)
+        #self.logger.logInformation (f"GaussianBlur MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
         result = self.GaussianBlurCachedKernel(a, mask, sigma)
         self.logger.logInformation (f"GaussianBlurCachedKernel MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
-        #result = self.GaussianBlurBox(a, mask, sigma)
-        #self.logger.logInformation (f"GaussianBlurBox MSE = {Tools.MSE(reference, result)}\n", Colors.Magenta)
+        result = self.GaussianBlurBox(a, mask, sigma)
+        self.logger.logInformation (f"GaussianBlurBox MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
         #result = GaussianBlurBoxIndependent(a, mask, sigma)
         #self.logger.logInformation (f"GaussianBlurBoxIndependent MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
