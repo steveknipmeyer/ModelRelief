@@ -21,6 +21,7 @@ from scipy.ndimage import gaussian_filter
 from shutil import copyfile
 from typing import Any, Callable, Dict, Optional
 
+from experiments import Experiments
 from filemanager import FileManager
 from logger import Logger
 from mathtools import MathTools
@@ -270,60 +271,6 @@ class Solver:
             filewriter = OBJWriter(self.services, self.results.mesh_transformed.image, file_path)
             filewriter.write()
 
-    @benchmark()
-    def scipy_filter(self):
-        """
-        SciPy Gaussian filter.
-        """
-        self.services.results.i3.image = gaussian_filter(self.services.results.depth_buffer_model.image, self.mesh_transform.unsharpmask_parameters.gaussian_low, order=0, output=None, mode='nearest', cval=0.0, truncate=4.0)
-        self.services.results.i3.title = "SciPy gaussian_filter"
-
-    @benchmark()
-    def GaussianCached(self):
-        """
-        Relief C++ Gaussian filter.
-        """
-        self.services.results.i4.image = relief.gaussian_filter(self.services.results.depth_buffer_model.image, self.results.combined_mask.image, self.mesh_transform.unsharpmask_parameters.gaussian_low, 11)
-        self.services.results.i4.title = "GaussianCached"
-        self.services.logger.logInformation (f"GaussianCached MSE = {Tools.MSE(self.services.results.i3.image, self.services.results.i4.image)}", Colors.BrightMagenta)
-
-    @benchmark()
-    def Box(self):
-        """
-        Relief C++ Gaussian filter.
-        """
-        self.services.results.i5.image = relief.gaussian_filter(self.services.results.depth_buffer_model.image, self.results.combined_mask.image, self.mesh_transform.unsharpmask_parameters.gaussian_low, 2)
-        self.services.results.i5.title = "Box"
-        self.services.logger.logInformation (f"Box MSE = {Tools.MSE(self.services.results.i3.image, self.services.results.i5.image)}", Colors.BrightMagenta)
-
-    @benchmark()
-    def BoxIndependent(self):
-        """
-        Relief C++ Gaussian filter.
-        """
-        self.services.results.i6.image = relief.gaussian_filter(self.services.results.depth_buffer_model.image, self.results.combined_mask.image, self.mesh_transform.unsharpmask_parameters.gaussian_low, 3)
-        self.services.results.i6.title = "BoxIndependent"
-        self.services.logger.logInformation (f"BoxIndependent MSE = {Tools.MSE(self.services.results.i3.image, self.services.results.i6.image)}", Colors.BrightMagenta)
-
-    @benchmark()
-    def BoxIndependentDelta(self):
-        """
-        Relief C++ Gaussian filter.
-        """
-        self.services.results.i7.image = relief.gaussian_filter(self.services.results.depth_buffer_model.image, self.results.combined_mask.image, self.mesh_transform.unsharpmask_parameters.gaussian_low, 4)
-        self.services.results.i7.title = "BoxIndependentDelta"
-        self.services.logger.logInformation (f"BoxIndependentDelta MSE = {Tools.MSE(self.services.results.i3.image, self.services.results.i7.image)}", Colors.BrightMagenta)
-
-    @benchmark()
-    def relief_filter(self):
-        """
-        Relief C++ Gaussian filter.
-        """
-        self.GaussianCached()
-        self.Box()
-        self.BoxIndependent()
-        self.BoxIndependentDelta()
-
     def debug_results(self):
         """
         Output final results for debugging.
@@ -359,11 +306,13 @@ class Solver:
         self.write_mesh()
         self.write_obj()
 
-        if self.enable_p8:
-            self.scipy_filter()
-            self.relief_filter()
+        # experimental tools
+        experiments = Experiments(self.results, self.services.logger, self.mesh_transform)
+        experiments.gaussian_filter()
 
+        # debug results
         self.debug_results()
+
 def main():
     """
     Main entry point.
