@@ -2,10 +2,14 @@
 #### Commit Notes
 
 #### Short Term
+    Refactor Logger to accept an optional named indent level.
+    Swap logColoreMessage parameters for consistency.
+
     Exceptions are hidden in Python extensions.
 
     Can the image array be shifted by the "background value" to allow optimization?
         Skip the lookup of the gaussian kernel elemeent and the multiplication.
+        This applies only to the algorithms that use a true gaussian function.
 
     What is the optimal size of the kernel radius?
         The article uses a radius of 10.

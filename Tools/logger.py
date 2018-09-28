@@ -44,7 +44,7 @@ class Logger:
             MessageClass.TIMER : Colors.BrightCyan,
         }        
 
-    def logColorMessage(self, color: str, message : str):
+    def logColorMessage(self, message : str, color: str):
         """
         Logs a message with a color attribute.
         """
@@ -56,7 +56,7 @@ class Logger:
         Logs a message.
         """
         color = self.colors[messageClass] if color_override is None else color_override
-        self.logColorMessage(color, message)
+        self.logColorMessage(message, color)
 
     def logDebug(self, message : str, color_override : str = None):
         """

@@ -49,23 +49,24 @@ class GaussianFilter {
         double GetOffsetImageElement(int row, int column, int xOffset, int yOffset);
         double ApplyKernel(GaussianKernel& kernel, int row, int column);
 
-        std::vector<int> BoxBlurSizes(double sigma, int passes);
-
-        void GaussianBlurBoxPass(double* pSource, double* pResult, int width, int height, double sigma, int radius);
-        void GaussianBlurBoxPassH(double* pSource, double* pResult, int width, int height, double sigma, int radius);
-        void GaussianBlurBoxPassV(double* pSource, double* pResult, int width, int height, double sigma, int radius);
-        void GaussianBlurBoxPassHOptimized(double* pSource, double* pResult, int width, int height, double sigma, int radius);
-        void GaussianBlurBoxPassVOptimized(double* pSource, double* pResult, int width, int height, double sigma, int radius);
+        std::vector<int> BoxSizes(double sigma, int passes);
+        void BoxPass(double* pSource, double* pResult, int width, int height, double sigma, int radius);
+        void BoxPassH(double* pSource, double* pResult, int width, int height, double sigma, int radius);
+        void BoxPassV(double* pSource, double* pResult, int width, int height, double sigma, int radius);
+        void BoxPassHDelta(double* pSource, double* pResult, int width, int height, double sigma, int radius);
+        void BoxPassVDelta(double* pSource, double* pResult, int width, int height, double sigma, int radius);
 
 public:
         GaussianFilter(NPDoubleArray& image, NPDoubleArray& mask, double sigma);
         ~GaussianFilter();
 
-        void GaussianBlur(double* pSource, double* pResult, int width, int height, double sigma);
-        void GaussianBlurCachedKernel(double* pSource, double* pResult, int width, int height, double sigma);
-        void GaussianBlurBox(double* pSource, double* pResult, int width, int height, double sigma);
-        void GaussianBlurBoxIndependent(double* pSource, double* pResult, int width, int height, double sigma);
-        void GaussianBlurBoxIndependentOptimized(double* pSource, double* pResult, int width, int height, double sigma);
+        void Baseline(double* pSource, double* pResult, int width, int height, double sigma);
+
+        void Gaussian(double* pSource, double* pResult, int width, int height, double sigma);
+        void GaussianCached(double* pSource, double* pResult, int width, int height, double sigma);
+        void Box(double* pSource, double* pResult, int width, int height, double sigma);
+        void BoxIndependent(double* pSource, double* pResult, int width, int height, double sigma);
+        void BoxIndependentDelta(double* pSource, double* pResult, int width, int height, double sigma);
 
         NPDoubleArray Calculate(int algorithm);
 };

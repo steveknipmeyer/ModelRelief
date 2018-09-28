@@ -278,46 +278,50 @@ class Solver:
         self.services.results.i3 = gaussian_filter(self.services.results.depth_buffer_model, self.mesh_transform.unsharpmask_parameters.gaussian_low, order=0, output=None, mode='nearest', cval=0.0, truncate=4.0)
 
     @benchmark()
-    def GaussianBlurCachedKernel(self):
+    def GaussianCached(self):
         """
         Relief C++ Gaussian filter.
         """
         self.services.results.i4 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 11)
-        self.services.logger.logInformation (f"GaussianBlurCachedKernel MSE = {Tools.MSE(self.services.results.i3, self.services.results.i4)}", Colors.Magenta)
+        self.services.logger.logInformation(f"tag = {tag}")
+        self.services.logger.logInformation (f"GaussianCached MSE = {Tools.MSE(self.services.results.i3, self.services.results.i4)}", Colors.BrightMagenta)
 
     @benchmark()
-    def GaussianBlurBox(self):
+    def Box(self):
         """
         Relief C++ Gaussian filter.
         """
         self.services.results.i5 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 2)
-        self.services.logger.logInformation (f"GaussianBlurBox MSE = {Tools.MSE(self.services.results.i3, self.services.results.i5)}", Colors.Magenta)
+        self.services.logger.logInformation(f"tag = {tag}")
+        self.services.logger.logInformation (f"Box MSE = {Tools.MSE(self.services.results.i3, self.services.results.i5)}", Colors.BrightMagenta)
 
     @benchmark()
-    def GaussianBlurBoxIndependent(self):
+    def BoxIndependent(self):
         """
         Relief C++ Gaussian filter.
         """
         self.services.results.i6 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 3)
-        self.services.logger.logInformation (f"GaussianBlurBoxIndependent MSE = {Tools.MSE(self.services.results.i3, self.services.results.i6)}", Colors.Magenta)
+        self.services.logger.logInformation(f"tag = {tag}")
+        self.services.logger.logInformation (f"BoxIndependent MSE = {Tools.MSE(self.services.results.i3, self.services.results.i6)}", Colors.BrightMagenta)
 
     @benchmark()
-    def GaussianBlurBoxIndependentOptimized(self):
+    def BoxIndependentDelta(self):
         """
         Relief C++ Gaussian filter.
         """
         self.services.results.i7 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 4)
-        self.services.logger.logInformation (f"GaussianBlurBoxIndependentOptimized MSE = {Tools.MSE(self.services.results.i3, self.services.results.i7)}", Colors.Magenta)
+        self.services.logger.logInformation(f"tag = {tag}")
+        self.services.logger.logInformation (f"BoxIndependentDelta MSE = {Tools.MSE(self.services.results.i3, self.services.results.i7)}", Colors.BrightMagenta)
 
     @benchmark()
     def relief_filter(self):
         """
         Relief C++ Gaussian filter.
         """
-        #self.GaussianBlurCachedKernel()
-        #self.GaussianBlurBox()
-        self.GaussianBlurBoxIndependent()
-        self.GaussianBlurBoxIndependentOptimized()
+        self.GaussianCached()
+        self.Box()
+        self.BoxIndependent()
+        self.BoxIndependentDelta()
 
     def debug_results(self):
         """
