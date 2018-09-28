@@ -2,10 +2,6 @@
 #### Commit Notes
 
 #### Short Term
-    Add silent mode for StopWatch.
-
-    Refactor Logger to accept an optional named indent level.
-
     Replace gaussian_filter with relief.gaussian_filter.
 
     Exceptions are hidden in Python extensions.
@@ -17,7 +13,6 @@
     How many passes are required for GaussianBoxBlur?
 
     Add an "Experiment" module to Explorer to isolate test code.
-
 
     Test asymmetric arrays.
 

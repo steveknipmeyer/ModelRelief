@@ -20,7 +20,7 @@ from typing import Any, Callable, Dict, Optional
 from explorer_ui import Ui_MainWindow
 from results import Results, DataSource
 from solver import Solver
-from stopwatch import benchmark
+from stopwatch import benchmark, StopWatch
 from widgets import ImageTab, ImageType, MeshTab, MeshType
 
 class Explorer(QtWidgets.QMainWindow):
@@ -370,6 +370,7 @@ def main():
     qapp = QtWidgets.QApplication([])
     qapp.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
 
+    StopWatch.silent = True
     explorer = Explorer(arguments.settings, arguments.working, qapp)
 
     # self.explorer.showMinimized()
