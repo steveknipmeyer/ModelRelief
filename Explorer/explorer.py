@@ -1,4 +1,4 @@
-    #!/usr/bin/env python 
+    #!/usr/bin/env python
 #
 #   Copyright (c) 2018
 #   All Rights Reserved.
@@ -57,7 +57,7 @@ class Explorer(QtWidgets.QMainWindow):
         self.initialize_handlers()
 
     # ------------------------------------------#
-    #             Initialization                #  
+    #             Initialization                #
     # ------------------------------------------#
 
     def load_settings(self, settings_file: str)->Dict[str, Any]:
@@ -71,38 +71,38 @@ class Explorer(QtWidgets.QMainWindow):
         self.settings_file = settings_file
         with open(self.settings_file) as json_file:
             settings = json.load(json_file)
-        return settings            
+        return settings
 
     def construct_tabs(self) -> None:
-        """ 
+        """
         Construct the result tabs with the images, meshes, etc. from the calculated solution.
         """
         # image views
-        self.image_tabs[ImageType.DepthBuffer]      = ImageTab(self.ui.depthBufferTab, ImageType.DepthBuffer, "DepthBuffer", "gray", ImageTab.add_image, DataSource(self.solver.results, "depth_buffer_model"))
-        self.image_tabs[ImageType.Relief]           = ImageTab(self.ui.reliefTab, ImageType.Relief, "Relief", "gray", ImageTab.add_image, DataSource(self.solver.results, "mesh_transformed"))
-        self.image_tabs[ImageType.BackgroundMask]   = ImageTab(self.ui.backgroundMaskTab, ImageType.BackgroundMask, "Background Mask", "gray", ImageTab.add_image, DataSource(self.solver.results, "depth_buffer_mask"))
-        self.image_tabs[ImageType.GradientX]        = ImageTab(self.ui.gradientXTab, ImageType.GradientX, "Gradient X: dI(x,y)/dx", "Blues_r", ImageTab.add_image, DataSource(self.solver.results, "gradient_x"))
-        self.image_tabs[ImageType.GradientXMask]    = ImageTab(self.ui.gradientXMaskTab, ImageType.GradientXMask, "Gradient X Mask", "gray", ImageTab.add_image, DataSource(self.solver.results, "gradient_x_mask"))
-        self.image_tabs[ImageType.GradientY]        = ImageTab(self.ui.gradientYTab, ImageType.GradientY, "Gradient Y: dI(x,y)/dy", "Blues_r", ImageTab.add_image, DataSource(self.solver.results, "gradient_y"))
-        self.image_tabs[ImageType.GradientYMask]    = ImageTab(self.ui.gradientYMaskTab, ImageType.GradientYMask, "Gradient Y Mask", "gray", ImageTab.add_image, DataSource(self.solver.results, "gradient_y_mask"))
-        self.image_tabs[ImageType.CompositeMask]    = ImageTab(self.ui.compositeMaskTab, ImageType.CompositeMask, "Composite Mask", "gray", ImageTab.add_image, DataSource(self.solver.results, "combined_mask"))
-        self.image_tabs[ImageType.GradientXUnsharp] = ImageTab(self.ui.gradientXUnsharpTab, ImageType.GradientXUnsharp, "Gradient X Unsharp", "Blues_r", ImageTab.add_image, DataSource(self.solver.results, "gradient_x_unsharp"))
-        self.image_tabs[ImageType.GradientYUnsharp] = ImageTab(self.ui.gradientYUnsharpTab, ImageType.GradientYUnsharp, "Gradient Y Unsharp", "Blues_r", ImageTab.add_image, DataSource(self.solver.results, "gradient_y_unsharp"))
+        self.image_tabs[ImageType.DepthBuffer]      = ImageTab(self.ui.depthBufferTab, ImageType.DepthBuffer, "gray", ImageTab.add_image, DataSource(self.solver.results, "depth_buffer_model"))
+        self.image_tabs[ImageType.Relief]           = ImageTab(self.ui.reliefTab, ImageType.Relief, "gray", ImageTab.add_image, DataSource(self.solver.results, "mesh_transformed"))
+        self.image_tabs[ImageType.BackgroundMask]   = ImageTab(self.ui.backgroundMaskTab, ImageType.BackgroundMask, "gray", ImageTab.add_image, DataSource(self.solver.results, "depth_buffer_mask"))
+        self.image_tabs[ImageType.GradientX]        = ImageTab(self.ui.gradientXTab, ImageType.GradientX, "Blues_r", ImageTab.add_image, DataSource(self.solver.results, "gradient_x"))
+        self.image_tabs[ImageType.GradientXMask]    = ImageTab(self.ui.gradientXMaskTab, ImageType.GradientXMask, "gray", ImageTab.add_image, DataSource(self.solver.results, "gradient_x_mask"))
+        self.image_tabs[ImageType.GradientY]        = ImageTab(self.ui.gradientYTab, ImageType.GradientY, "Blues_r", ImageTab.add_image, DataSource(self.solver.results, "gradient_y"))
+        self.image_tabs[ImageType.GradientYMask]    = ImageTab(self.ui.gradientYMaskTab, ImageType.GradientYMask, "gray", ImageTab.add_image, DataSource(self.solver.results, "gradient_y_mask"))
+        self.image_tabs[ImageType.CompositeMask]    = ImageTab(self.ui.compositeMaskTab, ImageType.CompositeMask, "gray", ImageTab.add_image, DataSource(self.solver.results, "combined_mask"))
+        self.image_tabs[ImageType.GradientXUnsharp] = ImageTab(self.ui.gradientXUnsharpTab, ImageType.GradientXUnsharp, "Blues_r", ImageTab.add_image, DataSource(self.solver.results, "gradient_x_unsharp"))
+        self.image_tabs[ImageType.GradientYUnsharp] = ImageTab(self.ui.gradientYUnsharpTab, ImageType.GradientYUnsharp, "Blues_r", ImageTab.add_image, DataSource(self.solver.results, "gradient_y_unsharp"))
 
         # mesh views
         self.mesh_tabs[MeshType.Model]  = MeshTab(self.ui.modelMeshTab,  MeshType.Model,  "Model", "Blues_r", DataSource(self.solver.results, "depth_buffer_model"))
-        self.mesh_tabs[MeshType.ModelScaled]  = MeshTab(self.ui.modelMeshScaledTab,  MeshType.ModelScaled,  "Model Scaled", "Blues_r", DataSource(self.solver.results, "mesh_scaled"))
+        self.mesh_tabs[MeshType.ModelScaled]  = MeshTab(self.ui.modelMeshScaledTab,   MeshType.ModelScaled,  "Model Scaled", "Blues_r", DataSource(self.solver.results, "mesh_scaled"))
         self.mesh_tabs[MeshType.Relief] = MeshTab(self.ui.reliefMeshTab, MeshType.Relief, "Relief", "Blues_r", DataSource(self.solver.results, "mesh_transformed"))
 
-        # workbench views
-        self.image_tabs[ImageType.Image1] = ImageTab(self.ui.i1Tab, ImageType.Image1, "Image One", "gray", ImageTab.add_image, DataSource(self.solver.results, "i1"))
-        self.image_tabs[ImageType.Image2] = ImageTab(self.ui.i2Tab, ImageType.Image2, "Image Two", "gray", ImageTab.add_image, DataSource(self.solver.results, "i2"))
-        self.image_tabs[ImageType.Image3] = ImageTab(self.ui.i3Tab, ImageType.Image3, "Image Three", "gray", ImageTab.add_image, DataSource(self.solver.results, "i3"))
-        self.image_tabs[ImageType.Image4] = ImageTab(self.ui.i4Tab, ImageType.Image4, "Image Four", "gray", ImageTab.add_image, DataSource(self.solver.results, "i4"))
-        self.image_tabs[ImageType.Image5] = ImageTab(self.ui.i5Tab, ImageType.Image5, "Image Five", "gray", ImageTab.add_image, DataSource(self.solver.results, "i5"))
-        self.image_tabs[ImageType.Image6] = ImageTab(self.ui.i6Tab, ImageType.Image6, "Image Six", "gray", ImageTab.add_image, DataSource(self.solver.results, "i6"))
-        self.image_tabs[ImageType.Image7] = ImageTab(self.ui.i7Tab, ImageType.Image6, "Image Seven", "gray", ImageTab.add_image, DataSource(self.solver.results, "i7"))
-        self.image_tabs[ImageType.Image8] = ImageTab(self.ui.i8Tab, ImageType.Image6, "Image Eight", "gray", ImageTab.add_image, DataSource(self.solver.results, "i8"))
+        # workbench image views
+        self.image_tabs[ImageType.Image1] = ImageTab(self.ui.i1Tab, ImageType.Image1, "gray", ImageTab.add_image, DataSource(self.solver.results, "i1"))
+        self.image_tabs[ImageType.Image2] = ImageTab(self.ui.i2Tab, ImageType.Image2, "gray", ImageTab.add_image, DataSource(self.solver.results, "i2"))
+        self.image_tabs[ImageType.Image3] = ImageTab(self.ui.i3Tab, ImageType.Image3, "gray", ImageTab.add_image, DataSource(self.solver.results, "i3"))
+        self.image_tabs[ImageType.Image4] = ImageTab(self.ui.i4Tab, ImageType.Image4, "gray", ImageTab.add_image, DataSource(self.solver.results, "i4"))
+        self.image_tabs[ImageType.Image5] = ImageTab(self.ui.i5Tab, ImageType.Image5, "gray", ImageTab.add_image, DataSource(self.solver.results, "i5"))
+        self.image_tabs[ImageType.Image6] = ImageTab(self.ui.i6Tab, ImageType.Image6, "gray", ImageTab.add_image, DataSource(self.solver.results, "i6"))
+        self.image_tabs[ImageType.Image7] = ImageTab(self.ui.i7Tab, ImageType.Image6, "gray", ImageTab.add_image, DataSource(self.solver.results, "i7"))
+        self.image_tabs[ImageType.Image8] = ImageTab(self.ui.i8Tab, ImageType.Image6, "gray", ImageTab.add_image, DataSource(self.solver.results, "i8"))
 
     def initialize_settings(self) ->None:
         mesh_transform:Dict[str, float] = self.settings['MeshTransform']
@@ -142,7 +142,7 @@ class Explorer(QtWidgets.QMainWindow):
 
     @benchmark()
     def initialize_ui(self)-> None:
-        """ 
+        """
         Initialize the UI
         """
         self.ui:Ui_MainWindow = Ui_MainWindow()
@@ -156,10 +156,10 @@ class Explorer(QtWidgets.QMainWindow):
         self.construct_tabs()
 
         # N.B. First update of tabs will be performed following the system-generate resizeEvent.
-    
+
     # ------------------------------------------#
-    #               Event Handlers              #  
-    # ------------------------------------------#   
+    #               Event Handlers              #
+    # ------------------------------------------#
     def resize_ui(self)-> None:
         """ Handles a resize event for the main window. """
 
@@ -218,7 +218,7 @@ class Explorer(QtWidgets.QMainWindow):
         enable
             On/Off
         """
-        self.ui.labelProcessing.setVisible(enable) 
+        self.ui.labelProcessing.setVisible(enable)
         self.ui.labelProcessing.repaint()
 
     def handle_process(self) ->None:
@@ -274,7 +274,7 @@ class Explorer(QtWidgets.QMainWindow):
             self.update(preserve_camera=False)
 
     def calculate(self) -> None:
-        """ 
+        """
         Transfor the active model using the MeshTransform.
         """
         self.set_busy (True)
@@ -308,7 +308,7 @@ class Explorer(QtWidgets.QMainWindow):
         self.set_busy (False)
 
     # ------------------------------------------#
-    #                 Update                    #  
+    #                 Update                    #
     # ------------------------------------------#
     def invalidate(self)->None:
         """
@@ -373,10 +373,10 @@ def main():
     explorer = Explorer(arguments.settings, arguments.working, qapp)
 
     # self.explorer.showMinimized()
-    # self.explorer.showNormal()        
+    # self.explorer.showNormal()
     # self.explorer.showMaximized()
 
-    explorer.show()        
+    explorer.show()
 
     exit(qapp.exec_())
 

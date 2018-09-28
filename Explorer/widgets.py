@@ -1,4 +1,4 @@
-    #!/usr/bin/env python 
+#!/usr/bin/env python
 #
 #   Copyright (c) 2018
 #   All Rights Reserved.
@@ -43,7 +43,7 @@ from typing import Any, Callable, Dict, Optional
 from results import Results, DataSource
 
 # ------------------------------------------#
-#                 Images                    #  
+#                 Images                    #
 # ------------------------------------------#
 class ImageType(Enum):
     """
@@ -73,7 +73,7 @@ class ImageType(Enum):
 class ImageTab():
     """ A UI tab of an image view. """
 
-    def __init__(self, widget: QtWidgets.QWidget, image_type: ImageType, title: str, cmap: str, content_ctor: Callable[[Figure, plt.Axes, np.ndarray, str, str], Figure], source: DataSource) -> None:
+    def __init__(self, widget: QtWidgets.QWidget, image_type: ImageType, cmap: str, content_ctor: Callable[[Figure, plt.Axes, np.ndarray, str, str], Figure], source: DataSource) -> None:
         """ A UI image tab in the Explorer.
         Parameters
         ----------
@@ -81,8 +81,6 @@ class ImageTab():
             QWidget of the tab.
         image_type
             The type of the image.
-        title
-            The title of the view.
         cmap
             The matplotlib colormap.
         content_ctor
@@ -92,7 +90,6 @@ class ImageTab():
         """
         self.widget = widget
         self.image_type = image_type
-        self.title = title
         self.cmap = cmap
 
         self.figure: Figure = None
@@ -133,7 +130,7 @@ class ImageTab():
         """ Constructs the UI tab with the image content.
             Regenerates the matplotlib Figure.
         """
-            
+
         figure_exists = self.figure != None
         if figure_exists:
             viewLim = self.get_view_extents(self.figure)
@@ -141,7 +138,7 @@ class ImageTab():
 
         # construct image figure
         data = self.source.data
-        self.figure = self.construct_subplot_figures ([data], 1, [self.title], [self.cmap])
+        self.figure = self.construct_subplot_figures ([data.image], 1, [data.title], [self.cmap])
 
         # restore extents
         if figure_exists:
@@ -169,7 +166,7 @@ class ImageTab():
         """
         if self.source.dirty:
             self.construct()
-            self.source.dirty = False            
+            self.source.dirty = False
 
     @staticmethod
     def add_image(figure: Figure, subplot: plt.Axes, image: np.ndarray, title: str, cmap: str) -> plt.Figure:
@@ -296,14 +293,14 @@ class ImageTab():
         return figure
 
 # ------------------------------------------#
-#                 Meshes                    #  
+#                 Meshes                    #
 # ------------------------------------------#
 class MeshType(Enum):
     """
     A class representing the various UI mesh view types.
     """
     Model  = 1,
-    ModelScaled  = 2,    
+    ModelScaled  = 2,
     Relief = 3
 
 class Camera:
@@ -316,7 +313,7 @@ class Camera:
         """
         self.figure = figure
 
-        self.azimuth, self.elevation, self.distance, self.focalpoint = mlab.view(figure=self.figure) 
+        self.azimuth, self.elevation, self.distance, self.focalpoint = mlab.view(figure=self.figure)
         self.roll = mlab.roll(figure=self.figure)
 
     def apply (self, figure=None) -> None:
@@ -345,7 +342,7 @@ class MeshContent(HasTraits):
         self.camera: Optional[Camera] = None
 
     def update(self, preserve_camera:bool = True):
-        """ 
+        """
         Update the mesh if necessary.
         Parameters
         ----------
@@ -362,14 +359,14 @@ class MeshContent(HasTraits):
         # This function is called when the view is opened. We don't populate the scene
         # when the view is not yet open, as some VTK features require a GLContext.
 
-        shape = self.source.data.shape
+        shape = self.source.data.image.shape
         width = shape[1]
         height = shape[0]
         X = np.arange(0, width, 1.0)
         Y = np.arange(0, height, 1.0)
 
         X, Y = np.meshgrid(X, Y)
-        Z = self.source.data
+        Z = self.source.data.image
 
         colors = np.empty(X.shape, dtype=str)
         colors.fill('b')
@@ -432,8 +429,8 @@ class MeshWidget(QtWidgets.QWidget):
     """ The QWidget containing the visualization, this is pure PyQt5 code. """
 
     def __init__(self, source: DataSource, mesh_type: MeshType, parent=None) -> None:
-        """ 
-        Initialization. 
+        """
+        Initialization.
         Parameters
         ----------
         source

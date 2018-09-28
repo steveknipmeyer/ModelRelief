@@ -2,23 +2,23 @@
 #### Commit Notes
 
 #### Short Term
+    Add silent mode for StopWatch.
+
     Refactor Logger to accept an optional named indent level.
-    Swap logColoreMessage parameters for consistency.
+
+    Replace gaussian_filter with relief.gaussian_filter.
 
     Exceptions are hidden in Python extensions.
-
-    Can the image array be shifted by the "background value" to allow optimization?
-        Skip the lookup of the gaussian kernel elemeent and the multiplication.
-        This applies only to the algorithms that use a true gaussian function.
 
     What is the optimal size of the kernel radius?
         The article uses a radius of 10.
         GaussianKernel::Radius returns 11.
 
     How many passes are required for GaussianBoxBlur?
-        
-    Add an "Experiment" module to Explorer to isolate test code.            
-    How can the Workbench images be labeled?
+
+    Add an "Experiment" module to Explorer to isolate test code.
+
+
     Test asymmetric arrays.
 
     Optimizations

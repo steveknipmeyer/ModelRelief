@@ -43,7 +43,7 @@ class Silhouette:
         background_mask
             The image background mask.
         sigma:
-            The standard deviation used in the Gaussian blur of the image.            
+            The standard deviation used in the Gaussian blur of the image.
         iterations:
             The number of time to apply the blur.
         """
@@ -51,7 +51,7 @@ class Silhouette:
         blurred_all = image
         for _ in range(iterations):
             blurred_all = gaussian_filter(blurred_all, sigma, order=0, output=None, mode='nearest', cval=0.0, truncate=4.0)
-        
+
         # isolate only the portion of the blend that extends into the background mask
         mask = Mask (self.services)
         mask_inverted = mask.invert(background_mask)
@@ -61,7 +61,10 @@ class Silhouette:
         result = image + blurred_edges
 
         # workbench
-        self.services.results.i1 = blurred_all
-        self.services.results.i2 = blurred_edges
+        self.services.results.i1.image = blurred_all
+        self.services.results.i1.title = "Blurred All"
+
+        self.services.results.i2.image = blurred_edges
+        self.services.results.i2.title = "Blurred Edges"
 
         return result

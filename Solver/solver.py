@@ -9,7 +9,7 @@
    :synopsis: Generates a mesh from a DepthBuffer and a MeshTransform.
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
-""" 
+"""
 
 import argparse
 import colorama
@@ -21,12 +21,12 @@ from scipy.ndimage import gaussian_filter
 from shutil import copyfile
 from typing import Any, Callable, Dict, Optional
 
-from filemanager import FileManager 
-from logger import Logger 
+from filemanager import FileManager
+from logger import Logger
 from mathtools import MathTools
 from objwriter import OBJWriter
 from results import Results
-from services import Services 
+from services import Services
 from stopwatch import benchmark
 from tools import Colors, Tools
 
@@ -55,7 +55,7 @@ class Solver:
 
         Parameters
         ----------
-        settings 
+        settings
             Path to JSON Mesh settings file.
         working
             Working folder path for intermediate files.
@@ -68,7 +68,7 @@ class Solver:
         # results collection
         self.results = Results()
 
-        working_folder = os.path.abspath(working) 
+        working_folder = os.path.abspath(working)
         self.working_folder = working_folder
         if not os.path.exists(working_folder):
             os.makedirs(working_folder)
@@ -101,7 +101,7 @@ class Solver:
         self.mesh = None
         self.depth_buffer: Optional[DepthBuffer] = None
         self.mesh_transform: Optional[MeshTransform] = None
-        
+
         self.settings_file = settings
 
     @property
@@ -117,19 +117,19 @@ class Solver:
         return os.path.abspath('../ModelRelief')
 
     @property
-    def settings_file(self): 
+    def settings_file(self):
         """
         Returns the absolute path of the Mesh settings file.
         """
         return self._settings_file
 
     @settings_file.setter
-    def settings_file(self, settings): 
+    def settings_file(self, settings):
         with open(settings) as json_file:
             self.settings = json.load(json_file)
         self.initialize_settings()
         self._settings_file = settings
-    
+
     def initialize_settings(self):
         """
         Unpack the JSON settings file and initialize Solver properties.
@@ -146,8 +146,8 @@ class Solver:
         The depth buffer is converted into model units.
         The background bit mask is calculated.
         """
-        self.results.depth_buffer_model = self.depth_buffer.floats
-        self.results.depth_buffer_mask = self.depth_buffer.background_mask
+        self.results.depth_buffer_model.image = self.depth_buffer.floats
+        self.results.depth_buffer_mask.image = self.depth_buffer.background_mask
 
     @benchmark()
     def process_gradients(self):
@@ -157,24 +157,24 @@ class Solver:
         The gradients are filtered by applying the composite mask.
         """
 
-        self.results.gradient_x = self.depth_buffer.gradient_x
-        self.results.gradient_y = self.depth_buffer.gradient_y
+        self.results.gradient_x.image = self.depth_buffer.gradient_x
+        self.results.gradient_y.image = self.depth_buffer.gradient_y
 
         # Composite mask: Values are processed only if they pass all three masks.
         #    A value must have a 1 in the background mask.
         #    A value must have both dI/dx <and> dI/dy that are 1 in the respective gradient masks.
-        mask = Mask(self.services) 
+        mask = Mask(self.services)
         threshold_value = self.mesh_transform.gradient_threshold if self.enable_gradient_threshold else float("inf")
-        self.results.gradient_x_mask = mask.threshold(self.results.gradient_x, threshold_value)
-        self.results.gradient_y_mask = mask.threshold(self.results.gradient_y, threshold_value)
-        self.results.combined_mask = self.results.gradient_x_mask * self.results.gradient_y_mask
+        self.results.gradient_x_mask.image = mask.threshold(self.results.gradient_x.image, threshold_value)
+        self.results.gradient_y_mask.image = mask.threshold(self.results.gradient_y.image, threshold_value)
+        self.results.combined_mask.image = self.results.gradient_x_mask.image * self.results.gradient_y_mask.image
         # N.B. Including the background result in the mask causes the "leading" derivatives along +X, +Y to be excluded.
         #      The derivates are forward differences so they are defined (along +X, +Y) in the XY region <outside> the background mask.
         # self.combined_mask = self.combined_mask * self.depth_buffer_mask
 
         # Modify gradient by applying threshold, setting values above threshold to zero.
-        self.results.gradient_x = self.results.gradient_x * self.results.combined_mask
-        self.results.gradient_y = self.results.gradient_y * self.results.combined_mask
+        self.results.gradient_x.image = self.results.gradient_x.image * self.results.combined_mask.image
+        self.results.gradient_y.image = self.results.gradient_y.image * self.results.combined_mask.image
 
     def process_attenuation(self):
         """
@@ -182,16 +182,16 @@ class Solver:
         """
         if self.enable_attenuation:
             attenuation = Attenuation(self.services)
-            self.results.gradient_x = attenuation.apply(self.results.gradient_x, self.mesh_transform.attenuation_parameters)
-            self.results.gradient_y = attenuation.apply(self.results.gradient_y, self.mesh_transform.attenuation_parameters)
+            self.results.gradient_x.image = attenuation.apply(self.results.gradient_x.image, self.mesh_transform.attenuation_parameters)
+            self.results.gradient_y.image = attenuation.apply(self.results.gradient_y.image, self.mesh_transform.attenuation_parameters)
 
     def process_unsharpmask(self):
         """
         Apply unsharp masking to amplify details.
         The high frequency features are obtained from the image, scaled and the added back.
         """
-        self.results.gradient_x_unsharp = self.results.gradient_x
-        self.results.gradient_y_unsharp = self.results.gradient_y
+        self.results.gradient_x_unsharp.image = self.results.gradient_x.image
+        self.results.gradient_y_unsharp.image = self.results.gradient_y.image
 
         if self.enable_unsharpmask:
             gaussian_low = self.mesh_transform.unsharpmask_parameters.gaussian_low if self.enable_unsharpmask_gaussian_low else 0.0
@@ -200,27 +200,27 @@ class Solver:
             parameters = UnsharpMaskParameters(gaussian_low, gaussian_high, high_frequency_scale)
 
             unsharpmask = UnsharpMask(self.services)
-            self.results.gradient_x_unsharp = unsharpmask.apply(self.results.gradient_x, self.results.combined_mask, parameters)
-            self.results.gradient_y_unsharp = unsharpmask.apply(self.results.gradient_y, self.results.combined_mask, parameters)
+            self.results.gradient_x_unsharp.image = unsharpmask.apply(self.results.gradient_x.image, self.results.combined_mask.image, parameters)
+            self.results.gradient_y_unsharp.image = unsharpmask.apply(self.results.gradient_y.image, self.results.combined_mask.image, parameters)
 
     def process_poisson(self):
         """
         Solve the Poisson equation that returns the final reconstructed mesh from the modified gradients.
         """
-        difference = Difference(self.services)        
-        self.results.dGxdx = difference.difference_x(self.results.gradient_x_unsharp, FiniteDifference.Backward)
-        self.results.dGydy = difference.difference_y(self.results.gradient_y_unsharp, FiniteDifference.Backward)
-        self.results.divG = self.results.dGxdx + self.results.dGydy
+        difference = Difference(self.services)
+        self.results.dGxdx.image = difference.difference_x(self.results.gradient_x_unsharp.image, FiniteDifference.Backward)
+        self.results.dGydy.image = difference.difference_y(self.results.gradient_y_unsharp.image, FiniteDifference.Backward)
+        self.results.divG.image = self.results.dGxdx.image + self.results.dGydy.image
 
-        poisson = Poisson(self.services) 
-        self.results.mesh_transformed = poisson.solve(self.results.divG)
+        poisson = Poisson(self.services)
+        self.results.mesh_transformed.image = poisson.solve(self.results.divG.image)
 
         # apply offset
-        offset = np.min(self.results.mesh_transformed)
-        self.results.mesh_transformed = self.results.mesh_transformed - offset
+        offset = np.min(self.results.mesh_transformed.image)
+        self.results.mesh_transformed.image = self.results.mesh_transformed.image - offset
 
         # apply background mask to reset background to zero
-        self.results.mesh_transformed = self.results.mesh_transformed * self.results.depth_buffer_mask
+        self.results.mesh_transformed.image = self.results.mesh_transformed.image * self.results.depth_buffer_mask.image
 
     def process_silhouette(self):
         """
@@ -228,26 +228,26 @@ class Solver:
         """
         if self.enable_p2:
             silhouette = Silhouette(self.services)
-            self.results.mesh_transformed = silhouette.process(self.results.mesh_transformed, self.results.depth_buffer_mask, self.mesh_transform.p2, int(self.mesh_transform.p3))
+            self.results.mesh_transformed.image = silhouette.process(self.results.mesh_transformed.image, self.results.depth_buffer_mask.image, self.mesh_transform.p2, int(self.mesh_transform.p3))
 
     def process_scale(self):
         """
         Scales the mesh to the final dimensions.
         """
         # linear scale original mesh
-        self.results.mesh_scaled = self.results.depth_buffer_model * self.mesh_transform.p1
+        self.results.mesh_scaled.image = self.results.depth_buffer_model.image * self.mesh_transform.p1
 
         write_file = False
         if write_file:
-            float_list = self.results.mesh_scaled.tolist()
+            float_list = self.results.mesh_scaled.image.tolist()
             file_path = '%s/%s' % (self.working_folder, self.mesh.name)
             FileManager().write_binary(file_path, FileManager().pack_floats(float_list))
 
         # scale relief
-        target_height = np.max(self.results.mesh_scaled)
-        current_height = np.max(self.results.mesh_transformed)
+        target_height = np.max(self.results.mesh_scaled.image)
+        current_height = np.max(self.results.mesh_transformed.image)
         factor = target_height / current_height
-        self.results.mesh_transformed = self.results.mesh_transformed * factor
+        self.results.mesh_transformed.image = self.results.mesh_transformed.image * factor
 
     def write_mesh(self):
         """
@@ -255,8 +255,8 @@ class Solver:
         """
         file_path = os.path.join(self.working_folder, self.mesh.name)
 
-        (width, height) = self.results.mesh_transformed.shape
-        mesh_list = self.results.mesh_transformed.reshape(width * height, 1)
+        (width, height) = self.results.mesh_transformed.image.shape
+        mesh_list = self.results.mesh_transformed.image.reshape(width * height, 1)
         FileManager().write_binary(file_path, FileManager().pack_floats(mesh_list))
 
     def write_obj(self):
@@ -264,10 +264,10 @@ class Solver:
         Write the final calculated mesh OBJ file.
         """
         if self.enable_obj:
-            filename, _ = os.path.splitext(self.mesh.name)        
+            filename, _ = os.path.splitext(self.mesh.name)
             file_path = os.path.join(self.working_folder, filename + ".obj")
-            
-            filewriter = OBJWriter(self.services, self.results.mesh_transformed, file_path)
+
+            filewriter = OBJWriter(self.services, self.results.mesh_transformed.image, file_path)
             filewriter.write()
 
     @benchmark()
@@ -275,43 +275,44 @@ class Solver:
         """
         SciPy Gaussian filter.
         """
-        self.services.results.i3 = gaussian_filter(self.services.results.depth_buffer_model, self.mesh_transform.unsharpmask_parameters.gaussian_low, order=0, output=None, mode='nearest', cval=0.0, truncate=4.0)
+        self.services.results.i3.image = gaussian_filter(self.services.results.depth_buffer_model.image, self.mesh_transform.unsharpmask_parameters.gaussian_low, order=0, output=None, mode='nearest', cval=0.0, truncate=4.0)
+        self.services.results.i3.title = "SciPy gaussian_filter"
 
     @benchmark()
     def GaussianCached(self):
         """
         Relief C++ Gaussian filter.
         """
-        self.services.results.i4 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 11)
-        self.services.logger.logInformation(f"tag = {tag}")
-        self.services.logger.logInformation (f"GaussianCached MSE = {Tools.MSE(self.services.results.i3, self.services.results.i4)}", Colors.BrightMagenta)
+        self.services.results.i4.image = relief.gaussian_filter(self.services.results.depth_buffer_model.image, self.results.combined_mask.image, self.mesh_transform.unsharpmask_parameters.gaussian_low, 11)
+        self.services.results.i4.title = "GaussianCached"
+        self.services.logger.logInformation (f"GaussianCached MSE = {Tools.MSE(self.services.results.i3.image, self.services.results.i4.image)}", Colors.BrightMagenta)
 
     @benchmark()
     def Box(self):
         """
         Relief C++ Gaussian filter.
         """
-        self.services.results.i5 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 2)
-        self.services.logger.logInformation(f"tag = {tag}")
-        self.services.logger.logInformation (f"Box MSE = {Tools.MSE(self.services.results.i3, self.services.results.i5)}", Colors.BrightMagenta)
+        self.services.results.i5.image = relief.gaussian_filter(self.services.results.depth_buffer_model.image, self.results.combined_mask.image, self.mesh_transform.unsharpmask_parameters.gaussian_low, 2)
+        self.services.results.i5.title = "Box"
+        self.services.logger.logInformation (f"Box MSE = {Tools.MSE(self.services.results.i3.image, self.services.results.i5.image)}", Colors.BrightMagenta)
 
     @benchmark()
     def BoxIndependent(self):
         """
         Relief C++ Gaussian filter.
         """
-        self.services.results.i6 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 3)
-        self.services.logger.logInformation(f"tag = {tag}")
-        self.services.logger.logInformation (f"BoxIndependent MSE = {Tools.MSE(self.services.results.i3, self.services.results.i6)}", Colors.BrightMagenta)
+        self.services.results.i6.image = relief.gaussian_filter(self.services.results.depth_buffer_model.image, self.results.combined_mask.image, self.mesh_transform.unsharpmask_parameters.gaussian_low, 3)
+        self.services.results.i6.title = "BoxIndependent"
+        self.services.logger.logInformation (f"BoxIndependent MSE = {Tools.MSE(self.services.results.i3.image, self.services.results.i6.image)}", Colors.BrightMagenta)
 
     @benchmark()
     def BoxIndependentDelta(self):
         """
         Relief C++ Gaussian filter.
         """
-        self.services.results.i7 = relief.gaussian_filter(self.services.results.depth_buffer_model, self.results.combined_mask, self.mesh_transform.unsharpmask_parameters.gaussian_low, 4)
-        self.services.logger.logInformation(f"tag = {tag}")
-        self.services.logger.logInformation (f"BoxIndependentDelta MSE = {Tools.MSE(self.services.results.i3, self.services.results.i7)}", Colors.BrightMagenta)
+        self.services.results.i7.image = relief.gaussian_filter(self.services.results.depth_buffer_model.image, self.results.combined_mask.image, self.mesh_transform.unsharpmask_parameters.gaussian_low, 4)
+        self.services.results.i7.title = "BoxIndependentDelta"
+        self.services.logger.logInformation (f"BoxIndependentDelta MSE = {Tools.MSE(self.services.results.i3.image, self.services.results.i7.image)}", Colors.BrightMagenta)
 
     @benchmark()
     def relief_filter(self):
@@ -334,12 +335,12 @@ class Solver:
                 print ("Results")
                 print ("------------------------------------------------------------")
                 MathTools.print_array("I", self.depth_buffer.floats)
-                MathTools.print_array("Gx", self.results.gradient_x)
-                MathTools.print_array("dGxdx", self.results.dGxdx)
-                MathTools.print_array("Gy", self.results.gradient_y)
-                MathTools.print_array("dGydy", self.results.dGydy)
-                MathTools.print_array("divG", self.results.divG)
-                MathTools.print_array("Poisson Solution", self.results.mesh_transformed)
+                MathTools.print_array("Gx", self.results.gradient_x.image)
+                MathTools.print_array("dGxdx", self.results.dGxdx.image)
+                MathTools.print_array("Gy", self.results.gradient_y.image)
+                MathTools.print_array("dGydy", self.results.dGydy.image)
+                MathTools.print_array("divG", self.results.divG.image)
+                MathTools.print_array("Poisson Solution", self.results.mesh_transformed.image)
 
     @benchmark()
     def transform(self):
@@ -376,7 +377,7 @@ def main():
                                 help='Temporary working folder.', required=True)
     arguments = options_parser.parse_args()
 
-    solver = Solver(arguments.settings, arguments.working)    
+    solver = Solver(arguments.settings, arguments.working)
     solver.transform()
 
 if __name__ == '__main__':

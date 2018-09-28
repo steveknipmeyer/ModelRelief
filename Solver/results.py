@@ -22,32 +22,32 @@ class Results:
         """
         default_shape = (1, 1)
         # component images
-        self.depth_buffer_model: np.ndarray = np.zeros(default_shape)                       # DepthBuffer : Z coordinates in model units
-        self.depth_buffer_mask: np.ndarray = np.zeros(default_shape)                        # DepthBuffer : background bit mask of complete model
-        self.dGxdx: np.ndarray = np.zeros(default_shape)                                    # 1st derivative of Gradient wrt X: dGradientX(x,y) / dx
-        self.dGydy: np.ndarray = np.zeros(default_shape)                                    # 1st derivative of Gradient wrt Y: dGradientY(x,y) / dy
-        self.divG: np.ndarray = np.zeros(default_shape)                                     # div Gradient(x,y)
-        self.gradient_x: np.ndarray = np.zeros(default_shape)                               # GradientX (thresholded)
-        self.gradient_x_mask: np.ndarray = np.zeros(default_shape)                          # GradientY (thresholded)
-        self.gradient_y: np.ndarray = np.zeros(default_shape)                               # GradientX bit mask (thresholded)
-        self.gradient_y_mask: np.ndarray = np.zeros(default_shape)                          # GradientX bit mask (thresholded)
-        self.combined_mask: np.ndarray = np.zeros(default_shape)                            # final bit mask : compostite 
-        self.gradient_x_unsharp: np.ndarray = np.zeros(default_shape)                       # GradientX : (unsharp masked)
-        self.gradient_y_unsharp: np.ndarray = np.zeros(default_shape)                       # GradientY : (unsharp masked)
+        self.depth_buffer_model: ImageResult = ImageResult(np.zeros(default_shape), "")                       # DepthBuffer : Z coordinates in model units
+        self.depth_buffer_mask: ImageResult = ImageResult(np.zeros(default_shape), "")                        # DepthBuffer : background bit mask of complete model
+        self.dGxdx: ImageResult = ImageResult(np.zeros(default_shape), "")                                    # 1st derivative of Gradient wrt X: dGradientX(x,y) / dx
+        self.dGydy: ImageResult = ImageResult(np.zeros(default_shape), "")                                    # 1st derivative of Gradient wrt Y: dGradientY(x,y) / dy
+        self.divG: ImageResult = ImageResult(np.zeros(default_shape), "")                                     # div Gradient(x,y)
+        self.gradient_x: ImageResult = ImageResult(np.zeros(default_shape), "")                               # GradientX (thresholded)
+        self.gradient_x_mask: ImageResult = ImageResult(np.zeros(default_shape), "")                          # GradientY (thresholded)
+        self.gradient_y: ImageResult = ImageResult(np.zeros(default_shape), "")                               # GradientX bit mask (thresholded)
+        self.gradient_y_mask: ImageResult = ImageResult(np.zeros(default_shape), "")                          # GradientX bit mask (thresholded)
+        self.combined_mask: ImageResult = ImageResult(np.zeros(default_shape), "")                            # final bit mask : compostite
+        self.gradient_x_unsharp: ImageResult = ImageResult(np.zeros(default_shape), "")                       # GradientX : (unsharp masked)
+        self.gradient_y_unsharp: ImageResult = ImageResult(np.zeros(default_shape), "")                       # GradientY : (unsharp masked)
 
         # mesh results
-        self.mesh_scaled: np.ndarray = np.zeros(default_shape)                              # Mesh: scaled linearly
-        self.mesh_transformed: np.ndarray = np.zeros(default_shape)                         # Mesh: complete solution
+        self.mesh_scaled: ImageResult = ImageResult(np.zeros(default_shape), "")                              # Mesh: scaled linearly
+        self.mesh_transformed: ImageResult = ImageResult(np.zeros(default_shape), "")                         # Mesh: complete solution
 
         # workbench images
-        self.i1 = np.zeros(default_shape)
-        self.i2 = np.zeros(default_shape)
-        self.i3 = np.zeros(default_shape)
-        self.i4 = np.zeros(default_shape)
-        self.i5 = np.zeros(default_shape)
-        self.i6 = np.zeros(default_shape)
-        self.i7 = np.zeros(default_shape)
-        self.i8 = np.zeros(default_shape)
+        self.i1: ImageResult = ImageResult(np.zeros(default_shape), "")
+        self.i2: ImageResult = ImageResult(np.zeros(default_shape), "")
+        self.i3: ImageResult = ImageResult(np.zeros(default_shape), "")
+        self.i4: ImageResult = ImageResult(np.zeros(default_shape), "")
+        self.i5: ImageResult = ImageResult(np.zeros(default_shape), "")
+        self.i6: ImageResult = ImageResult(np.zeros(default_shape), "")
+        self.i7: ImageResult = ImageResult(np.zeros(default_shape), "")
+        self.i8: ImageResult = ImageResult(np.zeros(default_shape), "")
 
     def initialize(self, rows: int, columns: int)->None :
         """
@@ -62,32 +62,49 @@ class Results:
         initialization_shape = (rows, columns)
 
         # component images
-        self.depth_buffer_model: np.ndarray = np.zeros(initialization_shape)
-        self.depth_buffer_mask: np.ndarray = np.zeros(initialization_shape) 
-        self.dGxdx: np.ndarray = np.zeros(initialization_shape)             
-        self.dGydy: np.ndarray = np.zeros(initialization_shape)             
-        self.divG: np.ndarray = np.zeros(initialization_shape)              
-        self.gradient_x: np.ndarray = np.zeros(initialization_shape)        
-        self.gradient_x_mask: np.ndarray = np.zeros(initialization_shape)   
-        self.gradient_y: np.ndarray = np.zeros(initialization_shape)        
-        self.gradient_y_mask: np.ndarray = np.zeros(initialization_shape)   
-        self.combined_mask: np.ndarray = np.zeros(initialization_shape)     
-        self.gradient_x_unsharp: np.ndarray = np.zeros(initialization_shape)
-        self.gradient_y_unsharp: np.ndarray = np.zeros(initialization_shape)
+        self.depth_buffer_model: np.ndarray = ImageResult(np.zeros(initialization_shape), "Model")
+        self.depth_buffer_mask: np.ndarray = ImageResult(np.zeros(initialization_shape), "Background Mask")
+        self.dGxdx: np.ndarray = ImageResult(np.zeros(initialization_shape), "div Gx: dG(x,y)/dx")
+        self.dGydy: np.ndarray = ImageResult(np.zeros(initialization_shape), "div Gy: dG(x,y)/dy")
+        self.divG: np.ndarray = ImageResult(np.zeros(initialization_shape), "div G")
+        self.gradient_x: np.ndarray = ImageResult(np.zeros(initialization_shape), "Gradient X: dI(x,y)/dx")
+        self.gradient_x_mask: np.ndarray = ImageResult(np.zeros(initialization_shape), "Gradient X Mask")
+        self.gradient_y: np.ndarray = ImageResult(np.zeros(initialization_shape), "Gradient Y: dI(x,y)/dy")
+        self.gradient_y_mask: np.ndarray = ImageResult(np.zeros(initialization_shape), "Gradient Y Mask")
+        self.combined_mask: np.ndarray = ImageResult(np.zeros(initialization_shape), "Composite Mask")
+        self.gradient_x_unsharp: np.ndarray = ImageResult(np.zeros(initialization_shape), "Gradient X Unsharp")
+        self.gradient_y_unsharp: np.ndarray = ImageResult(np.zeros(initialization_shape), "Gradient Y Unsharp")
 
         # mesh results
-        self.mesh_scaled: np.ndarray = np.zeros(initialization_shape)       
-        self.mesh_transformed: np.ndarray = np.zeros(initialization_shape)  
+        self.mesh_scaled: np.ndarray = ImageResult(np.zeros(initialization_shape), "Model Scaled")
+        self.mesh_transformed: np.ndarray = ImageResult(np.zeros(initialization_shape), "Relief")
 
         # workbench images
-        self.i1 = np.zeros(initialization_shape)
-        self.i2 = np.zeros(initialization_shape)
-        self.i3 = np.zeros(initialization_shape)
-        self.i4 = np.zeros(initialization_shape)
-        self.i5 = np.zeros(initialization_shape)
-        self.i6 = np.zeros(initialization_shape)
-        self.i7 = np.zeros(initialization_shape)
-        self.i8 = np.zeros(initialization_shape)
+        self.i1 = ImageResult(np.zeros(initialization_shape), "I1")
+        self.i2 = ImageResult(np.zeros(initialization_shape), "I2")
+        self.i3 = ImageResult(np.zeros(initialization_shape), "I3")
+        self.i4 = ImageResult(np.zeros(initialization_shape), "I4")
+        self.i5 = ImageResult(np.zeros(initialization_shape), "I5")
+        self.i6 = ImageResult(np.zeros(initialization_shape), "I6")
+        self.i7 = ImageResult(np.zeros(initialization_shape), "I7")
+        self.i8 = ImageResult(np.zeros(initialization_shape), "I8")
+
+class ImageResult:
+    """
+    Represents a tab holding a Workbench image and a title.
+    """
+    def __init__(self, image: np.ndarray, title: str)-> None:
+        """
+        Constructor.
+        Parameters
+        ----------
+        image
+            Image data.
+        title
+            Image title.
+        """
+        self.image = image
+        self.title = title
 
 class DataSource:
     """
@@ -101,14 +118,14 @@ class DataSource:
         results
             The Results structure holding the Solver results.
         property
-            The property name of the source in Results 
+            The property name of the source in Results
         """
         self.results = results
-        self.property = property_name            
+        self.property = property_name
         self.dirty = True
 
     @property
-    def data(self)-> np.ndarray:
+    def data(self)-> ImageResult:
         """
         Returns the source data from the Results structure.
         """
