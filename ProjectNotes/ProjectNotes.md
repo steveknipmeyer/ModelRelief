@@ -2,8 +2,6 @@
 #### Commit Notes
 
 #### Short Term
-    Replace gaussian_filter with relief.gaussian_filter.
-
     Experiment with NumPy pad solutions.
         https://stackoverflow.com/questions/40690248/copy-numpy-array-into-part-of-another-array
 

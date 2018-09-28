@@ -14,6 +14,7 @@ import numpy as np
 from scipy.ndimage import gaussian_filter
 
 import relief
+from imagetransform import ImageTransform
 from services import Services
 
 class UnsharpMaskParameters:
@@ -43,7 +44,7 @@ class UnsharpMask:
     A class for calculating unsharp masks of images.
     """
 
-    def __init__(self, services : Services) -> None: 
+    def __init__(self, services : Services) -> None:
         """
         Initialize an instance of an UnsharpMask.
         Parameters
@@ -68,7 +69,7 @@ class UnsharpMask:
         parameters
             The UnsharpMaskParamnter structure (gaussian_low, gaussian_high, high_frequency_scale)
         """
-        # N.B. The Gaussian blur used in Kerber's paper ignores pixels that have been masked. 
+        # N.B. The Gaussian blur used in Kerber's paper ignores pixels that have been masked.
         # The implementation here does include them. It seems a custom kernel (ndimage "generic filter") may be required that takes into consideration the overall mask.
         # https://dsp.stackexchange.com/questions/10057/gaussian-blur-standard-deviation-radius-and-kernel-size
         # https://stackoverflow.com/questions/23208232/image-filtering-with-scikit-image
@@ -76,15 +77,12 @@ class UnsharpMask:
 
         original_prime= original * combined_mask
 
-        low = gaussian_filter(original_prime, parameters.gaussian_low, order=0, output=None, mode='nearest', cval=0.0, truncate=4.0)
-        #low = relief.gaussian_filter(original_prime, combined_mask, parameters.gaussian_low, 4)
-
+        low = ImageTransform.gaussian(original_prime, combined_mask, parameters.gaussian_low)
         low = low * combined_mask
 
         # subtract low frequency from original to yield the high frequency components
         high = original_prime - low
-        high = gaussian_filter(high, parameters.gaussian_high, order=0, output=None, mode='nearest', cval=0.0, truncate=4.0)
-        #high = relief.gaussian_filter(high, combined_mask, parameters.gaussian_high, 4)
+        high = ImageTransform.gaussian(high, combined_mask, parameters.gaussian_high)
 
         # add back the scaled high frequency components to generate the final results
         final = original_prime + (parameters.high_frequency_scale * high)
