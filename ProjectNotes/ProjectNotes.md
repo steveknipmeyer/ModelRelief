@@ -4,11 +4,6 @@
 #### Short Term
     Should a relief module wrap the Python C++ extensions (instead of ImageTransform)?
 
-    What is the optimal size of the kernel radius?
-        The article uses a radius of 10.
-        GaussianKernel::Radius returns 11.
-    How many passes are required for GaussianBoxBlur?
-
     Why does the VSCode Python debugger not find modules in other folders?
         This happens only in the debugger.
         Adding .env to the workspace root resolves the issue.
