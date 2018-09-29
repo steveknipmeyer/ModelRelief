@@ -2,8 +2,10 @@
 #### Commit Notes
 
 #### Short Term
-    Experiment with NumPy pad solutions.
-        https://stackoverflow.com/questions/40690248/copy-numpy-array-into-part-of-another-array
+    Should a relief module wrap the Python C++ extensions (instead of ImageTransform)?
+
+    Can a transpose be used?
+    https://stackoverflow.com/questions/16737298/what-is-the-fastest-way-to-transpose-a-matrix-in-c
 
     What is the optimal size of the kernel radius?
         The article uses a radius of 10.
@@ -13,6 +15,8 @@
     Exceptions are hidden in Python extensions.
 
     Test asymmetric arrays.
+        height = image.shape[0]
+        width = image.shape[1]
 
     Why does the VSCode Python debugger not find modules in other folders?
         This happens only in the debugger.

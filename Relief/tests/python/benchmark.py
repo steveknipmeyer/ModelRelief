@@ -17,6 +17,7 @@ import os
 from scipy.ndimage import gaussian_filter, imread
 
 import relief
+from imagetransform import ImageTransform
 from logger import Logger
 from stopwatch import benchmark
 from tools import Colors, Tools
@@ -84,12 +85,12 @@ class Benchmark:
         return result
 
     @benchmark()
-    def BlurIndependentDelta(self, a: np.ndarray, mask: np.ndarray, sigma: float)->np.ndarray :
+    def BoxIndependentDelta(self, a: np.ndarray, mask: np.ndarray, sigma: float)->np.ndarray :
         """
         Relief C++ Gaussian filter.
         """
         for _ in range(self.trials):
-            result = relief.gaussian_filter(a, mask, sigma, 4)
+            result = ImageTransform.gaussian(a, mask, sigma)
         return result
 
     def relief_filter(self, a: np.ndarray, mask: np.ndarray, sigma: float)->None :
@@ -106,22 +107,22 @@ class Benchmark:
         """
         reference = self.scipy_filter(a, sigma)
 
-        result = self.Baseline(a, mask, sigma)
-        self.logger.logInformation (f"Baseliner MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+        # result = self.Baseline(a, mask, sigma)
+        # self.logger.logInformation (f"Baseliner MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
-        result = self.Gaussian(a, mask, sigma)
-        self.logger.logInformation (f"Gaussian MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+        # result = self.Gaussian(a, mask, sigma)
+        # self.logger.logInformation (f"Gaussian MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
-        result = self.GaussianCached(a, mask, sigma)
-        self.logger.logInformation (f"GaussianCached MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+        # result = self.GaussianCached(a, mask, sigma)
+        # self.logger.logInformation (f"GaussianCached MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
-        result = self.Box(a, mask, sigma)
-        self.logger.logInformation (f"Box MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+        #result = self.Box(a, mask, sigma)
+        #self.logger.logInformation (f"Box MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
         result = self.BoxIndependent(a, mask, sigma)
         self.logger.logInformation (f"BoxIndependent MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
-        result = self.BlurIndependentDelta(a, mask, sigma)
+        result = self.BoxIndependentDelta(a, mask, sigma)
         self.logger.logInformation (f"BoxIndependentDelta MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
     @benchmark()
@@ -166,10 +167,11 @@ class Benchmark:
         value
             Constant to fill array.
         """
-        filled = relief.fill(a, value)
+        for _ in range(self.trials):
+            filled = relief.fill(a, value)
 
-        middle = int(self.array_size / 2)
-        assert filled[middle, middle] == value, f'relief_fill: Filled array value {filled[middle, middle]} is not equal to {value}'
+            middle = int(self.array_size / 2)
+            assert filled[middle, middle] == value, f'relief_fill: Filled array value {filled[middle, middle]} is not equal to {value}'
 
     @benchmark()
     def np_fill(self, a: np.ndarray, value: float)-> None :
@@ -181,11 +183,12 @@ class Benchmark:
         value
             Constant to fill array.
         """
-        #a[:] = value
-        a.fill(value)
+        for _ in range(self.trials):
+            #a[:] = value
+            a.fill(value)
 
-        middle = int(self.array_size / 2)
-        assert a[middle, middle] == value*1, f'np_fill: Filled array value {a[middle, middle]} is not equal to {value}'
+            middle = int(self.array_size / 2)
+            assert a[middle, middle] == value*1, f'np_fill: Filled array value {a[middle, middle]} is not equal to {value}'
 
     def array_fill(self)->None :
         """
@@ -204,22 +207,23 @@ class Benchmark:
         """
         Pad an array with a border.
         """
-        a = np.zeros((self.array_size, self.array_size))
+        for _ in range(self.trials):
+            a = np.zeros((self.array_size, self.array_size))
 
-        border_size = 16
-        b = np.zeros((self.array_size + (2 * border_size), self.array_size + (2 * border_size)))
-        b[16:(self.array_size + border_size), 16:(self.array_size + border_size)] = a
+            border_size = 16
+            b = np.zeros((self.array_size + (2 * border_size), self.array_size + (2 * border_size)))
+            b[16:(self.array_size + border_size), 16:(self.array_size + border_size)] = a
 
 def main()->None :
     """
     Run benchmark tests.
     """
     input("Attach debugger and press <Enter>:")
-    benchmarkRunner = Benchmark(array_size = 256, trials = 4)
+    benchmarkRunner = Benchmark(array_size = 2048, trials = 10)
 
     #benchmarkRunner.array_fill()
     benchmarkRunner.array_filter()
-    #benchmarkRunner.pad_array()
+    benchmarkRunner.pad_array()
 
 if __name__ == '__main__':
     main()

@@ -34,10 +34,13 @@ class ImageTransform:
         sigma
             Standard deviation of gaussian blur.
         """
-        if True:
+        use_relief_extensions = True
+
+        if use_relief_extensions:
             # algorithm = BoxIndependentDelta
             result = relief.gaussian_filter(image, mask, sigma, 4)
         else:
+            # SciPy
             result = gaussian_filter(image, sigma, order=0, output=None, mode='nearest', cval=0.0, truncate=4.0)
 
         return result

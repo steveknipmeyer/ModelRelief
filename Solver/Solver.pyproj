@@ -28,6 +28,7 @@
     <Compile Include="attenuation.py" />
     <Compile Include="camera.py" />
     <Compile Include="difference.py" />
+    <Compile Include="experiments.py" />
     <Compile Include="Experiments\amg.py" />
     <Compile Include="Experiments\amgdemo.py" />
     <Compile Include="Experiments\design.py" />

@@ -358,6 +358,8 @@ def main():
     """
     Main entry point.
     """
+    input("Attach debugger and press <Enter>:")
+
     os.chdir(os.path.dirname(__file__))
 
     options_parser = argparse.ArgumentParser()
@@ -370,7 +372,7 @@ def main():
     qapp = QtWidgets.QApplication([])
     qapp.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
 
-    StopWatch.silent = True
+    StopWatch.silent = False
     explorer = Explorer(arguments.settings, arguments.working, qapp)
 
     # self.explorer.showMinimized()

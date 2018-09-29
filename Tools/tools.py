@@ -241,7 +241,7 @@ class Tools:
         pixels = image1.shape[0] * image1.shape[1]
         error = summed / pixels
 
-        precision = 4
+        precision = 8
         error = round(error, precision)
 
         return error
