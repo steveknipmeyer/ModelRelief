@@ -4,15 +4,10 @@
 #### Short Term
     Should a relief module wrap the Python C++ extensions (instead of ImageTransform)?
 
-    Can a transpose be used?
-    https://stackoverflow.com/questions/16737298/what-is-the-fastest-way-to-transpose-a-matrix-in-c
-
     What is the optimal size of the kernel radius?
         The article uses a radius of 10.
         GaussianKernel::Radius returns 11.
     How many passes are required for GaussianBoxBlur?
-
-    Exceptions are hidden in Python extensions.
 
     Test asymmetric arrays.
         height = image.shape[0]

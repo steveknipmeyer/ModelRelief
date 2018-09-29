@@ -105,10 +105,18 @@ NPDoubleArray& fill(NPDoubleArray& input, double value)
  */
 NPDoubleArray gaussian_filter(NPDoubleArray& image, NPDoubleArray& mask, double sigma, int algorithm)
 {
-    GaussianFilter filter(image, mask, sigma);
-    NPDoubleArray& filteredImage = filter.Calculate(algorithm);
-
-    return filteredImage;
+    try
+    {
+        GaussianFilter filter(image, mask, sigma);
+        NPDoubleArray& filteredImage = filter.Calculate(algorithm);
+        return filteredImage;
+    }
+    catch (...)
+    {
+        throw std::runtime_error("The gaussian_filter Relief C++ extension threw an exception.");
+        return image;
+    }
+    
 }
 
 /**

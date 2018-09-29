@@ -78,7 +78,7 @@ void GaussianFilter::Gaussian (double* pSource, double* pResult, int width, int 
 {
     // significant radius
     int radius = GaussianKernel::Radius(sigma);
-    
+
     for (int row = 0; row < height; row++)
         for (int column = 0; column < width; column++)
         {
@@ -140,7 +140,7 @@ void GaussianFilter::GaussianCached(double* pSource, double* pResult, int width,
                     if (x >= width) x = width - 1;
                     if (y < 0) y = 0;
                     if (y >= height) y = height - 1;
-                        
+
                     double imageElement = pSource[(y * width) + x];
                     double gaussian = *(pKernel + (kernelRow * kernelSize) + kernelColumn);
                     value += imageElement * gaussian;
@@ -444,9 +444,9 @@ double GaussianFilter::ApplyKernel(GaussianKernel& kernel, int row, int column)
  * @brief Returns a collection of box sizes to support Gaussian filter approximation.
  *        https://www.peterkovesi.com/matlabfns/
  * @param sigma Standard deviation.
- * @param passes The number of average filterings to be used to approximate the Gaussian.  This should be a minimum of 3, using 4 is better. 
- *               If the smoothed image is to be differentiated an additional averaging should be applied for each derivative.  
- *               if a second derivative is to be taken at least 5 averagings should be applied. 
+ * @param passes The number of average filterings to be used to approximate the Gaussian.  This should be a minimum of 3, using 4 is better.
+ *               If the smoothed image is to be differentiated an additional averaging should be applied for each derivative.
+ *               if a second derivative is to be taken at least 5 averagings should be applied.
  *
  * @return std::vector<float> Collection of box sizes.
  */
@@ -618,11 +618,11 @@ void GaussianFilter::BoxPassHDelta(double* pSource, double* pResult, int width, 
         {
             int previousSumLeftColumnIndex = column - radius - 1;
             if (previousSumLeftColumnIndex < 0) previousSumLeftColumnIndex = 0;
-            double previousSumLeftElement = pSource[row * width + previousSumLeftColumnIndex];
+            double previousSumLeftElement = pSource[(row * width) + previousSumLeftColumnIndex];
 
             int thisSumRightColumnIndex = column + radius;
             if (thisSumRightColumnIndex >= width) thisSumRightColumnIndex = width - 1;
-            double thisSumRightElement = pSource[row * width + thisSumRightColumnIndex];
+            double thisSumRightElement = pSource[(row * width) + thisSumRightColumnIndex];
 
             double thisSum = previousSum - previousSumLeftElement + thisSumRightElement;
 
