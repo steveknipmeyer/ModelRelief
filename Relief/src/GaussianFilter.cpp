@@ -332,7 +332,7 @@ NPDoubleArray GaussianFilter::Calculate(int algorithm)
     }
 
     // reshape result to have same shape as input
-    result.resize({ m_columns, m_rows});
+    result.resize({ m_rows, m_columns});
 
     return result;
 }

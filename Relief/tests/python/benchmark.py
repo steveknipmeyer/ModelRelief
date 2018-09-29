@@ -24,17 +24,20 @@ from tools import Colors, Tools
 
 class Benchmark:
 
-    def __init__(self, array_size: int, trials: int)-> None:
+    def __init__(self, rows: int, columns: int, trials: int)-> None:
         """
         Perform initialization.
         Parameters
         ----------
-        array_size
-            Dimensions of test aray.
+        rows
+            Rows in test array.
+        columns
+            Rows in test array.
         trials
-            Number of execution pass per test.
+            Columns in test arrray.
         """
-        self.array_size = array_size
+        self.rows = rows
+        self.columns = columns
         self.trials = trials
 
         self.logger = Logger()
@@ -107,17 +110,17 @@ class Benchmark:
         """
         reference = self.scipy_filter(a, sigma)
 
-        # result = self.Baseline(a, mask, sigma)
-        # self.logger.logInformation (f"Baseliner MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+        result = self.Baseline(a, mask, sigma)
+        self.logger.logInformation (f"Baseliner MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
-        # result = self.Gaussian(a, mask, sigma)
-        # self.logger.logInformation (f"Gaussian MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+        result = self.Gaussian(a, mask, sigma)
+        self.logger.logInformation (f"Gaussian MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
-        # result = self.GaussianCached(a, mask, sigma)
-        # self.logger.logInformation (f"GaussianCached MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+        result = self.GaussianCached(a, mask, sigma)
+        self.logger.logInformation (f"GaussianCached MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
-        #result = self.Box(a, mask, sigma)
-        #self.logger.logInformation (f"Box MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+        result = self.Box(a, mask, sigma)
+        self.logger.logInformation (f"Box MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
         result = self.BoxIndependent(a, mask, sigma)
         self.logger.logInformation (f"BoxIndependent MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
@@ -148,9 +151,9 @@ class Benchmark:
         """
         sigma = 4.0
 
-        a = np.random.rand(self.array_size, self.array_size)
+        a = np.random.rand(self.rows, self.columns)
         a = a * 255
-        mask = np.full((self.array_size, self.array_size), 1)
+        mask = np.full((self.rows, self.columns), 1)
 
         result = self.scipy_filter(a, sigma)
         self.logger.logInformation (f"scipy MSE = {Tools.MSE(result, result)}\n", Colors.Magenta)
@@ -170,8 +173,9 @@ class Benchmark:
         for _ in range(self.trials):
             filled = relief.fill(a, value)
 
-            middle = int(self.array_size / 2)
-            assert filled[middle, middle] == value, f'relief_fill: Filled array value {filled[middle, middle]} is not equal to {value}'
+            middle_row = int(self.rows / 2)
+            middle_column = int(self.columns / 2)
+            assert filled[middle_row, middle_column] == value, f'relief_fill: Filled array value {filled[middle, middle]} is not equal to {value}'
 
     @benchmark()
     def np_fill(self, a: np.ndarray, value: float)-> None :
@@ -187,8 +191,9 @@ class Benchmark:
             #a[:] = value
             a.fill(value)
 
-            middle = int(self.array_size / 2)
-            assert a[middle, middle] == value*1, f'np_fill: Filled array value {a[middle, middle]} is not equal to {value}'
+            middle_row = int(self.rows / 2)
+            middle_column = int(self.columns / 2)
+            assert a[middle_row, middle_column] == value*1, f'np_fill: Filled array value {a[middle, middle]} is not equal to {value}'
 
     def array_fill(self)->None :
         """
@@ -196,10 +201,10 @@ class Benchmark:
         """
         value = 1.0
 
-        b = np.zeros((self.array_size, self.array_size))
+        b = np.zeros((self.rows, self.columns))
         self.relief_fill(b, value)
 
-        a = np.zeros((self.array_size, self.array_size))
+        a = np.zeros((self.rows, self.columns))
         self.np_fill(a, value)
 
     @benchmark()
@@ -208,20 +213,20 @@ class Benchmark:
         Pad an array with a border.
         """
         for _ in range(self.trials):
-            a = np.zeros((self.array_size, self.array_size))
+            a = np.zeros((self.rows, self.columns))
 
             border_size = 16
-            b = np.zeros((self.array_size + (2 * border_size), self.array_size + (2 * border_size)))
-            b[16:(self.array_size + border_size), 16:(self.array_size + border_size)] = a
+            b = np.zeros((self.rows + (2 * border_size), self.columns + (2 * border_size)))
+            b[border_size:(self.rows + border_size), 16:(self.columns + border_size)] = a
 
 def main()->None :
     """
     Run benchmark tests.
     """
     input("Attach debugger and press <Enter>:")
-    benchmarkRunner = Benchmark(array_size = 2048, trials = 10)
+    benchmarkRunner = Benchmark(rows=512, columns = 256, trials = 10)
 
-    #benchmarkRunner.array_fill()
+    benchmarkRunner.array_fill()
     benchmarkRunner.array_filter()
     benchmarkRunner.pad_array()
 

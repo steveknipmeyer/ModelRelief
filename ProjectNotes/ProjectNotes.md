@@ -9,10 +9,6 @@
         GaussianKernel::Radius returns 11.
     How many passes are required for GaussianBoxBlur?
 
-    Test asymmetric arrays.
-        height = image.shape[0]
-        width = image.shape[1]
-
     Why does the VSCode Python debugger not find modules in other folders?
         This happens only in the debugger.
         Adding .env to the workspace root resolves the issue.
