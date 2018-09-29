@@ -1,6 +1,5 @@
 ﻿### Tasks
 #### Commit Notes
-
 #### Short Term
     Should a relief module wrap the Python C++ extensions (instead of ImageTransform)?
 

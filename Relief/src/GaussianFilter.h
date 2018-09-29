@@ -50,23 +50,26 @@ class GaussianFilter {
         double ApplyKernel(GaussianKernel& kernel, int row, int column);
 
         std::vector<int> BoxSizes(double sigma, int passes);
-        void BoxPass(double* pSource, double* pResult, int width, int height, double sigma, int radius);
-        void BoxPassH(double* pSource, double* pResult, int width, int height, double sigma, int radius);
-        void BoxPassV(double* pSource, double* pResult, int width, int height, double sigma, int radius);
-        void BoxPassHDelta(double* pSource, double* pResult, int width, int height, double sigma, int radius);
-        void BoxPassVDelta(double* pSource, double* pResult, int width, int height, double sigma, int radius);
+        void BoxPass(double* pResult, double* pSource, int width, int height, double sigma, int radius);
+        void BoxPassH(double* pResult, double* pSource, int width, int height, double sigma, int radius);
+        void BoxPassV(double* pResult, double* pSource, int width, int height, double sigma, int radius);
+        void BoxPassHDelta(double* pResult, double* pSource,  int width, int height, double sigma, int radius);
+        void BoxPassVDelta(double* pResult, double* pSource, int width, int height, double sigma, int radius);
+        void BoxPassHDeltaMask(double* pResult, double* pSource, double* pMask, int width, int height, double sigma, int radius);
+        void BoxPassVDeltaMask(double* pResult, double* pSource, double* pMask, int width, int height, double sigma, int radius);
 
 public:
         GaussianFilter(NPDoubleArray& image, NPDoubleArray& mask, double sigma);
         ~GaussianFilter();
 
-        void Baseline(double* pSource, double* pResult, int width, int height, double sigma);
+        void Baseline(double* pResult, double* pSource, int width, int height, double sigma);
 
-        void Gaussian(double* pSource, double* pResult, int width, int height, double sigma);
-        void GaussianCached(double* pSource, double* pResult, int width, int height, double sigma);
-        void Box(double* pSource, double* pResult, int width, int height, double sigma);
-        void BoxIndependent(double* pSource, double* pResult, int width, int height, double sigma);
-        void BoxIndependentDelta(double* pSource, double* pResult, int width, int height, double sigma);
+        void Gaussian(double* pResult, double* pSource, int width, int height, double sigma);
+        void GaussianCached(double* pResult, double* pSource, int width, int height, double sigma);
+        void Box(double* pResult, double* pSource, int width, int height, double sigma);
+        void BoxIndependent(double* pResult, double* pSource, int width, int height, double sigma);
+        void BoxIndependentDelta(double* pResult, double* pSource, int width, int height, double sigma);
+        void BoxIndependentDeltaMask(double* pResult, double* pSource, double* pMask, int width, int height, double sigma);
 
         NPDoubleArray Calculate(int algorithm);
 };

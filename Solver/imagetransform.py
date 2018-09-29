@@ -44,3 +44,24 @@ class ImageTransform:
             result = gaussian_filter(image, sigma, order=0, output=None, mode='nearest', cval=0.0, truncate=4.0)
 
         return result
+
+    @staticmethod
+    def gaussian_mask (image: np.ndarray, mask: np.ndarray, sigma: float)->np.ndarray:
+        """
+        image
+            Input image.
+        mask
+            Mask of valid image elements.
+        sigma
+            Standard deviation of gaussian blur.
+        """
+        use_relief_extensions = True
+
+        if use_relief_extensions:
+            # algorithm = BoxIndependentDeltaMask
+            result = relief.gaussian_filter(image, mask, sigma, 5)
+        else:
+            # SciPy
+            result = gaussian_filter(image, sigma, order=0, output=None, mode='nearest', cval=0.0, truncate=4.0)
+
+        return result
