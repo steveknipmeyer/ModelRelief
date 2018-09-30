@@ -1,36 +1,25 @@
 ﻿### Tasks
 #### Commit Notes
-#### Short Term
-    Should a relief module wrap the Python C++ extensions (instead of ImageTransform)?
 
-    Why does the VSCode Python debugger not find modules in other folders?
-        This happens only in the debugger.
-        Adding .env to the workspace root resolves the issue.
-            PYTHONPATH=.
-                The causes the entire OS env PYTHONPATH to be added to the search path.
+#### Short Term
+    Analyze the role of the composite mask!
+
+    Develop test models to test the gaussian filter mask processing.
+        The model should contain details near the edges (adjacent to the background) and near thresholded regions.
 
     Should the Python image masks be integers or booleans (instead of doubles)?
-
-    Review type annotations in new Python code.
 
     Move to .NET Core 2.1
         C:\Program Files\dotnet\sdk\2.1.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.ObsoleteReferences.targets(33,5): warning NETSDK1059: The tool 'Microsoft.EntityFrameworkCore.Tools.DotNet' is now included in the .NET Core SDK.
         Information on resolving this warning is available at (https://aka.ms/dotnetclitools-in-box). [D:\ModelRelief\ModelRelief\ModelRelief.csproj]
 
-        Why are there different versions of vc and vs2015_runtime between devenv and mrenv?
-            devenv
-                vc                        14.1                 h0510ff6_3
-                vs2015_runtime            15.5.2                        3
-            mrenv
-                vc                        14                            0    conda-forge
-                vs2015_runtime            14.0.25420                    0    conda-forge
-
-    N.B. The Gaussian blur used in Kerber's paper ignores pixels that have been masked.
-    The implementation here does include them. It seems a custom kernel (ndimage "generic filter") may be required that takes into consideration the overall mask.
-    https://www.geeksforgeeks.org/gaussian-filter-generation-c/
-    https://dsp.stackexchange.com/questions/10057/gaussian-blur-standard-deviation-radius-and-kernel-size
-    https://www.codewithc.com/gaussian-filter-generation-in-c/
-    https://stackoverflow.com/questions/8204645/implementing-gaussian-blur-how-to-calculate-convolution-matrix-kernel
+    Why are there different versions of vc and vs2015_runtime between devenv and mrenv?
+        devenv
+            vc                        14.1                 h0510ff6_3
+            vs2015_runtime            15.5.2                        3
+        mrenv
+            vc                        14                            0    conda-forge
+            vs2015_runtime            14.0.25420                    0    conda-forge
 
     Technical Review
         Review the Blender implementation.
@@ -53,9 +42,6 @@
     Builder
         IIS publish updates the user store but not the database which must be attached manually.
         Add a model list to control which models are added.
-
-    Why is the Python refactoring so slow?
-        "Refactoring library rope is not installed. Install?"
 
     Order a SQLServer book.
 
@@ -112,8 +98,6 @@ When the view camera is interactively changed, it should invalidate the Standard
     How should the appsettings.json files define the directory separator. Forward slash does not work with SQLServer.
         Does forward slash work with SQLite on Windows?
     Install a SQLite administration tool.
-
-
 
 #### Front End
 <span style="color:red">
@@ -821,6 +805,15 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 #### VSCode Issues
     How can the C# style checker be manually run in VSCode?
         https://github.com/OmniSharp/omnisharp-vscode/issues/43
+
+    Why does the VSCode Python debugger not find modules in other folders?
+        This happens only in the debugger.
+        Adding .env to the workspace root resolves the issue.
+            PYTHONPATH=.
+                The causes the entire OS env PYTHONPATH to be added to the search path.
+
+    Why is the Python refactoring so slow?
+        "Refactoring library rope is not installed. Install?"
 
 #### VSCode Debugging Workflows
 

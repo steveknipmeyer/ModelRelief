@@ -20,6 +20,7 @@
             "browse": {
                 "path": [
                     "${workspaceFolder}",
+                    "${workspaceFolder}/devenv/include",
                     "${workspaceFolder}/Relief/lib/pybind11/include/pybind11"
                 ],
                 "limitSymbolsToIncludedHeaders": true,

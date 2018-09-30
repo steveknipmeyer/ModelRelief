@@ -70,10 +70,6 @@ class UnsharpMask:
             The UnsharpMaskParamnter structure (gaussian_low, gaussian_high, high_frequency_scale)
         """
         # N.B. The Gaussian blur used in Kerber's paper ignores pixels that have been masked.
-        # The implementation here does include them. It seems a custom kernel (ndimage "generic filter") may be required that takes into consideration the overall mask.
-        # https://dsp.stackexchange.com/questions/10057/gaussian-blur-standard-deviation-radius-and-kernel-size
-        # https://stackoverflow.com/questions/23208232/image-filtering-with-scikit-image
-        # https://docs.scipy.org/doc/scipy/reference/tutorial/ndimage.html
 
         original_prime= original * combined_mask
 

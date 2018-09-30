@@ -168,10 +168,13 @@ class Solver:
         threshold_value = self.mesh_transform.gradient_threshold if self.enable_gradient_threshold else float("inf")
         self.results.gradient_x_mask.image = mask.threshold(self.results.gradient_x.image, threshold_value)
         self.results.gradient_y_mask.image = mask.threshold(self.results.gradient_y.image, threshold_value)
+
         self.results.combined_mask.image = self.results.gradient_x_mask.image * self.results.gradient_y_mask.image
         # N.B. Including the background result in the mask causes the "leading" derivatives along +X, +Y to be excluded.
         #      The derivates are forward differences so they are defined (along +X, +Y) in the XY region <outside> the background mask.
-        # self.combined_mask = self.combined_mask * self.depth_buffer_mask
+        # WIP: What is the impact? If gradients typically span many pixels, what is the significance of omitting the first gradient in a range?
+        #      If the gradient is purely vertical (one pixel span) then it should be skipped.
+        self.results.combined_mask.image = self.results.combined_mask.image * self.depth_buffer.background_mask
 
         # Modify gradient by applying threshold, setting values above threshold to zero.
         self.results.gradient_x.image = self.results.gradient_x.image * self.results.combined_mask.image
@@ -207,6 +210,9 @@ class Solver:
     def process_poisson(self):
         """
         Solve the Poisson equation that returns the final reconstructed mesh from the modified gradients.
+        http://people.mpi-inf.mpg.de/~kerber/publications/Jens_Kerber_Masterthesis.pdf
+        Due to the discrete case which we are in, they are obtained by a finite difference again like in Chapter 3.1.3, but here it has to be
+        the backward difffernce in order to produce a central difference like it is defined for the Laplacian.
         """
         difference = Difference(self.services)
         self.results.dGxdx.image = difference.difference_x(self.results.gradient_x_unsharp.image, FiniteDifference.Backward)

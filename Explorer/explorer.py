@@ -263,6 +263,7 @@ class Explorer(QtWidgets.QMainWindow):
         dialog = QtWidgets.QFileDialog()
         dialog.setFileMode(QtWidgets.QFileDialog.AnyFile)
         dialog.setNameFilter("All JSON files (*.json)")
+        dialog.setDirectory(os.path.abspath(os.path.join(self.working, os.pardir)))
 
         if dialog.exec_():
             filenames = dialog.selectedFiles()

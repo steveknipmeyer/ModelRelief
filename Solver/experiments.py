@@ -109,5 +109,5 @@ class Experiments():
         """
         Run the experimental Gaussian filter tests.
         """
-        self.scipy_filter()
-        self.relief_filter()
+        #self.scipy_filter()
+        #self.relief_filter()
