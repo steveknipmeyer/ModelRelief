@@ -77,12 +77,12 @@ class UnsharpMask:
 
         original_prime= original * combined_mask
 
-        low = ImageTransform.gaussian(original_prime, combined_mask, parameters.gaussian_low)
+        low = ImageTransform.gaussian_mask(original_prime, combined_mask, parameters.gaussian_low)
         low = low * combined_mask
 
         # subtract low frequency from original to yield the high frequency components
         high = original_prime - low
-        high = ImageTransform.gaussian(high, combined_mask, parameters.gaussian_high)
+        high = ImageTransform.gaussian_mask(high, combined_mask, parameters.gaussian_high)
 
         # add back the scaled high frequency components to generate the final results
         final = original_prime + (parameters.high_frequency_scale * high)

@@ -55,8 +55,8 @@ class GaussianFilter {
         void BoxPassV(double* pResult, double* pSource, int width, int height, double sigma, int radius);
         void BoxPassHDelta(double* pResult, double* pSource,  int width, int height, double sigma, int radius);
         void BoxPassVDelta(double* pResult, double* pSource, int width, int height, double sigma, int radius);
-        void BoxPassHDeltaMask(double* pResult, double* pSource, double* pMask, int width, int height, double sigma, int radius);
-        void BoxPassVDeltaMask(double* pResult, double* pSource, double* pMask, int width, int height, double sigma, int radius);
+        void BoxPassHMask(double* pResult, double* pSource, double* pMask, int width, int height, double sigma, int radius);
+        void BoxPassVMask(double* pResult, double* pSource, double* pMask, int width, int height, double sigma, int radius);
 
 public:
         GaussianFilter(NPDoubleArray& image, NPDoubleArray& mask, double sigma);
@@ -69,7 +69,7 @@ public:
         void Box(double* pResult, double* pSource, int width, int height, double sigma);
         void BoxIndependent(double* pResult, double* pSource, int width, int height, double sigma);
         void BoxIndependentDelta(double* pResult, double* pSource, int width, int height, double sigma);
-        void BoxIndependentDeltaMask(double* pResult, double* pSource, double* pMask, int width, int height, double sigma);
+        void BoxIndependentMask(double* pResult, double* pSource, double* pMask, int width, int height, double sigma);
 
         NPDoubleArray Calculate(int algorithm);
 };

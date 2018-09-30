@@ -97,7 +97,7 @@ class Benchmark:
         return result
 
     @benchmark()
-    def BoxIndependentDeltaMask(self, a: np.ndarray, mask: np.ndarray, sigma: float)->np.ndarray :
+    def BoxIndependentMask(self, a: np.ndarray, mask: np.ndarray, sigma: float)->np.ndarray :
         """
         Relief C++ Gaussian filter.
         """
@@ -119,26 +119,25 @@ class Benchmark:
         """
         reference = self.scipy_filter(a, sigma)
 
-        result = self.Baseline(a, mask, sigma)
-        self.logger.logInformation (f"Baseline MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+        #result = self.Baseline(a, mask, sigma)
+        #self.logger.logInformation (f"Baseline MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
-        result = self.Gaussian(a, mask, sigma)
-        self.logger.logInformation (f"Gaussian MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+        #result = self.Gaussian(a, mask, sigma)
+        #self.logger.logInformation (f"Gaussian MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
-        result = self.GaussianCached(a, mask, sigma)
-        self.logger.logInformation (f"GaussianCached MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+        #result = self.GaussianCached(a, mask, sigma)
+        #self.logger.logInformation (f"GaussianCached MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
-        result = self.Box(a, mask, sigma)
-        self.logger.logInformation (f"Box MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+        #result = self.Box(a, mask, sigma)
+        #self.logger.logInformation (f"Box MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
-        result = self.BoxIndependent(a, mask, sigma)
-        self.logger.logInformation (f"BoxIndependent MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+        #result = self.BoxIndependent(a, mask, sigma)
+        #self.logger.logInformation (f"BoxIndependent MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
         result = self.BoxIndependentDelta(a, mask, sigma)
         self.logger.logInformation (f"BoxIndependentDelta MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
 
-        result = self.BoxIndependentDeltaMask(a, mask, sigma)
-        self.logger.logInformation (f"BoxIndependentDeltaMask MSE = {Tools.MSE(reference, result)}\n", Colors.BrightMagenta)
+        result = self.BoxIndependentMask(a, mask, sigma)
 
     @benchmark()
     def scipy_filter(self, a: np.ndarray, sigma: float)->np.ndarray :
@@ -236,7 +235,7 @@ def main()->None :
     Run benchmark tests.
     """
     input("Attach debugger and press <Enter>:")
-    benchmarkRunner = Benchmark(rows=512, columns = 1024, trials = 1)
+    benchmarkRunner = Benchmark(rows=400, columns = 400, trials = 4)
 
     benchmarkRunner.array_fill()
     benchmarkRunner.array_filter()

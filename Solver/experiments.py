@@ -87,13 +87,12 @@ class Experiments():
         self.logger.logInformation (f"BoxIndependentDelta MSE = {Tools.MSE(self.results.i3.image, self.results.i7.image)}", Colors.BrightMagenta)
 
     @benchmark()
-    def BoxIndependentDeltaMask(self):
+    def BoxIndependentMask(self):
         """
         Relief C++ Gaussian filter.
         """
         self.results.i8.image = ImageTransform.gaussian_mask(self.results.depth_buffer_model.image, self.results.combined_mask.image, self.mesh_transform.unsharpmask_parameters.gaussian_low)
-        self.results.i8.title = "BoxIndependentDeltaMask"
-        self.logger.logInformation (f"BoxIndependentDeltaMask MSE = {Tools.MSE(self.results.i3.image, self.results.i8.image)}", Colors.BrightMagenta)
+        self.results.i8.title = "BoxIndependentMask"
 
     @benchmark()
     def relief_filter(self):
@@ -104,7 +103,7 @@ class Experiments():
         self.Box()
         self.BoxIndependent()
         self.BoxIndependentDelta()
-        self.BoxIndependentDeltaMask()
+        self.BoxIndependentMask()
 
     def gaussian_filter(self):
         """

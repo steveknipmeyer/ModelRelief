@@ -282,7 +282,7 @@ void GaussianFilter::BoxIndependentDelta(double* pResult, double* pSource, int h
 }
 
 /**
- * @brief BoxIndependentDeltaMask
+ * @brief BoxIndependentMask
  * http://blog.ivank.net/fastest-gaussian-blur.html#results
  * Algorithm 4
  * Performs a box blur in two passes, horizontally and then vertically.
@@ -297,7 +297,7 @@ void GaussianFilter::BoxIndependentDelta(double* pResult, double* pSource, int h
  *
  * @return NPDoubleArray&
  */
-void GaussianFilter::BoxIndependentDeltaMask(double* pResult, double* pSource, double* pMask, int height, int width, double sigma)
+void GaussianFilter::BoxIndependentMask(double* pResult, double* pSource, double* pMask, int height, int width, double sigma)
 {
     int passes = 5;
     std::vector<int> boxSizes = BoxSizes(sigma, passes);
@@ -312,8 +312,8 @@ void GaussianFilter::BoxIndependentDeltaMask(double* pResult, double* pSource, d
     {
         int radius = (boxSizes.at(iPass) - 1) / 2;
 
-        BoxPassHDeltaMask(pIntermediate2, pIntermediate1, pMask, height, width, sigma, radius);
-        BoxPassVDeltaMask(pResult, pIntermediate2, pMask, height, width, sigma, radius);
+        BoxPassHMask(pIntermediate2, pIntermediate1, pMask, height, width, sigma, radius);
+        BoxPassVMask(pResult, pIntermediate2, pMask, height, width, sigma, radius);
 
         if (iPass < (passes - 1))
             memcpy(intermediate1.get(), pResult, sizeof(double) * width * height);
@@ -371,7 +371,7 @@ NPDoubleArray GaussianFilter::Calculate(int algorithm)
 
         case 5:
             //cout << "BoxIndependentDeltaMask" << endl;
-            BoxIndependentDeltaMask(pResult, m_pImage, m_pMask, m_rows, m_columns, m_sigma);
+            BoxIndependentMask(pResult, m_pImage, m_pMask, m_rows, m_columns, m_sigma);
             break;
     }
 
@@ -723,7 +723,7 @@ void GaussianFilter::BoxPassVDelta(double* pResult, double* pSource, int height,
 }
 
 /**
- * @brief BoxPassHDeltaMask
+ * @brief BoxPassHMask
  * http://blog.ivank.net/fastest-gaussian-blur.html#results
  * Algorithm 4
  * Performs a horizontal box blur. The sums are optimized by using the previous thisSum.
@@ -739,39 +739,38 @@ void GaussianFilter::BoxPassVDelta(double* pResult, double* pSource, int height,
  *
  * @return NPDoubleArray&
  */
-void GaussianFilter::BoxPassHDeltaMask(double* pResult, double* pSource, double* pMask, int height, int width, double sigma, int radius)
+void GaussianFilter::BoxPassHMask(double* pResult, double* pSource, double* pMask, int height, int width, double sigma, int radius)
 {
-    double elementCount = (2 * radius) + 1;
+    int maxElementCount = (2 * radius + 1);
     for (int row = 0; row < height; row++)
     {
-        double firstColumnSum = radius * pSource[row * width];
-        for (int iColumn = 0; iColumn <= radius; iColumn++)
+        for (int column = 0; column < width; column++)
         {
-            firstColumnSum += pSource[row * width + iColumn];
-        }
-        pResult[row * width] = firstColumnSum / elementCount;
+            double value = 0;
+            int elementCount = 0;
+            for (int iColumn = column - radius; iColumn <= column + radius; iColumn++)
+            {
+                int x = iColumn;
+                if (x < 0) x = 0;
+                if (x >= width) x = width - 1;
 
-        double previousSum = firstColumnSum;
-        for (int column = 1; column < width; column++)
-        {
-            int previousSumLeftColumnIndex = column - radius - 1;
-            if (previousSumLeftColumnIndex < 0) previousSumLeftColumnIndex = 0;
-            double previousSumLeftElement = pSource[(row * width) + previousSumLeftColumnIndex];
-
-            int thisSumRightColumnIndex = column + radius;
-            if (thisSumRightColumnIndex >= width) thisSumRightColumnIndex = width - 1;
-            double thisSumRightElement = pSource[(row * width) + thisSumRightColumnIndex];
-
-            double thisSum = previousSum - previousSumLeftElement + thisSumRightElement;
-
-            pResult[(row * width) + column] = thisSum / elementCount;
-            previousSum = thisSum;
+                int index = (row * width) + x;
+                if (pMask[index] > 0)
+                {
+                    elementCount += 1;
+                    value += pSource[index];
+                }
+            }
+            if (elementCount == 0)
+                pResult[(row * width) + column] = 0;
+            else
+                pResult[(row * width) + column] = value / elementCount;
         }
     }
 }
 
 /**
- * @brief BoxPassVDeltaMask
+ * @brief BoxPassVMask
  * http://blog.ivank.net/fastest-gaussian-blur.html#results
  * Algorithm 4
  * Performs a horizontal box blur. The sums are optimized by using the previous thisSum.
@@ -787,33 +786,32 @@ void GaussianFilter::BoxPassHDeltaMask(double* pResult, double* pSource, double*
  *
  * @return NPDoubleArray&
  */
-void GaussianFilter::BoxPassVDeltaMask(double* pResult, double* pSource, double* pMask, int height, int width, double sigma, int radius)
+void GaussianFilter::BoxPassVMask(double* pResult, double* pSource, double* pMask, int height, int width, double sigma, int radius)
 {
-    double elementCount = (2 * radius) + 1;
-    for (int column = 0; column < width; column++)
+    int maxElementCount = (2 * radius + 1);
+    for (int row = 0; row < height; row++)
     {
-        double firstRowSum = radius * pSource[column];
-        for (int iRow = 0; iRow <= radius; iRow++)
+        for (int column = 0; column < width; column++)
         {
-            firstRowSum += pSource[(iRow * width) + column];
-        }
-        pResult[column] = firstRowSum / elementCount;
+            double value = 0;
+            int elementCount = 0;
+            for (int iRow = row - radius; iRow <= row + radius; iRow++)
+            {
+                int y = iRow;
+                if (y < 0) y = 0;
+                if (y >= height) y = height - 1;
 
-        double previousSum = firstRowSum;
-        for (int row = 1; row < height; row++)
-        {
-            int previousSumTopRowIndex = row - radius - 1;
-            if (previousSumTopRowIndex < 0) previousSumTopRowIndex = 0;
-            double previousSumTopElement = pSource[(previousSumTopRowIndex * width) + column];
-
-            int thisSumBottomRowIndex = row + radius;
-            if (thisSumBottomRowIndex >= height) thisSumBottomRowIndex = height - 1;
-            double thisSumBottomElement = pSource[(thisSumBottomRowIndex * width) + column];
-
-            double thisSum = previousSum - previousSumTopElement + thisSumBottomElement;
-
-            pResult[(row * width) + column] = thisSum / elementCount;
-            previousSum = thisSum;
+                int index = (y * width) + column;
+                if (pMask[index] > 0)
+                {
+                    elementCount += 1;
+                    value += pSource[index];
+                }
+            }
+            if (elementCount == 0)
+                pResult[(row * width) + column] = 0;
+            else
+                pResult[(row * width) + column] = value / elementCount;
         }
     }
 }
