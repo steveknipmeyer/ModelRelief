@@ -981,6 +981,54 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     git submodule init
     git submodule update
 
+###### git branch
+    (Development) d:\Github\ModelRelief>git status
+    On branch orthographic
+    Changes not staged for commit:
+    (use "git add <file>..." to update what will be committed)
+    (use "git checkout -- <file>..." to discard changes in working directory)
+
+            modified:   ModelRelief/Domain/Camera.cs
+            modified:   ModelRelief/Features/Cameras/Camera.cs
+            modified:   ProjectNotes/ProjectNotes.md
+
+    no changes added to commit (use "git add" and/or "git commit -a")
+
+    (Development) d:\Github\ModelRelief>git add .
+
+    (Development) d:\Github\ModelRelief>git commit -m "Extend Camera DTP and Domain models with Orthographic properties."
+    [orthographic 46e1a7c] Extend Camera DTP and Domain models with Orthographic properties.
+    3 files changed, 80 insertions(+), 19 deletions(-)
+
+    (Development) d:\Github\ModelRelief>git push
+    fatal: The current branch orthographic has no upstream branch.
+    To push the current branch and set the remote as upstream, use
+
+        git push --set-upstream origin orthographic
+
+
+    (Development) d:\Github\ModelRelief>git push --set-upstream origin orthographic
+    Enumerating objects: 50, done.
+    Counting objects: 100% (50/50), done.
+    Delta compression using up to 4 threads.
+    Compressing objects: 100% (27/27), done.
+    Writing objects: 100% (28/28), 3.00 KiB | 768.00 KiB/s, done.
+    Total 28 (delta 21), reused 0 (delta 0)
+    remote: Resolving deltas: 100% (21/21), completed with 18 local objects.
+    remote:
+    remote: Create a pull request for 'orthographic' on GitHub by visiting:
+    remote:      https://github.com/steveknipmeyer/ModelRelief/pull/new/orthographic
+    remote:
+    To https://github.com/steveknipmeyer/ModelRelief.git
+    * [new branch]      orthographic -> orthographic
+    Branch 'orthographic' set up to track remote branch 'orthographic' from 'origin'.
+
+    (Development) d:\Github\ModelRelief>git status
+    On branch orthographic
+    Your branch is up to date with 'origin/orthographic'.
+
+    nothing to commit, working tree clean
+
 #### TypeScript
     TypeScript Installations
         VSCode
