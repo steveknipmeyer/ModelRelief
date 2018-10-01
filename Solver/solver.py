@@ -204,8 +204,8 @@ class Solver:
             parameters = UnsharpMaskParameters(gaussian_low, gaussian_high, high_frequency_scale)
 
             unsharpmask = UnsharpMask(self.services)
-            self.results.gradient_x_unsharp.image = unsharpmask.apply(self.results.gradient_x.image, self.results.combined_mask.image, parameters)
-            self.results.gradient_y_unsharp.image = unsharpmask.apply(self.results.gradient_y.image, self.results.combined_mask.image, parameters)
+            self.results.gradient_x_unsharp.image = unsharpmask.apply(self.results.gradient_x.image, self.results.combined_mask.image, parameters, self.enable_p4)
+            self.results.gradient_y_unsharp.image = unsharpmask.apply(self.results.gradient_y.image, self.results.combined_mask.image, parameters, self.enable_p4)
 
     def process_poisson(self):
         """

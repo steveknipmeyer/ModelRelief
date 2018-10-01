@@ -55,7 +55,7 @@ class UnsharpMask:
         self.debug = True
         self.services = services
 
-    def apply (self, original: np.ndarray, combined_mask: np.ndarray, parameters : UnsharpMaskParameters) -> np.ndarray:
+    def apply (self, original: np.ndarray, combined_mask: np.ndarray, parameters : UnsharpMaskParameters, use_mask: bool = False) -> np.ndarray:
         """
         Applies unsharp masking to the input image.
         After the high frequencies components are extracted, they are scaled and then added back.
@@ -68,17 +68,19 @@ class UnsharpMask:
             The combined mask (Background * GradientXMask * GradientYMAsk) to be applied to the target image.
         parameters
             The UnsharpMaskParamnter structure (gaussian_low, gaussian_high, high_frequency_scale)
+        use_mask
+            Use composite mask to exclude thresholded elements and background
         """
         # N.B. The Gaussian blur used in Kerber's paper ignores pixels that have been masked.
 
         original_prime= original * combined_mask
 
-        low = ImageTransform.gaussian_mask(original_prime, combined_mask, parameters.gaussian_low)
+        low = ImageTransform.gaussian(original_prime, combined_mask, parameters.gaussian_low, use_mask)
         low = low * combined_mask
 
         # subtract low frequency from original to yield the high frequency components
         high = original_prime - low
-        high = ImageTransform.gaussian_mask(high, combined_mask, parameters.gaussian_high)
+        high = ImageTransform.gaussian(high, combined_mask, parameters.gaussian_high, use_mask)
 
         # add back the scaled high frequency components to generate the final results
         final = original_prime + (parameters.high_frequency_scale * high)

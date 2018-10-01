@@ -131,14 +131,14 @@ class Explorer(QtWidgets.QMainWindow):
         self.ui.unsharpGaussianHighCheckBox.setChecked(checkbox_enabled)
         self.ui.unsharpHFScaleCheckBox.setChecked(checkbox_enabled)
 
-        self.ui.p1CheckBox.setChecked(checkbox_enabled)
-        self.ui.p2CheckBox.setChecked(checkbox_enabled)
-        self.ui.p3CheckBox.setChecked(checkbox_enabled)
-        self.ui.p4CheckBox.setChecked(checkbox_enabled)
+        self.ui.p1CheckBox.setChecked(checkbox_enabled)                 
+        self.ui.p2CheckBox.setChecked(False)                                # Silhoutte: On/Off, Sigma
+        self.ui.p3CheckBox.setChecked(False)                                # Silhoutte: Iterations
+        self.ui.p4CheckBox.setChecked(checkbox_enabled)                     # Gaussian: Use Mask
         self.ui.p5CheckBox.setChecked(checkbox_enabled)
         self.ui.p6CheckBox.setChecked(checkbox_enabled)
         self.ui.p7CheckBox.setChecked(checkbox_enabled)
-        self.ui.p8CheckBox.setChecked(False)
+        self.ui.p8CheckBox.setChecked(checkbox_enabled)
 
     @benchmark()
     def initialize_ui(self)-> None:
@@ -373,7 +373,7 @@ def main():
     qapp = QtWidgets.QApplication([])
     qapp.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
 
-    StopWatch.silent = False
+    StopWatch.silent = True
     explorer = Explorer(arguments.settings, arguments.working, qapp)
 
     # self.explorer.showMinimized()

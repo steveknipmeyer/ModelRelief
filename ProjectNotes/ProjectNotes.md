@@ -2,7 +2,10 @@
 #### Commit Notes
 
 #### Short Term
-    Analyze the role of the composite mask!
+    Silhouette
+        https://stackoverflow.com/questions/17161088/how-to-refine-or-blur-or-smooth-just-the-edges
+
+    Analyze the role of the composite mask.
 
     Develop test models to test the gaussian filter mask processing.
         The model should contain details near the edges (adjacent to the background) and near thresholded regions.

@@ -98,7 +98,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>12</pointsize>
+            <pointsize>11</pointsize>
            </font>
           </property>
           <property name="focusPolicy">
@@ -623,8 +623,14 @@
          <height>20</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <family>MS Shell Dlg 2</family>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
        <property name="text">
-        <string>P1 (Scale)</string>
+        <string>P1: Relief Scale</string>
        </property>
       </widget>
       <widget class="QCheckBox" name="p2CheckBox">
@@ -632,12 +638,17 @@
         <rect>
          <x>16</x>
          <y>436</y>
-         <width>158</width>
+         <width>204</width>
          <height>19</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
        <property name="text">
-        <string>P2 (Silhouette)</string>
+        <string>P2 Silhouette: On/Off,</string>
        </property>
       </widget>
       <widget class="QLabel" name="labelExperimental">
@@ -711,14 +722,19 @@
       <widget class="QCheckBox" name="p3CheckBox">
        <property name="geometry">
         <rect>
-         <x>17</x>
+         <x>16</x>
          <y>465</y>
-         <width>158</width>
+         <width>190</width>
          <height>19</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
        <property name="text">
-        <string>P3</string>
+        <string>P3 Silhouette: Iterations</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="p4LineEdit">
@@ -740,14 +756,19 @@
       <widget class="QCheckBox" name="p4CheckBox">
        <property name="geometry">
         <rect>
-         <x>17</x>
+         <x>16</x>
          <y>495</y>
-         <width>158</width>
+         <width>191</width>
          <height>19</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
        <property name="text">
-        <string>P4</string>
+        <string>P4: Gaussian Mask</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="p6LineEdit">
@@ -775,6 +796,11 @@
          <height>19</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>P5</string>
        </property>
@@ -798,11 +824,16 @@
       <widget class="QCheckBox" name="p6CheckBox">
        <property name="geometry">
         <rect>
-         <x>14</x>
+         <x>16</x>
          <y>555</y>
          <width>158</width>
          <height>19</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>13</pointsize>
+        </font>
        </property>
        <property name="text">
         <string>P6</string>
@@ -827,11 +858,16 @@
       <widget class="QCheckBox" name="p7CheckBox">
        <property name="geometry">
         <rect>
-         <x>14</x>
+         <x>16</x>
          <y>585</y>
          <width>158</width>
          <height>19</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
        </property>
        <property name="text">
         <string>P7</string>
@@ -840,11 +876,16 @@
       <widget class="QCheckBox" name="p8CheckBox">
        <property name="geometry">
         <rect>
-         <x>14</x>
+         <x>16</x>
          <y>615</y>
          <width>158</width>
          <height>19</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
        </property>
        <property name="text">
         <string>P8</string>
@@ -910,6 +951,25 @@
        </property>
        <property name="text">
         <string>Wavefront OBJ</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelSigma">
+       <property name="geometry">
+        <rect>
+         <x>184</x>
+         <y>432</y>
+         <width>35</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Symbol</family>
+         <pointsize>19</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>s</string>
        </property>
       </widget>
      </widget>
