@@ -12,7 +12,6 @@ import {Graphics}               from 'Graphics'
 import {ILogger, HTMLLogger}     from 'Logger'
 import {MathLibrary}            from 'Math'
 import {Services}               from 'Services'
-import {TrackballControls}      from 'TrackballControls'
 import {UnitTests}              from 'UnitTests'
 
 let logger = new HTMLLogger();

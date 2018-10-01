@@ -296,6 +296,5 @@ export class CameraHelper {
         return defaultCamera;
     } 
 
-    static 
 //#endregion 
 }

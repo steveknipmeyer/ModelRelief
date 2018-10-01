@@ -25,7 +25,7 @@ import { RequestResponse }                  from 'RequestResponse'
 export class Model implements IModel{
 
     id          : number;
-    name        : string;  
+    name        : string;
     description : string;
 
     // Private

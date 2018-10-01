@@ -2,6 +2,22 @@
 #### Commit Notes
 
 #### Short Term
+    Create a git branch for the Orthographic Camera work.
+
+    Orthographic Camera
+        Replace contravariant references to PerspectiveCamera with Camera.
+        Convert Camera to the base class.
+            Introduce OrthographicCamera and PerspectiveCamera.
+        Can the JSON layout of Camera remain the same?
+            UI
+                Can the Camera HTML views be conditioned on Orthographic and Perpspective?
+            Structure
+                perspective: boolean
+                left, right, top, bottom: number
+        CameraHelper
+            getDefaultCamera: Add a parameter for Orthographic or Perspective.
+        Does TypeScript have default parameter values?
+
     Silhouette
         https://stackoverflow.com/questions/17161088/how-to-refine-or-blur-or-smooth-just-the-edges
 
