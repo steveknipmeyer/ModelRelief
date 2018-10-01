@@ -23,14 +23,12 @@ namespace ModelRelief.Domain
     [DependentFiles(typeof(DepthBuffer))]
     public class Camera : DomainModel
     {
-        public const double DefaultFieldOfView        =    37.0;
         public const double DefaultNearClippingPlane  =     0.1;
         public const double DefaultFarClippingPlane   = 10000.0;
 
         [DependentFileProperty]
-        public double FieldOfView { get; set; }
-        [DependentFileProperty]
-        public double AspectRatio { get; set; }
+        public bool IsPerspective { get; set; }
+
         [DependentFileProperty]
         public double Near { get; set; }
         [DependentFileProperty]
@@ -66,6 +64,30 @@ namespace ModelRelief.Domain
         [DependentFileProperty]
         public double UpZ { get; set; }
 
+        // Perspective
+        public const double DefaultFieldOfView  =  37.0;
+
+        [DependentFileProperty]
+        public double FieldOfView { get; set; }
+        [DependentFileProperty]
+        public double AspectRatio { get; set; }
+
+        // Orthographic
+        private const double OrthographicFrustrumPlaneOffset = 100;
+        public const double DefaulLeftPlane   = -OrthographicFrustrumPlaneOffset;
+        public const double DefaulRightPlane  = +OrthographicFrustrumPlaneOffset;
+        public const double DefaulTopPlane    = +OrthographicFrustrumPlaneOffset;
+        public const double DefaulBottomPlane = -OrthographicFrustrumPlaneOffset;
+
+        [DependentFileProperty]
+        public double Left { get; set; }
+        [DependentFileProperty]
+        public double Right { get; set; }
+        [DependentFileProperty]
+        public double Top { get; set; }
+        [DependentFileProperty]
+        public double Bottom { get; set; }
+
         // Navigation Properties
         public int? ProjectId { get; set; }
         public Project Project { get; set; }
@@ -76,13 +98,15 @@ namespace ModelRelief.Domain
         /// </summary>
         public Camera()
         {
+            IsPerspective = true;
+
             ScaleX = 1.0;
             ScaleY = 1.0;
             ScaleZ = 1.0;
 
-            UpX = 1.0;
+            UpX = 0.0;
             UpY = 1.0;
-            UpZ = 1.0;
+            UpZ = 0.0;
         }
     }
 }

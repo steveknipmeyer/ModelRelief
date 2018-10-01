@@ -24,11 +24,9 @@ namespace ModelRelief.Dto
         public string Name { get; set; }
         public string Description { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
-        public double FieldOfView { get; set; }
-        [Display(Name = "Aspect Ratio")]
-        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
-        public double AspectRatio { get; set; }
+        [Display(Name = "Perspective Camera")]
+        public bool IsPerspective { get; set; }
+
         [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double Near { get; set; }
         [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
@@ -81,19 +79,34 @@ namespace ModelRelief.Dto
         public int? ProjectId { get; set; }
         public Dto.Project Project { get; set; }
 
+        // Perspective
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
+        public double FieldOfView { get; set; }
+        [Display(Name = "Aspect Ratio")]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
+        public double AspectRatio { get; set; }
+
+        // Orthographic
+        public double Left { get; set; }
+        public double Right { get; set; }
+        public double Top { get; set; }
+        public double Bottom { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Camera"/> class.
         /// Constructor.
         /// </summary>
         public Camera()
         {
+            IsPerspective = true;
+
             ScaleX = 1.0;
             ScaleY = 1.0;
             ScaleZ = 1.0;
 
-            UpX = 1.0;
+            UpX = 0.0;
             UpY = 1.0;
-            UpZ = 1.0;
+            UpZ = 0.0;
         }
     }
 
@@ -114,10 +127,6 @@ namespace ModelRelief.Dto
             RuleFor(m => m.Description)
                 .NotNull().WithMessage("The Description property is required.");
 
-            RuleFor(m => m.FieldOfView)
-                .NotNull().WithMessage("The FieldOfView property is required.");
-            RuleFor(m => m.AspectRatio)
-                .NotNull().WithMessage("The AspectRatio property is required.");
             RuleFor(m => m.Near)
                 .NotNull().WithMessage("The Near clipping plane property is required.");
             RuleFor(m => m.Far)
@@ -138,6 +147,28 @@ namespace ModelRelief.Dto
                 .NotNull().WithMessage("The quaternion EulerZ property is required.");
             RuleFor(m => m.Theta)
                 .NotNull().WithMessage("The quaternion Theta property is required.");
+
+            // Perspective
+            RuleFor(m => m.FieldOfView)
+                .NotNull().WithMessage("The FieldOfView property is required.")
+                .When(m => m.IsPerspective);
+            RuleFor(m => m.AspectRatio)
+                .NotNull().WithMessage("The AspectRatio property is required.")
+                .When(m => m.IsPerspective);
+
+            // Orthographic
+            RuleFor(m => m.Left)
+                .NotNull().WithMessage("The Left plane property is required.")
+                .When(m => !m.IsPerspective);
+            RuleFor(m => m.Right)
+                .NotNull().WithMessage("The Right plane property is required.")
+                .When(m => !m.IsPerspective);
+            RuleFor(m => m.Top)
+                .NotNull().WithMessage("The Top plane property is required.")
+                .When(m => !m.IsPerspective);
+            RuleFor(m => m.Bottom)
+                .NotNull().WithMessage("The Bottom plane property is required.")
+                .When(m => !m.IsPerspective);
         }
     }
 

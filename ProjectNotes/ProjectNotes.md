@@ -3,19 +3,25 @@
 
 #### Short Term
     Create a git branch for the Orthographic Camera work.
+    Why does Models/Viewer/1 not work?
+        Was the Viewer.cshtml removed?
 
     Orthographic Camera
-        Replace contravariant references to PerspectiveCamera with Camera.
+        Replace contravariant references to PerspectiveCamera with THREE.Camera.
+
         Convert Camera to the base class.
             Introduce OrthographicCamera and PerspectiveCamera.
-        Can the JSON layout of Camera remain the same?
+
+        Can the Schema/JSON layout of Camera remain the same?
             UI
                 Can the Camera HTML views be conditioned on Orthographic and Perpspective?
             Structure
                 perspective: boolean
                 left, right, top, bottom: number
+
         CameraHelper
             getDefaultCamera: Add a parameter for Orthographic or Perspective.
+
         Does TypeScript have default parameter values?
 
     Silhouette
