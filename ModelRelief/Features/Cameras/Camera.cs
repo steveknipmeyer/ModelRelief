@@ -107,6 +107,16 @@ namespace ModelRelief.Dto
             UpX = 0.0;
             UpY = 1.0;
             UpZ = 0.0;
+
+            // Perspective
+            FieldOfView = Domain.Camera.DefaultFieldOfView;
+            AspectRatio = 1.0;
+
+            // Orthographic
+            Left    = Domain.Camera.DefaulLeftPlane;
+            Right   = Domain.Camera.DefaulRightPlane;
+            Top     = Domain.Camera.DefaulTopPlane;
+            Bottom  = Domain.Camera.DefaulBottomPlane;
         }
     }
 
