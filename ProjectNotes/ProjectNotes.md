@@ -2,15 +2,14 @@
 #### Commit Notes
 
 #### Short Term
-    Should the Camera constructor initialize default values for all properties?
-        FieldOFView
-        AspectRatio
-        Left, Right, Top, Bottom
     Orthographic Camera
+        Add the new orthographic properties to the FE UI.
+
         Replace contravariant references to PerspectiveCamera with THREE.Camera.
 
         Convert Camera to the base class.
             Introduce OrthographicCamera and PerspectiveCamera.
+            Move specialized CameraHelper methods to virtual methods.
 
         Can the Schema/JSON layout of Camera remain the same?
             UI
@@ -18,6 +17,8 @@
             Structure
                 perspective: boolean
                 left, right, top, bottom: number
+
+        Update the CameraControls to include the orthographic properties.
 
         CameraHelper
             getDefaultCamera: Add a parameter for Orthographic or Perspective.

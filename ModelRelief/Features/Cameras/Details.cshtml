@@ -28,7 +28,14 @@
         <dd>
             @Html.DisplayFor(model => model.Project.Name)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IsPerspective)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsPerspective)
+        </dd>
 
+        @*Perspective*@
         <dt>
             @Html.DisplayNameFor(model => model.FieldOfView)
         </dt>
@@ -41,6 +48,33 @@
         <dd>
             @Html.DisplayFor(model => model.AspectRatio)
         </dd>
+
+        @*Orthographic*@
+        <dt>
+            @Html.DisplayNameFor(model => model.Left)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Left)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Right)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Right)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Top)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Top)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Bottom)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Bottom)
+        </dd>
+
         <dt>
             @Html.DisplayNameFor(model => model.Near)
         </dt>
