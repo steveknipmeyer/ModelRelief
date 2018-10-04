@@ -1,13 +1,13 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
 import * as THREE                                   from 'three';
 
-import { Camera }                                   from 'Camera'
+import { BaseCamera }                               from 'BaseCamera'
 import { CameraHelper }                             from 'CameraHelper'
 import { assert }                                   from 'chai'
 import {Graphics}                                   from 'Graphics';
@@ -32,13 +32,13 @@ export class SinglePrecisionLoader {
     /**
      * Creates an instance of SinglePrecisionLoader.
      * @param {MeshGenerateParameters} parameters Mesh generation parameters.
-     * @param {Float32Array} values List of floats comprising the mesh values. 
+     * @param {Float32Array} values List of floats comprising the mesh values.
      *                              Row major order beginning at the bottom row.
      * @param {(number) => number} trasnformer Transform function that maps raw values to model values.
      * @param {THREE.Vector2} bufferExtents Buffer XY extents.
      * @param {THREE.Vector2} meshExtents Mesh XY extents.
     */
-    constructor(meshParameters : MeshGenerateParameters, values : Float32Array, transformer : (number) => number, bufferExtents : THREE.Vector2, meshExtents : THREE.Vector2) {  
+    constructor(meshParameters : MeshGenerateParameters, values : Float32Array, transformer : (number) => number, bufferExtents : THREE.Vector2, meshExtents : THREE.Vector2) {
 
         this.meshParameters = meshParameters;
         this.values         = values;
@@ -49,13 +49,13 @@ export class SinglePrecisionLoader {
 
     /**
      * @description Loads a model.
-     * @returns {Promise<THREE.Group>} 
+     * @returns {Promise<THREE.Group>}
      */
     async loadModelAsync () : Promise<THREE.Group> {
 
         if (!this.verifyMeshSettings())
             return null;
-    
+
         let mesh = this.constructGraphics();
 
         return mesh;
@@ -64,8 +64,8 @@ export class SinglePrecisionLoader {
     /**
      * @description Returns the buffer value at a pixel index.
      * @param {number} row Buffer row.
-     * @param {any} column Buffer column. 
-     * @returns {number} 
+     * @param {any} column Buffer column.
+     * @returns {number}
      */
     value(row : number, column) : number {
 
@@ -73,14 +73,14 @@ export class SinglePrecisionLoader {
         let valueRaw = this.values[index];
 
         let value = this.transformer(valueRaw);
-        
+
         return value;
     }
-    
+
     //#region Generation
     /**
      * @description Verifies the pre-requisite settings are defined to create a mesh.
-     * @returns {boolean} 
+     * @returns {boolean}
      */
     verifyMeshSettings(): boolean {
 
@@ -97,19 +97,19 @@ export class SinglePrecisionLoader {
      * @param {THREE.Vector2} meshLowerLeft World coordinated of lower left.
      * @param {number} faceSize Size of a face edge (not hypotenuse).
      * @param {number} baseVertexIndex Beginning offset in mesh geometry vertex array.
-     * @returns {FacePair} 
+     * @returns {FacePair}
      */
     constructTriFacesAtOffset (row : number, column : number, meshLowerLeft : THREE.Vector2, faceSize : number, baseVertexIndex : number) : FacePair {
-         
+
         let facePair : FacePair = {
             vertices : [],
             faces    : []
         }
 
         //  Vertices
-        //   2    3       
+        //   2    3
         //   0    1
-    
+
         // complete mesh center will be at the world origin
         let originX : number = meshLowerLeft.x + (column * faceSize);
         let originY : number = meshLowerLeft.y + (row    * faceSize);
@@ -131,7 +131,7 @@ export class SinglePrecisionLoader {
              new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 1, baseVertexIndex + 3),
              new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 3, baseVertexIndex + 2)
          );
-            
+
         return facePair;
     }
 
@@ -140,18 +140,18 @@ export class SinglePrecisionLoader {
      * @param {THREE.Mesh} mesh Template mesh identical in model <and> pixel extents.
      * @param {THREE.Vector2} meshExtents Final mesh extents.
      * @param {THREE.Material} material Material to assign to the mesh.
-     * @returns {THREE.Mesh} 
+     * @returns {THREE.Mesh}
      */
     constructGraphicsFromTemplate(mesh : THREE.Mesh, meshExtents: THREE.Vector2, material: THREE.Material): THREE.Mesh {
-      
+
         // The mesh template matches the aspect ratio of the template.
         // Now, scale the mesh to the final target dimensions.
         let boundingBox = Graphics.getBoundingBoxFromObject(mesh);
         let scale = meshExtents.x / boundingBox.getSize().x;
         mesh.scale.x = scale;
         mesh.scale.y = scale;
-       
-       
+
+
         let meshVertices = (<THREE.Geometry>mesh.geometry).vertices;
         let valueCount = this.values.length;
         assert(meshVertices.length === valueCount);
@@ -163,7 +163,7 @@ export class SinglePrecisionLoader {
         }
         let meshGeometry: THREE.Geometry = <THREE.Geometry>mesh.geometry;
         mesh = new THREE.Mesh(meshGeometry, material);
-       
+
         return mesh;
     }
 
@@ -171,7 +171,7 @@ export class SinglePrecisionLoader {
      * @description Constructs a new mesh from a collection of triangles.
      * @param {THREE.Vector2} meshXYExtents Extents of the mesh.
      * @param {THREE.Material} material Material to assign to the mesh.
-     * @returns {THREE.Mesh} 
+     * @returns {THREE.Mesh}
      */
    constructGraphicsByTriangulation(meshXYExtents : THREE.Vector2, material : THREE.Material) : THREE.Mesh {
        let meshGeometry = new THREE.Geometry();
@@ -194,18 +194,18 @@ export class SinglePrecisionLoader {
        meshGeometry.mergeVertices();
        let mesh = new THREE.Mesh(meshGeometry, material);
 
-       return mesh; 
+       return mesh;
    }
 
    /**
     * @description Constructs a mesh of the given base dimension.
     * @param {THREE.Material} [material] Material to assign to mesh.
-    * @returns {THREE.Mesh} 
+    * @returns {THREE.Mesh}
     */
    constructGraphics(material? : THREE.Material) : THREE.Mesh {
 
-       let timerTag = Services.timer.mark('SinglePrecisionLoader.constructGraphics');        
-       
+       let timerTag = Services.timer.mark('SinglePrecisionLoader.constructGraphics');
+
        if (!material)
            material = new THREE.MeshPhongMaterial(Mesh3d.DefaultMeshPhongMaterialParameters);
 
@@ -214,9 +214,9 @@ export class SinglePrecisionLoader {
 
        let meshCache: THREE.Mesh = Mesh3d.Cache.getMesh(this.meshExtents, new THREE.Vector2(this.bufferExtents.x, this.bufferExtents.y));
        meshCache = null;
-       let mesh: THREE.Mesh = meshCache ? this.constructGraphicsFromTemplate(meshCache, this.meshExtents, material) : this.constructGraphicsByTriangulation(this.meshExtents, material);   
+       let mesh: THREE.Mesh = meshCache ? this.constructGraphicsFromTemplate(meshCache, this.meshExtents, material) : this.constructGraphicsByTriangulation(this.meshExtents, material);
        mesh.name = this.meshParameters.name;
-       
+
        let meshGeometry = <THREE.Geometry>mesh.geometry;
        meshGeometry.verticesNeedUpdate = true;
        meshGeometry.normalsNeedUpdate  = true;
@@ -230,10 +230,10 @@ export class SinglePrecisionLoader {
        // Mesh was constructed with Z = buffer(X,Y).
        // Now rotate mesh to align with viewer XY plane so Top view is looking down on the mesh.
        mesh.rotateX(-Math.PI / 2);
-       
+
        Mesh3d.Cache.addMesh(this.meshExtents, new THREE.Vector2(this.bufferExtents.x, this.bufferExtents.y), mesh);
        Services.timer.logElapsedTime(timerTag)
 
        return mesh;
-   } 
+   }
 }

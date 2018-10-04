@@ -1,6 +1,6 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
@@ -8,7 +8,7 @@
 import * as Dto                 from 'DtoModels'
 import * as THREE               from 'three'
 
-import { Camera }                       from 'Camera'
+import { BaseCamera }                   from 'BaseCamera'
 import { CameraHelper }                 from 'CameraHelper'
 import { assert }                       from 'chai'
 import { HttpLibrary, ServerEndPoints } from 'Http'
@@ -32,16 +32,16 @@ import { StopWatch }                    from 'StopWatch'
  */
 export class DepthBuffer extends GeneratedFileModel {
 
-    static readonly NormalizedTolerance   : number = .001;    
+    static readonly NormalizedTolerance   : number = .001;
 
     width      : number;
     height     : number;
     format     : DepthBufferFormat;
 
-    // Navigation Properties    
+    // Navigation Properties
     project    : Project;
-    model3d    : Model3d; 
-    _camera    : Camera;
+    model3d    : Model3d;
+    _camera    : BaseCamera;
 
     // Private
     _rgbaArray  : Uint8Array;
@@ -53,7 +53,7 @@ export class DepthBuffer extends GeneratedFileModel {
      */
     constructor(parameters: IGeneratedFileModel = {}) {
 
-        parameters.name        = parameters.name        || "DepthBuffer"; 
+        parameters.name        = parameters.name        || "DepthBuffer";
         parameters.description = parameters.description || "DepthBuffer";
 
         super(parameters);
@@ -71,10 +71,10 @@ export class DepthBuffer extends GeneratedFileModel {
      * @description Returns a DepthBuffer instance through an HTTP query of the Id.
      * @static
      * @param {number} id DepthBuffer Id.
-     * @returns {Promise<DepthBuffer>} 
+     * @returns {Promise<DepthBuffer>}
      */
     static async fromIdAsync(id : number ) : Promise<DepthBuffer> {
-        
+
         if (!id)
             return undefined;
 
@@ -83,11 +83,11 @@ export class DepthBuffer extends GeneratedFileModel {
         });
         let depthBufferModel = await depthBuffer.getAsync();
         return DepthBuffer.fromDtoModelAsync(depthBufferModel);
-    }   
+    }
 
     /**
      * @description Constructs an instance from a DTO model.
-     * @returns {DepthBuffer} 
+     * @returns {DepthBuffer}
      */
     static async fromDtoModelAsync(dtoDepthBuffer : Dto.DepthBuffer) : Promise<DepthBuffer> {
 
@@ -95,7 +95,7 @@ export class DepthBuffer extends GeneratedFileModel {
         let depthBuffer = new DepthBuffer({
             id          : dtoDepthBuffer.id,
             name        : dtoDepthBuffer.name,
-            description : dtoDepthBuffer.description,       
+            description : dtoDepthBuffer.description,
         });
 
         depthBuffer.fileTimeStamp      = dtoDepthBuffer.fileTimeStamp;
@@ -107,26 +107,26 @@ export class DepthBuffer extends GeneratedFileModel {
 
         depthBuffer.project = await Project.fromIdAsync(dtoDepthBuffer.projectId);
         depthBuffer.model3d = await Model3d.fromIdAsync(dtoDepthBuffer.model3dId);
-        depthBuffer.camera  = await Camera.fromIdAsync(dtoDepthBuffer.cameraId);
+        depthBuffer.camera  = await BaseCamera.fromIdAsync(dtoDepthBuffer.cameraId);
 
         return depthBuffer;
     }
 
     /**
      * @description Returns a DTO DepthBuffer from the instance.
-     * @returns {Dto.DepthBuffer} 
+     * @returns {Dto.DepthBuffer}
      */
     toDtoModel() : Dto.DepthBuffer {
 
         let model = new Dto.DepthBuffer({
             id              : this.id,
             name            : this.name,
-            description     : this.description,    
+            description     : this.description,
 
             width           : this.width,
             height          : this.height,
             format          : this.format,
-        
+
             projectId       : this.project ? this.project.id : undefined,
             model3dId       : this.model3d ? this.model3d.id : undefined,
             cameraId        : this.camera  ? this.camera.id : undefined,
@@ -136,8 +136,8 @@ export class DepthBuffer extends GeneratedFileModel {
         });
 
         return model;
-    }        
-    
+    }
+
     /**
      * @description Returns the raw RGB array of the buffer.
      * @type {Uint8Array}
@@ -181,7 +181,7 @@ export class DepthBuffer extends GeneratedFileModel {
      * @readonly
      * @type {Camera}
      */
-    get camera() : Camera {
+    get camera() : BaseCamera {
 
         return this._camera;
     }
@@ -189,7 +189,7 @@ export class DepthBuffer extends GeneratedFileModel {
     /**
      * @description Sets the associated camera.
      */
-    set camera(value : Camera) {
+    set camera(value : BaseCamera) {
 
         this._camera = value;
     }
@@ -249,7 +249,7 @@ export class DepthBuffer extends GeneratedFileModel {
             if (depthValue > maximumNormalized)
                 maximumNormalized = depthValue;
             }
-        return maximumNormalized;            
+        return maximumNormalized;
     }
 
     /**
@@ -292,7 +292,7 @@ export class DepthBuffer extends GeneratedFileModel {
     /**
      * @description Convert a normalized depth [0,1] to depth in model units.
      * @param {number} normalizedDepth Normalized depth [0,1].
-     * @returns {number} 
+     * @returns {number}
      */
     normalizedToModelDepth(normalizedDepth : number) : number {
 
@@ -310,7 +310,7 @@ export class DepthBuffer extends GeneratedFileModel {
      * @description Returns the normalized depth value at a pixel index
      * @param {number} row Buffer row.
      * @param {any} column Buffer column.
-     * @returns {number} 
+     * @returns {number}
      */
     depthNormalized (row : number, column) : number {
 
@@ -321,14 +321,14 @@ export class DepthBuffer extends GeneratedFileModel {
     /**
      * @description Returns the depth value at a pixel index.
      * @param {number} row Buffer row.
-     * @param {any} column Buffer column. 
-     * @returns {number} 
+     * @param {any} column Buffer column.
+     * @returns {number}
      */
     depth(row : number, column) : number {
 
         let depthNormalized = this.depthNormalized(row, column);
         let depth = this.normalizedToModelDepth(depthNormalized);
-        
+
         return depth;
     }
 
@@ -336,10 +336,10 @@ export class DepthBuffer extends GeneratedFileModel {
      * @description Returns the buffer indices of a model point in world coordinates.
      * @param {THREE.Vector3} worldVertex Vertex of model.
      * @param {THREE.Box3} planeBoundingBox Size of planar bounding box.
-     * @returns {THREE.Vector2} 
+     * @returns {THREE.Vector2}
      */
     getModelVertexIndices (worldVertex : THREE.Vector3, planeBoundingBox : THREE.Box3) : THREE.Vector2 {
-    
+
         let boxSize      : THREE.Vector3 = planeBoundingBox.getSize();
         let meshExtents  : THREE.Vector2 = new THREE.Vector2 (boxSize.x, boxSize.y);
 
@@ -362,14 +362,14 @@ export class DepthBuffer extends GeneratedFileModel {
      * @description Returns the linear index of a model point in world coordinates.
      * @param {THREE.Vector3} worldVertex Vertex of model.
      * @param {THREE.Box3} planeBoundingBox Size of planar bounding box.
-     * @returns {number} 
+     * @returns {number}
      */
     getModelVertexIndex (worldVertex : THREE.Vector3, planeBoundingBox : THREE.Box3) : number {
 
-        let indices : THREE.Vector2 = this.getModelVertexIndices(worldVertex, planeBoundingBox);    
+        let indices : THREE.Vector2 = this.getModelVertexIndices(worldVertex, planeBoundingBox);
         let row    : number = indices.x;
         let column : number = indices.y;
-        
+
         let index = (row * this.width) + column;
         index = Math.round(index);
 
@@ -407,6 +407,6 @@ export class DepthBuffer extends GeneratedFileModel {
         this._logger.addMessage(`Z Range = ${this.range.toFixed(decimalPlaces)}`, messageStyle);
         this._logger.addMessage(`Minimum = ${this.minimum.toFixed(decimalPlaces)}`, messageStyle);
         this._logger.addMessage(`Maximum = ${this.maximum.toFixed(decimalPlaces)}`, messageStyle);
-        this._logger.addEmptyLine();        
+        this._logger.addEmptyLine();
     }
 }

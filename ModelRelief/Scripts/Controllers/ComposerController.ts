@@ -1,23 +1,23 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE  from 'three' 
+import * as THREE  from 'three'
 import * as dat    from 'dat-gui'
 import * as Dto    from "DtoModels";
 
 import { assert }                             from 'chai';
-import { Camera }                             from "Camera"
+import { BaseCamera }                         from "BaseCamera"
 import { CameraHelper }                       from "CameraHelper"
 import { ComposerView }                       from "ComposerView"
 import { DepthBuffer }                        from "DepthBuffer"
 import { DepthBufferFactory }                 from "DepthBufferFactory"
 import { EventManager, EventType, MREvent }   from 'EventManager'
 import { ElementAttributes, ElementIds }      from "Html"
-import { ContentType, HttpLibrary, 
+import { ContentType, HttpLibrary,
          MethodType, ServerEndPoints }        from "Http"
 import { StandardView }                       from "ICamera"
 import { Mesh }                               from "Mesh"
@@ -25,6 +25,7 @@ import { MeshTransform }                      from 'MeshTransform'
 import { MeshViewer }                         from "MeshViewer"
 import { Model3d }                            from "Model3d"
 import { ModelViewer }                        from "ModelViewer"
+import { PerspectiveCamera }                  from "PerspectiveCamera"
 import { UnitTests }                          from 'UnitTests';
 
 /**
@@ -39,13 +40,13 @@ class ComposerViewSettings {
     saveRelief      : () => void;
     /**
      * Creates an instance of ComposerViewSettings.
-     * @param {() => any} generateRelief 
-     * @param {() => any} saveRelief 
+     * @param {() => any} generateRelief
+     * @param {() => any} saveRelief
      */
     constructor(meshtransform : MeshTransform, generateRelief: () => any, saveRelief: () => any) {
 
         this.meshTransform = meshtransform;
-        
+
         this.generateRelief = generateRelief;
         this.saveRelief     = saveRelief;
     }
@@ -57,8 +58,8 @@ class ComposerViewSettings {
  */
 class ControlSettings {
 
-    minimum : number;       
-    maximum : number; 
+    minimum : number;
+    maximum : number;
     stepSize : number;
 
     /**
@@ -87,7 +88,7 @@ export class ComposerController {
     _composerViewSettings : ComposerViewSettings;               // UI settings
 
     _reliefWidthPixels  : number;                               // relief width
-    _reliefHeightPixels : number;                               // relief height 
+    _reliefHeightPixels : number;                               // relief height
 
     _initialMeshGeneration: boolean = true;
 
@@ -95,7 +96,7 @@ export class ComposerController {
      * Creates an instance of ComposerController.
      * @param {ComposerView} composerView Composer view.
      */
-    constructor(composerView : ComposerView) {  
+    constructor(composerView : ComposerView) {
 
         this._composerView = composerView;
 
@@ -163,7 +164,7 @@ export class ComposerController {
      * @readonly
      * @type {Camera}
      */
-    get activeDepthBufferCamera() : Camera {
+    get activeDepthBufferCamera() : BaseCamera {
         return this._composerView.mesh.depthBuffer.camera;
     }
 
@@ -181,10 +182,10 @@ export class ComposerController {
         let modelViewCamera = this.activeDepthBufferCamera.viewCamera.clone();
 
         // WIP: Set far plane based on model extents to avoid clipping
-        let boundingPlanes = CameraHelper.getBoundingClippingPlanes(modelViewCamera, this.modelViewer.modelGroup);
+        let boundingPlanes =  this.activeDepthBufferCamera.getBoundingClippingPlanes(this.modelViewer.modelGroup);
 
-        modelViewCamera.near = Camera.DefaultNearClippingPlane;
-        modelViewCamera.far  = Camera.DefaultFarClippingPlane;
+        modelViewCamera.near = BaseCamera.DefaultNearClippingPlane;
+        modelViewCamera.far  = BaseCamera.DefaultFarClippingPlane;
 
         modelViewCamera.updateProjectionMatrix();
         this.modelViewer.camera = modelViewCamera;
@@ -192,13 +193,13 @@ export class ComposerController {
 
     /**
      * @description Generates a relief from the current model camera.
-     * @returns {Promise<void>} 
+     * @returns {Promise<void>}
      */
-    async generateReliefAsync() : Promise<void> { 
+    async generateReliefAsync() : Promise<void> {
 
         // Camera
         let cameraModel: Dto.Camera = await this.updateCameraAsync();
-        
+
         // DepthBufffer
         let depthBufferModel: Dto.DepthBuffer = await this.updateDepthBufferAsync();
 
@@ -220,24 +221,24 @@ export class ComposerController {
 
     /**
      * @description Updates the Camera.
-     * @returns {Promise<Dto.Camera>} 
+     * @returns {Promise<Dto.Camera>}
      */
     async updateCameraAsync(): Promise<Dto.Camera> {
 
         // copy view camera so we can optimize clipping planes
         let modelViewCameraClone = this.modelViewer.camera.clone(true);
-        CameraHelper.finalizeClippingPlanes(modelViewCameraClone, this.modelViewer.modelGroup);
         this.activeDepthBufferCamera.viewCamera = modelViewCameraClone;
+        this.activeDepthBufferCamera.finalizeClippingPlanes(this.modelViewer.modelGroup);
 
         // update
         let depthBufferCameraModel : Dto.Camera = await this.activeDepthBufferCamera.toDtoModel().putAsync();
 
-        return depthBufferCameraModel; 
-    }        
-    
+        return depthBufferCameraModel;
+    }
+
     /**
      * @description Updates the DepthBuffer.
-     * @returns {Promise<Dto.DepthBuffer>} 
+     * @returns {Promise<Dto.DepthBuffer>}
      */
     async updateDepthBufferAsync(): Promise<Dto.DepthBuffer> {
 
@@ -259,24 +260,24 @@ export class ComposerController {
         // file
         this.activeDepthBuffer.depths = factoryDepthBuffer.depths;
         depthBufferModel = await depthBufferModel.postFileAsync(this.activeDepthBuffer.depths);
-        
+
         return depthBufferModel;
-    }        
+    }
 
     /**
      * @description Updates the MeshTransform.
-     * @returns {Promise<Dto.MeshTransform>} 
+     * @returns {Promise<Dto.MeshTransform>}
      */
     async updateMeshTransformAsync(): Promise<Dto.MeshTransform> {
 
         let updatedMeshTransform = await this.activeMeshTransform.toDtoModel().putAsync();
 
         return updatedMeshTransform;
-    }        
+    }
 
     /**
      * @description Updates the Mesh.
-     * @returns {Promise<Dto.Mesh>} 
+     * @returns {Promise<Dto.Mesh>}
      */
     async updateMeshAsync(): Promise<Dto.Mesh> {
 
@@ -287,8 +288,8 @@ export class ComposerController {
         let updateMeshModel = this.activeMesh.toDtoModel().putAsync();
 
         return updateMeshModel;
-    }        
-        
+    }
+
     /**
      * @description Saves the relief.
      */
@@ -297,17 +298,20 @@ export class ComposerController {
         // WIP: Save the Mesh as an OBJ format file?
         // It may be more efficient to maintain Meshes in raw format since the size is substantially smaller.
 
-        // WIP: Randomly generated cameras do not roundtrip the matrix property. However, cameras created and manipulated through views work fine.
-        // UnitTests.cameraRoundTrip();
 
-        let camera = new Camera({}, this.modelViewer.camera);
-        let cameraModel = camera.toDtoModel();
-        Camera.fromDtoModelAsync(cameraModel).then((cameraRoundtrip) => {
+        if (this.modelViewer.camera instanceof THREE.PerspectiveCamera) {
+            // WIP: Randomly generated cameras do not roundtrip the matrix property. However, cameras created and manipulated through views work fine.
+            // UnitTests.cameraRoundTrip();
 
-            UnitTests.comparePerspectiveCameras(camera.viewCamera, cameraRoundtrip.viewCamera);
+            let camera = new PerspectiveCamera({}, this.modelViewer.camera);
+            let cameraModel = camera.toDtoModel();
+            BaseCamera.fromDtoModelAsync(cameraModel).then((cameraRoundtrip) => {
+                let perspectiveCameraRoundTrip =  <THREE.PerspectiveCamera> cameraRoundtrip.viewCamera;
+                UnitTests.comparePerspectiveCameras(camera.viewCamera, perspectiveCameraRoundTrip);
 
-            this.modelViewer.camera = cameraRoundtrip.viewCamera;
-        });
+                this.modelViewer.camera = cameraRoundtrip.viewCamera;
+            });
+        }
     }
 
     //#endregion
@@ -320,12 +324,12 @@ export class ComposerController {
         this.modelViewer.eventManager.addEventListener(EventType.NewModel, this.onNewModel.bind(this));
 
         // overall dimensions
-        this._reliefWidthPixels  = ComposerController.DefaultReliefDimensions;    
+        this._reliefWidthPixels  = ComposerController.DefaultReliefDimensions;
         this._reliefHeightPixels = this._reliefWidthPixels / this.modelViewer.aspectRatio;
 
         this.initializeUIControls();
     }
-    
+
     /**
      * @description Initialize the view settings that are controllable by the user
      */
@@ -345,7 +349,7 @@ export class ComposerController {
         let containerDiv = document.getElementById(this._composerView.containerId);
         containerDiv.appendChild(gui.domElement);
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
-        //                                                                   ModelRelief                                                                //      
+        //                                                                   ModelRelief                                                                //
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         let composerViewOptions = gui.addFolder('Composer Options');
 
@@ -356,7 +360,7 @@ export class ComposerController {
         let controlMeshWidth  = dimensionsOptions.add(this._composerViewSettings.meshTransform, 'width').name('Width').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
         let controlMeshHeight = dimensionsOptions.add(this._composerViewSettings.meshTransform, 'height').name('Height').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
         let controlMeshDepth  = dimensionsOptions.add(this._composerViewSettings.meshTransform, 'depth').name('Depth').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
-        
+
         let reliefProcessingOptions = composerViewOptions.addFolder('Relief Processing');
 
         // Relief Processing Parameters
@@ -380,7 +384,7 @@ export class ComposerController {
 
         controlSettings = new ControlSettings(0.0, 1.0, 0.01);
         let controlP1  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'p1').name('P1').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
-        
+
         controlSettings = new ControlSettings(0.0, 10.0, 0.1);
         let controlP2  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, 'p2').name('P2').min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
 
@@ -399,5 +403,5 @@ export class ComposerController {
         composerViewOptions.open();
         dimensionsOptions.open();
         reliefProcessingOptions.open();
-    }    
+    }
 }

@@ -1,6 +1,6 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
@@ -8,7 +8,7 @@
 import * as Dto   from 'DtoModels'
 import * as THREE from 'three'
 
-import { Camera }                       from 'Camera'
+import { BaseCamera }                   from 'BaseCamera'
 import { DepthBuffer }                  from 'DepthBuffer'
 import { GeneratedFileModel }           from 'GeneratedFileModel'
 import { HttpLibrary, ServerEndPoints } from 'Http'
@@ -31,12 +31,12 @@ export class Mesh extends GeneratedFileModel {
 
     format: MeshFormat;
 
-    // Navigation Properties    
+    // Navigation Properties
     project         : Project;
-    camera          : Camera;             
+    camera          : BaseCamera;
     depthBuffer     : DepthBuffer;
     meshTransform   : MeshTransform;
-    
+
     /**
      * Creates an instance of Mesh.
      * @param {IGeneratedFileModel} [parameters={}] GeneratedFileModel properties.
@@ -45,9 +45,9 @@ export class Mesh extends GeneratedFileModel {
      */
     constructor(parameters : IGeneratedFileModel, depthBuffer : DepthBuffer, meshTransform : MeshTransform) {
 
-        parameters.name        = parameters.name        || "Mesh"; 
+        parameters.name        = parameters.name        || "Mesh";
         parameters.description = parameters.description || "Mesh";
-        
+
         super(parameters);
 
         this.initialize(depthBuffer, meshTransform);
@@ -68,10 +68,10 @@ export class Mesh extends GeneratedFileModel {
      * @description Returns a Mesh instance through an HTTP query of the Id.
      * @static
      * @param {number} id Mesh Id.
-     * @returns {Promise<Mesh>} 
+     * @returns {Promise<Mesh>}
      */
     static async fromIdAsync(id : number ) : Promise<Mesh> {
-        
+
         if (!id)
             return undefined;
 
@@ -80,11 +80,11 @@ export class Mesh extends GeneratedFileModel {
         });
         let meshModel = await mesh.getAsync();
         return Mesh.fromDtoModelAsync(meshModel);
-    }   
+    }
 
     /**
      * @description Constructs an instance from a DTO model.
-     * @returns {Mesh} 
+     * @returns {Mesh}
      */
     static async fromDtoModelAsync(dtoMesh : Dto.Mesh) : Promise<Mesh> {
 
@@ -95,9 +95,9 @@ export class Mesh extends GeneratedFileModel {
         let mesh = new Mesh ({
             id          : dtoMesh.id,
             name        : dtoMesh.name,
-            description : dtoMesh.description,       
-            }, 
-            depthBuffer, 
+            description : dtoMesh.description,
+            },
+            depthBuffer,
             meshTransform
         );
 
@@ -107,24 +107,24 @@ export class Mesh extends GeneratedFileModel {
         mesh.format         = dtoMesh.format;
 
         mesh.project        = await Project.fromIdAsync(dtoMesh.projectId);
-        mesh.camera         = await Camera.fromIdAsync(dtoMesh.cameraId);
+        mesh.camera         = await BaseCamera.fromIdAsync(dtoMesh.cameraId);
 
         return mesh;
     }
 
     /**
      * @description Returns a DTO Mesh from the instance.
-     * @returns {Dto.Mesh} 
+     * @returns {Dto.Mesh}
      */
     toDtoModel() : Dto.Mesh {
 
         let mesh = new Dto.Mesh({
             id              : this.id,
             name            : this.name,
-            description     : this.description,    
+            description     : this.description,
 
             format          : this.format,
-        
+
             projectId       : this.project ? this.project.id : undefined,
             cameraId        : this.camera ? this.camera.id : undefined,
             depthBufferId   : this.depthBuffer ? this.depthBuffer.id : undefined,
@@ -135,7 +135,7 @@ export class Mesh extends GeneratedFileModel {
         });
 
         return mesh;
-    }        
+    }
 
     //#region Properties
     /**
@@ -156,10 +156,10 @@ export class Mesh extends GeneratedFileModel {
         return this.depthBuffer.height;
     }
     //#endregion
-    
+
     /**
      * @description Constructs a graphics mesh.
-     * @returns {Promise<THREE.Group>} 
+     * @returns {Promise<THREE.Group>}
      */
     async getModelGroupAsync() : Promise<THREE.Group> {
 
@@ -175,7 +175,7 @@ export class Mesh extends GeneratedFileModel {
 
         let loader = new Loader();
         let modelGroup = loader.loadModelAsync(this);
-        
+
         return modelGroup;
     }
     //#endregion

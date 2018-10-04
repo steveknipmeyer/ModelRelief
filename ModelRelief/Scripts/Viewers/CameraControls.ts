@@ -1,15 +1,15 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE  from 'three' 
+import * as THREE  from 'three'
 import * as dat    from 'dat-gui'
 
-import {assert}                                 from 'chai';        
-import {Camera}                                 from 'Camera';
+import {assert}                                 from 'chai';
+import {BaseCamera}                             from 'BaseCamera';
 import {CameraHelper }                          from 'CameraHelper';
 import {ElementAttributes, ElementIds}          from 'Html';
 import {StandardView}                           from 'ICamera';
@@ -24,7 +24,7 @@ import {Viewer}                                 from "Viewer";
  */
 class CameraControlSettings {
 
-    camera                  : Camera;
+    camera                  : BaseCamera;
     standardView            : StandardView = StandardView.Front;
 
     fitView                 : () => void;
@@ -38,12 +38,12 @@ class CameraControlSettings {
      * @param {() => any} addCameraHelper Function to add CameraHelper to scene.
      * @param {() => any} boundClippingPlanes Function to set clipping planes to extents of model.
      */
-    constructor(camera: Camera, fitView: () => any, addCameraHelper: () => any, boundClippingPlanes: () => any) {
+    constructor(camera: BaseCamera, fitView: () => any, addCameraHelper: () => any, boundClippingPlanes: () => any) {
 
         this.fitView              = fitView;
         this.addCameraHelper      = addCameraHelper;
         this.boundClippingPlanes  = boundClippingPlanes;
-        
+
         this.camera = camera;
     }
 }
@@ -68,18 +68,18 @@ export class CameraControls {
 
     viewer      : Viewer;                     // associated viewer
     settings    : CameraControlSettings;      // UI settings
-    
+
     // The maximum and minimum values of these controls are modified by the boundClippingPlanes button so they are instance members.
     _controlNearClippingPlane : dat.GUIController;
     _controlFarClippingPlane  : dat.GUIController;
-    
+
     /**
      * Creates an instance of CameraControls.
      * @param {Viewer} viewer Associated viewer.
      * @param {CameraControlsOptions} [controlOptions] Options to include/exclude specialized controls.
    */
-    constructor(viewer : Viewer, controlOptions? : CameraControlsOptions) {  
-        
+    constructor(viewer : Viewer, controlOptions? : CameraControlsOptions) {
+
         this.viewer = viewer;
 
         // UI Controls
@@ -90,15 +90,15 @@ export class CameraControls {
     /**
      * @description Fits the active view.
      */
-    fitView() : void { 
-        
+    fitView() : void {
+
         this.viewer.fitView();
     }
 
     /**
      * @description Adds a camera visualization graphic to the scene.
      */
-    addCameraHelper() : void { 
+    addCameraHelper() : void {
 
         // remove existing
         Graphics.removeAllByName(this.viewer.scene, ObjectNames.CameraHelper);
@@ -110,7 +110,7 @@ export class CameraControls {
 
         // View
         let modelView = Graphics.cloneAndTransformObject(this.viewer.modelGroup, this.settings.camera.viewCamera.matrixWorldInverse);
-        let cameraView = CameraHelper.getDefaultCamera(this.viewer.aspectRatio);
+        let cameraView = CameraHelper.getDefaultCamera(this.viewer);
         Graphics.addCameraHelper(cameraView, this.viewer.scene, modelView);
     }
 
@@ -119,7 +119,7 @@ export class CameraControls {
      */
     boundClippingPlanes(): void {
 
-        let clippingPlanes = CameraHelper.getBoundingClippingPlanes(this.settings.camera.viewCamera, this.viewer.modelGroup);
+        let clippingPlanes = this.settings.camera.getBoundingClippingPlanes(this.viewer.modelGroup);
 
         // camera
         this.settings.camera.viewCamera.near = clippingPlanes.near;
@@ -146,7 +146,7 @@ export class CameraControls {
 
         let scope = this;
 
-        let camera = new Camera({}, this.viewer.camera);
+        let camera = new BaseCamera({}, this.viewer.camera);
         this.settings = new CameraControlSettings(camera, this.fitView.bind(this), this.addCameraHelper.bind(this), this.boundClippingPlanes.bind(this));
         assert.deepEqual(this.viewer.camera, this.settings.camera.viewCamera);
 
@@ -165,10 +165,10 @@ export class CameraControls {
         containerDiv.appendChild(gui.domElement);
 
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
-        //                                                                     Camera                                                                   //      
+        //                                                                     Camera                                                                   //
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         let cameraOptions = gui.addFolder('Camera Options');
-        
+
         // Fit View
         let controlFitView = cameraOptions.add(this.settings, 'fitView').name('Fit View');
 
@@ -194,7 +194,7 @@ export class CameraControls {
             let view : StandardView = parseInt(viewSetting, 10);
             scope.viewer.setCameraToStandardView(view);
         });
-            
+
         // Field of View
         if (showFieldOfView) {
             minimum = 25;
@@ -202,9 +202,10 @@ export class CameraControls {
             stepSize = 1;
             let controlFieldOfView = cameraOptions.add(this.settings.camera.viewCamera, 'fov').name('Field of View').min(minimum).max(maximum).step(stepSize).listen();
             controlFieldOfView.onChange(function (value) {
-
-                scope.settings.camera.viewCamera.fov = value;
-                scope.settings.camera.viewCamera.updateProjectionMatrix();
+                if (scope.settings.camera.viewCamera instanceof THREE.PerspectiveCamera) {
+                    scope.settings.camera.viewCamera.fov = value;
+                    scope.settings.camera.viewCamera.updateProjectionMatrix();
+                }
             }.bind(this));
         }
 
@@ -212,7 +213,7 @@ export class CameraControls {
         if (showClippingControls) {
             // Near Clipping Plane
             minimum  =   0.1;
-            maximum  = Camera.DefaultFarClippingPlane;
+            maximum  = BaseCamera.DefaultFarClippingPlane;
             stepSize =   0.1;
             this._controlNearClippingPlane = cameraOptions.add(this.settings.camera.viewCamera, 'near').name('Near Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
             this._controlNearClippingPlane.onChange (function (value) {
@@ -223,7 +224,7 @@ export class CameraControls {
 
             // Far Clipping Plane
             minimum  =  1;
-            maximum  =  Camera.DefaultFarClippingPlane;
+            maximum  =  BaseCamera.DefaultFarClippingPlane;
             stepSize =  0.1;
             this._controlFarClippingPlane = cameraOptions.add(this.settings.camera.viewCamera, 'far').name('Far Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
             this._controlFarClippingPlane.onChange (function (value) {
@@ -236,7 +237,7 @@ export class CameraControls {
             let controlBoundClippingPlanes = cameraOptions.add(this.settings, 'boundClippingPlanes').name('Bound Clipping Planes');
         }
 
-        cameraOptions.open();       
+        cameraOptions.open();
     }
 
     /**

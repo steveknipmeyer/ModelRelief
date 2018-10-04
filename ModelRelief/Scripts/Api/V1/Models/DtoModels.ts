@@ -1,6 +1,6 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
@@ -8,7 +8,7 @@
 import * as THREE       from 'three'
 
 import { Exception }                        from 'Exception'
-import { ContentType, HttpLibrary, 
+import { ContentType, HttpLibrary,
          MethodType, ServerEndPoints }      from 'Http'
 import { HttpStatusCode, HttpStatusMessage }from 'HttpStatus'
 import { ICamera, StandardView }            from 'ICamera'
@@ -24,20 +24,20 @@ import { ILogger, HTMLLogger }              from 'Logger'
 import { RequestResponse }                  from 'RequestResponse'
 import { Services }                         from 'Services'
 
-// ---------------------------------------------------------------------------------------------------------------------------------------------// 
+// ---------------------------------------------------------------------------------------------------------------------------------------------//
 //                                                              Base Classes                                                                    //
-// ---------------------------------------------------------------------------------------------------------------------------------------------// 
+// ---------------------------------------------------------------------------------------------------------------------------------------------//
 /**
  * @description Common base class for all DTO models.
  * @export
  * @class Model
  * @implements {IModel}
- * @template T 
+ * @template T
  */
 export class Model<T extends IModel> implements IModel{
 
     id          : number;
-    name        : string;  
+    name        : string;
     description : string;
 
     endPoint    : string;       // API endpoint
@@ -50,20 +50,20 @@ export class Model<T extends IModel> implements IModel{
      * @param {IModel} [parameters] Initialization parameters.
      */
     constructor (parameters: IModel = {}) {
-        
+
         let {
             id,
             name,
             description,
-    
+
         } = parameters;
 
         this.id            = id;
         this.name          = name;
         this.description   = description;
 
-        this._logger = Services.defaultLogger;       
-    }     
+        this._logger = Services.defaultLogger;
+    }
 
     /**
      * @description Submits an HTTP request to its API endpoint.
@@ -71,7 +71,7 @@ export class Model<T extends IModel> implements IModel{
      * @param {MethodType} requestType HTTP method.
      * @param {ContentType} contentType MIME type (e.g. JSON, octet-stream)
      * @param {*} requestData Data to send (or null)
-     * @returns {Promise<RequestResponse>} 
+     * @returns {Promise<RequestResponse>}
      */
     async submitRequestAsync(endPoint: string, requestType : MethodType, contentType : ContentType, requestData : any) : Promise<RequestResponse> {
 
@@ -85,14 +85,14 @@ export class Model<T extends IModel> implements IModel{
     }
     /**
      * @description Returns the derived instance of Model.
-     * @param {IModel} parameters 
-     * @returns {*} 
+     * @param {IModel} parameters
+     * @returns {*}
      */
     factory(parameters : IModel) : any{};
 
     /**
      * @description Posts the model to its API endpoint.
-     * @returns {Promise<T>} 
+     * @returns {Promise<T>}
      */
     async postAsync() : Promise<T> {
 
@@ -106,7 +106,7 @@ export class Model<T extends IModel> implements IModel{
 
     /**
      * @description Gets the model from its API endpoint.
-     * @returns {Promise<T>} 
+     * @returns {Promise<T>}
      */
     async getAsync() : Promise<T> {
 
@@ -118,10 +118,10 @@ export class Model<T extends IModel> implements IModel{
 
         return this.factory(result.model) as T
     }
-    
+
     /**
      * @description Puts the model to its API endpoint.
-     * @returns {Promise<T>} 
+     * @returns {Promise<T>}
      */
     async putAsync() : Promise<T> {
 
@@ -135,11 +135,11 @@ export class Model<T extends IModel> implements IModel{
 
 /**
  * @description Base class for a file-backed DTO model.
- * @export 
+ * @export
  * @class FileModel
  * @extends {Model<T>}
  * @implements {IFileModel}
- * @template T 
+ * @template T
  */
 export class FileModel<T extends IFileModel> extends Model<T> implements IFileModel{
 
@@ -172,7 +172,7 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
 
     /**
      * @description Posts the model and a backing file to its API endpoint.
-     * @returns {Promise<T>} 
+     * @returns {Promise<T>}
      */
     async postFileAsync(fileData : any) : Promise<T> {
 
@@ -180,14 +180,14 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
 
         let newModel = await HttpLibrary.postFileAsync (this.fileEndPoint, fileData);
 
-        Services.timer.logElapsedTime(exportTag);       
+        Services.timer.logElapsedTime(exportTag);
 
         return this.factory(newModel) as T;
     }
 
     /**
      * @description Gets the backing file from a model.
-     * @returns {Promise<UInt8Array>} 
+     * @returns {Promise<UInt8Array>}
      */
     async getFileAsync() : Promise<Uint8Array> {
 
@@ -197,11 +197,11 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
         if (this.fileArray)
             return this.fileArray;
 
-        let result = await this.submitRequestAsync(this.fileEndPoint, MethodType.Get, ContentType.OctetStream, null);       
+        let result = await this.submitRequestAsync(this.fileEndPoint, MethodType.Get, ContentType.OctetStream, null);
         this.fileArray = result.byteArrayDecodedDoublePrime;
 //      this._fileArray = result.byteArrayDecoded;
 
-        Services.timer.logElapsedTime(exportTag);       
+        Services.timer.logElapsedTime(exportTag);
 
         return this.fileArray;;
     }
@@ -209,7 +209,7 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
      /**
      * @description Gets the backing file as a string from a model.
      * // https://stackoverflow.com/questions/8936984/uint8array-to-string-in-javascript
-     * @returns {Promise<string>} 
+     * @returns {Promise<string>}
      */
     async getFileAsStringAsync() : Promise<string> {
 
@@ -228,12 +228,12 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
                 fileReader.onload = function(e) {
                     resolve((<any>e.target).result);
                 };
-    
+
                 fileReader.readAsText(blobBuffer);
             })
         }
         this.fileString = await byteToStringConverter();
-        Services.timer.logElapsedTime(exportTag);       
+        Services.timer.logElapsedTime(exportTag);
 
         return this.fileString;
     }
@@ -245,7 +245,7 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
  * @class GeneratedFileModel
  * @extends {FileModel<T>}
  * @implements {IGeneratedFileModel}
- * @template T 
+ * @template T
  */
 export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel<T> implements IGeneratedFileModel{
 
@@ -264,17 +264,17 @@ export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel
     }
 }
 
-// ---------------------------------------------------------------------------------------------------------------------------------------------// 
+// ---------------------------------------------------------------------------------------------------------------------------------------------//
 //                                                              DTO Models                                                                      //
-// ---------------------------------------------------------------------------------------------------------------------------------------------// 
+// ---------------------------------------------------------------------------------------------------------------------------------------------//
 /**
  * Concrete implementation of ICamera.
  * @class
  */
 export class Camera extends Model<Camera> implements ICamera {
 
-    fieldOfView: number;
-    aspectRatio: number;    
+    isPerspective: boolean;
+
     near: number;
     far: number;
 
@@ -295,13 +295,23 @@ export class Camera extends Model<Camera> implements ICamera {
     upY: number;
     upZ: number;
 
+    // Perspective
+    fieldOfView: number;
+    aspectRatio: number;
+
+    // Orthographic
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
+
     // Navigation Properties
     projectId: number;
     project: IProject;
 
     /**
      * Creates an instance of Camera.
-     * @param {ICamera} parameters 
+     * @param {ICamera} parameters
      */
     constructor (parameters: ICamera = {}) {
 
@@ -310,16 +320,16 @@ export class Camera extends Model<Camera> implements ICamera {
         this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiCameras}`;
 
         let {
-            fieldOfView,
-            aspectRatio,
+            isPerspective,
+
             near,
             far,
-        
+
             position,
             positionX,
             positionY,
             positionZ,
-        
+
             quaternion,
             eulerX,
             eulerY,
@@ -335,21 +345,31 @@ export class Camera extends Model<Camera> implements ICamera {
             upX,
             upY,
             upZ,
-                
+
+            // Perspective
+            fieldOfView,
+            aspectRatio,
+
+            // Orthographic
+            left,
+            right,
+            top,
+            bottom,
+
             // Navigation Properties
             projectId,
             project,
         } = parameters;
 
-        this.fieldOfView            = fieldOfView;    
-        this.aspectRatio            = aspectRatio;
+        this.isPerspective          = isPerspective;
+
         this.near                   = near;
         this.far                    = far;
-    
+
         this.positionX              = position ? position.x : positionX;
         this.positionY              = position ? position.y : positionY;
         this.positionZ              = position ? position.z : positionZ;
-    
+
         this.eulerX                 = quaternion ? quaternion.x : eulerX;
         this.eulerY                 = quaternion ? quaternion.y : eulerY;
         this.eulerZ                 = quaternion ? quaternion.z : eulerZ;
@@ -362,7 +382,17 @@ export class Camera extends Model<Camera> implements ICamera {
         this.upX                    = up ? up.x : upX;
         this.upY                    = up ? up.y : upY;
         this.upZ                    = up ? up.z : upZ;
-    
+
+        // Perspective
+        this.fieldOfView            = fieldOfView;
+        this.aspectRatio            = aspectRatio;
+
+        // Orthographic
+        this.left                   = left;
+        this.right                  = right;
+        this.top                    = top;
+        this.bottom                 = bottom;
+
         // Navigation Properties
         this.projectId              = projectId;
         this.project                = project;
@@ -371,7 +401,7 @@ export class Camera extends Model<Camera> implements ICamera {
     /**
      * @description Constructs an instance of a Camera.
      * @param {IModel} parameters : Dto.Camera
-     * @returns {Camera} 
+     * @returns {Camera}
      */
     factory (parameters: IModel) : Camera {
         return new Camera(parameters);
@@ -383,7 +413,7 @@ export class Camera extends Model<Camera> implements ICamera {
 *  @interface
 */
 export class DepthBuffer extends GeneratedFileModel<DepthBuffer> implements IDepthBuffer {
-    
+
     width: number;
     height: number;
     format: DepthBufferFormat;
@@ -400,7 +430,7 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> implements IDep
 
     /**
      * Creates an instance of DepthBuffer.
-     * @param {IDepthBuffer} parameters 
+     * @param {IDepthBuffer} parameters
      */
     constructor (parameters: IDepthBuffer = {}) {
 
@@ -412,14 +442,14 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> implements IDep
             width,
             height,
             format,
-        
+
             // Navigation Properties
             projectId,
             project,
-        
+
             model3dId,
             model3d,
-        
+
             cameraId,
             camera,
         } = parameters;
@@ -431,10 +461,10 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> implements IDep
         // Navigation Properties
         this.projectId  = projectId;
         this.project    = project;
-    
+
         this.model3dId  = model3dId;
         this.model3d    = model3d;
-    
+
         this.cameraId   = cameraId;
         this.camera     = camera;
     }
@@ -442,7 +472,7 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> implements IDep
     /**
      * @description Constructs an instance of a DepthBuffer
      * @param {IModel} parameters : Dto.DepthBuffer
-     * @returns {DepthBuffer} 
+     * @returns {DepthBuffer}
      */
     factory (parameters: IModel) : DepthBuffer {
         return new DepthBuffer(parameters);
@@ -454,7 +484,7 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> implements IDep
 *  @interface
 */
 export class Mesh extends GeneratedFileModel<Mesh> implements IMesh {
-    
+
     format: MeshFormat;
 
     // Navigation Properties
@@ -472,7 +502,7 @@ export class Mesh extends GeneratedFileModel<Mesh> implements IMesh {
 
     /**
      * Creates an instance of a Mesh.
-     * @param {Mesh} parameters 
+     * @param {Mesh} parameters
      */
     constructor (parameters: IMesh = {}) {
 
@@ -486,37 +516,37 @@ export class Mesh extends GeneratedFileModel<Mesh> implements IMesh {
             // Navigation Properties
             projectId,
             project,
-        
+
             cameraId,
             camera,
-        
+
             depthBufferId,
             depthBuffer,
-        
+
             meshTransformId,
             meshTransform,
-        } = parameters;            
+        } = parameters;
 
         this.format         = format;
 
         // Navigation Properties
         this.projectId      = projectId;
         this.project        = project;
-    
+
         this.cameraId       = cameraId;
         this.camera         = camera;
-    
+
         this.depthBufferId  = depthBufferId;
         this.depthBuffer    = depthBuffer;
-    
+
         this.meshTransformId  = meshTransformId;
         this.meshTransform    = meshTransform;
     }
-    
+
     /**
      * @description Constructs an instance of a Mesh.
      * @param {IModel} parameters : Dto.Mesh
-     * @returns {Mesh} 
+     * @returns {Mesh}
      */
     factory (parameters: IModel) : Mesh {
         return new Mesh(parameters);
@@ -554,7 +584,7 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
 
     /**
      * Creates an instance of a MeshTransform.
-     * @param {IMeshTransform} parameters 
+     * @param {IMeshTransform} parameters
      */
     constructor (parameters: IMeshTransform = {}) {
 
@@ -581,7 +611,7 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
             p6,
             p7,
             p8,
-        
+
             // Navigation Properties
             projectId,
             project,
@@ -605,16 +635,16 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
         this.p6                        = p6;
         this.p7                        = p7;
         this.p8                        = p8;
-    
+
         // Navigation Properties
         this.projectId              = projectId;
         this.project                = project;
         }
-    
+
     /**
      * @description Constructs an instance of a MeshTransform.
      * @param {IModel} parameters : Dto.MeshTransform
-     * @returns {MeshTransform} 
+     * @returns {MeshTransform}
      */
     factory (parameters: IModel) : MeshTransform {
         return new MeshTransform(parameters);
@@ -638,7 +668,7 @@ export class Model3d extends FileModel<Model3d> implements IModel3d {
 
     /**
      * Creates an instance of a Model3d.
-     * @param {IModel3d} parameters 
+     * @param {IModel3d} parameters
      */
     constructor (parameters: IModel3d = {}) {
 
@@ -652,7 +682,7 @@ export class Model3d extends FileModel<Model3d> implements IModel3d {
             // Navigation Properties
             projectId,
             project,
-        
+
             cameraId,
             camera,
         } = parameters;
@@ -662,7 +692,7 @@ export class Model3d extends FileModel<Model3d> implements IModel3d {
         // Navigation Properties
         this.projectId    = projectId;
         this.project      = project;
-    
+
         this.cameraId     = cameraId;
         this.camera       = camera;
     }
@@ -670,11 +700,11 @@ export class Model3d extends FileModel<Model3d> implements IModel3d {
     /**
      * @description Constructs an instance of a Model3d.
      * @param {IModel} parameters : Dto.Model3d
-     * @returns {Model3d} 
+     * @returns {Model3d}
      */
     factory (parameters: IModel) : Model3d {
         return new Model3d(parameters);
-    }    
+    }
 }
 
 /**
@@ -685,7 +715,7 @@ export class Project extends Model<Project> implements IProject {
 
     /**
      * Creates an instance of a Project.
-     * @param {Project} parameters 
+     * @param {Project} parameters
      */
     constructor (parameters: IProject = {}) {
 
@@ -697,7 +727,7 @@ export class Project extends Model<Project> implements IProject {
     /**
      * @description Constructs an instance of a Project.
      * @param {IModel} parameters : Dto.Project
-     * @returns {Project} 
+     * @returns {Project}
      */
     factory (parameters: IModel) : Project {
         return new Project(parameters);

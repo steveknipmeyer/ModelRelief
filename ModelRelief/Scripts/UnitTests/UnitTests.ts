@@ -1,6 +1,6 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
@@ -9,12 +9,13 @@ import * as THREE from 'three'
 import * as Dto from 'DtoModels'
 
 import {assert}                                 from 'chai'
-import {Camera}                                 from 'Camera'
+import {BaseCamera}                             from 'BaseCamera'
 import {DepthBuffer}                            from 'DepthBuffer'
 import {Exception}                              from 'Exception';
 import {HttpLibrary, ContentType, MethodType}   from 'Http'
 import {DepthBufferFormat}                      from 'IDepthBuffer'
 import {MathLibrary}                            from 'Math'
+import {PerspectiveCamera}                      from 'PerspectiveCamera'
 import {Services}                               from 'Services'
 
 /**
@@ -23,7 +24,7 @@ import {Services}                               from 'Services'
  * @class UnitTests
  */
 export class UnitTests {
-   
+
     static DefaultTolerance : number = 0.001;
 
     /**
@@ -31,7 +32,7 @@ export class UnitTests {
      * @class UnitTests
      * @constructor
      */
-    constructor() {       
+    constructor() {
     }
 
     /**
@@ -46,7 +47,7 @@ export class UnitTests {
 
         let formatTag = 'TAG';
         let errorMessage = `${property}: M[${formatTag}] of the matrices are not equal within ${tolerance}`
-        
+
         let m1Elements = m1.elements;
         let m2Elements = m2.elements;
         assert.equal(m1Elements.length, m2Elements.length);
@@ -109,7 +110,7 @@ export class UnitTests {
      * @description Returns a random scalar within the given range.
      * @static
      * @param {number} scale The range of the scalar. (default = 1).
-     * @returns {number} 
+     * @returns {number}
      */
     static generateScalar(scale : number = 1) : number {
 
@@ -121,7 +122,7 @@ export class UnitTests {
      * @description Returns a 3D vector with random coordinates.
      * @static
      * @param {number} scale The range of a coordinate. (default = 1).
-     * @returns {THREE.Vector3} 
+     * @returns {THREE.Vector3}
      */
     static generateVector3(scale : number = 1) : THREE.Vector3 {
 
@@ -132,7 +133,7 @@ export class UnitTests {
     /**
      * @description Returns a quaternion with random values.
      * @static
-     * @returns {THREE.Quaternion} 
+     * @returns {THREE.Quaternion}
      */
     static generateQuaternion() : THREE.Quaternion {
 
@@ -163,10 +164,10 @@ export class UnitTests {
 
             this.vectorsEqualWithinTolerance(c1.up, c2.up, 'up');
 
-            // WIP: THese camera properties do not roundtrip however the matrix and projectMatrix do roundtrip correctly.    
+            // WIP: THese camera properties do not roundtrip however the matrix and projectMatrix do roundtrip correctly.
             // this.quaternionsEqualWithinTolerance(c1.quaternion, c2.quaternion, 'quaternion');
             // this.vectorsEqualWithinTolerance(c1.getWorldDirection(), c2.getWorldDirection(), 'worldDirection');
-            
+
         }
         catch(exception) {
             Services.defaultLogger.addErrorMessage(`Cameras are not equal: ${exception.message}`);
@@ -186,7 +187,7 @@ export class UnitTests {
             let fieldOfView       = this.generateScalar(50);
             let aspect            = this.generateScalar(1.0);
             let nearClippingPlane = this.generateScalar(10);
-            let farClippingPlane  = nearClippingPlane + this.generateScalar(Camera.DefaultFarClippingPlane);
+            let farClippingPlane  = nearClippingPlane + this.generateScalar(BaseCamera.DefaultFarClippingPlane);
 
             let perspectiveCamera = new THREE.PerspectiveCamera(fieldOfView, aspect, nearClippingPlane, farClippingPlane);
 
@@ -198,23 +199,23 @@ export class UnitTests {
             perspectiveCamera.up.copy(up);
 
             // set position/rotation/scale attributes
-            perspectiveCamera.matrix.decompose(perspectiveCamera.position, perspectiveCamera.quaternion, perspectiveCamera.scale); 
+            perspectiveCamera.matrix.decompose(perspectiveCamera.position, perspectiveCamera.quaternion, perspectiveCamera.scale);
 
             perspectiveCamera.updateProjectionMatrix();
 
             // constructor
-            let camera = new Camera ({
+            let camera = new PerspectiveCamera ({
                 id          : 1,
                 name        : "Perspective Camera",
-                description : "This camera has random properties.",       
-                }, 
+                description : "This camera has random properties.",
+                },
                 perspectiveCamera);
 
             let cameraModel = camera.toDtoModel();
-            Camera.fromDtoModelAsync(cameraModel).then(cameraRoundtrip => {
+            BaseCamera.fromDtoModelAsync(cameraModel).then(cameraRoundtrip => {
                 let c1 = camera.viewCamera;
-                let c2 = cameraRoundtrip.viewCamera;       
-                
+                let c2 = <THREE.PerspectiveCamera> cameraRoundtrip.viewCamera;
+
                 this.comparePerspectiveCameras(c1, c2);
             })
         }
@@ -245,8 +246,8 @@ export class UnitTests {
         let readByteArray = await depthBufferModel.getFileAsync();
 
         // Assert
-        assert.deepEqual(originalByteArray, readByteArray, "Byte arrays are equal.")  
-    }   
+        assert.deepEqual(originalByteArray, readByteArray, "Byte arrays are equal.")
+    }
 
     static vertexMapping (depthBuffer : DepthBuffer, mesh : THREE.Mesh) {
 
@@ -258,7 +259,7 @@ export class UnitTests {
         // column = 2              0   1   2
         // buffer length = 6
 
-        // Test Points            
+        // Test Points
         let lowerLeft  = boundingBox.min;
         let lowerRight = new THREE.Vector3 (boundingBox.max.x, boundingBox.min.y, 0);
         let upperRight = boundingBox.max;
@@ -286,7 +287,7 @@ export class UnitTests {
         let upperRightIndices : THREE.Vector2 = new THREE.Vector2(lastRow, lastColumn);
         let upperLeftIndices  : THREE.Vector2 = new THREE.Vector2(lastRow, firstColumn);
         let centerIndices     : THREE.Vector2 = new THREE.Vector2(centerRow, centerColumn);
-        
+
         let index   : number
         let indices : THREE.Vector2;
 
@@ -325,5 +326,5 @@ export class UnitTests {
         index = depthBuffer.getModelVertexIndex(center, boundingBox);
         assert.equal(index, centerIndex);
     }
-} 
+}
 

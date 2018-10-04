@@ -1,6 +1,6 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
@@ -41,23 +41,23 @@ export class Loader {
      * @class Loader
      * @constructor
      */
-    constructor() {  
+    constructor() {
         this._logger = Services.defaultLogger;
     }
 
     /**
      * @description Loads a mesh based on the model type.
      * @param {FileModel} fileModel Model to load.
-     * @returns {Promise<THREE.Group>} 
+     * @returns {Promise<THREE.Group>}
      */
     async loadModelAsync (fileModel : FileModel) : Promise<THREE.Group> {
-       
+
         // Model3d
         if (fileModel instanceof Model3d)
             return await this.loadModel3dAsync(fileModel);
 
         // Mesh
-        if (fileModel instanceof Mesh)            
+        if (fileModel instanceof Mesh)
             return await this.loadMeshAsync(fileModel);
 
         this._logger.addErrorMessage(`Logger: invalid FileModel type = ${typeof(fileModel)}`);
@@ -66,7 +66,7 @@ export class Loader {
     /**
      * @description Loads a mesh from a Model3d.
      * @param {Model3d} model Model to load.
-     * @returns {Promise<THREE.Group>} 
+     * @returns {Promise<THREE.Group>}
      */
     async loadModel3dAsync (model : Model3d) : Promise<THREE.Group> {
 
@@ -80,14 +80,14 @@ export class Loader {
             default:
                 this._logger.addErrorMessage(`Logger: invalid Model3d type = ${model.format}`);
                 break;
-        }       
+        }
         return modelGroup;
     }
 
     /**
      * @description Loads a mesh from a Mesh.
      * @param {Mesh} mesh Mesh to load.
-     * @returns {Promise<THREE.Group>} 
+     * @returns {Promise<THREE.Group>}
      */
     async loadMeshAsync (mesh : Mesh) : Promise<THREE.Group> {
 
@@ -99,10 +99,10 @@ export class Loader {
         let depthBuffer = mesh.depthBuffer;
         let meshParameters : MeshGenerateParameters = {
             name : mesh.name
-        }    
+        }
         let bufferExtents = new THREE.Vector2(depthBuffer.width, depthBuffer.height);
-        let meshExtents : THREE.Vector2 = CameraHelper.getNearPlaneExtents(depthBuffer.camera.viewCamera);
-        
+        let meshExtents : THREE.Vector2 = depthBuffer.camera.getNearPlaneExtents()
+
         // NOOP default transform
         let transformer = (value : number) => {return value;};
 
@@ -137,7 +137,7 @@ export class Loader {
     /**
      * @description Loads a model based on the model name and path embedded in the HTML page.
      * @param {FileModel} fileModel Model to load.
-     * @returns {Promise<THREE.Group>} 
+     * @returns {Promise<THREE.Group>}
      */
     async loadOBJModelAsync (fileModel : FileModel) : Promise<THREE.Group> {
 
@@ -158,8 +158,8 @@ export class Loader {
     /**
      * @description Loads a parametric test model.
      * @param modelType Test model type (Sphere, Box, etc.)
-     * @returns {Promise<THREE.Group>} 
-     */    
+     * @returns {Promise<THREE.Group>}
+     */
     async loadParametricTestModel (modelType : TestModel) : Promise<THREE.Group>{
 
         let loader = new TestModelLoader();

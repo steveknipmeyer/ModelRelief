@@ -1,12 +1,12 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
 import * as THREE                                     from 'three';
-import { Camera }                                     from 'Camera';
+import { BaseCamera, IThreeBaseCamera }                                 from 'BaseCamera';
 import { CameraHelper }                               from 'CameraHelper';
 import { CameraControls, CameraControlsOptions }      from 'CameraControls';
 import { EventManager }                               from 'EventManager';
@@ -34,25 +34,25 @@ export class Viewer {
 
     _model                  : FileModel                 = null;
     _scene                  : THREE.Scene               = null;
-    _root                   : THREE.Object3D            = null;      
-                                                        
+    _root                   : THREE.Object3D            = null;
+
     _renderer               : THREE.WebGLRenderer       = null;;
     _canvas                 : HTMLCanvasElement         = null;
     _width                  : number                    = 0;
     _height                 : number                    = 0;
 
-    _camera                 : THREE.PerspectiveCamera   = null;
+    _camera                 : IThreeBaseCamera          = null;
 
     _controls               : TrackballControls         = null;
-    
+
     /**
      * Creates an instance of Viewer.
      * @param {string} name Viewer name.
      * @param {string} modelCanvasId HTML element to host the viewer.
      */
-    constructor(name : string, modelCanvasId : string, model? : FileModel) { 
+    constructor(name : string, modelCanvasId : string, model? : FileModel) {
 
-        this._name         = name;                    
+        this._name         = name;
         this._eventManager = new EventManager();
         this._logger       = Services.defaultLogger;
 
@@ -73,7 +73,7 @@ export class Viewer {
      * @type {string}
      */
     get name() : string {
-        
+
         return this._name;
     }
 
@@ -93,21 +93,21 @@ export class Viewer {
 
         this._scene = value;
     }
-        
+
     /**
      * @description Gets the camera.
-     * @type {THREE.PerspectiveCamera}
+     * @type {IThreeBaseCamera}
      */
-    get camera() : THREE.PerspectiveCamera{
-        
+    get camera() : IThreeBaseCamera{
+
         return this._camera;
     }
 
     /**
      * @description Sets the camera.
      */
-    set camera(camera : THREE.PerspectiveCamera) {
-        
+    set camera(camera : IThreeBaseCamera) {
+
         this._camera = camera;
         this.camera.name = this.name;
         this.initializeInputControls();
@@ -166,7 +166,7 @@ export class Viewer {
 
         let aspectRatio : number = this._width / this._height;
         return aspectRatio;
-    } 
+    }
 
     /**
      * @description Gets the DOM Id of the Viewer parent container.
@@ -174,10 +174,10 @@ export class Viewer {
      * @type {string}
      */
     get containerId() : string {
-        
+
         let parentElement : HTMLElement = this._canvas.parentElement;
         return parentElement.id;
-    } 
+    }
 
     /**
      * @description Gets the Event Manager.
@@ -190,7 +190,7 @@ export class Viewer {
     }
 //#endregion
 
-//#region Initialization    
+//#region Initialization
     /**
      * @description Adds a test sphere to a scene.
      */
@@ -226,12 +226,12 @@ export class Viewer {
         this._renderer.autoClear = true;
         this._renderer.setClearColor(0x000000);
     }
-        
+
     /**
      * @description Initialize the viewer camera
      */
     initializeCamera() {
-        this.camera = CameraHelper.getStandardViewCamera(StandardView.Top, this.aspectRatio, this.modelGroup);       
+        this.camera = CameraHelper.getStandardViewCamera(StandardView.Top, this, this.modelGroup);
     }
 
     /**
@@ -271,7 +271,7 @@ export class Viewer {
      */
     initializeUIControls(cameraControlsOptions? : CameraControlsOptions) {
 
-        this.cameraControls = new CameraControls(this, cameraControlsOptions);       
+        this.cameraControls = new CameraControls(this, cameraControlsOptions);
     }
 
     /**
@@ -288,38 +288,38 @@ export class Viewer {
             switch (keyCode) {
 
                 case "B".charCodeAt(0):
-                case "B".charCodeAt(0):  
-                    standardView = StandardView.Bottom;    
+                case "B".charCodeAt(0):
+                    standardView = StandardView.Bottom;
                     break;
                 case "F".charCodeAt(0):
-                case "f".charCodeAt(0):  
-                    standardView = StandardView.Front;    
+                case "f".charCodeAt(0):
+                    standardView = StandardView.Front;
                     break;
                 case "I".charCodeAt(0):
-                case "i".charCodeAt(0):  
-                    standardView = StandardView.Isometric;    
+                case "i".charCodeAt(0):
+                    standardView = StandardView.Isometric;
                     break;
                 case "L".charCodeAt(0):
-                case "l".charCodeAt(0):  
-                    standardView = StandardView.Left;    
+                case "l".charCodeAt(0):
+                    standardView = StandardView.Left;
                     break;
                 case "R".charCodeAt(0):
-                case "r".charCodeAt(0):  
-                    standardView = StandardView.Right;    
+                case "r".charCodeAt(0):
+                    standardView = StandardView.Right;
                     break;
                 case "T".charCodeAt(0):
-                case "t".charCodeAt(0):  
-                    standardView = StandardView.Top;    
+                case "t".charCodeAt(0):
+                    standardView = StandardView.Top;
                     break;
                 case "X".charCodeAt(0):
-                case "x".charCodeAt(0):  
-                    standardView = StandardView.Back;    
+                case "x".charCodeAt(0):
+                    standardView = StandardView.Back;
                     break;
 
                 default:
-                    return;                    
+                    return;
             }
-            this.camera = CameraHelper.getStandardViewCamera(standardView, this.aspectRatio, this.modelGroup);
+            this.camera = CameraHelper.getStandardViewCamera(standardView, this, this.modelGroup);
             this.cameraControls.settings.standardView = standardView;
     }, false);
     }
@@ -347,9 +347,9 @@ export class Viewer {
      * @description Removes all scene objects
      */
     clearAllAssests() {
-        
+
         Graphics.removeObjectChildren(this._root, false);
-    } 
+    }
 
     /**
      * @description Creates the root object in the scene
@@ -362,14 +362,14 @@ export class Viewer {
     }
 //#endregion
 
-//#region Camera  
+//#region Camera
     /**
      * @description Sets the view camera properties to the given settings.
      * @param {StandardView} view Camera settings to apply.
      */
     setCameraToStandardView(view : StandardView) {
 
-        let standardViewCamera = CameraHelper.getStandardViewCamera(view, this.aspectRatio, this.modelGroup);
+        let standardViewCamera = CameraHelper.getStandardViewCamera(view, this, this.modelGroup);
         this.camera = standardViewCamera;
 
         this.cameraControls.synchronizeCameraSettings(view);
@@ -390,8 +390,9 @@ export class Viewer {
      * @description Updates the scene camera to match the new window size
      */
     updateCameraOnWindowResize() {
+        if (this.camera instanceof THREE.PerspectiveCamera)
+            this.camera.aspect = this.aspectRatio;
 
-        this.camera.aspect = this.aspectRatio;
         this.camera.updateProjectionMatrix();
     }
 
@@ -436,5 +437,5 @@ export class Viewer {
         this.renderWebGL();
     }
 //#endregion
-} 
+}
 

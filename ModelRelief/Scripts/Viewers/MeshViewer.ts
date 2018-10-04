@@ -1,6 +1,6 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
@@ -8,19 +8,14 @@
 import * as THREE                   from 'three';
 import * as Dto                     from "DtoModels";
 
-import {Camera}                     from 'Camera';
-import {DepthBuffer}                from 'DepthBuffer';
 import {FileModel}                  from 'FileModel';
 import {Graphics}                   from 'Graphics';
-import {StandardView}               from 'ICamera';
-import {ILogger, HTMLLogger}        from 'Logger';
-import {MathLibrary}                from 'Math';
 import {Mesh}                       from 'Mesh';
 import {Mesh3d}                     from 'Mesh3d';
 import {MeshViewerControls}         from 'MeshViewerControls';
 import {Services}                   from 'Services';
 import {Viewer}                     from 'Viewer';
-  
+
 /**
  * @description Graphics viewer for a Mesh.
  * @export
@@ -41,7 +36,7 @@ export class MeshViewer extends Viewer {
      * @param {FileModel} model Model to load.
      */
     constructor(name : string, previewCanvasId : string, model? : FileModel) {
-        
+
         super(name, previewCanvasId, model);
 
         this.mesh = model as Mesh;
@@ -54,7 +49,7 @@ export class MeshViewer extends Viewer {
     /**
      * @description Populate scene.
      */
-    populateScene () {       
+    populateScene () {
 
         let height = 1;
         let width  = 1;
@@ -79,16 +74,16 @@ export class MeshViewer extends Viewer {
 
     /**
      * @description UI controls initialization.
-     */ 
+     */
     initializeUIControls() {
 
         let cameraControlOptions = {
-            cameraHelper     : false, 
-            fieldOfView      : false, 
+            cameraHelper     : false,
+            fieldOfView      : false,
             clippingControls : false,
         }
         super.initializeUIControls(cameraControlOptions);
         this._meshViewerControls = new MeshViewerControls(this);
-    }   
+    }
 //#endregion
 }

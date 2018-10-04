@@ -2,28 +2,34 @@
 #### Commit Notes
 
 #### Short Term
-    Orthographic Camera
-        Add the new orthographic properties to the FE UI.
+    Remove unused imports.
 
-        Replace contravariant references to PerspectiveCamera with THREE.Camera.
+    Review
+        instanceof THREE.PerspectiveCamera.
+        new THREE.PerspectiveCamera
+        THREE.PerspectiveCamera
 
-        Convert Camera to the base class.
-            Introduce OrthographicCamera and PerspectiveCamera.
-            Move specialized CameraHelper methods to virtual methods.
+    BaseCamera
+        Should it have an isPerspective property?
+            This is an alternative to testing:
+                 BaseCamera.viewCamera instanceof THREE.PerspectiveCamera.
 
-        Can the Schema/JSON layout of Camera remain the same?
-            UI
-                Can the Camera HTML views be conditioned on Orthographic and Perpspective?
-            Structure
-                perspective: boolean
-                left, right, top, bottom: number
+    Controls
+        Add OrthographicTrackballControls to project.
 
+    Viewer
+        Initialize both Perspective and Orthographic cameras.
+
+    Tests
+        Test SaveRelief (UnitTests.comparePerspectiveCameras).
+        UnitTests.ts
+        CaemraTests.ts
+
+    CameraControls
         Update the CameraControls to include the orthographic properties.
 
-        CameraHelper
-            getDefaultCamera: Add a parameter for Orthographic or Perspective.
 
-        Does TypeScript have default parameter values?
+
 
     Silhouette
         https://stackoverflow.com/questions/17161088/how-to-refine-or-blur-or-smooth-just-the-edges

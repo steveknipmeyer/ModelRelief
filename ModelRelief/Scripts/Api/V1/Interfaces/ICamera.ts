@@ -1,6 +1,6 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
@@ -34,11 +34,10 @@ export enum StandardView {
 export interface ICamera extends IModel {
 
     id?: number;
-    name?: string;   
+    name?: string;
     description?: string;
+    isPerspective?: boolean;
 
-    fieldOfView?: number;
-    aspectRatio?: number;    
     near?: number;
     far?: number;
 
@@ -66,7 +65,17 @@ export interface ICamera extends IModel {
     upX?: number;
     upY?: number;
     upZ?: number;
-           
+
+    // Perspective
+    fieldOfView?: number;
+    aspectRatio?: number;
+
+    // Orthographic
+    left?: number;
+    right?: number;
+    top?: number;
+    bottom?: number;
+
     // Navigation Properties
     projectId?: number;
     project?: IProject;

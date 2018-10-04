@@ -1,18 +1,20 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
 import * as THREE        from 'three'
 
-import { Camera, ClippingPlanes} from 'Camera'
-import { DepthBufferFactory }    from 'DepthBufferFactory'
-import { Graphics }              from 'Graphics'
-import {StandardView}            from "ICamera"
-import { Services }              from 'Services'
-import { StopWatch }             from 'StopWatch'
+import { BaseCamera, ClippingPlanes, IThreeBaseCamera} from 'BaseCamera'
+import { DepthBufferFactory }                          from 'DepthBufferFactory'
+import { Graphics }                                    from 'Graphics'
+import {StandardView}                                  from "ICamera"
+import { OrthographicCamera}                           from 'OrthographicCamera'
+import { PerspectiveCamera}                            from 'PerspectiveCamera'
+import { Services }                                    from 'Services'
+import { Viewer }                                      from 'Viewer'
 
 /**
  * Camera
@@ -20,7 +22,7 @@ import { StopWatch }             from 'StopWatch'
  * @class
  */
 export class CameraHelper {
-    
+
     /**
      * @constructor
      */
@@ -28,83 +30,16 @@ export class CameraHelper {
     }
 
 //#region Clipping Planes
-
     /**
-     * Returns the extents of the near camera plane.
+     * @description Resets the clipping planes to the default values.
      * @static
-     * @param {THREE.PerspectiveCamera} camera Camera.
-     * @returns {THREE.Vector2} 
-     * @memberof Graphics
+     * @param {IThreeBaseCamera} camera Camera to update.
      */
-    static getNearPlaneExtents(camera : THREE.PerspectiveCamera) : THREE.Vector2 {
-        
-        let cameraFOVRadians = camera.fov * (Math.PI / 180);
-    
-        let nearHeight = 2 * Math.tan(cameraFOVRadians / 2) * camera.near;
-        let nearWidth  = camera.aspect * nearHeight;
-        let extents = new THREE.Vector2(nearWidth, nearHeight);
-        
-        return extents;       
+    static setDefaultClippingPlanes(camera : IThreeBaseCamera) {
+
+        camera.near = BaseCamera.DefaultNearClippingPlane;
+        camera.far  = BaseCamera.DefaultFarClippingPlane;
     }
-
-    /** 
-     * Finds the bounding clipping planes for the given model. 
-     * 
-     */
-    static getBoundingClippingPlanes(camera : THREE.PerspectiveCamera, model : THREE.Object3D) : ClippingPlanes{
-
-        let cameraMatrixWorldInverse: THREE.Matrix4 = camera.matrixWorldInverse;
-        let boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(model, cameraMatrixWorldInverse);
-
-        // The bounding box is world-axis aligned. 
-        // In View coordinates, the camera is at the origin.
-        // The bounding near plane is the maximum Z of the bounding box.
-        // The bounding far plane is the minimum Z of the bounding box.
-        let nearPlane = -boundingBoxView.max.z;
-        let farPlane = -boundingBoxView.min.z;
-
-        let clippingPlanes : ClippingPlanes = {
-
-            // adjust by epsilon to avoid clipping geometry at the near plane edge
-            near :  (1 - DepthBufferFactory.NearPlaneEpsilon) * nearPlane,
-            far  : farPlane
-        }
-        return clippingPlanes;
-    }  
-
-    /**
-     * @description Bounds the camera clipping planes to fit the model.
-     * @static
-     * @param {THREE.PerspectiveCamera} camera 
-     * @param {THREE.Group} modelGroup 
-     * @param {boolean} setNear Set the near plane to the model extents.
-     * @param {boolean} setFar Set the far plane to the model extents.
-     */
-    static boundClippingPlanes(camera: THREE.PerspectiveCamera, modelGroup : THREE.Group, setNear : boolean, setFar : boolean) {
-
-        let clippingPlanes: ClippingPlanes = this.getBoundingClippingPlanes(camera, modelGroup);
-        if (setNear)
-            camera.near = clippingPlanes.near;
-        if (setFar)            
-            camera.far  = clippingPlanes.far;
-
-        camera.updateProjectionMatrix();
-    }
-
-    /**
-     * @description Finalize the camera clipping planes to fit the model if they are at the default values..
-     * @static
-     * @param {THREE.PerspectiveCamera} camera Camera to optimize clipping planes.
-     * @param {THREE.Group} modelGroup Target model.
-     */
-    static finalizeClippingPlanes(camera: THREE.PerspectiveCamera, modelGroup : THREE.Group) {
-
-        let setNear = (camera.near === Camera.DefaultNearClippingPlane);
-        let setFar  = (camera.far === Camera.DefaultFarClippingPlane);
-
-        CameraHelper.boundClippingPlanes(camera, modelGroup, setNear, setFar);
-    }
-
 //#endregion
 
 //#region Settings
@@ -117,16 +52,16 @@ export class CameraHelper {
      */
     static getDefaultBoundingBox (model : THREE.Object3D) : THREE.Box3 {
 
-        let boundingBox = new THREE.Box3();       
-        if (model) 
-            boundingBox = Graphics.getBoundingBoxFromObject(model); 
+        let boundingBox = new THREE.Box3();
+        if (model)
+            boundingBox = Graphics.getBoundingBoxFromObject(model);
 
         if (!boundingBox.isEmpty())
             return boundingBox;
-        
+
         // unit sphere proxy
         let sphereProxy = Graphics.createSphereMesh(new THREE.Vector3(), 1);
-        boundingBox = Graphics.getBoundingBoxFromObject(sphereProxy);         
+        boundingBox = Graphics.getBoundingBoxFromObject(sphereProxy);
 
         return boundingBox;
     }
@@ -134,61 +69,82 @@ export class CameraHelper {
     /**
      * @description Updates the camera to fit the model in the current view.
      * @static
-     * @param {THREE.PerspectiveCamera} camera Camera to update.
+     * @param {IThreeBaseCamera} camera Camera to update.
      * @param {THREE.Group} modelGroup Model to fit.
-     * @returns {THREE.PerspectiveCamera} 
+     * @returns {IThreeBaseCamera}
      */
-    static getFitViewCamera (cameraTemplate : THREE.PerspectiveCamera, modelGroup : THREE.Group) : THREE.PerspectiveCamera { 
+    static getFitViewCamera (cameraTemplate : IThreeBaseCamera, modelGroup : THREE.Group) : IThreeBaseCamera {
 
-        let timerTag = Services.timer.mark('Camera.getFitViewCamera');              
+        let timerTag = Services.timer.mark('Camera.getFitViewCamera');
 
         let camera = cameraTemplate.clone(true);
         let boundingBoxWorld         : THREE.Box3    = CameraHelper.getDefaultBoundingBox(modelGroup);
         let cameraMatrixWorld        : THREE.Matrix4 = camera.matrixWorld;
         let cameraMatrixWorldInverse : THREE.Matrix4 = camera.matrixWorldInverse;
-        
+
         // Find camera position in View coordinates...
         let boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(modelGroup, cameraMatrixWorldInverse);
+        let halfBoundingBoxViewXExtents  = boundingBoxView.getSize().x / 2;
+        let halfBoundingBoxViewYExtents  = boundingBoxView.getSize().y / 2;
 
-        let verticalFieldOfViewRadians   : number = (camera.fov / 2) * (Math.PI / 180);
-        let horizontalFieldOfViewRadians : number = Math.atan(camera.aspect * Math.tan(verticalFieldOfViewRadians));       
+        // new postion of camera in View coordinats
+        let newCameraZView : number;
 
-        let cameraZVerticalExtents   : number = (boundingBoxView.getSize().y / 2) / Math.tan (verticalFieldOfViewRadians);       
-        let cameraZHorizontalExtents : number = (boundingBoxView.getSize().x / 2) / Math.tan (horizontalFieldOfViewRadians);       
-        let cameraZ = Math.max(cameraZVerticalExtents, cameraZHorizontalExtents);
+        // Perspective
+        if (camera instanceof THREE.PerspectiveCamera) {
+            let verticalFieldOfViewRadians   : number = (camera.fov / 2) * (Math.PI / 180);
+            let horizontalFieldOfViewRadians : number = Math.atan(camera.aspect * Math.tan(verticalFieldOfViewRadians));
 
-        // preserve XY; set Z to include extents
-        let cameraPositionView = camera.position.applyMatrix4(cameraMatrixWorldInverse);
-        let positionView = new THREE.Vector3(cameraPositionView.x, cameraPositionView.y, boundingBoxView.max.z + cameraZ);
-        
-        // Now, transform back to World coordinates...
-        let positionWorld = positionView.applyMatrix4(cameraMatrixWorld);
+            let cameraZVerticalExtents   : number = halfBoundingBoxViewYExtents / Math.tan (verticalFieldOfViewRadians);
+            let cameraZHorizontalExtents : number = halfBoundingBoxViewXExtents / Math.tan (horizontalFieldOfViewRadians);
+            newCameraZView = Math.max(cameraZVerticalExtents, cameraZHorizontalExtents);
 
-        camera.position.copy (positionWorld);
+            // preserve XY; set Z to include extents
+            let previousCameraPositionView = camera.position.applyMatrix4(cameraMatrixWorldInverse);
+            let newCameraPositionView = new THREE.Vector3(previousCameraPositionView.x, previousCameraPositionView.y, boundingBoxView.max.z + newCameraZView);
+
+            // Now, transform back to World coordinates...
+            let positionWorld = newCameraPositionView.applyMatrix4(cameraMatrixWorld);
+
+            camera.position.copy (positionWorld);
+        }
+
+        // Orthographic
+        if (camera instanceof THREE.OrthographicCamera) {
+            // For orthographic cameras, Z has no effect on the view scale.
+            // Instead, adjust the clipping planes to fit the model bounding box.
+
+            camera.left   = -halfBoundingBoxViewXExtents;
+            camera.right  = +halfBoundingBoxViewXExtents;
+            camera.top    = +halfBoundingBoxViewYExtents;
+            camera.bottom = -halfBoundingBoxViewYExtents;
+        }
+
         camera.lookAt(boundingBoxWorld.getCenter());
 
         // force camera matrix to update; matrixAutoUpdate happens in render loop
         camera.updateMatrixWorld(true);
         camera.updateProjectionMatrix();
 
-        Services.timer.logElapsedTime(timerTag);       
+        Services.timer.logElapsedTime(timerTag);
         return camera;
     }
-        
+
     /**
      * @description Returns the camera settings to fit the model in a standard view.
      * @static
      * @param {Camera.StandardView} view Standard view (Top, Left, etc.)
+     * @param {Viewer} Target view.
      * @param {THREE.Object3D} modelGroup Model to fit.
-     * @returns {THREE.PerspectiveCamera} 
+     * @returns {IThreeBaseCamera}
      */
-    static getStandardViewCamera (view: StandardView, viewAspect : number, modelGroup : THREE.Group) : THREE.PerspectiveCamera { 
+    static getStandardViewCamera (view: StandardView, viewer : Viewer, modelGroup : THREE.Group) : IThreeBaseCamera {
 
-        let timerTag = Services.timer.mark('Camera.getStandardView');              
-        
-        let camera = CameraHelper.getDefaultCamera(viewAspect);               
+        let timerTag = Services.timer.mark('Camera.getStandardView');
+
+        let camera = CameraHelper.getDefaultCamera(viewer);
         let boundingBox = Graphics.getBoundingBoxFromObject(modelGroup);
-        
+
         let centerX = boundingBox.getCenter().x;
         let centerY = boundingBox.getCenter().y;
         let centerZ = boundingBox.getCenter().z;
@@ -199,8 +155,8 @@ export class CameraHelper {
         let maxX = boundingBox.max.x;
         let maxY = boundingBox.max.y;
         let maxZ = boundingBox.max.z;
-        
-        switch (view) {           
+
+        switch (view) {
             case StandardView.Front: {
                 camera.position.copy (new THREE.Vector3(centerX,  centerY, maxZ));
                 camera.up.set(0, 1, 0);
@@ -236,7 +192,7 @@ export class CameraHelper {
                 camera.position.copy (new THREE.Vector3(side,  side, side));
                 camera.up.set(-1, 1, -1);
                 break;
-            }       
+            }
         }
         // Force orientation before Fit View calculation
         camera.lookAt(boundingBox.getCenter());
@@ -252,49 +208,29 @@ export class CameraHelper {
     }
 
     /**
-     * @description Resets the clipping planes to the default values.
+     * @description Creates a default scene camera.
+     * @static
+     * @param {Viewer} Target view.
+     * @returns {IThreeBaseCamera}
      */
-    static setDefaultClippingPlanes(camera : THREE.PerspectiveCamera) {
+    static getDefaultCamera (viewer : Viewer) : IThreeBaseCamera {
 
-        camera.near = Camera.DefaultNearClippingPlane;
-        camera.far  = Camera.DefaultFarClippingPlane;
-    }
+        // default matches existing camera if it exists
+        let isPerspective : boolean = viewer.camera ? (viewer.camera instanceof THREE.PerspectiveCamera) : true;
 
-    /**
-     * Creates a default scene camera.
-     * @param viewAspect View aspect ratio.
-     */
-    static getDefaultCamera (viewAspect : number) : THREE.PerspectiveCamera {
-        
-        let defaultCamera = new THREE.PerspectiveCamera();
+        let defaultCamera = isPerspective ?
+            new THREE.PerspectiveCamera(PerspectiveCamera.DefaultFieldOfView, viewer.aspectRatio, BaseCamera.DefaultNearClippingPlane, BaseCamera.DefaultFarClippingPlane) :
+            new THREE.OrthographicCamera(OrthographicCamera.DefaulLeftPlane, OrthographicCamera.DefaulRightPlane, OrthographicCamera.DefaulTopPlane, OrthographicCamera.DefaulBottomPlane,
+                                         BaseCamera.DefaultNearClippingPlane, BaseCamera.DefaultFarClippingPlane);
+
         defaultCamera.position.copy (new THREE.Vector3 (0, 0, 0));
         defaultCamera.lookAt(new THREE.Vector3(0, 0, -1));
-        
-        this.setDefaultClippingPlanes(defaultCamera);
-        defaultCamera.fov    = Camera.DefaultFieldOfView;
-        defaultCamera.aspect = viewAspect;
 
         // force camera matrix to update; matrixAutoUpdate happens in render loop
-        defaultCamera.updateMatrixWorld(true);       
+        defaultCamera.updateMatrixWorld(true);
         defaultCamera.updateProjectionMatrix;
 
         return defaultCamera;
-    } 
-        
-    /**
-     * Returns the default scene camera.
-     * Creates a default if the current camera has not been constructed.
-     * @param camera Active camera (possibly null).
-     * @param viewAspect View aspect ratio.
-     */
-    static getSceneCamera (camera: THREE.PerspectiveCamera, viewAspect : number) : THREE.PerspectiveCamera {
-
-        if (camera)
-            return camera;
-
-        let defaultCamera = CameraHelper.getDefaultCamera(viewAspect);
-        return defaultCamera;
-    } 
-
-//#endregion 
+    }
+//#endregion
 }
