@@ -2,6 +2,10 @@
 #### Commit Notes
 
 #### Short Term
+    Circular Dependencies
+        https://legacy.gitbook.com/book/alm-tools/alm/details
+        https://medium.com/visual-development/how-to-fix-nasty-circular-dependency-issues-once-and-for-all-in-javascript-typescript-a04c987cf0de
+
     Remove unused imports.
 
     Review
@@ -114,6 +118,7 @@ When the view camera is interactively changed, it should invalidate the Standard
 - ASP.NET Core in Action
 
 #####  Lambda
+    npm i alm -g
 
 #####  Ubuntu
     Ignore line endings in git source.

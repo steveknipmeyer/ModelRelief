@@ -146,7 +146,7 @@ Desktop.ini
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
-# Mac 
+# Mac
 .DS_Store
 
 # HTML5.Assist
@@ -175,6 +175,9 @@ node_modules/
 #################
 ## ModelRelief
 #################
+## ALM
+.alm
+
 ## Python Virtual Environments
 mrenv
 devenv

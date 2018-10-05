@@ -8,11 +8,10 @@
 import * as THREE        from 'three'
 
 import { BaseCamera, ClippingPlanes, IThreeBaseCamera} from 'BaseCamera'
+import { CameraSettings }                              from 'Camerasettings'
 import { DepthBufferFactory }                          from 'DepthBufferFactory'
 import { Graphics }                                    from 'Graphics'
 import {StandardView}                                  from "ICamera"
-import { OrthographicCamera}                           from 'OrthographicCamera'
-import { PerspectiveCamera}                            from 'PerspectiveCamera'
 import { Services }                                    from 'Services'
 import { Viewer }                                      from 'Viewer'
 
@@ -219,8 +218,8 @@ export class CameraHelper {
         let isPerspective : boolean = viewer.camera ? (viewer.camera instanceof THREE.PerspectiveCamera) : true;
 
         let defaultCamera = isPerspective ?
-            new THREE.PerspectiveCamera(PerspectiveCamera.DefaultFieldOfView, viewer.aspectRatio, BaseCamera.DefaultNearClippingPlane, BaseCamera.DefaultFarClippingPlane) :
-            new THREE.OrthographicCamera(OrthographicCamera.DefaulLeftPlane, OrthographicCamera.DefaulRightPlane, OrthographicCamera.DefaulTopPlane, OrthographicCamera.DefaulBottomPlane,
+            new THREE.PerspectiveCamera(CameraSettings.DefaultFieldOfView, viewer.aspectRatio, BaseCamera.DefaultNearClippingPlane, BaseCamera.DefaultFarClippingPlane) :
+            new THREE.OrthographicCamera(CameraSettings.DefaultLeftPlane, CameraSettings.DefaultRightPlane, CameraSettings.DefaultTopPlane, CameraSettings.DefaultBottomPlane,
                                          BaseCamera.DefaultNearClippingPlane, BaseCamera.DefaultFarClippingPlane);
 
         defaultCamera.position.copy (new THREE.Vector3 (0, 0, 0));

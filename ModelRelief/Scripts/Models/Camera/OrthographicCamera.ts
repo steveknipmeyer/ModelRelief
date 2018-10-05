@@ -27,12 +27,6 @@ import { StopWatch }                    from 'StopWatch'
  */
 export class OrthographicCamera extends BaseCamera {
 
-    static FrustrumPlaneOffset : number = 100;
-    static DefaulLeftPlane : number     = -OrthographicCamera.FrustrumPlaneOffset;
-    static DefaulRightPlane : number    = +OrthographicCamera.FrustrumPlaneOffset;
-    static DefaulTopPlane : number      = +OrthographicCamera.FrustrumPlaneOffset;
-    static DefaulBottomPlane : number   = -OrthographicCamera.FrustrumPlaneOffset;
-
     viewCamera : THREE.OrthographicCamera;
 
     /**

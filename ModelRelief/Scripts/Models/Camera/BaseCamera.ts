@@ -9,14 +9,13 @@ import * as Dto          from 'DtoModels'
 import * as THREE        from 'three'
 
 import { CameraHelper }                 from 'CameraHelper'
+import { CameraSettings }               from 'Camerasettings'
 import { ICamera, StandardView }        from 'ICamera'
 import { DepthBufferFactory }           from 'DepthBufferFactory'
 import { Graphics }                     from 'Graphics'
 import { HttpLibrary, ServerEndPoints}  from 'Http'
 import { IModel }                       from 'IModel'
 import { Model }                        from 'Model'
-import {OrthographicCamera}             from 'OrthographicCamera'
-import {PerspectiveCamera}              from 'PerspectiveCamera'
 import { Project }                      from 'Project'
 import { Services }                     from 'Services'
 import { StopWatch }                    from 'StopWatch'
@@ -244,15 +243,15 @@ export class BaseCamera extends Model {
             scale           : scale,
             up              : up,
 
-            // Perspective
-            fieldOfView     : isPerspective? (<THREE.PerspectiveCamera>this.viewCamera).fov : PerspectiveCamera.DefaultFieldOfView,
+            // Perpsective
+            fieldOfView     : isPerspective? (<THREE.PerspectiveCamera>this.viewCamera).fov : CameraSettings.DefaultFieldOfView,
             aspectRatio     : isPerspective? (<THREE.PerspectiveCamera>this.viewCamera).aspect : 1.0,
 
             // Orthographic
-            left            : isOrthographic? (<THREE.OrthographicCamera>this.viewCamera).left   : OrthographicCamera.DefaulLeftPlane,
-            right           : isOrthographic? (<THREE.OrthographicCamera>this.viewCamera).right  : OrthographicCamera.DefaulRightPlane,
-            top             : isOrthographic? (<THREE.OrthographicCamera>this.viewCamera).top    : OrthographicCamera.DefaulTopPlane,
-            bottom          : isOrthographic? (<THREE.OrthographicCamera>this.viewCamera).bottom : OrthographicCamera.DefaulBottomPlane,
+            left            : isOrthographic? (<THREE.OrthographicCamera>this.viewCamera).left   : CameraSettings.DefaultLeftPlane,
+            right           : isOrthographic? (<THREE.OrthographicCamera>this.viewCamera).right  : CameraSettings.DefaultRightPlane,
+            top             : isOrthographic? (<THREE.OrthographicCamera>this.viewCamera).top    : CameraSettings.DefaultTopPlane,
+            bottom          : isOrthographic? (<THREE.OrthographicCamera>this.viewCamera).bottom : CameraSettings.DefaultBottomPlane,
 
             projectId       : this.project ? this.project.id : undefined,
         });

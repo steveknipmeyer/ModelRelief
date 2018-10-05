@@ -27,8 +27,6 @@ import { StopWatch }                    from 'StopWatch'
  */
 export class PerspectiveCamera extends BaseCamera {
 
-    static DefaultFieldOfView  : number =   37;       // 35mm vertical : https://www.nikonians.org/reviews/fov-tables
-
     viewCamera : THREE.PerspectiveCamera;
 
     /**
