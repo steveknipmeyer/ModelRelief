@@ -6,15 +6,15 @@
 "use strict";
 
 import * as THREE                                     from 'three';
-import { BaseCamera, IThreeBaseCamera }                                 from 'BaseCamera';
+
 import { CameraHelper }                               from 'CameraHelper';
 import { CameraControls, CameraControlsOptions }      from 'CameraControls';
 import { EventManager }                               from 'EventManager';
 import { FileModel }                                  from 'FileModel';
 import { Graphics, ObjectNames }                      from 'Graphics';
 import { StandardView }                               from 'ICamera';
+import { IThreeBaseCamera }                           from 'IThreeBaseCamera';
 import { ILogger }                                    from 'Logger';
-import { Materials}                                   from 'Materials';
 import { Services }                                   from 'Services';
 import { TrackballControls }                          from 'TrackballControls';
 
@@ -231,7 +231,7 @@ export class Viewer {
      * @description Initialize the viewer camera
      */
     initializeCamera() {
-        this.camera = CameraHelper.getStandardViewCamera(StandardView.Top, this, this.modelGroup);
+        this.camera = CameraHelper.getStandardViewCamera(StandardView.Top, this.camera, this.modelGroup);
     }
 
     /**
@@ -319,7 +319,7 @@ export class Viewer {
                 default:
                     return;
             }
-            this.camera = CameraHelper.getStandardViewCamera(standardView, this, this.modelGroup);
+            this.camera = CameraHelper.getStandardViewCamera(standardView, this.camera, this.modelGroup);
             this.cameraControls.settings.standardView = standardView;
     }, false);
     }
@@ -369,7 +369,7 @@ export class Viewer {
      */
     setCameraToStandardView(view : StandardView) {
 
-        let standardViewCamera = CameraHelper.getStandardViewCamera(view, this, this.modelGroup);
+        let standardViewCamera = CameraHelper.getStandardViewCamera(view, this.camera, this.modelGroup);
         this.camera = standardViewCamera;
 
         this.cameraControls.synchronizeCameraSettings(view);

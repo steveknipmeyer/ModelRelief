@@ -1,25 +1,22 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE  from 'three' 
+import * as THREE  from 'three'
 import * as dat    from 'dat-gui'
 
 import {ElementAttributes, ElementIds}  from "Html"
-import {ILogger, ConsoleLogger}         from 'Logger'
-import {Graphics}                       from "Graphics"
 import {MeshViewer}                     from "MeshViewer"
-import {Services}                       from 'Services'
 
 /**
  * @class
  * MeshViewer Settings
  */
 class MeshViewerSettings {
-   
+
     constructor() {
 
     }
@@ -27,7 +24,7 @@ class MeshViewerSettings {
 
 /**
  * MeshViewer UI Controls.
- */    
+ */
 export class MeshViewerControls {
 
     _meshViewer          : MeshViewer;                     // associated viewer
@@ -37,7 +34,7 @@ export class MeshViewerControls {
      * @class MeshViewerControls
      * @constructor
      */
-    constructor(meshViewer : MeshViewer) {  
+    constructor(meshViewer : MeshViewer) {
 
         this._meshViewer = meshViewer;
 
@@ -63,15 +60,15 @@ export class MeshViewerControls {
             width: ElementAttributes.DatGuiWidth
         });
         gui.domElement.id = ElementIds.MeshViewerControls;
-        
+
         let containerDiv = document.getElementById(this._meshViewer.containerId);
         containerDiv.appendChild(gui.domElement);
 
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
-        //                                                                   MeshViewer                                                                 //      
+        //                                                                   MeshViewer                                                                 //
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         let meshViewerOptions = gui.addFolder('MeshViewer Options');
 
         meshViewerOptions.open();
-    }    
+    }
 }

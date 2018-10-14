@@ -5,25 +5,20 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto                             from 'DtoModels' ;
 import * as THREE                           from 'three';
 
-import {CameraHelper}                       from 'CameraHelper'
-import {DepthBuffer}                        from 'DepthBuffer'
-import {Graphics}                           from 'Graphics';
-import {StandardView}                       from 'ICamera';
 import {Model3dFormat}                      from 'IModel3d';
 import {FileModel}                          from 'FileModel'
-import {ILogger, ConsoleLogger}             from 'Logger';
+import {MeshFormat}                         from 'IMesh';
+import {ILogger}                            from 'Logger';
 import {Mesh}                               from 'Mesh';
 import {MeshGenerateParameters}             from 'Mesh3d';
+import {Model3d}                            from 'Model3d';
 import {OBJLoader}                          from 'OBJLoader';
 import {Services}                           from 'Services';
 import {SinglePrecisionLoader}              from 'SinglePrecisionLoader';
 import {TestModelLoader, TestModel}         from 'TestModelLoader';
-import {Viewer}                             from 'Viewer';
-import {MeshFormat} from 'Api/V1/Interfaces/IMesh';
-import {Model3d} from 'Models/Model3d/Model3d';
+
 
 const testModelColor = '#558de8';
 

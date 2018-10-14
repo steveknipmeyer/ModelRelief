@@ -2,11 +2,20 @@
 #### Commit Notes
 
 #### Short Term
+
     Circular Dependencies
-        https://legacy.gitbook.com/book/alm-tools/alm/details
         https://medium.com/visual-development/how-to-fix-nasty-circular-dependency-issues-once-and-for-all-in-javascript-typescript-a04c987cf0de
+        Madge
+            https://github.com/pahen/madge
+        ALM
+            https://legacy.gitbook.com/book/alm-tools/alm/details
+
+    Configure tslint.
+        https://palantir.github.io/tslint/usage/configuration/
 
     Remove unused imports.
+
+    Refactor imports to use paths.
 
     Review
         instanceof THREE.PerspectiveCamera.
@@ -65,6 +74,8 @@
         Review ArtCAM.
 
     Lambda
+        Install madge.
+            npm -g install madge
         Install CMake VSCode extensions.
 
     Runtime Settings

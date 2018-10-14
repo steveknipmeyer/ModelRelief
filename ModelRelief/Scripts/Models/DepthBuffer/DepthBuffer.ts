@@ -5,24 +5,17 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto                 from 'DtoModels'
-import * as THREE               from 'three'
+import * as Dto                 from "DtoModels";
+import * as THREE               from "three";
 
-import { BaseCamera }                   from 'BaseCamera'
-import { CameraHelper }                 from 'CameraHelper'
-import { assert }                       from 'chai'
-import { HttpLibrary, ServerEndPoints } from 'Http'
-import { GeneratedFileModel }           from 'GeneratedFileModel'
-import { Graphics }                     from 'Graphics'
-import { DepthBufferFormat }            from 'IDepthBuffer';
-import { IGeneratedFileModel }          from 'IGeneratedFileModel';
-import { IModel }                       from 'IModel'
-import { MathLibrary }                  from 'Math'
-import { Mesh }                         from 'Mesh'
-import { Model3d }                      from 'Model3d'
-import { Project }                      from 'Project'
-import { Services }                     from 'Services'
-import { StopWatch }                    from 'StopWatch'
+import { BaseCamera }                   from "BaseCamera";
+import { CameraFactory }                from "CameraFactory";
+import { assert }                       from "chai";
+import { GeneratedFileModel }           from "GeneratedFileModel";
+import { DepthBufferFormat }            from "IDepthBuffer";
+import { IGeneratedFileModel }          from "IGeneratedFileModel";
+import { Model3d }                      from "Model3d";
+import { Project }                      from "Project";
 
 /**
  * @description Represents a depth buffer.
@@ -107,7 +100,7 @@ export class DepthBuffer extends GeneratedFileModel {
 
         depthBuffer.project = await Project.fromIdAsync(dtoDepthBuffer.projectId);
         depthBuffer.model3d = await Model3d.fromIdAsync(dtoDepthBuffer.model3dId);
-        depthBuffer.camera  = await BaseCamera.fromIdAsync(dtoDepthBuffer.cameraId);
+        depthBuffer.camera  = await CameraFactory.Construct(dtoDepthBuffer.cameraId);
 
         return depthBuffer;
     }
@@ -212,8 +205,7 @@ export class DepthBuffer extends GeneratedFileModel {
     get minimumNormalized () : number{
 
         let minimumNormalized : number = Number.MAX_VALUE;
-        for (let index: number = 0; index < this.depths.length; index++)
-            {
+        for (let index: number = 0; index < this.depths.length; index++) {
             let depthValue : number = this.depths[index];
 
             if (depthValue < minimumNormalized)
@@ -269,7 +261,7 @@ export class DepthBuffer extends GeneratedFileModel {
      * @readonly
      * @type {number}
      */
-    get rangeNormalized() : number{
+    get rangeNormalized() : number {
 
         let depthNormalized : number = this.maximumNormalized - this.minimumNormalized;
 

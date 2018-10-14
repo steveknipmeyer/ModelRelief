@@ -5,15 +5,13 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE        from 'three'
+import * as THREE               from 'three'
 
-import { BaseCamera, ClippingPlanes, IThreeBaseCamera} from 'BaseCamera'
-import { CameraSettings }                              from 'Camerasettings'
-import { DepthBufferFactory }                          from 'DepthBufferFactory'
-import { Graphics }                                    from 'Graphics'
-import {StandardView}                                  from "ICamera"
-import { Services }                                    from 'Services'
-import { Viewer }                                      from 'Viewer'
+import { CameraSettings }        from 'Camerasettings'
+import { Graphics }              from 'Graphics'
+import { StandardView}           from "ICamera"
+import { IThreeBaseCamera }      from 'IThreeBaseCamera'
+import { Services }              from 'Services'
 
 /**
  * Camera
@@ -36,8 +34,8 @@ export class CameraHelper {
      */
     static setDefaultClippingPlanes(camera : IThreeBaseCamera) {
 
-        camera.near = BaseCamera.DefaultNearClippingPlane;
-        camera.far  = BaseCamera.DefaultFarClippingPlane;
+        camera.near = CameraSettings.DefaultNearClippingPlane;
+        camera.far  = CameraSettings.DefaultFarClippingPlane;
     }
 //#endregion
 
@@ -133,15 +131,15 @@ export class CameraHelper {
      * @description Returns the camera settings to fit the model in a standard view.
      * @static
      * @param {Camera.StandardView} view Standard view (Top, Left, etc.)
-     * @param {Viewer} Target view.
+     * @param {THREE.Camera} viewCamera View camera.
      * @param {THREE.Object3D} modelGroup Model to fit.
      * @returns {IThreeBaseCamera}
      */
-    static getStandardViewCamera (view: StandardView, viewer : Viewer, modelGroup : THREE.Group) : IThreeBaseCamera {
+    static getStandardViewCamera (view: StandardView, viewCamera : THREE.Camera, modelGroup : THREE.Group) : IThreeBaseCamera {
 
         let timerTag = Services.timer.mark('Camera.getStandardView');
 
-        let camera = CameraHelper.getDefaultCamera(viewer);
+        let camera = CameraHelper.getDefaultCamera(viewCamera);
         let boundingBox = Graphics.getBoundingBoxFromObject(modelGroup);
 
         let centerX = boundingBox.getCenter().x;
@@ -209,18 +207,18 @@ export class CameraHelper {
     /**
      * @description Creates a default scene camera.
      * @static
-     * @param {Viewer} Target view.
+     * @param {THREE.Camera} viewCamera View camera.
      * @returns {IThreeBaseCamera}
      */
-    static getDefaultCamera (viewer : Viewer) : IThreeBaseCamera {
+    static getDefaultCamera (viewCamera : THREE.Camera) : IThreeBaseCamera {
 
         // default matches existing camera if it exists
-        let isPerspective : boolean = viewer.camera ? (viewer.camera instanceof THREE.PerspectiveCamera) : true;
+        let isPerspective : boolean = viewCamera ? (viewCamera instanceof THREE.PerspectiveCamera) : true;
 
         let defaultCamera = isPerspective ?
-            new THREE.PerspectiveCamera(CameraSettings.DefaultFieldOfView, viewer.aspectRatio, BaseCamera.DefaultNearClippingPlane, BaseCamera.DefaultFarClippingPlane) :
+            new THREE.PerspectiveCamera(CameraSettings.DefaultFieldOfView, (<THREE.PerspectiveCamera>viewCamera).aspect, CameraSettings.DefaultNearClippingPlane, CameraSettings.DefaultFarClippingPlane) :
             new THREE.OrthographicCamera(CameraSettings.DefaultLeftPlane, CameraSettings.DefaultRightPlane, CameraSettings.DefaultTopPlane, CameraSettings.DefaultBottomPlane,
-                                         BaseCamera.DefaultNearClippingPlane, BaseCamera.DefaultFarClippingPlane);
+                                         CameraSettings.DefaultNearClippingPlane, CameraSettings.DefaultFarClippingPlane);
 
         defaultCamera.position.copy (new THREE.Vector3 (0, 0, 0));
         defaultCamera.lookAt(new THREE.Vector3(0, 0, -1));

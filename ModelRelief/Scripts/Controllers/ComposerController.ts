@@ -11,15 +11,12 @@ import * as Dto    from "DtoModels";
 
 import { assert }                             from 'chai';
 import { BaseCamera }                         from "BaseCamera"
-import { CameraHelper }                       from "CameraHelper"
+import { CameraSettings }                     from "CameraSettings"
 import { ComposerView }                       from "ComposerView"
 import { DepthBuffer }                        from "DepthBuffer"
 import { DepthBufferFactory }                 from "DepthBufferFactory"
-import { EventManager, EventType, MREvent }   from 'EventManager'
+import { EventType, MREvent }                 from 'EventManager'
 import { ElementAttributes, ElementIds }      from "Html"
-import { ContentType, HttpLibrary,
-         MethodType, ServerEndPoints }        from "Http"
-import { StandardView }                       from "ICamera"
 import { Mesh }                               from "Mesh"
 import { MeshTransform }                      from 'MeshTransform'
 import { MeshViewer }                         from "MeshViewer"
@@ -184,8 +181,8 @@ export class ComposerController {
         // WIP: Set far plane based on model extents to avoid clipping
         let boundingPlanes =  this.activeDepthBufferCamera.getBoundingClippingPlanes(this.modelViewer.modelGroup);
 
-        modelViewCamera.near = BaseCamera.DefaultNearClippingPlane;
-        modelViewCamera.far  = BaseCamera.DefaultFarClippingPlane;
+        modelViewCamera.near = CameraSettings.DefaultNearClippingPlane;
+        modelViewCamera.far  = CameraSettings.DefaultFarClippingPlane;
 
         modelViewCamera.updateProjectionMatrix();
         this.modelViewer.camera = modelViewCamera;

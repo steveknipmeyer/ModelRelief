@@ -5,16 +5,15 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto          from 'DtoModels'
+import * as Dto   from 'DtoModels'
 
-import { BaseCamera }                    from 'BaseCamera';
+import { BaseCamera }                   from 'BaseCamera';
+import { CameraFactory }                from "CameraFactory";
 import { FileModel }                    from 'FileModel';
-import { HttpLibrary, ServerEndPoints } from 'Http'
 import { Model3dFormat }                from 'IModel3d';
 import { IFileModel }                   from 'IFileModel';
 import { Loader }                       from 'Loader';
 import { Project }                      from 'Project'
-import { Services }                     from 'Services'
 
 /**
  * @description Represents a 3D model.
@@ -48,7 +47,6 @@ export class Model3d extends FileModel {
      * @description Perform setup and initialization.
      */
     initialize(): void {
-
     }
 
     /**
@@ -87,7 +85,7 @@ export class Model3d extends FileModel {
         model3d.format  = dtoModel3d.format;
 
         model3d.project = await Project.fromIdAsync(dtoModel3d.projectId);
-        model3d.camera  = await BaseCamera.fromIdAsync(dtoModel3d.cameraId);
+        model3d.camera  = await CameraFactory.Construct(dtoModel3d.cameraId);
 
         return model3d;
     }

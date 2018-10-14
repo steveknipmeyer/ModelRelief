@@ -8,17 +8,10 @@
 import * as THREE  from 'three'
 import * as Dto    from "DtoModels";
 
-import { BaseCamera, ClippingPlanes} from 'BaseCamera'
-import { CameraHelper}           from 'CameraHelper'
+import { BaseCamera}             from 'BaseCamera'
 import { DepthBuffer}            from 'DepthBuffer'
-import { ElementIds }            from 'Html';
-import { Graphics}               from 'Graphics'
 import { ILogger, ConsoleLogger} from 'Logger'
-import { MathLibrary}            from 'Math'
-import { MeshView}               from 'MeshView'
-import { MeshViewer }            from 'MeshViewer';
 import { Services}               from 'Services'
-import { StopWatch}              from 'StopWatch'
 import { Tools}                  from 'Tools'
 
 /*

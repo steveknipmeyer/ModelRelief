@@ -13,6 +13,8 @@
  */
 export class CameraSettings  {
     // N.B. These settings are held in a separate class (rather than OrthographicCamera, PerspectiveCamera) to avoid circular dependencies between BaseCamera and its derived classes.
+    static DefaultNearClippingPlane : number =    0.1;
+    static DefaultFarClippingPlane  : number = 1000;
 
     // Perspective
     static DefaultFieldOfView  : number =   37;       // 35mm vertical : https://www.nikonians.org/reviews/fov-tables

@@ -11,11 +11,10 @@ import * as dat    from 'dat-gui'
 import {assert}                                 from 'chai';
 import {BaseCamera}                             from 'BaseCamera';
 import {CameraHelper }                          from 'CameraHelper';
+import {CameraSettings }                        from 'CameraSettings';
 import {ElementAttributes, ElementIds}          from 'Html';
 import {StandardView}                           from 'ICamera';
-import {ILogger, ConsoleLogger}                 from 'Logger';
 import {Graphics, ObjectNames}                  from 'Graphics';
-import {Services}                               from 'Services';
 import {Viewer}                                 from "Viewer";
 
 /**
@@ -110,7 +109,7 @@ export class CameraControls {
 
         // View
         let modelView = Graphics.cloneAndTransformObject(this.viewer.modelGroup, this.settings.camera.viewCamera.matrixWorldInverse);
-        let cameraView = CameraHelper.getDefaultCamera(this.viewer);
+        let cameraView = CameraHelper.getDefaultCamera(this.viewer.camera);
         Graphics.addCameraHelper(cameraView, this.viewer.scene, modelView);
     }
 
@@ -213,7 +212,7 @@ export class CameraControls {
         if (showClippingControls) {
             // Near Clipping Plane
             minimum  =   0.1;
-            maximum  = BaseCamera.DefaultFarClippingPlane;
+            maximum  = CameraSettings.DefaultFarClippingPlane;
             stepSize =   0.1;
             this._controlNearClippingPlane = cameraOptions.add(this.settings.camera.viewCamera, 'near').name('Near Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
             this._controlNearClippingPlane.onChange (function (value) {
@@ -224,7 +223,7 @@ export class CameraControls {
 
             // Far Clipping Plane
             minimum  =  1;
-            maximum  =  BaseCamera.DefaultFarClippingPlane;
+            maximum  =  CameraSettings.DefaultFarClippingPlane;
             stepSize =  0.1;
             this._controlFarClippingPlane = cameraOptions.add(this.settings.camera.viewCamera, 'far').name('Far Clipping Plane').min(minimum).max(maximum).step(stepSize).listen();
             this._controlFarClippingPlane.onChange (function (value) {

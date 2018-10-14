@@ -5,16 +5,9 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE from 'three'
-
-import { BaseCamera }                       from 'BaseCamera';
-import { Exception }                        from 'Exception';
-import {ContentType, HttpLibrary,
-        MethodType, ServerEndPoints}        from 'Http'
-import { ILogger, HTMLLogger }              from 'Logger'
+import { ILogger }                          from 'Logger'
 import { IModel }                           from 'IModel'
 import { Services }                         from 'Services'
-import { RequestResponse }                  from 'RequestResponse'
 
 /**
  * @description Common base class for all FE models.

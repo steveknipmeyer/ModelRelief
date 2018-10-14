@@ -1,23 +1,17 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE                       from 'three';
+import * as THREE                           from 'three';
 
-import { DepthBufferFactory }             from "DepthBufferFactory";
-import { EventManager, EventType }        from 'EventManager';
-import { FileModel }                      from 'FileModel';
-import { Graphics }                       from 'Graphics';
-import { StandardView }                   from "ICamera";
-import { ILogger }                        from 'Logger';
-import { Materials }                      from 'Materials';
-import { Model3d }                        from "Model3d";
-import { ModelViewerControls }            from "ModelViewerControls";
-import { Services }                       from 'Services';
-import { Viewer }                         from 'Viewer';
+import { EventType }                        from 'EventManager';
+import { FileModel }                        from 'FileModel';
+import { Model3d }                          from "Model3d";
+import { ModelViewerControls }              from "ModelViewerControls";
+import { Viewer }                           from 'Viewer';
 
 const ObjectNames = {
     Grid :  'Grid'
@@ -43,8 +37,8 @@ export class ModelViewer extends Viewer {
      * @param {FileModel} model Model to load.
      */
     constructor(name : string, modelCanvasId : string, model : FileModel) {
-        
-        super (name, modelCanvasId, model);       
+
+        super (name, modelCanvasId, model);
 
         this.model3d = model as Model3d;
     }
@@ -57,23 +51,23 @@ export class ModelViewer extends Viewer {
     setModelGroup(modelGroup : THREE.Group) {
 
         // Call base class property via super
-        // https://github.com/Microsoft/TypeScript/issues/4465        
+        // https://github.com/Microsoft/TypeScript/issues/4465
         super.setModelGroup(modelGroup);
 
         // dispatch NewModel event
         this.eventManager.dispatchEvent(this, EventType.NewModel, modelGroup);
     }
-    
+
 //#endregion
 
-//#region Initialization    
+//#region Initialization
     /**
      * @description Populate scene.
      */
     populateScene () {
 
-        super.populateScene(); 
-        
+        super.populateScene();
+
         var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
         helper.name = ObjectNames.Grid;
         this.scene.add(helper);
@@ -83,16 +77,16 @@ export class ModelViewer extends Viewer {
      * @description General initialization.
      */
     initialize() {
-        
+
         super.initialize();
     }
-        
+
     /**
      * @description UI controls initialization.
      */
     initializeUIControls() {
 
-        super.initializeUIControls();        
+        super.initializeUIControls();
         this._modelViewerControls = new ModelViewerControls(this);
     }
 //#endregion
@@ -100,13 +94,13 @@ export class ModelViewer extends Viewer {
 //#region Scene
     /**
      * @description Display the reference grid.
-     * @param {boolean} visible 
+     * @param {boolean} visible
      */
     displayGrid(visible : boolean) {
 
         let gridGeometry : THREE.Object3D = this.scene.getObjectByName(ObjectNames.Grid);
         gridGeometry.visible = visible;
         this._logger.addInfoMessage(`Display grid = ${visible}`);
-    } 
+    }
 //#endregion
-} 
+}

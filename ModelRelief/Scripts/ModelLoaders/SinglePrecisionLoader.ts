@@ -7,12 +7,8 @@
 
 import * as THREE                                   from 'three';
 
-import { BaseCamera }                               from 'BaseCamera'
-import { CameraHelper }                             from 'CameraHelper'
 import { assert }                                   from 'chai'
 import {Graphics}                                   from 'Graphics';
-import {ILogger, ConsoleLogger}                     from 'Logger';
-import {Mesh3dCache}                                from 'Mesh3dCache';
 import {FacePair, Mesh3d, MeshGenerateParameters}   from 'Mesh3d';
 import {Services}                                   from 'Services';
 

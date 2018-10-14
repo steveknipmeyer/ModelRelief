@@ -9,17 +9,14 @@ import * as Dto   from 'DtoModels'
 import * as THREE from 'three'
 
 import { BaseCamera }                   from 'BaseCamera'
+import { CameraFactory }                from "CameraFactory";
 import { DepthBuffer }                  from 'DepthBuffer'
 import { GeneratedFileModel }           from 'GeneratedFileModel'
-import { HttpLibrary, ServerEndPoints } from 'Http'
 import { IGeneratedFileModel }          from 'IGeneratedFileModel'
 import { MeshFormat }                   from 'IMesh'
-import { ILogger, ConsoleLogger }       from 'Logger'
-import { Mesh3dCache }                  from 'Mesh3dCache'
+import { Loader }                       from 'Loader';
 import { MeshTransform }                from 'MeshTransform'
 import { Project }                      from 'Project'
-import { Services }                     from 'Services'
-import {Loader} from 'ModelLoaders/Loader';
 
 /**
  * @description Represents a mesh.
@@ -103,11 +100,10 @@ export class Mesh extends GeneratedFileModel {
 
         mesh.fileTimeStamp      = dtoMesh.fileTimeStamp;
         mesh.fileIsSynchronized = dtoMesh.fileIsSynchronized;
+        mesh.format             = dtoMesh.format;
 
-        mesh.format         = dtoMesh.format;
-
-        mesh.project        = await Project.fromIdAsync(dtoMesh.projectId);
-        mesh.camera         = await BaseCamera.fromIdAsync(dtoMesh.cameraId);
+        mesh.project = await Project.fromIdAsync(dtoMesh.projectId);
+        mesh.camera  = await CameraFactory.Construct(dtoMesh.cameraId);
 
         return mesh;
     }

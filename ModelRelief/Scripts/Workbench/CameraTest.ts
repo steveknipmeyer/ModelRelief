@@ -9,10 +9,11 @@ import * as THREE                   from 'three'
 import {assert}                     from 'chai';
 import * as dat                     from 'dat-gui'
 
-import {BaseCamera, IThreeBaseCamera}   from 'BaseCamera'
+import {BaseCamera}                     from 'BaseCamera'
 import {DepthBufferFactory}             from 'DepthBufferFactory'
 import {Graphics, ObjectNames}          from 'Graphics'
 import {ElementAttributes, ElementIds}  from "Html"
+import { IThreeBaseCamera }                           from 'IThreeBaseCamera';
 import {Loader}                         from 'Loader'
 import {ILogger, ConsoleLogger}         from 'Logger'
 import {MathLibrary}                    from 'Math'

@@ -20,6 +20,7 @@ import { IMeshTransform }                   from 'IMeshTransform'
 import { IModel }                           from 'IModel'
 import { IModel3d, Model3dFormat }          from 'IModel3d'
 import { IProject }                         from 'IProject'
+import { IThreeBaseCamera }                 from 'IThreeBaseCamera'
 import { ILogger, HTMLLogger }              from 'Logger'
 import { RequestResponse }                  from 'RequestResponse'
 import { Services }                         from 'Services'
@@ -405,6 +406,54 @@ export class Camera extends Model<Camera> implements ICamera {
      */
     factory (parameters: IModel) : Camera {
         return new Camera(parameters);
+    }
+
+    /**
+     * @description Constructs an instance from a DTO model.
+     * @returns {Camera}
+     */
+    getViewCamera() : IThreeBaseCamera {
+
+        let position    = new THREE.Vector3(this.positionX, this.positionY, this.positionZ);
+        let quaternion  = new THREE.Quaternion(this.eulerX, this.eulerY, this.eulerZ, this.theta);
+        let scale       = new THREE.Vector3(this.scaleX, this.scaleY, this.scaleZ);
+        let up          = new THREE.Vector3(this.upX, this.upY, this.upZ);
+
+        // construct PerspectiveCamera from DTO properties
+        let viewCamera = this.isPerspective ?
+            new THREE.PerspectiveCamera(this.fieldOfView, this.aspectRatio, this.near, this.far) :
+            new THREE.OrthographicCamera(this.left, this.right, this.top, this.bottom, this.near, this.far);
+
+        viewCamera.matrix.compose(position, quaternion, scale);
+        viewCamera.up.copy(up);
+
+        // set position/rotation/scale attributes
+        viewCamera.matrix.decompose(viewCamera.position, viewCamera.quaternion, viewCamera.scale);
+
+        viewCamera.near   = this.near;
+        viewCamera.far    = this.far;
+
+        viewCamera.updateProjectionMatrix();
+
+        return viewCamera;
+    }
+
+    /**
+     * @description Returns a Camera instance through an HTTP query of the Id.
+     * @static
+     * @param {number} id Camera Id.
+     * @returns {Promise<BaseCamera>}
+     */
+    static async fromIdAsync(id : number ) : Promise<Camera> {
+
+        if (!id)
+            return undefined;
+
+        let camera = new Camera ({
+            id : id
+        });
+        let cameraModel = await camera.getAsync();
+        return cameraModel;
     }
 }
 

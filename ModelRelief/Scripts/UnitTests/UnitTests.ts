@@ -10,11 +10,9 @@ import * as Dto from 'DtoModels'
 
 import {assert}                                 from 'chai'
 import {BaseCamera}                             from 'BaseCamera'
+import {CameraSettings}                         from 'CameraSettings'
 import {DepthBuffer}                            from 'DepthBuffer'
-import {Exception}                              from 'Exception';
-import {HttpLibrary, ContentType, MethodType}   from 'Http'
 import {DepthBufferFormat}                      from 'IDepthBuffer'
-import {MathLibrary}                            from 'Math'
 import {PerspectiveCamera}                      from 'PerspectiveCamera'
 import {Services}                               from 'Services'
 
@@ -187,7 +185,7 @@ export class UnitTests {
             let fieldOfView       = this.generateScalar(50);
             let aspect            = this.generateScalar(1.0);
             let nearClippingPlane = this.generateScalar(10);
-            let farClippingPlane  = nearClippingPlane + this.generateScalar(BaseCamera.DefaultFarClippingPlane);
+            let farClippingPlane  = nearClippingPlane + this.generateScalar(CameraSettings.DefaultFarClippingPlane);
 
             let perspectiveCamera = new THREE.PerspectiveCamera(fieldOfView, aspect, nearClippingPlane, farClippingPlane);
 

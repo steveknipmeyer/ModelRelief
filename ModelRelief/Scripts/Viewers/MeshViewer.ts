@@ -13,7 +13,6 @@ import {Graphics}                   from 'Graphics';
 import {Mesh}                       from 'Mesh';
 import {Mesh3d}                     from 'Mesh3d';
 import {MeshViewerControls}         from 'MeshViewerControls';
-import {Services}                   from 'Services';
 import {Viewer}                     from 'Viewer';
 
 /**

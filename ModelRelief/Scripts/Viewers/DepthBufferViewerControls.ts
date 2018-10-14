@@ -1,6 +1,6 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
@@ -9,8 +9,6 @@ import * as dat    from 'dat-gui'
 
 import { DepthBufferViewer }              from "DepthBufferViewer"
 import { ElementAttributes, ElementIds }  from "Html"
-import { ILogger, ConsoleLogger }         from 'Logger'
-import { Services }                       from 'Services'
 
 /**
  * @class
@@ -19,16 +17,16 @@ import { Services }                       from 'Services'
 class DepthBufferViewerSettings {
 
     displayDepthBuffer : boolean;
-    
+
     constructor() {
-        
-        this.displayDepthBuffer = true; 
+
+        this.displayDepthBuffer = true;
     }
 }
 
 /**
  * DepthBufferViewer UI Controls.
- */    
+ */
 export class DepthBufferViewerControls {
 
     _depthBufferViewer         : DepthBufferViewer;                     // associated viewer
@@ -38,7 +36,7 @@ export class DepthBufferViewerControls {
      * @class DepthBufferViewerControls
      * @constructor
      */
-    constructor(depthBufferViewer : DepthBufferViewer) {  
+    constructor(depthBufferViewer : DepthBufferViewer) {
 
         this._depthBufferViewer = depthBufferViewer;
 
@@ -80,5 +78,5 @@ export class DepthBufferViewerControls {
             scope._depthBufferViewer.displayDepthBuffer(value);
         });
         depthBufferViewerOptions.open();
-    }    
+    }
 }

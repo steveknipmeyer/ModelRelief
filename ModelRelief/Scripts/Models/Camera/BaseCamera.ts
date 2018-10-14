@@ -10,34 +10,12 @@ import * as THREE        from 'three'
 
 import { CameraHelper }                 from 'CameraHelper'
 import { CameraSettings }               from 'Camerasettings'
-import { ICamera, StandardView }        from 'ICamera'
 import { DepthBufferFactory }           from 'DepthBufferFactory'
 import { Graphics }                     from 'Graphics'
-import { HttpLibrary, ServerEndPoints}  from 'Http'
 import { IModel }                       from 'IModel'
+import { IThreeBaseCamera }             from 'IThreeBaseCamera'
 import { Model }                        from 'Model'
 import { Project }                      from 'Project'
-import { Services }                     from 'Services'
-import { StopWatch }                    from 'StopWatch'
-
-/**
- * @description ITHREEBaseCamera
- * @export
- * @class ITHREEBaseCamera
- * @extends {THREE.Camera}
- */
-export interface IThreeBaseCamera extends THREE.Camera
-{
-    // THREE.PerspectiveCamera and THREE.OrthographicCamera are derived from abstract THREE.Camera.
-    //  However, the base class does not contain several members that are common to the derived classes.
-    //  This interface represents the union of the common members in PerspectiveCamera and OrthographicCamera
-    //  that are <not> in THREE.Camera.
-    near:       number;
-    far:        number;
-    zoom:       number;
-
-    updateProjectionMatrix(): void;
-}
 
 /**
  * @description Camera clipping planes tuple.
@@ -56,9 +34,6 @@ export interface ClippingPlanes {
  * @extends {Model}
  */
 export class BaseCamera extends Model {
-
-    static DefaultNearClippingPlane : number =    0.1;
-    static DefaultFarClippingPlane  : number = 1000;
 
     viewCamera : IThreeBaseCamera;
 
@@ -95,7 +70,6 @@ export class BaseCamera extends Model {
      * @description Resets the clipping planes to the default values.
      */
     setDefaultClippingPlanes() {
-
         CameraHelper.setDefaultClippingPlanes(this.viewCamera);
     }
 
@@ -140,8 +114,8 @@ export class BaseCamera extends Model {
      */
     finalizeClippingPlanes(modelGroup : THREE.Group) {
 
-        let setNear = (this.viewCamera.near === BaseCamera.DefaultNearClippingPlane);
-        let setFar  = (this.viewCamera.far === BaseCamera.DefaultFarClippingPlane);
+        let setNear = (this.viewCamera.near === CameraSettings.DefaultNearClippingPlane);
+        let setFar  = (this.viewCamera.far === CameraSettings.DefaultFarClippingPlane);
 
         let clippingPlanes: ClippingPlanes = this.getBoundingClippingPlanes(modelGroup);
         if (setNear)
@@ -153,24 +127,6 @@ export class BaseCamera extends Model {
     }
 
 //#endregion
-
-    /**
-     * @description Returns a BaseCamera instance through an HTTP query of the Id.
-     * @static
-     * @param {number} id Camera Id.
-     * @returns {Promise<BaseCamera>}
-     */
-    static async fromIdAsync(id : number ) : Promise<BaseCamera> {
-
-        if (!id)
-            return undefined;
-
-        let camera = new Dto.Camera ({
-            id : id
-        });
-        let cameraModel = await camera.getAsync();
-        return BaseCamera.fromDtoModelAsync(cameraModel);
-    }
 
     /**
      * @description Constructs an instance from a DTO model.
