@@ -2,6 +2,7 @@
 #### Commit Notes
 
 #### Short Term
+    Why does madge skip 49 files?
 
     Circular Dependencies
         https://medium.com/visual-development/how-to-fix-nasty-circular-dependency-issues-once-and-for-all-in-javascript-typescript-a04c987cf0de

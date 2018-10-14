@@ -15,7 +15,6 @@ import {CameraSettings }                        from 'CameraSettings';
 import {ElementAttributes, ElementIds}          from 'Html';
 import {StandardView}                           from 'ICamera';
 import {Graphics, ObjectNames}                  from 'Graphics';
-import {Viewer}                                 from "Viewer";
 
 /**
  * @description CameraControls
@@ -65,8 +64,8 @@ export interface CameraControlsOptions {
  */
 export class CameraControls {
 
-    viewer      : Viewer;                     // associated viewer
-    settings    : CameraControlSettings;      // UI settings
+    viewer      : any;                          // associated viewer
+    settings    : CameraControlSettings;        // UI settings
 
     // The maximum and minimum values of these controls are modified by the boundClippingPlanes button so they are instance members.
     _controlNearClippingPlane : dat.GUIController;
@@ -77,7 +76,7 @@ export class CameraControls {
      * @param {Viewer} viewer Associated viewer.
      * @param {CameraControlsOptions} [controlOptions] Options to include/exclude specialized controls.
    */
-    constructor(viewer : Viewer, controlOptions? : CameraControlsOptions) {
+    constructor(viewer : any, controlOptions? : CameraControlsOptions) {
 
         this.viewer = viewer;
 

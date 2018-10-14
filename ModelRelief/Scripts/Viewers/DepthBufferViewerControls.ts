@@ -7,7 +7,6 @@
 
 import * as dat    from 'dat-gui'
 
-import { DepthBufferViewer }              from "DepthBufferViewer"
 import { ElementAttributes, ElementIds }  from "Html"
 
 /**
@@ -29,14 +28,14 @@ class DepthBufferViewerSettings {
  */
 export class DepthBufferViewerControls {
 
-    _depthBufferViewer         : DepthBufferViewer;                     // associated viewer
+    _depthBufferViewer         : any;                                   // associated viewer
     _depthBufferViewerSettings : DepthBufferViewerSettings;             // UI settings
 
-    /** Default constructor
-     * @class DepthBufferViewerControls
-     * @constructor
+    /**
+     *Creates an instance of DepthBufferViewerControls.
+     * @param {DepthBufferViewer} depthBufferViewer
      */
-    constructor(depthBufferViewer : DepthBufferViewer) {
+    constructor(depthBufferViewer : any) {
 
         this._depthBufferViewer = depthBufferViewer;
 

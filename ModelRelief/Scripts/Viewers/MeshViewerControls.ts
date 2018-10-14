@@ -5,11 +5,9 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE  from 'three'
-import * as dat    from 'dat-gui'
+import * as dat from 'dat-gui'
 
 import {ElementAttributes, ElementIds}  from "Html"
-import {MeshViewer}                     from "MeshViewer"
 
 /**
  * @class
@@ -27,14 +25,14 @@ class MeshViewerSettings {
  */
 export class MeshViewerControls {
 
-    _meshViewer          : MeshViewer;                     // associated viewer
-    _meshViewerSettings  : MeshViewerSettings;             // UI settings
+    _meshViewer          : any;                             // associated viewer
+    _meshViewerSettings  : MeshViewerSettings;              // UI settings
 
-    /** Default constructor
-     * @class MeshViewerControls
-     * @constructor
+    /**
+     *Creates an instance of MeshViewerControls.
+     * @param {MeshViewer} meshViewer
      */
-    constructor(meshViewer : MeshViewer) {
+    constructor(meshViewer : any) {
 
         this._meshViewer = meshViewer;
 

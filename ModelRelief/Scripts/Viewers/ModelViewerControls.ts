@@ -1,19 +1,13 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE  from 'three' 
 import * as dat    from 'dat-gui'
 
-import {DepthBufferFactory}             from "DepthBufferFactory"
 import {ElementAttributes, ElementIds}  from "Html"
-import {ILogger, ConsoleLogger}         from 'Logger'
-import {Graphics}                       from "Graphics"
-import {ModelViewer}                    from "ModelViewer"
-import {Services}                       from 'Services'
 
 /**
  * @class
@@ -22,26 +16,26 @@ import {Services}                       from 'Services'
 class ModelViewerSettings {
 
     displayGrid    : boolean;
-    
+
     constructor() {
-        
-        this.displayGrid    = true; 
+
+        this.displayGrid    = true;
     }
 }
 
 /**
  * ModelViewer UI Controls.
- */    
+ */
 export class ModelViewerControls {
 
-    _modelViewer         : ModelViewer;                     // associated viewer
+    _modelViewer         : any;                             // associated viewer
     _modelViewerSettings : ModelViewerSettings;             // UI settings
 
-    /** Default constructor
-     * @class ModelViewerControls
-     * @constructor
+    /**
+     *Creates an instance of ModelViewerControls.
+     * @param {ModelViewer} modelViewer
      */
-    constructor(modelViewer : ModelViewer) {  
+    constructor(modelViewer : any) {
 
         this._modelViewer = modelViewer;
 
@@ -72,7 +66,7 @@ export class ModelViewerControls {
         containerDiv.appendChild(gui.domElement);
 
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
-        //                                                                   ModelViewer                                                                //      
+        //                                                                   ModelViewer                                                                //
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         let modelViewerOptions = gui.addFolder('ModelViewer Options');
 
@@ -83,5 +77,5 @@ export class ModelViewerControls {
             scope._modelViewer.displayGrid(value);
         });
         modelViewerOptions.open();
-    }    
+    }
 }
