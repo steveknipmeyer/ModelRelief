@@ -10,10 +10,10 @@ import * as Dto from 'DtoModels'
 
 import {assert}                                 from 'chai'
 import {BaseCamera}                             from 'BaseCamera'
+import {PerspectiveCamera}                      from 'BaseCamera'
 import {CameraSettings}                         from 'CameraSettings'
 import {DepthBuffer}                            from 'DepthBuffer'
 import {DepthBufferFormat}                      from 'IDepthBuffer'
-import {PerspectiveCamera}                      from 'PerspectiveCamera'
 import {Services}                               from 'Services'
 
 /**

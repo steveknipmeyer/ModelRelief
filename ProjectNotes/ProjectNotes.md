@@ -2,7 +2,11 @@
 #### Commit Notes
 
 #### Short Term
-    Remove unused imports.
+    Convert to ED5 modules?
+        Separate BaseCamers, OrthographicCamera, PerspectiveCamera.
+    What does CameraHelper.getDefaultCamera take a Camera as a parameter?
+
+    Remove unused imports.  
     Refactor imports to use paths.
     CameraFactory.Constuct
         Construct -> ConstructFromId

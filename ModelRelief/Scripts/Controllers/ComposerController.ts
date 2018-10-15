@@ -11,6 +11,7 @@ import * as Dto    from "DtoModels";
 
 import { assert }                             from 'chai';
 import { BaseCamera }                         from "BaseCamera"
+import { PerspectiveCamera }                  from "BaseCamera"
 import { CameraSettings }                     from "CameraSettings"
 import { ComposerView }                       from "ComposerView"
 import { DepthBuffer }                        from "DepthBuffer"
@@ -22,7 +23,6 @@ import { MeshTransform }                      from 'MeshTransform'
 import { MeshViewer }                         from "MeshViewer"
 import { Model3d }                            from "Model3d"
 import { ModelViewer }                        from "ModelViewer"
-import { PerspectiveCamera }                  from "PerspectiveCamera"
 import { UnitTests }                          from 'UnitTests';
 
 /**

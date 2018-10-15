@@ -214,9 +214,10 @@ export class CameraHelper {
 
         // default matches existing camera if it exists
         let isPerspective : boolean = viewCamera ? (viewCamera instanceof THREE.PerspectiveCamera) : true;
+        let aspectRatio : number = (viewCamera && (viewCamera instanceof THREE.PerspectiveCamera)) ? viewCamera.aspect : 1.0;
 
         let defaultCamera = isPerspective ?
-            new THREE.PerspectiveCamera(CameraSettings.DefaultFieldOfView, (<THREE.PerspectiveCamera>viewCamera).aspect, CameraSettings.DefaultNearClippingPlane, CameraSettings.DefaultFarClippingPlane) :
+            new THREE.PerspectiveCamera(CameraSettings.DefaultFieldOfView, aspectRatio, CameraSettings.DefaultNearClippingPlane, CameraSettings.DefaultFarClippingPlane) :
             new THREE.OrthographicCamera(CameraSettings.DefaultLeftPlane, CameraSettings.DefaultRightPlane, CameraSettings.DefaultTopPlane, CameraSettings.DefaultBottomPlane,
                                          CameraSettings.DefaultNearClippingPlane, CameraSettings.DefaultFarClippingPlane);
 

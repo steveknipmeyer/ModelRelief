@@ -7,8 +7,8 @@
 
 import * as Dto   from 'DtoModels'
 import {BaseCamera}             from 'BaseCamera';
-import {OrthographicCamera}     from 'OrthographicCamera';
-import {PerspectiveCamera}      from 'PerspectiveCamera';
+import {OrthographicCamera}     from 'BaseCamera';
+import {PerspectiveCamera}      from 'BaseCamera';
 
 /**
  * Camera

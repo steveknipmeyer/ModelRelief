@@ -214,3 +214,77 @@ export class BaseCamera extends Model {
         return camera;
     }
 }
+/**
+ * @description OrthographicCamera
+ * @export
+ * @class OrthographicCamera
+ * @extends {Model}
+ */
+export class OrthographicCamera extends BaseCamera {
+
+    viewCamera : THREE.OrthographicCamera;
+
+    /**
+     * @constructor
+     * Creates an instance of OrthographicCamera.
+     * @param {IModel} parameters IModel properties.
+     * @param {THREE.OrthographicCamera} camera OrthographicCamera.
+     */
+    constructor(parameters: IModel, camera : THREE.OrthographicCamera) {
+
+        super(parameters, camera);
+    }
+
+//#region Clipping Planes
+
+    /**
+     * Returns the extents of the near camera plane.
+     * @returns {THREE.Vector2}
+     */
+    getNearPlaneExtents() : THREE.Vector2 {
+
+        let nearWidth  = this.viewCamera.right - this.viewCamera.left;
+        let nearHeight = this.viewCamera.top - this.viewCamera.bottom;
+
+        return new THREE.Vector2(nearWidth, nearHeight);
+    }
+//#endregion
+}
+
+/**
+ * @description PerspectiveCamera
+ * @export
+ * @class PerspectiveCamera
+ * @extends {Model}
+ */
+export class PerspectiveCamera extends BaseCamera {
+
+    viewCamera : THREE.PerspectiveCamera;
+
+    /**
+     * @constructor
+     * Creates an instance of PerspectiveCamera.
+     * @param {IModel} parameters IModel properties.
+     * @param {THREE.PerspectiveCamera} camera PerspectiveCamera.
+     */
+    constructor(parameters: IModel, camera : THREE.PerspectiveCamera) {
+
+        super(parameters, camera);
+    }
+
+//#region Clipping Planes
+
+    /**
+     * Returns the extents of the near camera plane.
+     * @returns {THREE.Vector2}
+     */
+    getNearPlaneExtents() : THREE.Vector2 {
+
+        let cameraFOVRadians = this.viewCamera.fov * (Math.PI / 180);
+        let nearHeight = 2 * Math.tan(cameraFOVRadians / 2) * this.viewCamera.near;
+        let nearWidth  = this.viewCamera.aspect * nearHeight;
+
+        return new THREE.Vector2(nearWidth, nearHeight);
+    }
+//#endregion
+}
