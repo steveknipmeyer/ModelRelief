@@ -109,7 +109,6 @@ export class BaseCamera extends Model {
 
     /**
      * @description Finalize the camera clipping planes to fit the model if they are at the default values..
-     * @static
      * @param {THREE.Group} modelGroup Target model.
      */
     finalizeClippingPlanes(modelGroup : THREE.Group) {

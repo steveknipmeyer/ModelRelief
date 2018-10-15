@@ -2,7 +2,23 @@
 #### Commit Notes
 
 #### Short Term
-    Why does madge skip 49 files?
+    Remove unused imports.
+    Refactor imports to use paths.
+    CameraFactory.Constuct
+        Construct -> ConstructFromId
+        Construct
+
+    Review new BaseCamera().
+        BaseCamera.fromDtoModelAsync
+            Dto.Camera.getViewCamera
+            CameraFactory.ConstructFromId
+        DepthBuffer
+            CameraFactory.Construct
+        CameraControls
+            CameraFactory.Construct
+
+    Configure tslint.
+        https://palantir.github.io/tslint/usage/configuration/
 
     Circular Dependencies
         https://medium.com/visual-development/how-to-fix-nasty-circular-dependency-issues-once-and-for-all-in-javascript-typescript-a04c987cf0de
@@ -10,13 +26,6 @@
             https://github.com/pahen/madge
         ALM
             https://legacy.gitbook.com/book/alm-tools/alm/details
-
-    Configure tslint.
-        https://palantir.github.io/tslint/usage/configuration/
-
-    Remove unused imports.
-
-    Refactor imports to use paths.
 
     Review
         instanceof THREE.PerspectiveCamera.
