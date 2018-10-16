@@ -9,8 +9,8 @@ import * as THREE                   from 'three'
 import {assert}                     from 'chai';
 import * as dat                     from 'dat-gui'
 
-import {BaseCamera}                     from 'Camera'
 import {PerspectiveCamera}              from 'Camera'
+import { CameraFactory }                from "CameraFactory";
 import {Graphics, ObjectNames}          from 'Graphics'
 import {ElementAttributes, ElementIds}  from "Html"
 import { IThreeBaseCamera }             from 'IThreeBaseCamera';
@@ -219,7 +219,7 @@ export class App {
         // https://stackoverflow.com/questions/29221795/serializing-camera-state-in-threejs
         let camera = new PerspectiveCamera({}, <THREE.PerspectiveCamera> this._viewer.camera);
         let cameraModel = camera.toDtoModel();
-        BaseCamera.fromDtoModelAsync(cameraModel).then(cameraRoundtrip => {
+        CameraFactory.ConstructFromDtoModelAsync(cameraModel).then(cameraRoundtrip => {
 
             let perspectiveCameraRoundTrip = <PerspectiveCamera> cameraRoundtrip;
             let distortCamera = false;

@@ -419,7 +419,7 @@ export class Camera extends Model<Camera> implements ICamera {
         let scale       = new THREE.Vector3(this.scaleX, this.scaleY, this.scaleZ);
         let up          = new THREE.Vector3(this.upX, this.upY, this.upZ);
 
-        // construct PerspectiveCamera from DTO properties
+        // construct from DTO properties
         let viewCamera = this.isPerspective ?
             new THREE.PerspectiveCamera(this.fieldOfView, this.aspectRatio, this.near, this.far) :
             new THREE.OrthographicCamera(this.left, this.right, this.top, this.bottom, this.near, this.far);

@@ -9,6 +9,7 @@ import * as THREE  from 'three'
 import * as Dto    from "DtoModels";
 
 import { BaseCamera}             from 'Camera'
+import { CameraFactory }         from "CameraFactory";
 import { DepthBuffer}            from 'DepthBuffer'
 import { ILogger, ConsoleLogger} from 'Logger'
 import { Services}               from 'Services'
@@ -375,9 +376,8 @@ export class DepthBufferFactory {
         // this._depthBuffer.model3d   =
 
         // update camera properties from active view camera
-        this._depthBuffer.camera = new BaseCamera ({
-            id : this._camera.id,
-        }, this._camera.viewCamera);
+        let parameters = {id : this._camera.id};
+        this._depthBuffer.camera = CameraFactory.ConstructFromViewCamera(parameters, this._camera.viewCamera);
 
         this.analyzeTargets();
 

@@ -100,7 +100,7 @@ export class DepthBuffer extends GeneratedFileModel {
 
         depthBuffer.project = await Project.fromIdAsync(dtoDepthBuffer.projectId);
         depthBuffer.model3d = await Model3d.fromIdAsync(dtoDepthBuffer.model3dId);
-        depthBuffer.camera  = await CameraFactory.Construct(dtoDepthBuffer.cameraId);
+        depthBuffer.camera  = await CameraFactory.ConstructFromIdAsync(dtoDepthBuffer.cameraId);
 
         return depthBuffer;
     }

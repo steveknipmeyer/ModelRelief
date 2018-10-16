@@ -12,6 +12,7 @@ import * as Dto    from "DtoModels";
 import { assert }                             from 'chai';
 import { BaseCamera }                         from "Camera";
 import { PerspectiveCamera }                  from "Camera";
+import { CameraFactory }                      from "CameraFactory";
 import { CameraSettings }                     from "CameraSettings";
 import { ComposerView }                       from "ComposerView";
 import { DepthBuffer }                        from "DepthBuffer";
@@ -302,7 +303,7 @@ export class ComposerController {
 
             let camera = new PerspectiveCamera({}, this.modelViewer.camera);
             let cameraModel = camera.toDtoModel();
-            BaseCamera.fromDtoModelAsync(cameraModel).then((cameraRoundtrip) => {
+            CameraFactory.ConstructFromDtoModelAsync(cameraModel).then((cameraRoundtrip) => {
                 let perspectiveCameraRoundTrip =  <THREE.PerspectiveCamera> cameraRoundtrip.viewCamera;
                 UnitTests.comparePerspectiveCameras(camera.viewCamera, perspectiveCameraRoundTrip);
 

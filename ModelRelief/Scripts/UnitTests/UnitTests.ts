@@ -9,8 +9,8 @@ import * as THREE from 'three'
 import * as Dto from 'DtoModels'
 
 import {assert}                                 from 'chai'
-import {BaseCamera}                             from 'Camera'
 import {PerspectiveCamera}                      from 'Camera'
+import { CameraFactory }                        from "CameraFactory";
 import {CameraSettings}                         from 'CameraSettings'
 import {DepthBuffer}                            from 'DepthBuffer'
 import {DepthBufferFormat}                      from 'IDepthBuffer'
@@ -210,7 +210,7 @@ export class UnitTests {
                 perspectiveCamera);
 
             let cameraModel = camera.toDtoModel();
-            BaseCamera.fromDtoModelAsync(cameraModel).then(cameraRoundtrip => {
+            CameraFactory.ConstructFromDtoModelAsync(cameraModel).then(cameraRoundtrip => {
                 let c1 = camera.viewCamera;
                 let c2 = <THREE.PerspectiveCamera> cameraRoundtrip.viewCamera;
 

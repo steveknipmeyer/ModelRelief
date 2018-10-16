@@ -9,7 +9,7 @@ import * as Dto          from 'DtoModels'
 import * as THREE        from 'three'
 
 import { CameraHelper }                 from 'CameraHelper'
-import { CameraSettings }               from 'Camerasettings'
+import { CameraSettings }               from 'CameraSettings'
 import { DepthBufferFactory }           from 'DepthBufferFactory'
 import { Graphics }                     from 'Graphics'
 import { IModel }                       from 'IModel'
@@ -33,7 +33,7 @@ export interface ClippingPlanes {
  * @class Camera
  * @extends {Model}
  */
-export class BaseCamera extends Model {
+export abstract class BaseCamera extends Model {
 
     viewCamera : IThreeBaseCamera;
 
@@ -126,47 +126,6 @@ export class BaseCamera extends Model {
     }
 
 //#endregion
-
-    /**
-     * @description Constructs an instance from a DTO model.
-     * @returns {Camera}
-     */
-    static async fromDtoModelAsync(dtoCamera : Dto.Camera) : Promise<BaseCamera> {
-
-        let position    = new THREE.Vector3(dtoCamera.positionX, dtoCamera.positionY, dtoCamera.positionZ);
-        let quaternion  = new THREE.Quaternion(dtoCamera.eulerX, dtoCamera.eulerY, dtoCamera.eulerZ, dtoCamera.theta);
-        let scale       = new THREE.Vector3(dtoCamera.scaleX, dtoCamera.scaleY, dtoCamera.scaleZ);
-        let up          = new THREE.Vector3(dtoCamera.upX, dtoCamera.upY, dtoCamera.upZ);
-
-        // construct PerspectiveCamera from DTO properties
-        let viewCamera = dtoCamera.isPerspective ?
-            new THREE.PerspectiveCamera(dtoCamera.fieldOfView, dtoCamera.aspectRatio, dtoCamera.near, dtoCamera.far) :
-            new THREE.OrthographicCamera(dtoCamera.left, dtoCamera.right, dtoCamera.top, dtoCamera.bottom, dtoCamera.near, dtoCamera.far);
-
-        viewCamera.matrix.compose(position, quaternion, scale);
-        viewCamera.up.copy(up);
-
-        // set position/rotation/scale attributes
-        viewCamera.matrix.decompose(viewCamera.position, viewCamera.quaternion, viewCamera.scale);
-
-        viewCamera.near   = dtoCamera.near;
-        viewCamera.far    = dtoCamera.far;
-
-        viewCamera.updateProjectionMatrix();
-
-        // constructor
-        let camera = new BaseCamera ({
-            id          : dtoCamera.id,
-            name        : dtoCamera.name,
-            description : dtoCamera.description,
-            },
-            viewCamera
-        );
-
-        camera.project  = await Project.fromIdAsync(dtoCamera.projectId);
-
-        return camera;
-    }
 
     /**
      * @description Returns a DTO Camera model from the instance.

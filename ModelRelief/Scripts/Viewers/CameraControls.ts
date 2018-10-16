@@ -11,6 +11,7 @@ import * as dat    from 'dat-gui'
 import {assert}                                 from 'chai';
 import {BaseCamera}                             from 'Camera';
 import {CameraHelper }                          from 'CameraHelper';
+import { CameraFactory }                        from "CameraFactory";
 import {CameraSettings }                        from 'CameraSettings';
 import {ElementAttributes, ElementIds}          from 'Html';
 import {StandardView}                           from 'ICamera';
@@ -144,7 +145,10 @@ export class CameraControls {
 
         let scope = this;
 
-        let camera = new BaseCamera({}, this.viewer.camera);
+        let parameters = {};
+        let camera = CameraFactory.ConstructFromViewCamera(parameters, this.viewer.camera);
+
+
         this.settings = new CameraControlSettings(camera, this.fitView.bind(this), this.addCameraHelper.bind(this), this.boundClippingPlanes.bind(this));
         assert.deepEqual(this.viewer.camera, this.settings.camera.viewCamera);
 

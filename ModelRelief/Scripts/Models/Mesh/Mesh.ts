@@ -91,7 +91,7 @@ export class Mesh extends GeneratedFileModel {
         mesh.format             = dtoMesh.format;
 
         mesh.project = await Project.fromIdAsync(dtoMesh.projectId);
-        mesh.camera  = await CameraFactory.Construct(dtoMesh.cameraId);
+        mesh.camera  = await CameraFactory.ConstructFromIdAsync(dtoMesh.cameraId);
         mesh.depthBuffer    = await DepthBuffer.fromIdAsync(dtoMesh.depthBufferId);
         mesh.meshTransform  = await MeshTransform.fromIdAsync(dtoMesh.meshTransformId);
 

@@ -1,4 +1,4 @@
-﻿### Tasks
+﻿*### Tasks
 #### Commit Notes
 Refactor Mesh constructor to accept only IGenerateFileModel parameter for consistency with DepthBuffer.
 Rename source file BaseCamera.ts Camera.ts. The base and subclasses will be separated later when the circular references are resolved.
@@ -6,6 +6,16 @@ Rename source file BaseCamera.ts Camera.ts. The base and subclasses will be sepa
 #### Short Term
 
     What does CameraHelper.getDefaultCamera take a Camera as a parameter?
+
+    Review
+        instanceof THREE.PerspectiveCamera.
+        new THREE.PerspectiveCamera
+        THREE.PerspectiveCamera
+
+    BaseCamera
+        Should it have an isPerspective property?
+            This is an alternative to testing:
+                 BaseCamera.viewCamera instanceof THREE.PerspectiveCamera.
 
     Remove unused imports.
 
@@ -20,16 +30,6 @@ Rename source file BaseCamera.ts Camera.ts. The base and subclasses will be sepa
             https://github.com/pahen/madge
         ALM
             https://legacy.gitbook.com/book/alm-tools/alm/details
-
-    Review
-        instanceof THREE.PerspectiveCamera.
-        new THREE.PerspectiveCamera
-        THREE.PerspectiveCamera
-
-    BaseCamera
-        Should it have an isPerspective property?
-            This is an alternative to testing:
-                 BaseCamera.viewCamera instanceof THREE.PerspectiveCamera.
 
     Convert to ES5 modules?
         Separate BaseCamers, OrthographicCamera, PerspectiveCamera.

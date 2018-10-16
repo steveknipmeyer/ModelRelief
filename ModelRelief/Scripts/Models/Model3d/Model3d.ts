@@ -84,7 +84,7 @@ export class Model3d extends FileModel {
         model3d.format        = dtoModel3d.format;
 
         model3d.project = await Project.fromIdAsync(dtoModel3d.projectId);
-        model3d.camera  = await CameraFactory.Construct(dtoModel3d.cameraId);
+        model3d.camera  = await CameraFactory.ConstructFromIdAsync(dtoModel3d.cameraId);
 
         return model3d;
     }
