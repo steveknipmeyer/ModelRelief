@@ -9,7 +9,7 @@ import * as THREE  from 'three'
 import * as dat    from 'dat-gui'
 
 import {assert}                                 from 'chai';
-import {BaseCamera}                             from 'BaseCamera';
+import {BaseCamera}                             from 'Camera';
 import {CameraHelper }                          from 'CameraHelper';
 import {CameraSettings }                        from 'CameraSettings';
 import {ElementAttributes, ElementIds}          from 'Html';

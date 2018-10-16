@@ -1,25 +1,15 @@
 ﻿### Tasks
 #### Commit Notes
+Refactor Mesh constructor to accept only IGenerateFileModel parameter for consistency with DepthBuffer.
+Rename source file BaseCamera.ts Camera.ts. The base and subclasses will be separated later when the circular references are resolved.
 
 #### Short Term
-    Convert to ED5 modules?
-        Separate BaseCamers, OrthographicCamera, PerspectiveCamera.
+
     What does CameraHelper.getDefaultCamera take a Camera as a parameter?
 
-    Remove unused imports.  
-    Refactor imports to use paths.
-    CameraFactory.Constuct
-        Construct -> ConstructFromId
-        Construct
+    Remove unused imports.
 
-    Review new BaseCamera().
-        BaseCamera.fromDtoModelAsync
-            Dto.Camera.getViewCamera
-            CameraFactory.ConstructFromId
-        DepthBuffer
-            CameraFactory.Construct
-        CameraControls
-            CameraFactory.Construct
+    Refactor imports to use paths.
 
     Configure tslint.
         https://palantir.github.io/tslint/usage/configuration/
@@ -40,6 +30,9 @@
         Should it have an isPerspective property?
             This is an alternative to testing:
                  BaseCamera.viewCamera instanceof THREE.PerspectiveCamera.
+
+    Convert to ES5 modules?
+        Separate BaseCamers, OrthographicCamera, PerspectiveCamera.
 
     Controls
         Add OrthographicTrackballControls to project.

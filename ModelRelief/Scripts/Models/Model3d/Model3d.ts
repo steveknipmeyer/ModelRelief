@@ -7,7 +7,7 @@
 
 import * as Dto   from 'DtoModels'
 
-import { BaseCamera }                   from 'BaseCamera';
+import { BaseCamera }                   from 'Camera';
 import { CameraFactory }                from "CameraFactory";
 import { FileModel }                    from 'FileModel';
 import { Model3dFormat }                from 'IModel3d';
@@ -81,8 +81,7 @@ export class Model3d extends FileModel {
         });
 
         model3d.fileTimeStamp = dtoModel3d.fileTimeStamp;
-
-        model3d.format  = dtoModel3d.format;
+        model3d.format        = dtoModel3d.format;
 
         model3d.project = await Project.fromIdAsync(dtoModel3d.projectId);
         model3d.camera  = await CameraFactory.Construct(dtoModel3d.cameraId);

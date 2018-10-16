@@ -8,7 +8,7 @@
 import * as Dto   from 'DtoModels'
 import * as THREE from 'three'
 
-import { BaseCamera }                   from 'BaseCamera'
+import { BaseCamera }                   from 'Camera'
 import { CameraFactory }                from "CameraFactory";
 import { DepthBuffer }                  from 'DepthBuffer'
 import { GeneratedFileModel }           from 'GeneratedFileModel'
@@ -37,28 +37,21 @@ export class Mesh extends GeneratedFileModel {
     /**
      * Creates an instance of Mesh.
      * @param {IGeneratedFileModel} [parameters={}] GeneratedFileModel properties.
-     * @param {DepthBuffer} depthBuffer DepthBuffer.
-     * @param {MeshTransform} meshTransform MeshTransform.
      */
-    constructor(parameters : IGeneratedFileModel, depthBuffer : DepthBuffer, meshTransform : MeshTransform) {
+    constructor(parameters : IGeneratedFileModel) {
 
         parameters.name        = parameters.name        || "Mesh";
         parameters.description = parameters.description || "Mesh";
 
         super(parameters);
 
-        this.initialize(depthBuffer, meshTransform);
+        this.initialize();
     }
 
     /**
      * @description Perform setup and initialization.
-     * @param {DepthBuffer} depthBuffer DepthBuffer.
-     * @param {MeshTransform} meshTransform MeshTransform.
      */
-    initialize(depthBuffer : DepthBuffer, meshTransform : MeshTransform): void {
-
-        this.depthBuffer   = depthBuffer;
-        this.meshTransform = meshTransform;
+    initialize(): void {
     }
 
     /**
@@ -85,17 +78,12 @@ export class Mesh extends GeneratedFileModel {
      */
     static async fromDtoModelAsync(dtoMesh : Dto.Mesh) : Promise<Mesh> {
 
-        let depthBuffer    = await DepthBuffer.fromIdAsync(dtoMesh.depthBufferId);
-        let meshTransform  = await MeshTransform.fromIdAsync(dtoMesh.meshTransformId);
-
         // constructor
         let mesh = new Mesh ({
             id          : dtoMesh.id,
             name        : dtoMesh.name,
             description : dtoMesh.description,
-            },
-            depthBuffer,
-            meshTransform
+            }
         );
 
         mesh.fileTimeStamp      = dtoMesh.fileTimeStamp;
@@ -104,6 +92,8 @@ export class Mesh extends GeneratedFileModel {
 
         mesh.project = await Project.fromIdAsync(dtoMesh.projectId);
         mesh.camera  = await CameraFactory.Construct(dtoMesh.cameraId);
+        mesh.depthBuffer    = await DepthBuffer.fromIdAsync(dtoMesh.depthBufferId);
+        mesh.meshTransform  = await MeshTransform.fromIdAsync(dtoMesh.meshTransformId);
 
         return mesh;
     }

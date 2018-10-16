@@ -8,7 +8,7 @@
 import * as Dto                 from "DtoModels";
 import * as THREE               from "three";
 
-import { BaseCamera }                   from "BaseCamera";
+import { BaseCamera }                   from "Camera";
 import { CameraFactory }                from "CameraFactory";
 import { assert }                       from "chai";
 import { GeneratedFileModel }           from "GeneratedFileModel";

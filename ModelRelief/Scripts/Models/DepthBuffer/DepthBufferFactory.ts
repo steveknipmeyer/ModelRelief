@@ -8,7 +8,7 @@
 import * as THREE  from 'three'
 import * as Dto    from "DtoModels";
 
-import { BaseCamera}             from 'BaseCamera'
+import { BaseCamera}             from 'Camera'
 import { DepthBuffer}            from 'DepthBuffer'
 import { ILogger, ConsoleLogger} from 'Logger'
 import { Services}               from 'Services'
@@ -363,7 +363,9 @@ export class DepthBufferFactory {
             name        : 'Unnamed',
             description : 'Factory-generated',
             width       : this._width,
-            height      : this._height
+            height      : this._height,
+
+            cameraId    : this._camera.id
         })
 
         this._depthBuffer =  await DepthBuffer.fromDtoModelAsync(dtoDepthBuffer);
@@ -372,6 +374,7 @@ export class DepthBufferFactory {
         // WIP : Assign Model3d.
         // this._depthBuffer.model3d   =
 
+        // update camera properties from active view camera
         this._depthBuffer.camera = new BaseCamera ({
             id : this._camera.id,
         }, this._camera.viewCamera);

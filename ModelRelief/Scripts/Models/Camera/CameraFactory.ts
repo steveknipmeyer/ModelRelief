@@ -6,9 +6,9 @@
 "use strict";
 
 import * as Dto   from 'DtoModels'
-import {BaseCamera}             from 'BaseCamera';
-import {OrthographicCamera}     from 'BaseCamera';
-import {PerspectiveCamera}      from 'BaseCamera';
+import {BaseCamera}             from 'Camera';
+import {OrthographicCamera}     from 'Camera';
+import {PerspectiveCamera}      from 'Camera';
 
 /**
  * Camera

@@ -10,19 +10,19 @@ import * as dat    from 'dat-gui'
 import * as Dto    from "DtoModels";
 
 import { assert }                             from 'chai';
-import { BaseCamera }                         from "BaseCamera"
-import { PerspectiveCamera }                  from "BaseCamera"
-import { CameraSettings }                     from "CameraSettings"
-import { ComposerView }                       from "ComposerView"
-import { DepthBuffer }                        from "DepthBuffer"
-import { DepthBufferFactory }                 from "DepthBufferFactory"
-import { EventType, MREvent }                 from 'EventManager'
-import { ElementAttributes, ElementIds }      from "Html"
-import { Mesh }                               from "Mesh"
-import { MeshTransform }                      from 'MeshTransform'
-import { MeshViewer }                         from "MeshViewer"
-import { Model3d }                            from "Model3d"
-import { ModelViewer }                        from "ModelViewer"
+import { BaseCamera }                         from "Camera";
+import { PerspectiveCamera }                  from "Camera";
+import { CameraSettings }                     from "CameraSettings";
+import { ComposerView }                       from "ComposerView";
+import { DepthBuffer }                        from "DepthBuffer";
+import { DepthBufferFactory }                 from "DepthBufferFactory";
+import { EventType, MREvent }                 from 'EventManager';
+import { ElementAttributes, ElementIds }      from "Html";
+import { Mesh }                               from "Mesh";
+import { MeshTransform }                      from 'MeshTransform';
+import { MeshViewer }                         from "MeshViewer";
+import { Model3d }                            from "Model3d";
+import { ModelViewer }                        from "ModelViewer";
 import { UnitTests }                          from 'UnitTests';
 
 /**

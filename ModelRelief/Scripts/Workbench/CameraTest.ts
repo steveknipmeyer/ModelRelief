@@ -9,8 +9,8 @@ import * as THREE                   from 'three'
 import {assert}                     from 'chai';
 import * as dat                     from 'dat-gui'
 
-import {BaseCamera}                     from 'BaseCamera'
-import {PerspectiveCamera}              from 'BaseCamera'
+import {BaseCamera}                     from 'Camera'
+import {PerspectiveCamera}              from 'Camera'
 import {Graphics, ObjectNames}          from 'Graphics'
 import {ElementAttributes, ElementIds}  from "Html"
 import { IThreeBaseCamera }             from 'IThreeBaseCamera';
