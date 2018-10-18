@@ -1,11 +1,11 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import {IModel} from "IModel"
+import {IModel} from "./IModel";
 
 /**
  *  Common interface for all file-backed DTOs (e.g. DepthBuffer, Mesh, Model3d).

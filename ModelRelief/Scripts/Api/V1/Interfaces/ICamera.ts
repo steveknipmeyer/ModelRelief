@@ -5,16 +5,16 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE       from 'three'
+import * as THREE from "three";
 
-import { IModel }       from 'IModel'
-import { IProject }     from 'IProject'
+import { IModel } from "./IModel";
+import { IProject } from "./IProject";
 
 
  /**
- *  Standard camera views.
- *  @enum {number}
- */
+  *  Standard camera views.
+  *  @enum {number}
+  */
 export enum StandardView {
     None,
     Front,
@@ -23,14 +23,14 @@ export enum StandardView {
     Bottom,
     Left,
     Right,
-    Isometric
+    Isometric,
 }
 
  /**
- *  Represents a DTO for a Camera.
- *  N.B. All properties in the interface are optional so that an initialization object can be used to construct the concrete class.
- *  @interface
- */
+  *  Represents a DTO for a Camera.
+  *  N.B. All properties in the interface are optional so that an initialization object can be used to construct the concrete class.
+  *  @interface
+  */
 export interface ICamera extends IModel {
 
     id?: number;

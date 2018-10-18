@@ -5,25 +5,25 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE       from 'three'
+import * as THREE from "three";
 
-import { Exception }                        from 'Exception'
+import { IThreeBaseCamera } from "../../../Graphics/IThreeBaseCamera";
+import { Exception } from "../../../System/Exception";
 import { ContentType, HttpLibrary,
-         MethodType, ServerEndPoints }      from 'Http'
-import { HttpStatusCode, HttpStatusMessage }from 'HttpStatus'
-import { ICamera, StandardView }            from 'ICamera'
-import { IDepthBuffer, DepthBufferFormat }  from 'IDepthBuffer'
-import { IFileModel }                       from 'IFileModel'
-import { IGeneratedFileModel }              from 'IGeneratedFileModel'
-import { IMesh, MeshFormat }                from 'IMesh'
-import { IMeshTransform }                   from 'IMeshTransform'
-import { IModel }                           from 'IModel'
-import { IModel3d, Model3dFormat }          from 'IModel3d'
-import { IProject }                         from 'IProject'
-import { IThreeBaseCamera }                 from 'IThreeBaseCamera'
-import { ILogger, HTMLLogger }              from 'Logger'
-import { RequestResponse }                  from 'RequestResponse'
-import { Services }                         from 'Services'
+         MethodType, ServerEndPoints } from "../../../System/Http";
+import { HttpStatusCode } from "../../../System/HttpStatus";
+import { ILogger } from "../../../System/Logger";
+import { RequestResponse } from "../../../System/RequestResponse";
+import { Services } from "../../../System/Services";
+import { ICamera } from "../Interfaces/ICamera";
+import { DepthBufferFormat, IDepthBuffer } from "../Interfaces/IDepthBuffer";
+import { IFileModel } from "../Interfaces/IFileModel";
+import { IGeneratedFileModel } from "../Interfaces/IGeneratedFileModel";
+import { IMesh, MeshFormat } from "../Interfaces/IMesh";
+import { IMeshTransform } from "../Interfaces/IMeshTransform";
+import { IModel } from "../Interfaces/IModel";
+import { IModel3d, Model3dFormat } from "../Interfaces/IModel3d";
+import { IProject } from "../Interfaces/IProject";
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------//
 //                                                              Base Classes                                                                    //
@@ -35,24 +35,24 @@ import { Services }                         from 'Services'
  * @implements {IModel}
  * @template T
  */
-export class Model<T extends IModel> implements IModel{
+export class Model<T extends IModel> implements IModel {
 
-    id          : number;
-    name        : string;
-    description : string;
+    public id: number;
+    public name: string;
+    public description: string;
 
-    endPoint    : string;       // API endpoint
+    public endPoint: string;       // API endpoint
 
     // Private
-    _logger     : ILogger;
+    private _logger: ILogger;
 
     /**
      * Creates an instance of Model.
      * @param {IModel} [parameters] Initialization parameters.
      */
-    constructor (parameters: IModel = {}) {
+    constructor(parameters: IModel = {}) {
 
-        let {
+        const {
             id,
             name,
             description,
@@ -74,11 +74,11 @@ export class Model<T extends IModel> implements IModel{
      * @param {*} requestData Data to send (or null)
      * @returns {Promise<RequestResponse>}
      */
-    async submitRequestAsync(endPoint: string, requestType : MethodType, contentType : ContentType, requestData : any) : Promise<RequestResponse> {
+    public async submitRequestAsync(endPoint: string, requestType: MethodType, contentType: ContentType, requestData: any): Promise<RequestResponse> {
 
-        let exportTag = Services.timer.mark(`${requestType} ${this.constructor.name}`);
+        const exportTag = Services.timer.mark(`${requestType} ${this.constructor.name}`);
 
-        let result = await HttpLibrary.submitHttpRequestAsync(endPoint, requestType, contentType, requestData);
+        const result = await HttpLibrary.submitHttpRequestAsync(endPoint, requestType, contentType, requestData);
 
         Services.timer.logElapsedTime(exportTag);
 
@@ -89,17 +89,18 @@ export class Model<T extends IModel> implements IModel{
      * @param {IModel} parameters
      * @returns {*}
      */
-    factory(parameters : IModel) : any{};
+    public factory(parameters: IModel): any {
+    }
 
     /**
      * @description Posts the model to its API endpoint.
      * @returns {Promise<T>}
      */
-    async postAsync() : Promise<T> {
+    public async postAsync(): Promise<T> {
 
-        let newModel = JSON.stringify(this);
-        let result = await this.submitRequestAsync(this.endPoint, MethodType.Post, ContentType.Json, newModel);
-        if (result.response.status != HttpStatusCode.CREATED)
+        const newModel = JSON.stringify(this);
+        const result = await this.submitRequestAsync(this.endPoint, MethodType.Post, ContentType.Json, newModel);
+        if (result.response.status !== HttpStatusCode.CREATED)
             Exception.throwError(`postFileAsync model: Url = ${this.endPoint}, status = ${result.response.status}`);
 
         return this.factory(result.model) as T;
@@ -109,26 +110,26 @@ export class Model<T extends IModel> implements IModel{
      * @description Gets the model from its API endpoint.
      * @returns {Promise<T>}
      */
-    async getAsync() : Promise<T> {
+    public async getAsync(): Promise<T> {
 
         if (!this.id)
             return undefined;
 
-            let endPoint = `${this.endPoint}/${this.id}`;
-        let result = await this.submitRequestAsync(endPoint, MethodType.Get, ContentType.Json, null);
+        const endPoint = `${this.endPoint}/${this.id}`;
+        const result = await this.submitRequestAsync(endPoint, MethodType.Get, ContentType.Json, null);
 
-        return this.factory(result.model) as T
+        return this.factory(result.model) as T;
     }
 
     /**
      * @description Puts the model to its API endpoint.
      * @returns {Promise<T>}
      */
-    async putAsync() : Promise<T> {
+    public async putAsync(): Promise<T> {
 
-        let updatedModel = JSON.stringify(this);
-        let endPoint = `${this.endPoint}/${this.id}`;
-        let result = await this.submitRequestAsync(endPoint, MethodType.Put, ContentType.Json, updatedModel);
+        const updatedModel = JSON.stringify(this);
+        const endPoint = `${this.endPoint}/${this.id}`;
+        const result = await this.submitRequestAsync(endPoint, MethodType.Put, ContentType.Json, updatedModel);
 
         return this.factory(result.model) as T;
     }
@@ -142,14 +143,14 @@ export class Model<T extends IModel> implements IModel{
  * @implements {IFileModel}
  * @template T
  */
-export class FileModel<T extends IFileModel> extends Model<T> implements IFileModel{
+export class FileModel<T extends IFileModel> extends Model<T> implements IFileModel {
 
     // not exposed in UX; API only
-    fileTimeStamp: Date;
+    public fileTimeStamp: Date;
 
     // Private
-    fileArray  : Uint8Array;
-    fileString : string;
+    public fileArray: Uint8Array;
+    public fileString: string;
 
     /**
      * Creates an instance of FileModel.
@@ -167,7 +168,7 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
      * @readonly
      * @type {string}
      */
-    get fileEndPoint() : string {
+    get fileEndPoint(): string {
         return `${this.endPoint}/${this.id}/file`;
     }
 
@@ -175,11 +176,11 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
      * @description Posts the model and a backing file to its API endpoint.
      * @returns {Promise<T>}
      */
-    async postFileAsync(fileData : any) : Promise<T> {
+    public async postFileAsync(fileData: any): Promise<T> {
 
-        let exportTag = Services.timer.mark(`POST File: ${this.constructor.name}`);
+        const exportTag = Services.timer.mark(`POST File: ${this.constructor.name}`);
 
-        let newModel = await HttpLibrary.postFileAsync (this.fileEndPoint, fileData);
+        const newModel = await HttpLibrary.postFileAsync (this.fileEndPoint, fileData);
 
         Services.timer.logElapsedTime(exportTag);
 
@@ -190,48 +191,48 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
      * @description Gets the backing file from a model.
      * @returns {Promise<UInt8Array>}
      */
-    async getFileAsync() : Promise<Uint8Array> {
+    public async getFileAsync(): Promise<Uint8Array> {
 
-        let exportTag = Services.timer.mark(`GET File: ${this.constructor.name}`);
+        const exportTag = Services.timer.mark(`GET File: ${this.constructor.name}`);
 
         // cache
         if (this.fileArray)
             return this.fileArray;
 
-        let result = await this.submitRequestAsync(this.fileEndPoint, MethodType.Get, ContentType.OctetStream, null);
+        const result = await this.submitRequestAsync(this.fileEndPoint, MethodType.Get, ContentType.OctetStream, null);
         this.fileArray = result.byteArrayDecodedDoublePrime;
 //      this._fileArray = result.byteArrayDecoded;
 
         Services.timer.logElapsedTime(exportTag);
 
-        return this.fileArray;;
+        return this.fileArray;
     }
 
      /**
-     * @description Gets the backing file as a string from a model.
-     * // https://stackoverflow.com/questions/8936984/uint8array-to-string-in-javascript
-     * @returns {Promise<string>}
-     */
-    async getFileAsStringAsync() : Promise<string> {
+      * @description Gets the backing file as a string from a model.
+      * // https://stackoverflow.com/questions/8936984/uint8array-to-string-in-javascript
+      * @returns {Promise<string>}
+      */
+    public async getFileAsStringAsync(): Promise<string> {
 
-        let exportTag = Services.timer.mark(`GET File (string): ${this.constructor.name}`);
+        const exportTag = Services.timer.mark(`GET File (string): ${this.constructor.name}`);
 
         // cache
         if (this.fileString)
             return this.fileString;
 
-            let fileByteArray = await this.getFileAsync();
-        function byteToStringConverter() : Promise<string> {
+        const fileByteArray = await this.getFileAsync();
+        function byteToStringConverter(): Promise<string> {
             return new Promise<string>((resolve, reject) => {
-                let blobBuffer = new Blob([new Uint8Array(fileByteArray)]);
+                const blobBuffer = new Blob([new Uint8Array(fileByteArray)]);
 
-                let fileReader = new FileReader();
-                fileReader.onload = function(e) {
-                    resolve((<any>e.target).result);
+                const fileReader = new FileReader();
+                fileReader.onload = (e) => {
+                    resolve((e.target as any).result);
                 };
 
                 fileReader.readAsText(blobBuffer);
-            })
+            });
         }
         this.fileString = await byteToStringConverter();
         Services.timer.logElapsedTime(exportTag);
@@ -248,10 +249,10 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
  * @implements {IGeneratedFileModel}
  * @template T
  */
-export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel<T> implements IGeneratedFileModel{
+export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel<T> implements IGeneratedFileModel {
 
     // not exposed in UX; API only
-    fileIsSynchronized: boolean;
+    public fileIsSynchronized: boolean;
 
     /**
      * Creates an instance of GeneratedFileModel.
@@ -274,53 +275,71 @@ export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel
  */
 export class Camera extends Model<Camera> implements ICamera {
 
-    isPerspective: boolean;
+    /**
+     * @description Returns a Camera instance through an HTTP query of the Id.
+     * @static
+     * @param {number} id Camera Id.
+     * @returns {Promise<BaseCamera>}
+     */
+    public static async fromIdAsync(id: number ): Promise<Camera> {
 
-    near: number;
-    far: number;
+        if (!id)
+            return undefined;
 
-    positionX: number;
-    positionY: number;
-    positionZ: number;
+        const camera = new Camera ({
+            id,
+        });
+        const cameraModel = await camera.getAsync();
+        return cameraModel;
+    }
 
-    eulerX: number;
-    eulerY: number;
-    eulerZ: number;
-    theta: number;
+    public isPerspective: boolean;
 
-    scaleX: number;
-    scaleY: number;
-    scaleZ: number;
+    public near: number;
+    public far: number;
 
-    upX: number;
-    upY: number;
-    upZ: number;
+    public positionX: number;
+    public positionY: number;
+    public positionZ: number;
+
+    public eulerX: number;
+    public eulerY: number;
+    public eulerZ: number;
+    public theta: number;
+
+    public scaleX: number;
+    public scaleY: number;
+    public scaleZ: number;
+
+    public upX: number;
+    public upY: number;
+    public upZ: number;
 
     // Perspective
-    fieldOfView: number;
-    aspectRatio: number;
+    public fieldOfView: number;
+    public aspectRatio: number;
 
     // Orthographic
-    left: number;
-    right: number;
-    top: number;
-    bottom: number;
+    public left: number;
+    public right: number;
+    public top: number;
+    public bottom: number;
 
     // Navigation Properties
-    projectId: number;
-    project: IProject;
+    public projectId: number;
+    public project: IProject;
 
     /**
      * Creates an instance of Camera.
      * @param {ICamera} parameters
      */
-    constructor (parameters: ICamera = {}) {
+    constructor(parameters: ICamera = {}) {
 
         super(parameters);
 
         this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiCameras}`;
 
-        let {
+        const {
             isPerspective,
 
             near,
@@ -404,7 +423,7 @@ export class Camera extends Model<Camera> implements ICamera {
      * @param {IModel} parameters : Dto.Camera
      * @returns {Camera}
      */
-    factory (parameters: IModel) : Camera {
+    public factory(parameters: IModel): Camera {
         return new Camera(parameters);
     }
 
@@ -412,15 +431,15 @@ export class Camera extends Model<Camera> implements ICamera {
      * @description Constructs an instance from a DTO model.
      * @returns {Camera}
      */
-    getViewCamera() : IThreeBaseCamera {
+    public getViewCamera(): IThreeBaseCamera {
 
-        let position    = new THREE.Vector3(this.positionX, this.positionY, this.positionZ);
-        let quaternion  = new THREE.Quaternion(this.eulerX, this.eulerY, this.eulerZ, this.theta);
-        let scale       = new THREE.Vector3(this.scaleX, this.scaleY, this.scaleZ);
-        let up          = new THREE.Vector3(this.upX, this.upY, this.upZ);
+        const position    = new THREE.Vector3(this.positionX, this.positionY, this.positionZ);
+        const quaternion  = new THREE.Quaternion(this.eulerX, this.eulerY, this.eulerZ, this.theta);
+        const scale       = new THREE.Vector3(this.scaleX, this.scaleY, this.scaleZ);
+        const up          = new THREE.Vector3(this.upX, this.upY, this.upZ);
 
         // construct from DTO properties
-        let viewCamera = this.isPerspective ?
+        const viewCamera = this.isPerspective ?
             new THREE.PerspectiveCamera(this.fieldOfView, this.aspectRatio, this.near, this.far) :
             new THREE.OrthographicCamera(this.left, this.right, this.top, this.bottom, this.near, this.far);
 
@@ -437,57 +456,39 @@ export class Camera extends Model<Camera> implements ICamera {
 
         return viewCamera;
     }
-
-    /**
-     * @description Returns a Camera instance through an HTTP query of the Id.
-     * @static
-     * @param {number} id Camera Id.
-     * @returns {Promise<BaseCamera>}
-     */
-    static async fromIdAsync(id : number ) : Promise<Camera> {
-
-        if (!id)
-            return undefined;
-
-        let camera = new Camera ({
-            id : id
-        });
-        let cameraModel = await camera.getAsync();
-        return cameraModel;
-    }
 }
 
 /**
-*  Concrete implementation of IDepthBuffer.
-*  @interface
-*/
+ *  Concrete implementation of IDepthBuffer.
+ *  @interface
+ */
 export class DepthBuffer extends GeneratedFileModel<DepthBuffer> implements IDepthBuffer {
 
-    width: number;
-    height: number;
-    format: DepthBufferFormat;
+    public width: number;
+    public height: number;
+    public format: DepthBufferFormat;
 
     // Navigation Properties
-    projectId: number;
-    project: IProject;
+    public projectId: number;
+    public project: IProject;
 
-    model3dId: number;
-    model3d: IModel3d;
+    public model3dId: number;
+    public model3d: IModel3d;
 
-    cameraId: number;
-    camera: ICamera;
+    public cameraId: number;
+    public camera: ICamera;
 
     /**
      * Creates an instance of DepthBuffer.
      * @param {IDepthBuffer} parameters
      */
-    constructor (parameters: IDepthBuffer = {}) {
+    constructor(parameters: IDepthBuffer = {}) {
 
         super(parameters);
 
         this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiDepthBuffers}`;
 
-        let {
+        const {
             width,
             height,
             format,
@@ -523,43 +524,43 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> implements IDep
      * @param {IModel} parameters : Dto.DepthBuffer
      * @returns {DepthBuffer}
      */
-    factory (parameters: IModel) : DepthBuffer {
+    public factory(parameters: IModel): DepthBuffer {
         return new DepthBuffer(parameters);
     }
 }
 
 /**
-*  Concrete implementation of IMesh.
-*  @interface
-*/
+ *  Concrete implementation of IMesh.
+ *  @interface
+ */
 export class Mesh extends GeneratedFileModel<Mesh> implements IMesh {
 
-    format: MeshFormat;
+    public format: MeshFormat;
 
     // Navigation Properties
-    projectId: number;
-    project: IProject;
+    public projectId: number;
+    public project: IProject;
 
-    cameraId: number;
-    camera: ICamera;
+    public cameraId: number;
+    public camera: ICamera;
 
-    depthBufferId: number;
-    depthBuffer: IDepthBuffer;
+    public depthBufferId: number;
+    public depthBuffer: IDepthBuffer;
 
-    meshTransformId: number;
-    meshTransform: IMeshTransform;
+    public meshTransformId: number;
+    public meshTransform: IMeshTransform;
 
     /**
      * Creates an instance of a Mesh.
      * @param {Mesh} parameters
      */
-    constructor (parameters: IMesh = {}) {
+    constructor(parameters: IMesh = {}) {
 
         super(parameters);
 
         this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiMeshes}`;
 
-        let {
+        const {
             format,
 
             // Navigation Properties
@@ -597,51 +598,51 @@ export class Mesh extends GeneratedFileModel<Mesh> implements IMesh {
      * @param {IModel} parameters : Dto.Mesh
      * @returns {Mesh}
      */
-    factory (parameters: IModel) : Mesh {
+    public factory(parameters: IModel): Mesh {
         return new Mesh(parameters);
     }
 }
 
 /**
-*  Concrete implementation of IMeshTransform.
-*  @interface
-*/
+ *  Concrete implementation of IMeshTransform.
+ *  @interface
+ */
 export class MeshTransform extends Model<MeshTransform> implements IMeshTransform {
 
-    width: number;
-    height: number;
-    depth: number;
+    public width: number;
+    public height: number;
+    public depth: number;
 
-    gradientThreshold?: number;             // gradient threshold
-    attenuationFactor?:number;              // gradient attenuation (~a)
-    attenuationDecay?:number;               // gradient attenuation decay (b)
-    unsharpGaussianLow?: number;            // unsharp masking Gaussian low
-    unsharpGaussianHigh?: number;           // unsharp masking Gaussian high
-    unsharpHighFrequencyScale?: number;     // Unsharp masking high frequency scaling
-    p1?: number;                            // placeholder
-    p2?: number;                            // placeholder
-    p3?: number;                            // placeholder
-    p4?: number;                            // placeholder
-    p5?: number;                            // placeholder
-    p6?: number;                            // placeholder
-    p7?: number;                            // placeholder
-    p8?: number;                            // placeholder
+    public gradientThreshold?: number;             // gradient threshold
+    public attenuationFactor?: number;              // gradient attenuation (~a)
+    public attenuationDecay?: number;               // gradient attenuation decay (b)
+    public unsharpGaussianLow?: number;            // unsharp masking Gaussian low
+    public unsharpGaussianHigh?: number;           // unsharp masking Gaussian high
+    public unsharpHighFrequencyScale?: number;     // Unsharp masking high frequency scaling
+    public p1?: number;                            // placeholder
+    public p2?: number;                            // placeholder
+    public p3?: number;                            // placeholder
+    public p4?: number;                            // placeholder
+    public p5?: number;                            // placeholder
+    public p6?: number;                            // placeholder
+    public p7?: number;                            // placeholder
+    public p8?: number;                            // placeholder
 
     // Navigation Properties
-    projectId: number;
-    project: IProject;
+    public projectId: number;
+    public project: IProject;
 
     /**
      * Creates an instance of a MeshTransform.
      * @param {IMeshTransform} parameters
      */
-    constructor (parameters: IMeshTransform = {}) {
+    constructor(parameters: IMeshTransform = {}) {
 
         super(parameters);
 
         this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiMeshTransforms}`;
 
-        let {
+        const {
             width,
             height,
             depth,
@@ -695,37 +696,37 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
      * @param {IModel} parameters : Dto.MeshTransform
      * @returns {MeshTransform}
      */
-    factory (parameters: IModel) : MeshTransform {
+    public factory(parameters: IModel): MeshTransform {
         return new MeshTransform(parameters);
     }
-};
+}
 
 /**
-*  Concrete implementation of IModel3d.
-*  @interface
-*/
+ *  Concrete implementation of IModel3d.
+ *  @interface
+ */
 export class Model3d extends FileModel<Model3d> implements IModel3d {
 
-    format: Model3dFormat;
+    public format: Model3dFormat;
 
     // Navigation Properties
-    projectId: number;
-    project: IProject;
+    public projectId: number;
+    public project: IProject;
 
-    cameraId: number;
-    camera: ICamera;
+    public cameraId: number;
+    public camera: ICamera;
 
     /**
      * Creates an instance of a Model3d.
      * @param {IModel3d} parameters
      */
-    constructor (parameters: IModel3d = {}) {
+    constructor(parameters: IModel3d = {}) {
 
         super(parameters);
 
         this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiModels}`;
 
-        let {
+        const {
             format,
 
             // Navigation Properties
@@ -751,7 +752,7 @@ export class Model3d extends FileModel<Model3d> implements IModel3d {
      * @param {IModel} parameters : Dto.Model3d
      * @returns {Model3d}
      */
-    factory (parameters: IModel) : Model3d {
+    public factory(parameters: IModel): Model3d {
         return new Model3d(parameters);
     }
 }
@@ -766,7 +767,7 @@ export class Project extends Model<Project> implements IProject {
      * Creates an instance of a Project.
      * @param {Project} parameters
      */
-    constructor (parameters: IProject = {}) {
+    constructor(parameters: IProject = {}) {
 
         super(parameters);
 
@@ -778,7 +779,7 @@ export class Project extends Model<Project> implements IProject {
      * @param {IModel} parameters : Dto.Project
      * @returns {Project}
      */
-    factory (parameters: IModel) : Project {
+    public factory(parameters: IModel): Project {
         return new Project(parameters);
     }
 }

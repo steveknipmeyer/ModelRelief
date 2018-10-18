@@ -1,18 +1,12 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE       from 'three'
-
-import { ContentType, HttpLibrary, 
-         MethodType, ServerEndPoints }  from 'Http'
-import { IGeneratedFileModel }          from 'IGeneratedFileModel'
-import { FileModel }                    from 'FileModel'
-import { RequestResponse }              from 'RequestResponse'
-import { Services }                     from 'Services'
+import { FileModel } from "FileModel";
+import { IGeneratedFileModel } from "IGeneratedFileModel";
 
 /**
  * @description Base class for a generated file-backed DTO model.
@@ -21,10 +15,10 @@ import { Services }                     from 'Services'
  * @extends {FileModel}
  * @implements {IGeneratedFileModel}
  */
-export class GeneratedFileModel extends FileModel implements IGeneratedFileModel{
+export class GeneratedFileModel extends FileModel implements IGeneratedFileModel {
 
     // not exposed in UX; API only
-    fileIsSynchronized: boolean;
+    public fileIsSynchronized: boolean;
 
     /**
      * Creates an instance of GeneratedFileModel.

@@ -3,11 +3,10 @@
 
 #### Short Term
 
-    Remove unused imports.
-
-    Refactor imports to use paths.
-
     Configure tslint.
+        Api
+
+        https://palantir.github.io/tslint/rules/
         https://palantir.github.io/tslint/usage/configuration/
 
     Circular Dependencies

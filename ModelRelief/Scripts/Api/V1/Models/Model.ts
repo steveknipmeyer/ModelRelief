@@ -5,9 +5,9 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { ILogger }                          from 'Logger'
-import { IModel }                           from 'IModel'
-import { Services }                         from 'Services'
+import { ILogger } from "../../../System/Logger";
+import { Services } from "../../../System/Services";
+import { IModel } from "../Interfaces/IModel";
 
 /**
  * @description Common base class for all FE models.
@@ -15,22 +15,22 @@ import { Services }                         from 'Services'
  * @class Model
  * @implements {IModel}
  */
-export class Model implements IModel{
+export class Model implements IModel {
 
-    id          : number;
-    name        : string;
-    description : string;
+    public id: number;
+    public name: string;
+    public description: string;
 
     // Private
-    _logger     : ILogger;
+    public _logger: ILogger;
 
     /**
      * Creates an instance of Model.
      * @param {IModel} [parameters] Initialization parameters.
      */
-    constructor (parameters: IModel = {}) {
+    constructor(parameters: IModel = {}) {
 
-        let {
+        const {
             id,
             name,
             description,

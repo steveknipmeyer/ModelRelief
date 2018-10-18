@@ -1,19 +1,19 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { ICamera }              from 'ICamera'
-import { IModel3d }             from 'IModel3d'
-import { IProject }             from 'IProject'
-import { IGeneratedFileModel }  from 'IGeneratedFileModel'
+import { ICamera } from "./ICamera";
+import { IGeneratedFileModel } from "./IGeneratedFileModel";
+import { IModel3d } from "./IModel3d";
+import { IProject } from "./IProject";
 
  /**
- *  Depth buffer file formats.
- *  @enum {number}
- */
+  *  Depth buffer file formats.
+  *  @enum {number}
+  */
 export enum DepthBufferFormat {
     None,       // unknown
     SDB,        // single precision depth buffer
@@ -25,10 +25,10 @@ export enum DepthBufferFormat {
 }
 
  /**
- *  Represents a DTO for a DepthBuffer.
- *  N.B. All properties in the interface are optional so that an initialization object can be used to construct the concrete class.
- *  @interface
- */
+  *  Represents a DTO for a DepthBuffer.
+  *  N.B. All properties in the interface are optional so that an initialization object can be used to construct the concrete class.
+  *  @interface
+  */
 export interface IDepthBuffer extends IGeneratedFileModel {
 
     id?: number;
