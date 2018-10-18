@@ -56,6 +56,19 @@ export abstract class BaseCamera extends Model {
         this.initialize(camera);
     }
 
+//#region Properties
+    /**
+     * @description Returns whether the view camera is perpective (and not orthographic).
+     * @readonly
+     * @type {boolean}
+     */
+    get isPerspective(): boolean {
+
+        return this.viewCamera ? this.viewCamera instanceof THREE.PerspectiveCamera : true;
+    }
+
+//#endregion
+
     /**
      * @description Perform setup and initialization.
      * @param {IThreeBaseCamera} camera IThreeBaseCamera.
@@ -133,7 +146,7 @@ export abstract class BaseCamera extends Model {
      */
     toDtoModel() : Dto.Camera {
 
-        let isPerspective  = this.viewCamera instanceof THREE.PerspectiveCamera;
+        let isPerspective  = this.isPerspective;
         let isOrthographic = this.viewCamera instanceof THREE.OrthographicCamera;
 
         let position    = new THREE.Vector3();
