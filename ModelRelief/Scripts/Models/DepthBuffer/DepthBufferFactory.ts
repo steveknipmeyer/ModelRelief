@@ -5,15 +5,15 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE  from 'three'
-import * as Dto    from "DtoModels";
+import * as Dto from "DtoModels";
+import * as THREE from "three";
 
-import { BaseCamera}             from 'Camera'
-import { CameraFactory }         from "CameraFactory";
-import { DepthBuffer}            from 'DepthBuffer'
-import { ILogger, ConsoleLogger} from 'Logger'
-import { Services}               from 'Services'
-import { Tools}                  from 'Tools'
+import {BaseCamera} from "Scripts/Models/Camera/Camera";
+import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
+import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
+import {ILogger} from "Scripts/System/Logger";
+import {Services} from "Scripts/System/Services";
+import {Tools} from "Scripts/System/Tools";
 
 /*
   Requirements
@@ -24,15 +24,15 @@ import { Tools}                  from 'Tools'
  * @export
  * @interface DepthBufferFactoryParameters
  */
-export interface DepthBufferFactoryParameters {
+export interface IDepthBufferFactoryParameters {
 
-    canvas           : HTMLCanvasElement,       // Canvas element (any size)
-    width            : number,                  // width of DB
-    height           : number                   // height of DB
-    modelGroup       : THREE.Group,             // model root
-    camera           : BaseCamera,              // camera
+    canvas: HTMLCanvasElement;       // Canvas element (any size)
+    width: number;                  // width of DB
+    height: number;                   // height of DB
+    modelGroup: THREE.Group;             // model root
+    camera: BaseCamera;              // camera
 
-    logDepthBuffer?  : boolean,                 // use logarithmic depth buffer for higher resolution (better distribution) in scenes with large extents
+    logDepthBuffer?: boolean;                 // use logarithmic depth buffer for higher resolution (better distribution) in scenes with large extents
 }
 
 /**
@@ -41,43 +41,43 @@ export interface DepthBufferFactoryParameters {
  */
 export class DepthBufferFactory {
 
-    static DefaultResolution : number           = 1024;                     // default DB resolution
-    static NearPlaneEpsilon  : number           = .001;                     // adjustment to avoid clipping geometry on the near plane
+    public static DefaultResolution: number           = 1024;                     // default DB resolution
+    public static NearPlaneEpsilon: number           = .001;                     // adjustment to avoid clipping geometry on the near plane
 
-    static CssClassName      : string           = 'DepthBufferFactory';     // CSS class
-    static RootContainerId   : string           = 'rootContainer';          // root container for viewers
+    public static CssClassName: string           = "DepthBufferFactory";     // CSS class
+    public static RootContainerId: string           = "rootContainer";          // root container for viewers
 
-    _scene           : THREE.Scene              = null;     // target scene
-    _modelGroup      : THREE.Group              = null;     // target model
+    public _scene: THREE.Scene              = null;     // target scene
+    public _modelGroup: THREE.Group              = null;     // target model
 
-    _renderer        : THREE.WebGLRenderer      = null;     // scene renderer
-    _canvas          : HTMLCanvasElement        = null;     // DOM canvas supporting renderer
-    _width           : number                   = DepthBufferFactory.DefaultResolution;     // width resolution of the DB
-    _height          : number                   = DepthBufferFactory.DefaultResolution;     // height resolution of the DB
+    public _renderer: THREE.WebGLRenderer      = null;     // scene renderer
+    public _canvas: HTMLCanvasElement        = null;     // DOM canvas supporting renderer
+    public _width: number                   = DepthBufferFactory.DefaultResolution;     // width resolution of the DB
+    public _height: number                   = DepthBufferFactory.DefaultResolution;     // height resolution of the DB
 
-    _camera          : BaseCamera               = null;     // camera to generate the depth buffer
+    public _camera: BaseCamera               = null;     // camera to generate the depth buffer
 
 
-    _logDepthBuffer  : boolean                  = false;    // use a logarithmic buffer for more accuracy in large scenes
+    public _logDepthBuffer: boolean                  = false;    // use a logarithmic buffer for more accuracy in large scenes
 
-    _depthBuffer     : DepthBuffer              = null;     // depth buffer
-    _target          : THREE.WebGLRenderTarget  = null;     // WebGL render target for creating the WebGL depth buffer when rendering the scene
-    _encodedTarget   : THREE.WebGLRenderTarget  = null;     // WebGL render target for encodin the WebGL depth buffer into a floating point (RGBA format)
+    public _depthBuffer: DepthBuffer              = null;     // depth buffer
+    public _target: THREE.WebGLRenderTarget  = null;     // WebGL render target for creating the WebGL depth buffer when rendering the scene
+    public _encodedTarget: THREE.WebGLRenderTarget  = null;     // WebGL render target for encodin the WebGL depth buffer into a floating point (RGBA format)
 
-    _postScene       : THREE.Scene              = null;     // single polygon scene use to generate the encoded RGBA buffer
-    _postCamera      : THREE.OrthographicCamera = null;     // orthographic camera
-    _postMaterial    : THREE.ShaderMaterial     = null;     // shader material that encodes the WebGL depth buffer into a floating point RGBA format
+    public _postScene: THREE.Scene              = null;     // single polygon scene use to generate the encoded RGBA buffer
+    public _postCamera: THREE.OrthographicCamera = null;     // orthographic camera
+    public _postMaterial: THREE.ShaderMaterial     = null;     // shader material that encodes the WebGL depth buffer into a floating point RGBA format
 
-    _minimumWebGL    : boolean                  = true;     // true if minimum WeGL requirements are present
-    _logger          : ILogger                   = null;     // logger
+    public _minimumWebGL: boolean                  = true;     // true if minimum WeGL requirements are present
+    public _logger: ILogger                   = null;     // logger
 
     /**
      * @constructor
      * @param parameters Initialization parameters (DepthBufferFactoryParameters)
      */
-    constructor(parameters? : DepthBufferFactoryParameters) {
+    constructor(parameters?: IDepthBufferFactoryParameters) {
 
-        let {
+        const {
             // required
             canvas,
             width,
@@ -107,7 +107,7 @@ export class DepthBufferFactory {
      * Returns the active canvasof the factory.
      * @returns HTMLElement
      */
-    get canvas() : HTMLElement {
+    get canvas(): HTMLElement {
         return this._canvas;
     }
 
@@ -115,7 +115,7 @@ export class DepthBufferFactory {
      * Returns the active (last-generated) DepthBuffer constructed by the factory.
      * @returns DepthBuffer
      */
-    get depthBuffer() : DepthBuffer {
+    get depthBuffer(): DepthBuffer {
         return this._depthBuffer;
     }
 //#endregion
@@ -125,11 +125,11 @@ export class DepthBufferFactory {
      * Verifies the minimum WebGL extensions are present.
      * @param renderer WebGL renderer.
      */
-    verifyWebGLExtensions() : boolean {
+    public verifyWebGLExtensions(): boolean {
 
-        if (!this._renderer.extensions.get('WEBGL_depth_texture')) {
+        if (!this._renderer.extensions.get("WEBGL_depth_texture")) {
             this._minimumWebGL = false;
-            this._logger.addErrorMessage('The minimum WebGL extensions are not supported in the browser.');
+            this._logger.addErrorMessage("The minimum WebGL extensions are not supported in the browser.");
             return false;
         }
 
@@ -139,10 +139,10 @@ export class DepthBufferFactory {
     /**
      * Constructs a WebGL target canvas.
      */
-    initializeCanvas() : HTMLCanvasElement {
+    public initializeCanvas(): HTMLCanvasElement {
 
-        this._canvas.setAttribute('name', Tools.generatePseudoGUID());
-        this._canvas.setAttribute('class', DepthBufferFactory.CssClassName);
+        this._canvas.setAttribute("name", Tools.generatePseudoGUID());
+        this._canvas.setAttribute("class", DepthBufferFactory.CssClassName);
 
         // render dimensions
         this._canvas.width  = this._width;
@@ -158,7 +158,7 @@ export class DepthBufferFactory {
     /**
      * Perform setup and initialization of the render scene.
      */
-    initializeScene () : void {
+    public initializeScene(): void {
 
         this._scene = new THREE.Scene();
         if (this._modelGroup)
@@ -170,7 +170,7 @@ export class DepthBufferFactory {
     /**
      * Initialize the  model view.
      */
-     initializeRenderer() {
+     public initializeRenderer() {
 
         this._renderer = new THREE.WebGLRenderer( {canvas : this._canvas, logarithmicDepthBuffer : this._logDepthBuffer});
         this._renderer.setPixelRatio(window.devicePixelRatio);
@@ -189,12 +189,12 @@ export class DepthBufferFactory {
      * Initialize default lighting in the scene.
      * Lighting does not affect the depth buffer. It is only used if the canvas is made visible.
      */
-    initializeLighting (scene : THREE.Scene) : void {
+    public initializeLighting(scene: THREE.Scene): void {
 
-        let ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
         scene.add(ambientLight);
 
-        let directionalLight1 = new THREE.DirectionalLight(0xffffff);
+        const directionalLight1 = new THREE.DirectionalLight(0xffffff);
         directionalLight1.position.set(1, 1, 1);
         scene.add(directionalLight1);
     }
@@ -202,7 +202,7 @@ export class DepthBufferFactory {
     /**
      * Perform setup and initialization.
      */
-    initializePrimary () : void {
+    public initializePrimary(): void {
 
         this.initializeScene();
         this.initializeRenderer();
@@ -211,7 +211,7 @@ export class DepthBufferFactory {
     /**
      * Perform setup and initialization.
      */
-    initialize () : void {
+    public initialize(): void {
 
         this._logger = Services.defaultLogger;
 
@@ -224,10 +224,10 @@ export class DepthBufferFactory {
     /**
      * Constructs a render target <with a depth texture buffer>.
      */
-    constructDepthTextureRenderTarget() : THREE.WebGLRenderTarget {
+    public constructDepthTextureRenderTarget(): THREE.WebGLRenderTarget {
 
         // Model Scene -> (Render Texture, Depth Texture)
-        let renderTarget = new THREE.WebGLRenderTarget(this._width, this._height);
+        const renderTarget = new THREE.WebGLRenderTarget(this._width, this._height);
 
         renderTarget.texture.format           = THREE.RGBAFormat;
         renderTarget.texture.type             = THREE.UnsignedByteType;
@@ -247,22 +247,22 @@ export class DepthBufferFactory {
     /**
      * Perform setup and initialization of the post scene used to create the final RGBA encoded depth buffer.
      */
-    initializePostScene () : void {
+    public initializePostScene(): void {
 
-        let postMeshMaterial = new THREE.ShaderMaterial({
+        const postMeshMaterial = new THREE.ShaderMaterial({
 
-            vertexShader:   MR.shaderSource['DepthBufferVertexShader'],
-            fragmentShader: MR.shaderSource['DepthBufferFragmentShader'],
+            vertexShader:   MR.shaderSource.DepthBufferVertexShader,
+            fragmentShader: MR.shaderSource.DepthBufferFragmentShader,
 
             uniforms: {
                 cameraNear  :   { value: this._camera.viewCamera.near },
                 cameraFar   :   { value: this._camera.viewCamera.far },
                 tDiffuse    :   { value: this._target.texture },
-                tDepth      :   { value: this._target.depthTexture }
-            }
+                tDepth      :   { value: this._target.depthTexture },
+            },
         });
-        let postMeshPlane = new THREE.PlaneGeometry(2, 2);
-        let postMeshQuad  = new THREE.Mesh(postMeshPlane, postMeshMaterial);
+        const postMeshPlane = new THREE.PlaneGeometry(2, 2);
+        const postMeshQuad  = new THREE.Mesh(postMeshPlane, postMeshMaterial);
 
         this._postScene = new THREE.Scene();
         this._postScene.add(postMeshQuad);
@@ -274,15 +274,15 @@ export class DepthBufferFactory {
     /**
      * Constructs the orthographic camera used to convert the WebGL depth buffer to the encoded RGBA buffer
      */
-    initializePostCamera() {
+    public initializePostCamera() {
 
         // Setup post processing stage
-        let left: number      =  -1;
-        let right: number     =   1;
-        let top: number       =   1;
-        let bottom: number    =  -1;
-        let near: number      =   0;
-        let far: number       =   1;
+        const left: number      =  -1;
+        const right: number     =   1;
+        const top: number       =   1;
+        const bottom: number    =  -1;
+        const near: number      =   0;
+        const far: number       =   1;
 
         this._postCamera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
     }
@@ -290,7 +290,7 @@ export class DepthBufferFactory {
     /**
      * Perform setup and initialization.
      */
-    initializePost () : void {
+    public initializePost(): void {
 
         this.initializePostScene();
         this.initializePostCamera();
@@ -304,13 +304,13 @@ export class DepthBufferFactory {
      * @param row Pixel row.
      * @param column Column row.
      */
-     unsignedBytesToRGBA (buffer : Uint8Array, row : number, column : number) : string {
+     public unsignedBytesToRGBA(buffer: Uint8Array, row: number, column: number): string {
 
-        let offset = (row * this._width) + column;
-        let rValue = buffer[offset + 0].toString(16);
-        let gValue = buffer[offset + 1].toString(16);
-        let bValue = buffer[offset + 2].toString(16);
-        let aValue = buffer[offset + 3].toString(16);
+        const offset = (row * this._width) + column;
+        const rValue = buffer[offset + 0].toString(16);
+        const gValue = buffer[offset + 1].toString(16);
+        const bValue = buffer[offset + 2].toString(16);
+        const aValue = buffer[offset + 3].toString(16);
 
         return `#${rValue}${gValue}${bValue} ${aValue}`;
     }
@@ -318,19 +318,19 @@ export class DepthBufferFactory {
     /**
      * Analyzes a pixel from a render buffer.
      */
-    analyzeRenderBuffer () {
+    public analyzeRenderBuffer() {
 
-        let renderBuffer =  new Uint8Array(this._width * this._height * 4).fill(0);
+        const renderBuffer =  new Uint8Array(this._width * this._height * 4).fill(0);
         this._renderer.readRenderTargetPixels(this._target, 0, 0, this._width, this._height, renderBuffer);
 
-        let messageString = `RGBA[0, 0] = ${this.unsignedBytesToRGBA(renderBuffer, 0, 0)}`;
+        const messageString = `RGBA[0, 0] = ${this.unsignedBytesToRGBA(renderBuffer, 0, 0)}`;
         this._logger.addMessage(messageString, null);
     }
 
     /**
      * Analyze the render and depth targets.
      */
-    analyzeTargets ()  {
+    public analyzeTargets()  {
 
         this.analyzeRenderBuffer();
         this._depthBuffer.analyze();
@@ -340,9 +340,9 @@ export class DepthBufferFactory {
     /**
      * Create a depth buffer.
      */
-    async createDepthBufferAsync() : Promise<DepthBuffer> {
+    public async createDepthBufferAsync(): Promise<DepthBuffer> {
 
-        let timerTag = Services.timer.mark('DepthBufferFactory.createDepthBuffer');
+        const timerTag = Services.timer.mark("DepthBufferFactory.createDepthBuffer");
 
         this._renderer.render(this._scene, this._camera.viewCamera, this._target);
 
@@ -355,19 +355,19 @@ export class DepthBufferFactory {
         this._renderer.render(this._postScene, this._postCamera, this._encodedTarget);
 
         // decode RGBA texture into depth floats
-        let depthBufferRGBA =  new Uint8Array(this._width * this._height * 4).fill(0);
+        const depthBufferRGBA =  new Uint8Array(this._width * this._height * 4).fill(0);
         this._renderer.readRenderTargetPixels(this._encodedTarget, 0, 0, this._width, this._height, depthBufferRGBA);
 
-        let dtoDepthBuffer = new Dto.DepthBuffer({
+        const dtoDepthBuffer = new Dto.DepthBuffer({
 
             id          : 0,
-            name        : 'Unnamed',
-            description : 'Factory-generated',
+            name        : "Unnamed",
+            description : "Factory-generated",
             width       : this._width,
             height      : this._height,
 
-            cameraId    : this._camera.id
-        })
+            cameraId    : this._camera.id,
+        });
 
         this._depthBuffer =  await DepthBuffer.fromDtoModelAsync(dtoDepthBuffer);
         this._depthBuffer.rgbArray = depthBufferRGBA;
@@ -376,7 +376,7 @@ export class DepthBufferFactory {
         // this._depthBuffer.model3d   =
 
         // update camera properties from active view camera
-        let parameters = {id : this._camera.id};
+        const parameters = {id : this._camera.id};
         this._depthBuffer.camera = CameraFactory.ConstructFromViewCamera(parameters, this._camera.viewCamera);
 
         this.analyzeTargets();

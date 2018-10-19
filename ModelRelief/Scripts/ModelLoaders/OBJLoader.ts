@@ -1,8 +1,8 @@
-﻿// -------------------------------------------------------------------------------------// 
-//                                                                                      // 
-// @author mrdoob / http://mrdoob.com/                                                  // 
+﻿// -------------------------------------------------------------------------------------//
+//                                                                                      //
+// @author mrdoob / http://mrdoob.com/                                                  //
 // https://github.com/sohamkamani/three-object-loader/blob/master/source/index.js       //
-//                                                                                      // 
+//                                                                                      //
 // -------------------------------------------------------------------------------------//
 
 "use strict";
@@ -432,7 +432,7 @@ OBJLoader.prototype = {
 
     parse: function ( text ) {
 
-        let timerTag = Services.timer.mark('OBJLoader.parse');        
+        let timerTag = Services.timer.mark('OBJLoader.parse');
 
         var state = this._createParserState();
 
@@ -700,8 +700,8 @@ OBJLoader.prototype = {
 
             // Create materials
             // ModelRelief
-            //var createdMaterials = [];           
-            var createdMaterials : THREE.Material[] = [];           
+            //var createdMaterials = [];
+            var createdMaterials : THREE.Material[] = [];
 
             for ( var mi = 0, miLen = materials.length; mi < miLen ; mi++ ) {
 

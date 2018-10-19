@@ -5,15 +5,13 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto         from 'DtoModels'
-import * as THREE       from 'three'
+import * as Dto from "DtoModels";
+import * as THREE from "three";
 
-import {BaseCamera}             from 'Camera';
-import {OrthographicCamera}     from 'Camera';
-import {PerspectiveCamera}      from 'Camera';
-import { IModel }               from 'IModel'
-import { IThreeBaseCamera }             from 'IThreeBaseCamera'
-import { Project }              from 'Project'
+import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
+import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
+import {BaseCamera, OrthographicCamera, PerspectiveCamera} from "Scripts/Models/Camera/Camera";
+import {Project} from "Scripts/Models/Project/Project";
 
 /**
  * Camera
@@ -23,21 +21,15 @@ import { Project }              from 'Project'
 export class CameraFactory {
 
     /**
-     * @constructor
-     */
-    constructor() {
-    }
-
-    /**
      * @description Construct a camera (Orthographic, Perspective) from an Id.
      * @static
      * @param {number} id Camera Id.
      * @returns {Promise<BaseCamera>}
      */
-    static async ConstructFromIdAsync(id: number) : Promise<BaseCamera> {
+    public static async ConstructFromIdAsync(id: number): Promise<BaseCamera> {
 
-        let dtoCamera = await Dto.Camera.fromIdAsync(id);
-        let camera = await CameraFactory.ConstructFromDtoModelAsync(dtoCamera);
+        const dtoCamera = await Dto.Camera.fromIdAsync(id);
+        const camera = await CameraFactory.ConstructFromDtoModelAsync(dtoCamera);
 
         return camera;
     }
@@ -48,13 +40,13 @@ export class CameraFactory {
      * @param {number} id Camera Id.
      * @returns {Promise<BaseCamera>}
      */
-    static async ConstructFromDtoModelAsync(dtoCamera : Dto.Camera) : Promise<BaseCamera> {
+    public static async ConstructFromDtoModelAsync(dtoCamera: Dto.Camera): Promise<BaseCamera> {
 
-        let viewCamera = dtoCamera.getViewCamera();
-        let cameraParameters = {id: dtoCamera.id, name: dtoCamera.name, description: dtoCamera.description};
-        let camera  = dtoCamera.isPerspective ?
-            new PerspectiveCamera(cameraParameters, <THREE.PerspectiveCamera> viewCamera) :
-            new OrthographicCamera(cameraParameters, <THREE.OrthographicCamera> viewCamera);
+        const viewCamera = dtoCamera.getViewCamera();
+        const cameraParameters = {id: dtoCamera.id, name: dtoCamera.name, description: dtoCamera.description};
+        const camera  = dtoCamera.isPerspective ?
+            new PerspectiveCamera(cameraParameters, viewCamera as THREE.PerspectiveCamera) :
+            new OrthographicCamera(cameraParameters, viewCamera as THREE.OrthographicCamera);
 
         camera.project  = await Project.fromIdAsync(dtoCamera.projectId);
 
@@ -68,18 +60,24 @@ export class CameraFactory {
      * @param {IThreeBaseCamera} camera IThreeBaseCamera.
      * @returns {Promise<BaseCamera>}
      */
-    static ConstructFromViewCamera(parameters: IModel, viewCamera : IThreeBaseCamera) : BaseCamera {
+    public static ConstructFromViewCamera(parameters: IModel, viewCamera: IThreeBaseCamera): BaseCamera {
 
         parameters.name        = parameters.name        || "Camera";
         parameters.description = parameters.description || "Perspective Camera";
 
-        let camera  = viewCamera instanceof THREE.PerspectiveCamera ?
-            new PerspectiveCamera(parameters, <THREE.PerspectiveCamera> viewCamera) :
-            new OrthographicCamera(parameters, <THREE.OrthographicCamera> viewCamera);
+        const camera  = viewCamera instanceof THREE.PerspectiveCamera ?
+            new PerspectiveCamera(parameters, viewCamera as THREE.PerspectiveCamera) :
+            new OrthographicCamera(parameters, viewCamera as THREE.OrthographicCamera);
 
         camera.project = null;
 
         return camera;
+    }
+
+    /**
+     * @constructor
+     */
+    constructor() {
     }
 
 }

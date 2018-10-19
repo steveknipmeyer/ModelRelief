@@ -4,14 +4,13 @@
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
+import * as THREE from "three";
 
-import * as THREE               from 'three'
-
-import { CameraSettings }        from 'Camerasettings'
-import { Graphics }              from 'Graphics'
-import { StandardView}           from "ICamera"
-import { IThreeBaseCamera }      from 'IThreeBaseCamera'
-import { Services }              from 'Services'
+import {StandardView} from "Scripts/Api/V1/Interfaces/ICamera";
+import {Graphics} from "Scripts/Graphics/Graphics";
+import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
+import {CameraSettings} from "Scripts/Models/Camera/Camerasettings";
+import {Services} from "Scripts/System/Services";
 
 /**
  * Camera
@@ -20,19 +19,13 @@ import { Services }              from 'Services'
  */
 export class CameraHelper {
 
-    /**
-     * @constructor
-     */
-    constructor() {
-    }
-
 //#region Clipping Planes
     /**
      * @description Resets the clipping planes to the default values.
      * @static
      * @param {IThreeBaseCamera} camera Camera to update.
      */
-    static setDefaultClippingPlanes(camera : IThreeBaseCamera) {
+    public static setDefaultClippingPlanes(camera: IThreeBaseCamera) {
 
         camera.near = CameraSettings.DefaultNearClippingPlane;
         camera.far  = CameraSettings.DefaultFarClippingPlane;
@@ -47,7 +40,7 @@ export class CameraHelper {
      * @param {THREE.Object3D} model Model to calculate bounding box.
      * @returns {THREE.Box3}
      */
-    static getDefaultBoundingBox (model : THREE.Object3D) : THREE.Box3 {
+    public static getDefaultBoundingBox(model: THREE.Object3D): THREE.Box3 {
 
         let boundingBox = new THREE.Box3();
         if (model)
@@ -57,7 +50,7 @@ export class CameraHelper {
             return boundingBox;
 
         // unit sphere proxy
-        let sphereProxy = Graphics.createSphereMesh(new THREE.Vector3(), 1);
+        const sphereProxy = Graphics.createSphereMesh(new THREE.Vector3(), 1);
         boundingBox = Graphics.getBoundingBoxFromObject(sphereProxy);
 
         return boundingBox;
@@ -70,38 +63,38 @@ export class CameraHelper {
      * @param {THREE.Group} modelGroup Model to fit.
      * @returns {IThreeBaseCamera}
      */
-    static getFitViewCamera (cameraTemplate : IThreeBaseCamera, modelGroup : THREE.Group) : IThreeBaseCamera {
+    public static getFitViewCamera(cameraTemplate: IThreeBaseCamera, modelGroup: THREE.Group): IThreeBaseCamera {
 
-        let timerTag = Services.timer.mark('Camera.getFitViewCamera');
+        const timerTag = Services.timer.mark("Camera.getFitViewCamera");
 
-        let camera = cameraTemplate.clone(true);
-        let boundingBoxWorld         : THREE.Box3    = CameraHelper.getDefaultBoundingBox(modelGroup);
-        let cameraMatrixWorld        : THREE.Matrix4 = camera.matrixWorld;
-        let cameraMatrixWorldInverse : THREE.Matrix4 = camera.matrixWorldInverse;
+        const camera = cameraTemplate.clone(true);
+        const boundingBoxWorld: THREE.Box3    = CameraHelper.getDefaultBoundingBox(modelGroup);
+        const cameraMatrixWorld: THREE.Matrix4 = camera.matrixWorld;
+        const cameraMatrixWorldInverse: THREE.Matrix4 = camera.matrixWorldInverse;
 
         // Find camera position in View coordinates...
-        let boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(modelGroup, cameraMatrixWorldInverse);
-        let halfBoundingBoxViewXExtents  = boundingBoxView.getSize().x / 2;
-        let halfBoundingBoxViewYExtents  = boundingBoxView.getSize().y / 2;
+        const boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(modelGroup, cameraMatrixWorldInverse);
+        const halfBoundingBoxViewXExtents  = boundingBoxView.getSize().x / 2;
+        const halfBoundingBoxViewYExtents  = boundingBoxView.getSize().y / 2;
 
         // new postion of camera in View coordinats
-        let newCameraZView : number;
+        let newCameraZView: number;
 
         // Perspective
         if (camera instanceof THREE.PerspectiveCamera) {
-            let verticalFieldOfViewRadians   : number = (camera.fov / 2) * (Math.PI / 180);
-            let horizontalFieldOfViewRadians : number = Math.atan(camera.aspect * Math.tan(verticalFieldOfViewRadians));
+            const verticalFieldOfViewRadians: number = (camera.fov / 2) * (Math.PI / 180);
+            const horizontalFieldOfViewRadians: number = Math.atan(camera.aspect * Math.tan(verticalFieldOfViewRadians));
 
-            let cameraZVerticalExtents   : number = halfBoundingBoxViewYExtents / Math.tan (verticalFieldOfViewRadians);
-            let cameraZHorizontalExtents : number = halfBoundingBoxViewXExtents / Math.tan (horizontalFieldOfViewRadians);
+            const cameraZVerticalExtents: number = halfBoundingBoxViewYExtents / Math.tan (verticalFieldOfViewRadians);
+            const cameraZHorizontalExtents: number = halfBoundingBoxViewXExtents / Math.tan (horizontalFieldOfViewRadians);
             newCameraZView = Math.max(cameraZVerticalExtents, cameraZHorizontalExtents);
 
             // preserve XY; set Z to include extents
-            let previousCameraPositionView = camera.position.applyMatrix4(cameraMatrixWorldInverse);
-            let newCameraPositionView = new THREE.Vector3(previousCameraPositionView.x, previousCameraPositionView.y, boundingBoxView.max.z + newCameraZView);
+            const previousCameraPositionView = camera.position.applyMatrix4(cameraMatrixWorldInverse);
+            const newCameraPositionView = new THREE.Vector3(previousCameraPositionView.x, previousCameraPositionView.y, boundingBoxView.max.z + newCameraZView);
 
             // Now, transform back to World coordinates...
-            let positionWorld = newCameraPositionView.applyMatrix4(cameraMatrixWorld);
+            const positionWorld = newCameraPositionView.applyMatrix4(cameraMatrixWorld);
 
             camera.position.copy (positionWorld);
         }
@@ -135,23 +128,23 @@ export class CameraHelper {
      * @param {THREE.Object3D} modelGroup Model to fit.
      * @returns {IThreeBaseCamera}
      */
-    static getStandardViewCamera (view: StandardView, viewCamera : THREE.Camera, modelGroup : THREE.Group) : IThreeBaseCamera {
+    public static getStandardViewCamera(view: StandardView, viewCamera: THREE.Camera, modelGroup: THREE.Group): IThreeBaseCamera {
 
-        let timerTag = Services.timer.mark('Camera.getStandardView');
+        const timerTag = Services.timer.mark("Camera.getStandardView");
 
         let camera = CameraHelper.getDefaultCamera(viewCamera);
-        let boundingBox = Graphics.getBoundingBoxFromObject(modelGroup);
+        const boundingBox = Graphics.getBoundingBoxFromObject(modelGroup);
 
-        let centerX = boundingBox.getCenter().x;
-        let centerY = boundingBox.getCenter().y;
-        let centerZ = boundingBox.getCenter().z;
+        const centerX = boundingBox.getCenter().x;
+        const centerY = boundingBox.getCenter().y;
+        const centerZ = boundingBox.getCenter().z;
 
-        let minX = boundingBox.min.x;
-        let minY = boundingBox.min.y;
-        let minZ = boundingBox.min.z;
-        let maxX = boundingBox.max.x;
-        let maxY = boundingBox.max.y;
-        let maxZ = boundingBox.max.z;
+        const minX = boundingBox.min.x;
+        const minY = boundingBox.min.y;
+        const minZ = boundingBox.min.z;
+        const maxX = boundingBox.max.x;
+        const maxY = boundingBox.max.y;
+        const maxZ = boundingBox.max.z;
 
         switch (view) {
             case StandardView.Front: {
@@ -185,7 +178,7 @@ export class CameraHelper {
                 break;
             }
             case StandardView.Isometric: {
-                let side = Math.max(Math.max(boundingBox.getSize().x, boundingBox.getSize().y), boundingBox.getSize().z);
+                const side = Math.max(Math.max(boundingBox.getSize().x, boundingBox.getSize().y), boundingBox.getSize().z);
                 camera.position.copy (new THREE.Vector3(side,  side, side));
                 camera.up.set(-1, 1, -1);
                 break;
@@ -210,13 +203,13 @@ export class CameraHelper {
      * @param {THREE.Camera} viewCamera View camera.
      * @returns {IThreeBaseCamera}
      */
-    static getDefaultCamera (viewCamera : THREE.Camera) : IThreeBaseCamera {
+    public static getDefaultCamera(viewCamera: THREE.Camera): IThreeBaseCamera {
 
         // default matches existing camera if it exists
-        let isPerspective : boolean = viewCamera ? (viewCamera instanceof THREE.PerspectiveCamera) : true;
-        let aspectRatio : number = (viewCamera && (viewCamera instanceof THREE.PerspectiveCamera)) ? viewCamera.aspect : 1.0;
+        const isPerspective: boolean = viewCamera ? (viewCamera instanceof THREE.PerspectiveCamera) : true;
+        const aspectRatio: number = (viewCamera && (viewCamera instanceof THREE.PerspectiveCamera)) ? viewCamera.aspect : 1.0;
 
-        let defaultCamera = isPerspective ?
+        const defaultCamera = isPerspective ?
             new THREE.PerspectiveCamera(CameraSettings.DefaultFieldOfView, aspectRatio, CameraSettings.DefaultNearClippingPlane, CameraSettings.DefaultFarClippingPlane) :
             new THREE.OrthographicCamera(CameraSettings.DefaultLeftPlane, CameraSettings.DefaultRightPlane, CameraSettings.DefaultTopPlane, CameraSettings.DefaultBottomPlane,
                                          CameraSettings.DefaultNearClippingPlane, CameraSettings.DefaultFarClippingPlane);
@@ -226,9 +219,15 @@ export class CameraHelper {
 
         // force camera matrix to update; matrixAutoUpdate happens in render loop
         defaultCamera.updateMatrixWorld(true);
-        defaultCamera.updateProjectionMatrix;
+        defaultCamera.updateProjectionMatrix();
 
         return defaultCamera;
+    }
+
+    /**
+     * @constructor
+     */
+    constructor() {
     }
 //#endregion
 }

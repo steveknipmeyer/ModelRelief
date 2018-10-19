@@ -4,7 +4,7 @@
 #### Short Term
 
     Configure tslint.
-        Graphics
+        Models
 
         https://palantir.github.io/tslint/rules/
         https://palantir.github.io/tslint/usage/configuration/

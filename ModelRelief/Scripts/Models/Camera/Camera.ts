@@ -5,26 +5,26 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto          from 'DtoModels'
-import * as THREE        from 'three'
+import * as Dto from "DtoModels";
+import * as THREE from "three";
 
-import { CameraHelper }                 from 'CameraHelper'
-import { CameraSettings }               from 'CameraSettings'
-import { DepthBufferFactory }           from 'DepthBufferFactory'
-import { Graphics }                     from 'Graphics'
-import { IModel }                       from 'IModel'
-import { IThreeBaseCamera }             from 'IThreeBaseCamera'
-import { Model }                        from 'Model'
-import { Project }                      from 'Project'
+import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
+import {Model} from "Scripts/Api/V1/Models/Model";
+import {Graphics} from "Scripts/Graphics/Graphics";
+import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
+import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
+import {CameraSettings} from "Scripts/Models/Camera/Camerasettings";
+import {DepthBufferFactory} from "Scripts/Models/DepthBuffer/DepthBufferFactory";
+import {Project} from "Scripts/Models/Project/Project";
 
 /**
  * @description Camera clipping planes tuple.
  * @export
  * @interface ClippingPlanes
  */
-export interface ClippingPlanes {
-    near : number;
-    far  : number;
+export interface IClippingPlanes {
+    near: number;
+    far: number;
 }
 
 /**
@@ -35,10 +35,10 @@ export interface ClippingPlanes {
  */
 export abstract class BaseCamera extends Model {
 
-    viewCamera : IThreeBaseCamera;
+    public viewCamera: IThreeBaseCamera;
 
     // Navigation Properties
-    project    : Project;
+    public project: Project;
 
     /**
      * @constructor
@@ -46,7 +46,7 @@ export abstract class BaseCamera extends Model {
      * @param {IModel} parameters IModel properties.
      * @param {IThreeBaseCamera} camera IThreeBaseCamera.
      */
-    constructor(parameters: IModel, camera : IThreeBaseCamera) {
+    constructor(parameters: IModel, camera: IThreeBaseCamera) {
 
         parameters.name        = parameters.name        || "Camera";
         parameters.description = parameters.description || "Perspective Camera";
@@ -73,7 +73,7 @@ export abstract class BaseCamera extends Model {
      * @description Perform setup and initialization.
      * @param {IThreeBaseCamera} camera IThreeBaseCamera.
      */
-    initialize (camera : IThreeBaseCamera) : void {
+    public initialize(camera: IThreeBaseCamera): void {
 
         this.viewCamera = camera;
     }
@@ -82,7 +82,7 @@ export abstract class BaseCamera extends Model {
     /**
      * @description Resets the clipping planes to the default values.
      */
-    setDefaultClippingPlanes() {
+    public setDefaultClippingPlanes() {
         CameraHelper.setDefaultClippingPlanes(this.viewCamera);
     }
 
@@ -90,7 +90,7 @@ export abstract class BaseCamera extends Model {
      * Returns the extents of the near camera plane.
      * @returns {THREE.Vector2}
      */
-    getNearPlaneExtents() : THREE.Vector2 {
+    public getNearPlaneExtents(): THREE.Vector2 {
 
         return new THREE.Vector2(0, 0);
     }
@@ -99,24 +99,24 @@ export abstract class BaseCamera extends Model {
      * Finds the bounding clipping planes for the given model.
      *
      */
-    getBoundingClippingPlanes(model : THREE.Object3D) : ClippingPlanes{
+    public getBoundingClippingPlanes(model: THREE.Object3D): IClippingPlanes {
 
-        let cameraMatrixWorldInverse: THREE.Matrix4 = this.viewCamera.matrixWorldInverse;
-        let boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(model, cameraMatrixWorldInverse);
+        const cameraMatrixWorldInverse: THREE.Matrix4 = this.viewCamera.matrixWorldInverse;
+        const boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(model, cameraMatrixWorldInverse);
 
         // The bounding box is world-axis aligned.
         // In View coordinates, the camera is at the origin.
         // The bounding near plane is the maximum Z of the bounding box.
         // The bounding far plane is the minimum Z of the bounding box.
-        let nearPlane = -boundingBoxView.max.z;
-        let farPlane = -boundingBoxView.min.z;
+        const nearPlane = -boundingBoxView.max.z;
+        const farPlane = -boundingBoxView.min.z;
 
-        let clippingPlanes : ClippingPlanes = {
+        const clippingPlanes: IClippingPlanes = {
 
             // adjust by epsilon to avoid clipping geometry at the near plane edge
             near :  (1 - DepthBufferFactory.NearPlaneEpsilon) * nearPlane,
-            far  : farPlane
-        }
+            far  : farPlane,
+        };
         return clippingPlanes;
     }
 
@@ -124,12 +124,12 @@ export abstract class BaseCamera extends Model {
      * @description Finalize the camera clipping planes to fit the model if they are at the default values..
      * @param {THREE.Group} modelGroup Target model.
      */
-    finalizeClippingPlanes(modelGroup : THREE.Group) {
+    public finalizeClippingPlanes(modelGroup: THREE.Group) {
 
-        let setNear = (this.viewCamera.near === CameraSettings.DefaultNearClippingPlane);
-        let setFar  = (this.viewCamera.far === CameraSettings.DefaultFarClippingPlane);
+        const setNear = (this.viewCamera.near === CameraSettings.DefaultNearClippingPlane);
+        const setFar  = (this.viewCamera.far === CameraSettings.DefaultFarClippingPlane);
 
-        let clippingPlanes: ClippingPlanes = this.getBoundingClippingPlanes(modelGroup);
+        const clippingPlanes: IClippingPlanes = this.getBoundingClippingPlanes(modelGroup);
         if (setNear)
             this.viewCamera.near = clippingPlanes.near;
         if (setFar)
@@ -144,41 +144,41 @@ export abstract class BaseCamera extends Model {
      * @description Returns a DTO Camera model from the instance.
      * @returns {Dto.Camera}
      */
-    toDtoModel() : Dto.Camera {
+    public toDtoModel(): Dto.Camera {
 
-        let isPerspective  = this.isPerspective;
-        let isOrthographic = this.viewCamera instanceof THREE.OrthographicCamera;
+        const isPerspective  = this.isPerspective;
+        const isOrthographic = this.viewCamera instanceof THREE.OrthographicCamera;
 
-        let position    = new THREE.Vector3();
-        let quaternion  = new THREE.Quaternion();
-        let scale       = new THREE.Vector3();
+        const position    = new THREE.Vector3();
+        const quaternion  = new THREE.Quaternion();
+        const scale       = new THREE.Vector3();
         let up          = new THREE.Vector3();
         this.viewCamera.matrix.decompose(position, quaternion, scale);
         up = this.viewCamera.up;
 
-        let camera = new Dto.Camera({
+        const camera = new Dto.Camera({
             id              : this.id,
             name            : this.name,
             description     : this.description,
-            isPerspective   : isPerspective,
+            isPerspective,
 
             near            : this.viewCamera.near,
             far             : this.viewCamera.far,
 
-            position        : position,
-            quaternion      : quaternion,
-            scale           : scale,
-            up              : up,
+            position,
+            quaternion,
+            scale,
+            up,
 
             // Perpsective
-            fieldOfView     : isPerspective? (<THREE.PerspectiveCamera>this.viewCamera).fov : CameraSettings.DefaultFieldOfView,
-            aspectRatio     : isPerspective? (<THREE.PerspectiveCamera>this.viewCamera).aspect : 1.0,
+            fieldOfView     : isPerspective ? (this.viewCamera as THREE.PerspectiveCamera).fov : CameraSettings.DefaultFieldOfView,
+            aspectRatio     : isPerspective ? (this.viewCamera as THREE.PerspectiveCamera).aspect : 1.0,
 
             // Orthographic
-            left            : isOrthographic? (<THREE.OrthographicCamera>this.viewCamera).left   : CameraSettings.DefaultLeftPlane,
-            right           : isOrthographic? (<THREE.OrthographicCamera>this.viewCamera).right  : CameraSettings.DefaultRightPlane,
-            top             : isOrthographic? (<THREE.OrthographicCamera>this.viewCamera).top    : CameraSettings.DefaultTopPlane,
-            bottom          : isOrthographic? (<THREE.OrthographicCamera>this.viewCamera).bottom : CameraSettings.DefaultBottomPlane,
+            left            : isOrthographic ? (this.viewCamera as THREE.OrthographicCamera).left   : CameraSettings.DefaultLeftPlane,
+            right           : isOrthographic ? (this.viewCamera as THREE.OrthographicCamera).right  : CameraSettings.DefaultRightPlane,
+            top             : isOrthographic ? (this.viewCamera as THREE.OrthographicCamera).top    : CameraSettings.DefaultTopPlane,
+            bottom          : isOrthographic ? (this.viewCamera as THREE.OrthographicCamera).bottom : CameraSettings.DefaultBottomPlane,
 
             projectId       : this.project ? this.project.id : undefined,
         });
@@ -194,7 +194,7 @@ export abstract class BaseCamera extends Model {
  */
 export class OrthographicCamera extends BaseCamera {
 
-    viewCamera : THREE.OrthographicCamera;
+    public viewCamera: THREE.OrthographicCamera;
 
     /**
      * @constructor
@@ -202,7 +202,7 @@ export class OrthographicCamera extends BaseCamera {
      * @param {IModel} parameters IModel properties.
      * @param {THREE.OrthographicCamera} camera OrthographicCamera.
      */
-    constructor(parameters: IModel, camera : THREE.OrthographicCamera) {
+    constructor(parameters: IModel, camera: THREE.OrthographicCamera) {
 
         super(parameters, camera);
     }
@@ -213,10 +213,10 @@ export class OrthographicCamera extends BaseCamera {
      * Returns the extents of the near camera plane.
      * @returns {THREE.Vector2}
      */
-    getNearPlaneExtents() : THREE.Vector2 {
+    public getNearPlaneExtents(): THREE.Vector2 {
 
-        let nearWidth  = this.viewCamera.right - this.viewCamera.left;
-        let nearHeight = this.viewCamera.top - this.viewCamera.bottom;
+        const nearWidth  = this.viewCamera.right - this.viewCamera.left;
+        const nearHeight = this.viewCamera.top - this.viewCamera.bottom;
 
         return new THREE.Vector2(nearWidth, nearHeight);
     }
@@ -231,7 +231,7 @@ export class OrthographicCamera extends BaseCamera {
  */
 export class PerspectiveCamera extends BaseCamera {
 
-    viewCamera : THREE.PerspectiveCamera;
+    public viewCamera: THREE.PerspectiveCamera;
 
     /**
      * @constructor
@@ -239,7 +239,7 @@ export class PerspectiveCamera extends BaseCamera {
      * @param {IModel} parameters IModel properties.
      * @param {THREE.PerspectiveCamera} camera PerspectiveCamera.
      */
-    constructor(parameters: IModel, camera : THREE.PerspectiveCamera) {
+    constructor(parameters: IModel, camera: THREE.PerspectiveCamera) {
 
         super(parameters, camera);
     }
@@ -250,11 +250,11 @@ export class PerspectiveCamera extends BaseCamera {
      * Returns the extents of the near camera plane.
      * @returns {THREE.Vector2}
      */
-    getNearPlaneExtents() : THREE.Vector2 {
+    public getNearPlaneExtents(): THREE.Vector2 {
 
-        let cameraFOVRadians = this.viewCamera.fov * (Math.PI / 180);
-        let nearHeight = 2 * Math.tan(cameraFOVRadians / 2) * this.viewCamera.near;
-        let nearWidth  = this.viewCamera.aspect * nearHeight;
+        const cameraFOVRadians = this.viewCamera.fov * (Math.PI / 180);
+        const nearHeight = 2 * Math.tan(cameraFOVRadians / 2) * this.viewCamera.near;
+        const nearWidth  = this.viewCamera.aspect * nearHeight;
 
         return new THREE.Vector2(nearWidth, nearHeight);
     }

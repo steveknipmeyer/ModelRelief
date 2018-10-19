@@ -4,23 +4,21 @@
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
+import * as THREE from "three";
 
-import * as THREE                           from 'three';
+import {MeshFormat} from "Scripts/Api/V1/Interfaces/IMesh";
+import {Model3dFormat} from "Scripts/Api/V1/Interfaces/IModel3d";
+import {FileModel} from "Scripts/Api/V1/Models/FileModel";
+import {IMeshGenerateParameters} from "Scripts/Graphics/Mesh3d";
+import {OBJLoader} from "Scripts/ModelLoaders/OBJLoader";
+import {SinglePrecisionLoader} from "Scripts/ModelLoaders/SinglePrecisionLoader";
+import {TestModel, TestModelLoader} from "Scripts/ModelLoaders/TestModelLoader";
+import {Mesh} from "Scripts/Models/Mesh/Mesh";
+import {Model3d} from "Scripts/Models/Model3d/Model3d";
+import {ILogger} from "Scripts/System/Logger";
+import {Services} from "Scripts/System/Services";
 
-import {Model3dFormat}                      from 'IModel3d';
-import {FileModel}                          from 'FileModel'
-import {MeshFormat}                         from 'IMesh';
-import {ILogger}                            from 'Logger';
-import {Mesh}                               from 'Mesh';
-import {IMeshGenerateParameters}             from 'Mesh3d';
-import {Model3d}                            from 'Model3d';
-import {OBJLoader}                          from 'OBJLoader';
-import {Services}                           from 'Services';
-import {SinglePrecisionLoader}              from 'SinglePrecisionLoader';
-import {TestModelLoader, TestModel}         from 'TestModelLoader';
-
-
-const testModelColor = '#558de8';
+const testModelColor = "#558de8";
 
 /**
  * @description Represents the model loader used to create Mesh objects from files.
@@ -30,7 +28,7 @@ const testModelColor = '#558de8';
 export class Loader {
 
     // Private
-    _logger         : ILogger;
+    public _logger: ILogger;
 
     /** Default constructor
      * @class Loader
@@ -45,7 +43,7 @@ export class Loader {
      * @param {FileModel} fileModel Model to load.
      * @returns {Promise<THREE.Group>}
      */
-    async loadModelAsync (fileModel : FileModel) : Promise<THREE.Group> {
+    public async loadModelAsync(fileModel: FileModel): Promise<THREE.Group> {
 
         // Model3d
         if (fileModel instanceof Model3d)
@@ -63,9 +61,9 @@ export class Loader {
      * @param {Model3d} model Model to load.
      * @returns {Promise<THREE.Group>}
      */
-    async loadModel3dAsync (model : Model3d) : Promise<THREE.Group> {
+    public async loadModel3dAsync(model: Model3d): Promise<THREE.Group> {
 
-        let modelGroup : THREE.Group = new THREE.Group();
+        let modelGroup: THREE.Group = new THREE.Group();
         switch (model.format) {
 
             case Model3dFormat.OBJ:
@@ -84,22 +82,22 @@ export class Loader {
      * @param {Mesh} mesh Mesh to load.
      * @returns {Promise<THREE.Group>}
      */
-    async loadMeshAsync (mesh : Mesh) : Promise<THREE.Group> {
+    public async loadMeshAsync(mesh: Mesh): Promise<THREE.Group> {
 
-        let modelGroup : THREE.Group = new THREE.Group();
+        let modelGroup: THREE.Group = new THREE.Group();
 
-        let byteArray : Uint8Array = await mesh.toDtoModel().getFileAsync();
-        let floatArray = new Float32Array(byteArray.buffer);
+        const byteArray: Uint8Array = await mesh.toDtoModel().getFileAsync();
+        const floatArray = new Float32Array(byteArray.buffer);
 
-        let depthBuffer = mesh.depthBuffer;
-        let meshParameters : IMeshGenerateParameters = {
-            name : mesh.name
-        }
-        let bufferExtents = new THREE.Vector2(depthBuffer.width, depthBuffer.height);
-        let meshExtents : THREE.Vector2 = depthBuffer.camera.getNearPlaneExtents()
+        const depthBuffer = mesh.depthBuffer;
+        const meshParameters: IMeshGenerateParameters = {
+            name : mesh.name,
+        };
+        const bufferExtents = new THREE.Vector2(depthBuffer.width, depthBuffer.height);
+        const meshExtents: THREE.Vector2 = depthBuffer.camera.getNearPlaneExtents();
 
         // NOOP default transform
-        let transformer = (value : number) => {return value;};
+        let transformer = (value: number) => value;
 
         // override transformer
         switch (mesh.format) {
@@ -111,8 +109,8 @@ export class Loader {
             case MeshFormat.SFP:
                 // N.B. Solver returns a grid scaled according to the DepthBuffer dimensions (pixels). Only the Z coordinates are returned so the XY dimensions are implicity the DepthBuffer pixel units.
                 //      However, the Mesh construction logic will build the grid in real world model units so a conversion is required to map the Z values to real world units.
-                let scaleFactor = meshExtents.x / depthBuffer.width;
-                transformer = (value : number) => {return scaleFactor * value;};
+                const scaleFactor = meshExtents.x / depthBuffer.width;
+                transformer = (value: number) => scaleFactor * value;
                 break;
 
             case MeshFormat.DDB:
@@ -122,31 +120,31 @@ export class Loader {
                 return modelGroup;
         }
 
-        let loader = new SinglePrecisionLoader(meshParameters, floatArray, transformer, bufferExtents, meshExtents);
+        const loader = new SinglePrecisionLoader(meshParameters, floatArray, transformer, bufferExtents, meshExtents);
         modelGroup = await loader.loadModelAsync();
 
         return modelGroup;
     }
 
-    //region Model3d
+    // region Model3d
     /**
      * @description Loads a model based on the model name and path embedded in the HTML page.
      * @param {FileModel} fileModel Model to load.
      * @returns {Promise<THREE.Group>}
      */
-    async loadOBJModelAsync (fileModel : FileModel) : Promise<THREE.Group> {
+    public async loadOBJModelAsync(fileModel: FileModel): Promise<THREE.Group> {
 
-        let modelFile = await fileModel.toDtoModel().getFileAsStringAsync();
+        const modelFile = await fileModel.toDtoModel().getFileAsStringAsync();
 
-        let objLoader = () => new Promise<THREE.Group>((resolve, reject) => {
+        const objLoader = () => new Promise<THREE.Group>((resolve, reject) => {
 
-            let manager = new THREE.LoadingManager();
-            let loader  = new OBJLoader(manager);
+            const manager = new THREE.LoadingManager();
+            const loader  = new OBJLoader(manager);
 
             resolve(loader.parse(modelFile));
         });
 
-        let modelGroup : THREE.Group = await objLoader();
+        const modelGroup: THREE.Group = await objLoader();
         return modelGroup;
     }
 
@@ -155,10 +153,10 @@ export class Loader {
      * @param modelType Test model type (Sphere, Box, etc.)
      * @returns {Promise<THREE.Group>}
      */
-    async loadParametricTestModel (modelType : TestModel) : Promise<THREE.Group>{
+    public async loadParametricTestModel(modelType: TestModel): Promise<THREE.Group> {
 
-        let loader = new TestModelLoader();
+        const loader = new TestModelLoader();
         return loader.loadModelAsync(modelType);
     }
-    //endregion
+    // endregion
 }

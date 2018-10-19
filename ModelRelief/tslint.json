@@ -1,4 +1,10 @@
 {
+    "linterOptions": {
+        "exclude": [
+            "Scripts/ModelExporters/OBJExporter.ts",            // THREE library file
+            "Scripts/ModelLoaders/OBJLoader.ts"             // THREE library file
+        ]
+    },
     "extends": "tslint:recommended",
 //  "rulesDirectory": ["path/to/custom/rules/directory/", "another/path/"],
     "rules": {
@@ -22,6 +28,8 @@
             ]
         },
         "no-empty": [false],
+        "object-literal-sort-keys": false,
+        "prefer-for-of": false,
         "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case"]
     },
     "jsRules": {
