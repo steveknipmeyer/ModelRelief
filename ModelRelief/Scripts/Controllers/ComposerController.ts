@@ -6,25 +6,23 @@
 "use strict";
 
 import * as dat from "dat-gui";
+import * as Dto from "Scripts/Api/V1/Models/DtoModels";
 import * as THREE from "three";
-import * as Dto from "../Api/V1/Models/DtoModels";
 
-
-import { BaseCamera } from "Camera";
-import { PerspectiveCamera } from "Camera";
-import { CameraFactory } from "CameraFactory";
-import { CameraSettings } from "CameraSettings";
-import { ComposerView } from "ComposerView";
-import { DepthBuffer } from "DepthBuffer";
-import { DepthBufferFactory } from "DepthBufferFactory";
-import { EventType, MREvent } from "EventManager";
-import { ElementAttributes, ElementIds } from "Html";
-import { Mesh } from "Mesh";
-import { MeshTransform } from "MeshTransform";
-import { MeshViewer } from "MeshViewer";
-import { Model3d } from "Model3d";
-import { ModelViewer } from "ModelViewer";
-import { UnitTests } from "UnitTests";
+import {BaseCamera, PerspectiveCamera} from "Scripts/Models/Camera/Camera";
+import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
+import {CameraSettings} from "Scripts/Models/Camera/Camerasettings";
+import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
+import {DepthBufferFactory} from "Scripts/Models/DepthBuffer/DepthBufferFactory";
+import {Mesh} from "Scripts/Models/Mesh/Mesh";
+import {MeshTransform} from "Scripts/Models/MeshTransform/MeshTransform";
+import {Model3d} from "Scripts/Models/Model3d/Model3d";
+import {EventType, MREvent} from "Scripts/System/EventManager";
+import {ElementAttributes, ElementIds} from "Scripts/System/Html";
+import {UnitTests} from "Scripts/UnitTests/UnitTests";
+import {MeshViewer} from "Scripts/Viewers/MeshViewer";
+import {ModelViewer} from "Scripts/Viewers/ModelViewer";
+import {ComposerView} from "Scripts/Views/ComposerView";
 
 /**
  * @description ComposerViewSettings

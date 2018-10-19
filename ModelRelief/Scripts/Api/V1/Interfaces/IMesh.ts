@@ -1,15 +1,16 @@
-﻿// ------------------------------------------------------------------------//
+﻿
+// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
 //                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { ICamera } from "./ICamera";
-import { IDepthBuffer } from "./IDepthBuffer";
-import { IGeneratedFileModel } from "./IGeneratedFileModel";
-import { IMeshTransform } from "./IMeshTransform";
-import { IProject } from "./IProject";
+import {ICamera} from "Scripts/Api/V1/Interfaces/ICamera";
+import {IDepthBuffer} from "Scripts/Api/V1/Interfaces/IDepthBuffer";
+import {IGeneratedFileModel} from "Scripts/Api/V1/Interfaces/IGeneratedFileModel";
+import {IMeshTransform} from "Scripts/Api/V1/Interfaces/IMeshTransform";
+import {IProject} from "Scripts/Api/V1/Interfaces/IProject";
 
  /**
   *  Mesh file formats.

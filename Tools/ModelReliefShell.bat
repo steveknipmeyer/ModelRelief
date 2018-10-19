@@ -23,7 +23,7 @@ echo MRSolution=%MRSolution%
 :: https://blogs.msdn.microsoft.com/premier_developer/2018/04/15/order-of-precedence-when-configuring-asp-net-core/
 :: The last key loaded wins.
 
-:: N.B. These environment settings are the <only> settings used by XUnit (Visual Studio or 'dotnet test') 
+:: N.B. These environment settings are the <only> settings used by XUnit (Visual Studio or 'dotnet test')
 ::       because ModelRelief.Test does <not> have an appsettings.json or Properties/launchSettings.json.
 :: N.B. 'dotnet run' uses ModelRelief\Properties\launchSettings.json!
 ::       https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-run?tabs=netcore21
@@ -63,14 +63,16 @@ set PROMPT=(Development) $P$G
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\VsDevCmd.bat"
 
 :: TypeScript
-:: Target version must precede the path set by VsCevCmd. VSCode uses the command line to build TypeScript so the path is important.
+:: Target version must precede the path set by VsDevCmd. VSCode uses the command line to build TypeScript so the path is important.
 echo TypeScript Version = 2.4
 path=C:\Program Files (x86)\Microsoft SDKs\TypeScript\2.4;%path%
+::echo TypeScript Version = 3.1
+::path=C:\Program Files (x86)\Microsoft SDKs\TypeScript\3.1;%path%
 
 :: ASPNET CORE Configuration
 set ASPNETCORE_ENVIRONMENT=Test
 :: Ports Configuration
-::  Command line (dotnet run) : ASPNETCORE_URLS environment variable    
+::  Command line (dotnet run) : ASPNETCORE_URLS environment variable
 ::  Visual Studio             : launchSettings.json
 ::  VSCode                    : launch.json
 :: https://stackoverflow.com/questions/46336341/configure-asp-net-core-2-0-kestrel-for-https

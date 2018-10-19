@@ -1,11 +1,12 @@
-﻿// ------------------------------------------------------------------------//
+﻿
+// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
 //                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import {IFileModel } from "./IFileModel";
+import {IFileModel} from "Scripts/Api/V1/Interfaces/IFileModel";
 
 /**
  *  Common interface for all generated file DTOs (e.g. DepthBuffer, Mesh).

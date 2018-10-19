@@ -7,7 +7,7 @@
 
 import * as THREE from "three";
 
-import {Services} from "../System/Services";
+import {Services} from "Scripts/System/Services";
 
 /**
  * @description Default names of graphics objects.

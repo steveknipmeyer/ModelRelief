@@ -1,14 +1,15 @@
-﻿// ------------------------------------------------------------------------//
+﻿
+// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
 //                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { ICamera } from "./ICamera";
-import { IGeneratedFileModel } from "./IGeneratedFileModel";
-import { IModel3d } from "./IModel3d";
-import { IProject } from "./IProject";
+import {ICamera} from "Scripts/Api/V1/Interfaces/ICamera";
+import {IGeneratedFileModel} from "Scripts/Api/V1/Interfaces/IGeneratedFileModel";
+import {IModel3d} from "Scripts/Api/V1/Interfaces/IModel3d";
+import {IProject} from "Scripts/Api/V1/Interfaces/IProject";
 
  /**
   *  Depth buffer file formats.

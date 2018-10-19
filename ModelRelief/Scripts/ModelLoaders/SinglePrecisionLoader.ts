@@ -9,7 +9,7 @@ import * as THREE                                   from 'three';
 
 import { assert }                                   from 'chai'
 import {Graphics}                                   from 'Graphics';
-import {FacePair, Mesh3d, MeshGenerateParameters}   from 'Mesh3d';
+import {IFacePair, Mesh3d, IMeshGenerateParameters}   from 'Mesh3d';
 import {Services}                                   from 'Services';
 
 /**
@@ -19,7 +19,7 @@ import {Services}                                   from 'Services';
  */
 export class SinglePrecisionLoader {
 
-    meshParameters : MeshGenerateParameters;
+    meshParameters : IMeshGenerateParameters;
     values        : Float32Array;
     transformer   : (number) => number;
     bufferExtents : THREE.Vector2;
@@ -27,14 +27,14 @@ export class SinglePrecisionLoader {
 
     /**
      * Creates an instance of SinglePrecisionLoader.
-     * @param {MeshGenerateParameters} parameters Mesh generation parameters.
+     * @param {IMeshGenerateParameters} parameters Mesh generation parameters.
      * @param {Float32Array} values List of floats comprising the mesh values.
      *                              Row major order beginning at the bottom row.
      * @param {(number) => number} trasnformer Transform function that maps raw values to model values.
      * @param {THREE.Vector2} bufferExtents Buffer XY extents.
      * @param {THREE.Vector2} meshExtents Mesh XY extents.
     */
-    constructor(meshParameters : MeshGenerateParameters, values : Float32Array, transformer : (number) => number, bufferExtents : THREE.Vector2, meshExtents : THREE.Vector2) {
+    constructor(meshParameters : IMeshGenerateParameters, values : Float32Array, transformer : (number) => number, bufferExtents : THREE.Vector2, meshExtents : THREE.Vector2) {
 
         this.meshParameters = meshParameters;
         this.values         = values;
@@ -93,11 +93,11 @@ export class SinglePrecisionLoader {
      * @param {THREE.Vector2} meshLowerLeft World coordinated of lower left.
      * @param {number} faceSize Size of a face edge (not hypotenuse).
      * @param {number} baseVertexIndex Beginning offset in mesh geometry vertex array.
-     * @returns {FacePair}
+     * @returns {IFacePair}
      */
-    constructTriFacesAtOffset (row : number, column : number, meshLowerLeft : THREE.Vector2, faceSize : number, baseVertexIndex : number) : FacePair {
+    constructTriFacesAtOffset (row : number, column : number, meshLowerLeft : THREE.Vector2, faceSize : number, baseVertexIndex : number) : IFacePair {
 
-        let facePair : FacePair = {
+        let facePair : IFacePair = {
             vertices : [],
             faces    : []
         }

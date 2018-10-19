@@ -4,12 +4,11 @@
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
-
+import * as Dto from "Api/V1/Models/DtoModels";
 import * as THREE from "three";
-import * as Dto from "./DtoModels" ;
 
-import { IFileModel } from "../Interfaces/IFileModel";
-import { Model } from "./Model";
+import {IFileModel} from "Scripts/Api/V1/Interfaces/IFileModel";
+import {Model} from "Scripts/Api/V1/Models/Model";
 
 /**
  * @description Base class for a file-backed FE models.

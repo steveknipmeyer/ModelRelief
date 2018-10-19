@@ -7,9 +7,8 @@
 
 import * as THREE from "three";
 
-import { IModel } from "./IModel";
-import { IProject } from "./IProject";
-
+import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
+import {IProject} from "Scripts/Api/V1/Interfaces/IProject";
 
  /**
   *  Standard camera views.

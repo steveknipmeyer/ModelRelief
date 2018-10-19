@@ -154,6 +154,15 @@
         // Controls whether auto detection of tsc tasks is on or off.
         "typescript.tsc.autoDetect": "off",
 
+        // Preferred path style for auto imports.
+        //  - auto: Infer the shortest path type.
+        //  - relative: Relative to the file location.
+        //  - non-relative: Based on the `baseUrl` configured in your `jsconfig.json` / `tsconfig.json`.
+        "typescript.preferences.importModuleSpecifier": "non-relative",
+
+        // Enable/disable auto import suggestions. Requires using TypeScript 2.6.1 or newer in the workspace.
+        "typescript.suggest.autoImports": true,
+
     // ---------------------------------
     // Workbench
     // ---------------------------------

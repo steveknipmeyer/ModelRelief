@@ -5,7 +5,6 @@
 
     Configure tslint.
         Graphics
-            Graphics.ts
 
         https://palantir.github.io/tslint/rules/
         https://palantir.github.io/tslint/usage/configuration/
@@ -17,8 +16,11 @@
         ALM
             https://legacy.gitbook.com/book/alm-tools/alm/details
 
-    Convert to ES5 modules?
-        Separate BaseCamers, OrthographicCamera, PerspectiveCamera.
+    Move to TypeScript 3.1.
+        Convert TypeScript compiler output to ES5 modules?
+            Separate BaseCamers, OrthographicCamera, PerspectiveCamera.
+
+    Upgrade Three.js.
 
     Controls
         Add OrthographicTrackballControls to project.

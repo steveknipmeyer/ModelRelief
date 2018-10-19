@@ -1,13 +1,14 @@
-﻿// ------------------------------------------------------------------------//
+﻿
+// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
 //                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { ICamera } from "./ICamera";
-import { IFileModel } from "./IFileModel";
-import { IProject } from "./IProject";
+import {ICamera} from "Scripts/Api/V1/Interfaces/ICamera";
+import {IFileModel} from "Scripts/Api/V1/Interfaces/IFileModel";
+import {IProject} from "Scripts/Api/V1/Interfaces/IProject";
 
  /**
   *  3D model file formats.

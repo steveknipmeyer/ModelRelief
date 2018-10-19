@@ -1,30 +1,30 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE from 'three';
+import * as THREE from "three";
 
-import { Mesh3dCache }   from 'Mesh3dCache'
-          
+import {Mesh3dCache} from "Scripts/Graphics/Mesh3dCache";
+
 /**
  * @description Mesh generation parameters.
  * @export
  * @interface MeshGenerateParameters
  */
-export interface MeshGenerateParameters {
+export interface IMeshGenerateParameters {
 
-    name        : string;
-    material?   : THREE.Material;
+    name: string;
+    material?: THREE.Material;
 }
 
 /**
  * @description Represents a subdivided rectangular face consisting of two triagnular faces.
  * @interface FacePair
  */
-export interface FacePair {
+export interface IFacePair {
 
     vertices: THREE.Vector3[];
     faces: THREE.Face3[];
@@ -34,19 +34,19 @@ export interface FacePair {
  * @description Helper class for construction of THREE Meshes.
  * @export
  * @class Mesh3d
-  */
-  export class Mesh3d {
+ */
+export class Mesh3d {
 
-    static Cache                              : Mesh3dCache = new Mesh3dCache();
-    static DefaultMeshPhongMaterialParameters : THREE.MeshPhongMaterialParameters = {
-        
-        side: THREE.DoubleSide, 
-        wireframe : false, 
+    public static Cache: Mesh3dCache = new Mesh3dCache();
+    public static DefaultMeshPhongMaterialParameters: THREE.MeshPhongMaterialParameters = {
 
-        color: 0x42eef4, 
-        specular: 0xffffff, 
+        side: THREE.DoubleSide,
+        wireframe : false,
 
-        reflectivity : 0.75, 
-        shininess : 100
+        color: 0x42eef4,
+        specular: 0xffffff,
+
+        reflectivity : 0.75,
+        shininess : 100,
     };
 }

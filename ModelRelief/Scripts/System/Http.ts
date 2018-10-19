@@ -1,16 +1,12 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto                             from 'DtoModels'
-
-import { ConvertBase64 }                    from 'ConvertBase64'
 import { Exception }                        from 'Exception'
 import { HttpStatusCode, HttpStatusMessage }from 'HttpStatus'
-import { DepthBufferFormat }                from 'IDepthBuffer'
 import { IModel }                           from 'IModel'
 import { RequestResponse }                  from 'RequestResponse'
 import { Services }                         from 'Services'
@@ -43,7 +39,7 @@ export enum ServerEndPoints {
     ApiMeshes           = 'api/v1/meshes',
     ApiMeshTransforms   = 'api/v1/meshtransforms',
     ApiModels           = 'api/v1/models',
-    ApiProjects         = 'api/v1/projects',    
+    ApiProjects         = 'api/v1/projects',
 }
 
 /**
@@ -70,22 +66,22 @@ export class HttpLibrary {
     static sendXMLHttpRequest(endpoint : string, methodType : MethodType, contentType : ContentType, requestData : any, onComplete : (request: XMLHttpRequest) => any): void {
 
         let requestTag = Services.timer.mark(`${methodType} Request: ${endpoint}`);
-        let request = new XMLHttpRequest(); 
+        let request = new XMLHttpRequest();
 
-        // Abort 
+        // Abort
         let onAbort = function (this: XMLHttpRequestEventTarget, ev: Event) : any {
 
             Services.defaultLogger.addErrorMessage(`${methodType}: onAbort`);
         };
 
         // Error
-        let onError = function (this: XMLHttpRequestEventTarget, ev: ErrorEvent) : any { 
+        let onError = function (this: XMLHttpRequestEventTarget, ev: ErrorEvent) : any {
 
             Services.defaultLogger.addErrorMessage(`${methodType}: onError`);
         };
 
         // Progress
-        let onProgress = function (this: XMLHttpRequestEventTarget, ev: ProgressEvent) : any { 
+        let onProgress = function (this: XMLHttpRequestEventTarget, ev: ProgressEvent) : any {
 
             let percentComplete = ((ev.loaded / ev.total) * 100).toFixed(0);
             Services.defaultLogger.addInfoMessage(`${methodType}: onProgress = ${percentComplete}%`);
@@ -127,7 +123,7 @@ export class HttpLibrary {
         request.send(requestData);
 
         Services.timer.logElapsedTime(requestTag);
-    }  
+    }
 
     /**
      * Converts an array buffer to a string
@@ -177,11 +173,11 @@ export class HttpLibrary {
             'Content-Type': contentType,
             'Accept': 'application/json, application/octet-stream',
         });
-        
+
         let requestMode: RequestMode = 'cors';
         let cacheMode: RequestCache = 'default';
 
-        // WIP: Credentials must be supplied to use the API. 
+        // WIP: Credentials must be supplied to use the API.
         //      The browser provides the credentials for Ux Views.
         let init = {
             method: methodType,

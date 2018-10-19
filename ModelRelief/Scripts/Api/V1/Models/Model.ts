@@ -1,13 +1,14 @@
-﻿// ------------------------------------------------------------------------//
+﻿
+// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
 //                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { ILogger } from "../../../System/Logger";
-import { Services } from "../../../System/Services";
-import { IModel } from "../Interfaces/IModel";
+import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
+import {ILogger} from "Scripts/System/Logger";
+import {Services} from "Scripts/System/Services";
 
 /**
  * @description Common base class for all FE models.

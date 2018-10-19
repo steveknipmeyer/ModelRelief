@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { IModel } from "./IModel";
+import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
 
 export interface IProject extends IModel {
 

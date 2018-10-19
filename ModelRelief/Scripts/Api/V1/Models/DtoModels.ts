@@ -5,25 +5,23 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
+import {ICamera} from "Scripts/Api/V1/Interfaces/ICamera";
+import {DepthBufferFormat, IDepthBuffer} from "Scripts/Api/V1/Interfaces/IDepthBuffer";
+import {IFileModel} from "Scripts/Api/V1/Interfaces/IFileModel";
+import {IGeneratedFileModel} from "Scripts/Api/V1/Interfaces/IGeneratedFileModel";
+import {IMesh, MeshFormat} from "Scripts/Api/V1/Interfaces/IMesh";
+import {IMeshTransform} from "Scripts/Api/V1/Interfaces/IMeshTransform";
+import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
+import {IModel3d, Model3dFormat} from "Scripts/Api/V1/Interfaces/IModel3d";
+import {IProject} from "Scripts/Api/V1/Interfaces/IProject";
+import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
+import {Exception} from "Scripts/System/Exception";
+import {ContentType, HttpLibrary, MethodType, ServerEndPoints} from "Scripts/System/Http";
+import {HttpStatusCode} from "Scripts/System/HttpStatus";
+import {ILogger} from "Scripts/System/Logger";
+import {RequestResponse} from "Scripts/System/RequestResponse";
+import {Services} from "Scripts/System/Services";
 import * as THREE from "three";
-
-import { IThreeBaseCamera } from "../../../Graphics/IThreeBaseCamera";
-import { Exception } from "../../../System/Exception";
-import { ContentType, HttpLibrary,
-         MethodType, ServerEndPoints } from "../../../System/Http";
-import { HttpStatusCode } from "../../../System/HttpStatus";
-import { ILogger } from "../../../System/Logger";
-import { RequestResponse } from "../../../System/RequestResponse";
-import { Services } from "../../../System/Services";
-import { ICamera } from "../Interfaces/ICamera";
-import { DepthBufferFormat, IDepthBuffer } from "../Interfaces/IDepthBuffer";
-import { IFileModel } from "../Interfaces/IFileModel";
-import { IGeneratedFileModel } from "../Interfaces/IGeneratedFileModel";
-import { IMesh, MeshFormat } from "../Interfaces/IMesh";
-import { IMeshTransform } from "../Interfaces/IMeshTransform";
-import { IModel } from "../Interfaces/IModel";
-import { IModel3d, Model3dFormat } from "../Interfaces/IModel3d";
-import { IProject } from "../Interfaces/IProject";
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------//
 //                                                              Base Classes                                                                    //

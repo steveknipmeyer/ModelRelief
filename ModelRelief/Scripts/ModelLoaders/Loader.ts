@@ -12,7 +12,7 @@ import {FileModel}                          from 'FileModel'
 import {MeshFormat}                         from 'IMesh';
 import {ILogger}                            from 'Logger';
 import {Mesh}                               from 'Mesh';
-import {MeshGenerateParameters}             from 'Mesh3d';
+import {IMeshGenerateParameters}             from 'Mesh3d';
 import {Model3d}                            from 'Model3d';
 import {OBJLoader}                          from 'OBJLoader';
 import {Services}                           from 'Services';
@@ -92,7 +92,7 @@ export class Loader {
         let floatArray = new Float32Array(byteArray.buffer);
 
         let depthBuffer = mesh.depthBuffer;
-        let meshParameters : MeshGenerateParameters = {
+        let meshParameters : IMeshGenerateParameters = {
             name : mesh.name
         }
         let bufferExtents = new THREE.Vector2(depthBuffer.width, depthBuffer.height);
