@@ -5,9 +5,9 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE               from 'three';
+import * as THREE from "three";
 
-import {Services}               from 'Services';
+import {Services} from "../System/Services";
 
 /**
  * @description Default names of graphics objects.
@@ -16,15 +16,15 @@ import {Services}               from 'Services';
  */
 export enum ObjectNames {
 
-    Root          =  'Root',
+    Root          =  "Root",
 
-    BoundingBox   = 'Bounding Box',
-    Box           = 'Box',
-    CameraHelper  = 'CameraHelper',
-    ModelClone    = 'Model Clone',
-    Plane         = 'Plane',
-    Sphere        = 'Sphere',
-    Triad         = 'Triad'
+    BoundingBox   = "Bounding Box",
+    Box           = "Box",
+    CameraHelper  = "CameraHelper",
+    ModelClone    = "Model Clone",
+    Plane         = "Plane",
+    Sphere        = "Sphere",
+    Triad         = "Triad",
 }
 
 /**
@@ -33,12 +33,6 @@ export enum ObjectNames {
  * @class Graphics
  */
 export class Graphics {
-
-    /**
-     * Creates an instance of Graphics.
-     */
-    constructor() {
-    }
 
 //#region Geometry
     /* --------------------------------------------------------------------------------------------------------------------------------------//
@@ -51,20 +45,20 @@ export class Graphics {
      * @param {any} object3d Object to process.
      * https://stackoverflow.com/questions/18357529/threejs-remove-object-from-scene
      */
-    static disposeResources(object3d) : void {
+    public static disposeResources(object3d): void {
 
         // logger.addInfoMessage ('Removing: ' + object3d.name);
-        if (object3d.hasOwnProperty('geometry')) {
+        if (object3d.hasOwnProperty("geometry")) {
             object3d.geometry.dispose();
         }
 
-        if (object3d.hasOwnProperty('material')) {
+        if (object3d.hasOwnProperty("material")) {
 
-            var material = object3d.material;
-            if (material.hasOwnProperty('materials')) {
+            const material = object3d.material;
+            if (material.hasOwnProperty("materials")) {
 
-                var materials = material.materials;
-                for (var iMaterial in materials) {
+                const materials = material.materials;
+                for (const iMaterial in materials) {
                     if (materials.hasOwnProperty(iMaterial)) {
                         materials[iMaterial].dispose();
                     }
@@ -72,7 +66,7 @@ export class Graphics {
             }
         }
 
-        if (object3d.hasOwnProperty('texture')) {
+        if (object3d.hasOwnProperty("texture")) {
             object3d.texture.dispose();
         }
     }
@@ -84,13 +78,13 @@ export class Graphics {
      * @param {boolean} removeRoot Remove root object itself.
      * @returns
      */
-    static removeObjectChildren(rootObject : THREE.Object3D, removeRoot : boolean) {
+    public static removeObjectChildren(rootObject: THREE.Object3D, removeRoot: boolean) {
 
         if (!rootObject)
             return;
 
-        let logger  = Services.defaultLogger;
-        let remover = function (object3d) {
+        const logger  = Services.defaultLogger;
+        const remover = (object3d) => {
 
             if (object3d === rootObject) {
                 return;
@@ -101,9 +95,9 @@ export class Graphics {
         rootObject.traverse(remover);
 
         // remove root children from rootObject (backwards!)
-        for (let iChild : number = (rootObject.children.length - 1); iChild >= 0; iChild--) {
+        for (let iChild: number = (rootObject.children.length - 1); iChild >= 0; iChild--) {
 
-            let child : THREE.Object3D = rootObject.children[iChild];
+            const child: THREE.Object3D = rootObject.children[iChild];
             rootObject.remove (child);
         }
 
@@ -117,13 +111,14 @@ export class Graphics {
      * @param {THREE.Scene} scene Scene to process.
      * @param {string} objectName Object name to find.
      */
-    static removeAllByName (scene : THREE.Scene, objectName : string) : void {
+    public static removeAllByName(scene: THREE.Scene, objectName: string): void {
 
-        let object: THREE.Object3D;
-        while (object = scene.getObjectByName(objectName)) {
+        let object: THREE.Object3D = scene.getObjectByName(objectName);
+        while (object != null) {
 
             Graphics.disposeResources(object);
             object.parent.remove(object);
+            object = scene.getObjectByName(objectName);
         }
     }
 
@@ -134,24 +129,24 @@ export class Graphics {
      * @param {THREE.Matrix4} [matrix] Transformation matrix.
      * @returns {THREE.Object3D}
      */
-    static cloneAndTransformObject (object : THREE.Object3D, matrix? : THREE.Matrix4) : THREE.Object3D {
+    public static cloneAndTransformObject(object: THREE.Object3D, matrix?: THREE.Matrix4): THREE.Object3D {
 
-        let methodTag : string = Services.timer.mark('cloneAndTransformObject');
+        const methodTag: string = Services.timer.mark("cloneAndTransformObject");
         if (!matrix)
             matrix = new THREE.Matrix4();
 
         // clone object (and geometry!)
-        let cloneTag: string = Services.timer.mark('clone');
-        let objectClone : THREE.Object3D = object.clone();
-        objectClone.traverse(object => {
-            if (object instanceof(THREE.Mesh))
-                object.geometry = object.geometry.clone();
+        const cloneTag: string = Services.timer.mark("clone");
+        const objectClone: THREE.Object3D = object.clone();
+        objectClone.traverse((traversalObject) => {
+            if (traversalObject instanceof (THREE.Mesh))
+            traversalObject.geometry = traversalObject.geometry.clone();
         });
         Services.timer.logElapsedTime(cloneTag);
 
         // N.B. Important! The postion, rotation (quaternion) and scale are correct but the matrix has not been updated.
         // THREE.js updates the matrix in the render() loop.
-        let transformTag: string = Services.timer.mark('transform');
+        const transformTag: string = Services.timer.mark("transform");
         objectClone.updateMatrixWorld(true);
 
         // transform
@@ -169,17 +164,17 @@ export class Graphics {
      * @param {THREE.Matrix4} matrix Transformation matrix.
      * @returns {THREE.Box3}
      */
-    static getTransformedBoundingBox(object: THREE.Object3D, matrix: THREE.Matrix4): THREE.Box3 {
+    public static getTransformedBoundingBox(object: THREE.Object3D, matrix: THREE.Matrix4): THREE.Box3 {
 
-        let methodTag: string = Services.timer.mark('getTransformedBoundingBox');
+        const methodTag: string = Services.timer.mark("getTransformedBoundingBox");
 
         object.updateMatrixWorld(true);
         object.applyMatrix(matrix);
-        let boundingBox: THREE.Box3 = Graphics.getBoundingBoxFromObject(object);
+        const boundingBox: THREE.Box3 = Graphics.getBoundingBoxFromObject(object);
 
         // restore object
-        let matrixIdentity = new THREE.Matrix4();
-        let matrixInverse = matrixIdentity.getInverse(matrix, true);
+        const matrixIdentity = new THREE.Matrix4();
+        const matrixInverse = matrixIdentity.getInverse(matrix, true);
         object.applyMatrix(matrixInverse);
 
         Services.timer.logElapsedTime(methodTag);
@@ -194,13 +189,10 @@ export class Graphics {
      * @param {THREE.Material} material Material of the bounding box.
      * @returns {THREE.Mesh}
      */
-    static createBoundingBoxMeshFromGeometry(position : THREE.Vector3, geometry : THREE.Geometry, material : THREE.Material) : THREE.Mesh{
+    public static createBoundingBoxMeshFromGeometry(position: THREE.Vector3, geometry: THREE.Geometry, material: THREE.Material): THREE.Mesh {
 
-        var boundingBox     : THREE.Box3,
-            width           : number,
-            height          : number,
-            depth           : number,
-            boxMesh         : THREE.Mesh;
+        let boundingBox: THREE.Box3;
+        let boxMesh: THREE.Mesh;
 
         geometry.computeBoundingBox();
         boundingBox = geometry.boundingBox;
@@ -218,18 +210,13 @@ export class Graphics {
      * @param {THREE.Material} material Material of the box.
      * @returns {THREE.Mesh}
      */
-    static createBoundingBoxMeshFromBoundingBox(position : THREE.Vector3, boundingBox : THREE.Box3, material : THREE.Material) : THREE.Mesh {
+    public static createBoundingBoxMeshFromBoundingBox(position: THREE.Vector3, boundingBox: THREE.Box3, material: THREE.Material): THREE.Mesh {
 
-        var width           : number,
-            height          : number,
-            depth           : number,
-            boxMesh         : THREE.Mesh;
+        const width  = boundingBox.max.x - boundingBox.min.x;
+        const height = boundingBox.max.y - boundingBox.min.y;
+        const depth  = boundingBox.max.z - boundingBox.min.z;
 
-        width  = boundingBox.max.x - boundingBox.min.x;
-        height = boundingBox.max.y - boundingBox.min.y;
-        depth  = boundingBox.max.z - boundingBox.min.z;
-
-        boxMesh = this.createBoxMesh (position, width, height, depth, material);
+        const boxMesh = this.createBoxMesh (position, width, height, depth, material);
         boxMesh.name = ObjectNames.BoundingBox;
 
         return boxMesh;
@@ -241,19 +228,19 @@ export class Graphics {
      * @param {THREE.Object3D} rootObject Object to process.
      * @returns {THREE.Box3}
      */
-    static getBoundingBoxFromObject(rootObject : THREE.Object3D) : THREE.Box3 {
+    public static getBoundingBoxFromObject(rootObject: THREE.Object3D): THREE.Box3 {
 
-        let timerTag = Services.timer.mark(`${rootObject.name}: BoundingBox`);
+        const timerTag = Services.timer.mark(`${rootObject.name}: BoundingBox`);
 
         // https://stackoverflow.com/questions/15492857/any-way-to-get-a-bounding-box-from-a-three-js-object3d
-        let boundingBox : THREE.Box3 = new THREE.Box3();
+        let boundingBox: THREE.Box3 = new THREE.Box3();
         boundingBox = boundingBox.setFromObject(rootObject);
 
         Services.timer.logElapsedTime(timerTag);
         return boundingBox;
         }
 
-        /**
+    /**
      * @description Creates a box mesh.
      * @static
      * @param {THREE.Vector3} position Location of the box.
@@ -263,19 +250,14 @@ export class Graphics {
      * @param {THREE.Material} [material] Optional material.
      * @returns {THREE.Mesh}
      */
-    static createBoxMesh(position : THREE.Vector3, width : number, height : number, depth : number, material? : THREE.Material) : THREE.Mesh {
+    public static createBoxMesh(position: THREE.Vector3, width: number, height: number, depth: number, material?: THREE.Material): THREE.Mesh {
 
-        var
-            boxGeometry  : THREE.BoxGeometry,
-            boxMaterial  : THREE.Material,
-            box          : THREE.Mesh;
-
-        boxGeometry = new THREE.BoxGeometry(width, height, depth);
+        const boxGeometry = new THREE.BoxGeometry(width, height, depth);
         boxGeometry.computeBoundingBox();
 
-        boxMaterial = material || new THREE.MeshPhongMaterial( { color: 0x0000ff, opacity: 1.0} );
+        const boxMaterial = material || new THREE.MeshPhongMaterial( { color: 0x0000ff, opacity: 1.0} );
 
-        box = new THREE.Mesh( boxGeometry, boxMaterial);
+        const box = new THREE.Mesh( boxGeometry, boxMaterial);
         box.name = ObjectNames.Box;
         box.position.copy(position);
 
@@ -291,17 +273,11 @@ export class Graphics {
      * @param {THREE.Material} [material] Optional material.
      * @returns {THREE.Mesh}
      */
-    static createPlaneMesh(position : THREE.Vector3, width : number, height : number, material? : THREE.Material) : THREE.Mesh {
+    public static createPlaneMesh(position: THREE.Vector3, width: number, height: number, material?: THREE.Material): THREE.Mesh {
 
-        var
-            planeGeometry  : THREE.PlaneGeometry,
-            planeMaterial  : THREE.Material,
-            plane          : THREE.Mesh;
-
-        planeGeometry = new THREE.PlaneGeometry(width, height);
-        planeMaterial = material || new THREE.MeshPhongMaterial( { color: 0x0000ff, opacity: 1.0} );
-
-        plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        const planeGeometry = new THREE.PlaneGeometry(width, height);
+        const planeMaterial = material || new THREE.MeshPhongMaterial( { color: 0x0000ff, opacity: 1.0} );
+        const plane = new THREE.Mesh(planeGeometry, planeMaterial);
         plane.name = ObjectNames.Plane;
         plane.position.copy(position);
 
@@ -316,18 +292,15 @@ export class Graphics {
      * @param {THREE.Material} [material] Optional material.
      * @returns {THREE.Mesh}
      */
-    static createSphereMesh(position : THREE.Vector3, radius : number, material? : THREE.Material) : THREE.Mesh {
-        var sphereGeometry  : THREE.SphereGeometry,
-            segmentCount    : number = 32,
-            sphereMaterial  : THREE.Material,
-            sphere          : THREE.Mesh;
+    public static createSphereMesh(position: THREE.Vector3, radius: number, material?: THREE.Material): THREE.Mesh {
 
-        sphereGeometry = new THREE.SphereGeometry(radius, segmentCount, segmentCount);
+        const segmentCount: number = 32;
+        const sphereGeometry = new THREE.SphereGeometry(radius, segmentCount, segmentCount);
         sphereGeometry.computeBoundingBox();
 
-        sphereMaterial = material || new THREE.MeshPhongMaterial({ color: 0xff0000, opacity: 1.0} );
+        const sphereMaterial = material || new THREE.MeshPhongMaterial({ color: 0xff0000, opacity: 1.0} );
 
-        sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+        const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
         sphere.name = ObjectNames.Sphere;
         sphere.position.copy(position);
 
@@ -342,17 +315,13 @@ export class Graphics {
      * @param {number} color Color.
      * @returns {THREE.Line}
      */
-    static createLine(startPosition : THREE.Vector3, endPosition : THREE.Vector3, color : number) : THREE.Line {
+    public static createLine(startPosition: THREE.Vector3, endPosition: THREE.Vector3, color: number): THREE.Line {
 
-        var line            : THREE.Line,
-            lineGeometry    : THREE.Geometry,
-            material        : THREE.LineBasicMaterial;
-
-        lineGeometry = new THREE.Geometry();
+        const lineGeometry = new THREE.Geometry();
         lineGeometry.vertices.push (startPosition, endPosition);
 
-        material = new THREE.LineBasicMaterial( { color: color} );
-        line = new THREE.Line(lineGeometry, material);
+        const material = new THREE.LineBasicMaterial( { color} );
+        const line = new THREE.Line(lineGeometry, material);
 
         return line;
     }
@@ -366,13 +335,13 @@ export class Graphics {
      * @param {number} [headWidth] Width of the arrow head.
      * @returns {THREE.Object3D}
      */
-    static createWorldAxesTriad(position? : THREE.Vector3, length? : number, headLength? : number, headWidth? : number) : THREE.Object3D {
+    public static createWorldAxesTriad(position?: THREE.Vector3, length?: number, headLength?: number, headWidth?: number): THREE.Object3D {
 
-        var triadGroup      : THREE.Object3D = new THREE.Object3D(),
-            arrowPosition   : THREE.Vector3  = position ||new THREE.Vector3(),
-            arrowLength     : number = length     || 15,
-            arrowHeadLength : number = headLength || 1,
-            arrowHeadWidth  : number = headWidth  || 1;
+        const triadGroup: THREE.Object3D = new THREE.Object3D();
+        const arrowPosition: THREE.Vector3  = position || new THREE.Vector3();
+        const arrowLength: number = length     || 15;
+        const arrowHeadLength: number = headLength || 1;
+        const arrowHeadWidth: number = headWidth  || 1;
 
         triadGroup.add(new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), arrowPosition, arrowLength, 0xff0000, arrowHeadLength, arrowHeadWidth));
         triadGroup.add(new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), arrowPosition, arrowLength, 0x00ff00, arrowHeadLength, arrowHeadWidth));
@@ -389,18 +358,15 @@ export class Graphics {
      * @param {number} [step] Grid line intervals.
      * @returns {THREE.Object3D} Grid object.
      */
-    static createWorldAxesGrid(position? : THREE.Vector3, size? : number, step? : number) : THREE.Object3D {
+    public static createWorldAxesGrid(position?: THREE.Vector3, size?: number, step?: number): THREE.Object3D {
 
-        var gridGroup       : THREE.Object3D = new THREE.Object3D(),
-            gridPosition    : THREE.Vector3  = position ||new THREE.Vector3(),
-            gridSize        : number = size || 10,
-            gridStep        : number = step || 1,
-            colorCenterline : number =  0xff000000,
-            xyGrid           : THREE.GridHelper,
-            yzGrid           : THREE.GridHelper,
-            zxGrid           : THREE.GridHelper;
+        const gridGroup: THREE.Object3D = new THREE.Object3D();
+        const gridPosition: THREE.Vector3  = position || new THREE.Vector3();
+        const gridSize: number = size || 10;
+        const gridStep: number = step || 1;
+        const colorCenterline: number =  0xff000000;
 
-        xyGrid = new THREE.GridHelper(gridSize, gridStep);
+        const xyGrid = new THREE.GridHelper(gridSize, gridStep);
         xyGrid.setColors(colorCenterline, 0xff0000);
         xyGrid.position.copy(gridPosition.clone());
         xyGrid.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
@@ -408,7 +374,7 @@ export class Graphics {
         xyGrid.position.y += gridSize;
         gridGroup.add(xyGrid);
 
-        yzGrid = new THREE.GridHelper(gridSize, gridStep);
+        const yzGrid = new THREE.GridHelper(gridSize, gridStep);
         yzGrid.setColors(colorCenterline, 0x00ff00);
         yzGrid.position.copy(gridPosition.clone());
         yzGrid.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 2);
@@ -416,7 +382,7 @@ export class Graphics {
         yzGrid.position.z += gridSize;
         gridGroup.add(yzGrid);
 
-        zxGrid = new THREE.GridHelper(gridSize, gridStep);
+        const zxGrid = new THREE.GridHelper(gridSize, gridStep);
         zxGrid.setColors(colorCenterline, 0x0000ff);
         zxGrid.position.copy(gridPosition.clone());
         zxGrid.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
@@ -435,42 +401,42 @@ export class Graphics {
      * @param {THREE.Group} modelGroup Model geoemetry.
      * @returns {void}
      */
-    static addCameraHelper (camera : THREE.Camera, scene : THREE.Scene, modelGroup : THREE.Group) : void {
+    public static addCameraHelper(camera: THREE.Camera, scene: THREE.Scene, modelGroup: THREE.Group): void {
 
         if (!camera)
             return;
 
         // camera properties
-        let cameraMatrixWorld        : THREE.Matrix4 = camera.matrixWorld;
-        let cameraMatrixWorldInverse : THREE.Matrix4 = camera.matrixWorldInverse;
+        const cameraMatrixWorld: THREE.Matrix4 = camera.matrixWorld;
+        const cameraMatrixWorldInverse: THREE.Matrix4 = camera.matrixWorldInverse;
 
         // construct root object of the helper
-        let cameraHelper  = new THREE.Group();
+        const cameraHelper  = new THREE.Group();
         cameraHelper.name = ObjectNames.CameraHelper;
         cameraHelper.visible = true;
 
         // model bounding box (View coordinates)
-        let boundingBoxMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000, wireframe: true, transparent: false, opacity: 0.2 })
-        let boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(modelGroup, cameraMatrixWorldInverse);
-        let boundingBoxViewMesh = Graphics.createBoundingBoxMeshFromBoundingBox(boundingBoxView.getCenter(), boundingBoxView, boundingBoxMaterial);
+        const boundingBoxMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000, wireframe: true, transparent: false, opacity: 0.2 });
+        const boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(modelGroup, cameraMatrixWorldInverse);
+        const boundingBoxViewMesh = Graphics.createBoundingBoxMeshFromBoundingBox(boundingBoxView.getCenter(), boundingBoxView, boundingBoxMaterial);
 
-        let boundingBoxWorldMesh = Graphics.cloneAndTransformObject(boundingBoxViewMesh, cameraMatrixWorld);
+        const boundingBoxWorldMesh = Graphics.cloneAndTransformObject(boundingBoxViewMesh, cameraMatrixWorld);
         cameraHelper.add(boundingBoxWorldMesh);
 
         // position
-        let position = Graphics.createSphereMesh(camera.position, 3);
+        const position = Graphics.createSphereMesh(camera.position, 3);
         cameraHelper.add(position);
 
         // camera target line
-        let unitTarget = new THREE.Vector3(0, 0, -1);
+        const unitTarget = new THREE.Vector3(0, 0, -1);
         unitTarget.applyQuaternion(camera.quaternion);
-        let scaledTarget : THREE.Vector3;
+        let scaledTarget: THREE.Vector3;
         scaledTarget = unitTarget.multiplyScalar(-boundingBoxView.max.z);
 
-        let startPoint : THREE.Vector3 = camera.position;
-        let endPoint   : THREE.Vector3 = new THREE.Vector3();
+        const startPoint: THREE.Vector3 = camera.position;
+        const endPoint: THREE.Vector3 = new THREE.Vector3();
         endPoint.addVectors(startPoint, scaledTarget);
-        let targetLine : THREE.Line = Graphics.createLine(startPoint, endPoint, 0x00ff00);
+        const targetLine: THREE.Line = Graphics.createLine(startPoint, endPoint, 0x00ff00);
         cameraHelper.add(targetLine);
 
         scene.add(cameraHelper);
@@ -482,9 +448,9 @@ export class Graphics {
      * @param {THREE.Scene} scene Scene to annotate.
      * @param {number} size Size of axes.
      */
-    static addAxisHelper (scene : THREE.Scene, size : number) : void{
+    public static addAxisHelper(scene: THREE.Scene, size: number): void {
 
-        let axisHelper = new THREE.AxisHelper(size);
+        const axisHelper = new THREE.AxisHelper(size);
         axisHelper.visible = true;
         scene.add(axisHelper);
     }
@@ -510,7 +476,7 @@ export class Graphics {
     */
 
     // --------------------------------------------------------------------------------------------------------------------------------------//
-    //			World Coordinates
+    // 			World Coordinates
     // --------------------------------------------------------------------------------------------------------------------------------------//
     /**
      * @description Converts a JQuery event to world coordinates.
@@ -520,25 +486,18 @@ export class Graphics {
      * @param {THREE.Camera} camera Camera.
      * @returns {THREE.Vector3}
      */
-    static worldCoordinatesFromJQEvent (event : JQueryEventObject, container : JQuery, camera : THREE.Camera) : THREE.Vector3 {
+    public static worldCoordinatesFromJQEvent(event: JQueryEventObject, container: JQuery, camera: THREE.Camera): THREE.Vector3 {
 
-        var worldCoordinates    : THREE.Vector3,
-            deviceCoordinates2D : THREE.Vector2,
-            deviceCoordinates3D : THREE.Vector3,
-            deviceZ             : number;
-
-        deviceCoordinates2D = this.deviceCoordinatesFromJQEvent(event, container);
-
-        deviceZ = (camera instanceof THREE.PerspectiveCamera) ? 0.5 : 1.0;
-        deviceCoordinates3D = new THREE.Vector3(deviceCoordinates2D.x, deviceCoordinates2D.y, deviceZ);
-
-        worldCoordinates = deviceCoordinates3D.unproject(camera);
+        const deviceCoordinates2D = this.deviceCoordinatesFromJQEvent(event, container);
+        const deviceZ = (camera instanceof THREE.PerspectiveCamera) ? 0.5 : 1.0;
+        const deviceCoordinates3D = new THREE.Vector3(deviceCoordinates2D.x, deviceCoordinates2D.y, deviceZ);
+        const worldCoordinates = deviceCoordinates3D.unproject(camera);
 
         return worldCoordinates;
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------//
-    //			View Coordinates
+    // 			View Coordinates
     // --------------------------------------------------------------------------------------------------------------------------------------//
     /**
      * @description Converts world coordinates to view coordinates.
@@ -547,18 +506,16 @@ export class Graphics {
      * @param {THREE.Camera} camera Camera.
      * @returns {THREE.Vector3}
      */
-    static viewCoordinatesFromWorldCoordinates (vector : THREE.Vector3, camera : THREE.Camera) : THREE.Vector3 {
+    public static viewCoordinatesFromWorldCoordinates(vector: THREE.Vector3, camera: THREE.Camera): THREE.Vector3 {
 
-        var position          : THREE.Vector3 = vector.clone(),
-            viewCoordinates   : THREE.Vector3;
-
-        viewCoordinates = position.applyMatrix4(camera.matrixWorldInverse);
+        const position: THREE.Vector3 = vector.clone();
+        const viewCoordinates = position.applyMatrix4(camera.matrixWorldInverse);
 
         return viewCoordinates;
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------//
-    //			Device Coordinates
+    // 			Device Coordinates
     // --------------------------------------------------------------------------------------------------------------------------------------//
     /**
      * @description Converts a JQuery event to normalized device coordinates.
@@ -567,20 +524,15 @@ export class Graphics {
      * @param {JQuery} container DOM container.
      * @returns {THREE.Vector2}
      */
-    static deviceCoordinatesFromJQEvent (event : JQueryEventObject, container : JQuery) : THREE.Vector2 {
+    public static deviceCoordinatesFromJQEvent(event: JQueryEventObject, container: JQuery): THREE.Vector2 {
 
-        var deviceCoordinates           : THREE.Vector2,
-            screenContainerCoordinates  : THREE.Vector2,
-            ratioX,  ratioY              : number,
-            deviceX, deviceY             : number;
+        const screenContainerCoordinates = this.screenContainerCoordinatesFromJQEvent(event, container);
+        const ratioX = screenContainerCoordinates.x / container.width();
+        const ratioY = screenContainerCoordinates.y / container.height();
 
-        screenContainerCoordinates = this.screenContainerCoordinatesFromJQEvent(event, container);
-        ratioX = screenContainerCoordinates.x / container.width();
-        ratioY = screenContainerCoordinates.y / container.height();
-
-        deviceX = +((ratioX * 2) - 1);                 // [-1, 1]
-        deviceY = -((ratioY * 2) - 1);                 // [-1, 1]
-        deviceCoordinates = new THREE.Vector2(deviceX, deviceY);
+        const deviceX = +((ratioX * 2) - 1);                 // [-1, 1]
+        const deviceY = -((ratioY * 2) - 1);                 // [-1, 1]
+        const deviceCoordinates = new THREE.Vector2(deviceX, deviceY);
 
         return deviceCoordinates;
     }
@@ -592,21 +544,18 @@ export class Graphics {
      * @param {THREE.Camera} camera Camera.
      * @returns {THREE.Vector2}
      */
-    static deviceCoordinatesFromWorldCoordinates (vector : THREE.Vector3, camera : THREE.Camera) : THREE.Vector2 {
+    public static deviceCoordinatesFromWorldCoordinates(vector: THREE.Vector3, camera: THREE.Camera): THREE.Vector2 {
 
         // https://github.com/mrdoob/three.js/issues/78
-        var position                   : THREE.Vector3 = vector.clone(),
-            deviceCoordinates2D        : THREE.Vector2,
-            deviceCoordinates3D        : THREE.Vector3;
-
-        deviceCoordinates3D = position.project(camera);
-        deviceCoordinates2D = new THREE.Vector2(deviceCoordinates3D.x, deviceCoordinates3D.y);
+        const position: THREE.Vector3 = vector.clone();
+        const deviceCoordinates3D = position.project(camera);
+        const deviceCoordinates2D = new THREE.Vector2(deviceCoordinates3D.x, deviceCoordinates3D.y);
 
         return deviceCoordinates2D;
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------//
-    //			Screen Coordinates
+    // 			Screen Coordinates
     // --------------------------------------------------------------------------------------------------------------------------------------//
     /**
      * @description Page coordinates from a JQuery event.
@@ -614,9 +563,9 @@ export class Graphics {
      * @param {JQueryEventObject} event JQuery event.
      * @returns {THREE.Vector2} Screen (page) coordinates.
      */
-    static screenPageCoordinatesFromJQEvent(event : JQueryEventObject) : THREE.Vector2 {
+    public static screenPageCoordinatesFromJQEvent(event: JQueryEventObject): THREE.Vector2 {
 
-        var screenPageCoordinates : THREE.Vector2 = new THREE.Vector2();
+        const screenPageCoordinates: THREE.Vector2 = new THREE.Vector2();
 
         screenPageCoordinates.x = event.pageX;
         screenPageCoordinates.y = event.pageY;
@@ -634,9 +583,9 @@ export class Graphics {
      * @param {JQueryEventObject} event JQuery event.
      * @returns {THREE.Vector2} Screen client coordinates.
      */
-    static screenClientCoordinatesFromJQEvent(event : JQueryEventObject) : THREE.Vector2 {
+    public static screenClientCoordinatesFromJQEvent(event: JQueryEventObject): THREE.Vector2 {
 
-        var screenClientCoordinates : THREE.Vector2 = new THREE.Vector2();
+        const screenClientCoordinates: THREE.Vector2 = new THREE.Vector2();
 
         screenClientCoordinates.x = event.clientX;
         screenClientCoordinates.y = event.clientY;
@@ -651,17 +600,14 @@ export class Graphics {
      * @param {JQuery} container DOM container.
      * @returns {THREE.Vector2} Screen container coordinates.
      */
-    static screenContainerCoordinatesFromJQEvent(event : JQueryEventObject, container : JQuery) : THREE.Vector2 {
+    public static screenContainerCoordinatesFromJQEvent(event: JQueryEventObject, container: JQuery): THREE.Vector2 {
 
-        var screenContainerCoordinates : THREE.Vector2 = new THREE.Vector2(),
-            containerOffset            : JQueryCoordinates,
-            pageX, pageY               : number;
-
-        containerOffset = container.offset();
+        const screenContainerCoordinates: THREE.Vector2 = new THREE.Vector2();
+        const containerOffset = container.offset();
 
         // JQuery does not set pageX/pageY for Drop events. They are defined in the originalEvent member.
-        pageX = event.pageX || (<any>(event.originalEvent)).pageX;
-        pageY = event.pageY || (<any>(event.originalEvent)).pageY;
+        const pageX = event.pageX || ((event.originalEvent) as any).pageX;
+        const pageY = event.pageY || ((event.originalEvent) as any).pageY;
 
         screenContainerCoordinates.x = pageX - containerOffset.left;
         screenContainerCoordinates.y = pageY - containerOffset.top;
@@ -677,21 +623,17 @@ export class Graphics {
      * @param {THREE.Camera} camera Camera.
      * @returns {THREE.Vector2} Screen container coordinates.
      */
-    static screenContainerCoordinatesFromWorldCoordinates (vector : THREE.Vector3, container : JQuery, camera : THREE.Camera) : THREE.Vector2 {
+    public static screenContainerCoordinatesFromWorldCoordinates(vector: THREE.Vector3, container: JQuery, camera: THREE.Camera): THREE.Vector2 {
 
-        //https://github.com/mrdoob/three.js/issues/78
-        var position                   : THREE.Vector3 = vector.clone(),
-            deviceCoordinates          : THREE.Vector2,
-            screenContainerCoordinates : THREE.Vector2,
-            left                       : number,
-            top                        : number;
+        // https://github.com/mrdoob/three.js/issues/78
+        const position: THREE.Vector3 = vector.clone();
 
         // [(-1, -1), (1, 1)]
-        deviceCoordinates = this.deviceCoordinatesFromWorldCoordinates(position, camera);
-        left = ((+deviceCoordinates.x + 1) / 2) * container.width();
-        top  = ((-deviceCoordinates.y + 1) / 2) * container.height();
+        const deviceCoordinates = this.deviceCoordinatesFromWorldCoordinates(position, camera);
+        const left = ((+deviceCoordinates.x + 1) / 2) * container.width();
+        const top  = ((-deviceCoordinates.y + 1) / 2) * container.height();
 
-        screenContainerCoordinates = new THREE.Vector2(left, top);
+        const screenContainerCoordinates = new THREE.Vector2(left, top);
         return screenContainerCoordinates;
     }
 //#endregion
@@ -707,15 +649,15 @@ export class Graphics {
      * @param {THREE.Camera} camera Camera.
      * @returns {THREE.Raycaster}
      */
-    static raycasterFromMouse (mouseWorld : THREE.Vector3, camera : THREE.Camera) : THREE.Raycaster{
+    public static raycasterFromMouse(mouseWorld: THREE.Vector3, camera: THREE.Camera): THREE.Raycaster {
 
-        var rayOrigin  : THREE.Vector3 = new THREE.Vector3 (mouseWorld.x, mouseWorld.y, camera.position.z),
-            worldPoint : THREE.Vector3 = new THREE.Vector3(mouseWorld.x, mouseWorld.y, mouseWorld.z);
+        const rayOrigin: THREE.Vector3 = new THREE.Vector3 (mouseWorld.x, mouseWorld.y, camera.position.z);
+        const worldPoint: THREE.Vector3 = new THREE.Vector3(mouseWorld.x, mouseWorld.y, mouseWorld.z);
 
-            // Tools.consoleLog('World mouse coordinates: ' + worldPoint.x + ', ' + worldPoint.y);
+        // Tools.consoleLog('World mouse coordinates: ' + worldPoint.x + ', ' + worldPoint.y);
 
         // construct ray from camera to mouse world
-        var raycaster = new THREE.Raycaster (rayOrigin, worldPoint.sub (rayOrigin).normalize());
+        const raycaster = new THREE.Raycaster (rayOrigin, worldPoint.sub (rayOrigin).normalize());
 
         return raycaster;
     }
@@ -729,19 +671,14 @@ export class Graphics {
      * @param {boolean} recurse Recurse through objects.
      * @returns {THREE.Intersection} First intersection with screen objects.
      */
-    static getFirstIntersection(event : JQueryEventObject, container : JQuery, camera : THREE.Camera, sceneObjects : THREE.Object3D[], recurse : boolean) : THREE.Intersection {
-
-        var raycaster          : THREE.Raycaster,
-            mouseWorld         : THREE.Vector3,
-            iIntersection      : number,
-            intersection       : THREE.Intersection;
+    public static getFirstIntersection(event: JQueryEventObject, container: JQuery, camera: THREE.Camera, sceneObjects: THREE.Object3D[], recurse: boolean): THREE.Intersection {
 
         // construct ray from camera to mouse world
-        mouseWorld = Graphics.worldCoordinatesFromJQEvent(event, container, camera);
-        raycaster  = Graphics.raycasterFromMouse (mouseWorld, camera);
+        const mouseWorld = Graphics.worldCoordinatesFromJQEvent(event, container, camera);
+        const raycaster  = Graphics.raycasterFromMouse (mouseWorld, camera);
 
         // find all object intersections
-        var intersects : THREE.Intersection[] = raycaster.intersectObjects (sceneObjects, recurse);
+        const intersects: THREE.Intersection[] = raycaster.intersectObjects (sceneObjects, recurse);
 
         // no intersection?
         if (intersects.length === 0) {
@@ -749,12 +686,13 @@ export class Graphics {
         }
 
         // use first; reject lines (Transform Frame)
+        let iIntersection: number;
         for (iIntersection = 0; iIntersection < intersects.length; iIntersection++) {
 
-            intersection = intersects[iIntersection];
+            const intersection = intersects[iIntersection];
             if (!(intersection.object instanceof THREE.Line))
                 return intersection;
-            };
+            }
 
         return null;
     }
@@ -772,11 +710,10 @@ export class Graphics {
      * @param {number} [height] Height of canvas.
      * @returns {HTMLCanvasElement}
      */
-    static initializeCanvas(id : string, width? : number, height? : number) : HTMLCanvasElement {
+    public static initializeCanvas(id: string, width?: number, height?: number): HTMLCanvasElement {
 
-        let canvas : HTMLCanvasElement = <HTMLCanvasElement> document.querySelector(`#${id}`);
-        if (!canvas)
-            {
+        const canvas: HTMLCanvasElement = document.querySelector(`#${id}`) as HTMLCanvasElement;
+        if (!canvas) {
             Services.defaultLogger.addErrorMessage(`Canvas element id = ${id} not found`);
             return null;
             }
@@ -794,6 +731,12 @@ export class Graphics {
         canvas.style.height = `${height}px`;
 
         return canvas;
+    }
+
+    /**
+     * Creates an instance of Graphics.
+     */
+    constructor() {
     }
 //#endregion
 }

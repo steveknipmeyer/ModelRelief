@@ -4,7 +4,8 @@
 #### Short Term
 
     Configure tslint.
-        Api
+        Graphics
+            Graphics.ts
 
         https://palantir.github.io/tslint/rules/
         https://palantir.github.io/tslint/usage/configuration/

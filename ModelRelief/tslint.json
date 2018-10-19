@@ -2,11 +2,9 @@
     "extends": "tslint:recommended",
 //  "rulesDirectory": ["path/to/custom/rules/directory/", "another/path/"],
     "rules": {
-        "curly": [true, "as-needed"],
+        "curly": [false],
         "max-classes-per-file": [true, 10],
-        "max-line-length": {
-            "options": [200]
-        },
+        "max-line-length": false,
         "new-parens": true,
         "no-arg": true,
         "no-bitwise": true,
@@ -24,7 +22,7 @@
             ]
         },
         "no-empty": [false],
-        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"]
+        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case"]
     },
     "jsRules": {
         "max-line-length": {
