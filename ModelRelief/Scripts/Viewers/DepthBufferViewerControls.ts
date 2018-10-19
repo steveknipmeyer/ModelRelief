@@ -5,9 +5,8 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as dat    from 'dat-gui'
-
-import { ElementAttributes, ElementIds }  from "Html"
+import * as dat from "dat-gui";
+import {ElementAttributes, ElementIds} from "Scripts/System/Html";
 
 /**
  * @class
@@ -15,7 +14,7 @@ import { ElementAttributes, ElementIds }  from "Html"
  */
 class DepthBufferViewerSettings {
 
-    displayDepthBuffer : boolean;
+    public displayDepthBuffer: boolean;
 
     constructor() {
 
@@ -28,14 +27,14 @@ class DepthBufferViewerSettings {
  */
 export class DepthBufferViewerControls {
 
-    _depthBufferViewer         : any;                                   // associated viewer
-    _depthBufferViewerSettings : DepthBufferViewerSettings;             // UI settings
+    public _depthBufferViewer: any;                                   // associated viewer
+    public _depthBufferViewerSettings: DepthBufferViewerSettings;             // UI settings
 
     /**
-     *Creates an instance of DepthBufferViewerControls.
-     * @param {DepthBufferViewer} depthBufferViewer
+     * Creates an instance of DepthBufferViewerControls.
+     * @param {*} depthBufferViewer
      */
-    constructor(depthBufferViewer : any) {
+    constructor(depthBufferViewer: any) {
 
         this._depthBufferViewer = depthBufferViewer;
 
@@ -49,30 +48,30 @@ export class DepthBufferViewerControls {
     /**
      * Initialize the view settings that are controllable by the user
      */
-    initializeControls() {
+    public initializeControls() {
 
-        let scope = this;
+        const scope = this;
 
         this._depthBufferViewerSettings = new DepthBufferViewerSettings();
 
         // Init dat.gui and controls for the UI
-        let gui = new dat.GUI({
+        const gui = new dat.GUI({
             autoPlace: false,
             width: ElementAttributes.DatGuiWidth,
         });
         gui.domElement.id = ElementIds.DepthBufferViewerControls;
 
-        let containerDiv = document.getElementById(this._depthBufferViewer.containerId);
+        const containerDiv = document.getElementById(this._depthBufferViewer.containerId);
         containerDiv.appendChild(gui.domElement);
 
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         //                                                                   DepthBufferViewer                                                          //
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
-        let depthBufferViewerOptions = gui.addFolder('DepthBufferViewer Options');
+        const depthBufferViewerOptions = gui.addFolder("DepthBufferViewer Options");
 
         // DepthBuffer
-        let controlDisplayDepthBuffer = depthBufferViewerOptions.add(this._depthBufferViewerSettings, 'displayDepthBuffer').name('Display DepthBuffer');
-        controlDisplayDepthBuffer.onChange ((value : boolean) => {
+        const controlDisplayDepthBuffer = depthBufferViewerOptions.add(this._depthBufferViewerSettings, "displayDepthBuffer").name("Display DepthBuffer");
+        controlDisplayDepthBuffer.onChange ((value: boolean) => {
 
             scope._depthBufferViewer.displayDepthBuffer(value);
         });

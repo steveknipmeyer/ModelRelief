@@ -5,9 +5,8 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as dat    from 'dat-gui'
-
-import {ElementAttributes, ElementIds}  from "Html"
+import * as dat from "dat-gui";
+import {ElementAttributes, ElementIds} from "Scripts/System/Html";
 
 /**
  * @class
@@ -15,7 +14,7 @@ import {ElementAttributes, ElementIds}  from "Html"
  */
 class ModelViewerSettings {
 
-    displayGrid    : boolean;
+    public displayGrid: boolean;
 
     constructor() {
 
@@ -28,14 +27,14 @@ class ModelViewerSettings {
  */
 export class ModelViewerControls {
 
-    _modelViewer         : any;                             // associated viewer
-    _modelViewerSettings : ModelViewerSettings;             // UI settings
+    public _modelViewer: any;                             // associated viewer
+    public _modelViewerSettings: ModelViewerSettings;             // UI settings
 
     /**
-     *Creates an instance of ModelViewerControls.
+     * Creates an instance of ModelViewerControls.
      * @param {ModelViewer} modelViewer
      */
-    constructor(modelViewer : any) {
+    constructor(modelViewer: any) {
 
         this._modelViewer = modelViewer;
 
@@ -49,30 +48,30 @@ export class ModelViewerControls {
     /**
      * Initialize the view settings that are controllable by the user
      */
-    initializeControls() {
+    public initializeControls() {
 
-        let scope = this;
+        const scope = this;
 
         this._modelViewerSettings = new ModelViewerSettings();
 
         // Init dat.gui and controls for the UI
-        let gui = new dat.GUI({
+        const gui = new dat.GUI({
             autoPlace: false,
             width: ElementAttributes.DatGuiWidth,
         });
         gui.domElement.id = ElementIds.ModelViewerControls;
 
-        let containerDiv = document.getElementById(this._modelViewer.containerId);
+        const containerDiv = document.getElementById(this._modelViewer.containerId);
         containerDiv.appendChild(gui.domElement);
 
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         //                                                                   ModelViewer                                                                //
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
-        let modelViewerOptions = gui.addFolder('ModelViewer Options');
+        const modelViewerOptions = gui.addFolder("ModelViewer Options");
 
         // Grid
-        let controlDisplayGrid = modelViewerOptions.add(this._modelViewerSettings, 'displayGrid').name('Display Grid');
-        controlDisplayGrid.onChange ((value : boolean) => {
+        const controlDisplayGrid = modelViewerOptions.add(this._modelViewerSettings, "displayGrid").name("Display Grid");
+        controlDisplayGrid.onChange ((value: boolean) => {
 
             scope._modelViewer.displayGrid(value);
         });

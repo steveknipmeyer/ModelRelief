@@ -1,17 +1,14 @@
-﻿// ------------------------------------------------------------------------//
+﻿
+// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
 //                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE  from 'three';
-import * as dat    from 'dat-gui';
-import * as Dto    from "DtoModels";
-
-import { ElementIds }            from "Html";
-import { FileModel }             from 'FileModel';
-import { ModelViewer }           from "ModelViewer";
+import {FileModel} from "Scripts/Api/V1/Models/FileModel";
+import {ElementIds} from "Scripts/System/Html";
+import {ModelViewer} from "Scripts/Viewers/ModelViewer";
 
 /**
  * @description Represents a UI view of a 3D model.
@@ -20,15 +17,15 @@ import { ModelViewer }           from "ModelViewer";
  */
 export class ModelView {
 
-    _containerId                : string;
-    _modelViewer                : ModelViewer;
+    public _containerId: string;
+    public _modelViewer: ModelViewer;
 
     /**
      * Creates an instance of ModelView.
      * @param {string} containerId DOM container Id of view.
      * @param {FileModel} model Initial model to load.
      */
-    constructor(containerId : string, model : FileModel) {
+    constructor(containerId: string, model: FileModel) {
 
         this._containerId = containerId;
         this.initialize(model);
@@ -64,10 +61,10 @@ export class ModelView {
      * @description Performs initialization.
      * @param {FileModel} model Initial model to load.
      */
-    initialize(model : FileModel) {
+    public initialize(model: FileModel) {
 
         // Model Viewer
-        this._modelViewer = new ModelViewer('ModelViewer', ElementIds.ModelCanvas, model);
+        this._modelViewer = new ModelViewer("ModelViewer", ElementIds.ModelCanvas, model);
     }
 
 //#endregion

@@ -5,20 +5,19 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE                   from 'three'
-import {assert}                     from 'chai';
-import * as dat                     from 'dat-gui'
+import * as dat from "dat-gui";
+import * as THREE from "three";
 
-import {PerspectiveCamera}              from 'Camera'
-import { CameraFactory }                from "CameraFactory";
-import {Graphics, ObjectNames}          from 'Graphics'
-import {ElementAttributes, ElementIds}  from "Html"
-import { IThreeBaseCamera }             from 'IThreeBaseCamera';
-import {Loader}                         from 'Loader'
-import {ILogger, ConsoleLogger}         from 'Logger'
-import {Services}                       from 'Services'
-import {UnitTests}                      from 'UnitTests'
-import {Viewer}                         from 'Viewer'
+import {Graphics, ObjectNames} from "Scripts/Graphics/Graphics";
+import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
+import {Loader} from "Scripts/ModelLoaders/Loader";
+import {PerspectiveCamera} from "Scripts/Models/Camera/Camera";
+import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
+import {ElementAttributes, ElementIds} from "Scripts/System/Html";
+import {ILogger} from "Scripts/System/Logger";
+import {Services} from "Scripts/System/Services";
+import {UnitTests} from "Scripts/UnitTests/UnitTests";
+import {Viewer} from "Scripts/Viewers/Viewer";
 
 /**
  * @description CameraWorkbench
@@ -28,17 +27,17 @@ import {Viewer}                         from 'Viewer'
  */
 export class CameraViewer extends Viewer {
 
-    populateScene() {
+    public populateScene() {
 
-        let triad = Graphics.createWorldAxesTriad(new THREE.Vector3(), 10, 2.5, 2.5);
+        const triad = Graphics.createWorldAxesTriad(new THREE.Vector3(), 10, 2.5, 2.5);
         this._scene.add(triad);
 
-        let box : THREE.Mesh = Graphics.createBoxMesh(new THREE.Vector3(40, 60, -20), 10, 20, 20, new THREE.MeshPhongMaterial({color : 0xff0000}));
+        const box: THREE.Mesh = Graphics.createBoxMesh(new THREE.Vector3(40, 60, -20), 10, 20, 20, new THREE.MeshPhongMaterial({color : 0xff0000}));
         box.rotation.set(Math.random(), Math.random(), Math.random());
         box.updateMatrixWorld(true);
         this.modelGroup.add(box);
 
-        let sphere : THREE.Mesh = Graphics.createSphereMesh(new THREE.Vector3(-30, 100, -10), 10, new THREE.MeshPhongMaterial({color : 0x00ff00}));
+        const sphere: THREE.Mesh = Graphics.createSphereMesh(new THREE.Vector3(-30, 100, -10), 10, new THREE.MeshPhongMaterial({color : 0x00ff00}));
         this.modelGroup.add(sphere);
     }
 }
@@ -49,9 +48,9 @@ export class CameraViewer extends Viewer {
  */
 class ViewerControls {
 
-    showBoundingBoxes : () => void;
-    setClippingPlanes : () => void;
-    roundtripCamera  : () => void;
+    public showBoundingBoxes: () => void;
+    public setClippingPlanes: () => void;
+    public roundtripCamera: () => void;
 
     /**
      * Creates an instance of ViewerControls.
@@ -60,7 +59,7 @@ class ViewerControls {
      * @param {() => any} setClippingPlanes Function to set the clipping planes to the extents of the model.
      * @param {() => any} roundtripCamera Function to test roundtripping a camera through a
      */
-    constructor(camera: IThreeBaseCamera, showBoundingBoxes : () => any, setClippingPlanes : () => any, roundtripCamera : () => any) {
+    constructor(camera: IThreeBaseCamera, showBoundingBoxes: () => any, setClippingPlanes: () => any, roundtripCamera: () => any) {
 
             this.showBoundingBoxes = showBoundingBoxes;
             this.setClippingPlanes  = setClippingPlanes;
@@ -75,10 +74,10 @@ class ViewerControls {
  */
 export class App {
 
-    _logger         : ILogger;
-    _loader         : Loader;
-    _viewer         : CameraViewer;
-    _viewerControls : ViewerControls;
+    public _logger: ILogger;
+    public _loader: Loader;
+    public _viewer: CameraViewer;
+    public _viewerControls: ViewerControls;
 
     /**
      * Creates an instance of App.
@@ -89,20 +88,20 @@ export class App {
     /**
      * @description Set the camera clipping planes to the model extents in View coordinates.
      */
-    setClippingPlanes() {
+    public setClippingPlanes() {
 
-        let modelGroup               : THREE.Group   = this._viewer.modelGroup;
-        let cameraMatrixWorldInverse : THREE.Matrix4 = this._viewer.camera.matrixWorldInverse;
+        const modelGroup: THREE.Group   = this._viewer.modelGroup;
+        const cameraMatrixWorldInverse: THREE.Matrix4 = this._viewer.camera.matrixWorldInverse;
 
         // clone model (and geometry!)
-        let boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(modelGroup, cameraMatrixWorldInverse);
+        const boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(modelGroup, cameraMatrixWorldInverse);
 
         // The bounding box is world-axis aligned.
         // In View coordinates, the camera is at the origin.
         // The bounding near plane is the maximum Z of the bounding box.
         // The bounding far plane is the minimum Z of the bounding box.
-        let nearPlane = -boundingBoxView.max.z;
-        let farPlane  = -boundingBoxView.min.z;
+        const nearPlane = -boundingBoxView.max.z;
+        const farPlane  = -boundingBoxView.min.z;
 
         this._viewer.cameraControls.settings.camera.viewCamera.near = nearPlane;
         this._viewer.cameraControls.settings.camera.viewCamera.far  = farPlane;
@@ -116,13 +115,13 @@ export class App {
      * @param {number} color Color of bounding box mesh.
      * @returns {THREE.Mesh}
      */
-    createBoundingBox (object : THREE.Object3D, color : number) : THREE.Mesh {
+    public createBoundingBox(object: THREE.Object3D, color: number): THREE.Mesh {
 
-            let boundingBox : THREE.Box3 = new THREE.Box3();
+            let boundingBox: THREE.Box3 = new THREE.Box3();
             boundingBox = boundingBox.setFromObject(object);
 
-            let material = new THREE.MeshPhongMaterial( {color : color, opacity : 1.0, wireframe : true});
-            let boundingBoxMesh : THREE.Mesh = Graphics.createBoundingBoxMeshFromBoundingBox(boundingBox.getCenter(), boundingBox, material);
+            const material = new THREE.MeshPhongMaterial( {color, opacity : 1.0, wireframe : true});
+            const boundingBoxMesh: THREE.Mesh = Graphics.createBoundingBoxMeshFromBoundingBox(boundingBox.getCenter(), boundingBox, material);
 
             return boundingBoxMesh;
         }
@@ -130,40 +129,40 @@ export class App {
     /**
      * @description Show the clipping planes of the model in View and World coordinates.
      */
-    showBoundingBoxes() {
+    public showBoundingBoxes() {
 
-        let modelGroup               : THREE.Group   = this._viewer.modelGroup;
-        let cameraMatrixWorld        : THREE.Matrix4 = this._viewer.camera.matrixWorld;
-        let cameraMatrixWorldInverse : THREE.Matrix4 = this._viewer.camera.matrixWorldInverse;
+        const modelGroup: THREE.Group   = this._viewer.modelGroup;
+        const cameraMatrixWorld: THREE.Matrix4 = this._viewer.camera.matrixWorld;
+        const cameraMatrixWorldInverse: THREE.Matrix4 = this._viewer.camera.matrixWorldInverse;
 
         // remove existing BoundingBoxes and model clone (View coordinates)
         Graphics.removeAllByName(this._viewer._scene, ObjectNames.BoundingBox);
         Graphics.removeAllByName(this._viewer._scene, ObjectNames.ModelClone);
 
         // clone model (and geometry!)
-        let modelView  =  Graphics.cloneAndTransformObject(modelGroup, cameraMatrixWorldInverse);
+        const modelView  =  Graphics.cloneAndTransformObject(modelGroup, cameraMatrixWorldInverse);
         modelView.name = ObjectNames.ModelClone;
         this._viewer.scene.add(modelView);
 
-        let boundingBoxView : THREE.Mesh = this.createBoundingBox(modelView, 0xff00ff);
+        const boundingBoxView: THREE.Mesh = this.createBoundingBox(modelView, 0xff00ff);
         this._viewer.scene.add(boundingBoxView);
 
         // transform bounding box back from View to World
-        let boundingBoxWorld =  Graphics.cloneAndTransformObject(boundingBoxView, cameraMatrixWorld);
+        const boundingBoxWorld =  Graphics.cloneAndTransformObject(boundingBoxView, cameraMatrixWorld);
         this._viewer.scene.add(boundingBoxWorld);
     }
 
     /**
      * @description Roundtrip a PerspectiveCamera through the DTO model.
      */
-    roundtripCameraX ()  {
+    public roundtripCameraX()  {
 
         // https://stackoverflow.com/questions/29221795/serializing-camera-state-in-threejs
 
-        let originalCamera = <THREE.PerspectiveCamera> this._viewer.camera;
-        let originalCameraMatrixArray = originalCamera.matrix.toArray();
+        const originalCamera = this._viewer.camera as THREE.PerspectiveCamera;
+        const originalCameraMatrixArray = originalCamera.matrix.toArray();
 
-        let newCamera = new THREE.PerspectiveCamera();
+        const newCamera = new THREE.PerspectiveCamera();
         newCamera.matrix.fromArray(originalCameraMatrixArray);
         newCamera.up.copy(originalCamera.up);
 
@@ -182,20 +181,20 @@ export class App {
     /**
      * @description Roundtrip a PerspectiveCamera through the DTO model.
      */
-    roundtripCameraY ()  {
+    public roundtripCameraY()  {
 
         // https://stackoverflow.com/questions/29221795/serializing-camera-state-in-threejs
 
-        let originalCamera = <THREE.PerspectiveCamera> this._viewer.camera;
+        const originalCamera = this._viewer.camera as THREE.PerspectiveCamera;
 
-        let position    = new THREE.Vector3();
-        let quaternion  = new THREE.Quaternion();
-        let scale       = new THREE.Vector3();
+        const position    = new THREE.Vector3();
+        const quaternion  = new THREE.Quaternion();
+        const scale       = new THREE.Vector3();
         let up          = new THREE.Vector3();
         originalCamera.matrix.decompose(position, quaternion, scale);
         up = originalCamera.up;
 
-        let newCamera = new THREE.PerspectiveCamera();
+        const newCamera = new THREE.PerspectiveCamera();
         newCamera.matrix.compose(position, quaternion, scale);
         newCamera.up.copy(up);
 
@@ -214,55 +213,55 @@ export class App {
     /**
      * @description Roundtrip a PerspectiveCamera through the DTO model.
      */
-    roundtripCameraZ ()  {
+    public roundtripCameraZ()  {
 
         // https://stackoverflow.com/questions/29221795/serializing-camera-state-in-threejs
-        let camera = new PerspectiveCamera({}, <THREE.PerspectiveCamera> this._viewer.camera);
-        let cameraModel = camera.toDtoModel();
-        CameraFactory.ConstructFromDtoModelAsync(cameraModel).then(cameraRoundtrip => {
+        const camera = new PerspectiveCamera({}, this._viewer.camera as THREE.PerspectiveCamera);
+        const cameraModel = camera.toDtoModel();
+        CameraFactory.ConstructFromDtoModelAsync(cameraModel).then((cameraRoundtrip) => {
 
-            let perspectiveCameraRoundTrip = <PerspectiveCamera> cameraRoundtrip;
-            let distortCamera = false;
+            const perspectiveCameraRoundTrip = cameraRoundtrip as PerspectiveCamera;
+            const distortCamera = false;
             if (distortCamera) {
-                let deltaPosition : THREE.Vector3 = new THREE.Vector3();
+                const deltaPosition: THREE.Vector3 = new THREE.Vector3();
                 deltaPosition.copy(cameraRoundtrip.viewCamera.position);
-                let delta = 0.5;
+                const delta = 0.5;
                 cameraRoundtrip.viewCamera.position.set(deltaPosition.x + delta, deltaPosition.y, deltaPosition.z);
             }
             this._viewer.camera = cameraRoundtrip.viewCamera;
 
             UnitTests.comparePerspectiveCameras(camera.viewCamera, perspectiveCameraRoundTrip.viewCamera);
-        })
+        });
     }
 
     /**
      * @description Initialize the view settings that are controllable by the user
      */
-    initializeViewerControls() {
+    public initializeViewerControls() {
 
-        let scope = this;
+        const scope = this;
 
         this._viewerControls = new ViewerControls(this._viewer.camera, this.showBoundingBoxes.bind(this), this.setClippingPlanes.bind(this), this.roundtripCameraZ.bind(this));
 
         // Init dat.gui and controls for the UI
-        var gui = new dat.GUI({
+        const gui = new dat.GUI({
             autoPlace: false,
-            width: ElementAttributes.DatGuiWidth
+            width: ElementAttributes.DatGuiWidth,
         });
         gui.domElement.id = ElementIds.CameraTestControls;
 
-        let settingsDiv = document.getElementById('settingsControls');
+        const settingsDiv = document.getElementById("settingsControls");
         settingsDiv.appendChild(gui.domElement);
-        var folderOptions = gui.addFolder('CameraTest Options');
+        const folderOptions = gui.addFolder("CameraTest Options");
 
         // Show Bounding Boxes
-        let controlShowBoundingBoxes = folderOptions.add(this._viewerControls, 'showBoundingBoxes').name('Show Bounding Boxes');
+        const controlShowBoundingBoxes = folderOptions.add(this._viewerControls, "showBoundingBoxes").name("Show Bounding Boxes");
 
         // Clipping Planes
-        let controlSetClippingPlanes = folderOptions.add(this._viewerControls, 'setClippingPlanes').name('Set Clipping Planes');
+        const controlSetClippingPlanes = folderOptions.add(this._viewerControls, "setClippingPlanes").name("Set Clipping Planes");
 
         // Roundtrip Camera
-        let roundTripCamera = folderOptions.add(this._viewerControls, 'roundtripCamera').name('Roundtrip Camera');
+        const roundTripCamera = folderOptions.add(this._viewerControls, "roundtripCamera").name("Roundtrip Camera");
 
         folderOptions.open();
     }
@@ -270,16 +269,16 @@ export class App {
     /**
      * @description Main.
      */
-    run () {
+    public run() {
         this._logger = Services.defaultLogger;
 
         // Viewer
-        this._viewer = new CameraViewer('CameraViewer', 'viewerCanvas');
+        this._viewer = new CameraViewer("CameraViewer", "viewerCanvas");
 
         // UI Controls
         this.initializeViewerControls();
     }
 }
 
-let app = new App;
+const app = new App();
 app.run();

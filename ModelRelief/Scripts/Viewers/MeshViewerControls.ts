@@ -5,9 +5,8 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as dat from 'dat-gui'
-
-import {ElementAttributes, ElementIds}  from "Html"
+import * as dat from "dat-gui";
+import {ElementAttributes, ElementIds} from "Scripts/System/Html";
 
 /**
  * @class
@@ -25,14 +24,14 @@ class MeshViewerSettings {
  */
 export class MeshViewerControls {
 
-    _meshViewer          : any;                             // associated viewer
-    _meshViewerSettings  : MeshViewerSettings;              // UI settings
+    public _meshViewer: any;                             // associated viewer
+    public _meshViewerSettings: MeshViewerSettings;              // UI settings
 
     /**
-     *Creates an instance of MeshViewerControls.
+     * Creates an instance of MeshViewerControls.
      * @param {MeshViewer} meshViewer
      */
-    constructor(meshViewer : any) {
+    constructor(meshViewer: any) {
 
         this._meshViewer = meshViewer;
 
@@ -46,26 +45,26 @@ export class MeshViewerControls {
     /**
      * Initialize the view settings that are controllable by the user
      */
-    initializeControls() {
+    public initializeControls() {
 
-        let scope = this;
+        const scope = this;
 
         this._meshViewerSettings = new MeshViewerSettings();
 
         // Init dat.gui and controls for the UI
-        let gui = new dat.GUI({
+        const gui = new dat.GUI({
             autoPlace: false,
-            width: ElementAttributes.DatGuiWidth
+            width: ElementAttributes.DatGuiWidth,
         });
         gui.domElement.id = ElementIds.MeshViewerControls;
 
-        let containerDiv = document.getElementById(this._meshViewer.containerId);
+        const containerDiv = document.getElementById(this._meshViewer.containerId);
         containerDiv.appendChild(gui.domElement);
 
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         //                                                                   MeshViewer                                                                 //
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
-        let meshViewerOptions = gui.addFolder('MeshViewer Options');
+        const meshViewerOptions = gui.addFolder("MeshViewer Options");
 
         meshViewerOptions.open();
     }

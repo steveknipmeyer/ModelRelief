@@ -5,17 +5,17 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE                           from 'three';
+import * as THREE from "three";
 
-import { EventType }                        from 'EventManager';
-import { FileModel }                        from 'FileModel';
-import { Model3d }                          from "Model3d";
-import { ModelViewerControls }              from "ModelViewerControls";
-import { Viewer }                           from 'Viewer';
+import {FileModel} from "Scripts/Api/V1/Models/FileModel";
+import {Model3d} from "Scripts/Models/Model3d/Model3d";
+import {EventType} from "Scripts/System/EventManager";
+import {ModelViewerControls} from "Scripts/Viewers/ModelViewerControls";
+import {Viewer} from "Scripts/Viewers/Viewer";
 
 const ObjectNames = {
-    Grid :  'Grid'
-}
+    Grid :  "Grid",
+};
 
 /**
  * @description Represents a graphic viewer for a 3D model.
@@ -25,10 +25,10 @@ const ObjectNames = {
  */
 export class ModelViewer extends Viewer {
 
-    model3d : Model3d;                                      // active Model3d
+    public model3d: Model3d;                                      // active Model3d
 
     // Private
-    _modelViewerControls : ModelViewerControls;             // UI controls
+    public _modelViewerControls: ModelViewerControls;             // UI controls
 
     /**
      * Creates an instance of ModelViewer.
@@ -36,7 +36,7 @@ export class ModelViewer extends Viewer {
      * @param {string} modelCanvasId HTML element to host the viewer.
      * @param {FileModel} model Model to load.
      */
-    constructor(name : string, modelCanvasId : string, model : FileModel) {
+    constructor(name: string, modelCanvasId: string, model: FileModel) {
 
         super (name, modelCanvasId, model);
 
@@ -48,7 +48,7 @@ export class ModelViewer extends Viewer {
      * @description Sets the graphics of the model viewer.
      * @param {THREE.Group} modelGroup Graphics group to set.
      */
-    setModelGroup(modelGroup : THREE.Group) {
+    public setModelGroup(modelGroup: THREE.Group) {
 
         // Call base class property via super
         // https://github.com/Microsoft/TypeScript/issues/4465
@@ -64,11 +64,11 @@ export class ModelViewer extends Viewer {
     /**
      * @description Populate scene.
      */
-    populateScene () {
+    public populateScene() {
 
         super.populateScene();
 
-        var helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
+        const helper = new THREE.GridHelper(300, 30, 0x86e6ff, 0x999999);
         helper.name = ObjectNames.Grid;
         this.scene.add(helper);
     }
@@ -76,7 +76,7 @@ export class ModelViewer extends Viewer {
     /**
      * @description General initialization.
      */
-    initialize() {
+    public initialize() {
 
         super.initialize();
     }
@@ -84,7 +84,7 @@ export class ModelViewer extends Viewer {
     /**
      * @description UI controls initialization.
      */
-    initializeUIControls() {
+    public initializeUIControls() {
 
         super.initializeUIControls();
         this._modelViewerControls = new ModelViewerControls(this);
@@ -96,9 +96,9 @@ export class ModelViewer extends Viewer {
      * @description Display the reference grid.
      * @param {boolean} visible
      */
-    displayGrid(visible : boolean) {
+    public displayGrid(visible: boolean) {
 
-        let gridGeometry : THREE.Object3D = this.scene.getObjectByName(ObjectNames.Grid);
+        const gridGeometry: THREE.Object3D = this.scene.getObjectByName(ObjectNames.Grid);
         gridGeometry.visible = visible;
         this._logger.addInfoMessage(`Display grid = ${visible}`);
     }

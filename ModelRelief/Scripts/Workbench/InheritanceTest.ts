@@ -1,20 +1,14 @@
-﻿// ------------------------------------------------------------------------// 
+﻿
+// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE               from 'three'
+import {HTMLLogger} from "Scripts/System/Logger";
 
-import {DepthBufferFactory}     from 'DepthBufferFactory'
-import {Graphics}               from 'Graphics'
-import {ILogger, HTMLLogger}     from 'Logger'
-import {MathLibrary}            from 'Math'
-import {Services}               from 'Services'
-import {UnitTests}              from 'UnitTests'
-
-let logger = new HTMLLogger();
+const logger = new HTMLLogger();
 
 /**
  * @description Widget
@@ -22,16 +16,16 @@ let logger = new HTMLLogger();
  * @class Widget
  */
 export class Widget {
-    
-    name  : string;
-    price : number;
+
+    public name: string;
+    public price: number;
 
     /**
      * Creates an instance of Widget.
      * @param {string} name Name of widget.
      * @param {number} price Price of widget.
      */
-    constructor(name : string, price : number) {
+    constructor(name: string, price: number) {
 
         this.name  = name;
         this.price = price;
@@ -40,8 +34,8 @@ export class Widget {
     /**
      * @description Operate
      */
-    operate () {
-        logger.addInfoMessage(`${this.name} operating....`);        
+    public operate() {
+        logger.addInfoMessage(`${this.name} operating....`);
     }
 }
 
@@ -53,12 +47,12 @@ export class Widget {
  */
 export class ColorWidget extends Widget {
 
-    color : string;
+    public color: string;
 
     /**
      * @constructor
      */
-    constructor(name : string, price : number, color : string) {
+    constructor(name: string, price: number, color: string) {
 
         super (name, price);
         this.color = color;
@@ -72,13 +66,13 @@ export class ColorWidget extends Widget {
  */
 export class GrandParent {
 
-    grandparentProperty  : string;
+    public grandparentProperty: string;
 
     /**
      * Creates an instance of GrandParent.
-     * @param {string} grandparentProperty 
+     * @param {string} grandparentProperty
      */
-    constructor(grandparentProperty  : string) {
+    constructor(grandparentProperty: string) {
 
         this.grandparentProperty  = grandparentProperty ;
     }
@@ -89,16 +83,16 @@ export class GrandParent {
  * @class Parent
  * @extends {GrandParent}
  */
-export class Parent extends GrandParent{
-    
-    parentProperty : string;
+export class Parent extends GrandParent {
+
+    public parentProperty: string;
 
     /**
      * Creates an instance of Parent.
-     * @param {string} grandparentProperty 
-     * @param {string} parentProperty 
+     * @param {string} grandparentProperty
+     * @param {string} parentProperty
      */
-    constructor(grandparentProperty  : string, parentProperty : string) {
+    constructor(grandparentProperty: string, parentProperty: string) {
 
         super(grandparentProperty);
         this.parentProperty = parentProperty;
@@ -110,17 +104,17 @@ export class Parent extends GrandParent{
  * @class Child
  * @extends {Parent}
  */
-export class Child extends Parent{
-    
-    childProperty : string;
+export class Child extends Parent {
+
+    public childProperty: string;
 
     /**
      * Creates an instance of Child.
-     * @param {string} grandparentProperty 
-     * @param {string} parentProperty 
-     * @param {string} childProperty 
+     * @param {string} grandparentProperty
+     * @param {string} parentProperty
+     * @param {string} childProperty
      */
-    constructor(grandparentProperty : string, parentProperty : string, childProperty : string) {
+    constructor(grandparentProperty: string, parentProperty: string, childProperty: string) {
 
         super(grandparentProperty, parentProperty);
         this.childProperty = childProperty;
@@ -128,7 +122,7 @@ export class Child extends Parent{
 }
 
 /**
- * @description 
+ * @description
  * @export Inheritance
  * @class InheritanceTest
  */
@@ -143,17 +137,17 @@ export class InheritanceTest {
     /**
      * @description Main
      */
-    main () {
-        
-        let widget = new Widget ('Widget', 1.0);
+    public main() {
+
+        const widget = new Widget ("Widget", 1.0);
         widget.operate();
 
-        let colorWidget = new ColorWidget ('ColorWidget', 1.0, 'red');
+        const colorWidget = new ColorWidget ("ColorWidget", 1.0, "red");
         colorWidget.operate();
 
-        let child = new Child('GaGa', 'Dad', 'Steve');    
+        const child = new Child("GaGa", "Dad", "Steve");
     }
 }
 
-let inheritance = new InheritanceTest;
+const inheritance = new InheritanceTest();
 inheritance.main();

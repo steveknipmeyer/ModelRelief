@@ -4,20 +4,18 @@
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
+import * as THREE from "three";
 
-import * as THREE                                     from 'three';
-
-import { CameraHelper }                               from 'CameraHelper';
-import { CameraControls, CameraControlsOptions }      from 'CameraControls';
-import { EventManager }                               from 'EventManager';
-import { FileModel }                                  from 'FileModel';
-import { Graphics, ObjectNames }                      from 'Graphics';
-import { StandardView }                               from 'ICamera';
-import { IThreeBaseCamera }                           from 'IThreeBaseCamera';
-import { ILogger }                                    from 'Logger';
-import { Services }                                   from 'Services';
-import { TrackballControls }                          from 'TrackballControls';
-
+import {StandardView} from "Scripts/Api/V1/Interfaces/ICamera";
+import {FileModel} from "Scripts/Api/V1/Models/FileModel";
+import {Graphics, ObjectNames} from "Scripts/Graphics/Graphics";
+import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
+import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
+import {EventManager} from "Scripts/System/EventManager";
+import {ILogger} from "Scripts/System/Logger";
+import {Services} from "Scripts/System/Services";
+import {CameraControls, ICameraControlsOptions} from "Scripts/Viewers/CameraControls";
+import { TrackballControls} from "Scripts/Viewers/TrackballControls";
 /**
  * @description General 3D model viewer base class.
  * @export
@@ -25,32 +23,32 @@ import { TrackballControls }                          from 'TrackballControls';
  */
 export class Viewer {
 
-    cameraControls         : CameraControls            = null;
+    public cameraControls: CameraControls   = null;
 
     // Private
-    _name                   : string                    = '';
-    _eventManager           : EventManager               = null;
-    _logger                 : ILogger                   = null;
+    public _name: string                    = "";
+    public _eventManager: EventManager      = null;
+    public _logger: ILogger                 = null;
 
-    _model                  : FileModel                 = null;
-    _scene                  : THREE.Scene               = null;
-    _root                   : THREE.Object3D            = null;
+    public _model: FileModel                = null;
+    public _scene: THREE.Scene              = null;
+    public _root: THREE.Object3D            = null;
 
-    _renderer               : THREE.WebGLRenderer       = null;;
-    _canvas                 : HTMLCanvasElement         = null;
-    _width                  : number                    = 0;
-    _height                 : number                    = 0;
+    public _renderer: THREE.WebGLRenderer   = null;
+    public _canvas: HTMLCanvasElement       = null;
+    public _width: number                   = 0;
+    public _height: number                  = 0;
 
-    _camera                 : IThreeBaseCamera          = null;
+    public _camera: IThreeBaseCamera        = null;
 
-    _controls               : TrackballControls         = null;
+    public _controls: TrackballControls     = null;
 
     /**
      * Creates an instance of Viewer.
      * @param {string} name Viewer name.
      * @param {string} modelCanvasId HTML element to host the viewer.
      */
-    constructor(name : string, modelCanvasId : string, model? : FileModel) {
+    constructor(name: string, modelCanvasId: string, model?: FileModel) {
 
         this._name         = name;
         this._eventManager = new EventManager();
@@ -72,7 +70,7 @@ export class Viewer {
      * @readonly
      * @type {string}
      */
-    get name() : string {
+    get name(): string {
 
         return this._name;
     }
@@ -81,7 +79,7 @@ export class Viewer {
      * @description Gets the Viewer scene.
      * @type {THREE.Scene}
      */
-    get scene() : THREE.Scene {
+    get scene(): THREE.Scene {
 
         return this._scene;
     }
@@ -98,7 +96,7 @@ export class Viewer {
      * @description Gets the camera.
      * @type {IThreeBaseCamera}
      */
-    get camera() : IThreeBaseCamera{
+    get camera(): IThreeBaseCamera {
 
         return this._camera;
     }
@@ -106,7 +104,7 @@ export class Viewer {
     /**
      * @description Sets the camera.
      */
-    set camera(camera : IThreeBaseCamera) {
+    set camera(camera: IThreeBaseCamera) {
 
         this._camera = camera;
         this.camera.name = this.name;
@@ -121,7 +119,7 @@ export class Viewer {
      * @readonly
      * @type {FileModel}
      */
-    get model() : FileModel {
+    get model(): FileModel {
 
         return this._model;
     }
@@ -129,7 +127,7 @@ export class Viewer {
     /**
      * @description Sets the active model.
      */
-    set model (model : FileModel) {
+    set model(model: FileModel) {
 
         this._model = model;
     }
@@ -139,7 +137,7 @@ export class Viewer {
      * @readonly
      * @type {THREE.Group}
      */
-    get modelGroup() : THREE.Group {
+    get modelGroup(): THREE.Group {
 
         return this._root;
     }
@@ -148,7 +146,7 @@ export class Viewer {
      * @description Sets the graphics of the displayed model.
      * @param {THREE.Group} modelGroup New model to activate.
      */
-    setModelGroup(modelGroup : THREE.Group) {
+    public setModelGroup(modelGroup: THREE.Group) {
 
         // N.B. This is a method not a property so a sub class can override.
         // https://github.com/Microsoft/TypeScript/issues/4465
@@ -162,9 +160,9 @@ export class Viewer {
      * @readonly
      * @type {number}
      */
-    get aspectRatio() : number {
+    get aspectRatio(): number {
 
-        let aspectRatio : number = this._width / this._height;
+        const aspectRatio: number = this._width / this._height;
         return aspectRatio;
     }
 
@@ -173,9 +171,9 @@ export class Viewer {
      * @readonly
      * @type {string}
      */
-    get containerId() : string {
+    get containerId(): string {
 
-        let parentElement : HTMLElement = this._canvas.parentElement;
+        const parentElement: HTMLElement = this._canvas.parentElement;
         return parentElement.id;
     }
 
@@ -194,9 +192,9 @@ export class Viewer {
     /**
      * @description Adds a test sphere to a scene.
      */
-    populateScene () {
+    public populateScene() {
 
-        let mesh = Graphics.createSphereMesh(new THREE.Vector3(), 2);
+        const mesh = Graphics.createSphereMesh(new THREE.Vector3(), 2);
         mesh.visible = false;
         this._root.add(mesh);
     }
@@ -204,7 +202,7 @@ export class Viewer {
     /**
      * @description Initialize Scene
      */
-    initializeScene () {
+    public initializeScene() {
 
         this.scene = new THREE.Scene();
         this.createRoot();
@@ -215,13 +213,13 @@ export class Viewer {
     /**
      * @description Initialize the WebGL renderer.
      */
-    initializeRenderer () {
+    public initializeRenderer() {
 
         this._renderer = new THREE.WebGLRenderer({
 
             logarithmicDepthBuffer  : false,
             canvas                  : this._canvas,
-            antialias               : true
+            antialias               : true,
         });
         this._renderer.autoClear = true;
         this._renderer.setClearColor(0x000000);
@@ -230,23 +228,23 @@ export class Viewer {
     /**
      * @description Initialize the viewer camera
      */
-    initializeCamera() {
+    public initializeCamera() {
         this.camera = CameraHelper.getStandardViewCamera(StandardView.Top, this.camera, this.modelGroup);
     }
 
     /**
      * @description Adds lighting to the scene
      */
-    initializeLighting() {
+    public initializeLighting() {
 
-        let ambientLight = new THREE.AmbientLight(0x404040);
+        const ambientLight = new THREE.AmbientLight(0x404040);
         this.scene.add(ambientLight);
 
-        let directionalLight1 = new THREE.DirectionalLight(0xC0C090);
+        const directionalLight1 = new THREE.DirectionalLight(0xC0C090);
         directionalLight1.position.set(-100, -50, 100);
         this.scene.add(directionalLight1);
 
-        let directionalLight2 = new THREE.DirectionalLight(0xC0C090);
+        const directionalLight2 = new THREE.DirectionalLight(0xC0C090);
         directionalLight2.position.set(100, 50, -100);
         this.scene.add(directionalLight2);
     }
@@ -254,22 +252,22 @@ export class Viewer {
     /**
      * @description Sets up the user input controls (Trackball)
      */
-    initializeInputControls() {
+    public initializeInputControls() {
 
         this._controls = new TrackballControls(this.camera, this._renderer.domElement);
 
         // N.B. https://stackoverflow.com/questions/10325095/threejs-camera-lookat-has-no-effect-is-there-something-im-doing-wrong
         this._controls.position0.copy(this.camera.position);
 
-        let boundingBox = Graphics.getBoundingBoxFromObject(this._root);
+        const boundingBox = Graphics.getBoundingBoxFromObject(this._root);
         this._controls.target.copy(boundingBox.getCenter());
     }
 
     /**
      * @description Sets up the user input controls (Settings)
-     * @param {CameraControlsOptions} [cameraControlsOptions] Options to include/exclude specialized controls.
+     * @param {ICameraControlsOptions} [cameraControlsOptions] Options to include/exclude specialized controls.
      */
-    initializeUIControls(cameraControlsOptions? : CameraControlsOptions) {
+    public initializeUIControls(cameraControlsOptions?: ICameraControlsOptions) {
 
         this.cameraControls = new CameraControls(this, cameraControlsOptions);
     }
@@ -277,14 +275,14 @@ export class Viewer {
     /**
      * @description Sets up the keyboard shortcuts.
      */
-    initializeKeyboardShortcuts() {
+    public initializeKeyboardShortcuts() {
 
-        this._canvas.addEventListener('keyup', (event : KeyboardEvent) => {
+        this._canvas.addEventListener("keyup", (event: KeyboardEvent) => {
 
             let standardView = StandardView.None;
 
             // https://css-tricks.com/snippets/javascript/javascript-keycodes/
-            let keyCode : number = event.keyCode;
+            const keyCode: number = event.keyCode;
             switch (keyCode) {
 
                 case "B".charCodeAt(0):
@@ -327,7 +325,7 @@ export class Viewer {
     /**
      * @description Initialize the scene with the base objects
      */
-    initialize () {
+    public initialize() {
 
         this.initializeScene();
         this.initializeRenderer();
@@ -338,7 +336,7 @@ export class Viewer {
         this.initializeKeyboardShortcuts();
 
         this.onResizeWindow();
-        window.addEventListener('resize', this.onResizeWindow.bind(this), false);
+        window.addEventListener("resize", this.onResizeWindow.bind(this), false);
     }
 //#endregion
 
@@ -346,7 +344,7 @@ export class Viewer {
     /**
      * @description Removes all scene objects
      */
-    clearAllAssests() {
+    public clearAllAssests() {
 
         Graphics.removeObjectChildren(this._root, false);
     }
@@ -354,7 +352,7 @@ export class Viewer {
     /**
      * @description Creates the root object in the scene
      */
-    createRoot() {
+    public createRoot() {
 
         this._root = new THREE.Object3D();
         this._root.name = ObjectNames.Root;
@@ -367,9 +365,9 @@ export class Viewer {
      * @description Sets the view camera properties to the given settings.
      * @param {StandardView} view Camera settings to apply.
      */
-    setCameraToStandardView(view : StandardView) {
+    public setCameraToStandardView(view: StandardView) {
 
-        let standardViewCamera = CameraHelper.getStandardViewCamera(view, this.camera, this.modelGroup);
+        const standardViewCamera = CameraHelper.getStandardViewCamera(view, this.camera, this.modelGroup);
         this.camera = standardViewCamera;
 
         this.cameraControls.synchronizeCameraSettings(view);
@@ -378,7 +376,7 @@ export class Viewer {
     /**
      * @description Fits the active view.
      */
-    fitView() {
+    public fitView() {
 
         CameraHelper.setDefaultClippingPlanes(this.camera);
         this.camera = CameraHelper.getFitViewCamera (this.camera, this.modelGroup);
@@ -389,7 +387,7 @@ export class Viewer {
     /**
      * @description Updates the scene camera to match the new window size
      */
-    updateCameraOnWindowResize() {
+    public updateCameraOnWindowResize() {
         if (this.camera instanceof THREE.PerspectiveCamera)
             this.camera.aspect = this.aspectRatio;
 
@@ -399,7 +397,7 @@ export class Viewer {
     /**
      * @description Handles the WebGL processing for a DOM window 'resize' event
      */
-    resizeDisplayWebGL() {
+    public resizeDisplayWebGL() {
 
         this._width =  this._canvas.offsetWidth;
         this._height = this._canvas.offsetHeight;
@@ -412,7 +410,7 @@ export class Viewer {
     /**
      * @description Handles a window resize event
      */
-    onResizeWindow () {
+    public onResizeWindow() {
 
         this.resizeDisplayWebGL();
     }
@@ -422,7 +420,7 @@ export class Viewer {
     /**
      * @description Performs the WebGL render of the scene
      */
-    renderWebGL() {
+    public renderWebGL() {
 
         this._controls.update();
         this._renderer.render(this.scene, this.camera);
@@ -431,7 +429,7 @@ export class Viewer {
     /**
      * @description Main DOM render loop.
      */
-    animate() {
+    public animate() {
 
         requestAnimationFrame(this.animate.bind(this));
         this.renderWebGL();

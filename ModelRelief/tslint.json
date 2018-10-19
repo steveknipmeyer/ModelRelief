@@ -1,8 +1,9 @@
 {
     "linterOptions": {
         "exclude": [
-            "Scripts/ModelExporters/OBJExporter.ts",            // THREE library file
-            "Scripts/ModelLoaders/OBJLoader.ts"             // THREE library file
+            "Scripts/ModelExporters/OBJExporter.ts",           // THREE library file
+            "Scripts/ModelLoaders/OBJLoader.ts",               // THREE library file
+            "Scripts/Viewers/TrackballControls.ts"             // THREE library file
         ]
     },
     "extends": "tslint:recommended",
