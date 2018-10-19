@@ -5,7 +5,9 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto from "DtoModels";
+import * as Dto from "Scripts/Api/V1//Models/DtoModels";
+import * as THREE from "three";
+
 import {IGeneratedFileModel} from "Scripts/Api/V1/Interfaces/IGeneratedFileModel";
 import {MeshFormat} from "Scripts/Api/V1/Interfaces/IMesh";
 import {GeneratedFileModel} from "Scripts/Api/V1/Models/GeneratedFileModel";
@@ -15,9 +17,6 @@ import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
 import {MeshTransform} from "Scripts/Models/MeshTransform/MeshTransform";
 import {Project} from "Scripts/Models/Project/Project";
-import * as THREE from "three";
-
-
 
 /**
  * @description Represents a mesh.

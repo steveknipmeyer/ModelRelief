@@ -9,8 +9,7 @@
 
 import * as THREE   from 'three'
 
-import {Services}   from 'Services'
-import {StopWatch}  from 'StopWatch'
+import {Services} from 'Scripts/System/Services';
 
 export function OBJLoader ( manager ) {
 

@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto from "DtoModels";
+import * as Dto from "Scripts/Api/V1//Models/DtoModels";
 
 import {IFileModel} from "Scripts/Api/V1/Interfaces/IFileModel";
 import {Model3dFormat} from "Scripts/Api/V1/Interfaces/IModel3d";
