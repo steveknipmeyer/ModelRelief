@@ -1,21 +1,22 @@
-﻿// ------------------------------------------------------------------------// 
+﻿
+// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import {ILogger}                 from 'Logger'
-import {Tools}                   from 'Tools'
+import {ILogger} from "Scripts/System/Logger";
+import {Tools} from "Scripts/System/Tools";
 
 /**
  * @description Timer record.
  * @interface TimerEntry
  */
-interface TimerEntry {
+interface ITimerEntry {
 
-    startTime : number;
-    indent    : string;
+    startTime: number;
+    indent: string;
 }
 
 /**
@@ -24,27 +25,27 @@ interface TimerEntry {
  * @class
  */
 export class StopWatch {
-    
-    static precision : number = 3;
-    static keySuffixDelimiter: string = '@';
 
-    _logger            : ILogger;
-    _name              : string;
+    public static precision: number = 3;
+    public static keySuffixDelimiter: string = "@";
 
-    _events            : any;
-    _baselineTime      : number;
-    
+    public _logger: ILogger;
+    public _name: string;
+
+    public _events: any;
+    public _baselineTime: number;
+
     /**
      * @constructor
      * @param {string} timerName Timer identifier
      * @param {ILogger} logger Logger
      * N.B. Logger is passed as a constructor parameter because StopWatch and Service.consoleLogger are static Service properties.
      */
-    constructor(timerName : string, logger : ILogger) {
+    constructor(timerName: string, logger: ILogger) {
 
         this._logger = logger;
         this._name   = timerName;
-        this._events  = {}
+        this._events  = {};
         this._baselineTime = Date.now();
     }
 
@@ -54,7 +55,7 @@ export class StopWatch {
      * @readonly
      * @type {number}
      */
-    get eventCount () : number {
+    get eventCount(): number {
 
         return Object.keys(this._events).length;
     }
@@ -66,29 +67,29 @@ export class StopWatch {
      */
     get indentPrefix(): string {
 
-        let indent: string = '    ';
+        const indent: string = "    ";
         return indent.repeat(this.eventCount);
     }
-            
+
 //#endregion
     /**
      * @description Returns the friendly form of the event key excluding the unique suffix.
      */
-    friendlyKey (key: string) : string {
-        var friendlyKey = key.split(StopWatch.keySuffixDelimiter)[0];
+    public friendlyKey(key: string): string {
+        const friendlyKey = key.split(StopWatch.keySuffixDelimiter)[0];
         return friendlyKey;
     }
 
     /**
      * @description Adds an entry to the timer stack.
      */
-    mark(event : string) : string {
-        let startMilliseconds : number = Date.now();
-        let indentPrefix      : string = this.indentPrefix;
-        let timerEntry        : TimerEntry = { startTime: startMilliseconds, indent : indentPrefix};
+    public mark(event: string): string {
+        const startMilliseconds: number = Date.now();
+        const indentPrefix: string = this.indentPrefix;
+        const timerEntry: ITimerEntry = { startTime: startMilliseconds, indent : indentPrefix};
 
         // N.B. Ensure uniqueness of key in events dictionary. Minificaiton will collapse class names.
-        var suffix = Tools.generatePseudoGUID();
+        const suffix = Tools.generatePseudoGUID();
         event += ` ${StopWatch.keySuffixDelimiter}${suffix}`;
         this._events[event] = timerEntry;
 
@@ -100,11 +101,11 @@ export class StopWatch {
     /**
      * @description Logs the elapsted time.
      */
-    logElapsedTime(event : string) {
-        let timerElapsedTime   : number = Date.now();
-        let eventElapsedTime   : number = (timerElapsedTime - (<number> (this._events[event].startTime))) / 1000;
-        let elapsedTimeMessage : string = eventElapsedTime.toFixed(StopWatch.precision);
-        let indentPrefix       : string = this._events[event].indent;
+    public logElapsedTime(event: string) {
+        const timerElapsedTime: number = Date.now();
+        const eventElapsedTime: number = (timerElapsedTime - ((this._events[event].startTime) as number)) / 1000;
+        const elapsedTimeMessage: string = eventElapsedTime.toFixed(StopWatch.precision);
+        const indentPrefix: string = this._events[event].indent;
 
         this._logger.addMessage(`${indentPrefix}${this.friendlyKey(event)} : ${elapsedTimeMessage} sec`);
 

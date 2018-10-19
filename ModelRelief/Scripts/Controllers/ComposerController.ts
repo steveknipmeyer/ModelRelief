@@ -17,7 +17,7 @@ import {DepthBufferFactory} from "Scripts/Models/DepthBuffer/DepthBufferFactory"
 import {Mesh} from "Scripts/Models/Mesh/Mesh";
 import {MeshTransform} from "Scripts/Models/MeshTransform/MeshTransform";
 import {Model3d} from "Scripts/Models/Model3d/Model3d";
-import {EventType, MREvent} from "Scripts/System/EventManager";
+import {EventType, IMREvent} from "Scripts/System/EventManager";
 import {ElementAttributes, ElementIds} from "Scripts/System/Html";
 import {UnitTests} from "Scripts/UnitTests/UnitTests";
 import {MeshViewer} from "Scripts/Viewers/MeshViewer";
@@ -169,10 +169,10 @@ export class ComposerController {
 //#region Event Handlers
     /**
      * @description Event handler for new model.
-     * @param {MREvent} event NewModel event.
+     * @param {IMREvent} event NewModel event.
      * @param {THREE.Group} modelGroup Newly loaded model.
      */
-    public onNewModel(event: MREvent, modelGroup: THREE.Group) {
+    public onNewModel(event: IMREvent, modelGroup: THREE.Group) {
 
         // model camera = depth buffer camera (default clipping planes)
         const modelViewCamera = this.activeDepthBufferCamera.viewCamera.clone();

@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { Services } from "./Services";
+import {Services} from "Scripts/System/Services";
 
 export class Exception {
 
@@ -25,5 +25,4 @@ export class Exception {
      */
     constructor() {
     }
-
 }

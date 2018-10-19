@@ -1,6 +1,6 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
@@ -10,14 +10,15 @@
  * @export
  * @interface MREvent
  */
-export interface MREvent {
+export interface IMREvent {
 
-    type    : EventType;
-    target  : any;
+    type: EventType;
+    target: any;
 }
 
 /**
  * @description System event type.
+ *
  * @export
  * @enum {number}
  */
@@ -25,10 +26,10 @@ export enum EventType {
 
     None,
     NewModel,
-    MeshGenerate
+    MeshGenerate,
 }
 
-type Listener = (event: MREvent, ...args : any[]) => void;
+type Listener = (event: IMREvent, ...args: any[]) => void;
 type ListenerArray = Listener[][];  // Listener[][EventType];
 
 /**
@@ -38,8 +39,8 @@ type ListenerArray = Listener[][];  // Listener[][EventType];
  */
 export class EventManager {
 
-    _listeners : ListenerArray;
-    
+    public _listeners: ListenerArray;
+
     /**
      * Creates an instance of EventManager.
      * Creates EventManager object. It needs to be called with '.call' to add the functionality to an object.
@@ -50,16 +51,16 @@ export class EventManager {
     /**
      * @description Adds a listener to an event type.
      * @param {EventType} type The type of the event that gets added.
-     * @param {(event: MREvent, ...args : any[]) => void} listener The listener function that gets added.
+     * @param {(event: IMREvent, ...args : any[]) => void} listener The listener function that gets added.
      */
-    addEventListener(type: EventType, listener: (event: MREvent, ...args : any[]) => void ): void {
+    public addEventListener(type: EventType, listener: (event: IMREvent, ...args: any[]) => void ): void {
 
         if (this._listeners === undefined) {
             this._listeners = [];
             this._listeners[EventType.None] = [];
-        }            
-        
-        let listeners = this._listeners;
+        }
+
+        const listeners = this._listeners;
 
         // event does not exist; create
         if (listeners[type] === undefined) {
@@ -74,43 +75,43 @@ export class EventManager {
             listeners[type].push(listener);
         }
     }
-    
+
     /**
      * @description Checks whether a listener is registered for an event.
-     * @param {EventType} type 
-     * @param {(event: MREvent, ...args : any[]) => void} listener 
-     * @returns {boolean} 
+     * @param {EventType} type
+     * @param {(event: IMREvent, ...args : any[]) => void} listener
+     * @returns {boolean}
      */
-    hasEventListener(type: EventType, listener: (event: MREvent, ...args : any[]) => void): boolean {
+    public hasEventListener(type: EventType, listener: (event: IMREvent, ...args: any[]) => void): boolean {
 
-        // no events     
-        if (this._listeners === undefined) 
+        // no events
+        if (this._listeners === undefined)
             return false;
-        
-        let listeners = this._listeners;
+
+        const listeners = this._listeners;
 
         // event exists and listener registered => true
-        return listeners[type] !== undefined && listeners[type].indexOf(listener) !== - 1;       
+        return listeners[type] !== undefined && listeners[type].indexOf(listener) !== - 1;
     }
-    
+
     /**
      * @description Removes a listener from an event type.
-     * @param {EventType} type 
-     * @param {(event: MREvent, ...args : any[]) => void} listener 
-     * @returns {void} 
+     * @param {EventType} type
+     * @param {(event: IMREvent, ...args : any[]) => void} listener
+     * @returns {void}
      */
-    removeEventListener(type: EventType, listener: (event: MREvent, ...args : any[]) => void): void {
+    public removeEventListener(type: EventType, listener: (event: IMREvent, ...args: any[]) => void): void {
 
         // no events; do nothing
-        if (this._listeners === undefined ) 
+        if (this._listeners === undefined )
             return;
-        
-        let listeners = this._listeners;
-        let listenerArray = listeners[type];
+
+        const listeners = this._listeners;
+        const listenerArray = listeners[type];
 
         if (listenerArray !== undefined ) {
 
-            let index = listenerArray.indexOf(listener);
+            const index = listenerArray.indexOf(listener);
 
             // remove if found
             if (index !== -1) {
@@ -119,37 +120,37 @@ export class EventManager {
             }
         }
     }
-    
+
     /**
      * @description Fire an event type.
      * @param {*} target Event target.
      * @param {EventType} eventType The type of event that gets fired.
      * @param {...any[]} args Arguments for event.
-     * @returns {void} 
+     * @returns {void}
      */
-    dispatchEvent(target : any, eventType : EventType, ...args : any[]): void {
+    public dispatchEvent(target: any, eventType: EventType, ...args: any[]): void {
 
         // no events defined; do nothing
-        if (this._listeners === undefined) 
+        if (this._listeners === undefined)
             return;
-        
-        let listeners     = this._listeners;       
-        let listenerArray = listeners[eventType];
+
+        const listeners     = this._listeners;
+        const listenerArray = listeners[eventType];
 
         if (listenerArray !== undefined) {
-            
-            let theEvent = {
-                type   : eventType,         // type
-                target : target             // set target to instance triggering the event
-            }
-            
-            // duplicate original array of listeners
-            let array = listenerArray.slice(0);
 
-            let length = array.length;
+            const theEvent = {
+                type   : eventType,         // type
+                target,             // set target to instance triggering the event
+            };
+
+            // duplicate original array of listeners
+            const array = listenerArray.slice(0);
+
+            const length = array.length;
             for (let index = 0 ; index < length; index++) {
 
-                array[index](theEvent, ...args); 
+                array[index](theEvent, ...args);
             }
         }
     }
