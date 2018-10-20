@@ -9,7 +9,7 @@ import {assert} from "chai";
 import * as dat from "dat-gui";
 import {StandardView} from "Scripts/Api/V1/Interfaces/ICamera";
 import {Graphics, ObjectNames} from "Scripts/Graphics/Graphics";
-import {BaseCamera} from "Scripts/Models/Camera/Camera";
+import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
 import {CameraSettings} from "Scripts/Models/Camera/Camerasettings";

@@ -10,9 +10,9 @@ import * as THREE from "three";
 
 import {assert} from "chai";
 import {DepthBufferFormat} from "Scripts/Api/V1/Interfaces/IDepthBuffer";
-import {PerspectiveCamera} from "Scripts/Models/Camera/Camera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {CameraSettings} from "Scripts/Models/Camera/Camerasettings";
+import {PerspectiveCamera} from "Scripts/Models/Camera/PerspectiveCamera";
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
 import {Services} from "Scripts/System/Services";
 

@@ -12,7 +12,7 @@ import {assert} from "chai";
 import {DepthBufferFormat} from "Scripts/Api/V1/Interfaces/IDepthBuffer";
 import {IGeneratedFileModel} from "Scripts/Api/V1/Interfaces/IGeneratedFileModel";
 import {GeneratedFileModel} from "Scripts/Api/V1/Models/GeneratedFileModel";
-import {BaseCamera} from "Scripts/Models/Camera/Camera";
+import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {Model3d} from "Scripts/Models/Model3d/Model3d";
 import {Project} from "Scripts/Models/Project/Project";

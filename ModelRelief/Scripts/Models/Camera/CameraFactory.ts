@@ -10,7 +10,10 @@ import * as THREE from "three";
 
 import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
 import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
-import {BaseCamera, OrthographicCamera, PerspectiveCamera} from "Scripts/Models/Camera/Camera";
+import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
+import {OrthographicCamera} from "Scripts/Models/Camera/OrthographicCamera";
+import {PerspectiveCamera} from "Scripts/Models/Camera/PerspectiveCamera";
+
 import {Project} from "Scripts/Models/Project/Project";
 
 /**

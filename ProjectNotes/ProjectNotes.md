@@ -2,17 +2,8 @@
 #### Commit Notes
 
 #### Short Term
-
     Circular Dependencies
-        https://esdiscuss.org/topic/how-to-solve-this-basic-es6-module-circular-dependency-problem
-        https://stackoverflow.com/questions/38841469/how-to-fix-this-es6-module-circular-dependency
-        https://medium.com/visual-development/how-to-fix-nasty-circular-dependency-issues-once-and-for-all-in-javascript-typescript-a04c987cf0de
-        Madge
-            https://github.com/pahen/madge
-        ALM
-            https://legacy.gitbook.com/book/alm-tools/alm/details
-
-    1) Controllers/ComposerController.ts > Views/ComposerView.ts
+        1) Controllers/ComposerController.ts > Views/ComposerView.ts
 
     Controls
         Add OrthographicTrackballControls to project.
@@ -1496,3 +1487,16 @@ A Cmake Release build includes the 'O2' optimization flags. It is not necessary 
 np_fill, relief_fill
     The order of np_fill and releif_fill is critical. When np_fill follows relief_fill and the \<array target is the same\>, there is optimization which makes it much faster (8X).
     If the array targets are different, there is no performance difference.
+
+#### Circular Dependencies
+    https://esdiscuss.org/topic/how-to-solve-this-basic-es6-module-circular-dependency-problem
+    https://stackoverflow.com/questions/38841469/how-to-fix-this-es6-module-circular-dependency
+    https://medium.com/visual-development/how-to-fix-nasty-circular-dependency-issues-once-and-for-all-in-javascript-typescript-a04c987cf0de
+
+    Madge
+        https://github.com/pahen/madge
+        madge --warning --circular --extensions ts ModelRelief\Scripts
+            1) Controllers/ComposerController.ts > Views/ComposerView.ts
+
+    ALM
+        https://legacy.gitbook.com/book/alm-tools/alm/details

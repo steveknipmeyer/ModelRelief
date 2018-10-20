@@ -10,9 +10,10 @@ import * as Dto from "Scripts/Api/V1/Models/DtoModels";
 import * as THREE from "three";
 
 import {Loader} from "Scripts/ModelLoaders/Loader";
-import {BaseCamera, PerspectiveCamera} from "Scripts/Models/Camera/Camera";
+import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {CameraSettings} from "Scripts/Models/Camera/Camerasettings";
+import {PerspectiveCamera} from "Scripts/Models/Camera/PerspectiveCamera";
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
 import {DepthBufferFactory} from "Scripts/Models/DepthBuffer/DepthBufferFactory";
 import {Mesh} from "Scripts/Models/Mesh/Mesh";

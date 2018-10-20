@@ -8,7 +8,7 @@
 import * as Dto from "Scripts/Api/V1//Models/DtoModels";
 import * as THREE from "three";
 
-import {BaseCamera} from "Scripts/Models/Camera/Camera";
+import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
 import {DepthBufferFactorySettings} from "Scripts/Models/DepthBuffer/DepthBufferFactorySettings";
