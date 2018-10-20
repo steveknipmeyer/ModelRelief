@@ -9,6 +9,7 @@ import * as dat from "dat-gui";
 import * as Dto from "Scripts/Api/V1/Models/DtoModels";
 import * as THREE from "three";
 
+import {Loader} from "Scripts/ModelLoaders/Loader";
 import {BaseCamera, PerspectiveCamera} from "Scripts/Models/Camera/Camera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {CameraSettings} from "Scripts/Models/Camera/Camerasettings";
@@ -206,7 +207,8 @@ export class ComposerController {
         const meshModel: Dto.Mesh = await this.updateMeshAsync();
 
         // Mesh graphics
-        const meshGraphics = await this.activeMesh.constructGraphicssAsync();
+        const loader = new Loader();
+        const meshGraphics = await loader.loadMeshAsync(this.activeMesh);
 
         this.meshViewer.setModelGroup(meshGraphics);
         if (this._initialMeshGeneration) {

@@ -45,12 +45,4 @@ export class FileModel extends Model implements IFileModel {
     public toDtoModel(): Dto.FileModel<any> {
         return undefined;
     }
-
-    /**
-     * @description Returns a graphics represention of the model.
-     * @returns {Promise<THREE.Group>}
-     */
-    public getModelGroupAsync?(): Promise<THREE.Group> {
-        return undefined;
-    }
 }

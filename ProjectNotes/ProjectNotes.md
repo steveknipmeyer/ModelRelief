@@ -1,26 +1,20 @@
 ﻿### Tasks
 #### Commit Notes
+ModelLoaders/Loader.ts > Models/Mesh/Mesh.ts
+Models/Model3d/Model3d.ts > ModelLoaders/Loader.ts
+Models/DepthBuffer/DepthBuffer.ts > Models/Model3d/Model3d.ts > ModelLoaders/Loader.ts > Models/Mesh/Mesh.ts
+Models/Camera/Camera.ts > Models/DepthBuffer/DepthBufferFactory.ts > Models/DepthBuffer/DepthBuffer.ts > Models/Model3d/Model3d.ts > ModelLoaders/Loader.ts > Models/Mesh/Mesh.ts
 
 #### Short Term
 
-    Configure tslint.
-        Models
-
-        https://palantir.github.io/tslint/rules/
-        https://palantir.github.io/tslint/usage/configuration/
-
     Circular Dependencies
+        https://esdiscuss.org/topic/how-to-solve-this-basic-es6-module-circular-dependency-problem
+        https://stackoverflow.com/questions/38841469/how-to-fix-this-es6-module-circular-dependency
         https://medium.com/visual-development/how-to-fix-nasty-circular-dependency-issues-once-and-for-all-in-javascript-typescript-a04c987cf0de
         Madge
             https://github.com/pahen/madge
         ALM
             https://legacy.gitbook.com/book/alm-tools/alm/details
-
-    Move to TypeScript 3.1.
-        Convert TypeScript compiler output to ES5 modules?
-            Separate BaseCamers, OrthographicCamera, PerspectiveCamera.
-
-    Upgrade Three.js.
 
     Controls
         Add OrthographicTrackballControls to project.
@@ -35,6 +29,15 @@
 
     CameraControls
         Update the CameraControls to include the orthographic properties.
+
+
+
+
+    Move to TypeScript 3.1.
+        Convert TypeScript compiler output to ES5 modules?
+            Separate BaseCamers, OrthographicCamera, PerspectiveCamera.
+
+    Upgrade Three.js.
 
 
 

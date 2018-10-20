@@ -120,18 +120,18 @@ export class ComposerView {
 
             // load models; model event handlers now initialized
             const useTestModels = false;
+            const loader = new Loader();
             if (useTestModels) {
                 // Test Models
-                const loader = new Loader();
                 loader.loadParametricTestModel(TestModel.Checkerboard).then((modelGroup: THREE.Group) => {
                     this._modelView.modelViewer.setModelGroup(modelGroup);
                 });
             } else {
-                model3d.getModelGroupAsync().then((model) => {
+                loader.loadModel3dAsync(model3d).then((model) => {
                     this._modelView.modelViewer.setModelGroup (model);
                 });
             }
-            this.mesh.getModelGroupAsync().then((theMesh) => {
+            loader.loadMeshAsync(this.mesh).then((theMesh) => {
                 this._meshView.meshViewer.setModelGroup (theMesh);
                 this._meshView.meshViewer.setCameraToStandardView(StandardView.Top);
             });

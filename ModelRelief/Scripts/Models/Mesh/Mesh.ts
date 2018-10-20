@@ -11,7 +11,6 @@ import * as THREE from "three";
 import {IGeneratedFileModel} from "Scripts/Api/V1/Interfaces/IGeneratedFileModel";
 import {MeshFormat} from "Scripts/Api/V1/Interfaces/IMesh";
 import {GeneratedFileModel} from "Scripts/Api/V1/Models/GeneratedFileModel";
-import {Loader} from "Scripts/ModelLoaders/Loader";
 import {BaseCamera} from "Scripts/Models/Camera/Camera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
@@ -140,29 +139,6 @@ export class Mesh extends GeneratedFileModel {
         });
 
         return mesh;
-    }
-    //#endregion
-
-    /**
-     * @description Constructs a graphics mesh.
-     * @returns {Promise<THREE.Group>}
-     */
-    public async getModelGroupAsync(): Promise<THREE.Group> {
-
-        return this.constructGraphicssAsync();
-    }
-
-    //#region Generation
-    /**
-     * @description Generates a mesh.
-     * @returns {Promise<THREE.Group>} Group holding the mesh.
-     */
-    public async constructGraphicssAsync(): Promise<THREE.Group> {
-
-        const loader = new Loader();
-        const modelGroup = loader.loadModelAsync(this);
-
-        return modelGroup;
     }
     //#endregion
 }
