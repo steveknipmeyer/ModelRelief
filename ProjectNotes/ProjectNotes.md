@@ -1,9 +1,5 @@
 ﻿### Tasks
 #### Commit Notes
-ModelLoaders/Loader.ts > Models/Mesh/Mesh.ts
-Models/Model3d/Model3d.ts > ModelLoaders/Loader.ts
-Models/DepthBuffer/DepthBuffer.ts > Models/Model3d/Model3d.ts > ModelLoaders/Loader.ts > Models/Mesh/Mesh.ts
-Models/Camera/Camera.ts > Models/DepthBuffer/DepthBufferFactory.ts > Models/DepthBuffer/DepthBuffer.ts > Models/Model3d/Model3d.ts > ModelLoaders/Loader.ts > Models/Mesh/Mesh.ts
 
 #### Short Term
 
@@ -15,6 +11,8 @@ Models/Camera/Camera.ts > Models/DepthBuffer/DepthBufferFactory.ts > Models/Dept
             https://github.com/pahen/madge
         ALM
             https://legacy.gitbook.com/book/alm-tools/alm/details
+
+    1) Controllers/ComposerController.ts > Views/ComposerView.ts
 
     Controls
         Add OrthographicTrackballControls to project.

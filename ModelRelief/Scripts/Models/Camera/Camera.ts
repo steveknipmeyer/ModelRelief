@@ -14,7 +14,7 @@ import {Graphics} from "Scripts/Graphics/Graphics";
 import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
 import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
 import {CameraSettings} from "Scripts/Models/Camera/Camerasettings";
-import {DepthBufferFactory} from "Scripts/Models/DepthBuffer/DepthBufferFactory";
+import {DepthBufferFactorySettings} from "Scripts/Models/DepthBuffer/DepthBufferFactorySettings";
 import {Project} from "Scripts/Models/Project/Project";
 
 /**
@@ -114,7 +114,7 @@ export abstract class BaseCamera extends Model {
         const clippingPlanes: IClippingPlanes = {
 
             // adjust by epsilon to avoid clipping geometry at the near plane edge
-            near :  (1 - DepthBufferFactory.NearPlaneEpsilon) * nearPlane,
+            near :  (1 - DepthBufferFactorySettings.NearPlaneEpsilon) * nearPlane,
             far  : farPlane,
         };
         return clippingPlanes;

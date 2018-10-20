@@ -9,7 +9,6 @@
  * @description CameraSettings
  * @export
  * @class CameraSettings
- * @extends {Model}
  */
 export class CameraSettings  {
     // N.B. These settings are held in a separate class (rather than OrthographicCamera, PerspectiveCamera) to avoid circular dependencies between BaseCamera and its derived classes.

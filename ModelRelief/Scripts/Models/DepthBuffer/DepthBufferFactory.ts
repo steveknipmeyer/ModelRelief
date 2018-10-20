@@ -11,6 +11,7 @@ import * as THREE from "three";
 import {BaseCamera} from "Scripts/Models/Camera/Camera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
+import {DepthBufferFactorySettings} from "Scripts/Models/DepthBuffer/DepthBufferFactorySettings";
 import {ILogger} from "Scripts/System/Logger";
 import {Services} from "Scripts/System/Services";
 import {Tools} from "Scripts/System/Tools";
@@ -27,12 +28,12 @@ import {Tools} from "Scripts/System/Tools";
 export interface IDepthBufferFactoryParameters {
 
     canvas: HTMLCanvasElement;       // Canvas element (any size)
-    width: number;                  // width of DB
-    height: number;                   // height of DB
-    modelGroup: THREE.Group;             // model root
+    width: number;                   // width of DB
+    height: number;                  // height of DB
+    modelGroup: THREE.Group;         // model root
     camera: BaseCamera;              // camera
 
-    logDepthBuffer?: boolean;                 // use logarithmic depth buffer for higher resolution (better distribution) in scenes with large extents
+    logDepthBuffer?: boolean;        // use logarithmic depth buffer for higher resolution (better distribution) in scenes with large extents
 }
 
 /**
@@ -41,35 +42,34 @@ export interface IDepthBufferFactoryParameters {
  */
 export class DepthBufferFactory {
 
-    public static DefaultResolution: number           = 1024;                     // default DB resolution
-    public static NearPlaneEpsilon: number           = .001;                     // adjustment to avoid clipping geometry on the near plane
 
-    public static CssClassName: string           = "DepthBufferFactory";     // CSS class
+
+    public static CssClassName: string              = "DepthBufferFactory";     // CSS class
     public static RootContainerId: string           = "rootContainer";          // root container for viewers
 
-    public _scene: THREE.Scene              = null;     // target scene
-    public _modelGroup: THREE.Group              = null;     // target model
+    public _scene: THREE.Scene                      = null;     // target scene
+    public _modelGroup: THREE.Group                 = null;     // target model
 
-    public _renderer: THREE.WebGLRenderer      = null;     // scene renderer
-    public _canvas: HTMLCanvasElement        = null;     // DOM canvas supporting renderer
-    public _width: number                   = DepthBufferFactory.DefaultResolution;     // width resolution of the DB
-    public _height: number                   = DepthBufferFactory.DefaultResolution;     // height resolution of the DB
+    public _renderer: THREE.WebGLRenderer           = null;     // scene renderer
+    public _canvas: HTMLCanvasElement               = null;     // DOM canvas supporting renderer
+    public _width: number                           = DepthBufferFactorySettings.DefaultResolution;     // width resolution of the DB
+    public _height: number                          = DepthBufferFactorySettings.DefaultResolution;     // height resolution of the DB
 
-    public _camera: BaseCamera               = null;     // camera to generate the depth buffer
+    public _camera: BaseCamera                      = null;     // camera to generate the depth buffer
 
 
-    public _logDepthBuffer: boolean                  = false;    // use a logarithmic buffer for more accuracy in large scenes
+    public _logDepthBuffer: boolean                 = false;    // use a logarithmic buffer for more accuracy in large scenes
 
-    public _depthBuffer: DepthBuffer              = null;     // depth buffer
-    public _target: THREE.WebGLRenderTarget  = null;     // WebGL render target for creating the WebGL depth buffer when rendering the scene
+    public _depthBuffer: DepthBuffer                = null;     // depth buffer
+    public _target: THREE.WebGLRenderTarget         = null;     // WebGL render target for creating the WebGL depth buffer when rendering the scene
     public _encodedTarget: THREE.WebGLRenderTarget  = null;     // WebGL render target for encodin the WebGL depth buffer into a floating point (RGBA format)
 
-    public _postScene: THREE.Scene              = null;     // single polygon scene use to generate the encoded RGBA buffer
-    public _postCamera: THREE.OrthographicCamera = null;     // orthographic camera
-    public _postMaterial: THREE.ShaderMaterial     = null;     // shader material that encodes the WebGL depth buffer into a floating point RGBA format
+    public _postScene: THREE.Scene                  = null;     // single polygon scene use to generate the encoded RGBA buffer
+    public _postCamera: THREE.OrthographicCamera    = null;     // orthographic camera
+    public _postMaterial: THREE.ShaderMaterial      = null;     // shader material that encodes the WebGL depth buffer into a floating point RGBA format
 
     public _minimumWebGL: boolean                  = true;     // true if minimum WeGL requirements are present
-    public _logger: ILogger                   = null;     // logger
+    public _logger: ILogger                         = null;     // logger
 
     /**
      * @constructor
