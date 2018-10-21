@@ -25,23 +25,25 @@ export class Viewer {
 
     public cameraControls: CameraControls   = null;
 
+    // Protected
+    protected _root: THREE.Object3D            = null;
+    protected _logger: ILogger                 = null;
+
     // Private
-    public _name: string                    = "";
-    public _eventManager: EventManager      = null;
-    public _logger: ILogger                 = null;
+    private _name: string                    = "";
+    private _eventManager: EventManager      = null;
 
-    public _model: FileModel                = null;
-    public _scene: THREE.Scene              = null;
-    public _root: THREE.Object3D            = null;
+    private _model: FileModel                = null;
+    private _scene: THREE.Scene              = null;
 
-    public _renderer: THREE.WebGLRenderer   = null;
-    public _canvas: HTMLCanvasElement       = null;
-    public _width: number                   = 0;
-    public _height: number                  = 0;
+    private _renderer: THREE.WebGLRenderer   = null;
+    private _canvas: HTMLCanvasElement       = null;
+    private _width: number                   = 0;
+    private _height: number                  = 0;
 
-    public _camera: IThreeBaseCamera        = null;
+    private _camera: IThreeBaseCamera        = null;
 
-    public _controls: TrackballControls     = null;
+    private _controls: TrackballControls     = null;
 
     /**
      * Creates an instance of Viewer.

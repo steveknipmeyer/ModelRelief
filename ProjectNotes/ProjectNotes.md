@@ -2,23 +2,19 @@
 #### Commit Notes
 
 #### Short Term
-    Circular Dependencies
-        1) Controllers/ComposerController.ts > Views/ComposerView.ts
-
     Controls
         Add OrthographicTrackballControls to project.
 
     Viewer
         Initialize both Perspective and Orthographic cameras.
 
+    CameraControls
+        Update the CameraControls to include the orthographic properties.
+
     Tests
         Test SaveRelief (UnitTests.comparePerspectiveCameras).
         UnitTests.ts
         CaemraTests.ts
-
-    CameraControls
-        Update the CameraControls to include the orthographic properties.
-
 
 
 

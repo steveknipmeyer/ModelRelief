@@ -19,7 +19,6 @@ import {DepthBufferFactory} from "Scripts/Models/DepthBuffer/DepthBufferFactory"
 import {Mesh} from "Scripts/Models/Mesh/Mesh";
 import {MeshTransform} from "Scripts/Models/MeshTransform/MeshTransform";
 import {Model3d} from "Scripts/Models/Model3d/Model3d";
-import {EventType, IMREvent} from "Scripts/System/EventManager";
 import {ElementAttributes, ElementIds} from "Scripts/System/Html";
 import {UnitTests} from "Scripts/UnitTests/UnitTests";
 import {MeshViewer} from "Scripts/Viewers/MeshViewer";
@@ -80,13 +79,13 @@ class ControlSettings {
  */
 export class ComposerController {
 
-    public static DefaultReliefDimensions: number  = 512;             // relief dimensions
+    public static DefaultReliefDimensions: number  = 512;           // relief dimensions
 
-    public _composerView: ComposerView;                       // application view
-    public _composerViewSettings: ComposerViewSettings;               // UI settings
+    public _composerView: ComposerView;                             // application view
+    public _composerViewSettings: ComposerViewSettings;             // UI settings
 
-    public _reliefWidthPixels: number;                               // relief width
-    public _reliefHeightPixels: number;                               // relief height
+    public _reliefWidthPixels: number;                              // relief width
+    public _reliefHeightPixels: number;                             // relief height
 
     public _initialMeshGeneration: boolean = true;
 
@@ -169,26 +168,6 @@ export class ComposerController {
 //#endregion
 
 //#region Event Handlers
-    /**
-     * @description Event handler for new model.
-     * @param {IMREvent} event NewModel event.
-     * @param {THREE.Group} modelGroup Newly loaded model.
-     */
-    public onNewModel(event: IMREvent, modelGroup: THREE.Group) {
-
-        // model camera = depth buffer camera (default clipping planes)
-        const modelViewCamera = this.activeDepthBufferCamera.viewCamera.clone();
-
-        // WIP: Set far plane based on model extents to avoid clipping
-        const boundingPlanes =  this.activeDepthBufferCamera.getBoundingClippingPlanes(this.modelViewer.modelGroup);
-
-        modelViewCamera.near = CameraSettings.DefaultNearClippingPlane;
-        modelViewCamera.far  = CameraSettings.DefaultFarClippingPlane;
-
-        modelViewCamera.updateProjectionMatrix();
-        this.modelViewer.camera = modelViewCamera;
-    }
-
     /**
      * @description Generates a relief from the current model camera.
      * @returns {Promise<void>}
@@ -297,7 +276,6 @@ export class ComposerController {
         // WIP: Save the Mesh as an OBJ format file?
         // It may be more efficient to maintain Meshes in raw format since the size is substantially smaller.
 
-
         if (this.modelViewer.camera instanceof THREE.PerspectiveCamera) {
             // WIP: Randomly generated cameras do not roundtrip the matrix property. However, cameras created and manipulated through views work fine.
             // UnitTests.cameraRoundTrip();
@@ -320,11 +298,21 @@ export class ComposerController {
      */
     public initialize() {
 
-        this.modelViewer.eventManager.addEventListener(EventType.NewModel, this.onNewModel.bind(this));
-
         // overall dimensions
         this._reliefWidthPixels  = ComposerController.DefaultReliefDimensions;
         this._reliefHeightPixels = this._reliefWidthPixels / this.modelViewer.aspectRatio;
+
+        // model camera = depth buffer camera (default clipping planes)
+        const modelViewCamera = this.activeDepthBufferCamera.viewCamera.clone();
+
+        // WIP: Set far plane based on model extents to avoid clipping
+        const boundingPlanes =  this.activeDepthBufferCamera.getBoundingClippingPlanes(this.modelViewer.modelGroup);
+
+        modelViewCamera.near = CameraSettings.DefaultNearClippingPlane;
+        modelViewCamera.far  = CameraSettings.DefaultFarClippingPlane;
+
+        modelViewCamera.updateProjectionMatrix();
+        this.modelViewer.camera = modelViewCamera;
 
         this.initializeUIControls();
     }

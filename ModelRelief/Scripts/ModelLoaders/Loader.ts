@@ -28,7 +28,7 @@ const testModelColor = "#558de8";
 export class Loader {
 
     // Private
-    public _logger: ILogger;
+    private _logger: ILogger;
 
     /** Default constructor
      * @class Loader

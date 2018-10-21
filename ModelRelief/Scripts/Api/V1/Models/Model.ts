@@ -22,8 +22,8 @@ export class Model implements IModel {
     public name: string;
     public description: string;
 
-    // Private
-    public _logger: ILogger;
+    // Protected
+    protected _logger: ILogger;
 
     /**
      * Creates an instance of Model.

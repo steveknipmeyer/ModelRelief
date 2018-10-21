@@ -24,7 +24,7 @@ export class MeshViewer extends Viewer {
     public mesh: Mesh;                                        // active Mesh
 
     // Private
-    public _meshViewerControls: MeshViewerControls;            // UI controls
+    private _meshViewerControls: MeshViewerControls;            // UI controls
 
     /**
      * Creates an instance of MeshViewer.

@@ -28,7 +28,7 @@ export class ModelViewer extends Viewer {
     public model3d: Model3d;                                      // active Model3d
 
     // Private
-    public _modelViewerControls: ModelViewerControls;             // UI controls
+    private _modelViewerControls: ModelViewerControls;             // UI controls
 
     /**
      * Creates an instance of ModelViewer.

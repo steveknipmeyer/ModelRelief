@@ -21,11 +21,10 @@ export class DepthBufferViewer  {
     public canvas: HTMLCanvasElement;
 
     // Private
-    public _depthBuffer: DepthBuffer;
-    public _logger: ILogger;
+    private _depthBuffer: DepthBuffer;
+    private _logger: ILogger;
 
-    // Private
-    public _depthBufferViewerControls: DepthBufferViewerControls;            // UI controls
+    private _depthBufferViewerControls: DepthBufferViewerControls;            // UI controls
 
     /**
      * Creates an instance of DepthBufferViewer.

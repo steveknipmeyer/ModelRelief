@@ -30,7 +30,7 @@ export class CameraViewer extends Viewer {
     public populateScene() {
 
         const triad = Graphics.createWorldAxesTriad(new THREE.Vector3(), 10, 2.5, 2.5);
-        this._scene.add(triad);
+        this.scene.add(triad);
 
         const box: THREE.Mesh = Graphics.createBoxMesh(new THREE.Vector3(40, 60, -20), 10, 20, 20, new THREE.MeshPhongMaterial({color : 0xff0000}));
         box.rotation.set(Math.random(), Math.random(), Math.random());
@@ -136,8 +136,8 @@ export class App {
         const cameraMatrixWorldInverse: THREE.Matrix4 = this._viewer.camera.matrixWorldInverse;
 
         // remove existing BoundingBoxes and model clone (View coordinates)
-        Graphics.removeAllByName(this._viewer._scene, ObjectNames.BoundingBox);
-        Graphics.removeAllByName(this._viewer._scene, ObjectNames.ModelClone);
+        Graphics.removeAllByName(this._viewer.scene, ObjectNames.BoundingBox);
+        Graphics.removeAllByName(this._viewer.scene, ObjectNames.ModelClone);
 
         // clone model (and geometry!)
         const modelView  =  Graphics.cloneAndTransformObject(modelGroup, cameraMatrixWorldInverse);

@@ -9,10 +9,10 @@ import * as Dto from "Scripts/Api/V1//Models/DtoModels";
 import * as THREE from "three";
 
 import {StandardView} from "Scripts/Api/V1/Interfaces/ICamera";
-import {ComposerController} from "Scripts/Controllers/ComposerController";
 import {Loader} from "Scripts/ModelLoaders/Loader";
 import {TestModel} from "Scripts/ModelLoaders/TestModelLoader";
 import {Mesh} from "Scripts/Models/Mesh/Mesh";
+import {EventManager, EventType} from "Scripts/System/EventManager";
 import {ElementIds} from "Scripts/System/Html";
 import {Services} from "Scripts/System/Services";
 import {DepthBufferView} from "Scripts/Views/DepthBufferView";
@@ -28,6 +28,17 @@ declare var composerMeshModel: Dto.Mesh;
  * @class ComposerView
  */
 export class ComposerView {
+
+    public mesh: Mesh;
+
+    public _containerId: string;
+
+    public _meshView: MeshView;
+    public _modelView: ModelView;
+    public _depthBufferView: DepthBufferView;
+
+    // Private
+    private _eventManager: EventManager = null;
 
 //#region Properties
     /**
@@ -70,15 +81,15 @@ export class ComposerView {
         return this._depthBufferView;
     }
 
-    public mesh: Mesh;
+    /**
+     * @description Gets the Event Manager.
+     * @readonly
+     * @type {EventManager}
+     */
+    get eventManager(): EventManager {
 
-    public _containerId: string;
-
-    public _meshView: MeshView;
-    public _modelView: ModelView;
-    public _depthBufferView: DepthBufferView;
-
-    public _composerController: ComposerController;
+        return this._eventManager;
+    }
 
     /** Default constructor
      * @class ComposerView
@@ -87,6 +98,7 @@ export class ComposerView {
     constructor(containerId: string) {
 
         this._containerId = containerId;
+        this._eventManager = new EventManager();
 
         this.initialize();
     }
@@ -105,7 +117,6 @@ export class ComposerView {
             const model3d = this.mesh.depthBuffer.model3d;
             const depthBuffer = this.mesh.depthBuffer;
 
-
             // Mesh View
             this._meshView = new MeshView(ElementIds.MeshView, this.mesh);
 
@@ -115,22 +126,25 @@ export class ComposerView {
             // DepthBuffer View
             this._depthBufferView = new DepthBufferView(ElementIds.DepthBufferView, depthBuffer);
 
-            // Composer Controller
-            this._composerController = new ComposerController(this);
-
-            // load models; model event handlers now initialized
+            // load models; model event handlers in Viewers now initialized
             const useTestModels = false;
             const loader = new Loader();
-            if (useTestModels) {
-                // Test Models
-                loader.loadParametricTestModel(TestModel.Checkerboard).then((modelGroup: THREE.Group) => {
-                    this._modelView.modelViewer.setModelGroup(modelGroup);
-                });
-            } else {
-                loader.loadModel3dAsync(model3d).then((model) => {
-                    this._modelView.modelViewer.setModelGroup (model);
-                });
+
+            function onNewModel(modelGroup: THREE.Group) {
+                this._modelView.modelViewer.setModelGroup(modelGroup);
+
+                // dispatch ComposerViewInitialized event
+                this.eventManager.dispatchEvent(this, EventType.ComposerViewInitialized);
             }
+
+            // Model
+            if (useTestModels) {
+                loader.loadParametricTestModel(TestModel.Checkerboard).then(onNewModel.bind(this));
+            } else {
+                loader.loadModel3dAsync(model3d).then(onNewModel.bind(this));
+            }
+
+            // Mesh
             loader.loadMeshAsync(this.mesh).then((theMesh) => {
                 this._meshView.meshViewer.setModelGroup (theMesh);
                 this._meshView.meshViewer.setCameraToStandardView(StandardView.Top);

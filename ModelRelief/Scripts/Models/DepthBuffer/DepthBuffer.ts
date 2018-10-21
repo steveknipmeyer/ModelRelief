@@ -230,8 +230,8 @@ export class DepthBuffer extends GeneratedFileModel {
     public _camera: BaseCamera;
 
     // Private
-    public _rgbaArray: Uint8Array;
-    public _depths: Float32Array;
+    private _rgbaArray: Uint8Array;
+    private _depths: Float32Array;
 
     /**
      * Creates an instance of DepthBuffer.

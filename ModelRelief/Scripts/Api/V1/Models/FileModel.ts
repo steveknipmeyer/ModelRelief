@@ -23,8 +23,8 @@ export class FileModel extends Model implements IFileModel {
     public fileTimeStamp: Date;
 
     // Private
-    public fileArray: Uint8Array;
-    public fileString: string;
+    private fileArray: Uint8Array;
+    private fileString: string;
 
     /**
      * Creates an instance of FileModel.

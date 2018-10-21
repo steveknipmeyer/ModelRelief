@@ -26,7 +26,7 @@ export enum EventType {
 
     None,
     NewModel,
-    MeshGenerate,
+    ComposerViewInitialized,
 }
 
 type Listener = (event: IMREvent, ...args: any[]) => void;
