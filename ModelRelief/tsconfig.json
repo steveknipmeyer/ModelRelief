@@ -20,24 +20,6 @@
       "*": [
         "*",
         "Scripts/*"
-        // "Scripts/Api/V1/*",
-        // "Scripts/Api/V1/Interfaces/*",
-        // "Scripts/Api/V1/Models/*",
-        // "Scripts/Controllers/*",
-        // "Scripts/Models/*",
-        // "Scripts/Models/Camera/*",
-        // "Scripts/Models/DepthBuffer/*",
-        // "Scripts/Models/Mesh/*",
-        // "Scripts/Models/MeshTransform/*",
-        // "Scripts/Models/Model3d/*",
-        // "Scripts/Models/Project/*",
-        // "Scripts/Graphics/*",
-        // "Scripts/ModelExporters/*",
-        // "Scripts/ModelLoaders/*",
-        // "Scripts/System/*",
-        // "Scripts/UnitTests/*",
-        // "Scripts/Views/*",
-        // "Scripts/Viewers/*"
       ]
     }
   },

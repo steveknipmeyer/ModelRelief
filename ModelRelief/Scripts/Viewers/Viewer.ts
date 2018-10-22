@@ -15,7 +15,9 @@ import {EventManager} from "Scripts/System/EventManager";
 import {ILogger} from "Scripts/System/Logger";
 import {Services} from "Scripts/System/Services";
 import {CameraControls, ICameraControlsOptions} from "Scripts/Viewers/CameraControls";
-import { TrackballControls} from "Scripts/Viewers/TrackballControls";
+import {OrthographicTrackballControls} from "Scripts/Viewers/OrthographicTrackballControls";
+import {TrackballControls} from "Scripts/Viewers/TrackballControls";
+
 /**
  * @description General 3D model viewer base class.
  * @export
@@ -43,7 +45,7 @@ export class Viewer {
 
     private _camera: IThreeBaseCamera        = null;
 
-    private _controls: TrackballControls     = null;
+    private _controls: TrackballControls | OrthographicTrackballControls = null;
 
     /**
      * Creates an instance of Viewer.
@@ -252,11 +254,13 @@ export class Viewer {
     }
 
     /**
-     * @description Sets up the user input controls (Trackball)
+     * @description Sets up the user input controls (Trackball or OrthographicTrackballControls)
      */
     public initializeInputControls() {
 
-        this._controls = new TrackballControls(this.camera, this._renderer.domElement);
+        this._controls = this.camera instanceof THREE.PerspectiveCamera ?
+            new TrackballControls(this.camera, this._renderer.domElement) :
+            new OrthographicTrackballControls(this.camera, this._renderer.domElement);
 
         // N.B. https://stackoverflow.com/questions/10325095/threejs-camera-lookat-has-no-effect-is-there-something-im-doing-wrong
         this._controls.position0.copy(this.camera.position);

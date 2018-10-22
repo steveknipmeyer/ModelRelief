@@ -1,15 +1,24 @@
 ﻿### Tasks
 #### Commit Notes
+Add OrthographicTrackballControls.
 
 #### Short Term
-    Controls
-        Add OrthographicTrackballControls to project.
+    Turn off StopWatch so that console error messages are visible.
 
     Viewer
-        Initialize both Perspective and Orthographic cameras.
+        How can the View dynamically switch between Perspective and Orthographic cameras?
+            camera setter does call this.initializeInputControls.
+
+    OrthographicTrackballControls
+        Use Parametric test model.
+        Zoom does not work in both directions.
+        Fit does not work.
+        House (Front) yielded a division by zero.
+        Add keyboard shortcut handling.
 
     CameraControls
-        Update the CameraControls to include the orthographic properties.
+        Update the CameraControls to hide the Perspective properties.
+            Field of View
 
     Tests
         Test SaveRelief (UnitTests.comparePerspectiveCameras).
@@ -17,14 +26,12 @@
         CaemraTests.ts
 
 
+    Add madge circular dependency check to Builder.
 
     Move to TypeScript 3.1.
         Convert TypeScript compiler output to ES5 modules?
-            Separate BaseCamers, OrthographicCamera, PerspectiveCamera.
 
     Upgrade Three.js.
-
-
 
 
     Silhouette
