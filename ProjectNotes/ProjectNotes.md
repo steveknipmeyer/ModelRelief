@@ -4,9 +4,6 @@ Add enable property to StopWatch so that console messages may be suppressed.
 
 #### Short Term
     CameraControls
-        InitializeControls happens before ComposerController.initialize.
-            The default Viewer camera (Perspective) is used to initialize the CameraControls rather than the project (DepthBuffer) camera.
-
         Viewers/Viewer.ts <-> Viewers/CameraControls.ts
             Find all the paths that modify the camera of a Viewer.
                 Viewer.setCameraToStandardView

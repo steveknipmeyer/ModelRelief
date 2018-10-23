@@ -279,8 +279,9 @@ export class CameraControls {
      * @description Synchronize the UI camera settings with the target camera.
      */
     public synchronizeCameraSettings() {
-
         // update settings camera from Viewer
+
         this.settings.camera.viewCamera = this.viewer.camera;
+        this.settings.isPerspective = this.viewer.camera instanceof THREE.PerspectiveCamera;
     }
 }
