@@ -7,6 +7,7 @@
 
 import * as dat from "dat-gui";
 import {ElementAttributes, ElementIds} from "Scripts/System/Html";
+import {ModelViewer} from "Scripts/Viewers/ModelViewer";
 
 /**
  * @class
@@ -27,14 +28,14 @@ class ModelViewerSettings {
  */
 export class ModelViewerControls {
 
-    public _modelViewer: any;                             // associated viewer
-    public _modelViewerSettings: ModelViewerSettings;             // UI settings
+    private _modelViewer: ModelViewer;                               // associated viewer
+    private _modelViewerSettings: ModelViewerSettings;               // UI settings
 
     /**
      * Creates an instance of ModelViewerControls.
      * @param {ModelViewer} modelViewer
      */
-    constructor(modelViewer: any) {
+    constructor(modelViewer: ModelViewer) {
 
         this._modelViewer = modelViewer;
 

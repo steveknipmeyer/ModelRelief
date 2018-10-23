@@ -5,17 +5,19 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import {assert} from "chai";
 import * as dat from "dat-gui";
+import * as THREE from "three";
+
+import {assert} from "chai";
 import {StandardView} from "Scripts/Api/V1/Interfaces/ICamera";
 import {Graphics, ObjectNames} from "Scripts/Graphics/Graphics";
+import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
 import {CameraSettings} from "Scripts/Models/Camera/Camerasettings";
 import {ElementAttributes, ElementIds} from "Scripts/System/Html";
-import * as THREE from "three";
-
+import {Viewer} from "Scripts/Viewers/Viewer";
 
 /**
  * @description CameraControls
@@ -24,6 +26,11 @@ import * as THREE from "three";
 class CameraControlSettings {
 
     public camera: BaseCamera;
+
+    // A BaseCamera does not implement a setter for isPerspective to avoid circular dependencies (e.g. Camera <-> CameraFactory).
+    // So, the camera type is maintained as a CameraControls instance member. The onChange method handles the conversion of the underlying BaseCamera.
+    public isPerspective: boolean;
+
     public standardView: StandardView = StandardView.Front;
 
     public fitView: () => void;
@@ -39,11 +46,12 @@ class CameraControlSettings {
      */
     constructor(camera: BaseCamera, fitView: () => any, addCameraHelper: () => any, boundClippingPlanes: () => any) {
 
+        this.camera               = camera;
+        this.isPerspective        = camera.isPerspective;
+
         this.fitView              = fitView;
         this.addCameraHelper      = addCameraHelper;
         this.boundClippingPlanes  = boundClippingPlanes;
-
-        this.camera = camera;
     }
 }
 /**
@@ -65,19 +73,19 @@ export interface ICameraControlsOptions {
  */
 export class CameraControls {
 
-    public viewer: any;                          // associated viewer
-    public settings: CameraControlSettings;        // UI settings
+    public viewer: Viewer;                          // associated viewer
+    public settings: CameraControlSettings;         // UI settings
 
-    // The maximum and minimum values of these controls are modified by the boundClippingPlanes button so they are instance members.
-    public _controlNearClippingPlane: dat.GUIController;
-    public _controlFarClippingPlane: dat.GUIController;
+    // The maximum and minimum values of these controls are modified by the boundClippingPlanes button so theses controls are instance members.
+    private _controlNearClippingPlane: dat.GUIController;
+    private _controlFarClippingPlane: dat.GUIController;
 
     /**
      * Creates an instance of CameraControls.
      * @param {Viewer} viewer Associated viewer.
      * @param {ICameraControlsOptions} [controlOptions] Options to include/exclude specialized controls.
      */
-    constructor(viewer: any, controlOptions?: ICameraControlsOptions) {
+    constructor(viewer: Viewer, controlOptions?: ICameraControlsOptions) {
 
         this.viewer = viewer;
 
@@ -129,7 +137,7 @@ export class CameraControls {
         this._controlNearClippingPlane.setValue(clippingPlanes.near);
         this._controlFarClippingPlane.setValue(clippingPlanes.far);
     }
-    //#endregion
+//#endregion
 
     /**
      * @description Initialize the view settings that are controllable by the user
@@ -147,7 +155,6 @@ export class CameraControls {
 
         const parameters = {};
         const camera = CameraFactory.ConstructFromViewCamera(parameters, this.viewer.camera);
-
 
         this.settings = new CameraControlSettings(camera, this.fitView.bind(this), this.addCameraHelper.bind(this), this.boundClippingPlanes.bind(this));
         assert.deepEqual(this.viewer.camera, this.settings.camera.viewCamera);
@@ -197,6 +204,32 @@ export class CameraControls {
             scope.viewer.setCameraToStandardView(view);
         });
 
+        // Perspective
+        const perspectiveCameraControl = cameraOptions.add(this.settings, "isPerspective").name("Perspective").listen();
+        perspectiveCameraControl.onChange((value) => {
+
+            const existingCamera: BaseCamera  = CameraFactory.ConstructFromViewCamera({}, this.viewer.camera);
+            const newDtoCamera = existingCamera.toDtoModel();
+            newDtoCamera.isPerspective = !newDtoCamera.isPerspective;
+            const newCamera = newDtoCamera.getViewCamera();
+
+            if (scope.settings.isPerspective) {
+                // Orthographic -> Perspective
+            } else {
+                // Perspective -> Orthographic
+
+                // extents of existing Perspective camera clipping planes will define Orthographic camera boundary
+                const farPlaneExtents = existingCamera.getFarPlaneExtents();
+                const orthograpicCamera = newCamera as THREE.OrthographicCamera;
+                orthograpicCamera.left   = -farPlaneExtents.x / 2;
+                orthograpicCamera.right  = +farPlaneExtents.x / 2;
+                orthograpicCamera.top    = +farPlaneExtents.y / 2;
+                orthograpicCamera.bottom = -farPlaneExtents.y / 2;
+            }
+            this.viewer.camera = newCamera;
+            this.synchronizeCameraSettings();
+        });
+
         // Field of View
         if (showFieldOfView) {
             minimum = 25;
@@ -214,9 +247,9 @@ export class CameraControls {
         // Clipping
         if (showClippingControls) {
             // Near Clipping Plane
-            minimum  =   0.1;
-            maximum  = CameraSettings.DefaultFarClippingPlane;
-            stepSize =   0.1;
+            minimum  =  0.1;
+            maximum  =  CameraSettings.DefaultFarClippingPlane;
+            stepSize =  0.1;
             this._controlNearClippingPlane = cameraOptions.add(this.settings.camera.viewCamera, "near").name("Near Clipping Plane").min(minimum).max(maximum).step(stepSize).listen();
             this._controlNearClippingPlane.onChange ((value) => {
 
@@ -244,11 +277,10 @@ export class CameraControls {
 
     /**
      * @description Synchronize the UI camera settings with the target camera.
-     * @param {StandardView} [view] Standard view to set.
      */
-    public synchronizeCameraSettings(view?: StandardView) {
+    public synchronizeCameraSettings() {
 
-        // update settings camera from view
+        // update settings camera from Viewer
         this.settings.camera.viewCamera = this.viewer.camera;
     }
 }

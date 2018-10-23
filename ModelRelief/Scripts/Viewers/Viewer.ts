@@ -376,7 +376,7 @@ export class Viewer {
         const standardViewCamera = CameraHelper.getStandardViewCamera(view, this.camera, this.modelGroup);
         this.camera = standardViewCamera;
 
-        this.cameraControls.synchronizeCameraSettings(view);
+        this.cameraControls.synchronizeCameraSettings();
     }
 
     /**

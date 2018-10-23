@@ -45,5 +45,19 @@ export class PerspectiveCamera extends BaseCamera {
 
         return new THREE.Vector2(nearWidth, nearHeight);
     }
+
+    /**
+     * Returns the extents of the far camera plane.
+     * @returns {THREE.Vector2}
+     */
+    public getFarPlaneExtents(): THREE.Vector2 {
+
+        const cameraFOVRadians = this.viewCamera.fov * (Math.PI / 180);
+        const farHeight = 2 * Math.tan(cameraFOVRadians / 2) * this.viewCamera.far;
+        const farWidth  = this.viewCamera.aspect * farHeight;
+
+        return new THREE.Vector2(farWidth, farHeight);
+    }
+
 //#endregion
 }

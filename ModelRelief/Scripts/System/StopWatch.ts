@@ -29,11 +29,12 @@ export class StopWatch {
     public static precision: number = 3;
     public static keySuffixDelimiter: string = "@";
 
-    public _logger: ILogger;
-    public _name: string;
+    private _enabled: boolean;
+    private _logger: ILogger;
+    private _name: string;
 
-    public _events: any;
-    public _baselineTime: number;
+    private _events: any;
+    private _baselineTime: number;
 
     /**
      * @constructor
@@ -43,6 +44,7 @@ export class StopWatch {
      */
     constructor(timerName: string, logger: ILogger) {
 
+        this._enabled = false;
         this._logger = logger;
         this._name   = timerName;
         this._events  = {};
@@ -84,6 +86,9 @@ export class StopWatch {
      * @description Adds an entry to the timer stack.
      */
     public mark(event: string): string {
+        if (!this._enabled)
+            return "";
+
         const startMilliseconds: number = Date.now();
         const indentPrefix: string = this.indentPrefix;
         const timerEntry: ITimerEntry = { startTime: startMilliseconds, indent : indentPrefix};
@@ -101,7 +106,10 @@ export class StopWatch {
     /**
      * @description Logs the elapsted time.
      */
-    public logElapsedTime(event: string) {
+    public logElapsedTime(event: string): void {
+        if (!this._enabled)
+            return;
+
         const timerElapsedTime: number = Date.now();
         const eventElapsedTime: number = (timerElapsedTime - ((this._events[event].startTime) as number)) / 1000;
         const elapsedTimeMessage: string = eventElapsedTime.toFixed(StopWatch.precision);

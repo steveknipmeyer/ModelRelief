@@ -1,13 +1,24 @@
 ﻿### Tasks
 #### Commit Notes
-Add OrthographicTrackballControls.
+Add enable property to StopWatch so that console messages may be suppressed.
 
 #### Short Term
-    Turn off StopWatch so that console error messages are visible.
+    CameraControls
+        InitializeControls happens before ComposerController.initialize.
+            The default Viewer camera (Perspective) is used to initialize the CameraControls rather than the project (DepthBuffer) camera.
 
-    Viewer
-        How can the View dynamically switch between Perspective and Orthographic cameras?
-            camera setter does call this.initializeInputControls.
+        Viewers/Viewer.ts <-> Viewers/CameraControls.ts
+            Find all the paths that modify the camera of a Viewer.
+                Viewer.setCameraToStandardView
+                Viewer.camera =
+            Can synchronizeCameraSettings be called from CameraControls (to eliminate circular dependency)?
+
+        Update the CameraControls to hide the Perspective properties.
+            Field of View
+
+    Circular Dependencies
+        Viewers/MeshViewer.ts <-> Viewers/MeshViewerControls.ts
+        Viewers/ModelViewer.ts <-> Viewers/ModelViewerControls.ts
 
     OrthographicTrackballControls
         Use Parametric test model.
@@ -15,10 +26,6 @@ Add OrthographicTrackballControls.
         Fit does not work.
         House (Front) yielded a division by zero.
         Add keyboard shortcut handling.
-
-    CameraControls
-        Update the CameraControls to hide the Perspective properties.
-            Field of View
 
     Tests
         Test SaveRelief (UnitTests.comparePerspectiveCameras).

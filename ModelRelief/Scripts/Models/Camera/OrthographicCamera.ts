@@ -44,5 +44,15 @@ export class OrthographicCamera extends BaseCamera {
 
         return new THREE.Vector2(nearWidth, nearHeight);
     }
+
+    /**
+     * Returns the extents of the far camera plane.
+     * @returns {THREE.Vector2}
+     */
+    public getFarPlaneExtents(): THREE.Vector2 {
+        // near = far
+        return this.getNearPlaneExtents();
+    }
+
 //#endregion
 }

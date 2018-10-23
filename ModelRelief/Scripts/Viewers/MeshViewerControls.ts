@@ -7,6 +7,7 @@
 
 import * as dat from "dat-gui";
 import {ElementAttributes, ElementIds} from "Scripts/System/Html";
+import {MeshViewer} from "Scripts/Viewers/MeshViewer";
 
 /**
  * @class
@@ -24,14 +25,14 @@ class MeshViewerSettings {
  */
 export class MeshViewerControls {
 
-    public _meshViewer: any;                             // associated viewer
-    public _meshViewerSettings: MeshViewerSettings;              // UI settings
+    private _meshViewer: MeshViewer;                                // associated viewer
+    private _meshViewerSettings: MeshViewerSettings;                // UI settings
 
     /**
      * Creates an instance of MeshViewerControls.
      * @param {MeshViewer} meshViewer
      */
-    constructor(meshViewer: any) {
+    constructor(meshViewer: MeshViewer) {
 
         this._meshViewer = meshViewer;
 
