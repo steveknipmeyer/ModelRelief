@@ -130,24 +130,26 @@ export class ComposerView {
             const useTestModels = false;
             const loader = new Loader();
 
-            function onNewModel(modelGroup: THREE.Group) {
-                this._modelView.modelViewer.setModelGroup(modelGroup);
-
-                // dispatch ComposerViewInitialized event
-                this.eventManager.dispatchEvent(this, EventType.ComposerViewInitialized);
-            }
-
             // Model
+            let modelLoadedPromise: Promise<THREE.Group>;
             if (useTestModels) {
-                loader.loadParametricTestModelAsync(TestModel.Checkerboard).then(onNewModel.bind(this));
+                modelLoadedPromise = loader.loadParametricTestModelAsync(TestModel.Checkerboard);
             } else {
-                loader.loadModel3dAsync(model3d).then(onNewModel.bind(this));
+                modelLoadedPromise = loader.loadModel3dAsync(model3d);
             }
+            modelLoadedPromise.then ((theModel: THREE.Group) => {
+                this._modelView.modelViewer.setModelGroup(theModel);
+            });
 
             // Mesh
-            loader.loadMeshAsync(this.mesh).then((theMesh) => {
+            const meshLoadedPromise = loader.loadMeshAsync(this.mesh).then((theMesh: THREE.Group) => {
                 this._meshView.meshViewer.setModelGroup (theMesh);
                 this._meshView.meshViewer.setCameraToStandardView(StandardView.Top);
+            });
+
+            Promise.all([modelLoadedPromise, meshLoadedPromise]).then(() => {
+                // dispatch ComposerViewInitialized event
+                this.eventManager.dispatchEvent(this, EventType.ComposerViewInitialized);
             });
         });
     }

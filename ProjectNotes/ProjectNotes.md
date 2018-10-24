@@ -3,11 +3,6 @@
 
 #### Short Term
     Move StandardView keyboard handling to CameraControls?
-    Remove Viewer.InitializeUIControls?
-    Move construction of ComposerController into ComposerView.
-        Remove ComposerViewInitialized event.
-
-    Emit ComposerViewInitialized after both Model and Mesh loaded.
 
     CameraControls
         Update the CameraControls to hide the Perspective properties.
