@@ -153,7 +153,7 @@ export class Loader {
      * @param modelType Test model type (Sphere, Box, etc.)
      * @returns {Promise<THREE.Group>}
      */
-    public async loadParametricTestModel(modelType: TestModel): Promise<THREE.Group> {
+    public async loadParametricTestModelAsync(modelType: TestModel): Promise<THREE.Group> {
 
         const loader = new TestModelLoader();
         return loader.loadModelAsync(modelType);

@@ -8,7 +8,9 @@
 
 import {FileModel} from "Scripts/Api/V1/Models/FileModel";
 import {ElementIds} from "Scripts/System/Html";
+import {CameraControls} from "Scripts/Viewers/CameraControls";
 import {MeshViewer} from "Scripts/Viewers/MeshViewer";
+import {MeshViewerControls} from "Scripts/Viewers/MeshViewerControls";
 
 /**
  * @description UI View of a Mesh.
@@ -17,8 +19,10 @@ import {MeshViewer} from "Scripts/Viewers/MeshViewer";
  */
 export class MeshView {
 
-    public _containerId: string;
-    public _meshViewer: MeshViewer;
+    private _containerId: string;
+    private _meshViewer: MeshViewer;
+    private _cameraControls: CameraControls;
+    private _meshViewerControls: MeshViewerControls;
 
     /**
      * Creates an instance of MeshView.
@@ -65,6 +69,17 @@ export class MeshView {
 
         // Mesh Viewer
         this._meshViewer = new MeshViewer("MeshViewer", ElementIds.MeshCanvas, model);
+
+        // Camera Controls
+        const cameraControlsOptions = {
+            cameraHelper     : false,
+            fieldOfView      : false,
+            clippingControls : false,
+        };
+        this._cameraControls = new CameraControls(this._meshViewer, cameraControlsOptions);
+
+        // MeshViewer Controls
+        this._meshViewerControls = new MeshViewerControls(this._meshViewer);
     }
 
 //#endregion

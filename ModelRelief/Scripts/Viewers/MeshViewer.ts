@@ -9,7 +9,6 @@ import {FileModel} from "Scripts/Api/V1/Models/FileModel";
 import {Graphics} from "Scripts/Graphics/Graphics";
 import {Mesh3d} from "Scripts/Graphics/Mesh3d";
 import {Mesh} from "Scripts/Models/Mesh/Mesh";
-import {MeshViewerControls} from "Scripts/Viewers/MeshViewerControls";
 import {Viewer} from "Scripts/Viewers/Viewer";
 import * as THREE from "three";
 
@@ -22,9 +21,6 @@ import * as THREE from "three";
 export class MeshViewer extends Viewer {
 
     public mesh: Mesh;                                        // active Mesh
-
-    // Private
-    private _meshViewerControls: MeshViewerControls;            // UI controls
 
     /**
      * Creates an instance of MeshViewer.
@@ -74,13 +70,7 @@ export class MeshViewer extends Viewer {
      */
     public initializeUIControls() {
 
-        const cameraControlOptions = {
-            cameraHelper     : false,
-            fieldOfView      : false,
-            clippingControls : false,
-        };
-        super.initializeUIControls(cameraControlOptions);
-        this._meshViewerControls = new MeshViewerControls(this);
+        super.initializeUIControls();
     }
 //#endregion
 }

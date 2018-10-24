@@ -10,7 +10,6 @@ import * as THREE from "three";
 import {FileModel} from "Scripts/Api/V1/Models/FileModel";
 import {Model3d} from "Scripts/Models/Model3d/Model3d";
 import {EventType} from "Scripts/System/EventManager";
-import {ModelViewerControls} from "Scripts/Viewers/ModelViewerControls";
 import {Viewer} from "Scripts/Viewers/Viewer";
 
 const ObjectNames = {
@@ -26,9 +25,6 @@ const ObjectNames = {
 export class ModelViewer extends Viewer {
 
     public model3d: Model3d;                                      // active Model3d
-
-    // Private
-    private _modelViewerControls: ModelViewerControls;             // UI controls
 
     /**
      * Creates an instance of ModelViewer.
@@ -87,7 +83,6 @@ export class ModelViewer extends Viewer {
     public initializeUIControls() {
 
         super.initializeUIControls();
-        this._modelViewerControls = new ModelViewerControls(this);
     }
 //#endregion
 

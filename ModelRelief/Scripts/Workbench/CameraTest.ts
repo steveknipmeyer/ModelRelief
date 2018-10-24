@@ -102,9 +102,8 @@ export class App {
         // The bounding far plane is the minimum Z of the bounding box.
         const nearPlane = -boundingBoxView.max.z;
         const farPlane  = -boundingBoxView.min.z;
-
-        this._viewer.cameraControls.settings.camera.viewCamera.near = nearPlane;
-        this._viewer.cameraControls.settings.camera.viewCamera.far  = farPlane;
+        this._viewer.camera.near = nearPlane;
+        this._viewer.camera.far  = farPlane;
 
         this._viewer.camera.updateProjectionMatrix();
     }

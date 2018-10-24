@@ -8,7 +8,9 @@
 
 import {FileModel} from "Scripts/Api/V1/Models/FileModel";
 import {ElementIds} from "Scripts/System/Html";
+import {CameraControls, ICameraControlsOptions} from "Scripts/Viewers/CameraControls";
 import {ModelViewer} from "Scripts/Viewers/ModelViewer";
+import {ModelViewerControls} from "Scripts/Viewers/ModelViewerControls";
 
 /**
  * @description Represents a UI view of a 3D model.
@@ -17,8 +19,10 @@ import {ModelViewer} from "Scripts/Viewers/ModelViewer";
  */
 export class ModelView {
 
-    public _containerId: string;
-    public _modelViewer: ModelViewer;
+    private _containerId: string;
+    private _modelViewer: ModelViewer;
+    private _cameraControls: CameraControls;
+    private _modelViewerControls: ModelViewerControls;
 
     /**
      * Creates an instance of ModelView.
@@ -65,6 +69,13 @@ export class ModelView {
 
         // Model Viewer
         this._modelViewer = new ModelViewer("ModelViewer", ElementIds.ModelCanvas, model);
+
+        // Camera Controls
+        const cameraControlsOptions = {};
+        this._cameraControls = new CameraControls(this._modelViewer, cameraControlsOptions);
+
+        // Model Viewer Controls
+        this._modelViewerControls = new ModelViewerControls(this._modelViewer);
     }
 
 //#endregion

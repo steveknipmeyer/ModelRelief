@@ -16,6 +16,7 @@ import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
 import {CameraSettings} from "Scripts/Models/Camera/Camerasettings";
+import {EventType, IMREvent} from "Scripts/System/EventManager";
 import {ElementAttributes, ElementIds} from "Scripts/System/Html";
 import {Viewer} from "Scripts/Viewers/Viewer";
 
@@ -91,13 +92,50 @@ export class CameraControls {
 
         // UI Controls
         this.initializeControls(controlOptions);
+
+        // Events
+        this.initializeViewerEventListeners();
+    }
+
+    /**
+     * @description Synchronize the UI camera settings with the target camera.
+     */
+    public synchronizeCameraSettings() {
+        // update settings camera from Viewer
+
+        this.settings.camera.viewCamera = this.viewer.camera;
+        this.settings.isPerspective = this.viewer.camera instanceof THREE.PerspectiveCamera;
     }
 
 //#region Event Handlers
     /**
+     * @description Initialize event listeners for controlled Viewer.
+     * @private
+     */
+    private initializeViewerEventListeners(): void {
+
+        // Camera Properties
+        this.viewer.eventManager.addEventListener(EventType.ViewerCameraProperties, (event: IMREvent, camera: IThreeBaseCamera) => {
+            const viewer = event.target as Viewer;
+            console.log (`EventType.ViewerCameraProperties: Viewer = ${viewer.name}, Camera = ${camera}`);
+
+            this.settings.camera.viewCamera = this.viewer.camera;
+            this.settings.isPerspective = this.viewer.camera instanceof THREE.PerspectiveCamera;
+            });
+
+        // Camera Standard View
+        this.viewer.eventManager.addEventListener(EventType.ViewerCameraStandardView, (event: IMREvent, standardView: StandardView) => {
+            const viewer = event.target as Viewer;
+            console.log (`EventType.ViewerCameraStandardView:: Viewer = ${viewer.name}, View = ${standardView}`);
+
+            this.settings.standardView = standardView;
+        });
+        }
+
+    /**
      * @description Fits the active view.
      */
-    public fitView(): void {
+    private fitView(): void {
 
         this.viewer.fitView();
     }
@@ -105,7 +143,7 @@ export class CameraControls {
     /**
      * @description Adds a camera visualization graphic to the scene.
      */
-    public addCameraHelper(): void {
+    private addCameraHelper(): void {
 
         // remove existing
         Graphics.removeAllByName(this.viewer.scene, ObjectNames.CameraHelper);
@@ -124,7 +162,7 @@ export class CameraControls {
     /**
      * @description Force the far clipping plane to the model extents.
      */
-    public boundClippingPlanes(): void {
+    private boundClippingPlanes(): void {
 
         const clippingPlanes = this.settings.camera.getBoundingClippingPlanes(this.viewer.modelGroup);
 
@@ -143,7 +181,7 @@ export class CameraControls {
      * @description Initialize the view settings that are controllable by the user
      * @param {ICameraControlsOptions} [controlOptions] Options to include/exclude specialized controls.
      */
-    public initializeControls(controlOptions: ICameraControlsOptions = {}) {
+    private initializeControls(controlOptions: ICameraControlsOptions = {}) {
 
         const {
             cameraHelper     : showCameraHelper     = true,
@@ -273,15 +311,5 @@ export class CameraControls {
         }
 
         cameraOptions.open();
-    }
-
-    /**
-     * @description Synchronize the UI camera settings with the target camera.
-     */
-    public synchronizeCameraSettings() {
-        // update settings camera from Viewer
-
-        this.settings.camera.viewCamera = this.viewer.camera;
-        this.settings.isPerspective = this.viewer.camera instanceof THREE.PerspectiveCamera;
     }
 }

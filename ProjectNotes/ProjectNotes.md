@@ -1,21 +1,17 @@
 ﻿### Tasks
 #### Commit Notes
-Add enable property to StopWatch so that console messages may be suppressed.
 
 #### Short Term
-    CameraControls
-        Viewers/Viewer.ts <-> Viewers/CameraControls.ts
-            Find all the paths that modify the camera of a Viewer.
-                Viewer.setCameraToStandardView
-                Viewer.camera =
-            Can synchronizeCameraSettings be called from CameraControls (to eliminate circular dependency)?
+    Move StandardView keyboard handling to CameraControls?
+    Remove Viewer.InitializeUIControls?
+    Move construction of ComposerController into ComposerView.
+        Remove ComposerViewInitialized event.
 
+    Emit ComposerViewInitialized after both Model and Mesh loaded.
+
+    CameraControls
         Update the CameraControls to hide the Perspective properties.
             Field of View
-
-    Circular Dependencies
-        Viewers/MeshViewer.ts <-> Viewers/MeshViewerControls.ts
-        Viewers/ModelViewer.ts <-> Viewers/ModelViewerControls.ts
 
     OrthographicTrackballControls
         Use Parametric test model.

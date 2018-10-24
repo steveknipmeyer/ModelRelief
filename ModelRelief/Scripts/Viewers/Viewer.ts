@@ -11,10 +11,9 @@ import {FileModel} from "Scripts/Api/V1/Models/FileModel";
 import {Graphics, ObjectNames} from "Scripts/Graphics/Graphics";
 import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
 import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
-import {EventManager} from "Scripts/System/EventManager";
+import {EventManager, EventType} from "Scripts/System/EventManager";
 import {ILogger} from "Scripts/System/Logger";
 import {Services} from "Scripts/System/Services";
-import {CameraControls, ICameraControlsOptions} from "Scripts/Viewers/CameraControls";
 import {OrthographicTrackballControls} from "Scripts/Viewers/OrthographicTrackballControls";
 import {TrackballControls} from "Scripts/Viewers/TrackballControls";
 
@@ -24,8 +23,6 @@ import {TrackballControls} from "Scripts/Viewers/TrackballControls";
  * @class Viewer
  */
 export class Viewer {
-
-    public cameraControls: CameraControls   = null;
 
     // Protected
     protected _root: THREE.Object3D            = null;
@@ -114,8 +111,7 @@ export class Viewer {
         this.camera.name = this.name;
         this.initializeInputControls();
 
-        if (this.cameraControls)
-            this.cameraControls.synchronizeCameraSettings();
+        this.eventManager.dispatchEvent(this, EventType.ViewerCameraProperties, camera);
         }
 
     /**
@@ -271,11 +267,8 @@ export class Viewer {
 
     /**
      * @description Sets up the user input controls (Settings)
-     * @param {ICameraControlsOptions} [cameraControlsOptions] Options to include/exclude specialized controls.
      */
-    public initializeUIControls(cameraControlsOptions?: ICameraControlsOptions) {
-
-        this.cameraControls = new CameraControls(this, cameraControlsOptions);
+    public initializeUIControls() {
     }
 
     /**
@@ -323,8 +316,7 @@ export class Viewer {
                 default:
                     return;
             }
-            this.camera = CameraHelper.getStandardViewCamera(standardView, this.camera, this.modelGroup);
-            this.cameraControls.settings.standardView = standardView;
+            this.setCameraToStandardView(standardView);
     }, false);
     }
 
@@ -368,15 +360,16 @@ export class Viewer {
 
 //#region Camera
     /**
-     * @description Sets the view camera properties to the given settings.
-     * @param {StandardView} view Camera settings to apply.
+     * @description Sets the view camera properties to the given view.
+     * @param {StandardView} standardView Standard camera view to apply.
      */
-    public setCameraToStandardView(view: StandardView) {
+    public setCameraToStandardView(standardView: StandardView) {
 
-        const standardViewCamera = CameraHelper.getStandardViewCamera(view, this.camera, this.modelGroup);
+        const standardViewCamera = CameraHelper.getStandardViewCamera(standardView, this.camera, this.modelGroup);
+
         this.camera = standardViewCamera;
 
-        this.cameraControls.synchronizeCameraSettings();
+        this.eventManager.dispatchEvent(this, EventType.ViewerCameraStandardView, standardView);
     }
 
     /**

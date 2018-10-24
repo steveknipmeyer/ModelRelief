@@ -139,7 +139,7 @@ export class ComposerView {
 
             // Model
             if (useTestModels) {
-                loader.loadParametricTestModel(TestModel.Checkerboard).then(onNewModel.bind(this));
+                loader.loadParametricTestModelAsync(TestModel.Checkerboard).then(onNewModel.bind(this));
             } else {
                 loader.loadModel3dAsync(model3d).then(onNewModel.bind(this));
             }

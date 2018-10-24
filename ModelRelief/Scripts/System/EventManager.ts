@@ -12,7 +12,7 @@
  */
 export interface IMREvent {
 
-    type: EventType;
+    eventType: EventType;
     target: any;
 }
 
@@ -25,8 +25,10 @@ export interface IMREvent {
 export enum EventType {
 
     None,
-    NewModel,
-    ComposerViewInitialized,
+    NewModel,                                   // Viewer: new model loaded
+    ViewerCameraProperties,                     // Viewer: Camera property change
+    ViewerCameraStandardView,                   // Viewer: Camera oriented in StandardView
+    ComposerViewInitialized,                    // ComposerView: ModelViewer, MeshViewer initialized
 }
 
 type Listener = (event: IMREvent, ...args: any[]) => void;
@@ -123,25 +125,25 @@ export class EventManager {
 
     /**
      * @description Fire an event type.
-     * @param {*} target Event target.
-     * @param {EventType} eventType The type of event that gets fired.
+     * @param {*} theTarget Event target.
+     * @param {EventType} theEventType The type of event that gets fired.
      * @param {...any[]} args Arguments for event.
      * @returns {void}
      */
-    public dispatchEvent(target: any, eventType: EventType, ...args: any[]): void {
+    public dispatchEvent(theTarget: any, theEventType: EventType, ...args: any[]): void {
 
         // no events defined; do nothing
         if (this._listeners === undefined)
             return;
 
         const listeners     = this._listeners;
-        const listenerArray = listeners[eventType];
+        const listenerArray = listeners[theEventType];
 
         if (listenerArray !== undefined) {
 
-            const theEvent = {
-                type   : eventType,         // type
-                target,             // set target to instance triggering the event
+            const theEvent: IMREvent = {
+                eventType: theEventType,       // type
+                target:    theTarget,          // instance triggering the event
             };
 
             // duplicate original array of listeners
