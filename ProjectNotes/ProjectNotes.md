@@ -1,8 +1,5 @@
 ﻿### Tasks
 #### Commit Notes
-Add diagnostic logging to OrthographicTrackballControls.
-Add Format class for formatting support of Vectors, etc.
-CameraHelper.getFitViewCamera resets Orthographic zoom property.
 
 #### Short Term
     CameraControls
@@ -10,8 +7,10 @@ CameraHelper.getFitViewCamera resets Orthographic zoom property.
             Field of View
 
     OrthographicTrackballControls
-        Mousewheel does not work.
-        House (Front) yielded a division by zero.
+        The aspect ratio of a fit Orthographic view is incorrect.
+        The mesh generated from a zoomed in Orthographic view does not fit properly.
+
+        House can yield a division by zero.
             https://stackoverflow.com/questions/34326722/divide-by-zero-encountered-in-double-scalars-for-derivative-calculations
         Add keyboard shortcut handling.
             How can CameraControls and the OTC both install keyboard listeners?

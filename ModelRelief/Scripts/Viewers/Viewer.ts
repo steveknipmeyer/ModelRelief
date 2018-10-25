@@ -38,7 +38,7 @@ export class Viewer {
     private _renderer: THREE.WebGLRenderer   = null;
     private _canvas: HTMLCanvasElement       = null;
     private _width: number                   = 0;
-    private _height: number                  = 0;
+           private _height: number                  = 0;
 
     private _camera: IThreeBaseCamera        = null;
 

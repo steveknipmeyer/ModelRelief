@@ -127,7 +127,7 @@ export class ComposerView {
             this._depthBufferView = new DepthBufferView(ElementIds.DepthBufferView, depthBuffer);
 
             // load models; model event handlers in Viewers now initialized
-            const useTestModels = true;
+            const useTestModels = false;
             const loader = new Loader();
 
             // Model

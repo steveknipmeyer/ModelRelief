@@ -28,7 +28,7 @@ export function OrthographicTrackballControls ( object, domElement ) {
 	this.radius = 0;
 
 	this.rotateSpeed = 1.0;
-	this.zoomSpeed = 1.2;
+	this.zoomSpeed = 1.5;
 
 	this.noRotate = false;
 	this.noZoom = false;
@@ -251,7 +251,6 @@ export function OrthographicTrackballControls ( object, domElement ) {
 			var factor = 1.0 + ( _zoomEnd.y - _zoomStart.y ) * _this.zoomSpeed;
 
 			if ( Math.abs( factor - 1.0 ) > EPS && factor > 0.0 ) {
-
 				_this.object.zoom /= factor;
 
 				if ( _this.staticMoving ) {
@@ -318,14 +317,14 @@ export function OrthographicTrackballControls ( object, domElement ) {
 
 		this.updateCount += 1;
 		if ((this.updateCount % 50) === 0) {
-			console.log (`zoom: ${Format.formatNumber(object.zoom)}`);
-			console.log (Format.formatVector3("position", object.position));
-			console.log (Format.formatVector3("target", this.target));
-			console.log (Format.formatVector3("eye", _eye));
+			// console.log (`zoom: ${Format.formatNumber(object.zoom)}`);
+			// console.log (Format.formatVector3("position", object.position));
+			// console.log (Format.formatVector3("target", this.target));
+			// console.log (Format.formatVector3("eye", _eye));
 
-			let frustum = new THREE.Vector4(object.left, object.righ, object.top, object.bottom);
-			console.log (Format.formatVector4("frustum", frustum));
-			console.log ("");
+			// let frustum = new THREE.Vector4(object.left, object.righ, object.top, object.bottom);
+			// console.log (Format.formatVector4("frustum", frustum));
+			// console.log ("");
 		}
 
 		_eye.subVectors( _this.object.position, _this.target );
@@ -513,7 +512,25 @@ export function OrthographicTrackballControls ( object, domElement ) {
 
 		event.preventDefault();
 		event.stopPropagation();
-		_zoomStart.y += event.deltaY * 0.01;
+
+		switch ( event.deltaMode ) {
+
+			case 2:
+				// Zoom in pages
+				_zoomStart.y -= event.deltaY * 0.025;
+				break;
+
+			case 1:
+                 // Zoom in lines
+				_zoomStart.y -= event.deltaY * 0.01;
+				break;
+
+			default:
+				// undefined, 0, assume pixels
+				_zoomStart.y -= event.deltaY * 0.00025;
+				break;
+
+		}
 
 		_this.dispatchEvent( startEvent );
 		_this.dispatchEvent( endEvent );
