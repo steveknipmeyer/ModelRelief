@@ -102,7 +102,9 @@ export class CameraHelper {
         // Orthographic
         if (camera instanceof THREE.OrthographicCamera) {
             // For orthographic cameras, Z has no effect on the view scale.
-            // Instead, adjust the clipping planes to fit the model bounding box.
+            // Instead, adjust the frustum planes to fit the model bounding box.
+
+            camera.zoom = 1;
 
             camera.left   = -halfBoundingBoxViewXExtents;
             camera.right  = +halfBoundingBoxViewXExtents;

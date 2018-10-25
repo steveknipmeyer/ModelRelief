@@ -7,8 +7,11 @@
 'use strict';
 
 import * as THREE from 'three';
+import {Format} from "Scripts/System/Format";
 
 export function OrthographicTrackballControls ( object, domElement ) {
+
+	this.updateCount = 0;
 
 	var _this = this;
 	var STATE = { NONE: - 1, ROTATE: 0, ZOOM: 1, PAN: 2, TOUCH_ROTATE: 3, TOUCH_ZOOM_PAN: 4 };
@@ -313,6 +316,18 @@ export function OrthographicTrackballControls ( object, domElement ) {
 
 	this.update = function () {
 
+		this.updateCount += 1;
+		if ((this.updateCount % 50) === 0) {
+			console.log (`zoom: ${Format.formatNumber(object.zoom)}`);
+			console.log (Format.formatVector3("position", object.position));
+			console.log (Format.formatVector3("target", this.target));
+			console.log (Format.formatVector3("eye", _eye));
+
+			let frustum = new THREE.Vector4(object.left, object.righ, object.top, object.bottom);
+			console.log (Format.formatVector4("frustum", frustum));
+			console.log ("");
+		}
+
 		_eye.subVectors( _this.object.position, _this.target );
 
 		if ( ! _this.noRotate ) {
@@ -500,12 +515,8 @@ export function OrthographicTrackballControls ( object, domElement ) {
 		event.stopPropagation();
 		_zoomStart.y += event.deltaY * 0.01;
 
-		console.log (`event.deltaY = ${event.deltaY}`)
-		console.log (`_zoomStart.y = ${_zoomStart.y}`)
-
 		_this.dispatchEvent( startEvent );
 		_this.dispatchEvent( endEvent );
-
 	}
 
 	function touchstart( event ) {

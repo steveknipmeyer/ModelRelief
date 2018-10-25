@@ -43,6 +43,5 @@ export class Tools {
      */
     constructor() {
     }
-
 //#endregion
 }

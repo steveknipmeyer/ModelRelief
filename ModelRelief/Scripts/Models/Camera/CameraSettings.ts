@@ -19,9 +19,9 @@ export class CameraSettings  {
     public static DefaultFieldOfView: number =   37;       // 35mm vertical : https://www.nikonians.org/reviews/fov-tables
 
     // Orthographics
-    public static FrustrumPlaneOffset: number = 100;
-    public static DefaultLeftPlane: number     = -CameraSettings.FrustrumPlaneOffset;
-    public static DefaultRightPlane: number    = +CameraSettings.FrustrumPlaneOffset;
-    public static DefaultTopPlane: number      = +CameraSettings.FrustrumPlaneOffset;
-    public static DefaultBottomPlane: number   = -CameraSettings.FrustrumPlaneOffset;
+    public static FrustumPlaneOffset: number = 100;
+    public static DefaultLeftPlane: number     = -CameraSettings.FrustumPlaneOffset;
+    public static DefaultRightPlane: number    = +CameraSettings.FrustumPlaneOffset;
+    public static DefaultTopPlane: number      = +CameraSettings.FrustumPlaneOffset;
+    public static DefaultBottomPlane: number   = -CameraSettings.FrustumPlaneOffset;
 }

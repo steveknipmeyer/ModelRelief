@@ -331,7 +331,7 @@ export class Viewer {
         this.initializeLighting();
         this.initializeInputControls();
         this.initializeUIControls();
-        this.initializeKeyboardShortcuts();
+//      this.initializeKeyboardShortcuts();
 
         this.onResizeWindow();
         window.addEventListener("resize", this.onResizeWindow.bind(this), false);

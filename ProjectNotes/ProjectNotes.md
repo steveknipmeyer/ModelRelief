@@ -1,5 +1,8 @@
 ﻿### Tasks
 #### Commit Notes
+Add diagnostic logging to OrthographicTrackballControls.
+Add Format class for formatting support of Vectors, etc.
+CameraHelper.getFitViewCamera resets Orthographic zoom property.
 
 #### Short Term
     CameraControls
@@ -7,18 +10,17 @@
             Field of View
 
     OrthographicTrackballControls
-        Use Parametric test model.
-        Zoom does not work in both directions.
-        Fit does not work.
+        Mousewheel does not work.
         House (Front) yielded a division by zero.
             https://stackoverflow.com/questions/34326722/divide-by-zero-encountered-in-double-scalars-for-derivative-calculations
         Add keyboard shortcut handling.
+            How can CameraControls and the OTC both install keyboard listeners?
             Move StandardView keyboard handling to CameraControls?
 
     Tests
         Test SaveRelief (UnitTests.comparePerspectiveCameras).
         UnitTests.ts
-        CaemraTests.ts
+        CameraTests.ts
 
 
     Add madge circular dependency check to Builder.

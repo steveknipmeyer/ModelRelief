@@ -13,6 +13,23 @@
         "curly": [false],
         "max-classes-per-file": [true, 10],
         "max-line-length": false,
+        "member-ordering": [
+            true,
+            {
+              "order": [
+                "public-static-field",
+                "private-static-field",
+                "public-instance-field",
+                "private-instance-field",
+
+                "public-constructor",
+
+                "public-instance-method",
+                "protected-instance-method",
+                "private-instance-method"
+              ]
+            }
+          ],
         "new-parens": true,
         "no-arg": true,
         "no-bitwise": false,
