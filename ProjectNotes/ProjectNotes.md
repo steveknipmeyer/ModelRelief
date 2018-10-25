@@ -2,8 +2,6 @@
 #### Commit Notes
 
 #### Short Term
-    Move StandardView keyboard handling to CameraControls?
-
     CameraControls
         Update the CameraControls to hide the Perspective properties.
             Field of View
@@ -13,7 +11,9 @@
         Zoom does not work in both directions.
         Fit does not work.
         House (Front) yielded a division by zero.
+            https://stackoverflow.com/questions/34326722/divide-by-zero-encountered-in-double-scalars-for-derivative-calculations
         Add keyboard shortcut handling.
+            Move StandardView keyboard handling to CameraControls?
 
     Tests
         Test SaveRelief (UnitTests.comparePerspectiveCameras).

@@ -97,16 +97,6 @@ export class CameraControls {
         this.initializeViewerEventListeners();
     }
 
-    /**
-     * @description Synchronize the UI camera settings with the target camera.
-     */
-    public synchronizeCameraSettings() {
-        // update settings camera from Viewer
-
-        this.settings.camera.viewCamera = this.viewer.camera;
-        this.settings.isPerspective = this.viewer.camera instanceof THREE.PerspectiveCamera;
-    }
-
 //#region Event Handlers
     /**
      * @description Initialize event listeners for controlled Viewer.
@@ -116,18 +106,12 @@ export class CameraControls {
 
         // Camera Properties
         this.viewer.eventManager.addEventListener(EventType.ViewerCameraProperties, (event: IMREvent, camera: IThreeBaseCamera) => {
-            const viewer = event.target as Viewer;
-            console.log (`EventType.ViewerCameraProperties: Viewer = ${viewer.name}, Camera = ${camera}`);
-
-            this.settings.camera.viewCamera = this.viewer.camera;
-            this.settings.isPerspective = this.viewer.camera instanceof THREE.PerspectiveCamera;
+            this.settings.camera.viewCamera = camera;
+            this.settings.isPerspective = camera instanceof THREE.PerspectiveCamera;
             });
 
         // Camera Standard View
         this.viewer.eventManager.addEventListener(EventType.ViewerCameraStandardView, (event: IMREvent, standardView: StandardView) => {
-            const viewer = event.target as Viewer;
-            console.log (`EventType.ViewerCameraStandardView:: Viewer = ${viewer.name}, View = ${standardView}`);
-
             this.settings.standardView = standardView;
         });
         }
@@ -265,7 +249,6 @@ export class CameraControls {
                 orthograpicCamera.bottom = -farPlaneExtents.y / 2;
             }
             this.viewer.camera = newCamera;
-            this.synchronizeCameraSettings();
         });
 
         // Field of View

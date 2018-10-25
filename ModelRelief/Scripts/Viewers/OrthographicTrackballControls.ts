@@ -33,7 +33,7 @@ export function OrthographicTrackballControls ( object, domElement ) {
 	this.noRoll = false;
 
 	// ModelRelief
-	this.staticMoving = false;
+	this.staticMoving = true;
 	this.dynamicDampingFactor = 0.2;
 
 	this.keys = [ 65 /*A*/, 83 /*S*/, 68 /*D*/ ];
@@ -498,8 +498,11 @@ export function OrthographicTrackballControls ( object, domElement ) {
 
 		event.preventDefault();
 		event.stopPropagation();
-
 		_zoomStart.y += event.deltaY * 0.01;
+
+		console.log (`event.deltaY = ${event.deltaY}`)
+		console.log (`_zoomStart.y = ${_zoomStart.y}`)
+
 		_this.dispatchEvent( startEvent );
 		_this.dispatchEvent( endEvent );
 
