@@ -248,6 +248,7 @@ export class CameraControls {
                 orthograpicCamera.top    = +farPlaneExtents.y / 2;
                 orthograpicCamera.bottom = -farPlaneExtents.y / 2;
             }
+            newCamera.updateProjectionMatrix();
             this.viewer.camera = newCamera;
         });
 

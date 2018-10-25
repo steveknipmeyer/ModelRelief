@@ -229,7 +229,7 @@ export class Viewer {
      * @description Initialize the viewer camera
      */
     public initializeCamera() {
-        this.camera = CameraHelper.getStandardViewCamera(StandardView.Top, this.camera, this.modelGroup);
+        this.camera = CameraHelper.getStandardViewCamera(StandardView.Top, this.camera, this.aspectRatio, this.modelGroup);
     }
 
     /**
@@ -365,7 +365,7 @@ export class Viewer {
      */
     public setCameraToStandardView(standardView: StandardView) {
 
-        const standardViewCamera = CameraHelper.getStandardViewCamera(standardView, this.camera, this.modelGroup);
+        const standardViewCamera = CameraHelper.getStandardViewCamera(standardView, this.camera, this.aspectRatio, this.modelGroup);
 
         this.camera = standardViewCamera;
 
@@ -378,7 +378,7 @@ export class Viewer {
     public fitView() {
 
         CameraHelper.setDefaultClippingPlanes(this.camera);
-        this.camera = CameraHelper.getFitViewCamera (this.camera, this.modelGroup);
+        this.camera = CameraHelper.getFitViewCamera (this.camera, this.aspectRatio, this.modelGroup);
     }
 //#endregion
 

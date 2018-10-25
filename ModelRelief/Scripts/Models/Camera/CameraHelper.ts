@@ -60,10 +60,11 @@ export class CameraHelper {
      * @description Updates the camera to fit the model in the current view.
      * @static
      * @param {IThreeBaseCamera} camera Camera to update.
+     * @param {number} viewAspect Aspect ration of view.
      * @param {THREE.Group} modelGroup Model to fit.
      * @returns {IThreeBaseCamera}
      */
-    public static getFitViewCamera(cameraTemplate: IThreeBaseCamera, modelGroup: THREE.Group): IThreeBaseCamera {
+    public static getFitViewCamera(cameraTemplate: IThreeBaseCamera, viewAspect: number, modelGroup: THREE.Group): IThreeBaseCamera {
 
         const timerTag = Services.timer.mark("Camera.getFitViewCamera");
 
@@ -101,15 +102,25 @@ export class CameraHelper {
 
         // Orthographic
         if (camera instanceof THREE.OrthographicCamera) {
-            // For orthographic cameras, Z has no effect on the view scale.
-            // Instead, adjust the frustum planes to fit the model bounding box.
 
             camera.zoom = 1;
 
-            camera.left   = -halfBoundingBoxViewXExtents;
-            camera.right  = +halfBoundingBoxViewXExtents;
-            camera.top    = +halfBoundingBoxViewYExtents;
-            camera.bottom = -halfBoundingBoxViewYExtents;
+            // For orthographic cameras, Z has no effect on the view scale.
+            // Instead, adjust the frustum planes to fit the model bounding box.
+            const modelAspectRatio = halfBoundingBoxViewXExtents / halfBoundingBoxViewYExtents;
+            let halfCameraX;
+            let halfCameraY;
+            if (modelAspectRatio > viewAspect) {
+                halfCameraX = halfBoundingBoxViewXExtents;
+                halfCameraY = halfCameraX * viewAspect;
+            } else {
+                halfCameraY = halfBoundingBoxViewYExtents;
+                halfCameraX = halfCameraY / viewAspect;
+            }
+            camera.left   = -halfCameraX;
+            camera.right  = +halfCameraX;
+            camera.top    = +halfCameraY;
+            camera.bottom = -halfCameraY;
         }
 
         camera.lookAt(boundingBoxWorld.getCenter());
@@ -127,10 +138,11 @@ export class CameraHelper {
      * @static
      * @param {Camera.StandardView} view Standard view (Top, Left, etc.)
      * @param {THREE.Camera} viewCamera View camera.
+     * @param {number} viewAspect Aspect ration of view.
      * @param {THREE.Object3D} modelGroup Model to fit.
      * @returns {IThreeBaseCamera}
      */
-    public static getStandardViewCamera(view: StandardView, viewCamera: THREE.Camera, modelGroup: THREE.Group): IThreeBaseCamera {
+    public static getStandardViewCamera(view: StandardView, viewCamera: THREE.Camera, viewAspect: number, modelGroup: THREE.Group): IThreeBaseCamera {
 
         const timerTag = Services.timer.mark("Camera.getStandardView");
 
@@ -193,7 +205,7 @@ export class CameraHelper {
         camera.updateMatrixWorld(true);
         camera.updateProjectionMatrix();
 
-        camera = CameraHelper.getFitViewCamera(camera, modelGroup);
+        camera = CameraHelper.getFitViewCamera(camera, viewAspect, modelGroup);
 
         Services.timer.logElapsedTime(timerTag);
         return camera;

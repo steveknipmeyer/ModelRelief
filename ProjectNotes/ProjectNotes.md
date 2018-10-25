@@ -7,7 +7,6 @@
             Field of View
 
     OrthographicTrackballControls
-        The aspect ratio of a fit Orthographic view is incorrect.
         The mesh generated from a zoomed in Orthographic view does not fit properly.
 
         House can yield a division by zero.
