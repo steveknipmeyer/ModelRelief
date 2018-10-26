@@ -1,22 +1,36 @@
 ﻿### Tasks
 #### Commit Notes
-
 #### Short Term
+    Update Test JSON files.
+
+    Test Explorer.
+
+    Files.cs exception
+            Directory.Delete(path, recursive);
+
+    Why does Perspective -> Orthographic move the camera position to an extreme?
+
     CameraControls
         Update the CameraControls to hide the Perspective properties.
             Field of View
 
-    Review Fit View logic.
-        Should the clipping planes be set based on the Model?
-
-    Why does an incremental zoom sometimes reveal the mesh?
-        Review all the clipping plane logic.
-        far = 1000) ->
+    Should clipping planes be set based on the Model?
 
     OrthographicTrackballControls
-        House can yield a division by zero.
+        House (Orthographic Left)can yield a division by zero.
             https://stackoverflow.com/questions/34326722/divide-by-zero-encountered-in-double-scalars-for-derivative-calculations
-
+            [10:54:34 ERR] stderr = D:\ModelRelief\Solver\depthbuffer.py:272: RuntimeWarning: divide by zero encountered in true_divide
+            z_linear = (2.0 * self.camera.near * self.camera.far) / (self.camera.far + self.camera.near - (normalized * (self.camera.far - self.camera.near)))
+            D:\ModelRelief\Solver\difference.py:78: RuntimeWarning: invalid value encountered in subtract
+            difference = f_plus_delta - f
+            D:\ModelRelief\devenv\lib\site-packages\numpy\lib\function_base.py:2831: RuntimeWarning: invalid value encountered in ? (vectorized)
+            outputs = ufunc(*inputs)
+            ..\Solver\solver.py:180: RuntimeWarning: invalid value encountered in multiply
+            self.results.gradient_x.image = self.results.gradient_x.image * self.results.combined_mask.image
+            ..\Solver\solver.py:181: RuntimeWarning: invalid value encountered in multiply
+            self.results.gradient_y.image = self.results.gradient_y.image * self.results.combined_mask.image
+            ..\Solver\solver.py:257: RuntimeWarning: invalid value encountered in multiply
+            self.results.mesh_transformed.image = self.results.mesh_transformed.image * factor
     Tests
         ComposerController.SaveRelief (UnitTests.comparePerspectiveCameras).
         UnitTests.ts

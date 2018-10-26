@@ -93,7 +93,7 @@ class Benchmark:
         Relief C++ Gaussian filter.
         """
         for _ in range(self.trials):
-            result = ImageTransform.gaussian(a, mask, sigma)
+            result = ImageTransform.gaussian(a, mask, sigma, False)
         return result
 
     @benchmark()
@@ -102,7 +102,7 @@ class Benchmark:
         Relief C++ Gaussian filter.
         """
         for _ in range(self.trials):
-            result = ImageTransform.gaussian_mask(a, mask, sigma)
+            result = ImageTransform.gaussian(a, mask, sigma, True)
         return result
 
     def relief_filter(self, a: np.ndarray, mask: np.ndarray, sigma: float)->None :
@@ -186,7 +186,7 @@ class Benchmark:
 
             middle_row = int(self.rows / 2)
             middle_column = int(self.columns / 2)
-            assert filled[middle_row, middle_column] == value, f'relief_fill: Filled array value {filled[middle, middle]} is not equal to {value}'
+            assert filled[middle_row, middle_column] == value, f'relief_fill: Filled array value {filled[middle_row, middle_column]} is not equal to {value}'
 
     @benchmark()
     def np_fill(self, a: np.ndarray, value: float)-> None :
@@ -204,7 +204,7 @@ class Benchmark:
 
             middle_row = int(self.rows / 2)
             middle_column = int(self.columns / 2)
-            assert a[middle_row, middle_column] == value*1, f'np_fill: Filled array value {a[middle, middle]} is not equal to {value}'
+            assert a[middle_row, middle_column] == value*1, f'np_fill: Filled array value {a[middle_row, middle_column]} is not equal to {value}'
 
     def array_fill(self)->None :
         """
