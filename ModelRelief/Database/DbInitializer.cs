@@ -420,9 +420,11 @@ namespace ModelRelief.Database
                 new Camera
                 {
                     Name = "Top Camera", Description = "Aligned along negative Z",
+                    IsPerspective = true,
                     FieldOfView = Camera.DefaultFieldOfView,
                     AspectRatio = 1.0,
                     Near = Camera.DefaultNearClippingPlane, Far = Camera.DefaultFarClippingPlane,
+                    Left = -100, Right = 100, Top = 100, Bottom = -100,
 
                     PositionX = 0.0, PositionY = 0.0, PositionZ = 100.0,
                     EulerX = 0.0, EulerY = 0.0, EulerZ = -1.0, Theta = 0.0,
@@ -435,9 +437,11 @@ namespace ModelRelief.Database
                 new Camera
                 {
                     Name = "Isometric Camera", Description = "Isometric",
+                    IsPerspective = true,
                     FieldOfView = Camera.DefaultFieldOfView,
                     AspectRatio = 1.0,
                     Near = Camera.DefaultNearClippingPlane, Far = Camera.DefaultFarClippingPlane,
+                    Left = -100, Right = 100, Top = 100, Bottom = -100,
 
                     PositionX = 10.0, PositionY = 100.0, PositionZ = 100.0,
                     EulerX = -1.0, EulerY = -1.0, EulerZ = -1.0, Theta = 0.0,
@@ -451,9 +455,12 @@ namespace ModelRelief.Database
                 new Camera
                 {
                     Name = "Armadillo", Description = "Armadillo Model",
+                    IsPerspective = true,
                     FieldOfView = Camera.DefaultFieldOfView,
                     AspectRatio = 1.0,
                     Near = 232.05, Far = 339.50,
+                    Left = -100, Right = 100, Top = 100, Bottom = -100,
+
                     PositionX = -1.82, PositionY = 47.98, PositionZ = 262.32,
                     EulerX = 0.0475, EulerY = 0.0, EulerZ = 0.0, Theta = 1.0,
                     ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
@@ -464,9 +471,11 @@ namespace ModelRelief.Database
                 new Camera
                 {
                     Name = "Buddha", Description = "Buddha Model",
+                    IsPerspective = true,
                     FieldOfView = Camera.DefaultFieldOfView,
                     AspectRatio = 1.0,
                     Near = 222.23, Far = 283.75,
+                    Left = -100, Right = 100, Top = 100, Bottom = -100,
 
                     PositionX = -3.00, PositionY = 79.11, PositionZ = 252.03,
                     EulerX = -0.01, EulerY = -0.01, EulerZ = 0.0, Theta = 1.0,
@@ -478,9 +487,11 @@ namespace ModelRelief.Database
                 new Camera
                 {
                     Name = "Bunny", Description = "Bunny Model",
+                    IsPerspective = true,
                     FieldOfView = Camera.DefaultFieldOfView,
                     AspectRatio = 1.0,
                     Near = 132.85, Far = 201.95,
+                    Left = -100, Right = 100, Top = 100, Bottom = -100,
 
                     PositionX = -0.34, PositionY = 43.17, PositionZ = 167.44,
                     EulerX = 0.0, EulerY = 0.0, EulerZ = 0.0, Theta = 1.0,
@@ -492,9 +503,11 @@ namespace ModelRelief.Database
                 new Camera
                 {
                     Name = "Dolphin", Description = "Dolphin Model",
+                    IsPerspective = true,
                     FieldOfView = Camera.DefaultFieldOfView,
                     AspectRatio = 1.0,
                     Near = 355.49, Far = 800.22,
+                    Left = -100, Right = 100, Top = 100, Bottom = -100,
 
                     PositionX = 117.67, PositionY = -192.35, PositionZ = 511.19,
                     EulerX = 0.23, EulerY = 0.11, EulerZ = -0.03, Theta = 0.97,
@@ -506,9 +519,11 @@ namespace ModelRelief.Database
                 new Camera
                 {
                     Name = "Dragon", Description = "Dragon Model",
+                    IsPerspective = true,
                     FieldOfView = Camera.DefaultFieldOfView,
                     AspectRatio = 1.0,
                     Near = 145.41, Far = 190.31,
+                    Left = -100, Right = 100, Top = 100, Bottom = -100,
 
                     PositionX = -1.92, PositionY = 61.41, PositionZ = 160.73,
                     EulerX = -0.08, EulerY = -0.01, EulerZ = 0.0, Theta = 1.0,
@@ -520,23 +535,27 @@ namespace ModelRelief.Database
                 new Camera
                 {
                     Name = "House", Description = "House Model",
+                    IsPerspective = true,
                     FieldOfView = Camera.DefaultFieldOfView,
                     AspectRatio = 1.0,
-                    Near = 209.28, Far = 369.43,
+                    Near = 220.27, Far = 373.72,
+                    Left = -100, Right = 100, Top = 100, Bottom = -100,
 
-                    PositionX = 194.81, PositionY = 51.82, PositionZ = 214.04,
-                    EulerX = 0.04, EulerY = 0.36, EulerZ = -0.01, Theta = 0.93,
+                    PositionX = 221.37, PositionY = 59.82, PositionZ = 198.47,
+                    EulerX = 0.03, EulerY = 0.41, EulerZ = -0.01, Theta = 0.91,
                     ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
-                    UpX = 0.06, UpY = 1.0, UpZ = 0.07,
+                    UpX = 0.02, UpY = 1.0, UpZ = 0.05,
 
                     User = user, Project = FindByName<Project>(user, ProjectNames.Architecture),
                 },
                 new Camera
                 {
                     Name = "Lucy", Description = "Lucy Model",
+                    IsPerspective = true,
                     FieldOfView = Camera.DefaultFieldOfView,
                     AspectRatio = 1.0,
                     Near = 238.39, Far = 292.00,
+                    Left = -100, Right = 100, Top = 100, Bottom = -100,
 
                     PositionX = -3.16, PositionY = 79.32, PositionZ = 265.07,
                     EulerX = 0.0, EulerY = 0.0, EulerZ = 0.0, Theta = 1.0,
@@ -548,12 +567,14 @@ namespace ModelRelief.Database
                 new Camera
                 {
                     Name = "Roadster", Description = "Roadster Model",
+                    IsPerspective = true,
                     FieldOfView = Camera.DefaultFieldOfView,
                     AspectRatio = 1.0,
-                    Near = 534.84, Far = 1028.02,
+                    Near = 581.54, Far = 1080.66,
+                    Left = -100, Right = 100, Top = 100, Bottom = -100,
 
-                    PositionX = -419.61, PositionY = 189.93, PositionZ = 644.02,
-                    EulerX = -0.07, EulerY = -0.29, EulerZ = 0.0, Theta = 0.96,
+                    PositionX = -407.88, PositionY = 187.96, PositionZ = 712.46,
+                    EulerX = -0.07, EulerY = -0.26, EulerZ = -0.01, Theta = 0.96,
                     ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
                     UpX = 0.05, UpY = 0.99, UpZ = -0.13,
 
@@ -562,28 +583,16 @@ namespace ModelRelief.Database
                 new Camera
                 {
                     Name = "Statue", Description = "Statue Model",
+                    IsPerspective = true,
                     FieldOfView = Camera.DefaultFieldOfView,
                     AspectRatio = 1.0,
                     Near = 299.54, Far = 401.68,
+                    Left = -100, Right = 100, Top = 100, Bottom = -100,
 
                     PositionX = -4.16, PositionY = 72.49, PositionZ = 358.58,
                     EulerX = 0.04, EulerY = -0.01, EulerZ = 0.0, Theta = 1.0,
                     ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
                     UpX = 0.0, UpY = 1.0, UpZ = 0.0,
-
-                    User = user, Project = FindByName<Project>(user, "Stanford"),
-                },
-                new Camera
-                {
-                    Name = "Tyrannosaurus", Description = "Tyrannosarus Model",
-                    FieldOfView = Camera.DefaultFieldOfView,
-                    AspectRatio = 1.0,
-                    Near = 228.35, Far = 469.87,
-
-                    PositionX = 0.00, PositionY = 75.56, PositionZ = 310.00,
-                    EulerX = 0.00, EulerY = 0.0, EulerZ = 0.0, Theta = 1.00,
-                    ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
-                    UpX = 0.0, UpY = 1.00, UpZ = 0.0,
 
                     User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
@@ -600,6 +609,22 @@ namespace ModelRelief.Database
                     UpX = 0.0, UpY = 0.0, UpZ = -1.0,
 
                     User = user, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
+                },
+                new Camera
+                {
+                    Name = "Tyrannosaurus", Description = "Tyrannosarus Model",
+                    IsPerspective = true,
+                    FieldOfView = Camera.DefaultFieldOfView,
+                    AspectRatio = 1.0,
+                    Near = 228.35, Far = 469.87,
+                    Left = -100, Right = 100, Top = 100, Bottom = -100,
+
+                    PositionX = 0.00, PositionY = 75.56, PositionZ = 310.00,
+                    EulerX = 0.00, EulerY = 0.0, EulerZ = 0.0, Theta = 1.00,
+                    ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
+                    UpX = 0.0, UpY = 1.00, UpZ = 0.0,
+
+                    User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
             };
 

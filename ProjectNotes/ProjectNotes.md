@@ -1,20 +1,15 @@
 ﻿### Tasks
 #### Commit Notes
 #### Short Term
-    Update Test JSON files.
-
     Test Explorer.
 
+    Switching between Perspective and Orthographic can lead to anomalies in the generated mesh.
+        House (Front) is distorted.
+
+    Camera Pan is not preserved.
+
     Files.cs exception
-            Directory.Delete(path, recursive);
-
-    Why does Perspective -> Orthographic move the camera position to an extreme?
-
-    CameraControls
-        Update the CameraControls to hide the Perspective properties.
-            Field of View
-
-    Should clipping planes be set based on the Model?
+        Directory.Delete(path, recursive);
 
     OrthographicTrackballControls
         House (Orthographic Left)can yield a division by zero.
@@ -31,6 +26,15 @@
             self.results.gradient_y.image = self.results.gradient_y.image * self.results.combined_mask.image
             ..\Solver\solver.py:257: RuntimeWarning: invalid value encountered in multiply
             self.results.mesh_transformed.image = self.results.mesh_transformed.image * factor
+
+    Why does Perspective -> Orthographic move the camera position to an extreme?
+
+    CameraControls
+        Update the CameraControls to hide the Perspective properties.
+            Field of View
+
+    Should clipping planes be set based on the Model?
+
     Tests
         ComposerController.SaveRelief (UnitTests.comparePerspectiveCameras).
         UnitTests.ts
