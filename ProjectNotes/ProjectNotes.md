@@ -1,31 +1,20 @@
 ﻿### Tasks
 #### Commit Notes
+
 #### Short Term
-    Test Explorer.
+    Adjust the FE UI for Far Clipping Plane (10000);
+
+    Test model can deliver self.camera.near = 0 while self.camera.far seems fine.
+        Can finalizeClippingPlanes be incorrect for Orthographic cameras?
+            getBoundedClippingPlanes
 
     Switching between Perspective and Orthographic can lead to anomalies in the generated mesh.
         House (Front) is distorted.
 
+    Write a tool to update the Test models and DbInitializer.
+        Can the Mesh JSON files be transformed into C#?
+
     Camera Pan is not preserved.
-
-    Files.cs exception
-        Directory.Delete(path, recursive);
-
-    OrthographicTrackballControls
-        House (Orthographic Left)can yield a division by zero.
-            https://stackoverflow.com/questions/34326722/divide-by-zero-encountered-in-double-scalars-for-derivative-calculations
-            [10:54:34 ERR] stderr = D:\ModelRelief\Solver\depthbuffer.py:272: RuntimeWarning: divide by zero encountered in true_divide
-            z_linear = (2.0 * self.camera.near * self.camera.far) / (self.camera.far + self.camera.near - (normalized * (self.camera.far - self.camera.near)))
-            D:\ModelRelief\Solver\difference.py:78: RuntimeWarning: invalid value encountered in subtract
-            difference = f_plus_delta - f
-            D:\ModelRelief\devenv\lib\site-packages\numpy\lib\function_base.py:2831: RuntimeWarning: invalid value encountered in ? (vectorized)
-            outputs = ufunc(*inputs)
-            ..\Solver\solver.py:180: RuntimeWarning: invalid value encountered in multiply
-            self.results.gradient_x.image = self.results.gradient_x.image * self.results.combined_mask.image
-            ..\Solver\solver.py:181: RuntimeWarning: invalid value encountered in multiply
-            self.results.gradient_y.image = self.results.gradient_y.image * self.results.combined_mask.image
-            ..\Solver\solver.py:257: RuntimeWarning: invalid value encountered in multiply
-            self.results.mesh_transformed.image = self.results.mesh_transformed.image * factor
 
     Why does Perspective -> Orthographic move the camera position to an extreme?
 
@@ -34,6 +23,9 @@
             Field of View
 
     Should clipping planes be set based on the Model?
+
+    How can default settings be shared between C# and TypeScript?
+        Create a settings JSON file?
 
     Tests
         ComposerController.SaveRelief (UnitTests.comparePerspectiveCameras).

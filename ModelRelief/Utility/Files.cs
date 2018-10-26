@@ -120,8 +120,14 @@ namespace ModelRelief.Utility
         {
             if (!Directory.Exists(path))
                 return;
-
-            Directory.Delete(path, recursive);
+            try
+            {
+                Directory.Delete(path, recursive);
+            }
+            catch (System.IO.IOException)
+            {
+                Console.WriteLine($"The directory {path} is not empty and the contents cannot be entirely deleted.");
+            }
         }
 
         /// <summary>

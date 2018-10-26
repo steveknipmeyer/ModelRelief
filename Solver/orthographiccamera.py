@@ -26,7 +26,6 @@ class OrthographicCamera(Camera):
         Initialize an instance of an Orthographic Camera.
         """
         super().__init__(settings)
-        print("OrthographicCamera")
 
         self.left  = settings['Left']
         self.right = settings['Right']

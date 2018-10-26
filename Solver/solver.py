@@ -253,7 +253,14 @@ class Solver:
         # scale relief
         target_height = np.max(self.results.mesh_scaled.image)
         current_height = np.max(self.results.mesh_transformed.image)
-        factor = target_height / current_height
+
+        # N.B. Orthographic cameras can lead to flat meshes. There are no gradients because all surfaces are orthogonal to the camera.
+        if current_height == 0.0:
+            camera_type = "Perspective" if self.depth_buffer.camera.perspective else "Orthographic"
+            self.services.logger.logError(f"{camera_type} camera generated a flat mesh.")
+
+        factor = 1.0 if (current_height == 0.0) else (target_height / current_height)
+
         self.results.mesh_transformed.image = self.results.mesh_transformed.image * factor
 
     def write_mesh(self):

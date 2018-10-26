@@ -1,8 +1,8 @@
-﻿/* ----------------------    
+﻿/* ----------------------
     Bootstrap Overrides
 ------------------------*/
-body { 
-    background: #413D3D !important; 
+body {
+    background: #413D3D !important;
     color: rgb(255, 255, 255) !important;
 }
 
@@ -15,18 +15,18 @@ button {
 }
 
 #Username, #Password, #ConfirmPassword, #Register, #Login {
-    background: rgb(255, 255, 255) !important;     
+    background: rgb(255, 255, 255) !important;
     color: rgb(0, 0, 0) !important;
 }
 
-/* ----------------------    
+/* ----------------------
     General
 ------------------------*/
 #rootContainer {
     position : relative;
 }
 
-/* ----------------------    
+/* ----------------------
     Model3D View
 ------------------------*/
 #modelView {
@@ -40,7 +40,7 @@ button {
     background-color: #000000;
 }
 
-/* ----------------------    
+/* ----------------------
       Mesh View
 ------------------------*/
 #meshView {
@@ -56,7 +56,7 @@ button {
     background-color: #000000;
 }
 
-/* ----------------------    
+/* ----------------------
       DepthBuffer View
 ------------------------*/
 #depthBufferView {
@@ -72,7 +72,7 @@ button {
     background-color: #000000;
 }
 
-/* ----------------------    
+/* ----------------------
       UI Controls
 ------------------------*/
 
@@ -83,9 +83,9 @@ button {
         margin-bottom: 25px;
     }
 
-     .dg input[type=text] {        
+     .dg input[type=text] {
         color: white !important;;
-        font-size: 12pt;
+        font-size: 10pt;
     }
 
     /* 'Standard View' select element */
@@ -104,7 +104,7 @@ button {
     background-color: #000000;
 }
 
-/* ----------------------    
+/* ----------------------
     HTML Logger
 ------------------------*/
 

@@ -26,7 +26,6 @@ class PerspectiveCamera(Camera):
         Initialize an instance of a PerspectiveCamera.
         """
         super().__init__(settings)
-        print("PerspectiveCamera")
 
         self.aspect = settings['AspectRatio']
         self.fov    = settings['FieldOfView']
