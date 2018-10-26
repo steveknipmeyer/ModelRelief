@@ -6,17 +6,19 @@
         Update the CameraControls to hide the Perspective properties.
             Field of View
 
-    OrthographicTrackballControls
-        The mesh generated from a zoomed in Orthographic view does not fit properly.
+    Why does an incremental zoom sometimes reveal the mesh?
+        Review all the clipping plane logic.
 
+    OrthographicTrackballControls
         House can yield a division by zero.
             https://stackoverflow.com/questions/34326722/divide-by-zero-encountered-in-double-scalars-for-derivative-calculations
+
         Add keyboard shortcut handling.
             How can CameraControls and the OTC both install keyboard listeners?
             Move StandardView keyboard handling to CameraControls?
 
     Tests
-        Test SaveRelief (UnitTests.comparePerspectiveCameras).
+        ComposerController.SaveRelief (UnitTests.comparePerspectiveCameras).
         UnitTests.ts
         CameraTests.ts
 

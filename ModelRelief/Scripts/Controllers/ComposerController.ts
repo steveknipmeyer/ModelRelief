@@ -12,6 +12,7 @@ import * as THREE from "three";
 import {Loader} from "Scripts/ModelLoaders/Loader";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
+import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
 import {CameraSettings} from "Scripts/Models/Camera/Camerasettings";
 import {PerspectiveCamera} from "Scripts/Models/Camera/PerspectiveCamera";
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
@@ -157,12 +158,17 @@ export class ComposerController {
     }
 
     /**
-     * @description Active Camera.
-     * @readonly
-     * @type {Camera}
+     * @description Gets the active DepthBuffer camera.
+     * @type {BaseCamera}
      */
     get activeDepthBufferCamera(): BaseCamera {
         return this._composerView.mesh.depthBuffer.camera;
+    }
+    /**
+     * @description Sets the active DepthBuffer camera.
+     */
+    set activeDepthBufferCamera(camera: BaseCamera) {
+        this._composerView.mesh.depthBuffer.camera = camera;
     }
 
 //#endregion
@@ -205,7 +211,7 @@ export class ComposerController {
 
         // copy view camera so we can optimize clipping planes
         const modelViewCameraClone = this.modelViewer.camera.clone(true);
-        this.activeDepthBufferCamera.viewCamera = modelViewCameraClone;
+        this.activeDepthBufferCamera = CameraFactory.ConstructFromViewCamera(this.activeDepthBufferCamera, modelViewCameraClone);
         this.activeDepthBufferCamera.finalizeClippingPlanes(this.modelViewer.modelGroup);
 
         // update

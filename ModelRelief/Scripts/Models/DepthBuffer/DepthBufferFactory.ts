@@ -42,8 +42,6 @@ export interface IDepthBufferFactoryParameters {
  */
 export class DepthBufferFactory {
 
-
-
     public static CssClassName: string              = "DepthBufferFactory";     // CSS class
     public static RootContainerId: string           = "rootContainer";          // root container for viewers
 
@@ -68,8 +66,10 @@ export class DepthBufferFactory {
     public _postCamera: THREE.OrthographicCamera    = null;     // orthographic camera
     public _postMaterial: THREE.ShaderMaterial      = null;     // shader material that encodes the WebGL depth buffer into a floating point RGBA format
 
-    public _minimumWebGL: boolean                  = true;     // true if minimum WeGL requirements are present
+    public _minimumWebGL: boolean                   = true;     // true if minimum WeGL requirements are present
     public _logger: ILogger                         = null;     // logger
+
+    private _debug: boolean                         = false;
 
     /**
      * @constructor
@@ -379,7 +379,8 @@ export class DepthBufferFactory {
         const parameters = {id : this._camera.id};
         this._depthBuffer.camera = CameraFactory.ConstructFromViewCamera(parameters, this._camera.viewCamera);
 
-        this.analyzeTargets();
+        if (this._debug)
+            this.analyzeTargets();
 
         Services.timer.logElapsedTime(timerTag);
         return this._depthBuffer;

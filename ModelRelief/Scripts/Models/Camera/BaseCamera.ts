@@ -93,7 +93,6 @@ export abstract class BaseCamera extends Model {
      * @returns {THREE.Vector2}
      */
     public getNearPlaneExtents(): THREE.Vector2 {
-
         return new THREE.Vector2(0, 0);
     }
 

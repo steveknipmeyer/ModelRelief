@@ -9,6 +9,7 @@ import * as THREE from "three";
 
 import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
+import {Format} from "Scripts/System/Format";
 
 /**
  * @description OrthographicCamera
@@ -42,7 +43,9 @@ export class OrthographicCamera extends BaseCamera {
         const nearWidth  = this.viewCamera.right - this.viewCamera.left;
         const nearHeight = this.viewCamera.top - this.viewCamera.bottom;
 
-        return new THREE.Vector2(nearWidth, nearHeight);
+        const nearPlaneExtents = new THREE.Vector2(nearWidth, nearHeight);
+
+        return nearPlaneExtents;
     }
 
     /**

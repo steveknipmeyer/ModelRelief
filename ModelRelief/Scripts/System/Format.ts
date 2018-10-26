@@ -70,7 +70,7 @@ export class Format {
     public static padToLength(value: string, length: number = Format.numericFieldWidth, padCharacter: string = " "): string {
 
         const padCount = length - value.length;
-        return padCharacter.repeat(padCount) + value;
+        return padCharacter.repeat(padCount < 0 ? 0 : padCount) + value;
     }
 
     /**

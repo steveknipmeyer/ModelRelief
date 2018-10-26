@@ -9,6 +9,7 @@ import * as THREE from "three";
 
 import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
+import {Format} from "Scripts/System/Format";
 
 /**
  * @description PerspectiveCamera
@@ -42,8 +43,9 @@ export class PerspectiveCamera extends BaseCamera {
         const cameraFOVRadians = this.viewCamera.fov * (Math.PI / 180);
         const nearHeight = 2 * Math.tan(cameraFOVRadians / 2) * this.viewCamera.near;
         const nearWidth  = this.viewCamera.aspect * nearHeight;
+        const nearPlaneExtents = new THREE.Vector2(nearWidth, nearHeight);
 
-        return new THREE.Vector2(nearWidth, nearHeight);
+        return nearPlaneExtents;
     }
 
     /**
