@@ -9,13 +9,16 @@
 
 import * as THREE from 'three';
 
-export function TrackballControls ( object, domElement ) {
+export function TrackballControls ( object, domElement, keydownHandler ) {
 
 	var _this = this;
 	var STATE = { NONE: - 1, ROTATE: 0, ZOOM: 1, PAN: 2, TOUCH_ROTATE: 3, TOUCH_ZOOM_PAN: 4 };
 
 	this.object = object;
 	this.domElement = ( domElement !== undefined ) ? domElement : document;
+
+	// augment built-in keyboard controls
+	this.keydownHandler = keydownHandler;
 
 	// API
 
@@ -31,7 +34,6 @@ export function TrackballControls ( object, domElement ) {
 	this.noZoom = false;
 	this.noPan = false;
 
-	// ModelRelief
 	this.staticMoving = true;
 	this.dynamicDampingFactor = 0.2;
 
@@ -381,6 +383,10 @@ export function TrackballControls ( object, domElement ) {
 
 			_state = STATE.PAN;
 
+		} else {
+
+			// Viewer callback
+			this.keydownHandler(event);
 		}
 
 	}
@@ -399,8 +405,8 @@ export function TrackballControls ( object, domElement ) {
 
 		if ( _this.enabled === false ) return;
 
-		// ModelRelief
-		// Set the focus to allow keyboard accelerators in the Viewer class.
+		// WIP: Set the focus to allow keyboard accelerators in the Viewer class.
+		//       Is this necessary if all keyboard handling is performed in the input controller?
 		this.focus();
 
 		event.preventDefault();
@@ -620,9 +626,9 @@ export function TrackballControls ( object, domElement ) {
 	this.domElement.addEventListener( 'touchend', touchend, false );
 	this.domElement.addEventListener( 'touchmove', touchmove, false );
 
-	// ModelRelief
-	// window.addEventListener( 'keydown', keydown, false );
-	// window.addEventListener( 'keyup', keyup, false );
+
+	window.addEventListener( 'keydown', keydown.bind(this), false );
+	window.addEventListener( 'keyup', keyup, false );
 
 	this.handleResize();
 

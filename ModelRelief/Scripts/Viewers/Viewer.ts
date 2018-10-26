@@ -255,8 +255,8 @@ export class Viewer {
     public initializeInputControls() {
 
         this._controls = this.camera instanceof THREE.PerspectiveCamera ?
-            new TrackballControls(this.camera, this._renderer.domElement) :
-            new OrthographicTrackballControls(this.camera, this._renderer.domElement);
+            new TrackballControls(this.camera, this._renderer.domElement, this.keydownHandler.bind(this)) :
+            new OrthographicTrackballControls(this.camera, this._renderer.domElement, this.keydownHandler.bind(this));
 
         // N.B. https://stackoverflow.com/questions/10325095/threejs-camera-lookat-has-no-effect-is-there-something-im-doing-wrong
         this._controls.position0.copy(this.camera.position);
@@ -272,52 +272,51 @@ export class Viewer {
     }
 
     /**
-     * @description Sets up the keyboard shortcuts.
+     * @description Event handler for  keyboard shortcuts.
+     *              Chained from the input contrll (TrackballControls, OrthographicTrackballControls) handler.
+     * @param {KeyboardEvent} event
+     * @returns
      */
-    public initializeKeyboardShortcuts() {
+    public keydownHandler(event: KeyboardEvent) {
+        let standardView = StandardView.None;
 
-        this._canvas.addEventListener("keyup", (event: KeyboardEvent) => {
+        // https://css-tricks.com/snippets/javascript/javascript-keycodes/
+        const keyCode: number = event.keyCode;
+        switch (keyCode) {
 
-            let standardView = StandardView.None;
+            case "B".charCodeAt(0):
+            case "B".charCodeAt(0):
+                standardView = StandardView.Bottom;
+                break;
+            case "F".charCodeAt(0):
+            case "f".charCodeAt(0):
+                standardView = StandardView.Front;
+                break;
+            case "I".charCodeAt(0):
+            case "i".charCodeAt(0):
+                standardView = StandardView.Isometric;
+                break;
+            case "L".charCodeAt(0):
+            case "l".charCodeAt(0):
+                standardView = StandardView.Left;
+                break;
+            case "R".charCodeAt(0):
+            case "r".charCodeAt(0):
+                standardView = StandardView.Right;
+                break;
+            case "T".charCodeAt(0):
+            case "t".charCodeAt(0):
+                standardView = StandardView.Top;
+                break;
+            case "X".charCodeAt(0):
+            case "x".charCodeAt(0):
+                standardView = StandardView.Back;
+                break;
 
-            // https://css-tricks.com/snippets/javascript/javascript-keycodes/
-            const keyCode: number = event.keyCode;
-            switch (keyCode) {
-
-                case "B".charCodeAt(0):
-                case "B".charCodeAt(0):
-                    standardView = StandardView.Bottom;
-                    break;
-                case "F".charCodeAt(0):
-                case "f".charCodeAt(0):
-                    standardView = StandardView.Front;
-                    break;
-                case "I".charCodeAt(0):
-                case "i".charCodeAt(0):
-                    standardView = StandardView.Isometric;
-                    break;
-                case "L".charCodeAt(0):
-                case "l".charCodeAt(0):
-                    standardView = StandardView.Left;
-                    break;
-                case "R".charCodeAt(0):
-                case "r".charCodeAt(0):
-                    standardView = StandardView.Right;
-                    break;
-                case "T".charCodeAt(0):
-                case "t".charCodeAt(0):
-                    standardView = StandardView.Top;
-                    break;
-                case "X".charCodeAt(0):
-                case "x".charCodeAt(0):
-                    standardView = StandardView.Back;
-                    break;
-
-                default:
-                    return;
-            }
-            this.setCameraToStandardView(standardView);
-    }, false);
+            default:
+                return;
+        }
+        this.setCameraToStandardView(standardView);
     }
 
     /**
@@ -331,7 +330,6 @@ export class Viewer {
         this.initializeLighting();
         this.initializeInputControls();
         this.initializeUIControls();
-//      this.initializeKeyboardShortcuts();
 
         this.onResizeWindow();
         window.addEventListener("resize", this.onResizeWindow.bind(this), false);

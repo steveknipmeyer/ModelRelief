@@ -6,22 +6,21 @@
         Update the CameraControls to hide the Perspective properties.
             Field of View
 
+    Review Fit View logic.
+        Should the clipping planes be set based on the Model?
+
     Why does an incremental zoom sometimes reveal the mesh?
         Review all the clipping plane logic.
+        far = 1000) ->
 
     OrthographicTrackballControls
         House can yield a division by zero.
             https://stackoverflow.com/questions/34326722/divide-by-zero-encountered-in-double-scalars-for-derivative-calculations
 
-        Add keyboard shortcut handling.
-            How can CameraControls and the OTC both install keyboard listeners?
-            Move StandardView keyboard handling to CameraControls?
-
     Tests
         ComposerController.SaveRelief (UnitTests.comparePerspectiveCameras).
         UnitTests.ts
         CameraTests.ts
-
 
     Add madge circular dependency check to Builder.
 

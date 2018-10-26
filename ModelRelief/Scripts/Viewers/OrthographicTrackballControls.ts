@@ -9,7 +9,7 @@
 import * as THREE from 'three';
 import {Format} from "Scripts/System/Format";
 
-export function OrthographicTrackballControls ( object, domElement ) {
+export function OrthographicTrackballControls ( object, domElement,  keydownHandler ) {
 
 	this.updateCount = 0;
 
@@ -18,6 +18,9 @@ export function OrthographicTrackballControls ( object, domElement ) {
 
 	this.object = object;
 	this.domElement = ( domElement !== undefined ) ? domElement : document;
+
+	// augment built-in keyboard controls
+	this.keydownHandler = keydownHandler;
 
 	// API
 
@@ -35,7 +38,6 @@ export function OrthographicTrackballControls ( object, domElement ) {
 	this.noPan = false;
 	this.noRoll = false;
 
-	// ModelRelief
 	this.staticMoving = true;
 	this.dynamicDampingFactor = 0.2;
 
@@ -417,6 +419,10 @@ export function OrthographicTrackballControls ( object, domElement ) {
 
 			_state = STATE.PAN;
 
+		} else {
+
+			// Viewer callback
+			this.keydownHandler(event);
 		}
 
 	}
@@ -657,7 +663,7 @@ export function OrthographicTrackballControls ( object, domElement ) {
 	this.domElement.addEventListener( 'touchend', touchend, false );
 	this.domElement.addEventListener( 'touchmove', touchmove, false );
 
-	window.addEventListener( 'keydown', keydown, false );
+	window.addEventListener( 'keydown', keydown.bind(this), false );
 	window.addEventListener( 'keyup', keyup, false );
 
 	this.handleResize();
