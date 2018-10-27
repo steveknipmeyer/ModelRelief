@@ -90,6 +90,8 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 
 	this.handleResize = function () {
 
+		// WIP: Why are the frustum planes not reset during a resize?
+
 		if ( this.domElement === document ) {
 
 			this.screen.left = 0;

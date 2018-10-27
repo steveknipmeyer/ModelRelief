@@ -38,7 +38,7 @@ export class Viewer {
     private _renderer: THREE.WebGLRenderer   = null;
     private _canvas: HTMLCanvasElement       = null;
     private _width: number                   = 0;
-           private _height: number                  = 0;
+    private _height: number                  = 0;
 
     private _camera: IThreeBaseCamera        = null;
 
@@ -107,8 +107,13 @@ export class Viewer {
      */
     set camera(camera: IThreeBaseCamera) {
 
+        // orthographic camera: update frustum
+        if (camera instanceof THREE.OrthographicCamera)
+            CameraHelper.setDefaultOrthographicFrustum(camera, this.aspectRatio);
+
         this._camera = camera;
         this.camera.name = this.name;
+
         this.initializeInputControls();
 
         this.eventManager.dispatchEvent(this, EventType.ViewerCameraProperties, camera);

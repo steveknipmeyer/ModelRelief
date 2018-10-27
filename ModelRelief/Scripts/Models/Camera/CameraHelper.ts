@@ -9,7 +9,7 @@ import * as THREE from "three";
 import {StandardView} from "Scripts/Api/V1/Interfaces/ICamera";
 import {Graphics} from "Scripts/Graphics/Graphics";
 import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
-import {CameraSettings} from "Scripts/Models/Camera/Camerasettings";
+import {CameraSettings, IOrthographicFrustum} from "Scripts/Models/Camera/Camerasettings";
 import {Services} from "Scripts/System/Services";
 
 /**
@@ -146,7 +146,7 @@ export class CameraHelper {
 
         const timerTag = Services.timer.mark("Camera.getStandardView");
 
-        let camera = CameraHelper.getDefaultCamera(viewCamera);
+        let camera = CameraHelper.getDefaultCamera(viewAspect, !(viewCamera instanceof THREE.OrthographicCamera));
         const boundingBox = Graphics.getBoundingBoxFromObject(modelGroup);
 
         const centerX = boundingBox.getCenter().x;
@@ -214,19 +214,19 @@ export class CameraHelper {
     /**
      * @description Creates a default scene camera.
      * @static
-     * @param {THREE.Camera} viewCamera View camera.
+     * @param {THREE.Camera} viewAspect Aspect ratio of view.
+     * @param {boolean} perspectiveCamera Create a perspective camera.
      * @returns {IThreeBaseCamera}
      */
-    public static getDefaultCamera(viewCamera: THREE.Camera): IThreeBaseCamera {
+    public static getDefaultCamera(viewAspect: number, perspectiveCamera: boolean = true): IThreeBaseCamera {
 
-        // default matches existing camera if it exists
-        const isPerspective: boolean = viewCamera ? (viewCamera instanceof THREE.PerspectiveCamera) : true;
-        const aspectRatio: number = (viewCamera && (viewCamera instanceof THREE.PerspectiveCamera)) ? viewCamera.aspect : 1.0;
-
-        const defaultCamera = isPerspective ?
-            new THREE.PerspectiveCamera(CameraSettings.DefaultFieldOfView, aspectRatio, CameraSettings.DefaultNearClippingPlane, CameraSettings.DefaultFarClippingPlane) :
-            new THREE.OrthographicCamera(CameraSettings.DefaultLeftPlane, CameraSettings.DefaultRightPlane, CameraSettings.DefaultTopPlane, CameraSettings.DefaultBottomPlane,
-                                         CameraSettings.DefaultNearClippingPlane, CameraSettings.DefaultFarClippingPlane);
+        let defaultCamera;
+        if (perspectiveCamera) {
+            defaultCamera = new THREE.PerspectiveCamera(CameraSettings.DefaultFieldOfView, viewAspect, CameraSettings.DefaultNearClippingPlane, CameraSettings.DefaultFarClippingPlane);
+        } else {
+            const frustum: IOrthographicFrustum = this.getDefaultOrthographicFrustum(viewAspect);
+            defaultCamera = new THREE.OrthographicCamera(frustum.left, frustum.right, frustum.top, frustum.bottom, CameraSettings.DefaultNearClippingPlane, CameraSettings.DefaultFarClippingPlane);
+        }
 
         defaultCamera.position.copy (new THREE.Vector3 (0, 0, 0));
         defaultCamera.lookAt(new THREE.Vector3(0, 0, -1));
@@ -236,6 +236,36 @@ export class CameraHelper {
         defaultCamera.updateProjectionMatrix();
 
         return defaultCamera;
+    }
+
+    /**
+     * @description Returns the default frustum for an orthographic camera.
+     * @static
+     * @param {number} [viewAspect=1.0] Aspect ratio of view.
+     * @returns {IOrthographicFrustum}
+     */
+    public static getDefaultOrthographicFrustum(viewAspect: number = 1.0): IOrthographicFrustum {
+        const frustum: IOrthographicFrustum = {
+            left:   -CameraSettings.FrustumPlaneOffset,
+            right:  +CameraSettings.FrustumPlaneOffset,
+            top:    +CameraSettings.FrustumPlaneOffset / viewAspect,
+            bottom: -CameraSettings.FrustumPlaneOffset / viewAspect,
+        };
+        return frustum;
+    }
+
+    /**
+     * @description Sets the default frustum for an orthographic camera.
+     * @static
+     * @param {THREE.OrthographicCamera} camera The Orthographic camera to modify.
+     * @param {number} [viewAspect=1.0] Aspect ratio of view.
+     */
+    public static setDefaultOrthographicFrustum(camera: THREE.OrthographicCamera, viewAspect: number): void {
+        const frustum: IOrthographicFrustum = this.getDefaultOrthographicFrustum(viewAspect);
+        camera.left = frustum.left;
+        camera.right = frustum.right;
+        camera.top = frustum.top;
+        camera.bottom = frustum.bottom;
     }
 
     /**

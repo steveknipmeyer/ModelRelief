@@ -1,40 +1,38 @@
 ﻿### Tasks
 #### Commit Notes
 
-Solver validates mesh height in process_scale to handle flat meshes.
-  1) There are no gradients because all surfaces are orthogonal to the camera sight line.
-  2) All gradients are masked because they are too large.
-BaseCamera.getBoundedClippingPlanes validates near plane to ensure greater than CameraSettings.DefaultNearClippingPlane.
-Reduce the size of dat-gui input text.
-
 #### Short Term
-    The StandardView keyboard shortcuts change <both> views.
-
-    Why does the Test DepthBuffer camera have default frustum planes?
-        Answer: OTC always sets zoom. The frustum planes are never changed.
-
     The near plane of an orthographic camera is set to the minimum bounding box plane, clipping the geometry.
-
-    Are default orthographic frustrum planes based on the aspect ratio of the view?
 
     getBoundedClippingPlanes can generates near planes less than CameraSettings.DefaultNearClippingPlane.
 
     Switching between Perspective and Orthographic can lead to anomalies in the generated mesh.
         House (Front) is distorted.
 
-    Write a tool to update the Test models and DbInitializer.
-        Can the Mesh JSON files be transformed into C#?
-
     Camera Pan is not preserved.
+        Viewer.initializeInputControls
+            This can be deprecated. Both TC and OTC initialize position0 from the camera.position.
+                // N.B. https://stackoverflow.com/questions/10325095/threejs-camera-lookat-has-no-effect-is-there-something-im-doing-wrong
+                this._controls.position0.copy(this.camera.position);
+
+            const boundingBox = Graphics.getBoundingBoxFromObject(this._root);
+            this._controls.target.copy(boundingBox.getCenter());
+
+
+    Should clipping planes be set based on the Model?
 
     Why does Perspective -> Orthographic move the camera position to an extreme?
         Construct the new camera from the previous camera settings.
+
+    The StandardView keyboard shortcuts change <both> views.
 
     CameraControls
         Update the CameraControls to hide the Perspective properties.
             Field of View
 
-    Should clipping planes be set based on the Model?
+
+    Write a tool to update the Test models and DbInitializer.
+        Can the Mesh JSON files be transformed into C#?
 
     How can default settings be shared between C# and TypeScript?
         Create a settings JSON file?

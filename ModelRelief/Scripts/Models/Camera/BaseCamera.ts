@@ -19,7 +19,7 @@ import {DepthBufferFactorySettings} from "Scripts/Models/DepthBuffer/DepthBuffer
 import {Project} from "Scripts/Models/Project/Project";
 
 /**
- * @description Camera clipping planes tuple.
+ * @description Camera clipping planes.
  * @export
  * @interface ClippingPlanes
  */
@@ -187,7 +187,7 @@ export abstract class BaseCamera extends Model {
             scale,
             up,
 
-            // Perpsective
+            // Perspective
             fieldOfView     : isPerspective ? (this.viewCamera as THREE.PerspectiveCamera).fov : CameraSettings.DefaultFieldOfView,
             aspectRatio     : isPerspective ? (this.viewCamera as THREE.PerspectiveCamera).aspect : 1.0,
 

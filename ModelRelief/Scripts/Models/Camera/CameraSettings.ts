@@ -6,6 +6,18 @@
 "use strict";
 
 /**
+ * @description The frustum planes of an orthographic camera.
+ * @export
+ * @interface IOrthographicFrustum
+ */
+export interface IOrthographicFrustum {
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
+}
+
+/**
  * @description CameraSettings
  * @export
  * @class CameraSettings
@@ -18,7 +30,7 @@ export class CameraSettings  {
     // Perspective
     public static DefaultFieldOfView: number =   37;       // 35mm vertical : https://www.nikonians.org/reviews/fov-tables
 
-    // Orthographics
+    // Orthographic
     public static FrustumPlaneOffset: number = 100;
     public static DefaultLeftPlane: number     = -CameraSettings.FrustumPlaneOffset;
     public static DefaultRightPlane: number    = +CameraSettings.FrustumPlaneOffset;

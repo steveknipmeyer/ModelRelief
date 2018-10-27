@@ -32,6 +32,10 @@ class CameraControlSettings {
     // So, the camera type is maintained as a CameraControls instance member. The onChange method handles the conversion of the underlying BaseCamera.
     public isPerspective: boolean;
 
+    // The FOV control exposed for both Perspective and Orthographic cameras.
+    // Only Perspective cameras have a setting (fov) so the setting holds the value rather than the active camera
+    public fieldOfView: number;
+
     public standardView: StandardView = StandardView.Front;
 
     public fitView: () => void;
@@ -49,6 +53,7 @@ class CameraControlSettings {
 
         this.camera               = camera;
         this.isPerspective        = camera.isPerspective;
+        this.fieldOfView          = camera.isPerspective ? (camera.viewCamera as THREE.PerspectiveCamera).fov : CameraSettings.DefaultFieldOfView;
 
         this.fitView              = fitView;
         this.addCameraHelper      = addCameraHelper;
@@ -139,7 +144,7 @@ export class CameraControls {
 
         // View
         const modelView = Graphics.cloneAndTransformObject(this.viewer.modelGroup, this.settings.camera.viewCamera.matrixWorldInverse);
-        const cameraView = CameraHelper.getDefaultCamera(this.viewer.camera);
+        const cameraView = CameraHelper.getDefaultCamera(this.viewer.aspectRatio, this.viewer.camera instanceof THREE.PerspectiveCamera);
         Graphics.addCameraHelper(cameraView, this.viewer.scene, modelView);
     }
 
@@ -239,7 +244,6 @@ export class CameraControls {
                 // Orthographic -> Perspective
             } else {
                 // Perspective -> Orthographic
-
                 const orthograpicCamera = newCamera as THREE.OrthographicCamera;
 
                 orthograpicCamera.zoom = 1;
@@ -253,6 +257,13 @@ export class CameraControls {
             }
             newCamera.updateProjectionMatrix();
             this.viewer.camera = newCamera;
+
+            // synchronize UI settings
+            this.settings.camera.viewCamera = newCamera;
+            if (this.settings.isPerspective) {
+                const perspectiveCamera = newCamera as THREE.PerspectiveCamera;
+                this.settings.fieldOfView = perspectiveCamera.fov;
+            }
         });
 
         // Field of View
@@ -260,7 +271,7 @@ export class CameraControls {
             minimum = 25;
             maximum = 75;
             stepSize = 1;
-            const controlFieldOfView = cameraOptions.add(this.settings.camera.viewCamera, "fov").name("Field of View").min(minimum).max(maximum).step(stepSize).listen();
+            const controlFieldOfView = cameraOptions.add(this.settings, "fieldOfView").name("Field of View").min(minimum).max(maximum).step(stepSize).listen();
             controlFieldOfView.onChange((value) => {
                 if (scope.settings.camera.viewCamera instanceof THREE.PerspectiveCamera) {
                     scope.settings.camera.viewCamera.fov = value;
