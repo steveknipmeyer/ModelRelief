@@ -112,6 +112,9 @@ export abstract class BaseCamera extends Model {
      */
     public getBoundingClippingPlanes(model: THREE.Object3D): IClippingPlanes {
 
+        // ensure transform matrix is correct
+        this.viewCamera.updateMatrixWorld(true);
+
         const cameraMatrixWorldInverse: THREE.Matrix4 = this.viewCamera.matrixWorldInverse;
         const boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(model, cameraMatrixWorldInverse);
 
@@ -125,7 +128,7 @@ export abstract class BaseCamera extends Model {
         // validate near plane
         const validNearPlane: boolean = nearPlane >= CameraSettings.DefaultNearClippingPlane;
         if (!validNearPlane) {
-            console.log(`getBoundedClippingPlanes: nearPlane = ${nearPlane}`);
+            console.log(`getBoundingClippingPlanes: nearPlane = ${nearPlane}`);
             nearPlane = CameraSettings.DefaultNearClippingPlane;
         }
         const clippingPlanes: IClippingPlanes = {

@@ -1,10 +1,7 @@
 ﻿### Tasks
 #### Commit Notes
-
 #### Short Term
     The near plane of an orthographic camera is set to the minimum bounding box plane, clipping the geometry.
-
-    getBoundedClippingPlanes can generates near planes less than CameraSettings.DefaultNearClippingPlane.
 
     Switching between Perspective and Orthographic can lead to anomalies in the generated mesh.
         House (Front) is distorted.
