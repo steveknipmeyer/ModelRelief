@@ -41,3 +41,10 @@ class Camera(ABC):
         Returns the extents (model units) of the near clipping plane.
         """
         pass
+
+    @property
+    def projection(self)-> str:
+        """
+        Returns the projection type of the camera.
+        """
+        return "Perspective" if self.perspective else "Orthographic"

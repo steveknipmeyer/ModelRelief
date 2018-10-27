@@ -240,9 +240,12 @@ export class CameraControls {
             } else {
                 // Perspective -> Orthographic
 
+                const orthograpicCamera = newCamera as THREE.OrthographicCamera;
+
+                orthograpicCamera.zoom = 1;
+
                 // extents of existing Perspective camera clipping planes will define Orthographic camera boundary
                 const farPlaneExtents = existingCamera.getFarPlaneExtents();
-                const orthograpicCamera = newCamera as THREE.OrthographicCamera;
                 orthograpicCamera.left   = -farPlaneExtents.x / 2;
                 orthograpicCamera.right  = +farPlaneExtents.x / 2;
                 orthograpicCamera.top    = +farPlaneExtents.y / 2;

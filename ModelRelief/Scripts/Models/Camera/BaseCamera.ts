@@ -5,6 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
+import {assert} from "chai";
 import * as Dto from "Scripts/Api/V1//Models/DtoModels";
 import * as THREE from "three";
 
@@ -118,9 +119,15 @@ export abstract class BaseCamera extends Model {
         // In View coordinates, the camera is at the origin.
         // The bounding near plane is the maximum Z of the bounding box.
         // The bounding far plane is the minimum Z of the bounding box.
-        const nearPlane = -boundingBoxView.max.z;
-        const farPlane = -boundingBoxView.min.z;
+        let nearPlane   = -boundingBoxView.max.z;
+        const farPlane  = -boundingBoxView.min.z;
 
+        // validate near plane
+        const validNearPlane: boolean = nearPlane >= CameraSettings.DefaultNearClippingPlane;
+        if (!validNearPlane) {
+            console.log(`getBoundedClippingPlanes: nearPlane = ${nearPlane}`);
+            nearPlane = CameraSettings.DefaultNearClippingPlane;
+        }
         const clippingPlanes: IClippingPlanes = {
 
             // adjust by epsilon to avoid clipping geometry at the near plane edge

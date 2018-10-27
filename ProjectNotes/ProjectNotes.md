@@ -1,12 +1,23 @@
 ﻿### Tasks
 #### Commit Notes
 
-#### Short Term
-    Adjust the FE UI for Far Clipping Plane (10000);
+Solver validates mesh height in process_scale to handle flat meshes.
+  1) There are no gradients because all surfaces are orthogonal to the camera sight line.
+  2) All gradients are masked because they are too large.
+BaseCamera.getBoundedClippingPlanes validates near plane to ensure greater than CameraSettings.DefaultNearClippingPlane.
+Reduce the size of dat-gui input text.
 
-    Test model can deliver self.camera.near = 0 while self.camera.far seems fine.
-        Can finalizeClippingPlanes be incorrect for Orthographic cameras?
-            getBoundedClippingPlanes
+#### Short Term
+    The StandardView keyboard shortcuts change <both> views.
+
+    Why does the Test DepthBuffer camera have default frustum planes?
+        Answer: OTC always sets zoom. The frustum planes are never changed.
+
+    The near plane of an orthographic camera is set to the minimum bounding box plane, clipping the geometry.
+
+    Are default orthographic frustrum planes based on the aspect ratio of the view?
+
+    getBoundedClippingPlanes can generates near planes less than CameraSettings.DefaultNearClippingPlane.
 
     Switching between Perspective and Orthographic can lead to anomalies in the generated mesh.
         House (Front) is distorted.
@@ -17,6 +28,7 @@
     Camera Pan is not preserved.
 
     Why does Perspective -> Orthographic move the camera position to an extreme?
+        Construct the new camera from the previous camera settings.
 
     CameraControls
         Update the CameraControls to hide the Perspective properties.
