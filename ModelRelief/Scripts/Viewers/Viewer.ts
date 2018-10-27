@@ -13,6 +13,7 @@ import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
 import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
 import {EventManager, EventType} from "Scripts/System/EventManager";
 import {ILogger} from "Scripts/System/Logger";
+import {MathLibrary} from "Scripts/System/Math";
 import {Services} from "Scripts/System/Services";
 import {OrthographicTrackballControls} from "Scripts/Viewers/OrthographicTrackballControls";
 import {TrackballControls} from "Scripts/Viewers/TrackballControls";
@@ -107,9 +108,15 @@ export class Viewer {
      */
     set camera(camera: IThreeBaseCamera) {
 
-        // orthographic camera: update frustum
-        if (camera instanceof THREE.OrthographicCamera)
-            CameraHelper.setDefaultOrthographicFrustum(camera, this.aspectRatio);
+        // Update the orthographic frustum if necessary. A persisted camera may have been defined against a different view.
+        if (camera instanceof THREE.OrthographicCamera) {
+            const cameraAspectRatio = (camera.right - camera.left) / (camera.top - camera.bottom);
+            const tolerance = 0.01;
+            if (!MathLibrary.numbersEqualWithinTolerance(cameraAspectRatio, this.aspectRatio, tolerance)) {
+                this._logger.addWarningMessage(`Orthographic camera aspect ratio ${cameraAspectRatio} update to match View aspect ratio ${this.aspectRatio}`);
+                CameraHelper.setDefaultOrthographicFrustum(camera, this.aspectRatio);
+            }
+        }
 
         this._camera = camera;
         this.camera.name = this.name;
@@ -262,9 +269,6 @@ export class Viewer {
         this._controls = this.camera instanceof THREE.PerspectiveCamera ?
             new TrackballControls(this.camera, this._renderer.domElement, this.keydownHandler.bind(this)) :
             new OrthographicTrackballControls(this.camera, this._renderer.domElement, this.keydownHandler.bind(this));
-
-        // N.B. https://stackoverflow.com/questions/10325095/threejs-camera-lookat-has-no-effect-is-there-something-im-doing-wrong
-        this._controls.position0.copy(this.camera.position);
 
         const boundingBox = Graphics.getBoundingBoxFromObject(this._root);
         this._controls.target.copy(boundingBox.getCenter());

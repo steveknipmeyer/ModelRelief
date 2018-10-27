@@ -1,17 +1,23 @@
 ﻿### Tasks
 #### Commit Notes
+Viewer.initializeInputControls no longer defines controls.position0. Both TrackballControls and OrthographicTrackballControls initialize from the camera.
+Viewer sets orthographic camera aspect ratio if it does not match the view aspect ratio.
+    A persisted camera may have been defined against a different view.
+
 #### Short Term
-    The near plane of an orthographic camera is set to the minimum bounding box plane, clipping the geometry.
+
+    Orthographic cameras do not set the clipping planes correctly.
+        Fit often generates malformed views.
+    Does the 'zoom' property of an orthographic camera need to be persisted?
 
     Switching between Perspective and Orthographic can lead to anomalies in the generated mesh.
         House (Front) is distorted.
 
+        Consider refactoring the camera conversion logic in CameraControls into a CameraHelper method.
+            CameraHelper.ChangeProjection
+
     Camera Pan is not preserved.
         Viewer.initializeInputControls
-            This can be deprecated. Both TC and OTC initialize position0 from the camera.position.
-                // N.B. https://stackoverflow.com/questions/10325095/threejs-camera-lookat-has-no-effect-is-there-something-im-doing-wrong
-                this._controls.position0.copy(this.camera.position);
-
             const boundingBox = Graphics.getBoundingBoxFromObject(this._root);
             this._controls.target.copy(boundingBox.getCenter());
 
@@ -187,6 +193,10 @@ Namimg
 - [ ] The quaternion and up vector do not roundtrip although the visual camera appears unchanged.  The matrix and projectionMatrix are unchanged!
 - [ ] Cameras do not handle offsets (pan). Is this a TrackBallControl issue?
 - [ ] Randomly generated cameras do not roundtrip the matrix property.
+
+  Viewer.initializeInputControls no longer defines controls.position0. Both TrackballControls and OrthographicTrackballControls initialize from the camera.
+        // N.B. https://stackoverflow.com/questions/10325095/threejs-camera-lookat-has-no-effect-is-there-something-im-doing-wrong
+        this._controls.position0.copy(this.camera.position);
 
 ##### Clipping Plane Issues
 
