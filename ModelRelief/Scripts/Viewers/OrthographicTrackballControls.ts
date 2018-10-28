@@ -407,7 +407,7 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 
 		if ( _this.enabled === false ) return;
 
-		window.removeEventListener( 'keydown', keydown );
+		this.domElement.removeEventListener( 'keydown', keydown );
 
 		_prevState = _state;
 
@@ -441,7 +441,7 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 
 		_state = _prevState;
 
-		window.addEventListener( 'keydown', keydown, false );
+		this.domElement.addEventListener( 'keydown', keydown, false );
 
 	}
 
@@ -658,8 +658,8 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 		document.removeEventListener( 'mousemove', mousemove, false );
 		document.removeEventListener( 'mouseup', mouseup, false );
 
-		window.removeEventListener( 'keydown', keydown, false );
-		window.removeEventListener( 'keyup', keyup, false );
+		this.domElement.removeEventListener( 'keydown', keydown, false );
+		this.domElement.removeEventListener( 'keyup', keyup, false );
 
 	};
 
@@ -671,8 +671,8 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 	this.domElement.addEventListener( 'touchend', touchend, false );
 	this.domElement.addEventListener( 'touchmove', touchmove, false );
 
-	window.addEventListener( 'keydown', keydown.bind(this), false );
-	window.addEventListener( 'keyup', keyup, false );
+	this.domElement.addEventListener( 'keydown', keydown.bind(this), false );
+	this.domElement.addEventListener( 'keyup', keyup.bind(this), false );
 
 	this.handleResize();
 

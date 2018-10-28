@@ -3,30 +3,29 @@
 
 
 #### Short Term
-    The StandardView keyboard shortcuts change <both> views.
+    CameraControls
+        Refactor to use a DTO as the backing model.
 
-    Switching between Perspective and Orthographic can lead to anomalies in the generated mesh.
-        House (Front) is distorted.
-
-        Consider refactoring the camera conversion logic in CameraControls into a CameraHelper method.
+        Refactor the camera conversion logic into a CameraHelper method.
             CameraHelper.ChangeProjection
 
             Why does Perspective -> Orthographic move the camera position to an extreme?
                 Construct the new camera from the previous camera settings.
 
+        Switching between Perspective and Orthographic can lead to anomalies in the generated mesh.
+            House (Front) is distorted.
+
+        Update the CameraControls to hide the Perspective properties.
+            Field of View
+
+
     Camera Pan is not preserved.
         Viewer.initializeInputControls
-            const boundingBox = Graphics.getBoundingBoxFromObject(this._root);
             this._controls.target.copy(boundingBox.getCenter());
 
         Review the lookAt method calls.
 
     Should clipping planes be set based on the Model?
-
-    CameraControls
-        Update the CameraControls to hide the Perspective properties.
-            Field of View
-
 
     Write a tool to update the Test models and DbInitializer.
         Can the Mesh JSON files be transformed into C#?

@@ -71,7 +71,7 @@ export class ModelView {
         this._modelViewer = new ModelViewer("ModelViewer", ElementIds.ModelCanvas, model);
 
         // Camera Controls
-        const cameraControlsOptions = {};
+        const cameraControlsOptions: ICameraControlsOptions = {};
         this._cameraControls = new CameraControls(this._modelViewer, cameraControlsOptions);
 
         // Model Viewer Controls
