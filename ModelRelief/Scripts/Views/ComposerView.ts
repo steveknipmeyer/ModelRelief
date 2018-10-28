@@ -145,6 +145,9 @@ export class ComposerView {
             const meshLoadedPromise = loader.loadMeshAsync(this.mesh).then((theMesh: THREE.Group) => {
                 this._meshView.meshViewer.setModelGroup (theMesh);
                 this._meshView.meshViewer.setCameraToStandardView(StandardView.Top);
+
+                // mesh available; start render loop
+                this._meshView.meshViewer.animate();
             });
 
             Promise.all([modelLoadedPromise, meshLoadedPromise]).then(() => {

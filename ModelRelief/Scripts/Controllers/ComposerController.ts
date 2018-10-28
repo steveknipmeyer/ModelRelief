@@ -308,17 +308,11 @@ export class ComposerController {
         this._reliefWidthPixels  = ComposerController.DefaultReliefDimensions;
         this._reliefHeightPixels = this._reliefWidthPixels / this.modelViewer.aspectRatio;
 
-        // model camera = depth buffer camera (default clipping planes)
-        const modelViewCamera = this.activeDepthBufferCamera.viewCamera.clone();
+        // ModelViewer camera = DepthBuffer camera (used to generate active mesh)
+        this.initializeModelViewerCamera();
 
-        // WIP: Set far plane based on model extents to avoid clipping
-        const boundingPlanes =  this.activeDepthBufferCamera.getBoundingClippingPlanes(this.modelViewer.modelGroup);
-
-        modelViewCamera.near = CameraSettings.DefaultNearClippingPlane;
-        modelViewCamera.far  = CameraSettings.DefaultFarClippingPlane;
-
-        modelViewCamera.updateProjectionMatrix();
-        this.modelViewer.camera = modelViewCamera;
+        // model available; start render loop
+        this.modelViewer.animate();
 
         this.initializeUIControls();
     }
@@ -397,4 +391,25 @@ export class ComposerController {
         dimensionsOptions.open();
         reliefProcessingOptions.open();
     }
+
+    /**
+     * @description Initialize the ModelViewer camera.
+     * The camera is set to match the DepthBuffer camera used to generate the active mesh.
+     * @private
+     */
+    private initializeModelViewerCamera() {
+
+        // model camera = depth buffer camera (default clipping planes)
+        const modelViewCamera = this.activeDepthBufferCamera.viewCamera.clone();
+
+        // WIP: Set far plane based on model extents to avoid clipping
+        const boundingPlanes =  this.activeDepthBufferCamera.getBoundingClippingPlanes(this.modelViewer.modelGroup);
+
+        modelViewCamera.near = CameraSettings.DefaultNearClippingPlane;
+        modelViewCamera.far  = CameraSettings.DefaultFarClippingPlane;
+
+        modelViewCamera.updateProjectionMatrix();
+        this.modelViewer.camera = modelViewCamera;
+    }
+
 }

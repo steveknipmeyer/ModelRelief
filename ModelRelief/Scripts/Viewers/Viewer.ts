@@ -63,7 +63,7 @@ export class Viewer {
         this._model = model;
         this.initialize();
 
-        this.animate();
+//      this.animate();
     }
 
 //#region Properties

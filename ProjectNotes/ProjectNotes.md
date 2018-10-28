@@ -3,13 +3,16 @@
 
 
 #### Short Term
-    Supress the initial update of the ModelView (before the DepthBuffer camera has been applied.)
+    The StandardView keyboard shortcuts change <both> views.
 
     Switching between Perspective and Orthographic can lead to anomalies in the generated mesh.
         House (Front) is distorted.
 
         Consider refactoring the camera conversion logic in CameraControls into a CameraHelper method.
             CameraHelper.ChangeProjection
+
+            Why does Perspective -> Orthographic move the camera position to an extreme?
+                Construct the new camera from the previous camera settings.
 
     Camera Pan is not preserved.
         Viewer.initializeInputControls
@@ -19,11 +22,6 @@
         Review the lookAt method calls.
 
     Should clipping planes be set based on the Model?
-
-    Why does Perspective -> Orthographic move the camera position to an extreme?
-        Construct the new camera from the previous camera settings.
-
-    The StandardView keyboard shortcuts change <both> views.
 
     CameraControls
         Update the CameraControls to hide the Perspective properties.
