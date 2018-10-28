@@ -3,9 +3,7 @@
 
 
 #### Short Term
-
-    Orthographic cameras do not set the clipping planes correctly.
-        Fit often generates malformed views.
+    Supress the initial update of the ModelView (before the DepthBuffer camera has been applied.)
 
     Switching between Perspective and Orthographic can lead to anomalies in the generated mesh.
         House (Front) is distorted.
@@ -18,6 +16,7 @@
             const boundingBox = Graphics.getBoundingBoxFromObject(this._root);
             this._controls.target.copy(boundingBox.getCenter());
 
+        Review the lookAt method calls.
 
     Should clipping planes be set based on the Model?
 

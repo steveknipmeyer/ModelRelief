@@ -78,35 +78,26 @@ export class CameraHelper {
         const halfBoundingBoxViewXExtents  = boundingBoxView.getSize().x / 2;
         const halfBoundingBoxViewYExtents  = boundingBoxView.getSize().y / 2;
 
-        // new postion of camera in View coordinats
-        let newCameraZView: number;
+        // distance along Z from the model X/Y maximum; ensures entire model visible
+        let newCameraZDistanceView: number;
 
         // Perspective
         if (camera instanceof THREE.PerspectiveCamera) {
             const verticalFieldOfViewRadians: number = (camera.fov / 2) * (Math.PI / 180);
             const horizontalFieldOfViewRadians: number = Math.atan(camera.aspect * Math.tan(verticalFieldOfViewRadians));
 
-            const cameraZVerticalExtents: number = halfBoundingBoxViewYExtents / Math.tan (verticalFieldOfViewRadians);
-            const cameraZHorizontalExtents: number = halfBoundingBoxViewXExtents / Math.tan (horizontalFieldOfViewRadians);
-            newCameraZView = Math.max(cameraZVerticalExtents, cameraZHorizontalExtents);
-
-            // preserve XY; set Z to include extents
-            const previousCameraPositionView = camera.position.applyMatrix4(cameraMatrixWorldInverse);
-            const newCameraPositionView = new THREE.Vector3(previousCameraPositionView.x, previousCameraPositionView.y, boundingBoxView.max.z + newCameraZView);
-
-            // Now, transform back to World coordinates...
-            const positionWorld = newCameraPositionView.applyMatrix4(cameraMatrixWorld);
-
-            camera.position.copy (positionWorld);
+            const cameraZDistanceVerticalExtents: number = halfBoundingBoxViewYExtents / Math.tan (verticalFieldOfViewRadians);
+            const cameraZDistanceHorizontalExtents: number = halfBoundingBoxViewXExtents / Math.tan (horizontalFieldOfViewRadians);
+            newCameraZDistanceView = Math.max(cameraZDistanceVerticalExtents, cameraZDistanceHorizontalExtents);
         }
 
         // Orthographic
         if (camera instanceof THREE.OrthographicCamera) {
 
-            camera.zoom = 1;
-
             // For orthographic cameras, Z has no effect on the view scale.
             // Instead, adjust the frustum planes to fit the model bounding box.
+            camera.zoom = 1;
+
             const modelAspectRatio = halfBoundingBoxViewXExtents / halfBoundingBoxViewYExtents;
             let halfCameraX;
             let halfCameraY;
@@ -121,7 +112,22 @@ export class CameraHelper {
             camera.right  = +halfCameraX;
             camera.top    = +halfCameraY;
             camera.bottom = -halfCameraY;
+
+            // Since the camera frustum encloses the entire model, the Z distance of an orthographic camera does not affect the scale.
+            // However, a Z distance is chosen (from the front face of the model bounding box)  so that the camera can be rotated without clipping the model.
+            newCameraZDistanceView = boundingBoxView.getSize().z;
         }
+
+        // Preserve XY but set Z to enclose entire model.
+        // Since the absolute Z position of the model X/Y extent maximum is not known, the Z distance is added to the front of the bounding box.
+        // By enclosing the entire bounding box within the camera frustum, the entire model will be visible albeit scaled somewhat smaller than necessary.
+        const previousCameraPositionView = camera.position.applyMatrix4(cameraMatrixWorldInverse);
+        const newCameraPositionView = new THREE.Vector3(previousCameraPositionView.x, previousCameraPositionView.y, boundingBoxView.max.z + newCameraZDistanceView);
+
+        // Now, transform back to World coordinates...
+        const positionWorld = newCameraPositionView.applyMatrix4(cameraMatrixWorld);
+
+        camera.position.copy (positionWorld);
 
         camera.lookAt(boundingBoxWorld.getCenter());
 
