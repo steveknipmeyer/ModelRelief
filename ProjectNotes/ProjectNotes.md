@@ -1,14 +1,11 @@
 ﻿### Tasks
 #### Commit Notes
-Viewer.initializeInputControls no longer defines controls.position0. Both TrackballControls and OrthographicTrackballControls initialize from the camera.
-Viewer sets orthographic camera aspect ratio if it does not match the view aspect ratio.
-    A persisted camera may have been defined against a different view.
+
 
 #### Short Term
 
     Orthographic cameras do not set the clipping planes correctly.
         Fit often generates malformed views.
-    Does the 'zoom' property of an orthographic camera need to be persisted?
 
     Switching between Perspective and Orthographic can lead to anomalies in the generated mesh.
         House (Front) is distorted.

@@ -1,9 +1,12 @@
 /**
+ *  https://github.com/mrdoob/three.js/blob/dev/examples/js/controls/OrthographicTrackballControls.js
+ * "three": "^0.86.0",
  * @author Eberhard Graether / http://egraether.com/
  * @author Mark Lundin 	/ http://mark-lundin.com
  * @author Patrick Fuller / http://patrick-fuller.com
  * @author Max Smolens / https://github.com/msmolens
  */
+
 'use strict';
 
 import * as THREE from 'three';
@@ -246,7 +249,8 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 			var factor = _touchZoomDistanceEnd / _touchZoomDistanceStart;
 			_touchZoomDistanceStart = _touchZoomDistanceEnd;
 
-			_this.object.zoom *= factor;
+			// _this.object.zoom *= factor;
+			this.adjustFrustumByZoomFactor(factor);
 
 			_changed = true;
 
@@ -255,7 +259,9 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 			var factor = 1.0 + ( _zoomEnd.y - _zoomStart.y ) * _this.zoomSpeed;
 
 			if ( Math.abs( factor - 1.0 ) > EPS && factor > 0.0 ) {
-				_this.object.zoom /= factor;
+
+				// _this.object.zoom /= factor;
+				adjustFrustumByZoomFactor(this.object, factor);
 
 				if ( _this.staticMoving ) {
 
@@ -674,6 +680,20 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 	this.update();
 
 };
+
+/**
+ * @description Adjust the orthographic viewing frustum by the zoom factor.
+ * @param {THREE.OrthographicCamera} camera Camera to update.
+ * @param {number} zoomFactor Factor to scale the frustum.
+ */
+function adjustFrustumByZoomFactor(camera: THREE.OrthographicCamera, zoomFactor: number): void {
+
+	const frustumScale: number = zoomFactor;
+	camera.left 	*= frustumScale;
+	camera.right 	*= frustumScale;
+	camera.top 		*= frustumScale;
+	camera.bottom 	*= frustumScale;
+}
 
 OrthographicTrackballControls.prototype = Object.create( THREE.EventDispatcher.prototype );
 OrthographicTrackballControls.prototype.constructor = OrthographicTrackballControls;

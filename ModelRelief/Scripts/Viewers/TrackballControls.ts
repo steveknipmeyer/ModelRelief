@@ -1,5 +1,6 @@
 /**
  * https://github.com/gtsop/threejs-trackball-controls
+ * "three": "^0.86.0",
  * @author Eberhard Graether / http://egraether.com/
  * @author Mark Lundin 	/ http://mark-lundin.com
  * @author Simone Manini / http://daron1337.github.io
