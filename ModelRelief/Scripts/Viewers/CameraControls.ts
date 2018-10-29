@@ -250,6 +250,7 @@ export class CameraControls {
 
             // update Viewer
             this.viewer.camera = newCamera;
+            this.viewer.fitView();
 
             // synchronize UI settings
             this.synchronizeSettingsFromViewCamera(newCamera);

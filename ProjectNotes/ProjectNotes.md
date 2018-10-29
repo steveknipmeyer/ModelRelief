@@ -1,6 +1,7 @@
 ﻿### Tasks
 #### Commit Notes
 
+
 #### Short Term
     The FitView of an Orthographic camera should set the camera position based on the mdoel <extents> (not bounding box) to avoid clipping during rotation.
 
