@@ -26,14 +26,9 @@ import {Viewer} from "Scripts/Viewers/Viewer";
  */
 class CameraControlSettings {
 
-    public camera: BaseCamera;
-
-    // A BaseCamera does not implement a setter for isPerspective to avoid circular dependencies (e.g. Camera <-> CameraFactory).
-    // So, the camera type is maintained as a CameraControlSettings instance member. The onChange method handles the conversion of the underlying BaseCamera.
+    public near: number;
+    public far: number;
     public isPerspective: boolean;
-
-    // The FOV control exposed for both Perspective and Orthographic cameras.
-    // Only Perspective cameras have a setting (fov) so the setting holds the value rather than the active camera.
     public fieldOfView: number;
 
     public standardView: StandardView = StandardView.Front;
@@ -42,11 +37,16 @@ class CameraControlSettings {
      * Creates an instance of CameraControlSettings.
      * @param {Camera} camera Perspective camera.
      */
-    constructor(camera: BaseCamera) {
+    constructor(camera: THREE.Camera) {
 
-        this.camera               = camera;
-        this.isPerspective        = camera.isPerspective;
-        this.fieldOfView          = camera.isPerspective ? (camera.viewCamera as THREE.PerspectiveCamera).fov : CameraSettings.DefaultFieldOfView;
+        const baseCamera: IThreeBaseCamera = camera as IThreeBaseCamera;
+
+        this.near = baseCamera.near;
+        this.far = baseCamera.far;
+        this.isPerspective  = camera instanceof THREE.PerspectiveCamera;
+        this.fieldOfView    = this.isPerspective ? (camera as THREE.PerspectiveCamera).fov : CameraSettings.DefaultFieldOfView;
+
+        this.standardView = StandardView.None;
     }
 }
 /**
@@ -72,8 +72,8 @@ export class CameraControls {
     public settings: CameraControlSettings;         // UI settings
 
     // The maximum and minimum values of these controls are modified by the boundClippingPlanes button so theses controls are instance members.
-    private _controlNearClippingPlane: dat.GUIController;
-    private _controlFarClippingPlane: dat.GUIController;
+    private _controllerNearClippingPlane: dat.GUIController;
+    private _controllerFarClippingPlane: dat.GUIController;
 
     /**
      * Creates an instance of CameraControls.
@@ -100,8 +100,7 @@ export class CameraControls {
 
         // Camera
         this.viewer.eventManager.addEventListener(EventType.ViewerCameraProperties, (event: IMREvent, camera: IThreeBaseCamera) => {
-            this.settings.camera.viewCamera = camera;
-            this.settings.isPerspective = camera instanceof THREE.PerspectiveCamera;
+            this.synchronizeSettingsFromViewCamera(camera);
             });
 
         // Camera Standard View
@@ -126,13 +125,11 @@ export class CameraControls {
         // remove existing
         Graphics.removeAllByName(this.viewer.scene, ObjectNames.CameraHelper);
 
-        assert.deepEqual(this.viewer.camera, this.settings.camera.viewCamera);
-
         // World
-        Graphics.addCameraHelper(this.settings.camera.viewCamera, this.viewer.scene, this.viewer.modelGroup);
+        Graphics.addCameraHelper(this.viewer.camera, this.viewer.scene, this.viewer.modelGroup);
 
         // View
-        const modelView = Graphics.cloneAndTransformObject(this.viewer.modelGroup, this.settings.camera.viewCamera.matrixWorldInverse);
+        const modelView = Graphics.cloneAndTransformObject(this.viewer.modelGroup, this.viewer.camera.matrixWorldInverse);
         const cameraView = CameraHelper.getDefaultCamera(this.viewer.aspectRatio, this.viewer.camera instanceof THREE.PerspectiveCamera);
         Graphics.addCameraHelper(cameraView, this.viewer.scene, modelView);
     }
@@ -142,16 +139,17 @@ export class CameraControls {
      */
     private boundClippingPlanes(): void {
 
-        const clippingPlanes = this.settings.camera.getBoundingClippingPlanes(this.viewer.modelGroup);
+        const baseCamera: BaseCamera = CameraFactory.ConstructFromViewCamera({}, this.viewer.camera);
+        const clippingPlanes = baseCamera.getBoundingClippingPlanes(this.viewer.modelGroup);
 
         // camera
-        this.settings.camera.viewCamera.near = clippingPlanes.near;
-        this.settings.camera.viewCamera.far  = clippingPlanes.far;
-        this.settings.camera.viewCamera.updateProjectionMatrix();
+        this.viewer.camera.near = clippingPlanes.near;
+        this.viewer.camera.far  = clippingPlanes.far;
+        this.viewer.camera.updateProjectionMatrix();
 
         // UI controls
-        this._controlNearClippingPlane.setValue(clippingPlanes.near);
-        this._controlFarClippingPlane.setValue(clippingPlanes.far);
+        this._controllerNearClippingPlane.setValue(clippingPlanes.near);
+        this._controllerFarClippingPlane.setValue(clippingPlanes.far);
     }
 //#endregion
 
@@ -168,12 +166,7 @@ export class CameraControls {
         } = controlOptions;
 
         const scope = this;
-
-        const parameters = {};
-        const camera = CameraFactory.ConstructFromViewCamera(parameters, this.viewer.camera);
-
-        this.settings = new CameraControlSettings(camera);
-        assert.deepEqual(this.viewer.camera, this.settings.camera.viewCamera);
+        this.settings = new CameraControlSettings(this.viewer.camera);
 
         // Init dat.gui and controls for the UI
         const gui = new dat.GUI({
@@ -196,6 +189,7 @@ export class CameraControls {
 
         // Standard Views
         const viewOptions = {
+            None        : StandardView.None,
             Front       : StandardView.Front,
             Back        : StandardView.Back,
             Top         : StandardView.Top,
@@ -220,22 +214,22 @@ export class CameraControls {
             minimum  =  0.1;
             maximum  =  CameraSettings.DefaultFarClippingPlane;
             stepSize =  0.1;
-            this._controlNearClippingPlane = cameraOptions.add(this.settings.camera.viewCamera, "near").name("Near Clipping Plane").min(minimum).max(maximum).step(stepSize).listen();
-            this._controlNearClippingPlane.onChange ((value) => {
+            this._controllerNearClippingPlane = cameraOptions.add(this.settings, "near").name("Near Clipping Plane").min(minimum).max(maximum).step(stepSize).listen();
+            this._controllerNearClippingPlane.onChange ((value) => {
 
-                scope.settings.camera.viewCamera.near = value;
-                scope.settings.camera.viewCamera.updateProjectionMatrix();
+                scope.viewer.camera.near = value;
+                scope.viewer.camera.updateProjectionMatrix();
             });
 
             // Far Clipping Plane
             minimum  =  1;
             maximum  =  CameraSettings.DefaultFarClippingPlane;
             stepSize =  0.1;
-            this._controlFarClippingPlane = cameraOptions.add(this.settings.camera.viewCamera, "far").name("Far Clipping Plane").min(minimum).max(maximum).step(stepSize).listen();
-            this._controlFarClippingPlane.onChange ((value) => {
+            this._controllerFarClippingPlane = cameraOptions.add(this.settings, "far").name("Far Clipping Plane").min(minimum).max(maximum).step(stepSize).listen();
+            this._controllerFarClippingPlane.onChange ((value) => {
 
-                scope.settings.camera.viewCamera.far = value;
-                scope.settings.camera.viewCamera.updateProjectionMatrix();
+                scope.viewer.camera.far = value;
+                scope.viewer.camera.updateProjectionMatrix();
             });
 
             // Bound Clipping Planes
@@ -247,42 +241,18 @@ export class CameraControls {
             const controlCameraHelper = cameraOptions.add(this, "addCameraHelper").name("Camera Helper");
         }
 
-
         // Perspective
         const perspectiveCameraControl = cameraOptions.add(this.settings, "isPerspective").name("Perspective").listen();
         perspectiveCameraControl.onChange((value) => {
 
-            const existingCamera: BaseCamera  = CameraFactory.ConstructFromViewCamera({}, this.viewer.camera);
-            const newDtoCamera = existingCamera.toDtoModel();
-            newDtoCamera.isPerspective = !newDtoCamera.isPerspective;
-            const newCamera = newDtoCamera.getViewCamera();
-
-            if (scope.settings.isPerspective) {
-                // Orthographic -> Perspective
-            } else {
-                // Perspective -> Orthographic
-                const orthograpicCamera = newCamera as THREE.OrthographicCamera;
-
-                orthograpicCamera.zoom = 1;
-
-                // extents of existing Perspective camera clipping planes will define Orthographic camera boundary
-                const farPlaneExtents = existingCamera.getFarPlaneExtents();
-                orthograpicCamera.left   = -farPlaneExtents.x / 2;
-                orthograpicCamera.right  = +farPlaneExtents.x / 2;
-                orthograpicCamera.top    = +farPlaneExtents.y / 2;
-                orthograpicCamera.bottom = -farPlaneExtents.y / 2;
-            }
-            newCamera.updateProjectionMatrix();
+            // toggle projection
+            const newCamera: IThreeBaseCamera = CameraFactory.ConstructViewCameraOppositeProjection(this.viewer.camera);
 
             // update Viewer
             this.viewer.camera = newCamera;
 
             // synchronize UI settings
-            this.settings.camera.viewCamera = newCamera;
-            if (this.settings.isPerspective) {
-                const perspectiveCamera = newCamera as THREE.PerspectiveCamera;
-                this.settings.fieldOfView = perspectiveCamera.fov;
-            }
+            this.synchronizeSettingsFromViewCamera(newCamera);
         });
 
         // Field of View
@@ -292,13 +262,26 @@ export class CameraControls {
             stepSize = 1;
             const controlFieldOfView = cameraOptions.add(this.settings, "fieldOfView").name("Field of View").min(minimum).max(maximum).step(stepSize).listen();
             controlFieldOfView.onChange((value) => {
-                if (scope.settings.camera.viewCamera instanceof THREE.PerspectiveCamera) {
-                    scope.settings.camera.viewCamera.fov = value;
-                    scope.settings.camera.viewCamera.updateProjectionMatrix();
+                if (scope.viewer.camera instanceof THREE.PerspectiveCamera) {
+                    scope.viewer.camera.fov = value;
+                    scope.viewer.camera.updateProjectionMatrix();
                 }
             });
         }
-
         cameraOptions.open();
+    }
+
+    private synchronizeSettingsFromViewCamera(camera: IThreeBaseCamera): void {
+
+        this.settings.near = camera.near;
+        this.settings.far = camera.far;
+        this.settings.isPerspective = camera instanceof THREE.PerspectiveCamera;
+
+        if (this.settings.isPerspective) {
+            const perspectiveCamera = camera as THREE.PerspectiveCamera;
+            this.settings.fieldOfView = perspectiveCamera.fov;
+        }
+
+        this.settings.standardView = StandardView.None;
     }
 }

@@ -24,6 +24,12 @@ import {Project} from "Scripts/Models/Project/Project";
 export class CameraFactory {
 
     /**
+     * @constructor
+     */
+    constructor() {
+    }
+
+    /**
      * @description Construct a camera (Orthographic, Perspective) from an Id.
      * @static
      * @param {number} id Camera Id.
@@ -78,9 +84,35 @@ export class CameraFactory {
     }
 
     /**
-     * @constructor
+     * @description Toggles the projection mode of the camera (Perspective <-> Orthographic)
+     * @param {IThreeBaseCamera} camera Camera to swap projection.
+     * @returns {IThreeBaseCamera}
      */
-    constructor() {
-    }
+    public static ConstructViewCameraOppositeProjection(camera: IThreeBaseCamera): IThreeBaseCamera {
 
+        const sourceCamera: BaseCamera = CameraFactory.ConstructFromViewCamera({}, camera);
+
+        const newDtoCamera: Dto.Camera = sourceCamera.toDtoModel();
+        newDtoCamera.isPerspective = !newDtoCamera.isPerspective;
+        const newCamera = newDtoCamera.getViewCamera();
+
+        if (newCamera instanceof THREE.PerspectiveCamera) {
+            // Orthographic -> Perspective
+        } else {
+            // Perspective -> Orthographic
+            const orthograpicCamera = newCamera as THREE.OrthographicCamera;
+
+            // extents of existing Perspective camera clipping planes will define Orthographic camera boundary
+            orthograpicCamera.zoom = 1;
+
+            const nearPlaneExtents = sourceCamera.getNearPlaneExtents();
+            orthograpicCamera.left   = -nearPlaneExtents.x / 2;
+            orthograpicCamera.right  = +nearPlaneExtents.x / 2;
+            orthograpicCamera.top    = +nearPlaneExtents.y / 2;
+            orthograpicCamera.bottom = -nearPlaneExtents.y / 2;
+        }
+        newCamera.updateProjectionMatrix();
+
+        return newCamera;
+    }
 }

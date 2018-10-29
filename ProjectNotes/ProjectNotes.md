@@ -3,30 +3,22 @@
 
 
 #### Short Term
+    The FitView of an Orthographic camera should set the camera position based on the mdoel <extents> (not bounding box) to avoid clipping during rotation.
+
     CameraControls
-        Refactor to use a DTO as the backing model.
+        CameraControlSettings -> CameraControlsSettings
 
-        Goal : Remove settings.camera and connect directly to this.viewe.camera.
+        Should static methods be camelCase?
+            Several are capitalized.
 
-        settings
-            public camera: BaseCamera;
+        Perspective <-> Orthographic
+            The new view does not match the previous view.
 
-            public isPerspective: boolean;
-            public fieldOfView: number;
-            public standardView: StandardView = StandardView.Front;
+            Anomalies can be introducted in the generated mesh.
+                House (Front) is distorted.
 
-        Refactor the camera conversion logic into a CameraHelper method.
-            CameraHelper.ChangeProjection
-
-            Why does Perspective -> Orthographic move the camera position to an extreme?
-                Construct the new camera from the previous camera settings.
-
-        Switching between Perspective and Orthographic can lead to anomalies in the generated mesh.
-            House (Front) is distorted.
-
-        Update the CameraControls to hide the Perspective properties.
+        Separate the Perspective controls into a separate dat.gui controller that can be entirely hidden or shown.
             Field of View
-
 
     Camera Pan is not preserved.
         Viewer.initializeInputControls

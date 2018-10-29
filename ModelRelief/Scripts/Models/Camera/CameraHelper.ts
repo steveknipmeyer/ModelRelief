@@ -19,6 +19,12 @@ import {Services} from "Scripts/System/Services";
  */
 export class CameraHelper {
 
+    /**
+     * @constructor
+     */
+    constructor() {
+    }
+
 //#region Clipping Planes
     /**
      * @description Resets the clipping planes to the default values.
@@ -272,12 +278,6 @@ export class CameraHelper {
         camera.right = frustum.right;
         camera.top = frustum.top;
         camera.bottom = frustum.bottom;
-    }
-
-    /**
-     * @constructor
-     */
-    constructor() {
     }
 //#endregion
 }
