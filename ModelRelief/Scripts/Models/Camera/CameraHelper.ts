@@ -10,6 +10,8 @@ import {StandardView} from "Scripts/Api/V1/Interfaces/ICamera";
 import {Graphics} from "Scripts/Graphics/Graphics";
 import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
 import {CameraSettings, IOrthographicFrustum} from "Scripts/Models/Camera/Camerasettings";
+import {Format} from "Scripts/System/Format";
+import {ConsoleLogger} from "Scripts/System/Logger";
 import {Services} from "Scripts/System/Services";
 
 /**
@@ -282,6 +284,16 @@ export class CameraHelper {
         camera.right = frustum.right;
         camera.top = frustum.top;
         camera.bottom = frustum.bottom;
+    }
+
+    /**
+     * @description Debug support for displaying the properties of a camera.
+     * @param {IThreeBaseCamera} camera
+     */
+    public debugCameraProperties (camera: IThreeBaseCamera): void {
+
+        const consoleLogger: ConsoleLogger = new ConsoleLogger();
+        
     }
 //#endregion
 }

@@ -9,6 +9,9 @@
             Field of View
 
     Camera Pan is not preserved.
+        Experiment with CameraHelper.
+            Explorr lookat and target.
+            
         Viewer.initializeInputControls
             this._controls.target.copy(boundingBox.getCenter());
 
