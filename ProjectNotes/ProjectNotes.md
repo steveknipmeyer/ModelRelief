@@ -1,17 +1,10 @@
 ﻿### Tasks
 #### Commit Notes
 
-
 #### Short Term
-    The FitView of an Orthographic camera should set the camera position based on the mdoel <extents> (not bounding box) to avoid clipping during rotation.
+    Close in views of House (Lambda: Documents\Temp\MalformedHouse) happen in Orthogonal meshes.
 
     CameraControls
-        Perspective <-> Orthographic
-            The new view does not match the previous view.
-
-            Anomalies can be introducted in the generated mesh.
-                House (Front) is distorted.
-
         Separate the Perspective controls into a separate dat.gui controller that can be entirely hidden or shown.
             Field of View
 
@@ -22,6 +15,12 @@
         Review the lookAt method calls.
 
     Should clipping planes be set based on the Model?
+
+    Chrome "paused before potential out-of-memory crash".
+        https://stackoverflow.com/questions/42110726/chrome-devtools-paused-before-potential-out-of-memory-crash
+        https://developers.google.com/web/tools/chrome-devtools/memory-problems/
+        
+    Add UI progress indicator for mesh generation.
 
     Write a tool to update the Test models and DbInitializer.
         Can the Mesh JSON files be transformed into C#?
@@ -182,10 +181,10 @@ Namimg
 - [ ] The quaternion and up vector do not roundtrip although the visual camera appears unchanged.  The matrix and projectionMatrix are unchanged!
 - [ ] Cameras do not handle offsets (pan). Is this a TrackBallControl issue?
 - [ ] Randomly generated cameras do not roundtrip the matrix property.
-
-  Viewer.initializeInputControls no longer defines controls.position0. Both TrackballControls and OrthographicTrackballControls initialize from the camera.
-        // N.B. https://stackoverflow.com/questions/10325095/threejs-camera-lookat-has-no-effect-is-there-something-im-doing-wrong
-        this._controls.position0.copy(this.camera.position);
+- [ ] 
+Perspective <-> Orthographic
+    The new view does not match the previous view. 
+    Fit View is used after the conversion.
 
 ##### Clipping Plane Issues
 

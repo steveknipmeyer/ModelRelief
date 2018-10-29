@@ -65,9 +65,9 @@
 //              "MRDatabaseProvider": "SQLServer",
                 "MRDatabaseProvider": "SQLite",
                 "MRExitAfterInitialization":"False",
-                "MRInitializeDatabase":"True",
-                "MRSeedDatabase":"True",
-                "MRInitializeUserStore":"True",
+                "MRInitializeDatabase":"False",
+                "MRSeedDatabase":"False",
+                "MRInitializeUserStore":"False",
             },
             "sourceFileMap": {
                 "/Views": "${workspaceRoot}/Views"

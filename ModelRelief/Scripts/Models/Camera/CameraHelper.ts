@@ -121,7 +121,7 @@ export class CameraHelper {
 
             // Since the camera frustum encloses the entire model, the Z distance of an orthographic camera does not affect the scale.
             // However, a Z distance is chosen (from the front face of the model bounding box)  so that the camera can be rotated without clipping the model.
-            newCameraZDistanceView = boundingBoxView.getSize().z;
+            newCameraZDistanceView = Math.max(boundingBoxView.getSize().x, boundingBoxView.getSize().y, boundingBoxView.getSize().z);
         }
 
         // Preserve XY but set Z to enclose entire model.
