@@ -6,6 +6,15 @@
     CameraControls
         Refactor to use a DTO as the backing model.
 
+        Goal : Remove settings.camera and connect directly to this.viewe.camera.
+
+        settings
+            public camera: BaseCamera;
+
+            public isPerspective: boolean;
+            public fieldOfView: number;
+            public standardView: StandardView = StandardView.Front;
+
         Refactor the camera conversion logic into a CameraHelper method.
             CameraHelper.ChangeProjection
 
