@@ -217,7 +217,7 @@ export class App {
         // https://stackoverflow.com/questions/29221795/serializing-camera-state-in-threejs
         const camera = new PerspectiveCamera({}, this._viewer.camera as THREE.PerspectiveCamera);
         const cameraModel = camera.toDtoModel();
-        CameraFactory.ConstructFromDtoModelAsync(cameraModel).then((cameraRoundtrip) => {
+        CameraFactory.constructFromDtoModelAsync(cameraModel).then((cameraRoundtrip) => {
 
             const perspectiveCameraRoundTrip = cameraRoundtrip as PerspectiveCamera;
             const distortCamera = false;

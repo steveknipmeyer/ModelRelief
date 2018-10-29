@@ -209,6 +209,10 @@ export class CameraHelper {
                 camera.up.set(-1, 1, -1);
                 break;
             }
+
+            default: {
+                return viewCamera as IThreeBaseCamera;
+            }
         }
         // Force orientation before Fit View calculation
         camera.lookAt(boundingBox.getCenter());

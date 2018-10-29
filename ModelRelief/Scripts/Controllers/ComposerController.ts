@@ -211,7 +211,7 @@ export class ComposerController {
 
         // copy view camera so we can optimize clipping planes
         const modelViewCameraClone = this.modelViewer.camera.clone(true);
-        this.activeDepthBufferCamera = CameraFactory.ConstructFromViewCamera(this.activeDepthBufferCamera, modelViewCameraClone);
+        this.activeDepthBufferCamera = CameraFactory.constructFromViewCamera(this.activeDepthBufferCamera, modelViewCameraClone);
         this.activeDepthBufferCamera.finalizeClippingPlanes(this.modelViewer.modelGroup);
 
         // update
@@ -288,7 +288,7 @@ export class ComposerController {
 
             const camera = new PerspectiveCamera({}, this.modelViewer.camera);
             const cameraModel = camera.toDtoModel();
-            CameraFactory.ConstructFromDtoModelAsync(cameraModel).then((cameraRoundtrip) => {
+            CameraFactory.constructFromDtoModelAsync(cameraModel).then((cameraRoundtrip) => {
                 const perspectiveCameraRoundTrip =  cameraRoundtrip.viewCamera as THREE.PerspectiveCamera;
                 UnitTests.comparePerspectiveCameras(camera.viewCamera, perspectiveCameraRoundTrip);
 

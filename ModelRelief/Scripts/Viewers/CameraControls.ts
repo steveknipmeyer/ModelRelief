@@ -22,9 +22,9 @@ import {Viewer} from "Scripts/Viewers/Viewer";
 
 /**
  * @description CameraControls
- * @class CameraControlSettings
+ * @class CameraControlsSettings
  */
-class CameraControlSettings {
+class CameraControlsSettings {
 
     public near: number;
     public far: number;
@@ -34,7 +34,7 @@ class CameraControlSettings {
     public standardView: StandardView = StandardView.Front;
 
     /**
-     * Creates an instance of CameraControlSettings.
+     * Creates an instance of CameraControlsSettings.
      * @param {Camera} camera Perspective camera.
      */
     constructor(camera: THREE.Camera) {
@@ -69,7 +69,7 @@ export interface ICameraControlsOptions {
 export class CameraControls {
 
     public viewer: Viewer;                          // associated viewer
-    public settings: CameraControlSettings;         // UI settings
+    public settings: CameraControlsSettings;         // UI settings
 
     // The maximum and minimum values of these controls are modified by the boundClippingPlanes button so theses controls are instance members.
     private _controllerNearClippingPlane: dat.GUIController;
@@ -139,7 +139,7 @@ export class CameraControls {
      */
     private boundClippingPlanes(): void {
 
-        const baseCamera: BaseCamera = CameraFactory.ConstructFromViewCamera({}, this.viewer.camera);
+        const baseCamera: BaseCamera = CameraFactory.constructFromViewCamera({}, this.viewer.camera);
         const clippingPlanes = baseCamera.getBoundingClippingPlanes(this.viewer.modelGroup);
 
         // camera
@@ -166,7 +166,7 @@ export class CameraControls {
         } = controlOptions;
 
         const scope = this;
-        this.settings = new CameraControlSettings(this.viewer.camera);
+        this.settings = new CameraControlsSettings(this.viewer.camera);
 
         // Init dat.gui and controls for the UI
         const gui = new dat.GUI({
@@ -246,7 +246,7 @@ export class CameraControls {
         perspectiveCameraControl.onChange((value) => {
 
             // toggle projection
-            const newCamera: IThreeBaseCamera = CameraFactory.ConstructViewCameraOppositeProjection(this.viewer.camera);
+            const newCamera: IThreeBaseCamera = CameraFactory.constructViewCameraOppositeProjection(this.viewer.camera);
 
             // update Viewer
             this.viewer.camera = newCamera;

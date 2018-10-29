@@ -201,7 +201,7 @@ export class UnitTests {
                 perspectiveCamera);
 
             const cameraModel = camera.toDtoModel();
-            CameraFactory.ConstructFromDtoModelAsync(cameraModel).then((cameraRoundtrip) => {
+            CameraFactory.constructFromDtoModelAsync(cameraModel).then((cameraRoundtrip) => {
                 const c1 = camera.viewCamera;
                 const c2 = cameraRoundtrip.viewCamera as THREE.PerspectiveCamera;
 

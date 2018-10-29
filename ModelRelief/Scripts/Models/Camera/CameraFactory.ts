@@ -35,10 +35,10 @@ export class CameraFactory {
      * @param {number} id Camera Id.
      * @returns {Promise<BaseCamera>}
      */
-    public static async ConstructFromIdAsync(id: number): Promise<BaseCamera> {
+    public static async constructFromIdAsync(id: number): Promise<BaseCamera> {
 
         const dtoCamera = await Dto.Camera.fromIdAsync(id);
-        const camera = await CameraFactory.ConstructFromDtoModelAsync(dtoCamera);
+        const camera = await CameraFactory.constructFromDtoModelAsync(dtoCamera);
 
         return camera;
     }
@@ -49,7 +49,7 @@ export class CameraFactory {
      * @param {number} id Camera Id.
      * @returns {Promise<BaseCamera>}
      */
-    public static async ConstructFromDtoModelAsync(dtoCamera: Dto.Camera): Promise<BaseCamera> {
+    public static async constructFromDtoModelAsync(dtoCamera: Dto.Camera): Promise<BaseCamera> {
 
         const viewCamera = dtoCamera.getViewCamera();
         const cameraParameters = {id: dtoCamera.id, name: dtoCamera.name, description: dtoCamera.description};
@@ -69,7 +69,7 @@ export class CameraFactory {
      * @param {IThreeBaseCamera} camera IThreeBaseCamera.
      * @returns {Promise<BaseCamera>}
      */
-    public static ConstructFromViewCamera(parameters: IModel, viewCamera: IThreeBaseCamera): BaseCamera {
+    public static constructFromViewCamera(parameters: IModel, viewCamera: IThreeBaseCamera): BaseCamera {
 
         parameters.name        = parameters.name        || "Camera";
         parameters.description = parameters.description || "Perspective Camera";
@@ -88,9 +88,9 @@ export class CameraFactory {
      * @param {IThreeBaseCamera} camera Camera to swap projection.
      * @returns {IThreeBaseCamera}
      */
-    public static ConstructViewCameraOppositeProjection(camera: IThreeBaseCamera): IThreeBaseCamera {
+    public static constructViewCameraOppositeProjection(camera: IThreeBaseCamera): IThreeBaseCamera {
 
-        const sourceCamera: BaseCamera = CameraFactory.ConstructFromViewCamera({}, camera);
+        const sourceCamera: BaseCamera = CameraFactory.constructFromViewCamera({}, camera);
 
         const newDtoCamera: Dto.Camera = sourceCamera.toDtoModel();
         newDtoCamera.isPerspective = !newDtoCamera.isPerspective;
