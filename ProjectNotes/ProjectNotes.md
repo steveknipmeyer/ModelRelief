@@ -1,10 +1,8 @@
 ﻿### Tasks
 #### Commit Notes
-
+Add StandardView keyboard handling.
 
 #### Short Term
-    Add StandardView keyboard handling.
-
     Is IInputController needed?
         Is there a type that is the intersection of two types?
 

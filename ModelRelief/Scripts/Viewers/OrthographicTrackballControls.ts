@@ -15,7 +15,7 @@ import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
 import {Format} from "Scripts/System/Format";
 import {InputControllerHelper} from "Scripts/Viewers/InputControllerHelper"
 
-export function OrthographicTrackballControls ( object: THREE.OrthographicCamera, domElement,  keydownHandler ) {
+export function OrthographicTrackballControls ( object: THREE.OrthographicCamera, domElement) {
 
 	this.updateCount = 0;
 
@@ -24,9 +24,6 @@ export function OrthographicTrackballControls ( object: THREE.OrthographicCamera
 
 	this.object = object;
 	this.domElement = ( domElement !== undefined ) ? domElement : document;
-
-	// augment built-in keyboard controls
-	this.keydownHandler = keydownHandler;
 
 	// API
 
@@ -440,6 +437,9 @@ export function OrthographicTrackballControls ( object: THREE.OrthographicCamera
 
 		event.preventDefault();
 		event.stopPropagation();
+
+		// canvas focus necessary for Viewer keydownHandler
+		_this.domElement.focus();
 
 		if ( _state === STATE.NONE ) {
 

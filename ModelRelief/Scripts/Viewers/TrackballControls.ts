@@ -13,16 +13,13 @@ import * as THREE from 'three';
 
 import {InputControllerHelper} from "Scripts/Viewers/InputControllerHelper"
 
-export function TrackballControls ( object: THREE.PerspectiveCamera, domElement, keydownHandler ) {
+export function TrackballControls ( object: THREE.PerspectiveCamera, domElement) {
 
 	var _this = this;
 	var STATE = { NONE: - 1, ROTATE: 0, ZOOM: 1, PAN: 2, TOUCH_ROTATE: 3, TOUCH_ZOOM_PAN: 4 };
 
 	this.object = object;
 	this.domElement = ( domElement !== undefined ) ? domElement : document;
-
-	// augment built-in keyboard controls
-	this.keydownHandler = keydownHandler;
 
 	// API
 
@@ -397,6 +394,9 @@ export function TrackballControls ( object: THREE.PerspectiveCamera, domElement,
 
 		event.preventDefault();
 		event.stopPropagation();
+
+		// canvas focus necessary for Viewer keydownHandler
+		_this.domElement.focus();
 
 		if ( _state === STATE.NONE ) {
 
