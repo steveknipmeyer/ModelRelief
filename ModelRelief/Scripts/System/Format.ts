@@ -14,7 +14,7 @@ import * as THREE from "three";
 export class Format {
     private static numericPrecision = 2;
     private static numericFieldWidth = 8;
-    private static vectorLabelFieldWidth = 8;
+    private static vectorLabelFieldWidth = 16;
 
     /**
      * @description Formats a Vector2 into fixed width fields.

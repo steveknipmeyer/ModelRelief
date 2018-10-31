@@ -16,15 +16,16 @@ import {Services} from "Scripts/System/Services";
  */
 export enum ObjectNames {
 
-    Root          =  "Root",
+    Root                =  "Root",
 
-    BoundingBox   = "Bounding Box",
-    Box           = "Box",
-    CameraHelper  = "CameraHelper",
-    ModelClone    = "Model Clone",
-    Plane         = "Plane",
-    Sphere        = "Sphere",
-    Triad         = "Triad",
+    BoundingBox         = "Bounding Box",
+    Box                 = "Box",
+    CameraHelper        = "CameraHelper",
+    ControllerHelper    = "ControllerHelper",
+    ModelClone          = "Model Clone",
+    Plane               = "Plane",
+    Sphere              = "Sphere",
+    Triad               = "Triad",
 }
 
 /**

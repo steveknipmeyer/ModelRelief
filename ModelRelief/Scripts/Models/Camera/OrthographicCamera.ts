@@ -9,7 +9,6 @@ import * as THREE from "three";
 
 import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
-import {Format} from "Scripts/System/Format";
 
 /**
  * @description OrthographicCamera

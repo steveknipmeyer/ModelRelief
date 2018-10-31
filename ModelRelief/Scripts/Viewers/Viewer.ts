@@ -12,6 +12,7 @@ import {Graphics, ObjectNames} from "Scripts/Graphics/Graphics";
 import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
 import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
 import {EventManager, EventType} from "Scripts/System/EventManager";
+import {ElementIds} from "Scripts/System/Html";
 import {ILogger} from "Scripts/System/Logger";
 import {MathLibrary} from "Scripts/System/Math";
 import {Services} from "Scripts/System/Services";
@@ -350,6 +351,21 @@ export class Viewer {
     }
 
     /**
+     * @description Initializes diagnostic tools for debugging.
+     */
+    public initializeDiagnostics() {
+
+        if (this._canvas.id !== ElementIds.ModelCanvas)
+            return;
+
+        const interval = 1000;
+        window.setTimeout(() => {
+            InputControllerHelper.debugInputControllerProperties(this.name, this._controls, this.scene, this.camera);
+            // this.initializeDiagnostics();
+        }, interval);
+    }
+
+    /**
      * @description Initialize the scene with the base objects
      */
     public initialize() {
@@ -361,6 +377,7 @@ export class Viewer {
         this.initializeInputControls();
         this.initializeUIControls();
         this.initializeKeyboardShortcuts();
+        this.initializeDiagnostics();
 
         this.onResizeWindow();
         window.addEventListener("resize", this.onResizeWindow.bind(this), false);

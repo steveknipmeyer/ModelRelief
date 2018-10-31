@@ -315,18 +315,6 @@ export function OrthographicTrackballControls ( object: THREE.OrthographicCamera
 
 	this.update = function () {
 
-		this.updateCount += 1;
-		if ((this.updateCount % 50) === 0) {
-
-			// console.log (`zoom: ${Format.formatNumber(object.zoom)}`);
-			// console.log (Format.formatVector3("position", object.position));
-			// console.log (Format.formatVector3("target", this.target));
-			// console.log (Format.formatVector3("eye", _eye));
-
-			// let frustum = new THREE.Vector4(object.left, object.right, object.top, object.bottom);
-			// console.log (Format.formatVector4("frustum", frustum));
-			// console.log ("");
-		}
 		_eye.subVectors( _this.object.position, _this.target );
 
 		if ( ! _this.noRotate ) {

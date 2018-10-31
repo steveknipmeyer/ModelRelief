@@ -6,6 +6,7 @@
 "use strict";
 import * as THREE from "three";
 
+import {Graphics, ObjectNames} from "Scripts/Graphics/Graphics";
 import {Format} from "Scripts/System/Format";
 import {ConsoleLogger} from "Scripts/System/Logger";
 
@@ -68,4 +69,36 @@ export class InputControllerHelper {
         InputControllerHelper.setTarget(controller, translatedUnitTarget, setReset);
     }
 
+    /**
+     * @description Diagnostic tool for the input controller.
+     * @static
+     * @param {string} controllerName Controller name.
+     * @param {IInputController} controller Active controller.
+     * @param {THREE.Scene} scene Active scene.
+     * @param {THREE.Camera} camera Active camera.
+     */
+    public static debugInputControllerProperties(controllerName: string, controller: IInputController, scene: THREE.Scene, camera: THREE.Camera): void {
+
+        const consoleLogger: ConsoleLogger = new ConsoleLogger();
+        const headerStyle   = "font-family : monospace; font-weight : bold; color : cyan; font-size : 14px";
+        const messageStyle  = "font-family : monospace; color : white; font-size : 12px";
+
+        consoleLogger.addMessage(`${controllerName}: Input Controller Properties`, headerStyle);
+        consoleLogger.addMessage(`${Format.formatVector3("Camera Position", camera.position)}`, messageStyle);
+        consoleLogger.addMessage(`${Format.formatVector3("Target", controller.target)}`, messageStyle);
+
+        // construct root object of the helper
+        const controllerHelper  = new THREE.Group();
+        controllerHelper.name = ObjectNames.ControllerHelper;
+        controllerHelper.visible = true;
+
+        // remove existing
+        Graphics.removeAllByName(scene, ObjectNames.ControllerHelper);
+
+        // position
+        const position = Graphics.createSphereMesh(camera.position, 3);
+        controllerHelper.add(position);
+
+        scene.add(controllerHelper);
+    }
 }
