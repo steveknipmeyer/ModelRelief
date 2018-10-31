@@ -51,6 +51,7 @@ declare class TrackballControls extends THREE.EventDispatcher {
     checkDistances(): void;
     update(): void;
     reset(): void;
+    dispose(): void;
 }
 
 declare class OrthographicTrackballControls extends THREE.EventDispatcher {
@@ -88,6 +89,7 @@ declare class OrthographicTrackballControls extends THREE.EventDispatcher {
     panCamera(): void;
     update(): void;
     reset(): void;
+    dispose(): void;
 }
 
 declare class OBJLoader {

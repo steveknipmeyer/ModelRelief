@@ -1,8 +1,20 @@
 ﻿### Tasks
 #### Commit Notes
 
+
 #### Short Term
-    Close in views of House (Lambda: Documents\Temp\MalformedHouse) happen in Orthogonal meshes.
+    Add StandardView keyboard handling.
+
+    Is IInputController needed?
+        Is there a type that is the intersection of two types?
+
+    Is the center of rotation now the controls target point?
+
+    Add graphical helpers for the input controllers.
+
+    Review the difference between the controls "target" and the camera "lookAt".
+
+    Close in Orthogonal views of House (Lambda: Documents\Temp\MalformedHouse) yiueld malformed meshes.
 
     CameraControls
         Separate the Perspective controls into a separate dat.gui controller that can be entirely hidden or shown.
@@ -10,19 +22,17 @@
 
     Camera Pan is not preserved.
         Experiment with CameraHelper.
-            Explorr lookat and target.
-            
+            Explore lookat and target.
+
         Viewer.initializeInputControls
             this._controls.target.copy(boundingBox.getCenter());
-
-        Review the lookAt method calls.
 
     Should clipping planes be set based on the Model?
 
     Chrome "paused before potential out-of-memory crash".
         https://stackoverflow.com/questions/42110726/chrome-devtools-paused-before-potential-out-of-memory-crash
         https://developers.google.com/web/tools/chrome-devtools/memory-problems/
-        
+
     Add UI progress indicator for mesh generation.
 
     Write a tool to update the Test models and DbInitializer.
@@ -184,9 +194,9 @@ Namimg
 - [ ] The quaternion and up vector do not roundtrip although the visual camera appears unchanged.  The matrix and projectionMatrix are unchanged!
 - [ ] Cameras do not handle offsets (pan). Is this a TrackBallControl issue?
 - [ ] Randomly generated cameras do not roundtrip the matrix property.
-- [ ] 
+- [ ]
 Perspective <-> Orthographic
-    The new view does not match the previous view. 
+    The new view does not match the previous view.
     Fit View is used after the conversion.
 
 ##### Clipping Plane Issues

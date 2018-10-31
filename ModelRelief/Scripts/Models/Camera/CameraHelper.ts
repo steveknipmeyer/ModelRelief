@@ -288,12 +288,42 @@ export class CameraHelper {
 
     /**
      * @description Debug support for displaying the properties of a camera.
-     * @param {IThreeBaseCamera} camera
+     * @param {IThreeBaseCamera} camera Target camera.
+     * @param {string} tag Debug label.
      */
-    public debugCameraProperties (camera: IThreeBaseCamera): void {
+    public static debugCameraProperties(camera: IThreeBaseCamera, tag: string): void {
 
         const consoleLogger: ConsoleLogger = new ConsoleLogger();
-        
+        const headerStyle   = "font-family : monospace; font-weight : bold; color : yellow; font-size : 16px";
+        const messageStyle  = "font-family : monospace; color : white; font-size : 12px";
+        const isPerspective = camera instanceof THREE.PerspectiveCamera;
+        const cameraType = isPerspective ? "Perspective" : "Orthographic";
+
+        consoleLogger.addMessage(`${tag}: Camera Properties`, headerStyle);
+        consoleLogger.addMessage(`Type = ${cameraType}`, messageStyle);
+        // consoleLogger.addMessage(`Near Plane = ${camera.near}`, messageStyle);
+        // consoleLogger.addMessage(`Far Plane = ${camera.far}`, messageStyle);
+        // consoleLogger.addEmptyLine();
+
+        // if (isPerspective) {
+        //     const perspectiveCamera = camera as THREE.PerspectiveCamera;
+        //     consoleLogger.addMessage(`Field Of View = ${perspectiveCamera.fov}`, messageStyle);
+        //     consoleLogger.addMessage(`Aspect Ratio = ${perspectiveCamera.aspect}`, messageStyle);
+        // } else {
+        //     const orthographicCamera = camera as THREE.OrthographicCamera;
+        //     consoleLogger.addMessage(`Left = ${Format.formatNumber(orthographicCamera.left)}`, messageStyle);
+        //     consoleLogger.addMessage(`Right = ${Format.formatNumber(orthographicCamera.right)}`, messageStyle);
+        //     consoleLogger.addMessage(`Top = ${Format.formatNumber(orthographicCamera.top)}`, messageStyle);
+        //     consoleLogger.addMessage(`Bottom = ${Format.formatNumber(orthographicCamera.bottom)}`, messageStyle);
+        // }
+        // consoleLogger.addEmptyLine();
+
+        consoleLogger.addMessage(`${Format.formatVector3("Position", camera.position)}`, messageStyle);
+        consoleLogger.addMessage(`${Format.formatVector3("Up", camera.up)}`, messageStyle);
+        consoleLogger.addMessage(`${Format.formatVector4("Q", new THREE.Vector4(camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w))}`, messageStyle);
+        consoleLogger.addEmptyLine();
+
+        // consoleLogger.addMessage(`${Format.formatVector3("Scale", camera.scale)}`, messageStyle);
     }
 //#endregion
 }

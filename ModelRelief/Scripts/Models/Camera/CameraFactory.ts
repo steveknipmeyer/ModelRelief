@@ -111,7 +111,7 @@ export class CameraFactory {
             orthograpicCamera.top    = +nearPlaneExtents.y / 2;
             orthograpicCamera.bottom = -nearPlaneExtents.y / 2;
         }
-        // force camera matrix to update; matrixAutoUpdate happens in render loop        
+        // force camera matrix to update; matrixAutoUpdate happens in render loop
         newCamera.updateMatrixWorld(true);
         newCamera.updateProjectionMatrix();
 

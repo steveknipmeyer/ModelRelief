@@ -21,7 +21,7 @@ import {Project} from "Scripts/Models/Project/Project";
 /**
  * @description Camera clipping planes.
  * @export
- * @interface ClippingPlanes
+ * @interface IClippingPlanes
  */
 export interface IClippingPlanes {
     near: number;

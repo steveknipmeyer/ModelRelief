@@ -15,6 +15,7 @@ import {EventManager, EventType} from "Scripts/System/EventManager";
 import {ILogger} from "Scripts/System/Logger";
 import {MathLibrary} from "Scripts/System/Math";
 import {Services} from "Scripts/System/Services";
+import {IInputController, InputControllerHelper} from "Scripts/Viewers/InputControllerHelper";
 import {OrthographicTrackballControls} from "Scripts/Viewers/OrthographicTrackballControls";
 import {TrackballControls} from "Scripts/Viewers/TrackballControls";
 
@@ -251,7 +252,6 @@ export class Viewer {
 
         const ambientLight = new THREE.AmbientLight(0x404040);
         this.scene.add(ambientLight);
-
         const directionalLight1 = new THREE.DirectionalLight(0xC0C090);
         directionalLight1.position.set(-100, -50, 100);
         this.scene.add(directionalLight1);
@@ -266,12 +266,22 @@ export class Viewer {
      */
     public initializeInputControls() {
 
-        this._controls = this.camera instanceof THREE.PerspectiveCamera ?
-            new TrackballControls(this.camera, this._renderer.domElement, this.keydownHandler.bind(this)) :
-            new OrthographicTrackballControls(this.camera, this._renderer.domElement, this.keydownHandler.bind(this));
+        CameraHelper.debugCameraProperties(this.camera, "Before");
 
+        if (this._controls)
+            this._controls.dispose();
+        this._controls = this.camera instanceof THREE.PerspectiveCamera ?
+            new TrackballControls(this.camera as THREE.PerspectiveCamera, this._renderer.domElement, this.keydownHandler.bind(this)) :
+            new OrthographicTrackballControls(this.camera as THREE.OrthographicCamera, this._renderer.domElement, this.keydownHandler.bind(this));
+
+        CameraHelper.debugCameraProperties(this.camera, "After");
+
+        // N.B. This step is necessary for Fit View!
+        // https://stackoverflow.com/questions/16809805/three-trackballcontrols-rotation-center
         const boundingBox = Graphics.getBoundingBoxFromObject(this._root);
         this._controls.target.copy(boundingBox.getCenter());
+
+        // InputControllerHelper.setDefaultTarget(this._controls, this.camera, true);
     }
 
     /**
@@ -282,7 +292,7 @@ export class Viewer {
 
     /**
      * @description Event handler for  keyboard shortcuts.
-     *              Chained from the input contrll (TrackballControls, OrthographicTrackballControls) handler.
+     *              Chained from the input control (TrackballControls, OrthographicTrackballControls) handler.
      * @param {KeyboardEvent} event
      * @returns
      */

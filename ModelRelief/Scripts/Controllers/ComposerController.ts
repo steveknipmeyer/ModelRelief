@@ -278,7 +278,13 @@ export class ComposerController {
      * @description Saves the relief.
      */
     public saveRelief() {
+        CameraHelper.debugCameraProperties(this.modelViewer.camera, "saveRelief");
+    }
 
+    /**
+     * @description Saves the relief.
+     */
+    public saveReliefTest() {
         // WIP: Save the Mesh as an OBJ format file?
         // It may be more efficient to maintain Meshes in raw format since the size is substantially smaller.
 

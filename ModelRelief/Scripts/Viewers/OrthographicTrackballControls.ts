@@ -10,9 +10,12 @@
 'use strict';
 
 import * as THREE from 'three';
-import {Format} from "Scripts/System/Format";
 
-export function OrthographicTrackballControls ( object, domElement,  keydownHandler ) {
+import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
+import {Format} from "Scripts/System/Format";
+import {InputControllerHelper} from "Scripts/Viewers/InputControllerHelper"
+
+export function OrthographicTrackballControls ( object: THREE.OrthographicCamera, domElement,  keydownHandler ) {
 
 	this.updateCount = 0;
 
@@ -34,14 +37,14 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 	this.radius = 0;
 
 	this.rotateSpeed = 1.0;
-	this.zoomSpeed = 1.5;
+	this.zoomSpeed = 1.2;
 
 	this.noRotate = false;
 	this.noZoom = false;
 	this.noPan = false;
 	this.noRoll = false;
 
-	this.staticMoving = true;
+	this.staticMoving = false;
 	this.dynamicDampingFactor = 0.2;
 
 	this.keys = [ 65 /*A*/, 83 /*S*/, 68 /*D*/ ];
@@ -55,21 +58,21 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 	var _changed = true;
 
 	var _state = STATE.NONE,
-	_prevState = STATE.NONE,
+		_prevState = STATE.NONE,
 
-	_eye = new THREE.Vector3(),
+		_eye = new THREE.Vector3(),
 
-	_rotateStart = new THREE.Vector3(),
-	_rotateEnd = new THREE.Vector3(),
+		_rotateStart = new THREE.Vector3(),
+		_rotateEnd = new THREE.Vector3(),
 
-	_zoomStart = new THREE.Vector2(),
-	_zoomEnd = new THREE.Vector2(),
+		_zoomStart = new THREE.Vector2(),
+		_zoomEnd = new THREE.Vector2(),
 
-	_touchZoomDistanceStart = 0,
-	_touchZoomDistanceEnd = 0,
+		_touchZoomDistanceStart = 0,
+		_touchZoomDistanceEnd = 0,
 
-	_panStart = new THREE.Vector2(),
-	_panEnd = new THREE.Vector2();
+		_panStart = new THREE.Vector2(),
+		_panEnd = new THREE.Vector2();
 
 	// for reset
 
@@ -120,16 +123,6 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 		this.right0 = this.object.right;
 		this.top0 = this.object.top;
 		this.bottom0 = this.object.bottom;
-
-	};
-
-	this.handleEvent = function ( event ) {
-
-		if ( typeof this[ event.type ] === 'function' ) {
-
-			this[ event.type ]( event );
-
-		}
 
 	};
 
@@ -200,7 +193,7 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 
 	}() );
 
-	this.rotateCamera = ( function() {
+	this.rotateCamera = ( function () {
 
 		var axis = new THREE.Vector3(),
 			quaternion = new THREE.Quaternion();
@@ -238,7 +231,7 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 
 			}
 
-		}
+		};
 
 	}() );
 
@@ -250,7 +243,7 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 			_touchZoomDistanceStart = _touchZoomDistanceEnd;
 
 			// _this.object.zoom *= factor;
-			this.adjustFrustumByZoomFactor(factor);
+			adjustFrustumByZoomFactor(this.object, factor);
 
 			_changed = true;
 
@@ -261,7 +254,7 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 			if ( Math.abs( factor - 1.0 ) > EPS && factor > 0.0 ) {
 
 				// _this.object.zoom /= factor;
-				adjustFrustumByZoomFactor(this.object, factor);
+				adjustFrustumByZoomFactor(this.object, factor)
 
 				if ( _this.staticMoving ) {
 
@@ -281,7 +274,7 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 
 	};
 
-	this.panCamera = ( function() {
+	this.panCamera = ( function () {
 
 		var mouseChange = new THREE.Vector2(),
 			objectUp = new THREE.Vector3(),
@@ -319,7 +312,7 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 
 			}
 
-		}
+		};
 
 	}() );
 
@@ -327,16 +320,16 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 
 		this.updateCount += 1;
 		if ((this.updateCount % 50) === 0) {
+
 			// console.log (`zoom: ${Format.formatNumber(object.zoom)}`);
 			// console.log (Format.formatVector3("position", object.position));
 			// console.log (Format.formatVector3("target", this.target));
 			// console.log (Format.formatVector3("eye", _eye));
 
-			// let frustum = new THREE.Vector4(object.left, object.righ, object.top, object.bottom);
+			// let frustum = new THREE.Vector4(object.left, object.right, object.top, object.bottom);
 			// console.log (Format.formatVector4("frustum", frustum));
 			// console.log ("");
 		}
-
 		_eye.subVectors( _this.object.position, _this.target );
 
 		if ( ! _this.noRotate ) {
@@ -407,7 +400,7 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 
 		if ( _this.enabled === false ) return;
 
-		this.domElement.removeEventListener( 'keydown', keydown );
+		window.removeEventListener( 'keydown', keydown );
 
 		_prevState = _state;
 
@@ -427,10 +420,6 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 
 			_state = STATE.PAN;
 
-		} else {
-
-			// Viewer callback
-			this.keydownHandler(event);
 		}
 
 	}
@@ -441,7 +430,7 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 
 		_state = _prevState;
 
-		this.domElement.addEventListener( 'keydown', keydown, false );
+		window.addEventListener( 'keydown', keydown, false );
 
 	}
 
@@ -471,7 +460,7 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 		} else if ( _state === STATE.PAN && ! _this.noPan ) {
 
 			_panStart.copy( getMouseOnScreen( event.pageX, event.pageY ) );
-			_panEnd.copy( _panStart )
+			_panEnd.copy( _panStart );
 
 		}
 
@@ -548,6 +537,7 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 
 		_this.dispatchEvent( startEvent );
 		_this.dispatchEvent( endEvent );
+
 	}
 
 	function touchstart( event ) {
@@ -645,7 +635,7 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 
 	}
 
-	this.dispose = function() {
+	this.dispose = function () {
 
 		this.domElement.removeEventListener( 'contextmenu', contextmenu, false );
 		this.domElement.removeEventListener( 'mousedown', mousedown, false );
@@ -658,8 +648,8 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 		document.removeEventListener( 'mousemove', mousemove, false );
 		document.removeEventListener( 'mouseup', mouseup, false );
 
-		this.domElement.removeEventListener( 'keydown', keydown, false );
-		this.domElement.removeEventListener( 'keyup', keyup, false );
+		window.removeEventListener( 'keydown', keydown, false );
+		window.removeEventListener( 'keyup', keyup, false );
 
 	};
 
@@ -671,8 +661,8 @@ export function OrthographicTrackballControls ( object, domElement,  keydownHand
 	this.domElement.addEventListener( 'touchend', touchend, false );
 	this.domElement.addEventListener( 'touchmove', touchmove, false );
 
-	this.domElement.addEventListener( 'keydown', keydown.bind(this), false );
-	this.domElement.addEventListener( 'keyup', keyup.bind(this), false );
+	window.addEventListener( 'keydown', keydown, false );
+	window.addEventListener( 'keyup', keyup, false );
 
 	this.handleResize();
 
