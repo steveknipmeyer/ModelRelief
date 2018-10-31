@@ -269,21 +269,21 @@ export class Viewer {
 
         CameraHelper.debugCameraProperties(this.camera, "Before");
 
+        //  capture active lookAt before initialiting input controller
+        const cameraLookAt: THREE.Vector3 = CameraHelper.getLookAt(this.camera);
+
         if (this._controls)
             this._controls.dispose();
+
         this._controls = this.camera instanceof THREE.PerspectiveCamera ?
             new TrackballControls(this.camera as THREE.PerspectiveCamera, this._renderer.domElement) :
             new OrthographicTrackballControls(this.camera as THREE.OrthographicCamera, this._renderer.domElement);
 
+        // restore lookAt
+        this.camera.lookAt(cameraLookAt);
+        InputControllerHelper.setTarget(this._controls, cameraLookAt);
+
         CameraHelper.debugCameraProperties(this.camera, "After");
-
-        // N.B. This step is necessary for Fit View!
-        // https://stackoverflow.com/questions/16809805/three-trackballcontrols-rotation-center
-        const boundingBox = Graphics.getBoundingBoxFromObject(this._root);
-        this._controls.target.copy(boundingBox.getCenter());
-
-        // N.B. This step is necessary to preserve the restoration of a view that has been Panned!
-        // InputControllerHelper.setDefaultTarget(this._controls, this.camera, true);
     }
 
     /**

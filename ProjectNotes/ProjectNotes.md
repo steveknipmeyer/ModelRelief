@@ -2,18 +2,14 @@
 #### Commit Notes
 
 #### Short Term
-
-    Is the center of rotation now the controls target point?
+    The input controller uses the camera lookAt (controller target) as the center of rotation.
+        Optimize for not Fit View and general case.
 
     Close in Orthogonal views of House (Lambda: Documents\Temp\MalformedHouse) yiueld malformed meshes.
 
     CameraControls
         Separate the Perspective controls into a separate dat.gui controller that can be entirely hidden or shown.
             Field of View
-
-    Camera Pan is not preserved.
-        Viewer.initializeInputControls
-            this._controls.target.copy(boundingBox.getCenter());
 
     Should clipping planes be set based on the Model?
 

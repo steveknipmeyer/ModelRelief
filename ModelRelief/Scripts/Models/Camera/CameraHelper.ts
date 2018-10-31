@@ -287,6 +287,24 @@ export class CameraHelper {
     }
 
     /**
+     * @description Get the camera lookAt point.
+     * @static
+     * @param {THREE.Camera} camera Active camera.
+     */
+    public static getLookAt(camera: THREE.Camera): THREE.Vector3 {
+
+        // Default camera view: -Z
+        const unitTarget = new THREE.Vector3(0, 0, -1);
+
+        // apply camera rotation
+        unitTarget.applyQuaternion(camera.quaternion);
+
+        // The target is not a direction vector it is a point in world space so the unitTarget must be translated to the camera position.
+        const translatedUnitTarget = unitTarget.add(camera.position);
+        return translatedUnitTarget;
+    }
+
+    /**
      * @description Debug support for displaying the properties of a camera.
      * @param {IThreeBaseCamera} camera Target camera.
      * @param {string} tag Debug label.

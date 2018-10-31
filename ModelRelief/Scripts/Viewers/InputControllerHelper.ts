@@ -52,27 +52,6 @@ export class InputControllerHelper {
     }
 
     /**
-     * @description Set the target point of the input controller to the default value.
-     * @static
-     * @param {IInputController} controller Input controller.
-     * @param {THREE.Camera} camera Active camera.
-     * @param {boolean} [setReset=false] Also set the reset point used when resetting the controller.
-     */
-    public static setDefaultTarget(controller: IInputController, camera: THREE.Camera, setReset: boolean = false): void {
-
-        // Default camera view: -Z
-        const unitTarget = new THREE.Vector3(0, 0, -1);
-
-        // apply camera rotation
-        unitTarget.applyQuaternion(camera.quaternion);
-
-        // The target is not a direction vector it is a point in world space so the unitTarget must be translated to the camera position.
-        const translatedUnitTarget = unitTarget.add(camera.position);
-
-        InputControllerHelper.setTarget(controller, translatedUnitTarget, setReset);
-    }
-
-    /**
      * @description Diagnostic tool for the input controller.
      * @static
      * @param {string} controllerName Controller name.
