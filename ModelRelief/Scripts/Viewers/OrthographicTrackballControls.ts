@@ -17,8 +17,6 @@ import {InputControllerHelper} from "Scripts/Viewers/InputControllerHelper"
 
 export function OrthographicTrackballControls ( object: THREE.OrthographicCamera, domElement) {
 
-	this.updateCount = 0;
-
 	var _this = this;
 	var STATE = { NONE: - 1, ROTATE: 0, ZOOM: 1, PAN: 2, TOUCH_ROTATE: 3, TOUCH_ZOOM_PAN: 4 };
 
@@ -49,6 +47,8 @@ export function OrthographicTrackballControls ( object: THREE.OrthographicCamera
 	// internals
 
 	this.target = new THREE.Vector3();
+	this.eye = new THREE.Vector3();
+	this.lookAt = new THREE.Vector3();
 
 	var EPS = 0.000001;
 
@@ -344,6 +344,10 @@ export function OrthographicTrackballControls ( object: THREE.OrthographicCamera
 		_this.object.position.addVectors( _this.target, _eye );
 
 		_this.object.lookAt( _this.target );
+
+		// diagnostics
+		_this.eye = _eye;
+		_this.lookAt = _this.target;
 
 		if ( _changed ) {
 

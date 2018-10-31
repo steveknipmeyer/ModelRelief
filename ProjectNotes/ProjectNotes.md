@@ -1,16 +1,9 @@
 ﻿### Tasks
 #### Commit Notes
-Add StandardView keyboard handling.
 
 #### Short Term
-    Is IInputController needed?
-        Is there a type that is the intersection of two types?
 
     Is the center of rotation now the controls target point?
-
-    Add graphical helpers for the input controllers.
-
-    Review the difference between the controls "target" and the camera "lookAt".
 
     Close in Orthogonal views of House (Lambda: Documents\Temp\MalformedHouse) yiueld malformed meshes.
 
@@ -19,9 +12,6 @@ Add StandardView keyboard handling.
             Field of View
 
     Camera Pan is not preserved.
-        Experiment with CameraHelper.
-            Explore lookat and target.
-
         Viewer.initializeInputControls
             this._controls.target.copy(boundingBox.getCenter());
 

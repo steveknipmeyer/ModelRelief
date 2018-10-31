@@ -18,6 +18,9 @@ import {ConsoleLogger} from "Scripts/System/Logger";
 export interface IInputController {
     target: THREE.Vector3;          // target point of controller
     target0: THREE.Vector3;         // reset value
+
+    eye: THREE.Vector3;             // eye
+    lookAt: THREE.Vector3;          // camera lookat point
 }
 
 /**
@@ -85,19 +88,28 @@ export class InputControllerHelper {
 
         consoleLogger.addMessage(`${controllerName}: Input Controller Properties`, headerStyle);
         consoleLogger.addMessage(`${Format.formatVector3("Camera Position", camera.position)}`, messageStyle);
-        consoleLogger.addMessage(`${Format.formatVector3("Target", controller.target)}`, messageStyle);
+        consoleLogger.addMessage(`${Format.formatVector3("LookAt", controller.lookAt)}`, messageStyle);
+        consoleLogger.addMessage(`${Format.formatVector3("Eye", controller.eye)}`, messageStyle);
 
         // construct root object of the helper
         const controllerHelper  = new THREE.Group();
         controllerHelper.name = ObjectNames.ControllerHelper;
         controllerHelper.visible = true;
 
-        // remove existing
+        const redMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000, opacity: 1.0} );
+        const blueMaterial = new THREE.MeshPhongMaterial({ color: 0x0000ff, opacity: 1.0} );
+        const sphereSize = 5;
+
+        // remove existing graphics
         Graphics.removeAllByName(scene, ObjectNames.ControllerHelper);
 
         // position
-        const position = Graphics.createSphereMesh(camera.position, 3);
-        controllerHelper.add(position);
+        const eyeSphere = Graphics.createSphereMesh(camera.position, sphereSize, redMaterial);
+        controllerHelper.add(eyeSphere);
+
+        // lookAt
+        const lookAtSphere = Graphics.createSphereMesh(controller.lookAt, sphereSize, blueMaterial);
+        controllerHelper.add(lookAtSphere);
 
         scene.add(controllerHelper);
     }

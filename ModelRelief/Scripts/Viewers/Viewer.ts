@@ -279,11 +279,11 @@ export class Viewer {
 
         // N.B. This step is necessary for Fit View!
         // https://stackoverflow.com/questions/16809805/three-trackballcontrols-rotation-center
-        // const boundingBox = Graphics.getBoundingBoxFromObject(this._root);
-        // this._controls.target.copy(boundingBox.getCenter());
+        const boundingBox = Graphics.getBoundingBoxFromObject(this._root);
+        this._controls.target.copy(boundingBox.getCenter());
 
         // N.B. This step is necessary to preserve the restoration of a view that has been Panned!
-        InputControllerHelper.setDefaultTarget(this._controls, this.camera, true);
+        // InputControllerHelper.setDefaultTarget(this._controls, this.camera, true);
     }
 
     /**
