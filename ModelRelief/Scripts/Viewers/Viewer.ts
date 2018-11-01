@@ -200,6 +200,16 @@ export class Viewer {
 
         return this._eventManager;
     }
+
+    /**
+     * @description Get the input controller.
+     * @type {TrackballControls | OrthographicTrackballControls}
+     */
+    get controls(): TrackballControls | OrthographicTrackballControls {
+
+        return this._controls;
+    }
+
 //#endregion
 
 //#region Initialization
@@ -267,13 +277,11 @@ export class Viewer {
      */
     public initializeInputControls() {
 
-        CameraHelper.debugCameraProperties(this.camera, "Before");
+        //  capture active lookAt before initializing input controller
+        const cameraLookAt: THREE.Vector3 = CameraHelper.getLookAt(this.camera, this.modelGroup);
 
-        //  capture active lookAt before initialiting input controller
-        const cameraLookAt: THREE.Vector3 = CameraHelper.getLookAt(this.camera);
-
-        if (this._controls)
-            this._controls.dispose();
+        if (this.controls)
+            this.controls.dispose();
 
         this._controls = this.camera instanceof THREE.PerspectiveCamera ?
             new TrackballControls(this.camera as THREE.PerspectiveCamera, this._renderer.domElement) :
@@ -281,9 +289,7 @@ export class Viewer {
 
         // restore lookAt
         this.camera.lookAt(cameraLookAt);
-        InputControllerHelper.setTarget(this._controls, cameraLookAt);
-
-        CameraHelper.debugCameraProperties(this.camera, "After");
+        InputControllerHelper.setTarget(this.controls, cameraLookAt);
     }
 
     /**
@@ -360,7 +366,8 @@ export class Viewer {
 
         const interval = 1000;
         window.setTimeout(() => {
-            InputControllerHelper.debugInputControllerProperties(this.name, this._controls, this.scene, this.camera);
+            InputControllerHelper.debugInputControllerProperties(this.name, this.controls, this.scene, this.camera);
+            // loop
             // this.initializeDiagnostics();
         }, interval);
     }
@@ -377,7 +384,7 @@ export class Viewer {
         this.initializeInputControls();
         this.initializeUIControls();
         this.initializeKeyboardShortcuts();
-        this.initializeDiagnostics();
+        // this.initializeDiagnostics();
 
         this.onResizeWindow();
         window.addEventListener("resize", this.onResizeWindow.bind(this), false);
@@ -448,7 +455,7 @@ export class Viewer {
         this._height = this._canvas.offsetHeight;
         this._renderer.setSize(this._width, this._height, false);
 
-        this._controls.handleResize();
+        this.controls.handleResize();
         this.updateCameraOnWindowResize();
     }
 
@@ -467,7 +474,7 @@ export class Viewer {
      */
     public renderWebGL() {
 
-        this._controls.update();
+        this.controls.update();
         this._renderer.render(this.scene, this.camera);
     }
 

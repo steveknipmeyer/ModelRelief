@@ -66,9 +66,10 @@ export class InputControllerHelper {
         const messageStyle  = "font-family : monospace; color : white; font-size : 12px";
 
         consoleLogger.addMessage(`${controllerName}: Input Controller Properties`, headerStyle);
-        consoleLogger.addMessage(`${Format.formatVector3("Camera Position", camera.position)}`, messageStyle);
-        consoleLogger.addMessage(`${Format.formatVector3("LookAt", controller.lookAt)}`, messageStyle);
+        consoleLogger.addMessage(`${Format.formatVector3("Target", controller.lookAt)}`, messageStyle);
         consoleLogger.addMessage(`${Format.formatVector3("Eye", controller.eye)}`, messageStyle);
+        consoleLogger.addMessage(`Note: Controller Target + Eye = Camera.Position`, messageStyle);
+        consoleLogger.addMessage(`${Format.formatVector3("Camera.Position", camera.position)}`, messageStyle);
 
         // construct root object of the helper
         const controllerHelper  = new THREE.Group();

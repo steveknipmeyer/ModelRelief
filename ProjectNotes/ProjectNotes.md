@@ -2,10 +2,7 @@
 #### Commit Notes
 
 #### Short Term
-    The input controller uses the camera lookAt (controller target) as the center of rotation.
-        Optimize for not Fit View and general case.
-
-    Close in Orthogonal views of House (Lambda: Documents\Temp\MalformedHouse) yiueld malformed meshes.
+    Why are the input controller positions "reversed"?
 
     CameraControls
         Separate the Perspective controls into a separate dat.gui controller that can be entirely hidden or shown.
@@ -16,6 +13,8 @@
     Chrome "paused before potential out-of-memory crash".
         https://stackoverflow.com/questions/42110726/chrome-devtools-paused-before-potential-out-of-memory-crash
         https://developers.google.com/web/tools/chrome-devtools/memory-problems/
+
+    Close in Orthogonal views of House (Lambda: Documents\Temp\MalformedHouse) yiueld malformed meshes.
 
     Add UI progress indicator for mesh generation.
 
@@ -176,9 +175,9 @@ Namimg
 ##### Camera Issues
 
 - [ ] The quaternion and up vector do not roundtrip although the visual camera appears unchanged.  The matrix and projectionMatrix are unchanged!
-- [ ] Cameras do not handle offsets (pan). Is this a TrackBallControl issue?
 - [ ] Randomly generated cameras do not roundtrip the matrix property.
-- [ ]
+- [ ] Add snapping to model vertices to set center of rotation. The center of rotation is the camera lookAt point.
+
 Perspective <-> Orthographic
     The new view does not match the previous view.
     Fit View is used after the conversion.

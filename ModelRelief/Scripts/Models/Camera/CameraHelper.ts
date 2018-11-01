@@ -290,26 +290,38 @@ export class CameraHelper {
      * @description Get the camera lookAt point.
      * @static
      * @param {THREE.Camera} camera Active camera.
+     * @param {THREE.Group} modelGroup Active model.
      */
-    public static getLookAt(camera: THREE.Camera): THREE.Vector3 {
+    public static getLookAt(camera: THREE.Camera, modelGroup: THREE.Group): THREE.Vector3 {
 
         // Default camera view: -Z
-        const unitTarget = new THREE.Vector3(0, 0, -1);
+        const unitLookAt = new THREE.Vector3(0, 0, -1);
 
         // apply camera rotation
-        unitTarget.applyQuaternion(camera.quaternion);
+        unitLookAt.applyQuaternion(camera.quaternion);
 
-        // The target is not a direction vector it is a point in world space so the unitTarget must be translated to the camera position.
-        const translatedUnitTarget = unitTarget.add(camera.position);
-        return translatedUnitTarget;
+        // scale by the offset along the camera direction to the bounding box center
+        const boundingBox: THREE.Box3 = Graphics.getBoundingBoxFromObject(modelGroup);
+        const boundingBoxCenter = boundingBox.getCenter();
+
+        const boundingBoxOffset = boundingBox.getCenter().sub(camera.position);
+        const cameraDirectionOffset = boundingBoxOffset.dot(unitLookAt);
+        const scaledLookAt = unitLookAt.setLength(cameraDirectionOffset);
+        // const scaledLookAt = unitLookAt;
+
+        // The lookAt is not a direction vector it is a point in world space so translate to the camera position.
+        const lookAt = scaledLookAt.add(camera.position);
+
+        return lookAt;
     }
 
     /**
      * @description Debug support for displaying the properties of a camera.
      * @param {IThreeBaseCamera} camera Target camera.
+     * @param {THREE.Group} modelGroup Active model.
      * @param {string} tag Debug label.
      */
-    public static debugCameraProperties(camera: IThreeBaseCamera, tag: string): void {
+    public static debugCameraProperties(camera: IThreeBaseCamera, modelGroup: THREE.Group, tag: string): void {
 
         const consoleLogger: ConsoleLogger = new ConsoleLogger();
         const headerStyle   = "font-family : monospace; font-weight : bold; color : yellow; font-size : 16px";
@@ -337,6 +349,7 @@ export class CameraHelper {
         // consoleLogger.addEmptyLine();
 
         consoleLogger.addMessage(`${Format.formatVector3("Position", camera.position)}`, messageStyle);
+        consoleLogger.addMessage(`${Format.formatVector3("LookAt", CameraHelper.getLookAt(camera, modelGroup))}`, messageStyle);
         consoleLogger.addMessage(`${Format.formatVector3("Up", camera.up)}`, messageStyle);
         consoleLogger.addMessage(`${Format.formatVector4("Q", new THREE.Vector4(camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w))}`, messageStyle);
         consoleLogger.addEmptyLine();

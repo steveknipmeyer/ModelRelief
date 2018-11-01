@@ -22,6 +22,7 @@ import {MeshTransform} from "Scripts/Models/MeshTransform/MeshTransform";
 import {Model3d} from "Scripts/Models/Model3d/Model3d";
 import {ElementAttributes, ElementIds} from "Scripts/System/Html";
 import {UnitTests} from "Scripts/UnitTests/UnitTests";
+import {InputControllerHelper} from "Scripts/Viewers/InputControllerHelper";
 import {MeshViewer} from "Scripts/Viewers/MeshViewer";
 import {ModelViewer} from "Scripts/Viewers/ModelViewer";
 import {ComposerView} from "Scripts/Views/ComposerView";
@@ -278,7 +279,8 @@ export class ComposerController {
      * @description Saves the relief.
      */
     public saveRelief() {
-        CameraHelper.debugCameraProperties(this.modelViewer.camera, "saveRelief");
+        CameraHelper.debugCameraProperties(this.modelViewer.camera, this.modelViewer.modelGroup, "saveRelief");
+        InputControllerHelper.debugInputControllerProperties(this.modelViewer.name, this.modelViewer.controls, this.modelViewer.scene, this.modelViewer.camera);
     }
 
     /**
@@ -415,7 +417,10 @@ export class ComposerController {
         modelViewCamera.far  = CameraSettings.DefaultFarClippingPlane;
 
         modelViewCamera.updateProjectionMatrix();
+
+        // CameraHelper.debugCameraProperties(modelViewCamera, this.modelViewer.modelGroup, "Before");
         this.modelViewer.camera = modelViewCamera;
+        // CameraHelper.debugCameraProperties(this.modelViewer.camera, this.modelViewer.modelGroup, "After");
     }
 
 }
