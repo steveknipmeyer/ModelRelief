@@ -278,7 +278,7 @@ export class ComposerController {
     /**
      * @description Saves the relief.
      */
-    public saveRelief() {
+    public saveReliefDebug() {
         CameraHelper.debugCameraProperties(this.modelViewer.camera, this.modelViewer.modelGroup, "saveRelief");
         InputControllerHelper.debugInputControllerProperties(this.modelViewer.name, this.modelViewer.controls, this.modelViewer.scene, this.modelViewer.camera);
     }
@@ -286,13 +286,13 @@ export class ComposerController {
     /**
      * @description Saves the relief.
      */
-    public saveReliefTest() {
+    public saveRelief() {
         // WIP: Save the Mesh as an OBJ format file?
         // It may be more efficient to maintain Meshes in raw format since the size is substantially smaller.
 
         if (this.modelViewer.camera instanceof THREE.PerspectiveCamera) {
-            // WIP: Randomly generated cameras do not roundtrip the matrix property. However, cameras created and manipulated through views work fine.
-            // UnitTests.cameraRoundTrip();
+
+            UnitTests.cameraRoundTrip();
 
             const camera = new PerspectiveCamera({}, this.modelViewer.camera);
             const cameraModel = camera.toDtoModel();

@@ -22,10 +22,6 @@
     How can default settings be shared between C# and TypeScript?
         Create a settings JSON file?
 
-    Tests
-        ComposerController.SaveRelief (UnitTests.comparePerspectiveCameras).
-        UnitTests.ts
-        CameraTests.ts
 
     Add madge circular dependency check to Builder.
 

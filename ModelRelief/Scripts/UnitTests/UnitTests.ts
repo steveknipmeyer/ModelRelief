@@ -154,7 +154,7 @@ export class UnitTests {
 
             this.vectorsEqualWithinTolerance(c1.up, c2.up, "up");
 
-            // WIP: THese camera properties do not roundtrip however the matrix and projectMatrix do roundtrip correctly.
+            // WIP: These camera properties do not roundtrip however the matrix and projectionMatrix do roundtrip correctly.
             // this.quaternionsEqualWithinTolerance(c1.quaternion, c2.quaternion, 'quaternion');
             // this.vectorsEqualWithinTolerance(c1.getWorldDirection(), c2.getWorldDirection(), 'worldDirection');
 
@@ -168,6 +168,8 @@ export class UnitTests {
      * @static
      */
     public static cameraRoundTrip() {
+
+        // WIP: Randomly generated cameras do not roundtrip the matrix property. However, cameras created and manipulated through views work fine.
 
         const trials = 10;
         for (let iTrial = 0; iTrial < trials; iTrial++) {
@@ -190,6 +192,8 @@ export class UnitTests {
             // set position/rotation/scale attributes
             perspectiveCamera.matrix.decompose(perspectiveCamera.position, perspectiveCamera.quaternion, perspectiveCamera.scale);
 
+            perspectiveCamera.updateMatrix();
+            perspectiveCamera.updateMatrixWorld(true);
             perspectiveCamera.updateProjectionMatrix();
 
             // constructor
