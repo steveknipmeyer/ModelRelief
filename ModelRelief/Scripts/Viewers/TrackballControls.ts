@@ -47,7 +47,6 @@ export function TrackballControls ( object: THREE.PerspectiveCamera, domElement)
 
 	this.target = new THREE.Vector3();
 	this.eye = new THREE.Vector3();
-	this.lookAt = new THREE.Vector3();
 
 	var EPS = 0.000001;
 
@@ -323,7 +322,6 @@ export function TrackballControls ( object: THREE.PerspectiveCamera, domElement)
 
 		// diagnostics
 		_this.eye = _eye;
-		_this.lookAt = _this.target;
 
 		if ( lastPosition.distanceToSquared( _this.object.position ) > EPS ) {
 

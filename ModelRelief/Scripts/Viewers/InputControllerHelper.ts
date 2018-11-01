@@ -20,7 +20,6 @@ export interface IInputController {
     target0: THREE.Vector3;         // reset value
 
     eye: THREE.Vector3;             // eye
-    lookAt: THREE.Vector3;          // camera lookat point
 }
 
 /**
@@ -66,9 +65,9 @@ export class InputControllerHelper {
         const messageStyle  = "font-family : monospace; color : white; font-size : 12px";
 
         consoleLogger.addMessage(`${controllerName}: Input Controller Properties`, headerStyle);
-        consoleLogger.addMessage(`${Format.formatVector3("Target", controller.lookAt)}`, messageStyle);
+        consoleLogger.addMessage(`${Format.formatVector3("Target", controller.target)}`, messageStyle);
         consoleLogger.addMessage(`${Format.formatVector3("Eye", controller.eye)}`, messageStyle);
-        consoleLogger.addMessage(`Note: Controller Target + Eye = Camera.Position`, messageStyle);
+        consoleLogger.addMessage(`Note: Target + Eye = Camera.Position`, messageStyle);
         consoleLogger.addMessage(`${Format.formatVector3("Camera.Position", camera.position)}`, messageStyle);
 
         // construct root object of the helper
@@ -87,9 +86,9 @@ export class InputControllerHelper {
         const eyeSphere = Graphics.createSphereMesh(camera.position, sphereSize, redMaterial);
         controllerHelper.add(eyeSphere);
 
-        // lookAt
-        const lookAtSphere = Graphics.createSphereMesh(controller.lookAt, sphereSize, blueMaterial);
-        controllerHelper.add(lookAtSphere);
+        // target
+        const targetSphere = Graphics.createSphereMesh(controller.target, sphereSize, blueMaterial);
+        controllerHelper.add(targetSphere);
 
         scene.add(controllerHelper);
     }

@@ -2,8 +2,6 @@
 #### Commit Notes
 
 #### Short Term
-    Why are the input controller positions "reversed"?
-
     CameraControls
         Separate the Perspective controls into a separate dat.gui controller that can be entirely hidden or shown.
             Field of View

@@ -42,7 +42,6 @@ declare class TrackballControls extends THREE.EventDispatcher {
     up0: THREE.Vector3;
 
     eye: THREE.Vector3;
-    lookAt: THREE.Vector3;
 
     handleResize(): void;
     handleEvent(event: any): void;
@@ -84,7 +83,6 @@ declare class OrthographicTrackballControls extends THREE.EventDispatcher {
     up0: THREE.Vector3;
 
     eye: THREE.Vector3;
-    lookAt: THREE.Vector3;
 
     handleResize(): void;
     handleEvent(event: any): void;

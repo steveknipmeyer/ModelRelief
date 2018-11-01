@@ -48,7 +48,6 @@ export function OrthographicTrackballControls ( object: THREE.OrthographicCamera
 
 	this.target = new THREE.Vector3();
 	this.eye = new THREE.Vector3();
-	this.lookAt = new THREE.Vector3();
 
 	var EPS = 0.000001;
 
@@ -347,7 +346,6 @@ export function OrthographicTrackballControls ( object: THREE.OrthographicCamera
 
 		// diagnostics
 		_this.eye = _eye;
-		_this.lookAt = _this.target;
 
 		if ( _changed ) {
 
