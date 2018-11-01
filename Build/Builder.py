@@ -43,7 +43,7 @@ class Builder:
         """
         self.logger = Logger()
         self.arguments = arguments
-        self.environment:Environment = Environment() 
+        self.environment:Environment = Environment()
         self.publish = self.arguments.target != Target.local
 
         # folder names
@@ -88,7 +88,7 @@ class Builder:
                 shutil.rmtree(folder)
             else:
                 self.logger.logInformation("Exiting", Colors.Red)
-                sys.exit(1)            
+                sys.exit(1)
 
     def set_environment (self)->None :
         """
@@ -139,7 +139,11 @@ class Builder:
         # TypeScript
         self.logger.logInformation("\nTypeScript compilation", Colors.BrightMagenta)
         os.chdir(self.solution_path)
-        Tools.exec("tsc -p {}".format(self.modelrelief_path))       
+        Tools.exec("tsc -p {}".format(self.modelrelief_path))
+
+        self.logger.logInformation("\nTypeScript Circular Dependencies", Colors.BrightMagenta)
+        os.chdir(self.solution_path)
+        Tools.exec("madge --warning --circular --extensions ts ModelRelief\Scripts")
 
         # minification
         self.logger.logInformation("\nMinifying JavaScript", Colors.BrightMagenta)
@@ -160,17 +164,17 @@ class Builder:
         if self.arguments.python:
             if self.publish:
                 self.logger.logInformation("\nPython virtual environment", Colors.BrightMagenta)
-                os.makedirs(self.publish_path)                
+                os.makedirs(self.publish_path)
                 os.chdir(self.publish_path)
-                Tools.exec("BuildPythonEnvironment Production")        
-            else:                
+                Tools.exec("BuildPythonEnvironment Production")
+            else:
                 self.logger.logInformation("\nPlease see Build\\DevelopmentPythonInstallation.txt to create the development Python environment.", Colors.Cyan)
 
         # Python C++ extensions
         self.logger.logInformation("\nPython C++ extensions", Colors.BrightMagenta)
         environment = RuntimeEnvironment.production.value if self.publish else RuntimeEnvironment.development.value
         os.chdir(self.solution_path)
-        Tools.exec(f"BuildReliefPythonExtensions {environment}")        
+        Tools.exec(f"BuildReliefPythonExtensions {environment}")
 
         # database initialization and user store
         if self.arguments.initialize:
@@ -253,10 +257,10 @@ class Builder:
             self.logger.logInformation("Docker ModelRelief image", Colors.Cyan)
             os.chdir(self.solution_path)
             port = os.environ[EnvironmentNames.MRPort]
-            Tools.exec(f"docker build -t modelrelief --build-arg MRPORT={port} -f Build\\DockerFile.modelrelief  .")        
+            Tools.exec(f"docker build -t modelrelief --build-arg MRPORT={port} -f Build\\DockerFile.modelrelief  .")
 
             self.logger.logInformation("\nDocker ModelRelief Database image", Colors.Cyan)
-            Tools.exec(f"docker build -t modelreliefdatabase -f Build\\DockerFile.modelreliefdatabase  .")        
+            Tools.exec(f"docker build -t modelreliefdatabase -f Build\\DockerFile.modelreliefdatabase  .")
 
         self.logger.logInformation("\n</Publish>", Colors.BrightYellow)
 
@@ -266,7 +270,7 @@ class Builder:
         """
         self.logger.logInformation("\n<ModelRelief>", Colors.BrightCyan)
         os.chdir(self.solution_path)
-        self.environment.push()          
+        self.environment.push()
 
         self.initialize(self.source_wwwroot_path, self.source_store_path, self.publish_path, )
 
@@ -277,7 +281,7 @@ class Builder:
         if self.publish:
             self.publish_site()
 
-        self.environment.pop()          
+        self.environment.pop()
         self.logger.logInformation("\n</ModelRelief>", Colors.BrightCyan)
 
 def main():
@@ -297,11 +301,11 @@ def main():
     # Publish
     options_parser.add_argument('--deploy', '-d',
                                 help='Deploy the published content to the local IIS web folder.', type=ast.literal_eval, required=False, default=False)
-    
+
     arguments = options_parser.parse_args()
 
     builder = Builder(arguments)
     builder.run()
 
 if __name__ == "__main__":
-    main()  
+    main()

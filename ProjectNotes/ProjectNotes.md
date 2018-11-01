@@ -2,6 +2,10 @@
 #### Commit Notes
 
 #### Short Term
+    Visually examine randomly-generated cameras that have been round-tripped.
+
+    Experiment with Poisson solutions of images that have not been attenuated/processed.
+
     CameraControls
         Separate the Perspective controls into a separate dat.gui controller that can be entirely hidden or shown.
             Field of View
@@ -16,14 +20,13 @@
 
     Add UI progress indicator for mesh generation.
 
+
     Write a tool to update the Test models and DbInitializer.
         Can the Mesh JSON files be transformed into C#?
 
     How can default settings be shared between C# and TypeScript?
-        Create a settings JSON file?
+        Generate JavaScript and C# from a settings JSON file.
 
-
-    Add madge circular dependency check to Builder.
 
     Move to TypeScript 3.1.
         Convert TypeScript compiler output to ES5 modules?
