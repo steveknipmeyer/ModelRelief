@@ -113,10 +113,10 @@ namespace ModelRelief.Dto
             AspectRatio = 1.0;
 
             // Orthographic
-            Left    = Domain.Camera.DefaulLeftPlane;
-            Right   = Domain.Camera.DefaulRightPlane;
-            Top     = Domain.Camera.DefaulTopPlane;
-            Bottom  = Domain.Camera.DefaulBottomPlane;
+            Left    = Domain.Camera.DefaultLeftPlane;
+            Right   = Domain.Camera.DefaultRightPlane;
+            Top     = Domain.Camera.DefaultTopPlane;
+            Bottom  = Domain.Camera.DefaultBottomPlane;
         }
     }
 

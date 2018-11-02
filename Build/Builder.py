@@ -143,7 +143,7 @@ class Builder:
 
         self.logger.logInformation("\nTypeScript Circular Dependencies", Colors.BrightMagenta)
         os.chdir(self.solution_path)
-        Tools.exec("madge --warning --circular --extensions ts ModelRelief\Scripts")
+        Tools.exec("madge --warning --circular --extensions ts ModelRelief/Scripts")
 
         # minification
         self.logger.logInformation("\nMinifying JavaScript", Colors.BrightMagenta)

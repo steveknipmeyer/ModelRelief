@@ -74,10 +74,10 @@ namespace ModelRelief.Domain
 
         // Orthographic
         private const double OrthographicFrustrumPlaneOffset = 100;
-        public const double DefaulLeftPlane   = -OrthographicFrustrumPlaneOffset;
-        public const double DefaulRightPlane  = +OrthographicFrustrumPlaneOffset;
-        public const double DefaulTopPlane    = +OrthographicFrustrumPlaneOffset;
-        public const double DefaulBottomPlane = -OrthographicFrustrumPlaneOffset;
+        public const double DefaultLeftPlane   = -OrthographicFrustrumPlaneOffset;
+        public const double DefaultRightPlane  = +OrthographicFrustrumPlaneOffset;
+        public const double DefaultTopPlane    = +OrthographicFrustrumPlaneOffset;
+        public const double DefaultBottomPlane = -OrthographicFrustrumPlaneOffset;
 
         [DependentFileProperty]
         public double Left { get; set; }
@@ -113,10 +113,10 @@ namespace ModelRelief.Domain
             AspectRatio = 1.0;
 
             // Orthographic
-            Left    = Camera.DefaulLeftPlane;
-            Right   = Camera.DefaulRightPlane;
-            Top     = Camera.DefaulTopPlane;
-            Bottom  = Camera.DefaulBottomPlane;
+            Left    = Camera.DefaultLeftPlane;
+            Right   = Camera.DefaultRightPlane;
+            Top     = Camera.DefaultTopPlane;
+            Bottom  = Camera.DefaultBottomPlane;
         }
     }
 }

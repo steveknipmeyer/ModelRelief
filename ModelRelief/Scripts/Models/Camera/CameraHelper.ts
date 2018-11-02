@@ -264,10 +264,10 @@ export class CameraHelper {
      */
     public static getDefaultOrthographicFrustum(viewAspect: number = 1.0): IOrthographicFrustum {
         const frustum: IOrthographicFrustum = {
-            left:   -CameraSettings.FrustumPlaneOffset,
-            right:  +CameraSettings.FrustumPlaneOffset,
-            top:    +CameraSettings.FrustumPlaneOffset / viewAspect,
-            bottom: -CameraSettings.FrustumPlaneOffset / viewAspect,
+            left:   -CameraSettings.OrthographicFrustumPlaneOffset,
+            right:  +CameraSettings.OrthographicFrustumPlaneOffset,
+            top:    +CameraSettings.OrthographicFrustumPlaneOffset / viewAspect,
+            bottom: -CameraSettings.OrthographicFrustumPlaneOffset / viewAspect,
         };
         return frustum;
     }

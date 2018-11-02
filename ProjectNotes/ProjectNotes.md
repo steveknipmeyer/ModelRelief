@@ -2,36 +2,87 @@
 #### Commit Notes
 
 #### Short Term
-    Visually examine randomly-generated cameras that have been round-tripped.
 
-    Experiment with Poisson solutions of images that have not been attenuated/processed.
+    UI
+        Add UI progress indicator for mesh generation.
 
-    CameraControls
-        Separate the Perspective controls into a separate dat.gui controller that can be entirely hidden or shown.
-            Field of View
+        CameraControls
+            Separate the Perspective controls into a separate dat.gui controller that can be entirely hidden or shown.
+                Field of View
 
-    Should clipping planes be set based on the Model?
+    Core
+        Should clipping planes be set based on the Model?
 
-    Chrome "paused before potential out-of-memory crash".
-        https://stackoverflow.com/questions/42110726/chrome-devtools-paused-before-potential-out-of-memory-crash
-        https://developers.google.com/web/tools/chrome-devtools/memory-problems/
+        Close in Orthogonal views of House (Lambda: Documents\Temp\MalformedHouse) yiueld malformed meshes.
 
-    Close in Orthogonal views of House (Lambda: Documents\Temp\MalformedHouse) yiueld malformed meshes.
+        Visually examine randomly-generated cameras that have been round-tripped.
 
-    Add UI progress indicator for mesh generation.
+        Experiment with Poisson solutions of images that have not been attenuated/processed.
 
+        Chrome "paused before potential out-of-memory crash".
+            https://stackoverflow.com/questions/42110726/chrome-devtools-paused-before-potential-out-of-memory-crash
+            https://developers.google.com/web/tools/chrome-devtools/memory-problems/
 
-    Write a tool to update the Test models and DbInitializer.
-        Can the Mesh JSON files be transformed into C#?
+    Tools
 
-    How can default settings be shared between C# and TypeScript?
-        Generate JavaScript and C# from a settings JSON file.
+        TestModelUpdater: Updates the Solver\Test JSON models and the seed projects in DbInitializer.
+            Requirements
+                Maintain the seed database settings in a JSON file.
+                The tool:
+                    Read the seed JSON file.
+                    Update the contents from the JSON files found in the Working folder.
+                        The tools should process only the JSON files found in the Working folder.
+                        It should not be necessary to update all test models to refresh DbInitializer.
 
+                    Update the seed JSON file.
+                    DbInitializer reads the JSON file to populate the database.
+                        Cameras
+                        MeshTransforms
+            Output
+                DbInitializer
+                    Cameras
+                    MeshTransforms
+                User Store
+                    Mesh
+                    DepthBufers
+                Solver\Test JSON Files
 
-    Move to TypeScript 3.1.
-        Convert TypeScript compiler output to ES5 modules?
+        How can default settings be shared between C# and TypeScript?
+            Builder: Generate JavaScript and C# from a settings JSON file.
 
-    Upgrade Three.js.
+```c#
+            // Camera
+            public const double DefaultNearClippingPlane  =     0.1;
+            public const double DefaultFarClippingPlane   = 10000.0;
+
+            public const double DefaultFieldOfView  =  37.0;
+            private const double OrthographicFrustrumPlaneOffset = 100;
+            public const double DefaultLeftPlane   = -OrthographicFrustrumPlaneOffset;
+            public const double DefaultRightPlane  = +OrthographicFrustrumPlaneOffset;
+            public const double DefaultTopPlane    = +OrthographicFrustrumPlaneOffset;
+            public const double DefaultBottomPlane = -OrthographicFrustrumPlaneOffset;
+```
+```javascript
+            // N.B. These settings are held in a separate class (rather than OrthographicCamera, PerspectiveCamera) to avoid circular dependencies between BaseCamera and its derived classes.
+            public static DefaultNearClippingPlane: number =    0.1;
+            public static DefaultFarClippingPlane: number = 10000;
+
+            // Perspective
+            public static DefaultFieldOfView: number =   37;       // 35mm vertical : https://www.nikonians.org/reviews/fov-tables
+
+            // Orthographic
+            public static OrthographicFrustumPlaneOffset: number = 100;
+            public static DefaultLeftPlane: number     = -CameraSettings.OrthographicFrustumPlaneOffset;
+            public static DefaultRightPlane: number    = +CameraSettings.OrthographicFrustumPlaneOffset;
+            public static DefaultTopPlane: number      = +CameraSettings.OrthographicFrustumPlaneOffset;
+            public static DefaultBottomPlane: number   = -CameraSettings.OrthographicFrustumPlaneOffset;
+```
+
+    Upgrades
+        Move to TypeScript 3.1.
+            Convert TypeScript compiler output to ES5 modules?
+
+        Upgrade Three.js.
 
 
     Silhouette
