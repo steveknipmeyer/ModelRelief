@@ -105,6 +105,7 @@
             },
 
         //  ----- Tools
+            "program": "${workspaceRoot}/Tools/shareddefaults.py",
         //  "program": "${workspaceRoot}/Tools/testrunner.py",
         //  "program": "${workspaceRoot}/Tools/linecount.py",
 
@@ -121,7 +122,7 @@
         //  "args":["--s", "../Solver/Test/House.json", "--w", "../Solver/Test/Working"],
 
         //  ----- Relief C++ Extensions
-            "program": "${workspaceRoot}/Relief/tests/python/benchmark.py",
+        //  "program": "${workspaceRoot}/Relief/tests/python/benchmark.py",
         //  "program": "${workspaceRoot}/Relief/tests/python/relieftest.py",
         //  "program": "${workspaceRoot}/Relief/setup.py",
         //  "args":["build", "install"]

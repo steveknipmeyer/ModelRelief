@@ -25,7 +25,7 @@
 
     Tools
 
-        TestModelUpdater: Updates the Solver\Test JSON models and the seed projects in DbInitializer.
+        TestModelSynchronizer: Updates the Solver\Test JSON models and the seed projects in DbInitializer.
             Requirements
                 Maintain the seed database settings in a JSON file.
                 The tool:

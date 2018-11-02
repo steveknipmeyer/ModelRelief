@@ -1,0 +1,6 @@
+{
+    "DefaultNearClippingPlane": 0.1,
+    "DefaultFarClippingPlane": 10000.0,
+    "DefaultFieldOfView": 37.0,
+    "OrthographicFrustrumPlaneOffset": 100
+}

@@ -36,4 +36,5 @@ export class CameraSettings  {
     public static DefaultRightPlane: number    = +CameraSettings.OrthographicFrustumPlaneOffset;
     public static DefaultTopPlane: number      = +CameraSettings.OrthographicFrustumPlaneOffset;
     public static DefaultBottomPlane: number   = -CameraSettings.OrthographicFrustumPlaneOffset;
+
 }
