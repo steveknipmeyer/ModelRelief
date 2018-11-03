@@ -65,9 +65,10 @@
 //              "MRDatabaseProvider": "SQLServer",
                 "MRDatabaseProvider": "SQLite",
                 "MRExitAfterInitialization":"False",
-                "MRInitializeDatabase":"False",
-                "MRSeedDatabase":"False",
-                "MRInitializeUserStore":"False",
+
+                "MRInitializeDatabase":"True",
+                "MRSeedDatabase":"True",
+                "MRInitializeUserStore":"True",
             },
             "sourceFileMap": {
                 "/Views": "${workspaceRoot}/Views"
@@ -96,6 +97,7 @@
         //  "cwd": "${workspaceRoot}/Relief",
 
             "cwd": "${workspaceRoot}",
+
             "debugOptions": [
                 "DebugStdLib",
                 "RedirectOutput",

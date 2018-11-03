@@ -8,7 +8,11 @@
 import {ComposerController} from "Scripts/Controllers/ComposerController";
 import {EventType} from "Scripts/System/EventManager";
 import {ElementIds} from "Scripts/System/Html";
+import {Initializer} from "Scripts/System/Initializer";
 import {ComposerView} from "Scripts/Views/ComposerView";
+
+// system initialization
+Initializer.initialize();
 
 const composerView = new ComposerView(ElementIds.ComposerView);
 composerView.eventManager.addEventListener(EventType.ComposerViewInitialized, () => {

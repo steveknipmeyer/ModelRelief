@@ -2,6 +2,18 @@
 #### Commit Notes
 
 #### Short Term
+    Lambda
+        Install TypeScript SDK 3.1.
+            Update D:\ModelRelief\node_modules\@types\webvr-api\index.d.ts.
+                interface VRLayer {
+                    leftBounds?: number[] | Float32Array;
+                    rightBounds?: number[] | Float32Array;
+                    source?: HTMLCanvasElement | null;
+                }
+
+        Verify Visual Studio is current.
+        NPM install TypeScript 3.1.
+        Update Visual Studio ModelRelief project version.
 
     UI
         Add UI progress indicator for mesh generation.
@@ -48,39 +60,10 @@
                 Solver\Test JSON Files
 
         How can default settings be shared between C# and TypeScript?
-            Builder: Generate JavaScript and C# from a settings JSON file.
-
-```c#
-            // Camera
-            public const double DefaultNearClippingPlane  =     0.1;
-            public const double DefaultFarClippingPlane   = 10000.0;
-
-            public const double DefaultFieldOfView  =  37.0;
-            private const double OrthographicFrustrumPlaneOffset = 100;
-            public const double DefaultLeftPlane   = -OrthographicFrustrumPlaneOffset;
-            public const double DefaultRightPlane  = +OrthographicFrustrumPlaneOffset;
-            public const double DefaultTopPlane    = +OrthographicFrustrumPlaneOffset;
-            public const double DefaultBottomPlane = -OrthographicFrustrumPlaneOffset;
-```
-```javascript
-            // N.B. These settings are held in a separate class (rather than OrthographicCamera, PerspectiveCamera) to avoid circular dependencies between BaseCamera and its derived classes.
-            public static DefaultNearClippingPlane: number =    0.1;
-            public static DefaultFarClippingPlane: number = 10000;
-
-            // Perspective
-            public static DefaultFieldOfView: number =   37;       // 35mm vertical : https://www.nikonians.org/reviews/fov-tables
-
-            // Orthographic
-            public static OrthographicFrustumPlaneOffset: number = 100;
-            public static DefaultLeftPlane: number     = -CameraSettings.OrthographicFrustumPlaneOffset;
-            public static DefaultRightPlane: number    = +CameraSettings.OrthographicFrustumPlaneOffset;
-            public static DefaultTopPlane: number      = +CameraSettings.OrthographicFrustumPlaneOffset;
-            public static DefaultBottomPlane: number   = -CameraSettings.OrthographicFrustumPlaneOffset;
-```
+            Define the common settings in JSON files that can be loaded by both TypeScript (request) and C# (file I/O).
 
     Upgrades
-        Move to TypeScript 3.1.
-            Convert TypeScript compiler output to ES5 modules?
+        Convert TypeScript compiler output to ES5 modules?
 
         Upgrade Three.js.
 
@@ -1517,7 +1500,7 @@ https://semver.npmjs.com/
             When SQLite is configured, the database file is stored in store/<environment>/database.
             Also, the database folder is used to transfer the SQLServer seed database to the Docker database container during a build.
 
-    Updateing the mrenv requirements.production.txt
+    Updating the mrenv requirements.production.txt
         conda list --export > <requirements.production.txt>
 
 #### Jupyter
@@ -1554,7 +1537,6 @@ np_fill, relief_fill
     Madge
         https://github.com/pahen/madge
         madge --warning --circular --extensions ts ModelRelief\Scripts
-            1) Controllers/ComposerController.ts > Views/ComposerView.ts
 
     ALM
         https://legacy.gitbook.com/book/alm-tools/alm/details
