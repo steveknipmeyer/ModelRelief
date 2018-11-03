@@ -11,7 +11,7 @@ namespace ModelRelief.Features
 
     /// <summary>
     /// MVC Controller extensions.
-    /// ContosoUniverityCore
+    /// ContosoUniversityCore
     /// </summary>
     public static class ControllerExtensions
     {

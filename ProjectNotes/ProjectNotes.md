@@ -2,19 +2,11 @@
 #### Commit Notes
 
 #### Short Term
-    Lambda
-        Install TypeScript SDK 3.1.
-            Update D:\ModelRelief\node_modules\@types\webvr-api\index.d.ts.
-                interface VRLayer {
-                    leftBounds?: number[] | Float32Array;
-                    rightBounds?: number[] | Float32Array;
-                    source?: HTMLCanvasElement | null;
-                }
-
-        Verify Visual Studio is current.
-        NPM install TypeScript 3.1.
-        Update Visual Studio ModelRelief project version.
-
+    SharedSettings
+        Add C# support for reading DefaultCameraSettings.json.
+            Resolve location of DefaultCameraSettings.json.
+            Generalize to handle different types of default settings (e.g. Camera, Mesh).
+            Should this functionality be part of the API (e.g. <model>/settings)?
     UI
         Add UI progress indicator for mesh generation.
 
@@ -35,32 +27,27 @@
             https://stackoverflow.com/questions/42110726/chrome-devtools-paused-before-potential-out-of-memory-crash
             https://developers.google.com/web/tools/chrome-devtools/memory-problems/
 
-    Tools
+    TestModelSynchronizer: Updates the Solver\Test JSON models and the seed projects in DbInitializer.
+        Requirements
+            Maintain the seed database settings in a JSON file.
+            The tool:
+                Read the seed JSON file.
+                Update the contents from the JSON files found in the Working folder.
+                    The tools should process only the JSON files found in the Working folder.
+                    It should not be necessary to update all test models to refresh DbInitializer.
 
-        TestModelSynchronizer: Updates the Solver\Test JSON models and the seed projects in DbInitializer.
-            Requirements
-                Maintain the seed database settings in a JSON file.
-                The tool:
-                    Read the seed JSON file.
-                    Update the contents from the JSON files found in the Working folder.
-                        The tools should process only the JSON files found in the Working folder.
-                        It should not be necessary to update all test models to refresh DbInitializer.
-
-                    Update the seed JSON file.
-                    DbInitializer reads the JSON file to populate the database.
-                        Cameras
-                        MeshTransforms
-            Output
-                DbInitializer
+                Update the seed JSON file.
+                DbInitializer reads the JSON file to populate the database.
                     Cameras
                     MeshTransforms
-                User Store
-                    Mesh
-                    DepthBufers
-                Solver\Test JSON Files
-
-        How can default settings be shared between C# and TypeScript?
-            Define the common settings in JSON files that can be loaded by both TypeScript (request) and C# (file I/O).
+        Output
+            DbInitializer
+                Cameras
+                MeshTransforms
+            User Store
+                Mesh
+                DepthBufers
+            Solver\Test JSON Files
 
     Upgrades
         Convert TypeScript compiler output to ES5 modules?

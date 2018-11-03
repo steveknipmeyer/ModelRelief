@@ -17,9 +17,9 @@ export class Initializer  {
      * @description Performs system initialization.
      * @static
      */
-    public static initialize() {
+    public static async initialize(): Promise<void> {
 
         // shared Camera settings with backend
-        CameraSettings.initialize();
+        await CameraSettings.initialize();
         }
 }

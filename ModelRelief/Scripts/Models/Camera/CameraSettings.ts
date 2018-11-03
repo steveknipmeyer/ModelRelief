@@ -5,6 +5,8 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
+import { HttpLibrary, MethodType, ContentType } from "Scripts/System/Http";
+
 /**
  * @description The frustum planes of an orthographic camera.
  * @export
@@ -15,6 +17,19 @@ export interface IOrthographicFrustum {
     right: number;
     top: number;
     bottom: number;
+}
+
+
+/**
+ * @description JSON default camera settings.
+  * @interface IDefaultCameraSettings
+ */
+export interface IDefaultCameraSettings {
+
+    DefaultNearClippingPlane: number;
+    DefaultFarClippingPlane: number;
+    DefaultFieldOfView: number;
+    OrthographicFrustrumPlaneOffset: number;
 }
 
 /**
@@ -41,25 +56,22 @@ export class CameraSettings  {
      * @description Initialize the default settings from the common JSON file used to share settings between the front end (FE) and back end (BE).
      * @static
      */
-    public static initialize() {
+    public static async initialize(): Promise<void> {
 
         // Populate the shared settings from the JSON file.
-        const DefaultCameraSettings = {
-            DefaultNearClippingPlane:           0.1,
-            DefaultFarClippingPlane:        10000.0,
-            DefaultFieldOfView:                37.0,
-            OrthographicFrustrumPlaneOffset:  100,
-        };
+        const endPoint = `${HttpLibrary.HostRoot}settings/camera`;
+        const result = await HttpLibrary.submitHttpRequestAsync(endPoint, MethodType.Get, ContentType.Json, null);
+        const defaultCameraSettings: IDefaultCameraSettings = JSON.parse(result.contentString) as unknown as IDefaultCameraSettings;
 
         // Clipping Planes
-        CameraSettings.DefaultNearClippingPlane = DefaultCameraSettings.DefaultNearClippingPlane;
-        CameraSettings.DefaultFarClippingPlane = DefaultCameraSettings.DefaultFarClippingPlane;
+        CameraSettings.DefaultNearClippingPlane = defaultCameraSettings.DefaultNearClippingPlane;
+        CameraSettings.DefaultFarClippingPlane = defaultCameraSettings.DefaultFarClippingPlane;
 
         // Perspective
-        CameraSettings.DefaultFieldOfView = DefaultCameraSettings.DefaultFieldOfView;
+        CameraSettings.DefaultFieldOfView = defaultCameraSettings.DefaultFieldOfView;
 
         // Orthographic
-        CameraSettings.OrthographicFrustumPlaneOffset = DefaultCameraSettings.OrthographicFrustrumPlaneOffset;
+        CameraSettings.OrthographicFrustumPlaneOffset = defaultCameraSettings.OrthographicFrustrumPlaneOffset;
         CameraSettings.DefaultLeftPlane    = -CameraSettings.OrthographicFrustumPlaneOffset;
         CameraSettings.DefaultRightPlane   = +CameraSettings.OrthographicFrustumPlaneOffset;
         CameraSettings.DefaultTopPlane     = +CameraSettings.OrthographicFrustumPlaneOffset;
