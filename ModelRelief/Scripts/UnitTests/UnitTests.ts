@@ -11,7 +11,7 @@ import * as THREE from "three";
 import {assert} from "chai";
 import {DepthBufferFormat} from "Scripts/Api/V1/Interfaces/IDepthBuffer";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
-import {CameraSettings} from "Scripts/Models/Camera/Camerasettings";
+import {DefaultCameraSettings} from "Scripts/Models/Camera/DefaultCameraSettings";
 import {PerspectiveCamera} from "Scripts/Models/Camera/PerspectiveCamera";
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
 import {Services} from "Scripts/System/Services";
@@ -178,7 +178,7 @@ export class UnitTests {
             const fieldOfView       = this.generateScalar(50);
             const aspect            = this.generateScalar(1.0);
             const nearClippingPlane = this.generateScalar(10);
-            const farClippingPlane  = nearClippingPlane + this.generateScalar(CameraSettings.DefaultFarClippingPlane);
+            const farClippingPlane  = nearClippingPlane + this.generateScalar(DefaultCameraSettings.FarClippingPlane);
 
             const perspectiveCamera = new THREE.PerspectiveCamera(fieldOfView, aspect, nearClippingPlane, farClippingPlane);
 

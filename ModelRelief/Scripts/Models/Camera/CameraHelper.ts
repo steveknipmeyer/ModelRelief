@@ -9,7 +9,7 @@ import * as THREE from "three";
 import {StandardView} from "Scripts/Api/V1/Interfaces/ICamera";
 import {Graphics} from "Scripts/Graphics/Graphics";
 import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
-import {CameraSettings, IOrthographicFrustum} from "Scripts/Models/Camera/Camerasettings";
+import {DefaultCameraSettings, IOrthographicFrustum} from "Scripts/Models/Camera/DefaultCameraSettings";
 import {Format} from "Scripts/System/Format";
 import {ConsoleLogger} from "Scripts/System/Logger";
 import {Services} from "Scripts/System/Services";
@@ -35,8 +35,8 @@ export class CameraHelper {
      */
     public static setDefaultClippingPlanes(camera: IThreeBaseCamera) {
 
-        camera.near = CameraSettings.DefaultNearClippingPlane;
-        camera.far  = CameraSettings.DefaultFarClippingPlane;
+        camera.near = DefaultCameraSettings.NearClippingPlane;
+        camera.far  = DefaultCameraSettings.FarClippingPlane;
     }
 //#endregion
 
@@ -240,10 +240,10 @@ export class CameraHelper {
 
         let defaultCamera;
         if (perspectiveCamera) {
-            defaultCamera = new THREE.PerspectiveCamera(CameraSettings.DefaultFieldOfView, viewAspect, CameraSettings.DefaultNearClippingPlane, CameraSettings.DefaultFarClippingPlane);
+            defaultCamera = new THREE.PerspectiveCamera(DefaultCameraSettings.FieldOfView, viewAspect, DefaultCameraSettings.NearClippingPlane, DefaultCameraSettings.FarClippingPlane);
         } else {
             const frustum: IOrthographicFrustum = this.getDefaultOrthographicFrustum(viewAspect);
-            defaultCamera = new THREE.OrthographicCamera(frustum.left, frustum.right, frustum.top, frustum.bottom, CameraSettings.DefaultNearClippingPlane, CameraSettings.DefaultFarClippingPlane);
+            defaultCamera = new THREE.OrthographicCamera(frustum.left, frustum.right, frustum.top, frustum.bottom, DefaultCameraSettings.NearClippingPlane, DefaultCameraSettings.FarClippingPlane);
         }
 
         defaultCamera.position.copy (new THREE.Vector3 (0, 0, 0));
@@ -264,10 +264,10 @@ export class CameraHelper {
      */
     public static getDefaultOrthographicFrustum(viewAspect: number = 1.0): IOrthographicFrustum {
         const frustum: IOrthographicFrustum = {
-            left:   -CameraSettings.OrthographicFrustumPlaneOffset,
-            right:  +CameraSettings.OrthographicFrustumPlaneOffset,
-            top:    +CameraSettings.OrthographicFrustumPlaneOffset / viewAspect,
-            bottom: -CameraSettings.OrthographicFrustumPlaneOffset / viewAspect,
+            left:   -DefaultCameraSettings.OrthographicFrustumPlaneOffset,
+            right:  +DefaultCameraSettings.OrthographicFrustumPlaneOffset,
+            top:    +DefaultCameraSettings.OrthographicFrustumPlaneOffset / viewAspect,
+            bottom: -DefaultCameraSettings.OrthographicFrustumPlaneOffset / viewAspect,
         };
         return frustum;
     }

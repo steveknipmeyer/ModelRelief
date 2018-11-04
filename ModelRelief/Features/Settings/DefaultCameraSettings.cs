@@ -12,9 +12,9 @@ namespace ModelRelief.Features.Settings
     /// </summary>
     public class DefaultCameraSettings
     {
-        public double DefaultNearClippingPlane { get; set; }
-        public double DefaultFarClippingPlane { get; set; }
-        public double DefaultFieldOfView { get; set; }
+        public double NearClippingPlane { get; set; }
+        public double FarClippingPlane { get; set; }
+        public double FieldOfView { get; set; }
         public double OrthographicFrustrumPlaneOffset { get; set; }
     }
 }

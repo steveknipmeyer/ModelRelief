@@ -1,11 +1,11 @@
 ﻿### Tasks
 #### Commit Notes
 
+
 #### Short Term
     SharedSettings
         Add C# support for reading DefaultCameraSettings.json.
-            Resolve location of DefaultCameraSettings.json.
-            Generalize to handle different types of default settings (e.g. Camera, Mesh).
+            ModelRelief\System\Initializer
             Should this functionality be part of the API (e.g. <model>/settings)?
     UI
         Add UI progress indicator for mesh generation.
@@ -1486,6 +1486,13 @@ https://semver.npmjs.com/
             The users folder is used to hold the user file system.
             When SQLite is configured, the database file is stored in store/<environment>/database.
             Also, the database folder is used to transfer the SQLServer seed database to the Docker database container during a build.
+
+        SQLServer Notes
+            The database is located here: C:\Program Files\Microsoft SQL Server\MSSQL14.SQLEXPRESS\MSSQL\DATA.
+            Using SQL Server Management Studio:
+                1) Delete the existing database.
+                2) Copy the updated database from the User folder (e.g. C:\Users\Steve Knipmeyer) into C:\Program Files\Microsoft SQL Server\MSSQL14.SQLEXPRESS\MSSQL\DATA.
+                3) Attach the updated ModelReliefProduction.db.
 
     Updating the mrenv requirements.production.txt
         conda list --export > <requirements.production.txt>

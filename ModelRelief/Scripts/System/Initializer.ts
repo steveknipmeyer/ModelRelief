@@ -4,7 +4,7 @@
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
-import {CameraSettings} from "Scripts/Models/Camera/CameraSettings";
+import {DefaultCameraSettings} from "Scripts/Models/Camera/DefaultCameraSettings";
 
 /**
  * @description CameraSettings
@@ -20,6 +20,6 @@ export class Initializer  {
     public static async initialize(): Promise<void> {
 
         // shared Camera settings with backend
-        await CameraSettings.initialize();
+        await DefaultCameraSettings.initialize();
         }
 }

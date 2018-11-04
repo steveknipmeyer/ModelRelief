@@ -13,7 +13,7 @@ import {Loader} from "Scripts/ModelLoaders/Loader";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
-import {CameraSettings} from "Scripts/Models/Camera/Camerasettings";
+import {DefaultCameraSettings} from "Scripts/Models/Camera/DefaultCameraSettings";
 import {PerspectiveCamera} from "Scripts/Models/Camera/PerspectiveCamera";
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
 import {DepthBufferFactory} from "Scripts/Models/DepthBuffer/DepthBufferFactory";
@@ -413,8 +413,8 @@ export class ComposerController {
         // WIP: Set far plane based on model extents to avoid clipping
         const boundingPlanes =  this.activeDepthBufferCamera.getBoundingClippingPlanes(this.modelViewer.modelGroup);
 
-        modelViewCamera.near = CameraSettings.DefaultNearClippingPlane;
-        modelViewCamera.far  = CameraSettings.DefaultFarClippingPlane;
+        modelViewCamera.near = DefaultCameraSettings.NearClippingPlane;
+        modelViewCamera.far  = DefaultCameraSettings.FarClippingPlane;
 
         modelViewCamera.updateProjectionMatrix();
 

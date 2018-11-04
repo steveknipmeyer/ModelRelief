@@ -7,11 +7,14 @@
 namespace ModelRelief.Features.Home
 {
     using System;
+    using System.IO;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Features.Settings;
+    using ModelRelief.Services;
+    using ModelRelief.Utility;
     using Newtonsoft.Json;
 
     public class SettingsController : Controller
@@ -34,15 +37,40 @@ namespace ModelRelief.Features.Home
             ConfigurationProvider = configurationProvider ?? throw new System.ArgumentNullException(nameof(configurationProvider));
         }
 
-        [Route("settings/{settingsFile}")]
-        public async Task<ContentResult> GetFile([FromRoute]string settingsFile)
+        /// <summary>
+        /// Return the default settings object for the given settings type.
+        /// </summary>
+        /// <param name="settingsType">Settings type (e.g. camera)</param>
+        /// <param name="hostingEnvironment">IHostingEnvironment</param>
+        /// <param name="configurationProvider">IConfigurationProvider</param>
+        /// <returns>Settings object read from JSON.</returns>
+        public static object GetSettings(string settingsType, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider)
         {
-            await Task.CompletedTask;
+            var rootSettingsFile = $"Default{Strings.Captitalize(settingsType)}Settings.json";
+            var settingsFile = $"{hostingEnvironment.ContentRootPath}{configurationProvider.GetSetting(Paths.Settings)}/{rootSettingsFile}";
+            settingsFile = Path.GetFullPath(settingsFile);
 
-            var cameraSettingsFile = @"D:\ModelRelief\ModelRelief\Settings\DefaultCameraSettings.json";
-            DefaultCameraSettings defaultCameraSettings = JsonConvert.DeserializeObject<DefaultCameraSettings>(System.IO.File.ReadAllText(cameraSettingsFile));
+            switch (settingsType.ToLower())
+            {
+                case "camera":
+                    DefaultCameraSettings defaultCameraSettings = JsonConvert.DeserializeObject<DefaultCameraSettings>(System.IO.File.ReadAllText(settingsFile));
+                    return defaultCameraSettings;
 
-            var serializedContent = JsonConvert.SerializeObject(defaultCameraSettings, new JsonSerializerSettings
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// Returns the JSON settings file by category (e.g. camera).
+        /// </summary>
+        /// <param name="settingsType">JSON settings file type (e.g. camera).</param>
+        /// <returns>JSON settings file.</returns>
+        [Route("settings/{settingsType}")]
+        public ContentResult GetFile([FromRoute]string settingsType)
+        {
+            var settingsObject = SettingsController.GetSettings(settingsType, HostingEnvironment, ConfigurationProvider);
+            var serializedContent = JsonConvert.SerializeObject(settingsObject, new JsonSerializerSettings
                 {
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                 });

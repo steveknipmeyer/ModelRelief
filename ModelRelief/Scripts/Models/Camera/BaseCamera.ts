@@ -14,7 +14,7 @@ import {Model} from "Scripts/Api/V1/Models/Model";
 import {Graphics} from "Scripts/Graphics/Graphics";
 import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
 import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
-import {CameraSettings} from "Scripts/Models/Camera/Camerasettings";
+import {DefaultCameraSettings} from "Scripts/Models/Camera/DefaultCameraSettings";
 import {DepthBufferFactorySettings} from "Scripts/Models/DepthBuffer/DepthBufferFactorySettings";
 import {Project} from "Scripts/Models/Project/Project";
 
@@ -126,10 +126,10 @@ export abstract class BaseCamera extends Model {
         const farPlane  = -boundingBoxView.min.z;
 
         // validate near plane
-        const validNearPlane: boolean = nearPlane >= CameraSettings.DefaultNearClippingPlane;
+        const validNearPlane: boolean = nearPlane >= DefaultCameraSettings.NearClippingPlane;
         if (!validNearPlane) {
             console.log(`getBoundingClippingPlanes: nearPlane = ${nearPlane}`);
-            nearPlane = CameraSettings.DefaultNearClippingPlane;
+            nearPlane = DefaultCameraSettings.NearClippingPlane;
         }
         const clippingPlanes: IClippingPlanes = {
 
@@ -146,8 +146,8 @@ export abstract class BaseCamera extends Model {
      */
     public finalizeClippingPlanes(modelGroup: THREE.Group) {
 
-        const setNear = (this.viewCamera.near === CameraSettings.DefaultNearClippingPlane);
-        const setFar  = (this.viewCamera.far === CameraSettings.DefaultFarClippingPlane);
+        const setNear = (this.viewCamera.near === DefaultCameraSettings.NearClippingPlane);
+        const setFar  = (this.viewCamera.far === DefaultCameraSettings.FarClippingPlane);
 
         const clippingPlanes: IClippingPlanes = this.getBoundingClippingPlanes(modelGroup);
         if (setNear)
@@ -191,14 +191,14 @@ export abstract class BaseCamera extends Model {
             up,
 
             // Perspective
-            fieldOfView     : isPerspective ? (this.viewCamera as THREE.PerspectiveCamera).fov : CameraSettings.DefaultFieldOfView,
+            fieldOfView     : isPerspective ? (this.viewCamera as THREE.PerspectiveCamera).fov : DefaultCameraSettings.FieldOfView,
             aspectRatio     : isPerspective ? (this.viewCamera as THREE.PerspectiveCamera).aspect : 1.0,
 
             // Orthographic
-            left            : isOrthographic ? (this.viewCamera as THREE.OrthographicCamera).left   : CameraSettings.DefaultLeftPlane,
-            right           : isOrthographic ? (this.viewCamera as THREE.OrthographicCamera).right  : CameraSettings.DefaultRightPlane,
-            top             : isOrthographic ? (this.viewCamera as THREE.OrthographicCamera).top    : CameraSettings.DefaultTopPlane,
-            bottom          : isOrthographic ? (this.viewCamera as THREE.OrthographicCamera).bottom : CameraSettings.DefaultBottomPlane,
+            left            : isOrthographic ? (this.viewCamera as THREE.OrthographicCamera).left   : DefaultCameraSettings.LeftPlane,
+            right           : isOrthographic ? (this.viewCamera as THREE.OrthographicCamera).right  : DefaultCameraSettings.RightPlane,
+            top             : isOrthographic ? (this.viewCamera as THREE.OrthographicCamera).top    : DefaultCameraSettings.TopPlane,
+            bottom          : isOrthographic ? (this.viewCamera as THREE.OrthographicCamera).bottom : DefaultCameraSettings.BottomPlane,
 
             projectId       : this.project ? this.project.id : undefined,
         });

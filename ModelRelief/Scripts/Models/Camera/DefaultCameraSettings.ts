@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { HttpLibrary, MethodType, ContentType } from "Scripts/System/Http";
+import { ContentType, HttpLibrary, MethodType } from "Scripts/System/Http";
 
 /**
  * @description The frustum planes of an orthographic camera.
@@ -22,35 +22,35 @@ export interface IOrthographicFrustum {
 
 /**
  * @description JSON default camera settings.
-  * @interface IDefaultCameraSettings
+ * @interface IDefaultCameraSettings
  */
 export interface IDefaultCameraSettings {
 
-    DefaultNearClippingPlane: number;
-    DefaultFarClippingPlane: number;
-    DefaultFieldOfView: number;
+    NearClippingPlane: number;
+    FarClippingPlane: number;
+    FieldOfView: number;
     OrthographicFrustrumPlaneOffset: number;
 }
 
 /**
- * @description CameraSettings
+ * @description DefaultCameraSettings
  * @export
- * @class CameraSettings
+ * @class DefaultCameraSettings
  */
-export class CameraSettings  {
+export class DefaultCameraSettings  {
     // N.B. These settings are held in a separate class (rather than OrthographicCamera, PerspectiveCamera) to avoid circular dependencies between BaseCamera and its derived classes.
-    public static DefaultNearClippingPlane: number;
-    public static DefaultFarClippingPlane: number;
+    public static NearClippingPlane: number;
+    public static FarClippingPlane: number;
 
     // Perspective
-    public static DefaultFieldOfView: number;       // 35mm vertical : https://www.nikonians.org/reviews/fov-tables
+    public static FieldOfView: number;       // 35mm vertical : https://www.nikonians.org/reviews/fov-tables
 
     // Orthographic
     public static OrthographicFrustumPlaneOffset: number;
-    public static DefaultLeftPlane: number;
-    public static DefaultRightPlane: number;
-    public static DefaultTopPlane: number;
-    public static DefaultBottomPlane: number;
+    public static LeftPlane: number;
+    public static RightPlane: number;
+    public static TopPlane: number;
+    public static BottomPlane: number;
 
     /**
      * @description Initialize the default settings from the common JSON file used to share settings between the front end (FE) and back end (BE).
@@ -64,17 +64,17 @@ export class CameraSettings  {
         const defaultCameraSettings: IDefaultCameraSettings = JSON.parse(result.contentString) as unknown as IDefaultCameraSettings;
 
         // Clipping Planes
-        CameraSettings.DefaultNearClippingPlane = defaultCameraSettings.DefaultNearClippingPlane;
-        CameraSettings.DefaultFarClippingPlane = defaultCameraSettings.DefaultFarClippingPlane;
+        DefaultCameraSettings.NearClippingPlane = defaultCameraSettings.NearClippingPlane;
+        DefaultCameraSettings.FarClippingPlane  = defaultCameraSettings.FarClippingPlane;
 
         // Perspective
-        CameraSettings.DefaultFieldOfView = defaultCameraSettings.DefaultFieldOfView;
+        DefaultCameraSettings.FieldOfView = defaultCameraSettings.FieldOfView;
 
         // Orthographic
-        CameraSettings.OrthographicFrustumPlaneOffset = defaultCameraSettings.OrthographicFrustrumPlaneOffset;
-        CameraSettings.DefaultLeftPlane    = -CameraSettings.OrthographicFrustumPlaneOffset;
-        CameraSettings.DefaultRightPlane   = +CameraSettings.OrthographicFrustumPlaneOffset;
-        CameraSettings.DefaultTopPlane     = +CameraSettings.OrthographicFrustumPlaneOffset;
-        CameraSettings.DefaultBottomPlane  = -CameraSettings.OrthographicFrustumPlaneOffset;
+        DefaultCameraSettings.OrthographicFrustumPlaneOffset = defaultCameraSettings.OrthographicFrustrumPlaneOffset;
+        DefaultCameraSettings.LeftPlane    = -DefaultCameraSettings.OrthographicFrustumPlaneOffset;
+        DefaultCameraSettings.RightPlane   = +DefaultCameraSettings.OrthographicFrustumPlaneOffset;
+        DefaultCameraSettings.TopPlane     = +DefaultCameraSettings.OrthographicFrustumPlaneOffset;
+        DefaultCameraSettings.BottomPlane  = -DefaultCameraSettings.OrthographicFrustumPlaneOffset;
     }
 }
