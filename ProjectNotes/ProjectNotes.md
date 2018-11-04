@@ -1,14 +1,13 @@
 ﻿### Tasks
 #### Commit Notes
 
-
 #### Short Term
-    C# documentation addin?
-
-    TestModelSynchronizer: Updates the Solver\Test JSON models and the seed projects in DbInitializer.
+    UpdateSeedDatabase: Updates the Solver\Test JSON models and the seed projects in DbInitializer.
         Requirements
-            Maintain the seed database settings in a JSON file.
-            The tool:
+            Maintain these model settings in a JSON or C# file.
+                Cameras
+                MeshTransforms
+            Processing:
                 Read the seed JSON file.
                 Update the contents from the JSON files found in the Working folder.
                     The tools should process only the JSON files found in the Working folder.
@@ -22,14 +21,16 @@
             DbInitializer
                 Cameras
                 MeshTransforms
-            User Store
+            User Store Files
                 Mesh
                 DepthBufers
             Solver\Test JSON Files
-
+        Issues
+            Should the tool write C# code or JSON?
+            The Project references in Camera and MeshTransform are null.
+                How can these be handled?
     Upgrades
         Convert TypeScript compiler output to ES5 modules?
-
         Upgrade Three.js.
 
     UI
