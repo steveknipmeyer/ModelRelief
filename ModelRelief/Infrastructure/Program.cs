@@ -37,8 +37,12 @@ namespace ModelRelief.Infrastructure
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-                var initializer = new DbInitializer(services, ExitAfterInitialization);
+
+                var initializer = new Initializer(services);
                 initializer.Initialize();
+
+                var dbInitializer = new DbInitializer(services, ExitAfterInitialization);
+                dbInitializer.Initialize();
             }
             if (ExitAfterInitialization)
                 return;

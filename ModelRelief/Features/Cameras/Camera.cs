@@ -9,8 +9,7 @@ namespace ModelRelief.Dto
     using System.ComponentModel.DataAnnotations;
     using AutoMapper;
     using FluentValidation;
-    using ModelRelief.Api.V1.Shared.Rest;
-    using ModelRelief.Domain;
+    using ModelRelief.Features.Settings;
 
     /// <summary>
     /// Represents a DataTransferObject (DTO) for a Camera.
@@ -109,14 +108,14 @@ namespace ModelRelief.Dto
             UpZ = 0.0;
 
             // Perspective
-            FieldOfView = Domain.Camera.DefaultFieldOfView;
+            FieldOfView = DefaultCameraSettings.FieldOfView;
             AspectRatio = 1.0;
 
             // Orthographic
-            Left    = Domain.Camera.DefaultLeftPlane;
-            Right   = Domain.Camera.DefaultRightPlane;
-            Top     = Domain.Camera.DefaultTopPlane;
-            Bottom  = Domain.Camera.DefaultBottomPlane;
+            Left    = DefaultCameraSettings.LeftPlane;
+            Right   = DefaultCameraSettings.RightPlane;
+            Top     = DefaultCameraSettings.TopPlane;
+            Bottom  = DefaultCameraSettings.BottomPlane;
         }
     }
 

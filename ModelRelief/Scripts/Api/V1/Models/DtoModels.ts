@@ -612,8 +612,8 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
     public depth: number;
 
     public gradientThreshold?: number;             // gradient threshold
-    public attenuationFactor?: number;              // gradient attenuation (~a)
-    public attenuationDecay?: number;               // gradient attenuation decay (b)
+    public attenuationFactor?: number;             // gradient attenuation (~a)
+    public attenuationDecay?: number;              // gradient attenuation decay (b)
     public unsharpGaussianLow?: number;            // unsharp masking Gaussian low
     public unsharpGaussianHigh?: number;           // unsharp masking Gaussian high
     public unsharpHighFrequencyScale?: number;     // Unsharp masking high frequency scaling

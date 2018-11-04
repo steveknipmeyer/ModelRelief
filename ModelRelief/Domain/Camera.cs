@@ -6,6 +6,7 @@
 
 namespace ModelRelief.Domain
 {
+    using ModelRelief.Features.Settings;
     using ModelRelief.Services.Relationships;
 
     public enum StandardView
@@ -23,9 +24,6 @@ namespace ModelRelief.Domain
     [DependentFiles(typeof(DepthBuffer))]
     public class Camera : DomainModel
     {
-        public const double DefaultNearClippingPlane  =     0.1;
-        public const double DefaultFarClippingPlane   = 10000.0;
-
         [DependentFileProperty]
         public bool IsPerspective { get; set; }
 
@@ -65,20 +63,12 @@ namespace ModelRelief.Domain
         public double UpZ { get; set; }
 
         // Perspective
-        public const double DefaultFieldOfView  =  37.0;
-
         [DependentFileProperty]
         public double FieldOfView { get; set; }
         [DependentFileProperty]
         public double AspectRatio { get; set; }
 
         // Orthographic
-        private const double OrthographicFrustrumPlaneOffset = 100;
-        public const double DefaultLeftPlane   = -OrthographicFrustrumPlaneOffset;
-        public const double DefaultRightPlane  = +OrthographicFrustrumPlaneOffset;
-        public const double DefaultTopPlane    = +OrthographicFrustrumPlaneOffset;
-        public const double DefaultBottomPlane = -OrthographicFrustrumPlaneOffset;
-
         [DependentFileProperty]
         public double Left { get; set; }
         [DependentFileProperty]
@@ -109,14 +99,14 @@ namespace ModelRelief.Domain
             UpZ = 0.0;
 
             // Perspective
-            FieldOfView = Camera.DefaultFieldOfView;
+            FieldOfView = DefaultCameraSettings.FieldOfView;
             AspectRatio = 1.0;
 
             // Orthographic
-            Left    = Camera.DefaultLeftPlane;
-            Right   = Camera.DefaultRightPlane;
-            Top     = Camera.DefaultTopPlane;
-            Bottom  = Camera.DefaultBottomPlane;
+            Left    = DefaultCameraSettings.LeftPlane;
+            Right   = DefaultCameraSettings.RightPlane;
+            Top     = DefaultCameraSettings.TopPlane;
+            Bottom  = DefaultCameraSettings.BottomPlane;
         }
     }
 }

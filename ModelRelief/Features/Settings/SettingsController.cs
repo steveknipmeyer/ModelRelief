@@ -38,30 +38,6 @@ namespace ModelRelief.Features.Home
         }
 
         /// <summary>
-        /// Return the default settings object for the given settings type.
-        /// </summary>
-        /// <param name="settingsType">Settings type (e.g. camera)</param>
-        /// <param name="hostingEnvironment">IHostingEnvironment</param>
-        /// <param name="configurationProvider">IConfigurationProvider</param>
-        /// <returns>Settings object read from JSON.</returns>
-        public static object GetSettings(string settingsType, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider)
-        {
-            var rootSettingsFile = $"Default{Strings.Captitalize(settingsType)}Settings.json";
-            var settingsFile = $"{hostingEnvironment.ContentRootPath}{configurationProvider.GetSetting(Paths.Settings)}/{rootSettingsFile}";
-            settingsFile = Path.GetFullPath(settingsFile);
-
-            switch (settingsType.ToLower())
-            {
-                case "camera":
-                    DefaultCameraSettings defaultCameraSettings = JsonConvert.DeserializeObject<DefaultCameraSettings>(System.IO.File.ReadAllText(settingsFile));
-                    return defaultCameraSettings;
-
-                default:
-                    return null;
-            }
-        }
-
-        /// <summary>
         /// Returns the JSON settings file by category (e.g. camera).
         /// </summary>
         /// <param name="settingsType">JSON settings file type (e.g. camera).</param>
@@ -69,7 +45,8 @@ namespace ModelRelief.Features.Home
         [Route("settings/{settingsType}")]
         public ContentResult GetFile([FromRoute]string settingsType)
         {
-            var settingsObject = SettingsController.GetSettings(settingsType, HostingEnvironment, ConfigurationProvider);
+            var settingsManager = new SettingsManager(HostingEnvironment, ConfigurationProvider);
+            var settingsObject = settingsManager.GetSettings(settingsType);
             var serializedContent = JsonConvert.SerializeObject(settingsObject, new JsonSerializerSettings
                 {
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore,

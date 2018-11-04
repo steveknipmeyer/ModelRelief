@@ -3,29 +3,7 @@
 
 
 #### Short Term
-    SharedSettings
-        Add C# support for reading DefaultCameraSettings.json.
-            ModelRelief\System\Initializer
-            Should this functionality be part of the API (e.g. <model>/settings)?
-    UI
-        Add UI progress indicator for mesh generation.
-
-        CameraControls
-            Separate the Perspective controls into a separate dat.gui controller that can be entirely hidden or shown.
-                Field of View
-
-    Core
-        Should clipping planes be set based on the Model?
-
-        Close in Orthogonal views of House (Lambda: Documents\Temp\MalformedHouse) yiueld malformed meshes.
-
-        Visually examine randomly-generated cameras that have been round-tripped.
-
-        Experiment with Poisson solutions of images that have not been attenuated/processed.
-
-        Chrome "paused before potential out-of-memory crash".
-            https://stackoverflow.com/questions/42110726/chrome-devtools-paused-before-potential-out-of-memory-crash
-            https://developers.google.com/web/tools/chrome-devtools/memory-problems/
+    C# documentation addin?
 
     TestModelSynchronizer: Updates the Solver\Test JSON models and the seed projects in DbInitializer.
         Requirements
@@ -53,6 +31,26 @@
         Convert TypeScript compiler output to ES5 modules?
 
         Upgrade Three.js.
+
+    UI
+        Add UI progress indicator for mesh generation.
+
+        CameraControls
+            Separate the Perspective controls into a separate dat.gui controller that can be entirely hidden or shown.
+                Field of View
+
+    Core
+        Should clipping planes be set based on the Model?
+
+        Close in Orthogonal views of House (Lambda: Documents\Temp\MalformedHouse) yiueld malformed meshes.
+
+        Visually examine randomly-generated cameras that have been round-tripped.
+
+        Experiment with Poisson solutions of images that have not been attenuated/processed.
+
+        Chrome "paused before potential out-of-memory crash".
+            https://stackoverflow.com/questions/42110726/chrome-devtools-paused-before-potential-out-of-memory-crash
+            https://developers.google.com/web/tools/chrome-devtools/memory-problems/
 
 
     Silhouette

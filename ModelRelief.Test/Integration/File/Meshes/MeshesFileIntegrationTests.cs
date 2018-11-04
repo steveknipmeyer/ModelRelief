@@ -50,11 +50,7 @@ namespace ModelRelief.Test.Integration.Meshes
                 var cameraFactory = cameraNode.Factory as ITestModelFactory;
                 cameraNode.Model = cameraFactory.ConstructValidModel();
 
-                // N.B. Camera properties must match the Lucy camera properties set in DbInitializer.
-                //      The reference scaled mesh compared in FileRequest_MeshGenerateScalesDepthBufferByP1() is based on those properties.
                 var camera = cameraNode.Model as Dto.Camera;
-                camera.Near = 238.39;
-                camera.Far  = 292.00;
                 cameraNode.Model = await cameraFactory.PostNewModel(camera);
 
                 // DepthBuffer

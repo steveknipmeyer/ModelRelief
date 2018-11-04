@@ -21,6 +21,7 @@ namespace ModelRelief.Database
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Domain;
+    using ModelRelief.Features.Settings;
     using ModelRelief.Services;
     using ModelRelief.Utility;
 
@@ -421,9 +422,9 @@ namespace ModelRelief.Database
                 {
                     Name = "Top Camera", Description = "Aligned along negative Z",
                     IsPerspective = true,
-                    FieldOfView = Camera.DefaultFieldOfView,
+                    FieldOfView = DefaultCameraSettings.FieldOfView,
                     AspectRatio = 1.0,
-                    Near = Camera.DefaultNearClippingPlane, Far = Camera.DefaultFarClippingPlane,
+                    Near = DefaultCameraSettings.NearClippingPlane, Far = DefaultCameraSettings.FarClippingPlane,
                     Left = -100, Right = 100, Top = 100, Bottom = -100,
 
                     PositionX = 0.0, PositionY = 0.0, PositionZ = 100.0,
@@ -438,9 +439,9 @@ namespace ModelRelief.Database
                 {
                     Name = "Isometric Camera", Description = "Isometric",
                     IsPerspective = true,
-                    FieldOfView = Camera.DefaultFieldOfView,
+                    FieldOfView = DefaultCameraSettings.FieldOfView,
                     AspectRatio = 1.0,
-                    Near = Camera.DefaultNearClippingPlane, Far = Camera.DefaultFarClippingPlane,
+                    Near = DefaultCameraSettings.NearClippingPlane, Far = DefaultCameraSettings.FarClippingPlane,
                     Left = -100, Right = 100, Top = 100, Bottom = -100,
 
                     PositionX = 10.0, PositionY = 100.0, PositionZ = 100.0,
@@ -456,7 +457,7 @@ namespace ModelRelief.Database
                 {
                     Name = "Armadillo", Description = "Armadillo Model",
                     IsPerspective = true,
-                    FieldOfView = Camera.DefaultFieldOfView,
+                    FieldOfView = DefaultCameraSettings.FieldOfView,
                     AspectRatio = 1.0,
                     Near = 232.05, Far = 339.50,
                     Left = -100, Right = 100, Top = 100, Bottom = -100,
@@ -472,7 +473,7 @@ namespace ModelRelief.Database
                 {
                     Name = "Buddha", Description = "Buddha Model",
                     IsPerspective = true,
-                    FieldOfView = Camera.DefaultFieldOfView,
+                    FieldOfView = DefaultCameraSettings.FieldOfView,
                     AspectRatio = 1.0,
                     Near = 222.23, Far = 283.75,
                     Left = -100, Right = 100, Top = 100, Bottom = -100,
@@ -488,7 +489,7 @@ namespace ModelRelief.Database
                 {
                     Name = "Bunny", Description = "Bunny Model",
                     IsPerspective = true,
-                    FieldOfView = Camera.DefaultFieldOfView,
+                    FieldOfView = DefaultCameraSettings.FieldOfView,
                     AspectRatio = 1.0,
                     Near = 132.85, Far = 201.95,
                     Left = -100, Right = 100, Top = 100, Bottom = -100,
@@ -504,7 +505,7 @@ namespace ModelRelief.Database
                 {
                     Name = "Dolphin", Description = "Dolphin Model",
                     IsPerspective = true,
-                    FieldOfView = Camera.DefaultFieldOfView,
+                    FieldOfView = DefaultCameraSettings.FieldOfView,
                     AspectRatio = 1.0,
                     Near = 355.49, Far = 800.22,
                     Left = -100, Right = 100, Top = 100, Bottom = -100,
@@ -520,7 +521,7 @@ namespace ModelRelief.Database
                 {
                     Name = "Dragon", Description = "Dragon Model",
                     IsPerspective = true,
-                    FieldOfView = Camera.DefaultFieldOfView,
+                    FieldOfView = DefaultCameraSettings.FieldOfView,
                     AspectRatio = 1.0,
                     Near = 145.41, Far = 190.31,
                     Left = -100, Right = 100, Top = 100, Bottom = -100,
@@ -536,7 +537,7 @@ namespace ModelRelief.Database
                 {
                     Name = "House", Description = "House Model",
                     IsPerspective = true,
-                    FieldOfView = Camera.DefaultFieldOfView,
+                    FieldOfView = DefaultCameraSettings.FieldOfView,
                     AspectRatio = 1.0,
                     Near = 220.27, Far = 373.72,
                     Left = -100, Right = 100, Top = 100, Bottom = -100,
@@ -552,7 +553,7 @@ namespace ModelRelief.Database
                 {
                     Name = "Lucy", Description = "Lucy Model",
                     IsPerspective = true,
-                    FieldOfView = Camera.DefaultFieldOfView,
+                    FieldOfView = DefaultCameraSettings.FieldOfView,
                     AspectRatio = 1.0,
                     Near = 238.39, Far = 292.00,
                     Left = -100, Right = 100, Top = 100, Bottom = -100,
@@ -568,7 +569,7 @@ namespace ModelRelief.Database
                 {
                     Name = "Roadster", Description = "Roadster Model",
                     IsPerspective = true,
-                    FieldOfView = Camera.DefaultFieldOfView,
+                    FieldOfView = DefaultCameraSettings.FieldOfView,
                     AspectRatio = 1.0,
                     Near = 581.54, Far = 1080.66,
                     Left = -100, Right = 100, Top = 100, Bottom = -100,
@@ -584,7 +585,7 @@ namespace ModelRelief.Database
                 {
                     Name = "Statue", Description = "Statue Model",
                     IsPerspective = true,
-                    FieldOfView = Camera.DefaultFieldOfView,
+                    FieldOfView = DefaultCameraSettings.FieldOfView,
                     AspectRatio = 1.0,
                     Near = 299.54, Far = 401.68,
                     Left = -100, Right = 100, Top = 100, Bottom = -100,
@@ -614,7 +615,7 @@ namespace ModelRelief.Database
                 {
                     Name = "Tyrannosaurus", Description = "Tyrannosarus Model",
                     IsPerspective = true,
-                    FieldOfView = Camera.DefaultFieldOfView,
+                    FieldOfView = DefaultCameraSettings.FieldOfView,
                     AspectRatio = 1.0,
                     Near = 228.35, Far = 469.87,
                     Left = -100, Right = 100, Top = 100, Bottom = -100,
