@@ -164,14 +164,13 @@ namespace ModelRelief.Database
         {
             EnsureServerInitialized();
 
-            if (ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRInitializeUserStore))
-                InitializeUserStore();
-
             if (ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRInitializeDatabase))
             {
                 InitializeDatabase().Wait();
+
                 if (ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRSeedDatabase))
                 {
+                    InitializeUserStore();
                     SeedDatabaseForTestUsers().Wait();
                 }
             }

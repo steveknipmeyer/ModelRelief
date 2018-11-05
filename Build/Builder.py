@@ -98,10 +98,10 @@ class Builder:
         if self.publish:
             os.environ[EnvironmentNames.ASPNETCORE_ENVIRONMENT] = RuntimeEnvironment.production.value
 
-        os.environ[EnvironmentNames.MRExitAfterInitialization] = "True"
-        os.environ[EnvironmentNames.MRInitializeUserStore] = "True"
+        os.environ[EnvironmentNames.MRUpdateSeedData] = "False"
         os.environ[EnvironmentNames.MRInitializeDatabase] = "True"
         os.environ[EnvironmentNames.MRSeedDatabase] = "True"
+        os.environ[EnvironmentNames.MRExitAfterInitialization] = "True"
 
         self.environment.show(color=Colors.BrightWhite)
 

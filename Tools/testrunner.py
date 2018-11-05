@@ -45,7 +45,7 @@ class TestRunner:
         """            
         self.logger.logInformation("\nBegin initialize database for {}".format(database), Colors.BrightYellow)
 
-        subprocess.run ("dotnet run --no-launch-profile -p ModelRelief --MRExitAfterInitialization=True --MRInitializeUserStore=True --MRInitializeDatabase=True --MRSeedDatabase=True --MRDatabaseProvider={}".format(database))
+        subprocess.run ("dotnet run --no-launch-profile -p ModelRelief --MRExitAfterInitialization=True --MRUpdateSeedData=False --MRInitializeDatabase=True --MRSeedDatabase=True --MRDatabaseProvider={}".format(database))
 
         self.logger.logInformation("End initialize database for {}".format(database), Colors.BrightYellow)
 

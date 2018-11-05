@@ -2,52 +2,27 @@
 #### Commit Notes
 
 #### Short Term
-    Document DbInitializer modes.
-        MRExitAfterInitialization
-        MRInitializeUserStore
-        MRInitializeDatabase
-        MRSeedDatabase
-        MRHarvestWorkingStore
+    Builder
+    Deployment
 
-    UpdateSeedDatabase: Updates the Solver\Test JSON models and the seed projects in DbInitializer.
+    The Python Environment tools throw if an environmet variable is not found.
 
-        Should this tool be integrated into DbInitializer?!
-            Control with an environment variable?
+    DbInitializer
 
-        Requirements
-            Maintain these model settings in a JSON or C# file.
-                Cameras
-                MeshTransforms
-            Processing:
-                Read the seed JSON file.
-                Update the contents from the JSON files found in the Working folder.
-                    The tools should process only the JSON files found in the Working folder.
-                    It should not be necessary to update all test models to refresh DbInitializer.
+        Refactor to create Cameras and MeshTransforms from the JSON definitions.
+            Assign User and Project references (after loading the JSON) by using FindByName<Type>.
 
-                Update the seed JSON file.
-                DbInitializer reads the JSON file to populate the database.
-                    Cameras
-                    MeshTransforms
-        Output
-            DbInitializer
-                Cameras
-                MeshTransforms
-            User Store Files
+        Control with an environment variable?
+
+        Harvest
+            Update Camera and MeshTransform JSON definitions.
+            User Store
                 Mesh
                 DepthBufers
             Solver\Test JSON Files
 
         Notes
-            Data Structure
-                Mesh
-                    mesh name (lowercase)
-                    Id
-                    JSON
             DepthBuffer files are modified in-place in the store/user. Mesh files are created in the working folder.
-            Should the tool write C# code or JSON?
-            The Project references in Camera and MeshTransform are null.
-                DbInitializer must assign references (after loading the JSON) by using  FindByName<>.
-            The JSON represents a DTP model. DbInitializer constructs Domain models.
 
     Upgrades
         Convert TypeScript compiler output to ES5 modules?
@@ -1346,10 +1321,8 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 Environment variables set in the Visual Studio launchSettings.json **override** environment variables set in the shell.
 The Visual Studio Debug project settings for Environment variables **writes through** to launchSettings.json. They are *identical*.
 
-The XUnit tests cannot be run with MRInitializeUserStore since this prompts for user verification however *the console is not displayed*.
+The XUnit tests cannot be run withany required prompts for user verification because *the console is not displayed*.
 ServerFramework (WebHost.CreateDefaultBuilder) sets the environment to "Test" *however the environment variables from launchSettings.json are not used.*
-Therefore, it is imperative not to set MRInitializeUserStore in the shell so that XUnit can be run.
-However, MRInitializeUserStore may be set if the application is started through 'dotnet run'.
 
 #### New Computer Setup
     gulp must be installed globally.
@@ -1554,3 +1527,15 @@ np_fill, relief_fill
 
     ALM
         https://legacy.gitbook.com/book/alm-tools/alm/details
+
+### DbInitializer
+
+|Setting|Description||
+|---|---|---|
+|MRUpdateSeedData|Update seed database and project files from Test user changes.|Camera, MeshTransform|
+|MRInitializeDatabase|Deletes the database and recreates it.|
+|MRSeedDatabase|Adds the test data to the database and populates the user store.||
+|MRExitAfterInitialization|Perform initialization and then exits without starting the server.|
+
+
+
