@@ -23,15 +23,10 @@
     "Top": 100.0,
     "Bottom": -100.0,
     "ProjectId": 3,
-    "Project": {
-      "Id": 3,
-      "Name": "ModelRelief",
-      "Description": "Development and Test (test@modelrelief.com)",
-      "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
-    },
+    "Project": null,
     "Id": 1,
     "Name": "Top Camera",
-    "Description": "Aligned along negative Z",
+    "Description": "Aligned along negative Z (test@modelrelief.com)",
     "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
   },
   {
@@ -58,15 +53,10 @@
     "Top": 100.0,
     "Bottom": -100.0,
     "ProjectId": 3,
-    "Project": {
-      "Id": 3,
-      "Name": "ModelRelief",
-      "Description": "Development and Test (test@modelrelief.com)",
-      "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
-    },
+    "Project": null,
     "Id": 2,
     "Name": "Isometric Camera",
-    "Description": "Isometric",
+    "Description": "Isometric (test@modelrelief.com)",
     "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
   },
   {
@@ -93,15 +83,10 @@
     "Top": 100.0,
     "Bottom": -100.0,
     "ProjectId": 4,
-    "Project": {
-      "Id": 4,
-      "Name": "Stanford",
-      "Description": "Stanford model repository (test@modelrelief.com)",
-      "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
-    },
+    "Project": null,
     "Id": 3,
     "Name": "Armadillo",
-    "Description": "Armadillo Model",
+    "Description": "Armadillo Model (test@modelrelief.com)",
     "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
   },
   {
@@ -128,15 +113,10 @@
     "Top": 100.0,
     "Bottom": -100.0,
     "ProjectId": 4,
-    "Project": {
-      "Id": 4,
-      "Name": "Stanford",
-      "Description": "Stanford model repository (test@modelrelief.com)",
-      "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
-    },
+    "Project": null,
     "Id": 4,
     "Name": "Buddha",
-    "Description": "Buddha Model",
+    "Description": "Buddha Model (test@modelrelief.com)",
     "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
   },
   {
@@ -163,15 +143,10 @@
     "Top": 100.0,
     "Bottom": -100.0,
     "ProjectId": 4,
-    "Project": {
-      "Id": 4,
-      "Name": "Stanford",
-      "Description": "Stanford model repository (test@modelrelief.com)",
-      "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
-    },
+    "Project": null,
     "Id": 5,
     "Name": "Bunny",
-    "Description": "Bunny Model",
+    "Description": "Bunny Model (test@modelrelief.com)",
     "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
   },
   {
@@ -198,15 +173,10 @@
     "Top": 100.0,
     "Bottom": -100.0,
     "ProjectId": 2,
-    "Project": {
-      "Id": 2,
-      "Name": "Jewelry",
-      "Description": "Jewelry watch faces, bracelets and pendants (test@modelrelief.com)",
-      "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
-    },
+    "Project": null,
     "Id": 6,
     "Name": "Dolphin",
-    "Description": "Dolphin Model",
+    "Description": "Dolphin Model (test@modelrelief.com)",
     "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
   },
   {
@@ -233,15 +203,10 @@
     "Top": 100.0,
     "Bottom": -100.0,
     "ProjectId": 4,
-    "Project": {
-      "Id": 4,
-      "Name": "Stanford",
-      "Description": "Stanford model repository (test@modelrelief.com)",
-      "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
-    },
+    "Project": null,
     "Id": 7,
     "Name": "Dragon",
-    "Description": "Dragon Model",
+    "Description": "Dragon Model (test@modelrelief.com)",
     "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
   },
   {
@@ -268,15 +233,10 @@
     "Top": 100.0,
     "Bottom": -100.0,
     "ProjectId": 1,
-    "Project": {
-      "Id": 1,
-      "Name": "Architecture",
-      "Description": "Architectural structures, woodwork, panels and details (test@modelrelief.com)",
-      "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
-    },
+    "Project": null,
     "Id": 8,
     "Name": "House",
-    "Description": "House Model",
+    "Description": "House Model (test@modelrelief.com)",
     "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
   },
   {
@@ -303,15 +263,10 @@
     "Top": 100.0,
     "Bottom": -100.0,
     "ProjectId": 4,
-    "Project": {
-      "Id": 4,
-      "Name": "Stanford",
-      "Description": "Stanford model repository (test@modelrelief.com)",
-      "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
-    },
+    "Project": null,
     "Id": 9,
     "Name": "Lucy",
-    "Description": "Lucy Model",
+    "Description": "Lucy Model (test@modelrelief.com)",
     "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
   },
   {
@@ -338,15 +293,10 @@
     "Top": 100.0,
     "Bottom": -100.0,
     "ProjectId": 2,
-    "Project": {
-      "Id": 2,
-      "Name": "Jewelry",
-      "Description": "Jewelry watch faces, bracelets and pendants (test@modelrelief.com)",
-      "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
-    },
+    "Project": null,
     "Id": 10,
     "Name": "Roadster",
-    "Description": "Roadster Model",
+    "Description": "Roadster Model (test@modelrelief.com)",
     "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
   },
   {
@@ -373,15 +323,10 @@
     "Top": 100.0,
     "Bottom": -100.0,
     "ProjectId": 4,
-    "Project": {
-      "Id": 4,
-      "Name": "Stanford",
-      "Description": "Stanford model repository (test@modelrelief.com)",
-      "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
-    },
+    "Project": null,
     "Id": 11,
     "Name": "Statue",
-    "Description": "Statue Model",
+    "Description": "Statue Model (test@modelrelief.com)",
     "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
   },
   {
@@ -408,15 +353,10 @@
     "Top": 100.0,
     "Bottom": -100.0,
     "ProjectId": 3,
-    "Project": {
-      "Id": 3,
-      "Name": "ModelRelief",
-      "Description": "Development and Test (test@modelrelief.com)",
-      "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
-    },
+    "Project": null,
     "Id": 12,
     "Name": "Test",
-    "Description": "Isometric Test Model",
+    "Description": "Isometric Test Model (test@modelrelief.com)",
     "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
   },
   {
@@ -443,15 +383,10 @@
     "Top": 100.0,
     "Bottom": -100.0,
     "ProjectId": 4,
-    "Project": {
-      "Id": 4,
-      "Name": "Stanford",
-      "Description": "Stanford model repository (test@modelrelief.com)",
-      "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
-    },
+    "Project": null,
     "Id": 13,
     "Name": "Tyrannosaurus",
-    "Description": "Tyrannosarus Model",
+    "Description": "Tyrannosarus Model (test@modelrelief.com)",
     "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
   }
 ]

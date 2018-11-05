@@ -16,9 +16,9 @@ namespace ModelRelief.Features.Accounts
 
     public class AccountController : Controller
         {
+        private readonly IServiceProvider _services;
         private UserManager<ApplicationUser>   _userManager;
         private SignInManager<ApplicationUser> _signInManager;
-        private IServiceProvider               _services;
 
         public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IServiceProvider services)
             {

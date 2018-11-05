@@ -164,14 +164,22 @@ namespace ModelRelief.Database
         {
             EnsureServerInitialized();
 
+            // update test data from existing data
+            if (ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRUpdateSeedData))
+            {
+            ExportJSONAsync().Wait();
+            }
+
+            // create new database
             if (ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRInitializeDatabase))
             {
-                InitializeDatabase().Wait();
+                InitializeDatabaseAsync().Wait();
 
+                // add test data
                 if (ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRSeedDatabase))
                 {
                     InitializeUserStore();
-                    SeedDatabaseForTestUsers().Wait();
+                    SeedDatabaseForTestUsersAsync().Wait();
                 }
             }
         }
@@ -179,7 +187,7 @@ namespace ModelRelief.Database
         /// <summary>
         /// Populate the database schema.
         /// </summary>
-        public async Task InitializeDatabase()
+        public async Task InitializeDatabaseAsync()
         {
             Logger.LogInformation($"Preparing to initialize database.");
             try
@@ -280,7 +288,7 @@ namespace ModelRelief.Database
         /// Seeds the database with test data.
         /// </summary>
         /// <returns></returns>
-        private async Task SeedDatabaseForTestUsers()
+        private async Task SeedDatabaseForTestUsersAsync()
         {
             var userAccounts = new List<string>
             {
@@ -291,7 +299,7 @@ namespace ModelRelief.Database
 
             foreach (var account in userAccounts)
             {
-                var user = await AddUser(account);
+                var user = await AddUserAsync(account);
                 SeedDatabaseForUser(user);
             }
 
@@ -379,7 +387,7 @@ namespace ModelRelief.Database
         /// <summary>
         /// Add test users.
         /// </summary>
-        private async Task<ApplicationUser> AddUser(string accountName)
+        private async Task<ApplicationUser> AddUserAsync(string accountName)
         {
             var userNameSetting = $"{accountName}:UserName";
             var passwordSetting = $"{accountName}:Password";
@@ -645,8 +653,6 @@ namespace ModelRelief.Database
             }
             DbContext.SaveChanges();
 
-            GenerateJSON<Camera>(user, "Paths:ResourceFolders:Camera");
-
             QualifyDescription<Camera>(user);
         }
 
@@ -840,7 +846,7 @@ namespace ModelRelief.Database
             }
             DbContext.SaveChanges();
 
-            GenerateJSON<MeshTransform>(user, "Paths:ResourceFolders:MeshTransform");
+            ExportEntityJSON<MeshTransform>(user, "Paths:ResourceFolders:MeshTransform");
 
             QualifyDescription<MeshTransform>(user);
         }
@@ -1129,11 +1135,22 @@ namespace ModelRelief.Database
             DbContext.SaveChanges();
         }
 
-        private string GetTestUserName()
+        /// <summary>
+        /// Returns the Test user.
+        /// </summary>
+        /// <returns>Test user.</returns>
+        private async Task<ApplicationUser> GetTestUserAsync()
         {
             var userNameSetting = $"{UserAccounts.Test}:UserName";
             var userName = ConfigurationProvider.GetSetting(userNameSetting);
-            return userName;
+
+            ApplicationUser user = await UserManager.FindByNameAsync(userName);
+
+            // stop tracking to avoid conflicting tracking
+            if (user != null)
+                DbContext.Entry(user).State = EntityState.Detached;
+
+            return user;
         }
 
         /// <summary>
@@ -1142,14 +1159,12 @@ namespace ModelRelief.Database
         /// <typeparam name="TEntity">Domain model.</typeparam>
         /// <param name="user">Application user.</param>
         /// <param name="folderType">Type of folder</param>
-        private void GenerateJSON<TEntity>(ApplicationUser user, string folderType)
+        private void ExportEntityJSON<TEntity>(ApplicationUser user, string folderType)
             where TEntity : DomainModel
         {
-            if (!string.Equals(user.UserName, GetTestUserName()))
-                return;
-
             var modelList = DbContext.Set<TEntity>()
-            .Where(r => (r.UserId == user.Id));
+                                .Where(r => (r.UserId == user.Id))
+                                .AsNoTracking();
 
             var jsonFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUsers)}/{ConfigurationProvider.GetSetting(folderType)}";
             var jsonFolder = $"{HostingEnvironment.ContentRootPath}{jsonFolderPartialPath}";
@@ -1168,10 +1183,23 @@ namespace ModelRelief.Database
                 //serialize object directly into file stream
                 serializer.Serialize(file, modelList);
             }
+            Logger.LogInformation($"Writing JSON definitions for {user.UserName} amd model = {modelType}, file = {jsonFile}");
+        }
 
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"Writing JSON definitions for {user.UserName} amd model = {modelType}, file = {jsonFile}");
-            Console.ForegroundColor = ConsoleColor.White;
+        /// <summary>
+        /// Export those entities which are used to update the seed database.
+        /// </summary>
+        private async Task ExportJSONAsync()
+        {
+            ApplicationUser testUser = await GetTestUserAsync();
+            if (testUser == null)
+            {
+                Logger.LogError($"ExportJSON: The Test user was not found so the update was aborted.");
+                return;
+            }
+
+            ExportEntityJSON<Camera>(testUser, "Paths:ResourceFolders:Camera");
+            ExportEntityJSON<MeshTransform>(testUser, "Paths:ResourceFolders:MeshTransform");
         }
     }
 }

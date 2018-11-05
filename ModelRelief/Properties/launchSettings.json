@@ -52,7 +52,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Test",
         "MRDatabaseProvider": "SQLServer",
-        "MRUpdateSeedData": "False",
+        "MRUpdateSeedData": "True",
         "MRInitializeDatabase": "True",
         "MRSeedDatabase": "True",
         "MRExitAfterInitialization": "False"
