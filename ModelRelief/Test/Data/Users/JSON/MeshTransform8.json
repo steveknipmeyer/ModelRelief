@@ -1,0 +1,30 @@
+{
+    "AttenuationDecay": 0.6,
+    "AttenuationFactor": 10.0,
+    "Depth": 1.0,
+    "Description": "Lucy transform (test@modelrelief.com)",
+    "GradientThreshold": 5.0,
+    "Height": 100.0,
+    "Id": 8,
+    "Name": "Lucy",
+    "P1": 0.03,
+    "P2": 1.0,
+    "P3": 0.0,
+    "P4": 0.0,
+    "P5": 0.0,
+    "P6": 0.0,
+    "P7": 0.0,
+    "P8": 0.0,
+    "Project": {
+        "Description": "Stanford model repository (test@modelrelief.com)",
+        "Id": 4,
+        "Name": "Stanford",
+        "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f"
+    },
+    "ProjectId": 4,
+    "UnsharpGaussianHigh": 1.0,
+    "UnsharpGaussianLow": 4.0,
+    "UnsharpHighFrequencyScale": 3.0,
+    "UserId": "7ab4676b-563b-4c42-b6f9-27c11208f33f",
+    "Width": 100.0
+}

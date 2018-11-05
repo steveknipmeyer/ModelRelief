@@ -44,7 +44,9 @@ class UpdateSeedDatabase:
         self.project_path = os.path.normpath(os.environ[EnvironmentNames.MR])
         self.store_test_path = os.path.normpath(os.path.join(self.project_path, "store/test/users/7ab4676b-563b-4c42-b6f9-27c11208f33f"))
         self.working_path = os.path.join(self.store_test_path, "working")
-        self.test_json_path = os.path.normpath(os.path.join(self.project_path, "Test/Data/JSON"))
+
+        self.test_data_users_path = os.path.normpath(os.path.join(self.project_path, "Test/Data/Users"))
+        self.test_data_users_json_path = os.path.normpath(os.path.join(self.test_data_users_path, "JSON"))
 
     def get_modified_meshes(self)->List[dict]:
         """
@@ -52,7 +54,7 @@ class UpdateSeedDatabase:
         """
         self.logger.logInformation (f"store/test = {self.store_test_path}", Colors.BrightMagenta)
         self.logger.logInformation (f"working = {self.working_path}", Colors.BrightMagenta)
-        self.logger.logInformation (f"Test/JSON = {self.test_json_path}", Colors.BrightMagenta)
+        self.logger.logInformation (f"Test/JSON = {self.test_data_users_json_path}", Colors.BrightMagenta)
 
         meshes: List[dict] = []
         def find_json(file: str)->None:
@@ -88,7 +90,7 @@ class UpdateSeedDatabase:
 
         object_id = json_object["Id"]
         file = f"{root_name}{object_id}.json"
-        file_path = os.path.join(self.test_json_path, file)
+        file_path = os.path.join(self.test_data_users_json_path, file)
         with open(file_path, 'w') as outfile:
             json.dump(json_object, outfile, indent=4, sort_keys=True)
 

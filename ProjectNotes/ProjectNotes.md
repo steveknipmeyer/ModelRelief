@@ -2,7 +2,18 @@
 #### Commit Notes
 
 #### Short Term
+    Document DbInitializer modes.
+        MRExitAfterInitialization
+        MRInitializeUserStore
+        MRInitializeDatabase
+        MRSeedDatabase
+        MRHarvestWorkingStore
+
     UpdateSeedDatabase: Updates the Solver\Test JSON models and the seed projects in DbInitializer.
+
+        Should this tool be integrated into DbInitializer?!
+            Control with an environment variable?
+
         Requirements
             Maintain these model settings in a JSON or C# file.
                 Cameras
@@ -25,12 +36,22 @@
                 Mesh
                 DepthBufers
             Solver\Test JSON Files
-        Issues
+
+        Notes
+            Data Structure
+                Mesh
+                    mesh name (lowercase)
+                    Id
+                    JSON
+            DepthBuffer files are modified in-place in the store/user. Mesh files are created in the working folder.
             Should the tool write C# code or JSON?
             The Project references in Camera and MeshTransform are null.
-                How can these be handled?
+                DbInitializer must assign references (after loading the JSON) by using  FindByName<>.
+            The JSON represents a DTP model. DbInitializer constructs Domain models.
+
     Upgrades
         Convert TypeScript compiler output to ES5 modules?
+        AspNET Core
         Upgrade Three.js.
 
     UI
