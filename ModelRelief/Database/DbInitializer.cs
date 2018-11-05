@@ -24,6 +24,7 @@ namespace ModelRelief.Database
     using ModelRelief.Features.Settings;
     using ModelRelief.Services;
     using ModelRelief.Utility;
+    using Newtonsoft.Json;
 
     using static ModelRelief.Services.StorageManager;
 
@@ -40,6 +41,16 @@ namespace ModelRelief.Database
 
         private string                          StoreUsersPath { get; set; }
         private string                          SqlitePath { get; set; }
+
+        /// <summary>
+        /// User Accounts
+        /// </summary>
+        private class UserAccounts
+        {
+            public static readonly string Test    = "TestAccount";
+            public static readonly string ArtCAM  = "ArtCAMAccount";
+            public static readonly string Vectric = "VectricAccount";
+        }
 
         /// <summary>
         /// Test Project Names
@@ -274,9 +285,9 @@ namespace ModelRelief.Database
         {
             var userAccounts = new List<string>
             {
-                "TestAccount",
-                "ArtCAMAccount",
-                "VectricAccount",
+                UserAccounts.Test,
+                UserAccounts.ArtCAM,
+                UserAccounts.Vectric,
             };
 
             foreach (var account in userAccounts)
@@ -635,6 +646,8 @@ namespace ModelRelief.Database
             }
             DbContext.SaveChanges();
 
+            GenerateJSON<Camera>(user, "Paths:ResourceFolders:Camera");
+
             QualifyDescription<Camera>(user);
         }
 
@@ -827,6 +840,8 @@ namespace ModelRelief.Database
                 DbContext.MeshTransforms.Add(meshTransform);
             }
             DbContext.SaveChanges();
+
+            GenerateJSON<MeshTransform>(user, "Paths:ResourceFolders:MeshTransform");
 
             QualifyDescription<MeshTransform>(user);
         }
@@ -1113,6 +1128,51 @@ namespace ModelRelief.Database
             }
 
             DbContext.SaveChanges();
+        }
+
+        private string GetTestUserName()
+        {
+            var userNameSetting = $"{UserAccounts.Test}:UserName";
+            var userName = ConfigurationProvider.GetSetting(userNameSetting);
+            return userName;
+        }
+
+        /// <summary>
+        /// Creates a JSON file containing all the objects of the given type.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="user">Application user.</param>
+        /// <param name="folderType">Type of folder</param>
+        private void GenerateJSON<TEntity>(ApplicationUser user, string folderType)
+            where TEntity : DomainModel
+        {
+            if (!string.Equals(user.UserName, GetTestUserName()))
+                return;
+
+            var modelList = DbContext.Set<TEntity>()
+            .Where(r => (r.UserId == user.Id));
+
+            var jsonFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUsers)}/{ConfigurationProvider.GetSetting(folderType)}";
+            var jsonFolder = $"{HostingEnvironment.ContentRootPath}{jsonFolderPartialPath}";
+
+            var modelType = typeof(TEntity).Name;
+            var jsonFile = $"{Path.Combine(jsonFolder, modelType)}.json";
+
+            using (StreamWriter file = File.CreateText(jsonFile))
+            {
+                JsonSerializer serializer = new JsonSerializer()
+                {
+                    Formatting = Formatting.Indented,
+                    MaxDepth = 2,
+                };
+
+                //serialize object directly into file stream
+                serializer.Serialize(file, modelList);
+            }
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"Writing JSON definitions for {user.UserName} amd model = {modelType}, file = {jsonFile}");
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 }
