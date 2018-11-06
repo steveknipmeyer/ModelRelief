@@ -166,7 +166,7 @@ namespace ModelRelief.Database
             // update test data from existing data
             if (ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRUpdateSeedData))
             {
-                ExportJSONAsync().Wait();
+                UpdateSeedDataAsync().Wait();
             }
 
             // create new database
@@ -378,9 +378,9 @@ namespace ModelRelief.Database
         /// <param name="user">Owning user.</param>
         private void SeedUserStore(ApplicationUser user)
         {
-            CopyTestFiles<Domain.Model3d>(user, "Paths:ResourceFolders:Model3d");
-            CopyTestFiles<Domain.DepthBuffer>(user, "Paths:ResourceFolders:DepthBuffer");
-            CopyTestFiles<Domain.Mesh>(user, "Paths:ResourceFolders:Mesh");
+            CopySeedDataFilesToStore<Domain.Model3d>(user, "Paths:ResourceFolders:Model3d");
+            CopySeedDataFilesToStore<Domain.DepthBuffer>(user, "Paths:ResourceFolders:DepthBuffer");
+            CopySeedDataFilesToStore<Domain.Mesh>(user, "Paths:ResourceFolders:Mesh");
         }
 
         /// <summary>
@@ -1059,7 +1059,7 @@ namespace ModelRelief.Database
         /// <typeparam name="TEntity">Domain model.</typeparam>
         /// <param name="user">Owning user.</param>
         /// <param name="folderType">Type of folder</param>
-        private void CopyTestFiles<TEntity>(ApplicationUser user, string folderType)
+        private void CopySeedDataFilesToStore<TEntity>(ApplicationUser user, string folderType)
             where TEntity : DomainModel
         {
             var sourceFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUsers)}/{ConfigurationProvider.GetSetting(folderType)}";
@@ -1093,6 +1093,49 @@ namespace ModelRelief.Database
                     File.Copy(file.FullName, destinationFileName, overwrite: true);
                 }
             }
+        }
+
+        /// <summary>
+        /// Update the seed data files from the user store for a particular model type.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="folderType">Type of folder</param>
+        private async Task<bool> UpdateSeedDataFilesFromStoreAsync<TEntity>(string folderType)
+            where TEntity : DomainModel
+        {
+            // Test user provides the source of the data files
+            var testUser = await GetTestUserAsync();
+
+            // Source = D:\ModelRelief\ModelRelief\store\test\users\7ab4676b-563b-4c42-b6f9-27c11208f33f\depthbuffers
+            var rootSourceFolderPath = Path.GetFullPath($"{StoreUsersPath}{testUser.Id}/{ConfigurationProvider.GetSetting(folderType)}");
+
+            // Destination = D:\ModelRelief\ModelRelief\Test\Data\Users\depthbuffers
+            var rootDestinationFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUsers)}/{ConfigurationProvider.GetSetting(folderType)}";
+            var rootDestinationFolderPath = Path.GetFullPath($"{HostingEnvironment.ContentRootPath}{rootDestinationFolderPartialPath}");
+
+            var modelList = DbContext.Set<TEntity>()
+                                .Where(m => (m.UserId == testUser.Id))
+                                .AsNoTracking();
+
+            foreach (var model in modelList)
+            {
+                var modelName = Path.GetFileNameWithoutExtension(model.Name);
+
+                var sourceFolderPath = Path.Combine(rootSourceFolderPath, model.Id.ToString());
+                var destinationFolderPath = Path.Combine(rootDestinationFolderPath, modelName);
+
+                var rootSourceDirectory = new System.IO.DirectoryInfo(sourceFolderPath);
+                System.IO.FileInfo[] files = rootSourceDirectory.GetFiles("*.*");
+                foreach (var file in files)
+                {
+                    var destinationFileName = Path.Combine(destinationFolderPath, file.Name);
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Logger.LogInformation($"{file.FullName} -> {destinationFileName}");
+                    File.Copy(file.FullName, destinationFileName, overwrite: true);
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+            }
+            return true;
         }
 
         /// <summary>
@@ -1261,16 +1304,18 @@ namespace ModelRelief.Database
         /// <summary>
         /// Export those entities which are used to update the seed database.
         /// </summary>
-        private async Task ExportJSONAsync()
+        private async Task<bool> ExportJSONAsync()
         {
             ApplicationUser testUser = await GetTestUserAsync();
             if (testUser == null)
             {
                 Logger.LogError($"ExportJSON: The Test user was not found so the update was aborted.");
-                return;
+                return false;
             }
             ExportEntityJSON<Camera>(testUser, "Paths:ResourceFolders:Camera");
             ExportEntityJSON<MeshTransform>(testUser, "Paths:ResourceFolders:MeshTransform");
+
+            return true;
         }
 
         /// <summary>
@@ -1285,6 +1330,54 @@ namespace ModelRelief.Database
             var entityList = JsonConvert.DeserializeObject<List<TEntity>>(System.IO.File.ReadAllText(jsonFile));
             return entityList;
         }
-        #endregion
+
+        /// <summary>
+        /// Updates the seed data files (e.g. DepthBuffer, Mesh).
+        /// </summary>
+        /// <returns>True if successful.</returns>
+        private async Task<bool> UpdateSeedDataFilesAsync()
+        {
+            await UpdateSeedDataFilesFromStoreAsync<Domain.DepthBuffer>("Paths:ResourceFolders:DepthBuffer");
+            await UpdateSeedDataFilesFromStoreAsync<Domain.Mesh>("Paths:ResourceFolders:Mesh");
+
+            return true;
+        }
+
+        /// <summary>
+        /// Updates the test JSON used for Explorer testing.
+        /// </summary>
+        /// <returns>True if successful.</returns>
+        private async Task<bool> UpdateTestJSONAsync()
+        {
+            await Task.CompletedTask;
+            return true;
+        }
+
+        /// <summary>
+        /// Updates the seed data used to populate the database and the user store.
+        ///     JSON (Camera, MeshTransform) used to populate database.
+        ///     Mesh and DepthBuffer files.
+        ///     Test JSON used by Explorer.
+        /// </summary>
+        private async Task<bool> UpdateSeedDataAsync()
+        {
+            // JSON definitions from existing database; used to populate new databases
+            bool exportJSONSuccess = await ExportJSONAsync();
+            if (!exportJSONSuccess)
+                return false;
+
+            // data files (e.g. DepthBuffer, Mesh)
+            bool updateSuccess = await UpdateSeedDataFilesAsync();
+            if (!updateSuccess)
+                return false;
+
+            // Test JSON (e.g. Explorer)
+            bool exportTestJSONSuccess = await UpdateTestJSONAsync();
+            if (!exportTestJSONSuccess)
+                return false;
+
+            return true;
+        }
     }
+    #endregion
 }

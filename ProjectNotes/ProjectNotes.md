@@ -6,15 +6,10 @@
     Remove updateseeddatabase.py.
 
     DbInitializer
-        Harvest
-            User Store
-                Mesh
-                DepthBufers
-            Solver\Test JSON Files
-                Export JSON for all Mesh entities similar to Dispatcher.
+        D:\ModelRelief\ModelRelief\store\test\users\7ab4676b-563b-4c42-b6f9-27c11208f33f\depthbuffers
+        D:\ModelRelief\ModelRelief\Test\Data\Users\depthbuffers
 
-        Notes
-            DepthBuffer files are modified in-place in the store/user. Mesh files are created in the working folder.
+    Merge orthographic branch to master.
 
     Upgrades
         Convert TypeScript compiler output to ES5 modules?
