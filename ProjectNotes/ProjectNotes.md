@@ -5,9 +5,11 @@
 #### Short Term
     Remove updateseeddatabase.py.
 
-    DbInitializer
-        D:\ModelRelief\ModelRelief\store\test\users\7ab4676b-563b-4c42-b6f9-27c11208f33f\depthbuffers
-        D:\ModelRelief\ModelRelief\Test\Data\Users\depthbuffers
+    Share JSON serialization.
+        Dispatcher.SerializeModelToWorkingStorage
+        DbInitializer
+            ExportEntityJSON
+            UpdateTestJSONAsync
 
     Merge orthographic branch to master.
 

@@ -440,6 +440,7 @@ namespace ModelRelief.Database
                 if (camera.Project != null)
                     camera.Project = FindByName<Project>(user, camera.Project?.Name);
             }
+
             foreach (Camera camera in cameraList)
             {
                 DbContext.Cameras.Add(camera);
@@ -538,8 +539,6 @@ namespace ModelRelief.Database
                 if (meshtransform.Project != null)
                     meshtransform.Project = FindByName<Project>(user, meshtransform.Project?.Name);
             }
-
-            var meshtransformList = ImportEntityJSON<MeshTransform>("Paths:ResourceFolders:MeshTransform");
 
             foreach (MeshTransform meshTransform in meshTransformList)
             {
@@ -809,10 +808,7 @@ namespace ModelRelief.Database
                 foreach (var file in files)
                 {
                     var destinationFileName = Path.Combine(destinationFolderPath, file.Name);
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Logger.LogInformation($"{file.FullName} -> {destinationFileName}");
                     File.Copy(file.FullName, destinationFileName, overwrite: true);
-                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             return true;
@@ -1001,14 +997,14 @@ namespace ModelRelief.Database
         /// <summary>
         /// Constructs a list of entities read from the seed JSON definitions file.
         /// </summary>
-        /// <typeparam name="TEntity">Entity type to be imported.</typeparam>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
         /// <param name="folderType">Folder type.</param>
-        /// <returns>List of entities read from JSON.</returns>
+        /// <returns>List of models read from JSON.</returns>
         private List<TEntity> ImportEntityJSON<TEntity>(string folderType)
         {
             var jsonFile = GetEntityJSONFileName<TEntity>(folderType);
-            var entityList = JsonConvert.DeserializeObject<List<TEntity>>(System.IO.File.ReadAllText(jsonFile));
-            return entityList;
+            var modelList = JsonConvert.DeserializeObject<List<TEntity>>(System.IO.File.ReadAllText(jsonFile));
+            return modelList;
         }
 
         /// <summary>
@@ -1029,7 +1025,37 @@ namespace ModelRelief.Database
         /// <returns>True if successful.</returns>
         private async Task<bool> UpdateTestJSONAsync()
         {
+            // Test user provides the source of the data files.
+            var testUser = await GetTestUserAsync();
+
             await Task.CompletedTask;
+            var expandedMeshList =  DbContext.Set<Mesh>()
+                                        .Where(m => (m.UserId == testUser.Id))
+                                        .Include(m => m.DepthBuffer)
+                                            .ThenInclude(d => d.Camera)
+                                        .Include(m => m.MeshTransform)
+                                        .AsNoTracking();
+
+            var destinationFolder = Path.GetFullPath($"{HostingEnvironment.ContentRootPath}/../Solver/Test");
+            foreach (var mesh in expandedMeshList)
+            {
+                var modelName = Path.GetFileNameWithoutExtension(mesh.Name);
+                var destinationFile = Path.GetFullPath($"{destinationFolder}/{modelName}.json");
+                Console.WriteLine($"Creating {destinationFile}");
+
+                using (StreamWriter file = File.CreateText(destinationFile))
+                {
+                    JsonSerializer serializer = new JsonSerializer()
+                    {
+                        Formatting = Formatting.Indented,
+                        MaxDepth = 2,
+                    };
+
+                    //serialize object directly into file stream
+                    serializer.Serialize(file, mesh);
+                }
+            }
+
             return true;
         }
 
