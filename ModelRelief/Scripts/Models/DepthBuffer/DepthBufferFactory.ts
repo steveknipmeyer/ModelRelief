@@ -377,7 +377,7 @@ export class DepthBufferFactory {
 
         // update camera properties from active view camera
         const parameters = {id : this._camera.id};
-        this._depthBuffer.camera = CameraFactory.constructFromViewCamera(parameters, this._camera.viewCamera);
+        this._depthBuffer.camera = CameraFactory.constructFromViewCamera(parameters, this._camera.viewCamera, this._camera.project);
 
         if (this._debug)
             this.analyzeTargets();

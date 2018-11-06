@@ -212,7 +212,7 @@ export class ComposerController {
 
         // copy view camera so we can optimize clipping planes
         const modelViewCameraClone = this.modelViewer.camera.clone(true);
-        this.activeDepthBufferCamera = CameraFactory.constructFromViewCamera(this.activeDepthBufferCamera, modelViewCameraClone);
+        this.activeDepthBufferCamera = CameraFactory.constructFromViewCamera(this.activeDepthBufferCamera, modelViewCameraClone, this.activeDepthBufferCamera.project);
         this.activeDepthBufferCamera.finalizeClippingPlanes(this.modelViewer.modelGroup);
 
         // update

@@ -67,9 +67,10 @@ export class CameraFactory {
      * @static
      * @param {IModel} parameters IModel properties.
      * @param {IThreeBaseCamera} camera IThreeBaseCamera.
+     * @param {Project} project [Optional] Project to assign.
      * @returns {Promise<BaseCamera>}
      */
-    public static constructFromViewCamera(parameters: IModel, viewCamera: IThreeBaseCamera): BaseCamera {
+    public static constructFromViewCamera(parameters: IModel, viewCamera: IThreeBaseCamera, project: Project = null): BaseCamera {
 
         parameters.name        = parameters.name        || "Camera";
         parameters.description = parameters.description || "Perspective Camera";
@@ -78,7 +79,7 @@ export class CameraFactory {
             new PerspectiveCamera(parameters, viewCamera as THREE.PerspectiveCamera) :
             new OrthographicCamera(parameters, viewCamera as THREE.OrthographicCamera);
 
-        camera.project = null;
+        camera.project = project;
 
         return camera;
     }

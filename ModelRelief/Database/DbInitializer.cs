@@ -21,7 +21,6 @@ namespace ModelRelief.Database
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Domain;
-    using ModelRelief.Features.Settings;
     using ModelRelief.Services;
     using ModelRelief.Utility;
     using Newtonsoft.Json;
@@ -433,13 +432,14 @@ namespace ModelRelief.Database
         /// <param name="user">Owning user.</param>
         private void AddCameras(ApplicationUser user)
         {
-#if false
+#if true
             var cameraList = ImportEntityJSON<Camera>("Paths:ResourceFolders:Camera");
             foreach (var camera in cameraList)
             {
                 camera.Id = 0;
                 camera.User = user;
-                camera.Project = FindByName<Project>(user, camera.Project.Name);
+                if (camera.Project != null)
+                    camera.Project = FindByName<Project>(user, camera.Project?.Name);
             }
 #else
             var cameraList = new Camera[]
@@ -746,13 +746,14 @@ namespace ModelRelief.Database
         /// <param name="user">Owning user.</param>
         private void AddMeshTransforms(ApplicationUser user)
         {
-#if false
+#if true
             var meshTransformList = ImportEntityJSON<MeshTransform>("Paths:ResourceFolders:MeshTransform");
             foreach (var meshtransform in meshTransformList)
             {
                 meshtransform.Id = 0;
                 meshtransform.User = user;
-                meshtransform.Project = FindByName<Project>(user, meshtransform.Project.Name);
+                if (meshtransform.Project != null)
+                    meshtransform.Project = FindByName<Project>(user, meshtransform.Project?.Name);
             }
 
             var meshtransformList = ImportEntityJSON<MeshTransform>("Paths:ResourceFolders:MeshTransform");
@@ -1130,7 +1131,7 @@ namespace ModelRelief.Database
                 // strip existing suffix; user name in parentheses
                 int index = model.Description.IndexOf("(");
                 if (index > 0)
-                    model.Description = model.Description.Substring(0, index);
+                    model.Description = model.Description.Substring(0, index - 1);
 
                 model.Description += $" ({descriptionSuffix})";
             }
@@ -1158,6 +1159,7 @@ namespace ModelRelief.Database
             DbContext.SaveChanges();
         }
 
+        #region UpdateSeedData
         /// <summary>
         /// Returns the Test user.
         /// </summary>
@@ -1283,5 +1285,6 @@ namespace ModelRelief.Database
             var entityList = JsonConvert.DeserializeObject<List<TEntity>>(System.IO.File.ReadAllText(jsonFile));
             return entityList;
         }
+        #endregion
     }
 }

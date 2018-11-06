@@ -3,7 +3,9 @@
 
 #### Short Term
 
-    The Python Environment tools throw if an environment variable is not found.
+    Add a precision formatter for numeric values in Views.
+        https://stackoverflow.com/questions/12067375/html-displayfor-decimal-format
+    Remove updateseeddatabase.py.
 
     DbInitializer
         Harvest
@@ -16,6 +18,8 @@
 
         Notes
             DepthBuffer files are modified in-place in the store/user. Mesh files are created in the working folder.
+
+    The Python Environment tools throw if an environment variable is not found.
 
     Upgrades
         Convert TypeScript compiler output to ES5 modules?
