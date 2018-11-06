@@ -1,15 +1,12 @@
 ﻿### Tasks
 #### Commit Notes
 
-#### Short Term
 
-    Add a precision formatter for numeric values in Views.
-        https://stackoverflow.com/questions/12067375/html-displayfor-decimal-format
+#### Short Term
     Remove updateseeddatabase.py.
 
     DbInitializer
         Harvest
-            Update Camera and MeshTransform JSON definitions.
             User Store
                 Mesh
                 DepthBufers
@@ -19,12 +16,13 @@
         Notes
             DepthBuffer files are modified in-place in the store/user. Mesh files are created in the working folder.
 
-    The Python Environment tools throw if an environment variable is not found.
-
     Upgrades
         Convert TypeScript compiler output to ES5 modules?
-        AspNET Core
+        AspNET Core 2.1
         Upgrade Three.js.
+
+    The Python Environment tools throw if an environment variable is not found.
+        Should there be defaults such as for Builder?
 
     UI
         Add UI progress indicator for mesh generation.

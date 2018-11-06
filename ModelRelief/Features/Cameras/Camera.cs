@@ -86,9 +86,13 @@ namespace ModelRelief.Dto
         public double AspectRatio { get; set; }
 
         // Orthographic
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double Left { get; set; }
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double Right { get; set; }
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double Top { get; set; }
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double Bottom { get; set; }
 
         /// <summary>
