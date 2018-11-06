@@ -30,25 +30,25 @@ namespace ModelRelief.Database
 
     public class DbInitializer
     {
-        private bool                            ExitAfterInitialization  { get; set; }
-        private IServiceProvider                Services { get; set; }
-        private IHostingEnvironment             HostingEnvironment  { get; set; }
-        private Services.IConfigurationProvider ConfigurationProvider  { get; set; }
-        private ModelReliefDbContext            DbContext  { get; set; }
-        private UserManager<ApplicationUser>    UserManager  { get; set; }
-        private ILogger<DbInitializer>          Logger  { get; set; }
-        private IStorageManager                 StorageManager { get; set; }
+        private bool ExitAfterInitialization { get; set; }
+        private IServiceProvider Services { get; set; }
+        private IHostingEnvironment HostingEnvironment { get; set; }
+        private Services.IConfigurationProvider ConfigurationProvider { get; set; }
+        private ModelReliefDbContext DbContext { get; set; }
+        private UserManager<ApplicationUser> UserManager { get; set; }
+        private ILogger<DbInitializer> Logger { get; set; }
+        private IStorageManager StorageManager { get; set; }
 
-        private string                          StoreUsersPath { get; set; }
-        private string                          SqlitePath { get; set; }
+        private string StoreUsersPath { get; set; }
+        private string SqlitePath { get; set; }
 
         /// <summary>
         /// User Accounts
         /// </summary>
         private class UserAccounts
         {
-            public static readonly string Test    = "TestAccount";
-            public static readonly string ArtCAM  = "ArtCAMAccount";
+            public static readonly string Test = "TestAccount";
+            public static readonly string ArtCAM = "ArtCAMAccount";
             public static readonly string Vectric = "VectricAccount";
         }
 
@@ -58,9 +58,9 @@ namespace ModelRelief.Database
         private class ProjectNames
         {
             public static readonly string Architecture = "Architecture";
-            public static readonly string Jewelry      = "Jewelry";
-            public static readonly string ModelRelief  = "ModelRelief";
-            public static readonly string Stanford     = "Stanford";
+            public static readonly string Jewelry = "Jewelry";
+            public static readonly string ModelRelief = "ModelRelief";
+            public static readonly string Stanford = "Stanford";
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace ModelRelief.Database
             if (UserManager == null)
                 throw new ArgumentNullException(nameof(UserManager));
 
-            Logger  = services.GetRequiredService<ILogger<DbInitializer>>();
+            Logger = services.GetRequiredService<ILogger<DbInitializer>>();
             if (Logger == null)
                 throw new ArgumentNullException(nameof(Logger));
 
@@ -167,7 +167,7 @@ namespace ModelRelief.Database
             // update test data from existing data
             if (ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRUpdateSeedData))
             {
-            ExportJSONAsync().Wait();
+                ExportJSONAsync().Wait();
             }
 
             // create new database
@@ -263,11 +263,11 @@ namespace ModelRelief.Database
                         string targetPath = string.Empty;
                         try
                         {
-                        sourcePath = Path.Combine(databaseFolder, restore ? entry.Key : entry.Value);
-                        targetPath = Path.Combine(databaseFolder, restore ? entry.Value : entry.Key);
-                        Logger.LogInformation($"Database file copy : ({sourcePath} -> {targetPath})");
-                        File.Copy(sourcePath, targetPath, overwrite: true);
-                        fileCopied = true;
+                            sourcePath = Path.Combine(databaseFolder, restore ? entry.Key : entry.Value);
+                            targetPath = Path.Combine(databaseFolder, restore ? entry.Value : entry.Key);
+                            Logger.LogInformation($"Database file copy : ({sourcePath} -> {targetPath})");
+                            File.Copy(sourcePath, targetPath, overwrite: true);
+                            fileCopied = true;
                         }
                         catch (Exception ex)
                         {
@@ -360,7 +360,7 @@ namespace ModelRelief.Database
             if (!ExitAfterInitialization)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Delete the user store folder: {storeUsersPath} (Y/N)?");
+                Console.WriteLine($"Delete the user store folder: {StoreUsersPath} (Y/N)?");
                 Console.ForegroundColor = ConsoleColor.White;
                 var response = Console.ReadLine();
                 if (!string.Equals(response.ToUpper(), "Y"))
@@ -395,7 +395,7 @@ namespace ModelRelief.Database
 
             var userName = ConfigurationProvider.GetSetting(userNameSetting);
             var password = ConfigurationProvider.GetSetting(passwordSetting);
-            var id       = ConfigurationProvider.GetSetting(idSetting);
+            var id = ConfigurationProvider.GetSetting(idSetting);
 
             var user = new ApplicationUser() { UserName = $"{userName}", Id = $"{id}" };
             var createResult = await UserManager.CreateAsync(user, $"{password}");
@@ -433,7 +433,16 @@ namespace ModelRelief.Database
         /// <param name="user">Owning user.</param>
         private void AddCameras(ApplicationUser user)
         {
-            var cameras = new Camera[]
+#if false
+            var cameraList = ImportEntityJSON<Camera>("Paths:ResourceFolders:Camera");
+            foreach (var camera in cameraList)
+            {
+                camera.Id = 0;
+                camera.User = user;
+                camera.Project = FindByName<Project>(user, camera.Project.Name);
+            }
+#else
+            var cameraList = new Camera[]
             {
                 // Generic Cameras
                 new Camera
@@ -646,8 +655,8 @@ namespace ModelRelief.Database
                     User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
             };
-
-            foreach (Camera camera in cameras)
+#endif
+            foreach (Camera camera in cameraList)
             {
                 DbContext.Cameras.Add(camera);
             }
@@ -737,7 +746,18 @@ namespace ModelRelief.Database
         /// <param name="user">Owning user.</param>
         private void AddMeshTransforms(ApplicationUser user)
         {
-            var meshTransforms = new MeshTransform[]
+#if false
+            var meshTransformList = ImportEntityJSON<MeshTransform>("Paths:ResourceFolders:MeshTransform");
+            foreach (var meshtransform in meshTransformList)
+            {
+                meshtransform.Id = 0;
+                meshtransform.User = user;
+                meshtransform.Project = FindByName<Project>(user, meshtransform.Project.Name);
+            }
+
+            var meshtransformList = ImportEntityJSON<MeshTransform>("Paths:ResourceFolders:MeshTransform");
+#else
+            var meshTransformList = new MeshTransform[]
             {
                 // Generic MeshTransforms
                 new MeshTransform
@@ -839,14 +859,12 @@ namespace ModelRelief.Database
                     User = user, Project = FindByName<Project>(user, "Stanford"),
                 },
             };
-
-            foreach (MeshTransform meshTransform in meshTransforms)
+#endif
+            foreach (MeshTransform meshTransform in meshTransformList)
             {
                 DbContext.MeshTransforms.Add(meshTransform);
             }
             DbContext.SaveChanges();
-
-            ExportEntityJSON<MeshTransform>(user, "Paths:ResourceFolders:MeshTransform");
 
             QualifyDescription<MeshTransform>(user);
         }
@@ -1044,9 +1062,9 @@ namespace ModelRelief.Database
             where TEntity : DomainModel
         {
             var sourceFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUsers)}/{ConfigurationProvider.GetSetting(folderType)}";
-            var sourceFolderPath        = $"{HostingEnvironment.ContentRootPath}{sourceFolderPartialPath}";
+            var sourceFolderPath = $"{HostingEnvironment.ContentRootPath}{sourceFolderPartialPath}";
 
-            var destinationFolderPath   = $"{StoreUsersPath}{user.Id}/{ConfigurationProvider.GetSetting(folderType)}";
+            var destinationFolderPath = $"{StoreUsersPath}{user.Id}/{ConfigurationProvider.GetSetting(folderType)}";
             Directory.CreateDirectory(destinationFolderPath);
 
             // iterate over all folders
@@ -1108,9 +1126,14 @@ namespace ModelRelief.Database
                             .Where(m => (m.User.Id == user.Id));
 
             foreach (var model in models)
-                {
+            {
+                // strip existing suffix; user name in parentheses
+                int index = model.Description.IndexOf("(");
+                if (index > 0)
+                    model.Description = model.Description.Substring(0, index);
+
                 model.Description += $" ({descriptionSuffix})";
-                }
+            }
             DbContext.SaveChanges();
         }
 
@@ -1122,9 +1145,9 @@ namespace ModelRelief.Database
         private void SetFileProperties<TEntity>(IEnumerable<TEntity> models)
             where TEntity : FileDomainModel
         {
-           // model Ids are known now; set paths, etc.
+            // model Ids are known now; set paths, etc.
             foreach (TEntity model in models)
-                {
+            {
                 model.FileTimeStamp = DateTime.Now;
                 model.Path = GetRelativePath(StorageManager.DefaultModelStorageFolder(model));
 
@@ -1154,6 +1177,26 @@ namespace ModelRelief.Database
         }
 
         /// <summary>
+        /// Returns the JSON definition file for the given entity type.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model</typeparam>
+        /// <param name="folderType">Folder type.</param>
+        /// <returns></returns>
+        private string GetEntityJSONFileName<TEntity>(string folderType)
+        {
+            var jsonFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUsers)}/{ConfigurationProvider.GetSetting(folderType)}";
+            var jsonFolder = $"{HostingEnvironment.ContentRootPath}{jsonFolderPartialPath}";
+
+            var modelType = typeof(TEntity).Name;
+            var jsonFile = $"{Path.Combine(jsonFolder, modelType)}.json";
+
+            //normalize
+            jsonFile = Path.GetFullPath(jsonFile);
+
+            return jsonFile;
+        }
+
+        /// <summary>
         /// Creates a JSON file containing all the objects of the given type.
         /// </summary>
         /// <typeparam name="TEntity">Domain model.</typeparam>
@@ -1162,16 +1205,43 @@ namespace ModelRelief.Database
         private void ExportEntityJSON<TEntity>(ApplicationUser user, string folderType)
             where TEntity : DomainModel
         {
-            var modelList = DbContext.Set<TEntity>()
-                                .Where(r => (r.UserId == user.Id))
-                                .AsNoTracking();
+            // N.B. There is currently no way at the current time (EntityFramework Core 2.1) to include <all> referenced entities.
+            //      The property Project is required so the Name can be used to find and assign the correct Project for each User.
+            //      The Id alone is not sufficient because the exported JSON is always based on the Test user so the Ids would not match other users.
+            //      Consequently, the query is specialized by entity type so the Include clause can be included.
+            //          .Include(x => x.Project)
+            //https://stackoverflow.com/questions/49593482/entity-framework-core-2-0-1-eager-loading-on-all-nested-related-entities
 
-            var jsonFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUsers)}/{ConfigurationProvider.GetSetting(folderType)}";
-            var jsonFolder = $"{HostingEnvironment.ContentRootPath}{jsonFolderPartialPath}";
+            IQueryable<TEntity> modelList = null;
+            switch (typeof(TEntity).Name)
+            {
+                case "Camera":
+                    modelList = (IQueryable<TEntity>)DbContext.Set<Camera>()
+                                    .Where(c => c.UserId == user.Id)
+                                    .Include(c => c.Project)
+                                    .AsNoTracking();
+                    break;
 
-            var modelType = typeof(TEntity).Name;
-            var jsonFile = $"{Path.Combine(jsonFolder, modelType)}.json";
+                case "MeshTransform":
+                    modelList = (IQueryable<TEntity>)DbContext.Set<MeshTransform>()
+                                    .Where(m => m.UserId == user.Id)
+                                    .Include(m => m.Project)
+                                    .AsNoTracking();
+                    break;
 
+                default:
+                    Logger.LogError($"ExportEntityJSON: unsupported entity type {typeof(TEntity).Name}");
+                    return;
+            }
+
+            // verify models present; export only when database is populated
+            if (modelList.Count() <= 0)
+            {
+                Logger.LogError($"ExportEntityJSON: No models were found for type {typeof(TEntity).Name}. No export was done.");
+                return;
+            }
+
+            var jsonFile = GetEntityJSONFileName<TEntity>(folderType);
             using (StreamWriter file = File.CreateText(jsonFile))
             {
                 JsonSerializer serializer = new JsonSerializer()
@@ -1183,7 +1253,7 @@ namespace ModelRelief.Database
                 //serialize object directly into file stream
                 serializer.Serialize(file, modelList);
             }
-            Logger.LogInformation($"Writing JSON definitions for {user.UserName} amd model = {modelType}, file = {jsonFile}");
+            Logger.LogInformation($"Writing JSON definitions for {user.UserName} amd model = {typeof(TEntity).Name}, file = {jsonFile}");
         }
 
         /// <summary>
@@ -1197,9 +1267,21 @@ namespace ModelRelief.Database
                 Logger.LogError($"ExportJSON: The Test user was not found so the update was aborted.");
                 return;
             }
-
             ExportEntityJSON<Camera>(testUser, "Paths:ResourceFolders:Camera");
             ExportEntityJSON<MeshTransform>(testUser, "Paths:ResourceFolders:MeshTransform");
+        }
+
+        /// <summary>
+        /// Constructs a list of entities read from the seed JSON definitions file.
+        /// </summary>
+        /// <typeparam name="TEntity">Entity type to be imported.</typeparam>
+        /// <param name="folderType">Folder type.</param>
+        /// <returns>List of entities read from JSON.</returns>
+        private List<TEntity> ImportEntityJSON<TEntity>(string folderType)
+        {
+            var jsonFile = GetEntityJSONFileName<TEntity>(folderType);
+            var entityList = JsonConvert.DeserializeObject<List<TEntity>>(System.IO.File.ReadAllText(jsonFile));
+            return entityList;
         }
     }
 }

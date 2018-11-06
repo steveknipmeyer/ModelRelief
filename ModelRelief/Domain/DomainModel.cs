@@ -30,6 +30,7 @@ namespace ModelRelief.Domain
         public string Description { get; set; }
 
         // Navigation Properties
+        [JsonIgnore]
         public string UserId { get; set; }
         [JsonIgnore]
         public ApplicationUser User { get; set; }

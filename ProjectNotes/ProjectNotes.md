@@ -2,24 +2,17 @@
 #### Commit Notes
 
 #### Short Term
-    Builder
-    Deployment
 
-    The Python Environment tools throw if an environmet variable is not found.
+    The Python Environment tools throw if an environment variable is not found.
 
     DbInitializer
-
-        Refactor to create Cameras and MeshTransforms from the JSON definitions.
-            Assign User and Project references (after loading the JSON) by using FindByName<Type>.
-
-        Control with an environment variable?
-
         Harvest
             Update Camera and MeshTransform JSON definitions.
             User Store
                 Mesh
                 DepthBufers
             Solver\Test JSON Files
+                Export JSON for all Mesh entities similar to Dispatcher.
 
         Notes
             DepthBuffer files are modified in-place in the store/user. Mesh files are created in the working folder.
