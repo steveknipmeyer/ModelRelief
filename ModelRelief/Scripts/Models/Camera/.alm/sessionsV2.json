@@ -1,0 +1,46 @@
+{
+  "sessions": [
+    {
+      "id": "67c0161f-126f-4bc1-b1e9-2e8a5c750592",
+      "tabLayout": {
+        "type": "stack",
+        "width": 100,
+        "height": 100,
+        "tabs": [
+          {
+            "id": "5ef80be0-d98f-4ff7-8818-99f8f9cf16b6",
+            "relativeUrl": "file://./BaseCamera.ts",
+            "additionalData": null
+          },
+          {
+            "id": "ffa99fcf-9b91-493b-afa2-ab0fd036c79d",
+            "relativeUrl": "file://./OrthographicCamera.ts",
+            "additionalData": null
+          },
+          {
+            "id": "6e1e4c70-b6d4-4590-988b-e6959d552abc",
+            "relativeUrl": "file://./PerspectiveCamera.ts",
+            "additionalData": null
+          },
+          {
+            "id": "51599a16-b926-4618-b5ce-c967885b3f81",
+            "relativeUrl": "file://./CameraHelper.ts",
+            "additionalData": null
+          },
+          {
+            "id": "5ccb956f-a1c4-4d81-8a95-f3d405ebe7b5",
+            "relativeUrl": "dependency://./Dependency View",
+            "additionalData": null
+          }
+        ],
+        "subItems": [],
+        "activeItemIndex": 0
+      },
+      "lastUsed": 1538730866586,
+      "fileTreeExpanded": true,
+      "selectedTabId": "5ef80be0-d98f-4ff7-8818-99f8f9cf16b6",
+      "errorsExpanded": true
+    }
+  ],
+  "relativePathToTsconfig": "../../../tsconfig.json"
+}
