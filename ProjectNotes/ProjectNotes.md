@@ -5,11 +5,10 @@ Share JSON serialization in Files.SerializeJSON.
     Install madge.
         npm -g install madge
     Install CMake VSCode extensions.
+    git checkout core21.
 
 #### Short Term
     Remove updateseeddatabase.py.
-
-    Merge orthographic branch to master.
 
     Upgrades
         AspNET Core 2.1
