@@ -1,26 +1,17 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE                   from 'three';
-import * as Dto                     from "DtoModels";
+import {FileModel} from "Scripts/Api/V1/Models/FileModel";
+import {Graphics} from "Scripts/Graphics/Graphics";
+import {Mesh3d} from "Scripts/Graphics/Mesh3d";
+import {Mesh} from "Scripts/Models/Mesh/Mesh";
+import {Viewer} from "Scripts/Viewers/Viewer";
+import * as THREE from "three";
 
-import {Camera}                     from 'Camera';
-import {DepthBuffer}                from 'DepthBuffer';
-import {FileModel}                  from 'FileModel';
-import {Graphics}                   from 'Graphics';
-import {StandardView}               from 'ICamera';
-import {ILogger, HTMLLogger}        from 'Logger';
-import {MathLibrary}                from 'Math';
-import {Mesh}                       from 'Mesh';
-import {Mesh3d}                     from 'Mesh3d';
-import {MeshViewerControls}         from 'MeshViewerControls';
-import {Services}                   from 'Services';
-import {Viewer}                     from 'Viewer';
-  
 /**
  * @description Graphics viewer for a Mesh.
  * @export
@@ -29,10 +20,7 @@ import {Viewer}                     from 'Viewer';
  */
 export class MeshViewer extends Viewer {
 
-    mesh : Mesh;                                        // active Mesh
-
-    // Private
-    _meshViewerControls: MeshViewerControls;            // UI controls
+    public mesh: Mesh;                                        // active Mesh
 
     /**
      * Creates an instance of MeshViewer.
@@ -40,8 +28,8 @@ export class MeshViewer extends Viewer {
      * @param {string} previewCanvasId HTML element to host the viewer.
      * @param {FileModel} model Model to load.
      */
-    constructor(name : string, previewCanvasId : string, model? : FileModel) {
-        
+    constructor(name: string, previewCanvasId: string, model?: FileModel) {
+
         super(name, previewCanvasId, model);
 
         this.mesh = model as Mesh;
@@ -54,11 +42,11 @@ export class MeshViewer extends Viewer {
     /**
      * @description Populate scene.
      */
-    populateScene () {       
+    public populateScene() {
 
-        let height = 1;
-        let width  = 1;
-        let mesh = Graphics.createPlaneMesh(new THREE.Vector3(), height, width, new THREE.MeshPhongMaterial(Mesh3d.DefaultMeshPhongMaterialParameters));
+        const height = 1;
+        const width  = 1;
+        const mesh = Graphics.createPlaneMesh(new THREE.Vector3(), height, width, new THREE.MeshPhongMaterial(Mesh3d.DefaultMeshPhongMaterialParameters));
         mesh.rotateX(-Math.PI / 2);
 
         this._root.add(mesh);
@@ -67,28 +55,22 @@ export class MeshViewer extends Viewer {
     /**
      * @description Adds lighting to the scene.
      */
-    initializeLighting() {
+    public initializeLighting() {
 
-        let ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
         this.scene.add(ambientLight);
 
-        let directionalLight1 = new THREE.DirectionalLight(0xffffff);
+        const directionalLight1 = new THREE.DirectionalLight(0xffffff);
         directionalLight1.position.set(4, 4, 4);
         this.scene.add(directionalLight1);
     }
 
     /**
      * @description UI controls initialization.
-     */ 
-    initializeUIControls() {
+     */
+    public initializeUIControls() {
 
-        let cameraControlOptions = {
-            cameraHelper     : false, 
-            fieldOfView      : false, 
-            clippingControls : false,
-        }
-        super.initializeUIControls(cameraControlOptions);
-        this._meshViewerControls = new MeshViewerControls(this);
-    }   
+        super.initializeUIControls();
+    }
 //#endregion
 }

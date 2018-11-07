@@ -1,12 +1,12 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import {ILogger, ConsoleLogger, HTMLLogger}  from 'Logger'
-import {StopWatch}                           from 'StopWatch'
+import {ConsoleLogger, HTMLLogger, ILogger} from "Scripts/System/Logger";
+import {StopWatch} from "Scripts/System/StopWatch";
 
 /**
  * Services
@@ -15,12 +15,12 @@ import {StopWatch}                           from 'StopWatch'
  */
 export class Services {
 
-    static consoleLogger : ConsoleLogger = new ConsoleLogger();
-    static htmlLogger    : HTMLLogger    = new HTMLLogger();
-    static defaultLogger: ILogger        = Services.consoleLogger;
+    public static consoleLogger: ConsoleLogger = new ConsoleLogger();
+    public static htmlLogger: HTMLLogger    = new HTMLLogger();
+    public static defaultLogger: ILogger        = Services.consoleLogger;
 
-    static timer: StopWatch = new StopWatch('Master', Services.defaultLogger);
-    
+    public static timer: StopWatch = new StopWatch("Master", Services.defaultLogger);
+
     /**
      * @constructor
      */

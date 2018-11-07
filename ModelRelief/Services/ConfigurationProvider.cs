@@ -38,10 +38,10 @@ namespace ModelRelief.Services
         {
             Logger.LogInformation($"{ConfigurationSettings.MRPort} = {GetSetting(ConfigurationSettings.MRPort)}");
             Logger.LogInformation($"{ConfigurationSettings.MRDatabaseProvider} = {GetSetting(ConfigurationSettings.MRDatabaseProvider)}");
-            Logger.LogInformation($"{ConfigurationSettings.MRExitAferInitialization} = {GetSetting(ConfigurationSettings.MRExitAferInitialization)}");
+            Logger.LogInformation($"{ConfigurationSettings.MRUpdateSeedData} = {GetSetting(ConfigurationSettings.MRUpdateSeedData)}");
             Logger.LogInformation($"{ConfigurationSettings.MRInitializeDatabase} = {GetSetting(ConfigurationSettings.MRInitializeDatabase)}");
             Logger.LogInformation($"{ConfigurationSettings.MRSeedDatabase} = {GetSetting(ConfigurationSettings.MRSeedDatabase)}");
-            Logger.LogInformation($"{ConfigurationSettings.MRInitializeUserStore} = {GetSetting(ConfigurationSettings.MRInitializeUserStore)}");
+            Logger.LogInformation($"{ConfigurationSettings.MRExitAferInitialization} = {GetSetting(ConfigurationSettings.MRExitAferInitialization)}");
         }
 
         /// <summary>
@@ -107,12 +107,12 @@ namespace ModelRelief.Services
     {
         // configuration settings
         public const string MRPort                      = "MRPort";
-        public const string MRExitAferInitialization    = "MRExitAfterInitialization";
         public const string MRDatabaseProvider          = "MRDatabaseProvider";
+
+        public const string MRUpdateSeedData            = "MRUpdateSeedData";
         public const string MRInitializeDatabase        = "MRInitializeDatabase";
         public const string MRSeedDatabase              = "MRSeedDatabase";
-        public const string MRInitializeUserStore       = "MRInitializeUserStore";
-        public const string MRSeedUserStore             = "MRSeedUserStore";
+        public const string MRExitAferInitialization    = "MRExitAfterInitialization";
 
         // database providers
         public const string SQLServer = "SQLServer";
@@ -124,6 +124,7 @@ namespace ModelRelief.Services
     /// </summary>
     public class Paths
     {
+        public const string Settings      = "Paths:Settings";
         public const string TestDataUsers = "Paths:TestDataUsers";
         public const string TestDataFiles = "Paths:TestDataFiles";
         public const string StoreDatabase = "Paths:StoreDatabase";

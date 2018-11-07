@@ -253,7 +253,15 @@ class Solver:
         # scale relief
         target_height = np.max(self.results.mesh_scaled.image)
         current_height = np.max(self.results.mesh_transformed.image)
-        factor = target_height / current_height
+
+        # N.B. Some final meshes may be flat.
+        #   There are no gradients because all surfaces are orthogonal to the camera sight line.
+        #   All gradients are masked because they are too large.
+        validMeshHeight: bool = current_height > 0.0
+        if not validMeshHeight:
+            self.services.logger.logError (f"{self.depth_buffer.camera.projection} camera generated a flat mesh of height {current_height}.")
+        factor = 1.0 if not validMeshHeight else (target_height / current_height)
+
         self.results.mesh_transformed.image = self.results.mesh_transformed.image * factor
 
     def write_mesh(self):

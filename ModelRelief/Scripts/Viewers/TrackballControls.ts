@@ -1,15 +1,19 @@
 /**
- * https://github.com/gtsop/threejs-trackball-controls
+ *  https://github.com/gtsop/threejs-trackball-controls
+ * "three": "^0.97.0",
  * @author Eberhard Graether / http://egraether.com/
  * @author Mark Lundin 	/ http://mark-lundin.com
  * @author Simone Manini / http://daron1337.github.io
  * @author Luca Antiga 	/ http://lantiga.github.io
  */
+
 'use strict';
 
 import * as THREE from 'three';
 
-export function TrackballControls ( object, domElement ) {
+import {InputControllerHelper} from "Scripts/Viewers/InputControllerHelper"
+
+export function TrackballControls ( object: THREE.PerspectiveCamera, domElement) {
 
 	var _this = this;
 	var STATE = { NONE: - 1, ROTATE: 0, ZOOM: 1, PAN: 2, TOUCH_ROTATE: 3, TOUCH_ZOOM_PAN: 4 };
@@ -31,7 +35,7 @@ export function TrackballControls ( object, domElement ) {
 	this.noZoom = false;
 	this.noPan = false;
 
-	this.staticMoving = true;
+	this.staticMoving = false;
 	this.dynamicDampingFactor = 0.2;
 
 	this.minDistance = 0;
@@ -42,30 +46,31 @@ export function TrackballControls ( object, domElement ) {
 	// internals
 
 	this.target = new THREE.Vector3();
+	this.eye = new THREE.Vector3();
 
 	var EPS = 0.000001;
 
 	var lastPosition = new THREE.Vector3();
 
 	var _state = STATE.NONE,
-	_prevState = STATE.NONE,
+		_prevState = STATE.NONE,
 
-	_eye = new THREE.Vector3(),
+		_eye = new THREE.Vector3(),
 
-	_movePrev = new THREE.Vector2(),
-	_moveCurr = new THREE.Vector2(),
+		_movePrev = new THREE.Vector2(),
+		_moveCurr = new THREE.Vector2(),
 
-	_lastAxis = new THREE.Vector3(),
-	_lastAngle = 0,
+		_lastAxis = new THREE.Vector3(),
+		_lastAngle = 0,
 
-	_zoomStart = new THREE.Vector2(),
-	_zoomEnd = new THREE.Vector2(),
+		_zoomStart = new THREE.Vector2(),
+		_zoomEnd = new THREE.Vector2(),
 
-	_touchZoomDistanceStart = 0,
-	_touchZoomDistanceEnd = 0,
+		_touchZoomDistanceStart = 0,
+		_touchZoomDistanceEnd = 0,
 
-	_panStart = new THREE.Vector2(),
-	_panEnd = new THREE.Vector2();
+		_panStart = new THREE.Vector2(),
+		_panEnd = new THREE.Vector2();
 
 	// for reset
 
@@ -105,16 +110,6 @@ export function TrackballControls ( object, domElement ) {
 
 	};
 
-	this.handleEvent = function ( event ) {
-
-		if ( typeof this[ event.type ] === 'function' ) {
-
-			this[ event.type ]( event );
-
-		}
-
-	};
-
 	var getMouseOnScreen = ( function () {
 
 		var vector = new THREE.Vector2();
@@ -149,7 +144,7 @@ export function TrackballControls ( object, domElement ) {
 
 	}() );
 
-	this.rotateCamera = ( function() {
+	this.rotateCamera = ( function () {
 
 		var axis = new THREE.Vector3(),
 			quaternion = new THREE.Quaternion(),
@@ -239,7 +234,7 @@ export function TrackballControls ( object, domElement ) {
 
 	};
 
-	this.panCamera = ( function() {
+	this.panCamera = ( function () {
 
 		var mouseChange = new THREE.Vector2(),
 			objectUp = new THREE.Vector3(),
@@ -271,7 +266,7 @@ export function TrackballControls ( object, domElement ) {
 
 			}
 
-		}
+		};
 
 	}() );
 
@@ -324,6 +319,9 @@ export function TrackballControls ( object, domElement ) {
 		_this.checkDistances();
 
 		_this.object.lookAt( _this.target );
+
+		// diagnostics
+		_this.eye = _eye;
 
 		if ( lastPosition.distanceToSquared( _this.object.position ) > EPS ) {
 
@@ -398,12 +396,11 @@ export function TrackballControls ( object, domElement ) {
 
 		if ( _this.enabled === false ) return;
 
-		// ModelRelief
-		// Set the focus to allow keyboard accelerators in the Viewer class.
-		this.focus();
-
 		event.preventDefault();
 		event.stopPropagation();
+
+		// canvas focus necessary for Viewer keydownHandler
+		_this.domElement.focus();
 
 		if ( _state === STATE.NONE ) {
 
@@ -478,18 +475,20 @@ export function TrackballControls ( object, domElement ) {
 
 		if ( _this.enabled === false ) return;
 
+		if ( _this.noZoom === true ) return;
+
 		event.preventDefault();
 		event.stopPropagation();
 
 		switch ( event.deltaMode ) {
 
-                        case 2:
-                                // Zoom in pages
-                                _zoomStart.y -= event.deltaY * 0.025;
-                                break;
+			case 2:
+				// Zoom in pages
+				_zoomStart.y -= event.deltaY * 0.025;
+				break;
 
 			case 1:
-                                // Zoom in lines
+				// Zoom in lines
 				_zoomStart.y -= event.deltaY * 0.01;
 				break;
 
@@ -508,6 +507,8 @@ export function TrackballControls ( object, domElement ) {
 	function touchstart( event ) {
 
 		if ( _this.enabled === false ) return;
+
+		event.preventDefault();
 
 		switch ( event.touches.length ) {
 
@@ -593,7 +594,7 @@ export function TrackballControls ( object, domElement ) {
 
 	}
 
-	this.dispose = function() {
+	this.dispose = function () {
 
 		this.domElement.removeEventListener( 'contextmenu', contextmenu, false );
 		this.domElement.removeEventListener( 'mousedown', mousedown, false );
@@ -611,7 +612,7 @@ export function TrackballControls ( object, domElement ) {
 
 	};
 
-	this.domElement.addEventListener( 'contextmenu', contextmenu, false ); 
+	this.domElement.addEventListener( 'contextmenu', contextmenu, false );
 	this.domElement.addEventListener( 'mousedown', mousedown, false );
 	this.domElement.addEventListener( 'wheel', mousewheel, false );
 
@@ -619,16 +620,15 @@ export function TrackballControls ( object, domElement ) {
 	this.domElement.addEventListener( 'touchend', touchend, false );
 	this.domElement.addEventListener( 'touchmove', touchmove, false );
 
-	// ModelRelief
-	// window.addEventListener( 'keydown', keydown, false );
-	// window.addEventListener( 'keyup', keyup, false );
+	window.addEventListener( 'keydown', keydown, false );
+	window.addEventListener( 'keyup', keyup, false );
 
 	this.handleResize();
 
 	// force an update at start
 	this.update();
 
-}
+};
 
 TrackballControls.prototype = Object.create( THREE.EventDispatcher.prototype );
 TrackballControls.prototype.constructor = TrackballControls;

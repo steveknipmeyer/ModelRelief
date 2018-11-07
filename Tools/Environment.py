@@ -30,11 +30,11 @@ class EnvironmentNames:
     MRPublish = "MRPublish"
 
     # intialization
-    MRExitAfterInitialization = "MRExitAfterInitialization"
-
+    MRUpdateSeedData = "MRUpdateSeedData"
     MRInitializeDatabase = "MRInitializeDatabase"
     MRSeedDatabase = "MRSeedDatabase"
-    MRInitializeUserStore = "MRInitializeUserStore"
+
+    MRExitAfterInitialization = "MRExitAfterInitialization"
 
     # runtime
     MRPort = "MRPort"
@@ -70,11 +70,10 @@ class Environment:
             EnvironmentNames.MRPublish : os.environ[EnvironmentNames.MRPublish],
 
             # intialization
-            EnvironmentNames.MRExitAfterInitialization : os.environ[EnvironmentNames.MRExitAfterInitialization],
-
-            EnvironmentNames.MRInitializeUserStore : os.environ[EnvironmentNames.MRInitializeUserStore],
+            EnvironmentNames.MRUpdateSeedData : os.environ[EnvironmentNames.MRUpdateSeedData],
             EnvironmentNames.MRInitializeDatabase : os.environ[EnvironmentNames.MRInitializeDatabase],
             EnvironmentNames.MRSeedDatabase : os.environ[EnvironmentNames.MRSeedDatabase],
+            EnvironmentNames.MRExitAfterInitialization : os.environ[EnvironmentNames.MRExitAfterInitialization],
 
             # runtime
             EnvironmentNames.MRPort : os.environ[EnvironmentNames.MRPort],

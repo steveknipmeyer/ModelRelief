@@ -187,6 +187,8 @@ namespace ModelRelief.Migrations
 
                     b.Property<double>("AspectRatio");
 
+                    b.Property<double>("Bottom");
+
                     b.Property<string>("Description");
 
                     b.Property<double>("EulerX");
@@ -198,6 +200,10 @@ namespace ModelRelief.Migrations
                     b.Property<double>("Far");
 
                     b.Property<double>("FieldOfView");
+
+                    b.Property<bool>("IsPerspective");
+
+                    b.Property<double>("Left");
 
                     b.Property<string>("Name")
                         .IsRequired();
@@ -212,6 +218,8 @@ namespace ModelRelief.Migrations
 
                     b.Property<int?>("ProjectId");
 
+                    b.Property<double>("Right");
+
                     b.Property<double>("ScaleX");
 
                     b.Property<double>("ScaleY");
@@ -219,6 +227,8 @@ namespace ModelRelief.Migrations
                     b.Property<double>("ScaleZ");
 
                     b.Property<double>("Theta");
+
+                    b.Property<double>("Top");
 
                     b.Property<double>("UpX");
 

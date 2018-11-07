@@ -18,8 +18,9 @@ import numpy as np
 from typing import List, Tuple, Union
 
 from camera import Camera
+from camerafactory import CameraFactory
 from filemanager import FileManager
-from gradient import Gradient 
+from gradient import Gradient
 from mask import Mask
 from services import Services
 
@@ -31,7 +32,7 @@ class TestDepthBuffer:
     def __init__(self):
         """
         Initialize an instancee of a DepthBuffer.
-        """       
+        """
         # data = np.array(
         #  [ 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
         #    0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
@@ -90,11 +91,11 @@ class DepthBuffer:
         self._height = int(settings['Height'])
         self.format = settings['Format']
 
-        self.camera = Camera(settings['Camera'])
+        self.camera: Camera = CameraFactory.construct(settings['Camera'])
 
         self._floats_unit_differential : List[float] = []
-        self._floats : np.ndarray = [] 
-        self._gradients : List[np.ndarray] = [] 
+        self._floats : np.ndarray = []
+        self._gradients : List[np.ndarray] = []
 
     @property
     def name(self):
@@ -156,7 +157,7 @@ class DepthBuffer:
         """
         floats_array = np.array(self.floats_raw)
         floats_array = self.normalized_to_model_depth(floats_array)
-        floats = floats_array.tolist()       
+        floats = floats_array.tolist()
 
         return floats
 
@@ -180,7 +181,7 @@ class DepthBuffer:
         floats_array = np.array(floats_raw)
         scaler = lambda v: self.normalized_to_model_depth_unit_differential(v, xScale)
         floats_array = scaler(floats_array)
-        floats = floats_array.tolist()       
+        floats = floats_array.tolist()
         self._floats_unit_differential = floats
 
         return self._floats_unit_differential
@@ -207,7 +208,7 @@ class DepthBuffer:
         a = np.array(floats)
         a = np.reshape(a, (self.height, self.width))
 
-        self._floats = a       
+        self._floats = a
 
         return self._floats
 
@@ -298,7 +299,7 @@ class DepthBuffer:
             A normalized depth buffer value.
         scale
             Scale factor to apply.
-        
+
         Returns
         ----------
             Normalized scaled value.
@@ -319,7 +320,7 @@ class DepthBuffer:
             A normalized depth buffer value.
         scale
             Scale factor to apply.
-        
+
         Returns
         ----------
             Scaled value in <model units>.
@@ -347,9 +348,9 @@ class DepthBuffer:
             An ndarray of floats in <model units>.
         """
         float_array = np.array(self.floats_raw)
-        
+
         # scale
-        scaler = lambda v: self.scale_model_depth(v, scale)        
+        scaler = lambda v: self.scale_model_depth(v, scale)
         float_array = scaler(float_array)
 
         if self.debug:
@@ -363,8 +364,8 @@ class DepthBuffer:
             FileManager().write_floats(scaled_path, float_list)
 
             self.verify_scale_buffer((unscaled_path, scaled_path), scale)
-        scaled_floats = float_array.reshape(self.width, self.height)    
-        
+        scaled_floats = float_array.reshape(self.width, self.height)
+
         return scaled_floats
 
     def verify_scale_buffer(self, files : Tuple[str, str], scale : float) -> bool:
@@ -387,7 +388,7 @@ class DepthBuffer:
 
         tolerance = 1e-6
         for index in range(0, len(unscaled)):
-            try:    
+            try:
                 unscaled_value = unscaled[index]
                 scaled_value   = scaled[index]
 
@@ -397,7 +398,7 @@ class DepthBuffer:
                     return False
 
             except Exception:
-                print ("An exception occurred validating the scaled DepthBuffer.")     
+                print ("An exception occurred validating the scaled DepthBuffer.")
                 return False
 
         print ("Scale verified.")

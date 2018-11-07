@@ -109,19 +109,9 @@ namespace ModelRelief.Services.Jobs
         {
             string workingStorageFolder = StorageManager.WorkingStorageFolder(model.UserId);
             string fileName = $"{workingStorageFolder}{model.GetType().Name}{model.Id.ToString()}.json";
-            Files.EnsureDirectoryExists(fileName);
 
-            using (StreamWriter file = File.CreateText(fileName))
-            {
-                JsonSerializer serializer = new JsonSerializer()
-                {
-                    Formatting = Formatting.Indented,
-                    MaxDepth = 2,
-                };
+            Files.SerializeJSON(model, fileName);
 
-                //serialize object directly into file stream
-                serializer.Serialize(file, model);
-            }
             return fileName;
         }
 
@@ -196,7 +186,7 @@ namespace ModelRelief.Services.Jobs
         /// <param name="args">Arguments.</param>
         /// <param name="timeOut">Millisecond timeout. Maximum process execution time.</param>
         /// <returns>Process exit code.</returns>
-        public int RunProcess(string taskName, string args, int timeOut = 30000)
+        public int RunProcess(string taskName, string args, int timeOut = 60000)
         {
             ProcessStartInfo start = new ProcessStartInfo
             {

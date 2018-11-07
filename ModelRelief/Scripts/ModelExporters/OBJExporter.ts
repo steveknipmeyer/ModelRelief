@@ -1,19 +1,16 @@
-// -------------------------------------------------------------------------------------// 
-//                                                                                      // 
-// @author mrdoob / http://mrdoob.com/                                                  // 
+// -------------------------------------------------------------------------------------//
+//                                                                                      //
+// @author mrdoob / http://mrdoob.com/                                                  //
 // https://github.com/AndrewRayCode/three-obj-exporter/blob/master/index.js       //
-//                                                                                      // 
+//                                                                                      //
 // -------------------------------------------------------------------------------------//
 
 "use strict";
 
 import * as THREE from 'three'
 
-import { Services }  from 'Services'
-import { StopWatch } from 'StopWatch'
-
 export class OBJExporter {
-	
+
 	constructor() {
 	}
 

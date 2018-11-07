@@ -62,12 +62,13 @@
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Test",
-                "MRDatabaseProvider": "SQLServer",
-//              "MRDatabaseProvider": "SQLite",
-                "MRExitAfterInitialization":"False",
+//              "MRDatabaseProvider": "SQLServer",
+                "MRDatabaseProvider": "SQLite",
+
+                "MRUpdateSeedData":"False",
                 "MRInitializeDatabase":"True",
                 "MRSeedDatabase":"True",
-                "MRInitializeUserStore":"True",
+                "MRExitAfterInitialization":"False",
             },
             "sourceFileMap": {
                 "/Views": "${workspaceRoot}/Views"
@@ -96,6 +97,7 @@
         //  "cwd": "${workspaceRoot}/Relief",
 
             "cwd": "${workspaceRoot}",
+
             "debugOptions": [
                 "DebugStdLib",
                 "RedirectOutput",
@@ -105,6 +107,7 @@
             },
 
         //  ----- Tools
+            "program": "${workspaceRoot}/Tools/updateseeddatabase.py",
         //  "program": "${workspaceRoot}/Tools/testrunner.py",
         //  "program": "${workspaceRoot}/Tools/linecount.py",
 
@@ -121,7 +124,7 @@
         //  "args":["--s", "../Solver/Test/House.json", "--w", "../Solver/Test/Working"],
 
         //  ----- Relief C++ Extensions
-            "program": "${workspaceRoot}/Relief/tests/python/benchmark.py",
+        //  "program": "${workspaceRoot}/Relief/tests/python/benchmark.py",
         //  "program": "${workspaceRoot}/Relief/tests/python/relieftest.py",
         //  "program": "${workspaceRoot}/Relief/setup.py",
         //  "args":["build", "install"]

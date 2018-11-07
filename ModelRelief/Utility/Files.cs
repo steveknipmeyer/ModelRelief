@@ -11,6 +11,7 @@ namespace ModelRelief.Utility
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using Newtonsoft.Json;
 
     public class Files
     {
@@ -120,8 +121,14 @@ namespace ModelRelief.Utility
         {
             if (!Directory.Exists(path))
                 return;
-
-            Directory.Delete(path, recursive);
+            try
+            {
+                Directory.Delete(path, recursive);
+            }
+            catch (System.IO.IOException)
+            {
+                Console.WriteLine($"The directory {path} is not empty and the contents cannot be entirely deleted.");
+            }
         }
 
         /// <summary>
@@ -162,6 +169,37 @@ namespace ModelRelief.Utility
         public static void SleepForTimeStamp()
         {
             Thread.Sleep(1000);
+        }
+
+        /// <summary>
+        /// Serialize an object into a JSON file.
+        /// </summary>
+        /// <param name="value">Object to serialize</param>
+        /// <param name="fileName">Output file.</param>
+        /// <returns>True if successful</returns>
+        public static bool SerializeJSON(object value, string fileName)
+        {
+            Files.EnsureDirectoryExists(fileName);
+            try
+            {
+                using (StreamWriter file = File.CreateText(fileName))
+                {
+                    JsonSerializer serializer = new JsonSerializer()
+                    {
+                        Formatting = Formatting.Indented,
+                        MaxDepth = 2,
+                    };
+
+                    //serialize object directly into file stream
+                    serializer.Serialize(file, value);
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

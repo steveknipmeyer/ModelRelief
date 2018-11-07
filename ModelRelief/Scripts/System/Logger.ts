@@ -1,6 +1,6 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
@@ -14,12 +14,12 @@ declare var loggingEnabled: boolean;
  * @interface Logger
  */
 export interface ILogger {
-    addErrorMessage (errorMessage : string);
-    addWarningMessage (warningMessage : string);
-    addInfoMessage (infoMessage : string);
-    addMessage (infoMessage : string, style? : string);
+    addErrorMessage(errorMessage: string);
+    addWarningMessage(warningMessage: string);
+    addInfoMessage(infoMessage: string);
+    addMessage(infoMessage: string, style?: string);
 
-    addEmptyLine ();
+    addEmptyLine();
 
     clearLog();
 }
@@ -29,17 +29,17 @@ export interface ILogger {
  * @enum {number}
  */
 enum MessageClass {
-    Error   = 'logError',
-    Warning = 'logWarning',
-    Info    = 'logInfo',
-    None    = 'logNone'
+    Error   = "logError",
+    Warning = "logWarning",
+    Info    = "logInfo",
+    None    = "logNone",
 }
 
 /**
  * Console logging
  * @class
  */
-export class ConsoleLogger implements ILogger{
+export class ConsoleLogger implements ILogger {
 
     /**
      * @constructor
@@ -53,12 +53,12 @@ export class ConsoleLogger implements ILogger{
      * @param messageClass Message class.
      * @param style Optional style.
      */
-    addMessageEntry (message : string, messageClass : MessageClass, style? : string) : void {
+    public addMessageEntry(message: string, messageClass: MessageClass, style?: string): void {
         if (!loggingEnabled)
             return;
 
-        const prefix = 'MR: ';
-        let logMessage = `${prefix}${message}`;
+        const prefix = "MR: ";
+        const logMessage = `${prefix}${message}`;
 
         switch (messageClass) {
 
@@ -75,8 +75,8 @@ export class ConsoleLogger implements ILogger{
                 break;
 
             case MessageClass.None:
-                style = style || 'color: #ffffff';
-                console.log('%c ' + logMessage, style);
+                style = style || "color: #ffffff";
+                console.log("%c " + logMessage, style);
                 break;
         }
     }
@@ -85,7 +85,7 @@ export class ConsoleLogger implements ILogger{
      * Add an error message to the log.
      * @param errorMessage Error message text.
      */
-    addErrorMessage (errorMessage : string) {
+    public addErrorMessage(errorMessage: string) {
 
         this.addMessageEntry(errorMessage, MessageClass.Error);
     }
@@ -94,7 +94,7 @@ export class ConsoleLogger implements ILogger{
      * Add a warning message to the log.
      * @param warningMessage Warning message text.
      */
-    addWarningMessage (warningMessage : string) {
+    public addWarningMessage(warningMessage: string) {
 
         this.addMessageEntry(warningMessage, MessageClass.Warning);
     }
@@ -103,7 +103,7 @@ export class ConsoleLogger implements ILogger{
      * Add an informational message to the log.
      * @param infoMessage Information message text.
      */
-    addInfoMessage (infoMessage : string) {
+    public addInfoMessage(infoMessage: string) {
 
         this.addMessageEntry(infoMessage, MessageClass.Info);
     }
@@ -113,7 +113,7 @@ export class ConsoleLogger implements ILogger{
      * @param message Information message text.
      * @param style Optional style.
      */
-    addMessage (message : string, style? : string) {
+    public addMessage(message: string, style?: string) {
 
         this.addMessageEntry(message, MessageClass.None, style);
     }
@@ -121,15 +121,15 @@ export class ConsoleLogger implements ILogger{
     /**
      * Adds an empty line
      */
-    addEmptyLine () {
-        
-        console.log('');
+    public addEmptyLine() {
+
+        console.log("");
     }
 
     /**
      * Clears the log output
      */
-    clearLog () {
+    public clearLog() {
 
         console.clear();
     }
@@ -140,27 +140,27 @@ export class ConsoleLogger implements ILogger{
  * HTML logging
  * @class
  */
-export class HTMLLogger implements ILogger{
+export class HTMLLogger implements ILogger {
 
-    rootId           : string;
-    rootElementTag   : string;
-    rootElement      : HTMLElement;
+    public rootId: string;
+    public rootElementTag: string;
+    public rootElement: HTMLElement;
 
-    messageTag       : string;
-    baseMessageClass : string
+    public messageTag: string;
+    public baseMessageClass: string;
 
     /**
      * @constructor
      */
     constructor() {
-        
-        this.rootId         = 'loggerRoot'
-        this.rootElementTag = 'ul';
 
-        this.messageTag       = 'li';
-        this.baseMessageClass = 'logMessage';
+        this.rootId         = "loggerRoot";
+        this.rootElementTag = "ul";
 
-        this.rootElement = <HTMLElement> document.querySelector(`#${this.rootId}`);
+        this.messageTag       = "li";
+        this.baseMessageClass = "logMessage";
+
+        this.rootElement = document.querySelector(`#${this.rootId}`) as HTMLElement;
         if (!this.rootElement) {
 
             this.rootElement = document.createElement(this.rootElementTag);
@@ -173,12 +173,12 @@ export class HTMLLogger implements ILogger{
      * @param message Message text.
      * @param messageClass CSS class to be added to message.
      */
-    addMessageElement (message : string, messageClass? : string) : HTMLElement {
-        
-        let messageElement = document.createElement(this.messageTag);
+    public addMessageElement(message: string, messageClass?: string): HTMLElement {
+
+        const messageElement = document.createElement(this.messageTag);
         messageElement.textContent = message;
 
-        messageElement.className   = `${this.baseMessageClass} ${messageClass ? messageClass : ''}`;;
+        messageElement.className   = `${this.baseMessageClass} ${messageClass ? messageClass : ""}`;
 
         this.rootElement.appendChild(messageElement);
 
@@ -189,7 +189,7 @@ export class HTMLLogger implements ILogger{
      * Add an error message to the log.
      * @param errorMessage Error message text.
      */
-    addErrorMessage (errorMessage : string) {
+    public addErrorMessage(errorMessage: string) {
 
         this.addMessageElement(errorMessage, MessageClass.Error);
     }
@@ -198,7 +198,7 @@ export class HTMLLogger implements ILogger{
      * Add a warning message to the log.
      * @param warningMessage Warning message text.
      */
-    addWarningMessage (warningMessage : string) {
+    public addWarningMessage(warningMessage: string) {
 
         this.addMessageElement(warningMessage, MessageClass.Warning);
     }
@@ -207,7 +207,7 @@ export class HTMLLogger implements ILogger{
      * Add an informational message to the log.
      * @param infoMessage Information message text.
      */
-    addInfoMessage (infoMessage : string) {
+    public addInfoMessage(infoMessage: string) {
 
         this.addMessageElement(infoMessage, MessageClass.Info);
     }
@@ -217,9 +217,9 @@ export class HTMLLogger implements ILogger{
      * @param message Information message text.
      * @param style Optional CSS style.
      */
-    addMessage (message : string, style? : string) {
+    public addMessage(message: string, style?: string) {
 
-        let messageElement = this.addMessageElement(message);
+        const messageElement = this.addMessageElement(message);
         if (style)
             messageElement.style.cssText = style;
     }
@@ -227,17 +227,17 @@ export class HTMLLogger implements ILogger{
     /**
      * Adds an empty line
      */
-    addEmptyLine () {
+    public addEmptyLine() {
 
         // https://stackoverflow.com/questions/5140547/line-break-inside-a-list-item-generates-space-between-the-lines
-//      this.addMessage('<br/><br/>');        
-        this.addMessage('.');        
+//      this.addMessage('<br/><br/>');
+        this.addMessage(".");
     }
 
     /**
      * Clears the log output
      */
-    clearLog () {
+    public clearLog() {
 
         // https://stackoverflow.com/questions/3955229/remove-all-child-elements-of-a-dom-node-in-javascript
         while (this.rootElement.firstChild) {

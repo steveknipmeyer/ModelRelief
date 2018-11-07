@@ -1,16 +1,12 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as dat    from 'dat-gui'
-
-import { DepthBufferViewer }              from "DepthBufferViewer"
-import { ElementAttributes, ElementIds }  from "Html"
-import { ILogger, ConsoleLogger }         from 'Logger'
-import { Services }                       from 'Services'
+import * as dat from "dat-gui";
+import {ElementAttributes, ElementIds} from "Scripts/System/Html";
 
 /**
  * @class
@@ -18,27 +14,27 @@ import { Services }                       from 'Services'
  */
 class DepthBufferViewerSettings {
 
-    displayDepthBuffer : boolean;
-    
+    public displayDepthBuffer: boolean;
+
     constructor() {
-        
-        this.displayDepthBuffer = true; 
+
+        this.displayDepthBuffer = true;
     }
 }
 
 /**
  * DepthBufferViewer UI Controls.
- */    
+ */
 export class DepthBufferViewerControls {
 
-    _depthBufferViewer         : DepthBufferViewer;                     // associated viewer
-    _depthBufferViewerSettings : DepthBufferViewerSettings;             // UI settings
+    public _depthBufferViewer: any;                                   // associated viewer
+    public _depthBufferViewerSettings: DepthBufferViewerSettings;             // UI settings
 
-    /** Default constructor
-     * @class DepthBufferViewerControls
-     * @constructor
+    /**
+     * Creates an instance of DepthBufferViewerControls.
+     * @param {*} depthBufferViewer
      */
-    constructor(depthBufferViewer : DepthBufferViewer) {  
+    constructor(depthBufferViewer: any) {
 
         this._depthBufferViewer = depthBufferViewer;
 
@@ -52,33 +48,33 @@ export class DepthBufferViewerControls {
     /**
      * Initialize the view settings that are controllable by the user
      */
-    initializeControls() {
+    public initializeControls() {
 
-        let scope = this;
+        const scope = this;
 
         this._depthBufferViewerSettings = new DepthBufferViewerSettings();
 
         // Init dat.gui and controls for the UI
-        let gui = new dat.GUI({
+        const gui = new dat.GUI({
             autoPlace: false,
             width: ElementAttributes.DatGuiWidth,
         });
         gui.domElement.id = ElementIds.DepthBufferViewerControls;
 
-        let containerDiv = document.getElementById(this._depthBufferViewer.containerId);
+        const containerDiv = document.getElementById(this._depthBufferViewer.containerId);
         containerDiv.appendChild(gui.domElement);
 
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         //                                                                   DepthBufferViewer                                                          //
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
-        let depthBufferViewerOptions = gui.addFolder('DepthBufferViewer Options');
+        const depthBufferViewerOptions = gui.addFolder("DepthBufferViewer Options");
 
         // DepthBuffer
-        let controlDisplayDepthBuffer = depthBufferViewerOptions.add(this._depthBufferViewerSettings, 'displayDepthBuffer').name('Display DepthBuffer');
-        controlDisplayDepthBuffer.onChange ((value : boolean) => {
+        const controlDisplayDepthBuffer = depthBufferViewerOptions.add(this._depthBufferViewerSettings, "displayDepthBuffer").name("Display DepthBuffer");
+        controlDisplayDepthBuffer.onChange ((value: boolean) => {
 
             scope._depthBufferViewer.displayDepthBuffer(value);
         });
         depthBufferViewerOptions.open();
-    }    
+    }
 }

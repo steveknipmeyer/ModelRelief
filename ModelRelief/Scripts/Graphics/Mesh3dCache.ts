@@ -1,11 +1,11 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { Graphics } from 'Graphics';
+import {Graphics} from "Scripts/Graphics/Graphics";
 
 /**
  *  Mesh cache to optimize mesh creation.
@@ -13,12 +13,12 @@ import { Graphics } from 'Graphics';
  *  @class
  */
 export class Mesh3dCache {
-    _cache : Map<string, THREE.Mesh>;
+    public _cache: Map<string, THREE.Mesh>;
 
     /**
      * Constructor
      */
-    constructor() {       
+    constructor() {
         this._cache = new Map();
     }
 
@@ -28,10 +28,10 @@ export class Mesh3dCache {
      * @param {THREE.Vector2} pixelExtents Extents of the pixel array used to subdivide the mesh.
      * @returns {string}
      */
-    generateKey(modelExtents : THREE.Vector2, pixelExtents : THREE.Vector2) : string{
-        
-        let xExtents = modelExtents.x.toFixed(2).toString();
-        let yExtents = modelExtents.y.toFixed(2).toString();
+    public generateKey(modelExtents: THREE.Vector2, pixelExtents: THREE.Vector2): string {
+
+        const xExtents = modelExtents.x.toFixed(2).toString();
+        const yExtents = modelExtents.y.toFixed(2).toString();
         return `Model Extents = (${xExtents}, ${yExtents}) : Pixels = (${Math.round(pixelExtents.x).toString()}, ${Math.round(pixelExtents.y).toString()})`;
     }
 
@@ -41,9 +41,9 @@ export class Mesh3dCache {
      * @param {THREE.Vector2} pixelExtents Extents of the pixel array used to subdivide the mesh.
      * @returns {THREE.Mesh}
      */
-    getMesh(modelExtents: THREE.Vector2, pixelExtents: THREE.Vector2) : THREE.Mesh{
-        
-        let key: string = this.generateKey(modelExtents, pixelExtents);
+    public getMesh(modelExtents: THREE.Vector2, pixelExtents: THREE.Vector2): THREE.Mesh {
+
+        const key: string = this.generateKey(modelExtents, pixelExtents);
         return this._cache[key];
     }
 
@@ -52,16 +52,16 @@ export class Mesh3dCache {
      * @param {THREE.Vector2} modelExtents Extents of the camera near plane; model units.
      * @param {THREE.Vector2} pixelExtents Extents of the pixel array used to subdivide the mesh.
      * @param {THREE.Mesh} Mesh instance to add.
-     * @returns {void} 
+     * @returns {void}
      */
-    addMesh(modelExtents: THREE.Vector2, pixelExtents: THREE.Vector2, mesh : THREE.Mesh) : void {
+    public addMesh(modelExtents: THREE.Vector2, pixelExtents: THREE.Vector2, mesh: THREE.Mesh): void {
 
-        let key: string = this.generateKey(modelExtents, pixelExtents);
+        const key: string = this.generateKey(modelExtents, pixelExtents);
         if (this._cache[key])
             return;
 
-        let meshClone = Graphics.cloneAndTransformObject(mesh);
+        const meshClone = Graphics.cloneAndTransformObject(mesh);
         this._cache[key] = meshClone;
     }
-}   
+}
 

@@ -1,25 +1,20 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE  from 'three' 
-import * as dat    from 'dat-gui'
-
-import {ElementAttributes, ElementIds}  from "Html"
-import {ILogger, ConsoleLogger}         from 'Logger'
-import {Graphics}                       from "Graphics"
-import {MeshViewer}                     from "MeshViewer"
-import {Services}                       from 'Services'
+import * as dat from "dat-gui";
+import {ElementAttributes, ElementIds} from "Scripts/System/Html";
+import {MeshViewer} from "Scripts/Viewers/MeshViewer";
 
 /**
  * @class
  * MeshViewer Settings
  */
 class MeshViewerSettings {
-   
+
     constructor() {
 
     }
@@ -27,17 +22,17 @@ class MeshViewerSettings {
 
 /**
  * MeshViewer UI Controls.
- */    
+ */
 export class MeshViewerControls {
 
-    _meshViewer          : MeshViewer;                     // associated viewer
-    _meshViewerSettings  : MeshViewerSettings;             // UI settings
+    private _meshViewer: MeshViewer;                                // associated viewer
+    private _meshViewerSettings: MeshViewerSettings;                // UI settings
 
-    /** Default constructor
-     * @class MeshViewerControls
-     * @constructor
+    /**
+     * Creates an instance of MeshViewerControls.
+     * @param {MeshViewer} meshViewer
      */
-    constructor(meshViewer : MeshViewer) {  
+    constructor(meshViewer: MeshViewer) {
 
         this._meshViewer = meshViewer;
 
@@ -51,27 +46,27 @@ export class MeshViewerControls {
     /**
      * Initialize the view settings that are controllable by the user
      */
-    initializeControls() {
+    public initializeControls() {
 
-        let scope = this;
+        const scope = this;
 
         this._meshViewerSettings = new MeshViewerSettings();
 
         // Init dat.gui and controls for the UI
-        let gui = new dat.GUI({
+        const gui = new dat.GUI({
             autoPlace: false,
-            width: ElementAttributes.DatGuiWidth
+            width: ElementAttributes.DatGuiWidth,
         });
         gui.domElement.id = ElementIds.MeshViewerControls;
-        
-        let containerDiv = document.getElementById(this._meshViewer.containerId);
+
+        const containerDiv = document.getElementById(this._meshViewer.containerId);
         containerDiv.appendChild(gui.domElement);
 
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
-        //                                                                   MeshViewer                                                                 //      
+        //                                                                   MeshViewer                                                                 //
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
-        let meshViewerOptions = gui.addFolder('MeshViewer Options');
+        const meshViewerOptions = gui.addFolder("MeshViewer Options");
 
         meshViewerOptions.open();
-    }    
+    }
 }

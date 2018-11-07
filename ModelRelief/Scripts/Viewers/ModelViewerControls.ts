@@ -1,19 +1,13 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE  from 'three' 
-import * as dat    from 'dat-gui'
-
-import {DepthBufferFactory}             from "DepthBufferFactory"
-import {ElementAttributes, ElementIds}  from "Html"
-import {ILogger, ConsoleLogger}         from 'Logger'
-import {Graphics}                       from "Graphics"
-import {ModelViewer}                    from "ModelViewer"
-import {Services}                       from 'Services'
+import * as dat from "dat-gui";
+import {ElementAttributes, ElementIds} from "Scripts/System/Html";
+import {ModelViewer} from "Scripts/Viewers/ModelViewer";
 
 /**
  * @class
@@ -21,27 +15,27 @@ import {Services}                       from 'Services'
  */
 class ModelViewerSettings {
 
-    displayGrid    : boolean;
-    
+    public displayGrid: boolean;
+
     constructor() {
-        
-        this.displayGrid    = true; 
+
+        this.displayGrid    = true;
     }
 }
 
 /**
  * ModelViewer UI Controls.
- */    
+ */
 export class ModelViewerControls {
 
-    _modelViewer         : ModelViewer;                     // associated viewer
-    _modelViewerSettings : ModelViewerSettings;             // UI settings
+    private _modelViewer: ModelViewer;                               // associated viewer
+    private _modelViewerSettings: ModelViewerSettings;               // UI settings
 
-    /** Default constructor
-     * @class ModelViewerControls
-     * @constructor
+    /**
+     * Creates an instance of ModelViewerControls.
+     * @param {ModelViewer} modelViewer
      */
-    constructor(modelViewer : ModelViewer) {  
+    constructor(modelViewer: ModelViewer) {
 
         this._modelViewer = modelViewer;
 
@@ -55,33 +49,33 @@ export class ModelViewerControls {
     /**
      * Initialize the view settings that are controllable by the user
      */
-    initializeControls() {
+    public initializeControls() {
 
-        let scope = this;
+        const scope = this;
 
         this._modelViewerSettings = new ModelViewerSettings();
 
         // Init dat.gui and controls for the UI
-        let gui = new dat.GUI({
+        const gui = new dat.GUI({
             autoPlace: false,
             width: ElementAttributes.DatGuiWidth,
         });
         gui.domElement.id = ElementIds.ModelViewerControls;
 
-        let containerDiv = document.getElementById(this._modelViewer.containerId);
+        const containerDiv = document.getElementById(this._modelViewer.containerId);
         containerDiv.appendChild(gui.domElement);
 
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
-        //                                                                   ModelViewer                                                                //      
+        //                                                                   ModelViewer                                                                //
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
-        let modelViewerOptions = gui.addFolder('ModelViewer Options');
+        const modelViewerOptions = gui.addFolder("ModelViewer Options");
 
         // Grid
-        let controlDisplayGrid = modelViewerOptions.add(this._modelViewerSettings, 'displayGrid').name('Display Grid');
-        controlDisplayGrid.onChange ((value : boolean) => {
+        const controlDisplayGrid = modelViewerOptions.add(this._modelViewerSettings, "displayGrid").name("Display Grid");
+        controlDisplayGrid.onChange ((value: boolean) => {
 
             scope._modelViewer.displayGrid(value);
         });
         modelViewerOptions.open();
-    }    
+    }
 }

@@ -24,7 +24,7 @@ class CMakeExtension(Extension):
 class CMakeBuild(build_ext):
 
     def __init__(self, dist):
-        """ 
+        """
         Initialize an instance of CMakeBuild.
         """
         super().__init__(dist)
@@ -38,7 +38,7 @@ class CMakeBuild(build_ext):
     def run(self):
         try:
             out = subprocess.check_output(['cmake', '--version'])
-    
+
         except OSError:
             raise RuntimeError(
                 "CMake must be installed to build the following extensions: " +
@@ -52,7 +52,7 @@ class CMakeBuild(build_ext):
 
         for ext in self.extensions:
             self.build_extension(ext)
-    
+
     def copy_unit_tests_executable(self, configuration):
         """ Copy the C++ unit test executable from the build output to the bin folder.
         Parameters
@@ -60,7 +60,7 @@ class CMakeBuild(build_ext):
         configuration
             Release, Debug
         """
-        
+
         source = os.path.join(self.root, self.build_temp, configuration, self.unit_tests_executable)
         self.logger.logInformation(f"\nUnit test executable = {source}", Colors.BrightMagenta)
 
@@ -72,7 +72,7 @@ class CMakeBuild(build_ext):
         """
         # N.B. 'setup.py test' leaks build output into the root of the project folder!
         Tools.delete_files([os.path.join(self.root, 'relief.cp36-win_amd64.pyd'), os.path.join(self.root, 'relief.pdb')])
-  
+
     def build_extension(self, ext):
         extdir = os.path.abspath(
             os.path.dirname(self.get_ext_fullpath(ext.name)))
@@ -119,7 +119,7 @@ setup(
     description='ModelRelief image processing Python extensions',
     long_description='',
 
-    # add an extension module named 'relief' to the package 
+    # add an extension module named 'relief' to the package
     ext_modules=[CMakeExtension('relief')],
 
     # add custom build_ext command

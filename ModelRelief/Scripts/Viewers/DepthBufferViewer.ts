@@ -1,31 +1,30 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { DepthBuffer }               from "DepthBuffer";
-import { DepthBufferViewerControls } from 'DepthBufferViewerControls';
-import { Graphics}                   from 'Graphics'
-import { ILogger }                   from 'Logger';
-import { Services }                  from 'Services';
-  
+import {Graphics} from "Scripts/Graphics/Graphics";
+import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
+import {ILogger} from "Scripts/System/Logger";
+import {Services} from "Scripts/System/Services";
+import {DepthBufferViewerControls} from "Scripts/Viewers/DepthBufferViewerControls";
+
 /**
  * @description Graphics viewer for a DepthBuffer.
  * @export
  * @class DepthBufferViewer
-  */
+ */
 export class DepthBufferViewer  {
 
-    canvas : HTMLCanvasElement;
+    public canvas: HTMLCanvasElement;
 
     // Private
-    _depthBuffer    : DepthBuffer;
-    _logger         : ILogger;
+    private _depthBuffer: DepthBuffer;
+    private _logger: ILogger;
 
-    // Private
-    _depthBufferViewerControls: DepthBufferViewerControls;            // UI controls
+    private _depthBufferViewerControls: DepthBufferViewerControls;            // UI controls
 
     /**
      * Creates an instance of DepthBufferViewer.
@@ -33,10 +32,10 @@ export class DepthBufferViewer  {
      * @param {string} canvasId HTML element to host the viewer.
      * @param {DepthBuffer} depthBuffer The DepthBuffer bound to this viewer.
      */
-    constructor(name : string, canvasId : string, depthBuffer : DepthBuffer) {
+    constructor(name: string, canvasId: string, depthBuffer: DepthBuffer) {
 
-        this.canvas = <HTMLCanvasElement> document.querySelector(`#${canvasId}`);
-        this._depthBuffer = depthBuffer;    
+        this.canvas = document.querySelector(`#${canvasId}`) as HTMLCanvasElement;
+        this._depthBuffer = depthBuffer;
 
         this._logger = Services.defaultLogger;
 
@@ -49,39 +48,39 @@ export class DepthBufferViewer  {
      * @readonly
      * @type {string}
      */
-    get containerId() : string {
-        
-        let parentElement : HTMLElement = this.canvas.parentElement;
+    get containerId(): string {
+
+        const parentElement: HTMLElement = this.canvas.parentElement;
         return parentElement.id;
-    } 
+    }
 //#endregion
 
 //#region Event Handlers
     /**
      * @description Display the associated DepthBuffer.
-     * @param {boolean} visible 
+     * @param {boolean} visible
      */
-    displayDepthBuffer(visible : boolean) {
+    public displayDepthBuffer(visible: boolean) {
 
-        this.canvas.style.display = visible ? '' : 'none';
+        this.canvas.style.display = visible ? "" : "none";
         this._logger.addMessage(`Display DepthBuffer = ${visible}`);
-    } 
+    }
 
     /**
      * Handle a mouse down event on the canvas.
      */
-    onMouseDown(event : JQueryEventObject) : void {
+    public onMouseDown(event: JQueryEventObject): void {
         // https://www.w3schools.com/colors/colors_names.asp
-        let messageStyle = 'color:fuchsia'
+        const messageStyle = "color:fuchsia";
 
-        let deviceCoordinates : THREE.Vector2 = Graphics.deviceCoordinatesFromJQEvent(event, <JQuery>$(event.target));
+        const deviceCoordinates: THREE.Vector2 = Graphics.deviceCoordinatesFromJQEvent(event, $(event.target) as JQuery);
         this._logger.addMessage(`Device = ${deviceCoordinates.x}, ${deviceCoordinates.y}`, messageStyle);
-        
-        let decimalPlaces   : number = 2;
-        let row             : number = (deviceCoordinates.y + 1) / 2 * this._depthBuffer.height;
-        let column          : number = (deviceCoordinates.x + 1) / 2 * this._depthBuffer.width;
-        this._logger.addMessage(`Offset = [${row}, ${column}]`, messageStyle);       
-        this._logger.addMessage(`Depth = ${this._depthBuffer.depth(row, column).toFixed(decimalPlaces)}`, messageStyle);       
+
+        const decimalPlaces: number = 2;
+        const row: number = (deviceCoordinates.y + 1) / 2 * this._depthBuffer.height;
+        const column: number = (deviceCoordinates.x + 1) / 2 * this._depthBuffer.width;
+        this._logger.addMessage(`Offset = [${row}, ${column}]`, messageStyle);
+        this._logger.addMessage(`Depth = ${this._depthBuffer.depth(row, column).toFixed(decimalPlaces)}`, messageStyle);
         this._logger.addEmptyLine();
     }
 
@@ -91,18 +90,18 @@ export class DepthBufferViewer  {
     /**
      * @description Initialization.
      */
-    initialize() {
-        this.initializeUIControls();            
+    public initialize() {
+        this.initializeUIControls();
 
-        let $canvas = $(this.canvas).on('mousedown', this.onMouseDown.bind(this));
+        const $canvas = $(this.canvas).on("mousedown", this.onMouseDown.bind(this));
     }
 
     /**
      * @description UI controls initialization.
-     */ 
-    initializeUIControls() {
+     */
+    public initializeUIControls() {
 
         this._depthBufferViewerControls = new DepthBufferViewerControls(this);
-    }   
+    }
 //#endregion
 }

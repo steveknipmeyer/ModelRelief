@@ -1,18 +1,19 @@
-﻿// ------------------------------------------------------------------------// 
+﻿
+// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { ICamera }          from 'ICamera'
-import { IFileModel }       from 'IFileModel'
-import { IProject }         from 'IProject'
+import {ICamera} from "Scripts/Api/V1/Interfaces/ICamera";
+import {IFileModel} from "Scripts/Api/V1/Interfaces/IFileModel";
+import {IProject} from "Scripts/Api/V1/Interfaces/IProject";
 
  /**
- *  3D model file formats.
- *  @enum {number}
- */
+  *  3D model file formats.
+  *  @enum {number}
+  */
 export enum Model3dFormat {
     None,           // unknown
     OBJ,            // Wavefront OBJ
@@ -20,10 +21,10 @@ export enum Model3dFormat {
 }
 
  /**
- *  Represents a DTO for a Model3d.
- *  N.B. All properties in the interface are optional so that an initialization object can be used to construct the concrete class.
- *  @interface
- */
+  *  Represents a DTO for a Model3d.
+  *  N.B. All properties in the interface are optional so that an initialization object can be used to construct the concrete class.
+  *  @interface
+  */
 export interface IModel3d extends IFileModel {
 
     id?: number;

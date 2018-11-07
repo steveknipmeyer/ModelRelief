@@ -1,22 +1,24 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
+import * as THREE from "three";
 
-import * as THREE                                     from 'three';
-import { Camera }                                     from 'Camera';
-import { CameraHelper }                               from 'CameraHelper';
-import { CameraControls, CameraControlsOptions }      from 'CameraControls';
-import { EventManager }                               from 'EventManager';
-import { FileModel }                                  from 'FileModel';
-import { Graphics, ObjectNames }                      from 'Graphics';
-import { StandardView }                               from 'ICamera';
-import { ILogger }                                    from 'Logger';
-import { Materials}                                   from 'Materials';
-import { Services }                                   from 'Services';
-import { TrackballControls }                          from 'TrackballControls';
+import {StandardView} from "Scripts/Api/V1/Interfaces/ICamera";
+import {FileModel} from "Scripts/Api/V1/Models/FileModel";
+import {Graphics, ObjectNames} from "Scripts/Graphics/Graphics";
+import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
+import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
+import {EventManager, EventType} from "Scripts/System/EventManager";
+import {ElementIds} from "Scripts/System/Html";
+import {ILogger} from "Scripts/System/Logger";
+import {MathLibrary} from "Scripts/System/Math";
+import {Services} from "Scripts/System/Services";
+import {IInputController, InputControllerHelper} from "Scripts/Viewers/InputControllerHelper";
+import {OrthographicTrackballControls} from "Scripts/Viewers/OrthographicTrackballControls";
+import {TrackballControls} from "Scripts/Viewers/TrackballControls";
 
 /**
  * @description General 3D model viewer base class.
@@ -25,34 +27,34 @@ import { TrackballControls }                          from 'TrackballControls';
  */
 export class Viewer {
 
-    cameraControls         : CameraControls            = null;
+    // Protected
+    protected _root: THREE.Object3D            = null;
+    protected _logger: ILogger                 = null;
 
     // Private
-    _name                   : string                    = '';
-    _eventManager           : EventManager               = null;
-    _logger                 : ILogger                   = null;
+    private _name: string                    = "";
+    private _eventManager: EventManager      = null;
 
-    _model                  : FileModel                 = null;
-    _scene                  : THREE.Scene               = null;
-    _root                   : THREE.Object3D            = null;      
-                                                        
-    _renderer               : THREE.WebGLRenderer       = null;;
-    _canvas                 : HTMLCanvasElement         = null;
-    _width                  : number                    = 0;
-    _height                 : number                    = 0;
+    private _model: FileModel                = null;
+    private _scene: THREE.Scene              = null;
 
-    _camera                 : THREE.PerspectiveCamera   = null;
+    private _renderer: THREE.WebGLRenderer   = null;
+    private _canvas: HTMLCanvasElement       = null;
+    private _width: number                   = 0;
+    private _height: number                  = 0;
 
-    _controls               : TrackballControls         = null;
-    
+    private _camera: IThreeBaseCamera        = null;
+
+    private _controls: TrackballControls | OrthographicTrackballControls = null;
+
     /**
      * Creates an instance of Viewer.
      * @param {string} name Viewer name.
      * @param {string} modelCanvasId HTML element to host the viewer.
      */
-    constructor(name : string, modelCanvasId : string, model? : FileModel) { 
+    constructor(name: string, modelCanvasId: string, model?: FileModel) {
 
-        this._name         = name;                    
+        this._name         = name;
         this._eventManager = new EventManager();
         this._logger       = Services.defaultLogger;
 
@@ -63,7 +65,7 @@ export class Viewer {
         this._model = model;
         this.initialize();
 
-        this.animate();
+//      this.animate();
     }
 
 //#region Properties
@@ -72,8 +74,8 @@ export class Viewer {
      * @readonly
      * @type {string}
      */
-    get name() : string {
-        
+    get name(): string {
+
         return this._name;
     }
 
@@ -81,7 +83,7 @@ export class Viewer {
      * @description Gets the Viewer scene.
      * @type {THREE.Scene}
      */
-    get scene() : THREE.Scene {
+    get scene(): THREE.Scene {
 
         return this._scene;
     }
@@ -93,27 +95,37 @@ export class Viewer {
 
         this._scene = value;
     }
-        
+
     /**
      * @description Gets the camera.
-     * @type {THREE.PerspectiveCamera}
+     * @type {IThreeBaseCamera}
      */
-    get camera() : THREE.PerspectiveCamera{
-        
+    get camera(): IThreeBaseCamera {
+
         return this._camera;
     }
 
     /**
      * @description Sets the camera.
      */
-    set camera(camera : THREE.PerspectiveCamera) {
-        
+    set camera(camera: IThreeBaseCamera) {
+
+        // Update the orthographic frustum if necessary. A persisted camera may have been defined against a different view.
+        if (camera instanceof THREE.OrthographicCamera) {
+            const cameraAspectRatio = (camera.right - camera.left) / (camera.top - camera.bottom);
+            const tolerance = 0.01;
+            if (!MathLibrary.numbersEqualWithinTolerance(cameraAspectRatio, this.aspectRatio, tolerance)) {
+                this._logger.addWarningMessage(`Orthographic camera aspect ratio ${cameraAspectRatio} update to match View aspect ratio ${this.aspectRatio}`);
+                CameraHelper.setDefaultOrthographicFrustum(camera, this.aspectRatio);
+            }
+        }
+
         this._camera = camera;
         this.camera.name = this.name;
+
         this.initializeInputControls();
 
-        if (this.cameraControls)
-            this.cameraControls.synchronizeCameraSettings();
+        this.eventManager.dispatchEvent(this, EventType.ViewerCameraProperties, camera);
         }
 
     /**
@@ -121,7 +133,7 @@ export class Viewer {
      * @readonly
      * @type {FileModel}
      */
-    get model() : FileModel {
+    get model(): FileModel {
 
         return this._model;
     }
@@ -129,7 +141,7 @@ export class Viewer {
     /**
      * @description Sets the active model.
      */
-    set model (model : FileModel) {
+    set model(model: FileModel) {
 
         this._model = model;
     }
@@ -139,7 +151,7 @@ export class Viewer {
      * @readonly
      * @type {THREE.Group}
      */
-    get modelGroup() : THREE.Group {
+    get modelGroup(): THREE.Group {
 
         return this._root;
     }
@@ -148,7 +160,7 @@ export class Viewer {
      * @description Sets the graphics of the displayed model.
      * @param {THREE.Group} modelGroup New model to activate.
      */
-    setModelGroup(modelGroup : THREE.Group) {
+    public setModelGroup(modelGroup: THREE.Group) {
 
         // N.B. This is a method not a property so a sub class can override.
         // https://github.com/Microsoft/TypeScript/issues/4465
@@ -162,22 +174,22 @@ export class Viewer {
      * @readonly
      * @type {number}
      */
-    get aspectRatio() : number {
+    get aspectRatio(): number {
 
-        let aspectRatio : number = this._width / this._height;
+        const aspectRatio: number = this._width / this._height;
         return aspectRatio;
-    } 
+    }
 
     /**
      * @description Gets the DOM Id of the Viewer parent container.
      * @readonly
      * @type {string}
      */
-    get containerId() : string {
-        
-        let parentElement : HTMLElement = this._canvas.parentElement;
+    get containerId(): string {
+
+        const parentElement: HTMLElement = this._canvas.parentElement;
         return parentElement.id;
-    } 
+    }
 
     /**
      * @description Gets the Event Manager.
@@ -188,15 +200,25 @@ export class Viewer {
 
         return this._eventManager;
     }
+
+    /**
+     * @description Get the input controller.
+     * @type {TrackballControls | OrthographicTrackballControls}
+     */
+    get controls(): TrackballControls | OrthographicTrackballControls {
+
+        return this._controls;
+    }
+
 //#endregion
 
-//#region Initialization    
+//#region Initialization
     /**
      * @description Adds a test sphere to a scene.
      */
-    populateScene () {
+    public populateScene() {
 
-        let mesh = Graphics.createSphereMesh(new THREE.Vector3(), 2);
+        const mesh = Graphics.createSphereMesh(new THREE.Vector3(), 2);
         mesh.visible = false;
         this._root.add(mesh);
     }
@@ -204,7 +226,7 @@ export class Viewer {
     /**
      * @description Initialize Scene
      */
-    initializeScene () {
+    public initializeScene() {
 
         this.scene = new THREE.Scene();
         this.createRoot();
@@ -215,119 +237,145 @@ export class Viewer {
     /**
      * @description Initialize the WebGL renderer.
      */
-    initializeRenderer () {
+    public initializeRenderer() {
 
         this._renderer = new THREE.WebGLRenderer({
 
             logarithmicDepthBuffer  : false,
             canvas                  : this._canvas,
-            antialias               : true
+            antialias               : true,
         });
         this._renderer.autoClear = true;
         this._renderer.setClearColor(0x000000);
     }
-        
+
     /**
      * @description Initialize the viewer camera
      */
-    initializeCamera() {
-        this.camera = CameraHelper.getStandardViewCamera(StandardView.Top, this.aspectRatio, this.modelGroup);       
+    public initializeCamera() {
+        this.camera = CameraHelper.getStandardViewCamera(StandardView.Top, this.camera, this.aspectRatio, this.modelGroup);
     }
 
     /**
      * @description Adds lighting to the scene
      */
-    initializeLighting() {
+    public initializeLighting() {
 
-        let ambientLight = new THREE.AmbientLight(0x404040);
+        const ambientLight = new THREE.AmbientLight(0x404040);
         this.scene.add(ambientLight);
-
-        let directionalLight1 = new THREE.DirectionalLight(0xC0C090);
+        const directionalLight1 = new THREE.DirectionalLight(0xC0C090);
         directionalLight1.position.set(-100, -50, 100);
         this.scene.add(directionalLight1);
 
-        let directionalLight2 = new THREE.DirectionalLight(0xC0C090);
+        const directionalLight2 = new THREE.DirectionalLight(0xC0C090);
         directionalLight2.position.set(100, 50, -100);
         this.scene.add(directionalLight2);
     }
 
     /**
-     * @description Sets up the user input controls (Trackball)
+     * @description Sets up the user input controls (Trackball or OrthographicTrackballControls)
      */
-    initializeInputControls() {
+    public initializeInputControls() {
 
-        this._controls = new TrackballControls(this.camera, this._renderer.domElement);
+        //  capture active lookAt before initializing input controller
+        const cameraLookAt: THREE.Vector3 = CameraHelper.getLookAt(this.camera, this.modelGroup);
 
-        // N.B. https://stackoverflow.com/questions/10325095/threejs-camera-lookat-has-no-effect-is-there-something-im-doing-wrong
-        this._controls.position0.copy(this.camera.position);
+        if (this.controls)
+            this.controls.dispose();
 
-        let boundingBox = Graphics.getBoundingBoxFromObject(this._root);
-        this._controls.target.copy(boundingBox.getCenter());
+        this._controls = this.camera instanceof THREE.PerspectiveCamera ?
+            new TrackballControls(this.camera as THREE.PerspectiveCamera, this._renderer.domElement) :
+            new OrthographicTrackballControls(this.camera as THREE.OrthographicCamera, this._renderer.domElement);
+
+        // restore lookAt
+        this.camera.lookAt(cameraLookAt);
+        InputControllerHelper.setTarget(this.controls, cameraLookAt);
     }
 
     /**
      * @description Sets up the user input controls (Settings)
-     * @param {CameraControlsOptions} [cameraControlsOptions] Options to include/exclude specialized controls.
      */
-    initializeUIControls(cameraControlsOptions? : CameraControlsOptions) {
+    public initializeUIControls() {
+    }
 
-        this.cameraControls = new CameraControls(this, cameraControlsOptions);       
+    /**
+     * @description Event handler for  keyboard shortcuts.
+     *              Chained from the input control (TrackballControls, OrthographicTrackballControls) handler.
+     * @param {KeyboardEvent} event
+     * @returns
+     */
+    public keydownHandler(event: KeyboardEvent) {
+        let standardView = StandardView.None;
+
+        // https://css-tricks.com/snippets/javascript/javascript-keycodes/
+        const keyCode: number = event.keyCode;
+        switch (keyCode) {
+
+            case "B".charCodeAt(0):
+            case "B".charCodeAt(0):
+                standardView = StandardView.Bottom;
+                break;
+            case "F".charCodeAt(0):
+            case "f".charCodeAt(0):
+                standardView = StandardView.Front;
+                break;
+            case "I".charCodeAt(0):
+            case "i".charCodeAt(0):
+                standardView = StandardView.Isometric;
+                break;
+            case "L".charCodeAt(0):
+            case "l".charCodeAt(0):
+                standardView = StandardView.Left;
+                break;
+            case "R".charCodeAt(0):
+            case "r".charCodeAt(0):
+                standardView = StandardView.Right;
+                break;
+            case "T".charCodeAt(0):
+            case "t".charCodeAt(0):
+                standardView = StandardView.Top;
+                break;
+            case "X".charCodeAt(0):
+            case "x".charCodeAt(0):
+                standardView = StandardView.Back;
+                break;
+
+            default:
+                return;
+        }
+        this.setCameraToStandardView(standardView);
     }
 
     /**
      * @description Sets up the keyboard shortcuts.
      */
-    initializeKeyboardShortcuts() {
+    public initializeKeyboardShortcuts() {
 
-        this._canvas.addEventListener('keyup', (event : KeyboardEvent) => {
+        this._canvas.addEventListener("keyup", (event: KeyboardEvent) => {
+            this.keydownHandler(event);
+        });
+    }
 
-            let standardView = StandardView.None;
+    /**
+     * @description Initializes diagnostic tools for debugging.
+     */
+    public initializeDiagnostics() {
 
-            // https://css-tricks.com/snippets/javascript/javascript-keycodes/
-            let keyCode : number = event.keyCode;
-            switch (keyCode) {
+        if (this._canvas.id !== ElementIds.ModelCanvas)
+            return;
 
-                case "B".charCodeAt(0):
-                case "B".charCodeAt(0):  
-                    standardView = StandardView.Bottom;    
-                    break;
-                case "F".charCodeAt(0):
-                case "f".charCodeAt(0):  
-                    standardView = StandardView.Front;    
-                    break;
-                case "I".charCodeAt(0):
-                case "i".charCodeAt(0):  
-                    standardView = StandardView.Isometric;    
-                    break;
-                case "L".charCodeAt(0):
-                case "l".charCodeAt(0):  
-                    standardView = StandardView.Left;    
-                    break;
-                case "R".charCodeAt(0):
-                case "r".charCodeAt(0):  
-                    standardView = StandardView.Right;    
-                    break;
-                case "T".charCodeAt(0):
-                case "t".charCodeAt(0):  
-                    standardView = StandardView.Top;    
-                    break;
-                case "X".charCodeAt(0):
-                case "x".charCodeAt(0):  
-                    standardView = StandardView.Back;    
-                    break;
-
-                default:
-                    return;                    
-            }
-            this.camera = CameraHelper.getStandardViewCamera(standardView, this.aspectRatio, this.modelGroup);
-            this.cameraControls.settings.standardView = standardView;
-    }, false);
+        const interval = 1000;
+        window.setTimeout(() => {
+            InputControllerHelper.debugInputControllerProperties(this.name, this.controls, this.scene, this.camera);
+            // loop
+            // this.initializeDiagnostics();
+        }, interval);
     }
 
     /**
      * @description Initialize the scene with the base objects
      */
-    initialize () {
+    public initialize() {
 
         this.initializeScene();
         this.initializeRenderer();
@@ -336,9 +384,10 @@ export class Viewer {
         this.initializeInputControls();
         this.initializeUIControls();
         this.initializeKeyboardShortcuts();
+        // this.initializeDiagnostics();
 
         this.onResizeWindow();
-        window.addEventListener('resize', this.onResizeWindow.bind(this), false);
+        window.addEventListener("resize", this.onResizeWindow.bind(this), false);
     }
 //#endregion
 
@@ -346,15 +395,15 @@ export class Viewer {
     /**
      * @description Removes all scene objects
      */
-    clearAllAssests() {
-        
+    public clearAllAssests() {
+
         Graphics.removeObjectChildren(this._root, false);
-    } 
+    }
 
     /**
      * @description Creates the root object in the scene
      */
-    createRoot() {
+    public createRoot() {
 
         this._root = new THREE.Object3D();
         this._root.name = ObjectNames.Root;
@@ -362,26 +411,27 @@ export class Viewer {
     }
 //#endregion
 
-//#region Camera  
+//#region Camera
     /**
-     * @description Sets the view camera properties to the given settings.
-     * @param {StandardView} view Camera settings to apply.
+     * @description Sets the view camera properties to the given view.
+     * @param {StandardView} standardView Standard camera view to apply.
      */
-    setCameraToStandardView(view : StandardView) {
+    public setCameraToStandardView(standardView: StandardView) {
 
-        let standardViewCamera = CameraHelper.getStandardViewCamera(view, this.aspectRatio, this.modelGroup);
+        const standardViewCamera = CameraHelper.getStandardViewCamera(standardView, this.camera, this.aspectRatio, this.modelGroup);
+
         this.camera = standardViewCamera;
 
-        this.cameraControls.synchronizeCameraSettings(view);
+        this.eventManager.dispatchEvent(this, EventType.ViewerCameraStandardView, standardView);
     }
 
     /**
      * @description Fits the active view.
      */
-    fitView() {
+    public fitView() {
 
         CameraHelper.setDefaultClippingPlanes(this.camera);
-        this.camera = CameraHelper.getFitViewCamera (this.camera, this.modelGroup);
+        this.camera = CameraHelper.getFitViewCamera (this.camera, this.aspectRatio, this.modelGroup);
     }
 //#endregion
 
@@ -389,29 +439,30 @@ export class Viewer {
     /**
      * @description Updates the scene camera to match the new window size
      */
-    updateCameraOnWindowResize() {
+    public updateCameraOnWindowResize() {
+        if (this.camera instanceof THREE.PerspectiveCamera)
+            this.camera.aspect = this.aspectRatio;
 
-        this.camera.aspect = this.aspectRatio;
         this.camera.updateProjectionMatrix();
     }
 
     /**
      * @description Handles the WebGL processing for a DOM window 'resize' event
      */
-    resizeDisplayWebGL() {
+    public resizeDisplayWebGL() {
 
         this._width =  this._canvas.offsetWidth;
         this._height = this._canvas.offsetHeight;
         this._renderer.setSize(this._width, this._height, false);
 
-        this._controls.handleResize();
+        this.controls.handleResize();
         this.updateCameraOnWindowResize();
     }
 
     /**
      * @description Handles a window resize event
      */
-    onResizeWindow () {
+    public onResizeWindow() {
 
         this.resizeDisplayWebGL();
     }
@@ -421,20 +472,20 @@ export class Viewer {
     /**
      * @description Performs the WebGL render of the scene
      */
-    renderWebGL() {
+    public renderWebGL() {
 
-        this._controls.update();
+        this.controls.update();
         this._renderer.render(this.scene, this.camera);
     }
 
     /**
      * @description Main DOM render loop.
      */
-    animate() {
+    public animate() {
 
         requestAnimationFrame(this.animate.bind(this));
         this.renderWebGL();
     }
 //#endregion
-} 
+}
 

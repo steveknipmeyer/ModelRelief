@@ -1,20 +1,16 @@
-﻿// ------------------------------------------------------------------------// 
+﻿
+// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE  from 'three'; 
-import * as dat    from 'dat-gui';
-import * as Dto    from "DtoModels";
-
-import { HtmlLibrary, ElementIds }            from "Html";
-import { FileModel }                          from 'FileModel';
-import { ILogger, ConsoleLogger }             from 'Logger';
-import { ModelViewer }                        from "ModelViewer";
-import { Services }                           from 'Services';
-import { Viewer }                             from "Viewer";
+import {FileModel} from "Scripts/Api/V1/Models/FileModel";
+import {ElementIds} from "Scripts/System/Html";
+import {CameraControls, ICameraControlsOptions} from "Scripts/Viewers/CameraControls";
+import {ModelViewer} from "Scripts/Viewers/ModelViewer";
+import {ModelViewerControls} from "Scripts/Viewers/ModelViewerControls";
 
 /**
  * @description Represents a UI view of a 3D model.
@@ -23,19 +19,21 @@ import { Viewer }                             from "Viewer";
  */
 export class ModelView {
 
-    _containerId                : string;
-    _modelViewer                : ModelViewer;
-    
+    private _containerId: string;
+    private _modelViewer: ModelViewer;
+    private _cameraControls: CameraControls;
+    private _modelViewerControls: ModelViewerControls;
+
     /**
      * Creates an instance of ModelView.
      * @param {string} containerId DOM container Id of view.
      * @param {FileModel} model Initial model to load.
      */
-    constructor(containerId : string, model : FileModel) {  
+    constructor(containerId: string, model: FileModel) {
 
-        this._containerId = containerId;    
+        this._containerId = containerId;
         this.initialize(model);
-    } 
+    }
 
 //#region Properties
     /**
@@ -53,10 +51,10 @@ export class ModelView {
      * @readonly
      * @type {ModelViewer}
      */
-    get modelViewer(): ModelViewer { 
+    get modelViewer(): ModelViewer {
 
         return this._modelViewer;
-    }        
+    }
 //#endregion
 
 //#region Event Handlers
@@ -67,12 +65,19 @@ export class ModelView {
      * @description Performs initialization.
      * @param {FileModel} model Initial model to load.
      */
-    initialize(model : FileModel) {
+    public initialize(model: FileModel) {
 
-        // Model Viewer    
-        this._modelViewer = new ModelViewer('ModelViewer', ElementIds.ModelCanvas, model);
+        // Model Viewer
+        this._modelViewer = new ModelViewer("ModelViewer", ElementIds.ModelCanvas, model);
+
+        // Camera Controls
+        const cameraControlsOptions: ICameraControlsOptions = {};
+        this._cameraControls = new CameraControls(this._modelViewer, cameraControlsOptions);
+
+        // Model Viewer Controls
+        this._modelViewerControls = new ModelViewerControls(this._modelViewer);
     }
-    
+
 //#endregion
 }
 

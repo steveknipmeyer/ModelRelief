@@ -1,21 +1,20 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE from 'three'
-import * as Dto from 'DtoModels'
+import * as Dto from "Scripts/Api/V1//Models/DtoModels";
+import * as THREE from "three";
 
-import {assert}                                 from 'chai'
-import {Camera}                                 from 'Camera'
-import {DepthBuffer}                            from 'DepthBuffer'
-import {Exception}                              from 'Exception';
-import {HttpLibrary, ContentType, MethodType}   from 'Http'
-import {DepthBufferFormat}                      from 'IDepthBuffer'
-import {MathLibrary}                            from 'Math'
-import {Services}                               from 'Services'
+import {assert} from "chai";
+import {DepthBufferFormat} from "Scripts/Api/V1/Interfaces/IDepthBuffer";
+import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
+import {DefaultCameraSettings} from "Scripts/Models/Camera/DefaultCameraSettings";
+import {PerspectiveCamera} from "Scripts/Models/Camera/PerspectiveCamera";
+import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
+import {Services} from "Scripts/System/Services";
 
 /**
  * @description Unit test harness.
@@ -23,16 +22,8 @@ import {Services}                               from 'Services'
  * @class UnitTests
  */
 export class UnitTests {
-   
-    static DefaultTolerance : number = 0.001;
 
-    /**
-     * Default constructor
-     * @class UnitTests
-     * @constructor
-     */
-    constructor() {       
-    }
+    public static DefaultTolerance: number = 0.001;
 
     /**
      * @description Determines whether two matrices are equal within the given tolerance.
@@ -42,16 +33,16 @@ export class UnitTests {
      * @param {string} property Property name.
      * @param {number} [tolerance=UnitTests.DefaultVectorTolerance] Tolerance.
      */
-    static matricesEqualWithinTolerance(m1 : THREE.Matrix, m2: THREE.Matrix, property : string, tolerance = UnitTests.DefaultTolerance) {
+    public static matricesEqualWithinTolerance(m1: THREE.Matrix, m2: THREE.Matrix, property: string, tolerance = UnitTests.DefaultTolerance) {
 
-        let formatTag = 'TAG';
-        let errorMessage = `${property}: M[${formatTag}] of the matrices are not equal within ${tolerance}`
-        
-        let m1Elements = m1.elements;
-        let m2Elements = m2.elements;
+        const formatTag = "TAG";
+        const errorMessage = `${property}: M[${formatTag}] of the matrices are not equal within ${tolerance}`;
+
+        const m1Elements = m1.elements;
+        const m2Elements = m2.elements;
         assert.equal(m1Elements.length, m2Elements.length);
 
-        let length = m1Elements.length;
+        const length = m1Elements.length;
         for (let iElement = 0; iElement < length; iElement++) {
             assert.closeTo(m1Elements[iElement], m2Elements[iElement], tolerance, errorMessage.replace(formatTag, iElement.toString()));
         }
@@ -65,7 +56,7 @@ export class UnitTests {
      * @param {string} property Property name.
      * @param {number} [tolerance=UnitTests.DefaultVectorTolerance] Tolerance.
      */
-    static scalarsEqualWithinTolerance(s1 : number, s2: number, property : string, tolerance = UnitTests.DefaultTolerance) {
+    public static scalarsEqualWithinTolerance(s1: number, s2: number, property: string, tolerance = UnitTests.DefaultTolerance) {
 
         assert.closeTo(s1, s2, tolerance, `${property}: The values of the scalars are not equal within ${tolerance}`);
     }
@@ -78,13 +69,13 @@ export class UnitTests {
      * @param {string} property Property name.
      * @param {number} [tolerance=UnitTests.DefaultVectorTolerance] Tolerance.
      */
-    static vectorsEqualWithinTolerance(v1 : THREE.Vector3, v2: THREE.Vector3, property : string, tolerance = UnitTests.DefaultTolerance) {
+    public static vectorsEqualWithinTolerance(v1: THREE.Vector3, v2: THREE.Vector3, property: string, tolerance = UnitTests.DefaultTolerance) {
 
-        let formatTag = 'TAG';
-        let errorMessage = `${property}: The ${formatTag} values of the vectors are not equal within ${tolerance}`
-        assert.closeTo(v1.x, v2.x, tolerance, errorMessage.replace(formatTag, 'X'));
-        assert.closeTo(v1.y, v2.y, tolerance, errorMessage.replace(formatTag, 'Y'));
-        assert.closeTo(v1.z, v2.z, tolerance, errorMessage.replace(formatTag, 'Z'));
+        const formatTag = "TAG";
+        const errorMessage = `${property}: The ${formatTag} values of the vectors are not equal within ${tolerance}`;
+        assert.closeTo(v1.x, v2.x, tolerance, errorMessage.replace(formatTag, "X"));
+        assert.closeTo(v1.y, v2.y, tolerance, errorMessage.replace(formatTag, "Y"));
+        assert.closeTo(v1.z, v2.z, tolerance, errorMessage.replace(formatTag, "Z"));
     }
 
     /**
@@ -95,25 +86,25 @@ export class UnitTests {
      * @param {string} property Property name.
      * @param {number} [tolerance=UnitTests.DefaultVectorTolerance] Tolerance.
      */
-    static quaternionsEqualWithinTolerance(q1 : THREE.Quaternion, q2: THREE.Quaternion, property : string, tolerance = UnitTests.DefaultTolerance) {
+    public static quaternionsEqualWithinTolerance(q1: THREE.Quaternion, q2: THREE.Quaternion, property: string, tolerance = UnitTests.DefaultTolerance) {
 
-        let formatTag = 'TAG';
-        let errorMessage = `${property}: The ${formatTag} values of the quaternions are not equal within ${tolerance}`
-        assert.closeTo(q1.x, q2.x, tolerance, errorMessage.replace(formatTag, 'X'));
-        assert.closeTo(q1.y, q2.y, tolerance, errorMessage.replace(formatTag, 'Y'));
-        assert.closeTo(q1.z, q2.z, tolerance, errorMessage.replace(formatTag, 'Z'));
-        assert.closeTo(q1.w, q2.w, tolerance, errorMessage.replace(formatTag, 'W'));
+        const formatTag = "TAG";
+        const errorMessage = `${property}: The ${formatTag} values of the quaternions are not equal within ${tolerance}`;
+        assert.closeTo(q1.x, q2.x, tolerance, errorMessage.replace(formatTag, "X"));
+        assert.closeTo(q1.y, q2.y, tolerance, errorMessage.replace(formatTag, "Y"));
+        assert.closeTo(q1.z, q2.z, tolerance, errorMessage.replace(formatTag, "Z"));
+        assert.closeTo(q1.w, q2.w, tolerance, errorMessage.replace(formatTag, "W"));
     }
 
     /**
      * @description Returns a random scalar within the given range.
      * @static
      * @param {number} scale The range of the scalar. (default = 1).
-     * @returns {number} 
+     * @returns {number}
      */
-    static generateScalar(scale : number = 1) : number {
+    public static generateScalar(scale: number = 1): number {
 
-        let scalar = Math.random() * scale;
+        const scalar = Math.random() * scale;
         return scalar;
     }
 
@@ -121,22 +112,22 @@ export class UnitTests {
      * @description Returns a 3D vector with random coordinates.
      * @static
      * @param {number} scale The range of a coordinate. (default = 1).
-     * @returns {THREE.Vector3} 
+     * @returns {THREE.Vector3}
      */
-    static generateVector3(scale : number = 1) : THREE.Vector3 {
+    public static generateVector3(scale: number = 1): THREE.Vector3 {
 
-        let vector = new THREE.Vector3(Math.random() * scale, Math.random() * scale, Math.random() * scale);
+        const vector = new THREE.Vector3(Math.random() * scale, Math.random() * scale, Math.random() * scale);
         return vector;
     }
 
     /**
      * @description Returns a quaternion with random values.
      * @static
-     * @returns {THREE.Quaternion} 
+     * @returns {THREE.Quaternion}
      */
-    static generateQuaternion() : THREE.Quaternion {
+    public static generateQuaternion(): THREE.Quaternion {
 
-        let quaternion = new THREE.Quaternion(Math.random(), Math.random(), Math.random(), Math.random());
+        const quaternion = new THREE.Quaternion(Math.random(), Math.random(), Math.random(), Math.random());
         return quaternion;
     }
 
@@ -146,29 +137,28 @@ export class UnitTests {
      * @param {THREE.PerspectiveCamera} c1 First camera to compare.
      * @param {THREE.PerspectiveCamera} c2 Second camera to compare.
      */
-    static comparePerspectiveCameras (c1 : THREE.PerspectiveCamera, c2 : THREE.PerspectiveCamera) {
+    public static comparePerspectiveCameras(c1: THREE.PerspectiveCamera, c2: THREE.PerspectiveCamera) {
 
         try {
-            this.scalarsEqualWithinTolerance(c1.fov, c2.fov, 'fov');
-            this.scalarsEqualWithinTolerance(c1.aspect, c2.aspect, 'aspect');
-            this.scalarsEqualWithinTolerance(c1.near, c2.near, 'near');
-            this.scalarsEqualWithinTolerance(c1.far, c2.far, 'far');
+            this.scalarsEqualWithinTolerance(c1.fov, c2.fov, "fov");
+            this.scalarsEqualWithinTolerance(c1.aspect, c2.aspect, "aspect");
+            this.scalarsEqualWithinTolerance(c1.near, c2.near, "near");
+            this.scalarsEqualWithinTolerance(c1.far, c2.far, "far");
 
-            this.vectorsEqualWithinTolerance(c1.position, c2.position, 'position');
+            this.vectorsEqualWithinTolerance(c1.position, c2.position, "position");
 
-            this.matricesEqualWithinTolerance(c1.matrix, c2.matrix, 'matrix');
-            this.matricesEqualWithinTolerance(c1.projectionMatrix, c2.projectionMatrix, 'projectionMatrix');
+            this.matricesEqualWithinTolerance(c1.matrix, c2.matrix, "matrix");
+            this.matricesEqualWithinTolerance(c1.projectionMatrix, c2.projectionMatrix, "projectionMatrix");
 
-            this.vectorsEqualWithinTolerance(c1.scale, c2.scale, 'scale');
+            this.vectorsEqualWithinTolerance(c1.scale, c2.scale, "scale");
 
-            this.vectorsEqualWithinTolerance(c1.up, c2.up, 'up');
+            this.vectorsEqualWithinTolerance(c1.up, c2.up, "up");
 
-            // WIP: THese camera properties do not roundtrip however the matrix and projectMatrix do roundtrip correctly.    
+            // WIP: These camera properties do not roundtrip however the matrix and projectionMatrix do roundtrip correctly.
             // this.quaternionsEqualWithinTolerance(c1.quaternion, c2.quaternion, 'quaternion');
             // this.vectorsEqualWithinTolerance(c1.getWorldDirection(), c2.getWorldDirection(), 'worldDirection');
-            
-        }
-        catch(exception) {
+
+        } catch (exception) {
             Services.defaultLogger.addErrorMessage(`Cameras are not equal: ${exception.message}`);
         }
     }
@@ -177,46 +167,50 @@ export class UnitTests {
      * @description Tests whether a Perspective camera can be re-constructed from the DTO Camera properties.
      * @static
      */
-    static cameraRoundTrip() {
+    public static cameraRoundTrip() {
 
-        let trials = 10;
+        // WIP: Randomly generated cameras do not roundtrip the matrix property. However, cameras created and manipulated through views work fine.
+
+        const trials = 10;
         for (let iTrial = 0; iTrial < trials; iTrial++) {
 
             // construct random PerspectiveCamera
-            let fieldOfView       = this.generateScalar(50);
-            let aspect            = this.generateScalar(1.0);
-            let nearClippingPlane = this.generateScalar(10);
-            let farClippingPlane  = nearClippingPlane + this.generateScalar(Camera.DefaultFarClippingPlane);
+            const fieldOfView       = this.generateScalar(50);
+            const aspect            = this.generateScalar(1.0);
+            const nearClippingPlane = this.generateScalar(10);
+            const farClippingPlane  = nearClippingPlane + this.generateScalar(DefaultCameraSettings.FarClippingPlane);
 
-            let perspectiveCamera = new THREE.PerspectiveCamera(fieldOfView, aspect, nearClippingPlane, farClippingPlane);
+            const perspectiveCamera = new THREE.PerspectiveCamera(fieldOfView, aspect, nearClippingPlane, farClippingPlane);
 
-            let position    = this.generateVector3(500);
-            let quaternion  = this.generateQuaternion();
-            let scale       = this.generateVector3();
-            let up          = this.generateVector3();
+            const position    = this.generateVector3(500);
+            const quaternion  = this.generateQuaternion();
+            const scale       = this.generateVector3();
+            const up          = this.generateVector3();
             perspectiveCamera.matrix.compose(position, quaternion, scale);
             perspectiveCamera.up.copy(up);
 
             // set position/rotation/scale attributes
-            perspectiveCamera.matrix.decompose(perspectiveCamera.position, perspectiveCamera.quaternion, perspectiveCamera.scale); 
+            perspectiveCamera.matrix.decompose(perspectiveCamera.position, perspectiveCamera.quaternion, perspectiveCamera.scale);
 
+            perspectiveCamera.updateMatrix();
+            perspectiveCamera.updateMatrixWorld(true);
             perspectiveCamera.updateProjectionMatrix();
 
             // constructor
-            let camera = new Camera ({
+            const camera = new PerspectiveCamera ({
                 id          : 1,
                 name        : "Perspective Camera",
-                description : "This camera has random properties.",       
-                }, 
+                description : "This camera has random properties.",
+                },
                 perspectiveCamera);
 
-            let cameraModel = camera.toDtoModel();
-            Camera.fromDtoModelAsync(cameraModel).then(cameraRoundtrip => {
-                let c1 = camera.viewCamera;
-                let c2 = cameraRoundtrip.viewCamera;       
-                
+            const cameraModel = camera.toDtoModel();
+            CameraFactory.constructFromDtoModelAsync(cameraModel).then((cameraRoundtrip) => {
+                const c1 = camera.viewCamera;
+                const c2 = cameraRoundtrip.viewCamera as THREE.PerspectiveCamera;
+
                 this.comparePerspectiveCameras(c1, c2);
-            })
+            });
         }
     }
 
@@ -224,71 +218,71 @@ export class UnitTests {
      * @description Round trip an array of bytes.
      * @static
      */
-    static async binaryRoundtripAsync() : Promise<void> {
+    public static async binaryRoundtripAsync(): Promise<void> {
 
         // Arrange
-        let originalByteArray = new Uint8Array(256);
+        const originalByteArray = new Uint8Array(256);
         for (let iByte = 0; iByte < 256; iByte++) {
             originalByteArray[iByte] = iByte;
         }
 
-        let depthBuffer = new Dto.DepthBuffer({
+        const depthBuffer = new Dto.DepthBuffer({
             name : "DepthBuffer",
             description: "Unit Test",
             format: DepthBufferFormat.SDB,
             width: 16,
-            height: 16
+            height: 16,
         });
-        let depthBufferModel = await depthBuffer.postFileAsync(originalByteArray);
+        const depthBufferModel = await depthBuffer.postFileAsync(originalByteArray);
 
         // Act
-        let readByteArray = await depthBufferModel.getFileAsync();
+        const readByteArray = await depthBufferModel.getFileAsync();
 
         // Assert
-        assert.deepEqual(originalByteArray, readByteArray, "Byte arrays are equal.")  
-    }   
+        assert.deepEqual(originalByteArray, readByteArray, "Byte arrays are equal.");
+    }
 
-    static vertexMapping (depthBuffer : DepthBuffer, mesh : THREE.Mesh) {
+    public static vertexMapping(depthBuffer: DepthBuffer, mesh: THREE.Mesh) {
 
-        let meshGeometry : THREE.Geometry = <THREE.Geometry> mesh.geometry;
+        const meshGeometry: THREE.Geometry = mesh.geometry as THREE.Geometry;
         meshGeometry.computeBoundingBox();
-        let boundingBox = meshGeometry.boundingBox;
+        const boundingBox = meshGeometry.boundingBox;
 
         // width  = 3              3   4   5
         // column = 2              0   1   2
         // buffer length = 6
 
-        // Test Points            
-        let lowerLeft  = boundingBox.min;
-        let lowerRight = new THREE.Vector3 (boundingBox.max.x, boundingBox.min.y, 0);
-        let upperRight = boundingBox.max;
-        let upperLeft  = new THREE.Vector3 (boundingBox.min.x, boundingBox.max.y, 0);
-        let center     = boundingBox.getCenter();
+        // Test Points
+        const lowerLeft  = boundingBox.min;
+        const lowerRight = new THREE.Vector3 (boundingBox.max.x, boundingBox.min.y, 0);
+        const upperRight = boundingBox.max;
+        const upperLeft  = new THREE.Vector3 (boundingBox.min.x, boundingBox.max.y, 0);
+        const center     = boundingBox.getCenter();
 
         // Expected Values
-        let bufferLength    : number = (depthBuffer.width * depthBuffer.height);
+        const bufferLength: number = (depthBuffer.width * depthBuffer.height);
 
-        let firstColumn   : number = 0;
-        let lastColumn    : number = depthBuffer.width - 1;
-        let centerColumn  : number = Math.round(depthBuffer.width / 2);
-        let firstRow      : number = 0;
-        let lastRow       : number = depthBuffer.height - 1;
-        let centerRow     : number = Math.round(depthBuffer.height / 2);
+        const firstColumn: number = 0;
+        const lastColumn: number = depthBuffer.width - 1;
+        const centerColumn: number = Math.round(depthBuffer.width / 2);
+        const firstRow: number = 0;
+        const lastRow: number = depthBuffer.height - 1;
+        const centerRow: number = Math.round(depthBuffer.height / 2);
 
-        let lowerLeftIndex  : number = 0;
-        let lowerRightIndex : number = depthBuffer.width - 1;
-        let upperRightIndex : number = bufferLength - 1;
-        let upperLeftIndex  : number = bufferLength - depthBuffer.width;
-        let centerIndex     : number = (centerRow * depthBuffer.width) +  Math.round(depthBuffer.width / 2);
+        const lowerLeftIndex: number = 0;
+        const lowerRightIndex: number = depthBuffer.width - 1;
+        const upperRightIndex: number = bufferLength - 1;
+        const upperLeftIndex: number = bufferLength - depthBuffer.width;
+        const centerIndex: number = (centerRow * depthBuffer.width) +  Math.round(depthBuffer.width / 2);
 
-        let lowerLeftIndices  : THREE.Vector2 = new THREE.Vector2(firstRow, firstColumn);
-        let lowerRightIndices : THREE.Vector2 = new THREE.Vector2(firstRow, lastColumn);
-        let upperRightIndices : THREE.Vector2 = new THREE.Vector2(lastRow, lastColumn);
-        let upperLeftIndices  : THREE.Vector2 = new THREE.Vector2(lastRow, firstColumn);
-        let centerIndices     : THREE.Vector2 = new THREE.Vector2(centerRow, centerColumn);
-        
-        let index   : number
-        let indices : THREE.Vector2;
+        const lowerLeftIndices: THREE.Vector2 = new THREE.Vector2(firstRow, firstColumn);
+        const lowerRightIndices: THREE.Vector2 = new THREE.Vector2(firstRow, lastColumn);
+        const upperRightIndices: THREE.Vector2 = new THREE.Vector2(lastRow, lastColumn);
+        const upperLeftIndices: THREE.Vector2 = new THREE.Vector2(lastRow, firstColumn);
+        const centerIndices: THREE.Vector2 = new THREE.Vector2(centerRow, centerColumn);
+
+        let index: number;
+        let indices: THREE.Vector2;
 
         // Lower Left
         indices = depthBuffer.getModelVertexIndices(lowerLeft, boundingBox);
@@ -325,5 +319,13 @@ export class UnitTests {
         index = depthBuffer.getModelVertexIndex(center, boundingBox);
         assert.equal(index, centerIndex);
     }
-} 
+
+    /**
+     * Default constructor
+     * @class UnitTests
+     * @constructor
+     */
+    constructor() {
+    }
+}
 

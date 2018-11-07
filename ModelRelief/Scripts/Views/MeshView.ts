@@ -1,19 +1,16 @@
-﻿// ------------------------------------------------------------------------// 
+﻿
+// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as THREE  from 'three' 
-import * as dat    from 'dat-gui'
-
-import { HtmlLibrary, ElementIds }            from 'Html';
-import { FileModel }                          from 'FileModel';
-import { ILogger, ConsoleLogger }             from 'Logger';
-import { MeshViewer }                         from 'MeshViewer';
-import { Services }                           from 'Services';
-import { Viewer }                             from 'Viewer';
+import {FileModel} from "Scripts/Api/V1/Models/FileModel";
+import {ElementIds} from "Scripts/System/Html";
+import {CameraControls} from "Scripts/Viewers/CameraControls";
+import {MeshViewer} from "Scripts/Viewers/MeshViewer";
+import {MeshViewerControls} from "Scripts/Viewers/MeshViewerControls";
 
 /**
  * @description UI View of a Mesh.
@@ -22,19 +19,21 @@ import { Viewer }                             from 'Viewer';
  */
 export class MeshView {
 
-    _containerId               : string;
-    _meshViewer                : MeshViewer;
-    
+    private _containerId: string;
+    private _meshViewer: MeshViewer;
+    private _cameraControls: CameraControls;
+    private _meshViewerControls: MeshViewerControls;
+
     /**
      * Creates an instance of MeshView.
-     * @param {string} containerId 
+     * @param {string} containerId
      * @param {FileModel} model Initial model to load.
      */
-    constructor(containerId : string, model : FileModel) {  
+    constructor(containerId: string, model: FileModel) {
 
-        this._containerId = containerId;    
+        this._containerId = containerId;
         this.initialize(model);
-    } 
+    }
 
 //#region Properties
     /**
@@ -55,7 +54,7 @@ export class MeshView {
     get meshViewer(): MeshViewer {
 
         return this._meshViewer;
-    }        
+    }
 //#endregion
 
 //#region Event Handlers
@@ -66,12 +65,23 @@ export class MeshView {
      * @description Performs initialization.
      * @param {FileModel} model Initial model to load.
      */
-    initialize(model : FileModel) {
+    public initialize(model: FileModel) {
 
-        // Mesh Viewer    
-        this._meshViewer = new MeshViewer('MeshViewer', ElementIds.MeshCanvas, model);
+        // Mesh Viewer
+        this._meshViewer = new MeshViewer("MeshViewer", ElementIds.MeshCanvas, model);
+
+        // Camera Controls
+        const cameraControlsOptions = {
+            cameraHelper     : false,
+            fieldOfView      : false,
+            clippingControls : false,
+        };
+        this._cameraControls = new CameraControls(this._meshViewer, cameraControlsOptions);
+
+        // MeshViewer Controls
+        this._meshViewerControls = new MeshViewerControls(this._meshViewer);
     }
-    
+
 //#endregion
 }
 

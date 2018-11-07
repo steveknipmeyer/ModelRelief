@@ -23,22 +23,33 @@ namespace ModelRelief.Database
     using ModelRelief.Domain;
     using ModelRelief.Services;
     using ModelRelief.Utility;
+    using Newtonsoft.Json;
 
     using static ModelRelief.Services.StorageManager;
 
     public class DbInitializer
     {
-        private bool                            ExitAfterInitialization  { get; set; }
-        private IServiceProvider                Services { get; set; }
-        private IHostingEnvironment             HostingEnvironment  { get; set; }
-        private Services.IConfigurationProvider ConfigurationProvider  { get; set; }
-        private ModelReliefDbContext            DbContext  { get; set; }
-        private UserManager<ApplicationUser>    UserManager  { get; set; }
-        private ILogger<DbInitializer>          Logger  { get; set; }
-        private IStorageManager                 StorageManager { get; set; }
+        private bool ExitAfterInitialization { get; set; }
+        private IServiceProvider Services { get; set; }
+        private IHostingEnvironment HostingEnvironment { get; set; }
+        private Services.IConfigurationProvider ConfigurationProvider { get; set; }
+        private ModelReliefDbContext DbContext { get; set; }
+        private UserManager<ApplicationUser> UserManager { get; set; }
+        private ILogger<DbInitializer> Logger { get; set; }
+        private IStorageManager StorageManager { get; set; }
 
-        private string                          StoreUsersPath { get; set; }
-        private string                          SqlitePath { get; set; }
+        private string StoreUsersPath { get; set; }
+        private string SqlitePath { get; set; }
+
+        /// <summary>
+        /// User Accounts
+        /// </summary>
+        private class UserAccounts
+        {
+            public static readonly string Test = "TestAccount";
+            public static readonly string ArtCAM = "ArtCAMAccount";
+            public static readonly string Vectric = "VectricAccount";
+        }
 
         /// <summary>
         /// Test Project Names
@@ -46,9 +57,9 @@ namespace ModelRelief.Database
         private class ProjectNames
         {
             public static readonly string Architecture = "Architecture";
-            public static readonly string Jewelry      = "Jewelry";
-            public static readonly string ModelRelief  = "ModelRelief";
-            public static readonly string Stanford     = "Stanford";
+            public static readonly string Jewelry = "Jewelry";
+            public static readonly string ModelRelief = "ModelRelief";
+            public static readonly string Stanford = "Stanford";
         }
 
         /// <summary>
@@ -77,7 +88,7 @@ namespace ModelRelief.Database
             if (UserManager == null)
                 throw new ArgumentNullException(nameof(UserManager));
 
-            Logger  = services.GetRequiredService<ILogger<DbInitializer>>();
+            Logger = services.GetRequiredService<ILogger<DbInitializer>>();
             if (Logger == null)
                 throw new ArgumentNullException(nameof(Logger));
 
@@ -152,15 +163,22 @@ namespace ModelRelief.Database
         {
             EnsureServerInitialized();
 
-            if (ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRInitializeUserStore))
-                InitializeUserStore();
+            // update test data from existing data
+            if (ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRUpdateSeedData))
+            {
+                UpdateSeedDataAsync().Wait();
+            }
 
+            // create new database
             if (ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRInitializeDatabase))
             {
-                InitializeDatabase().Wait();
+                InitializeDatabaseAsync().Wait();
+
+                // add test data
                 if (ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRSeedDatabase))
                 {
-                    SeedDatabaseForTestUsers().Wait();
+                    InitializeUserStore();
+                    SeedDatabaseForTestUsersAsync().Wait();
                 }
             }
         }
@@ -168,7 +186,7 @@ namespace ModelRelief.Database
         /// <summary>
         /// Populate the database schema.
         /// </summary>
-        public async Task InitializeDatabase()
+        public async Task InitializeDatabaseAsync()
         {
             Logger.LogInformation($"Preparing to initialize database.");
             try
@@ -244,11 +262,11 @@ namespace ModelRelief.Database
                         string targetPath = string.Empty;
                         try
                         {
-                        sourcePath = Path.Combine(databaseFolder, restore ? entry.Key : entry.Value);
-                        targetPath = Path.Combine(databaseFolder, restore ? entry.Value : entry.Key);
-                        Logger.LogInformation($"Database file copy : ({sourcePath} -> {targetPath})");
-                        File.Copy(sourcePath, targetPath, overwrite: true);
-                        fileCopied = true;
+                            sourcePath = Path.Combine(databaseFolder, restore ? entry.Key : entry.Value);
+                            targetPath = Path.Combine(databaseFolder, restore ? entry.Value : entry.Key);
+                            Logger.LogInformation($"Database file copy : ({sourcePath} -> {targetPath})");
+                            File.Copy(sourcePath, targetPath, overwrite: true);
+                            fileCopied = true;
                         }
                         catch (Exception ex)
                         {
@@ -269,18 +287,18 @@ namespace ModelRelief.Database
         /// Seeds the database with test data.
         /// </summary>
         /// <returns></returns>
-        private async Task SeedDatabaseForTestUsers()
+        private async Task SeedDatabaseForTestUsersAsync()
         {
             var userAccounts = new List<string>
             {
-                "TestAccount",
-                "ArtCAMAccount",
-                "VectricAccount",
+                UserAccounts.Test,
+                UserAccounts.ArtCAM,
+                UserAccounts.Vectric,
             };
 
             foreach (var account in userAccounts)
             {
-                var user = await AddUser(account);
+                var user = await AddUserAsync(account);
                 SeedDatabaseForUser(user);
             }
 
@@ -341,7 +359,7 @@ namespace ModelRelief.Database
             if (!ExitAfterInitialization)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Delete the user store folder: {storeUsersPath} (Y/N)?");
+                Console.WriteLine($"Delete the user store folder: {StoreUsersPath} (Y/N)?");
                 Console.ForegroundColor = ConsoleColor.White;
                 var response = Console.ReadLine();
                 if (!string.Equals(response.ToUpper(), "Y"))
@@ -360,15 +378,15 @@ namespace ModelRelief.Database
         /// <param name="user">Owning user.</param>
         private void SeedUserStore(ApplicationUser user)
         {
-            CopyTestFiles<Domain.Model3d>(user, "Paths:ResourceFolders:Model3d");
-            CopyTestFiles<Domain.DepthBuffer>(user, "Paths:ResourceFolders:DepthBuffer");
-            CopyTestFiles<Domain.Mesh>(user, "Paths:ResourceFolders:Mesh");
+            CopySeedDataFilesToStore<Domain.Model3d>(user, "Paths:ResourceFolders:Model3d");
+            CopySeedDataFilesToStore<Domain.DepthBuffer>(user, "Paths:ResourceFolders:DepthBuffer");
+            CopySeedDataFilesToStore<Domain.Mesh>(user, "Paths:ResourceFolders:Mesh");
         }
 
         /// <summary>
         /// Add test users.
         /// </summary>
-        private async Task<ApplicationUser> AddUser(string accountName)
+        private async Task<ApplicationUser> AddUserAsync(string accountName)
         {
             var userNameSetting = $"{accountName}:UserName";
             var passwordSetting = $"{accountName}:Password";
@@ -376,7 +394,7 @@ namespace ModelRelief.Database
 
             var userName = ConfigurationProvider.GetSetting(userNameSetting);
             var password = ConfigurationProvider.GetSetting(passwordSetting);
-            var id       = ConfigurationProvider.GetSetting(idSetting);
+            var id = ConfigurationProvider.GetSetting(idSetting);
 
             var user = new ApplicationUser() { UserName = $"{userName}", Id = $"{id}" };
             var createResult = await UserManager.CreateAsync(user, $"{password}");
@@ -414,196 +432,16 @@ namespace ModelRelief.Database
         /// <param name="user">Owning user.</param>
         private void AddCameras(ApplicationUser user)
         {
-            var cameras = new Camera[]
+            var cameraList = ImportEntityJSON<Camera>("Paths:ResourceFolders:Camera");
+            foreach (var camera in cameraList)
             {
-                // Generic Cameras
-                new Camera
-                {
-                    Name = "Top Camera", Description = "Aligned along negative Z",
-                    FieldOfView = Camera.DefaultFieldOfView,
-                    AspectRatio = 1.0,
-                    Near = Camera.DefaultNearClippingPlane, Far = Camera.DefaultFarClippingPlane,
+                camera.Id = 0;
+                camera.User = user;
+                if (camera.Project != null)
+                    camera.Project = FindByName<Project>(user, camera.Project?.Name);
+            }
 
-                    PositionX = 0.0, PositionY = 0.0, PositionZ = 100.0,
-                    EulerX = 0.0, EulerY = 0.0, EulerZ = -1.0, Theta = 0.0,
-                    ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
-                    UpX = 0.0, UpY = 1.0, UpZ = 0.0,
-
-                    User = user, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
-                },
-
-                new Camera
-                {
-                    Name = "Isometric Camera", Description = "Isometric",
-                    FieldOfView = Camera.DefaultFieldOfView,
-                    AspectRatio = 1.0,
-                    Near = Camera.DefaultNearClippingPlane, Far = Camera.DefaultFarClippingPlane,
-
-                    PositionX = 10.0, PositionY = 100.0, PositionZ = 100.0,
-                    EulerX = -1.0, EulerY = -1.0, EulerZ = -1.0, Theta = 0.0,
-                    ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
-                    UpX = 0.0, UpY = 1.0, UpZ = 0.0,
-
-                    User = user, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
-                },
-
-                // Model Specific Cameras
-                new Camera
-                {
-                    Name = "Armadillo", Description = "Armadillo Model",
-                    FieldOfView = Camera.DefaultFieldOfView,
-                    AspectRatio = 1.0,
-                    Near = 232.05, Far = 339.50,
-                    PositionX = -1.82, PositionY = 47.98, PositionZ = 262.32,
-                    EulerX = 0.0475, EulerY = 0.0, EulerZ = 0.0, Theta = 1.0,
-                    ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
-                    UpX = 0.0, UpY = 1.0, UpZ = 0.0,
-
-                    User = user, Project = FindByName<Project>(user, "Stanford"),
-                },
-                new Camera
-                {
-                    Name = "Buddha", Description = "Buddha Model",
-                    FieldOfView = Camera.DefaultFieldOfView,
-                    AspectRatio = 1.0,
-                    Near = 222.23, Far = 283.75,
-
-                    PositionX = -3.00, PositionY = 79.11, PositionZ = 252.03,
-                    EulerX = -0.01, EulerY = -0.01, EulerZ = 0.0, Theta = 1.0,
-                    ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
-                    UpX = 0.0, UpY = 1.0, UpZ = 0.0,
-
-                    User = user, Project = FindByName<Project>(user, "Stanford"),
-                },
-                new Camera
-                {
-                    Name = "Bunny", Description = "Bunny Model",
-                    FieldOfView = Camera.DefaultFieldOfView,
-                    AspectRatio = 1.0,
-                    Near = 132.85, Far = 201.95,
-
-                    PositionX = -0.34, PositionY = 43.17, PositionZ = 167.44,
-                    EulerX = 0.0, EulerY = 0.0, EulerZ = 0.0, Theta = 1.0,
-                    ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
-                    UpX = 0.0, UpY = 1.0, UpZ = 0.0,
-
-                    User = user, Project = FindByName<Project>(user, "Stanford"),
-                },
-                new Camera
-                {
-                    Name = "Dolphin", Description = "Dolphin Model",
-                    FieldOfView = Camera.DefaultFieldOfView,
-                    AspectRatio = 1.0,
-                    Near = 355.49, Far = 800.22,
-
-                    PositionX = 117.67, PositionY = -192.35, PositionZ = 511.19,
-                    EulerX = 0.23, EulerY = 0.11, EulerZ = -0.03, Theta = 0.97,
-                    ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
-                    UpX = 0.10, UpY = 0.90, UpZ = 0.43,
-
-                    User = user, Project = FindByName<Project>(user, ProjectNames.Jewelry),
-                },
-                new Camera
-                {
-                    Name = "Dragon", Description = "Dragon Model",
-                    FieldOfView = Camera.DefaultFieldOfView,
-                    AspectRatio = 1.0,
-                    Near = 145.41, Far = 190.31,
-
-                    PositionX = -1.92, PositionY = 61.41, PositionZ = 160.73,
-                    EulerX = -0.08, EulerY = -0.01, EulerZ = 0.0, Theta = 1.0,
-                    ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
-                    UpX = 0.0, UpY = 1.0, UpZ = 0.0,
-
-                    User = user, Project = FindByName<Project>(user, "Stanford"),
-                },
-                new Camera
-                {
-                    Name = "House", Description = "House Model",
-                    FieldOfView = Camera.DefaultFieldOfView,
-                    AspectRatio = 1.0,
-                    Near = 209.28, Far = 369.43,
-
-                    PositionX = 194.81, PositionY = 51.82, PositionZ = 214.04,
-                    EulerX = 0.04, EulerY = 0.36, EulerZ = -0.01, Theta = 0.93,
-                    ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
-                    UpX = 0.06, UpY = 1.0, UpZ = 0.07,
-
-                    User = user, Project = FindByName<Project>(user, ProjectNames.Architecture),
-                },
-                new Camera
-                {
-                    Name = "Lucy", Description = "Lucy Model",
-                    FieldOfView = Camera.DefaultFieldOfView,
-                    AspectRatio = 1.0,
-                    Near = 238.39, Far = 292.00,
-
-                    PositionX = -3.16, PositionY = 79.32, PositionZ = 265.07,
-                    EulerX = 0.0, EulerY = 0.0, EulerZ = 0.0, Theta = 1.0,
-                    ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
-                    UpX = 0.0, UpY = 1.0, UpZ = 0.0,
-
-                    User = user, Project = FindByName<Project>(user, "Stanford"),
-                },
-                new Camera
-                {
-                    Name = "Roadster", Description = "Roadster Model",
-                    FieldOfView = Camera.DefaultFieldOfView,
-                    AspectRatio = 1.0,
-                    Near = 534.84, Far = 1028.02,
-
-                    PositionX = -419.61, PositionY = 189.93, PositionZ = 644.02,
-                    EulerX = -0.07, EulerY = -0.29, EulerZ = 0.0, Theta = 0.96,
-                    ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
-                    UpX = 0.05, UpY = 0.99, UpZ = -0.13,
-
-                    User = user, Project = FindByName<Project>(user, ProjectNames.Jewelry),
-                },
-                new Camera
-                {
-                    Name = "Statue", Description = "Statue Model",
-                    FieldOfView = Camera.DefaultFieldOfView,
-                    AspectRatio = 1.0,
-                    Near = 299.54, Far = 401.68,
-
-                    PositionX = -4.16, PositionY = 72.49, PositionZ = 358.58,
-                    EulerX = 0.04, EulerY = -0.01, EulerZ = 0.0, Theta = 1.0,
-                    ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
-                    UpX = 0.0, UpY = 1.0, UpZ = 0.0,
-
-                    User = user, Project = FindByName<Project>(user, "Stanford"),
-                },
-                new Camera
-                {
-                    Name = "Tyrannosaurus", Description = "Tyrannosarus Model",
-                    FieldOfView = Camera.DefaultFieldOfView,
-                    AspectRatio = 1.0,
-                    Near = 228.35, Far = 469.87,
-
-                    PositionX = 0.00, PositionY = 75.56, PositionZ = 310.00,
-                    EulerX = 0.00, EulerY = 0.0, EulerZ = 0.0, Theta = 1.00,
-                    ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
-                    UpX = 0.0, UpY = 1.00, UpZ = 0.0,
-
-                    User = user, Project = FindByName<Project>(user, "Stanford"),
-                },
-                new Camera
-                {
-                    Name = "Test", Description = "Test Model",
-                    FieldOfView = Camera.DefaultFieldOfView,
-                    AspectRatio = 1.0,
-                    Near = 148.69, Far = 199.42,
-
-                    PositionX = 25.00, PositionY = 201.06, PositionZ = -46.50,
-                    EulerX = -0.71, EulerY = 0.0, EulerZ = 0.0, Theta = 0.71,
-                    ScaleX = 1.0, ScaleY = 1.0, ScaleZ = 1.0,
-                    UpX = 0.0, UpY = 0.0, UpZ = -1.0,
-
-                    User = user, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
-                },
-            };
-
-            foreach (Camera camera in cameras)
+            foreach (Camera camera in cameraList)
             {
                 DbContext.Cameras.Add(camera);
             }
@@ -693,110 +531,16 @@ namespace ModelRelief.Database
         /// <param name="user">Owning user.</param>
         private void AddMeshTransforms(ApplicationUser user)
         {
-            var meshTransforms = new MeshTransform[]
+            var meshTransformList = ImportEntityJSON<MeshTransform>("Paths:ResourceFolders:MeshTransform");
+            foreach (var meshtransform in meshTransformList)
             {
-                // Generic MeshTransforms
-                new MeshTransform
-                {
-                    Name = "Identity", Description = "Default transform",
-                    Width = 100.0, Height = 100.0, Depth = 1.0,
-                    GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = user, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
-                },
+                meshtransform.Id = 0;
+                meshtransform.User = user;
+                if (meshtransform.Project != null)
+                    meshtransform.Project = FindByName<Project>(user, meshtransform.Project?.Name);
+            }
 
-                // Model-specific MeshTransforms
-                new MeshTransform
-                {
-                    Name = "Armadillo", Description = "Armadillo transform",
-                    Width = 100.0, Height = 100.0, Depth = 1.0,
-                    GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.9, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 6.0,
-                    P1 = 0.02, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = user, Project = FindByName<Project>(user, "Stanford"),
-                },
-                new MeshTransform
-                {
-                    Name = "Bunny", Description = "Bunny transform",
-                    Width = 100.0, Height = 100.0, Depth = 1.0,
-                    GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = user, Project = FindByName<Project>(user, "Stanford"),
-                },
-                new MeshTransform
-                {
-                    Name = "Buddha", Description = "Buddha transform",
-                    Width = 100.0, Height = 100.0, Depth = 1.0,
-                    GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = user, Project = FindByName<Project>(user, "Stanford"),
-                },
-                new MeshTransform
-                {
-                    Name = "Dolphin", Description = "Dolphin transform",
-                    Width = 100.0, Height = 100.0, Depth = 1.0,
-                    GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = user, Project = FindByName<Project>(user, ProjectNames.Jewelry),
-                },
-                new MeshTransform
-                {
-                    Name = "Dragon", Description = "Dragon transform",
-                    Width = 100.0, Height = 100.0, Depth = 1.0,
-                    GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = user, Project = FindByName<Project>(user, "Stanford"),
-                },
-                new MeshTransform
-                {
-                    Name = "House", Description = "House transform",
-                    Width = 100.0, Height = 100.0, Depth = 1.0,
-                    GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = user, Project = FindByName<Project>(user, ProjectNames.Architecture),
-                },
-                new MeshTransform
-                {
-                    Name = "Lucy", Description = "Lucy transform",
-                    Width = 100.0, Height = 100.0, Depth = 1.0,
-                    GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = user, Project = FindByName<Project>(user, "Stanford"),
-                },
-                new MeshTransform
-                {
-                    Name = "Roadster", Description = "Roadster transform",
-                    Width = 100.0, Height = 100.0, Depth = 1.0,
-                    GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = user, Project = FindByName<Project>(user, ProjectNames.Jewelry),
-                },
-                new MeshTransform
-                {
-                    Name = "Statue", Description = "Statue transform",
-                    Width = 100.0, Height = 100.0, Depth = 1.0,
-                    GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = user, Project = FindByName<Project>(user, ProjectNames.Jewelry),
-                },
-                new MeshTransform
-                {
-                    Name = "Test", Description = "Test transform",
-                    Width = 100.0, Height = 100.0, Depth = 1.0,
-                    GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = user, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
-                },
-                new MeshTransform
-                {
-                    Name = "Tyrannosaurus", Description = "Tyrannosaurus transform",
-                    Width = 100.0, Height = 100.0, Depth = 1.0,
-                    GradientThreshold = 5.0, AttenuationFactor = 10.0, AttenuationDecay = 0.6, UnsharpGaussianLow = 4.0, UnsharpGaussianHigh = 1.0, UnsharpHighFrequencyScale = 3.0,
-                    P1 = 0.03, P2 = 1.0, P3 = 0.0, P4 = 0.0, P5 = 0.0, P6 = 0.0, P7 = 0.0, P8 = 0.0,
-                    User = user, Project = FindByName<Project>(user, "Stanford"),
-                },
-            };
-
-            foreach (MeshTransform meshTransform in meshTransforms)
+            foreach (MeshTransform meshTransform in meshTransformList)
             {
                 DbContext.MeshTransforms.Add(meshTransform);
             }
@@ -994,13 +738,13 @@ namespace ModelRelief.Database
         /// <typeparam name="TEntity">Domain model.</typeparam>
         /// <param name="user">Owning user.</param>
         /// <param name="folderType">Type of folder</param>
-        private void CopyTestFiles<TEntity>(ApplicationUser user, string folderType)
+        private void CopySeedDataFilesToStore<TEntity>(ApplicationUser user, string folderType)
             where TEntity : DomainModel
         {
             var sourceFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUsers)}/{ConfigurationProvider.GetSetting(folderType)}";
-            var sourceFolderPath        = $"{HostingEnvironment.ContentRootPath}{sourceFolderPartialPath}";
+            var sourceFolderPath = $"{HostingEnvironment.ContentRootPath}{sourceFolderPartialPath}";
 
-            var destinationFolderPath   = $"{StoreUsersPath}{user.Id}/{ConfigurationProvider.GetSetting(folderType)}";
+            var destinationFolderPath = $"{StoreUsersPath}{user.Id}/{ConfigurationProvider.GetSetting(folderType)}";
             Directory.CreateDirectory(destinationFolderPath);
 
             // iterate over all folders
@@ -1028,6 +772,46 @@ namespace ModelRelief.Database
                     File.Copy(file.FullName, destinationFileName, overwrite: true);
                 }
             }
+        }
+
+        /// <summary>
+        /// Update the seed data files from the user store for a particular model type.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="folderType">Type of folder</param>
+        private async Task<bool> UpdateSeedDataFilesFromStoreAsync<TEntity>(string folderType)
+            where TEntity : DomainModel
+        {
+            // Test user provides the source of the data files
+            var testUser = await GetTestUserAsync();
+
+            // Source = D:\ModelRelief\ModelRelief\store\test\users\7ab4676b-563b-4c42-b6f9-27c11208f33f\depthbuffers
+            var rootSourceFolderPath = Path.GetFullPath($"{StoreUsersPath}{testUser.Id}/{ConfigurationProvider.GetSetting(folderType)}");
+
+            // Destination = D:\ModelRelief\ModelRelief\Test\Data\Users\depthbuffers
+            var rootDestinationFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUsers)}/{ConfigurationProvider.GetSetting(folderType)}";
+            var rootDestinationFolderPath = Path.GetFullPath($"{HostingEnvironment.ContentRootPath}{rootDestinationFolderPartialPath}");
+
+            var modelList = DbContext.Set<TEntity>()
+                                .Where(m => (m.UserId == testUser.Id))
+                                .AsNoTracking();
+
+            foreach (var model in modelList)
+            {
+                var modelName = Path.GetFileNameWithoutExtension(model.Name);
+
+                var sourceFolderPath = Path.Combine(rootSourceFolderPath, model.Id.ToString());
+                var destinationFolderPath = Path.Combine(rootDestinationFolderPath, modelName);
+
+                var rootSourceDirectory = new System.IO.DirectoryInfo(sourceFolderPath);
+                System.IO.FileInfo[] files = rootSourceDirectory.GetFiles("*.*");
+                foreach (var file in files)
+                {
+                    var destinationFileName = Path.Combine(destinationFolderPath, file.Name);
+                    File.Copy(file.FullName, destinationFileName, overwrite: true);
+                }
+            }
+            return true;
         }
 
         /// <summary>
@@ -1062,9 +846,14 @@ namespace ModelRelief.Database
                             .Where(m => (m.User.Id == user.Id));
 
             foreach (var model in models)
-                {
+            {
+                // strip existing suffix; user name in parentheses
+                int index = model.Description.IndexOf("(");
+                if (index > 0)
+                    model.Description = model.Description.Substring(0, index - 1);
+
                 model.Description += $" ({descriptionSuffix})";
-                }
+            }
             DbContext.SaveChanges();
         }
 
@@ -1076,9 +865,9 @@ namespace ModelRelief.Database
         private void SetFileProperties<TEntity>(IEnumerable<TEntity> models)
             where TEntity : FileDomainModel
         {
-           // model Ids are known now; set paths, etc.
+            // model Ids are known now; set paths, etc.
             foreach (TEntity model in models)
-                {
+            {
                 model.FileTimeStamp = DateTime.Now;
                 model.Path = GetRelativePath(StorageManager.DefaultModelStorageFolder(model));
 
@@ -1088,5 +877,193 @@ namespace ModelRelief.Database
 
             DbContext.SaveChanges();
         }
+
+        #region UpdateSeedData
+        /// <summary>
+        /// Returns the Test user.
+        /// </summary>
+        /// <returns>Test user.</returns>
+        private async Task<ApplicationUser> GetTestUserAsync()
+        {
+            var userNameSetting = $"{UserAccounts.Test}:UserName";
+            var userName = ConfigurationProvider.GetSetting(userNameSetting);
+
+            ApplicationUser user = await UserManager.FindByNameAsync(userName);
+
+            // stop tracking to avoid conflicting tracking
+            if (user != null)
+                DbContext.Entry(user).State = EntityState.Detached;
+
+            return user;
+        }
+
+        /// <summary>
+        /// Returns the JSON definition file for the given entity type.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model</typeparam>
+        /// <param name="folderType">Folder type.</param>
+        /// <returns></returns>
+        private string GetEntityJSONFileName<TEntity>(string folderType)
+        {
+            var jsonFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUsers)}/{ConfigurationProvider.GetSetting(folderType)}";
+            var jsonFolder = $"{HostingEnvironment.ContentRootPath}{jsonFolderPartialPath}";
+
+            var modelType = typeof(TEntity).Name;
+            var jsonFile = $"{Path.Combine(jsonFolder, modelType)}.json";
+
+            //normalize
+            jsonFile = Path.GetFullPath(jsonFile);
+
+            return jsonFile;
+        }
+
+        /// <summary>
+        /// Creates a JSON file containing all the objects of the given type.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="user">Application user.</param>
+        /// <param name="folderType">Type of folder</param>
+        private void ExportEntityJSON<TEntity>(ApplicationUser user, string folderType)
+            where TEntity : DomainModel
+        {
+            // N.B. There is currently no way at the current time (EntityFramework Core 2.1) to include <all> referenced entities.
+            //      The property Project is required so the Name can be used to find and assign the correct Project for each User.
+            //      The Id alone is not sufficient because the exported JSON is always based on the Test user so the Ids would not match other users.
+            //      Consequently, the query is specialized by entity type so the Include clause can be included.
+            //          .Include(x => x.Project)
+            //https://stackoverflow.com/questions/49593482/entity-framework-core-2-0-1-eager-loading-on-all-nested-related-entities
+
+            IQueryable<TEntity> modelList = null;
+            switch (typeof(TEntity).Name)
+            {
+                case "Camera":
+                    modelList = (IQueryable<TEntity>)DbContext.Set<Camera>()
+                                    .Where(c => c.UserId == user.Id)
+                                    .Include(c => c.Project)
+                                    .AsNoTracking();
+                    break;
+
+                case "MeshTransform":
+                    modelList = (IQueryable<TEntity>)DbContext.Set<MeshTransform>()
+                                    .Where(m => m.UserId == user.Id)
+                                    .Include(m => m.Project)
+                                    .AsNoTracking();
+                    break;
+
+                default:
+                    Logger.LogError($"ExportEntityJSON: unsupported entity type {typeof(TEntity).Name}");
+                    return;
+            }
+
+            // verify models present; export only when database is populated
+            if (modelList.Count() <= 0)
+            {
+                Logger.LogError($"ExportEntityJSON: No models were found for type {typeof(TEntity).Name}. No export was done.");
+                return;
+            }
+
+            var jsonFile = GetEntityJSONFileName<TEntity>(folderType);
+            Files.SerializeJSON(modelList, jsonFile);
+
+            Logger.LogInformation($"Writing JSON definitions for {user.UserName} amd model = {typeof(TEntity).Name}, file = {jsonFile}");
+        }
+
+        /// <summary>
+        /// Export those entities which are used to update the seed database.
+        /// </summary>
+        private async Task<bool> ExportJSONAsync()
+        {
+            ApplicationUser testUser = await GetTestUserAsync();
+            if (testUser == null)
+            {
+                Logger.LogError($"ExportJSON: The Test user was not found so the update was aborted.");
+                return false;
+            }
+            ExportEntityJSON<Camera>(testUser, "Paths:ResourceFolders:Camera");
+            ExportEntityJSON<MeshTransform>(testUser, "Paths:ResourceFolders:MeshTransform");
+
+            return true;
+        }
+
+        /// <summary>
+        /// Constructs a list of entities read from the seed JSON definitions file.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="folderType">Folder type.</param>
+        /// <returns>List of models read from JSON.</returns>
+        private List<TEntity> ImportEntityJSON<TEntity>(string folderType)
+        {
+            var jsonFile = GetEntityJSONFileName<TEntity>(folderType);
+            var modelList = JsonConvert.DeserializeObject<List<TEntity>>(System.IO.File.ReadAllText(jsonFile));
+            return modelList;
+        }
+
+        /// <summary>
+        /// Updates the seed data files (e.g. DepthBuffer, Mesh).
+        /// </summary>
+        /// <returns>True if successful.</returns>
+        private async Task<bool> UpdateSeedDataFilesAsync()
+        {
+            await UpdateSeedDataFilesFromStoreAsync<Domain.DepthBuffer>("Paths:ResourceFolders:DepthBuffer");
+            await UpdateSeedDataFilesFromStoreAsync<Domain.Mesh>("Paths:ResourceFolders:Mesh");
+
+            return true;
+        }
+
+        /// <summary>
+        /// Updates the test JSON used for Explorer testing.
+        /// </summary>
+        /// <returns>True if successful.</returns>
+        private async Task<bool> UpdateTestJSONAsync()
+        {
+            // Test user provides the source of the data files.
+            var testUser = await GetTestUserAsync();
+
+            await Task.CompletedTask;
+            var expandedMeshList =  DbContext.Set<Mesh>()
+                                        .Where(m => (m.UserId == testUser.Id))
+                                        .Include(m => m.DepthBuffer)
+                                            .ThenInclude(d => d.Camera)
+                                        .Include(m => m.MeshTransform)
+                                        .AsNoTracking();
+
+            var destinationFolder = Path.GetFullPath($"{HostingEnvironment.ContentRootPath}/../Solver/Test");
+            foreach (var mesh in expandedMeshList)
+            {
+                var modelName = Path.GetFileNameWithoutExtension(mesh.Name);
+                var destinationFile = Path.GetFullPath($"{destinationFolder}/{modelName}.json");
+                Logger.LogInformation($"Creating {destinationFile}");
+                Files.SerializeJSON(mesh, destinationFile);
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Updates the seed data used to populate the database and the user store.
+        ///     JSON (Camera, MeshTransform) used to populate database.
+        ///     Mesh and DepthBuffer files.
+        ///     Test JSON used by Explorer.
+        /// </summary>
+        private async Task<bool> UpdateSeedDataAsync()
+        {
+            // JSON definitions from existing database; used to populate new databases
+            bool exportJSONSuccess = await ExportJSONAsync();
+            if (!exportJSONSuccess)
+                return false;
+
+            // data files (e.g. DepthBuffer, Mesh)
+            bool updateSuccess = await UpdateSeedDataFilesAsync();
+            if (!updateSuccess)
+                return false;
+
+            // Test JSON (e.g. Explorer)
+            bool exportTestJSONSuccess = await UpdateTestJSONAsync();
+            if (!exportTestJSONSuccess)
+                return false;
+
+            return true;
+        }
     }
+    #endregion
 }
