@@ -963,17 +963,8 @@ namespace ModelRelief.Database
             }
 
             var jsonFile = GetEntityJSONFileName<TEntity>(folderType);
-            using (StreamWriter file = File.CreateText(jsonFile))
-            {
-                JsonSerializer serializer = new JsonSerializer()
-                {
-                    Formatting = Formatting.Indented,
-                    MaxDepth = 2,
-                };
+            Files.SerializeJSON(modelList, jsonFile);
 
-                //serialize object directly into file stream
-                serializer.Serialize(file, modelList);
-            }
             Logger.LogInformation($"Writing JSON definitions for {user.UserName} amd model = {typeof(TEntity).Name}, file = {jsonFile}");
         }
 
@@ -1041,19 +1032,8 @@ namespace ModelRelief.Database
             {
                 var modelName = Path.GetFileNameWithoutExtension(mesh.Name);
                 var destinationFile = Path.GetFullPath($"{destinationFolder}/{modelName}.json");
-                Console.WriteLine($"Creating {destinationFile}");
-
-                using (StreamWriter file = File.CreateText(destinationFile))
-                {
-                    JsonSerializer serializer = new JsonSerializer()
-                    {
-                        Formatting = Formatting.Indented,
-                        MaxDepth = 2,
-                    };
-
-                    //serialize object directly into file stream
-                    serializer.Serialize(file, mesh);
-                }
+                Logger.LogInformation($"Creating {destinationFile}");
+                Files.SerializeJSON(mesh, destinationFile);
             }
 
             return true;

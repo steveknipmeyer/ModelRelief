@@ -1,22 +1,23 @@
 ﻿### Tasks
 #### Commit Notes
-
+Share JSON serialization in Files.SerializeJSON.
+#### Lambda
+    Install madge.
+        npm -g install madge
+    Install CMake VSCode extensions.
 
 #### Short Term
     Remove updateseeddatabase.py.
 
-    Share JSON serialization.
-        Dispatcher.SerializeModelToWorkingStorage
-        DbInitializer
-            ExportEntityJSON
-            UpdateTestJSONAsync
-
     Merge orthographic branch to master.
 
     Upgrades
-        Convert TypeScript compiler output to ES5 modules?
         AspNET Core 2.1
+            C:\Program Files\dotnet\sdk\2.1.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.ObsoleteReferences.targets(33,5): warning NETSDK1059: The tool 'Microsoft.EntityFrameworkCore.Tools.DotNet' is now included in the .NET Core SDK.
+            Information on resolving this warning is available at (https://aka.ms/dotnetclitools-in-box). [D:\ModelRelief\ModelRelief\ModelRelief.csproj]
+
         Upgrade Three.js.
+        Convert TypeScript compiler output to ES5 modules?
 
     The Python Environment tools throw if an environment variable is not found.
         Should there be defaults such as for Builder?
@@ -41,20 +42,16 @@
             https://stackoverflow.com/questions/42110726/chrome-devtools-paused-before-potential-out-of-memory-crash
             https://developers.google.com/web/tools/chrome-devtools/memory-problems/
 
+    Review repository structure.
+    Build an installer package for Explorer.
 
     Silhouette
         https://stackoverflow.com/questions/17161088/how-to-refine-or-blur-or-smooth-just-the-edges
-
-    Analyze the role of the composite mask.
 
     Develop test models to test the gaussian filter mask processing.
         The model should contain details near the edges (adjacent to the background) and near thresholded regions.
 
     Should the Python image masks be integers or booleans (instead of doubles)?
-
-    Move to .NET Core 2.1
-        C:\Program Files\dotnet\sdk\2.1.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.ObsoleteReferences.targets(33,5): warning NETSDK1059: The tool 'Microsoft.EntityFrameworkCore.Tools.DotNet' is now included in the .NET Core SDK.
-        Information on resolving this warning is available at (https://aka.ms/dotnetclitools-in-box). [D:\ModelRelief\ModelRelief\ModelRelief.csproj]
 
     Why are there different versions of vc and vs2015_runtime between devenv and mrenv?
         devenv
@@ -70,11 +67,6 @@
         Review the technical papers.
         Review ZSurf.
         Review ArtCAM.
-
-    Lambda
-        Install madge.
-            npm -g install madge
-        Install CMake VSCode extensions.
 
     Runtime Settings
         https://medium.freecodecamp.org/environment-settings-in-javascript-apps-c5f9744282b6

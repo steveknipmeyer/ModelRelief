@@ -109,19 +109,9 @@ namespace ModelRelief.Services.Jobs
         {
             string workingStorageFolder = StorageManager.WorkingStorageFolder(model.UserId);
             string fileName = $"{workingStorageFolder}{model.GetType().Name}{model.Id.ToString()}.json";
-            Files.EnsureDirectoryExists(fileName);
 
-            using (StreamWriter file = File.CreateText(fileName))
-            {
-                JsonSerializer serializer = new JsonSerializer()
-                {
-                    Formatting = Formatting.Indented,
-                    MaxDepth = 2,
-                };
+            Files.SerializeJSON(model, fileName);
 
-                //serialize object directly into file stream
-                serializer.Serialize(file, model);
-            }
             return fileName;
         }
 

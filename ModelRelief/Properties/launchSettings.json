@@ -26,6 +26,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production",
         "MRDatabaseProvider": "SQLServer",
+
         "MRUpdateSeedData": "False",
         "MRInitializeDatabase": "True",
         "MRSeedDatabase": "True",
@@ -39,6 +40,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "MRDatabaseProvider": "SQLServer",
+
         "MRUpdateSeedData": "False",
         "MRInitializeDatabase": "True",
         "MRSeedDatabase": "True",
@@ -52,7 +54,8 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Test",
         "MRDatabaseProvider": "SQLServer",
-        "MRUpdateSeedData": "False",
+
+        "MRUpdateSeedData": "True",
         "MRInitializeDatabase": "True",
         "MRSeedDatabase": "True",
         "MRExitAfterInitialization": "False"
