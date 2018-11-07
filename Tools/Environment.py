@@ -94,7 +94,7 @@ class Environment:
         for key, _ in self.values.items():
             print (f"{key} = {os.environ[key]}")
         print (Colors.Reset)
-        
+
     def push(self):
         """
         Save the current environment.
@@ -102,12 +102,12 @@ class Environment:
         state = {}
         for key, _ in self.values.items():
             state[key] = os.environ[key]
-        
+
         self.stack.append(state)
 
     def pop(self):
-        """ 
-        Restore the original environment. 
+        """
+        Restore the original environment.
         """
         state = self.stack.pop()
         for key, value in state.items():
@@ -133,7 +133,7 @@ class Environment:
         return database_path
 
     def test_stack(self):
-        """ 
+        """
         Test the push/pop stack of environment states.
         """
         self.show(Colors.BrightCyan)

@@ -17,7 +17,7 @@ import subprocess
 import sys
 from enum import Enum
 
-from baseline import BaseLine 
+from baseline import BaseLine
 from environment import EnvironmentNames, Environment
 from logger import Logger
 from tools import Colors
@@ -42,7 +42,7 @@ class TestRunner:
         ----------
         database
             The database provider (SQLServer | SQLite)
-        """            
+        """
         self.logger.logInformation("\nBegin initialize database for {}".format(database), Colors.BrightYellow)
 
         subprocess.run ("dotnet run --no-launch-profile -p ModelRelief --MRExitAfterInitialization=True --MRUpdateSeedData=False --MRInitializeDatabase=True --MRSeedDatabase=True --MRDatabaseProvider={}".format(database))
@@ -57,7 +57,7 @@ class TestRunner:
         ----------
         database
             The database provider (SQLServer | SQLite)
-        """            
+        """
         baseline = BaseLine(self.logger, database)
         baseline.create_baseline_database()
 
@@ -69,7 +69,7 @@ class TestRunner:
         ----------
         database
             The database provider (SQLServer | SQLite)
-        """            
+        """
         self.logger.logInformation("\nBegin test execution for {}".format(database), Colors.BrightGreen)
 
         os.environ[EnvironmentNames.MRDatabaseProvider] = database
@@ -91,12 +91,12 @@ class TestRunner:
 
         databases = ["SQLite", "SQLServer"]
         for database in databases:
-            
+
             # initialize database and user store
             self.initialize_database(database)
-            
+
             # execute unit tests
-            self.execute_tests(database)  
+            self.execute_tests(database)
 
         # restore environment
         self.environment.pop()

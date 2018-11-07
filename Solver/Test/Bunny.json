@@ -44,7 +44,7 @@
       "Description": "Bunny Model (test@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2018-11-07T04:35:09.878178",
+    "FileTimeStamp": "2018-11-07T08:56:58.4482829",
     "RelativeFileName": "store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\depthbuffers\\3\\bunny.sdb",
     "Id": 3,
     "Name": "bunny.sdb",
@@ -76,7 +76,7 @@
     "Description": "Bunny transform (test@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2018-11-07T04:35:10.0302473",
+  "FileTimeStamp": "2018-11-07T08:56:58.6206534",
   "RelativeFileName": "store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\meshes\\3\\bunny.sfp",
   "Id": 3,
   "Name": "bunny.sfp",

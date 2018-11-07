@@ -107,8 +107,7 @@
             },
 
         //  ----- Tools
-            "program": "${workspaceRoot}/Tools/updateseeddatabase.py",
-        //  "program": "${workspaceRoot}/Tools/testrunner.py",
+            "program": "${workspaceRoot}/Tools/testrunner.py",
         //  "program": "${workspaceRoot}/Tools/linecount.py",
 
         //  ----- Build
