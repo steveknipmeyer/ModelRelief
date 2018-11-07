@@ -15,6 +15,7 @@ Share JSON serialization in Files.SerializeJSON.
         AspNET Core 2.1
             C:\Program Files\dotnet\sdk\2.1.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.ObsoleteReferences.targets(33,5): warning NETSDK1059: The tool 'Microsoft.EntityFrameworkCore.Tools.DotNet' is now included in the .NET Core SDK.
             Information on resolving this warning is available at (https://aka.ms/dotnetclitools-in-box). [D:\ModelRelief\ModelRelief\ModelRelief.csproj]
+        Review ModelRelief.csproj.
 
         Upgrade Three.js.
         Convert TypeScript compiler output to ES5 modules?
@@ -24,7 +25,6 @@ Share JSON serialization in Files.SerializeJSON.
 
     UI
         Add UI progress indicator for mesh generation.
-
         CameraControls
             Separate the Perspective controls into a separate dat.gui controller that can be entirely hidden or shown.
                 Field of View
@@ -43,7 +43,7 @@ Share JSON serialization in Files.SerializeJSON.
             https://developers.google.com/web/tools/chrome-devtools/memory-problems/
 
     Review repository structure.
-    Build an installer package for Explorer.
+    Build a Python installer package for Explorer.
 
     Silhouette
         https://stackoverflow.com/questions/17161088/how-to-refine-or-blur-or-smooth-just-the-edges
@@ -81,17 +81,12 @@ Share JSON serialization in Files.SerializeJSON.
         Add a model list to control which models are added.
 
     Order a SQLServer book.
+    Order a git book.
 
     Register for A2 hosting.
 
-    Review ModelRelief.csproj.
-
     Investigate workspaces in VSCode.
         Why is the second workspace unnamed?
-
-    Write OBJ
-        Should the OBJWriter be part of FileManager?
-        Or should FileManager be renamed BinaryFile (or similar)?
 
     Create additional test models.
         Spheres (Positive, Negative)
