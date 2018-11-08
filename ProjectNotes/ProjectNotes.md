@@ -1,6 +1,5 @@
 ﻿### Tasks
 #### Commit Notes
-Share JSON serialization in Files.SerializeJSON.
 #### Lambda
     Install madge.
         npm -g install madge
@@ -11,10 +10,7 @@ Share JSON serialization in Files.SerializeJSON.
     Remove updateseeddatabase.py.
 
     Upgrades
-        AspNET Core 2.1
-            C:\Program Files\dotnet\sdk\2.1.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.ObsoleteReferences.targets(33,5): warning NETSDK1059: The tool 'Microsoft.EntityFrameworkCore.Tools.DotNet' is now included in the .NET Core SDK.
-            Information on resolving this warning is available at (https://aka.ms/dotnetclitools-in-box). [D:\ModelRelief\ModelRelief\ModelRelief.csproj]
-        Review ModelRelief.csproj.
+        Update NuGet packages.
 
         Upgrade Three.js.
         Convert TypeScript compiler output to ES5 modules?
