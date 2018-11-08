@@ -6,12 +6,17 @@
 
 namespace ModelRelief.Services
 {
+    using FluentValidation.AspNetCore;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using ModelRelief.Database;
     using ModelRelief.Domain;
+    using ModelRelief.Features.Errors;
+    using ModelRelief.Infrastructure;
+    using ModelRelief.Services.Jobs;
+    using ModelRelief.Services.Relationships;
 
     public static class ServiceCollectionExtensions
     {
@@ -38,6 +43,37 @@ namespace ModelRelief.Services
             }
             services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<ModelReliefDbContext>();
+        }
+
+        /// <summary>
+        /// Extension method to add the MVC services.
+        /// </summary>
+        /// <param name="services">IServiceCollection</param>
+        public static void AddCustomMvc(this IServiceCollection services)
+        {
+            services.AddMvc(options =>
+            {
+                options.InputFormatters.Insert(0, new RawRequestBodyFormatter());
+                // N.B. Order matters!
+                //                  options.Filters.Add(typeof(DbContextTransactionFilter));
+                options.Filters.Add(typeof(GlobalExceptionFilter));
+                //                  options.Filters.Add(typeof(ValidatorActionFilter));
+            })
+                .AddFeatureFolders()
+                // automatically register all validators within this assembly
+                .AddFluentValidation(config => { config.RegisterValidatorsFromAssemblyContaining<Startup>(); });
+        }
+
+        /// <summary>
+        /// Extension method to add ModelRelief services.
+        /// </summary>
+        /// <param name="services">IServiceCollection</param>
+        public static void AddModelReliefServices(this IServiceCollection services)
+        {
+            services.AddSingleton<Services.IConfigurationProvider, Services.ConfigurationProvider>();
+            services.AddSingleton<IStorageManager, StorageManager>();
+            services.AddSingleton<IDependencyManager, DependencyManager>();
+            services.AddSingleton<IDispatcher, Dispatcher>();
         }
     }
 }

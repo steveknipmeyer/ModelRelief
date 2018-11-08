@@ -121,43 +121,19 @@ namespace ModelRelief
         /// <param name="services">DI Service collection.</param>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(Configuration);
-            services.AddRouting(options => options.LowercaseUrls = true);
-
-            services.AddMvc(options =>
-                {
-                    options.InputFormatters.Insert(0, new RawRequestBodyFormatter());
-                    // N.B. Order matters!
-//                  options.Filters.Add(typeof(DbContextTransactionFilter));
-                    options.Filters.Add(typeof(GlobalExceptionFilter));
-//                  options.Filters.Add(typeof(ValidatorActionFilter));
-                })
-                .AddFeatureFolders()
-                // automatically register all validators within this assembly
-                .AddFluentValidation(config => { config.RegisterValidatorsFromAssemblyContaining<Startup>(); });
-
-            // ModelRelief
-            services.AddSingleton<Services.IConfigurationProvider, Services.ConfigurationProvider>();
-            services.AddSingleton<IStorageManager, StorageManager>();
-            services.AddSingleton<IDependencyManager, DependencyManager>();
-            services.AddSingleton<IDispatcher, Dispatcher>();
-            services.AddDatabaseServices();
-
             // cache for use outside controllers (e.g. FileDomainModel)
             // N.B. ContentRootPath contains a trailing slash when running the integration tests.
             // The normal runtime mode (web host) does not include a slash. Strip, if present.
             StorageManager.ContentRootPath = services.BuildServiceProvider().GetService<IHostingEnvironment>().ContentRootPath.TrimEnd(Path.DirectorySeparatorChar);
 
+            services.AddSingleton(Configuration);
+            services.AddRouting(options => options.LowercaseUrls = true);
+            services.AddCustomMvc();
+            services.AddModelReliefServices();
+            services.AddDatabaseServices();
             services.AddAutoMapper(typeof(Startup));
             Mapper.AssertConfigurationIsValid();
 
-#if false
-            // WIP This leads to a runtime error during where the type GetSingleRequestHandler cannot be used with service ICancellableAsynRequestHandler.
-            //     The error happens in ConfigureAutofacServices when builder.Build is called.
-            //     AddMediatR is used in CUC but not in OAPI.
-            //     This method requires MediatR.Extensions.Microsoft.DependencyInjection
-            services.AddMediatR(typeof(Startup));
-#endif
             return ConfigureAutofacServices(services);
         }
 
