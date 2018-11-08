@@ -31,9 +31,24 @@ namespace ModelRelief.Infrastructure
         {
             ConfigureLogging();
 
-            var host = BuildWebHost(args);
+            var host = CreateWebHostBuilder(args).Build();
+
             ProcessConfiguration(host);
 
+            PerformInitialization(host);
+
+            if (ExitAfterInitialization)
+                return;
+
+            host.Run();
+        }
+
+        /// <summary>
+        /// Perform general initialization including seeding the database.
+        /// </summary>
+        /// <param name="host">Web host.</param>
+        private static void PerformInitialization(IWebHost host)
+        {
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
@@ -44,10 +59,6 @@ namespace ModelRelief.Infrastructure
                 var dbInitializer = new DbInitializer(services, ExitAfterInitialization);
                 dbInitializer.Initialize();
             }
-            if (ExitAfterInitialization)
-                return;
-
-            host.Run();
         }
 
         /// <summary>
@@ -83,12 +94,12 @@ namespace ModelRelief.Infrastructure
         /// </summary>
         /// <param name="args">Arguments.</param>
         /// <returns>IWebHost</returns>
-        public static IWebHost BuildWebHost(string[] args)
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             try
             {
                 Log.Information("Starting web host");
-                var webHost = WebHost.CreateDefaultBuilder(args)
+                var webHostBuilder = WebHost.CreateDefaultBuilder(args)
                                      .ConfigureAppConfiguration((builderContext, config) =>
                                      {
                                          // WIP: Implement secret store for Production environments. Azure?
@@ -103,10 +114,9 @@ namespace ModelRelief.Infrastructure
                                      })
                                      .UseStartup<Startup>()
                                      .UseSerilog()
-                                     .UseUrls($"http://+:{Environment.GetEnvironmentVariable(ConfigurationSettings.MRPort)}")
-                                     .Build();
+                                     .UseUrls($"http://+:{Environment.GetEnvironmentVariable(ConfigurationSettings.MRPort)}");
 
-                return webHost;
+                return webHostBuilder;
             }
             catch (Exception ex)
             {
