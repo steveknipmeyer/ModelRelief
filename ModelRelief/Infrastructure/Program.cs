@@ -49,14 +49,13 @@ namespace ModelRelief.Infrastructure
         /// <param name="host">Web host.</param>
         private static void PerformInitialization(IWebHost host)
         {
-            using (var scope = host.Services.CreateScope())
+            var services = (IServiceScopeFactory)host.Services.GetService(typeof(IServiceScopeFactory));
+            using (var scope = services.CreateScope())
             {
-                var services = scope.ServiceProvider;
-
-                var initializer = new Initializer(services);
+                var initializer = new Initializer(scope);
                 initializer.Initialize();
 
-                var dbInitializer = new DbInitializer(services, ExitAfterInitialization);
+                var dbInitializer = new DbInitializer(scope, ExitAfterInitialization);
                 dbInitializer.Initialize();
             }
         }

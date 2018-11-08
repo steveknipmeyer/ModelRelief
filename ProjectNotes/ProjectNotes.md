@@ -8,9 +8,11 @@
 
 #### Short Term
     Remove updateseeddatabase.py.
+    In Production, test creating a new user and the seeding of the sample data.
+        Test environment always performs authentication.
 
     Upgrades
-        Update NuGet packages.
+        Test Postman.
 
         Upgrade Three.js.
         Convert TypeScript compiler output to ES5 modules?
