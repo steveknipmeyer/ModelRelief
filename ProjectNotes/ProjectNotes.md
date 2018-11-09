@@ -1,10 +1,6 @@
 ﻿### Tasks
 #### Commit Notes
-Enable HTTPS redirection.
-Change ports to 5000 (HTTP) and 5001 (HTTPS).
-Include env.Isenvironment(Test) alongside env.IsDevelopment in Startup.Configure.
-Reduce log level (from Debug) to Information.
-Change IIS Express (Visual Studio) ports to (HTTP) 44300 and (HTTPS) 44301.
+
 
 #### Lambda
     Install madge.
@@ -14,12 +10,6 @@ Change IIS Express (Visual Studio) ports to (HTTP) 44300 and (HTTPS) 44301.
     Review Firewall for ModelRelief and Dimension settings.
 
 #### Short Term
-    Remove Hello, ModelRelief!
-    Add diagnostics to About page.
-        Environment
-        User
-
-
     Review MRPORT assignments.
     Review all occurrences of 60655 across ModelRelief.
         Update Postman.

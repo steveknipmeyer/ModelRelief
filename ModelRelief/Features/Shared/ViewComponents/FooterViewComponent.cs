@@ -19,25 +19,6 @@ namespace ModelRelief.Features.Shared.ViewComponents
             _configurationProvider = configurationProvider;
             }
 
-#if false
-        public IViewComponentResult Invoke()
-            {
-            // Invoke was removed from ViewComponent however this still compiles.
-
-            var greetingMessage = _configurationProvider.GetGreeting("Greeting");
-            return View ("Default", greetingMessage);
-            }
-#endif
-
-#if false
-        public Task<IViewComponentResult> InvokeAsync()
-            {
-            // This form explicitly converts the return result to a Task.
-
-            var greetingMessage = _configurationProvider.GetGreeting("Greeting");
-            return Task.FromResult<IViewComponentResult>(View ("Default", greetingMessage));
-            }
-#endif
 #if true
         public async Task<IViewComponentResult> InvokeAsync()
             {
@@ -46,10 +27,10 @@ namespace ModelRelief.Features.Shared.ViewComponents
 
             // Server Side Async is not Client Side Async
             // https://stackoverflow.com/questions/36024748/viewcomponents-in-asp-net-mvc-6-are-not-async
-            await Task.Delay(0);
+            await Task.CompletedTask;
 
-            var greetingMessage = _configurationProvider.GetSetting("Greeting");
-            return View("Default", greetingMessage);
+            var versionMessage = _configurationProvider.GetSetting("Version");
+            return View("Default", versionMessage);
             }
 #endif
         }
