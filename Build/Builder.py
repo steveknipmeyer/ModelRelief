@@ -256,8 +256,9 @@ class Builder:
 
             self.logger.logInformation("Docker ModelRelief image", Colors.Cyan)
             os.chdir(self.solution_path)
-            port = os.environ[EnvironmentNames.MRPort]
-            Tools.exec(f"docker build -t modelrelief --build-arg MRPORT={port} -f Build\\DockerFile.modelrelief  .")
+            port_http = os.environ[EnvironmentNames.MRPort]
+            port_https = os.environ[EnvironmentNames.MRPortSecure]
+            Tools.exec(f"docker build -t modelrelief --build-arg MRPORT={port_http} MRPORTSecure={port_https} -f Build\\DockerFile.modelrelief  .")
 
             self.logger.logInformation("\nDocker ModelRelief Database image", Colors.Cyan)
             Tools.exec(f"docker build -t modelreliefdatabase -f Build\\DockerFile.modelreliefdatabase  .")

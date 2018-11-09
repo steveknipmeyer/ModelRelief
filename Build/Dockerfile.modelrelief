@@ -8,8 +8,11 @@ WORKDIR /root
 COPY Publish .
 
 # make port available to the world outside this container
-ARG MRPORT=60655
+# WIP: Can these be read from the launch environment?
+ARG MRPORT=5000
 EXPOSE $MRPORT
+ARG MRPORTSecure=5001
+EXPOSE $MRPORTSecure
 
 # paths
 RUN setx PATH "%PATH%;C:\root\mrenv"
@@ -18,14 +21,15 @@ RUN setx PYTHONPATH "C:\root\Solver;C:\root\Tools"
 # MR runtime settings
 ENV ASPNETCORE_ENVIRONMENT=Production
 ENV MRPort=$MRPORT
+ENV MRPortSecure=$MRPORTSecure
 ENV MRDatabaseProvider=SQLServer
-ENV MRExitAfterInitialization=False
+ENV MRUpdateSeedData=False
 ENV MRInitializeDatabase=False
 ENV MRSeedDatabase=False
-ENV MRUpdateSeedData=False
+ENV MRExitAfterInitialization=False
 
 # ASP.NET Core runtime settings
-ENV ASPNETCORE_URLS=http://localhost:$MRPORT/
+ENV ASPNETCORE_URLS=https://localhost:$MRPORTSecure/;http://localhost:$MRPORT/
 
 # run solver.py when the container launches
 #CMD python Solver/solver.py

@@ -10,9 +10,7 @@
     Review Firewall for ModelRelief and Dimension settings.
 
 #### Short Term
-    Review MRPORT assignments.
-    Review all occurrences of 60655 across ModelRelief.
-        Update Postman.
+    HttpsRedirection does not work on IIS.
 
     Update external script refefereces to HTTPS.
         This happens in Production (app.UseHsts())
@@ -1444,6 +1442,7 @@ https://semver.npmjs.com/
         PYTHONPATH                      C:\modelrelief\Tools; C:\modelrelief\Solver;
 
         The secure (HTTPS, MRPortSecure) and insecure (HTTP, MRPort) ports must be configured.
+            These are set in appSettings.ProductionIIS.json as MRPort and MRPortSecure.
             https://docs.microsoft.com/en-us/aspnet/core/security/enforcing-ssl?view=aspnetcore-2.1&tabs=visual-studio#require-https
             The secure port where the client is redirected (typically, 443 in production and 5001 in development).
             The insecure port (typically, 80 in production and 5000 in development).

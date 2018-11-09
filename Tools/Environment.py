@@ -38,6 +38,7 @@ class EnvironmentNames:
 
     # runtime
     MRPort = "MRPort"
+    MRPortSecure = "MRPortSecure"
     MRDatabaseProvider = "MRDatabaseProvider"
     ASPNETCORE_ENVIRONMENT = "ASPNETCORE_ENVIRONMENT"
 
@@ -77,6 +78,7 @@ class Environment:
 
             # runtime
             EnvironmentNames.MRPort : os.environ[EnvironmentNames.MRPort],
+            EnvironmentNames.MRPortSecure : os.environ[EnvironmentNames.MRPortSecure],
             EnvironmentNames.MRDatabaseProvider : os.environ[EnvironmentNames.MRDatabaseProvider],
             EnvironmentNames.ASPNETCORE_ENVIRONMENT : os.environ[EnvironmentNames.ASPNETCORE_ENVIRONMENT],
         }
