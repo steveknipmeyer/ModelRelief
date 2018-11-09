@@ -1,26 +1,52 @@
 ﻿### Tasks
 #### Commit Notes
+Enable HTTPS redirection.
+Change ports to 5000 (HTTP) and 5001 (HTTPS).
+Include env.Isenvironment(Test) alongside env.IsDevelopment in Startup.Configure.
+Reduce log level (from Debug) to Information.
+Change IIS Express (Visual Studio) ports to (HTTP) 44300 and (HTTPS) 44301.
+
 #### Lambda
     Install madge.
         npm -g install madge
     Install CMake VSCode extensions.
     git checkout core21.
+    Review Firewall for ModelRelief and Dimension settings.
 
 #### Short Term
-    Remove updateseeddatabase.py.
-    In Production, test creating a new user and the seeding of the sample data.
-        Test environment always performs authentication.
+    Remove Hello, ModelRelief!
+    Add diagnostics to About page.
+        Environment
+        User
+
+
+    Review MRPORT assignments.
+    Review all occurrences of 60655 across ModelRelief.
+        Update Postman.
+
+    Update external script refefereces to HTTPS.
+        This happens in Production (app.UseHsts())
+        Mixed Content: The page at 'https://localhost:5001/composer/edit/8' was loaded over HTTPS, but requested an insecure script 'http://ajax.aspnetcdn.com/ajax/jQuery.Validate/1.16.0/jQuery.Validate.js'. This request has been blocked; the content must be served over HTTPS.
+
+    app.UseHttpsRedirection leads to Xunit test failure.
+
+    Why is the Visual Studio build so slow?
+
+    Prepare a comprehensive solution testing checklist.
+
+    Test Docker.
+
+    git
+        Remove Visual Studio performance analysis reports from source code control.
+        Why is Quokka Workbench bundled in with modelrelief.js?
 
     Upgrades
-        
-        Test Postman.
-
         Upgrade Three.js.
         Convert TypeScript compiler output to ES5 modules?
 
     The Python Environment tools throw if an environment variable is not found.
         Should there be defaults such as for Builder?
-
+****
     UI
         Add UI progress indicator for mesh generation.
         CameraControls
@@ -1426,6 +1452,11 @@ https://semver.npmjs.com/
         (?) ASPNETCORE_ENVIRONMENT      Production
         PATH                            C:\modelrelief\mrenv
         PYTHONPATH                      C:\modelrelief\Tools; C:\modelrelief\Solver;
+
+        The secure (HTTPS, MRPortSecure) and insecure (HTTP, MRPort) ports must be configured.
+            https://docs.microsoft.com/en-us/aspnet/core/security/enforcing-ssl?view=aspnetcore-2.1&tabs=visual-studio#require-https
+            The secure port where the client is redirected (typically, 443 in production and 5001 in development).
+            The insecure port (typically, 80 in production and 5000 in development).
 
     How are credentials handled in a ConnectionString in Production?
         https://stackoverflow.com/questions/44931613/how-to-correctly-store-connection-strings-in-environment-variables-for-retrieval

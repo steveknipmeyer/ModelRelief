@@ -24,13 +24,20 @@ namespace ModelRelief.Database
         /// </summary>
         /// <param name="scope">Service scope provider.</param>
         public Initializer(IServiceScope scope)
+        : this(scope.ServiceProvider)
         {
-            if (scope == null)
-                throw new ArgumentNullException(nameof(IServiceScope));
+        }
 
-            IServiceProvider services = scope.ServiceProvider;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Initializer"/> class.
+        /// Constructor
+        /// </summary>
+        /// <param name="services">Service provider.</param>
+        public Initializer(IServiceProvider services)
+        {
             Services = services;
-
+            if (services == null)
+                throw new ArgumentNullException(nameof(IServiceScope));
             HostingEnvironment = Services.GetRequiredService<IHostingEnvironment>();
             if (HostingEnvironment == null)
                 throw new ArgumentNullException(nameof(HostingEnvironment));

@@ -112,8 +112,7 @@ namespace ModelRelief.Infrastructure
                                          }
                                      })
                                      .UseStartup<Startup>()
-                                     .UseSerilog()
-                                     .UseUrls($"http://+:{Environment.GetEnvironmentVariable(ConfigurationSettings.MRPort)}");
+                                     .UseSerilog();
 
                 return webHostBuilder;
             }

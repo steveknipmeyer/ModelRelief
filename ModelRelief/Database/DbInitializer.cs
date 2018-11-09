@@ -450,8 +450,9 @@ namespace ModelRelief.Database
             {
                 camera.Id = 0;
                 camera.User = user;
-                if (camera.Project != null)
-                    camera.Project = FindByName<Project>(user, camera.Project?.Name);
+
+                camera.Project = FindByName<Project>(user, camera.Project?.Name);
+                camera.ProjectId = camera.Project.Id;
             }
 
             foreach (Camera camera in cameraList)
@@ -549,8 +550,9 @@ namespace ModelRelief.Database
             {
                 meshtransform.Id = 0;
                 meshtransform.User = user;
-                if (meshtransform.Project != null)
-                    meshtransform.Project = FindByName<Project>(user, meshtransform.Project?.Name);
+
+                meshtransform.Project = FindByName<Project>(user, meshtransform.Project?.Name);
+                meshtransform.ProjectId = meshtransform.Project.Id;
             }
 
             foreach (MeshTransform meshTransform in meshTransformList)

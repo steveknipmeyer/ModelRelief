@@ -3,8 +3,10 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:60655//Models/Viewer/1",
-      "sslPort": 0
+      // IIS Express ports should be in the range 44300 - 44399.
+      // https://stackoverflow.com/questions/41075478/visual-studio-2017-enable-ssl
+      "applicationUrl": "http://localhost:44300",
+      "sslPort": 44301
     }
   },
   "profiles": {
@@ -12,8 +14,9 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Test",
+        "ASPNETCORE_ENVIRONMENT": "Production",
         "MRDatabaseProvider": "SQLServer",
+
         "MRUpdateSeedData": "False",
         "MRInitializeDatabase": "True",
         "MRSeedDatabase": "True",
@@ -32,7 +35,7 @@
         "MRSeedDatabase": "True",
         "MRExitAfterInitialization": "False"
       },
-      "applicationUrl": "http://localhost:60655"
+      "applicationUrl": "https://localhost:5001;http://localhost:5000"
     },
     "ModelRelief Development": {
       "commandName": "Project",
@@ -46,7 +49,7 @@
         "MRSeedDatabase": "True",
         "MRExitAfterInitialization": "False"
       },
-      "applicationUrl": "http://localhost:60655"
+      "applicationUrl": "https://localhost:5001;http://localhost:5000"
     },
     "ModelRelief Test": {
       "commandName": "Project",
@@ -60,7 +63,7 @@
         "MRSeedDatabase": "True",
         "MRExitAfterInitialization": "False"
       },
-      "applicationUrl": "http://localhost:60655"
+      "applicationUrl": "https://localhost:5001;http://localhost:5000"
     }
   }
 }

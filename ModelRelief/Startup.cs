@@ -147,8 +147,14 @@ namespace ModelRelief
         /// <param name="signInManager">SignIn Manager.</param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, Services.IConfigurationProvider configurationProvider, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
-            if (env.IsDevelopment())
+            if (env.IsDevelopment() || env.IsEnvironment("Test"))
+            {
                 app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseHsts();
+            }
 
             // https://stackoverflow.com/questions/35031279/confused-with-error-handling-in-asp-net-5-mvc-6
             // app.UseStatusCodePagesWithReExecute("/Errors/Error/{0}");
@@ -161,6 +167,10 @@ namespace ModelRelief
             {
                 ContentTypeProvider = provider,
             });
+
+            // XUnit TestServer not compatible
+            if (!env.IsEnvironment("Test"))
+                app.UseHttpsRedirection();
 
             app.AddStaticFilePaths(env.ContentRootPath, new string[] { "Scripts" });
             app.UseAuthentication();

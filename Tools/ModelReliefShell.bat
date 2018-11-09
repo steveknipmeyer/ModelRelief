@@ -28,7 +28,8 @@ echo MRSolution=%MRSolution%
 :: N.B. 'dotnet run' uses ModelRelief\Properties\launchSettings.json!
 ::       https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-run?tabs=netcore21
 ::       Disable with 'dotnet run --no-launch-profile'.
-set MRPort=60655
+set MRPort=5000
+set MRPortSecure=5001
 set MRDatabaseProvider=SQLServer
 set MRUpdateSeedData=False
 set MRInitializeDatabase=False
@@ -73,14 +74,14 @@ set ASPNETCORE_ENVIRONMENT=Test
 ::  Command line (dotnet run) : ASPNETCORE_URLS environment variable
 ::  Visual Studio             : launchSettings.json
 ::  VSCode                    : launch.json
-:: https://stackoverflow.com/questions/46336341/configure-asp-net-core-2-0-kestrel-for-https
 :: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel?tabs=aspnetcore2x#useurls-limitations
-:: set ASPNETCORE_URLS=https://*:%MRPort%
-set ASPNETCORE_URLS=http://localhost:%MRPort%/
+set ASPNETCORE_URLS=https://localhost:%MRPortSecure%/;http://localhost:%MRPort%/
+set ASPNETCORE_HTTPS_PORT=%MRPortSecure%
 
 echo --- Environment ---
 echo MR=%MR%
 echo ASPNETCORE_URLS=%ASPNETCORE_URLS%
+echo ASPNETCORE_HTTPS_PORT=%ASPNETCORE_HTTPS_PORT%
 echo(
 echo ASPNETCORE_ENVIRONMENT=%ASPNETCORE_ENVIRONMENT%
 echo MRDatabaseProvider=%MRDatabaseProvider%

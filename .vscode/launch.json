@@ -13,30 +13,30 @@
     }],
    "configurations": [
 
-       {
+        {
            "type": "chrome",
            "request": "launch",
            "name": "Launch Chrome",
-           "url": "http://localhost:60655/models/viewer/1",
+           "url": "http://localhost:5000/models/viewer/1",
            "webRoot": "${workspaceRoot}/ModelRelief/wwwroot",
            "sourceMaps": true
            // N.B. outFiles, outDir are not recognized by Intellisense.
            // "outDir": "${workspaceRoot}/ModelRelief/wwwroot/js"
-       },
+        },
         {
             "name": ".NET Core Launch",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "ASPNET .Core Build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceRoot}/ModelRelief/bin/Debug/netcoreapp2.0/ModelRelief.dll",
+            "program": "${workspaceRoot}/ModelRelief/bin/Debug/netcoreapp2.1/ModelRelief.dll",
             "args": [],
             "cwd": "${workspaceRoot}/ModelRelief",
             "stopAtEntry": false,
             "enableStepFiltering": false,
 
             // The external console will not launch the browser. It is necessary to manually start the browser.
-            // The internal console does not support Console.ReadLine so MRInitializeDatabase is not supported.
+            // The internal console does not support Console.ReadLine so user verification steps are not possible.
             "console": "externalTerminal",
 
             "internalConsoleOptions": "openOnSessionStart",
@@ -51,7 +51,7 @@
                 "windows": {
                    "command": "cmd.exe",
                 // "args": "/C start ${auto-detect-url}",
-                   "args": "/C start http://localhost:60655/models/viewer/1"
+                   "args": "/C start http://localhost:5000/models/viewer/1"
                 },
                 "osx": {
                     "command": "open"
@@ -61,9 +61,9 @@
                 }
             },
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Test",
-//              "MRDatabaseProvider": "SQLServer",
-                "MRDatabaseProvider": "SQLite",
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "MRDatabaseProvider": "SQLServer",
+                // "MRDatabaseProvider": "SQLite",
 
                 "MRUpdateSeedData":"False",
                 "MRInitializeDatabase":"True",

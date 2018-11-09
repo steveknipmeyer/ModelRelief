@@ -11,7 +11,7 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors></WarningsAsErrors>
-    <DocumentationFile>bin\Debug\netcoreapp2.0\ModelRelief.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netcoreapp2.1\ModelRelief.xml</DocumentationFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
@@ -65,7 +65,7 @@
     <PackageReference Include="MediatR" Version="4.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="2.8.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.1"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" />
     <PackageReference Include="OdeToCode.AddFeatureFolders" Version="2.0.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />

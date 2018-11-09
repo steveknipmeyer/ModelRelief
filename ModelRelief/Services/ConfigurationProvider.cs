@@ -36,7 +36,9 @@ namespace ModelRelief.Services
         /// </summary>
         public void LogConfigurationSettings()
         {
-            Logger.LogInformation($"{ConfigurationSettings.MRPort} = {GetSetting(ConfigurationSettings.MRPort)}");
+            Logger.LogInformation($"{ConfigurationSettings.URLS} = {GetSetting(ConfigurationSettings.URLS)}");
+            Logger.LogInformation($"{ConfigurationSettings.HTTPSPORT} = {GetSetting(ConfigurationSettings.HTTPSPORT)}");
+
             Logger.LogInformation($"{ConfigurationSettings.MRDatabaseProvider} = {GetSetting(ConfigurationSettings.MRDatabaseProvider)}");
             Logger.LogInformation($"{ConfigurationSettings.MRUpdateSeedData} = {GetSetting(ConfigurationSettings.MRUpdateSeedData)}");
             Logger.LogInformation($"{ConfigurationSettings.MRInitializeDatabase} = {GetSetting(ConfigurationSettings.MRInitializeDatabase)}");
@@ -106,7 +108,9 @@ namespace ModelRelief.Services
     public class ConfigurationSettings
     {
         // configuration settings
-        public const string MRPort                      = "MRPort";
+        public const string URLS                        = "URLS";                           // ASPNETCORE_URLS
+        public const string HTTPSPORT                   = "HTTPS_PORT";                     // ASPNETCORE_HTTPS_PORT
+
         public const string MRDatabaseProvider          = "MRDatabaseProvider";
 
         public const string MRUpdateSeedData            = "MRUpdateSeedData";

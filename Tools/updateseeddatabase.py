@@ -26,6 +26,8 @@ from tools import Colors, Tools
 
 class UpdateSeedDatabase:
     """
+    WIP: This tool has been deprecated. The seed database is updated from DbInitializer.
+
     Update the JSON and relief files (Mesh, DepthBuffer) used to create the initial test database.
     The Working folder contents are scanned to <incrementally> update the files.
     """
