@@ -26,7 +26,11 @@
 
     Why is the Visual Studio build so slow?
 
-    Test Docker.
+    Docker container cannot configure HTTPS.
+        https://github.com/aspnet/Docs/issues/6199
+        https://github.com/dotnet/dotnet-docker/issues/630
+        https://github.com/dotnet/dotnet-docker/blob/master/samples/aspnetapp/aspnetcore-docker-https-development.md
+
     repository
         Separate
             NodeWorkbench

@@ -259,10 +259,10 @@ class Builder:
             os.chdir(self.solution_path)
             port_http = os.environ[EnvironmentNames.MRPort]
             port_https = os.environ[EnvironmentNames.MRPortSecure]
-            Tools.exec(f"docker build -t modelrelief --build-arg MRPORT={port_http} MRPORTSecure={port_https} -f Build\\DockerFile.modelrelief  .")
+            Tools.exec(f"docker build -t modelrelief --build-arg MRPORT={port_http} --build-arg MRPORTSecure={port_https} -f Build\\DockerFile.modelrelief .")
 
             self.logger.logInformation("\nDocker ModelRelief Database image", Colors.Cyan)
-            Tools.exec(f"docker build -t modelreliefdatabase -f Build\\DockerFile.modelreliefdatabase  .")
+            Tools.exec(f"docker build -t modelreliefdatabase -f Build\\DockerFile.modelreliefdatabase .")
 
         self.logger.logInformation("\n</Publish>", Colors.BrightYellow)
 
@@ -302,7 +302,7 @@ def main():
                                 help='Build the runtime Python virtual environment.', type=ast.literal_eval, required=False, default=True)
     # Publish
     options_parser.add_argument('--deploy', '-d',
-                                help='Deploy the published content to the local IIS web folder.', type=ast.literal_eval, required=False, default=False)
+                                help='Deploy the published content to the local IIS folder.', type=ast.literal_eval, required=False, default=False)
 
     arguments = options_parser.parse_args()
 

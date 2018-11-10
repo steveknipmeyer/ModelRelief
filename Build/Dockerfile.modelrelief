@@ -30,6 +30,7 @@ ENV MRExitAfterInitialization=False
 
 # ASP.NET Core runtime settings
 ENV ASPNETCORE_URLS=https://localhost:$MRPORTSecure/;http://localhost:$MRPORT/
+ENV ASPNETCORE_HTTPS_PORT=%MRPortSecure%
 
 # run solver.py when the container launches
 #CMD python Solver/solver.py
