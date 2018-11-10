@@ -2,18 +2,17 @@
 #### Commit Notes
 
 #### Lambda
-    Install madge.
-        npm -g install madge
-    Install CMake VSCode extensions.
-    git checkout core21.
-    Review Firewall for ModelRelief and Dimension settings.
 
 #### Short Term
+    Add ReliefTest to testrunner.
+    
     Prepare a comprehensive solution testing checklist.
+        Visual Studio
+            IIS Express launch
         testrunner (XUnit)          python Tools\testrunner.py
         Builder
-            Development             python.exe Builder.py --target local
-            IIS                     python.exe Build\Builder.py --target local
+            Development             python.exe Build\Builder.py --target local
+            IIS                     python.exe Build\builder.py --target IIS --deploy True
         Postman
         Explorer                    python.exe Explorer\explorer.py --s ../Solver/Test/Lucy.json --w ../Solver/Test/Working
         Solver                      python Solver\solver.py --s "Test/House.json" --w "Test/Working"
@@ -21,13 +20,19 @@
 
     HttpsRedirection
         It does not work on IIS. It does work for IIS Express, Development and Production.
-            Test disables HttpsRedirection to support XUnit.
         app.UseHttpsRedirection leads to Xunit test failure.
+            Test disables HttpsRedirection to support XUnit.
 
 
     Why is the Visual Studio build so slow?
 
     Test Docker.
+    repository
+        Separate
+            NodeWorkbench
+            Quokka Workbench
+        Move ModelRelief\Test.
+            Add Postman tests to source code control.
 
     Upgrades
         Upgrade Three.js.
@@ -139,7 +144,8 @@ When the view camera is interactively changed, it should invalidate the Standard
     The (PowerShell?) language service could not be started.
     Python 3.X
     ModelReliefShell.sh
-        set ASPNETCORE_URLS=http://localhost:60655/
+        MRPort, MRPortSecure, ASPNETCORE_URLS, ASPNETCORE_HTTPS_PORT
+        Review other runtime environment variables.
     How should the appsettings.json files define the directory separator. Forward slash does not work with SQLServer.
         Does forward slash work with SQLite on Windows?
     Install a SQLite administration tool.
@@ -1412,12 +1418,12 @@ https://semver.npmjs.com/
         docker container prune
 
     Run a Docker container in the background.
-        docker run -d -p 8080:60655 modelrelief
+        docker run -d -p 8080:5000 modelrelief
     Run a Docker container interactively.
-        docker run -it -p 8080:60655 modelrelief
+        docker run -it -p 8080:5000 modelrelief
 
     Run a Docker container but override the default entrypoint with the command shell.
-        docker run -it --entrypoint "cmd" -p 8080:60655 modelrelief
+        docker run -it --entrypoint "cmd" -p 8080:5000 modelrelief
     Start a command shell in a running container.
         docker exec <container> cmd
 
@@ -1425,7 +1431,7 @@ https://semver.npmjs.com/
         docker run -d --name mrsql -p 1433:1433 -e sa_password=<> -e ACCEPT_EULA=Y microsoft/mssql-server-windows-express
         docker inspect mrsql
 
-    Start the Docker services defines in docker-composer.yml in the current directory.
+    Start the Docker services defined in docker-composer.yml in the current directory.
         docker-compose up
 
 #### SQLServer

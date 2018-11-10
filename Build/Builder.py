@@ -103,6 +103,7 @@ class Builder:
         os.environ[EnvironmentNames.MRSeedDatabase] = "True"
         os.environ[EnvironmentNames.MRExitAfterInitialization] = "True"
 
+        self.logger.logInformation("Build environment initialized; original popped at completion.", Colors.BrightCyan)
         self.environment.show(color=Colors.BrightWhite)
 
     def initialize (self, wwwroot: str, store: str, publish: str)->None :
@@ -273,7 +274,7 @@ class Builder:
         os.chdir(self.solution_path)
         self.environment.push()
 
-        self.initialize(self.source_wwwroot_path, self.source_store_path, self.publish_path, )
+        self.initialize(self.source_wwwroot_path, self.source_store_path, self.publish_path)
 
         # build
         self.build()

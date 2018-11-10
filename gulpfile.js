@@ -453,7 +453,7 @@ gulp.task('serve', function () {
     
     proxy: {
 
-        target: "localhost:60655/Models/Viewer/1"
+        target: "localhost:5000/Models/Viewer/1"
     }
 //  browser: 'google chrome canary'
 //  Canary    

@@ -19,7 +19,15 @@
     <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="BuildExplorerUI.bat" />
+    <Content Include="BuildPythonEnvironment.bat" />
+    <Content Include="BuildReliefPythonExtensions.bat" />
     <Content Include="DevelopmentPythonInstallation.txt" />
+    <Content Include="docker-compose.yml" />
+    <Content Include="DockerBuild.bat" />
+    <Content Include="Dockerfile.modelrelief" />
+    <Content Include="Dockerfile.modelreliefdatabase" />
+    <Content Include="DockerStart.bat" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builder.py" />
