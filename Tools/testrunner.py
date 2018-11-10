@@ -61,7 +61,7 @@ class TestRunner:
         baseline = BaseLine(self.logger, database)
         baseline.create_baseline_database()
 
-    def execute_tests(self, database: str):
+    def execute_database_tests(self, database: str):
         """
         Execute the unit tests for the given database provider.
 
@@ -77,6 +77,18 @@ class TestRunner:
 
         self.logger.logInformation("End test execution for {}".format(database), Colors.BrightGreen)
 
+    def execute_relief_tests(self ):
+        """
+        Execute the Relief C++ extension unit tests.
+        """
+        self.logger.logInformation("\nBegin Relief C++ extension tests", Colors.BrightGreen)
+
+        relief_executable = os.path.join (os.environ[EnvironmentNames.MRSolution], "Relief/tests/bin/reliefUnitTests.exe")
+        print (relief_executable)
+        subprocess.run (relief_executable)
+
+        self.logger.logInformation("End Relief C++ extension tests.", Colors.BrightGreen)
+
     def run (self):
         """
         For all databases:
@@ -88,15 +100,19 @@ class TestRunner:
 
         # save environment
         self.environment.push()
-
+        
+        # database            
         databases = ["SQLite", "SQLServer"]
         for database in databases:
 
             # initialize database and user store
             self.initialize_database(database)
 
-            # execute unit tests
-            self.execute_tests(database)
+            # unit tests
+            self.execute_database_tests(database)
+
+        # Relief C++ extension
+        self.execute_relief_tests()
 
         # restore environment
         self.environment.pop()

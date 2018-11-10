@@ -1,35 +1,22 @@
 ﻿### Tasks
 #### Commit Notes
-
 #### Lambda
-
-#### Short Term
-    Add ReliefTest to testrunner.
-    
-    Prepare a comprehensive solution testing checklist.
+#### Test Checklist
+    Test Checklist
         Visual Studio
             IIS Express launch
         testrunner (XUnit)          python Tools\testrunner.py
         Builder
             Development             python.exe Build\Builder.py --target local
             IIS                     python.exe Build\builder.py --target IIS --deploy True
+            Docker                  python.exe Build\builder.py --target Docker
         Postman
         Explorer                    python.exe Explorer\explorer.py --s ../Solver/Test/Lucy.json --w ../Solver/Test/Working
         Solver                      python Solver\solver.py --s "Test/House.json" --w "Test/Working"
         Relief unit tests           D:\ModelRelief\Relief\tests\bin\reliefUnitTests.exe
+        Docker                      DockerStart
 
-    HttpsRedirection
-        It does not work on IIS. It does work for IIS Express, Development and Production.
-        app.UseHttpsRedirection leads to Xunit test failure.
-            Test disables HttpsRedirection to support XUnit.
-
-
-    Why is the Visual Studio build so slow?
-
-    Docker container cannot configure HTTPS.
-        https://github.com/aspnet/Docs/issues/6199
-        https://github.com/dotnet/dotnet-docker/issues/630
-        https://github.com/dotnet/dotnet-docker/blob/master/samples/aspnetapp/aspnetcore-docker-https-development.md
+#### Short Term   
 
     repository
         Separate
@@ -1406,6 +1393,12 @@ https://semver.npmjs.com/
 
 #### Docker
     Issues
+        Docker container cannot configure HTTPS.
+            The certification must be made available in the container.
+            https://github.com/aspnet/Docs/issues/6199
+            https://github.com/dotnet/dotnet-docker/issues/630
+            https://github.com/dotnet/dotnet-docker/blob/master/samples/aspnetapp/aspnetcore-docker-https-development.md
+
         Chrome
             Composer
                 There is a require timeout loading the modelrelief module.
@@ -1535,7 +1528,7 @@ np_fill, relief_fill
     ALM
         https://legacy.gitbook.com/book/alm-tools/alm/details
 
-### DbInitializer
+#### DbInitializer
 
 |Setting|Description||
 |---|---|---|
@@ -1544,5 +1537,10 @@ np_fill, relief_fill
 |MRSeedDatabase|Adds the test data to the database and populates the user store.||
 |MRExitAfterInitialization|Perform initialization and then exits without starting the server.|
 
+#### HTTPS
+    HttpsRedirection
+        It does not work on IIS. It does work for IIS Express, Development and Production.
+        app.UseHttpsRedirection leads to Xunit test failure.
+            Test disables HttpsRedirection to support XUnit.
 
 
