@@ -1,7 +1,6 @@
 ﻿### Tasks
 #### Commit Notes
 
-
 #### Lambda
     Install madge.
         npm -g install madge
@@ -10,31 +9,32 @@
     Review Firewall for ModelRelief and Dimension settings.
 
 #### Short Term
-    HttpsRedirection does not work on IIS.
+    Prepare a comprehensive solution testing checklist.
+        testrunner (XUnit)          python Tools\testrunner.py
+        Builder
+            Development             python.exe Builder.py --target local
+            IIS                     python.exe Build\Builder.py --target local
+        Postman
+        Explorer                    python.exe Explorer\explorer.py --s ../Solver/Test/Lucy.json --w ../Solver/Test/Working
+        Solver                      python Solver\solver.py --s "Test/House.json" --w "Test/Working"
+        Relief unit tests           D:\ModelRelief\Relief\tests\bin\reliefUnitTests.exe
 
-    Update external script refefereces to HTTPS.
-        This happens in Production (app.UseHsts())
-        Mixed Content: The page at 'https://localhost:5001/composer/edit/8' was loaded over HTTPS, but requested an insecure script 'http://ajax.aspnetcdn.com/ajax/jQuery.Validate/1.16.0/jQuery.Validate.js'. This request has been blocked; the content must be served over HTTPS.
+    HttpsRedirection
+        It does not work on IIS. It does work for IIS Express, Development and Production.
+            Test disables HttpsRedirection to support XUnit.
+        app.UseHttpsRedirection leads to Xunit test failure.
 
-    app.UseHttpsRedirection leads to Xunit test failure.
 
     Why is the Visual Studio build so slow?
 
-    Prepare a comprehensive solution testing checklist.
-
     Test Docker.
-
-    git
-        Remove Visual Studio performance analysis reports from source code control.
-        Why is Quokka Workbench bundled in with modelrelief.js?
 
     Upgrades
         Upgrade Three.js.
         Convert TypeScript compiler output to ES5 modules?
 
-    The Python Environment tools throw if an environment variable is not found.
-        Should there be defaults such as for Builder?
-****
+
+
     UI
         Add UI progress indicator for mesh generation.
         CameraControls
