@@ -22,12 +22,16 @@ namespace ModelRelief.Features.Home
 
         public IActionResult Index()
             {
-#if false
-            // stackoverflow.com/questions/46406525/net-core-2-0-basepath-error
-            return RedirectToAction("Edit", "Composer", new { Id = 1 });
-#else
             return View();
-#endif
             }
+
+        /// <summary>
+        /// Action method for Privacy Get.
+        /// </summary>
+        [HttpGet]
+        public IActionResult Privacy()
+        {
+            return View();
         }
     }
+}

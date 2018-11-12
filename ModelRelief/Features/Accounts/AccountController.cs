@@ -14,12 +14,21 @@ namespace ModelRelief.Features.Accounts
     using ModelRelief.Database;
     using ModelRelief.Domain;
 
+    /// <summary>
+    /// Account controller.
+    /// </summary>
     public class AccountController : Controller
         {
         private readonly IServiceProvider _services;
         private UserManager<ApplicationUser>   _userManager;
         private SignInManager<ApplicationUser> _signInManager;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AccountController"/> class.
+        /// </summary>
+        /// <param name="userManager">UserManager.</param>
+        /// <param name="signInManager">SignInManager.</param>
+        /// <param name="services">IServiceProvider.</param>
         public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IServiceProvider services)
             {
             _userManager  = userManager;
@@ -27,12 +36,19 @@ namespace ModelRelief.Features.Accounts
             _services = services;
             }
 
+        /// <summary>
+        /// Action method for Register Get.
+        /// </summary>
         [HttpGet]
         public IActionResult Register()
             {
             return View();
             }
 
+        /// <summary>
+        /// Action method for Register Post.
+        /// </summary>
+        /// <param name="model">RegisterViewModel containing user credentials.</param>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
@@ -65,6 +81,9 @@ namespace ModelRelief.Features.Accounts
             return RedirectToAction("Index", "Home");
             }
 
+        /// <summary>
+        /// Action method for Logout.
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
@@ -73,12 +92,19 @@ namespace ModelRelief.Features.Accounts
             return RedirectToAction("Index", "Home");
             }
 
+        /// <summary>
+        /// Action method for Login Get.
+        /// </summary>
         [HttpGet]
         public IActionResult Login()
             {
             return View();
             }
 
+        /// <summary>
+        /// Action method for Login Post.
+        /// </summary>
+        /// <param name="model">LoginViewModel containing user credentials.</param>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -107,6 +133,9 @@ namespace ModelRelief.Features.Accounts
                 }
             }
 
+        /// <summary>
+        /// Action method for Manager Get.
+        /// </summary>
         [HttpGet]
         public IActionResult Manage()
         {

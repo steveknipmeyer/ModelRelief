@@ -27,9 +27,6 @@ Add SRI integrity checks for CDN scripts.
             _CookieConsentPartial.cshtml has been added.
                 Add to _Layout.cshtml._
 
-            Views/Home/Privacy.cshtml
-                The Privacy action method is added to the Home controller.
-
     IDaaS Benefits
         Overall security is vastly improved.
         Far fewer code will need to be written and maintained.
