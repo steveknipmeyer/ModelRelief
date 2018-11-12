@@ -85,4 +85,10 @@
   <ItemGroup>
     <Folder Include="Migrations\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Features\Accounts\Manage.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
 </Project>

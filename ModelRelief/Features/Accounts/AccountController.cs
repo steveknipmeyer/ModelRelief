@@ -106,5 +106,11 @@ namespace ModelRelief.Features.Accounts
                 return RedirectToAction("Index", "Home");
                 }
             }
+
+        [HttpGet]
+        public IActionResult Manage()
+        {
+            return View();
         }
     }
+}

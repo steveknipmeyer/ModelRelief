@@ -1,8 +1,5 @@
 ﻿### Tasks
 #### Commit Notes
-Update JaveScript libraries.
-    jquery.validate 1.16.0 -> 1.17.0
-    jquery.validation.unobtrusive 3.2.6 -> 3.2.9
 
 #### Lambda
 #### Vector
@@ -25,6 +22,7 @@ Update JaveScript libraries.
 
 #### Short Term
     ASP.NET Core 2.1
+
         .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
         _CookieConsentPartial.cshtml has been added.
