@@ -1,6 +1,13 @@
 ﻿### Tasks
 #### Commit Notes
+Update JaveScript libraries.
+    jquery.validate 1.16.0 -> 1.17.0
+    jquery.validation.unobtrusive 3.2.6 -> 3.2.9
+
 #### Lambda
+#### Vector
+    npm install
+    
 #### Test Checklist
     Test Checklist
         Visual Studio
@@ -18,9 +25,8 @@
 
 #### Short Term
     ASP.NET Core 2.1
-        jQuery 3.2.1 to 3.3.1
-        jquery.validate 1.16.0 to 1.17.0
         .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
         _CookieConsentPartial.cshtml has been added.
         _Layout.cshtml
             <partial name="_CookieConsentPartial" /> is added.
@@ -29,12 +35,15 @@
         Added
             Views/Home/Privacy.cshtml
             The Privacy action method is added to the Home controller.
+
     IDaaS Benefits
         Overall security is vastly improved.
         Far fewer code will need to be written and maintained.
         Auth0 provides an excellend dashboard with metrics.
         API authorization will be supported.
         The TestAuthorization middleware can be removed.
+        Questions
+            Can the Test environment be deprecated?
 
     repository
         Separate
