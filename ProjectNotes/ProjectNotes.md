@@ -1,6 +1,7 @@
 ﻿### Tasks
 #### Commit Notes
-
+Separate validation scripts into _ValidationScriptsPartial.cshtml.
+Add SRI integrity checks for CDN scripts.
 #### Lambda
 #### Vector
     npm install
@@ -22,17 +23,12 @@
 
 #### Short Term
     ASP.NET Core 2.1
+       Cookies
+            _CookieConsentPartial.cshtml has been added.
+                Add to _Layout.cshtml._
 
-        .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-        _CookieConsentPartial.cshtml has been added.
-        _Layout.cshtml
-            <partial name="_CookieConsentPartial" /> is added.
-        _ValidationScriptsPartial.cshtml
-            Separate from _Layout.cshtml.
-        Added
             Views/Home/Privacy.cshtml
-            The Privacy action method is added to the Home controller.
+                The Privacy action method is added to the Home controller.
 
     IDaaS Benefits
         Overall security is vastly improved.

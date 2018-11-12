@@ -78,21 +78,18 @@
         <environment names="Staging,Production">
             <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.2.1.min.js"
                     asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                    asp-fallback-test="window.jQuery">
-            </script>
-            <script src="https://ajax.aspnetcdn.com/ajax/jQuery.Validate/1.17.0/jQuery.Validate.js"
-                    asp-fallback-src="~/lib/jquery-validation/dist/jquery.validate.min.js"
-                    asp-fallback-test="window.jQuery.validator">
-            </script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.9/jquery.validate.unobtrusive.min.js"
-                    asp-fallback-src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive..min.js"
-                    asp-fallback-test="">
+                    asp-fallback-test="window.jQuery"
+                    crossorigin = "anonymous"
+                    integrity = "sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f" >
             </script>
             <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
                     asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                    asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+                    asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                    crossorigin = "anonymous"
+                    integrity = "sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" >
             </script>
         </environment>
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
         @RenderSection("scripts", required: false)
 

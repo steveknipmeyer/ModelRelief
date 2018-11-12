@@ -8,6 +8,7 @@ namespace ModelRelief.Services
 {
     using FluentValidation.AspNetCore;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -61,7 +62,8 @@ namespace ModelRelief.Services
             })
                 .AddFeatureFolders()
                 // automatically register all validators within this assembly
-                .AddFluentValidation(config => { config.RegisterValidatorsFromAssemblyContaining<Startup>(); });
+                .AddFluentValidation(config => { config.RegisterValidatorsFromAssemblyContaining<Startup>(); })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         /// <summary>
