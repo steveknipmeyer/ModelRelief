@@ -7,6 +7,8 @@
 namespace ModelRelief.Services
 {
     using FluentValidation.AspNetCore;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -22,28 +24,17 @@ namespace ModelRelief.Services
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Extension method to add the database services.
+        /// Extension method to conmfigure cookie policy.
         /// </summary>
         /// <param name="services">IServiceCollection</param>
-        public static void AddDatabaseServices(this IServiceCollection services)
+        public static void ConfigureCookies(this IServiceCollection services)
         {
-            // build the intermediate service provider
-            var serviceProvider = services.BuildServiceProvider();
-            var configurationProvider = serviceProvider.GetService<Services.IConfigurationProvider>();
-
-            switch (configurationProvider.Database)
+            services.Configure<CookiePolicyOptions>(options =>
             {
-                case RelationalDatabaseProvider.SQLite:
-                    services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlite(configurationProvider.Configuration.GetConnectionString(ConfigurationSettings.SQLite)));
-                    break;
-
-                case RelationalDatabaseProvider.SQLServer:
-                default:
-                    services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlServer(configurationProvider.Configuration.GetConnectionString(ConfigurationSettings.SQLServer)));
-                    break;
-            }
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                    .AddEntityFrameworkStores<ModelReliefDbContext>();
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
         }
 
         /// <summary>
@@ -76,6 +67,31 @@ namespace ModelRelief.Services
             services.AddSingleton<IStorageManager, StorageManager>();
             services.AddSingleton<IDependencyManager, DependencyManager>();
             services.AddSingleton<IDispatcher, Dispatcher>();
+        }
+
+        /// <summary>
+        /// Extension method to add the database services.
+        /// </summary>
+        /// <param name="services">IServiceCollection</param>
+        public static void AddDatabaseServices(this IServiceCollection services)
+        {
+            // build the intermediate service provider
+            var serviceProvider = services.BuildServiceProvider();
+            var configurationProvider = serviceProvider.GetService<Services.IConfigurationProvider>();
+
+            switch (configurationProvider.Database)
+            {
+                case RelationalDatabaseProvider.SQLite:
+                    services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlite(configurationProvider.Configuration.GetConnectionString(ConfigurationSettings.SQLite)));
+                    break;
+
+                case RelationalDatabaseProvider.SQLServer:
+                default:
+                    services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlServer(configurationProvider.Configuration.GetConnectionString(ConfigurationSettings.SQLServer)));
+                    break;
+            }
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                    .AddEntityFrameworkStores<ModelReliefDbContext>();
         }
     }
 }

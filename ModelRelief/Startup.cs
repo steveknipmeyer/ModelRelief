@@ -128,6 +128,7 @@ namespace ModelRelief
 
             services.AddSingleton(Configuration);
             services.AddRouting(options => options.LowercaseUrls = true);
+            services.ConfigureCookies();
             services.AddCustomMvc();
             services.AddModelReliefServices();
             services.AddDatabaseServices();
@@ -172,6 +173,7 @@ namespace ModelRelief
             });
 
             app.AddStaticFilePaths(env.ContentRootPath, new string[] { "Scripts" });
+            app.UseCookiePolicy();
             app.UseAuthentication();
 
             // authentication middleware for testing

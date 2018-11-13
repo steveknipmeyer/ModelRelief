@@ -1,10 +1,7 @@
 ﻿### Tasks
 #### Commit Notes
-Separate validation scripts into _ValidationScriptsPartial.cshtml.
-Add SRI integrity checks for CDN scripts.
 #### Lambda
 #### Vector
-    npm install
     
 #### Test Checklist
     Test Checklist
@@ -22,10 +19,6 @@ Add SRI integrity checks for CDN scripts.
         Docker                      DockerStart
 
 #### Short Term
-    ASP.NET Core 2.1
-       Cookies
-            _CookieConsentPartial.cshtml has been added.
-                Add to _Layout.cshtml._
 
     IDaaS Benefits
         Overall security is vastly improved.
