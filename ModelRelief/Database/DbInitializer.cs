@@ -890,14 +890,7 @@ namespace ModelRelief.Database
         /// <returns>Development user.</returns>
         private ApplicationUser GetDevelopmentUser()
         {
-            var userNameSetting = $"{UserAccounts.Development}:UserName";
-            var userName = ConfigurationProvider.GetSetting(userNameSetting);
-
             ApplicationUser user = ConstructUserFromAccountName(UserAccounts.Development);
-
-            // stop tracking to avoid conflicting tracking
-            if (user != null)
-                DbContext.Entry(user).State = EntityState.Detached;
 
             return user;
         }
