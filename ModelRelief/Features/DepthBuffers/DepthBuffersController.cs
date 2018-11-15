@@ -42,7 +42,7 @@ namespace ModelRelief.Features.DepthBuffers
         /// <param name="depthBuffer">DepthBuffer instance for View.</param>
         protected async override Task InitializeViewControls(Dto.DepthBuffer depthBuffer = null)
         {
-            var applicationUser = await Identity.FindApplicationUserAsync(UserManager, User);
+            var applicationUser = await IdentityUtility.FindApplicationUserAsync(UserManager, User);
             var userId = applicationUser?.Id ?? string.Empty;
 
             ViewBag.DepthBufferFormats  = ViewHelpers.PopulateEnumDropDownList<DepthBufferFormat>("Select depth buffer format");

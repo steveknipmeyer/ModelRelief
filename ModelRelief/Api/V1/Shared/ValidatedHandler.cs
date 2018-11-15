@@ -92,7 +92,7 @@ namespace ModelRelief.Api.V1.Shared
         public virtual async Task<TEntity> FindModelAsync<TEntity>(ClaimsPrincipal claimsPrincipal, int id, bool throwIfNotFound = true)
             where TEntity : DomainModel
         {
-            var user = await Identity.FindApplicationUserAsync(UserManager, claimsPrincipal);
+            var user = await IdentityUtility.FindApplicationUserAsync(UserManager, claimsPrincipal);
             return await FindModelAsync<TEntity>(user, id, throwIfNotFound);
         }
 

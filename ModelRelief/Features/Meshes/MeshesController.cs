@@ -42,7 +42,7 @@ namespace ModelRelief.Features.Meshes
         /// <param name="mesh">Mesh instance for View.</param>
         protected async override Task InitializeViewControls(Dto.Mesh mesh = null)
         {
-            var applicationUser = await Identity.FindApplicationUserAsync(UserManager, User);
+            var applicationUser = await IdentityUtility.FindApplicationUserAsync(UserManager, User);
             var userId = applicationUser?.Id ?? string.Empty;
 
             ViewBag.MeshFormat      = ViewHelpers.PopulateEnumDropDownList<MeshFormat>("Select mesh format");

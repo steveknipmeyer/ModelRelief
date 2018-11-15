@@ -42,7 +42,7 @@ namespace ModelRelief.Features.Cameras
         /// <param name="camera">Camera instance for View.</param>
         protected async override Task InitializeViewControls(Dto.Camera camera = null)
         {
-            var applicationUser = await Identity.FindApplicationUserAsync(UserManager, User);
+            var applicationUser = await IdentityUtility.FindApplicationUserAsync(UserManager, User);
             var userId = applicationUser?.Id ?? string.Empty;
 
             ViewBag.StandardViews   = ViewHelpers.PopulateEnumDropDownList<StandardView>("Select a standard camera view");

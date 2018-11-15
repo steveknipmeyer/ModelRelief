@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-// <copyright file="Identity.cs" company="ModelRelief">
+// <copyright file="IdentityUtility.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -13,7 +13,7 @@ namespace ModelRelief.Utility
     using ModelRelief.Api.V1.Shared.Errors;
     using ModelRelief.Domain;
 
-    public static class Identity
+    public static class IdentityUtility
     {
         // N.B. Must match TestAccount!
         public static string MockUserId
@@ -27,15 +27,16 @@ namespace ModelRelief.Utility
         }
 
         /// <summary>
-        /// IPrincipal extension method to retrieve the User Id.
+        /// IPrincipal extension method to retrieve a Claim.
         /// https://stackoverflow.com/questions/38543193/proper-way-to-get-current-user-id-in-entity-framework-core
         /// </summary>
         /// <param name="principal">User</param>
-        /// <returns>User Id</returns>
-        public static string GetUserId(this IPrincipal principal)
+        /// <param name="claimType">System.Security.Claims.ClaimTypes</param>
+        /// <returns>Claim value.</returns>
+        public static string GetUserClaim(IPrincipal principal, string claimType)
         {
             var claimsIdentity = (ClaimsIdentity)principal.Identity;
-            var claim = claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            var claim = claimsIdentity.FindFirst(claimType);
             return claim.Value;
         }
 
@@ -52,7 +53,7 @@ namespace ModelRelief.Utility
             throw new UserAuthenticationException();
 
         // mock authentication to work with PostMan and xUnit; assign a User Id to the GenericIdentity that was created in the middleware
-        if (claimsPrincipal.Identity.Name == Identity.MockUserName)
+        if (claimsPrincipal.Identity.Name == IdentityUtility.MockUserName)
             return await userManager.FindByIdAsync(MockUserId);
         else
             return await userManager.GetUserAsync(claimsPrincipal);

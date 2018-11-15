@@ -71,7 +71,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             await ValidateReferences<TEntity>(newModel, message.User);
 
             // set ownership
-            newModel.User = await Identity.FindApplicationUserAsync(UserManager, message.User);
+            newModel.User = await IdentityUtility.FindApplicationUserAsync(UserManager, message.User);
 
             DbContext.Set<TEntity>().Add(newModel);
             await DependencyManager.PersistChangesAsync(newModel, cancellationToken);

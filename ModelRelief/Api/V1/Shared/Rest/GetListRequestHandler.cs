@@ -63,7 +63,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns></returns>
         public override async Task<object> OnHandle(GetListRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
-            var user = await Identity.FindApplicationUserAsync(UserManager, message.User);
+            var user = await IdentityUtility.FindApplicationUserAsync(UserManager, message.User);
 
             IQueryable<TEntity> results = DbContext.Set<TEntity>()
                                                 .Where(m => (m.UserId == user.Id));

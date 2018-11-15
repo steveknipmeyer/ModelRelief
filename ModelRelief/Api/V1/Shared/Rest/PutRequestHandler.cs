@@ -81,7 +81,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             updatedModel.Id = message.Id;
 
             // set ownership
-            updatedModel.User = await Identity.FindApplicationUserAsync(UserManager, message.User);
+            updatedModel.User = await IdentityUtility.FindApplicationUserAsync(UserManager, message.User);
 
             DbContext.Set<TEntity>().Update(updatedModel);
             await DependencyManager.PersistChangesAsync(updatedModel, cancellationToken);

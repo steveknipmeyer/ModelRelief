@@ -42,7 +42,7 @@ namespace ModelRelief.Features.Projects
         /// <param name="project">Project instance for View.</param>
         protected async override Task InitializeViewControls(Dto.Project project = null)
         {
-            var applicationUser = await Identity.FindApplicationUserAsync(UserManager, User);
+            var applicationUser = await IdentityUtility.FindApplicationUserAsync(UserManager, User);
             var userId = applicationUser?.Id ?? string.Empty;
         }
     }

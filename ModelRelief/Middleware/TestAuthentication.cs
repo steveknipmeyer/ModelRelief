@@ -23,7 +23,7 @@ namespace ModelRelief.Middleware
             // if (!isAuthenticated)
             if (env.IsEnvironment("Test") && !isAuthenticated)
             {
-                context.User = new System.Security.Claims.ClaimsPrincipal(new GenericIdentity(Identity.MockUserName));
+                context.User = new System.Security.Claims.ClaimsPrincipal(new GenericIdentity(IdentityUtility.MockUserName));
 #if false
                 // WIP: Creating a ClaimsPrincipal here yields an exception about access of a Disposed object.    
                 var userName = configurationProvider.GetSetting("TestAccount:UserName");

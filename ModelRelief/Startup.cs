@@ -13,7 +13,6 @@ namespace ModelRelief
     using Autofac.Extensions.DependencyInjection;
     using Autofac.Features.Variance;
     using AutoMapper;
-    using FluentValidation.AspNetCore;
     using MediatR;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -22,15 +21,11 @@ namespace ModelRelief
     using Microsoft.AspNetCore.StaticFiles;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Domain;
-    using ModelRelief.Features.Errors;
     using ModelRelief.Infrastructure;
     using ModelRelief.Middleware;
     using ModelRelief.Services;
-    using ModelRelief.Services.Jobs;
-    using ModelRelief.Services.Relationships;
     using ModelRelief.Workbench;
 
     public class Startup
@@ -129,6 +124,7 @@ namespace ModelRelief
             services.AddSingleton(Configuration);
             services.AddRouting(options => options.LowercaseUrls = true);
             services.ConfigureCookies();
+            services.AddAuth0Authentication(Configuration);
             services.AddCustomMvc();
             services.AddModelReliefServices();
             services.AddDatabaseServices();
@@ -161,7 +157,7 @@ namespace ModelRelief
                 app.UseHttpsRedirection();
 
             // https://stackoverflow.com/questions/35031279/confused-with-error-handling-in-asp-net-5-mvc-6
-            // app.UseStatusCodePagesWithReExecute("/Errors/Error/{0}");
+            app.UseStatusCodePagesWithReExecute("/Errors/Error/{0}");
 
             // Set up custom content types, associating file extension to MIME type
             var provider = new FileExtensionContentTypeProvider();

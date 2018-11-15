@@ -49,7 +49,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
                             .FirstOrDefault();
 
             var dependentTypes  = DependencyManager.GetClassDependentFiles(rootType);
-            var dependentModels = await Manager.FindDependentModels(Identity.MockUserId, rootType, rootPrimaryKey, dependentTypes);
+            var dependentModels = await Manager.FindDependentModels(IdentityUtility.MockUserId, rootType, rootPrimaryKey, dependentTypes);
 
             return dependentModels;
         }

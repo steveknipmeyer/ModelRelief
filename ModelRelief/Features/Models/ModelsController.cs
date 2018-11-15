@@ -67,7 +67,7 @@ namespace ModelRelief.Features.Models
         /// <param name="model">Model instance for View.</param>
         protected async override Task InitializeViewControls(Dto.Model3d model)
         {
-            var applicationUser = await Identity.FindApplicationUserAsync(UserManager, User);
+            var applicationUser = await IdentityUtility.FindApplicationUserAsync(UserManager, User);
             var userId = applicationUser?.Id ?? string.Empty;
 
             ViewBag.ModelFormat  = ViewHelpers.PopulateEnumDropDownList<Model3dFormat>("Select model format");

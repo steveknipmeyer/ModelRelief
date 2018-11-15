@@ -42,7 +42,7 @@ namespace ModelRelief.Features.MeshTransforms
         /// <param name="meshTransform">MeshTransform instance for View.</param>
         protected async override Task InitializeViewControls(Dto.MeshTransform meshTransform = null)
         {
-            var applicationUser = await Identity.FindApplicationUserAsync(UserManager, User);
+            var applicationUser = await IdentityUtility.FindApplicationUserAsync(UserManager, User);
             var userId = applicationUser?.Id ?? string.Empty;
 
             ViewBag.ProjectId = ViewHelpers.PopulateModelDropDownList<Project>(DbContext, userId, "Select a project", meshTransform?.ProjectId);

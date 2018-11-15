@@ -1,6 +1,10 @@
 ﻿### Tasks
 #### Commit Notes
+Rename Identity IdentityUtility.
+ApplicationUser no longer subclasses from Identity.
 #### Lambda
+    User Secrets
+
 #### Vector
     
 #### Test Checklist
@@ -19,16 +23,50 @@
         Docker                      DockerStart
 
 #### Short Term
+    Autho0 Integration
+        Remove UserManager.
+        Remove Microsoft.AspNetCore.Identity;
 
+        Document references to ApplicationUser.
+        IdentityUtility.FindApplicationUserAsync
+            This method is primariy used to get the ApplicationUser.Id from the User (ClaimsPrincipal).
+
+        Replace the ApplicationUser reference in the DomainModel to some form of an ApplicationUserId.
+
+        UserProfile
+            https://auth0.com/docs/quickstart/webapp/aspnet-core/02-user-profile
+
+        DbInitializer no longer needs to add accounts. They will always exist as identities in Auth0.    
+            The process of creating ApplicationUsers must be refactored to construct an ApplicationUser consisting of the the standard identities (ArtCam, Vectric, Test)
+
+        Questions
+            Does the ModelRelief API return the correct response codes if a user is not authenticated or authorized?
+                401: Unauthorized
+                403: Forbidden?
+                404: Not Found
+            Can authorization policies be used to provide access to sample models for all users?
+                This would remove the need to seed the database with the test models <for each user>.
+            How can custom claims be added?
+                Company
+                Phone Number
+        
     IDaaS Benefits
         Overall security is vastly improved.
         Far fewer code will need to be written and maintained.
-        Auth0 provides an excellend dashboard with metrics.
+        Auth0 provides an excellend dashboard with analytics.
         API authorization will be supported.
         The TestAuthorization middleware can be removed.
         Questions
             Can the Test environment be deprecated?
 
+    Review Core error handling.
+        https://andrewlock.net/re-execute-the-middleware-pipeline-with-the-statuscodepages-middleware-to-create-custom-error-pages/
+        Why was this statement disabled?
+            // https://stackoverflow.com/questions/35031279/confused-with-error-handling-in-asp-net-5-mvc-6
+            app.UseStatusCodePagesWithReExecute("/Errors/Error/{0}");
+        Why is the errorCode 0 in the Errors Error action method?
+            Possibly, the error redirection happens only when status codes are returned by the pipline <rather than when an exception is thrown.>
+        
     repository
         Separate
             NodeWorkbench
@@ -39,8 +77,6 @@
     Upgrades
         Upgrade Three.js.
         Convert TypeScript compiler output to ES5 modules?
-
-
 
     UI
         Add UI progress indicator for mesh generation.
