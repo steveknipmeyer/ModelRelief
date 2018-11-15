@@ -9,7 +9,6 @@ namespace ModelRelief.Domain
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.IO;
-    using System.Threading.Tasks;
     using ModelRelief.Services;
     using ModelRelief.Services.Relationships;
     using ModelRelief.Utility;
@@ -32,8 +31,6 @@ namespace ModelRelief.Domain
         // Navigation Properties
         [JsonIgnore]
         public string UserId { get; set; }
-        [JsonIgnore]
-        public ApplicationUser User { get; set; }
     }
 
     /// <summary>

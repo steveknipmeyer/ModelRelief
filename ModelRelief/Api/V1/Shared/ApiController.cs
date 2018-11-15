@@ -11,7 +11,6 @@ namespace ModelRelief.Api.V1.Shared
     using System.Threading.Tasks;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Errors;
@@ -28,7 +27,6 @@ namespace ModelRelief.Api.V1.Shared
             where TEntity : DomainModel
     {
         public ModelReliefDbContext             DbContext { get; }
-        public UserManager<ApplicationUser>     UserManager { get; }
         public ILogger                          Logger { get; }
         public IMediator                        Mediator { get; }
 
@@ -37,13 +35,11 @@ namespace ModelRelief.Api.V1.Shared
         /// Base API Controller
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mediator">IMediator.</param>
-        protected ApiController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMediator mediator)
+        protected ApiController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMediator mediator)
         {
             DbContext   = dbContext;
-            UserManager = userManager;
             Logger      = loggerFactory.CreateLogger(typeof(ApiController<TEntity>).Name);
             Mediator    = mediator;
         }

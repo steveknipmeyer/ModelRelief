@@ -13,7 +13,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using AutoMapper.QueryableExtensions;
     using FluentValidation;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Database;
@@ -37,7 +36,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
-        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
@@ -46,14 +44,13 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="validators">All validators matching IValidator for the given request.</param>
         public PostRequestHandler(
             ModelReliefDbContext dbContext,
-            UserManager<ApplicationUser> userManager,
             ILoggerFactory loggerFactory,
             IMapper mapper,
             IHostingEnvironment hostingEnvironment,
             Services.IConfigurationProvider  configurationProvider,
             IDependencyManager dependencyManager,
             IEnumerable<IValidator<PostRequest<TEntity, TRequestModel, TGetModel>>> validators)
-            : base(dbContext, userManager, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators)
+            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators)
         {
         }
 
@@ -71,7 +68,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
             await ValidateReferences<TEntity>(newModel, message.User);
 
             // set ownership
-            newModel.User = await IdentityUtility.FindApplicationUserAsync(UserManager, message.User);
+            var applicationUser = await IdentityUtility.FindApplicationUserAsync(message.User);
+            newModel.UserId = applicationUser.Id;
 
             DbContext.Set<TEntity>().Add(newModel);
             await DependencyManager.PersistChangesAsync(newModel, cancellationToken);

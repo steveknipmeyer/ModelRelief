@@ -9,21 +9,15 @@ namespace ModelRelief.Utility
     using System.Security.Claims;
     using System.Security.Principal;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Identity;
     using ModelRelief.Api.V1.Shared.Errors;
     using ModelRelief.Domain;
 
     public static class IdentityUtility
     {
-        // N.B. Must match TestAccount!
-        public static string MockUserId
+        // N.B. Must match DevelopmentAccount!
+        public static string DevelopmentUserId
         {
-            get { return "7ab4676b-563b-4c42-b6f9-27c11208f33f"; }
-        }
-
-        public static string MockUserName
-        {
-            get { return "MockTestUser"; }
+            get { return "auth05bedab58aa237e078600530b"; }
         }
 
         /// <summary>
@@ -37,26 +31,24 @@ namespace ModelRelief.Utility
         {
             var claimsIdentity = (ClaimsIdentity)principal.Identity;
             var claim = claimsIdentity.FindFirst(claimType);
-            return claim.Value;
+
+            return claim?.Value ?? string.Empty;
         }
 
         /// <summary>
         /// Returns the current user from a ClaimsPrincipal.
-        /// https://stackoverflow.com/questions/30701006/how-to-get-the-current-logged-in-user-id-asp-net-core
         /// </summary>
-        /// <param name="userManager">User Manager from DI</param>
         /// <param name="claimsPrincipal">HttpContext.User</param>
         /// <returns>USer</returns>
-        public static async Task<ApplicationUser> FindApplicationUserAsync(UserManager<ApplicationUser> userManager, ClaimsPrincipal claimsPrincipal)
+        public static async Task<ApplicationUser> FindApplicationUserAsync(ClaimsPrincipal claimsPrincipal)
         {
-        if ((claimsPrincipal == null) || (!claimsPrincipal.Identity.IsAuthenticated))
-            throw new UserAuthenticationException();
+            if ((claimsPrincipal == null) || (!claimsPrincipal.Identity.IsAuthenticated))
+                throw new UserAuthenticationException();
 
-        // mock authentication to work with PostMan and xUnit; assign a User Id to the GenericIdentity that was created in the middleware
-        if (claimsPrincipal.Identity.Name == IdentityUtility.MockUserName)
-            return await userManager.FindByIdAsync(MockUserId);
-        else
-            return await userManager.GetUserAsync(claimsPrincipal);
+            var applicationUser = new ApplicationUser(claimsPrincipal);
+            await Task.CompletedTask;
+
+            return applicationUser;
         }
     }
 }

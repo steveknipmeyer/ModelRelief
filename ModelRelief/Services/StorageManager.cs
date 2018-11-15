@@ -73,7 +73,7 @@ namespace ModelRelief.Services
             var modelRootFolder  = ConfigurationProvider.GetSetting($"Paths:ResourceFolders:{typeof(TEntity).Name}");
 
             // N.B. Path.Combine does not handle path fragments that mix forward and backward slashes.
-            string modelStorageFolder = $"{GetAbsolutePath(storeUsersFolder)}{model.User.Id}/{modelRootFolder}/{model.Id}/";
+            string modelStorageFolder = $"{GetAbsolutePath(storeUsersFolder)}{model.UserId}/{modelRootFolder}/{model.Id}/";
 
             // normalize
             return Path.GetFullPath(modelStorageFolder);

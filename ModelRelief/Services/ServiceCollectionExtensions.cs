@@ -13,14 +13,12 @@ namespace ModelRelief.Services
     using Microsoft.AspNetCore.Authentication.OpenIdConnect;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
     using ModelRelief.Database;
-    using ModelRelief.Domain;
     using ModelRelief.Features.Errors;
     using ModelRelief.Infrastructure;
     using ModelRelief.Services.Jobs;
@@ -164,8 +162,6 @@ namespace ModelRelief.Services
                     services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlServer(configurationProvider.Configuration.GetConnectionString(ConfigurationSettings.SQLServer)));
                     break;
             }
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                    .AddEntityFrameworkStores<ModelReliefDbContext>();
         }
     }
 }

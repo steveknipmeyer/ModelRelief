@@ -16,7 +16,6 @@ namespace ModelRelief
     using MediatR;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Routing;
     using Microsoft.AspNetCore.StaticFiles;
     using Microsoft.Extensions.Configuration;
@@ -24,7 +23,6 @@ namespace ModelRelief
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Domain;
     using ModelRelief.Infrastructure;
-    using ModelRelief.Middleware;
     using ModelRelief.Services;
     using ModelRelief.Workbench;
 
@@ -140,9 +138,7 @@ namespace ModelRelief
         /// <param name="app">DI IApplicationBuilder</param>
         /// <param name="env">DI IHostingEnvironment</param>
         /// <param name="configurationProvider">Configuration provider.</param>
-        /// <param name="userManager">Identity UserManager.</param>
-        /// <param name="signInManager">SignIn Manager.</param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Services.IConfigurationProvider configurationProvider, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Services.IConfigurationProvider configurationProvider)
         {
             if (env.IsDevelopment() || env.IsEnvironment("Test"))
             {
@@ -171,13 +167,6 @@ namespace ModelRelief
             app.AddStaticFilePaths(env.ContentRootPath, new string[] { "Scripts" });
             app.UseCookiePolicy();
             app.UseAuthentication();
-
-            // authentication middleware for testing
-            app.Use(async (context, next) =>
-            {
-                await TestAuthentication.Test(env, context, next);
-            });
-
             app.UseMvc(ConfigureRoutes);
         }
 

@@ -10,13 +10,11 @@ namespace ModelRelief.Features.Models
     using AutoMapper;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
     using ModelRelief.Domain;
-    using ModelRelief.Services;
     using ModelRelief.Utility;
 
     /// <summary>
@@ -32,13 +30,12 @@ namespace ModelRelief.Features.Models
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
-        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="mediator">IMediator</param>
         /// <param name="configurationProvider">Configuration provider.</param>
-        public ModelsController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator, Services.IConfigurationProvider configurationProvider)
-            : base(dbContext, userManager, loggerFactory, mapper, mediator)
+        public ModelsController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator, Services.IConfigurationProvider configurationProvider)
+            : base(dbContext, loggerFactory, mapper, mediator)
         {
             ConfigurationProvider = configurationProvider;
         }
@@ -67,7 +64,7 @@ namespace ModelRelief.Features.Models
         /// <param name="model">Model instance for View.</param>
         protected async override Task InitializeViewControls(Dto.Model3d model)
         {
-            var applicationUser = await IdentityUtility.FindApplicationUserAsync(UserManager, User);
+            var applicationUser = await IdentityUtility.FindApplicationUserAsync(User);
             var userId = applicationUser?.Id ?? string.Empty;
 
             ViewBag.ModelFormat  = ViewHelpers.PopulateEnumDropDownList<Model3dFormat>("Select model format");

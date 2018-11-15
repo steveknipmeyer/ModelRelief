@@ -17,7 +17,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using FluentValidation;
     using FluentValidation.Results;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Errors;
@@ -40,7 +39,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
-        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
@@ -49,7 +47,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="validators">All validators matching IValidator for the given request.</param>
         public PatchRequestHandler(
             ModelReliefDbContext dbContext,
-            UserManager<ApplicationUser> userManager,
             ILoggerFactory loggerFactory,
             IMapper mapper,
             IHostingEnvironment hostingEnvironment,
@@ -57,7 +54,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             IDependencyManager dependencyManager,
             IEnumerable<IValidator<PatchRequest<TEntity,
             TGetModel>>> validators)
-            : base(dbContext, userManager, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators)
+            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators)
         {
         }
 

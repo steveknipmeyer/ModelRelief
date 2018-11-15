@@ -9,11 +9,10 @@ namespace ModelRelief.Database
     using System;
     using System.Linq;
     using System.Reflection;
-    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using ModelRelief.Domain;
 
-    public class ModelReliefDbContext : IdentityDbContext<ApplicationUser>
+    public class ModelReliefDbContext : DbContext
         {
         public ModelReliefDbContext(DbContextOptions options)
             : base(options)

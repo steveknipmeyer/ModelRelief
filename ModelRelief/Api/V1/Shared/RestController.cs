@@ -10,7 +10,6 @@ namespace ModelRelief.Api.V1.Shared
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using MediatR;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Rest;
@@ -32,12 +31,11 @@ namespace ModelRelief.Api.V1.Shared
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mediator">IMediator.</param>
         /// <remarks>Defaults to use paging.</remarks>
-        protected RestController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMediator mediator)
-            : this(dbContext, userManager, loggerFactory, mediator, new RestControllerOptions { UsePaging = true })
+        protected RestController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMediator mediator)
+            : this(dbContext, loggerFactory, mediator, new RestControllerOptions { UsePaging = true })
         {
         }
 
@@ -46,12 +44,11 @@ namespace ModelRelief.Api.V1.Shared
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mediator">IMediator.</param>
         /// <param name="restControllerOptions">Options for paging, etc.</param>
-        protected RestController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMediator mediator, RestControllerOptions restControllerOptions)
-            : base(dbContext, userManager, loggerFactory, mediator)
+        protected RestController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMediator mediator, RestControllerOptions restControllerOptions)
+            : base(dbContext, loggerFactory, mediator)
         {
             RestControllerOptions = restControllerOptions;
         }

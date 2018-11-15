@@ -12,7 +12,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using AutoMapper;
     using FluentValidation;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Database;
     using ModelRelief.Domain;
@@ -32,7 +31,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
-        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
@@ -43,7 +41,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="dispatcher">Dispatcher for long-runnning processes.</param>
         public DepthBufferFileRequestHandler(
             ModelReliefDbContext dbContext,
-            UserManager<ApplicationUser> userManager,
             ILoggerFactory loggerFactory,
             IMapper mapper,
             IHostingEnvironment hostingEnvironment,
@@ -52,7 +49,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             IEnumerable<IValidator<FileRequest<Domain.DepthBuffer>>> validators,
             IStorageManager storageManager,
             IDispatcher dispatcher)
-            : base(dbContext, userManager, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators, storageManager)
+            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators, storageManager)
         {
             Dispatcher = dispatcher ?? throw new System.ArgumentNullException(nameof(dispatcher));
         }

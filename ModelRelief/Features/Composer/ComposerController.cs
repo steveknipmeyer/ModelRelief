@@ -10,13 +10,10 @@ namespace ModelRelief.Features.Composer
     using AutoMapper;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
-    using ModelRelief.Domain;
-    using ModelRelief.Utility;
 
     /// <summary>
     /// Represents a controller to handle Composer requests.
@@ -29,12 +26,11 @@ namespace ModelRelief.Features.Composer
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
-        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="mediator">IMediator</param>
-        public ComposerController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator)
-            : base(dbContext, userManager, loggerFactory, mapper, mediator)
+        public ComposerController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator)
+            : base(dbContext, loggerFactory, mapper, mediator)
         {
         }
 

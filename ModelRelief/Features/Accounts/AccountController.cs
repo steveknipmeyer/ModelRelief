@@ -8,11 +8,10 @@ namespace ModelRelief.Features.Accounts
 {
     using System;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authentication.Cookies;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.DependencyInjection;
-    using ModelRelief.Database;
-    using ModelRelief.Domain;
 
     /// <summary>
     /// Account controller.
@@ -20,118 +19,42 @@ namespace ModelRelief.Features.Accounts
     public class AccountController : Controller
         {
         private readonly IServiceProvider _services;
-        private UserManager<ApplicationUser>   _userManager;
-        private SignInManager<ApplicationUser> _signInManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountController"/> class.
         /// </summary>
-        /// <param name="userManager">UserManager.</param>
-        /// <param name="signInManager">SignInManager.</param>
         /// <param name="services">IServiceProvider.</param>
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IServiceProvider services)
+        public AccountController(IServiceProvider services)
             {
-            _userManager  = userManager;
-            _signInManager = signInManager;
             _services = services;
             }
 
         /// <summary>
-        /// Action method for Register Get.
+        /// Action method for Login.
         /// </summary>
-        [HttpGet]
-        public IActionResult Register()
-            {
-            return View();
-            }
-
-        /// <summary>
-        /// Action method for Register Post.
-        /// </summary>
-        /// <param name="model">RegisterViewModel containing user credentials.</param>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model)
-            {
-            if (!ModelState.IsValid)
-                {
-                // re-display with validation messages
-                return View();
-                }
-
-            var user = new ApplicationUser() { UserName = model.Username };
-            var createResult = await _userManager.CreateAsync(user, model.Password);
-            if (!createResult.Succeeded)
-                {
-                foreach (var error in createResult.Errors)
-                    {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                // re-display with validation messages
-                return View();
-                }
-
-            // success
-            await _signInManager.SignInAsync(user, false);
-
-            // examples
-            var initializer = new DbInitializer(_services, false);
-            initializer.SeedDatabaseForUser(user);
-
-            return RedirectToAction("Index", "Home");
-            }
+        /// <param name="returnUrl">Return Url after successful login.</param>
+        /// <returns></returns>
+        public async Task Login(string returnUrl = "/")
+        {
+            await HttpContext.ChallengeAsync("Auth0", new AuthenticationProperties() { RedirectUri = returnUrl });
+        }
 
         /// <summary>
         /// Action method for Logout.
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
+        [Authorize]
+        public async Task Logout()
+        {
+            await HttpContext.SignOutAsync("Auth0", new AuthenticationProperties
             {
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
-            }
-
-        /// <summary>
-        /// Action method for Login Get.
-        /// </summary>
-        [HttpGet]
-        public IActionResult Login()
-            {
-            return View();
-            }
-
-        /// <summary>
-        /// Action method for Login Post.
-        /// </summary>
-        /// <param name="model">LoginViewModel containing user credentials.</param>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
-            {
-            if (!ModelState.IsValid)
-                {
-                // re-display with validation messages
-                return View();
-                }
-
-            var loginResult = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
-            if (!loginResult.Succeeded)
-                {
-                ModelState.AddModelError(string.Empty, "Login was not successful. Please try again.");
-
-                // re-display with validation messages
-                return View();
-                }
-            if (Url.IsLocalUrl(model.ReturnUrl))
-                {
-                return Redirect(model.ReturnUrl);
-                }
-            else
-                {
-                return RedirectToAction("Index", "Home");
-                }
-            }
+                // Indicate here where Auth0 should redirect the user after a logout.
+                // Note that the resulting absolute Uri must be whitelisted in the **Allowed Logout URLs** settings for the client.
+                RedirectUri = Url.Action("Index", "Home"),
+            });
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        }
 
         /// <summary>
         /// Action method for Manager Get.

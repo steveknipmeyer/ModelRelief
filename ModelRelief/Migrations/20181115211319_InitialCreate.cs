@@ -1,0 +1,316 @@
+﻿// -----------------------------------------------------------------------
+// <copyright file="20181115211319_InitialCreate.cs" company="ModelRelief">
+// Copyright (c) ModelRelief. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace ModelRelief.Migrations
+{
+    using System;
+    using Microsoft.EntityFrameworkCore.Metadata;
+    using Microsoft.EntityFrameworkCore.Migrations;
+
+    /// <summary>
+    /// Create initial DBContext.
+    /// </summary>
+    public partial class InitialCreate : Migration
+    {
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.CreateTable(
+                name: "Projects",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Projects", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Cameras",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true),
+                    IsPerspective = table.Column<bool>(nullable: false),
+                    Near = table.Column<double>(nullable: false),
+                    Far = table.Column<double>(nullable: false),
+                    PositionX = table.Column<double>(nullable: false),
+                    PositionY = table.Column<double>(nullable: false),
+                    PositionZ = table.Column<double>(nullable: false),
+                    EulerX = table.Column<double>(nullable: false),
+                    EulerY = table.Column<double>(nullable: false),
+                    EulerZ = table.Column<double>(nullable: false),
+                    Theta = table.Column<double>(nullable: false),
+                    ScaleX = table.Column<double>(nullable: false),
+                    ScaleY = table.Column<double>(nullable: false),
+                    ScaleZ = table.Column<double>(nullable: false),
+                    UpX = table.Column<double>(nullable: false),
+                    UpY = table.Column<double>(nullable: false),
+                    UpZ = table.Column<double>(nullable: false),
+                    FieldOfView = table.Column<double>(nullable: false),
+                    AspectRatio = table.Column<double>(nullable: false),
+                    Left = table.Column<double>(nullable: false),
+                    Right = table.Column<double>(nullable: false),
+                    Top = table.Column<double>(nullable: false),
+                    Bottom = table.Column<double>(nullable: false),
+                    ProjectId = table.Column<int>(nullable: true),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cameras", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cameras_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MeshTransforms",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true),
+                    Width = table.Column<double>(nullable: false),
+                    Height = table.Column<double>(nullable: false),
+                    Depth = table.Column<double>(nullable: false),
+                    GradientThreshold = table.Column<double>(nullable: false),
+                    AttenuationFactor = table.Column<double>(nullable: false),
+                    AttenuationDecay = table.Column<double>(nullable: false),
+                    UnsharpGaussianLow = table.Column<double>(nullable: false),
+                    UnsharpGaussianHigh = table.Column<double>(nullable: false),
+                    UnsharpHighFrequencyScale = table.Column<double>(nullable: false),
+                    P1 = table.Column<double>(nullable: false),
+                    P2 = table.Column<double>(nullable: false),
+                    P3 = table.Column<double>(nullable: false),
+                    P4 = table.Column<double>(nullable: false),
+                    P5 = table.Column<double>(nullable: false),
+                    P6 = table.Column<double>(nullable: false),
+                    P7 = table.Column<double>(nullable: false),
+                    P8 = table.Column<double>(nullable: false),
+                    ProjectId = table.Column<int>(nullable: true),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MeshTransforms", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MeshTransforms_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Models",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true),
+                    FileTimeStamp = table.Column<DateTime>(nullable: true),
+                    Path = table.Column<string>(nullable: true),
+                    Format = table.Column<int>(nullable: false),
+                    ProjectId = table.Column<int>(nullable: true),
+                    CameraId = table.Column<int>(nullable: true),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Models", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Models_Cameras_CameraId",
+                        column: x => x.CameraId,
+                        principalTable: "Cameras",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Models_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DepthBuffers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true),
+                    FileTimeStamp = table.Column<DateTime>(nullable: true),
+                    Path = table.Column<string>(nullable: true),
+                    FileIsSynchronized = table.Column<bool>(nullable: false),
+                    Width = table.Column<double>(nullable: false),
+                    Height = table.Column<double>(nullable: false),
+                    Format = table.Column<int>(nullable: false),
+                    ProjectId = table.Column<int>(nullable: true),
+                    Model3dId = table.Column<int>(nullable: true),
+                    CameraId = table.Column<int>(nullable: true),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DepthBuffers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DepthBuffers_Cameras_CameraId",
+                        column: x => x.CameraId,
+                        principalTable: "Cameras",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_DepthBuffers_Models_Model3dId",
+                        column: x => x.Model3dId,
+                        principalTable: "Models",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_DepthBuffers_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Meshes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true),
+                    FileTimeStamp = table.Column<DateTime>(nullable: true),
+                    Path = table.Column<string>(nullable: true),
+                    FileIsSynchronized = table.Column<bool>(nullable: false),
+                    Format = table.Column<int>(nullable: false),
+                    ProjectId = table.Column<int>(nullable: true),
+                    CameraId = table.Column<int>(nullable: true),
+                    DepthBufferId = table.Column<int>(nullable: true),
+                    MeshTransformId = table.Column<int>(nullable: true),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Meshes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Meshes_Cameras_CameraId",
+                        column: x => x.CameraId,
+                        principalTable: "Cameras",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Meshes_DepthBuffers_DepthBufferId",
+                        column: x => x.DepthBufferId,
+                        principalTable: "DepthBuffers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Meshes_MeshTransforms_MeshTransformId",
+                        column: x => x.MeshTransformId,
+                        principalTable: "MeshTransforms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Meshes_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cameras_ProjectId",
+                table: "Cameras",
+                column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DepthBuffers_CameraId",
+                table: "DepthBuffers",
+                column: "CameraId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DepthBuffers_Model3dId",
+                table: "DepthBuffers",
+                column: "Model3dId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DepthBuffers_ProjectId",
+                table: "DepthBuffers",
+                column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Meshes_CameraId",
+                table: "Meshes",
+                column: "CameraId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Meshes_DepthBufferId",
+                table: "Meshes",
+                column: "DepthBufferId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Meshes_MeshTransformId",
+                table: "Meshes",
+                column: "MeshTransformId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Meshes_ProjectId",
+                table: "Meshes",
+                column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MeshTransforms_ProjectId",
+                table: "MeshTransforms",
+                column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Models_CameraId",
+                table: "Models",
+                column: "CameraId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Models_ProjectId",
+                table: "Models",
+                column: "ProjectId");
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "Meshes");
+
+            migrationBuilder.DropTable(
+                name: "DepthBuffers");
+
+            migrationBuilder.DropTable(
+                name: "MeshTransforms");
+
+            migrationBuilder.DropTable(
+                name: "Models");
+
+            migrationBuilder.DropTable(
+                name: "Cameras");
+
+            migrationBuilder.DropTable(
+                name: "Projects");
+        }
+    }
+}

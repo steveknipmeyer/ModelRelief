@@ -18,7 +18,6 @@ namespace ModelRelief.Api.V1.Shared
     using FluentValidation.Results;
     using MediatR;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Errors;
@@ -36,7 +35,6 @@ namespace ModelRelief.Api.V1.Shared
         where TRequest : IRequest<TResponse>
     {
         public ModelReliefDbContext             DbContext { get; }
-        public UserManager<ApplicationUser>     UserManager { get; }
         public ILogger                          Logger { get; }
         public IMapper                          Mapper { get; }
         public IHostingEnvironment              HostingEnvironment { get; }
@@ -49,7 +47,6 @@ namespace ModelRelief.Api.V1.Shared
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
@@ -58,7 +55,6 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="validators">List of validators</param>
         public ValidatedHandler(
             ModelReliefDbContext dbContext,
-            UserManager<ApplicationUser> userManager,
             ILoggerFactory loggerFactory,
             IMapper mapper,
             IHostingEnvironment hostingEnvironment,
@@ -67,7 +63,6 @@ namespace ModelRelief.Api.V1.Shared
             IEnumerable<IValidator<TRequest>> validators)
         {
             DbContext =             dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
-            UserManager =           userManager ?? throw new System.ArgumentNullException(nameof(dbContext));
             Logger =                (loggerFactory == null) ? throw new System.ArgumentNullException(nameof(loggerFactory)) : loggerFactory.CreateLogger(typeof(ValidatedHandler<TRequest, TResponse>).Name);
             Mapper =                mapper ?? throw new System.ArgumentNullException(nameof(mapper));
             HostingEnvironment =    hostingEnvironment ?? throw new System.ArgumentNullException(nameof(hostingEnvironment));
@@ -92,7 +87,7 @@ namespace ModelRelief.Api.V1.Shared
         public virtual async Task<TEntity> FindModelAsync<TEntity>(ClaimsPrincipal claimsPrincipal, int id, bool throwIfNotFound = true)
             where TEntity : DomainModel
         {
-            var user = await IdentityUtility.FindApplicationUserAsync(UserManager, claimsPrincipal);
+            var user = await IdentityUtility.FindApplicationUserAsync(claimsPrincipal);
             return await FindModelAsync<TEntity>(user, id, throwIfNotFound);
         }
 

@@ -10,10 +10,8 @@ namespace ModelRelief.Features.Projects
     using AutoMapper;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Database;
-    using ModelRelief.Domain;
     using ModelRelief.Utility;
 
     /// <summary>
@@ -27,12 +25,11 @@ namespace ModelRelief.Features.Projects
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
-        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="mediator">IMediator</param>
-        public ProjectsController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator)
-            : base(dbContext, userManager, loggerFactory, mapper, mediator)
+        public ProjectsController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator)
+            : base(dbContext, loggerFactory, mapper, mediator)
         {
         }
 
@@ -42,7 +39,7 @@ namespace ModelRelief.Features.Projects
         /// <param name="project">Project instance for View.</param>
         protected async override Task InitializeViewControls(Dto.Project project = null)
         {
-            var applicationUser = await IdentityUtility.FindApplicationUserAsync(UserManager, User);
+            var applicationUser = await IdentityUtility.FindApplicationUserAsync(User);
             var userId = applicationUser?.Id ?? string.Empty;
         }
     }

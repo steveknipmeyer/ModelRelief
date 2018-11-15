@@ -12,7 +12,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Extensions;
@@ -37,7 +36,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
-        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
@@ -45,13 +43,12 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="dependencyManager">Services for dependency processing.</param>
         public GetListRequestHandler(
             ModelReliefDbContext dbContext,
-            UserManager<ApplicationUser> userManager,
             ILoggerFactory loggerFactory,
             IMapper mapper,
             IHostingEnvironment hostingEnvironment,
             Services.IConfigurationProvider  configurationProvider,
             IDependencyManager dependencyManager)
-            : base(dbContext, userManager, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, null)
+            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, null)
         {
         }
 
@@ -63,7 +60,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns></returns>
         public override async Task<object> OnHandle(GetListRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
-            var user = await IdentityUtility.FindApplicationUserAsync(UserManager, message.User);
+            var user = await IdentityUtility.FindApplicationUserAsync(message.User);
 
             IQueryable<TEntity> results = DbContext.Set<TEntity>()
                                                 .Where(m => (m.UserId == user.Id));

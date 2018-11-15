@@ -10,7 +10,6 @@ namespace ModelRelief.Features.DepthBuffers
     using AutoMapper;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Database;
     using ModelRelief.Domain;
@@ -27,12 +26,11 @@ namespace ModelRelief.Features.DepthBuffers
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
-        /// <param name="userManager">UserManager (ClaimsPrincipal -> ApplicationUser).</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="mediator">IMediator</param>
-        public DepthBuffersController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator)
-            : base(dbContext, userManager, loggerFactory, mapper, mediator)
+        public DepthBuffersController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator)
+            : base(dbContext, loggerFactory, mapper, mediator)
         {
         }
 
@@ -42,7 +40,7 @@ namespace ModelRelief.Features.DepthBuffers
         /// <param name="depthBuffer">DepthBuffer instance for View.</param>
         protected async override Task InitializeViewControls(Dto.DepthBuffer depthBuffer = null)
         {
-            var applicationUser = await IdentityUtility.FindApplicationUserAsync(UserManager, User);
+            var applicationUser = await IdentityUtility.FindApplicationUserAsync(User);
             var userId = applicationUser?.Id ?? string.Empty;
 
             ViewBag.DepthBufferFormats  = ViewHelpers.PopulateEnumDropDownList<DepthBufferFormat>("Select depth buffer format");

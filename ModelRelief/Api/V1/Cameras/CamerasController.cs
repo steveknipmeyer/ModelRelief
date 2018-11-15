@@ -7,7 +7,6 @@
 namespace ModelRelief.Api.V1.Cameras
 {
     using MediatR;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared;
@@ -25,11 +24,10 @@ namespace ModelRelief.Api.V1.Cameras
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        /// <param name="userManager">UserManager to convert from ClaimsPrincipal to ApplicationUser.</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mediator">IMediator.</param>
-        public CamerasController(ModelReliefDbContext dbContext, UserManager<ApplicationUser> userManager, ILoggerFactory loggerFactory, IMediator mediator)
-            : base(dbContext, userManager, loggerFactory, mediator)
+        public CamerasController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMediator mediator)
+            : base(dbContext, loggerFactory, mediator)
         {
         }
     }
