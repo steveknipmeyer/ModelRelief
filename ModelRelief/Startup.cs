@@ -140,7 +140,7 @@ namespace ModelRelief
         /// <param name="configurationProvider">Configuration provider.</param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, Services.IConfigurationProvider configurationProvider)
         {
-            if (env.IsDevelopment() || env.IsEnvironment("Test"))
+            if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -149,7 +149,7 @@ namespace ModelRelief
                 app.UseHsts();
             }
             // XUnit TestServer not compatible
-            if (!env.IsEnvironment("Test"))
+            if (!env.IsDevelopment())
                 app.UseHttpsRedirection();
 
             // https://stackoverflow.com/questions/35031279/confused-with-error-handling-in-asp-net-5-mvc-6

@@ -339,7 +339,7 @@ namespace ModelRelief.Database
         /// </summary>
         private void CreateTestDatabase()
         {
-            if (string.Equals(HostingEnvironment.EnvironmentName, "Test", StringComparison.CurrentCultureIgnoreCase))
+            if (string.Equals(HostingEnvironment.EnvironmentName, "Development", StringComparison.CurrentCultureIgnoreCase))
             {
                 // create the baseline copy of the test
                 DbContext.SaveChanges();

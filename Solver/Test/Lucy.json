@@ -41,14 +41,14 @@
       "Project": null,
       "Id": 9,
       "Name": "Lucy",
-      "Description": "Lucy Model (test@modelrelief.com)"
+      "Description": "Lucy Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2018-11-08T07:38:46.6664508",
-    "RelativeFileName": "store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\depthbuffers\\7\\lucy.sdb",
+    "FileTimeStamp": "2018-11-15T17:16:12.0067119",
+    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\7\\lucy.sdb",
     "Id": 7,
     "Name": "lucy.sdb",
-    "Description": "Generated in Maya (test@modelrelief.com)"
+    "Description": "Generated in Maya (development@modelrelief.com)"
   },
   "MeshTransformId": 8,
   "MeshTransform": {
@@ -73,12 +73,12 @@
     "Project": null,
     "Id": 8,
     "Name": "Lucy",
-    "Description": "Lucy transform (test@modelrelief.com)"
+    "Description": "Lucy transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2018-11-08T07:38:46.877375",
-  "RelativeFileName": "store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\meshes\\7\\lucy.sfp",
+  "FileTimeStamp": "2018-11-15T17:16:12.159238",
+  "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\7\\lucy.sfp",
   "Id": 7,
   "Name": "lucy.sfp",
-  "Description": "Isometric (test@modelrelief.com)"
+  "Description": "Isometric (development@modelrelief.com)"
 }

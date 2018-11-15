@@ -1,9 +1,9 @@
 ﻿### Tasks
 #### Commit Notes
-Rename Identity IdentityUtility.
-ApplicationUser no longer subclasses from Identity.
+
 #### Lambda
     User Secrets
+    Update Production site.
 
 #### Vector
     
@@ -24,28 +24,26 @@ ApplicationUser no longer subclasses from Identity.
 
 #### Short Term
     Autho0 Integration
-        Remove UserManager.
-        Remove Microsoft.AspNetCore.Identity;
+        How is a Bearer token created for API access?
+        Run Test suite.
 
-        Document references to ApplicationUser.
-        IdentityUtility.FindApplicationUserAsync
-            This method is primariy used to get the ApplicationUser.Id from the User (ClaimsPrincipal).
+        Update Production site.
 
-        Replace the ApplicationUser reference in the DomainModel to some form of an ApplicationUserId.
+        Remove Test Environment.
+            DbInitializer
 
         UserProfile
             https://auth0.com/docs/quickstart/webapp/aspnet-core/02-user-profile
-
-        DbInitializer no longer needs to add accounts. They will always exist as identities in Auth0.    
-            The process of creating ApplicationUsers must be refactored to construct an ApplicationUser consisting of the the standard identities (ArtCam, Vectric, Test)
 
         Questions
             Does the ModelRelief API return the correct response codes if a user is not authenticated or authorized?
                 401: Unauthorized
                 403: Forbidden?
                 404: Not Found
+
             Can authorization policies be used to provide access to sample models for all users?
                 This would remove the need to seed the database with the test models <for each user>.
+
             How can custom claims be added?
                 Company
                 Phone Number
@@ -274,7 +272,7 @@ Perspective <-> Orthographic
 ##### Testing
 - [x] Add the new properties to the ConstructValidModel method of the \<Model>TestModelFactory class.
 - [x] Run the unit tests.
-- [x] Replace the test JSON files in Solver\Test with the updated properties.
+- [x] Update the test JSON files using MRUpdateSeedData.
 
 ##### Schema
 - [x] Update ModelRelief.dgml schema diagram.
@@ -1357,7 +1355,7 @@ Environment variables set in the Visual Studio launchSettings.json **override** 
 The Visual Studio Debug project settings for Environment variables **writes through** to launchSettings.json. They are *identical*.
 
 The XUnit tests cannot be run withany required prompts for user verification because *the console is not displayed*.
-ServerFramework (WebHost.CreateDefaultBuilder) sets the environment to "Test" *however the environment variables from launchSettings.json are not used.*
+ServerFramework (WebHost.CreateDefaultBuilder) sets the environment to "Development" *however the environment variables from launchSettings.json are not used.*
 
 #### New Computer Setup
     gulp must be installed globally.

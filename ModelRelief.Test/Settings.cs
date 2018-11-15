@@ -15,7 +15,7 @@ namespace ModelRelief.Test
     /// </summary>
     public class Settings
     {
-        public const string Environment = "Test";
+        public const string Environment = "Development";
         public const string Scheme = "http";
         public const string Host   = "localhost";
 

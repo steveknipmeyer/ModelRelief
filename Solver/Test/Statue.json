@@ -41,14 +41,14 @@
       "Project": null,
       "Id": 11,
       "Name": "Statue",
-      "Description": "Statue Model (test@modelrelief.com)"
+      "Description": "Statue Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2018-11-08T07:38:46.6664701",
-    "RelativeFileName": "store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\depthbuffers\\9\\statue.sdb",
+    "FileTimeStamp": "2018-11-15T17:16:12.0067256",
+    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\9\\statue.sdb",
     "Id": 9,
     "Name": "statue.sdb",
-    "Description": "Generated in Maya (test@modelrelief.com)"
+    "Description": "Generated in Maya (development@modelrelief.com)"
   },
   "MeshTransformId": 10,
   "MeshTransform": {
@@ -73,12 +73,12 @@
     "Project": null,
     "Id": 10,
     "Name": "Statue",
-    "Description": "Statue transform (test@modelrelief.com)"
+    "Description": "Statue transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2018-11-08T07:38:46.877421",
-  "RelativeFileName": "store\\test\\users\\7ab4676b-563b-4c42-b6f9-27c11208f33f\\meshes\\9\\statue.sfp",
+  "FileTimeStamp": "2018-11-15T17:16:12.1592548",
+  "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\9\\statue.sfp",
   "Id": 9,
   "Name": "statue.sfp",
-  "Description": "Top (test@modelrelief.com)"
+  "Description": "Top (development@modelrelief.com)"
 }
