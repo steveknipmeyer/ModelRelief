@@ -1,5 +1,6 @@
 ﻿### Tasks
 #### Commit Notes
+Resolve SRI integrity hash for jQuery.Validate/1.17.0.
 
 #### Lambda
     User Secrets
@@ -27,14 +28,6 @@
         How is a Bearer token created for API access?
         Run Test suite.
 
-        Update Production site.
-
-        Remove Test Environment.
-            DbInitializer
-
-        UserProfile
-            https://auth0.com/docs/quickstart/webapp/aspnet-core/02-user-profile
-
         Questions
             Does the ModelRelief API return the correct response codes if a user is not authenticated or authorized?
                 401: Unauthorized
@@ -43,10 +36,6 @@
 
             Can authorization policies be used to provide access to sample models for all users?
                 This would remove the need to seed the database with the test models <for each user>.
-
-            How can custom claims be added?
-                Company
-                Phone Number
         
     IDaaS Benefits
         Overall security is vastly improved.
