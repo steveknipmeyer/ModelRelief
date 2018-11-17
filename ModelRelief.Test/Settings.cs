@@ -28,7 +28,7 @@ namespace ModelRelief.Test
         /// <returns>Content folder root.</returns>
         public static string GetContentRootPath()
         {
-            // e.g. D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief.Test\bin\Debug\netcoreapp2.0
+            // e.g. D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief.Test\bin\Debug\netcoreapp2.1
             var currentDirectory = Directory.GetCurrentDirectory();
 
             // reset path from <top> down

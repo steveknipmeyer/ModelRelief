@@ -10,6 +10,8 @@ namespace ModelRelief.Api.V1.Shared
     using System.Net;
     using System.Threading.Tasks;
     using MediatR;
+    using Microsoft.AspNetCore.Authentication.Cookies;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
@@ -18,8 +20,7 @@ namespace ModelRelief.Api.V1.Shared
     using ModelRelief.Database;
     using ModelRelief.Domain;
 
-    // WIP: What is the best practive for API authorization?
-    [Authorize]
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
     [Area("ApiV1")]
     [Route("apiV1/[controller]")]
     [Produces("application/json")]

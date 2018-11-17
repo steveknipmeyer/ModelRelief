@@ -50,6 +50,11 @@ namespace ModelRelief.Services
                 options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
             .AddCookie()
+            .AddJwtBearer(options =>
+            {
+                options.Authority = $"https://{configuration["Auth0:Domain"]}/";
+                options.Audience = configuration["Auth0:ApiIdentifier"];
+            })
             .AddOpenIdConnect("Auth0", options =>
             {
                 // Set the authority to your Auth0 domain

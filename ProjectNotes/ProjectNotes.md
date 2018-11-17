@@ -1,13 +1,13 @@
 ﻿### Tasks
 #### Commit Notes
-Resolve SRI integrity hash for jQuery.Validate/1.17.0.
+Register IHttpContextAccessor to support client side validation.
 
 #### Lambda
     User Secrets
     Update Production site.
 
 #### Vector
-    
+
 #### Test Checklist
     Test Checklist
         Visual Studio
@@ -24,9 +24,40 @@ Resolve SRI integrity hash for jQuery.Validate/1.17.0.
         Docker                      DockerStart
 
 #### Short Term
+    UnitTests
+        Request an API token at startup.
+            https://auth0.com/docs/api-auth/tutorials/password-grant
+            var client = new RestClient("https://modelrelief.auth0.com/oauth/token");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("content-type", "application/json");
+            request.AddParameter("application/json", "{\"grant_type\":\"password\",\"username\": \"user@example.com\",\"password\": \"pwd\",\"audience\": \"https://someapi.com/api\", \"scope\": \"read:sample\", \"client_id\": \"FV1JbxjkYpC0qWigYsgfN0XvZwGFE9I-\", \"client_secret\": \"YOUR_CLIENT_SECRET\"}", ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
+        Insert the Bearer token for each request.
+
+    HTTP/HTTPS
+        IIS Production does not respond on HTTP 6000.
+        Development cannot set a cookie on HTTP 5000.
+
     Autho0 Integration
-        How is a Bearer token created for API access?
-        Run Test suite.
+        Resources
+            DualAuthentication
+                https://wildermuth.com/2017/08/19/Two-AuthorizationSchemes-in-ASP-NET-Core-2
+            The Auth0 Authorization API Debugger does not work to issue 'password' tokens.
+                However, curl works to grant Bearer tokens.
+
+        How are Auth0 API tokens managed?
+            https://auth0.com/docs/quickstart/backend/aspnet-core-webapi/01-authorization#create-an-api
+            https://github.com/auth0-samples/auth0-aspnetcore-webapi-samples/tree/master/Quickstart/01-Authorization
+            The unit tests can request an access token at runtime.
+                There is no need to embed the Bearer JWT in the application.
+
+        XUnit Middelware Authentication
+            https://medium.com/@zbartl/authentication-and-asp-net-core-integration-testing-using-testserver-15d47b03045a
+
+        Postman
+            Investigate variables.
+            HTTPS endpoints do not work. However, they do work with curl.
+            Add environments (Development, Local Production, Production).
 
         Questions
             Does the ModelRelief API return the correct response codes if a user is not authenticated or authorized?
@@ -36,7 +67,7 @@ Resolve SRI integrity hash for jQuery.Validate/1.17.0.
 
             Can authorization policies be used to provide access to sample models for all users?
                 This would remove the need to seed the database with the test models <for each user>.
-        
+
     IDaaS Benefits
         Overall security is vastly improved.
         Far fewer code will need to be written and maintained.
@@ -51,9 +82,12 @@ Resolve SRI integrity hash for jQuery.Validate/1.17.0.
         Why was this statement disabled?
             // https://stackoverflow.com/questions/35031279/confused-with-error-handling-in-asp-net-5-mvc-6
             app.UseStatusCodePagesWithReExecute("/Errors/Error/{0}");
+            Some applications use:
+                app.UseExceptionHandler("/Home/Error");
+
         Why is the errorCode 0 in the Errors Error action method?
             Possibly, the error redirection happens only when status codes are returned by the pipline <rather than when an exception is thrown.>
-        
+
     repository
         Separate
             NodeWorkbench
@@ -1573,7 +1607,8 @@ np_fill, relief_fill
 
 #### HTTPS
     HttpsRedirection
-        It does not work on IIS. It does work for IIS Express, Development and Production.
+        It does not work on IIS Production and Development.
+        It does work for IIS Express and Production.
         app.UseHttpsRedirection leads to Xunit test failure.
             Test disables HttpsRedirection to support XUnit.
 

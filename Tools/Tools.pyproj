@@ -32,6 +32,8 @@
     <Compile Include="environment.py" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Auth0Query.bat" />
+    <Content Include="Auth0Grant.bat" />
     <Content Include="DotNetPID.ps1" />
     <Content Include="GitBash.bat" />
     <Content Include="ModelReliefShell.bat" />

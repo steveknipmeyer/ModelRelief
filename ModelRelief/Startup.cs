@@ -16,12 +16,12 @@ namespace ModelRelief
     using MediatR;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Routing;
     using Microsoft.AspNetCore.StaticFiles;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using ModelRelief.Api.V1.Shared.Rest;
-    using ModelRelief.Domain;
     using ModelRelief.Infrastructure;
     using ModelRelief.Services;
     using ModelRelief.Workbench;
@@ -124,6 +124,8 @@ namespace ModelRelief
             services.ConfigureCookies();
             services.AddAuth0Authentication(Configuration);
             services.AddCustomMvc();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddModelReliefServices();
             services.AddDatabaseServices();
             services.AddAutoMapper(typeof(Startup));

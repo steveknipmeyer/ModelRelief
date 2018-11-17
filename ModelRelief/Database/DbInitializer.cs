@@ -331,7 +331,7 @@ namespace ModelRelief.Database
             // user store
             SeedUserStore(user);
 
-            Logger.LogInformation($"User {user} database and sample data sets created.");
+            Logger.LogInformation($"User {user.Name} database and sample data sets created.");
         }
 
         /// <summary>
