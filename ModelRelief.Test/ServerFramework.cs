@@ -6,8 +6,10 @@
 
 namespace ModelRelief.Test
 {
+    using System;
     using System.IO;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Reflection;
     using System.Text;
     using System.Threading.Tasks;
@@ -18,6 +20,7 @@ namespace ModelRelief.Test
     using Microsoft.Extensions.Logging;
     using ModelRelief.Services;
     using Newtonsoft.Json;
+    using Xunit;
 
     /// <summary>
     /// Sets up a test server and HTTP client for integration testing.
@@ -58,17 +61,48 @@ namespace ModelRelief.Test
                                             .UseStartup<Startup>());
 
             Client = Server.CreateClient();
+            SetAuthorizationHeaderAsync().Wait();
+        }
+
+        /// <summary>
+        /// Requests an API JWT Bearer token from Auth0.
+        /// The token is set as the default Authorization for all client requests.
+        /// </summary>
+        /// <returns></returns>
+        private async Task<bool> SetAuthorizationHeaderAsync()
+        {
+            var configuration = ConfigurationProvider.Configuration;
+            var passwordGrantRequest = new
+            {
+                grant_type      = "password",
+                username        = configuration["DevelopmentAccount:Name"],
+                password        = configuration["DevelopmentAccount:Password"],
+                audience        = configuration["Auth0:ApiIdentifier"],
+                client_id       = configuration["Auth0:ApiClientId"],
+                client_secret   = configuration["Auth0:ApiClientSecret"],
+            };
+
+            var client = new HttpClient();
+            var endpoint = "https://modelrelief.auth0.com/oauth/token";
+            var requestResponse = await SubmitHttpRequestAsync(client, HttpRequestType.Post, endpoint, passwordGrantRequest);
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+
+            var passwordGrant = JsonConvert.DeserializeObject<PasswordGrant>(requestResponse.ContentString);
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", passwordGrant.Access_token);
+
+            return true;
         }
 
         /// <summary>
         /// Submits an object to a given endpoint using the HTTP method.
         /// </summary>
+        /// <param name="client">HTTP client to send request..</param>
         /// <param name="requestType">HTTP request type.</param>
         /// <param name="endPoint">Endpoint.</param>
         /// <param name="contentObject">Object to serlize and send in the body of the request.</param>
         /// <param name="binaryContent">File content for the requwst.</param>
         /// <returns></returns>
-        public async Task<RequestResponse> SubmitHttpRequest(HttpRequestType requestType, string endPoint, object contentObject = null, bool binaryContent = false)
+        public async Task<RequestResponse> SubmitHttpRequestAsync(HttpClient client, HttpRequestType requestType, string endPoint, object contentObject = null, bool binaryContent = false)
         {
             HttpContent content = null;
             if (!binaryContent)
@@ -81,28 +115,50 @@ namespace ModelRelief.Test
                 content = new ByteArrayContent(contentObject as byte[]);
             }
 
-            HttpResponseMessage response = null;
-            switch (requestType)
+            HttpResponseMessage response = new HttpResponseMessage();
+            try
             {
-                case HttpRequestType.Get:
-                    response = await Client.GetAsync(endPoint);
-                    break;
+                switch (requestType)
+                {
+                    case HttpRequestType.Get:
+                        response = await client.GetAsync(endPoint);
+                        break;
 
-                case HttpRequestType.Post:
-                    response = await Client.PostAsync(endPoint, content);
-                    break;
+                    case HttpRequestType.Post:
+                        response = await client.PostAsync(endPoint, content);
+                        break;
 
-                case HttpRequestType.Put:
-                    response = await Client.PutAsync(endPoint, content);
-                    break;
+                    case HttpRequestType.Put:
+                        response = await client.PutAsync(endPoint, content);
+                        break;
 
-                case HttpRequestType.Delete:
-                    response = await Client.DeleteAsync(endPoint);
-                    break;
+                    case HttpRequestType.Delete:
+                        response = await client.DeleteAsync(endPoint);
+                        break;
+                }
             }
-            var responseString = await response.Content.ReadAsStringAsync();
+            catch (Exception ex)
+            {
+                Console.WriteLine($"HTTP request {endPoint} threw an exception: {ex.Message}");
+                return new RequestResponse { Message = response, ContentString = string.Empty };
+            }
 
+            var responseString = await response.Content.ReadAsStringAsync();
             return new RequestResponse { Message = response, ContentString = responseString };
+        }
+
+        /// <summary>
+        /// Submits an object to a given endpoint using the HTTP method.
+        /// </summary>
+        /// <param name="requestType">HTTP request type.</param>
+        /// <param name="endPoint">Endpoint.</param>
+        /// <param name="contentObject">Object to serlize and send in the body of the request.</param>
+        /// <param name="binaryContent">File content for the requwst.</param>
+        /// <returns></returns>
+        public async Task<RequestResponse> SubmitHttpRequestAsync(HttpRequestType requestType, string endPoint, object contentObject = null, bool binaryContent = false)
+        {
+            // use TestServer HTTPClient
+            return await SubmitHttpRequestAsync(Client, requestType, endPoint, contentObject, binaryContent);
         }
     }
 }

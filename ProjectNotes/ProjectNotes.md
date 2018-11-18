@@ -1,6 +1,9 @@
 ﻿### Tasks
 #### Commit Notes
-Register IHttpContextAccessor to support client side validation.
+Ad support to TestServer to request a password grant Bearer token.
+Remove appsettings.Test.json and remaining references to Test environment.
+Environment.py -> environment py
+SubmitHttpRequest -> SubmitHttpRequestAsync
 
 #### Lambda
     User Secrets
@@ -24,32 +27,24 @@ Register IHttpContextAccessor to support client side validation.
         Docker                      DockerStart
 
 #### Short Term
-    UnitTests
-        Request an API token at startup.
-            https://auth0.com/docs/api-auth/tutorials/password-grant
-            var client = new RestClient("https://modelrelief.auth0.com/oauth/token");
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("content-type", "application/json");
-            request.AddParameter("application/json", "{\"grant_type\":\"password\",\"username\": \"user@example.com\",\"password\": \"pwd\",\"audience\": \"https://someapi.com/api\", \"scope\": \"read:sample\", \"client_id\": \"FV1JbxjkYpC0qWigYsgfN0XvZwGFE9I-\", \"client_secret\": \"YOUR_CLIENT_SECRET\"}", ParameterType.RequestBody);
-            IRestResponse response = client.Execute(request);
-        Insert the Bearer token for each request.
-
+    LastPass
+        test@modelrelief.com
+        artcam@artcam.com
+        vectric@vectric.com
+  
+    Azure Keys
+        Create key store.
+        Move Production database credientials to key store.
+        Remove Azure key file from git.
+        Remove Add.UserSecrets from ModelRelief and ModelRelief.Test.
+  
     HTTP/HTTPS
         IIS Production does not respond on HTTP 6000.
         Development cannot set a cookie on HTTP 5000.
 
     Autho0 Integration
-        Resources
-            DualAuthentication
-                https://wildermuth.com/2017/08/19/Two-AuthorizationSchemes-in-ASP-NET-Core-2
-            The Auth0 Authorization API Debugger does not work to issue 'password' tokens.
-                However, curl works to grant Bearer tokens.
-
-        How are Auth0 API tokens managed?
-            https://auth0.com/docs/quickstart/backend/aspnet-core-webapi/01-authorization#create-an-api
-            https://github.com/auth0-samples/auth0-aspnetcore-webapi-samples/tree/master/Quickstart/01-Authorization
-            The unit tests can request an access token at runtime.
-                There is no need to embed the Bearer JWT in the application.
+        The Auth0 Authorization API Debugger does not work to issue 'password' grants.
+            Compare the parameters sent with the curl Auth0Grant batch file which does work.
 
         XUnit Middelware Authentication
             https://medium.com/@zbartl/authentication-and-asp-net-core-integration-testing-using-testserver-15d47b03045a
@@ -73,9 +68,6 @@ Register IHttpContextAccessor to support client side validation.
         Far fewer code will need to be written and maintained.
         Auth0 provides an excellend dashboard with analytics.
         API authorization will be supported.
-        The TestAuthorization middleware can be removed.
-        Questions
-            Can the Test environment be deprecated?
 
     Review Core error handling.
         https://andrewlock.net/re-execute-the-middleware-pipeline-with-the-statuscodepages-middleware-to-create-custom-error-pages/
@@ -227,6 +219,10 @@ What controls are (ultimately) present in Composer?
  -
 Namimg
     FE uses depthbuffers while API uses depth-buffers.
+
+Some Views are identical. Should they use a shared ViewComponent?
+    Create, Edit
+    Details, Delete
 
 ##### FE Model Structure
 
@@ -461,24 +457,6 @@ public class Project : DomainModel
 ___
 </div>
 
-<span style="color:red">
-How are credentials passed with a fetch request?   <br>
-Only Test works because there is special middleware handling which provides authorization.
-</span><br></br>
-
-    Investigate Chai unit tests for front-end JavaScript.
-
-    Accessing Model From JavaScript
-        https://stackoverflow.com/questions/16361364/accessing-mvcs-model-property-from-javascript
-
-    Webpack
-
-    Some Views are identical. Should they use a shared ViewComponent?
-        Create, Edit
-        Details, Delete
-
-
-
 ##### Critical Issues
 <span style="color:red">
 Replace DateTime with a type that has more resolution.
@@ -712,8 +690,6 @@ An ApplicationUser could have a storage folder property that is used by the Stor
     xUnit Async
         https://github.com/xunit/xunit/issues/1066
 
-    Support database authentication.
-
     Integration Tests
         If all integration and unit tests are non-destructive, is it necessary to refresh the Test database from the Baseline?
             This does not work with SQLServer as it seems to maintain an exclusive file lock during DbInitializer execution.
@@ -734,6 +710,8 @@ An ApplicationUser could have a storage folder property that is used by the Stor
             Schema
             Host
             Port
+
+    Investigate chai for FE JavaScript testing.
 
 #### Mediator
 
@@ -769,7 +747,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
             <Model><Request>Validator
 
         Pipeline
-            Custom authentication middleware (Test)
+            Custom authentication middleware (e.g. Test [now deprecated])
                 DbContextTransactionFilter.OnActionExecutionAsync
                     begin transaction
                         Validators (Model-binding before action method)
@@ -1385,11 +1363,6 @@ ServerFramework (WebHost.CreateDefaultBuilder) sets the environment to "Developm
         npm install --global gulp-cli
     node must be installed.
 
-#### Authentication and Authorization
-    https://odetocode.com/blogs/scott/archive/2017/02/06/anti-forgery-tokens-and-asp-net-core-apis.aspx
-
-    https://stackoverflow.com/questions/40351870/asp-net-core-custom-authentication-tying-request-to-user
-
 #### C#
     Conversion of List of derived class to the base class.
         // https://stackoverflow.com/questions/1817300/convert-listderivedclass-to-listbaseclass
@@ -1522,17 +1495,18 @@ https://semver.npmjs.com/
         https://stackoverflow.com/questions/44931613/how-to-correctly-store-connection-strings-in-environment-variables-for-retrieval
 
     Server Structure
-        modelrelief (ContentRootPath)
-            <application files>
-            logs
-            mrenv
-            store/production
-            Solver
-            Test
-            Tools
-            wwwroot
+        IIS Production
+            modelrelief (ContentRootPath)
+                <application files>
+                logs
+                mrenv
+                store/production
+                Solver
+                Test
+                Tools
+                wwwroot
 
-        Development, Test
+        Development, local Production
             ModelRelief (ContentRootPath)
                 <application files>
                 logs
@@ -1600,7 +1574,7 @@ np_fill, relief_fill
 
 |Setting|Description||
 |---|---|---|
-|MRUpdateSeedData|Update seed database and project files from Test user changes.|Camera, MeshTransform|
+|MRUpdateSeedData|Update seed database and project files from Development user changes.|Camera, MeshTransform|
 |MRInitializeDatabase|Deletes the database and recreates it.|
 |MRSeedDatabase|Adds the test data to the database and populates the user store.||
 |MRExitAfterInitialization|Perform initialization and then exits without starting the server.|
@@ -1610,6 +1584,6 @@ np_fill, relief_fill
         It does not work on IIS Production and Development.
         It does work for IIS Express and Production.
         app.UseHttpsRedirection leads to Xunit test failure.
-            Test disables HttpsRedirection to support XUnit.
+            Development disables HttpsRedirection to support XUnit.
 
 

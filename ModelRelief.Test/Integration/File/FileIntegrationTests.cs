@@ -76,7 +76,7 @@ namespace ModelRelief.Test.Integration
             var modelId = TestModelFactory.IdRange.Min();
 
             // Act
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{modelId}/file");
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{modelId}/file");
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
@@ -93,7 +93,7 @@ namespace ModelRelief.Test.Integration
             var modelId = TestModelFactory.IdRange.Max() + 1;
 
             // Act
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{modelId}/file");
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{modelId}/file");
 
             // Assert
             Assert.False(requestResponse.Message.IsSuccessStatusCode);
@@ -115,7 +115,7 @@ namespace ModelRelief.Test.Integration
             var writtenByteArray = Utility.ByteArrayFromFile(fileName);
 
             // Act
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{newModel.Id}/file");
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{newModel.Id}/file");
             var fileContentResult = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(requestResponse.ContentString);
             var encodedString = fileContentResult.GetValue("fileContents");
             var readByteArray = Convert.FromBase64String(encodedString.ToString());
@@ -242,7 +242,7 @@ namespace ModelRelief.Test.Integration
             var writtenByteArray = Utility.ByteArrayFromFile(fileName);
 
             // Act
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{newModel.Id}/file");
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{newModel.Id}/file");
             var fileContentResult = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(requestResponse.ContentString);
             var encodedString = fileContentResult.GetValue("fileContents");
             var readByteArray = Convert.FromBase64String(encodedString.ToString());
@@ -270,11 +270,11 @@ namespace ModelRelief.Test.Integration
 
             // rename model (and file)
             newModel.Name = "New Name";
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Put, $"{TestModelFactory.ApiUrl}/{newModel.Id}", newModel);
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Put, $"{TestModelFactory.ApiUrl}/{newModel.Id}", newModel);
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
             // Act
-            requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{newModel.Id}/file");
+            requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{newModel.Id}/file");
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);

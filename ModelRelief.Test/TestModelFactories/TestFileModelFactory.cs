@@ -43,7 +43,7 @@ namespace ModelRelief.Test.TestModels
             var byteArray = Utility.ByteArrayFromFile(fileName);
 
             // Act
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Post, $"{ApiUrl}/{modelId}/file", byteArray, binaryContent: true);
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Post, $"{ApiUrl}/{modelId}/file", byteArray, binaryContent: true);
 
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -63,7 +63,7 @@ namespace ModelRelief.Test.TestModels
             var byteArray = Utility.ByteArrayFromFile(fileName);
 
             // Act
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{modelId}/file", byteArray, binaryContent: true);
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Put, $"{ApiUrl}/{modelId}/file", byteArray, binaryContent: true);
 
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);

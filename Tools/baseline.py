@@ -58,13 +58,13 @@ class BaseLine:
         if self.database == "SQLite":
             database_folder = self.environment.sqlite_path
             file_list = [
-                ("ModelReliefTest.db", "ModelReliefBaseline.db")
+                ("ModelReliefDevelopment.db", "ModelReliefBaseline.db")
             ]
         elif self.database == "SQLServer":
             database_folder = self.environment.sqlserver_path
             file_list = [
-                ("ModelReliefTest.mdf",     "ModelReliefBaseline.mdf"),
-                ("ModelReliefTest_log.ldf", "ModelReliefBaseline_log.ldf")
+                ("ModelReliefDevelopment.mdf",     "ModelReliefBaseline.mdf"),
+                ("ModelReliefDevelopment_log.ldf", "ModelReliefBaseline_log.ldf")
             ]
             time.sleep(5)
         else:

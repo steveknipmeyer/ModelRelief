@@ -242,7 +242,7 @@ namespace ModelRelief.Database
                     Directory.CreateDirectory(databaseFolder);
                     fileList = new Dictionary<string, string>
                     {
-                        { "ModelReliefBaseline.db",     "ModelReliefTest.db" },
+                        { "ModelReliefBaseline.db",     "ModelReliefDevelopment.db" },
                     };
                     break;
 
@@ -251,8 +251,8 @@ namespace ModelRelief.Database
                     databaseFolder = Environment.ExpandEnvironmentVariables("%USERPROFILE%");
                     fileList = new Dictionary<string, string>
                     {
-                        { "ModelReliefBaseline.mdf",     "ModelReliefTest.mdf" },
-                        { "ModelReliefBaseline_log.ldf", "ModelReliefTest_log.ldf" },
+                        { "ModelReliefBaseline.mdf",     "ModelReliefDevelopment.mdf" },
+                        { "ModelReliefBaseline_log.ldf", "ModelReliefDevelopment_log.ldf" },
                     };
                     break;
             }

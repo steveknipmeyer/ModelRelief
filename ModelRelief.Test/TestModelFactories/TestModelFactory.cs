@@ -67,13 +67,13 @@ namespace ModelRelief.Test.TestModels
             // https://stackoverflow.com/questions/5095183/how-would-i-run-an-async-taskt-method-synchronously
 
             // first model
-            var requestResponse = ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiUrl}/1").GetAwaiter().GetResult();
+            var requestResponse = ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{ApiUrl}/1").GetAwaiter().GetResult();
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
             var firstModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
             FirstModelName = firstModel.Name;
 
             // range of model IDs
-            requestResponse = ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiUrl}").GetAwaiter().GetResult();
+            requestResponse = ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{ApiUrl}").GetAwaiter().GetResult();
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
             var queryList = JsonConvert.DeserializeObject<PagedResults<TEntity>>(requestResponse.ContentString);
             var totalNumberOfRecords = queryList.TotalNumberOfRecords;
@@ -105,7 +105,7 @@ namespace ModelRelief.Test.TestModels
         /// <returns>Existing model.</returns>
         public async Task<IModel> FindModel(int modelId)
         {
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{ApiUrl}/{modelId}");
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{ApiUrl}/{modelId}");
 
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
@@ -192,7 +192,7 @@ namespace ModelRelief.Test.TestModels
             // Arrange
 
             // Act
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Post, ApiUrl, model);
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Post, ApiUrl, model);
 
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -220,7 +220,7 @@ namespace ModelRelief.Test.TestModels
             // Arrange
 
             // Act
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Put, $"{ApiUrl}/{model.Id}", model);
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Put, $"{ApiUrl}/{model.Id}", model);
 
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -240,7 +240,7 @@ namespace ModelRelief.Test.TestModels
             // Arrange
 
             // Act
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Delete, $"{ApiUrl}/{existingModel.Id}");
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Delete, $"{ApiUrl}/{existingModel.Id}");
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);

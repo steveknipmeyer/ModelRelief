@@ -69,7 +69,7 @@ echo TypeScript Version = 3.1
 path=C:\Program Files (x86)\Microsoft SDKs\TypeScript\3.1;%path%
 
 :: ASPNET CORE Configuration
-set ASPNETCORE_ENVIRONMENT=Test
+set ASPNETCORE_ENVIRONMENT=Development
 :: Ports Configuration
 ::  Command line (dotnet run) : ASPNETCORE_URLS environment variable
 ::  Visual Studio             : launchSettings.json
