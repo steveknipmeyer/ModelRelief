@@ -1,5 +1,6 @@
 ﻿### Tasks
 #### Commit Notes
+     Add Auth0 settings to ConfigurationSettings constants.
 
 #### Lambda
     User Secrets
@@ -28,19 +29,13 @@
         artcam@artcam.com
         vectric@vectric.com
     
-    Strongly type UserSecrets. Do not rely on strings!
-
     Azure Keys
         Create key store.
         Move Production database credientials to key store.
         Remove Azure key file from git.
         Remove Add.UserSecrets from ModelRelief and ModelRelief.Test.
-  
-    HTTP/HTTPS
-        IIS Production does not respond on HTTP 6000.
-        Development cannot set a cookie on HTTP 5000.
 
-    Autho0 Integration
+    Auth0 Integration
         The Auth0 Authorization API Debugger does not work to issue 'password' grants.
             It does not contain these properties:
                 audience
@@ -1575,11 +1570,14 @@ np_fill, relief_fill
 |MRSeedDatabase|Adds the test data to the database and populates the user store.||
 |MRExitAfterInitialization|Perform initialization and then exits without starting the server.|
 
-#### HTTPS
+#### HTTPSRedirection
     HttpsRedirection
         It does not work on IIS Production and Development.
         It does work for IIS Express and Production.
         app.UseHttpsRedirection leads to Xunit test failure.
             Development disables HttpsRedirection to support XUnit.
 
+#### HTTP/HTTPS
+    IIS Production does not respond on HTTP 6000.
+    Development cannot set a cookie on HTTP 5000.
 

@@ -75,16 +75,17 @@ namespace ModelRelief.Test
             var passwordGrantRequest = new
             {
                 grant_type      = "password",
-                username        = configuration["DevelopmentAccount:Name"],
-                password        = configuration["DevelopmentAccount:Password"],
-                audience        = configuration["Auth0:ApiAudience"],
-                client_id       = configuration["Auth0:ApiClientId"],
-                client_secret   = configuration["Auth0:ApiClientSecret"],
+                username        = configuration[ConfigurationSettings.DevelopmentAccountName],
+                password        = configuration[ConfigurationSettings.DevelopmentAccountPassword],
+                audience        = configuration[ConfigurationSettings.ApiAudience],
+                client_id       = configuration[ConfigurationSettings.ApiClientId],
+                client_secret   = configuration[ConfigurationSettings.ApiClientSecret],
             };
 
             var client = new HttpClient();
             var endpoint = "https://modelrelief.auth0.com/oauth/token";
             var requestResponse = await SubmitHttpRequestAsync(client, HttpRequestType.Post, endpoint, passwordGrantRequest);
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
             var passwordGrant = JsonConvert.DeserializeObject<PasswordGrant>(requestResponse.ContentString);
             Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", passwordGrant.Access_token);

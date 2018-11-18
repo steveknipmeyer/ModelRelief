@@ -52,17 +52,17 @@ namespace ModelRelief.Services
             .AddCookie()
             .AddJwtBearer(options =>
             {
-                options.Authority = $"https://{configuration["Auth0:Domain"]}/";
-                options.Audience = configuration["Auth0:ApiAudience"];
+                options.Authority = $"https://{configuration[ConfigurationSettings.Domain]}/";
+                options.Audience = configuration[ConfigurationSettings.ApiAudience];
             })
             .AddOpenIdConnect("Auth0", options =>
             {
                 // Set the authority to your Auth0 domain
-                options.Authority = $"https://{configuration["Auth0:Domain"]}";
+                options.Authority = $"https://{configuration[ConfigurationSettings.Domain]}";
 
                 // Configure the Auth0 Client ID and Client Secret
-                options.ClientId = configuration["Auth0:ClientId"];
-                options.ClientSecret = configuration["Auth0:ClientSecret"];
+                options.ClientId = configuration[ConfigurationSettings.ClientId];
+                options.ClientSecret = configuration[ConfigurationSettings.ClientSecret];
 
                 // Set response type to code
                 options.ResponseType = "code";
@@ -91,7 +91,7 @@ namespace ModelRelief.Services
                     // handle the logout redirection
                     OnRedirectToIdentityProviderForSignOut = (context) =>
                     {
-                        var logoutUri = $"https://{configuration["Auth0:Domain"]}/v2/logout?client_id={configuration["Auth0:ClientId"]}";
+                        var logoutUri = $"https://{configuration[ConfigurationSettings.Domain]}/v2/logout?client_id={configuration[ConfigurationSettings.ClientId]}";
 
                         var postLogoutUri = context.Properties.RedirectUri;
                         if (!string.IsNullOrEmpty(postLogoutUri))
