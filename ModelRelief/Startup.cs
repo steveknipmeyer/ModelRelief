@@ -155,7 +155,7 @@ namespace ModelRelief
                 app.UseHttpsRedirection();
 
             // https://stackoverflow.com/questions/35031279/confused-with-error-handling-in-asp-net-5-mvc-6
-            app.UseStatusCodePagesWithReExecute("/Errors/Error/{0}");
+            // app.UseStatusCodePagesWithReExecute("/Errors/Error/{0}");
 
             // Set up custom content types, associating file extension to MIME type
             var provider = new FileExtensionContentTypeProvider();

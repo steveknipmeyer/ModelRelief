@@ -53,7 +53,7 @@ namespace ModelRelief.Services
             .AddJwtBearer(options =>
             {
                 options.Authority = $"https://{configuration["Auth0:Domain"]}/";
-                options.Audience = configuration["Auth0:ApiIdentifier"];
+                options.Audience = configuration["Auth0:ApiAudience"];
             })
             .AddOpenIdConnect("Auth0", options =>
             {

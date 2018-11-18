@@ -1,9 +1,5 @@
 ﻿### Tasks
 #### Commit Notes
-Ad support to TestServer to request a password grant Bearer token.
-Remove appsettings.Test.json and remaining references to Test environment.
-Environment.py -> environment py
-SubmitHttpRequest -> SubmitHttpRequestAsync
 
 #### Lambda
     User Secrets
@@ -31,7 +27,9 @@ SubmitHttpRequest -> SubmitHttpRequestAsync
         test@modelrelief.com
         artcam@artcam.com
         vectric@vectric.com
-  
+    
+    Strongly type UserSecrets. Do not rely on strings!
+
     Azure Keys
         Create key store.
         Move Production database credientials to key store.
@@ -44,15 +42,13 @@ SubmitHttpRequest -> SubmitHttpRequestAsync
 
     Autho0 Integration
         The Auth0 Authorization API Debugger does not work to issue 'password' grants.
-            Compare the parameters sent with the curl Auth0Grant batch file which does work.
+            It does not contain these properties:
+                audience
+                client_secret
 
         XUnit Middelware Authentication
             https://medium.com/@zbartl/authentication-and-asp-net-core-integration-testing-using-testserver-15d47b03045a
 
-        Postman
-            Investigate variables.
-            HTTPS endpoints do not work. However, they do work with curl.
-            Add environments (Development, Local Production, Production).
 
         Questions
             Does the ModelRelief API return the correct response codes if a user is not authenticated or authorized?
@@ -76,7 +72,7 @@ SubmitHttpRequest -> SubmitHttpRequestAsync
             app.UseStatusCodePagesWithReExecute("/Errors/Error/{0}");
             Some applications use:
                 app.UseExceptionHandler("/Home/Error");
-
+            Unauthorized (401) errors are directed to the Errors controller with a code of 0.
         Why is the errorCode 0 in the Errors Error action method?
             Possibly, the error redirection happens only when status codes are returned by the pipline <rather than when an exception is thrown.>
 
