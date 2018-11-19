@@ -101,18 +101,9 @@ namespace ModelRelief.Infrastructure
                 var webHostBuilder = WebHost.CreateDefaultBuilder(args)
                                      .ConfigureAppConfiguration((builderContext, config) =>
                                      {
-                                         // WIP: Implement secret store for Production environments. Azure?
-                                         // https://joonasw.net/view/aspnet-core-2-configuration-changes
                                          var env = builderContext.HostingEnvironment;
                                          Log.Information($"Runtime environment (ASPNETCORE_ENVIRONMENT) = {env.EnvironmentName}");
-                                         var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
-                                         if (appAssembly != null)
-                                         {
-                                             config.AddUserSecrets(appAssembly, optional: true);
-                                         }
-                                     })
-                                     .ConfigureAppConfiguration((builderContext, config) =>
-                                     {
+
                                          config.AddJsonFile("azurekeyvault.json", optional: false);
                                          var builtConfig = config.Build();
 

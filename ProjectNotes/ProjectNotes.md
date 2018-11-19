@@ -1,11 +1,14 @@
 ﻿### Tasks
 #### Commit Notes
-     Add Auth0 settings to ConfigurationSettings constants.
 
 #### Lambda
     Update Production site.
+    Delete Xsecrets.json.
 
 #### Vector
+Install LastPass binary.
+Remove all Chrome saved passwords.
+Disable auto-login feature.
 
 #### Test Checklist
     Test Checklist
@@ -25,13 +28,13 @@
 #### Short Term
 
     Azure Keys
-        Add top-level Accounts.
+        Change credentials of all databases.
+        Move database credentials to key store.
+        Test Production.
+
         Add top-level AppSettings?
         Strong typing:
             Configuration.GetSection("AppSettings")
-        Move Production database credentials to key store.
-        Remove Add.UserSecrets from ModelRelief and ModelRelief.Test.
-        Configure ModelRelief.Test.
 
     Review Core error handling.
         https://andrewlock.net/re-execute-the-middleware-pipeline-with-the-statuscodepages-middleware-to-create-custom-error-pages/

@@ -44,9 +44,9 @@ namespace ModelRelief.Database
         /// </summary>
         private class UserAccounts
         {
-            public static readonly string Development = "DevelopmentAccount";
-            public static readonly string Sales       = "SalesAccount";
-            public static readonly string Support     = "SupportAccount";
+            public static readonly string Development = "Accounts:Development";
+            public static readonly string Sales       = "Accounts:Sales";
+            public static readonly string Support     = "Accounts:Support";
         }
 
         /// <summary>

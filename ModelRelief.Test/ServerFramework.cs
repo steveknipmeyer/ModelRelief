@@ -43,19 +43,18 @@ namespace ModelRelief.Test
                                             .UseContentRoot(contentRootPath)
                                             .ConfigureAppConfiguration((builderContext, config) =>
                                             {
-                                                // WIP: Implement secret store for Production environments. Azure?
-                                                // https://joonasw.net/view/aspnet-core-2-configuration-changes
-                                                var env = builderContext.HostingEnvironment;
-                                                var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
-                                                if (appAssembly != null)
-                                                {
-                                                    config.AddUserSecrets(appAssembly, optional: true);
-                                                }
-
-                                                var configurationProvider = Settings.ConfigurationProvider(config);
-
                                                 var loggerFactory = new LoggerFactory();
                                                 var logger = loggerFactory.CreateLogger<Services.ConfigurationProvider>();
+
+                                                config.AddJsonFile("azurekeyvault.json", optional: false);
+                                                var builtConfig = config.Build();
+
+                                                config.AddAzureKeyVault(
+                                                    $"https://{builtConfig["AzureKeyVault:Vault"]}.vault.azure.net/",
+                                                    builtConfig["AzureKeyVault:ApplicationId"],
+                                                    builtConfig["AzureKeyVault:ModelReliefKVKey"]);
+
+                                                var configurationProvider = Settings.ConfigurationProvider(config);
                                                 this.ConfigurationProvider = new Services.ConfigurationProvider(configurationProvider, logger);
                                             })
                                             .UseStartup<Startup>());

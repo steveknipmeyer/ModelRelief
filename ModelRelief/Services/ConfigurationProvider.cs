@@ -123,8 +123,8 @@ namespace ModelRelief.Services
         public const string SQLite    = "SQLite";
 
         // Development Test Account
-        public const string DevelopmentAccountName     = "DevelopmentAccount:Name";
-        public const string DevelopmentAccountPassword = "DevelopmentAccount:Password";
+        public const string DevelopmentAccountName     = "Accounts:Development:Name";
+        public const string DevelopmentAccountPassword = "Accounts:Development:Password";
 
         // Auth0
         public const string Domain          = "Auth0:Domain";
