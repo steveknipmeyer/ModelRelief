@@ -3,7 +3,6 @@
      Add Auth0 settings to ConfigurationSettings constants.
 
 #### Lambda
-    User Secrets
     Update Production site.
 
 #### Vector
@@ -24,41 +23,15 @@
         Docker                      DockerStart
 
 #### Short Term
-    LastPass
-        test@modelrelief.com
-        artcam@artcam.com
-        vectric@vectric.com
-    
+
     Azure Keys
-        Create key store.
-        Move Production database credientials to key store.
-        Remove Azure key file from git.
+        Add top-level Accounts.
+        Add top-level AppSettings?
+        Strong typing:
+            Configuration.GetSection("AppSettings")
+        Move Production database credentials to key store.
         Remove Add.UserSecrets from ModelRelief and ModelRelief.Test.
-
-    Auth0 Integration
-        The Auth0 Authorization API Debugger does not work to issue 'password' grants.
-            It does not contain these properties:
-                audience
-                client_secret
-
-        XUnit Middelware Authentication
-            https://medium.com/@zbartl/authentication-and-asp-net-core-integration-testing-using-testserver-15d47b03045a
-
-
-        Questions
-            Does the ModelRelief API return the correct response codes if a user is not authenticated or authorized?
-                401: Unauthorized
-                403: Forbidden?
-                404: Not Found
-
-            Can authorization policies be used to provide access to sample models for all users?
-                This would remove the need to seed the database with the test models <for each user>.
-
-    IDaaS Benefits
-        Overall security is vastly improved.
-        Far fewer code will need to be written and maintained.
-        Auth0 provides an excellend dashboard with analytics.
-        API authorization will be supported.
+        Configure ModelRelief.Test.
 
     Review Core error handling.
         https://andrewlock.net/re-execute-the-middleware-pipeline-with-the-statuscodepages-middleware-to-create-custom-error-pages/
@@ -71,7 +44,13 @@
         Why is the errorCode 0 in the Errors Error action method?
             Possibly, the error redirection happens only when status codes are returned by the pipline <rather than when an exception is thrown.>
 
-    repository
+        Questions
+            Does the ModelRelief API return the correct response codes if a user is not authenticated or authorized?
+                401: Unauthorized
+                403: Forbidden?
+                404: Not Found
+
+    git repository
         Separate
             NodeWorkbench
             Quokka Workbench
@@ -1581,3 +1560,17 @@ np_fill, relief_fill
     IIS Production does not respond on HTTP 6000.
     Development cannot set a cookie on HTTP 5000.
 
+#### Auth0
+    IDaaS Benefits
+        Overall security is vastly improved.
+        Far fewer code will need to be written and maintained.
+        Auth0 provides an excellend dashboard with analytics.
+        API authorization will be supported.
+
+    The Auth0 Authorization API Debugger does not work to issue 'password' grants.
+        It does not contain these properties:
+            audience
+            client_secret
+
+    Can authorization policies be used to provide access to sample models for all users?
+        This would remove the need to seed the database with the test models <for each user>.

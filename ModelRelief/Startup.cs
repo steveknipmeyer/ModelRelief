@@ -170,6 +170,8 @@ namespace ModelRelief
             app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseMvc(ConfigureRoutes);
+
+            var placeHolder = Configuration["Auth0:PlaceHolder"];
         }
 
         /// <summary>

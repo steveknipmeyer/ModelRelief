@@ -111,6 +111,16 @@ namespace ModelRelief.Infrastructure
                                              config.AddUserSecrets(appAssembly, optional: true);
                                          }
                                      })
+                                     .ConfigureAppConfiguration((builderContext, config) =>
+                                     {
+                                         config.AddJsonFile("azurekeyvault.json", optional: false);
+                                         var builtConfig = config.Build();
+
+                                         config.AddAzureKeyVault(
+                                             $"https://{builtConfig["AzureKeyVault:Vault"]}.vault.azure.net/",
+                                             builtConfig["AzureKeyVault:ApplicationId"],
+                                             builtConfig["AzureKeyVault:ModelReliefKVKey"]);
+                                     })
                                      .UseStartup<Startup>()
                                      .UseSerilog();
 
