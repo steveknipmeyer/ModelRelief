@@ -117,7 +117,8 @@ namespace ModelRelief
             // cache for use outside controllers (e.g. FileDomainModel)
             // N.B. ContentRootPath contains a trailing slash when running the integration tests.
             // The normal runtime mode (web host) does not include a slash. Strip, if present.
-            StorageManager.ContentRootPath = services.BuildServiceProvider().GetService<IHostingEnvironment>().ContentRootPath.TrimEnd(Path.DirectorySeparatorChar);
+            var env = services.BuildServiceProvider().GetService<IHostingEnvironment>();
+            StorageManager.ContentRootPath = env.ContentRootPath.TrimEnd(Path.DirectorySeparatorChar);
 
             services.AddSingleton(Configuration);
             services.AddRouting(options => options.LowercaseUrls = true);
@@ -127,7 +128,7 @@ namespace ModelRelief
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddModelReliefServices();
-            services.AddDatabaseServices();
+            services.AddDatabaseServices(env);
             services.AddAutoMapper(typeof(Startup));
             Mapper.AssertConfigurationIsValid();
 
@@ -150,22 +151,14 @@ namespace ModelRelief
             {
                 app.UseHsts();
             }
-            // XUnit TestServer not compatible
+            // HttpsRedirection: XUnit TestServer not compatible
             if (!env.IsDevelopment())
                 app.UseHttpsRedirection();
 
-            // https://stackoverflow.com/questions/35031279/confused-with-error-handling-in-asp-net-5-mvc-6
-            // app.UseStatusCodePagesWithReExecute("/Errors/Error/{0}");
+            // https://andrewlock.net/re-execute-the-middleware-pipeline-with-the-statuscodepages-middleware-to-create-custom-error-pages/
+            app.UseStatusCodePagesWithReExecute("/Errors/Error", "?statusCode={0}");
 
-            // Set up custom content types, associating file extension to MIME type
-            var provider = new FileExtensionContentTypeProvider();
-            provider.Mappings[".obj"] = "text/plain";
-            provider.Mappings[".mtl"] = "text/plain";
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                ContentTypeProvider = provider,
-            });
-
+            app.ConfigureStaticFiles();
             app.AddStaticFilePaths(env.ContentRootPath, new string[] { "Scripts" });
             app.UseCookiePolicy();
             app.UseAuthentication();

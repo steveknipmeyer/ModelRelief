@@ -12,6 +12,7 @@ namespace ModelRelief.Services
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Authentication.OpenIdConnect;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -150,7 +151,8 @@ namespace ModelRelief.Services
         /// Extension method to add the database services.
         /// </summary>
         /// <param name="services">IServiceCollection</param>
-        public static void AddDatabaseServices(this IServiceCollection services)
+        /// <param name="env">IIHostingEnvironment</param>
+        public static void AddDatabaseServices(this IServiceCollection services, IHostingEnvironment env)
         {
             // build the intermediate service provider
             var serviceProvider = services.BuildServiceProvider();

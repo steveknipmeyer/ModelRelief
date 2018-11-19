@@ -7,6 +7,7 @@
 namespace Microsoft.AspNetCore.Builder
 {
     using System.IO;
+    using Microsoft.AspNetCore.StaticFiles;
     using Microsoft.Extensions.FileProviders;
 
     public static class ApplicationBuilderExtensions
@@ -52,5 +53,24 @@ namespace Microsoft.AspNetCore.Builder
                 }
             return app;
             }
+
+        /// <summary>
+        /// Configures static file support.
+        /// </summary>
+        /// <param name="app">IApplicationBuilder</param>
+        /// <returns>IApplicationBuilder instance.</returns>
+        public static IApplicationBuilder ConfigureStaticFiles(this IApplicationBuilder app)
+        {
+            // Set up custom content types, associating file extension to MIME type
+            var provider = new FileExtensionContentTypeProvider();
+            provider.Mappings[".obj"] = "text/plain";
+            provider.Mappings[".mtl"] = "text/plain";
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                ContentTypeProvider = provider,
+            });
+
+            return app;
         }
     }
+}

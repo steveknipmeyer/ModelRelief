@@ -1,14 +1,15 @@
 ﻿### Tasks
 #### Commit Notes
 
+
 #### Lambda
     Update Production site.
     Delete Xsecrets.json.
 
 #### Vector
-Install LastPass binary.
-Remove all Chrome saved passwords.
-Disable auto-login feature.
+    Install LastPass binary.
+    Remove all Chrome saved passwords.
+    Disable auto-login feature.
 
 #### Test Checklist
     Test Checklist
@@ -26,26 +27,26 @@ Disable auto-login feature.
         Docker                      DockerStart
 
 #### Short Term
+    Document the exception handling and the use of custom error pages.
+        https://andrewlock.net/re-execute-the-middleware-pipeline-with-the-statuscodepages-middleware-to-create-custom-error-pages/
+        The GlobalExceptionFilter sets the status code depending on the type of exception.
+        This logic is active only <outside> Development. Otherwise, the Developer exception pages are used.
 
     Azure Keys
-        Change credentials of all databases.
+        Change credentials of Production SQLServer database.
+        Set the appSetting.json connection string to include a CredentialPlaceholder marker.
+            If the marker is present, replace with the configuration setting.
+
+            ConnectionStrings--Database--Credentials
+                "Server=localhost\\SQLEXPRESS;Database=ModelReliefProduction;CredentialsPlaceholder;MultipleActiveResultSets=true",
+                CredentialsPlaceholder = User Id=sa;Password=ModelRelief!
+
         Move database credentials to key store.
         Test Production.
 
         Add top-level AppSettings?
         Strong typing:
             Configuration.GetSection("AppSettings")
-
-    Review Core error handling.
-        https://andrewlock.net/re-execute-the-middleware-pipeline-with-the-statuscodepages-middleware-to-create-custom-error-pages/
-        Why was this statement disabled?
-            // https://stackoverflow.com/questions/35031279/confused-with-error-handling-in-asp-net-5-mvc-6
-            app.UseStatusCodePagesWithReExecute("/Errors/Error/{0}");
-            Some applications use:
-                app.UseExceptionHandler("/Home/Error");
-            Unauthorized (401) errors are directed to the Errors controller with a code of 0.
-        Why is the errorCode 0 in the Errors Error action method?
-            Possibly, the error redirection happens only when status codes are returned by the pipline <rather than when an exception is thrown.>
 
         Questions
             Does the ModelRelief API return the correct response codes if a user is not authenticated or authorized?

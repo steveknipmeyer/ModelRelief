@@ -21,12 +21,14 @@ namespace ModelRelief.Features.Errors
         /// </summary>
         /// <remarks>This is used for middleware errors such as no endpoint NotFound (404).
         /// It is NOT used for an error code returned by the application such as BadRequest (400)</remarks>
-        /// <param name="errorCode">Error code.</param>
+        /// <param name="statusCode">Error code.</param>
         /// <returns></returns>
-        public IActionResult Error(int errorCode)
+        public IActionResult Error(int? statusCode)
         {
+            statusCode = statusCode ?? 0;
+
             string page = "Error";
-            switch (errorCode)
+            switch (statusCode)
             {
                 case (int)HttpStatusCode.BadRequest:
                     page = "BadRequest";
@@ -36,7 +38,7 @@ namespace ModelRelief.Features.Errors
                     page = "NotFound";
                     break;
             }
-            ViewData["statusCode"] = errorCode;
+            ViewData["statusCode"] = statusCode;
             return View(page);
         }
     }
