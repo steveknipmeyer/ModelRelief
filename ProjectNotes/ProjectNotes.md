@@ -1,6 +1,6 @@
 ﻿### Tasks
 #### Commit Notes
-
+Refactor CredentialsSQLServer to use setting for placeholder.
 
 #### Lambda
     Change sa password.
@@ -26,10 +26,13 @@
         Docker                      DockerStart
 
 #### Short Term
+    Merge auth branch.
 
-    Add top-level AppSettings?
-    Strong typing:
-        Configuration.GetSection("AppSettings")
+    Condiguration Settings
+        Add top-level AppSettings?
+        Strong typing:
+            Configuration.GetSection("AppSettings")
+    
 
     Questions
         Does the ModelRelief API return the correct response codes if a user is not authenticated or authorized?

@@ -19,8 +19,10 @@ namespace ModelRelief.Database
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Options;
     using ModelRelief.Domain;
     using ModelRelief.Services;
+    using ModelRelief.Settings;
     using ModelRelief.Utility;
     using Newtonsoft.Json;
 
@@ -35,19 +37,10 @@ namespace ModelRelief.Database
         private ModelReliefDbContext DbContext { get; set; }
         private ILogger<DbInitializer> Logger { get; set; }
         private IStorageManager StorageManager { get; set; }
+        private AccountsSettings Accounts { get; set; }
 
         private string StoreUsersPath { get; set; }
         private string SqlitePath { get; set; }
-
-        /// <summary>
-        /// User Accounts
-        /// </summary>
-        private class UserAccounts
-        {
-            public static readonly string Development = "Accounts:Development";
-            public static readonly string Sales       = "Accounts:Sales";
-            public static readonly string Support     = "Accounts:Support";
-        }
 
         /// <summary>
         /// Test Project Names
@@ -102,6 +95,8 @@ namespace ModelRelief.Database
             StorageManager = services.GetRequiredService<IStorageManager>();
             if (StorageManager == null)
                 throw new ArgumentNullException(nameof(StorageManager));
+
+            Accounts = services.GetRequiredService<IOptions<AccountsSettings>>().Value as AccountsSettings;
 
             var storeUsersPartialPath = ConfigurationProvider.GetSetting(Paths.StoreUsers);
             StoreUsersPath = GetAbsolutePath(storeUsersPartialPath);
@@ -296,16 +291,16 @@ namespace ModelRelief.Database
         /// <returns></returns>
         private async Task SeedDatabaseForTestUsersAsync()
         {
-            var userAccounts = new List<string>
+            var userAccounts = new List<Account>
             {
-                UserAccounts.Development,
-                UserAccounts.Sales,
-                UserAccounts.Support,
+                Accounts.Development,
+                Accounts.Sales,
+                Accounts.Support,
             };
 
             foreach (var account in userAccounts)
             {
-                ApplicationUser user = ConstructUserFromAccountName(account);
+                ApplicationUser user = ConstructUserFromAccount(account);
                 SeedDatabaseForUser(user);
             }
 
@@ -394,15 +389,9 @@ namespace ModelRelief.Database
         /// <summary>
         /// Returns the unique user Id for an account.
         /// </summary>
-        private ApplicationUser ConstructUserFromAccountName(string accountName)
+        private ApplicationUser ConstructUserFromAccount(Account account)
         {
-            var nameSetting = $"{accountName}:Name";
-            var nameIdentifierSetting = $"{accountName}:NameIdentifier";
-
-            var nameIdentifier = ConfigurationProvider.GetSetting(nameIdentifierSetting);
-            var name           = ConfigurationProvider.GetSetting(nameSetting);
-
-            var user = new ApplicationUser(nameIdentifier, name);
+            var user = new ApplicationUser(account.NameIdentifier, account.Name);
 
             return user;
         }
@@ -890,7 +879,7 @@ namespace ModelRelief.Database
         /// <returns>Development user.</returns>
         private ApplicationUser GetDevelopmentUser()
         {
-            ApplicationUser user = ConstructUserFromAccountName(UserAccounts.Development);
+            ApplicationUser user = ConstructUserFromAccount(Accounts.Development);
 
             return user;
         }

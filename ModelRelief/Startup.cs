@@ -18,12 +18,12 @@ namespace ModelRelief
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Routing;
-    using Microsoft.AspNetCore.StaticFiles;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Infrastructure;
     using ModelRelief.Services;
+
     using ModelRelief.Workbench;
 
     public class Startup
@@ -125,12 +125,12 @@ namespace ModelRelief
             services.ConfigureCookies();
             services.AddAuth0Authentication(Configuration);
             services.AddCustomMvc();
-
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddModelReliefServices();
             services.AddDatabaseServices(env);
             services.AddAutoMapper(typeof(Startup));
             Mapper.AssertConfigurationIsValid();
+            services.AddConfigurationTypes(Configuration);
 
             return ConfigureAutofacServices(services);
         }

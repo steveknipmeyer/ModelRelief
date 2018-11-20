@@ -10,15 +10,17 @@ namespace ModelRelief.Test
     using System.IO;
     using System.Net.Http;
     using System.Net.Http.Headers;
-    using System.Reflection;
     using System.Text;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.TestHost;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Options;
     using ModelRelief.Services;
+    using ModelRelief.Settings;
     using Newtonsoft.Json;
     using Xunit;
 
@@ -70,12 +72,14 @@ namespace ModelRelief.Test
         /// <returns></returns>
         private async Task<bool> SetAuthorizationHeaderAsync()
         {
+            var accounts = Server.Host.Services.GetRequiredService<IOptions<AccountsSettings>>().Value as AccountsSettings;
+
             var configuration = ConfigurationProvider.Configuration;
             var passwordGrantRequest = new
             {
                 grant_type      = "password",
-                username        = configuration[ConfigurationSettings.DevelopmentAccountName],
-                password        = configuration[ConfigurationSettings.DevelopmentAccountPassword],
+                username        = accounts.Development.Name,
+                password        = accounts.Development.Password,
                 audience        = configuration[ConfigurationSettings.ApiAudience],
                 client_id       = configuration[ConfigurationSettings.ApiClientId],
                 client_secret   = configuration[ConfigurationSettings.ApiClientSecret],

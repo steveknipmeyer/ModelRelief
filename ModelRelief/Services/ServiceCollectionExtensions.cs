@@ -24,6 +24,7 @@ namespace ModelRelief.Services
     using ModelRelief.Infrastructure;
     using ModelRelief.Services.Jobs;
     using ModelRelief.Services.Relationships;
+    using ModelRelief.Settings;
 
     public static class ServiceCollectionExtensions
     {
@@ -41,6 +42,11 @@ namespace ModelRelief.Services
             });
         }
 
+        /// <summary>
+        /// Extension to add support for Auth0.
+        /// </summary>
+        /// <param name="services">IServiceCollection</param>
+        /// <param name="configuration">IConfiguration</param>
         public static void AddAuth0Authentication(this IServiceCollection services, IConfiguration configuration)
         {
             // Add authentication services
@@ -169,11 +175,23 @@ namespace ModelRelief.Services
                     var connectionString = configurationProvider.Configuration.GetConnectionString(ConfigurationSettings.SQLServer);
 
                     // replace credentionals if production placeholder present
-                    connectionString = connectionString.Replace("CredentialsSQLServer", configurationProvider.GetSetting(ConfigurationSettings.CredentialsSQLServer));
+                    var credentialSetting = ConfigurationSettings.CredentialsSQLServer;
+                    connectionString = connectionString.Replace(credentialSetting, configurationProvider.GetSetting(credentialSetting));
 
                     services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlServer(connectionString));
                     break;
             }
+        }
+
+        /// <summary>
+        /// Extension method to add strongly types configuration settings.
+        /// </summary>
+        /// <param name="services">IServiceCollection</param>
+        /// <param name="configuration">IConfiguration</param>
+        public static void AddConfigurationTypes(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<AccountsSettings>(configuration.GetSection("Accounts"));
+            services.Configure<Auth0Settings>(configuration.GetSection("Auth0"));
         }
     }
 }
