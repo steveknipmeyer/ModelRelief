@@ -1,10 +1,10 @@
 ﻿### Tasks
 #### Commit Notes
-
+Add information about the source page in the Error handler.
 
 #### Lambda
     Update Production site.
-    Delete Xsecrets.json.
+    Delete secrets.json, Xsecrets.json.
 
 #### Vector
     Install LastPass binary.
@@ -27,10 +27,6 @@
         Docker                      DockerStart
 
 #### Short Term
-    Document the exception handling and the use of custom error pages.
-        https://andrewlock.net/re-execute-the-middleware-pipeline-with-the-statuscodepages-middleware-to-create-custom-error-pages/
-        The GlobalExceptionFilter sets the status code depending on the type of exception.
-        This logic is active only <outside> Development. Otherwise, the Developer exception pages are used.
 
     Azure Keys
         Change credentials of Production SQLServer database.
@@ -66,6 +62,7 @@
         Convert TypeScript compiler output to ES5 modules?
 
     UI
+        Add favicon.ico support.
         Add UI progress indicator for mesh generation.
         CameraControls
             Separate the Perspective controls into a separate dat.gui controller that can be entirely hidden or shown.
@@ -606,6 +603,43 @@ A Put (File) request returns Created instead of OK. The file is correctly replac
     // https://stackoverflow.com/questions/35031279/confused-with-error-handling-in-asp-net-5-mvc-6
     Why is there an intermittent Error? It can happen the first time Meshes or Composer is opened.
         Experiment: Disable the Errors controller.
+
+    This is the error handling control flow:
+        RestController:ApiController
+            Mediator.Send
+                ApiValidationException
+                EntityNotFoundException
+                ModelFileNotFoundException              API only
+                ModelNotBackedByFileException           API only
+                UserAuthenticationException
+                Exception
+            These exceptions are <caught> and then converted into an ApiErrorResult where they are returned to the caller with no further processing.
+            <No> exception is propagated further.
+            
+        ViewController:UxController
+            NullRequestException                        null request; Ux only
+            Mediator.Send
+                ApiValidationException
+                EntityNotFoundException
+                UserAuthenticationException
+                Exception
+            These exceptions are thrown and then caught by GlobalExceptionFilter.OnException.
+
+        GlobalExceptionFilter.OnException
+            This logic is active only <outside> Development. Otherwise, the Developer exception pages are used.
+            Sets the status code depending on the type of exception.
+            Marks the exception as <handled>.
+            Returns a StatusCodeResult which then flows to app.UseStatusCodePagesWithReExecute.
+                    NullRequestException            HttpStatusCode.BadRequest
+                    EntityNotFoundException         HttpStatusCode.NotFound
+                    UserAuthenticationException     HttpStatusCode.Unauthorized;
+
+        /Errors/Error/?statusCode={0}
+            This controller action is called through UseStatusCodePagesWithReExecute.
+            https://andrewlock.net/re-execute-the-middleware-pipeline-with-the-statuscodepages-middleware-to-create-custom-error-pages/
+                    HttpStatusCode.BadRequest       BadRequest.cshtml
+                    HttpStatusCode.NotFound:        NotFound.cshtml
+                    default                         Error.cshtml    
 
 #### Logging
     How can ModelRelief messages be associated with a category (e.g. 'Microsoft')?

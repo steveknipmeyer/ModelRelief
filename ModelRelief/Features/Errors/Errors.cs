@@ -7,6 +7,7 @@
 namespace ModelRelief.Features.Errors
 {
     using System.Net;
+    using Microsoft.AspNetCore.Diagnostics;
     using Microsoft.AspNetCore.Mvc;
 
     /// <summary>
@@ -26,6 +27,7 @@ namespace ModelRelief.Features.Errors
         public IActionResult Error(int? statusCode)
         {
             statusCode = statusCode ?? 0;
+            var feature = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
 
             string page = "Error";
             switch (statusCode)
@@ -37,8 +39,19 @@ namespace ModelRelief.Features.Errors
                 case (int)HttpStatusCode.NotFound:
                     page = "NotFound";
                     break;
+
+                case (int)HttpStatusCode.Unauthorized:
+                    page = "NotAuthorized";
+                    break;
+
+                default:
+                    page = "Error";
+                    break;
             }
             ViewData["statusCode"] = statusCode;
+            ViewData["originalPath"] = feature?.OriginalPath;
+            ViewData["originalQueryString"] = feature?.OriginalQueryString;
+
             return View(page);
         }
     }

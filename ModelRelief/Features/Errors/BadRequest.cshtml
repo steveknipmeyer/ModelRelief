@@ -4,6 +4,7 @@
 </head>
 <body>
     <h2>A status code of @ViewData["statusCode"] was received.</h2>
-    <h3>A bad request was received.</h3>
+    <h3>Path = @ViewData["originalPath"]</h3>
+    <h3>Query String = @ViewData["originalQueryString"]</h3>
 </body>
 </html>
