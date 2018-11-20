@@ -25,21 +25,6 @@
         Docker                      DockerStart
 
 #### Short Term
-    Merge auth branch.
-
-    Questions
-        Does the ModelRelief API return the correct response codes if a user is not authenticated or authorized?
-            401: Unauthorized
-            403: Forbidden?
-            404: Not Found
-
-    git repository
-        Separate
-            NodeWorkbench
-            Quokka Workbench
-        Move ModelRelief\Test.
-            Add Postman tests to source code control.
-
     Upgrades
         Upgrade Three.js.
         Convert TypeScript compiler output to ES5 modules?
@@ -582,10 +567,6 @@ A Put (File) request returns Created instead of OK. The file is correctly replac
         API Reference       ApiReference
 
 #### Error Handling
-    // https://stackoverflow.com/questions/35031279/confused-with-error-handling-in-asp-net-5-mvc-6
-    Why is there an intermittent Error? It can happen the first time Meshes or Composer is opened.
-        Experiment: Disable the Errors controller.
-
     This is the error handling control flow:
         RestController:ApiController
             Mediator.Send
@@ -1594,3 +1575,10 @@ np_fill, relief_fill
 
     Can authorization policies be used to provide access to sample models for all users?
         This would remove the need to seed the database with the test models <for each user>.
+
+#### git Repository
+        Separate
+            NodeWorkbench
+            Quokka Workbench
+        Move ModelRelief\Test.
+            Add Postman tests to source code control.
