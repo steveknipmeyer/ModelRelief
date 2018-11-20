@@ -123,6 +123,7 @@ namespace ModelRelief
             services.AddSingleton(Configuration);
             services.AddRouting(options => options.LowercaseUrls = true);
             services.ConfigureCookies();
+            services.AddConfigurationTypes(Configuration);
             services.AddAuth0Authentication(Configuration);
             services.AddCustomMvc();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -130,7 +131,6 @@ namespace ModelRelief
             services.AddDatabaseServices(env);
             services.AddAutoMapper(typeof(Startup));
             Mapper.AssertConfigurationIsValid();
-            services.AddConfigurationTypes(Configuration);
 
             return ConfigureAutofacServices(services);
         }

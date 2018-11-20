@@ -18,6 +18,7 @@ namespace ModelRelief.Services
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
     using ModelRelief.Database;
     using ModelRelief.Features.Errors;
@@ -49,6 +50,9 @@ namespace ModelRelief.Services
         /// <param name="configuration">IConfiguration</param>
         public static void AddAuth0Authentication(this IServiceCollection services, IConfiguration configuration)
         {
+            // Auth0 settings
+            var auth0 = services.BuildServiceProvider().GetRequiredService<IOptions<Auth0Settings>>().Value as Auth0Settings;
+
             // Add authentication services
             services.AddAuthentication(options =>
             {
@@ -59,17 +63,17 @@ namespace ModelRelief.Services
             .AddCookie()
             .AddJwtBearer(options =>
             {
-                options.Authority = $"https://{configuration[ConfigurationSettings.Domain]}/";
-                options.Audience = configuration[ConfigurationSettings.ApiAudience];
+                options.Authority = $"https://{auth0.Domain}/";
+                options.Audience = auth0.ApiAudience;
             })
             .AddOpenIdConnect("Auth0", options =>
             {
                 // Set the authority to your Auth0 domain
-                options.Authority = $"https://{configuration[ConfigurationSettings.Domain]}";
+                options.Authority = $"https://{auth0.Domain}";
 
                 // Configure the Auth0 Client ID and Client Secret
-                options.ClientId = configuration[ConfigurationSettings.ClientId];
-                options.ClientSecret = configuration[ConfigurationSettings.ClientSecret];
+                options.ClientId = auth0.ClientId;
+                options.ClientSecret = auth0.ClientSecret;
 
                 // Set response type to code
                 options.ResponseType = "code";
@@ -98,7 +102,7 @@ namespace ModelRelief.Services
                     // handle the logout redirection
                     OnRedirectToIdentityProviderForSignOut = (context) =>
                     {
-                        var logoutUri = $"https://{configuration[ConfigurationSettings.Domain]}/v2/logout?client_id={configuration[ConfigurationSettings.ClientId]}";
+                        var logoutUri = $"https://{auth0.Domain}/v2/logout?client_id={auth0.ClientId}";
 
                         var postLogoutUri = context.Properties.RedirectUri;
                         if (!string.IsNullOrEmpty(postLogoutUri))

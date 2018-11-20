@@ -1,6 +1,5 @@
 ﻿### Tasks
 #### Commit Notes
-Refactor CredentialsSQLServer to use setting for placeholder.
 
 #### Lambda
     Change sa password.
@@ -27,12 +26,6 @@ Refactor CredentialsSQLServer to use setting for placeholder.
 
 #### Short Term
     Merge auth branch.
-
-    Condiguration Settings
-        Add top-level AppSettings?
-        Strong typing:
-            Configuration.GetSection("AppSettings")
-    
 
     Questions
         Does the ModelRelief API return the correct response codes if a user is not authenticated or authorized?
@@ -61,7 +54,7 @@ Refactor CredentialsSQLServer to use setting for placeholder.
     Core
         Should clipping planes be set based on the Model?
 
-        Close in Orthogonal views of House (Lambda: Documents\Temp\MalformedHouse) yiueld malformed meshes.
+        Close in Orthogonal views of House (Lambda: Documents\Temp\MalformedHouse) yield malformed meshes.
 
         Visually examine randomly-generated cameras that have been round-tripped.
 
@@ -71,7 +64,6 @@ Refactor CredentialsSQLServer to use setting for placeholder.
             https://stackoverflow.com/questions/42110726/chrome-devtools-paused-before-potential-out-of-memory-crash
             https://developers.google.com/web/tools/chrome-devtools/memory-problems/
 
-    Review repository structure.
     Build a Python installer package for Explorer.
 
     Silhouette

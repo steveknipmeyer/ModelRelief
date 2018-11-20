@@ -122,15 +122,6 @@ namespace ModelRelief.Services
         public const string SQLServer = "SQLServer";
         public const string SQLite    = "SQLite";
 
-        // Auth0
-        public const string Domain          = "Auth0:Domain";
-        public const string ClientId        = "Auth0:ClientId";
-        public const string ClientSecret    = "Auth0:ClientSecret";
-
-        public const string ApiClientId     = "Auth0:ApiClientId";
-        public const string ApiClientSecret = "Auth0:ApiClientSecret";
-        public const string ApiAudience     = "Auth0:ApiAudience";
-
         // Credentials
         public const string CredentialsSQLServer = "Credentials:SQLServer";
     }
