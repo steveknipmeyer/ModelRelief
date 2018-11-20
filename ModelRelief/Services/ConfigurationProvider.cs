@@ -134,6 +134,9 @@ namespace ModelRelief.Services
         public const string ApiClientId     = "Auth0:ApiClientId";
         public const string ApiClientSecret = "Auth0:ApiClientSecret";
         public const string ApiAudience     = "Auth0:ApiAudience";
+
+        // Credentials
+        public const string CredentialsSQLServer = "Credentials:SQLServer";
     }
 
     /// <summary>

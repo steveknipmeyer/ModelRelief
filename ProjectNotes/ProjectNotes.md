@@ -1,15 +1,14 @@
 ﻿### Tasks
 #### Commit Notes
-Add information about the source page in the Error handler.
+
 
 #### Lambda
+    Change sa password.
+        https://dba.stackexchange.com/questions/103804/changing-sa-password
     Update Production site.
     Delete secrets.json, Xsecrets.json.
 
 #### Vector
-    Install LastPass binary.
-    Remove all Chrome saved passwords.
-    Disable auto-login feature.
 
 #### Test Checklist
     Test Checklist
@@ -28,27 +27,15 @@ Add information about the source page in the Error handler.
 
 #### Short Term
 
-    Azure Keys
-        Change credentials of Production SQLServer database.
-        Set the appSetting.json connection string to include a CredentialPlaceholder marker.
-            If the marker is present, replace with the configuration setting.
+    Add top-level AppSettings?
+    Strong typing:
+        Configuration.GetSection("AppSettings")
 
-            ConnectionStrings--Database--Credentials
-                "Server=localhost\\SQLEXPRESS;Database=ModelReliefProduction;CredentialsPlaceholder;MultipleActiveResultSets=true",
-                CredentialsPlaceholder = User Id=sa;Password=ModelRelief!
-
-        Move database credentials to key store.
-        Test Production.
-
-        Add top-level AppSettings?
-        Strong typing:
-            Configuration.GetSection("AppSettings")
-
-        Questions
-            Does the ModelRelief API return the correct response codes if a user is not authenticated or authorized?
-                401: Unauthorized
-                403: Forbidden?
-                404: Not Found
+    Questions
+        Does the ModelRelief API return the correct response codes if a user is not authenticated or authorized?
+            401: Unauthorized
+            403: Forbidden?
+            404: Not Found
 
     git repository
         Separate

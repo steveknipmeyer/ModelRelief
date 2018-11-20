@@ -156,7 +156,7 @@ namespace ModelRelief.Services
         {
             // build the intermediate service provider
             var serviceProvider = services.BuildServiceProvider();
-            var configurationProvider = serviceProvider.GetService<Services.IConfigurationProvider>();
+            var configurationProvider = serviceProvider.GetService<Services.IConfigurationProvider>() as ModelRelief.Services.ConfigurationProvider;
 
             switch (configurationProvider.Database)
             {
@@ -166,7 +166,12 @@ namespace ModelRelief.Services
 
                 case RelationalDatabaseProvider.SQLServer:
                 default:
-                    services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlServer(configurationProvider.Configuration.GetConnectionString(ConfigurationSettings.SQLServer)));
+                    var connectionString = configurationProvider.Configuration.GetConnectionString(ConfigurationSettings.SQLServer);
+
+                    // replace credentionals if production placeholder present
+                    connectionString = connectionString.Replace("CredentialsSQLServer", configurationProvider.GetSetting(ConfigurationSettings.CredentialsSQLServer));
+
+                    services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlServer(connectionString));
                     break;
             }
         }
