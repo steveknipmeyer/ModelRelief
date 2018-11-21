@@ -419,7 +419,7 @@ export class Graphics {
         // model bounding box (View coordinates)
         const boundingBoxMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000, wireframe: true, transparent: false, opacity: 0.2 });
         const boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(modelGroup, cameraMatrixWorldInverse);
-        const boundingBoxViewMesh = Graphics.createBoundingBoxMeshFromBoundingBox(boundingBoxView.getCenter(), boundingBoxView, boundingBoxMaterial);
+        const boundingBoxViewMesh = Graphics.createBoundingBoxMeshFromBoundingBox(boundingBoxView.getCenter(new THREE.Vector3()), boundingBoxView, boundingBoxMaterial);
 
         const boundingBoxWorldMesh = Graphics.cloneAndTransformObject(boundingBoxViewMesh, cameraMatrixWorld);
         cameraHelper.add(boundingBoxWorldMesh);
@@ -451,7 +451,7 @@ export class Graphics {
      */
     public static addAxisHelper(scene: THREE.Scene, size: number): void {
 
-        const axisHelper = new THREE.AxisHelper(size);
+        const axisHelper = new THREE.AxesHelper(size);
         axisHelper.visible = true;
         scene.add(axisHelper);
     }

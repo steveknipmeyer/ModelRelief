@@ -54,7 +54,9 @@ export class SinglePrecisionLoader {
 
         const mesh = this.constructGraphics();
 
-        return mesh;
+        const meshGroup = new THREE.Group();
+        meshGroup.add(mesh);
+        return meshGroup;
     }
 
     /**
@@ -143,7 +145,7 @@ export class SinglePrecisionLoader {
         // The mesh template matches the aspect ratio of the template.
         // Now, scale the mesh to the final target dimensions.
         const boundingBox = Graphics.getBoundingBoxFromObject(mesh);
-        const scale = meshExtents.x / boundingBox.getSize().x;
+        const scale = meshExtents.x / boundingBox.getSize(new THREE.Vector3()).x;
         mesh.scale.x = scale;
         mesh.scale.y = scale;
 

@@ -33,7 +33,7 @@
     "@types/dat-gui": "^0.6.3",
     "@types/jquery": "3.2.1",
     "@types/requirejs": "^2.1.29",
-    "@types/three": "^0.84.17",
+    "@types/three": "0.93.10",
     "babel-eslint": "^7.2.3",
     "beepbeep": "^1.2.1",
     "bootstrap": "^3.3.7",
@@ -57,7 +57,7 @@
     "requirejs": "^2.3.6",
     "robocopy": "^0.1.15",
     "run-sequence": "^2.0.0",
-    "three": "^0.86.0",
+    "three": "0.98.0",
     "typescript": "^3.1.6",
     "uglify-js": "^3.4.9"
   },

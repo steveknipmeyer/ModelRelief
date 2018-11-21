@@ -331,7 +331,7 @@ export class DepthBuffer extends GeneratedFileModel {
      */
     public getModelVertexIndices(worldVertex: THREE.Vector3, planeBoundingBox: THREE.Box3): THREE.Vector2 {
 
-        const boxSize: THREE.Vector3 = planeBoundingBox.getSize();
+        const boxSize: THREE.Vector3 = planeBoundingBox.getSize(new THREE.Vector3());
         const meshExtents: THREE.Vector2 = new THREE.Vector2 (boxSize.x, boxSize.y);
 
         //  map coordinates to offsets in range [0, 1]

@@ -83,8 +83,9 @@ export class CameraHelper {
 
         // Find camera position in View coordinates...
         const boundingBoxView: THREE.Box3 = Graphics.getTransformedBoundingBox(modelGroup, cameraMatrixWorldInverse);
-        const halfBoundingBoxViewXExtents  = boundingBoxView.getSize().x / 2;
-        const halfBoundingBoxViewYExtents  = boundingBoxView.getSize().y / 2;
+        const boundingBoxViewSize = boundingBoxView.getSize(new THREE.Vector3());
+        const halfBoundingBoxViewXExtents  = boundingBoxViewSize.x / 2;
+        const halfBoundingBoxViewYExtents  = boundingBoxViewSize.y / 2;
 
         // distance along Z from the model X/Y maximum; ensures entire model visible
         let newCameraZDistanceView: number;
@@ -123,7 +124,7 @@ export class CameraHelper {
 
             // Since the camera frustum encloses the entire model, the Z distance of an orthographic camera does not affect the scale.
             // However, a Z distance is chosen (from the front face of the model bounding box)  so that the camera can be rotated without clipping the model.
-            newCameraZDistanceView = Math.max(boundingBoxView.getSize().x, boundingBoxView.getSize().y, boundingBoxView.getSize().z);
+            newCameraZDistanceView = Math.max(boundingBoxView.getSize(new THREE.Vector3()).x, boundingBoxView.getSize(new THREE.Vector3()).y, boundingBoxView.getSize(new THREE.Vector3()).z);
         }
 
         // Preserve XY but set Z to enclose entire model.
@@ -137,7 +138,7 @@ export class CameraHelper {
 
         camera.position.copy (positionWorld);
 
-        camera.lookAt(boundingBoxWorld.getCenter());
+        camera.lookAt(boundingBoxWorld.getCenter(new THREE.Vector3()));
 
         // force camera matrix to update; matrixAutoUpdate happens in render loop
         camera.updateMatrixWorld(true);
@@ -163,9 +164,10 @@ export class CameraHelper {
         let camera = CameraHelper.getDefaultCamera(viewAspect, !(viewCamera instanceof THREE.OrthographicCamera));
         const boundingBox = Graphics.getBoundingBoxFromObject(modelGroup);
 
-        const centerX = boundingBox.getCenter().x;
-        const centerY = boundingBox.getCenter().y;
-        const centerZ = boundingBox.getCenter().z;
+        const boundingBoxCenter = boundingBox.getCenter(new THREE.Vector3());
+        const centerX = boundingBoxCenter.x;
+        const centerY = boundingBoxCenter.y;
+        const centerZ = boundingBoxCenter.z;
 
         const minX = boundingBox.min.x;
         const minY = boundingBox.min.y;
@@ -206,7 +208,7 @@ export class CameraHelper {
                 break;
             }
             case StandardView.Isometric: {
-                const side = Math.max(Math.max(boundingBox.getSize().x, boundingBox.getSize().y), boundingBox.getSize().z);
+                const side = Math.max(Math.max(boundingBox.getSize(new THREE.Vector3()).x, boundingBox.getSize(new THREE.Vector3()).y), boundingBox.getSize(new THREE.Vector3()).z);
                 camera.position.copy (new THREE.Vector3(side,  side, side));
                 camera.up.set(-1, 1, -1);
                 break;
@@ -217,7 +219,7 @@ export class CameraHelper {
             }
         }
         // Force orientation before Fit View calculation
-        camera.lookAt(boundingBox.getCenter());
+        camera.lookAt(boundingBox.getCenter(new THREE.Vector3()));
 
         // force camera matrix to update; matrixAutoUpdate happens in render loop
         camera.updateMatrixWorld(true);
@@ -302,9 +304,9 @@ export class CameraHelper {
 
         // scale by the offset along the camera direction to the bounding box center
         const boundingBox: THREE.Box3 = Graphics.getBoundingBoxFromObject(modelGroup);
-        const boundingBoxCenter = boundingBox.getCenter();
+        const boundingBoxCenter = boundingBox.getCenter(new THREE.Vector3());
 
-        const boundingBoxOffset = boundingBox.getCenter().sub(camera.position);
+        const boundingBoxOffset = boundingBoxCenter.sub(camera.position);
         const cameraDirectionOffset = boundingBoxOffset.dot(unitLookAt);
         const scaledLookAt = unitLookAt.setLength(cameraDirectionOffset);
         // const scaledLookAt = unitLookAt;

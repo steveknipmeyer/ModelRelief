@@ -131,7 +131,9 @@ export class CameraControls {
         // View
         const modelView = Graphics.cloneAndTransformObject(this.viewer.modelGroup, this.viewer.camera.matrixWorldInverse);
         const cameraView = CameraHelper.getDefaultCamera(this.viewer.aspectRatio, this.viewer.camera instanceof THREE.PerspectiveCamera);
-        Graphics.addCameraHelper(cameraView, this.viewer.scene, modelView);
+        const modelViewGroup = new THREE.Group();
+        modelViewGroup.add(modelView);
+        Graphics.addCameraHelper(cameraView, this.viewer.scene, modelViewGroup);
     }
 
     /**

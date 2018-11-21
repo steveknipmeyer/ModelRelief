@@ -27,6 +27,12 @@
 #### Short Term
     Upgrades
         Upgrade Three.js.
+            Change Viewer._root to THREE.Group?
+                Do the semantics of THREE.Group cause the WebGLRenderer to skip the geometry?
+                https://dustinpfister.github.io/2018/05/16/threejs-grouping-mesh-objects/
+                https://github.com/mrdoob/three.js/issues/8711
+            Update OBJLoader.ts.
+            Minimize calls to Box2.getCenter(), etc.
         Convert TypeScript compiler output to ES5 modules?
 
     UI
@@ -578,7 +584,7 @@ A Put (File) request returns Created instead of OK. The file is correctly replac
                 Exception
             These exceptions are <caught> and then converted into an ApiErrorResult where they are returned to the caller with no further processing.
             <No> exception is propagated further.
-            
+
         ViewController:UxController
             NullRequestException                        null request; Ux only
             Mediator.Send
@@ -602,7 +608,7 @@ A Put (File) request returns Created instead of OK. The file is correctly replac
             https://andrewlock.net/re-execute-the-middleware-pipeline-with-the-statuscodepages-middleware-to-create-custom-error-pages/
                     HttpStatusCode.BadRequest       BadRequest.cshtml
                     HttpStatusCode.NotFound:        NotFound.cshtml
-                    default                         Error.cshtml    
+                    default                         Error.cshtml
 
 #### Logging
     How can ModelRelief messages be associated with a category (e.g. 'Microsoft')?

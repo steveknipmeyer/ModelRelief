@@ -257,7 +257,7 @@ export class UnitTests {
         const lowerRight = new THREE.Vector3 (boundingBox.max.x, boundingBox.min.y, 0);
         const upperRight = boundingBox.max;
         const upperLeft  = new THREE.Vector3 (boundingBox.min.x, boundingBox.max.y, 0);
-        const center     = boundingBox.getCenter();
+        const center     = boundingBox.getCenter(new THREE.Vector3());
 
         // Expected Values
         const bufferLength: number = (depthBuffer.width * depthBuffer.height);

@@ -53,9 +53,8 @@ export class Materials {
 
             bumpMap   : designTexture,
             bumpScale : -1.0,
-
-            shading: THREE.SmoothShading,
         });
+        material.flatShading = false;
 
         return material;
     }

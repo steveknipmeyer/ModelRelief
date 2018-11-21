@@ -152,8 +152,9 @@ export class Viewer {
      * @type {THREE.Group}
      */
     get modelGroup(): THREE.Group {
-
-        return this._root;
+        const rootGroup = new THREE.Group();
+        rootGroup.add(this._root);
+        return rootGroup;
     }
 
     /**
