@@ -28,7 +28,7 @@ import {TrackballControls} from "Scripts/Viewers/TrackballControls";
 export class Viewer {
 
     // Protected
-    protected _root: THREE.Object3D            = null;
+    protected _root: THREE.Group            = null;
     protected _logger: ILogger                 = null;
 
     // Private
@@ -152,9 +152,7 @@ export class Viewer {
      * @type {THREE.Group}
      */
     get modelGroup(): THREE.Group {
-        const rootGroup = new THREE.Group();
-        rootGroup.add(this._root);
-        return rootGroup;
+        return this._root;
     }
 
     /**
@@ -406,7 +404,7 @@ export class Viewer {
      */
     public createRoot() {
 
-        this._root = new THREE.Object3D();
+        this._root = new THREE.Group();
         this._root.name = ObjectNames.Root;
         this.scene.add(this._root);
     }
