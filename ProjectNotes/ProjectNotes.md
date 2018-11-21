@@ -25,22 +25,6 @@
         Docker                      DockerStart
 
 #### Short Term
-    Upgrades
-        Upgrade Three.js.
-            Change Viewer._root to THREE.Group?
-                Do the semantics of THREE.Group cause the WebGLRenderer to skip the geometry?
-                https://dustinpfister.github.io/2018/05/16/threejs-grouping-mesh-objects/
-                https://github.com/mrdoob/three.js/issues/8711
-            Update OBJLoader.ts.
-            Minimize calls to Box2.getCenter(), etc.
-        Convert TypeScript compiler output to ES5 modules?
-
-    UI
-        Add favicon.ico support.
-        Add UI progress indicator for mesh generation.
-        CameraControls
-            Separate the Perspective controls into a separate dat.gui controller that can be entirely hidden or shown.
-                Field of View
 
     Core
         Should clipping planes be set based on the Model?
@@ -50,20 +34,32 @@
         Visually examine randomly-generated cameras that have been round-tripped.
 
         Experiment with Poisson solutions of images that have not been attenuated/processed.
+        Develop test models to test the gaussian filter mask processing.
+            The model should contain details near the edges (adjacent to the background) and near thresholded regions.
+                Spheres (Positive, Negative)
+                Cubes
+                Architectural
 
         Chrome "paused before potential out-of-memory crash".
             https://stackoverflow.com/questions/42110726/chrome-devtools-paused-before-potential-out-of-memory-crash
             https://developers.google.com/web/tools/chrome-devtools/memory-problems/
+
+    UI
+        Add favicon.ico support.
+        Add UI progress indicator for mesh generation.
+        CameraControls
+            Separate the Perspective controls into a separate dat.gui controller that can be entirely hidden or shown.
+                Field of View
 
     Build a Python installer package for Explorer.
 
     Silhouette
         https://stackoverflow.com/questions/17161088/how-to-refine-or-blur-or-smooth-just-the-edges
 
-    Develop test models to test the gaussian filter mask processing.
-        The model should contain details near the edges (adjacent to the background) and near thresholded regions.
-
     Should the Python image masks be integers or booleans (instead of doubles)?
+
+    Three.js
+        Update OBJLoader.ts.
 
     Why are there different versions of vc and vs2015_runtime between devenv and mrenv?
         devenv
@@ -89,7 +85,6 @@
         The transfer of models is inefficent because they are Base64 encoded.
 
     Builder
-        IIS publish updates the user store but not the database which must be attached manually.
         Add a model list to control which models are added.
 
     Order a SQLServer book.
@@ -99,11 +94,6 @@
 
     Investigate workspaces in VSCode.
         Why is the second workspace unnamed?
-
-    Create additional test models.
-        Spheres (Positive, Negative)
-        Cubes
-        Architectural
 
     Solver
         Meshes are not oriented correctly in Mayavi Isometric views.
