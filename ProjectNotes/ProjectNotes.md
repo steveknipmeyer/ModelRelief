@@ -2,10 +2,6 @@
 #### Commit Notes
 
 #### Lambda
-    Change sa password.
-        https://dba.stackexchange.com/questions/103804/changing-sa-password
-    Update Production site.
-    Delete secrets.json, Xsecrets.json.
 
 #### Vector
 
