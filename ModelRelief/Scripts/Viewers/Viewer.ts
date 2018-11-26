@@ -28,8 +28,8 @@ import {TrackballControls} from "Scripts/Viewers/TrackballControls";
 export class Viewer {
 
     // Protected
-    protected _root: THREE.Group            = null;
-    protected _logger: ILogger                 = null;
+    protected _root: THREE.Group             = null;
+    protected _logger: ILogger               = null;
 
     // Private
     private _name: string                    = "";

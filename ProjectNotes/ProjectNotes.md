@@ -21,10 +21,17 @@
         Postman
         Explorer                    python.exe Explorer\explorer.py --s ../Solver/Test/Lucy.json --w ../Solver/Test/Working
         Solver                      python Solver\solver.py --s "Test/House.json" --w "Test/Working"
-        Relief unit tests           D:\ModelRelief\Relief\tests\bin\reliefUnitTests.exe
         Docker                      DockerStart
 
 #### Short Term
+    Knald license.
+    Evauluate silouette properties of existing algorithm.
+    Explore
+        Awesome Bump
+        Knald
+        xNormal
+        ShaderMap
+        Gimp Normal Plugin
 
     Core
         Should clipping planes be set based on the Model?
