@@ -13,7 +13,7 @@
 #endif
 
 // THREE.js pre-defined vertex shader uniforms and attributes
-// http://threejs.org/docs/#Reference/Renderers.WebGL/WebGLProgram
+// https://threejs.org/docs/#api/en/renderers/webgl/WebGLProgram
 #if defined(NOOP)
 uniform mat4 modelMatrix;					// = object.matrixWorld
 uniform mat4 modelViewMatrix;				// = camera.matrixWorldInverse * object.matrixWorld
