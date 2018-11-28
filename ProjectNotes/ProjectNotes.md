@@ -1,7 +1,5 @@
 ﻿### Tasks
 #### Commit Notes
-Experiments with NormalMap shader.
-Replaced Detector with Three WEBGL utility methods.
 #### Lambda
 
 #### Vector

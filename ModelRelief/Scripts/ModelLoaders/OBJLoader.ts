@@ -728,10 +728,15 @@ OBJLoader.prototype = {
 
                         vertexShader:   MR.shaderSource.NormalMapVertexShader,
                         fragmentShader: MR.shaderSource.NormalMapFragmentShader,
+                        uniforms: {
+                            cameraNear  :   { value: 0.1 },
+                            cameraFar   :   { value: 100.0 },
+                        },
+
                     });
 
                     material = ( ! isLine ? new THREE.MeshPhongMaterial() : new THREE.LineBasicMaterial() );
-                    // material = normalMapMaterial;
+//                  material = normalMapMaterial;
                     material.name = sourceMaterial.name;
 
                 }

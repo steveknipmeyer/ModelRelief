@@ -3,8 +3,13 @@
 //                                                                         //
 // Copyright (c) <2017-2018> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
-precision highp float;
-precision highp int;
+//#define MAXIMUMPRECISION
+#if defined(MAXIMUMPRECISION)
+    precision highp float;
+    precision highp int;
+#else
+    precision mediump float;
+#endif
 
 // THREE.js pre-defined vertex shader uniforms and attributes
 // http://threejs.org/docs/#Reference/Renderers.WebGL/WebGLProgram
@@ -27,6 +32,7 @@ varying vec2 vUV;							// UV coordinates of vertex
 varying vec3 vNormal;						// vertex normal
 varying vec3 vWorldPosition;				// vertex world position
 varying vec3 vViewPosition;					// vertex view position (flipped)
+varying float vDepth;						// Z depth
 
 /// <summary>
 ///  Main entry point
@@ -46,4 +52,6 @@ void main() {
 	vViewPosition = -mvPosition.xyz;
 
 	gl_Position = projectionMatrix * mvPosition;
+
+	vDepth = gl_Position.z;
 }
