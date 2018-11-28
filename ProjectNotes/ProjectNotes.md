@@ -1,6 +1,7 @@
 ﻿### Tasks
 #### Commit Notes
-
+Experiments with NormalMap shader.
+Replaced Detector with Three WEBGL utility methods.
 #### Lambda
 
 #### Vector
@@ -20,7 +21,12 @@
         Docker                      DockerStart
 
 #### Short Term
+    Convert to a linear depth buffer in the shader?
+        https://stackoverflow.com/questions/42509883/how-to-correctly-linearize-depth-in-opengl-es-in-ios/42515399#42515399
+    Integrate ImageSharp.
+    Add support for normap map creation.
     Knald license.
+
     Evauluate silouette properties of existing algorithm.
     Explore
         Awesome Bump
@@ -49,6 +55,7 @@
 
     UI
         Add favicon.ico support.
+            https://realfavicongenerator.net/favicon/aspnet_core#.W_6RlGhKjmE
         Add UI progress indicator for mesh generation.
         CameraControls
             Separate the Perspective controls into a separate dat.gui controller that can be entirely hidden or shown.

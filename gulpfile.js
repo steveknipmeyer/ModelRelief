@@ -1,6 +1,6 @@
-﻿// ------------------------------------------------------------------------// 
+﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //                                                                          
+//                                                                         //
 // Copyright (c) <2017> Steve Knipmeyer                                    //
 // ------------------------------------------------------------------------//
 
@@ -32,26 +32,26 @@ var robocopy     = require('robocopy');
 var runSequence  = require('run-sequence');
 
 var sourceConfig = new function() {
- 
-    this.sourceRoot     = './ModelRelief/';                
+
+    this.sourceRoot     = './ModelRelief/';
 
     this.cssRoot        = this.sourceRoot + 'CSS/';
     this.imagesRoot     = this.sourceRoot + 'Delivery/Images/';
-    this.scriptsRoot    = this.sourceRoot + 'Scripts/';    
+    this.scriptsRoot    = this.sourceRoot + 'Scripts/';
     this.shaders        = this.scriptsRoot + 'Shaders/';
  }();
 
 var siteConfig = new function() {
- 
-    this.wwwRoot         = sourceConfig.sourceRoot + './wwwroot/';                      
-    this.nodeModulesRoot = './node_modules/';                      
+
+    this.wwwRoot         = sourceConfig.sourceRoot + './wwwroot/';
+    this.nodeModulesRoot = './node_modules/';
 
     this.cssRoot         = this.wwwRoot + 'css/';
     this.imagesRoot      = this.wwwRoot + 'images/';
     this.jsRoot          = this.wwwRoot + 'js/';
     this.libRoot         = this.wwwRoot + 'lib/';
  }();
- 
+
 var encodingAscii          = {encoding: 'ascii'};
 var encodingUnicode        = {encoding: 'utf8'};
 var EOL                    = require('os').EOL;
@@ -74,13 +74,13 @@ var onError = function (err) {
 /// </summary>
 function readFile(fileName, stripByteOrderMark) {
     var lines = [];
-    
+
     lines = fs.readFileSync(fileName).toString();
     if (stripByteOrderMark)
         lines = lines.replace(/^\uFEFF/, '');
 
     lines = lines.split('\n');
-   
+
     return lines;
 }
 
@@ -113,7 +113,7 @@ function deleteFile (fileName) {
 /// https://stackoverflow.com/questions/11293857/fastest-way-to-copy-file-in-node-js
 /// </summary>
 function copyFile(file, sourceFolder, targetFolder, callBack) {
-    
+
     var callBackCalled = false;
     var source = sourceFolder + file;
     var target = targetFolder + file;
@@ -194,7 +194,7 @@ function generateShaders() {
         glslFiles           = [],
         declarationLines    = [],
         shaderLines      = [];
-    
+
     declarationLines = readFile(glslSourceFolder + shaderTemplateFile, true);
     shaderLines = [];
 
@@ -202,10 +202,10 @@ function generateShaders() {
     glslFiles.forEach(appendShader);
 
     // ensure output folder exists
-    createDirectory(shaderOutputFolder);   
+    createDirectory(shaderOutputFolder);
     deleteFile (shaderFilePath);
-    
-    appendFile(shaderFilePath, declarationLines, encodingAscii, true);    
+
+    appendFile(shaderFilePath, declarationLines, encodingAscii, true);
     appendFile(shaderFilePath, shaderLines, encodingAscii, false);
 
     /// <summary>
@@ -243,7 +243,7 @@ function generateShaders() {
 /// Create the output structure for wwwroot.
 /// </summary>
 gulp.task('createWWWRoot', function () {
-    createDirectory(siteConfig.wwwRoot);   
+    createDirectory(siteConfig.wwwRoot);
 });
 
 /// <summary>
@@ -338,9 +338,9 @@ gulp.task('copyNPM', function () {
 
     // three/examples/js
     subFolder         = 'threejs/';
-    sourceFolder      = siteConfig.nodeModulesRoot + 'three/examples/js/'; 
+    sourceFolder      = siteConfig.nodeModulesRoot + 'three/examples/js/';
     destinationFolder = siteConfig.libRoot + subFolder;
-    gulp.src([sourceFolder + 'Detector.js']).pipe(gulp.dest(destinationFolder ));
+    gulp.src([sourceFolder + 'WebGL.js']).pipe(gulp.dest(destinationFolder ));
     gulp.src([sourceFolder + 'libs/' + 'dat.gui.min.js']).pipe(gulp.dest(destinationFolder ));
 
     // requirejs
@@ -373,7 +373,7 @@ gulp.task('buildShadersReload', function () {
 
 /// <summary>
 /// Compile TypeScript
-/// The TypeScript compiler is invoked through the Windows path. 
+/// The TypeScript compiler is invoked through the Windows path.
 /// This is initialized in the development shell to the desired TypeScript compiler version.
 /// "C:\Program Files (x86)\Microsoft SDKs\TypeScript\2.4""
 /// </summary>
@@ -394,19 +394,19 @@ gulp.task('compileTypeScript', function () {
     // N.B. Errors are emitted twice.
     // https://github.com/ivogabe/gulp-typescript/issues/438
     let beepSounded = false;
-    let tsResult = tsProject.src() 
-        .pipe(sourcemaps.init())        // sourcemaps will be generated 
+    let tsResult = tsProject.src()
+        .pipe(sourcemaps.init())        // sourcemaps will be generated
         .pipe(tsProject())
         .on('error', function (err) {
             // N.B. called after <every> compilation error...
             if (!beepSounded)
-                beep();                    
-           beepSounded = true; 
+                beep();
+           beepSounded = true;
         }
     );
 
     return tsResult.js
-        .pipe(sourcemaps.write())       // sourcemaps are added to the .js file 
+        .pipe(sourcemaps.write())       // sourcemaps are added to the .js file
         .pipe(gulp.dest(''));
 });
 
@@ -418,16 +418,16 @@ gulp.task('compileTypeScriptReload', function () {
     runSequence('compileTypeScript', 'reload');
 });
 
-/// <summary> 
+/// <summary>
 /// Test task.
-/// </summary> 
+/// </summary>
 gulp.task('test', function () {
     beep();
 });
-  
-/// <summary> 
+
+/// <summary>
 /// Default build task
-/// </summary> 
+/// </summary>
 gulp.task('default', function () {
   runSequence('createWWWRoot', 'copyNPM', 'buildCSS', 'buildShaders', 'buildStaticContent');
 });
@@ -450,13 +450,13 @@ gulp.task('serve', function () {
 
   browserSync({
     notify: true,
-    
+
     proxy: {
 
         target: "localhost:5000/Models/Viewer/1"
     }
 //  browser: 'google chrome canary'
-//  Canary    
+//  Canary
 //  browser: "C:/Users/Steve Knipmeyer/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
   });
 

@@ -14,9 +14,6 @@ uniform mat4 viewMatrix;
 uniform vec3 cameraPosition;
 #endif
 
-uniform vec3        designColor;				// color
-uniform sampler2D   tDiffuse;                   // diffuse texture (not used)
-
 varying vec2 vUV;								// UV coordinates of vertex
 varying vec3 vNormal;							// vertex normal
 varying vec3 vWorldPosition;					// vertex world position
@@ -30,8 +27,9 @@ const vec3 noColor = vec3(0.0, 0.0, 0.0);
 void main() {
 
 	vec3 normal = normalize(vNormal);
-	vec3 viewPosition = normalize(vViewPosition);
 
-    gl_FragColor.xyz = designColor.xyz;
-	gl_FragColor.a   = 1.0;
+    float redComponent   = (normal.x + 1.0) / 2.0;
+    float greenComponent = (normal.y + 1.0) / 2.0;
+    float blueComponent  = normal.z;
+    gl_FragColor = vec4(redComponent, greenComponent, blueComponent, 1.0);
 }

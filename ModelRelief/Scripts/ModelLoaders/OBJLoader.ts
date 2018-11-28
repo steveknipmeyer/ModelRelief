@@ -724,7 +724,14 @@ OBJLoader.prototype = {
 
                 if ( ! material ) {
 
+                    const normalMapMaterial = new THREE.ShaderMaterial({
+
+                        vertexShader:   MR.shaderSource.NormalMapVertexShader,
+                        fragmentShader: MR.shaderSource.NormalMapFragmentShader,
+                    });
+
                     material = ( ! isLine ? new THREE.MeshPhongMaterial() : new THREE.LineBasicMaterial() );
+                    // material = normalMapMaterial;
                     material.name = sourceMaterial.name;
 
                 }

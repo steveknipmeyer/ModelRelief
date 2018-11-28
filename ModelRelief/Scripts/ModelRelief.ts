@@ -11,7 +11,11 @@ import {ElementIds} from "Scripts/System/Html";
 import {Initializer} from "Scripts/System/Initializer";
 import {ComposerView} from "Scripts/Views/ComposerView";
 
-Initializer.initialize().then(() => {
+Initializer.initialize().then((initializationSuccess: boolean) => {
+
+    if (!initializationSuccess)
+        return;
+
     const composerView = new ComposerView(ElementIds.ComposerView);
     composerView.eventManager.addEventListener(EventType.ComposerViewInitialized, () => {
         const composerController = new ComposerController(composerView);

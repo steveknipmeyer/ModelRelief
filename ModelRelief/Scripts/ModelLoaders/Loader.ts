@@ -15,7 +15,6 @@ import {SinglePrecisionLoader} from "Scripts/ModelLoaders/SinglePrecisionLoader"
 import {TestModel, TestModelLoader} from "Scripts/ModelLoaders/TestModelLoader";
 import {Mesh} from "Scripts/Models/Mesh/Mesh";
 import {Model3d} from "Scripts/Models/Model3d/Model3d";
-import {Format} from "Scripts/System/Format";
 import {ILogger} from "Scripts/System/Logger";
 import {Services} from "Scripts/System/Services";
 

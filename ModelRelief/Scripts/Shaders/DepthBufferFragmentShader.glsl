@@ -33,7 +33,7 @@ varying vec3 vNormal;							// vertex normal
 varying vec3 vWorldPosition;					// vertex world position
 varying vec3 vViewPosition;						// vertex view position (flipped)
 
-const vec3 noColor = vec3(0.0, 0.0, 0.0);
+const vec3 noColor = vec3(0.0, 0.0, 0.0);%
 
 // http://concord-consortium.github.io/lab/experiments/webgl-gpgpu/webgl.html
 // https://stackoverflow.com/questions/17981163/webgl-read-pixels-from-floating-point-render-target
