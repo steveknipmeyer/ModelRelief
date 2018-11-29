@@ -1,13 +1,11 @@
 ﻿// ------------------------------------------------------------------------//
+// DepthBufferFragmentShader                                               //
 // ModelRelief                                                             //
 //                                                                         //
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
+// Copyright (c) <2017-2019> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 
-// enable extensions (e.g. dFdx, dFdy)
-// #extension GL_OES_standard_derivatives : enable
-
-//#define MAXIMUMPRECISION
+#define MAXIMUMPRECISION
 #if defined(MAXIMUMPRECISION)
     precision highp float;
     precision highp int;
@@ -33,7 +31,7 @@ varying vec3 vNormal;							// vertex normal
 varying vec3 vWorldPosition;					// vertex world position
 varying vec3 vViewPosition;						// vertex view position (flipped)
 
-const vec3 noColor = vec3(0.0, 0.0, 0.0);%
+const vec3 noColor = vec3(0.0, 0.0, 0.0);
 
 // http://concord-consortium.github.io/lab/experiments/webgl-gpgpu/webgl.html
 // https://stackoverflow.com/questions/17981163/webgl-read-pixels-from-floating-point-render-target

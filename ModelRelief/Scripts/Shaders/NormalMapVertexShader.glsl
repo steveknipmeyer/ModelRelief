@@ -1,9 +1,11 @@
 ﻿// ------------------------------------------------------------------------//
+// NormalMapVertexShader                                                   //
 // ModelRelief                                                             //
 //                                                                         //
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
+// Copyright (c) <2017-2019> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
-//#define MAXIMUMPRECISION
+
+#define MAXIMUMPRECISION
 #if defined(MAXIMUMPRECISION)
     precision highp float;
     precision highp int;

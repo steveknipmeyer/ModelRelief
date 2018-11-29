@@ -1,10 +1,20 @@
 ﻿// ------------------------------------------------------------------------//
+// TemplateFragmentShader                                                  //
 // ModelRelief                                                             //
 //                                                                         //
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
+// Copyright (c) <2017-2019> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
+
 // enable extensions (e.g. dFdx, dFdy)
-#extension GL_OES_standard_derivatives : enable
+// #extension GL_OES_standard_derivatives : enable
+
+#define MAXIMUMPRECISION
+#if defined(MAXIMUMPRECISION)
+    precision highp float;
+    precision highp int;
+#else
+    precision mediump float;
+#endif
 
 #include <packing>
 

@@ -1,9 +1,17 @@
 ﻿// ------------------------------------------------------------------------//
+// NormalMapFragmentShader                                                 //
 // ModelRelief                                                             //
 //                                                                         //
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
+// Copyright (c) <2017-2019> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
-//#extension GL_EXT_frag_depth : enable
+
+#define MAXIMUMPRECISION
+#if defined(MAXIMUMPRECISION)
+    precision highp float;
+    precision highp int;
+#else
+    precision mediump float;
+#endif
 
 #include <packing>
 

@@ -1,5 +1,7 @@
 ﻿### Tasks
 #### Commit Notes
+Shaders now use high precision floats.
+
 #### Lambda
 
 #### Vector
