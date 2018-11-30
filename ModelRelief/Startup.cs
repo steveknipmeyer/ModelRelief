@@ -114,11 +114,7 @@ namespace ModelRelief
         /// <param name="services">DI Service collection.</param>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            // cache for use outside controllers (e.g. FileDomainModel)
-            // N.B. ContentRootPath contains a trailing slash when running the integration tests.
-            // The normal runtime mode (web host) does not include a slash. Strip, if present.
             var env = services.BuildServiceProvider().GetService<IHostingEnvironment>();
-            StorageManager.ContentRootPath = env.ContentRootPath.TrimEnd(Path.DirectorySeparatorChar);
 
             services.AddSingleton(Configuration);
             services.AddRouting(options => options.LowercaseUrls = true);
@@ -131,8 +127,12 @@ namespace ModelRelief
             services.AddDatabaseServices(env);
             services.AddAutoMapper(typeof(Startup));
             Mapper.AssertConfigurationIsValid();
+            var serviceProvider = ConfigureAutofacServices(services);
 
-            return ConfigureAutofacServices(services);
+            // service provider for contexts without DI
+            ApplicationServices.StorageManager = serviceProvider.GetRequiredService<IStorageManager>();
+
+            return serviceProvider;
         }
 
         /// <summary>

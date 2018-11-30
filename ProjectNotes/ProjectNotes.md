@@ -20,10 +20,6 @@
         Docker                      DockerStart
 
 #### Short Term
-    Investigate static methods in ModelRelief.Services.StorageManager.
-        Should these be added to the IStorageManager interface for access by DI consumers?
-        Some consumers (e.g. FileDoman) do not use DI.
-            public static string ContentRootPath { get; set; }
      File methods should share common setup steps for deleting existing files, etc.
 
     Convert to a linear depth buffer in the shader?

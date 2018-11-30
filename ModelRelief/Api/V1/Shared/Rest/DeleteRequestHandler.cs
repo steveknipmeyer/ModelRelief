@@ -26,6 +26,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
     public class DeleteRequestHandler<TEntity>  : ValidatedHandler<DeleteRequest<TEntity>, object>
         where TEntity   : DomainModel
     {
+        private IStorageManager StorageManager { get; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DeleteRequestHandler{TEntity}"/> class.
         /// Constructor
@@ -36,15 +38,18 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
+        /// <param name="storageManager">Services for file system storage.</param>
         public DeleteRequestHandler(
             ModelReliefDbContext dbContext,
             ILoggerFactory loggerFactory,
             IMapper mapper,
             IHostingEnvironment hostingEnvironment,
             Services.IConfigurationProvider configurationProvider,
-            IDependencyManager dependencyManager)
+            IDependencyManager dependencyManager,
+            IStorageManager storageManager)
             : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, null)
         {
+            StorageManager = storageManager;
         }
 
         /// <summary>

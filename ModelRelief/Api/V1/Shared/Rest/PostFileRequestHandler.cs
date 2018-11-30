@@ -80,7 +80,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
          // await Files.WriteImageFileFromByteArray(fileName, message.NewFile.Raw);
 
             // update file metadata; normalize path
-            fileDomainModel.Path = ModelRelief.Services.StorageManager.GetRelativePath(Path.GetFullPath($"{Path.GetDirectoryName(fileName)}/"));
+            fileDomainModel.Path = StorageManager.GetRelativePath(Path.GetFullPath($"{Path.GetDirectoryName(fileName)}/"));
             fileDomainModel.FileTimeStamp = DateTime.Now;
 
             if (fileDomainModel is GeneratedFileDomainModel generatedFileDomainModel)

@@ -16,9 +16,6 @@ namespace ModelRelief.Services
     /// </summary>
     public class StorageManager : IStorageManager
     {
-        // cached for use without DependencyInjection (e.g. FileDomainModel)
-        public static string ContentRootPath { get; set; }
-
         public IHostingEnvironment HostingEnvironment { get; }
         public IConfigurationProvider ConfigurationProvider { get; }
 
@@ -29,12 +26,25 @@ namespace ModelRelief.Services
         }
 
         /// <summary>
+        /// Gets the server ContentRootPath.
+        /// </summary>
+        public string ContentRootPath
+        {
+            get
+            {
+                // N.B. ContentRootPath contains a trailing slash when running the integration tests.
+                // The normal runtime mode (web host) does not include a slash. Strip, if present.
+                return HostingEnvironment.ContentRootPath.TrimEnd(Path.DirectorySeparatorChar);
+            }
+        }
+
+        /// <summary>
         /// Returns a path relative to the web ContentRootPath.
         /// This is the Path property of a FileDomainModel entity.
         /// </summary>
         /// <param name="path">Path to process.</param>
         /// <returns>Path relative to ContentRootPath. </returns>
-        public static string GetRelativePath(string path)
+        public string GetRelativePath(string path)
         {
             // verify path contains ContentRootPath
             if (path.IndexOf(ContentRootPath) != 0)
@@ -50,9 +60,9 @@ namespace ModelRelief.Services
         /// </summary>
         /// <param name="path">Relative path to combine with ContentRootPath.</param>
         /// <returns>Absolute path including ContentRootPath</returns>
-        public static string GetAbsolutePath(string path)
+        public string GetAbsolutePath(string path)
         {
-            var absolutePath = $"{StorageManager.ContentRootPath}{System.IO.Path.DirectorySeparatorChar}{path}";
+            var absolutePath = $"{ContentRootPath}{System.IO.Path.DirectorySeparatorChar}{path}";
 
             // normalize
             absolutePath = Path.GetFullPath(absolutePath);

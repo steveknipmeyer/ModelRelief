@@ -47,6 +47,14 @@ namespace ModelRelief.Domain
         {
         }
 
+        [JsonIgnore]
+        protected IStorageManager StorageManager
+        {
+            get
+            {
+                return ApplicationServices.StorageManager;
+            }
+        }
         /// <summary>
         /// Gets the model storage folder for a given model instance.
         /// </summary>
