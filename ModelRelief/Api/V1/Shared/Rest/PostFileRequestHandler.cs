@@ -20,8 +20,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using ModelRelief.Services;
     using ModelRelief.Services.Relationships;
     using ModelRelief.Utility;
-
-    using static ModelRelief.Services.StorageManager;
+    using SixLabors.ImageSharp;
+    using SixLabors.ImageSharp.PixelFormats;
+    using SixLabors.ImageSharp.Processing;
 
     /// <summary>
     /// Represents a handler for a POST request to create a new model.
@@ -75,10 +76,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
             var fileName = Path.Combine(StorageManager.DefaultModelStorageFolder(domainModel), domainModel.Name);
 
-            await Files.WriteFileFromByteArray(fileName, message.NewFile.Raw);
+            await Files.WriteRawFileFromByteArray(fileName, message.NewFile.Raw);
+         // await Files.WriteImageFileFromByteArray(fileName, message.NewFile.Raw);
 
             // update file metadata; normalize path
-            fileDomainModel.Path = GetRelativePath(Path.GetFullPath($"{Path.GetDirectoryName(fileName)}/"));
+            fileDomainModel.Path = ModelRelief.Services.StorageManager.GetRelativePath(Path.GetFullPath($"{Path.GetDirectoryName(fileName)}/"));
             fileDomainModel.FileTimeStamp = DateTime.Now;
 
             if (fileDomainModel is GeneratedFileDomainModel generatedFileDomainModel)

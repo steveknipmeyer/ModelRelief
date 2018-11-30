@@ -12,6 +12,9 @@ namespace ModelRelief.Utility
     using System.Threading;
     using System.Threading.Tasks;
     using Newtonsoft.Json;
+    using SixLabors.ImageSharp;
+    using SixLabors.ImageSharp.PixelFormats;
+    using SixLabors.ImageSharp.Processing;
 
     public class Files
     {
@@ -77,24 +80,54 @@ namespace ModelRelief.Utility
         /// </summary>
         /// <param name="fileName">Filename (overwritten if exists)</param>
         /// <param name="stream">Stream to read</param>
-        public static async Task WriteFileFromStream(string fileName, System.IO.Stream stream)
+        public static async Task WriteRawFileFromStream(string fileName, System.IO.Stream stream)
         {
             byte[] byteArray = Files.ReadToEnd(stream);
-            await WriteFileFromByteArray(fileName, byteArray);
+            await WriteRawFileFromByteArray(fileName, byteArray);
         }
 
         /// <summary>
-        /// Writes a disk file from a byte array.
+        /// Writes a raw file from a byte array.
         /// </summary>
         /// <param name="fileName">Filename (overwritten if exists)</param>
         /// <param name="byteArray">Byte array to write to file.</param>
-        public static async Task WriteFileFromByteArray(string fileName, byte[] byteArray)
+        public static async Task WriteRawFileFromByteArray(string fileName, byte[] byteArray)
         {
             if (System.IO.File.Exists(fileName))
                 System.IO.File.Delete(fileName);
 
             Directory.CreateDirectory(Path.GetDirectoryName(fileName));
             await System.IO.File.WriteAllBytesAsync(fileName, byteArray);
+        }
+
+        /// <summary>
+        /// Writes a disk image file from a byte array.
+        /// </summary>
+        /// <param name="fileName">Filename (overwritten if exists)</param>
+        /// <param name="byteArray">Byte array to write to file.</param>
+        public static async Task WriteImageFileFromByteArray(string fileName, byte[] byteArray)
+        {
+            var rootFileName = System.IO.Path.ChangeExtension(fileName, null);
+            var imageFileName = $"{rootFileName}.png";
+
+            if (System.IO.File.Exists(imageFileName))
+                System.IO.File.Delete(imageFileName);
+
+            Directory.CreateDirectory(Path.GetDirectoryName(imageFileName));
+
+            int dimensions = (int)Math.Sqrt(byteArray.Length / 4);
+            var floatArray = new float[byteArray.Length / 4];
+            Buffer.BlockCopy(byteArray, 0, floatArray, 0, byteArray.Length);
+
+            using (var image = Image.LoadPixelData<Rgba32>(byteArray, dimensions, dimensions))
+            {
+                image.Mutate(x => x.Grayscale());
+                using (var fileStream = new FileStream(imageFileName, FileMode.Create))
+                {
+                    image.SaveAsPng(fileStream);
+                }
+            }
+            await Task.CompletedTask;
         }
 
         /// <summary>

@@ -4,6 +4,8 @@
 //                                                                         //
 // Copyright (c) <2017-2019> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
+// This extension is not supported.
+// #extension GL_EXT_frag_depth : enable
 
 #define MAXIMUMPRECISION
 #if defined(MAXIMUMPRECISION)
@@ -45,5 +47,5 @@ void main() {
 
     // experimental
     float z = (vDepth - cameraNear) / (cameraFar - cameraNear);
-//  gl_FragDepth = z;
+//  gl_FragDepthEXT = z;
 }

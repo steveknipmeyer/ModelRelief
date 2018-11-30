@@ -10,7 +10,6 @@ namespace ModelRelief.Database
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
     using ModelRelief.Features.Settings;
-    using static ModelRelief.Services.StorageManager;
 
     public class Initializer
     {
