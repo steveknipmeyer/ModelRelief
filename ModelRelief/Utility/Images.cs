@@ -22,26 +22,43 @@ namespace ModelRelief.Utility
         private static readonly int BytesPerSinglePrecisionFloat = 4;
 
         /// <summary>
-        /// Analyze the properties of an image buffer.
+        /// Analyze the properties of a single precision floating point image buffer.
         /// </summary>
-        /// <typeparam name="T">Pixel type.</typeparam>
         /// <param name="imageBuffer">Pixel buffer.</param>
         /// <param name="name">Friendly name.</param>
-        public static void AnalyzeImage<T>(IList<T> imageBuffer, string name)
+        public static void AnalyzeFloatImage(float[] imageBuffer, string name)
         {
             var minimum = imageBuffer.Min();
             var maximum = imageBuffer.Max();
 
-            int centerOffset = imageBuffer.Count() / 2;
-            var centerValue  = imageBuffer[centerOffset];
+            int dimensions = (int)Math.Sqrt(imageBuffer.Count());
+            int middle = dimensions / 2;
+            int centerOffset = (middle * dimensions) + middle;
+            var center = imageBuffer[centerOffset];
 
-            Console.ForegroundColor = ConsoleColor.Magenta;
+            var lowerLeft  = imageBuffer[0];
+            var upperRight = imageBuffer[imageBuffer.Count() - 1];
+
+            var precision = "0.00000";
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine($"{name}");
-            Console.WriteLine($"Minimum = {minimum}");
-            Console.WriteLine($"Maximum = {maximum}");
-            Console.WriteLine($"Center = {centerValue}");
+            Console.WriteLine($"Lower Left  = {lowerLeft.ToString(precision)}");
+            Console.WriteLine($"Upper Right = {upperRight.ToString(precision)}");
+            Console.WriteLine($"Center  = {center.ToString(precision)}");
+            Console.WriteLine($"Minimum = {minimum.ToString(precision)}");
+            Console.WriteLine($"Maximum = {maximum.ToString(precision)}");
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.White;
+        }
+        /// <summary>
+        /// Convert HalfSingle array to single precision float.
+        /// </summary>
+        /// <param name="imageBuffer">Pixel buffer.</param>
+        /// <param name="name">Friendly name.</param>
+        public static void AnalyzeHalfSingleImage(HalfSingle[] imageBuffer, string name)
+        {
+            float[] floatBuffer = Array.ConvertAll(imageBuffer, element => element.ToSingle());
+            AnalyzeFloatImage(floatBuffer, name);
         }
 
         /// <summary>
@@ -61,7 +78,6 @@ namespace ModelRelief.Utility
             // convert to float
             var pixelCount = byteArray.Length / BytesPerSinglePrecisionFloat;
             var floatArray = new float[pixelCount];
-
             Buffer.BlockCopy(byteArray, 0, floatArray, 0, byteArray.Count());
 
             // convert to 16-bit float
@@ -69,8 +85,8 @@ namespace ModelRelief.Utility
             for (var iPixel = 0; iPixel < pixelCount; iPixel++)
                 halfSingleArray[iPixel] = new HalfSingle(floatArray[iPixel]);
 
-            AnalyzeImage(floatArray, "floatArray");
-//          AnalyzeImage(halfSingleArray, "halfSingleArray");
+            AnalyzeFloatImage(floatArray, "floatArray");
+            AnalyzeHalfSingleImage(halfSingleArray, "halfSingleArray");
 
             int dimensions = (int)Math.Sqrt(floatArray.Length);
             using (var image = Image.LoadPixelData<HalfSingle>(halfSingleArray, dimensions, dimensions))
@@ -85,6 +101,7 @@ namespace ModelRelief.Utility
                     ColorType = PngColorType.Grayscale,
                     });
                 }
+                var lowerLeft = image[0, 0];
             }
             return true;
         }

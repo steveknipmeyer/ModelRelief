@@ -33,8 +33,11 @@ varying vec3 vViewPosition;						// vertex view position (flipped)
 
 const vec3 noColor = vec3(0.0, 0.0, 0.0);
 
+// https://stackoverflow.com/questions/17981163/webgl-read-pixels-from-floating-point-render-target
 // http://concord-consortium.github.io/lab/experiments/webgl-gpgpu/webgl.html
 // https://stackoverflow.com/questions/17981163/webgl-read-pixels-from-floating-point-render-target
+// https://stackoverflow.com/questions/39041140/how-to-quickly-pack-a-float-to-4-bytes
+
     float shift_right (float v, float amt) {
         v = floor(v) + 0.5;
         return floor(v / exp2(amt));
@@ -71,6 +74,7 @@ const vec3 noColor = vec3(0.0, 0.0, 0.0);
         float byte1 = (sign * 128.0 + remaining_bits_of_biased_exponent) / 255.0;
         return vec4(byte4, byte3, byte2, byte1);
     }
+
 
 /// <summary>
 ///  Main entry point

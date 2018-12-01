@@ -400,13 +400,17 @@ export class DepthBuffer extends GeneratedFileModel {
         this._logger.addEmptyLine();
 
         this._logger.addMessage("Normalized", headerStyle);
-        this._logger.addMessage(`Center Depth = ${this.depthNormalized(middle, middle).toFixed(decimalPlaces)}`, messageStyle);
+        this._logger.addMessage(`Lower Left Depth  = ${this.depthNormalized(0, 0).toFixed(decimalPlaces)}`, messageStyle);
+        this._logger.addMessage(`Upper Right Depth = ${this.depthNormalized(this.width - 1, this.height - 1).toFixed(decimalPlaces)}`, messageStyle);
+        this._logger.addMessage(`Center Depth      = ${this.depthNormalized(middle, middle).toFixed(decimalPlaces)}`, messageStyle);
         this._logger.addMessage(`Z Range = ${this.rangeNormalized.toFixed(decimalPlaces)}`, messageStyle);
         this._logger.addMessage(`Minimum = ${this.minimumNormalized.toFixed(decimalPlaces)}`, messageStyle);
         this._logger.addMessage(`Maximum = ${this.maximumNormalized.toFixed(decimalPlaces)}`, messageStyle);
         this._logger.addEmptyLine();
 
         this._logger.addMessage("Model Units", headerStyle);
+        this._logger.addMessage(`Lower Left Depth = ${this.depth(0, 0).toFixed(decimalPlaces)}`, messageStyle);
+        this._logger.addMessage(`Upper Right Depth = ${this.depth(this.width - 1, this.height - 1).toFixed(decimalPlaces)}`, messageStyle);
         this._logger.addMessage(`Center Depth = ${this.depth(middle, middle).toFixed(decimalPlaces)}`, messageStyle);
         this._logger.addMessage(`Z Range = ${this.range.toFixed(decimalPlaces)}`, messageStyle);
         this._logger.addMessage(`Minimum = ${this.minimum.toFixed(decimalPlaces)}`, messageStyle);
