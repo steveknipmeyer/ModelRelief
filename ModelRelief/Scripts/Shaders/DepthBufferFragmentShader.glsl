@@ -87,6 +87,7 @@ void main() {
 #endif
 
     // raw normalized [0, 1] WebGL
+    // N.B. Depth values are linear (as written by THREE.WebGLRenderTarget to the THREE.DepthBuffer depth texture).
     float depth = texture2D(tDepth, vUV).x;
 
     gl_FragColor = encode_float(depth);

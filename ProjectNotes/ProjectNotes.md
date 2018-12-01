@@ -1,6 +1,6 @@
 ﻿### Tasks
 #### Commit Notes
-
+Depth values are linear (as written by THREE.WebGLRenderTarget to the THREE.DepthBuffer depth texture).
 #### Lambda
 
 #### Vector
@@ -22,7 +22,7 @@
 #### Short Term
     Why is encode_float required in DepthBufferFragmentShader?
         Why is not sufficient to simply decompose the 4 byte float into 4 separate bytes?
-    Are depth buffer values non-linear or linear?
+    Integration tests fail when writing proxy DepthBuffer files because the image creation cannot be done.
 
     PNG Creation
         Add helper methods for analyzing an image.

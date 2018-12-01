@@ -265,29 +265,45 @@ class DepthBuffer:
     def normalized_to_model_depth(self, normalized):
         """
         Convert a normalized depth [0,1] to depth in model units.
-        https://stackoverflow.com/questions/6652253/getting-the-true-z-value-from-the-depth-buffer
+        N.B. Depth values are linear (as written by THREE.WebGLRenderTarget to the THREE.DepthBuffer depth texture).
         """
-        normalized = 2.0 * normalized - 1.0
+        model_depth = (self.camera.far - self.camera.near) * (1.0 - normalized);
 
-        z_linear = (2.0 * self.camera.near * self.camera.far) / (self.camera.far + self.camera.near - (normalized * (self.camera.far - self.camera.near)))
+        return model_depth;
 
-        # z_linear is the distance from the camera; adjust to yield height from mesh plane
-        z_linear = self.camera.far - z_linear
-
-        return z_linear
-
-    def model_depth_to_normalized (self, z : float):
+    def model_depth_to_normalized (self, model_depth : float):
         """
         Returns the normalized depth buffer value of a model depth.
+        N.B. Depth values are linear (as written by THREE.WebGLRenderTarget to the THREE.DepthBuffer depth texture).
         """
-
-        # distance from camera
-        z = self.camera.far - z
-
-        normalized = (self.camera.far + self.camera.near - 2.0 * self.camera.near * self.camera.far / z) / (self.camera.far - self.camera.near)
-        normalized = (normalized + 1.0) / 2.0
+        normalized = model_depth / (self.camera.far - model_depth)
 
         return normalized
+
+    def normalized_nonlinear_to_model_depth(self, normalized_nonlinear):
+        """
+        Convert a normalized non-linear depth [0,1] to depth in model units.
+        https://stackoverflow.com/questions/6652253/getting-the-true-z-value-from-the-depth-buffer
+        """
+        normalized_nonlinear = (2.0 * normalized_nonlinear) - 1.0
+        model_depth = (2.0 * self.camera.near * self.camera.far) / (self.camera.far + self.camera.near - (normalized_nonlinear * (self.camera.far - self.camera.near)))
+
+        # z_linear is the distance from the camera; adjust to yield height from mesh plane
+        model_depth = self.camera.far - model_depth
+
+        return model_depth
+
+    def model_depth_to_normalized_nonlinear (self, model_depth : float):
+        """
+        Returns the normalized non-linear depth buffer value of a model depth.
+        """
+        # distance from camera
+        model_depth = self.camera.far - model_depth
+
+        normalized_nonlinear = (self.camera.far + self.camera.near - 2.0 * self.camera.near * self.camera.far / model_depth) / (self.camera.far - self.camera.near)
+        normalized_nonlinear = (normalized_nonlinear + 1.0) / 2.0
+
+        return normalized_nonlinear
 
     def scale_model_depth_normalized (self, normalized : float, scale : float):
         """

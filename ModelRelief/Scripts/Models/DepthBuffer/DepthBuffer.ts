@@ -282,19 +282,32 @@ export class DepthBuffer extends GeneratedFileModel {
 
     /**
      * @description Convert a normalized depth [0,1] to depth in model units.
-     * @param {number} normalizedDepth Normalized depth [0,1].
+     * @param {number} normalizedDepth Normalized linear depth [0,1].
      * @returns {number}
      */
     public normalizedToModelDepth(normalizedDepth: number): number {
 
+        // N.B.Depth values are linear(as written by THREE.WebGLRenderTarget to the THREE.DepthBuffer depth texture).
+        const modelDepth = (this.camera.viewCamera.far - this.camera.viewCamera.near) * (1.0 - normalizedDepth);
+
+        return modelDepth;
+    }
+
+    /**
+     * @description Convert a normalized non-linear depth [0,1] to depth in model units.
+     * @param {number} normalizedNonLinearDepth Normalized non-linear depth [0,1].
+     * @returns {number}
+     */
+    public normalizedNonLinearToModelDepth(normalizedNonLinearDepth: number): number {
+
         // https://stackoverflow.com/questions/6652253/getting-the-true-z-value-from-the-depth-buffer
-        normalizedDepth = 2.0 * normalizedDepth - 1.0;
-        let zLinear = 2.0 * this.camera.viewCamera.near * this.camera.viewCamera.far / (this.camera.viewCamera.far + this.camera.viewCamera.near - normalizedDepth * (this.camera.viewCamera.far - this.camera.viewCamera.near));
+        normalizedNonLinearDepth = (2.0 * normalizedNonLinearDepth) - 1.0;
+        let modelDepth = 2.0 * this.camera.viewCamera.near * this.camera.viewCamera.far / (this.camera.viewCamera.far + this.camera.viewCamera.near - normalizedNonLinearDepth * (this.camera.viewCamera.far - this.camera.viewCamera.near));
 
         // zLinear is the distance from the camera; adjust to yield height from mesh plane
-        zLinear = this.camera.viewCamera.far - zLinear;
+        modelDepth = this.camera.viewCamera.far - modelDepth;
 
-        return zLinear;
+        return modelDepth;
     }
 
     /**
