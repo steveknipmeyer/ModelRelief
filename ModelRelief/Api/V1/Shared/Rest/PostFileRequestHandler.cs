@@ -77,8 +77,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
             var fileName = Path.Combine(StorageManager.DefaultModelStorageFolder(domainModel), domainModel.Name);
 
             await Files.WriteRawFileFromByteArray(fileName, message.NewFile.Raw);
-            if (domainModel.GetType() == typeof(Domain.DepthBuffer))
-                Images.WriteImageFileFromByteArray(fileName, message.NewFile.Raw);
+
+            //if (domainModel.GetType() == typeof(Domain.DepthBuffer))
+            //    Images.WriteImageFileFromByteArray(fileName, message.NewFile.Raw);
 
             // update file metadata; normalize path
             fileDomainModel.Path = StorageManager.GetRelativePath(Path.GetFullPath($"{Path.GetDirectoryName(fileName)}/"));

@@ -1,6 +1,5 @@
 ﻿### Tasks
 #### Commit Notes
-Depth values are linear (as written by THREE.WebGLRenderTarget to the THREE.DepthBuffer depth texture).
 #### Lambda
 
 #### Vector
@@ -20,18 +19,11 @@ Depth values are linear (as written by THREE.WebGLRenderTarget to the THREE.Dept
         Docker                      DockerStart
 
 #### Short Term
-    Why is encode_float required in DepthBufferFragmentShader?
-        Why is not sufficient to simply decompose the 4 byte float into 4 separate bytes?
-    Integration tests fail when writing proxy DepthBuffer files because the image creation cannot be done.
+    Integration tests fail when writing proxy DepthBuffer files because the image creation fails because the image data in invalid.
 
     PNG Creation
-        Add helper methods for analyzing an image.
-            Maximum
-            Minimum
-        Pixel Format
         Integrate with Files utility class.
-
-    File methods should share common setup steps for deleting existing files, etc.
+        File methods should share common setup steps for deleting existing files, etc.
 
     Convert to a linear depth buffer in the shader?
         https://stackoverflow.com/questions/42509883/how-to-correctly-linearize-depth-in-opengl-es-in-ios/42515399#42515399
