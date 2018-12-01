@@ -69,7 +69,7 @@ export class DepthBufferFactory {
     public _minimumWebGL: boolean                   = true;     // true if minimum WeGL requirements are present
     public _logger: ILogger                         = null;     // logger
 
-    private _debug: boolean                         = false;
+    private _debug: boolean                         = true;
 
     /**
      * @constructor

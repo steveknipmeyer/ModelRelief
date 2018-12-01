@@ -74,7 +74,7 @@ export class DepthBufferViewer  {
         const messageStyle = "color:fuchsia";
 
         const deviceCoordinates: THREE.Vector2 = Graphics.deviceCoordinatesFromJQEvent(event, $(event.target) as JQuery);
-        this._logger.addMessage(`Device = ${deviceCoordinates.x}, ${deviceCoordinates.y}`, messageStyle);
+        this._logger.addMessage(`Device [X, y] = ${deviceCoordinates.x}, ${deviceCoordinates.y}`, messageStyle);
 
         const decimalPlaces: number = 2;
         const row: number = (deviceCoordinates.y + 1) / 2 * this._depthBuffer.height;

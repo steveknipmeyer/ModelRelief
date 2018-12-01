@@ -20,7 +20,18 @@
         Docker                      DockerStart
 
 #### Short Term
-     File methods should share common setup steps for deleting existing files, etc.
+    Why is encode_float required in DepthBufferFragmentShader?
+        Why is not sufficient to simply decompose the 4 byte float into 4 separate bytes?
+    Are depth buffer values non-linear or linear?
+
+    PNG Creation
+        Add helper methods for analyzing an image.
+            Maximum
+            Minimum
+        Pixel Format
+        Integrate with Files utility class.
+
+    File methods should share common setup steps for deleting existing files, etc.
 
     Convert to a linear depth buffer in the shader?
         https://stackoverflow.com/questions/42509883/how-to-correctly-linearize-depth-in-opengl-es-in-ios/42515399#42515399
