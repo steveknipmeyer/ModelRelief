@@ -107,7 +107,7 @@
             },
 
         //  ----- Tools
-            "program": "${workspaceRoot}/Tools/testrunner.py",
+        //  "program": "${workspaceRoot}/Tools/testrunner.py",
         //  "program": "${workspaceRoot}/Tools/linecount.py",
 
         //  ----- Build
@@ -132,6 +132,7 @@
         //  "program": "${workspaceRoot}/Solver/Experiments/pybind11test.py",
         //  "program": "${workspaceRoot}/Solver/Experiments/workbench.py",
         //  "program": "${workspaceRoot}/Solver/Experiments/mayavitest.py",
+        "program": "${workspaceRoot}/Solver/Experiments/pngfloat.py",
 
             "args":[]
         },

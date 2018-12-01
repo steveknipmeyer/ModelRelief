@@ -267,9 +267,9 @@ class DepthBuffer:
         Convert a normalized depth [0,1] to depth in model units.
         N.B. Depth values are linear (as written by THREE.WebGLRenderTarget to the THREE.DepthBuffer depth texture).
         """
-        model_depth = (self.camera.far - self.camera.near) * (1.0 - normalized);
+        model_depth = (self.camera.far - self.camera.near) * (1.0 - normalized)
 
-        return model_depth;
+        return model_depth
 
     def model_depth_to_normalized (self, model_depth : float):
         """
