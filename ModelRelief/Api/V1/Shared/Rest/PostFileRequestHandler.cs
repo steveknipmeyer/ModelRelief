@@ -78,7 +78,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
             await Files.WriteRawFileFromByteArray(fileName, message.NewFile.Raw);
 
-            //if (domainModel.GetType() == typeof(Domain.DepthBuffer))
+            // if (domainModel.GetType() == typeof(Domain.DepthBuffer))
             //    Images.WriteImageFileFromByteArray(fileName, message.NewFile.Raw);
 
             // update file metadata; normalize path

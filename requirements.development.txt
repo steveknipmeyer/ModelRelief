@@ -2,13 +2,19 @@ The development environement must be installed manually. See Logs\DevelopmentPyt
 
 conda config --add channels conda-forge
 conda create --prefix .\devenv python=3.6
-pip install mayavi
-pip install pyqt5
+conda activate D:\ModelRelief\devenv
+
+---------------------- Core ----------------------
+conda install numpy
 conda install colorama
 conda install scipy
-pip install qdarkstyle
-pip install pyamg
+conda install pyamg
 conda install matplotlib
+conda install pybind11
+conda install imageio
+
+---------------------- Development Only ----------------------
+conda install mayavi
+conda install qdarkstyle
 conda install pylint
 conda install mypy
-conda install imageio

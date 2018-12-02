@@ -81,12 +81,16 @@ namespace ModelRelief.Utility
             Buffer.BlockCopy(byteArray, 0, floatArray, 0, byteArray.Count());
 
             // convert to 16-bit float
+            var minimum = floatArray.Min();
+            var maximum = floatArray.Max();
+            var range = maximum - minimum;
             var halfSingleArray = new HalfSingle[pixelCount];
             for (var iPixel = 0; iPixel < pixelCount; iPixel++)
-                halfSingleArray[iPixel] = new HalfSingle(floatArray[iPixel]);
-
-            AnalyzeFloatImage(floatArray, "floatArray");
-            AnalyzeHalfSingleImage(halfSingleArray, "halfSingleArray");
+            {
+                //float scaledValue = (float)((Math.Pow(2, 16) - 1) * (1 - (floatArray[iPixel] / range)));
+                float scaledValue = floatArray[iPixel];
+                halfSingleArray[iPixel] = new HalfSingle(scaledValue);
+            }
 
             int dimensions = (int)Math.Sqrt(floatArray.Length);
             using (var image = Image.LoadPixelData<HalfSingle>(halfSingleArray, dimensions, dimensions))

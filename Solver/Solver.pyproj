@@ -34,6 +34,7 @@
     <Compile Include="Experiments\design.py" />
     <Compile Include="Experiments\image.py" />
     <Compile Include="Experiments\mayavitest.py" />
+    <Compile Include="Experiments\pngfloat.py" />
     <Compile Include="Experiments\pybind11test.py" />
     <Compile Include="Experiments\PythonTest.py" />
     <Compile Include="Experiments\test.py" />

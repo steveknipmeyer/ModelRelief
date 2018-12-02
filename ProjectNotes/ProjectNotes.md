@@ -1,8 +1,6 @@
 ﻿### Tasks
 #### Commit Notes
-Add imageio dependency for image file reading and writing.
-Whitelist numpy in pylint to allow more complete coverage (e.g. np.uint16).
-Add command line argument support to pngwriter.
+
 #### Lambda
 
 #### Vector
@@ -22,18 +20,25 @@ Add command line argument support to pngwriter.
         Docker                      DockerStart
 
 #### Short Term
+    Should development Python modules be locked to specific versions?
 
-    How can requirements.production.txt be filtered to only the minimum essential modules?
-    Test production.
+    Review the Explorer UI.
+        There is clipping in the labels.
+        The font size of the image tabs is small.
 
     PNG Creation
         Integration tests fail when writing proxy DepthBuffer files because the image creation fails because the image data in invalid.
         Integrate with Files utility class.
         File methods should share common setup steps for deleting existing files, etc.
 
+    ImageSharp
+        A 16 bit grayscale image is created from normalize values[0..1] however:
+            The pixel values do not span the entire dynamic range [0..65535].
+            The background has value [54, 54, 54].
+
     Convert to a linear depth buffer in the shader?
         https://stackoverflow.com/questions/42509883/how-to-correctly-linearize-depth-in-opengl-es-in-ios/42515399#42515399
-    Integrate ImageSharp.
+
     Add support for normap map creation.
     Knald license.
 
