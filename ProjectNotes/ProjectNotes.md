@@ -1,5 +1,8 @@
 ﻿### Tasks
 #### Commit Notes
+Add imageio dependency for image file reading and writing.
+Whitelist numpy in pylint to allow more complete coverage (e.g. np.uint16).
+Add command line argument support to pngwriter.
 #### Lambda
 
 #### Vector
@@ -20,19 +23,18 @@
 
 #### Short Term
 
-    Integration tests fail when writing proxy DepthBuffer files because the image creation fails because the image data in invalid.
+    How can requirements.production.txt be filtered to only the minimum essential modules?
+    Test production.
 
     PNG Creation
-        https://stackoverflow.com/questions/24240039/save-numpy-array-as-image-with-high-precision-16-bits-with-scikit-image
-        https://stackoverflow.com/questions/25696615/can-i-save-a-numpy-array-as-a-16-bit-image-using-normal-enthought-python/25814423#25814423
-
+        Integration tests fail when writing proxy DepthBuffer files because the image creation fails because the image data in invalid.
         Integrate with Files utility class.
         File methods should share common setup steps for deleting existing files, etc.
 
     Convert to a linear depth buffer in the shader?
         https://stackoverflow.com/questions/42509883/how-to-correctly-linearize-depth-in-opengl-es-in-ios/42515399#42515399
-
-    Add support for normal map creation.
+    Integrate ImageSharp.
+    Add support for normap map creation.
     Knald license.
 
     Evauluate silouette properties of existing algorithm.
@@ -1185,10 +1187,9 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     FeatureFolders              MIT https://raw.githubusercontent.com/OdeToCode/AddFeatureFolders/master/LICENSE
     http-status-codes           MIT https://www.npmjs.com/package/http-status-codes
     base64                      MIT https://github.com/beatgammit/base64-js/blob/master/index.js
-    numpngw                     BSD 2-Clause https://github.com/WarrenWeckesser/numpngw/blob/master/LICENSE.txt
-
     OpinionatedApiController : Spencer Schneidenbach
     ContosoCore              : Jimmy Bogard
+
     Model                                       Project         Source      License             Link
     Armadillo                                   Stanford        Stanford
     Buddha                                      Stanford        Stanford

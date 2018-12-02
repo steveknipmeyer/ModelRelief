@@ -14,7 +14,7 @@ import math
 import numpy as np
 import unittest
 import os
-from scipy.ndimage import gaussian_filter, imread
+from scipy.ndimage import gaussian_filter
 
 import relief
 from imagetransform import ImageTransform

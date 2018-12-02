@@ -109,6 +109,8 @@
         //  ----- Tools
         //  "program": "${workspaceRoot}/Tools/testrunner.py",
         //  "program": "${workspaceRoot}/Tools/linecount.py",
+        "program": "${workspaceRoot}/Tools/pngwriter.py",
+        "args":["--file", "${workspaceRoot}/ModelRelief/store/development/users/auth05bedab58aa237e078600530b/depthbuffers/1/armadillo.sdb"]
 
         //  ----- Build
         //  "program": "${workspaceRoot}/Build/builder.py",
@@ -132,9 +134,8 @@
         //  "program": "${workspaceRoot}/Solver/Experiments/pybind11test.py",
         //  "program": "${workspaceRoot}/Solver/Experiments/workbench.py",
         //  "program": "${workspaceRoot}/Solver/Experiments/mayavitest.py",
-        "program": "${workspaceRoot}/Solver/Experiments/pngfloat.py",
 
-            "args":[]
+        // "args":[]
         },
         {
             "name": "Python (Active File)",

@@ -11,3 +11,4 @@ pip install pyamg
 conda install matplotlib
 conda install pylint
 conda install mypy
+conda install imageio
