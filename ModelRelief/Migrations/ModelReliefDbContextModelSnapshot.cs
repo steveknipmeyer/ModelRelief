@@ -257,6 +257,48 @@ namespace ModelRelief.Migrations
                     b.ToTable("Models");
                 });
 
+            modelBuilder.Entity("ModelRelief.Domain.NormalMap", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CameraId");
+
+                    b.Property<string>("Description");
+
+                    b.Property<bool>("FileIsSynchronized");
+
+                    b.Property<DateTime?>("FileTimeStamp");
+
+                    b.Property<int>("Format");
+
+                    b.Property<double>("Height");
+
+                    b.Property<int?>("Model3dId");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<string>("Path");
+
+                    b.Property<int?>("ProjectId");
+
+                    b.Property<string>("UserId");
+
+                    b.Property<double>("Width");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CameraId");
+
+                    b.HasIndex("Model3dId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("NormalMaps");
+                });
+
             modelBuilder.Entity("ModelRelief.Domain.Project", b =>
                 {
                     b.Property<int>("Id")
@@ -337,6 +379,24 @@ namespace ModelRelief.Migrations
                     b.HasOne("ModelRelief.Domain.Camera", "Camera")
                         .WithMany()
                         .HasForeignKey("CameraId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("ModelRelief.Domain.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("ModelRelief.Domain.NormalMap", b =>
+                {
+                    b.HasOne("ModelRelief.Domain.Camera", "Camera")
+                        .WithMany()
+                        .HasForeignKey("CameraId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("ModelRelief.Domain.Model3d", "Model3d")
+                        .WithMany()
+                        .HasForeignKey("Model3dId")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ModelRelief.Domain.Project", "Project")

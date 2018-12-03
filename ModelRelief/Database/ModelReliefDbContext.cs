@@ -34,6 +34,9 @@ namespace ModelRelief.Database
         public DbSet<Model3d> Models
             { get; set; }
 
+        public DbSet<NormalMap> NormalMaps
+        { get; set; }
+
         public DbSet<Project> Projects
             { get; set; }
 

@@ -1,18 +1,73 @@
 ﻿### Tasks
 #### Commit Notes
+Extend appsettings.json to add ResourceFolder.
+Add new domain entity class: NormalMap.cs.
+Extend DbContext to add NormalMap.
+DbInitializer adds placeholder NormalMap.
+Add placeholder Lucy normal map to Test\Data\Users.
 
 #### Lambda
-
 #### Vector
 
-#### Test Checklist
+### Adding a New GeneratedFileDomainModel (e.g. NormalMap)
+#### Documentation
+- [ ] Update the class hierarchies in ProjectNotes.
+
+#### Configuration
+- [X] Add the paths to the new model folders in appsettings.json (e.g. Paths:ResourceFolders:NormalMaps).
+
+#### Displatcher
+- [ ] Add support for generating the file after dependencies have changed. (e.g. GenerateNormalMapAsync).
+
+#### Domain
+- [X] Add the database ModelRelief.Domain schema class (e.g. NormalMap.cs).
+
+#### Database
+- [X] Delete the existing databases using SQL Server Object Explorer.
+- [X] Add the new entity type to ModelReliefDbContext.cs.
+- [X] Add the new model types to DbInitializer including support for updating the seed files (UpdateSeedData)
+- [X] **dotnet ef migrations add InitialCreate**
+
+#### Test Files
+- [X] Add the new model folder type to Test\Data\Users including at least one placeholder file to ensure the output folder will be created.
+
+#### Api
+- [ ] Add request handlers to the V1 folder (e.g. Api\V1\NormalMaps)
+- [ ] Add API definitions for the new model to ApiValidationHelper.cs.
+
+#### Features
+- [ ] Add the new controller. (e.g. Features\NormalMaps\NormalMapsController.cs)
+- [ ] Add the new DTO model (e.g. NormalMap.cs)
+- [ ] Add the supporting Razor pages (e.g. Create.cshtml)
+
+#### Scripts
+- [ ] Add the interface to Api\V1\Interfaces (e.g. INormalMap.ts).
+- [ ] Add the necessary graphics models to Models (e.g. Models\NormalMap\NormalMap.ts).
+- [ ] If the entity is graphical, add a new viewer to Viewers (e.g. Viewers\NormalMapViewer.ts)
+- [ ] If the entity is graphical, add an HTML View to Views (e.g. Views\NormalMapView.ts)
+
+#### Integration Tests
+- [ ] Add the model Base support to Integration\Base (e.g. NormalMapsBaseIntegration.cs)
+- [ ] Add the model File support to Integration\File (e.g. NormalMapsFileIntegration.cs)
+- [ ] Add the test model factory support to TestModelFactores (e.g. NormalMapTestModelFactory.cs)
+
+#### Solver
+- [ ] Add a new Python class (e.g. normalmap.py).
+
+#### Tools
+- [ ] Add utilities as needed (e.g. normalmapwriter.py)
+
+#### Explorer
+- [ ] Add support as required.
+
+### Test Checklist
     Test Checklist
         Visual Studio
             IIS Express launch
         testrunner (XUnit)          python Tools\testrunner.py
         Builder
             Development             python.exe Build\Builder.py --target local
-            IIS                     python.exe Build\builder.py --target IIS --deploy True
+             IIS                     python.exe Build\builder.py --target IIS --deploy True
             Docker                  python.exe Build\builder.py --target Docker
         Postman
         Explorer                    python.exe Explorer\explorer.py --s ../Solver/Test/Lucy.json --w ../Solver/Test/Working
@@ -20,23 +75,14 @@
         Docker                      DockerStart
 
 #### Short Term
-    Should development Python modules be locked to specific versions?
-
 
     PNG Creation
         Integration tests fail when writing proxy DepthBuffer files because the image creation fails because the image data in invalid.
         Integrate with Files utility class.
         File methods should share common setup steps for deleting existing files, etc.
 
-    ImageSharp
-        A 16 bit grayscale image is created from normalize values[0..1] however:
-            The pixel values do not span the entire dynamic range [0..65535].
-            The background has value [54, 54, 54].
-
-    Convert to a linear depth buffer in the shader?
-        https://stackoverflow.com/questions/42509883/how-to-correctly-linearize-depth-in-opengl-es-in-ios/42515399#42515399
-
-    Add support for normap map creation.
+    Add support for normal map creation.
+    Add NormalMap type to database schema.
     Knald license.
 
     Evauluate silouette properties of existing algorithm.
@@ -46,6 +92,13 @@
         xNormal
         ShaderMap
         Gimp Normal Plugin
+
+    Dependency Table
+        Dependent Id    Dependent Type      Dependency Id   Dependency Type
+        1               Mesh                3               DepthBuffer
+        1               Mesh                5               MeshTransform
+        3               DepthBuffer         11              Model
+        3               DepthBuffer         7               Camera
 
     Core
         Should clipping planes be set based on the Model?
@@ -82,14 +135,6 @@
 
     Three.js
         Update OBJLoader.ts.
-
-    Why are there different versions of vc and vs2015_runtime between devenv and mrenv?
-        devenv
-            vc                        14.1                 h0510ff6_3
-            vs2015_runtime            15.5.2                        3
-        mrenv
-            vc                        14                            0    conda-forge
-            vs2015_runtime            14.0.25420                    0    conda-forge
 
     Technical Review
         Review the Blender implementation.
@@ -235,6 +280,7 @@ Perspective <-> Orthographic
 
 ##### Database
 - [x] Delete the auto-generated classes from the Migrations folder.
+- [x] Using SQL Server Object Explorer, delete the existing physical databases.
 - [x] From the ModelRelief\ModelRelief project folder, create the initial migration: **dotnet ef migrations add InitialCreate**
 - [x] Add // \<auto-generated /\> to auto-generated files as necessary.
 
@@ -799,9 +845,10 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 
 #### Image processing
 
-    Image File Creation
-        ImageSharp
-        Create a 16 bit PNG from the depth data.
+    ImageSharp
+        A 16 bit grayscale image is created from normalize values[0..1] however:
+            The pixel values do not span the entire dynamic range [0..65535].
+            The background has value [54, 54, 54].
 
     Images in ASPNET
         https://github.com/SixLabors/ImageSharp
@@ -921,6 +968,9 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
         https://code.visualstudio.com/blogs/2016/02/23/introducing-chrome-debugger-for-vs-code
 
 #### Depth Buffer Notes
+    The depth buffer raw values are linear. Can the precision be higher?
+        https://stackoverflow.com/questions/42509883/how-to-correctly-linearize-depth-in-opengl-es-in-ios/42515399#42515399
+
     Experiment with precision setting in THREE.WebGLRenderer.
 
     Precision is substantially improved by moving the Near plane as close to the model as possible.

@@ -27,9 +27,11 @@
     <Compile Include="colortest.py" />
     <Compile Include="linecount.py" />
     <Compile Include="logger.py" />
+    <Compile Include="pngwriter.py" />
     <Compile Include="testrunner.py" />
     <Compile Include="tools.py" />
     <Compile Include="environment.py" />
+    <Compile Include="updateseeddatabase.py" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Auth0Query.bat" />

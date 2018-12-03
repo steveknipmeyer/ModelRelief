@@ -320,6 +320,7 @@ namespace ModelRelief.Database
 
             AddDepthBuffers(user);
             AddMeshes(user);
+            AddNormalMaps(user);
 
             // user store
             SeedUserStore(user);
@@ -382,6 +383,7 @@ namespace ModelRelief.Database
             CopySeedDataFilesToStore<Domain.Model3d>(user, "Paths:ResourceFolders:Model3d");
             CopySeedDataFilesToStore<Domain.DepthBuffer>(user, "Paths:ResourceFolders:DepthBuffer");
             CopySeedDataFilesToStore<Domain.Mesh>(user, "Paths:ResourceFolders:Mesh");
+            CopySeedDataFilesToStore<Domain.NormalMap>(user, "Paths:ResourceFolders:NormalMap");
         }
 
         /// <summary>
@@ -725,6 +727,34 @@ namespace ModelRelief.Database
         }
 
         /// <summary>
+        /// Add test normal maps.
+        /// </summary>
+        /// <param name="user">Owning user.</param>
+        private void AddNormalMaps(ApplicationUser user)
+        {
+            var normalMaps = new NormalMap[]
+            {
+                new NormalMap
+                {
+                    Name = "lucy.nmap", Description = "8-bit Normal Map",
+                    Width = 512, Height = 512,
+                    Format = NormalMapFormat.NMAP,
+                    Model3d = FindByName<Model3d>(user, "lucy.obj"), Camera = FindByName<Camera>(user, "Lucy"),
+                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                },
+            };
+
+            foreach (NormalMap normalMap in normalMaps)
+            {
+                DbContext.NormalMaps.Add(normalMap);
+            }
+            DbContext.SaveChanges();
+
+            SetFileProperties(normalMaps);
+            QualifyDescription<NormalMap>(user);
+        }
+
+        /// <summary>
         /// Create the user store for a particular model type.
         /// </summary>
         /// <typeparam name="TEntity">Domain model.</typeparam>
@@ -984,13 +1014,14 @@ namespace ModelRelief.Database
         }
 
         /// <summary>
-        /// Updates the seed data files (e.g. DepthBuffer, Mesh).
+        /// Updates the seed data files (e.g. DepthBuffer, Mesh, NormalMap) generated from a 3D model.
         /// </summary>
         /// <returns>True if successful.</returns>
         private bool UpdateSeedDataFiles()
         {
             UpdateSeedDataFilesFromStore<Domain.DepthBuffer>("Paths:ResourceFolders:DepthBuffer");
             UpdateSeedDataFilesFromStore<Domain.Mesh>("Paths:ResourceFolders:Mesh");
+            UpdateSeedDataFilesFromStore<Domain.NormalMap>("Paths:ResourceFolders:NormalMap");
 
             return true;
         }
@@ -1036,7 +1067,7 @@ namespace ModelRelief.Database
             if (!exportJSONSuccess)
                 return false;
 
-            // data files (e.g. DepthBuffer, Mesh)
+            // data files (e.g. DepthBuffer, Mesh, NormalMap)
             bool updateSuccess = UpdateSeedDataFiles();
             if (!updateSuccess)
                 return false;
