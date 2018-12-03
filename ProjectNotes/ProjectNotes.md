@@ -38,10 +38,12 @@
 - [X] Add the new entity type to the main navigation bar (_Layout.cshtml).
 
 #### Scripts
-- [ ] Add the interface to Api\V1\Interfaces (e.g. INormalMap.ts).
-- [ ] Add the necessary graphics models to Models (e.g. Models\NormalMap\NormalMap.ts).
+- [X] Add the interface to Api\V1\Interfaces (e.g. INormalMap.ts).
+- [X] Add the new concrete class implementing the interface to DtoModels.ts.
+- [X] Add the necessary application graphics model to Models (e.g. Models\NormalMap\NormalMap.ts).
 - [ ] If the entity is graphical, add a new viewer to Viewers (e.g. Viewers\NormalMapViewer.ts)
-- [ ] If the entity is graphical, add an HTML View to Views (e.g. Views\NormalMapView.ts)
+- [ ] If the entity is graphical, add an MVC View to Views (e.g. Views\NormalMapView.ts)
+- [ ] If the entity is graphical, add the View to Composer\Edit.cshtml.
 
 #### Integration Tests
 - [ ] Add the model Base support to Integration\Base (e.g. NormalMapsBaseIntegration.cs)
@@ -67,6 +69,9 @@ Issues
         This is probably due to the fact that a Mesh does not have a reference to a NormalMap.
         A NormalMap is marked as having a dependency on the Mesh class.
             [DependentFiles(typeof(Mesh))]
+    Share common methods between DepthBuffers and NormalMaps:
+        getModelVertexIndices
+        getModelVertexIndex
 
 ### Test Checklist
     Test Checklist

@@ -40,6 +40,7 @@ export enum ServerEndPoints {
     ApiMeshes           = "api/v1/meshes",
     ApiMeshTransforms   = "api/v1/meshtransforms",
     ApiModels           = "api/v1/models",
+    ApiNormalMaps       = "api/v1/normalmaps",
     ApiProjects         = "api/v1/projects",
 }
 

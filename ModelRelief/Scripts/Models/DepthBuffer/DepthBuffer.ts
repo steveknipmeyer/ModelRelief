@@ -173,8 +173,6 @@ export class DepthBuffer extends GeneratedFileModel {
         return depth;
     }
 
-    public static readonly NormalizedTolerance: number = .001;
-
     /**
      * @description Returns a DepthBuffer instance through an HTTP query of the Id.
      * @static

@@ -12,7 +12,8 @@ import {IGeneratedFileModel} from "Scripts/Api/V1/Interfaces/IGeneratedFileModel
 import {IMesh, MeshFormat} from "Scripts/Api/V1/Interfaces/IMesh";
 import {IMeshTransform} from "Scripts/Api/V1/Interfaces/IMeshTransform";
 import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
-import {IModel3d, Model3dFormat} from "Scripts/Api/V1/Interfaces/IModel3d";
+import { IModel3d, Model3dFormat } from "Scripts/Api/V1/Interfaces/IModel3d";
+import {NormalMapFormat, INormalMap } from "Scripts/Api/V1/Interfaces/INormalMap";
 import {IProject} from "Scripts/Api/V1/Interfaces/IProject";
 import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
 import {Exception} from "Scripts/System/Exception";
@@ -458,7 +459,7 @@ export class Camera extends Model<Camera> implements ICamera {
 
 /**
  *  Concrete implementation of IDepthBuffer.
- *  @interface
+ *  @class
  */
 export class DepthBuffer extends GeneratedFileModel<DepthBuffer> implements IDepthBuffer {
 
@@ -529,7 +530,7 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> implements IDep
 
 /**
  *  Concrete implementation of IMesh.
- *  @interface
+ *  @class
  */
 export class Mesh extends GeneratedFileModel<Mesh> implements IMesh {
 
@@ -603,7 +604,7 @@ export class Mesh extends GeneratedFileModel<Mesh> implements IMesh {
 
 /**
  *  Concrete implementation of IMeshTransform.
- *  @interface
+ *  @class
  */
 export class MeshTransform extends Model<MeshTransform> implements IMeshTransform {
 
@@ -701,7 +702,7 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
 
 /**
  *  Concrete implementation of IModel3d.
- *  @interface
+ *  @class
  */
 export class Model3d extends FileModel<Model3d> implements IModel3d {
 
@@ -752,6 +753,77 @@ export class Model3d extends FileModel<Model3d> implements IModel3d {
      */
     public factory(parameters: IModel): Model3d {
         return new Model3d(parameters);
+    }
+}
+
+/**
+ *  Concrete implementation of INormalMap.
+ *  @class
+ */
+export class NormalMap extends GeneratedFileModel<NormalMap> implements INormalMap {
+
+    public width: number;
+    public height: number;
+    public format: NormalMapFormat;
+
+    // Navigation Properties
+    public projectId: number;
+    public project: IProject;
+
+    public model3dId: number;
+    public model3d: IModel3d;
+
+    public cameraId: number;
+    public camera: ICamera;
+
+    /**
+     * Creates an instance of NormalMap.
+     * @param {INormalMap} parameters
+     */
+    constructor(parameters: INormalMap = {}) {
+
+        super(parameters);
+
+        this.endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiNormalMaps}`;
+
+        const {
+            width,
+            height,
+            format,
+
+            // Navigation Properties
+            projectId,
+            project,
+
+            model3dId,
+            model3d,
+
+            cameraId,
+            camera,
+        } = parameters;
+
+        this.width = width;
+        this.height = height;
+        this.format = format;
+
+        // Navigation Properties
+        this.projectId = projectId;
+        this.project = project;
+
+        this.model3dId = model3dId;
+        this.model3d = model3d;
+
+        this.cameraId = cameraId;
+        this.camera = camera;
+    }
+
+    /**
+     * @description Constructs an instance of a NormalMap
+     * @param {IModel} parameters : Dto.NormalMap
+     * @returns {NormalMap}
+     */
+    public factory(parameters: IModel): NormalMap {
+        return new NormalMap(parameters);
     }
 }
 
