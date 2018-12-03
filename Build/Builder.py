@@ -169,7 +169,7 @@ class Builder:
                 os.chdir(self.publish_path)
                 Tools.exec("BuildPythonEnvironment Production")
             else:
-                self.logger.logInformation("\nPlease see Build\\DevelopmentPythonInstallation.txt to create the development Python environment.", Colors.Cyan)
+                self.logger.logInformation("\nUse 'BuildPythonEnvironment Development' to create the Python environment.", Colors.Cyan)
 
         # Python C++ extensions
         self.logger.logInformation("\nPython C++ extensions", Colors.BrightMagenta)

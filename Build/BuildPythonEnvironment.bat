@@ -10,9 +10,8 @@ goto InvalidArgs
 
 :Development
 set EnvironmentName=devenv
-set RequirementsFile=%MRSolution%requirements.development.conda.txt
-echo The development environement must be installed manually. See Logs\DevelopmentPythonInstallation.txt.
-goto exit
+set RequirementsFile=%MRSolution%requirements.development.txt
+goto BuildEnvironment
 
 :Production
 set EnvironmentName=mrenv
@@ -23,7 +22,7 @@ goto BuildEnvironment
 :BuildEnvironment
 
 :: remove
-::conda env remove --yes --prefix %EnvironmentName% 
+::conda env remove --yes --prefix %EnvironmentName%
 
 :: create
 call conda create --yes --prefix %EnvironmentName% --file %RequirementsFile%
@@ -33,6 +32,8 @@ echo.
 echo The Anaconda environment '%EnvironmentName%' has been created.
 echo EnvironmentNme = %EnvironmentName%
 echo Requirements   = %RequirementsFile%
+echo Activate the environment using:
+echo conda activate %EnvironmentName%
 goto exit
 
 :: ------------------ Exit ---------------------------::

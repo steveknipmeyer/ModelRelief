@@ -131,7 +131,7 @@ class Explorer(QtWidgets.QMainWindow):
         self.ui.unsharpGaussianHighCheckBox.setChecked(checkbox_enabled)
         self.ui.unsharpHFScaleCheckBox.setChecked(checkbox_enabled)
 
-        self.ui.p1CheckBox.setChecked(checkbox_enabled)                 
+        self.ui.p1CheckBox.setChecked(checkbox_enabled)
         self.ui.p2CheckBox.setChecked(False)                                # Silhoutte: On/Off, Sigma
         self.ui.p3CheckBox.setChecked(False)                                # Silhoutte: Iterations
         self.ui.p4CheckBox.setChecked(checkbox_enabled)                     # Gaussian: Use Mask

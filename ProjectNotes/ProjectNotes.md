@@ -22,9 +22,6 @@
 #### Short Term
     Should development Python modules be locked to specific versions?
 
-    Review the Explorer UI.
-        There is clipping in the labels.
-        The font size of the image tabs is small.
 
     PNG Creation
         Integration tests fail when writing proxy DepthBuffer files because the image creation fails because the image data in invalid.
@@ -1603,3 +1600,8 @@ np_fill, relief_fill
             Quokka Workbench
         Move ModelRelief\Test.
             Add Postman tests to source code control.
+
+#### Explorer
+    qdarkstyle introduced several issues in a recent update.
+        There is clipping in the labels.
+        The font size of the image tabs is small.
