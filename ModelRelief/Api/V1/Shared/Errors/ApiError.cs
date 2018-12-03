@@ -44,7 +44,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
         Mesh            = 3000,
         MeshTransform   = 4000,
         Model3d         = 5000,
-        Project         = 6000,
+        NormalMap       = 6000,
+        Project         = 7000,
     }
 
     /// <summary>
@@ -113,8 +114,15 @@ namespace ModelRelief.Api.V1.Shared.Rest
         ModelPatchValidationError           = ErrorCodeBase.Model3d + HttpRequestBaseOffset.Patch,
         ModelDeleteValidationError          = ErrorCodeBase.Model3d + HttpRequestBaseOffset.Delete,
 
+        // NormalMap
+        NormalMapGetValidationError             = ErrorCodeBase.NormalMap + HttpRequestBaseOffset.Get,
+        NormalMapPostValidationError            = ErrorCodeBase.NormalMap + HttpRequestBaseOffset.Post,
+        NormalMapPutValidationError             = ErrorCodeBase.NormalMap + HttpRequestBaseOffset.Put,
+        NormalMapPatchValidationError           = ErrorCodeBase.NormalMap + HttpRequestBaseOffset.Patch,
+        NormalMapDeleteValidationError          = ErrorCodeBase.NormalMap + HttpRequestBaseOffset.Delete,
+
         // Project
-        ProjectgetValidationError           = ErrorCodeBase.Project + HttpRequestBaseOffset.Get,
+        ProjectgetValidationError = ErrorCodeBase.Project + HttpRequestBaseOffset.Get,
         ProjectPostValidationError          = ErrorCodeBase.Project + HttpRequestBaseOffset.Post,
         ProjectPutValidationError           = ErrorCodeBase.Project + HttpRequestBaseOffset.Put,
         ProjectPatchValidationError         = ErrorCodeBase.Project + HttpRequestBaseOffset.Patch,
@@ -150,6 +158,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
             if (domainModelType == typeof(Domain.Model3d))
                 baseOffset = ErrorCodeBase.Model3d;
+
+            if (domainModelType == typeof(Domain.NormalMap))
+                baseOffset = ErrorCodeBase.NormalMap;
 
             if (domainModelType == typeof(Domain.Project))
                 baseOffset = ErrorCodeBase.Project;

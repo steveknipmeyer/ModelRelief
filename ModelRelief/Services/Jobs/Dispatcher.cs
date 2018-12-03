@@ -85,6 +85,21 @@ namespace ModelRelief.Services.Jobs
         }
 
         /// <summary>
+        /// Writes a JSON file to working storage from the given model.
+        /// </summary>
+        /// <param name="model">Domain model to serialize.</param>
+        /// <returns>Path of JSON file.</returns>
+        private string SerializeModelToWorkingStorage(DomainModel model)
+        {
+            string workingStorageFolder = StorageManager.WorkingStorageFolder(model.UserId);
+            string fileName = $"{workingStorageFolder}{model.GetType().Name}{model.Id.ToString()}.json";
+
+            Files.SerializeJSON(model, fileName);
+
+            return fileName;
+        }
+
+        /// <summary>
         /// Dispatches a process to create a DepthBuffer from its dependencies (e.g. Model3d, Camera).
         /// </summary>
         /// <param name="depthBuffer">DepthBuffer.</param>
@@ -101,18 +116,19 @@ namespace ModelRelief.Services.Jobs
         }
 
         /// <summary>
-        /// Writes a JSON file to working storage from the given model.
+        /// Dispatches a process to create a NormalMap from its dependencies (e.g. Model3d, Camera).
         /// </summary>
-        /// <param name="model">Domain model to serialize.</param>
-        /// <returns>Path of JSON file.</returns>
-        private string SerializeModelToWorkingStorage(DomainModel model)
+        /// <param name="normalMap">NormalMap.</param>
+        /// <param name="cancellationToken">Token to allows operation to be cancelled</param>
+        /// /// <returns>True if successful.</returns>
+        public async Task<bool> GenerateNormalMapAsync(Domain.NormalMap normalMap, CancellationToken cancellationToken = default)
         {
-            string workingStorageFolder = StorageManager.WorkingStorageFolder(model.UserId);
-            string fileName = $"{workingStorageFolder}{model.GetType().Name}{model.Id.ToString()}.json";
+            // N.B. NormalMap does not implement FileGenerateRequest now because there is no means to generate a new NormalMap on the backend.
+            // Later, there could be a case for generating NormalMaps on the server to allow completely API-driven workflows.
 
-            Files.SerializeJSON(model, fileName);
-
-            return fileName;
+            Logger.LogError($"{nameof(GenerateNormalMapAsync)} is not implemented.");
+            await Task.CompletedTask;
+            return false;
         }
 
         /// <summary>

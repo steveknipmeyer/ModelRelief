@@ -8,8 +8,6 @@ namespace ModelRelief.Services.Jobs
 {
     using System.Threading;
     using System.Threading.Tasks;
-    using ModelRelief.Api.V1.Shared.Rest;
-    using ModelRelief.Domain;
 
     /// <summary>
     /// Dispatch manager.
@@ -20,5 +18,6 @@ namespace ModelRelief.Services.Jobs
         // Worker Process
         Task<bool> GenerateDepthBufferAsync(Domain.DepthBuffer depthBuffer, CancellationToken cancellationToken = default);
         Task<bool> GenerateMeshAsync(Domain.Mesh mesh, CancellationToken cancellationToken = default);
+        Task<bool> GenerateNormalMapAsync(Domain.NormalMap normalMap, CancellationToken cancellationToken = default);
     }
 }

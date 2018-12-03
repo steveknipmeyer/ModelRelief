@@ -1,10 +1,5 @@
 ﻿### Tasks
 #### Commit Notes
-Extend appsettings.json to add ResourceFolder.
-Add new domain entity class: NormalMap.cs.
-Extend DbContext to add NormalMap.
-DbInitializer adds placeholder NormalMap.
-Add placeholder Lucy normal map to Test\Data\Users.
 
 #### Lambda
 #### Vector
@@ -16,8 +11,9 @@ Add placeholder Lucy normal map to Test\Data\Users.
 #### Configuration
 - [X] Add the paths to the new model folders in appsettings.json (e.g. Paths:ResourceFolders:NormalMaps).
 
-#### Displatcher
-- [ ] Add support for generating the file after dependencies have changed. (e.g. GenerateNormalMapAsync).
+#### Dispatcher
+- [x] Extend IDispatcher to include a generation method for the new entity (e.g. GenerateNormalMapAsync).
+- [x] Add support for generating the file after dependencies have changed. (e.g. GenerateNormalMapAsync).
 
 #### Domain
 - [X] Add the database ModelRelief.Domain schema class (e.g. NormalMap.cs).
@@ -32,13 +28,14 @@ Add placeholder Lucy normal map to Test\Data\Users.
 - [X] Add the new model folder type to Test\Data\Users including at least one placeholder file to ensure the output folder will be created.
 
 #### Api
-- [ ] Add request handlers to the V1 folder (e.g. Api\V1\NormalMaps)
-- [ ] Add API definitions for the new model to ApiValidationHelper.cs.
+- [X] Add request handlers to the V1 folder (e.g. Api\V1\NormalMaps)
+- [X] Add API definitions for the new model to ApiErros.cs.
 
 #### Features
-- [ ] Add the new controller. (e.g. Features\NormalMaps\NormalMapsController.cs)
-- [ ] Add the new DTO model (e.g. NormalMap.cs)
-- [ ] Add the supporting Razor pages (e.g. Create.cshtml)
+- [X] Add the new controller. (e.g. Features\NormalMaps\NormalMapsController.cs)
+- [X] Add the new DTO model (e.g. NormalMap.cs)
+- [X] Add the supporting Razor pages (e.g. Create.cshtml)
+- [X] Add the new entity type to the main navigation bar (_Layout.cshtml).
 
 #### Scripts
 - [ ] Add the interface to Api\V1\Interfaces (e.g. INormalMap.ts).
@@ -51,6 +48,9 @@ Add placeholder Lucy normal map to Test\Data\Users.
 - [ ] Add the model File support to Integration\File (e.g. NormalMapsFileIntegration.cs)
 - [ ] Add the test model factory support to TestModelFactores (e.g. NormalMapTestModelFactory.cs)
 
+#### Postman
+- [ ] Add test requests to support the new entity,
+
 #### Solver
 - [ ] Add a new Python class (e.g. normalmap.py).
 
@@ -59,6 +59,14 @@ Add placeholder Lucy normal map to Test\Data\Users.
 
 #### Explorer
 - [ ] Add support as required.
+
+Issues
+    Design the NormalMapFactory.
+
+    [14:42:58 ERR] DependencyManager.FindDependentModels: error looking up foreign key: Class = ModelRelief.Domain.Mesh, Id = 1
+        This is probably due to the fact that a Mesh does not have a reference to a NormalMap.
+        A NormalMap is marked as having a dependency on the Mesh class.
+            [DependentFiles(typeof(Mesh))]
 
 ### Test Checklist
     Test Checklist
