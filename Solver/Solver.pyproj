@@ -39,7 +39,9 @@
     <Compile Include="Experiments\test.py" />
     <Compile Include="Experiments\testmodule.py" />
     <Compile Include="Experiments\workbench.py" />
+    <Compile Include="camerafactory.py" />
     <Compile Include="filemanager.py" />
+    <Compile Include="imagetransform.py" />
     <Compile Include="gradient.py" />
     <Compile Include="mask.py" />
     <Compile Include="mathtools.py" />
@@ -48,6 +50,8 @@
     <Compile Include="meshtransform.py" />
     <Compile Include="depthbuffer.py" />
     <Compile Include="objwriter.py" />
+    <Compile Include="orthographiccamera.py" />
+    <Compile Include="perspectivecamera.py" />
     <Compile Include="poisson.py" />
     <Compile Include="results.py" />
     <Compile Include="services.py" />

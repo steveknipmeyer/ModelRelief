@@ -6,7 +6,7 @@
 
 ### Adding a New GeneratedFileDomainModel (e.g. NormalMap)
 #### Documentation
-- [ ] Update the class hierarchies in ProjectNotes.
+- [X] Update the class hierarchies in ProjectNotes.
 
 #### Configuration
 - [X] Add the paths to the new model folders in appsettings.json (e.g. Paths:ResourceFolders:NormalMaps).
@@ -45,10 +45,13 @@
 - [ ] If the entity is graphical, add an MVC View to Views (e.g. Views\NormalMapView.ts)
 - [ ] If the entity is graphical, add the View to Composer\Edit.cshtml.
 
-#### Integration Tests
-- [ ] Add the model Base support to Integration\Base (e.g. NormalMapsBaseIntegration.cs)
-- [ ] Add the model File support to Integration\File (e.g. NormalMapsFileIntegration.cs)
-- [ ] Add the test model factory support to TestModelFactores (e.g. NormalMapTestModelFactory.cs)
+#### XUnit Integration Tests
+- [X] Add the model Base support to Integration\Base (e.g. NormalMapsBaseIntegration.cs)
+- [X] Add the model File support to Integration\File (e.g. NormalMapsFileIntegration.cs)
+- [X] Add the test model factory support to TestModelFactores (e.g. NormalMapTestModelFactory.cs)
+
+#### TypeScript Unit Tests
+- [ ] Add tests supporting the new entity to UnitTests.ts.
 
 #### Postman
 - [ ] Add test requests to support the new entity,
@@ -65,10 +68,13 @@
 Issues
     Design the NormalMapFactory.
 
+    What integration tests are appropriate?
+
     [14:42:58 ERR] DependencyManager.FindDependentModels: error looking up foreign key: Class = ModelRelief.Domain.Mesh, Id = 1
         This is probably due to the fact that a Mesh does not have a reference to a NormalMap.
         A NormalMap is marked as having a dependency on the Mesh class.
             [DependentFiles(typeof(Mesh))]
+
     Share common methods between DepthBuffers and NormalMaps:
         getModelVertexIndices
         getModelVertexIndex
@@ -330,6 +336,7 @@ The FE DTO interfaces are used to facilitate construction of DTO models from HTT
 |||IMesh||
 |||IMeshTransform||
 |||IModel3d||
+|||INormalMap||
 |||IProject||
 
 **DTO**
@@ -343,6 +350,7 @@ export interface IDepthBuffer extends IGeneratedFileModel
 export interface IMesh extends extends IGeneratedFileModel
 export interface IMeshTransform extends IModel
 export interface IModel3d extends IFileModel
+export interface INormalMap extends IGeneratedFileModel
 export interface IProject extends IModel
 ```
 
@@ -375,8 +383,9 @@ export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel
 |Camera|IModel<br>Model||Dto.Camera|IModel, ICamera<br>Dto.Model||THREE.Camera|
 |DepthBuffer|IGeneratedFileModel<br>GeneratedFileModel||Dto.DepthBuffer|IGeneratedFileModel, IDepthBuffer<br>Dto.GeneratedFileModel||
 |Mesh|IGeneratedFileModel<br>GeneratedFileModel||Dto.Mesh|IGeneratedFileModel, IMesh<br>Dto.GeneratedFileModel||THREE.Mesh|
-|MeshTransform|IModel<br>Model||Dto.MeshTransform|IModel,IMeshTransform<br>Dto.Model|||
-|Model3d|IFileModel<br>FileModel||Model3d|IFileModel,IModel3d<br>Dto.FileModel||THREE.Mesh|
+|MeshTransform|IModel<br>Model||Dto.MeshTransform|IModel, IMeshTransform<br>Dto.Model|||
+|Model3d|IFileModel<br>FileModel||Dto.Model3d|IFileModel, IModel3d<br>Dto.FileModel||THREE.Mesh|
+|NormalMap|IGeneratedFileModel<br>GeneratedFileModel||Dto.NormalMap|IGeneratedFileModel, INormalMap<br>Dto.GeneratedFileModel||
 |Project|IModel<br>Model||Dto.Project|IModel, IProject<br>Dto.Model||
 
 
@@ -387,6 +396,7 @@ export class DepthBuffer extends GeneratedFileModel
 export class Mesh extends GeneratedFileModel
 export class MeshTransform extends Model
 export class Model3d extends FileModel
+export class NormalMap extends GeneratedFileModel
 export class Project extends Model
 ```
 **DTO**
@@ -396,6 +406,7 @@ export class DepthBuffer extends GeneratedFileModel<DepthBuffer> implements IDep
 export class Mesh extends GeneratedFileModel<Mesh> implements IMesh
 export class MeshTransform extends Model<MeshTransform> implements IMeshTransform
 export class Model3d extends FileModel<Model3d> implements IModel3d
+export class NormalMap extends GeneratedFileModel<NormalMap> implements INormalMap
 export class Project extends Model<Project> implements IProject
 ```
 
@@ -423,11 +434,13 @@ Domain models are in an inheritance chain so they can share common functionality
 Implementing a hierarchy of DTO models creates potential issues with DataAnnotation attributes sucn as Display(Name).
 </span>
 
-|DTO (HTTP)||Domain (DB)|
-|--|
+
+|DTO (HTTP)||Abstract Domain (DB)|
+|--|--|--|
 |||Domain.DomainModel|
 |||Domain.FileDomainModel|
 |||Domain.GeneratedFileDomainModel|
+
 
 **Domain**
 ```csharp
@@ -446,17 +459,19 @@ public abstract class GeneratedFileDomainModel : FileDomainModel
 |Dto.Mesh|Dto.IGeneratedFileModel|||Domain.Mesh|GeneratedFileDomainModel|
 |Dto.MeshTransform|Dto.IModel|||Domain.MeshTransform|DomainModel|
 |Dto.Model3d|Dto.IFileModel|||Domain.Model3d|FileDomainModel|
+|Dto.NormalMap|Dto.IGeneratedFileModel|||Domain.NormalMap|GeneratedFileDomainModel|
 |Dto.Project|Dto.IModel|||Domain.Project|DomainModel|
 |||||
 
 **DTO**
 ModelReliefFeatures
-```javascript
+```csharp
 public class Camera : IModel
 public class DepthBuffer : IGeneratedFileModel
 public class Mesh : IGeneratedFileModel
 public class MeshTransform : IModel
 public class Model3d : IFileModel
+public class NormalMap : IGeneratedFileModel
 public class Project : IModel
 ```
 **Domain**
@@ -467,6 +482,7 @@ public class DepthBuffer  : GeneratedFileDomainModel
 public class Mesh : GeneratedFileDomainModel
 public class MeshTransform : DomainModel
 public class Model3d : FileDomainModel
+public class NormalMap  : GeneratedFileDomainModel
 public class Project : DomainModel
 ```
 ___
@@ -624,8 +640,6 @@ https://msdn.microsoft.com/en-us/magazine/mt767693.aspx
     binary          update (full)                           PUT            /api/v1/resource/id/file                 PutFile                 OK
     binary          update (partial)        no endpoint
     binary          delete                                  DELETE         /api/v1/resource/id/File                 DeleteFile              OK
-
-Add authentication support!
 
 The Project is populating the object graph too deeply.
 

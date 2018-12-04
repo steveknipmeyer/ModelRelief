@@ -5,8 +5,7 @@
     <ProjectGuid>7cc869ef-74b2-478b-af71-186ec6de990e</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <StartupFile>Baseline.py</StartupFile>
-    <SearchPath>
-    </SearchPath>
+    <SearchPath>..\Solver</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>Tools</Name>

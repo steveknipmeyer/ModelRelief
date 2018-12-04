@@ -1,25 +1,25 @@
 // -----------------------------------------------------------------------
-// <copyright file="DepthBufferTestFileModelFactory.cs" company="ModelRelief">
+// <copyright file="NormalMapTestFileModelFactory.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ModelRelief.Test.TestModels.DepthBuffers
+namespace ModelRelief.Test.TestModels.NormalMaps
 {
     using System.Collections.Generic;
     using ModelRelief.Dto;
 
     /// <summary>
-    /// DepthBuffer test model.
+    /// NormalMap test model.
     /// </summary>
-    public class DepthBufferTestFileModelFactory : TestFileModelFactory<Domain.DepthBuffer, Dto.DepthBuffer>
+    public class NormalMapTestFileModelFactory : TestFileModelFactory<Domain.NormalMap, Dto.NormalMap>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DepthBufferTestFileModelFactory"/> class.
+        /// Initializes a new instance of the <see cref="NormalMapTestFileModelFactory"/> class.
         /// Constructor
         /// </summary>
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
-        public DepthBufferTestFileModelFactory(ClassFixture classFixture)
+        public NormalMapTestFileModelFactory(ClassFixture classFixture)
             : base(classFixture)
         {
         }
@@ -29,8 +29,8 @@ namespace ModelRelief.Test.TestModels.DepthBuffers
         /// </summary>
         public override void Initialize()
         {
-            ApiUrl = "/api/v1/depth-buffers";
-            UxUrl  = "/depthbuffers";
+            ApiUrl = "/api/v1/normal-maps";
+            UxUrl  = "/normalmaps";
 
             ReferencePropertyNames = new List<string> { "ProjectId", "Model3dId", "CameraId" };
             InvalidReferenceProperty = 0;
@@ -45,14 +45,14 @@ namespace ModelRelief.Test.TestModels.DepthBuffers
         /// <returns>Valid model.</returns>
         public override IModel ConstructValidModel()
         {
-            var depthBuffer = base.ConstructValidModel() as Dto.DepthBuffer;
+            var normalMap = base.ConstructValidModel() as Dto.NormalMap;
 
-            depthBuffer.Name = "TestDepthBuffer.sdb";
-            depthBuffer.Width  = 512;
-            depthBuffer.Height = 512;
-            depthBuffer.Format = Domain.DepthBufferFormat.SDB;
+            normalMap.Name = "TestNormalMap.sdb";
+            normalMap.Width  = 512;
+            normalMap.Height = 512;
+            normalMap.Format = Domain.NormalMapFormat.NMAP;
 
-            return depthBuffer;
+            return normalMap;
         }
     }
 }

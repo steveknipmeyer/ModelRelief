@@ -13,7 +13,7 @@ import {IMesh, MeshFormat} from "Scripts/Api/V1/Interfaces/IMesh";
 import {IMeshTransform} from "Scripts/Api/V1/Interfaces/IMeshTransform";
 import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
 import { IModel3d, Model3dFormat } from "Scripts/Api/V1/Interfaces/IModel3d";
-import {NormalMapFormat, INormalMap } from "Scripts/Api/V1/Interfaces/INormalMap";
+import {INormalMap, NormalMapFormat } from "Scripts/Api/V1/Interfaces/INormalMap";
 import {IProject} from "Scripts/Api/V1/Interfaces/IProject";
 import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
 import {Exception} from "Scripts/System/Exception";

@@ -28,7 +28,6 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 from matplotlib.transforms import Bbox
-from mpl_toolkits.mplot3d import Axes3D
 
 from traits.api import HasTraits, Instance, on_trait_change
 from traitsui.api import View, Item

@@ -15,7 +15,7 @@ namespace ModelRelief.Api.V1.NormalMaps
     /// <summary>
     /// Represents a controller to handle NormalMap API requests.
     /// </summary>
-    [Route("api/v1/depth-buffers")]
+    [Route("api/v1/normal-maps")]
     public class NormalMapsController : RestController<Domain.NormalMap, Dto.NormalMap, Dto.NormalMap, Dto.NormalMap, Dto.PostFile>
     {
         /// <summary>
