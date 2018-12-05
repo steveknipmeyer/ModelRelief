@@ -15,12 +15,15 @@ export enum ElementIds {
     MeshCanvas          = "meshCanvas",
     DepthBufferView     = "depthBufferView",
     DepthBufferCanvas   = "depthBufferCanvas",
+    NormalMapView       = "normalMapView",
+    NormalMapCanvas     = "normalMapCanvas",
 
     CameraControls              = "cameraControls",
-    ModelViewerControls         = "modelViewerControls",
-    MeshViewerControls          = "meshViewerControls",
-    DepthBufferViewerControls   = "depthBufferViewerControls",
     ComposerControls            = "composerControls",
+    DepthBufferViewerControls   = "depthBufferViewerControls",
+    MeshViewerControls          = "meshViewerControls",
+    ModelViewerControls         = "modelViewerControls",
+    NormalMapViewerControls     = "normalMapViewerControls",
 
     // Workbench
     CameraTestControls  = "cameraTestControls",

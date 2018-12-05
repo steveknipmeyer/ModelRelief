@@ -12,12 +12,14 @@ import {StandardView} from "Scripts/Api/V1/Interfaces/ICamera";
 import {Loader} from "Scripts/ModelLoaders/Loader";
 import {TestModel} from "Scripts/ModelLoaders/TestModelLoader";
 import {Mesh} from "Scripts/Models/Mesh/Mesh";
+import {NormalMap} from "Scripts/Models/NormalMap/NormalMap";
 import {EventManager, EventType} from "Scripts/System/EventManager";
 import {ElementIds} from "Scripts/System/Html";
 import {Services} from "Scripts/System/Services";
 import {DepthBufferView} from "Scripts/Views/DepthBufferView";
 import {MeshView} from "Scripts/Views/MeshView";
 import {ModelView} from "Scripts/Views/ModelView";
+import {NormalMapView} from "Scripts/Views/NormalMapView";
 
 // defined in Edit HTML page
 declare var composerMeshModel: Dto.Mesh;
@@ -36,6 +38,7 @@ export class ComposerView {
     public _meshView: MeshView;
     public _modelView: ModelView;
     public _depthBufferView: DepthBufferView;
+    public _normalMapView: NormalMapView;
 
     // Private
     private _eventManager: EventManager = null;
@@ -72,7 +75,7 @@ export class ComposerView {
     }
 
     /**
-     * @description Gets the DebpthBufferView.
+     * @description Gets the DepthBufferView.
      * @readonly
      * @type {string}
      */
@@ -125,6 +128,10 @@ export class ComposerView {
 
             // DepthBuffer View
             this._depthBufferView = new DepthBufferView(ElementIds.DepthBufferView, depthBuffer);
+
+            // NormalMap View
+            const normalMap = new NormalMap({});
+            this._normalMapView = new NormalMapView(ElementIds.NormalMapView, normalMap);
 
             // load models; model event handlers in Viewers now initialized
             const useTestModels = false;

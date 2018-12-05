@@ -41,9 +41,12 @@
 - [X] Add the interface to Api\V1\Interfaces (e.g. INormalMap.ts).
 - [X] Add the new concrete class implementing the interface to DtoModels.ts.
 - [X] Add the necessary application graphics model to Models (e.g. Models\NormalMap\NormalMap.ts).
-- [ ] If the entity is graphical, add a new viewer to Viewers (e.g. Viewers\NormalMapViewer.ts)
-- [ ] If the entity is graphical, add an MVC View to Views (e.g. Views\NormalMapView.ts)
-- [ ] If the entity is graphical, add the View to Composer\Edit.cshtml.
+<br>*If the entity is graphical:*
+- [X] Add a new viewer to Viewers (e.g. Viewers\NormalMapViewer.ts)
+- [X] Add an MVC View to Views (e.g. Views\NormalMapView.ts)
+- [X] Add the HTML View to Composer\Edit.cshtml.
+- [ ] Create the factory (e.g. NormalMapFactory) to construct the entity.
+- [ ] Extend ComposerController to add support for generating the new entity.
 
 #### XUnit Integration Tests
 - [X] Add the model Base support to Integration\Base (e.g. NormalMapsBaseIntegration.cs)
@@ -54,7 +57,7 @@
 - [ ] Add tests supporting the new entity to UnitTests.ts.
 
 #### Postman
-- [ ] Add test requests to support the new entity,
+- [X] Add test requests to support the new entity,
 
 #### Solver
 - [ ] Add a new Python class (e.g. normalmap.py).
