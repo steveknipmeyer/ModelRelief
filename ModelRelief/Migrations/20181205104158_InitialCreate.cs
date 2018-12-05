@@ -239,6 +239,8 @@ namespace ModelRelief.Migrations
                     ProjectId = table.Column<int>(nullable: true),
                     CameraId = table.Column<int>(nullable: true),
                     DepthBufferId = table.Column<int>(nullable: true),
+                    NprmalMapId = table.Column<int>(nullable: true),
+                    NormalMapId = table.Column<int>(nullable: true),
                     MeshTransformId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -260,6 +262,12 @@ namespace ModelRelief.Migrations
                         name: "FK_Meshes_MeshTransforms_MeshTransformId",
                         column: x => x.MeshTransformId,
                         principalTable: "MeshTransforms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Meshes_NormalMaps_NormalMapId",
+                        column: x => x.NormalMapId,
+                        principalTable: "NormalMaps",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
@@ -306,6 +314,11 @@ namespace ModelRelief.Migrations
                 column: "MeshTransformId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Meshes_NormalMapId",
+                table: "Meshes",
+                column: "NormalMapId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Meshes_ProjectId",
                 table: "Meshes",
                 column: "ProjectId");
@@ -347,13 +360,13 @@ namespace ModelRelief.Migrations
                 name: "Meshes");
 
             migrationBuilder.DropTable(
-                name: "NormalMaps");
-
-            migrationBuilder.DropTable(
                 name: "DepthBuffers");
 
             migrationBuilder.DropTable(
                 name: "MeshTransforms");
+
+            migrationBuilder.DropTable(
+                name: "NormalMaps");
 
             migrationBuilder.DropTable(
                 name: "Models");

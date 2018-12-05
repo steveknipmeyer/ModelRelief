@@ -150,6 +150,10 @@ namespace ModelRelief.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<int?>("NormalMapId");
+
+                    b.Property<int?>("NprmalMapId");
+
                     b.Property<string>("Path");
 
                     b.Property<int?>("ProjectId");
@@ -163,6 +167,8 @@ namespace ModelRelief.Migrations
                     b.HasIndex("DepthBufferId");
 
                     b.HasIndex("MeshTransformId");
+
+                    b.HasIndex("NormalMapId");
 
                     b.HasIndex("ProjectId");
 
@@ -358,6 +364,11 @@ namespace ModelRelief.Migrations
                     b.HasOne("ModelRelief.Domain.MeshTransform", "MeshTransform")
                         .WithMany()
                         .HasForeignKey("MeshTransformId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("ModelRelief.Domain.NormalMap", "NormalMap")
+                        .WithMany()
+                        .HasForeignKey("NormalMapId")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ModelRelief.Domain.Project", "Project")

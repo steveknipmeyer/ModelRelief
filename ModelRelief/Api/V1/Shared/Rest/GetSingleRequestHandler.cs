@@ -61,6 +61,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
             // stop tracking to avoid conflicting tracking with updatedModel
             DbContext.Entry(targetModel).State = EntityState.Detached;
 
+            var model = await DbContext.Set<TEntity>()
+                 .SingleOrDefaultAsync(m => m.Id == message.Id);
+
             // expand returned model
             var expandedUpdatedModel = await DbContext.Set<TEntity>()
                  .ProjectTo<TGetModel>(Mapper.ConfigurationProvider)

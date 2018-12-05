@@ -10,7 +10,6 @@ namespace ModelRelief.Dto
     using System.ComponentModel.DataAnnotations;
     using AutoMapper;
     using FluentValidation;
-    using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Domain;
 
     /// <summary>
@@ -35,6 +34,9 @@ namespace ModelRelief.Dto
 
         public int? DepthBufferId { get; set; }
         public Dto.DepthBuffer DepthBuffer { get; set; }
+
+        public int? NormalMapId { get; set; }
+        public Dto.NormalMap NormalMap { get; set; }
 
         public int? MeshTransformId { get; set; }
         public Dto.MeshTransform MeshTransform { get; set; }

@@ -11,8 +11,8 @@ namespace ModelRelief.Domain
     public enum MeshFormat
     {
         None,           // unknown
-        SDB,            // single precision depth buffer
-        DDB,            // double precision depth buffer
+        SDB,            // single precision depth buffer [0..1]
+        DDB,            // double precision depth buffer [0..1]
         SFP,            // single precision float (model units)
         DFP,            // double precision float (model units)
         OBJ,            // Wavefront OBJ
@@ -33,6 +33,10 @@ namespace ModelRelief.Domain
         [GeneratedFileProperty]
         public int? DepthBufferId { get; set; }
         public DepthBuffer DepthBuffer { get; set; }
+
+        [GeneratedFileProperty]
+        public int? NormalMapId { get; set; }
+        public NormalMap NormalMap { get; set; }
 
         [GeneratedFileProperty]
         public int? MeshTransformId { get; set; }

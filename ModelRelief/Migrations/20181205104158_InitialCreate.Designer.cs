@@ -10,7 +10,7 @@ using ModelRelief.Database;
 namespace ModelRelief.Migrations
 {
     [DbContext(typeof(ModelReliefDbContext))]
-    [Migration("20181203140224_InitialCreate")]
+    [Migration("20181205104158_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -152,6 +152,10 @@ namespace ModelRelief.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<int?>("NormalMapId");
+
+                    b.Property<int?>("NprmalMapId");
+
                     b.Property<string>("Path");
 
                     b.Property<int?>("ProjectId");
@@ -165,6 +169,8 @@ namespace ModelRelief.Migrations
                     b.HasIndex("DepthBufferId");
 
                     b.HasIndex("MeshTransformId");
+
+                    b.HasIndex("NormalMapId");
 
                     b.HasIndex("ProjectId");
 
@@ -360,6 +366,11 @@ namespace ModelRelief.Migrations
                     b.HasOne("ModelRelief.Domain.MeshTransform", "MeshTransform")
                         .WithMany()
                         .HasForeignKey("MeshTransformId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("ModelRelief.Domain.NormalMap", "NormalMap")
+                        .WithMany()
+                        .HasForeignKey("NormalMapId")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ModelRelief.Domain.Project", "Project")

@@ -319,8 +319,8 @@ namespace ModelRelief.Database
             AddMeshTransforms(user);
 
             AddDepthBuffers(user);
-            AddMeshes(user);
             AddNormalMaps(user);
+            AddMeshes(user);
 
             // user store
             SeedUserStore(user);
@@ -661,57 +661,68 @@ namespace ModelRelief.Database
             {
                 new Mesh
                 {
-                    Name = "armadillo.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "armadillo.sdb"), MeshTransform = FindByName<MeshTransform>(user, "Armadillo"),
+                    Name = "armadillo.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
+                    DepthBuffer = FindByName<DepthBuffer>(user, "armadillo.sdb"), NormalMap = FindByName<NormalMap>(user, "armadillo.nmap"), MeshTransform = FindByName<MeshTransform>(user, "Armadillo"),
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new Mesh
                 {
-                    Name = "buddha.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "buddha.sdb"), MeshTransform =  FindByName<MeshTransform>(user, "Buddha"),
+                    Name = "buddha.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
+                    DepthBuffer = FindByName<DepthBuffer>(user, "buddha.sdb"), NormalMap = FindByName<NormalMap>(user, "buddha.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Buddha"),
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new Mesh
                 {
-                    Name = "bunny.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "bunny.sdb"), MeshTransform =  FindByName<MeshTransform>(user, "Bunny"),
+                    Name = "bunny.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
+                    DepthBuffer = FindByName<DepthBuffer>(user, "bunny.sdb"), NormalMap = FindByName<NormalMap>(user, "bunny.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Bunny"),
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new Mesh
                 {
-                    Name = "dolphin.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "dolphin.sdb"), MeshTransform =  FindByName<MeshTransform>(user, "Dolphin"),
+                    Name = "dolphin.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
+                    DepthBuffer = FindByName<DepthBuffer>(user, "dolphin.sdb"), NormalMap = FindByName<NormalMap>(user, "dolphin.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Dolphin"),
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
                 },
                 new Mesh
                 {
-                    Name = "dragon.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "dragon.sdb"), MeshTransform =  FindByName<MeshTransform>(user, "Dragon"),
+                    Name = "dragon.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
+                    DepthBuffer = FindByName<DepthBuffer>(user, "dragon.sdb"), NormalMap = FindByName<NormalMap>(user, "dragon.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Dragon"),
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new Mesh
                 {
-                    Name = "house.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "house.sdb"), MeshTransform =  FindByName<MeshTransform>(user, "House"),
+                    Name = "house.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
+                    DepthBuffer = FindByName<DepthBuffer>(user, "house.sdb"), NormalMap = FindByName<NormalMap>(user, "house.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "House"),
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Architecture),
                 },
                 new Mesh
                 {
-                    Name = "lucy.sfp", Description = "Isometric", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Isometric Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "lucy.sdb"), MeshTransform =  FindByName<MeshTransform>(user, "Lucy"),
+                    Name = "lucy.sfp", Description = "Isometric", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Isometric Camera"),
+                    DepthBuffer = FindByName<DepthBuffer>(user, "lucy.sdb"), NormalMap = FindByName<NormalMap>(user, "lucy.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Lucy"),
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new Mesh
                 {
-                    Name = "roadster.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "roadster.sdb"), MeshTransform =  FindByName<MeshTransform>(user, "Roadster"),
+                    Name = "roadster.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
+                    DepthBuffer = FindByName<DepthBuffer>(user, "roadster.sdb"), NormalMap = FindByName<NormalMap>(user, "roadster.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Roadster"),
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
                 },
                 new Mesh
                 {
-                    Name = "statue.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "statue.sdb"), MeshTransform =  FindByName<MeshTransform>(user, "Statue"),
+                    Name = "statue.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
+                    DepthBuffer = FindByName<DepthBuffer>(user, "statue.sdb"), NormalMap = FindByName<NormalMap>(user, "statue.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Statue"),
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new Mesh
                 {
-                    Name = "test.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "test.sdb"), MeshTransform =  FindByName<MeshTransform>(user, "Test"),
+                    Name = "test.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
+                    DepthBuffer = FindByName<DepthBuffer>(user, "test.sdb"), NormalMap = FindByName<NormalMap>(user, "test.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Test"),
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
                 },
                 new Mesh
                 {
-                    Name = "tyrannosaurus.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"), DepthBuffer = FindByName<DepthBuffer>(user, "tyrannosaurus.sdb"), MeshTransform =  FindByName<MeshTransform>(user, "Tyrannosaurus"),
+                    Name = "tyrannosaurus.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
+                    DepthBuffer = FindByName<DepthBuffer>(user, "tyrannosaurus.sdb"), NormalMap = FindByName<NormalMap>(user, "tyrannosaurus.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Tyrannosaurus"),
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
                 },
             };
@@ -736,10 +747,90 @@ namespace ModelRelief.Database
             {
                 new NormalMap
                 {
-                    Name = "lucy.nmap", Description = "8-bit Normal Map",
+                    Name = "armadillo.nmap", Description = "Generated in Rhino",
+                    Width = 512, Height = 512,
+                    Format = NormalMapFormat.NMAP,
+                    Model3d = FindByName<Model3d>(user, "armadillo.obj"), Camera = FindByName<Camera>(user, "Armadillo"),
+                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                },
+                new NormalMap
+                {
+                    Name = "buddha.nmap", Description = "Generated in Rhino",
+                    Width = 512, Height = 512,
+                    Format = NormalMapFormat.NMAP,
+                    Model3d = FindByName<Model3d>(user, "buddha.obj"), Camera = FindByName<Camera>(user, "Buddha"),
+                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                },
+                new NormalMap
+                {
+                    Name = "bunny.nmap", Description = "Generated in VRay",
+                    Width = 512, Height = 512,
+                    Format = NormalMapFormat.NMAP,
+                    Model3d = FindByName<Model3d>(user, "bunny.obj"), Camera = FindByName<Camera>(user, "Bunny"),
+                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                },
+                new NormalMap
+                {
+                    Name = "dolphin.nmap", Description = "Generated in VRay",
+                    Width = 512, Height = 512,
+                    Format = NormalMapFormat.NMAP,
+                    Model3d = FindByName<Model3d>(user, "dolphin.obj"), Camera = FindByName<Camera>(user, "Dolphin"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
+                },
+                new NormalMap
+                {
+                    Name = "dragon.nmap", Description = "Generated in VRay",
+                    Width = 512, Height = 512,
+                    Format = NormalMapFormat.NMAP,
+                    Model3d = FindByName<Model3d>(user, "dragon.obj"), Camera = FindByName<Camera>(user, "Dragon"),
+                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                },
+                new NormalMap
+                {
+                    Name = "house.nmap", Description = "Generated in VRay",
+                    Width = 512, Height = 512,
+                    Format = NormalMapFormat.NMAP,
+                    Model3d = FindByName<Model3d>(user, "house.obj"), Camera = FindByName<Camera>(user, "House"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Architecture),
+                },
+                new NormalMap
+                {
+                    Name = "lucy.nmap", Description = "Generated in Maya",
                     Width = 512, Height = 512,
                     Format = NormalMapFormat.NMAP,
                     Model3d = FindByName<Model3d>(user, "lucy.obj"), Camera = FindByName<Camera>(user, "Lucy"),
+                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                },
+                new NormalMap
+                {
+                    Name = "roadster.nmap", Description = "Generated in Maya",
+                    Width = 512, Height = 512,
+                    Format = NormalMapFormat.NMAP,
+                    Model3d = FindByName<Model3d>(user, "roadster.obj"), Camera = FindByName<Camera>(user, "Roadster"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
+                },
+                new NormalMap
+                {
+                    Name = "statue.nmap", Description = "Generated in Maya",
+                    Width = 512, Height = 512,
+                    Format = NormalMapFormat.NMAP,
+                    Model3d = FindByName<Model3d>(user, "statue.obj"), Camera = FindByName<Camera>(user, "Statue"),
+                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                },
+                new NormalMap
+                {
+                    Name = "test.nmap", Description = "Generated in ModelRelief",
+                    Width = 512, Height = 512,
+                    Format = NormalMapFormat.NMAP,
+                    Model3d = FindByName<Model3d>(user, "test.obj"), Camera = FindByName<Camera>(user, "Test"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
+                },
+                new NormalMap
+                {
+                    Name = "tyrannosaurus.nmap", Description = "Generated in ModelRelief",
+                    Width = 512, Height = 512,
+                    Format = NormalMapFormat.NMAP,
+                    Model3d = FindByName<Model3d>(user, "tyrannosaurus.obj"), Camera = FindByName<Camera>(user, "Tyrannosaurus"),
                     UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
                 },
             };
