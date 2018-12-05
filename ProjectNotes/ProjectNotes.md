@@ -5,6 +5,8 @@
 #### Vector
 
 Issues
+    https://stackoverflow.com/questions/41284349/automapper-error-saying-mapper-not-initialized
+
     How is a Mesh (ComposerView) connected to a NormalMap?
         Should a Mesh hold a reference to a NormalMap?
     
