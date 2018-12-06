@@ -87,20 +87,11 @@ namespace ModelRelief
             builder.RegisterGeneric(typeof(DeleteRequest<>));
             builder.RegisterGeneric(typeof(DeleteRequestHandler<>)).AsImplementedInterfaces();
 
-            // MediatR : register delegates as SingleInstanceFactory and MultiInstanceFactory types
-            builder.Register<SingleInstanceFactory>(context =>
+            // MediatR : register delegates
+            builder.Register<ServiceFactory>(ctx =>
             {
-                // https://github.com/jbogard/MediatR/issues/123
-                var c = context.Resolve<IComponentContext>();
-                return t =>
-                {
-                    return c.TryResolve(t, out object o) ? o : null;
-                };
-            });
-            builder.Register<MultiInstanceFactory>(context =>
-            {
-                var componentContext = context.Resolve<IComponentContext>();
-                return t => (IEnumerable<object>)componentContext.Resolve(typeof(IEnumerable<>).MakeGenericType(t));
+                var c = ctx.Resolve<IComponentContext>();
+                return t => c.Resolve(t);
             });
 
             var container = builder.Build();
@@ -126,8 +117,10 @@ namespace ModelRelief
             services.AddModelReliefServices();
             services.AddDatabaseServices(env);
             services.AddAutoMapper(typeof(Startup));
-            Mapper.AssertConfigurationIsValid();
+
             var serviceProvider = ConfigureAutofacServices(services);
+            IMapper mapper = serviceProvider.GetRequiredService<IMapper>();
+            mapper.ConfigurationProvider.AssertConfigurationIsValid();
 
             // service provider for contexts without DI
             ApplicationServices.StorageManager = serviceProvider.GetRequiredService<IStorageManager>();
