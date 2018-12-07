@@ -58,7 +58,6 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.3.1" />
-    <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="CommandLineParser" Version="2.3.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="8.0.101" />
@@ -88,6 +87,10 @@
   <ItemGroup>
     <Folder Include="Api\V1\NormalMaps\" />
     <Folder Include="Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\GitHub\AutoMapper\src\AutoMapper\AutoMapper.csproj" />
   </ItemGroup>
 
   <ItemGroup>

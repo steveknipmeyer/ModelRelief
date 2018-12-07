@@ -7,18 +7,20 @@ Install NET Core 2.2
 #### Vector
 
 Issues
-    Mesh
+    Add NormalMapSpace to UI.
 
     How is a Mesh (ComposerView) connected to a NormalMap?
         Should a Mesh hold a reference to a NormalMap?
-    
+    Mesh
+        DepthBuffer
+            Camera
+            Model
+        NormalMap
+            Camera
+            Model
+
     ComposerController
         activeDepthBufferCamera -> activeMeshReliefCamera
-
-    DbInitializer
-        Seed the normal maps with the existing DepthBuffer images.
-        Until the mesh generation uses the NormalMaps they can be placeholders.
-        The NormalMap files that are displayed in the UI are generated dynamically.
 
     Design the NormalMapFactory.
 

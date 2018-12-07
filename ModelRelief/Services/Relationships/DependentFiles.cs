@@ -12,7 +12,7 @@ namespace ModelRelief.Services.Relationships
 
     /// <summary>
     /// Represents a class that has dependents.
-    /// WHen this class had a key property change (FileProperty) the dependent classes must re-generate their file-backed resources.
+    /// WHen this class has a key property change (FileProperty) the dependent classes must re-generate their file-backed resources.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class DependentFiles : Attribute

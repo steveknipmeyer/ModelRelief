@@ -196,6 +196,7 @@ namespace ModelRelief.Migrations
                     Width = table.Column<double>(nullable: false),
                     Height = table.Column<double>(nullable: false),
                     Format = table.Column<int>(nullable: false),
+                    Space = table.Column<int>(nullable: false),
                     ProjectId = table.Column<int>(nullable: true),
                     Model3dId = table.Column<int>(nullable: true),
                     CameraId = table.Column<int>(nullable: true)
@@ -239,7 +240,6 @@ namespace ModelRelief.Migrations
                     ProjectId = table.Column<int>(nullable: true),
                     CameraId = table.Column<int>(nullable: true),
                     DepthBufferId = table.Column<int>(nullable: true),
-                    NprmalMapId = table.Column<int>(nullable: true),
                     NormalMapId = table.Column<int>(nullable: true),
                     MeshTransformId = table.Column<int>(nullable: true)
                 },

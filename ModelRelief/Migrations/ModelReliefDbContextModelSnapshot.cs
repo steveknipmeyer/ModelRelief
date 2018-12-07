@@ -15,7 +15,7 @@ namespace ModelRelief.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -152,8 +152,6 @@ namespace ModelRelief.Migrations
 
                     b.Property<int?>("NormalMapId");
 
-                    b.Property<int?>("NprmalMapId");
-
                     b.Property<string>("Path");
 
                     b.Property<int?>("ProjectId");
@@ -289,6 +287,8 @@ namespace ModelRelief.Migrations
                     b.Property<string>("Path");
 
                     b.Property<int?>("ProjectId");
+
+                    b.Property<int>("Space");
 
                     b.Property<string>("UserId");
 

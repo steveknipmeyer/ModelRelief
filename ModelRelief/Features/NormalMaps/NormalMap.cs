@@ -27,6 +27,7 @@ namespace ModelRelief.Dto
         public double Width { get; set; }
         public double Height { get; set; }
         public NormalMapFormat Format { get; set; }
+        public NormalMapSpace Space { get; set; }
 
         // Navigation Properties
         public int? ProjectId { get; set; }
@@ -78,7 +79,7 @@ namespace ModelRelief.Dto
         /// </summary>
         public NormalMapMappingProfile()
         {
-        CreateMap<Domain.NormalMap, Dto.NormalMap>().ReverseMap();
+            CreateMap<Domain.NormalMap, Dto.NormalMap>().ReverseMap();
         }
     }
 }

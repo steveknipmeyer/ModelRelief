@@ -16,12 +16,20 @@ namespace ModelRelief.Domain
         JPG,        // JPG format
     }
 
+    public enum NormalMapSpace
+    {
+        None,       // unknown
+        Object,
+        Tangent,
+    }
+
     [DependentFiles(typeof(Mesh))]
     public class NormalMap  : GeneratedFileDomainModel
     {
         public double Width { get; set; }
         public double Height { get; set; }
         public NormalMapFormat Format { get; set; }
+        public NormalMapSpace Space { get; set; }
 
         // Navigation Properties
         public int? ProjectId { get; set; }

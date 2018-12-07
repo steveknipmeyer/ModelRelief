@@ -661,9 +661,11 @@ namespace ModelRelief.Database
             {
                 new Mesh
                 {
-                    Name = "armadillo.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
-                    DepthBuffer = FindByName<DepthBuffer>(user, "armadillo.sdb"), NormalMap = FindByName<NormalMap>(user, "armadillo.nmap"), MeshTransform = FindByName<MeshTransform>(user, "Armadillo"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
+                    Name = "armadillo.sfp", Description = "Top", Format = MeshFormat.SFP,
+                    //Camera = FindByName<Camera>(user, "Top Camera"),
+                    //DepthBuffer = FindByName<DepthBuffer>(user, "armadillo.sdb"), NormalMap = FindByName<NormalMap>(user, "armadillo.nmap"), MeshTransform = FindByName<MeshTransform>(user, "Armadillo"),
+                    UserId = user.Id,
+                    //Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new Mesh
                 {
@@ -749,7 +751,7 @@ namespace ModelRelief.Database
                 {
                     Name = "armadillo.nmap", Description = "Generated in Rhino",
                     Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP,
+                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
                     Model3d = FindByName<Model3d>(user, "armadillo.obj"), Camera = FindByName<Camera>(user, "Armadillo"),
                     UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
                 },
@@ -757,7 +759,7 @@ namespace ModelRelief.Database
                 {
                     Name = "buddha.nmap", Description = "Generated in Rhino",
                     Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP,
+                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
                     Model3d = FindByName<Model3d>(user, "buddha.obj"), Camera = FindByName<Camera>(user, "Buddha"),
                     UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
                 },
@@ -765,7 +767,7 @@ namespace ModelRelief.Database
                 {
                     Name = "bunny.nmap", Description = "Generated in VRay",
                     Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP,
+                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
                     Model3d = FindByName<Model3d>(user, "bunny.obj"), Camera = FindByName<Camera>(user, "Bunny"),
                     UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
                 },
@@ -773,7 +775,7 @@ namespace ModelRelief.Database
                 {
                     Name = "dolphin.nmap", Description = "Generated in VRay",
                     Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP,
+                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
                     Model3d = FindByName<Model3d>(user, "dolphin.obj"), Camera = FindByName<Camera>(user, "Dolphin"),
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
                 },
@@ -781,7 +783,7 @@ namespace ModelRelief.Database
                 {
                     Name = "dragon.nmap", Description = "Generated in VRay",
                     Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP,
+                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
                     Model3d = FindByName<Model3d>(user, "dragon.obj"), Camera = FindByName<Camera>(user, "Dragon"),
                     UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
                 },
@@ -789,7 +791,7 @@ namespace ModelRelief.Database
                 {
                     Name = "house.nmap", Description = "Generated in VRay",
                     Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP,
+                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
                     Model3d = FindByName<Model3d>(user, "house.obj"), Camera = FindByName<Camera>(user, "House"),
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Architecture),
                 },
@@ -797,7 +799,7 @@ namespace ModelRelief.Database
                 {
                     Name = "lucy.nmap", Description = "Generated in Maya",
                     Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP,
+                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
                     Model3d = FindByName<Model3d>(user, "lucy.obj"), Camera = FindByName<Camera>(user, "Lucy"),
                     UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
                 },
@@ -805,7 +807,7 @@ namespace ModelRelief.Database
                 {
                     Name = "roadster.nmap", Description = "Generated in Maya",
                     Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP,
+                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
                     Model3d = FindByName<Model3d>(user, "roadster.obj"), Camera = FindByName<Camera>(user, "Roadster"),
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
                 },
@@ -813,7 +815,7 @@ namespace ModelRelief.Database
                 {
                     Name = "statue.nmap", Description = "Generated in Maya",
                     Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP,
+                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
                     Model3d = FindByName<Model3d>(user, "statue.obj"), Camera = FindByName<Camera>(user, "Statue"),
                     UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
                 },
@@ -821,7 +823,7 @@ namespace ModelRelief.Database
                 {
                     Name = "test.nmap", Description = "Generated in ModelRelief",
                     Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP,
+                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
                     Model3d = FindByName<Model3d>(user, "test.obj"), Camera = FindByName<Camera>(user, "Test"),
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
                 },
@@ -829,7 +831,7 @@ namespace ModelRelief.Database
                 {
                     Name = "tyrannosaurus.nmap", Description = "Generated in ModelRelief",
                     Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP,
+                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
                     Model3d = FindByName<Model3d>(user, "tyrannosaurus.obj"), Camera = FindByName<Camera>(user, "Tyrannosaurus"),
                     UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
                 },
