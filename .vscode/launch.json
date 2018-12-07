@@ -29,7 +29,7 @@
             "request": "launch",
             "preLaunchTask": "ASPNET .Core Build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceRoot}/ModelRelief/bin/Debug/netcoreapp2.1/ModelRelief.dll",
+            "program": "${workspaceRoot}/ModelRelief/bin/Debug/netcoreapp2.2/ModelRelief.dll",
             "args": [],
             "cwd": "${workspaceRoot}/ModelRelief",
             "stopAtEntry": false,

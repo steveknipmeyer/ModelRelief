@@ -45,7 +45,6 @@ export class DepthBuffer extends GeneratedFileModel {
         this.depths = new Float32Array(this.rgbArray.buffer);
     }
 
-    //#region Properties
     /**
      * @description Returns the raw floats of the depth buffer.
      * @type {Float32Array}
@@ -276,7 +275,6 @@ export class DepthBuffer extends GeneratedFileModel {
 
         return model;
     }
-    //#endregion
 
     /**
      * @description Convert a normalized depth [0,1] to depth in model units.

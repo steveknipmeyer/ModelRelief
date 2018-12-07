@@ -10,6 +10,7 @@ import {ICamera} from "Scripts/Api/V1/Interfaces/ICamera";
 import {IDepthBuffer} from "Scripts/Api/V1/Interfaces/IDepthBuffer";
 import {IGeneratedFileModel} from "Scripts/Api/V1/Interfaces/IGeneratedFileModel";
 import {IMeshTransform} from "Scripts/Api/V1/Interfaces/IMeshTransform";
+import {INormalMap} from "Scripts/Api/V1/Interfaces/INormalMap";
 import {IProject} from "Scripts/Api/V1/Interfaces/IProject";
 
  /**
@@ -48,6 +49,9 @@ export interface IMesh extends IGeneratedFileModel {
 
     depthBufferId?: number;
     depthBuffer?: IDepthBuffer;
+
+    normalMapId?: number;
+    normalMap?: INormalMap;
 
     meshTransformId?: number;
     meshTransform?: IMeshTransform;

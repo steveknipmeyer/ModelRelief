@@ -20,6 +20,8 @@ import {DepthBufferFactory} from "Scripts/Models/DepthBuffer/DepthBufferFactory"
 import {Mesh} from "Scripts/Models/Mesh/Mesh";
 import {MeshTransform} from "Scripts/Models/MeshTransform/MeshTransform";
 import {Model3d} from "Scripts/Models/Model3d/Model3d";
+import {NormalMap} from "Scripts/Models/NormalMap/NormalMap";
+import {NormalMapFactory} from "Scripts/Models/NormalMap/NormalMapFactory";
 import {ElementAttributes, ElementIds} from "Scripts/System/Html";
 import {UnitTests} from "Scripts/UnitTests/UnitTests";
 import {InputControllerHelper} from "Scripts/Viewers/InputControllerHelper";
@@ -63,8 +65,8 @@ class ControlSettings {
 
     /**
      * Creates an instance of ControlSettings.
-     * @param {number} minimum Minimim value of control.
-     * @param {number} maximum Maximim value of control.
+     * @param {number} minimum Minimum value of control.
+     * @param {number} maximum Maximum value of control.
      * @param {number} stepSize Step size of control.
      */
     constructor(minimum: number, maximum: number, stepSize: number) {
@@ -159,17 +161,27 @@ export class ComposerController {
     }
 
     /**
-     * @description Gets the active DepthBuffer camera.
+     * @description Active NormalMap.
+     * @readonly
+     * @type {NormalMap}
+     */
+    get activeNormalMap(): NormalMap {
+        return this._composerView.mesh.normalMap;
+    }
+
+    /**
+     * @description Gets the active relief camera.
      * @type {BaseCamera}
      */
-    get activeDepthBufferCamera(): BaseCamera {
+    get activeMeshReliefCamera(): BaseCamera {
         return this._composerView.mesh.depthBuffer.camera;
     }
     /**
-     * @description Sets the active DepthBuffer camera.
+     * @description Sets the active relief camera.
      */
-    set activeDepthBufferCamera(camera: BaseCamera) {
+    set activeMeshReliefCamera(camera: BaseCamera) {
         this._composerView.mesh.depthBuffer.camera = camera;
+        this._composerView.mesh.normalMap.camera   = camera;
     }
 
 //#endregion
@@ -186,6 +198,9 @@ export class ComposerController {
 
         // DepthBufffer
         const depthBufferModel: Dto.DepthBuffer = await this.updateDepthBufferAsync();
+
+        // NormalMap
+        const normalMapModel: Dto.NormalMap = await this.updateNormalMapAsync();
 
         // MeshTransform
         const meshTransformModel: Dto.MeshTransform = await this.updateMeshTransformAsync();
@@ -212,13 +227,12 @@ export class ComposerController {
 
         // copy view camera so we can optimize clipping planes
         const modelViewCameraClone = this.modelViewer.camera.clone(true);
-        this.activeDepthBufferCamera = CameraFactory.constructFromViewCamera(this.activeDepthBufferCamera, modelViewCameraClone, this.activeDepthBufferCamera.project);
-        this.activeDepthBufferCamera.finalizeClippingPlanes(this.modelViewer.modelGroup);
+        this.activeMeshReliefCamera = CameraFactory.constructFromViewCamera(this.activeMeshReliefCamera, modelViewCameraClone, this.activeMeshReliefCamera.project);
+        this.activeMeshReliefCamera.finalizeClippingPlanes(this.modelViewer.modelGroup);
 
         // update
-        const depthBufferCameraModel: Dto.Camera = await this.activeDepthBufferCamera.toDtoModel().putAsync();
-
-        return depthBufferCameraModel;
+        const reliefCameraModel: Dto.Camera = await this.activeMeshReliefCamera.toDtoModel().putAsync();
+        return reliefCameraModel;
     }
 
     /**
@@ -229,11 +243,11 @@ export class ComposerController {
 
         // generate new DepthBuffer from active Camera
         const canvasElement = this._composerView.depthBufferView.depthBufferViewer.canvas;
-        const factory = new DepthBufferFactory({ canvas : canvasElement, width: this._reliefWidthPixels, height: this._reliefHeightPixels, modelGroup: this.modelViewer.modelGroup, camera: this.activeDepthBufferCamera});
+        const factory = new DepthBufferFactory({ canvas : canvasElement, width: this._reliefWidthPixels, height: this._reliefHeightPixels, modelGroup: this.modelViewer.modelGroup, camera: this.activeMeshReliefCamera});
         const factoryDepthBuffer = await factory.createDepthBufferAsync();
 
         // metadata
-        this.activeDepthBuffer.camera = this.activeDepthBufferCamera;
+        this.activeDepthBuffer.camera = this.activeMeshReliefCamera;
         this.activeDepthBuffer.width  = this._reliefWidthPixels;
         this.activeDepthBuffer.height = this._reliefHeightPixels;
 
@@ -247,6 +261,34 @@ export class ComposerController {
         depthBufferModel = await depthBufferModel.postFileAsync(this.activeDepthBuffer.depths);
 
         return depthBufferModel;
+    }
+
+    /**
+     * @description Updates the NormalMap.
+     * @returns {Promise<Dto.NormalMap>}
+     */
+    public async updateNormalMapAsync(): Promise<Dto.NormalMap> {
+
+        // generate new NormalMap from active Camera
+        const canvasElement = this._composerView._normalMapView.normalMapViewer.canvas;
+        const factory = new NormalMapFactory({ canvas : canvasElement, width: this._reliefWidthPixels, height: this._reliefHeightPixels, modelGroup: this.modelViewer.modelGroup, camera: this.activeMeshReliefCamera});
+        const factoryNormalMap = await factory.createNormalMapAsync();
+
+        // metadata
+        this.activeNormalMap.camera = this.activeMeshReliefCamera;
+        this.activeNormalMap.width  = this._reliefWidthPixels;
+        this.activeNormalMap.height = this._reliefHeightPixels;
+
+        // The NormalMap is not synchronized because of changes to its dependent objects (e.g. Camera).
+        // Do not allow the (currently unimplemented) FileGenerateRequest to be queued because POST will update the object.
+        this.activeNormalMap.fileIsSynchronized = false;
+        let normalMapModel: Dto.NormalMap = await this.activeNormalMap.toDtoModel().putAsync();
+
+        // file
+        this.activeNormalMap.elements = factoryNormalMap.elements;
+        normalMapModel = await normalMapModel.postFileAsync(this.activeNormalMap.elements);
+
+        return normalMapModel;
     }
 
     /**
@@ -408,10 +450,10 @@ export class ComposerController {
     private initializeModelViewerCamera() {
 
         // model camera = depth buffer camera (default clipping planes)
-        const modelViewCamera = this.activeDepthBufferCamera.viewCamera.clone();
+        const modelViewCamera = this.activeMeshReliefCamera.viewCamera.clone();
 
         // WIP: Set far plane based on model extents to avoid clipping
-        const boundingPlanes =  this.activeDepthBufferCamera.getBoundingClippingPlanes(this.modelViewer.modelGroup);
+        const boundingPlanes =  this.activeMeshReliefCamera.getBoundingClippingPlanes(this.modelViewer.modelGroup);
 
         modelViewCamera.near = DefaultCameraSettings.NearClippingPlane;
         modelViewCamera.far  = DefaultCameraSettings.FarClippingPlane;

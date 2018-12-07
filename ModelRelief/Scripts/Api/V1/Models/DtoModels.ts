@@ -546,6 +546,9 @@ export class Mesh extends GeneratedFileModel<Mesh> implements IMesh {
     public depthBufferId: number;
     public depthBuffer: IDepthBuffer;
 
+    public normalMapId: number;
+    public normalMap: INormalMap;
+
     public meshTransformId: number;
     public meshTransform: IMeshTransform;
 
@@ -572,6 +575,9 @@ export class Mesh extends GeneratedFileModel<Mesh> implements IMesh {
             depthBufferId,
             depthBuffer,
 
+            normalMapId,
+            normalMap,
+
             meshTransformId,
             meshTransform,
         } = parameters;
@@ -587,6 +593,9 @@ export class Mesh extends GeneratedFileModel<Mesh> implements IMesh {
 
         this.depthBufferId  = depthBufferId;
         this.depthBuffer    = depthBuffer;
+
+        this.normalMapId    = normalMapId;
+        this.normalMap      = normalMap;
 
         this.meshTransformId  = meshTransformId;
         this.meshTransform    = meshTransform;

@@ -55,7 +55,6 @@ export class DepthBufferFactory {
 
     public _camera: BaseCamera                      = null;     // camera to generate the depth buffer
 
-
     public _logDepthBuffer: boolean                 = false;    // use a logarithmic buffer for more accuracy in large scenes
 
     public _depthBuffer: DepthBuffer                = null;     // depth buffer
@@ -104,7 +103,7 @@ export class DepthBufferFactory {
 
 //#region Properties
     /**
-     * Returns the active canvasof the factory.
+     * Returns the active canvas of the factory.
      * @returns HTMLElement
      */
     get canvas(): HTMLElement {

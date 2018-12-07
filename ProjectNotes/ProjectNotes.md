@@ -6,10 +6,15 @@ Install NET Core 2.2
 #### Vector
 
 Issues
-    Verify PostMan PostFile tests.
+    Can DepthBufferFactory and NormalMapFactory share a base class (e.g. ImageFactory)?
 
-    ComposerController
-        activeDepthBufferCamera -> activeMeshReliefCamera
+    Review Mesh, DepthBuffer and NormalMap properties:
+        Width
+        Height
+
+    How should the initial camera of the ModelViewer be defined in a ComposerView?
+        Mesh.DepthBuffer.Camera is used.
+        Mesh.NormalMap.Camera is equivalent.
 
     Design the NormalMapFactory.
 

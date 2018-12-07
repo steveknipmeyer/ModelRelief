@@ -15,6 +15,7 @@ import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
 import {MeshTransform} from "Scripts/Models/MeshTransform/MeshTransform";
+import {NormalMap} from "Scripts/Models/NormalMap/NormalMap";
 import {Project} from "Scripts/Models/Project/Project";
 
 /**
@@ -83,6 +84,7 @@ export class Mesh extends GeneratedFileModel {
         mesh.project = await Project.fromIdAsync(dtoMesh.projectId);
         mesh.camera  = await CameraFactory.constructFromIdAsync(dtoMesh.cameraId);
         mesh.depthBuffer    = await DepthBuffer.fromIdAsync(dtoMesh.depthBufferId);
+        mesh.normalMap      = await NormalMap.fromIdAsync(dtoMesh.normalMapId);
         mesh.meshTransform  = await MeshTransform.fromIdAsync(dtoMesh.meshTransformId);
 
         return mesh;
@@ -94,6 +96,7 @@ export class Mesh extends GeneratedFileModel {
     public project: Project;
     public camera: BaseCamera;
     public depthBuffer: DepthBuffer;
+    public normalMap: NormalMap;
     public meshTransform: MeshTransform;
 
     /**
@@ -132,6 +135,7 @@ export class Mesh extends GeneratedFileModel {
             projectId       : this.project ? this.project.id : undefined,
             cameraId        : this.camera ? this.camera.id : undefined,
             depthBufferId   : this.depthBuffer ? this.depthBuffer.id : undefined,
+            normalMapId     : this.normalMap ? this.normalMap.id : undefined,
             meshTransformId : this.meshTransform ? this.meshTransform.id : undefined,
 
             fileTimeStamp      : this.fileTimeStamp,

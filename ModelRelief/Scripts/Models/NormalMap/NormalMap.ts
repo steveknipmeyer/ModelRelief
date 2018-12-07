@@ -9,8 +9,8 @@ import * as Dto from "Scripts/Api/V1//Models/DtoModels";
 import * as THREE from "three";
 
 import {assert} from "chai";
-import {NormalMapFormat} from "Scripts/Api/V1/Interfaces/INormalMap";
 import {IGeneratedFileModel} from "Scripts/Api/V1/Interfaces/IGeneratedFileModel";
+import {NormalMapFormat} from "Scripts/Api/V1/Interfaces/INormalMap";
 import {GeneratedFileModel} from "Scripts/Api/V1/Models/GeneratedFileModel";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
@@ -24,6 +24,22 @@ import {Project} from "Scripts/Models/Project/Project";
  * @extends {GeneratedFileModel}
  */
 export class NormalMap extends GeneratedFileModel {
+
+    /**
+     * @description Returns the raw floats of the normal map.
+     * @type {Float32Array}
+     */
+    get elements(): Float32Array {
+
+        return this._elements;
+    }
+    /**
+     * @description Sets the raw floats of the normal map.
+     */
+    set elements(value: Float32Array) {
+
+        this._elements = value;
+    }
 
     /**
      * @description Returns the associated camera.
@@ -108,6 +124,7 @@ export class NormalMap extends GeneratedFileModel {
     public _camera: BaseCamera;
 
     // Private
+    private _elements: Float32Array;
 
     /**
      * Creates an instance of NormalMap.
@@ -154,7 +171,6 @@ export class NormalMap extends GeneratedFileModel {
 
         return model;
     }
-    //#endregion
 
     /**
      * @description Analyzes properties of a normal map.
