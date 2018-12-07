@@ -661,11 +661,9 @@ namespace ModelRelief.Database
             {
                 new Mesh
                 {
-                    Name = "armadillo.sfp", Description = "Top", Format = MeshFormat.SFP,
-                    //Camera = FindByName<Camera>(user, "Top Camera"),
-                    //DepthBuffer = FindByName<DepthBuffer>(user, "armadillo.sdb"), NormalMap = FindByName<NormalMap>(user, "armadillo.nmap"), MeshTransform = FindByName<MeshTransform>(user, "Armadillo"),
-                    UserId = user.Id,
-                    //Project = FindByName<Project>(user, ProjectNames.Stanford),
+                    Name = "armadillo.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
+                    DepthBuffer = FindByName<DepthBuffer>(user, "armadillo.sdb"), NormalMap = FindByName<NormalMap>(user, "armadillo.nmap"), MeshTransform = FindByName<MeshTransform>(user, "Armadillo"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new Mesh
                 {

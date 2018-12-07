@@ -64,7 +64,7 @@ namespace ModelRelief.Features
         public virtual async Task<IActionResult> Index([FromQuery] GetListRequest getRequest)
         {
             getRequest = getRequest ?? new GetListRequest();
-            var pagedResults = await HandleRequestAsync(new GetListRequest<TEntity, TGetModel>
+            var results = await HandleRequestAsync(new GetListRequest<TEntity, TGetModel>
             {
                 User = User,
                 UrlHelperContainer  = this,
@@ -77,7 +77,9 @@ namespace ModelRelief.Features
                 UsePaging           = ViewControllerOptions.UsePaging,
             });
 
-            var modelCollection = ((PagedResults<TGetModel>)pagedResults).Results;
+            // N.B. Return value may be PagedResults or a simple Array depending on if UsePaging was active in the request.
+            var modelCollection = (results is PagedResults<TGetModel>) ? ((PagedResults<TGetModel>)results).Results : results;
+
             return View(modelCollection);
         }
 

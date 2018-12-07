@@ -1,13 +1,13 @@
 ﻿### Tasks
 #### Commit Notes
-
+Add NormalMapSpace to UI.
+Add Mesh.NormalMap property to Mesh Razor pages.
 #### Lambda
 Install NET Core 2.2
 
 #### Vector
 
 Issues
-    Add NormalMapSpace to UI.
 
     How is a Mesh (ComposerView) connected to a NormalMap?
         Should a Mesh hold a reference to a NormalMap?

@@ -31,9 +31,12 @@
                 @Html.DisplayNameFor(model => model.DepthBuffer.Name)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.NormalMap.Name)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.MeshTransform.Name)
             </th>
-        <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -58,13 +61,16 @@
                 @Html.DisplayFor(modelItem => item.DepthBuffer.Name)
             </th>
             <th>
+                @Html.DisplayFor(modelItem => item.NormalMap.Name)
+            </th>
+            <th>
                 @Html.DisplayFor(modelItem => item.MeshTransform.Name)
             </th>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
-                <a asp-controller="Composer" asp-action="Edit" asp-route-id="@item.Id">Composer</a>                
+                <a asp-controller="Composer" asp-action="Edit" asp-route-id="@item.Id">Composer</a>
             </td>
         </tr>
 }

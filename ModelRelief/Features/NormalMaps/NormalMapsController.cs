@@ -44,6 +44,7 @@ namespace ModelRelief.Features.NormalMaps
             var userId = applicationUser?.Id ?? string.Empty;
 
             ViewBag.NormalMapFormats  = ViewHelpers.PopulateEnumDropDownList<NormalMapFormat>("Select normal map format");
+            ViewBag.NormalMapSpaces  = ViewHelpers.PopulateEnumDropDownList<NormalMapSpace>("Select normal map space");
 
             ViewBag.ProjectId = ViewHelpers.PopulateModelDropDownList<Project>(DbContext, userId, "Select a project", normalMap?.ProjectId);
             ViewBag.Model3dId = ViewHelpers.PopulateModelDropDownList<Model3d>(DbContext, userId, "Select a model", normalMap?.Model3dId);
