@@ -41,8 +41,6 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Build", "Build\Build.pyproj
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ReliefPythonDebug", "ReliefTest\ReliefPythonDebug.pyproj", "{279242A8-16CC-4CBD-8A5E-C9CBEAC148DB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapper", "..\GitHub\AutoMapper\src\AutoMapper\AutoMapper.csproj", "{8BF2249B-05CF-4C2E-817F-AF5446AF5996}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,25 +115,12 @@ Global
 		{279242A8-16CC-4CBD-8A5E-C9CBEAC148DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{279242A8-16CC-4CBD-8A5E-C9CBEAC148DB}.Release|x64.ActiveCfg = Release|Any CPU
 		{279242A8-16CC-4CBD-8A5E-C9CBEAC148DB}.Release|x86.ActiveCfg = Release|Any CPU
-		{8BF2249B-05CF-4C2E-817F-AF5446AF5996}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8BF2249B-05CF-4C2E-817F-AF5446AF5996}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8BF2249B-05CF-4C2E-817F-AF5446AF5996}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{8BF2249B-05CF-4C2E-817F-AF5446AF5996}.Debug|x64.Build.0 = Debug|Any CPU
-		{8BF2249B-05CF-4C2E-817F-AF5446AF5996}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{8BF2249B-05CF-4C2E-817F-AF5446AF5996}.Debug|x86.Build.0 = Debug|Any CPU
-		{8BF2249B-05CF-4C2E-817F-AF5446AF5996}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8BF2249B-05CF-4C2E-817F-AF5446AF5996}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8BF2249B-05CF-4C2E-817F-AF5446AF5996}.Release|x64.ActiveCfg = Release|Any CPU
-		{8BF2249B-05CF-4C2E-817F-AF5446AF5996}.Release|x64.Build.0 = Release|Any CPU
-		{8BF2249B-05CF-4C2E-817F-AF5446AF5996}.Release|x86.ActiveCfg = Release|Any CPU
-		{8BF2249B-05CF-4C2E-817F-AF5446AF5996}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{583B0720-98A2-444B-9BD4-CD6DD2E385A7} = {8606C6AB-8976-479A-BE76-9DE123DA22E6}
-		{8BF2249B-05CF-4C2E-817F-AF5446AF5996} = {8606C6AB-8976-479A-BE76-9DE123DA22E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C9E654D7-52C7-4D21-8503-FCC19F9E0BAD}

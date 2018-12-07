@@ -7,6 +7,7 @@
 namespace ModelRelief.Api.V1.Shared.Rest
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;
@@ -84,12 +85,12 @@ namespace ModelRelief.Api.V1.Shared.Rest
             DbContext.Set<TEntity>().Update(updatedModel);
             await DependencyManager.PersistChangesAsync(updatedModel, cancellationToken);
 
-            // expand returned model
-            var expandedUpdatedModel = await DbContext.Set<TEntity>()
-                 .ProjectTo<TGetModel>(Mapper.ConfigurationProvider)
-                 .SingleOrDefaultAsync(m => m.Id == updatedModel.Id);
+            // fully populate return model
+            IQueryable<TEntity> model = DbContext.Set<TEntity>()
+                                            .Where(m => (m.Id == updatedModel.Id));
+            var projectedModel = model.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).Single();
 
-            return expandedUpdatedModel;
+            return projectedModel;
         }
     }
 }

@@ -116,6 +116,7 @@ namespace ModelRelief.Test
             else
             {
                 content = new ByteArrayContent(contentObject as byte[]);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
             }
 
             HttpResponseMessage response = new HttpResponseMessage();

@@ -7,6 +7,7 @@
 namespace ModelRelief.Api.V1.Shared.Rest
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;
@@ -76,11 +77,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
             // N.B. ProjectTo populates all navigation properties.
             //      Mapper.Map<TGetModel>(newModel) would return only the primary model.
-            var expandedNewModel = await DbContext.Set<TEntity>()
-                 .ProjectTo<TGetModel>(Mapper.ConfigurationProvider)
-                 .SingleOrDefaultAsync(m => m.Id == newModel.Id);
+            IQueryable<TEntity> model = DbContext.Set<TEntity>()
+                                            .Where(m => (m.Id == newModel.Id));
+            var projectedModel = model.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).Single();
 
-            return expandedNewModel;
+            return projectedModel;
         }
     }
 }

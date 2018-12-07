@@ -143,21 +143,22 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public override async Task<TGetModel> OnHandle(PatchRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
             // find target model
-            var model = await FindModelAsync<TEntity>(message.User, message.Id);
+            var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
 
             // update from request
-            var updatedModel = BuildUpdatedDomainModel(message, model);
+            var updatedModel = BuildUpdatedDomainModel(message, targetModel);
 
             // validate all references are owned
             await ValidateReferences<TEntity>(updatedModel, message.User);
 
             await DependencyManager.PersistChangesAsync(updatedModel, cancellationToken);
 
-            var expandedModel = await DbContext.Set<TEntity>()
-                 .ProjectTo<TGetModel>(Mapper.ConfigurationProvider)
-                 .SingleOrDefaultAsync(m => m.Id == message.Id);
+            // fully populate return model
+            IQueryable<TEntity> model = DbContext.Set<TEntity>()
+                                            .Where(m => (m.Id == message.Id));
+            var projectedModel = model.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).Single();
 
-            return expandedModel;
+            return projectedModel;
         }
     }
 }

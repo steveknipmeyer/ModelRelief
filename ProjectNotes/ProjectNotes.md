@@ -1,23 +1,12 @@
 ﻿### Tasks
 #### Commit Notes
-Add NormalMapSpace to UI.
-Add Mesh.NormalMap property to Mesh Razor pages.
 #### Lambda
 Install NET Core 2.2
 
 #### Vector
 
 Issues
-
-    How is a Mesh (ComposerView) connected to a NormalMap?
-        Should a Mesh hold a reference to a NormalMap?
-    Mesh
-        DepthBuffer
-            Camera
-            Model
-        NormalMap
-            Camera
-            Model
+    Verify PostMan PostFile tests.
 
     ComposerController
         activeDepthBufferCamera -> activeMeshReliefCamera

@@ -65,6 +65,12 @@ namespace Microsoft.AspNetCore.Builder
             var provider = new FileExtensionContentTypeProvider();
             provider.Mappings[".obj"] = "text/plain";
             provider.Mappings[".mtl"] = "text/plain";
+
+            // Base64 Encoded
+            provider.Mappings[".sdb"]  = "text/plain";
+            provider.Mappings[".sfp"]  = "text/plain";
+            provider.Mappings[".nmap"] = "text/plain";
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 ContentTypeProvider = provider,
