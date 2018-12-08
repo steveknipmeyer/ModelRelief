@@ -1,5 +1,7 @@
 ﻿### Tasks
 #### Commit Notes
+
+
 #### Lambda
 Install NET Core 2.2
 Add Postman variables.
@@ -20,11 +22,6 @@ Issues
     Design the NormalMapFactory.
 
     What integration tests are appropriate?
-
-    [14:42:58 ERR] DependencyManager.FindDependentModels: error looking up foreign key: Class = ModelRelief.Domain.Mesh, Id = 1
-        This is probably due to the fact that a Mesh does not have a reference to a NormalMap.
-        A NormalMap is marked as having a dependency on the Mesh class.
-            [DependentFiles(typeof(Mesh))]
 
     Share common methods between DepthBuffers and NormalMaps:
         getModelVertexIndices

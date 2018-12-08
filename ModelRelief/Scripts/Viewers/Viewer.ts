@@ -109,6 +109,7 @@ export class Viewer {
      * @description Sets the camera.
      */
     set camera(camera: IThreeBaseCamera) {
+        CameraHelper.debugCameraProperties(camera, this.modelGroup, `${this.name} Before`);
 
         // Update the orthographic frustum if necessary. A persisted camera may have been defined against a different view.
         if (camera instanceof THREE.OrthographicCamera) {
@@ -122,6 +123,7 @@ export class Viewer {
 
         this._camera = camera;
         this.camera.name = this.name;
+        CameraHelper.debugCameraProperties(this.camera, this.modelGroup, `${this.name} After`);
 
         this.initializeInputControls();
 

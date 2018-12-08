@@ -360,8 +360,6 @@ export class ComposerController {
 
         // ModelViewer camera = DepthBuffer camera (used to generate active mesh)
         this.initializeModelViewerCamera();
-
-        // model available; start render loop
         this.modelViewer.animate();
 
         this.initializeUIControls();
@@ -449,7 +447,7 @@ export class ComposerController {
      */
     private initializeModelViewerCamera() {
 
-        // model camera = depth buffer camera (default clipping planes)
+        // model camera = relief camera (default clipping planes)
         const modelViewCamera = this.activeMeshReliefCamera.viewCamera.clone();
 
         // WIP: Set far plane based on model extents to avoid clipping
@@ -457,12 +455,8 @@ export class ComposerController {
 
         modelViewCamera.near = DefaultCameraSettings.NearClippingPlane;
         modelViewCamera.far  = DefaultCameraSettings.FarClippingPlane;
-
         modelViewCamera.updateProjectionMatrix();
 
-        // CameraHelper.debugCameraProperties(modelViewCamera, this.modelViewer.modelGroup, "Before");
         this.modelViewer.camera = modelViewCamera;
-        // CameraHelper.debugCameraProperties(this.modelViewer.camera, this.modelViewer.modelGroup, "After");
     }
-
 }
