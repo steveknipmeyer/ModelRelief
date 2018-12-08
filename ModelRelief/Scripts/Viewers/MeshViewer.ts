@@ -19,7 +19,8 @@ import * as THREE from "three";
  * @extends {Viewer}
  */
 export class MeshViewer extends Viewer {
-
+    
+    // Public
     public mesh: Mesh;                                        // active Mesh
 
     /**

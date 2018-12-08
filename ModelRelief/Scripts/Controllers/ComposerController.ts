@@ -91,8 +91,6 @@ export class ComposerController {
     public _reliefWidthPixels: number;                              // relief width
     public _reliefHeightPixels: number;                             // relief height
 
-    public _initialMeshGeneration: boolean = true;
-
     /**
      * Creates an instance of ComposerController.
      * @param {ComposerView} composerView Composer view.
@@ -213,10 +211,6 @@ export class ComposerController {
         const meshGraphics = await loader.loadMeshAsync(this.activeMesh);
 
         this.meshViewer.setModelGroup(meshGraphics);
-        if (this._initialMeshGeneration) {
-            this.meshViewer.fitView();
-            this._initialMeshGeneration = false;
-        }
     }
 
     /**
