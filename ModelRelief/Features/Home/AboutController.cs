@@ -40,6 +40,7 @@ namespace ModelRelief.Features.Home
         }
 
         [Route("special/{id?}")]
+        [HttpGet]
         public IActionResult Phone()
         {
             return Content("571 730 7138");

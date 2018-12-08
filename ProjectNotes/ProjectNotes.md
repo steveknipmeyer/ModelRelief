@@ -2,6 +2,7 @@
 #### Commit Notes
 #### Lambda
 Install NET Core 2.2
+Add Postman variables.
 
 #### Vector
 
@@ -1696,3 +1697,8 @@ np_fill, relief_fill
     qdarkstyle introduced several issues in a recent update.
         There is clipping in the labels.
         The font size of the image tabs is small.
+
+#### Swagger
+    API authentication must include  the type "Bearer":
+
+        Bearer <JWT>

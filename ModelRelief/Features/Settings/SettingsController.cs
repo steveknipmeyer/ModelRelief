@@ -43,6 +43,7 @@ namespace ModelRelief.Features.Home
         /// <param name="settingsType">JSON settings file type (e.g. camera).</param>
         /// <returns>JSON settings file.</returns>
         [Route("settings/{settingsType}")]
+        [HttpGet]
         public ContentResult GetFile([FromRoute]string settingsType)
         {
             var settingsManager = new SettingsManager(HostingEnvironment, ConfigurationProvider);

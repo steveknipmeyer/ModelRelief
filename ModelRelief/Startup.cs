@@ -9,6 +9,7 @@ namespace ModelRelief
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
     using Autofac.Features.Variance;
@@ -25,6 +26,7 @@ namespace ModelRelief
     using ModelRelief.Services;
 
     using ModelRelief.Workbench;
+    using Swashbuckle.AspNetCore.Swagger;
 
     public class Startup
     {
@@ -117,6 +119,25 @@ namespace ModelRelief
             services.AddModelReliefServices();
             services.AddDatabaseServices(env);
             services.AddAutoMapper(typeof(Startup));
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Title = "ModelRelief API",
+                    Version = "v1",
+                    Description = "Low relief generation from 3D models",
+                    Contact = new Contact
+                    {
+                        Name = "Steve Knipmeyer",
+                        Email = string.Empty,
+                    },
+                });
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme { In = "header", Description = "Please enter JWT with Bearer into field", Name = "Authorization", Type = "apiKey" });
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+                {
+                    { "Bearer", Enumerable.Empty<string>() },
+                });
+            });
 
             var serviceProvider = ConfigureAutofacServices(services);
             IMapper mapper = serviceProvider.GetRequiredService<IMapper>();
@@ -155,6 +176,14 @@ namespace ModelRelief
             app.AddStaticFilePaths(env.ContentRootPath, new string[] { "Scripts" });
             app.UseCookiePolicy();
             app.UseAuthentication();
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ModelRelief API V1");
+            });
+
             app.UseMvc(ConfigureRoutes);
         }
 
