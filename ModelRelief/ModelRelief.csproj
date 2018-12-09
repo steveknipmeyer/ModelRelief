@@ -11,7 +11,7 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors></WarningsAsErrors>
-    <DocumentationFile>bin\Debug\netcoreapp2.1\ModelRelief.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netcoreapp2.2\ModelRelief.xml</DocumentationFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>

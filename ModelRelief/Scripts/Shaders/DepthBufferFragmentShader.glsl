@@ -75,7 +75,6 @@ const vec3 noColor = vec3(0.0, 0.0, 0.0);
         return vec4(byte4, byte3, byte2, byte1);
     }
 
-
 /// <summary>
 ///  Main entry point
 /// </summary>

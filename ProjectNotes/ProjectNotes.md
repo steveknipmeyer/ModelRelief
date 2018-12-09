@@ -1,7 +1,5 @@
 ﻿### Tasks
 #### Commit Notes
-
-
 #### Lambda
 Install NET Core 2.2
 Add Postman variables.
@@ -9,7 +7,8 @@ Add Postman variables.
 #### Vector
 
 Issues
-    Can DepthBufferFactory and NormalMapFactory share a base class (e.g. ImageFactory)?
+    Questions
+        Add initializeMaterial to define 3D model shader.
 
     Review Mesh, DepthBuffer and NormalMap properties:
         Width
@@ -19,9 +18,7 @@ Issues
         Mesh.DepthBuffer.Camera is used.
         Mesh.NormalMap.Camera is equivalent.
 
-    Design the NormalMapFactory.
-
-    What integration tests are appropriate?
+    What NormalMap integration tests are appropriate?
 
     Share common methods between DepthBuffers and NormalMaps:
         getModelVertexIndices

@@ -123,6 +123,9 @@ button {
 .DepthBufferFactory {
     background-color: #000000;
 }
+.ImageFactory {
+    background-color: #000000;
+}
 
 /* ----------------------
     HTML Logger
