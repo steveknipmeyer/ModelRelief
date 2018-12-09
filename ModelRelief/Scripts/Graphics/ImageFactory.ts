@@ -41,7 +41,7 @@ export interface IImageFactoryParameters {
  */
 export class ImageFactory {
 
-    // Protected        
+    // Protected
     protected static CssClassName: string              = "ImageFactory";           // CSS class
     protected static RootContainerId: string           = "rootContainer";          // root container for viewers
 
@@ -116,17 +116,17 @@ export class ImageFactory {
 
 //#region Initialization
      /**
-      * Verifies the WebGL extensions are present. 
+      * Verifies the WebGL extensions are present.
       */
     protected verifyWebGLExtensions(): boolean {
 
-        for (const extension in this._minimumWebGLExtensions) {
+        for (const extension of this._minimumWebGLExtensions) {
             if (!this._renderer.extensions.get(extension)) {
                 this._minimumWebGL = false;
                 this._logger.addErrorMessage(`The minimum WebGL extension ${extension} is not supported in the browser.`);
                 return false;
             }
-        }        
+        }
         return true;
     }
 
@@ -150,10 +150,9 @@ export class ImageFactory {
     }
 
     /**
-    * Initialize the shader material used in the primary 3D model scene.
+     * Initialize the shader material used in the primary 3D model scene.
      */
     protected initializeMaterial(): THREE.Material {
-
         return null;
     }
 
@@ -183,7 +182,7 @@ export class ImageFactory {
         this._target = this.constructRenderTarget();
 
         // 2D plane scene
-        this._postTarget = this.constructPostRenderTarget()
+        this._postTarget = this.constructPostRenderTarget();
 
         this.verifyWebGLExtensions();
     }
@@ -217,9 +216,6 @@ export class ImageFactory {
     protected initialize(): void {
 
         this._logger = Services.defaultLogger;
-
-        this.initializePrimary();
-        this.initializePost();
     }
 
     /**
@@ -248,17 +244,15 @@ export class ImageFactory {
      */
     protected constructPostRenderTarget(): THREE.WebGLRenderTarget {
 
-        var postTarget = new THREE.WebGLRenderTarget(this._width, this._height);
+        const postTarget = new THREE.WebGLRenderTarget(this._width, this._height);
         return postTarget;
     }
 
     /**
-    * Initialize the shader material used in the post scene.
+     * Initialize the shader material used in the post scene.
      */
     protected initializePostMaterial(): THREE.Material {
-
-        const postMaterial = new THREE.MeshPhongMaterial()
-        return postMaterial;
+        return  null;
     }
 
     /**
@@ -342,27 +336,53 @@ export class ImageFactory {
     }
 
 //#endregion
+    /**
+     * @description Renders the 3D model.
+     * @private
+     */
+    protected renderPrimary(): void {
+
+        this.initializePrimary();
+
+        // override all materials with image shader material
+        const material = this.initializeMaterial();
+        if (material)
+            this._scene.overrideMaterial = material;
+
+        this._renderer.render(this._scene, this._camera.viewCamera, this._target);
+
+        // restore default materials
+        this._scene.overrideMaterial = null;
+    }
 
     /**
-     * Create an image buffer.
+     * @description Renders the 2D post plane to create the final image.
+     * @private
      */
-    protected createImageBuffer(): Uint8Array {
+    protected renderPost(): void {
 
-        const timerTag = Services.timer.mark("ImageBufferFactory.createImageBufferAsync");
-
-        var material = this.initializeMaterial();
-        if (material) 
-            this._scene.overrideMaterial = material;
-        this._renderer.render(this._scene, this._camera.viewCamera, this._target);
-        this._scene.overrideMaterial = null;
+        this.initializePost();
 
         // (optional) preview image
         this._renderer.render(this._postScene, this._postCamera);
 
         // generate final image into render target
         this._renderer.render(this._postScene, this._postCamera, this._postTarget);
+    }
 
-        // read image buffer
+    /**
+     * @description Create an image buffer.
+     * @protected
+     * @returns {Uint8Array}
+     */
+    protected createImageBuffer(): Uint8Array {
+
+        const timerTag = Services.timer.mark("ImageBufferFactory.createImageBufferAsync");
+
+        this.renderPrimary();
+        this.renderPost();
+
+        // read render buffer to create image array
         const imageBuffer = new Uint8Array(this._width * this._height * 4).fill(0);
         this._renderer.readRenderTargetPixels(this._postTarget, 0, 0, this._width, this._height, imageBuffer);
 

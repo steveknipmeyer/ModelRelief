@@ -44,7 +44,7 @@ export class Materials {
      * @param {THREE.Texture} designTexture Bump map texture.
      * @returns {THREE.MeshPhongMaterial} Phong bump mapped material.
      */
-    public static createMeshPhongMaterial(designTexture: THREE.Texture): THREE.MeshPhongMaterial {
+    public static createMeshPhongBumpMaterial(designTexture: THREE.Texture): THREE.MeshPhongMaterial {
 
         let material: THREE.MeshPhongMaterial;
 

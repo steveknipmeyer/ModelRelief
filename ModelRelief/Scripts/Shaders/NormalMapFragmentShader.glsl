@@ -22,8 +22,6 @@
 uniform mat4 viewMatrix;
 uniform vec3 cameraPosition;
 #endif
-uniform float       cameraNear;         // near clipping plane
-uniform float       cameraFar;          // far clipping plane
 
 varying vec2 vUV;                       // UV coordinates of vertex
 varying vec3 vNormal;                   // vertex normal
@@ -44,8 +42,4 @@ void main() {
     float greenComponent = (normal.y + 1.0) / 2.0;
     float blueComponent  = normal.z;
     gl_FragColor = vec4(redComponent, greenComponent, blueComponent, 1.0);
-
-    // experimental
-    float z = (vDepth - cameraNear) / (cameraFar - cameraNear);
-//  gl_FragDepthEXT = z;
 }

@@ -26,50 +26,6 @@ import {Project} from "Scripts/Models/Project/Project";
 export class NormalMap extends GeneratedFileModel {
 
     /**
-     * @description Returns the raw floats of the normal map.
-     * @type {Float32Array}
-     */
-    get elements(): Float32Array {
-
-        return this._elements;
-    }
-    /**
-     * @description Sets the raw floats of the normal map.
-     */
-    set elements(value: Float32Array) {
-
-        this._elements = value;
-    }
-
-    /**
-     * @description Returns the associated camera.
-     * @readonly
-     * @type {Camera}
-     */
-    get camera(): BaseCamera {
-
-        return this._camera;
-    }
-
-    /**
-     * @description Sets the associated camera.
-     */
-    set camera(value: BaseCamera) {
-
-        this._camera = value;
-    }
-
-    /**
-     * @description Returns the aspect ratio of the normal map.
-     * @readonly
-     * @type {number}
-     */
-    get aspectRatio(): number {
-
-        return this.width / this.height;
-    }
-
-    /**
      * @description Returns a NormalMap instance through an HTTP query of the Id.
      * @static
      * @param {number} id NormalMap Id.
@@ -124,7 +80,7 @@ export class NormalMap extends GeneratedFileModel {
     public _camera: BaseCamera;
 
     // Private
-    private _elements: Float32Array;
+    private _rgbArray: Uint8Array;
 
     /**
      * Creates an instance of NormalMap.
@@ -139,6 +95,52 @@ export class NormalMap extends GeneratedFileModel {
 
         this.initialize();
     }
+
+//#region Properties
+    /**
+     * @description Returns the raw RGBA values of the normal map.
+     * @type {Float32Array}
+     */
+    get rgbArray(): Uint8Array {
+
+        return this._rgbArray;
+    }
+    /**
+     * @description Sets the raw RGBA values of the normal map.
+     */
+    set rgbArray(value: Uint8Array) {
+
+        this._rgbArray = value;
+    }
+
+    /**
+     * @description Returns the associated camera.
+     * @readonly
+     * @type {Camera}
+     */
+    get camera(): BaseCamera {
+
+        return this._camera;
+    }
+
+    /**
+     * @description Sets the associated camera.
+     */
+    set camera(value: BaseCamera) {
+
+        this._camera = value;
+    }
+
+    /**
+     * @description Returns the aspect ratio of the normal map.
+     * @readonly
+     * @type {number}
+     */
+    get aspectRatio(): number {
+
+        return this.width / this.height;
+    }
+//#endregion
 
     /**
      * @description Perform setup and initialization.

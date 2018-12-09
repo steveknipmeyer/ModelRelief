@@ -7,8 +7,13 @@ Add Postman variables.
 #### Vector
 
 Issues
-    Questions
-        Add initializeMaterial to define 3D model shader.
+    TypeScript builds only when ModelRelief builds.
+
+    NormalMapFactory
+        The NormalMap is undefined in empty regions.
+        [.WebGL-000001BA8E418630]GL ERROR :GL_INVALID_OPERATION : glDrawArrays: attempt to access out of range vertices in attribute 2
+            Do shaders need to be disposed or de-allocated?
+            The issue happens only during the second pass.
 
     Review Mesh, DepthBuffer and NormalMap properties:
         Width

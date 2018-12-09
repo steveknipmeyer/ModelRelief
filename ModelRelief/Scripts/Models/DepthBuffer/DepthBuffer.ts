@@ -26,6 +26,79 @@ import {Project} from "Scripts/Models/Project/Project";
 export class DepthBuffer extends GeneratedFileModel {
 
     /**
+     * @description Returns a DepthBuffer instance through an HTTP query of the Id.
+     * @static
+     * @param {number} id DepthBuffer Id.
+     * @returns {Promise<DepthBuffer>}
+     */
+    public static async fromIdAsync(id: number ): Promise<DepthBuffer> {
+
+        if (!id)
+            return undefined;
+
+        const depthBuffer = new Dto.DepthBuffer ({
+            id,
+        });
+        const depthBufferModel = await depthBuffer.getAsync();
+        return DepthBuffer.fromDtoModelAsync(depthBufferModel);
+    }
+
+    /**
+     * @description Constructs an instance from a DTO model.
+     * @returns {DepthBuffer}
+     */
+    public static async fromDtoModelAsync(dtoDepthBuffer: Dto.DepthBuffer): Promise<DepthBuffer> {
+
+        // constructor
+        const depthBuffer = new DepthBuffer({
+            id          : dtoDepthBuffer.id,
+            name        : dtoDepthBuffer.name,
+            description : dtoDepthBuffer.description,
+        });
+
+        depthBuffer.fileTimeStamp      = dtoDepthBuffer.fileTimeStamp;
+        depthBuffer.fileIsSynchronized = dtoDepthBuffer.fileIsSynchronized;
+
+        depthBuffer.width  = dtoDepthBuffer.width;
+        depthBuffer.height = dtoDepthBuffer.height;
+        depthBuffer.format = dtoDepthBuffer.format;
+
+        depthBuffer.project = await Project.fromIdAsync(dtoDepthBuffer.projectId);
+        depthBuffer.model3d = await Model3d.fromIdAsync(dtoDepthBuffer.model3dId);
+        depthBuffer.camera  = await CameraFactory.constructFromIdAsync(dtoDepthBuffer.cameraId);
+
+        return depthBuffer;
+    }
+
+    public width: number;
+    public height: number;
+    public format: DepthBufferFormat;
+
+    // Navigation Properties
+    public project: Project;
+    public model3d: Model3d;
+    public _camera: BaseCamera;
+
+    // Private
+    private _rgbaArray: Uint8Array;
+    private _depths: Float32Array;
+
+    /**
+     * Creates an instance of DepthBuffer.
+     * @param {IGeneratedFileModel} [parameters={}] GeneratedFileModel properties.
+     */
+    constructor(parameters: IGeneratedFileModel = {}) {
+
+        parameters.name        = parameters.name        || "DepthBuffer";
+        parameters.description = parameters.description || "DepthBuffer";
+
+        super(parameters);
+
+        this.initialize();
+    }
+
+//#region Properties
+    /**
      * @description Returns the raw RGB array of the buffer.
      * @type {Uint8Array}
      */
@@ -171,78 +244,7 @@ export class DepthBuffer extends GeneratedFileModel {
 
         return depth;
     }
-
-    /**
-     * @description Returns a DepthBuffer instance through an HTTP query of the Id.
-     * @static
-     * @param {number} id DepthBuffer Id.
-     * @returns {Promise<DepthBuffer>}
-     */
-    public static async fromIdAsync(id: number ): Promise<DepthBuffer> {
-
-        if (!id)
-            return undefined;
-
-        const depthBuffer = new Dto.DepthBuffer ({
-            id,
-        });
-        const depthBufferModel = await depthBuffer.getAsync();
-        return DepthBuffer.fromDtoModelAsync(depthBufferModel);
-    }
-
-    /**
-     * @description Constructs an instance from a DTO model.
-     * @returns {DepthBuffer}
-     */
-    public static async fromDtoModelAsync(dtoDepthBuffer: Dto.DepthBuffer): Promise<DepthBuffer> {
-
-        // constructor
-        const depthBuffer = new DepthBuffer({
-            id          : dtoDepthBuffer.id,
-            name        : dtoDepthBuffer.name,
-            description : dtoDepthBuffer.description,
-        });
-
-        depthBuffer.fileTimeStamp      = dtoDepthBuffer.fileTimeStamp;
-        depthBuffer.fileIsSynchronized = dtoDepthBuffer.fileIsSynchronized;
-
-        depthBuffer.width  = dtoDepthBuffer.width;
-        depthBuffer.height = dtoDepthBuffer.height;
-        depthBuffer.format = dtoDepthBuffer.format;
-
-        depthBuffer.project = await Project.fromIdAsync(dtoDepthBuffer.projectId);
-        depthBuffer.model3d = await Model3d.fromIdAsync(dtoDepthBuffer.model3dId);
-        depthBuffer.camera  = await CameraFactory.constructFromIdAsync(dtoDepthBuffer.cameraId);
-
-        return depthBuffer;
-    }
-
-    public width: number;
-    public height: number;
-    public format: DepthBufferFormat;
-
-    // Navigation Properties
-    public project: Project;
-    public model3d: Model3d;
-    public _camera: BaseCamera;
-
-    // Private
-    private _rgbaArray: Uint8Array;
-    private _depths: Float32Array;
-
-    /**
-     * Creates an instance of DepthBuffer.
-     * @param {IGeneratedFileModel} [parameters={}] GeneratedFileModel properties.
-     */
-    constructor(parameters: IGeneratedFileModel = {}) {
-
-        parameters.name        = parameters.name        || "DepthBuffer";
-        parameters.description = parameters.description || "DepthBuffer";
-
-        super(parameters);
-
-        this.initialize();
-    }
+//#endregion
 
     /**
      * @description Perform setup and initialization.
