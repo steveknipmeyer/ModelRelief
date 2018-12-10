@@ -1,13 +1,17 @@
 ﻿### Tasks
 #### Commit Notes
 #### Lambda
-Install NET Core 2.2
-Add Postman variables.
 
 #### Vector
 
 Issues
+
     TypeScript builds only when ModelRelief builds.
+    Investigate webgl-debug library.
+    RenderDoc?
+        "c:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-gpu-watchdog --gpu-startup-dialog --allow-no-sandbox-job --allow-sandbox-debugging --no-sandbox --disable-gpu-sandbox
+
+    Are WebGL programs ever unloaded
 
     NormalMapFactory
         The NormalMap is undefined in empty regions.
