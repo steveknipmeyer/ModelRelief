@@ -11,13 +11,15 @@ Issues
     RenderDoc?
         "c:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-gpu-watchdog --gpu-startup-dialog --allow-no-sandbox-job --allow-sandbox-debugging --no-sandbox --disable-gpu-sandbox
 
-    Are WebGL programs ever unloaded
+    Are WebGL programs ever unloaded?
 
     NormalMapFactory
         The NormalMap is undefined in empty regions.
-        [.WebGL-000001BA8E418630]GL ERROR :GL_INVALID_OPERATION : glDrawArrays: attempt to access out of range vertices in attribute 2
+        Chrome: [.WebGL-000001BA8E418630]GL ERROR :GL_INVALID_OPERATION : glDrawArrays: attempt to access out of range vertices in attribute 2
+        Firfox: Error: WebGL warning: drawArrays: Vertex fetch requires 1037832, but attribs only supply 6.
             Do shaders need to be disposed or de-allocated?
             The issue happens only during the second pass.
+                map: this._target.texture,
 
     Review Mesh, DepthBuffer and NormalMap properties:
         Width

@@ -114,6 +114,7 @@ export class DepthBufferFactory extends ImageFactory {
                 tDepth      :   { value: this._target.depthTexture },
             },
         });
+        postMaterial.type = "DepthBufferShader";
         return postMaterial;
     }
 //#endregion

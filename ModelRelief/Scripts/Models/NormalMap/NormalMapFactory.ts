@@ -83,7 +83,7 @@ export class NormalMapFactory extends ImageFactory {
             vertexShader:   MR.shaderSource.NormalMapVertexShader,
             fragmentShader: MR.shaderSource.NormalMapFragmentShader,
         });
-
+        material.type = "NormalMapShader";
         return material;
     }
 //#endregion

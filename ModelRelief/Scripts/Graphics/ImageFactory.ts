@@ -386,6 +386,10 @@ export class ImageFactory {
         const imageBuffer = new Uint8Array(this._width * this._height * 4).fill(0);
         this._renderer.readRenderTargetPixels(this._postTarget, 0, 0, this._width, this._height, imageBuffer);
 
+        this._renderer.dispose();
+        this._target.dispose();
+        this._postTarget.dispose();
+
         Services.timer.logElapsedTime(timerTag);
 
         return imageBuffer;
