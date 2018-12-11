@@ -19,7 +19,7 @@ import * as THREE from "three";
  * @extends {Viewer}
  */
 export class MeshViewer extends Viewer {
-    
+
     // Public
     public mesh: Mesh;                                        // active Mesh
 
@@ -50,7 +50,7 @@ export class MeshViewer extends Viewer {
         const mesh = Graphics.createPlaneMesh(new THREE.Vector3(), height, width, new THREE.MeshPhongMaterial(Mesh3d.DefaultMeshPhongMaterialParameters));
         mesh.rotateX(-Math.PI / 2);
 
-        this._root.add(mesh);
+        this.root.add(mesh);
     }
 
     /**

@@ -8,9 +8,10 @@
 import * as Dto from "Scripts/Api/V1//Models/DtoModels";
 import * as THREE from "three";
 
-import { ImageFactorySettings } from "Scripts/Graphics/ImageFactorySettings";
+import {Graphics, ObjectNames} from "Scripts/Graphics/Graphics";
+import {ImageFactorySettings} from "Scripts/Graphics/ImageFactorySettings";
+import {TestModel, TestModelLoader} from "Scripts/ModelLoaders/TestModelLoader";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
-import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {ILogger} from "Scripts/System/Logger";
 import {Services} from "Scripts/System/Services";
 import {Tools} from "Scripts/System/Tools";
@@ -47,6 +48,7 @@ export class ImageFactory {
 
     // protected
     protected _scene: THREE.Scene                      = null;     // target scene
+    protected _root: THREE.Group                       = null;     // root object
     protected _modelGroup: THREE.Group                 = null;     // target model
 
     protected _renderer: THREE.WebGLRenderer           = null;     // scene renderer
@@ -62,8 +64,8 @@ export class ImageFactory {
     protected _postTarget: THREE.WebGLRenderTarget     = null;     // WebGL render target (2D)
 
     protected _postScene: THREE.Scene                  = null;     // single polygon scene use to generate the encoded RGBA buffer
+    protected _postRoot: THREE.Group                   = null;     // root object
     protected _postCamera: THREE.OrthographicCamera    = null;     // orthographic camera
-    protected _postMaterial: THREE.ShaderMaterial      = null;     // shader material for 2D scene
 
     protected _minimumWebGL: boolean                   = true;     // true if minimum WeGL requirements are present
     protected _logger: ILogger                         = null;     // logger
@@ -94,7 +96,11 @@ export class ImageFactory {
         this._canvas          = canvas;
         this._width           = width;
         this._height          = height;
-        this._modelGroup      = modelGroup.clone(true);
+
+//      this._modelGroup      = modelGroup.clone(true);
+        const loader = new TestModelLoader();
+        this._modelGroup = loader.loadTestModel(TestModel.Sphere);
+
         this._camera          = camera;
 
         // optional
@@ -111,6 +117,20 @@ export class ImageFactory {
      */
     get canvas(): HTMLElement {
         return this._canvas;
+    }
+
+    /**
+     * @description Removes all scene objects
+     */
+    public clearAllAssests() {
+
+        Graphics.removeObjectChildren(this._root, false);
+        Graphics.removeObjectChildren(this._postRoot, false);
+
+        //this._renderer.context.getExtension("WEBGL_lose_context").loseContext();
+        this._renderer.dispose();
+        this._target.dispose();
+        this._postTarget.dispose();
     }
 //#endregion
 
@@ -161,9 +181,12 @@ export class ImageFactory {
      */
     protected initializeScene(): void {
 
+        this._root  = new THREE.Group();
+        this._root.name = ObjectNames.ImageFactoryModelGroup;
+        this._root.add(this._modelGroup);
+
         this._scene = new THREE.Scene();
-        if (this._modelGroup)
-            this._scene.add(this._modelGroup);
+        this._scene.add(this._root);
 
         this.initializeLighting(this._scene);
     }
@@ -260,12 +283,17 @@ export class ImageFactory {
      */
     protected initializePostScene(): void {
 
+        this._postRoot  = new THREE.Group();
+        this._postRoot.name = ObjectNames.ImageFactoryModelGroup;
+
         const postMaterial = this.initializePostMaterial();
         const postMeshPlane = new THREE.PlaneGeometry(2, 2);
         const postMeshQuad  = new THREE.Mesh(postMeshPlane, postMaterial);
+        postMeshQuad.name   = ObjectNames.ImagePlane;
+        this._postRoot.add(postMeshQuad);
 
         this._postScene = new THREE.Scene();
-        this._postScene.add(postMeshQuad);
+        this._postScene.add(this._postRoot);
 
         this.initializePostCamera();
         this.initializeLighting(this._postScene);
@@ -386,9 +414,7 @@ export class ImageFactory {
         const imageBuffer = new Uint8Array(this._width * this._height * 4).fill(0);
         this._renderer.readRenderTargetPixels(this._postTarget, 0, 0, this._width, this._height, imageBuffer);
 
-        this._renderer.dispose();
-        this._target.dispose();
-        this._postTarget.dispose();
+        this.clearAllAssests();
 
         Services.timer.logElapsedTime(timerTag);
 

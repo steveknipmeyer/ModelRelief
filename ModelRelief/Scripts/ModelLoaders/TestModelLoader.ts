@@ -7,7 +7,7 @@
 
 import * as THREE from "three";
 
-import {Graphics} from "Scripts/Graphics/Graphics";
+import {Graphics, ObjectNames} from "Scripts/Graphics/Graphics";
 
 const testModelColor = "#558de8";
 
@@ -77,6 +77,7 @@ export class TestModelLoader {
     private loadTorusModel(): THREE.Group {
 
         const modelGroup = new THREE.Group();
+        modelGroup.name = ObjectNames.ModelGroup;
 
         // Setup some geometries
         const geometry = new THREE.TorusKnotGeometry(1, 0.3, 128, 64);
@@ -114,6 +115,7 @@ export class TestModelLoader {
         const mesh = Graphics.createSphereMesh(new THREE.Vector3(), radius, new THREE.MeshPhongMaterial({ color: testModelColor }));
 
         const modelGroup = new THREE.Group();
+        modelGroup.name = ObjectNames.ModelGroup;
         modelGroup.add(mesh);
 
         return modelGroup;
@@ -130,6 +132,7 @@ export class TestModelLoader {
         const mesh = Graphics.createBoxMesh(new THREE.Vector3(), width, height, depth, new THREE.MeshPhongMaterial({ color: testModelColor }));
 
         const modelGroup = new THREE.Group();
+        modelGroup.name = ObjectNames.ModelGroup;
         modelGroup.add(mesh);
 
         return modelGroup;
@@ -148,6 +151,7 @@ export class TestModelLoader {
         mesh.name = "SlopedPlane";
 
         const modelGroup = new THREE.Group();
+        modelGroup.name = ObjectNames.ModelGroup;
         modelGroup.add(mesh);
 
         return modelGroup;
@@ -175,6 +179,7 @@ export class TestModelLoader {
         const colorDelta: number = (256 / totalCells) * Math.pow(256, 2);
 
         const modelGroup: THREE.Group = new THREE.Group();
+        modelGroup.name = ObjectNames.ModelGroup;
         const cellOrigin: THREE.Vector3 = origin.clone();
         let cellColor: number = baseColor;
         for (let iRow: number = 0; iRow < gridDivisions; iRow++) {

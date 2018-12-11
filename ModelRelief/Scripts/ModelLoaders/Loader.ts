@@ -9,6 +9,7 @@ import * as THREE from "three";
 import {MeshFormat} from "Scripts/Api/V1/Interfaces/IMesh";
 import {Model3dFormat} from "Scripts/Api/V1/Interfaces/IModel3d";
 import {FileModel} from "Scripts/Api/V1/Models/FileModel";
+import {ObjectNames} from "Scripts/Graphics/Graphics";
 import {IMeshGenerateParameters} from "Scripts/Graphics/Mesh3d";
 import {OBJLoader} from "Scripts/ModelLoaders/OBJLoader";
 import {SinglePrecisionLoader} from "Scripts/ModelLoaders/SinglePrecisionLoader";
@@ -64,6 +65,7 @@ export class Loader {
     public async loadModel3dAsync(model: Model3d): Promise<THREE.Group> {
 
         let modelGroup: THREE.Group = new THREE.Group();
+        modelGroup.name = ObjectNames.ModelGroup;
         switch (model.format) {
 
             case Model3dFormat.OBJ:
@@ -84,7 +86,8 @@ export class Loader {
      */
     public async loadMeshAsync(mesh: Mesh): Promise<THREE.Group> {
 
-        let modelGroup: THREE.Group = new THREE.Group();
+        let meshGroup: THREE.Group = new THREE.Group();
+        meshGroup.name = ObjectNames.MeshGroup;
 
         const byteArray: Uint8Array = await mesh.toDtoModel().getFileAsync();
         const floatArray = new Float32Array(byteArray.buffer);
@@ -117,13 +120,13 @@ export class Loader {
             case MeshFormat.DFP:
             default:
                 this._logger.addErrorMessage(`Logger: invalid Mesh type = ${mesh.format}`);
-                return modelGroup;
+                return meshGroup;
         }
 
         const loader = new SinglePrecisionLoader(meshParameters, floatArray, transformer, bufferExtents, meshExtents);
-        modelGroup = await loader.loadModelAsync();
+        meshGroup = await loader.loadModelAsync();
 
-        return modelGroup;
+        return meshGroup;
     }
 
     // region Model3d

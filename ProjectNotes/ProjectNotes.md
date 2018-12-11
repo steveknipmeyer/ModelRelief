@@ -1,12 +1,17 @@
 ﻿### Tasks
 #### Commit Notes
+
 #### Lambda
 
 #### Vector
 
 Issues
 
-    TypeScript builds only when ModelRelief builds.
+    Resources
+        https://stackoverflow.com/questions/51753768/webgl-force-canvas-to-lose-context
+        Lastly, forcing a context loss on the webgl context and getting rid of the renderer afterward will ensure you’ll be freeing up GPU resources,
+        and allowing you to initialize another renderer afterward without resource usage being stacked up.
+
     Investigate webgl-debug library.
     RenderDoc?
         "c:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-gpu-watchdog --gpu-startup-dialog --allow-no-sandbox-job --allow-sandbox-debugging --no-sandbox --disable-gpu-sandbox
@@ -15,11 +20,11 @@ Issues
 
     NormalMapFactory
         The NormalMap is undefined in empty regions.
-        Chrome: [.WebGL-000001BA8E418630]GL ERROR :GL_INVALID_OPERATION : glDrawArrays: attempt to access out of range vertices in attribute 2
-        Firfox: Error: WebGL warning: drawArrays: Vertex fetch requires 1037832, but attribs only supply 6.
+        INVALID_OPERATION: drawArrays: no buffer is bound to enabled attribute
             Do shaders need to be disposed or de-allocated?
             The issue happens only during the second pass.
-                map: this._target.texture,
+                initializePostMaterial
+                    map: this._target.texture,
 
     Review Mesh, DepthBuffer and NormalMap properties:
         Width
@@ -1707,3 +1712,7 @@ np_fill, relief_fill
     API authentication must include  the type "Bearer":
 
         Bearer <JWT>
+
+#### ANSI Command Shell Sequences
+    [HKEY_CURRENT_USER\Console]
+    "VirtualTerminalLevel"=dword:00000001

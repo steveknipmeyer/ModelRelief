@@ -9,6 +9,7 @@ import * as THREE from "three";
 
 import {assert} from "chai";
 import {Graphics} from "Scripts/Graphics/Graphics";
+import {ObjectNames} from "Scripts/Graphics/Graphics";
 import {IFacePair, IMeshGenerateParameters, Mesh3d} from "Scripts/Graphics/Mesh3d";
 import {Services} from "Scripts/System/Services";
 
@@ -55,6 +56,8 @@ export class SinglePrecisionLoader {
         const mesh = this.constructGraphics();
 
         const meshGroup = new THREE.Group();
+        meshGroup.name = ObjectNames.MeshGroup;
+
         meshGroup.add(mesh);
         return meshGroup;
     }

@@ -9,6 +9,7 @@
 
 import * as THREE   from 'three'
 
+import {ObjectNames} from "Scripts/Graphics/Graphics";
 import {Services} from 'Scripts/System/Services';
 
 export function OBJLoader ( manager ) {
@@ -663,6 +664,8 @@ OBJLoader.prototype = {
         state.finalize();
 
         var container = new THREE.Group();
+        container.name = ObjectNames.OBJModelGroup;
+
         // ModelRelief
         //container.materialLibraries = [].concat( state.materialLibraries );
         (<any>container).materialLibraries = [].concat( state.materialLibraries );
@@ -719,7 +722,6 @@ OBJLoader.prototype = {
                         material = materialLine;
 
                     }
-
                 }
 
                 if ( ! material ) {

@@ -22,10 +22,10 @@
             "type": "shell",
             "command": "tsc --pretty -p ModelRelief",
             "windows": {
-                "command": "tsc -p ModelRelief "
+                "command": "tsc --pretty -p ModelRelief "
             },
             "linux": {
-                "command": "${workspaceFolder}/node_modules/typescript/bin/tsc -p ./ModelRelief "
+                "command": "${workspaceFolder}/node_modules/typescript/bin/tsc --pretty -p ./ModelRelief "
             },
             "group": "build",
             "presentation": {
@@ -124,11 +124,11 @@
             "problemMatcher": [
                 "$msCompile"
             ]
-        }, 
+        },
         {
             "label": "dotnet ProcessID",
             "type": "shell",
-            "command": "powershell -executionPolicy bypass -noexit -file Tools/DotNetPID.ps1",   
+            "command": "powershell -executionPolicy bypass -noexit -file Tools/DotNetPID.ps1",
             "group": "none",
             "presentation": {
                 "reveal": "always",

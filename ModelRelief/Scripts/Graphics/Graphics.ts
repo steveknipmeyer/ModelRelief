@@ -16,16 +16,22 @@ import {Services} from "Scripts/System/Services";
  */
 export enum ObjectNames {
 
-    Root                =  "Root",
+    Root                    =  "Root",
 
-    BoundingBox         = "Bounding Box",
-    Box                 = "Box",
-    CameraHelper        = "CameraHelper",
-    ControllerHelper    = "ControllerHelper",
-    ModelClone          = "Model Clone",
-    Plane               = "Plane",
-    Sphere              = "Sphere",
-    Triad               = "Triad",
+    BoundingBox             = "Bounding Box",
+    Box                     = "Box",
+    CameraHelper            = "CameraHelper",
+    ControllerHelper        = "ControllerHelper",
+    ImageFactoryModelGroup  = "ImageFactoryModelGroup",             // collection of THREE.Mesh in an ImageFactory
+    ImagePlane              = "ImagePlane",                         // ImageFactory
+    MeshGroup               = "MeshGroup",                          // single THREE.Mesh such as a constructed relief
+    ModelGroup              = "ModelGroup",                         // collection of THREE.Mesh
+    ModelViewGroup          = "ModelViewGroup",                     // CameraHelper
+    ModelClone              = "Model Clone",
+    OBJModelGroup           = "OBJModelGroup",                      // collection of THREE.Mesh from an OBJ model
+    Plane                   = "Plane",
+    Sphere                  = "Sphere",
+    Triad                   = "Triad",
 }
 
 /**
@@ -39,6 +45,7 @@ export class Graphics {
     /* --------------------------------------------------------------------------------------------------------------------------------------//
     //			Geometry
     // --------------------------------------------------------------------------------------------------------------------------------------*/
+    private static logger  = Services.defaultLogger;
 
     /**
      * @description Dispose of resources held by a graphical object.
@@ -46,29 +53,38 @@ export class Graphics {
      * @param {any} object3d Object to process.
      * https://stackoverflow.com/questions/18357529/threejs-remove-object-from-scene
      */
-    public static disposeResources(object3d): void {
+    private static disposeResources(object3d): void {
 
-        // logger.addInfoMessage ('Removing: ' + object3d.name);
-        if (object3d.hasOwnProperty("geometry")) {
-            object3d.geometry.dispose();
-        }
+        if (!object3d.isMesh)
+            return;
 
-        if (object3d.hasOwnProperty("material")) {
+        Graphics.logger.addInfoMessage ("Disposing Mesh: " + object3d.name);
 
-            const material = object3d.material;
-            if (material.hasOwnProperty("materials")) {
+        const disposeMaterial = (material) => {
+            Graphics.logger.addInfoMessage ("\tdispose Material: " + material.name);
+            material.dispose();
 
-                const materials = material.materials;
-                for (const iMaterial in materials) {
-                    if (materials.hasOwnProperty(iMaterial)) {
-                        materials[iMaterial].dispose();
-                    }
+            // dispose textures
+            for (const key of Object.keys(material)) {
+                const value = material[key];
+                // property of type Texture?
+                if (value && typeof value === "object" && "minFilter" in value) {
+                    Graphics.logger.addInfoMessage ("\tdispose Texture: " + value.name);
+                    value.dispose();
                 }
             }
-        }
+        };
 
-        if (object3d.hasOwnProperty("texture")) {
-            object3d.texture.dispose();
+        Graphics.logger.addInfoMessage ("\tdispose Geometry: " + object3d.geometry.name);
+        object3d.geometry.dispose();
+
+        // single material
+        if (object3d.material.isMaterial) {
+            disposeMaterial(object3d.material);
+        // array of materials
+        } else {
+            for (const material of object3d.material)
+                disposeMaterial(material);
         }
     }
 
@@ -84,16 +100,15 @@ export class Graphics {
         if (!rootObject)
             return;
 
-        const logger  = Services.defaultLogger;
-        const remover = (object3d) => {
+        // dispose of resources
+        const disposer = (object3d) => {
 
             if (object3d === rootObject) {
                 return;
             }
             Graphics.disposeResources(object3d);
         };
-
-        rootObject.traverse(remover);
+        rootObject.traverse(disposer);
 
         // remove root children from rootObject (backwards!)
         for (let iChild: number = (rootObject.children.length - 1); iChild >= 0; iChild--) {
@@ -102,6 +117,7 @@ export class Graphics {
             rootObject.remove (child);
         }
 
+        // finally, remove root also?
         if (removeRoot && rootObject.parent)
             rootObject.parent.remove(rootObject);
     }

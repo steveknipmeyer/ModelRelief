@@ -28,7 +28,6 @@ import {TrackballControls} from "Scripts/Viewers/TrackballControls";
 export class Viewer {
 
     // Protected
-    protected _root: THREE.Group             = null;
     protected _logger: ILogger               = null;
 
     // Private
@@ -37,6 +36,7 @@ export class Viewer {
 
     private _model: FileModel                = null;
     private _scene: THREE.Scene              = null;
+    private _root: THREE.Group             = null;
 
     private _renderer: THREE.WebGLRenderer   = null;
     private _canvas: HTMLCanvasElement       = null;
@@ -94,6 +94,23 @@ export class Viewer {
     set scene(value: THREE.Scene) {
 
         this._scene = value;
+    }
+
+    /**
+     * @description Gets the root Group of the scene.
+     * @type {THREE.Scene}
+     */
+    get root(): THREE.Group {
+
+        return this._root;
+    }
+
+    /**
+     * @description Sets the root Group of the scene.
+     */
+    set root(value: THREE.Group) {
+
+        this._root = value;
     }
 
     /**

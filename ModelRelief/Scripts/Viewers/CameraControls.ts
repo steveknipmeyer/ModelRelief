@@ -69,7 +69,7 @@ export interface ICameraControlsOptions {
 export class CameraControls {
 
     public viewer: Viewer;                          // associated viewer
-    public settings: CameraControlsSettings;         // UI settings
+    public settings: CameraControlsSettings;        // UI settings
 
     // The maximum and minimum values of these controls are modified by the boundClippingPlanes button so theses controls are instance members.
     private _controllerNearClippingPlane: dat.GUIController;
@@ -130,9 +130,11 @@ export class CameraControls {
 
         // View
         const modelView = Graphics.cloneAndTransformObject(this.viewer.modelGroup, this.viewer.camera.matrixWorldInverse);
-        const cameraView = CameraHelper.getDefaultCamera(this.viewer.aspectRatio, this.viewer.camera instanceof THREE.PerspectiveCamera);
         const modelViewGroup = new THREE.Group();
+        modelViewGroup.name = ObjectNames.ModelViewGroup;
         modelViewGroup.add(modelView);
+
+        const cameraView = CameraHelper.getDefaultCamera(this.viewer.aspectRatio, this.viewer.camera instanceof THREE.PerspectiveCamera);
         Graphics.addCameraHelper(cameraView, this.viewer.scene, modelViewGroup);
     }
 
