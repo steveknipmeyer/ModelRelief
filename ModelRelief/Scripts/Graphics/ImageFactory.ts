@@ -96,11 +96,7 @@ export class ImageFactory {
         this._canvas          = canvas;
         this._width           = width;
         this._height          = height;
-
-//      this._modelGroup      = modelGroup.clone(true);
-        const loader = new TestModelLoader();
-        this._modelGroup = loader.loadTestModel(TestModel.Sphere);
-
+        this._modelGroup      = modelGroup.clone(true);
         this._camera          = camera;
 
         // optional
@@ -125,9 +121,11 @@ export class ImageFactory {
     public clearAllAssests() {
 
         Graphics.removeObjectChildren(this._root, false);
-        Graphics.removeObjectChildren(this._postRoot, false);
 
-        //this._renderer.context.getExtension("WEBGL_lose_context").loseContext();
+        // PROBLEM
+        //Graphics.removeObjectChildren(this._postRoot, false);
+
+        // this._renderer.context.getExtension("WEBGL_lose_context").loseContext();
         this._renderer.dispose();
         this._target.dispose();
         this._postTarget.dispose();
@@ -196,7 +194,7 @@ export class ImageFactory {
      */
      protected initializeRenderer() {
 
-        this._renderer = new THREE.WebGLRenderer( {canvas : this._canvas, logarithmicDepthBuffer : this._logDepthBuffer});
+        this._renderer = new THREE.WebGLRenderer( {canvas : this._canvas, logarithmicDepthBuffer : this._logDepthBuffer, preserveDrawingBuffer: true});
 
         this._renderer.setPixelRatio(window.devicePixelRatio);
         this._renderer.setSize(this._width, this._height);
@@ -242,20 +240,29 @@ export class ImageFactory {
     }
 
     /**
-     * Constructs the primary (3D model) render target.
+     * Constructs the default render target.
      */
-    protected constructRenderTarget(): THREE.WebGLRenderTarget {
+    protected constructDefaultRenderTarget(): THREE.WebGLRenderTarget {
 
         const renderTarget = new THREE.WebGLRenderTarget(this._width, this._height);
 
         renderTarget.texture.format           = THREE.RGBAFormat;
-        renderTarget.texture.type             = THREE.UnsignedByteType;
-        renderTarget.texture.minFilter        = THREE.NearestFilter;
+        renderTarget.texture.minFilter        = THREE.LinearFilter;
         renderTarget.texture.magFilter        = THREE.NearestFilter;
         renderTarget.texture.generateMipmaps  = false;
 
+        renderTarget.depthBuffer              = false;
         renderTarget.stencilBuffer            = false;
 
+        return renderTarget;
+    }
+
+    /**
+     * Constructs the primary (3D model) render target.
+     */
+    protected constructRenderTarget(): THREE.WebGLRenderTarget {
+
+        const renderTarget = this.constructDefaultRenderTarget();
         return renderTarget;
     }
 
@@ -267,7 +274,7 @@ export class ImageFactory {
      */
     protected constructPostRenderTarget(): THREE.WebGLRenderTarget {
 
-        const postTarget = new THREE.WebGLRenderTarget(this._width, this._height);
+        const postTarget = this.constructDefaultRenderTarget();
         return postTarget;
     }
 
@@ -286,7 +293,7 @@ export class ImageFactory {
         this._postRoot  = new THREE.Group();
         this._postRoot.name = ObjectNames.ImageFactoryModelGroup;
 
-        const postMaterial = this.initializePostMaterial();
+        const postMaterial  = this.initializePostMaterial();
         const postMeshPlane = new THREE.PlaneGeometry(2, 2);
         const postMeshQuad  = new THREE.Mesh(postMeshPlane, postMaterial);
         postMeshQuad.name   = ObjectNames.ImagePlane;
@@ -377,7 +384,7 @@ export class ImageFactory {
         if (material)
             this._scene.overrideMaterial = material;
 
-        this._renderer.render(this._scene, this._camera.viewCamera, this._target);
+        this._renderer.render(this._scene, this._camera.viewCamera, this._target, true);
 
         // restore default materials
         this._scene.overrideMaterial = null;
@@ -395,7 +402,7 @@ export class ImageFactory {
         this._renderer.render(this._postScene, this._postCamera);
 
         // generate final image into render target
-        this._renderer.render(this._postScene, this._postCamera, this._postTarget);
+        this._renderer.render(this._postScene, this._postCamera, this._postTarget, true);
     }
 
     /**
@@ -408,6 +415,7 @@ export class ImageFactory {
         const timerTag = Services.timer.mark("ImageBufferFactory.createImageBufferAsync");
 
         this.renderPrimary();
+
         this.renderPost();
 
         // read render buffer to create image array

@@ -95,9 +95,11 @@ export class NormalMapFactory extends ImageFactory {
      */
     protected initializePostMaterial(): THREE.Material {
 
-        const postMaterial  = new THREE.MeshPhongMaterial({
-             map: this._target.texture,
+        const texture = this._target.texture;
+        const postMaterial  = new THREE.MeshBasicMaterial({
+            map: texture,
         });
+        postMaterial.needsUpdate = true;
 
         return postMaterial;
     }

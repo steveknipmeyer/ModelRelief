@@ -87,9 +87,9 @@ export class DepthBufferFactory extends ImageFactory {
 
         const  target: THREE.WebGLRenderTarget = super.constructRenderTarget();
 
-        target.depthBuffer              = true;
-        target.depthTexture             = new THREE.DepthTexture(this._width, this._height);
-        target.depthTexture.type        = THREE.UnsignedIntType;
+        target.depthBuffer        = true;
+        target.depthTexture       = new THREE.DepthTexture(this._width, this._height);
+        target.depthTexture.type  = THREE.UnsignedIntType;
 
         return target;
     }
@@ -110,11 +110,11 @@ export class DepthBufferFactory extends ImageFactory {
             uniforms: {
                 cameraNear  :   { value: this._camera.viewCamera.near },
                 cameraFar   :   { value: this._camera.viewCamera.far },
-                tDiffuse    :   { value: this._target.texture },
                 tDepth      :   { value: this._target.depthTexture },
             },
         });
         postMaterial.type = "DepthBufferShader";
+
         return postMaterial;
     }
 //#endregion

@@ -43,7 +43,7 @@ export class Graphics {
 
 //#region Geometry
     /* --------------------------------------------------------------------------------------------------------------------------------------//
-    //			Geometry
+    //          Geometry
     // --------------------------------------------------------------------------------------------------------------------------------------*/
     private static logger  = Services.defaultLogger;
 
@@ -61,7 +61,7 @@ export class Graphics {
         Graphics.logger.addInfoMessage ("Disposing Mesh: " + object3d.name);
 
         const disposeMaterial = (material) => {
-            Graphics.logger.addInfoMessage ("\tdispose Material: " + material.name);
+            //Graphics.logger.addInfoMessage ("\tdispose Material: " + material.name);
             material.dispose();
 
             // dispose textures
@@ -69,13 +69,13 @@ export class Graphics {
                 const value = material[key];
                 // property of type Texture?
                 if (value && typeof value === "object" && "minFilter" in value) {
-                    Graphics.logger.addInfoMessage ("\tdispose Texture: " + value.name);
+                    //Graphics.logger.addInfoMessage ("\tdispose Texture: " + value.name);
                     value.dispose();
                 }
             }
         };
 
-        Graphics.logger.addInfoMessage ("\tdispose Geometry: " + object3d.geometry.name);
+        //Graphics.logger.addInfoMessage ("\tdispose Geometry: " + object3d.geometry.name);
         object3d.geometry.dispose();
 
         // single material

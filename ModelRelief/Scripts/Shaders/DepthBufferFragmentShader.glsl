@@ -23,7 +23,6 @@ uniform vec3 cameraPosition;
 
 uniform float       cameraNear;                 // near clipping plane
 uniform float       cameraFar;                  // far clipping plane
-uniform sampler2D   tDiffuse;                   // diffuse texture
 uniform sampler2D   tDepth;                     // depth texture
 
 varying vec2 vUV;								// UV coordinates of vertex
@@ -82,7 +81,6 @@ void main() {
 
     vec3 normal = normalize(vNormal);
     vec3 viewPosition = normalize(vViewPosition);
-    vec3 diffuse = texture2D(tDiffuse, vUV).rgb;
 
 #if defined (ORTHOGRAPHICDEPTH)
     // [0, 1] orthographic clip coordinates
