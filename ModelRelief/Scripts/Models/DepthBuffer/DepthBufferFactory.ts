@@ -12,21 +12,11 @@ import {IImageFactoryParameters, ImageFactory} from "Scripts/Graphics/ImageFacto
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
 
-
 /**
  * @class
  * DepthBufferFactory
  */
 export class DepthBufferFactory extends ImageFactory {
-
-//#region Properties
-    /**
-     * Returns the active (last-generated) DepthBuffer constructed by the factory.
-     * @returns DepthBuffer
-     */
-    get depthBuffer(): DepthBuffer {
-        return this._depthBuffer;
-    }
 
     private static FactoryName: string = "DepthBufferFactory";
 
@@ -41,6 +31,15 @@ export class DepthBufferFactory extends ImageFactory {
         super(parameters);
 
         this._minimumWebGLExtensions = ["WEBGL_depth_texture"];
+    }
+
+//#region Properties
+    /**
+     * Returns the active (last-generated) DepthBuffer constructed by the factory.
+     * @returns DepthBuffer
+     */
+    get depthBuffer(): DepthBuffer {
+        return this._depthBuffer;
     }
 //#endregion
 
@@ -77,7 +76,6 @@ export class DepthBufferFactory extends ImageFactory {
 
         return this._depthBuffer;
     }
-//#endregion
 
 //#region Initialization
     /**
@@ -93,6 +91,7 @@ export class DepthBufferFactory extends ImageFactory {
 
         return target;
     }
+
 //#endregion
 
 //#region PostProcessing

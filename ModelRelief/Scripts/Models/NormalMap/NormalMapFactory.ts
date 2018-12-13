@@ -18,15 +18,6 @@ import {NormalMap} from "Scripts/Models/NormalMap/NormalMap";
  */
 export class NormalMapFactory extends ImageFactory {
 
-//#region Properties
-    /**
-     * Returns the active (last-generated) NormalMap constructed by the factory.
-     * @returns NormalMap
-     */
-    get normalMap(): NormalMap {
-        return this._normalMap;
-    }
-
     private static FactoryName: string = "NormalMapFactory";
 
     // Private
@@ -38,6 +29,15 @@ export class NormalMapFactory extends ImageFactory {
      */
     constructor(parameters?: IImageFactoryParameters) {
         super(parameters);
+    }
+
+//#region Properties
+    /**
+     * Returns the active (last-generated) NormalMap constructed by the factory.
+     * @returns NormalMap
+     */
+    get normalMap(): NormalMap {
+        return this._normalMap;
     }
 //#endregion
 

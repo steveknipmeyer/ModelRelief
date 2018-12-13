@@ -6,44 +6,21 @@
 #### Vector
 
 Issues
-    It is the NormalMap stage that fails.
-    Why does the issue happen only on the second pass?
+    Why does the DepthBufferShader get cleared but NormalMapShader is still present?
+    Why does disposing of the Post scene lead to WebGL errors?
 
-    preserveDrawingBuffer
-    material.needsUpdate
-    copyFrameBufferToTexture
-
-    Resources
-        https://stackoverflow.com/questions/51753768/webgl-force-canvas-to-lose-context
-        Lastly, forcing a context loss on the webgl context and getting rid of the renderer afterward will ensure you’ll be freeing up GPU resources,
-        and allowing you to initialize another renderer afterward without resource usage being stacked up.
+    Why does MeshPhongMaterial (rather than MeshBasicMaterial) lead to WebGL errors in NormalMap factory?
+    Orthogonal planes (.e.g. House) do not generate constant Z depths.
 
     Investigate webgl-debug library.
+        Can WebGlRenderer.info be useful?
     http://www.realtimerendering.com/blog/debugging-webgl-with-spectorjs/
 
     RenderDoc?
         "c:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-gpu-watchdog --gpu-startup-dialog --allow-no-sandbox-job --allow-sandbox-debugging --no-sandbox --disable-gpu-sandbox
 
-    Are WebGL programs ever unloaded?
-
     NormalMapFactory
         The NormalMap is undefined in empty regions.
-
-        The issue is in renderPost.
-                // (optional) preview image
-                this._renderer.render(this._postScene, this._postCamera);
-
-        Why doesn't cloning the depth texture work?
-            tDepth      :   { value: this._target.depthTexture },
-
-        INVALID_OPERATION: drawArrays: no buffer is bound to enabled attribute
-        Firfox: Error: WebGL warning: drawArrays: Vertex attrib array 0 is enabled but has no buffer bound.
-
-            Do shaders need to be disposed or de-allocated?
-
-            The issue happens only during the second pass.
-                initializePostMaterial
-                    map: this._target.texture,
 
     Review Mesh, DepthBuffer and NormalMap properties:
         Width

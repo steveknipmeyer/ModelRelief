@@ -96,7 +96,7 @@ export class ImageFactory {
         this._canvas          = canvas;
         this._width           = width;
         this._height          = height;
-        this._modelGroup      = modelGroup.clone(true);
+        this._modelGroup      = Graphics.cloneAndTransformObject(modelGroup) as THREE.Group;
         this._camera          = camera;
 
         // optional
@@ -121,8 +121,6 @@ export class ImageFactory {
     public clearAllAssests() {
 
         Graphics.removeObjectChildren(this._root, false);
-
-        // PROBLEM
         //Graphics.removeObjectChildren(this._postRoot, false);
 
         // this._renderer.context.getExtension("WEBGL_lose_context").loseContext();
@@ -293,12 +291,13 @@ export class ImageFactory {
         this._postRoot  = new THREE.Group();
         this._postRoot.name = ObjectNames.ImageFactoryModelGroup;
 
-        const postMaterial  = this.initializePostMaterial();
-        const postMeshPlane = new THREE.PlaneGeometry(2, 2);
-        const postMeshQuad  = new THREE.Mesh(postMeshPlane, postMaterial);
-        postMeshQuad.name   = ObjectNames.ImagePlane;
-        this._postRoot.add(postMeshQuad);
+        const postPlaneMaterial  = this.initializePostMaterial();
+        const postPlaneGeometry = new THREE.PlaneGeometry(2, 2);
+        postPlaneGeometry.uvsNeedUpdate = true;
+        const postPlane  = new THREE.Mesh(postPlaneGeometry, postPlaneMaterial);
+        postPlane.name   = ObjectNames.ImagePlane;
 
+        this._postRoot.add(postPlane);
         this._postScene = new THREE.Scene();
         this._postScene.add(this._postRoot);
 
