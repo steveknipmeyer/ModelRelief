@@ -121,10 +121,10 @@ export class ImageFactory {
     public clearAllAssests() {
 
         Graphics.removeObjectChildren(this._root, false);
+
+        // WIP: Disposing of PlaneGeometry leads to WebGL errors.
         //Graphics.removeObjectChildren(this._postRoot, false);
 
-        // this._renderer.context.getExtension("WEBGL_lose_context").loseContext();
-        this._renderer.dispose();
         this._target.dispose();
         this._postTarget.dispose();
     }
@@ -188,9 +188,19 @@ export class ImageFactory {
     }
 
     /**
+     * Initialize the renderer.
+     * Abstract method: overridden by concrete factory classes.
+     */
+    protected constructRenderer(): THREE.WebGLRenderer {
+        return null;
+    }
+
+    /**
      * Initialize the  model view.
      */
-     protected initializeRenderer() {
+     protected initializeRenderer(): void {
+
+        this._renderer = this.constructRenderer();
 
         this._renderer = new THREE.WebGLRenderer( {canvas : this._canvas, logarithmicDepthBuffer : this._logDepthBuffer, preserveDrawingBuffer: true});
 
@@ -293,7 +303,6 @@ export class ImageFactory {
 
         const postPlaneMaterial  = this.initializePostMaterial();
         const postPlaneGeometry = new THREE.PlaneGeometry(2, 2);
-        postPlaneGeometry.uvsNeedUpdate = true;
         const postPlane  = new THREE.Mesh(postPlaneGeometry, postPlaneMaterial);
         postPlane.name   = ObjectNames.ImagePlane;
 

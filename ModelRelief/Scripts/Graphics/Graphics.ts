@@ -157,15 +157,7 @@ export class Graphics {
         const objectClone: THREE.Object3D = object.clone();
         objectClone.traverse((traversalObject) => {
             if (traversalObject instanceof (THREE.Mesh)) {
-
                 traversalObject.geometry = traversalObject.geometry.clone();
-                const geometry : THREE.Geometry = traversalObject.geometry as THREE.Geometry;
-                geometry.verticesNeedUpdate = true;
-                geometry.normalsNeedUpdate = true;
-                geometry.elementsNeedUpdate = true;
-                
-                geometry.computeVertexNormals();
-                geometry.computeFaceNormals();
             }
         });
         Services.timer.logElapsedTime(cloneTag);

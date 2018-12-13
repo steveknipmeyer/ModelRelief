@@ -18,6 +18,10 @@ import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
  */
 export class DepthBufferFactory extends ImageFactory {
 
+    // Protected
+    protected static FactoryRenderer: THREE.WebGLRenderer = null;                     // shared renderer instance  
+
+    // Private
     private static FactoryName: string = "DepthBufferFactory";
 
     // Private
@@ -79,6 +83,18 @@ export class DepthBufferFactory extends ImageFactory {
 
 //#region Initialization
     /**
+     * Initialize the renderer.
+     */
+    protected constructRenderer(): THREE.WebGLRenderer {
+
+        if (DepthBufferFactory.FactoryRenderer == null) 
+            DepthBufferFactory.FactoryRenderer = new THREE.WebGLRenderer( {canvas : this._canvas, logarithmicDepthBuffer : this._logDepthBuffer, preserveDrawingBuffer: true});
+
+        // singleton
+        return DepthBufferFactory.FactoryRenderer
+    }
+
+    /**
      * Constructs the primary (3D model) render target.
      */
     protected constructRenderTarget(): THREE.WebGLRenderTarget {
@@ -95,7 +111,6 @@ export class DepthBufferFactory extends ImageFactory {
 //#endregion
 
 //#region PostProcessing
-
     /**
      * Initialize the shader material used to encode the depth buffer.
      */

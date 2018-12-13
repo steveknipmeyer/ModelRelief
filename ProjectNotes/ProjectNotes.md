@@ -6,10 +6,19 @@
 #### Vector
 
 Issues
-    Why does the DepthBufferShader get cleared but NormalMapShader is still present?
-    Why does disposing of the Post scene lead to WebGL errors?
+    clearAllAssets
+        DepthBufferShader
+
+        NormalMapShader
+        MeshBasicMaterial
+
+    Why does disposing of the Post scene (PlaneGeometry) lead to WebGL errors?
+
+    Why are some normal maps speckled?
+        The pattern is random.
 
     Why does MeshPhongMaterial (rather than MeshBasicMaterial) lead to WebGL errors in NormalMap factory?
+
     Orthogonal planes (.e.g. House) do not generate constant Z depths.
 
     Investigate webgl-debug library.

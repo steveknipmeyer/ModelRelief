@@ -18,6 +18,10 @@ import {NormalMap} from "Scripts/Models/NormalMap/NormalMap";
  */
 export class NormalMapFactory extends ImageFactory {
 
+    // Protected
+    protected static FactoryRenderer: THREE.WebGLRenderer = null;                     // shared renderer instance
+
+    // Private
     private static FactoryName: string = "NormalMapFactory";
 
     // Private
@@ -70,9 +74,20 @@ export class NormalMapFactory extends ImageFactory {
         this._normalMap.camera = CameraFactory.constructFromViewCamera(parameters, this._camera.viewCamera, this._camera.project);
 
         return this._normalMap;    }
-//#endregion
 
 //#region Initialization
+    /**
+     * Initialize the renderer.
+     */
+    protected constructRenderer(): THREE.WebGLRenderer {
+
+        if (NormalMapFactory.FactoryRenderer == null)
+            NormalMapFactory.FactoryRenderer = new THREE.WebGLRenderer( {canvas : this._canvas, logarithmicDepthBuffer : this._logDepthBuffer, preserveDrawingBuffer: true});
+
+        // singleton
+        return NormalMapFactory.FactoryRenderer;
+    }
+
     /**
      * Initialize the shader material used to encode the depth buffer.
      */
@@ -89,7 +104,6 @@ export class NormalMapFactory extends ImageFactory {
 //#endregion
 
 //#region PostProcessing
-
     /**
      * Initialize the shader material used to encode the depth buffer.
      */
@@ -106,7 +120,6 @@ export class NormalMapFactory extends ImageFactory {
 //#endregion
 
 //#region Analysis
-
     /**
      * Analyze the render and depth targets.
      */
