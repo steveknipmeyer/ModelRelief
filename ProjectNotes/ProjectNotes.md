@@ -6,23 +6,23 @@
 #### Vector
 
 Issues
-    clearAllAssets
-        DepthBufferShader
+    Can the DepthBufferViewer and NormalMapViewer share a common base class?
 
-        NormalMapShader
-        MeshBasicMaterial
+    Share common methods between DepthBuffers and NormalMaps:
+        getModelVertexIndices
+        getModelVertexIndex
 
-    Why does disposing of the Post scene (PlaneGeometry) lead to WebGL errors?
+    Document the ImageFactory data flows.
+
+    https://webglfundamentals.org/webgl/lessons/webgl-how-it-works.html
 
     Why are some normal maps speckled?
-        The pattern is random.
-
-    Why does MeshPhongMaterial (rather than MeshBasicMaterial) lead to WebGL errors in NormalMap factory?
+        Pixels that should be culled are visible.
 
     Orthogonal planes (.e.g. House) do not generate constant Z depths.
 
     Investigate webgl-debug library.
-        Can WebGlRenderer.info be useful?
+
     http://www.realtimerendering.com/blog/debugging-webgl-with-spectorjs/
 
     RenderDoc?
@@ -41,9 +41,6 @@ Issues
 
     What NormalMap integration tests are appropriate?
 
-    Share common methods between DepthBuffers and NormalMaps:
-        getModelVertexIndices
-        getModelVertexIndex
 
 ### Adding a New GeneratedFileDomainModel (e.g. NormalMap)
 #### Documentation

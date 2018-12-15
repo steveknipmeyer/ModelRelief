@@ -757,4 +757,55 @@ export class Graphics {
     constructor() {
     }
 //#endregion
+
+//#region WebGL
+    /* --------------------------------------------------------------------------------------------------------------------------------------//
+    //  WebGL
+    // --------------------------------------------------------------------------------------------------------------------------------------*/
+    /**
+     * @description Display WebGLProgram properties.
+     */
+    public static showWebGLPrograms(renderer: THREE.WebGLRenderer) {
+
+        const info = renderer.info;
+        const gl = renderer.context;
+
+        for (const iProgram of info.programs) {
+            const threeProgram: THREE.WebGLProgram = iProgram;
+            console.log(threeProgram.vertexShader);
+            console.log(threeProgram.fragmentShader);
+            const program = threeProgram.program;
+
+            const numberAttributes = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
+            for (let iAttribute = 0; iAttribute < numberAttributes; ++iAttribute) {
+                const attributeInfo = gl.getActiveAttrib(program, iAttribute);
+                const index = gl.getAttribLocation(program, attributeInfo.name);
+                console.log(index, attributeInfo.name);
+            }
+            console.log();
+        }
+    }
+
+    /**
+     * @description Reset all WebGL vertex attributes.
+     * @param renderer WebGLRenderer
+     */
+    public static resetWebGLVertexAttributes(renderer: THREE.WebGLRenderer) {
+
+        // https://github.com/stackgl/gl-reset/blob/master/state.js
+        // https://stackoverflow.com/questions/12427880/is-it-important-to-call-gldisablevertexattribarray
+        const gl = renderer.context;
+
+        const numberAttributes = gl.getParameter(gl.MAX_VERTEX_ATTRIBS);
+        const temporaryBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, temporaryBuffer);
+
+        for (let iAttribute = 0; iAttribute < numberAttributes; ++iAttribute) {
+
+            gl.disableVertexAttribArray(iAttribute);
+            gl.vertexAttribPointer(iAttribute, 4, gl.FLOAT, false, 0, 0);
+            gl.vertexAttrib1f(iAttribute, 0);
+        }
+        gl.deleteBuffer(temporaryBuffer);
+    }
 }

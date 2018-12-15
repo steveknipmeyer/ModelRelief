@@ -98,7 +98,6 @@ export class NormalMapFactory extends ImageFactory {
             vertexShader:   MR.shaderSource.NormalMapVertexShader,
             fragmentShader: MR.shaderSource.NormalMapFragmentShader,
         });
-        material.type = "NormalMapShader";
         return material;
     }
 //#endregion
@@ -110,7 +109,7 @@ export class NormalMapFactory extends ImageFactory {
     protected initializePostMaterial(): THREE.Material {
 
         const texture = this._target.texture;
-        const postMaterial  = new THREE.MeshBasicMaterial({
+        const postMaterial  = new THREE.MeshPhongMaterial({
             map: texture,
         });
         postMaterial.needsUpdate = true;

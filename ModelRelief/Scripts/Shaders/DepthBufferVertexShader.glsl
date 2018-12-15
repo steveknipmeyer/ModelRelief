@@ -27,7 +27,6 @@ uniform vec3 cameraPosition;				// = camera position in world space
 attribute vec3 position;
 attribute vec3 normal;
 attribute vec2 uv;
-attribute vec2 uv2;
 #endif
 
 varying vec2 vUV;							// UV coordinates of vertex
@@ -40,7 +39,7 @@ varying vec3 vViewPosition;					// vertex view position (flipped)
 /// </summary>
 void main() {
 
-	vUV = uv;
+    vUV = uv;
 
 	vec3 transformedNormal = normalMatrix * normal;
 	vNormal = normalize(transformedNormal);

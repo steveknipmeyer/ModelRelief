@@ -121,12 +121,13 @@ export class ImageFactory {
     public clearAllAssests() {
 
         Graphics.removeObjectChildren(this._root, false);
-
-        // WIP: Disposing of PlaneGeometry leads to WebGL errors.
-        //Graphics.removeObjectChildren(this._postRoot, false);
+        Graphics.removeObjectChildren(this._postRoot, false);
 
         this._target.dispose();
         this._postTarget.dispose();
+
+        Graphics.resetWebGLVertexAttributes(this._renderer);
+        this._renderer.context = null;
     }
 //#endregion
 
@@ -391,7 +392,7 @@ export class ImageFactory {
         const material = this.initializeMaterial();
         if (material)
             this._scene.overrideMaterial = material;
-
+        
         this._renderer.render(this._scene, this._camera.viewCamera, this._target, true);
 
         // restore default materials
