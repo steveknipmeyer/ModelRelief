@@ -256,8 +256,6 @@ export class ImageFactory {
 
         renderTarget.texture.format           = THREE.RGBAFormat;
         renderTarget.texture.minFilter        = THREE.LinearFilter;
-        renderTarget.texture.magFilter        = THREE.NearestFilter;
-        renderTarget.texture.generateMipmaps  = false;
 
         renderTarget.depthBuffer              = false;
         renderTarget.stencilBuffer            = false;
@@ -392,10 +390,7 @@ export class ImageFactory {
         if (material)
             this._scene.overrideMaterial = material;
 
-        if (this._factoryName === "DepthBufferFactory")
-            this._renderer.render(this._scene, this._camera.viewCamera, this._target, true);
-        else
-            this._renderer.render(this._scene, this._camera.viewCamera);
+        this._renderer.render(this._scene, this._camera.viewCamera, this._target, true);
 
         // restore default materials
         this._scene.overrideMaterial = null;
@@ -427,8 +422,7 @@ export class ImageFactory {
 
         this.renderPrimary();
 
-        if (this._factoryName === ObjectNames.DepthBufferFactory)
-            this.renderPost();
+        this.renderPost();
 
         // read render buffer to create image array
         const imageBuffer = new Uint8Array(this._width * this._height * 4).fill(0);

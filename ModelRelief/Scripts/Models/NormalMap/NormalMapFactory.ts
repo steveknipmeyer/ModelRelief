@@ -96,8 +96,6 @@ export class NormalMapFactory extends ImageFactory {
     protected initializeMaterial(): THREE.Material {
 
         const material = new THREE.ShaderMaterial({
-            depthTest: true,
-
             vertexShader:   MR.shaderSource.NormalMapVertexShader,
             fragmentShader: MR.shaderSource.NormalMapFragmentShader,
         });
@@ -112,7 +110,7 @@ export class NormalMapFactory extends ImageFactory {
     protected initializePostMaterial(): THREE.Material {
 
         const texture = this._target.texture;
-        const postMaterial  = new THREE.MeshPhongMaterial({
+        const postMaterial  = new THREE.MeshBasicMaterial({
             map: texture,
         });
         postMaterial.needsUpdate = true;
