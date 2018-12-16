@@ -5,12 +5,16 @@
 #### Vector
 
 Issues
-    Creata test scene with multipl objects.
+    Depth is incorrect in NormalMap render targets.
+        https://github.com/mrdoob/three.js/issues/11783
+
     Remove the NormalMap comet trail.
+
+    Graphics.cloneAndTransformObject needs to clone materials also.
+
     Can the DepthBufferViewer and NormalMapViewer share a common base class?
     is anti-aliasing enabled?
-    Convert tabs to spaces in shaders.
-
+    
     Share common methods between DepthBuffers and NormalMaps:
         getModelVertexIndices
         getModelVertexIndex
@@ -19,8 +23,6 @@ Issues
 
     https://webglfundamentals.org/webgl/lessons/webgl-how-it-works.html
 
-    Why are some normal maps speckled?
-        Pixels that should be culled are visible.
 
     Orthogonal planes (.e.g. House) do not generate constant Z depths.
 
@@ -43,7 +45,6 @@ Issues
         Mesh.NormalMap.Camera is equivalent.
 
     What NormalMap integration tests are appropriate?
-
 
 ### Adding a New GeneratedFileDomainModel (e.g. NormalMap)
 #### Documentation

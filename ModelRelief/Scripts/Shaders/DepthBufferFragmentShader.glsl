@@ -25,10 +25,10 @@ uniform float       cameraNear;                 // near clipping plane
 uniform float       cameraFar;                  // far clipping plane
 uniform sampler2D   tDepth;                     // depth texture
 
-varying vec2 vUV;								// UV coordinates of vertex
-varying vec3 vNormal;							// vertex normal
-varying vec3 vWorldPosition;					// vertex world position
-varying vec3 vViewPosition;						// vertex view position (flipped)
+varying vec2 vUV;                               // UV coordinates of vertex
+varying vec3 vNormal;                           // vertex normal
+varying vec3 vWorldPosition;                    // vertex world position
+varying vec3 vViewPosition;                     // vertex view position (flipped)
 
 const vec3 noColor = vec3(0.0, 0.0, 0.0);
 

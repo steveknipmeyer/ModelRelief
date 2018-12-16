@@ -281,6 +281,7 @@ export class ImageFactory {
     protected constructPostRenderTarget(): THREE.WebGLRenderTarget {
 
         const postTarget = this.constructDefaultRenderTarget();
+
         return postTarget;
     }
 

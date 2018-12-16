@@ -24,13 +24,13 @@ uniform mat4 viewMatrix;
 uniform vec3 cameraPosition;
 #endif
 
-uniform vec3        designColor;				// color
+uniform vec3        designColor;                // color
 uniform sampler2D   tDiffuse;                   // diffuse texture (not used)
 
-varying vec2 vUV;								// UV coordinates of vertex
-varying vec3 vNormal;							// vertex normal
-varying vec3 vWorldPosition;					// vertex world position
-varying vec3 vViewPosition;						// vertex view position (flipped)
+varying vec2 vUV;                               // UV coordinates of vertex
+varying vec3 vNormal;                           // vertex normal
+varying vec3 vWorldPosition;                    // vertex world position
+varying vec3 vViewPosition;                     // vertex view position (flipped)
 
 const vec3 noColor = vec3(0.0, 0.0, 0.0);
 

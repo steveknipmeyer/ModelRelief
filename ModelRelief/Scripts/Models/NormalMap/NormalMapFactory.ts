@@ -101,6 +101,20 @@ export class NormalMapFactory extends ImageFactory {
         });
         return material;
     }
+
+    /**
+     * Constructs the primary (3D model) render target.
+     */
+    protected constructRenderTarget(): THREE.WebGLRenderTarget {
+
+        const  target: THREE.WebGLRenderTarget = super.constructRenderTarget();
+
+        target.depthBuffer        = true;
+        target.depthTexture       = new THREE.DepthTexture(this._width, this._height);
+        target.depthTexture.type  = THREE.UnsignedIntType;
+
+        return target;
+    }
 //#endregion
 
 //#region PostProcessing
@@ -109,11 +123,15 @@ export class NormalMapFactory extends ImageFactory {
      */
     protected initializePostMaterial(): THREE.Material {
 
-        const texture = this._target.texture;
-        const postMaterial  = new THREE.MeshBasicMaterial({
-            map: texture,
+        const postMaterial = new THREE.ShaderMaterial({
+
+            vertexShader:   MR.shaderSource.NormalMapTextureVertexShader,
+            fragmentShader: MR.shaderSource.NormalMapTextureFragmentShader,
+
+            uniforms: {
+                tNormalMap : { value: this._target.texture },
+            },
         });
-        postMaterial.needsUpdate = true;
 
         return postMaterial;
     }

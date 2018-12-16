@@ -154,7 +154,7 @@ export class Graphics {
         if (!matrix)
             matrix = new THREE.Matrix4();
 
-        // clone object (and geometry!)
+        // clone object (and geometry and material!)
         const cloneTag: string = Services.timer.mark("clone");
         const objectClone: THREE.Object3D = object.clone();
         objectClone.traverse((traversalObject) => {

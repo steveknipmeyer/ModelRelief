@@ -1,12 +1,9 @@
 ﻿// ------------------------------------------------------------------------//
-// TemplateVertexShader                                                    //
+// NormalMapTextureVertexShader                                            //
 // ModelRelief                                                             //
 //                                                                         //
 // Copyright (c) <2017-2019> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
-
-// enable extensions (e.g. dFdx, dFdy)
-// #extension GL_OES_standard_derivatives : enable
 
 #define MAXIMUMPRECISION
 #if defined(MAXIMUMPRECISION)
@@ -34,26 +31,16 @@ attribute vec2 uv2;
 #endif
 
 varying vec2 vUV;                           // UV coordinates of vertex
-varying vec3 vNormal;                       // vertex normal
-varying vec3 vWorldPosition;                // vertex world position
-varying vec3 vViewPosition;                 // vertex view position (flipped)
 
 /// <summary>
 ///  Main entry point
 /// </summary>
 void main() {
 
-	vUV = uv;
+    // position
+    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+    gl_Position = projectionMatrix * mvPosition;
 
-	vec3 transformedNormal = normalMatrix * normal;
-	vNormal = normalize(transformedNormal);
-
-	vec4 worldPosition = modelMatrix * vec4(position, 1.0);
-	vWorldPosition = worldPosition.xyz;
-
-	vec4 mvPosition;
-	mvPosition = modelViewMatrix * vec4(position, 1.0);
-	vViewPosition = -mvPosition.xyz;
-
-	gl_Position = projectionMatrix * mvPosition;
+    // normal
+    vUV = uv;
 }
