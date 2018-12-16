@@ -191,10 +191,19 @@ export class ImageFactory {
 
     /**
      * Initialize the renderer.
-     * Abstract method: overridden by concrete factory classes.
      */
     protected constructRenderer(): THREE.WebGLRenderer {
-        return null;
+
+        const renderer = new THREE.WebGLRenderer({
+
+            logarithmicDepthBuffer  : false,
+            canvas                  : this._canvas,
+            antialias               : true,
+        });
+        renderer.autoClear = true;
+        renderer.setClearColor(0x000000);
+
+        return renderer;
     }
 
     /**
@@ -254,11 +263,17 @@ export class ImageFactory {
 
         const renderTarget = new THREE.WebGLRenderTarget(this._width, this._height);
 
-        renderTarget.texture.format           = THREE.RGBAFormat;
-        renderTarget.texture.minFilter        = THREE.LinearFilter;
+        renderTarget.texture.format      = THREE.RGBAFormat;
+        renderTarget.texture.minFilter   = THREE.LinearFilter;
+        renderTarget.texture.magFilter   = THREE.NearestFilter;
 
-        renderTarget.depthBuffer              = false;
-        renderTarget.stencilBuffer            = false;
+        renderTarget.stencilBuffer       = false;
+
+        // N.B. Depth buffer must be enabled or polygon depth tests are not done.
+        // https://github.com/mrdoob/three.js/issues/11783
+        renderTarget.depthBuffer        = true;
+        renderTarget.depthTexture       = new THREE.DepthTexture(this._width, this._height);
+        renderTarget.depthTexture.type  = THREE.UnsignedIntType;
 
         return renderTarget;
     }
@@ -269,6 +284,7 @@ export class ImageFactory {
     protected constructRenderTarget(): THREE.WebGLRenderTarget {
 
         const renderTarget = this.constructDefaultRenderTarget();
+
         return renderTarget;
     }
 

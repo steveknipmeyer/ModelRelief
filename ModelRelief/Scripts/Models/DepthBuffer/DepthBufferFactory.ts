@@ -78,30 +78,6 @@ export class DepthBufferFactory extends ImageFactory {
     }
 
 //#region Initialization
-    /**
-     * Initialize the renderer.
-     */
-    protected constructRenderer(): THREE.WebGLRenderer {
-
-        const renderer = new THREE.WebGLRenderer( {canvas : this._canvas, logarithmicDepthBuffer : this._logDepthBuffer, preserveDrawingBuffer: true});
-
-        return renderer;
-    }
-
-    /**
-     * Constructs the primary (3D model) render target.
-     */
-    protected constructRenderTarget(): THREE.WebGLRenderTarget {
-
-        const  target: THREE.WebGLRenderTarget = super.constructRenderTarget();
-
-        target.depthBuffer        = true;
-        target.depthTexture       = new THREE.DepthTexture(this._width, this._height);
-        target.depthTexture.type  = THREE.UnsignedIntType;
-
-        return target;
-    }
-
 //#endregion
 
 //#region PostProcessing

@@ -74,23 +74,6 @@ export class NormalMapFactory extends ImageFactory {
 
 //#region Initialization
     /**
-     * Initialize the renderer.
-     */
-    protected constructRenderer(): THREE.WebGLRenderer {
-
-        const renderer = new THREE.WebGLRenderer({
-
-            logarithmicDepthBuffer  : false,
-            canvas                  : this._canvas,
-            antialias               : true,
-        });
-        renderer.autoClear = true;
-        renderer.setClearColor(0x000000);
-
-        return renderer;
-    }
-
-    /**
      * Initialize the shader material used to encode the depth buffer.
      */
     protected initializeMaterial(): THREE.Material {
@@ -100,20 +83,6 @@ export class NormalMapFactory extends ImageFactory {
             fragmentShader: MR.shaderSource.NormalMapFragmentShader,
         });
         return material;
-    }
-
-    /**
-     * Constructs the primary (3D model) render target.
-     */
-    protected constructRenderTarget(): THREE.WebGLRenderTarget {
-
-        const  target: THREE.WebGLRenderTarget = super.constructRenderTarget();
-
-        target.depthBuffer        = true;
-        target.depthTexture       = new THREE.DepthTexture(this._width, this._height);
-        target.depthTexture.type  = THREE.UnsignedIntType;
-
-        return target;
     }
 //#endregion
 

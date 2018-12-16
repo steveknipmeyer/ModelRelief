@@ -5,15 +5,9 @@
 #### Vector
 
 Issues
-    Depth is incorrect in NormalMap render targets.
-        https://github.com/mrdoob/three.js/issues/11783
-
-    Remove the NormalMap comet trail.
-
     Graphics.cloneAndTransformObject needs to clone materials also.
 
     Can the DepthBufferViewer and NormalMapViewer share a common base class?
-    is anti-aliasing enabled?
     
     Share common methods between DepthBuffers and NormalMaps:
         getModelVertexIndices
@@ -22,7 +16,6 @@ Issues
     Document the ImageFactory data flows.
 
     https://webglfundamentals.org/webgl/lessons/webgl-how-it-works.html
-
 
     Orthogonal planes (.e.g. House) do not generate constant Z depths.
 
