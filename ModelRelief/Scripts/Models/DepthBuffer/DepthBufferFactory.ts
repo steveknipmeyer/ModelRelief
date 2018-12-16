@@ -103,7 +103,6 @@ export class DepthBufferFactory extends ImageFactory {
 //#endregion
 
 //#region Analysis
-
     /**
      * Analyze the render and depth targets.
      */
@@ -112,4 +111,6 @@ export class DepthBufferFactory extends ImageFactory {
         super.analyzeRenderBuffer();
         this._depthBuffer.analyze();
     }
+//#endregion
 }
+

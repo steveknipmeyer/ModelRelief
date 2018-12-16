@@ -8,7 +8,9 @@ Issues
     Graphics.cloneAndTransformObject needs to clone materials also.
 
     Can the DepthBufferViewer and NormalMapViewer share a common base class?
-    
+
+    Create PNG images from normal maps.
+
     Share common methods between DepthBuffers and NormalMaps:
         getModelVertexIndices
         getModelVertexIndex
@@ -17,17 +19,16 @@ Issues
 
     https://webglfundamentals.org/webgl/lessons/webgl-how-it-works.html
 
-    Orthogonal planes (.e.g. House) do not generate constant Z depths.
+    Orthogonal planes (e.g. House) do not generate constant Z depths.
 
     Investigate webgl-debug library.
+
+    Explore Nsight for shader debugging.
 
     http://www.realtimerendering.com/blog/debugging-webgl-with-spectorjs/
 
     RenderDoc?
         "c:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-gpu-watchdog --gpu-startup-dialog --allow-no-sandbox-job --allow-sandbox-debugging --no-sandbox --disable-gpu-sandbox
-
-    NormalMapFactory
-        The NormalMap is undefined in empty regions.
 
     Review Mesh, DepthBuffer and NormalMap properties:
         Width

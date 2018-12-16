@@ -84,6 +84,19 @@ export class NormalMapFactory extends ImageFactory {
         });
         return material;
     }
+
+    /**
+     * Initialize the renderer.
+     */
+    protected constructRenderer(): THREE.WebGLRenderer {
+
+        const renderer = super.constructRenderer();
+
+        const zAxis = new THREE.Color(0.5, 0.5, 1.0);
+        renderer.setClearColor(zAxis);
+
+        return renderer;
+    }
 //#endregion
 
 //#region PostProcessing
@@ -115,6 +128,7 @@ export class NormalMapFactory extends ImageFactory {
         super.analyzeRenderBuffer();
         this._normalMap.analyze();
     }
+//#endregion
 }
 
 

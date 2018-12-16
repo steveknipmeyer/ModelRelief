@@ -10,7 +10,6 @@ import * as THREE from "three";
 
 import {Graphics, ObjectNames} from "Scripts/Graphics/Graphics";
 import {ImageFactorySettings} from "Scripts/Graphics/ImageFactorySettings";
-import {TestModel, TestModelLoader} from "Scripts/ModelLoaders/TestModelLoader";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {ILogger} from "Scripts/System/Logger";
 import {Services} from "Scripts/System/Services";
@@ -168,28 +167,6 @@ export class ImageFactory {
     }
 
     /**
-     * Initialize the shader material used in the primary 3D model scene.
-     */
-    protected initializeMaterial(): THREE.Material {
-        return null;
-    }
-
-    /**
-     * Perform setup and initialization of the render scene.
-     */
-    protected initializeScene(): void {
-
-        this._root  = new THREE.Group();
-        this._root.name = ObjectNames.ImageFactoryModelGroup;
-        this._root.add(this._modelGroup);
-
-        this._scene = new THREE.Scene();
-        this._scene.add(this._root);
-
-        this.initializeLighting(this._scene);
-    }
-
-    /**
      * Initialize the renderer.
      */
     protected constructRenderer(): THREE.WebGLRenderer {
@@ -226,37 +203,6 @@ export class ImageFactory {
     }
 
     /**
-     * Initialize default lighting in the scene.
-     * Lighting does not affect the image buffer. It is only used if the canvas is made visible.
-     */
-    protected initializeLighting(scene: THREE.Scene): void {
-
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-        scene.add(ambientLight);
-
-        const directionalLight1 = new THREE.DirectionalLight(0xffffff);
-        directionalLight1.position.set(1, 1, 1);
-        scene.add(directionalLight1);
-    }
-
-    /**
-     * Perform setup and initialization.
-     */
-    protected initializePrimary(): void {
-
-        this.initializeScene();
-        this.initializeRenderer();
-    }
-
-    /**
-     * Perform setup and initialization.
-     */
-    protected initialize(): void {
-
-        this._logger = Services.defaultLogger;
-    }
-
-    /**
      * Constructs the default render target.
      */
     protected constructDefaultRenderTarget(): THREE.WebGLRenderTarget {
@@ -286,6 +232,59 @@ export class ImageFactory {
         const renderTarget = this.constructDefaultRenderTarget();
 
         return renderTarget;
+    }
+
+    /**
+     * Initialize the shader material used in the primary 3D model scene.
+     */
+    protected initializeMaterial(): THREE.Material {
+        return null;
+    }
+
+    /**
+     * Perform setup and initialization of the render scene.
+     */
+    protected initializeScene(): void {
+
+        this._root  = new THREE.Group();
+        this._root.name = ObjectNames.ImageFactoryModelGroup;
+        this._root.add(this._modelGroup);
+
+        this._scene = new THREE.Scene();
+        this._scene.add(this._root);
+
+        this.initializeLighting(this._scene);
+    }
+
+    /**
+     * Initialize default lighting in the scene.
+     * Lighting does not affect the image buffer. It is only used if the canvas is made visible.
+     */
+    protected initializeLighting(scene: THREE.Scene): void {
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+        scene.add(ambientLight);
+
+        const directionalLight1 = new THREE.DirectionalLight(0xffffff);
+        directionalLight1.position.set(1, 1, 1);
+        scene.add(directionalLight1);
+    }
+
+    /**
+     * Perform setup and initialization.
+     */
+    protected initializePrimary(): void {
+
+        this.initializeScene();
+        this.initializeRenderer();
+    }
+
+    /**
+     * Perform setup and initialization.
+     */
+    protected initialize(): void {
+
+        this._logger = Services.defaultLogger;
     }
 
 //#endregion
