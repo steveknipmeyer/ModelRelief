@@ -21,14 +21,15 @@ Issues
 
     Orthogonal planes (e.g. House) do not generate constant Z depths.
 
-    Investigate webgl-debug library.
+    WebGL Debugging
+        Investigate webgl-debug library.
 
-    Explore Nsight for shader debugging.
+        Explore Nsight for shader debugging.
 
-    http://www.realtimerendering.com/blog/debugging-webgl-with-spectorjs/
+        http://www.realtimerendering.com/blog/debugging-webgl-with-spectorjs/
 
-    RenderDoc?
-        "c:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-gpu-watchdog --gpu-startup-dialog --allow-no-sandbox-job --allow-sandbox-debugging --no-sandbox --disable-gpu-sandbox
+        RenderDoc?
+            "c:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-gpu-watchdog --gpu-startup-dialog --allow-no-sandbox-job --allow-sandbox-debugging --no-sandbox --disable-gpu-sandbox
 
     Review Mesh, DepthBuffer and NormalMap properties:
         Width

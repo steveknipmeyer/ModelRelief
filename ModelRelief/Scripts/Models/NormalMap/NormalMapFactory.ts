@@ -105,14 +105,8 @@ export class NormalMapFactory extends ImageFactory {
      */
     protected initializePostMaterial(): THREE.Material {
 
-        const postMaterial = new THREE.ShaderMaterial({
-
-            vertexShader:   MR.shaderSource.NormalMapTextureVertexShader,
-            fragmentShader: MR.shaderSource.NormalMapTextureFragmentShader,
-
-            uniforms: {
-                tNormalMap : { value: this._target.texture },
-            },
+        const postMaterial = new THREE.MeshBasicMaterial({
+            map: this._target.texture;
         });
 
         return postMaterial;
