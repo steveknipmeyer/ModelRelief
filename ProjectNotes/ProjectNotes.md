@@ -1,12 +1,15 @@
 ﻿### Tasks
 #### Commit Notes
-
 #### Lambda
 
 #### Vector
 
 Issues
+    Creata test scene with multipl objects.
+    Remove the NormalMap comet trail.
     Can the DepthBufferViewer and NormalMapViewer share a common base class?
+    is anti-aliasing enabled?
+    Convert tabs to spaces in shaders.
 
     Share common methods between DepthBuffers and NormalMaps:
         getModelVertexIndices

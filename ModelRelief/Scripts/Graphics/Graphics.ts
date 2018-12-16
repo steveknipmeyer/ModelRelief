@@ -15,6 +15,8 @@ import {Services} from "Scripts/System/Services";
  * @enum {number}
  */
 export enum ObjectNames {
+    DepthBufferFactory      = "DepthBufferFactory",
+    NormalMapFactory        = "NormalMapFactory",
 
     Root                    =  "Root",
 
@@ -58,7 +60,7 @@ export class Graphics {
         if (!object3d.isMesh)
             return;
 
-        Graphics.logger.addInfoMessage ("Disposing Mesh: " + object3d.name);
+        //Graphics.logger.addInfoMessage ("Disposing Mesh: " + object3d.name);
 
         const disposeMaterial = (material) => {
             //Graphics.logger.addInfoMessage ("\tdispose Material: " + material.name);

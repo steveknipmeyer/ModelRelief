@@ -47,6 +47,8 @@ export class ImageFactory {
     protected static RootContainerId: string           = "rootContainer";          // root container for viewers
 
     // protected
+    protected _factoryName: string                     = "";       // factory name
+
     protected _scene: THREE.Scene                      = null;     // target scene
     protected _root: THREE.Group                       = null;     // root object
     protected _modelGroup: THREE.Group                 = null;     // target model
@@ -127,7 +129,6 @@ export class ImageFactory {
         this._postTarget.dispose();
 
         Graphics.resetWebGLVertexAttributes(this._renderer);
-        this._renderer.context = null;
     }
 //#endregion
 
@@ -202,8 +203,6 @@ export class ImageFactory {
      protected initializeRenderer(): void {
 
         this._renderer = this.constructRenderer();
-
-        this._renderer = new THREE.WebGLRenderer( {canvas : this._canvas, logarithmicDepthBuffer : this._logDepthBuffer, preserveDrawingBuffer: true});
 
         this._renderer.setPixelRatio(window.devicePixelRatio);
         this._renderer.setSize(this._width, this._height);
@@ -392,8 +391,11 @@ export class ImageFactory {
         const material = this.initializeMaterial();
         if (material)
             this._scene.overrideMaterial = material;
-        
-        this._renderer.render(this._scene, this._camera.viewCamera, this._target, true);
+
+        if (this._factoryName === "DepthBufferFactory")
+            this._renderer.render(this._scene, this._camera.viewCamera, this._target, true);
+        else
+            this._renderer.render(this._scene, this._camera.viewCamera);
 
         // restore default materials
         this._scene.overrideMaterial = null;
@@ -425,7 +427,8 @@ export class ImageFactory {
 
         this.renderPrimary();
 
-        this.renderPost();
+        if (this._factoryName === ObjectNames.DepthBufferFactory)
+            this.renderPost();
 
         // read render buffer to create image array
         const imageBuffer = new Uint8Array(this._width * this._height * 4).fill(0);

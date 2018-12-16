@@ -23,6 +23,8 @@ import {Model3d} from "Scripts/Models/Model3d/Model3d";
 import {NormalMap} from "Scripts/Models/NormalMap/NormalMap";
 import {NormalMapFactory} from "Scripts/Models/NormalMap/NormalMapFactory";
 import {ElementAttributes, ElementIds} from "Scripts/System/Html";
+import {ILogger} from "Scripts/System/Logger";
+import {Services} from "Scripts/System/Services";
 import {UnitTests} from "Scripts/UnitTests/UnitTests";
 import {InputControllerHelper} from "Scripts/Viewers/InputControllerHelper";
 import {MeshViewer} from "Scripts/Viewers/MeshViewer";
@@ -83,13 +85,18 @@ class ControlSettings {
  */
 export class ComposerController {
 
+    // Static
     public static DefaultReliefDimensions: number  = 512;           // relief dimensions
 
+    // Public
     public _composerView: ComposerView;                             // application view
     public _composerViewSettings: ComposerViewSettings;             // UI settings
 
     public _reliefWidthPixels: number;                              // relief width
     public _reliefHeightPixels: number;                             // relief height
+
+    // Protected
+    protected _logger: ILogger;
 
     /**
      * Creates an instance of ComposerController.
@@ -211,6 +218,8 @@ export class ComposerController {
         const meshGraphics = await loader.loadMeshAsync(this.activeMesh);
 
         this.meshViewer.setModelGroup(meshGraphics);
+
+        this._logger.addMessage("Mesh generated");
     }
 
     /**
@@ -347,6 +356,7 @@ export class ComposerController {
      * @description Initialization.
      */
     public initialize() {
+        this._logger = Services.defaultLogger;
 
         // overall dimensions
         this._reliefWidthPixels  = ComposerController.DefaultReliefDimensions;

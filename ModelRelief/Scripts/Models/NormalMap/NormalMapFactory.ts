@@ -8,6 +8,7 @@
 import * as Dto from "Scripts/Api/V1//Models/DtoModels";
 import * as THREE from "three";
 
+import { ObjectNames } from "Scripts/Graphics/Graphics";
 import {IImageFactoryParameters, ImageFactory} from "Scripts/Graphics/ImageFactory";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {NormalMap} from "Scripts/Models/NormalMap/NormalMap";
@@ -18,12 +19,6 @@ import {NormalMap} from "Scripts/Models/NormalMap/NormalMap";
  */
 export class NormalMapFactory extends ImageFactory {
 
-    // Protected
-    protected static FactoryRenderer: THREE.WebGLRenderer = null;                     // shared renderer instance
-
-    // Private
-    private static FactoryName: string = "NormalMapFactory";
-
     // Private
     private _normalMap: NormalMap = null;     // normal map
 
@@ -33,6 +28,8 @@ export class NormalMapFactory extends ImageFactory {
      */
     constructor(parameters?: IImageFactoryParameters) {
         super(parameters);
+
+        this._factoryName = ObjectNames.NormalMapFactory;
     }
 
 //#region Properties
@@ -81,11 +78,16 @@ export class NormalMapFactory extends ImageFactory {
      */
     protected constructRenderer(): THREE.WebGLRenderer {
 
-        if (NormalMapFactory.FactoryRenderer == null)
-            NormalMapFactory.FactoryRenderer = new THREE.WebGLRenderer( {canvas : this._canvas, logarithmicDepthBuffer : this._logDepthBuffer, preserveDrawingBuffer: true});
+        const renderer = new THREE.WebGLRenderer({
 
-        // singleton
-        return NormalMapFactory.FactoryRenderer;
+            logarithmicDepthBuffer  : false,
+            canvas                  : this._canvas,
+            antialias               : true,
+        });
+        renderer.autoClear = true;
+        renderer.setClearColor(0x000000);
+
+        return renderer;
     }
 
     /**
@@ -94,6 +96,7 @@ export class NormalMapFactory extends ImageFactory {
     protected initializeMaterial(): THREE.Material {
 
         const material = new THREE.ShaderMaterial({
+            depthTest: true,
 
             vertexShader:   MR.shaderSource.NormalMapVertexShader,
             fragmentShader: MR.shaderSource.NormalMapFragmentShader,

@@ -8,6 +8,7 @@
 import * as Dto from "Scripts/Api/V1//Models/DtoModels";
 import * as THREE from "three";
 
+import {ObjectNames} from "Scripts/Graphics/Graphics";
 import {IImageFactoryParameters, ImageFactory} from "Scripts/Graphics/ImageFactory";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
@@ -17,12 +18,6 @@ import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
  * DepthBufferFactory
  */
 export class DepthBufferFactory extends ImageFactory {
-
-    // Protected
-    protected static FactoryRenderer: THREE.WebGLRenderer = null;                     // shared renderer instance  
-
-    // Private
-    private static FactoryName: string = "DepthBufferFactory";
 
     // Private
     private _depthBuffer: DepthBuffer = null;     // depth buffer
@@ -34,6 +29,7 @@ export class DepthBufferFactory extends ImageFactory {
     constructor(parameters?: IImageFactoryParameters) {
         super(parameters);
 
+        this._factoryName = ObjectNames.DepthBufferFactory;
         this._minimumWebGLExtensions = ["WEBGL_depth_texture"];
     }
 
@@ -87,11 +83,9 @@ export class DepthBufferFactory extends ImageFactory {
      */
     protected constructRenderer(): THREE.WebGLRenderer {
 
-        if (DepthBufferFactory.FactoryRenderer == null) 
-            DepthBufferFactory.FactoryRenderer = new THREE.WebGLRenderer( {canvas : this._canvas, logarithmicDepthBuffer : this._logDepthBuffer, preserveDrawingBuffer: true});
+        const renderer = new THREE.WebGLRenderer( {canvas : this._canvas, logarithmicDepthBuffer : this._logDepthBuffer, preserveDrawingBuffer: true});
 
-        // singleton
-        return DepthBufferFactory.FactoryRenderer
+        return renderer;
     }
 
     /**

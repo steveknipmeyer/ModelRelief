@@ -23,11 +23,7 @@ uniform mat4 viewMatrix;
 uniform vec3 cameraPosition;
 #endif
 
-varying vec2 vUV;                       // UV coordinates of vertex
 varying vec3 vNormal;                   // vertex normal
-varying vec3 vWorldPosition;            // vertex world position
-varying vec3 vViewPosition;             // vertex view position (flipped)
-varying float vDepth;                   // Z depth
 
 const vec3 noColor = vec3(0.0, 0.0, 0.0);
 
@@ -36,10 +32,9 @@ const vec3 noColor = vec3(0.0, 0.0, 0.0);
 /// </summary>
 void main() {
 
-	vec3 normal = normalize(vNormal);
+    float redComponent   = (vNormal.x + 1.0) / 2.0;
+    float greenComponent = (vNormal.y + 1.0) / 2.0;
+    float blueComponent  = vNormal.z;
 
-    float redComponent   = (normal.x + 1.0) / 2.0;
-    float greenComponent = (normal.y + 1.0) / 2.0;
-    float blueComponent  = normal.z;
     gl_FragColor = vec4(redComponent, greenComponent, blueComponent, 1.0);
 }
