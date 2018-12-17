@@ -106,7 +106,7 @@ export class NormalMapFactory extends ImageFactory {
     protected initializePostMaterial(): THREE.Material {
 
         const postMaterial = new THREE.MeshBasicMaterial({
-            map: this._target.texture;
+            map: this._target.texture,
         });
 
         return postMaterial;

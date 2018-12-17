@@ -7,6 +7,7 @@
 
 import * as THREE from "three";
 
+import {Materials} from "Scripts/Graphics/Materials";
 import {Services} from "Scripts/System/Services";
 
 /**
@@ -60,34 +61,12 @@ export class Graphics {
         if (!object3d.isMesh)
             return;
 
-        //Graphics.logger.addInfoMessage ("Disposing Mesh: " + object3d.name);
+        Graphics.logger.addInfoMessage ("Disposing Mesh: " + object3d.name);
 
-        const disposeMaterial = (material) => {
-            //Graphics.logger.addInfoMessage ("\tdispose Material: " + material.name);
-            material.dispose();
-
-            // dispose textures
-            for (const key of Object.keys(material)) {
-                const value = material[key];
-                // property of type Texture?
-                if (value && typeof value === "object" && "minFilter" in value) {
-                    //Graphics.logger.addInfoMessage ("\tdispose Texture: " + value.name);
-                    value.dispose();
-                }
-            }
-        };
-
-        //Graphics.logger.addInfoMessage ("\tdispose Geometry: " + object3d.geometry.name);
+        Graphics.logger.addInfoMessage ("\tdispose Geometry: " + object3d.geometry.name);
         object3d.geometry.dispose();
 
-        // single material
-        if (object3d.material.isMaterial) {
-            disposeMaterial(object3d.material);
-        // array of materials
-        } else {
-            for (const material of object3d.material)
-                disposeMaterial(material);
-        }
+        Materials.disposeMaterial(object3d.material);
     }
 
     /**
@@ -160,6 +139,7 @@ export class Graphics {
         objectClone.traverse((traversalObject) => {
             if (traversalObject instanceof (THREE.Mesh)) {
                 traversalObject.geometry = traversalObject.geometry.clone();
+                traversalObject.material = Materials.cloneMaterial(traversalObject.material);
             }
         });
         Services.timer.logElapsedTime(cloneTag);

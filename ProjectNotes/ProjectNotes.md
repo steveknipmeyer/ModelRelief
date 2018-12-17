@@ -5,7 +5,7 @@
 #### Vector
 
 Issues
-    Graphics.cloneAndTransformObject needs to clone materials also.
+    Style Chrome development tools.
 
     Can the DepthBufferViewer and NormalMapViewer share a common base class?
 
@@ -19,6 +19,8 @@ Issues
 
     https://webglfundamentals.org/webgl/lessons/webgl-how-it-works.html
 
+    What NormalMap integration tests are appropriate?
+
     Orthogonal planes (e.g. House) do not generate constant Z depths.
 
     WebGL Debugging
@@ -26,9 +28,10 @@ Issues
 
         Explore Nsight for shader debugging.
 
-        http://www.realtimerendering.com/blog/debugging-webgl-with-spectorjs/
+        SpectorJS
+            http://www.realtimerendering.com/blog/debugging-webgl-with-spectorjs/
 
-        RenderDoc?
+        RenderDoc
             "c:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-gpu-watchdog --gpu-startup-dialog --allow-no-sandbox-job --allow-sandbox-debugging --no-sandbox --disable-gpu-sandbox
 
     Review Mesh, DepthBuffer and NormalMap properties:
@@ -39,7 +42,6 @@ Issues
         Mesh.DepthBuffer.Camera is used.
         Mesh.NormalMap.Camera is equivalent.
 
-    What NormalMap integration tests are appropriate?
 
 ### Adding a New GeneratedFileDomainModel (e.g. NormalMap)
 #### Documentation
