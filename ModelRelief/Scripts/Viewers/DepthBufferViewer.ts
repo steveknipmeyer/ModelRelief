@@ -5,10 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import {Graphics} from "Scripts/Graphics/Graphics";
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
-import {ILogger} from "Scripts/System/Logger";
-import {Services} from "Scripts/System/Services";
 import {DepthBufferViewerControls} from "Scripts/Viewers/DepthBufferViewerControls";
 import {ImageViewer} from "Scripts/Viewers/ImageViewer";
 
@@ -18,6 +15,9 @@ import {ImageViewer} from "Scripts/Viewers/ImageViewer";
  * @class DepthBufferViewer
  */
 export class DepthBufferViewer extends ImageViewer {
+
+    // Private
+    _depthBufferViewerControls : DepthBufferViewerControls;
 
     /**
      * Creates an instance of DepthBufferViewer.
@@ -43,7 +43,7 @@ export class DepthBufferViewer extends ImageViewer {
      */
     public initializeUIControls() {
 
-        this._imageViewerControls = new DepthBufferViewerControls(this);
+        this._depthBufferViewerControls = new DepthBufferViewerControls(this);
     }
 //#endregion
 }

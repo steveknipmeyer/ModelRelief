@@ -73,7 +73,7 @@ export class NormalMapViewerControls {
         const controlDisplayNormalMap = normalMapViewerOptions.add(this._normalMapViewerSettings, "displayNormalMap").name("Display NormalMap");
         controlDisplayNormalMap.onChange ((value: boolean) => {
 
-            scope._normalMapViewer.displayNormalMap(value);
+            scope._normalMapViewer.displayImage(value);
         });
         normalMapViewerOptions.open();
     }

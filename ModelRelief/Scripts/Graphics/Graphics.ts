@@ -61,9 +61,9 @@ export class Graphics {
         if (!object3d.isMesh)
             return;
 
-        Graphics.logger.addInfoMessage ("Disposing Mesh: " + object3d.name);
+        //Graphics.logger.addInfoMessage ("Disposing Mesh: " + object3d.name);
 
-        Graphics.logger.addInfoMessage ("\tdispose Geometry: " + object3d.geometry.name);
+        //Graphics.logger.addInfoMessage ("\tdispose Geometry: " + object3d.geometry.name);
         object3d.geometry.dispose();
 
         Materials.disposeMaterial(object3d.material);

@@ -14,6 +14,7 @@ import {NormalMapFormat} from "Scripts/Api/V1/Interfaces/INormalMap";
 import {GeneratedFileModel} from "Scripts/Api/V1/Models/GeneratedFileModel";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
+import {IImageModel} from "Scripts/Models/Interfaces/IImageModel";
 import {Model3d} from "Scripts/Models/Model3d/Model3d";
 import {Project} from "Scripts/Models/Project/Project";
 
@@ -23,7 +24,7 @@ import {Project} from "Scripts/Models/Project/Project";
  * @class NormalMap
  * @extends {GeneratedFileModel}
  */
-export class NormalMap extends GeneratedFileModel {
+export class NormalMap extends GeneratedFileModel implements IImageModel {
 
     /**
      * @description Returns a NormalMap instance through an HTTP query of the Id.

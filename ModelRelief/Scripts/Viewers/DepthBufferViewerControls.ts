@@ -73,7 +73,7 @@ export class DepthBufferViewerControls {
         const controlDisplayDepthBuffer = depthBufferViewerOptions.add(this._depthBufferViewerSettings, "displayDepthBuffer").name("Display DepthBuffer");
         controlDisplayDepthBuffer.onChange ((value: boolean) => {
 
-            scope._depthBufferViewer.displayDepthBuffer(value);
+            scope._depthBufferViewer.displayImage(value);
         });
         depthBufferViewerOptions.open();
     }

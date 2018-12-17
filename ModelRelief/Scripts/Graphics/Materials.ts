@@ -102,7 +102,7 @@ export class Materials {
      */
     private static dispose(material: THREE.Material): void {
 
-        Services.defaultLogger.addInfoMessage ("\tdispose Material: " + material.name);
+        //Services.defaultLogger.addInfoMessage ("\tdispose Material: " + material.name);
         material.dispose();
 
         // dispose textures
@@ -110,7 +110,7 @@ export class Materials {
 
             const value = material[key];
             if (Materials.isTexture(value)) {
-                Services.defaultLogger.addInfoMessage ("\tdispose Texture: " + value.name);
+                //Services.defaultLogger.addInfoMessage ("\tdispose Texture: " + value.name);
                 value.dispose();
             }
         }
@@ -123,14 +123,14 @@ export class Materials {
      */
     private static cloneTextures(material: THREE.Material): void {
 
-        Services.defaultLogger.addInfoMessage ("\tclone Material: " + material.name);
+        //Services.defaultLogger.addInfoMessage ("\tclone Material: " + material.name);
 
         // clone textures
         for (const key of Object.keys(material)) {
 
             const value = material[key];
             if (Materials.isTexture(value)) {
-                Services.defaultLogger.addInfoMessage ("\tclone Texture: " + value.name);
+                //Services.defaultLogger.addInfoMessage ("\tclone Texture: " + value.name);
                 material[key] = value.clone();
             }
         }

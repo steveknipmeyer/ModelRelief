@@ -15,8 +15,8 @@ import {GeneratedFileModel} from "Scripts/Api/V1/Models/GeneratedFileModel";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {Model3d} from "Scripts/Models/Model3d/Model3d";
+import {IImageModel} from "Scripts/Models/Interfaces/IImageModel";
 import {Project} from "Scripts/Models/Project/Project";
-import {Image} from "Scripts/Viewers/ImageViewer";
 
 /**
  * @description Represents a depth buffer.
@@ -24,7 +24,7 @@ import {Image} from "Scripts/Viewers/ImageViewer";
  * @class DepthBuffer
  * @extends {GeneratedFileModel}
  */
-export class DepthBuffer extends GeneratedFileModel implements Image {
+export class DepthBuffer extends GeneratedFileModel implements IImageModel {
 
     /**
      * @description Returns a DepthBuffer instance through an HTTP query of the Id.

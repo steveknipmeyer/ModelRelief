@@ -5,25 +5,18 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import {Graphics} from "Scripts/Graphics/Graphics";
 import {NormalMap} from "Scripts/Models/NormalMap/NormalMap";
-import {ILogger} from "Scripts/System/Logger";
-import {Services} from "Scripts/System/Services";
 import {NormalMapViewerControls} from "Scripts/Viewers/NormalMapViewerControls";
+import {ImageViewer} from "Scripts/Viewers/ImageViewer";
 
 /**
  * @description Graphics viewer for a NormalMap.
  * @export
  * @class NormalMapViewer
  */
-export class NormalMapViewer  {
-
-    public canvas: HTMLCanvasElement;
+export class NormalMapViewer extends ImageViewer {
 
     // Private
-    private _normalMap: NormalMap;
-    private _logger: ILogger;
-
     private _normalMapViewerControls: NormalMapViewerControls;            // UI controls
 
     /**
@@ -34,68 +27,16 @@ export class NormalMapViewer  {
      */
     constructor(name: string, canvasId: string, normalMap: NormalMap) {
 
-        this.canvas = document.querySelector(`#${canvasId}`) as HTMLCanvasElement;
-        this._normalMap = normalMap;
-
-        this._logger = Services.defaultLogger;
-
-        this.initialize();
+        super(name, canvasId, normalMap);
     }
 
 //#region Properties
-    /**
-     * @description Gets the DOM Id of the Viewer parent container.
-     * @readonly
-     * @type {string}
-     */
-    get containerId(): string {
-
-        const parentElement: HTMLElement = this.canvas.parentElement;
-        return parentElement.id;
-    }
 //#endregion
 
 //#region Event Handlers
-    /**
-     * @description Display the associated NormalMap.
-     * @param {boolean} visible
-     */
-    public displayNormalMap(visible: boolean) {
-
-        this.canvas.style.display = visible ? "" : "none";
-        this._logger.addMessage(`Display NormalMap = ${visible}`);
-    }
-
-    /**
-     * Handle a mouse down event on the canvas.
-     */
-    public onMouseDown(event: JQueryEventObject): void {
-        // https://www.w3schools.com/colors/colors_names.asp
-        const messageStyle = "color:fuchsia";
-
-        const deviceCoordinates: THREE.Vector2 = Graphics.deviceCoordinatesFromJQEvent(event, $(event.target) as JQuery);
-        this._logger.addMessage(`Device [X, y] = ${deviceCoordinates.x}, ${deviceCoordinates.y}`, messageStyle);
-
-        const decimalPlaces: number = 2;
-        const row: number = (deviceCoordinates.y + 1) / 2 * this._normalMap.height;
-        const column: number = (deviceCoordinates.x + 1) / 2 * this._normalMap.width;
-        this._logger.addMessage(`Offset = [${row}, ${column}]`, messageStyle);
-
-        this._logger.addEmptyLine();
-    }
-
 //#endregion
 
 //#region Initialization
-    /**
-     * @description Initialization.
-     */
-    public initialize() {
-        this.initializeUIControls();
-
-        const $canvas = $(this.canvas).on("mousedown", this.onMouseDown.bind(this));
-    }
-
     /**
      * @description UI controls initialization.
      */

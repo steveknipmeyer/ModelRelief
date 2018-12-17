@@ -6,18 +6,9 @@
 "use strict";
 
 import {Graphics} from "Scripts/Graphics/Graphics";
+import {IImageModel} from "Scripts/Models/Interfaces/IImageModel";
 import {ILogger} from "Scripts/System/Logger";
 import {Services} from "Scripts/System/Services";
-
-export interface Image {
-
-    width: number;
-    height: number;
-}
-
-export interface ImageViewerControls {
-
-}
 
 /**
  * @description Graphics viewer for an image.
@@ -31,10 +22,9 @@ export class ImageViewer  {
     public canvas: HTMLCanvasElement;
 
     // Protected
-    protected _imageViewerControls: ImageViewerControls;            // UI controls
 
     // Private
-    private _image: Image;
+    private _image: IImageModel;
     private _logger: ILogger;
 
     /**
@@ -43,8 +33,9 @@ export class ImageViewer  {
      * @param {string} canvasId HTML element to host the viewer.
      * @param {Image} image The image bound to this viewer.
      */
-    constructor(name: string, canvasId: string, image: Image) {
+    constructor(name: string, canvasId: string, image: IImageModel) {
 
+        this.name = name;
         this.canvas = document.querySelector(`#${canvasId}`) as HTMLCanvasElement;
         this._image = image;
 
@@ -74,7 +65,7 @@ export class ImageViewer  {
     public displayImage(visible: boolean): void {
 
         this.canvas.style.display = visible ? "" : "none";
-        this._logger.addMessage(`Display Image = ${visible}`);
+        this._logger.addMessage(`${this.name} Image = ${visible}`);
     }
 
     /**
@@ -111,8 +102,6 @@ export class ImageViewer  {
      * @description UI controls initialization.
      */
     public initializeUIControls() {
-
-//      this._imageViewerControls = new NormalMapViewerControls(this);
     }
 //#endregion
 }
