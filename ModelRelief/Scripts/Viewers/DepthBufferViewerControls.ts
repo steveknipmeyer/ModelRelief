@@ -27,8 +27,8 @@ class DepthBufferViewerSettings {
  */
 export class DepthBufferViewerControls {
 
-    public _depthBufferViewer: any;                                   // associated viewer
-    public _depthBufferViewerSettings: DepthBufferViewerSettings;             // UI settings
+    public _depthBufferViewer: any;                                             // associated viewer
+    public _depthBufferViewerSettings: DepthBufferViewerSettings;               // UI settings
 
     /**
      * Creates an instance of DepthBufferViewerControls.

@@ -5,8 +5,6 @@
 #### Vector
 
 Issues
-    Style Chrome development tools.
-
     Can the DepthBufferViewer and NormalMapViewer share a common base class?
 
     Create PNG images from normal maps.
