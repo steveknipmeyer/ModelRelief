@@ -1,12 +1,13 @@
 ﻿### Tasks
 #### Commit Notes
 #### Lambda
+    Review User and Workspace settings for Vector/Lambda.
+        Why is the tslint warning about alphabetized imports not seen in VSCode?
+    Which Doxygen extension should be installed?
 
 #### Vector
 
 Issues
-    Can the DepthBufferViewer and NormalMapViewer share a common base class?
-
     Create PNG images from normal maps.
 
     Share common methods between DepthBuffers and NormalMaps:
