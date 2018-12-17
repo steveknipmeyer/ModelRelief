@@ -71,6 +71,7 @@ export class DepthBuffer extends GeneratedFileModel implements IImageModel {
         return depthBuffer;
     }
 
+    // Public
     public width: number;
     public height: number;
     public format: DepthBufferFormat;

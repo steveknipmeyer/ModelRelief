@@ -8,11 +8,21 @@
 #### Vector
 
 Issues
-    Create PNG images from normal maps.
+    Are the test NormalMaps valid?
 
-    Share common methods between DepthBuffers and NormalMaps:
-        getModelVertexIndices
-        getModelVertexIndex
+    ImageHelper 
+        DepthBuffer, Normalap hold instances.
+        Replace (empty) System\Image (ImageLibrary)
+        Implement IImageModel?
+
+        methods
+            Indexer
+            RGB, RGBA values
+            Vector3
+            getModelVertexIndices (DepthBuffer)
+            getModelVertexIndex (DepthBuffer)
+
+    Create PNG images from normal maps.
 
     Document the ImageFactory data flows.
 

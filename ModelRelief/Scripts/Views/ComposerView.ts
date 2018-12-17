@@ -119,6 +119,7 @@ export class ComposerView {
             this.mesh = mesh;
             const model3d = this.mesh.depthBuffer.model3d;
             const depthBuffer = this.mesh.depthBuffer;
+            const normalMap = this.mesh.normalMap;
 
             // Mesh View
             this._meshView = new MeshView(ElementIds.MeshView, this.mesh);
@@ -130,7 +131,6 @@ export class ComposerView {
             this._depthBufferView = new DepthBufferView(ElementIds.DepthBufferView, depthBuffer);
 
             // NormalMap View
-            const normalMap = new NormalMap({});
             this._normalMapView = new NormalMapView(ElementIds.NormalMapView, normalMap);
 
             // load models; model event handlers in Viewers now initialized

@@ -355,29 +355,13 @@ export class ImageFactory {
 //#endregion
 
 //#region Analysis
-    /**
-     * Constructs an RGBA string with the byte values of a pixel.
-     * @param buffer Unsigned byte raw buffer.
-     * @param row Pixel row.
-     * @param column Column row.
-     */
-     protected unsignedBytesToRGBA(buffer: Uint8Array, row: number, column: number): string {
-
-        const offset = (row * this._width) + column;
-        const rValue = buffer[offset + 0].toString(16);
-        const gValue = buffer[offset + 1].toString(16);
-        const bValue = buffer[offset + 2].toString(16);
-        const aValue = buffer[offset + 3].toString(16);
-
-        return `#${rValue}${gValue}${bValue} ${aValue}`;
-    }
 
     /**
      * Analyzes a pixel from a render buffer.
      */
     protected analyzeRenderBuffer() {
 
-        const renderBuffer =  new Uint8Array(this._width * this._height * 4).fill(0);
+        const renderBuffer = new Uint8Array(this._width * this._height * 4).fill(0);
         this._renderer.readRenderTargetPixels(this._target, 0, 0, this._width, this._height, renderBuffer);
 
         const messageString = `RGBA[0, 0] = ${this.unsignedBytesToRGBA(renderBuffer, 0, 0)}`;

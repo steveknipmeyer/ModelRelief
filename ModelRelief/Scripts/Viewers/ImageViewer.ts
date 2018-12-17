@@ -7,6 +7,7 @@
 
 import {Graphics} from "Scripts/Graphics/Graphics";
 import {IImageModel} from "Scripts/Models/Interfaces/IImageModel";
+import {Format} from "Scripts/System/Format";
 import {ILogger} from "Scripts/System/Logger";
 import {Services} from "Scripts/System/Services";
 
@@ -74,14 +75,15 @@ export class ImageViewer  {
     public onMouseDown(event: JQueryEventObject): void {
         // https://www.w3schools.com/colors/colors_names.asp
         const messageStyle = "color:fuchsia";
+        const precision = 2;
+        const fieldWidth = 4;
 
         const deviceCoordinates: THREE.Vector2 = Graphics.deviceCoordinatesFromJQEvent(event, $(event.target) as JQuery);
-        this._logger.addMessage(`Device [X, y] = ${deviceCoordinates.x}, ${deviceCoordinates.y}`, messageStyle);
+        this._logger.addMessage(`Device = [${Format.formatNumber(deviceCoordinates.x, precision, fieldWidth)}, ${Format.formatNumber(deviceCoordinates.y, precision, fieldWidth)}]`, messageStyle);
 
-        const decimalPlaces: number = 2;
         const row: number = (deviceCoordinates.y + 1) / 2 * this._image.height;
         const column: number = (deviceCoordinates.x + 1) / 2 * this._image.width;
-        this._logger.addMessage(`Offset = [${row}, ${column}]`, messageStyle);
+        this._logger.addMessage(`Offset = [${Format.formatNumber(row, precision, fieldWidth)}, ${Format.formatNumber(column, precision, fieldWidth)}]`, messageStyle);
 
         this._logger.addEmptyLine();
     }
