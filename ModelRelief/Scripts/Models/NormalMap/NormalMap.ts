@@ -81,7 +81,7 @@ export class NormalMap extends GeneratedFileModel implements IImageModel {
     public _camera: BaseCamera;
 
     // Private
-    private _rgbArray: Uint8Array;
+    private _rgbaArray: Uint8Array;
 
     /**
      * Creates an instance of NormalMap.
@@ -102,16 +102,16 @@ export class NormalMap extends GeneratedFileModel implements IImageModel {
      * @description Returns the raw RGBA values of the normal map.
      * @type {Float32Array}
      */
-    get rgbArray(): Uint8Array {
+    get rgbaArray(): Uint8Array {
 
-        return this._rgbArray;
+        return this._rgbaArray;
     }
     /**
      * @description Sets the raw RGBA values of the normal map.
      */
-    set rgbArray(value: Uint8Array) {
+    set rgbaArray(value: Uint8Array) {
 
-        this._rgbArray = value;
+        this._rgbaArray = value;
     }
 
     /**

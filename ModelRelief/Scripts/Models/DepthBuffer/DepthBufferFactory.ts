@@ -62,7 +62,7 @@ export class DepthBufferFactory extends ImageFactory {
         });
 
         this._depthBuffer =  await DepthBuffer.fromDtoModelAsync(dtoDepthBuffer);
-        this._depthBuffer.rgbArray = imageBuffer;
+        this._depthBuffer.rgbaArray = imageBuffer;
 
         // WIP : Assign Model3d.
         // this._depthBuffer.model3d   =
@@ -108,7 +108,6 @@ export class DepthBufferFactory extends ImageFactory {
      */
     protected analyzeTargets()  {
 
-        super.analyzeRenderBuffer();
         this._depthBuffer.analyze();
     }
 //#endregion

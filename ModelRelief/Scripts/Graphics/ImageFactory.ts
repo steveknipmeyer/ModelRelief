@@ -11,6 +11,7 @@ import * as THREE from "three";
 import {Graphics, ObjectNames} from "Scripts/Graphics/Graphics";
 import {ImageFactorySettings} from "Scripts/Graphics/ImageFactorySettings";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
+import {Image} from "Scripts/System/Image";
 import {ILogger} from "Scripts/System/Logger";
 import {Services} from "Scripts/System/Services";
 import {Tools} from "Scripts/System/Tools";
@@ -115,6 +116,7 @@ export class ImageFactory {
     get canvas(): HTMLElement {
         return this._canvas;
     }
+//#endregion
 
     /**
      * @description Removes all scene objects
@@ -129,7 +131,6 @@ export class ImageFactory {
 
         Graphics.resetWebGLVertexAttributes(this._renderer);
     }
-//#endregion
 
 //#region Initialization
      /**
@@ -286,7 +287,6 @@ export class ImageFactory {
 
         this._logger = Services.defaultLogger;
     }
-
 //#endregion
 
 //#region PostProcessing
@@ -354,26 +354,30 @@ export class ImageFactory {
     }
 //#endregion
 
-//#region Analysis
-
+//#region Target Buffers
     /**
-     * Analyzes a pixel from a render buffer.
+     * Read a render target.
      */
-    protected analyzeRenderBuffer() {
+    protected readRenderTarget(theTarget: THREE.WebGLRenderTarget): Uint8Array {
 
-        const renderBuffer = new Uint8Array(this._width * this._height * 4).fill(0);
-        this._renderer.readRenderTargetPixels(this._target, 0, 0, this._width, this._height, renderBuffer);
+        const buffer = new Uint8Array(this._width * this._height * Image.RGBASize).fill(0);
+        this._renderer.readRenderTargetPixels(theTarget, 0, 0, this._width, this._height, buffer);
 
-        const messageString = `RGBA[0, 0] = ${this.unsignedBytesToRGBA(renderBuffer, 0, 0)}`;
-        this._logger.addMessage(messageString, null);
+        return buffer;
     }
 
     /**
-     * Analyze the render target.
+     * Read the primary render target.
      */
-    protected analyzeTargets()  {
+    protected readTarget(): Uint8Array {
+        return this.readRenderTarget(this._target);
+    }
 
-        this.analyzeRenderBuffer();
+    /**
+     * Read the post render target.
+     */
+    protected readPostTarget(): Uint8Array {
+        return this.readRenderTarget(this._postTarget);
     }
 
 //#endregion
@@ -425,7 +429,7 @@ export class ImageFactory {
         this.renderPost();
 
         // read render buffer to create image array
-        const imageBuffer = new Uint8Array(this._width * this._height * 4).fill(0);
+        const imageBuffer = new Uint8Array(this._width * this._height * Image.RGBASize).fill(0);
         this._renderer.readRenderTargetPixels(this._postTarget, 0, 0, this._width, this._height, imageBuffer);
 
         this.clearAllAssests();

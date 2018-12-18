@@ -61,7 +61,7 @@ export class NormalMapFactory extends ImageFactory {
         });
 
         this._normalMap =  await NormalMap.fromDtoModelAsync(dtoNormalMap);
-        this._normalMap.rgbArray = imageBuffer;
+        this._normalMap.rgbaArray = imageBuffer;
 
         // WIP : Assign Model3d.
         // this._normalMap.model3d   =
@@ -119,11 +119,7 @@ export class NormalMapFactory extends ImageFactory {
      */
     protected analyzeTargets()  {
 
-        super.analyzeRenderBuffer();
         this._normalMap.analyze();
     }
 //#endregion
 }
-
-
-

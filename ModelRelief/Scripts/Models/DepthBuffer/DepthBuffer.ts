@@ -14,8 +14,8 @@ import {IGeneratedFileModel} from "Scripts/Api/V1/Interfaces/IGeneratedFileModel
 import {GeneratedFileModel} from "Scripts/Api/V1/Models/GeneratedFileModel";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
-import {Model3d} from "Scripts/Models/Model3d/Model3d";
 import {IImageModel} from "Scripts/Models/Interfaces/IImageModel";
+import {Model3d} from "Scripts/Models/Model3d/Model3d";
 import {Project} from "Scripts/Models/Project/Project";
 
 /**
@@ -104,7 +104,7 @@ export class DepthBuffer extends GeneratedFileModel implements IImageModel {
      * @description Returns the raw RGB array of the buffer.
      * @type {Uint8Array}
      */
-    get rgbArray(): Uint8Array {
+    get rgbaArray(): Uint8Array {
 
         return this._rgbaArray;
     }
@@ -112,12 +112,12 @@ export class DepthBuffer extends GeneratedFileModel implements IImageModel {
     /**
      * @description Sets the raw RGB array.
      */
-    set rgbArray(value: Uint8Array) {
+    set rgbaArray(value: Uint8Array) {
 
         this._rgbaArray = value;
 
         // RGBA -> Float32
-        this.depths = new Float32Array(this.rgbArray.buffer);
+        this.depths = new Float32Array(this.rgbaArray.buffer);
     }
 
     /**

@@ -75,15 +75,16 @@ export class ImageViewer  {
     public onMouseDown(event: JQueryEventObject): void {
         // https://www.w3schools.com/colors/colors_names.asp
         const messageStyle = "color:fuchsia";
-        const precision = 2;
         const fieldWidth = 4;
 
+        let precision = 2;
         const deviceCoordinates: THREE.Vector2 = Graphics.deviceCoordinatesFromJQEvent(event, $(event.target) as JQuery);
         this._logger.addMessage(`Device = [${Format.formatNumber(deviceCoordinates.x, precision, fieldWidth)}, ${Format.formatNumber(deviceCoordinates.y, precision, fieldWidth)}]`, messageStyle);
 
-        const row: number = (deviceCoordinates.y + 1) / 2 * this._image.height;
+        precision = 0;
+        const row: number = this._image.height - ((deviceCoordinates.y + 1) / 2 * this._image.height);
         const column: number = (deviceCoordinates.x + 1) / 2 * this._image.width;
-        this._logger.addMessage(`Offset = [${Format.formatNumber(row, precision, fieldWidth)}, ${Format.formatNumber(column, precision, fieldWidth)}]`, messageStyle);
+        this._logger.addMessage(`Pixel = [${Format.formatNumber(row, precision, fieldWidth)}, ${Format.formatNumber(column, precision, fieldWidth)}]`, messageStyle);
 
         this._logger.addEmptyLine();
     }

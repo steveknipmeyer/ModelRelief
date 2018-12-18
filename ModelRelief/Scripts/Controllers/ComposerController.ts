@@ -288,8 +288,8 @@ export class ComposerController {
         let normalMapModel: Dto.NormalMap = await this.activeNormalMap.toDtoModel().putAsync();
 
         // file
-        this.activeNormalMap.rgbArray = factoryNormalMap.rgbArray;
-        normalMapModel = await normalMapModel.postFileAsync(this.activeNormalMap.rgbArray);
+        this.activeNormalMap.rgbaArray = factoryNormalMap.rgbaArray;
+        normalMapModel = await normalMapModel.postFileAsync(this.activeNormalMap.rgbaArray);
 
         return normalMapModel;
     }

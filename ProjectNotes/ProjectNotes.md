@@ -8,13 +8,15 @@
 #### Vector
 
 Issues
+    Investigate 'missing' npm errors.
+        npm list
+        npm list -g
+
     Are the test NormalMaps valid?
 
-    ImageHelper 
+    Image
         DepthBuffer, Normalap hold instances.
-        Replace (empty) System\Image (ImageLibrary)
-        Implement IImageModel?
-
+        Where should Image be placed in the source tree?
         methods
             Indexer
             RGB, RGBA values
