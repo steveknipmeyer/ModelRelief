@@ -17,7 +17,7 @@ import {ImageViewer} from "Scripts/Viewers/ImageViewer";
 export class DepthBufferViewer extends ImageViewer {
 
     // Private
-    _depthBufferViewerControls : DepthBufferViewerControls;
+    private _depthBufferViewerControls: DepthBufferViewerControls;
 
     /**
      * Creates an instance of DepthBufferViewer.

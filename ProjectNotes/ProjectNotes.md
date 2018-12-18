@@ -3,10 +3,6 @@
 Add ImageViewer.analyzePixel().
 
 #### Lambda
-Uninstall TypeScript 3.1.
-    Install TypeScript 3.2 SDK.
-    (local) npm install typescript (3.2)
-    (global) npm install -g typescript (3.2)
 
     Visual Studio External Tools
         Compile TypeScript
