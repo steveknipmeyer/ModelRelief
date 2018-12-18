@@ -1,10 +1,20 @@
 ﻿### Tasks
 #### Commit Notes
-#### Lambda
-    Review User and Workspace settings for Vector/Lambda.
-        Why is the tslint warning about alphabetized imports not seen in VSCode?
-    Which Doxygen extension should be installed?
+Add ImageViewer.analyzePixel().
 
+#### Lambda
+Uninstall TypeScript 3.1.
+    Install TypeScript 3.2 SDK.
+    (local) npm install typescript (3.2)
+    (global) npm install -g typescript (3.2)
+
+    Visual Studio External Tools
+        Compile TypeScript
+        node.exe
+        node_modules/typescript/bin/tsc -p ModelRelief
+        $(SolutionDir)
+    VSCode
+        Install TypeScript TSLint Plugin
 #### Vector
 
 Issues
@@ -12,7 +22,11 @@ Issues
         npm list
         npm list -g
 
+    Install tslint for Visual Studio 2017.
+        https://github.com/Microsoft/vscode-typescript-tslint-plugin
+
     Are the test NormalMaps valid?
+    What NormalMap integration tests are appropriate?
 
     Image
         DepthBuffer, Normalap hold instances.
@@ -21,8 +35,6 @@ Issues
             Indexer
             RGB, RGBA values
             Vector3
-            getModelVertexIndices (DepthBuffer)
-            getModelVertexIndex (DepthBuffer)
 
     Create PNG images from normal maps.
 
@@ -30,7 +42,6 @@ Issues
 
     https://webglfundamentals.org/webgl/lessons/webgl-how-it-works.html
 
-    What NormalMap integration tests are appropriate?
 
     Orthogonal planes (e.g. House) do not generate constant Z depths.
 

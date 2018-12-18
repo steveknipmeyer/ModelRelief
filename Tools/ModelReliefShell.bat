@@ -63,10 +63,6 @@ set PROMPT=(Development) $P$G
 :: Visual Studio 2017
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\VsDevCmd.bat"
 
-:: TypeScript
-:: Target version must precede the path set by VsDevCmd. VSCode uses the command line to build TypeScript so the path is important.
-echo TypeScript Version = 3.1
-path=C:\Program Files (x86)\Microsoft SDKs\TypeScript\3.1;%path%
 
 :: ASPNET CORE Configuration
 set ASPNETCORE_ENVIRONMENT=Development

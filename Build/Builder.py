@@ -140,7 +140,7 @@ class Builder:
         # TypeScript
         self.logger.logInformation("\nTypeScript compilation", Colors.BrightMagenta)
         os.chdir(self.solution_path)
-        Tools.exec("tsc -p {}".format(self.modelrelief_path))
+        Tools.exec("node node_modules/typescript/bin/tsc -p {}".format(self.modelrelief_path))
 
         self.logger.logInformation("\nTypeScript Circular Dependencies", Colors.BrightMagenta)
         os.chdir(self.solution_path)

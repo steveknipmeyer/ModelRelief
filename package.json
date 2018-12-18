@@ -58,7 +58,8 @@
     "robocopy": "^0.1.15",
     "run-sequence": "^2.0.0",
     "three": "0.98.0",
-    "typescript": "^3.1.6",
+    "typescript": "^3.2.2",
+    "typescript-tslint-plugin": "^0.2.1",
     "uglify-js": "^3.4.9"
   },
   "scripts": {

@@ -2,7 +2,7 @@
   "compilerOptions": {
     // Compiler
     "target": "es5",
-    "lib": [ "es5", "es2015", "dom"],                // assume availability of these libraries
+    "lib": [ "es5", "es2015", "dom" ], // assume availability of these libraries
     "noImplicitAny": false,
     "noEmitOnError": true,
     "removeComments": false,
@@ -11,12 +11,12 @@
     "allowJs": true,
 
     // Modules
-    "module": "amd",                                  // generate AMD (Asynchronous Module Definition code for modules
-    "moduleResolution": "node",                       // include node_modules in search paths
-    "traceResolution": false,                         // show search paths when resolving modules
+    "module": "amd", // generate AMD (Asynchronous Module Definition code for modules
+    "moduleResolution": "node", // include node_modules in search paths
+    "traceResolution": false, // show search paths when resolving modules
 
     "baseUrl": ".",
-    "paths": {                                        // search path for module resolution; include project client libraries
+    "paths": { // search path for module resolution; include project client libraries
       "*": [
         "*",
         "Scripts/*"
@@ -24,12 +24,21 @@
     }
   },
 
-  "exclude": [                                        // folders <not> included in compilation
+  "exclude": [ // folders <not> included in compilation
     "node_modules",
-    "wwwroot",                                        // Scott Allen : NDC Opinionated View of ASPNET Core
-    "**/*.js",                                        // JavaScript
+    "wwwroot",              // Scott Allen : NDC Opinionated View of ASPNET Core
+    "**/*.js",              // JavaScript
+    "Scripts/Workbench/*"   // test
+  ],
 
-    "Scripts/Workbench/*",                            // test
+  "plugins": [
+    {
+      "name": "typescript-tslint-plugin",
+      "alwaysShowRuleFailuresAsWarnings": false,
+      "ignoreDefinitionFiles": true,
+      "suppressWhileTypeErrorsPresent": false,
+      "mockTypeScriptVersion": false
+    }
   ]
 }
 

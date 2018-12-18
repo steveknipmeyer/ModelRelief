@@ -337,52 +337,6 @@ export class DepthBuffer extends GeneratedFileModel implements IImageModel {
     }
 
     /**
-     * @description Returns the buffer indices of a model point in world coordinates.
-     * @param {THREE.Vector3} worldVertex Vertex of model.
-     * @param {THREE.Box3} planeBoundingBox Size of planar bounding box.
-     * @returns {THREE.Vector2}
-     */
-    public getModelVertexIndices(worldVertex: THREE.Vector3, planeBoundingBox: THREE.Box3): THREE.Vector2 {
-
-        const boxSize: THREE.Vector3 = planeBoundingBox.getSize(new THREE.Vector3());
-        const meshExtents: THREE.Vector2 = new THREE.Vector2 (boxSize.x, boxSize.y);
-
-        //  map coordinates to offsets in range [0, 1]
-        const offsetX: number = (worldVertex.x + (boxSize.x / 2)) / boxSize.x;
-        const offsetY: number = (worldVertex.y + (boxSize.y / 2)) / boxSize.y;
-
-        let row: number = offsetY * (this.height - 1);
-        let column: number = offsetX * (this.width - 1);
-        row    = Math.round(row);
-        column = Math.round(column);
-
-        assert.isTrue((row >= 0) && (row < this.height), (`Vertex (${worldVertex.x}, ${worldVertex.y}, ${worldVertex.z}) yielded row = ${row}`));
-        assert.isTrue((column >= 0) && (column < this.width), (`Vertex (${worldVertex.x}, ${worldVertex.y}, ${worldVertex.z}) yielded column = ${column}`));
-
-        return new THREE.Vector2(row, column);
-    }
-
-    /**
-     * @description Returns the linear index of a model point in world coordinates.
-     * @param {THREE.Vector3} worldVertex Vertex of model.
-     * @param {THREE.Box3} planeBoundingBox Size of planar bounding box.
-     * @returns {number}
-     */
-    public getModelVertexIndex(worldVertex: THREE.Vector3, planeBoundingBox: THREE.Box3): number {
-
-        const indices: THREE.Vector2 = this.getModelVertexIndices(worldVertex, planeBoundingBox);
-        const row: number = indices.x;
-        const column: number = indices.y;
-
-        let index = (row * this.width) + column;
-        index = Math.round(index);
-
-        assert.isTrue((index >= 0) && (index < this.depths.length), (`Vertex (${worldVertex.x}, ${worldVertex.y}, ${worldVertex.z}) yielded index = ${index}`));
-
-        return index;
-    }
-
-    /**
      * @description Analyzes properties of a depth buffer.
      */
     public analyze() {

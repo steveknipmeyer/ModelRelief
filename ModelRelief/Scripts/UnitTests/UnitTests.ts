@@ -14,6 +14,7 @@ import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {DefaultCameraSettings} from "Scripts/Models/Camera/DefaultCameraSettings";
 import {PerspectiveCamera} from "Scripts/Models/Camera/PerspectiveCamera";
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
+import {Image} from "Scripts/System/Image";
 import {Services} from "Scripts/System/Services";
 
 /**
@@ -244,6 +245,8 @@ export class UnitTests {
 
     public static vertexMapping(depthBuffer: DepthBuffer, mesh: THREE.Mesh) {
 
+        const image = new Image(depthBuffer.width, depthBuffer.height, depthBuffer.rgbaArray);
+
         const meshGeometry: THREE.Geometry = mesh.geometry as THREE.Geometry;
         meshGeometry.computeBoundingBox();
         const boundingBox = meshGeometry.boundingBox;
@@ -285,38 +288,38 @@ export class UnitTests {
         let indices: THREE.Vector2;
 
         // Lower Left
-        indices = depthBuffer.getModelVertexIndices(lowerLeft, boundingBox);
+        indices = image.getModelVertexIndices(lowerLeft, boundingBox);
         assert.deepEqual(indices, lowerLeftIndices);
 
-        index   = depthBuffer.getModelVertexIndex(lowerLeft, boundingBox);
+        index   = image.getModelVertexIndex(lowerLeft, boundingBox);
         assert.equal(index, lowerLeftIndex);
 
         // Lower Right
-        indices = depthBuffer.getModelVertexIndices(lowerRight, boundingBox);
+        indices = image.getModelVertexIndices(lowerRight, boundingBox);
         assert.deepEqual(indices, lowerRightIndices);
 
-        index = depthBuffer.getModelVertexIndex(lowerRight, boundingBox);
+        index = image.getModelVertexIndex(lowerRight, boundingBox);
         assert.equal(index, lowerRightIndex);
 
         // Upper Right
-        indices = depthBuffer.getModelVertexIndices(upperRight, boundingBox);
+        indices = image.getModelVertexIndices(upperRight, boundingBox);
         assert.deepEqual(indices, upperRightIndices);
 
-        index = depthBuffer.getModelVertexIndex(upperRight, boundingBox);
+        index = image.getModelVertexIndex(upperRight, boundingBox);
         assert.equal(index, upperRightIndex);
 
         // Upper Left
-        indices = depthBuffer.getModelVertexIndices(upperLeft, boundingBox);
+        indices = image.getModelVertexIndices(upperLeft, boundingBox);
         assert.deepEqual(indices, upperLeftIndices);
 
-        index = depthBuffer.getModelVertexIndex(upperLeft, boundingBox);
+        index = image.getModelVertexIndex(upperLeft, boundingBox);
         assert.equal(index, upperLeftIndex);
 
         // Center
-        indices = depthBuffer.getModelVertexIndices(center, boundingBox);
+        indices = image.getModelVertexIndices(center, boundingBox);
         assert.deepEqual(indices, centerIndices);
 
-        index = depthBuffer.getModelVertexIndex(center, boundingBox);
+        index = image.getModelVertexIndex(center, boundingBox);
         assert.equal(index, centerIndex);
     }
 

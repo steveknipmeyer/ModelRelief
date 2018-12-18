@@ -22,7 +22,7 @@
             "type": "shell",
             "command": "tsc --pretty -p ModelRelief",
             "windows": {
-                "command": "tsc --pretty -p ModelRelief "
+                "command": "node ${workspaceFolder}/node_modules/typescript/bin/tsc --pretty -p ./ModelRelief "
             },
             "linux": {
                 "command": "${workspaceFolder}/node_modules/typescript/bin/tsc --pretty -p ./ModelRelief "

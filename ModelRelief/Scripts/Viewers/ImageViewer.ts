@@ -87,8 +87,9 @@ export class ImageViewer  {
         this._logger.addMessage(`Pixel = [${Format.formatNumber(row, precision, fieldWidth)}, ${Format.formatNumber(column, precision, fieldWidth)}]`, messageStyle);
 
         this._logger.addEmptyLine();
-    }
 
+        this.analyzePixel(row, column);
+    }
 //#endregion
 
 //#region Initialization
@@ -105,6 +106,17 @@ export class ImageViewer  {
      * @description UI controls initialization.
      */
     public initializeUIControls() {
+    }
+
+//#endregion
+
+//#region Analysis
+    /**
+     * @description Analyze a pixel.
+     * @param row Image row.
+     * @param column Image column.
+     */
+    public analyzePixel(row: number, column: number) {
     }
 //#endregion
 }

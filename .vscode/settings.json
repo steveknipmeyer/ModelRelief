@@ -148,7 +148,6 @@
         // Possibly, this is due to the embedded space in the NPM path.
 
         // TypeScript Version
-        "typescript.tsdk": "C:/Program Files (x86)/Microsoft SDKs/TypeScript/2.4",
 
         // Defines space handling after opening and before closing non empty braces. Requires TypeScript >= 2.3.0.
         "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,

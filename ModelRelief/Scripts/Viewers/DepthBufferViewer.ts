@@ -46,4 +46,14 @@ export class DepthBufferViewer extends ImageViewer {
         this._depthBufferViewerControls = new DepthBufferViewerControls(this);
     }
 //#endregion
+//#region Analysis
+    /**
+     * @description Analyze a pixel.
+     * @param row Image row.
+     * @param column Image column.
+     */
+    public analyzePixel(row: number, column: number) {
+    }
+//#endregion
+
 }
