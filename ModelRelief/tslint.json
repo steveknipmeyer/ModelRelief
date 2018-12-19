@@ -1,11 +1,12 @@
 {
     "linterOptions": {
-        "exclude": [
-            "Scripts/ModelExporters/OBJExporter.ts",           // THREE library file
-            "Scripts/ModelLoaders/OBJLoader.ts",               // THREE library file
-            "Scripts/Viewers/OrthographicTrackballControls.ts",// THREE library file
-            "Scripts/Viewers/TrackballControls.ts"             // THREE library file
-        ]
+      "exclude": [
+        "/**/*.d.ts",
+        "Scripts/ModelExporters/OBJExporter.ts",            // THREE library file
+        "Scripts/ModelLoaders/OBJLoader.ts",                // THREE library file
+        "Scripts/Viewers/OrthographicTrackballControls.ts", // THREE library file
+        "Scripts/Viewers/TrackballControls.ts"              // THREE library file
+      ]
     },
     "extends": "tslint:recommended",
 //  "rulesDirectory": ["path/to/custom/rules/directory/", "another/path/"],
@@ -49,6 +50,7 @@
         },
         "no-empty": [false],
         "object-literal-sort-keys": false,
+        "ordered-imports": true,
         "prefer-for-of": false,
         "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case"]
     },

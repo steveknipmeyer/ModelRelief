@@ -21,27 +21,26 @@
         "*",
         "Scripts/*"
       ]
-    }
+    },
+
+    "plugins": [
+      {
+        "name": "typescript-tslint-plugin",
+        "alwaysShowRuleFailuresAsWarnings": true,
+        "ignoreDefinitionFiles": true,
+        "suppressWhileTypeErrorsPresent": false,
+        "mockTypeScriptVersion": false
+      }
+    ]
   },
 
   "exclude": [ // folders <not> included in compilation
     "node_modules",
-    "wwwroot",              // Scott Allen : NDC Opinionated View of ASPNET Core
-    "**/*.js",              // JavaScript
-    "Scripts/Workbench/*"   // test
-  ],
-
-  "plugins": [
-    {
-      "name": "typescript-tslint-plugin",
-      "alwaysShowRuleFailuresAsWarnings": false,
-      "ignoreDefinitionFiles": true,
-      "suppressWhileTypeErrorsPresent": false,
-      "mockTypeScriptVersion": false
-    }
+    "wwwroot",                  // Scott Allen : NDC Opinionated View of ASPNET Core
+    "**/*.js",                  // JavaScript
+    "Scripts/Workbench/*"       // test
   ]
 }
-
 /*
     "strictNullChecks": true,
     // never allow null of undefined to be assigned to types by default

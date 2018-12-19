@@ -26,9 +26,11 @@ import {ElementAttributes, ElementIds} from "Scripts/System/Html";
 import {ILogger} from "Scripts/System/Logger";
 import {Services} from "Scripts/System/Services";
 import {UnitTests} from "Scripts/UnitTests/UnitTests";
+import {DepthBufferViewer} from "Scripts/Viewers/DepthBufferViewer";
 import {InputControllerHelper} from "Scripts/Viewers/InputControllerHelper";
 import {MeshViewer} from "Scripts/Viewers/MeshViewer";
 import {ModelViewer} from "Scripts/Viewers/ModelViewer";
+import {NormalMapViewer} from "Scripts/Viewers/NormalMapViewer";
 import {ComposerView} from "Scripts/Views/ComposerView";
 
 /**
@@ -118,6 +120,24 @@ export class ComposerController {
      */
     get modelViewer(): ModelViewer {
         return this._composerView._modelView.modelViewer;
+    }
+
+    /**
+     * @description Active DepthBufferViewer.
+     * @readonly
+     * @type {DepthBufferViewer}
+     */
+    get depthBufferViewer(): DepthBufferViewer {
+        return this._composerView._depthBufferView.depthBufferViewer;
+    }
+
+    /**
+     * @description Active NormalMapViewer.
+     * @readonly
+     * @type {NormalMapViewer}
+     */
+    get normalMapViewer(): NormalMapViewer {
+        return this._composerView._normalMapView.normalMapViewer;
     }
 
     /**
@@ -263,6 +283,9 @@ export class ComposerController {
         this.activeDepthBuffer.depths = factoryDepthBuffer.depths;
         depthBufferModel = await depthBufferModel.postFileAsync(this.activeDepthBuffer.depths);
 
+        // viewer
+        this.depthBufferViewer.image = this.activeDepthBuffer;
+
         return depthBufferModel;
     }
 
@@ -290,6 +313,9 @@ export class ComposerController {
         // file
         this.activeNormalMap.rgbaArray = factoryNormalMap.rgbaArray;
         normalMapModel = await normalMapModel.postFileAsync(this.activeNormalMap.rgbaArray);
+
+        // viewer
+        this.normalMapViewer.image = this.activeNormalMap;
 
         return normalMapModel;
     }

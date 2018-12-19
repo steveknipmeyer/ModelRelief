@@ -6,8 +6,8 @@
 "use strict";
 
 import {NormalMap} from "Scripts/Models/NormalMap/NormalMap";
-import {NormalMapViewerControls} from "Scripts/Viewers/NormalMapViewerControls";
 import {ImageViewer} from "Scripts/Viewers/ImageViewer";
+import {NormalMapViewerControls} from "Scripts/Viewers/NormalMapViewerControls";
 
 /**
  * @description Graphics viewer for a NormalMap.

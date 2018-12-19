@@ -21,12 +21,10 @@ export class ImageViewer  {
     // Public
     public name: string;
     public canvas: HTMLCanvasElement;
+    public image: IImageModel;
 
     // Protected
-
-    // Private
-    private _image: IImageModel;
-    private _logger: ILogger;
+    protected _logger: ILogger;
 
     /**
      * Creates an instance of ImageViewer.
@@ -38,7 +36,7 @@ export class ImageViewer  {
 
         this.name = name;
         this.canvas = document.querySelector(`#${canvasId}`) as HTMLCanvasElement;
-        this._image = image;
+        this.image = image;
 
         this._logger = Services.defaultLogger;
 
@@ -82,11 +80,9 @@ export class ImageViewer  {
         this._logger.addMessage(`Device = [${Format.formatNumber(deviceCoordinates.x, precision, fieldWidth)}, ${Format.formatNumber(deviceCoordinates.y, precision, fieldWidth)}]`, messageStyle);
 
         precision = 0;
-        const row: number = this._image.height - ((deviceCoordinates.y + 1) / 2 * this._image.height);
-        const column: number = (deviceCoordinates.x + 1) / 2 * this._image.width;
+        const row: number = (deviceCoordinates.y + 1) / 2 * this.image.height;
+        const column: number = (deviceCoordinates.x + 1) / 2 * this.image.width;
         this._logger.addMessage(`Pixel = [${Format.formatNumber(row, precision, fieldWidth)}, ${Format.formatNumber(column, precision, fieldWidth)}]`, messageStyle);
-
-        this._logger.addEmptyLine();
 
         this.analyzePixel(row, column);
     }

@@ -1,25 +1,16 @@
 ﻿### Tasks
 #### Commit Notes
 Add ImageViewer.analyzePixel().
-
+Update images held by ImageViewer after mesh generation.
+Resolve tslint configuration issue in tsconfig.json.
 #### Lambda
 
-    Visual Studio External Tools
-        Compile TypeScript
-        node.exe
-        node_modules/typescript/bin/tsc -p ModelRelief
-        $(SolutionDir)
-    VSCode
-        Install TypeScript TSLint Plugin
 #### Vector
 
 Issues
     Investigate 'missing' npm errors.
         npm list
         npm list -g
-
-    Install tslint for Visual Studio 2017.
-        https://github.com/Microsoft/vscode-typescript-tslint-plugin
 
     Are the test NormalMaps valid?
     What NormalMap integration tests are appropriate?

@@ -6,6 +6,7 @@
 "use strict";
 
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
+import {Format} from "Scripts/System/Format";
 import {DepthBufferViewerControls} from "Scripts/Viewers/DepthBufferViewerControls";
 import {ImageViewer} from "Scripts/Viewers/ImageViewer";
 
@@ -53,6 +54,14 @@ export class DepthBufferViewer extends ImageViewer {
      * @param column Image column.
      */
     public analyzePixel(row: number, column: number) {
+
+        const depthBuffer = this.image as DepthBuffer;
+
+        const messageStyle = "color:fuchsia";
+        const precision = 2;
+        const fieldWidth = 4;
+        this._logger.addMessage(`Normalized Depth = ${Format.formatNumber(depthBuffer.depthNormalized(row, column), precision, fieldWidth)}`, messageStyle);
+        this._logger.addEmptyLine();
     }
 //#endregion
 
