@@ -17,6 +17,7 @@ import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {IImageModel} from "Scripts/Models/Interfaces/IImageModel";
 import {Model3d} from "Scripts/Models/Model3d/Model3d";
 import {Project} from "Scripts/Models/Project/Project";
+import {Image} from "Scripts/System/Image";
 
 /**
  * @description Represents a normal map.
@@ -96,7 +97,6 @@ export class NormalMap extends GeneratedFileModel implements IImageModel {
 
         this.initialize();
     }
-
 //#region Properties
     /**
      * @description Returns the raw RGBA values of the normal map.
@@ -150,6 +150,23 @@ export class NormalMap extends GeneratedFileModel implements IImageModel {
     }
 
     /**
+     * @description Return the normal at the given offset.
+     * @param row Image row.
+     * @param column Image column.
+     */
+    public normal(row: number, column: number): THREE.Vector3 {
+
+        const offset = ((row * this.width) + column) * Image.RGBASize;
+
+        const x = this.rgComponentToVectorXYComponent(this.rgbaArray[offset]);
+        const y = this.rgComponentToVectorXYComponent(this.rgbaArray[offset + 1]);
+        const z = this.rgbaArray[offset + 2] / 255.0;
+        const normalVector = new THREE.Vector3(x, y, z);
+
+        return normalVector;
+    }
+
+    /**
      * @description Returns a DTO NormalMap from the instance.
      * @returns {Dto.NormalMap}
      */
@@ -188,4 +205,14 @@ export class NormalMap extends GeneratedFileModel implements IImageModel {
 
         this._logger.addEmptyLine();
     }
+
+    /**
+     * @description Return X|Y cartesian component of a vector from the R|G value.
+     * @param rgbValue The R|G component corresponding an X|Y value.
+     */
+    private rgComponentToVectorXYComponent(rgbValue: number): number {
+        const component = (rgbValue - 127.0) / 127.0;
+        return component;
+    }
+
 }

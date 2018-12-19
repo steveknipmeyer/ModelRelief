@@ -55,7 +55,7 @@ export class DepthBufferViewer extends ImageViewer {
      */
     public analyzePixel(row: number, column: number) {
 
-        const depthBuffer = this.image as DepthBuffer;
+        const depthBuffer = this.imageModel as DepthBuffer;
 
         const messageStyle = "color:fuchsia";
         const precision = 2;

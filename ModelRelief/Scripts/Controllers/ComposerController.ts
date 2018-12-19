@@ -284,7 +284,7 @@ export class ComposerController {
         depthBufferModel = await depthBufferModel.postFileAsync(this.activeDepthBuffer.depths);
 
         // viewer
-        this.depthBufferViewer.image = this.activeDepthBuffer;
+        this.depthBufferViewer.imageModel = this.activeDepthBuffer;
 
         return depthBufferModel;
     }
@@ -315,7 +315,7 @@ export class ComposerController {
         normalMapModel = await normalMapModel.postFileAsync(this.activeNormalMap.rgbaArray);
 
         // viewer
-        this.normalMapViewer.image = this.activeNormalMap;
+        this.normalMapViewer.imageModel = this.activeNormalMap;
 
         return normalMapModel;
     }

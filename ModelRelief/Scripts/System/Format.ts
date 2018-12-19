@@ -12,9 +12,9 @@ import * as THREE from "three";
  * @class
  */
 export class Format {
-    private static numericPrecision = 2;
-    private static numericFieldWidth = 8;
-    private static vectorLabelFieldWidth = 16;
+    public static numericPrecision = 2;
+    public static numericFieldWidth = 8;
+    public static vectorLabelFieldWidth = 16;
 
     /**
      * @description Formats a Vector2 into fixed width fields.
@@ -68,6 +68,10 @@ export class Format {
      * @returns {string}
      */
     public static padToLength(value: string, length: number = Format.numericFieldWidth, padCharacter: string = " "): string {
+
+        // no padding
+        if (length === -1)
+            return value;
 
         const padCount = length - value.length;
         return padCharacter.repeat(padCount < 0 ? 0 : padCount) + value;

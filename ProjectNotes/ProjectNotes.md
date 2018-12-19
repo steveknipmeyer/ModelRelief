@@ -1,8 +1,6 @@
 ﻿### Tasks
 #### Commit Notes
-Add ImageViewer.analyzePixel().
-Update images held by ImageViewer after mesh generation.
-Resolve tslint configuration issue in tsconfig.json.
+
 #### Lambda
 
 #### Vector
@@ -16,7 +14,7 @@ Issues
     What NormalMap integration tests are appropriate?
 
     Image
-        DepthBuffer, Normalap hold instances.
+        DepthBuffer, NormalMap hold instances.
         Where should Image be placed in the source tree?
         methods
             Indexer
