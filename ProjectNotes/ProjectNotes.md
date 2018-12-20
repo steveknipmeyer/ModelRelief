@@ -6,6 +6,8 @@
 #### Vector
 
 Issues
+    Roadster normal map does not seem to be correct.
+
     Are the test NormalMaps valid?
         Generatae new NormalMaps and update the seed data.
 

@@ -134,7 +134,7 @@ export class ComposerView {
             this._normalMapView = new NormalMapView(ElementIds.NormalMapView, normalMap);
 
             // load models; model event handlers in Viewers now initialized
-            const useTestModels = true;
+            const useTestModels = false;
             const loader = new Loader();
 
             // Model

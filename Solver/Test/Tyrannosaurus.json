@@ -16,11 +16,11 @@
     "CameraId": 13,
     "Camera": {
       "IsPerspective": true,
-      "Near": 228.35,
-      "Far": 469.87,
-      "PositionX": 0.0,
-      "PositionY": 75.56,
-      "PositionZ": 310.0,
+      "Near": 227.48034121060832,
+      "Far": 468.99208398887208,
+      "PositionX": 3.8051915284206053,
+      "PositionY": 85.342509645345174,
+      "PositionZ": 309.12779565879396,
       "EulerX": 0.0,
       "EulerY": 0.0,
       "EulerZ": 0.0,
@@ -44,12 +44,14 @@
       "Description": "Tyrannosarus Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2018-11-15T17:16:12.0067383",
+    "FileTimeStamp": "2018-12-20T05:58:26.3441788",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\11\\tyrannosaurus.sdb",
     "Id": 11,
     "Name": "tyrannosaurus.sdb",
     "Description": "Generated in ModelRelief (development@modelrelief.com)"
   },
+  "NormalMapId": 11,
+  "NormalMap": null,
   "MeshTransformId": 12,
   "MeshTransform": {
     "Width": 100.0,
@@ -76,7 +78,7 @@
     "Description": "Tyrannosaurus transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2018-11-15T17:16:12.1592686",
+  "FileTimeStamp": "2018-12-18T15:59:01.9290371",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\11\\tyrannosaurus.sfp",
   "Id": 11,
   "Name": "tyrannosaurus.sfp",
