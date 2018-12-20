@@ -18,6 +18,7 @@ class FileManager:
     A class for general support for file conversion and input/output.
     """
     SINGLE_PRECISION = 4
+    UNSIGNED_INTEGER = 4
 
     def __init__(self) -> None:
         """
@@ -99,3 +100,33 @@ class FileManager:
             for value in floats:
                 file.write(str(value) + '\n')
 
+    def unpack_integer32(self, byte_list: bytes, integers_per_unpack=None) ->List[int]:
+        """
+        Returns a list of 32-bit integer tuples from a byte sequence.
+        The length of the tuple is controlled by the integers_per_unpack parameter.
+
+        The default is to return a single tuple containing all integers as performance testing
+        shows that this is the most efficient.
+        """
+        integer_count = int(len(byte_list) / FileManager.UNSIGNED_INTEGER)
+        if integers_per_unpack is None:
+            integers_per_unpack = integer_count
+
+        unpack_steps = int(integer_count / integers_per_unpack)
+
+        integer_tuples= []
+        span = FileManager.UNSIGNED_INTEGER * integers_per_unpack
+        unpack_format = '%dI' % integers_per_unpack
+        for value in range(unpack_steps):
+            lower = value * span
+            upper = lower + span
+            integer_tuple = struct.unpack(unpack_format, byte_list[lower:upper])
+            integer_tuples.append(integer_tuple)
+
+        # unpack list of tuples into a list of single integer values
+        integers:List[int] = []
+        for integer_tuple in integer_tuples:
+            for value in integer_tuple:
+                integers.append(value)
+
+        return integers

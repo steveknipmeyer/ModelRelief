@@ -6,12 +6,13 @@
 #### Vector
 
 Issues
-    Investigate 'missing' npm errors.
-        npm list
-        npm list -g
-
     Are the test NormalMaps valid?
-    What NormalMap integration tests are appropriate?
+        Generatae new NormalMaps and update the seed data.
+
+    Create PNG images from normal maps.
+        What does the format argument of imageio.imwriter mean?
+        Verify image integer values represent RGBA vectors.
+        WARNING:root:Lossy conversion from uint32 to uint8. Losing 24 bits of resolution. Convert image to uint8 prior to saving to suppress this warning.
 
     Image
         DepthBuffer, NormalMap hold instances.
@@ -21,11 +22,15 @@ Issues
             RGB, RGBA values
             Vector3
 
-    Create PNG images from normal maps.
-
     Document the ImageFactory data flows.
 
     https://webglfundamentals.org/webgl/lessons/webgl-how-it-works.html
+
+    What NormalMap integration tests are appropriate?
+
+    Investigate 'missing' npm errors.
+        npm list
+        npm list -g
 
 
     Orthogonal planes (e.g. House) do not generate constant Z depths.
