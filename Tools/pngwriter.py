@@ -81,15 +81,21 @@ class PngWriter:
         elements = len(raw_bytes) / PngWriter.BytesPerRGBA
         dimensions = int(math.sqrt(elements))
 
-        image_array = FileManager().unpack_integer32(raw_bytes)
-        image_array = np.reshape(image_array, [dimensions, dimensions])
-
         # convert to 32 bit unsigned integers
-        image_array = image_array.astype(np.uint32)
+        int32_array = FileManager().unpack_integer32(raw_bytes)
+        int32_array = np.reshape(int32_array, [dimensions, dimensions])
+        int32_array = int32_array.astype(np.uint32)
+        int32_array = np.flipud(int32_array)
 
-        image_array = np.flipud(image_array)
+        # RGBA
+        rgba_array = np.zeros((dimensions, dimensions, FileManager.RGBA), dtype=np.uint8)
+        for color_index in range(FileManager.RGBA):
+            bit_shift = 8 * color_index
+            mask = 0xFF << bit_shift
+            component_array = (int32_array[:,:] & mask) >> bit_shift
+            rgba_array[:,:, color_index] = component_array
 
-        imageio.imwrite(png_filename, image_array, format="RGBA")
+        imageio.imwrite(png_filename,  rgba_array)
 
 def main():
     """

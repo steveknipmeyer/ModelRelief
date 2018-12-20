@@ -19,6 +19,7 @@ class FileManager:
     """
     SINGLE_PRECISION = 4
     UNSIGNED_INTEGER = 4
+    RGBA = 4
 
     def __init__(self) -> None:
         """
