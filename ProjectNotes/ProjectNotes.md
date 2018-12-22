@@ -6,7 +6,8 @@
 #### Vector
 
 Issues
-    Roadster normal map does not seem to be correct.
+    Normal Processing
+        The DepthBuffer is not a height field. It is the OpenGL non-linear format.
 
     Image
         DepthBuffer, NormalMap hold instances.
@@ -22,9 +23,11 @@ Issues
 
     What NormalMap integration tests are appropriate?
 
-    Investigate 'missing' npm errors.
-        npm list
-        npm list -g
+    npm
+        Move all packages to devDepencies.
+        Investigate 'missing' npm errors.
+            npm list
+            npm list -g
 
     Orthogonal planes (e.g. House) do not generate constant Z depths.
 
@@ -595,7 +598,6 @@ File Formats
     How should the model name be held in the ModelViewer?
         The model.Name property is now 'Root' (THREE).
 
-###### Review and organize the Postman tests.
 
 ---
 #### Dependency Manager
@@ -634,11 +636,9 @@ https://msdn.microsoft.com/en-us/magazine/mt767693.aspx
 
 ###### How can properties be excluded (e.g. Attribute) from entity processing?
 
-
 #### Architecture
     How should byte-ordering (BigEndian, LittleEndian) be handled?
         Are some devices (e.g. phones) BigEndian?
-
 
 #### API Design
 
@@ -966,13 +966,6 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 
     Create a set of sample materials such as wood, glass, plaster, etc.
 
-    Pan
-        Camera translations are not handled correctly.
-
-    Camera
-        Why does the View change slightly after the 2nd Fit View?
-            This happens only if the view has been <panned>.
-
 ####Shaders
     Gradients are calculated from the DepthBuffer which directly reflects the faceting of the model.
         Could the DepthBuffer use the fragment shader which has interpolated vertex coordinates?
@@ -1199,7 +1192,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     TypeScript Installations
         VSCode
         TypeScript SDK
-        node-typescript(?)
+        node-typescript
 
     How can a subclass call the property (method) of a super class?
         https://github.com/Microsoft/TypeScript/issues/4465
@@ -1644,7 +1637,6 @@ https://semver.npmjs.com/
 #### pybind11
     https://github.com/chhenning/pybind11_with_MSVC_2017
 
-
     python setup.py clean --all
     python setup --verbose build --debug install
     python setup.py --verbose build --debug
@@ -1724,3 +1716,9 @@ np_fill, relief_fill
 #### ANSI Command Shell Sequences
     [HKEY_CURRENT_USER\Console]
     "VirtualTerminalLevel"=dword:00000001
+
+#### Pyamg
+    https://github.com/pyamg/pyamg/commit/a188d5b8c03337018d8fe4f8bb883a8decc95bb5
+    This warning has been resolved in the tip of Pyamg but a new version (4.0.0+) has not been distributed through Conda.
+    D:\ModelRelief\devenv\lib\site-packages\pyamg\gallery\stencil.py:114: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.  
+        diag[s] = 0

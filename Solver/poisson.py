@@ -50,7 +50,8 @@ class Poisson:
         dimensions = np.shape(divG)
         n = dimensions[0]
         grid = (n,n)
-        A = pyamg.gallery.poisson(grid, format='csr')                                 # 2D Poisson problem on 4x4 grid
+        
+        A = pyamg.gallery.poisson(grid, format='csr')                                   # 2D Poisson problem on 4x4 grid
         ml = pyamg.ruge_stuben_solver(A)                                                # construct the multigrid hierarchy
 
         b = divG.reshape(A.shape[0])                                                    # vectorize

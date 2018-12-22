@@ -73,7 +73,7 @@ export class ImageFactory {
     protected _logger: ILogger                         = null;     // logger
 
     protected _minimumWebGLExtensions: string[]     = [];
-    protected _debug: boolean                       = true;
+    protected _debug: boolean                       = false;
 
     // Private
 

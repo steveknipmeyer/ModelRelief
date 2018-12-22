@@ -348,9 +348,9 @@ export class DepthBuffer extends GeneratedFileModel implements IImageModel {
         const messageStyle  = "font-family : monospace; color : white; font-size : 14px";
 
         this._logger.addMessage("Camera Properties", headerStyle);
-        this._logger.addMessage(`Near Plane = ${this.camera.viewCamera.near}`, messageStyle);
-        this._logger.addMessage(`Far Plane  = ${this.camera.viewCamera.far}`, messageStyle);
-        this._logger.addMessage(`Clip Range = ${this.camera.viewCamera.far - this.camera.viewCamera.near}`, messageStyle);
+        this._logger.addMessage(`Near Plane = ${this.camera.viewCamera.near.toFixed(decimalPlaces)}`, messageStyle);
+        this._logger.addMessage(`Far Plane  = ${this.camera.viewCamera.far.toFixed(decimalPlaces)}`, messageStyle);
+        this._logger.addMessage(`Clip Range = ${(this.camera.viewCamera.far - this.camera.viewCamera.near).toFixed(decimalPlaces)}`, messageStyle);
         this._logger.addEmptyLine();
 
         this._logger.addMessage("Normalized", headerStyle);
