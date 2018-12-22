@@ -2,7 +2,10 @@
 #### Commit Notes
 
 #### Lambda
-
+npm install -g npm-install-missing
+Update node.
+npm install --global --production npm-windows-upgrade
+    npm version is 6.5.0.
 #### Vector
 
 Issues
@@ -22,12 +25,6 @@ Issues
     https://webglfundamentals.org/webgl/lessons/webgl-how-it-works.html
 
     What NormalMap integration tests are appropriate?
-
-    npm
-        Move all packages to devDepencies.
-        Investigate 'missing' npm errors.
-            npm list
-            npm list -g
 
     Orthogonal planes (e.g. House) do not generate constant Z depths.
 
@@ -236,9 +233,6 @@ When the view camera is interactively changed, it should invalidate the Standard
 ##### Technical Education
 
 - ASP.NET Core in Action
-
-#####  Lambda
-    npm i alm -g
 
 #####  Ubuntu
     Ignore line endings in git source.
@@ -1722,3 +1716,6 @@ np_fill, relief_fill
     This warning has been resolved in the tip of Pyamg but a new version (4.0.0+) has not been distributed through Conda.
     D:\ModelRelief\devenv\lib\site-packages\pyamg\gallery\stencil.py:114: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.  
         diag[s] = 0
+
+#### NPM
+    https://github.com/felixrieseberg/npm-windows-upgrade
