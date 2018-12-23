@@ -223,11 +223,13 @@ class Solver:
         self.results.mesh_transformed.image = poisson.solve(self.results.divG.image)
 
         # apply offset
-        offset = np.min(self.results.mesh_transformed.image)
-        self.results.mesh_transformed.image = self.results.mesh_transformed.image - offset
+        if self.enable_p7:
+            offset = np.min(self.results.mesh_transformed.image)
+            self.results.mesh_transformed.image = self.results.mesh_transformed.image - offset
 
         # apply background mask to reset background to zero
-        self.results.mesh_transformed.image = self.results.mesh_transformed.image * self.results.depth_buffer_mask.image
+        if self.enable_p8:
+            self.results.mesh_transformed.image = self.results.mesh_transformed.image * self.results.depth_buffer_mask.image
 
     def process_silhouette(self):
         """

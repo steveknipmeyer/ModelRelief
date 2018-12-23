@@ -6,6 +6,7 @@ npm install -g npm-install-missing
 Update node.
 npm install --global --production npm-windows-upgrade
     npm version is 6.5.0.
+
 #### Vector
 
 Issues
@@ -19,8 +20,6 @@ Issues
             Indexer
             RGB, RGBA values
             Vector3
-
-    Document the ImageFactory data flows.
 
     https://webglfundamentals.org/webgl/lessons/webgl-how-it-works.html
 
@@ -1714,7 +1713,7 @@ np_fill, relief_fill
 #### Pyamg
     https://github.com/pyamg/pyamg/commit/a188d5b8c03337018d8fe4f8bb883a8decc95bb5
     This warning has been resolved in the tip of Pyamg but a new version (4.0.0+) has not been distributed through Conda.
-    D:\ModelRelief\devenv\lib\site-packages\pyamg\gallery\stencil.py:114: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.  
+    D:\ModelRelief\devenv\lib\site-packages\pyamg\gallery\stencil.py:114: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
         diag[s] = 0
 
 #### NPM

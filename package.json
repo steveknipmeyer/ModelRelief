@@ -45,7 +45,7 @@
     "minimist": "0.0.8",
     "minipass": "^2.3.5",
     "mkdirp": "^0.5.1",
-    "natives": "^1.1.6"
+    "natives": "^1.1.6",
     "number-is-nan": "^1.0.1",
     "once": "^1.4.0",
     "path": "^0.12.7",

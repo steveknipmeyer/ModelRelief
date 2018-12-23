@@ -860,8 +860,8 @@
         <rect>
          <x>16</x>
          <y>585</y>
-         <width>158</width>
-         <height>19</height>
+         <width>187</width>
+         <height>24</height>
         </rect>
        </property>
        <property name="font">
@@ -870,7 +870,7 @@
         </font>
        </property>
        <property name="text">
-        <string>P7</string>
+        <string>P7: Force Positive Z</string>
        </property>
       </widget>
       <widget class="QCheckBox" name="p8CheckBox">
@@ -888,7 +888,7 @@
         </font>
        </property>
        <property name="text">
-        <string>P8</string>
+        <string>P8: Force Planar</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="p5LineEdit">
@@ -925,8 +925,8 @@
         <rect>
          <x>16</x>
          <y>660</y>
-         <width>157</width>
-         <height>18</height>
+         <width>168</width>
+         <height>25</height>
         </rect>
        </property>
        <property name="font">
@@ -944,7 +944,7 @@
        <property name="geometry">
         <rect>
          <x>15</x>
-         <y>685</y>
+         <y>690</y>
          <width>165</width>
          <height>20</height>
         </rect>
