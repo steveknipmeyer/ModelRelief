@@ -44,7 +44,7 @@
       "Description": "Bunny Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2018-12-20T05:52:53.8769873",
+    "FileTimeStamp": "2018-12-23T11:01:05.0852341",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\3\\bunny.sdb",
     "Id": 3,
     "Name": "bunny.sdb",
@@ -64,7 +64,7 @@
     "UnsharpGaussianHigh": 1.0,
     "UnsharpHighFrequencyScale": 3.0,
     "P1": 0.1,
-    "P2": 1.0,
+    "P2": 0.0,
     "P3": 0.0,
     "P4": 0.0,
     "P5": 0.0,
@@ -78,7 +78,7 @@
     "Description": "Bunny transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2018-12-18T15:59:01.9289763",
+  "FileTimeStamp": "2018-12-23T10:57:43.746715",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\3\\bunny.sfp",
   "Id": 3,
   "Name": "bunny.sfp",

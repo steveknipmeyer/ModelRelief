@@ -460,8 +460,8 @@
        <property name="geometry">
         <rect>
          <x>32</x>
-         <y>332</y>
-         <width>155</width>
+         <y>330</y>
+         <width>97</width>
          <height>23</height>
         </rect>
        </property>
@@ -627,6 +627,8 @@
         <font>
          <family>MS Shell Dlg 2</family>
          <pointsize>11</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
        </property>
        <property name="text">
@@ -765,6 +767,8 @@
        <property name="font">
         <font>
          <pointsize>11</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
        </property>
        <property name="text">
@@ -792,8 +796,8 @@
         <rect>
          <x>16</x>
          <y>525</y>
-         <width>158</width>
-         <height>19</height>
+         <width>190</width>
+         <height>22</height>
         </rect>
        </property>
        <property name="font">
@@ -802,7 +806,7 @@
         </font>
        </property>
        <property name="text">
-        <string>P5</string>
+        <string>P5: Numpy Gradients</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="p7LineEdit">
@@ -832,11 +836,11 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>13</pointsize>
+         <pointsize>11</pointsize>
         </font>
        </property>
        <property name="text">
-        <string>P6</string>
+        <string>P6: Translate +Z</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="p8LineEdit">
@@ -870,7 +874,7 @@
         </font>
        </property>
        <property name="text">
-        <string>P7: Force Positive Z</string>
+        <string>P7: Force Planar</string>
        </property>
       </widget>
       <widget class="QCheckBox" name="p8CheckBox">
@@ -888,7 +892,7 @@
         </font>
        </property>
        <property name="text">
-        <string>P8: Force Planar</string>
+        <string>P8</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="p5LineEdit">

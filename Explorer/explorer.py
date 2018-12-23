@@ -131,14 +131,15 @@ class Explorer(QtWidgets.QMainWindow):
         self.ui.unsharpGaussianHighCheckBox.setChecked(checkbox_enabled)
         self.ui.unsharpHFScaleCheckBox.setChecked(checkbox_enabled)
 
-        self.ui.p1CheckBox.setChecked(checkbox_enabled)
-        self.ui.p2CheckBox.setChecked(False)                                # Silhoutte: On/Off, Sigma
-        self.ui.p3CheckBox.setChecked(False)                                # Silhoutte: Iterations
-        self.ui.p4CheckBox.setChecked(checkbox_enabled)                     # Gaussian: Use Mask
-        self.ui.p5CheckBox.setChecked(checkbox_enabled)
-        self.ui.p6CheckBox.setChecked(checkbox_enabled)
-        self.ui.p7CheckBox.setChecked(checkbox_enabled)
-        self.ui.p8CheckBox.setChecked(checkbox_enabled)
+        # definitions in Solver.py
+        self.ui.p1CheckBox.setChecked(True)
+        self.ui.p2CheckBox.setChecked(False)
+        self.ui.p3CheckBox.setChecked(False)
+        self.ui.p4CheckBox.setChecked(False)
+        self.ui.p5CheckBox.setChecked(False)
+        self.ui.p6CheckBox.setChecked(False)
+        self.ui.p7CheckBox.setChecked(False)
+        self.ui.p8CheckBox.setChecked(False)
 
     @benchmark()
     def initialize_ui(self)-> None:

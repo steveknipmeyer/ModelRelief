@@ -448,16 +448,7 @@ export class ComposerController {
         const controlUnsharpHighFrequencyScale  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "unsharpHighFrequencyScale").name("High Frequency Scale").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
 
         controlSettings = new ControlSettings(0.0, 1.0, 0.01);
-        const controlP1  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "p1").name("P1").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
-
-        controlSettings = new ControlSettings(0.0, 10.0, 0.1);
-        const controlP2  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "p2").name("P2").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
-
-        controlSettings = new ControlSettings(0.0, 1.0, 0.01);
-        const controlP3  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "p3").name("P3").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
-
-        controlSettings = new ControlSettings(0.0, 1.0, 0.01);
-        const controlP4  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "p4").name("P4").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+        const controlP1  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "p1").name("Scale (%)").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
 
         // Generate Relief
         const controlGenerateRelief = reliefProcessingOptions.add(this._composerViewSettings, "generateRelief").name("Generate Relief");

@@ -44,7 +44,7 @@
       "Description": "Tyrannosarus Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2018-12-20T05:58:26.3441788",
+    "FileTimeStamp": "2018-12-23T11:06:31.2551554",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\11\\tyrannosaurus.sdb",
     "Id": 11,
     "Name": "tyrannosaurus.sdb",
@@ -64,7 +64,7 @@
     "UnsharpGaussianHigh": 1.0,
     "UnsharpHighFrequencyScale": 3.0,
     "P1": 0.03,
-    "P2": 1.0,
+    "P2": 0.0,
     "P3": 0.0,
     "P4": 0.0,
     "P5": 0.0,
@@ -78,7 +78,7 @@
     "Description": "Tyrannosaurus transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2018-12-18T15:59:01.9290371",
+  "FileTimeStamp": "2018-12-23T10:57:43.7467838",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\11\\tyrannosaurus.sfp",
   "Id": 11,
   "Name": "tyrannosaurus.sfp",

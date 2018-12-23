@@ -16,8 +16,8 @@
     "CameraId": 11,
     "Camera": {
       "IsPerspective": true,
-      "Near": 298.75454315679445,
-      "Far": 401.30543167644748,
+      "Near": 298.75454315523029,
+      "Far": 401.30543168350448,
       "PositionX": -4.16,
       "PositionY": 72.49,
       "PositionZ": 358.58,
@@ -44,7 +44,7 @@
       "Description": "Statue Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2018-12-20T05:56:52.6358054",
+    "FileTimeStamp": "2018-12-23T11:05:13.6368866",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\9\\statue.sdb",
     "Id": 9,
     "Name": "statue.sdb",
@@ -64,7 +64,7 @@
     "UnsharpGaussianHigh": 1.0,
     "UnsharpHighFrequencyScale": 3.0,
     "P1": 0.03,
-    "P2": 1.0,
+    "P2": 0.0,
     "P3": 0.0,
     "P4": 0.0,
     "P5": 0.0,
@@ -78,7 +78,7 @@
     "Description": "Statue transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2018-12-18T15:59:01.9290236",
+  "FileTimeStamp": "2018-12-23T10:57:43.7467692",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\9\\statue.sfp",
   "Id": 9,
   "Name": "statue.sfp",

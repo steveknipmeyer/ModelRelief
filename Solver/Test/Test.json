@@ -16,8 +16,8 @@
     "CameraId": 12,
     "Camera": {
       "IsPerspective": false,
-      "Near": 96.903000000000034,
-      "Far": 148.00000000000003,
+      "Near": 96.902999999999977,
+      "Far": 148.0,
       "PositionX": 24.999999999999996,
       "PositionY": 147.99999999999997,
       "PositionZ": -46.499999999999972,
@@ -44,7 +44,7 @@
       "Description": "Isometric Test Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2018-12-20T05:57:53.7292321",
+    "FileTimeStamp": "2018-12-23T11:05:46.4218996",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\10\\test.sdb",
     "Id": 10,
     "Name": "test.sdb",
@@ -64,7 +64,7 @@
     "UnsharpGaussianHigh": 1.0,
     "UnsharpHighFrequencyScale": 3.0,
     "P1": 0.03,
-    "P2": 1.0,
+    "P2": 0.0,
     "P3": 0.0,
     "P4": 0.0,
     "P5": 0.0,
@@ -78,7 +78,7 @@
     "Description": "Test transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2018-12-18T15:59:01.9290303",
+  "FileTimeStamp": "2018-12-23T10:57:43.7467763",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\10\\test.sfp",
   "Id": 10,
   "Name": "test.sfp",

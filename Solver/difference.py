@@ -48,7 +48,6 @@ class Difference:
         self.services = services
 
     def difference_x(self, a: np.ndarray, direction:FiniteDifference) -> np.ndarray:
-    # def difference_x(self, a: np.ndarray, direction:FiniteDifference) -> np.ndarray:
         """
         Calculates the finite dfferences along the X axis.
         Parameters

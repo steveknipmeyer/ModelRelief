@@ -32,13 +32,15 @@ class Gradient:
         self.debug = True
         self.services = services
 
-    def calculate(self, array: np.ndarray) -> List[np.ndarray]:
+    def calculate(self, array: np.ndarray, use_np_gradient: bool) -> List[np.ndarray]:
         """
         Calculates the gradients of an ndarray.
         Parameters
         ----------
         array
             The ndarray for which the gradients will be calculated.
+        use_np_gradient
+            Use Numpy gradient method not Difference class.
         Returns
         -------
         An ndarray for each dimension.
@@ -46,8 +48,9 @@ class Gradient:
             results[0] = Y gradient
             results[1] = X gradient
         """
-
-        # result = np.gradient(array)
+        if use_np_gradient:
+            result = np.gradient(array)
+            return result
 
         difference = Difference(self.services)
         gradient_x = difference.difference_x(array, FiniteDifference.Forward)

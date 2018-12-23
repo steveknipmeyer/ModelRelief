@@ -85,14 +85,14 @@ class Solver:
         self.enable_unsharpmask_high_frequence_scale = True
 
         # experimental
-        self.enable_p1 = True
-        self.enable_p2 = True
-        self.enable_p3 = True
-        self.enable_p4 = True
-        self.enable_p5 = True
-        self.enable_p6 = True
-        self.enable_p7 = True
-        self.enable_p8 = True
+        self.enable_p1 = True               # scale relief
+        self.enable_p2 = False              # silhoutte processing, sigma gaussian 
+        self.enable_p3 = False               # silhouette processing, blurring passes
+        self.enable_p4 = False               # use composite mask in gaussian blur
+        self.enable_p5 = False               # use Numpy gradients, not Difference class
+        self.enable_p6 = False               # translate mesh Z to positive values
+        self.enable_p7 = False               # force planar by zeroing with background mask
+        self.enable_p8 = False
 
         # file output
         self.enable_obj = True
@@ -136,7 +136,8 @@ class Solver:
         Unpack the JSON settings file and initialize Solver properties.
         """
         self.mesh = Mesh(self.settings, self.services)
-        self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'], self.services)
+        self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'], self.services, self.enable_p5)
+
         self.mesh_transform = MeshTransform(self.settings['MeshTransform'])
         # print("%r" % self.mesh_transform)
 
@@ -223,12 +224,12 @@ class Solver:
         self.results.mesh_transformed.image = poisson.solve(self.results.divG.image)
 
         # apply offset
-        if self.enable_p7:
+        if self.enable_p6:
             offset = np.min(self.results.mesh_transformed.image)
             self.results.mesh_transformed.image = self.results.mesh_transformed.image - offset
 
         # apply background mask to reset background to zero
-        if self.enable_p8:
+        if self.enable_p7:
             self.results.mesh_transformed.image = self.results.mesh_transformed.image * self.results.depth_buffer_mask.image
 
     def process_silhouette(self):

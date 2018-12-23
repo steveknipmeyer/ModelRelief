@@ -71,7 +71,7 @@ class DepthBuffer:
     """
     SINGLE_PRECISION = 4
 
-    def __init__(self, settings: dict, services : Services) -> None:
+    def __init__(self, settings: dict, services : Services, use_np_gradient: bool) -> None:
         """
         Initialize an instancee of a DepthBuffer.
         Parameters:
@@ -80,11 +80,14 @@ class DepthBuffer:
             The path of the DepthBuffer JSON file.
         services
             Service support for logging, timers, etc.
+        use_np_gradient
+            User Numpy gradient method.
         """
         self.debug = False
 
         self.settings = settings
         self.services = services
+        self.use_np_gradient = use_np_gradient
 
         self.path = os.path.join(self.services.content_folder,  settings['RelativeFileName'])
         self._width = int(settings['Width'])
@@ -223,7 +226,7 @@ class DepthBuffer:
 
         floats_array = self.floats
         gradient = Gradient(self.services)
-        self._gradients = gradient.calculate(floats_array)
+        self._gradients = gradient.calculate(floats_array, self.use_np_gradient)
 
         return self._gradients
 

@@ -16,7 +16,7 @@
     "CameraId": 3,
     "Camera": {
       "IsPerspective": true,
-      "Near": 232.04868515019513,
+      "Near": 232.04868515019504,
       "Far": 339.4957260625664,
       "PositionX": -1.8175776471867418,
       "PositionY": 47.980111748796418,
@@ -44,7 +44,7 @@
       "Description": "Armadillo Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2018-12-20T05:50:57.5371806",
+    "FileTimeStamp": "2018-12-23T10:59:23.2923063",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\1\\armadillo.sdb",
     "Id": 1,
     "Name": "armadillo.sdb",
@@ -64,7 +64,7 @@
     "UnsharpGaussianHigh": 1.0,
     "UnsharpHighFrequencyScale": 6.0,
     "P1": 0.02,
-    "P2": 1.0,
+    "P2": 0.0,
     "P3": 0.0,
     "P4": 0.0,
     "P5": 0.0,
@@ -78,7 +78,7 @@
     "Description": "Armadillo transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2018-12-18T15:59:01.9288696",
+  "FileTimeStamp": "2018-12-23T10:57:43.7466035",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\1\\armadillo.sfp",
   "Id": 1,
   "Name": "armadillo.sfp",
