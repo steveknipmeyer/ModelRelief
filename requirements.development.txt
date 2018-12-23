@@ -85,7 +85,7 @@ pyparsing=2.3.0=py_0
 pyqt=5.6.0=py36h764d66f_1007
 python=3.6.6=he025d50_0
 python-dateutil=2.7.5=py_0
-qdarkstyle=2.6.5=py_0
+qdarkstyle=2.5.4=py_0
 qt=5.6.2=h2639256_8
 scipy=1.1.0=py36h4f6bf74_1
 setuptools=40.6.2=py36_0
