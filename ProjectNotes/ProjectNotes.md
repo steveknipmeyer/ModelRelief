@@ -46,7 +46,6 @@ Issues
         Mesh.DepthBuffer.Camera is used.
         Mesh.NormalMap.Camera is equivalent.
 
-
 ### Adding a New GeneratedFileDomainModel (e.g. NormalMap)
 #### Documentation
 - [X] Update the class hierarchies in ProjectNotes.

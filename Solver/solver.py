@@ -37,6 +37,7 @@ from meshtransform import MeshTransform
 
 from attenuation import Attenuation
 from difference import Difference, FiniteDifference, Axis
+from integrator import Integrator
 from mask import Mask
 from meshscale import MeshScale
 from poisson import Poisson
@@ -86,13 +87,13 @@ class Solver:
 
         # experimental
         self.enable_p1 = True               # scale relief
-        self.enable_p2 = False              # silhoutte processing, sigma gaussian 
+        self.enable_p2 = False              # silhoutte processing, sigma gaussian
         self.enable_p3 = False               # silhouette processing, blurring passes
         self.enable_p4 = False               # use composite mask in gaussian blur
         self.enable_p5 = False               # use Numpy gradients, not Difference class
         self.enable_p6 = False               # translate mesh Z to positive values
         self.enable_p7 = False               # force planar by zeroing with background mask
-        self.enable_p8 = False
+        self.enable_p8 = False               # use Integrator rather than Poisson solver
 
         # file output
         self.enable_obj = True
@@ -215,6 +216,12 @@ class Solver:
         Due to the discrete case which we are in, they are obtained by a finite difference again like in Chapter 3.1.3, but here it has to be
         the backward difffernce in order to produce a central difference like it is defined for the Laplacian.
         """
+        if self.enable_p8:
+            integrator = Integrator(self.services)
+            self.results.mesh_transformed.image = integrator.integrate_x(self.results.gradient_x_unsharp.image)
+            #self.results.mesh_transformed.image = integrator.integrate_y(self.results.gradient_y_unsharp.image)
+            return
+
         difference = Difference(self.services)
         self.results.dGxdx.image = difference.difference_x(self.results.gradient_x_unsharp.image, FiniteDifference.Backward)
         self.results.dGydy.image = difference.difference_y(self.results.gradient_y_unsharp.image, FiniteDifference.Backward)
