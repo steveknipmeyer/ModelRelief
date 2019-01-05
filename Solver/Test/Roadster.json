@@ -44,14 +44,31 @@
       "Description": "Roadster Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2018-12-23T11:04:17.4645834",
+    "FileTimeStamp": "2019-01-05T12:09:45.5439422",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\8\\roadster.sdb",
     "Id": 8,
     "Name": "roadster.sdb",
     "Description": "Generated in Maya (development@modelrelief.com)"
   },
   "NormalMapId": 8,
-  "NormalMap": null,
+  "NormalMap": {
+    "Width": 512.0,
+    "Height": 512.0,
+    "Format": 1,
+    "Space": 2,
+    "ProjectId": 2,
+    "Project": null,
+    "Model3dId": 8,
+    "Model3d": null,
+    "CameraId": 10,
+    "Camera": null,
+    "FileIsSynchronized": true,
+    "FileTimeStamp": "2019-01-05T12:09:45.7888536",
+    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\8\\roadster.nmap",
+    "Id": 8,
+    "Name": "roadster.nmap",
+    "Description": "Generated in Maya (development@modelrelief.com)"
+  },
   "MeshTransformId": 9,
   "MeshTransform": {
     "Width": 100.0,
@@ -78,7 +95,7 @@
     "Description": "Roadster transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2018-12-23T10:57:43.7467614",
+  "FileTimeStamp": "2019-01-05T12:09:46.0726736",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\8\\roadster.sfp",
   "Id": 8,
   "Name": "roadster.sfp",

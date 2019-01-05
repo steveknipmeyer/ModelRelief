@@ -31,7 +31,7 @@ class TestDepthBuffer:
     """
     def __init__(self):
         """
-        Initialize an instancee of a DepthBuffer.
+        Initialize an instance of a TestDepthBuffer.
         """
         # data = np.array(
         #  [ 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
@@ -73,11 +73,11 @@ class DepthBuffer:
 
     def __init__(self, settings: dict, services : Services, use_np_gradient: bool) -> None:
         """
-        Initialize an instancee of a DepthBuffer.
+        Initialize an instance of a DepthBuffer.
         Parameters:
         ----------
         setting
-            The path of the DepthBuffer JSON file.
+            The DepthBuffer JSON definition.
         services
             Service support for logging, timers, etc.
         use_np_gradient
@@ -247,7 +247,7 @@ class DepthBuffer:
     @property
     def background_mask(self) -> np.ndarray:
         """
-        Retureens the background mask of the DepthBuffer.
+        Returns the background mask of the DepthBuffer.
         """
         mask = Mask(self.services)
         b_mask = mask.background_from_depth_buffer(self.floats)

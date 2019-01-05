@@ -44,14 +44,31 @@
       "Description": "Armadillo Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2018-12-23T10:59:23.2923063",
+    "FileTimeStamp": "2019-01-05T12:09:45.5434795",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\1\\armadillo.sdb",
     "Id": 1,
     "Name": "armadillo.sdb",
     "Description": "Generated in Rhino (development@modelrelief.com)"
   },
   "NormalMapId": 1,
-  "NormalMap": null,
+  "NormalMap": {
+    "Width": 512.0,
+    "Height": 512.0,
+    "Format": 1,
+    "Space": 2,
+    "ProjectId": 4,
+    "Project": null,
+    "Model3dId": 1,
+    "Model3d": null,
+    "CameraId": 3,
+    "Camera": null,
+    "FileIsSynchronized": true,
+    "FileTimeStamp": "2019-01-05T12:09:45.7885311",
+    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\1\\armadillo.nmap",
+    "Id": 1,
+    "Name": "armadillo.nmap",
+    "Description": "Generated in Rhino (development@modelrelief.com)"
+  },
   "MeshTransformId": 2,
   "MeshTransform": {
     "Width": 100.0,
@@ -78,7 +95,7 @@
     "Description": "Armadillo transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2018-12-23T10:57:43.7466035",
+  "FileTimeStamp": "2019-01-05T12:09:46.0724142",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\1\\armadillo.sfp",
   "Id": 1,
   "Name": "armadillo.sfp",

@@ -44,14 +44,31 @@
       "Description": "Dragon Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2018-12-23T11:02:18.879007",
+    "FileTimeStamp": "2019-01-05T12:09:45.5438872",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\5\\dragon.sdb",
     "Id": 5,
     "Name": "dragon.sdb",
     "Description": "Generated in VRay (development@modelrelief.com)"
   },
   "NormalMapId": 5,
-  "NormalMap": null,
+  "NormalMap": {
+    "Width": 512.0,
+    "Height": 512.0,
+    "Format": 1,
+    "Space": 2,
+    "ProjectId": 4,
+    "Project": null,
+    "Model3dId": 5,
+    "Model3d": null,
+    "CameraId": 7,
+    "Camera": null,
+    "FileIsSynchronized": true,
+    "FileTimeStamp": "2019-01-05T12:09:45.7887718",
+    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\5\\dragon.nmap",
+    "Id": 5,
+    "Name": "dragon.nmap",
+    "Description": "Generated in VRay (development@modelrelief.com)"
+  },
   "MeshTransformId": 6,
   "MeshTransform": {
     "Width": 100.0,
@@ -78,7 +95,7 @@
     "Description": "Dragon transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2018-12-23T10:57:43.7467296",
+  "FileTimeStamp": "2019-01-05T12:09:46.072624",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\5\\dragon.sfp",
   "Id": 5,
   "Name": "dragon.sfp",

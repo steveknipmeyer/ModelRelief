@@ -1131,6 +1131,7 @@ namespace ModelRelief.Database
                                         .Include(m => m.DepthBuffer)
                                             .ThenInclude(d => d.Camera)
                                         .Include(m => m.MeshTransform)
+                                        .Include(m => m.NormalMap)
                                         .AsNoTracking();
 
             var destinationFolder = Path.GetFullPath($"{HostingEnvironment.ContentRootPath}/../Solver/Test");

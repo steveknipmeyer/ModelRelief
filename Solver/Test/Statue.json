@@ -44,14 +44,31 @@
       "Description": "Statue Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2018-12-23T11:05:13.6368866",
+    "FileTimeStamp": "2019-01-05T12:09:45.5439625",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\9\\statue.sdb",
     "Id": 9,
     "Name": "statue.sdb",
     "Description": "Generated in Maya (development@modelrelief.com)"
   },
   "NormalMapId": 9,
-  "NormalMap": null,
+  "NormalMap": {
+    "Width": 512.0,
+    "Height": 512.0,
+    "Format": 1,
+    "Space": 2,
+    "ProjectId": 4,
+    "Project": null,
+    "Model3dId": 9,
+    "Model3d": null,
+    "CameraId": 11,
+    "Camera": null,
+    "FileIsSynchronized": true,
+    "FileTimeStamp": "2019-01-05T12:09:45.7888736",
+    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\9\\statue.nmap",
+    "Id": 9,
+    "Name": "statue.nmap",
+    "Description": "Generated in Maya (development@modelrelief.com)"
+  },
   "MeshTransformId": 10,
   "MeshTransform": {
     "Width": 100.0,
@@ -78,7 +95,7 @@
     "Description": "Statue transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2018-12-23T10:57:43.7467692",
+  "FileTimeStamp": "2019-01-05T12:09:46.072692",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\9\\statue.sfp",
   "Id": 9,
   "Name": "statue.sfp",

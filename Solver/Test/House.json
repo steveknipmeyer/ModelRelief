@@ -44,14 +44,31 @@
       "Description": "House Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2018-12-23T11:02:47.8671402",
+    "FileTimeStamp": "2019-01-05T12:09:45.543906",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\6\\house.sdb",
     "Id": 6,
     "Name": "house.sdb",
     "Description": "Generated in VRay (development@modelrelief.com)"
   },
   "NormalMapId": 6,
-  "NormalMap": null,
+  "NormalMap": {
+    "Width": 512.0,
+    "Height": 512.0,
+    "Format": 1,
+    "Space": 2,
+    "ProjectId": 1,
+    "Project": null,
+    "Model3dId": 6,
+    "Model3d": null,
+    "CameraId": 8,
+    "Camera": null,
+    "FileIsSynchronized": true,
+    "FileTimeStamp": "2019-01-05T12:09:45.788809",
+    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\6\\house.nmap",
+    "Id": 6,
+    "Name": "house.nmap",
+    "Description": "Generated in VRay (development@modelrelief.com)"
+  },
   "MeshTransformId": 7,
   "MeshTransform": {
     "Width": 100.0,
@@ -78,7 +95,7 @@
     "Description": "House transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2018-12-23T10:57:43.746737",
+  "FileTimeStamp": "2019-01-05T12:09:46.0726422",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\6\\house.sfp",
   "Id": 6,
   "Name": "house.sfp",

@@ -44,14 +44,31 @@
       "Description": "Buddha Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2018-12-23T11:00:29.46898",
+    "FileTimeStamp": "2019-01-05T12:09:45.5438042",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\2\\buddha.sdb",
     "Id": 2,
     "Name": "buddha.sdb",
     "Description": "Generated in Rhino (development@modelrelief.com)"
   },
   "NormalMapId": 2,
-  "NormalMap": null,
+  "NormalMap": {
+    "Width": 512.0,
+    "Height": 512.0,
+    "Format": 1,
+    "Space": 2,
+    "ProjectId": 4,
+    "Project": null,
+    "Model3dId": 2,
+    "Model3d": null,
+    "CameraId": 4,
+    "Camera": null,
+    "FileIsSynchronized": true,
+    "FileTimeStamp": "2019-01-05T12:09:45.788701",
+    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\2\\buddha.nmap",
+    "Id": 2,
+    "Name": "buddha.nmap",
+    "Description": "Generated in Rhino (development@modelrelief.com)"
+  },
   "MeshTransformId": 4,
   "MeshTransform": {
     "Width": 100.0,
@@ -78,7 +95,7 @@
     "Description": "Buddha transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2018-12-23T10:57:43.7467054",
+  "FileTimeStamp": "2019-01-05T12:09:46.0725535",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\2\\buddha.sfp",
   "Id": 2,
   "Name": "buddha.sfp",

@@ -1,17 +1,28 @@
 ﻿### Tasks
 #### Commit Notes
+Add a NormalMap class to support Solver.
+Include the NormalMap entity in the working file JSON.
+Move RGBA unpacking support to FileManager.
+Update Test JSON files with NormalMap properties.
 
 #### Lambda
-npm install -g npm-install-missing
-Update node.
-npm install --global --production npm-windows-upgrade
-    npm version is 6.5.0.
 
 #### Vector
 
 Issues
+    Wrap the RGBA logic into a higher level FileManager method (e.g. ReadRGBA).
+    Why does Solver call initialize_settings twice during startup?
+
     Normal Processing
-        The DepthBuffer is not a height field. It is the OpenGL non-linear format.
+        
+        Add a NormalMap class to the Solver tools.
+        Replace the gradient ndarray with a normal map calculated from the components of the normals.
+            Gx = Nx/Nz
+            Gy = Ny/Nz
+
+        Notes
+            The DepthBuffer is not a height field. It is the OpenGL non-linear format.
+                Therefore an algorithm based on a linear depth must peform the conversion to model coordinates.
 
     Image
         DepthBuffer, NormalMap hold instances.
@@ -1463,6 +1474,9 @@ https://semver.npmjs.com/
 
     Why does node_modules use three 0.86 when package.json specifies ^0.86 which should admit 0.89 as the latest version.
     It seems that a leading zero for the major version is ignored and only the 2nd and 3rd fields are processed.
+
+    npm install -g npm-install-missing
+    npm install --global --production npm-windows-upgrade
 
 #### Adding a New Test Model
     Add the 3D model to D:\Users\Steve Knipmeyer\Documents\Development\ModelRelief\Models.

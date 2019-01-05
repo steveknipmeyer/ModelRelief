@@ -34,6 +34,7 @@ from tools import Colors, Tools
 from depthbuffer import DepthBuffer
 from mesh import Mesh
 from meshtransform import MeshTransform
+from normalmap import NormalMap
 
 from attenuation import Attenuation
 from difference import Difference, FiniteDifference, Axis
@@ -103,6 +104,7 @@ class Solver:
         self.mesh = None
         self.depth_buffer: Optional[DepthBuffer] = None
         self.mesh_transform: Optional[MeshTransform] = None
+        self.normal_map: Optional[NormalMap] = None
 
         self.settings_file = settings
 
@@ -138,6 +140,8 @@ class Solver:
         """
         self.mesh = Mesh(self.settings, self.services)
         self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'], self.services, self.enable_p5)
+        self.normal_map = NormalMap(self.settings['NormalMap'], self.services)
+        components = self.normal_map.components
 
         self.mesh_transform = MeshTransform(self.settings['MeshTransform'])
         # print("%r" % self.mesh_transform)

@@ -145,7 +145,6 @@ namespace ModelRelief.Services.Jobs
             mesh.FileIsSynchronized = false;
             await DbContext.SaveChangesAsync();
 
-            // expand mesh to include Camera
             var expandedMesh = await DbContext.Set<Mesh>()
                                 .Where(m => (m.Id == mesh.Id) &&
                                             (m.UserId == mesh.UserId))

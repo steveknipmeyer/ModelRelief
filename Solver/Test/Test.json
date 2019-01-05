@@ -44,14 +44,31 @@
       "Description": "Isometric Test Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2018-12-23T11:05:46.4218996",
+    "FileTimeStamp": "2019-01-05T12:09:45.543994",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\10\\test.sdb",
     "Id": 10,
     "Name": "test.sdb",
     "Description": "Generated in ModelRelief (development@modelrelief.com)"
   },
   "NormalMapId": 10,
-  "NormalMap": null,
+  "NormalMap": {
+    "Width": 512.0,
+    "Height": 512.0,
+    "Format": 1,
+    "Space": 2,
+    "ProjectId": 3,
+    "Project": null,
+    "Model3dId": 10,
+    "Model3d": null,
+    "CameraId": 12,
+    "Camera": null,
+    "FileIsSynchronized": true,
+    "FileTimeStamp": "2019-01-05T12:09:45.7888876",
+    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\10\\test.nmap",
+    "Id": 10,
+    "Name": "test.nmap",
+    "Description": "Generated in ModelRelief (development@modelrelief.com)"
+  },
   "MeshTransformId": 11,
   "MeshTransform": {
     "Width": 100.0,
@@ -78,7 +95,7 @@
     "Description": "Test transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2018-12-23T10:57:43.7467763",
+  "FileTimeStamp": "2019-01-05T12:09:46.072705",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\10\\test.sfp",
   "Id": 10,
   "Name": "test.sfp",

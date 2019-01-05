@@ -35,7 +35,6 @@ class PngWriter:
     Creates PNG files.
     """
     BytesPerSinglePrecisionFloat = 4
-    BytesPerRGBA = 4
 
     def __init__(self, arguments):
         """
@@ -77,23 +76,9 @@ class PngWriter:
         filename = Path(self.source_file)
         png_filename = filename.with_suffix('.png')
 
-        raw_bytes = FileManager().read__binary(self.source_file)
-        elements = len(raw_bytes) / PngWriter.BytesPerRGBA
-        dimensions = int(math.sqrt(elements))
-
-        # convert to 32 bit unsigned integers
-        int32_array = FileManager().unpack_integer32(raw_bytes)
-        int32_array = np.reshape(int32_array, [dimensions, dimensions])
-        int32_array = int32_array.astype(np.uint32)
-        int32_array = np.flipud(int32_array)
-
-        # RGBA
-        rgba_array = np.zeros((dimensions, dimensions, FileManager.RGBA), dtype=np.uint8)
-        for color_index in range(FileManager.RGBA):
-            bit_shift = 8 * color_index
-            mask = 0xFF << bit_shift
-            component_array = (int32_array[:,:] & mask) >> bit_shift
-            rgba_array[:,:, color_index] = component_array
+        file_manager = FileManager()
+        raw_bytes = file_manager.read__binary(self.source_file)
+        rgba_array = file_manager.unpack_rgba(raw_bytes)
 
         imageio.imwrite(png_filename,  rgba_array)
 

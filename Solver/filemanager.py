@@ -10,7 +10,10 @@
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
+import math
 import struct
+import numpy as np
+
 from typing import List
 
 class FileManager:
@@ -45,12 +48,11 @@ class FileManager:
 
     def unpack_floats(self, byte_list: bytes, floats_per_unpack=None) ->List[float]:
         """
-        Returns a list of float tuples from a byte sequence.
-        The length of the tuple is controlled by the floats_per_unpack parameter.
-
-        The default is to return a single tuple containing all floats as performance testing
-        shows that this is the most efficient.
+        Returns a list of floats from a byte sequence.
         """
+
+        # The default is to unpack in a single tuple containing all floats as performance testing
+        # shows that this is the most efficient.
         float_count = int(len(byte_list) / FileManager.SINGLE_PRECISION)
         if floats_per_unpack is None:
             floats_per_unpack = float_count
@@ -103,12 +105,11 @@ class FileManager:
 
     def unpack_integer32(self, byte_list: bytes, integers_per_unpack=None) ->List[int]:
         """
-        Returns a list of 32-bit integer tuples from a byte sequence.
-        The length of the tuple is controlled by the integers_per_unpack parameter.
-
-        The default is to return a single tuple containing all integers as performance testing
-        shows that this is the most efficient.
+        Returns a list of 32-bit integer from a byte sequence.
         """
+
+        # The default is to unpack in a single tuple containing all integets as performance testing
+        # shows that this is the most efficient.
         integer_count = int(len(byte_list) / FileManager.UNSIGNED_INTEGER)
         if integers_per_unpack is None:
             integers_per_unpack = integer_count
@@ -131,3 +132,26 @@ class FileManager:
                 integers.append(value)
 
         return integers
+ 
+    def unpack_rgba(self, byte_list: bytes) ->List[np.ndarray]:
+        """
+        Returns a list of NumPy arrays representing the RGBA planes.
+        """
+        elements = len(byte_list) / FileManager.RGBA
+        dimensions = int(math.sqrt(elements))
+
+        # convert to 32 bit unsigned integers
+        int32_array = FileManager().unpack_integer32(byte_list)
+        int32_array = np.reshape(int32_array, [dimensions, dimensions])
+        int32_array = int32_array.astype(np.uint32)
+        int32_array = np.flipud(int32_array)
+
+        # RGBA
+        rgba_array = np.zeros((dimensions, dimensions, FileManager.RGBA), dtype=np.uint8)
+        for color_index in range(FileManager.RGBA):
+            bit_shift = 8 * color_index
+            mask = 0xFF << bit_shift
+            component_array = (int32_array[:,:] & mask) >> bit_shift
+            rgba_array[:,:, color_index] = component_array
+
+        return rgba_array
