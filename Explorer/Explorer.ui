@@ -882,7 +882,7 @@
         <rect>
          <x>16</x>
          <y>615</y>
-         <width>158</width>
+         <width>194</width>
          <height>19</height>
         </rect>
        </property>
@@ -892,7 +892,7 @@
         </font>
        </property>
        <property name="text">
-        <string>P8</string>
+        <string>P8: NormalMap Gradients</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="p5LineEdit">

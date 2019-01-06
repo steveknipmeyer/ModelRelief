@@ -80,6 +80,8 @@ class PngWriter:
         raw_bytes = file_manager.read_binary(self.source_file)
         rgba_array = file_manager.unpack_rgba(raw_bytes)
 
+        rgba_array = np.flipud(rgba_array)
+
         imageio.imwrite(png_filename,  rgba_array)
 
 def main():

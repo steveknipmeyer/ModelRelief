@@ -97,23 +97,57 @@ class NormalMap:
         self._components = rgba_planes
         return self._components
 
+    def rg_to_xy(self, component: np.ndarray)-> np.ndarray:
+        """
+        Converts a Red/Green value to the normalized XY vector component.
+        """
+        component = (component - 127.0) / 127.0
+        return component
+
     @property
-    def normal_x(self):
+    def x(self)-> np.ndarray:
         """
         Returns the X component.
         """
-        return self.components[0]
+        x_plane = self.components[:, :, 0]
+        normal_x = self.rg_to_xy(x_plane)
+        return normal_x
 
     @property
-    def normal_y(self):
+    def y(self)-> np.ndarray:
         """
         Returns the Y component.
         """
-        return self.components[1]
+        y_plane = self.components[:, :, 1]
+        normal_y = self.rg_to_xy(y_plane)
+        return normal_y
 
     @property
-    def normal_z(self):
+    def z(self)-> np.ndarray:
         """
         Returns the Z component.
         """
-        return self.components[2]
+        z_plane: np.ndarray = self.components[:, :, 2]
+        
+        # WIP: prevent unbounded gradients (division by zero)
+        z_plane[z_plane == 0] = 1
+        # WIP: flip
+        z_plane = -1.0 * z_plane / 255.0
+
+        return z_plane
+
+    @property
+    def gradient_x(self):
+        """
+        Returns the X gradient of the NormalMap.
+        """
+        gradient = self.x / self.z
+        return gradient
+
+    @property
+    def gradient_y(self):
+        """
+        Returns the Y gradient of the NormalMap.
+        """
+        gradient = self.y / self.z
+        return gradient

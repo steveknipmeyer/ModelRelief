@@ -87,14 +87,14 @@ class Solver:
         self.enable_unsharpmask_high_frequence_scale = True
 
         # experimental
-        self.enable_p1 = True               # scale relief
-        self.enable_p2 = False              # silhoutte processing, sigma gaussian
+        self.enable_p1 = True                # scale relief
+        self.enable_p2 = False               # silhoutte processing, sigma gaussian
         self.enable_p3 = False               # silhouette processing, blurring passes
         self.enable_p4 = False               # use composite mask in gaussian blur
         self.enable_p5 = False               # use Numpy gradients, not Difference class
         self.enable_p6 = False               # translate mesh Z to positive values
         self.enable_p7 = False               # force planar by zeroing with background mask
-        self.enable_p8 = False               # use Integrator rather than Poisson solver
+        self.enable_p8 = False               # use NormalMap gradients (not DepthBuffer heightfields)
 
         # file output
         self.enable_obj = True
@@ -137,7 +137,6 @@ class Solver:
         self.mesh = Mesh(self.settings, self.services)
         self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'], self.services, self.enable_p5)
         self.normal_map = NormalMap(self.settings['NormalMap'], self.services)
-        rgba = self.normal_map.components
 
         self.mesh_transform = MeshTransform(self.settings['MeshTransform'])
         # print("%r" % self.mesh_transform)
@@ -159,9 +158,16 @@ class Solver:
         The gradients are thresholded to remove high values such as at the model edges.
         The gradients are filtered by applying the composite mask.
         """
+        # NormalMap gradients
+        if self.enable_p8:
+            self.results.gradient_x.image = self.normal_map.gradient_x
+            self.results.gradient_y.image = self.normal_map.gradient_y
+        # DepthBuffer (heighfield) gradients
+        else:
+            self.results.gradient_x.image = self.depth_buffer.gradient_x
+            self.results.gradient_y.image = self.depth_buffer.gradient_y
 
-        self.results.gradient_x.image = self.depth_buffer.gradient_x
-        self.results.gradient_y.image = self.depth_buffer.gradient_y
+        # experimental
 
         # Composite mask: Values are processed only if they pass all three masks.
         #    A value must have a 1 in the background mask.
@@ -216,11 +222,11 @@ class Solver:
         Due to the discrete case which we are in, they are obtained by a finite difference again like in Chapter 3.1.3, but here it has to be
         the backward difffernce in order to produce a central difference like it is defined for the Laplacian.
         """
-        if self.enable_p8:
-            integrator = Integrator(self.services)
-            self.results.mesh_transformed.image = integrator.integrate_x(self.results.gradient_x_unsharp.image)
-            #self.results.mesh_transformed.image = integrator.integrate_y(self.results.gradient_y_unsharp.image)
-            return
+        #if self.enable_pX:
+        #    integrator = Integrator(self.services)
+        #    self.results.mesh_transformed.image = integrator.integrate_x(self.results.gradient_x_unsharp.image)
+        #    self.results.mesh_transformed.image = integrator.integrate_y(self.results.gradient_y_unsharp.image)
+        #    return
 
         difference = Difference(self.services)
         self.results.dGxdx.image = difference.difference_x(self.results.gradient_x_unsharp.image, FiniteDifference.Backward)

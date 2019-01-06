@@ -185,7 +185,6 @@ class FileManager:
         int32_list = FileManager().unpack_integer32(byte_list)
         int32_array = np.reshape(int32_list, [dimensions, dimensions])
         int32_array = int32_array.astype(np.uint32)
-        int32_array = np.flipud(int32_array)
 
         # RGBA
         rgba_array = np.zeros((dimensions, dimensions, FileManager.RGBA), dtype)

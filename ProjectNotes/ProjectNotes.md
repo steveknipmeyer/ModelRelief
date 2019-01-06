@@ -6,7 +6,13 @@
 #### Vector
 
 Issues
-    
+    It appears that NormalMap gradients lose some high frequency detail.
+    The Tyrannosaurus yields invalid results.
+
+    Review all Solver flags.
+        self.enable_p4 = False               # use composite mask in gaussian blur
+        self.enable_p5 = False               # use Numpy gradients, not Difference class
+
     Normal Processing
         Replace the gradient ndarray with a normal map calculated from the components of the normals.
             Gx = Nx/Nz
