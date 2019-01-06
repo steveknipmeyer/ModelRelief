@@ -52,13 +52,13 @@ class Solver:
     """
     Transforms a DepthBuffer to create a Mesh (raw float format) based on a MeshTransform.
     """
-    def __init__(self, settings: str, working: str) -> None:
+    def __init__(self, settings_file: str, working: str) -> None:
         """
         Initialize an instance of the Solver.
 
         Parameters
         ----------
-        settings
+        settings_file
             Path to JSON Mesh settings file.
         working
             Working folder path for intermediate files.
@@ -99,14 +99,14 @@ class Solver:
         # file output
         self.enable_obj = True
 
-        self.settings = None
-        self._settings_file = ''
-        self.mesh = None
+        self.settings_file = ''
+        self.settings: dict = {}
+        self.mesh: Optional[Mesh] = None
         self.depth_buffer: Optional[DepthBuffer] = None
         self.mesh_transform: Optional[MeshTransform] = None
         self.normal_map: Optional[NormalMap] = None
 
-        self.settings_file = settings
+        self.initialize(settings_file)
 
     @property
     def content_folder(self):
@@ -120,28 +120,23 @@ class Solver:
 
         return os.path.abspath('../ModelRelief')
 
-    @property
-    def settings_file(self):
-        """
-        Returns the absolute path of the Mesh settings file.
-        """
-        return self._settings_file
-
-    @settings_file.setter
-    def settings_file(self, settings):
-        with open(settings) as json_file:
-            self.settings = json.load(json_file)
-        self.initialize_settings()
-        self._settings_file = settings
-
-    def initialize_settings(self):
+    def load_settings(self, settings_file: str):
         """
         Unpack the JSON settings file and initialize Solver properties.
         """
+        self.settings_file = settings_file
+        with open(settings_file) as json_file:
+            self.settings = json.load(json_file)
+
+    def initialize(self, settings_file: str):
+        """
+        Initialize the Solver.
+        """
+        self.load_settings(settings_file)
+
         self.mesh = Mesh(self.settings, self.services)
         self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'], self.services, self.enable_p5)
         self.normal_map = NormalMap(self.settings['NormalMap'], self.services)
-        components = self.normal_map.components
 
         self.mesh_transform = MeshTransform(self.settings['MeshTransform'])
         # print("%r" % self.mesh_transform)

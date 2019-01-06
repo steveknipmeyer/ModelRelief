@@ -2,7 +2,7 @@
 #
 #   Copyright (c) 2018
 #   All Rights Reserved.
-# 
+#
 
 """
 .. module:: NormalMap
@@ -93,12 +93,11 @@ class NormalMap:
             return self._components
 
         # read NormalMap image
-        filename = Path(self.path)
-
         file_manager = FileManager()
-        raw_bytes = file_manager.read__binary(filename)
+        raw_bytes = file_manager.read_binary(self.path)
         rgba_array = file_manager.unpack_rgba(raw_bytes)
 
+        self._components = rgba_array
         return self._components
 
     @property

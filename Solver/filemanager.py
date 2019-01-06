@@ -30,7 +30,7 @@ class FileManager:
         """
         self.debug = True
 
-    def read__binary(self, path: str) -> bytearray:
+    def read_binary(self, path: str) -> bytearray:
         """
         Reads a raw stream of bytes.
         Note: A raw depth buffer is a binary stream of single precision four byte floats.
@@ -132,7 +132,7 @@ class FileManager:
                 integers.append(value)
 
         return integers
- 
+
     def unpack_rgba(self, byte_list: bytes) ->List[np.ndarray]:
         """
         Returns a list of NumPy arrays representing the RGBA planes.
@@ -141,8 +141,8 @@ class FileManager:
         dimensions = int(math.sqrt(elements))
 
         # convert to 32 bit unsigned integers
-        int32_array = FileManager().unpack_integer32(byte_list)
-        int32_array = np.reshape(int32_array, [dimensions, dimensions])
+        int32_list = FileManager().unpack_integer32(byte_list)
+        int32_array = np.reshape(int32_list, [dimensions, dimensions])
         int32_array = int32_array.astype(np.uint32)
         int32_array = np.flipud(int32_array)
 

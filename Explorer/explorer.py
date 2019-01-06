@@ -38,8 +38,8 @@ class Explorer(QtWidgets.QMainWindow):
 
         self.debug = True
 
-        self.settings_file = settings_file
-        self.settings = self.load_settings(self.settings_file)
+        self.settings_file = ''
+        self.settings = self.load_settings(settings_file)
         self.working = working
 
         # solver instance
@@ -268,8 +268,7 @@ class Explorer(QtWidgets.QMainWindow):
 
         if dialog.exec_():
             filenames = dialog.selectedFiles()
-            self.settings_file = filenames[0]
-            self.settings = self.load_settings(self.settings_file)
+            self.settings = self.load_settings(filenames[0])
 
             self.initialize_settings()
             self.calculate()
@@ -303,7 +302,7 @@ class Explorer(QtWidgets.QMainWindow):
         self.solver.enable_obj = self.ui.fileOBJCheckBox.isChecked()
 
         # solve
-        self.solver.settings_file = self.settings_file
+        self.solver.initialize(self.settings_file)
         self.solver.transform()
         self.invalidate()
 

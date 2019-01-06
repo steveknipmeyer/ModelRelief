@@ -141,7 +141,7 @@ class DepthBuffer:
         Constructs a list of bytes from the DepthBuffer.
         """
         # read raw bytes
-        return FileManager().read__binary(self.path)
+        return FileManager().read_binary(self.path)
 
     @property
     def floats_raw(self) -> List[float]:

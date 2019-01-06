@@ -51,7 +51,7 @@ class PngWriter:
         filename = Path(self.source_file)
         png_filename = filename.with_suffix('.png')
 
-        raw_bytes = FileManager().read__binary( self.source_file)
+        raw_bytes = FileManager().read_binary( self.source_file)
         elements = len(raw_bytes) / PngWriter.BytesPerSinglePrecisionFloat
         dimensions = int(math.sqrt(elements))
 
@@ -77,7 +77,7 @@ class PngWriter:
         png_filename = filename.with_suffix('.png')
 
         file_manager = FileManager()
-        raw_bytes = file_manager.read__binary(self.source_file)
+        raw_bytes = file_manager.read_binary(self.source_file)
         rgba_array = file_manager.unpack_rgba(raw_bytes)
 
         imageio.imwrite(png_filename,  rgba_array)

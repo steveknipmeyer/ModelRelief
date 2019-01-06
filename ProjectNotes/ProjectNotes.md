@@ -1,9 +1,5 @@
 ﻿### Tasks
 #### Commit Notes
-Add a NormalMap class to support Solver.
-Include the NormalMap entity in the working file JSON.
-Move RGBA unpacking support to FileManager.
-Update Test JSON files with NormalMap properties.
 
 #### Lambda
 
@@ -11,7 +7,6 @@ Update Test JSON files with NormalMap properties.
 
 Issues
     Wrap the RGBA logic into a higher level FileManager method (e.g. ReadRGBA).
-    Why does Solver call initialize_settings twice during startup?
 
     Normal Processing
         
