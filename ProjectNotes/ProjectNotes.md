@@ -6,11 +6,8 @@
 #### Vector
 
 Issues
-    Wrap the RGBA logic into a higher level FileManager method (e.g. ReadRGBA).
-
+    
     Normal Processing
-        
-        Add a NormalMap class to the Solver tools.
         Replace the gradient ndarray with a normal map calculated from the components of the normals.
             Gx = Nx/Nz
             Gy = Ny/Nz

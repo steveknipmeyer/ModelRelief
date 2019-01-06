@@ -137,6 +137,7 @@ class Solver:
         self.mesh = Mesh(self.settings, self.services)
         self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'], self.services, self.enable_p5)
         self.normal_map = NormalMap(self.settings['NormalMap'], self.services)
+        rgba = self.normal_map.components
 
         self.mesh_transform = MeshTransform(self.settings['MeshTransform'])
         # print("%r" % self.mesh_transform)

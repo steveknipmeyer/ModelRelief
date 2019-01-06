@@ -92,12 +92,9 @@ class NormalMap:
         if (len(self._components) > 0):
             return self._components
 
-        # read NormalMap image
-        file_manager = FileManager()
-        raw_bytes = file_manager.read_binary(self.path)
-        rgba_array = file_manager.unpack_rgba(raw_bytes)
+        rgba_planes = FileManager().read_rgba(self.path, np.float)
 
-        self._components = rgba_array
+        self._components = rgba_planes
         return self._components
 
     @property

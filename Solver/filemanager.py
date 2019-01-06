@@ -33,7 +33,10 @@ class FileManager:
     def read_binary(self, path: str) -> bytearray:
         """
         Reads a raw stream of bytes.
-        Note: A raw depth buffer is a binary stream of single precision four byte floats.
+        Parameters
+        ---------
+        path
+            File to read.
         """
         with open(file=path, mode='rb') as file:
             byte_list = bytearray(file.read())
@@ -42,6 +45,12 @@ class FileManager:
     def write_binary(self, path: str, byte_list: bytes):
         """
         Writes a raw stream of bytes.
+        Parameters
+        ---------
+        path
+            File to write.
+        byte_list
+            List of bytes to write.
         """
         with open(file=path, mode='wb') as file:
             file.write(byte_list)
@@ -49,6 +58,12 @@ class FileManager:
     def unpack_floats(self, byte_list: bytes, floats_per_unpack=None) ->List[float]:
         """
         Returns a list of floats from a byte sequence.
+        Parameters
+        ---------
+        byte_list
+            List of bytes to unpack into floats.
+        floats_per_unpack
+            Number of floats to unpack per step.
         """
 
         # The default is to unpack in a single tuple containing all floats as performance testing
@@ -79,6 +94,10 @@ class FileManager:
     def pack_floats(self, floats: List[float]) -> bytes:
         """
         Packs a list of single precision (32 bit) floats into a byte sequence.
+        Parameters
+        ---------
+        floats
+            List of floats to pack into byte list.
         """
         float_count = len(floats)
 
@@ -90,6 +109,10 @@ class FileManager:
     def read_floats(self, path: str) ->List[float]:
         """
         Reads a file into a list of floats.
+        Parameters
+        ---------
+        path
+            File to read.
         """
         with open(file=path, mode='r') as file:
             float_list = list(map(float, file))
@@ -98,6 +121,12 @@ class FileManager:
     def write_floats(self, path: str, floats: List[float]) -> None:
         """
         Writes a file from a list of floats.
+        Parameters
+        ---------
+        path
+            File to write.
+        floats
+            List of floats to write.
         """
         with open(file=path, mode='w') as file:
             for value in floats:
@@ -106,6 +135,12 @@ class FileManager:
     def unpack_integer32(self, byte_list: bytes, integers_per_unpack=None) ->List[int]:
         """
         Returns a list of 32-bit integer from a byte sequence.
+        Parameters
+        ---------
+        byte_list
+            List of bytes to unpack into 32-bit integers.
+        integers_per_unpack
+            Number of integers to unpack per step.
         """
 
         # The default is to unpack in a single tuple containing all integets as performance testing
@@ -133,9 +168,15 @@ class FileManager:
 
         return integers
 
-    def unpack_rgba(self, byte_list: bytes) ->List[np.ndarray]:
+    def unpack_rgba(self, byte_list: bytes, dtype=np.uint8) ->List[np.ndarray]:
         """
         Returns a list of NumPy arrays representing the RGBA planes.
+        Parameters
+        ---------
+        byte_list
+            List of bytes to unpack into RGBA planes.
+        dtype
+            Data type of plane.
         """
         elements = len(byte_list) / FileManager.RGBA
         dimensions = int(math.sqrt(elements))
@@ -147,11 +188,26 @@ class FileManager:
         int32_array = np.flipud(int32_array)
 
         # RGBA
-        rgba_array = np.zeros((dimensions, dimensions, FileManager.RGBA), dtype=np.uint8)
+        rgba_array = np.zeros((dimensions, dimensions, FileManager.RGBA), dtype)
         for color_index in range(FileManager.RGBA):
             bit_shift = 8 * color_index
             mask = 0xFF << bit_shift
             component_array = (int32_array[:,:] & mask) >> bit_shift
             rgba_array[:,:, color_index] = component_array
+
+        return rgba_array
+
+    def read_rgba(self, path: str, dtype=np.uint8) -> List[np.ndarray]:
+        """
+        Reads a raw RGBA file.
+        Parameters
+        ----------
+        path
+            File to read.
+        dtype
+            Data type of plane.
+        """
+        raw_bytes = self.read_binary(path)
+        rgba_array = self.unpack_rgba(raw_bytes, dtype)
 
         return rgba_array
