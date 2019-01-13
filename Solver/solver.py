@@ -90,11 +90,11 @@ class Solver:
         self.enable_p1 = True                # scale relief
         self.enable_p2 = False               # silhoutte processing, sigma gaussian
         self.enable_p3 = False               # silhouette processing, blurring passes
-        self.enable_p4 = False               # use composite mask in gaussian blur
+        self.enable_p4 = True                # use composite mask in gaussian blur
         self.enable_p5 = False               # use Numpy gradients, not Difference class
         self.enable_p6 = False               # translate mesh Z to positive values
         self.enable_p7 = False               # force planar by zeroing with background mask
-        self.enable_p8 = False               # use NormalMap gradients (not DepthBuffer heightfields)
+        self.enable_p8 = True                # use NormalMap gradients (not DepthBuffer heightfields)
 
         # file output
         self.enable_obj = True
