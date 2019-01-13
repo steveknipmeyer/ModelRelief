@@ -687,6 +687,7 @@ OBJLoader.prototype = {
             if ( geometry.normals.length > 0 ) {
 
                 buffergeometry.addAttribute( 'normal', new THREE.BufferAttribute( new Float32Array( geometry.normals ), 3 ) );
+                buffergeometry.computeVertexNormals();
 
             } else {
 
