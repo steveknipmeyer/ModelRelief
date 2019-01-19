@@ -15,6 +15,7 @@ namespace ModelRelief.Test.Integration.Meshes
     using ModelRelief.Test.TestModels.DepthBuffers;
     using ModelRelief.Test.TestModels.Meshes;
     using ModelRelief.Test.TestModels.MeshTransforms;
+    using ModelRelief.Test.TestModels.NormalMaps;
     using ModelRelief.Utility;
     using Newtonsoft.Json;
     using Xunit;
@@ -63,6 +64,16 @@ namespace ModelRelief.Test.Integration.Meshes
                 depthBufferNode.Model = await depthBufferFactory.PostNewModel(depthBuffer);
                 depthBufferNode.Model = await depthBufferFactory.PostNewFile(depthBufferNode.Model.Id, "DepthBuffer.sdb");
 
+                // NormalMap
+                var normalMapNode = NodeCollection[typeof(Domain.NormalMap)];
+                var normalMapFactory = normalMapNode.Factory as ITestFileModelFactory;
+                normalMapNode.Model = normalMapFactory.ConstructValidModel();
+
+                var normalMap = normalMapNode.Model as Dto.NormalMap;
+                normalMap.CameraId = cameraNode.Model.Id;
+                normalMapNode.Model = await normalMapFactory.PostNewModel(normalMap);
+                normalMapNode.Model = await normalMapFactory.PostNewFile(normalMapNode.Model.Id, "NormalMap.nmap");
+
                 // MeshTransform
                 var meshTransformNode = NodeCollection[typeof(Domain.MeshTransform)];
                 var meshTransformFactory = meshTransformNode.Factory as ITestModelFactory;
@@ -75,9 +86,10 @@ namespace ModelRelief.Test.Integration.Meshes
 
                 var mesh = meshNode.Model as Dto.Mesh;
                 mesh.DepthBufferId = depthBufferNode.Model.Id;
+                mesh.NormalMapId   = normalMapNode.Model.Id;
                 mesh.MeshTransformId = meshTransformNode.Model.Id;
                 meshNode.Model = await meshFactory.PostNewModel(mesh);
-                meshNode.Model = await meshFactory.PostNewFile(meshNode.Model.Id, "DepthBuffer.sdb");
+                meshNode.Model = await meshFactory.PostNewFile(meshNode.Model.Id, "Mesh.sfp");
             }
         }
 
@@ -101,6 +113,7 @@ namespace ModelRelief.Test.Integration.Meshes
             {
                 new MeshTestFileModelFactory(ClassFixture),
                 new DepthBufferTestFileModelFactory(ClassFixture),
+                new NormalMapTestFileModelFactory(ClassFixture),
                 new MeshTransformTestModelFactory(ClassFixture),
                 new CameraTestModelFactory(ClassFixture),
             });
