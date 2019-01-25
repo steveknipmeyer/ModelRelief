@@ -7,7 +7,23 @@
 
 #### Vector
 
+A2 Hosting
+    Environment Variables
+        https://stackoverflow.com/questions/31049152/publish-to-iis-setting-environment-variable
+    Change connection strings to match database.
+    Use SQL Server Management Studio to upload production database.
+    Server location is in Arizona. Change to Amsterdam.
+    Investigate SQL Server database dump.
+    Create e-mail accounts.
+        webmaster@modelrelief.com
+        steve@modelrelief.com
+
 Issues
+    New users should have access to test models.
+        When Auth0 was introduced, the Create account logic was removed which populated the account with the test models.
+            https://community.auth0.com/t/configure-implement-callback-after-user-registration/11895/9
+            DbInitializer.SeedDatabaseForUser
+
     It appears that NormalMap gradients lose some high frequency detail.
 
     Image
@@ -1564,7 +1580,9 @@ https://semver.npmjs.com/
                 Reset the SA password.
 
 #### Publish and Deploy
-    Production <must> set on the server:
+    Environment variables must be set in web.config.
+        web.config.production is the seed file that is copied to the IIS folder.
+        https://www.andrecarlucci.com/en/setting-environment-variables-for-asp-net-core-when-publishing-on-iis/
         (?) ASPNETCORE_ENVIRONMENT      Production
         PATH                            C:\modelrelief\mrenv
         PYTHONPATH                      C:\modelrelief\Tools; C:\modelrelief\Solver;
@@ -1575,7 +1593,7 @@ https://semver.npmjs.com/
             The secure port where the client is redirected (typically, 443 in production and 5001 in development).
             The insecure port (typically, 80 in production and 5000 in development).
 
-    How are credentials handled in a ConnectionString in Production?
+    azurekeyvault.json must be copied to the root folder.
         https://stackoverflow.com/questions/44931613/how-to-correctly-store-connection-strings-in-environment-variables-for-retrieval
 
     Server Structure
@@ -1583,7 +1601,7 @@ https://semver.npmjs.com/
             modelrelief (ContentRootPath)
                 <application files>
                 logs
-                mrenv
+                mrenv`
                 store/production
                 Solver
                 Test

@@ -197,7 +197,7 @@ class Builder:
         os.chdir(self.modelrelief_path)
         Tools.exec("dotnet publish -c Release -o {}".format(self.publish_path))
         self.logger.logInformation("\nUpdating web.config", Colors.Cyan)
-        Tools.copy_file(os.path.join(self.solution_path, self.web_config), os.path.join(self.publish_path, self.web_config))
+        Tools.copy_file(os.path.join(self.solution_path, self.web_config) + ".production", os.path.join(self.publish_path, self.web_config))
 
         # file exclusions
         self.logger.logInformation("\nRemoving source files that have been minified", Colors.BrightMagenta)

@@ -66,7 +66,7 @@ class Logger:
 
     def logInformation(self, message : str, color_override : str = None):
         """
-        Logs an Inforration class message.
+        Logs an Information class message.
         """
         self.logMessage(MessageClass.INFORMATION, message, color_override)
 
