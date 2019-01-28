@@ -1456,9 +1456,23 @@ The XUnit tests cannot be run withany required prompts for user verification bec
 ServerFramework (WebHost.CreateDefaultBuilder) sets the environment to "Development" *however the environment variables from launchSettings.json are not used.*
 
 #### New Computer Setup
-    gulp must be installed globally.
+
+    NPM
         npm install --global gulp-cli
-    node must be installed.
+        npm install --global madge
+    Node.js must be installed.
+    Install .NET Core 2.2 SDK.
+    Add axurekeyvault.json to ModelRelief project folder.
+
+    From the solution root:
+        conda config --add channels conda-forge
+        npm install
+            Modify  C:\Program Files (x86)\Microsoft Visual Studio\Shared\Anaconda3_64\Library\bin\pyrcc5.bat  to wrap Python path in quotations.
+                @"C:/Program Files (x86)/Microsoft Visual Studio/Shared/Anaconda3_64\python.exe" -m PyQt5.pyrcc_main %1 %2 %3 %4 %5 %6 %7 %8 %9
+        BuildPythonEnvironment Development
+        dotnet restore
+        git submodule init
+        git submodule update
 
 #### C#
     Conversion of List of derived class to the base class.

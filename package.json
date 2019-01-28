@@ -7,8 +7,7 @@
     "url": "https://github.com/steveknipmeyer/ModelRelief.git"
   },
   "main": "index.js",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/chai": "^4.1.7",
     "@types/dat-gui": "^0.6.3",
