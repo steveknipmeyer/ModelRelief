@@ -1,21 +1,27 @@
 ﻿### Tasks
 #### Commit Notes
-        self.enable_p4 = False               # use composite mask in gaussian blur
-        self.enable_p5 = False               # use Numpy gradients, not Difference class
-
+    Deployment on A2 Hosting.
+    Add new version of Credentials:SQLServer for A2 Hosting.
+    Modify web.config.production to remove WebDAV to resolve 405 (Method Not Allowed)
 #### Lambda
 
 #### Vector
 
+Does the "unable to connect" message always appear at startup?
+    It is also seen in the local IIS instance.
+    Logger.LogError($"The database connection could not be opened after {maximumAttempts} attempts to reach the server.");
+
+IIS
+    Local
+        Why can't cookies be set? The cookie consent dialog continues to open.
+
+    Alpha
+        Why does the IIS build fail on Alpha with privilege errors deleting the Publish folder?
+        Why were there intermittent runtime errors at startup?
+            Azure service errors?
+
 A2 Hosting
-    Environment Variables
-        https://stackoverflow.com/questions/31049152/publish-to-iis-setting-environment-variable
-    Change connection strings to match database.
-    Use SQL Server Management Studio to upload production database.
-    Server location is in Arizona. Change to Amsterdam.
-    Investigate SQL Server database dump.
     Create e-mail accounts.
-        webmaster@modelrelief.com
         steve@modelrelief.com
 
 Issues
@@ -130,7 +136,7 @@ Issues
         testrunner (XUnit)          python Tools\testrunner.py
         Builder
             Development             python.exe Build\Builder.py --target local
-             IIS                     python.exe Build\builder.py --target IIS --deploy True
+             IIS                    python.exe Build\builder.py --target IIS --deploy True
             Docker                  python.exe Build\builder.py --target Docker
         Postman
         Explorer                    python.exe Explorer\explorer.py --s ../Solver/Test/Lucy.json --w ../Solver/Test/Working
@@ -1082,7 +1088,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     SQL Server Studio
         Connnect to a locadb from Studio
         http://nikgupta.net/2015/12/10/connect-localdb-from-management-studio/
-
+        N.B. The SQL Server Express LocalDB must be running. Start a ModelRelief session from Visual Studio before using the command line utility.
         C:\Program Files\Microsoft SQL Server\130\Tools\Binn
             λ SqlLocalDB.exe info MSSQLLOCALDB
             Name:               MSSQLLocalDB
@@ -1456,11 +1462,29 @@ The XUnit tests cannot be run withany required prompts for user verification bec
 ServerFramework (WebHost.CreateDefaultBuilder) sets the environment to "Development" *however the environment variables from launchSettings.json are not used.*
 
 #### New Computer Setup
-
+    Graphics Tools
+        Rhino3D
+        MeshLab
+    Set up a shortcut for ModelReliefShell.bat.
+    KeyTweak (Right Ctrl -> Context Menu)    
+    Postman
+    Git
+    Notepad++
+    Sqlite 64-bit
+    SQLServer Management Studio
+    SQLite Expert Personal
+    clink (Marin Rodgers) command shell extensions
+    Macrium Reflect
+    Visual Studio
+        Anaconda 64-bit
+        synchronize settings
+    VSCode
+       extesqlnsions
+       synchronize User Settings
+    Node.js
     NPM
         npm install --global gulp-cli
         npm install --global madge
-    Node.js must be installed.
     Install .NET Core 2.2 SDK.
     Add axurekeyvault.json to ModelRelief project folder.
 
@@ -1591,7 +1615,24 @@ https://semver.npmjs.com/
         SQLServer Management Studio
             Connect to the database instance using Windows Authentication.
                 Enable SQL Server and Windows Authentication.
+                Enable the SA account.
                 Reset the SA password.
+
+        N.B. Database access is provided through the 'modelrelief' login (not SA).
+            The ModelReliefProduction database has a 'modelrelief' user which has read/write privileges to the database.
+
+#### IIS Configuration
+    https://stackify.com/how-to-deploy-asp-net-core-to-iis/
+
+    Build Site
+        python Build\Builder.py --deploy --target IIS
+
+    Install .NET Core 2.2 Runtime & Hosting Bundle for Windows (v2.2.1) [or whatever .NET Core version is required].
+        https://dotnet.microsoft.com/download/dotnet-core/2.2
+
+    Modify C:\Windows\System32\inetsrv\Config\ApplicationHost.config to allow modules and handlers to be modified in web.config.
+
+    See OneNote notebook on IIS and A2 Hosting.
 
 #### Publish and Deploy
     Environment variables must be set in web.config.
@@ -1602,7 +1643,7 @@ https://semver.npmjs.com/
         PYTHONPATH                      C:\modelrelief\Tools; C:\modelrelief\Solver;
 
         The secure (HTTPS, MRPortSecure) and insecure (HTTP, MRPort) ports must be configured.
-            These are set in appSettings.ProductionIIS.json as MRPort and MRPortSecure.
+            These are set in appSettings.ProductionIIS.json as the settings URLS and HTTPS_PORT.
             https://docs.microsoft.com/en-us/aspnet/core/security/enforcing-ssl?view=aspnetcore-2.1&tabs=visual-studio#require-https
             The secure port where the client is redirected (typically, 443 in production and 5001 in development).
             The insecure port (typically, 80 in production and 5000 in development).
@@ -1644,6 +1685,12 @@ https://semver.npmjs.com/
                 1) Delete the existing database.
                 2) Copy the updated database from the User folder (e.g. C:\Users\Steve Knipmeyer) into C:\Program Files\Microsoft SQL Server\MSSQL14.SQLEXPRESS\MSSQL\DATA.
                 3) Attach the updated ModelReliefProduction.db.
+                4) Security->Logins add a UserMapping for the modelrelief login to the ModelReliefProduction database.
+                5) From Databases->ModelReliefProduction->Security->Users give the modelrelief user the necessary privileges:
+                    db_backupoperator
+                    db_reader
+                    db_writer
+                    db_ddladmin
 
     Updating the mrenv requirements.production.txt
         conda list --export > <requirements.production.txt>
@@ -1706,6 +1753,8 @@ np_fill, relief_fill
     Development cannot set a cookie on HTTP 5000.
 
 #### Auth0
+    My Auth0 login uses my Microsoft (steve@knipmeyer.org) credentials.
+
     IDaaS Benefits
         Overall security is vastly improved.
         Far fewer code will need to be written and maintained.
@@ -1749,3 +1798,4 @@ np_fill, relief_fill
 
 #### NPM
     https://github.com/felixrieseberg/npm-windows-upgrade
+
