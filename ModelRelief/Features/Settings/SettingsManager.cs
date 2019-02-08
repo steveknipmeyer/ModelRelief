@@ -8,11 +8,9 @@ namespace ModelRelief.Features.Settings
 {
     using System.IO;
     using Microsoft.AspNetCore.Hosting;
-    using ModelRelief.Domain;
     using ModelRelief.Services;
     using ModelRelief.Utility;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// Shared settings manager.
@@ -21,6 +19,7 @@ namespace ModelRelief.Features.Settings
     public class SettingsManager
     {
         public const string CameraType = "camera";
+        public const string SystemType = "system";
 
         public IHostingEnvironment HostingEnvironment { get; }
         public IConfigurationProvider ConfigurationProvider { get; }
@@ -38,7 +37,7 @@ namespace ModelRelief.Features.Settings
         /// <returns>Settings object read from JSON.</returns>
         public object GetSettings(string settingsType)
         {
-            var rootSettingsFile = $"Default{Strings.Captitalize(settingsType)}Settings.json";
+            var rootSettingsFile = $"{Strings.Captitalize(settingsType)}Settings.json";
             var settingsFile = $"{HostingEnvironment.ContentRootPath}{ConfigurationProvider.GetSetting(Paths.Settings)}/{rootSettingsFile}";
             settingsFile = Path.GetFullPath(settingsFile);
 
@@ -47,6 +46,10 @@ namespace ModelRelief.Features.Settings
                 case CameraType:
                     var defaultCameraSettings = JsonConvert.DeserializeObject<DefaultCameraSettingsJson>(System.IO.File.ReadAllText(settingsFile));
                     return defaultCameraSettings;
+
+                case SystemType:
+                    var systemSettings = JsonConvert.DeserializeObject<SystemSettingsJson>(System.IO.File.ReadAllText(settingsFile));
+                    return systemSettings;
 
                 default:
                     return null;

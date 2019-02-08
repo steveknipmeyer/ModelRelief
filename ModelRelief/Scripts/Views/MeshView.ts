@@ -8,7 +8,7 @@
 
 import {FileModel} from "Scripts/Api/V1/Models/FileModel";
 import {ElementIds} from "Scripts/System/Html";
-import {CameraControls} from "Scripts/Viewers/CameraControls";
+import {CameraControls, ICameraControlsOptions} from "Scripts/Viewers/CameraControls";
 import {MeshViewer} from "Scripts/Viewers/MeshViewer";
 import {MeshViewerControls} from "Scripts/Viewers/MeshViewerControls";
 
@@ -71,7 +71,7 @@ export class MeshView {
         this._meshViewer = new MeshViewer("MeshViewer", ElementIds.MeshCanvas, model);
 
         // Camera Controls
-        const cameraControlsOptions = {
+        const cameraControlsOptions: ICameraControlsOptions = {
             cameraHelper     : false,
             fieldOfView      : false,
             clippingControls : false,

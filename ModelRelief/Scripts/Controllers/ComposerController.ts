@@ -25,6 +25,7 @@ import {NormalMapFactory} from "Scripts/Models/NormalMap/NormalMapFactory";
 import {ElementAttributes, ElementIds} from "Scripts/System/Html";
 import {ILogger} from "Scripts/System/Logger";
 import {Services} from "Scripts/System/Services";
+import {SystemSettings} from "Scripts/System/SystemSettings";
 import {UnitTests} from "Scripts/UnitTests/UnitTests";
 import {DepthBufferViewer} from "Scripts/Viewers/DepthBufferViewer";
 import {InputControllerHelper} from "Scripts/Viewers/InputControllerHelper";
@@ -417,23 +418,29 @@ export class ComposerController {
         //                                                                   ModelRelief                                                                //
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         const composerViewOptions = gui.addFolder("Composer Options");
-
-        const dimensionsOptions = composerViewOptions.addFolder("Mesh Dimensions");
-        let controlSettings = new ControlSettings(1.0, 1000.0, 1.0);
+        let controlSettings: ControlSettings = null;
 
         // Mesh Dimensions
-        const controlMeshWidth  = dimensionsOptions.add(this._composerViewSettings.meshTransform, "width").name("Width").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
-        const controlMeshHeight = dimensionsOptions.add(this._composerViewSettings.meshTransform, "height").name("Height").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
-        const controlMeshDepth  = dimensionsOptions.add(this._composerViewSettings.meshTransform, "depth").name("Depth").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+        let dimensionsOptions: dat.GUI = null;
+        if (SystemSettings.developmentUI) {
+            dimensionsOptions = composerViewOptions.addFolder("Mesh Dimensions");
+            controlSettings = new ControlSettings(1.0, 1000.0, 1.0);
 
-        const reliefProcessingOptions = composerViewOptions.addFolder("Relief Processing");
+            const controlMeshWidth = dimensionsOptions.add(this._composerViewSettings.meshTransform, "width").name("Width").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+            const controlMeshHeight = dimensionsOptions.add(this._composerViewSettings.meshTransform, "height").name("Height").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+            const controlMeshDepth = dimensionsOptions.add(this._composerViewSettings.meshTransform, "depth").name("Depth").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+        }
 
         // Relief Processing Parameters
+        const reliefProcessingOptions = composerViewOptions.addFolder("Relief Processing");
+
         controlSettings = new ControlSettings(0.0, 10.0, 0.1);
         const controlGaussianThreshold = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "gradientThreshold").name("Gradient Threshold").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
 
-        controlSettings = new ControlSettings(0.0, 100.0, 0.1);
-        const controlAttenuationFactor = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "attenuationFactor").name("Attenuation Factor").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+        if (SystemSettings.developmentUI) {
+            controlSettings = new ControlSettings(0.0, 100.0, 0.1);
+            const controlAttenuationFactor = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "attenuationFactor").name("Attenuation Factor").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+        }
 
         controlSettings = new ControlSettings(0.0, 1.0, 0.1);
         const controlAttenuationDecay = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "attenuationDecay").name("Attenuation Decay").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
@@ -441,8 +448,10 @@ export class ComposerController {
         controlSettings = new ControlSettings(0.0, 10.0, 0.1);
         const controlUnsharpGaussianLow = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "unsharpGaussianLow").name("Gaussian Low").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
 
-        controlSettings = new ControlSettings(0.0, 10.0, 0.1);
-        const controlUnsharpGaussianHigh = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "unsharpGaussianHigh").name("Gaussian High").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+        if (SystemSettings.developmentUI) {
+            controlSettings = new ControlSettings(0.0, 10.0, 0.1);
+            const controlUnsharpGaussianHigh = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "unsharpGaussianHigh").name("Gaussian High").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+        }
 
         controlSettings = new ControlSettings(0.0, 10.0, 0.1);
         const controlUnsharpHighFrequencyScale  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "unsharpHighFrequencyScale").name("High Frequency Scale").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
@@ -454,11 +463,15 @@ export class ComposerController {
         const controlGenerateRelief = reliefProcessingOptions.add(this._composerViewSettings, "generateRelief").name("Generate Relief");
 
         // Save Relief
-        const controlSaveRelief = reliefProcessingOptions.add(this._composerViewSettings, "saveRelief").name("Save Relief");
+        if (SystemSettings.developmentUI) {
+            const controlSaveRelief = reliefProcessingOptions.add(this._composerViewSettings, "saveRelief").name("Save Relief");
+        }
 
         composerViewOptions.open();
-        dimensionsOptions.open();
         reliefProcessingOptions.open();
+
+        if (SystemSettings.developmentUI)
+            dimensionsOptions.open();
     }
 
     /**

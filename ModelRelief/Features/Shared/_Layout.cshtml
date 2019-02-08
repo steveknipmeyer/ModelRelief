@@ -1,100 +1,105 @@
-﻿<!DOCTYPE html>
+﻿@using ModelRelief.Features.Settings
+
+<!DOCTYPE html>
 
 <html>
-    <head>
-        <title>@ViewBag.Title</title>
-        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<head>
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
-        <!--******************************************************************************************-->
-        <!--                                    CSS                                                   -->
-        <!--******************************************************************************************-->
+    <!--******************************************************************************************-->
+    <!--                                    CSS                                                   -->
+    <!--******************************************************************************************-->
 
-        <environment names="Development">
-            <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-            <link rel="stylesheet" href="~/css/site.css" />
-        </environment>
-        <environment names="Staging, Production, Test">
-            <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
-                  asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-                  asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-            @*WIP : Add minification to generate site.min.css*@
-            <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-        </environment>
-        @if (String.Equals("workbench", this.ViewContext.RouteData.Values["controller"].ToString().ToLower()))
-        {
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment names="Staging, Production, Test">
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        @*WIP : Add minification to generate site.min.css*@
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    </environment>
+    @if (String.Equals("workbench", this.ViewContext.RouteData.Values["controller"].ToString().ToLower()))
+    {
         <link rel="stylesheet" href="~/css/workbench.css">
-        }
-    </head>
+    }
+</head>
 
-    <body>
+<body>
 
-        <div class="navbar navbar-inverse navbar-default">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">ModelRelief</a>
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li><a asp-area="" asp-controller="About" asp-action="Configuration">About</a></li>
+    <div class="navbar navbar-inverse navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">ModelRelief</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-area="" asp-controller="About" asp-action="Configuration">About</a></li>
 
+                    @if (SystemSettings.DevelopmentUI)
+                    {
                         <li><a asp-area="" asp-controller="Projects" asp-action="Index">Projects</a></li>
                         <li><a asp-area="" asp-controller="Models" asp-action="Index">Models</a></li>
                         <li><a asp-area="" asp-controller="Cameras" asp-action="Index">Cameras</a></li>
                         <li><a asp-area="" asp-controller="DepthBuffers" asp-action="Index">DepthBuffers</a></li>
-                        <li><a asp-area="" asp-controller="Meshes" asp-action="Index">Meshes</a></li>
                         <li><a asp-area="" asp-controller="MeshTransforms" asp-action="Index">MeshTransforms</a></li>
                         <li><a asp-area="" asp-controller="NormalMaps" asp-action="Index">NormalMaps</a></li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
+                    }
+                    <li><a asp-area="" asp-controller="Meshes" asp-action="Index">Meshes</a></li>
+                </ul>
+                <partial name="_LoginPartial" />
             </div>
         </div>
+    </div>
 
-        <partial name="_CookieConsentPartial" />
+    <partial name="_CookieConsentPartial" />
 
-        <div class="container">
-            <div>
-                @RenderBody()
-            </div>
-
-            <footer>
-                @await Component.InvokeAsync("Footer")
-            </footer>
+    <div class="container">
+        <div>
+            @RenderBody()
         </div>
 
-        <!--******************************************************************************************-->
-        <!--                                    Common JavaScript                                     -->
-        <!--******************************************************************************************-->
-        <environment names="Development, Test">
-            <script src="~/lib/jquery/dist/jquery.js"></script>
-            <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-            <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
-            <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        </environment>
-        <environment names="Staging,Production">
-            <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.2.1.min.js"
-                    asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                    asp-fallback-test="window.jQuery"
-                    crossorigin="anonymous"
-                    integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f">
-            </script>
-            <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
-                    asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                    asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                    crossorigin="anonymous"
-                    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
-            </script>
-        </environment>
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+        <footer>
+            @await Component.InvokeAsync("Footer")
+        </footer>
+    </div>
 
-        @RenderSection("scripts", required: false)
+    <!--******************************************************************************************-->
+    <!--                                    Common JavaScript                                     -->
+    <!--******************************************************************************************-->
+    <environment names="Development, Test">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.2.1.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+        </script>
+    </environment>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
-    </body>
+    @RenderSection("scripts", required: false)
+
+</body>
 </html>

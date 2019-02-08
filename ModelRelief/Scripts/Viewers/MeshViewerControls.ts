@@ -7,6 +7,7 @@
 
 import * as dat from "dat-gui";
 import {ElementAttributes, ElementIds} from "Scripts/System/Html";
+import {SystemSettings} from "Scripts/System/SystemSettings";
 import {MeshViewer} from "Scripts/Viewers/MeshViewer";
 
 /**
@@ -37,7 +38,8 @@ export class MeshViewerControls {
         this._meshViewer = meshViewer;
 
         // UI Controls
-        this.initializeControls();
+        if (SystemSettings.developmentUI)
+            this.initializeControls();
     }
 
 //#region Event Handlers

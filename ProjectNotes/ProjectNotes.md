@@ -7,6 +7,9 @@
 
 #### Vector
 
+### Short Term
+Update copyright dates.
+
 Does the database "unable to connect" message always appear at startup?
     It is also seen in the local IIS instance.
     Logger.LogError($"The database connection could not be opened after {maximumAttempts} attempts to reach the server.");
@@ -22,14 +25,9 @@ IIS
 
 A2 Hosting
     Create e-mail accounts.
-        steve@modelrelief.com
+        XYZ@modelrelief.com
 
 Issues
-    New users should have access to test models.
-        When Auth0 was introduced, the Create account logic was removed which populated the account with the test models.
-            https://community.auth0.com/t/configure-implement-callback-after-user-registration/11895/9
-            DbInitializer.SeedDatabaseForUser
-
     It appears that NormalMap gradients lose some high frequency detail.
 
     Image
@@ -215,7 +213,6 @@ Issues
     Runtime Settings
         https://medium.freecodecamp.org/environment-settings-in-javascript-apps-c5f9744282b6
         minifiedExtension
-        loggingEnabled
 
     Performance
         The transfer of models is inefficent because they are Base64 encoded.

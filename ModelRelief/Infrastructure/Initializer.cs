@@ -55,6 +55,9 @@ namespace ModelRelief.Database
 
             var defaultCameraSettings = settingsManager.GetSettings(SettingsManager.CameraType) as DefaultCameraSettingsJson;
             DefaultCameraSettings.Initialize(defaultCameraSettings);
+
+            var systemSettings = settingsManager.GetSettings(SettingsManager.SystemType) as SystemSettingsJson;
+            SystemSettings.Initialize(systemSettings);
         }
 
         /// <summary>

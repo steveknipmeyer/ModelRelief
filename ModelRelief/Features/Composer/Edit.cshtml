@@ -1,4 +1,6 @@
-﻿@model ModelRelief.Dto.Mesh
+﻿@using ModelRelief.Features.Settings
+
+@model ModelRelief.Dto.Mesh
 
 @{
     ViewBag.Title = "Model Composer";
@@ -12,6 +14,7 @@
             <div id="meshView">
                 <canvas id="meshCanvas" tabindex='2'></canvas>
             </div>
+
             <div id="depthBufferView">
                 <!-- The canvas is generated dynamically. -->
                 <canvas id="depthBufferCanvas"></canvas>
@@ -40,14 +43,12 @@
             <script src="~/js/shaders.js"></script>
             <script>
                 var minifiedExtension = '';
-                var loggingEnabled = true;
             </script>
         </environment>
         <environment names="Staging, Production">
             <script src="~/js/shaders.min.js"></script>
             <script>
                 var minifiedExtension = '.min';
-                var loggingEnabled = false;
             </script>
         </environment>
 

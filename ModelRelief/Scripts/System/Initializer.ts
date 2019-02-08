@@ -6,6 +6,7 @@
 "use strict";
 import {DefaultCameraSettings} from "Scripts/Models/Camera/DefaultCameraSettings";
 import {ElementIds} from "Scripts/System/Html";
+import {SystemSettings} from "Scripts/System/SystemSettings";
 
 /**
  * @description CameraSettings
@@ -29,6 +30,9 @@ export class Initializer  {
 
         // shared Camera settings with backend
         await DefaultCameraSettings.initialize();
+
+        // shared System settings with backend
+        await SystemSettings.initialize();
 
         return true;
         }

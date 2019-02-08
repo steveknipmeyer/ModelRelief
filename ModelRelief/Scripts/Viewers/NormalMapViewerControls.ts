@@ -6,6 +6,7 @@
 "use strict";
 
 import * as dat from "dat-gui";
+import {SystemSettings} from "Scripts/System/SystemSettings";
 import {ElementAttributes, ElementIds} from "Scripts/System/Html";
 
 /**
@@ -39,7 +40,8 @@ export class NormalMapViewerControls {
         this._normalMapViewer = normalMapViewer;
 
         // UI Controls
-        this.initializeControls();
+        if (SystemSettings.developmentUI)
+            this.initializeControls();
     }
 
 //#region Event Handlers

@@ -7,6 +7,7 @@
 
 import {NormalMap} from "Scripts/Models/NormalMap/NormalMap";
 import {ElementIds} from "Scripts/System/Html";
+import {SystemSettings} from "Scripts/System/SystemSettings";
 import {NormalMapViewer} from "Scripts/Viewers/NormalMapViewer";
 
 /**
@@ -65,6 +66,11 @@ export class NormalMapView {
 
         // NormalMap Viewer
         this._normalMapViewer = new NormalMapViewer("NormalMapViewer", ElementIds.NormalMapCanvas, normalMap);
+
+        if (!SystemSettings.developmentUI) {
+            const normalMapViewerElement = document.getElementById(ElementIds.DepthBufferCanvas);
+            normalMapViewerElement.style.display = "none";
+        }
     }
 
 //#endregion

@@ -5,8 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-// defined in Edit HTML page
-declare var loggingEnabled: boolean;
+import {SystemSettings} from "Scripts/System/SystemSettings";
 
 /**
  * @description Diagnostic logging.
@@ -54,7 +53,7 @@ export class ConsoleLogger implements ILogger {
      * @param style Optional style.
      */
     public addMessageEntry(message: string, messageClass: MessageClass, style?: string): void {
-        if (!loggingEnabled)
+        if (!SystemSettings.loggingEnabled)
             return;
 
         const prefix = "MR: ";
