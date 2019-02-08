@@ -20,6 +20,9 @@ namespace ModelRelief.Features.Home
             Console.WriteLine(function.F2(1.0, 2.0));
         }
 
+        /// <summary>
+        /// Action method for Home page.
+        /// </summary>
         public IActionResult Index()
             {
             return View();

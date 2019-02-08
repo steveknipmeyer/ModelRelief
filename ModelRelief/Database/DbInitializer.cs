@@ -11,6 +11,7 @@ namespace ModelRelief.Database
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Security.Claims;
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
@@ -286,7 +287,6 @@ namespace ModelRelief.Database
         /// <summary>
         /// Seeds the database with test data.
         /// </summary>
-        /// <returns></returns>
         private async Task SeedDatabaseForTestUsersAsync()
         {
             var userAccounts = new List<Account>
@@ -304,6 +304,26 @@ namespace ModelRelief.Database
 
             CreateTestDatabase();
             await Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Seeds the database with test data for a new user.
+        /// </summary>
+        /// <param name="claimsPrincipal">Newly-logged in user.</param>
+        public async Task SeedDatabaseForNewUserAsync(ClaimsPrincipal claimsPrincipal)
+        {
+            if ((claimsPrincipal == null) || (!claimsPrincipal.Identity.IsAuthenticated))
+                return;
+
+            ApplicationUser user = await IdentityUtility.FindApplicationUserAsync(claimsPrincipal);
+            IQueryable<Model3d> results = DbContext.Set<Model3d>()
+                                            .Where(m => (m.UserId == user.Id));
+
+            // models exist; not brand new user
+            if (results.Any())
+                return;
+
+            SeedDatabaseForUser(user);
         }
 
         /// <summary>
@@ -329,7 +349,7 @@ namespace ModelRelief.Database
         }
 
         /// <summary>
-        /// Copies the newlt-created database to create the test database.
+        /// Copies the newly-created database to create the test database.
         /// </summary>
         private void CreateTestDatabase()
         {

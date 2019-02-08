@@ -7,7 +7,7 @@
 
 #### Vector
 
-Does the "unable to connect" message always appear at startup?
+Does the database "unable to connect" message always appear at startup?
     It is also seen in the local IIS instance.
     Logger.LogError($"The database connection could not be opened after {maximumAttempts} attempts to reach the server.");
 

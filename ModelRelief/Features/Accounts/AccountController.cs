@@ -12,6 +12,7 @@ namespace ModelRelief.Features.Accounts
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using ModelRelief.Database;
 
     /// <summary>
     /// Account controller.
@@ -33,10 +34,20 @@ namespace ModelRelief.Features.Accounts
         /// Action method for Login.
         /// </summary>
         /// <param name="returnUrl">Return Url after successful login.</param>
-        /// <returns></returns>
-        public async Task Login(string returnUrl = "/")
+        public async Task Login(string returnUrl = "/Account/LoginComplete")
         {
             await HttpContext.ChallengeAsync("Auth0", new AuthenticationProperties() { RedirectUri = returnUrl });
+        }
+
+        /// <summary>
+        /// Action method for LoginComplete.
+        /// </summary>
+        public async Task<RedirectResult> LoginComplete()
+        {
+            var dbInitializer = new DbInitializer(_services, exitAfterInitialization: false);
+            await dbInitializer.SeedDatabaseForNewUserAsync(this.User);
+
+            return Redirect("/");
         }
 
         /// <summary>
