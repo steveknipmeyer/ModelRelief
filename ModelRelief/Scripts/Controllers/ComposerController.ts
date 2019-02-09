@@ -426,38 +426,38 @@ export class ComposerController {
             dimensionsOptions = composerViewOptions.addFolder("Mesh Dimensions");
             controlSettings = new ControlSettings(1.0, 1000.0, 1.0);
 
-            const controlMeshWidth = dimensionsOptions.add(this._composerViewSettings.meshTransform, "width").name("Width").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
-            const controlMeshHeight = dimensionsOptions.add(this._composerViewSettings.meshTransform, "height").name("Height").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
-            const controlMeshDepth = dimensionsOptions.add(this._composerViewSettings.meshTransform, "depth").name("Depth").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+            const controlMeshWidth = dimensionsOptions.add(this._composerViewSettings.meshTransform, "width").name("Width").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize);
+            const controlMeshHeight = dimensionsOptions.add(this._composerViewSettings.meshTransform, "height").name("Height").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize);
+            const controlMeshDepth = dimensionsOptions.add(this._composerViewSettings.meshTransform, "depth").name("Depth").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize);
         }
 
         // Relief Processing Parameters
         const reliefProcessingOptions = composerViewOptions.addFolder("Relief Processing");
 
         controlSettings = new ControlSettings(0.0, 10.0, 0.1);
-        const controlGaussianThreshold = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "gradientThreshold").name("Gradient Threshold").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+        const controlGaussianThreshold = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "gradientThreshold").name("Gradient Threshold").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize);
 
         if (SystemSettings.developmentUI) {
             controlSettings = new ControlSettings(0.0, 100.0, 0.1);
-            const controlAttenuationFactor = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "attenuationFactor").name("Attenuation Factor").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+            const controlAttenuationFactor = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "attenuationFactor").name("Attenuation Factor").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize);
         }
 
         controlSettings = new ControlSettings(0.0, 1.0, 0.1);
-        const controlAttenuationDecay = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "attenuationDecay").name("Attenuation Decay").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+        const controlAttenuationDecay = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "attenuationDecay").name("Attenuation Decay").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize);
 
         controlSettings = new ControlSettings(0.0, 10.0, 0.1);
-        const controlUnsharpGaussianLow = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "unsharpGaussianLow").name("Gaussian Low").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+        const controlUnsharpGaussianLow = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "unsharpGaussianLow").name("Gaussian Low").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize);
 
         if (SystemSettings.developmentUI) {
             controlSettings = new ControlSettings(0.0, 10.0, 0.1);
-            const controlUnsharpGaussianHigh = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "unsharpGaussianHigh").name("Gaussian High").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+            const controlUnsharpGaussianHigh = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "unsharpGaussianHigh").name("Gaussian High").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize);
         }
 
         controlSettings = new ControlSettings(0.0, 10.0, 0.1);
-        const controlUnsharpHighFrequencyScale  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "unsharpHighFrequencyScale").name("High Frequency Scale").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+        const controlUnsharpHighFrequencyScale  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "unsharpHighFrequencyScale").name("High Frequency Scale").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize);
 
         controlSettings = new ControlSettings(0.0, 1.0, 0.01);
-        const controlP1  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "p1").name("Scale (%)").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize).listen();
+        const controlP1  = reliefProcessingOptions.add(this._composerViewSettings.meshTransform, "p1").name("Scale (%)").min(controlSettings.minimum).max(controlSettings.maximum).step(controlSettings.stepSize);
 
         // Generate Relief
         const controlGenerateRelief = reliefProcessingOptions.add(this._composerViewSettings, "generateRelief").name("Generate Relief");

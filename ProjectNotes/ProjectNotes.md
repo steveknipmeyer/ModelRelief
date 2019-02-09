@@ -968,10 +968,6 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     OrbitControls versus Trackball
     Add MaterialLoader.
 
-    Provide keyboard support in UI settings.
-        https://github.com/dataarts/dat.gui/issues/179
-        The dat-gui listen() method blocks keyboard input in the text field.
-
     Create a set of sample materials such as wood, glass, plaster, etc.
 
 ####Shaders
@@ -1463,7 +1459,7 @@ ServerFramework (WebHost.CreateDefaultBuilder) sets the environment to "Developm
         Rhino3D
         MeshLab
     Set up a shortcut for ModelReliefShell.bat.
-    KeyTweak (Right Ctrl -> Context Menu)    
+    KeyTweak (Right Ctrl -> Context Menu)
     Postman
     Git
     Notepad++

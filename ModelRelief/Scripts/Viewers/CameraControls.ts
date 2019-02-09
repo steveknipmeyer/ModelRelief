@@ -50,7 +50,7 @@ class CameraControlsSettings {
     }
 }
 /**
- * @description Options to expose camera settings controls.
+ * @description UI options to expose camera settings controls.
  * @export
  * @interface CameraControlsOptions
  */
@@ -71,9 +71,16 @@ export class CameraControls {
     public viewer: Viewer;                          // associated viewer
     public settings: CameraControlsSettings;        // UI settings
 
-    // The maximum and minimum values of these controls are modified by the boundClippingPlanes button so theses controls are instance members.
-    private _controllerNearClippingPlane: dat.GUIController;
-    private _controllerFarClippingPlane: dat.GUIController;
+    // N.B. Controls are instance members so they can be explicitly synchronized when an associated setting has changed.
+    //      The dat.GUI API listen method can synchronize a control with it's setting data structure
+    //      however it blocks the text field of a slider from being updated manually so listen is not used.
+    //      https://github.com/dataarts/dat.gui/issues/179
+    private _controlNearClippingPlane: dat.GUIController;
+    private _controlFarClippingPlane: dat.GUIController;
+    private _controlIsPerspective: dat.GUIController;
+    private _controlFieldOfView: dat.GUIController;
+
+    private _controlStandardView: dat.GUIController;
 
     /**
      * Creates an instance of CameraControls.
@@ -152,8 +159,8 @@ export class CameraControls {
         this.viewer.camera.updateProjectionMatrix();
 
         // UI controls
-        this._controllerNearClippingPlane.setValue(clippingPlanes.near);
-        this._controllerFarClippingPlane.setValue(clippingPlanes.far);
+        this._controlNearClippingPlane.setValue(clippingPlanes.near);
+        this._controlFarClippingPlane.setValue(clippingPlanes.far);
     }
 //#endregion
 
@@ -202,8 +209,8 @@ export class CameraControls {
             Right       : StandardView.Right,
             Bottom      : StandardView.Bottom,
         };
-        const controlStandardViews = cameraOptions.add(this.settings, "standardView", viewOptions).name("Standard View").listen();
-        controlStandardViews.onChange ((viewSetting: string) => {
+        this._controlStandardView = cameraOptions.add(this.settings, "standardView", viewOptions).name("Standard View");
+        this._controlStandardView.onChange ((viewSetting: string) => {
 
             const view: StandardView = parseInt(viewSetting, 10);
             scope.viewer.setCameraToStandardView(view);
@@ -218,8 +225,8 @@ export class CameraControls {
             minimum  =  0.1;
             maximum  =  DefaultCameraSettings.FarClippingPlane;
             stepSize =  0.1;
-            this._controllerNearClippingPlane = cameraOptions.add(this.settings, "near").name("Near Clipping Plane").min(minimum).max(maximum).step(stepSize).listen();
-            this._controllerNearClippingPlane.onChange ((value) => {
+            this._controlNearClippingPlane = cameraOptions.add(this.settings, "near").name("Near Clipping Plane").min(minimum).max(maximum).step(stepSize);
+            this._controlNearClippingPlane.onChange ((value) => {
 
                 scope.viewer.camera.near = value;
                 scope.viewer.camera.updateProjectionMatrix();
@@ -229,8 +236,8 @@ export class CameraControls {
             minimum  =  1;
             maximum  =  DefaultCameraSettings.FarClippingPlane;
             stepSize =  0.1;
-            this._controllerFarClippingPlane = cameraOptions.add(this.settings, "far").name("Far Clipping Plane").min(minimum).max(maximum).step(stepSize).listen();
-            this._controllerFarClippingPlane.onChange ((value) => {
+            this._controlFarClippingPlane = cameraOptions.add(this.settings, "far").name("Far Clipping Plane").min(minimum).max(maximum).step(stepSize);
+            this._controlFarClippingPlane.onChange ((value) => {
 
                 scope.viewer.camera.far = value;
                 scope.viewer.camera.updateProjectionMatrix();
@@ -246,8 +253,8 @@ export class CameraControls {
         }
 
         // Perspective
-        const perspectiveCameraControl = cameraOptions.add(this.settings, "isPerspective").name("Perspective").listen();
-        perspectiveCameraControl.onChange((value) => {
+        this._controlIsPerspective = cameraOptions.add(this.settings, "isPerspective").name("Perspective");
+        this._controlIsPerspective.onChange((value) => {
 
             // toggle projection
             const newCamera: IThreeBaseCamera = CameraFactory.constructViewCameraOppositeProjection(this.viewer.camera);
@@ -265,8 +272,8 @@ export class CameraControls {
             minimum = 25;
             maximum = 75;
             stepSize = 1;
-            const controlFieldOfView = cameraOptions.add(this.settings, "fieldOfView").name("Field of View").min(minimum).max(maximum).step(stepSize).listen();
-            controlFieldOfView.onChange((value) => {
+            this._controlFieldOfView = cameraOptions.add(this.settings, "fieldOfView").name("Field of View").min(minimum).max(maximum).step(stepSize);
+            this._controlFieldOfView.onChange((value) => {
                 if (scope.viewer.camera instanceof THREE.PerspectiveCamera) {
                     scope.viewer.camera.fov = value;
                     scope.viewer.camera.updateProjectionMatrix();
@@ -276,17 +283,45 @@ export class CameraControls {
         cameraOptions.open();
     }
 
+    /**
+     * @description Update a UI control with a setting.
+     * @param control Control to update.
+     * @param value New setting.
+     */
+    private updateUIControl(control: dat.GUIController, value: any): void {
+        // N.B. Not all UI controls may be present depending on the CameraControlsOptions.
+        //      So, every UI control is tested for existence before being synchronized.
+
+        if (!control)
+            return;
+
+        if (control.getValue() !== value)
+            control.setValue(value);
+    }
+
+    /**
+     * @description Synchronize the camera settings from an external camera.
+     * @private
+     * @param {IThreeBaseCamera} camera External camera.
+     */
     private synchronizeSettingsFromViewCamera(camera: IThreeBaseCamera): void {
 
         this.settings.near = camera.near;
+        this.updateUIControl(this._controlNearClippingPlane, this.settings.near)
+
         this.settings.far = camera.far;
+        this.updateUIControl(this._controlFarClippingPlane, this.settings.far)
+
         this.settings.isPerspective = camera instanceof THREE.PerspectiveCamera;
+        this.updateUIControl(this._controlIsPerspective, this.settings.isPerspective)
 
         if (this.settings.isPerspective) {
             const perspectiveCamera = camera as THREE.PerspectiveCamera;
             this.settings.fieldOfView = perspectiveCamera.fov;
+            this.updateUIControl(this._controlFieldOfView, this.settings.fieldOfView)
         }
 
         this.settings.standardView = StandardView.None;
+        this.updateUIControl(this._controlStandardView, this.settings.standardView)
     }
 }
