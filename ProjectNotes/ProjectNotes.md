@@ -8,7 +8,8 @@
 #### Vector
 
 ### Short Term
-Update copyright dates.
+
+Clipping planes are not preserved when a Composer view is initialized.
 
 Does the database "unable to connect" message always appear at startup?
     It is also seen in the local IIS instance.

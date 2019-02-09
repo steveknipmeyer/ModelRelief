@@ -1,7 +1,7 @@
 // ------------------------------------------------------------------------//
 // ModelRelief                                                             //
 //                                                                         //
-// Copyright (c) <2017-2018> Steve Knipmeyer                               //
+// Copyright (c) Steve Knipmeyer. All rights reserved.                     //
 // ------------------------------------------------------------------------//
 "use strict";
 import {DefaultCameraSettings} from "Scripts/Models/Camera/DefaultCameraSettings";
