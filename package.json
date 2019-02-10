@@ -18,7 +18,7 @@
     "babel-eslint": "^7.2.3",
     "balanced-match": "^1.0.0",
     "beepbeep": "^1.2.1",
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^4.2.1",
     "brace-expansion": "^1.1.11",
     "browser-sync": "^2.26.3",
     "chai": "^4.2.0",

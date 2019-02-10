@@ -1,7 +1,7 @@
 ﻿/* ----------------------
     Bootstrap Overrides
 ------------------------*/
-body {
+/*body {
     background: #413D3D !important;
     color: rgb(255, 255, 255) !important;
 }
@@ -21,7 +21,7 @@ button {
 #Username, #Password, #ConfirmPassword, #Register, #Login {
     background: rgb(255, 255, 255) !important;
     color: rgb(0, 0, 0) !important;
-}
+}*/
 
 /* ----------------------
     General
