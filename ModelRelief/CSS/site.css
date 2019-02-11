@@ -17,10 +17,6 @@ button {
 .navbar-link {
     color: #9d9d9d !important;
 }
-
-#Username, #Password, #ConfirmPassword, #Register, #Login {
-    background: rgb(255, 255, 255) !important;
-    color: rgb(0, 0, 0) !important;
 }*/
 
 /* ----------------------
@@ -105,7 +101,7 @@ button {
 
      .dg input[type=text] {
         color: white !important;
-        font-size: 10pt;
+        font-size: 12pt;
     }
 
     /* 'Standard View' select element */

@@ -29,39 +29,30 @@
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ModelRelief</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home <span class="sr-only">(current)</span></a>
+                @if (SystemSettings.DevelopmentUI)
+                {
+                    <a class="nav-item nav-link" asp-area="" asp-controller="About" asp-action="Configuration">About</a>
 
-    <div class="navbar navbar-inverse navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">ModelRelief</a>
+                    <a class="nav-item nav-link" asp-area="" asp-controller="Models" asp-action="Index">Models</a>
+                    <a class="nav-item nav-link" asp-area="" asp-controller="Projects" asp-action="Index">Projects</a>
+                    <a class="nav-item nav-link" asp-area="" asp-controller="Cameras" asp-action="Index">Cameras</a>
+                    <a class="nav-item nav-link" asp-area="" asp-controller="DepthBuffers" asp-action="Index">DepthBuffers</a>
+                    <a class="nav-item nav-link" asp-area="" asp-controller="MeshTransforms" asp-action="Index">MeshTransforms</a>
+                    <a class="nav-item nav-link" asp-area="" asp-controller="NormalMaps" asp-action="Index">NormalMaps</a>
+                }
+                <a class="nav-item nav-link" asp-area="" asp-controller="Meshes" asp-action="Index">Meshes</a>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="About" asp-action="Configuration">About</a></li>
-
-                    @if (SystemSettings.DevelopmentUI)
-                    {
-                        <li><a asp-area="" asp-controller="Projects" asp-action="Index">Projects</a></li>
-                        <li><a asp-area="" asp-controller="Models" asp-action="Index">Models</a></li>
-                        <li><a asp-area="" asp-controller="Cameras" asp-action="Index">Cameras</a></li>
-                        <li><a asp-area="" asp-controller="DepthBuffers" asp-action="Index">DepthBuffers</a></li>
-                        <li><a asp-area="" asp-controller="MeshTransforms" asp-action="Index">MeshTransforms</a></li>
-                        <li><a asp-area="" asp-controller="NormalMaps" asp-action="Index">NormalMaps</a></li>
-                    }
-                    <li><a asp-area="" asp-controller="Meshes" asp-action="Index">Meshes</a></li>
-                </ul>
-                <partial name="_LoginPartial" />
-            </div>
+            <partial name="_LoginPartial" />
         </div>
-    </div>
-
+    </nav>
     <partial name="_CookieConsentPartial" />
 
     <div class="container">

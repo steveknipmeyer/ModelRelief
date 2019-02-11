@@ -1,13 +1,14 @@
 ﻿### Tasks
 #### Commit Notes
-    Deployment on A2 Hosting.
-    Add new version of Credentials:SQLServer for A2 Hosting.
-    Modify web.config.production to remove WebDAV to resolve 405 (Method Not Allowed)
 #### Lambda
 
 #### Vector
 
 ### Short Term
+
+Add Horse to test models.
+
+Decimate Statue.obj.
 
 Clipping planes are not preserved when a Composer view is initialized.
 
@@ -63,6 +64,90 @@ Issues
     How should the initial camera of the ModelViewer be defined in a ComposerView?
         Mesh.DepthBuffer.Camera is used.
         Mesh.NormalMap.Camera is equivalent.
+
+    PNG Creation
+        Integrate with Files utility class.
+        File methods should share common setup steps for deleting existing files, etc.
+
+    Evauluate silhouette properties of existing algorithm.
+    Explore
+        Awesome Bump
+        Knald
+        xNormal
+        ShaderMap
+        Gimp Normal Plugin
+
+    Dependency Table
+        Dependent Id    Dependent Type      Dependency Id   Dependency Type
+        1               Mesh                3               DepthBuffer
+        1               Mesh                5               MeshTransform
+        3               DepthBuffer         11              Model
+        3               DepthBuffer         7               Camera
+
+    Core
+        Should clipping planes be set based on the Model?
+
+        Close in Orthogonal views of House (Lambda: Documents\Temp\MalformedHouse) yield malformed meshes.
+
+        Visually examine randomly-generated cameras that have been round-tripped.
+
+        Experiment with Poisson solutions of images that have not been attenuated/processed.
+        Develop test models to test the gaussian filter mask processing.
+            The model should contain details near the edges (adjacent to the background) and near thresholded regions.
+                Spheres (Positive, Negative)
+                Cubes
+                Architectural
+
+        Chrome "paused before potential out-of-memory crash".
+            https://stackoverflow.com/questions/42110726/chrome-devtools-paused-before-potential-out-of-memory-crash
+            https://developers.google.com/web/tools/chrome-devtools/memory-problems/
+
+    UI
+        CameraControls
+            Separate the Perspective controls into a separate dat.gui controller that can be entirely hidden or shown.
+                Field of View
+
+    Build a Python installer package for Explorer.
+
+    Silhouette
+        https://stackoverflow.com/questions/17161088/how-to-refine-or-blur-or-smooth-just-the-edges
+
+    Should the Python image masks be integers or booleans (instead of doubles)?
+
+    Three.js
+        Update OBJLoader.ts.
+
+    Technical Review
+        Review the Blender implementation.
+            What were the pre-processing steps that were done to prepare the data for the Poisson solver?
+        Review the technical papers.
+        Review ZSurf.
+        Review ArtCAM.
+
+    Runtime Settings
+        https://medium.freecodecamp.org/environment-settings-in-javascript-apps-c5f9744282b6
+        minifiedExtension
+
+    Performance
+        The transfer of models is inefficent because they are Base64 encoded.
+
+    Builder
+        Add a model list to control which models are added.
+
+    Investigate workspaces in VSCode.
+        Why is the second workspace unnamed?
+
+    Solver
+        Meshes are not oriented correctly in Mayavi Isometric views.
+
+        How can the mayavi log be viewed?
+
+    Explore Python unit tests.
+
+    3D Surface Visualization
+        https://jakevdp.github.io/PythonDataScienceHandbook/04.12-three-dimensional-plotting.html
+
+    Update database schema diagram.
 
 ### Adding a New GeneratedFileDomainModel (e.g. NormalMap)
 #### Documentation
@@ -141,105 +226,6 @@ Issues
         Explorer                    python.exe Explorer\explorer.py --s ../Solver/Test/Lucy.json --w ../Solver/Test/Working
         Solver                      python Solver\solver.py --s "Test/House.json" --w "Test/Working"
         Docker                      DockerStart
-
-#### Short Term
-
-    PNG Creation
-        Integration tests fail when writing proxy DepthBuffer files because the image creation fails because the image data in invalid.
-        Integrate with Files utility class.
-        File methods should share common setup steps for deleting existing files, etc.
-
-    Add support for normal map creation.
-    Add NormalMap type to database schema.
-    Knald license.
-
-    Evauluate silouette properties of existing algorithm.
-    Explore
-        Awesome Bump
-        Knald
-        xNormal
-        ShaderMap
-        Gimp Normal Plugin
-
-    Dependency Table
-        Dependent Id    Dependent Type      Dependency Id   Dependency Type
-        1               Mesh                3               DepthBuffer
-        1               Mesh                5               MeshTransform
-        3               DepthBuffer         11              Model
-        3               DepthBuffer         7               Camera
-
-    Core
-        Should clipping planes be set based on the Model?
-
-        Close in Orthogonal views of House (Lambda: Documents\Temp\MalformedHouse) yield malformed meshes.
-
-        Visually examine randomly-generated cameras that have been round-tripped.
-
-        Experiment with Poisson solutions of images that have not been attenuated/processed.
-        Develop test models to test the gaussian filter mask processing.
-            The model should contain details near the edges (adjacent to the background) and near thresholded regions.
-                Spheres (Positive, Negative)
-                Cubes
-                Architectural
-
-        Chrome "paused before potential out-of-memory crash".
-            https://stackoverflow.com/questions/42110726/chrome-devtools-paused-before-potential-out-of-memory-crash
-            https://developers.google.com/web/tools/chrome-devtools/memory-problems/
-
-    UI
-        Add favicon.ico support.
-            https://realfavicongenerator.net/favicon/aspnet_core#.W_6RlGhKjmE
-        Add UI progress indicator for mesh generation.
-        CameraControls
-            Separate the Perspective controls into a separate dat.gui controller that can be entirely hidden or shown.
-                Field of View
-
-    Build a Python installer package for Explorer.
-
-    Silhouette
-        https://stackoverflow.com/questions/17161088/how-to-refine-or-blur-or-smooth-just-the-edges
-
-    Should the Python image masks be integers or booleans (instead of doubles)?
-
-    Three.js
-        Update OBJLoader.ts.
-
-    Technical Review
-        Review the Blender implementation.
-            What were the pre-processing steps that were done to prepare the data for the Poisson solver?
-        Review the technical papers.
-        Review ZSurf.
-        Review ArtCAM.
-
-    Runtime Settings
-        https://medium.freecodecamp.org/environment-settings-in-javascript-apps-c5f9744282b6
-        minifiedExtension
-
-    Performance
-        The transfer of models is inefficent because they are Base64 encoded.
-
-    Builder
-        Add a model list to control which models are added.
-
-    Order a SQLServer book.
-    Order a git book.
-
-    Register for A2 hosting.
-
-    Investigate workspaces in VSCode.
-        Why is the second workspace unnamed?
-
-    Solver
-        Meshes are not oriented correctly in Mayavi Isometric views.
-
-        How can the mayavi log be viewed?
-
-    Explore Python unit tests.
-
-    3D Surface Visualization
-        https://jakevdp.github.io/PythonDataScienceHandbook/04.12-three-dimensional-plotting.html
-
-    Update database schema diagram.
 
 ###### StandardView
 When the view camera is interactively changed, it should invalidate the StandardView in the UI.
@@ -1312,7 +1298,9 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     Statue                                      Stanford        Stanford
     Test                                        ModelRelief     Internal
     Tyrannosaurus                               Stanford        Stanford
-
+    
+    Horse                                       Logo            TurboSquid                      https://www.turbosquid.com/FullPreview/Index.cfm/ID/587173
+    
     Gaussian Box Blur           MIT https://www.peterkovesi.com/matlabfns/citesite.html
        Ivan Kutskir                 http://blog.ivank.net/fastest-gaussian-blur.html
 
