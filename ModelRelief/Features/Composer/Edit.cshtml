@@ -37,36 +37,36 @@
         <!--                                    ModelRelief                                           -->
         <!--******************************************************************************************-->
         <script>
-            var composerMeshModel = @DataConversion.SerializeObject(Model)
+            var composerMeshModel = @DataConversion.SerializeObject(Model);
         </script>
         <environment names="Development, Test">
             <script src="~/js/shaders.js"></script>
             <script>
-                var minifiedExtension = '';
+                let minifiedExtension = "";
             </script>
         </environment>
         <environment names="Staging, Production">
             <script src="~/js/shaders.min.js"></script>
             <script>
-                var minifiedExtension = '.min';
+                let minifiedExtension = ".min";
             </script>
         </environment>
 
         <script>
             requirejs.config({
-                baseUrl: '.',
+                baseUrl: ".",
                 paths: {
-                    ModelRelief                             : `/js/modelrelief${minifiedExtension}`,
-                    three                                   : `/lib/threejs/three${minifiedExtension}`,
+                   "ModelRelief"                             : `/js/modelrelief${minifiedExtension}`,
+                   "three"                                   : `/lib/threejs/three${minifiedExtension}`,
 
-                    chai                                    : '/lib/chai/chai.min',
-                   'dat-gui'                                : '/lib/threejs/dat.gui.min',
-                }
+                   "chai"                                    : "/lib/chai/chai.min",
+                   "dat-gui"                                : "/lib/threejs/dat.gui.min",
+                },
             });
-            window.onload = function () {
+            window.onload = () => {
 
-                requirejs(['ModelRelief']);
-            }
+                requirejs(["ModelRelief"]);
+            };
         </script>
     }
 

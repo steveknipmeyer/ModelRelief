@@ -68,7 +68,7 @@ export class NormalMapView {
         this._normalMapViewer = new NormalMapViewer("NormalMapViewer", ElementIds.NormalMapCanvas, normalMap);
 
         if (!SystemSettings.developmentUI) {
-            const normalMapViewerElement = document.getElementById(ElementIds.DepthBufferCanvas);
+            const normalMapViewerElement = document.getElementById(ElementIds.NormalMapCanvas);
             normalMapViewerElement.style.display = "none";
         }
     }

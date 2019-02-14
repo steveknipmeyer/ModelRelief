@@ -49,6 +49,7 @@
             ]
         },
         "no-empty": [false],
+        "no-trailing-whitespace": false,
         "object-literal-sort-keys": false,
         "ordered-imports": true,
         "prefer-for-of": false,

@@ -37,6 +37,7 @@ var sourceConfig = new function() {
 
     this.cssRoot        = this.sourceRoot + 'CSS/';
     this.imagesRoot     = this.sourceRoot + 'Delivery/Images/';
+    this.htmlRoot       = this.sourceRoot + 'Delivery/Html/';
     this.scriptsRoot    = this.sourceRoot + 'Scripts/';
     this.shaders        = this.scriptsRoot + 'Shaders/';
  }();
@@ -294,6 +295,9 @@ gulp.task('buildStaticContent', function () {
     gulp.src([sourceFolder + '**/*']).pipe(gulp.dest(destinationFolder ));
 
     // FILES
+    sourceFolder      = sourceConfig.htmlRoot;
+    destinationFolder = siteConfig.wwwRoot;
+    gulp.src([sourceFolder + 'landing.html']).pipe(gulp.dest(destinationFolder ));
 });
 
 /// <summary>

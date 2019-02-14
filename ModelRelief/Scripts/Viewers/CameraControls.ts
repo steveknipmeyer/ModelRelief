@@ -307,21 +307,21 @@ export class CameraControls {
     private synchronizeSettingsFromViewCamera(camera: IThreeBaseCamera): void {
 
         this.settings.near = camera.near;
-        this.updateUIControl(this._controlNearClippingPlane, this.settings.near)
+        this.updateUIControl(this._controlNearClippingPlane, this.settings.near);
 
         this.settings.far = camera.far;
-        this.updateUIControl(this._controlFarClippingPlane, this.settings.far)
+        this.updateUIControl(this._controlFarClippingPlane, this.settings.far);
 
         this.settings.isPerspective = camera instanceof THREE.PerspectiveCamera;
-        this.updateUIControl(this._controlIsPerspective, this.settings.isPerspective)
+        this.updateUIControl(this._controlIsPerspective, this.settings.isPerspective);
 
         if (this.settings.isPerspective) {
             const perspectiveCamera = camera as THREE.PerspectiveCamera;
             this.settings.fieldOfView = perspectiveCamera.fov;
-            this.updateUIControl(this._controlFieldOfView, this.settings.fieldOfView)
+            this.updateUIControl(this._controlFieldOfView, this.settings.fieldOfView);
         }
 
         this.settings.standardView = StandardView.None;
-        this.updateUIControl(this._controlStandardView, this.settings.standardView)
+        this.updateUIControl(this._controlStandardView, this.settings.standardView);
     }
 }

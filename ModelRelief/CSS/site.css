@@ -31,12 +31,12 @@ button {
 ------------------------*/
 #modelView {
     position : relative;
-    width:  512px;
+    width:  256px;
 }
 
 #modelCanvas{
-    width:  512px;
-    height: 512px;
+    width:  256px;
+    height: 256px;
     background-color: #000000;
 }
 
@@ -47,12 +47,12 @@ button {
     position : absolute;
     top : 0px;
     right: 0px;
-    width:  512px;
+    width:  768px;
 }
 
-#meshCanvas{
-    width:  512px;
-    height: 512px;
+#meshCanvas {
+    width: 768px;
+    height: 768px;
     background-color: #000000;
 }
 
