@@ -1,207 +1,42 @@
 
 {
     // ---------------------------------
-    // Window
-    // ---------------------------------
-        "window.zoomLevel": 0,
-
-    // ---------------------------------
-    // ActiveFile
-    // ---------------------------------
-        // Enable/Disable ActiveFileInStatusBar
-        "ActiveFileInStatusBar.enable": true,
-        // Show fullpath or relative path in status bar.
-        "ActiveFileInStatusBar.fullpath": false,
-        // Reveal the active file in the file system.
-        "ActiveFileInStatusBar.revealFile": true,
-
-    // ---------------------------------
-    // Document This (JavaScript and TypeScript)
-    // ---------------------------------
-        // When enabled, memberOf information is added to comment tags on class members.
-        "docthis.includeMemberOfOnClassMembers": false,
-
-        // When enabled, memberOf information is added to comment tags on interface members.
-        "docthis.includeMemberOfOnInterfaceMembers": false,
-
-        // When enabled, JSDoc comments for functions and methods will include @description.
-        "docthis.includeDescriptionTag": true,
-
-    // ---------------------------------
-    // Doxygen (C++)
-    // ---------------------------------
-        "doxdocgen.generic.authorTag": "@author Steve Knipmeyer",
-
-    // ---------------------------------
-    // Editor
-    // ---------------------------------
-        // Controls if the editor shows code lenses
-        "editor.codeLens": false,
-
-        // Overrides editor colors and font style from the currently selected color theme.
-        "editor.tokenColorCustomizations": {
-            "functions" : "#da82e6",
-            "variables" : "#ffffff",
-            "comments": "#77f3f3",
-            "types": "#ff00ff",
-            "keywords": "#FFFF00",
-            "numbers": "#ffffff",
-            "strings": "#00ff95"
-        },
-        // Controls the font family.
-        "editor.fontFamily": "Consolas",
-
-        // Controls the font size in pixels.
-        "editor.fontSize": 12.5,
-
-        // Controls if the editor should automatically format the pasted content. A formatter must be available and the formatter should be able to format a range in a document.
-        "editor.formatOnPaste": false,
-
-        "editor.renderWhitespace": "all",
-
-    // ---------------------------------
     // Files
     // ---------------------------------
-    "files.autoSave": "onWindowChange",
-    "files.exclude": {
-        "**/.git": true,         // this is a default value
+        "files.exclude": {
+            "**/.git": true,         // this is a default value
 
-        "**/node_modules": true, // this excludes all folders
-                                 // named "node_modules" from
-                                 // the explore tree
-        "devenv": true,
-        "mrenv": true,
-        "Publish": true,
+            "**/node_modules": true, // this excludes all folders
+                                    // named "node_modules" from
+                                    // the explore tree
+            "devenv": true,
+            "mrenv": true,
+            "Publish": true,
 
-        // alternative version
-        "node_modules": true    // this excludes the folder
-                                // only from the root of
-                                // your workspace
-    },
-
-    // ---------------------------------
-    // Markdown
-    // ---------------------------------
-    "[markdown]": {
-        "editor.wordWrap": "off",
-        "editor.quickSuggestions": false
-    },
-
-    "markdown.styles": [
-      //  "ProjectNotes/markdown.css"
-    ],
-
-    // ---------------------------------
-    // MultiClip
-    // ---------------------------------
-        // Specify if text should be formatted after pasting
-        "multiclip.formatAfterPaste": false,
-        "workbench.activityBar.visible": true,
-        "editor.accessibilitySupport": "off",
+            // alternative version
+            "node_modules": true    // this excludes the folder
+                                    // only from the root of
+                                    // your workspace
+        },
 
     // ---------------------------------
     // Python
     // ---------------------------------
         // Path to Python, you can use a custom version of Python by modifying this setting to include the full path.
         "python.pythonPath": "${workspaceFolder}\\devenv\\python.exe",
-        "python.linting.pylintEnabled": true,
-        "python.linting.pylintArgs": [
-            "--ignored-modules=numpy",
-            "--ignored-classes=numpy",
-            "--extension-pkg-whitelist=numpy"
-        ],
-        "python.linting.mypyEnabled": true,
-          // Arguments passed in. Each argument is a separate item in the array.
-        "python.linting.mypyArgs": [
-            "--ignore-missing-imports",
-            "--show-error-context",
-            "--follow-imports=normal"
-        ],
-        // "python.autoComplete.extraPaths": ["${workspaceRoot}/Solver"],
 
     // ---------------------------------
     // Search
     // ---------------------------------
-    // The folders to exclude when doing a full text search in the workspace.
-    "search.exclude": {
-        "**/.mypy_cache": true,
-        "**/*.d.ts": true,
-        "**/*.js": true,
-        "**/*.obj": true,
-        "**/devenv": true,
-        "**/node_modules": true,
-        "**/Publish": true,
-        "**/[Ww]ork*/**/*": true
-    },
-
-    // ---------------------------------
-    // Terminal
-    // ---------------------------------
-        // Controls the font size in pixels of the terminal.
-        "terminal.integrated.fontSize": 13,
-
-    // ---------------------------------
-    // TypeScript
-    // ---------------------------------
-        // N.B. Setting the path DNW when VSCode is not started from the command line.
-        // DevelopmentShell sets the path to NPM through nodevars.bat.
-        // Possibly, this is due to the embedded space in the NPM path.
-
-        // TypeScript Version
-
-        // Defines space handling after opening and before closing non empty braces. Requires TypeScript >= 2.3.0.
-        "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
-
-        // Specifies the path to the NPM executable used for Automatic Type Acquisition. Requires TypeScript >= 2.3.4.
-        //"typescript.npm": "C:/Users/Steve Knipmeyer/AppData/Roaming/npm",
-
-        // Controls whether auto detection of tsc tasks is on or off.
-        "typescript.tsc.autoDetect": "off",
-
-        // Preferred path style for auto imports.
-        //  - auto: Infer the shortest path type.
-        //  - relative: Relative to the file location.
-        //  - non-relative: Based on the `baseUrl` configured in your `jsconfig.json` / `tsconfig.json`.
-        "typescript.preferences.importModuleSpecifier": "non-relative",
-
-        // Enable/disable auto import suggestions. Requires using TypeScript 2.6.1 or newer in the workspace.
-        "typescript.suggest.autoImports": true,
-
-    // ---------------------------------
-    // Workbench
-    // ---------------------------------
-
-        "workbench.iconTheme": "vscode-icons",
-
-        // Controls if opened editors show as preview. Preview editors are reused until they are kept (e.g. via double click or editing).
-        "workbench.editor.enablePreview": false,
-
-        // Overrides colors from the currently selected color theme.
-        // https://code.visualstudio.com/docs/getstarted/theme-color-reference
-        "workbench.colorCustomizations": {
-            "editor.background": "#000000",
-            "editor.foreground": "#ffffff",
-            "editor.lineHighlightBorder": "#ff00ff33",
-            "editorLineNumber.foreground": "#8fdddd",
-            "editorIndentGuide.background": "#32393f",
-            "editorWhitespace.foreground": "#013638",
-            "editor.findMatchHighlightBackground" : "#168292",
-            "peekViewEditor.background": "#222222",
-            "peekViewResult.selectionBackground": "#7997cb",
-            "peekViewEditor.matchHighlightBackground": "#7997cb",
-            "sideBar.background": "#131313",
+        // The folders to exclude when doing a full text search in the workspace.
+        "search.exclude": {
+            "**/.mypy_cache": true,
+            "**/*.d.ts": true,
+            "**/*.js": true,
+            "**/*.obj": true,
+            "**/devenv": true,
+            "**/node_modules": true,
+            "**/Publish": true,
+            "**/[Ww]ork*/**/*": true
         },
-        "files.associations": {
-            "iostream": "cpp",
-            "functional": "cpp",
-            "optional": "cpp",
-            "system_error": "cpp",
-            "xlocmon": "cpp",
-            "xtr1common": "cpp",
-            "iomanip": "cpp",
-            "array": "cpp",
-            "ios": "cpp",
-            "xutility": "cpp"
-        },
-
 }

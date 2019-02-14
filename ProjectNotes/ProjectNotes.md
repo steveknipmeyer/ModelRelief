@@ -8,11 +8,11 @@
 #### Today
 
 #### Material Frameworks
-Materialize : http://materializecss.com 
-Material Design Lite : https://getmdl.io 
-MUI : https://www.muicss.com 
-Material Foundation : https://eucalyptuss.github.io/materia... 
-Material : http://daemonite.github.io/material 
+Materialize : http://materializecss.com
+Material Design Lite : https://getmdl.io
+MUI : https://www.muicss.com
+Material Foundation : https://eucalyptuss.github.io/materia...
+Material : http://daemonite.github.io/material
 Lumx : http://ui.lumapps.com
 
 #### Landing Page
@@ -86,7 +86,7 @@ Lumx : http://ui.lumapps.com
         RGB, RGBA values
         Vector3
 
-#### WebGL 
+#### WebGL
     https://webglfundamentals.org/webgl/lessons/webgl-how-it-works.html
 
     Chrome "paused before potential out-of-memory crash".
@@ -1335,9 +1335,9 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     Statue                                      Stanford        Stanford
     Test                                        ModelRelief     Internal
     Tyrannosaurus                               Stanford        Stanford
-    
+
     Horse                                       Logo            TurboSquid                      https://www.turbosquid.com/FullPreview/Index.cfm/ID/587173
-    
+
     Gaussian Box Blur           MIT https://www.peterkovesi.com/matlabfns/citesite.html
        Ivan Kutskir                 http://blog.ivank.net/fastest-gaussian-blur.html
 
@@ -1807,7 +1807,7 @@ np_fill, relief_fill
 
 #### ANSI Command Shell Sequences
     [HKEY_CURRENT_USER\Console]
-    "VirtualTerminalLevel"=dword:00000001
+    "VirtualTerminalLevel"=dword:**00000001**
 
 #### Pyamg
     https://github.com/pyamg/pyamg/commit/a188d5b8c03337018d8fe4f8bb883a8decc95bb5
@@ -1818,3 +1818,7 @@ np_fill, relief_fill
 #### NPM
     https://github.com/felixrieseberg/npm-windows-upgrade
 
+#### VSCode Settings Synchronization
+GitHub Token: d242687a4ed2e25c95fc479f1b06a0a72a021c39
+GitHub Gist: 4f93e06d28b5712f01903d42aba07a41
+GitHub Gist Type: Secret
