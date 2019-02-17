@@ -9,8 +9,6 @@
 #### Today
 
 #### MDB
-    Resolve the SystemSetting circular dependencies.
-
     Review DevelopmentUI.
     Explorer scallop theme.
         https://www.flaticon.com/free-icon/scallop_166047
