@@ -1,7 +1,6 @@
 ﻿### Tasks
 #### Commit Notes
-Create Vendor folder for licensed software (e.g. MDBootstrap).
-Upgrade CDN Bootstrap from 3.3.7 to 4.2.1.
+
 #### Lambda
 
 #### Vector
@@ -10,17 +9,11 @@ Upgrade CDN Bootstrap from 3.3.7 to 4.2.1.
 #### Today
 
 #### MDB
-    Add loading logic for non-Development environments.
-    Add browsser-sync support.
     Resolve the SystemSetting circular dependencies.
 
-#### Material Frameworks
-Materialize : http://materializecss.com
-Material Design Lite : https://getmdl.io
-MUI : https://www.muicss.com
-Material Foundation : https://eucalyptuss.github.io/materia...
-Material : http://daemonite.github.io/material
-Lumx : http://ui.lumapps.com
+    Review DevelopmentUI.
+    Explorer scallop theme.
+        https://www.flaticon.com/free-icon/scallop_166047
 
 #### Landing Page
     Can this be a static page for perforrmance?
@@ -1347,7 +1340,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 
     Gaussian Box Blur           MIT https://www.peterkovesi.com/matlabfns/citesite.html
        Ivan Kutskir                 http://blog.ivank.net/fastest-gaussian-blur.html
-    MDBootstrap        
+    MDBootstrap
 
 #### Visual Studio
     Performance
@@ -1683,7 +1676,7 @@ https://semver.npmjs.com/
             modelrelief (ContentRootPath)
                 <application files>
                 logs
-                mrenv`
+                mrenv
                 store/production
                 Solver
                 Test
@@ -1833,3 +1826,11 @@ GitHub Gist Type: Secret
 
 #### Browser-Sync
 https://west-wind.com/wconnect/weblog/ShowEntry.blog?id=943
+
+#### Material Frameworks
+Materialize : http://materializecss.com
+Material Design Lite : https://getmdl.io
+MUI : https://www.muicss.com
+Material Foundation : https://eucalyptuss.github.io/materia...
+Material : http://daemonite.github.io/material
+Lumx : http://ui.lumapps.com

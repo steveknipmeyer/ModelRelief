@@ -298,6 +298,9 @@ gulp.task('buildStaticContent', function () {
     gulp.src([sourceFolder + '**/*']).pipe(gulp.dest(destinationFolder ));
 
     // FILES
+    sourceFolder      = sourceConfig.htmlRoot;
+    destinationFolder = siteConfig.wwwRoot;
+    gulp.src([sourceFolder + 'workbench.html']).pipe(gulp.dest(destinationFolder ));
 });
 
 /// <summary>
@@ -487,7 +490,7 @@ gulp.task('test', function () {
 /// Default build task
 /// </summary>
 gulp.task('default', function () {
-  runSequence('createWWWRoot', 'copyNPM', 'copyVendor', 'buildCSS', 'buildShaders', 'buildStaticContent');
+  runSequence('createWWWRoot', 'copyNPM', 'copyVendor', 'compressJS', 'buildCSS', 'buildShaders', 'buildStaticContent');
 });
 
 //-----------------------------------------------------------------------------
