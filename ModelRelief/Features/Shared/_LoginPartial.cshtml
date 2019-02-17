@@ -2,7 +2,7 @@
 @if (User.Identity.IsAuthenticated)
 {
     <form class="form-inline ml-auto" asp-area="" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
-        <a asp-area="" asp-controller="Account" asp-action="Manage" title="Manage">Hello @User.Identity.Name</a>
+        <a class = "mr-2" asp-area="" asp-controller="Account" asp-action="Manage" title="Manage">@User.Identity.Name</a>
         <button class="btn btn-outline-light my-2 my-sm-0" type="submit" >Logout</button>
     </form>
 }

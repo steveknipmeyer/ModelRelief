@@ -1340,6 +1340,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 
     Gaussian Box Blur           MIT https://www.peterkovesi.com/matlabfns/citesite.html
        Ivan Kutskir                 http://blog.ivank.net/fastest-gaussian-blur.html
+    MDBootstrap        
 
 #### Visual Studio
     Performance
@@ -1822,3 +1823,6 @@ np_fill, relief_fill
 GitHub Token: d242687a4ed2e25c95fc479f1b06a0a72a021c39
 GitHub Gist: 4f93e06d28b5712f01903d42aba07a41
 GitHub Gist Type: Secret
+
+#### Browser-Sync
+https://west-wind.com/wconnect/weblog/ShowEntry.blog?id=943
