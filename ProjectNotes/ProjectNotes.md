@@ -1,11 +1,18 @@
 ﻿### Tasks
 #### Commit Notes
+Create Vendor folder for licensed software (e.g. MDBootstrap).
+Upgrade CDN Bootstrap from 3.3.7 to 4.2.1.
 #### Lambda
 
 #### Vector
 
 ### MVC
 #### Today
+
+#### MDB
+    Add loading logic for non-Development environments.
+    Add browsser-sync support.
+    Resolve the SystemSetting circular dependencies.
 
 #### Material Frameworks
 Materialize : http://materializecss.com

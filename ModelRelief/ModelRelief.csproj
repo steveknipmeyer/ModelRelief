@@ -93,6 +93,7 @@
 
   <ItemGroup>
     <Folder Include="Api\V1\NormalMaps\" />
+    <Folder Include="Delivery\Html\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

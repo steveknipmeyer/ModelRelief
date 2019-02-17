@@ -40,12 +40,15 @@ var sourceConfig = new function() {
     this.htmlRoot       = this.sourceRoot + 'Delivery/Html/';
     this.scriptsRoot    = this.sourceRoot + 'Scripts/';
     this.shaders        = this.scriptsRoot + 'Shaders/';
+
+    this.nodeModulesRoot = './node_modules/';
+    this.vendorRoot      = './ModelRelief/Vendor/';
+    this.mdbRoot         = this.vendorRoot + 'MDBootstrap/MDB-Gulp-Pro_4.7.1/dist/';
  }();
 
 var siteConfig = new function() {
 
     this.wwwRoot         = sourceConfig.sourceRoot + './wwwroot/';
-    this.nodeModulesRoot = './node_modules/';
 
     this.cssRoot         = this.wwwRoot + 'css/';
     this.imagesRoot      = this.wwwRoot + 'images/';
@@ -295,9 +298,6 @@ gulp.task('buildStaticContent', function () {
     gulp.src([sourceFolder + '**/*']).pipe(gulp.dest(destinationFolder ));
 
     // FILES
-    sourceFolder      = sourceConfig.htmlRoot;
-    destinationFolder = siteConfig.wwwRoot;
-    gulp.src([sourceFolder + 'landing.html']).pipe(gulp.dest(destinationFolder ));
 });
 
 /// <summary>
@@ -309,55 +309,109 @@ gulp.task('copyNPM', function () {
 
     // Bootstrap
     let subFolder         = 'bootstrap/dist/';
-    let sourceFolder      = siteConfig.nodeModulesRoot + subFolder;
+    let sourceFolder      = sourceConfig.nodeModulesRoot + subFolder;
     let destinationFolder = siteConfig.libRoot + subFolder;
     gulp.src([sourceFolder + '**/*']).pipe(gulp.dest(destinationFolder ));
 
     // jquery
     subFolder         = 'jquery/dist/';
-    sourceFolder      = siteConfig.nodeModulesRoot + subFolder;
+    sourceFolder      = sourceConfig.nodeModulesRoot + subFolder;
     destinationFolder = siteConfig.libRoot + subFolder;
     gulp.src([sourceFolder + '**/*']).pipe(gulp.dest(destinationFolder ));
 
     // jquery-validation
     subFolder         = 'jquery-validation/dist/';
-    sourceFolder      = siteConfig.nodeModulesRoot + subFolder;
+    sourceFolder      = sourceConfig.nodeModulesRoot + subFolder;
     destinationFolder = siteConfig.libRoot + subFolder;
     gulp.src([sourceFolder + '**/*']).pipe(gulp.dest(destinationFolder ));
 
     // FILES
+    let fileList = [];
 
     //jquery-validation-unobtrusive
     subFolder         = 'jquery-validation-unobtrusive/dist/';
-    sourceFolder      = siteConfig.nodeModulesRoot + subFolder;
+    sourceFolder      = sourceConfig.nodeModulesRoot + subFolder;
     destinationFolder = siteConfig.libRoot + subFolder;
     gulp.src([sourceFolder + 'jquery.validate.unobtrusive.js']).pipe(gulp.dest(destinationFolder ));
 
     // threejs
     subFolder         = 'threejs/';
-    sourceFolder      = siteConfig.nodeModulesRoot + 'three/build/';
+    sourceFolder      = sourceConfig.nodeModulesRoot + 'three/build/';
     destinationFolder = siteConfig.libRoot + subFolder;
-    gulp.src([sourceFolder + 'three.js']).pipe(gulp.dest(destinationFolder ));
-    gulp.src([sourceFolder + 'three.min.js']).pipe(gulp.dest(destinationFolder ));
+    fileList = ['three.js', 'three.min.js'];
+    fileList.forEach(function (file) {
+        gulp.src([sourceFolder + file]).pipe(gulp.dest(destinationFolder ));
+    });
 
     // three/examples/js
     subFolder         = 'threejs/';
-    sourceFolder      = siteConfig.nodeModulesRoot + 'three/examples/js/';
+    sourceFolder      = sourceConfig.nodeModulesRoot + 'three/examples/js/';
     destinationFolder = siteConfig.libRoot + subFolder;
-    gulp.src([sourceFolder + 'WebGL.js']).pipe(gulp.dest(destinationFolder ));
-    gulp.src([sourceFolder + 'libs/' + 'dat.gui.min.js']).pipe(gulp.dest(destinationFolder ));
+    fileList = ['WebGL.js', 'libs/' + 'dat.gui.min.js'];
+    fileList.forEach(function (file) {
+        gulp.src([sourceFolder + file]).pipe(gulp.dest(destinationFolder ));
+    });
 
     // requirejs
     subFolder         = 'requirejs/';
-    sourceFolder      = siteConfig.nodeModulesRoot + subFolder;
+    sourceFolder      = sourceConfig.nodeModulesRoot + subFolder;
     destinationFolder = siteConfig.libRoot + subFolder;
     gulp.src([sourceFolder + 'require.js']).pipe(gulp.dest(destinationFolder ));
 
     // chai assertion library
     subFolder         = 'chai/';
-    sourceFolder      = siteConfig.nodeModulesRoot + subFolder;
+    sourceFolder      = sourceConfig.nodeModulesRoot + subFolder;
     destinationFolder = siteConfig.libRoot + subFolder;
     gulp.src([sourceFolder + 'chai.js']).pipe(gulp.dest(destinationFolder ));
+});
+
+/// <summary>
+/// Populate wwwroot with (licensed) vendor content
+/// </summary>
+gulp.task('copyVendor', function () {
+
+    // FOLDERS
+
+    // MDBootstrap
+    let subFolder         = '';
+    let sourceFolder      = '';
+    let destinationFolder = '';
+    let subFolderList     = [];
+
+    // These folders are loaded by mdb.css which uses paths relative to the <CSS file>.
+    subFolderList = ['font', 'img'];
+    subFolderList.forEach(function (subFolder) {
+        sourceFolder      = sourceConfig.mdbRoot + subFolder;
+        destinationFolder = siteConfig.wwwRoot + 'lib/mdb/';
+        gulp.src([sourceFolder + '**/**']).pipe(gulp.dest(destinationFolder));
+    });
+
+    // These folders are loaded by mdb.js though jQuery.load which uses paths relative to <wwwroot>.
+    subFolderList = ['mdb-addons'];
+    subFolderList.forEach(function (subFolder) {
+        sourceFolder      = sourceConfig.mdbRoot + subFolder;
+        destinationFolder = siteConfig.wwwRoot;
+        gulp.src([sourceFolder + '**/**']).pipe(gulp.dest(destinationFolder));
+    });
+
+    // FILES
+    let fileList = [];
+
+    // MDBootstrap JavaScript
+    sourceFolder      = sourceConfig.mdbRoot + 'js/';
+    destinationFolder = siteConfig.libRoot + 'mdb/js/';
+    fileList = ['mdb.js', 'mdb.min.js', 'popper.min.js'];
+    fileList.forEach(function (file) {
+        gulp.src([sourceFolder + file]).pipe(gulp.dest(destinationFolder ));
+    });
+
+    // MDBootstrap CSS
+    sourceFolder      = sourceConfig.mdbRoot + 'css/';
+    destinationFolder = siteConfig.libRoot + 'mdb/css/';
+    fileList = ['mdb.css', 'mdb.min.css'];
+    fileList.forEach(function (file) {
+        gulp.src([sourceFolder + file]).pipe(gulp.dest(destinationFolder ));
+    });
 });
 
 /// <summary>
@@ -433,7 +487,7 @@ gulp.task('test', function () {
 /// Default build task
 /// </summary>
 gulp.task('default', function () {
-  runSequence('createWWWRoot', 'copyNPM', 'buildCSS', 'buildShaders', 'buildStaticContent');
+  runSequence('createWWWRoot', 'copyNPM', 'copyVendor', 'buildCSS', 'buildShaders', 'buildStaticContent');
 });
 
 //-----------------------------------------------------------------------------

@@ -6,67 +6,67 @@
     ViewBag.Title = "Model Composer";
 }
 
-    <div id="rootContainer">
-        <div id="composerView">
-            <div id="modelView">
-                <canvas id="modelCanvas" tabindex='1'></canvas>
-            </div>
-            <div id="meshView">
-                <canvas id="meshCanvas" tabindex='2'></canvas>
-            </div>
+<div id="rootContainer">
+    <div id="composerView">
+        <div id="modelView">
+            <canvas id="modelCanvas" tabindex='1'></canvas>
+        </div>
+        <div id="meshView">
+            <canvas id="meshCanvas" tabindex='2'></canvas>
+        </div>
 
-            <div id="depthBufferView">
-                <!-- The canvas is generated dynamically. -->
-                <canvas id="depthBufferCanvas"></canvas>
-            </div>
-            <div id="normalMapView">
-                <!-- The canvas is generated dynamically. -->
-                <canvas id="normalMapCanvas"></canvas>
-            </div>
+        <div id="depthBufferView">
+            <!-- The canvas is generated dynamically. -->
+            <canvas id="depthBufferCanvas"></canvas>
+        </div>
+        <div id="normalMapView">
+            <!-- The canvas is generated dynamically. -->
+            <canvas id="normalMapCanvas"></canvas>
         </div>
     </div>
+</div>
 
-    @section scripts {
-        <!--******************************************************************************************-->
-        <!--                                    Libraries                                             -->
-        <!--******************************************************************************************-->
-        <script src="~/lib/threejs/WebGL.js"></script>
-        <script src="~/lib/requirejs/require.js"></script>
+@section scripts {
+    <!--******************************************************************************************-->
+    <!--                                    Libraries                                             -->
+    <!--******************************************************************************************-->
+    <script src="~/lib/threejs/WebGL.js"></script>
+    <script src="~/lib/requirejs/require.js"></script>
 
-        <!--******************************************************************************************-->
-        <!--                                    ModelRelief                                           -->
-        <!--******************************************************************************************-->
-        <script>
+    <!--******************************************************************************************-->
+    <!--                                    ModelRelief                                           -->
+    <!--******************************************************************************************-->
+    <script>
             var composerMeshModel = @DataConversion.SerializeObject(Model);
-        </script>
-        <environment names="Development, Test">
-            <script src="~/js/shaders.js"></script>
-            <script>
-                let minifiedExtension = "";
-            </script>
-        </environment>
-        <environment names="Staging, Production">
-            <script src="~/js/shaders.min.js"></script>
-            <script>
-                let minifiedExtension = ".min";
-            </script>
-        </environment>
-
+    </script>
+    <environment names="Development, Test">
+        <script src="~/js/shaders.js"></script>
         <script>
-            requirejs.config({
-                baseUrl: ".",
-                paths: {
-                   "ModelRelief"                             : `/js/modelrelief${minifiedExtension}`,
-                   "three"                                   : `/lib/threejs/three${minifiedExtension}`,
-
-                   "chai"                                    : "/lib/chai/chai.min",
-                   "dat-gui"                                : "/lib/threejs/dat.gui.min",
-                },
-            });
-            window.onload = () => {
-
-                requirejs(["ModelRelief"]);
-            };
+            let minifiedExtension = "";
         </script>
-    }
+    </environment>
+    <environment names="Staging, Production">
+        <script src="~/js/shaders.min.js"></script>
+        <script>
+            let minifiedExtension = ".min";
+        </script>
+    </environment>
+
+    <script>
+        requirejs.config({
+            baseUrl: ".",
+            paths: {
+                "ModelRelief": `/js/modelrelief${minifiedExtension}`,
+                "three": `/lib/threejs/three${minifiedExtension}`,
+
+                "chai": "/lib/chai/chai",
+                "dat-gui": "/lib/threejs/dat.gui.min",
+            },
+        });
+        window.onload = () => {
+
+            requirejs(["ModelRelief"]);
+        };
+    </script>
+}
 
