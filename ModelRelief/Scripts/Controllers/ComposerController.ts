@@ -44,6 +44,7 @@ class ComposerViewSettings {
 
     public generateRelief: () => void;
     public saveRelief: () => void;
+
     /**
      * Creates an instance of ComposerViewSettings.
      * @param {() => any} generateRelief

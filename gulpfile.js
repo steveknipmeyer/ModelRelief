@@ -514,7 +514,8 @@ gulp.task('serve', function () {
 
     proxy: {
 
-        target: "localhost:5000/Models/Viewer/1"
+        // target: "localhost:5000/ModelRelief/Delivery/Html/Workbench.html"
+        target: "localhost:5000/Workbench.html"
     }
 //  browser: 'google chrome canary'
 //  Canary
@@ -524,4 +525,5 @@ gulp.task('serve', function () {
   gulp.watch([sourceConfig.shaders + '*.glsl'],                   ['buildShadersReload']);
   gulp.watch([sourceConfig.scriptsRoot + '**/*.ts'],              ['compileTypeScriptReload']);
   gulp.watch([siteConfig.cssRoot + '**/*.css'],                   ['reload']);
+  gulp.watch([siteConfig.wwwRoot + '**/*.html'],                  ['reload']);
 });

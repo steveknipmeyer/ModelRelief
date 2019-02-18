@@ -5,106 +5,27 @@
 /* ----------------------
     General
 ------------------------*/
-#rootContainer {
-    position : relative;
+#modelCanvas, #meshCanvas, #depthBufferCanvas, #normalMapCanvas {
+    width:  512px;
+    height: 512px;
+    background-color: #000000;
 }
 
 /* ----------------------
     Model3D View
 ------------------------*/
-#modelView {
-    position : relative;
-    width:  256px;
-}
-
-#modelCanvas{
-    width:  256px;
-    height: 256px;
-    background-color: #000000;
-}
 
 /* ----------------------
-      Mesh View
+    Mesh View
 ------------------------*/
-#meshView {
-    position : absolute;
-    top : 0px;
-    right: 0px;
-    width:  768px;
-}
-
-#meshCanvas {
-    width: 768px;
-    height: 768px;
-    background-color: #000000;
-}
 
 /* ----------------------
-      DepthBuffer View
+    DepthBuffer View
 ------------------------*/
-#depthBufferView {
-    position : absolute;
-    top : 640px;
-    right: 0px;
-    width:  512px;
-}
-
-#depthBufferCanvas{
-    width:  512px;
-    height: 1px;
-    background-color: #000000;
-}
 
 /* ----------------------
-      NormalMap View
+    NormalMap View
 ------------------------*/
-#normalMapView {
-    position: absolute;
-    top: 1280px;
-    right: 0px;
-    width: 512px;
-}
-
-#normalMapCanvas {
-    width: 512px;
-    height: 1px;
-    background-color: #000000;
-}
-
-/* ----------------------
-      UI Controls
-------------------------*/
-
-    /* dat.ui */
-    .dg.main {
-        user-select: none;
-        z-Index: 200;
-        margin-bottom: 25px;
-    }
-
-     .dg input[type=text] {
-        color: white !important;
-        font-size: 12pt;
-    }
-
-    /* 'Standard View' select element */
-    div.c > select {
-        color: #000000;
-    }
-
-#cameraControls {
-    float: right
-}
-#modelViewerControls, #meshViewerControls, #composerControls {
-    float: left
-}
-
-.DepthBufferFactory {
-    background-color: #000000;
-}
-.ImageFactory {
-    background-color: #000000;
-}
 
 /* ----------------------
     HTML Logger

@@ -35,13 +35,12 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ModelRelief</a>
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">modelRelief</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home <span class="sr-only">(current)</span></a>
                 @if (SystemSettings.DevelopmentUI)
                 {
                     <a class="nav-item nav-link" asp-area="" asp-controller="About" asp-action="Configuration">About</a>
@@ -53,7 +52,7 @@
                     <a class="nav-item nav-link" asp-area="" asp-controller="MeshTransforms" asp-action="Index">MeshTransforms</a>
                     <a class="nav-item nav-link" asp-area="" asp-controller="NormalMaps" asp-action="Index">NormalMaps</a>
                 }
-                <a class="nav-item nav-link" asp-area="" asp-controller="Meshes" asp-action="Index">Meshes</a>
+                <a class="nav-item nav-link" href="/Workbench.html">Workbench</a>
             </div>
             <partial name="_LoginPartial" />
         </div>

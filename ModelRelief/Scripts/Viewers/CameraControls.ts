@@ -8,7 +8,6 @@
 import * as dat from "dat-gui";
 import * as THREE from "three";
 
-import {assert} from "chai";
 import {StandardView} from "Scripts/Api/V1/Interfaces/ICamera";
 import {Graphics, ObjectNames} from "Scripts/Graphics/Graphics";
 import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";

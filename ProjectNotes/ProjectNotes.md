@@ -14,16 +14,34 @@
         https://www.flaticon.com/free-icon/scallop_166047
 
 #### Landing Page
-    Can this be a static page for perforrmance?
+
+    modelRelief(Preview)
 
     Add logo.
 
     Create thumbnail images of the test models.
 	    These will be delivered from the Delivery\images folder.
 
-    Add a mechanism for sending e-mail for suggestions, critiques, etc.
+        Lucy
+        House
+        Dragon
+        Tyrannosaurus
+        Armadillo
 
-    Create a video?
+        Roadster
+        Bunny
+
+        Horse
+        Scallop
+
+            Statue
+            Dolphin
+            Buddha
+            Test
+
+    Add a Contact Form for sending e-mail for suggestions, critiques, etc.
+
+    Create a video or an animation?
 
 #### Auth0
     Customize Log In dialog box.
@@ -1545,14 +1563,14 @@ https://semver.npmjs.com/
 
     Update DbInitializer:
         [X] AddModels
-        [X] AddMeshTransform
         [X] AddDepthBuffers
-        [X] AddCameras
         [X] AddMeshes
 
-        In ModelRelief, open the new model and generate a relief.
-        Add the generated DepthBuffer and Mesh from the store folder to ModelRelief\Test.
-        Update the Camera settings in DbInitializer with the updated Camera properties as shown in the Camera page.
+    In ModelRelief, open the new model and generate a relief.
+    Add the generated DepthBuffer and Mesh from the store folder to ModelRelief\Test.
+    Update the Solver\Test JSON files using MRUpdateSeedData.
+
+    Update the model counts in the integration tests.
 
 #### Numpy
 
