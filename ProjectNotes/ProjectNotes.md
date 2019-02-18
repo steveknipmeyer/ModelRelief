@@ -17,6 +17,9 @@
 
     modelRelief(Preview)
 
+    Investigate the cookie policy dropdown in the navbar. Is this from the Bootstrap?
+        It impacts the vertical scrolling of the navbar.
+
     Add logo.
 
     Create thumbnail images of the test models.
