@@ -510,16 +510,24 @@ gulp.task ('reload', function() {
 gulp.task('serve', function () {
 
   browserSync({
-    notify: true,
-
-    proxy: {
-
-        // target: "localhost:5000/ModelRelief/Delivery/Html/Workbench.html"
-        target: "localhost:5000/Workbench.html"
-    }
 //  browser: 'google chrome canary'
 //  Canary
 //  browser: "C:/Users/Steve Knipmeyer/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
+
+    notify: true,
+
+    // proxy: {
+    //     target: "localhost:5000/"
+    // },
+
+    // ----------------------------------------------
+    // Use these settings for prototyping static pages.
+    server: {
+        baseDir: 'ModelRelief/wwwroot',
+        directory: true
+    },
+    startPath: 'Workbench.html'
+    // ----------------------------------------------
   });
 
   gulp.watch([sourceConfig.shaders + '*.glsl'],                   ['buildShadersReload']);

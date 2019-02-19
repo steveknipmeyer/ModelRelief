@@ -20,6 +20,16 @@
     <link href="css/workbench.css" rel="stylesheet">
 
     <style>
+        /* .row {
+            background-color: rgb(217, 240, 240);
+            outline: 1px solid black;
+        }
+
+        [class^=col] {
+
+            background-color:  rgb(243, 248, 225);
+            outline: 1px solid black
+        } */
     </style>
 </head>
 
@@ -51,116 +61,177 @@
         </nav>
     </header>
 
+    <!--
+    // Extra small devices (portrait phones, less than 576px)
+    // No media query for `xs` since this is the default in Bootstrap
+
+    // Small devices (landscape phones, 576px and up)
+    @media (min-width: 576px) { ... }
+
+    // Medium devices (tablets, 768px and up)
+    @media (min-width: 768px) { ... }
+
+    // Large devices (desktops, 992px and up)
+    @media (min-width: 992px) { ... }
+
+    // Extra large devices (large desktops, 1200px and up)
+    @media (min-width: 1200px) { ... }
+    -->
+
     <main class="mt-5">
 
-        <div class="container">
+        <!-- Model View -->
+        <div id="modelViewContainer" class="container">
             <div class="row">
-                <!--
-                Dropdown: Standard View
-                Slider: Near Clipping
-                Slider: Far Clipping
-                Button: Bound Clipping
-                Checkbox: Perspective
+                <div class="col">
 
-                Floating Button (arrows-alt): Fit View
- -->
-                <div class="col-md-2 mb-4">
-                    First Column
-                </div>
+                    <!-- Model Card -->
+                    <div class="card card-cascade narrower">
 
-                <div class="col-md-4 mb-4">
-                    <div class="card">
+                        <!-- Header -->
+                        <div class="view view-cascade py-2 gradient-card-header info-color-dark">
+                            <h5 class="mb-0">Model</h5>
+                        </div>
+                        <!-- /Header     -->
+
+                        <!-- Body -->
                         <div class="card-body">
 
-                            <!-- Camera Controls -->
-                            <h4 class="card-title">Camera Controls</h4>
-                            <hr>
-
-                            <!-- Standard View     -->
                             <div class="row">
-                                <div class="col-md-9 mb-1">
-                                    <!-- Standard View -->
-                                    <div class="dropdown">
-                                        <!--Trigger-->
-                                        <button class="btn btn-primary btn-sm dropdown-toggle ml-0" type="button"
-                                            id="standardView" data-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">Standard
-                                            View</button>
+                                <!-- Camera Controls Column -->
+                                <div class="col-md-4 mb-4">
 
-                                        <!--Menu-->
-                                        <div class="dropdown-menu dropdown-primary">
-                                            <a class="dropdown-item" href="#">None</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Front</a>
-                                            <a class="dropdown-item" href="#">Back</a>
-                                            <a class="dropdown-item" href="#">Top</a>
-                                            <a class="dropdown-item" href="#">Isometric</a>
-                                            <a class="dropdown-item" href="#">Left</a>
-                                            <a class="dropdown-item" href="#">Right</a>
-                                            <a class="dropdown-item" href="#">Bottom</a>
+                                    <!-- Standard View     -->
+                                    <div class="row">
+                                        <div class="col-md-9 mt-2 mb-1">
+                                            <!-- Standard View -->
+                                            <div class="dropdown">
+                                                <!--Trigger-->
+                                                <button class="btn btn-primary btn-sm dropdown-toggle ml-0"
+                                                    type="button" id="standardView" data-toggle="dropdown"
+                                                    aria-haspopup="true" aria-expanded="false">Standard
+                                                    View</button>
+
+                                                <!--Menu-->
+                                                <div class="dropdown-menu dropdown-primary">
+                                                    <a class="dropdown-item" href="#">None</a>
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" href="#">Front</a>
+                                                    <a class="dropdown-item" href="#">Back</a>
+                                                    <a class="dropdown-item" href="#">Top</a>
+                                                    <a class="dropdown-item" href="#">Isometric</a>
+                                                    <a class="dropdown-item" href="#">Left</a>
+                                                    <a class="dropdown-item" href="#">Right</a>
+                                                    <a class="dropdown-item" href="#">Bottom</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Near Clipping -->
+                                    <div class="row mt-2">
+                                        <div class="col-md-9 mt-3">
+                                            <div class="d-flex my-1">
+                                                <span class="mr-2 mt-1">0</span>
+                                                <form class="range-field">
+                                                    <input id="nearClippingSlider" class="border-0" type="range" min="0"
+                                                        max="10" step="0.5" />
+                                                </form>
+                                                <span class="ml-2 mt-1">10</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 ">
+                                            <div class="md-form mt-0">
+                                                <input type="text" id="nearClipping" class="form-control" value="0.1">
+                                                <label for="nearClipping">Near</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Far Clipping -->
+                                    <div class="row mt-2">
+                                        <div class="col-md-9 mt-1">
+                                            <div class="d-flex  my-1">
+                                                <span class="mr-2 mt-1">0</span>
+                                                <form class="range-field">
+                                                    <input id="farClippingSlider" class="border-0" type="range" min="0"
+                                                        max="10" step="0.5" />
+                                                </form>
+                                                <span class="ml-2 mt-1">10</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 ">
+                                            <div class="md-form mt-0">
+                                                <input type="text" id="farClipping" class="form-control">
+                                                <label for="farClipping">Far</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Perspective    -->
+                                    <div class="row">
+                                        <div class="col-md-6">
+
+                                            <div class="form-check p-0">
+                                                <input type="checkbox" class="form-check-input" id="perspective">
+                                                <label class="form-check-label" for="perspective">Perspective</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- View Column -->
+                                <div class="col">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            This is the Model view.
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <!-- /Body -->
 
-                            <!-- Near Clipping -->
-                            <div class="row mt-2">
-                                <div class="col-md-9 mt-1">
-                                    <div class="d-flex my-1">
-                                        <span class="mr-2 mt-1">0</span>
-                                        <form class="range-field">
-                                            <input id="nearClippingSlider" class="border-0" type="range" min="0"
-                                                max="10" step="0.5" />
-                                        </form>
-                                        <span class="ml-2 mt-1">10</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 ">
-                                    <div class="md-form mt-0">
-                                        <input type="text" id="nearClipping" class="form-control" value="0.1">
-                                        <label for="nearClipping">Near</label>
-                                    </div>
-                                </div>
-                            </div>
+                    </div>
+                    <!-- /Model Card -->
 
-                            <!-- Far Clipping -->
-                            <div class="row mt-2">
-                                <div class="col-md-9 mt-1">
-                                    <div class="d-flex  my-1">
-                                        <span class="mr-2 mt-1">0</span>
-                                        <form class="range-field">
-                                            <input id="farClippingSlider" class="border-0" type="range" min="0" max="10"
-                                                step="0.5" />
-                                        </form>
-                                        <span class="ml-2 mt-1">10</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 ">
-                                    <div class="md-form mt-0">
-                                        <input type="text" id="farClipping" class="form-control">
-                                        <label for="farClipping">Far</label>
-                                    </div>
-                                </div>
-                            </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Model View -->
 
-                            <!-- Perspective    -->
-                            <div class="row">
-                                <div class="col-md-6">
+        <!-- Mesh View -->
+        <div id="meshViewContainer" class="container mt-4">
+            <div class="row">
+                <div class="col">
 
-                                    <div class="form-check p-0">
-                                        <input type="checkbox" class="form-check-input" id="perspective">
-                                        <label class="form-check-label" for="perspective">Perspective</label>
-                                    </div>
+                    <!-- Mesh Card -->
+                    <div class="card card-cascade narrower">
+
+                        <!-- Header -->
+                        <div class="view view-cascade py-2 gradient-card-header info-color-dark">
+                            <h5 class="mb-0">Mesh</h5>
+                        </div>
+                        <!-- /Header     -->
+
+                        <!-- Body -->
+                        <div class="card-body">
+                            <div class="card">
+                                <div class="card-body">
+                                    This is the Mesh view.
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    Third Column
-                </div>
+                        <!-- /Body -->
 
+                    </div>
+                    <!-- /Mesh Card -->
+
+                </div>
             </div>
+        </div>
+        <!-- /Mesh View -->
+
     </main>
 
     <!-- Footer -->
