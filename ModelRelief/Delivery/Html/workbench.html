@@ -20,6 +20,12 @@
     <link href="css/workbench.css" rel="stylesheet">
 
     <style>
+        /* #modelViewCard, #meshViewCard {
+            width: 100%;
+            padding-top: 100%;
+            position: relative;
+        } */
+
         /* .row {
             background-color: rgb(217, 240, 240);
             outline: 1px solid black;
@@ -78,12 +84,12 @@
     @media (min-width: 1200px) { ... }
     -->
 
-    <main class="mt-5">
+    <main class="mt-2">
 
         <!-- Model View -->
         <div id="modelViewContainer" class="container">
             <div class="row">
-                <div class="col">
+                <div class="col-md-8">
 
                     <!-- Model Card -->
                     <div class="card card-cascade narrower">
@@ -183,8 +189,8 @@
                                 <!-- View Column -->
                                 <div class="col">
                                     <div class="card">
-                                        <div class="card-body">
-                                            This is the Model view.
+                                        <div id="modelViewCard"
+                                            class="card-body embed-responsive embed-responsive-1by1">
                                         </div>
                                     </div>
                                 </div>
@@ -217,8 +223,7 @@
                         <!-- Body -->
                         <div class="card-body">
                             <div class="card">
-                                <div class="card-body">
-                                    This is the Mesh view.
+                                <div id="meshViewCard" class="card-body embed-responsive embed-responsive-1by1">
                                 </div>
                             </div>
                         </div>
