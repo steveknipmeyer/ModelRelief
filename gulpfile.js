@@ -374,7 +374,7 @@ gulp.task('copyNPM', function () {
 /// </summary>
 gulp.task('buildMDBootstrapCSS', function (callback) {
 
-    console.log('\nForking MDBootstrap CSS build...')
+    console.log('\nForking MDBootstrap CSS build...');
     exec(`gulp --gulpfile ${sourceConfig.mdbRoot}gulpfile.js css-compile css-minify`, function (err, stdout, stderr) {
         console.log(stdout);
         console.log(stderr);
@@ -387,7 +387,7 @@ gulp.task('buildMDBootstrapCSS', function (callback) {
 /// </summary>
 gulp.task('buildMDBootstrapCSSReload', function () {
 
-    runSequence('buildMDBootstrapCSS', 'copyVendor', 'reload');
+    runSequence('buildMDBootstrapCSS', 'copyVendor', 'reload', 'beep');
 });
 
 /// <summary>
@@ -502,9 +502,9 @@ gulp.task('compileTypeScriptReload', function () {
 });
 
 /// <summary>
-/// Test task.
+/// Beep task.
 /// </summary>
-gulp.task('test', function () {
+gulp.task('beep', function () {
     beep();
 });
 

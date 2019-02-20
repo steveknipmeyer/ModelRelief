@@ -4,11 +4,11 @@
 $skins: () !default;
 
 $skins: map-merge((
-  "modelrelief": (
+  "custom": (
     "skin-primary-color":      #2b2b2b,
     "skin-navbar":             #44474b,
     "skin-footer-color":       #44474b,
-    "skin-accent":             #75c1f0,
+    "skin-accent":             #afa2ad,                   // Checkbox
     "skin-flat":               #a5a4a4,
     "skin-sidenav-item":       rgba(0,   0,   0,   .4),
     "skin-sidenav-item-hover": rgba(0,   0,   0,   .4),
@@ -18,44 +18,32 @@ $skins: map-merge((
     "skin-mask-light":         rgba(121, 121, 121, .65),
     "skin-mask-strong":        rgba(121, 121, 121, .8),
     "skin-sn-child":           #afdffc,
-    "skin-btn-primary":        #46aded,
+    "skin-btn-primary":        #7d909c,
     "skin-btn-secondary":      #7d8488,
     "skin-btn-default":        #353637,
     "skin-text":               $white,
 
-    "skin-body":               #132e49,
+    "skin-body":               #1d272e,
     "skin-btn-danger":         red
   )
 ), $skins);
 
 @each $skin, $data in $skins {
   .#{$skin}-skin {
-    background-color: map-get($data, skin-body);
 
-    // .btn-danger {
-    //   background-color: map-get($data, skin-btn-danger) !important;
-    // }
+    background-color: map-get($data, skin-body);
+    color: white;
+
+    .range-field input[type="range"] {
+      &::-webkit-slider-thumb {
+        background: gray !important;
+      }
+      &::-moz-range-thumb {
+        background: gray !important;
+      }
+      &::-ms-thumb {
+        background:gray !important;
+      }
+    }
   }
 }
-
-$skins: map-merge((
-  "baseline": (
-    "skin-primary-color":      #2b2b2b,
-    "skin-navbar":             #44474b,
-    "skin-footer-color":       #44474b,
-    "skin-accent":             #75c1f0,
-    "skin-flat":               #a5a4a4,
-    "skin-sidenav-item":       rgba(0,   0,   0,   .4),
-    "skin-sidenav-item-hover": rgba(0,   0,   0,   .4),
-    "skin-gradient-start":     #383838,
-    "skin-gradient-end":       #a5a4a4,
-    "skin-mask-slight":        rgba(121, 121, 121, .5),
-    "skin-mask-light":         rgba(121, 121, 121, .65),
-    "skin-mask-strong":        rgba(121, 121, 121, .8),
-    "skin-sn-child":           #afdffc,
-    "skin-btn-primary":        #46aded,
-    "skin-btn-secondary":      #7d8488,
-    "skin-btn-default":        #353637,
-    "skin-text":               $white
-  )
-), $skins);

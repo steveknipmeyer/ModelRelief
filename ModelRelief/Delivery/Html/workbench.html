@@ -20,6 +20,23 @@
     <link href="css/workbench.css" rel="stylesheet">
 
     <style>
+        .mrControlText {
+            font-size: 10pt !important;
+        }
+
+        .range-field input[type=range]+.thumb {
+            background-color: darkgray !important;
+        }
+
+        #modelViewCardBody,
+        #meshViewCardBody {
+            background-color: black;
+        }
+
+        .card-cascade {
+            background-color: black !important;
+        }
+
         /* .row {
             background-color: rgb(217, 240, 240);
             outline: 1px solid black;
@@ -33,7 +50,7 @@
     </style>
 </head>
 
-<body class="modelrelief-skin">
+<body class="custom-skin">
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark">
@@ -83,19 +100,19 @@
         <!-- Model View -->
         <div id="modelViewContainer" class="container">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-4">
 
                     <!-- Model Card -->
                     <div class="card card-cascade narrower">
 
                         <!-- Header -->
-                        <div class="view view-cascade py-2 gradient-card-header info-color-dark">
+                        <div class="view view-cascade py-2 gradient-card-header grey darken-3">
                             <h5 class="mb-0">Model</h5>
                         </div>
                         <!-- /Header     -->
 
                         <!-- Body -->
-                        <div class="card-body embed-responsive embed-responsive-1by1">
+                        <div id="modelViewCardBody" class="card-body embed-responsive embed-responsive-1by1">
                         </div>
                         <!-- /Body -->
 
@@ -110,19 +127,19 @@
         <!-- Mesh View -->
         <div id="meshViewContainer" class="container mt-4">
             <div class="row">
-                <div class="col">
+                <div class="col-md-6">
 
                     <!-- Mesh Card -->
                     <div class="card card-cascade narrower">
 
                         <!-- Header -->
-                        <div class="view view-cascade py-2 gradient-card-header info-color-dark">
+                        <div class="view view-cascade py-2 gradient-card-header grey darken-3">
                             <h5 class="mb-0">Mesh</h5>
                         </div>
                         <!-- /Header     -->
 
                         <!-- Body -->
-                        <div class="card-body embed-responsive embed-responsive-1by1">
+                        <div id="meshViewCardBody" class="card-body embed-responsive embed-responsive-1by1">
                         </div>
                         <!-- /Body -->
 
@@ -134,6 +151,32 @@
         </div>
         <!-- /Mesh View -->
 
+        <div class="container">
+            <!-- Far Clipping -->
+            <div class="row mt-2 mrControlText">
+                <div class="col-md-9 mt-1">
+                    <div class="d-flex  my-1">
+                        <span class="mr-2 mt-1">0</span>
+                        <form class="range-field">
+                            <input id="farClippingSlider" class="border-0" type="range" min="0" max="10" step="0.5" />
+                        </form>
+                        <span class="ml-2 mt-1">10</span>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <!-- Perspective    -->
+            <div class="row">
+                <div class="col-md-6">
+
+                    <div class="form-check p-0 mrControlText">
+                        <input type="checkbox" class="form-check-input mrCheckbox" id="perspective">
+                        <label class="form-check-label " for="perspective">Perspective</label>
+                    </div>
+                </div>
+            </div>
+            <span class="font-weight-lighter mrControlText">hello, world</span>
+        </div>
     </main>
 
     <!-- Footer -->

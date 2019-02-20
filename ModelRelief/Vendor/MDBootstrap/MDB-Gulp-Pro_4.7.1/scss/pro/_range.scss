@@ -35,10 +35,11 @@
       &.active {
         border-radius: $border-radius-circle $border-radius-circle $border-radius-circle 0;
         .value {
-          color: $white-base;
+          color: black;
           margin-left: $input-range-active-value-ml;
           margin-top: $input-range-active-value-mt;
           font-size: $input-range-active-value-font-size;
+          font-weight: bold;
         }
       }
     }

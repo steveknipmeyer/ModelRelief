@@ -8,12 +8,13 @@
     "removeComments": false,
     "sourceMap": true,
     "outFile": "wwwroot/js/modelrelief.js",
+    "experimentalDecorators": true,
     "allowJs": true,
 
     // Modules
-    "module": "amd", // generate AMD (Asynchronous Module Definition code for modules
-    "moduleResolution": "node", // include node_modules in search paths
-    "traceResolution": false, // show search paths when resolving modules
+    "module": "amd",                    // generate AMD (Asynchronous Module Definition code for modules
+    "moduleResolution": "node",         // include node_modules in search paths
+    "traceResolution": false,           // show search paths when resolving modules
 
     "baseUrl": ".",
     "paths": { // search path for module resolution; include project client libraries

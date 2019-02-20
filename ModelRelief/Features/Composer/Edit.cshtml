@@ -3,28 +3,29 @@
 @model ModelRelief.Dto.Mesh
 
 @{
-    ViewBag.Title = "Model Composer";
+ViewBag.Title = "Model Composer";
 }
 
-<div id="rootContainer">
-    <div id="composerView">
-        <div id="modelView">
-            <canvas id="modelCanvas" tabindex='1'></canvas>
-        </div>
-        <div id="meshView">
-            <canvas id="meshCanvas" tabindex='2'></canvas>
-        </div>
+<body class="custom-skin">
+    <div id="rootContainer">
+        <div id="composerView">
+            <div id="modelView">
+                <canvas id="modelCanvas" tabindex='1'></canvas>
+            </div>
+            <div id="meshView">
+                <canvas id="meshCanvas" tabindex='2'></canvas>
+            </div>
 
-        <div id="depthBufferView">
-            <!-- The canvas is generated dynamically. -->
-            <canvas id="depthBufferCanvas"></canvas>
-        </div>
-        <div id="normalMapView">
-            <!-- The canvas is generated dynamically. -->
-            <canvas id="normalMapCanvas"></canvas>
+            <div id="depthBufferView">
+                <!-- The canvas is generated dynamically. -->
+                <canvas id="depthBufferCanvas"></canvas>
+            </div>
+            <div id="normalMapView">
+                <!-- The canvas is generated dynamically. -->
+                <canvas id="normalMapCanvas"></canvas>
+            </div>
         </div>
     </div>
-</div>
 
 @section scripts {
     <!--******************************************************************************************-->
@@ -37,7 +38,7 @@
     <!--                                    ModelRelief                                           -->
     <!--******************************************************************************************-->
     <script>
-            var composerMeshModel = @DataConversion.SerializeObject(Model);
+        var composerMeshModel = @DataConversion.SerializeObject(Model);
     </script>
     <environment names="Development, Test">
         <script src="~/js/shaders.js"></script>
@@ -68,5 +69,5 @@
             requirejs(["ModelRelief"]);
         };
     </script>
-}
-
+    }
+</body>
