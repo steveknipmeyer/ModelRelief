@@ -6,6 +6,8 @@
 
 namespace ModelRelief.Features.Composer
 {
+    using System.Globalization;
+    using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
     using MediatR;
@@ -14,6 +16,7 @@ namespace ModelRelief.Features.Composer
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
+    using ModelRelief.Utility;
 
     /// <summary>
     /// Represents a controller to handle Composer requests.
@@ -38,9 +41,22 @@ namespace ModelRelief.Features.Composer
         /// Action handler for a Composer request.
         /// </summary>
         /// <param name="id">Mesh Id.</param>
+        /// <param name="name">Mesh Name.</param>
         /// <returns>Composer page.</returns>
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(int id, [FromQuery] string name)
         {
+            if (id == 0)
+            {
+                var applicationUser = await IdentityUtility.FindApplicationUserAsync(User);
+
+                // query by Name
+                var model = DbContext.Set<Domain.Mesh>()
+                                                .Where(m => (m.UserId == applicationUser.Id))
+                                                .Where(m => m.Name.StartsWith(name, true, CultureInfo.CurrentCulture))
+                                                .FirstOrDefault();
+                id = model.Id;
+            }
+
             var mesh = await HandleRequestAsync(new GetSingleRequest<Domain.Mesh, Dto.Mesh>
             {
                 User = User,
