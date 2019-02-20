@@ -1,25 +1,61 @@
-// Your custom skin
+// ModelRelief Skin
+
 // Skins
 $skins: () !default;
+
 $skins: map-merge((
-  "test": (
-    "skin-primary-color":      #fff, 
-    "skin-navbar":             #fff,
-    "skin-footer-color":       #fff,
-    "skin-flat":               #fff,
-    "skin-accent":             #fff,   
-    "skin-sidenav-item":       #fff,   
-    "skin-sidenav-item-hover": #fff,
-    "skin-gradient-start":     #fff,
-    "skin-gradient-end":       #fff,
-    "skin-mask-slight":        #fff,
-    "skin-mask-light":         #fff,
-    "skin-mask-strong":        #fff,
-    "skin-sn-child":           #fff,
-    "skin-btn-primary":        #fff,
-    "skin-btn-secondary":      #fff,
-    "skin-btn-default":        #fff,
-    "skin-text":               #fff,
+  "modelrelief": (
+    "skin-primary-color":      #2b2b2b,
+    "skin-navbar":             #44474b,
+    "skin-footer-color":       #44474b,
+    "skin-accent":             #75c1f0,
+    "skin-flat":               #a5a4a4,
+    "skin-sidenav-item":       rgba(0,   0,   0,   .4),
+    "skin-sidenav-item-hover": rgba(0,   0,   0,   .4),
+    "skin-gradient-start":     #383838,
+    "skin-gradient-end":       #a5a4a4,
+    "skin-mask-slight":        rgba(121, 121, 121, .5),
+    "skin-mask-light":         rgba(121, 121, 121, .65),
+    "skin-mask-strong":        rgba(121, 121, 121, .8),
+    "skin-sn-child":           #afdffc,
+    "skin-btn-primary":        #46aded,
+    "skin-btn-secondary":      #7d8488,
+    "skin-btn-default":        #353637,
+    "skin-text":               $white,
+
+    "skin-body":               #132e49,
+    "skin-btn-danger":         red
   )
 ), $skins);
 
+@each $skin, $data in $skins {
+  .#{$skin}-skin {
+    background-color: map-get($data, skin-body);
+
+    // .btn-danger {
+    //   background-color: map-get($data, skin-btn-danger) !important;
+    // }
+  }
+}
+
+$skins: map-merge((
+  "baseline": (
+    "skin-primary-color":      #2b2b2b,
+    "skin-navbar":             #44474b,
+    "skin-footer-color":       #44474b,
+    "skin-accent":             #75c1f0,
+    "skin-flat":               #a5a4a4,
+    "skin-sidenav-item":       rgba(0,   0,   0,   .4),
+    "skin-sidenav-item-hover": rgba(0,   0,   0,   .4),
+    "skin-gradient-start":     #383838,
+    "skin-gradient-end":       #a5a4a4,
+    "skin-mask-slight":        rgba(121, 121, 121, .5),
+    "skin-mask-light":         rgba(121, 121, 121, .65),
+    "skin-mask-strong":        rgba(121, 121, 121, .8),
+    "skin-sn-child":           #afdffc,
+    "skin-btn-primary":        #46aded,
+    "skin-btn-secondary":      #7d8488,
+    "skin-btn-default":        #353637,
+    "skin-text":               $white
+  )
+), $skins);
