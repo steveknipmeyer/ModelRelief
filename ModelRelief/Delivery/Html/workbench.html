@@ -20,12 +20,26 @@
     <link href="css/workbench.css" rel="stylesheet">
 
     <style>
-        .mrControlText {
-            font-size: 10pt !important;
+        .controlSection {
+            border-color: white !important;
+            margin-top: 0 !important;
         }
 
-        .range-field input[type=range]+.thumb {
-            background-color: darkgray !important;
+        .controlContainer {
+            margin-top: 20px;
+        }
+
+        .controlHeading {
+            font-size: 12pt !important;
+        }
+
+        .controlHeadingDivider {
+            border-color: darkgray !important;
+            margin-top: 0 !important;
+        }
+
+        .controlText {
+            font-size: 10pt !important;
         }
 
         #modelViewCardBody,
@@ -37,6 +51,7 @@
             background-color: black !important;
         }
 
+        /* CSS Debugging */
         /* .row {
             background-color: rgb(217, 240, 240);
             outline: 1px solid black;
@@ -44,7 +59,7 @@
 
         [class^=col] {
 
-            background-color:  rgb(243, 248, 225);
+            background-color: rgb(243, 248, 225);
             outline: 1px solid black
         } */
     </style>
@@ -96,86 +111,167 @@
     -->
 
     <main class="mt-2">
+        <div class="container-fluid">
+            <div class="row mt-1 mx-5">
 
-        <!-- Model View -->
-        <div id="modelViewContainer" class="container">
-            <div class="row">
-                <div class="col-md-4">
 
-                    <!-- Model Card -->
-                    <div class="card card-cascade narrower">
-
-                        <!-- Header -->
-                        <div class="view view-cascade py-2 gradient-card-header grey darken-3">
-                            <h5 class="mb-0">Model</h5>
-                        </div>
-                        <!-- /Header     -->
-
-                        <!-- Body -->
-                        <div id="modelViewCardBody" class="card-body embed-responsive embed-responsive-1by1">
-                        </div>
-                        <!-- /Body -->
-
-                    </div>
-                    <!-- /Model Card -->
-
-                </div>
-            </div>
-        </div>
-        <!-- /Model View -->
-
-        <!-- Mesh View -->
-        <div id="meshViewContainer" class="container mt-4">
-            <div class="row">
                 <div class="col-md-6">
+                    <h5>Overview</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                ModelRelief transforms 3D models into reliefs.
+                            </div>
+                            <!-- Model -->
+                            <div class="col-md-6">
+                                <!-- Model View -->
+                                <div id="modelViewContainer" class="container-fluid">
+                                    <div class="row">
+                                        <div class="col">
 
-                    <!-- Mesh Card -->
-                    <div class="card card-cascade narrower">
+                                            <!-- Model Card -->
+                                            <div class="card card-cascade narrower">
 
-                        <!-- Header -->
-                        <div class="view view-cascade py-2 gradient-card-header grey darken-3">
-                            <h5 class="mb-0">Mesh</h5>
+                                                <!-- Header -->
+                                                <div class="view view-cascade py-2 gradient-card-header grey darken-3">
+                                                    <h5 class="mb-0">Model</h5>
+                                                </div>
+                                                <!-- /Header     -->
+
+                                                <!-- Body -->
+                                                <div id="modelViewCardBody"
+                                                    class="card-body embed-responsive embed-responsive-1by1">
+                                                </div>
+                                                <!-- /Body -->
+
+                                            </div>
+                                            <!-- /Model Card -->
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Model View -->
+                            </div>
                         </div>
-                        <!-- /Header     -->
 
-                        <!-- Body -->
-                        <div id="meshViewCardBody" class="card-body embed-responsive embed-responsive-1by1">
+                        <h5>Mesh Settings</h4>
+                            <hr class="controlSection">
+
+                            <!-- Gradient Threshold -->
+                            <div class="controlContainer">
+                                <span class="controlHeading">Gradient Threshold</span>
+                                <hr class="controlHeadingDivider">
+                                <div class="row mt-2 controlText">
+                                    <div class="col-md-9 mt-1">
+                                        <div class="d-flex  my-1">
+                                            <span class="mr-2 mt-1">0</span>
+                                            <form class="range-field">
+                                                <input id="farClippingSlider" class="border-0" type="range" min="0"
+                                                    max="10" step="0.5" />
+                                            </form>
+                                            <span class="ml-2 mt-1">10</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Gradient Attenuation -->
+                            <div class="controlContainer">
+                                <span class="controlHeading">Gradient Attenuation</span>
+                                <hr class="controlHeadingDivider">
+                                <div class="row mt-2 controlText">
+                                    <div class="col-md-9 mt-1">
+                                        <div class="d-flex  my-1">
+                                            <span class="mr-2 mt-1">0</span>
+                                            <form class="range-field">
+                                                <input id="farClippingSlider" class="border-0" type="range" min="0"
+                                                    max="10" step="0.5" />
+                                            </form>
+                                            <span class="ml-2 mt-1">10</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Gaussian Blur (Unsharp) -->
+                            <div class="controlContainer">
+                                <span class="controlHeading">Gaussian Blur (Unsharp)</span>
+                                <hr class="controlHeadingDivider">
+                                <div class="row mt-2 controlText">
+                                    <div class="col-md-9 mt-1">
+                                        <div class="d-flex  my-1">
+                                            <span class="mr-2 mt-1">0</span>
+                                            <form class="range-field">
+                                                <input id="farClippingSlider" class="border-0" type="range" min="0"
+                                                    max="10" step="0.5" />
+                                            </form>
+                                            <span class="ml-2 mt-1">10</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- High Frequency Detail -->
+                            <div class="controlContainer">
+                                <span class="controlHeading">High Frequency Detail</span>
+                                <hr class="controlHeadingDivider">
+                                <div class="row mt-2 controlText">
+                                    <div class="col-md-9 mt-1">
+                                        <div class="d-flex  my-1">
+                                            <span class="mr-2 mt-1">0</span>
+                                            <form class="range-field">
+                                                <input id="farClippingSlider" class="border-0" type="range" min="0"
+                                                    max="10" step="0.5" />
+                                            </form>
+                                            <span class="ml-2 mt-1">10</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Scale -->
+                            <div class="controlContainer">
+                                <span class="controlHeading">Scale</span>
+                                <hr class="controlHeadingDivider">
+                                <div class="row mt-2 controlText">
+                                    <div class="col-md-9 mt-1">
+                                        <div class="d-flex  my-1">
+                                            <span class="mr-2 mt-1">0</span>
+                                            <form class="range-field">
+                                                <input id="farClippingSlider" class="border-0" type="range" min="0"
+                                                    max="10" step="0.5" />
+                                            </form>
+                                            <span class="ml-2 mt-1">10</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                </div>
+                <!-- Mesh -->
+                <div class="col">
+                    <!-- Mesh View -->
+                    <div id="meshViewContainer" class="container-fluid">
+                        <div class="row">
+                            <div class="col">
+
+                                <!-- Mesh Card -->
+                                <div class="card card-cascade narrower">
+
+                                    <!-- Header -->
+                                    <div class="view view-cascade py-2 gradient-card-header grey darken-3">
+                                        <h5 class="mb-0">Mesh</h5>
+                                    </div>
+                                    <!-- /Header     -->
+
+                                    <!-- Body -->
+                                    <div id="meshViewCardBody" class="card-body embed-responsive embed-responsive-1by1">
+                                    </div>
+                                    <!-- /Body -->
+
+                                </div>
+                                <!-- /Mesh Card -->
+
+                            </div>
                         </div>
-                        <!-- /Body -->
-
                     </div>
-                    <!-- /Mesh Card -->
-
+                    <!-- /Mesh View -->
                 </div>
             </div>
-        </div>
-        <!-- /Mesh View -->
-
-        <div class="container">
-            <!-- Far Clipping -->
-            <div class="row mt-2 mrControlText">
-                <div class="col-md-9 mt-1">
-                    <div class="d-flex  my-1">
-                        <span class="mr-2 mt-1">0</span>
-                        <form class="range-field">
-                            <input id="farClippingSlider" class="border-0" type="range" min="0" max="10" step="0.5" />
-                        </form>
-                        <span class="ml-2 mt-1">10</span>
-                    </div>
-                </div>
-            </div>
-            <hr>
-            <!-- Perspective    -->
-            <div class="row">
-                <div class="col-md-6">
-
-                    <div class="form-check p-0 mrControlText">
-                        <input type="checkbox" class="form-check-input mrCheckbox" id="perspective">
-                        <label class="form-check-label " for="perspective">Perspective</label>
-                    </div>
-                </div>
-            </div>
-            <span class="font-weight-lighter mrControlText">hello, world</span>
         </div>
     </main>
 
@@ -222,7 +318,7 @@
             });
         });
 
-        // Near Clipping Slider
+        // Slider
         $('#nearClippingSlider').change(function (slideEvent) {
             sliderValue = this.value;
             console.log(sliderValue);

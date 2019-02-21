@@ -23,8 +23,7 @@ $skins: map-merge((
     "skin-btn-default":        #353637,
     "skin-text":               $white,
 
-    "skin-body":               #1d272e,
-    "skin-btn-danger":         red
+    "skin-body":               #1d272e
   )
 ), $skins);
 
@@ -34,6 +33,7 @@ $skins: map-merge((
     background-color: map-get($data, skin-body);
     color: white;
 
+    // Range Slider Thumb
     .range-field input[type="range"] {
       &::-webkit-slider-thumb {
         background: gray !important;
@@ -44,6 +44,10 @@ $skins: map-merge((
       &::-ms-thumb {
         background:gray !important;
       }
+    }
+    // Range Slider Active Thumb
+    .range-field input[type=range] + .thumb {
+        background-color: lightgray !important;
     }
   }
 }

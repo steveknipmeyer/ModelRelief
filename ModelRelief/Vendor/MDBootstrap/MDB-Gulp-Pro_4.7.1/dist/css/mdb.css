@@ -13258,6 +13258,8 @@ button.md-toast-close-button {
     background: gray !important; }
   .custom-skin .range-field input[type="range"]::-ms-thumb {
     background: gray !important; }
+  .custom-skin .range-field input[type=range] + .thumb {
+    background-color: lightgray !important; }
 
 .white-skin {
   color: white; }
@@ -13267,6 +13269,8 @@ button.md-toast-close-button {
     background: gray !important; }
   .white-skin .range-field input[type="range"]::-ms-thumb {
     background: gray !important; }
+  .white-skin .range-field input[type=range] + .thumb {
+    background-color: lightgray !important; }
 
 .black-skin {
   color: white; }
@@ -13276,6 +13280,8 @@ button.md-toast-close-button {
     background: gray !important; }
   .black-skin .range-field input[type="range"]::-ms-thumb {
     background: gray !important; }
+  .black-skin .range-field input[type=range] + .thumb {
+    background-color: lightgray !important; }
 
 .cyan-skin {
   color: white; }
@@ -13285,6 +13291,8 @@ button.md-toast-close-button {
     background: gray !important; }
   .cyan-skin .range-field input[type="range"]::-ms-thumb {
     background: gray !important; }
+  .cyan-skin .range-field input[type=range] + .thumb {
+    background-color: lightgray !important; }
 
 .mdb-skin {
   color: white; }
@@ -13294,6 +13302,8 @@ button.md-toast-close-button {
     background: gray !important; }
   .mdb-skin .range-field input[type="range"]::-ms-thumb {
     background: gray !important; }
+  .mdb-skin .range-field input[type=range] + .thumb {
+    background-color: lightgray !important; }
 
 .deep-purple-skin {
   color: white; }
@@ -13303,6 +13313,8 @@ button.md-toast-close-button {
     background: gray !important; }
   .deep-purple-skin .range-field input[type="range"]::-ms-thumb {
     background: gray !important; }
+  .deep-purple-skin .range-field input[type=range] + .thumb {
+    background-color: lightgray !important; }
 
 .navy-blue-skin {
   color: white; }
@@ -13312,6 +13324,8 @@ button.md-toast-close-button {
     background: gray !important; }
   .navy-blue-skin .range-field input[type="range"]::-ms-thumb {
     background: gray !important; }
+  .navy-blue-skin .range-field input[type=range] + .thumb {
+    background-color: lightgray !important; }
 
 .pink-skin {
   color: white; }
@@ -13321,6 +13335,8 @@ button.md-toast-close-button {
     background: gray !important; }
   .pink-skin .range-field input[type="range"]::-ms-thumb {
     background: gray !important; }
+  .pink-skin .range-field input[type=range] + .thumb {
+    background-color: lightgray !important; }
 
 .indigo-skin {
   color: white; }
@@ -13330,6 +13346,8 @@ button.md-toast-close-button {
     background: gray !important; }
   .indigo-skin .range-field input[type="range"]::-ms-thumb {
     background: gray !important; }
+  .indigo-skin .range-field input[type=range] + .thumb {
+    background-color: lightgray !important; }
 
 .light-blue-skin {
   color: white; }
@@ -13339,6 +13357,8 @@ button.md-toast-close-button {
     background: gray !important; }
   .light-blue-skin .range-field input[type="range"]::-ms-thumb {
     background: gray !important; }
+  .light-blue-skin .range-field input[type=range] + .thumb {
+    background-color: lightgray !important; }
 
 .grey-skin {
   color: white; }
@@ -13348,6 +13368,8 @@ button.md-toast-close-button {
     background: gray !important; }
   .grey-skin .range-field input[type="range"]::-ms-thumb {
     background: gray !important; }
+  .grey-skin .range-field input[type=range] + .thumb {
+    background-color: lightgray !important; }
 
 .custom-skin .gradient {
   background: #383838;

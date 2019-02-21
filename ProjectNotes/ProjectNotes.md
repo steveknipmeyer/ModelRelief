@@ -7,14 +7,15 @@
 
 ### MVC
 #### Today
-
-#### MDB
+    CSS
+        container versus container-fluid
     Review DevelopmentUI.
     Explorer scallop theme.
         https://www.flaticon.com/free-icon/scallop_166047
 
-#### Landing Page
+#### MDB
 
+#### Landing Page
     modelRelief(Preview)
 
     Add logo.
