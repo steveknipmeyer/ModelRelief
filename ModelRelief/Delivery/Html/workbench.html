@@ -38,8 +38,16 @@
             margin-top: 0 !important;
         }
 
+        .controlDescription {
+            font-size: 10pt !important;
+        }
+
         .controlText {
             font-size: 10pt !important;
+        }
+
+        .sliderControl {
+            margin-top: -20px !important;
         }
 
         #modelViewCardBody,
@@ -153,94 +161,147 @@
                             </div>
                         </div>
 
-                        <h5>Mesh Settings</h4>
-                            <hr class="controlSection">
+                        <h4>Mesh Settings</h4>
+                        <hr class="controlSection">
 
-                            <!-- Gradient Threshold -->
-                            <div class="controlContainer">
-                                <span class="controlHeading">Gradient Threshold</span>
-                                <hr class="controlHeadingDivider">
-                                <div class="row mt-2 controlText">
-                                    <div class="col-md-9 mt-1">
-                                        <div class="d-flex  my-1">
-                                            <span class="mr-2 mt-1">0</span>
-                                            <form class="range-field">
-                                                <input id="farClippingSlider" class="border-0" type="range" min="0"
-                                                    max="10" step="0.5" />
-                                            </form>
-                                            <span class="ml-2 mt-1">10</span>
+                        <!-- Gradient Threshold -->
+                        <div class=" controlContainer">
+                            <span class="controlHeading">Gradient Threshold</span>
+                            <hr class="controlHeadingDivider">
+
+                            <div class="row">
+                                <div class="col controlDescription">
+                                    This is descriptive text about the control.
+                                </div>
+                                <div class="col">
+                                    <div class="row mt-2 controlText">
+                                        <div class="col-md-9 mt-1 sliderControl">
+                                            <div class="d-flex  my-1">
+                                                <span class="mr-2 mt-1">0</span>
+                                                <form class="range-field">
+                                                    <input id="farClippingSlider" class="border-0" type="range" min="0"
+                                                        max="10" step="0.5" />
+                                                </form>
+                                                <span class="ml-2 mt-1">10</span>
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
-                            <!-- Gradient Attenuation -->
-                            <div class="controlContainer">
-                                <span class="controlHeading">Gradient Attenuation</span>
-                                <hr class="controlHeadingDivider">
-                                <div class="row mt-2 controlText">
-                                    <div class="col-md-9 mt-1">
-                                        <div class="d-flex  my-1">
-                                            <span class="mr-2 mt-1">0</span>
-                                            <form class="range-field">
-                                                <input id="farClippingSlider" class="border-0" type="range" min="0"
-                                                    max="10" step="0.5" />
-                                            </form>
-                                            <span class="ml-2 mt-1">10</span>
+
+                        </div>
+
+                        <!-- Gradient Attenuation -->
+                        <div class="controlContainer">
+                            <span class="controlHeading">Gradient Attenuation</span>
+                            <hr class="controlHeadingDivider">
+
+                            <div class="row">
+                                <div class="col controlDescription">
+                                    This is descriptive text about the control.
+                                </div>
+                                <div class="col">
+                                    <div class="row mt-2 controlText">
+                                        <div class="col-md-9 mt-1 sliderControl">
+                                            <div class="d-flex  my-1">
+                                                <span class="mr-2 mt-1">0</span>
+                                                <form class="range-field">
+                                                    <input id="farClippingSlider" class="border-0" type="range" min="0"
+                                                        max="10" step="0.5" />
+                                                </form>
+                                                <span class="ml-2 mt-1">10</span>
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
-                            <!-- Gaussian Blur (Unsharp) -->
-                            <div class="controlContainer">
-                                <span class="controlHeading">Gaussian Blur (Unsharp)</span>
-                                <hr class="controlHeadingDivider">
-                                <div class="row mt-2 controlText">
-                                    <div class="col-md-9 mt-1">
-                                        <div class="d-flex  my-1">
-                                            <span class="mr-2 mt-1">0</span>
-                                            <form class="range-field">
-                                                <input id="farClippingSlider" class="border-0" type="range" min="0"
-                                                    max="10" step="0.5" />
-                                            </form>
-                                            <span class="ml-2 mt-1">10</span>
+
+                        </div>
+
+                        <!-- Gaussian Blur (Unsharp) -->
+                        <div class="controlContainer">
+                            <span class="controlHeading">Gaussian Blur (Unsharp)</span>
+                            <hr class="controlHeadingDivider">
+
+                            <div class="row">
+                                <div class="col controlDescription">
+                                    This is descriptive text about the control.
+                                </div>
+                                <div class="col">
+                                    <div class="row mt-2 controlText">
+                                        <div class="col-md-9 mt-1 sliderControl">
+                                            <div class="d-flex  my-1">
+                                                <span class="mr-2 mt-1">0</span>
+                                                <form class="range-field">
+                                                    <input id="farClippingSlider" class="border-0" type="range" min="0"
+                                                        max="10" step="0.5" />
+                                                </form>
+                                                <span class="ml-2 mt-1">10</span>
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
-                            <!-- High Frequency Detail -->
-                            <div class="controlContainer">
-                                <span class="controlHeading">High Frequency Detail</span>
-                                <hr class="controlHeadingDivider">
-                                <div class="row mt-2 controlText">
-                                    <div class="col-md-9 mt-1">
-                                        <div class="d-flex  my-1">
-                                            <span class="mr-2 mt-1">0</span>
-                                            <form class="range-field">
-                                                <input id="farClippingSlider" class="border-0" type="range" min="0"
-                                                    max="10" step="0.5" />
-                                            </form>
-                                            <span class="ml-2 mt-1">10</span>
+
+                        </div>
+
+                        <!-- High Frequency Detail -->
+                        <div class="controlContainer">
+                            <span class="controlHeading">High Frequency Detail</span>
+                            <hr class="controlHeadingDivider">
+
+                            <div class="row">
+                                <div class="col controlDescription">
+                                    This is descriptive text about the control.
+                                </div>
+                                <div class="col">
+                                    <div class="row mt-2 controlText">
+                                        <div class="col-md-9 mt-1 sliderControl">
+                                            <div class="d-flex  my-1">
+                                                <span class="mr-2 mt-1">0</span>
+                                                <form class="range-field">
+                                                    <input id="farClippingSlider" class="border-0" type="range" min="0"
+                                                        max="10" step="0.5" />
+                                                </form>
+                                                <span class="ml-2 mt-1">10</span>
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
-                            <!-- Scale -->
-                            <div class="controlContainer">
-                                <span class="controlHeading">Scale</span>
-                                <hr class="controlHeadingDivider">
-                                <div class="row mt-2 controlText">
-                                    <div class="col-md-9 mt-1">
-                                        <div class="d-flex  my-1">
-                                            <span class="mr-2 mt-1">0</span>
-                                            <form class="range-field">
-                                                <input id="farClippingSlider" class="border-0" type="range" min="0"
-                                                    max="10" step="0.5" />
-                                            </form>
-                                            <span class="ml-2 mt-1">10</span>
+
+                        </div>
+
+                        <!-- Scale -->
+                        <div class="controlContainer">
+                            <span class="controlHeading">Scale</span>
+                            <hr class="controlHeadingDivider">
+
+                            <div class="row">
+                                <div class="col controlDescription">
+                                    This is descriptive text about the control.
+                                </div>
+                                <div class="col">
+                                    <div class="row mt-2 controlText">
+                                        <div class="col-md-9 mt-1 sliderControl">
+                                            <div class="d-flex my-1">
+                                                <span class="mr-2 mt-1">0</span>
+                                                <form class="range-field">
+                                                    <input id="farClippingSlider" class="border-0" type="range" min="0"
+                                                        max="10" step="0.5" />
+                                                </form>
+                                                <span class="ml-2 mt-1">10</span>
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
+                        </div>
                 </div>
                 <!-- Mesh -->
                 <div class="col">
@@ -270,6 +331,10 @@
                         </div>
                     </div>
                     <!-- /Mesh View -->
+
+                    <div class="d-flex justify-content-center">
+                        <a class="btn-floating btn-lg purple-gradient"><i class="fas fa-bolt"></i></a>
+                    </div>
                 </div>
             </div>
         </div>
