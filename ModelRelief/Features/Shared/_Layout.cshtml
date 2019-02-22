@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 
 <html>
+
 <head>
     <title>@ViewBag.Title</title>
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
@@ -19,9 +20,7 @@
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment names="Staging, Production, Test">
-        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/4.2.1/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/4.2.1/css/bootstrap.min.css" asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
 
         <link rel="stylesheet" href="~/lib/mdb/css/mdb.min.css" asp-append-version="true" />
         @*WIP : Add minification to generate site.min.css*@
@@ -29,7 +28,7 @@
     </environment>
     @if (String.Equals("workbench", this.ViewContext.RouteData.Values["controller"].ToString().ToLower()))
     {
-        <link rel="stylesheet" href="~/css/workbench.css">
+    <link rel="stylesheet" href="~/css/workbench.css">
     }
 </head>
 
@@ -43,14 +42,14 @@
             <div class="navbar-nav">
                 @if (SystemSettings.DevelopmentUI)
                 {
-                    <a class="nav-item nav-link" asp-area="" asp-controller="About" asp-action="Configuration">About</a>
+                <a class="nav-item nav-link" asp-area="" asp-controller="About" asp-action="Configuration">About</a>
 
-                    <a class="nav-item nav-link" asp-area="" asp-controller="Models" asp-action="Index">Models</a>
-                    <a class="nav-item nav-link" asp-area="" asp-controller="Projects" asp-action="Index">Projects</a>
-                    <a class="nav-item nav-link" asp-area="" asp-controller="Cameras" asp-action="Index">Cameras</a>
-                    <a class="nav-item nav-link" asp-area="" asp-controller="DepthBuffers" asp-action="Index">DepthBuffers</a>
-                    <a class="nav-item nav-link" asp-area="" asp-controller="MeshTransforms" asp-action="Index">MeshTransforms</a>
-                    <a class="nav-item nav-link" asp-area="" asp-controller="NormalMaps" asp-action="Index">NormalMaps</a>
+                <a class="nav-item nav-link" asp-area="" asp-controller="Models" asp-action="Index">Models</a>
+                <a class="nav-item nav-link" asp-area="" asp-controller="Projects" asp-action="Index">Projects</a>
+                <a class="nav-item nav-link" asp-area="" asp-controller="Cameras" asp-action="Index">Cameras</a>
+                <a class="nav-item nav-link" asp-area="" asp-controller="DepthBuffers" asp-action="Index">DepthBuffers</a>
+                <a class="nav-item nav-link" asp-area="" asp-controller="MeshTransforms" asp-action="Index">MeshTransforms</a>
+                <a class="nav-item nav-link" asp-area="" asp-controller="NormalMaps" asp-action="Index">NormalMaps</a>
                 }
                 <a class="nav-item nav-link" href="/Workbench.html">Workbench</a>
             </div>
@@ -59,15 +58,13 @@
     </nav>
     <partial name="_CookieConsentPartial" />
 
-    <div class="container">
-        <div>
-            @RenderBody()
-        </div>
-
-        <footer>
-            @await Component.InvokeAsync("Footer")
-        </footer>
+    <div class="container-fluid">
+        @RenderBody()
     </div>
+
+    <footer>
+        @await Component.InvokeAsync("Footer")
+    </footer>
 
     <!--******************************************************************************************-->
     <!--                                    Common JavaScript                                     -->
@@ -81,18 +78,10 @@
         <script src="~/lib/mdb/js/mdb.js"></script>
     </environment>
     <environment names="Staging,Production">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.2.1.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.2.1.min.js" asp-fallback-src="~/lib/jquery/dist/jquery.min.js" asp-fallback-test="window.jQuery" crossorigin="anonymous" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f">
         </script>
         <script src="~/lib/mdb/js/popper.min.js"></script>
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/4.2.1/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                crossorigin="anonymous"
-                integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k">
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/4.2.1/bootstrap.min.js" asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal" crossorigin="anonymous" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k">
         </script>
         <script src="~/lib/mdb/js/mdb.min.js"></script>
     </environment>
@@ -101,4 +90,5 @@
     @RenderSection("scripts", required: false)
 
 </body>
+
 </html>

@@ -7,26 +7,221 @@ ViewBag.Title = "Model Composer";
 }
 
 <body class="custom-skin">
-    <div id="rootContainer">
+    <main class="mt-2">
+        <div id="rootContainer" class="container-fluid">
+            <div id="composerView">
+                <div class="row mt-1 mx-5">
 
-        <div id="composerView">
-            <div id="modelView">
-                <canvas id="modelCanvas" tabindex='1'></canvas>
-            </div>
-            <div id="meshView">
-                <canvas id="meshCanvas" tabindex='2'></canvas>
-            </div>
+                    <div class="col-md-6">
+                        <div class="row">
 
-            <div id="depthBufferView">
-                <!-- The canvas is generated dynamically. -->
-                <canvas id="depthBufferCanvas"></canvas>
-            </div>
-            <div id="normalMapView">
-                <!-- The canvas is generated dynamically. -->
-                <canvas id="normalMapCanvas"></canvas>
+                            <div class="col-md-6">
+                                <h5>Overview</h4> ModelRelief transforms 3D models into reliefs.
+                            </div>
+
+                            <!-- Model -->
+                            <div class="col-md-6">
+                                <!-- Model View -->
+                                <div id="modelViewContainer" class="container-fluid">
+                                    <div class="row">
+                                        <div class="col">
+
+                                            <!-- Model Card -->
+                                            <div class="card card-cascade narrower">
+
+                                                <!-- Header -->
+                                                <div class="view view-cascade d-flex justify-content-between gradient-card-header grey darken-3 py-2">
+                                                    <div></div>
+                                                    <h5 class="mt-1">Model</h5>
+                                                    <button id="fitView" type="button" class="btn btn-outline-light-blue btn-rounded btn-sm px-2 mt-0 mr-0">
+                                                        <i class="fas fa-expand-arrows-alt mt-0"></i>
+                                                    </button>
+                                                </div>
+                                                <!-- /Header -->
+
+                                                <!-- Body -->
+                                                <div id="modelViewCardBody" class="card-body">
+                                                    <div id="modelView">
+                                                        <canvas id="modelCanvas" class="" tabindex='1'></canvas>
+                                                    </div>
+                                                </div>
+                                                <!-- /Body -->
+
+                                            </div>
+                                            <!-- /Model Card -->
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Model View -->
+                            </div>
+                        </div>
+
+                        <h4>Mesh Settings</h4>
+                        <hr class="controlSection">
+
+                        <!-- Gradient Threshold -->
+                        <div class=" controlContainer">
+                            <span class="controlHeading">Gradient Threshold</span>
+                            <hr class="controlHeadingDivider">
+
+                            <div class="row">
+                                <div class="col-md-9 controlDescription">
+                                    <span>This is descriptive text about the control. It describes the effect this control has on the generated mesh.</span>
+                                </div>
+                                <div class="col">
+                                    <div class="d-flex my-1 sliderControl controlText">
+                                        <span class="mr-2 mt-1">0</span>
+                                        <form class="range-field w-100">
+                                            <input id="gradientThreshold" class="border-0" type="range" min="0" max="10" step="0.5" />
+                                        </form>
+                                        <span class="ml-2 mt-1">10</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Gradient Attenuation -->
+                        <div class="controlContainer">
+                            <span class="controlHeading">Gradient Attenuation</span>
+                            <hr class="controlHeadingDivider">
+
+                            <div class="row">
+                                <div class="col-md-9 controlDescription">
+                                    <span>This is descriptive text about the control. It describes the effect this control has on the generated mesh.</span>
+                                </div>
+                                <div class="col">
+                                    <div class="d-flex my-1 sliderControl controlText">
+                                        <span class="mr-2 mt-1">0</span>
+                                        <form class="range-field w-100">
+                                            <input id="gradientAttenuation" class="border-0" type="range" min="0" max="10" step="0.5" />
+                                        </form>
+                                        <span class="ml-2 mt-1">10</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Gaussian Blur (Unsharp) -->
+                        <div class="controlContainer">
+                            <span class="controlHeading">Gaussian Blur (Unsharp)</span>
+                            <hr class="controlHeadingDivider">
+
+                            <div class="row">
+                                <div class="col-md-9 controlDescription">
+                                    <span>This is descriptive text about the control. It describes the effect this control has on the generated mesh.</span>
+                                </div>
+                                <div class="col">
+                                    <div class="d-flex my-1 sliderControl controlText">
+                                        <span class="mr-2 mt-1">0</span>
+                                        <form class="range-field w-100">
+                                            <input id="gaussianBlur" class="border-0" type="range" min="0" max="10" step="0.5" />
+                                        </form>
+                                        <span class="ml-2 mt-1">10</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- High Frequency Detail -->
+                        <div class="controlContainer">
+                            <span class="controlHeading">High Frequency Detail</span>
+                            <hr class="controlHeadingDivider">
+
+                            <div class="row">
+                                <div class="col-md-9 controlDescription">
+                                    <span>This is descriptive text about the control. It describes the effect this control has on the generated mesh.</span>
+                                </div>
+                                <div class="col">
+                                    <div class="d-flex my-1 sliderControl controlText">
+                                        <span class="mr-2 mt-1">0</span>
+                                        <form class="range-field w-100">
+                                            <input id="highFrequencyDetail" class="border-0" type="range" min="0" max="10" step="0.5" />
+                                        </form>
+                                        <span class="ml-2 mt-1">10</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Scale -->
+                        <div class="controlContainer">
+                            <span class="controlHeading">Scale</span>
+                            <hr class="controlHeadingDivider">
+
+                            <div class="row">
+                                <div class="col-md-9 controlDescription">
+                                    <span>This is descriptive text about the control. It describes the effect this control has on the generated mesh.</span>
+                                </div>
+
+                                <div class="col">
+                                    <div class="d-flex my-1 sliderControl controlText">
+                                        <span class="mr-2 mt-1">0</span>
+                                        <form class="range-field w-100">
+                                            <input id="meshScale" class="border-0" type="range" min="0" max="10" step="0.5" />
+                                        </form>
+                                        <span class="ml-2 mt-1">10</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mesh -->
+                    <div class="col px-0">
+                        <!-- Mesh View -->
+                        <div id="meshViewContainer" class="container-fluid">
+                            <div class="row">
+
+                                <div class="col">
+                                    <!-- Mesh Card -->
+                                    <div class="card card-cascade narrower">
+
+                                        <!-- Header -->
+                                        <div class="view view-cascade d-flex justify-content-between gradient-card-header grey darken-3 py-2">
+                                            <div></div>
+                                            <h5 class="mt-1">Mesh</h5>
+                                            <button id="fitView" type="button" class="btn btn-outline-light-blue btn-rounded btn-sm px-2 mt-0 mr-0">
+                                                <i class="fas fa-expand-arrows-alt mt-0"></i>
+                                            </button>
+                                        </div>
+                                        <!-- /Header -->
+
+                                        <!-- Body -->
+                                        <div id="meshViewCardBody" class="card-body embed-responsive embed-responsive-1by1">
+                                            <div id="meshView">
+                                                <canvas id="meshCanvas" tabindex='2'></canvas>
+                                            </div>
+                                        </div>
+                                        <!-- /Body -->
+
+                                    </div>
+                                    <!-- /Mesh Card -->
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Mesh View -->
+
+                        <div class="d-flex justify-content-center">
+                            <a id="generateMesh" class="btn-floating btn-lg purple-gradient"><i class="fas fa-bolt"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="depthBufferView">
+                    <!-- The canvas is generated dynamically. -->
+                    <canvas id="depthBufferCanvas"></canvas>
+                </div>
+
+                <div id="normalMapView">
+                    <!-- The canvas is generated dynamically. -->
+                    <canvas id="normalMapCanvas"></canvas>
+                </div>
+
             </div>
         </div>
-    </div>
+    </main>
 
 @section scripts {
     <!--******************************************************************************************-->

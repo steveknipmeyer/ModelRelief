@@ -554,8 +554,9 @@ gulp.task('serve', function () {
 
   gulp.watch([sourceConfig.shaders + '*.glsl'],                   ['buildShadersReload']);
   gulp.watch([sourceConfig.scriptsRoot + '**/*.ts'],              ['compileTypeScriptReload']);
-  gulp.watch([sourceConfig.mdbRoot + '**/*.scss'],                ['buildMDBootstrapCSSReload']);
 
+  gulp.watch([sourceConfig.cssRoot + '**/*.css'],                 ['buildCSS']);
+  gulp.watch([sourceConfig.mdbRoot + '**/*.scss'],                ['buildMDBootstrapCSSReload']);
   gulp.watch([siteConfig.cssRoot + '**/*.css'],                   ['reload']);
   gulp.watch([siteConfig.wwwRoot + '**/*.html'],                  ['reload']);
 });

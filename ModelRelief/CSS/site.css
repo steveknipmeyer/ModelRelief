@@ -1,15 +1,65 @@
 ﻿/* ----------------------
     Bootstrap Overrides
 ------------------------*/
-
 /* ----------------------
-    General
+    Composer
 ------------------------*/
-#modelCanvas, #meshCanvas, #depthBufferCanvas, #normalMapCanvas {
+/* #modelCanvas, #meshCanvas, #depthBufferCanvas, #normalMapCanvas {
     width:  512px;
     height: 512px;
     background-color: #000000;
+} */
+
+.controlSection {
+    border-color: white !important;
+    margin-top: 0 !important;
 }
+
+.controlContainer {
+    margin-top: 20px;
+}
+
+.controlHeading {
+    font-size: 12pt !important;
+}
+
+.controlHeadingDivider {
+    border-color: darkgray !important;
+    margin-top: 0 !important;
+}
+
+.controlDescription {
+    font-size: 10pt !important;
+}
+
+.controlText {
+    font-size: 10pt !important;
+}
+
+.sliderControl {
+    margin-top: -10px !important;
+}
+
+#modelViewCardBody,
+#meshViewCardBody {
+    background-color: black;
+}
+
+.card-cascade {
+    background-color: black !important;
+}
+
+/* CSS Debugging */
+/* .row {
+    background-color: rgb(217, 240, 240);
+    outline: 1px solid black;
+}
+
+[class^=col] {
+
+    background-color: rgb(243, 248, 225);
+    outline: 1px solid black
+} */
 
 /* ----------------------
     Model3D View
