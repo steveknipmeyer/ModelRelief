@@ -4,11 +4,11 @@
 /* ----------------------
     Composer
 ------------------------*/
-/* #modelCanvas, #meshCanvas, #depthBufferCanvas, #normalMapCanvas {
+#depthBufferCanvas, #normalMapCanvas {
     width:  512px;
     height: 512px;
     background-color: #000000;
-} */
+}
 
 .controlSection {
     border-color: white !important;

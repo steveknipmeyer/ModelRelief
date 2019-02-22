@@ -40,9 +40,9 @@ ViewBag.Title = "Model Composer";
                                                 <!-- /Header -->
 
                                                 <!-- Body -->
-                                                <div id="modelViewCardBody" class="card-body">
+                                                <div id="modelViewCardBody" class="card-body embed-responsive embed-responsive-1by1">
                                                     <div id="modelView">
-                                                        <canvas id="modelCanvas" class="" tabindex='1'></canvas>
+                                                        <canvas id="modelCanvas" class="embed-responsive-item" tabindex='2'></canvas>
                                                     </div>
                                                 </div>
                                                 <!-- /Body -->
@@ -190,7 +190,7 @@ ViewBag.Title = "Model Composer";
                                         <!-- Body -->
                                         <div id="meshViewCardBody" class="card-body embed-responsive embed-responsive-1by1">
                                             <div id="meshView">
-                                                <canvas id="meshCanvas" tabindex='2'></canvas>
+                                                <canvas id="meshCanvas" class="embed-responsive-item" tabindex='2'></canvas>
                                             </div>
                                         </div>
                                         <!-- /Body -->
@@ -223,7 +223,7 @@ ViewBag.Title = "Model Composer";
         </div>
     </main>
 
-@section scripts {
+    @section scripts {
     <!--******************************************************************************************-->
     <!--                                    Libraries                                             -->
     <!--******************************************************************************************-->

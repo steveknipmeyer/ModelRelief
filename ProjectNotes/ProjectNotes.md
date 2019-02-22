@@ -7,9 +7,6 @@
 
 ### MVC
 #### Today
-    The canvas elements do not resize.
-    What is the correct way to dynamically resize a canvas with 1:1 aspect ratio.
-
     Review DevelopmentUI.
     Explorer scallop theme.
         https://www.flaticon.com/free-icon/scallop_166047
