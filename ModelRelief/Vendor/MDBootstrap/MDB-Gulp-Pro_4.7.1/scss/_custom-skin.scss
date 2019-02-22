@@ -36,18 +36,18 @@ $skins: map-merge((
     // Range Slider Thumb
     .range-field input[type="range"] {
       &::-webkit-slider-thumb {
-        background: gray !important;
+        background: lightblue !important;
       }
       &::-moz-range-thumb {
-        background: gray !important;
+        background: grlightblueay !important;
       }
       &::-ms-thumb {
-        background:gray !important;
+        background:lightblue !important;
       }
     }
     // Range Slider Active Thumb
     .range-field input[type=range] + .thumb {
-        background-color: lightgray !important;
+        background-color: cyan !important;
     }
   }
 }
