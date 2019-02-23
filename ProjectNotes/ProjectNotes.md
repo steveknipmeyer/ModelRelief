@@ -7,7 +7,8 @@
 
 ### MVC
 #### Today
-    Review DevelopmentUI.
+    Review Attenuation Decay.
+        It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
     Explorer scallop theme.
         https://www.flaticon.com/free-icon/scallop_166047
 

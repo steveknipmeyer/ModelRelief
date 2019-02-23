@@ -29,7 +29,7 @@ export enum ElementIds {
 
     GradientThreshold           = "gradientThreshold",
     AttenuationFactor           = "attenuationFactor",
-    UnsharpGaussianLow          = "UnsharpGaussianLow",
+    UnsharpGaussianLow          = "unsharpGaussianLow",
     UnsharpHighFrequencyScale   = "unsharpHighFrequencyScale",
     MeshScale                   = "meshScale",
 

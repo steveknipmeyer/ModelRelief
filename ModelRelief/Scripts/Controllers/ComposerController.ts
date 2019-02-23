@@ -335,9 +335,9 @@ export class ComposerController {
         // Force the Mesh to be re-generated now on the back end.
         this.activeMesh.fileIsSynchronized = true;
 
-        const updateMeshModel = this.activeMesh.toDtoModel().putAsync();
+        const updatedMeshModel = this.activeMesh.toDtoModel().putAsync();
 
-        return updateMeshModel;
+        return updatedMeshModel;
     }
 
     /**
@@ -396,10 +396,34 @@ export class ComposerController {
 
         this._composerViewSettings = new ComposerViewSettings(this.activeMeshTransform);
 
+        // Settings
+        this.initializeSliderControl (`${ElementIds.GradientThreshold}`, this._composerViewSettings.meshTransform, "gradientThreshold");
+        this.initializeSliderControl(`${ElementIds.AttenuationFactor}`, this._composerViewSettings.meshTransform, "attenuationFactor");
+        this.initializeSliderControl(`${ElementIds.UnsharpGaussianLow}`, this._composerViewSettings.meshTransform, "unsharpGaussianLow");
+        this.initializeSliderControl(`${ElementIds.UnsharpHighFrequencyScale}`, this._composerViewSettings.meshTransform, "unsharpHighFrequencyScale");
+        this.initializeSliderControl(`${ElementIds.MeshScale}`, this._composerViewSettings.meshTransform, "p1");
+
         // Generate Mesh
         const generateMeshControl = document.querySelector(`#${ElementIds.GenerateMesh}`);
-        generateMeshControl.addEventListener("click", (clickevent) => {
+        generateMeshControl.addEventListener("click", (clickEvent) => {
             this.generateReliefAsync();
+        });
+    }
+
+    /**
+     * @description Initialize a range slider control.
+     * @private
+     * @param {string} elementId HTML Id of range slider.
+     * @param {any} setting Setting.
+     * @param {string} propertyName Setting property name.
+     */
+    private initializeSliderControl(elementId: string, setting: any, propertyName: string): void {
+
+        const control = document.querySelector(`#${elementId}`) as HTMLInputElement;
+
+        control.value = setting[propertyName];
+        control.addEventListener("change", (changeEvent) => {
+            setting[propertyName] = control.value;
         });
     }
 
