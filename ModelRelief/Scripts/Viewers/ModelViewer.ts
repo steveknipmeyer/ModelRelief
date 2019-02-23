@@ -29,12 +29,13 @@ export class ModelViewer extends Viewer {
     /**
      * Creates an instance of ModelViewer.
      * @param {string} name Viewer name.
+     * @param {string} viewContainerId Container of the view. The view holds the controls.
      * @param {string} modelCanvasId HTML element to host the viewer.
      * @param {FileModel} model Model to load.
      */
-    constructor(name: string, modelCanvasId: string, model: FileModel) {
+    constructor(name: string, viewContainerId: string, modelCanvasId: string, model: FileModel) {
 
-        super (name, modelCanvasId, model);
+        super (name, viewContainerId, modelCanvasId, model);
 
         this.model3d = model as Model3d;
     }

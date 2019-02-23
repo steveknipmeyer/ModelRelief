@@ -69,7 +69,7 @@ export class ModelView {
     public initialize(model: FileModel) {
 
         // Model Viewer
-        this._modelViewer = new ModelViewer("ModelViewer", ElementIds.ModelCanvas, model);
+        this._modelViewer = new ModelViewer("ModelViewer", ElementIds.ModelView, ElementIds.ModelCanvas, model);
 
         // Camera Controls
         const cameraControlsOptions: ICameraControlsOptions = {

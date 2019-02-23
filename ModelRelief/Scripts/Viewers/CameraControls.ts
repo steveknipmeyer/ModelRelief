@@ -165,7 +165,7 @@ export class CameraControls {
         this.settings = new CameraControlsSettings(this.viewer.camera);
 
         // Fit View
-        const fitViewControl = document.querySelector(`#${this.viewer.containerId} #${ElementIds.FitView}`);
+        const fitViewControl = document.querySelector(`#${this.viewer.viewContainerId} #${ElementIds.FitView}`);
         fitViewControl.addEventListener("click", (clickevent) => {
             this.fitView();
         });

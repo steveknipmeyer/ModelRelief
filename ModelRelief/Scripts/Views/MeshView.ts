@@ -68,7 +68,7 @@ export class MeshView {
     public initialize(model: FileModel) {
 
         // Mesh Viewer
-        this._meshViewer = new MeshViewer("MeshViewer", ElementIds.MeshCanvas, model);
+        this._meshViewer = new MeshViewer("MeshViewer", ElementIds.MeshView, ElementIds.MeshCanvas, model);
 
         // Camera Controls
         const cameraControlsOptions: ICameraControlsOptions = {

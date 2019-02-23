@@ -1,6 +1,5 @@
 ﻿### Tasks
 #### Commit Notes
-
 #### Lambda
 
 #### Vector
@@ -9,15 +8,14 @@
 #### Today
     Review Attenuation Decay.
         It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
-    Explorer scallop theme.
-        https://www.flaticon.com/free-icon/scallop_166047
 
 #### MDB
 
 #### Landing Page
-    modelRelief(Preview)
-
     Add logo.
+
+    Explorer scallop theme.
+        https://www.flaticon.com/free-icon/scallop_166047
 
     Create thumbnail images of the test models.
 	    These will be delivered from the Delivery\images folder.
@@ -31,8 +29,16 @@
         Roadster
         Bunny
 
-        Horse
+
+
+        Prancing Horse
         Scallop
+        Plunderbuss Pete
+        Thingiverse Sculpture
+        Archive 3D
+            Pegasys
+            David
+            https://archive3d.net/?category=31
 
             Statue
             Dolphin
@@ -53,15 +59,20 @@
     Add a Credit page.
 
 #### Composer
-    Add a processing/busy indicator.
-        Loading
-        Mesh Generation
 
     Knobs
         https://www.cssscript.com/canvas-javascript-knob-dial-component/
         https://github.com/aterrien/jQuery-Knob
 
     Reset settings for defaults.
+
+#### Publication
+    3D CAD Jewelry
+    CNC
+    ArtCAM
+    Vectrix
+    3D Printing
+    HackerNews
 
 ### Short Term
 
@@ -1349,6 +1360,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     Dragon                                      Stanford        Stanford
     House (San Francisco)                       Architectural   TurboSquid  RoyaltyFree         https://www.turbosquid.com/FullPreview/Index.cfm/ID/832520
     Lucy                                        Stanford        Stanford
+    Plunderbus Pete                                             Thingiverse Creative Commons    https://www.thingiverse.com/thing:144775
     Roadster (Duesen Bayern Mystar 190 SL)      Jewelry         TurboSquid  Editorial(None)     https://www.turbosquid.com/3d-models/free-duesen-bayern-mystar-190-3d-model/1062796
     Statue                                      Stanford        Stanford
     Test                                        ModelRelief     Internal

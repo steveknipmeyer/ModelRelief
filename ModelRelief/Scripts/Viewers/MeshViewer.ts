@@ -26,12 +26,13 @@ export class MeshViewer extends Viewer {
     /**
      * Creates an instance of MeshViewer.
      * @param {string} name Viewer name.
-     * @param {string} previewCanvasId HTML element to host the viewer.
+     * @param {string} viewContainerId Container of the view. The view holds the controls.
+     * @param {string} previewCanvasId HTML canvas element to host the viewer.
      * @param {FileModel} model Model to load.
      */
-    constructor(name: string, previewCanvasId: string, model?: FileModel) {
+    constructor(name: string, viewContainerId: string, previewCanvasId: string, model?: FileModel) {
 
-        super(name, previewCanvasId, model);
+        super(name, viewContainerId, previewCanvasId, model);
 
         this.mesh = model as Mesh;
     }

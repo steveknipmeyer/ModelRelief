@@ -233,6 +233,7 @@ export class ComposerController {
 
         this.meshViewer.setModelGroup(meshGraphics);
 
+        this.meshViewer.enableProgressBar(false);
         this._logger.addMessage("Mesh generated");
     }
 
@@ -406,6 +407,8 @@ export class ComposerController {
         // Generate Mesh
         const generateMeshControl = document.querySelector(`#${ElementIds.GenerateMesh}`);
         generateMeshControl.addEventListener("click", (clickEvent) => {
+
+            this.meshViewer.enableProgressBar(true);
             this.generateReliefAsync();
         });
     }

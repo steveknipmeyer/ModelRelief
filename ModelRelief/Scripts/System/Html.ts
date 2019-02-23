@@ -26,6 +26,7 @@ export enum ElementIds {
     NormalMapViewerControls     = "normalMapViewerControls",
 
     FitView                     = "fitView",
+    ProgressBar                 = "progressBar",
 
     GradientThreshold           = "gradientThreshold",
     AttenuationFactor           = "attenuationFactor",

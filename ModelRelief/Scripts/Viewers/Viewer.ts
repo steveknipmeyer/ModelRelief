@@ -32,6 +32,7 @@ export class Viewer {
 
     // Private
     private _name: string                    = "";
+    private _viewContainerId: string         = "";
     private _eventManager: EventManager      = null;
 
     private _model: FileModel                = null;
@@ -50,13 +51,16 @@ export class Viewer {
     /**
      * Creates an instance of Viewer.
      * @param {string} name Viewer name.
+     * @param {string} viewContainerId Container of the view. The view holds the controls.
      * @param {string} modelCanvasId HTML element to host the viewer.
      */
-    constructor(name: string, modelCanvasId: string, model?: FileModel) {
+    constructor(name: string, viewContainerId: string, modelCanvasId: string, model?: FileModel) {
 
         this._name         = name;
         this._eventManager = new EventManager();
         this._logger       = Services.defaultLogger;
+
+        this._viewContainerId = viewContainerId;
 
         this._canvas = Graphics.initializeCanvas(modelCanvasId);
         this._width  = this._canvas.offsetWidth;
@@ -77,6 +81,16 @@ export class Viewer {
     get name(): string {
 
         return this._name;
+    }
+
+    /**
+     * @description Gets the View container Id.
+     * @readonly
+     * @type {string}
+     */
+    get viewContainerId(): string {
+
+        return this._viewContainerId;
     }
 
     /**
@@ -185,6 +199,8 @@ export class Viewer {
 
         Graphics.removeObjectChildren(this._root, false);
         this._root.add(modelGroup);
+
+        this.enableProgressBar(false);
     }
 
     /**
@@ -503,6 +519,18 @@ export class Viewer {
 
         requestAnimationFrame(this.animate.bind(this));
         this.renderWebGL();
+    }
+//#endregion
+
+//#region Utility
+    /**
+     * @description Activates the progress bar.
+     * @param {boolean} enable
+     */
+    public enableProgressBar(enable: boolean): void {
+
+        const progressBar = document.querySelector(`#${this.viewContainerId} #${ElementIds.ProgressBar}`) as HTMLDivElement;
+        progressBar.style.visibility = enable ? "visible" : "hidden";
     }
 //#endregion
 }
