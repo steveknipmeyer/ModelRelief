@@ -22,7 +22,7 @@ ViewBag.Title = "Model Composer";
                             <!-- Model -->
                             <div class="col-md-6">
                                 <!-- Model View -->
-                                <div id="modelViewContainer" class="container-fluid">
+                                <div id="modelView" class="container-fluid">
                                     <div class="row">
                                         <div class="col">
 
@@ -81,7 +81,7 @@ ViewBag.Title = "Model Composer";
                             </div>
                         </div>
 
-                        <!-- Gradient Attenuation -->
+                        <!-- Attenuation Factor -->
                         <div class="controlContainer">
                             <span class="controlHeading">Gradient Attenuation</span>
                             <hr class="controlHeadingDivider">
@@ -94,7 +94,7 @@ ViewBag.Title = "Model Composer";
                                     <div class="d-flex my-1 sliderControl controlText">
                                         <span class="mr-2 mt-1">0</span>
                                         <form class="range-field w-100">
-                                            <input id="gradientAttenuation" class="border-0" type="range" min="0" max="10" step="0.5" />
+                                            <input id="attenuationFactor" class="border-0" type="range" min="0" max="10" step="0.5" />
                                         </form>
                                         <span class="ml-2 mt-1">10</span>
                                     </div>
@@ -102,7 +102,7 @@ ViewBag.Title = "Model Composer";
                             </div>
                         </div>
 
-                        <!-- Gaussian Blur (Unsharp) -->
+                        <!-- Unsharp Gaussian Low -->
                         <div class="controlContainer">
                             <span class="controlHeading">Gaussian Blur (Unsharp)</span>
                             <hr class="controlHeadingDivider">
@@ -115,7 +115,7 @@ ViewBag.Title = "Model Composer";
                                     <div class="d-flex my-1 sliderControl controlText">
                                         <span class="mr-2 mt-1">0</span>
                                         <form class="range-field w-100">
-                                            <input id="gaussianBlur" class="border-0" type="range" min="0" max="10" step="0.5" />
+                                            <input id="unsharpGaussianLow" class="border-0" type="range" min="0" max="10" step="0.5" />
                                         </form>
                                         <span class="ml-2 mt-1">10</span>
                                     </div>
@@ -123,7 +123,7 @@ ViewBag.Title = "Model Composer";
                             </div>
                         </div>
 
-                        <!-- High Frequency Detail -->
+                        <!-- Unsharp High Frequency Scale -->
                         <div class="controlContainer">
                             <span class="controlHeading">High Frequency Detail</span>
                             <hr class="controlHeadingDivider">
@@ -136,7 +136,7 @@ ViewBag.Title = "Model Composer";
                                     <div class="d-flex my-1 sliderControl controlText">
                                         <span class="mr-2 mt-1">0</span>
                                         <form class="range-field w-100">
-                                            <input id="highFrequencyDetail" class="border-0" type="range" min="0" max="10" step="0.5" />
+                                            <input id="unsharpHighFrequencyScale" class="border-0" type="range" min="0" max="10" step="0.5" />
                                         </form>
                                         <span class="ml-2 mt-1">10</span>
                                     </div>
@@ -144,7 +144,7 @@ ViewBag.Title = "Model Composer";
                             </div>
                         </div>
 
-                        <!-- Scale -->
+                        <!-- Mesh Scale (P1) -->
                         <div class="controlContainer">
                             <span class="controlHeading">Scale</span>
                             <hr class="controlHeadingDivider">
@@ -170,7 +170,7 @@ ViewBag.Title = "Model Composer";
                     <!-- Mesh -->
                     <div class="col px-0">
                         <!-- Mesh View -->
-                        <div id="meshViewContainer" class="container-fluid">
+                        <div id="meshView" class="container-fluid">
                             <div class="row">
 
                                 <div class="col">
@@ -234,7 +234,7 @@ ViewBag.Title = "Model Composer";
     <!--                                    ModelRelief                                           -->
     <!--******************************************************************************************-->
     <script>
-        var composerMeshModel = @DataConversion.SerializeObject(Model);
+         var composerMeshModel = @DataConversion.SerializeObject(Model);
     </script>
     <environment names="Development, Test">
         <script src="~/js/shaders.js"></script>

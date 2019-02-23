@@ -163,6 +163,12 @@ export class CameraControls {
         } = controlOptions;
 
         this.settings = new CameraControlsSettings(this.viewer.camera);
+
+        // Fit View
+        const fitViewControl = document.querySelector(`#${this.viewer.containerId} #${ElementIds.FitView}`);
+        fitViewControl.addEventListener("click", (clickevent) => {
+            this.fitView();
+        });
     }
 
     /**
@@ -189,7 +195,7 @@ export class CameraControls {
     private synchronizeSettingsFromViewCamera(camera: IThreeBaseCamera): void {
 
         this.settings.near = camera.near;
-        this.settings.far = camera.far;
+        this.settings.far  = camera.far;
 
         this.settings.isPerspective = camera instanceof THREE.PerspectiveCamera;
         if (this.settings.isPerspective) {

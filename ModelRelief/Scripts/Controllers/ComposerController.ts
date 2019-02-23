@@ -42,20 +42,12 @@ class ComposerViewSettings {
 
     public meshTransform: MeshTransform;
 
-    public generateRelief: () => void;
-    public saveRelief: () => void;
-
     /**
      * Creates an instance of ComposerViewSettings.
-     * @param {() => any} generateRelief
-     * @param {() => any} saveRelief
      */
-    constructor(meshtransform: MeshTransform, generateRelief: () => any, saveRelief: () => any) {
+    constructor(meshtransform: MeshTransform) {
 
         this.meshTransform = meshtransform;
-
-        this.generateRelief = generateRelief;
-        this.saveRelief = saveRelief;
     }
 }
 
@@ -402,7 +394,13 @@ export class ComposerController {
      */
     public initializeUIControls() {
 
-        this._composerViewSettings = new ComposerViewSettings(this.activeMeshTransform, this.generateReliefAsync.bind(this), this.saveRelief.bind(this));
+        this._composerViewSettings = new ComposerViewSettings(this.activeMeshTransform);
+
+        // Generate Mesh
+        const generateMeshControl = document.querySelector(`#${ElementIds.GenerateMesh}`);
+        generateMeshControl.addEventListener("click", (clickevent) => {
+            this.generateReliefAsync();
+        });
     }
 
     /**

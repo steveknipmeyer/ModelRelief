@@ -25,6 +25,16 @@ export enum ElementIds {
     ModelViewerControls         = "modelViewerControls",
     NormalMapViewerControls     = "normalMapViewerControls",
 
+    FitView                     = "fitView",
+
+    GradientThreshold           = "gradientThreshold",
+    AttenuationFactor           = "attenuationFactor",
+    UnsharpGaussianLow          = "UnsharpGaussianLow",
+    UnsharpHighFrequencyScale   = "unsharpHighFrequencyScale",
+    MeshScale                   = "meshScale",
+
+    GenerateMesh                = "generateMesh",
+
     // Workbench
     CameraTestControls  = "cameraTestControls",
 }
