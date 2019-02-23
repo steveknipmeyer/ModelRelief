@@ -29,8 +29,6 @@
         Roadster
         Bunny
 
-
-
         Prancing Horse
         Scallop
         Plunderbuss Pete
@@ -46,6 +44,7 @@
             Test
 
     Add a Contact Form for sending e-mail for suggestions, critiques, etc.
+        https://dotnetcoretutorials.com/2017/11/02/using-mailkit-send-receive-email-asp-net-core/
 
     Create a video or an animation?
 
@@ -60,9 +59,7 @@
 
 #### Composer
 
-    Knobs
-        https://www.cssscript.com/canvas-javascript-knob-dial-component/
-        https://github.com/aterrien/jQuery-Knob
+    Create profile graphics for the settings.
 
     Reset settings for defaults.
 
@@ -77,8 +74,6 @@
 ### Short Term
 
 #### Models
-    Add Horse to test models.
-
     Decimate Statue.obj.
 
 #### Database
