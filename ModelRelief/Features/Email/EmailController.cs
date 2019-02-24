@@ -18,19 +18,19 @@ namespace ModelRelief.Features.Email
         {
         private IHostingEnvironment HostingEnvironment { get; }
         private Services.IConfigurationProvider ConfigurationProvider { get; }
-        private IServiceProvider Services { get; }
+        private IEmailSettings EmailSettings { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmailController"/> class.
         /// </summary>
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
-        /// <param name="services">IServiceProvider.</param>
-        public EmailController(IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider, IServiceProvider services)
+        /// <param name="emailSettings">Email settings from a configuration store (Azure key vault).</param>
+        public EmailController(IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider, IOptions<EmailSettings> emailSettings)
         {
             HostingEnvironment = hostingEnvironment ?? throw new System.ArgumentNullException(nameof(hostingEnvironment));
             ConfigurationProvider = configurationProvider ?? throw new System.ArgumentNullException(nameof(configurationProvider));
-            Services = services;
+            EmailSettings = emailSettings.Value;
         }
 
         /// <summary>
@@ -41,10 +41,9 @@ namespace ModelRelief.Features.Email
         [ValidateAntiForgeryToken]
         public IActionResult Send([FromForm] EmailMessage formData)
         {
-            var emailSettings = Services.GetRequiredService<IOptions<EmailSettings>>().Value as EmailSettings;
-            var smtpUsername = emailSettings.SmtpUsername;
+            var smtpUsername = EmailSettings.SmtpUsername;
 
-            return Content($"Hello {formData.Name}");
+            return new OkObjectResult($"Hello {formData.Name}");
         }
     }
 }

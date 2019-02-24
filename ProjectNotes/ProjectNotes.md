@@ -1,24 +1,12 @@
 ﻿### Tasks
 #### Commit Notes
+
 #### Lambda
 
 #### Vector
 
 ### MVC
 #### Today
-    What is the purpose of this method?
-        /// <summary>
-        /// Extension method to add strongly types configuration settings.
-        /// </summary>
-        /// <param name="services">IServiceCollection</param>
-        /// <param name="configuration">IConfiguration</param>
-        public static void AddConfigurationTypes(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.Configure<AccountsSettings>(configuration.GetSection("Accounts"));
-            services.Configure<Auth0Settings>(configuration.GetSection("Auth0"));
-            services.Configure<EmailSettings>(configuration.GetSection("EmailConfiguration"));
-        }
-
     Review Attenuation Decay.
         It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
 
@@ -78,6 +66,7 @@
 
 #### Publication
     3D CAD Jewelry
+        https://matrixusergroup.com/
     CNC
     ArtCAM
     Vectrix

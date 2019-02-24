@@ -116,7 +116,7 @@ namespace ModelRelief
             services.AddAuth0Authentication(Configuration);
             services.AddCustomMvc();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddModelReliefServices();
+            services.AddModelReliefServices(Configuration);
             services.AddDatabaseServices(env);
             services.AddAutoMapper(typeof(Startup));
             services.AddSwaggerGen(c =>

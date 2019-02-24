@@ -149,7 +149,8 @@ namespace ModelRelief.Services
         /// Extension method to add ModelRelief services.
         /// </summary>
         /// <param name="services">IServiceCollection</param>
-        public static void AddModelReliefServices(this IServiceCollection services)
+        /// <param name="configuration">IConfiguration</param>
+        public static void AddModelReliefServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<Services.IConfigurationProvider, Services.ConfigurationProvider>();
             services.AddSingleton<IStorageManager, StorageManager>();
@@ -188,7 +189,7 @@ namespace ModelRelief.Services
         }
 
         /// <summary>
-        /// Extension method to add strongly types configuration settings.
+        /// Extension method to add strongly typed configuration settings.
         /// </summary>
         /// <param name="services">IServiceCollection</param>
         /// <param name="configuration">IConfiguration</param>
@@ -197,6 +198,23 @@ namespace ModelRelief.Services
             services.Configure<AccountsSettings>(configuration.GetSection("Accounts"));
             services.Configure<Auth0Settings>(configuration.GetSection("Auth0"));
             services.Configure<EmailSettings>(configuration.GetSection("EmailConfiguration"));
+
+            /*
+            // N.B. These strongly-typed configuration settings can be acquired in two ways in a controller.
+            // https://arghya.xyz/articles/practical-configuration-and-di-in-aspnet-core/
+
+            // A) Services (Indirect)
+            public EmailController(IServiceProvider services)
+            {
+                var emailSettings = services.GetRequiredService<IOptions<EmailSettings>>().Value as EmailSettings;;
+            }
+
+            // B) Parameter (Direct)
+            public EmailController(IOptions<EmailSettings> emailSettings)
+            {
+                var emailSettings = emailSettings.Value;
+            }
+            */
         }
     }
 }
