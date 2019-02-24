@@ -27,6 +27,9 @@ namespace ModelRelief.Features.Home
             ConfigurationProvider = configurationProvider ?? throw new System.ArgumentNullException(nameof(configurationProvider));
         }
 
+        /// <summary>
+        /// Action method for configuration.
+        /// </summary>
         public ContentResult Configuration()
         {
             return new ContentResult
@@ -39,6 +42,9 @@ namespace ModelRelief.Features.Home
                 };
         }
 
+        /// <summary>
+        /// Action method for route testing.
+        /// </summary>
         [Route("special/{id?}")]
         [HttpGet]
         public IActionResult Phone()

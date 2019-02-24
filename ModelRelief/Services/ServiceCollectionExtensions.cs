@@ -196,6 +196,7 @@ namespace ModelRelief.Services
         {
             services.Configure<AccountsSettings>(configuration.GetSection("Accounts"));
             services.Configure<Auth0Settings>(configuration.GetSection("Auth0"));
+            services.Configure<EmailSettings>(configuration.GetSection("EmailConfiguration"));
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿@using System
 @{
-    ViewBag.Title = $"ModelRelief {Environment.GetEnvironmentVariable("ASPNETCORE_Environment")}";
+ViewBag.Title = $"ModelRelief {Environment.GetEnvironmentVariable("ASPNETCORE_Environment")}";
 }
 
 <body class="custom-skin">
@@ -42,8 +42,7 @@
 
                         <!--Card image-->
                         <div class="view overlay">
-                            <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(72).jpg" class="card-img-top"
-                                alt="">
+                            <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(72).jpg" class="card-img-top" alt="">
                             <a href="/composer/edit/?name=lucy">
                                 <div class="mask rgba-white-slight"></div>
                             </a>
@@ -71,8 +70,7 @@
 
                         <!--Card image-->
                         <div class="view overlay">
-                            <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(74).jpg" class="card-img-top"
-                                alt="">
+                            <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(74).jpg" class="card-img-top" alt="">
                             <a href="/composer/edit/?name=dragon">
                                 <div class="mask rgba-white-slight"></div>
                             </a>
@@ -100,8 +98,7 @@
 
                         <!--Card image-->
                         <div class="view overlay">
-                            <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(75).jpg" class="card-img-top"
-                                alt="">
+                            <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(75).jpg" class="card-img-top" alt="">
                             <a href="/composer/edit/?name=house">
                                 <div class="mask rgba-white-slight"></div>
                             </a>
@@ -123,6 +120,107 @@
             </div>
 
         </div>
+
+        <!--Section: contact-->
+        <section id="contact" class="py-5" style="background-color: rgb(20, 21, 22);">
+
+            <div class="container">
+
+                <!-- Section heading -->
+                <h2 class="h1-responsive font-weight-bold text-center mb-5">Contact us</h2>
+                <!-- Section description -->
+                <p class="text-center w-responsive mx-auto mb-5">Do you have any questions? Please do not hesitate to contact us directly. Our team will come back to you within a matter of hours to help you.</p>
+
+                <!-- Grid row -->
+                <div class="row">
+
+                    <!-- Grid column -->
+                    <div class="col-md-9 mb-md-0 mb-5">
+
+                        <form id="contact-form" name="contact-form" asp-area="" asp-controller="Email" asp-action="Send" method="post">
+
+                            <!-- Grid row -->
+                            <div class="row">
+
+                                <!-- Grid column -->
+                                <div class="col-md-6">
+                                    <div class="md-form mb-0">
+                                        <input type="text" id="contact-name" name="Name" class="form-control">
+                                        <label for="contact-name" class="">Your name</label>
+                                    </div>
+                                </div>
+                                <!-- Grid column -->
+
+                                <!-- Grid column -->
+                                <div class="col-md-6">
+                                    <div class="md-form mb-0">
+                                        <input type="text" id="contact-email" name="Email" class="form-control">
+                                        <label for="contact-email" class="">Your email</label>
+                                    </div>
+                                </div>
+                                <!-- Grid column -->
+
+                            </div>
+                            <!-- Grid row -->
+
+                            <!-- Grid row -->
+                            <div class="row">
+
+                                <!-- Grid column -->
+                                <div class="col-md-12">
+                                    <div class="md-form mb-0">
+                                        <input type="text" id="contact-Subject" name="Subject" class="form-control">
+                                        <label for="contact-Subject" class="">Subject</label>
+                                    </div>
+                                </div>
+                                <!-- Grid column -->
+
+                            </div>
+                            <!-- Grid row -->
+
+                            <!-- Grid row -->
+                            <div class="row">
+
+                                <!-- Grid column -->
+                                <div class="col-md-12">
+                                    <div class="md-form">
+                                        <textarea type="text" id="contact-message" name="Message" class="form-control md-textarea" rows="3"></textarea>
+                                        <label for="contact-message">Your message</label>
+                                    </div>
+                                </div>
+                                <!-- Grid column -->
+
+                            </div>
+                            <!-- Grid row -->
+
+                        </form>
+
+                        <div class="text-center text-md-left">
+                            <a class="btn btn-purple btn-md" onclick="document.getElementById('contact-form').submit();">Send</a>
+                        </div>
+                        <div class="status"></div>
+                    </div>
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-md-3 text-center">
+                        <ul class="list-unstyled mb-0">
+                            <li>
+                                <i class="fas fa-envelope fa-2x mt-4 purple-text"></i>
+                                <p class="mb-0">info@modelrelief.com</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Grid column -->
+
+                </div>
+                <!-- Grid row -->
+
+            </div>
+
+        </section>
+        <!--Section: contact-->
+
         <!--Main container-->
     </main>
     <!--Main layout-->
@@ -134,5 +232,6 @@
     <!------------------------------------------------------------------------------------------------>
     <!--                                    ModelRelief                                             -->
     <!------------------------------------------------------------------------------------------------>
+
 
 </body>
