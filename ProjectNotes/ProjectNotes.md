@@ -44,9 +44,6 @@
             Buddha
             Test
 
-    Add a Contact Form for sending e-mail for suggestions, critiques, etc.
-        https://dotnetcoretutorials.com/2017/11/02/using-mailkit-send-receive-email-asp-net-core/
-
     Create a video or an animation?
 
 #### Auth0

@@ -7,6 +7,7 @@
 namespace ModelRelief.Features.Email
 {
     using System;
+    using System.Collections.Generic;
     using System.Net;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
@@ -15,22 +16,22 @@ namespace ModelRelief.Features.Email
     using ModelRelief.Settings;
 
     public class EmailController : Controller
-        {
+    {
         private IHostingEnvironment HostingEnvironment { get; }
         private Services.IConfigurationProvider ConfigurationProvider { get; }
-        private IEmailSettings EmailSettings { get; }
+        private IEmailService EmailService { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmailController"/> class.
         /// </summary>
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
-        /// <param name="emailSettings">Email settings from a configuration store (Azure key vault).</param>
-        public EmailController(IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider, IOptions<EmailSettings> emailSettings)
+        /// <param name="emailService">Email service.</param>
+        public EmailController(IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider, IEmailService emailService)
         {
             HostingEnvironment = hostingEnvironment ?? throw new System.ArgumentNullException(nameof(hostingEnvironment));
             ConfigurationProvider = configurationProvider ?? throw new System.ArgumentNullException(nameof(configurationProvider));
-            EmailSettings = emailSettings.Value;
+            EmailService = emailService;
         }
 
         /// <summary>
@@ -41,9 +42,19 @@ namespace ModelRelief.Features.Email
         [ValidateAntiForgeryToken]
         public IActionResult Send([FromForm] EmailMessage formData)
         {
-            var smtpUsername = EmailSettings.SmtpUsername;
+            var message = new EmailMessage
+            {
+                Name = formData.Name,
+                Email = formData.Email,
+                Subject = formData.Subject,
+                Message = formData.Message,
 
-            return new OkObjectResult($"Hello {formData.Name}");
+                ToAddresses = new List<EmailAddress>() { new EmailAddress { Name = EmailService.Username, Address = EmailService.Username } },
+                FromAddresses = new List<EmailAddress>() { new EmailAddress { Name = formData.Name, Address = formData.Email } },
+            };
+            EmailService.Send(message);
+
+            return new OkObjectResult(string.Empty);
         }
     }
 }

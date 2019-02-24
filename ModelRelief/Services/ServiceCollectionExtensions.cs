@@ -21,6 +21,7 @@ namespace ModelRelief.Services
     using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
     using ModelRelief.Database;
+    using ModelRelief.Features.Email;
     using ModelRelief.Features.Errors;
     using ModelRelief.Infrastructure;
     using ModelRelief.Services.Jobs;
@@ -156,6 +157,8 @@ namespace ModelRelief.Services
             services.AddSingleton<IStorageManager, StorageManager>();
             services.AddSingleton<IDependencyManager, DependencyManager>();
             services.AddSingleton<IDispatcher, Dispatcher>();
+
+            services.AddTransient<IEmailService, EmailService>();
         }
 
         /// <summary>
