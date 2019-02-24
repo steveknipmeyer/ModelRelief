@@ -23,6 +23,7 @@
 
             Back End
                 Validation must use the appropriate secret key for validation.
+                https://retifrav.github.io/blog/2017/08/23/dotnet-core-mvc-recaptcha/
 
     Review Attenuation Decay.
         It is 0.9 in the thesis but there are values of 0.6 in the sample data set.

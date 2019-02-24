@@ -47,6 +47,7 @@ namespace ModelRelief.Features.Email
         public IActionResult Send([FromForm] EmailMessage formData)
         {
             bool requestIsLocal = HttpHelpers.RequestIsLocal(this.Request);
+            var reCapthaResponse = Request.Form["g-recaptcha-response"];
 
             var message = new EmailMessage
             {
