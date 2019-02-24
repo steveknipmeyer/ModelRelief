@@ -14,11 +14,13 @@ namespace ModelRelief.Features.Email
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Options;
     using ModelRelief.Settings;
+    using ModelRelief.Utility;
 
     public class EmailController : Controller
     {
         private IHostingEnvironment HostingEnvironment { get; }
         private Services.IConfigurationProvider ConfigurationProvider { get; }
+        private ReCAPTCHASettings ReCAPTCHASettings { get; }
         private IEmailService EmailService { get; }
 
         /// <summary>
@@ -26,11 +28,13 @@ namespace ModelRelief.Features.Email
         /// </summary>
         /// <param name="hostingEnvironment">IHostingEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
+        /// <param name="reCAPTCHASettings">reCAPTCHA settings from a configuration store (Azure key vault).</param>
         /// <param name="emailService">Email service.</param>
-        public EmailController(IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider, IEmailService emailService)
+        public EmailController(IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider, IOptions<ReCAPTCHASettings> reCAPTCHASettings, IEmailService emailService)
         {
             HostingEnvironment = hostingEnvironment ?? throw new System.ArgumentNullException(nameof(hostingEnvironment));
             ConfigurationProvider = configurationProvider ?? throw new System.ArgumentNullException(nameof(configurationProvider));
+            ReCAPTCHASettings = reCAPTCHASettings.Value as ReCAPTCHASettings;
             EmailService = emailService;
         }
 
@@ -42,6 +46,8 @@ namespace ModelRelief.Features.Email
         [ValidateAntiForgeryToken]
         public IActionResult Send([FromForm] EmailMessage formData)
         {
+            bool requestIsLocal = HttpHelpers.RequestIsLocal(this.Request);
+
             var message = new EmailMessage
             {
                 Name = formData.Name,

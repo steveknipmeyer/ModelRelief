@@ -201,6 +201,7 @@ namespace ModelRelief.Services
             services.Configure<AccountsSettings>(configuration.GetSection("Accounts"));
             services.Configure<Auth0Settings>(configuration.GetSection("Auth0"));
             services.Configure<EmailSettings>(configuration.GetSection("EmailConfiguration"));
+            services.Configure<ReCAPTCHASettings>(configuration.GetSection("ReCAPTCHA"));
 
             /*
             // N.B. These strongly-typed configuration settings can be acquired in two ways in a controller.
