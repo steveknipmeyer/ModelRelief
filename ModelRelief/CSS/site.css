@@ -1,8 +1,12 @@
 ﻿/* ----------------------
-    Bootstrap Overrides
+    General
 ------------------------*/
 sup {
     font-size: 14px;
+}
+
+#sendButton {
+    cursor: not-allowed;
 }
 
 /* ----------------------

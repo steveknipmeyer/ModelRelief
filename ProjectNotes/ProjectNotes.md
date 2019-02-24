@@ -9,19 +9,20 @@
 #### Today
     Contact Form
         Front End
-            Privacy policy.
-            Field validation?
+            Add a Privacy policy.
+            Implement basic field validation.
             Implement sending using jQuery and AJAX.
             Include other fields in the e-mail such as industry.
-            Enable and disable the Send button depending on the state of reCAPTCHA.
             Return the status.
                 If there is a failure suggest mailTo:info@modelserver.com
+            
+            Trap Submit presses when validation has not been completed.
 
-        ReCAPTCHA
             Google reCAPTCHA - Client Side Validation with Vanilla JavaScript
             https://www.youtube.com/watch?v=okaZ6OIqlzs
 
-            Backend validation must use the appropriate secret key for validation.
+            Back End
+                Validation must use the appropriate secret key for validation.
 
     Review Attenuation Decay.
         It is 0.9 in the thesis but there are values of 0.6 in the sample data set.

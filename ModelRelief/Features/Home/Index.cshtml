@@ -208,16 +208,16 @@
 
                         @if (HttpHelpers.RequestIsLocal(Context.Request))
                         {
-                            <div class="g-recaptcha" data-sitekey=@($"{reCAPTCHASettings.Value.localhostModelRelief.Site}")></div>
+                            <div class="g-recaptcha" data-sitekey=@($"{reCAPTCHASettings.Value.localhostModelRelief.Site}") data-callback="recaptchaCallBack" data-theme="dark"></div>
                         }
                         else
                         {
-                            <div class="g-recaptcha" data-sitekey=@($"{reCAPTCHASettings.Value.ModelRelief.Site}")></div>
+                            <div class="g-recaptcha" data-sitekey=@($"{reCAPTCHASettings.Value.ModelRelief.Site}") data-callback="recaptchaCallBack" data-theme="dark"></div>
                         }
                         <br />
 
                         <div class="text-center text-md-left">
-                            <a class="btn btn-purple btn-md" onclick="document.getElementById('contact-form').submit();">Send</a>
+                            <input id="sendButton" type="submit" class="btn btn-purple btn-md" onclick="document.getElementById('contact-form').submit();" value="Send"/>
                         </div>
                         <div class="status"></div>
                     </div>
@@ -249,6 +249,12 @@
     <!------------------------------------------------------------------------------------------------>
     <!--                                    ModelRelief                                             -->
     <!------------------------------------------------------------------------------------------------>
+    <script>
+        function recaptchaCallBack() {
 
+            const sendButton = document.querySelector("#sendButton");
+            sendButton.style.cursor = "pointer";
+        }
+    </script>
 
 </body>
