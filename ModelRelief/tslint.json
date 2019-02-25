@@ -11,6 +11,7 @@
     "extends": "tslint:recommended",
 //  "rulesDirectory": ["path/to/custom/rules/directory/", "another/path/"],
     "rules": {
+        "align": [false, "statements"]
         "comment-format": [false, "check-space"],
         "curly": [false],
         "max-classes-per-file": [true, 10],

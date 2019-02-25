@@ -144,7 +144,7 @@
 
                     <!-- Grid column -->
                     <div class="col-md-9 mb-md-0 mb-5">
-                        <form id="contact-form" name="contact-form" asp-area="" asp-controller="Email" asp-action="Send" method="post">
+                        <form id="contact-form" name="contact-form">
 
                             <!-- Grid row -->
                             <div class="row">
@@ -174,7 +174,7 @@
                                 <!-- Grid column -->
                                 <div class="col-md-12">
                                     <div class="md-form mb-0">
-                                        <input type="text" id="contact-Subject" name="Subject" class="form-control">
+                                        <input type="text" id="contact-subject" name="Subject" class="form-control">
                                         <label for="contact-Subject" class="">Subject</label>
                                     </div>
                                 </div>
@@ -199,9 +199,9 @@
                             <div class="g-recaptcha" data-sitekey="@ViewData["ReCaptchaKey"]" data-callback="recaptchaCallBack" data-theme="dark"></div>
                             <br />
                             <div class="text-center text-md-left">
-                                <input id="sendButton" type="submit" class="btn btn-purple btn-md" onclick="document.getElementById('contact-form').submit();" value="Send" />
+                                <input id="sendButton" type="button" class="btn btn-purple btn-md" onclick="validateForm()" value="Send" />
                             </div>
-                            <div class="status"></div>
+                            <div id="contact-form-status" class="status"></div>
                         </form>
 
                     </div>
@@ -234,10 +234,70 @@
     <!--                                    ModelRelief                                             -->
     <!------------------------------------------------------------------------------------------------>
     <script>
+
         function recaptchaCallBack() {
 
             const sendButton = document.querySelector("#sendButton");
             sendButton.style.cursor = "pointer";
+        }
+
+        function validateForm() {
+
+            const name =  document.getElementById('contact-name').value;
+            if (name == "") {
+                document.getElementById('contact-form-status').innerHTML = "Please enter a Name";
+                return false;
+            }
+
+            const email =  document.getElementById('contact-email').value;
+            if (email == "") {
+                document.getElementById('contact-form-status').innerHTML = "Please enter your e-mail address";
+                return false;
+            } else {
+                var re = /^(([^<>()\[\]\\.,;:\s@@"]+(\.[^<>()\[\]\\.,;:\s@@"]+)*)|(".+"))@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                if(!re.test(email)){
+                    document.getElementById('contact-form-status').innerHTML = "Your e-mail address is invalid";
+                    return false;
+                }
+            }
+
+            const subject =  document.getElementById('contact-subject').value;
+            if (subject == "") {
+                document.getElementById('contact-form-status').innerHTML = "Please enter a subject";
+                return false;
+            }
+
+            const message =  document.getElementById('contact-message').value;
+            if (message == "") {
+                document.getElementById('contact-form-status').innerHTML = "Please enter a message";
+                return false;
+            }
+
+            document.getElementById('contact-form-status').innerHTML = "Sending...";
+
+            formData = {
+                'name': $('input[name=Name]').val(),
+                'email': $('input[name=Email]').val(),
+                'subject': $('input[name=Subject]').val(),
+                'message': $('textarea[name=Message]').val()
+            };
+
+            $.ajax({
+                url: "/Email/Send",
+                type: "POST",
+                data: formData,
+                success: function (data, textStatus, jqXHR) {
+
+                    $('#contact-form-status').text(data.message);
+                    if (data.code) {
+                        // reset the form if mail was sent successfully
+                        $('#contact-form').closest('form').find("input[type=text], textarea").val("");
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $('#contact-form').text(jqXHR);
+                }
+            });
         }
     </script>
 

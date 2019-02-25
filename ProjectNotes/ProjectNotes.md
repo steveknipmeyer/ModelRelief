@@ -9,6 +9,10 @@
 #### Today
     Contact Form
         Front End
+            Move JavaScript to external file?
+            Investigate improved validation.
+            Clear form contents after Send.
+
             Add a Privacy policy.
             Implement basic field validation.
             Implement sending using jQuery and AJAX.
