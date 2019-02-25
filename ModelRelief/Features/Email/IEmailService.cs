@@ -16,7 +16,7 @@ namespace ModelRelief.Features.Email
     {
         string Username { get; }
 
-        void Send(EmailMessage emailMessage);
+        string Send(EmailMessage emailMessage);
         List<EmailMessage> ReceiveEmail(int maxCount = 10);
     }
 }

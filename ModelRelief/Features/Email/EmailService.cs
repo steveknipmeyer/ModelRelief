@@ -54,7 +54,7 @@ namespace ModelRelief.Features.Email
         /// </summary>
         /// <param name="emailMessage">Message to send.</param>
         /// https://dotnetcoretutorials.com/2017/11/02/using-mailkit-send-receive-email-asp-net-core/
-        public void Send(EmailMessage emailMessage)
+        public string Send(EmailMessage emailMessage)
         {
             var message = new MimeMessage();
             message.To.AddRange(emailMessage.ToAddresses.Select(x => new MailboxAddress(x.Name, x.Address)));
@@ -68,6 +68,8 @@ namespace ModelRelief.Features.Email
 
             using (var emailClient = new SmtpClient())
             {
+                try
+                {
                 // ModelRelief.com does not (yet) have an SSL certification; SSL = false
                 emailClient.Connect(_emailSettings.SmtpServer, _emailSettings.SmtpPort, false);
 
@@ -79,7 +81,14 @@ namespace ModelRelief.Features.Email
                 emailClient.Send(message);
 
                 emailClient.Disconnect(true);
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
             }
+
+            return string.Empty;
         }
     }
 }

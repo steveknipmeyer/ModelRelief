@@ -3,7 +3,7 @@
     @*ViewBag.Title = $"ModelRelief {Environment.GetEnvironmentVariable("ASPNETCORE_Environment")}";*@
 }
 
-<body class="custom-skin">
+<div class="custom-skin">
     <!--Main layout-->
     <main class="mt-5">
         <!--Main container-->
@@ -31,7 +31,6 @@
                     </p>
                     <a class="btn-floating btn-lg purple-gradient"><i class="fas fa-bolt"></i></a>
                 </div>
-
             </div>
 
             <!--Grid row-->
@@ -276,29 +275,32 @@
             document.getElementById('contact-form-status').innerHTML = "Sending...";
 
             formData = {
-                'name': $('input[name=Name]').val(),
-                'email': $('input[name=Email]').val(),
-                'subject': $('input[name=Subject]').val(),
-                'message': $('textarea[name=Message]').val()
+                'Name': $('input[name=Name]').val(),
+                'Email': $('input[name=Email]').val(),
+                'Subject': $('input[name=Subject]').val(),
+                'Message': $('textarea[name=Message]').val(),
+                'ReCAPTCHAResponse': grecaptcha.getResponse()
             };
 
             $.ajax({
-                url: "/Email/Send",
+                url: "Email/Send",
                 type: "POST",
                 data: formData,
-                success: function (data, textStatus, jqXHR) {
 
-                    $('#contact-form-status').text(data.message);
-                    if (data.code) {
+                success: function (responseResult, textStatus, jqXHR) {
+
+                    $('#contact-form-status').text(responseResult.message);
+                    if (responseResult.mailSent) {
                         // reset the form if mail was sent successfully
                         $('#contact-form').closest('form').find("input[type=text], textarea").val("");
                     }
                 },
+
                 error: function (jqXHR, textStatus, errorThrown) {
-                    $('#contact-form').text(jqXHR);
+                    $('#contact-form-status').text(jqXHR.statusText);
                 }
             });
         }
     </script>
 
-</body>
+</div>

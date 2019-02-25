@@ -24,7 +24,7 @@ namespace ModelRelief.Features.Email
     {
         private IHostingEnvironment HostingEnvironment { get; }
         private Services.IConfigurationProvider ConfigurationProvider { get; }
-        private ILogger Logger  { get; }
+        private ILogger Logger { get; }
         private ReCAPTCHASettings ReCAPTCHASettings { get; }
         private IEmailService EmailService { get; }
 
@@ -76,20 +76,32 @@ namespace ModelRelief.Features.Email
 
             return true;
         }
+
+        /// <summary>
+        /// Action method for testing.
+        /// </summary>
+        [HttpGet]
+        public IActionResult Test()
+        {
+            return Content("You have reached the Email controller.");
+        }
+
         /// <summary>
         /// Action method for e-mail send.
         /// </summary>
         /// <param name="formData">Form contents from e-mail form.</param>
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Send([FromForm] EmailMessage formData)
+        public JsonResult Send([FromForm] EmailMessage formData)
         {
             bool requestIsLocal = HttpHelpers.RequestIsLocal(this.Request);
             string secretKey = requestIsLocal ? ReCAPTCHASettings.localhostModelRelief.Secret : ReCAPTCHASettings.ModelRelief.Secret;
 
-            var reCapthaResponse = Request.Form["g-recaptcha-response"];
+            var reCapthaResponse = formData.ReCAPTCHAResponse;
             if (!ReCaptchaPassed(reCapthaResponse, secretKey, Logger))
-                return StatusCode(StatusCodes.Status401Unauthorized);
+            {
+                var errorResult = new { mailSent = false, message = "Please make sure you have checked 'I'm not a robot.' The authorization validation failed. " };
+                return Json(errorResult);
+            }
 
             var message = new EmailMessage
             {
@@ -101,9 +113,16 @@ namespace ModelRelief.Features.Email
                 ToAddresses = new List<EmailAddress>() { new EmailAddress { Name = EmailService.Username, Address = EmailService.Username } },
                 FromAddresses = new List<EmailAddress>() { new EmailAddress { Name = formData.Name, Address = formData.Email } },
             };
-            EmailService.Send(message);
 
-            return new OkObjectResult(string.Empty);
+            var statusResult = EmailService.Send(message);
+            if (!string.IsNullOrEmpty(statusResult))
+            {
+                var sendErrorResult = new { mailSent = false, message = $"Your e-mail could not be sent. {statusResult}" };
+                return Json(sendErrorResult);
+            }
+
+            var successResult = new { mailSent = true, message = "Your e-mail was successfully sent. Thank you!" };
+            return Json(successResult);
         }
     }
 }

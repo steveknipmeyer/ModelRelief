@@ -7,20 +7,31 @@
 
 ### MVC
 #### Today
+    Why are the reCAPTCHA verifications failing now?
+        The reCAPTCHA key is not included in the payload.
+        https://stackoverflow.com/questions/27902539/how-can-i-validate-google-recaptcha-v2-using-javascript-jquery
+    Add MailKit Send exception handler.
+    Where is Ctrl+W keyboard shortcut?
+    Are the VSCode C# erros still present on Vector?
+    Include reCAPTCHA in validation logic.
+    How can the Email controller return statusText in the jqXHR object?
+    Why are Select elements missing from forms (e.g. /meshes/edit/7)
+    Patch Macrium on Vector.
+
+    Why doesn't Outlook (laptop) work at Georgetown?
+
+    Validate HTML extension.
+        Review use of dashes in HTML comments.
+    Where is the JWT saved in the Postman ModelRelief collection?
+
     Contact Form
         Front End
             Move JavaScript to external file?
-            Investigate improved validation.
-            Clear form contents after Send.
-
             Add a Privacy policy.
-            Implement basic field validation.
-            Implement sending using jQuery and AJAX.
             Include other fields in the e-mail such as industry.
+
             Return the status.
                 If there is a failure suggest mailTo:info@modelserver.com
-            
-            Trap Submit presses when validation has not been completed.
 
             Google reCAPTCHA - Client Side Validation with Vanilla JavaScript
             https://www.youtube.com/watch?v=okaZ6OIqlzs
