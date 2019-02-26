@@ -6,6 +6,7 @@
 
 ### MVC
 #### Today
+    Repair the Horse model.
     Update Development\ModelRelief\Models
         Rename the existing models to preserve the studies.
         Scallop
@@ -1609,7 +1610,9 @@ https://semver.npmjs.com/
     Update the Solver\Test JSON files using MRUpdateSeedData.
 
     Update the model counts in the integration tests.
-
+        IdRange = Enumerable.Range(1, X);            
+        N.B. The LucyDepthBufferFindsOneDependent integration test has several Ids that are hard-coded.
+            These need to be changed if the Lucy Camera, DepthBuffer of Model keys change.
 #### Numpy
 
 **Benchmarks (512x512 Array)**
