@@ -1,5 +1,7 @@
 ﻿### Tasks
 #### Commit Notes
+If there is a failure suggest mailTo:info@modelserver.com
+Include reCAPTCHA in validation logic.
 
 #### Lambda
 
@@ -7,38 +9,15 @@
 
 ### MVC
 #### Today
-    Why are the reCAPTCHA verifications failing now?
-        The reCAPTCHA key is not included in the payload.
-        https://stackoverflow.com/questions/27902539/how-can-i-validate-google-recaptcha-v2-using-javascript-jquery
-    Add MailKit Send exception handler.
-    Where is Ctrl+W keyboard shortcut?
-    Are the VSCode C# erros still present on Vector?
-    Include reCAPTCHA in validation logic.
-    How can the Email controller return statusText in the jqXHR object?
     Why are Select elements missing from forms (e.g. /meshes/edit/7)
-    Patch Macrium on Vector.
-
-    Why doesn't Outlook (laptop) work at Georgetown?
 
     Validate HTML extension.
         Review use of dashes in HTML comments.
-    Where is the JWT saved in the Postman ModelRelief collection?
 
     Contact Form
-        Front End
-            Move JavaScript to external file?
-            Add a Privacy policy.
-            Include other fields in the e-mail such as industry.
+        Add a Privacy policy.
+        Include other fields in the e-mail such as industry.
 
-            Return the status.
-                If there is a failure suggest mailTo:info@modelserver.com
-
-            Google reCAPTCHA - Client Side Validation with Vanilla JavaScript
-            https://www.youtube.com/watch?v=okaZ6OIqlzs
-
-            Back End
-                Validation must use the appropriate secret key for validation.
-                https://retifrav.github.io/blog/2017/08/23/dotnet-core-mvc-recaptcha/
 
     Review Attenuation Decay.
         It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
@@ -47,6 +26,12 @@
 
 #### Landing Page
     Add logo.
+
+    Notes
+        Features not published
+            clipping planes
+            perspective cameras
+        API
 
     Explorer scallop theme.
         https://www.flaticon.com/free-icon/scallop_166047

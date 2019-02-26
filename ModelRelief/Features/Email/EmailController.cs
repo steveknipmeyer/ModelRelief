@@ -99,7 +99,7 @@ namespace ModelRelief.Features.Email
             var reCapthaResponse = formData.ReCAPTCHAResponse;
             if (!ReCaptchaPassed(reCapthaResponse, secretKey, Logger))
             {
-                var errorResult = new { mailSent = false, message = "Please make sure you have checked 'I'm not a robot.' The authorization validation failed. " };
+                var errorResult = new { mailSent = false, message = "Please make sure you have checked 'I'm not a robot.'<br>The authorization validation failed. " };
                 return Json(errorResult);
             }
 
@@ -117,7 +117,7 @@ namespace ModelRelief.Features.Email
             var statusResult = EmailService.Send(message);
             if (!string.IsNullOrEmpty(statusResult))
             {
-                var sendErrorResult = new { mailSent = false, message = $"Your e-mail could not be sent. {statusResult}" };
+                var sendErrorResult = new { mailSent = false, message = $"Your e-mail could not be sent.<br><a href=\"mailto:info@modelrelief.com\">Please click here to use your mail client.</a><br>{statusResult}" };
                 return Json(sendErrorResult);
             }
 

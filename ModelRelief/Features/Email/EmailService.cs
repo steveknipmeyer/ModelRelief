@@ -73,7 +73,7 @@ namespace ModelRelief.Features.Email
                 // ModelRelief.com does not (yet) have an SSL certification; SSL = false
                 emailClient.Connect(_emailSettings.SmtpServer, _emailSettings.SmtpPort, false);
 
-                //Remove any OAuth functionality as we won't be using it.
+                // Remove any OAuth functionality as we won't be using it.
                 emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
 
                 emailClient.Authenticate(_emailSettings.SmtpUsername, _emailSettings.SmtpPassword);
@@ -87,7 +87,6 @@ namespace ModelRelief.Features.Email
                     return ex.Message;
                 }
             }
-
             return string.Empty;
         }
     }
