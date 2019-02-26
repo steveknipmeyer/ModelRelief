@@ -1,33 +1,33 @@
 ﻿<body>
-    <div id="cameraContainer" >
-        <canvas id="viewerCanvas"  tabindex='1'></canvas>
+    <div id="cameraContainer">
+        <canvas id="viewerCanvas" tabindex='1'></canvas>
         <div id="settingsControls"></div>
     </div>
 
     @section scripts {
-        <!------------------------------------------------------------------------------------------------>
-        <!--                                    Libraries                                               -->
-        <!------------------------------------------------------------------------------------------------>
+        <!--******************************************************************************************-->
+        <!--                                    Libraries                                             -->
+        <!--******************************************************************************************-->
         <script src="~/lib/requirejs/require.js"></script>
 
-        <!------------------------------------------------------------------------------------------------>
-        <!--                                    ModelRelief                                             -->
-        <!------------------------------------------------------------------------------------------------>
+        <!--******************************************************************************************-->
+        <!--                                    ModelRelief                                           -->
+        <!--******************************************************************************************-->
         <script src="~/js/shaders.js"></script>
         <script>
             requirejs.config({
                 baseUrl: '.',
                 paths: {
-                    'Workbench/CameraTest'                  : '/js/modelrelief',
+                    'Workbench/CameraTest': '/js/modelrelief',
 
-                    chai                                    : '/lib/chai/chai',
-                    three                                   : '/lib/threejs/three',
-                   'dat-gui'                                : '/lib/threejs/dat.gui.min',
+                    chai: '/lib/chai/chai',
+                    three: '/lib/threejs/three',
+                    'dat-gui': '/lib/threejs/dat.gui.min',
                 }
             });
             window.onload = function () {
                 requirejs(['Workbench/CameraTest']);
             }
         </script>
-    }        
+    }
 </body>

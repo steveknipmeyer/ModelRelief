@@ -6,8 +6,8 @@
 
 ### MVC
 #### Today
-    Validate HTML extension.
-        Review use of dashes in HTML comments.
+    Add a Credit page.
+    Create profile graphics for the settings.
 
     Contact Form
         Add a Privacy policy.
@@ -65,11 +65,7 @@
     favicon.ico
         https://realfavicongenerator.net/favicon/aspnet_core#.W_6RlGhKjmE
 
-    Add a Credit page.
-
 #### Composer
-
-    Create profile graphics for the settings.
 
     Reset settings for defaults.
 

@@ -1,30 +1,30 @@
 ﻿<body>
-    <div id="inheritanceContainer" >
+    <div id="inheritanceContainer">
     </div>
     @section scripts {
-        <!------------------------------------------------------------------------------------------------>
-        <!--                                    Libraries                                               -->
-        <!------------------------------------------------------------------------------------------------>
+        <!--******************************************************************************************-->
+        <!--                                    Libraries                                             -->
+        <!--******************************************************************************************-->
         <script src="~/lib/requirejs/require.js"></script>
 
-        <!------------------------------------------------------------------------------------------------>
-        <!--                                    ModelRelief                                             -->
-        <!------------------------------------------------------------------------------------------------>
+        <!--******************************************************************************************-->
+        <!--                                    ModelRelief                                           -->
+        <!--******************************************************************************************-->
         <script src="~/js/shaders.js"></script>
         <script>
             requirejs.config({
                 baseUrl: '.',
                 paths: {
-                    'Workbench/InheritanceTest'                  : '/js/modelrelief',
+                    'Workbench/InheritanceTest': '/js/modelrelief',
 
-                    chai                                    : '/lib/chai/chai',
-                    three                                   : '/lib/threejs/three',
-                   'dat-gui'                                : '/lib/threejs/dat.gui.min',
+                    chai: '/lib/chai/chai',
+                    three: '/lib/threejs/three',
+                    'dat-gui': '/lib/threejs/dat.gui.min',
                 }
             });
             window.onload = function () {
                 requirejs(['Workbench/InheritanceTest']);
             }
         </script>
-    }                
+    }
 </body>
