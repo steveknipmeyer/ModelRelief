@@ -1,4 +1,13 @@
 ﻿/* ----------------------
+    MDB Overrides
+------------------------*/
+
+/* MDBootstrap sets the display of select elements to 'none'. */
+select {
+    display: block !important;
+}
+
+/* ----------------------
     General
 ------------------------*/
 sup {

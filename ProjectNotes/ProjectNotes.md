@@ -1,23 +1,17 @@
 ﻿### Tasks
 #### Commit Notes
-If there is a failure suggest mailTo:info@modelserver.com
-Include reCAPTCHA in validation logic.
-
 #### Lambda
 
 #### Vector
 
 ### MVC
 #### Today
-    Why are Select elements missing from forms (e.g. /meshes/edit/7)
-
     Validate HTML extension.
         Review use of dashes in HTML comments.
 
     Contact Form
         Add a Privacy policy.
         Include other fields in the e-mail such as industry.
-
 
     Review Attenuation Decay.
         It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
