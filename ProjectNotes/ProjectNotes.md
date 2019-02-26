@@ -6,7 +6,13 @@
 
 ### MVC
 #### Today
-    How can OBJ models be smoothed?
+    Smooth the OBJ models that are visibly facetted.
+        Dolphin
+        Scallop
+    Why does Scallop not Fit properly?
+
+    Add Standard View Select.
+
     Add a Credit page.
     Add a Privacy page.
     Create profile graphics for the settings.

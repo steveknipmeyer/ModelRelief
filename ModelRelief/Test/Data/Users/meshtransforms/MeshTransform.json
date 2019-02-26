@@ -335,7 +335,7 @@
     "Name": "Tyrannosaurus",
     "Description": "Tyrannosaurus transform (development@modelrelief.com)"
   },
- {
+  {
     "Width": 100.0,
     "Height": 100.0,
     "Depth": 1.0,
@@ -353,12 +353,12 @@
     "P6": 0.0,
     "P7": 0.0,
     "P8": 0.0,
-    "ProjectId": 4,
+    "ProjectId": 2,
     "Project": {
-       "Id": 2,
+      "Id": 2,
       "Name": "Jewelry",
       "Description": "Jewelry watch faces, bracelets and pendants (development@modelrelief.com)"
-   },
+    },
     "Id": 13,
     "Name": "Scallop",
     "Description": "Scallop transform (development@modelrelief.com)"
