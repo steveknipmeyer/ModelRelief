@@ -14,6 +14,13 @@ sup {
     font-size: 14px;
 }
 
+hr{
+border-color: gray;
+}
+
+input, textarea {
+    color: white !important;
+}
 #sendButton {
     cursor: not-allowed;
 }

@@ -135,7 +135,7 @@
             <!-- Section heading -->
             <h2 class="h1-responsive font-weight-bold text-center mb-5">Contact us</h2>
             <!-- Section description -->
-            <p class="text-center w-responsive mx-auto mb-5">Do you have any questions? Please do not hesitate to contact us directly. Our team will come back to you within a matter of hours to help you.</p>
+            <p class="text-center w-responsive mx-auto mb-5">Please let us know what you think! <br />We would love to hear your comment and suggestions about where to go next with ModelRelief.</p>
 
             <!-- Grid row -->
             <div class="row">
@@ -193,11 +193,51 @@
                             <!-- Grid column -->
                         </div>
                         <!-- Grid row -->
-
-                        <div class="g-recaptcha" data-sitekey="@ViewData["ReCaptchaKey"]" data-callback="recaptchaCallBack" data-theme="dark"></div>
-                        <br />
+                        <div id="applicationDomain" class="mt-3">
+                            <h6><strong>How do you plan to use ModelRelief?</strong></h6>
+                            <div class="row">
+                                <!-- Grid column -->
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="application[]" id="checkboxJewelry" value="Jewelry">
+                                        <label for="checkboxJewelry" class="form-check-label">Jewelry</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="application[]" id="checkboxArchitecturalDetails" value="ArchitecturalDetails">
+                                        <label for="checkboxArchitecturalDetails" class="form-check-label">Architectural Details</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="application[]" id="checkboxPackaging" value="Packaging">
+                                        <label for="checkboxPackaging" class="form-check-label">Packaging</label>
+                                    </div>
+                                    <div class="md-form mt-0 mb-0 ml-3">
+                                        <input type="text" id="applicationOther" name="applicationOther" class="form-control">
+                                        <label for="applicationOther" class="">Other</label>
+                                    </div>
+                                </div>
+                                <!-- Grid column -->
+                                <!-- Grid column -->
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="application[]" id="checkboxWoodworking" value="Woodworking">
+                                        <label for="checkboxWoodworking" class="form-check-label">Woodworking</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="application[]" id="checkboxFoodMolds" value="FoodMolds">
+                                        <label for="checkboxFoodMolds" class="form-check-label">Food Molds</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="application[]" id="checkbox3DPrinting" value="3DPrinting">
+                                        <label for="checkbox3DPrinting" class="form-check-label">3D Printing</label>
+                                    </div>
+                                    <!-- Grid column -->
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="g-recaptcha mt-4 mb-0" data-sitekey="@ViewData["ReCaptchaKey"]" data-callback="recaptchaCallBack" data-theme="dark"></div>
                         <div class="text-center text-md-left">
-                            <input id="sendButton" type="button" class="btn btn-purple btn-md" onclick="validateForm()" value="Send" />
+                            <input id="sendButton" type="button" class="btn btn-purple btn-md mt-1" onclick="validateForm()" value="Send" />
                         </div>
                         <div id="contact-form-status" class="status"></div>
                     </form>
@@ -281,11 +321,19 @@
 
             document.getElementById('contact-form-status').html = "Sending...";
 
+            var applications = [];
+            $('#applicationDomain input:checked').each(function () {
+                applications.push(this.value);
+            });
             formData = {
                 'Name': $('input[name=Name]').val(),
                 'Email': $('input[name=Email]').val(),
                 'Subject': $('input[name=Subject]').val(),
                 'Message': $('textarea[name=Message]').val(),
+
+                'Applications': applications,
+                'ApplicationOther': $('input[name=applicationOther]').val(),
+
                 'ReCAPTCHAResponse': reCAPTCHAResponse
             };
 
@@ -300,12 +348,13 @@
                     if (responseResult.mailSent) {
                         // reset the form if mail was sent successfully
                         $('#contact-form').closest('form').find("input[type=text], textarea").val("");
+                        $('#contact-form').closest('form').find("input[type=checkbox]").prop('checked', false);
+                        grecaptcha.reset();
                     }
                 },
-
                 error: function (jqXHR, textStatus, errorThrown) {
                     $('#contact-form-status').html(jqXHR.statusText);
-                }
+                },
             });
         }
     </script>

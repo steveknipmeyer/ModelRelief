@@ -8,10 +8,7 @@
 #### Today
     Add a Credit page.
     Create profile graphics for the settings.
-
-    Contact Form
-        Add a Privacy policy.
-        Include other fields in the e-mail such as industry.
+    Add a Privacy policy.
 
     Review Attenuation Decay.
         It is 0.9 in the thesis but there are values of 0.6 in the sample data set.

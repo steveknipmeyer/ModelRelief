@@ -27,6 +27,9 @@ namespace ModelRelief.Features.Email
         public string Subject { get; set; }
         public string Message { get; set; }
 
+        public string[] Applications { get; set; }
+        public string ApplicationOther { get; set; }
+
         public string ReCAPTCHAResponse { get; set; }
     }
 }

@@ -103,12 +103,16 @@ namespace ModelRelief.Features.Email
                 return Json(errorResult);
             }
 
+            var applicationList = string.Join(", ", formData.Applications);
+            var applications = $"\n\nApplications: {applicationList}";
+            applications += string.IsNullOrEmpty(formData.ApplicationOther) ? string.Empty : $", {formData.ApplicationOther}";
+
             var message = new EmailMessage
             {
                 Name = formData.Name,
                 Email = formData.Email,
                 Subject = formData.Subject,
-                Message = formData.Message,
+                Message = formData.Message + applications,
 
                 ToAddresses = new List<EmailAddress>() { new EmailAddress { Name = EmailService.Username, Address = EmailService.Username } },
                 FromAddresses = new List<EmailAddress>() { new EmailAddress { Name = formData.Name, Address = formData.Email } },
