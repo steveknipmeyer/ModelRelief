@@ -6,9 +6,10 @@
 
 ### MVC
 #### Today
+    How can OBJ models be smoothed?
     Add a Credit page.
+    Add a Privacy page.
     Create profile graphics for the settings.
-    Add a Privacy policy.
 
     Review Attenuation Decay.
         It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
@@ -1578,9 +1579,18 @@ https://semver.npmjs.com/
         [X] AddModels
         [X] AddDepthBuffers
         [X] AddMeshes
+        [X] AddNormalMaps
+
+    Update JSON files. 
+        Place the new entities at the end and increment the Id.
+        Update the Project properties to reflect the Project that was assigned to the model.
+        [X] Camera.json (placeholder, values not important)
+        [X] MeshTransform.json (placeholder, values not important)
+
+    Copy and existing mesh file to create a placeholder in Test\Data\Users\meshes.
 
     In ModelRelief, open the new model and generate a relief.
-    Add the generated DepthBuffer and Mesh from the store folder to ModelRelief\Test.
+    Add the generated Mesh, DepthBuffer and NormalMap from the store folder to ModelRelief\Test.
     Update the Solver\Test JSON files using MRUpdateSeedData.
 
     Update the model counts in the integration tests.

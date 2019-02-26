@@ -513,6 +513,11 @@ namespace ModelRelief.Database
                 },
                 new Model3d
                 {
+                    Name = "scallop.obj", Description = "Scallop shell", Format = Model3dFormat.OBJ,
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry), Camera = FindByName<Camera>(user, "Top Camera"),
+                },
+                new Model3d
+                {
                     Name = "statue.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
                     UserId = user.Id, Project = FindByName<Project>(user, "Stanford"), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
@@ -637,6 +642,14 @@ namespace ModelRelief.Database
                 },
                 new DepthBuffer
                 {
+                    Name = "scallop.sdb", Description = "Created in ModelRelief",
+                    Width = 512, Height = 512,
+                    Format = DepthBufferFormat.SDB,
+                    Model3d = FindByName<Model3d>(user, "scallop.obj"), Camera = FindByName<Camera>(user, "Scallop"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
+                },
+                new DepthBuffer
+                {
                     Name = "statue.sdb", Description = "Generated in Maya",
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.SDB,
@@ -725,6 +738,12 @@ namespace ModelRelief.Database
                 {
                     Name = "roadster.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
                     DepthBuffer = FindByName<DepthBuffer>(user, "roadster.sdb"), NormalMap = FindByName<NormalMap>(user, "roadster.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Roadster"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
+                },
+                new Mesh
+                {
+                    Name = "scallop.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
+                    DepthBuffer = FindByName<DepthBuffer>(user, "scallop.sdb"), NormalMap = FindByName<NormalMap>(user, "scallop.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Scallop"),
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
                 },
                 new Mesh
@@ -827,6 +846,14 @@ namespace ModelRelief.Database
                     Width = 512, Height = 512,
                     Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
                     Model3d = FindByName<Model3d>(user, "roadster.obj"), Camera = FindByName<Camera>(user, "Roadster"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
+                },
+                new NormalMap
+                {
+                    Name = "scallop.nmap", Description = "Created in ModelRelief",
+                    Width = 512, Height = 512,
+                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
+                    Model3d = FindByName<Model3d>(user, "scallop.obj"), Camera = FindByName<Camera>(user, "Scallop"),
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
                 },
                 new NormalMap

@@ -427,5 +427,38 @@
     "Id": 13,
     "Name": "Tyrannosaurus",
     "Description": "Tyrannosarus Model (development@modelrelief.com)"
+  },
+  {
+    "IsPerspective": true,
+    "Near": 227.48034121060832,
+    "Far": 468.99208398887208,
+    "PositionX": 3.8051915284206053,
+    "PositionY": 85.342509645345174,
+    "PositionZ": 309.12779565879396,
+    "EulerX": 0.0,
+    "EulerY": 0.0,
+    "EulerZ": 0.0,
+    "Theta": 1.0,
+    "ScaleX": 1.0,
+    "ScaleY": 1.0,
+    "ScaleZ": 1.0,
+    "UpX": 0.0,
+    "UpY": 1.0,
+    "UpZ": 0.0,
+    "FieldOfView": 37.0,
+    "AspectRatio": 1.0,
+    "Left": -100.0,
+    "Right": 100.0,
+    "Top": 100.0,
+    "Bottom": -100.0,
+    "ProjectId": 4,
+    "Project": {
+      "Id": 2,
+       "Name": "Jewelry",
+      "Description": "Jewelry watch faces, bracelets and pendants (development@modelrelief.com)"
+   },
+    "Id": 14,
+    "Name": "Scallop",
+    "Description": "Scallop Shell (development@modelrelief.com)"
   }
 ]
