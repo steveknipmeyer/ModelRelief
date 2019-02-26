@@ -44,7 +44,7 @@
       "Description": "Scallop Shell (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T13:57:56.6516821",
+    "FileTimeStamp": "2019-02-26T16:59:51.4822753",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\11\\scallop.sdb",
     "Id": 11,
     "Name": "scallop.sdb",
@@ -63,7 +63,7 @@
     "CameraId": 14,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T13:57:57.0570407",
+    "FileTimeStamp": "2019-02-26T16:59:51.6476706",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\11\\scallop.nmap",
     "Id": 11,
     "Name": "scallop.nmap",
@@ -95,7 +95,7 @@
     "Description": "Scallop transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-26T13:57:57.499101",
+  "FileTimeStamp": "2019-02-26T16:59:51.8684741",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\11\\scallop.sfp",
   "Id": 11,
   "Name": "scallop.sfp",

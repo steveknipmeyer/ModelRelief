@@ -44,7 +44,7 @@
       "Description": "Tyrannosarus Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T13:57:56.6517305",
+    "FileTimeStamp": "2019-02-26T16:59:51.4823292",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\14\\tyrannosaurus.sdb",
     "Id": 14,
     "Name": "tyrannosaurus.sdb",
@@ -63,7 +63,7 @@
     "CameraId": 13,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T13:57:57.0570748",
+    "FileTimeStamp": "2019-02-26T16:59:51.6476989",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\14\\tyrannosaurus.nmap",
     "Id": 14,
     "Name": "tyrannosaurus.nmap",
@@ -95,7 +95,7 @@
     "Description": "Tyrannosaurus transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-26T13:57:57.4991305",
+  "FileTimeStamp": "2019-02-26T16:59:51.8685037",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\14\\tyrannosaurus.sfp",
   "Id": 14,
   "Name": "tyrannosaurus.sfp",

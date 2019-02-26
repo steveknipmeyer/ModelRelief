@@ -44,7 +44,7 @@
       "Description": "Roadster Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T13:57:56.6516712",
+    "FileTimeStamp": "2019-02-26T16:59:51.4822685",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\10\\roadster.sdb",
     "Id": 10,
     "Name": "roadster.sdb",
@@ -63,7 +63,7 @@
     "CameraId": 10,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T13:57:57.0570274",
+    "FileTimeStamp": "2019-02-26T16:59:51.6476536",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\10\\roadster.nmap",
     "Id": 10,
     "Name": "roadster.nmap",
@@ -95,7 +95,7 @@
     "Description": "Roadster transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-26T13:57:57.4990891",
+  "FileTimeStamp": "2019-02-26T16:59:51.8684602",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\10\\roadster.sfp",
   "Id": 10,
   "Name": "roadster.sfp",

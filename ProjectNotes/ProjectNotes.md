@@ -6,11 +6,6 @@
 
 ### MVC
 #### Today
-    Repair the Horse model.
-    Update Development\ModelRelief\Models
-        Rename the existing models to preserve the studies.
-        Scallop
-        PlunderbussPete
 
     Smooth the OBJ models that are visibly facetted.
         Dolphin

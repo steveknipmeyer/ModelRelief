@@ -44,7 +44,7 @@
       "Description": "Armadillo Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T13:57:56.6511709",
+    "FileTimeStamp": "2019-02-26T16:59:51.4819478",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\1\\armadillo.sdb",
     "Id": 1,
     "Name": "armadillo.sdb",
@@ -63,7 +63,7 @@
     "CameraId": 3,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T13:57:57.0566725",
+    "FileTimeStamp": "2019-02-26T16:59:51.6474307",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\1\\armadillo.nmap",
     "Id": 1,
     "Name": "armadillo.nmap",
@@ -95,7 +95,7 @@
     "Description": "Armadillo transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-26T13:57:57.4988032",
+  "FileTimeStamp": "2019-02-26T16:59:51.8682946",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\1\\armadillo.sfp",
   "Id": 1,
   "Name": "armadillo.sfp",
