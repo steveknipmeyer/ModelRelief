@@ -44,7 +44,7 @@
       "Description": "Bunny Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T12:00:08.6694135",
+    "FileTimeStamp": "2019-02-26T13:57:56.6515687",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\3\\bunny.sdb",
     "Id": 3,
     "Name": "bunny.sdb",
@@ -63,7 +63,7 @@
     "CameraId": 5,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T12:00:08.8134585",
+    "FileTimeStamp": "2019-02-26T13:57:57.0568801",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\3\\bunny.nmap",
     "Id": 3,
     "Name": "bunny.nmap",
@@ -95,7 +95,7 @@
     "Description": "Bunny transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-26T12:00:09.0206601",
+  "FileTimeStamp": "2019-02-26T13:57:57.499006",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\3\\bunny.sfp",
   "Id": 3,
   "Name": "bunny.sfp",

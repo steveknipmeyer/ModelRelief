@@ -334,9 +334,9 @@ namespace ModelRelief.Database
         {
             // database
             AddProjects(user);
-            AddCameras(user);
+            AddCameras(user);                   // JSON
             AddModels(user);
-            AddMeshTransforms(user);
+            AddMeshTransforms(user);            // JSON
 
             AddDepthBuffers(user);
             AddNormalMaps(user);
@@ -498,6 +498,11 @@ namespace ModelRelief.Database
                 },
                 new Model3d
                 {
+                    Name = "horse.obj", Description = "Prancing horse", Format = Model3dFormat.OBJ,
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry), Camera = FindByName<Camera>(user, "Top Camera"),
+                },
+                new Model3d
+                {
                     Name = "house.obj", Description = "San Francisco house", Format = Model3dFormat.OBJ,
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Architecture), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
@@ -505,6 +510,11 @@ namespace ModelRelief.Database
                 {
                     Name = "lucy.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
                     UserId = user.Id, Project = FindByName<Project>(user, "Stanford"), Camera = FindByName<Camera>(user, "Top Camera"),
+                },
+                new Model3d
+                {
+                    Name = "plunderbusspete.obj", Description = "Plunder Buss Pete pirate", Format = Model3dFormat.OBJ,
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
                 new Model3d
                 {
@@ -618,6 +628,14 @@ namespace ModelRelief.Database
                 },
                 new DepthBuffer
                 {
+                    Name = "horse.sdb", Description = "Created in ModelRelief",
+                    Width = 512, Height = 512,
+                    Format = DepthBufferFormat.SDB,
+                    Model3d = FindByName<Model3d>(user, "horse.obj"), Camera = FindByName<Camera>(user, "Horse"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
+                },
+                new DepthBuffer
+                {
                     Name = "house.sdb", Description = "Generated in VRay",
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.SDB,
@@ -631,6 +649,14 @@ namespace ModelRelief.Database
                     Format = DepthBufferFormat.SDB,
                     Model3d = FindByName<Model3d>(user, "lucy.obj"), Camera = FindByName<Camera>(user, "Lucy"),
                     UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                },
+                new DepthBuffer
+                {
+                    Name = "plunderbusspete.sdb", Description = "Created in ModelRelief",
+                    Width = 512, Height = 512,
+                    Format = DepthBufferFormat.SDB,
+                    Model3d = FindByName<Model3d>(user, "plunderbusspete.obj"), Camera = FindByName<Camera>(user, "PlunderbussPete"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
                 },
                 new DepthBuffer
                 {
@@ -724,6 +750,12 @@ namespace ModelRelief.Database
                 },
                 new Mesh
                 {
+                    Name = "horse.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
+                    DepthBuffer = FindByName<DepthBuffer>(user, "horse.sdb"), NormalMap = FindByName<NormalMap>(user, "horse.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Horse"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
+                },
+                new Mesh
+                {
                     Name = "house.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
                     DepthBuffer = FindByName<DepthBuffer>(user, "house.sdb"), NormalMap = FindByName<NormalMap>(user, "house.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "House"),
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Architecture),
@@ -733,6 +765,12 @@ namespace ModelRelief.Database
                     Name = "lucy.sfp", Description = "Isometric", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Isometric Camera"),
                     DepthBuffer = FindByName<DepthBuffer>(user, "lucy.sdb"), NormalMap = FindByName<NormalMap>(user, "lucy.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Lucy"),
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
+                },
+                new Mesh
+                {
+                    Name = "plunderbusspete.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
+                    DepthBuffer = FindByName<DepthBuffer>(user, "plunderbusspete.sdb"), NormalMap = FindByName<NormalMap>(user, "plunderbusspete.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "PlunderbussPete"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
                 },
                 new Mesh
                 {
@@ -826,6 +864,14 @@ namespace ModelRelief.Database
                 },
                 new NormalMap
                 {
+                    Name = "horse.nmap", Description = "Created in ModelRelief",
+                    Width = 512, Height = 512,
+                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
+                    Model3d = FindByName<Model3d>(user, "horse.obj"), Camera = FindByName<Camera>(user, "Horse"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
+                },
+                new NormalMap
+                {
                     Name = "house.nmap", Description = "Generated in VRay",
                     Width = 512, Height = 512,
                     Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
@@ -839,6 +885,14 @@ namespace ModelRelief.Database
                     Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
                     Model3d = FindByName<Model3d>(user, "lucy.obj"), Camera = FindByName<Camera>(user, "Lucy"),
                     UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                },
+                new NormalMap
+                {
+                    Name = "plunderbusspete.nmap", Description = "Created in ModelRelief",
+                    Width = 512, Height = 512,
+                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
+                    Model3d = FindByName<Model3d>(user, "plunderbusspete.obj"), Camera = FindByName<Camera>(user, "PlunderbussPete"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
                 },
                 new NormalMap
                 {

@@ -4,14 +4,14 @@
   "Project": null,
   "CameraId": 2,
   "Camera": null,
-  "DepthBufferId": 7,
+  "DepthBufferId": 8,
   "DepthBuffer": {
     "Width": 512.0,
     "Height": 512.0,
     "Format": 1,
     "ProjectId": 4,
     "Project": null,
-    "Model3dId": 7,
+    "Model3dId": 8,
     "Model3d": null,
     "CameraId": 9,
     "Camera": {
@@ -44,13 +44,13 @@
       "Description": "Lucy Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T12:00:08.6694404",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\7\\lucy.sdb",
-    "Id": 7,
+    "FileTimeStamp": "2019-02-26T13:57:56.6516422",
+    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\8\\lucy.sdb",
+    "Id": 8,
     "Name": "lucy.sdb",
     "Description": "Generated in Maya (development@modelrelief.com)"
   },
-  "NormalMapId": 7,
+  "NormalMapId": 8,
   "NormalMap": {
     "Width": 512.0,
     "Height": 512.0,
@@ -58,14 +58,14 @@
     "Space": 2,
     "ProjectId": 4,
     "Project": null,
-    "Model3dId": 7,
+    "Model3dId": 8,
     "Model3d": null,
     "CameraId": 9,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T12:00:08.8135007",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\7\\lucy.nmap",
-    "Id": 7,
+    "FileTimeStamp": "2019-02-26T13:57:57.0569812",
+    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\8\\lucy.nmap",
+    "Id": 8,
     "Name": "lucy.nmap",
     "Description": "Generated in Maya (development@modelrelief.com)"
   },
@@ -95,9 +95,9 @@
     "Description": "Lucy transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-26T12:00:09.0207111",
-  "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\7\\lucy.sfp",
-  "Id": 7,
+  "FileTimeStamp": "2019-02-26T13:57:57.4990591",
+  "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\8\\lucy.sfp",
+  "Id": 8,
   "Name": "lucy.sfp",
   "Description": "Isometric (development@modelrelief.com)"
 }

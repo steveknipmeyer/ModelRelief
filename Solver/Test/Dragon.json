@@ -44,7 +44,7 @@
       "Description": "Dragon Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T12:00:08.6694274",
+    "FileTimeStamp": "2019-02-26T13:57:56.6515927",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\5\\dragon.sdb",
     "Id": 5,
     "Name": "dragon.sdb",
@@ -63,7 +63,7 @@
     "CameraId": 7,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T12:00:08.8134838",
+    "FileTimeStamp": "2019-02-26T13:57:57.0569245",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\5\\dragon.nmap",
     "Id": 5,
     "Name": "dragon.nmap",
@@ -95,7 +95,7 @@
     "Description": "Dragon transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-26T12:00:09.0206796",
+  "FileTimeStamp": "2019-02-26T13:57:57.4990295",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\5\\dragon.sfp",
   "Id": 5,
   "Name": "dragon.sfp",

@@ -4,14 +4,14 @@
   "Project": null,
   "CameraId": 1,
   "Camera": null,
-  "DepthBufferId": 11,
+  "DepthBufferId": 13,
   "DepthBuffer": {
     "Width": 512.0,
     "Height": 512.0,
     "Format": 1,
     "ProjectId": 3,
     "Project": null,
-    "Model3dId": 11,
+    "Model3dId": 13,
     "Model3d": null,
     "CameraId": 12,
     "Camera": {
@@ -44,13 +44,13 @@
       "Description": "Isometric Test Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T12:00:08.6694848",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\11\\test.sdb",
-    "Id": 11,
+    "FileTimeStamp": "2019-02-26T13:57:56.6517191",
+    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\13\\test.sdb",
+    "Id": 13,
     "Name": "test.sdb",
     "Description": "Generated in ModelRelief (development@modelrelief.com)"
   },
-  "NormalMapId": 11,
+  "NormalMapId": 13,
   "NormalMap": {
     "Width": 512.0,
     "Height": 512.0,
@@ -58,14 +58,14 @@
     "Space": 2,
     "ProjectId": 3,
     "Project": null,
-    "Model3dId": 11,
+    "Model3dId": 13,
     "Model3d": null,
     "CameraId": 12,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T12:00:08.8135274",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\11\\test.nmap",
-    "Id": 11,
+    "FileTimeStamp": "2019-02-26T13:57:57.0570624",
+    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\13\\test.nmap",
+    "Id": 13,
     "Name": "test.nmap",
     "Description": "Generated in ModelRelief (development@modelrelief.com)"
   },
@@ -95,9 +95,9 @@
     "Description": "Test transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-26T12:00:09.0207456",
-  "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\11\\test.sfp",
-  "Id": 11,
+  "FileTimeStamp": "2019-02-26T13:57:57.499121",
+  "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\13\\test.sfp",
+  "Id": 13,
   "Name": "test.sfp",
   "Description": "Top (development@modelrelief.com)"
 }

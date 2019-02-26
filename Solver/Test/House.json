@@ -4,14 +4,14 @@
   "Project": null,
   "CameraId": 1,
   "Camera": null,
-  "DepthBufferId": 6,
+  "DepthBufferId": 7,
   "DepthBuffer": {
     "Width": 512.0,
     "Height": 512.0,
     "Format": 1,
     "ProjectId": 1,
     "Project": null,
-    "Model3dId": 6,
+    "Model3dId": 7,
     "Model3d": null,
     "CameraId": 8,
     "Camera": {
@@ -44,13 +44,13 @@
       "Description": "House Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T12:00:08.6694339",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\6\\house.sdb",
-    "Id": 6,
+    "FileTimeStamp": "2019-02-26T13:57:56.6516276",
+    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\7\\house.sdb",
+    "Id": 7,
     "Name": "house.sdb",
     "Description": "Generated in VRay (development@modelrelief.com)"
   },
-  "NormalMapId": 6,
+  "NormalMapId": 7,
   "NormalMap": {
     "Width": 512.0,
     "Height": 512.0,
@@ -58,14 +58,14 @@
     "Space": 2,
     "ProjectId": 1,
     "Project": null,
-    "Model3dId": 6,
+    "Model3dId": 7,
     "Model3d": null,
     "CameraId": 8,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T12:00:08.8134938",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\6\\house.nmap",
-    "Id": 6,
+    "FileTimeStamp": "2019-02-26T13:57:57.0569617",
+    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\7\\house.nmap",
+    "Id": 7,
     "Name": "house.nmap",
     "Description": "Generated in VRay (development@modelrelief.com)"
   },
@@ -95,9 +95,9 @@
     "Description": "House transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-26T12:00:09.0207035",
-  "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\6\\house.sfp",
-  "Id": 6,
+  "FileTimeStamp": "2019-02-26T13:57:57.4990493",
+  "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\7\\house.sfp",
+  "Id": 7,
   "Name": "house.sfp",
   "Description": "Top (development@modelrelief.com)"
 }

@@ -6,15 +6,22 @@
 
 ### MVC
 #### Today
+    Update Development\ModelRelief\Models
+        Rename the existing models to preserve the studies.
+        Scallop
+        PlunderbussPete
+
     Smooth the OBJ models that are visibly facetted.
         Dolphin
         Scallop
-    Why does Scallop not Fit properly?
 
     Add Standard View Select.
 
     Add a Credit page.
     Add a Privacy page.
+    Add a workflow page.
+        Illustrate with images from Explorer!
+
     Create profile graphics for the settings.
 
     Review Attenuation Decay.
@@ -40,25 +47,25 @@
         Lucy
         House
         Dragon
-        Tyrannosaurus
-        Armadillo
-
-        Roadster
-        Bunny
-
-        Prancing Horse
+        Horse
         Scallop
         Plunderbuss Pete
+
+        Not Used
+            Tyrannosaurus
+            Armadillo
+            Roadster
+            Bunny
+            Statue
+            Dolphin
+            Buddha
+            Test
+
         Thingiverse Sculpture
         Archive 3D
             Pegasys
             David
             https://archive3d.net/?category=31
-
-            Statue
-            Dolphin
-            Buddha
-            Test
 
     Create a video or an animation?
 
@@ -85,7 +92,9 @@
 ### Short Term
 
 #### Models
-    Decimate Statue.obj.
+    Decimation
+        Statue.obj
+        Plunderbuss Pete
 
 #### Database
     Does the database "unable to connect" message always appear at startup?
@@ -1589,11 +1598,11 @@ https://semver.npmjs.com/
 
     Update JSON files. 
         Place the new entities at the end and increment the Id.
-        Update the Project properties to reflect the Project that was assigned to the model.
+        Update the Project Id to reflect the Project that was assigned to the model.
         [X] Camera.json (placeholder, values not important)
         [X] MeshTransform.json (placeholder, values not important)
 
-    Copy and existing mesh file to create a placeholder in Test\Data\Users\meshes.
+    Copy an existing mesh file to create a placeholder in Test\Data\Users\meshes.
 
     In ModelRelief, open the new model and generate a relief.
     Add the generated Mesh, DepthBuffer and NormalMap from the store folder to ModelRelief\Test.
