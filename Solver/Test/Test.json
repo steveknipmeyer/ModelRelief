@@ -44,7 +44,7 @@
       "Description": "Isometric Test Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:30:05.4089567",
+    "FileTimeStamp": "2019-02-27T04:55:01.3690298",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\13\\test.sdb",
     "Id": 13,
     "Name": "test.sdb",
@@ -63,7 +63,7 @@
     "CameraId": 12,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:30:05.5808701",
+    "FileTimeStamp": "2019-02-27T04:55:01.5071801",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\13\\test.nmap",
     "Id": 13,
     "Name": "test.nmap",
@@ -95,7 +95,7 @@
     "Description": "Test transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-27T04:30:05.8109567",
+  "FileTimeStamp": "2019-02-27T04:55:01.6978495",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\13\\test.sfp",
   "Id": 13,
   "Name": "test.sfp",

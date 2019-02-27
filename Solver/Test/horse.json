@@ -44,7 +44,7 @@
       "Description": "Prancing Horse Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:30:05.4089046",
+    "FileTimeStamp": "2019-02-27T04:55:01.3689786",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\6\\horse.sdb",
     "Id": 6,
     "Name": "horse.sdb",
@@ -63,7 +63,7 @@
     "CameraId": 15,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:30:05.5807811",
+    "FileTimeStamp": "2019-02-27T04:55:01.5071247",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\6\\horse.nmap",
     "Id": 6,
     "Name": "horse.nmap",
@@ -95,7 +95,7 @@
     "Description": "Horse transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-27T04:30:05.810833",
+  "FileTimeStamp": "2019-02-27T04:55:01.697793",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\6\\horse.sfp",
   "Id": 6,
   "Name": "horse.sfp",

@@ -4,29 +4,28 @@
 
 #### Vector
 
-### MVC
 #### Today
-
-    Smooth the OBJ models that are visibly facetted.
-        Dolphin
-        Scallop
 
     Add Standard View Select.
 
-    Add a Credit page.
-    Add a Privacy page.
-    Add a workflow page.
-        Illustrate with images from Explorer!
+    Review all mesh generation settings for delivered models.
+        Attenuation Decay.
+            It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
+
+#### Composer
 
     Create profile graphics for the settings.
+    Reset settings for defaults.
 
-    Review Attenuation Decay.
-        It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
+#### Privacy Page
+    Add a Privacy page.
+        The page exists populate it.
 
-#### MDB
+#### Credits Page
 
-#### Landing Page
-    Add logo.
+#### Workflow Page
+
+    Illustrate with images from Explorer!
 
     Notes
         Features not published
@@ -34,12 +33,23 @@
             perspective cameras
         API
 
-    Explorer scallop theme.
+#### Landing Page
+    Add logo.
+    favicon.ico
         https://www.flaticon.com/free-icon/scallop_166047
+        https://realfavicongenerator.net/favicon/aspnet_core#.W_6RlGhKjmE
 
     Create thumbnail images of the test models.
 	    These will be delivered from the Delivery\images folder.
 
+    Create a video or an animation?
+
+#### Auth0
+    Customize Log In dialog box.
+
+#### UI
+
+#### Models
         Lucy
         House
         Dragon
@@ -63,19 +73,6 @@
             David
             https://archive3d.net/?category=31
 
-    Create a video or an animation?
-
-#### Auth0
-    Customize Log In dialog box.
-
-#### UI
-    favicon.ico
-        https://realfavicongenerator.net/favicon/aspnet_core#.W_6RlGhKjmE
-
-#### Composer
-
-    Reset settings for defaults.
-
 #### Publication
     3D CAD Jewelry
         https://matrixusergroup.com/
@@ -86,11 +83,6 @@
     HackerNews
 
 ### Short Term
-
-#### Models
-    Decimation
-        Statue.obj
-        Plunderbuss Pete
 
 #### Database
     Does the database "unable to connect" message always appear at startup?

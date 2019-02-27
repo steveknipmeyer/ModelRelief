@@ -44,7 +44,7 @@
       "Description": "Lucy Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:30:05.4089188",
+    "FileTimeStamp": "2019-02-27T04:55:01.3689923",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\8\\lucy.sdb",
     "Id": 8,
     "Name": "lucy.sdb",
@@ -63,7 +63,7 @@
     "CameraId": 9,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:30:05.5808003",
+    "FileTimeStamp": "2019-02-27T04:55:01.5071382",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\8\\lucy.nmap",
     "Id": 8,
     "Name": "lucy.nmap",
@@ -95,7 +95,7 @@
     "Description": "Lucy transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-27T04:30:05.8108639",
+  "FileTimeStamp": "2019-02-27T04:55:01.6978066",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\8\\lucy.sfp",
   "Id": 8,
   "Name": "lucy.sfp",
