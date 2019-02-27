@@ -7,44 +7,112 @@
         View
     </button>
 
+    <!-- Standard View -->
+    <div class="dropdown">
 
-                                    <!-- Standard View -->
-                                    <div class="dropdown">
-                                        <!--Trigger-->
-                                        <button class="btn btn-primary btn-sm dropdown-toggle ml-0" type="button" id="standardView" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Standard
-                                            View</button>
+        <a href="#" class="btn pull-right dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="icon-settings"></i></a>
+        <div class="dropdown-menu dropdown-menu-right">
+            <a href="#" class="dropdown-item">Link 1</a>
+            <a href="#" class="dropdown-item">Link 1</a>
+            <a href="#" class="dropdown-item">Link 1</a>
+        </div>
 
-                                        <!--Menu-->
-                                        <div class="dropdown-menu dropdown-primary">
-                                            <a class="dropdown-item" href="#">None</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Front</a>
-                                            <a class="dropdown-item" href="#">Back</a>
-                                            <a class="dropdown-item" href="#">Top</a>
-                                            <a class="dropdown-item" href="#">Isometric</a>
-                                            <a class="dropdown-item" href="#">Left</a>
-                                            <a class="dropdown-item" href="#">Right</a>
-                                            <a class="dropdown-item" href="#">Bottom</a>
-                                        </div>
-                                    </div>
 
-<script>
-    // Perspective Checkbox
-    $('#perspective').change(function () {
-        const value = $(this).prop('checked');
-        console.log(`standardView: ${value}`);
-    })
+        <!-- Standard View -->
+        <div class="dropdown">
+            <!--Trigger-->
+            <button class="btn btn-primary btn-sm dropdown-toggle ml-0" type="button" id="standardView" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Standard
+                View
+            </button>
 
-    // Standard View Dropdown
-    $(function () {
+            <!--Menu-->
+            <div class="dropdown-menu dropdown-primary">
+                <a class="dropdown-item" href="#">None</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Front</a>
+                <a class="dropdown-item" href="#">Back</a>
+                <a class="dropdown-item" href="#">Top</a>
+                <a class="dropdown-item" href="#">Isometric</a>
+                <a class="dropdown-item" href="#">Left</a>
+                <a class="dropdown-item" href="#">Right</a>
+                <a class="dropdown-item" href="#">Bottom</a>
+            </div>
+        </div>
+        <!--Trigger-->
+        <button class="btn btn-outline-cyan btn-rounded btn-sm dropdown-toggle ml-0" type="button" id="standardView" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-camera mt-0"></i>
+        </button>
 
-        $(".dropdown-menu a").click(function () {
-            viewValue = $(this).text();
-            console.log(`standardView: ${viewValue}`);
+        <!--Menu-->
+        <div class="dropdown-menu dropdown-primary">
+            <a class="dropdown-item" href="#">Front</a>
+            <a class="dropdown-item" href="#">Back</a>
+            <a class="dropdown-item" href="#">Top</a>
+            <a class="dropdown-item" href="#">Isometric</a>
+            <a class="dropdown-item" href="#">Left</a>
+            <a class="dropdown-item" href="#">Right</a>
+            <a class="dropdown-item" href="#">Bottom</a>
+        </div>
+    </div>
 
-            $(".btn:first-child").text(viewValue);
-            $(".btn:first-child").val(viewValue);
+    <script>
+        // Perspective Checkbox
+        $('#perspective').change(function () {
+            const value = $(this).prop('checked');
+            console.log(`standardView: ${value}`);
+        })
 
+        // Standard View Dropdown
+        $(function () {
+
+            $(".dropdown-menu a").click(function () {
+                viewValue = $(this).text();
+                console.log(`standardView: ${viewValue}`);
+
+                $(".btn:first-child").text(viewValue);
+                $(".btn:first-child").val(viewValue);
+
+            });
         });
-    });
-</script>
+
+        // Material Select Initialization
+        $(document).ready(function () {
+            $('.mdb-select').materialSelect();
+        });
+
+        $('.dropdown-toggle').click(function () {
+            dropDownFixPosition($('button'), $('.dropdown-menu'));
+        });
+        function dropDownFixPosition(button, dropdown) {
+            var dropDownTop = button.offset().top + button.outerHeight();
+            dropdown.css('top', dropDownTop + "px");
+            dropdown.css('left', button.offset().left + "px");
+        }
+        $(document).on("show.bs.dropdown", function () {
+            var dropdownToggle = $(this).find(".dropdown-toggle");
+            var dropdownMenu = $(this).find(".dropdown-menu");
+            dropdownMenu.css({
+                "top": (dropdownToggle.position().top + dropdownToggle.outerHeight()) + "px",
+                "left": dropdownToggle.position().left + "px"
+            });
+        });
+
+        $('#fitView').on('click', function (e) {
+            var top = e.pageY - 10;
+            var left = e.pageX - 90;
+            $("#context-menu").css({
+                display: "block",
+                top: top,
+                left: left
+            }).addClass("show");
+            return false; //blocks default Webbrowser right click menu
+        }).on("click", function () {
+            $("#context-menu").removeClass("show").hide();
+        });
+
+        $("#context-menu a").on("click", function () {
+            $(this).parent().removeClass("show").hide();
+        });
+
+    </script>

@@ -21,7 +21,11 @@
 
     <!-- ModelRelief Site -->
     <link href="css/site.css" rel="stylesheet">
-
+    <style>
+        #cardHeader {
+            overflow: visible !important;
+        }
+    </style>
 </head>
 
 <body class="custom-skin">
@@ -49,9 +53,26 @@
                                             <div class="card card-cascade narrower">
 
                                                 <!-- Header -->
-                                                <div class="view view-cascade d-flex justify-content-between gradient-card-header grey darken-4 py-2">
-                                                    <div></div>
+                                                <div id="cardHeader" class="view view-cascade d-flex justify-content-between gradient-card-header grey darken-4 py-2">
+
+                                                    <!--Trigger-->
+                                                    <button class="btn btn-outline-cyan btn-rounded btn-sm dropdown-toggle ml-0" type="button" id="standardView" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-camera mt-0"></i>
+                                                    </button>
+
+                                                    <!--Menu-->
+                                                    <div class="dropdown-menu dropdown-primary">
+                                                        <a class="dropdown-item" href="#">Front</a>
+                                                        <a class="dropdown-item" href="#">Back</a>
+                                                        <a class="dropdown-item" href="#">Top</a>
+                                                        <a class="dropdown-item" href="#">Isometric</a>
+                                                        <a class="dropdown-item" href="#">Left</a>
+                                                        <a class="dropdown-item" href="#">Right</a>
+                                                        <a class="dropdown-item" href="#">Bottom</a>
+                                                    </div>
+
                                                     <h5 class="mt-1">Model</h5>
+
                                                     <button id="fitView" type="button" class="btn btn-outline-cyan btn-rounded btn-sm px-2 mt-0 mr-0">
                                                         <i class="fas fa-expand-arrows-alt mt-0"></i>
                                                     </button>
@@ -73,16 +94,6 @@
                                     </div>
                                 </div>
                                 <!-- /Model View -->
-                                <select class="mdb-select md-form">
-                                    <option value="None">None</option>
-                                    <option value="Front">Front</option>
-                                    <option value="Back">Back</option>
-                                    <option value="Top">Top</option>
-                                    <option value="Isometric">Isometric</option>
-                                    <option value="Left">Left</option>
-                                    <option value="Right">Right</option>
-                                    <option value="Bottom">Bottom</option>
-                                </select>
 
                             </div>
                         </div>
@@ -250,19 +261,27 @@
 
             </div>
         </div>
+        <div class="dropdown-menu dropdown-menu-sm" id="context-menu">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+        </div>
     </main>
     <!--Main layout-->
     <!------------------------------------------------------------------------------------------------>
     <!--                                    Libraries                                               -->
     <!------------------------------------------------------------------------------------------------>
+    <script src="/lib/jquery/dist/jquery.js"></script>
+    <script src="/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
+    <script src="/lib/mdb/js/popper.min.js"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/lib/mdb/js/mdb.js"></script>
+
     <!------------------------------------------------------------------------------------------------>
     <!--                                    ModelRelief                                             -->
     <!------------------------------------------------------------------------------------------------>
     <script>
-        // Material Select Initialization
-        $(document).ready(function () {
-            $('.mdb-select').materialSelect();
-        });
     </script>
 </body>
 

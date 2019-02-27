@@ -7,6 +7,11 @@ select {
     display: block !important;
 }
 
+/* This is necessary to prevent the Camera (StandardView) dropdown from being clipped. */
+.modelReliefCardHeader {
+    overflow: visible !important;
+}
+
 /* ----------------------
     General
 ------------------------*/
