@@ -44,7 +44,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "MRDatabaseProvider": "SQLServer",
 
-        "MRUpdateSeedData": "True",
+        "MRUpdateSeedData": "False",
         "MRInitializeDatabase": "True",
         "MRSeedDatabase": "True",
         "MRExitAfterInitialization": "False"

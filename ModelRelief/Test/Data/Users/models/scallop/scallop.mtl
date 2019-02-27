@@ -1,8 +1,8 @@
-# Rhino
+# MTL written from D:\ModelRelief\ModelRelief\Test\Data\Users\models\scallop\scallop.obj
 newmtl diffuse_Black
-Ka 0.0000 0.0000 0.0000
-Kd 0.0000 0.0000 0.0000
-Ks 1.0000 1.0000 1.0000
-Tf 0.0000 0.0000 0.0000
-d 1.0000
-Ns 0.0000
+Kd 0 0 0
+Ns 4
+d 1
+illum 2
+Ka 0 0 0
+Ks 1 1 1

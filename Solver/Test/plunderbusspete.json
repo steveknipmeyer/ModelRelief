@@ -44,7 +44,7 @@
       "Description": "Plunderbuss Pete Pirate Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T16:59:51.4822615",
+    "FileTimeStamp": "2019-02-27T04:30:05.4089254",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\9\\plunderbusspete.sdb",
     "Id": 9,
     "Name": "plunderbusspete.sdb",
@@ -63,7 +63,7 @@
     "CameraId": 16,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T16:59:51.6476476",
+    "FileTimeStamp": "2019-02-27T04:30:05.580807",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\9\\plunderbusspete.nmap",
     "Id": 9,
     "Name": "plunderbusspete.nmap",
@@ -95,7 +95,7 @@
     "Description": "Plunderbuss Pete transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-26T16:59:51.8684538",
+  "FileTimeStamp": "2019-02-27T04:30:05.8108891",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\9\\plunderbusspete.sfp",
   "Id": 9,
   "Name": "plunderbusspete.sfp",

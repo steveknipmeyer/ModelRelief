@@ -44,7 +44,7 @@
       "Description": "House Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T16:59:51.4822406",
+    "FileTimeStamp": "2019-02-27T04:30:05.408912",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\7\\house.sdb",
     "Id": 7,
     "Name": "house.sdb",
@@ -63,7 +63,7 @@
     "CameraId": 8,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-26T16:59:51.6476354",
+    "FileTimeStamp": "2019-02-27T04:30:05.5807933",
     "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\7\\house.nmap",
     "Id": 7,
     "Name": "house.nmap",
@@ -95,7 +95,7 @@
     "Description": "House transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-26T16:59:51.8684406",
+  "FileTimeStamp": "2019-02-27T04:30:05.8108489",
   "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\7\\house.sfp",
   "Id": 7,
   "Name": "house.sfp",
