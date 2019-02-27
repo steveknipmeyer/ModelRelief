@@ -26,242 +26,244 @@
 
 <body class="custom-skin">
     <!--Main layout-->
-    <main class="mt-5">
-        <!--Main container-->
-        <div class="container">
+    <main class="mt-2">
+        <div id="rootContainer" class="container-fluid">
+            <div id="composerView">
+                <div class="row mt-1 mx-5">
 
-            <!--Grid row-->
-            <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
 
-                <div class="col-md-7 mb-4">
-                    <div class="view overlay z-depth-1-half">
-                        <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(70).jpg" class="card-img-top" alt="">
-                        <div class="mask rgba-white-light"></div>
+                            <div class="col-md-6">
+                                <h5>Overview</h5> ModelRelief transforms 3D models into reliefs.
+                            </div>
+
+                            <!-- Model -->
+                            <div class="col-md-6">
+                                <!-- Model View -->
+                                <div id="modelView" class="container-fluid">
+                                    <div class="row">
+                                        <div class="col">
+
+                                            <!-- Model Card -->
+                                            <div class="card card-cascade narrower">
+
+                                                <!-- Header -->
+                                                <div class="view view-cascade d-flex justify-content-between gradient-card-header grey darken-4 py-2">
+                                                    <div></div>
+                                                    <h5 class="mt-1">Model</h5>
+                                                    <button id="fitView" type="button" class="btn btn-outline-cyan btn-rounded btn-sm px-2 mt-0 mr-0">
+                                                        <i class="fas fa-expand-arrows-alt mt-0"></i>
+                                                    </button>
+                                                </div>
+                                                <!-- /Header -->
+                                                <!-- Body -->
+                                                <div id="modelViewCardBody" class="card-body embed-responsive embed-responsive-1by1">
+                                                    <canvas id="modelCanvas" class="embed-responsive-item" tabindex='2'></canvas>
+                                                </div>
+                                                <!-- /Body -->
+
+                                            </div>
+                                            <!-- /Model Card -->
+
+                                            <div id="progressBar" class="progress md-progress secondary-color">
+                                                <div class="indeterminate"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Model View -->
+                                <select class="mdb-select md-form">
+                                    <option value="None">None</option>
+                                    <option value="Front">Front</option>
+                                    <option value="Back">Back</option>
+                                    <option value="Top">Top</option>
+                                    <option value="Isometric">Isometric</option>
+                                    <option value="Left">Left</option>
+                                    <option value="Right">Right</option>
+                                    <option value="Bottom">Bottom</option>
+                                </select>
+
+                            </div>
+                        </div>
+
+                        <h4>Mesh Settings</h4>
+                        <hr class="controlSection">
+
+                        <!-- Gradient Threshold -->
+                        <div class=" controlContainer">
+                            <span class="controlHeading">Gradient Threshold</span>
+                            <hr class="controlHeadingDivider">
+
+                            <div class="row">
+                                <div class="col-md-9 controlDescription">
+                                    <span>This is descriptive text about the control. It describes the effect this control has on the generated mesh.</span>
+                                </div>
+                                <div class="col">
+                                    <div class="d-flex my-1 sliderControl controlText">
+                                        <span class="mr-2 mt-1">0</span>
+                                        <form class="range-field w-100">
+                                            <input id="gradientThreshold" class="border-0" type="range" min="0" max="10" step="0.1" />
+                                        </form>
+                                        <span class="ml-2 mt-1">10</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Attenuation Factor -->
+                        <div class="controlContainer">
+                            <span class="controlHeading">Gradient Attenuation</span>
+                            <hr class="controlHeadingDivider">
+
+                            <div class="row">
+                                <div class="col-md-9 controlDescription">
+                                    <span>This is descriptive text about the control. It describes the effect this control has on the generated mesh.</span>
+                                </div>
+                                <div class="col">
+                                    <div class="d-flex my-1 sliderControl controlText">
+                                        <span class="mr-2 mt-1">0</span>
+                                        <form class="range-field w-100">
+                                            <input id="attenuationFactor" class="border-0" type="range" min="0" max="100" step="0.5" />
+                                        </form>
+                                        <span class="ml-2 mt-1">100</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Unsharp Gaussian Low -->
+                        <div class="controlContainer">
+                            <span class="controlHeading">Gaussian Blur (Unsharp)</span>
+                            <hr class="controlHeadingDivider">
+
+                            <div class="row">
+                                <div class="col-md-9 controlDescription">
+                                    <span>This is descriptive text about the control. It describes the effect this control has on the generated mesh.</span>
+                                </div>
+                                <div class="col">
+                                    <div class="d-flex my-1 sliderControl controlText">
+                                        <span class="mr-2 mt-1">0</span>
+                                        <form class="range-field w-100">
+                                            <input id="unsharpGaussianLow" class="border-0" type="range" min="0" max="5" step="0.1" />
+                                        </form>
+                                        <span class="ml-2 mt-1">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Unsharp High Frequency Scale -->
+                        <div class="controlContainer">
+                            <span class="controlHeading">High Frequency Detail</span>
+                            <hr class="controlHeadingDivider">
+
+                            <div class="row">
+                                <div class="col-md-9 controlDescription">
+                                    <span>This is descriptive text about the control. It describes the effect this control has on the generated mesh.</span>
+                                </div>
+                                <div class="col">
+                                    <div class="d-flex my-1 sliderControl controlText">
+                                        <span class="mr-2 mt-1">0</span>
+                                        <form class="range-field w-100">
+                                            <input id="unsharpHighFrequencyScale" class="border-0" type="range" min="0" max="5" step="0.1" />
+                                        </form>
+                                        <span class="ml-2 mt-1">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mesh Scale (P1) -->
+                        <div class="controlContainer">
+                            <span class="controlHeading">Scale</span>
+                            <hr class="controlHeadingDivider">
+
+                            <div class="row">
+                                <div class="col-md-9 controlDescription">
+                                    <span>This is descriptive text about the control. It describes the effect this control has on the generated mesh.</span>
+                                </div>
+
+                                <div class="col">
+                                    <div class="d-flex my-1 sliderControl controlText">
+                                        <span class="mr-2 mt-1">0</span>
+                                        <form class="range-field w-100">
+                                            <input id="meshScale" class="border-0" type="range" min="0" max="0.10" step="0.001" />
+                                        </form>
+                                        <span class="ml-2 mt-1">10%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mesh -->
+                    <div class="col px-0">
+                        <!-- Mesh View -->
+                        <div id="meshView" class="container-fluid">
+                            <div class="row">
+
+                                <div class="col">
+                                    <!-- Mesh Card -->
+                                    <div class="card card-cascade narrower">
+
+                                        <!-- Header -->
+                                        <div class="view view-cascade d-flex justify-content-between gradient-card-header grey darken-4 py-2">
+                                            <div></div>
+                                            <h5 class="mt-1">Mesh</h5>
+                                            <button id="fitView" type="button" class="btn btn-outline-cyan btn-rounded btn-sm px-2 mt-0 mr-0">
+                                                <i class="fas fa-expand-arrows-alt mt-0"></i>
+                                            </button>
+                                        </div>
+                                        <!-- /Header -->
+                                        <!-- Body -->
+                                        <div id="meshViewCardBody" class="card-body embed-responsive embed-responsive-1by1">
+                                            <canvas id="meshCanvas" class="embed-responsive-item" tabindex='2'></canvas>
+                                        </div>
+                                        <!-- /Body -->
+                                    </div>
+                                    <!-- /Mesh Card -->
+
+                                    <div id="progressBar" class="progress md-progress secondary-color">
+                                        <div class="indeterminate"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Mesh View -->
+
+                        <div class="d-flex justify-content-center">
+                            <a id="generateMesh" class="btn-floating btn-lg purple-gradient"><i class="fas fa-bolt"></i></a>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-md-5 mb-4">
-                    <h2>Some very awesome heading</h2>
-                    <hr>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis pariatur quod ipsum atque
-                        quam dolorem
-                        voluptate officia sunt placeat consectetur alias fugit cum praesentium ratione sint mollitia,
-                        perferendis
-                        natus quaerat!</p>
-                    <a class="btn-floating btn-lg purple-gradient"><i class="fas fa-bolt"></i></a>
+                <div id="depthBufferView">
+                    <!-- The canvas is generated dynamically. -->
+                    <canvas id="depthBufferCanvas"></canvas>
+                </div>
+
+                <div id="normalMapView">
+                    <!-- The canvas is generated dynamically. -->
+                    <canvas id="normalMapCanvas"></canvas>
                 </div>
 
             </div>
-
-            <!--Grid row-->
-            <div class="row">
-
-                <div class="col-lg-4 col-md-12 mb-4">
-
-                    <!--Card-->
-                    <div class="card">
-
-                        <!--Card image-->
-                        <div class="view overlay">
-                            <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(72).jpg" class="card-img-top" alt="">
-                            <a href="/composer/edit/?name=lucy">
-                                <div class="mask rgba-white-slight"></div>
-                            </a>
-                        </div>
-
-                        <!--Card content-->
-                        <div class="card-body">
-                            <!--Title-->
-                            <h4 class="card-title">Lucy</h4>
-                            <!--Text-->
-                            <p class="card-text">Some quick example text to build on the card title and make up the
-                                bulk of the card's content.</p>
-                            <a href="/composer/edit/?name=lucy" class="btn btn-indigo">Lucy</a>
-                        </div>
-
-                    </div>
-                    <!--/.Card-->
-
-                </div>
-
-                <div class="col-lg-4 col-md-6 mb-4">
-
-                    <!--Card-->
-                    <div class="card">
-
-                        <!--Card image-->
-                        <div class="view overlay">
-                            <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(74).jpg" class="card-img-top" alt="">
-                            <a href="/composer/edit/?name=dragon">
-                                <div class="mask rgba-white-slight"></div>
-                            </a>
-                        </div>
-
-                        <!--Card content-->
-                        <div class="card-body">
-                            <!--Title-->
-                            <h4 class="card-title">Dragon</h4>
-                            <!--Text-->
-                            <p class="card-text">Some quick example text to build on the card title and make up the
-                                bulk of the card's content.</p>
-                            <a href="/composer/edit/?name=dragon" class="btn btn-indigo">Dragon</a>
-                        </div>
-
-                    </div>
-                    <!--/.Card-->
-
-                </div>
-
-                <div class="col-lg-4 col-md-6 mb-4">
-
-                    <!--Card-->
-                    <div class="card">
-
-                        <!--Card image-->
-                        <div class="view overlay">
-                            <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(75).jpg" class="card-img-top" alt="">
-                            <a href="/composer/edit/?name=house">
-                                <div class="mask rgba-white-slight"></div>
-                            </a>
-                        </div>
-
-                        <!--Card content-->
-                        <div class="card-body">
-                            <!--Title-->
-                            <h4 class="card-title">House</h4>
-                            <!--Text-->
-                            <p class="card-text">Some quick example text to build on the card title and make up the
-                                bulk of the card's content.</p>
-                            <a href="/composer/edit/?name=house" class="btn btn-indigo">House</a>
-                        </div>
-
-                    </div>
-                    <!--/.Card-->
-                </div>
-            </div>
-
         </div>
-        <!--Section: contact-->
-        <section id="contact" class="py-5" style="background-color: #eee;">
-
-            <div class="container">
-
-                <!-- Section heading -->
-                <h2 class="h1-responsive font-weight-bold text-center mb-5">Contact us</h2>
-                <!-- Section description -->
-                <p class="text-center w-responsive mx-auto mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit, error amet numquam iure provident voluptate esse quasi, veritatis totam voluptas nostrum quisquam eum porro a pariatur veniam.</p>
-
-                <!-- Grid row -->
-                <div class="row">
-
-                    <!-- Grid column -->
-                    <div class="col-md-9 mb-md-0 mb-5">
-
-                        <form>
-
-                            <!-- Grid row -->
-                            <div class="row">
-
-                                <!-- Grid column -->
-                                <div class="col-md-6">
-                                    <div class="md-form mb-0">
-                                        <input type="text" id="contact-name" class="form-control">
-                                        <label for="contact-name" class="">Your name</label>
-                                    </div>
-                                </div>
-                                <!-- Grid column -->
-
-                                <!-- Grid column -->
-                                <div class="col-md-6">
-                                    <div class="md-form mb-0">
-                                        <input type="text" id="contact-email" class="form-control">
-                                        <label for="contact-email" class="">Your email</label>
-                                    </div>
-                                </div>
-                                <!-- Grid column -->
-
-                            </div>
-                            <!-- Grid row -->
-
-                            <!-- Grid row -->
-                            <div class="row">
-
-                                <!-- Grid column -->
-                                <div class="col-md-12">
-                                    <div class="md-form mb-0">
-                                        <input type="text" id="contact-Subject" class="form-control">
-                                        <label for="contact-Subject" class="">Subject</label>
-                                    </div>
-                                </div>
-                                <!-- Grid column -->
-
-                            </div>
-                            <!-- Grid row -->
-
-                            <!-- Grid row -->
-                            <div class="row">
-
-                                <!-- Grid column -->
-                                <div class="col-md-12">
-                                    <div class="md-form">
-                                        <textarea type="text" id="contact-message" class="form-control md-textarea" rows="3"></textarea>
-                                        <label for="contact-message">Your message</label>
-                                    </div>
-                                </div>
-                                <!-- Grid column -->
-
-                            </div>
-                            <!-- Grid row -->
-
-                        </form>
-
-                        <div class="text-center text-md-left">
-                            <a class="btn btn-purple btn-md">Send</a>
-                        </div>
-
-                    </div>
-                    <!-- Grid column -->
-
-                    <!-- Grid column -->
-                    <div class="col-md-3 text-center">
-                        <ul class="list-unstyled mb-0">
-                            <li>
-                                <i class="fas fa-map-marker-alt fa-2x purple-text"></i>
-                                <p>San Francisco, CA 94126, USA</p>
-                            </li>
-                            <li>
-                                <i class="fas fa-phone fa-2x mt-4 purple-text"></i>
-                                <p>+ 01 234 567 89</p>
-                            </li>
-                            <li>
-                                <i class="fas fa-envelope fa-2x mt-4 purple-text"></i>
-                                <p class="mb-0">contact@example.com</p>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- Grid column -->
-
-                </div>
-                <!-- Grid row -->
-
-            </div>
-
-        </section>
-        <!--Section: contact-->
-
-        <!--Main container-->
     </main>
     <!--Main layout-->
-
     <!------------------------------------------------------------------------------------------------>
     <!--                                    Libraries                                               -->
     <!------------------------------------------------------------------------------------------------>
-
     <!------------------------------------------------------------------------------------------------>
     <!--                                    ModelRelief                                             -->
     <!------------------------------------------------------------------------------------------------>
-
-
+    <script>
+        // Material Select Initialization
+        $(document).ready(function () {
+            $('.mdb-select').materialSelect();
+        });
+    </script>
 </body>
 
 </html>

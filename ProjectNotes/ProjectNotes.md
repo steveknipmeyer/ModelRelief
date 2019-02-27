@@ -20,6 +20,7 @@
 #### Privacy Page
     Add a Privacy page.
         The page exists populate it.
+    https://auth0.com/docs/compliance/gdpr
 
 #### Credits Page
 
