@@ -30,6 +30,11 @@ input, textarea {
     cursor: not-allowed;
 }
 
+.dropdown-menu {
+    background-color: #1d272e !important;
+    color: white !important;
+}
+
 /* ----------------------
     Composer
 ------------------------*/

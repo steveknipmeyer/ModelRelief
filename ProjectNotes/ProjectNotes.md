@@ -5,11 +5,14 @@
 #### Vector
 
 #### Today
+    custom-skin: undeclared variable
+        "skin-text":               $white,
 
-    Add Standard View Select.
-        https://github.com/coreui/coreui-free-bootstrap-admin-template/issues/296
-        https://stackoverflow.com/questions/31829312/bootstrap-dropdown-clipped-by-overflowhidden-container-how-to-change-the-conta
-        https://jsfiddle.net/djibe89/qej2ppcq/
+    Style StandardView.
+    Improve StandardView initialization:
+        Iterate through StandardView enum.
+        Dynamically assign anchor elements to StandardView.
+
     Review all mesh generation settings for delivered models.
         Attenuation Decay.
             It is 0.9 in the thesis but there are values of 0.6 in the sample data set.

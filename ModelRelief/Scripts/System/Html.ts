@@ -25,6 +25,7 @@ export enum ElementIds {
     ModelViewerControls         = "modelViewerControls",
     NormalMapViewerControls     = "normalMapViewerControls",
 
+    StandardView                = "standardView",
     FitView                     = "fitView",
     ProgressBar                 = "progressBar",
 

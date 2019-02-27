@@ -7,16 +7,16 @@
 
 import * as THREE from "three";
 
-import {StandardView} from "Scripts/Api/V1/Interfaces/ICamera";
-import {Graphics, ObjectNames} from "Scripts/Graphics/Graphics";
-import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
-import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
-import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
-import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
-import {DefaultCameraSettings} from "Scripts/Models/Camera/DefaultCameraSettings";
-import {EventType, IMREvent} from "Scripts/System/EventManager";
-import {ElementAttributes, ElementIds} from "Scripts/System/Html";
-import {Viewer} from "Scripts/Viewers/Viewer";
+import { StandardView } from "Scripts/Api/V1/Interfaces/ICamera";
+import { Graphics, ObjectNames } from "Scripts/Graphics/Graphics";
+import { IThreeBaseCamera } from "Scripts/Graphics/IThreeBaseCamera";
+import { BaseCamera } from "Scripts/Models/Camera/BaseCamera";
+import { CameraFactory } from "Scripts/Models/Camera/CameraFactory";
+import { CameraHelper } from "Scripts/Models/Camera/CameraHelper";
+import { DefaultCameraSettings } from "Scripts/Models/Camera/DefaultCameraSettings";
+import { EventType, IMREvent } from "Scripts/System/EventManager";
+import { ElementAttributes, ElementIds } from "Scripts/System/Html";
+import { Viewer } from "Scripts/Viewers/Viewer";
 
 /**
  * @description CameraControls
@@ -41,8 +41,8 @@ class CameraControlsSettings {
 
         this.near = baseCamera.near;
         this.far = baseCamera.far;
-        this.isPerspective  = camera instanceof THREE.PerspectiveCamera;
-        this.fieldOfView    = this.isPerspective ? (camera as THREE.PerspectiveCamera).fov : DefaultCameraSettings.FieldOfView;
+        this.isPerspective = camera instanceof THREE.PerspectiveCamera;
+        this.fieldOfView = this.isPerspective ? (camera as THREE.PerspectiveCamera).fov : DefaultCameraSettings.FieldOfView;
 
         this.standardView = StandardView.None;
     }
@@ -85,7 +85,7 @@ export class CameraControls {
         this.initializeViewerEventListeners();
     }
 
-//#region Event Handlers
+    //#region Event Handlers
     /**
      * @description Initialize event listeners for controlled Viewer.
      * @private
@@ -95,13 +95,13 @@ export class CameraControls {
         // Camera
         this.viewer.eventManager.addEventListener(EventType.ViewerCameraProperties, (event: IMREvent, camera: IThreeBaseCamera) => {
             this.synchronizeSettingsFromViewCamera(camera);
-            });
+        });
 
         // Camera Standard View
         this.viewer.eventManager.addEventListener(EventType.ViewerCameraStandardView, (event: IMREvent, standardView: StandardView) => {
             this.settings.standardView = standardView;
         });
-        }
+    }
 
     /**
      * @description Fits the active view.
@@ -142,13 +142,13 @@ export class CameraControls {
 
         // camera
         this.viewer.camera.near = clippingPlanes.near;
-        this.viewer.camera.far  = clippingPlanes.far;
+        this.viewer.camera.far = clippingPlanes.far;
         this.viewer.camera.updateProjectionMatrix();
 
         // synchronize UI controls
         // WIP
     }
-//#endregion
+    //#endregion
 
     /**
      * @description Initialize the view settings that are controllable by the user
@@ -157,9 +157,9 @@ export class CameraControls {
     private initializeControls(controlOptions: ICameraControlsOptions = {}) {
 
         const {
-            cameraHelper     : showCameraHelper     = true,
-            fieldOfView      : showFieldOfView      = true,
-            clippingControls : showClippingControls = true,
+            cameraHelper: showCameraHelper = true,
+            fieldOfView: showFieldOfView = true,
+            clippingControls: showClippingControls = true,
         } = controlOptions;
 
         this.settings = new CameraControlsSettings(this.viewer.camera);
@@ -168,6 +168,43 @@ export class CameraControls {
         const fitViewControl = document.querySelector(`#${this.viewer.viewContainerId} #${ElementIds.FitView}`);
         fitViewControl.addEventListener("click", (clickevent) => {
             this.fitView();
+        });
+
+        // Standard View
+        const viewer = this.viewer;
+        const standardViewControl = document.querySelector(`#${this.viewer.viewContainerId} #${ElementIds.StandardView}`);
+        [].forEach.call(standardViewControl.children, (element) => {
+            element.addEventListener('click', (clickEvent) => {
+
+                const viewValue = element.text;
+                var standardView = StandardView.None;
+                switch (viewValue) {
+                    case "Front":
+                        standardView = StandardView.Front;
+                        break;
+                    case "Back":
+                        standardView = StandardView.Back;
+                        break;
+                    case "Top":
+                        standardView = StandardView.Top;
+                        break;
+                    case "Isometric":
+                        standardView = StandardView.Isometric;
+                        break;
+                    case "Left":
+                        standardView = StandardView.Left;
+                        break;
+                    case "Right":
+                        standardView = StandardView.Right;
+                        break;
+                    case "Bottom":
+                        standardView = StandardView.Bottom;
+                        break;
+                    default:
+                        return;
+                }
+                viewer.setCameraToStandardView(standardView);
+            }, false)
         });
     }
 
@@ -195,7 +232,7 @@ export class CameraControls {
     private synchronizeSettingsFromViewCamera(camera: IThreeBaseCamera): void {
 
         this.settings.near = camera.near;
-        this.settings.far  = camera.far;
+        this.settings.far = camera.far;
 
         this.settings.isPerspective = camera instanceof THREE.PerspectiveCamera;
         if (this.settings.isPerspective) {
