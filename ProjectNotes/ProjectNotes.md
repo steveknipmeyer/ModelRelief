@@ -1,11 +1,13 @@
 ﻿### Tasks
 #### Commit Notes
 
-#### Lambda
+#### Lambdas
 
 #### Vector
 
 #### Today
+    Should the Contact Form have a different background color?
+
     Review all mesh generation settings for delivered models.
         Attenuation Decay.
             It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
@@ -1365,7 +1367,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     Bunny                                       Stanford        Stanford
     Dolphin                                     Jewelry         TurboSquid  RoyaltyFree         https://www.turbosquid.com/FullPreview/Index.cfm/ID/332975
     Dragon                                      Stanford        Stanford
-    Horse                                       
+    Horse
     House (San Francisco)                       Architectural   TurboSquid  RoyaltyFree         https://www.turbosquid.com/FullPreview/Index.cfm/ID/832520
     Lucy                                        Stanford        Stanford
     Plunderbus Pete                                             Thingiverse Creative Commons    https://www.thingiverse.com/thing:144775

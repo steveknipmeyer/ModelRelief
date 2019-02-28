@@ -63,8 +63,14 @@
         @RenderBody()
     </div>
 
-    <footer>
-        @await Component.InvokeAsync("Footer")
+    <footer class="page-footer font-small blue-grey darken-3">
+        @*@await Component.InvokeAsync("Footer")*@
+
+        <div class="footer-copyright text-center mt-3 py-3">
+            © 2019 Copyright:
+            <a href="http://modelrelief.com/"> ModelRelief.com</a>
+        </div>
+
     </footer>
 
     <!--******************************************************************************************-->
