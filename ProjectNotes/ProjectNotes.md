@@ -1351,6 +1351,11 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     FeatureFolders              MIT https://raw.githubusercontent.com/OdeToCode/AddFeatureFolders/master/LICENSE
     http-status-codes           MIT https://www.npmjs.com/package/http-status-codes
     base64                      MIT https://github.com/beatgammit/base64-js/blob/master/index.js
+    Mavavi                      MIT, GPL https://docs.enthought.com/mayavi/mayavi/
+    PyAMG                       MIT https://github.com/pyamg/pyamg
+    Gaussian Box Blur           MIT https://www.peterkovesi.com/matlabfns/citesite.html
+       Ivan Kutskir                 http://blog.ivank.net/fastest-gaussian-blur.html
+    MDBootstrap
     OpinionatedApiController : Spencer Schneidenbach
     ContosoCore              : Jimmy Bogard
 
@@ -1360,6 +1365,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     Bunny                                       Stanford        Stanford
     Dolphin                                     Jewelry         TurboSquid  RoyaltyFree         https://www.turbosquid.com/FullPreview/Index.cfm/ID/332975
     Dragon                                      Stanford        Stanford
+    Horse                                       
     House (San Francisco)                       Architectural   TurboSquid  RoyaltyFree         https://www.turbosquid.com/FullPreview/Index.cfm/ID/832520
     Lucy                                        Stanford        Stanford
     Plunderbus Pete                                             Thingiverse Creative Commons    https://www.thingiverse.com/thing:144775
@@ -1368,11 +1374,6 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     Test                                        ModelRelief     Internal
     Tyrannosaurus                               Stanford        Stanford
 
-    Horse                                       Logo            TurboSquid                      https://www.turbosquid.com/FullPreview/Index.cfm/ID/587173
-
-    Gaussian Box Blur           MIT https://www.peterkovesi.com/matlabfns/citesite.html
-       Ivan Kutskir                 http://blog.ivank.net/fastest-gaussian-blur.html
-    MDBootstrap
 
 #### Visual Studio
     Performance

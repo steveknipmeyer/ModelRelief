@@ -42,10 +42,19 @@ namespace ModelRelief.Features.Home
             }
 
         /// <summary>
-        /// Action method for Privacy Get.
+        /// Action method for Privacy page.
         /// </summary>
         [HttpGet]
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Action method for Credits page.
+        /// </summary>
+        [HttpGet]
+        public IActionResult Credits()
         {
             return View();
         }
