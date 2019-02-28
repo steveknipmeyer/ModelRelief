@@ -148,7 +148,41 @@ export class CameraControls {
         // synchronize UI controls
         // WIP
     }
+
     //#endregion
+
+    /**
+     * @description Initialize the StandardrView (Camera) control.
+     * @private
+     */
+    private initializeStandardView(): void {
+
+        const viewer = this.viewer;
+        const standardViewControl = document.querySelector(`#${this.viewer.viewContainerId} #${ElementIds.StandardView}`);
+
+        for (const enumMember in StandardView) {
+
+            var isValueProperty = parseInt(enumMember, 10) >= 0
+            if (!isValueProperty) {
+                const viewName = enumMember;
+                const viewValue = StandardView[enumMember];
+                if (viewName === "None")
+                    continue;
+
+                var anchorElement: HTMLAnchorElement = document.createElement('a');
+                anchorElement.text = viewName;
+                anchorElement.setAttribute('data-view', viewValue);
+                anchorElement.className = "dropdown-item";
+                anchorElement.addEventListener('click', (clickEvent) => {
+                    const targetElement : HTMLElement = <HTMLElement> clickEvent.target;
+                    const standardView = parseInt(targetElement.getAttribute("data-view"), 10);
+                    viewer.setCameraToStandardView(standardView);
+                }, false)
+
+            standardViewControl.appendChild(anchorElement) ;
+            }
+        }
+    }
 
     /**
      * @description Initialize the view settings that are controllable by the user
@@ -171,41 +205,7 @@ export class CameraControls {
         });
 
         // Standard View
-        const viewer = this.viewer;
-        const standardViewControl = document.querySelector(`#${this.viewer.viewContainerId} #${ElementIds.StandardView}`);
-        [].forEach.call(standardViewControl.children, (element) => {
-            element.addEventListener('click', (clickEvent) => {
-
-                const viewValue = element.text;
-                var standardView = StandardView.None;
-                switch (viewValue) {
-                    case "Front":
-                        standardView = StandardView.Front;
-                        break;
-                    case "Back":
-                        standardView = StandardView.Back;
-                        break;
-                    case "Top":
-                        standardView = StandardView.Top;
-                        break;
-                    case "Isometric":
-                        standardView = StandardView.Isometric;
-                        break;
-                    case "Left":
-                        standardView = StandardView.Left;
-                        break;
-                    case "Right":
-                        standardView = StandardView.Right;
-                        break;
-                    case "Bottom":
-                        standardView = StandardView.Bottom;
-                        break;
-                    default:
-                        return;
-                }
-                viewer.setCameraToStandardView(standardView);
-            }, false)
-        });
+        this.initializeStandardView();
     }
 
     /**

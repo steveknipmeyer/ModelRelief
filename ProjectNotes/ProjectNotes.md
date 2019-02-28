@@ -1,18 +1,11 @@
 ﻿### Tasks
 #### Commit Notes
+
 #### Lambda
 
 #### Vector
 
 #### Today
-    custom-skin: undeclared variable
-        "skin-text":               $white,
-
-    Style StandardView.
-    Improve StandardView initialization:
-        Iterate through StandardView enum.
-        Dynamically assign anchor elements to StandardView.
-
     Review all mesh generation settings for delivered models.
         Attenuation Decay.
             It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
@@ -1590,7 +1583,7 @@ https://semver.npmjs.com/
         [X] AddMeshes
         [X] AddNormalMaps
 
-    Update JSON files. 
+    Update JSON files.
         Place the new entities at the end and increment the Id.
         Update the Project Id to reflect the Project that was assigned to the model.
         [X] Camera.json (placeholder, values not important)
@@ -1603,7 +1596,7 @@ https://semver.npmjs.com/
     Update the Solver\Test JSON files using MRUpdateSeedData.
 
     Update the model counts in the integration tests.
-        IdRange = Enumerable.Range(1, X);            
+        IdRange = Enumerable.Range(1, X);
         N.B. The LucyDepthBufferFindsOneDependent integration test has several Ids that are hard-coded.
             These need to be changed if the Lucy Camera, DepthBuffer of Model keys change.
 #### Numpy

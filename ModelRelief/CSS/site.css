@@ -12,6 +12,12 @@ select {
     overflow: visible !important;
 }
 
+/* StandardView  */
+.dropdown-menu a:hover {
+background-color: black !important;
+color: darkturquoise !important;
+}
+
 /* ----------------------
     General
 ------------------------*/
