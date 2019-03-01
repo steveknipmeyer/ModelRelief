@@ -5,6 +5,7 @@
 }
 
 <style>
+
     .creditTable {
         margin-left: 10%;
         margin-right: 10%;
@@ -12,21 +13,40 @@
 
     .creditHeading {
         font-size: 16pt;
+        color: lightgray;
     }
+
     .creditTechnology {
-        font-size: 14pt;
+        font-size: 12pt;
     }
+
     .creditDescription {
-        font-size: 12pt;
+        font-size: 10pt;
     }
+
     .creditLicense {
-        font-size: 12pt;
+        font-size: 10pt;
     }
+
     .creditTable a:hover {
         color: darkturquoise;
     }
-   
 
+    .creditTable a:link {
+        color: cyan;
+    }
+
+    .creditTable a:visited {
+        color: cyan;
+    }
+
+    .creditTable a:hover {
+        color: mediumpurple;
+    }
+
+    .creditTable a:active {
+        color: blue;
+    }
 </style>
 
 <main>
@@ -41,26 +61,38 @@
 
                 <div class="row">
                     <div class="col-md-2">
-                        <a class="creditTechnology" target="_blank" href="">Placeholder</a>
+                        <a class="creditTechnology" target="_blank" href="https://people.mpi-inf.mpg.de/~kerber/">Dr. Jens Kerber</a>
                     </div>
                     <div class="col-md-8">
-                        <span class="creditDescription">Placeholder</span>
+                        <span class="creditDescription">Dr. Kerber is a leading computer scientist researcher in the field of digital bas reliefs. <br />Much of the processing in ModelRelief is based on his master's thesis at the Univesity of Saarland <a class="creditTechnology" target="_blank" href="https://people.mpi-inf.mpg.de/~kerber/publications/Jens_Kerber_Masterthesis.pdf">Digitial Art of Bas-Relief Sculpting</a>. </span>
                     </div>
                     <div class="col-md-2">
-                        <span class="creditLicense">Placeholder</span>
+                        <span class="creditLicense"></span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-2">
-                        <a class="creditTechnology" target="_blank" href="">Placeholder</a>
+                        <a class="creditTechnology" target="_blank" href="http://blog.ivank.net/fastest-gaussian-blur.html">Fast Gaussian Blur</a>
                     </div>
                     <div class="col-md-8">
-                        <span class="creditDescription">Placeholder</span>
+                        <span class="creditDescription">Ivan Kutskir's  algorithm for performing Gaussian blur operations in near linear time. Based on <a class="creditTechnology" target="_blank" href="http://elynxsdk.free.fr/ext-docs/Blur/Fast_box_blur.pdf">Fast image convolutions</a> by Wojciech Jarosz</span>
                     </div>
                     <div class="col-md-2">
-                        <span class="creditLicense">Placeholder</span>
+                        <span class="creditLicense">MIT License</span>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="https://www.peterkovesi.com/matlabfns">Gaussian Box Blur</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">MATLAB and Octave Functions for Computer Vision and Image Processing</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="creditLicense">MIT License</span>
+                    </div>
+                </div>
+
             </section>
 
             <section class="creditSection mt-4">
@@ -89,6 +121,52 @@
                         <span class="creditLicense">Apache License</span>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="https://getbootstrap.com/">Bootstrap</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">Open source toolkit for development with HTML, CSS and JavaScript</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="creditLicense">MIT License</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="https://mdbootstrap.com/">MDBootstrap</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">Material Design for Bootstrap</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="creditLicense">Commercial</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="https://github.com/beatgammit/base64-js/blob/master/index.js">base64</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">Basic base64 encoding/decoding in pure JavaScript</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="creditLicense">MIT License</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="https://www.npmjs.com/package/http-status-codes">http-status-codes</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">Constants enumerating the HTTP status codes. Based on the Java Apache HttpStatus API</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="creditLicense">MIT License</span>
+                    </div>
+                </div>
+
+
             </section>
 
             <section class="creditSection mt-4">
@@ -108,14 +186,203 @@
                 </div>
                 <div class="row">
                     <div class="col-md-2">
-                        <a class="creditTechnology" target="_blank" href="https://www.numpy.org//">NumPy</a>
+                        <a class="creditTechnology" target="_blank" href="https://www.numpy.org/">NumPy</a>
                     </div>
                     <div class="col-md-8">
                         <span class="creditDescription">Fundamental package for scientific computing with Python</span>
                     </div>
                     <div class="col-md-2">
-                        <a  class="creditLicense" target="_blank" href="https://www.numpy.org/license.html">License</a>
+                        <a class="creditLicense" target="_blank" href="https://www.numpy.org/license.html">License</a>
                     </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="https://github.com/pyamg/pyamg">PyAMG</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">Python Algebraic Multigrid Solver</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="creditLicense">MIT License</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="https://docs.enthought.com/mayavi/mayavi/">Mavavi</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">3D scientific data visualization and plotting in Python<br />Ramachandran, P. and Varoquaux, G., `Mayavi: 3D Visualization of Scientific Data` IEEE Computing in Science & Engineering, 13 (2), pp. 40-51 (2011)</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="creditLicense">MIT, GPL Licenses</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="https://github.com/autofac/Autofac">Autofac</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">IoC container for Microsoft .NET</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="creditLicense">MIT License</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="">Placeholder</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">Placeholder</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="creditLicense">Placeholder</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="https://en.wikipedia.org/wiki/C_Sharp_(programming_language)">C# Programming Language</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">General-purpose, multi-paradigm programming language</span>
+                    </div>
+                    <div class="col-md-2">
+                        <a class="creditLicense" target="_blank" href="https://en.wikipedia.org/wiki/Python_Software_Foundation_License">Python Software Foundation License</a>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="https://www.python.org/">Python</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">Interpreted, high-level, general-purpose programming language</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="creditLicense">Placeholder</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="https://www.microsoft.com/en-us/sql-server/sql-server-editions-express">SQL Server Express</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">SQL Relational Database</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="creditLicense">Microsoft</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="https://auth0.com/">Auth0</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">Universal authentication & authorization platform for web, mobile and legacy applications</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="creditLicense">Auth0 Free Plan</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="https://github.com/jbogard/MediatR">MediatR</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">Jimmy Bogard's simple mediator implementation in .NET</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="creditLicense">Apache</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="https://raw.githubusercontent.com/OdeToCode/AddFeatureFolders/master/LICENSE">FeatureFolders</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">K. Scott Allen's extensions to MVC for organizing projects by features</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="creditLicense">MIT</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="https://github.com/schneidenbach/RecessOpinionatedApiInAspNetCore">Opinionated API Controller</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">Spencer Schneidenbach's API architecture for .NET MVC based on Jimmy Bogard's work</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="creditLicense">MIT</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="https://github.com/jbogard/ContosoUniversityDotNetCore/blob/master/LICENSE">Contoso University Core</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">Jimmy Bogard's implementation of Contoso University showing .NET Core best practices</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="creditLicense">MIT</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="https://serilog.net/">Serilog</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">Structured logging for .NET applications</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="creditLicense">Apache</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="https://github.com/AutoMapper/AutoMapper">AutoMapper</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">Convention-based object mapper for .NET</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="creditLicense">MIT</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="https://github.com/commandlineparser/commandline">Command Line Parser</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">Command line parser library for CLS and NetStandard</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="creditLicense">MIT</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="https://github.com/jstedfast/MailKit">MailKit</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">A cross-platform .NET library for IMAP, POP3, and SMTP</span>
+                    </div>
+                    <div class="col-md-2">
+                        <a class="creditLicense" target="_blank" href="https://github.com/jstedfast/MailKit/blob/master/License.md">Xamarin Copyright, MIT</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="https://github.com/domaindrivendev/Swashbuckle.AspNetCore">Swashbuckle</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">Swagger tooling for API's built with ASP.NET Core </span>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="creditLicense">MIT</span>
+                    </div>
+                </div>
             </section>
 
             <section class="creditSection mt-4">
@@ -146,7 +413,24 @@
                 </div>
             </section>
 
+            <section class="creditSection mt-4">
+                <span class="creditHeading">Placeholder</span>
+                <hr class="mt-0" />
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <a class="creditTechnology" target="_blank" href="">Placeholder</a>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="creditDescription">Placeholder</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="creditLicense">Placeholder</span>
+                    </div>
+                </div>
+            </section>
+
         </div>
     </div>
-    </div>
+
 </main>

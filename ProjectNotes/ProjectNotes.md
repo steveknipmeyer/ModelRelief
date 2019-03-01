@@ -7,10 +7,14 @@
 
 #### Today
     Should the Contact Form have a different background color?
+    Gradient -> Slope
 
     Review all mesh generation settings for delivered models.
         Attenuation Decay.
             It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
+
+#### General
+    Add meta tags.
 
 #### Composer
 
@@ -1346,21 +1350,43 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
         Similarly, for binary documents without specific or known subtype, application/octet-stream should be used.
 
 #### Licenses
-    THREE.js                    MIT
-    Serilog                     Apache https://www.apache.org/licenses/LICENSE-2.0
-    Autofac                     MIT
-    MediatR                     Apache https://github.com/jbogard/MediatR/blob/master/LICENSE
-    FeatureFolders              MIT https://raw.githubusercontent.com/OdeToCode/AddFeatureFolders/master/LICENSE
-    http-status-codes           MIT https://www.npmjs.com/package/http-status-codes
-    base64                      MIT https://github.com/beatgammit/base64-js/blob/master/index.js
-    Mavavi                      MIT, GPL https://docs.enthought.com/mayavi/mayavi/
-    PyAMG                       MIT https://github.com/pyamg/pyamg
-    Gaussian Box Blur           MIT https://www.peterkovesi.com/matlabfns/citesite.html
-       Ivan Kutskir                 http://blog.ivank.net/fastest-gaussian-blur.html
-    MDBootstrap
-    OpinionatedApiController : Spencer Schneidenbach
-    ContosoCore              : Jimmy Bogard
+    Algorithms
+    Dr. Jens Kerner                         https://people.mpi-inf.mpg.de/~kerber/publications/Jens_Kerber_Masterthesis.pdf
+    Gaussian Box Blur           MIT         https://www.peterkovesi.com/matlabfns/citesite.html
+    Ivan Kutskir                MIT         http://blog.ivank.net/fastest-gaussian-blur.html
 
+    Front End
+    THREE.js                    MIT         https://threejs.org
+    TypeScript                  Apache      https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-2.2/
+    Bootstrap                   MIT         https://getbootstrap.com/
+    MDBootstrap                 Commercial  https://mdbootstrap.com/
+    base64-js                   MIT         https://github.com/beatgammit/base64-js/blob/master/index.js
+    http-status-codes           MIT         https://www.npmjs.com/package/http-status-codes
+
+    Back End
+    ASP.NET Core                Apache      Microsoft
+    NumPy                                   https://www.numpy.org/
+    PyAMG                       MIT         https://github.com/pyamg/pyamg
+    Mavavi                      MIT, GPL    https://docs.enthought.com/mayavi/mayavi/
+    Autofac                     MIT         https://github.com/autofac/Autofac
+    C#                        	MIT         https://en.wikipedia.org/wiki/C_Sharp_(programming_language)
+    Python                      PSF         https://www.python.org/
+    SQL Server                  Microsoft   https://www.microsoft.com/en-us/sql-server/sql-server-editions-express
+    Auth0                       Microsoft   https://auth0.com/
+    Microsoft Azure             Microsoft   https://azure.microsoft.com/en-us/services/key-vault/
+    MediatR                     Apache      https://github.com/jbogard/MediatR/blob/master/LICENSE
+    FeatureFolders              MIT         https://raw.githubusercontent.com/OdeToCode/AddFeatureFolders/master/LICENSE
+    OpinionatedApiController    MIT         https://github.com/schneidenbach/RecessOpinionatedApiInAspNetCore
+    ContosoCore                 MIT         https://github.com/jbogard/ContosoUniversityDotNetCore
+    Serilog                     Apache      https://www.apache.org/licenses/LICENSE-2.0
+    AutoMapper                  MIT         https://github.com/AutoMapper/AutoMapper
+    CommandLineParser
+    MailKit
+
+    Swashbuckle
+    
+
+  3D Models
     Model                                       Project         Source      License             Link
     Armadillo                                   Stanford        Stanford
     Buddha                                      Stanford        Stanford
@@ -1375,7 +1401,6 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     Statue                                      Stanford        Stanford
     Test                                        ModelRelief     Internal
     Tyrannosaurus                               Stanford        Stanford
-
 
 #### Visual Studio
     Performance
