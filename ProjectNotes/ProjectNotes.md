@@ -1380,11 +1380,10 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     ContosoCore                 MIT         https://github.com/jbogard/ContosoUniversityDotNetCore
     Serilog                     Apache      https://www.apache.org/licenses/LICENSE-2.0
     AutoMapper                  MIT         https://github.com/AutoMapper/AutoMapper
-    CommandLineParser
-    MailKit
-
-    Swashbuckle
-    
+    CommandLineParser           MIT         https://github.com/commandlineparser/commandline
+    MailKit                     MIT, GPL    https://github.com/jstedfast/MailKit
+    Fluent Validation           Apache 2.0  https://github.com/JeremySkinner/FluentValidation
+    Swashbuckle                 MIT         https://github.com/domaindrivendev/Swashbuckle.AspNetCore
 
   3D Models
     Model                                       Project         Source      License             Link
