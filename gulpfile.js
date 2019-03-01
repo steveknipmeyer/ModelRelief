@@ -36,6 +36,7 @@ var sourceConfig = new function() {
     this.sourceRoot     = './ModelRelief/';
 
     this.cssRoot        = this.sourceRoot + 'CSS/';
+    this.faviconRoot    = this.sourceRoot + 'Delivery/Favicon/';
     this.imagesRoot     = this.sourceRoot + 'Delivery/Images/';
     this.htmlRoot       = this.sourceRoot + 'Delivery/Html/';
     this.scriptsRoot    = this.sourceRoot + 'Scripts/';
@@ -293,9 +294,14 @@ gulp.task('buildStaticContent', function () {
 
     // FOLDERS
 
+    // Favicon
+    let sourceFolder      = sourceConfig.faviconRoot;
+    let destinationFolder = siteConfig.wwwRoot;
+    gulp.src([sourceFolder + '**/*']).pipe(gulp.dest(destinationFolder ));
+
     // Images
-    let sourceFolder      = sourceConfig.imagesRoot;
-    let destinationFolder = siteConfig.imagesRoot;
+    sourceFolder      = sourceConfig.imagesRoot;
+    destinationFolder = siteConfig.imagesRoot;
     gulp.src([sourceFolder + '**/*']).pipe(gulp.dest(destinationFolder ));
 
     // FILES

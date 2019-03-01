@@ -6,6 +6,9 @@
 #### Vector
 
 #### Today
+    Async support for Footer component?
+    Add logo to navigation header.
+
     Should the Contact Form have a different background color?
 
     Review all mesh generation settings for delivered models.
@@ -39,9 +42,6 @@
 
 #### Landing Page
     Add logo.
-    favicon.ico
-        https://www.flaticon.com/free-icon/scallop_166047
-        https://realfavicongenerator.net/favicon/aspnet_core#.W_6RlGhKjmE
 
     Create thumbnail images of the test models.
 	    These will be delivered from the Delivery\images folder.
@@ -1907,3 +1907,8 @@ MUI : https://www.muicss.com
 Material Foundation : https://eucalyptuss.github.io/materia...
 Material : http://daemonite.github.io/material
 Lumx : http://ui.lumapps.com
+
+#### Favicon
+        https://realfavicongenerator.net/
+        https://www.flaticon.com/free-icon/scallop_166047
+        https://realfavicongenerator.net/favicon/aspnet_core#.W_6RlGhKjmE

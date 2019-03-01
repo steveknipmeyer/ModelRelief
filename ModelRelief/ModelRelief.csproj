@@ -94,6 +94,7 @@
 
   <ItemGroup>
     <Folder Include="Api\V1\NormalMaps\" />
+    <Folder Include="Delivery\Favicon\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 
