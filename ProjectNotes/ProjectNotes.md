@@ -7,7 +7,6 @@
 
 #### Today
     Should the Contact Form have a different background color?
-    Gradient -> Slope
 
     Review all mesh generation settings for delivered models.
         Attenuation Decay.
@@ -1385,21 +1384,25 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     Fluent Validation           Apache 2.0  https://github.com/JeremySkinner/FluentValidation
     Swashbuckle                 MIT         https://github.com/domaindrivendev/Swashbuckle.AspNetCore
 
-  3D Models
-    Model                                       Project         Source      License             Link
-    Armadillo                                   Stanford        Stanford
-    Buddha                                      Stanford        Stanford
-    Bunny                                       Stanford        Stanford
-    Dolphin                                     Jewelry         TurboSquid  RoyaltyFree         https://www.turbosquid.com/FullPreview/Index.cfm/ID/332975
-    Dragon                                      Stanford        Stanford
-    Horse
-    House (San Francisco)                       Architectural   TurboSquid  RoyaltyFree         https://www.turbosquid.com/FullPreview/Index.cfm/ID/832520
-    Lucy                                        Stanford        Stanford
-    Plunderbus Pete                                             Thingiverse Creative Commons    https://www.thingiverse.com/thing:144775
-    Roadster (Duesen Bayern Mystar 190 SL)      Jewelry         TurboSquid  Editorial(None)     https://www.turbosquid.com/3d-models/free-duesen-bayern-mystar-190-3d-model/1062796
-    Statue                                      Stanford        Stanford
-    Test                                        ModelRelief     Internal
-    Tyrannosaurus                               Stanford        Stanford
+    3D Models
+    Model                                       Source      License             Link
+    Armadillo                                   Stanford
+    Buddha                                      Stanford
+    Bunny                                       Stanford
+    Dolphin                                     TurboSquid  RoyaltyFree         https://www.turbosquid.com/FullPreview/Index.cfm/ID/332975
+    Dragon                                      Stanford
+    Horse                                       TurboSquid  RoyaltyFree         https://www.turbosquid.com/3d-models/statue-3d-model/587173
+    House (San Francisco)                       TurboSquid  RoyaltyFree         https://www.turbosquid.com/FullPreview/Index.cfm/ID/832520
+    Lucy                                        Stanford
+    Plunderbus Pete                             Thingiverse Creative Commons    https://www.thingiverse.com/thing:144775
+    Roadster (Duesen Bayern Mystar 190 SL)      TurboSquid  Editorial(None)     https://www.turbosquid.com/3d-models/free-duesen-bayern-mystar-190-3d-model/1062796
+    Scallop                                     ModelRelief 
+    Statue                                      Stanford
+    Test                                        ModelRelief 
+    Tyrannosaurus                               Stanford
+  
+    Art         
+    Scallop Image                               Dreamstime  Royalty Free        https://www.dreamstime.com/scallop-logo-isolated-scallop-white-background-scallop-logo-isolated-scallop-white-background-eps-vector-illustration-image131838280
 
 #### Visual Studio
     Performance
