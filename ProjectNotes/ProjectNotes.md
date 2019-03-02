@@ -1,15 +1,12 @@
 ﻿### Tasks
 #### Commit Notes
-Use await Html.PartialAsync to load Favicons.
 
 #### Lambdas
 
 #### Vector
 
 #### Today
-    Add logo to navigation header.
-
-    Should the Contact Form have a different background color?
+    Customize Log In dialog box.
 
     Review all mesh generation settings for delivered models.
         Attenuation Decay.
@@ -26,7 +23,7 @@ Use await Html.PartialAsync to load Favicons.
 #### Privacy Page
     Add a Privacy page.
         The page exists populate it.
-    https://auth0.com/docs/compliance/gdpr
+        https://auth0.com/docs/compliance/gdpr
 
 #### Credits Page
 
@@ -41,15 +38,12 @@ Use await Html.PartialAsync to load Favicons.
         API
 
 #### Landing Page
-    Add logo.
-
     Create thumbnail images of the test models.
 	    These will be delivered from the Delivery\images folder.
 
     Create a video or an animation?
 
 #### Auth0
-    Customize Log In dialog box.
 
 #### UI
 

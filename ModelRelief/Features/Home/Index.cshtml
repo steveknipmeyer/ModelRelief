@@ -2,6 +2,11 @@
     ViewBag.Title = "ModelRelief";
     @*ViewBag.Title = $"ModelRelief {Environment.GetEnvironmentVariable("ASPNETCORE_Environment")}";*@
 }
+<style>
+    form label {
+        color: white !important;
+    }
+</style>
 
 <!--Main layout-->
 <main class="mt-5">
@@ -13,7 +18,7 @@
 
             <div class="col-md-7 mb-4">
                 <div class="view overlay z-depth-1-half">
-                    <img src="~/images/ModelReliefShell.png" class="card-img-top" alt="">
+                    <img src="~/images/ModelReliefWhite.png" class="card-img-top" alt="">
                     <div class="mask rgba-white-light"></div>
                 </div>
             </div>
@@ -328,7 +333,7 @@
                         <hr />
                         <div class="g-recaptcha mt-4 mb-0" data-sitekey="@ViewData["ReCaptchaKey"]" data-callback="recaptchaCallBack" data-theme="dark"></div>
                         <div class="text-center text-md-left">
-                            <input id="sendButton" type="button" class="btn btn-purple btn-md mt-1" onclick="validateForm()" value="Send" />
+                            <input id="sendButton" type="button" class="btn btn-blue-grey btn-md mt-1" onclick="validateForm()" value="Send" />
                         </div>
                         <div id="contact-form-status" class="status"></div>
                     </form>
@@ -339,7 +344,7 @@
                 <div class="col-md-3 text-center">
                     <ul class="list-unstyled mb-0">
                         <li>
-                            <i class="fas fa-envelope fa-2x mt-4 purple-text"></i>
+                            <i class="fas fa-envelope fa-2x mt-4 "></i>
                             <p class="mb-0">info@modelrelief.com</p>
                         </li>
                     </ul>
