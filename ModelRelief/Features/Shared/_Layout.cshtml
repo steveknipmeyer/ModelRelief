@@ -32,18 +32,12 @@
     }
 
     <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=YAmzm36wgR">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=YAmzm36wgR">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=YAmzm36wgR">
-    <link rel="manifest" href="/site.webmanifest?v=YAmzm36wgR">
-    <link rel="mask-icon" href="/safari-pinned-tab.svg?v=YAmzm36wgR" color="#5bbad5">
-    <link rel="shortcut icon" href="/favicon.ico?v=YAmzm36wgR">
-    <meta name="msapplication-TileColor" content="#2b5797">
-    <meta name="theme-color" content="#5887a4">
+    @await Html.PartialAsync("_Favicons")
 </head>
 
 <body class="custom-skin">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <img class="mt-0" src="~/images/shellWhite.png" alt="ModelRelief Shell" height="32" width="32">
         <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">modelRelief<span class="font-smaller font-weight-lighter"><sup> preview</sup></span></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -62,7 +56,7 @@
                     <a class="nav-item nav-link" asp-area="" asp-controller="NormalMaps" asp-action="Index">NormalMaps</a>
                 }
                 <a class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="Credits">Credits</a>
-@*                <a class="nav-item nav-link" href="/Workbench.html">Workbench</a>*@
+                @*                <a class="nav-item nav-link" href="/Workbench.html">Workbench</a>*@
             </div>
             <partial name="_LoginPartial" />
         </div>
@@ -77,7 +71,7 @@
         @*@await Component.InvokeAsync("Footer")*@
 
         <div class="footer-copyright text-center mt-3 py-3">
-            <img class="mt-0" src="~/apple-touch-icon.png" alt="ModelRelief Shell" height="32" width="32">
+            <img class="mt-0" src="~/images/shellWhite.png" alt="ModelRelief Shell" height="32" width="32">
             © 2019 Copyright:
             <a href="http://modelrelief.com/"> ModelRelief.com</a>
         </div>

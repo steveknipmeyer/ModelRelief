@@ -1,12 +1,12 @@
 ﻿### Tasks
 #### Commit Notes
+Use await Html.PartialAsync to load Favicons.
 
 #### Lambdas
 
 #### Vector
 
 #### Today
-    Async support for Footer component?
     Add logo to navigation header.
 
     Should the Contact Form have a different background color?
@@ -1403,7 +1403,8 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
   
     Art         
     Scallop Image                               Dreamstime  Royalty Free        https://www.dreamstime.com/scallop-logo-isolated-scallop-white-background-scallop-logo-isolated-scallop-white-background-eps-vector-illustration-image131838280
-
+    Scallop Icon                                Flaticon    Royalty Free        <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+    
 #### Visual Studio
     Performance
         https://developercommunity.visualstudio.com/content/problem/43364/visual-studio-2017-increadibly-slow-and-laggy.html
