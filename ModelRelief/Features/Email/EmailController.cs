@@ -103,7 +103,7 @@ namespace ModelRelief.Features.Email
                 return Json(errorResult);
             }
 
-            var applicationList = string.Join(", ", formData.Applications);
+            var applicationList = (formData.Applications == null) ? string.Empty : string.Join(", ", formData.Applications);
             var applications = $"\n\nApplications: {applicationList}";
             applications += string.IsNullOrEmpty(formData.ApplicationOther) ? string.Empty : $", {formData.ApplicationOther}";
 

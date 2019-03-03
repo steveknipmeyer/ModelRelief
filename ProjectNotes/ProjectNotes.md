@@ -1,17 +1,15 @@
 ﻿### Tasks
 #### Commit Notes
 Add Google analytics.
+Resolve null exception if Contact form application list was empty
+Partially fill favicon shell.
+
 #### Lambdas
 
 #### Vector
 
 #### Today
-
-    Remove nonone@nowhere.com.
-    There is a Bad Request if no Applications are checked in the Contact Form.
-    
-    Make favicon solid.
-    How can local hidden folders be shown in FileZilla?
+   
 
     Local IIS
         Cookie header is malformed in Production.
@@ -22,6 +20,7 @@ Add Google analytics.
             Add additional logging output.
 
     Move inline CSS into the site.css style sheet.
+    Move inline JavaScript to external file.
 
     Review all mesh generation settings for delivered models.
         Attenuation Decay.

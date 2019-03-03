@@ -71,6 +71,9 @@ namespace Microsoft.AspNetCore.Builder
             provider.Mappings[".sfp"]  = "text/plain";
             provider.Mappings[".nmap"] = "text/plain";
 
+            // site.webmanifest (favicons bundle)
+            provider.Mappings[".webmanifest"] = "application/manifest+json";
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 ContentTypeProvider = provider,
