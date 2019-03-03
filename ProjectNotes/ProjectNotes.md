@@ -1,32 +1,24 @@
 ﻿### Tasks
 #### Commit Notes
-Add Google analytics.
-Resolve null exception if Contact form application list was empty
-Partially fill favicon shell.
 
 #### Lambdas
 
 #### Vector
 
 #### Today
-   
 
-    Local IIS
-        Cookie header is malformed in Production.
-        Login loops endlessly.
-        Account\LoginComplete : 400
-        Composer\Edit\?name=Scallop
-        What is the best practice to debug a production IIS instance?
-            Add additional logging output.
+    Add a cookie policy to _CookieConsentPartial.cshtml.
 
-    Move inline CSS into the site.css style sheet.
-    Move inline JavaScript to external file.
+    What is the best practice to debug a production IIS instance?
+        Add additional logging output.
 
     Review all mesh generation settings for delivered models.
         Attenuation Decay.
             It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
 
 #### General
+Move inline CSS into the site.css style sheet.
+Move inline JavaScript to external file.
 
 #### Composer
     Create profile graphics for the settings.
@@ -1794,11 +1786,12 @@ https://semver.npmjs.com/
                    Then the database is "restored" using Import Dump from the Plesk control panel.
                    See the steps in One Note:ModelRelief:A2 Hosting:Import Dump.
 
+            Both!
                 4) Security->Logins add a UserMapping for the modelrelief login to the ModelReliefProduction database.
                 5) From Databases->ModelReliefProduction->Security->Users give the modelrelief user the necessary privileges:
                     db_backupoperator
-                    db_reader
-                    db_writer
+                    db_datareader
+                    db_datawriter
                     db_ddladmin
 
     Updating the mrenv requirements.production.txt
