@@ -1,15 +1,27 @@
 ﻿### Tasks
 #### Commit Notes
-
+Add Google analytics.
 #### Lambdas
 
 #### Vector
 
 #### Today
-    Move inline CSS into the site.css style sheet.
 
-    Analytics
-        https://www.a2hosting.com/blog/what-are-analytics/
+    Remove nonone@nowhere.com.
+    There is a Bad Request if no Applications are checked in the Contact Form.
+    
+    Make favicon solid.
+    How can local hidden folders be shown in FileZilla?
+
+    Local IIS
+        Cookie header is malformed in Production.
+        Login loops endlessly.
+        Account\LoginComplete : 400
+        Composer\Edit\?name=Scallop
+        What is the best practice to debug a production IIS instance?
+            Add additional logging output.
+
+    Move inline CSS into the site.css style sheet.
 
     Review all mesh generation settings for delivered models.
         Attenuation Decay.
@@ -1767,11 +1779,22 @@ https://semver.npmjs.com/
             Also, the database folder is used to transfer the SQLServer seed database to the Docker database container during a build.
 
         SQLServer Notes
-            The database is located here: C:\Program Files\Microsoft SQL Server\MSSQL14.SQLEXPRESS\MSSQL\DATA.
-            Using SQL Server Management Studio:
-                1) Delete the existing database.
-                2) Copy the updated database from the User folder (e.g. C:\Users\Steve Knipmeyer) into C:\Program Files\Microsoft SQL Server\MSSQL14.SQLEXPRESS\MSSQL\DATA.
-                3) Attach the updated ModelReliefProduction.db.
+            Local IIS
+                The database is located here: C:\Program Files\Microsoft SQL Server\MSSQL14.SQLEXPRESS\MSSQL\DATA.
+                Using SQL Server Management Studio (sa account):
+                    1) Delete the existing database.
+                    2) Copy the updated database from the User folder (e.g. C:\Users\Steve Knipmeyer) into C:\Program Files\Microsoft SQL Server\MSSQL14.SQLEXPRESS\MSSQL\DATA.
+                    3) Attach the updated ModelReliefProduction.db.
+
+            A2 Hosting
+                1) Using SSMS log in using the 'sa' account and Delete the database.
+                   It is imperative to use the 'sa' account as neither 'modelrelief' nor 'modelrel_sa' have sufficient privileges to delete the database.
+                2) From the Plesk Control Panel, create a new ModelReliefProduction database.
+                3) A2 Hosting uses SQL Server 2016 (not SQL Server 2017) so the database must be imported using Import Dump from the Plesk Control Panel.
+                   SQL Server LocalDb (2016), the development SQL Server, is used to export the database to a backup file, ModelReliefProduction.bak.
+                   Then the database is "restored" using Import Dump from the Plesk control panel.
+                   See the steps in One Note:ModelRelief:A2 Hosting:Import Dump.
+
                 4) Security->Logins add a UserMapping for the modelrelief login to the ModelReliefProduction database.
                 5) From Databases->ModelReliefProduction->Security->Users give the modelrelief user the necessary privileges:
                     db_backupoperator
