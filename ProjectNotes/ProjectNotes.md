@@ -6,19 +6,19 @@
 #### Vector
 
 #### Today
-    Customize Log In dialog box.
+    Move inline CSS into the site.css style sheet.
+
+    Analytics
+        https://www.a2hosting.com/blog/what-are-analytics/
 
     Review all mesh generation settings for delivered models.
         Attenuation Decay.
             It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
 
 #### General
-    Add meta tags.
 
 #### Composer
-
     Create profile graphics for the settings.
-    Reset settings for defaults.
 
 #### Privacy Page
     Add a Privacy page.
@@ -28,7 +28,6 @@
 #### Credits Page
 
 #### Workflow Page
-
     Illustrate with images from Explorer!
 
     Notes
