@@ -307,7 +307,7 @@ gulp.task('buildStaticContent', function () {
     // FILES
     sourceFolder      = sourceConfig.htmlRoot;
     destinationFolder = siteConfig.wwwRoot;
-    gulp.src([sourceFolder + 'workbench.html']).pipe(gulp.dest(destinationFolder ));
+    gulp.src([sourceFolder + 'helloworld.html']).pipe(gulp.dest(destinationFolder ));
 });
 
 /// <summary>
@@ -453,18 +453,8 @@ gulp.task('buildShaders', function() {
 });
 
 /// <summary>
-/// Compile shaders and reload the browser.
-/// </summary>
-gulp.task('buildShadersReload', function () {
-
-    runSequence('buildShaders', 'reload');
-});
-
-/// <summary>
 /// Compile TypeScript
 /// The TypeScript compiler is invoked through the Windows path.
-/// This is initialized in the development shell to the desired TypeScript compiler version.
-/// "C:\Program Files (x86)\Microsoft SDKs\TypeScript\2.4""
 /// </summary>
 gulp.task('compileTypeScriptExec', function (callback) {
   exec('tsc.exe', function (err, stdout, stderr) {
@@ -497,14 +487,6 @@ gulp.task('compileTypeScript', function () {
     return tsResult.js
         .pipe(sourcemaps.write())       // sourcemaps are added to the .js file
         .pipe(gulp.dest(''));
-});
-
-/// <summary>
-/// Compile TypeScript and reload the browser.
-/// </summary>
-gulp.task('compileTypeScriptReload', function () {
-
-    runSequence('compileTypeScript', 'reload');
 });
 
 /// <summary>
@@ -558,11 +540,11 @@ gulp.task('serve', function () {
     // ----------------------------------------------
   });
 
-  gulp.watch([sourceConfig.shaders + '*.glsl'],                   ['buildShadersReload']);
-  gulp.watch([sourceConfig.scriptsRoot + '**/*.ts'],              ['compileTypeScriptReload']);
+  gulp.watch([sourceConfig.shaders + '*.glsl'],                   () => runSequence('buildShaders', 'reload'));
+  gulp.watch([sourceConfig.scriptsRoot + '**/*.ts'],              () => runSequence('compileTypeScript', 'reload'));
 
-  gulp.watch([sourceConfig.cssRoot + '**/*.css'],                 ['buildCSS']);
-  gulp.watch([sourceConfig.mdbRoot + '**/*.scss'],                ['buildMDBootstrapCSSReload']);
-  gulp.watch([siteConfig.cssRoot + '**/*.css'],                   ['reload']);
-  gulp.watch([siteConfig.wwwRoot + '**/*.html'],                  ['reload']);
+  gulp.watch([sourceConfig.cssRoot + '**/*.css'],                 () => runSequence('buildCSS', 'reload'));
+  gulp.watch([sourceConfig.mdbRoot + '**/*.scss'],                () => runSequence('buildMDBootstrapCSS', 'copyVendor', 'reload', 'beep'));
+  gulp.watch([sourceConfig.htmlRoot + '**/*.html'],               () => runSequence('buildStaticContent', 'reload'));
 });
+

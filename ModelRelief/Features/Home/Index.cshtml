@@ -8,6 +8,14 @@
     form label {
         color: white !important;
     }
+
+    .card-title {
+        color: white !important;
+    }
+
+    .card-body {
+        background-color: #083042 !important;
+    }
 </style>
 
 <!--Main layout-->
@@ -21,15 +29,39 @@
             <div class="col-md-9 mb-4">
                 <h2>3D Models to Bas-Reliefs. Simple.</h2>
                 <hr>
-                <p>A powerful tool to create a bas-relief (sculptural low relief) from a 3D model.</p>
-                <p>Any perspective view of a 3D model can be quickly set up and used to generate a high-resolution bas-relief.</p>
+                <p>ModelRelief is a powerful tool to create a bas-relief (sculptural low relief) from a 3D model. This is a preview to get your ideas about next steps!</p>
+                <p>Please see the Credits page for the all people and technology that made this possible.</p>
             </div>
-            <div class="col-md-3 mb-4">
+            <div class="col-md-2 mb-4">
 
                 <img src="~/images/ModelReliefWhite.png" class="card-img-top" alt="">
             </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <h5>Compose a View</h5>
+                <img src="~/images/3DModel.png" class="card-img-top" alt="">
+                <p>Any perspective view of a 3D model can be quickly set up and used to generate a relief.</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h5>Image Processing...</h5>
+                <img src="~/images/DepthBuffer.png" class="card-img-top" alt="">
+                <p>Advanced image processing algorithms manipulate the 3D model in the image domain.</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h5>Bas-Relief Generated!</h5>
+                <img src="~/images/Relief.png" class="card-img-top" alt="">
+                <p>A relief mesh is created that preserves the detail in the original model.</p>
+            </div>
 
         </div>
+
+        <h2>Gallery</h2>
+        <hr>
+        <p>Select any one of the test models and try your own experiments.</p>
+        <p>You will need to create a free account so we can store your test projects. </p>
+        <p>Please let us know below what you would like to see next!</p>
 
         <!--Grid row-->
         <div class="row">
@@ -41,22 +73,16 @@
 
                     <!--Card image-->
                     <div class="view overlay">
-                        <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(72).jpg" class="card-img-top" alt="">
+                        <img src="~/images/Lucy.png" class="card-img-top" alt="">
                         <a href="/composer/edit/?name=lucy">
                             <div class="mask rgba-white-slight"></div>
                         </a>
                     </div>
-
                     <!--Card content-->
                     <div class="card-body">
                         <!--Title-->
-                        <h4 class="card-title">Lucy</h4>
-                        <!--Text-->
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
-                        </p>
-                        <a href="/composer/edit/?name=lucy" class="btn btn-indigo">Lucy</a>
+                        <h5 class="card-title">Lucy</h5>
+                        <a href="/composer/edit/?name=lucy" class="btn btn-blue-grey btn-rounded btn-sm">Create</a>
                     </div>
 
                 </div>
@@ -71,7 +97,60 @@
 
                     <!--Card image-->
                     <div class="view overlay">
-                        <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(74).jpg" class="card-img-top" alt="">
+                        <img src="~/images/Scallop.png" class="card-img-top" alt="">
+                        <a href="/composer/edit/?name=scallop">
+                            <div class="mask rgba-white-slight"></div>
+                        </a>
+                    </div>
+
+                    <!--Card content-->
+                    <div class="card-body">
+                        <!--Title-->
+                        <h5 class="card-title">Scallop Shell</h5>
+                        <a href="/composer/edit/?name=scallop" class="btn btn-blue-grey btn-rounded btn-sm">Create</a>
+                    </div>
+
+                </div>
+                <!--/.Card-->
+            </div>
+
+            <div class="col-lg-4 col-md-6 mb-4">
+
+                <!--Card-->
+                <div class="card">
+
+                    <!--Card image-->
+                    <div class="view overlay">
+                        <img src="~/images/Horse.png" class="card-img-top" alt="">
+                        <a href="/composer/edit/?name=horse">
+                            <div class="mask rgba-white-slight"></div>
+                        </a>
+                    </div>
+
+                    <!--Card content-->
+                    <div class="card-body">
+                        <!--Title-->
+                        <h5 class="card-title">Prancing Horse</h5>
+                        <a href="/composer/edit/?name=horse" class="btn btn-blue-grey btn-rounded btn-sm">Create</a>
+                    </div>
+
+                </div>
+                <!--/.Card-->
+
+            </div>
+        </div>
+
+        <!--Grid row-->
+        <div class="row">
+
+            <div class="col-lg-4 col-md-6 mb-4">
+
+                <!--Card-->
+                <div class="card">
+
+                    <!--Card image-->
+                    <div class="view overlay">
+                        <img src="~/images/Dragon.png" class="card-img-top" alt="">
                         <a href="/composer/edit/?name=dragon">
                             <div class="mask rgba-white-slight"></div>
                         </a>
@@ -80,52 +159,14 @@
                     <!--Card content-->
                     <div class="card-body">
                         <!--Title-->
-                        <h4 class="card-title">Dragon</h4>
-                        <!--Text-->
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
-                        </p>
-                        <a href="/composer/edit/?name=dragon" class="btn btn-indigo">Dragon</a>
+                        <h5 class="card-title">Chinese Dragon</h5>
+                        <a href="/composer/edit/?name=dragon" class="btn btn-blue-grey btn-rounded btn-sm">Create</a>
                     </div>
 
                 </div>
                 <!--/.Card-->
 
             </div>
-
-            <div class="col-lg-4 col-md-6 mb-4">
-
-                <!--Card-->
-                <div class="card">
-
-                    <!--Card image-->
-                    <div class="view overlay">
-                        <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(75).jpg" class="card-img-top" alt="">
-                        <a href="/composer/edit/?name=house">
-                            <div class="mask rgba-white-slight"></div>
-                        </a>
-                    </div>
-
-                    <!--Card content-->
-                    <div class="card-body">
-                        <!--Title-->
-                        <h4 class="card-title">House</h4>
-                        <!--Text-->
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
-                        </p>
-                        <a href="/composer/edit/?name=house" class="btn btn-indigo">House</a>
-                    </div>
-
-                </div>
-                <!--/.Card-->
-            </div>
-        </div>
-
-        <!--Grid row-->
-        <div class="row">
 
             <div class="col-lg-4 col-md-12 mb-4">
 
@@ -134,8 +175,8 @@
 
                     <!--Card image-->
                     <div class="view overlay">
-                        <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(72).jpg" class="card-img-top" alt="">
-                        <a href="/composer/edit/?name=lucy">
+                        <img src="~/images/plunderbusspete.png" class="card-img-top" alt="">
+                        <a href="/composer/edit/?name=plunderbusspete">
                             <div class="mask rgba-white-slight"></div>
                         </a>
                     </div>
@@ -143,13 +184,8 @@
                     <!--Card content-->
                     <div class="card-body">
                         <!--Title-->
-                        <h4 class="card-title">PlunderBuss Pete</h4>
-                        <!--Text-->
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
-                        </p>
-                        <a href="/composer/edit/?name=plunderbusspete" class="btn btn-indigo">Plunderbuss Pete</a>
+                        <h5 class="card-title">Plunderbuss Pete</h5>
+                        <a href="/composer/edit/?name=plunderbusspete" class="btn btn-blue-grey btn-rounded btn-sm">Create</a>
                     </div>
 
                 </div>
@@ -164,37 +200,7 @@
 
                     <!--Card image-->
                     <div class="view overlay">
-                        <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(74).jpg" class="card-img-top" alt="">
-                        <a href="/composer/edit/?name=dragon">
-                            <div class="mask rgba-white-slight"></div>
-                        </a>
-                    </div>
-
-                    <!--Card content-->
-                    <div class="card-body">
-                        <!--Title-->
-                        <h4 class="card-title">Horse</h4>
-                        <!--Text-->
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
-                        </p>
-                        <a href="/composer/edit/?name=horse" class="btn btn-indigo">Horse</a>
-                    </div>
-
-                </div>
-                <!--/.Card-->
-
-            </div>
-
-            <div class="col-lg-4 col-md-6 mb-4">
-
-                <!--Card-->
-                <div class="card">
-
-                    <!--Card image-->
-                    <div class="view overlay">
-                        <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(75).jpg" class="card-img-top" alt="">
+                        <img src="~/images/House.png" class="card-img-top" alt="">
                         <a href="/composer/edit/?name=house">
                             <div class="mask rgba-white-slight"></div>
                         </a>
@@ -203,18 +209,15 @@
                     <!--Card content-->
                     <div class="card-body">
                         <!--Title-->
-                        <h4 class="card-title">Scallop</h4>
+                        <h5 class="card-title">San Francisco House</h5>
                         <!--Text-->
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
-                        </p>
-                        <a href="/composer/edit/?name=scallop" class="btn btn-indigo">Scallop</a>
+                        <a href="/composer/edit/?name=house" class="btn btn-blue-grey btn-rounded btn-sm">Create</a>
                     </div>
 
                 </div>
                 <!--/.Card-->
             </div>
+
         </div>
     </div>
 
@@ -325,7 +328,7 @@
                             </div>
                         </div>
                         <hr />
-                        <div class="g-recaptcha mt-4 mb-0" data-sitekey="@ViewData["ReCaptchaKey"]" data-callback="recaptchaCallBack" ></div>
+                        <div class="g-recaptcha mt-4 mb-0" data-sitekey="@ViewData["ReCaptchaKey"]" data-callback="recaptchaCallBack"></div>
                         <div class="text-center text-md-left">
                             <input id="sendButton" type="button" class="btn btn-blue-grey btn-md mt-1" onclick="validateForm()" value="Send" />
                         </div>

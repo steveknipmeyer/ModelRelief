@@ -6,16 +6,12 @@
 #### Vector
 
 #### Today
-    Write landing page copy.
-        Free (Preview)
-        Create account.
-        Choose a model. Choose a view. Make a low relief mesh.
-        Send us feedback.
-        Create storyboard to explain process.
-        
-    Write instructions for Composer.
+    Remove dependency on MDBootstrap.
 
-    Cookie permission is repeated in IIS local.
+    IIS localHOST
+        Cookie permission cannot be dismissed. It is always displayed.
+        Login may require deletion of local cookies.
+        After login, there is an endless loop with Auth0.
 
     Add a cookie policy to _CookieConsentPartial.cshtml.
 

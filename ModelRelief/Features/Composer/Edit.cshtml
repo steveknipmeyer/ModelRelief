@@ -11,12 +11,62 @@
     <div id="rootContainer" class="container-fluid">
         <div id="composerView">
             <div class="row mt-1 mx-5">
-
                 <div class="col-md-6">
                     <div class="row">
-
                         <div class="col-md-6">
-                            <h5>Overview</h5> ModelRelief transforms 3D models into reliefs.
+                            <h5>Transform 3D models into low reliefs.</h5>
+                            <div class="row composerStep">
+                                <div class="col-md-2">
+                                    <span class="fa-stack">
+                                        <span class="far fa-circle fa-stack-2x"></span>
+                                        <strong class="fa-stack-1x">
+                                            1
+                                        </strong>
+                                    </span>
+                                </div>
+                                <div class="col">
+                                    Use the Model view to create the exact perspective view you want.<br />
+                                </div>
+                            </div>
+                            <div class="row composerStep">
+                                <div class="col-md-2">
+                                    <span class="fa-stack">
+                                        <span class="far fa-circle fa-stack-2x"></span>
+                                        <strong class="fa-stack-1x">
+                                            2
+                                        </strong>
+                                    </span>
+                                </div>
+                                <div class="col">
+                                    Zoom. Pan. Rotate. Compose your view.
+                                </div>
+                            </div>
+                            <div class="row  composerStep">
+                                <div class="col-md-2">
+                                    <span class="fa-stack">
+                                        <span class="far fa-circle fa-stack-2x"></span>
+                                        <strong class="fa-stack-1x">
+                                            3
+                                        </strong>
+                                    </span>
+                                </div>
+                                <div class="col">
+                                    Press the purple lightning bolt to create your bas-relief. It will be generated and then shown in the Relief view.
+                                </div>
+                            </div>
+                            <div class="row  composerStep">
+                                <div class="col-md-2">
+                                    <span class="fa-stack">
+                                        <span class="far fa-circle fa-stack-2x"></span>
+                                        <strong class="fa-stack-1x">
+                                            4
+                                        </strong>
+                                    </span>
+                                </div>
+                                <div class="col">
+                                    Experiment with the settings below to control the details and size of your relief.
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Model -->
@@ -69,7 +119,7 @@
                         </div>
                     </div>
 
-                    <h4>Mesh Settings</h4>
+                    <h4>Relief Settings</h4>
                     <hr class="controlSection">
 
                     <!-- Gradient Threshold -->
@@ -79,9 +129,11 @@
 
                         <div class="row">
                             <div class="col-md-6 controlDescription">
-                                <span>This is descriptive text about the control. It describes the effect this control has on the generated mesh.</span>
+                                <span>Model features with slope values higher than this threshold are flattened.</span>
                             </div>
-                            <div class="col-md-3"></div>
+                            <div class="col-md-3">
+                                <img src="~/images/SlopeThreshold.png" class="card-img-top" alt="">
+                            </div>
                             <div class="col">
                                 <div class="d-flex my-1 sliderControl controlText">
                                     <span class="mr-2 mt-1">0</span>
@@ -101,9 +153,11 @@
 
                         <div class="row">
                             <div class="col-md-6 controlDescription">
-                                <span>This is descriptive text about the control. It describes the effect this control has on the generated mesh.</span>
+                                <span>This setting controls the flattening of all model features. Higher slopes are flattened more than lower slopes.</span>
                             </div>
-                            <div class="col-md-3"></div>
+                            <div class="col-md-3">
+                                <img src="~/images/SlopeAttenutation.png" class="card-img-top" alt="">
+                            </div>
                             <div class="col">
                                 <div class="d-flex my-1 sliderControl controlText">
                                     <span class="mr-2 mt-1">0</span>
@@ -123,9 +177,11 @@
 
                         <div class="row">
                             <div class="col-md-6 controlDescription">
-                                <span>This is descriptive text about the control. It describes the effect this control has on the generated mesh.</span>
+                                <span>This setting separates detail from the larger features of the model so that it may be amplified.</span>
                             </div>
-                            <div class="col-md-3"></div>
+                            <div class="col-md-3">
+                                <img src="~/images/UnsharpMask.png" class="card-img-top" alt="">
+                            </div>
                             <div class="col">
                                 <div class="d-flex my-1 sliderControl controlText">
                                     <span class="mr-2 mt-1">0</span>
@@ -145,9 +201,11 @@
 
                         <div class="row">
                             <div class="col-md-6 controlDescription">
-                                <span>This is descriptive text about the control. It describes the effect this control has on the generated mesh.</span>
+                                <span>This setting controls the amplification of the detail separated by the above Gaussian Blue (Unsharp) step.</span>
                             </div>
-                            <div class="col-md-3"></div>
+                            <div class="col-md-3">
+                                <img src="~/images/HighFrequencyScale.png" class="card-img-top" alt="">
+                            </div>
                             <div class="col">
                                 <div class="d-flex my-1 sliderControl controlText">
                                     <span class="mr-2 mt-1">0</span>
@@ -162,15 +220,14 @@
 
                     <!-- Mesh Scale (P1) -->
                     <div class="controlContainer">
-                        <span class="controlHeading">Scale</span>
+                        <span class="controlHeading">Final Height</span>
                         <hr class="controlHeadingDivider">
 
                         <div class="row">
-                            <div class="col-md-6 controlDescription">
-                                <span>This is descriptive text about the control. It describes the effect this control has on the generated mesh.</span>
+                            <div class="col-md-9 controlDescription">
+                                <span>This setting controls the height of the final relief. It is a percentage of the depth of the original model.</span>
                             </div>
-                            <div class="col-md-3"></div>
-                            <div class="col">
+                            <div class="col-md-3">
                                 <div class="d-flex my-1 sliderControl controlText">
                                     <span class="mr-2 mt-1">0</span>
                                     <form class="range-field w-100">
@@ -208,7 +265,7 @@
                                             </div>
                                         </div>
 
-                                        <h5 class="mt-2">Mesh</h5>
+                                        <h5 class="mt-2">Relief</h5>
                                         <button id="fitView" type="button" class="btn btn-outline-cyan btn-rounded btn-sm px-2 mt-0 mr-0">
                                             <i class="fas fa-expand-arrows-alt mt-0"></i>
                                         </button>

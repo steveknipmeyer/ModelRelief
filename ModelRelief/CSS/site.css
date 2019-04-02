@@ -2,20 +2,9 @@
     MDB Overrides
 ------------------------*/
 
-/* MDBootstrap sets the display of select elements to 'none'. */
+/* MDBootstrap sets the display of standard HTML select elements to 'none'. */
 select {
     display: block !important;
-}
-
-/* This is necessary to prevent the Camera (StandardView) dropdown from being clipped. */
-.modelReliefCardHeader {
-    overflow: visible !important;
-}
-
-/* StandardView  */
-.dropdown-menu a:hover {
-background-color: black !important;
-color: darkturquoise !important;
 }
 
 /* ----------------------
@@ -25,29 +14,32 @@ sup {
     font-size: 14px;
 }
 
-hr{
-border-color: gray;
+hr {
+    border-color: gray;
 }
 
 input, textarea {
     color: white !important;
 }
+
+/* ----------------------
+    Landing
+------------------------*/
 #sendButton {
     cursor: not-allowed;
-}
-
-.dropdown-menu {
-    background-color: #1d272e !important;
-    color: white !important;
 }
 
 /* ----------------------
     Composer
 ------------------------*/
 #depthBufferCanvas, #normalMapCanvas {
-    width:  512px;
+    width: 512px;
     height: 512px;
     background-color: #000000;
+}
+
+.composerStep {
+    margin-top: 20px;
 }
 
 .controlSection {
@@ -56,7 +48,7 @@ input, textarea {
 }
 
 .controlContainer {
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .controlHeading {
@@ -77,7 +69,7 @@ input, textarea {
 }
 
 .sliderControl {
-    margin-top: -10px !important;
+    margin-top: 20px !important;
 }
 
 #modelViewCardBody,
@@ -89,17 +81,21 @@ input, textarea {
     background-color: black !important;
 }
 
-/* CSS Debugging */
-/* .row {
-    background-color: rgb(217, 240, 240);
-    outline: 1px solid black;
+/* (Camera) Standard View */
+.dropdown-menu {
+    background-color: #1d272e !important;
+    color: white !important;
 }
 
-[class^=col] {
+.dropdown-menu a:hover {
+    background-color: black !important;
+    color: darkturquoise !important;
+}
 
-    background-color: rgb(243, 248, 225);
-    outline: 1px solid black
-} */
+/* This is necessary to prevent the dropdown from being clipped. */
+.modelReliefCardHeader {
+    overflow: visible !important;
+}
 
 /* ----------------------
     Model3D View
@@ -126,12 +122,13 @@ input, textarea {
     padding: 0;
     margin: 0;
 }
+
 .logMessage {
     margin-left: 100PX;
 }
 
 .logError {
-    color : #B6CFDC;
+    color: #B6CFDC;
 }
 
 .logWarning {
@@ -141,3 +138,17 @@ input, textarea {
 .logInfo {
     color: rgb(255, 255, 255);
 }
+
+/* ----------------------
+    CSS Debugging
+------------------------*/
+/* .row {
+    background-color: rgb(217, 240, 240);
+    outline: 1px solid black;
+}
+
+[class^=col] {
+
+    background-color: rgb(243, 248, 225);
+    outline: 1px solid black
+} */
