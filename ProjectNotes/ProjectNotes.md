@@ -6,6 +6,16 @@
 #### Vector
 
 #### Today
+    Write landing page copy.
+        Free (Preview)
+        Create account.
+        Choose a model. Choose a view. Make a low relief mesh.
+        Send us feedback.
+        Create storyboard to explain process.
+        
+    Write instructions for Composer.
+
+    Cookie permission is repeated in IIS local.
 
     Add a cookie policy to _CookieConsentPartial.cshtml.
 
@@ -17,11 +27,8 @@
             It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
 
 #### General
-Move inline CSS into the site.css style sheet.
-Move inline JavaScript to external file.
 
 #### Composer
-    Create profile graphics for the settings.
 
 #### Privacy Page
     Add a Privacy page.
@@ -1577,6 +1584,7 @@ ServerFramework (WebHost.CreateDefaultBuilder) sets the environment to "Developm
         git submodule init
         git submodule update
 
+        python.exe Build\Builder.py --target local        
 #### C#
     Conversion of List of derived class to the base class.
         // https://stackoverflow.com/questions/1817300/convert-listderivedclass-to-listbaseclass
@@ -1786,7 +1794,7 @@ https://semver.npmjs.com/
                    Then the database is "restored" using Import Dump from the Plesk control panel.
                    See the steps in One Note:ModelRelief:A2 Hosting:Import Dump.
 
-            Both!
+            Local IIS Only(?)
                 4) Security->Logins add a UserMapping for the modelrelief login to the ModelReliefProduction database.
                 5) From Databases->ModelReliefProduction->Security->Users give the modelrelief user the necessary privileges:
                     db_backupoperator
@@ -1796,6 +1804,25 @@ https://semver.npmjs.com/
 
     Updating the mrenv requirements.production.txt
         conda list --export > <requirements.production.txt>
+
+    N.B. The Windows Universal C runtime <debug> library (ucrtbased.dll) is required by the Python C++ extension module relief.
+        relief-0.1-py3.6-win-amd64.egg\relief.cp36-win_amd64.pyd
+            Why does the relief build include the debug DLL as a dependency? The build output from builder.py shows Release.
+            The Dependencies tool https://github.com/lucasg/Dependencies was used to determine that ucrtbased.dll was not found.
+                DependenciesGui "C:\Inetpub\vhosts\modelrelief.com\httpdocs\mrenv\Lib\site-packages\relief-0.1-py3.6-win-amd64.egg\relief.cp36-win_amd64.pyd"
+            To test set up a context similar to how IIS will run:
+                cd C:\Inetpub\vhosts\modelrelief.com\httpdocs
+                set path=%path%;.\mrenv
+                python.exe
+                    import relief
+            
+        To resolve the ucrtbase.dll must be in the path so Windows can load the DLL.
+        Possible solutions:
+            Manually copy ucrtbased.dll (from the build computer) into C:\Inetpub\vhosts\modelrelief.com\httpdocs\mrenv.
+            Package ucrtbased.dll into the ModelRelief Publish distribution by copying from C:\Windowws\System32.
+            Determine why the python build process is creating a debug DLL dependency.
+            Determine why the build computer has ucrtbased.dll in C:\windows\system32 but the production server does not.
+                Is this related to how Visual Studio was installed on the development machine?
 
 #### Jupyter
     Notebook confguration
