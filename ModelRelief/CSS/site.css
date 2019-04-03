@@ -24,6 +24,10 @@ input, textarea {
     color: white;
 }
 
+.btn {
+    color: white;
+}
+
 a {
     color: white;
     font-weight: lighter;
@@ -50,6 +54,10 @@ footer.page-footer .footer-copyright {
     width: 512px;
     height: 512px;
     background-color: #000000;
+}
+
+.fa-camera, .fa-expand-arrows-alt {
+  color: cyan !important;
 }
 
 .composerStep {
