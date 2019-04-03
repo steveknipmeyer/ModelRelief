@@ -6,7 +6,13 @@
 #### Vector
 
 #### Today
+    Switch to VSCode.
+
     Remove dependency on MDBootstrap.
+        Generate button
+        Busy indicator
+        Font Awesome
+        Click handler for test model cards
 
     IIS localHOST
         Cookie permission cannot be dismissed. It is always displayed.
@@ -1357,7 +1363,6 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     THREE.js                    MIT         https://threejs.org
     TypeScript                  Apache      https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-2.2/
     Bootstrap                   MIT         https://getbootstrap.com/
-    MDBootstrap                 Commercial  https://mdbootstrap.com/
     base64-js                   MIT         https://github.com/beatgammit/base64-js/blob/master/index.js
     http-status-codes           MIT         https://www.npmjs.com/package/http-status-codes
 
@@ -1395,15 +1400,15 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     Lucy                                        Stanford
     Plunderbus Pete                             Thingiverse Creative Commons    https://www.thingiverse.com/thing:144775
     Roadster (Duesen Bayern Mystar 190 SL)      TurboSquid  Editorial(None)     https://www.turbosquid.com/3d-models/free-duesen-bayern-mystar-190-3d-model/1062796
-    Scallop                                     ModelRelief 
+    Scallop                                     ModelRelief
     Statue                                      Stanford
-    Test                                        ModelRelief 
+    Test                                        ModelRelief
     Tyrannosaurus                               Stanford
-  
-    Art         
+
+    Art
     Scallop Image                               Dreamstime  Royalty Free        https://www.dreamstime.com/scallop-logo-isolated-scallop-white-background-scallop-logo-isolated-scallop-white-background-eps-vector-illustration-image131838280
     Scallop Icon                                Flaticon    Royalty Free        <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-    
+
 #### Visual Studio
     Performance
         https://developercommunity.visualstudio.com/content/problem/43364/visual-studio-2017-increadibly-slow-and-laggy.html
@@ -1580,7 +1585,7 @@ ServerFramework (WebHost.CreateDefaultBuilder) sets the environment to "Developm
         git submodule init
         git submodule update
 
-        python.exe Build\Builder.py --target local        
+        python.exe Build\Builder.py --target local
 #### C#
     Conversion of List of derived class to the base class.
         // https://stackoverflow.com/questions/1817300/convert-listderivedclass-to-listbaseclass
@@ -1811,7 +1816,7 @@ https://semver.npmjs.com/
                 set path=%path%;.\mrenv
                 python.exe
                     import relief
-            
+
         To resolve the ucrtbase.dll must be in the path so Windows can load the DLL.
         Possible solutions:
             Manually copy ucrtbased.dll (from the build computer) into C:\Inetpub\vhosts\modelrelief.com\httpdocs\mrenv.

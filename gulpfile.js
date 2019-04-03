@@ -44,8 +44,6 @@ var sourceConfig = new function() {
 
     this.nodeModulesRoot = './node_modules/';
     this.vendorRoot      = './ModelRelief/Vendor/';
-    this.mdbRoot         = this.vendorRoot + 'MDBootstrap/MDB-Gulp-Pro_4.7.1/';
-    this.mdbRootDist     = this.mdbRoot + 'dist/';
  }();
 
 var siteConfig = new function() {
@@ -376,76 +374,6 @@ gulp.task('copyNPM', function () {
 });
 
 /// <summary>
-/// Build MDBootstrap CSS
-/// </summary>
-gulp.task('buildMDBootstrapCSS', function (callback) {
-
-    console.log('\nForking MDBootstrap CSS build...');
-    exec(`gulp --gulpfile ${sourceConfig.mdbRoot}gulpfile.js css-compile css-minify`, function (err, stdout, stderr) {
-        console.log(stdout);
-        console.log(stderr);
-        callback(err);
-    });
-});
-
-/// <summary>
-/// Build MDBootstap CSS and reload the browser.
-/// </summary>
-gulp.task('buildMDBootstrapCSSReload', function () {
-
-    runSequence('buildMDBootstrapCSS', 'copyVendor', 'reload', 'beep');
-});
-
-/// <summary>
-/// Populate wwwroot with (licensed) vendor content
-/// </summary>
-gulp.task('copyVendor', function () {
-
-    // FOLDERS
-
-    // MDBootstrap
-    let subFolder         = '';
-    let sourceFolder      = '';
-    let destinationFolder = '';
-    let subFolderList     = [];
-
-    // These folders are loaded by mdb.css which uses paths relative to the <CSS file>.
-    subFolderList = ['font', 'img'];
-    subFolderList.forEach(function (subFolder) {
-        sourceFolder      = sourceConfig.mdbRootDist + subFolder;
-        destinationFolder = siteConfig.wwwRoot + 'lib/mdb/';
-        gulp.src([sourceFolder + '**/**']).pipe(gulp.dest(destinationFolder));
-    });
-
-    // These folders are loaded by mdb.js though jQuery.load which uses paths relative to <wwwroot>.
-    subFolderList = ['mdb-addons'];
-    subFolderList.forEach(function (subFolder) {
-        sourceFolder      = sourceConfig.mdbRootDist + subFolder;
-        destinationFolder = siteConfig.wwwRoot;
-        gulp.src([sourceFolder + '**/**']).pipe(gulp.dest(destinationFolder));
-    });
-
-    // FILES
-    let fileList = [];
-
-    // MDBootstrap JavaScript
-    sourceFolder      = sourceConfig.mdbRootDist + 'js/';
-    destinationFolder = siteConfig.libRoot + 'mdb/js/';
-    fileList = ['mdb.js', 'mdb.min.js', 'popper.min.js'];
-    fileList.forEach(function (file) {
-        gulp.src([sourceFolder + file]).pipe(gulp.dest(destinationFolder ));
-    });
-
-    // MDBootstrap CSS
-    sourceFolder      = sourceConfig.mdbRootDist + 'css/';
-    destinationFolder = siteConfig.libRoot + 'mdb/css/';
-    fileList = ['mdb.css', 'mdb.min.css'];
-    fileList.forEach(function (file) {
-        gulp.src([sourceFolder + file]).pipe(gulp.dest(destinationFolder ));
-    });
-});
-
-/// <summary>
 /// Assemble shader file from .glsl components.
 /// </summary>
 gulp.task('buildShaders', function() {
@@ -500,7 +428,7 @@ gulp.task('beep', function () {
 /// Default build task
 /// </summary>
 gulp.task('default', function () {
-  runSequence('createWWWRoot', 'copyNPM', 'buildMDBootstrapCSS', 'copyVendor', 'compressJS', 'buildCSS', 'buildShaders', 'buildStaticContent');
+  runSequence('createWWWRoot', 'copyNPM', 'compressJS', 'buildCSS', 'buildShaders', 'buildStaticContent');
 });
 
 //-----------------------------------------------------------------------------
@@ -544,7 +472,6 @@ gulp.task('serve', function () {
   gulp.watch([sourceConfig.scriptsRoot + '**/*.ts'],              () => runSequence('compileTypeScript', 'reload'));
 
   gulp.watch([sourceConfig.cssRoot + '**/*.css'],                 () => runSequence('buildCSS', 'reload'));
-  gulp.watch([sourceConfig.mdbRoot + '**/*.scss'],                () => runSequence('buildMDBootstrapCSS', 'copyVendor', 'reload', 'beep'));
   gulp.watch([sourceConfig.htmlRoot + '**/*.html'],               () => runSequence('buildStaticContent', 'reload'));
 });
 
