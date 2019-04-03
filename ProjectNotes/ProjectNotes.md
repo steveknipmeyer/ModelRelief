@@ -10,6 +10,13 @@
         Generate button
         Busy indicator
         Click handler for test model cards
+        View icon colors
+            StandardView
+            Fit
+        Range Sliders
+            Line Weights
+            Thumb
+        Card headers are are too large; they extend the entire width of the card.
 
     Linux
         WSL

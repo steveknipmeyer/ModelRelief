@@ -21,7 +21,7 @@ hr {
 }
 
 input, textarea {
-    color: white !important;
+    color: white;
 }
 
 a {
@@ -57,8 +57,8 @@ footer.page-footer .footer-copyright {
 }
 
 .controlSection {
-    border-color: white !important;
-    margin-top: 0 !important;
+    border-color: white;
+    margin-top: 0;
 }
 
 .controlContainer {
@@ -66,24 +66,24 @@ footer.page-footer .footer-copyright {
 }
 
 .controlHeading {
-    font-size: 12pt !important;
+    font-size: 12pt;
 }
 
 .controlHeadingDivider {
-    border-color: darkgray !important;
-    margin-top: 0 !important;
+    border-color: darkgray;
+    margin-top: 0;
 }
 
 .controlDescription {
-    font-size: 10pt !important;
+    font-size: 10pt;
 }
 
 .controlText {
-    font-size: 10pt !important;
+    font-size: 10pt;
 }
 
 .sliderControl {
-    margin-top: 20px !important;
+    margin-top: 20px;
 }
 
 #modelViewCardBody,
@@ -92,23 +92,17 @@ footer.page-footer .footer-copyright {
 }
 
 .card-cascade {
-    background-color: black !important;
+    background-color: black;
 }
 
 /* (Camera) Standard View */
 .dropdown-menu {
-    background-color: #1d272e !important;
-    color: white !important;
+    background-color: #1d272e;
+    color: white;
 }
 
 .dropdown-menu a:hover {
-    background-color: black !important;
-    color: darkturquoise !important;
-}
-
-/* This is necessary to prevent the dropdown from being clipped. */
-.modelReliefCardHeader {
-    overflow: visible !important;
+    background-color: darkslategray !important;
 }
 
 /* ----------------------
