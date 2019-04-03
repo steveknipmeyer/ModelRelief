@@ -1,6 +1,17 @@
 ﻿/* ----------------------
     General
 ------------------------*/
+body {
+    background-color: #3b6176;
+    color: white;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: Roboto, sans-serif;
+    font-style:  normal;
+    font-weight: 300;
+}
+
 sup {
     font-size: 14px;
 }
@@ -11,6 +22,18 @@ hr {
 
 input, textarea {
     color: white !important;
+}
+
+a {
+    color: white;
+    font-weight: lighter;
+}
+
+footer.page-footer .footer-copyright {
+    overflow: hidden;
+    /* background-color: rgba(0,0,0,.4); */
+    background-color: #212529;
+    color: rgba(255,255,255, 0.6);
 }
 
 /* ----------------------

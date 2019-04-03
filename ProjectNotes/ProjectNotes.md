@@ -6,18 +6,22 @@
 #### Vector
 
 #### Today
-    Switch to VSCode.
-
     Remove dependency on MDBootstrap.
         Generate button
         Busy indicator
-        Font Awesome
         Click handler for test model cards
+
+    Linux
+        WSL
+        VirtualBox
+        Upgrade dual boot configuraiton on Vector.
+
 
     IIS localHOST
         Cookie permission cannot be dismissed. It is always displayed.
         Login may require deletion of local cookies.
         After login, there is an endless loop with Auth0.
+            Is this an issue with localhost?
 
     Add a cookie policy to _CookieConsentPartial.cshtml.
 
