@@ -24,8 +24,9 @@ input, textarea {
     color: white;
 }
 
-.btn {
+.button-rounded {
     color: white;
+    border-radius: 32px;
 }
 
 a {
@@ -34,10 +35,8 @@ a {
 }
 
 footer.page-footer .footer-copyright {
-    overflow: hidden;
-    /* background-color: rgba(0,0,0,.4); */
-    background-color: #212529;
-    color: rgba(255,255,255, 0.6);
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
 }
 
 /* ----------------------

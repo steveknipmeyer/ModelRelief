@@ -6,21 +6,27 @@
 #### Vector
 
 #### Today
-    How can undefined CSS be identified?
+    Remove unused GitHub repositories.
 
     Remove dependency on MDBootstrap.
-        View icon colors: StandardView, Fit)
+        View icon colors: StandardView, Fit
             btn-outline-cyan btn-rounded
+
         Generate button
+            Floating Active Button (FAB)
         Busy indicator
         Click handler for test model cards
 
         Range Sliders
             Line Weights
             Thumb
+
         Card headers are are too large; they extend the entire width of the card.
             <div class="card card-cascade narrower">
             <div class="modelReliefCardHeader view view-cascade d-flex justify-content-between gradient-card-header grey darken-4 py-2">
+
+        waves-effect
+            https://codepen.io/finnhvman/pen/jLXKJw
     Linux
         WSL
         VirtualBox
