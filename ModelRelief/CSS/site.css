@@ -179,7 +179,7 @@ input[type=checkbox]:checked + label:before {
     border-radius: 24px;
 }
 
-.dropdown-toggle {
+.dropdown-toggle{
     color: cyan;
 }
 

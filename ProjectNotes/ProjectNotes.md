@@ -9,7 +9,6 @@
     Remove unused GitHub repositories.
 
     Remove dependency on MDBootstrap.
-
         Composer
             StandardView dropdown arrow disappeass during hover.
 
