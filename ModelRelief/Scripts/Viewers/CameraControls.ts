@@ -15,7 +15,7 @@ import { CameraFactory } from "Scripts/Models/Camera/CameraFactory";
 import { CameraHelper } from "Scripts/Models/Camera/CameraHelper";
 import { DefaultCameraSettings } from "Scripts/Models/Camera/DefaultCameraSettings";
 import { EventType, IMREvent } from "Scripts/System/EventManager";
-import { ElementAttributes, ElementIds } from "Scripts/System/Html";
+import { ElementClasses } from "Scripts/System/Html";
 import { Viewer } from "Scripts/Viewers/Viewer";
 
 /**
@@ -158,7 +158,7 @@ export class CameraControls {
     private initializeStandardView(): void {
 
         const viewer = this.viewer;
-        const standardViewControl = document.querySelector(`#${this.viewer.viewContainerId} #${ElementIds.StandardView}`);
+        const standardViewControl = document.querySelector(`#${this.viewer.viewContainerId} .${ElementClasses.StandardViewMenu}`);
 
         for (const enumMember in StandardView) {
 
@@ -199,7 +199,7 @@ export class CameraControls {
         this.settings = new CameraControlsSettings(this.viewer.camera);
 
         // Fit View
-        const fitViewControl = document.querySelector(`#${this.viewer.viewContainerId} #${ElementIds.FitView}`);
+        const fitViewControl = document.querySelector(`#${this.viewer.viewContainerId} .${ElementClasses.FitViewButton}`);
         fitViewControl.addEventListener("click", (clickevent) => {
             this.fitView();
         });

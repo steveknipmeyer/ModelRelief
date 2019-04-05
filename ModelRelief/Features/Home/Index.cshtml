@@ -20,7 +20,6 @@ ViewBag.Description = "Easily create bas-reliefs (sculptural low reliefs) from 3
                 <p>Please see the Credits page for the all people and technology that made this possible.</p>
             </div>
             <div class="col-md-2 mb-4">
-
                 <img src="~/images/ModelReliefWhite.png" class="card-img-top" alt="">
             </div>
         </div>
@@ -324,7 +323,7 @@ ViewBag.Description = "Easily create bas-reliefs (sculptural low reliefs) from 3
                             </div>
                         </div>
                         <hr />
-                        <div class="g-recaptcha mt-4 mb-0" data-sitekey="@ViewData[" ReCaptchaKey"]" data-callback="recaptchaCallBack"></div>
+                        <div class="g-recaptcha mt-4 mb-0" data-sitekey="@ViewData["ReCaptchaKey"]" data-callback="recaptchaCallBack"></div>
                         <div class="text-center text-md-left">
                             <input id="sendButton" type="button" class="actionButton button-rounded btn mt-1" onclick="validateForm()" value="Send" />
                         </div>

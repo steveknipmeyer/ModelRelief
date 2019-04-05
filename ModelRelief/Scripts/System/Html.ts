@@ -25,8 +25,6 @@ export enum ElementIds {
     ModelViewerControls         = "modelViewerControls",
     NormalMapViewerControls     = "normalMapViewerControls",
 
-    StandardView                = "standardView",
-    FitView                     = "fitView",
     ProgressBar                 = "progressBar",
 
     GradientThreshold           = "gradientThreshold",
@@ -39,6 +37,13 @@ export enum ElementIds {
 
     // Workbench
     CameraTestControls  = "cameraTestControls",
+}
+
+export enum ElementClasses {
+
+    StandardViewButton = "standardViewButton",
+    StandardViewMenu   = "standardViewMenu",
+    FitViewButton      = "fitViewButton",
 }
 
 export let ElementAttributes = {

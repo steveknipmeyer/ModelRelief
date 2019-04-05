@@ -11,20 +11,13 @@
     Remove dependency on MDBootstrap.
 
         Composer
-            StandardView, Fit: button borders
-
-            Card headers are are too large; they extend the entire width of the card.
-                <div class="card card-cascade narrower">
-                <div class="modelReliefCardHeader view view-cascade d-flex justify-content-between gradient-card-header grey darken-4 py-2">
+            StandardView dropdown arrow disappeass during hover.
 
             Generate button
                 Floating Active Button (FAB)
 
             Busy indicator
-
-            Range Sliders
-                https://www.cssportal.com/style-input-range/
-
+                It is visible during the initial update.
     Linux
         WSL
         VirtualBox
