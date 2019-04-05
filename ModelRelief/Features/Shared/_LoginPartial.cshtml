@@ -3,12 +3,12 @@
 {
     <form class="form-inline ml-auto" asp-area="" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
         <a class = "mr-2" asp-area="" asp-controller="Account" asp-action="Manage" title="Manage">@User.Identity.Name</a>
-        <button class="btn btn-outline-secondary button-rounded btn-sm waves-effect my-2 my-sm-0" type="submit" >Logout</button>
+        <button class="btn btn-outline-secondary button-rounded btn-sm my-2 my-sm-0" type="submit" >Logout</button>
     </form>
 }
 else
 {
     <form class="form-inline ml-auto">
-        <a class="btn btn-outline-secondary button-rounded btn-sm waves-effect  my-2 my-sm-0" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+        <a class="btn btn-outline-secondary button-rounded btn-sm my-2 my-sm-0" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
     </form>
 }
