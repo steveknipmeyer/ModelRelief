@@ -330,6 +330,29 @@ input[type=range]:focus::-ms-fill-upper {
     50%{background-position:100% 47%}
     100%{background-position:0% 54%}
 }
+/* ----------------------
+    Generate (Floating Action Button)
+------------------------*/
+
+.fab {
+   width: 70px;
+   height: 70px;
+   background-image: linear-gradient(40deg, rgb(255, 110, 196), rgb(120, 115, 245)) !important;
+   border-radius: 50%;
+   box-shadow: 0 6px 10px 0 #666;
+
+   font-size: 50px;
+   line-height: 70px;
+   color: white;
+   text-align: center;
+
+  transition: all 0.1s ease-in-out;
+}
+
+.fab:hover {
+   box-shadow: 0 6px 14px 0 #666;
+   transform: scale(1.05);
+}
 
 /* ----------------------
     Credits

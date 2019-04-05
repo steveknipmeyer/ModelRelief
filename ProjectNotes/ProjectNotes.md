@@ -8,10 +8,6 @@
 #### Today
     Remove unused GitHub repositories.
 
-    Remove dependency on MDBootstrap.
-        Composer
-            Generate button
-                Floating Active Button (FAB)
     Linux
         WSL
         VirtualBox
