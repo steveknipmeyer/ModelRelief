@@ -9,26 +9,22 @@
     Remove unused GitHub repositories.
 
     Remove dependency on MDBootstrap.
-        Landing
-            Contact form
 
         Composer
-            View icon colors: StandardView, Fit
-                btn-outline-cyan btn-rounded
-
-            Generate button
-                Floating Active Button (FAB)
-            Busy indicator
-
-            Range Sliders
-                https://www.cssportal.com/style-input-range/
+            StandardView, Fit: button borders
 
             Card headers are are too large; they extend the entire width of the card.
                 <div class="card card-cascade narrower">
                 <div class="modelReliefCardHeader view view-cascade d-flex justify-content-between gradient-card-header grey darken-4 py-2">
 
-        waves-effect
-            https://codepen.io/finnhvman/pen/jLXKJw
+            Generate button
+                Floating Active Button (FAB)
+
+            Busy indicator
+
+            Range Sliders
+                https://www.cssportal.com/style-input-range/
+
     Linux
         WSL
         VirtualBox

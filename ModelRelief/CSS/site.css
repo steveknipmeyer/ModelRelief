@@ -38,6 +38,32 @@ a {
     background-color: rgb(16, 41, 53);
 }
 
+/* Ripple effect */
+.rippleContainer {
+  position: relative;
+  display: inline-block;
+}
+.ripple {
+  background-position: center;
+  transition: background 1s;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background-attachment: fixed;
+}
+.ripple:hover {
+  background: rgba(255, 255, 255, 0.2) radial-gradient(circle, transparent 1%, #ffffff 50%) center/15000%;
+}
+.ripple:active {
+  background-size: 100%;
+  transition: background 0s;
+}
+
 /* ----------------------
     Navigation Bar
 ------------------------*/
@@ -57,7 +83,6 @@ footer.page-footer .footer-copyright {
     Landing
 ------------------------*/
 
-
 .actionButton {
     font-size: 12px;
     padding: 10px 25px 10px 25px;
@@ -66,6 +91,31 @@ footer.page-footer .footer-copyright {
 
 #sendButton {
     cursor: not-allowed;
+}
+/* ----------------------
+    Contact Form
+------------------------*/
+#contact-form {
+    font-weight: 300;
+}
+
+.form-control {
+    color: white;
+    caret-color: white;
+
+    background-color: transparent;
+    border-width: 0px 0px 1px 0px;
+    border-radius: 0px;
+}
+
+input:focus, textarea:focus {
+  background-color: transparent !important;
+}
+
+input[type=checkbox]:checked + label:before {
+  background-color: MediumSeaGreen;
+  border-color: MediumSeaGreen;
+  color: #fff;
 }
 
 /* ----------------------
@@ -124,7 +174,7 @@ footer.page-footer .footer-copyright {
     background-color: black;
 }
 
-/* (Camera) Standard View */
+/* (Camera Icon) Standard View */
 .dropdown-menu {
     background-color: #1d272e;
     color: white;
@@ -132,48 +182,6 @@ footer.page-footer .footer-copyright {
 
 .dropdown-menu a:hover {
     background-color: darkslategray !important;
-}
-
-/* ----------------------
-    Model3D View
-------------------------*/
-
-/* ----------------------
-    Mesh View
-------------------------*/
-
-/* ----------------------
-    DepthBuffer View
-------------------------*/
-
-/* ----------------------
-    NormalMap View
-------------------------*/
-
-/* ----------------------
-    HTML Logger
-------------------------*/
-
-#loggerRoot {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.logMessage {
-    margin-left: 100PX;
-}
-
-.logError {
-    color: #B6CFDC;
-}
-
-.logWarning {
-    color: #B771B7;
-}
-
-.logInfo {
-    color: rgb(255, 255, 255);
 }
 
 /* ----------------------
@@ -219,6 +227,32 @@ footer.page-footer .footer-copyright {
 
 .creditTable a:active {
     color: blue;
+}
+
+/* ----------------------
+    HTML Logger
+------------------------*/
+
+#loggerRoot {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.logMessage {
+    margin-left: 100PX;
+}
+
+.logError {
+    color: #B6CFDC;
+}
+
+.logWarning {
+    color: #B771B7;
+}
+
+.logInfo {
+    color: rgb(255, 255, 255);
 }
 
 /* ----------------------
