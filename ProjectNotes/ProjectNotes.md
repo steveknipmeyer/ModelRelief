@@ -9,21 +9,23 @@
     Remove unused GitHub repositories.
 
     Remove dependency on MDBootstrap.
-        View icon colors: StandardView, Fit
-            btn-outline-cyan btn-rounded
+        Landing
+            Contact form
 
-        Generate button
-            Floating Active Button (FAB)
-        Busy indicator
-        Click handler for test model cards
+        Composer
+            View icon colors: StandardView, Fit
+                btn-outline-cyan btn-rounded
 
-        Range Sliders
-            Line Weights
-            Thumb
+            Generate button
+                Floating Active Button (FAB)
+            Busy indicator
 
-        Card headers are are too large; they extend the entire width of the card.
-            <div class="card card-cascade narrower">
-            <div class="modelReliefCardHeader view view-cascade d-flex justify-content-between gradient-card-header grey darken-4 py-2">
+            Range Sliders
+                https://www.cssportal.com/style-input-range/
+
+            Card headers are are too large; they extend the entire width of the card.
+                <div class="card card-cascade narrower">
+                <div class="modelReliefCardHeader view view-cascade d-flex justify-content-between gradient-card-header grey darken-4 py-2">
 
         waves-effect
             https://codepen.io/finnhvman/pen/jLXKJw
@@ -1969,3 +1971,6 @@ Lumx : http://ui.lumapps.com
         https://realfavicongenerator.net/
         https://www.flaticon.com/free-icon/scallop_166047
         https://realfavicongenerator.net/favicon/aspnet_core#.W_6RlGhKjmE
+
+#### CSS
+Chrome DevTools snippet to report on unused CSS: https://gist.github.com/kdzwinel/426a0f76f113643fa285

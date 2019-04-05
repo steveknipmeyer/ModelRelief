@@ -12,10 +12,6 @@ h1, h2, h3, h4, h5 {
     font-weight: 300;
 }
 
-sup {
-    font-size: 14px;
-}
-
 hr {
     border-color: gray;
 }
@@ -34,6 +30,24 @@ a {
     font-weight: lighter;
 }
 
+.card {
+    border: none;
+}
+
+.card-body {
+    background-color: rgb(16, 41, 53);
+}
+
+/* ----------------------
+    Navigation Bar
+------------------------*/
+sup {
+    font-size: 14px;
+}
+
+/* ----------------------
+    Footer
+------------------------*/
 footer.page-footer .footer-copyright {
     font-size: 14px;
     color: rgba(255, 255, 255, 0.5);
@@ -42,6 +56,14 @@ footer.page-footer .footer-copyright {
 /* ----------------------
     Landing
 ------------------------*/
+
+
+.actionButton {
+    font-size: 12px;
+    padding: 10px 25px 10px 25px;
+    background-color: slategray;
+}
+
 #sendButton {
     cursor: not-allowed;
 }
@@ -152,6 +174,51 @@ footer.page-footer .footer-copyright {
 
 .logInfo {
     color: rgb(255, 255, 255);
+}
+
+/* ----------------------
+    Credits
+------------------------*/
+.creditTable {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.creditHeading {
+    font-size: 16pt;
+    color: lightgray;
+}
+
+.creditTechnology {
+    font-size: 12pt;
+}
+
+.creditDescription {
+    font-size: 10pt;
+}
+
+.creditLicense {
+    font-size: 10pt;
+}
+
+.creditTable a:hover {
+    color: darkturquoise;
+}
+
+.creditTable a:link {
+    color: white;
+}
+
+.creditTable a:visited {
+    color: white;
+}
+
+.creditTable a:hover {
+    color: cyan;
+}
+
+.creditTable a:active {
+    color: blue;
 }
 
 /* ----------------------
