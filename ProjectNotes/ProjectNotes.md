@@ -10,13 +10,8 @@
 
     Remove dependency on MDBootstrap.
         Composer
-            StandardView dropdown arrow disappeass during hover.
-
             Generate button
                 Floating Active Button (FAB)
-
-            Busy indicator
-                It is visible during the initial update.
     Linux
         WSL
         VirtualBox
@@ -28,6 +23,9 @@
         Login may require deletion of local cookies.
         After login, there is an endless loop with Auth0.
             Is this an issue with localhost?
+            It may be related to SSL. The same behavior can be seen in VSCode when the port is 5000 (rather than 5001).
+                launch.json: "args": "/C start http://localhost:5001/"
+
 
     Add a cookie policy to _CookieConsentPartial.cshtml.
 

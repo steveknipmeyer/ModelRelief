@@ -12,7 +12,6 @@
         ]
     }],
    "configurations": [
-
         {
            "type": "chrome",
            "request": "launch",
@@ -27,6 +26,13 @@
             "name": ".NET Core Launch",
             "type": "coreclr",
             "request": "launch",
+            "logging": {
+                "engineLogging": false,
+                "moduleLoad": false,
+                "exceptions": false,
+                "browserStdOut": false,
+            },
+
             "preLaunchTask": "ASPNET .Core Build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceRoot}/ModelRelief/bin/Debug/netcoreapp2.2/ModelRelief.dll",
@@ -37,7 +43,7 @@
 
             // The external console will not launch the browser. It is necessary to manually start the browser.
             // The internal console does not support Console.ReadLine so user verification steps are not possible.
-            "console": "externalTerminal",
+            "console": "internalConsole",
 
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {
@@ -51,7 +57,7 @@
                 "windows": {
                    "command": "cmd.exe",
                 // "args": "/C start ${auto-detect-url}",
-                   "args": "/C start http://localhost:5000/"
+                   "args": "/C start http://localhost:5001/"
                 },
                 "osx": {
                     "command": "open"

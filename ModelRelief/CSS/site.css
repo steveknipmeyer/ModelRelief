@@ -179,6 +179,10 @@ input[type=checkbox]:checked + label:before {
     border-radius: 24px;
 }
 
+.standardViewButton:hover {
+    color: cyan;
+}
+
 .dropdown-toggle{
     color: cyan;
 }
@@ -297,6 +301,36 @@ input[type=range]:focus::-ms-fill-lower {
 input[type=range]:focus::-ms-fill-upper {
   background: #B8A9A9;
 }
+/* ----------------------
+    Progress
+------------------------*/
+/* https://www.gradient-animator.com/ */
+#progressBar {
+    height: 16px;
+    background: linear-gradient(270deg, #e62088, #5adcea);
+
+    background-size: 400% 400%;
+
+    -webkit-animation: ProgressBarAnimation 1s ease infinite;
+    -moz-animation: ProgressBarAnimation 1s ease infinite;
+    animation: ProgressBarAnimation 1s ease infinite;
+}
+@-webkit-keyframes ProgressBarAnimation {
+    0%{background-position:0% 54%}
+    50%{background-position:100% 47%}
+    100%{background-position:0% 54%}
+}
+@-moz-keyframes ProgressBarAnimation {
+    0%{background-position:0% 54%}
+    50%{background-position:100% 47%}
+    100%{background-position:0% 54%}
+}
+@keyframes ProgressBarAnimation {
+    0%{background-position:0% 54%}
+    50%{background-position:100% 47%}
+    100%{background-position:0% 54%}
+}
+
 /* ----------------------
     Credits
 ------------------------*/
