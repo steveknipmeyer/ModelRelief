@@ -57,7 +57,7 @@
                 "windows": {
                    "command": "cmd.exe",
                 // "args": "/C start ${auto-detect-url}",
-                   "args": "/C start http://localhost:5001/"
+                   "args": "/C start https://localhost:5001/"
                 },
                 "osx": {
                     "command": "open"

@@ -304,26 +304,32 @@
 When the view camera is interactively changed, it should invalidate the StandardView in the UI.
     Mesh view opens with the UI set to StandardCamera.Front but the view is Top.
 
-##### Technical Education
+#####  Ubuntu Setup
 
-- ASP.NET Core in Action
-
-#####  Ubuntu
+#####  Ubuntu Development
     Ignore line endings in git source.
     %TEMP% is not defined so the log file is created as %TEMP%\Logs\ModelRelief.log.
     Shift-End does not work in the editor to select from the cursor position to EOL.
     tsc command line
         Does the compiler need to be symbolically linked to a bin folder (e.g. usr/bin)
-    SQLite
-        The version is 2.87 on Ubuntu and 5.0 on Windows.
+
+    Database
+        SQLite
+            The version is 2.87 on Ubuntu and 5.0 on Windows.
+            Install a SQLite administration tool.
+        MySQL
+
     The (PowerShell?) language service could not be started.
     Python 3.X
+
     ModelReliefShell.sh
         MRPort, MRPortSecure, ASPNETCORE_URLS, ASPNETCORE_HTTPS_PORT
         Review other runtime environment variables.
-    How should the appsettings.json files define the directory separator. Forward slash does not work with SQLServer.
-        Does forward slash work with SQLite on Windows?
-    Install a SQLite administration tool.
+
+    appsettings.json
+        How should settings files define the directory separator?
+            Forward slash does not work with SQLServer.
+            Does forward slash work with SQLite on Windows?
 
 #### Front End
 <span style="color:red">
@@ -1174,8 +1180,8 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     Git Configuration: https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup
     git config --list
 
-|Configuration File|Linux|Note|Windows|Note
-|----|----
+|Configuration File|Linux|Note|Windows|Note|
+|----|----|----|----|----|
 |system|/etc/gitconfig||C:\Program Files\Git\etc\gitconfig|none
 |system|||C:\ProgramData\Git\config
 |user|~/.gitconfig||C:\Users\$USER\\.gitconfig
