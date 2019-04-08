@@ -1,0 +1,5 @@
+sudo apt install git
+git config --global user.name "Steve Knipmeyer"
+git config --global user.email "steve@knipmeyer.org"
+
+git config credential.helper store
