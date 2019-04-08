@@ -331,6 +331,11 @@ When the view camera is interactively changed, it should invalidate the Standard
             Forward slash does not work with SQLServer.
             Does forward slash work with SQLite on Windows?
 
+    VirualBox Guest Additions
+        sudo apt update
+        sudo apt upgrade
+        sudo apt install build-essential dkms linux-headers-$(uname -r)
+
 #### Front End
 <span style="color:red">
     The 'dotnet run' workflow runs as 'Production'!
