@@ -1,5 +1,6 @@
 ﻿### Tasks
 #### Commit Notes
+Replace gulp-util with fancy-log.
 
 #### Lambdas
 
@@ -7,12 +8,6 @@
 
 #### Today
     Remove unused GitHub repositories.
-
-    Linux
-        WSL
-        VirtualBox
-        Upgrade dual boot configuraiton on Vector.
-
 
     IIS localHOST
         Cookie permission cannot be dismissed. It is always displayed.
@@ -337,6 +332,13 @@ When the view camera is interactively changed, it should invalidate the Standard
         sudo apt install build-essential dkms linux-headers-$(uname -r)
 
     Linux Setup
+        UI
+            sudo apt install gnome-tweak-tool
+                Keyboard and Mouse
+                    Additional Layout Options
+                        Miscellaneous Compatibility Options
+                            NumLock
+
         git
             sudo apt install git
             git config --global user.name "Steve Knipmeyer"
@@ -347,32 +349,44 @@ When the view camera is interactively changed, it should invalidate the Standard
                 cd ModelRelief
                 git config credential.helper store
 
-        https://code.visualstudio.com/docs/setup/linux
-            sudo snap install --classic code
-co
-        Install VSCode Setting Sync.
-            Download settings using the Gist Token and Gist Id contained in this file.
+            Pull Pybind11 and Catch2 repos.
+                git submodule init
+                git submodule update
 
-        git submodule init
-        git submodule update
+        VSCode
+            https://code.visualstudio.com/docs/setup/linux
+                sudo snap install --classic code
+
+            Install VSCode Setting Sync.
+                Download settings using the Gist Token and Gist Id contained in this file.
+
+        Node
+            https://linuxize.com/post/how-to-install-node-js-on-ubuntu-18.04/
+            sudo apt install nodejs
+
+        NPM
+            sudo apt install npm
+
+        Gulp
+            sudo npm install --global gulp-cli
+
+        Madge (TypeScript circular dependency tool)
+            sudo npm install --global madge
 
         .NET Core
             https://dotnet.microsoft.com/download/linux-package-manager/ubuntu18-04/sdk-current
 
-        dotnet restore
+        Build
+            npm install
 
-        node, npm
-            https://linuxize.com/post/how-to-install-node-js-on-ubuntu-18.04/
+            dotnet restore
+            dotnet  build
 
-        npm install
-        sudo npm install --global gulp-cli
-        sudo npm install --global madge
+
 
         Issues
             The c_cpp_properties.json settings much be updated for linux. There is a win32 settings group.
-            Install Lucinda Console for use in VSCode and terminal.
-                VSCode in Windows uses Consolas.
-                    Why are the Workspace Text Editor: Fonts different between Windows and Linux after the settings have been synched.
+
             HTTPS
                 Successfully installed the ASP.NET Core HTTPS Development Certificate.
                 To trust the certificate run 'dotnet dev-certs https --trust' (Windows and macOS only). For establishing trust on other platforms refer to the platform specific documentation.

@@ -15,7 +15,7 @@ Documents\bin\DebugGulp.bat
 // Gulp
 var gulp         = require('gulp');
 var eol          = require('gulp-eol');
-var gutil        = require('gulp-util');
+var flog         = require('fancy-log');
 var exec         = require('child_process').exec;
 var rename       = require('gulp-rename');
 var sourcemaps   = require('gulp-sourcemaps');
@@ -70,7 +70,7 @@ var tsProject = ts.createProject(sourceConfig.sourceRoot + 'tsconfig.json');
 /// </summary>
 var onError = function (err) {
     beep([0]);
-    gutil.log(gutil.colors.red(err));
+    flog.log(gutil.colors.red(err));
 };
 
 /// <summary>

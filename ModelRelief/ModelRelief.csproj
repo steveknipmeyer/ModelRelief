@@ -107,7 +107,7 @@
     </Content>
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="tsc" />
+  <Target Name="PreBuild" AfterTargets="PreBuildEvent">
+    <Exec Command="../node_modules/typescript/bin/tsc --pretty -p ." />
   </Target>
 </Project>
