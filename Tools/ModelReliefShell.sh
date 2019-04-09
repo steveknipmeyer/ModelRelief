@@ -1,8 +1,10 @@
+# !/bin/bash
+# ModelRelief Development Shell
 
 # ModelRelief Folder Locations
-MRSolution=$(pwd)/
-MR=${MRSolution}ModelRelief/
-MRPublish=${MRSolution}Publish/
+export MRSolution=$(pwd)/
+export MR=${MRSolution}ModelRelief/
+export MRPublish=${MRSolution}Publish/
 
 # ModelRelief Settings
 # Settings are <overridden> by these configuration providers in order:
@@ -21,13 +23,13 @@ MRPublish=${MRSolution}Publish/
 # N.B. 'dotnet run' uses ModelRelief\Properties\launchSettings.json!
 #       https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-run?tabs=netcore21
 #       Disable with 'dotnet run --no-launch-profile'.
-MRPort=5000
-MRPortSecure=5001
-MRDatabaseProvider=SQLServer
-MRUpdateSeedData=False
-MRInitializeDatabase=False
-MRSeedDatabase=False
-MRExitAfterInitialization=False
+export MRPort=5000
+export MRPortSecure=5001
+export MRDatabaseProvider=SQLServer
+export MRUpdateSeedData=False
+export MRInitializeDatabase=False
+export MRSeedDatabase=False
+export MRExitAfterInitialization=False
 
 export PATH="$PATH:${MRSolution}Tools:${MRSolution}Build"
 
@@ -42,7 +44,7 @@ export "MYPYPATH=${MRSolution}Tools/"
 #conda activate ./devenv
 
 # ASPNET CORE Configuration
-ASPNETCORE_ENVIRONMENT=Development
+export ASPNETCORE_ENVIRONMENT=Development
 # Ports Configuration
 #  Command line (dotnet run) : ASPNETCORE_URLS environment variable
 #  Visual Studio             : launchSettings.json
