@@ -10,7 +10,7 @@
   "dependencies": {},
   "devDependencies": {
     "@types/chai": "^4.1.7",
-    "@types/dat.gui": "^0.6.3",
+    "@types/dat.gui": "^0.7.2",
     "@types/jquery": "3.2.1",
     "@types/requirejs": "^2.1.29",
     "@types/three": "0.93.10",

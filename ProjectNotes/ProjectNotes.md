@@ -379,7 +379,6 @@ When the view camera is interactively changed, it should invalidate the Standard
         Build
             npm install
 
-            dotnet restore
             dotnet  build
 
 
