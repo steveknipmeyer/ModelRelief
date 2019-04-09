@@ -336,6 +336,45 @@ When the view camera is interactively changed, it should invalidate the Standard
         sudo apt upgrade
         sudo apt install build-essential dkms linux-headers-$(uname -r)
 
+    Linux Setup
+        sudo apt install git
+        git config --global user.name "Steve Knipmeyer"
+        git config --global user.email "steve@knipmeyer.org"
+
+        git config credential.helper store
+
+        https://code.visualstudio.com/docs/setup/linux
+        sudo apt install ./<file>.deb
+
+        Install VSCode Setting Sync.
+            Download settings using the Gist Token and Gist Id contained in this file.
+
+        git submodule init
+        git submodule update
+
+        .NET Core
+            https://dotnet.microsoft.com/download/linux-package-manager/ubuntu18-04/sdk-current
+
+        dotnet restore
+
+        node, npm
+            https://linuxize.com/post/how-to-install-node-js-on-ubuntu-18.04/
+
+        npm install
+        sudo npm install --global gulp-cli
+        sudo npm install --global madge
+
+        Issues
+            The c_cpp_properties.json settings much be updated for linux. There is a win32 settings group.
+            Install Lucinda Console for use in VSCode and terminal.
+                VSCode in Windows uses Consolas.
+                    Why are the Workspace Text Editor: Fonts different between Windows and Linux after the settings have been synched.
+            HTTPS
+                Successfully installed the ASP.NET Core HTTPS Development Certificate.
+                To trust the certificate run 'dotnet dev-certs https --trust' (Windows and macOS only). For establishing trust on other platforms refer to the platform specific documentation.
+                For more information on configuring HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.
+
+
 #### Front End
 <span style="color:red">
     The 'dotnet run' workflow runs as 'Production'!
@@ -1223,6 +1262,14 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 
     git submodule init
     git submodule update
+        stephen@alpha-VirtualBox:~/ModelRelief$ git submodule init
+        Submodule 'Relief/lib/Catch2' (https://github.com/catchorg/Catch2.git) registered for path 'Relief/lib/Catch2'
+        Submodule 'Relief/lib/pybind11' (https://github.com/pybind/pybind11.git) registered for path 'Relief/lib/pybind11'
+        stephen@alpha-VirtualBox:~/ModelRelief$ git submodule update
+        Cloning into '/home/stephen/ModelRelief/Relief/lib/Catch2'...
+        Cloning into '/home/stephen/ModelRelief/Relief/lib/pybind11'...
+        Submodule path 'Relief/lib/Catch2': checked out '60b05b20413afe4ad9980e627862474a9b8ba4cd'
+        Submodule path 'Relief/lib/pybind11': checked out '435dbdd114d135712a8a3b68eb9e640756ffe73b'
 
 ###### git branch
     (Development) d:\Github\ModelRelief>git status
@@ -1581,8 +1628,7 @@ ServerFramework (WebHost.CreateDefaultBuilder) sets the environment to "Developm
         Anaconda 64-bit
         synchronize settings
     VSCode
-       extesqlnsions
-       synchronize User Settings
+       synchronize User Settings (Extensions, ketboard mapping, settings)
     Node.js
     NPM
         npm install --global gulp-cli
@@ -1811,8 +1857,8 @@ https://semver.npmjs.com/
                    See the steps in One Note:ModelRelief:A2 Hosting:Import Dump.
 
             Local IIS Only(?)
-                4) Security->Logins add a UserMapping for the modelrelief login to the ModelReliefProduction database.
-                5) From Databases->ModelReliefProduction->Security->Users give the modelrelief user the necessary privileges:
+                1) Security->Logins add a UserMapping for the modelrelief login to the ModelReliefProduction database.
+                2) From Databases->ModelReliefProduction->Security->Users give the modelrelief user the necessary privileges:
                     db_backupoperator
                     db_datareader
                     db_datawriter
