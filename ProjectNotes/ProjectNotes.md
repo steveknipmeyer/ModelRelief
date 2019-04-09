@@ -337,15 +337,19 @@ When the view camera is interactively changed, it should invalidate the Standard
         sudo apt install build-essential dkms linux-headers-$(uname -r)
 
     Linux Setup
-        sudo apt install git
-        git config --global user.name "Steve Knipmeyer"
-        git config --global user.email "steve@knipmeyer.org"
+        git
+            sudo apt install git
+            git config --global user.name "Steve Knipmeyer"
+            git config --global user.email "steve@knipmeyer.org"
 
-        git config credential.helper store
+            git clone https://github.com/steveknipmeyer/ModelRelief.git
+            Store credentials.
+                cd ModelRelief
+                git config credential.helper store
 
         https://code.visualstudio.com/docs/setup/linux
-        sudo apt install ./<file>.deb
-
+            sudo snap install --classic code
+co
         Install VSCode Setting Sync.
             Download settings using the Gist Token and Gist Id contained in this file.
 
