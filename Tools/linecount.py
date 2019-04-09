@@ -12,7 +12,6 @@
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 
 """
-import colorama
 import os
 import sys
 from enum import Enum
@@ -30,7 +29,6 @@ class LineCount:
         """
         Performs initialization.
         """
-        colorama.init()        
         self.logger = Logger()
         self.environment:Environment = Environment()
 
@@ -58,7 +56,7 @@ class LineCount:
             with open(file) as f:
                 for index, _ in enumerate(f):
                     pass
-            return index + 1            
+            return index + 1
 
         def process_file(file: str)->None:
             """
@@ -75,17 +73,17 @@ class LineCount:
                 if file_extension in counts:
                     counts[file_extension] += lines
                 else:
-                    counts[file_extension] = lines    
+                    counts[file_extension] = lines
 
         tools.recurse_folder(root, excluded_folders, process_file)
 
         total_lines = 0
         for key, value in counts.items():
-            self.logger.logInformation(f"{key} = {value}", Colors.BrightMagenta) 
+            self.logger.logInformation(f"{key} = {value}", Colors.BrightMagenta)
             total_lines = total_lines + value
-        self.logger.logInformation(f"Total lines = {total_lines}", Colors.BrightYellow) 
+        self.logger.logInformation(f"Total lines = {total_lines}", Colors.BrightYellow)
 
-        self.logger.logInformation("\n</LineCount>", Colors.BrightCyan) 
+        self.logger.logInformation("\n</LineCount>", Colors.BrightCyan)
 
 def main():
     """
@@ -96,4 +94,3 @@ def main():
 
 if __name__ == "__main__":
     main()
- 

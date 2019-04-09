@@ -1,12 +1,11 @@
 # ---------------------- Manual Steps ----------------------
 #
 # conda config --add channels conda-forge
-# conda create --prefix .\devenv python=3.6
-# conda activate D:\ModelRelief\devenv
+# conda create --prefix devenv python=3.6
+# conda activate devenv
 #
 # ---------------------- Core ----------------------
 # conda install numpy
-# conda install colorama
 # conda install scipy
 # conda install pyamg
 # conda install matplotlib
@@ -22,6 +21,21 @@
 # ---------------------- Requirements ----------------------
 # This file may be used to create an environment using:
 # $ conda create --name <env> --file <this file>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # platform: win-64
 apptools=4.4.0=py36_1002
 astroid=2.1.0=py36_1000

@@ -15,7 +15,6 @@
 import json
 import io
 import os
-import colorama
 
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional
@@ -149,7 +148,6 @@ class Environment:
         self.show(Colors.BrightCyan)
 
 def main():
-    colorama.init()
     e = Environment()
     e.test_stack()
 

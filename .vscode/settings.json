@@ -20,6 +20,13 @@
             "node_modules": true    // this excludes the folder only from the root of your workspace
         },
 
+        "files.watcherExclude": {
+            "**/.git/objects/**": true,
+            "**/.git/subtree-cache/**": true,
+            "**/node_modules/*/**": true,
+            "**/devenv/*/**": true
+        },
+
     // ---------------------------------
     // Python
     // ---------------------------------

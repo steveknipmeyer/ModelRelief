@@ -179,8 +179,8 @@ node_modules/
 .alm
 
 ## Python Virtual Environments
-mrenv
-devenv
+mrenv/
+devenv/
 
 # web runtime
 wwwroot

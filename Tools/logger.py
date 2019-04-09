@@ -10,7 +10,6 @@
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
-import colorama
 from enum import Enum
 
 from tools import Colors
@@ -31,18 +30,16 @@ class Logger:
     """
 
     def __init__(self) -> None:
-        """ 
+        """
         Initialize an instance of the Logger.
         """
-        colorama.init()
-        
         self.colors = {
             MessageClass.DEBUG : Colors.BrightMagenta,
             MessageClass.INFORMATION : Colors.BrightWhite,
             MessageClass.WARNING : Colors.BrightYellow,
             MessageClass.ERROR : Colors.BrightRed,
             MessageClass.TIMER : Colors.BrightCyan,
-        }        
+        }
 
     def logColorMessage(self, message : str, color: str):
         """

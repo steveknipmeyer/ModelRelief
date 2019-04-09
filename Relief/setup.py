@@ -1,5 +1,4 @@
 
-import colorama
 import os
 import re
 import sys
@@ -29,7 +28,6 @@ class CMakeBuild(build_ext):
         """
         super().__init__(dist)
 
-        colorama.init()
         self.logger = Logger()
 
         self.root = os.path.dirname(os.path.realpath(__file__))

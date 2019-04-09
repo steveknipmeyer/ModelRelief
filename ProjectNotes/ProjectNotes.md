@@ -378,13 +378,39 @@ When the view camera is interactively changed, it should invalidate the Standard
 
         Build
             npm install
-
             dotnet  build
+Alpha --->
+        Anaconda
+            https://linuxize.com/post/how-to-install-anaconda-on-ubuntu-18-04/
+                If you'd prefer that conda's base environment not be activated on startup, set the auto_activate_base parameter to false:
+                    conda config --set auto_activate_base false
+            conda config --add channels conda-forge
 
+        Postman
+            snap install postman
+                sudo snap switch --channel=candidate postman
+                sudo snap refresh postman
 
+        Runtime
+            Add azurekeyvault.json to ModelRelief project folder.
+
+        Build
+            BuildPythonEnvironment.sh
+
+            python Build/Builder.py --target local
+
+        Shell
+            cd ModelRelief
+            conda activate ./devenv
+            source ./Tools/ModelReliefShell.sh
 
         Issues
-            The c_cpp_properties.json settings much be updated for linux. There is a win32 settings group.
+            How can 'conda activate ./devenv' be run from ModelRelief.sh?
+            What screen capture utility can replace SnagIt?
+            Linters mypy and pyling are not installed (VSCode warning message).
+
+            The c_cpp_properties.json settings much be updated for linux.
+                "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.14.26428/bin/Hostx64/x64/cl.exe",
 
             HTTPS
                 Successfully installed the ASP.NET Core HTTPS Development Certificate.
@@ -1627,7 +1653,7 @@ The Visual Studio Debug project settings for Environment variables **writes thro
 The XUnit tests cannot be run withany required prompts for user verification because *the console is not displayed*.
 ServerFramework (WebHost.CreateDefaultBuilder) sets the environment to "Development" *however the environment variables from launchSettings.json are not used.*
 
-#### New Computer Setup
+#### New Windows Computer Setup
     Graphics Tools
         Rhino3D
         MeshLab
@@ -1651,7 +1677,7 @@ ServerFramework (WebHost.CreateDefaultBuilder) sets the environment to "Developm
         npm install --global gulp-cli
         npm install --global madge
     Install .NET Core 2.2 SDK.
-    Add axurekeyvault.json to ModelRelief project folder.
+    Add azurekeyvault.json to ModelRelief project folder.
 
     From the solution root:
         conda config --add channels conda-forge

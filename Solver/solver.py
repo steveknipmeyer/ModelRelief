@@ -12,7 +12,6 @@
 """
 
 import argparse
-import colorama
 import json
 import os
 import numpy as np
@@ -64,9 +63,6 @@ class Solver:
             Working folder path for intermediate files.
         """
         self.debug = False
-
-        # Windows only
-        colorama.init()
 
         # results collection
         self.results = Results()

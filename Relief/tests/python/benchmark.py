@@ -9,7 +9,6 @@
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
-import colorama
 import math
 import numpy as np
 import unittest

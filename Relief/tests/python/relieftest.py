@@ -9,7 +9,6 @@
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
-import colorama
 import math
 import numpy as np
 import os
@@ -85,7 +84,6 @@ class ReliefTest(unittest.TestCase):
         """ Initialize an instance of ReliefTest. """
         super().__init__(methodName)
 
-        colorama.init()
         self.logger = Logger()
 
     def tearDown(self):
