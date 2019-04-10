@@ -1,12 +1,10 @@
 /**
  * @brief pybind11 bindings for ModelRelief Python extensions.
- * 
+ *
  * @file Bindings.cpp
  * @author Steve Knipmeyer
  * @date 2018-09-03
  */
-#pragma once
-
 #include <pybind11/pybind11.h>
 
 #include "ModelRelief.h"

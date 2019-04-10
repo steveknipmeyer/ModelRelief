@@ -5,7 +5,6 @@
  * @author Steve Knipmeyer
  * @date 2018-09-03
  */
-#pragma once
 #define _USE_MATH_DEFINES
 #include <iostream>
 #include <cmath>
@@ -32,15 +31,15 @@ GaussianKernel::GaussianKernel(double sigma)
 
     m_kernelRadius = GaussianKernel::Radius(m_sigma);
     m_kernelSize   = (m_kernelRadius * 2) + 1;
-    m_rows         = m_kernelSize;             
-    m_columns      = m_kernelSize;             
-    m_xLimit       = (m_columns - 1) / 2;      
-    m_yLimit       = (m_rows - 1) / 2;         
+    m_rows         = m_kernelSize;
+    m_columns      = m_kernelSize;
+    m_xLimit       = (m_columns - 1) / 2;
+    m_yLimit       = (m_rows - 1) / 2;
 
     m_kernel = unique_ptr<double[]>(new double[m_rows * m_columns]);
 
     CalculateStandard();
-    Normalize(); 
+    Normalize();
 }
 
 /**
@@ -138,7 +137,7 @@ void GaussianKernel::Iterate(KernelCallback callback, void* pArguments)
 {
     for (int x = -m_xLimit; x <= m_xLimit; x++)
         for (int y = -m_yLimit; y <= m_yLimit; y++)
-            std::invoke(callback, *this, x, y, pArguments);
+            std::__invoke(callback, *this, x, y, pArguments);
 }
 
 /**

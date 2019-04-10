@@ -5,8 +5,6 @@
  * @author Steve Knipmeyer
  * @date 2018-09-23
  */
-#pragma once
-
 #include <iostream>
 #include <cmath>
 #include <iomanip>

@@ -8,8 +8,8 @@ Replace gulp-util with fancy-log.
 
 #### Today
     Vector
-        conda install cmake
-        Update requirements.development.txt
+        Test BuildPythonEnvironment Development.
+            conda install cmake
 
         .bashrc
             # SLK
@@ -415,6 +415,8 @@ Alpha --->
             python Build/Builder.py --target local
 
         Issues
+            Why are the development headers in lib/Python3.6m rather than lib/Python3.6?
+
             What screen capture utility can replace SnagIt?
             Linters mypy and pyling are not installed (VSCode warning message).
 

@@ -1,6 +1,6 @@
 /**
  * @brief Class implementing an image processing kernel for Gaussian filters.
- * 
+ *
  * @file GaussianKernel.h
  * @author Steve Knipmeyer
  * @date 2018-09-03
@@ -28,7 +28,7 @@ using GaussianKernelR = GaussianKernel&;
 
 /**
  * @brief Class implementing an image processing kernel for Gaussian filters.
- * 
+ *
  */
 class GaussianKernel {
     private:
@@ -37,7 +37,7 @@ class GaussianKernel {
         int     m_kernelSize;               // dimension of kernel array
         int     m_rows;                     // kernel rows
         int     m_columns;                  // kernel columns
-        int     m_xLimit;                   // x bound    
+        int     m_xLimit;                   // x bound
         int     m_yLimit;                   // y bound
 
         std::unique_ptr<double[]> m_kernel; // default (unmasked) kernel
@@ -45,11 +45,11 @@ class GaussianKernel {
         void Iterate(KernelCallback callback, void* pArguments);
         void Gaussian(int x, int y, void* pArguments);
         void Sum(int x, int y, void* pArguments);
-        void GaussianKernel::NormalizeElement(int x, int y, void* pArguments);
+        void NormalizeElement(int x, int y, void* pArguments);
 
     public:
         GaussianKernel(double sigma);
-        ~GaussianKernel(); 
+        ~GaussianKernel();
 
         int KernelSize() const;
         int Rows() { return m_rows; }

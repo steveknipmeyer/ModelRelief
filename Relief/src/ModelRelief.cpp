@@ -24,7 +24,7 @@ namespace ModelRelief {
  * @param input2 Second array.
  * @return NPDoubleArray
  */
-NPDoubleArray add_arrays(NPDoubleArray input1, NPDoubleArray input2) 
+NPDoubleArray add_arrays(NPDoubleArray input1, NPDoubleArray input2)
 {
    // read input arrays buffer_info
    py::buffer_info buf1 = input1.request(), buf2 = input2.request();
@@ -103,12 +103,12 @@ NPDoubleArray& fill(NPDoubleArray& input, double value)
  * @param algorithm Filter algorithm to use.
  * @return NPDoubleArray&
  */
-NPDoubleArray gaussian_filter(NPDoubleArray& image, NPDoubleArray& mask, double sigma, int algorithm)
+NPDoubleArray gaussian_filter(NPDoubleArray& image, NPDoubleArray& mask, double sigma, const int algorithm)
 {
     try
     {
         GaussianFilter filter(image, mask, sigma);
-        NPDoubleArray& filteredImage = filter.Calculate(algorithm);
+        NPDoubleArray filteredImage = filter.Calculate(algorithm);
         return filteredImage;
     }
     catch (...)
@@ -116,7 +116,7 @@ NPDoubleArray gaussian_filter(NPDoubleArray& image, NPDoubleArray& mask, double 
         throw std::runtime_error("The gaussian_filter Relief C++ extension threw an exception.");
         return image;
     }
-    
+
 }
 
 /**
