@@ -39,9 +39,9 @@ export "PYTHONPATH=${MRSolution}Tools:${MRSolution}Solver:${MRSolution}Explorer:
 # MyPy Linter
 export "MYPYPATH=${MRSolution}Tools/"
 
-# Active the ModelRelief Python environment.
-#conda init bash
-#conda activate ./devenv
+# activate the ModelRelief Python environment.
+conda activate ./devenv
+PS1='(devenv) ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 
 # ASPNET CORE Configuration
 export ASPNETCORE_ENVIRONMENT=Development
@@ -53,15 +53,4 @@ export ASPNETCORE_ENVIRONMENT=Development
 export "ASPNETCORE_URLS=https://localhost:$MRPortSecure/:http://localhost:$MRPort/"
 export "ASPNETCORE_HTTPS_PORT=$MRPortSecure"
 
-echo --- Environment ---
-echo MR=$MR
-echo ASPNETCORE_URLS=$ASPNETCORE_URLS
-echo ASPNETCORE_HTTPS_PORT=$ASPNETCORE_HTTPS_PORT
-echo
-echo ASPNETCORE_ENVIRONMENT=$ASPNETCORE_ENVIRONMENT
-echo MRDatabaseProvider=$MRDatabaseProvider
-echo
-echo MRUpdateSeedData=$MRUpdateSeedData
-echo MRInitializeDatabase=$MRInitializeDatabase
-echo MRSeedDatabase=$MRSeedDatabase
-echo MRExitAfterInitialization=$MRExitAfterInitialization
+. showenv.sh

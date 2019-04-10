@@ -85,7 +85,7 @@ class Environment:
         self.stack:List[Dict] = []
 
         self.sqlite_path = os.path.join(os.environ[EnvironmentNames.MR], self.database_relative_path(DatabaseProvider.sqlite.value))
-        self.sqlserver_path = os.environ["USERPROFILE"]
+        self.sqlserver_path = os.environ["HOME"]
 
     def show (self, color=Colors.Magenta):
         """

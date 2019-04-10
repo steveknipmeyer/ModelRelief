@@ -65,7 +65,7 @@ class Builder:
         self.source_store_path = os.path.join(self.modelrelief_path, self.store_folder)
 
         # files
-        self.build_explorer = "BuildExplorerUI.bat"
+        self.build_explorer = "BuildExplorerUI.sh"
         self.file_exclusions = ["js/modelrelief.js", "js/modelrelief.js.map", "js/shaders.js"]
         self.settings_production = "appsettings.Production.json"
         self.settings_production_docker = "appsettings.ProductionDocker.json"
@@ -135,7 +135,7 @@ class Builder:
         # gulp (wwwroot)
         self.logger.logInformation("\nBuilding wwwroot", Colors.BrightMagenta)
         os.chdir(self.solution_path)
-        Tools.exec("gulp.cmd")
+        Tools.exec("gulp")
 
         # TypeScript
         self.logger.logInformation("\nTypeScript compilation", Colors.BrightMagenta)
@@ -149,7 +149,7 @@ class Builder:
         # minification
         self.logger.logInformation("\nMinifying JavaScript", Colors.BrightMagenta)
         os.chdir(self.solution_path)
-        Tools.exec("gulp.cmd compressJS")
+        Tools.exec("gulp compressJS")
 
         # Explorer UI
         self.logger.logInformation("\nExplorer UI", Colors.BrightMagenta)

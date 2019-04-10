@@ -396,18 +396,16 @@ When the view camera is interactively changed, it should invalidate the Standard
         Runtime
             Add azurekeyvault.json to ModelRelief project folder.
 
+        .bashrc
+            cd ModelRelief
+            . Tools/ModelReliefShell.sh
+
         Build
             BuildPythonEnvironment.sh
 Alpha --->
             python Build/Builder.py --target local
 
-        Shell
-            cd ModelRelief
-            conda activate ./devenv
-            source ./Tools/ModelReliefShell.sh
-
         Issues
-            How can 'conda activate ./devenv' be run from ModelRelief.sh?
             What screen capture utility can replace SnagIt?
             Linters mypy and pyling are not installed (VSCode warning message).
 
@@ -418,7 +416,6 @@ Alpha --->
                 Successfully installed the ASP.NET Core HTTPS Development Certificate.
                 To trust the certificate run 'dotnet dev-certs https --trust' (Windows and macOS only). For establishing trust on other platforms refer to the platform specific documentation.
                 For more information on configuring HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.
-
 
 #### Front End
 <span style="color:red">
