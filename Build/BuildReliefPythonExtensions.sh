@@ -27,6 +27,5 @@ if [ $EnvironmentName = "mrenv" ]; then
     echo "Activating Production Python environment"
     conda activate Publish/mrenv
  fi
-
 cd Relief
 python setup.py build $BuildOptions install

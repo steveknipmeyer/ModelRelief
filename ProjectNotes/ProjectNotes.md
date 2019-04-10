@@ -8,7 +8,13 @@ Replace gulp-util with fancy-log.
 
 #### Today
     Vector
-        Set default Python environment to devenv.
+        conda install cmake
+        Update requirements.development.txt
+
+        .bashrc
+            # SLK
+            cd ~/ModelRelief
+            . ~/ModelRelief/Tools/ModelReliefShell.sh
 
     Remove unused GitHub repositories.
 
