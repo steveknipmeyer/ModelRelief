@@ -167,15 +167,17 @@ class Builder:
                 self.logger.logInformation("\nPython virtual environment", Colors.BrightMagenta)
                 os.makedirs(self.publish_path)
                 os.chdir(self.publish_path)
-                Tools.exec("BuildPythonEnvironment Production")
+                Tools.exec("BuildPythonEnvironment.sh Production")
             else:
-                self.logger.logInformation("\nUse 'BuildPythonEnvironment Development' to create the Python environment.", Colors.Cyan)
+                 os.chdir(self.solution_path)
+                 if not os.path.exists("devenv"):
+                    Tools.exec("BuildPythonEnvironment.sh Development")
 
         # Python C++ extensions
         self.logger.logInformation("\nPython C++ extensions", Colors.BrightMagenta)
         environment = RuntimeEnvironment.production.value if self.publish else RuntimeEnvironment.development.value
         os.chdir(self.solution_path)
-        Tools.exec(f"BuildReliefPythonExtensions {environment}")
+        Tools.exec(f"BuildReliefPythonExtensions.sh {environment}")
 
         # database initialization and user store
         if self.arguments.initialize:

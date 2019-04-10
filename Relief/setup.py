@@ -31,7 +31,7 @@ class CMakeBuild(build_ext):
         self.logger = Logger()
 
         self.root = os.path.dirname(os.path.realpath(__file__))
-        self.unit_tests_executable = 'reliefUnitTests.exe'
+        self.unit_tests_executable = 'reliefUnitTests'
 
     def run(self):
         try:
@@ -59,7 +59,7 @@ class CMakeBuild(build_ext):
             Release, Debug
         """
 
-        source = os.path.join(self.root, self.build_temp, configuration, self.unit_tests_executable)
+        source = os.path.join(self.root, self.build_temp, self.unit_tests_executable)
         self.logger.logInformation(f"\nUnit test executable = {source}", Colors.BrightMagenta)
 
         destination = os.path.join(self.root, "tests", "bin", self.unit_tests_executable)

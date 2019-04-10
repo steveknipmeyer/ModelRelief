@@ -416,6 +416,7 @@ Alpha --->
 
         Issues
             Why are the development headers in lib/Python3.6m rather than lib/Python3.6?
+            https://github.com/pybind/pybind11/issues/623
 
             What screen capture utility can replace SnagIt?
             Linters mypy and pyling are not installed (VSCode warning message).

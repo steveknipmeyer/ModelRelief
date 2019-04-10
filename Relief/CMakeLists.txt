@@ -1,7 +1,12 @@
 cmake_minimum_required(VERSION 3.11.0)
 project(relief)
 
-set(CMAKE_VERBOSE_MAKEFILE ON)
+# Enable for verbose build output.
+#set(CMAKE_VERBOSE_MAKEFILE ON)
+
+# https://pybind11.readthedocs.io/en/stable/faq.html
+# https://stackoverflow.com/questions/17080869/what-is-the-cmake-equivalent-to-gcc-fvisibility-hidden-when-controlling-the-e
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 # source directory
 set(SOURCE_DIR "src")
@@ -29,10 +34,15 @@ SET(TESTS ${SOURCES}
 
 # generate unit test executable
 include_directories(../devenv/include)
-link_directories(../devenv/libs)
+link_directories(../devenv/lib)
 
 include_directories()
 include_directories(lib/pybind11/include)
 include_directories(lib/Catch2/single_include/catch2)
+
+# N.B. ReliefUnitTests has unresolved (unused) symbols to the Python runtime library.
+# The unresolved symbols are treated as warnings (not errors), otherwise the link step fails.
+# https://linux.die.net/man/1/ld
+set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--warn-unresolved-symbols")
 
 add_executable("${PROJECT_NAME}UnitTests" ${TESTS})
