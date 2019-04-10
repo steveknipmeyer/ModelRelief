@@ -379,12 +379,14 @@ When the view camera is interactively changed, it should invalidate the Standard
         Build
             npm install
             dotnet  build
-Alpha --->
+
         Anaconda
             https://linuxize.com/post/how-to-install-anaconda-on-ubuntu-18-04/
                 If you'd prefer that conda's base environment not be activated on startup, set the auto_activate_base parameter to false:
                     conda config --set auto_activate_base false
             conda config --add channels conda-forge
+            conda update conda
+            conda update anaconda
 
         Postman
             snap install postman
@@ -396,7 +398,7 @@ Alpha --->
 
         Build
             BuildPythonEnvironment.sh
-
+Alpha --->
             python Build/Builder.py --target local
 
         Shell
