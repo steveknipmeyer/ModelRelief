@@ -7,6 +7,9 @@ Replace gulp-util with fancy-log.
 #### Vector
 
 #### Today
+    Vector
+        Set default Python environment to devenv.
+
     Remove unused GitHub repositories.
 
     IIS localHOST
