@@ -19,7 +19,8 @@
     // Python
     // ---------------------------------
         // Path to Python, you can use a custom version of Python by modifying this setting to include the full path.
-        "python.pythonPath": "${workspaceFolder}\\devenv\\python.exe",
+        "python.pythonPath": "D:\\ModelRelief\\devenv\\python.exe",
+        "python.envFile": "${workspaceRoot}\\.env",
 
     // ---------------------------------
     // Search
