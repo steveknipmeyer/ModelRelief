@@ -42,6 +42,7 @@ include_directories(lib/Catch2/single_include/catch2)
 
 # N.B. ReliefUnitTests has unresolved (unused) symbols to the Python runtime library.
 # The unresolved symbols are treated as warnings (not errors), otherwise the link step fails.
+# https://github.com/pybind/pybind11/issues/623
 # https://linux.die.net/man/1/ld
 set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--warn-unresolved-symbols")
 

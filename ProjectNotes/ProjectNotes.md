@@ -7,15 +7,6 @@ Replace gulp-util with fancy-log.
 #### Vector
 
 #### Today
-    Vector
-        Test BuildPythonEnvironment Development.
-            conda install cmake
-
-        .bashrc
-            # SLK
-            cd ~/ModelRelief
-            . ~/ModelRelief/Tools/ModelReliefShell.sh
-
     Remove unused GitHub repositories.
 
     IIS localHOST
@@ -415,6 +406,10 @@ Alpha --->
             python Build/Builder.py --target local
 
         Issues
+            Database
+                https://www.youtube.com/watch?v=N10QW_AIOnI
+                https://vitux.com/how-to-install-wine-on-ubuntu/
+
             Why are the development headers in lib/Python3.6m rather than lib/Python3.6?
             https://github.com/pybind/pybind11/issues/623
 
