@@ -62,7 +62,7 @@ namespace ModelRelief.Test.Integration.Meshes
                 var depthBuffer = depthBufferNode.Model as Dto.DepthBuffer;
                 depthBuffer.CameraId = cameraNode.Model.Id;
                 depthBufferNode.Model = await depthBufferFactory.PostNewModel(depthBuffer);
-                depthBufferNode.Model = await depthBufferFactory.PostNewFile(depthBufferNode.Model.Id, "DepthBuffer.sdb");
+                depthBufferNode.Model = await depthBufferFactory.PostNewFile(depthBufferNode.Model.Id, "depthbuffer.sdb");
 
                 // NormalMap
                 var normalMapNode = NodeCollection[typeof(Domain.NormalMap)];
@@ -72,7 +72,7 @@ namespace ModelRelief.Test.Integration.Meshes
                 var normalMap = normalMapNode.Model as Dto.NormalMap;
                 normalMap.CameraId = cameraNode.Model.Id;
                 normalMapNode.Model = await normalMapFactory.PostNewModel(normalMap);
-                normalMapNode.Model = await normalMapFactory.PostNewFile(normalMapNode.Model.Id, "NormalMap.nmap");
+                normalMapNode.Model = await normalMapFactory.PostNewFile(normalMapNode.Model.Id, "normalmap.nmap");
 
                 // MeshTransform
                 var meshTransformNode = NodeCollection[typeof(Domain.MeshTransform)];
@@ -89,7 +89,7 @@ namespace ModelRelief.Test.Integration.Meshes
                 mesh.NormalMapId   = normalMapNode.Model.Id;
                 mesh.MeshTransformId = meshTransformNode.Model.Id;
                 meshNode.Model = await meshFactory.PostNewModel(mesh);
-                meshNode.Model = await meshFactory.PostNewFile(meshNode.Model.Id, "Mesh.sfp");
+                meshNode.Model = await meshFactory.PostNewFile(meshNode.Model.Id, "mesh.sfp");
             }
         }
 
@@ -136,7 +136,7 @@ namespace ModelRelief.Test.Integration.Meshes
             meshModel = await meshFactory.FindModel(meshModel.Id) as Dto.Mesh;
             meshModel.FileIsSynchronized.Should().Be(true);
 
-            // reset FileIsSynchronized so GenerateFileRequest will fire on next FileIsSynchronized property changes
+            // reset FileIsSynchronized so GenerateFileRequest will fire on next FileIsSynchronized property change
             if (!fileIsSynchronized)
             {
                 meshModel.FileIsSynchronized = false;
@@ -243,7 +243,7 @@ namespace ModelRelief.Test.Integration.Meshes
                 var scaledByteArray = Convert.FromBase64String(encodedString.ToString());
 
                 // compare to reference
-                var referenceScaledFloats = Utility.FloatListFromFile("DepthBuffer.sdb.Scale05");
+                var referenceScaledFloats = Utility.FloatListFromFile("depthbuffer.sdb.Scale05");
 
                 int numberFloats = referenceScaledFloats.Count;
                 for (int iFloat = 0; iFloat < numberFloats; iFloat++)

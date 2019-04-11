@@ -48,7 +48,7 @@ namespace ModelRelief.Test.Integration.DepthBuffers
                 var modelNode      = NodeCollection[typeof(Domain.Model3d)];
                 var model3dFactory = modelNode.Factory as ITestFileModelFactory;
                 modelNode.Model    = await model3dFactory.PostNewModel();
-                modelNode.Model    = await model3dFactory.PostNewFile(modelNode.Model.Id, "UnitCube.obj");
+                modelNode.Model    = await model3dFactory.PostNewFile(modelNode.Model.Id, "unitcube.obj");
 
                 // Camera
                 var cameraNode    = NodeCollection[typeof(Domain.Camera)];
@@ -64,7 +64,7 @@ namespace ModelRelief.Test.Integration.DepthBuffers
                 depthBuffer.Model3dId = modelNode.Model.Id;
                 depthBuffer.CameraId  = cameraNode.Model.Id;
                 depthBufferNode.Model = await depthBufferFactory.PostNewModel(depthBuffer);
-                depthBufferNode.Model = await depthBufferFactory.PostNewFile(depthBufferNode.Model.Id, "DepthBuffer.sdb");
+                depthBufferNode.Model = await depthBufferFactory.PostNewFile(depthBufferNode.Model.Id, "depthbuffer.sdb");
             }
         }
 

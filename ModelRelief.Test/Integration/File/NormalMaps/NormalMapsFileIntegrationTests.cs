@@ -48,7 +48,7 @@ namespace ModelRelief.Test.Integration.NormalMaps
                 var modelNode      = NodeCollection[typeof(Domain.Model3d)];
                 var model3dFactory = modelNode.Factory as ITestFileModelFactory;
                 modelNode.Model    = await model3dFactory.PostNewModel();
-                modelNode.Model    = await model3dFactory.PostNewFile(modelNode.Model.Id, "UnitCube.obj");
+                modelNode.Model    = await model3dFactory.PostNewFile(modelNode.Model.Id, "unitcube.obj");
 
                 // Camera
                 var cameraNode    = NodeCollection[typeof(Domain.Camera)];

@@ -71,9 +71,9 @@
                 // "MRDatabaseProvider": "SQLServer",
                 "MRDatabaseProvider": "SQLite",
 
-                "MRUpdateSeedData":"True",
-                "MRInitializeDatabase":"False",
-                "MRSeedDatabase":"False",
+                "MRUpdateSeedData":"False",
+                "MRInitializeDatabase":"True",
+                "MRSeedDatabase":"True",
                 "MRExitAfterInitialization":"False",
             },
             "sourceFileMap": {

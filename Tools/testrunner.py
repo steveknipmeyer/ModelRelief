@@ -45,7 +45,7 @@ class TestRunner:
         """
         self.logger.logInformation("\nBegin initialize database for {}".format(database), Colors.BrightYellow)
 
-        subprocess.run ("dotnet run --no-launch-profile -p ModelRelief --MRExitAfterInitialization=True --MRUpdateSeedData=False --MRInitializeDatabase=True --MRSeedDatabase=True --MRDatabaseProvider={}".format(database))
+        subprocess.call (["dotnet", "run", "--no-launch-profile", "-p", "ModelRelief", "--MRExitAfterInitialization=True", "--MRUpdateSeedData=False", "--MRInitializeDatabase=True", "--MRSeedDatabase=True" "--MRDatabaseProvider={}".format(database)])
 
         self.logger.logInformation("End initialize database for {}".format(database), Colors.BrightYellow)
 
@@ -73,7 +73,7 @@ class TestRunner:
         self.logger.logInformation("\nBegin test execution for {}".format(database), Colors.BrightGreen)
 
         os.environ[EnvironmentNames.MRDatabaseProvider] = database
-        subprocess.run ("dotnet test --results-directory Results --logger trx;LogFileName={}TestResults.trx ModelRelief.test".format(database))
+        subprocess.call (["dotnet", "test", "--results-directory", "Results", "--logger", "trx;LogFileName={}TestResults.trx".format(database), "ModelRelief.Test"])
 
         self.logger.logInformation("End test execution for {}".format(database), Colors.BrightGreen)
 
@@ -83,7 +83,7 @@ class TestRunner:
         """
         self.logger.logInformation("\nBegin Relief C++ extension tests", Colors.BrightGreen)
 
-        relief_executable = os.path.join (os.environ[EnvironmentNames.MRSolution], "Relief/tests/bin/reliefUnitTests.exe")
+        relief_executable = os.path.join (os.environ[EnvironmentNames.MRSolution], "Relief/tests/bin/reliefUnitTests")
         print (relief_executable)
         subprocess.run (relief_executable)
 
@@ -100,9 +100,10 @@ class TestRunner:
 
         # save environment
         self.environment.push()
-        
-        # database            
-        databases = ["SQLite", "SQLServer"]
+
+        # database
+        # databases = ["SQLite", "SQLServer"]
+        databases = ["SQLite"]
         for database in databases:
 
             # initialize database and user store

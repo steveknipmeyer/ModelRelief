@@ -47,7 +47,7 @@ namespace ModelRelief.Test.TestModels.DepthBuffers
         {
             var depthBuffer = base.ConstructValidModel() as Dto.DepthBuffer;
 
-            depthBuffer.Name = "TestDepthBuffer.sdb";
+            depthBuffer.Name = "Testdepthbuffer.sdb";
             depthBuffer.Width  = 512;
             depthBuffer.Height = 512;
             depthBuffer.Format = Domain.DepthBufferFormat.SDB;

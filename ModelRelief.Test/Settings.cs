@@ -33,7 +33,7 @@ namespace ModelRelief.Test
 
             // reset path from <top> down
             var contentRootPath = currentDirectory.Remove(currentDirectory.IndexOf(Settings.ContentRootFolder) + Settings.ContentRootFolder.Length);
-            contentRootPath = Path.Combine(contentRootPath, Settings.ContentRootFolder) + @"\";
+            contentRootPath = Path.Combine(contentRootPath, Settings.ContentRootFolder) + @"/";
 
             return contentRootPath;
         }

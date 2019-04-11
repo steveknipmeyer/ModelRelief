@@ -304,7 +304,15 @@ When the view camera is interactively changed, it should invalidate the Standard
 
 #####  Ubuntu Development
     Issues
+        chmod +x /home/stephen/ModelRelief/Relief/tests/bin/reliefUnitTests
+
+        Review all casing of files and directories.
+            images
+
+        Remove SQLServer references?
+
         %TEMP% is not defined so the log file is created as %TEMP%\Logs\ModelRelief.log.
+            where is the log file?
 
         Database
             MySQL/MariaDB

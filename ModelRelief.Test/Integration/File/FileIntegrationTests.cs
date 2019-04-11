@@ -141,7 +141,7 @@ namespace ModelRelief.Test.Integration
             var newModel = await PostNewModel();
 
             // Act
-            newModel = await PostNewFile(newModel.Id, "UnitCube.obj");
+            newModel = await PostNewFile(newModel.Id, "unitcube.obj");
 
             // Assert
 
@@ -161,7 +161,7 @@ namespace ModelRelief.Test.Integration
             var newGeneratedFileModel = newModel as IGeneratedFileModel;
 
             // Act
-            var updatedModel = await PostNewFile(newModel.Id, "UnitCube.obj");
+            var updatedModel = await PostNewFile(newModel.Id, "unitcube.obj");
 
             // Assert
             // before PostFile
@@ -186,7 +186,7 @@ namespace ModelRelief.Test.Integration
             var newModel = await PostNewModel();
 
             // Act
-            var modelAfterFirstPost   = await PostNewFile(newModel.Id, "UnitCube.obj");
+            var modelAfterFirstPost   = await PostNewFile(newModel.Id, "unitcube.obj");
             Files.SleepForTimeStamp();
             var modelAfterSecondPost = await PostNewFile(newModel.Id, "ModelRelief.txt");
 
@@ -216,7 +216,7 @@ namespace ModelRelief.Test.Integration
             var newModel = await PostNewModel();
 
             // Act
-            newModel = await PutFile(newModel.Id, "UnitCube.obj");
+            newModel = await PutFile(newModel.Id, "unitcube.obj");
 
             // Assert
 
@@ -235,7 +235,7 @@ namespace ModelRelief.Test.Integration
             // Arrange
             var newModel = await PostNewModel();
             // initial create
-            newModel = await PostNewFile(newModel.Id, "UnitCube.obj");
+            newModel = await PostNewFile(newModel.Id, "unitcube.obj");
             // update
             var fileName = "ModelRelief.txt";
             newModel = await PutFile(newModel.Id, fileName);
@@ -266,7 +266,7 @@ namespace ModelRelief.Test.Integration
         {
             // Arrange
             var newModel = await PostNewModel();
-            newModel = await PostNewFile(newModel.Id, "UnitCube.obj");
+            newModel = await PostNewFile(newModel.Id, "unitcube.obj");
 
             // rename model (and file)
             newModel.Name = "New Name";
