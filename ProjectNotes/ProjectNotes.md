@@ -8,6 +8,9 @@ Replace gulp-util with fancy-log.
 
 #### Today
     Remove unused GitHub repositories.
+    Alpha
+        Screenshot
+        Cnfigure Thunderbird.
 
     IIS localHOST
         Cookie permission cannot be dismissed. It is always displayed.
@@ -302,36 +305,37 @@ When the view camera is interactively changed, it should invalidate the Standard
 #####  Ubuntu Setup
 
 #####  Ubuntu Development
-    Ignore line endings in git source.
-    %TEMP% is not defined so the log file is created as %TEMP%\Logs\ModelRelief.log.
-    Shift-End does not work in the editor to select from the cursor position to EOL.
-    tsc command line
-        Does the compiler need to be symbolically linked to a bin folder (e.g. usr/bin)
+    Issues
+        %TEMP% is not defined so the log file is created as %TEMP%\Logs\ModelRelief.log.
 
-    Database
-        SQLite
-            The version is 2.87 on Ubuntu and 5.0 on Windows.
-            Install a SQLite administration tool.
-        MySQL
+        Database
+            SQLite
+                The version is 2.87 on Ubuntu and 5.0 on Windows.
+                Install a SQLite administration tool.
+            MySQL/MariaDB
+            https://www.youtube.com/watch?v=N10QW_AIOnI
+            https://vitux.com/how-to-install-wine-on-ubuntu/
 
-    The (PowerShell?) language service could not be started.
-    Python 3.X
+            appsettings.json
+                How should settings files define the directory separator?
+                    Forward slash does not work with SQLServer.
+                    Does forward slash work with SQLite on Windows?
 
-    ModelReliefShell.sh
-        MRPort, MRPortSecure, ASPNETCORE_URLS, ASPNETCORE_HTTPS_PORT
-        Review other runtime environment variables.
+            Python
+                Why are the development headers in lib/Python3.6m rather than lib/Python3.6?
 
-    appsettings.json
-        How should settings files define the directory separator?
-            Forward slash does not work with SQLServer.
-            Does forward slash work with SQLite on Windows?
+            HTTPS
+                Successfully installed the ASP.NET Core HTTPS Development Certificate.
+                To trust the certificate run 'dotnet dev-certs https --trust' (Windows and macOS only). For establishing trust on other platforms refer to the platform specific documentation.
+                For more information on configuring HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.
 
-    VirualBox Guest Additions
+
+    Linux Setup
+        VirtualBox Guest Additions
         sudo apt update
         sudo apt upgrade
         sudo apt install build-essential dkms linux-headers-$(uname -r)
 
-    Linux Setup
         UI
             sudo apt install gnome-tweak-tool
                 Keyboard and Mouse
@@ -402,27 +406,7 @@ When the view camera is interactively changed, it should invalidate the Standard
 
         Build
             BuildPythonEnvironment.sh
-Alpha --->
             python Build/Builder.py --target local
-
-        Issues
-            Database
-                https://www.youtube.com/watch?v=N10QW_AIOnI
-                https://vitux.com/how-to-install-wine-on-ubuntu/
-
-            Why are the development headers in lib/Python3.6m rather than lib/Python3.6?
-            https://github.com/pybind/pybind11/issues/623
-
-            What screen capture utility can replace SnagIt?
-            Linters mypy and pyling are not installed (VSCode warning message).
-
-            The c_cpp_properties.json settings much be updated for linux.
-                "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.14.26428/bin/Hostx64/x64/cl.exe",
-
-            HTTPS
-                Successfully installed the ASP.NET Core HTTPS Development Certificate.
-                To trust the certificate run 'dotnet dev-certs https --trust' (Windows and macOS only). For establishing trust on other platforms refer to the platform specific documentation.
-                For more information on configuring HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.
 
 #### Front End
 <span style="color:red">

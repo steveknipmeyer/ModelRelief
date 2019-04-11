@@ -169,8 +169,8 @@ class Builder:
                 os.chdir(self.publish_path)
                 Tools.exec("BuildPythonEnvironment.sh Production")
             else:
-                 os.chdir(self.solution_path)
-                 if not os.path.exists("devenv"):
+                os.chdir(self.solution_path)
+                if not os.path.exists("devenv"):
                     Tools.exec("BuildPythonEnvironment.sh Development")
 
         # Python C++ extensions

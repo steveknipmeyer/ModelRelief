@@ -81,7 +81,7 @@ class Colors:
         """
         print (Colors.Black, 'Black', Colors.Reset)
         print (Colors.Red, 'Red', Colors.Reset)
-        print (Colors.Green, 'Green', Colors.Reset) 
+        print (Colors.Green, 'Green', Colors.Reset)
         print (Colors.Yellow, 'Yellow', Colors.Reset)
         print (Colors.Blue, 'Blue', Colors.Reset)
         print (Colors.Magenta, 'Magenta', Colors.Reset)
@@ -115,7 +115,6 @@ class Tools:
         """
             Perform class initialization.
         """
-        pass
 
     @staticmethod
     def copy_file (source_file, destination_file):
@@ -138,10 +137,10 @@ class Tools:
     def copy_folder (source_folder, destination_folder):
         """
         Copy a single folder. Not recursive.
-        """ 
+        """
         print ("%s -> %s" % (source_folder, destination_folder))
         copy_tree(source_folder, destination_folder)
-    
+
     @staticmethod
     def delete_files(files: List[str])->None:
         """ Deletes a list of files. Checks for existence.
@@ -149,7 +148,7 @@ class Tools:
         for file in files:
             if os.path.isfile(file):
                 os.remove(file)
-    
+
     def recurse_folder(self, folder: str, excluded_folders: Set[str], process_file: Callable[[str], None])->None:
         """
         Recurse a folder and process each file.
@@ -160,7 +159,7 @@ class Tools:
         excluded_folders
             Set of folders to exclude from processing.
         process_file
-            Callback to process a file.            
+            Callback to process a file.
         """
         for dirpath, dirnames, filenames in os.walk(folder, topdown=True):
             dirnames[:] = [d for d in dirnames if d not in excluded_folders]
@@ -179,7 +178,7 @@ class Tools:
         """
         yes = set(['yes', 'ye', 'y'])
         no  = set(['no','n', ''])
-        
+
         while True:
             choice = input(answer).lower()
             if choice in yes:
@@ -190,7 +189,7 @@ class Tools:
                 print ("Please respond with 'yes' or 'no'\n")
 
     @staticmethod
-    def is_production(): 
+    def is_production():
         """
         Returns whether the current environment is Production.
         """
