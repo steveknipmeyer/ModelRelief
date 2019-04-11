@@ -44,8 +44,8 @@
       "Description": "Armadillo Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:55:01.3687211",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\1\\armadillo.sdb",
+    "FileTimeStamp": "2019-04-11T12:04:06.97581",
+    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/depthbuffers/1/armadillo.sdb",
     "Id": 1,
     "Name": "armadillo.sdb",
     "Description": "Generated in Rhino (development@modelrelief.com)"
@@ -63,8 +63,8 @@
     "CameraId": 3,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:55:01.5069911",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\1\\armadillo.nmap",
+    "FileTimeStamp": "2019-04-11T12:04:07.2862995",
+    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/normalmaps/1/armadillo.nmap",
     "Id": 1,
     "Name": "armadillo.nmap",
     "Description": "Generated in Rhino (development@modelrelief.com)"
@@ -95,8 +95,8 @@
     "Description": "Armadillo transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-27T04:55:01.6976715",
-  "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\1\\armadillo.sfp",
+  "FileTimeStamp": "2019-04-11T12:04:07.634981",
+  "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/meshes/1/armadillo.sfp",
   "Id": 1,
   "Name": "armadillo.sfp",
   "Description": "Top (development@modelrelief.com)"

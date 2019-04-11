@@ -44,8 +44,8 @@
       "Description": "House Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:55:01.3689855",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\7\\house.sdb",
+    "FileTimeStamp": "2019-04-11T13:06:46.6925408",
+    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/depthbuffers/7/house.sdb",
     "Id": 7,
     "Name": "house.sdb",
     "Description": "Generated in VRay (development@modelrelief.com)"
@@ -55,7 +55,7 @@
     "Width": 512.0,
     "Height": 512.0,
     "Format": 1,
-    "Space": 2,
+    "Space": 0,
     "ProjectId": 1,
     "Project": null,
     "Model3dId": 7,
@@ -63,8 +63,8 @@
     "CameraId": 8,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:55:01.5071315",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\7\\house.nmap",
+    "FileTimeStamp": "2019-04-11T13:06:50.3244117",
+    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/normalmaps/7/house.nmap",
     "Id": 7,
     "Name": "house.nmap",
     "Description": "Generated in VRay (development@modelrelief.com)"
@@ -95,8 +95,8 @@
     "Description": "House transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-27T04:55:01.6977999",
-  "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\7\\house.sfp",
+  "FileTimeStamp": "2019-04-11T12:04:07.635415",
+  "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/meshes/7/house.sfp",
   "Id": 7,
   "Name": "house.sfp",
   "Description": "Top (development@modelrelief.com)"

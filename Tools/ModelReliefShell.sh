@@ -25,7 +25,7 @@ export MRPublish=${MRSolution}Publish/
 #       Disable with 'dotnet run --no-launch-profile'.
 export MRPort=5000
 export MRPortSecure=5001
-export MRDatabaseProvider=SQLServer
+export MRDatabaseProvider=SQLite
 export MRUpdateSeedData=False
 export MRInitializeDatabase=False
 export MRSeedDatabase=False

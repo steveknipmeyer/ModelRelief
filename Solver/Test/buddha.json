@@ -44,8 +44,8 @@
       "Description": "Buddha Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:55:01.3689178",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\2\\buddha.sdb",
+    "FileTimeStamp": "2019-04-11T12:04:06.9762009",
+    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/depthbuffers/2/buddha.sdb",
     "Id": 2,
     "Name": "buddha.sdb",
     "Description": "Generated in Rhino (development@modelrelief.com)"
@@ -63,8 +63,8 @@
     "CameraId": 4,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:55:01.5070797",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\2\\buddha.nmap",
+    "FileTimeStamp": "2019-04-11T12:04:07.2866093",
+    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/normalmaps/2/buddha.nmap",
     "Id": 2,
     "Name": "buddha.nmap",
     "Description": "Generated in Rhino (development@modelrelief.com)"
@@ -95,8 +95,8 @@
     "Description": "Buddha transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-27T04:55:01.6977568",
-  "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\2\\buddha.sfp",
+  "FileTimeStamp": "2019-04-11T12:04:07.6352823",
+  "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/meshes/2/buddha.sfp",
   "Id": 2,
   "Name": "buddha.sfp",
   "Description": "Top (development@modelrelief.com)"

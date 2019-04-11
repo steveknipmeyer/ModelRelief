@@ -9,8 +9,6 @@ Replace gulp-util with fancy-log.
 #### Today
     Remove unused GitHub repositories.
     Alpha
-        Screenshot
-        Cnfigure Thunderbird.
 
     IIS localHOST
         Cookie permission cannot be dismissed. It is always displayed.
@@ -309,9 +307,6 @@ When the view camera is interactively changed, it should invalidate the Standard
         %TEMP% is not defined so the log file is created as %TEMP%\Logs\ModelRelief.log.
 
         Database
-            SQLite
-                The version is 2.87 on Ubuntu and 5.0 on Windows.
-                Install a SQLite administration tool.
             MySQL/MariaDB
             https://www.youtube.com/watch?v=N10QW_AIOnI
             https://vitux.com/how-to-install-wine-on-ubuntu/
@@ -403,6 +398,11 @@ When the view camera is interactively changed, it should invalidate the Standard
         .bashrc
             cd ModelRelief
             . Tools/ModelReliefShell.sh
+
+        SQLite
+            sudo apt-get install sqlite3 (if required)
+                sqlite3 -version
+            sudo apt-get install sqlitebrower
 
         Build
             BuildPythonEnvironment.sh

@@ -69,7 +69,7 @@ namespace ModelRelief.Services.Jobs
                 case "Vector":
                     // N.B. The path to the python executable is found through the system PATH.
                     // Therefore, it is imperative that the path include the ModelRelief Python environment before any other python runtimes such as the base Anaconda path.
-                    return @"python.exe";
+                    return @"python";
             }
         }
 
@@ -158,7 +158,7 @@ namespace ModelRelief.Services.Jobs
             // WIP:  XPlatform: Review the handling of the command line arguments.
             // Add extra trailing \ to avoid ending folder path with \".
             // Otherwise, the workding folder will be parsed as having a trailing " in the solver command line arguments.
-            string workingFolder = $"{StorageManager.WorkingStorageFolder(mesh.UserId)}\\";
+            string workingFolder = $"{StorageManager.WorkingStorageFolder(mesh.UserId)}/";
             string workingFolderArgument = $"-w \"{workingFolder}\"";
 
             string solverPath = GetSolverPath();

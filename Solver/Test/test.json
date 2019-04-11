@@ -44,8 +44,8 @@
       "Description": "Isometric Test Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:55:01.3690298",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\13\\test.sdb",
+    "FileTimeStamp": "2019-04-11T12:04:06.9764441",
+    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/depthbuffers/13/test.sdb",
     "Id": 13,
     "Name": "test.sdb",
     "Description": "Generated in ModelRelief (development@modelrelief.com)"
@@ -63,8 +63,8 @@
     "CameraId": 12,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:55:01.5071801",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\13\\test.nmap",
+    "FileTimeStamp": "2019-04-11T12:04:07.2868324",
+    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/normalmaps/13/test.nmap",
     "Id": 13,
     "Name": "test.nmap",
     "Description": "Generated in ModelRelief (development@modelrelief.com)"
@@ -95,8 +95,8 @@
     "Description": "Test transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-27T04:55:01.6978495",
-  "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\13\\test.sfp",
+  "FileTimeStamp": "2019-04-11T12:04:07.6355571",
+  "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/meshes/13/test.sfp",
   "Id": 13,
   "Name": "test.sfp",
   "Description": "Top (development@modelrelief.com)"

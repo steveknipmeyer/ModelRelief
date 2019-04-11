@@ -44,8 +44,8 @@
       "Description": "Bunny Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:55:01.368936",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\3\\bunny.sdb",
+    "FileTimeStamp": "2019-04-11T12:04:06.9762311",
+    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/depthbuffers/3/bunny.sdb",
     "Id": 3,
     "Name": "bunny.sdb",
     "Description": "Generated in VRay (development@modelrelief.com)"
@@ -63,8 +63,8 @@
     "CameraId": 5,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:55:01.5070884",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\3\\bunny.nmap",
+    "FileTimeStamp": "2019-04-11T12:04:07.2866327",
+    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/normalmaps/3/bunny.nmap",
     "Id": 3,
     "Name": "bunny.nmap",
     "Description": "Generated in VRay (development@modelrelief.com)"
@@ -95,8 +95,8 @@
     "Description": "Bunny transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-27T04:55:01.6977711",
-  "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\3\\bunny.sfp",
+  "FileTimeStamp": "2019-04-11T12:04:07.635308",
+  "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/meshes/3/bunny.sfp",
   "Id": 3,
   "Name": "bunny.sfp",
   "Description": "Top (development@modelrelief.com)"

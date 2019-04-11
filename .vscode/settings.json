@@ -49,6 +49,6 @@
             "**/[Ww]ork*/**/*": true,
             "**/wwwroot/**/*": true
         },
-        "debug.console.fontFamily": "Consolas",
-        "debug.console.fontSize": 12,
+        "debug.console.fontFamily": "Monospace",
+        "debug.console.fontSize": 14,
 }

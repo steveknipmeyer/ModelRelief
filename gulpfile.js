@@ -37,7 +37,7 @@ var sourceConfig = new function() {
 
     this.cssRoot        = this.sourceRoot + 'CSS/';
     this.faviconRoot    = this.sourceRoot + 'Delivery/Favicon/';
-    this.imagesRoot     = this.sourceRoot + 'Delivery/Images/';
+    this.imagesRoot     = this.sourceRoot + 'Delivery/images/';
     this.htmlRoot       = this.sourceRoot + 'Delivery/Html/';
     this.scriptsRoot    = this.sourceRoot + 'Scripts/';
     this.shaders        = this.scriptsRoot + 'Shaders/';

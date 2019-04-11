@@ -16,8 +16,8 @@
     "CameraId": 15,
     "Camera": {
       "IsPerspective": true,
-      "Near": 34.9364134382028,
-      "Far": 49.714432851084425,
+      "Near": 34.936413438202791,
+      "Far": 49.714432851084418,
       "PositionX": -0.7575242110463285,
       "PositionY": 8.641837380329946,
       "PositionZ": 42.3179164709751,
@@ -44,8 +44,8 @@
       "Description": "Prancing Horse Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:55:01.3689786",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\6\\horse.sdb",
+    "FileTimeStamp": "2019-04-11T12:42:56.2352377",
+    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/depthbuffers/6/horse.sdb",
     "Id": 6,
     "Name": "horse.sdb",
     "Description": "Created in ModelRelief (development@modelrelief.com)"
@@ -55,7 +55,7 @@
     "Width": 512.0,
     "Height": 512.0,
     "Format": 1,
-    "Space": 2,
+    "Space": 0,
     "ProjectId": 2,
     "Project": null,
     "Model3dId": 6,
@@ -63,8 +63,8 @@
     "CameraId": 15,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:55:01.5071247",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\6\\horse.nmap",
+    "FileTimeStamp": "2019-04-11T12:43:00.8293261",
+    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/normalmaps/6/horse.nmap",
     "Id": 6,
     "Name": "horse.nmap",
     "Description": "Created in ModelRelief (development@modelrelief.com)"
@@ -95,8 +95,8 @@
     "Description": "Horse transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-27T04:55:01.697793",
-  "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\6\\horse.sfp",
+  "FileTimeStamp": "2019-04-11T12:04:07.6353938",
+  "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/meshes/6/horse.sfp",
   "Id": 6,
   "Name": "horse.sfp",
   "Description": "Top (development@modelrelief.com)"

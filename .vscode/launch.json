@@ -68,12 +68,12 @@
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
-                "MRDatabaseProvider": "SQLServer",
-                // "MRDatabaseProvider": "SQLite",
+                // "MRDatabaseProvider": "SQLServer",
+                "MRDatabaseProvider": "SQLite",
 
-                "MRUpdateSeedData":"False",
-                "MRInitializeDatabase":"True",
-                "MRSeedDatabase":"True",
+                "MRUpdateSeedData":"True",
+                "MRInitializeDatabase":"False",
+                "MRSeedDatabase":"False",
                 "MRExitAfterInitialization":"False",
             },
             "sourceFileMap": {
@@ -103,11 +103,6 @@
         //  "cwd": "${workspaceRoot}/Relief",
 
             "cwd": "${workspaceRoot}",
-
-            "debugOptions": [
-                "DebugStdLib",
-                "RedirectOutput",
-            ],
             "env": {
                 "name": "value"
             },
@@ -153,10 +148,6 @@
             "console": "integratedTerminal",
             "program": "${file}",
             "cwd": "${workspaceRoot}",
-            "debugOptions": [
-                "DebugStdLib",
-                "RedirectOutput",
-            ],
             "env": {
                 "name": "value"
             },

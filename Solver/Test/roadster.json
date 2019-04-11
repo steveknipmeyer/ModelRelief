@@ -44,8 +44,8 @@
       "Description": "Roadster Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:55:01.3690054",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\10\\roadster.sdb",
+    "FileTimeStamp": "2019-04-11T12:04:06.9763788",
+    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/depthbuffers/10/roadster.sdb",
     "Id": 10,
     "Name": "roadster.sdb",
     "Description": "Generated in Maya (development@modelrelief.com)"
@@ -63,8 +63,8 @@
     "CameraId": 10,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:55:01.5071515",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\10\\roadster.nmap",
+    "FileTimeStamp": "2019-04-11T12:04:07.2867719",
+    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/normalmaps/10/roadster.nmap",
     "Id": 10,
     "Name": "roadster.nmap",
     "Description": "Generated in Maya (development@modelrelief.com)"
@@ -95,8 +95,8 @@
     "Description": "Roadster transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-27T04:55:01.6978291",
-  "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\10\\roadster.sfp",
+  "FileTimeStamp": "2019-04-11T12:04:07.6354961",
+  "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/meshes/10/roadster.sfp",
   "Id": 10,
   "Name": "roadster.sfp",
   "Description": "Top (development@modelrelief.com)"

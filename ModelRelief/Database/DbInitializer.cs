@@ -1227,7 +1227,7 @@ namespace ModelRelief.Database
             // Test user provides the source of the data files.
             var developmentUser = GetDevelopmentUser();
 
-            var expandedMeshList =  DbContext.Set<Mesh>()
+            var expandedMeshList = DbContext.Set<Mesh>()
                                         .Where(m => (m.UserId == developmentUser.Id))
                                         .Include(m => m.DepthBuffer)
                                             .ThenInclude(d => d.Camera)

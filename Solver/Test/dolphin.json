@@ -44,8 +44,8 @@
       "Description": "Dolphin Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:55:01.3689436",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\depthbuffers\\4\\dolphin.sdb",
+    "FileTimeStamp": "2019-04-11T12:04:06.9762598",
+    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/depthbuffers/4/dolphin.sdb",
     "Id": 4,
     "Name": "dolphin.sdb",
     "Description": "Generated in VRay (development@modelrelief.com)"
@@ -63,8 +63,8 @@
     "CameraId": 6,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2019-02-27T04:55:01.5070954",
-    "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\normalmaps\\4\\dolphin.nmap",
+    "FileTimeStamp": "2019-04-11T12:04:07.2866529",
+    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/normalmaps/4/dolphin.nmap",
     "Id": 4,
     "Name": "dolphin.nmap",
     "Description": "Generated in VRay (development@modelrelief.com)"
@@ -95,8 +95,8 @@
     "Description": "Dolphin transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2019-02-27T04:55:01.6977785",
-  "RelativeFileName": "store\\development\\users\\auth05bedab58aa237e078600530b\\meshes\\4\\dolphin.sfp",
+  "FileTimeStamp": "2019-04-11T12:04:07.6353284",
+  "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/meshes/4/dolphin.sfp",
   "Id": 4,
   "Name": "dolphin.sfp",
   "Description": "Top (development@modelrelief.com)"
