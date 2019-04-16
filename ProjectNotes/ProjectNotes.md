@@ -416,6 +416,48 @@ When the view camera is interactively changed, it should invalidate the Standard
             BuildPythonEnvironment.sh
             python Build/Builder.py --target local
 
+        nginx
+            Configure the VirtualBox VM to use <Bridged Networking>.
+            Find VM IP address using ifconfig.
+            Add an entry to the hosts file.
+                C:\Windows\System32\drivers\etc\hosts
+                10.1.10.70 mrvm.com
+            Use Firewall on the VM to open port 80.
+            https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04\
+        3D Graphics
+            Firefox
+                https://www.omgubuntu.co.uk/2017/04/small-tweak-makes-firefox-linux-run-much-faster
+            Benchmark with glmark2-es2.
+            Alpha
+                =======================================================
+                    glmark2 2014.03+git20150611.fa71af2d
+                =======================================================
+                    OpenGL Information
+                    GL_VENDOR:     VMware, Inc.
+                    GL_RENDERER:   llvmpipe (LLVM 7.0, 256 bits)
+                    GL_VERSION:    OpenGL ES 3.0 Mesa 18.2.8
+                =======================================================
+                [build] use-vbo=false: FPS: 111 FrameTime: 9.009 ms
+                [build] use-vbo=true: FPS: 115 FrameTime: 8.696 ms
+                [texture] texture-filter=nearest: FPS: 140 FrameTime: 7.143 ms
+                [texture] texture-filter=linear: FPS: 216 FrameTime: 4.630 ms
+                [texture] texture-filter=mipmap: FPS: 178 FrameTime: 5.618 ms
+                [shading] shading=gouraud: FPS: 123 FrameTime: 8.130 ms
+                [shading] shading=blinn-phong-inf: FPS: 62 FrameTime: 16.129 ms
+                [shading] shading=phong: FPS: 54 FrameTime: 18.519 ms
+                [shading] shading=cel: FPS: 55 FrameTime: 18.182 ms
+                [bump] bump-render=high-poly: FPS: 35 FrameTime: 28.571 ms
+                [bump] bump-render=normals: FPS: 128 FrameTime: 7.812 ms
+                [bump] bump-render=height: FPS: 121 FrameTime: 8.264 ms
+                [effect2d] kernel=0,1,0;1,-4,1;0,1,0;: FPS: 70 FrameTime: 14.286 ms
+                [effect2d] kernel=1,1,1,1,1;1,1,1,1,1;1,1,1,1,1;: FPS: 41 FrameTime: 24.390 ms
+                [pulsar] light=false:quads=5:texture=false: FPS: 102 FrameTime: 9.804 ms
+                [desktop] blur-radius=5:effect=blur:passes=1:separable=true:windows=4: FPS: 0 FrameTime: inf ms
+                =======================================================
+                                                glmark2 Score: 96
+                =======================================================
+
+
 #### Front End
 <span style="color:red">
     The 'dotnet run' workflow runs as 'Production'!
