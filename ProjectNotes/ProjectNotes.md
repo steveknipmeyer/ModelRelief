@@ -338,16 +338,26 @@ When the view camera is interactively changed, it should invalidate the Standard
 
     Linux Setup
         VirtualBox Guest Additions
-        sudo apt update
-        sudo apt upgrade
-        sudo apt install build-essential dkms linux-headers-$(uname -r)
+            sudo apt update
+            sudo apt upgrade
+            VirtualBox
+                sudo apt install build-essential dkms linux-headers-$(uname -r)
+            WSL
+                sudo apt install build-essential (WSL)
+        WSL
+            https://shunsvineyard.info/2019/01/27/using-visual-studio-code-with-windows-subsystem-for-linux/
+            Add export DISPLAY=localhost:0.0 to ~/bashrc
 
-        UI
-            sudo apt install gnome-tweak-tool
-                Keyboard and Mouse
-                    Additional Layout Options
-                        Miscellaneous Compatibility Options
-                            NumLock
+
+        UI (not supported on WSL)
+            VirtualBox
+                sudo apt install gnome-tweak-tool
+                    Keyboard and Mouse
+                        Additional Layout Options
+                            Miscellaneous Compatibility Options
+                                NumLock
+            WSL
+                https://askubuntu.com/questions/57079/xubuntu-make-shiftnumpad-work-like-windows
 
         git
             sudo apt install git
