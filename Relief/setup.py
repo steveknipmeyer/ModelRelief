@@ -65,6 +65,9 @@ class CMakeBuild(build_ext):
         destination = os.path.join(self.root, "tests", "bin", self.unit_tests_executable)
         Tools.copy_file(source, destination)
 
+        # executable permission
+        Tools.exec("chmod u+x {}".format(destination))
+
     def post_build(self):
         """ Performs cleanup after the completion of the build.
         """

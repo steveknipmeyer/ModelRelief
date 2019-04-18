@@ -28,7 +28,7 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production",
-        "MRDatabaseProvider": "SQLServer",
+        "MRDatabaseProvider": "SQLite",
 
         "MRUpdateSeedData": "False",
         "MRInitializeDatabase": "True",
@@ -42,7 +42,7 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "MRDatabaseProvider": "SQLServer",
+        "MRDatabaseProvider": "SQLite",
 
         "MRUpdateSeedData": "False",
         "MRInitializeDatabase": "True",

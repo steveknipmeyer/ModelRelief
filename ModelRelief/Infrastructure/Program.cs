@@ -82,7 +82,7 @@ namespace ModelRelief.Infrastructure
 
             Log.Logger = new LoggerConfiguration()
                         .ReadFrom.Configuration(configuration)
-                        // suppress all Microsoft messages unless they are >- Error
+                        // suppress all Microsoft messages unless they are >= Error
                         // https://github.com/serilog/serilog-extensions-logging/issues/78
                         //.MinimumLevel.Override("Microsoft", LogEventLevel.Error)
                         .CreateLogger();

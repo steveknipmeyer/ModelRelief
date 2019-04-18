@@ -1,7 +1,8 @@
 ﻿### Tasks
 #### Commit Notes
-Replace gulp-util with fancy-log.
-
+Default database is SQLite.
+Set executable permission on reliefUnitTests.
+Add Logging cofiguration to appsettings.json to suppress console logging during unit test execution.
 #### Lambdas
 
 #### Vector
@@ -304,7 +305,22 @@ When the view camera is interactively changed, it should invalidate the Standard
 
 #####  Ubuntu Development
     Issues
-        chmod +x /home/stephen/ModelRelief/Relief/tests/bin/reliefUnitTests
+       testrunner
+            fail: ValidatedHandler`2[0]
+            DeleteRequest: The file to be deleted '/home/stephen/ModelRelief/ModelRelief/Testdepthbuffer.sdb' does not exist.
+            DeleteRequest: The file to be deleted '/home/stephen/ModelRelief/ModelRelief/TestNormalMap.sdb' does not exist.
+
+        Why does dotnet test from the command line have such an inclusive level of logging?
+
+        How can xUnit tests be debugged?
+
+        The cookie permission banner always appears.
+
+        The generated model does not appear in the final mesh.
+            Possibly the file GET fails...
+
+            PostProcess ModelRelief.Api.V1.Shared.Rest.FileRequest`1[ModelRelief.Domain.Mesh] Operation = Generate
+            [12:12:31 ERR] stderr = python: can't open file 'Solver/solver.py': [Errno 2] No such file or directory
 
         Review all casing of files and directories.
             images
@@ -382,6 +398,7 @@ When the view camera is interactively changed, it should invalidate the Standard
 
         .NET Core
             https://dotnet.microsoft.com/download/linux-package-manager/ubuntu18-04/sdk-current
+            Permission issues: https://github.com/dotnet/cli/issues/10357
 
         Build
             npm install
@@ -417,13 +434,17 @@ When the view camera is interactively changed, it should invalidate the Standard
             python Build/Builder.py --target local
 
         nginx
+            https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04\
+
             Configure the VirtualBox VM to use <Bridged Networking>.
             Find VM IP address using ifconfig.
+            If on an external network:
             Add an entry to the hosts file.
                 C:\Windows\System32\drivers\etc\hosts
                 10.1.10.70 mrvm.com
+
             Use Firewall on the VM to open port 80.
-            https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04\
+
         3D Graphics
             Firefox
                 https://www.omgubuntu.co.uk/2017/04/small-tweak-makes-firefox-linux-run-much-faster
