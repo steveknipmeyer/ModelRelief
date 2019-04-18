@@ -50,11 +50,11 @@ namespace ModelRelief.Test.TestModels.Models
         /// <returns>Valid model.</returns>
         public override IModel ConstructValidModel()
         {
-            var validModel = base.ConstructValidModel() as Dto.Model3d;
-            validModel.Name = "TestModel3d.obj";
-            validModel.Format = Domain.Model3dFormat.OBJ;
+            var model = base.ConstructValidModel() as Dto.Model3d;
+            model.Name = "testmodel3d.obj";
+            model.Format = Domain.Model3dFormat.OBJ;
 
-            return validModel;
+            return model;
         }
     }
 }

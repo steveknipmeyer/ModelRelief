@@ -47,7 +47,7 @@ namespace ModelRelief.Test.TestModels.NormalMaps
         {
             var normalMap = base.ConstructValidModel() as Dto.NormalMap;
 
-            normalMap.Name = "TestNormalMap.sdb";
+            normalMap.Name = "testnormalmap.sdb";
             normalMap.Width  = 512;
             normalMap.Height = 512;
             normalMap.Format = Domain.NormalMapFormat.NMAP;

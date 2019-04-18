@@ -503,7 +503,7 @@ namespace ModelRelief.Test.Integration
         /// </summary>
         [Fact]
         [Trait("Category", "Api Delete")]
-        public async Task Delete_TargetModelIsDeleted()
+        public async virtual Task Delete_TargetModelIsDeleted()
         {
             // Arrange
             var newModel = await PostNewModel();

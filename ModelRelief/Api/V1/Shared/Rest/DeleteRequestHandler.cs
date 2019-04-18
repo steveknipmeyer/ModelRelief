@@ -76,7 +76,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             // confirm that parent folder of file matches the storage folder
             if (!string.Equals(modelStorageFolder, fileFolder, StringComparison.InvariantCultureIgnoreCase))
             {
-                Logger.LogError($"DeleteRequest: The parent folder of the file to be deleted '{fileFolder}' does not match the user storage folder '{modelStorageFolder}'.");
+                Logger.LogWarning($"DeleteRequest: The parent folder of the file to be deleted '{fileFolder}' does not match the user storage folder '{modelStorageFolder}'.");
                 return;
             }
 
@@ -84,7 +84,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             var fileName = Path.Combine(fileFolder, fileDomainModel.Name);
             if (!File.Exists(fileName))
             {
-                Logger.LogError($"DeleteRequest: The file to be deleted '{fileName}' does not exist.");
+                Logger.LogWarning($"DeleteRequest: The file to be deleted '{fileName}' does not exist.");
                 return;
             }
 

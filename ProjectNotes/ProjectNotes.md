@@ -1,29 +1,30 @@
 ﻿### Tasks
 #### Commit Notes
-Default database is SQLite.
-Set executable permission on reliefUnitTests.
-Add Logging cofiguration to appsettings.json to suppress console logging during unit test execution.
+
 #### Lambdas
+
+#### Alpha
 
 #### Vector
 
 #### Today
     Remove unused GitHub repositories.
-    Alpha
-
-    IIS localHOST
-        Cookie permission cannot be dismissed. It is always displayed.
-        Login may require deletion of local cookies.
-        After login, there is an endless loop with Auth0.
-            Is this an issue with localhost?
-            It may be related to SSL. The same behavior can be seen in VSCode when the port is 5000 (rather than 5001).
-                launch.json: "args": "/C start http://localhost:5001/"
-
-
     Add a cookie policy to _CookieConsentPartial.cshtml.
 
-    What is the best practice to debug a production IIS instance?
-        Add additional logging output.
+    IIS localHOST
+        N.B. Are these actually <Production> configuration issues?
+
+        Cookies
+            Permission cannot be dismissed. It is always displayed.
+        Login
+            Login may require deletion of local cookies.
+            After login, there is an endless loop with Auth0.
+                Is this an issue with localhost?
+                It may be related to SSL. The same behavior can be seen in VSCode when the port is 5000 (rather than 5001).
+                    launch.json: "args": "/C start http://localhost:5001/"
+        Debugging
+            What is the best practice to debug a production IIS instance?
+                Add additional logging output.
 
     Review all mesh generation settings for delivered models.
         Attenuation Decay.
@@ -305,22 +306,8 @@ When the view camera is interactively changed, it should invalidate the Standard
 
 #####  Ubuntu Development
     Issues
-       testrunner
-            fail: ValidatedHandler`2[0]
-            DeleteRequest: The file to be deleted '/home/stephen/ModelRelief/ModelRelief/Testdepthbuffer.sdb' does not exist.
-            DeleteRequest: The file to be deleted '/home/stephen/ModelRelief/ModelRelief/TestNormalMap.sdb' does not exist.
-
-        Why does dotnet test from the command line have such an inclusive level of logging?
-
         How can xUnit tests be debugged?
-
-        The cookie permission banner always appears.
-
-        The generated model does not appear in the final mesh.
-            Possibly the file GET fails...
-
-            PostProcess ModelRelief.Api.V1.Shared.Rest.FileRequest`1[ModelRelief.Domain.Mesh] Operation = Generate
-            [12:12:31 ERR] stderr = python: can't open file 'Solver/solver.py': [Errno 2] No such file or directory
+        What is the source of the empty lines in the console output from 'dotnet test'?
 
         Review all casing of files and directories.
             images

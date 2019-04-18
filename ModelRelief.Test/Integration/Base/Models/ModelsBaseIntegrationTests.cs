@@ -6,7 +6,10 @@
 
 namespace ModelRelief.Test.Integration.Models
 {
+    using System.Threading.Tasks;
+
     using ModelRelief.Test.TestModels.Models;
+    using Xunit;
 
     /// <summary>
     /// Base integration Tests.
@@ -23,19 +26,31 @@ namespace ModelRelief.Test.Integration.Models
             : base(classFixture, new Model3dTestFileModelFactory(classFixture))
         {
         }
-#region Get
-#endregion
+        #region Get
+        #endregion
 
-#region Post
-#endregion
+        #region Post
+        #endregion
 
-#region Put
-#endregion
+        #region Put
+        #endregion
 
-#region Patch
-#endregion
+        #region Patch
+        #endregion
 
-#region Delete
+        #region Delete
+
+        /// <summary>
+        /// N.B. This is a wrapper to permit CodeLens test debugging. CodeLens does not work with inherited test methods.
+        /// Test that a Delete request deletes the target model.
+        /// </summary>
+        [Fact]
+        [Trait("Category", "Api Delete")]
+        public override async Task Delete_TargetModelIsDeleted()
+        {
+            await base.Delete_TargetModelIsDeleted();
+            await Task.CompletedTask;
+        }
 #endregion
     }
 }
