@@ -306,6 +306,10 @@ When the view camera is interactively changed, it should invalidate the Standard
 
 #####  Ubuntu Development
     Issues
+        Alpha shows stack overflow when running from VSCode.
+        Vector has OpenGL issues.
+            https://askubuntu.com/questions/1127011/win10-linux-subsystem-libgl-error-no-matching-fbconfigs-or-visuals-found-libgl
+
         madge: Warns on dat-gui.
 
         How can xUnit tests be debugged?
