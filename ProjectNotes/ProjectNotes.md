@@ -307,8 +307,6 @@ When the view camera is interactively changed, it should invalidate the Standard
 #####  Ubuntu Development
     Issues
         madge: Warns on dat-gui.
-        ls colors
-        OpenGL 3.2 driver
 
         How can xUnit tests be debugged?
         What is the source of the empty lines in the console output from 'dotnet test'?
