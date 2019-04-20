@@ -51,7 +51,7 @@ class Solver:
     """
     Transforms a DepthBuffer to create a Mesh (raw float format) based on a MeshTransform.
     """
-    def __init__(self, settings_file: str, working: str) -> None:
+    def __init__(self, settings_file: str, working: str)-> None:
         """
         Initialize an instance of the Solver.
 

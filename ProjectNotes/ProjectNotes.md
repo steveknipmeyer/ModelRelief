@@ -306,6 +306,8 @@ When the view camera is interactively changed, it should invalidate the Standard
 
 #####  Ubuntu Development
     Issues
+        madge: Warns on dat-gui.
+
         How can xUnit tests be debugged?
         What is the source of the empty lines in the console output from 'dotnet test'?
 
@@ -329,12 +331,6 @@ When the view camera is interactively changed, it should invalidate the Standard
 
             Python
                 Why are the development headers in lib/Python3.6m rather than lib/Python3.6?
-
-            HTTPS
-                Successfully installed the ASP.NET Core HTTPS Development Certificate.
-                To trust the certificate run 'dotnet dev-certs https --trust' (Windows and macOS only). For establishing trust on other platforms refer to the platform specific documentation.
-                For more information on configuring HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.
-
 
     Linux Setup
         VirtualBox Guest Additions
@@ -413,7 +409,7 @@ Alpha--->
             https://dotnet.microsoft.com/download/linux-package-manager/ubuntu18-04/sdk-current
             Permission issues: https://github.com/dotnet/cli/issues/10357
 
-            Test command line build: dotnet  build
+            Test command line build: 'dotnet  build'
 
         Anaconda
             https://linuxize.com/post/how-to-install-anaconda-on-ubuntu-18-04/
@@ -436,7 +432,7 @@ Alpha--->
         SQLite
             sudo apt-get install sqlite3 (if required)
                 sqlite3 -version
-            sudo apt-get install sqlitebrower
+            sudo apt-get install sqlitebrowser
 
         Build
             BuildPythonEnvironment.sh
