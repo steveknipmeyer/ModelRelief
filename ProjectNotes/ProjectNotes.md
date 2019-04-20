@@ -392,17 +392,18 @@ When the view camera is interactively changed, it should invalidate the Standard
 
             Install VSCode Setting Sync.
                 Download settings using the Gist Token and Gist Id contained in this file.
-Alpha--->
+Alpha
         Node
             https://linuxize.com/post/how-to-install-node-js-on-ubuntu-18.04/
             sudo apt install nodejs
 
         NPM
             sudo apt install npm
+            npm install
 
         Gulp
             sudo npm install --global gulp-cli
-            npm install
+
 
         Madge (TypeScript circular dependency tool)
             sudo npm install --global madge
@@ -421,11 +422,12 @@ Alpha--->
             conda update conda
             conda update anaconda
 
+
         Postman
             Ubuntu
                 snap install postman
-                    sudo snap switch --channel=candidate postman
-                    sudo snap refresh postman
+                sudo snap switch --channel=candidate postman
+                sudo snap refresh postman
 
         Runtime
             Add azurekeyvault.json to ModelRelief project folder.
@@ -437,7 +439,7 @@ Alpha--->
             sudo apt-get install sqlitebrowser
 
         Build
-            BuildPythonEnvironment.sh
+            Build/BuildPythonEnvironment.sh Development
             python Build/Builder.py --target local
 
         nginx
@@ -456,6 +458,9 @@ Alpha--->
             Firefox
                 https://www.omgubuntu.co.uk/2017/04/small-tweak-makes-firefox-linux-run-much-faster
             Benchmark with glmark2-es2.
+                sudo apt install mesa-utils
+                sudo apr install glmark2-es2
+                glmark2-es2
             Alpha
                 =======================================================
                     glmark2 2014.03+git20150611.fa71af2d
@@ -483,6 +488,63 @@ Alpha--->
                 [desktop] blur-radius=5:effect=blur:passes=1:separable=true:windows=4: FPS: 0 FrameTime: inf ms
                 =======================================================
                                                 glmark2 Score: 96
+                =======================================================
+            Ubuntu Native
+                =======================================================
+                    glmark2 2014.03+git20150611.fa71af2d
+                =======================================================
+                    OpenGL Information
+                    GL_VENDOR:     NVIDIA Corporation
+                    GL_RENDERER:   GeForce GTX 780/PCIe/SSE2
+                    GL_VERSION:    OpenGL ES 3.1 340.107
+                =======================================================
+                [build] use-vbo=false: FPS: 60 FrameTime: 16.667 ms
+                [build] use-vbo=true: FPS: 60 FrameTime: 16.667 ms
+                [texture] texture-filter=nearest: FPS: 60 FrameTime: 16.667 ms
+                [texture] texture-filter=linear: FPS: 60 FrameTime: 16.667 ms
+                [texture] texture-filter=mipmap: FPS: 60 FrameTime: 16.667 ms
+                [shading] shading=gouraud: FPS: 60 FrameTime: 16.667 ms
+                [shading] shading=blinn-phong-inf: FPS: 60 FrameTime: 16.667 ms
+                [shading] shading=phong: FPS: 60 FrameTime: 16.667 ms
+                [shading] shading=cel: FPS: 60 FrameTime: 16.667 ms
+                [bump] bump-render=high-poly: FPS: 60 FrameTime: 16.667 ms
+                [bump] bump-render=normals: FPS: 60 FrameTime: 16.667 ms
+                [bump] bump-render=height: FPS: 60 FrameTime: 16.667 ms
+                [effect2d] kernel=0,1,0;1,-4,1;0,1,0;: FPS: 60 FrameTime: 16.667 ms
+                [effect2d] kernel=1,1,1,1,1;1,1,1,1,1;1,1,1,1,1;: FPS: 60 FrameTime: 16.667 ms
+                [pulsar] light=false:quads=5:texture=false: FPS: 60 FrameTime: 16.667 ms
+                [desktop] blur-radius=5:effect=blur:passes=1:separable=true:windows=4: FPS: 60 FrameTime: 16.667 ms
+                [desktop] effect=shadow:windows=4: FPS: 60 FrameTime: 16.667 ms
+                [buffer] columns=200:interleave=false:update-dispersion=0.9:update-fraction=0.5:update-method=map: FPS: 60 FrameTime: 16.667 ms
+                [buffer] columns=200:interleave=false:update-dispersion=0.9:update-fraction=0.5:update-method=subdata: FPS: 60 FrameTime: 16.667 ms
+                [buffer] columns=200:interleave=true:update-dispersion=0.9:update-fraction=0.5:update-method=map: FPS: 60 FrameTime: 16.667 ms
+                [ideas] speed=duration: FPS: 60 FrameTime: 16.667 ms
+                [jellyfish] <default>: FPS: 59 FrameTime: 16.949 ms
+                [terrain] <default>: FPS: 60 FrameTime: 16.667 ms
+                [shadow] <default>: FPS: 60 FrameTime: 16.667 ms
+                [refract] <default>: FPS: 60 FrameTime: 16.667 ms
+                =======================================================
+                                                glmark2 Score: 59
+                =======================================================
+                =======================================================
+                    glmark2 2014.03+git20150611.fa71af2d
+                =======================================================
+                    OpenGL Information
+                    GL_VENDOR:     NVIDIA Corporation
+                    GL_RENDERER:   GeForce GTX 780/PCIe/SSE2
+                    GL_VERSION:    4.4.0 NVIDIA 340.107
+                =======================================================
+                [build] use-vbo=false: FPS: 9758 FrameTime: 0.102 ms
+                [build] use-vbo=true: FPS: 17183 FrameTime: 0.058 ms
+                [texture] texture-filter=nearest: FPS: 15725 FrameTime: 0.064 ms
+                [texture] texture-filter=linear: FPS: 15668 FrameTime: 0.064 ms
+                [texture] texture-filter=mipmap: FPS: 15696 FrameTime: 0.064 ms
+                [shading] shading=gouraud: FPS: 15764 FrameTime: 0.063 ms
+                [shading] shading=blinn-phong-inf: FPS: 15691 FrameTime: 0.064 ms
+                [shading] shading=phong: FPS: 15469 FrameTime: 0.065 ms
+                [shading] shading=cel: FPS: 15483 FrameTime: 0.065 ms
+                =======================================================
+                                                glmark2 Score: 15159
                 =======================================================
 
             Vector
