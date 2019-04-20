@@ -390,7 +390,7 @@ When the view camera is interactively changed, it should invalidate the Standard
 
             Install VSCode Setting Sync.
                 Download settings using the Gist Token and Gist Id contained in this file.
-Alpha
+
         Node
             https://linuxize.com/post/how-to-install-node-js-on-ubuntu-18.04/
             sudo apt install nodejs
@@ -443,12 +443,13 @@ Alpha
         nginx
             https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04\
 
-            Configure the VirtualBox VM to use <Bridged Networking>.
-            Find VM IP address using ifconfig.
-            If on an external network:
-            Add an entry to the hosts file.
-                C:\Windows\System32\drivers\etc\hosts
-                10.1.10.70 mrvm.com
+            VirtualBox
+                Configure the VirtualBox VM to use <Bridged Networking>.
+                Find VM IP address using ifconfig.
+                If on an external network:
+                Add an entry to the hosts file.
+                    C:\Windows\System32\drivers\etc\hosts
+                    10.1.10.70 mrvm.com
 
             Use Firewall on the VM to open port 80.
 
