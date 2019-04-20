@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as dat from "dat-gui";
+import * as dat from "dat.gui";
 import * as Dto from "Scripts/Api/V1/Models/DtoModels";
 import * as THREE from "three";
 

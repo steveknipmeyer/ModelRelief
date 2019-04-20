@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as dat from "dat-gui";
+import * as dat from "dat.gui";
 import {ElementAttributes, ElementIds} from "Scripts/System/Html";
 import {SystemSettings} from "Scripts/System/SystemSettings";
 import {ModelViewer} from "Scripts/Viewers/ModelViewer";

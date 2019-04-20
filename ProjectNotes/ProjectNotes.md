@@ -346,10 +346,14 @@ When the view camera is interactively changed, it should invalidate the Standard
                 sudo apt install build-essential (WSL)
         WSL
             https://shunsvineyard.info/2019/01/27/using-visual-studio-code-with-windows-subsystem-for-linux/
-            Add export DISPLAY=localhost:0.0 to ~/bashrc
+            MobaXTerm
+                Add export DISPLAY=localhost:0.0 to ~/bashrc
+                Settings->XTerminal
+                    Clipboard: disable on Select
+                    Disable 'unix-compatible keyboard'77888111117
 
 
-        UI (not supported on WSL)
+        Windows Keyboard
             VirtualBox
                 sudo apt install gnome-tweak-tool
                     Keyboard and Mouse
@@ -358,6 +362,12 @@ When the view camera is interactively changed, it should invalidate the Standard
                                 NumLock
             WSL
                 https://askubuntu.com/questions/57079/xubuntu-make-shiftnumpad-work-like-windows
+                setxkbmap -option 'numpad:microsoft'
+
+        .bashrc
+            cd ModelRelief
+            . Tools/ModelReliefShell.sh
+            setxkbmap -option 'numpad:microsoft'
 
         git
             sudo apt install git
@@ -374,12 +384,17 @@ When the view camera is interactively changed, it should invalidate the Standard
                 git submodule update
 
         VSCode
-            https://code.visualstudio.com/docs/setup/linux
+            Ubuntu
+                https://code.visualstudio.com/docs/setup/linux
                 sudo snap install --classic code
+            WSL
+                N.B. 'sudo apt install firefox' resolves VSCode dependency issues.
+                https://shunsvineyard.info/2019/01/27/using-visual-studio-code-with-windows-subsystem-for-linux/
+                https://nickjanetakis.com/blog/using-wsl-and-mobaxterm-to-create-a-linux-dev-environment-on-windows
 
             Install VSCode Setting Sync.
                 Download settings using the Gist Token and Gist Id contained in this file.
-
+Alpha--->
         Node
             https://linuxize.com/post/how-to-install-node-js-on-ubuntu-18.04/
             sudo apt install nodejs
@@ -389,6 +404,7 @@ When the view camera is interactively changed, it should invalidate the Standard
 
         Gulp
             sudo npm install --global gulp-cli
+            npm install
 
         Madge (TypeScript circular dependency tool)
             sudo npm install --global madge
@@ -397,9 +413,7 @@ When the view camera is interactively changed, it should invalidate the Standard
             https://dotnet.microsoft.com/download/linux-package-manager/ubuntu18-04/sdk-current
             Permission issues: https://github.com/dotnet/cli/issues/10357
 
-        Build
-            npm install
-            dotnet  build
+            Test command line build: dotnet  build
 
         Anaconda
             https://linuxize.com/post/how-to-install-anaconda-on-ubuntu-18-04/
@@ -410,16 +424,14 @@ When the view camera is interactively changed, it should invalidate the Standard
             conda update anaconda
 
         Postman
-            snap install postman
-                sudo snap switch --channel=candidate postman
-                sudo snap refresh postman
+            Ubuntu
+                snap install postman
+                    sudo snap switch --channel=candidate postman
+                    sudo snap refresh postman
 
         Runtime
             Add azurekeyvault.json to ModelRelief project folder.
 
-        .bashrc
-            cd ModelRelief
-            . Tools/ModelReliefShell.sh
 
         SQLite
             sudo apt-get install sqlite3 (if required)

@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as dat from "dat-gui";
+import * as dat from "dat.gui";
 import * as THREE from "three";
 
 import {StandardView} from "Scripts/Api/V1/Interfaces/ICamera";
