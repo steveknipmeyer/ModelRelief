@@ -307,6 +307,8 @@ When the view camera is interactively changed, it should invalidate the Standard
 #####  Ubuntu Development
     Issues
         madge: Warns on dat-gui.
+        ls colors
+        OpenGL 3.2 driver
 
         How can xUnit tests be debugged?
         What is the source of the empty lines in the console output from 'dotnet test'?
@@ -483,6 +485,48 @@ Alpha--->
                                                 glmark2 Score: 96
                 =======================================================
 
+            Vector
+                =======================================================
+                    glmark2 2014.03+git20150611.fa71af2d
+                =======================================================
+                    OpenGL Information
+                    GL_VENDOR:     VMware, Inc.
+                    GL_RENDERER:   llvmpipe (LLVM 7.0, 256 bits)
+                    GL_VERSION:    OpenGL ES 3.0 Mesa 18.2.8
+                =======================================================
+                [build] use-vbo=false: FPS: 67 FrameTime: 14.925 ms
+                [build] use-vbo=true: FPS: 86 FrameTime: 11.628 ms
+                [texture] texture-filter=nearest: FPS: 116 FrameTime: 8.621 ms
+                [texture] texture-filter=linear: FPS: 107 FrameTime: 9.346 ms
+                [texture] texture-filter=mipmap: FPS: 95 FrameTime: 10.526 ms
+                [shading] shading=gouraud: FPS: 74 FrameTime: 13.514 ms
+                [shading] shading=blinn-phong-inf: FPS: 68 FrameTime: 14.706 ms
+                [shading] shading=phong: FPS: 64 FrameTime: 15.625 ms
+                [shading] shading=cel: FPS: 66 FrameTime: 15.152 ms
+                [bump] bump-render=high-poly: FPS: 45 FrameTime: 22.222 ms
+                [bump] bump-render=normals: FPS: 120 FrameTime: 8.333 ms
+                [bump] bump-render=height: FPS: 112 FrameTime: 8.929 ms
+                [effect2d] kernel=0,1,0;1,-4,1;0,1,0;: FPS: 72 FrameTime: 13.889 ms
+                [effect2d] kernel=1,1,1,1,1;1,1,1,1,1;1,1,1,1,1;: FPS: 52 FrameTime: 19.231 ms
+                [pulsar] light=false:quads=5:texture=false: FPS: 93 FrameTime: 10.753 ms
+                [desktop] blur-radius=5:effect=blur:passes=1:separable=true:windows=4: FPS: 27 FrameTime: 37.037 ms
+                [desktop] effect=shadow:windows=4: FPS: 46 FrameTime: 21.739 ms
+                [buffer] columns=200:interleave=false:update-dispersion=0.9:update-fraction=0.5:update-method=map: FPS: 52 FrameTime: 19.231 ms
+                [buffer] columns=200:interleave=false:update-dispersion=0.9:update-fraction=0.5:update-method=subdata: FPS: 42 FrameTime: 23.810 ms
+                [buffer] columns=200:interleave=true:update-dispersion=0.9:update-fraction=0.5:update-method=map: FPS: 40 FrameTime: 25.000 ms
+                [ideas] speed=duration: FPS: 58 FrameTime: 17.241 ms
+                [jellyfish] <default>: FPS: 39 FrameTime: 25.641 ms
+                [terrain] <default>: FPS: 3 FrameTime: 333.333 ms
+                [shadow] <default>: FPS: 39 FrameTime: 25.641 ms
+                [refract] <default>: FPS: 7 FrameTime: 142.857 ms
+                [conditionals] fragment-steps=0:vertex-steps=0: FPS: 75 FrameTime: 13.333 ms
+                [conditionals] fragment-steps=5:vertex-steps=0: FPS: 69 FrameTime: 14.493 ms
+                [conditionals] fragment-steps=0:vertex-steps=5: FPS: 76 FrameTime: 13.158 ms
+                [function] fragment-complexity=low:fragment-steps=5: FPS: 74 FrameTime: 13.514 ms
+                [function] fragment-complexity=medium:fragment-steps=5: FPS: 61 FrameTime: 16.393 ms
+                =======================================================
+                                                glmark2 Score: 64
+                =======================================================
 
 #### Front End
 <span style="color:red">
