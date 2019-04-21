@@ -1,6 +1,8 @@
 ﻿### Tasks
 #### Commit Notes
-
+Launch configuration do not open browser.
+WSL development environment uses Windows-based browsers.
+Change VSCode debug launch terminal from Debug Console to Integrated Terminal.
 #### Lambdas
 
 #### Alpha
@@ -8,7 +10,10 @@
 #### Vector
 
 #### Today
+    Relocate Solver folder to resolve configuration issues between Development and Production.
+
     Remove unused GitHub repositories.
+
     Add a cookie policy to _CookieConsentPartial.cshtml.
 
     IIS localHOST
@@ -306,13 +311,13 @@ When the view camera is interactively changed, it should invalidate the Standard
 
 #####  Ubuntu Development
     Issues
-        Alpha shows stack overflow when running from VSCode.
         Vector has OpenGL issues.
             https://askubuntu.com/questions/1127011/win10-linux-subsystem-libgl-error-no-matching-fbconfigs-or-visuals-found-libgl
 
         madge: Warns on dat-gui.
 
         How can xUnit tests be debugged?
+
         What is the source of the empty lines in the console output from 'dotnet test'?
 
         Review all casing of files and directories.
@@ -320,18 +325,10 @@ When the view camera is interactively changed, it should invalidate the Standard
 
         Remove SQLServer references?
 
-        %TEMP% is not defined so the log file is created as %TEMP%\Logs\ModelRelief.log.
-            where is the log file?
-
         Database
             MySQL/MariaDB
             https://www.youtube.com/watch?v=N10QW_AIOnI
             https://vitux.com/how-to-install-wine-on-ubuntu/
-
-            appsettings.json
-                How should settings files define the directory separator?
-                    Forward slash does not work with SQLServer.
-                    Does forward slash work with SQLite on Windows?
 
             Python
                 Why are the development headers in lib/Python3.6m rather than lib/Python3.6?
@@ -365,9 +362,16 @@ When the view camera is interactively changed, it should invalidate the Standard
                 setxkbmap -option 'numpad:microsoft'
 
         .bashrc
+            cd ~
             cd ModelRelief
             . Tools/ModelReliefShell.sh
+
+            #MobaXTerm
+            export DISPLAY=localhost:0.0
+            #Windows numpad keyboard
             setxkbmap -option 'numpad:microsoft'
+
+            eval "$(dircolors ~/.dircolors)";
 
         git
             sudo apt install git
@@ -414,7 +418,7 @@ When the view camera is interactively changed, it should invalidate the Standard
             https://dotnet.microsoft.com/download/linux-package-manager/ubuntu18-04/sdk-current
             Permission issues: https://github.com/dotnet/cli/issues/10357
 
-            Test command line build: 'dotnet  build'
+            Test command line build: 'dotnet build ModelRelief'
 
         Anaconda
             https://linuxize.com/post/how-to-install-anaconda-on-ubuntu-18-04/
@@ -433,7 +437,6 @@ When the view camera is interactively changed, it should invalidate the Standard
 
         Runtime
             Add azurekeyvault.json to ModelRelief project folder.
-
 
         SQLite
             sudo apt-get install sqlite3 (if required)

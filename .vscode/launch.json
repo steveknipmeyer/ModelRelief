@@ -43,14 +43,14 @@
 
             // The external console will not launch the browser. It is necessary to manually start the browser.
             // The internal console does not support Console.ReadLine so user verification steps are not possible.
-            "console": "internalConsole",
+            "console": "integratedTerminal",
 
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {
 
                 // <---------------------------------------------------------------->
                 // N.B. Set to true when using independently of the compound profiles.
-                "enabled": true,
+                "enabled": false,
                 // <---------------------------------------------------------------->
 
                 "args": "${auto-detect-url}",
@@ -62,9 +62,9 @@
                 "osx": {
                     "command": "open"
                 },
-                // "linux": {
-                //     "command": "xdg-open"
-                //}
+                "linux": {
+                    "command": "xdg-open"
+                }
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
