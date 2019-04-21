@@ -90,6 +90,12 @@
 //          "processId": "${command:pickProcess}",
             "processId": "23564"
         },
+        {
+            "name": "Python Attach",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command:pickProcess}",
+        },
 
         {
             "name": "Python",
@@ -110,17 +116,17 @@
         //  ----- Tools
         //  "program": "${workspaceRoot}/Tools/testrunner.py",
         //  "program": "${workspaceRoot}/Tools/linecount.py",
-        "program": "${workspaceRoot}/Tools/pngwriter.py",
-        // "args":["--file", "${workspaceRoot}/ModelRelief/store/development/users/auth05bedab58aa237e078600530b/depthbuffers/1/armadillo.sdb", "--format", "grayscale"]
-        "args":["--file", "${workspaceRoot}/ModelRelief/store/development/users/auth05bedab58aa237e078600530b/normalmaps/3/bunny.nmap", "--format", "rgba"]
+        //  "program": "${workspaceRoot}/Tools/pngwriter.py",
+        //  "args":["--file", "${workspaceRoot}/ModelRelief/store/development/users/auth05bedab58aa237e078600530b/depthbuffers/1/armadillo.sdb", "--format", "grayscale"]
+        //  "args":["--file", "${workspaceRoot}/ModelRelief/store/development/users/auth05bedab58aa237e078600530b/normalmaps/3/bunny.nmap", "--format", "rgba"]
 
         //  ----- Build
         //  "program": "${workspaceRoot}/Build/builder.py",
         //  "args":["--target", "IIS", "--deploy", "False"]
 
         //  ----- Explorer
-        //  "program": "${workspaceRoot}/Explorer/explorer.py",
-        //  "args":["--s", "../Solver/Test/House.json", "--w", "../Solver/Test/Working"]
+        "program": "${workspaceRoot}/Explorer/explorer.py",
+        "args":["--s", "../Solver/Test/lucy.json", "--w", "../Solver/Test/Working"]
 
         //  ----- Solver
         //  "program": "${workspaceRoot}/Solver/solver.py",

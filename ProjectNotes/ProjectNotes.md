@@ -1,8 +1,7 @@
 ﻿### Tasks
 #### Commit Notes
-Launch configuration do not open browser.
-WSL development environment uses Windows-based browsers.
-Change VSCode debug launch terminal from Debug Console to Integrated Terminal.
+
+
 #### Lambdas
 
 #### Alpha
@@ -11,6 +10,8 @@ Change VSCode debug launch terminal from Debug Console to Integrated Terminal.
 
 #### Today
     Relocate Solver folder to resolve configuration issues between Development and Production.
+
+    How can Python binary extensions be resolved (e.g. sys, time)?
 
     Remove unused GitHub repositories.
 
@@ -598,7 +599,8 @@ When the view camera is interactively changed, it should invalidate the Standard
 
 #### Front End
 <span style="color:red">
-    The 'dotnet run' workflow runs as 'Production'!
+    The 'dotnet run' workflow runs using the first 'Project' configuration in Properties/launchSettings.json.
+     The ordering in launchSettings.json controls whether the configuraiton is 'Production' or 'Development'.
 </span><br><br>
 
 ##### FE UI

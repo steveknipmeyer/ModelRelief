@@ -51,4 +51,5 @@
         },
         "debug.console.fontFamily": "Monospace",
         "debug.console.fontSize": 14,
+        "python.formatting.autopep8Path": "",
 }

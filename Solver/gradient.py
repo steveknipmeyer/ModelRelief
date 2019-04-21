@@ -11,7 +11,7 @@
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
 import numpy as np
-from typing import List
+from typing import Dict, List, Tuple
 
 from difference import Difference, FiniteDifference, Axis
 from services import Services
@@ -32,7 +32,7 @@ class Gradient:
         self.debug = True
         self.services = services
 
-    def calculate(self, array: np.ndarray, use_np_gradient: bool) -> List[np.ndarray]:
+    def calculate(self, array: np.ndarray, use_np_gradient: bool) -> Dict[Tuple[int, int], float]:
         """
         Calculates the gradients of an ndarray.
         Parameters

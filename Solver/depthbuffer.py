@@ -15,7 +15,7 @@ import os
 import sys
 import numpy as np
 
-from typing import List, Tuple, Union
+from typing import Dict, List, Tuple, Union
 
 from camera import Camera
 from camerafactory import CameraFactory
@@ -98,7 +98,7 @@ class DepthBuffer:
 
         self._floats_unit_differential : List[float] = []
         self._floats : np.ndarray = []
-        self._gradients : List[np.ndarray] = []
+        self._gradients : Dict[Tuple[int, int], float] = {}
 
     @property
     def name(self):
@@ -216,7 +216,7 @@ class DepthBuffer:
         return self._floats
 
     @property
-    def gradients(self) -> List[np.ndarray]:
+    def gradients(self) -> Dict[Tuple[int, int], float]:
         """
         Returns the XY gradients of the DB.
         """

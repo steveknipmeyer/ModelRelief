@@ -15,7 +15,7 @@ import os
 import qdarkstyle
 
 from PyQt5 import QtGui, QtCore, QtWidgets
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Callable, Dict, Optional, Tuple
 
 from explorer_ui import Ui_MainWindow
 from results import Results, DataSource
@@ -359,7 +359,8 @@ def main():
     """
     Main entry point.
     """
-    input("Attach debugger and press <Enter>:")
+    # This hook is used in Windows to allow an external debugger to be attached.
+    # input("Attach debugger and press <Enter>:")
 
     os.chdir(os.path.dirname(__file__))
 

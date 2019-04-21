@@ -14,7 +14,7 @@ import math
 import struct
 import numpy as np
 
-from typing import List
+from typing import Dict, List, Tuple
 
 class FileManager:
     """
@@ -168,7 +168,7 @@ class FileManager:
 
         return integers
 
-    def unpack_rgba(self, byte_list: bytes, dtype=np.uint8) ->List[np.ndarray]:
+    def unpack_rgba(self, byte_list: bytes, dtype=np.uint8) -> Dict[Tuple[int, int], float]:
         """
         Returns a list of NumPy arrays representing the RGBA planes.
         Parameters
@@ -196,7 +196,7 @@ class FileManager:
 
         return rgba_array
 
-    def read_rgba(self, path: str, dtype=np.uint8) -> List[np.ndarray]:
+    def read_rgba(self, path: str, dtype=np.uint8) -> Dict[Tuple[int, int], float]:
         """
         Reads a raw RGBA file.
         Parameters

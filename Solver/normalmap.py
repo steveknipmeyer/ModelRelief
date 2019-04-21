@@ -16,7 +16,7 @@ import sys
 import numpy as np
 
 from pathlib import Path
-from typing import List, Tuple, Union
+from typing import Dict, List, Tuple, Union
 
 from filemanager import FileManager
 from services import Services
@@ -46,7 +46,7 @@ class NormalMap:
         self._height = int(settings['Height'])
         self.format = settings['Format']
 
-        self._components : List[np.ndarray] = []
+        self._components : Dict[Tuple[int, int], float] = {}
 
     @property
     def name(self):
@@ -84,7 +84,7 @@ class NormalMap:
         self._height = value
 
     @property
-    def components(self) -> List[np.ndarray]:
+    def components(self) -> np.ndarray:
         """
         Returns the vector components of the NormalMap.
         """
@@ -128,7 +128,7 @@ class NormalMap:
         Returns the Z component.
         """
         z_plane: np.ndarray = self.components[:, :, 2]
-        
+
         # WIP: prevent unbounded gradients (division by zero)
         z_plane[z_plane == 0] = 1
         # WIP: flip
