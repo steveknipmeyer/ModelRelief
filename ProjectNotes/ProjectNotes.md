@@ -1,9 +1,6 @@
 ﻿### Tasks
 #### Commit Notes
 
-
-#### Lambdas
-
 #### Alpha
 
 #### Vector

@@ -41,6 +41,10 @@ class EnvironmentNames:
     MRDatabaseProvider = "MRDatabaseProvider"
     ASPNETCORE_ENVIRONMENT = "ASPNETCORE_ENVIRONMENT"
 
+    # debug
+    # working folder in Windows file system for access by graphical applications (e.g. MeshLab)
+    WindowsTemp = "WindowsTemp"
+
 class RuntimeEnvironment(Enum):
     """ ASPNETCORE_ENVIRONMENT """
     development = 'Development'

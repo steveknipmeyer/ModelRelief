@@ -20,6 +20,7 @@ from scipy.ndimage import gaussian_filter
 from shutil import copyfile
 from typing import Any, Callable, Dict, Optional
 
+from environment import EnvironmentNames
 from experiments import Experiments
 from filemanager import FileManager
 from logger import Logger
@@ -308,6 +309,14 @@ class Solver:
 
             filewriter = OBJWriter(self.services, self.results.mesh_transformed.image, file_path)
             filewriter.write()
+
+            # copy to Windows file system for access by graphical applications outside WSL (e.g. MeshLab)
+            windows_temp = os.getenv(EnvironmentNames.WindowsTemp)
+            if (windows_temp is None):
+                return
+
+            file_temp_path = os.path.join(windows_temp, filename + ".obj")
+            Tools.copy_file(file_path, file_temp_path)
 
     def debug_results(self):
         """
