@@ -27,7 +27,7 @@
       "commandName": "Project",
       "launchBrowser": false,
       "environmentVariables": {
-      "ASPNETCORE_ENVIRONMENT": "Production",
+      "ASPNETCORE_ENVIRONMENT": "Development",
         "MRDatabaseProvider": "SQLite",
 
         "MRUpdateSeedData": "False",

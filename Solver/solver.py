@@ -108,10 +108,22 @@ class Solver:
     def content_folder(self):
         """
         Returns the absolute path of ContentRootPath.
-        In Production, the Solver folder is at the same level as ContentRootPath.
-        In Development, Test environments, the Solver folder is one level above at the Solution root.
+        In deployed Production, the Solver folder is at the same level as ContentRootPath.
+        In Development, Production (development) environments, the Solver folder is one level above at the Solution root.
         """
-        if Tools.is_production():
+        # -- Production (Deployed)
+        # (ContentRootPath)
+        #     Solver
+        #         solver.py (this)
+        #     wwwroot
+
+        # -- Development, Production (local)
+        # Solver
+        #     solver.py (this)
+        # ModelRelief (ContentRootPath)
+        #     wwwroot
+
+        if os.path.exists('../wwwroot'):
             return os.path.abspath('..')
 
         return os.path.abspath('../ModelRelief')

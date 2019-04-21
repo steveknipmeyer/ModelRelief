@@ -9,9 +9,11 @@
 #### Vector
 
 #### Today
-    Relocate Solver folder to resolve configuration issues between Development and Production.
+    What is the source of the empty lines in the console output from 'dotnet test'?
 
     How can Python binary extensions be resolved (e.g. sys, time)?
+
+    How can xUnit tests be debugged?
 
     Remove unused GitHub repositories.
 
@@ -35,291 +37,10 @@
     Review all mesh generation settings for delivered models.
         Attenuation Decay.
             It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
-
-#### General
-
-#### Composer
-
-#### Privacy Page
-    Add a Privacy page.
-        The page exists populate it.
-        https://auth0.com/docs/compliance/gdpr
-
-#### Credits Page
-
-#### Workflow Page
-    Illustrate with images from Explorer!
-
-    Notes
-        Features not published
-            clipping planes
-            perspective cameras
-        API
-
-#### Landing Page
-    Create thumbnail images of the test models.
-	    These will be delivered from the Delivery\images folder.
-
-    Create a video or an animation?
-
-#### Auth0
-
-#### UI
-
-#### Models
-        Lucy
-        House
-        Dragon
-        Horse
-        Scallop
-        Plunderbuss Pete
-
-        Not Used
-            Tyrannosaurus
-            Armadillo
-            Roadster
-            Bunny
-            Statue
-            Dolphin
-            Buddha
-            Test
-
-        Thingiverse Sculpture
-        Archive 3D
-            Pegasys
-            David
-            https://archive3d.net/?category=31
-
-#### Publication
-    3D CAD Jewelry
-        https://matrixusergroup.com/
-    CNC
-    ArtCAM
-    Vectrix
-    3D Printing
-    HackerNews
-
-### Short Term
-
-#### Database
-    Does the database "unable to connect" message always appear at startup?
-        It is also seen in the local IIS instance.
-        Logger.LogError($"The database connection could not be opened after {maximumAttempts} attempts to reach the server.");
-
-    Update database schema diagram.
-
-#### IIS
-    Local
-        Why can't cookies be set? The cookie consent dialog continues to open.
-
-    Alpha
-        Why does the IIS build fail on Alpha with privilege errors deleting the Publish folder?
-        Why were there intermittent runtime errors at startup?
-            Could these be Azure service errors accessing the key-value vault?
-
-#### NormalMaps
-    It appears that NormalMap gradients lose some high frequency detail.
-
-    What NormalMap integration tests are appropriate?
-
-#### Images
-    PNG Creation
-        Integrate with Files utility class.
-        File methods should share common setup steps for deleting existing files, etc.
-
-##### TypeScript Image Class
-    DepthBuffer, NormalMap should hold instances.
-    Where should Image be placed in the source tree?
-    methods
-        Indexer
-        RGB, RGBA values
-        Vector3
-
-#### WebGL
-    https://webglfundamentals.org/webgl/lessons/webgl-how-it-works.html
-
-    Chrome "paused before potential out-of-memory crash".
-        https://stackoverflow.com/questions/42110726/chrome-devtools-paused-before-potential-out-of-memory-crash
-        https://developers.google.com/web/tools/chrome-devtools/memory-problems/
-
-##### WebGL Debugging
-        Investigate webgl-debug library.
-
-        Explore Nsight for shader debugging.
-
-        SpectorJS
-            http://www.realtimerendering.com/blog/debugging-webgl-with-spectorjs/
-
-        RenderDoc
-            "c:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-gpu-watchdog --gpu-startup-dialog --allow-no-sandbox-job --allow-sandbox-debugging --no-sandbox --disable-gpu-sandbox
-
-#### Core
-    Technical Review
-        Review the Blender implementation.
-            What were the pre-processing steps that were done to prepare the data for the Poisson solver?
-        Review the technical papers.
-        Review ZSurf.
-        Review ArtCAM.
-
-    Explore
-        Awesome Bump
-        Knald
-        xNormal
-        ShaderMap
-        Gimp Normal Plugin
-
-    Orthogonal planes (e.g. House) do not generate constant Z depths.
-
-    Close in Orthogonal views of House (Lambda: Documents\Temp\MalformedHouse) yield malformed meshes.
-
-    Review Mesh, DepthBuffer and NormalMap properties:
-        Width
-        Height
-
-    How should the initial camera of the ModelViewer be defined in a ComposerView?
-        Mesh.DepthBuffer.Camera is used.
-        Mesh.NormalMap.Camera is equivalent.
-
-    Should clipping planes be set based on the Model?
-
-    Clipping planes are not preserved when a Composer view is initialized.
-
-    Visually examine randomly-generated cameras that have been round-tripped.
-
-    Experiment with Poisson solutions of images that have not been attenuated/processed.
-
-    Develop test models to test the gaussian filter mask processing.
-        The model should contain details near the edges (adjacent to the background) and near thresholded regions.
-            Spheres (Positive, Negative)
-            Cubes
-            Architectural
-
-    Silhouette
-        https://stackoverflow.com/questions/17161088/how-to-refine-or-blur-or-smooth-just-the-edges
-
-    Runtime Settings
-        https://medium.freecodecamp.org/environment-settings-in-javascript-apps-c5f9744282b6
-        minifiedExtension
-
-#### Explorer
-    Build a Python installer package for Explorer.
-
-    How can the mayavi log be viewed?
-
-    3D Surface Visualization
-        https://jakevdp.github.io/PythonDataScienceHandbook/04.12-three-dimensional-plotting.html
-
-#### Three.js
-    Update OBJLoader.ts.
-
-#### Performance
-    The transfer of models is inefficent because they are Base64 encoded.
-
-#### Builder
-    Add a model list to control which models are added.
-
-#### Solver
-    Should the Python image masks be integers or booleans (instead of doubles)?
-
-    Meshes are not oriented correctly in Mayavi Isometric views.
-
-#### Python
-    Explore Python unit tests.
-
-### Adding a New GeneratedFileDomainModel (e.g. NormalMap)
-#### Documentation
-- [X] Update the class hierarchies in ProjectNotes.
-
-#### Configuration
-- [X] Add the paths to the new model folders in appsettings.json (e.g. Paths:ResourceFolders:NormalMaps).
-
-#### Dispatcher
-- [x] Extend IDispatcher to include a generation method for the new entity (e.g. GenerateNormalMapAsync).
-- [x] Add support for generating the file after dependencies have changed. (e.g. GenerateNormalMapAsync).
-
-#### Domain
-- [X] Add the database ModelRelief.Domain schema class (e.g. NormalMap.cs).
-
-#### Database
-- [X] Delete the existing databases using SQL Server Object Explorer.
-- [X] Add the new entity type to ModelReliefDbContext.cs.
-- [X] Add the new model types to DbInitializer including support for updating the seed files (UpdateSeedData)
-- [X] **dotnet ef migrations add InitialCreate**
-
-#### Test Files
-- [X] Add the new model folder type to Test\Data\Users including at least one placeholder file to ensure the output folder will be created.
-
-#### Api
-- [X] Add request handlers to the V1 folder (e.g. Api\V1\NormalMaps)
-- [X] Add API definitions for the new model to ApiErros.cs.
-
-#### Features
-- [X] Add the new controller. (e.g. Features\NormalMaps\NormalMapsController.cs)
-- [X] Add the new DTO model (e.g. NormalMap.cs)
-- [X] Add the supporting Razor pages (e.g. Create.cshtml)
-- [X] Add the new entity type to the main navigation bar (_Layout.cshtml).
-
-#### Scripts
-- [X] Add the interface to Api\V1\Interfaces (e.g. INormalMap.ts).
-- [X] Add the new concrete class implementing the interface to DtoModels.ts.
-- [X] Add the necessary application graphics model to Models (e.g. Models\NormalMap\NormalMap.ts).
-<br>*If the entity is graphical:*
-- [X] Add a new viewer to Viewers (e.g. Viewers\NormalMapViewer.ts)
-- [X] Add an MVC View to Views (e.g. Views\NormalMapView.ts)
-- [X] Add the HTML View to Composer\Edit.cshtml.
-- [ ] Create the factory (e.g. NormalMapFactory) to construct the entity.
-- [ ] Extend ComposerController to add support for generating the new entity.
-
-#### XUnit Integration Tests
-- [X] Add the model Base support to Integration\Base (e.g. NormalMapsBaseIntegration.cs)
-- [X] Add the model File support to Integration\File (e.g. NormalMapsFileIntegration.cs)
-- [X] Add the test model factory support to TestModelFactores (e.g. NormalMapTestModelFactory.cs)
-
-#### TypeScript Unit Tests
-- [ ] Add tests supporting the new entity to UnitTests.ts.
-
-#### Postman
-- [X] Add test requests to support the new entity,
-
-#### Solver
-- [ ] Add a new Python class (e.g. normalmap.py).
-
-#### Tools
-- [ ] Add utilities as needed (e.g. normalmapwriter.py)
-
-#### Explorer
-- [ ] Add support as required.
-
-### Test Checklist
-    Test Checklist
-        Visual Studio
-            IIS Express launch
-        testrunner (XUnit)          python Tools\testrunner.py
-        Builder
-            Development             python.exe Build\Builder.py --target local
-             IIS                    python.exe Build\builder.py --target IIS --deploy True
-            Docker                  python.exe Build\builder.py --target Docker
-        Postman
-        Explorer                    python.exe Explorer\explorer.py --s ../Solver/Test/Lucy.json --w ../Solver/Test/Working
-        Solver                      python Solver\solver.py --s "Test/House.json" --w "Test/Working"
-        Docker                      DockerStart
-
-###### StandardView
-When the view camera is interactively changed, it should invalidate the StandardView in the UI.
-    Mesh view opens with the UI set to StandardCamera.Front but the view is Top.
-
-#####  Ubuntu Setup
-
-#####  Ubuntu Development
+#####  Linux Development
     Issues
         Vector has OpenGL issues.
             https://askubuntu.com/questions/1127011/win10-linux-subsystem-libgl-error-no-matching-fbconfigs-or-visuals-found-libgl
-
-        madge: Warns on dat-gui.
-
-        How can xUnit tests be debugged?
-
-        What is the source of the empty lines in the console output from 'dotnet test'?
 
         Review all casing of files and directories.
             images
@@ -596,6 +317,315 @@ When the view camera is interactively changed, it should invalidate the Standard
                 =======================================================
                                                 glmark2 Score: 64
                 =======================================================
+#### New Windows Computer Setup
+    Graphics Tools
+        Rhino3D
+        MeshLab
+    Set up a shortcut for ModelReliefShell.bat.
+    KeyTweak (Right Ctrl -> Context Menu)
+    Postman
+    Git
+    Notepad++
+    Sqlite 64-bit
+    SQLServer Management Studio
+    SQLite Expert Personal
+    clink (Marin Rodgers) command shell extensions
+    Macrium Reflect
+    Visual Studio
+        Anaconda 64-bit
+        synchronize settings
+    VSCode
+       synchronize User Settings (Extensions, ketboard mapping, settings)
+    Node.js
+    NPM
+        npm install --global gulp-cli
+        npm install --global madge
+    Install .NET Core 2.2 SDK.
+    Add azurekeyvault.json to ModelRelief project folder.
+
+    From the solution root:
+        conda config --add channels conda-forge
+        npm install
+            Modify  C:\Program Files (x86)\Microsoft Visual Studio\Shared\Anaconda3_64\Library\bin\pyrcc5.bat  to wrap Python path in quotations.
+                @"C:/Program Files (x86)/Microsoft Visual Studio/Shared/Anaconda3_64\python.exe" -m PyQt5.pyrcc_main %1 %2 %3 %4 %5 %6 %7 %8 %9
+        BuildPythonEnvironment Development
+        dotnet restore
+        git submodule init
+        git submodule update
+
+        python.exe Build\Builder.py --target local
+
+#### General
+
+#### Composer
+
+#### Privacy Page
+    Add a Privacy page.
+        The page exists populate it.
+        https://auth0.com/docs/compliance/gdpr
+
+#### Credits Page
+
+#### Workflow Page
+    Illustrate with images from Explorer!
+
+    Notes
+        Features not published
+            clipping planes
+            perspective cameras
+        API
+
+#### Landing Page
+    Create thumbnail images of the test models.
+	    These will be delivered from the Delivery\images folder.
+
+    Create a video or an animation?
+
+#### Auth0
+
+#### UI
+
+#### Models
+        Lucy
+        House
+        Dragon
+        Horse
+        Scallop
+        Plunderbuss Pete
+
+        Not Used
+            Tyrannosaurus
+            Armadillo
+            Roadster
+            Bunny
+            Statue
+            Dolphin
+            Buddha
+            Test
+
+        Thingiverse Sculpture
+        Archive 3D
+            Pegasys
+            David
+            https://archive3d.net/?category=31
+
+#### Publication
+    3D CAD Jewelry
+        https://matrixusergroup.com/
+    CNC
+    ArtCAM
+    Vectrix
+    3D Printing
+    HackerNews
+
+### Short Term
+
+#### Database
+    Does the database "unable to connect" message always appear at startup?
+        It is also seen in the local IIS instance.
+        Logger.LogError($"The database connection could not be opened after {maximumAttempts} attempts to reach the server.");
+
+    Update database schema diagram.
+
+#### IIS
+    Local
+        Why can't cookies be set? The cookie consent dialog continues to open.
+
+    Alpha
+        Why does the IIS build fail on Alpha with privilege errors deleting the Publish folder?
+        Why were there intermittent runtime errors at startup?
+            Could these be Azure service errors accessing the key-value vault?
+
+#### NormalMaps
+    It appears that NormalMap gradients lose some high frequency detail.
+
+    What NormalMap integration tests are appropriate?
+
+#### Images
+    PNG Creation
+        Integrate with Files utility class.
+        File methods should share common setup steps for deleting existing files, etc.
+
+##### TypeScript Image Class
+    DepthBuffer, NormalMap should hold instances.
+    Where should Image be placed in the source tree?
+    methods
+        Indexer
+        RGB, RGBA values
+        Vector3
+
+#### WebGL
+    https://webglfundamentals.org/webgl/lessons/webgl-how-it-works.html
+
+    Chrome "paused before potential out-of-memory crash".
+        https://stackoverflow.com/questions/42110726/chrome-devtools-paused-before-potential-out-of-memory-crash
+        https://developers.google.com/web/tools/chrome-devtools/memory-problems/
+
+##### WebGL Debugging
+        Investigate webgl-debug library.
+
+        Explore Nsight for shader debugging.
+
+        SpectorJS
+            http://www.realtimerendering.com/blog/debugging-webgl-with-spectorjs/
+
+        RenderDoc
+            "c:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-gpu-watchdog --gpu-startup-dialog --allow-no-sandbox-job --allow-sandbox-debugging --no-sandbox --disable-gpu-sandbox
+
+#### Core
+    Technical Review
+        Review the Blender implementation.
+            What were the pre-processing steps that were done to prepare the data for the Poisson solver?
+        Review the technical papers.
+        Review ZSurf.
+        Review ArtCAM.
+
+    Explore
+        Awesome Bump
+        Knald
+        xNormal
+        ShaderMap
+        Gimp Normal Plugin
+
+    Orthogonal planes (e.g. House) do not generate constant Z depths.
+
+    Close in Orthogonal views of House (Lambda: Documents\Temp\MalformedHouse) yield malformed meshes.
+
+    Review Mesh, DepthBuffer and NormalMap properties:
+        Width
+        Height
+
+    How should the initial camera of the ModelViewer be defined in a ComposerView?
+        Mesh.DepthBuffer.Camera is used.
+        Mesh.NormalMap.Camera is equivalent.
+
+    Should clipping planes be set based on the Model?
+
+    Clipping planes are not preserved when a Composer view is initialized.
+
+    Visually examine randomly-generated cameras that have been round-tripped.
+
+    Experiment with Poisson solutions of images that have not been attenuated/processed.
+
+    Develop test models to test the gaussian filter mask processing.
+        The model should contain details near the edges (adjacent to the background) and near thresholded regions.
+            Spheres (Positive, Negative)
+            Cubes
+            Architectural
+
+    Silhouette
+        https://stackoverflow.com/questions/17161088/how-to-refine-or-blur-or-smooth-just-the-edges
+
+    Runtime Settings
+        https://medium.freecodecamp.org/environment-settings-in-javascript-apps-c5f9744282b6
+        minifiedExtension
+
+#### Explorer
+    Build a Python installer package for Explorer.
+
+    How can the mayavi log be viewed?
+
+    3D Surface Visualization
+        https://jakevdp.github.io/PythonDataScienceHandbook/04.12-three-dimensional-plotting.html
+
+#### Three.js
+    Update OBJLoader.ts.
+
+#### Performance
+    The transfer of models is inefficent because they are Base64 encoded.
+
+#### Builder
+    Add a model list to control which models are added.
+
+#### Solver
+    Should the Python image masks be integers or booleans (instead of doubles)?
+
+    Meshes are not oriented correctly in Mayavi Isometric views.
+
+#### Python
+    Explore Python unit tests.
+
+### Adding a New GeneratedFileDomainModel (e.g. NormalMap)
+#### Documentation
+- [X] Update the class hierarchies in ProjectNotes.
+
+#### Configuration
+- [X] Add the paths to the new model folders in appsettings.json (e.g. Paths:ResourceFolders:NormalMaps).
+
+#### Dispatcher
+- [x] Extend IDispatcher to include a generation method for the new entity (e.g. GenerateNormalMapAsync).
+- [x] Add support for generating the file after dependencies have changed. (e.g. GenerateNormalMapAsync).
+
+#### Domain
+- [X] Add the database ModelRelief.Domain schema class (e.g. NormalMap.cs).
+
+#### Database
+- [X] Delete the existing databases using SQL Server Object Explorer.
+- [X] Add the new entity type to ModelReliefDbContext.cs.
+- [X] Add the new model types to DbInitializer including support for updating the seed files (UpdateSeedData)
+- [X] **dotnet ef migrations add InitialCreate**
+
+#### Test Files
+- [X] Add the new model folder type to Test\Data\Users including at least one placeholder file to ensure the output folder will be created.
+
+#### Api
+- [X] Add request handlers to the V1 folder (e.g. Api\V1\NormalMaps)
+- [X] Add API definitions for the new model to ApiErros.cs.
+
+#### Features
+- [X] Add the new controller. (e.g. Features\NormalMaps\NormalMapsController.cs)
+- [X] Add the new DTO model (e.g. NormalMap.cs)
+- [X] Add the supporting Razor pages (e.g. Create.cshtml)
+- [X] Add the new entity type to the main navigation bar (_Layout.cshtml).
+
+#### Scripts
+- [X] Add the interface to Api\V1\Interfaces (e.g. INormalMap.ts).
+- [X] Add the new concrete class implementing the interface to DtoModels.ts.
+- [X] Add the necessary application graphics model to Models (e.g. Models\NormalMap\NormalMap.ts).
+<br>*If the entity is graphical:*
+- [X] Add a new viewer to Viewers (e.g. Viewers\NormalMapViewer.ts)
+- [X] Add an MVC View to Views (e.g. Views\NormalMapView.ts)
+- [X] Add the HTML View to Composer\Edit.cshtml.
+- [ ] Create the factory (e.g. NormalMapFactory) to construct the entity.
+- [ ] Extend ComposerController to add support for generating the new entity.
+
+#### XUnit Integration Tests
+- [X] Add the model Base support to Integration\Base (e.g. NormalMapsBaseIntegration.cs)
+- [X] Add the model File support to Integration\File (e.g. NormalMapsFileIntegration.cs)
+- [X] Add the test model factory support to TestModelFactores (e.g. NormalMapTestModelFactory.cs)
+
+#### TypeScript Unit Tests
+- [ ] Add tests supporting the new entity to UnitTests.ts.
+
+#### Postman
+- [X] Add test requests to support the new entity,
+
+#### Solver
+- [ ] Add a new Python class (e.g. normalmap.py).
+
+#### Tools
+- [ ] Add utilities as needed (e.g. normalmapwriter.py)
+
+#### Explorer
+- [ ] Add support as required.
+
+### Test Checklist
+    Test Checklist
+        Visual Studio
+            IIS Express launch
+        testrunner (XUnit)          python Tools\testrunner.py
+        Builder
+            Development             python.exe Build\Builder.py --target local
+             IIS                    python.exe Build\builder.py --target IIS --deploy True
+            Docker                  python.exe Build\builder.py --target Docker
+        Postman
+        Explorer                    python.exe Explorer\explorer.py --s ../Solver/Test/Lucy.json --w ../Solver/Test/Working
+        Solver                      python Solver\solver.py --s "Test/House.json" --w "Test/Working"
+        Docker                      DockerStart
+
+###### StandardView
+When the view camera is interactively changed, it should invalidate the StandardView in the UI.
+    Mesh view opens with the UI set to StandardCamera.Front but the view is Top.
 
 #### Front End
 <span style="color:red">
@@ -1833,43 +1863,6 @@ The Visual Studio Debug project settings for Environment variables **writes thro
 The XUnit tests cannot be run withany required prompts for user verification because *the console is not displayed*.
 ServerFramework (WebHost.CreateDefaultBuilder) sets the environment to "Development" *however the environment variables from launchSettings.json are not used.*
 
-#### New Windows Computer Setup
-    Graphics Tools
-        Rhino3D
-        MeshLab
-    Set up a shortcut for ModelReliefShell.bat.
-    KeyTweak (Right Ctrl -> Context Menu)
-    Postman
-    Git
-    Notepad++
-    Sqlite 64-bit
-    SQLServer Management Studio
-    SQLite Expert Personal
-    clink (Marin Rodgers) command shell extensions
-    Macrium Reflect
-    Visual Studio
-        Anaconda 64-bit
-        synchronize settings
-    VSCode
-       synchronize User Settings (Extensions, ketboard mapping, settings)
-    Node.js
-    NPM
-        npm install --global gulp-cli
-        npm install --global madge
-    Install .NET Core 2.2 SDK.
-    Add azurekeyvault.json to ModelRelief project folder.
-
-    From the solution root:
-        conda config --add channels conda-forge
-        npm install
-            Modify  C:\Program Files (x86)\Microsoft Visual Studio\Shared\Anaconda3_64\Library\bin\pyrcc5.bat  to wrap Python path in quotations.
-                @"C:/Program Files (x86)/Microsoft Visual Studio/Shared/Anaconda3_64\python.exe" -m PyQt5.pyrcc_main %1 %2 %3 %4 %5 %6 %7 %8 %9
-        BuildPythonEnvironment Development
-        dotnet restore
-        git submodule init
-        git submodule update
-
-        python.exe Build\Builder.py --target local
 #### C#
     Conversion of List of derived class to the base class.
         // https://stackoverflow.com/questions/1817300/convert-listderivedclass-to-listbaseclass
