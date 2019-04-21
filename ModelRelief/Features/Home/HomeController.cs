@@ -26,8 +26,10 @@ namespace ModelRelief.Features.Home
         public HomeController(IFunctionTwo<double> function, IOptions<ReCAPTCHASettings> reCAPTCHASettings)
         {
             _reCAPTCHASettings = reCAPTCHASettings.Value as ReCAPTCHASettings;
-            this._function = function;
-            Console.WriteLine(function.F2(1.0, 2.0));
+
+            // DI experimentation
+            // this._function = function;
+            // Console.WriteLine(function.F2(1.0, 2.0));
         }
 
         /// <summary>

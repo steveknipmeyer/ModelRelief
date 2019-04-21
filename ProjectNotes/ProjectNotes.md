@@ -9,13 +9,9 @@
 #### Vector
 
 #### Today
-    What is the source of the empty lines in the console output from 'dotnet test'?
-
     How can Python binary extensions be resolved (e.g. sys, time)?
 
     How can xUnit tests be debugged?
-
-    Remove unused GitHub repositories.
 
     Add a cookie policy to _CookieConsentPartial.cshtml.
 

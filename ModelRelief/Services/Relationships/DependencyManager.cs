@@ -240,7 +240,6 @@ namespace ModelRelief.Services.Relationships
                     // Console.ForegroundColor = ConsoleColor.White;
                 }
             }
-            Console.WriteLine();
         }
 
         /// <summary>
