@@ -19,6 +19,7 @@
 # conda install qdarkstyle
 # conda install pylint
 # conda install mypy
+# conda install rope
 #
 # ---------------------- Requirements ----------------------
 # This file may be used to create an environment using:
@@ -101,7 +102,9 @@ python-dateutil=2.8.0=py_0
 qdarkstyle=2.6.5=py_0
 qt=5.6.3=h8bf5577_3
 readline=7.0=hf8c457e_1001
+relief=0.1=pypi_0
 rhash=1.3.6=h14c3975_1001
+rope=0.10.7=py_1
 scipy=1.2.1=py36h09a28d5_1
 setuptools=41.0.0=py36_0
 sip=4.18.1=py36hf484d3e_1000

@@ -28,7 +28,7 @@ namespace ModelRelief.Features.Home
             _reCAPTCHASettings = reCAPTCHASettings.Value as ReCAPTCHASettings;
 
             // DI experimentation
-            // this._function = function;
+            this._function = function;
             // Console.WriteLine(function.F2(1.0, 2.0));
         }
 

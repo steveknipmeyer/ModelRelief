@@ -26,7 +26,7 @@ from tools import Colors, Tools
 class Target(Enum):
     """ Target runtime environments. """
     local = 'local'
-    iis = 'IIS'
+    nginx = 'Nginx'
     docker = 'Docker'
 
     def __str__(self):
@@ -44,7 +44,8 @@ class Builder:
         self.logger = Logger()
         self.arguments = arguments
         self.environment:Environment = Environment()
-        self.publish = self.arguments.target != Target.local
+        self.publish = self.arguments.publish
+        self.deploy = self.arguments.deploy
 
         # folder names
         self.wwwroot_folder = "wwwroot"
@@ -56,7 +57,7 @@ class Builder:
         self.tools_folder = "Tools"
 
         # folder paths
-        self.iis_deploy_path = os.path.join("C:/", "modelrelief")
+        self.nginx_deploy_path = "/var/www/html"
         self.modelrelief_path = os.environ[EnvironmentNames.MR]
         self.publish_path = os.environ[EnvironmentNames.MRPublish]
         self.publish_wwwroot_path = os.path.join(self.publish_path, self.wwwroot_folder)
@@ -69,7 +70,7 @@ class Builder:
         self.file_exclusions = ["js/modelrelief.js", "js/modelrelief.js.map", "js/shaders.js"]
         self.settings_production = "appsettings.Production.json"
         self.settings_production_docker = "appsettings.ProductionDocker.json"
-        self.settings_production_iis = "appsettings.ProductionIIS.json"
+        self.settings_production_deploy = "appsettings.ProductionDeploy.json"
         self.web_config = "web.config"
 
     def delete_folder (self, folder: str, confirm=False)->None:
@@ -183,9 +184,38 @@ class Builder:
         if self.arguments.initialize:
             self.logger.logInformation("\nInitialize database and user store", Colors.BrightMagenta)
             os.chdir(self.modelrelief_path)
-            Tools.exec("dotnet run --no-launch-profile")
+            Tools.exec("dotnet run")
 
         self.logger.logInformation("\n</Build>", Colors.BrightYellow)
+
+    def publish_seed_database (self):
+        """
+        Publish seed database.
+        """
+        os.chdir(self.solution_path)
+        database = os.environ[EnvironmentNames.MRDatabaseProvider]
+        self.logger.logInformation(f"ASPNETCORE_ENVIRONMENT = {os.environ[EnvironmentNames.ASPNETCORE_ENVIRONMENT]}", Colors.BrightMagenta)
+
+        # SQLite
+        if database == DatabaseProvider.sqlite.value:
+            self.logger.logInformation("\nSQLite database", Colors.BrightMagenta)
+            database_publish_path = self.environment.database_relative_path(DatabaseProvider.sqlite.value)
+            database_files = ['ModelReliefProduction.db']
+            database_path = self.environment.sqlite_path
+        # SQLServer
+        elif database == DatabaseProvider.sqlserver.value:
+            self.logger.logInformation("\nSQLServer database", Colors.BrightMagenta)
+            database_publish_path = self.environment.database_relative_path(DatabaseProvider.sqlserver.value)
+            database_files = ['ModelReliefProduction.mdf', 'ModelReliefProduction_log.ldf']
+            database_path = self.environment.sqlserver_path
+        else:
+            self.logger.logError("Invalid MRDatabaseProvider", Colors.Red)
+            return
+
+        for file in database_files:
+            source = os.path.join(database_path, file)
+            destination = os.path.join(self.publish_path, database_publish_path, file)
+            Tools.copy_file(source, destination)
 
     def publish_site (self):
         """
@@ -230,26 +260,8 @@ class Builder:
         os.chdir(self.modelrelief_path)
         Tools.copy_folder(os.path.join(self.modelrelief_path, self.store_folder), os.path.join(self.publish_path, self.store_folder))
 
-        # SQLServer seed database
-        self.logger.logInformation("\nSQLServer database", Colors.BrightMagenta)
-        os.chdir(self.solution_path)
-        sqlserver_publish_path = self.environment.database_relative_path(DatabaseProvider.sqlserver.value)
-        sqlserver_files = ['ModelReliefProduction.mdf', 'ModelReliefProduction_log.ldf']
-        for file in sqlserver_files:
-            source = os.path.join(self.environment.sqlserver_path, file)
-            destination = os.path.join(self.publish_path, sqlserver_publish_path, file)
-            Tools.copy_file(source, destination)
-
-        # IIS
-        if self.arguments.target == Target.iis:
-            self.logger.logInformation("\nIIS-specific publishing steps", Colors.BrightMagenta)
-            self.logger.logInformation(f"\nUpdating {self.settings_production}", Colors.Cyan)
-            Tools.copy_file(os.path.join(self.modelrelief_path, self.settings_production_iis), os.path.join(self.publish_path, self.settings_production))
-
-            if self.arguments.deploy:
-                self.logger.logInformation("\nDeploying to local IIS server", Colors.BrightMagenta)
-                self.delete_folder(self.iis_deploy_path)
-                Tools.copy_folder(self.publish_path, self.iis_deploy_path)
+        # Seed Database
+        self.publish_seed_database()
 
         # Docker
         if self.arguments.target == Target.docker:
@@ -268,6 +280,26 @@ class Builder:
 
         self.logger.logInformation("\n</Publish>", Colors.BrightYellow)
 
+    def deploy_site (self):
+        """
+        Deploy web site.
+        """
+        self.logger.logInformation("\n<Deploy>", Colors.BrightCyan)
+        os.chdir(self.solution_path)
+
+        # Nginx
+        if self.arguments.target == Target.nginx:
+            self.logger.logInformation("\nNginx-specific publishing steps", Colors.BrightMagenta)
+            self.logger.logInformation(f"\nUpdating {self.settings_production}", Colors.Cyan)
+            Tools.copy_file(os.path.join(self.modelrelief_path, self.settings_production_deploy), os.path.join(self.publish_path, self.settings_production))
+
+            if self.arguments.deploy:
+                self.logger.logInformation("\nDeploying to local Nginx server", Colors.BrightMagenta)
+                self.delete_folder(self.nginx_deploy_path)
+                Tools.copy_folder(self.publish_path, self.nginx_deploy_path)
+
+        self.logger.logInformation("\n</Deploy>", Colors.BrightYellow)
+
     def run (self):
         """
         Sequence the build steps.
@@ -285,12 +317,16 @@ class Builder:
         if self.publish:
             self.publish_site()
 
+        # deploy
+        if self.deploy:
+            self.deploy_site()
+
         self.environment.pop()
         self.logger.logInformation("\n</ModelRelief>", Colors.BrightCyan)
 
 def main():
     """
-        Main entry point.
+    Main entry point.
     """
     options_parser = argparse.ArgumentParser()
 
@@ -300,11 +336,14 @@ def main():
     # Build
     options_parser.add_argument('--initialize', '-i',
                                 help='Initialize the database and the user store.', type=ast.literal_eval, required=False, default=True)
-    options_parser.add_argument('--python', '-p',
+    options_parser.add_argument('--python', '-P',
                                 help='Build the runtime Python virtual environment.', type=ast.literal_eval, required=False, default=True)
     # Publish
+    options_parser.add_argument('--publish', '-p',
+                                help='Publish the deployable web site package in a local staging folder.', type=ast.literal_eval, required=False, default=False)
+    # Deploy
     options_parser.add_argument('--deploy', '-d',
-                                help='Deploy the published content to the local IIS folder.', type=ast.literal_eval, required=False, default=False)
+                                help='Deploy the web content to a local web server folder.', type=ast.literal_eval, required=False, default=False)
 
     arguments = options_parser.parse_args()
 

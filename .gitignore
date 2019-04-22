@@ -194,6 +194,7 @@ Solver/Test/Working/*
 # Python
 .mypy_cache
 __pycache__
+#Rope refactoring library
 
 # Azure Key Vault
 **/azurekeyvault.json

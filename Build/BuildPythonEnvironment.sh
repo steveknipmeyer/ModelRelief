@@ -12,7 +12,7 @@ conda create --yes --prefix devenv --file ./requirements.development.txt
 
 elif [ $1 = 'Production' ]; then
 echo "Building production environment into mrenv"
-conda create --yes --prefix mrenv --file ./requirements.production.txt
+conda create --yes --prefix mrenv --file ../requirements.production.txt
 else
     echo "unknown environment: $1"
     exit

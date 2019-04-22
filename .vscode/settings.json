@@ -4,6 +4,8 @@
     // Editor
     // ---------------------------------
     "editor.fontFamily": "Monospace",
+    "editor.fontWeight": "normal",
+    "editor.fontSize": 13,
 
     // ---------------------------------
     // Files
@@ -49,7 +51,7 @@
             "**/[Ww]ork*/**/*": true,
             "**/wwwroot/**/*": true
         },
-        "debug.console.fontFamily": "Monospace",
+        "debug.console.fontFamily": "Consolas",
         "debug.console.fontSize": 14,
         "python.formatting.autopep8Path": "",
 }

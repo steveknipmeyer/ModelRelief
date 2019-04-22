@@ -121,12 +121,12 @@
         //  "args":["--file", "${workspaceRoot}/ModelRelief/store/development/users/auth05bedab58aa237e078600530b/normalmaps/3/bunny.nmap", "--format", "rgba"]
 
         //  ----- Build
-        //  "program": "${workspaceRoot}/Build/builder.py",
-        //  "args":["--target", "IIS", "--deploy", "False"]
+       "program": "${workspaceRoot}/Build/Builder.py",
+       "args":["--target", "Nginx", "--publish", "True"]
 
         //  ----- Explorer
-        "program": "${workspaceRoot}/Explorer/explorer.py",
-        "args":["--s", "../Solver/Test/lucy.json", "--w", "../Solver/Test/Working"]
+        // "program": "${workspaceRoot}/Explorer/explorer.py",
+        // "args":["--s", "../Solver/Test/lucy.json", "--w", "../Solver/Test/Working"]
 
         //  ----- Solver
         //  "program": "${workspaceRoot}/Solver/solver.py",

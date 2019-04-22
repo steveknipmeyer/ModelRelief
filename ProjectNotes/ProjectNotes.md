@@ -1,11 +1,20 @@
 ﻿### Tasks
 #### Commit Notes
+Resolve folder location of ModelRelief.log
 
 #### Alpha
 
 #### Vector
 
 #### Today
+    publish
+        Generalize database support to include SQLite in addition to SQLServer.
+
+        Rename --deploy to --publish?
+
+    nginx
+        Create a new sudo account ('admin') from which to manage nginx.
+
     How can Python binary extensions be resolved (e.g. sys, time)?
 
     How can xUnit tests be debugged?
@@ -169,11 +178,13 @@
                 Configure the VirtualBox VM to use <Bridged Networking>.
                 Find VM IP address using ifconfig.
                 If on an external network:
-                Add an entry to the hosts file.
-                    C:\Windows\System32\drivers\etc\hosts
-                    10.1.10.70 mrvm.com
+                    Add an entry to the hosts file.
+                        C:\Windows\System32\drivers\etc\hosts
+                        10.1.10.70 mrvm.com
 
-            Use Firewall on the VM to open port 80.
+                Use Firewall on the VM to open port 80.
+            WSL
+                sudo service nginx start
 
         3D Graphics
             Firefox
