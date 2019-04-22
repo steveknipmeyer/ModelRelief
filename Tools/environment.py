@@ -88,8 +88,19 @@ class Environment:
 
         self.stack:List[Dict] = []
 
-        self.sqlite_path = os.path.join(os.environ[EnvironmentNames.MR], self.database_relative_path(DatabaseProvider.sqlite.value))
-        self.sqlserver_path = '/var/opt/mssql/data'
+    @property
+    def sqlite_path(self):
+        """
+        Returns the path of the SQLite folder.
+        """
+        return os.path.join(os.environ[EnvironmentNames.MR], self.database_relative_path(DatabaseProvider.sqlite.value))
+
+    @property
+    def sqlserver_path(self):
+        """
+        Returns the path of the SQLServer folder.
+        """
+        return '/var/opt/mssql/data'
 
     def show (self, color=Colors.Magenta):
         """

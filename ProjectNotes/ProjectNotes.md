@@ -8,9 +8,31 @@ Resolve folder location of ModelRelief.log
 
 #### Today
     publish
-        Generalize database support to include SQLite in addition to SQLServer.
+        Python C++ extensions
+        Activating Production Python environment
 
-        Rename --deploy to --publish?
+        CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'.
+        To initialize your shell, run
+
+            $ conda init <SHELL_NAME>
+
+        Currently supported shells are:
+        - bash
+        - fish
+        - tcsh
+        - xonsh
+        - zsh
+        - powershell
+
+        See 'conda init --help' for more information and options.
+
+        IMPORTANT: You may need to close and restart your shell after running 'conda init'.
+
+
+        running build
+        running build_ext
+        Building configuration : Release
+
 
     nginx
         Create a new sudo account ('admin') from which to manage nginx.

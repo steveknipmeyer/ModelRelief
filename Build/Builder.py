@@ -184,7 +184,7 @@ class Builder:
         if self.arguments.initialize:
             self.logger.logInformation("\nInitialize database and user store", Colors.BrightMagenta)
             os.chdir(self.modelrelief_path)
-            Tools.exec("dotnet run")
+            Tools.exec("dotnet run --no-launch-profile")
 
         self.logger.logInformation("\n</Build>", Colors.BrightYellow)
 
@@ -194,7 +194,6 @@ class Builder:
         """
         os.chdir(self.solution_path)
         database = os.environ[EnvironmentNames.MRDatabaseProvider]
-        self.logger.logInformation(f"ASPNETCORE_ENVIRONMENT = {os.environ[EnvironmentNames.ASPNETCORE_ENVIRONMENT]}", Colors.BrightMagenta)
 
         # SQLite
         if database == DatabaseProvider.sqlite.value:
