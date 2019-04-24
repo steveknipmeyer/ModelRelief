@@ -8,30 +8,31 @@ Resolve folder location of ModelRelief.log
 
 #### Today
     publish
-        Python C++ extensions
-        Activating Production Python environment
+        Investigate 'conda activate'
+            Python C++ extensions
+            Activating Production Python environment
 
-        CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'.
-        To initialize your shell, run
+            CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'.
+            To initialize your shell, run
 
-            $ conda init <SHELL_NAME>
+                $ conda init <SHELL_NAME>
 
-        Currently supported shells are:
-        - bash
-        - fish
-        - tcsh
-        - xonsh
-        - zsh
-        - powershell
+            Currently supported shells are:
+            - bash
+            - fish
+            - tcsh
+            - xonsh
+            - zsh
+            - powershell
 
-        See 'conda init --help' for more information and options.
+            See 'conda init --help' for more information and options.
 
-        IMPORTANT: You may need to close and restart your shell after running 'conda init'.
+            IMPORTANT: You may need to close and restart your shell after running 'conda init'.
 
 
-        running build
-        running build_ext
-        Building configuration : Release
+            running build
+            running build_ext
+            Building configuration : Release
 
 
     nginx

@@ -41,7 +41,7 @@ export "MYPYPATH=${MRSolution}Tools/"
 
 # activate the ModelRelief Python environment.
 conda activate ./devenv
-PS1='(devenv) ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+#PS1='(devenv) ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 
 # ASPNET CORE Configuration
 export ASPNETCORE_ENVIRONMENT=Development

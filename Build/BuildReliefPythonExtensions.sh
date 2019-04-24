@@ -1,6 +1,10 @@
 #!/bin/bash
 # Builds the Python C++ extensions.
 # usage: BuildReliefPythonExtensions <Development | Production>
+echo BuildReliefPythonExtensions
+echo 0=$0
+echo 1=$1
+echo 2=$2
 
 if [ $# -eq 0 ]; then
     echo "usage: $0 [Development | Production]"
@@ -24,8 +28,13 @@ cd $MRSolution
 
 # set up Production Python environement
 if [ $EnvironmentName = "mrenv" ]; then
-    echo "Activating Production Python environment"
+    echo "Activating production (mrenv) Python environment"
     conda activate Publish/mrenv
  fi
 cd Relief
-python setup.py build $BuildOptions install
+#python setup.py build $BuildOptions install
+cd ..
+if [ $EnvironmentName = "mrenv" ]; then
+    echo "Restoring developoment (devenv) Python environment"
+    conda activate ./devenv
+ fi
